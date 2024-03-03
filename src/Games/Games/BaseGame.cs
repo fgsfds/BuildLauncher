@@ -50,7 +50,7 @@ namespace Games.Games
         public abstract string ShortName { get; }
 
         /// <inheritdoc/>
-        public abstract string StartupFile { get; }
+        public abstract string DefFile { get; }
 
         /// <inheritdoc/>
         public abstract List<string> RequiredFiles { get; }
@@ -140,7 +140,7 @@ namespace Games.Games
             {
                 using var zip = ZipFile.OpenRead(file);
 
-                var ini = zip.Entries.FirstOrDefault(x => x.Name.Equals(StartupFile));
+                var ini = zip.Entries.FirstOrDefault(x => x.Name.Equals(DefFile));
 
                 if (ini is null)
                 {
@@ -162,7 +162,7 @@ namespace Games.Games
 
             using (var archive = ZipArchive.Create())
             {
-                archive.AddEntry(StartupFile, memStream);
+                archive.AddEntry(DefFile, memStream);
 
                 archive.SaveTo(filePath, CompressionType.None);
             }

@@ -26,9 +26,9 @@ namespace Common.Interfaces
         string MainFile { get; }
 
         /// <summary>
-        /// Main startup file ()
+        /// Def file name
         /// </summary>
-        string StartupFile { get; }
+        string DefFile { get; }
 
         /// <summary>
         /// Game install folder

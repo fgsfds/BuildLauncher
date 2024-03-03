@@ -22,7 +22,7 @@ namespace Games.Games
         public override string MainFile => "SW.GRP";
 
         /// <inheritdoc/>
-        public override string StartupFile => "sw.def";
+        public override string DefFile => "sw.def";
 
         /// <inheritdoc/>
         public override List<string> RequiredFiles => [MainFile];

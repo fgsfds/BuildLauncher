@@ -36,7 +36,7 @@ namespace Games.Games
         public override string MainFile => "DUKE3D.GRP";
 
         /// <inheritdoc/>
-        public override string StartupFile => "duke3d.def";
+        public override string DefFile => "duke3d.def";
 
         /// <inheritdoc/>
         public override List<string> RequiredFiles => [MainFile];

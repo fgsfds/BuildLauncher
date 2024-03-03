@@ -22,7 +22,7 @@ namespace Games.Games
         public override string MainFile => "BLOOD.RFF";
 
         /// <inheritdoc/>
-        public override string StartupFile => "blood.def";
+        public override string DefFile => "blood.def";
 
         /// <inheritdoc/>
         public override List<string> RequiredFiles => [MainFile, "BLOOD.INI", "GUI.RFF", "SOUNDS.RFF", "SURFACE.DAT", "TILES000.ART", "VOXEL.DAT"];
