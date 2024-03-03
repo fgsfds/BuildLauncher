@@ -22,7 +22,7 @@ namespace Mods.Mods
         public required string? PathToFile { get; init; }
 
         /// <inheritdoc/>
-        public string? FileName => PathToFile is null ? null : Path.GetFileName(FileName);
+        public string? FileName => PathToFile is null ? null : Path.GetFileName(PathToFile);
 
         /// <inheritdoc/>
         public required Stream? Image { get; init; }
