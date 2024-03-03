@@ -1,0 +1,153 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             d:DesignWidth="800"
+             d:DesignHeight="450"
+             xmlns:vm="clr-namespace:BuildLauncher.ViewModels"
+             x:DataType="vm:SettingsViewModel"
+             x:Class="BuildLauncher.Pages.SettingsPage">
+
+    <Grid RowDefinitions="auto,*,auto">
+
+        <StackPanel Grid.Row="0" Orientation="Vertical">
+
+            <!--Theme selection-->
+            <Grid ColumnDefinitions="auto,*">
+
+                <StackPanel Orientation="Horizontal" Margin="5">
+
+                    <TextBlock Margin="5"
+                               VerticalAlignment="Center">
+                        Theme
+                    </TextBlock>
+
+                    <RadioButton GroupName="theme"
+                                 Margin="5"
+                                 Command="{Binding SetDefaultThemeCommand}"
+                                 IsChecked="{Binding IsDefaultTheme}">
+                        System
+                    </RadioButton>
+
+                    <RadioButton GroupName="theme"
+                                 Margin="5"
+                                 Command="{Binding SetLightThemeCommand}"
+                                 IsChecked="{Binding IsLightTheme}">
+                        Light
+                    </RadioButton>
+
+                    <RadioButton GroupName="theme"
+                                 Margin="5"
+                                 Command="{Binding SetDarkThemeCommand}"
+                                 IsChecked="{Binding IsDarkTheme}">
+                        Dark
+                    </RadioButton>
+
+                </StackPanel>
+
+            </Grid>
+
+            <Grid ColumnDefinitions="auto,*,auto" RowDefinitions="auto,auto,auto,auto,auto">
+
+                <!--Path to Blood-->
+                <TextBlock Grid.Row="0" Grid.Column="0"
+                           VerticalAlignment="Center"
+                           Margin="10, 5">Path to Blood install:</TextBlock>
+
+                <TextBox Grid.Row="0" Grid.Column="1"
+
+                         Text="{Binding PathToBlood}"
+                         Margin="0,3"/>
+
+                <Button Grid.Row="0" Grid.Column="2"
+
+                        Margin="5,0,10,0"
+                        Width="{Binding $self.Bounds.Height}"
+                        HorizontalContentAlignment="Center"
+                        Command="{Binding OpenFolderPickerCommand}"
+                        CommandParameter="Blood">
+                    ...
+                </Button>
+
+
+                <!--Path to Duke 3D-->
+                <TextBlock Grid.Row="1" Grid.Column="0"
+                           VerticalAlignment="Center"
+                           Margin="10, 5">Path to Duke Nukem 3D install:</TextBlock>
+
+                <TextBox Grid.Row="1"  Grid.Column="1"
+                         Text="{Binding PathToDuke3D}"
+                         Margin="0,3"/>
+
+                <Button Grid.Row="1"  Grid.Column="2"
+                        Margin="5,0,10,0"
+                        Width="{Binding $self.Bounds.Height}"
+                        HorizontalContentAlignment="Center"
+                        Command="{Binding OpenFolderPickerCommand}"
+                        CommandParameter="Duke3D">
+                    ...
+                </Button>
+
+
+                <!--Path to Duke WT-->
+                <TextBlock Grid.Row="2" Grid.Column="0"
+                           VerticalAlignment="Center"
+                           Margin="10, 5">Path to Duke World Tour install:</TextBlock>
+
+                <TextBox Grid.Row="2"  Grid.Column="1"
+                         Text="{Binding PathToDukeWT}"
+                         Margin="0,3"/>
+
+                <Button Grid.Row="2"  Grid.Column="2"
+                        Margin="5,0,10,0"
+                        Width="{Binding $self.Bounds.Height}"
+                        HorizontalContentAlignment="Center"
+                        Command="{Binding OpenFolderPickerCommand}"
+                        CommandParameter="DukeWT">
+                    ...
+                </Button>
+
+
+                <!--Path to Duke 64-->
+                <TextBlock Grid.Row="3" Grid.Column="0"
+                           VerticalAlignment="Center"
+                           Margin="10, 5">Path to Duke Nukem 64 ROM:</TextBlock>
+
+                <TextBox Grid.Row="3"  Grid.Column="1"
+                         Text="{Binding PathToDuke64}"
+                         Margin="0,3"/>
+
+                <Button Grid.Row="3"  Grid.Column="2"
+                        Margin="5,0,10,0"
+                        Width="{Binding $self.Bounds.Height}"
+                        HorizontalContentAlignment="Center"
+                        Command="{Binding OpenFilePickerCommand}">
+                    ...
+                </Button>
+
+
+                <!--Path to Shadow Warrior-->
+                <TextBlock Grid.Row="4" Grid.Column="0"
+                           VerticalAlignment="Center"
+                           Margin="10, 5">Path to Shadow Warrior install:</TextBlock>
+
+                <TextBox Grid.Row="4"  Grid.Column="1"
+                         Text="{Binding PathToWang}"
+                         Margin="0,3"/>
+
+                <Button Grid.Row="4"  Grid.Column="2"
+                        Margin="5,0,10,0"
+                        Width="{Binding $self.Bounds.Height}"
+                        HorizontalContentAlignment="Center"
+                        Command="{Binding OpenFolderPickerCommand}"
+                        CommandParameter="Wang">
+                    ...
+                </Button>
+
+            </Grid>
+
+        </StackPanel>
+
+    </Grid>
+</UserControl>

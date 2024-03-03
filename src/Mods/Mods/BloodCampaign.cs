@@ -1,0 +1,20 @@
+﻿using Common.Enums.Addons;
+
+namespace Mods.Mods
+{
+    /// <summary>
+    /// Blood campaign
+    /// </summary>
+    public class BloodCampaign : BaseMod
+    {
+        /// <summary>
+        /// Blood Addon enum
+        /// </summary>
+        public required BloodAddonEnum AddonEnum { get; set; }
+
+        /// <summary>
+        /// Startup .ini file
+        /// </summary>
+        public required string IniFile { get; init; }
+    }
+}

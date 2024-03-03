@@ -1,0 +1,36 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Assets\Blood\cp.png" />
+    <EmbeddedResource Include="Assets\Blood\blood.png" />
+    <EmbeddedResource Include="Assets\Duke3D\carib.png" />
+    <EmbeddedResource Include="Assets\Duke3D\duke3d.png" />
+    <EmbeddedResource Include="Assets\Duke3D\duke64.png" />
+    <EmbeddedResource Include="Assets\Duke3D\dukedc.png" />
+    <EmbeddedResource Include="Assets\Duke3D\dukewt.jpg" />
+    <EmbeddedResource Include="Assets\Duke3D\nwinter.jpg" />
+    <EmbeddedResource Include="Assets\Wang\twin.png" />
+    <EmbeddedResource Include="Assets\Wang\wang.png" />
+    <EmbeddedResource Include="Assets\Wang\wanton.png" />
+    <EmbeddedResource Include="Assets\WTStopgap.zip" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AddSealed">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Common\Common.csproj" />
+    <ProjectReference Include="..\Mods\Mods.csproj" />
+  </ItemGroup>
+
+</Project>

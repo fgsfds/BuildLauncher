@@ -1,0 +1,96 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:md="https://github.com/whistyun/Markdown.Avalonia"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             xmlns:vm="clr-namespace:BuildLauncher.ViewModels"
+             xmlns:helpers="clr-namespace:BuildLauncher.Helpers"
+             x:DataType="vm:GameViewModel"
+             x:Class="BuildLauncher.Controls.CampaignsControl">
+
+    <UserControl.Resources>
+        <helpers:ImagePathToBitmapConverter x:Key="ImagePathToBitmapConverter"/>
+    </UserControl.Resources>
+
+    <Grid RowDefinitions="*,auto, auto" ColumnDefinitions="2*,*">
+
+        <ListBox Name="CampaignsListControl"
+                 Grid.Row="0" Grid.Column="0"
+                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                 Padding="2"
+                 ItemsSource="{Binding CampaignsList}"
+                 SelectedItem="{Binding SelectedCampaign}"
+                 PointerPressed="ListBoxEmptySpaceClicked">
+
+            <ListBox.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel Orientation="Horizontal" />
+                </ItemsPanelTemplate>
+            </ListBox.ItemsPanel>
+
+            <ListBox.ContextMenu>
+                <ContextMenu>
+                </ContextMenu>
+            </ListBox.ContextMenu>
+
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+
+                    <Grid RowDefinitions="auto" Width="150">
+
+                        <Image RenderOptions.BitmapInterpolationMode="HighQuality"
+                               Source="{Binding Image, Converter={StaticResource ImagePathToBitmapConverter}}"
+                               Margin="10"
+                               HorizontalAlignment="Center"/>
+
+                        <TextBlock Text="{Binding DisplayName}"
+                                   Margin="10"
+                                   Padding="5"
+                                   Background="{Binding Path=Background, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}"
+                                   HorizontalAlignment="Stretch"
+                                   Opacity="100"
+                                   TextAlignment="Center"
+                                   VerticalAlignment="Bottom"
+                                   TextWrapping="Wrap"/>
+
+                        <TextBlock Text="{Binding DisplayName}"
+                                   Margin="10"
+                                   Padding="5"
+                                   HorizontalAlignment="Stretch"
+                                   TextAlignment="Center"
+                                   VerticalAlignment="Bottom"
+                                   TextWrapping="Wrap"/>
+
+                    </Grid>
+
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
+        <md:MarkdownScrollViewer Grid.Row="0" Grid.Column="1"
+                                 Margin="10,5"
+                                 Markdown="{Binding SelectedCampaignDescription}">
+
+            <md:MarkdownScrollViewer.Styles>
+                <StyleInclude Source="/Styles/MarkdownStyle.axaml"/>
+            </md:MarkdownScrollViewer.Styles>
+
+        </md:MarkdownScrollViewer>
+
+        <StackPanel Orientation="Horizontal" Grid.Row="1" Margin="0,5">
+
+            <StackPanel Name="PortsButtonsPanel" Orientation="Horizontal">
+                <TextBlock VerticalAlignment="Center">Start with: </TextBlock>
+            </StackPanel>
+
+            <CheckBox IsChecked="{Binding SkipIntroCheckbox}"
+                      VerticalAlignment="Center"
+                      Margin="5,0">
+                Skip intro
+            </CheckBox>
+        </StackPanel>
+
+    </Grid>
+
+</UserControl>

@@ -1,0 +1,75 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             d:DesignWidth="800"
+             d:DesignHeight="450"
+             xmlns:vm="clr-namespace:BuildLauncher.ViewModels"
+             xmlns:ctrl="clr-namespace:BuildLauncher.Controls"
+             x:DataType="vm:PortViewModel"
+             x:Class="BuildLauncher.Pages.PortsPage">
+
+    <Grid RowDefinitions="*,auto">
+
+        <WrapPanel Orientation="Horizontal"
+                   Grid.IsSharedSizeScope="True"
+                   Grid.Row="0">
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition SharedSizeGroup="SharedGroup" />
+                </Grid.ColumnDefinitions>
+                <ctrl:PortControl Name="Raze" Grid.Row="0" Grid.Column="0" Margin="5"></ctrl:PortControl>
+            </Grid>
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition SharedSizeGroup="SharedGroup" />
+                </Grid.ColumnDefinitions>
+                <ctrl:PortControl Name="NBlood" Grid.Row="0" Grid.Column="1" Margin="5"></ctrl:PortControl>
+            </Grid>
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition SharedSizeGroup="SharedGroup" />
+                </Grid.ColumnDefinitions>
+                <ctrl:PortControl Name="NotBlood" Grid.Row="0" Grid.Column="2" Margin="5"></ctrl:PortControl>
+            </Grid>
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition SharedSizeGroup="SharedGroup" />
+                </Grid.ColumnDefinitions>
+                <ctrl:PortControl Name="PCExhumed" Grid.Row="1" Grid.Column="0" Margin="5"></ctrl:PortControl>
+            </Grid>
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition SharedSizeGroup="SharedGroup" />
+                </Grid.ColumnDefinitions>
+                <ctrl:PortControl Name="RedNukem" Grid.Row="1" Grid.Column="1" Margin="5"></ctrl:PortControl>
+            </Grid>
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition SharedSizeGroup="SharedGroup" />
+                </Grid.ColumnDefinitions>
+                <ctrl:PortControl Name="EDuke32" Grid.Row="1" Grid.Column="2" Margin="5"></ctrl:PortControl>
+            </Grid>
+
+        </WrapPanel>
+
+        <StackPanel Orientation="Horizontal" Grid.Row="1">
+            <Button Margin="10,10,10,15"
+                    Padding="5"
+                    Click="OpenPortsFolderCommand">
+                Open ports folder...
+            </Button>
+        </StackPanel>
+
+    </Grid>
+
+
+
+</UserControl>
