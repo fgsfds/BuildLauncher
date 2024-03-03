@@ -152,7 +152,8 @@ namespace Mods.Providers
                             Author = author,
                             Url = url,
                             IsOfficial = false,
-                            PathToFile = file
+                            PathToFile = file,
+                            MapFile = startupFile!
                         });
                     }
                     else if (modTypeEnum is ModTypeEnum.Autoload)
