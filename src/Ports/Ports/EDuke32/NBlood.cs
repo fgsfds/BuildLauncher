@@ -1,4 +1,6 @@
 ﻿using Common.Enums;
+using Common.Enums.Addons;
+using Common.Helpers;
 using Common.Interfaces;
 using Mods.Mods;
 using Ports.Providers;
@@ -38,24 +40,46 @@ namespace Ports.Ports.EDuke32
         /// <inheritdoc/>
         public override void GetStartCampaignArgs(StringBuilder sb, IGame game, IMod mod)
         {
-            sb.Append($@" -usecwd -nosetup -j ""{game.GameInstallFolder}""");
-
-            if (mod is BloodCampaign campaign)
+            if (mod is not BloodCampaign bloodCamp)
             {
-                if (campaign.FileName is not null)
+                ThrowHelper.NotImplementedException();
+                return;
+            }
+
+            var ini = bloodCamp.StartupFile;
+
+            if (bloodCamp.ModType is ModTypeEnum.Map)
+            {
+                if (bloodCamp.AddonEnum is BloodAddonEnum.Blood)
                 {
-                    sb.Append($@" -g ""{Path.Combine(game.CampaignsFolderPath, campaign.FileName)}""");
+                    ini = Consts.BloodIni;
                 }
-
-                sb.Append($@" -ini ""{campaign.IniFile}""");
+                else if (bloodCamp.AddonEnum is BloodAddonEnum.Cryptic)
+                {
+                    ini = Consts.CrypticIni;
+                }
             }
 
-            if (mod is SingleMap map)
+            sb.Append($@" -usecwd -nosetup -j ""{game.GameInstallFolder}"" -g BLOOD.RFF -ini ""{ini}""");
+
+            if (bloodCamp.FileName is null)
             {
-                sb.Append($@" -map ""{Path.Combine(game.MapsFolderPath, map.FileName!)}""");
+                return;
             }
 
-            return;
+            if (bloodCamp.ModType is ModTypeEnum.Campaign)
+            {
+                sb.Append($@" -g ""{Path.Combine(game.CampaignsFolderPath, bloodCamp.FileName)}""");
+            }
+            else if (bloodCamp.ModType is ModTypeEnum.Map)
+            {
+                sb.Append($@" -g ""{Path.Combine(game.MapsFolderPath, bloodCamp.FileName)}"" -map ""{bloodCamp.StartupFile}""");
+            }
+            else
+            {
+                ThrowHelper.NotImplementedException();
+                return;
+            }
         }
     }
 }

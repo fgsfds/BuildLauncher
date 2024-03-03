@@ -49,6 +49,7 @@ namespace Games.Games
             {
                 campaigns.Add(new WangCampaign()
                 {
+                    ModType = ModTypeEnum.Campaign,
                     DisplayName = "Shadow Warrior",
                     Image = ImageHelper.FileNameToStream("Wang.wang.png"),
                     AddonEnum = WangAddonEnum.Wang,
@@ -58,13 +59,15 @@ namespace Games.Games
                     Url = null,
                     Author = null,
                     IsOfficial = true,
-                    PathToFile = null
+                    PathToFile = null,
+                    StartupFile = null
                 });
 
                 if (IsWantonInstalled)
                 {
                     campaigns.Add(new WangCampaign()
                     {
+                        ModType = ModTypeEnum.Campaign,
                         DisplayName = "Wanton Destruction",
                         Image = ImageHelper.FileNameToStream("Wang.wanton.png"),
                         AddonEnum = WangAddonEnum.Wanton,
@@ -74,7 +77,8 @@ namespace Games.Games
                         Url = null,
                         Author = null,
                         IsOfficial = true,
-                        PathToFile = null
+                        PathToFile = null,
+                        StartupFile = null
                     });
                 }
 
@@ -82,6 +86,7 @@ namespace Games.Games
                 {
                     campaigns.Add(new WangCampaign()
                     {
+                        ModType = ModTypeEnum.Campaign,
                         DisplayName = "Twin Dragon",
                         Image = ImageHelper.FileNameToStream("Wang.twin.png"),
                         AddonEnum = WangAddonEnum.TwinDragon,
@@ -91,7 +96,8 @@ namespace Games.Games
                         Url = null,
                         Author = null,
                         IsOfficial = true,
-                        PathToFile = null
+                        PathToFile = null,
+                        StartupFile = null
                     });
                 }
             }

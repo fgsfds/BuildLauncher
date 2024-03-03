@@ -10,5 +10,8 @@
         /// Path to main downloadable mods manifests file
         /// </summary>
         public const string Manifests = "https://github.com/fgsfds/Build-Mods-Repo/raw/master/manifests.json";
+
+        public const string CrypticIni = "CRYPTIC.INI";
+        public const string BloodIni = "BLOOD.INI";
     }
 }

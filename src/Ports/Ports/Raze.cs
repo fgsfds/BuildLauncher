@@ -1,5 +1,6 @@
 ﻿using Common.Enums;
 using Common.Enums.Addons;
+using Common.Helpers;
 using Common.Interfaces;
 using Games.Games;
 using Mods.Mods;
@@ -84,8 +85,7 @@ namespace Ports.Ports
                 File.WriteAllText(config, text);
             }
 
-            var contents = AddGamePathsToConfig(game.GameInstallFolder, game.ModsFolderPath, config);
-            File.WriteAllLines(config, contents);
+            AddGamePathsToConfig(game.GameInstallFolder, game.ModsFolderPath, config);
         }
 
         /// <inheritdoc/>
@@ -95,7 +95,7 @@ namespace Ports.Ports
 
             if (mod is BloodCampaign bMod)
             {
-                GetBloodArgs(sb, game, mod, bMod);
+                GetBloodArgs(sb, game, bMod);
             }
             else if (mod is DukeCampaign dMod)
             {
@@ -105,9 +105,9 @@ namespace Ports.Ports
             {
                 GetWangArgs(sb, game, wMod);
             }
-            else if (mod is SingleMap map)
+            else
             {
-                sb.Append($@" -file ""{game.MapsFolderPath}\{mod.FileName}"" -map ""{map.FileName}""");
+                ThrowHelper.NotImplementedException();
             }
         }
 
@@ -128,63 +128,107 @@ namespace Ports.Ports
         /// <inheritdoc/>
         public override void GetSkipIntroParameter(StringBuilder sb) => sb.Append(" -quick");
 
-        private static void GetWangArgs(StringBuilder sb, IGame game, WangCampaign wMod)
+        private static void GetWangArgs(StringBuilder sb, IGame game, WangCampaign wangCamp)
         {
             sb.Append(@" -iwad SW.GRP");
 
-            if (wMod.FileName is null)
+            if (wangCamp.FileName is null)
             {
-                if (wMod.AddonEnum is WangAddonEnum.Wanton)
+                if (wangCamp.AddonEnum is WangAddonEnum.Wanton)
                 {
                     sb.Append(@" -file WT.GRP");
                 }
-                else if (wMod.AddonEnum is WangAddonEnum.TwinDragon)
+                else if (wangCamp.AddonEnum is WangAddonEnum.TwinDragon)
                 {
                     sb.Append(@" -file TD.GRP");
                 }
-            }
-            else if (wMod.FileName is not null)
-            {
-                sb.Append($@" -file ""{Path.Combine(game.CampaignsFolderPath, wMod.FileName)}""");
-            }
-        }
-
-        private void GetDukeArgs(StringBuilder sb, IGame game, DukeCampaign dMod)
-        {
-            sb.Append($" -addon {(byte)dMod.AddonEnum}");
-
-            if (dMod.AddonEnum is DukeAddonEnum.WorldTour &&
-                game is DukeGame dukeGame)
-            {
-                var config = Path.Combine(FolderPath, ConfigFile);
-                var contents = AddGamePathsToConfig(dukeGame.DukeWTInstallPath, game.ModsFolderPath, config);
-                File.WriteAllLines(config, contents);
 
                 return;
             }
 
-            if (dMod.FileName is not null)
+            if (wangCamp.ModType is ModTypeEnum.Campaign)
             {
-                sb.Append($@" -file ""{Path.Combine(game.CampaignsFolderPath, dMod.FileName)}""");
+                sb.Append($@" -file ""{Path.Combine(game.CampaignsFolderPath, wangCamp.FileName)}""");
             }
-
-            if (dMod.ConFile is not null)
+            else if (wangCamp.ModType is ModTypeEnum.Map)
             {
-                sb.Append($@" -con {dMod.ConFile}");
+                sb.Append($@" -file ""{Path.Combine(game.MapsFolderPath, wangCamp.FileName)}"" -map ""{wangCamp.StartupFile}""");
+            }
+            else
+            {
+                ThrowHelper.NotImplementedException();
+                return;
             }
         }
 
-        private void GetBloodArgs(StringBuilder sb, IGame game, IMod mod, BloodCampaign bMod)
+        private void GetDukeArgs(StringBuilder sb, IGame game, DukeCampaign dukeCamp)
         {
-            sb.Append(" -iwad BLOOD.RFF");
+            sb.Append($" -addon {(byte)dukeCamp.AddonEnum}");
 
-            if (mod.FileName is null)
+            if (dukeCamp.AddonEnum is DukeAddonEnum.WorldTour &&
+                game is DukeGame dukeGame)
             {
-                sb.Append($@" -ini ""{bMod.IniFile}""");
+                var config = Path.Combine(FolderPath, ConfigFile);
+                AddGamePathsToConfig(dukeGame.DukeWTInstallPath, game.ModsFolderPath, config);
+
+                return;
             }
-            else if (mod.FileName is not null)
+
+            if (dukeCamp.FileName is null)
             {
-                sb.Append($@" -file ""{game.CampaignsFolderPath}\{mod.FileName}""");
+                return;
+            }
+
+            if (dukeCamp.ModType is ModTypeEnum.Campaign)
+            {
+                sb.Append($@" -file ""{Path.Combine(game.CampaignsFolderPath, dukeCamp.FileName)}"" -con ""{dukeCamp.StartupFile}""");
+            }
+            else if (dukeCamp.ModType is ModTypeEnum.Map)
+            {
+                sb.Append($@" -file ""{Path.Combine(game.MapsFolderPath, dukeCamp.FileName)}"" -map ""{dukeCamp.StartupFile}""");
+            }
+            else
+            {
+                ThrowHelper.NotImplementedException();
+                return;
+            }
+        }
+
+        private void GetBloodArgs(StringBuilder sb, IGame game, BloodCampaign bloodCamp)
+        {
+            var ini = bloodCamp.StartupFile;
+
+            if (bloodCamp.ModType is ModTypeEnum.Map)
+            {
+                if (bloodCamp.AddonEnum is BloodAddonEnum.Blood)
+                {
+                    ini = Consts.BloodIni;
+                }
+                else if (bloodCamp.AddonEnum is BloodAddonEnum.Cryptic)
+                {
+                    ini = Consts.CrypticIni;
+                }
+            }
+
+            sb.Append(@$" -iwad BLOOD.RFF -ini ""{ini}""");
+
+            if (bloodCamp.FileName is null)
+            {
+                return;
+            }
+
+            if (bloodCamp.ModType is ModTypeEnum.Campaign)
+            {
+                sb.Append($@" -file ""{Path.Combine(game.CampaignsFolderPath, bloodCamp.FileName)}""");
+            }
+            else if (bloodCamp.ModType is ModTypeEnum.Map)
+            {
+                sb.Append($@" -file ""{Path.Combine(game.MapsFolderPath, bloodCamp.FileName)}"" -map ""{bloodCamp.StartupFile}""");
+            }
+            else
+            {
+                ThrowHelper.NotImplementedException();
+                return;
             }
         }
 
@@ -192,7 +236,7 @@ namespace Ports.Ports
         /// Add paths to game and mods folder to the config
         /// </summary>
         [Obsolete("Remove if this ever implemented https://github.com/ZDoom/Raze/issues/1060")]
-        private static string[] AddGamePathsToConfig(string gameFolder, string modsFolder, string config)
+        private static void AddGamePathsToConfig(string gameFolder, string modsFolder, string config)
         {
             var contents = File.ReadAllLines(config);
 
@@ -219,7 +263,7 @@ namespace Ports.Ports
                 }
             }
 
-            return contents;
+            File.WriteAllLines(config, contents);
         }
     }
 }

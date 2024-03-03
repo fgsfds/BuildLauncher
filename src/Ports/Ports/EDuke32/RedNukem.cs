@@ -45,8 +45,6 @@ namespace Ports.Ports.EDuke32
         /// <inheritdoc/>
         public override void GetStartCampaignArgs(StringBuilder sb, IGame game, IMod mod)
         {
-            sb.Append($@" -usecwd -nosetup");
-
             if (mod is not DukeCampaign dukeCamp ||
                 game is not DukeGame dukeGame)
             {
@@ -54,24 +52,33 @@ namespace Ports.Ports.EDuke32
                 return;
             }
 
+            sb.Append($@" -usecwd -nosetup");
+
             if (dukeCamp.AddonEnum is DukeAddonEnum.Duke64)
             {
                 sb.Append(@$" -j {Path.GetDirectoryName(dukeGame.Duke64RomPath)} -gamegrp ""{Path.GetFileName(dukeGame.Duke64RomPath)}""");
                 return;
             }
 
+            sb.Append($@" -j ""{game.GameInstallFolder}"" -addon {(byte)dukeCamp.AddonEnum}");
+
             if (dukeCamp.FileName is null)
             {
-                sb.Append($@" -j ""{game.GameInstallFolder}"" -addon {(byte)dukeCamp.AddonEnum}");
+                return;
+            }
+
+            if (dukeCamp.ModType is ModTypeEnum.Campaign)
+            {
+                sb.Append($@" -g ""{Path.Combine(game.CampaignsFolderPath, dukeCamp.FileName)}"" -x ""{dukeCamp.StartupFile}""");
+            }
+            else if (dukeCamp.ModType is ModTypeEnum.Map)
+            {
+                sb.Append($@" -g ""{Path.Combine(game.MapsFolderPath, dukeCamp.FileName)}"" -map ""{dukeCamp.StartupFile}""");
             }
             else
             {
-                sb.Append($@" -j ""{game.GameInstallFolder}"" -addon {(byte)dukeCamp.AddonEnum} -g ""{Path.Combine(game.CampaignsFolderPath, dukeCamp.FileName)}""");
-            }
-
-            if (dukeCamp.ConFile is not null)
-            {
-                sb.Append($@" -con {dukeCamp.ConFile}");
+                ThrowHelper.NotImplementedException();
+                return;
             }
         }
     }

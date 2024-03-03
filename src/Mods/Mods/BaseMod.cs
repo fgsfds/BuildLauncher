@@ -10,6 +10,9 @@ namespace Mods.Mods
     public abstract class BaseMod : IMod
     {
         /// <inheritdoc/>
+        public required ModTypeEnum ModType { get; init; }
+
+        /// <inheritdoc/>
         public required string DisplayName { get; init; }
 
         /// <inheritdoc/>
@@ -20,6 +23,9 @@ namespace Mods.Mods
 
         /// <inheritdoc/>
         public required string? PathToFile { get; init; }
+
+        /// <inheritdoc/>
+        public required virtual string? StartupFile { get; init; }
 
         /// <inheritdoc/>
         public string? FileName => PathToFile is null ? null : Path.GetFileName(PathToFile);

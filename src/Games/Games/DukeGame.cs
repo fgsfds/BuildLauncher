@@ -87,9 +87,10 @@ namespace Games.Games
             {
                 campaigns.Add(new DukeCampaign()
                 {
+                    ModType = ModTypeEnum.Campaign,
                     DisplayName = "Duke Nukem 3D",
                     Image = ImageHelper.FileNameToStream("Duke3D.duke3d.png"),
-                    ConFile = null,
+                    StartupFile = null,
                     AddonEnum = DukeAddonEnum.Duke3D,
                     Version = null,
                     SupportedPorts = null,
@@ -104,9 +105,10 @@ namespace Games.Games
                 {
                     campaigns.Add(new DukeCampaign()
                     {
+                        ModType = ModTypeEnum.Campaign,
                         DisplayName = "Caribbean",
                         Image = ImageHelper.FileNameToStream("Duke3D.carib.png"),
-                        ConFile = null,
+                        StartupFile = null,
                         AddonEnum = DukeAddonEnum.Caribbean,
                         Version = null,
                         SupportedPorts = null,
@@ -121,9 +123,10 @@ namespace Games.Games
                 {
                     campaigns.Add(new DukeCampaign()
                     {
+                        ModType = ModTypeEnum.Campaign,
                         DisplayName = "Nuclear Winter",
                         Image = ImageHelper.FileNameToStream("Duke3D.nwinter.jpg"),
-                        ConFile = null,
+                        StartupFile = null,
                         AddonEnum = DukeAddonEnum.NuclearWinter,
                         Version = null,
                         SupportedPorts = null,
@@ -138,9 +141,10 @@ namespace Games.Games
                 {
                     campaigns.Add(new DukeCampaign()
                     {
+                        ModType = ModTypeEnum.Campaign,
                         DisplayName = "Duke it Out in DC",
                         Image = ImageHelper.FileNameToStream("Duke3D.dukedc.png"),
-                        ConFile = null,
+                        StartupFile = null,
                         AddonEnum = DukeAddonEnum.DukeDC,
                         Version = null,
                         SupportedPorts = null,
@@ -157,9 +161,10 @@ namespace Games.Games
             {
                 campaigns.Add(new DukeCampaign()
                 {
+                    ModType = ModTypeEnum.Campaign,
                     DisplayName = "Duke Nukem 3D World Tour",
                     Image = ImageHelper.FileNameToStream("Duke3D.dukewt.jpg"),
-                    ConFile = null,
+                    StartupFile = null,
                     AddonEnum = DukeAddonEnum.WorldTour,
                     SupportedPorts = [PortEnum.Raze, PortEnum.EDuke32, PortEnum.BuildGDX],
                     Version = null,
@@ -175,9 +180,10 @@ namespace Games.Games
             {
                 campaigns.Add(new DukeCampaign()
                 {
+                    ModType = ModTypeEnum.Campaign,
                     DisplayName = "Duke Nukem 64",
                     Image = ImageHelper.FileNameToStream("Duke3D.duke64.png"),
-                    ConFile = null,
+                    StartupFile = null,
                     SupportedPorts = [PortEnum.RedNukem],
                     AddonEnum = DukeAddonEnum.Duke64,
                     Version = null,

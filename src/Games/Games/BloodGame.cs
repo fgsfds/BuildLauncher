@@ -45,8 +45,9 @@ namespace Games.Games
 
             campaigns.Add(new BloodCampaign()
             {
+                ModType = ModTypeEnum.Campaign,
                 DisplayName = "Blood",
-                IniFile = "BLOOD.INI",
+                StartupFile = Consts.BloodIni,
                 Image = ImageHelper.FileNameToStream("Blood.blood.png"),
                 AddonEnum = BloodAddonEnum.Blood,
                 Version = null,
@@ -62,8 +63,9 @@ namespace Games.Games
             {
                 campaigns.Add(new BloodCampaign()
                 {
+                    ModType = ModTypeEnum.Campaign,
                     DisplayName = "Cryptic Passage",
-                    IniFile = "CRYPTIC.INI",
+                    StartupFile = Consts.CrypticIni,
                     Image = ImageHelper.FileNameToStream("Blood.cp.png"),
                     AddonEnum = BloodAddonEnum.Cryptic,
                     Version = null,

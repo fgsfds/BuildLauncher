@@ -33,24 +33,36 @@ namespace Ports.Ports.EDuke32
         /// <inheritdoc/>
         public override void GetStartCampaignArgs(StringBuilder sb, IGame game, IMod mod)
         {
-            sb.Append($@" -usecwd -nosetup");
-
-            AddMusicFolder(sb, game);
-
-            if (mod is not WangCampaign dukeCamp ||
-                game is not WangGame dukeGame)
+            if (mod is not WangCampaign wangCamp ||
+                game is not WangGame wangGame)
             {
                 ThrowHelper.ArgumentException();
                 return;
             }
 
-            if (dukeCamp.FileName is null)
+            sb.Append($@" -usecwd -nosetup");
+
+            AddMusicFolder(sb, game);
+
+            sb.Append($@" -j""{wangGame.GameInstallFolder}"" -addon{(byte)wangCamp.AddonEnum}");
+
+            if (wangCamp.FileName is null)
             {
-                sb.Append($@" -j""{dukeGame.GameInstallFolder}"" -j""E:\Steam\steamapps\common\Shadow Warrior Classic\gameroot\classic\MUSIC"" -addon{(byte)dukeCamp.AddonEnum}");
+                return;
+            }
+
+            if (wangCamp.ModType is ModTypeEnum.Campaign)
+            {
+                sb.Append($@" -j""{game.CampaignsFolderPath}"" -g""{wangCamp.FileName}""");
+            }
+            else if (wangCamp.ModType is ModTypeEnum.Map)
+            {
+                sb.Append($@" -j""{game.CampaignsFolderPath}"" -g""{wangCamp.FileName}"" -map ""{wangCamp.StartupFile}""");
             }
             else
             {
-                sb.Append($@" -j""{dukeGame.GameInstallFolder}"" -j""{dukeGame.CampaignsFolderPath}"" -g""{dukeCamp.FileName}"" -addon{(byte)dukeCamp.AddonEnum}");
+                ThrowHelper.NotImplementedException();
+                return;
             }
         }
 

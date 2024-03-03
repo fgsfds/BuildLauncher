@@ -15,6 +15,6 @@ namespace Mods.Mods
         /// <summary>
         /// Startup .ini file
         /// </summary>
-        public required string IniFile { get; init; }
+        public required override string StartupFile { get; init; }
     }
 }

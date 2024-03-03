@@ -79,6 +79,8 @@ namespace Mods.Providers
                                 description = manifest.Description;
                                 startupFile = manifest.StartupFile;
                                 dukeAddonEnum = manifest.DukeAddon is not null ? (DukeAddonEnum)manifest.DukeAddon : DukeAddonEnum.Duke3D;
+                                wangAddonEnum = manifest.WangAddon is not null ? (WangAddonEnum)manifest.WangAddon : WangAddonEnum.Wang;
+                                bloodAddonEnum = manifest.BloodAddon is not null ? (BloodAddonEnum)manifest.BloodAddon : BloodAddonEnum.Blood;
                                 version = manifest.Version;
                                 url = manifest.Url;
                                 author = manifest.Author;
@@ -87,17 +89,36 @@ namespace Mods.Providers
                         }
                     }
 
-                    if (modTypeEnum is ModTypeEnum.Campaign)
+                    if (modTypeEnum is ModTypeEnum.Autoload)
+                    {
+                        mods.Add(new AutoloadMod()
+                        {
+                            ModType = ModTypeEnum.Autoload,
+                            DisplayName = displayName,
+                            Image = image,
+                            SupportedPorts = supportedPorts,
+                            Description = description,
+                            Version = version,
+                            Author = author,
+                            Url = url,
+                            IsEnabled = true,
+                            IsOfficial = false,
+                            PathToFile = file,
+                            StartupFile = null
+                        });
+                    }
+                    else
                     {
                         if (game.GameEnum is GameEnum.Duke3D)
                         {
                             mods.Add(new DukeCampaign()
                             {
+                                ModType = modTypeEnum,
                                 DisplayName = displayName,
                                 Image = image,
                                 SupportedPorts = supportedPorts,
                                 Description = description,
-                                ConFile = startupFile,
+                                StartupFile = startupFile,
                                 AddonEnum = dukeAddonEnum,
                                 Version = version,
                                 Author = author,
@@ -110,6 +131,7 @@ namespace Mods.Providers
                         {
                             mods.Add(new WangCampaign()
                             {
+                                ModType = modTypeEnum,
                                 DisplayName = displayName,
                                 Image = image,
                                 SupportedPorts = supportedPorts,
@@ -119,13 +141,15 @@ namespace Mods.Providers
                                 Author = author,
                                 Url = url,
                                 IsOfficial = false,
-                                PathToFile = file
+                                PathToFile = file,
+                                StartupFile = null
                             });
                         }
                         else if (game.GameEnum is GameEnum.Blood)
                         {
                             mods.Add(new BloodCampaign()
                             {
+                                ModType = modTypeEnum,
                                 DisplayName = displayName,
                                 Image = image,
                                 SupportedPorts = supportedPorts,
@@ -134,43 +158,11 @@ namespace Mods.Providers
                                 Version = version,
                                 Author = author,
                                 Url = url,
-                                IniFile = startupFile!,
+                                StartupFile = startupFile!,
                                 IsOfficial = false,
                                 PathToFile = file
                             });
                         }
-                    }
-                    else if (modTypeEnum is ModTypeEnum.Map)
-                    {
-                        mods.Add(new SingleMap()
-                        {
-                            DisplayName = displayName,
-                            Image = image,
-                            SupportedPorts = supportedPorts,
-                            Description = description,
-                            Version = version,
-                            Author = author,
-                            Url = url,
-                            IsOfficial = false,
-                            PathToFile = file,
-                            MapFile = startupFile!
-                        });
-                    }
-                    else if (modTypeEnum is ModTypeEnum.Autoload)
-                    {
-                        mods.Add(new AutoloadMod()
-                        {
-                            DisplayName = displayName,
-                            Image = image,
-                            SupportedPorts = supportedPorts,
-                            Description = description,
-                            Version = version,
-                            Author = author,
-                            Url = url,
-                            IsEnabled = true,
-                            IsOfficial = false,
-                            PathToFile = file
-                        });
                     }
                 }
                 catch

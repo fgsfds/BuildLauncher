@@ -5,6 +5,11 @@ namespace Common.Interfaces
     public interface IMod
     {
         /// <summary>
+        /// Type of the mod
+        /// </summary>
+        ModTypeEnum ModType { get; init; }
+
+        /// <summary>
         /// Name of the mod
         /// </summary>
         string DisplayName { get; init; }
@@ -25,9 +30,14 @@ namespace Common.Interfaces
         string? PathToFile { get; init; }
 
         /// <summary>
-        /// Name of the file
+        /// Name of the mod file
         /// </summary>
         string? FileName { get; }
+
+        /// <summary>
+        /// Main startup file (CON, INI, MAP etc)
+        /// </summary>
+        string? StartupFile { get; init; }
 
         /// <summary>
         /// Cover image
