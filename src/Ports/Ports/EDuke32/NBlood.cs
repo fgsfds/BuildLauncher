@@ -2,6 +2,7 @@
 using Common.Interfaces;
 using Mods.Mods;
 using Ports.Providers;
+using System.Text;
 
 namespace Ports.Ports.EDuke32
 {
@@ -35,26 +36,26 @@ namespace Ports.Ports.EDuke32
         public override void BeforeStart(IGame game) { }
 
         /// <inheritdoc/>
-        public override string GetStartCampaignArgs(IGame game, IMod mod)
+        public override void GetStartCampaignArgs(StringBuilder sb, IGame game, IMod mod)
         {
-            var args = $@" -usecwd -nosetup -j ""{game.GameInstallFolder}""";
+            sb.Append($@" -usecwd -nosetup -j ""{game.GameInstallFolder}""");
 
             if (mod is BloodCampaign campaign)
             {
                 if (campaign.FileName is not null)
                 {
-                    args += $@" -g ""{Path.Combine(game.CampaignsFolderPath, campaign.FileName)}""";
+                    sb.Append($@" -g ""{Path.Combine(game.CampaignsFolderPath, campaign.FileName)}""");
                 }
 
-                args += $@" -ini ""{campaign.IniFile}""";
+                sb.Append($@" -ini ""{campaign.IniFile}""");
             }
 
             if (mod is SingleMap map)
             {
-                args += $@" -map ""{Path.Combine(game.MapsFolderPath, map.FileName!)}""";
+                sb.Append($@" -map ""{Path.Combine(game.MapsFolderPath, map.FileName!)}""");
             }
 
-            return args;
+            return;
         }
     }
 }

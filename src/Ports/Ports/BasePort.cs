@@ -3,6 +3,7 @@ using Common.Enums;
 using Ports.Providers;
 using System.Collections.Immutable;
 using Common.Interfaces;
+using System.Text;
 
 namespace Ports.Ports
 {
@@ -46,19 +47,19 @@ namespace Ports.Ports
         /// </summary>
         /// <param name="game">Game<param>
         /// <param name="mod">Map/campaign</param>
-        public abstract string GetStartCampaignArgs(IGame game, IMod mod);
+        public abstract void GetStartCampaignArgs(StringBuilder sb, IGame game, IMod mod);
 
         /// <summary>
         /// Get command line arguments to load mods
         /// </summary>
         /// <param name="game">Game<param>
         /// <param name="mods">Mods</param>
-        public abstract string GetAutoloadModsArgs(IGame game, ImmutableList<IMod> mods);
+        public abstract void GetAutoloadModsArgs(StringBuilder sb, IGame game, ImmutableList<IMod> mods);
 
         /// <summary>
         /// Return command line parameter to skip intro
         /// </summary>
-        public abstract string GetSkipIntroParameter();
+        public abstract void GetSkipIntroParameter(StringBuilder sb);
 
         /// <summary>
         /// Predicate to find windows release

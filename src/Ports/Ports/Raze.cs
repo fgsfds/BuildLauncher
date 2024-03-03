@@ -6,6 +6,7 @@ using Mods.Mods;
 using Ports.Providers;
 using System.Collections.Immutable;
 using System.Diagnostics;
+using System.Text;
 
 namespace Ports.Ports
 {
@@ -88,77 +89,69 @@ namespace Ports.Ports
         }
 
         /// <inheritdoc/>
-        public override string GetStartCampaignArgs(IGame game, IMod mod)
+        public override void GetStartCampaignArgs(StringBuilder sb, IGame game, IMod mod)
         {
-            var args = $@" -nosetup -savedir ""{Path.Combine(FolderPath, "Save", mod.DisplayName.Replace(' ', '_'))}""";
+            sb.Append($@" -nosetup -savedir ""{Path.Combine(FolderPath, "Save", mod.DisplayName.Replace(' ', '_'))}""");
 
             if (mod is BloodCampaign bMod)
             {
-                args = GetBloodArgs(game, mod, args, bMod);
+                GetBloodArgs(sb, game, mod, bMod);
             }
             else if (mod is DukeCampaign dMod)
             {
-                args = GetDukeArgs(game, args, dMod);
+                GetDukeArgs(sb, game, dMod);
             }
             else if (mod is WangCampaign wMod)
             {
-                args = GetWangArgs(game, args, wMod);
+                GetWangArgs(sb, game, wMod);
             }
-            else if (mod is SingleMap)
+            else if (mod is SingleMap map)
             {
-                args += $@" -file ""{game.MapsFolderPath}\{mod.FileName}"" -map ""{mod.FileName}""";
+                sb.Append($@" -file ""{game.MapsFolderPath}\{mod.FileName}"" -map ""{map.FileName}""");
             }
-
-            return args;
         }
 
         /// <inheritdoc/>
-        public override string GetAutoloadModsArgs(IGame game, ImmutableList<IMod> mods)
+        public override void GetAutoloadModsArgs(StringBuilder sb, IGame game, ImmutableList<IMod> mods)
         {
             if (mods.Count == 0)
             {
-                return string.Empty;
+                return;
             }
-
-            string args = string.Empty;
 
             foreach (var mod in mods)
             {
-                args += $@" -file ""{mod.FileName}""";
+                sb.Append($@" -file ""{mod.FileName}""");
             }
-
-            return args;
         }
 
         /// <inheritdoc/>
-        public override string GetSkipIntroParameter() => " -quick";
+        public override void GetSkipIntroParameter(StringBuilder sb) => sb.Append(" -quick");
 
-        private static string GetWangArgs(IGame game, string args, WangCampaign wMod)
+        private static void GetWangArgs(StringBuilder sb, IGame game, WangCampaign wMod)
         {
-            args += @" -iwad SW.GRP";
+            sb.Append(@" -iwad SW.GRP");
 
             if (wMod.FileName is null)
             {
                 if (wMod.AddonEnum is WangAddonEnum.Wanton)
                 {
-                    args += @" -file WT.GRP";
+                    sb.Append(@" -file WT.GRP");
                 }
                 else if (wMod.AddonEnum is WangAddonEnum.TwinDragon)
                 {
-                    args += @" -file TD.GRP";
+                    sb.Append(@" -file TD.GRP");
                 }
             }
             else if (wMod.FileName is not null)
             {
-                args += $@" -file ""{Path.Combine(game.CampaignsFolderPath, wMod.FileName)}""";
+                sb.Append($@" -file ""{Path.Combine(game.CampaignsFolderPath, wMod.FileName)}""");
             }
-
-            return args;
         }
 
-        private string GetDukeArgs(IGame game, string args, DukeCampaign dMod)
+        private void GetDukeArgs(StringBuilder sb, IGame game, DukeCampaign dMod)
         {
-            args += $" -addon {(byte)dMod.AddonEnum}";
+            sb.Append($" -addon {(byte)dMod.AddonEnum}");
 
             if (dMod.AddonEnum is DukeAddonEnum.WorldTour &&
                 game is DukeGame dukeGame)
@@ -167,36 +160,32 @@ namespace Ports.Ports
                 var contents = AddGamePathsToConfig(dukeGame.DukeWTInstallPath, game.ModsFolderPath, config);
                 File.WriteAllLines(config, contents);
 
-                return args;
+                return;
             }
 
             if (dMod.FileName is not null)
             {
-                args += $@" -file ""{Path.Combine(game.CampaignsFolderPath, dMod.FileName)}""";
+                sb.Append($@" -file ""{Path.Combine(game.CampaignsFolderPath, dMod.FileName)}""");
             }
 
             if (dMod.ConFile is not null)
             {
-                args += $@" -con {dMod.ConFile}";
+                sb.Append($@" -con {dMod.ConFile}");
             }
-
-            return args;
         }
 
-        private static string GetBloodArgs(IGame game, IMod mod, string args, BloodCampaign bMod)
+        private void GetBloodArgs(StringBuilder sb, IGame game, IMod mod, BloodCampaign bMod)
         {
-            args += " -iwad BLOOD.RFF";
+            sb.Append(" -iwad BLOOD.RFF");
 
             if (mod.FileName is null)
             {
-                args += $@" -ini ""{bMod.IniFile}""";
+                sb.Append($@" -ini ""{bMod.IniFile}""");
             }
             else if (mod.FileName is not null)
             {
-                args += $@" -file ""{game.CampaignsFolderPath}\{mod.FileName}""";
+                sb.Append($@" -file ""{game.CampaignsFolderPath}\{mod.FileName}""");
             }
-
-            return args;
         }
 
         /// <summary>

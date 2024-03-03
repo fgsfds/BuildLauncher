@@ -2,6 +2,7 @@
 using Common.Interfaces;
 using Ports.Providers;
 using System.Collections.Immutable;
+using System.Text;
 
 namespace Ports.Ports
 {
@@ -47,12 +48,12 @@ namespace Ports.Ports
         public override int? InstalledVersion => null;
 
         /// <inheritdoc/>
-        public override string GetAutoloadModsArgs(IGame provider, ImmutableList<IMod> mods) => throw new NotImplementedException();
+        public override void GetAutoloadModsArgs(StringBuilder sb, IGame provider, ImmutableList<IMod> mods) => throw new NotImplementedException();
 
         /// <inheritdoc/>
-        public override string GetStartCampaignArgs(IGame game, IMod mod) => throw new NotImplementedException();
+        public override void GetStartCampaignArgs(StringBuilder sb, IGame game, IMod mod) => throw new NotImplementedException();
 
         /// <inheritdoc/>
-        public override string GetSkipIntroParameter() => throw new NotImplementedException();
+        public override void GetSkipIntroParameter(StringBuilder sb) => throw new NotImplementedException();
     }
 }

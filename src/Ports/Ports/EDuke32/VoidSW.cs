@@ -3,6 +3,7 @@ using Common.Helpers;
 using Common.Interfaces;
 using Games.Games;
 using Mods.Mods;
+using System.Text;
 
 namespace Ports.Ports.EDuke32
 {
@@ -30,33 +31,33 @@ namespace Ports.Ports.EDuke32
         public override string ConfigFile => "voidsw.cfg";
 
         /// <inheritdoc/>
-        public override string GetStartCampaignArgs(IGame game, IMod mod)
+        public override void GetStartCampaignArgs(StringBuilder sb, IGame game, IMod mod)
         {
-            var args = $@" -usecwd -nosetup";
+            sb.Append($@" -usecwd -nosetup");
 
-            AddMusicFolder(game, ref args);
+            AddMusicFolder(sb, game);
 
             if (mod is not WangCampaign dukeCamp ||
                 game is not WangGame dukeGame)
             {
                 ThrowHelper.ArgumentException();
-                return null;
+                return;
             }
 
             if (dukeCamp.FileName is null)
             {
-                return args += $@" -j""{dukeGame.GameInstallFolder}"" -j""E:\Steam\steamapps\common\Shadow Warrior Classic\gameroot\classic\MUSIC"" -addon{(byte)dukeCamp.AddonEnum}";
+                sb.Append($@" -j""{dukeGame.GameInstallFolder}"" -j""E:\Steam\steamapps\common\Shadow Warrior Classic\gameroot\classic\MUSIC"" -addon{(byte)dukeCamp.AddonEnum}");
             }
             else
             {
-                return args += $@" -j""{dukeGame.GameInstallFolder}"" -j""{dukeGame.CampaignsFolderPath}"" -g""{dukeCamp.FileName}"" -addon{(byte)dukeCamp.AddonEnum}";
+                sb.Append($@" -j""{dukeGame.GameInstallFolder}"" -j""{dukeGame.CampaignsFolderPath}"" -g""{dukeCamp.FileName}"" -addon{(byte)dukeCamp.AddonEnum}");
             }
         }
 
         /// <summary>
         /// Add music folders to the search list if music files don't exist in the game directory
         /// </summary>
-        private static void AddMusicFolder(IGame game, ref string args)
+        private static void AddMusicFolder(StringBuilder sb, IGame game)
         {
             if (File.Exists(Path.Combine(game.GameInstallFolder, "track02.ogg")))
             {
@@ -66,14 +67,14 @@ namespace Ports.Ports.EDuke32
             var folder = Path.Combine(game.GameInstallFolder, "MUSIC");
             if (Directory.Exists(folder))
             {
-                args += @$" -j""{folder}""";
+                sb.Append(@$" -j""{folder}""");
                 return;
             }
 
             folder = Path.Combine(game.GameInstallFolder, "classic", "MUSIC");
             if (Directory.Exists(folder))
             {
-                args += @$" -j""{folder}""";
+                sb.Append(@$" -j""{folder}""");
                 return;
             }
         }

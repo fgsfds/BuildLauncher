@@ -11,6 +11,7 @@ using Mods;
 using Common.Tools;
 using Common.Interfaces;
 using Mods.Providers;
+using System.Text;
 
 namespace BuildLauncher.ViewModels
 {
@@ -153,13 +154,17 @@ namespace BuildLauncher.ViewModels
 
             port.BeforeStart(Game);
 
-            var args = port.GetStartCampaignArgs(Game, SelectedCampaign);
-            args += port.GetAutoloadModsArgs(Game, [.. ModsList]);
+            StringBuilder sb = new();
+
+            port.GetStartCampaignArgs(sb, Game, SelectedCampaign);
+            port.GetAutoloadModsArgs(sb, Game, [.. ModsList]);
 
             if (SkipIntroCheckbox)
             {
-                args += port.GetSkipIntroParameter();
+                port.GetSkipIntroParameter(sb);
             }
+
+            var args = sb.ToString();
 
             StartPort(port.FullPathToExe, args);
         }

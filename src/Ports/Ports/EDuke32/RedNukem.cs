@@ -5,6 +5,7 @@ using Common.Interfaces;
 using Games.Games;
 using Mods.Mods;
 using Ports.Providers;
+using System.Text;
 
 namespace Ports.Ports.EDuke32
 {
@@ -42,37 +43,36 @@ namespace Ports.Ports.EDuke32
         public override Func<GitHubReleaseAsset, bool> WindowsReleasePredicate => static x => x.FileName.StartsWith("rednukem_win64");
 
         /// <inheritdoc/>
-        public override string GetStartCampaignArgs(IGame game, IMod mod)
+        public override void GetStartCampaignArgs(StringBuilder sb, IGame game, IMod mod)
         {
-            var args = $@" -usecwd -nosetup";
+            sb.Append($@" -usecwd -nosetup");
 
             if (mod is not DukeCampaign dukeCamp ||
                 game is not DukeGame dukeGame)
             {
                 ThrowHelper.ArgumentException();
-                return null;
+                return;
             }
 
             if (dukeCamp.AddonEnum is DukeAddonEnum.Duke64)
             {
-                return args += @$" -j {Path.GetDirectoryName(dukeGame.Duke64RomPath)} -gamegrp ""{Path.GetFileName(dukeGame.Duke64RomPath)}""";
+                sb.Append(@$" -j {Path.GetDirectoryName(dukeGame.Duke64RomPath)} -gamegrp ""{Path.GetFileName(dukeGame.Duke64RomPath)}""");
+                return;
             }
 
             if (dukeCamp.FileName is null)
             {
-                args += $@" -j ""{game.GameInstallFolder}"" -addon {(byte)dukeCamp.AddonEnum}";
+                sb.Append($@" -j ""{game.GameInstallFolder}"" -addon {(byte)dukeCamp.AddonEnum}");
             }
             else
             {
-                args += $@" -j ""{game.GameInstallFolder}"" -addon {(byte)dukeCamp.AddonEnum} -g ""{Path.Combine(game.CampaignsFolderPath, dukeCamp.FileName)}""";
+                sb.Append($@" -j ""{game.GameInstallFolder}"" -addon {(byte)dukeCamp.AddonEnum} -g ""{Path.Combine(game.CampaignsFolderPath, dukeCamp.FileName)}""");
             }
 
             if (dukeCamp.ConFile is not null)
             {
-                args += $@" -con {dukeCamp.ConFile}";
+                sb.Append($@" -con {dukeCamp.ConFile}");
             }
-
-            return args;
         }
     }
 }

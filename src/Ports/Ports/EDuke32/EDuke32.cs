@@ -6,6 +6,7 @@ using Ports.Providers;
 using System.Collections.Immutable;
 using Common.Enums.Addons;
 using Common.Interfaces;
+using System.Text;
 
 namespace Ports.Ports.EDuke32
 {
@@ -66,54 +67,53 @@ namespace Ports.Ports.EDuke32
         }
 
         /// <inheritdoc/>
-        public override string GetStartCampaignArgs(IGame game, IMod mod)
+        public override void GetStartCampaignArgs(StringBuilder sb, IGame game, IMod mod)
         {
-            var args = $@" -usecwd -nosetup";
+            sb.Append($@" -usecwd -nosetup");
 
             if (mod is not DukeCampaign dukeCamp ||
                 game is not DukeGame dukeGame)
             {
                 ThrowHelper.ArgumentException();
-                return null;
+                return;
             }
 
             if (dukeCamp.AddonEnum is DukeAddonEnum.WorldTour)
             {
-                return args += $@" -addon {(byte)DukeAddonEnum.Duke3D} -j""{dukeGame.DukeWTInstallPath}"" -j ""{Path.Combine(game.SpecialFolderPath, Consts.WTStopgap)}"" -gamegrp e32wt.grp";
+                sb.Append($@" -addon {(byte)DukeAddonEnum.Duke3D} -j""{dukeGame.DukeWTInstallPath}"" -j ""{Path.Combine(game.SpecialFolderPath, Consts.WTStopgap)}"" -gamegrp e32wt.grp");
+                return;
             }
 
             if (dukeCamp.FileName is null)
             {
-                return args += $@" -j ""{game.GameInstallFolder}"" -addon {(byte)dukeCamp.AddonEnum}";
+                sb.Append($@" -j ""{game.GameInstallFolder}"" -addon {(byte)dukeCamp.AddonEnum}");
             }
             else
             {
-                return args += $@" -j ""{game.GameInstallFolder}"" -addon {(byte)dukeCamp.AddonEnum} -g ""{Path.Combine(game.CampaignsFolderPath, dukeCamp.FileName)}""";
+                sb.Append($@" -j ""{game.GameInstallFolder}"" -addon {(byte)dukeCamp.AddonEnum} -g ""{Path.Combine(game.CampaignsFolderPath, dukeCamp.FileName)}""");
             }
         }
 
         /// <inheritdoc/>
-        public override string GetAutoloadModsArgs(IGame game, ImmutableList<IMod> mods)
+        public override void GetAutoloadModsArgs(StringBuilder sb, IGame game, ImmutableList<IMod> mods)
         {
             if (mods.Count == 0)
             {
-                return string.Empty;
+                return;
             }
 
-            var args = $@" -j ""{game.ModsFolderPath}""";
+            sb.Append($@" -j ""{game.ModsFolderPath}""");
 
             foreach (var mod in mods)
             {
-                args += $@" -g ""{mod.FileName}""";
+                sb.Append($@" -g ""{mod.FileName}""");
             }
 
-            args += $@" -g ""{Path.Combine(game.SpecialFolderPath, "z_combined.zip")}""";
-
-            return args;
+            sb.Append($@" -g ""{Path.Combine(game.SpecialFolderPath, "z_combined.zip")}""");
         }
 
         /// <inheritdoc/>
-        public override string GetSkipIntroParameter() => " -quick";
+        public override void GetSkipIntroParameter(StringBuilder sb) => sb.Append(" -quick");
 
         /// <inheritdoc/>
         public override int? InstalledVersion
