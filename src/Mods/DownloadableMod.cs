@@ -20,6 +20,8 @@ namespace Mods
 
         public string Description { get; set; }
 
+        public string? Author { get; set; }
+
 
         public override string ToString() => Name;
 
@@ -28,6 +30,11 @@ namespace Mods
             StringBuilder description = new($"## {Name}{Environment.NewLine}");
 
             description.Append($"{Environment.NewLine}#### v{Version:0.0#}");
+
+            if (Author is not null)
+            {
+                description.Append($"{Environment.NewLine}{Environment.NewLine}*by {Author}*");
+            }
 
             if (Url is not null)
             {
