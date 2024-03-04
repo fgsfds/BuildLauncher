@@ -15,7 +15,7 @@ namespace BuildLauncher.Pages
             InitializeComponent();
 
             var vmFactory = BindingsManager.Provider.GetRequiredService<PortViewModelFactory>();
-            
+
             Raze.DataContext = vmFactory.Create(PortEnum.Raze);
             NBlood.DataContext = vmFactory.Create(PortEnum.NBlood);
             NotBlood.DataContext = vmFactory.Create(PortEnum.NotBlood);

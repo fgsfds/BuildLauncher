@@ -31,7 +31,7 @@ namespace Ports.Ports
         /// <inheritdoc/>
         public override List<GameEnum> SupportedGames =>
             [
-            GameEnum.Blood, 
+            GameEnum.Blood,
             GameEnum.Duke3D,
             GameEnum.Wang,
             GameEnum.Powerslave,

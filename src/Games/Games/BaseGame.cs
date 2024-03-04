@@ -1,13 +1,13 @@
-﻿using Common.Helpers;
-using SharpCompress.Common;
+﻿using Common.Enums;
+using Common.Helpers;
+using Common.Interfaces;
+using Mods.Providers;
 using SharpCompress.Archives;
+using SharpCompress.Common;
 using System.Collections.Immutable;
 using System.IO.Compression;
 using System.Text;
 using ZipArchive = SharpCompress.Archives.Zip.ZipArchive;
-using Common.Enums;
-using Common.Interfaces;
-using Mods.Providers;
 
 namespace Games.Games
 {

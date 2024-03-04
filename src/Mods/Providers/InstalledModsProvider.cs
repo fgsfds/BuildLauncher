@@ -3,6 +3,7 @@ using Common.Enums.Addons;
 using Common.Helpers;
 using Common.Interfaces;
 using Mods.Mods;
+using Mods.Serializable;
 using SharpCompress.Archives;
 using System.Text.Json;
 

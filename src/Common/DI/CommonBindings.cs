@@ -8,9 +8,9 @@ namespace Common.DI
     {
         public static void Load(ServiceCollection container)
         {
-            container.AddTransient<ArchiveTools>();
-
             container.AddSingleton<ConfigProvider>();
+
+            container.AddTransient<ArchiveTools>();
         }
     }
 }

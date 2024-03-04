@@ -1,11 +1,11 @@
-﻿using Common.Helpers;
-using Common.Enums;
+﻿using Common.Enums;
+using Common.Enums.Addons;
+using Common.Helpers;
+using Common.Interfaces;
 using Games.Games;
 using Mods.Mods;
 using Ports.Providers;
 using System.Collections.Immutable;
-using Common.Enums.Addons;
-using Common.Interfaces;
 using System.Text;
 
 namespace Ports.Ports.EDuke32
@@ -40,7 +40,7 @@ namespace Ports.Ports.EDuke32
         public override Uri RepoUrl => new("https://dukeworld.com/eduke32/synthesis/latest/");
 
         /// <inheritdoc/>
-        public override Func<GitHubReleaseAsset, bool> WindowsReleasePredicate => ThrowHelper.NotImplementedException< Func<GitHubReleaseAsset, bool>>();
+        public override Func<GitHubReleaseAsset, bool> WindowsReleasePredicate => ThrowHelper.NotImplementedException<Func<GitHubReleaseAsset, bool>>();
 
         /// <inheritdoc/>
         public override void BeforeStart(IGame game)

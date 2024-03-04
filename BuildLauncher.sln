@@ -11,11 +11,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Avalonia", "Avalonia", "{E2
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common", "src\Common\Common.csproj", "{B7D765A0-7B23-474A-AA7B-E2CDC29078FB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Games", "src\Games\Games.csproj", "{3DE48404-FDA3-4385-8C8D-AB0E32D1E877}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Games", "src\Games\Games.csproj", "{3DE48404-FDA3-4385-8C8D-AB0E32D1E877}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ports", "src\Ports\Ports.csproj", "{1234E66C-EE8D-4002-9D03-6E295D53C6E8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ports", "src\Ports\Ports.csproj", "{1234E66C-EE8D-4002-9D03-6E295D53C6E8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mods", "src\Mods\Mods.csproj", "{E02FDBCA-C900-4B80-9F54-45B03149D883}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mods", "src\Mods\Mods.csproj", "{E02FDBCA-C900-4B80-9F54-45B03149D883}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Updater", "src\Updater\Updater.csproj", "{CD246600-DBC0-49E3-AD62-5E16E4484837}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -47,6 +49,10 @@ Global
 		{E02FDBCA-C900-4B80-9F54-45B03149D883}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E02FDBCA-C900-4B80-9F54-45B03149D883}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E02FDBCA-C900-4B80-9F54-45B03149D883}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CD246600-DBC0-49E3-AD62-5E16E4484837}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CD246600-DBC0-49E3-AD62-5E16E4484837}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CD246600-DBC0-49E3-AD62-5E16E4484837}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CD246600-DBC0-49E3-AD62-5E16E4484837}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

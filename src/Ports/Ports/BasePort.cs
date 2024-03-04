@@ -1,8 +1,8 @@
-﻿using Common.Helpers;
-using Common.Enums;
+﻿using Common.Enums;
+using Common.Helpers;
+using Common.Interfaces;
 using Ports.Providers;
 using System.Collections.Immutable;
-using Common.Interfaces;
 using System.Text;
 
 namespace Ports.Ports

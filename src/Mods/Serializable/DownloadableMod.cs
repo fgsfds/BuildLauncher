@@ -2,7 +2,7 @@
 using System.Text;
 using System.Text.Json.Serialization;
 
-namespace Mods
+namespace Mods.Serializable
 {
     public sealed class DownloadableMod
     {

@@ -83,6 +83,10 @@
                     <pages:SettingsPage x:Name="SettingsPageTab"/>
                 </TabItem>
 
+                <TabItem Name="AboutTab" Header="{Binding ElementName=AboutPageTab, Path=((vm:AboutViewModel)DataContext).AboutTabHeader}" Margin="5" >
+                    <pages:AboutPage x:Name="AboutPageTab"/>
+                </TabItem>
+
             </TabControl>
         </Grid>
     </Border>

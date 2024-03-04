@@ -1,5 +1,6 @@
 ﻿using Common.Enums;
 using Common.Helpers;
+using Mods.Serializable;
 using System.Collections.Immutable;
 using System.Text.Json;
 

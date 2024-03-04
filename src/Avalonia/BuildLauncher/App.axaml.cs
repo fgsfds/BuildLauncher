@@ -18,7 +18,7 @@ public sealed partial class App : Application
     public override void Initialize()
     {
         AvaloniaXamlLoader.Load(this);
-    }   
+    }
 
     public override void OnFrameworkInitializationCompleted()
     {
@@ -29,6 +29,7 @@ public sealed partial class App : Application
         Games.DI.ProvidersBindings.Load(container);
         Ports.DI.ProvidersBindings.Load(container);
         Mods.DI.ProvidersBindings.Load(container);
+        Updater.DI.ProvidersBindings.Load(container);
 
         var theme = BindingsManager.Provider.GetRequiredService<ConfigProvider>().Config.Theme;
 

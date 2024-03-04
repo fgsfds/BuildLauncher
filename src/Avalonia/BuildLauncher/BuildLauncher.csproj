@@ -8,10 +8,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <None Remove="Assets\blank.png" />
-    </ItemGroup>
-
-    <ItemGroup>
       <ApplicationDefinition Include="Assets\blood.png" />
       <ApplicationDefinition Include="Assets\duke3d.png" />
       <ApplicationDefinition Include="Assets\sw.png" />
@@ -32,11 +28,6 @@
       <ProjectReference Include="..\..\Common\Common.csproj" />
       <ProjectReference Include="..\..\Games\Games.csproj" />
       <ProjectReference Include="..\..\Ports\Ports.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Compile Update="Controls\DownloadsControl.axaml.cs">
-        <DependentUpon>DownloadsControl.axaml</DependentUpon>
-      </Compile>
+      <ProjectReference Include="..\..\Updater\Updater.csproj" />
     </ItemGroup>
 </Project>

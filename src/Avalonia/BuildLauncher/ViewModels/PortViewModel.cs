@@ -1,8 +1,8 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Ports.Tools;
-using Ports.Providers;
 using Ports.Ports;
+using Ports.Providers;
+using Ports.Tools;
 
 namespace BuildLauncher.ViewModels
 {

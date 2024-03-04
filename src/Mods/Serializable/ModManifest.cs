@@ -3,7 +3,7 @@ using Common.Enums.Addons;
 using Common.Helpers;
 using System.Text.Json.Serialization;
 
-namespace Mods
+namespace Mods.Serializable
 {
     public sealed class ModManifest
     {
