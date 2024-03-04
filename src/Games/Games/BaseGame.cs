@@ -121,7 +121,7 @@ namespace Games.Games
                 return;
             }
 
-            var filePath = Path.Combine(SpecialFolderPath, "combined.zip");
+            var filePath = Path.Combine(SpecialFolderPath, Consts.CombinedMod);
 
             if (File.Exists(filePath))
             {

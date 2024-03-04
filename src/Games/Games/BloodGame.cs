@@ -25,12 +25,12 @@ namespace Games.Games
         public override string DefFile => "blood.def";
 
         /// <inheritdoc/>
-        public override List<string> RequiredFiles => [MainFile, "BLOOD.INI", "GUI.RFF", "SOUNDS.RFF", "SURFACE.DAT", "TILES000.ART", "VOXEL.DAT"];
+        public override List<string> RequiredFiles => [MainFile, Consts.BloodIni, "GUI.RFF", "SOUNDS.RFF", "SURFACE.DAT", "TILES000.ART", "VOXEL.DAT"];
 
         /// <summary>
         /// List of files required for Cryptic Passage
         /// </summary>
-        private readonly List<string> RequiredCPFiles = ["CP01.MAP", "CPART07.AR_", "CPART15.AR_", "CRYPTIC.INI", "CRYPTIC.SMK", "CRYPTIC.WAV"];
+        private readonly List<string> RequiredCPFiles = [Consts.CrypticIni, "CP01.MAP", "CPART07.AR_", "CPART15.AR_", "CRYPTIC.SMK", "CRYPTIC.WAV"];
 
         /// <summary>
         /// Is Cryptic Passage instaleld
@@ -41,7 +41,7 @@ namespace Games.Games
         /// <inheritdoc/>
         protected override List<IMod> GetOriginalCampaigns()
         {
-            List<IMod> campaigns = new();
+            List<IMod> campaigns = new(2);
 
             campaigns.Add(new BloodCampaign()
             {

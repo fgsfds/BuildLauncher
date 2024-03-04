@@ -43,7 +43,7 @@ namespace Games.Games
         /// </summary>
         protected override List<IMod> GetOriginalCampaigns()
         {
-            List<IMod> campaigns = new();
+            List<IMod> campaigns = new(3);
 
             if (IsBaseGameInstalled)
             {

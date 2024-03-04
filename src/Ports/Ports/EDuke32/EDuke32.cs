@@ -121,7 +121,7 @@ namespace Ports.Ports.EDuke32
                 sb.Append($@" -g ""{mod.FileName}""");
             }
 
-            sb.Append($@" -g ""{Path.Combine(game.SpecialFolderPath, "z_combined.zip")}""");
+            sb.Append($@" -g ""{Path.Combine(game.SpecialFolderPath, Consts.CombinedMod)}""");
         }
 
         /// <inheritdoc/>

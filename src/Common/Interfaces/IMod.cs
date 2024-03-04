@@ -68,7 +68,6 @@ namespace Common.Interfaces
         /// <summary>
         /// Create markdown description of the mod
         /// </summary>
-        /// <returns></returns>
         string ToMarkdownString();
     }
 }
