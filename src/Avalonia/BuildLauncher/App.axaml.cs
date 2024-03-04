@@ -50,9 +50,9 @@ public sealed partial class App : Application
         {
             desktop.MainWindow = new MainWindow();
         }
-        else if (ApplicationLifetime is ISingleViewApplicationLifetime singleViewPlatform)
+        else if (ApplicationLifetime is ISingleViewApplicationLifetime)
         {
-            throw new NotImplementedException();
+            ThrowHelper.NotImplementedException();
         }
 
         base.OnFrameworkInitializationCompleted();

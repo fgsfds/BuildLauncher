@@ -144,12 +144,7 @@ namespace BuildLauncher.ViewModels
         [RelayCommand]
         private void StartGame(object? command)
         {
-            if (command is not BasePort port)
-            {
-                ThrowHelper.ArgumentException(nameof(command));
-                return;
-            }
-
+            command.ThrowIfNotType<BasePort>(out var port);
             SelectedCampaign.ThrowIfNull();
 
             port.BeforeStart(Game);
@@ -238,7 +233,7 @@ namespace BuildLauncher.ViewModels
             }
             else
             {
-                ThrowHelper.NotImplementedException();
+                ThrowHelper.NotImplementedException(SelectedDownloadableMod.ModType.ToString());
                 return;
             }
 

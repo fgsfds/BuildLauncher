@@ -1,5 +1,6 @@
 ﻿using Common.Config;
 using Common.Enums;
+using Common.Helpers;
 using Common.Interfaces;
 using Games.Games;
 using Mods.Providers;
@@ -62,16 +63,16 @@ namespace Games.Providers
                 GameEnum.Blood => Blood,
                 GameEnum.Duke3D => Duke3D,
                 GameEnum.Wang => Wang,
-                GameEnum.IonFury => throw new NotImplementedException(),
-                GameEnum.Powerslave => throw new NotImplementedException(),
-                GameEnum.NAM => throw new NotImplementedException(),
-                GameEnum.WWIIGI => throw new NotImplementedException(),
-                GameEnum.RedneckRampage => throw new NotImplementedException(),
-                GameEnum.RidesAgain => throw new NotImplementedException(),
-                GameEnum.TekWar => throw new NotImplementedException(),
-                GameEnum.Witchaven => throw new NotImplementedException(),
-                GameEnum.Witchaven2 => throw new NotImplementedException(),
-                _ => throw new NotImplementedException()
+                GameEnum.IonFury => ThrowHelper.NotImplementedException<IGame>(),
+                GameEnum.Powerslave => ThrowHelper.NotImplementedException<IGame>(),
+                GameEnum.NAM => ThrowHelper.NotImplementedException<IGame>(),
+                GameEnum.WWIIGI => ThrowHelper.NotImplementedException<IGame>(),
+                GameEnum.RedneckRampage => ThrowHelper.NotImplementedException<IGame>(),
+                GameEnum.RidesAgain => ThrowHelper.NotImplementedException<IGame>(),
+                GameEnum.TekWar => ThrowHelper.NotImplementedException<IGame>(),
+                GameEnum.Witchaven => ThrowHelper.NotImplementedException<IGame>(),
+                GameEnum.Witchaven2 => ThrowHelper.NotImplementedException<IGame>(),
+                _ => ThrowHelper.NotImplementedException<IGame>()
             };
         }
 

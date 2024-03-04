@@ -19,10 +19,7 @@ namespace Common.Helpers
 
             var resource = ass.GetManifestResourceStream($"{ass.GetName().Name}.Assets.{fileName}");
 
-            if (resource is null)
-            {
-                ThrowHelper.NullReferenceException();
-            }
+            resource.ThrowIfNull();
 
             return resource;
         }

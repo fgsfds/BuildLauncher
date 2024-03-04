@@ -23,11 +23,7 @@ namespace BuildLauncher.Controls
         /// </summary>
         public void Init(PortsProvider portsProvider)
         {
-            if (DataContext is not GameViewModel gameViewModel)
-            {
-                ThrowHelper.ArgumentException(nameof(DataContext));
-                return;
-            }
+            DataContext.ThrowIfNotType<GameViewModel>(out var gameViewModel);
 
             _gameViewModel = gameViewModel;
 
@@ -68,10 +64,7 @@ namespace BuildLauncher.Controls
         /// </summary>
         private void AddContextMenuButtons()
         {
-            if (CampaignsListControl.ContextMenu is null)
-            {
-                ThrowHelper.NullReferenceException(nameof(CampaignsListControl));
-            }
+            CampaignsListControl.ContextMenu.ThrowIfNull();
 
             if (CampaignsListControl.SelectedItem is not IMod iMod)
             {

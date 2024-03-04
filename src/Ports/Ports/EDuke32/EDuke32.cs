@@ -40,7 +40,7 @@ namespace Ports.Ports.EDuke32
         public override Uri RepoUrl => new("https://dukeworld.com/eduke32/synthesis/latest/");
 
         /// <inheritdoc/>
-        public override Func<GitHubReleaseAsset, bool> WindowsReleasePredicate => throw new NotImplementedException();
+        public override Func<GitHubReleaseAsset, bool> WindowsReleasePredicate => ThrowHelper.NotImplementedException< Func<GitHubReleaseAsset, bool>>();
 
         /// <inheritdoc/>
         public override void BeforeStart(IGame game)
@@ -69,12 +69,8 @@ namespace Ports.Ports.EDuke32
         /// <inheritdoc/>
         public override void GetStartCampaignArgs(StringBuilder sb, IGame game, IMod mod)
         {
-            if (mod is not DukeCampaign dukeCamp ||
-                game is not DukeGame dukeGame)
-            {
-                ThrowHelper.ArgumentException();
-                return;
-            }
+            mod.ThrowIfNotType<DukeCampaign>(out var dukeCamp);
+            game.ThrowIfNotType<DukeGame>(out var dukeGame);
 
             sb.Append($@" -usecwd -nosetup");
 
@@ -101,7 +97,7 @@ namespace Ports.Ports.EDuke32
             }
             else
             {
-                ThrowHelper.NotImplementedException();
+                ThrowHelper.NotImplementedException($"Mod type {dukeCamp.ModType} is not supported");
                 return;
             }
         }

@@ -45,7 +45,7 @@ namespace Mods
 
                 if (!result || addon is not DukeAddonEnum dukeAddon)
                 {
-                    ThrowHelper.Exception();
+                    ThrowHelper.Exception($"Error while parsing enum from {Addon}");
                     return null;
                 }
 
@@ -67,7 +67,7 @@ namespace Mods
 
                 if (!result || addon is not WangAddonEnum wangAddon)
                 {
-                    ThrowHelper.Exception();
+                    ThrowHelper.Exception($"Error while parsing enum from {Addon}");
                     return null;
                 }
 
@@ -89,7 +89,7 @@ namespace Mods
 
                 if (!result || addon is not BloodAddonEnum bloodAddon)
                 {
-                    ThrowHelper.Exception();
+                    ThrowHelper.Exception($"Error while parsing enum from {Addon}");
                     return null;
                 }
 

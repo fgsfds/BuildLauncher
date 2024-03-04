@@ -17,11 +17,7 @@ namespace BuildLauncher.Controls
         /// </summary>
         public void Init()
         {
-            if (DataContext is not GameViewModel gameViewModel)
-            {
-                ThrowHelper.ArgumentException(nameof(DataContext));
-                return;
-            }
+            DataContext.ThrowIfNotType<GameViewModel>(out var gameViewModel);
 
             AddContextMenuButtons(gameViewModel);
         }
@@ -31,10 +27,7 @@ namespace BuildLauncher.Controls
         /// </summary>
         private void AddContextMenuButtons(GameViewModel gameViewModel)
         {
-            if (ModsListControl.ContextMenu is null)
-            {
-                ThrowHelper.NullReferenceException(nameof(ModsListControl.ContextMenu));
-            }
+            ModsListControl.ContextMenu.ThrowIfNull();
 
             var deleteButton = new MenuItem()
             {

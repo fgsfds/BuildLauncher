@@ -40,11 +40,7 @@ namespace Ports.Ports.EDuke32
         /// <inheritdoc/>
         public override void GetStartCampaignArgs(StringBuilder sb, IGame game, IMod mod)
         {
-            if (mod is not BloodCampaign bloodCamp)
-            {
-                ThrowHelper.NotImplementedException();
-                return;
-            }
+            mod.ThrowIfNotType<BloodCampaign>(out var bloodCamp);
 
             var ini = bloodCamp.StartupFile;
 
@@ -77,7 +73,7 @@ namespace Ports.Ports.EDuke32
             }
             else
             {
-                ThrowHelper.NotImplementedException();
+                ThrowHelper.NotImplementedException($"Mod type {bloodCamp.ModType} is not supported");
                 return;
             }
         }

@@ -38,7 +38,7 @@ namespace Mods.Providers
             }
             else
             {
-                ThrowHelper.NotImplementedException();
+                ThrowHelper.NotImplementedException(nameof(modTypeEnum));
                 return null;
             }
 

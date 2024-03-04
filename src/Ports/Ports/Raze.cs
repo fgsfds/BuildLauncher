@@ -107,7 +107,7 @@ namespace Ports.Ports
             }
             else
             {
-                ThrowHelper.NotImplementedException();
+                ThrowHelper.NotImplementedException($"Mod type {mod} is not supported");
             }
         }
 
@@ -156,7 +156,7 @@ namespace Ports.Ports
             }
             else
             {
-                ThrowHelper.NotImplementedException();
+                ThrowHelper.NotImplementedException($"Mod type {wangCamp.ModType} is not supported");
                 return;
             }
         }
@@ -189,7 +189,7 @@ namespace Ports.Ports
             }
             else
             {
-                ThrowHelper.NotImplementedException();
+                ThrowHelper.NotImplementedException($"Mod type {dukeCamp.ModType} is not supported");
                 return;
             }
         }
@@ -227,7 +227,7 @@ namespace Ports.Ports
             }
             else
             {
-                ThrowHelper.NotImplementedException();
+                ThrowHelper.NotImplementedException($"Mod type {bloodCamp.ModType} is not supported");
                 return;
             }
         }

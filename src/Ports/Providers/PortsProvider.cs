@@ -1,4 +1,5 @@
 ﻿using Common.Enums;
+using Common.Helpers;
 using Ports.Ports;
 using Ports.Ports.EDuke32;
 
@@ -58,7 +59,7 @@ namespace Ports.Providers
                 PortEnum.NotBlood => NotBlood,
                 PortEnum.VoidSW => VoidSW,
                 PortEnum.PCExhumed => PCExhumed,
-                _ => throw new NotImplementedException()
+                _ => ThrowHelper.NotImplementedException<BasePort>()
             };
         }
     }

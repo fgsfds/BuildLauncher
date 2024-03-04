@@ -20,11 +20,7 @@ namespace BuildLauncher.Pages
             CampControl.Init(portsProvider);
             ModsControl.Init();
 
-            if (DataContext is not GameViewModel gameVM)
-            {
-                ThrowHelper.ArgumentException();
-                return;
-            }
+            DataContext.ThrowIfNotType<GameViewModel>(out var gameVM);
 
             gameVM.InitializeCommand.Execute(null);
         }

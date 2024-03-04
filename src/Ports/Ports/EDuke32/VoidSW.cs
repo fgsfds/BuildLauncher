@@ -33,12 +33,8 @@ namespace Ports.Ports.EDuke32
         /// <inheritdoc/>
         public override void GetStartCampaignArgs(StringBuilder sb, IGame game, IMod mod)
         {
-            if (mod is not WangCampaign wangCamp ||
-                game is not WangGame wangGame)
-            {
-                ThrowHelper.ArgumentException();
-                return;
-            }
+            mod.ThrowIfNotType<WangCampaign>(out var wangCamp);
+            game.ThrowIfNotType<WangGame>(out var wangGame);
 
             sb.Append($@" -usecwd -nosetup");
 
@@ -61,7 +57,7 @@ namespace Ports.Ports.EDuke32
             }
             else
             {
-                ThrowHelper.NotImplementedException();
+                ThrowHelper.NotImplementedException($"Mod type {wangCamp.ModType} is not supported");
                 return;
             }
         }

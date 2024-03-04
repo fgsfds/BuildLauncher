@@ -35,7 +35,7 @@ namespace Common.Tools
 
             if (!response.IsSuccessStatusCode)
             {
-                ThrowHelper.Exception("Error while downloading a file: " + response.StatusCode.ToString());
+                ThrowHelper.Exception($"Error while downloading {url}, error: {response.StatusCode}");
             }
 
             await using var source = await response.Content.ReadAsStreamAsync();

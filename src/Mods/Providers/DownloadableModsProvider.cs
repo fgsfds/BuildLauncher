@@ -64,10 +64,7 @@ namespace Mods.Providers
 
             _semaphore.Release();
 
-            if (_mods is null)
-            {
-                ThrowHelper.NullReferenceException();
-            }
+            _mods.ThrowIfNull();
 
             return _mods;
         }
