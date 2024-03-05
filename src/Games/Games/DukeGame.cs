@@ -87,6 +87,7 @@ namespace Games.Games
             {
                 campaigns.Add(new DukeCampaign()
                 {
+                    Guid = new(Consts.Duke3dGuid),
                     ModType = ModTypeEnum.Campaign,
                     DisplayName = "Duke Nukem 3D",
                     Image = ImageHelper.FileNameToStream("Duke3D.duke3d.png"),
@@ -105,6 +106,7 @@ namespace Games.Games
                 {
                     campaigns.Add(new DukeCampaign()
                     {
+                        Guid = new(Consts.CaribbeanGuid),
                         ModType = ModTypeEnum.Campaign,
                         DisplayName = "Caribbean",
                         Image = ImageHelper.FileNameToStream("Duke3D.carib.png"),
@@ -123,6 +125,7 @@ namespace Games.Games
                 {
                     campaigns.Add(new DukeCampaign()
                     {
+                        Guid = new(Consts.NuclearWinterGuid),
                         ModType = ModTypeEnum.Campaign,
                         DisplayName = "Nuclear Winter",
                         Image = ImageHelper.FileNameToStream("Duke3D.nwinter.jpg"),
@@ -141,6 +144,7 @@ namespace Games.Games
                 {
                     campaigns.Add(new DukeCampaign()
                     {
+                        Guid = new(Consts.DukeDCGuid),
                         ModType = ModTypeEnum.Campaign,
                         DisplayName = "Duke it Out in DC",
                         Image = ImageHelper.FileNameToStream("Duke3D.dukedc.png"),
@@ -161,6 +165,7 @@ namespace Games.Games
             {
                 campaigns.Add(new DukeCampaign()
                 {
+                    Guid = new(Consts.WorldTourGuid),
                     ModType = ModTypeEnum.Campaign,
                     DisplayName = "Duke Nukem 3D World Tour",
                     Image = ImageHelper.FileNameToStream("Duke3D.dukewt.jpg"),
@@ -180,6 +185,7 @@ namespace Games.Games
             {
                 campaigns.Add(new DukeCampaign()
                 {
+                    Guid = new(Consts.Duke64Guid),
                     ModType = ModTypeEnum.Campaign,
                     DisplayName = "Duke Nukem 64",
                     Image = ImageHelper.FileNameToStream("Duke3D.duke64.png"),

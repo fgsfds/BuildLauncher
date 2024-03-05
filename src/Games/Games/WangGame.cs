@@ -49,6 +49,7 @@ namespace Games.Games
             {
                 campaigns.Add(new WangCampaign()
                 {
+                    Guid = new(Consts.WangGuid),
                     ModType = ModTypeEnum.Campaign,
                     DisplayName = "Shadow Warrior",
                     Image = ImageHelper.FileNameToStream("Wang.wang.png"),
@@ -67,6 +68,7 @@ namespace Games.Games
                 {
                     campaigns.Add(new WangCampaign()
                     {
+                        Guid = new(Consts.WantonGuid),
                         ModType = ModTypeEnum.Campaign,
                         DisplayName = "Wanton Destruction",
                         Image = ImageHelper.FileNameToStream("Wang.wanton.png"),
@@ -86,6 +88,7 @@ namespace Games.Games
                 {
                     campaigns.Add(new WangCampaign()
                     {
+                        Guid = new(Consts.TwinDragonGuid),
                         ModType = ModTypeEnum.Campaign,
                         DisplayName = "Twin Dragon",
                         Image = ImageHelper.FileNameToStream("Wang.twin.png"),

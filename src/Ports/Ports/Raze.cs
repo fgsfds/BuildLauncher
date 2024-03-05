@@ -112,7 +112,7 @@ namespace Ports.Ports
         }
 
         /// <inheritdoc/>
-        public override void GetAutoloadModsArgs(StringBuilder sb, IGame game, ImmutableList<IMod> mods)
+        public override void GetAutoloadModsArgs(StringBuilder sb, IGame _, ImmutableList<IMod> mods)
         {
             if (mods.Count == 0)
             {
@@ -121,6 +121,13 @@ namespace Ports.Ports
 
             foreach (var mod in mods)
             {
+                mod.ThrowIfNotType<AutoloadMod>(out var autoloadMod);
+
+                if (!autoloadMod.IsEnabled)
+                {
+                    continue;
+                }
+
                 sb.Append($@" -file ""{mod.FileName}""");
             }
         }

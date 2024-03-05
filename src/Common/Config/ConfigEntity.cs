@@ -18,46 +18,62 @@ namespace Common.Config
         public delegate void ParameterChanged(string parameterName);
         public event ParameterChanged NotifyParameterChanged;
 
-        private ThemeEnum _theme;
+        private ThemeEnum _theme = ThemeEnum.System;
         public ThemeEnum Theme
         {
             get => _theme;
             set => SetConfigParameter(ref _theme, value);
         }
 
-        private string _gamePathBlood;
-        public string GamePathBlood
+        private string? _gamePathBlood = null;
+        public string? GamePathBlood
         {
             get => _gamePathBlood;
             set => SetConfigParameter(ref _gamePathBlood, value);
         }
 
-        private string _gamePathDuke;
-        public string GamePathDuke3D
+        private string? _gamePathDuke = null;
+        public string? GamePathDuke3D
         {
             get => _gamePathDuke;
             set => SetConfigParameter(ref _gamePathDuke, value);
         }
 
-        private string _gamePathDuke64;
-        public string GamePathDuke64
+        private string? _gamePathDuke64 = null;
+        public string? GamePathDuke64
         {
             get => _gamePathDuke64;
             set => SetConfigParameter(ref _gamePathDuke64, value);
         }
 
-        private string _gamePathDukeWT;
-        public string GamePathDukeWT
+        private string? _gamePathDukeWT = null;
+        public string? GamePathDukeWT
         {
             get => _gamePathDukeWT;
             set => SetConfigParameter(ref _gamePathDukeWT, value);
         }
 
-        private string _gamePathWang;
-        public string GamePathWang
+        private string? _gamePathWang = null;
+        public string? GamePathWang
         {
             get => _gamePathWang;
             set => SetConfigParameter(ref _gamePathWang, value);
+        }
+
+        public HashSet<Guid> DisabledAutoloadMods { get; set; } = [];
+
+        public void AddDisabledAutoloadMod(Guid guid)
+        {
+            DisabledAutoloadMods.Add(guid);
+            NotifyConfigChanged?.Invoke();
+            NotifyParameterChanged?.Invoke(nameof(DisabledAutoloadMods));
+        }
+
+        public void RemoveDisabledAutoloadMod(Guid guid)
+        {
+            DisabledAutoloadMods.Remove(guid);
+            NotifyConfigChanged?.Invoke();
+            NotifyParameterChanged?.Invoke(nameof(DisabledAutoloadMods));
         }
 
         /// <summary>

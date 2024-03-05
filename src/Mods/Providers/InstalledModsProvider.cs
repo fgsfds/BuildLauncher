@@ -1,4 +1,5 @@
-﻿using Common.Enums;
+﻿using Common.Config;
+using Common.Enums;
 using Common.Enums.Addons;
 using Common.Helpers;
 using Common.Interfaces;
@@ -14,6 +15,13 @@ namespace Mods.Providers
     /// </summary>
     public sealed class InstalledModsProvider
     {
+        private readonly ConfigEntity _config;
+
+        public InstalledModsProvider(ConfigProvider configProvider)
+        {
+            _config = configProvider.Config;
+        }
+
         /// <summary>
         /// Get list of installed mods
         /// </summary>
@@ -47,6 +55,7 @@ namespace Mods.Providers
 
             foreach (var file in files)
             {
+                Guid guid = Guid.NewGuid();
                 string displayName = Path.GetFileNameWithoutExtension(file);
                 string description = string.Empty;
                 DukeAddonEnum dukeAddonEnum = DukeAddonEnum.Duke3D;
@@ -75,6 +84,7 @@ namespace Mods.Providers
 
                             if (manifest is not null)
                             {
+                                guid = manifest.Guid;
                                 displayName = manifest.Name;
                                 supportedPorts = manifest.SupportedPorts;
                                 description = manifest.Description;
@@ -92,8 +102,11 @@ namespace Mods.Providers
 
                     if (modTypeEnum is ModTypeEnum.Autoload)
                     {
+                        var isEnabled = !_config.DisabledAutoloadMods.Contains(guid);
+
                         mods.Add(new AutoloadMod()
                         {
+                            Guid = guid,
                             ModType = ModTypeEnum.Autoload,
                             DisplayName = displayName,
                             Image = image,
@@ -102,7 +115,7 @@ namespace Mods.Providers
                             Version = version,
                             Author = author,
                             Url = url,
-                            IsEnabled = true,
+                            IsEnabled = isEnabled,
                             IsOfficial = false,
                             PathToFile = file,
                             StartupFile = null
@@ -114,6 +127,7 @@ namespace Mods.Providers
                         {
                             mods.Add(new DukeCampaign()
                             {
+                                Guid = guid,
                                 ModType = modTypeEnum,
                                 DisplayName = displayName,
                                 Image = image,
@@ -132,6 +146,7 @@ namespace Mods.Providers
                         {
                             mods.Add(new WangCampaign()
                             {
+                                Guid = guid,
                                 ModType = modTypeEnum,
                                 DisplayName = displayName,
                                 Image = image,
@@ -150,6 +165,7 @@ namespace Mods.Providers
                         {
                             mods.Add(new BloodCampaign()
                             {
+                                Guid = guid,
                                 ModType = modTypeEnum,
                                 DisplayName = displayName,
                                 Image = image,

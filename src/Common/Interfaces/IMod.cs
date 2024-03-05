@@ -5,6 +5,11 @@ namespace Common.Interfaces
     public interface IMod
     {
         /// <summary>
+        /// Mod's GUID
+        /// </summary>
+        Guid Guid { get; init; }
+
+        /// <summary>
         /// Type of the mod
         /// </summary>
         ModTypeEnum ModType { get; init; }

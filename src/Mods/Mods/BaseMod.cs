@@ -10,6 +10,8 @@ namespace Mods.Mods
     public abstract class BaseMod : IMod
     {
         /// <inheritdoc/>
+        public required Guid Guid { get; init; }
+
         public required ModTypeEnum ModType { get; init; }
 
         /// <inheritdoc/>

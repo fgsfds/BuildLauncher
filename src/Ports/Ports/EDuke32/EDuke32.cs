@@ -114,6 +114,13 @@ namespace Ports.Ports.EDuke32
 
             foreach (var mod in mods)
             {
+                mod.ThrowIfNotType<AutoloadMod>(out var autoloadMod);
+
+                if (!autoloadMod.IsEnabled)
+                {
+                    continue;
+                }
+
                 sb.Append($@" -g ""{mod.FileName}""");
             }
 

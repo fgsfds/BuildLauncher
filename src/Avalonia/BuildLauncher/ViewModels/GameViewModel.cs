@@ -1,3 +1,5 @@
+using Avalonia.Controls;
+using Common.Config;
 using Common.Enums;
 using Common.Helpers;
 using Common.Interfaces;
@@ -21,18 +23,21 @@ namespace BuildLauncher.ViewModels
         private readonly GamesProvider _gamesProvider;
         private readonly ArchiveTools _archiveTools;
         private readonly DownloadableModsProvider _downloadableModsProvider;
+        private readonly ConfigEntity _config;
 
         public GameViewModel(
         IGame game,
         GamesProvider gamesProvider,
         ArchiveTools archiveTools,
-        DownloadableModsProvider modsProvider)
+        DownloadableModsProvider modsProvider,
+        ConfigEntity config)
         {
             Game = game;
 
             _gamesProvider = gamesProvider;
             _archiveTools = archiveTools;
             _downloadableModsProvider = modsProvider;
+            _config = config;
 
             _gamesProvider.NotifyGameChanged += NotifyGameChanged;
         }
@@ -204,6 +209,25 @@ namespace BuildLauncher.ViewModels
 
             File.Delete(SelectedCampaign.PathToFile);
             OnPropertyChanged(nameof(CampaignsList));
+        }
+
+
+        /// <summary>
+        /// Delete selected map/campaign
+        /// </summary>
+        [RelayCommand]
+        private void ModCheckboxPressed(object? obj)
+        {
+            obj.ThrowIfNotType<AutoloadMod>(out var mod);
+
+            if (!mod.IsEnabled)
+            {
+                _config.AddDisabledAutoloadMod(mod.Guid);
+            }
+            else if (mod.IsEnabled)
+            {
+                _config.RemoveDisabledAutoloadMod(mod.Guid);
+            }
         }
 
 

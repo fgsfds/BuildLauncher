@@ -51,6 +51,7 @@ Another goal of this project is to create a unification standard for Build Engin
 - Launch original games, their addons, and custom content with the port of your choice
 - Create Would Tour Stopgap for EDuke32 automatically
 - Create combined autoload mod for EDuke32 and its forks, so more than one autoload mod can work at the same time
+- Turn autoload mods on and off
 - Keep saved games for custom content in separate folders (only for Raze so far)
 
 </td>
@@ -70,7 +71,6 @@ Another goal of this project is to create a unification standard for Build Engin
 - Support for BuildGDX and DOSBox
 - More downloadable maps, campaigns and mods
 - Downloaded content auto update
-- Ability to turn autoload mods off and on
 - Better support for custom content that's not downloaded from the launcher
 - Support for loose .map files
 - Linux/Deck version

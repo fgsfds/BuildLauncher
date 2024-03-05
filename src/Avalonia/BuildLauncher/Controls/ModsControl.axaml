@@ -39,7 +39,9 @@
 
                         <StackPanel Orientation="Horizontal">
 
-                            <CheckBox IsChecked="{Binding IsEnabled}"></CheckBox>
+                            <CheckBox IsChecked="{Binding IsEnabled}"
+                                      Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=((vm:GameViewModel)DataContext).ModCheckboxPressedCommand}}"
+                                      CommandParameter="{Binding $parent[ListBoxItem].Content}"/>
 
                             <TextBlock Text="{Binding DisplayName}"
                                        VerticalAlignment="Center"

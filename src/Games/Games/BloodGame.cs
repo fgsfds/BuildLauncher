@@ -45,6 +45,7 @@ namespace Games.Games
 
             campaigns.Add(new BloodCampaign()
             {
+                Guid = new(Consts.BloodGuid),
                 ModType = ModTypeEnum.Campaign,
                 DisplayName = "Blood",
                 StartupFile = Consts.BloodIni,
@@ -63,6 +64,7 @@ namespace Games.Games
             {
                 campaigns.Add(new BloodCampaign()
                 {
+                    Guid = new(Consts.CrypticGuid),
                     ModType = ModTypeEnum.Campaign,
                     DisplayName = "Cryptic Passage",
                     StartupFile = Consts.CrypticIni,
