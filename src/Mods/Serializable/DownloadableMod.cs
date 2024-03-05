@@ -8,21 +8,21 @@ namespace Mods.Serializable
     {
         public Guid Guid { get; set; }
 
+        public string DownloadUrl { get; set; }
+
         public string Name { get; set; }
 
-        public string DownloadUrl { get; set; }
+        public float Version { get; set; }
+
+        public string? Author { get; set; }
+
+        public string? Url { get; init; }
 
         public GameEnum Game { get; set; }
 
         public ModTypeEnum ModType { get; set; }
 
-        public float Version { get; set; }
-
         public string Description { get; set; }
-
-        public string? Author { get; set; }
-
-        public string? Url { get; init; }
 
 
         public string ToMarkdownString()

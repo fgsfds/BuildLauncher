@@ -128,6 +128,12 @@ namespace Ports.Ports
                     continue;
                 }
 
+                if (autoloadMod.SupportedPorts is not null &&
+                    !autoloadMod.SupportedPorts.Contains(PortEnum))
+                {
+                    continue;
+                }
+
                 sb.Append($@" -file ""{mod.FileName}""");
             }
         }

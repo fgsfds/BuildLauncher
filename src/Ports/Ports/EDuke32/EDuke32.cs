@@ -121,6 +121,12 @@ namespace Ports.Ports.EDuke32
                     continue;
                 }
 
+                if (autoloadMod.SupportedPorts is not null &&
+                    !autoloadMod.SupportedPorts.Contains(PortEnum))
+                {
+                    continue;
+                }
+
                 sb.Append($@" -g ""{mod.FileName}""");
             }
 

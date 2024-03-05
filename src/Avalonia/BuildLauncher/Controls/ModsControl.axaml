@@ -40,6 +40,7 @@
                         <StackPanel Orientation="Horizontal">
 
                             <CheckBox IsChecked="{Binding IsEnabled}"
+                                      Margin="5,0,0,0"
                                       Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=((vm:GameViewModel)DataContext).ModCheckboxPressedCommand}}"
                                       CommandParameter="{Binding $parent[ListBoxItem].Content}"/>
 
