@@ -32,7 +32,7 @@ namespace Ports.Ports.EDuke32
         public override string ConfigFile => "voidsw.cfg";
 
         /// <inheritdoc/>
-        public override void GetStartCampaignArgs(StringBuilder sb, IGame game, IMod mod)
+        protected override void GetStartCampaignArgs(StringBuilder sb, IGame game, IMod mod)
         {
             mod.ThrowIfNotType<WangCampaign>(out var wangCamp);
             game.ThrowIfNotType<WangGame>(out var wangGame);
@@ -62,11 +62,11 @@ namespace Ports.Ports.EDuke32
                 return;
             }
         }
-        
+
         // <inheritdoc/>
-        public override void GetAutoloadModsArgs(StringBuilder sb, IGame game, ImmutableList<IMod> mods)
+        protected override void GetAutoloadModsArgs(StringBuilder sb, IGame game, IEnumerable<IMod> mods)
         {
-            if (mods.Count == 0)
+            if (!mods.Any())
             {
                 return;
             }

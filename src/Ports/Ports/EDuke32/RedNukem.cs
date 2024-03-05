@@ -43,7 +43,7 @@ namespace Ports.Ports.EDuke32
         public override Func<GitHubReleaseAsset, bool> WindowsReleasePredicate => static x => x.FileName.StartsWith("rednukem_win64");
 
         /// <inheritdoc/>
-        public override void GetStartCampaignArgs(StringBuilder sb, IGame game, IMod mod)
+        protected override void GetStartCampaignArgs(StringBuilder sb, IGame game, IMod mod)
         {
             mod.ThrowIfNotType<DukeCampaign>(out var dukeCamp);
             game.ThrowIfNotType<DukeGame>(out var dukeGame);

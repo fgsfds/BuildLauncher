@@ -54,7 +54,7 @@ namespace Ports.Ports
             : null;
 
         /// <inheritdoc/>
-        public override void BeforeStart(IGame game)
+        protected override void BeforeStart(IGame game)
         {
             var config = Path.Combine(FolderPath, ConfigFile);
 
@@ -89,7 +89,7 @@ namespace Ports.Ports
         }
 
         /// <inheritdoc/>
-        public override void GetStartCampaignArgs(StringBuilder sb, IGame game, IMod mod)
+        protected override void GetStartCampaignArgs(StringBuilder sb, IGame game, IMod mod)
         {
             sb.Append($@" -nosetup -savedir ""{Path.Combine(FolderPath, "Save", mod.DisplayName.Replace(' ', '_'))}""");
 
@@ -112,9 +112,9 @@ namespace Ports.Ports
         }
 
         /// <inheritdoc/>
-        public override void GetAutoloadModsArgs(StringBuilder sb, IGame _, ImmutableList<IMod> mods)
+        protected override void GetAutoloadModsArgs(StringBuilder sb, IGame _, IEnumerable<IMod> mods)
         {
-            if (mods.Count == 0)
+            if (!mods.Any())
             {
                 return;
             }
@@ -139,7 +139,7 @@ namespace Ports.Ports
         }
 
         /// <inheritdoc/>
-        public override void GetSkipIntroParameter(StringBuilder sb) => sb.Append(" -quick");
+        protected override void GetSkipIntroParameter(StringBuilder sb) => sb.Append(" -quick");
 
         private static void GetWangArgs(StringBuilder sb, IGame game, WangCampaign wangCamp)
         {

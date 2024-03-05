@@ -35,10 +35,10 @@ namespace Ports.Ports.EDuke32
         public override Func<GitHubReleaseAsset, bool> WindowsReleasePredicate => static x => x.FileName.StartsWith("nblood_win64");
 
         /// <inheritdoc/>
-        public override void BeforeStart(IGame game) { }
+        protected override void BeforeStart(IGame game) { }
 
         /// <inheritdoc/>
-        public override void GetStartCampaignArgs(StringBuilder sb, IGame game, IMod mod)
+        protected override void GetStartCampaignArgs(StringBuilder sb, IGame game, IMod mod)
         {
             mod.ThrowIfNotType<BloodCampaign>(out var bloodCamp);
 

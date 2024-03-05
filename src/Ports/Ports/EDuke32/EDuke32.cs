@@ -43,7 +43,7 @@ namespace Ports.Ports.EDuke32
         public override Func<GitHubReleaseAsset, bool> WindowsReleasePredicate => ThrowHelper.NotImplementedException<Func<GitHubReleaseAsset, bool>>();
 
         /// <inheritdoc/>
-        public override void BeforeStart(IGame game)
+        protected override void BeforeStart(IGame game)
         {
             var config = Path.Combine(FolderPath, ConfigFile);
 
@@ -67,7 +67,7 @@ namespace Ports.Ports.EDuke32
         }
 
         /// <inheritdoc/>
-        public override void GetStartCampaignArgs(StringBuilder sb, IGame game, IMod mod)
+        protected override void GetStartCampaignArgs(StringBuilder sb, IGame game, IMod mod)
         {
             mod.ThrowIfNotType<DukeCampaign>(out var dukeCamp);
             game.ThrowIfNotType<DukeGame>(out var dukeGame);
@@ -103,9 +103,9 @@ namespace Ports.Ports.EDuke32
         }
 
         /// <inheritdoc/>
-        public override void GetAutoloadModsArgs(StringBuilder sb, IGame game, ImmutableList<IMod> mods)
+        protected override void GetAutoloadModsArgs(StringBuilder sb, IGame game, IEnumerable<IMod> mods)
         {
-            if (mods.Count == 0)
+            if (!mods.Any())
             {
                 return;
             }
@@ -134,7 +134,7 @@ namespace Ports.Ports.EDuke32
         }
 
         /// <inheritdoc/>
-        public override void GetSkipIntroParameter(StringBuilder sb) => sb.Append(" -quick");
+        protected override void GetSkipIntroParameter(StringBuilder sb) => sb.Append(" -quick");
 
         /// <inheritdoc/>
         public override int? InstalledVersion

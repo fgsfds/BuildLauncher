@@ -28,6 +28,6 @@ namespace Ports.Ports.EDuke32
         public override Func<GitHubReleaseAsset, bool> WindowsReleasePredicate => static x => x.FileName.StartsWith("notblood-win64");
 
         /// <inheritdoc/>
-        public override void BeforeStart(IGame game) { }
+        protected override void BeforeStart(IGame game) { }
     }
 }

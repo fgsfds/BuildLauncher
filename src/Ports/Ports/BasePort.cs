@@ -2,7 +2,6 @@
 using Common.Helpers;
 using Common.Interfaces;
 using Ports.Providers;
-using System.Collections.Immutable;
 using System.Text;
 
 namespace Ports.Ports
@@ -43,25 +42,6 @@ namespace Ports.Ports
         public abstract Uri RepoUrl { get; }
 
         /// <summary>
-        /// Get command line arguments to start custom map or campaign
-        /// </summary>
-        /// <param name="game">Game<param>
-        /// <param name="mod">Map/campaign</param>
-        public abstract void GetStartCampaignArgs(StringBuilder sb, IGame game, IMod mod);
-
-        /// <summary>
-        /// Get command line arguments to load mods
-        /// </summary>
-        /// <param name="game">Game<param>
-        /// <param name="mods">Mods</param>
-        public abstract void GetAutoloadModsArgs(StringBuilder sb, IGame game, ImmutableList<IMod> mods);
-
-        /// <summary>
-        /// Return command line parameter to skip intro
-        /// </summary>
-        public abstract void GetSkipIntroParameter(StringBuilder sb);
-
-        /// <summary>
         /// Predicate to find windows release
         /// </summary>
         public abstract Func<GitHubReleaseAsset, bool> WindowsReleasePredicate { get; }
@@ -92,10 +72,59 @@ namespace Ports.Ports
         /// </summary>
         public virtual string PortFolder => Name;
 
+
+        /// <summary>
+        /// Get command line parameters to start the game with selected campaign and autoload mods
+        /// </summary>
+        /// <param name="game">Game<param>
+        /// <param name="mod">Map/campaign</param>
+        /// <param name="autoloadMods">Mods</param>
+        /// <param name="skipIntro">Skip intro</param>
+        public string GetStartGameArgs(IGame game, IMod mod, IEnumerable<IMod> autoloadMods, bool skipIntro)
+        {
+            StringBuilder sb = new();
+
+            BeforeStart(game);
+
+            GetStartCampaignArgs(sb, game, mod);
+
+            GetAutoloadModsArgs(sb, game, autoloadMods);
+
+            if (skipIntro)
+            {
+                GetSkipIntroParameter(sb);
+            }
+
+            return sb.ToString();
+        }
+
+
         /// <summary>
         /// Method to perform before starting the port
         /// </summary>
         /// <param name="game"></param>
-        public virtual void BeforeStart(IGame game) { }
+        protected virtual void BeforeStart(IGame game) { }
+
+        /// <summary>
+        /// Get command line arguments to start custom map or campaign
+        /// </summary>
+        /// <param name="sb">String builder for parameters</param>
+        /// <param name="game">Game<param>
+        /// <param name="mod">Map/campaign</param>
+        protected abstract void GetStartCampaignArgs(StringBuilder sb, IGame game, IMod mod);
+
+        /// <summary>
+        /// Get command line arguments to load mods
+        /// </summary>
+        /// <param name="sb">String builder for parameters</param>
+        /// <param name="game">Game<param>
+        /// <param name="autoloadMods">Mods</param>
+        protected abstract void GetAutoloadModsArgs(StringBuilder sb, IGame game, IEnumerable<IMod> autoloadMods);
+
+        /// <summary>
+        /// Return command line parameter to skip intro
+        /// </summary>
+        /// <param name="sb">String builder for parameters</param>
+        protected abstract void GetSkipIntroParameter(StringBuilder sb);
     }
 }

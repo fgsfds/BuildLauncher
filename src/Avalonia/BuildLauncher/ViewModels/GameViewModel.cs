@@ -160,19 +160,7 @@ namespace BuildLauncher.ViewModels
             command.ThrowIfNotType<BasePort>(out var port);
             SelectedCampaign.ThrowIfNull();
 
-            port.BeforeStart(Game);
-
-            StringBuilder sb = new();
-
-            port.GetStartCampaignArgs(sb, Game, SelectedCampaign);
-            port.GetAutoloadModsArgs(sb, Game, [.. ModsList]);
-
-            if (SkipIntroCheckbox)
-            {
-                port.GetSkipIntroParameter(sb);
-            }
-
-            var args = sb.ToString();
+            var args = port.GetStartGameArgs(Game, SelectedCampaign, ModsList, SkipIntroCheckbox);
 
             StartPort(port.FullPathToExe, args);
         }
