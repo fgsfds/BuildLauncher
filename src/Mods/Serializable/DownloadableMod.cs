@@ -10,7 +10,7 @@ namespace Mods.Serializable
 
         public string Name { get; set; }
 
-        public string Url { get; set; }
+        public string DownloadUrl { get; set; }
 
         public GameEnum Game { get; set; }
 
@@ -22,8 +22,8 @@ namespace Mods.Serializable
 
         public string? Author { get; set; }
 
+        public string? Url { get; init; }
 
-        public override string ToString() => Name;
 
         public string ToMarkdownString()
         {

@@ -239,7 +239,7 @@ namespace BuildLauncher.ViewModels
         {
             SelectedDownloadableMod.ThrowIfNull();
 
-            var url = SelectedDownloadableMod.Url;
+            var url = SelectedDownloadableMod.DownloadUrl;
             var file = Path.GetFileName(url.ToString());
             string path;
 

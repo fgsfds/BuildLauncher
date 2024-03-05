@@ -73,6 +73,11 @@ namespace Mods.Mods
                 description.Append(Environment.NewLine + Environment.NewLine + Description);
             }
 
+            if (SupportedPorts is not null)
+            {
+                description.Append(Environment.NewLine + Environment.NewLine + $"Only supported by: *{string.Join(", ", SupportedPorts)}*");
+            }
+
             return description.ToString();
         }
     }
