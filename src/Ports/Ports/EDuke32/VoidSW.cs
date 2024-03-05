@@ -3,6 +3,7 @@ using Common.Helpers;
 using Common.Interfaces;
 using Games.Games;
 using Mods.Mods;
+using System.Collections.Immutable;
 using System.Text;
 
 namespace Ports.Ports.EDuke32
@@ -60,6 +61,24 @@ namespace Ports.Ports.EDuke32
                 ThrowHelper.NotImplementedException($"Mod type {wangCamp.ModType} is not supported");
                 return;
             }
+        }
+        
+        // <inheritdoc/>
+        public override void GetAutoloadModsArgs(StringBuilder sb, IGame game, ImmutableList<IMod> mods)
+        {
+            if (mods.Count == 0)
+            {
+                return;
+            }
+
+            sb.Append($@" -j""{game.ModsFolderPath}""");
+
+            foreach (var mod in mods)
+            {
+                sb.Append($@" -g""{mod.FileName}""");
+            }
+
+            sb.Append($@" -j""{Path.Combine(game.SpecialFolderPath, Consts.CombinedModFolder)}"" -mh""{Consts.CombinedDef}""");
         }
 
         /// <summary>

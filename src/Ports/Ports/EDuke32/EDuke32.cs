@@ -76,7 +76,7 @@ namespace Ports.Ports.EDuke32
 
             if (dukeCamp.AddonEnum is DukeAddonEnum.WorldTour)
             {
-                sb.Append($@" -addon {(byte)DukeAddonEnum.Duke3D} -j""{dukeGame.DukeWTInstallPath}"" -j ""{Path.Combine(game.SpecialFolderPath, Consts.WTStopgap)}"" -gamegrp e32wt.grp");
+                sb.Append($@" -addon {(byte)DukeAddonEnum.Duke3D} -j ""{dukeGame.DukeWTInstallPath}"" -j ""{Path.Combine(game.SpecialFolderPath, Consts.WTStopgap)}"" -gamegrp e32wt.grp");
                 return;
             }
 
@@ -117,7 +117,7 @@ namespace Ports.Ports.EDuke32
                 sb.Append($@" -g ""{mod.FileName}""");
             }
 
-            sb.Append($@" -g ""{Path.Combine(game.SpecialFolderPath, Consts.CombinedMod)}""");
+            sb.Append($@" -j ""{Path.Combine(game.SpecialFolderPath, Consts.CombinedModFolder)}"" -mh ""{Consts.CombinedDef}""");
         }
 
         /// <inheritdoc/>
