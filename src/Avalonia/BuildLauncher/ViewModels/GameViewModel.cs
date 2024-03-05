@@ -71,11 +71,6 @@ namespace BuildLauncher.ViewModels
         public float ProgressBarValue { get; set; }
 
         /// <summary>
-        /// Skip intro parameter
-        /// </summary>
-        public bool SkipIntroCheckbox { get; set; }
-
-        /// <summary>
         /// Currently selected campaign/map
         /// </summary>
         [ObservableProperty]
@@ -89,6 +84,19 @@ namespace BuildLauncher.ViewModels
         [ObservableProperty]
         [NotifyPropertyChangedFor(nameof(SelectedModDescription))]
         private IMod? _selectedMod;
+
+        /// <summary>
+        /// Skip intro parameter
+        /// </summary>
+        public bool SkipIntroCheckbox
+        {
+            get => _config.SkipIntro;
+            set
+            {
+                _config.SkipIntro = value;
+                OnPropertyChanged(nameof(SkipIntroCheckbox));
+            }
+        }
 
         /// <summary>
         /// Currently selected downloadable campaign, map or mod

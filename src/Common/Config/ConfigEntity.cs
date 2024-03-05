@@ -60,6 +60,13 @@ namespace Common.Config
             set => SetConfigParameter(ref _gamePathWang, value);
         }
 
+        private bool _skipIntro = false;
+        public bool SkipIntro
+        {
+            get => _skipIntro;
+            set => SetConfigParameter(ref _skipIntro, value);
+        }
+
         public HashSet<Guid> DisabledAutoloadMods { get; set; } = [];
 
         public void AddDisabledAutoloadMod(Guid guid)
