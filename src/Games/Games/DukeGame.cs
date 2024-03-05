@@ -113,7 +113,8 @@ namespace Games.Games
                         StartupFile = null,
                         AddonEnum = DukeAddonEnum.Caribbean,
                         Version = null,
-                        SupportedPorts = null,
+                        //TODO remove when https://voidpoint.io/terminx/eduke32/-/issues/297 is fixed
+                        SupportedPorts = [PortEnum.Raze, PortEnum.BuildGDX],
                         Description = null,
                         Url = null,
                         Author = null,
@@ -151,7 +152,8 @@ namespace Games.Games
                         StartupFile = null,
                         AddonEnum = DukeAddonEnum.DukeDC,
                         Version = null,
-                        SupportedPorts = null,
+                        //TODO remove when https://voidpoint.io/terminx/eduke32/-/issues/297 is fixed
+                        SupportedPorts = [PortEnum.Raze, PortEnum.BuildGDX],
                         Description = null,
                         Url = null,
                         Author = null,
