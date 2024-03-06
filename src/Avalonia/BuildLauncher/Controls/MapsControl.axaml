@@ -4,11 +4,11 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:md="https://github.com/whistyun/Markdown.Avalonia"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             xmlns:vm="clr-namespace:BuildLauncher.ViewModels"
              xmlns:helpers="clr-namespace:BuildLauncher.Helpers"
+             xmlns:vm="clr-namespace:BuildLauncher.ViewModels"
              xmlns:ctrl="clr-namespace:BuildLauncher.Controls"
              x:DataType="vm:GameViewModel"
-             x:Class="BuildLauncher.Controls.CampaignsControl">
+             x:Class="BuildLauncher.Controls.MapsControl">
 
     <UserControl.Resources>
         <helpers:ImagePathToBitmapConverter x:Key="ImagePathToBitmapConverter"/>
@@ -16,17 +16,17 @@
 
     <Grid RowDefinitions="*,auto, auto" ColumnDefinitions="2*,*">
 
-        <ListBox Name="CampaignsList"
+        <ListBox Name="MapsList"
                  Grid.Row="0" Grid.Column="0"
                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                  Padding="2"
-                 ItemsSource="{Binding CampaignsList}"
-                 SelectedItem="{Binding SelectedCampaign}"
+                 ItemsSource="{Binding MapsList}"
+                 SelectedItem="{Binding SelectedMap}"
                  PointerPressed="ListBoxEmptySpaceClicked">
 
             <ListBox.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <WrapPanel Orientation="Horizontal" />
+                    <WrapPanel Orientation="Vertical" />
                 </ItemsPanelTemplate>
             </ListBox.ItemsPanel>
 
@@ -35,28 +35,13 @@
 
                     <Grid RowDefinitions="auto" Width="150">
 
-                        <Image RenderOptions.BitmapInterpolationMode="HighQuality"
-                               Source="{Binding Image, Converter={StaticResource ImagePathToBitmapConverter}}"
-                               Margin="10"
-                               HorizontalAlignment="Center"/>
-
                         <TextBlock Text="{Binding DisplayName}"
                                    Margin="10"
                                    Padding="5"
-                                   Background="{Binding Path=Background, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}"
-                                   HorizontalAlignment="Stretch"
-                                   Opacity="100"
+                                   HorizontalAlignment="Center"
                                    TextAlignment="Center"
-                                   VerticalAlignment="Bottom"
-                                   TextWrapping="Wrap"/>
-
-                        <TextBlock Text="{Binding DisplayName}"
-                                   Margin="10"
-                                   Padding="5"
-                                   HorizontalAlignment="Stretch"
-                                   TextAlignment="Center"
-                                   VerticalAlignment="Bottom"
-                                   TextWrapping="Wrap"/>
+                                   VerticalAlignment="Center"
+                                   TextWrapping="NoWrap"/>
 
                     </Grid>
 
@@ -67,7 +52,7 @@
 
         <md:MarkdownScrollViewer Grid.Row="0" Grid.Column="1"
                                  Margin="10,5"
-                                 Markdown="{Binding SelectedCampaignDescription}">
+                                 Markdown="{Binding SelectedMapDescription}">
 
             <md:MarkdownScrollViewer.Styles>
                 <StyleInclude Source="/Styles/MarkdownStyle.axaml"/>

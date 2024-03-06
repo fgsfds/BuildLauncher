@@ -2,11 +2,10 @@ using Avalonia.Controls;
 using BuildLauncher.ViewModels;
 using Common.Helpers;
 using CommunityToolkit.Mvvm.Input;
-using Mods.Serializable;
 
 namespace BuildLauncher.Controls
 {
-    public partial class DownloadsControl : UserControl
+    public sealed partial class DownloadsControl : UserControl
     {
         public DownloadsControl()
         {

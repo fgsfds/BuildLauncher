@@ -13,23 +13,13 @@
         <helpers:ImagePathToBitmapConverter x:Key="ImagePathToBitmapConverter"/>
     </UserControl.Resources>
 
-    <Grid RowDefinitions="auto,*,auto" ColumnDefinitions="*,*,*">
-
-        <TextBlock Grid.Row="0" Grid.Column="0"
-                   HorizontalAlignment="Center">
-            Maps and campaigns
-        </TextBlock>
-
-        <TextBlock Grid.Row="0" Grid.Column="1"
-                   HorizontalAlignment="Center">
-            Mods
-        </TextBlock>
+    <Grid RowDefinitions="*,auto" ColumnDefinitions="2*,2*,2*,3*">
 
         <ListBox Name="DownloadableCampaignsList"
-                 Grid.Row="1" Grid.Column="0"
+                 Grid.Row="0" Grid.Column="0"
                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                 Margin="2"
-                 Padding="2"
+                 Margin="0,0,2,0"
+                 Padding="2,35,2,2"
                  ItemsSource="{Binding DownloadableCampaignsList}"
                  SelectedItem="{Binding SelectedDownloadableMod}">
 
@@ -57,11 +47,51 @@
             </ListBox.ItemTemplate>
         </ListBox>
 
-        <ListBox Name="DownloadableModsList"
-                 Grid.Row="1" Grid.Column="1"
+        <TextBlock Grid.Row="0" Grid.Column="0"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Top"
+                   Margin="10">
+            Campaigns
+        </TextBlock>
+
+        <ListBox Name="DownloadableMapsList"
+                 Grid.Row="0" Grid.Column="1"
                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                 Margin="2"
-                 Padding="2"
+                 Margin="2,0"
+                 Padding="2,35,2,2"
+                 ItemsSource="{Binding DownloadableMapsList}"
+                 SelectedItem="{Binding SelectedDownloadableMod}">
+
+            <ListBox.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel Orientation="Vertical" />
+                </ItemsPanelTemplate>
+            </ListBox.ItemsPanel>
+
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
+
+                        <TextBlock Text="{Binding Name}"
+                                   VerticalAlignment="Center"
+                                   Margin="10"/>
+
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
+        <TextBlock Grid.Row="0" Grid.Column="1"
+                   HorizontalAlignment="Center"
+                   Margin="10">
+            Maps
+        </TextBlock>
+
+        <ListBox Name="DownloadableModsList"
+                 Grid.Row="0" Grid.Column="2"
+                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                 Margin="2,0,0,0"
+                 Padding="2,35,2,2"
                  ItemsSource="{Binding DownloadableModsList}"
                  SelectedItem="{Binding SelectedDownloadableMod}">
 
@@ -89,7 +119,13 @@
             </ListBox.ItemTemplate>
         </ListBox>
 
-        <md:MarkdownScrollViewer Grid.Row="1" Grid.Column="2"
+        <TextBlock Grid.Row="0" Grid.Column="2"
+                   HorizontalAlignment="Center"
+                   Margin="10">
+            Mods
+        </TextBlock>
+
+        <md:MarkdownScrollViewer Grid.Row="0" Grid.Column="3"
                                  Margin="10,5"
                                  Markdown="{Binding SelectedDownloadableDescription}">
 
@@ -99,18 +135,22 @@
 
         </md:MarkdownScrollViewer>
 
-        <StackPanel Orientation="Horizontal"
-                    Grid.Row="2" Grid.ColumnSpan="2"
-                    Margin="0,10">
+        <Grid ColumnDefinitions="auto,*"
+              Grid.Row="1" Grid.ColumnSpan="3"
+              Margin="0,10">
 
             <Button Command="{Binding DownloadModCommand}"
                     Margin="0,5,5,5"
+                    Grid.Column="0"
                     Padding="5"
                     Content="{Binding DownloadButtonText, FallbackValue= Download}"/>
 
-            <ProgressBar Value="{Binding ProgressBarValue}"></ProgressBar>
+            <ProgressBar Value="{Binding ProgressBarValue}"
+                         Grid.Column="1"
+                         Height="10"
+                         HorizontalAlignment="Stretch"></ProgressBar>
 
-        </StackPanel>
+        </Grid>
 
     </Grid>
 

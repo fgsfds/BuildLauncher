@@ -19,6 +19,7 @@ namespace BuildLauncher.Pages
         public void Init(PortsProvider portsProvider)
         {
             CampControl.Init(portsProvider);
+            MapssControl.Init(portsProvider);
             ModsControl.Init();
             DownControl.Init();
 

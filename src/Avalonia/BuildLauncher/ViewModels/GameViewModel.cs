@@ -46,7 +46,12 @@ namespace BuildLauncher.ViewModels
         /// <summary>
         /// List of installed campaigns and maps
         /// </summary>
-        public ImmutableList<IMod> CampaignsList => [.. Game.GetCampaigns(), .. Game.GetSingleMaps()];
+        public ImmutableList<IMod> CampaignsList => Game.GetCampaigns();
+
+        /// <summary>
+        /// List of installed campaigns and maps
+        /// </summary>
+        public ImmutableList<IMod> MapsList => Game.GetSingleMaps();
 
         /// <summary>
         /// List of installed autoload mods
@@ -56,7 +61,12 @@ namespace BuildLauncher.ViewModels
         /// <summary>
         /// List of downloadanle campaigns and maps
         /// </summary>
-        public ImmutableList<DownloadableMod> DownloadableCampaignsList => _downloadableModsProvider.GetDownloadableMods(Game.GameEnum, [ModTypeEnum.Campaign, ModTypeEnum.Map]);
+        public ImmutableList<DownloadableMod> DownloadableCampaignsList => _downloadableModsProvider.GetDownloadableMods(Game.GameEnum, ModTypeEnum.Campaign);
+
+        /// <summary>
+        /// List of downloadanle campaigns and maps
+        /// </summary>
+        public ImmutableList<DownloadableMod> DownloadableMapsList => _downloadableModsProvider.GetDownloadableMods(Game.GameEnum, ModTypeEnum.Map);
 
         /// <summary>
         /// List of downloadanle autoload mods
@@ -73,8 +83,16 @@ namespace BuildLauncher.ViewModels
         /// </summary>
         [ObservableProperty]
         [NotifyPropertyChangedFor(nameof(SelectedCampaignDescription))]
-        [NotifyCanExecuteChangedFor(nameof(StartGameCommand))]
+        [NotifyCanExecuteChangedFor(nameof(StartCampaignCommand))]
         private IMod? _selectedCampaign;
+
+        /// <summary>
+        /// Currently selected campaign/map
+        /// </summary>
+        [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(SelectedMapDescription))]
+        [NotifyCanExecuteChangedFor(nameof(StartMapCommand))]
+        private IMod? _selectedMap;
 
         /// <summary>
         /// Currently selected autoload mod
@@ -121,6 +139,8 @@ namespace BuildLauncher.ViewModels
 
         public string SelectedCampaignDescription => SelectedCampaign is null ? string.Empty : SelectedCampaign.ToMarkdownString();
 
+        public string SelectedMapDescription => SelectedMap is null ? string.Empty : SelectedMap.ToMarkdownString();
+
         public string SelectedModDescription => SelectedMod is null ? string.Empty : SelectedMod.ToMarkdownString();
 
         public string SelectedDownloadableDescription => SelectedDownloadableMod is null ? string.Empty : SelectedDownloadableMod.ToMarkdownString();
@@ -160,6 +180,7 @@ namespace BuildLauncher.ViewModels
             await _downloadableModsProvider.UpdateCachedListAsync().ConfigureAwait(false);
 
             OnPropertyChanged(nameof(DownloadableCampaignsList));
+            OnPropertyChanged(nameof(DownloadableMapsList));
             OnPropertyChanged(nameof(DownloadableModsList));
         }
 
@@ -169,12 +190,28 @@ namespace BuildLauncher.ViewModels
         /// </summary>
         /// <param name="command">Port to start map/campaign with</param>
         [RelayCommand]
-        private void StartGame(object? command)
+        private void StartCampaign(object? command)
         {
             command.ThrowIfNotType<BasePort>(out var port);
             SelectedCampaign.ThrowIfNull();
 
             var args = port.GetStartGameArgs(Game, SelectedCampaign, ModsList, SkipIntroCheckbox);
+
+            StartPort(port.FullPathToExe, args);
+        }
+
+
+        /// <summary>
+        /// Start selected map/campaign
+        /// </summary>
+        /// <param name="command">Port to start map/campaign with</param>
+        [RelayCommand]
+        private void StartMap(object? command)
+        {
+            command.ThrowIfNotType<BasePort>(out var port);
+            SelectedMap.ThrowIfNull();
+
+            var args = port.GetStartGameArgs(Game, SelectedMap, ModsList, SkipIntroCheckbox);
 
             StartPort(port.FullPathToExe, args);
         }
@@ -189,6 +226,20 @@ namespace BuildLauncher.ViewModels
             Process.Start(new ProcessStartInfo
             {
                 FileName = Game.ModsFolderPath,
+                UseShellExecute = true,
+            });
+        }
+
+
+        /// <summary>
+        /// Open mods folder
+        /// </summary>
+        [RelayCommand]
+        private void OpenCampaignsFolder()
+        {
+            Process.Start(new ProcessStartInfo
+            {
+                FileName = Game.CampaignsFolderPath,
                 UseShellExecute = true,
             });
         }
@@ -219,6 +270,20 @@ namespace BuildLauncher.ViewModels
 
             File.Delete(SelectedCampaign.PathToFile);
             OnPropertyChanged(nameof(CampaignsList));
+        }
+
+
+        /// <summary>
+        /// Delete selected map/campaign
+        /// </summary>
+        [RelayCommand]
+        private void DeleteMap()
+        {
+            SelectedMap.ThrowIfNull();
+            SelectedMap.PathToFile.ThrowIfNull();
+
+            File.Delete(SelectedMap.PathToFile);
+            OnPropertyChanged(nameof(MapsList));
         }
 
 

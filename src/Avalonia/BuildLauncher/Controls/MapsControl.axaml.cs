@@ -8,12 +8,12 @@ using Ports.Providers;
 
 namespace BuildLauncher.Controls
 {
-    public partial class CampaignsControl : UserControl
+    public partial class MapsControl : UserControl
     {
         private IEnumerable<BasePort> _supportedPorts;
         private GameViewModel _gameViewModel;
 
-        public CampaignsControl()
+        public MapsControl()
         {
             InitializeComponent();
         }
@@ -27,11 +27,11 @@ namespace BuildLauncher.Controls
 
             _gameViewModel = gameViewModel;
 
-            CampaignsList.SelectionChanged += CampaignsListSelectionChanged;
+            MapsList.SelectionChanged += MapsListSelectionChanged;
 
             _supportedPorts = portsProvider.GetPortsThatSupportGame(_gameViewModel.Game.GameEnum);
 
-            CampaignsList.ContextMenu = new();
+            MapsList.ContextMenu = new();
 
             AddPortsButtons();
 
@@ -49,9 +49,9 @@ namespace BuildLauncher.Controls
                 {
                     Content = port.Name,
                     Command = new RelayCommand(() =>
-                                _gameViewModel.StartCampaignCommand.Execute(port),
-        () => port.IsInstalled && CampaignsList.SelectedItem is not null &&
-                        (((IMod)CampaignsList.SelectedItem)?.SupportedPorts is null || ((IMod)CampaignsList.SelectedItem).SupportedPorts!.Contains(port.PortEnum))
+                                _gameViewModel.StartMapCommand.Execute(port),
+        () => port.IsInstalled && MapsList.SelectedItem is not null &&
+                        (((IMod)MapsList.SelectedItem)?.SupportedPorts is null || ((IMod)MapsList.SelectedItem).SupportedPorts!.Contains(port.PortEnum))
                         ),
                     Margin = new(5),
                     Padding = new(5),
@@ -66,14 +66,14 @@ namespace BuildLauncher.Controls
         /// </summary>
         private void AddContextMenuButtons()
         {
-            CampaignsList.ContextMenu.ThrowIfNull();
+            MapsList.ContextMenu.ThrowIfNull();
 
-            if (CampaignsList.SelectedItem is not IMod iMod)
+            if (MapsList.SelectedItem is not IMod iMod)
             {
                 return;
             }
 
-            CampaignsList.ContextMenu.Items.Clear();
+            MapsList.ContextMenu.Items.Clear();
 
 
             foreach (var port in _supportedPorts)
@@ -85,36 +85,36 @@ namespace BuildLauncher.Controls
                     {
                         Header = $"Start with {port.Name}",
                         Command = new RelayCommand(() =>
-                                            _gameViewModel.StartCampaignCommand.Execute(port)
+                                            _gameViewModel.StartMapCommand.Execute(port)
                         )
                     };
 
-                    CampaignsList.ContextMenu.Items.Add(portButton);
+                    MapsList.ContextMenu.Items.Add(portButton);
                 }
 
             }
 
-            if (CampaignsList.ContextMenu.Items.Count > 0)
+            if (MapsList.ContextMenu.Items.Count > 0)
             {
-                CampaignsList.ContextMenu.Items.Add(new Separator());
+                MapsList.ContextMenu.Items.Add(new Separator());
             }
 
             var deleteButton = new MenuItem()
             {
                 Header = "Delete",
                 Command = new RelayCommand(() =>
-                                            _gameViewModel.DeleteCampaignCommand.Execute(null),
+                                            _gameViewModel.DeleteMapCommand.Execute(null),
 () => !iMod.IsOfficial
                     )
             };
 
-            CampaignsList.ContextMenu.Items.Add(deleteButton);
+            MapsList.ContextMenu.Items.Add(deleteButton);
         }
 
         /// <summary>
         /// Update CanExecute for ports buttons and context menu buttons when selected campaign changed
         /// </summary>
-        private void CampaignsListSelectionChanged(object? sender, SelectionChangedEventArgs e)
+        private void MapsListSelectionChanged(object? sender, SelectionChangedEventArgs e)
         {
             foreach (var control in BottomPanel.PortsButtonsPanel.Children)
             {
@@ -133,7 +133,7 @@ namespace BuildLauncher.Controls
         /// </summary>
         private void ListBoxEmptySpaceClicked(object? sender, Avalonia.Input.PointerPressedEventArgs e)
         {
-            CampaignsList.SelectedItem = null;
+            MapsList.SelectedItem = null;
         }
     }
 }

@@ -26,6 +26,9 @@ dotnet_diagnostic.IDE0017.severity = none
 # Remove unnecessary suppression (IDE0079)
 dotnet_diagnostic.IDE0079.severity = none
 
+# Consider making public types internal
+dotnet_diagnostic.CA1515.severity = warning
+
 # CA2000: Dispose objects before losing scope
 dotnet_diagnostic.CA2000.severity = error
 csharp_indent_labels = one_less_than_current

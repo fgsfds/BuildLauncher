@@ -49,6 +49,8 @@ namespace Mods.Mods
         public required bool IsOfficial { get; init; }
 
 
+        public override string ToString() => DisplayName;
+
         /// <inheritdoc/>
         public string ToMarkdownString()
         {

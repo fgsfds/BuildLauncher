@@ -17,8 +17,12 @@
     <Grid RowDefinitions="*">
 
         <TabControl>
-            <TabItem Header="Maps and Campaigns" Margin="5">
+            <TabItem Header="Campaigns" Margin="5">
                 <ctrl:CampaignsControl Name="CampControl"/>
+            </TabItem>
+
+            <TabItem Header="Maps" Margin="5">
+                <ctrl:MapsControl Name="MapssControl"/>
             </TabItem>
 
             <TabItem Header="Mods" Margin="5">

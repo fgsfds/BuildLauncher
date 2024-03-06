@@ -5,7 +5,7 @@ namespace Mods.Mods
     /// <summary>
     /// Blood campaign
     /// </summary>
-    public class BloodCampaign : BaseMod
+    public sealed class BloodCampaign : BaseMod
     {
         /// <summary>
         /// Blood Addon enum

@@ -6,7 +6,7 @@ using Mods.Providers;
 
 namespace BuildLauncher.ViewModels
 {
-    public class GameViewModelFactory
+    public sealed class GameViewModelFactory
     {
         private readonly GamesProvider _gamesProvider;
         private readonly ArchiveTools _archiveTools;
