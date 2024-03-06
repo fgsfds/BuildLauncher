@@ -24,6 +24,8 @@ namespace Mods.Serializable
 
         public string Description { get; set; }
 
+        public long FileSize { get; set; }
+
 
         public string ToMarkdownString()
         {

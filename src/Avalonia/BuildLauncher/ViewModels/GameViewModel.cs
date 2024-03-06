@@ -115,6 +115,7 @@ namespace BuildLauncher.ViewModels
                 _selectedDownloadableMod = value;
                 OnPropertyChanged(nameof(SelectedDownloadableMod));
                 OnPropertyChanged(nameof(SelectedDownloadableDescription));
+                OnPropertyChanged(nameof(DownloadButtonText));
 
                 DownloadModCommand.NotifyCanExecuteChanged();
             }
@@ -125,6 +126,21 @@ namespace BuildLauncher.ViewModels
         public string SelectedModDescription => SelectedMod is null ? string.Empty : SelectedMod.ToMarkdownString();
 
         public string SelectedDownloadableDescription => SelectedDownloadableMod is null ? string.Empty : SelectedDownloadableMod.ToMarkdownString();
+
+        public string DownloadButtonText
+        {
+            get
+            {
+                if (SelectedDownloadableMod is null)
+                {
+                    return "Download";
+                }
+                else
+                {
+                    return $"Download ({SelectedDownloadableMod.FileSize.ToSizeString()})";
+                }
+            }
+        }
 
         #endregion
 
