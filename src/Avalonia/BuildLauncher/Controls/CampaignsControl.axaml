@@ -15,7 +15,7 @@
 
     <Grid RowDefinitions="*,auto, auto" ColumnDefinitions="2*,*">
 
-        <ListBox Name="CampaignsListControl"
+        <ListBox Name="CampaignsList"
                  Grid.Row="0" Grid.Column="0"
                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                  Padding="2"

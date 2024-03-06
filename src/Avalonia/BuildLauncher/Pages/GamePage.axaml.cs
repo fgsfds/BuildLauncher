@@ -1,4 +1,5 @@
 using Avalonia.Controls;
+using BuildLauncher.Controls;
 using BuildLauncher.ViewModels;
 using Common.Helpers;
 using Ports.Providers;
@@ -19,6 +20,7 @@ namespace BuildLauncher.Pages
         {
             CampControl.Init(portsProvider);
             ModsControl.Init();
+            DownControl.Init();
 
             DataContext.ThrowIfNotType<GameViewModel>(out var gameVM);
 

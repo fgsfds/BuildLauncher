@@ -15,7 +15,7 @@
 
     <Grid RowDefinitions="*,auto" ColumnDefinitions="2*,*">
 
-        <ListBox Name="ModsListControl"
+        <ListBox Name="ModsList"
                  Grid.Row="0"
                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                  Padding="2"

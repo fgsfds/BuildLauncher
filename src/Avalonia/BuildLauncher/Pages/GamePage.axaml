@@ -26,7 +26,7 @@
             </TabItem>
 
             <TabItem Header="Downloads" Margin="5">
-                <ctrl:DownloadsControl/>
+                <ctrl:DownloadsControl Name="DownControl"/>
             </TabItem>
 
         </TabControl>

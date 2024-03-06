@@ -1,4 +1,3 @@
-using Avalonia.Controls;
 using Common.Config;
 using Common.Enums;
 using Common.Helpers;
@@ -13,7 +12,6 @@ using Mods.Serializable;
 using Ports.Ports;
 using System.Collections.Immutable;
 using System.Diagnostics;
-using System.Text;
 
 namespace BuildLauncher.ViewModels
 {

@@ -27,7 +27,7 @@ namespace BuildLauncher.Controls
         /// </summary>
         private void AddContextMenuButtons(GameViewModel gameViewModel)
         {
-            ModsListControl.ContextMenu.ThrowIfNull();
+            ModsList.ContextMenu.ThrowIfNull();
 
             var deleteButton = new MenuItem()
             {
@@ -35,7 +35,7 @@ namespace BuildLauncher.Controls
                 Command = new RelayCommand(() => gameViewModel.DeleteModCommand.Execute(null))
             };
 
-            ModsListControl.ContextMenu.Items.Add(deleteButton);
+            ModsList.ContextMenu.Items.Add(deleteButton);
         }
     }
 }

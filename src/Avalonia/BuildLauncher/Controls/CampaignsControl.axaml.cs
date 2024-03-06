@@ -27,7 +27,7 @@ namespace BuildLauncher.Controls
 
             _gameViewModel = gameViewModel;
 
-            CampaignsListControl.SelectionChanged += CampaignsListSelectionChanged;
+            CampaignsList.SelectionChanged += CampaignsListSelectionChanged;
 
             _supportedPorts = portsProvider.GetPortsThatSupportGame(_gameViewModel.Game.GameEnum);
 
@@ -48,8 +48,8 @@ namespace BuildLauncher.Controls
                     Content = port.Name,
                     Command = new RelayCommand(() =>
                         _gameViewModel.StartGameCommand.Execute(port),
-                        () => port.IsInstalled && CampaignsListControl.SelectedItem is not null &&
-                        (((IMod)CampaignsListControl.SelectedItem)?.SupportedPorts is null || ((IMod)CampaignsListControl.SelectedItem).SupportedPorts!.Contains(port.PortEnum))
+                        () => port.IsInstalled && CampaignsList.SelectedItem is not null &&
+                        (((IMod)CampaignsList.SelectedItem)?.SupportedPorts is null || ((IMod)CampaignsList.SelectedItem).SupportedPorts!.Contains(port.PortEnum))
                         ),
                     Margin = new(5),
                     Padding = new(5),
@@ -64,25 +64,15 @@ namespace BuildLauncher.Controls
         /// </summary>
         private void AddContextMenuButtons()
         {
-            CampaignsListControl.ContextMenu.ThrowIfNull();
+            CampaignsList.ContextMenu.ThrowIfNull();
 
-            if (CampaignsListControl.SelectedItem is not IMod iMod)
+            if (CampaignsList.SelectedItem is not IMod iMod)
             {
                 return;
             }
 
-            CampaignsListControl.ContextMenu.Items.Clear();
+            CampaignsList.ContextMenu.Items.Clear();
 
-            var deleteButton = new MenuItem()
-            {
-                Header = "Delete",
-                Command = new RelayCommand(() =>
-                _gameViewModel.DeleteCampaignCommand.Execute(null),
-                () => !iMod.IsOfficial
-                )
-            };
-
-            CampaignsListControl.ContextMenu.Items.Add(deleteButton);
 
             foreach (var port in _supportedPorts)
             {
@@ -97,10 +87,26 @@ namespace BuildLauncher.Controls
                         )
                     };
 
-                    CampaignsListControl.ContextMenu.Items.Add(portButton);
+                    CampaignsList.ContextMenu.Items.Add(portButton);
                 }
 
             }
+
+            if (CampaignsList.ContextMenu.Items.Count > 0)
+            {
+                CampaignsList.ContextMenu.Items.Add(new Separator());
+            }
+
+            var deleteButton = new MenuItem()
+            {
+                Header = "Delete",
+                Command = new RelayCommand(() =>
+                _gameViewModel.DeleteCampaignCommand.Execute(null),
+                () => !iMod.IsOfficial
+                )
+            };
+
+            CampaignsList.ContextMenu.Items.Add(deleteButton);
         }
 
         /// <summary>
@@ -125,7 +131,7 @@ namespace BuildLauncher.Controls
         /// </summary>
         private void ListBoxEmptySpaceClicked(object? sender, Avalonia.Input.PointerPressedEventArgs e)
         {
-            CampaignsListControl.SelectedItem = null;
+            CampaignsList.SelectedItem = null;
         }
     }
 }

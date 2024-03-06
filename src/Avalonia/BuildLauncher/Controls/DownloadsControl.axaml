@@ -25,7 +25,7 @@
             Mods
         </TextBlock>
 
-        <ListBox Name="CampaignsList"
+        <ListBox Name="DownloadableCampaignsList"
                  Grid.Row="1" Grid.Column="0"
                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                  Margin="2"
@@ -38,6 +38,11 @@
                     <WrapPanel Orientation="Vertical" />
                 </ItemsPanelTemplate>
             </ListBox.ItemsPanel>
+
+            <ListBox.ContextMenu>
+                <ContextMenu>
+                </ContextMenu>
+            </ListBox.ContextMenu>
 
             <ListBox.ItemTemplate>
                 <DataTemplate>
@@ -52,7 +57,7 @@
             </ListBox.ItemTemplate>
         </ListBox>
 
-        <ListBox Name="ModsList"
+        <ListBox Name="DownloadableModsList"
                  Grid.Row="1" Grid.Column="1"
                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                  Margin="2"
@@ -65,6 +70,11 @@
                     <WrapPanel Orientation="Vertical" />
                 </ItemsPanelTemplate>
             </ListBox.ItemsPanel>
+
+            <ListBox.ContextMenu>
+                <ContextMenu>
+                </ContextMenu>
+            </ListBox.ContextMenu>
 
             <ListBox.ItemTemplate>
                 <DataTemplate>

@@ -8,17 +8,23 @@
              x:DataType="vm:PortViewModel">
 
     <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
+
         <TextBlock Text="{Binding Name, FallbackValue=Name}" FontWeight="Black" HorizontalAlignment="Center"/>
+
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
             <TextBlock Text="Installed version: "/>
             <TextBlock Text="{Binding Version, FallbackValue=None}"/>
         </StackPanel>
+
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
             <TextBlock Text="Latest version: " Foreground="{DynamicResource SystemAccentColor}"/>
             <TextBlock Text="{Binding LatestVersion, FallbackValue=None}" Foreground="{DynamicResource SystemAccentColor}"/>
         </StackPanel>
+
         <Button Content="{Binding InstallButtonText}" HorizontalAlignment="Center" Command="{Binding InstallCommand}" Margin="5"/>
+
         <ProgressBar HorizontalAlignment="Center" Value="{Binding ProgressBarValue}"/>
+
     </StackPanel>
 
 </UserControl>
