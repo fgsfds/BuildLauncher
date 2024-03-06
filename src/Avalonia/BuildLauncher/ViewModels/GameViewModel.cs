@@ -224,6 +224,8 @@ namespace BuildLauncher.ViewModels
             {
                 _config.RemoveDisabledAutoloadMod(mod.Guid);
             }
+
+            Game.CreateCombinedMod();
         }
 
 

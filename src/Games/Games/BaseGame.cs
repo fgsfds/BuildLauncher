@@ -1,6 +1,7 @@
 ﻿using Common.Enums;
 using Common.Helpers;
 using Common.Interfaces;
+using Mods.Mods;
 using Mods.Providers;
 using System.Collections.Immutable;
 using System.IO.Compression;
@@ -13,7 +14,7 @@ namespace Games.Games
     /// </summary>
     public abstract class BaseGame : IGame
     {
-        protected readonly InstalledModsProvider _modsProvider;
+        protected readonly InstalledModsProvider _installedModsProvider;
 
         /// <inheritdoc/>
         public string GameInstallFolder { get; set; }
@@ -55,7 +56,7 @@ namespace Games.Games
 
         public BaseGame(InstalledModsProvider modsProvider)
         {
-            _modsProvider = modsProvider;
+            _installedModsProvider = modsProvider;
 
             if (!Directory.Exists(CampaignsFolderPath))
             {
@@ -86,7 +87,7 @@ namespace Games.Games
         {
             var campaigns = GetOriginalCampaigns();
 
-            var cusomCampaigns = _modsProvider.GetMods(this, ModTypeEnum.Campaign);
+            var cusomCampaigns = _installedModsProvider.GetMods(this, ModTypeEnum.Campaign);
 
             return [.. campaigns, .. cusomCampaigns];
         }
@@ -95,7 +96,7 @@ namespace Games.Games
         /// <inheritdoc/>
         public virtual ImmutableList<IMod> GetSingleMaps()
         {
-            var maps = _modsProvider.GetMods(this, ModTypeEnum.Map);
+            var maps = _installedModsProvider.GetMods(this, ModTypeEnum.Map);
 
             return [.. maps];
         }
@@ -104,7 +105,7 @@ namespace Games.Games
         /// <inheritdoc/>
         public virtual ImmutableList<IMod> GetAutoloadMods()
         {
-            var mods = _modsProvider.GetMods(this, ModTypeEnum.Autoload);
+            var mods = _installedModsProvider.GetMods(this, ModTypeEnum.Autoload);
 
             return [.. mods];
         }
@@ -128,16 +129,25 @@ namespace Games.Games
             }
 
             StringBuilder newDef = new();
-            var files = Directory.GetFiles(ModsFolderPath);
 
-            if (files.Length == 0)
+            var files = _installedModsProvider.GetMods(this, ModTypeEnum.Autoload);
+
+            if (files.Count == 0)
             {
                 return;
             }
 
             foreach (var file in files)
             {
-                using var zip = ZipFile.OpenRead(file);
+                file.ThrowIfNotType<AutoloadMod>(out var autoloadMod);
+                autoloadMod.PathToFile.ThrowIfNull();
+
+                if (!autoloadMod.IsEnabled)
+                {
+                    continue;
+                }
+
+                using var zip = ZipFile.OpenRead(autoloadMod.PathToFile);
 
                 var ini = zip.Entries.FirstOrDefault(x => x.Name.Equals(DefFile));
 

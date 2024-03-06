@@ -12,6 +12,7 @@ namespace Mods.Mods
         /// <inheritdoc/>
         public required Guid Guid { get; init; }
 
+        /// <inheritdoc/>
         public required ModTypeEnum ModType { get; init; }
 
         /// <inheritdoc/>
