@@ -16,7 +16,7 @@ namespace Updater
             using HttpClient client = new();
             client.DefaultRequestHeaders.UserAgent.ParseAdd("BuildLauncher");
 
-            var json = await client.GetStringAsync(Consts.GitHubReleases);
+            var json = await client.GetStringAsync(Consts.GitHubReleases).ConfigureAwait(false);
 
             var releases = JsonSerializer.Deserialize(json, GitHubReleaseContext.Default.ListGitHubRelease)
                 ?? ThrowHelper.Exception<List<GitHubRelease>>("Error while deserializing GitHub releases");

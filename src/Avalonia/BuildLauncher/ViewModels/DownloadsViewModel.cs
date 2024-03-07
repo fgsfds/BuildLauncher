@@ -121,7 +121,7 @@ namespace BuildLauncher.ViewModels
 
             _downloadableModsProvider.Progress.ProgressChanged += ProgressChanged;
 
-            await _downloadableModsProvider.DownloadModAsync(SelectedDownloadableMod, Game);
+            await _downloadableModsProvider.DownloadModAsync(SelectedDownloadableMod, Game).ConfigureAwait(false); ;
 
             _downloadableModsProvider.Progress.ProgressChanged -= ProgressChanged;
             ProgressChanged(null, 0);

@@ -31,21 +31,21 @@ namespace Common.Tools
             using HttpClient client = new();
             client.Timeout = TimeSpan.FromSeconds(10);
 
-            using var response = await client.GetAsync(url, HttpCompletionOption.ResponseHeadersRead);
+            using var response = await client.GetAsync(url, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false); ;
 
             if (!response.IsSuccessStatusCode)
             {
                 ThrowHelper.Exception($"Error while downloading {url}, error: {response.StatusCode}");
             }
 
-            await using var source = await response.Content.ReadAsStreamAsync();
+            await using var source = await response.Content.ReadAsStreamAsync().ConfigureAwait(false); ;
             var contentLength = response.Content.Headers.ContentLength;
 
             await using FileStream file = new(tempFile, FileMode.Create, FileAccess.Write, FileShare.None);
 
             if (!contentLength.HasValue)
             {
-                await source.CopyToAsync(file);
+                await source.CopyToAsync(file).ConfigureAwait(false); ;
             }
             else
             {
@@ -53,14 +53,14 @@ namespace Common.Tools
                 var totalBytesRead = 0f;
                 int bytesRead;
 
-                while ((bytesRead = await source.ReadAsync(buffer)) != 0)
+                while ((bytesRead = await source.ReadAsync(buffer).ConfigureAwait(false)) != 0)
                 {
-                    await file.WriteAsync(buffer.AsMemory(0, bytesRead));
+                    await file.WriteAsync(buffer.AsMemory(0, bytesRead)).ConfigureAwait(false);
                     totalBytesRead += bytesRead;
                     progress.Report(totalBytesRead / (long)contentLength * 100);
                 }
 
-                await file.DisposeAsync();
+                await file.DisposeAsync().ConfigureAwait(false); ;
 
                 File.Move(tempFile, filePath, true);
             }
@@ -112,7 +112,7 @@ namespace Common.Tools
 
                     entryNumber++;
                 }
-            });
+            }).ConfigureAwait(false); ;
         }
     }
 }

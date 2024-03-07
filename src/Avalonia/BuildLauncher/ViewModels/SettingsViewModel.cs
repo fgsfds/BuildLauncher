@@ -105,7 +105,7 @@ namespace BuildLauncher.ViewModels
                 {
                     Title = "Choose game folder",
                     AllowMultiple = false
-                });
+                }).ConfigureAwait(false);
 
             if (files.Count == 0)
             {
@@ -156,7 +156,7 @@ namespace BuildLauncher.ViewModels
                     Title = "Choose game folder",
                     AllowMultiple = false,
                     FileTypeFilter = [z64]
-                });
+                }).ConfigureAwait(false);
 
             if (files.Count == 0)
             {

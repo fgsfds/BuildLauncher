@@ -54,7 +54,7 @@ namespace Mods.Providers
                 return;
             }
 
-            await _archiveTools.DownloadFileAsync(new(url), Path.Combine(path, file));
+            await _archiveTools.DownloadFileAsync(new(url), Path.Combine(path, file)).ConfigureAwait(false); ;
 
             Progress = _archiveTools.Progress;
 

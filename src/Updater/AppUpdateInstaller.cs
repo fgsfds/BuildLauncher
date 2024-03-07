@@ -19,7 +19,7 @@ namespace Updater
         /// <returns></returns>
         public async Task<bool> CheckForUpdates(Version currentVersion)
         {
-            _update = await GitHubReleasesProvider.GetLatestUpdateAsync(currentVersion);
+            _update = await GitHubReleasesProvider.GetLatestUpdateAsync(currentVersion).ConfigureAwait(false); ;
 
             var hasUpdate = _update is not null;
 
@@ -46,13 +46,13 @@ namespace Updater
                 File.Delete(fileName);
             }
 
-            await _archiveTools.DownloadFileAsync(updateUrl, fileName);
+            await _archiveTools.DownloadFileAsync(updateUrl, fileName).ConfigureAwait(false); ;
 
             ZipFile.ExtractToDirectory(fileName, Path.Combine(Directory.GetCurrentDirectory(), Consts.UpdateFolder), true);
 
             File.Delete(fileName);
 
-            await File.Create(Consts.UpdateFile).DisposeAsync();
+            await File.Create(Consts.UpdateFile).DisposeAsync().ConfigureAwait(false); ;
         }
 
         /// <summary>

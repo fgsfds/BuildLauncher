@@ -18,7 +18,6 @@ namespace BuildLauncher.Controls
         public void InitializeControl()
         {
             DataContext.ThrowIfNotType<DownloadsViewModel>(out var viewModel);
-            viewModel.InitializeCommand.Execute(null);
 
             AddContextMenuButtons(DownloadableCampaignsList);
             AddContextMenuButtons(DownloadableMapsList);
