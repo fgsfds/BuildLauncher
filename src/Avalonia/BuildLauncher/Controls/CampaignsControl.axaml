@@ -7,7 +7,7 @@
              xmlns:vm="clr-namespace:BuildLauncher.ViewModels"
              xmlns:helpers="clr-namespace:BuildLauncher.Helpers"
              xmlns:ctrl="clr-namespace:BuildLauncher.Controls"
-             x:DataType="vm:GameViewModel"
+             x:DataType="vm:CampaignsViewModel"
              x:Class="BuildLauncher.Controls.CampaignsControl">
 
     <UserControl.Resources>

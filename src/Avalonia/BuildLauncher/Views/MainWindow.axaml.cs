@@ -1,34 +1,22 @@
 ﻿using Avalonia.Controls;
 using BuildLauncher.ViewModels;
-using Common.DI;
 using Common.Enums;
 using Games.Providers;
-using Microsoft.Extensions.DependencyInjection;
 using Ports.Providers;
 
 namespace BuildLauncher.Views;
 
 public sealed partial class MainWindow : Window
 {
-    public MainWindow()
+    public MainWindow(MainViewModel vm, GamesProvider gamesProvider, ViewModelsFactory vmFactory, PortsProvider portsProvider)
     {
-        var vm = BindingsManager.Provider.GetRequiredService<MainViewModel>();
-        var gamesProvider = BindingsManager.Provider.GetRequiredService<GamesProvider>();
-        var gameVmFactory = BindingsManager.Provider.GetRequiredService<GameViewModelFactory>();
-        var portsProvider = BindingsManager.Provider.GetRequiredService<PortsProvider>();
-
         DataContext = vm;
 
         InitializeComponent();
 
-        BloodPage.DataContext = gameVmFactory.Create(GameEnum.Blood);
-        BloodPage.Init(portsProvider);
-
-        DukePage.DataContext = gameVmFactory.Create(GameEnum.Duke3D);
-        DukePage.Init(portsProvider);
-
-        WangPage.DataContext = gameVmFactory.Create(GameEnum.Wang);
-        WangPage.Init(portsProvider);
+        BloodPage.InitializeControl(GameEnum.Blood, portsProvider, vmFactory);
+        DukePage.InitializeControl(GameEnum.Duke3D, portsProvider, vmFactory);
+        WangPage.InitializeControl(GameEnum.Wang, portsProvider, vmFactory);
 
         SettingsTab.IsSelected = true;
 

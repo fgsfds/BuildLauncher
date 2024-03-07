@@ -15,9 +15,13 @@ namespace BuildLauncher.Controls
         /// <summary>
         /// Initialize control
         /// </summary>
-        public void Init()
+        public void InitializeControl()
         {
+            DataContext.ThrowIfNotType<DownloadsViewModel>(out var viewModel);
+            viewModel.InitializeCommand.Execute(null);
+
             AddContextMenuButtons(DownloadableCampaignsList);
+            AddContextMenuButtons(DownloadableMapsList);
             AddContextMenuButtons(DownloadableModsList);
         }
 
@@ -26,16 +30,15 @@ namespace BuildLauncher.Controls
         /// </summary>
         private void AddContextMenuButtons(ListBox listBox)
         {
-            DataContext.ThrowIfNotType<GameViewModel>(out var gameViewModel);
-            listBox.ContextMenu.ThrowIfNull();
+            DataContext.ThrowIfNotType<DownloadsViewModel>(out var viewModel);
 
-            listBox.ContextMenu.Items.Clear();
+            listBox.ContextMenu = new();
 
             var downloadButton = new MenuItem()
             {
                 Header = "Download",
                 Command = new RelayCommand(() =>
-                gameViewModel.DownloadModCommand.Execute(null)
+                viewModel.DownloadModCommand.Execute(null)
                 )
             };
 

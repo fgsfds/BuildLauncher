@@ -5,7 +5,7 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="BuildLauncher.Controls.PortsButtonsControl"
              xmlns:vm="clr-namespace:BuildLauncher.ViewModels"
-             x:DataType="vm:GameViewModel">
+             x:DataType="vm:IPortsButtonControl">
 
     <Grid ColumnDefinitions="auto, auto, *" Grid.Row="1" Margin="0,10">
 
@@ -27,8 +27,8 @@
         <Button Grid.Column="2"
                 HorizontalAlignment="Right"
                 Padding="5"
-                Command="{Binding OpenCampaignsFolderCommand}">
-            Open campaigns folder...
+                Command="{Binding OpenFolderCommand}">
+            Open folder...
         </Button>
 
     </Grid>

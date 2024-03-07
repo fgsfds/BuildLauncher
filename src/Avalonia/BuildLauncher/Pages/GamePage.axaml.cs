@@ -1,7 +1,7 @@
 using Avalonia.Controls;
 using BuildLauncher.Controls;
 using BuildLauncher.ViewModels;
-using Common.Helpers;
+using Common.Enums;
 using Ports.Providers;
 
 namespace BuildLauncher.Pages
@@ -16,16 +16,17 @@ namespace BuildLauncher.Pages
         /// <summary>
         /// Initialize control
         /// </summary>
-        public void Init(PortsProvider portsProvider)
+        public void InitializeControl(GameEnum gameEnum, PortsProvider portsProvider, ViewModelsFactory vmFactory)
         {
-            CampControl.Init(portsProvider);
-            MapssControl.Init(portsProvider);
-            ModsControl.Init();
-            DownControl.Init();
+            CampControl.DataContext = vmFactory.GetCampaignsViewModel(gameEnum);
+            MapssControl.DataContext = vmFactory.GetMapsViewModel(gameEnum);
+            ModsControl.DataContext = vmFactory.GetModsViewModel(gameEnum);
+            DownControl.DataContext = vmFactory.GetDownloadsViewModel(gameEnum);
 
-            DataContext.ThrowIfNotType<GameViewModel>(out var gameVM);
-
-            gameVM.InitializeCommand.Execute(null);
+            CampControl.InitializeControl(portsProvider);
+            MapssControl.InitializeControl(portsProvider);
+            ModsControl.InitializeControl();
+            DownControl.InitializeControl();
         }
     }
 }

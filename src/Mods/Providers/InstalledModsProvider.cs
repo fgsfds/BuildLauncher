@@ -27,9 +27,9 @@ namespace Mods.Providers
         /// </summary>
         /// <param name="game">Game</param>
         /// <param name="modTypeEnum">Mod type enum</param>
-        public List<IMod> GetMods(IGame game, ModTypeEnum modTypeEnum)
+        public IEnumerable<IMod> GetMods(IGame game, ModTypeEnum modTypeEnum)
         {
-            List<IMod> mods = new();
+            List<IMod> mods = [];
 
             string path;
 

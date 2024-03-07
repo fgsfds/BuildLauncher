@@ -17,7 +17,7 @@ namespace Ports.Providers
         /// Get the latest release of the selected port
         /// </summary>
         /// <param name="port">Port</param>
-        public static async Task<PortRelease?> GetLatestRelease(BasePort port)
+        public static async Task<PortRelease?> GetLatestReleaseAsync(BasePort port)
         {
             if (CommonProperties.IsDevMode)
             {

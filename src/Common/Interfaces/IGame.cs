@@ -84,6 +84,6 @@ namespace Common.Interfaces
         /// <summary>
         /// Get list of autoload mods
         /// </summary>
-        ImmutableList<IMod> GetAutoloadMods();
+        ImmutableList<IMod> GetAutoloadMods(bool enabledOnly);
     }
 }

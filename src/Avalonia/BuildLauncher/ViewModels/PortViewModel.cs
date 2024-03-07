@@ -71,9 +71,9 @@ namespace BuildLauncher.ViewModels
         /// Initialize VM
         /// </summary>
         [RelayCommand]
-        private async Task Init()
+        private async Task InitializeAsync()
         {
-            _release = await PortsReleasesProvider.GetLatestRelease(_port);
+            _release = await PortsReleasesProvider.GetLatestReleaseAsync(_port);
             OnPropertyChanged(nameof(LatestVersion));
             OnPropertyChanged(nameof(InstallButtonText));
         }

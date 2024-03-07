@@ -80,7 +80,7 @@ namespace Ports.Ports
         /// <param name="mod">Map/campaign</param>
         /// <param name="autoloadMods">Mods</param>
         /// <param name="skipIntro">Skip intro</param>
-        public string GetStartGameArgs(IGame game, IMod mod, IEnumerable<IMod> autoloadMods, bool skipIntro)
+        public string GetStartGameArgs(IGame game, IMod mod, bool skipIntro)
         {
             StringBuilder sb = new();
 
@@ -88,7 +88,7 @@ namespace Ports.Ports
 
             GetStartCampaignArgs(sb, game, mod);
 
-            GetAutoloadModsArgs(sb, game, autoloadMods);
+            GetAutoloadModsArgs(sb, game, game.GetAutoloadMods(true));
 
             if (skipIntro)
             {

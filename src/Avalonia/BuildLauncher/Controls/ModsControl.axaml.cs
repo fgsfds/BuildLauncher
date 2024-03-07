@@ -15,24 +15,24 @@ namespace BuildLauncher.Controls
         /// <summary>
         /// Initialize control
         /// </summary>
-        public void Init()
+        public void InitializeControl()
         {
-            DataContext.ThrowIfNotType<GameViewModel>(out var gameViewModel);
+            DataContext.ThrowIfNotType<ModsViewModel>(out var viewModel);
 
-            AddContextMenuButtons(gameViewModel);
+            AddContextMenuButtons(viewModel);
         }
 
         /// <summary>
         /// Add button to the right click menu
         /// </summary>
-        private void AddContextMenuButtons(GameViewModel gameViewModel)
+        private void AddContextMenuButtons(ModsViewModel viewModel)
         {
-            ModsList.ContextMenu.ThrowIfNull();
+            ModsList.ContextMenu = new();
 
             var deleteButton = new MenuItem()
             {
                 Header = "Delete",
-                Command = new RelayCommand(() => gameViewModel.DeleteModCommand.Execute(null))
+                Command = new RelayCommand(() => viewModel.DeleteModCommand.Execute(null))
             };
 
             ModsList.ContextMenu.Items.Add(deleteButton);

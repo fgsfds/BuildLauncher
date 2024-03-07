@@ -50,14 +50,13 @@ namespace Common.Config
         /// </summary>
         private void SaveConfigFile()
         {
-            using (FileStream fs = new(Consts.ConfigFile, FileMode.Create))
-            {
-                JsonSerializer.Serialize(
-                   fs,
-                   Config,
-                   ConfigEntityContext.Default.ConfigEntity
-                   );
-            }
+            using FileStream fs = new(Consts.ConfigFile, FileMode.Create);
+
+            JsonSerializer.Serialize(
+               fs,
+               Config,
+               ConfigEntityContext.Default.ConfigEntity
+               );
         }
     }
 }

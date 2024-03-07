@@ -8,10 +8,10 @@ using Ports.Providers;
 
 namespace BuildLauncher.Controls
 {
-    public partial class MapsControl : UserControl
+    public sealed partial class MapsControl : UserControl
     {
         private IEnumerable<BasePort> _supportedPorts;
-        private GameViewModel _gameViewModel;
+        private MapsViewModel _viewModel;
 
         public MapsControl()
         {
@@ -21,17 +21,15 @@ namespace BuildLauncher.Controls
         /// <summary>
         /// Initialize control
         /// </summary>
-        public void Init(PortsProvider portsProvider)
+        public void InitializeControl(PortsProvider portsProvider)
         {
-            DataContext.ThrowIfNotType<GameViewModel>(out var gameViewModel);
+            DataContext.ThrowIfNotType<MapsViewModel>(out var viewModel);
 
-            _gameViewModel = gameViewModel;
+            _viewModel = viewModel;
+            _supportedPorts = portsProvider.GetPortsThatSupportGame(_viewModel.Game.GameEnum);
 
             MapsList.SelectionChanged += MapsListSelectionChanged;
-
-            _supportedPorts = portsProvider.GetPortsThatSupportGame(_gameViewModel.Game.GameEnum);
-
-            MapsList.ContextMenu = new();
+            BottomPanel.DataContext = viewModel;
 
             AddPortsButtons();
 
@@ -49,8 +47,8 @@ namespace BuildLauncher.Controls
                 {
                     Content = port.Name,
                     Command = new RelayCommand(() =>
-                                _gameViewModel.StartMapCommand.Execute(port),
-        () => port.IsInstalled && MapsList.SelectedItem is not null &&
+                        _viewModel.StartMapCommand.Execute(port),
+                        () => port.IsInstalled && MapsList.SelectedItem is not null &&
                         (((IMod)MapsList.SelectedItem)?.SupportedPorts is null || ((IMod)MapsList.SelectedItem).SupportedPorts!.Contains(port.PortEnum))
                         ),
                     Margin = new(5),
@@ -66,7 +64,7 @@ namespace BuildLauncher.Controls
         /// </summary>
         private void AddContextMenuButtons()
         {
-            MapsList.ContextMenu.ThrowIfNull();
+            MapsList.ContextMenu = new();
 
             if (MapsList.SelectedItem is not IMod iMod)
             {
@@ -74,7 +72,6 @@ namespace BuildLauncher.Controls
             }
 
             MapsList.ContextMenu.Items.Clear();
-
 
             foreach (var port in _supportedPorts)
             {
@@ -85,7 +82,7 @@ namespace BuildLauncher.Controls
                     {
                         Header = $"Start with {port.Name}",
                         Command = new RelayCommand(() =>
-                                            _gameViewModel.StartMapCommand.Execute(port)
+                                            _viewModel.StartMapCommand.Execute(port)
                         )
                     };
 
@@ -102,9 +99,9 @@ namespace BuildLauncher.Controls
             var deleteButton = new MenuItem()
             {
                 Header = "Delete",
-                Command = new RelayCommand(() =>
-                                            _gameViewModel.DeleteMapCommand.Execute(null),
-() => !iMod.IsOfficial
+                Command = new RelayCommand(
+                    () => _viewModel.DeleteMapCommand.Execute(null),
+                    () => !iMod.IsOfficial
                     )
             };
 

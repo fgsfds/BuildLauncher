@@ -8,10 +8,10 @@ using Ports.Providers;
 
 namespace BuildLauncher.Controls
 {
-    public partial class CampaignsControl : UserControl
+    public sealed partial class CampaignsControl : UserControl
     {
         private IEnumerable<BasePort> _supportedPorts;
-        private GameViewModel _gameViewModel;
+        private CampaignsViewModel _viewModel;
 
         public CampaignsControl()
         {
@@ -21,17 +21,15 @@ namespace BuildLauncher.Controls
         /// <summary>
         /// Initialize control
         /// </summary>
-        public void Init(PortsProvider portsProvider)
+        public void InitializeControl(PortsProvider portsProvider)
         {
-            DataContext.ThrowIfNotType<GameViewModel>(out var gameViewModel);
+            DataContext.ThrowIfNotType<CampaignsViewModel>(out var viewModel);
 
-            _gameViewModel = gameViewModel;
+            _viewModel = viewModel;
+            _supportedPorts = portsProvider.GetPortsThatSupportGame(_viewModel.Game.GameEnum);
 
             CampaignsList.SelectionChanged += CampaignsListSelectionChanged;
-
-            _supportedPorts = portsProvider.GetPortsThatSupportGame(_gameViewModel.Game.GameEnum);
-
-            CampaignsList.ContextMenu = new();
+            BottomPanel.DataContext = viewModel;
 
             AddPortsButtons();
 
@@ -49,9 +47,9 @@ namespace BuildLauncher.Controls
                 {
                     Content = port.Name,
                     Command = new RelayCommand(() =>
-                                _gameViewModel.StartCampaignCommand.Execute(port),
-        () => port.IsInstalled && CampaignsList.SelectedItem is not null &&
-                        (((IMod)CampaignsList.SelectedItem)?.SupportedPorts is null || ((IMod)CampaignsList.SelectedItem).SupportedPorts!.Contains(port.PortEnum))
+                        _viewModel.StartCampaignCommand.Execute(port),
+                        () => port.IsInstalled && CampaignsList.SelectedItem is not null &&
+                        (((IMod)CampaignsList.SelectedItem).SupportedPorts is null || ((IMod)CampaignsList.SelectedItem).SupportedPorts!.Contains(port.PortEnum))
                         ),
                     Margin = new(5),
                     Padding = new(5),
@@ -66,7 +64,7 @@ namespace BuildLauncher.Controls
         /// </summary>
         private void AddContextMenuButtons()
         {
-            CampaignsList.ContextMenu.ThrowIfNull();
+            CampaignsList.ContextMenu = new();
 
             if (CampaignsList.SelectedItem is not IMod iMod)
             {
@@ -84,9 +82,7 @@ namespace BuildLauncher.Controls
                     var portButton = new MenuItem()
                     {
                         Header = $"Start with {port.Name}",
-                        Command = new RelayCommand(() =>
-                                            _gameViewModel.StartCampaignCommand.Execute(port)
-                        )
+                        Command = new RelayCommand(() => _viewModel.StartCampaignCommand.Execute(port))
                     };
 
                     CampaignsList.ContextMenu.Items.Add(portButton);
@@ -102,9 +98,9 @@ namespace BuildLauncher.Controls
             var deleteButton = new MenuItem()
             {
                 Header = "Delete",
-                Command = new RelayCommand(() =>
-                                            _gameViewModel.DeleteCampaignCommand.Execute(null),
-() => !iMod.IsOfficial
+                Command = new RelayCommand(
+                    () => _viewModel.DeleteCampaignCommand.Execute(null),
+                    () => !iMod.IsOfficial
                     )
             };
 

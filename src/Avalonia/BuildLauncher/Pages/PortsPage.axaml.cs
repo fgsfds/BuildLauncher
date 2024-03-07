@@ -14,14 +14,14 @@ namespace BuildLauncher.Pages
         {
             InitializeComponent();
 
-            var vmFactory = BindingsManager.Provider.GetRequiredService<PortViewModelFactory>();
+            var vmFactory = BindingsManager.Provider.GetRequiredService<ViewModelsFactory>();
 
-            Raze.DataContext = vmFactory.Create(PortEnum.Raze);
-            NBlood.DataContext = vmFactory.Create(PortEnum.NBlood);
-            NotBlood.DataContext = vmFactory.Create(PortEnum.NotBlood);
-            PCExhumed.DataContext = vmFactory.Create(PortEnum.PCExhumed);
-            RedNukem.DataContext = vmFactory.Create(PortEnum.RedNukem);
-            EDuke32.DataContext = vmFactory.Create(PortEnum.EDuke32);
+            Raze.DataContext = vmFactory.GetPortViewModel(PortEnum.Raze);
+            NBlood.DataContext = vmFactory.GetPortViewModel(PortEnum.NBlood);
+            NotBlood.DataContext = vmFactory.GetPortViewModel(PortEnum.NotBlood);
+            PCExhumed.DataContext = vmFactory.GetPortViewModel(PortEnum.PCExhumed);
+            RedNukem.DataContext = vmFactory.GetPortViewModel(PortEnum.RedNukem);
+            EDuke32.DataContext = vmFactory.GetPortViewModel(PortEnum.EDuke32);
         }
 
         /// <summary>

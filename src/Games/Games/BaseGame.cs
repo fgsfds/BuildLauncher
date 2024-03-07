@@ -103,9 +103,14 @@ namespace Games.Games
 
 
         /// <inheritdoc/>
-        public virtual ImmutableList<IMod> GetAutoloadMods()
+        public virtual ImmutableList<IMod> GetAutoloadMods(bool enabledOnly)
         {
             var mods = _installedModsProvider.GetMods(this, ModTypeEnum.Autoload);
+
+            if (enabledOnly)
+            {
+                mods = mods.Where(static x => ((AutoloadMod)x).IsEnabled);
+            }
 
             return [.. mods];
         }
@@ -132,7 +137,7 @@ namespace Games.Games
 
             var files = _installedModsProvider.GetMods(this, ModTypeEnum.Autoload);
 
-            if (files.Count == 0)
+            if (!files.Any())
             {
                 return;
             }

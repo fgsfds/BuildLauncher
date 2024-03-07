@@ -7,12 +7,11 @@ namespace BuildLauncher.DI
     {
         public static void Load(ServiceCollection container)
         {
+            container.AddSingleton<ViewModelsFactory>();
+
             container.AddSingleton<MainViewModel>();
-            container.AddSingleton<GameViewModelFactory>();
             container.AddSingleton<SettingsViewModel>();
             container.AddSingleton<AboutViewModel>();
-
-            container.AddSingleton<PortViewModelFactory>();
         }
     }
 }

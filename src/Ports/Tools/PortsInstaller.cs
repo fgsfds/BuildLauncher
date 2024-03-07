@@ -34,7 +34,7 @@ namespace Ports.Tools
         /// <param name="port">Port</param>
         public async Task InstallAsync(BasePort port)
         {
-            var release = await PortsReleasesProvider.GetLatestRelease(port);
+            var release = await PortsReleasesProvider.GetLatestReleaseAsync(port);
 
             if (release is null)
             {
