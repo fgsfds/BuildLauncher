@@ -1,12 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <OutputType>WinExe</OutputType>
-    <!--If you are willing to use Windows/MacOS native APIs you will need to create 3 projects.
-    One for Windows with net7.0-windows TFM, one for MacOS with net7.0-macos and one with net7.0 TFM for Linux.-->
-    <ApplicationManifest>app.manifest</ApplicationManifest>
-      <Configurations>Debug;Release</Configurations>
+      <AssemblyName>BuildLauncher</AssemblyName>
+      <OutputType>WinExe</OutputType>
       <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+      <SelfContained>true</SelfContained>
       <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
+      <ApplicationManifest>app.manifest</ApplicationManifest>
+      <Configurations>Debug;Release</Configurations>
+      <StartupObject>BuildLauncher.Desktop.Program</StartupObject>
   </PropertyGroup>
 
   <ItemGroup>
@@ -18,6 +19,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\BuildLauncher\BuildLauncher.csproj" />
+    <ProjectReference Include="..\BuildLauncher.Avalonia.Core\BuildLauncher.Avalonia.Core.csproj" />
   </ItemGroup>
 </Project>

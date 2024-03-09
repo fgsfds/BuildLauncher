@@ -2,6 +2,7 @@
 
   <PropertyGroup>
       <Configurations>Debug;Release</Configurations>
+      <AssemblyName>BuildLauncher.Common</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>

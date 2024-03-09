@@ -39,7 +39,7 @@ namespace Updater
         {
             var updateUrl = _update.DownloadUrl;
 
-            var fileName = Path.Combine(Directory.GetCurrentDirectory(), Path.GetFileName(updateUrl.ToString()).Trim());
+            var fileName = Path.Combine(CommonProperties.ExeFolderPath, Path.GetFileName(updateUrl.ToString()).Trim());
 
             if (File.Exists(fileName))
             {
@@ -48,7 +48,7 @@ namespace Updater
 
             await _archiveTools.DownloadFileAsync(updateUrl, fileName).ConfigureAwait(false); ;
 
-            ZipFile.ExtractToDirectory(fileName, Path.Combine(Directory.GetCurrentDirectory(), Consts.UpdateFolder), true);
+            ZipFile.ExtractToDirectory(fileName, Path.Combine(CommonProperties.ExeFolderPath, Consts.UpdateFolder), true);
 
             File.Delete(fileName);
 
@@ -60,7 +60,7 @@ namespace Updater
         /// </summary>
         public static void InstallUpdate()
         {
-            var dir = Directory.GetCurrentDirectory();
+            var dir = CommonProperties.ExeFolderPath;
             var updateDir = Path.Combine(dir, Consts.UpdateFolder);
             var oldExe = Path.Combine(dir, CommonProperties.ExecutableName);
             var newExe = Path.Combine(updateDir, CommonProperties.ExecutableName);
