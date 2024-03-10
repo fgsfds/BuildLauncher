@@ -1,5 +1,3 @@
-## Binaries are currently unavailable until I figure out why they are detected as a virus
-
 <table>
 
 <tr>
