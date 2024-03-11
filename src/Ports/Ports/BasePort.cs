@@ -79,7 +79,6 @@ namespace Ports.Ports
         /// </summary>
         /// <param name="game">Game<param>
         /// <param name="mod">Map/campaign</param>
-        /// <param name="autoloadMods">Mods</param>
         /// <param name="skipIntro">Skip intro</param>
         public string GetStartGameArgs(IGame game, IMod mod, bool skipIntro)
         {

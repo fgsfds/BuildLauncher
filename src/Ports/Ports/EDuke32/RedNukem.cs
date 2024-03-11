@@ -93,7 +93,7 @@ namespace Ports.Ports.EDuke32
 
         private static void GetRedneckArgs(StringBuilder sb, RedneckGame game, RedneckCampaign camp)
         {
-            sb.Append($@" -usecwd -nosetup -j ""{game.GameInstallFolder}""");
+            sb.Append($@" -usecwd -nosetup");
 
             if (camp.AddonEnum is RedneckAddonEnum.Again)
             {
