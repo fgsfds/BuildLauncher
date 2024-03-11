@@ -32,6 +32,9 @@ Another goal of this project is to create a unification standard for Build Engin
 - Duke Nukem 3D (including Caribbean, Nuclear Winter, Duke it out in DC, World Tour and  Duke 64)
 - Shadow Warrior (including Wanton Destruction and Twin Dragon)
 - Blood (including Cryptic Passage)
+- Redneck Rampage, Route 66 and Rides Again
+- Ion Fury
+- Powerslave
 
 </td>
 </tr>
@@ -88,6 +91,7 @@ Another goal of this project is to create a unification standard for Build Engin
 <td valign="center">
 
 - Caribbean and Duke it out in DC don't launch with EDuke32 and RedNukem
+- Route 66 doesn't work with RedNukem yet
 - Wanton Destruction launched from Raze has episodes and maps names from the original game
 - Skip intro checkbox doesn't work with RedNukem
 - Mods and campaigns that replace original files don't work with EDuke32 and related ports
