@@ -13,8 +13,8 @@
         WindowStartupLocation="CenterScreen"
         CanResize="True"
         WindowState="Maximized"
-        Width="1000"
-        Height="500"
+        MinWidth="1100"
+        MinHeight="500"
         ExtendClientAreaToDecorationsHint="True"
         Background="{DynamicResource Background}">
 
@@ -34,19 +34,6 @@
 
             <TabControl Grid.Row="1" Margin="5" TabStripPlacement="Left">
 
-                <TabItem Name="BloodTab" IsEnabled="{Binding IsBloodTabEnabled}">
-
-                    <TabItem.Header>
-                        <StackPanel Orientation="Horizontal">
-                            <Image RenderOptions.BitmapInterpolationMode="HighQuality" Source="/Assets/blood.png" Width="24" />
-                            <TextBlock Text="Blood" Margin="5" />
-                        </StackPanel>
-                    </TabItem.Header>
-
-                    <pages:GamePage x:Name="BloodPage"/>
-
-                </TabItem>
-
                 <TabItem Name="DukeTab" IsEnabled="{Binding IsDukeTabEnabled}">
 
                     <TabItem.Header>
@@ -60,6 +47,19 @@
 
                 </TabItem>
 
+                <TabItem Name="BloodTab" IsEnabled="{Binding IsBloodTabEnabled}">
+
+                    <TabItem.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <Image RenderOptions.BitmapInterpolationMode="HighQuality" Source="/Assets/blood.png" Width="24" />
+                            <TextBlock Text="Blood" Margin="5" />
+                        </StackPanel>
+                    </TabItem.Header>
+
+                    <pages:GamePage x:Name="BloodPage"/>
+
+                </TabItem>
+
                 <TabItem Name="WangTab" IsEnabled="{Binding IsWangTabEnabled}">
 
                     <TabItem.Header>
@@ -70,6 +70,45 @@
                     </TabItem.Header>
 
                     <pages:GamePage x:Name="WangPage"/>
+
+                </TabItem>
+
+                <TabItem Name="FuryTab" IsEnabled="{Binding IsFuryTabEnabled}">
+
+                    <TabItem.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <Image RenderOptions.BitmapInterpolationMode="HighQuality" Source="/Assets/fury.png" Width="24" />
+                            <TextBlock Text="Ion Fury" Margin="5" />
+                        </StackPanel>
+                    </TabItem.Header>
+
+                    <pages:GamePage x:Name="FuryPage"/>
+
+                </TabItem>
+
+                <TabItem Name="RedneckTab" IsEnabled="{Binding IsRedneckTabEnabled}">
+
+                    <TabItem.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <Image RenderOptions.BitmapInterpolationMode="HighQuality" Source="/Assets/redneck.png" Width="24" />
+                            <TextBlock Text="Redneck Rampage" Margin="5" />
+                        </StackPanel>
+                    </TabItem.Header>
+
+                    <pages:GamePage x:Name="RedneckPage"/>
+
+                </TabItem>
+
+                <TabItem Name="SlaveTab" IsEnabled="{Binding IsSlaveTabEnabled}">
+
+                    <TabItem.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <Image RenderOptions.BitmapInterpolationMode="HighQuality" Source="/Assets/slave.png" Width="24" />
+                            <TextBlock Text="Powerslave" Margin="5" />
+                        </StackPanel>
+                    </TabItem.Header>
+
+                    <pages:GamePage x:Name="SlavePage"/>
 
                 </TabItem>
 

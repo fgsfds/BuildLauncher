@@ -21,6 +21,9 @@ namespace Games.Providers
         public BloodGame Blood { get; private set; }
         public DukeGame Duke3D { get; private set; }
         public WangGame Wang { get; private set; }
+        public RedneckGame Redneck { get; private set; }
+        public FuryGame Fury { get; private set; }
+        public SlaveGame Slave { get; private set; }
 
 
         public GamesProvider(
@@ -48,6 +51,22 @@ namespace Games.Providers
                 GameInstallFolder = _config.GamePathWang
             };
 
+            Fury = new(_modsProvider)
+            {
+                GameInstallFolder = _config.GamePathFury
+            };
+
+            Redneck = new(_modsProvider)
+            {
+                GameInstallFolder = _config.GamePathRedneck,
+                AgainInstallPath = _config.GamePathAgain
+            };
+
+            Slave = new(_modsProvider)
+            {
+                GameInstallFolder = _config.GamePathSlave
+            };
+
             _config.NotifyParameterChanged += NotifyParameterChanged;
         }
 
@@ -63,12 +82,12 @@ namespace Games.Providers
                 GameEnum.Blood => Blood,
                 GameEnum.Duke3D => Duke3D,
                 GameEnum.Wang => Wang,
-                GameEnum.IonFury => ThrowHelper.NotImplementedException<IGame>(),
-                GameEnum.Powerslave => ThrowHelper.NotImplementedException<IGame>(),
+                GameEnum.Fury => Fury,
+                GameEnum.Slave => Slave,
                 GameEnum.NAM => ThrowHelper.NotImplementedException<IGame>(),
                 GameEnum.WWIIGI => ThrowHelper.NotImplementedException<IGame>(),
-                GameEnum.RedneckRampage => ThrowHelper.NotImplementedException<IGame>(),
-                GameEnum.RidesAgain => ThrowHelper.NotImplementedException<IGame>(),
+                GameEnum.Redneck => Redneck,
+                GameEnum.Again => Redneck,
                 GameEnum.TekWar => ThrowHelper.NotImplementedException<IGame>(),
                 GameEnum.Witchaven => ThrowHelper.NotImplementedException<IGame>(),
                 GameEnum.Witchaven2 => ThrowHelper.NotImplementedException<IGame>(),
@@ -107,6 +126,26 @@ namespace Games.Providers
             {
                 Wang.GameInstallFolder = _config.GamePathWang;
                 NotifyGameChanged?.Invoke(Wang.GameEnum);
+            }
+            else if (parameterName.Equals(nameof(_config.GamePathFury)))
+            {
+                Fury.GameInstallFolder = _config.GamePathFury;
+                NotifyGameChanged?.Invoke(Fury.GameEnum);
+            }
+            else if (parameterName.Equals(nameof(_config.GamePathRedneck)))
+            {
+                Redneck.GameInstallFolder = _config.GamePathRedneck;
+                NotifyGameChanged?.Invoke(Redneck.GameEnum);
+            }
+            else if (parameterName.Equals(nameof(_config.GamePathAgain)))
+            {
+                Redneck.AgainInstallPath = _config.GamePathAgain;
+                NotifyGameChanged?.Invoke(Redneck.GameEnum);
+            }
+            else if (parameterName.Equals(nameof(_config.GamePathSlave)))
+            {
+                Slave.GameInstallFolder = _config.GamePathSlave;
+                NotifyGameChanged?.Invoke(Slave.GameEnum);
             }
         }
     }

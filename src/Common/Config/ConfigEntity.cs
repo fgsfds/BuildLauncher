@@ -60,6 +60,34 @@ namespace Common.Config
             set => SetConfigParameter(ref _gamePathWang, value);
         }
 
+        private string? _gamePathRedneck = null;
+        public string? GamePathRedneck
+        {
+            get => _gamePathRedneck;
+            set => SetConfigParameter(ref _gamePathRedneck, value);
+        }
+
+        private string? _gamePathAgain = null;
+        public string? GamePathAgain
+        {
+            get => _gamePathAgain;
+            set => SetConfigParameter(ref _gamePathAgain, value);
+        }
+
+        private string? _gamePathSlave = null;
+        public string? GamePathSlave
+        {
+            get => _gamePathSlave;
+            set => SetConfigParameter(ref _gamePathSlave, value);
+        }
+
+        private string? _gamePathFury = null;
+        public string? GamePathFury
+        {
+            get => _gamePathFury;
+            set => SetConfigParameter(ref _gamePathFury, value);
+        }
+
         private bool _skipIntro = false;
         public bool SkipIntro
         {

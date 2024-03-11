@@ -68,7 +68,7 @@ namespace Games.Games
                     ModType = ModTypeEnum.Campaign,
                     DisplayName = "Cryptic Passage",
                     StartupFile = Consts.CrypticIni,
-                    Image = ImageHelper.FileNameToStream("Blood.cp.png"),
+                    Image = ImageHelper.FileNameToStream("Blood.cp.jpg"),
                     AddonEnum = BloodAddonEnum.Cryptic,
                     Version = null,
                     SupportedPorts = null,

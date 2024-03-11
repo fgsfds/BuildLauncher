@@ -61,6 +61,7 @@ namespace Mods.Providers
                 DukeAddonEnum dukeAddonEnum = DukeAddonEnum.Duke3D;
                 WangAddonEnum wangAddonEnum = WangAddonEnum.Wang;
                 BloodAddonEnum bloodAddonEnum = BloodAddonEnum.Blood;
+                RedneckAddonEnum redneckAddonEnum = RedneckAddonEnum.Redneck;
                 List<PortEnum>? supportedPorts = null;
                 string? startupFile = null;
                 float? version = null;
@@ -92,6 +93,7 @@ namespace Mods.Providers
                                 dukeAddonEnum = manifest.DukeAddon is not null ? (DukeAddonEnum)manifest.DukeAddon : DukeAddonEnum.Duke3D;
                                 wangAddonEnum = manifest.WangAddon is not null ? (WangAddonEnum)manifest.WangAddon : WangAddonEnum.Wang;
                                 bloodAddonEnum = manifest.BloodAddon is not null ? (BloodAddonEnum)manifest.BloodAddon : BloodAddonEnum.Blood;
+                                redneckAddonEnum = manifest.RedneckAddon is not null ? (RedneckAddonEnum)manifest.RedneckAddon : RedneckAddonEnum.Redneck;
                                 version = manifest.Version;
                                 url = manifest.Url;
                                 author = manifest.Author;
@@ -178,6 +180,61 @@ namespace Mods.Providers
                                 StartupFile = startupFile!,
                                 IsOfficial = false,
                                 PathToFile = file
+                            });
+                        }
+                        else if (game.GameEnum is GameEnum.Fury)
+                        {
+                            mods.Add(new FuryCampaign()
+                            {
+                                Guid = guid,
+                                ModType = modTypeEnum,
+                                DisplayName = displayName,
+                                Image = image,
+                                SupportedPorts = supportedPorts,
+                                Description = description,
+                                Version = version,
+                                Author = author,
+                                Url = url,
+                                StartupFile = startupFile!,
+                                IsOfficial = false,
+                                PathToFile = file
+                            });
+                        }
+                        else if (game.GameEnum is GameEnum.Slave)
+                        {
+                            mods.Add(new SlaveCampaign()
+                            {
+                                Guid = guid,
+                                ModType = modTypeEnum,
+                                DisplayName = displayName,
+                                Image = image,
+                                SupportedPorts = supportedPorts,
+                                Description = description,
+                                Version = version,
+                                Author = author,
+                                Url = url,
+                                StartupFile = startupFile!,
+                                IsOfficial = false,
+                                PathToFile = file
+                            });
+                        }
+                        else if (game.GameEnum is GameEnum.Redneck)
+                        {
+                            mods.Add(new RedneckCampaign()
+                            {
+                                Guid = guid,
+                                ModType = modTypeEnum,
+                                DisplayName = displayName,
+                                Image = image,
+                                SupportedPorts = supportedPorts,
+                                Description = description,
+                                Version = version,
+                                Author = author,
+                                Url = url,
+                                StartupFile = startupFile!,
+                                IsOfficial = false,
+                                PathToFile = file,
+                                AddonEnum = redneckAddonEnum
                             });
                         }
                     }

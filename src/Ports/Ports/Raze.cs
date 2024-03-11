@@ -33,9 +33,9 @@ namespace Ports.Ports
             GameEnum.Blood,
             GameEnum.Duke3D,
             GameEnum.Wang,
-            GameEnum.Powerslave,
-            GameEnum.RedneckRampage,
-            GameEnum.RidesAgain,
+            GameEnum.Slave,
+            GameEnum.Redneck,
+            GameEnum.Again,
             GameEnum.NAM,
             GameEnum.WWIIGI
             ];
@@ -92,21 +92,29 @@ namespace Ports.Ports
         {
             sb.Append($@" -nosetup -savedir ""{Path.Combine(FolderPath, "Save", mod.DisplayName.Replace(' ', '_'))}""");
 
-            if (mod is BloodCampaign bMod)
+            if (game is BloodGame bGame && mod is BloodCampaign bMod)
             {
-                GetBloodArgs(sb, game, bMod);
+                GetBloodArgs(sb, bGame, bMod);
             }
-            else if (mod is DukeCampaign dMod)
+            else if (game is DukeGame dGame && mod is DukeCampaign dMod)
             {
-                GetDukeArgs(sb, game, dMod);
+                GetDukeArgs(sb, dGame, dMod);
             }
-            else if (mod is WangCampaign wMod)
+            else if (game is WangGame wGame && mod is WangCampaign wMod)
             {
-                GetWangArgs(sb, game, wMod);
+                GetWangArgs(sb, wGame, wMod);
+            }
+            else if (game is SlaveGame sGame && mod is SlaveCampaign sMod)
+            {
+                GetSlaveArgs(sb, sGame, sMod);
+            }
+            else if (game is RedneckGame rGame && mod is RedneckCampaign rMod)
+            {
+                GetRedneckArgs(sb, rGame, rMod);
             }
             else
             {
-                ThrowHelper.NotImplementedException($"Mod type {mod} is not supported");
+                ThrowHelper.NotImplementedException($"Mod type {mod} for game {game} is not supported");
             }
         }
 
@@ -140,17 +148,88 @@ namespace Ports.Ports
         /// <inheritdoc/>
         protected override void GetSkipIntroParameter(StringBuilder sb) => sb.Append(" -quick");
 
-        private static void GetWangArgs(StringBuilder sb, IGame game, WangCampaign wangCamp)
+        private void GetDukeArgs(StringBuilder sb, DukeGame game, DukeCampaign camp)
         {
-            sb.Append(@" -iwad SW.GRP");
+            sb.Append($" -addon {(byte)camp.AddonEnum}");
 
-            if (wangCamp.FileName is null)
+            if (camp.AddonEnum is DukeAddonEnum.WorldTour)
             {
-                if (wangCamp.AddonEnum is WangAddonEnum.Wanton)
+                var config = Path.Combine(FolderPath, ConfigFile);
+                AddGamePathsToConfig(game.DukeWTInstallPath, game.ModsFolderPath, config);
+
+                return;
+            }
+
+            if (camp.FileName is null)
+            {
+                return;
+            }
+
+            if (camp.ModType is ModTypeEnum.Campaign)
+            {
+                sb.Append($@" -file ""{Path.Combine(game.CampaignsFolderPath, camp.FileName)}"" -con ""{camp.StartupFile}""");
+            }
+            else if (camp.ModType is ModTypeEnum.Map)
+            {
+                sb.Append($@" -file ""{Path.Combine(game.MapsFolderPath, camp.FileName)}"" -map ""{camp.StartupFile}""");
+            }
+            else
+            {
+                ThrowHelper.NotImplementedException($"Mod type {camp.ModType} is not supported");
+                return;
+            }
+        }
+
+        private void GetBloodArgs(StringBuilder sb, BloodGame game, BloodCampaign camp)
+        {
+            var ini = camp.StartupFile;
+
+            if (camp.ModType is ModTypeEnum.Map)
+            {
+                if (camp.AddonEnum is BloodAddonEnum.Blood)
+                {
+                    ini = Consts.BloodIni;
+                }
+                else if (camp.AddonEnum is BloodAddonEnum.Cryptic)
+                {
+                    ini = Consts.CrypticIni;
+                }
+            }
+
+            //sb.Append(@$" -iwad BLOOD.RFF -ini ""{ini}""");
+            sb.Append(@$" -ini ""{ini}""");
+
+            if (camp.FileName is null)
+            {
+                return;
+            }
+
+            if (camp.ModType is ModTypeEnum.Campaign)
+            {
+                sb.Append($@" -file ""{Path.Combine(game.CampaignsFolderPath, camp.FileName)}""");
+            }
+            else if (camp.ModType is ModTypeEnum.Map)
+            {
+                sb.Append($@" -file ""{Path.Combine(game.MapsFolderPath, camp.FileName)}"" -map ""{camp.StartupFile}""");
+            }
+            else
+            {
+                ThrowHelper.NotImplementedException($"Mod type {camp.ModType} is not supported");
+                return;
+            }
+        }
+
+        private static void GetWangArgs(StringBuilder sb, WangGame game, WangCampaign camp)
+        {
+            //sb.Append(@" -iwad SW.GRP");
+
+            if (camp.FileName is null)
+            {
+                if (camp.AddonEnum is WangAddonEnum.Wanton)
                 {
                     sb.Append(@" -file WT.GRP");
                 }
-                else if (wangCamp.AddonEnum is WangAddonEnum.TwinDragon)
+                else if (camp.AddonEnum is WangAddonEnum.TwinDragon)
                 {
                     sb.Append(@" -file TD.GRP");
                 }
@@ -158,88 +237,73 @@ namespace Ports.Ports
                 return;
             }
 
-            if (wangCamp.ModType is ModTypeEnum.Campaign)
+            if (camp.ModType is ModTypeEnum.Campaign)
             {
-                sb.Append($@" -file ""{Path.Combine(game.CampaignsFolderPath, wangCamp.FileName)}""");
+                sb.Append($@" -file ""{Path.Combine(game.CampaignsFolderPath, camp.FileName)}""");
             }
-            else if (wangCamp.ModType is ModTypeEnum.Map)
+            else if (camp.ModType is ModTypeEnum.Map)
             {
-                sb.Append($@" -file ""{Path.Combine(game.MapsFolderPath, wangCamp.FileName)}"" -map ""{wangCamp.StartupFile}""");
+                sb.Append($@" -file ""{Path.Combine(game.MapsFolderPath, camp.FileName)}"" -map ""{camp.StartupFile}""");
             }
             else
             {
-                ThrowHelper.NotImplementedException($"Mod type {wangCamp.ModType} is not supported");
+                ThrowHelper.NotImplementedException($"Mod type {camp.ModType} is not supported");
                 return;
             }
         }
 
-        private void GetDukeArgs(StringBuilder sb, IGame game, DukeCampaign dukeCamp)
+        private void GetRedneckArgs(StringBuilder sb, RedneckGame game, RedneckCampaign camp)
         {
-            sb.Append($" -addon {(byte)dukeCamp.AddonEnum}");
+            if (camp.AddonEnum is RedneckAddonEnum.Route66)
+            {
+                sb.Append(" -route66");
+                return;
+            }
 
-            if (dukeCamp.AddonEnum is DukeAddonEnum.WorldTour &&
-                game is DukeGame dukeGame)
+            if (camp.AddonEnum is RedneckAddonEnum.Again)
             {
                 var config = Path.Combine(FolderPath, ConfigFile);
-                AddGamePathsToConfig(dukeGame.DukeWTInstallPath, game.ModsFolderPath, config);
-
-                return;
+                AddGamePathsToConfig(game.AgainInstallPath, game.ModsFolderPath, config);
             }
 
-            if (dukeCamp.FileName is null)
+            if (camp.FileName is null)
             {
                 return;
             }
 
-            if (dukeCamp.ModType is ModTypeEnum.Campaign)
+            if (camp.ModType is ModTypeEnum.Campaign)
             {
-                sb.Append($@" -file ""{Path.Combine(game.CampaignsFolderPath, dukeCamp.FileName)}"" -con ""{dukeCamp.StartupFile}""");
+                sb.Append($@" -file ""{Path.Combine(game.CampaignsFolderPath, camp.FileName)}""");
             }
-            else if (dukeCamp.ModType is ModTypeEnum.Map)
+            else if (camp.ModType is ModTypeEnum.Map)
             {
-                sb.Append($@" -file ""{Path.Combine(game.MapsFolderPath, dukeCamp.FileName)}"" -map ""{dukeCamp.StartupFile}""");
+                sb.Append($@" -file ""{Path.Combine(game.MapsFolderPath, camp.FileName)}"" -map ""{camp.StartupFile}""");
             }
             else
             {
-                ThrowHelper.NotImplementedException($"Mod type {dukeCamp.ModType} is not supported");
+                ThrowHelper.NotImplementedException($"Mod type {camp.ModType} is not supported");
                 return;
             }
         }
 
-        private void GetBloodArgs(StringBuilder sb, IGame game, BloodCampaign bloodCamp)
+        private static void GetSlaveArgs(StringBuilder sb, SlaveGame game, SlaveCampaign camp)
         {
-            var ini = bloodCamp.StartupFile;
-
-            if (bloodCamp.ModType is ModTypeEnum.Map)
-            {
-                if (bloodCamp.AddonEnum is BloodAddonEnum.Blood)
-                {
-                    ini = Consts.BloodIni;
-                }
-                else if (bloodCamp.AddonEnum is BloodAddonEnum.Cryptic)
-                {
-                    ini = Consts.CrypticIni;
-                }
-            }
-
-            sb.Append(@$" -iwad BLOOD.RFF -ini ""{ini}""");
-
-            if (bloodCamp.FileName is null)
+            if (camp.FileName is null)
             {
                 return;
             }
 
-            if (bloodCamp.ModType is ModTypeEnum.Campaign)
+            if (camp.ModType is ModTypeEnum.Campaign)
             {
-                sb.Append($@" -file ""{Path.Combine(game.CampaignsFolderPath, bloodCamp.FileName)}""");
+                sb.Append($@" -file ""{Path.Combine(game.CampaignsFolderPath, camp.FileName)}""");
             }
-            else if (bloodCamp.ModType is ModTypeEnum.Map)
+            else if (camp.ModType is ModTypeEnum.Map)
             {
-                sb.Append($@" -file ""{Path.Combine(game.MapsFolderPath, bloodCamp.FileName)}"" -map ""{bloodCamp.StartupFile}""");
+                sb.Append($@" -file ""{Path.Combine(game.MapsFolderPath, camp.FileName)}"" -map ""{camp.StartupFile}""");
             }
             else
             {
-                ThrowHelper.NotImplementedException($"Mod type {bloodCamp.ModType} is not supported");
+                ThrowHelper.NotImplementedException($"Mod type {camp.ModType} is not supported");
                 return;
             }
         }

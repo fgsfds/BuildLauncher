@@ -54,7 +54,7 @@ namespace Ports.Ports
         /// <summary>
         /// Path to port install folder
         /// </summary>
-        public string FolderPath => Path.Combine(CommonProperties.PortsFolderPath, PortFolder);
+        public virtual string FolderPath => Path.Combine(CommonProperties.PortsFolderPath, PortFolder);
 
         /// <summary>
         /// Path to port exe
@@ -64,13 +64,14 @@ namespace Ports.Ports
         /// <summary>
         /// Is port installed
         /// </summary>
-        public bool IsInstalled => InstalledVersion is not null;
+        public virtual bool IsInstalled => InstalledVersion is not null;
+
 
         /// <summary>
         /// Name of the folder that contains the port files
         /// By default is the same as <see cref="Name"/>
         /// </summary>
-        public virtual string PortFolder => Name;
+        protected string PortFolder => Name;
 
 
         /// <summary>

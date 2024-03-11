@@ -59,6 +59,30 @@ namespace BuildLauncher.ViewModels
             set => _config.GamePathWang = value;
         }
 
+        public string PathToFury
+        {
+            get => _config.GamePathFury;
+            set => _config.GamePathFury = value;
+        }
+
+        public string PathToRedneck
+        {
+            get => _config.GamePathRedneck;
+            set => _config.GamePathRedneck = value;
+        }
+
+        public string PathToAgain
+        {
+            get => _config.GamePathAgain;
+            set => _config.GamePathAgain = value;
+        }
+
+        public string PathToSlave
+        {
+            get => _config.GamePathSlave;
+            set => _config.GamePathSlave = value;
+        }
+
         #endregion
 
 

@@ -96,6 +96,28 @@ namespace Mods.Serializable
                 return bloodAddon;
             }
         }
+
+        [JsonIgnore]
+        public RedneckAddonEnum? RedneckAddon
+        {
+            get
+            {
+                if (Addon is null || Game is not GameEnum.Redneck)
+                {
+                    return null;
+                }
+
+                var result = Enum.TryParse(typeof(RedneckAddonEnum), Addon.ToString(), out var addon);
+
+                if (!result || addon is not RedneckAddonEnum redneckAddon)
+                {
+                    ThrowHelper.Exception($"Error while parsing enum from {Addon}");
+                    return null;
+                }
+
+                return redneckAddon;
+            }
+        }
     }
 
 

@@ -16,7 +16,7 @@ namespace BuildLauncher.Helpers
         {
             if (value is null)
             {
-                return new Bitmap(AssetLoader.Open(new Uri($"avares://BuildLauncher/Assets/blank.png")));
+                return new Bitmap(AssetLoader.Open(new Uri($"avares://BuildLauncher.Avalonia.Core/Assets/blank.png")));
             }
 
             value.ThrowIfNotType<Stream>(out var stream);

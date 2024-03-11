@@ -48,7 +48,7 @@
 
             </Grid>
 
-            <Grid ColumnDefinitions="auto,*,auto" RowDefinitions="auto,auto,auto,auto,auto">
+            <Grid ColumnDefinitions="auto,*,auto" RowDefinitions="auto,auto,auto,auto,auto,auto,auto,auto,auto">
 
                 <!--Path to Blood-->
                 <TextBlock Grid.Row="0" Grid.Column="0"
@@ -142,6 +142,82 @@
                         HorizontalContentAlignment="Center"
                         Command="{Binding OpenFolderPickerCommand}"
                         CommandParameter="Wang">
+                    ...
+                </Button>
+
+
+                <!--Path to Ion Fury-->
+                <TextBlock Grid.Row="5" Grid.Column="0"
+                           VerticalAlignment="Center"
+                           Margin="10, 5">Path to Ion Fury install:</TextBlock>
+
+                <TextBox Grid.Row="5"  Grid.Column="1"
+                         Text="{Binding PathToFury}"
+                         Margin="0,3"/>
+
+                <Button Grid.Row="5"  Grid.Column="2"
+                        Margin="5,0,10,0"
+                        Width="{Binding $self.Bounds.Height}"
+                        HorizontalContentAlignment="Center"
+                        Command="{Binding OpenFolderPickerCommand}"
+                        CommandParameter="Fury">
+                    ...
+                </Button>
+
+
+                <!--Path to Redneck Rampage-->
+                <TextBlock Grid.Row="6" Grid.Column="0"
+                           VerticalAlignment="Center"
+                           Margin="10, 5">Path to Redneck Rampage install:</TextBlock>
+
+                <TextBox Grid.Row="6"  Grid.Column="1"
+                         Text="{Binding PathToRedneck}"
+                         Margin="0,3"/>
+
+                <Button Grid.Row="6"  Grid.Column="2"
+                        Margin="5,0,10,0"
+                        Width="{Binding $self.Bounds.Height}"
+                        HorizontalContentAlignment="Center"
+                        Command="{Binding OpenFolderPickerCommand}"
+                        CommandParameter="Redneck">
+                    ...
+                </Button>
+
+
+                <!--Path to Redes Again-->
+                <TextBlock Grid.Row="7" Grid.Column="0"
+                           VerticalAlignment="Center"
+                           Margin="10, 5">Path to Rides Again install:</TextBlock>
+
+                <TextBox Grid.Row="7"  Grid.Column="1"
+                         Text="{Binding PathToAgain}"
+                         Margin="0,3"/>
+
+                <Button Grid.Row="7"  Grid.Column="2"
+                        Margin="5,0,10,0"
+                        Width="{Binding $self.Bounds.Height}"
+                        HorizontalContentAlignment="Center"
+                        Command="{Binding OpenFolderPickerCommand}"
+                        CommandParameter="Again">
+                    ...
+                </Button>
+
+
+                <!--Path to Powerslave-->
+                <TextBlock Grid.Row="8" Grid.Column="0"
+                           VerticalAlignment="Center"
+                           Margin="10, 5">Path to Powerslave install:</TextBlock>
+
+                <TextBox Grid.Row="8"  Grid.Column="1"
+                         Text="{Binding PathToSlave}"
+                         Margin="0,3"/>
+
+                <Button Grid.Row="8"  Grid.Column="2"
+                        Margin="5,0,10,0"
+                        Width="{Binding $self.Bounds.Height}"
+                        HorizontalContentAlignment="Center"
+                        Command="{Binding OpenFolderPickerCommand}"
+                        CommandParameter="Slave">
                     ...
                 </Button>
 

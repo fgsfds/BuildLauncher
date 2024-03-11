@@ -37,6 +37,21 @@ public sealed partial class MainViewModel : ObservableObject
     /// </summary>
     public bool IsWangTabEnabled => _gamesProvider.Wang.IsBaseGameInstalled;
 
+    /// <summary>
+    /// Is Ion Fury tab enabled
+    /// </summary>
+    public bool IsFuryTabEnabled => _gamesProvider.Fury.IsBaseGameInstalled;
+
+    /// <summary>
+    /// Is Redneck Rampage tab enabled
+    /// </summary>
+    public bool IsRedneckTabEnabled => _gamesProvider.Redneck.IsBaseGameInstalled || _gamesProvider.Redneck.IsAgainInstalled;
+
+    /// <summary>
+    /// Is Powerslave tab enabled
+    /// </summary>
+    public bool IsSlaveTabEnabled => _gamesProvider.Slave.IsBaseGameInstalled;
+
     #endregion
 
 
@@ -59,6 +74,19 @@ public sealed partial class MainViewModel : ObservableObject
         else if (parameterName.Equals(nameof(_config.GamePathWang)))
         {
             OnPropertyChanged(nameof(IsWangTabEnabled));
+        }
+        else if (parameterName.Equals(nameof(_config.GamePathFury)))
+        {
+            OnPropertyChanged(nameof(IsFuryTabEnabled));
+        }
+        else if (parameterName.Equals(nameof(_config.GamePathRedneck)) ||
+                 parameterName.Equals(nameof(_config.GamePathAgain)))
+        {
+            OnPropertyChanged(nameof(IsRedneckTabEnabled));
+        }
+        else if (parameterName.Equals(nameof(_config.GamePathSlave)))
+        {
+            OnPropertyChanged(nameof(IsSlaveTabEnabled));
         }
     }
 }

@@ -30,7 +30,6 @@ namespace Ports.Ports.EDuke32
         public override List<GameEnum> SupportedGames =>
             [
             GameEnum.Duke3D,
-            GameEnum.IonFury,
             GameEnum.NAM,
             GameEnum.WWIIGI
             ];

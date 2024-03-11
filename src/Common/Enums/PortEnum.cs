@@ -9,6 +9,7 @@
         NBlood,
         NotBlood,
         VoidSW,
-        PCExhumed
+        PCExhumed,
+        Fury
     }
 }

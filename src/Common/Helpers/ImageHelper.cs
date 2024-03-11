@@ -16,8 +16,7 @@ namespace Common.Helpers
             {
                 ass = Assembly.GetCallingAssembly();
             }
-
-            var resource = ass.GetManifestResourceStream($"{ass.GetName().Name}.Assets.{fileName}");
+            var resource = ass.GetManifestResourceStream($"{ass.GetName().Name!.Split('.')[1]}.Assets.{fileName}");
 
             resource.ThrowIfNull();
 

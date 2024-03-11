@@ -30,8 +30,8 @@ namespace Ports.Ports.EDuke32
         public override List<GameEnum> SupportedGames =>
             [
             GameEnum.Duke3D,
-            GameEnum.RedneckRampage,
-            GameEnum.RidesAgain,
+            GameEnum.Redneck,
+            GameEnum.Again,
             GameEnum.NAM,
             GameEnum.WWIIGI
             ];
@@ -45,35 +45,81 @@ namespace Ports.Ports.EDuke32
         /// <inheritdoc/>
         protected override void GetStartCampaignArgs(StringBuilder sb, IGame game, IMod mod)
         {
-            mod.ThrowIfNotType<DukeCampaign>(out var dukeCamp);
-            game.ThrowIfNotType<DukeGame>(out var dukeGame);
-
-            sb.Append($@" -usecwd -nosetup");
-
-            if (dukeCamp.AddonEnum is DukeAddonEnum.Duke64)
+            if (game is DukeGame dGame && mod is DukeCampaign dMod)
             {
-                sb.Append(@$" -j {Path.GetDirectoryName(dukeGame.Duke64RomPath)} -gamegrp ""{Path.GetFileName(dukeGame.Duke64RomPath)}""");
-                return;
+                GetDukeArgs(sb, dGame, dMod);
             }
-
-            sb.Append($@" -j ""{game.GameInstallFolder}"" -addon {(byte)dukeCamp.AddonEnum}");
-
-            if (dukeCamp.FileName is null)
+            else if (game is RedneckGame rGame && mod is RedneckCampaign rMod)
             {
-                return;
-            }
-
-            if (dukeCamp.ModType is ModTypeEnum.Campaign)
-            {
-                sb.Append($@" -g ""{Path.Combine(game.CampaignsFolderPath, dukeCamp.FileName)}"" -x ""{dukeCamp.StartupFile}""");
-            }
-            else if (dukeCamp.ModType is ModTypeEnum.Map)
-            {
-                sb.Append($@" -g ""{Path.Combine(game.MapsFolderPath, dukeCamp.FileName)}"" -map ""{dukeCamp.StartupFile}""");
+                GetRedneckArgs(sb, rGame, rMod);
             }
             else
             {
-                ThrowHelper.NotImplementedException($"Mod type {dukeCamp.ModType} is not supported");
+                ThrowHelper.NotImplementedException($"Mod type {mod} for game {game} is not supported");
+            }
+        }
+
+        private static void GetDukeArgs(StringBuilder sb, DukeGame game, DukeCampaign camp)
+        {
+            sb.Append($@" -usecwd -nosetup");
+
+            if (camp.AddonEnum is DukeAddonEnum.Duke64)
+            {
+                sb.Append(@$" -j {Path.GetDirectoryName(game.Duke64RomPath)} -gamegrp ""{Path.GetFileName(game.Duke64RomPath)}""");
+                return;
+            }
+
+            sb.Append($@" -j ""{game.GameInstallFolder}"" -addon {(byte)camp.AddonEnum}");
+
+            if (camp.FileName is null)
+            {
+                return;
+            }
+
+            if (camp.ModType is ModTypeEnum.Campaign)
+            {
+                sb.Append($@" -g ""{Path.Combine(game.CampaignsFolderPath, camp.FileName)}"" -x ""{camp.StartupFile}""");
+            }
+            else if (camp.ModType is ModTypeEnum.Map)
+            {
+                sb.Append($@" -g ""{Path.Combine(game.MapsFolderPath, camp.FileName)}"" -map ""{camp.StartupFile}""");
+            }
+            else
+            {
+                ThrowHelper.NotImplementedException($"Mod type {camp.ModType} is not supported");
+                return;
+            }
+        }
+
+        private static void GetRedneckArgs(StringBuilder sb, RedneckGame game, RedneckCampaign camp)
+        {
+            sb.Append($@" -usecwd -nosetup -j ""{game.GameInstallFolder}""");
+
+            if (camp.AddonEnum is RedneckAddonEnum.Again)
+            {
+                sb.Append($@" -j ""{game.AgainInstallPath}""");
+            }
+            else
+            {
+                sb.Append($@" -j ""{game.GameInstallFolder}""");
+            }
+
+            if (camp.FileName is null)
+            {
+                return;
+            }
+
+            if (camp.ModType is ModTypeEnum.Campaign)
+            {
+                sb.Append($@" -g ""{Path.Combine(game.CampaignsFolderPath, camp.FileName)}"" -x ""{camp.StartupFile}""");
+            }
+            else if (camp.ModType is ModTypeEnum.Map)
+            {
+                sb.Append($@" -g ""{Path.Combine(game.MapsFolderPath, camp.FileName)}"" -map ""{camp.StartupFile}""");
+            }
+            else
+            {
+                ThrowHelper.NotImplementedException($"Mod type {camp.ModType} is not supported");
                 return;
             }
         }

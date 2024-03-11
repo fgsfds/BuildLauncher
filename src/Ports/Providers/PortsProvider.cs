@@ -1,4 +1,5 @@
-﻿using Common.Enums;
+﻿using Common.Config;
+using Common.Enums;
 using Common.Helpers;
 using Ports.Ports;
 using Ports.Ports.EDuke32;
@@ -10,6 +11,7 @@ namespace Ports.Providers
     /// </summary>
     public sealed class PortsProvider
     {
+        private readonly ConfigEntity _config;
         private readonly List<BasePort> _ports;
 
         public BuildGDX BuildGDX { get; init; }
@@ -20,10 +22,13 @@ namespace Ports.Providers
         public Raze Raze { get; init; }
         public RedNukem RedNukem { get; init; }
         public VoidSW VoidSW { get; init; }
+        public Fury Fury { get; init; }
 
 
-        public PortsProvider()
+        public PortsProvider(ConfigProvider configProvider)
         {
+            _config = configProvider.Config;
+
             BuildGDX = new();
             EDuke32 = new();
             NBlood = new();
@@ -32,8 +37,9 @@ namespace Ports.Providers
             Raze = new();
             RedNukem = new();
             VoidSW = new();
+            Fury = new(_config);
 
-            _ports = [BuildGDX, EDuke32, NBlood, NotBlood, PCExhumed, Raze, RedNukem, VoidSW];
+            _ports = [BuildGDX, EDuke32, NBlood, NotBlood, PCExhumed, Raze, RedNukem, VoidSW, Fury];
         }
 
 
@@ -59,6 +65,7 @@ namespace Ports.Providers
                 PortEnum.NotBlood => NotBlood,
                 PortEnum.VoidSW => VoidSW,
                 PortEnum.PCExhumed => PCExhumed,
+                PortEnum.Fury => Fury,
                 _ => ThrowHelper.NotImplementedException<BasePort>()
             };
         }

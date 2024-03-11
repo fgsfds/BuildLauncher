@@ -8,17 +8,22 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Assets\Blood\cp.png" />
     <EmbeddedResource Include="Assets\Blood\blood.png" />
-    <EmbeddedResource Include="Assets\Duke3D\carib.png" />
-    <EmbeddedResource Include="Assets\Duke3D\duke3d.png" />
-    <EmbeddedResource Include="Assets\Duke3D\duke64.png" />
-    <EmbeddedResource Include="Assets\Duke3D\dukedc.png" />
+    <EmbeddedResource Include="Assets\Blood\cp.jpg" />
+    <EmbeddedResource Include="Assets\Duke3D\carib.jpg" />
+    <EmbeddedResource Include="Assets\Duke3D\duke3d.jpg" />
+    <EmbeddedResource Include="Assets\Duke3D\duke64.jpg" />
+    <EmbeddedResource Include="Assets\Duke3D\dukedc.jpg" />
     <EmbeddedResource Include="Assets\Duke3D\dukewt.jpg" />
     <EmbeddedResource Include="Assets\Duke3D\nwinter.jpg" />
-    <EmbeddedResource Include="Assets\Wang\twin.png" />
-    <EmbeddedResource Include="Assets\Wang\wang.png" />
-    <EmbeddedResource Include="Assets\Wang\wanton.png" />
+    <EmbeddedResource Include="Assets\Fury\fury.jpg" />
+    <EmbeddedResource Include="Assets\Redneck\again.jpg" />
+    <EmbeddedResource Include="Assets\Redneck\redneck.jpg" />
+    <EmbeddedResource Include="Assets\Redneck\route66.jpg" />
+    <EmbeddedResource Include="Assets\Slave\slave.jpg" />
+    <EmbeddedResource Include="Assets\Wang\twin.jpg" />
+    <EmbeddedResource Include="Assets\Wang\wang.jpg" />
+    <EmbeddedResource Include="Assets\Wang\wanton.jpg" />
     <EmbeddedResource Include="Assets\WTStopgap.zip" />
   </ItemGroup>
 

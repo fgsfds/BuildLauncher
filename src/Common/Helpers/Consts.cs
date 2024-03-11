@@ -57,5 +57,10 @@
         public const string NuclearWinterGuid = "b66de608-5563-4ff4-9180-eafa3e5c05b8";
         public const string WorldTourGuid = "bc84eec9-f0b7-49e8-8445-2c53959f9dad";
         public const string Duke64Guid = "a0166e53-2918-4a74-9a1b-c6229103d13c";
+        public const string FuryGuid = "16e17d93-dcaa-469f-8a42-07fb0e39dd32";
+        public const string SlaveGuid = "b6430ca7-ac76-420a-aff8-75b916aacfdd";
+        public const string RedneckGuid = "4580f0db-cc7c-4bbe-8ecc-00cc52469c07";
+        public const string AgainGuid = "f292db2a-8aba-4262-9ff1-3f17ef0607c7";
+        public const string Route66Guid = "2f13d194-c74d-4f91-944b-62e87b561398";
     }
 }
