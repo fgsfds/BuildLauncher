@@ -53,7 +53,7 @@ namespace Ports.Ports
             : null;
 
         /// <inheritdoc/>
-        protected override void BeforeStart(IGame game)
+        protected override void BeforeStart(IGame game, IMod campaign)
         {
             var config = Path.Combine(FolderPath, ConfigFile);
 
@@ -85,6 +85,8 @@ namespace Ports.Ports
             }
 
             AddGamePathsToConfig(game.GameInstallFolder, game.ModsFolderPath, config);
+
+            FixRoute66Files(game, campaign);
         }
 
         /// <inheritdoc/>
@@ -315,6 +317,28 @@ namespace Ports.Ports
             {
                 ThrowHelper.NotImplementedException($"Mod type {camp.ModType} is not supported");
                 return;
+            }
+        }
+
+        /// <summary>
+        /// Remove route 66 art files overrides
+        /// </summary>
+        private static void FixRoute66Files(IGame game, IMod campaign)
+        {
+            if (game is RedneckGame && campaign is RedneckCampaign)
+            {
+                var origArtA = Path.Combine(game.GameInstallFolder, "TILES024.ART");
+                var prigArtB = Path.Combine(game.GameInstallFolder, "TILES025.ART");
+
+                if (File.Exists(origArtA))
+                {
+                    File.Delete(origArtA);
+                }
+
+                if (File.Exists(prigArtB))
+                {
+                    File.Delete(prigArtB);
+                }
             }
         }
 

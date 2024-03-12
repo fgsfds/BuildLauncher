@@ -88,7 +88,7 @@ namespace Games.Games
                         StartupFile = null,
                         AddonEnum = RedneckAddonEnum.Route66,
                         Version = null,
-                        SupportedPorts = [PortEnum.Raze, PortEnum.BuildGDX],
+                        SupportedPorts = null,
                         Description = null,
                         Url = null,
                         Author = null,

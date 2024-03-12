@@ -41,27 +41,11 @@ namespace Ports.Ports.EDuke32
         public override Func<GitHubReleaseAsset, bool> WindowsReleasePredicate => ThrowHelper.NotImplementedException<Func<GitHubReleaseAsset, bool>>();
 
         /// <inheritdoc/>
-        protected override void BeforeStart(IGame game)
+        protected override void BeforeStart(IGame game, IMod campaign)
         {
-            var config = Path.Combine(FolderPath, ConfigFile);
+            FixGrpInConfig();
 
-            if (!File.Exists(config))
-            {
-                return;
-            }
-
-            var contents = File.ReadAllLines(config);
-
-            for (var i = 0; i < contents.Length; i++)
-            {
-                if (contents[i].StartsWith("SelectedGRP"))
-                {
-                    contents[i] = @"SelectedGRP = """"";
-                    break;
-                }
-            }
-
-            File.WriteAllLines(config, contents);
+            FixRoute66Files(game, campaign);
         }
 
         /// <inheritdoc/>
@@ -156,6 +140,66 @@ namespace Ports.Ports.EDuke32
                 }
 
                 return int.Parse(File.ReadAllText(versionFile));
+            }
+        }
+
+        /// <summary>
+        /// Remove GRP files from the config
+        /// </summary>
+        private void FixGrpInConfig()
+        {
+            var config = Path.Combine(FolderPath, ConfigFile);
+
+            if (!File.Exists(config))
+            {
+                return;
+            }
+
+            var contents = File.ReadAllLines(config);
+
+            for (var i = 0; i < contents.Length; i++)
+            {
+                if (contents[i].StartsWith("SelectedGRP"))
+                {
+                    contents[i] = @"SelectedGRP = """"";
+                    break;
+                }
+            }
+
+            File.WriteAllLines(config, contents);
+        }
+
+        /// <summary>
+        /// Override original art files with route 66's ones or remove overrides
+        /// </summary>
+        private static void FixRoute66Files(IGame game, IMod campaign)
+        {
+            if (game is RedneckGame && campaign is RedneckCampaign rCamp)
+            {
+                var routeArtA = Path.Combine(game.GameInstallFolder, "TILESA66.ART");
+                var routeArtB = Path.Combine(game.GameInstallFolder, "TILESB66.ART");
+
+                var origArtA = Path.Combine(game.GameInstallFolder, "TILES024.ART");
+                var origArtB = Path.Combine(game.GameInstallFolder, "TILES025.ART");
+
+
+                if (rCamp.AddonEnum is RedneckAddonEnum.Route66)
+                {
+                    File.Copy(routeArtA, origArtA);
+                    File.Copy(routeArtB, origArtB);
+                }
+                else
+                {
+                    if (File.Exists(origArtA))
+                    {
+                        File.Delete(origArtA);
+                    }
+
+                    if (File.Exists(origArtB))
+                    {
+                        File.Delete(origArtB);
+                    }
+                }
             }
         }
     }

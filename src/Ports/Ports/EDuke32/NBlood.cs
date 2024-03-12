@@ -34,8 +34,10 @@ namespace Ports.Ports.EDuke32
         /// <inheritdoc/>
         public override Func<GitHubReleaseAsset, bool> WindowsReleasePredicate => static x => x.FileName.StartsWith("nblood_win64");
 
-        /// <inheritdoc/>
-        protected override void BeforeStart(IGame game) { }
+        /// <summary>
+        /// No need to do anything
+        /// </summary>
+        protected override void BeforeStart(IGame game, IMod campaign) { }
 
         /// <inheritdoc/>
         protected override void GetStartCampaignArgs(StringBuilder sb, IGame game, IMod mod)

@@ -84,7 +84,7 @@ namespace Ports.Ports
         {
             StringBuilder sb = new();
 
-            BeforeStart(game);
+            BeforeStart(game, mod);
 
             GetStartCampaignArgs(sb, game, mod);
 
@@ -102,8 +102,9 @@ namespace Ports.Ports
         /// <summary>
         /// Method to perform before starting the port
         /// </summary>
-        /// <param name="game"></param>
-        protected virtual void BeforeStart(IGame game) { }
+        /// <param name="game">Game</param>
+        /// <param name="campaign">Campaign</param>
+        protected virtual void BeforeStart(IGame game, IMod campaign) { }
 
         /// <summary>
         /// Get command line arguments to start custom map or campaign

@@ -69,8 +69,8 @@ namespace Ports.Ports.EDuke32
         }
 
         /// <summary>
-        /// No need to fix config
+        /// No need to do anything
         /// </summary>
-        protected override void BeforeStart(IGame game) { }
+        protected override void BeforeStart(IGame game, IMod campaign) { }
     }
 }

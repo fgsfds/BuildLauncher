@@ -99,6 +99,10 @@ namespace Ports.Ports.EDuke32
             {
                 sb.Append($@" -j ""{game.AgainInstallPath}""");
             }
+            else if (camp.AddonEnum is RedneckAddonEnum.Route66)
+            {
+                sb.Append($@" -j ""{game.GameInstallFolder}"" -x GAME66.CON");
+            }
             else
             {
                 sb.Append($@" -j ""{game.GameInstallFolder}""");
