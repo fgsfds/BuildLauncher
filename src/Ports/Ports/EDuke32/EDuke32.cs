@@ -176,28 +176,64 @@ namespace Ports.Ports.EDuke32
         {
             if (game is RedneckGame && campaign is RedneckCampaign rCamp)
             {
-                var routeArtA = Path.Combine(game.GameInstallFolder, "TILESA66.ART");
-                var routeArtB = Path.Combine(game.GameInstallFolder, "TILESB66.ART");
+                var tilesA1 = Path.Combine(game.GameInstallFolder, "TILESA66.ART");
+                var tilesA2 = Path.Combine(game.GameInstallFolder, "TILES024.ART");
 
-                var origArtA = Path.Combine(game.GameInstallFolder, "TILES024.ART");
-                var origArtB = Path.Combine(game.GameInstallFolder, "TILES025.ART");
+                var tilesB1 = Path.Combine(game.GameInstallFolder, "TILESB66.ART");
+                var tilesB2 = Path.Combine(game.GameInstallFolder, "TILES025.ART");
+
+                var turdMovAnm1 = Path.Combine(game.GameInstallFolder, "TURD66.ANM");
+                var turdMovAnm2 = Path.Combine(game.GameInstallFolder, "TURDMOV.ANM");
+
+                var turdMovVoc1 = Path.Combine(game.GameInstallFolder, "TURD66.VOC");
+                var turdMovVoc2 = Path.Combine(game.GameInstallFolder, "TURDMOV.VOC");
+
+                var endMovAnm1 = Path.Combine(game.GameInstallFolder, "END66.ANM");
+                var endMovAnm2 = Path.Combine(game.GameInstallFolder, "RR_OUTRO.ANM");
+
+                var endMovVoc1 = Path.Combine(game.GameInstallFolder, "END66.VOC");
+                var endMovVoc2 = Path.Combine(game.GameInstallFolder, "LN_FINAL.VOC");
 
 
                 if (rCamp.AddonEnum is RedneckAddonEnum.Route66)
                 {
-                    File.Copy(routeArtA, origArtA);
-                    File.Copy(routeArtB, origArtB);
+                    File.Copy(tilesA1, tilesA2, true);
+                    File.Copy(tilesB1, tilesB2, true);
+                    File.Copy(turdMovAnm1, turdMovAnm2, true);
+                    File.Copy(turdMovVoc1, turdMovVoc2, true);
+                    File.Copy(endMovAnm1, endMovAnm2, true);
+                    File.Copy(endMovVoc1, endMovVoc2, true);
                 }
                 else
                 {
-                    if (File.Exists(origArtA))
+                    if (File.Exists(tilesA2))
                     {
-                        File.Delete(origArtA);
+                        File.Delete(tilesA2);
                     }
 
-                    if (File.Exists(origArtB))
+                    if (File.Exists(tilesB2))
                     {
-                        File.Delete(origArtB);
+                        File.Delete(tilesB2);
+                    }
+
+                    if (File.Exists(turdMovAnm2))
+                    {
+                        File.Delete(turdMovAnm2);
+                    }
+
+                    if (File.Exists(turdMovVoc2))
+                    {
+                        File.Delete(turdMovVoc2);
+                    }
+
+                    if (File.Exists(endMovAnm2))
+                    {
+                        File.Delete(endMovAnm2);
+                    }
+
+                    if (File.Exists(endMovVoc2))
+                    {
+                        File.Delete(endMovVoc2);
                     }
                 }
             }

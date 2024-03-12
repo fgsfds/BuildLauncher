@@ -24,28 +24,20 @@ namespace Games.Games
         public required string AgainInstallPath { get; set; }
 
         /// <inheritdoc/>
-        public override string MainFile => "REDNECK.GRP";
-
-        /// <inheritdoc/>
         public override string DefFile => "redneck.def";
 
-        /// <summary>
-        /// List of files required for Route 66
-        /// </summary>
-        public List<string> RequiredFilesRoute66 => ["END66.ANM"];
-
         /// <inheritdoc/>
-        public override List<string> RequiredFiles => [MainFile];
+        public override List<string> RequiredFiles => ["REDNECK.GRP"];
 
         /// <summary>
         /// Is Route 66 installed
         /// </summary>
-        public bool IsRoute66Installed => IsInstalled(RequiredFilesRoute66);
+        public bool IsRoute66Installed => IsInstalled(["TILESA66.ART", "TILESB66.ART", "TURD66.ANM", "TURD66.VOC", "END66.ANM", "END66.VOC", "BUBBA66.CON", "DEFS66.CON", "GATOR66.CON", "GAME66.CON", "PIG66.CON"]);
 
         /// <summary>
         /// Is Rides Again installed
         /// </summary>
-        public bool IsAgainInstalled => IsInstalled([MainFile], AgainInstallPath);
+        public bool IsAgainInstalled => IsInstalled(["REDNECK.GRP", "BIKER.CON"], AgainInstallPath);
 
 
         public RedneckGame(InstalledModsProvider modsProvider) : base(modsProvider)

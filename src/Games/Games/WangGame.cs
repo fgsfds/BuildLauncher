@@ -19,13 +19,10 @@ namespace Games.Games
         public override string ShortName => "Wang";
 
         /// <inheritdoc/>
-        public override string MainFile => "SW.GRP";
-
-        /// <inheritdoc/>
         public override string DefFile => "sw.def";
 
         /// <inheritdoc/>
-        public override List<string> RequiredFiles => [MainFile];
+        public override List<string> RequiredFiles => ["SW.GRP"];
 
         /// <summary>
         /// Is Duke it Out in DC installed

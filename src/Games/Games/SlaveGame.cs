@@ -18,13 +18,10 @@ namespace Games.Games
         public override string ShortName => "Slave";
 
         /// <inheritdoc/>
-        public override string MainFile => "STUFF.DAT";
-
-        /// <inheritdoc/>
         public override string DefFile => "exhumed.def";
 
         /// <inheritdoc/>
-        public override List<string> RequiredFiles => [MainFile];
+        public override List<string> RequiredFiles => ["STUFF.DAT"];
 
 
         public SlaveGame(InstalledModsProvider modsProvider) : base(modsProvider)

@@ -39,9 +39,6 @@ namespace Games.Games
         public abstract GameEnum GameEnum { get; }
 
         /// <inheritdoc/>
-        public abstract string MainFile { get; }
-
-        /// <inheritdoc/>
         public abstract string FullName { get; }
 
         /// <inheritdoc/>

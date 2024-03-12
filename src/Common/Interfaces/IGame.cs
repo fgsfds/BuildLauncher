@@ -21,11 +21,6 @@ namespace Common.Interfaces
         GameEnum GameEnum { get; }
 
         /// <summary>
-        /// Main startup file (GRP, RFF etc)
-        /// </summary>
-        string MainFile { get; }
-
-        /// <summary>
         /// Def file name
         /// </summary>
         string DefFile { get; }

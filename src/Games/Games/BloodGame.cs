@@ -19,13 +19,10 @@ namespace Games.Games
         public override string ShortName => FullName;
 
         /// <inheritdoc/>
-        public override string MainFile => "BLOOD.RFF";
-
-        /// <inheritdoc/>
         public override string DefFile => "blood.def";
 
         /// <inheritdoc/>
-        public override List<string> RequiredFiles => [MainFile, Consts.BloodIni, "GUI.RFF", "SOUNDS.RFF", "SURFACE.DAT", "TILES000.ART", "VOXEL.DAT"];
+        public override List<string> RequiredFiles => [Consts.BloodIni, "BLOOD.RFF", "GUI.RFF", "SOUNDS.RFF", "SURFACE.DAT", "TILES000.ART", "VOXEL.DAT"];
 
         /// <summary>
         /// List of files required for Cryptic Passage

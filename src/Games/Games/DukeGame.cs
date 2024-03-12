@@ -33,18 +33,10 @@ namespace Games.Games
         public required string DukeWTInstallPath { get; set; }
 
         /// <inheritdoc/>
-        public override string MainFile => "DUKE3D.GRP";
-
-        /// <inheritdoc/>
         public override string DefFile => "duke3d.def";
 
         /// <inheritdoc/>
-        public override List<string> RequiredFiles => [MainFile];
-
-        /// <summary>
-        /// List of files required for World Tour
-        /// </summary>
-        public List<string> RequiredFilesWorldTour => ["EPISODE5BOSS.CON", "FIREFLYTROOPER.CON", "FLAMETHROWER.CON"];
+        public override List<string> RequiredFiles => ["DUKE3D.GRP"];
 
         /// <summary>
         /// Is Duke it Out in DC installed
@@ -64,7 +56,7 @@ namespace Games.Games
         /// <summary>
         /// Is World Tour installed
         /// </summary>
-        public bool IsWorldTourInstalled => IsInstalled(RequiredFilesWorldTour, DukeWTInstallPath);
+        public bool IsWorldTourInstalled => IsInstalled(["EPISODE5BOSS.CON", "FIREFLYTROOPER.CON", "FLAMETHROWER.CON"], DukeWTInstallPath);
 
         /// <summary>
         /// Is Duke 64 installed

@@ -330,19 +330,43 @@ namespace Ports.Ports
         /// </summary>
         private static void FixRoute66Files(IGame game, IMod campaign)
         {
-            if (game is RedneckGame && campaign is RedneckCampaign)
+            if (game is RedneckGame && campaign is RedneckCampaign rCamp)
             {
-                var origArtA = Path.Combine(game.GameInstallFolder, "TILES024.ART");
-                var prigArtB = Path.Combine(game.GameInstallFolder, "TILES025.ART");
+                var tilesA2 = Path.Combine(game.GameInstallFolder, "TILES024.ART");
+                var tilesB2 = Path.Combine(game.GameInstallFolder, "TILES025.ART");
+                var turdMovAnm2 = Path.Combine(game.GameInstallFolder, "TURDMOV.ANM");
+                var turdMovVoc2 = Path.Combine(game.GameInstallFolder, "TURDMOV.VOC");
+                var endMovAnm2 = Path.Combine(game.GameInstallFolder, "RR_OUTRO.ANM");
+                var endMovVoc2 = Path.Combine(game.GameInstallFolder, "LN_FINAL.VOC");
 
-                if (File.Exists(origArtA))
+                if (File.Exists(tilesA2))
                 {
-                    File.Delete(origArtA);
+                    File.Delete(tilesA2);
                 }
 
-                if (File.Exists(prigArtB))
+                if (File.Exists(tilesB2))
                 {
-                    File.Delete(prigArtB);
+                    File.Delete(tilesB2);
+                }
+
+                if (File.Exists(turdMovAnm2))
+                {
+                    File.Delete(turdMovAnm2);
+                }
+
+                if (File.Exists(turdMovVoc2))
+                {
+                    File.Delete(turdMovVoc2);
+                }
+
+                if (File.Exists(endMovAnm2))
+                {
+                    File.Delete(endMovAnm2);
+                }
+
+                if (File.Exists(endMovVoc2))
+                {
+                    File.Delete(endMovVoc2);
                 }
             }
         }

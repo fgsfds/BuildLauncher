@@ -18,13 +18,10 @@ namespace Games.Games
         public override string ShortName => "Fury";
 
         /// <inheritdoc/>
-        public override string MainFile => "fury.grp";
-
-        /// <inheritdoc/>
         public override string DefFile => "fury.def";
 
         /// <inheritdoc/>
-        public override List<string> RequiredFiles => [MainFile];
+        public override List<string> RequiredFiles => ["fury.grp"];
 
 
         public FuryGame(InstalledModsProvider modsProvider) : base(modsProvider)
