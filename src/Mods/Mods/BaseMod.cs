@@ -48,6 +48,9 @@ namespace Mods.Mods
         /// <inheritdoc/>
         public required bool IsOfficial { get; init; }
 
+        /// <inheritdoc/>
+        public string? Addon { get; protected set; }
+
 
         public override string ToString() => DisplayName;
 

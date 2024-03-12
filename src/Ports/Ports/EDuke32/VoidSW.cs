@@ -63,7 +63,7 @@ namespace Ports.Ports.EDuke32
         }
 
         // <inheritdoc/>
-        protected override void GetAutoloadModsArgs(StringBuilder sb, IGame game, IEnumerable<IMod> mods)
+        protected override void GetAutoloadModsArgs(StringBuilder sb, IGame game, IMod campaign, IEnumerable<IMod> mods)
         {
             if (!mods.Any())
             {
@@ -78,12 +78,21 @@ namespace Ports.Ports.EDuke32
 
                 if (!autoloadMod.IsEnabled)
                 {
+                    //skipping disabled mods
                     continue;
                 }
 
-                if (autoloadMod.SupportedPorts is not null &&
-                    !autoloadMod.SupportedPorts.Contains(PortEnum))
+                if (!autoloadMod.SupportedPorts?.Contains(PortEnum) ?? false)
                 {
+                    //skipping mods not supported by the current port
+                    continue;
+                }
+
+                if (campaign.Addon is not null &&
+                    autoloadMod.SupportedAddons is not null &&
+                    autoloadMod.SupportedAddons.Contains(campaign.Addon))
+                {
+                    //skipping mods not supported by the current addon
                     continue;
                 }
 

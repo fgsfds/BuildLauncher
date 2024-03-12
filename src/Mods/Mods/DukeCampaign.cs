@@ -10,6 +10,15 @@ namespace Mods.Mods
         /// <summary>
         /// Duke Addon enum
         /// </summary>
-        public required DukeAddonEnum AddonEnum { get; set; }
+        private DukeAddonEnum _addonEnum;
+        public required DukeAddonEnum AddonEnum 
+        {
+            get => _addonEnum;
+            init
+            {
+                Addon = value.ToString();
+                _addonEnum = value;
+            }
+        }
     }
 }

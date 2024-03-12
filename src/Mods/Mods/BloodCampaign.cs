@@ -10,7 +10,16 @@ namespace Mods.Mods
         /// <summary>
         /// Blood Addon enum
         /// </summary>
-        public required BloodAddonEnum AddonEnum { get; set; }
+        private BloodAddonEnum _addonEnum;
+        public required BloodAddonEnum AddonEnum
+        {
+            get => _addonEnum;
+            init
+            {
+                Addon = value.ToString();
+                _addonEnum = value;
+            }
+        }
 
         /// <summary>
         /// Startup .ini file

@@ -88,7 +88,7 @@ namespace Ports.Ports
 
             GetStartCampaignArgs(sb, game, mod);
 
-            GetAutoloadModsArgs(sb, game, game.GetAutoloadMods(true));
+            GetAutoloadModsArgs(sb, game, mod, game.GetAutoloadMods(true));
 
             if (skipIntro)
             {
@@ -118,8 +118,9 @@ namespace Ports.Ports
         /// </summary>
         /// <param name="sb">String builder for parameters</param>
         /// <param name="game">Game<param>
+        /// <param name="campaign">Campaign\map<param>
         /// <param name="autoloadMods">Mods</param>
-        protected abstract void GetAutoloadModsArgs(StringBuilder sb, IGame game, IEnumerable<IMod> autoloadMods);
+        protected abstract void GetAutoloadModsArgs(StringBuilder sb, IGame game, IMod campaign, IEnumerable<IMod> autoloadMods);
 
         /// <summary>
         /// Return command line parameter to skip intro

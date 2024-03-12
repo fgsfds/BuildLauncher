@@ -71,6 +71,11 @@ namespace Common.Interfaces
         bool IsOfficial { get; init; }
 
         /// <summary>
+        /// Campaign's addon as a string
+        /// </summary>
+        string? Addon { get; }
+
+        /// <summary>
         /// Create markdown description of the mod
         /// </summary>
         string ToMarkdownString();

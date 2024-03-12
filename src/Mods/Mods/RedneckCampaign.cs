@@ -10,6 +10,15 @@ namespace Mods.Mods
         /// <summary>
         /// Redneck Addon enum
         /// </summary>
-        public required RedneckAddonEnum AddonEnum { get; set; }
+        private RedneckAddonEnum _addonEnum;
+        public required RedneckAddonEnum AddonEnum
+        {
+            get => _addonEnum;
+            init
+            {
+                Addon = value.ToString();
+                _addonEnum = value;
+            }
+        }
     }
 }

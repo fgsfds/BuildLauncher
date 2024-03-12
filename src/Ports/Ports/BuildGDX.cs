@@ -47,7 +47,7 @@ namespace Ports.Ports
         public override int? InstalledVersion => null;
 
         /// <inheritdoc/>
-        protected override void GetAutoloadModsArgs(StringBuilder sb, IGame provider, IEnumerable<IMod> mods) => throw new NotImplementedException();
+        protected override void GetAutoloadModsArgs(StringBuilder sb, IGame provider, IMod campaign, IEnumerable<IMod> mods) => throw new NotImplementedException();
 
         /// <inheritdoc/>
         protected override void GetStartCampaignArgs(StringBuilder sb, IGame game, IMod mod) => throw new NotImplementedException();

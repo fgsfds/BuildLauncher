@@ -58,11 +58,9 @@ namespace Mods.Providers
                 Guid guid = Guid.NewGuid();
                 string displayName = Path.GetFileNameWithoutExtension(file);
                 string description = string.Empty;
-                DukeAddonEnum dukeAddonEnum = DukeAddonEnum.Duke3D;
-                WangAddonEnum wangAddonEnum = WangAddonEnum.Wang;
-                BloodAddonEnum bloodAddonEnum = BloodAddonEnum.Blood;
-                RedneckAddonEnum redneckAddonEnum = RedneckAddonEnum.Redneck;
+                string? addon = null;
                 List<PortEnum>? supportedPorts = null;
+                List<string>? supportedAddons = null;
                 string? startupFile = null;
                 float? version = null;
                 string? url = null;
@@ -85,15 +83,19 @@ namespace Mods.Providers
 
                             if (manifest is not null)
                             {
+                                if (manifest.ModType is not ModTypeEnum.Autoload &&
+                                    manifest.SupportedAddons is not null)
+                                {
+                                    ThrowHelper.NotImplementedException("SupportedAddons property is only supported by Autoload mods");
+                                }
+
                                 guid = manifest.Guid;
                                 displayName = manifest.Name;
+                                addon = manifest.Addon;
                                 supportedPorts = manifest.SupportedPorts;
+                                supportedAddons = manifest.SupportedAddons;
                                 description = manifest.Description;
                                 startupFile = manifest.StartupFile;
-                                dukeAddonEnum = manifest.DukeAddon is not null ? (DukeAddonEnum)manifest.DukeAddon : DukeAddonEnum.Duke3D;
-                                wangAddonEnum = manifest.WangAddon is not null ? (WangAddonEnum)manifest.WangAddon : WangAddonEnum.Wang;
-                                bloodAddonEnum = manifest.BloodAddon is not null ? (BloodAddonEnum)manifest.BloodAddon : BloodAddonEnum.Blood;
-                                redneckAddonEnum = manifest.RedneckAddon is not null ? (RedneckAddonEnum)manifest.RedneckAddon : RedneckAddonEnum.Redneck;
                                 version = manifest.Version;
                                 url = manifest.Url;
                                 author = manifest.Author;
@@ -113,6 +115,7 @@ namespace Mods.Providers
                             DisplayName = displayName,
                             Image = image,
                             SupportedPorts = supportedPorts,
+                            SupportedAddons = supportedAddons,
                             Description = description,
                             Version = version,
                             Author = author,
@@ -136,7 +139,7 @@ namespace Mods.Providers
                                 SupportedPorts = supportedPorts,
                                 Description = description,
                                 StartupFile = startupFile,
-                                AddonEnum = dukeAddonEnum,
+                                AddonEnum = addon is null ? DukeAddonEnum.Duke3D : Enum.Parse<DukeAddonEnum>(addon),
                                 Version = version,
                                 Author = author,
                                 Url = url,
@@ -154,7 +157,7 @@ namespace Mods.Providers
                                 Image = image,
                                 SupportedPorts = supportedPorts,
                                 Description = description,
-                                AddonEnum = wangAddonEnum,
+                                AddonEnum = addon is null ? WangAddonEnum.Wang : Enum.Parse<WangAddonEnum>(addon),
                                 Version = version,
                                 Author = author,
                                 Url = url,
@@ -173,7 +176,7 @@ namespace Mods.Providers
                                 Image = image,
                                 SupportedPorts = supportedPorts,
                                 Description = description,
-                                AddonEnum = bloodAddonEnum,
+                                AddonEnum = addon is null ? BloodAddonEnum.Blood : Enum.Parse<BloodAddonEnum>(addon),
                                 Version = version,
                                 Author = author,
                                 Url = url,
@@ -228,13 +231,13 @@ namespace Mods.Providers
                                 Image = image,
                                 SupportedPorts = supportedPorts,
                                 Description = description,
+                                AddonEnum = addon is null ? RedneckAddonEnum.Redneck : Enum.Parse<RedneckAddonEnum>(addon),
                                 Version = version,
                                 Author = author,
                                 Url = url,
                                 StartupFile = startupFile!,
                                 IsOfficial = false,
-                                PathToFile = file,
-                                AddonEnum = redneckAddonEnum
+                                PathToFile = file
                             });
                         }
                     }
