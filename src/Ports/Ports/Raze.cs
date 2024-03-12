@@ -147,7 +147,7 @@ namespace Ports.Ports
 
                 if (campaign.Addon is not null &&
                     autoloadMod.SupportedAddons is not null &&
-                    autoloadMod.SupportedAddons.Contains(campaign.Addon))
+                    !autoloadMod.SupportedAddons.Contains(campaign.Addon))
                 {
                     //skipping mods not supported by the current addon
                     continue;
