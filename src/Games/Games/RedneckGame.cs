@@ -66,13 +66,21 @@ namespace Games.Games
                     ModType = ModTypeEnum.Campaign,
                     DisplayName = "Redneck Rampage",
                     Image = ImageHelper.FileNameToStream("Redneck.redneck.jpg"),
-                    StartupFile = null,
                     AddonEnum = RedneckAddonEnum.Redneck,
+                    Author = "Xatrix Entertainment",
+                    Description = """
+                        **Redneck Rampage** is a 1997 first-person shooter game developed by **Xatrix Entertainment** and published by **Interplay**.
+                        The game is a first-person shooter with a variety of weapons and levels, and has a hillbilly theme, primarily taking place in a fictional Arkansas town.
+                        Many of the weapons and power-ups border on the nonsensical, and in some ways the game is a parody of both first-person shooter games and rural American life.
+
+                        The game's plot revolves around two brothers, Leonard and Bubba, fighting through the fictional town of Hickston, Arkansas to rescue their prized pig Bessie and thwart an alien invasion.
+                        The brothers battle through such locales as a meat packing plant and a trailer park, and battle evil clones of their neighbors. There are also male and female alien enemies.
+                        The bosses are the Assface and the leader of the alien invasion, the Queen Vixen.
+                        """,
+                    StartupFile = null,
                     Version = null,
                     SupportedPorts = null,
-                    Description = null,
                     Url = null,
-                    Author = null,
                     IsOfficial = true,
                     PathToFile = null
                 });
@@ -85,13 +93,16 @@ namespace Games.Games
                         ModType = ModTypeEnum.Campaign,
                         DisplayName = "Route 66",
                         Image = ImageHelper.FileNameToStream("Redneck.route66.jpg"),
-                        StartupFile = null,
                         AddonEnum = RedneckAddonEnum.Route66,
+                        Author = "Sunstorm Interactive",
+                        Description = """
+                            **Redneck Rampage: Suckin' Grits on Route 66** is a 12-level expansion pack for Redneck Rampage. It was developed by Sunstorm Interactive and released on December 19, 1997.
+                            The add-on contains several new locations and textures, as well as a new ending.
+                            """,
+                        StartupFile = null,
                         Version = null,
                         SupportedPorts = null,
-                        Description = null,
                         Url = null,
-                        Author = null,
                         IsOfficial = true,
                         PathToFile = null
                     });
@@ -106,13 +117,18 @@ namespace Games.Games
                     ModType = ModTypeEnum.Campaign,
                     DisplayName = "Rides Again",
                     Image = ImageHelper.FileNameToStream("Redneck.again.jpg"),
-                    StartupFile = null,
                     AddonEnum = RedneckAddonEnum.Again,
+                    Author = "Xatrix Entertainment",
+                    Description = """
+                        **Redneck Rampage Rides Again** is a sequel to Redneck Rampage developed by **Xatrix Entertainment** and published by **Interplay Entertainment** for MS-DOS in 1998.
+
+                        After Leonard and Bubba crash-land a UFO, they find themselves in the middle of the desert.
+                        Along the way, they are hunted by aliens and must blast their way through jackalope farms, Disgraceland, a riverboat, a brothel and various other locales.
+                        """,
                     Version = null,
+                    StartupFile = null,
                     SupportedPorts = null,
-                    Description = null,
                     Url = null,
-                    Author = null,
                     IsOfficial = true,
                     PathToFile = null
                 });

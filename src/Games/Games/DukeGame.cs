@@ -91,13 +91,19 @@ namespace Games.Games
                     ModType = ModTypeEnum.Campaign,
                     DisplayName = "Duke Nukem 3D",
                     Image = ImageHelper.FileNameToStream("Duke3D.duke3d.jpg"),
-                    StartupFile = null,
                     AddonEnum = DukeAddonEnum.Duke3D,
+                    Author = "3D Realms",
+                    Description = """
+                        Duke Nukem 3D is a first-person shooter developed and published by **3D Realms**.
+                        Released on April 19, 1996, Duke Nukem 3D is the third game in the Duke Nukem series and a sequel to Duke Nukem II.
+
+                        The player assumes the role of Duke Nukem, an imperious action hero, and fights through 48 levels spread across 5 episodes. The player encounters a host of enemies and fights them with a range of weaponry.
+                        In the end, Duke annihilates the alien overlords and celebrates by desecrating their corpses.
+                        """,
+                    StartupFile = null,
                     Version = null,
                     SupportedPorts = null,
-                    Description = null,
                     Url = null,
-                    Author = null,
                     IsOfficial = true,
                     PathToFile = null
                 });
@@ -110,14 +116,20 @@ namespace Games.Games
                         ModType = ModTypeEnum.Campaign,
                         DisplayName = "Caribbean",
                         Image = ImageHelper.FileNameToStream("Duke3D.carib.jpg"),
-                        StartupFile = null,
                         AddonEnum = DukeAddonEnum.Caribbean,
+                        Author = "Sunstorm Interactive",
+                        Description = """
+                            **Life's A Beach** is an expansion pack for the highly acclaimed first-person shooter Duke Nukem 3D. It was released on December 31, 1997 by **Sunstorm Interactive**.
+
+                            Narrative elements in Duke Caribbean: Life's A Beach are sparse. According to the official game manual, Duke Nukem is on vacation in the Caribbean to take a break from killing aliens.
+                            However, the aliens have decided that the Caribbean offers the perfect climate for a new breeding ground, so they begin laying eggs and terrorizing the local tourists.
+                            Angered that his rest and relaxation is being delayed, Duke Nukem sets out on a mission for retribution against the aliens who are interrupting his vacation.
+                            """,
+                        StartupFile = null,
                         Version = null,
                         //TODO remove when https://voidpoint.io/terminx/eduke32/-/issues/297 is fixed
                         SupportedPorts = [PortEnum.Raze, PortEnum.BuildGDX],
-                        Description = null,
                         Url = null,
-                        Author = null,
                         IsOfficial = true,
                         PathToFile = null
                     });
@@ -130,13 +142,18 @@ namespace Games.Games
                         ModType = ModTypeEnum.Campaign,
                         DisplayName = "Nuclear Winter",
                         Image = ImageHelper.FileNameToStream("Duke3D.nwinter.jpg"),
-                        StartupFile = null,
                         AddonEnum = DukeAddonEnum.NuclearWinter,
+                        Author = "Simply Silly Software",
+                        Description = """
+                            **Nuclear Winter**, is a Christmas-themed expansion pack for Duke Nukem 3D. It was developed by **Simply Silly Software** and published by **WizardWorks** on December 30, 1997.
+
+                            Santa Claus has been captured and brainwashed by the aliens that Duke previously defeated. To make matters worse, the aliens are now supported by an enemy force calling themselves the Feminist Elven Militia.
+                            Duke Nukem must travel to the North Pole in order to stop the brainwashed Santa Claus and his manipulative captors.
+                            """,
+                        StartupFile = null,
                         Version = null,
                         SupportedPorts = null,
-                        Description = null,
                         Url = null,
-                        Author = null,
                         IsOfficial = true,
                         PathToFile = null
                     });
@@ -149,14 +166,21 @@ namespace Games.Games
                         ModType = ModTypeEnum.Campaign,
                         DisplayName = "Duke it Out in DC",
                         Image = ImageHelper.FileNameToStream("Duke3D.dukedc.jpg"),
-                        StartupFile = null,
                         AddonEnum = DukeAddonEnum.DukeDC,
+                        Author = "WizardWorks",
+                        Description = """
+                            **Duke It Out In D.C.** is a Duke Nukem 3D expansion pack developed by Sunstorm Interactive and published by **WizardWorks** on March 17, 1997.
+                            The add-on does not introduce any new enemies, weapons, or sprites, but it features an all-new episode comprised of ten original levels,
+                            each based on a famous location in Washington, D.C. 
+
+                            Aliens have crash-landed into the Capitol Building and have launched a massive invasion of Washington, D.C. Duke Nukem arrives to find that the
+                            alien invaders have captured several national monuments and critical government buildings, but in the end, Duke defeats the invading army and rescues the President from the Cycloid Emperor.
+                            """,
+                        StartupFile = null,
                         Version = null,
                         //TODO remove when https://voidpoint.io/terminx/eduke32/-/issues/297 is fixed
                         SupportedPorts = [PortEnum.Raze, PortEnum.BuildGDX],
-                        Description = null,
                         Url = null,
-                        Author = null,
                         IsOfficial = true,
                         PathToFile = null
                     });
@@ -171,13 +195,19 @@ namespace Games.Games
                     ModType = ModTypeEnum.Campaign,
                     DisplayName = "Duke Nukem 3D World Tour",
                     Image = ImageHelper.FileNameToStream("Duke3D.dukewt.jpg"),
-                    StartupFile = null,
                     AddonEnum = DukeAddonEnum.WorldTour,
                     SupportedPorts = [PortEnum.Raze, PortEnum.EDuke32, PortEnum.BuildGDX],
+                    Author = "WizardWorks",
+                    Description = """
+                        **Duke Nukem 3D: 20th Anniversary World Tour** is a 2016 special edition remake of Duke Nukem 3D, originally released in 1996.
+                        The remake includes all content from Duke Nukem 3D: Atomic Edition, but it adds new levels, enemies, a weapon, and several special features.
+
+                        The 20th Anniversary Edition includes a new fifth episode known as Alien World Order.
+                        The episode was designed by Allen Blum and Richard “Levelord” Gray, both of whom designed all the levels in the original Duke Nukem 3D. 
+                        """,
+                    StartupFile = null,
                     Version = null,
-                    Description = null,
                     Url = null,
-                    Author = null,
                     IsOfficial = true,
                     PathToFile = null
                 });
@@ -191,13 +221,18 @@ namespace Games.Games
                     ModType = ModTypeEnum.Campaign,
                     DisplayName = "Duke Nukem 64",
                     Image = ImageHelper.FileNameToStream("Duke3D.duke64.jpg"),
-                    StartupFile = null,
-                    SupportedPorts = [PortEnum.RedNukem],
                     AddonEnum = DukeAddonEnum.Duke64,
+                    SupportedPorts = [PortEnum.RedNukem],
+                    Author = "3D Realms, Eurocom",
+                    Description = """
+                        **Duke Nukem 64** is the Nintendo 64 port of the first-person shooter MS-DOS/PC game Duke Nukem 3D.
+                        The Nintendo 64 port features significant changes from the PC version, including modified and expanded levels and a different set of weapons.
+                        The port also includes a four-player deathmatch mode and a two-player co-op mode via split-screen.
+                        The game's mature themes have been minimized to satisfy Nintendo's adult content standards.
+                        """,
+                    StartupFile = null,
                     Version = null,
-                    Description = null,
                     Url = null,
-                    Author = null,
                     IsOfficial = true,
                     PathToFile = null
                 });
