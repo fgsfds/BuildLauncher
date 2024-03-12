@@ -81,6 +81,11 @@ namespace Ports.Ports
                     hw_useindexedcolortextures=true
                     """;
 
+                if (!Directory.Exists(Path.GetDirectoryName(config)))
+                {
+                    Directory.CreateDirectory(Path.GetDirectoryName(config));
+                }
+
                 File.WriteAllText(config, text);
             }
 
