@@ -38,15 +38,15 @@ namespace Games.Games
         /// <summary>
         /// Get list of original campaigns
         /// </summary>
-        protected override List<IMod> GetOriginalCampaigns()
+        protected override Dictionary<Guid, IMod> GetOriginalCampaigns()
         {
-            List<IMod> campaigns = new(3);
+            Dictionary<Guid, IMod> campaigns = new(3);
 
             if (IsBaseGameInstalled)
             {
-                campaigns.Add(new WangCampaign()
+                campaigns.Add(Consts.WangGuid, new WangCampaign()
                 {
-                    Guid = new(Consts.WangGuid),
+                    Guid = Consts.WangGuid,
                     ModType = ModTypeEnum.Campaign,
                     DisplayName = "Shadow Warrior",
                     Image = ImageHelper.FileNameToStream("Wang.wang.jpg"),
@@ -69,9 +69,9 @@ namespace Games.Games
 
                 if (IsWantonInstalled)
                 {
-                    campaigns.Add(new WangCampaign()
+                    campaigns.Add(Consts.WantonGuid, new WangCampaign()
                     {
-                        Guid = new(Consts.WantonGuid),
+                        Guid = Consts.WantonGuid,
                         ModType = ModTypeEnum.Campaign,
                         DisplayName = "Wanton Destruction",
                         Image = ImageHelper.FileNameToStream("Wang.wanton.jpg"),
@@ -97,9 +97,9 @@ namespace Games.Games
 
                 if (IsTwinDragonInstalled)
                 {
-                    campaigns.Add(new WangCampaign()
+                    campaigns.Add(Consts.TwinDragonGuid, new WangCampaign()
                     {
-                        Guid = new(Consts.TwinDragonGuid),
+                        Guid = Consts.TwinDragonGuid,
                         ModType = ModTypeEnum.Campaign,
                         DisplayName = "Twin Dragon",
                         Image = ImageHelper.FileNameToStream("Wang.twin.jpg"),

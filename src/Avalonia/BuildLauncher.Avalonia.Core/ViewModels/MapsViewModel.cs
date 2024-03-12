@@ -42,7 +42,7 @@ namespace BuildLauncher.ViewModels
         /// <summary>
         /// List of installed campaigns and maps
         /// </summary>
-        public ImmutableList<IMod> MapsList => Game.GetSingleMaps();
+        public ImmutableList<IMod> MapsList => Game.GetSingleMaps().Select(x => x.Value).ToImmutableList();
 
         /// <summary>
         /// Currently selected campaign/map

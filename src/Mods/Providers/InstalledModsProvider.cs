@@ -27,9 +27,9 @@ namespace Mods.Providers
         /// </summary>
         /// <param name="game">Game</param>
         /// <param name="modTypeEnum">Mod type enum</param>
-        public IEnumerable<IMod> GetMods(IGame game, ModTypeEnum modTypeEnum)
+        public Dictionary<Guid, IMod> GetMods(IGame game, ModTypeEnum modTypeEnum)
         {
-            List<IMod> mods = [];
+            //List<IMod> mods = [];
 
             string path;
 
@@ -53,8 +53,12 @@ namespace Mods.Providers
 
             var files = Directory.GetFiles(path);
 
+            Dictionary<Guid, IMod> addedMods = [];
+
             foreach (var file in files)
             {
+                IMod mod;
+
                 Guid guid = Guid.NewGuid();
                 string displayName = Path.GetFileNameWithoutExtension(file);
                 string description = string.Empty;
@@ -108,7 +112,7 @@ namespace Mods.Providers
                     {
                         var isEnabled = !_config.DisabledAutoloadMods.Contains(guid);
 
-                        mods.Add(new AutoloadMod()
+                        mod = new AutoloadMod()
                         {
                             Guid = guid,
                             ModType = ModTypeEnum.Autoload,
@@ -124,13 +128,13 @@ namespace Mods.Providers
                             IsOfficial = false,
                             PathToFile = file,
                             StartupFile = null
-                        });
+                        };
                     }
                     else
                     {
                         if (game.GameEnum is GameEnum.Duke3D)
                         {
-                            mods.Add(new DukeCampaign()
+                            mod = new DukeCampaign()
                             {
                                 Guid = guid,
                                 ModType = modTypeEnum,
@@ -145,11 +149,11 @@ namespace Mods.Providers
                                 Url = url,
                                 IsOfficial = false,
                                 PathToFile = file
-                            });
+                            };
                         }
                         else if (game.GameEnum is GameEnum.Wang)
                         {
-                            mods.Add(new WangCampaign()
+                            mod = new WangCampaign()
                             {
                                 Guid = guid,
                                 ModType = modTypeEnum,
@@ -164,11 +168,11 @@ namespace Mods.Providers
                                 IsOfficial = false,
                                 PathToFile = file,
                                 StartupFile = null
-                            });
+                            };
                         }
                         else if (game.GameEnum is GameEnum.Blood)
                         {
-                            mods.Add(new BloodCampaign()
+                            mod = new BloodCampaign()
                             {
                                 Guid = guid,
                                 ModType = modTypeEnum,
@@ -183,11 +187,11 @@ namespace Mods.Providers
                                 StartupFile = startupFile!,
                                 IsOfficial = false,
                                 PathToFile = file
-                            });
+                            };
                         }
                         else if (game.GameEnum is GameEnum.Fury)
                         {
-                            mods.Add(new FuryCampaign()
+                            mod = new FuryCampaign()
                             {
                                 Guid = guid,
                                 ModType = modTypeEnum,
@@ -201,11 +205,11 @@ namespace Mods.Providers
                                 StartupFile = startupFile!,
                                 IsOfficial = false,
                                 PathToFile = file
-                            });
+                            };
                         }
                         else if (game.GameEnum is GameEnum.Slave)
                         {
-                            mods.Add(new SlaveCampaign()
+                            mod = new SlaveCampaign()
                             {
                                 Guid = guid,
                                 ModType = modTypeEnum,
@@ -219,11 +223,11 @@ namespace Mods.Providers
                                 StartupFile = startupFile!,
                                 IsOfficial = false,
                                 PathToFile = file
-                            });
+                            };
                         }
                         else if (game.GameEnum is GameEnum.Redneck)
                         {
-                            mods.Add(new RedneckCampaign()
+                            mod = new RedneckCampaign()
                             {
                                 Guid = guid,
                                 ModType = modTypeEnum,
@@ -238,8 +242,34 @@ namespace Mods.Providers
                                 StartupFile = startupFile!,
                                 IsOfficial = false,
                                 PathToFile = file
-                            });
+                            };
                         }
+                        else
+                        {
+                            ThrowHelper.NotImplementedException();
+                            return [];
+                        }
+                    }
+
+                    if (addedMods.TryGetValue(guid, out var addedMod))
+                    {
+                        if (addedMod.Version is null &&
+                            mod.Version is not null)
+                        {
+                            //replacing with mod that have version
+                            addedMods[guid] = mod;
+                        }
+                        else if (addedMod.Version is not null &&
+                                 mod.Version is not null &&
+                                 addedMod.Version < mod.Version)
+                        {
+                            //replacing with mod that have higher version
+                            addedMods[guid] = mod;
+                        }
+                    }
+                    else
+                    {
+                        addedMods.Add(guid, mod);
                     }
                 }
                 catch
@@ -249,7 +279,7 @@ namespace Mods.Providers
 
             }
 
-            return mods;
+            return addedMods;
         }
     }
 }

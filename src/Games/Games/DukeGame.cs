@@ -71,15 +71,15 @@ namespace Games.Games
 
 
         /// <inheritdoc/>
-        protected override List<IMod> GetOriginalCampaigns()
+        protected override Dictionary<Guid, IMod> GetOriginalCampaigns()
         {
-            List<IMod> campaigns = new(6);
+            Dictionary<Guid, IMod> campaigns = new(6);
 
             if (IsBaseGameInstalled)
             {
-                campaigns.Add(new DukeCampaign()
+                campaigns.Add(Consts.Duke3dGuid, new DukeCampaign()
                 {
-                    Guid = new(Consts.Duke3dGuid),
+                    Guid = Consts.Duke3dGuid,
                     ModType = ModTypeEnum.Campaign,
                     DisplayName = "Duke Nukem 3D",
                     Image = ImageHelper.FileNameToStream("Duke3D.duke3d.jpg"),
@@ -102,9 +102,9 @@ namespace Games.Games
 
                 if (IsCaribbeanInstalled)
                 {
-                    campaigns.Add(new DukeCampaign()
+                    campaigns.Add(Consts.CaribbeanGuid, new DukeCampaign()
                     {
-                        Guid = new(Consts.CaribbeanGuid),
+                        Guid = Consts.CaribbeanGuid,
                         ModType = ModTypeEnum.Campaign,
                         DisplayName = "Caribbean",
                         Image = ImageHelper.FileNameToStream("Duke3D.carib.jpg"),
@@ -128,9 +128,9 @@ namespace Games.Games
                 }
                 if (IsNuclearWinterInstalled)
                 {
-                    campaigns.Add(new DukeCampaign()
+                    campaigns.Add(Consts.NuclearWinterGuid, new DukeCampaign()
                     {
-                        Guid = new(Consts.NuclearWinterGuid),
+                        Guid = Consts.NuclearWinterGuid,
                         ModType = ModTypeEnum.Campaign,
                         DisplayName = "Nuclear Winter",
                         Image = ImageHelper.FileNameToStream("Duke3D.nwinter.jpg"),
@@ -152,9 +152,9 @@ namespace Games.Games
                 }
                 if (IsDukeDCInstalled)
                 {
-                    campaigns.Add(new DukeCampaign()
+                    campaigns.Add(Consts.DukeDCGuid, new DukeCampaign()
                     {
-                        Guid = new(Consts.DukeDCGuid),
+                        Guid = Consts.DukeDCGuid,
                         ModType = ModTypeEnum.Campaign,
                         DisplayName = "Duke it Out in DC",
                         Image = ImageHelper.FileNameToStream("Duke3D.dukedc.jpg"),
@@ -181,9 +181,9 @@ namespace Games.Games
 
             if (IsWorldTourInstalled)
             {
-                campaigns.Add(new DukeCampaign()
+                campaigns.Add(Consts.WorldTourGuid, new DukeCampaign()
                 {
-                    Guid = new(Consts.WorldTourGuid),
+                    Guid = Consts.WorldTourGuid,
                     ModType = ModTypeEnum.Campaign,
                     DisplayName = "Duke Nukem 3D World Tour",
                     Image = ImageHelper.FileNameToStream("Duke3D.dukewt.jpg"),
@@ -207,9 +207,9 @@ namespace Games.Games
 
             if (IsDuke64Installed)
             {
-                campaigns.Add(new DukeCampaign()
+                campaigns.Add(Consts.Duke64Guid, new DukeCampaign()
                 {
-                    Guid = new(Consts.Duke64Guid),
+                    Guid = Consts.Duke64Guid,
                     ModType = ModTypeEnum.Campaign,
                     DisplayName = "Duke Nukem 64",
                     Image = ImageHelper.FileNameToStream("Duke3D.duke64.jpg"),

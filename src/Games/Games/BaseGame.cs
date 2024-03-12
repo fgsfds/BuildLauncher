@@ -3,7 +3,6 @@ using Common.Helpers;
 using Common.Interfaces;
 using Mods.Mods;
 using Mods.Providers;
-using System.Collections.Immutable;
 using System.IO.Compression;
 using System.Text;
 
@@ -80,36 +79,70 @@ namespace Games.Games
 
 
         /// <inheritdoc/>
-        public virtual ImmutableList<IMod> GetCampaigns()
+        public virtual Dictionary<Guid, IMod> GetCampaigns()
         {
-            var campaigns = GetOriginalCampaigns();
+            Dictionary<Guid, IMod> originalCampaigns = GetOriginalCampaigns();
 
-            var cusomCampaigns = _installedModsProvider.GetMods(this, ModTypeEnum.Campaign);
+            var customCampaigns = _installedModsProvider.GetMods(this, ModTypeEnum.Campaign);
 
-            return [.. campaigns, .. cusomCampaigns];
+            foreach (var customCamp in customCampaigns)
+            {
+                if (originalCampaigns.TryGetValue(customCamp.Key, out var originalCamp))
+                {
+                    if (originalCamp.Version is null &&
+                        customCamp.Value.Version is not null)
+                    {
+                        //replacing with mod that have version
+                        originalCampaigns[customCamp.Key] = customCamp.Value;
+                    }
+                    else if (customCamp.Value.Version is not null &&
+                             originalCamp.Version is not null &&
+                             customCamp.Value.Version > originalCamp.Version)
+                    {
+                        //replacing with mod that have higher version
+                        originalCampaigns[customCamp.Key] = customCamp.Value;
+                    }
+                }
+                else
+                {
+                    originalCampaigns.Add(customCamp.Key, customCamp.Value);
+                }
+            }
+
+            return originalCampaigns;
         }
 
 
         /// <inheritdoc/>
-        public virtual ImmutableList<IMod> GetSingleMaps()
+        public virtual Dictionary<Guid, IMod> GetSingleMaps()
         {
             var maps = _installedModsProvider.GetMods(this, ModTypeEnum.Map);
 
-            return [.. maps];
+            return maps;
         }
 
 
         /// <inheritdoc/>
-        public virtual ImmutableList<IMod> GetAutoloadMods(bool enabledOnly)
+        public virtual Dictionary<Guid, IMod> GetAutoloadMods(bool enabledOnly)
         {
             var mods = _installedModsProvider.GetMods(this, ModTypeEnum.Autoload);
 
             if (enabledOnly)
             {
-                mods = mods.Where(static x => ((AutoloadMod)x).IsEnabled);
+                Dictionary<Guid, IMod> filtered = [];
+
+                foreach (var mod in mods)
+                {
+                    if (((AutoloadMod)mod.Value).IsEnabled)
+                    {
+                        filtered.Add(mod.Key, mod.Value);
+                    }
+                }
+
+                return filtered;
             }
 
-            return [.. mods];
+            return mods;
         }
 
 
@@ -134,14 +167,14 @@ namespace Games.Games
 
             var files = _installedModsProvider.GetMods(this, ModTypeEnum.Autoload);
 
-            if (!files.Any())
+            if (files.Count == 0)
             {
                 return;
             }
 
             foreach (var file in files)
             {
-                file.ThrowIfNotType<AutoloadMod>(out var autoloadMod);
+                file.Value.ThrowIfNotType<AutoloadMod>(out var autoloadMod);
                 autoloadMod.PathToFile.ThrowIfNull();
 
                 if (!autoloadMod.IsEnabled)
@@ -199,7 +232,7 @@ namespace Games.Games
         /// Get list of original campaigns
         /// </summary>
         /// <returns></returns>
-        protected abstract List<IMod> GetOriginalCampaigns();
+        protected abstract Dictionary<Guid, IMod> GetOriginalCampaigns();
 
 
         /// <summary>

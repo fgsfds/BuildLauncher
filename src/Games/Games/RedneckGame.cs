@@ -46,15 +46,15 @@ namespace Games.Games
 
 
         /// <inheritdoc/>
-        protected override List<IMod> GetOriginalCampaigns()
+        protected override Dictionary<Guid, IMod> GetOriginalCampaigns()
         {
-            List<IMod> campaigns = new(3);
+            Dictionary<Guid, IMod> campaigns = new(3);
 
             if (IsBaseGameInstalled)
             {
-                campaigns.Add(new RedneckCampaign()
+                campaigns.Add(Consts.RedneckGuid, new RedneckCampaign()
                 {
-                    Guid = new(Consts.RedneckGuid),
+                    Guid = Consts.RedneckGuid,
                     ModType = ModTypeEnum.Campaign,
                     DisplayName = "Redneck Rampage",
                     Image = ImageHelper.FileNameToStream("Redneck.redneck.jpg"),
@@ -79,9 +79,9 @@ namespace Games.Games
 
                 if (IsRoute66Installed)
                 {
-                    campaigns.Add(new RedneckCampaign()
+                    campaigns.Add(Consts.Route66Guid, new RedneckCampaign()
                     {
-                        Guid = new(Consts.Route66Guid),
+                        Guid = Consts.Route66Guid,
                         ModType = ModTypeEnum.Campaign,
                         DisplayName = "Route 66",
                         Image = ImageHelper.FileNameToStream("Redneck.route66.jpg"),
@@ -103,9 +103,9 @@ namespace Games.Games
 
             if (IsAgainInstalled)
             {
-                campaigns.Add(new RedneckCampaign()
+                campaigns.Add(Consts.AgainGuid, new RedneckCampaign()
                 {
-                    Guid = new(Consts.AgainGuid),
+                    Guid = Consts.AgainGuid,
                     ModType = ModTypeEnum.Campaign,
                     DisplayName = "Rides Again",
                     Image = ImageHelper.FileNameToStream("Redneck.again.jpg"),

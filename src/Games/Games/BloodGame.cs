@@ -36,13 +36,13 @@ namespace Games.Games
 
 
         /// <inheritdoc/>
-        protected override List<IMod> GetOriginalCampaigns()
+        protected override Dictionary<Guid, IMod> GetOriginalCampaigns()
         {
-            List<IMod> campaigns = new(2);
+            Dictionary<Guid, IMod> campaigns = new(2);
 
-            campaigns.Add(new BloodCampaign()
+            campaigns.Add(Consts.BloodGuid, new BloodCampaign()
             {
-                Guid = new(Consts.BloodGuid),
+                Guid = Consts.BloodGuid,
                 ModType = ModTypeEnum.Campaign,
                 DisplayName = "Blood",
                 StartupFile = Consts.BloodIni,
@@ -70,9 +70,9 @@ namespace Games.Games
 
             if (IsCrypticPassageInstalled)
             {
-                campaigns.Add(new BloodCampaign()
+                campaigns.Add(Consts.CrypticGuid, new BloodCampaign()
                 {
-                    Guid = new(Consts.CrypticGuid),
+                    Guid = Consts.CrypticGuid,
                     ModType = ModTypeEnum.Campaign,
                     DisplayName = "Cryptic Passage",
                     StartupFile = Consts.CrypticIni,

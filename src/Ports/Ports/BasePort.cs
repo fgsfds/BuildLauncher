@@ -121,7 +121,7 @@ namespace Ports.Ports
         /// <param name="game">Game<param>
         /// <param name="campaign">Campaign\map<param>
         /// <param name="autoloadMods">Mods</param>
-        protected abstract void GetAutoloadModsArgs(StringBuilder sb, IGame game, IMod campaign, IEnumerable<IMod> autoloadMods);
+        protected abstract void GetAutoloadModsArgs(StringBuilder sb, IGame game, IMod campaign, Dictionary<Guid, IMod> autoloadMods);
 
         /// <summary>
         /// Return command line parameter to skip intro

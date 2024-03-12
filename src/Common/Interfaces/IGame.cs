@@ -1,5 +1,4 @@
 ﻿using Common.Enums;
-using System.Collections.Immutable;
 
 namespace Common.Interfaces
 {
@@ -69,16 +68,16 @@ namespace Common.Interfaces
         /// <summary>
         /// Get list of official addons and custom campaigns
         /// </summary>
-        ImmutableList<IMod> GetCampaigns();
+        Dictionary<Guid, IMod> GetCampaigns();
 
         /// <summary>
         /// Get list of custom maps
         /// </summary>
-        ImmutableList<IMod> GetSingleMaps();
+        Dictionary<Guid, IMod> GetSingleMaps();
 
         /// <summary>
         /// Get list of autoload mods
         /// </summary>
-        ImmutableList<IMod> GetAutoloadMods(bool enabledOnly);
+        Dictionary<Guid, IMod> GetAutoloadMods(bool enabledOnly);
     }
 }

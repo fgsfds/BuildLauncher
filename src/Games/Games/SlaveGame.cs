@@ -30,15 +30,15 @@ namespace Games.Games
 
 
         /// <inheritdoc/>
-        protected override List<IMod> GetOriginalCampaigns()
+        protected override Dictionary<Guid, IMod> GetOriginalCampaigns()
         {
-            List<IMod> campaigns = new(1);
+            Dictionary<Guid, IMod> campaigns = new(1);
 
             if (IsBaseGameInstalled)
             {
-                campaigns.Add(new SlaveCampaign()
+                campaigns.Add(Consts.SlaveGuid, new SlaveCampaign()
                 {
-                    Guid = new(Consts.SlaveGuid),
+                    Guid = Consts.SlaveGuid,
                     ModType = ModTypeEnum.Campaign,
                     DisplayName = "Powerslave",
                     Image = ImageHelper.FileNameToStream("Slave.slave.jpg"),

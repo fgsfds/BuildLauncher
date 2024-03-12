@@ -30,15 +30,15 @@ namespace Games.Games
 
 
         /// <inheritdoc/>
-        protected override List<IMod> GetOriginalCampaigns()
+        protected override Dictionary<Guid, IMod> GetOriginalCampaigns()
         {
-            List<IMod> campaigns = new(1);
+            Dictionary<Guid, IMod> campaigns = new(1);
 
             if (IsBaseGameInstalled)
             {
-                campaigns.Add(new FuryCampaign()
+                campaigns.Add(Consts.FuryGuid, new FuryCampaign()
                 {
-                    Guid = new(Consts.FuryGuid),
+                    Guid = Consts.FuryGuid,
                     ModType = ModTypeEnum.Campaign,
                     DisplayName = "Ion Fury",
                     Image = ImageHelper.FileNameToStream("Fury.fury.jpg"),

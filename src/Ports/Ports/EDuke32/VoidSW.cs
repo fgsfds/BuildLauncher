@@ -63,7 +63,7 @@ namespace Ports.Ports.EDuke32
         }
 
         // <inheritdoc/>
-        protected override void GetAutoloadModsArgs(StringBuilder sb, IGame game, IMod campaign, IEnumerable<IMod> mods)
+        protected override void GetAutoloadModsArgs(StringBuilder sb, IGame game, IMod campaign, Dictionary<Guid, IMod> mods)
         {
             if (!mods.Any())
             {
@@ -96,7 +96,7 @@ namespace Ports.Ports.EDuke32
                     continue;
                 }
 
-                sb.Append($@" -g""{mod.FileName}""");
+                sb.Append($@" -g""{mod.Value.FileName}""");
             }
 
             sb.Append($@" -j""{Path.Combine(game.SpecialFolderPath, Consts.CombinedModFolder)}"" -mh""{Consts.CombinedDef}""");

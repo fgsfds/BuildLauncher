@@ -11,7 +11,7 @@ namespace Mods.Mods
         /// Duke Addon enum
         /// </summary>
         private DukeAddonEnum _addonEnum;
-        public required DukeAddonEnum AddonEnum 
+        public required DukeAddonEnum AddonEnum
         {
             get => _addonEnum;
             init

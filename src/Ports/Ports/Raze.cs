@@ -126,9 +126,9 @@ namespace Ports.Ports
         }
 
         /// <inheritdoc/>
-        protected override void GetAutoloadModsArgs(StringBuilder sb, IGame _, IMod campaign, IEnumerable<IMod> mods)
+        protected override void GetAutoloadModsArgs(StringBuilder sb, IGame _, IMod campaign, Dictionary<Guid, IMod> mods)
         {
-            if (!mods.Any())
+            if (mods.Count == 0)
             {
                 return;
             }
@@ -158,7 +158,7 @@ namespace Ports.Ports
                     continue;
                 }
 
-                sb.Append($@" -file ""{mod.FileName}""");
+                sb.Append($@" -file ""{mod.Value.FileName}""");
             }
         }
 
