@@ -135,7 +135,7 @@ namespace Ports.Ports
 
             foreach (var mod in mods)
             {
-                mod.ThrowIfNotType<AutoloadMod>(out var autoloadMod);
+                mod.Value.ThrowIfNotType<AutoloadMod>(out var autoloadMod);
 
                 if (!autoloadMod.IsEnabled)
                 {

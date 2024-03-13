@@ -53,7 +53,7 @@ namespace Ports.Ports.EDuke32
         protected override void GetStartCampaignArgs(StringBuilder sb, IGame game, IMod mod)
         {
             mod.ThrowIfNotType<FuryCampaign>(out var dukeCamp);
-            game.ThrowIfNotType<FuryGame>(out var dukeGame);
+            game.ThrowIfNotType<FuryGame>(out _);
 
             sb.Append($@" -nosetup");
 
