@@ -13,14 +13,21 @@ namespace BuildLauncher.ViewModels
     {
         public readonly IGame Game;
         private readonly DownloadableModsProvider _downloadableModsProvider;
+        private readonly InstalledModsProvider _installedModsProvider;
 
         public DownloadsViewModel(
             IGame game,
-            DownloadableModsProvider modsProvider)
+            DownloadableModsProvider downloadableModsProvider,
+            InstalledModsProvider installedModsProvider
+            )
         {
             Game = game;
 
-            _downloadableModsProvider = modsProvider;
+            _downloadableModsProvider = downloadableModsProvider;
+            _installedModsProvider = installedModsProvider;
+
+            _downloadableModsProvider.NotifyModDownloaded += ModChanged;
+            _installedModsProvider.NotifyModDeleted += ModChanged;
         }
 
 
@@ -99,7 +106,6 @@ namespace BuildLauncher.ViewModels
         /// <summary>
         /// Update downloadable mods list
         /// </summary>
-        /// <param name="useCache">Update from cache</param>
         private async Task UpdateAsync()
         {
             await _downloadableModsProvider.UpdateCachedListAsync().ConfigureAwait(false);
@@ -136,6 +142,27 @@ namespace BuildLauncher.ViewModels
         {
             ProgressBarValue = e;
             OnPropertyChanged(nameof(ProgressBarValue));
+        }
+
+        private void ModChanged(IGame game, ModTypeEnum modType)
+        {
+            if (game.GameEnum != Game.GameEnum)
+            {
+                return;
+            }
+
+            if (modType is ModTypeEnum.Campaign)
+            {
+                OnPropertyChanged(nameof(DownloadableCampaignsList));
+            }
+            else if (modType is ModTypeEnum.Map)
+            {
+                OnPropertyChanged(nameof(DownloadableMapsList));
+            }
+            else if (modType is ModTypeEnum.Autoload)
+            {
+                OnPropertyChanged(nameof(DownloadableModsList));
+            }
         }
     }
 }

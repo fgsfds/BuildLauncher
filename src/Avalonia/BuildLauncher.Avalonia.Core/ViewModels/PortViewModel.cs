@@ -73,6 +73,7 @@ namespace BuildLauncher.ViewModels
         public async Task InitializeAsync()
         {
             _release = await PortsReleasesProvider.GetLatestReleaseAsync(_port);
+
             OnPropertyChanged(nameof(LatestVersion));
             OnPropertyChanged(nameof(InstallButtonText));
         }

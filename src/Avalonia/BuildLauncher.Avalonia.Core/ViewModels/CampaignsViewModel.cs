@@ -15,20 +15,25 @@ namespace BuildLauncher.ViewModels
     public sealed partial class CampaignsViewModel : ObservableObject, IPortsButtonControl
     {
         public readonly IGame Game;
+
         private readonly GamesProvider _gamesProvider;
         private readonly DownloadableModsProvider _downloadableModsProvider;
+        private readonly InstalledModsProvider _installedModsProvider;
         private readonly ConfigEntity _config;
 
         public CampaignsViewModel(
             IGame game,
             GamesProvider gamesProvider,
             DownloadableModsProvider modsProvider,
-            ConfigEntity config)
+            InstalledModsProvider installedModsProvider,
+            ConfigEntity config
+            )
         {
             Game = game;
 
             _gamesProvider = gamesProvider;
             _downloadableModsProvider = modsProvider;
+            _installedModsProvider = installedModsProvider;
             _config = config;
 
             _gamesProvider.NotifyGameChanged += NotifyGameChanged;
@@ -68,6 +73,22 @@ namespace BuildLauncher.ViewModels
         public string SelectedCampaignDescription => SelectedCampaign is null ? string.Empty : SelectedCampaign.ToMarkdownString();
 
         #endregion
+
+
+        /// <summary>
+        /// VM initialization
+        /// </summary>
+        public Task InitializeAsync() => UpdateAsync();
+
+        /// <summary>
+        /// Update campaigns list
+        /// </summary>
+        private async Task UpdateAsync()
+        {
+            await _installedModsProvider.UpdateCachedListAsync(Game);
+
+            OnPropertyChanged(nameof(CampaignsList));
+        }
 
 
         #region Relay Commands
@@ -111,7 +132,8 @@ namespace BuildLauncher.ViewModels
             SelectedCampaign.ThrowIfNull();
             SelectedCampaign.PathToFile.ThrowIfNull();
 
-            File.Delete(SelectedCampaign.PathToFile);
+            _installedModsProvider.DeleteMod(Game, SelectedCampaign);
+
             OnPropertyChanged(nameof(CampaignsList));
         }
 
@@ -151,12 +173,15 @@ namespace BuildLauncher.ViewModels
             }
         }
 
-        private void NotifyModDownloaded(ModTypeEnum modType)
+        private void NotifyModDownloaded(IGame game, ModTypeEnum modType)
         {
-            if (modType is ModTypeEnum.Campaign)
+            if (game.GameEnum != Game.GameEnum ||
+                modType is not ModTypeEnum.Campaign)
             {
-                OnPropertyChanged(nameof(CampaignsList));
+                return;
             }
+
+            OnPropertyChanged(nameof(CampaignsList));
         }
     }
 }

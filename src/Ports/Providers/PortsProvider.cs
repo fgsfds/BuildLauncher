@@ -27,6 +27,11 @@ namespace Ports.Providers
 
         public PortsProvider(ConfigProvider configProvider)
         {
+            if (!Directory.Exists(CommonProperties.PortsFolderPath))
+            {
+                Directory.CreateDirectory(CommonProperties.PortsFolderPath);
+            }
+
             _config = configProvider.Config;
 
             BuildGDX = new();

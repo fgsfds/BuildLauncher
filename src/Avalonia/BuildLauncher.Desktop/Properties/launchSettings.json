@@ -1,8 +1,0 @@
-{
-  "profiles": {
-    "BuildLauncher.Desktop": {
-      "commandName": "Project",
-      "commandLineArgs": "-dev"
-    }
-  }
-}

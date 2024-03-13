@@ -10,21 +10,24 @@ namespace BuildLauncher.ViewModels
     public sealed class ViewModelsFactory
     {
         private readonly GamesProvider _gamesProvider;
-        private readonly DownloadableModsProvider _modsProvider;
+        private readonly DownloadableModsProvider _downloadableModsProvider;
+        private readonly InstalledModsProvider _installedModsProvider;
         private readonly ConfigEntity _config;
         private readonly PortsInstallerFactory _installerFactory;
         private readonly PortsProvider _portsProvider;
 
         public ViewModelsFactory(
             GamesProvider gamesProvider,
-            DownloadableModsProvider modsProvider,
+            DownloadableModsProvider downloadableModsProvider,
+            InstalledModsProvider installedModsProvider,
             ConfigProvider configProvider,
             PortsInstallerFactory installerFactory,
             PortsProvider portsProvider
             )
         {
             _gamesProvider = gamesProvider;
-            _modsProvider = modsProvider;
+            _downloadableModsProvider = downloadableModsProvider;
+            _installedModsProvider = installedModsProvider;
             _config = configProvider.Config;
             _installerFactory = installerFactory;
             _portsProvider = portsProvider;
@@ -39,10 +42,12 @@ namespace BuildLauncher.ViewModels
             CampaignsViewModel vm = new(
                 _gamesProvider.GetGame(gameEnum),
                 _gamesProvider,
-                _modsProvider,
+                _downloadableModsProvider,
+                _installedModsProvider,
                 _config
                 );
 
+            Task.Run(vm.InitializeAsync);
             return vm;
         }
 
@@ -56,10 +61,12 @@ namespace BuildLauncher.ViewModels
             MapsViewModel vm = new(
                 _gamesProvider.GetGame(gameEnum),
                 _gamesProvider,
-                _modsProvider,
+                _downloadableModsProvider,
+                _installedModsProvider,
                 _config
                 );
 
+            Task.Run(vm.InitializeAsync);
             return vm;
         }
 
@@ -72,10 +79,12 @@ namespace BuildLauncher.ViewModels
             ModsViewModel vm = new(
                 _gamesProvider.GetGame(gameEnum),
                 _gamesProvider,
-                _modsProvider,
+                _downloadableModsProvider,
+                _installedModsProvider,
                 _config
                 );
 
+            Task.Run(vm.InitializeAsync);
             return vm;
         }
 
@@ -87,7 +96,8 @@ namespace BuildLauncher.ViewModels
         {
             DownloadsViewModel vm = new(
                 _gamesProvider.GetGame(gameEnum),
-                _modsProvider
+                _downloadableModsProvider,
+                _installedModsProvider
                 );
 
             Task.Run(vm.InitializeAsync);

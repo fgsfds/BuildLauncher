@@ -17,23 +17,43 @@ namespace BuildLauncher.ViewModels
         public readonly IGame Game;
         private readonly GamesProvider _gamesProvider;
         private readonly DownloadableModsProvider _downloadableModsProvider;
+        private readonly InstalledModsProvider _installedModsProvider;
         private readonly ConfigEntity _config;
 
         public MapsViewModel(
             IGame game,
             GamesProvider gamesProvider,
-            DownloadableModsProvider modsProvider,
-            ConfigEntity config)
+            DownloadableModsProvider downloadableModsProvider,
+            InstalledModsProvider installedModsProvider,
+            ConfigEntity config
+            )
         {
             Game = game;
 
             _gamesProvider = gamesProvider;
-            _downloadableModsProvider = modsProvider;
+            _downloadableModsProvider = downloadableModsProvider;
+            _installedModsProvider = installedModsProvider;
             _config = config;
 
             _gamesProvider.NotifyGameChanged += NotifyGameChanged;
             _config.NotifyParameterChanged += NotifyConfigChanged;
             _downloadableModsProvider.NotifyModDownloaded += NotifyModDownloaded;
+        }
+
+
+        /// <summary>
+        /// VM initialization
+        /// </summary>
+        public Task InitializeAsync() => UpdateAsync();
+
+        /// <summary>
+        /// Update maps list
+        /// </summary>
+        private async Task UpdateAsync()
+        {
+            await _installedModsProvider.UpdateCachedListAsync(Game);
+
+            OnPropertyChanged(nameof(MapsList));
         }
 
 
@@ -109,9 +129,9 @@ namespace BuildLauncher.ViewModels
         private void DeleteMap()
         {
             SelectedMap.ThrowIfNull();
-            SelectedMap.PathToFile.ThrowIfNull();
 
-            File.Delete(SelectedMap.PathToFile);
+            _installedModsProvider.DeleteMod(Game, SelectedMap);
+
             OnPropertyChanged(nameof(MapsList));
         }
 
@@ -151,12 +171,15 @@ namespace BuildLauncher.ViewModels
             }
         }
 
-        private void NotifyModDownloaded(ModTypeEnum modType)
+        private void NotifyModDownloaded(IGame game, ModTypeEnum modType)
         {
-            if (modType is ModTypeEnum.Map)
+            if (game.GameEnum != Game.GameEnum ||
+                modType is not ModTypeEnum.Map)
             {
-                OnPropertyChanged(nameof(MapsList));
+                return;
             }
+
+            OnPropertyChanged(nameof(MapsList));
         }
     }
 }

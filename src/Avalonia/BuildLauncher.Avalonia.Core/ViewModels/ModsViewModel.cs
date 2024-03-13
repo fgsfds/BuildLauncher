@@ -17,22 +17,41 @@ namespace BuildLauncher.ViewModels
         public readonly IGame Game;
         private readonly GamesProvider _gamesProvider;
         private readonly DownloadableModsProvider _downloadableModsProvider;
+        private readonly InstalledModsProvider _installedModsProvider;
         private readonly ConfigEntity _config;
 
         public ModsViewModel(
             IGame game,
             GamesProvider gamesProvider,
-            DownloadableModsProvider modsProvider,
+            DownloadableModsProvider downloadableModsProvider,
+            InstalledModsProvider installedModsProvider,
             ConfigEntity config)
         {
             Game = game;
 
             _gamesProvider = gamesProvider;
-            _downloadableModsProvider = modsProvider;
+            _downloadableModsProvider = downloadableModsProvider;
+            _installedModsProvider = installedModsProvider;
             _config = config;
 
             _gamesProvider.NotifyGameChanged += NotifyGameChanged;
             _downloadableModsProvider.NotifyModDownloaded += NotifyModDownloaded;
+        }
+
+
+        /// <summary>
+        /// VM initialization
+        /// </summary>
+        public Task InitializeAsync() => UpdateAsync();
+
+        /// <summary>
+        /// Update mods list
+        /// </summary>
+        private async Task UpdateAsync()
+        {
+            await _installedModsProvider.UpdateCachedListAsync(Game);
+
+            OnPropertyChanged(nameof(ModsList));
         }
 
 
@@ -78,9 +97,9 @@ namespace BuildLauncher.ViewModels
         private void DeleteMod()
         {
             SelectedMod.ThrowIfNull();
-            SelectedMod.PathToFile.ThrowIfNull();
 
-            File.Delete(SelectedMod.PathToFile);
+            _installedModsProvider.DeleteMod(Game, SelectedMod);
+
             OnPropertyChanged(nameof(ModsList));
         }
 
@@ -116,12 +135,15 @@ namespace BuildLauncher.ViewModels
             }
         }
 
-        private void NotifyModDownloaded(ModTypeEnum modType)
+        private void NotifyModDownloaded(IGame game, ModTypeEnum modType)
         {
-            if (modType is ModTypeEnum.Autoload)
+            if (game.GameEnum != Game.GameEnum ||
+                modType is not ModTypeEnum.Autoload)
             {
-                OnPropertyChanged(nameof(ModsList));
+                return;
             }
+
+            OnPropertyChanged(nameof(ModsList));
         }
     }
 }

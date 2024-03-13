@@ -21,6 +21,8 @@ namespace BuildLauncher.Helpers
 
             value.ThrowIfNotType<Stream>(out var stream);
 
+            stream.Position = 0;
+
             return new Bitmap(stream);
         }
 

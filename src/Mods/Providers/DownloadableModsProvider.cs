@@ -13,8 +13,9 @@ namespace Mods.Providers
     /// </summary>
     public sealed class DownloadableModsProvider
     {
-        private ImmutableList<DownloadableMod>? _mods;
+        private ImmutableList<DownloadableMod>? _cache;
         private readonly SemaphoreSlim _semaphore = new(1);
+
         private readonly ArchiveTools _archiveTools;
         private readonly InstalledModsProvider _installedModsProvider;
 
@@ -23,7 +24,7 @@ namespace Mods.Providers
         /// </summary>
         public Progress<float> Progress = new();
 
-        public delegate void ModDownloaded(ModTypeEnum modType);
+        public delegate void ModDownloaded(IGame game, ModTypeEnum modType);
         public event ModDownloaded NotifyModDownloaded;
 
         public DownloadableModsProvider(
@@ -35,6 +36,67 @@ namespace Mods.Providers
             _installedModsProvider = installedModsProvider;
         }
 
+
+        /// <summary>
+        /// Update cached list of downloadable mods from online repo
+        /// </summary>
+        public async Task UpdateCachedListAsync()
+        {
+            _semaphore.Wait();
+
+            if (_cache is null)
+            {
+                await UpdateCacheAsync().ConfigureAwait(false);
+            }
+
+            _semaphore.Release();
+
+            _cache.ThrowIfNull();
+        }
+
+
+        /// <summary>
+        /// Get list of downloadable mods
+        /// </summary>
+        /// <param name="gameEnum">Game enum</param>
+        /// <param name="modTypeEnum">Mod type enum</param>
+        public ImmutableList<DownloadableMod> GetDownloadableMods(IGame game, ModTypeEnum modTypeEnum)
+        {
+            var result = _cache?.Where(x => x.Game == game.GameEnum && x.ModType == modTypeEnum);
+
+            if (result is null)
+            {
+                return [];
+            }
+
+            var installedMods = _installedModsProvider.GetMods(game, modTypeEnum);
+
+            foreach (var downloadableMod in result)
+            {
+                if (installedMods.TryGetValue(downloadableMod.Guid, out var installedMod))
+                {
+                    downloadableMod.IsInstalled = true;
+
+                    if (downloadableMod.Version > installedMod.Version)
+                    {
+                        downloadableMod.HasNewerVersion = true;
+                    }
+                }
+                else
+                {
+                    downloadableMod.IsInstalled = false;
+                }
+            }
+
+            return [.. result];
+        }
+
+
+        /// <summary>
+        /// Download mod
+        /// </summary>
+        /// <param name="mod">Mod</param>
+        /// <param name="game">Game</param>
         public async Task DownloadModAsync(DownloadableMod mod, IGame game)
         {
             var url = mod.DownloadUrl;
@@ -59,64 +121,15 @@ namespace Mods.Providers
                 return;
             }
 
-            await _archiveTools.DownloadFileAsync(new(url), Path.Combine(path, file)).ConfigureAwait(false); ;
+            var pathToFile = Path.Combine(path, file);
+
+            await _archiveTools.DownloadFileAsync(new(url), pathToFile).ConfigureAwait(false);
 
             Progress = _archiveTools.Progress;
 
-            NotifyModDownloaded?.Invoke(mod.ModType);
-        }
+            _installedModsProvider.AddMod(game, mod.ModType, pathToFile);
 
-
-        /// <summary>
-        /// Get list of downloadable mods
-        /// </summary>
-        /// <param name="gameEnum">Game enum</param>
-        /// <param name="modTypeEnum">Mod type enum</param>
-        public ImmutableList<DownloadableMod> GetDownloadableMods(IGame game, ModTypeEnum modTypeEnum)
-        {
-            var result = _mods?.Where(x => x.Game == game.GameEnum && x.ModType == modTypeEnum);
-
-            if (result is null)
-            {
-                return [];
-            }
-
-            var installedMods = _installedModsProvider.GetMods(game, modTypeEnum);
-
-            foreach (var downloadableMod in result)
-            {
-                if (installedMods.TryGetValue(downloadableMod.Guid, out var installedMod))
-                {
-                    downloadableMod.IsInstalled = true;
-
-                    if (downloadableMod.Version > installedMod.Version)
-                    {
-                        downloadableMod.HasNewerVersion = true;
-                    }
-                }
-            }
-
-            return [.. result];
-        }
-
-
-        /// <summary>
-        /// Update cached list of downloadable mods from online repo
-        /// </summary>
-        public async Task<ImmutableList<DownloadableMod>> UpdateCachedListAsync()
-        {
-            _semaphore.Wait();
-
-            if (_mods is null)
-            {
-                await UpdateCacheAsync().ConfigureAwait(false);
-            }
-
-            _semaphore.Release();
-
-            _mods.ThrowIfNull();
-
-            return _mods;
+            NotifyModDownloaded?.Invoke(game, mod.ModType);
         }
 
 
@@ -135,7 +148,7 @@ namespace Mods.Providers
 
             var list = JsonSerializer.Deserialize(fixesXml, DownloadableModManifestsListContext.Default.ListDownloadableMod);
 
-            _mods = [.. list];
+            _cache = [.. list];
         }
     }
 }
