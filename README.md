@@ -90,9 +90,9 @@ Another goal of this project is to create a unification standard for Build Engin
 <tr>
 <td valign="center">
 
-- Caribbean and Duke it out in DC don't launch with EDuke32 and RedNukem
+- Caribbean and Duke it out in DC can't be launched with EDuke32 and RedNukem
 - Route 66 doesn't work with RedNukem yet
-- Wanton Destruction launched from Raze has episodes and maps names from the original game
+- Wanton Destruction launched from Raze has episodes and maps names from the original game unless downloaded from the lancher
 - Skip intro checkbox doesn't work with RedNukem
 - Mods and campaigns that replace original files don't work with EDuke32 and related ports
 
