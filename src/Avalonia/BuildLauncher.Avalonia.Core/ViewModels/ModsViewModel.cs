@@ -58,13 +58,6 @@ namespace BuildLauncher.ViewModels
         #region Relay Commands
 
         /// <summary>
-        /// VM initialization
-        /// </summary>
-        [RelayCommand]
-        private Task InitializeAsync() => Task.CompletedTask;
-
-
-        /// <summary>
         /// Open mods folder
         /// </summary>
         [RelayCommand]

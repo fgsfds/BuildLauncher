@@ -73,13 +73,6 @@ namespace BuildLauncher.ViewModels
         #region Relay Commands
 
         /// <summary>
-        /// VM initialization
-        /// </summary>
-        [RelayCommand]
-        private Task InitializeAsync() => Task.CompletedTask;
-
-
-        /// <summary>
         /// Start selected map/campaign
         /// </summary>
         /// <param name="command">Port to start map/campaign with</param>

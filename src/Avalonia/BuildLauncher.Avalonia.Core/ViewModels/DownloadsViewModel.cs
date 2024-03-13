@@ -94,14 +94,13 @@ namespace BuildLauncher.ViewModels
         /// <summary>
         /// VM initialization
         /// </summary>
-        [RelayCommand]
-        private Task InitializeAsync() => UpdateAsync(true);
+        public Task InitializeAsync() => UpdateAsync();
 
         /// <summary>
         /// Update downloadable mods list
         /// </summary>
         /// <param name="useCache">Update from cache</param>
-        private async Task UpdateAsync(bool useCache)
+        private async Task UpdateAsync()
         {
             await _downloadableModsProvider.UpdateCachedListAsync().ConfigureAwait(false);
 

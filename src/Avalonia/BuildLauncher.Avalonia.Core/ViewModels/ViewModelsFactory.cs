@@ -43,7 +43,6 @@ namespace BuildLauncher.ViewModels
                 _config
                 );
 
-            vm.InitializeCommand?.Execute(null);
             return vm;
         }
 
@@ -61,7 +60,6 @@ namespace BuildLauncher.ViewModels
                 _config
                 );
 
-            vm.InitializeCommand?.Execute(null);
             return vm;
         }
 
@@ -78,7 +76,6 @@ namespace BuildLauncher.ViewModels
                 _config
                 );
 
-            vm.InitializeCommand?.Execute(null);
             return vm;
         }
 
@@ -93,7 +90,7 @@ namespace BuildLauncher.ViewModels
                 _modsProvider
                 );
 
-            vm.InitializeCommand?.Execute(null);
+            Task.Run(vm.InitializeAsync);
             return vm;
         }
 
@@ -109,7 +106,7 @@ namespace BuildLauncher.ViewModels
                 _portsProvider.GetPort(portEnum)
                 );
 
-            vm.InitializeCommand?.Execute(null);
+            Task.Run(vm.InitializeAsync);
             return vm;
         }
     }
