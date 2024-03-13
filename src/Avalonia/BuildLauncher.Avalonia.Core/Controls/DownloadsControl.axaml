@@ -18,31 +18,51 @@
         <ListBox Name="DownloadableCampaignsList"
                  Grid.Row="0" Grid.Column="0"
                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                 HorizontalAlignment="Stretch"
                  Margin="0,0,2,0"
                  Padding="2,35,2,2"
+                 Grid.IsSharedSizeScope="True"
                  ItemsSource="{Binding DownloadableCampaignsList}"
                  SelectedItem="{Binding SelectedDownloadableMod}">
 
-            <ListBox.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <WrapPanel Orientation="Vertical" />
-                </ItemsPanelTemplate>
-            </ListBox.ItemsPanel>
-
-            <ListBox.ContextMenu>
-                <ContextMenu>
-                </ContextMenu>
-            </ListBox.ContextMenu>
-
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
+
+                    <Grid HorizontalAlignment="Stretch">
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="auto" SharedSizeGroup="Version1"/>
+                            <ColumnDefinition Width="auto" SharedSizeGroup="Size1"/>
+                            <ColumnDefinition Width="auto" SharedSizeGroup="Status1"/>
+                        </Grid.ColumnDefinitions>
 
                         <TextBlock Text="{Binding Name}"
+                                   Grid.Column="0"
                                    VerticalAlignment="Center"
+                                   HorizontalAlignment="Left"
                                    Margin="10"/>
 
-                    </StackPanel>
+                        <TextBlock Text="{Binding VersionString}"
+                                   Grid.Column="1"
+                                   VerticalAlignment="Center"
+                                   HorizontalAlignment="Right"
+                                   Margin="10"/>
+
+                        <TextBlock Text="{Binding FileSizeString}"
+                                   Grid.Column="2"
+                                   VerticalAlignment="Center"
+                                   HorizontalAlignment="Right"
+                                   Margin="10"/>
+
+                        <TextBlock Text="{Binding Status}"
+                                   Grid.Column="3"
+                                   VerticalAlignment="Center"
+                                   HorizontalAlignment="Right"
+                                   FontWeight="Bold"
+                                   Margin="10"/>
+                    </Grid>
+
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
@@ -60,24 +80,48 @@
                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                  Margin="2,0"
                  Padding="2,35,2,2"
+                 Grid.IsSharedSizeScope="True"
                  ItemsSource="{Binding DownloadableMapsList}"
                  SelectedItem="{Binding SelectedDownloadableMod}">
 
-            <ListBox.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <WrapPanel Orientation="Vertical" />
-                </ItemsPanelTemplate>
-            </ListBox.ItemsPanel>
-
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
+
+                    <Grid HorizontalAlignment="Stretch">
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="auto" SharedSizeGroup="Version2"/>
+                            <ColumnDefinition Width="auto" SharedSizeGroup="Size2"/>
+                            <ColumnDefinition Width="auto" SharedSizeGroup="Status2"/>
+                        </Grid.ColumnDefinitions>
 
                         <TextBlock Text="{Binding Name}"
+                                   Grid.Column="0"
                                    VerticalAlignment="Center"
+                                   HorizontalAlignment="Left"
                                    Margin="10"/>
 
-                    </StackPanel>
+                        <TextBlock Text="{Binding VersionString}"
+                                   Grid.Column="1"
+                                   VerticalAlignment="Center"
+                                   HorizontalAlignment="Right"
+                                   Margin="10"/>
+
+                        <TextBlock Text="{Binding FileSizeString}"
+                                   Grid.Column="2"
+                                   VerticalAlignment="Center"
+                                   HorizontalAlignment="Right"
+                                   Margin="10"/>
+
+                        <TextBlock Text="{Binding Status}"
+                                   Grid.Column="3"
+                                   VerticalAlignment="Center"
+                                   HorizontalAlignment="Right"
+                                   FontWeight="Bold"
+                                   Margin="10"/>
+                    </Grid>
+
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
@@ -95,29 +139,48 @@
                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                  Margin="2,0,0,0"
                  Padding="2,35,2,2"
+                 Grid.IsSharedSizeScope="True"
                  ItemsSource="{Binding DownloadableModsList}"
                  SelectedItem="{Binding SelectedDownloadableMod}">
 
-            <ListBox.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <WrapPanel Orientation="Vertical" />
-                </ItemsPanelTemplate>
-            </ListBox.ItemsPanel>
-
-            <ListBox.ContextMenu>
-                <ContextMenu>
-                </ContextMenu>
-            </ListBox.ContextMenu>
-
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
+
+                    <Grid HorizontalAlignment="Stretch">
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="auto" SharedSizeGroup="Version3"/>
+                            <ColumnDefinition Width="auto" SharedSizeGroup="Size3"/>
+                            <ColumnDefinition Width="auto" SharedSizeGroup="Status3"/>
+                        </Grid.ColumnDefinitions>
 
                         <TextBlock Text="{Binding Name}"
+                                   Grid.Column="0"
                                    VerticalAlignment="Center"
+                                   HorizontalAlignment="Left"
                                    Margin="10"/>
 
-                    </StackPanel>
+                        <TextBlock Text="{Binding VersionString}"
+                                   Grid.Column="1"
+                                   VerticalAlignment="Center"
+                                   HorizontalAlignment="Right"
+                                   Margin="10"/>
+
+                        <TextBlock Text="{Binding FileSizeString}"
+                                   Grid.Column="2"
+                                   VerticalAlignment="Center"
+                                   HorizontalAlignment="Right"
+                                   Margin="10"/>
+
+                        <TextBlock Text="{Binding Status}"
+                                   Grid.Column="3"
+                                   VerticalAlignment="Center"
+                                   HorizontalAlignment="Right"
+                                   FontWeight="Bold"
+                                   Margin="10"/>
+                    </Grid>
+
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>

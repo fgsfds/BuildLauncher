@@ -1,4 +1,5 @@
 ﻿using Common.Enums;
+using Common.Helpers;
 using System.Text;
 using System.Text.Json.Serialization;
 
@@ -25,6 +26,36 @@ namespace Mods.Serializable
         public string Description { get; set; }
 
         public long FileSize { get; set; }
+
+        [JsonIgnore]
+        public bool IsInstalled { get; set; }
+
+        [JsonIgnore]
+        public bool HasNewerVersion { get; set; }
+
+        [JsonIgnore]
+        public string Status
+        {
+            get
+            {
+                if (HasNewerVersion)
+                {
+                    return "Update available";
+                }
+                if (IsInstalled)
+                {
+                    return "Installed";
+                }
+
+                return string.Empty;
+            }
+        }
+
+        [JsonIgnore]
+        public string VersionString => $"v{Version:0.0#}";
+
+        [JsonIgnore]
+        public string FileSizeString => FileSize.ToSizeString();
 
 
         public string ToMarkdownString()
