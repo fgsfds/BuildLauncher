@@ -29,17 +29,17 @@ namespace BuildLauncher.ViewModels
         /// <summary>
         /// List of downloadanle campaigns and maps
         /// </summary>
-        public ImmutableList<DownloadableMod> DownloadableCampaignsList => _downloadableModsProvider.GetDownloadableMods(Game.GameEnum, ModTypeEnum.Campaign);
+        public ImmutableList<DownloadableMod> DownloadableCampaignsList => _downloadableModsProvider.GetDownloadableMods(Game, ModTypeEnum.Campaign);
 
         /// <summary>
         /// List of downloadanle campaigns and maps
         /// </summary>
-        public ImmutableList<DownloadableMod> DownloadableMapsList => _downloadableModsProvider.GetDownloadableMods(Game.GameEnum, ModTypeEnum.Map);
+        public ImmutableList<DownloadableMod> DownloadableMapsList => _downloadableModsProvider.GetDownloadableMods(Game, ModTypeEnum.Map);
 
         /// <summary>
         /// List of downloadanle autoload mods
         /// </summary>
-        public ImmutableList<DownloadableMod> DownloadableModsList => _downloadableModsProvider.GetDownloadableMods(Game.GameEnum, ModTypeEnum.Autoload);
+        public ImmutableList<DownloadableMod> DownloadableModsList => _downloadableModsProvider.GetDownloadableMods(Game, ModTypeEnum.Autoload);
 
         /// <summary>
         /// Download/install progress

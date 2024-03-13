@@ -16,6 +16,7 @@ namespace Mods.Providers
         private ImmutableList<DownloadableMod>? _mods;
         private readonly SemaphoreSlim _semaphore = new(1);
         private readonly ArchiveTools _archiveTools;
+        private readonly InstalledModsProvider _installedModsProvider;
 
         /// <summary>
         /// Operation progress
@@ -25,9 +26,13 @@ namespace Mods.Providers
         public delegate void ModDownloaded(ModTypeEnum modType);
         public event ModDownloaded NotifyModDownloaded;
 
-        public DownloadableModsProvider(ArchiveTools archiveTools)
+        public DownloadableModsProvider(
+            ArchiveTools archiveTools,
+            InstalledModsProvider installedModsProvider
+            )
         {
             _archiveTools = archiveTools;
+            _installedModsProvider = installedModsProvider;
         }
 
         public async Task DownloadModAsync(DownloadableMod mod, IGame game)
@@ -67,31 +72,28 @@ namespace Mods.Providers
         /// </summary>
         /// <param name="gameEnum">Game enum</param>
         /// <param name="modTypeEnum">Mod type enum</param>
-        public ImmutableList<DownloadableMod> GetDownloadableMods(GameEnum gameEnum, ModTypeEnum modTypeEnum)
+        public ImmutableList<DownloadableMod> GetDownloadableMods(IGame game, ModTypeEnum modTypeEnum)
         {
-            var result = _mods?.Where(x => x.Game == gameEnum && x.ModType == modTypeEnum);
+            var result = _mods?.Where(x => x.Game == game.GameEnum && x.ModType == modTypeEnum);
 
             if (result is null)
             {
                 return [];
             }
 
-            return [.. result];
-        }
+            var installedMods = _installedModsProvider.GetMods(game, modTypeEnum);
 
-
-        /// <summary>
-        /// Get list of downloadable mods
-        /// </summary>
-        /// <param name="gameEnum">Game enum</param>
-        /// <param name="modTypeEnums">List of mod type enums</param>
-        public ImmutableList<DownloadableMod> GetDownloadableMods(GameEnum gameEnum, IEnumerable<ModTypeEnum> modTypeEnums)
-        {
-            var result = _mods?.Where(x => x.Game == gameEnum && modTypeEnums.Contains(x.ModType));
-
-            if (result is null)
+            foreach (var downloadableMod in result)
             {
-                return [];
+                if (installedMods.TryGetValue(downloadableMod.Guid, out var installedMod))
+                {
+                    downloadableMod.IsInstalled = true;
+
+                    if (downloadableMod.Version > installedMod.Version)
+                    {
+                        downloadableMod.HasNewerVersion = true;
+                    }
+                }
             }
 
             return [.. result];
