@@ -44,7 +44,17 @@ namespace Ports.Ports
         /// <inheritdoc/>
         public override Func<GitHubReleaseAsset, bool> WindowsReleasePredicate => throw new NotImplementedException();
 
+        /// <inheritdoc/>
         public override int? InstalledVersion => null;
+
+        /// <inheritdoc/>
+        public override string AddDirectoryParam => throw new NotImplementedException();
+
+        /// <inheritdoc/>
+        public override string AddFileParam => throw new NotImplementedException();
+
+        /// <inheritdoc/>
+        public override string AddDefParam => throw new NotImplementedException();
 
         /// <inheritdoc/>
         protected override void GetAutoloadModsArgs(StringBuilder sb, IGame provider, IMod campaign, Dictionary<Guid, IMod> mods) => throw new NotImplementedException();

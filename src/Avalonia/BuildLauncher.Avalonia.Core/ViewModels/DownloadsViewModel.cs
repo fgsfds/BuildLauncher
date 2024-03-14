@@ -130,8 +130,6 @@ namespace BuildLauncher.ViewModels
 
             _downloadableModsProvider.Progress.ProgressChanged -= ProgressChanged;
             ProgressChanged(null, 0);
-
-            Game.CreateCombinedMod();
         }
         private bool DownloadSelectedModCanExecute => SelectedDownloadableMod is not null;
 

@@ -31,6 +31,15 @@ namespace Ports.Ports.EDuke32
         public override string ConfigFile => "voidsw.cfg";
 
         /// <inheritdoc/>
+        public override string AddDirectoryParam => "-j";
+
+        /// <inheritdoc/>
+        public override string AddFileParam => "-g";
+
+        /// <inheritdoc/>
+        public override string AddDefParam => "-mh";
+
+        /// <inheritdoc/>
         protected override void GetStartCampaignArgs(StringBuilder sb, IGame game, IMod mod)
         {
             mod.ThrowIfNotType<WangCampaign>(out var wangCamp);
@@ -60,46 +69,6 @@ namespace Ports.Ports.EDuke32
                 ThrowHelper.NotImplementedException($"Mod type {wangCamp.ModType} is not supported");
                 return;
             }
-        }
-
-        // <inheritdoc/>
-        protected override void GetAutoloadModsArgs(StringBuilder sb, IGame game, IMod campaign, Dictionary<Guid, IMod> mods)
-        {
-            if (!mods.Any())
-            {
-                return;
-            }
-
-            sb.Append($@" -j""{game.ModsFolderPath}""");
-
-            foreach (var mod in mods)
-            {
-                mod.Value.ThrowIfNotType<AutoloadMod>(out var autoloadMod);
-
-                if (!autoloadMod.IsEnabled)
-                {
-                    //skipping disabled mods
-                    continue;
-                }
-
-                if (!autoloadMod.SupportedPorts?.Contains(PortEnum) ?? false)
-                {
-                    //skipping mods not supported by the current port
-                    continue;
-                }
-
-                if (campaign.Addon is not null &&
-                    autoloadMod.SupportedAddons is not null &&
-                    autoloadMod.SupportedAddons.Contains(campaign.Addon))
-                {
-                    //skipping mods not supported by the current addon
-                    continue;
-                }
-
-                sb.Append($@" -g""{mod.Value.FileName}""");
-            }
-
-            sb.Append($@" -j""{Path.Combine(game.SpecialFolderPath, Consts.CombinedModFolder)}"" -mh""{Consts.CombinedDef}""");
         }
 
         /// <summary>

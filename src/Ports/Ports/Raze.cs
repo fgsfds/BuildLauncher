@@ -53,6 +53,15 @@ namespace Ports.Ports
             : null;
 
         /// <inheritdoc/>
+        public override string AddDirectoryParam => throw new NotImplementedException();
+
+        /// <inheritdoc/>
+        public override string AddFileParam => throw new NotImplementedException();
+
+        /// <inheritdoc/>
+        public override string AddDefParam => throw new NotImplementedException();
+
+        /// <inheritdoc/>
         protected override void BeforeStart(IGame game, IMod campaign)
         {
             var config = Path.Combine(FolderPath, ConfigFile);
@@ -328,9 +337,9 @@ namespace Ports.Ports
         /// <summary>
         /// Remove route 66 art files overrides
         /// </summary>
-        private static void FixRoute66Files(IGame game, IMod campaign)
+        private static void FixRoute66Files(IGame game, IMod _)
         {
-            if (game is RedneckGame && campaign is RedneckCampaign rCamp)
+            if (game is RedneckGame)
             {
                 var tilesA2 = Path.Combine(game.GameInstallFolder, "TILES024.ART");
                 var tilesB2 = Path.Combine(game.GameInstallFolder, "TILES025.ART");

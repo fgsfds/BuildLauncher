@@ -73,8 +73,6 @@ namespace Games.Games
             {
                 Directory.CreateDirectory(SpecialFolderPath);
             }
-
-            CreateCombinedMod();
         }
 
 
@@ -165,7 +163,7 @@ namespace Games.Games
 
             StringBuilder newDef = new();
 
-            var files = _installedModsProvider.GetMods(this, ModTypeEnum.Autoload);
+            var files = GetAutoloadMods(true);
 
             if (files.Count == 0)
             {

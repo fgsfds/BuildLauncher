@@ -27,6 +27,15 @@ namespace Ports.Ports.EDuke32
         public override string ConfigFile => "eduke32.cfg";
 
         /// <inheritdoc/>
+        public override string AddDirectoryParam => "-j ";
+
+        /// <inheritdoc/>
+        public override string AddFileParam => "-g ";
+
+        /// <inheritdoc/>
+        public override string AddDefParam => "-mh ";
+
+        /// <inheritdoc/>
         public override List<GameEnum> SupportedGames =>
             [
             GameEnum.Duke3D,
@@ -44,6 +53,8 @@ namespace Ports.Ports.EDuke32
         protected override void BeforeStart(IGame game, IMod campaign)
         {
             FixGrpInConfig();
+
+            game.CreateCombinedMod();
 
             FixRoute66Files(game, campaign);
         }
@@ -92,7 +103,7 @@ namespace Ports.Ports.EDuke32
                 return;
             }
 
-            sb.Append($@" -j ""{game.ModsFolderPath}""");
+            sb.Append($@" {AddDirectoryParam}""{game.ModsFolderPath}""");
 
             foreach (var mod in mods)
             {
@@ -118,10 +129,10 @@ namespace Ports.Ports.EDuke32
                     continue;
                 }
 
-                sb.Append($@" -g ""{mod.Value.FileName}""");
+                sb.Append($@" {AddFileParam}""{mod.Value.FileName}""");
             }
 
-            sb.Append($@" -j ""{Path.Combine(game.SpecialFolderPath, Consts.CombinedModFolder)}"" -mh ""{Consts.CombinedDef}""");
+            sb.Append($@" {AddDirectoryParam}""{Path.Combine(game.SpecialFolderPath, Consts.CombinedModFolder)}"" {AddDefParam}""{Consts.CombinedDef}""");
         }
 
         /// <inheritdoc/>
@@ -174,7 +185,7 @@ namespace Ports.Ports.EDuke32
         /// </summary>
         private static void FixRoute66Files(IGame game, IMod campaign)
         {
-            if (game is RedneckGame && campaign is RedneckCampaign rCamp)
+            if (game is RedneckGame rGame && rGame.IsRoute66Installed && campaign is RedneckCampaign rCamp) 
             {
                 var tilesA1 = Path.Combine(game.GameInstallFolder, "TILESA66.ART");
                 var tilesA2 = Path.Combine(game.GameInstallFolder, "TILES024.ART");

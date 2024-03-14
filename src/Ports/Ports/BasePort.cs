@@ -52,14 +52,25 @@ namespace Ports.Ports
         public abstract int? InstalledVersion { get; }
 
         /// <summary>
+        /// Cmd parameter to add folder to search path
+        /// </summary>
+        public abstract string AddDirectoryParam { get; }
+
+        /// <summary>
+        /// Cmd parameter to load additional file
+        /// </summary>
+        public abstract string AddFileParam { get; }
+
+        /// <summary>
+        /// Cmd parameter to load additional Def file
+        /// </summary>
+        public abstract string AddDefParam { get; }
+
+
+        /// <summary>
         /// Path to port install folder
         /// </summary>
         public virtual string FolderPath => Path.Combine(CommonProperties.PortsFolderPath, PortFolder);
-
-        /// <summary>
-        /// Path to port exe
-        /// </summary>
-        public string FullPathToExe => Path.Combine(FolderPath, Exe);
 
         /// <summary>
         /// Is port installed
@@ -72,6 +83,11 @@ namespace Ports.Ports
         /// By default is the same as <see cref="Name"/>
         /// </summary>
         protected string PortFolder => Name;
+
+        /// <summary>
+        /// Path to port exe
+        /// </summary>
+        public string FullPathToExe => Path.Combine(FolderPath, Exe);
 
 
         /// <summary>
