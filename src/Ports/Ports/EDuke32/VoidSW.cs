@@ -51,7 +51,7 @@ namespace Ports.Ports.EDuke32
 
             sb.Append($@" -usecwd -nosetup");
 
-            AddMusicFolder(sb, game);
+            AddMusicFolder(sb, wGame);
 
             sb.Append($@" -j""{wGame.GameInstallFolder}"" -addon{(byte)wCamp.AddonEnum}");
 
@@ -62,11 +62,20 @@ namespace Ports.Ports.EDuke32
 
             if (wCamp.ModType is ModTypeEnum.Campaign)
             {
-                sb.Append($@" -j""{game.CampaignsFolderPath}"" -g""{wCamp.FileName}""");
+                sb.Append($@" -j""{wGame.CampaignsFolderPath}"" -g""{wCamp.FileName}""");
             }
             else if (wCamp.ModType is ModTypeEnum.Map)
             {
-                sb.Append($@" -j""{game.CampaignsFolderPath}"" -g""{wCamp.FileName}"" -map ""{wCamp.StartupFile}""");
+                if (wCamp.IsLoose)
+                {
+                    sb.Append($@" -j""{Path.Combine(wGame.MapsFolderPath)}""");
+                }
+                else
+                {
+                    sb.Append($@" -g""{Path.Combine(wGame.MapsFolderPath, wCamp.FileName)}""");
+                }
+
+                sb.Append($@" -map ""{wCamp.StartupFile}""");
             }
             else
             {

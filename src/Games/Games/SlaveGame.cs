@@ -59,7 +59,8 @@ namespace Games.Games
                     SupportedPorts = null,
                     Url = null,
                     IsOfficial = true,
-                    PathToFile = null
+                    PathToFile = null,
+                    IsLoose = false
                 });
             }
 

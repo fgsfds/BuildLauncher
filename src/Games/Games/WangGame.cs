@@ -64,7 +64,8 @@ namespace Games.Games
                     Url = null,
                     IsOfficial = true,
                     PathToFile = null,
-                    StartupFile = null
+                    StartupFile = null,
+                    IsLoose = false
                 });
 
                 if (IsWantonInstalled)
@@ -91,7 +92,8 @@ namespace Games.Games
                         Url = null,
                         IsOfficial = true,
                         PathToFile = null,
-                        StartupFile = null
+                        StartupFile = null,
+                        IsLoose = false
                     });
                 }
 
@@ -119,7 +121,8 @@ namespace Games.Games
                         Url = null,
                         IsOfficial = true,
                         PathToFile = null,
-                        StartupFile = null
+                        StartupFile = null,
+                        IsLoose = false
                     });
                 }
             }

@@ -76,6 +76,11 @@ namespace Common.Interfaces
         string? Addon { get; }
 
         /// <summary>
+        /// Is loose unarchived file
+        /// </summary>
+        bool IsLoose { get; init; }
+
+        /// <summary>
         /// Create markdown description of the mod
         /// </summary>
         string ToMarkdownString();

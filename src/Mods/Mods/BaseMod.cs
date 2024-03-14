@@ -51,6 +51,8 @@ namespace Mods.Mods
         /// <inheritdoc/>
         public string? Addon { get; protected set; }
 
+        public required bool IsLoose { get; init; }
+
 
         public override string ToString() => DisplayName;
 

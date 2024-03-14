@@ -6,6 +6,7 @@ using Games.Games;
 using Mods.Mods;
 using Ports.Providers;
 using System.Text;
+using System.Xml.Linq;
 
 namespace Ports.Ports.EDuke32
 {
@@ -94,7 +95,16 @@ namespace Ports.Ports.EDuke32
             }
             else if (camp.ModType is ModTypeEnum.Map)
             {
-                sb.Append($@" -g ""{Path.Combine(game.MapsFolderPath, camp.FileName)}"" -map ""{camp.StartupFile}""");
+                if (camp.IsLoose)
+                {
+                    sb.Append($@" -j ""{Path.Combine(game.MapsFolderPath)}""");
+                }
+                else
+                {
+                    sb.Append($@" -g ""{Path.Combine(game.MapsFolderPath, camp.FileName)}""");
+                }
+
+                sb.Append($@" -map ""{camp.StartupFile}""");
             }
             else
             {

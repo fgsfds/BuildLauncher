@@ -76,7 +76,6 @@ namespace Ports.Ports
 
                     [FileSearch.Directories]
                     Path=.
-                    Path=.
 
                     [SoundfontSearch.Directories]
                     Path=$PROGDIR/soundfonts
@@ -99,7 +98,7 @@ namespace Ports.Ports
                 File.WriteAllText(config, text);
             }
 
-            AddGamePathsToConfig(game.GameInstallFolder, game.ModsFolderPath, config);
+            AddGamePathsToConfig(game.GameInstallFolder, game.ModsFolderPath, game.MapsFolderPath, config);
 
             FixRoute66Files(game, campaign);
         }
@@ -167,7 +166,7 @@ namespace Ports.Ports
             if (camp.AddonEnum is DukeAddonEnum.WorldTour)
             {
                 var config = Path.Combine(FolderPath, ConfigFile);
-                AddGamePathsToConfig(game.DukeWTInstallPath, game.ModsFolderPath, config);
+                AddGamePathsToConfig(game.DukeWTInstallPath, game.ModsFolderPath, game.MapsFolderPath, config);
 
                 return;
             }
@@ -183,7 +182,7 @@ namespace Ports.Ports
             }
             else if (camp.ModType is ModTypeEnum.Map)
             {
-                sb.Append($@" -file ""{Path.Combine(game.MapsFolderPath, camp.FileName)}"" -map ""{camp.StartupFile}""");
+                GetMapArgs(sb, game, camp);
             }
             else
             {
@@ -191,6 +190,7 @@ namespace Ports.Ports
                 return;
             }
         }
+
 
         private void GetBloodArgs(StringBuilder sb, BloodGame game, BloodCampaign camp)
         {
@@ -221,7 +221,7 @@ namespace Ports.Ports
             }
             else if (camp.ModType is ModTypeEnum.Map)
             {
-                sb.Append($@" -file ""{Path.Combine(game.MapsFolderPath, camp.FileName)}"" -map ""{camp.StartupFile}""");
+                GetMapArgs(sb, game, camp);
             }
             else
             {
@@ -252,7 +252,7 @@ namespace Ports.Ports
             }
             else if (camp.ModType is ModTypeEnum.Map)
             {
-                sb.Append($@" -file ""{Path.Combine(game.MapsFolderPath, camp.FileName)}"" -map ""{camp.StartupFile}""");
+                GetMapArgs(sb, game, camp);
             }
             else
             {
@@ -272,7 +272,7 @@ namespace Ports.Ports
             if (camp.AddonEnum is RedneckAddonEnum.Again)
             {
                 var config = Path.Combine(FolderPath, ConfigFile);
-                AddGamePathsToConfig(game.AgainInstallPath, game.ModsFolderPath, config);
+                AddGamePathsToConfig(game.AgainInstallPath, game.ModsFolderPath, game.MapsFolderPath, config);
             }
 
             if (camp.FileName is null)
@@ -286,7 +286,7 @@ namespace Ports.Ports
             }
             else if (camp.ModType is ModTypeEnum.Map)
             {
-                sb.Append($@" -file ""{Path.Combine(game.MapsFolderPath, camp.FileName)}"" -map ""{camp.StartupFile}""");
+                GetMapArgs(sb, game, camp);
             }
             else
             {
@@ -308,12 +308,27 @@ namespace Ports.Ports
             }
             else if (camp.ModType is ModTypeEnum.Map)
             {
-                sb.Append($@" -file ""{Path.Combine(game.MapsFolderPath, camp.FileName)}"" -map ""{camp.StartupFile}""");
+                GetMapArgs(sb, game, camp);
             }
             else
             {
                 ThrowHelper.NotImplementedException($"Mod type {camp.ModType} is not supported");
                 return;
+            }
+        }
+
+        /// <summary>
+        /// Get startup args for packed and loose maps
+        /// </summary>
+        private static void GetMapArgs(StringBuilder sb, BaseGame game, BaseMod camp)
+        {
+            if (camp.IsLoose)
+            {
+                sb.Append($@" -file ""{Path.Combine(game.MapsFolderPath, camp.StartupFile!)}"" -map ""{camp.StartupFile}""");
+            }
+            else
+            {
+                sb.Append($@" -file ""{Path.Combine(game.MapsFolderPath, camp.FileName!)}"" -map ""{camp.StartupFile}""");
             }
         }
 
@@ -367,34 +382,55 @@ namespace Ports.Ports
         /// Add paths to game and mods folder to the config
         /// </summary>
         [Obsolete("Remove if this ever implemented https://github.com/ZDoom/Raze/issues/1060")]
-        private static void AddGamePathsToConfig(string gameFolder, string modsFolder, string config)
+        private static void AddGamePathsToConfig(string gameFolder, string modsFolder, string mapsFolder, string config)
         {
             var contents = File.ReadAllLines(config);
+
+            StringBuilder sb = new(contents.Length);
 
             for (var i = 0; i < contents.Length; i++)
             {
                 if (contents[i].Equals("[GameSearch.Directories]"))
                 {
-                    var path = gameFolder.Replace('\\', '/');
+                    sb.AppendLine(contents[i]);
 
-                    contents[i + 1] = $"Path={path}";
+                    var path = gameFolder.Replace('\\', '/');
+                    sb.AppendLine("Path=" + path);
+
+                    do
+                    {
+                        i++;
+                    }
+                    while (!string.IsNullOrWhiteSpace(contents[i]));
+
+                    sb.AppendLine();
                     continue;
                 }
+
                 if (contents[i].Equals("[FileSearch.Directories]"))
                 {
-                    var path = modsFolder.Replace('\\', '/');
+                    sb.AppendLine(contents[i]);
 
-                    contents[i + 1] = $"Path={path}";
+                    var path = gameFolder.Replace('\\', '/');
+                    sb.AppendLine("Path=" + path);
+                    path = modsFolder.Replace('\\', '/');
+                    sb.AppendLine("Path=" + path);
 
-                    path = gameFolder.Replace('\\', '/');
+                    do
+                    {
+                        i++;
+                    }
+                    while (!string.IsNullOrWhiteSpace(contents[i]));
 
-                    contents[i + 2] = $"Path={path}";
-
-                    break;
+                    sb.AppendLine();
+                    continue;
                 }
+
+                sb.AppendLine(contents[i]);
             }
 
-            File.WriteAllLines(config, contents);
+            var result = sb.ToString();
+            File.WriteAllText(config, result);
         }
     }
 }

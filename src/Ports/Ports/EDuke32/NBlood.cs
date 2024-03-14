@@ -77,7 +77,16 @@ namespace Ports.Ports.EDuke32
             }
             else if (bCamp.ModType is ModTypeEnum.Map)
             {
-                sb.Append($@" -g ""{Path.Combine(bGame.MapsFolderPath, bCamp.FileName)}"" -map ""{bCamp.StartupFile}""");
+                if (bCamp.IsLoose)
+                {
+                    sb.Append($@" -j ""{Path.Combine(game.MapsFolderPath)}""");
+                }
+                else
+                {
+                    sb.Append($@" -g ""{Path.Combine(game.MapsFolderPath, bCamp.FileName)}""");
+                }
+
+                sb.Append($@" -map ""{bCamp.StartupFile}""");
             }
             else
             {

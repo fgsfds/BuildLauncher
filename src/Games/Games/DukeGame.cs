@@ -97,7 +97,8 @@ namespace Games.Games
                     SupportedPorts = null,
                     Url = null,
                     IsOfficial = true,
-                    PathToFile = null
+                    PathToFile = null,
+                    IsLoose = false
                 });
 
                 if (IsCaribbeanInstalled)
@@ -123,7 +124,8 @@ namespace Games.Games
                         SupportedPorts = [PortEnum.Raze, PortEnum.BuildGDX],
                         Url = null,
                         IsOfficial = true,
-                        PathToFile = null
+                        PathToFile = null,
+                        IsLoose = false
                     });
                 }
                 if (IsNuclearWinterInstalled)
@@ -147,7 +149,8 @@ namespace Games.Games
                         SupportedPorts = null,
                         Url = null,
                         IsOfficial = true,
-                        PathToFile = null
+                        PathToFile = null,
+                        IsLoose = false
                     });
                 }
                 if (IsDukeDCInstalled)
@@ -174,7 +177,8 @@ namespace Games.Games
                         SupportedPorts = [PortEnum.Raze, PortEnum.BuildGDX],
                         Url = null,
                         IsOfficial = true,
-                        PathToFile = null
+                        PathToFile = null,
+                        IsLoose = false
                     });
                 }
             }
@@ -201,7 +205,8 @@ namespace Games.Games
                     Version = null,
                     Url = null,
                     IsOfficial = true,
-                    PathToFile = null
+                    PathToFile = null,
+                    IsLoose = false
                 });
             }
 
@@ -226,7 +231,8 @@ namespace Games.Games
                     Version = null,
                     Url = null,
                     IsOfficial = true,
-                    PathToFile = null
+                    PathToFile = null,
+                    IsLoose = false
                 });
             }
 

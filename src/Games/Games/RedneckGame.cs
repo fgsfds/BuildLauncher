@@ -74,7 +74,8 @@ namespace Games.Games
                     SupportedPorts = null,
                     Url = null,
                     IsOfficial = true,
-                    PathToFile = null
+                    PathToFile = null,
+                    IsLoose = false
                 });
 
                 if (IsRoute66Installed)
@@ -96,7 +97,8 @@ namespace Games.Games
                         SupportedPorts = null,
                         Url = null,
                         IsOfficial = true,
-                        PathToFile = null
+                        PathToFile = null,
+                        IsLoose = false
                     });
                 }
             }
@@ -122,7 +124,8 @@ namespace Games.Games
                     SupportedPorts = null,
                     Url = null,
                     IsOfficial = true,
-                    PathToFile = null
+                    PathToFile = null,
+                    IsLoose = false
                 });
             }
 

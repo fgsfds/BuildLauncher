@@ -122,23 +122,20 @@ namespace Mods.Providers
 
             await Task.Run(() =>
             {
-                string[] files;
-                ModTypeEnum modTypeEnum;
+                IEnumerable<string> files;
 
-                files = Directory.GetFiles(game.CampaignsFolderPath);
-                modTypeEnum = ModTypeEnum.Campaign;
-                var camps = GetModsList(game, modTypeEnum, files);
-                _cache[game.GameEnum].Add(modTypeEnum, camps);
+                files = Directory.GetFiles(game.CampaignsFolderPath, "*.zip");
+                var camps = GetModsList(game, ModTypeEnum.Campaign, files);
+                _cache[game.GameEnum].Add(ModTypeEnum.Campaign, camps);
 
-                files = Directory.GetFiles(game.MapsFolderPath);
-                modTypeEnum = ModTypeEnum.Map;
-                var maps = GetModsList(game, modTypeEnum, files);
-                _cache[game.GameEnum].Add(modTypeEnum, maps);
+                files = Directory.GetFiles(game.MapsFolderPath, "*.zip");
+                files = files.Union(Directory.GetFiles(game.MapsFolderPath, "*.map"));
+                var maps = GetModsList(game, ModTypeEnum.Map, files);
+                _cache[game.GameEnum].Add(ModTypeEnum.Map, maps);
 
-                files = Directory.GetFiles(game.ModsFolderPath);
-                modTypeEnum = ModTypeEnum.Autoload;
-                var mods = GetModsList(game, modTypeEnum, files);
-                _cache[game.GameEnum].Add(modTypeEnum, mods);
+                files = Directory.GetFiles(game.ModsFolderPath, "*.zip");
+                var mods = GetModsList(game, ModTypeEnum.Autoload, files);
+                _cache[game.GameEnum].Add(ModTypeEnum.Autoload, mods);
             });
         }
 
@@ -211,6 +208,7 @@ namespace Mods.Providers
             string? url = null;
             string? author = null;
             Stream? image = null;
+            bool isLoose = false;
 
             if (ArchiveFactory.IsArchive(file, out var _))
             {
@@ -246,6 +244,11 @@ namespace Mods.Providers
                     }
                 }
             }
+            else if (file.EndsWith(".map", StringComparison.InvariantCultureIgnoreCase))
+            {
+                isLoose = true;
+                startupFile = Path.GetFileName(file);
+            }
 
             if (modTypeEnum is ModTypeEnum.Autoload)
             {
@@ -266,7 +269,8 @@ namespace Mods.Providers
                     IsEnabled = isEnabled,
                     IsOfficial = false,
                     PathToFile = file,
-                    StartupFile = null
+                    StartupFile = null,
+                    IsLoose = isLoose
                 };
             }
             else
@@ -287,7 +291,8 @@ namespace Mods.Providers
                         Author = author,
                         Url = url,
                         IsOfficial = false,
-                        PathToFile = file
+                        PathToFile = file,
+                        IsLoose = isLoose
                     };
                 }
                 else if (game.GameEnum is GameEnum.Wang)
@@ -306,7 +311,8 @@ namespace Mods.Providers
                         Url = url,
                         IsOfficial = false,
                         PathToFile = file,
-                        StartupFile = null
+                        StartupFile = null,
+                        IsLoose = isLoose
                     };
                 }
                 else if (game.GameEnum is GameEnum.Blood)
@@ -325,7 +331,8 @@ namespace Mods.Providers
                         Url = url,
                         StartupFile = startupFile!,
                         IsOfficial = false,
-                        PathToFile = file
+                        PathToFile = file,
+                        IsLoose = isLoose
                     };
                 }
                 else if (game.GameEnum is GameEnum.Fury)
@@ -343,7 +350,8 @@ namespace Mods.Providers
                         Url = url,
                         StartupFile = startupFile!,
                         IsOfficial = false,
-                        PathToFile = file
+                        PathToFile = file,
+                        IsLoose = isLoose
                     };
                 }
                 else if (game.GameEnum is GameEnum.Slave)
@@ -361,7 +369,8 @@ namespace Mods.Providers
                         Url = url,
                         StartupFile = startupFile!,
                         IsOfficial = false,
-                        PathToFile = file
+                        PathToFile = file,
+                        IsLoose = isLoose
                     };
                 }
                 else if (game.GameEnum is GameEnum.Redneck)
@@ -380,7 +389,8 @@ namespace Mods.Providers
                         Url = url,
                         StartupFile = startupFile!,
                         IsOfficial = false,
-                        PathToFile = file
+                        PathToFile = file,
+                        IsLoose = isLoose
                     };
                 }
                 else
