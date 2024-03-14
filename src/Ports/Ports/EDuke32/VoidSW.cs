@@ -39,37 +39,42 @@ namespace Ports.Ports.EDuke32
         /// <inheritdoc/>
         public override string AddDefParam => "-mh";
 
+
         /// <inheritdoc/>
         protected override void GetStartCampaignArgs(StringBuilder sb, IGame game, IMod mod)
         {
-            mod.ThrowIfNotType<WangCampaign>(out var wangCamp);
-            game.ThrowIfNotType<WangGame>(out var wangGame);
+            if (game is not WangGame wGame || mod is not WangCampaign wCamp)
+            {
+                ThrowHelper.NotImplementedException($"Mod type {mod} for game {game} is not supported");
+                return;
+            }
 
             sb.Append($@" -usecwd -nosetup");
 
             AddMusicFolder(sb, game);
 
-            sb.Append($@" -j""{wangGame.GameInstallFolder}"" -addon{(byte)wangCamp.AddonEnum}");
+            sb.Append($@" -j""{wGame.GameInstallFolder}"" -addon{(byte)wCamp.AddonEnum}");
 
-            if (wangCamp.FileName is null)
+            if (wCamp.FileName is null)
             {
                 return;
             }
 
-            if (wangCamp.ModType is ModTypeEnum.Campaign)
+            if (wCamp.ModType is ModTypeEnum.Campaign)
             {
-                sb.Append($@" -j""{game.CampaignsFolderPath}"" -g""{wangCamp.FileName}""");
+                sb.Append($@" -j""{game.CampaignsFolderPath}"" -g""{wCamp.FileName}""");
             }
-            else if (wangCamp.ModType is ModTypeEnum.Map)
+            else if (wCamp.ModType is ModTypeEnum.Map)
             {
-                sb.Append($@" -j""{game.CampaignsFolderPath}"" -g""{wangCamp.FileName}"" -map ""{wangCamp.StartupFile}""");
+                sb.Append($@" -j""{game.CampaignsFolderPath}"" -g""{wCamp.FileName}"" -map ""{wCamp.StartupFile}""");
             }
             else
             {
-                ThrowHelper.NotImplementedException($"Mod type {wangCamp.ModType} is not supported");
+                ThrowHelper.NotImplementedException($"Mod type {wCamp.ModType} is not supported");
                 return;
             }
         }
+
 
         /// <summary>
         /// Add music folders to the search list if music files don't exist in the game directory

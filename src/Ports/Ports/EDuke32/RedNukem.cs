@@ -42,16 +42,17 @@ namespace Ports.Ports.EDuke32
         /// <inheritdoc/>
         public override Func<GitHubReleaseAsset, bool> WindowsReleasePredicate => static x => x.FileName.StartsWith("rednukem_win64");
 
+
         /// <inheritdoc/>
         protected override void GetStartCampaignArgs(StringBuilder sb, IGame game, IMod mod)
         {
-            if (game is DukeGame dGame && mod is DukeCampaign dMod)
+            if (game is DukeGame dGame && mod is DukeCampaign dCamp)
             {
-                GetDukeArgs(sb, dGame, dMod);
+                GetDukeArgs(sb, dGame, dCamp);
             }
-            else if (game is RedneckGame rGame && mod is RedneckCampaign rMod)
+            else if (game is RedneckGame rGame && mod is RedneckCampaign rCamp)
             {
-                GetRedneckArgs(sb, rGame, rMod);
+                GetRedneckArgs(sb, rGame, rCamp);
             }
             else
             {
@@ -59,38 +60,12 @@ namespace Ports.Ports.EDuke32
             }
         }
 
-        private static void GetDukeArgs(StringBuilder sb, DukeGame game, DukeCampaign camp)
-        {
-            sb.Append($@" -usecwd -nosetup");
-
-            if (camp.AddonEnum is DukeAddonEnum.Duke64)
-            {
-                sb.Append(@$" -j {Path.GetDirectoryName(game.Duke64RomPath)} -gamegrp ""{Path.GetFileName(game.Duke64RomPath)}""");
-                return;
-            }
-
-            sb.Append($@" -j ""{game.GameInstallFolder}"" -addon {(byte)camp.AddonEnum}");
-
-            if (camp.FileName is null)
-            {
-                return;
-            }
-
-            if (camp.ModType is ModTypeEnum.Campaign)
-            {
-                sb.Append($@" -g ""{Path.Combine(game.CampaignsFolderPath, camp.FileName)}"" -x ""{camp.StartupFile}""");
-            }
-            else if (camp.ModType is ModTypeEnum.Map)
-            {
-                sb.Append($@" -g ""{Path.Combine(game.MapsFolderPath, camp.FileName)}"" -map ""{camp.StartupFile}""");
-            }
-            else
-            {
-                ThrowHelper.NotImplementedException($"Mod type {camp.ModType} is not supported");
-                return;
-            }
-        }
-
+        /// <summary>
+        /// Get startup agrs for Redneck Rampage
+        /// </summary>
+        /// <param name="sb">StringBuilder</param>
+        /// <param name="game">RedneckGame</param>
+        /// <param name="camp">RedneckCampaign</param>
         private static void GetRedneckArgs(StringBuilder sb, RedneckGame game, RedneckCampaign camp)
         {
             sb.Append($@" -usecwd -nosetup");

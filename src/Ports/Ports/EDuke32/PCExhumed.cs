@@ -34,43 +34,42 @@ namespace Ports.Ports.EDuke32
         /// <inheritdoc/>
         public override Func<GitHubReleaseAsset, bool> WindowsReleasePredicate => static x => x.FileName.StartsWith("pcexhumed_win64");
 
-        /// <inheritdoc/>
-        protected override void GetStartCampaignArgs(StringBuilder sb, IGame game, IMod mod)
-        {
-            if (game is SlaveGame && mod is SlaveCampaign sMod)
-            {
-                sb.Append($@" -usecwd -nosetup");
-                sb.Append(@$" -j {game.GameInstallFolder}");
-            }
-            else
-            {
-                ThrowHelper.NotImplementedException($"Mod type {mod} for game {game} is not supported");
-                return;
-            }
-
-            if (sMod.FileName is null)
-            {
-                return;
-            }
-
-            if (sMod.ModType is ModTypeEnum.Campaign)
-            {
-                sb.Append($@" -g ""{Path.Combine(game.CampaignsFolderPath, sMod.FileName)}"" -x ""{sMod.StartupFile}""");
-            }
-            else if (sMod.ModType is ModTypeEnum.Map)
-            {
-                sb.Append($@" -g ""{Path.Combine(game.MapsFolderPath, sMod.FileName)}"" -map ""{sMod.StartupFile}""");
-            }
-            else
-            {
-                ThrowHelper.NotImplementedException($"Mod type {sMod.ModType} is not supported");
-                return;
-            }
-        }
 
         /// <summary>
         /// No need to do anything
         /// </summary>
         protected override void BeforeStart(IGame game, IMod campaign) { }
+
+        /// <inheritdoc/>
+        protected override void GetStartCampaignArgs(StringBuilder sb, IGame game, IMod mod)
+        {
+            if (game is not SlaveGame sGame || mod is not SlaveCampaign sCamp)
+            {
+                ThrowHelper.NotImplementedException($"Mod type {mod} for game {game} is not supported");
+                return;
+            }
+
+            sb.Append($@" -usecwd -nosetup");
+            sb.Append(@$" -j {game.GameInstallFolder}");
+
+            if (sCamp.FileName is null)
+            {
+                return;
+            }
+
+            if (sCamp.ModType is ModTypeEnum.Campaign)
+            {
+                sb.Append($@" -g ""{Path.Combine(sGame.CampaignsFolderPath, sCamp.FileName)}"" -x ""{sCamp.StartupFile}""");
+            }
+            else if (sCamp.ModType is ModTypeEnum.Map)
+            {
+                sb.Append($@" -g ""{Path.Combine(sGame.MapsFolderPath, sCamp.FileName)}"" -map ""{sCamp.StartupFile}""");
+            }
+            else
+            {
+                ThrowHelper.NotImplementedException($"Mod type {sCamp.ModType} is not supported");
+                return;
+            }
+        }
     }
 }

@@ -49,17 +49,21 @@ namespace Ports.Ports.EDuke32
             _config = config;
         }
 
+
         /// <inheritdoc/>
         protected override void GetStartCampaignArgs(StringBuilder sb, IGame game, IMod mod)
         {
-            mod.ThrowIfNotType<FuryCampaign>(out var dukeCamp);
-            game.ThrowIfNotType<FuryGame>(out _);
+            if (game is not FuryGame || mod is not FuryCampaign fCamp)
+            {
+                ThrowHelper.NotImplementedException($"Mod type {mod} for game {game} is not supported");
+                return;
+            }
 
             sb.Append($@" -nosetup");
 
-            if (dukeCamp.ModType is ModTypeEnum.Map)
+            if (fCamp.ModType is ModTypeEnum.Map)
             {
-                sb.Append($@" -g ""{Path.Combine(game.MapsFolderPath, dukeCamp.FileName)}"" -map ""{dukeCamp.StartupFile}""");
+                sb.Append($@" -g ""{Path.Combine(game.MapsFolderPath, fCamp.FileName!)}"" -map ""{fCamp.StartupFile}""");
             }
         }
     }

@@ -1,6 +1,7 @@
 ﻿using Common.Enums;
 using Common.Helpers;
 using Common.Interfaces;
+using Mods.Mods;
 using Ports.Providers;
 using System.Text;
 
@@ -112,6 +113,37 @@ namespace Ports.Ports
             }
 
             return sb.ToString();
+        }
+
+
+        /// <summary>
+        /// Check if autoload mod works with current port and addon
+        /// </summary>
+        /// <param name="autoloadMod">Autoload mod</param>
+        /// <param name="campaign">Campaign</param>
+        protected bool ValidateAutoloadMod(AutoloadMod autoloadMod, IMod campaign)
+        {
+            if (!autoloadMod.IsEnabled)
+            {
+                //skipping disabled mods
+                return false;
+            }
+
+            if (!autoloadMod.SupportedPorts?.Contains(PortEnum) ?? false)
+            {
+                //skipping mods not supported by the current port
+                return false;
+            }
+
+            if (campaign.Addon is not null &&
+                autoloadMod.SupportedAddons is not null &&
+                !autoloadMod.SupportedAddons.Contains(campaign.Addon))
+            {
+                //skipping mods not supported by the current addon
+                return false;
+            }
+
+            return true;
         }
 
 

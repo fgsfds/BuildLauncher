@@ -61,6 +61,7 @@ namespace Ports.Ports
         /// <inheritdoc/>
         public override string AddDefParam => throw new NotImplementedException();
 
+
         /// <inheritdoc/>
         protected override void BeforeStart(IGame game, IMod campaign)
         {
@@ -92,7 +93,7 @@ namespace Ports.Ports
 
                 if (!Directory.Exists(Path.GetDirectoryName(config)))
                 {
-                    Directory.CreateDirectory(Path.GetDirectoryName(config));
+                    Directory.CreateDirectory(Path.GetDirectoryName(config)!);
                 }
 
                 File.WriteAllText(config, text);
@@ -146,24 +147,8 @@ namespace Ports.Ports
             {
                 mod.Value.ThrowIfNotType<AutoloadMod>(out var autoloadMod);
 
-                if (!autoloadMod.IsEnabled)
+                if (!ValidateAutoloadMod(autoloadMod, campaign))
                 {
-                    //skipping disabled mods
-                    continue;
-                }
-
-                if (autoloadMod.SupportedPorts is not null &&
-                    !autoloadMod.SupportedPorts.Contains(PortEnum))
-                {
-                    //skipping mods not supported by the current port
-                    continue;
-                }
-
-                if (campaign.Addon is not null &&
-                    autoloadMod.SupportedAddons is not null &&
-                    !autoloadMod.SupportedAddons.Contains(campaign.Addon))
-                {
-                    //skipping mods not supported by the current addon
                     continue;
                 }
 
@@ -173,6 +158,7 @@ namespace Ports.Ports
 
         /// <inheritdoc/>
         protected override void GetSkipIntroParameter(StringBuilder sb) => sb.Append(" -quick");
+
 
         private void GetDukeArgs(StringBuilder sb, DukeGame game, DukeCampaign camp)
         {
@@ -222,7 +208,6 @@ namespace Ports.Ports
                 }
             }
 
-            //sb.Append(@$" -iwad BLOOD.RFF -ini ""{ini}""");
             sb.Append(@$" -ini ""{ini}""");
 
             if (camp.FileName is null)
@@ -247,8 +232,6 @@ namespace Ports.Ports
 
         private static void GetWangArgs(StringBuilder sb, WangGame game, WangCampaign camp)
         {
-            //sb.Append(@" -iwad SW.GRP");
-
             if (camp.FileName is null)
             {
                 if (camp.AddonEnum is WangAddonEnum.Wanton)

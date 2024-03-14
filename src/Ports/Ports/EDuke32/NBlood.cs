@@ -2,6 +2,7 @@
 using Common.Enums.Addons;
 using Common.Helpers;
 using Common.Interfaces;
+using Games.Games;
 using Mods.Mods;
 using Ports.Providers;
 using System.Text;
@@ -34,6 +35,7 @@ namespace Ports.Ports.EDuke32
         /// <inheritdoc/>
         public override Func<GitHubReleaseAsset, bool> WindowsReleasePredicate => static x => x.FileName.StartsWith("nblood_win64");
 
+
         /// <summary>
         /// No need to do anything
         /// </summary>
@@ -42,40 +44,44 @@ namespace Ports.Ports.EDuke32
         /// <inheritdoc/>
         protected override void GetStartCampaignArgs(StringBuilder sb, IGame game, IMod mod)
         {
-            mod.ThrowIfNotType<BloodCampaign>(out var bloodCamp);
-
-            var ini = bloodCamp.StartupFile;
-
-            if (bloodCamp.ModType is ModTypeEnum.Map)
+            if (game is not BloodGame bGame || mod is not BloodCampaign bCamp)
             {
-                if (bloodCamp.AddonEnum is BloodAddonEnum.Blood)
+                ThrowHelper.NotImplementedException($"Mod type {mod} for game {game} is not supported");
+                return;
+            }
+
+            var ini = bCamp.StartupFile;
+
+            if (bCamp.ModType is ModTypeEnum.Map)
+            {
+                if (bCamp.AddonEnum is BloodAddonEnum.Blood)
                 {
                     ini = Consts.BloodIni;
                 }
-                else if (bloodCamp.AddonEnum is BloodAddonEnum.Cryptic)
+                else if (bCamp.AddonEnum is BloodAddonEnum.Cryptic)
                 {
                     ini = Consts.CrypticIni;
                 }
             }
 
-            sb.Append($@" -usecwd -nosetup -j ""{game.GameInstallFolder}"" -g BLOOD.RFF -ini ""{ini}""");
+            sb.Append($@" -usecwd -nosetup -j ""{bGame.GameInstallFolder}"" -g BLOOD.RFF -ini ""{ini}""");
 
-            if (bloodCamp.FileName is null)
+            if (bCamp.FileName is null)
             {
                 return;
             }
 
-            if (bloodCamp.ModType is ModTypeEnum.Campaign)
+            if (bCamp.ModType is ModTypeEnum.Campaign)
             {
-                sb.Append($@" -g ""{Path.Combine(game.CampaignsFolderPath, bloodCamp.FileName)}""");
+                sb.Append($@" -g ""{Path.Combine(bGame.CampaignsFolderPath, bCamp.FileName)}""");
             }
-            else if (bloodCamp.ModType is ModTypeEnum.Map)
+            else if (bCamp.ModType is ModTypeEnum.Map)
             {
-                sb.Append($@" -g ""{Path.Combine(game.MapsFolderPath, bloodCamp.FileName)}"" -map ""{bloodCamp.StartupFile}""");
+                sb.Append($@" -g ""{Path.Combine(bGame.MapsFolderPath, bCamp.FileName)}"" -map ""{bCamp.StartupFile}""");
             }
             else
             {
-                ThrowHelper.NotImplementedException($"Mod type {bloodCamp.ModType} is not supported");
+                ThrowHelper.NotImplementedException($"Mod type {bCamp.ModType} is not supported");
                 return;
             }
         }
