@@ -18,7 +18,7 @@
 
         <ListBox Name="MapsList"
                  Grid.Row="0" Grid.Column="0"
-                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                 ScrollViewer.VerticalScrollBarVisibility="Disabled"
                  Padding="2"
                  ItemsSource="{Binding MapsList}"
                  SelectedItem="{Binding SelectedMap}"
@@ -33,13 +33,13 @@
             <ListBox.ItemTemplate>
                 <DataTemplate>
 
-                    <Grid RowDefinitions="auto" Width="150">
+                    <Grid RowDefinitions="auto">
 
                         <TextBlock Text="{Binding DisplayName}"
                                    Margin="10"
                                    Padding="5"
-                                   HorizontalAlignment="Center"
-                                   TextAlignment="Center"
+                                   HorizontalAlignment="Left"
+                                   TextAlignment="Left"
                                    VerticalAlignment="Center"
                                    TextWrapping="NoWrap"/>
 
