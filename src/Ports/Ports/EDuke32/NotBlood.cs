@@ -1,5 +1,4 @@
 ﻿using Common.Enums;
-using Common.Interfaces;
 using Ports.Providers;
 
 namespace Ports.Ports.EDuke32
@@ -26,11 +25,5 @@ namespace Ports.Ports.EDuke32
 
         /// <inheritdoc/>
         public override Func<GitHubReleaseAsset, bool> WindowsReleasePredicate => static x => x.FileName.StartsWith("notblood-win64");
-
-
-        /// <summary>
-        /// No need to do anything
-        /// </summary>
-        protected override void BeforeStart(IGame game, IMod campaign) { }
     }
 }
