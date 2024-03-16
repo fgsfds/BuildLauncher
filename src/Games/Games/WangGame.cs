@@ -7,7 +7,7 @@ using Mods.Providers;
 
 namespace Games.Games
 {
-    public sealed class WangGame(InstalledModsProvider modsProvider) : BaseGame(modsProvider)
+    public sealed class WangGame(InstalledModsProviderFactory modsProvider, DownloadableModsProviderFactory downloadableModsProviderFactory) : BaseGame(modsProvider, downloadableModsProviderFactory)
     {
         /// <inheritdoc/>
         public override GameEnum GameEnum => GameEnum.Wang;

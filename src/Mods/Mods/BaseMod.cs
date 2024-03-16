@@ -51,6 +51,7 @@ namespace Mods.Mods
         /// <inheritdoc/>
         public string? Addon { get; protected set; }
 
+        /// <inheritdoc/>
         public required bool IsLoose { get; init; }
 
 

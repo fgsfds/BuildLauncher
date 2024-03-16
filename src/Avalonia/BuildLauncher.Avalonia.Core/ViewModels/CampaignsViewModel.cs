@@ -5,7 +5,6 @@ using Common.Interfaces;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Games.Providers;
-using Mods.Providers;
 using Ports.Ports;
 using System.Collections.Immutable;
 using System.Diagnostics;
@@ -17,28 +16,22 @@ namespace BuildLauncher.ViewModels
         public readonly IGame Game;
 
         private readonly GamesProvider _gamesProvider;
-        private readonly DownloadableModsProvider _downloadableModsProvider;
-        private readonly InstalledModsProvider _installedModsProvider;
         private readonly ConfigEntity _config;
 
         public CampaignsViewModel(
             IGame game,
             GamesProvider gamesProvider,
-            DownloadableModsProvider modsProvider,
-            InstalledModsProvider installedModsProvider,
             ConfigEntity config
             )
         {
             Game = game;
 
             _gamesProvider = gamesProvider;
-            _downloadableModsProvider = modsProvider;
-            _installedModsProvider = installedModsProvider;
             _config = config;
 
             _gamesProvider.NotifyGameChanged += NotifyGameChanged;
             _config.NotifyParameterChanged += NotifyConfigChanged;
-            _downloadableModsProvider.NotifyModDownloaded += NotifyModDownloaded;
+            Game.DownloadableModsProvider.NotifyModDownloaded += NotifyModDownloaded;
         }
 
 
@@ -85,7 +78,7 @@ namespace BuildLauncher.ViewModels
         /// </summary>
         private async Task UpdateAsync()
         {
-            await _installedModsProvider.UpdateCachedListAsync(Game);
+            await Game.InstalledModsProvider.CreateCache();
 
             OnPropertyChanged(nameof(CampaignsList));
         }
@@ -132,7 +125,7 @@ namespace BuildLauncher.ViewModels
             SelectedCampaign.ThrowIfNull();
             SelectedCampaign.PathToFile.ThrowIfNull();
 
-            _installedModsProvider.DeleteMod(Game, SelectedCampaign);
+            Game.InstalledModsProvider.DeleteMod(SelectedCampaign);
 
             OnPropertyChanged(nameof(CampaignsList));
         }

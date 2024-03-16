@@ -5,7 +5,6 @@ using Common.Interfaces;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Games.Providers;
-using Mods.Providers;
 using Ports.Ports;
 using System.Collections.Immutable;
 using System.Diagnostics;
@@ -16,28 +15,22 @@ namespace BuildLauncher.ViewModels
     {
         public readonly IGame Game;
         private readonly GamesProvider _gamesProvider;
-        private readonly DownloadableModsProvider _downloadableModsProvider;
-        private readonly InstalledModsProvider _installedModsProvider;
         private readonly ConfigEntity _config;
 
         public MapsViewModel(
             IGame game,
             GamesProvider gamesProvider,
-            DownloadableModsProvider downloadableModsProvider,
-            InstalledModsProvider installedModsProvider,
             ConfigEntity config
             )
         {
             Game = game;
 
             _gamesProvider = gamesProvider;
-            _downloadableModsProvider = downloadableModsProvider;
-            _installedModsProvider = installedModsProvider;
             _config = config;
 
             _gamesProvider.NotifyGameChanged += NotifyGameChanged;
             _config.NotifyParameterChanged += NotifyConfigChanged;
-            _downloadableModsProvider.NotifyModDownloaded += NotifyModDownloaded;
+            Game.DownloadableModsProvider.NotifyModDownloaded += NotifyModDownloaded;
         }
 
 
@@ -51,7 +44,7 @@ namespace BuildLauncher.ViewModels
         /// </summary>
         private async Task UpdateAsync()
         {
-            await _installedModsProvider.UpdateCachedListAsync(Game);
+            await Game.InstalledModsProvider.CreateCache();
 
             OnPropertyChanged(nameof(MapsList));
         }
@@ -130,7 +123,7 @@ namespace BuildLauncher.ViewModels
         {
             SelectedMap.ThrowIfNull();
 
-            _installedModsProvider.DeleteMod(Game, SelectedMap);
+            Game.InstalledModsProvider.DeleteMod(SelectedMap);
 
             OnPropertyChanged(nameof(MapsList));
         }

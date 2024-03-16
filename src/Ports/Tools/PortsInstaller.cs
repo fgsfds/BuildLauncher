@@ -34,16 +34,16 @@ namespace Ports.Tools
         /// <param name="port">Port</param>
         public async Task InstallAsync(BasePort port)
         {
-            var release = await PortsReleasesProvider.GetLatestReleaseAsync(port).ConfigureAwait(false); ;
+            var release = await PortsReleasesProvider.GetLatestReleaseAsync(port).ConfigureAwait(false);
 
             if (release is null)
             {
                 return;
             }
 
-            await _fileTools.DownloadFileAsync(new Uri(release.Url), Path.GetFileName(release.Url)).ConfigureAwait(false); ;
+            await _fileTools.DownloadFileAsync(new Uri(release.Url), Path.GetFileName(release.Url)).ConfigureAwait(false);
 
-            await _fileTools.UnpackArchiveAsync(Path.GetFileName(release.Url), port.FolderPath).ConfigureAwait(false); ;
+            await _fileTools.UnpackArchiveAsync(Path.GetFileName(release.Url), port.FolderPath).ConfigureAwait(false);
 
             File.Delete(Path.GetFileName(release.Url));
 

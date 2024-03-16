@@ -13,32 +13,50 @@ namespace Mods.Providers
     /// <summary>
     /// Class that provides lists of installed mods
     /// </summary>
-    public sealed class InstalledModsProvider
+    public sealed class InstalledModsProvider : IInstalledModsProvider
     {
-        private readonly Dictionary<GameEnum, Dictionary<ModTypeEnum, Dictionary<Guid, IMod>>>? _cache = [];
-        private readonly SemaphoreSlim _semaphore = new(1);
-        
+        private readonly IGame _game;
         private readonly ConfigEntity _config;
+        private readonly Dictionary<ModTypeEnum, Dictionary<Guid, IMod>>? _cache;
+        private readonly SemaphoreSlim _semaphore = new(1);
 
-        public delegate void ModInstalled(IGame game, ModTypeEnum modType);
         public event ModInstalled NotifyModDeleted;
 
-        public InstalledModsProvider(ConfigProvider configProvider)
+        public InstalledModsProvider(
+            IGame game,
+            ConfigEntity config
+            )
         {
-            _config = configProvider.Config;
+            _game = game;
+            _config = config;
+            _cache = [];
         }
 
 
-        /// <summary>
-        /// Update cached list of installed mods
-        /// </summary>
-        public async Task UpdateCachedListAsync(IGame game)
+        /// <inheritdoc/>
+        public async Task CreateCache()
         {
             _semaphore.Wait();
 
-            if (_cache is null || !_cache.TryGetValue(game.GameEnum, out _))
+            if (_cache.Count == 0)
             {
-                await UpdateCacheAsync(game);
+                await Task.Run(() =>
+                {
+                    IEnumerable<string> files;
+
+                    files = Directory.GetFiles(_game.CampaignsFolderPath, "*.zip");
+                    var camps = GetModsFromFiles(ModTypeEnum.Campaign, files);
+                    _cache.Add(ModTypeEnum.Campaign, camps);
+
+                    files = Directory.GetFiles(_game.MapsFolderPath, "*.zip");
+                    files = files.Union(Directory.GetFiles(_game.MapsFolderPath, "*.map"));
+                    var maps = GetModsFromFiles(ModTypeEnum.Map, files);
+                    _cache.Add(ModTypeEnum.Map, maps);
+
+                    files = Directory.GetFiles(_game.ModsFolderPath, "*.zip");
+                    var mods = GetModsFromFiles(ModTypeEnum.Autoload, files);
+                    _cache.Add(ModTypeEnum.Autoload, mods);
+                });
             }
 
             _semaphore.Release();
@@ -46,40 +64,31 @@ namespace Mods.Providers
             _cache.ThrowIfNull();
         }
 
-        /// <summary>
-        /// Delete mod from cache and disk
-        /// </summary>
-        /// <param name="game">Game</param>
-        /// <param name="mod">Mod</param>
-        public void DeleteMod(IGame game, IMod mod)
+        /// <inheritdoc/>
+        public void DeleteMod(IMod mod)
         {
             _cache.ThrowIfNull();
 
             File.Delete(mod.PathToFile!);
 
-            _cache[game.GameEnum][mod.ModType].Remove(mod.Guid);
+            _cache[mod.ModType].Remove(mod.Guid);
 
-            NotifyModDeleted?.Invoke(game, mod.ModType);
+            NotifyModDeleted?.Invoke(_game, mod.ModType);
         }
 
-        /// <summary>
-        /// Add mod to cache
-        /// </summary>
-        /// <param name="game">Game</param>
-        /// <param name="modTypeEnum">Mod type</param>
-        /// <param name="pathToFile">Path to mod file</param>
-        public void AddMod(IGame game, ModTypeEnum modTypeEnum, string pathToFile)
+        /// <inheritdoc/>
+        public void AddMod(ModTypeEnum modTypeEnum, string pathToFile)
         {
             _cache.ThrowIfNull();
 
-            var mod = GetMod(game, modTypeEnum, pathToFile);
+            var mod = GetMod(modTypeEnum, pathToFile);
 
-            if (!_cache[game.GameEnum].TryGetValue(mod.ModType, out _))
+            if (!_cache.TryGetValue(mod.ModType, out _))
             {
-                _cache[game.GameEnum].Add(mod.ModType, []);
+                _cache.Add(mod.ModType, []);
             }
 
-            var dict = _cache[game.GameEnum][mod.ModType];
+            var dict = _cache[mod.ModType];
 
             if (dict.TryGetValue(mod.Guid, out _))
             {
@@ -91,18 +100,14 @@ namespace Mods.Providers
             }
         }
 
-        /// <summary>
-        /// Get installed mods
-        /// </summary>
-        /// <param name="game">Game</param>
-        /// <param name="modTypeEnum">Mod type</param>
-        public Dictionary<Guid, IMod> GetMods(IGame game, ModTypeEnum modTypeEnum)
+        /// <inheritdoc/>
+        public Dictionary<Guid, IMod> GetInstalledMods(ModTypeEnum modTypeEnum)
         {
             _cache.ThrowIfNull();
 
             try
             {
-                return _cache[game.GameEnum][modTypeEnum];
+                return _cache[modTypeEnum];
             }
             catch
             {
@@ -111,41 +116,11 @@ namespace Mods.Providers
         }
 
         /// <summary>
-        /// Get list of installed mods
+        /// Get mods from list of files
         /// </summary>
-        /// <param name="game">Game</param>
-        private async Task UpdateCacheAsync(IGame game)
-        {
-            _cache.ThrowIfNull();
-
-            _cache.Add(game.GameEnum, []);
-
-            await Task.Run(() =>
-            {
-                IEnumerable<string> files;
-
-                files = Directory.GetFiles(game.CampaignsFolderPath, "*.zip");
-                var camps = GetModsList(game, ModTypeEnum.Campaign, files);
-                _cache[game.GameEnum].Add(ModTypeEnum.Campaign, camps);
-
-                files = Directory.GetFiles(game.MapsFolderPath, "*.zip");
-                files = files.Union(Directory.GetFiles(game.MapsFolderPath, "*.map"));
-                var maps = GetModsList(game, ModTypeEnum.Map, files);
-                _cache[game.GameEnum].Add(ModTypeEnum.Map, maps);
-
-                files = Directory.GetFiles(game.ModsFolderPath, "*.zip");
-                var mods = GetModsList(game, ModTypeEnum.Autoload, files);
-                _cache[game.GameEnum].Add(ModTypeEnum.Autoload, mods);
-            });
-        }
-
-        /// <summary>
-        /// Get mods dictionary
-        /// </summary>
-        /// <param name="game">Game</param>
         /// <param name="modTypeEnum">Mod type</param>
         /// <param name="files">Paths to mod files</param>
-        private Dictionary<Guid, IMod> GetModsList(IGame game, ModTypeEnum modTypeEnum, IEnumerable<string> files)
+        private Dictionary<Guid, IMod> GetModsFromFiles(ModTypeEnum modTypeEnum, IEnumerable<string> files)
         {
             Dictionary<Guid, IMod> addedMods = [];
 
@@ -153,7 +128,7 @@ namespace Mods.Providers
             {
                 try
                 {
-                    var mod = GetMod(game, modTypeEnum, file);
+                    var mod = GetMod(modTypeEnum, file);
 
                     if (addedMods.TryGetValue(mod.Guid, out var addedMod))
                     {
@@ -187,13 +162,11 @@ namespace Mods.Providers
         }
 
         /// <summary>
-        /// Get mod from file
+        /// Get mod from a file
         /// </summary>
-        /// <param name="game">Game</param>
         /// <param name="modTypeEnum">Mod type</param>
         /// <param name="file">Path to mod file</param>
-        /// <returns></returns>
-        private IMod GetMod(IGame game, ModTypeEnum modTypeEnum, string file)
+        private IMod GetMod(ModTypeEnum modTypeEnum, string file)
         {
             IMod mod;
 
@@ -275,7 +248,7 @@ namespace Mods.Providers
             }
             else
             {
-                if (game.GameEnum is GameEnum.Duke3D)
+                if (_game.GameEnum is GameEnum.Duke3D)
                 {
                     mod = new DukeCampaign()
                     {
@@ -295,7 +268,7 @@ namespace Mods.Providers
                         IsLoose = isLoose
                     };
                 }
-                else if (game.GameEnum is GameEnum.Wang)
+                else if (_game.GameEnum is GameEnum.Wang)
                 {
                     mod = new WangCampaign()
                     {
@@ -315,7 +288,7 @@ namespace Mods.Providers
                         IsLoose = isLoose
                     };
                 }
-                else if (game.GameEnum is GameEnum.Blood)
+                else if (_game.GameEnum is GameEnum.Blood)
                 {
                     mod = new BloodCampaign()
                     {
@@ -335,7 +308,7 @@ namespace Mods.Providers
                         IsLoose = isLoose
                     };
                 }
-                else if (game.GameEnum is GameEnum.Fury)
+                else if (_game.GameEnum is GameEnum.Fury)
                 {
                     mod = new FuryCampaign()
                     {
@@ -354,7 +327,7 @@ namespace Mods.Providers
                         IsLoose = isLoose
                     };
                 }
-                else if (game.GameEnum is GameEnum.Slave)
+                else if (_game.GameEnum is GameEnum.Slave)
                 {
                     mod = new SlaveCampaign()
                     {
@@ -373,7 +346,7 @@ namespace Mods.Providers
                         IsLoose = isLoose
                     };
                 }
-                else if (game.GameEnum is GameEnum.Redneck)
+                else if (_game.GameEnum is GameEnum.Redneck)
                 {
                     mod = new RedneckCampaign()
                     {

@@ -59,6 +59,10 @@ namespace Common.Interfaces
         /// </summary>
         string SpecialFolderPath { get; }
 
+        IInstalledModsProvider InstalledModsProvider { get; init; }
+
+        IDownloadableModsProvider DownloadableModsProvider { get; init; }
+
 
         /// <summary>
         /// Create combined autoload mod

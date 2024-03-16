@@ -32,7 +32,7 @@ namespace Ports.Providers
                 client.Timeout = TimeSpan.FromMinutes(1);
                 client.DefaultRequestHeaders.UserAgent.ParseAdd("BuildLauncher");
 
-                response = await client.GetStringAsync(port.RepoUrl).ConfigureAwait(false); ;
+                response = await client.GetStringAsync(port.RepoUrl).ConfigureAwait(false);
             }
             catch (Exception)
             {

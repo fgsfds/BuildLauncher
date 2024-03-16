@@ -6,7 +6,6 @@ using Games.Games;
 using Mods.Mods;
 using Ports.Providers;
 using System.Text;
-using System.Xml.Linq;
 
 namespace Ports.Ports.EDuke32
 {

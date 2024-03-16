@@ -82,7 +82,7 @@ namespace BuildLauncher.ViewModels
         {
             IsInProgress = true;
 
-            await _updateInstaller.DownloadAndUnpackLatestRelease().ConfigureAwait(false); ;
+            await _updateInstaller.DownloadAndUnpackLatestRelease().ConfigureAwait(false);
 
             AppUpdateInstaller.InstallUpdate();
         }

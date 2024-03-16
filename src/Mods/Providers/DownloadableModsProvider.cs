@@ -11,93 +11,105 @@ namespace Mods.Providers
     /// <summary>
     /// Class that provides lists of mods available to download
     /// </summary>
-    public sealed class DownloadableModsProvider
+    public sealed class DownloadableModsProvider : IDownloadableModsProvider
     {
-        private ImmutableList<DownloadableMod>? _cache;
-        private readonly SemaphoreSlim _semaphore = new(1);
-
+        private readonly IGame _game;
         private readonly ArchiveTools _archiveTools;
-        private readonly InstalledModsProvider _installedModsProvider;
 
-        /// <summary>
-        /// Operation progress
-        /// </summary>
-        public Progress<float> Progress = new();
+        private static Dictionary<GameEnum, Dictionary<ModTypeEnum, Dictionary<Guid, IDownloadableMod>>>? _cache;
+        private static readonly SemaphoreSlim _semaphore = new(1);
 
-        public delegate void ModDownloaded(IGame game, ModTypeEnum modType);
         public event ModDownloaded NotifyModDownloaded;
 
+        /// <inheritdoc/>
+        public Progress<float> Progress { get; private set; } = new();
+
         public DownloadableModsProvider(
-            ArchiveTools archiveTools,
-            InstalledModsProvider installedModsProvider
+            IGame game,
+            ArchiveTools archiveTools
             )
         {
+            _game = game;
             _archiveTools = archiveTools;
-            _installedModsProvider = installedModsProvider;
         }
 
 
-        /// <summary>
-        /// Update cached list of downloadable mods from online repo
-        /// </summary>
-        public async Task UpdateCachedListAsync()
+        /// <inheritdoc/>
+        public async Task CreateCacheAsync()
         {
             _semaphore.Wait();
 
-            if (_cache is null)
+            if (_cache is not null)
             {
-                await UpdateCacheAsync().ConfigureAwait(false);
+                _semaphore.Release();
+                return;
+            }
+
+            using HttpClient client = new();
+            client.Timeout = TimeSpan.FromSeconds(10);
+            await using var stream = await client.GetStreamAsync(Consts.Manifests).ConfigureAwait(false);
+
+            using StreamReader file = new(stream);
+            var fixesXml = file.ReadToEnd();
+
+            var list = JsonSerializer.Deserialize(fixesXml, DownloadableModManifestsListContext.Default.ListDownloadableMod);
+
+            if (list is null)
+            {
+                ThrowHelper.Exception();
+            }
+
+            _cache = [];
+
+            foreach (var mod in list)
+            {
+                _cache.TryAdd(mod.Game, []);
+                _cache[mod.Game].TryAdd(mod.ModType, []);
+                _cache[mod.Game][mod.ModType].TryAdd(mod.Guid, mod);
             }
 
             _semaphore.Release();
-
-            _cache.ThrowIfNull();
         }
 
 
-        /// <summary>
-        /// Get list of downloadable mods
-        /// </summary>
-        /// <param name="gameEnum">Game enum</param>
-        /// <param name="modTypeEnum">Mod type enum</param>
-        public ImmutableList<DownloadableMod> GetDownloadableMods(IGame game, ModTypeEnum modTypeEnum)
+        /// <inheritdoc/>
+        public ImmutableList<IDownloadableMod> GetDownloadableMods(ModTypeEnum modTypeEnum)
         {
-            var result = _cache?.Where(x => x.Game == game.GameEnum && x.ModType == modTypeEnum);
-
-            if (result is null)
+            if (_cache is null || !_cache.TryGetValue(_game.GameEnum, out var downloadableMods))
             {
                 return [];
             }
 
-            var installedMods = _installedModsProvider.GetMods(game, modTypeEnum);
-
-            foreach (var downloadableMod in result)
+            if (downloadableMods is null || !downloadableMods.TryGetValue(modTypeEnum, out var modTypeCache))
             {
-                if (installedMods.TryGetValue(downloadableMod.Guid, out var installedMod))
-                {
-                    downloadableMod.IsInstalled = true;
+                return [];
+            }
 
-                    if (downloadableMod.Version > installedMod.Version)
+            var installedMods = _game.InstalledModsProvider.GetInstalledMods(modTypeEnum);
+
+            foreach (var downloadableMod in modTypeCache)
+            {
+                if (installedMods.TryGetValue(downloadableMod.Key, out var installedMod))
+                {
+                    downloadableMod.Value.IsInstalled = true;
+
+                    if (downloadableMod.Value.Version > installedMod.Version)
                     {
-                        downloadableMod.HasNewerVersion = true;
+                        downloadableMod.Value.HasNewerVersion = true;
                     }
                 }
                 else
                 {
-                    downloadableMod.IsInstalled = false;
+                    downloadableMod.Value.IsInstalled = false;
                 }
             }
 
-            return [.. result];
+            return [.. modTypeCache.Values];
         }
 
 
-        /// <summary>
-        /// Download mod
-        /// </summary>
-        /// <param name="mod">Mod</param>
-        /// <param name="game">Game</param>
-        public async Task DownloadModAsync(DownloadableMod mod, IGame game)
+        /// <inheritdoc/>
+        public async Task DownloadModAsync(IDownloadableMod mod)
         {
             var url = mod.DownloadUrl;
             var file = Path.GetFileName(url.ToString());
@@ -105,15 +117,15 @@ namespace Mods.Providers
 
             if (mod.ModType is ModTypeEnum.Campaign)
             {
-                path = game.CampaignsFolderPath;
+                path = _game.CampaignsFolderPath;
             }
             else if (mod.ModType is ModTypeEnum.Map)
             {
-                path = game.MapsFolderPath;
+                path = _game.MapsFolderPath;
             }
             else if (mod.ModType is ModTypeEnum.Autoload)
             {
-                path = game.ModsFolderPath;
+                path = _game.ModsFolderPath;
             }
             else
             {
@@ -127,28 +139,9 @@ namespace Mods.Providers
 
             Progress = _archiveTools.Progress;
 
-            _installedModsProvider.AddMod(game, mod.ModType, pathToFile);
+            _game.InstalledModsProvider.AddMod(mod.ModType, pathToFile);
 
-            NotifyModDownloaded?.Invoke(game, mod.ModType);
-        }
-
-
-        /// <summary>
-        /// Download fixes xml from online repository
-        /// </summary>
-        /// <returns></returns>
-        private async Task UpdateCacheAsync()
-        {
-            using HttpClient client = new();
-            client.Timeout = TimeSpan.FromSeconds(10);
-            await using var stream = await client.GetStreamAsync(Consts.Manifests).ConfigureAwait(false);
-
-            using StreamReader file = new(stream);
-            var fixesXml = file.ReadToEnd();
-
-            var list = JsonSerializer.Deserialize(fixesXml, DownloadableModManifestsListContext.Default.ListDownloadableMod);
-
-            _cache = [.. list];
+            NotifyModDownloaded?.Invoke(_game, mod.ModType);
         }
     }
 }

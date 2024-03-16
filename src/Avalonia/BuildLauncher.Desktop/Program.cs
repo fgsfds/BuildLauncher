@@ -3,7 +3,7 @@ using Common.Helpers;
 
 namespace BuildLauncher.Desktop;
 
-sealed class Program
+public sealed class Program
 {
     // Initialization code. Don't use any Avalonia, third-party APIs or any
     // SynchronizationContext-reliant code before AppMain is called: things aren't initialized

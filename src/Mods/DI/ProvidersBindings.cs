@@ -7,8 +7,8 @@ namespace Mods.DI
     {
         public static void Load(ServiceCollection container)
         {
-            container.AddSingleton<InstalledModsProvider>();
-            container.AddSingleton<DownloadableModsProvider>();
+            container.AddSingleton<InstalledModsProviderFactory>();
+            container.AddSingleton<DownloadableModsProviderFactory>();
         }
     }
 }

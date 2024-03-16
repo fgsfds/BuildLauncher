@@ -3,7 +3,6 @@ using Common.Helpers;
 using Common.Interfaces;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Mods.Providers;
 using Mods.Serializable;
 using System.Collections.Immutable;
 
@@ -12,22 +11,13 @@ namespace BuildLauncher.ViewModels
     public sealed partial class DownloadsViewModel : ObservableObject
     {
         public readonly IGame Game;
-        private readonly DownloadableModsProvider _downloadableModsProvider;
-        private readonly InstalledModsProvider _installedModsProvider;
 
-        public DownloadsViewModel(
-            IGame game,
-            DownloadableModsProvider downloadableModsProvider,
-            InstalledModsProvider installedModsProvider
-            )
+        public DownloadsViewModel(IGame game)
         {
             Game = game;
 
-            _downloadableModsProvider = downloadableModsProvider;
-            _installedModsProvider = installedModsProvider;
-
-            _downloadableModsProvider.NotifyModDownloaded += ModChanged;
-            _installedModsProvider.NotifyModDeleted += ModChanged;
+            Game.DownloadableModsProvider.NotifyModDownloaded += ModChanged;
+            Game.InstalledModsProvider.NotifyModDeleted += ModChanged;
         }
 
 
@@ -36,17 +26,17 @@ namespace BuildLauncher.ViewModels
         /// <summary>
         /// List of downloadanle campaigns and maps
         /// </summary>
-        public ImmutableList<DownloadableMod> DownloadableCampaignsList => _downloadableModsProvider.GetDownloadableMods(Game, ModTypeEnum.Campaign);
+        public ImmutableList<IDownloadableMod> DownloadableCampaignsList => Game.DownloadableModsProvider.GetDownloadableMods(ModTypeEnum.Campaign);
 
         /// <summary>
         /// List of downloadanle campaigns and maps
         /// </summary>
-        public ImmutableList<DownloadableMod> DownloadableMapsList => _downloadableModsProvider.GetDownloadableMods(Game, ModTypeEnum.Map);
+        public ImmutableList<IDownloadableMod> DownloadableMapsList => Game.DownloadableModsProvider.GetDownloadableMods(ModTypeEnum.Map);
 
         /// <summary>
         /// List of downloadanle autoload mods
         /// </summary>
-        public ImmutableList<DownloadableMod> DownloadableModsList => _downloadableModsProvider.GetDownloadableMods(Game, ModTypeEnum.Autoload);
+        public ImmutableList<IDownloadableMod> DownloadableModsList => Game.DownloadableModsProvider.GetDownloadableMods(ModTypeEnum.Autoload);
 
         /// <summary>
         /// Download/install progress
@@ -108,7 +98,7 @@ namespace BuildLauncher.ViewModels
         /// </summary>
         private async Task UpdateAsync()
         {
-            await _downloadableModsProvider.UpdateCachedListAsync().ConfigureAwait(false);
+            await Game.DownloadableModsProvider.CreateCacheAsync().ConfigureAwait(true);
 
             OnPropertyChanged(nameof(DownloadableCampaignsList));
             OnPropertyChanged(nameof(DownloadableMapsList));
@@ -124,11 +114,11 @@ namespace BuildLauncher.ViewModels
         {
             SelectedDownloadableMod.ThrowIfNull();
 
-            _downloadableModsProvider.Progress.ProgressChanged += ProgressChanged;
+            Game.DownloadableModsProvider.Progress.ProgressChanged += ProgressChanged;
 
-            await _downloadableModsProvider.DownloadModAsync(SelectedDownloadableMod, Game).ConfigureAwait(false); ;
+            await Game.DownloadableModsProvider.DownloadModAsync(SelectedDownloadableMod).ConfigureAwait(false);
 
-            _downloadableModsProvider.Progress.ProgressChanged -= ProgressChanged;
+            Game.DownloadableModsProvider.Progress.ProgressChanged -= ProgressChanged;
             ProgressChanged(null, 0);
         }
         private bool DownloadSelectedModCanExecute => SelectedDownloadableMod is not null;

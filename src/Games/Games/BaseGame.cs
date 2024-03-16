@@ -13,8 +13,6 @@ namespace Games.Games
     /// </summary>
     public abstract class BaseGame : IGame
     {
-        protected readonly InstalledModsProvider _installedModsProvider;
-
         /// <inheritdoc/>
         public string GameInstallFolder { get; set; }
 
@@ -49,10 +47,18 @@ namespace Games.Games
         /// <inheritdoc/>
         public abstract List<string> RequiredFiles { get; }
 
+        public IInstalledModsProvider InstalledModsProvider { get; init; }
 
-        public BaseGame(InstalledModsProvider modsProvider)
+        public IDownloadableModsProvider DownloadableModsProvider { get; init; }
+
+
+        public BaseGame(
+            InstalledModsProviderFactory installedModsProviderFactory,
+            DownloadableModsProviderFactory downloadableModsProviderFactory
+            )
         {
-            _installedModsProvider = modsProvider;
+            InstalledModsProvider = installedModsProviderFactory.GetSingleton(this);
+            DownloadableModsProvider = downloadableModsProviderFactory.GetSingleton(this);
 
             if (!Directory.Exists(CampaignsFolderPath))
             {
@@ -81,7 +87,7 @@ namespace Games.Games
         {
             Dictionary<Guid, IMod> originalCampaigns = GetOriginalCampaigns();
 
-            var customCampaigns = _installedModsProvider.GetMods(this, ModTypeEnum.Campaign);
+            var customCampaigns = InstalledModsProvider.GetInstalledMods(ModTypeEnum.Campaign);
 
             foreach (var customCamp in customCampaigns)
             {
@@ -114,7 +120,7 @@ namespace Games.Games
         /// <inheritdoc/>
         public virtual Dictionary<Guid, IMod> GetSingleMaps()
         {
-            var maps = _installedModsProvider.GetMods(this, ModTypeEnum.Map);
+            var maps = InstalledModsProvider.GetInstalledMods(ModTypeEnum.Map);
 
             return maps;
         }
@@ -123,7 +129,7 @@ namespace Games.Games
         /// <inheritdoc/>
         public virtual Dictionary<Guid, IMod> GetAutoloadMods(bool enabledOnly)
         {
-            var mods = _installedModsProvider.GetMods(this, ModTypeEnum.Autoload);
+            var mods = InstalledModsProvider.GetInstalledMods(ModTypeEnum.Autoload);
 
             if (enabledOnly)
             {

@@ -1,11 +1,12 @@
 ﻿using Common.Enums;
 using Common.Helpers;
+using Common.Interfaces;
 using System.Text;
 using System.Text.Json.Serialization;
 
 namespace Mods.Serializable
 {
-    public sealed class DownloadableMod
+    public sealed class DownloadableMod : IDownloadableMod
     {
         public Guid Guid { get; set; }
 

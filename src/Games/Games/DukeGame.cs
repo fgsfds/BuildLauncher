@@ -64,7 +64,7 @@ namespace Games.Games
         public bool IsDuke64Installed => File.Exists(Duke64RomPath);
 
 
-        public DukeGame(InstalledModsProvider modsProvider) : base(modsProvider)
+        public DukeGame(InstalledModsProviderFactory modsProvider, DownloadableModsProviderFactory downloadableModsProviderFactory) : base(modsProvider, downloadableModsProviderFactory)
         {
             CreateWTStopgapFolder();
         }

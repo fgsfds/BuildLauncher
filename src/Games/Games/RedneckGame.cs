@@ -7,7 +7,7 @@ using Mods.Providers;
 
 namespace Games.Games
 {
-    public sealed class RedneckGame : BaseGame
+    public sealed class RedneckGame(InstalledModsProviderFactory modsProvider, DownloadableModsProviderFactory downloadableModsProviderFactory) : BaseGame(modsProvider, downloadableModsProviderFactory)
     {
         /// <inheritdoc/>
         public override GameEnum GameEnum => GameEnum.Redneck;
@@ -38,11 +38,6 @@ namespace Games.Games
         /// Is Rides Again installed
         /// </summary>
         public bool IsAgainInstalled => IsInstalled(["REDNECK.GRP", "BIKER.CON"], AgainInstallPath);
-
-
-        public RedneckGame(InstalledModsProvider modsProvider) : base(modsProvider)
-        {
-        }
 
 
         /// <inheritdoc/>

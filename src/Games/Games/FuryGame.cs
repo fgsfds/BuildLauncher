@@ -6,7 +6,7 @@ using Mods.Providers;
 
 namespace Games.Games
 {
-    public sealed class FuryGame : BaseGame
+    public sealed class FuryGame(InstalledModsProviderFactory modsProvider, DownloadableModsProviderFactory downloadableModsProviderFactory) : BaseGame(modsProvider, downloadableModsProviderFactory)
     {
         /// <inheritdoc/>
         public override GameEnum GameEnum => GameEnum.Fury;
@@ -22,11 +22,6 @@ namespace Games.Games
 
         /// <inheritdoc/>
         public override List<string> RequiredFiles => ["fury.grp"];
-
-
-        public FuryGame(InstalledModsProvider modsProvider) : base(modsProvider)
-        {
-        }
 
 
         /// <inheritdoc/>

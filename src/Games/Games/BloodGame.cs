@@ -7,7 +7,7 @@ using Mods.Providers;
 
 namespace Games.Games
 {
-    public sealed class BloodGame(InstalledModsProvider modsProvider) : BaseGame(modsProvider)
+    public sealed class BloodGame(InstalledModsProviderFactory modsProvider, DownloadableModsProviderFactory downloadableModsProviderFactory) : BaseGame(modsProvider, downloadableModsProviderFactory)
     {
         /// <inheritdoc/>
         public override GameEnum GameEnum => GameEnum.Blood;

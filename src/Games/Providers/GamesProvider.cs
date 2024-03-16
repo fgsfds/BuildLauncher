@@ -16,7 +16,8 @@ namespace Games.Providers
         public event GameChanged NotifyGameChanged;
 
         private readonly ConfigEntity _config;
-        private readonly InstalledModsProvider _modsProvider;
+        private readonly InstalledModsProviderFactory _modsProvider;
+        private readonly DownloadableModsProviderFactory _downloadableModsProviderFactory;
 
         public BloodGame Blood { get; private set; }
         public DukeGame Duke3D { get; private set; }
@@ -28,41 +29,43 @@ namespace Games.Providers
 
         public GamesProvider(
             ConfigProvider config,
-            InstalledModsProvider modsProvider
+            InstalledModsProviderFactory modsProvider,
+             DownloadableModsProviderFactory downloadableModsProviderFactory
             )
         {
             _config = config.Config;
             _modsProvider = modsProvider;
+            _downloadableModsProviderFactory = downloadableModsProviderFactory;
 
-            Blood = new(_modsProvider)
+            Blood = new(_modsProvider, _downloadableModsProviderFactory)
             {
                 GameInstallFolder = _config.GamePathBlood
             };
 
-            Duke3D = new(_modsProvider)
+            Duke3D = new(_modsProvider, _downloadableModsProviderFactory)
             {
                 GameInstallFolder = _config.GamePathDuke3D,
                 Duke64RomPath = _config.GamePathDuke64,
                 DukeWTInstallPath = _config.GamePathDukeWT
             };
 
-            Wang = new(_modsProvider)
+            Wang = new(_modsProvider, _downloadableModsProviderFactory)
             {
                 GameInstallFolder = _config.GamePathWang
             };
 
-            Fury = new(_modsProvider)
+            Fury = new(_modsProvider, _downloadableModsProviderFactory)
             {
                 GameInstallFolder = _config.GamePathFury
             };
 
-            Redneck = new(_modsProvider)
+            Redneck = new(_modsProvider, _downloadableModsProviderFactory)
             {
                 GameInstallFolder = _config.GamePathRedneck,
                 AgainInstallPath = _config.GamePathAgain
             };
 
-            Slave = new(_modsProvider)
+            Slave = new(_modsProvider, _downloadableModsProviderFactory)
             {
                 GameInstallFolder = _config.GamePathSlave
             };

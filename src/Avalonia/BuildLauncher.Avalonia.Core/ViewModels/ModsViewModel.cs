@@ -6,7 +6,6 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Games.Providers;
 using Mods.Mods;
-using Mods.Providers;
 using System.Collections.Immutable;
 using System.Diagnostics;
 
@@ -16,26 +15,20 @@ namespace BuildLauncher.ViewModels
     {
         public readonly IGame Game;
         private readonly GamesProvider _gamesProvider;
-        private readonly DownloadableModsProvider _downloadableModsProvider;
-        private readonly InstalledModsProvider _installedModsProvider;
         private readonly ConfigEntity _config;
 
         public ModsViewModel(
             IGame game,
             GamesProvider gamesProvider,
-            DownloadableModsProvider downloadableModsProvider,
-            InstalledModsProvider installedModsProvider,
             ConfigEntity config)
         {
             Game = game;
 
             _gamesProvider = gamesProvider;
-            _downloadableModsProvider = downloadableModsProvider;
-            _installedModsProvider = installedModsProvider;
             _config = config;
 
             _gamesProvider.NotifyGameChanged += NotifyGameChanged;
-            _downloadableModsProvider.NotifyModDownloaded += NotifyModDownloaded;
+            Game.DownloadableModsProvider.NotifyModDownloaded += NotifyModDownloaded;
         }
 
 
@@ -49,7 +42,7 @@ namespace BuildLauncher.ViewModels
         /// </summary>
         private async Task UpdateAsync()
         {
-            await _installedModsProvider.UpdateCachedListAsync(Game);
+            await Game.InstalledModsProvider.CreateCache();
 
             OnPropertyChanged(nameof(ModsList));
         }
@@ -98,7 +91,7 @@ namespace BuildLauncher.ViewModels
         {
             SelectedMod.ThrowIfNull();
 
-            _installedModsProvider.DeleteMod(Game, SelectedMod);
+            Game.InstalledModsProvider.DeleteMod(SelectedMod);
 
             OnPropertyChanged(nameof(ModsList));
         }

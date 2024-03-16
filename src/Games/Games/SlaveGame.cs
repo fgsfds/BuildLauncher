@@ -6,7 +6,7 @@ using Mods.Providers;
 
 namespace Games.Games
 {
-    public sealed class SlaveGame : BaseGame
+    public sealed class SlaveGame(InstalledModsProviderFactory modsProvider, DownloadableModsProviderFactory downloadableModsProviderFactory) : BaseGame(modsProvider, downloadableModsProviderFactory)
     {
         /// <inheritdoc/>
         public override GameEnum GameEnum => GameEnum.Slave;
@@ -22,11 +22,6 @@ namespace Games.Games
 
         /// <inheritdoc/>
         public override List<string> RequiredFiles => ["STUFF.DAT"];
-
-
-        public SlaveGame(InstalledModsProvider modsProvider) : base(modsProvider)
-        {
-        }
 
 
         /// <inheritdoc/>

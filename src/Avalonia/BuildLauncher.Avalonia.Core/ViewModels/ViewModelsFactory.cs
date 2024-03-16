@@ -1,7 +1,6 @@
 ﻿using Common.Config;
 using Common.Enums;
 using Games.Providers;
-using Mods.Providers;
 using Ports.Providers;
 using Ports.Tools;
 
@@ -10,24 +9,18 @@ namespace BuildLauncher.ViewModels
     public sealed class ViewModelsFactory
     {
         private readonly GamesProvider _gamesProvider;
-        private readonly DownloadableModsProvider _downloadableModsProvider;
-        private readonly InstalledModsProvider _installedModsProvider;
         private readonly ConfigEntity _config;
         private readonly PortsInstallerFactory _installerFactory;
         private readonly PortsProvider _portsProvider;
 
         public ViewModelsFactory(
             GamesProvider gamesProvider,
-            DownloadableModsProvider downloadableModsProvider,
-            InstalledModsProvider installedModsProvider,
             ConfigProvider configProvider,
             PortsInstallerFactory installerFactory,
             PortsProvider portsProvider
             )
         {
             _gamesProvider = gamesProvider;
-            _downloadableModsProvider = downloadableModsProvider;
-            _installedModsProvider = installedModsProvider;
             _config = configProvider.Config;
             _installerFactory = installerFactory;
             _portsProvider = portsProvider;
@@ -42,8 +35,6 @@ namespace BuildLauncher.ViewModels
             CampaignsViewModel vm = new(
                 _gamesProvider.GetGame(gameEnum),
                 _gamesProvider,
-                _downloadableModsProvider,
-                _installedModsProvider,
                 _config
                 );
 
@@ -61,8 +52,6 @@ namespace BuildLauncher.ViewModels
             MapsViewModel vm = new(
                 _gamesProvider.GetGame(gameEnum),
                 _gamesProvider,
-                _downloadableModsProvider,
-                _installedModsProvider,
                 _config
                 );
 
@@ -79,8 +68,6 @@ namespace BuildLauncher.ViewModels
             ModsViewModel vm = new(
                 _gamesProvider.GetGame(gameEnum),
                 _gamesProvider,
-                _downloadableModsProvider,
-                _installedModsProvider,
                 _config
                 );
 
@@ -95,9 +82,7 @@ namespace BuildLauncher.ViewModels
         public DownloadsViewModel GetDownloadsViewModel(GameEnum gameEnum)
         {
             DownloadsViewModel vm = new(
-                _gamesProvider.GetGame(gameEnum),
-                _downloadableModsProvider,
-                _installedModsProvider
+                _gamesProvider.GetGame(gameEnum)
                 );
 
             Task.Run(vm.InitializeAsync);

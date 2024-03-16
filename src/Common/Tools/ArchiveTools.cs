@@ -31,21 +31,21 @@ namespace Common.Tools
             using HttpClient client = new();
             client.Timeout = TimeSpan.FromSeconds(10);
 
-            using var response = await client.GetAsync(url, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false); ;
+            using var response = await client.GetAsync(url, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false);
 
             if (!response.IsSuccessStatusCode)
             {
                 ThrowHelper.Exception($"Error while downloading {url}, error: {response.StatusCode}");
             }
 
-            await using var source = await response.Content.ReadAsStreamAsync().ConfigureAwait(false); ;
+            await using var source = await response.Content.ReadAsStreamAsync().ConfigureAwait(false);
             var contentLength = response.Content.Headers.ContentLength;
 
             await using FileStream file = new(tempFile, FileMode.Create, FileAccess.Write, FileShare.None);
 
             if (!contentLength.HasValue)
             {
-                await source.CopyToAsync(file).ConfigureAwait(false); ;
+                await source.CopyToAsync(file).ConfigureAwait(false);
             }
             else
             {
@@ -60,7 +60,7 @@ namespace Common.Tools
                     progress.Report(totalBytesRead / (long)contentLength * 100);
                 }
 
-                await file.DisposeAsync().ConfigureAwait(false); ;
+                await file.DisposeAsync().ConfigureAwait(false);
 
                 File.Move(tempFile, filePath, true);
             }
@@ -112,7 +112,7 @@ namespace Common.Tools
 
                     entryNumber++;
                 }
-            }).ConfigureAwait(false); ;
+            }).ConfigureAwait(false);
         }
     }
 }
