@@ -221,6 +221,19 @@ namespace Mods.Providers
                         image = ImageHelper.GetCoverFromArchive(archive);
                     }
                 }
+                else
+                {
+                    if (_game.GameEnum is GameEnum.Blood && modTypeEnum is ModTypeEnum.Campaign)
+                    {
+                        var ini = archive.Entries.FirstOrDefault(static x => x.Key.EndsWith(".ini", StringComparison.InvariantCultureIgnoreCase));
+
+                        if (ini is not null)
+                        {
+                            startupFile = ini.Key;
+                        }
+
+                    }
+                }
             }
             else if (file.EndsWith(".map", StringComparison.InvariantCultureIgnoreCase))
             {
