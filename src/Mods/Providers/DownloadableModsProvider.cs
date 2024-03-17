@@ -22,7 +22,7 @@ namespace Mods.Providers
         public event ModDownloaded NotifyModDownloaded;
 
         /// <inheritdoc/>
-        public Progress<float> Progress { get; private set; } = new();
+        public Progress<float> Progress { get; private set; }
 
         public DownloadableModsProvider(
             IGame game,
@@ -31,6 +31,8 @@ namespace Mods.Providers
         {
             _game = game;
             _archiveTools = archiveTools;
+
+            Progress = _archiveTools.Progress;
         }
 
 
@@ -136,8 +138,6 @@ namespace Mods.Providers
             var pathToFile = Path.Combine(path, file);
 
             await _archiveTools.DownloadFileAsync(new(url), pathToFile).ConfigureAwait(false);
-
-            Progress = _archiveTools.Progress;
 
             _game.InstalledModsProvider.AddMod(mod.ModType, pathToFile);
 
