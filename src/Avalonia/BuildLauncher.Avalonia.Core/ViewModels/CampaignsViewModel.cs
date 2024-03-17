@@ -63,6 +63,19 @@ namespace BuildLauncher.ViewModels
             }
         }
 
+        /// <summary>
+        /// Skip startup window parameter
+        /// </summary>
+        public bool SkipStartupCheckbox
+        {
+            get => _config.SkipStartup;
+            set
+            {
+                _config.SkipStartup = value;
+                OnPropertyChanged(nameof(SkipStartupCheckbox));
+            }
+        }
+
         public string SelectedCampaignDescription => SelectedCampaign is null ? string.Empty : SelectedCampaign.ToMarkdownString();
 
         #endregion
@@ -96,7 +109,7 @@ namespace BuildLauncher.ViewModels
             command.ThrowIfNotType<BasePort>(out var port);
             SelectedCampaign.ThrowIfNull();
 
-            var args = port.GetStartGameArgs(Game, SelectedCampaign, SkipIntroCheckbox);
+            var args = port.GetStartGameArgs(Game, SelectedCampaign, SkipIntroCheckbox, SkipStartupCheckbox);
 
             StartPort(port.FullPathToExe, args);
         }
@@ -163,6 +176,10 @@ namespace BuildLauncher.ViewModels
             if (parameterName.Equals(nameof(_config.SkipIntro)))
             {
                 OnPropertyChanged(nameof(SkipIntroCheckbox));
+            }
+            else if (parameterName.Equals(nameof(_config.SkipStartup)))
+            {
+                OnPropertyChanged(nameof(SkipStartupCheckbox));
             }
         }
 

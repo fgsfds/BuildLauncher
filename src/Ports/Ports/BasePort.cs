@@ -97,7 +97,7 @@ namespace Ports.Ports
         /// <param name="game">Game<param>
         /// <param name="mod">Map/campaign</param>
         /// <param name="skipIntro">Skip intro</param>
-        public string GetStartGameArgs(IGame game, IMod mod, bool skipIntro)
+        public string GetStartGameArgs(IGame game, IMod mod, bool skipIntro, bool skipStartup)
         {
             StringBuilder sb = new();
 
@@ -110,6 +110,11 @@ namespace Ports.Ports
             if (skipIntro)
             {
                 GetSkipIntroParameter(sb);
+            }
+
+            if (skipStartup)
+            {
+                GetSkipStartupParameter(sb);
             }
 
             return sb.ToString();
@@ -176,5 +181,11 @@ namespace Ports.Ports
         /// </summary>
         /// <param name="sb">String builder for parameters</param>
         protected abstract void GetSkipIntroParameter(StringBuilder sb);
+
+        /// <summary>
+        /// Return command line parameter to skip startup window
+        /// </summary>
+        /// <param name="sb">String builder for parameters</param>
+        protected abstract void GetSkipStartupParameter(StringBuilder sb);
     }
 }

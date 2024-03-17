@@ -95,6 +95,13 @@ namespace Common.Config
             set => SetConfigParameter(ref _skipIntro, value);
         }
 
+        private bool _skipStartup = true;
+        public bool SkipStartup
+        {
+            get => _skipStartup;
+            set => SetConfigParameter(ref _skipStartup, value);
+        }
+
         public HashSet<Guid> DisabledAutoloadMods { get; set; } = [];
 
         public void AddDisabledAutoloadMod(Guid guid)

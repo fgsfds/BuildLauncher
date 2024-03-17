@@ -5,6 +5,8 @@ namespace BuildLauncher.ViewModels
     public interface IPortsButtonControl
     {
         bool SkipIntroCheckbox { get; set; }
+     
+        bool SkipStartupCheckbox { get; set; }
 
         public IRelayCommand? OpenFolderCommand { get; }
     }

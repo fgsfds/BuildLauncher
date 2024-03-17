@@ -69,7 +69,7 @@ namespace Ports.Ports
         /// <inheritdoc/>
         protected override void GetStartCampaignArgs(StringBuilder sb, IGame game, IMod mod)
         {
-            sb.Append(@" -jar ..\..\BuildGDX.jar -silent ""true""");
+            sb.Append(@" -jar ..\..\BuildGDX.jar");
 
             if (game is BloodGame bGame && mod is BloodCampaign bMod)
             {
@@ -102,6 +102,9 @@ namespace Ports.Ports
 
         /// <inheritdoc/>
         protected override void GetSkipIntroParameter(StringBuilder sb) { }
+
+        /// <inheritdoc/>
+        protected override void GetSkipStartupParameter(StringBuilder sb) => sb.Append(" -silent \"true\"");
 
 
         private void GetDukeArgs(StringBuilder sb, DukeGame game, DukeCampaign camp)

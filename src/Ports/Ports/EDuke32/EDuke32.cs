@@ -95,7 +95,7 @@ namespace Ports.Ports.EDuke32
         /// <param name="camp">DukeCampaign</param>
         protected static void GetDukeArgs(StringBuilder sb, DukeGame game, DukeCampaign camp)
         {
-            sb.Append($@" -usecwd -nosetup");
+            sb.Append($@" -usecwd");
 
             if (camp.AddonEnum is DukeAddonEnum.WorldTour)
             {
@@ -167,6 +167,9 @@ namespace Ports.Ports.EDuke32
 
         /// <inheritdoc/>
         protected override void GetSkipIntroParameter(StringBuilder sb) => sb.Append(" -quick");
+
+        /// <inheritdoc/>
+        protected override void GetSkipStartupParameter(StringBuilder sb) => sb.Append(" -nosetup");
 
 
         /// <summary>

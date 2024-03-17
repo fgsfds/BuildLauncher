@@ -107,7 +107,7 @@ namespace Ports.Ports
         /// <inheritdoc/>
         protected override void GetStartCampaignArgs(StringBuilder sb, IGame game, IMod mod)
         {
-            sb.Append($@" -nosetup -savedir ""{Path.Combine(PathToPortFolder, "Save", mod.DisplayName.Replace(' ', '_'))}""");
+            sb.Append($@" -savedir ""{Path.Combine(PathToPortFolder, "Save", mod.DisplayName.Replace(' ', '_'))}""");
 
             if (game is BloodGame bGame && mod is BloodCampaign bMod)
             {
@@ -158,6 +158,9 @@ namespace Ports.Ports
 
         /// <inheritdoc/>
         protected override void GetSkipIntroParameter(StringBuilder sb) => sb.Append(" -quick");
+
+        /// <inheritdoc/>
+        protected override void GetSkipStartupParameter(StringBuilder sb) => sb.Append(" -nosetup");
 
 
         private void GetDukeArgs(StringBuilder sb, DukeGame game, DukeCampaign camp)
