@@ -24,9 +24,6 @@ namespace Ports.Ports.EDuke32
         public override string Name => "RedNukem";
 
         /// <inheritdoc/>
-        public override string ConfigFile => "rednukem.cfg";
-
-        /// <inheritdoc/>
         public override List<GameEnum> SupportedGames =>
             [
             GameEnum.Duke3D,
@@ -41,6 +38,10 @@ namespace Ports.Ports.EDuke32
 
         /// <inheritdoc/>
         public override Func<GitHubReleaseAsset, bool> WindowsReleasePredicate => static x => x.FileName.StartsWith("rednukem_win64");
+
+
+        /// <inheritdoc/>
+        protected override string ConfigFile => "rednukem.cfg";
 
 
         /// <inheritdoc/>

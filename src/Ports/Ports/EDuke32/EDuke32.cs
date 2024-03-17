@@ -24,16 +24,16 @@ namespace Ports.Ports.EDuke32
         public override string Name => "EDuke32";
 
         /// <inheritdoc/>
-        public override string ConfigFile => "eduke32.cfg";
+        protected override string ConfigFile => "eduke32.cfg";
 
         /// <inheritdoc/>
-        public override string AddDirectoryParam => "-j ";
+        protected override string AddDirectoryParam => "-j ";
 
         /// <inheritdoc/>
-        public override string AddFileParam => "-g ";
+        protected override string AddFileParam => "-g ";
 
         /// <inheritdoc/>
-        public override string AddDefParam => "-mh ";
+        protected override string AddDefParam => "-mh ";
 
         /// <inheritdoc/>
         public override List<GameEnum> SupportedGames =>
@@ -54,7 +54,7 @@ namespace Ports.Ports.EDuke32
         {
             get
             {
-                var versionFile = Path.Combine(FolderPath, "version");
+                var versionFile = Path.Combine(PathToPortFolder, "version");
 
                 if (!File.Exists(versionFile))
                 {
@@ -174,7 +174,7 @@ namespace Ports.Ports.EDuke32
         /// </summary>
         protected void FixGrpInConfig()
         {
-            var config = Path.Combine(FolderPath, ConfigFile);
+            var config = Path.Combine(PathToPortFolder, ConfigFile);
 
             if (!File.Exists(config))
             {

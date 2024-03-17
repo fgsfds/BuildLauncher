@@ -25,10 +25,7 @@ namespace Ports.Ports.EDuke32
         /// <inheritdoc/>
         public override string Name => "Fury";
 
-        /// <inheritdoc/>
-        public override string ConfigFile => "fury.cfg";
-
-        public override string FolderPath => _config.GamePathFury ?? string.Empty;
+        public override string PathToPortFolder => _config.GamePathFury ?? string.Empty;
 
         public override bool IsInstalled => File.Exists(FullPathToExe);
 
@@ -48,6 +45,10 @@ namespace Ports.Ports.EDuke32
         {
             _config = config;
         }
+
+
+        /// <inheritdoc/>
+        protected override string ConfigFile => "fury.cfg";
 
 
         /// <inheritdoc/>

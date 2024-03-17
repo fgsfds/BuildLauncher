@@ -19,6 +19,11 @@ namespace Ports.Providers
         /// <param name="port">Port</param>
         public static async Task<PortRelease?> GetLatestReleaseAsync(BasePort port)
         {
+            if (port.PortEnum is PortEnum.BuildGDX)
+            {
+                return new(port.RepoUrl.ToString(), 116);
+            }
+
             if (CommonProperties.IsDevMode)
             {
                 return null;
@@ -39,9 +44,7 @@ namespace Ports.Providers
                 return null;
             }
 
-            var a = port.GetType();
-
-            if (port.PortEnum == PortEnum.EDuke32)
+            if (port.PortEnum is PortEnum.EDuke32)
             {
                 return EDuke32Hack(response);
             }
@@ -63,6 +66,16 @@ namespace Ports.Providers
                 return null;
             }
 
+            var version = GetVersion(port, release, zip);
+
+            return new(zip.DownloadUrl, version);
+        }
+
+        /// <summary>
+        /// Get port version
+        /// </summary>
+        private static int GetVersion(BasePort port, GitHubRelease? release, GitHubReleaseAsset? zip)
+        {
             int version = 0;
 
             if (port is NotBlood)
@@ -75,7 +88,7 @@ namespace Ports.Providers
                 version = int.Parse(numbersOnly);
             }
 
-            return new(zip.DownloadUrl, version);
+            return version;
         }
 
         /// <summary>

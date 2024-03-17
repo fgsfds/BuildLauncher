@@ -25,9 +25,6 @@ namespace Ports.Ports
         public override string Name => "Raze";
 
         /// <inheritdoc/>
-        public override string ConfigFile => "raze_portable.ini";
-
-        /// <inheritdoc/>
         public override List<GameEnum> SupportedGames =>
             [
             GameEnum.Blood,
@@ -52,20 +49,24 @@ namespace Ports.Ports
             ? int.Parse(new string(FileVersionInfo.GetVersionInfo(FullPathToExe).FileVersion!.Where(static x => char.IsDigit(x)).ToArray()))
             : null;
 
-        /// <inheritdoc/>
-        public override string AddDirectoryParam => throw new NotImplementedException();
 
         /// <inheritdoc/>
-        public override string AddFileParam => throw new NotImplementedException();
+        protected override string ConfigFile => "raze_portable.ini";
 
         /// <inheritdoc/>
-        public override string AddDefParam => throw new NotImplementedException();
+        protected override string AddDirectoryParam => throw new NotImplementedException();
+
+        /// <inheritdoc/>
+        protected override string AddFileParam => throw new NotImplementedException();
+
+        /// <inheritdoc/>
+        protected override string AddDefParam => throw new NotImplementedException();
 
 
         /// <inheritdoc/>
         protected override void BeforeStart(IGame game, IMod campaign)
         {
-            var config = Path.Combine(FolderPath, ConfigFile);
+            var config = Path.Combine(PathToPortFolder, ConfigFile);
 
             if (!File.Exists(config))
             {
@@ -106,7 +107,7 @@ namespace Ports.Ports
         /// <inheritdoc/>
         protected override void GetStartCampaignArgs(StringBuilder sb, IGame game, IMod mod)
         {
-            sb.Append($@" -nosetup -savedir ""{Path.Combine(FolderPath, "Save", mod.DisplayName.Replace(' ', '_'))}""");
+            sb.Append($@" -nosetup -savedir ""{Path.Combine(PathToPortFolder, "Save", mod.DisplayName.Replace(' ', '_'))}""");
 
             if (game is BloodGame bGame && mod is BloodCampaign bMod)
             {
@@ -165,7 +166,7 @@ namespace Ports.Ports
 
             if (camp.AddonEnum is DukeAddonEnum.WorldTour)
             {
-                var config = Path.Combine(FolderPath, ConfigFile);
+                var config = Path.Combine(PathToPortFolder, ConfigFile);
                 AddGamePathsToConfig(game.DukeWTInstallPath, game.ModsFolderPath, game.MapsFolderPath, config);
 
                 return;
@@ -271,7 +272,7 @@ namespace Ports.Ports
 
             if (camp.AddonEnum is RedneckAddonEnum.Again)
             {
-                var config = Path.Combine(FolderPath, ConfigFile);
+                var config = Path.Combine(PathToPortFolder, ConfigFile);
                 AddGamePathsToConfig(game.AgainInstallPath, game.ModsFolderPath, game.MapsFolderPath, config);
             }
 

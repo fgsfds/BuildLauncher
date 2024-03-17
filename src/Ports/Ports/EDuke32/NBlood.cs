@@ -24,9 +24,6 @@ namespace Ports.Ports.EDuke32
         public override string Name => "NBlood";
 
         /// <inheritdoc/>
-        public override string ConfigFile => "nblood.cfg";
-
-        /// <inheritdoc/>
         public override List<GameEnum> SupportedGames => [GameEnum.Blood];
 
         /// <inheritdoc/>
@@ -34,6 +31,10 @@ namespace Ports.Ports.EDuke32
 
         /// <inheritdoc/>
         public override Func<GitHubReleaseAsset, bool> WindowsReleasePredicate => static x => x.FileName.StartsWith("nblood_win64");
+
+
+        /// <inheritdoc/>
+        protected override string ConfigFile => "nblood.cfg";
 
 
         /// <inheritdoc/>

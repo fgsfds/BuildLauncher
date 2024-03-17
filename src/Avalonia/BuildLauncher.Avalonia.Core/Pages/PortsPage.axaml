@@ -58,6 +58,13 @@
                 <ctrl:PortControl Name="EDuke32" Grid.Row="1" Grid.Column="2" Margin="5"></ctrl:PortControl>
             </Grid>
 
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition SharedSizeGroup="SharedGroup" />
+                </Grid.ColumnDefinitions>
+                <ctrl:PortControl Name="BuildGDX" Grid.Row="1" Grid.Column="2" Margin="5"></ctrl:PortControl>
+            </Grid>
+
         </WrapPanel>
 
         <StackPanel Orientation="Horizontal" Grid.Row="1">

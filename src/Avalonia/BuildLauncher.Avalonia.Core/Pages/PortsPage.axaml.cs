@@ -22,6 +22,7 @@ namespace BuildLauncher.Pages
             PCExhumed.DataContext = vmFactory.GetPortViewModel(PortEnum.PCExhumed);
             RedNukem.DataContext = vmFactory.GetPortViewModel(PortEnum.RedNukem);
             EDuke32.DataContext = vmFactory.GetPortViewModel(PortEnum.EDuke32);
+            BuildGDX.DataContext = vmFactory.GetPortViewModel(PortEnum.BuildGDX);
         }
 
         /// <summary>

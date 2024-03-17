@@ -28,11 +28,6 @@ namespace Ports.Ports
         public abstract string Name { get; }
 
         /// <summary>
-        /// Name of the config file
-        /// </summary>
-        public abstract string ConfigFile { get; }
-
-        /// <summary>
         /// Games supported by the port
         /// </summary>
         public abstract List<GameEnum> SupportedGames { get; }
@@ -53,42 +48,47 @@ namespace Ports.Ports
         public abstract int? InstalledVersion { get; }
 
         /// <summary>
-        /// Cmd parameter to add folder to search path
-        /// </summary>
-        public abstract string AddDirectoryParam { get; }
-
-        /// <summary>
-        /// Cmd parameter to load additional file
-        /// </summary>
-        public abstract string AddFileParam { get; }
-
-        /// <summary>
-        /// Cmd parameter to load additional Def file
-        /// </summary>
-        public abstract string AddDefParam { get; }
-
-
-        /// <summary>
         /// Path to port install folder
         /// </summary>
-        public virtual string FolderPath => Path.Combine(CommonProperties.PortsFolderPath, PortFolder);
+        public virtual string PathToPortFolder => Path.Combine(CommonProperties.PortsFolderPath, PortFolderName);
 
         /// <summary>
         /// Is port installed
         /// </summary>
         public virtual bool IsInstalled => InstalledVersion is not null;
 
+        /// <summary>
+        /// Path to port exe
+        /// </summary>
+        public string FullPathToExe => Path.Combine(PathToPortFolder, Exe);
+
+
+        /// <summary>
+        /// Name of the config file
+        /// </summary>
+        protected abstract string ConfigFile { get; }
+
+        /// <summary>
+        /// Cmd parameter to add folder to search path
+        /// </summary>
+        protected abstract string AddDirectoryParam { get; }
+
+        /// <summary>
+        /// Cmd parameter to load additional file
+        /// </summary>
+        protected abstract string AddFileParam { get; }
+
+        /// <summary>
+        /// Cmd parameter to load additional Def file
+        /// </summary>
+        protected abstract string AddDefParam { get; }
+
 
         /// <summary>
         /// Name of the folder that contains the port files
         /// By default is the same as <see cref="Name"/>
         /// </summary>
-        protected string PortFolder => Name;
-
-        /// <summary>
-        /// Path to port exe
-        /// </summary>
-        public string FullPathToExe => Path.Combine(FolderPath, Exe);
+        protected virtual string PortFolderName => Name;
 
 
         /// <summary>
