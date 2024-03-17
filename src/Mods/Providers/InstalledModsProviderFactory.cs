@@ -10,7 +10,7 @@ namespace Mods.Providers
         private readonly ConfigEntity _config = configProvider.Config;
 
         /// <summary>
-        /// Get or create singleton instance on the provider
+        /// Get or create singleton instance of the provider
         /// </summary>
         /// <param name="game">Game</param>
         public InstalledModsProvider GetSingleton(IGame game)

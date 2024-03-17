@@ -17,7 +17,7 @@ namespace Mods.Providers
     {
         private readonly IGame _game;
         private readonly ConfigEntity _config;
-        private readonly Dictionary<ModTypeEnum, Dictionary<Guid, IMod>>? _cache;
+        private readonly Dictionary<ModTypeEnum, Dictionary<Guid, IMod>> _cache;
         private readonly SemaphoreSlim _semaphore = new(1);
 
         public event ModInstalled NotifyModDeleted;
