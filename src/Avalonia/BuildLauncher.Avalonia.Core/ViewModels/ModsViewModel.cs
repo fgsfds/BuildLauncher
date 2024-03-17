@@ -35,14 +35,14 @@ namespace BuildLauncher.ViewModels
         /// <summary>
         /// VM initialization
         /// </summary>
-        public Task InitializeAsync() => UpdateAsync();
+        public Task InitializeAsync() => UpdateAsync(false);
 
         /// <summary>
         /// Update mods list
         /// </summary>
-        private async Task UpdateAsync()
+        private async Task UpdateAsync(bool createNew)
         {
-            await Game.InstalledModsProvider.CreateCache();
+            await Game.InstalledModsProvider.CreateCache(createNew);
 
             OnPropertyChanged(nameof(ModsList));
         }
@@ -80,6 +80,16 @@ namespace BuildLauncher.ViewModels
                 FileName = Game.ModsFolderPath,
                 UseShellExecute = true,
             });
+        }
+
+
+        /// <summary>
+        /// Refresh campaigns list
+        /// </summary>
+        [RelayCommand]
+        private async Task RefreshListAsync()
+        {
+            await UpdateAsync(true);
         }
 
 

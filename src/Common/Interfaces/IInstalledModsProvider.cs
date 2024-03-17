@@ -30,6 +30,7 @@ namespace Common.Interfaces
         /// <summary>
         /// Create cache of installed mods if it doesn't exist
         /// </summary>
-        Task CreateCache();
+        /// <param name="createNew">Clear current cache and create new</param>
+        Task CreateCache(bool createNew);
     }
 }

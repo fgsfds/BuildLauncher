@@ -34,9 +34,14 @@ namespace Mods.Providers
 
 
         /// <inheritdoc/>
-        public async Task CreateCache()
+        public async Task CreateCache(bool createNew)
         {
             _semaphore.Wait();
+
+            if (createNew)
+            {
+                _cache.Clear();
+            }
 
             if (_cache.Count == 0)
             {

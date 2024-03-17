@@ -7,7 +7,7 @@
              xmlns:i="clr-namespace:Common.Interfaces;assembly=BuildLauncher.Common"
              x:DataType="i:IPortsButtonControl">
 
-    <Grid ColumnDefinitions="auto, *" Grid.Row="1" Margin="0,10">
+    <Grid ColumnDefinitions="*, auto, auto" Grid.Row="1" Margin="0,10">
 
         <StackPanel Name="PortsButtonsPanel"
                     Grid.Column="0"
@@ -18,6 +18,14 @@
         </StackPanel>
 
         <Button Grid.Column="1"
+                HorizontalAlignment="Right"
+                Padding="5"
+                Margin="5,0"
+                Command="{Binding RefreshListCommand}">
+            Refresh
+        </Button>
+
+        <Button Grid.Column="2"
                 HorizontalAlignment="Right"
                 Padding="5"
                 Command="{Binding OpenFolderCommand}">

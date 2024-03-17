@@ -65,13 +65,22 @@
 
         </md:MarkdownScrollViewer>
 
-        <Button Grid.Row="1"
-                Command="{Binding OpenFolderCommand}"
-                HorizontalAlignment="Right"
-                Margin="0,15"
-                Padding="5">
-            Open folder...
-        </Button>
+        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right">
+
+            <Button Command="{Binding RefreshListCommand}"
+                    HorizontalAlignment="Right"
+                    Margin="5,15"
+                    Padding="5">
+                Refresh
+            </Button>
+
+            <Button Command="{Binding OpenFolderCommand}"
+                    HorizontalAlignment="Right"
+                    Margin="0,15"
+                    Padding="5">
+                Open folder...
+            </Button>
+        </StackPanel>
 
     </Grid>
 

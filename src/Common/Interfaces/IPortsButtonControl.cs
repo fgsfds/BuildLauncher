@@ -4,6 +4,8 @@ namespace Common.Interfaces
 {
     public interface IPortsButtonControl
     {
-        public IRelayCommand? OpenFolderCommand { get; }
+        IRelayCommand? OpenFolderCommand { get; }
+
+        IAsyncRelayCommand? RefreshListCommand { get; }
     }
 }
