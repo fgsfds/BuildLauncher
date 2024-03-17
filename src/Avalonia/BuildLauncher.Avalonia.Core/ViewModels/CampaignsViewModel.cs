@@ -50,32 +50,6 @@ namespace BuildLauncher.ViewModels
         [NotifyCanExecuteChangedFor(nameof(StartCampaignCommand))]
         private IMod? _selectedCampaign;
 
-        /// <summary>
-        /// Skip intro parameter
-        /// </summary>
-        public bool SkipIntroCheckbox
-        {
-            get => _config.SkipIntro;
-            set
-            {
-                _config.SkipIntro = value;
-                OnPropertyChanged(nameof(SkipIntroCheckbox));
-            }
-        }
-
-        /// <summary>
-        /// Skip startup window parameter
-        /// </summary>
-        public bool SkipStartupCheckbox
-        {
-            get => _config.SkipStartup;
-            set
-            {
-                _config.SkipStartup = value;
-                OnPropertyChanged(nameof(SkipStartupCheckbox));
-            }
-        }
-
         public string SelectedCampaignDescription => SelectedCampaign is null ? string.Empty : SelectedCampaign.ToMarkdownString();
 
         #endregion
@@ -109,7 +83,7 @@ namespace BuildLauncher.ViewModels
             command.ThrowIfNotType<BasePort>(out var port);
             SelectedCampaign.ThrowIfNull();
 
-            var args = port.GetStartGameArgs(Game, SelectedCampaign, SkipIntroCheckbox, SkipStartupCheckbox);
+            var args = port.GetStartGameArgs(Game, SelectedCampaign, _config.SkipIntro, _config.SkipStartup);
 
             StartPort(port.FullPathToExe, args);
         }
@@ -173,14 +147,6 @@ namespace BuildLauncher.ViewModels
 
         private void NotifyConfigChanged(string parameterName)
         {
-            if (parameterName.Equals(nameof(_config.SkipIntro)))
-            {
-                OnPropertyChanged(nameof(SkipIntroCheckbox));
-            }
-            else if (parameterName.Equals(nameof(_config.SkipStartup)))
-            {
-                OnPropertyChanged(nameof(SkipStartupCheckbox));
-            }
         }
 
         private void NotifyModDownloaded(IGame game, ModTypeEnum modType)

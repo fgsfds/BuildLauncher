@@ -83,6 +83,32 @@ namespace BuildLauncher.ViewModels
             set => _config.GamePathSlave = value;
         }
 
+        /// <summary>
+        /// Skip intro parameter
+        /// </summary>
+        public bool SkipIntroCheckbox
+        {
+            get => _config.SkipIntro;
+            set
+            {
+                _config.SkipIntro = value;
+                OnPropertyChanged(nameof(SkipIntroCheckbox));
+            }
+        }
+
+        /// <summary>
+        /// Skip startup window parameter
+        /// </summary>
+        public bool SkipStartupCheckbox
+        {
+            get => _config.SkipStartup;
+            set
+            {
+                _config.SkipStartup = value;
+                OnPropertyChanged(nameof(SkipStartupCheckbox));
+            }
+        }
+
         #endregion
 
 

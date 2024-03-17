@@ -50,29 +50,8 @@
 
             <Grid ColumnDefinitions="auto,*,auto" RowDefinitions="auto,auto,auto,auto,auto,auto,auto,auto,auto">
 
-                <!--Path to Blood-->
-                <TextBlock Grid.Row="0" Grid.Column="0"
-                           VerticalAlignment="Center"
-                           Margin="10, 5">Path to Blood install:</TextBlock>
-
-                <TextBox Grid.Row="0" Grid.Column="1"
-
-                         Text="{Binding PathToBlood}"
-                         Margin="0,3"/>
-
-                <Button Grid.Row="0" Grid.Column="2"
-
-                        Margin="5,0,10,0"
-                        Width="{Binding $self.Bounds.Height}"
-                        HorizontalContentAlignment="Center"
-                        Command="{Binding OpenFolderPickerCommand}"
-                        CommandParameter="Blood">
-                    ...
-                </Button>
-
-
                 <!--Path to Duke 3D-->
-                <TextBlock Grid.Row="1" Grid.Column="0"
+                <TextBlock Grid.Row="0" Grid.Column="0"
                            VerticalAlignment="Center"
                            Margin="10, 5">Path to Duke Nukem 3D install:</TextBlock>
 
@@ -91,7 +70,7 @@
 
 
                 <!--Path to Duke WT-->
-                <TextBlock Grid.Row="2" Grid.Column="0"
+                <TextBlock Grid.Row="1" Grid.Column="0"
                            VerticalAlignment="Center"
                            Margin="10, 5">Path to Duke World Tour install:</TextBlock>
 
@@ -110,7 +89,7 @@
 
 
                 <!--Path to Duke 64-->
-                <TextBlock Grid.Row="3" Grid.Column="0"
+                <TextBlock Grid.Row="2" Grid.Column="0"
                            VerticalAlignment="Center"
                            Margin="10, 5">Path to Duke Nukem 64 ROM:</TextBlock>
 
@@ -123,6 +102,27 @@
                         Width="{Binding $self.Bounds.Height}"
                         HorizontalContentAlignment="Center"
                         Command="{Binding OpenFilePickerCommand}">
+                    ...
+                </Button>
+
+
+                <!--Path to Blood-->
+                <TextBlock Grid.Row="3" Grid.Column="0"
+                           VerticalAlignment="Center"
+                           Margin="10, 5">Path to Blood install:</TextBlock>
+
+                <TextBox Grid.Row="0" Grid.Column="1"
+
+                         Text="{Binding PathToBlood}"
+                         Margin="0,3"/>
+
+                <Button Grid.Row="0" Grid.Column="2"
+
+                        Margin="5,0,10,0"
+                        Width="{Binding $self.Bounds.Height}"
+                        HorizontalContentAlignment="Center"
+                        Command="{Binding OpenFolderPickerCommand}"
+                        CommandParameter="Blood">
                     ...
                 </Button>
 
@@ -222,6 +222,18 @@
                 </Button>
 
             </Grid>
+
+            <CheckBox IsChecked="{Binding SkipIntroCheckbox}"
+                      VerticalAlignment="Center"
+                      Margin="10,5">
+                Skip intro
+            </CheckBox>
+
+            <CheckBox IsChecked="{Binding SkipStartupCheckbox}"
+                      VerticalAlignment="Center"
+                      Margin="10,0">
+                Skip startup window
+            </CheckBox>
 
         </StackPanel>
 

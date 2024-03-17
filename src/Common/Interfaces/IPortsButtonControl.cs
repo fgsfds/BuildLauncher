@@ -1,13 +1,9 @@
 ﻿using CommunityToolkit.Mvvm.Input;
 
-namespace BuildLauncher.ViewModels
+namespace Common.Interfaces
 {
     public interface IPortsButtonControl
     {
-        bool SkipIntroCheckbox { get; set; }
-     
-        bool SkipStartupCheckbox { get; set; }
-
         public IRelayCommand? OpenFolderCommand { get; }
     }
 }
