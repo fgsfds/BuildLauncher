@@ -81,6 +81,11 @@ namespace Common.Interfaces
         bool IsLoose { get; init; }
 
         /// <summary>
+        /// Built-in def file
+        /// </summary>
+        string? DefFileContents { get; init; }
+
+        /// <summary>
         /// Create markdown description of the mod
         /// </summary>
         string ToMarkdownString();

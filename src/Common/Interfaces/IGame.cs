@@ -67,7 +67,8 @@ namespace Common.Interfaces
         /// <summary>
         /// Create combined autoload mod
         /// </summary>
-        void CreateCombinedMod();
+        /// <param name="additionalDef">Additional text for def</param>
+        void CreateCombinedMod(string? additionalDef = null);
 
         /// <summary>
         /// Get list of official addons and custom campaigns

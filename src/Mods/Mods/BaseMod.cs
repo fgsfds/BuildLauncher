@@ -54,6 +54,9 @@ namespace Mods.Mods
         /// <inheritdoc/>
         public required bool IsLoose { get; init; }
 
+        /// <inheritdoc/>
+        public string? DefFileContents { get; init; }
+
 
         public override string ToString() => DisplayName;
 

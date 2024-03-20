@@ -151,7 +151,7 @@ namespace Games.Games
 
 
         /// <inheritdoc/>
-        public void CreateCombinedMod()
+        public void CreateCombinedMod(string? additionalDef = null)
         {
             Cleanup();
 
@@ -195,11 +195,16 @@ namespace Games.Games
                     continue;
                 }
 
-                using (var streamReader = new StreamReader(ini.Open()))
-                {
-                    newDef.Append(streamReader.ReadToEnd());
-                    newDef.Append(Environment.NewLine);
-                }
+                using var stream = ini.Open();
+                using var streamReader = new StreamReader(stream);
+
+                newDef.Append(streamReader.ReadToEnd());
+                newDef.Append(Environment.NewLine);
+            }
+
+            if (additionalDef is not  null)
+            {
+                newDef.Append(additionalDef);
             }
 
             using var memStream = new MemoryStream(Encoding.UTF8.GetBytes(newDef.ToString()));

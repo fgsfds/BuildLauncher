@@ -71,7 +71,7 @@ namespace Ports.Ports.EDuke32
         {
             FixGrpInConfig();
 
-            game.CreateCombinedMod();
+            game.CreateCombinedMod(campaign.DefFileContents);
         }
 
         /// <inheritdoc/>
