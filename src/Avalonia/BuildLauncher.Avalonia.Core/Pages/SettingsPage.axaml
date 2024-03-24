@@ -48,7 +48,7 @@
 
             </Grid>
 
-            <Grid ColumnDefinitions="auto,*,auto" RowDefinitions="auto,auto,auto,auto,auto,auto,auto,auto,auto">
+            <Grid ColumnDefinitions="auto,*,auto,auto,auto" RowDefinitions="auto,auto,auto,auto,auto,auto,auto,auto,auto">
 
                 <!--Path to Duke 3D-->
                 <TextBlock Grid.Row="0" Grid.Column="0"
@@ -60,12 +60,22 @@
                          Margin="0,3"/>
 
                 <Button Grid.Row="0"  Grid.Column="2"
-                        Margin="5,0,10,0"
+                        Margin="5,0"
                         Width="{Binding $self.Bounds.Height}"
                         HorizontalContentAlignment="Center"
                         Command="{Binding OpenFolderPickerCommand}"
                         CommandParameter="Duke3D">
                     ...
+                </Button>
+
+                <Button Grid.Row="0"  Grid.Column="3"
+                        Margin="0,0,5,0"
+                        Width="{Binding $self.Bounds.Height}"
+                        HorizontalContentAlignment="Center"
+                        Command="{Binding AutodetectCommand}"
+                        CommandParameter="Duke3D"
+                        ToolTip.Tip="Autodetect">
+                    ⟳
                 </Button>
 
 
@@ -79,12 +89,22 @@
                          Margin="0,3"/>
 
                 <Button Grid.Row="1"  Grid.Column="2"
-                        Margin="5,0,10,0"
+                        Margin="5,0"
                         Width="{Binding $self.Bounds.Height}"
                         HorizontalContentAlignment="Center"
                         Command="{Binding OpenFolderPickerCommand}"
                         CommandParameter="DukeWT">
                     ...
+                </Button>
+
+                <Button Grid.Row="1"  Grid.Column="3"
+                        Margin="0,0,10,0"
+                        Width="{Binding $self.Bounds.Height}"
+                        HorizontalContentAlignment="Center"
+                        Command="{Binding AutodetectCommand}"
+                        CommandParameter="DukeWT"
+                        ToolTip.Tip="Autodetect">
+                    ⟳
                 </Button>
 
 
@@ -98,7 +118,7 @@
                          Margin="0,3"/>
 
                 <Button Grid.Row="2"  Grid.Column="2"
-                        Margin="5,0,10,0"
+                        Margin="5,0"
                         Width="{Binding $self.Bounds.Height}"
                         HorizontalContentAlignment="Center"
                         Command="{Binding OpenFilePickerCommand}">
@@ -117,13 +137,22 @@
                          Margin="0,3"/>
 
                 <Button Grid.Row="3" Grid.Column="2"
-
-                        Margin="5,0,10,0"
+                        Margin="5,0"
                         Width="{Binding $self.Bounds.Height}"
                         HorizontalContentAlignment="Center"
                         Command="{Binding OpenFolderPickerCommand}"
                         CommandParameter="Blood">
                     ...
+                </Button>
+
+                <Button Grid.Row="3"  Grid.Column="3"
+                        Margin="0,0,10,0"
+                        Width="{Binding $self.Bounds.Height}"
+                        HorizontalContentAlignment="Center"
+                        Command="{Binding AutodetectCommand}"
+                        CommandParameter="Blood"
+                        ToolTip.Tip="Autodetect">
+                    ⟳
                 </Button>
 
 
@@ -137,12 +166,22 @@
                          Margin="0,3"/>
 
                 <Button Grid.Row="4"  Grid.Column="2"
-                        Margin="5,0,10,0"
+                        Margin="5,0"
                         Width="{Binding $self.Bounds.Height}"
                         HorizontalContentAlignment="Center"
                         Command="{Binding OpenFolderPickerCommand}"
                         CommandParameter="Wang">
                     ...
+                </Button>
+
+                <Button Grid.Row="4"  Grid.Column="3"
+                        Margin="0,0,10,0"
+                        Width="{Binding $self.Bounds.Height}"
+                        HorizontalContentAlignment="Center"
+                        Command="{Binding AutodetectCommand}"
+                        CommandParameter="Wang"
+                        ToolTip.Tip="Autodetect">
+                    ⟳
                 </Button>
 
 
@@ -156,12 +195,22 @@
                          Margin="0,3"/>
 
                 <Button Grid.Row="5"  Grid.Column="2"
-                        Margin="5,0,10,0"
+                        Margin="5,0"
                         Width="{Binding $self.Bounds.Height}"
                         HorizontalContentAlignment="Center"
                         Command="{Binding OpenFolderPickerCommand}"
                         CommandParameter="Fury">
                     ...
+                </Button>
+
+                <Button Grid.Row="5"  Grid.Column="3"
+                        Margin="0,0,10,0"
+                        Width="{Binding $self.Bounds.Height}"
+                        HorizontalContentAlignment="Center"
+                        Command="{Binding AutodetectCommand}"
+                        CommandParameter="Fury"
+                        ToolTip.Tip="Autodetect">
+                    ⟳
                 </Button>
 
 
@@ -175,12 +224,22 @@
                          Margin="0,3"/>
 
                 <Button Grid.Row="6"  Grid.Column="2"
-                        Margin="5,0,10,0"
+                        Margin="5,0"
                         Width="{Binding $self.Bounds.Height}"
                         HorizontalContentAlignment="Center"
                         Command="{Binding OpenFolderPickerCommand}"
                         CommandParameter="Redneck">
                     ...
+                </Button>
+
+                <Button Grid.Row="6"  Grid.Column="3"
+                        Margin="0,0,10,0"
+                        Width="{Binding $self.Bounds.Height}"
+                        HorizontalContentAlignment="Center"
+                        Command="{Binding AutodetectCommand}"
+                        CommandParameter="Redneck"
+                        ToolTip.Tip="Autodetect">
+                    ⟳
                 </Button>
 
 
@@ -194,12 +253,22 @@
                          Margin="0,3"/>
 
                 <Button Grid.Row="7"  Grid.Column="2"
-                        Margin="5,0,10,0"
+                        Margin="5,0"
                         Width="{Binding $self.Bounds.Height}"
                         HorizontalContentAlignment="Center"
                         Command="{Binding OpenFolderPickerCommand}"
                         CommandParameter="Again">
                     ...
+                </Button>
+
+                <Button Grid.Row="7"  Grid.Column="3"
+                        Margin="0,0,10,0"
+                        Width="{Binding $self.Bounds.Height}"
+                        HorizontalContentAlignment="Center"
+                        Command="{Binding AutodetectCommand}"
+                        CommandParameter="Again"
+                        ToolTip.Tip="Autodetect">
+                    ⟳
                 </Button>
 
 
@@ -213,12 +282,22 @@
                          Margin="0,3"/>
 
                 <Button Grid.Row="8"  Grid.Column="2"
-                        Margin="5,0,10,0"
+                        Margin="5,0"
                         Width="{Binding $self.Bounds.Height}"
                         HorizontalContentAlignment="Center"
                         Command="{Binding OpenFolderPickerCommand}"
                         CommandParameter="Slave">
                     ...
+                </Button>
+
+                <Button Grid.Row="8"  Grid.Column="3"
+                        Margin="0,0,10,0"
+                        Width="{Binding $self.Bounds.Height}"
+                        HorizontalContentAlignment="Center"
+                        Command="{Binding AutodetectCommand}"
+                        CommandParameter="Slave"
+                        ToolTip.Tip="Autodetect">
+                    ⟳
                 </Button>
 
             </Grid>

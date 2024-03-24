@@ -4,6 +4,7 @@
     {
         Blood,
         Duke3D,
+        DukeWT,
         Wang,
         Fury,
         Slave,

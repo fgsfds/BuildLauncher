@@ -22,64 +22,64 @@ namespace Common.Config
             set => SetConfigParameter(ref _theme, value);
         }
 
-        private string _gamePathBlood = string.Empty;
-        public string GamePathBlood
+        private string? _gamePathBlood = null;
+        public string? GamePathBlood
         {
             get => _gamePathBlood;
             set => SetConfigParameter(ref _gamePathBlood, value);
         }
 
-        private string _gamePathDuke = string.Empty;
-        public string GamePathDuke3D
+        private string? _gamePathDuke = null;
+        public string? GamePathDuke3D
         {
             get => _gamePathDuke;
             set => SetConfigParameter(ref _gamePathDuke, value);
         }
 
-        private string _gamePathDuke64 = string.Empty;
-        public string GamePathDuke64
+        private string? _gamePathDuke64 = null;
+        public string? GamePathDuke64
         {
             get => _gamePathDuke64;
             set => SetConfigParameter(ref _gamePathDuke64, value);
         }
 
-        private string _gamePathDukeWT = string.Empty;
-        public string GamePathDukeWT
+        private string? _gamePathDukeWT = null;
+        public string? GamePathDukeWT
         {
             get => _gamePathDukeWT;
             set => SetConfigParameter(ref _gamePathDukeWT, value);
         }
 
-        private string _gamePathWang = string.Empty;
-        public string GamePathWang
+        private string? _gamePathWang = null;
+        public string? GamePathWang
         {
             get => _gamePathWang;
             set => SetConfigParameter(ref _gamePathWang, value);
         }
 
-        private string _gamePathRedneck = string.Empty;
-        public string GamePathRedneck
+        private string? _gamePathRedneck = null;
+        public string? GamePathRedneck
         {
             get => _gamePathRedneck;
             set => SetConfigParameter(ref _gamePathRedneck, value);
         }
 
-        private string _gamePathAgain = string.Empty;
-        public string GamePathAgain
+        private string? _gamePathAgain = null;
+        public string? GamePathAgain
         {
             get => _gamePathAgain;
             set => SetConfigParameter(ref _gamePathAgain, value);
         }
 
-        private string _gamePathSlave = string.Empty;
-        public string GamePathSlave
+        private string? _gamePathSlave = null;
+        public string? GamePathSlave
         {
             get => _gamePathSlave;
             set => SetConfigParameter(ref _gamePathSlave, value);
         }
 
-        private string _gamePathFury = string.Empty;
-        public string GamePathFury
+        private string? _gamePathFury = null;
+        public string? GamePathFury
         {
             get => _gamePathFury;
             set => SetConfigParameter(ref _gamePathFury, value);
@@ -116,15 +116,23 @@ namespace Common.Config
         /// <summary>
         /// Sets config parameter if changed and invokes notifier
         /// </summary>
-        /// <param name="fieldName">Parameter field to change</param>
+        /// <param name="field">Parameter field to change</param>
         /// <param name="value">New value</param>
-        private void SetConfigParameter<T>(ref T fieldName, T value, [CallerMemberName] string callerName = "")
+        private void SetConfigParameter<T>(ref T? field, T value, [CallerMemberName] string callerName = "")
         {
             callerName.ThrowIfNullOrEmpty();
 
-            if (fieldName is null || !fieldName.Equals(value))
+            if (field is null || !field.Equals(value))
             {
-                fieldName = value;
+                if (value is string str && string.IsNullOrWhiteSpace(str))
+                {
+                    field = default;
+                }
+                else
+                {
+                    field = value;
+                }
+
                 ParameterChangedEvent?.Invoke(callerName);
             }
         }
@@ -132,6 +140,7 @@ namespace Common.Config
 
     [JsonSourceGenerationOptions(
         WriteIndented = true,
+        DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
         Converters = [typeof(JsonStringEnumConverter<ThemeEnum>)]
         )]
     [JsonSerializable(typeof(ConfigEntity))]

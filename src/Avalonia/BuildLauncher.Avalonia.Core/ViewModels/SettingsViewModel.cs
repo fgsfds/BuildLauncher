@@ -7,16 +7,22 @@ using Common.Enums;
 using Common.Helpers;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Games.Providers;
 
 namespace BuildLauncher.ViewModels
 {
     internal sealed partial class SettingsViewModel : ObservableObject
     {
         private readonly ConfigEntity _config;
+        private readonly GamesAutoDetector _gamesAutoDetector;
 
-        public SettingsViewModel(ConfigProvider config)
+        public SettingsViewModel(
+            ConfigProvider config,
+            GamesAutoDetector gamesAutoDetector
+            )
         {
             _config = config.Config;
+            _gamesAutoDetector = gamesAutoDetector;
         }
 
 
@@ -29,55 +35,55 @@ namespace BuildLauncher.ViewModels
         public bool IsDarkTheme => _config.Theme is ThemeEnum.Dark;
 
 
-        public string PathToBlood
+        public string? PathToBlood
         {
             get => _config.GamePathBlood;
             set => _config.GamePathBlood = value;
         }
 
-        public string PathToDuke3D
+        public string? PathToDuke3D
         {
             get => _config.GamePathDuke3D;
             set => _config.GamePathDuke3D = value;
         }
 
-        public string PathToDukeWT
+        public string? PathToDukeWT
         {
             get => _config.GamePathDukeWT;
             set => _config.GamePathDukeWT = value;
         }
 
-        public string PathToDuke64
+        public string? PathToDuke64
         {
             get => _config.GamePathDuke64;
             set => _config.GamePathDuke64 = value;
         }
 
-        public string PathToWang
+        public string? PathToWang
         {
             get => _config.GamePathWang;
             set => _config.GamePathWang = value;
         }
 
-        public string PathToFury
+        public string? PathToFury
         {
             get => _config.GamePathFury;
             set => _config.GamePathFury = value;
         }
 
-        public string PathToRedneck
+        public string? PathToRedneck
         {
             get => _config.GamePathRedneck;
             set => _config.GamePathRedneck = value;
         }
 
-        public string PathToAgain
+        public string? PathToAgain
         {
             get => _config.GamePathAgain;
             set => _config.GamePathAgain = value;
         }
 
-        public string PathToSlave
+        public string? PathToSlave
         {
             get => _config.GamePathSlave;
             set => _config.GamePathSlave = value;
@@ -168,11 +174,11 @@ namespace BuildLauncher.ViewModels
 
                 OnPropertyChanged(nameof(PathToDuke3D));
             }
-            else if (param.Equals("DukeWT"))
+            else if (param.Equals(GameEnum.DukeWT.ToString()))
             {
                 PathToDukeWT = files[0].Path.LocalPath;
 
-                OnPropertyChanged(nameof(PathToDuke3D));
+                OnPropertyChanged(nameof(PathToDukeWT));
             }
             else if (param.Equals(GameEnum.Blood.ToString()))
             {
@@ -209,6 +215,103 @@ namespace BuildLauncher.ViewModels
                 PathToSlave = files[0].Path.LocalPath;
 
                 OnPropertyChanged(nameof(PathToSlave));
+            }
+        }
+
+
+        /// <summary>
+        /// Replace path to game with autp detected one
+        /// </summary>
+        [RelayCommand]
+        private void Autodetect(string param)
+        {
+            if (param.Equals(GameEnum.Duke3D.ToString()))
+            {
+                var path = _gamesAutoDetector.GetPath(GameEnum.Duke3D);
+
+                if (path is not null)
+                {
+                    PathToDuke3D = path;
+
+                    OnPropertyChanged(nameof(PathToDuke3D));
+                }
+            }
+            else if (param.Equals(GameEnum.DukeWT.ToString()))
+            {
+                var path = _gamesAutoDetector.GetPath(GameEnum.DukeWT);
+
+                if (path is not null)
+                {
+                    PathToDukeWT = path;
+
+                    OnPropertyChanged(nameof(PathToDukeWT));
+                }
+            }
+            else if (param.Equals(GameEnum.Blood.ToString()))
+            {
+                var path = _gamesAutoDetector.GetPath(GameEnum.Blood);
+
+                if (path is not null)
+                {
+                    PathToBlood = path;
+
+                    OnPropertyChanged(nameof(PathToBlood));
+                }
+            }
+            else if (param.Equals(GameEnum.Wang.ToString()))
+            {
+                var path = _gamesAutoDetector.GetPath(GameEnum.Wang);
+
+                if (path is not null)
+                {
+                    PathToWang = path;
+
+                    OnPropertyChanged(nameof(PathToWang));
+                }
+            }
+            else if (param.Equals(GameEnum.Redneck.ToString()))
+            {
+                var path = _gamesAutoDetector.GetPath(GameEnum.Redneck);
+
+                if (path is not null)
+                {
+                    PathToRedneck = path;
+
+                    OnPropertyChanged(nameof(PathToRedneck));
+                }
+            }
+            else if (param.Equals(GameEnum.Again.ToString()))
+            {
+                var path = _gamesAutoDetector.GetPath(GameEnum.Again);
+
+                if (path is not null)
+                {
+                    PathToAgain = path;
+
+                    OnPropertyChanged(nameof(PathToAgain));
+                }
+            }
+            else if (param.Equals(GameEnum.Fury.ToString()))
+            {
+                var path = _gamesAutoDetector.GetPath(GameEnum.Fury);
+
+                if (path is not null)
+                {
+                    PathToFury = path;
+
+                    OnPropertyChanged(nameof(PathToFury));
+                }
+            }
+            else if (param.Equals(GameEnum.Slave.ToString()))
+            {
+                var path = _gamesAutoDetector.GetPath(GameEnum.Slave);
+
+                if (path is not null)
+                {
+                    PathToSlave = path;
+
+                    OnPropertyChanged(nameof(PathToSlave));
+                }
             }
         }
 
