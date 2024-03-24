@@ -162,13 +162,7 @@ namespace BuildLauncher.ViewModels
                 return;
             }
 
-            if (param.Equals(GameEnum.Blood.ToString()))
-            {
-                PathToBlood = files[0].Path.LocalPath;
-
-                OnPropertyChanged(nameof(PathToBlood));
-            }
-            else if (param.Equals(GameEnum.Duke3D.ToString()))
+            if (param.Equals(GameEnum.Duke3D.ToString()))
             {
                 PathToDuke3D = files[0].Path.LocalPath;
 
@@ -180,11 +174,41 @@ namespace BuildLauncher.ViewModels
 
                 OnPropertyChanged(nameof(PathToDuke3D));
             }
+            else if (param.Equals(GameEnum.Blood.ToString()))
+            {
+                PathToBlood = files[0].Path.LocalPath;
+
+                OnPropertyChanged(nameof(PathToBlood));
+            }
             else if (param.Equals(GameEnum.Wang.ToString()))
             {
                 PathToWang = files[0].Path.LocalPath;
 
                 OnPropertyChanged(nameof(PathToWang));
+            }
+            else if (param.Equals(GameEnum.Redneck.ToString()))
+            {
+                PathToRedneck = files[0].Path.LocalPath;
+
+                OnPropertyChanged(nameof(PathToRedneck));
+            }
+            else if (param.Equals(GameEnum.Again.ToString()))
+            {
+                PathToAgain = files[0].Path.LocalPath;
+
+                OnPropertyChanged(nameof(PathToAgain));
+            }
+            else if (param.Equals(GameEnum.Fury.ToString()))
+            {
+                PathToFury = files[0].Path.LocalPath;
+
+                OnPropertyChanged(nameof(PathToFury));
+            }
+            else if (param.Equals(GameEnum.Slave.ToString()))
+            {
+                PathToSlave = files[0].Path.LocalPath;
+
+                OnPropertyChanged(nameof(PathToSlave));
             }
         }
 
