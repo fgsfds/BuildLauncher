@@ -49,12 +49,11 @@ namespace Mods.Providers
                 {
                     IEnumerable<string> files;
 
-                    files = Directory.GetFiles(_game.CampaignsFolderPath, "*.zip");
+                    files = Directory.GetFiles(_game.CampaignsFolderPath).Where(static x => x.EndsWith(".zip", StringComparison.InvariantCultureIgnoreCase) || x.EndsWith(".grp", StringComparison.InvariantCultureIgnoreCase));
                     var camps = GetModsFromFiles(ModTypeEnum.Campaign, files);
                     _cache.Add(ModTypeEnum.Campaign, camps);
 
-                    files = Directory.GetFiles(_game.MapsFolderPath, "*.zip");
-                    files = files.Union(Directory.GetFiles(_game.MapsFolderPath, "*.map"));
+                    files = Directory.GetFiles(_game.MapsFolderPath).Where(static x => x.EndsWith(".zip", StringComparison.InvariantCultureIgnoreCase) || x.EndsWith(".map", StringComparison.InvariantCultureIgnoreCase));
                     var maps = GetModsFromFiles(ModTypeEnum.Map, files);
                     _cache.Add(ModTypeEnum.Map, maps);
 
@@ -135,6 +134,11 @@ namespace Mods.Providers
                 {
                     var mod = GetMod(modTypeEnum, file);
 
+                    if (mod is null)
+                    {
+                        continue;
+                    }
+
                     if (addedMods.TryGetValue(mod.Guid, out var addedMod))
                     {
                         if (addedMod.Version is null &&
@@ -160,7 +164,6 @@ namespace Mods.Providers
                 {
                     continue;
                 }
-
             }
 
             return addedMods;
@@ -171,7 +174,7 @@ namespace Mods.Providers
         /// </summary>
         /// <param name="modTypeEnum">Mod type</param>
         /// <param name="file">Path to mod file</param>
-        private IMod GetMod(ModTypeEnum modTypeEnum, string file)
+        private IMod? GetMod(ModTypeEnum modTypeEnum, string file)
         {
             IMod mod;
 
@@ -250,6 +253,11 @@ namespace Mods.Providers
             {
                 isLoose = true;
                 startupFile = Path.GetFileName(file);
+            }
+            else if (file.EndsWith(".grp", StringComparison.InvariantCultureIgnoreCase))
+            {
+                //"real" grps are not supported
+                return null;
             }
 
             if (modTypeEnum is ModTypeEnum.Autoload)
