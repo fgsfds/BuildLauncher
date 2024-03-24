@@ -27,8 +27,8 @@ namespace BuildLauncher.ViewModels
             _gamesProvider = gamesProvider;
             _config = config;
 
-            _gamesProvider.NotifyGameChanged += NotifyGameChanged;
-            Game.DownloadableModsProvider.NotifyModDownloaded += NotifyModDownloaded;
+            _gamesProvider.GameChangedEvent += OnGameChanged;
+            Game.DownloadableModsProvider.ModDownloadedEvent += OnModDownloaded;
         }
 
 
@@ -128,7 +128,7 @@ namespace BuildLauncher.ViewModels
         #endregion
 
 
-        private void NotifyGameChanged(GameEnum parameterName)
+        private void OnGameChanged(GameEnum parameterName)
         {
             if (parameterName == Game.GameEnum)
             {
@@ -136,7 +136,7 @@ namespace BuildLauncher.ViewModels
             }
         }
 
-        private void NotifyModDownloaded(IGame game, ModTypeEnum modType)
+        private void OnModDownloaded(IGame game, ModTypeEnum modType)
         {
             if (game.GameEnum != Game.GameEnum ||
                 modType is not ModTypeEnum.Autoload)

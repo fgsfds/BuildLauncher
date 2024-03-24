@@ -87,13 +87,13 @@ namespace BuildLauncher.ViewModels
         {
             var installer = _installerFactory.Create();
 
-            installer.Progress.ProgressChanged += ProgressChanged;
+            installer.Progress.ProgressChanged += OnProgressChanged;
             ProgressBarValue = 0;
             OnPropertyChanged(nameof(ProgressBarValue));
 
             await installer.InstallAsync(_port);
 
-            installer.Progress.ProgressChanged -= ProgressChanged;
+            installer.Progress.ProgressChanged -= OnProgressChanged;
             ProgressBarValue = 0;
             OnPropertyChanged(nameof(ProgressBarValue));
             OnPropertyChanged(nameof(Version));
@@ -103,7 +103,7 @@ namespace BuildLauncher.ViewModels
         #endregion
 
 
-        private void ProgressChanged(object? sender, float e)
+        private void OnProgressChanged(object? sender, float e)
         {
             ProgressBarValue = e;
             OnPropertyChanged(nameof(ProgressBarValue));

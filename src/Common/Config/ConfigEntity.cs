@@ -12,11 +12,8 @@ namespace Common.Config
             _theme = ThemeEnum.System;
         }
 
-        public delegate void ConfigChanged();
-        public event ConfigChanged NotifyConfigChanged;
-
         public delegate void ParameterChanged(string parameterName);
-        public event ParameterChanged NotifyParameterChanged;
+        public event ParameterChanged ParameterChangedEvent;
 
         private ThemeEnum _theme = ThemeEnum.System;
         public ThemeEnum Theme
@@ -107,15 +104,13 @@ namespace Common.Config
         public void AddDisabledAutoloadMod(Guid guid)
         {
             DisabledAutoloadMods.Add(guid);
-            NotifyConfigChanged?.Invoke();
-            NotifyParameterChanged?.Invoke(nameof(DisabledAutoloadMods));
+            ParameterChangedEvent?.Invoke(nameof(DisabledAutoloadMods));
         }
 
         public void RemoveDisabledAutoloadMod(Guid guid)
         {
             DisabledAutoloadMods.Remove(guid);
-            NotifyConfigChanged?.Invoke();
-            NotifyParameterChanged?.Invoke(nameof(DisabledAutoloadMods));
+            ParameterChangedEvent?.Invoke(nameof(DisabledAutoloadMods));
         }
 
         /// <summary>
@@ -130,8 +125,7 @@ namespace Common.Config
             if (fieldName is null || !fieldName.Equals(value))
             {
                 fieldName = value;
-                NotifyConfigChanged?.Invoke();
-                NotifyParameterChanged?.Invoke(callerName);
+                ParameterChangedEvent?.Invoke(callerName);
             }
         }
     }

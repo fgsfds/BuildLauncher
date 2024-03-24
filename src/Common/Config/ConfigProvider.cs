@@ -9,7 +9,7 @@ namespace Common.Config
         {
             Config = ReadConfigFromFile();
 
-            Config.NotifyConfigChanged += SaveConfigFile;
+            Config.ParameterChangedEvent += OnParameterChanged; ;
         }
 
         /// <summary>
@@ -58,5 +58,7 @@ namespace Common.Config
                ConfigEntityContext.Default.ConfigEntity
                );
         }
+
+        private void OnParameterChanged(string _) => SaveConfigFile();
     }
 }

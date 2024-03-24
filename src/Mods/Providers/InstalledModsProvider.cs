@@ -20,7 +20,7 @@ namespace Mods.Providers
         private readonly Dictionary<ModTypeEnum, Dictionary<Guid, IMod>> _cache;
         private readonly SemaphoreSlim _semaphore = new(1);
 
-        public event ModInstalled NotifyModDeleted;
+        public event ModChanged ModDeletedEvent;
 
         public InstalledModsProvider(
             IGame game,
@@ -77,7 +77,7 @@ namespace Mods.Providers
 
             _cache[mod.ModType].Remove(mod.Guid);
 
-            NotifyModDeleted?.Invoke(_game, mod.ModType);
+            ModDeletedEvent?.Invoke(_game, mod.ModType);
         }
 
         /// <inheritdoc/>

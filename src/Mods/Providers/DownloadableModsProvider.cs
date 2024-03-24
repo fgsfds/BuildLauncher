@@ -19,7 +19,7 @@ namespace Mods.Providers
         private static Dictionary<GameEnum, Dictionary<ModTypeEnum, Dictionary<Guid, IDownloadableMod>>>? _cache;
         private static readonly SemaphoreSlim _semaphore = new(1);
 
-        public event ModDownloaded NotifyModDownloaded;
+        public event ModChanged ModDownloadedEvent;
 
         /// <inheritdoc/>
         public Progress<float> Progress { get; private set; }
@@ -141,7 +141,7 @@ namespace Mods.Providers
 
             _game.InstalledModsProvider.AddMod(mod.ModType, pathToFile);
 
-            NotifyModDownloaded?.Invoke(_game, mod.ModType);
+            ModDownloadedEvent?.Invoke(_game, mod.ModType);
         }
     }
 }

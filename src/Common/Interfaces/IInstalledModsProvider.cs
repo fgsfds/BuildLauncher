@@ -1,12 +1,11 @@
 ﻿using Common.Enums;
+using Common.Helpers;
 
 namespace Common.Interfaces
 {
-    public delegate void ModInstalled(IGame game, ModTypeEnum modType);
-
     public interface IInstalledModsProvider
     {
-        event ModInstalled NotifyModDeleted;
+        event ModChanged ModDeletedEvent;
 
         /// <summary>
         /// Add mod to cache

@@ -13,64 +13,71 @@ namespace Games.Providers
     public sealed class GamesProvider
     {
         public delegate void GameChanged(GameEnum game);
-        public event GameChanged NotifyGameChanged;
+        public event GameChanged GameChangedEvent;
 
         private readonly ConfigEntity _config;
         private readonly InstalledModsProviderFactory _modsProvider;
         private readonly DownloadableModsProviderFactory _downloadableModsProviderFactory;
 
-        public BloodGame Blood { get; private set; }
-        public DukeGame Duke3D { get; private set; }
-        public WangGame Wang { get; private set; }
-        public RedneckGame Redneck { get; private set; }
-        public FuryGame Fury { get; private set; }
-        public SlaveGame Slave { get; private set; }
+        private readonly BloodGame _blood;
+        private readonly DukeGame _duke3d;
+        private readonly WangGame _wang;
+        private readonly RedneckGame _redneck;
+        private readonly FuryGame _fury;
+        private readonly SlaveGame _slave;
+
+        public bool IsBloodInstalled => _blood.IsBaseGameInstalled;
+        public bool IsDukeInstalled => _duke3d.IsBaseGameInstalled || _duke3d.IsWorldTourInstalled || _duke3d.IsDuke64Installed;
+        public bool IsWangInstalled => _wang.IsBaseGameInstalled;
+        public bool IsFuryInstalled => _fury.IsBaseGameInstalled;
+        public bool IsRedneckInstalled => _redneck.IsBaseGameInstalled || _redneck.IsAgainInstalled;
+        public bool IsSlaveInstalled => _slave.IsBaseGameInstalled;
 
 
         public GamesProvider(
             ConfigProvider config,
             InstalledModsProviderFactory modsProvider,
-             DownloadableModsProviderFactory downloadableModsProviderFactory
+            DownloadableModsProviderFactory downloadableModsProviderFactory
             )
         {
             _config = config.Config;
             _modsProvider = modsProvider;
             _downloadableModsProviderFactory = downloadableModsProviderFactory;
 
-            Blood = new(_modsProvider, _downloadableModsProviderFactory)
+            _blood = new(_modsProvider, _downloadableModsProviderFactory)
             {
                 GameInstallFolder = _config.GamePathBlood
             };
 
-            Duke3D = new(_modsProvider, _downloadableModsProviderFactory)
+            _duke3d = new(_modsProvider, _downloadableModsProviderFactory)
             {
                 GameInstallFolder = _config.GamePathDuke3D,
                 Duke64RomPath = _config.GamePathDuke64,
                 DukeWTInstallPath = _config.GamePathDukeWT
             };
 
-            Wang = new(_modsProvider, _downloadableModsProviderFactory)
+            _wang = new(_modsProvider, _downloadableModsProviderFactory)
             {
                 GameInstallFolder = _config.GamePathWang
             };
 
-            Fury = new(_modsProvider, _downloadableModsProviderFactory)
+            _fury = new(_modsProvider, _downloadableModsProviderFactory)
             {
                 GameInstallFolder = _config.GamePathFury
             };
 
-            Redneck = new(_modsProvider, _downloadableModsProviderFactory)
+            _redneck = new(_modsProvider, _downloadableModsProviderFactory)
             {
                 GameInstallFolder = _config.GamePathRedneck,
                 AgainInstallPath = _config.GamePathAgain
             };
 
-            Slave = new(_modsProvider, _downloadableModsProviderFactory)
+            _slave = new(_modsProvider, _downloadableModsProviderFactory)
             {
                 GameInstallFolder = _config.GamePathSlave
             };
 
-            _config.NotifyParameterChanged += NotifyParameterChanged;
+            _config.ParameterChangedEvent += OnParameterChanged;
         }
 
 
@@ -82,15 +89,15 @@ namespace Games.Providers
         {
             return gameEnum switch
             {
-                GameEnum.Blood => Blood,
-                GameEnum.Duke3D => Duke3D,
-                GameEnum.Wang => Wang,
-                GameEnum.Fury => Fury,
-                GameEnum.Slave => Slave,
+                GameEnum.Blood => _blood,
+                GameEnum.Duke3D => _duke3d,
+                GameEnum.Wang => _wang,
+                GameEnum.Fury => _fury,
+                GameEnum.Slave => _slave,
+                GameEnum.Redneck => _redneck,
+                GameEnum.Again => _redneck,
                 GameEnum.NAM => ThrowHelper.NotImplementedException<IGame>(),
                 GameEnum.WWIIGI => ThrowHelper.NotImplementedException<IGame>(),
-                GameEnum.Redneck => Redneck,
-                GameEnum.Again => Redneck,
                 GameEnum.TekWar => ThrowHelper.NotImplementedException<IGame>(),
                 GameEnum.Witchaven => ThrowHelper.NotImplementedException<IGame>(),
                 GameEnum.Witchaven2 => ThrowHelper.NotImplementedException<IGame>(),
@@ -103,52 +110,52 @@ namespace Games.Providers
         /// Update game instance when path to the game changes in the config
         /// </summary>
         /// <param name="parameterName">Config parameter</param>
-        private void NotifyParameterChanged(string parameterName)
+        private void OnParameterChanged(string parameterName)
         {
             if (parameterName.Equals(nameof(_config.GamePathBlood)))
             {
-                Blood.GameInstallFolder = _config.GamePathBlood;
-                NotifyGameChanged?.Invoke(Blood.GameEnum);
+                _blood.GameInstallFolder = _config.GamePathBlood;
+                GameChangedEvent?.Invoke(_blood.GameEnum);
             }
             else if (parameterName.Equals(nameof(_config.GamePathDuke3D)))
             {
-                Duke3D.GameInstallFolder = _config.GamePathDuke3D;
-                NotifyGameChanged?.Invoke(Duke3D.GameEnum);
+                _duke3d.GameInstallFolder = _config.GamePathDuke3D;
+                GameChangedEvent?.Invoke(_duke3d.GameEnum);
             }
             else if (parameterName.Equals(nameof(_config.GamePathDuke64)))
             {
-                Duke3D.Duke64RomPath = _config.GamePathDuke64;
-                NotifyGameChanged?.Invoke(Duke3D.GameEnum);
+                _duke3d.Duke64RomPath = _config.GamePathDuke64;
+                GameChangedEvent?.Invoke(_duke3d.GameEnum);
             }
             else if (parameterName.Equals(nameof(_config.GamePathDukeWT)))
             {
-                Duke3D.DukeWTInstallPath = _config.GamePathDukeWT;
-                NotifyGameChanged?.Invoke(Duke3D.GameEnum);
+                _duke3d.DukeWTInstallPath = _config.GamePathDukeWT;
+                GameChangedEvent?.Invoke(_duke3d.GameEnum);
             }
             else if (parameterName.Equals(nameof(_config.GamePathWang)))
             {
-                Wang.GameInstallFolder = _config.GamePathWang;
-                NotifyGameChanged?.Invoke(Wang.GameEnum);
+                _wang.GameInstallFolder = _config.GamePathWang;
+                GameChangedEvent?.Invoke(_wang.GameEnum);
             }
             else if (parameterName.Equals(nameof(_config.GamePathFury)))
             {
-                Fury.GameInstallFolder = _config.GamePathFury;
-                NotifyGameChanged?.Invoke(Fury.GameEnum);
+                _fury.GameInstallFolder = _config.GamePathFury;
+                GameChangedEvent?.Invoke(_fury.GameEnum);
             }
             else if (parameterName.Equals(nameof(_config.GamePathRedneck)))
             {
-                Redneck.GameInstallFolder = _config.GamePathRedneck;
-                NotifyGameChanged?.Invoke(Redneck.GameEnum);
+                _redneck.GameInstallFolder = _config.GamePathRedneck;
+                GameChangedEvent?.Invoke(_redneck.GameEnum);
             }
             else if (parameterName.Equals(nameof(_config.GamePathAgain)))
             {
-                Redneck.AgainInstallPath = _config.GamePathAgain;
-                NotifyGameChanged?.Invoke(Redneck.GameEnum);
+                _redneck.AgainInstallPath = _config.GamePathAgain;
+                GameChangedEvent?.Invoke(_redneck.GameEnum);
             }
             else if (parameterName.Equals(nameof(_config.GamePathSlave)))
             {
-                Slave.GameInstallFolder = _config.GamePathSlave;
-                NotifyGameChanged?.Invoke(Slave.GameEnum);
+                _slave.GameInstallFolder = _config.GamePathSlave;
+                GameChangedEvent?.Invoke(_slave.GameEnum);
             }
         }
     }

@@ -1,13 +1,12 @@
 ﻿using Common.Enums;
+using Common.Helpers;
 using System.Collections.Immutable;
 
 namespace Common.Interfaces
 {
-    public delegate void ModDownloaded(IGame game, ModTypeEnum modType);
-
     public interface IDownloadableModsProvider
     {
-        event ModDownloaded NotifyModDownloaded;
+        event ModChanged ModDownloadedEvent;
 
         /// <summary>
         /// Download progress

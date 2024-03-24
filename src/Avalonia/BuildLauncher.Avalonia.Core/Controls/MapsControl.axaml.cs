@@ -28,7 +28,7 @@ namespace BuildLauncher.Controls
             _viewModel = viewModel;
             _supportedPorts = portsProvider.GetPortsThatSupportGame(_viewModel.Game.GameEnum);
 
-            MapsList.SelectionChanged += MapsListSelectionChanged;
+            MapsList.SelectionChanged += OnMapsListSelectionChanged;
             BottomPanel.DataContext = viewModel;
 
             AddPortsButtons();
@@ -111,7 +111,7 @@ namespace BuildLauncher.Controls
         /// <summary>
         /// Update CanExecute for ports buttons and context menu buttons when selected campaign changed
         /// </summary>
-        private void MapsListSelectionChanged(object? sender, SelectionChangedEventArgs e)
+        private void OnMapsListSelectionChanged(object? sender, SelectionChangedEventArgs e)
         {
             foreach (var control in BottomPanel.PortsButtonsPanel.Children)
             {

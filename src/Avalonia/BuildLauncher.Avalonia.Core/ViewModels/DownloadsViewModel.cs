@@ -16,8 +16,8 @@ namespace BuildLauncher.ViewModels
         {
             Game = game;
 
-            Game.DownloadableModsProvider.NotifyModDownloaded += ModChanged;
-            Game.InstalledModsProvider.NotifyModDeleted += ModChanged;
+            Game.DownloadableModsProvider.ModDownloadedEvent += OnModChanged;
+            Game.InstalledModsProvider.ModDeletedEvent += OnModChanged;
         }
 
 
@@ -114,25 +114,25 @@ namespace BuildLauncher.ViewModels
         {
             SelectedDownloadableMod.ThrowIfNull();
 
-            Game.DownloadableModsProvider.Progress.ProgressChanged += ProgressChanged;
+            Game.DownloadableModsProvider.Progress.ProgressChanged += OnProgressChanged;
 
             await Game.DownloadableModsProvider.DownloadModAsync(SelectedDownloadableMod).ConfigureAwait(false);
 
-            Game.DownloadableModsProvider.Progress.ProgressChanged -= ProgressChanged;
-            ProgressChanged(null, 0);
+            Game.DownloadableModsProvider.Progress.ProgressChanged -= OnProgressChanged;
+            OnProgressChanged(null, 0);
         }
         private bool DownloadSelectedModCanExecute => SelectedDownloadableMod is not null;
 
         #endregion
 
 
-        private void ProgressChanged(object? sender, float e)
+        private void OnProgressChanged(object? sender, float e)
         {
             ProgressBarValue = e;
             OnPropertyChanged(nameof(ProgressBarValue));
         }
 
-        private void ModChanged(IGame game, ModTypeEnum modType)
+        private void OnModChanged(IGame game, ModTypeEnum modType)
         {
             if (game.GameEnum != Game.GameEnum)
             {

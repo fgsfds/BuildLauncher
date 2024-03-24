@@ -28,27 +28,27 @@ public sealed partial class MainWindow : Window
 
 
         //Set active tab depending on what games are installed
-        if (gamesProvider.Duke3D.IsBaseGameInstalled || gamesProvider.Duke3D.IsDuke64Installed)
+        if (gamesProvider.IsDukeInstalled)
         {
             DukeTab.IsSelected = true;
         }
-        else if (gamesProvider.Blood.IsBaseGameInstalled)
+        else if (gamesProvider.IsBloodInstalled)
         {
             BloodTab.IsSelected = true;
         }
-        else if (gamesProvider.Wang.IsBaseGameInstalled)
+        else if (gamesProvider.IsWangInstalled)
         {
             WangTab.IsSelected = true;
         }
-        else if (gamesProvider.Fury.IsBaseGameInstalled)
+        else if (gamesProvider.IsFuryInstalled)
         {
             FuryTab.IsSelected = true;
         }
-        else if (gamesProvider.Redneck.IsBaseGameInstalled)
+        else if (gamesProvider.IsRedneckInstalled)
         {
             RedneckTab.IsSelected = true;
         }
-        else if (gamesProvider.Slave.IsBaseGameInstalled)
+        else if (gamesProvider.IsSlaveInstalled)
         {
             SlaveTab.IsSelected = true;
         }
