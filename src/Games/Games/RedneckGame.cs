@@ -21,7 +21,7 @@ namespace Games.Games
         /// <summary>
         /// Path to Rides Again folder
         /// </summary>
-        public required string AgainInstallPath { get; set; }
+        public required string? AgainInstallPath { get; set; }
 
         /// <inheritdoc/>
         public override string DefFile => "redneck.def";

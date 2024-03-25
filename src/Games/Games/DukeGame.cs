@@ -25,12 +25,12 @@ namespace Games.Games
         /// <summary>
         /// Path to Duke64 rom file
         /// </summary>
-        public required string Duke64RomPath { get; set; }
+        public required string? Duke64RomPath { get; set; }
 
         /// <summary>
         /// Path to World Tour folder
         /// </summary>
-        public required string DukeWTInstallPath { get; set; }
+        public required string? DukeWTInstallPath { get; set; }
 
         /// <inheritdoc/>
         public override string DefFile => "duke3d.def";

@@ -14,7 +14,7 @@ namespace Games.Games
     public abstract class BaseGame : IGame
     {
         /// <inheritdoc/>
-        public string GameInstallFolder { get; set; }
+        public string? GameInstallFolder { get; set; }
 
         /// <inheritdoc/>
         public bool IsBaseGameInstalled => IsInstalled(RequiredFiles);

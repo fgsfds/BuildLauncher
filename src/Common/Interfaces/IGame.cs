@@ -27,7 +27,7 @@ namespace Common.Interfaces
         /// <summary>
         /// Game install folder
         /// </summary>
-        string GameInstallFolder { get; set; }
+        string? GameInstallFolder { get; set; }
 
         /// <summary>
         /// Is base game installed

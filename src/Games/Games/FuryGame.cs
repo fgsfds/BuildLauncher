@@ -35,15 +35,13 @@ namespace Games.Games
                 {
                     Guid = Consts.FuryGuid,
                     ModType = ModTypeEnum.Campaign,
-                    DisplayName = "Ion Fury",
-                    Image = ImageHelper.FileNameToStream("Fury.fury.jpg"),
+                    DisplayName = IsAftershock() ? "Ion Fury: Aftershock" : "Ion Fury",
+                    Image = IsAftershock() ? ImageHelper.FileNameToStream("Fury.aftershock.jpg") : ImageHelper.FileNameToStream("Fury.fury.jpg"),
                     Author = "Voidpoint, LLC",
                     Description = """
                     **Ion Fury** (originally titled Ion Maiden) is a 2019 cyberpunk first-person shooter developed by **Voidpoint** and published by **3D Realms**.
                     It is a prequel to the 2016 video game Bombshell. Ion Fury runs on a modified version of Ken Silverman's Build engine and is the first original commercial game to utilize the engine in 20 years,
                     the previous being World War II GI.
-                    
-                    An expansion, **Ion Fury: Aftershock**, was released in October 2023.
 
                     You assume the role of Shelly "Bombshell" Harrison, a bomb disposal expert aligned to the Global Defense Force. Dr. Jadus Heskel, a transhumanist cult leader,
                     unleashes an army of cybernetically-enhanced soldiers on the futuristic dystopian city of Neo D.C., which Shelly is tasked with fighting through.
@@ -59,6 +57,33 @@ namespace Games.Games
             }
 
             return campaigns;
+        }
+
+        /// <summary>
+        /// Is Aftershock addon installed
+        /// </summary>
+        private bool IsAftershock()
+        {
+            if (GameInstallFolder is null)
+            {
+                return false;
+            }
+
+            try
+            {
+                var text = File.ReadAllText(Path.Combine(GameInstallFolder, "fury.grpinfo"));
+
+                if (text.Contains("ashock.def"))
+                {
+                    return true;
+                }
+
+                return false;
+            }
+            catch
+            {
+                return false;
+            }
         }
     }
 }
