@@ -14,7 +14,7 @@
         <helpers:ImagePathToBitmapConverter x:Key="ImagePathToBitmapConverter"/>
     </UserControl.Resources>
 
-    <Grid RowDefinitions="*,auto, auto" ColumnDefinitions="2*,*">
+    <Grid RowDefinitions="*, auto, auto" ColumnDefinitions="2*,*">
 
         <ListBox Name="MapsList"
                  Grid.Row="0" Grid.Column="0"

@@ -13,7 +13,7 @@
         <helpers:ImagePathToBitmapConverter x:Key="ImagePathToBitmapConverter"/>
     </UserControl.Resources>
 
-    <Grid RowDefinitions="*,auto" ColumnDefinitions="2*,2*,2*,3*">
+    <Grid RowDefinitions="*,auto" ColumnDefinitions="*,*,*,*">
 
         <ListBox Name="DownloadableCampaignsList"
                  Grid.Row="0" Grid.Column="0"
@@ -31,10 +31,10 @@
                     <Grid HorizontalAlignment="Stretch">
 
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="auto" SharedSizeGroup="Version1"/>
-                            <ColumnDefinition Width="auto" SharedSizeGroup="Size1"/>
-                            <ColumnDefinition Width="auto" SharedSizeGroup="Status1"/>
+                            <ColumnDefinition Width="*" MinWidth="100"/>
+                            <ColumnDefinition Width="*" MinWidth="0" SharedSizeGroup="Version1"/>
+                            <ColumnDefinition Width="*" MinWidth="0" SharedSizeGroup="Size1"/>
+                            <ColumnDefinition Width="*" MinWidth="0" SharedSizeGroup="Status1"/>
                         </Grid.ColumnDefinitions>
 
                         <TextBlock Text="{Binding Name}"
@@ -90,10 +90,10 @@
                     <Grid HorizontalAlignment="Stretch">
 
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="auto" SharedSizeGroup="Version2"/>
-                            <ColumnDefinition Width="auto" SharedSizeGroup="Size2"/>
-                            <ColumnDefinition Width="auto" SharedSizeGroup="Status2"/>
+                            <ColumnDefinition Width="*" MinWidth="100"/>
+                            <ColumnDefinition Width="*" MinWidth="0" SharedSizeGroup="Version2"/>
+                            <ColumnDefinition Width="*" MinWidth="0" SharedSizeGroup="Size2"/>
+                            <ColumnDefinition Width="*" MinWidth="0" SharedSizeGroup="Status2"/>
                         </Grid.ColumnDefinitions>
 
                         <TextBlock Text="{Binding Name}"
@@ -149,10 +149,10 @@
                     <Grid HorizontalAlignment="Stretch">
 
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="auto" SharedSizeGroup="Version3"/>
-                            <ColumnDefinition Width="auto" SharedSizeGroup="Size3"/>
-                            <ColumnDefinition Width="auto" SharedSizeGroup="Status3"/>
+                            <ColumnDefinition Width="*" MinWidth="100"/>
+                            <ColumnDefinition Width="*" MinWidth="0" SharedSizeGroup="Version3"/>
+                            <ColumnDefinition Width="*" MinWidth="0" SharedSizeGroup="Size3"/>
+                            <ColumnDefinition Width="*" MinWidth="0" SharedSizeGroup="Status3"/>
                         </Grid.ColumnDefinitions>
 
                         <TextBlock Text="{Binding Name}"
