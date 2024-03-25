@@ -24,6 +24,7 @@ namespace Mods.Providers
         /// <inheritdoc/>
         public Progress<float> Progress { get; private set; }
 
+        [Obsolete($"Don't create directly. Use {nameof(DownloadableModsProviderFactory)}.")]
         public DownloadableModsProvider(
             IGame game,
             ArchiveTools archiveTools

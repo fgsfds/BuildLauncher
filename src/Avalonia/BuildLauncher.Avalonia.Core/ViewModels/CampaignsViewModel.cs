@@ -18,6 +18,8 @@ namespace BuildLauncher.ViewModels
         private readonly GamesProvider _gamesProvider;
         private readonly ConfigEntity _config;
 
+
+        [Obsolete($"Don't create directly. Use {nameof(ViewModelsFactory)}.")]
         public CampaignsViewModel(
             IGame game,
             GamesProvider gamesProvider,

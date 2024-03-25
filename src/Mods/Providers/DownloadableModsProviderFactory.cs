@@ -20,7 +20,9 @@ namespace Mods.Providers
                 return value;
             }
 
+#pragma warning disable CS0618 // Type or member is obsolete
             DownloadableModsProvider newProvider = new(game, _archiveTools);
+#pragma warning restore CS0618 // Type or member is obsolete
             _list.Add(game.GameEnum, newProvider);
 
             return newProvider;

@@ -26,6 +26,7 @@ namespace BuildLauncher.ViewModels
             _portsProvider = portsProvider;
         }
 
+#pragma warning disable CS0618 // Type or member is obsolete
         /// <summary>
         /// Create <see cref="CampaignsViewModel"/>
         /// </summary>
@@ -104,5 +105,6 @@ namespace BuildLauncher.ViewModels
             Task.Run(vm.InitializeAsync);
             return vm;
         }
+#pragma warning restore CS0618 // Type or member is obsolete
     }
 }

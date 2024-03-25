@@ -12,6 +12,8 @@ namespace BuildLauncher.ViewModels
     {
         public readonly IGame Game;
 
+
+        [Obsolete($"Don't create directly. Use {nameof(ViewModelsFactory)}.")]
         public DownloadsViewModel(IGame game)
         {
             Game = game;

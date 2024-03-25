@@ -12,6 +12,8 @@ namespace BuildLauncher.ViewModels
         private readonly BasePort _port;
         private PortRelease? _release;
 
+
+        [Obsolete($"Don't create directly. Use {nameof(ViewModelsFactory)}.")]
         public PortViewModel(
             PortsInstallerFactory installerFactory,
             BasePort port

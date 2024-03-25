@@ -6,6 +6,7 @@ using Common.Interfaces;
 using Mods.Mods;
 using Mods.Serializable;
 using SharpCompress.Archives;
+using System.ComponentModel;
 using System.Text.Json;
 
 namespace Mods.Providers
@@ -22,6 +23,7 @@ namespace Mods.Providers
 
         public event ModChanged ModDeletedEvent;
 
+        [Obsolete($"Don't create directly. Use {nameof(InstalledModsProvider)}.")]
         public InstalledModsProvider(
             IGame game,
             ConfigEntity config
