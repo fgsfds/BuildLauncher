@@ -47,6 +47,15 @@ namespace Games.Providers
                 }
 
                 //World Tour
+                //Using WT as a base game as a last resort
+                pathToGame = Path.Combine(lib, "Duke Nukem 3D Twentieth Anniversary World Tour");
+                if (Directory.Exists(pathToGame))
+                {
+                    _dukePath ??= pathToGame;
+                }
+
+
+                //WORLD TOUR
                 pathToGame = Path.Combine(lib, "Duke Nukem 3D Twentieth Anniversary World Tour");
                 if (Directory.Exists(pathToGame))
                 {

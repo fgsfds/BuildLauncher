@@ -75,7 +75,8 @@ namespace Games.Games
         {
             Dictionary<Guid, IMod> campaigns = new(6);
 
-            if (IsBaseGameInstalled)
+            if (IsBaseGameInstalled &&
+                GameInstallFolder != DukeWTInstallPath)
             {
                 campaigns.Add(Consts.Duke3dGuid, new DukeCampaign()
                 {
@@ -100,7 +101,37 @@ namespace Games.Games
                     PathToFile = null,
                     IsLoose = false
                 });
+            }
 
+            if (IsWorldTourInstalled)
+            {
+                campaigns.Add(Consts.WorldTourGuid, new DukeCampaign()
+                {
+                    Guid = Consts.WorldTourGuid,
+                    ModType = ModTypeEnum.Campaign,
+                    DisplayName = "Duke Nukem 3D World Tour",
+                    Image = ImageHelper.FileNameToStream("Duke3D.dukewt.jpg"),
+                    AddonEnum = DukeAddonEnum.WorldTour,
+                    SupportedPorts = [PortEnum.Raze, PortEnum.EDuke32, PortEnum.BuildGDX],
+                    Author = "WizardWorks",
+                    Description = """
+                        **Duke Nukem 3D: 20th Anniversary World Tour** is a 2016 special edition remake of Duke Nukem 3D, originally released in 1996.
+                        The remake includes all content from Duke Nukem 3D: Atomic Edition, but it adds new levels, enemies, a weapon, and several special features.
+
+                        The 20th Anniversary Edition includes a new fifth episode known as Alien World Order.
+                        The episode was designed by Allen Blum and Richard “Levelord” Gray, both of whom designed all the levels in the original Duke Nukem 3D. 
+                        """,
+                    StartupFile = null,
+                    Version = null,
+                    Url = null,
+                    IsOfficial = true,
+                    PathToFile = null,
+                    IsLoose = false
+                });
+            }
+
+            if (IsBaseGameInstalled)
+            {
                 if (IsCaribbeanInstalled)
                 {
                     campaigns.Add(Consts.CaribbeanGuid, new DukeCampaign()
@@ -128,6 +159,7 @@ namespace Games.Games
                         IsLoose = false
                     });
                 }
+
                 if (IsNuclearWinterInstalled)
                 {
                     campaigns.Add(Consts.NuclearWinterGuid, new DukeCampaign()
@@ -153,6 +185,7 @@ namespace Games.Games
                         IsLoose = false
                     });
                 }
+
                 if (IsDukeDCInstalled)
                 {
                     campaigns.Add(Consts.DukeDCGuid, new DukeCampaign()
@@ -181,33 +214,6 @@ namespace Games.Games
                         IsLoose = false
                     });
                 }
-            }
-
-            if (IsWorldTourInstalled)
-            {
-                campaigns.Add(Consts.WorldTourGuid, new DukeCampaign()
-                {
-                    Guid = Consts.WorldTourGuid,
-                    ModType = ModTypeEnum.Campaign,
-                    DisplayName = "Duke Nukem 3D World Tour",
-                    Image = ImageHelper.FileNameToStream("Duke3D.dukewt.jpg"),
-                    AddonEnum = DukeAddonEnum.WorldTour,
-                    SupportedPorts = [PortEnum.Raze, PortEnum.EDuke32, PortEnum.BuildGDX],
-                    Author = "WizardWorks",
-                    Description = """
-                        **Duke Nukem 3D: 20th Anniversary World Tour** is a 2016 special edition remake of Duke Nukem 3D, originally released in 1996.
-                        The remake includes all content from Duke Nukem 3D: Atomic Edition, but it adds new levels, enemies, a weapon, and several special features.
-
-                        The 20th Anniversary Edition includes a new fifth episode known as Alien World Order.
-                        The episode was designed by Allen Blum and Richard “Levelord” Gray, both of whom designed all the levels in the original Duke Nukem 3D. 
-                        """,
-                    StartupFile = null,
-                    Version = null,
-                    Url = null,
-                    IsOfficial = true,
-                    PathToFile = null,
-                    IsLoose = false
-                });
             }
 
             if (IsDuke64Installed)

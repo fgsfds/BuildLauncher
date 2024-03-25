@@ -250,12 +250,12 @@ namespace Games.Games
         /// <param name="files">List of required files</param>
         protected bool IsInstalled(List<string> files, string? path = null)
         {
-            if (GameInstallFolder is null)
+            var gamePath = path is null ? GameInstallFolder : path;
+
+            if (gamePath is null)
             {
                 return false;
             }
-
-            var gamePath = path is null ? GameInstallFolder : path;
 
             foreach (var file in files)
             {
