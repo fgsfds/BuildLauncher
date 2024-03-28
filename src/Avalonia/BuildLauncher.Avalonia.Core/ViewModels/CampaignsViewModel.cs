@@ -41,7 +41,7 @@ namespace BuildLauncher.ViewModels
         /// <summary>
         /// List of installed campaigns and maps
         /// </summary>
-        public ImmutableList<IMod> CampaignsList => Game.GetCampaigns().Select(x => x.Value).ToImmutableList();
+        public ImmutableList<IAddon> CampaignsList => Game.GetCampaigns().Select(x => x.Value).ToImmutableList();
 
         /// <summary>
         /// Currently selected campaign/map
@@ -49,7 +49,7 @@ namespace BuildLauncher.ViewModels
         [ObservableProperty]
         [NotifyPropertyChangedFor(nameof(SelectedCampaignDescription))]
         [NotifyCanExecuteChangedFor(nameof(StartCampaignCommand))]
-        private IMod? _selectedCampaign;
+        private IAddon? _selectedCampaign;
 
         public string SelectedCampaignDescription => SelectedCampaign is null ? string.Empty : SelectedCampaign.ToMarkdownString();
 
@@ -159,7 +159,7 @@ namespace BuildLauncher.ViewModels
         private void OnModDownloaded(IGame game, ModTypeEnum modType)
         {
             if (game.GameEnum != Game.GameEnum ||
-                modType is not ModTypeEnum.Campaign)
+                modType is not ModTypeEnum.TC)
             {
                 return;
             }

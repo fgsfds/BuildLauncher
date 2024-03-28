@@ -45,7 +45,7 @@ namespace Ports.Ports.EDuke32
 
 
         /// <inheritdoc/>
-        protected override void BeforeStart(IGame game, IMod campaign)
+        protected override void BeforeStart(IGame game, IAddon campaign)
         {
             FixGrpInConfig();
 
@@ -55,7 +55,7 @@ namespace Ports.Ports.EDuke32
         }
 
         /// <inheritdoc/>
-        protected override void GetStartCampaignArgs(StringBuilder sb, IGame game, IMod mod)
+        protected override void GetStartCampaignArgs(StringBuilder sb, IGame game, IAddon mod)
         {
             if (game is DukeGame dGame && mod is DukeCampaign dCamp)
             {
@@ -99,7 +99,7 @@ namespace Ports.Ports.EDuke32
                 return;
             }
 
-            if (camp.ModType is ModTypeEnum.Campaign)
+            if (camp.ModType is ModTypeEnum.TC)
             {
                 sb.Append($@" -g ""{Path.Combine(game.CampaignsFolderPath, camp.FileName)}"" -x ""{camp.StartupFile}""");
             }
@@ -127,7 +127,7 @@ namespace Ports.Ports.EDuke32
         /// Override original art files with route 66's ones or remove overrides
         /// </summary>
         [Obsolete("Remove if RedNukem can even properly launch R66")]
-        private static void FixRoute66Files(IGame game, IMod campaign)
+        private static void FixRoute66Files(IGame game, IAddon campaign)
         {
             if (game is not RedneckGame rGame || !rGame.IsRoute66Installed || campaign is not RedneckCampaign rCamp)
             {

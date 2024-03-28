@@ -3,44 +3,106 @@ using System.Text.Json.Serialization;
 
 namespace Mods.Serializable
 {
-    public sealed class ModManifest
+    public sealed class AddonManifest
     {
-        public required Guid Guid { get; init; }
+        [JsonRequired]
+        [JsonPropertyName("id")]
+        public string Id { get; set; }
 
-        public required ModTypeEnum ModType { get; init; }
+        [JsonPropertyName("game")]
+        [JsonConverter(typeof(SingleOrArrayConverter<GameEnum>))]
+        public List<GameEnum> SupportedGames { get; set; }
 
-        public required GameEnum Game { get; init; }
+        [JsonPropertyName("title")]
+        public string Title { get; set; }
 
-        public required string Name { get; init; }
+        [JsonPropertyName("author")]
+        public string Author { get; set; }
 
-        public required float Version { get; init; }
+        [JsonPropertyName("version")]
+        public string Version { get; set; }
 
-        public required string Description { get; init; }
+        [JsonPropertyName("description")]
+        [JsonConverter(typeof(StringOrDescriptionConverter))]
+        public Description Description { get; set; }
 
+        [JsonPropertyName("preview")]
+        public string PreviewImage { get; set; }
 
-        public string? Url { get; init; } = null;
+        [JsonPropertyName("GRP")]
+        [JsonConverter(typeof(SingleOrArrayConverter<string>))]
+        public List<string> Grps { get; set; }
 
-        public string? Author { get; init; } = null;
+        [JsonPropertyName("CON")]
+        [JsonConverter(typeof(SingleOrArrayConverter<Typed>))]
+        public List<Typed> Cons { get; set; }
 
-        public string? Addon { get; init; } = null;
+        [JsonPropertyName("DEF")]
+        [JsonConverter(typeof(SingleOrArrayConverter<Typed>))]
+        public List<Typed> Defs { get; set; }
 
-        public List<string>? SupportedAddons { get; init; } = null;
+        [JsonPropertyName("RTS")]
+        [JsonConverter(typeof(SingleOrArrayConverter<string>))]
+        public List<string> Rtss { get; set; }
 
-        public List<PortEnum>? SupportedPorts { get; init; } = null;
+        [JsonPropertyName("gamecrc")]
+        [JsonConverter(typeof(SingleOrArrayConverter<int>))]
+        public List<int> SupportedGamesCrcs { get; set; }
 
-        public string? StartupFile { get; init; } = null;
+        [JsonPropertyName("dependencies")]
+        [JsonConverter(typeof(SingleOrArrayConverter<Addon>))]
+        public List<Addon> Dependencies { get; set; }
+
+        [JsonPropertyName("incompatibles")]
+        [JsonConverter(typeof(SingleOrArrayConverter<Addon>))]
+        public List<Addon> Incompatibles { get; set; }
     }
 
+    [JsonSerializable(typeof(AddonManifest))]
+    public sealed partial class AddonManifestContext : JsonSerializerContext;
 
-    [JsonSourceGenerationOptions(
-        WriteIndented = true,
-        DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
-        Converters = [
-            typeof(JsonStringEnumConverter<PortEnum>),
-            typeof(JsonStringEnumConverter<GameEnum>),
-            typeof(JsonStringEnumConverter<ModTypeEnum>)
-            ]
-    )]
-    [JsonSerializable(typeof(ModManifest))]
-    public sealed partial class ModManifestContext : JsonSerializerContext;
+
+    public sealed class DescriptionPath
+    {
+        [JsonPropertyName("path")]
+        public string PathToTxt { get; set; }
+    }
+
+    [JsonSerializable(typeof(DescriptionPath))]
+    public sealed partial class DescriptionContext : JsonSerializerContext;
+
+
+    public sealed class Typed
+    {
+        [JsonPropertyName("type")]
+        public ScriptTypeEnum Type { get; set; }
+
+        [JsonPropertyName("path")]
+        public string PathToFile { get; set; }
+    }
+
+    [JsonSourceGenerationOptions(Converters = [typeof(JsonStringEnumConverter<ScriptTypeEnum>)])]
+    [JsonSerializable(typeof(Typed))]
+    public sealed partial class TypedContext : JsonSerializerContext;
+
+
+    public sealed class Addon
+    {
+        [JsonPropertyName("id")]
+        public string Id { get; set; }
+
+        [JsonPropertyName("version")]
+        public string Version { get; set; }
+    }
+
+    [JsonSerializable(typeof(Addon))]
+    public sealed partial class AddonContext : JsonSerializerContext;
+
+
+    public sealed class Description
+    {
+        public bool IsText { get; set; }
+
+        public string Text { get; set; }
+    }
 }

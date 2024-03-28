@@ -64,7 +64,7 @@ namespace Ports.Ports
 
 
         /// <inheritdoc/>
-        protected override void BeforeStart(IGame game, IMod campaign)
+        protected override void BeforeStart(IGame game, IAddon campaign)
         {
             var config = Path.Combine(PathToPortFolder, ConfigFile);
 
@@ -105,9 +105,9 @@ namespace Ports.Ports
         }
 
         /// <inheritdoc/>
-        protected override void GetStartCampaignArgs(StringBuilder sb, IGame game, IMod mod)
+        protected override void GetStartCampaignArgs(StringBuilder sb, IGame game, IAddon mod)
         {
-            sb.Append($@" -savedir ""{Path.Combine(PathToPortFolder, "Save", mod.DisplayName.Replace(' ', '_'))}""");
+            sb.Append($@" -savedir ""{Path.Combine(PathToPortFolder, "Save", mod.Title.Replace(' ', '_'))}""");
 
             if (game is BloodGame bGame && mod is BloodCampaign bMod)
             {
@@ -136,7 +136,7 @@ namespace Ports.Ports
         }
 
         /// <inheritdoc/>
-        protected override void GetAutoloadModsArgs(StringBuilder sb, IGame _, IMod campaign, Dictionary<Guid, IMod> mods)
+        protected override void GetAutoloadModsArgs(StringBuilder sb, IGame _, IAddon campaign, Dictionary<Guid, IAddon> mods)
         {
             if (mods.Count == 0)
             {
@@ -180,7 +180,7 @@ namespace Ports.Ports
                 return;
             }
 
-            if (camp.ModType is ModTypeEnum.Campaign)
+            if (camp.ModType is ModTypeEnum.TC)
             {
                 sb.Append($@" -file ""{Path.Combine(game.CampaignsFolderPath, camp.FileName)}"" -con ""{camp.StartupFile}""");
             }
@@ -219,7 +219,7 @@ namespace Ports.Ports
                 return;
             }
 
-            if (camp.ModType is ModTypeEnum.Campaign)
+            if (camp.ModType is ModTypeEnum.TC)
             {
                 sb.Append($@" -file ""{Path.Combine(game.CampaignsFolderPath, camp.FileName)}""");
             }
@@ -250,7 +250,7 @@ namespace Ports.Ports
                 return;
             }
 
-            if (camp.ModType is ModTypeEnum.Campaign)
+            if (camp.ModType is ModTypeEnum.TC)
             {
                 sb.Append($@" -file ""{Path.Combine(game.CampaignsFolderPath, camp.FileName)}""");
             }
@@ -284,7 +284,7 @@ namespace Ports.Ports
                 return;
             }
 
-            if (camp.ModType is ModTypeEnum.Campaign)
+            if (camp.ModType is ModTypeEnum.TC)
             {
                 sb.Append($@" -file ""{Path.Combine(game.CampaignsFolderPath, camp.FileName)}""");
             }
@@ -306,7 +306,7 @@ namespace Ports.Ports
                 return;
             }
 
-            if (camp.ModType is ModTypeEnum.Campaign)
+            if (camp.ModType is ModTypeEnum.TC)
             {
                 sb.Append($@" -file ""{Path.Combine(game.CampaignsFolderPath, camp.FileName)}""");
             }
@@ -324,7 +324,7 @@ namespace Ports.Ports
         /// <summary>
         /// Get startup args for packed and loose maps
         /// </summary>
-        private static void GetMapArgs(StringBuilder sb, BaseGame game, BaseMod camp)
+        private static void GetMapArgs(StringBuilder sb, BaseGame game, BaseAddon camp)
         {
             if (camp.IsLoose)
             {
@@ -339,7 +339,7 @@ namespace Ports.Ports
         /// <summary>
         /// Remove route 66 art files overrides
         /// </summary>
-        private static void FixRoute66Files(IGame game, IMod _)
+        private static void FixRoute66Files(IGame game, IAddon _)
         {
             if (game is RedneckGame)
             {

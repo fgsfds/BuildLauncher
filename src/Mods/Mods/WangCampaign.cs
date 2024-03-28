@@ -5,7 +5,7 @@ namespace Mods.Mods
     /// <summary>
     /// Shadow Warrior campaign
     /// </summary>
-    public sealed class WangCampaign : BaseMod
+    public sealed class WangCampaign : BaseAddon
     {
         /// <summary>
         /// Wang Addon enum

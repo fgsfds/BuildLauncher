@@ -5,7 +5,7 @@ namespace Mods.Mods
     /// <summary>
     /// Redneck Rampage campaign
     /// </summary>
-    public sealed class RedneckCampaign : BaseMod
+    public sealed class RedneckCampaign : BaseAddon
     {
         /// <summary>
         /// Redneck Addon enum

@@ -3,7 +3,7 @@
     /// <summary>
     /// Powerslave campaign
     /// </summary>
-    public sealed class SlaveCampaign : BaseMod
+    public sealed class SlaveCampaign : BaseAddon
     {
     }
 }

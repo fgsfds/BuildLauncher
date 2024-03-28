@@ -67,7 +67,7 @@ namespace Ports.Ports.EDuke32
 
 
         /// <inheritdoc/>
-        protected override void BeforeStart(IGame game, IMod campaign)
+        protected override void BeforeStart(IGame game, IAddon campaign)
         {
             FixGrpInConfig();
 
@@ -75,7 +75,7 @@ namespace Ports.Ports.EDuke32
         }
 
         /// <inheritdoc/>
-        protected override void GetStartCampaignArgs(StringBuilder sb, IGame game, IMod mod)
+        protected override void GetStartCampaignArgs(StringBuilder sb, IGame game, IAddon mod)
         {
             if (game is DukeGame dGame && mod is DukeCampaign dCamp)
             {
@@ -116,7 +116,7 @@ namespace Ports.Ports.EDuke32
                 return;
             }
 
-            if (camp.ModType is ModTypeEnum.Campaign)
+            if (camp.ModType is ModTypeEnum.TC)
             {
                 sb.Append($@" -g ""{Path.Combine(game.CampaignsFolderPath, camp.FileName)}"" -x ""{camp.StartupFile}""");
             }
@@ -141,7 +141,7 @@ namespace Ports.Ports.EDuke32
         }
 
         /// <inheritdoc/>
-        protected override void GetAutoloadModsArgs(StringBuilder sb, IGame game, IMod campaign, Dictionary<Guid, IMod> mods)
+        protected override void GetAutoloadModsArgs(StringBuilder sb, IGame game, IAddon campaign, Dictionary<Guid, IAddon> mods)
         {
             if (mods.Count == 0)
             {

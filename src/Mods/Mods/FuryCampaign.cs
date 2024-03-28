@@ -3,7 +3,7 @@
     /// <summary>
     /// Ion Fury campaign
     /// </summary>
-    public sealed class FuryCampaign : BaseMod
+    public sealed class FuryCampaign : BaseAddon
     {
     }
 }

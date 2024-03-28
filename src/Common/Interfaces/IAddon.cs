@@ -2,12 +2,16 @@
 
 namespace Common.Interfaces
 {
-    public interface IMod
+    public interface IAddon
     {
         /// <summary>
-        /// Mod's GUID
+        /// Mod's ID
         /// </summary>
-        Guid Guid { get; init; }
+        string Id { get; init; }
+
+        GameEnum Game { get; init; }
+
+        List<int>? GameCrcs { get; init; }
 
         /// <summary>
         /// Type of the mod
@@ -17,7 +21,7 @@ namespace Common.Interfaces
         /// <summary>
         /// Name of the mod
         /// </summary>
-        string DisplayName { get; init; }
+        string Title { get; init; }
 
         /// <summary>
         /// Mod's author
@@ -40,11 +44,6 @@ namespace Common.Interfaces
         string? FileName { get; }
 
         /// <summary>
-        /// Main startup file (CON, INI, MAP etc)
-        /// </summary>
-        string? StartupFile { get; init; }
-
-        /// <summary>
         /// Cover image
         /// </summary>
         Stream? Image { get; init; }
@@ -56,24 +55,9 @@ namespace Common.Interfaces
         List<PortEnum>? SupportedPorts { get; init; }
 
         /// <summary>
-        /// Url to the mod's website
-        /// </summary>
-        string? Url { get; init; }
-
-        /// <summary>
         /// Mod's version
         /// </summary>
-        float? Version { get; init; }
-
-        /// <summary>
-        /// Is official campaign
-        /// </summary>
-        bool IsOfficial { get; init; }
-
-        /// <summary>
-        /// Campaign's addon as a string
-        /// </summary>
-        string? Addon { get; }
+        string? Version { get; init; }
 
         /// <summary>
         /// Is loose unarchived file
@@ -84,6 +68,9 @@ namespace Common.Interfaces
         /// Built-in def file
         /// </summary>
         string? DefFileContents { get; init; }
+
+        HashSet<string>? Dependencies { get; init; }
+        HashSet<string>? Incompatibles { get; init; }
 
         /// <summary>
         /// Create markdown description of the mod

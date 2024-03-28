@@ -25,17 +25,17 @@ namespace Games.Games
 
 
         /// <inheritdoc/>
-        protected override Dictionary<Guid, IMod> GetOriginalCampaigns()
+        protected override Dictionary<string, IAddon> GetOriginalCampaigns()
         {
-            Dictionary<Guid, IMod> campaigns = new(1);
+            Dictionary<string, IAddon> campaigns = new(1);
 
             if (IsBaseGameInstalled)
             {
-                campaigns.Add(Consts.FuryGuid, new FuryCampaign()
+                campaigns.Add(GameEnum.Fury.ToString(), new FuryCampaign()
                 {
-                    Guid = Consts.FuryGuid,
-                    ModType = ModTypeEnum.Campaign,
-                    DisplayName = IsAftershock() ? "Ion Fury: Aftershock" : "Ion Fury",
+                    Id = GameEnum.Fury.ToString(),
+                    ModType = ModTypeEnum.Official,
+                    Title = IsAftershock() ? "Ion Fury: Aftershock" : "Ion Fury",
                     Image = IsAftershock() ? ImageHelper.FileNameToStream("Fury.aftershock.jpg") : ImageHelper.FileNameToStream("Fury.fury.jpg"),
                     Author = "Voidpoint, LLC",
                     Description = """
@@ -49,8 +49,6 @@ namespace Games.Games
                     StartupFile = null,
                     Version = null,
                     SupportedPorts = null,
-                    Url = null,
-                    IsOfficial = true,
                     PathToFile = null,
                     IsLoose = false
                 });

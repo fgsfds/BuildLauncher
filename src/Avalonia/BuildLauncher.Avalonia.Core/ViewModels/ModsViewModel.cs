@@ -62,7 +62,7 @@ namespace BuildLauncher.ViewModels
         /// </summary>
         [ObservableProperty]
         [NotifyPropertyChangedFor(nameof(SelectedModDescription))]
-        private IMod? _selectedMod;
+        private IAddon? _selectedMod;
 
         public string SelectedModDescription => SelectedMod is null ? string.Empty : SelectedMod.ToMarkdownString();
 
@@ -119,11 +119,11 @@ namespace BuildLauncher.ViewModels
 
             if (!mod.IsEnabled)
             {
-                _config.AddDisabledAutoloadMod(mod.Guid);
+                _config.AddDisabledAutoloadMod(mod.Id);
             }
             else if (mod.IsEnabled)
             {
-                _config.RemoveDisabledAutoloadMod(mod.Guid);
+                _config.RemoveDisabledAutoloadMod(mod.Id);
             }
         }
 
@@ -141,7 +141,7 @@ namespace BuildLauncher.ViewModels
         private void OnModDownloaded(IGame game, ModTypeEnum modType)
         {
             if (game.GameEnum != Game.GameEnum ||
-                modType is not ModTypeEnum.Autoload)
+                modType is not ModTypeEnum.Mod)
             {
                 return;
             }

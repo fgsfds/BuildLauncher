@@ -38,17 +38,17 @@ namespace Games.Games
         /// <summary>
         /// Get list of original campaigns
         /// </summary>
-        protected override Dictionary<Guid, IMod> GetOriginalCampaigns()
+        protected override Dictionary<Guid, IAddon> GetOriginalCampaigns()
         {
-            Dictionary<Guid, IMod> campaigns = new(3);
+            Dictionary<Guid, IAddon> campaigns = new(3);
 
             if (IsBaseGameInstalled)
             {
                 campaigns.Add(Consts.WangGuid, new WangCampaign()
                 {
-                    Guid = Consts.WangGuid,
-                    ModType = ModTypeEnum.Campaign,
-                    DisplayName = "Shadow Warrior",
+                    Id = Consts.WangGuid,
+                    ModType = ModTypeEnum.TC,
+                    Title = "Shadow Warrior",
                     Image = ImageHelper.FileNameToStream("Wang.wang.jpg"),
                     AddonEnum = WangAddonEnum.Wang,
                     Version = null,
@@ -72,9 +72,9 @@ namespace Games.Games
                 {
                     campaigns.Add(Consts.WantonGuid, new WangCampaign()
                     {
-                        Guid = Consts.WantonGuid,
-                        ModType = ModTypeEnum.Campaign,
-                        DisplayName = "Wanton Destruction",
+                        Id = Consts.WantonGuid,
+                        ModType = ModTypeEnum.TC,
+                        Title = "Wanton Destruction",
                         Image = ImageHelper.FileNameToStream("Wang.wanton.jpg"),
                         AddonEnum = WangAddonEnum.Wanton,
                         Author = "Sunstorm Interactive",
@@ -101,9 +101,9 @@ namespace Games.Games
                 {
                     campaigns.Add(Consts.TwinDragonGuid, new WangCampaign()
                     {
-                        Guid = Consts.TwinDragonGuid,
-                        ModType = ModTypeEnum.Campaign,
-                        DisplayName = "Twin Dragon",
+                        Id = Consts.TwinDragonGuid,
+                        ModType = ModTypeEnum.TC,
+                        Title = "Twin Dragon",
                         Image = ImageHelper.FileNameToStream("Wang.twin.jpg"),
                         AddonEnum = WangAddonEnum.TwinDragon,
                         Author = "Wylde Productions, Level Infinity",

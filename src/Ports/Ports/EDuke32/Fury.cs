@@ -52,7 +52,7 @@ namespace Ports.Ports.EDuke32
 
 
         /// <inheritdoc/>
-        protected override void GetStartCampaignArgs(StringBuilder sb, IGame game, IMod mod)
+        protected override void GetStartCampaignArgs(StringBuilder sb, IGame game, IAddon mod)
         {
             if (game is not FuryGame || mod is not FuryCampaign fCamp)
             {

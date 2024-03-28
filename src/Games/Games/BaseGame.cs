@@ -1,6 +1,7 @@
 ﻿using Common.Enums;
 using Common.Helpers;
 using Common.Interfaces;
+using Mods.Helpers;
 using Mods.Mods;
 using Mods.Providers;
 using System.IO.Compression;
@@ -83,11 +84,11 @@ namespace Games.Games
 
 
         /// <inheritdoc/>
-        public virtual Dictionary<Guid, IMod> GetCampaigns()
+        public virtual Dictionary<string, IAddon> GetCampaigns()
         {
-            Dictionary<Guid, IMod> originalCampaigns = GetOriginalCampaigns();
+            Dictionary<string, IAddon> originalCampaigns = GetOriginalCampaigns();
 
-            var customCampaigns = InstalledModsProvider.GetInstalledMods(ModTypeEnum.Campaign);
+            var customCampaigns = InstalledModsProvider.GetInstalledMods(ModTypeEnum.TC);
 
             foreach (var customCamp in customCampaigns)
             {
@@ -101,7 +102,7 @@ namespace Games.Games
                     }
                     else if (customCamp.Value.Version is not null &&
                              originalCamp.Version is not null &&
-                             customCamp.Value.Version > originalCamp.Version)
+                             VersionComparer.Compare(customCamp.Value.Version, originalCamp.Version, ">"))
                     {
                         //replacing with mod that have higher version
                         originalCampaigns[customCamp.Key] = customCamp.Value;
@@ -118,7 +119,7 @@ namespace Games.Games
 
 
         /// <inheritdoc/>
-        public virtual Dictionary<Guid, IMod> GetSingleMaps()
+        public virtual Dictionary<string, IAddon> GetSingleMaps()
         {
             var maps = InstalledModsProvider.GetInstalledMods(ModTypeEnum.Map);
 
@@ -127,13 +128,13 @@ namespace Games.Games
 
 
         /// <inheritdoc/>
-        public virtual Dictionary<Guid, IMod> GetAutoloadMods(bool enabledOnly)
+        public virtual Dictionary<string, IAddon> GetAutoloadMods(bool enabledOnly)
         {
-            var mods = InstalledModsProvider.GetInstalledMods(ModTypeEnum.Autoload);
+            var mods = InstalledModsProvider.GetInstalledMods(ModTypeEnum.Mod);
 
             if (enabledOnly)
             {
-                Dictionary<Guid, IMod> filtered = [];
+                Dictionary<string, IAddon> filtered = [];
 
                 foreach (var mod in mods)
                 {
@@ -241,7 +242,7 @@ namespace Games.Games
         /// Get list of original campaigns
         /// </summary>
         /// <returns></returns>
-        protected abstract Dictionary<Guid, IMod> GetOriginalCampaigns();
+        protected abstract Dictionary<string, IAddon> GetOriginalCampaigns();
 
 
         /// <summary>

@@ -71,18 +71,18 @@ namespace Games.Games
 
 
         /// <inheritdoc/>
-        protected override Dictionary<Guid, IMod> GetOriginalCampaigns()
+        protected override Dictionary<string, IAddon> GetOriginalCampaigns()
         {
-            Dictionary<Guid, IMod> campaigns = new(6);
+            Dictionary<string, IAddon> campaigns = new(6);
 
             if (IsBaseGameInstalled &&
                 GameInstallFolder != DukeWTInstallPath)
             {
-                campaigns.Add(Consts.Duke3dGuid, new DukeCampaign()
+                campaigns.Add("Duke3D", new DukeCampaign()
                 {
-                    Guid = Consts.Duke3dGuid,
-                    ModType = ModTypeEnum.Campaign,
-                    DisplayName = "Duke Nukem 3D",
+                    Id = "Duke3D",
+                    ModType = ModTypeEnum.TC,
+                    Title = "Duke Nukem 3D",
                     Image = ImageHelper.FileNameToStream("Duke3D.duke3d.jpg"),
                     AddonEnum = DukeAddonEnum.Duke3D,
                     Author = "3D Realms",
@@ -96,8 +96,6 @@ namespace Games.Games
                     StartupFile = null,
                     Version = null,
                     SupportedPorts = null,
-                    Url = null,
-                    IsOfficial = true,
                     PathToFile = null,
                     IsLoose = false
                 });
@@ -105,11 +103,11 @@ namespace Games.Games
 
             if (IsWorldTourInstalled)
             {
-                campaigns.Add(Consts.WorldTourGuid, new DukeCampaign()
+                campaigns.Add("DukeWT", new DukeCampaign()
                 {
-                    Guid = Consts.WorldTourGuid,
-                    ModType = ModTypeEnum.Campaign,
-                    DisplayName = "Duke Nukem 3D World Tour",
+                    Id = "DukeWT",
+                    ModType = ModTypeEnum.TC,
+                    Title = "Duke Nukem 3D World Tour",
                     Image = ImageHelper.FileNameToStream("Duke3D.dukewt.jpg"),
                     AddonEnum = DukeAddonEnum.WorldTour,
                     SupportedPorts = [PortEnum.Raze, PortEnum.EDuke32, PortEnum.BuildGDX],
@@ -123,8 +121,6 @@ namespace Games.Games
                         """,
                     StartupFile = null,
                     Version = null,
-                    Url = null,
-                    IsOfficial = true,
                     PathToFile = null,
                     IsLoose = false
                 });
@@ -134,11 +130,11 @@ namespace Games.Games
             {
                 if (IsCaribbeanInstalled)
                 {
-                    campaigns.Add(Consts.CaribbeanGuid, new DukeCampaign()
+                    campaigns.Add("dukevaca", new DukeCampaign()
                     {
-                        Guid = Consts.CaribbeanGuid,
-                        ModType = ModTypeEnum.Campaign,
-                        DisplayName = "Caribbean",
+                        Id = "dukevaca",
+                        ModType = ModTypeEnum.TC,
+                        Title = "Caribbean",
                         Image = ImageHelper.FileNameToStream("Duke3D.carib.jpg"),
                         AddonEnum = DukeAddonEnum.Caribbean,
                         Author = "Sunstorm Interactive",
@@ -153,8 +149,6 @@ namespace Games.Games
                         Version = null,
                         //TODO remove when https://voidpoint.io/terminx/eduke32/-/issues/297 is fixed
                         SupportedPorts = [PortEnum.Raze, PortEnum.BuildGDX],
-                        Url = null,
-                        IsOfficial = true,
                         PathToFile = null,
                         IsLoose = false
                     });
@@ -162,11 +156,11 @@ namespace Games.Games
 
                 if (IsNuclearWinterInstalled)
                 {
-                    campaigns.Add(Consts.NuclearWinterGuid, new DukeCampaign()
+                    campaigns.Add("dukenw", new DukeCampaign()
                     {
-                        Guid = Consts.NuclearWinterGuid,
-                        ModType = ModTypeEnum.Campaign,
-                        DisplayName = "Nuclear Winter",
+                        Id = "dukenw",
+                        ModType = ModTypeEnum.TC,
+                        Title = "Nuclear Winter",
                         Image = ImageHelper.FileNameToStream("Duke3D.nwinter.jpg"),
                         AddonEnum = DukeAddonEnum.NuclearWinter,
                         Author = "Simply Silly Software",
@@ -179,8 +173,6 @@ namespace Games.Games
                         StartupFile = null,
                         Version = null,
                         SupportedPorts = null,
-                        Url = null,
-                        IsOfficial = true,
                         PathToFile = null,
                         IsLoose = false
                     });
@@ -188,11 +180,11 @@ namespace Games.Games
 
                 if (IsDukeDCInstalled)
                 {
-                    campaigns.Add(Consts.DukeDCGuid, new DukeCampaign()
+                    campaigns.Add("dukedc", new DukeCampaign()
                     {
-                        Guid = Consts.DukeDCGuid,
-                        ModType = ModTypeEnum.Campaign,
-                        DisplayName = "Duke it Out in DC",
+                        Id = "dukedc",
+                        ModType = ModTypeEnum.TC,
+                        Title = "Duke it Out in DC",
                         Image = ImageHelper.FileNameToStream("Duke3D.dukedc.jpg"),
                         AddonEnum = DukeAddonEnum.DukeDC,
                         Author = "WizardWorks",
@@ -208,8 +200,6 @@ namespace Games.Games
                         Version = null,
                         //TODO remove when https://voidpoint.io/terminx/eduke32/-/issues/297 is fixed
                         SupportedPorts = [PortEnum.Raze, PortEnum.BuildGDX],
-                        Url = null,
-                        IsOfficial = true,
                         PathToFile = null,
                         IsLoose = false
                     });
@@ -218,11 +208,11 @@ namespace Games.Games
 
             if (IsDuke64Installed)
             {
-                campaigns.Add(Consts.Duke64Guid, new DukeCampaign()
+                campaigns.Add("Duke64", new DukeCampaign()
                 {
-                    Guid = Consts.Duke64Guid,
-                    ModType = ModTypeEnum.Campaign,
-                    DisplayName = "Duke Nukem 64",
+                    Id = "Duke64",
+                    ModType = ModTypeEnum.TC,
+                    Title = "Duke Nukem 64",
                     Image = ImageHelper.FileNameToStream("Duke3D.duke64.jpg"),
                     AddonEnum = DukeAddonEnum.Duke64,
                     SupportedPorts = [PortEnum.RedNukem],
@@ -235,8 +225,6 @@ namespace Games.Games
                         """,
                     StartupFile = null,
                     Version = null,
-                    Url = null,
-                    IsOfficial = true,
                     PathToFile = null,
                     IsLoose = false
                 });

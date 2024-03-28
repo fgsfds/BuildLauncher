@@ -41,17 +41,17 @@ namespace Games.Games
 
 
         /// <inheritdoc/>
-        protected override Dictionary<Guid, IMod> GetOriginalCampaigns()
+        protected override Dictionary<Guid, IAddon> GetOriginalCampaigns()
         {
-            Dictionary<Guid, IMod> campaigns = new(3);
+            Dictionary<Guid, IAddon> campaigns = new(3);
 
             if (IsBaseGameInstalled)
             {
                 campaigns.Add(Consts.RedneckGuid, new RedneckCampaign()
                 {
-                    Guid = Consts.RedneckGuid,
-                    ModType = ModTypeEnum.Campaign,
-                    DisplayName = "Redneck Rampage",
+                    Id = Consts.RedneckGuid,
+                    ModType = ModTypeEnum.TC,
+                    Title = "Redneck Rampage",
                     Image = ImageHelper.FileNameToStream("Redneck.redneck.jpg"),
                     AddonEnum = RedneckAddonEnum.Redneck,
                     Author = "Xatrix Entertainment",
@@ -77,9 +77,9 @@ namespace Games.Games
                 {
                     campaigns.Add(Consts.Route66Guid, new RedneckCampaign()
                     {
-                        Guid = Consts.Route66Guid,
-                        ModType = ModTypeEnum.Campaign,
-                        DisplayName = "Route 66",
+                        Id = Consts.Route66Guid,
+                        ModType = ModTypeEnum.TC,
+                        Title = "Route 66",
                         Image = ImageHelper.FileNameToStream("Redneck.route66.jpg"),
                         AddonEnum = RedneckAddonEnum.Route66,
                         Author = "Sunstorm Interactive",
@@ -102,9 +102,9 @@ namespace Games.Games
             {
                 campaigns.Add(Consts.AgainGuid, new RedneckCampaign()
                 {
-                    Guid = Consts.AgainGuid,
-                    ModType = ModTypeEnum.Campaign,
-                    DisplayName = "Rides Again",
+                    Id = Consts.AgainGuid,
+                    ModType = ModTypeEnum.TC,
+                    Title = "Rides Again",
                     Image = ImageHelper.FileNameToStream("Redneck.again.jpg"),
                     AddonEnum = RedneckAddonEnum.Again,
                     Author = "Xatrix Entertainment",

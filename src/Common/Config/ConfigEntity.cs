@@ -99,17 +99,17 @@ namespace Common.Config
             set => SetConfigParameter(ref _skipStartup, value);
         }
 
-        public HashSet<Guid> DisabledAutoloadMods { get; set; } = [];
+        public HashSet<string> DisabledAutoloadMods { get; set; } = [];
 
-        public void AddDisabledAutoloadMod(Guid guid)
+        public void AddDisabledAutoloadMod(string id)
         {
-            DisabledAutoloadMods.Add(guid);
+            DisabledAutoloadMods.Add(id);
             ParameterChangedEvent?.Invoke(nameof(DisabledAutoloadMods));
         }
 
-        public void RemoveDisabledAutoloadMod(Guid guid)
+        public void RemoveDisabledAutoloadMod(string id)
         {
-            DisabledAutoloadMods.Remove(guid);
+            DisabledAutoloadMods.Remove(id);
             ParameterChangedEvent?.Invoke(nameof(DisabledAutoloadMods));
         }
 

@@ -7,7 +7,10 @@ using Mods.Providers;
 
 namespace Games.Games
 {
-    public sealed class BloodGame(InstalledModsProviderFactory modsProvider, DownloadableModsProviderFactory downloadableModsProviderFactory) : BaseGame(modsProvider, downloadableModsProviderFactory)
+    public sealed class BloodGame(
+        InstalledModsProviderFactory modsProvider,
+        DownloadableModsProviderFactory downloadableModsProviderFactory
+        ) : BaseGame(modsProvider, downloadableModsProviderFactory)
     {
         /// <inheritdoc/>
         public override GameEnum GameEnum => GameEnum.Blood;
@@ -36,15 +39,15 @@ namespace Games.Games
 
 
         /// <inheritdoc/>
-        protected override Dictionary<Guid, IMod> GetOriginalCampaigns()
+        protected override Dictionary<string, IAddon> GetOriginalCampaigns()
         {
-            Dictionary<Guid, IMod> campaigns = new(2);
+            Dictionary<string, IAddon> campaigns = new(2);
 
-            campaigns.Add(Consts.BloodGuid, new BloodCampaign()
+            campaigns.Add("Blood", new BloodCampaign()
             {
-                Guid = Consts.BloodGuid,
-                ModType = ModTypeEnum.Campaign,
-                DisplayName = "Blood",
+                Id = "Blood",
+                ModType = ModTypeEnum.Official,
+                Title = "Blood",
                 StartupFile = Consts.BloodIni,
                 Image = ImageHelper.FileNameToStream("Blood.blood.png"),
                 AddonEnum = BloodAddonEnum.Blood,
@@ -63,19 +66,17 @@ namespace Games.Games
                     """,
                 Version = null,
                 SupportedPorts = null,
-                Url = null,
-                IsOfficial = true,
                 PathToFile = null,
                 IsLoose = false
             });
 
             if (IsCrypticPassageInstalled)
             {
-                campaigns.Add(Consts.CrypticGuid, new BloodCampaign()
+                campaigns.Add("Cryptic", new BloodCampaign()
                 {
-                    Guid = Consts.CrypticGuid,
-                    ModType = ModTypeEnum.Campaign,
-                    DisplayName = "Cryptic Passage",
+                    Id = "Cryptic",
+                    ModType = ModTypeEnum.Official,
+                    Title = "Cryptic Passage",
                     StartupFile = Consts.CrypticIni,
                     Image = ImageHelper.FileNameToStream("Blood.cp.jpg"),
                     AddonEnum = BloodAddonEnum.Cryptic,
@@ -90,8 +91,6 @@ namespace Games.Games
                         """,
                     Version = null,
                     SupportedPorts = null,
-                    Url = null,
-                    IsOfficial = true,
                     PathToFile = null,
                     IsLoose = false
                 });

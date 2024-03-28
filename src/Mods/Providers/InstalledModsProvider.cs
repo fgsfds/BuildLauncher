@@ -6,7 +6,6 @@ using Common.Interfaces;
 using Mods.Mods;
 using Mods.Serializable;
 using SharpCompress.Archives;
-using System.ComponentModel;
 using System.Text.Json;
 
 namespace Mods.Providers
@@ -18,7 +17,7 @@ namespace Mods.Providers
     {
         private readonly IGame _game;
         private readonly ConfigEntity _config;
-        private readonly Dictionary<ModTypeEnum, Dictionary<Guid, IMod>> _cache;
+        private readonly Dictionary<ModTypeEnum, Dictionary<string, IAddon>> _cache;
         private readonly SemaphoreSlim _semaphore = new(1);
 
         public event ModChanged ModDeletedEvent;
@@ -52,16 +51,16 @@ namespace Mods.Providers
                     IEnumerable<string> files;
 
                     files = Directory.GetFiles(_game.CampaignsFolderPath).Where(static x => x.EndsWith(".zip", StringComparison.InvariantCultureIgnoreCase) || x.EndsWith(".grp", StringComparison.InvariantCultureIgnoreCase));
-                    var camps = GetModsFromFiles(ModTypeEnum.Campaign, files);
-                    _cache.Add(ModTypeEnum.Campaign, camps);
+                    var camps = GetModsFromFiles(ModTypeEnum.TC, files);
+                    _cache.Add(ModTypeEnum.TC, camps);
 
                     files = Directory.GetFiles(_game.MapsFolderPath).Where(static x => x.EndsWith(".zip", StringComparison.InvariantCultureIgnoreCase) || x.EndsWith(".map", StringComparison.InvariantCultureIgnoreCase));
                     var maps = GetModsFromFiles(ModTypeEnum.Map, files);
                     _cache.Add(ModTypeEnum.Map, maps);
 
                     files = Directory.GetFiles(_game.ModsFolderPath, "*.zip");
-                    var mods = GetModsFromFiles(ModTypeEnum.Autoload, files);
-                    _cache.Add(ModTypeEnum.Autoload, mods);
+                    var mods = GetModsFromFiles(ModTypeEnum.Mod, files);
+                    _cache.Add(ModTypeEnum.Mod, mods);
                 });
             }
 
@@ -71,13 +70,13 @@ namespace Mods.Providers
         }
 
         /// <inheritdoc/>
-        public void DeleteMod(IMod mod)
+        public void DeleteMod(IAddon mod)
         {
             _cache.ThrowIfNull();
 
             File.Delete(mod.PathToFile!);
 
-            _cache[mod.ModType].Remove(mod.Guid);
+            _cache[mod.ModType].Remove(mod.Id);
 
             ModDeletedEvent?.Invoke(_game, mod.ModType);
         }
@@ -96,18 +95,18 @@ namespace Mods.Providers
 
             var dict = _cache[mod.ModType];
 
-            if (dict.TryGetValue(mod.Guid, out _))
+            if (dict.TryGetValue(mod.Id, out _))
             {
-                dict[mod.Guid] = mod;
+                dict[mod.Id] = mod;
             }
             else
             {
-                dict.Add(mod.Guid, mod);
+                dict.Add(mod.Id, mod);
             }
         }
 
         /// <inheritdoc/>
-        public Dictionary<Guid, IMod> GetInstalledMods(ModTypeEnum modTypeEnum)
+        public Dictionary<string, IAddon> GetInstalledMods(ModTypeEnum modTypeEnum)
         {
             _cache.ThrowIfNull();
 
@@ -126,9 +125,9 @@ namespace Mods.Providers
         /// </summary>
         /// <param name="modTypeEnum">Mod type</param>
         /// <param name="files">Paths to mod files</param>
-        private Dictionary<Guid, IMod> GetModsFromFiles(ModTypeEnum modTypeEnum, IEnumerable<string> files)
+        private Dictionary<string, IAddon> GetModsFromFiles(ModTypeEnum modTypeEnum, IEnumerable<string> files)
         {
-            Dictionary<Guid, IMod> addedMods = [];
+            Dictionary<string, IAddon> addedMods = [];
 
             foreach (var file in files)
             {
@@ -141,25 +140,25 @@ namespace Mods.Providers
                         continue;
                     }
 
-                    if (addedMods.TryGetValue(mod.Guid, out var addedMod))
+                    if (addedMods.TryGetValue(mod.Id, out var addedMod))
                     {
                         if (addedMod.Version is null &&
                             mod.Version is not null)
                         {
                             //replacing with mod that have version
-                            addedMods[mod.Guid] = mod;
+                            addedMods[mod.Id] = mod;
                         }
                         else if (addedMod.Version is not null &&
                                  mod.Version is not null &&
-                                 addedMod.Version < mod.Version)
+                                 string.CompareOrdinal(addedMod.Version, mod.Version) == -1)
                         {
                             //replacing with mod that have higher version
-                            addedMods[mod.Guid] = mod;
+                            addedMods[mod.Id] = mod;
                         }
                     }
                     else
                     {
-                        addedMods.Add(mod.Guid, mod);
+                        addedMods.Add(mod.Id, mod);
                     }
                 }
                 catch
@@ -176,19 +175,17 @@ namespace Mods.Providers
         /// </summary>
         /// <param name="modTypeEnum">Mod type</param>
         /// <param name="file">Path to mod file</param>
-        private IMod? GetMod(ModTypeEnum modTypeEnum, string file)
+        private IAddon? GetMod(ModTypeEnum modTypeEnum, string file)
         {
-            IMod mod;
+            IAddon mod;
 
-            var guid = Guid.NewGuid();
-            string displayName = Path.GetFileNameWithoutExtension(file);
+            var id = Guid.NewGuid().ToString();
+            string title = Path.GetFileNameWithoutExtension(file);
             string description = string.Empty;
-            string? addon = null;
             List<PortEnum>? supportedPorts = null;
             List<string>? supportedAddons = null;
             string? startupFile = null;
-            float? version = null;
-            string? url = null;
+            string? version = null;
             string? author = null;
             Stream? image = null;
             bool isLoose = false;
@@ -197,39 +194,32 @@ namespace Mods.Providers
             if (ArchiveFactory.IsArchive(file, out var _))
             {
                 using var archive = ArchiveFactory.Open(file);
-                var entry = archive.Entries.FirstOrDefault(static x => x.Key.Equals("manifest.json"));
+                var entry = archive.Entries.FirstOrDefault(static x => x.Key.Equals("addon.json"));
 
                 if (entry is not null)
                 {
                     var manifest = JsonSerializer.Deserialize(
                         entry.OpenEntryStream(),
-                        ModManifestContext.Default.ModManifest
+                        AddonManifestContext.Default.AddonManifest
                         );
 
                     if (manifest is not null)
                     {
-                        if (manifest.ModType is not ModTypeEnum.Autoload &&
-                            manifest.SupportedAddons is not null)
-                        {
-                            ThrowHelper.NotImplementedException("SupportedAddons property is only supported by Autoload mods");
-                        }
-
-                        guid = manifest.Guid;
-                        displayName = manifest.Name;
+                        id = manifest.Id;
+                        title = manifest.Title;
                         addon = manifest.Addon;
                         supportedPorts = manifest.SupportedPorts;
                         supportedAddons = manifest.SupportedAddons;
                         description = manifest.Description;
                         startupFile = manifest.StartupFile;
                         version = manifest.Version;
-                        url = manifest.Url;
                         author = manifest.Author;
                         image = ImageHelper.GetCoverFromArchive(archive);
                     }
                 }
                 else
                 {
-                    if (_game.GameEnum is GameEnum.Blood && modTypeEnum is ModTypeEnum.Campaign)
+                    if (_game.GameEnum is GameEnum.Blood && modTypeEnum is ModTypeEnum.TC)
                     {
                         var ini = archive.Entries.FirstOrDefault(static x => x.Key.EndsWith(".ini", StringComparison.InvariantCultureIgnoreCase));
 
@@ -243,7 +233,7 @@ namespace Mods.Providers
                 var defFile = archive.Entries.FirstOrDefault(x => x.Key.Equals(_game.DefFile));
 
                 if (defFile is not null &&
-                    modTypeEnum is ModTypeEnum.Campaign)
+                    modTypeEnum is ModTypeEnum.TC)
                 {
                     using var stream = defFile.OpenEntryStream();
                     using StreamReader reader = new(stream);
@@ -262,24 +252,22 @@ namespace Mods.Providers
                 return null;
             }
 
-            if (modTypeEnum is ModTypeEnum.Autoload)
+            if (modTypeEnum is ModTypeEnum.Mod)
             {
-                var isEnabled = !_config.DisabledAutoloadMods.Contains(guid);
+                var isEnabled = !_config.DisabledAutoloadMods.Contains(id);
 
                 mod = new AutoloadMod()
                 {
-                    Guid = guid,
-                    ModType = ModTypeEnum.Autoload,
-                    DisplayName = displayName,
+                    Id = id,
+                    ModType = ModTypeEnum.Mod,
+                    Title = title,
                     Image = image,
                     SupportedPorts = supportedPorts,
                     SupportedAddons = supportedAddons,
                     Description = description,
                     Version = version,
                     Author = author,
-                    Url = url,
                     IsEnabled = isEnabled,
-                    IsOfficial = false,
                     PathToFile = file,
                     StartupFile = null,
                     IsLoose = isLoose
@@ -291,9 +279,9 @@ namespace Mods.Providers
                 {
                     mod = new DukeCampaign()
                     {
-                        Guid = guid,
+                        Id = id,
                         ModType = modTypeEnum,
-                        DisplayName = displayName,
+                        Title = title,
                         Image = image,
                         SupportedPorts = supportedPorts,
                         Description = description,
@@ -301,8 +289,6 @@ namespace Mods.Providers
                         AddonEnum = addon is null ? DukeAddonEnum.Duke3D : Enum.Parse<DukeAddonEnum>(addon),
                         Version = version,
                         Author = author,
-                        Url = url,
-                        IsOfficial = false,
                         PathToFile = file,
                         IsLoose = isLoose,
                         DefFileContents = defFileContents
@@ -312,17 +298,15 @@ namespace Mods.Providers
                 {
                     mod = new WangCampaign()
                     {
-                        Guid = guid,
+                        Id = id,
                         ModType = modTypeEnum,
-                        DisplayName = displayName,
+                        Title = title,
                         Image = image,
                         SupportedPorts = supportedPorts,
                         Description = description,
                         AddonEnum = addon is null ? WangAddonEnum.Wang : Enum.Parse<WangAddonEnum>(addon),
                         Version = version,
                         Author = author,
-                        Url = url,
-                        IsOfficial = false,
                         PathToFile = file,
                         StartupFile = null,
                         IsLoose = isLoose,
@@ -333,18 +317,16 @@ namespace Mods.Providers
                 {
                     mod = new BloodCampaign()
                     {
-                        Guid = guid,
+                        Id = id,
                         ModType = modTypeEnum,
-                        DisplayName = displayName,
+                        Title = title,
                         Image = image,
                         SupportedPorts = supportedPorts,
                         Description = description,
                         AddonEnum = addon is null ? BloodAddonEnum.Blood : Enum.Parse<BloodAddonEnum>(addon),
                         Version = version,
                         Author = author,
-                        Url = url,
                         StartupFile = startupFile!,
-                        IsOfficial = false,
                         PathToFile = file,
                         IsLoose = isLoose,
                         DefFileContents = defFileContents
@@ -354,17 +336,15 @@ namespace Mods.Providers
                 {
                     mod = new FuryCampaign()
                     {
-                        Guid = guid,
+                        Id = id,
                         ModType = modTypeEnum,
-                        DisplayName = displayName,
+                        Title = title,
                         Image = image,
                         SupportedPorts = supportedPorts,
                         Description = description,
                         Version = version,
                         Author = author,
-                        Url = url,
                         StartupFile = startupFile!,
-                        IsOfficial = false,
                         PathToFile = file,
                         IsLoose = isLoose,
                         DefFileContents = defFileContents
@@ -374,17 +354,15 @@ namespace Mods.Providers
                 {
                     mod = new SlaveCampaign()
                     {
-                        Guid = guid,
+                        Id = id,
                         ModType = modTypeEnum,
-                        DisplayName = displayName,
+                        Title = title,
                         Image = image,
                         SupportedPorts = supportedPorts,
                         Description = description,
                         Version = version,
                         Author = author,
-                        Url = url,
                         StartupFile = startupFile!,
-                        IsOfficial = false,
                         PathToFile = file,
                         IsLoose = isLoose,
                         DefFileContents = defFileContents
@@ -394,18 +372,16 @@ namespace Mods.Providers
                 {
                     mod = new RedneckCampaign()
                     {
-                        Guid = guid,
+                        Id = id,
                         ModType = modTypeEnum,
-                        DisplayName = displayName,
+                        Title = title,
                         Image = image,
                         SupportedPorts = supportedPorts,
                         Description = description,
                         AddonEnum = addon is null ? RedneckAddonEnum.Redneck : Enum.Parse<RedneckAddonEnum>(addon),
                         Version = version,
                         Author = author,
-                        Url = url,
                         StartupFile = startupFile!,
-                        IsOfficial = false,
                         PathToFile = file,
                         IsLoose = isLoose,
                         DefFileContents = defFileContents

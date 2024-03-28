@@ -37,13 +37,13 @@ namespace Ports.Ports.EDuke32
 
 
         /// <inheritdoc/>
-        protected override void BeforeStart(IGame game, IMod campaign)
+        protected override void BeforeStart(IGame game, IAddon campaign)
         {
             game.CreateCombinedMod();
         }
 
         /// <inheritdoc/>
-        protected override void GetStartCampaignArgs(StringBuilder sb, IGame game, IMod mod)
+        protected override void GetStartCampaignArgs(StringBuilder sb, IGame game, IAddon mod)
         {
             if (game is not SlaveGame sGame || mod is not SlaveCampaign sCamp)
             {
@@ -59,7 +59,7 @@ namespace Ports.Ports.EDuke32
                 return;
             }
 
-            if (sCamp.ModType is ModTypeEnum.Campaign)
+            if (sCamp.ModType is ModTypeEnum.TC)
             {
                 sb.Append($@" -g ""{Path.Combine(sGame.CampaignsFolderPath, sCamp.FileName)}"" -x ""{sCamp.StartupFile}""");
             }

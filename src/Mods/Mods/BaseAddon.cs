@@ -7,16 +7,18 @@ namespace Mods.Mods
     /// <summary>
     /// Base class for campaigns and maps
     /// </summary>
-    public abstract class BaseMod : IMod
+    public abstract class BaseAddon : IAddon
     {
         /// <inheritdoc/>
-        public required Guid Guid { get; init; }
+        public required string Id { get; init; }
+
+        public GameEnum Game { get; init; }
 
         /// <inheritdoc/>
         public required ModTypeEnum ModType { get; init; }
 
         /// <inheritdoc/>
-        public required string DisplayName { get; init; }
+        public required string Title { get; init; }
 
         /// <inheritdoc/>
         public required List<PortEnum>? SupportedPorts { get; init; }
@@ -28,25 +30,16 @@ namespace Mods.Mods
         public required string? PathToFile { get; init; }
 
         /// <inheritdoc/>
-        public required virtual string? StartupFile { get; init; }
-
-        /// <inheritdoc/>
         public string? FileName => PathToFile is null ? null : Path.GetFileName(PathToFile);
 
         /// <inheritdoc/>
         public required Stream? Image { get; init; }
 
         /// <inheritdoc/>
-        public required float? Version { get; init; }
-
-        /// <inheritdoc/>
-        public required string? Url { get; init; }
+        public required string? Version { get; init; }
 
         /// <inheritdoc/>
         public required string? Author { get; init; }
-
-        /// <inheritdoc/>
-        public required bool IsOfficial { get; init; }
 
         /// <inheritdoc/>
         public string? Addon { get; protected set; }
@@ -57,27 +50,27 @@ namespace Mods.Mods
         /// <inheritdoc/>
         public string? DefFileContents { get; init; }
 
+        public List<int>? GameCrcs { get; init; }
 
-        public override string ToString() => DisplayName;
+        public HashSet<string>? Dependencies { get; init; }
+
+        public HashSet<string>? Incompatibles { get; init; }
+
+        public override string ToString() => Title;
 
         /// <inheritdoc/>
         public string ToMarkdownString()
         {
-            StringBuilder description = new($"## {DisplayName}{Environment.NewLine}");
+            StringBuilder description = new($"## {Title}{Environment.NewLine}");
 
             if (Version is not null)
             {
-                description.Append($"{Environment.NewLine}#### v{(float)Version:0.0#}");
+                description.Append($"{Environment.NewLine}#### v{Version}");
             }
 
             if (Author is not null)
             {
                 description.Append($"{Environment.NewLine}{Environment.NewLine}*by {Author}*");
-            }
-
-            if (Url is not null)
-            {
-                description.Append($"{Environment.NewLine}{Environment.NewLine}[{Url}]({Url})");
             }
 
             if (Description is not null)

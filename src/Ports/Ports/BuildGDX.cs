@@ -67,7 +67,7 @@ namespace Ports.Ports
 
 
         /// <inheritdoc/>
-        protected override void GetStartCampaignArgs(StringBuilder sb, IGame game, IMod mod)
+        protected override void GetStartCampaignArgs(StringBuilder sb, IGame game, IAddon mod)
         {
             sb.Append(@" -jar ..\..\BuildGDX.jar");
 
@@ -98,7 +98,7 @@ namespace Ports.Ports
         }
 
         /// <inheritdoc/>
-        protected override void GetAutoloadModsArgs(StringBuilder sb, IGame _, IMod campaign, Dictionary<Guid, IMod> mods) { }
+        protected override void GetAutoloadModsArgs(StringBuilder sb, IGame _, IAddon campaign, Dictionary<Guid, IAddon> mods) { }
 
         /// <inheritdoc/>
         protected override void GetSkipIntroParameter(StringBuilder sb) { }

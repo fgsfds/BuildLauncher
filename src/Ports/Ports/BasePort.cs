@@ -97,7 +97,7 @@ namespace Ports.Ports
         /// <param name="game">Game<param>
         /// <param name="mod">Map/campaign</param>
         /// <param name="skipIntro">Skip intro</param>
-        public string GetStartGameArgs(IGame game, IMod mod, bool skipIntro, bool skipStartup)
+        public string GetStartGameArgs(IGame game, IAddon mod, bool skipIntro, bool skipStartup)
         {
             StringBuilder sb = new();
 
@@ -126,7 +126,7 @@ namespace Ports.Ports
         /// </summary>
         /// <param name="autoloadMod">Autoload mod</param>
         /// <param name="campaign">Campaign</param>
-        protected bool ValidateAutoloadMod(AutoloadMod autoloadMod, IMod campaign)
+        protected bool ValidateAutoloadMod(AutoloadMod autoloadMod, IAddon campaign)
         {
             if (!autoloadMod.IsEnabled)
             {
@@ -157,7 +157,7 @@ namespace Ports.Ports
         /// </summary>
         /// <param name="game">Game</param>
         /// <param name="campaign">Campaign</param>
-        protected virtual void BeforeStart(IGame game, IMod campaign) { }
+        protected virtual void BeforeStart(IGame game, IAddon campaign) { }
 
         /// <summary>
         /// Get command line arguments to start custom map or campaign
@@ -165,7 +165,7 @@ namespace Ports.Ports
         /// <param name="sb">String builder for parameters</param>
         /// <param name="game">Game<param>
         /// <param name="mod">Map/campaign</param>
-        protected abstract void GetStartCampaignArgs(StringBuilder sb, IGame game, IMod mod);
+        protected abstract void GetStartCampaignArgs(StringBuilder sb, IGame game, IAddon mod);
 
         /// <summary>
         /// Get command line arguments to load mods
@@ -174,7 +174,7 @@ namespace Ports.Ports
         /// <param name="game">Game<param>
         /// <param name="campaign">Campaign\map<param>
         /// <param name="autoloadMods">Mods</param>
-        protected abstract void GetAutoloadModsArgs(StringBuilder sb, IGame game, IMod campaign, Dictionary<Guid, IMod> autoloadMods);
+        protected abstract void GetAutoloadModsArgs(StringBuilder sb, IGame game, IAddon campaign, Dictionary<string, IAddon> autoloadMods);
 
         /// <summary>
         /// Return command line parameter to skip intro

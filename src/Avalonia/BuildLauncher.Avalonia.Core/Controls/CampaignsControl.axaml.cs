@@ -49,7 +49,7 @@ namespace BuildLauncher.Controls
                     Command = new RelayCommand(() =>
                         _viewModel.StartCampaignCommand.Execute(port),
                         () => port.IsInstalled && CampaignsList.SelectedItem is not null &&
-                        (((IMod)CampaignsList.SelectedItem).SupportedPorts is null || ((IMod)CampaignsList.SelectedItem).SupportedPorts!.Contains(port.PortEnum))
+                        (((IAddon)CampaignsList.SelectedItem).SupportedPorts is null || ((IAddon)CampaignsList.SelectedItem).SupportedPorts!.Contains(port.PortEnum))
                         ),
                     Margin = new(5),
                     Padding = new(5),
@@ -66,7 +66,7 @@ namespace BuildLauncher.Controls
         {
             CampaignsList.ContextMenu = new();
 
-            if (CampaignsList.SelectedItem is not IMod iMod)
+            if (CampaignsList.SelectedItem is not IAddon iMod)
             {
                 return;
             }

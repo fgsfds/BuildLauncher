@@ -38,13 +38,13 @@ namespace Ports.Ports.EDuke32
 
 
         /// <inheritdoc/>
-        protected override void BeforeStart(IGame game, IMod campaign)
+        protected override void BeforeStart(IGame game, IAddon campaign)
         {
             game.CreateCombinedMod();
         }
 
         /// <inheritdoc/>
-        protected override void GetStartCampaignArgs(StringBuilder sb, IGame game, IMod mod)
+        protected override void GetStartCampaignArgs(StringBuilder sb, IGame game, IAddon mod)
         {
             if (game is not BloodGame bGame || mod is not BloodCampaign bCamp)
             {
@@ -73,7 +73,7 @@ namespace Ports.Ports.EDuke32
                 return;
             }
 
-            if (bCamp.ModType is ModTypeEnum.Campaign)
+            if (bCamp.ModType is ModTypeEnum.TC)
             {
                 sb.Append($@" -g ""{Path.Combine(bGame.CampaignsFolderPath, bCamp.FileName)}""");
             }

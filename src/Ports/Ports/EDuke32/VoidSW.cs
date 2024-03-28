@@ -42,7 +42,7 @@ namespace Ports.Ports.EDuke32
 
 
         /// <inheritdoc/>
-        protected override void GetStartCampaignArgs(StringBuilder sb, IGame game, IMod mod)
+        protected override void GetStartCampaignArgs(StringBuilder sb, IGame game, IAddon mod)
         {
             if (game is not WangGame wGame || mod is not WangCampaign wCamp)
             {
@@ -61,7 +61,7 @@ namespace Ports.Ports.EDuke32
                 return;
             }
 
-            if (wCamp.ModType is ModTypeEnum.Campaign)
+            if (wCamp.ModType is ModTypeEnum.TC)
             {
                 sb.Append($@" -j""{wGame.CampaignsFolderPath}"" -g""{wCamp.FileName}""");
             }

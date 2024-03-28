@@ -25,17 +25,17 @@ namespace Games.Games
 
 
         /// <inheritdoc/>
-        protected override Dictionary<Guid, IMod> GetOriginalCampaigns()
+        protected override Dictionary<Guid, IAddon> GetOriginalCampaigns()
         {
-            Dictionary<Guid, IMod> campaigns = new(1);
+            Dictionary<Guid, IAddon> campaigns = new(1);
 
             if (IsBaseGameInstalled)
             {
                 campaigns.Add(Consts.SlaveGuid, new SlaveCampaign()
                 {
-                    Guid = Consts.SlaveGuid,
-                    ModType = ModTypeEnum.Campaign,
-                    DisplayName = "Powerslave",
+                    Id = Consts.SlaveGuid,
+                    ModType = ModTypeEnum.TC,
+                    Title = "Powerslave",
                     Image = ImageHelper.FileNameToStream("Slave.slave.jpg"),
                     Author = "Lobotomy Software",
                     Description = """
