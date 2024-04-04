@@ -52,7 +52,7 @@ namespace Ports.Ports.EDuke32
             }
 
             sb.Append($@" -usecwd -nosetup");
-            sb.Append(@$" -j {game.GameInstallFolder}");
+            sb.Append(@$" -j ""{game.GameInstallFolder}""");
 
             if (sCamp.FileName is null)
             {

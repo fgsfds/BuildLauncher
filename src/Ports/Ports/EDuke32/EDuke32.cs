@@ -105,7 +105,7 @@ namespace Ports.Ports.EDuke32
 
             if (camp.AddonEnum is DukeAddonEnum.Duke64)
             {
-                sb.Append(@$" -j {Path.GetDirectoryName(game.Duke64RomPath)} -gamegrp ""{Path.GetFileName(game.Duke64RomPath)}""");
+                sb.Append(@$" -j ""{Path.GetDirectoryName(game.Duke64RomPath)}"" -gamegrp ""{Path.GetFileName(game.Duke64RomPath)}""");
                 return;
             }
 
