@@ -42,9 +42,10 @@ namespace Ports.Ports.EDuke32
 
 
         /// <inheritdoc/>
-        protected override void GetStartCampaignArgs(StringBuilder sb, IGame game, IMod mod)
+        protected override void GetStartCampaignArgs(StringBuilder sb, IGame game, IAddon mod)
         {
-            if (game is not WangGame wGame || mod is not WangCampaign wCamp)
+            if (game is not WangGame wGame ||
+                mod is not WangCampaign wMod)
             {
                 ThrowHelper.NotImplementedException($"Mod type {mod} for game {game} is not supported");
                 return;
@@ -54,33 +55,35 @@ namespace Ports.Ports.EDuke32
 
             AddMusicFolder(sb, wGame);
 
-            sb.Append($@" -j""{wGame.GameInstallFolder}"" -addon{(byte)wCamp.AddonEnum}");
+            sb.Append($@" -j""{wGame.GameInstallFolder}"" -addon{wMod.AddonEnum}");
 
-            if (wCamp.FileName is null)
+            if (mod.FileName is null)
             {
                 return;
             }
 
-            if (wCamp.ModType is ModTypeEnum.Campaign)
+            if (mod.Type is ModTypeEnum.TC)
             {
-                sb.Append($@" -j""{wGame.CampaignsFolderPath}"" -g""{wCamp.FileName}""");
+                sb.Append($@" -j""{wGame.CampaignsFolderPath}"" -g""{mod.FileName}""");
             }
-            else if (wCamp.ModType is ModTypeEnum.Map)
+            else if (mod.Type is ModTypeEnum.Map)
             {
-                if (wCamp.IsLoose)
-                {
-                    sb.Append($@" -j""{Path.Combine(wGame.MapsFolderPath)}""");
-                }
-                else
-                {
-                    sb.Append($@" -g""{Path.Combine(wGame.MapsFolderPath, wCamp.FileName)}""");
-                }
+                //TODO restore loose maps
+                //if (mod.IsLoose)
+                //{
+                //    sb.Append($@" -j""{Path.Combine(wGame.MapsFolderPath)}""");
+                //}
+                //else
+                //{
+                //    sb.Append($@" -g""{Path.Combine(wGame.MapsFolderPath, mod.FileName)}""");
+                //}
 
-                sb.Append($@" -map ""{wCamp.StartupFile}""");
+                //TODO
+                //sb.Append($@" -map ""{mod.StartupFile}""");
             }
             else
             {
-                ThrowHelper.NotImplementedException($"Mod type {wCamp.ModType} is not supported");
+                ThrowHelper.NotImplementedException($"Mod type {mod.Type} is not supported");
                 return;
             }
         }

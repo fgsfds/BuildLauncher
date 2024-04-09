@@ -5,20 +5,11 @@ namespace Mods.Mods
     /// <summary>
     /// Shadow Warrior campaign
     /// </summary>
-    public sealed class WangCampaign : BaseMod
+    public sealed class WangCampaign : Addon
     {
         /// <summary>
         /// Wang Addon enum
         /// </summary>
-        private WangAddonEnum _addonEnum;
-        public required WangAddonEnum AddonEnum
-        {
-            get => _addonEnum;
-            init
-            {
-                Addon = value.ToString();
-                _addonEnum = value;
-            }
-        }
+        public required WangAddonEnum AddonEnum { get; init; }
     }
 }

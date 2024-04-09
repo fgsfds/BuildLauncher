@@ -171,7 +171,7 @@ namespace Games.Providers
             {
                 GameEnum.Blood => _bloodPath,
                 GameEnum.Redneck => _redneckPath,
-                GameEnum.Again => _againPath,
+                GameEnum.RedneckRA => _againPath,
                 GameEnum.Duke3D => _dukePath,
                 GameEnum.DukeWT => _dukeWtPath,
                 GameEnum.Wang => _wangPath,
@@ -195,7 +195,7 @@ namespace Games.Providers
             _config.GamePathFury ??= GetPath(GameEnum.Fury);
             _config.GamePathSlave ??= GetPath(GameEnum.Slave);
             _config.GamePathRedneck ??= GetPath(GameEnum.Redneck);
-            _config.GamePathAgain ??= GetPath(GameEnum.Again);
+            _config.GamePathAgain ??= GetPath(GameEnum.RedneckRA);
         }
 
 

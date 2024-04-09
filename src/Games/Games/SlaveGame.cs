@@ -18,24 +18,24 @@ namespace Games.Games
         public override string ShortName => "Slave";
 
         /// <inheritdoc/>
-        public override string DefFile => "exhumed.def";
+        public override string DefFileName => "exhumed.def";
 
         /// <inheritdoc/>
         public override List<string> RequiredFiles => ["STUFF.DAT"];
 
 
         /// <inheritdoc/>
-        protected override Dictionary<Guid, IMod> GetOriginalCampaigns()
+        protected override Dictionary<string, IAddon> GetOriginalCampaigns()
         {
-            Dictionary<Guid, IMod> campaigns = new(1);
+            Dictionary<string, IAddon> campaigns = new(1);
 
             if (IsBaseGameInstalled)
             {
-                campaigns.Add(Consts.SlaveGuid, new SlaveCampaign()
+                campaigns.Add(GameEnum.Slave.ToString(), new SlaveCampaign()
                 {
-                    Guid = Consts.SlaveGuid,
-                    ModType = ModTypeEnum.Campaign,
-                    DisplayName = "Powerslave",
+                    Id = GameEnum.Slave.ToString(),
+                    Type = ModTypeEnum.Official,
+                    Title = "Powerslave",
                     Image = ImageHelper.FileNameToStream("Slave.slave.jpg"),
                     Author = "Lobotomy Software",
                     Description = """
@@ -49,13 +49,16 @@ namespace Games.Games
                         various minions, which include mummies, Anubis soldiers, scorpions, and evil spirits. The player's course of action is directed by the spirit of King Ramses, whose mummy was exhumed
                         from its tomb by the Kilmaat, who seek to resurrect him and use his powers to control the world.
                         """,
-                    StartupFile = null,
                     Version = null,
                     SupportedPorts = null,
-                    Url = null,
-                    IsOfficial = true,
                     PathToFile = null,
-                    IsLoose = false
+                    SupportedGames = null,
+                    SupportedGamesCrcs = null,
+                    Dependencies = null,
+                    Incompatibles = null,
+                    MainDef = null,
+                    AdditionalDefs = null,
+                    StartMap = null
                 });
             }
 

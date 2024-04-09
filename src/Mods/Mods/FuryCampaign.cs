@@ -1,9 +1,14 @@
 ﻿namespace Mods.Mods
 {
     /// <summary>
-    /// Ion Fury campaign
+    /// Duke Nukem 3D campaign
     /// </summary>
-    public sealed class FuryCampaign : BaseMod
+    public sealed class FuryCampaign : Addon
     {
+        public required string? MainCon { get; init; }
+
+        public required HashSet<string>? AdditionalCons { get; init; }
+
+        public required string? RTS { get; init; }
     }
 }

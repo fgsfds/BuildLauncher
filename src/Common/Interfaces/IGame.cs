@@ -22,7 +22,7 @@ namespace Common.Interfaces
         /// <summary>
         /// Def file name
         /// </summary>
-        string DefFile { get; }
+        string DefFileName { get; }
 
         /// <summary>
         /// Game install folder
@@ -73,16 +73,16 @@ namespace Common.Interfaces
         /// <summary>
         /// Get list of official addons and custom campaigns
         /// </summary>
-        Dictionary<Guid, IMod> GetCampaigns();
+        Dictionary<string, IAddon> GetCampaigns();
 
         /// <summary>
         /// Get list of custom maps
         /// </summary>
-        Dictionary<Guid, IMod> GetSingleMaps();
+        Dictionary<string, IAddon> GetSingleMaps();
 
         /// <summary>
         /// Get list of autoload mods
         /// </summary>
-        Dictionary<Guid, IMod> GetAutoloadMods(bool enabledOnly);
+        Dictionary<string, IAddon> GetAutoloadMods(bool enabledOnly);
     }
 }

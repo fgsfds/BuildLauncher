@@ -18,13 +18,13 @@ namespace Common.Interfaces
         /// Delete mod from cache and disk
         /// </summary>
         /// <param name="mod">Mod</param>
-        void DeleteMod(IMod mod);
+        void DeleteMod(IAddon mod);
 
         /// <summary>
         /// Get installed mods
         /// </summary>
         /// <param name="modTypeEnum">Mod type</param>
-        Dictionary<Guid, IMod> GetInstalledMods(ModTypeEnum modTypeEnum);
+        Dictionary<string, IAddon> GetInstalledMods(ModTypeEnum modTypeEnum);
 
         /// <summary>
         /// Create cache of installed mods if it doesn't exist

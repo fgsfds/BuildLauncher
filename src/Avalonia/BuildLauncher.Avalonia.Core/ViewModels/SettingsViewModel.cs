@@ -198,7 +198,7 @@ namespace BuildLauncher.ViewModels
 
                 OnPropertyChanged(nameof(PathToRedneck));
             }
-            else if (param.Equals(GameEnum.Again.ToString()))
+            else if (param.Equals(GameEnum.RedneckRA.ToString()))
             {
                 PathToAgain = files[0].Path.LocalPath;
 
@@ -280,9 +280,9 @@ namespace BuildLauncher.ViewModels
                     OnPropertyChanged(nameof(PathToRedneck));
                 }
             }
-            else if (param.Equals(GameEnum.Again.ToString()))
+            else if (param.Equals(GameEnum.RedneckRA.ToString()))
             {
-                var path = _gamesAutoDetector.GetPath(GameEnum.Again);
+                var path = _gamesAutoDetector.GetPath(GameEnum.RedneckRA);
 
                 if (path is not null)
                 {

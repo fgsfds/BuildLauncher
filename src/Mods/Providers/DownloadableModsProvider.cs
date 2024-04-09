@@ -2,6 +2,7 @@
 using Common.Helpers;
 using Common.Interfaces;
 using Common.Tools;
+using Mods.Helpers;
 using Mods.Serializable;
 using System.Collections.Immutable;
 using System.Text.Json;
@@ -16,7 +17,7 @@ namespace Mods.Providers
         private readonly IGame _game;
         private readonly ArchiveTools _archiveTools;
 
-        private static Dictionary<GameEnum, Dictionary<ModTypeEnum, Dictionary<Guid, IDownloadableMod>>>? _cache;
+        private static Dictionary<GameEnum, Dictionary<ModTypeEnum, Dictionary<string, IDownloadableMod>>>? _cache;
         private static readonly SemaphoreSlim _semaphore = new(1);
 
         public event ModChanged ModDownloadedEvent;
@@ -55,7 +56,7 @@ namespace Mods.Providers
             using StreamReader file = new(stream);
             var fixesXml = file.ReadToEnd();
 
-            var list = JsonSerializer.Deserialize(fixesXml, DownloadableModManifestsListContext.Default.ListDownloadableMod);
+            var list = JsonSerializer.Deserialize(fixesXml, DownloadableModManifestsListContext.Default.ListDownloadableAddonDto);
 
             if (list is null)
             {
@@ -68,7 +69,7 @@ namespace Mods.Providers
             {
                 _cache.TryAdd(mod.Game, []);
                 _cache[mod.Game].TryAdd(mod.ModType, []);
-                _cache[mod.Game][mod.ModType].TryAdd(mod.Guid, mod);
+                _cache[mod.Game][mod.ModType].TryAdd(mod.Id, mod);
             }
 
             _semaphore.Release();
@@ -96,7 +97,7 @@ namespace Mods.Providers
                 {
                     downloadableMod.Value.IsInstalled = true;
 
-                    if (downloadableMod.Value.Version > installedMod.Version)
+                    if (VersionComparer.Compare(downloadableMod.Value.Version, installedMod.Version, ">"))
                     {
                         downloadableMod.Value.HasNewerVersion = true;
                     }
@@ -118,7 +119,7 @@ namespace Mods.Providers
             var file = Path.GetFileName(url.ToString());
             string path;
 
-            if (mod.ModType is ModTypeEnum.Campaign)
+            if (mod.ModType is ModTypeEnum.TC)
             {
                 path = _game.CampaignsFolderPath;
             }
@@ -126,7 +127,7 @@ namespace Mods.Providers
             {
                 path = _game.MapsFolderPath;
             }
-            else if (mod.ModType is ModTypeEnum.Autoload)
+            else if (mod.ModType is ModTypeEnum.Mod)
             {
                 path = _game.ModsFolderPath;
             }

@@ -2,8 +2,9 @@
 {
     public enum ModTypeEnum : byte
     {
-        Campaign,
+        Official,
+        TC,
         Map,
-        Autoload
+        Mod
     }
 }

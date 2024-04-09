@@ -18,24 +18,24 @@ namespace Games.Games
         public override string ShortName => "Fury";
 
         /// <inheritdoc/>
-        public override string DefFile => "fury.def";
+        public override string DefFileName => "fury.def";
 
         /// <inheritdoc/>
         public override List<string> RequiredFiles => ["fury.grp"];
 
 
         /// <inheritdoc/>
-        protected override Dictionary<Guid, IMod> GetOriginalCampaigns()
+        protected override Dictionary<string, IAddon> GetOriginalCampaigns()
         {
-            Dictionary<Guid, IMod> campaigns = new(1);
+            Dictionary<string, IAddon> campaigns = new(1);
 
             if (IsBaseGameInstalled)
             {
-                campaigns.Add(Consts.FuryGuid, new FuryCampaign()
+                campaigns.Add(GameEnum.Fury.ToString(), new FuryCampaign()
                 {
-                    Guid = Consts.FuryGuid,
-                    ModType = ModTypeEnum.Campaign,
-                    DisplayName = IsAftershock() ? "Ion Fury: Aftershock" : "Ion Fury",
+                    Id = GameEnum.Fury.ToString(),
+                    Type = ModTypeEnum.Official,
+                    Title = IsAftershock() ? "Ion Fury: Aftershock" : "Ion Fury",
                     Image = IsAftershock() ? ImageHelper.FileNameToStream("Fury.aftershock.jpg") : ImageHelper.FileNameToStream("Fury.fury.jpg"),
                     Author = "Voidpoint, LLC",
                     Description = """
@@ -46,13 +46,19 @@ namespace Games.Games
                     You assume the role of Shelly "Bombshell" Harrison, a bomb disposal expert aligned to the Global Defense Force. Dr. Jadus Heskel, a transhumanist cult leader,
                     unleashes an army of cybernetically-enhanced soldiers on the futuristic dystopian city of Neo D.C., which Shelly is tasked with fighting through.
                     """,
-                    StartupFile = null,
                     Version = null,
                     SupportedPorts = null,
-                    Url = null,
-                    IsOfficial = true,
                     PathToFile = null,
-                    IsLoose = false
+                    SupportedGames = null,
+                    SupportedGamesCrcs = null,
+                    Dependencies = null,
+                    Incompatibles = null,
+                    MainCon = null,
+                    AdditionalCons = null,
+                    MainDef = null,
+                    AdditionalDefs = null,
+                    RTS = null,
+                    StartMap = null
                 });
             }
 

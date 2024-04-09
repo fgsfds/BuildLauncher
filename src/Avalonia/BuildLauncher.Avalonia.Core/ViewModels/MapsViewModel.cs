@@ -56,7 +56,7 @@ namespace BuildLauncher.ViewModels
         /// <summary>
         /// List of installed campaigns and maps
         /// </summary>
-        public ImmutableList<IMod> MapsList => Game.GetSingleMaps().Select(x => x.Value).ToImmutableList();
+        public ImmutableList<IAddon> MapsList => Game.GetSingleMaps().Select(x => x.Value).ToImmutableList();
 
         /// <summary>
         /// Currently selected campaign/map
@@ -64,7 +64,7 @@ namespace BuildLauncher.ViewModels
         [ObservableProperty]
         [NotifyPropertyChangedFor(nameof(SelectedMapDescription))]
         [NotifyCanExecuteChangedFor(nameof(StartMapCommand))]
-        private IMod? _selectedMap;
+        private IAddon? _selectedMap;
 
         public string SelectedMapDescription => SelectedMap is null ? string.Empty : SelectedMap.ToMarkdownString();
 

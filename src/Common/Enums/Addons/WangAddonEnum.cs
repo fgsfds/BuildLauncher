@@ -3,7 +3,7 @@
     public enum WangAddonEnum : byte
     {
         Wang = 0,
-        Wanton = 1,
-        TwinDragon = 2
+        WangWD = 1,
+        WangTD = 2
     }
 }

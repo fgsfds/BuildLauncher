@@ -1,5 +1,6 @@
 using Avalonia.Controls;
 using BuildLauncher.ViewModels;
+using Common.Enums;
 using Common.Helpers;
 using Common.Interfaces;
 using CommunityToolkit.Mvvm.Input;
@@ -49,7 +50,7 @@ namespace BuildLauncher.Controls
                     Command = new RelayCommand(() =>
                         _viewModel.StartMapCommand.Execute(port),
                         () => port.IsInstalled && MapsList.SelectedItem is not null &&
-                        (((IMod)MapsList.SelectedItem)?.SupportedPorts is null || ((IMod)MapsList.SelectedItem).SupportedPorts!.Contains(port.PortEnum))
+                        (((IAddon)MapsList.SelectedItem)?.SupportedPorts is null || ((IAddon)MapsList.SelectedItem).SupportedPorts!.Contains(port.PortEnum))
                         ),
                     Margin = new(5),
                     Padding = new(5),
@@ -66,7 +67,7 @@ namespace BuildLauncher.Controls
         {
             MapsList.ContextMenu = new();
 
-            if (MapsList.SelectedItem is not IMod iMod)
+            if (MapsList.SelectedItem is not IAddon iMod)
             {
                 return;
             }
@@ -101,7 +102,7 @@ namespace BuildLauncher.Controls
                 Header = "Delete",
                 Command = new RelayCommand(
                     () => _viewModel.DeleteMapCommand.Execute(null),
-                    () => !iMod.IsOfficial
+                    () => iMod.Type is not ModTypeEnum.Official
                     )
             };
 

@@ -1,9 +1,9 @@
 ﻿namespace Mods.Mods
 {
     /// <summary>
-    /// Powerslave campaign
+    /// Duke Nukem 3D campaign
     /// </summary>
-    public sealed class SlaveCampaign : BaseMod
+    public sealed class SlaveCampaign : Addon
     {
     }
 }

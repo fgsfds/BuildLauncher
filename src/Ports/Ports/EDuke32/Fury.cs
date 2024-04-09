@@ -52,9 +52,9 @@ namespace Ports.Ports.EDuke32
 
 
         /// <inheritdoc/>
-        protected override void GetStartCampaignArgs(StringBuilder sb, IGame game, IMod mod)
+        protected override void GetStartCampaignArgs(StringBuilder sb, IGame game, IAddon mod)
         {
-            if (game is not FuryGame || mod is not FuryCampaign fCamp)
+            if (game is not FuryGame)
             {
                 ThrowHelper.NotImplementedException($"Mod type {mod} for game {game} is not supported");
                 return;
@@ -62,18 +62,21 @@ namespace Ports.Ports.EDuke32
 
             sb.Append($@" -nosetup");
 
-            if (fCamp.ModType is ModTypeEnum.Map)
+            if (mod.Type is ModTypeEnum.Map)
             {
-                if (fCamp.IsLoose)
-                {
-                    sb.Append($@" -j ""{Path.Combine(game.MapsFolderPath)}""");
-                }
-                else
-                {
-                    sb.Append($@" -g ""{Path.Combine(game.MapsFolderPath, fCamp.FileName!)}""");
-                }
+                //TODO restore loose maps
+                //if (mod.IsLoose)
+                //{
+                //    sb.Append($@" -j ""{Path.Combine(game.MapsFolderPath)}""");
+                //}
+                //else
+                //{
+                //    sb.Append($@" -g ""{Path.Combine(game.MapsFolderPath, mod.FileName!)}""");
+                //}
 
-                sb.Append($@" -map ""{fCamp.StartupFile}""");
+                sb.Append($@" -g ""{Path.Combine(game.MapsFolderPath, mod.FileName!)}""");
+                //TODO
+                //sb.Append($@" -map ""{mod.StartupFile}""");
             }
         }
     }

@@ -10,15 +10,13 @@ namespace Common.Interfaces
         long FileSize { get; set; }
         string FileSizeString { get; }
         GameEnum Game { get; set; }
-        Guid Guid { get; set; }
+        string Id { get; set; }
         bool HasNewerVersion { get; set; }
         bool IsInstalled { get; set; }
         ModTypeEnum ModType { get; set; }
-        string Name { get; set; }
+        string Title { get; set; }
         string Status { get; }
-        string? Url { get; init; }
-        float Version { get; set; }
-        string VersionString { get; }
+        string? Version { get; set; }
 
         string ToMarkdownString();
     }

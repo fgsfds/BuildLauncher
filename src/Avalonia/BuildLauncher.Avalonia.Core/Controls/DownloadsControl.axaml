@@ -37,13 +37,13 @@
                             <ColumnDefinition Width="*" MinWidth="0" SharedSizeGroup="Status1"/>
                         </Grid.ColumnDefinitions>
 
-                        <TextBlock Text="{Binding Name}"
+                        <TextBlock Text="{Binding Title}"
                                    Grid.Column="0"
                                    VerticalAlignment="Center"
                                    HorizontalAlignment="Left"
                                    Margin="10"/>
 
-                        <TextBlock Text="{Binding VersionString}"
+                        <TextBlock Text="{Binding Version}"
                                    Grid.Column="1"
                                    VerticalAlignment="Center"
                                    HorizontalAlignment="Right"
@@ -96,13 +96,13 @@
                             <ColumnDefinition Width="*" MinWidth="0" SharedSizeGroup="Status2"/>
                         </Grid.ColumnDefinitions>
 
-                        <TextBlock Text="{Binding Name}"
+                        <TextBlock Text="{Binding Title}"
                                    Grid.Column="0"
                                    VerticalAlignment="Center"
                                    HorizontalAlignment="Left"
                                    Margin="10"/>
 
-                        <TextBlock Text="{Binding VersionString}"
+                        <TextBlock Text="{Binding Version}"
                                    Grid.Column="1"
                                    VerticalAlignment="Center"
                                    HorizontalAlignment="Right"
@@ -155,13 +155,13 @@
                             <ColumnDefinition Width="*" MinWidth="0" SharedSizeGroup="Status3"/>
                         </Grid.ColumnDefinitions>
 
-                        <TextBlock Text="{Binding Name}"
+                        <TextBlock Text="{Binding Title}"
                                    Grid.Column="0"
                                    VerticalAlignment="Center"
                                    HorizontalAlignment="Left"
                                    Margin="10"/>
 
-                        <TextBlock Text="{Binding VersionString}"
+                        <TextBlock Text="{Binding Version}"
                                    Grid.Column="1"
                                    VerticalAlignment="Center"
                                    HorizontalAlignment="Right"

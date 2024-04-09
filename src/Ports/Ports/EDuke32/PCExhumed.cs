@@ -37,15 +37,15 @@ namespace Ports.Ports.EDuke32
 
 
         /// <inheritdoc/>
-        protected override void BeforeStart(IGame game, IMod campaign)
+        protected override void BeforeStart(IGame game, IAddon campaign)
         {
             game.CreateCombinedMod();
         }
 
         /// <inheritdoc/>
-        protected override void GetStartCampaignArgs(StringBuilder sb, IGame game, IMod mod)
+        protected override void GetStartCampaignArgs(StringBuilder sb, IGame game, IAddon mod)
         {
-            if (game is not SlaveGame sGame || mod is not SlaveCampaign sCamp)
+            if (game is not SlaveGame sGame)
             {
                 ThrowHelper.NotImplementedException($"Mod type {mod} for game {game} is not supported");
                 return;
@@ -54,31 +54,33 @@ namespace Ports.Ports.EDuke32
             sb.Append($@" -usecwd -nosetup");
             sb.Append(@$" -j ""{game.GameInstallFolder}""");
 
-            if (sCamp.FileName is null)
+            if (mod.FileName is null)
             {
                 return;
             }
 
-            if (sCamp.ModType is ModTypeEnum.Campaign)
+            if (mod.Type is ModTypeEnum.TC)
             {
-                sb.Append($@" -g ""{Path.Combine(sGame.CampaignsFolderPath, sCamp.FileName)}"" -x ""{sCamp.StartupFile}""");
+                //TODO
+                //sb.Append($@" -g ""{Path.Combine(sGame.CampaignsFolderPath, mod.FileName)}"" -x ""{mod.StartupFile}""");
             }
-            else if (sCamp.ModType is ModTypeEnum.Map)
+            else if (mod.Type is ModTypeEnum.Map)
             {
-                if (sCamp.IsLoose)
-                {
-                    sb.Append($@" -j ""{Path.Combine(sGame.MapsFolderPath)}""");
-                }
-                else
-                {
-                    sb.Append($@" -g ""{Path.Combine(sGame.MapsFolderPath, sCamp.FileName)}""");
-                }
+                //TODO restore loose maps
+                //if (mod.IsLoose)
+                //{
+                //    sb.Append($@" -j ""{Path.Combine(sGame.MapsFolderPath)}""");
+                //}
+                //else
+                //{
+                //    sb.Append($@" -g ""{Path.Combine(sGame.MapsFolderPath, mod.FileName)}""");
+                //}
 
-                sb.Append($@" -map ""{sCamp.StartupFile}""");
+                //sb.Append($@" -map ""{mod.StartupFile}""");
             }
             else
             {
-                ThrowHelper.NotImplementedException($"Mod type {sCamp.ModType} is not supported");
+                ThrowHelper.NotImplementedException($"Mod type {mod.Type} is not supported");
                 return;
             }
         }

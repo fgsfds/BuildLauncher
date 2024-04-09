@@ -38,29 +38,30 @@ namespace Ports.Ports.EDuke32
 
 
         /// <inheritdoc/>
-        protected override void BeforeStart(IGame game, IMod campaign)
+        protected override void BeforeStart(IGame game, IAddon campaign)
         {
             game.CreateCombinedMod();
         }
 
         /// <inheritdoc/>
-        protected override void GetStartCampaignArgs(StringBuilder sb, IGame game, IMod mod)
+        protected override void GetStartCampaignArgs(StringBuilder sb, IGame game, IAddon mod)
         {
-            if (game is not BloodGame bGame || mod is not BloodCampaign bCamp)
+            if (game is not BloodGame bGame ||
+                mod is not BloodCampaign bMod)
             {
                 ThrowHelper.NotImplementedException($"Mod type {mod} for game {game} is not supported");
                 return;
             }
 
-            var ini = bCamp.StartupFile;
+            var ini = bMod.INI;
 
-            if (bCamp.ModType is ModTypeEnum.Map)
+            if (bMod.Type is ModTypeEnum.Map)
             {
-                if (bCamp.AddonEnum is BloodAddonEnum.Blood)
+                if (bMod.Id == BloodAddonEnum.Blood.ToString())
                 {
                     ini = Consts.BloodIni;
                 }
-                else if (bCamp.AddonEnum is BloodAddonEnum.Cryptic)
+                else if (bMod.Id == BloodAddonEnum.BloodCP.ToString())
                 {
                     ini = Consts.CrypticIni;
                 }
@@ -68,31 +69,26 @@ namespace Ports.Ports.EDuke32
 
             sb.Append($@" -usecwd -nosetup -j ""{bGame.GameInstallFolder}"" -g BLOOD.RFF -ini ""{ini}""");
 
-            if (bCamp.FileName is null)
+            if (bMod.FileName is null)
             {
                 return;
             }
 
-            if (bCamp.ModType is ModTypeEnum.Campaign)
+            if (bMod.Type is ModTypeEnum.TC)
             {
-                sb.Append($@" -g ""{Path.Combine(bGame.CampaignsFolderPath, bCamp.FileName)}""");
+                sb.Append($@" -g ""{Path.Combine(bGame.CampaignsFolderPath, bMod.FileName)}""");
             }
-            else if (bCamp.ModType is ModTypeEnum.Map)
+            else if (bMod.Type is ModTypeEnum.Map)
             {
-                if (bCamp.IsLoose)
-                {
-                    sb.Append($@" -j ""{Path.Combine(game.MapsFolderPath)}""");
-                }
-                else
-                {
-                    sb.Append($@" -g ""{Path.Combine(game.MapsFolderPath, bCamp.FileName)}""");
-                }
+                //TODO loose maps
+                sb.Append($@" -g ""{Path.Combine(game.MapsFolderPath, bMod.FileName)}""");
 
-                sb.Append($@" -map ""{bCamp.StartupFile}""");
+                //TODO maps
+                sb.Append($@" -map ""{bMod.StartMap}""");
             }
             else
             {
-                ThrowHelper.NotImplementedException($"Mod type {bCamp.ModType} is not supported");
+                ThrowHelper.NotImplementedException($"Mod type {bMod.Type} is not supported");
                 return;
             }
         }

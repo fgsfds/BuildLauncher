@@ -67,23 +67,24 @@ namespace Ports.Ports.EDuke32
 
 
         /// <inheritdoc/>
-        protected override void BeforeStart(IGame game, IMod campaign)
+        protected override void BeforeStart(IGame game, IAddon campaign)
         {
             FixGrpInConfig();
 
-            game.CreateCombinedMod(campaign.DefFileContents);
+            //TODO
+            //game.CreateCombinedMod(campaign.DefFileContents);
         }
 
         /// <inheritdoc/>
-        protected override void GetStartCampaignArgs(StringBuilder sb, IGame game, IMod mod)
+        protected override void GetStartCampaignArgs(StringBuilder sb, IGame game, IAddon mod)
         {
-            if (game is DukeGame dGame && mod is DukeCampaign dCamp)
+            if (game is DukeGame dGame)
             {
-                GetDukeArgs(sb, dGame, dCamp);
+                GetDukeArgs(sb, dGame, mod);
             }
             else
             {
-                ThrowHelper.NotImplementedException($"Mod type {mod.ModType} for game {game} is not supported");
+                ThrowHelper.NotImplementedException($"Mod type {mod.Type} for game {game} is not supported");
             }
         }
 
@@ -93,56 +94,59 @@ namespace Ports.Ports.EDuke32
         /// <param name="sb">StringBuilder</param>
         /// <param name="game">DukeGame</param>
         /// <param name="camp">DukeCampaign</param>
-        protected static void GetDukeArgs(StringBuilder sb, DukeGame game, DukeCampaign camp)
+        protected static void GetDukeArgs(StringBuilder sb, DukeGame game, IAddon camp)
         {
-            sb.Append($@" -usecwd");
+            //TODO
+            //sb.Append($@" -usecwd");
 
-            if (camp.AddonEnum is DukeAddonEnum.WorldTour)
-            {
-                sb.Append($@" -addon {(byte)DukeAddonEnum.Duke3D} -j ""{game.DukeWTInstallPath}"" -j ""{Path.Combine(game.SpecialFolderPath, Consts.WTStopgap)}"" -gamegrp e32wt.grp");
-                return;
-            }
+            //if (camp.Id == DukeAddonEnum.WorldTour.ToString())
+            //{
+            //    sb.Append($@" -addon {(byte)DukeAddonEnum.Duke3D} -j ""{game.DukeWTInstallPath}"" -j ""{Path.Combine(game.SpecialFolderPath, Consts.WTStopgap)}"" -gamegrp e32wt.grp");
+            //    return;
+            //}
 
-            if (camp.AddonEnum is DukeAddonEnum.Duke64)
-            {
-                sb.Append(@$" -j ""{Path.GetDirectoryName(game.Duke64RomPath)}"" -gamegrp ""{Path.GetFileName(game.Duke64RomPath)}""");
-                return;
-            }
+            //if (camp.Id == GameEnum.Duke64.ToString())
+            //{
+            //    sb.Append(@$" -j ""{Path.GetDirectoryName(game.Duke64RomPath)}"" -gamegrp ""{Path.GetFileName(game.Duke64RomPath)}""");
+            //    return;
+            //}
 
-            sb.Append($@" -j ""{game.GameInstallFolder}"" -addon {(byte)camp.AddonEnum}");
+            //sb.Append($@" -j ""{game.GameInstallFolder}"" -addon {(byte)camp.AddonEnum}");
 
-            if (camp.FileName is null)
-            {
-                return;
-            }
+            //if (camp.FileName is null)
+            //{
+            //    return;
+            //}
 
-            if (camp.ModType is ModTypeEnum.Campaign)
-            {
-                sb.Append($@" -g ""{Path.Combine(game.CampaignsFolderPath, camp.FileName)}"" -x ""{camp.StartupFile}""");
-            }
-            else if (camp.ModType is ModTypeEnum.Map)
-            {
-                if (camp.IsLoose)
-                {
-                    sb.Append($@" -j ""{Path.Combine(game.MapsFolderPath)}""");
-                }
-                else
-                {
-                    sb.Append($@" -g ""{Path.Combine(game.MapsFolderPath, camp.FileName)}""");
-                }
+            //if (camp.Type is ModTypeEnum.TC)
+            //{
+            //    sb.Append($@" -g ""{Path.Combine(game.CampaignsFolderPath, camp.FileName)}"" -x ""{camp.StartupFile}""");
+            //}
+            //else if (camp.Type is ModTypeEnum.Map)
+            //{
+            //    if (camp.IsLoose)
+            //    {
+            //        sb.Append($@" -j ""{Path.Combine(game.MapsFolderPath)}""");
+            //    }
+            //    else
+            //    {
+            //        sb.Append($@" -g ""{Path.Combine(game.MapsFolderPath, camp.FileName)}""");
+            //    }
 
-                sb.Append($@" -map ""{camp.StartupFile}""");
-            }
-            else
-            {
-                ThrowHelper.NotImplementedException($"Mod type {camp.ModType} is not supported");
-                return;
-            }
+            //    sb.Append($@" -map ""{camp.StartupFile}""");
+            //}
+            //else
+            //{
+            //    ThrowHelper.NotImplementedException($"Mod type {camp.Type} is not supported");
+            //    return;
+            //}
         }
 
         /// <inheritdoc/>
-        protected override void GetAutoloadModsArgs(StringBuilder sb, IGame game, IMod campaign, Dictionary<Guid, IMod> mods)
+        protected override void GetAutoloadModsArgs(StringBuilder sb, IGame game, IAddon campaign)
         {
+            var mods = game.GetAutoloadMods(true);
+
             if (mods.Count == 0)
             {
                 return;
@@ -152,14 +156,17 @@ namespace Ports.Ports.EDuke32
 
             foreach (var mod in mods)
             {
-                mod.Value.ThrowIfNotType<AutoloadMod>(out var autoloadMod);
-
-                if (!ValidateAutoloadMod(autoloadMod, campaign))
+                if (mod.Value is not AutoloadMod aMod)
                 {
                     continue;
                 }
 
-                sb.Append($@" {AddFileParam}""{mod.Value.FileName}""");
+                if (!ValidateAutoloadMod(aMod, campaign))
+                {
+                    continue;
+                }
+
+                sb.Append($@" {AddFileParam}""{aMod.FileName}""");
             }
 
             sb.Append($@" {AddDirectoryParam}""{Path.Combine(game.SpecialFolderPath, Consts.CombinedModFolder)}"" {AddDefParam}""{Consts.CombinedDef}""");

@@ -3,10 +3,8 @@ using Common.Enums.Addons;
 using Common.Helpers;
 using Common.Interfaces;
 using Games.Games;
-using Mods.Mods;
 using Ports.Providers;
 using System.Text;
-
 
 namespace Ports.Ports
 {
@@ -32,7 +30,7 @@ namespace Ports.Ports
             GameEnum.Wang,
             GameEnum.Slave,
             GameEnum.Redneck,
-            GameEnum.Again,
+            GameEnum.RedneckRA,
             GameEnum.NAM,
             GameEnum.WWIIGI,
             GameEnum.Witchaven,
@@ -67,29 +65,29 @@ namespace Ports.Ports
 
 
         /// <inheritdoc/>
-        protected override void GetStartCampaignArgs(StringBuilder sb, IGame game, IMod mod)
+        protected override void GetStartCampaignArgs(StringBuilder sb, IGame game, IAddon mod)
         {
             sb.Append(@" -jar ..\..\BuildGDX.jar");
 
-            if (game is BloodGame bGame && mod is BloodCampaign bMod)
+            if (game is BloodGame bGame)
             {
-                GetBloodArgs(sb, bGame, bMod);
+                GetBloodArgs(sb, bGame, mod);
             }
-            else if (game is DukeGame dGame && mod is DukeCampaign dMod)
+            else if (game is DukeGame dGame)
             {
-                GetDukeArgs(sb, dGame, dMod);
+                GetDukeArgs(sb, dGame, mod);
             }
-            else if (game is WangGame wGame && mod is WangCampaign wMod)
+            else if (game is WangGame wGame)
             {
-                GetWangArgs(sb, wGame, wMod);
+                GetWangArgs(sb, wGame, mod);
             }
-            else if (game is SlaveGame sGame && mod is SlaveCampaign sMod)
+            else if (game is SlaveGame sGame)
             {
-                GetSlaveArgs(sb, sGame, sMod);
+                GetSlaveArgs(sb, sGame, mod);
             }
-            else if (game is RedneckGame rGame && mod is RedneckCampaign rMod)
+            else if (game is RedneckGame rGame)
             {
-                GetRedneckArgs(sb, rGame, rMod);
+                GetRedneckArgs(sb, rGame, mod);
             }
             else
             {
@@ -98,7 +96,7 @@ namespace Ports.Ports
         }
 
         /// <inheritdoc/>
-        protected override void GetAutoloadModsArgs(StringBuilder sb, IGame _, IMod campaign, Dictionary<Guid, IMod> mods) { }
+        protected override void GetAutoloadModsArgs(StringBuilder sb, IGame _, IAddon campaign) { }
 
         /// <inheritdoc/>
         protected override void GetSkipIntroParameter(StringBuilder sb) { }
@@ -107,9 +105,9 @@ namespace Ports.Ports
         protected override void GetSkipStartupParameter(StringBuilder sb) => sb.Append(" -silent \"true\"");
 
 
-        private void GetDukeArgs(StringBuilder sb, DukeGame game, DukeCampaign camp)
+        private void GetDukeArgs(StringBuilder sb, DukeGame game, IAddon camp)
         {
-            if (camp.AddonEnum is DukeAddonEnum.WorldTour)
+            if (camp.Id == DukeAddonEnum.WorldTour.ToString())
             {
                 sb.Append($@" -path ""{game.DukeWTInstallPath}""");
             }
@@ -119,19 +117,19 @@ namespace Ports.Ports
             }
         }
 
-        private void GetBloodArgs(StringBuilder sb, BloodGame game, BloodCampaign camp)
+        private void GetBloodArgs(StringBuilder sb, BloodGame game, IAddon camp)
         {
             sb.Append($@" -path ""{game.GameInstallFolder}""");
         }
 
-        private static void GetWangArgs(StringBuilder sb, WangGame game, WangCampaign camp)
+        private static void GetWangArgs(StringBuilder sb, WangGame game, IAddon camp)
         {
             sb.Append($@" -path ""{game.GameInstallFolder}""");
         }
 
-        private void GetRedneckArgs(StringBuilder sb, RedneckGame game, RedneckCampaign camp)
+        private void GetRedneckArgs(StringBuilder sb, RedneckGame game, IAddon camp)
         {
-            if (camp.AddonEnum is RedneckAddonEnum.Again)
+            if (camp.Id == GameEnum.RedneckRA.ToString())
             {
                 sb.Append($@" -path ""{game.AgainInstallPath}""");
             }
@@ -141,7 +139,7 @@ namespace Ports.Ports
             }
         }
 
-        private static void GetSlaveArgs(StringBuilder sb, SlaveGame game, SlaveCampaign camp)
+        private static void GetSlaveArgs(StringBuilder sb, SlaveGame game, IAddon camp)
         {
             sb.Append($@" -path ""{game.GameInstallFolder}""");
         }

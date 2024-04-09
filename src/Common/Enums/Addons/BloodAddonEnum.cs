@@ -3,6 +3,6 @@
     public enum BloodAddonEnum : byte
     {
         Blood,
-        Cryptic
+        BloodCP
     }
 }

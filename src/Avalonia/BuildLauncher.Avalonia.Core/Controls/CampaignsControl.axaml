@@ -40,7 +40,7 @@
                                Margin="10"
                                HorizontalAlignment="Center"/>
 
-                        <TextBlock Text="{Binding DisplayName}"
+                        <TextBlock Text="{Binding Title}"
                                    Margin="10"
                                    Padding="5"
                                    Background="{Binding Path=Background, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}"
@@ -50,7 +50,7 @@
                                    VerticalAlignment="Bottom"
                                    TextWrapping="Wrap"/>
 
-                        <TextBlock Text="{Binding DisplayName}"
+                        <TextBlock Text="{Binding Title}"
                                    Margin="10"
                                    Padding="5"
                                    HorizontalAlignment="Stretch"

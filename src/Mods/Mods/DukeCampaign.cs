@@ -5,20 +5,17 @@ namespace Mods.Mods
     /// <summary>
     /// Duke Nukem 3D campaign
     /// </summary>
-    public sealed class DukeCampaign : BaseMod
+    public sealed class DukeCampaign : Addon
     {
         /// <summary>
         /// Duke Addon enum
         /// </summary>
-        private DukeAddonEnum _addonEnum;
-        public required DukeAddonEnum AddonEnum
-        {
-            get => _addonEnum;
-            init
-            {
-                Addon = value.ToString();
-                _addonEnum = value;
-            }
-        }
+        public required DukeAddonEnum AddonEnum { get; init; }
+
+        public required string? MainCon { get; init; }
+
+        public required HashSet<string>? AdditionalCons { get; init; }
+
+        public required string? RTS { get; init; }
     }
 }

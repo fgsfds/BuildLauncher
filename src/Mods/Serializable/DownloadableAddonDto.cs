@@ -6,19 +6,17 @@ using System.Text.Json.Serialization;
 
 namespace Mods.Serializable
 {
-    public sealed class DownloadableMod : IDownloadableMod
+    public sealed class DownloadableAddonDto : IDownloadableMod
     {
-        public Guid Guid { get; set; }
+        public string Id { get; set; }
 
         public string DownloadUrl { get; set; }
 
-        public string Name { get; set; }
+        public string Title { get; set; }
 
-        public float Version { get; set; }
+        public string? Version { get; set; }
 
         public string? Author { get; set; }
-
-        public string? Url { get; init; }
 
         public GameEnum Game { get; set; }
 
@@ -53,26 +51,21 @@ namespace Mods.Serializable
         }
 
         [JsonIgnore]
-        public string VersionString => $"v{Version:0.0#}";
-
-        [JsonIgnore]
         public string FileSizeString => FileSize.ToSizeString();
 
 
         public string ToMarkdownString()
         {
-            StringBuilder description = new($"## {Name}{Environment.NewLine}");
+            StringBuilder description = new($"## {Title}{Environment.NewLine}");
 
-            description.Append($"{Environment.NewLine}#### v{Version:0.0#}");
+            if (Version is not null)
+            {
+                description.Append($"{Environment.NewLine}#### v{Version}");
+            }
 
             if (Author is not null)
             {
                 description.Append($"{Environment.NewLine}{Environment.NewLine}*by {Author}*");
-            }
-
-            if (Url is not null)
-            {
-                description.Append($"{Environment.NewLine}{Environment.NewLine}[{Url}]({Url})");
             }
 
             if (Description is not null)
@@ -94,6 +87,6 @@ namespace Mods.Serializable
             typeof(JsonStringEnumConverter<ModTypeEnum>)
             ]
     )]
-    [JsonSerializable(typeof(List<DownloadableMod>))]
+    [JsonSerializable(typeof(List<DownloadableAddonDto>))]
     public sealed partial class DownloadableModManifestsListContext : JsonSerializerContext;
 }

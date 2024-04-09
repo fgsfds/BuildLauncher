@@ -95,7 +95,7 @@ namespace Games.Providers
                 GameEnum.Fury => _fury,
                 GameEnum.Slave => _slave,
                 GameEnum.Redneck => _redneck,
-                GameEnum.Again => _redneck,
+                GameEnum.RedneckRA => _redneck,
                 GameEnum.NAM => ThrowHelper.NotImplementedException<IGame>(),
                 GameEnum.WWIIGI => ThrowHelper.NotImplementedException<IGame>(),
                 GameEnum.TekWar => ThrowHelper.NotImplementedException<IGame>(),

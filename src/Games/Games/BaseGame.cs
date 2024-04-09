@@ -1,6 +1,7 @@
 ﻿using Common.Enums;
 using Common.Helpers;
 using Common.Interfaces;
+using Mods.Helpers;
 using Mods.Mods;
 using Mods.Providers;
 using System.IO.Compression;
@@ -42,7 +43,7 @@ namespace Games.Games
         public abstract string ShortName { get; }
 
         /// <inheritdoc/>
-        public abstract string DefFile { get; }
+        public abstract string DefFileName { get; }
 
         /// <inheritdoc/>
         public abstract List<string> RequiredFiles { get; }
@@ -83,29 +84,18 @@ namespace Games.Games
 
 
         /// <inheritdoc/>
-        public virtual Dictionary<Guid, IMod> GetCampaigns()
+        public virtual Dictionary<string, IAddon> GetCampaigns()
         {
-            Dictionary<Guid, IMod> originalCampaigns = GetOriginalCampaigns();
+            Dictionary<string, IAddon> originalCampaigns = GetOriginalCampaigns();
 
-            var customCampaigns = InstalledModsProvider.GetInstalledMods(ModTypeEnum.Campaign);
+            var customCampaigns = InstalledModsProvider.GetInstalledMods(ModTypeEnum.TC);
 
             foreach (var customCamp in customCampaigns)
             {
-                if (originalCampaigns.TryGetValue(customCamp.Key, out var originalCamp))
+                if (originalCampaigns.TryGetValue(customCamp.Key, out var _))
                 {
-                    if (originalCamp.Version is null &&
-                        customCamp.Value.Version is not null)
-                    {
-                        //replacing with mod that have version
-                        originalCampaigns[customCamp.Key] = customCamp.Value;
-                    }
-                    else if (customCamp.Value.Version is not null &&
-                             originalCamp.Version is not null &&
-                             customCamp.Value.Version > originalCamp.Version)
-                    {
-                        //replacing with mod that have higher version
-                        originalCampaigns[customCamp.Key] = customCamp.Value;
-                    }
+                    //replacing original campaign with the downloaded one
+                    originalCampaigns[customCamp.Key] = customCamp.Value;
                 }
                 else
                 {
@@ -118,7 +108,7 @@ namespace Games.Games
 
 
         /// <inheritdoc/>
-        public virtual Dictionary<Guid, IMod> GetSingleMaps()
+        public virtual Dictionary<string, IAddon> GetSingleMaps()
         {
             var maps = InstalledModsProvider.GetInstalledMods(ModTypeEnum.Map);
 
@@ -127,23 +117,29 @@ namespace Games.Games
 
 
         /// <inheritdoc/>
-        public virtual Dictionary<Guid, IMod> GetAutoloadMods(bool enabledOnly)
+        public virtual Dictionary<string, IAddon> GetAutoloadMods(bool enabledOnly)
         {
-            var mods = InstalledModsProvider.GetInstalledMods(ModTypeEnum.Autoload);
+            var mods = InstalledModsProvider.GetInstalledMods(ModTypeEnum.Mod);
 
             if (enabledOnly)
             {
-                Dictionary<Guid, IMod> filtered = [];
+                Dictionary<string, IAddon> enabled = [];
 
                 foreach (var mod in mods)
                 {
-                    if (((AutoloadMod)mod.Value).IsEnabled)
+                    if (mod.Value is not AutoloadMod aMod)
                     {
-                        filtered.Add(mod.Key, mod.Value);
+                        ThrowHelper.ArgumentException(nameof(mod));
+                        return null;
+                    }
+
+                    if (aMod.IsEnabled)
+                    {
+                        enabled.Add(mod.Key, aMod);
                     }
                 }
 
-                return filtered;
+                return enabled;
             }
 
             return mods;
@@ -152,7 +148,9 @@ namespace Games.Games
 
         /// <inheritdoc/>
         public void CreateCombinedMod(string? additionalDef = null)
-        {
+        { 
+            //TODO
+            /*
             Cleanup();
 
             if (!Directory.Exists(ModsFolderPath))
@@ -178,7 +176,7 @@ namespace Games.Games
 
             foreach (var file in files)
             {
-                file.Value.ThrowIfNotType<AutoloadMod>(out var autoloadMod);
+                file.Value.ThrowIfNotType<IAddon>(out var autoloadMod);
                 autoloadMod.PathToFile.ThrowIfNull();
 
                 if (!autoloadMod.IsEnabled)
@@ -188,7 +186,7 @@ namespace Games.Games
 
                 using var zip = ZipFile.OpenRead(autoloadMod.PathToFile);
 
-                var ini = zip.Entries.FirstOrDefault(x => x.Name.Equals(DefFile));
+                var ini = zip.Entries.FirstOrDefault(x => x.Name.Equals(DefFileName));
 
                 if (ini is null)
                 {
@@ -202,7 +200,7 @@ namespace Games.Games
                 newDef.Append(Environment.NewLine);
             }
 
-            if (additionalDef is not  null)
+            if (additionalDef is not null)
             {
                 newDef.Append(additionalDef);
             }
@@ -215,6 +213,7 @@ namespace Games.Games
             }
 
             File.WriteAllText(Path.Combine(combinedFolderPath, Consts.CombinedDef), newDef.ToString());
+            */
         }
 
         /// <summary>
@@ -241,7 +240,7 @@ namespace Games.Games
         /// Get list of original campaigns
         /// </summary>
         /// <returns></returns>
-        protected abstract Dictionary<Guid, IMod> GetOriginalCampaigns();
+        protected abstract Dictionary<string, IAddon> GetOriginalCampaigns();
 
 
         /// <summary>

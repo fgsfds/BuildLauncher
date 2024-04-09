@@ -2,22 +2,28 @@
 
 namespace Common.Interfaces
 {
-    public interface IMod
+    public interface IAddon
     {
         /// <summary>
-        /// Mod's GUID
+        /// Mod's ID
         /// </summary>
-        Guid Guid { get; init; }
+        string Id { get; init; }
 
         /// <summary>
-        /// Type of the mod
+        /// Type of the addon
         /// </summary>
-        ModTypeEnum ModType { get; init; }
+        ModTypeEnum Type { get; init; }
+
+        HashSet<GameEnum>? SupportedGames { get; init; }
+
+        HashSet<int>? SupportedGamesCrcs { get; init; }
+
+        public bool IsEnabled { get; init; }
 
         /// <summary>
         /// Name of the mod
         /// </summary>
-        string DisplayName { get; init; }
+        string Title { get; init; }
 
         /// <summary>
         /// Mod's author
@@ -40,11 +46,6 @@ namespace Common.Interfaces
         string? FileName { get; }
 
         /// <summary>
-        /// Main startup file (CON, INI, MAP etc)
-        /// </summary>
-        string? StartupFile { get; init; }
-
-        /// <summary>
         /// Cover image
         /// </summary>
         Stream? Image { get; init; }
@@ -53,37 +54,34 @@ namespace Common.Interfaces
         /// Ports that support this campaign
         /// if null - supported by all ports that support the game
         /// </summary>
-        List<PortEnum>? SupportedPorts { get; init; }
-
-        /// <summary>
-        /// Url to the mod's website
-        /// </summary>
-        string? Url { get; init; }
+        HashSet<PortEnum>? SupportedPorts { get; init; }
 
         /// <summary>
         /// Mod's version
         /// </summary>
-        float? Version { get; init; }
+        string? Version { get; init; }
 
-        /// <summary>
-        /// Is official campaign
-        /// </summary>
-        bool IsOfficial { get; init; }
+        bool IsAvailable { get; set; }
 
-        /// <summary>
-        /// Campaign's addon as a string
-        /// </summary>
-        string? Addon { get; }
+        Dictionary<string, string?>? Dependencies { get; init; }
 
-        /// <summary>
-        /// Is loose unarchived file
-        /// </summary>
-        bool IsLoose { get; init; }
+        Dictionary<string, string?>? Incompatibles { get; init; }
 
-        /// <summary>
-        /// Built-in def file
-        /// </summary>
-        string? DefFileContents { get; init; }
+        //string? MainCon { get; init; }
+
+        string? MainDef { get; init; }
+
+        //HashSet<string>? AdditionalCons { get; init; }
+
+        HashSet<string>? AdditionalDefs { get; init; }
+
+        //string? RTS { get; init; }
+        //string? INI { get; init; }
+        //string? RFF { get; init; }
+        //string? SND { get; init; }
+
+        IStartMap? StartMap { get; init; }
+
 
         /// <summary>
         /// Create markdown description of the mod

@@ -6,7 +6,7 @@ using Common.Interfaces;
 using Mods.Mods;
 using Mods.Serializable;
 using SharpCompress.Archives;
-using System.ComponentModel;
+using System.Runtime.Intrinsics.Arm;
 using System.Text.Json;
 
 namespace Mods.Providers
@@ -18,7 +18,7 @@ namespace Mods.Providers
     {
         private readonly IGame _game;
         private readonly ConfigEntity _config;
-        private readonly Dictionary<ModTypeEnum, Dictionary<Guid, IMod>> _cache;
+        private readonly Dictionary<ModTypeEnum, Dictionary<string, IAddon>> _cache;
         private readonly SemaphoreSlim _semaphore = new(1);
 
         public event ModChanged ModDeletedEvent;
@@ -52,16 +52,16 @@ namespace Mods.Providers
                     IEnumerable<string> files;
 
                     files = Directory.GetFiles(_game.CampaignsFolderPath).Where(static x => x.EndsWith(".zip", StringComparison.InvariantCultureIgnoreCase) || x.EndsWith(".grp", StringComparison.InvariantCultureIgnoreCase));
-                    var camps = GetModsFromFiles(ModTypeEnum.Campaign, files);
-                    _cache.Add(ModTypeEnum.Campaign, camps);
+                    var camps = GetModsFromFiles(ModTypeEnum.TC, files);
+                    _cache.Add(ModTypeEnum.TC, camps);
 
                     files = Directory.GetFiles(_game.MapsFolderPath).Where(static x => x.EndsWith(".zip", StringComparison.InvariantCultureIgnoreCase) || x.EndsWith(".map", StringComparison.InvariantCultureIgnoreCase));
                     var maps = GetModsFromFiles(ModTypeEnum.Map, files);
                     _cache.Add(ModTypeEnum.Map, maps);
 
                     files = Directory.GetFiles(_game.ModsFolderPath, "*.zip");
-                    var mods = GetModsFromFiles(ModTypeEnum.Autoload, files);
-                    _cache.Add(ModTypeEnum.Autoload, mods);
+                    var mods = GetModsFromFiles(ModTypeEnum.Mod, files);
+                    _cache.Add(ModTypeEnum.Mod, mods);
                 });
             }
 
@@ -71,15 +71,15 @@ namespace Mods.Providers
         }
 
         /// <inheritdoc/>
-        public void DeleteMod(IMod mod)
+        public void DeleteMod(IAddon mod)
         {
             _cache.ThrowIfNull();
 
             File.Delete(mod.PathToFile!);
 
-            _cache[mod.ModType].Remove(mod.Guid);
+            _cache[mod.Type].Remove(mod.Id);
 
-            ModDeletedEvent?.Invoke(_game, mod.ModType);
+            ModDeletedEvent?.Invoke(_game, mod.Type);
         }
 
         /// <inheritdoc/>
@@ -89,25 +89,30 @@ namespace Mods.Providers
 
             var mod = GetMod(modTypeEnum, pathToFile);
 
-            if (!_cache.TryGetValue(mod.ModType, out _))
+            if (mod is null)
             {
-                _cache.Add(mod.ModType, []);
+                ThrowHelper.NullReferenceException();
             }
 
-            var dict = _cache[mod.ModType];
-
-            if (dict.TryGetValue(mod.Guid, out _))
+            if (!_cache.TryGetValue(mod.Type, out _))
             {
-                dict[mod.Guid] = mod;
+                _cache.Add(mod.Type, []);
+            }
+
+            var dict = _cache[mod.Type];
+
+            if (dict.TryGetValue(mod.Id, out _))
+            {
+                dict[mod.Id] = mod;
             }
             else
             {
-                dict.Add(mod.Guid, mod);
+                dict.Add(mod.Id, mod);
             }
         }
 
         /// <inheritdoc/>
-        public Dictionary<Guid, IMod> GetInstalledMods(ModTypeEnum modTypeEnum)
+        public Dictionary<string, IAddon> GetInstalledMods(ModTypeEnum modTypeEnum)
         {
             _cache.ThrowIfNull();
 
@@ -126,9 +131,9 @@ namespace Mods.Providers
         /// </summary>
         /// <param name="modTypeEnum">Mod type</param>
         /// <param name="files">Paths to mod files</param>
-        private Dictionary<Guid, IMod> GetModsFromFiles(ModTypeEnum modTypeEnum, IEnumerable<string> files)
+        private Dictionary<string, IAddon> GetModsFromFiles(ModTypeEnum modTypeEnum, IEnumerable<string> files)
         {
-            Dictionary<Guid, IMod> addedMods = [];
+            Dictionary<string, IAddon> addedMods = [];
 
             foreach (var file in files)
             {
@@ -141,25 +146,27 @@ namespace Mods.Providers
                         continue;
                     }
 
-                    if (addedMods.TryGetValue(mod.Guid, out var addedMod))
+                    //TODO return check
+                    if (false)
+                    //if (addedMods.TryGetValue(mod.Id, out var addedMod))
                     {
-                        if (addedMod.Version is null &&
-                            mod.Version is not null)
-                        {
-                            //replacing with mod that have version
-                            addedMods[mod.Guid] = mod;
-                        }
-                        else if (addedMod.Version is not null &&
-                                 mod.Version is not null &&
-                                 addedMod.Version < mod.Version)
-                        {
-                            //replacing with mod that have higher version
-                            addedMods[mod.Guid] = mod;
-                        }
+                        //if (addedMod.Version is null &&
+                        //    mod.Version is not null)
+                        //{
+                        //    //replacing with mod that have version
+                        //    addedMods[mod.Id] = mod;
+                        //}
+                        //else if (addedMod.Version is not null &&
+                        //         mod.Version is not null &&
+                        //         string.CompareOrdinal(addedMod.Version, mod.Version) == -1)
+                        //{
+                        //    //replacing with mod that have higher version
+                        //    addedMods[mod.Id] = mod;
+                        //}
                     }
                     else
                     {
-                        addedMods.Add(mod.Guid, mod);
+                        addedMods.Add(mod.Id, mod);
                     }
                 }
                 catch
@@ -175,240 +182,325 @@ namespace Mods.Providers
         /// Get mod from a file
         /// </summary>
         /// <param name="modTypeEnum">Mod type</param>
-        /// <param name="file">Path to mod file</param>
-        private IMod? GetMod(ModTypeEnum modTypeEnum, string file)
+        /// <param name="pathToFile">Path to mod file</param>
+        private Addon? GetMod(ModTypeEnum modTypeEnum, string pathToFile)
         {
-            IMod mod;
-
-            var guid = Guid.NewGuid();
-            string displayName = Path.GetFileNameWithoutExtension(file);
-            string description = string.Empty;
-            string? addon = null;
-            List<PortEnum>? supportedPorts = null;
-            List<string>? supportedAddons = null;
-            string? startupFile = null;
-            float? version = null;
-            string? url = null;
+            var type = modTypeEnum;
+            var id = Path.GetFileName(pathToFile);
+            var title = Path.GetFileName(pathToFile);
             string? author = null;
+            string? version = null;
+            string? description = null;
             Stream? image = null;
-            bool isLoose = false;
-            string? defFileContents = null;
 
-            if (ArchiveFactory.IsArchive(file, out var _))
+            HashSet<GameEnum>? supportedGames = [_game.GameEnum];
+            HashSet<int>? supportedGamesCrcs = null;
+            HashSet<PortEnum>? supportedPorts = null;
+            HashSet<string>? grps = null;
+
+            string? mainCon = null;
+            HashSet<string>? addCons = null;
+            string? mainDef = null;
+            HashSet<string>? addDefs = null;
+
+            string? rts = null;
+            string? ini = null;
+            string? rff = null;
+            string? snd = null;
+
+            Dictionary<string, string?>? dependencies = null;
+            Dictionary<string, string?>? incompatibles = null;
+            IStartMap? startMap = null;
+
+            //string? defFileContents = null;
+
+            var dukeAddon = DukeAddonEnum.Duke3D;
+            var bloodAddon = BloodAddonEnum.Blood;
+            var wangAddon = WangAddonEnum.Wang;
+            var redneckAddon = RedneckAddonEnum.Redneck;
+
+            if (ArchiveFactory.IsArchive(pathToFile, out var _))
             {
-                using var archive = ArchiveFactory.Open(file);
-                var entry = archive.Entries.FirstOrDefault(static x => x.Key.Equals("manifest.json"));
+                using var archive = ArchiveFactory.Open(pathToFile);
+                var entry = archive.Entries.FirstOrDefault(static x => x.Key.Equals("addon.json"));
 
-                if (entry is not null)
+                if (entry is null)
                 {
-                    var manifest = JsonSerializer.Deserialize(
-                        entry.OpenEntryStream(),
-                        ModManifestContext.Default.ModManifest
-                        );
+                    //TODO add support for non-manifested mods
+                    return null;
+                }
 
-                    if (manifest is not null)
+                var manifest = JsonSerializer.Deserialize(
+                    entry.OpenEntryStream(),
+                    AddonManifestContext.Default.AddonDto
+                    );
+
+                if (manifest is not null)
+                {
+                    type = manifest.Type;
+                    id = manifest.Id;
+                    title = manifest.Title;
+                    author = manifest.Author;
+                    version = manifest.Version;
+
+                    //TODO description
+                    if (manifest.Description is string desc)
                     {
-                        if (manifest.ModType is not ModTypeEnum.Autoload &&
-                            manifest.SupportedAddons is not null)
-                        {
-                            ThrowHelper.NotImplementedException("SupportedAddons property is only supported by Autoload mods");
-                        }
+                        description = desc;
+                    }
 
-                        guid = manifest.Guid;
-                        displayName = manifest.Name;
-                        addon = manifest.Addon;
-                        supportedPorts = manifest.SupportedPorts;
-                        supportedAddons = manifest.SupportedAddons;
-                        description = manifest.Description;
-                        startupFile = manifest.StartupFile;
-                        version = manifest.Version;
-                        url = manifest.Url;
-                        author = manifest.Author;
-                        image = ImageHelper.GetCoverFromArchive(archive);
+                    image = ImageHelper.GetCoverFromArchive(archive);
+                    supportedGames = manifest.SupportedGames is null ? supportedGames : [.. manifest.SupportedGames];
+                    supportedGamesCrcs = manifest.SupportedGamesCrcs is null ? null : [.. manifest.SupportedGamesCrcs];
+                    grps = manifest.Grps?.ToHashSet();
+
+                    rts = manifest.Rts;
+                    ini = manifest.Ini;
+                    rff = manifest.Rff;
+                    snd = manifest.Snd;
+                    startMap = manifest.StartMap;
+
+                    if (manifest.Cons is not null)
+                    {
+                        addCons = new(manifest.Cons.Count);
+
+                        foreach (var con in manifest.Cons)
+                        {
+                            if (con.Type is ScriptTypeEnum.Main)
+                            {
+                                mainCon = con.PathToFile;
+                            }
+                            else
+                            {
+                                addCons.Add(con.PathToFile);
+                            }
+                        }
+                    }
+
+                    if (manifest.Defs is not null)
+                    {
+                        addDefs = new(manifest.Defs.Count);
+
+                        foreach (var def in manifest.Defs)
+                        {
+                            if (def.Type is ScriptTypeEnum.Main)
+                            {
+                                mainDef = def.PathToFile;
+                            }
+                            else
+                            {
+                                addDefs.Add(def.PathToFile);
+                            }
+                        }
+                    }
+
+                    if (manifest.Dependencies is not null)
+                    {
+                        dependencies = new(manifest.Dependencies.Count);
+
+                        //extracting official addons from dependencies
+                        foreach (var dep in manifest.Dependencies)
+                        {
+                            if (dep.Id == DukeAddonEnum.DukeDC.ToString())
+                            {
+                                dukeAddon = DukeAddonEnum.DukeDC;
+                            }
+                            else if (dep.Id == DukeAddonEnum.DukeNW.ToString())
+                            {
+                                dukeAddon = DukeAddonEnum.DukeNW;
+                            }
+                            else if (dep.Id == DukeAddonEnum.DukeVaca.ToString())
+                            {
+                                dukeAddon = DukeAddonEnum.DukeVaca;
+                            }
+                            else if (dep.Id == DukeAddonEnum.WorldTour.ToString())
+                            {
+                                dukeAddon = DukeAddonEnum.WorldTour;
+                            }
+
+                            else if (dep.Id == WangAddonEnum.WangTD.ToString())
+                            {
+                                wangAddon = WangAddonEnum.WangTD;
+                            }
+                            else if (dep.Id == WangAddonEnum.WangWD.ToString())
+                            {
+                                wangAddon = WangAddonEnum.WangWD;
+                            }
+
+                            else if (dep.Id == RedneckAddonEnum.RedneckR66.ToString())
+                            {
+                                redneckAddon = RedneckAddonEnum.RedneckR66;
+                            }
+
+                            else if (dep.Id == BloodAddonEnum.BloodCP.ToString())
+                            {
+                                bloodAddon = BloodAddonEnum.BloodCP;
+                            }
+
+                            dependencies.Add(dep.Id, dep.Version);
+                        }
+                    }
+
+                    if (manifest.Incompatibles is not null)
+                    {
+                        incompatibles = new(manifest.Incompatibles.Count);
+
+                        foreach (var dep in manifest.Incompatibles)
+                        {
+                            incompatibles.Add(dep.Id, dep.Version);
+                        }
                     }
                 }
-                else
-                {
-                    if (_game.GameEnum is GameEnum.Blood && modTypeEnum is ModTypeEnum.Campaign)
-                    {
-                        var ini = archive.Entries.FirstOrDefault(static x => x.Key.EndsWith(".ini", StringComparison.InvariantCultureIgnoreCase));
 
-                        if (ini is not null)
-                        {
-                            startupFile = ini.Key;
-                        }
-                    }
-                }
+                //var defFile = archive.Entries.FirstOrDefault(x => x.Key.Equals(_game.DefFileName));
 
-                var defFile = archive.Entries.FirstOrDefault(x => x.Key.Equals(_game.DefFile));
+                //if (defFile is not null &&
+                //    modTypeEnum is ModTypeEnum.TC)
+                //{
+                //    using var stream = defFile.OpenEntryStream();
+                //    using StreamReader reader = new(stream);
 
-                if (defFile is not null &&
-                    modTypeEnum is ModTypeEnum.Campaign)
-                {
-                    using var stream = defFile.OpenEntryStream();
-                    using StreamReader reader = new(stream);
-
-                    defFileContents = reader.ReadToEnd();
-                }
+                //    defFileContents = reader.ReadToEnd();
+                //}
             }
-            else if (file.EndsWith(".map", StringComparison.InvariantCultureIgnoreCase))
+            else if (pathToFile.EndsWith(".map", StringComparison.InvariantCultureIgnoreCase))
             {
-                isLoose = true;
-                startupFile = Path.GetFileName(file);
+                //TODO loose maps
             }
-            else if (file.EndsWith(".grp", StringComparison.InvariantCultureIgnoreCase))
+            else if (pathToFile.EndsWith(".grp", StringComparison.InvariantCultureIgnoreCase))
             {
                 //"real" grps are not supported
                 return null;
             }
 
-            if (modTypeEnum is ModTypeEnum.Autoload)
-            {
-                var isEnabled = !_config.DisabledAutoloadMods.Contains(guid);
+            Addon? addon = null;
 
-                mod = new AutoloadMod()
+            if (modTypeEnum is ModTypeEnum.Mod)
+            {
+                var isEnabled = !_config.DisabledAutoloadMods.Contains(id);
+
+                addon = new AutoloadMod()
                 {
-                    Guid = guid,
-                    ModType = ModTypeEnum.Autoload,
-                    DisplayName = displayName,
+                    Id = id,
+                    Type = ModTypeEnum.Mod,
+                    Title = title!,
                     Image = image,
                     SupportedPorts = supportedPorts,
-                    SupportedAddons = supportedAddons,
                     Description = description,
                     Version = version,
                     Author = author,
-                    Url = url,
                     IsEnabled = isEnabled,
-                    IsOfficial = false,
-                    PathToFile = file,
-                    StartupFile = null,
-                    IsLoose = isLoose
+                    PathToFile = pathToFile,
+                    MainDef = mainDef,
+                    AdditionalDefs = addDefs,
+                    SupportedGames = supportedGames,
+                    SupportedGamesCrcs = supportedGamesCrcs,
+                    Dependencies = dependencies,
+                    Incompatibles = incompatibles,
+                    StartMap = startMap
                 };
             }
             else
             {
                 if (_game.GameEnum is GameEnum.Duke3D)
                 {
-                    mod = new DukeCampaign()
+                    addon = new DukeCampaign()
                     {
-                        Guid = guid,
-                        ModType = modTypeEnum,
-                        DisplayName = displayName,
+                        Id = id,
+                        Type = type,
+                        Title = title!,
                         Image = image,
                         SupportedPorts = supportedPorts,
                         Description = description,
-                        StartupFile = startupFile,
-                        AddonEnum = addon is null ? DukeAddonEnum.Duke3D : Enum.Parse<DukeAddonEnum>(addon),
                         Version = version,
                         Author = author,
-                        Url = url,
-                        IsOfficial = false,
-                        PathToFile = file,
-                        IsLoose = isLoose,
-                        DefFileContents = defFileContents
+                        PathToFile = pathToFile,
+                        SupportedGames = supportedGames,
+                        SupportedGamesCrcs = supportedGamesCrcs,
+                        Dependencies = dependencies,
+                        Incompatibles = incompatibles,
+                        StartMap = startMap,
+                        MainCon = mainCon,
+                        AdditionalCons = addCons,
+                        MainDef = mainDef,
+                        AdditionalDefs = addDefs,
+                        RTS = rts,
+                        AddonEnum = dukeAddon
                     };
                 }
                 else if (_game.GameEnum is GameEnum.Wang)
                 {
-                    mod = new WangCampaign()
+                    addon = new WangCampaign()
                     {
-                        Guid = guid,
-                        ModType = modTypeEnum,
-                        DisplayName = displayName,
+                        Id = id,
+                        Type = type,
+                        Title = title!,
                         Image = image,
                         SupportedPorts = supportedPorts,
                         Description = description,
-                        AddonEnum = addon is null ? WangAddonEnum.Wang : Enum.Parse<WangAddonEnum>(addon),
                         Version = version,
                         Author = author,
-                        Url = url,
-                        IsOfficial = false,
-                        PathToFile = file,
-                        StartupFile = null,
-                        IsLoose = isLoose,
-                        DefFileContents = defFileContents
+                        PathToFile = pathToFile,
+                        SupportedGames = supportedGames,
+                        SupportedGamesCrcs = supportedGamesCrcs,
+                        Dependencies = dependencies,
+                        Incompatibles = incompatibles,
+                        StartMap = startMap,
+                        MainDef = mainDef,
+                        AdditionalDefs = addDefs,
+                        AddonEnum = wangAddon
                     };
                 }
                 else if (_game.GameEnum is GameEnum.Blood)
                 {
-                    mod = new BloodCampaign()
+                    addon = new BloodCampaign()
                     {
-                        Guid = guid,
-                        ModType = modTypeEnum,
-                        DisplayName = displayName,
-                        Image = image,
-                        SupportedPorts = supportedPorts,
-                        Description = description,
-                        AddonEnum = addon is null ? BloodAddonEnum.Blood : Enum.Parse<BloodAddonEnum>(addon),
-                        Version = version,
-                        Author = author,
-                        Url = url,
-                        StartupFile = startupFile!,
-                        IsOfficial = false,
-                        PathToFile = file,
-                        IsLoose = isLoose,
-                        DefFileContents = defFileContents
-                    };
-                }
-                else if (_game.GameEnum is GameEnum.Fury)
-                {
-                    mod = new FuryCampaign()
-                    {
-                        Guid = guid,
-                        ModType = modTypeEnum,
-                        DisplayName = displayName,
+                        Id = id,
+                        Type = type,
+                        Title = title!,
                         Image = image,
                         SupportedPorts = supportedPorts,
                         Description = description,
                         Version = version,
                         Author = author,
-                        Url = url,
-                        StartupFile = startupFile!,
-                        IsOfficial = false,
-                        PathToFile = file,
-                        IsLoose = isLoose,
-                        DefFileContents = defFileContents
-                    };
-                }
-                else if (_game.GameEnum is GameEnum.Slave)
-                {
-                    mod = new SlaveCampaign()
-                    {
-                        Guid = guid,
-                        ModType = modTypeEnum,
-                        DisplayName = displayName,
-                        Image = image,
-                        SupportedPorts = supportedPorts,
-                        Description = description,
-                        Version = version,
-                        Author = author,
-                        Url = url,
-                        StartupFile = startupFile!,
-                        IsOfficial = false,
-                        PathToFile = file,
-                        IsLoose = isLoose,
-                        DefFileContents = defFileContents
+                        PathToFile = pathToFile,
+                        SupportedGames = supportedGames,
+                        SupportedGamesCrcs = supportedGamesCrcs,
+                        Dependencies = dependencies,
+                        Incompatibles = incompatibles,
+                        StartMap = startMap,
+                        MainDef = mainDef,
+                        AdditionalDefs = addDefs,
+                        INI = ini ?? Consts.BloodIni,
+                        RFF = rff ?? "BLOOD.RFF",
+                        SND = snd ?? "SOUND.RFF",
+                        AddonEnum = bloodAddon
                     };
                 }
                 else if (_game.GameEnum is GameEnum.Redneck)
                 {
-                    mod = new RedneckCampaign()
+                    addon = new RedneckCampaign()
                     {
-                        Guid = guid,
-                        ModType = modTypeEnum,
-                        DisplayName = displayName,
+                        Id = id,
+                        Type = type,
+                        Title = title!,
                         Image = image,
                         SupportedPorts = supportedPorts,
                         Description = description,
-                        AddonEnum = addon is null ? RedneckAddonEnum.Redneck : Enum.Parse<RedneckAddonEnum>(addon),
                         Version = version,
                         Author = author,
-                        Url = url,
-                        StartupFile = startupFile!,
-                        IsOfficial = false,
-                        PathToFile = file,
-                        IsLoose = isLoose,
-                        DefFileContents = defFileContents
+                        PathToFile = pathToFile,
+                        SupportedGames = supportedGames,
+                        SupportedGamesCrcs = supportedGamesCrcs,
+                        Dependencies = dependencies,
+                        Incompatibles = incompatibles,
+                        StartMap = startMap,
+                        MainCon = mainCon,
+                        AdditionalCons = addCons,
+                        MainDef = mainDef,
+                        AdditionalDefs = addDefs,
+                        RTS = rts,
+                        AddonEnum = redneckAddon
                     };
                 }
                 else
@@ -418,7 +510,7 @@ namespace Mods.Providers
                 }
             }
 
-            return mod;
+            return addon;
         }
     }
 }

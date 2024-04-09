@@ -44,7 +44,7 @@
                                       Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=((vm:ModsViewModel)DataContext).ModCheckboxPressedCommand}}"
                                       CommandParameter="{Binding $parent[ListBoxItem].Content}"/>
 
-                            <TextBlock Text="{Binding DisplayName}"
+                            <TextBlock Text="{Binding Title}"
                                        VerticalAlignment="Center"
                                        Margin="10"/>
 

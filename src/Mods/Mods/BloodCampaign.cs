@@ -5,25 +5,20 @@ namespace Mods.Mods
     /// <summary>
     /// Blood campaign
     /// </summary>
-    public sealed class BloodCampaign : BaseMod
+    public sealed class BloodCampaign : Addon
     {
         /// <summary>
         /// Blood Addon enum
         /// </summary>
-        private BloodAddonEnum _addonEnum;
-        public required BloodAddonEnum AddonEnum
-        {
-            get => _addonEnum;
-            init
-            {
-                Addon = value.ToString();
-                _addonEnum = value;
-            }
-        }
+        public required BloodAddonEnum AddonEnum { get; init; }
 
         /// <summary>
         /// Startup .ini file
         /// </summary>
-        public required override string StartupFile { get; init; }
+        public required string INI { get; init; }
+
+        public required string RFF { get; init; }
+
+        public required string SND { get; init; }
     }
 }

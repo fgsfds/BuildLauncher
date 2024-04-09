@@ -28,7 +28,7 @@ namespace BuildLauncher.ViewModels
         /// <summary>
         /// List of downloadanle campaigns and maps
         /// </summary>
-        public ImmutableList<IDownloadableMod> DownloadableCampaignsList => Game.DownloadableModsProvider.GetDownloadableMods(ModTypeEnum.Campaign);
+        public ImmutableList<IDownloadableMod> DownloadableCampaignsList => Game.DownloadableModsProvider.GetDownloadableMods(ModTypeEnum.TC);
 
         /// <summary>
         /// List of downloadanle campaigns and maps
@@ -38,7 +38,7 @@ namespace BuildLauncher.ViewModels
         /// <summary>
         /// List of downloadanle autoload mods
         /// </summary>
-        public ImmutableList<IDownloadableMod> DownloadableModsList => Game.DownloadableModsProvider.GetDownloadableMods(ModTypeEnum.Autoload);
+        public ImmutableList<IDownloadableMod> DownloadableModsList => Game.DownloadableModsProvider.GetDownloadableMods(ModTypeEnum.Mod);
 
         /// <summary>
         /// Download/install progress
@@ -48,8 +48,8 @@ namespace BuildLauncher.ViewModels
         /// <summary>
         /// Currently selected downloadable campaign, map or mod
         /// </summary>
-        private DownloadableMod? _selectedDownloadableMod;
-        public DownloadableMod? SelectedDownloadableMod
+        private DownloadableAddonDto? _selectedDownloadableMod;
+        public DownloadableAddonDto? SelectedDownloadableMod
         {
             get => _selectedDownloadableMod;
             set
@@ -141,7 +141,7 @@ namespace BuildLauncher.ViewModels
                 return;
             }
 
-            if (modType is ModTypeEnum.Campaign)
+            if (modType is ModTypeEnum.TC)
             {
                 OnPropertyChanged(nameof(DownloadableCampaignsList));
             }
@@ -149,7 +149,7 @@ namespace BuildLauncher.ViewModels
             {
                 OnPropertyChanged(nameof(DownloadableMapsList));
             }
-            else if (modType is ModTypeEnum.Autoload)
+            else if (modType is ModTypeEnum.Mod)
             {
                 OnPropertyChanged(nameof(DownloadableModsList));
             }
