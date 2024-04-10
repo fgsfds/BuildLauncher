@@ -62,6 +62,12 @@ namespace Ports.Ports
         /// <inheritdoc/>
         protected override string AddDefParam => throw new NotImplementedException();
 
+        protected override string AddConParam => throw new NotImplementedException();
+
+        protected override string MainDefParam => throw new NotImplementedException();
+
+        protected override string MainConParam => throw new NotImplementedException();
+
 
         /// <inheritdoc/>
         protected override void BeforeStart(IGame game, IAddon campaign)

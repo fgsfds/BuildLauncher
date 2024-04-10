@@ -322,7 +322,7 @@ namespace Mods.Providers
                             {
                                 wangAddon = WangAddonEnum.WangTD;
                             }
-                            else if (dep.Id == WangAddonEnum.WangWD.ToString())
+                            else if (dep.Id.Equals(WangAddonEnum.WangWD.ToString(), StringComparison.InvariantCultureIgnoreCase))
                             {
                                 wangAddon = WangAddonEnum.WangWD;
                             }
@@ -332,7 +332,7 @@ namespace Mods.Providers
                                 redneckAddon = RedneckAddonEnum.RedneckR66;
                             }
 
-                            else if (dep.Id == BloodAddonEnum.BloodCP.ToString())
+                            else if (dep.Id.Equals(BloodAddonEnum.BloodCP.ToString(), StringComparison.InvariantCultureIgnoreCase))
                             {
                                 bloodAddon = BloodAddonEnum.BloodCP;
                             }

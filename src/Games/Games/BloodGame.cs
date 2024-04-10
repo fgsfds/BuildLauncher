@@ -71,7 +71,7 @@ namespace Games.Games
                 Incompatibles = null,
                 MainDef = null,
                 AdditionalDefs = null,
-                INI = null,
+                INI = Consts.BloodIni,
                 RFF = null,
                 SND = null,
                 StartMap = null,

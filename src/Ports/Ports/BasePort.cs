@@ -101,6 +101,16 @@ namespace Ports.Ports
         protected abstract string AddDefParam { get; }
 
 
+        protected abstract string AddConParam { get; }
+        /// <summary>
+        /// Cmd parameter to load additional Def file
+        /// </summary>
+        protected abstract string MainDefParam { get; }
+
+
+        protected abstract string MainConParam { get; }
+
+
         /// <summary>
         /// Name of the folder that contains the port files
         /// By default is the same as <see cref="Name"/>

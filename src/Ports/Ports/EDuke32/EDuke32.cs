@@ -27,13 +27,22 @@ namespace Ports.Ports.EDuke32
         protected override string ConfigFile => "eduke32.cfg";
 
         /// <inheritdoc/>
-        protected override string AddDirectoryParam => "-j ";
+        protected override string AddDirectoryParam => "-j";
 
         /// <inheritdoc/>
-        protected override string AddFileParam => "-g ";
+        protected override string AddFileParam => "-g";
 
         /// <inheritdoc/>
-        protected override string AddDefParam => "-mh ";
+        protected override string AddDefParam => "-mh";
+
+        /// <inheritdoc/>
+        protected override string AddConParam => "-mx";
+
+        /// <inheritdoc/>
+        protected override string MainDefParam => "-h";
+
+        /// <inheritdoc/>
+        protected override string MainConParam => "-x";
 
         /// <inheritdoc/>
         public override List<GameEnum> SupportedGames =>
@@ -78,9 +87,9 @@ namespace Ports.Ports.EDuke32
         /// <inheritdoc/>
         protected override void GetStartCampaignArgs(StringBuilder sb, IGame game, IAddon mod)
         {
-            if (game is DukeGame dGame)
+            if (game is DukeGame dGame && mod is DukeCampaign dCamp)
             {
-                GetDukeArgs(sb, dGame, mod);
+                GetDukeArgs(sb, dGame, dCamp);
             }
             else
             {
@@ -94,52 +103,67 @@ namespace Ports.Ports.EDuke32
         /// <param name="sb">StringBuilder</param>
         /// <param name="game">DukeGame</param>
         /// <param name="camp">DukeCampaign</param>
-        protected static void GetDukeArgs(StringBuilder sb, DukeGame game, IAddon camp)
+        protected void GetDukeArgs(StringBuilder sb, DukeGame game, DukeCampaign camp)
         {
-            //TODO
-            //sb.Append($@" -usecwd");
+            //don't search for steam/gog installs
+            sb.Append($@" -usecwd");
 
-            //if (camp.Id == DukeAddonEnum.WorldTour.ToString())
-            //{
-            //    sb.Append($@" -addon {(byte)DukeAddonEnum.Duke3D} -j ""{game.DukeWTInstallPath}"" -j ""{Path.Combine(game.SpecialFolderPath, Consts.WTStopgap)}"" -gamegrp e32wt.grp");
-            //    return;
-            //}
+            if (camp.Id == GameEnum.Duke64.ToString())
+            {
+                sb.Append(@$" {AddDirectoryParam} ""{Path.GetDirectoryName(game.Duke64RomPath)}"" -gamegrp ""{Path.GetFileName(game.Duke64RomPath)}""");
+                return;
+            }
 
-            //if (camp.Id == GameEnum.Duke64.ToString())
-            //{
-            //    sb.Append(@$" -j ""{Path.GetDirectoryName(game.Duke64RomPath)}"" -gamegrp ""{Path.GetFileName(game.Duke64RomPath)}""");
-            //    return;
-            //}
+            if (camp.Id == DukeAddonEnum.WorldTour.ToString())
+            {
+                sb.Append($@" {AddDirectoryParam} ""{game.DukeWTInstallPath}"" -addon {(byte)DukeAddonEnum.Duke3D} {AddDirectoryParam} ""{Path.Combine(game.SpecialFolderPath, Consts.WTStopgap)}"" -gamegrp e32wt.grp");
+            }
+            else
+            {
+                sb.Append($@" {AddDirectoryParam} ""{game.GameInstallFolder}"" -addon {(byte)camp.RequiredAddonEnum}");
+            }
 
-            //sb.Append($@" -j ""{game.GameInstallFolder}"" -addon {(byte)camp.AddonEnum}");
+            if (camp.FileName is null)
+            {
+                return;
+            }
 
-            //if (camp.FileName is null)
-            //{
-            //    return;
-            //}
+            if (camp.Type is ModTypeEnum.TC)
+            {
+                sb.Append($@" {AddFileParam} ""{Path.Combine(game.CampaignsFolderPath, camp.FileName)}""");
 
-            //if (camp.Type is ModTypeEnum.TC)
-            //{
-            //    sb.Append($@" -g ""{Path.Combine(game.CampaignsFolderPath, camp.FileName)}"" -x ""{camp.StartupFile}""");
-            //}
-            //else if (camp.Type is ModTypeEnum.Map)
-            //{
-            //    if (camp.IsLoose)
-            //    {
-            //        sb.Append($@" -j ""{Path.Combine(game.MapsFolderPath)}""");
-            //    }
-            //    else
-            //    {
-            //        sb.Append($@" -g ""{Path.Combine(game.MapsFolderPath, camp.FileName)}""");
-            //    }
+                if (camp.MainCon is not null)
+                {
+                    sb.Append($@" {MainConParam} ""{camp.MainCon}""");
+                }
 
-            //    sb.Append($@" -map ""{camp.StartupFile}""");
-            //}
-            //else
-            //{
-            //    ThrowHelper.NotImplementedException($"Mod type {camp.Type} is not supported");
-            //    return;
-            //}
+                if (camp.AdditionalCons?.Count > 0)
+                {
+                    foreach (var con in camp.AdditionalCons)
+                    {
+                        sb.Append($@" {AddConParam} ""{con}""");
+                    }
+                }
+            }
+            else if (camp.Type is ModTypeEnum.Map)
+            {
+                //TODO loose map
+                //if (camp.IsLoose)
+                //{
+                //    sb.Append($@" {AddDirectoryParam} ""{Path.Combine(game.MapsFolderPath)}""");
+                //}
+                //else
+                //{
+                //    sb.Append($@" {AddFileParam} ""{Path.Combine(game.MapsFolderPath, camp.FileName)}""");
+                //}
+
+                //sb.Append($@" -map ""{camp.StartupFile}""");
+            }
+            else
+            {
+                ThrowHelper.NotImplementedException($"Mod type {camp.Type} is not supported");
+                return;
+            }
         }
 
         /// <inheritdoc/>

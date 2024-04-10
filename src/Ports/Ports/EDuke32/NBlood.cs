@@ -4,6 +4,7 @@ using Common.Helpers;
 using Common.Interfaces;
 using Games.Games;
 using Mods.Mods;
+using Mods.Serializable.Addon;
 using Ports.Providers;
 using System.Text;
 
@@ -53,21 +54,32 @@ namespace Ports.Ports.EDuke32
                 return;
             }
 
-            var ini = bMod.INI;
+            string ini;
+            string rff;
 
-            if (bMod.Type is ModTypeEnum.Map)
+            if (bMod.INI is not null)
             {
-                if (bMod.Id == BloodAddonEnum.Blood.ToString())
-                {
-                    ini = Consts.BloodIni;
-                }
-                else if (bMod.Id == BloodAddonEnum.BloodCP.ToString())
-                {
-                    ini = Consts.CrypticIni;
-                }
+                ini = bMod.INI;
+            }
+            else if (bMod.RequiredAddonEnum is BloodAddonEnum.BloodCP)
+            {
+                ini = Consts.CrypticIni;
+            }
+            else
+            {
+                ini = Consts.BloodIni;
             }
 
-            sb.Append($@" -usecwd -nosetup -j ""{bGame.GameInstallFolder}"" -g BLOOD.RFF -ini ""{ini}""");
+            if (bMod.RFF is not null)
+            {
+                rff = bMod.RFF;
+            }
+            else
+            {
+                rff = Consts.BloodRff;
+            }
+
+            sb.Append($@" -usecwd -nosetup -j ""{bGame.GameInstallFolder}"" -g {rff} -ini ""{ini}""");
 
             if (bMod.FileName is null)
             {
@@ -81,10 +93,12 @@ namespace Ports.Ports.EDuke32
             else if (bMod.Type is ModTypeEnum.Map)
             {
                 //TODO loose maps
-                sb.Append($@" -g ""{Path.Combine(game.MapsFolderPath, bMod.FileName)}""");
 
-                //TODO maps
-                sb.Append($@" -map ""{bMod.StartMap}""");
+                if (bMod.StartMap is MapFileDto mapFile)
+                {
+                    sb.Append($@" -g ""{Path.Combine(game.MapsFolderPath, bMod.FileName)}""");
+                    sb.Append($@" -map ""{mapFile.File}""");
+                }
             }
             else
             {

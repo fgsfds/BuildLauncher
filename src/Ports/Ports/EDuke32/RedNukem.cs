@@ -57,9 +57,9 @@ namespace Ports.Ports.EDuke32
         /// <inheritdoc/>
         protected override void GetStartCampaignArgs(StringBuilder sb, IGame game, IAddon mod)
         {
-            if (game is DukeGame dGame)
+            if (game is DukeGame dGame && mod is DukeCampaign dCamp)
             {
-                GetDukeArgs(sb, dGame, mod);
+                GetDukeArgs(sb, dGame, dCamp);
             }
             else if (game is RedneckGame rGame)
             {
