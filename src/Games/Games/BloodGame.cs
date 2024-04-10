@@ -71,11 +71,11 @@ namespace Games.Games
                 Incompatibles = null,
                 MainDef = null,
                 AdditionalDefs = null,
-                INI = Consts.BloodIni,
+                INI = null,
                 RFF = null,
                 SND = null,
                 StartMap = null,
-                AddonEnum = BloodAddonEnum.Blood
+                RequiredAddonEnum = BloodAddonEnum.Blood
             });
 
             if (IsCrypticPassageInstalled)
@@ -108,7 +108,7 @@ namespace Games.Games
                     RFF = null,
                     SND = null,
                     StartMap = null,
-                    AddonEnum = BloodAddonEnum.BloodCP
+                    RequiredAddonEnum = BloodAddonEnum.BloodCP
                 });
             }
 

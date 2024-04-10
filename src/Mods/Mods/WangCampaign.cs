@@ -10,6 +10,6 @@ namespace Mods.Mods
         /// <summary>
         /// Wang Addon enum
         /// </summary>
-        public required WangAddonEnum AddonEnum { get; init; }
+        public required WangAddonEnum RequiredAddonEnum { get; init; }
     }
 }

@@ -176,7 +176,7 @@ namespace Ports.Ports
                 return;
             }
 
-            sb.Append($" -addon {(byte)dMod.AddonEnum}");
+            sb.Append($" -addon {(byte)dMod.RequiredAddonEnum}");
 
             if (camp.Id == DukeAddonEnum.WorldTour.ToString())
             {

@@ -425,7 +425,7 @@ namespace Mods.Providers
                         MainDef = mainDef,
                         AdditionalDefs = addDefs,
                         RTS = rts,
-                        AddonEnum = dukeAddon
+                        RequiredAddonEnum = dukeAddon
                     };
                 }
                 else if (_game.GameEnum is GameEnum.Wang)
@@ -448,7 +448,7 @@ namespace Mods.Providers
                         StartMap = startMap,
                         MainDef = mainDef,
                         AdditionalDefs = addDefs,
-                        AddonEnum = wangAddon
+                        RequiredAddonEnum = wangAddon
                     };
                 }
                 else if (_game.GameEnum is GameEnum.Blood)
@@ -471,10 +471,10 @@ namespace Mods.Providers
                         StartMap = startMap,
                         MainDef = mainDef,
                         AdditionalDefs = addDefs,
-                        INI = ini ?? Consts.BloodIni,
-                        RFF = rff ?? "BLOOD.RFF",
-                        SND = snd ?? "SOUND.RFF",
-                        AddonEnum = bloodAddon
+                        INI = ini,
+                        RFF = rff,
+                        SND = snd,
+                        RequiredAddonEnum = bloodAddon
                     };
                 }
                 else if (_game.GameEnum is GameEnum.Redneck)
@@ -500,7 +500,7 @@ namespace Mods.Providers
                         MainDef = mainDef,
                         AdditionalDefs = addDefs,
                         RTS = rts,
-                        AddonEnum = redneckAddon
+                        RequiredAddonEnum = redneckAddon
                     };
                 }
                 else

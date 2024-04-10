@@ -10,15 +10,15 @@ namespace Mods.Mods
         /// <summary>
         /// Blood Addon enum
         /// </summary>
-        public required BloodAddonEnum AddonEnum { get; init; }
+        public required BloodAddonEnum RequiredAddonEnum { get; init; }
 
         /// <summary>
         /// Startup .ini file
         /// </summary>
-        public required string INI { get; init; }
+        public required string? INI { get; init; }
 
-        public required string RFF { get; init; }
+        public required string? RFF { get; init; }
 
-        public required string SND { get; init; }
+        public required string? SND { get; init; }
     }
 }

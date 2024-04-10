@@ -10,7 +10,7 @@ namespace Mods.Mods
         /// <summary>
         /// Redneck Addon enum
         /// </summary>
-        public required RedneckAddonEnum AddonEnum { get; init; }
+        public required RedneckAddonEnum RequiredAddonEnum { get; init; }
 
         public required string? MainCon { get; init; }
 

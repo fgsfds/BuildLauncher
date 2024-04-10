@@ -10,7 +10,7 @@ namespace Mods.Mods
         /// <summary>
         /// Duke Addon enum
         /// </summary>
-        public required DukeAddonEnum AddonEnum { get; init; }
+        public required DukeAddonEnum RequiredAddonEnum { get; init; }
 
         public required string? MainCon { get; init; }
 

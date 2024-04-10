@@ -33,6 +33,16 @@
         public const string BloodIni = "BLOOD.INI";
 
         /// <summary>
+        /// Blood ini
+        /// </summary>
+        public const string BloodRff = "BLOOD.RFF";
+
+        /// <summary>
+        /// Blood ini
+        /// </summary>
+        public const string BloodSnd = "SOUND.RFF";
+
+        /// <summary>
         /// Blood Cryptic Passage ini
         /// </summary>
         public const string CrypticIni = "CRYPTIC.INI";

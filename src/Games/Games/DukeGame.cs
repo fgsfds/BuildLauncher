@@ -105,7 +105,7 @@ namespace Games.Games
                     AdditionalDefs = null,
                     RTS = null,
                     StartMap = null,
-                    AddonEnum = DukeAddonEnum.Duke3D
+                    RequiredAddonEnum = DukeAddonEnum.Duke3D
                 });
             }
 
@@ -138,7 +138,7 @@ namespace Games.Games
                     AdditionalDefs = null,
                     RTS = null,
                     StartMap = null,
-                    AddonEnum = DukeAddonEnum.WorldTour
+                    RequiredAddonEnum = DukeAddonEnum.WorldTour
                 });
             }
 
@@ -174,7 +174,7 @@ namespace Games.Games
                         AdditionalDefs = null,
                         RTS = null,
                         StartMap = null,
-                        AddonEnum = DukeAddonEnum.DukeVaca
+                        RequiredAddonEnum = DukeAddonEnum.DukeVaca
                     });
                 }
 
@@ -206,7 +206,7 @@ namespace Games.Games
                         AdditionalDefs = null,
                         RTS = null,
                         StartMap = null,
-                        AddonEnum = DukeAddonEnum.DukeNW
+                        RequiredAddonEnum = DukeAddonEnum.DukeNW
                     });
                 }
 
@@ -241,7 +241,7 @@ namespace Games.Games
                         AdditionalDefs = null,
                         RTS = null,
                         StartMap = null,
-                        AddonEnum = DukeAddonEnum.DukeDC
+                        RequiredAddonEnum = DukeAddonEnum.DukeDC
                     });
                 }
             }
@@ -274,7 +274,7 @@ namespace Games.Games
                     AdditionalDefs = null,
                     RTS = null,
                     StartMap = null,
-                    AddonEnum = DukeAddonEnum.Duke64
+                    RequiredAddonEnum = DukeAddonEnum.Duke64
                 });
             }
 

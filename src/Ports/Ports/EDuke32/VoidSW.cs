@@ -55,7 +55,7 @@ namespace Ports.Ports.EDuke32
 
             AddMusicFolder(sb, wGame);
 
-            sb.Append($@" -j""{wGame.GameInstallFolder}"" -addon{wMod.AddonEnum}");
+            sb.Append($@" -j""{wGame.GameInstallFolder}"" -addon{wMod.RequiredAddonEnum}");
 
             if (mod.FileName is null)
             {
