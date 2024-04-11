@@ -27,22 +27,22 @@ namespace Ports.Ports.EDuke32
         protected override string ConfigFile => "eduke32.cfg";
 
         /// <inheritdoc/>
-        protected override string AddDirectoryParam => "-j";
+        protected override string AddDirectoryParam => "-j ";
 
         /// <inheritdoc/>
-        protected override string AddFileParam => "-g";
+        protected override string AddFileParam => "-g ";
 
         /// <inheritdoc/>
-        protected override string AddDefParam => "-mh";
+        protected override string AddDefParam => "-mh ";
 
         /// <inheritdoc/>
-        protected override string AddConParam => "-mx";
+        protected override string AddConParam => "-mx ";
 
         /// <inheritdoc/>
-        protected override string MainDefParam => "-h";
+        protected override string MainDefParam => "-h ";
 
         /// <inheritdoc/>
-        protected override string MainConParam => "-x";
+        protected override string MainConParam => "-x ";
 
         /// <inheritdoc/>
         public override List<GameEnum> SupportedGames =>
@@ -110,17 +110,17 @@ namespace Ports.Ports.EDuke32
 
             if (camp.Id == GameEnum.Duke64.ToString())
             {
-                sb.Append(@$" {AddDirectoryParam} ""{Path.GetDirectoryName(game.Duke64RomPath)}"" -gamegrp ""{Path.GetFileName(game.Duke64RomPath)}""");
+                sb.Append(@$" {AddDirectoryParam}""{Path.GetDirectoryName(game.Duke64RomPath)}"" -gamegrp ""{Path.GetFileName(game.Duke64RomPath)}""");
                 return;
             }
 
             if (camp.Id == DukeAddonEnum.WorldTour.ToString())
             {
-                sb.Append($@" {AddDirectoryParam} ""{game.DukeWTInstallPath}"" -addon {(byte)DukeAddonEnum.Duke3D} {AddDirectoryParam} ""{Path.Combine(game.SpecialFolderPath, Consts.WTStopgap)}"" -gamegrp e32wt.grp");
+                sb.Append($@" {AddDirectoryParam}""{game.DukeWTInstallPath}"" -addon {(byte)DukeAddonEnum.Duke3D} {AddDirectoryParam}""{Path.Combine(game.SpecialFolderPath, Consts.WTStopgap)}"" -gamegrp e32wt.grp");
             }
             else
             {
-                sb.Append($@" {AddDirectoryParam} ""{game.GameInstallFolder}"" -addon {(byte)camp.RequiredAddonEnum}");
+                sb.Append($@" {AddDirectoryParam}""{game.GameInstallFolder}"" -addon {(byte)camp.RequiredAddonEnum}");
             }
 
             if (camp.FileName is null)
@@ -130,18 +130,18 @@ namespace Ports.Ports.EDuke32
 
             if (camp.Type is ModTypeEnum.TC)
             {
-                sb.Append($@" {AddFileParam} ""{Path.Combine(game.CampaignsFolderPath, camp.FileName)}""");
+                sb.Append($@" {AddFileParam}""{Path.Combine(game.CampaignsFolderPath, camp.FileName)}""");
 
                 if (camp.MainCon is not null)
                 {
-                    sb.Append($@" {MainConParam} ""{camp.MainCon}""");
+                    sb.Append($@" {MainConParam}""{camp.MainCon}""");
                 }
 
                 if (camp.AdditionalCons?.Count > 0)
                 {
                     foreach (var con in camp.AdditionalCons)
                     {
-                        sb.Append($@" {AddConParam} ""{con}""");
+                        sb.Append($@" {AddConParam}""{con}""");
                     }
                 }
             }
@@ -176,7 +176,7 @@ namespace Ports.Ports.EDuke32
                 return;
             }
 
-            sb.Append($@" {AddDirectoryParam}""{game.ModsFolderPath}""");
+            sb.Append($@" {AddDirectoryParam} ""{game.ModsFolderPath}""");
 
             foreach (var mod in mods)
             {
@@ -191,9 +191,14 @@ namespace Ports.Ports.EDuke32
                 }
 
                 sb.Append($@" {AddFileParam}""{aMod.FileName}""");
+
+                foreach (var def in aMod.AdditionalDefs)
+                {
+                    sb.Append($@" {AddDefParam}""{def}""");
+                }
             }
 
-            sb.Append($@" {AddDirectoryParam}""{Path.Combine(game.SpecialFolderPath, Consts.CombinedModFolder)}"" {AddDefParam}""{Consts.CombinedDef}""");
+            //sb.Append($@" {AddDirectoryParam}""{Path.Combine(game.SpecialFolderPath, Consts.CombinedModFolder)}"" {AddDefParam}""{Consts.CombinedDef}""");
         }
 
         /// <inheritdoc/>

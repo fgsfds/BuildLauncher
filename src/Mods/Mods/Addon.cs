@@ -90,7 +90,17 @@ namespace Mods.Mods
 
             if (Description is not null)
             {
-                description.Append(Environment.NewLine + Environment.NewLine + Description);
+                var lines = Description.Split("\r\n");
+
+                for (var i = 0; i < lines.Length; i++)
+                {
+                    if (lines[i].StartsWith("http"))
+                    {
+                        lines[i] = $"[{lines[i]}]({lines[i]})";
+                    }
+                }
+
+                description.Append(Environment.NewLine + Environment.NewLine + string.Join(Environment.NewLine + Environment.NewLine, lines));
             }
 
             if (SupportedPorts is not null)

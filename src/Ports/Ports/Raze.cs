@@ -4,6 +4,7 @@ using Common.Helpers;
 using Common.Interfaces;
 using Games.Games;
 using Mods.Mods;
+using Mods.Serializable.Addon;
 using Ports.Providers;
 using System.Diagnostics;
 using System.Text;
@@ -54,19 +55,22 @@ namespace Ports.Ports
         protected override string ConfigFile => "raze_portable.ini";
 
         /// <inheritdoc/>
-        protected override string AddDirectoryParam => throw new NotImplementedException();
+        protected override string AddDirectoryParam => "-j ";
 
         /// <inheritdoc/>
-        protected override string AddFileParam => throw new NotImplementedException();
+        protected override string AddFileParam => "-file ";
 
         /// <inheritdoc/>
-        protected override string AddDefParam => throw new NotImplementedException();
+        protected override string AddDefParam => "-adddef ";
 
-        protected override string AddConParam => throw new NotImplementedException();
+        /// <inheritdoc/>
+        protected override string AddConParam => "-addcon ";
 
-        protected override string MainDefParam => throw new NotImplementedException();
+        /// <inheritdoc/>
+        protected override string MainDefParam => "-def ";
 
-        protected override string MainConParam => throw new NotImplementedException();
+        /// <inheritdoc/>
+        protected override string MainConParam => "-con ";
 
 
         /// <inheritdoc/>
@@ -115,9 +119,9 @@ namespace Ports.Ports
         {
             sb.Append($@" -savedir ""{Path.Combine(PathToPortFolder, "Save", mod.Title.Replace(' ', '_'))}""");
 
-            if (game is BloodGame bGame)
+            if (game is BloodGame bGame && mod is BloodCampaign bCamp)
             {
-                GetBloodArgs(sb, bGame, mod);
+                GetBloodArgs(sb, bGame, bCamp);
             }
             else if (game is DukeGame dGame)
             {
@@ -163,7 +167,12 @@ namespace Ports.Ports
                     continue;
                 }
 
-                sb.Append($@" -file ""{aMod.FileName}""");
+                sb.Append($@" {AddFileParam}""{aMod.FileName}""");
+
+                foreach (var def in aMod.AdditionalDefs)
+                {
+                    sb.Append($@" {AddDefParam}""{def}""");
+                }
             }
         }
 
@@ -214,34 +223,50 @@ namespace Ports.Ports
         }
 
 
-        private void GetBloodArgs(StringBuilder sb, BloodGame game, IAddon addon)
+        private void GetBloodArgs(StringBuilder sb, BloodGame game, BloodCampaign bMod)
         {
-            if (addon is not BloodCampaign bMod)
+            if (bMod.INI is not null)
             {
-                ThrowHelper.NotImplementedException($"Mod type {addon} for game {game} is not supported");
-                return;
+                sb.Append($@" -ini ""{bMod.INI}""");
+            }
+            else if (bMod.RequiredAddonEnum is BloodAddonEnum.BloodCP)
+            {
+                sb.Append($@" -ini ""{Consts.CrypticIni}""");
             }
 
-            var ini = bMod.INI;
-
-            if (ini is null)
-            {
-                if (bMod.Dependencies?.TryGetValue(BloodAddonEnum.BloodCP.ToString(), out var _) ?? false)
-                {
-                    ini = Consts.CrypticIni;
-                }
-            }
-
-            sb.Append(@$" -ini ""{ini}""");
 
             if (bMod.FileName is null)
             {
                 return;
             }
 
+
+            if (bMod.RFF is not null)
+            {
+                sb.Append($@" -rff {bMod.RFF}");
+            }
+
+
+            if (bMod.SND is not null)
+            {
+                sb.Append($@" -snd {bMod.SND}");
+            }
+
+
+            if (bMod.MainDef is not null)
+            {
+                sb.Append($@" {MainDefParam}""{bMod.MainDef}""");
+            }
+            else
+            {
+                //overriding default def so gamename.def files are ignored
+                sb.Append($@" {MainDefParam}a");
+            }
+
+
             if (bMod.Type is ModTypeEnum.TC)
             {
-                sb.Append($@" -file ""{Path.Combine(game.CampaignsFolderPath, bMod.FileName)}""");
+                sb.Append($@" {AddFileParam}""{Path.Combine(game.CampaignsFolderPath, bMod.FileName)}""");
             }
             else if (bMod.Type is ModTypeEnum.Map)
             {
@@ -346,15 +371,13 @@ namespace Ports.Ports
         /// </summary>
         private static void GetMapArgs(StringBuilder sb, BaseGame game, IAddon camp)
         {
-            //TODO
-            //if (camp.IsLoose)
-            //{
-            //    sb.Append($@" -file ""{Path.Combine(game.MapsFolderPath, camp.StartupFile!)}"" -map ""{camp.StartupFile}""");
-            //}
-            //else
-            //{
-            //    sb.Append($@" -file ""{Path.Combine(game.MapsFolderPath, camp.FileName!)}"" -map ""{camp.StartupFile}""");
-            //}
+            //TODO loose maps
+            //TODO e#m#
+            if (camp.StartMap is MapFileDto mapFile)
+            {
+                sb.Append($@" -file ""{Path.Combine(game.MapsFolderPath, camp.FileName!)}""");
+                sb.Append($@" -map ""{mapFile.File}""");
+            }
         }
 
         /// <summary>

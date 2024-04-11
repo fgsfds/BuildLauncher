@@ -54,49 +54,61 @@ namespace Ports.Ports.EDuke32
                 return;
             }
 
-            string ini;
-            string rff;
+
+            sb.Append($@" -usecwd {AddDirectoryParam}""{bGame.GameInstallFolder}""");
+
 
             if (bMod.INI is not null)
             {
-                ini = bMod.INI;
+                sb.Append($@" -ini ""{bMod.INI}""");
             }
             else if (bMod.RequiredAddonEnum is BloodAddonEnum.BloodCP)
             {
-                ini = Consts.CrypticIni;
-            }
-            else
-            {
-                ini = Consts.BloodIni;
+                sb.Append($@" -ini ""{Consts.CrypticIni}""");
             }
 
-            if (bMod.RFF is not null)
-            {
-                rff = bMod.RFF;
-            }
-            else
-            {
-                rff = Consts.BloodRff;
-            }
-
-            sb.Append($@" -usecwd -nosetup -j ""{bGame.GameInstallFolder}"" -g {rff} -ini ""{ini}""");
 
             if (bMod.FileName is null)
             {
                 return;
             }
 
+
+            if (bMod.RFF is not null)
+            {
+                sb.Append($@" -rff {bMod.RFF}");
+            }
+
+
+            if (bMod.SND is not null)
+            {
+                sb.Append($@" -snd {bMod.SND}");
+            }
+
+
+            if (bMod.MainDef is not null)
+            {
+                sb.Append($@" {MainDefParam}""{bMod.MainDef}""");
+            }
+            else
+            {
+                //overriding default def so gamename.def files are ignored
+                sb.Append($@" {MainDefParam}a");
+            }
+
+
             if (bMod.Type is ModTypeEnum.TC)
             {
-                sb.Append($@" -g ""{Path.Combine(bGame.CampaignsFolderPath, bMod.FileName)}""");
+                sb.Append($@" {AddFileParam}""{Path.Combine(bGame.CampaignsFolderPath, bMod.FileName)}""");
             }
             else if (bMod.Type is ModTypeEnum.Map)
             {
                 //TODO loose maps
+                //TODO e#m#
 
                 if (bMod.StartMap is MapFileDto mapFile)
                 {
-                    sb.Append($@" -g ""{Path.Combine(game.MapsFolderPath, bMod.FileName)}""");
+                    sb.Append($@" {AddFileParam}""{Path.Combine(game.MapsFolderPath, bMod.FileName)}""");
                     sb.Append($@" -map ""{mapFile.File}""");
                 }
             }
