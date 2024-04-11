@@ -124,9 +124,9 @@ namespace Ports.Ports
         {
             sb.Append($@" -savedir ""{Path.Combine(PathToPortFolder, "Save", mod.Title.Replace(' ', '_'))}""");
 
-            if (game is DukeGame dGame)
+            if (game is DukeGame dGame && mod is DukeCampaign dMod)
             {
-                GetDukeArgs(sb, dGame, mod);
+                GetDukeArgs(sb, dGame, dMod);
             }
             else if (game is BloodGame bGame && mod is BloodCampaign bCamp)
             {
@@ -150,17 +150,11 @@ namespace Ports.Ports
             }
         }
 
-        private void GetDukeArgs(StringBuilder sb, DukeGame game, IAddon camp)
+        private void GetDukeArgs(StringBuilder sb, DukeGame game, DukeCampaign dMod)
         {
-            if (camp is not DukeCampaign dMod)
-            {
-                ThrowHelper.NotImplementedException($"Mod type {camp} for game {game} is not supported");
-                return;
-            }
-
             sb.Append($" -addon {(byte)dMod.RequiredAddonEnum}");
 
-            if (camp.Id == DukeAddonEnum.WorldTour.ToString())
+            if (dMod.Id == DukeAddonEnum.WorldTour.ToString())
             {
                 var config = Path.Combine(PathToPortFolder, ConfigFile);
                 AddGamePathsToConfig(game.DukeWTInstallPath, game.ModsFolderPath, game.MapsFolderPath, config);
@@ -168,23 +162,79 @@ namespace Ports.Ports
                 return;
             }
 
-            if (camp.FileName is null)
+            if (dMod.FileName is null)
             {
                 return;
             }
 
-            if (camp.Type is ModTypeEnum.TC)
+            if (dMod.Type is ModTypeEnum.TC)
             {
                 //TODO
                 //sb.Append($@" -file ""{Path.Combine(game.CampaignsFolderPath, camp.FileName)}"" -con ""{camp.StartupFile}""");
             }
-            else if (camp.Type is ModTypeEnum.Map)
+            else if (dMod.Type is ModTypeEnum.Map)
             {
-                GetMapArgs(sb, game, camp);
+                GetMapArgs(sb, game, dMod);
             }
             else
             {
-                ThrowHelper.NotImplementedException($"Mod type {camp.Type} is not supported");
+                ThrowHelper.NotImplementedException($"Mod type {dMod.Type} is not supported");
+                return;
+            }
+        }
+
+        protected void GetBloodArgs(StringBuilder sb, BloodGame game, BloodCampaign bMod)
+        {
+            if (bMod.INI is not null)
+            {
+                sb.Append($@" -ini ""{bMod.INI}""");
+            }
+            else if (bMod.RequiredAddonEnum is BloodAddonEnum.BloodCP)
+            {
+                sb.Append($@" -ini ""{Consts.CrypticIni}""");
+            }
+
+
+            if (bMod.FileName is null)
+            {
+                return;
+            }
+
+
+            if (bMod.RFF is not null)
+            {
+                sb.Append($@" -rff {bMod.RFF}");
+            }
+
+
+            if (bMod.SND is not null)
+            {
+                sb.Append($@" -snd {bMod.SND}");
+            }
+
+
+            if (bMod.MainDef is not null)
+            {
+                sb.Append($@" {MainDefParam}""{bMod.MainDef}""");
+            }
+            else
+            {
+                //overriding default def so gamename.def files are ignored
+                sb.Append($@" {MainDefParam}a");
+            }
+
+
+            if (bMod.Type is ModTypeEnum.TC)
+            {
+                sb.Append($@" {AddFileParam}""{Path.Combine(game.CampaignsFolderPath, bMod.FileName)}""");
+            }
+            else if (bMod.Type is ModTypeEnum.Map)
+            {
+                GetMapArgs(sb, game, bMod);
+            }
+            else
+            {
+                ThrowHelper.NotImplementedException($"Mod type {bMod.Type} is not supported");
                 return;
             }
         }
@@ -292,7 +342,7 @@ namespace Ports.Ports
                     continue;
                 }
 
-                if (!ValidateAutoloadMod(aMod, campaign))
+                if (!ValidateAutoloadMod(aMod, campaign, addons))
                 {
                     continue;
                 }
@@ -313,7 +363,7 @@ namespace Ports.Ports
         {
             if (game is RedneckGame)
             {
-                var tilesA2 = Path.Combine(game.GameInstallFolder!, "TILES024.ART");
+                var tilesA2 = Path.Combine(game.GameInstallFolder, "TILES024.ART");
                 var tilesB2 = Path.Combine(game.GameInstallFolder, "TILES025.ART");
                 var turdMovAnm2 = Path.Combine(game.GameInstallFolder, "TURDMOV.ANM");
                 var turdMovVoc2 = Path.Combine(game.GameInstallFolder, "TURDMOV.VOC");

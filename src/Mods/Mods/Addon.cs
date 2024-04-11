@@ -68,7 +68,7 @@ namespace Mods.Mods
         /// <inheritdoc/>
         public string? FileName => PathToFile is null ? null : Path.GetFileName(PathToFile);
 
-        public virtual bool IsEnabled { get; init; } = true;
+        //public virtual bool IsEnabled { get; init; } = true;
 
         public override string ToString() => Title;
 

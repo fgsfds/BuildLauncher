@@ -28,6 +28,9 @@ namespace Ports.Ports.EDuke32
         protected override string ConfigFile => "voidsw.cfg";
 
         /// <inheritdoc/>
+        protected override string AddDirectoryParam => "-j";
+
+        /// <inheritdoc/>
         protected override string AddFileParam => "-g";
 
         /// <inheritdoc/>

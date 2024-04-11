@@ -2,6 +2,6 @@
 {
     public sealed class AutoloadMod : Addon
     {
-        public required override bool IsEnabled { get; init; }
+        public required bool IsEnabled { get; init; }
     }
 }

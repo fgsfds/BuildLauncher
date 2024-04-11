@@ -18,7 +18,7 @@ namespace Common.Interfaces
 
         HashSet<int>? SupportedGamesCrcs { get; init; }
 
-        public bool IsEnabled { get; init; }
+        //public bool IsEnabled { get; init; }
 
         /// <summary>
         /// Name of the mod

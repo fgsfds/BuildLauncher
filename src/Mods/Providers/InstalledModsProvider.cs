@@ -378,6 +378,12 @@ namespace Mods.Providers
             if (modTypeEnum is ModTypeEnum.Mod)
             {
                 var isEnabled = !_config.DisabledAutoloadMods.Contains(id);
+                string? requiredAddon = null;
+
+                if (_game.GameEnum is GameEnum.Duke3D)
+                {
+                    requiredAddon = dukeAddon.ToString();
+                }
 
                 addon = new AutoloadMod()
                 {

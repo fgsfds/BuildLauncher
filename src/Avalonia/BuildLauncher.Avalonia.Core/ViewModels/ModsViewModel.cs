@@ -55,7 +55,7 @@ namespace BuildLauncher.ViewModels
         /// <summary>
         /// List of installed autoload mods
         /// </summary>
-        public ImmutableList<IAddon> ModsList => Game.GetAutoloadMods(false).Select(x => x.Value).ToImmutableList();
+        public ImmutableList<AutoloadMod> ModsList => Game.GetAutoloadMods(false).Select(x => (AutoloadMod)x.Value).ToImmutableList();
 
         /// <summary>
         /// Currently selected autoload mod

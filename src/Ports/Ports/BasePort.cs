@@ -6,6 +6,7 @@ using Games.Games;
 using Mods.Mods;
 using Mods.Serializable.Addon;
 using Ports.Providers;
+using System.Linq;
 using System.Text;
 
 namespace Ports.Ports
@@ -151,63 +152,6 @@ namespace Ports.Ports
         }
 
 
-        protected void GetBloodArgs(StringBuilder sb, BloodGame game, BloodCampaign bMod)
-        {
-            if (bMod.INI is not null)
-            {
-                sb.Append($@" -ini ""{bMod.INI}""");
-            }
-            else if (bMod.RequiredAddonEnum is BloodAddonEnum.BloodCP)
-            {
-                sb.Append($@" -ini ""{Consts.CrypticIni}""");
-            }
-
-
-            if (bMod.FileName is null)
-            {
-                return;
-            }
-
-
-            if (bMod.RFF is not null)
-            {
-                sb.Append($@" -rff {bMod.RFF}");
-            }
-
-
-            if (bMod.SND is not null)
-            {
-                sb.Append($@" -snd {bMod.SND}");
-            }
-
-
-            if (bMod.MainDef is not null)
-            {
-                sb.Append($@" {MainDefParam}""{bMod.MainDef}""");
-            }
-            else
-            {
-                //overriding default def so gamename.def files are ignored
-                sb.Append($@" {MainDefParam}a");
-            }
-
-
-            if (bMod.Type is ModTypeEnum.TC)
-            {
-                sb.Append($@" {AddFileParam}""{Path.Combine(game.CampaignsFolderPath, bMod.FileName)}""");
-            }
-            else if (bMod.Type is ModTypeEnum.Map)
-            {
-                GetMapArgs(sb, game, bMod);
-            }
-            else
-            {
-                ThrowHelper.NotImplementedException($"Mod type {bMod.Type} is not supported");
-                return;
-            }
-        }
-
-
         /// <summary>
         /// Get startup args for packed and loose maps
         /// </summary>
@@ -228,7 +172,7 @@ namespace Ports.Ports
         /// </summary>
         /// <param name="autoloadMod">Autoload mod</param>
         /// <param name="campaign">Campaign</param>
-        protected bool ValidateAutoloadMod(AutoloadMod autoloadMod, IAddon campaign)
+        protected bool ValidateAutoloadMod(AutoloadMod autoloadMod, IAddon campaign, Dictionary<string, IAddon> addons)
         {
             if (!autoloadMod.IsEnabled)
             {
@@ -242,13 +186,18 @@ namespace Ports.Ports
                 return false;
             }
 
-            //TODO restore check
-            //if (autoloadMod.Incompatibles.Contains(campaign.Id) is not null &&
-            //    !autoloadMod.SupportedAddons.Contains(campaign.Addon))
-            //{
-            //    //skipping mods not supported by the current addon
-            //    return false;
-            //}
+            IEnumerable<string> ids = [.. addons.Keys, campaign.Id];
+
+            if (autoloadMod.Dependencies is not null)
+            {
+                foreach (var dep in autoloadMod.Dependencies)
+                {
+                    if (!ids.Contains(dep.Key))
+                    {
+                        return false;
+                    }
+                }
+            }
 
             return true;
         }

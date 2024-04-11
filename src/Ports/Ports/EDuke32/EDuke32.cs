@@ -119,9 +119,70 @@ namespace Ports.Ports.EDuke32
             }
         }
 
+
         private void GetSlaveArgs(StringBuilder sb, SlaveGame sGame, IAddon mod)
         {
             throw new NotImplementedException();
+        }
+
+
+        protected void GetBloodArgs(StringBuilder sb, BloodGame game, BloodCampaign bMod)
+        {
+            sb.Append(@$" {AddDirectoryParam}""{game.GameInstallFolder}""");
+
+
+            if (bMod.INI is not null)
+            {
+                sb.Append($@" -ini ""{bMod.INI}""");
+            }
+            else if (bMod.RequiredAddonEnum is BloodAddonEnum.BloodCP)
+            {
+                sb.Append($@" -ini ""{Consts.CrypticIni}""");
+            }
+
+
+            if (bMod.MainDef is not null)
+            {
+                sb.Append($@" {MainDefParam}""{bMod.MainDef}""");
+            }
+            else
+            {
+                //overriding default def so gamename.def files are ignored
+                sb.Append($@" {MainDefParam}""a""");
+            }
+
+
+            if (bMod.FileName is null)
+            {
+                return;
+            }
+
+
+            if (bMod.RFF is not null)
+            {
+                sb.Append($@" -rff {bMod.RFF}");
+            }
+
+
+            if (bMod.SND is not null)
+            {
+                sb.Append($@" -snd {bMod.SND}");
+            }
+
+
+            if (bMod.Type is ModTypeEnum.TC)
+            {
+                sb.Append($@" {AddFileParam}""{Path.Combine(game.CampaignsFolderPath, bMod.FileName)}""");
+            }
+            else if (bMod.Type is ModTypeEnum.Map)
+            {
+                GetMapArgs(sb, game, bMod);
+            }
+            else
+            {
+                ThrowHelper.NotImplementedException($"Mod type {bMod.Type} is not supported");
+                return;
+            }
         }
 
         /// <summary>
@@ -147,10 +208,23 @@ namespace Ports.Ports.EDuke32
                 sb.Append($@" {AddDirectoryParam}""{game.GameInstallFolder}"" -addon {(byte)camp.RequiredAddonEnum}");
             }
 
+
+            if (camp.MainDef is not null)
+            {
+                sb.Append($@" {MainDefParam}""{camp.MainDef}""");
+            }
+            else
+            {
+                //overriding default def so gamename.def files are ignored
+                sb.Append($@" {MainDefParam}""a""");
+            }
+
+
             if (camp.FileName is null)
             {
                 return;
             }
+
 
             if (camp.Type is ModTypeEnum.TC)
             {
@@ -201,10 +275,23 @@ namespace Ports.Ports.EDuke32
                 sb.Append($@" -j ""{game.GameInstallFolder}""");
             }
 
+
+            if (camp.MainDef is not null)
+            {
+                sb.Append($@" {MainDefParam}""{camp.MainDef}""");
+            }
+            else
+            {
+                //overriding default def so gamename.def files are ignored
+                sb.Append($@" {MainDefParam}""a""");
+            }
+
+
             if (camp.FileName is null)
             {
                 return;
             }
+
 
             if (camp.Type is ModTypeEnum.TC)
             {
@@ -237,14 +324,27 @@ namespace Ports.Ports.EDuke32
 
         private void GetWangArgs(StringBuilder sb, WangGame wGame, WangCampaign wMod)
         {
+            sb.Append($@" {AddDirectoryParam}""{wGame.GameInstallFolder}"" -addon{(byte)wMod.RequiredAddonEnum}");
+
             AddWangMusicFolder(sb, wGame);
 
-            sb.Append($@" {AddDirectoryParam}""{wGame.GameInstallFolder}"" -addon{wMod.RequiredAddonEnum}");
+
+            if (wMod.MainDef is not null)
+            {
+                sb.Append($@" {MainDefParam}""{wMod.MainDef}""");
+            }
+            else
+            {
+                //overriding default def so gamename.def files are ignored
+                sb.Append($@" {MainDefParam}""a""");
+            }
+
 
             if (wMod.FileName is null)
             {
                 return;
             }
+
 
             if (wMod.Type is ModTypeEnum.TC)
             {
@@ -298,7 +398,7 @@ namespace Ports.Ports.EDuke32
                 return;
             }
 
-            sb.Append($@" {AddDirectoryParam} ""{game.ModsFolderPath}""");
+            sb.Append($@" {AddDirectoryParam}""{game.ModsFolderPath}""");
 
             foreach (var mod in mods)
             {
@@ -307,7 +407,7 @@ namespace Ports.Ports.EDuke32
                     continue;
                 }
 
-                if (!ValidateAutoloadMod(aMod, campaign))
+                if (!ValidateAutoloadMod(aMod, campaign, mods))
                 {
                     continue;
                 }
