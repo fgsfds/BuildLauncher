@@ -19,9 +19,6 @@ namespace Games.Games
         public override string ShortName => "Wang";
 
         /// <inheritdoc/>
-        public override string DefFileName => "sw.def";
-
-        /// <inheritdoc/>
         public override List<string> RequiredFiles => ["SW.GRP"];
 
         /// <summary>

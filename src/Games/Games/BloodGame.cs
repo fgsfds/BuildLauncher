@@ -22,9 +22,6 @@ namespace Games.Games
         public override string ShortName => FullName;
 
         /// <inheritdoc/>
-        public override string DefFileName => "blood.def";
-
-        /// <inheritdoc/>
         public override List<string> RequiredFiles => [Consts.BloodIni, "BLOOD.RFF", "GUI.RFF", "SOUNDS.RFF", "SURFACE.DAT", "TILES000.ART", "VOXEL.DAT"];
 
         /// <summary>

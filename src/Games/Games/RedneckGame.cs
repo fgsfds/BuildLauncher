@@ -24,9 +24,6 @@ namespace Games.Games
         public required string? AgainInstallPath { get; set; }
 
         /// <inheritdoc/>
-        public override string DefFileName => "redneck.def";
-
-        /// <inheritdoc/>
         public override List<string> RequiredFiles => ["REDNECK.GRP"];
 
         /// <summary>

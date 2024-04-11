@@ -20,11 +20,6 @@ namespace Common.Interfaces
         GameEnum GameEnum { get; }
 
         /// <summary>
-        /// Def file name
-        /// </summary>
-        string DefFileName { get; }
-
-        /// <summary>
         /// Game install folder
         /// </summary>
         string? GameInstallFolder { get; set; }
@@ -62,13 +57,6 @@ namespace Common.Interfaces
         IInstalledModsProvider InstalledModsProvider { get; init; }
 
         IDownloadableModsProvider DownloadableModsProvider { get; init; }
-
-
-        /// <summary>
-        /// Create combined autoload mod
-        /// </summary>
-        /// <param name="additionalDef">Additional text for def</param>
-        void CreateCombinedMod(string? additionalDef = null);
 
         /// <summary>
         /// Get list of official addons and custom campaigns

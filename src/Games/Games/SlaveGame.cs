@@ -18,9 +18,6 @@ namespace Games.Games
         public override string ShortName => "Slave";
 
         /// <inheritdoc/>
-        public override string DefFileName => "exhumed.def";
-
-        /// <inheritdoc/>
         public override List<string> RequiredFiles => ["STUFF.DAT"];
 
 

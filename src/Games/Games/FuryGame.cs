@@ -18,9 +18,6 @@ namespace Games.Games
         public override string ShortName => "Fury";
 
         /// <inheritdoc/>
-        public override string DefFileName => "fury.def";
-
-        /// <inheritdoc/>
         public override List<string> RequiredFiles => ["fury.grp"];
 
 

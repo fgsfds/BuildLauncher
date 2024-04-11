@@ -1,4 +1,5 @@
 ﻿using Common.Enums;
+using Common.Interfaces;
 using Ports.Providers;
 
 namespace Ports.Ports.EDuke32
@@ -6,7 +7,7 @@ namespace Ports.Ports.EDuke32
     /// <summary>
     /// NotBlood port
     /// </summary>
-    public sealed class NotBlood : NBlood
+    public sealed class NotBlood : EDuke32
     {
         /// <inheritdoc/>
         public override PortEnum PortEnum => PortEnum.NotBlood;
@@ -18,13 +19,22 @@ namespace Ports.Ports.EDuke32
         public override string Name => "NotBlood";
 
         /// <inheritdoc/>
+        public override List<GameEnum> SupportedGames => [GameEnum.Blood];
+
+        /// <inheritdoc/>
         public override Uri RepoUrl => new("https://api.github.com/repos/clipmove/NotBlood/releases");
 
         /// <inheritdoc/>
         public override Func<GitHubReleaseAsset, bool> WindowsReleasePredicate => static x => x.FileName.StartsWith("notblood-win64");
 
-
         /// <inheritdoc/>
         protected override string ConfigFile => "notblood.cfg";
+
+
+        /// <inheritdoc/>
+        protected override void BeforeStart(IGame game, IAddon campaign)
+        {
+            //nothing to do
+        }
     }
 }

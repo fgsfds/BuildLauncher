@@ -43,9 +43,6 @@ namespace Games.Games
         public abstract string ShortName { get; }
 
         /// <inheritdoc/>
-        public abstract string DefFileName { get; }
-
-        /// <inheritdoc/>
         public abstract List<string> RequiredFiles { get; }
 
         public IInstalledModsProvider InstalledModsProvider { get; init; }

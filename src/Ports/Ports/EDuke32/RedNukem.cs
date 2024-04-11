@@ -1,11 +1,8 @@
 ﻿using Common.Enums;
 using Common.Enums.Addons;
-using Common.Helpers;
 using Common.Interfaces;
 using Games.Games;
-using Mods.Mods;
 using Ports.Providers;
-using System.Text;
 
 namespace Ports.Ports.EDuke32
 {
@@ -39,7 +36,6 @@ namespace Ports.Ports.EDuke32
         /// <inheritdoc/>
         public override Func<GitHubReleaseAsset, bool> WindowsReleasePredicate => static x => x.FileName.StartsWith("rednukem_win64");
 
-
         /// <inheritdoc/>
         protected override string ConfigFile => "rednukem.cfg";
 
@@ -49,86 +45,14 @@ namespace Ports.Ports.EDuke32
         {
             FixGrpInConfig();
 
-            game.CreateCombinedMod();
-
             FixRoute66Files(game, campaign);
         }
 
-        /// <inheritdoc/>
-        protected override void GetStartCampaignArgs(StringBuilder sb, IGame game, IAddon mod)
-        {
-            if (game is DukeGame dGame && mod is DukeCampaign dCamp)
-            {
-                GetDukeArgs(sb, dGame, dCamp);
-            }
-            else if (game is RedneckGame rGame)
-            {
-                GetRedneckArgs(sb, rGame, mod);
-            }
-            else
-            {
-                ThrowHelper.NotImplementedException($"Mod type {mod} for game {game} is not supported");
-            }
-        }
-
-        /// <summary>
-        /// Get startup agrs for Redneck Rampage
-        /// </summary>
-        /// <param name="sb">StringBuilder</param>
-        /// <param name="game">RedneckGame</param>
-        /// <param name="camp">RedneckCampaign</param>
-        private static void GetRedneckArgs(StringBuilder sb, RedneckGame game, IAddon camp)
-        {
-            sb.Append($@" -usecwd -nosetup");
-
-            if (camp.Id == GameEnum.RedneckRA.ToString())
-            {
-                sb.Append($@" -j ""{game.AgainInstallPath}""");
-            }
-            else if (camp.Id == RedneckAddonEnum.RedneckR66.ToString())
-            {
-                sb.Append($@" -j ""{game.GameInstallFolder}"" -x GAME66.CON");
-            }
-            else
-            {
-                sb.Append($@" -j ""{game.GameInstallFolder}""");
-            }
-
-            if (camp.FileName is null)
-            {
-                return;
-            }
-
-            if (camp.Type is ModTypeEnum.TC)
-            {
-                //TODO
-                //sb.Append($@" -g ""{Path.Combine(game.CampaignsFolderPath, camp.FileName)}"" -x ""{camp.StartupFile}""");
-            }
-            else if (camp.Type is ModTypeEnum.Map)
-            {
-                //TODO restore loose maps
-                //if (camp.IsLoose)
-                //{
-                //    sb.Append($@" -j ""{Path.Combine(game.MapsFolderPath)}""");
-                //}
-                //else
-                //{
-                //    sb.Append($@" -g ""{Path.Combine(game.MapsFolderPath, camp.FileName)}""");
-                //}
-                //TODO
-                //sb.Append($@" -map ""{camp.StartupFile}""");
-            }
-            else
-            {
-                ThrowHelper.NotImplementedException($"Mod type {camp.Type} is not supported");
-                return;
-            }
-        }
 
         /// <summary>
         /// Override original art files with route 66's ones or remove overrides
         /// </summary>
-        [Obsolete("Remove if RedNukem can even properly launch R66")]
+        [Obsolete("Remove if RedNukem can ever properly launch R66")]
         private static void FixRoute66Files(IGame game, IAddon campaign)
         {
             if (game is not RedneckGame rGame || !rGame.IsRoute66Installed)

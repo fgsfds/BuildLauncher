@@ -4,7 +4,6 @@ using Common.Helpers;
 using Common.Interfaces;
 using Games.Games;
 using Mods.Mods;
-using Mods.Serializable.Addon;
 using Ports.Providers;
 using System.Diagnostics;
 using System.Text;
@@ -72,6 +71,12 @@ namespace Ports.Ports
         /// <inheritdoc/>
         protected override string MainConParam => "-con ";
 
+        /// <inheritdoc/>
+        protected override void GetSkipIntroParameter(StringBuilder sb) => sb.Append(" -quick");
+
+        /// <inheritdoc/>
+        protected override void GetSkipStartupParameter(StringBuilder sb) => sb.Append(" -nosetup");
+
 
         /// <inheritdoc/>
         protected override void BeforeStart(IGame game, IAddon campaign)
@@ -119,13 +124,13 @@ namespace Ports.Ports
         {
             sb.Append($@" -savedir ""{Path.Combine(PathToPortFolder, "Save", mod.Title.Replace(' ', '_'))}""");
 
-            if (game is BloodGame bGame && mod is BloodCampaign bCamp)
-            {
-                GetBloodArgs(sb, bGame, bCamp);
-            }
-            else if (game is DukeGame dGame)
+            if (game is DukeGame dGame)
             {
                 GetDukeArgs(sb, dGame, mod);
+            }
+            else if (game is BloodGame bGame && mod is BloodCampaign bCamp)
+            {
+                GetBloodArgs(sb, bGame, bCamp);
             }
             else if (game is WangGame wGame)
             {
@@ -144,44 +149,6 @@ namespace Ports.Ports
                 ThrowHelper.NotImplementedException($"Mod type {mod} for game {game} is not supported");
             }
         }
-
-        /// <inheritdoc/>
-        protected override void GetAutoloadModsArgs(StringBuilder sb, IGame game, IAddon campaign)
-        {
-            var addons = game.GetAutoloadMods(true);
-
-            if (addons.Count == 0)
-            {
-                return;
-            }
-
-            foreach (var mod in addons)
-            {
-                if (mod.Value is not AutoloadMod aMod)
-                {
-                    continue;
-                }
-
-                if (!ValidateAutoloadMod(aMod, campaign))
-                {
-                    continue;
-                }
-
-                sb.Append($@" {AddFileParam}""{aMod.FileName}""");
-
-                foreach (var def in aMod.AdditionalDefs)
-                {
-                    sb.Append($@" {AddDefParam}""{def}""");
-                }
-            }
-        }
-
-        /// <inheritdoc/>
-        protected override void GetSkipIntroParameter(StringBuilder sb) => sb.Append(" -quick");
-
-        /// <inheritdoc/>
-        protected override void GetSkipStartupParameter(StringBuilder sb) => sb.Append(" -nosetup");
-
 
         private void GetDukeArgs(StringBuilder sb, DukeGame game, IAddon camp)
         {
@@ -221,75 +188,17 @@ namespace Ports.Ports
                 return;
             }
         }
-
-
-        private void GetBloodArgs(StringBuilder sb, BloodGame game, BloodCampaign bMod)
-        {
-            if (bMod.INI is not null)
-            {
-                sb.Append($@" -ini ""{bMod.INI}""");
-            }
-            else if (bMod.RequiredAddonEnum is BloodAddonEnum.BloodCP)
-            {
-                sb.Append($@" -ini ""{Consts.CrypticIni}""");
-            }
-
-
-            if (bMod.FileName is null)
-            {
-                return;
-            }
-
-
-            if (bMod.RFF is not null)
-            {
-                sb.Append($@" -rff {bMod.RFF}");
-            }
-
-
-            if (bMod.SND is not null)
-            {
-                sb.Append($@" -snd {bMod.SND}");
-            }
-
-
-            if (bMod.MainDef is not null)
-            {
-                sb.Append($@" {MainDefParam}""{bMod.MainDef}""");
-            }
-            else
-            {
-                //overriding default def so gamename.def files are ignored
-                sb.Append($@" {MainDefParam}a");
-            }
-
-
-            if (bMod.Type is ModTypeEnum.TC)
-            {
-                sb.Append($@" {AddFileParam}""{Path.Combine(game.CampaignsFolderPath, bMod.FileName)}""");
-            }
-            else if (bMod.Type is ModTypeEnum.Map)
-            {
-                GetMapArgs(sb, game, bMod);
-            }
-            else
-            {
-                ThrowHelper.NotImplementedException($"Mod type {bMod.Type} is not supported");
-                return;
-            }
-        }
-
-        private static void GetWangArgs(StringBuilder sb, WangGame game, IAddon camp)
+        private void GetWangArgs(StringBuilder sb, WangGame game, IAddon camp)
         {
             if (camp.FileName is null)
             {
                 if (camp.Id == WangAddonEnum.WangWD.ToString())
                 {
-                    sb.Append(@" -file WT.GRP");
+                    sb.Append($" {AddFileParam}WT.GRP");
                 }
                 else if (camp.Id == WangAddonEnum.WangTD.ToString())
                 {
-                    sb.Append(@" -file TD.GRP");
+                    sb.Append($" {AddFileParam}TD.GRP");
                 }
 
                 return;
@@ -297,7 +206,7 @@ namespace Ports.Ports
 
             if (camp.Type is ModTypeEnum.TC)
             {
-                sb.Append($@" -file ""{Path.Combine(game.CampaignsFolderPath, camp.FileName)}""");
+                sb.Append($@" {AddFileParam}""{Path.Combine(game.CampaignsFolderPath, camp.FileName)}""");
             }
             else if (camp.Type is ModTypeEnum.Map)
             {
@@ -331,7 +240,7 @@ namespace Ports.Ports
 
             if (camp.Type is ModTypeEnum.TC)
             {
-                sb.Append($@" -file ""{Path.Combine(game.CampaignsFolderPath, camp.FileName)}""");
+                sb.Append($@" {AddFileParam}""{Path.Combine(game.CampaignsFolderPath, camp.FileName)}""");
             }
             else if (camp.Type is ModTypeEnum.Map)
             {
@@ -344,7 +253,7 @@ namespace Ports.Ports
             }
         }
 
-        private static void GetSlaveArgs(StringBuilder sb, SlaveGame game, IAddon camp)
+        private void GetSlaveArgs(StringBuilder sb, SlaveGame game, IAddon camp)
         {
             if (camp.FileName is null)
             {
@@ -353,7 +262,7 @@ namespace Ports.Ports
 
             if (camp.Type is ModTypeEnum.TC)
             {
-                sb.Append($@" -file ""{Path.Combine(game.CampaignsFolderPath, camp.FileName)}""");
+                sb.Append($@" {AddFileParam}""{Path.Combine(game.CampaignsFolderPath, camp.FileName)}""");
             }
             else if (camp.Type is ModTypeEnum.Map)
             {
@@ -366,24 +275,41 @@ namespace Ports.Ports
             }
         }
 
-        /// <summary>
-        /// Get startup args for packed and loose maps
-        /// </summary>
-        private static void GetMapArgs(StringBuilder sb, BaseGame game, IAddon camp)
+        /// <inheritdoc/>
+        protected override void GetAutoloadModsArgs(StringBuilder sb, IGame game, IAddon campaign)
         {
-            //TODO loose maps
-            //TODO e#m#
-            if (camp.StartMap is MapFileDto mapFile)
+            var addons = game.GetAutoloadMods(true);
+
+            if (addons.Count == 0)
             {
-                sb.Append($@" -file ""{Path.Combine(game.MapsFolderPath, camp.FileName!)}""");
-                sb.Append($@" -map ""{mapFile.File}""");
+                return;
+            }
+
+            foreach (var mod in addons)
+            {
+                if (mod.Value is not AutoloadMod aMod)
+                {
+                    continue;
+                }
+
+                if (!ValidateAutoloadMod(aMod, campaign))
+                {
+                    continue;
+                }
+
+                sb.Append($@" {AddFileParam}""{aMod.FileName}""");
+
+                foreach (var def in aMod.AdditionalDefs)
+                {
+                    sb.Append($@" {AddDefParam}""{def}""");
+                }
             }
         }
 
         /// <summary>
-        /// Remove route 66 art files overrides
+        /// Remove route 66 art files overrides used for RedNukem
         /// </summary>
-        private static void FixRoute66Files(IGame game, IAddon _)
+        private void FixRoute66Files(IGame game, IAddon _)
         {
             if (game is RedneckGame)
             {

@@ -74,27 +74,54 @@ namespace Ports.Ports.EDuke32
             }
         }
 
+        /// <inheritdoc/>
+        protected override void GetSkipIntroParameter(StringBuilder sb) => sb.Append(" -quick");
+
+        /// <inheritdoc/>
+        protected override void GetSkipStartupParameter(StringBuilder sb) => sb.Append(" -nosetup");
+
 
         /// <inheritdoc/>
         protected override void BeforeStart(IGame game, IAddon campaign)
         {
             FixGrpInConfig();
-
-            //TODO
-            //game.CreateCombinedMod(campaign.DefFileContents);
         }
 
         /// <inheritdoc/>
         protected override void GetStartCampaignArgs(StringBuilder sb, IGame game, IAddon mod)
         {
+            //don't search for steam/gog installs
+            sb.Append($@" -usecwd");
+
             if (game is DukeGame dGame && mod is DukeCampaign dCamp)
             {
                 GetDukeArgs(sb, dGame, dCamp);
+            }
+            else if (game is BloodGame bGame && mod is BloodCampaign bMod)
+            {
+                GetBloodArgs(sb, bGame, bMod);
+            }
+            else if (game is WangGame wGame && mod is WangCampaign wMod)
+            {
+                GetWangArgs(sb, wGame, wMod);
+            }
+            else if (game is SlaveGame sGame)
+            {
+                GetSlaveArgs(sb, sGame, mod);
+            }
+            else if (game is RedneckGame rGame && mod is RedneckCampaign rCamp)
+            {
+                GetRedneckArgs(sb, rGame, rCamp);
             }
             else
             {
                 ThrowHelper.NotImplementedException($"Mod type {mod.Type} for game {game} is not supported");
             }
+        }
+
+        private void GetSlaveArgs(StringBuilder sb, SlaveGame sGame, IAddon mod)
+        {
+            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -105,9 +132,6 @@ namespace Ports.Ports.EDuke32
         /// <param name="camp">DukeCampaign</param>
         protected void GetDukeArgs(StringBuilder sb, DukeGame game, DukeCampaign camp)
         {
-            //don't search for steam/gog installs
-            sb.Append($@" -usecwd");
-
             if (camp.Id == GameEnum.Duke64.ToString())
             {
                 sb.Append(@$" {AddDirectoryParam}""{Path.GetDirectoryName(game.Duke64RomPath)}"" -gamegrp ""{Path.GetFileName(game.Duke64RomPath)}""");
@@ -147,17 +171,7 @@ namespace Ports.Ports.EDuke32
             }
             else if (camp.Type is ModTypeEnum.Map)
             {
-                //TODO loose map
-                //if (camp.IsLoose)
-                //{
-                //    sb.Append($@" {AddDirectoryParam} ""{Path.Combine(game.MapsFolderPath)}""");
-                //}
-                //else
-                //{
-                //    sb.Append($@" {AddFileParam} ""{Path.Combine(game.MapsFolderPath, camp.FileName)}""");
-                //}
-
-                //sb.Append($@" -map ""{camp.StartupFile}""");
+                GetMapArgs(sb, game, camp);
             }
             else
             {
@@ -165,6 +179,114 @@ namespace Ports.Ports.EDuke32
                 return;
             }
         }
+
+        /// <summary>
+        /// Get startup agrs for Redneck Rampage
+        /// </summary>
+        /// <param name="sb">StringBuilder</param>
+        /// <param name="game">RedneckGame</param>
+        /// <param name="camp">RedneckCampaign</param>
+        private void GetRedneckArgs(StringBuilder sb, RedneckGame game, RedneckCampaign camp)
+        {
+            if (camp.Id == GameEnum.RedneckRA.ToString())
+            {
+                sb.Append($@" -j ""{game.AgainInstallPath}""");
+            }
+            else if (camp.Id == RedneckAddonEnum.RedneckR66.ToString())
+            {
+                sb.Append($@" -j ""{game.GameInstallFolder}"" -x GAME66.CON");
+            }
+            else
+            {
+                sb.Append($@" -j ""{game.GameInstallFolder}""");
+            }
+
+            if (camp.FileName is null)
+            {
+                return;
+            }
+
+            if (camp.Type is ModTypeEnum.TC)
+            {
+                sb.Append($@" {AddFileParam}""{Path.Combine(game.CampaignsFolderPath, camp.FileName)}""");
+
+                if (camp.MainCon is not null)
+                {
+                    sb.Append($@" {MainConParam}""{camp.MainCon}""");
+                }
+
+                if (camp.AdditionalCons?.Count > 0)
+                {
+                    foreach (var con in camp.AdditionalCons)
+                    {
+                        sb.Append($@" {AddConParam}""{con}""");
+                    }
+                }
+            }
+            else if (camp.Type is ModTypeEnum.Map)
+            {
+                GetMapArgs(sb, game, camp);
+            }
+            else
+            {
+                ThrowHelper.NotImplementedException($"Mod type {camp.Type} is not supported");
+                return;
+            }
+        }
+
+
+        private void GetWangArgs(StringBuilder sb, WangGame wGame, WangCampaign wMod)
+        {
+            AddWangMusicFolder(sb, wGame);
+
+            sb.Append($@" {AddDirectoryParam}""{wGame.GameInstallFolder}"" -addon{wMod.RequiredAddonEnum}");
+
+            if (wMod.FileName is null)
+            {
+                return;
+            }
+
+            if (wMod.Type is ModTypeEnum.TC)
+            {
+                sb.Append($@" {AddDirectoryParam}""{wGame.CampaignsFolderPath}"" {AddFileParam}""{wMod.FileName}""");
+            }
+            else if (wMod.Type is ModTypeEnum.Map)
+            {
+                GetMapArgs(sb, wGame, wMod);
+            }
+            else
+            {
+                ThrowHelper.NotImplementedException($"Mod type {wMod.Type} is not supported");
+                return;
+            }
+        }
+
+
+        /// <summary>
+        /// Add music folders to the search list if music files don't exist in the game directory
+        /// </summary>
+        private static void AddWangMusicFolder(StringBuilder sb, IGame game)
+        {
+            if (File.Exists(Path.Combine(game.GameInstallFolder, "track02.ogg")))
+            {
+                return;
+            }
+
+            var folder = Path.Combine(game.GameInstallFolder, "MUSIC");
+            if (Directory.Exists(folder))
+            {
+                sb.Append(@$" -j""{folder}""");
+                return;
+            }
+
+            folder = Path.Combine(game.GameInstallFolder, "classic", "MUSIC");
+            if (Directory.Exists(folder))
+            {
+                sb.Append(@$" -j""{folder}""");
+                return;
+            }
+        }
+
 
         /// <inheritdoc/>
         protected override void GetAutoloadModsArgs(StringBuilder sb, IGame game, IAddon campaign)
@@ -192,20 +314,15 @@ namespace Ports.Ports.EDuke32
 
                 sb.Append($@" {AddFileParam}""{aMod.FileName}""");
 
-                foreach (var def in aMod.AdditionalDefs)
+                if (aMod.AdditionalDefs is not null)
                 {
-                    sb.Append($@" {AddDefParam}""{def}""");
+                    foreach (var def in aMod.AdditionalDefs)
+                    {
+                        sb.Append($@" {AddDefParam}""{def}""");
+                    }
                 }
             }
-
-            //sb.Append($@" {AddDirectoryParam}""{Path.Combine(game.SpecialFolderPath, Consts.CombinedModFolder)}"" {AddDefParam}""{Consts.CombinedDef}""");
         }
-
-        /// <inheritdoc/>
-        protected override void GetSkipIntroParameter(StringBuilder sb) => sb.Append(" -quick");
-
-        /// <inheritdoc/>
-        protected override void GetSkipStartupParameter(StringBuilder sb) => sb.Append(" -nosetup");
 
 
         /// <summary>

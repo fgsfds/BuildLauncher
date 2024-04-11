@@ -1,7 +1,10 @@
 ﻿using Common.Enums;
+using Common.Enums.Addons;
 using Common.Helpers;
 using Common.Interfaces;
+using Games.Games;
 using Mods.Mods;
+using Mods.Serializable.Addon;
 using Ports.Providers;
 using System.Text;
 
@@ -145,6 +148,78 @@ namespace Ports.Ports
             }
 
             return sb.ToString();
+        }
+
+
+        protected void GetBloodArgs(StringBuilder sb, BloodGame game, BloodCampaign bMod)
+        {
+            if (bMod.INI is not null)
+            {
+                sb.Append($@" -ini ""{bMod.INI}""");
+            }
+            else if (bMod.RequiredAddonEnum is BloodAddonEnum.BloodCP)
+            {
+                sb.Append($@" -ini ""{Consts.CrypticIni}""");
+            }
+
+
+            if (bMod.FileName is null)
+            {
+                return;
+            }
+
+
+            if (bMod.RFF is not null)
+            {
+                sb.Append($@" -rff {bMod.RFF}");
+            }
+
+
+            if (bMod.SND is not null)
+            {
+                sb.Append($@" -snd {bMod.SND}");
+            }
+
+
+            if (bMod.MainDef is not null)
+            {
+                sb.Append($@" {MainDefParam}""{bMod.MainDef}""");
+            }
+            else
+            {
+                //overriding default def so gamename.def files are ignored
+                sb.Append($@" {MainDefParam}a");
+            }
+
+
+            if (bMod.Type is ModTypeEnum.TC)
+            {
+                sb.Append($@" {AddFileParam}""{Path.Combine(game.CampaignsFolderPath, bMod.FileName)}""");
+            }
+            else if (bMod.Type is ModTypeEnum.Map)
+            {
+                GetMapArgs(sb, game, bMod);
+            }
+            else
+            {
+                ThrowHelper.NotImplementedException($"Mod type {bMod.Type} is not supported");
+                return;
+            }
+        }
+
+
+        /// <summary>
+        /// Get startup args for packed and loose maps
+        /// </summary>
+        protected void GetMapArgs(StringBuilder sb, IGame game, IAddon camp)
+        {
+            //TODO loose maps
+            //TODO e#m#
+            if (camp.StartMap is MapFileDto mapFile)
+            {
+                sb.Append($@" -file ""{Path.Combine(game.MapsFolderPath, camp.FileName!)}""");
+                sb.Append($@" -map ""{mapFile.File}""");
+            }
         }
 
 

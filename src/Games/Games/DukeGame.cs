@@ -33,9 +33,6 @@ namespace Games.Games
         public required string? DukeWTInstallPath { get; set; }
 
         /// <inheritdoc/>
-        public override string DefFileName => "duke3d.def";
-
-        /// <inheritdoc/>
         public override List<string> RequiredFiles => ["DUKE3D.GRP"];
 
         /// <summary>
