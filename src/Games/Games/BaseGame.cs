@@ -77,6 +77,8 @@ namespace Games.Games
             {
                 Directory.CreateDirectory(SpecialFolderPath);
             }
+
+            Cleanup();
         }
 
 
@@ -142,93 +144,15 @@ namespace Games.Games
             return mods;
         }
 
-
-        /// <inheritdoc/>
-        public void CreateCombinedMod(string? additionalDef = null)
-        { 
-            //TODO
-            /*
-            Cleanup();
-
-            if (!Directory.Exists(ModsFolderPath))
-            {
-                return;
-            }
-
-            var combinedFolderPath = Path.Combine(SpecialFolderPath, Consts.CombinedModFolder);
-
-            if (Directory.Exists(combinedFolderPath))
-            {
-                Directory.Delete(combinedFolderPath, true);
-            }
-
-            StringBuilder newDef = new();
-
-            var files = GetAutoloadMods(true);
-
-            if (files.Count == 0)
-            {
-                return;
-            }
-
-            foreach (var file in files)
-            {
-                file.Value.ThrowIfNotType<IAddon>(out var autoloadMod);
-                autoloadMod.PathToFile.ThrowIfNull();
-
-                if (!autoloadMod.IsEnabled)
-                {
-                    continue;
-                }
-
-                using var zip = ZipFile.OpenRead(autoloadMod.PathToFile);
-
-                var ini = zip.Entries.FirstOrDefault(x => x.Name.Equals(DefFileName));
-
-                if (ini is null)
-                {
-                    continue;
-                }
-
-                using var stream = ini.Open();
-                using var streamReader = new StreamReader(stream);
-
-                newDef.Append(streamReader.ReadToEnd());
-                newDef.Append(Environment.NewLine);
-            }
-
-            if (additionalDef is not null)
-            {
-                newDef.Append(additionalDef);
-            }
-
-            using var memStream = new MemoryStream(Encoding.UTF8.GetBytes(newDef.ToString()));
-
-            if (!Directory.Exists(combinedFolderPath))
-            {
-                Directory.CreateDirectory(combinedFolderPath);
-            }
-
-            File.WriteAllText(Path.Combine(combinedFolderPath, Consts.CombinedDef), newDef.ToString());
-            */
-        }
-
         /// <summary>
         /// Removing old versions of combined mod
         /// </summary>
         [Obsolete("Remove later")]
         private void Cleanup()
         {
-            var combFile1 = Path.Combine(SpecialFolderPath, "combined.zip");
-            var combFile2 = Path.Combine(SpecialFolderPath, "z_combined.zip");
-
-            if (File.Exists(combFile1))
+            if (Directory.Exists(SpecialFolderPath))
             {
-                File.Delete(combFile1);
-            }
-            if (File.Exists(combFile2))
-            {
-                File.Delete(combFile2);
+                Directory.Delete(SpecialFolderPath);
             }
         }
 

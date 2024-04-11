@@ -44,31 +44,20 @@ namespace Mods.Mods
         /// <inheritdoc/>
         public required Stream? Image { get; init; }
 
+        /// <inheritdoc/>
         public bool IsAvailable { get; set; }
 
-        //public required string? MainCon { get; init; }
-
+        /// <inheritdoc/>
         public required string? MainDef { get; init; }
 
-        //public required HashSet<string>? AdditionalCons { get; init; }
-
+        /// <inheritdoc/>
         public required HashSet<string>? AdditionalDefs { get; init; }
 
-        //public required string? RTS { get; init; }
-
-        //public required string? INI { get; init; }
-
-        //public required string? RFF { get; init; }
-
-        //public required string? SND { get; init; }
-
+        /// <inheritdoc/>
         public required IStartMap? StartMap { get; init; }
-
 
         /// <inheritdoc/>
         public string? FileName => PathToFile is null ? null : Path.GetFileName(PathToFile);
-
-        //public virtual bool IsEnabled { get; init; } = true;
 
         public override string ToString() => Title;
 

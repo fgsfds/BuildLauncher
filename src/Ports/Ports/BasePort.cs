@@ -1,12 +1,9 @@
 ﻿using Common.Enums;
-using Common.Enums.Addons;
 using Common.Helpers;
 using Common.Interfaces;
-using Games.Games;
 using Mods.Mods;
 using Mods.Serializable.Addon;
 using Ports.Providers;
-using System.Linq;
 using System.Text;
 
 namespace Ports.Ports
@@ -66,24 +63,6 @@ namespace Ports.Ports
         /// </summary>
         public string FullPathToExe => Path.Combine(PathToPortFolder, Exe);
 
-        //public abstract string CmdSetMainGrp { get; }
-
-        //public abstract string CmdAddGrp { get; }
-
-        //public abstract string CmdSetMainDef { get; }
-
-        //public abstract string CmdAddDef { get; }
-
-        //public abstract string CmdSetMainCon { get; }
-
-        //public abstract string CmdAddCon { get; }
-
-        //public abstract string CmdAddFolder { get; }
-
-
-
-
-
         /// <summary>
         /// Name of the config file
         /// </summary>
@@ -104,16 +83,13 @@ namespace Ports.Ports
         /// </summary>
         protected abstract string AddDefParam { get; }
 
-
         protected abstract string AddConParam { get; }
         /// <summary>
         /// Cmd parameter to load additional Def file
         /// </summary>
         protected abstract string MainDefParam { get; }
 
-
         protected abstract string MainConParam { get; }
-
 
         /// <summary>
         /// Name of the folder that contains the port files
@@ -194,6 +170,19 @@ namespace Ports.Ports
                 {
                     if (!ids.Contains(dep.Key))
                     {
+                        //skipping mods that don't have every dependency
+                        return false;
+                    }
+                }
+            }
+
+            if (autoloadMod.Incompatibles is not null)
+            {
+                foreach (var dep in autoloadMod.Incompatibles)
+                {
+                    if (ids.Contains(dep.Key))
+                    {
+                        //skipping incompatible mods
                         return false;
                     }
                 }
@@ -224,7 +213,6 @@ namespace Ports.Ports
         /// <param name="sb">String builder for parameters</param>
         /// <param name="game">Game<param>
         /// <param name="campaign">Campaign\map<param>
-        /// <param name="autoloadMods">Mods</param>
         protected abstract void GetAutoloadModsArgs(StringBuilder sb, IGame game, IAddon campaign);
 
         /// <summary>
