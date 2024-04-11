@@ -152,7 +152,7 @@ namespace Games.Games
         {
             if (Directory.Exists(SpecialFolderPath))
             {
-                Directory.Delete(SpecialFolderPath);
+                Directory.Delete(SpecialFolderPath, true);
             }
         }
 

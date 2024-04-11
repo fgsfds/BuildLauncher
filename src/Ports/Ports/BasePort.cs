@@ -4,6 +4,7 @@ using Common.Interfaces;
 using Mods.Mods;
 using Mods.Serializable.Addon;
 using Ports.Providers;
+using System.Linq;
 using System.Text;
 
 namespace Ports.Ports
@@ -162,13 +163,12 @@ namespace Ports.Ports
                 return false;
             }
 
-            IEnumerable<string> ids = [.. addons.Keys, campaign.Id];
-
             if (autoloadMod.Dependencies is not null)
             {
                 foreach (var dep in autoloadMod.Dependencies)
                 {
-                    if (!ids.Contains(dep.Key))
+                    if (!addons.ContainsKey(dep.Key) &&
+                        campaign.Id != dep.Key)
                     {
                         //skipping mods that don't have every dependency
                         return false;
@@ -180,7 +180,8 @@ namespace Ports.Ports
             {
                 foreach (var dep in autoloadMod.Incompatibles)
                 {
-                    if (ids.Contains(dep.Key))
+                    if (addons.ContainsKey(dep.Key) ||
+                        campaign.Id == dep.Key)
                     {
                         //skipping incompatible mods
                         return false;

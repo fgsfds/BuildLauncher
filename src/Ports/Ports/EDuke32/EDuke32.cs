@@ -105,9 +105,9 @@ namespace Ports.Ports.EDuke32
             {
                 GetWangArgs(sb, wGame, wMod);
             }
-            else if (game is SlaveGame sGame)
+            else if (game is SlaveGame sGame && mod is SlaveCampaign sMod)
             {
-                GetSlaveArgs(sb, sGame, mod);
+                GetSlaveArgs(sb, sGame, sMod);
             }
             else if (game is RedneckGame rGame && mod is RedneckCampaign rCamp)
             {
@@ -117,12 +117,6 @@ namespace Ports.Ports.EDuke32
             {
                 ThrowHelper.NotImplementedException($"Mod type {mod.Type} for game {game} is not supported");
             }
-        }
-
-
-        private void GetSlaveArgs(StringBuilder sb, SlaveGame sGame, IAddon mod)
-        {
-            throw new NotImplementedException();
         }
 
 
@@ -362,24 +356,62 @@ namespace Ports.Ports.EDuke32
         }
 
 
-        /// <summary>
-        /// Add music folders to the search list if music files don't exist in the game directory
-        /// </summary>
-        private static void AddWangMusicFolder(StringBuilder sb, IGame game)
+        private void GetSlaveArgs(StringBuilder sb, SlaveGame sGame, SlaveCampaign sMod)
         {
-            if (File.Exists(Path.Combine(game.GameInstallFolder, "track02.ogg")))
+            sb.Append(@$" {AddDirectoryParam}""{sGame.GameInstallFolder}""");
+
+
+            if (sMod.MainDef is not null)
+            {
+                sb.Append($@" {MainDefParam}""{sMod.MainDef}""");
+            }
+            else
+            {
+                //overriding default def so gamename.def files are ignored
+                sb.Append($@" {MainDefParam}""a""");
+            }
+
+
+            if (sMod.FileName is null)
             {
                 return;
             }
 
-            var folder = Path.Combine(game.GameInstallFolder, "MUSIC");
+
+            if (sMod.Type is ModTypeEnum.TC)
+            {
+                sb.Append($@" {AddFileParam}""{Path.Combine(sGame.CampaignsFolderPath, sMod.FileName)}""");
+            }
+            else if (sMod.Type is ModTypeEnum.Map)
+            {
+                GetMapArgs(sb, sGame, sMod);
+            }
+            else
+            {
+                ThrowHelper.NotImplementedException($"Mod type {sMod.Type} is not supported");
+                return;
+            }
+        }
+
+
+        /// <summary>
+        /// Add music folders to the search list if music files don't exist in the game directory
+        /// </summary>
+        private static void AddWangMusicFolder(StringBuilder sb, WangGame game)
+        {
+            if (File.Exists(Path.Combine(game.GameInstallFolder!, "track02.ogg")))
+            {
+                return;
+            }
+
+            var folder = Path.Combine(game.GameInstallFolder!, "MUSIC");
             if (Directory.Exists(folder))
             {
                 sb.Append(@$" -j""{folder}""");
                 return;
             }
 
-            folder = Path.Combine(game.GameInstallFolder, "classic", "MUSIC");
+            folder = Path.Combine(game.GameInstallFolder!, "classic", "MUSIC");
             if (Directory.Exists(folder))
             {
                 sb.Append(@$" -j""{folder}""");
