@@ -8,7 +8,7 @@
         Duke64,
         Wang,
         Fury,
-        Slave,
+        Exhumed,
         NAM,
         WWIIGI,
         Redneck,

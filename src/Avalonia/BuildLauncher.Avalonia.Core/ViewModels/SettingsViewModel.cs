@@ -210,7 +210,7 @@ namespace BuildLauncher.ViewModels
 
                 OnPropertyChanged(nameof(PathToFury));
             }
-            else if (param.Equals(GameEnum.Slave.ToString()))
+            else if (param.Equals(GameEnum.Exhumed.ToString()))
             {
                 PathToSlave = files[0].Path.LocalPath;
 
@@ -302,9 +302,9 @@ namespace BuildLauncher.ViewModels
                     OnPropertyChanged(nameof(PathToFury));
                 }
             }
-            else if (param.Equals(GameEnum.Slave.ToString()))
+            else if (param.Equals(GameEnum.Exhumed.ToString()))
             {
-                var path = _gamesAutoDetector.GetPath(GameEnum.Slave);
+                var path = _gamesAutoDetector.GetPath(GameEnum.Exhumed);
 
                 if (path is not null)
                 {

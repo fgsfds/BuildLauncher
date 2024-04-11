@@ -9,7 +9,7 @@ namespace Games.Games
     public sealed class SlaveGame(InstalledModsProviderFactory modsProvider, DownloadableModsProviderFactory downloadableModsProviderFactory) : BaseGame(modsProvider, downloadableModsProviderFactory)
     {
         /// <inheritdoc/>
-        public override GameEnum GameEnum => GameEnum.Slave;
+        public override GameEnum GameEnum => GameEnum.Exhumed;
 
         /// <inheritdoc/>
         public override string FullName => "Powerslave";
@@ -28,9 +28,9 @@ namespace Games.Games
 
             if (IsBaseGameInstalled)
             {
-                campaigns.Add(GameEnum.Slave.ToString(), new SlaveCampaign()
+                campaigns.Add(GameEnum.Exhumed.ToString(), new SlaveCampaign()
                 {
-                    Id = GameEnum.Slave.ToString(),
+                    Id = GameEnum.Exhumed.ToString(),
                     Type = ModTypeEnum.Official,
                     Title = "Powerslave",
                     Image = ImageHelper.FileNameToStream("Slave.slave.jpg"),

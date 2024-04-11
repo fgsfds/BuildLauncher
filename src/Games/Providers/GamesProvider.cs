@@ -93,7 +93,7 @@ namespace Games.Providers
                 GameEnum.Duke3D => _duke3d,
                 GameEnum.Wang => _wang,
                 GameEnum.Fury => _fury,
-                GameEnum.Slave => _slave,
+                GameEnum.Exhumed => _slave,
                 GameEnum.Redneck => _redneck,
                 GameEnum.RedneckRA => _redneck,
                 GameEnum.NAM => ThrowHelper.NotImplementedException<IGame>(),

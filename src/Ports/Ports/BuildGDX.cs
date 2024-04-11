@@ -28,7 +28,7 @@ namespace Ports.Ports
             GameEnum.Blood,
             GameEnum.Duke3D,
             GameEnum.Wang,
-            GameEnum.Slave,
+            GameEnum.Exhumed,
             GameEnum.Redneck,
             GameEnum.RedneckRA,
             GameEnum.NAM,

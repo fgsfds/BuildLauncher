@@ -24,7 +24,7 @@ public sealed partial class MainWindow : Window
         WangPage.InitializeControl(GameEnum.Wang, portsProvider, vmFactory);
         FuryPage.InitializeControl(GameEnum.Fury, portsProvider, vmFactory);
         RedneckPage.InitializeControl(GameEnum.Redneck, portsProvider, vmFactory);
-        SlavePage.InitializeControl(GameEnum.Slave, portsProvider, vmFactory);
+        SlavePage.InitializeControl(GameEnum.Exhumed, portsProvider, vmFactory);
 
 
         //Set active tab depending on what games are installed

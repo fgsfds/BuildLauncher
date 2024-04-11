@@ -19,7 +19,7 @@ namespace Ports.Ports.EDuke32
         public override string Name => "PCExhumed";
 
         /// <inheritdoc/>
-        public override List<GameEnum> SupportedGames => [GameEnum.Slave];
+        public override List<GameEnum> SupportedGames => [GameEnum.Exhumed];
 
         /// <inheritdoc/>
         public override Uri RepoUrl => new("https://api.github.com/repos/nukeykt/NBlood/releases");

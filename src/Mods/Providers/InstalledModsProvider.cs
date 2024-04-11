@@ -6,7 +6,6 @@ using Common.Interfaces;
 using Mods.Mods;
 using Mods.Serializable;
 using SharpCompress.Archives;
-using System.Runtime.Intrinsics.Arm;
 using System.Text.Json;
 
 namespace Mods.Providers
@@ -507,6 +506,28 @@ namespace Mods.Providers
                         AdditionalDefs = addDefs,
                         RTS = rts,
                         RequiredAddonEnum = redneckAddon
+                    };
+                }
+                else if (_game.GameEnum is GameEnum.Exhumed)
+                {
+                    addon = new SlaveCampaign()
+                    {
+                        Id = id,
+                        Type = type,
+                        Title = title!,
+                        Image = image,
+                        SupportedPorts = supportedPorts,
+                        Description = description,
+                        Version = version,
+                        Author = author,
+                        PathToFile = pathToFile,
+                        SupportedGames = supportedGames,
+                        SupportedGamesCrcs = supportedGamesCrcs,
+                        Dependencies = dependencies,
+                        Incompatibles = incompatibles,
+                        StartMap = startMap,
+                        MainDef = mainDef,
+                        AdditionalDefs = addDefs
                     };
                 }
                 else
