@@ -10,6 +10,8 @@ namespace BuildLauncher.Pages
     {
         public GamePage()
         {
+            //preventing early setting of the wrong view model
+            DataContext = null;
             InitializeComponent();
         }
 
