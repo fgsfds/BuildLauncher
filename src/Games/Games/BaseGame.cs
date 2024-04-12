@@ -1,11 +1,8 @@
 ﻿using Common.Enums;
 using Common.Helpers;
 using Common.Interfaces;
-using Mods.Helpers;
 using Mods.Mods;
 using Mods.Providers;
-using System.IO.Compression;
-using System.Text;
 
 namespace Games.Games
 {
@@ -32,6 +29,12 @@ namespace Games.Games
         /// <inheritdoc/>
         public string SpecialFolderPath => Path.Combine(CommonProperties.DataFolderPath, ShortName, "Special");
 
+        /// <inheritdoc/>
+        public IInstalledModsProvider InstalledModsProvider { get; init; }
+
+        /// <inheritdoc/>
+        public IDownloadableModsProvider DownloadableModsProvider { get; init; }
+
 
         /// <inheritdoc/>
         public abstract GameEnum GameEnum { get; }
@@ -44,10 +47,6 @@ namespace Games.Games
 
         /// <inheritdoc/>
         public abstract List<string> RequiredFiles { get; }
-
-        public IInstalledModsProvider InstalledModsProvider { get; init; }
-
-        public IDownloadableModsProvider DownloadableModsProvider { get; init; }
 
 
         public BaseGame(
@@ -85,9 +84,9 @@ namespace Games.Games
         /// <inheritdoc/>
         public virtual Dictionary<string, IAddon> GetCampaigns()
         {
-            Dictionary<string, IAddon> originalCampaigns = GetOriginalCampaigns();
+            var originalCampaigns = GetOriginalCampaigns();
 
-            var customCampaigns = InstalledModsProvider.GetInstalledMods(ModTypeEnum.TC);
+            var customCampaigns = InstalledModsProvider.GetInstalledMods(AddonTypeEnum.TC);
 
             foreach (var customCamp in customCampaigns)
             {
@@ -109,7 +108,7 @@ namespace Games.Games
         /// <inheritdoc/>
         public virtual Dictionary<string, IAddon> GetSingleMaps()
         {
-            var maps = InstalledModsProvider.GetInstalledMods(ModTypeEnum.Map);
+            var maps = InstalledModsProvider.GetInstalledMods(AddonTypeEnum.Map);
 
             return maps;
         }
@@ -118,7 +117,7 @@ namespace Games.Games
         /// <inheritdoc/>
         public virtual Dictionary<string, IAddon> GetAutoloadMods(bool enabledOnly)
         {
-            var mods = InstalledModsProvider.GetInstalledMods(ModTypeEnum.Mod);
+            var mods = InstalledModsProvider.GetInstalledMods(AddonTypeEnum.Mod);
 
             if (enabledOnly)
             {
@@ -190,7 +189,7 @@ namespace Games.Games
 
 
         /// <summary>
-        /// Does the file exists in the game install folder
+        /// Does the file exist in the game install folder
         /// </summary>
         /// <param name="file">File</param>
         protected bool IsInstalled(string file)

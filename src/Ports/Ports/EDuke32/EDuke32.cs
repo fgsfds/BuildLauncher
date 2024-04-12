@@ -97,87 +97,12 @@ namespace Ports.Ports.EDuke32
             {
                 GetDukeArgs(sb, dGame, dCamp);
             }
-            else if (game is BloodGame bGame && mod is BloodCampaign bMod)
-            {
-                GetBloodArgs(sb, bGame, bMod);
-            }
-            else if (game is WangGame wGame && mod is WangCampaign wMod)
-            {
-                GetWangArgs(sb, wGame, wMod);
-            }
-            else if (game is SlaveGame sGame && mod is SlaveCampaign sMod)
-            {
-                GetSlaveArgs(sb, sGame, sMod);
-            }
-            else if (game is RedneckGame rGame && mod is RedneckCampaign rCamp)
-            {
-                GetRedneckArgs(sb, rGame, rCamp);
-            }
             else
             {
                 ThrowHelper.NotImplementedException($"Mod type {mod.Type} for game {game} is not supported");
             }
         }
 
-
-        protected void GetBloodArgs(StringBuilder sb, BloodGame game, BloodCampaign bMod)
-        {
-            sb.Append(@$" {AddDirectoryParam}""{game.GameInstallFolder}""");
-
-
-            if (bMod.INI is not null)
-            {
-                sb.Append($@" -ini ""{bMod.INI}""");
-            }
-            else if (bMod.RequiredAddonEnum is BloodAddonEnum.BloodCP)
-            {
-                sb.Append($@" -ini ""{Consts.CrypticIni}""");
-            }
-
-
-            if (bMod.MainDef is not null)
-            {
-                sb.Append($@" {MainDefParam}""{bMod.MainDef}""");
-            }
-            else
-            {
-                //overriding default def so gamename.def files are ignored
-                sb.Append($@" {MainDefParam}""a""");
-            }
-
-
-            if (bMod.FileName is null)
-            {
-                return;
-            }
-
-
-            if (bMod.RFF is not null)
-            {
-                sb.Append($@" -rff {bMod.RFF}");
-            }
-
-
-            if (bMod.SND is not null)
-            {
-                sb.Append($@" -snd {bMod.SND}");
-            }
-
-
-            if (bMod.Type is ModTypeEnum.TC)
-            {
-                sb.Append($@" {AddFileParam}""{Path.Combine(game.CampaignsFolderPath, bMod.FileName)}""");
-            }
-            else if (bMod.Type is ModTypeEnum.Map)
-            {
-                GetMapArgs(sb, game, bMod);
-            }
-            else
-            {
-                ThrowHelper.NotImplementedException($"Mod type {bMod.Type} is not supported");
-                return;
-            }
-        }
 
         /// <summary>
         /// Get startup agrs for Duke
@@ -220,7 +145,7 @@ namespace Ports.Ports.EDuke32
             }
 
 
-            if (camp.Type is ModTypeEnum.TC)
+            if (camp.Type is AddonTypeEnum.TC)
             {
                 sb.Append($@" {AddFileParam}""{Path.Combine(game.CampaignsFolderPath, camp.FileName)}""");
 
@@ -237,184 +162,13 @@ namespace Ports.Ports.EDuke32
                     }
                 }
             }
-            else if (camp.Type is ModTypeEnum.Map)
+            else if (camp.Type is AddonTypeEnum.Map)
             {
                 GetMapArgs(sb, game, camp);
             }
             else
             {
                 ThrowHelper.NotImplementedException($"Mod type {camp.Type} is not supported");
-                return;
-            }
-        }
-
-        /// <summary>
-        /// Get startup agrs for Redneck Rampage
-        /// </summary>
-        /// <param name="sb">StringBuilder</param>
-        /// <param name="game">RedneckGame</param>
-        /// <param name="camp">RedneckCampaign</param>
-        private void GetRedneckArgs(StringBuilder sb, RedneckGame game, RedneckCampaign camp)
-        {
-            if (camp.Id == GameEnum.RedneckRA.ToString())
-            {
-                sb.Append($@" -j ""{game.AgainInstallPath}""");
-            }
-            else if (camp.Id == RedneckAddonEnum.RedneckR66.ToString())
-            {
-                sb.Append($@" -j ""{game.GameInstallFolder}"" -x GAME66.CON");
-            }
-            else
-            {
-                sb.Append($@" -j ""{game.GameInstallFolder}""");
-            }
-
-
-            if (camp.MainDef is not null)
-            {
-                sb.Append($@" {MainDefParam}""{camp.MainDef}""");
-            }
-            else
-            {
-                //overriding default def so gamename.def files are ignored
-                sb.Append($@" {MainDefParam}""a""");
-            }
-
-
-            if (camp.FileName is null)
-            {
-                return;
-            }
-
-
-            if (camp.Type is ModTypeEnum.TC)
-            {
-                sb.Append($@" {AddFileParam}""{Path.Combine(game.CampaignsFolderPath, camp.FileName)}""");
-
-                if (camp.MainCon is not null)
-                {
-                    sb.Append($@" {MainConParam}""{camp.MainCon}""");
-                }
-
-                if (camp.AdditionalCons?.Count > 0)
-                {
-                    foreach (var con in camp.AdditionalCons)
-                    {
-                        sb.Append($@" {AddConParam}""{con}""");
-                    }
-                }
-            }
-            else if (camp.Type is ModTypeEnum.Map)
-            {
-                GetMapArgs(sb, game, camp);
-            }
-            else
-            {
-                ThrowHelper.NotImplementedException($"Mod type {camp.Type} is not supported");
-                return;
-            }
-        }
-
-
-        private void GetWangArgs(StringBuilder sb, WangGame wGame, WangCampaign wMod)
-        {
-            sb.Append($@" {AddDirectoryParam}""{wGame.GameInstallFolder}"" -addon{(byte)wMod.RequiredAddonEnum}");
-
-            AddWangMusicFolder(sb, wGame);
-
-
-            if (wMod.MainDef is not null)
-            {
-                sb.Append($@" {MainDefParam}""{wMod.MainDef}""");
-            }
-            else
-            {
-                //overriding default def so gamename.def files are ignored
-                sb.Append($@" {MainDefParam}""a""");
-            }
-
-
-            if (wMod.FileName is null)
-            {
-                return;
-            }
-
-
-            if (wMod.Type is ModTypeEnum.TC)
-            {
-                sb.Append($@" {AddDirectoryParam}""{wGame.CampaignsFolderPath}"" {AddFileParam}""{wMod.FileName}""");
-            }
-            else if (wMod.Type is ModTypeEnum.Map)
-            {
-                GetMapArgs(sb, wGame, wMod);
-            }
-            else
-            {
-                ThrowHelper.NotImplementedException($"Mod type {wMod.Type} is not supported");
-                return;
-            }
-        }
-
-
-        private void GetSlaveArgs(StringBuilder sb, SlaveGame sGame, SlaveCampaign sMod)
-        {
-            sb.Append(@$" {AddDirectoryParam}""{sGame.GameInstallFolder}""");
-
-
-            if (sMod.MainDef is not null)
-            {
-                sb.Append($@" {MainDefParam}""{sMod.MainDef}""");
-            }
-            else
-            {
-                //overriding default def so gamename.def files are ignored
-                sb.Append($@" {MainDefParam}""a""");
-            }
-
-
-            if (sMod.FileName is null)
-            {
-                return;
-            }
-
-
-            if (sMod.Type is ModTypeEnum.TC)
-            {
-                sb.Append($@" {AddFileParam}""{Path.Combine(sGame.CampaignsFolderPath, sMod.FileName)}""");
-            }
-            else if (sMod.Type is ModTypeEnum.Map)
-            {
-                GetMapArgs(sb, sGame, sMod);
-            }
-            else
-            {
-                ThrowHelper.NotImplementedException($"Mod type {sMod.Type} is not supported");
-                return;
-            }
-        }
-
-
-        /// <summary>
-        /// Add music folders to the search list if music files don't exist in the game directory
-        /// </summary>
-        private static void AddWangMusicFolder(StringBuilder sb, WangGame game)
-        {
-            if (File.Exists(Path.Combine(game.GameInstallFolder!, "track02.ogg")))
-            {
-                return;
-            }
-
-            var folder = Path.Combine(game.GameInstallFolder!, "MUSIC");
-            if (Directory.Exists(folder))
-            {
-                sb.Append(@$" -j""{folder}""");
-                return;
-            }
-
-            folder = Path.Combine(game.GameInstallFolder!, "classic", "MUSIC");
-            if (Directory.Exists(folder))
-            {
-                sb.Append(@$" -j""{folder}""");
                 return;
             }
         }

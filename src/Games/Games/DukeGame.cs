@@ -78,7 +78,7 @@ namespace Games.Games
                 campaigns.Add(GameEnum.Duke3D.ToString(), new DukeCampaign()
                 {
                     Id = GameEnum.Duke3D.ToString(),
-                    Type = ModTypeEnum.Official,
+                    Type = AddonTypeEnum.Official,
                     Title = "Duke Nukem 3D",
                     Image = ImageHelper.FileNameToStream("Duke3D.duke3d.jpg"),
                     Author = "3D Realms",
@@ -111,7 +111,7 @@ namespace Games.Games
                 campaigns.Add(GameEnum.DukeWT.ToString(), new DukeCampaign()
                 {
                     Id = GameEnum.Duke3D.ToString(),
-                    Type = ModTypeEnum.Official,
+                    Type = AddonTypeEnum.Official,
                     Title = "Duke Nukem 3D World Tour",
                     Image = ImageHelper.FileNameToStream("Duke3D.dukewt.jpg"),
                     SupportedPorts = [PortEnum.Raze, PortEnum.EDuke32, PortEnum.BuildGDX],
@@ -146,7 +146,7 @@ namespace Games.Games
                     campaigns.Add(DukeAddonEnum.DukeVaca.ToString(), new DukeCampaign()
                     {
                         Id = DukeAddonEnum.DukeVaca.ToString(),
-                        Type = ModTypeEnum.Official,
+                        Type = AddonTypeEnum.Official,
                         Title = "Caribbean",
                         Image = ImageHelper.FileNameToStream("Duke3D.carib.jpg"),
                         Author = "Sunstorm Interactive",
@@ -180,7 +180,7 @@ namespace Games.Games
                     campaigns.Add(DukeAddonEnum.DukeNW.ToString(), new DukeCampaign()
                     {
                         Id = DukeAddonEnum.DukeNW.ToString(),
-                        Type = ModTypeEnum.Official,
+                        Type = AddonTypeEnum.Official,
                         Title = "Nuclear Winter",
                         Image = ImageHelper.FileNameToStream("Duke3D.nwinter.jpg"),
                         Author = "Simply Silly Software",
@@ -212,7 +212,7 @@ namespace Games.Games
                     campaigns.Add(DukeAddonEnum.DukeDC.ToString(), new DukeCampaign()
                     {
                         Id = DukeAddonEnum.DukeDC.ToString(),
-                        Type = ModTypeEnum.Official,
+                        Type = AddonTypeEnum.Official,
                         Title = "Duke it Out in DC",
                         Image = ImageHelper.FileNameToStream("Duke3D.dukedc.jpg"),
                         Author = "WizardWorks",
@@ -248,7 +248,7 @@ namespace Games.Games
                 campaigns.Add(GameEnum.Duke64.ToString(), new DukeCampaign()
                 {
                     Id = GameEnum.Duke64.ToString(),
-                    Type = ModTypeEnum.Official,
+                    Type = AddonTypeEnum.Official,
                     Title = "Duke Nukem 64",
                     Image = ImageHelper.FileNameToStream("Duke3D.duke64.jpg"),
                     SupportedPorts = [PortEnum.RedNukem],

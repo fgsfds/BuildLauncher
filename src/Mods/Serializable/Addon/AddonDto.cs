@@ -12,7 +12,7 @@ namespace Mods.Serializable
 
         [JsonRequired]
         [JsonPropertyName("type")]
-        public required ModTypeEnum Type { get; set; }
+        public required AddonTypeEnum Type { get; set; }
 
         [JsonPropertyName("game")]
         [JsonConverter(typeof(SingleOrArrayConverter<GameEnum>))]
@@ -79,7 +79,7 @@ namespace Mods.Serializable
         public IStartMap? StartMap { get; set; }
     }
 
-    [JsonSourceGenerationOptions(Converters = [typeof(JsonStringEnumConverter<PortEnum>), typeof(JsonStringEnumConverter<ModTypeEnum>)])]
+    [JsonSourceGenerationOptions(Converters = [typeof(JsonStringEnumConverter<PortEnum>), typeof(JsonStringEnumConverter<AddonTypeEnum>)])]
     [JsonSerializable(typeof(AddonDto))]
     public sealed partial class AddonManifestContext : JsonSerializerContext;
 }

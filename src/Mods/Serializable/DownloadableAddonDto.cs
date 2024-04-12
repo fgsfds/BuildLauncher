@@ -20,7 +20,7 @@ namespace Mods.Serializable
 
         public GameEnum Game { get; set; }
 
-        public ModTypeEnum ModType { get; set; }
+        public AddonTypeEnum ModType { get; set; }
 
         public string Description { get; set; }
 
@@ -84,7 +84,7 @@ namespace Mods.Serializable
         Converters = [
             typeof(JsonStringEnumConverter<PortEnum>),
             typeof(JsonStringEnumConverter<GameEnum>),
-            typeof(JsonStringEnumConverter<ModTypeEnum>)
+            typeof(JsonStringEnumConverter<AddonTypeEnum>)
             ]
     )]
     [JsonSerializable(typeof(List<DownloadableAddonDto>))]

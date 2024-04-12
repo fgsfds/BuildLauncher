@@ -1,9 +1,10 @@
 ﻿namespace Mods.Mods
 {
     /// <summary>
-    /// Duke Nukem 3D campaign
+    /// Powerslave campaign
     /// </summary>
     public sealed class SlaveCampaign : Addon
     {
+        //powersalve doesn't have any unique files
     }
 }

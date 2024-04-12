@@ -17,8 +17,14 @@ namespace Mods.Mods
         /// </summary>
         public required string? INI { get; init; }
 
+        /// <summary>
+        /// Main .rff file
+        /// </summary>
         public required string? RFF { get; init; }
 
+        /// <summary>
+        /// Main .snd file
+        /// </summary>
         public required string? SND { get; init; }
     }
 }

@@ -7,7 +7,7 @@ namespace Ports.Ports.EDuke32
     /// <summary>
     /// NotBlood port
     /// </summary>
-    public sealed class NotBlood : EDuke32
+    public sealed class NotBlood : NBlood
     {
         /// <inheritdoc/>
         public override PortEnum PortEnum => PortEnum.NotBlood;

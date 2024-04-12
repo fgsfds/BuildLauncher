@@ -44,7 +44,7 @@ namespace Games.Games
                 campaigns.Add(GameEnum.Wang.ToString(), new WangCampaign()
                 {
                     Id = GameEnum.Wang.ToString(),
-                    Type = ModTypeEnum.Official,
+                    Type = AddonTypeEnum.Official,
                     Title = "Shadow Warrior",
                     Image = ImageHelper.FileNameToStream("Wang.wang.jpg"),
                     Version = null,
@@ -73,7 +73,7 @@ namespace Games.Games
                     campaigns.Add(WangAddonEnum.WangWD.ToString(), new WangCampaign()
                     {
                         Id = WangAddonEnum.WangWD.ToString(),
-                        Type = ModTypeEnum.Official,
+                        Type = AddonTypeEnum.Official,
                         Title = "Wanton Destruction",
                         Image = ImageHelper.FileNameToStream("Wang.wanton.jpg"),
                         Author = "Sunstorm Interactive",
@@ -105,7 +105,7 @@ namespace Games.Games
                     campaigns.Add(WangAddonEnum.WangTD.ToString(), new WangCampaign()
                     {
                         Id = WangAddonEnum.WangTD.ToString(),
-                        Type = ModTypeEnum.Official,
+                        Type = AddonTypeEnum.Official,
                         Title = "Twin Dragon",
                         Image = ImageHelper.FileNameToStream("Wang.twin.jpg"),
                         Author = "Wylde Productions, Level Infinity",

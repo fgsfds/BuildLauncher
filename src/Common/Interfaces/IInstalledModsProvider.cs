@@ -12,7 +12,7 @@ namespace Common.Interfaces
         /// </summary>
         /// <param name="modTypeEnum">Mod type</param>
         /// <param name="pathToFile">Path to mod file</param>
-        void AddMod(ModTypeEnum modTypeEnum, string pathToFile);
+        void AddMod(AddonTypeEnum modTypeEnum, string pathToFile);
 
         /// <summary>
         /// Delete mod from cache and disk
@@ -24,7 +24,7 @@ namespace Common.Interfaces
         /// Get installed mods
         /// </summary>
         /// <param name="modTypeEnum">Mod type</param>
-        Dictionary<string, IAddon> GetInstalledMods(ModTypeEnum modTypeEnum);
+        Dictionary<string, IAddon> GetInstalledMods(AddonTypeEnum modTypeEnum);
 
         /// <summary>
         /// Create cache of installed mods if it doesn't exist

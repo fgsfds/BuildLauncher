@@ -4,7 +4,6 @@ using Common.Interfaces;
 using Mods.Mods;
 using Mods.Serializable.Addon;
 using Ports.Providers;
-using System.Linq;
 using System.Text;
 
 namespace Ports.Ports
@@ -84,12 +83,19 @@ namespace Ports.Ports
         /// </summary>
         protected abstract string AddDefParam { get; }
 
-        protected abstract string AddConParam { get; }
         /// <summary>
-        /// Cmd parameter to load additional Def file
+        /// Cmd parameter to load additional Con file
+        /// </summary>
+        protected abstract string AddConParam { get; }
+
+        /// <summary>
+        /// Cmd parameter to load main Def file
         /// </summary>
         protected abstract string MainDefParam { get; }
 
+        /// <summary>
+        /// Cmd parameter to load main Con file
+        /// </summary>
         protected abstract string MainConParam { get; }
 
         /// <summary>
@@ -140,6 +146,10 @@ namespace Ports.Ports
             {
                 sb.Append($@" -file ""{Path.Combine(game.MapsFolderPath, camp.FileName!)}""");
                 sb.Append($@" -map ""{mapFile.File}""");
+            }
+            else
+            {
+                ThrowHelper.NotImplementedException();
             }
         }
 

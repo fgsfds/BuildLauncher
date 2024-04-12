@@ -10,7 +10,7 @@ namespace Mods.Mods
     public class Addon : IAddon
     {
         /// <inheritdoc/>
-        public required ModTypeEnum Type { get; init; }
+        public required AddonTypeEnum Type { get; init; }
 
         /// <inheritdoc/>
         public required string Id { get; init; }
@@ -21,8 +21,10 @@ namespace Mods.Mods
         /// <inheritdoc/>
         public required string? Version { get; init; }
 
+        /// <inheritdoc/>
         public required HashSet<GameEnum>? SupportedGames { get; init; }
 
+        /// <inheritdoc/>
         public required HashSet<int>? SupportedGamesCrcs { get; init; }
 
         /// <inheritdoc/>
@@ -34,8 +36,10 @@ namespace Mods.Mods
         /// <inheritdoc/>
         public required HashSet<PortEnum>? SupportedPorts { get; init; }
 
+        /// <inheritdoc/>
         public required Dictionary<string, string?>? Dependencies { get; init; }
 
+        /// <inheritdoc/>
         public required Dictionary<string, string?>? Incompatibles { get; init; }
 
         /// <inheritdoc/>

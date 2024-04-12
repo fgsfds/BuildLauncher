@@ -47,16 +47,6 @@
         /// </summary>
         public const string CrypticIni = "CRYPTIC.INI";
 
-        /// <summary>
-        /// Combined mod folder
-        /// </summary>
-        public const string CombinedModFolder = "combined";
-
-        /// <summary>
-        /// Combined def file name
-        /// </summary>
-        public const string CombinedDef = "z_combined.def";
-
         public const string UpdateFile = ".update";
 
         public const string UpdateFolder = "update";

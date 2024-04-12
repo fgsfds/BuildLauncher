@@ -1,8 +1,11 @@
 ﻿using Common.Enums;
 using Common.Enums.Addons;
+using Common.Helpers;
 using Common.Interfaces;
 using Games.Games;
+using Mods.Mods;
 using Ports.Providers;
+using System.Text;
 
 namespace Ports.Ports.EDuke32
 {
@@ -46,6 +49,95 @@ namespace Ports.Ports.EDuke32
             FixGrpInConfig();
 
             FixRoute66Files(game, campaign);
+        }
+
+
+        /// <inheritdoc/>
+        protected override void GetStartCampaignArgs(StringBuilder sb, IGame game, IAddon mod)
+        {
+            //don't search for steam/gog installs
+            sb.Append($@" -usecwd");
+
+            if (game is DukeGame dGame && mod is DukeCampaign dCamp)
+            {
+                GetDukeArgs(sb, dGame, dCamp);
+            }
+            else if (game is RedneckGame rGame && mod is RedneckCampaign rCamp)
+            {
+                GetRedneckArgs(sb, rGame, rCamp);
+            }
+            else
+            {
+                ThrowHelper.NotImplementedException($"Mod type {mod.Type} for game {game} is not supported");
+            }
+        }
+
+
+        /// <summary>
+        /// Get startup agrs for Redneck Rampage
+        /// </summary>
+        /// <param name="sb">StringBuilder</param>
+        /// <param name="game">RedneckGame</param>
+        /// <param name="camp">RedneckCampaign</param>
+        private void GetRedneckArgs(StringBuilder sb, RedneckGame game, RedneckCampaign camp)
+        {
+            if (camp.Id == GameEnum.RedneckRA.ToString())
+            {
+                sb.Append($@" -j ""{game.AgainInstallPath}""");
+            }
+            else if (camp.Id == RedneckAddonEnum.RedneckR66.ToString())
+            {
+                sb.Append($@" -j ""{game.GameInstallFolder}"" -x GAME66.CON");
+            }
+            else
+            {
+                sb.Append($@" -j ""{game.GameInstallFolder}""");
+            }
+
+
+            if (camp.MainDef is not null)
+            {
+                sb.Append($@" {MainDefParam}""{camp.MainDef}""");
+            }
+            else
+            {
+                //overriding default def so gamename.def files are ignored
+                sb.Append($@" {MainDefParam}""a""");
+            }
+
+
+            if (camp.FileName is null)
+            {
+                return;
+            }
+
+
+            if (camp.Type is AddonTypeEnum.TC)
+            {
+                sb.Append($@" {AddFileParam}""{Path.Combine(game.CampaignsFolderPath, camp.FileName)}""");
+
+                if (camp.MainCon is not null)
+                {
+                    sb.Append($@" {MainConParam}""{camp.MainCon}""");
+                }
+
+                if (camp.AdditionalCons?.Count > 0)
+                {
+                    foreach (var con in camp.AdditionalCons)
+                    {
+                        sb.Append($@" {AddConParam}""{con}""");
+                    }
+                }
+            }
+            else if (camp.Type is AddonTypeEnum.Map)
+            {
+                GetMapArgs(sb, game, camp);
+            }
+            else
+            {
+                ThrowHelper.NotImplementedException($"Mod type {camp.Type} is not supported");
+                return;
+            }
         }
 
 

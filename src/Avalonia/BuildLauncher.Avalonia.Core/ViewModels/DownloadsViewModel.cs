@@ -28,17 +28,17 @@ namespace BuildLauncher.ViewModels
         /// <summary>
         /// List of downloadanle campaigns and maps
         /// </summary>
-        public ImmutableList<IDownloadableMod> DownloadableCampaignsList => Game.DownloadableModsProvider.GetDownloadableMods(ModTypeEnum.TC);
+        public ImmutableList<IDownloadableMod> DownloadableCampaignsList => Game.DownloadableModsProvider.GetDownloadableMods(AddonTypeEnum.TC);
 
         /// <summary>
         /// List of downloadanle campaigns and maps
         /// </summary>
-        public ImmutableList<IDownloadableMod> DownloadableMapsList => Game.DownloadableModsProvider.GetDownloadableMods(ModTypeEnum.Map);
+        public ImmutableList<IDownloadableMod> DownloadableMapsList => Game.DownloadableModsProvider.GetDownloadableMods(AddonTypeEnum.Map);
 
         /// <summary>
         /// List of downloadanle autoload mods
         /// </summary>
-        public ImmutableList<IDownloadableMod> DownloadableModsList => Game.DownloadableModsProvider.GetDownloadableMods(ModTypeEnum.Mod);
+        public ImmutableList<IDownloadableMod> DownloadableModsList => Game.DownloadableModsProvider.GetDownloadableMods(AddonTypeEnum.Mod);
 
         /// <summary>
         /// Download/install progress
@@ -134,22 +134,22 @@ namespace BuildLauncher.ViewModels
             OnPropertyChanged(nameof(ProgressBarValue));
         }
 
-        private void OnModChanged(IGame game, ModTypeEnum modType)
+        private void OnModChanged(IGame game, AddonTypeEnum modType)
         {
             if (game.GameEnum != Game.GameEnum)
             {
                 return;
             }
 
-            if (modType is ModTypeEnum.TC)
+            if (modType is AddonTypeEnum.TC)
             {
                 OnPropertyChanged(nameof(DownloadableCampaignsList));
             }
-            else if (modType is ModTypeEnum.Map)
+            else if (modType is AddonTypeEnum.Map)
             {
                 OnPropertyChanged(nameof(DownloadableMapsList));
             }
-            else if (modType is ModTypeEnum.Mod)
+            else if (modType is AddonTypeEnum.Mod)
             {
                 OnPropertyChanged(nameof(DownloadableModsList));
             }

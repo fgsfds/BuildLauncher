@@ -47,7 +47,7 @@ namespace Games.Games
                 campaigns.Add(GameEnum.Redneck.ToString(), new RedneckCampaign()
                 {
                     Id = GameEnum.Redneck.ToString(),
-                    Type = ModTypeEnum.Official,
+                    Type = AddonTypeEnum.Official,
                     Title = "Redneck Rampage",
                     Image = ImageHelper.FileNameToStream("Redneck.redneck.jpg"),
                     Author = "Xatrix Entertainment",
@@ -81,7 +81,7 @@ namespace Games.Games
                     campaigns.Add(RedneckAddonEnum.RedneckR66.ToString(), new RedneckCampaign()
                     {
                         Id = RedneckAddonEnum.RedneckR66.ToString(),
-                        Type = ModTypeEnum.Official,
+                        Type = AddonTypeEnum.Official,
                         Title = "Route 66",
                         Image = ImageHelper.FileNameToStream("Redneck.route66.jpg"),
                         Author = "Sunstorm Interactive",
@@ -112,7 +112,7 @@ namespace Games.Games
                 campaigns.Add(GameEnum.RedneckRA.ToString(), new RedneckCampaign()
                 {
                     Id = GameEnum.RedneckRA.ToString(),
-                    Type = ModTypeEnum.Official,
+                    Type = AddonTypeEnum.Official,
                     Title = "Rides Again",
                     Image = ImageHelper.FileNameToStream("Redneck.again.jpg"),
                     Author = "Xatrix Entertainment",

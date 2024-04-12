@@ -43,7 +43,7 @@ namespace Games.Games
             campaigns.Add(GameEnum.Blood.ToString(), new BloodCampaign()
             {
                 Id = GameEnum.Blood.ToString(),
-                Type = ModTypeEnum.Official,
+                Type = AddonTypeEnum.Official,
                 Title = "Blood",
                 Image = ImageHelper.FileNameToStream("Blood.blood.png"),
                 Author = "Monolith Productions",
@@ -80,7 +80,7 @@ namespace Games.Games
                 campaigns.Add(BloodAddonEnum.BloodCP.ToString(), new BloodCampaign()
                 {
                     Id = BloodAddonEnum.BloodCP.ToString(),
-                    Type = ModTypeEnum.Official,
+                    Type = AddonTypeEnum.Official,
                     Title = "Cryptic Passage",
                     Image = ImageHelper.FileNameToStream("Blood.cp.jpg"),
                     Author = "Sunstorm Interactive",

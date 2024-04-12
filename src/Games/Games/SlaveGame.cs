@@ -31,7 +31,7 @@ namespace Games.Games
                 campaigns.Add(GameEnum.Exhumed.ToString(), new SlaveCampaign()
                 {
                     Id = GameEnum.Exhumed.ToString(),
-                    Type = ModTypeEnum.Official,
+                    Type = AddonTypeEnum.Official,
                     Title = "Powerslave",
                     Image = ImageHelper.FileNameToStream("Slave.slave.jpg"),
                     Author = "Lobotomy Software",

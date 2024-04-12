@@ -12,10 +12,19 @@ namespace Mods.Mods
         /// </summary>
         public required DukeAddonEnum RequiredAddonEnum { get; init; }
 
+        /// <summary>
+        /// Main .con file
+        /// </summary>
         public required string? MainCon { get; init; }
 
+        /// <summary>
+        /// Additional .con files
+        /// </summary>
         public required HashSet<string>? AdditionalCons { get; init; }
 
+        /// <summary>
+        /// Main .rts file
+        /// </summary>
         public required string? RTS { get; init; }
     }
 }

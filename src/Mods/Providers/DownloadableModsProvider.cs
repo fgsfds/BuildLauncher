@@ -17,7 +17,7 @@ namespace Mods.Providers
         private readonly IGame _game;
         private readonly ArchiveTools _archiveTools;
 
-        private static Dictionary<GameEnum, Dictionary<ModTypeEnum, Dictionary<string, IDownloadableMod>>>? _cache;
+        private static Dictionary<GameEnum, Dictionary<AddonTypeEnum, Dictionary<string, IDownloadableMod>>>? _cache;
         private static readonly SemaphoreSlim _semaphore = new(1);
 
         public event ModChanged ModDownloadedEvent;
@@ -77,7 +77,7 @@ namespace Mods.Providers
 
 
         /// <inheritdoc/>
-        public ImmutableList<IDownloadableMod> GetDownloadableMods(ModTypeEnum modTypeEnum)
+        public ImmutableList<IDownloadableMod> GetDownloadableMods(AddonTypeEnum modTypeEnum)
         {
             if (_cache is null || !_cache.TryGetValue(_game.GameEnum, out var downloadableMods))
             {
@@ -119,15 +119,15 @@ namespace Mods.Providers
             var file = Path.GetFileName(url.ToString());
             string path;
 
-            if (mod.ModType is ModTypeEnum.TC)
+            if (mod.ModType is AddonTypeEnum.TC)
             {
                 path = _game.CampaignsFolderPath;
             }
-            else if (mod.ModType is ModTypeEnum.Map)
+            else if (mod.ModType is AddonTypeEnum.Map)
             {
                 path = _game.MapsFolderPath;
             }
-            else if (mod.ModType is ModTypeEnum.Mod)
+            else if (mod.ModType is AddonTypeEnum.Mod)
             {
                 path = _game.ModsFolderPath;
             }

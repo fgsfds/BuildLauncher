@@ -101,7 +101,7 @@ namespace BuildLauncher.Controls
                 Header = "Delete",
                 Command = new RelayCommand(
                     () => _viewModel.DeleteCampaignCommand.Execute(null),
-                    () => iMod.Type is not ModTypeEnum.Official
+                    () => iMod.Type is not AddonTypeEnum.Official
                     )
             };
 

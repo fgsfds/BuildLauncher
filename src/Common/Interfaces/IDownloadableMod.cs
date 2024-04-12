@@ -13,7 +13,7 @@ namespace Common.Interfaces
         string Id { get; set; }
         bool HasNewerVersion { get; set; }
         bool IsInstalled { get; set; }
-        ModTypeEnum ModType { get; set; }
+        AddonTypeEnum ModType { get; set; }
         string Title { get; set; }
         string Status { get; }
         string? Version { get; set; }

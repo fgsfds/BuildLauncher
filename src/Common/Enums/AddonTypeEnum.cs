@@ -1,6 +1,6 @@
 ﻿namespace Common.Enums
 {
-    public enum ModTypeEnum : byte
+    public enum AddonTypeEnum : byte
     {
         Official,
         TC,

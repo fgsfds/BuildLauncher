@@ -27,7 +27,7 @@ namespace Common.Interfaces
         /// Download mod
         /// </summary>
         /// <param name="mod">Mod</param>
-        ImmutableList<IDownloadableMod> GetDownloadableMods(ModTypeEnum modTypeEnum);
+        ImmutableList<IDownloadableMod> GetDownloadableMods(AddonTypeEnum modTypeEnum);
 
         /// <summary>
         /// Create cache of downloadable mods if it doesn't exist

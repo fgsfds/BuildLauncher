@@ -3,6 +3,7 @@ using Common.Enums;
 using Common.Enums.Addons;
 using Common.Helpers;
 using Common.Interfaces;
+using Mods.Helpers;
 using Mods.Mods;
 using Mods.Serializable;
 using SharpCompress.Archives;
@@ -17,7 +18,7 @@ namespace Mods.Providers
     {
         private readonly IGame _game;
         private readonly ConfigEntity _config;
-        private readonly Dictionary<ModTypeEnum, Dictionary<string, IAddon>> _cache;
+        private readonly Dictionary<AddonTypeEnum, Dictionary<string, IAddon>> _cache;
         private readonly SemaphoreSlim _semaphore = new(1);
 
         public event ModChanged ModDeletedEvent;
@@ -51,16 +52,16 @@ namespace Mods.Providers
                     IEnumerable<string> files;
 
                     files = Directory.GetFiles(_game.CampaignsFolderPath).Where(static x => x.EndsWith(".zip", StringComparison.InvariantCultureIgnoreCase) || x.EndsWith(".grp", StringComparison.InvariantCultureIgnoreCase));
-                    var camps = GetModsFromFiles(ModTypeEnum.TC, files);
-                    _cache.Add(ModTypeEnum.TC, camps);
+                    var camps = GetModsFromFiles(AddonTypeEnum.TC, files);
+                    _cache.Add(AddonTypeEnum.TC, camps);
 
                     files = Directory.GetFiles(_game.MapsFolderPath).Where(static x => x.EndsWith(".zip", StringComparison.InvariantCultureIgnoreCase) || x.EndsWith(".map", StringComparison.InvariantCultureIgnoreCase));
-                    var maps = GetModsFromFiles(ModTypeEnum.Map, files);
-                    _cache.Add(ModTypeEnum.Map, maps);
+                    var maps = GetModsFromFiles(AddonTypeEnum.Map, files);
+                    _cache.Add(AddonTypeEnum.Map, maps);
 
                     files = Directory.GetFiles(_game.ModsFolderPath, "*.zip");
-                    var mods = GetModsFromFiles(ModTypeEnum.Mod, files);
-                    _cache.Add(ModTypeEnum.Mod, mods);
+                    var mods = GetModsFromFiles(AddonTypeEnum.Mod, files);
+                    _cache.Add(AddonTypeEnum.Mod, mods);
                 });
             }
 
@@ -82,7 +83,7 @@ namespace Mods.Providers
         }
 
         /// <inheritdoc/>
-        public void AddMod(ModTypeEnum modTypeEnum, string pathToFile)
+        public void AddMod(AddonTypeEnum modTypeEnum, string pathToFile)
         {
             _cache.ThrowIfNull();
 
@@ -111,7 +112,7 @@ namespace Mods.Providers
         }
 
         /// <inheritdoc/>
-        public Dictionary<string, IAddon> GetInstalledMods(ModTypeEnum modTypeEnum)
+        public Dictionary<string, IAddon> GetInstalledMods(AddonTypeEnum modTypeEnum)
         {
             _cache.ThrowIfNull();
 
@@ -130,7 +131,7 @@ namespace Mods.Providers
         /// </summary>
         /// <param name="modTypeEnum">Mod type</param>
         /// <param name="files">Paths to mod files</param>
-        private Dictionary<string, IAddon> GetModsFromFiles(ModTypeEnum modTypeEnum, IEnumerable<string> files)
+        private Dictionary<string, IAddon> GetModsFromFiles(AddonTypeEnum modTypeEnum, IEnumerable<string> files)
         {
             Dictionary<string, IAddon> addedMods = [];
 
@@ -138,34 +139,32 @@ namespace Mods.Providers
             {
                 try
                 {
-                    var mod = GetMod(modTypeEnum, file);
+                    var newMod = GetMod(modTypeEnum, file);
 
-                    if (mod is null)
+                    if (newMod is null)
                     {
                         continue;
                     }
 
-                    //TODO return check
-                    if (false)
-                    //if (addedMods.TryGetValue(mod.Id, out var addedMod))
+                    if (addedMods.TryGetValue(newMod.Id, out var existingMod))
                     {
-                        //if (addedMod.Version is null &&
-                        //    mod.Version is not null)
-                        //{
-                        //    //replacing with mod that have version
-                        //    addedMods[mod.Id] = mod;
-                        //}
-                        //else if (addedMod.Version is not null &&
-                        //         mod.Version is not null &&
-                        //         string.CompareOrdinal(addedMod.Version, mod.Version) == -1)
-                        //{
-                        //    //replacing with mod that have higher version
-                        //    addedMods[mod.Id] = mod;
-                        //}
+                        if (existingMod.Version is null &&
+                            newMod.Version is not null)
+                        {
+                            //replacing with mod that have version
+                            addedMods[newMod.Id] = newMod;
+                        }
+                        else if (existingMod.Version is not null &&
+                                 newMod.Version is not null &&
+                                 VersionComparer.Compare(newMod.Version, existingMod.Version, ">"))
+                        {
+                            //replacing with mod that have higher version
+                            addedMods[newMod.Id] = newMod;
+                        }
                     }
                     else
                     {
-                        addedMods.Add(mod.Id, mod);
+                        addedMods.Add(newMod.Id, newMod);
                     }
                 }
                 catch
@@ -182,7 +181,7 @@ namespace Mods.Providers
         /// </summary>
         /// <param name="modTypeEnum">Mod type</param>
         /// <param name="pathToFile">Path to mod file</param>
-        private Addon? GetMod(ModTypeEnum modTypeEnum, string pathToFile)
+        private Addon? GetMod(AddonTypeEnum modTypeEnum, string pathToFile)
         {
             var type = modTypeEnum;
             var id = Path.GetFileName(pathToFile);
@@ -350,17 +349,6 @@ namespace Mods.Providers
                         }
                     }
                 }
-
-                //var defFile = archive.Entries.FirstOrDefault(x => x.Key.Equals(_game.DefFileName));
-
-                //if (defFile is not null &&
-                //    modTypeEnum is ModTypeEnum.TC)
-                //{
-                //    using var stream = defFile.OpenEntryStream();
-                //    using StreamReader reader = new(stream);
-
-                //    defFileContents = reader.ReadToEnd();
-                //}
             }
             else if (pathToFile.EndsWith(".map", StringComparison.InvariantCultureIgnoreCase))
             {
@@ -374,7 +362,7 @@ namespace Mods.Providers
 
             Addon? addon = null;
 
-            if (modTypeEnum is ModTypeEnum.Mod)
+            if (modTypeEnum is AddonTypeEnum.Mod)
             {
                 var isEnabled = !_config.DisabledAutoloadMods.Contains(id);
                 string? requiredAddon = null;
@@ -387,7 +375,7 @@ namespace Mods.Providers
                 addon = new AutoloadMod()
                 {
                     Id = id,
-                    Type = ModTypeEnum.Mod,
+                    Type = AddonTypeEnum.Mod,
                     Title = title!,
                     Image = image,
                     SupportedPorts = supportedPorts,
@@ -431,6 +419,31 @@ namespace Mods.Providers
                         AdditionalDefs = addDefs,
                         RTS = rts,
                         RequiredAddonEnum = dukeAddon
+                    };
+                }
+                else if (_game.GameEnum is GameEnum.Fury)
+                {
+                    addon = new FuryCampaign()
+                    {
+                        Id = id,
+                        Type = type,
+                        Title = title!,
+                        Image = image,
+                        SupportedPorts = supportedPorts,
+                        Description = description,
+                        Version = version,
+                        Author = author,
+                        PathToFile = pathToFile,
+                        SupportedGames = supportedGames,
+                        SupportedGamesCrcs = supportedGamesCrcs,
+                        Dependencies = dependencies,
+                        Incompatibles = incompatibles,
+                        StartMap = startMap,
+                        MainCon = mainCon,
+                        AdditionalCons = addCons,
+                        MainDef = mainDef,
+                        AdditionalDefs = addDefs,
+                        RTS = rts
                     };
                 }
                 else if (_game.GameEnum is GameEnum.Wang)

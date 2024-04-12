@@ -12,13 +12,17 @@ namespace Common.Interfaces
         /// <summary>
         /// Type of the addon
         /// </summary>
-        ModTypeEnum Type { get; init; }
+        AddonTypeEnum Type { get; init; }
 
+        /// <summary>
+        /// List of supported games
+        /// </summary>
         HashSet<GameEnum>? SupportedGames { get; init; }
 
+        /// <summary>
+        /// List of supported games CRCs
+        /// </summary>
         HashSet<int>? SupportedGamesCrcs { get; init; }
-
-        //public bool IsEnabled { get; init; }
 
         /// <summary>
         /// Name of the mod
@@ -61,25 +65,34 @@ namespace Common.Interfaces
         /// </summary>
         string? Version { get; init; }
 
-        bool IsAvailable { get; set; }
-
+        /// <summary>
+        /// List of mods that the current mod depends on
+        /// </summary>
         Dictionary<string, string?>? Dependencies { get; init; }
 
+        /// <summary>
+        /// List of mods that the current mod it incompatible with
+        /// </summary>
         Dictionary<string, string?>? Incompatibles { get; init; }
 
-        //string? MainCon { get; init; }
+        /// <summary>
+        /// Does the mod have all dependencies and incompatibles in check
+        /// </summary>
+        bool IsAvailable { get; set; }
 
+        /// <summary>
+        /// Main def file
+        /// </summary>
         string? MainDef { get; init; }
 
-        //HashSet<string>? AdditionalCons { get; init; }
-
+        /// <summary>
+        /// Additional def files
+        /// </summary>
         HashSet<string>? AdditionalDefs { get; init; }
 
-        //string? RTS { get; init; }
-        //string? INI { get; init; }
-        //string? RFF { get; init; }
-        //string? SND { get; init; }
-
+        /// <summary>
+        /// Map that will be started when the mod is loaded
+        /// </summary>
         IStartMap? StartMap { get; init; }
 
 

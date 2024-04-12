@@ -31,7 +31,7 @@ namespace Games.Games
                 campaigns.Add(GameEnum.Fury.ToString(), new FuryCampaign()
                 {
                     Id = GameEnum.Fury.ToString(),
-                    Type = ModTypeEnum.Official,
+                    Type = AddonTypeEnum.Official,
                     Title = IsAftershock() ? "Ion Fury: Aftershock" : "Ion Fury",
                     Image = IsAftershock() ? ImageHelper.FileNameToStream("Fury.aftershock.jpg") : ImageHelper.FileNameToStream("Fury.fury.jpg"),
                     Author = "Voidpoint, LLC",

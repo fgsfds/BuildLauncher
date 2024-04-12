@@ -1,6 +1,10 @@
 ﻿using Common.Enums;
+using Common.Helpers;
 using Common.Interfaces;
+using Games.Games;
+using Mods.Mods;
 using Ports.Providers;
+using System.Text;
 
 namespace Ports.Ports.EDuke32
 {
@@ -35,6 +39,61 @@ namespace Ports.Ports.EDuke32
         protected override void BeforeStart(IGame game, IAddon campaign)
         {
             //nothing to do
+        }
+
+
+        /// <inheritdoc/>
+        protected override void GetStartCampaignArgs(StringBuilder sb, IGame game, IAddon mod)
+        {
+            //don't search for steam/gog installs
+            sb.Append($@" -usecwd");
+
+            if (game is SlaveGame sGame && mod is SlaveCampaign sMod)
+            {
+                GetSlaveArgs(sb, sGame, sMod);
+            }
+            else
+            {
+                ThrowHelper.NotImplementedException($"Mod type {mod.Type} for game {game} is not supported");
+            }
+        }
+
+
+        private void GetSlaveArgs(StringBuilder sb, SlaveGame sGame, SlaveCampaign sMod)
+        {
+            sb.Append(@$" {AddDirectoryParam}""{sGame.GameInstallFolder}""");
+
+
+            if (sMod.MainDef is not null)
+            {
+                sb.Append($@" {MainDefParam}""{sMod.MainDef}""");
+            }
+            else
+            {
+                //overriding default def so gamename.def files are ignored
+                sb.Append($@" {MainDefParam}""a""");
+            }
+
+
+            if (sMod.FileName is null)
+            {
+                return;
+            }
+
+
+            if (sMod.Type is AddonTypeEnum.TC)
+            {
+                sb.Append($@" {AddFileParam}""{Path.Combine(sGame.CampaignsFolderPath, sMod.FileName)}""");
+            }
+            else if (sMod.Type is AddonTypeEnum.Map)
+            {
+                GetMapArgs(sb, sGame, sMod);
+            }
+            else
+            {
+                ThrowHelper.NotImplementedException($"Mod type {sMod.Type} is not supported");
+                return;
+            }
         }
     }
 }

@@ -54,9 +54,6 @@ namespace Ports.Ports
         protected override string ConfigFile => "raze_portable.ini";
 
         /// <inheritdoc/>
-        protected override string AddDirectoryParam => "-j ";
-
-        /// <inheritdoc/>
         protected override string AddFileParam => "-file ";
 
         /// <inheritdoc/>
@@ -167,12 +164,12 @@ namespace Ports.Ports
                 return;
             }
 
-            if (dMod.Type is ModTypeEnum.TC)
+            if (dMod.Type is AddonTypeEnum.TC)
             {
                 //TODO
                 //sb.Append($@" -file ""{Path.Combine(game.CampaignsFolderPath, camp.FileName)}"" -con ""{camp.StartupFile}""");
             }
-            else if (dMod.Type is ModTypeEnum.Map)
+            else if (dMod.Type is AddonTypeEnum.Map)
             {
                 GetMapArgs(sb, game, dMod);
             }
@@ -224,11 +221,11 @@ namespace Ports.Ports
             }
 
 
-            if (bMod.Type is ModTypeEnum.TC)
+            if (bMod.Type is AddonTypeEnum.TC)
             {
                 sb.Append($@" {AddFileParam}""{Path.Combine(game.CampaignsFolderPath, bMod.FileName)}""");
             }
-            else if (bMod.Type is ModTypeEnum.Map)
+            else if (bMod.Type is AddonTypeEnum.Map)
             {
                 GetMapArgs(sb, game, bMod);
             }
@@ -254,11 +251,11 @@ namespace Ports.Ports
                 return;
             }
 
-            if (camp.Type is ModTypeEnum.TC)
+            if (camp.Type is AddonTypeEnum.TC)
             {
                 sb.Append($@" {AddFileParam}""{Path.Combine(game.CampaignsFolderPath, camp.FileName)}""");
             }
-            else if (camp.Type is ModTypeEnum.Map)
+            else if (camp.Type is AddonTypeEnum.Map)
             {
                 GetMapArgs(sb, game, camp);
             }
@@ -288,11 +285,11 @@ namespace Ports.Ports
                 return;
             }
 
-            if (camp.Type is ModTypeEnum.TC)
+            if (camp.Type is AddonTypeEnum.TC)
             {
                 sb.Append($@" {AddFileParam}""{Path.Combine(game.CampaignsFolderPath, camp.FileName)}""");
             }
-            else if (camp.Type is ModTypeEnum.Map)
+            else if (camp.Type is AddonTypeEnum.Map)
             {
                 GetMapArgs(sb, game, camp);
             }
@@ -310,11 +307,11 @@ namespace Ports.Ports
                 return;
             }
 
-            if (camp.Type is ModTypeEnum.TC)
+            if (camp.Type is AddonTypeEnum.TC)
             {
                 sb.Append($@" {AddFileParam}""{Path.Combine(game.CampaignsFolderPath, camp.FileName)}""");
             }
-            else if (camp.Type is ModTypeEnum.Map)
+            else if (camp.Type is AddonTypeEnum.Map)
             {
                 GetMapArgs(sb, game, camp);
             }
