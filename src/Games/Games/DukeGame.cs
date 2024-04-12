@@ -108,9 +108,9 @@ namespace Games.Games
 
             if (IsWorldTourInstalled)
             {
-                campaigns.Add(DukeAddonEnum.DukeWT.ToString(), new DukeCampaign()
+                campaigns.Add(GameEnum.DukeWT.ToString(), new DukeCampaign()
                 {
-                    Id = GameEnum.Duke3D.ToString(),
+                    Id = GameEnum.DukeWT.ToString(),
                     Type = AddonTypeEnum.Official,
                     Title = "Duke Nukem 3D World Tour",
                     Image = ImageHelper.FileNameToStream("Duke3D.dukewt.jpg"),

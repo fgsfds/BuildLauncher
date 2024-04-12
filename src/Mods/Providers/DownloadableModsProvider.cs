@@ -62,10 +62,7 @@ namespace Mods.Providers
 
                 var list = JsonSerializer.Deserialize(fixesXml, DownloadableModManifestsListContext.Default.ListDownloadableAddonDto);
 
-                if (list is null)
-                {
-                    ThrowHelper.Exception();
-                }
+                list.ThrowIfNull();
 
                 _cache = [];
 

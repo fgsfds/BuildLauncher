@@ -89,10 +89,7 @@ namespace Mods.Providers
 
             var mod = GetMod(modTypeEnum, pathToFile);
 
-            if (mod is null)
-            {
-                ThrowHelper.NullReferenceException();
-            }
+            mod.ThrowIfNull();
 
             if (!_cache.TryGetValue(mod.Type, out _))
             {
