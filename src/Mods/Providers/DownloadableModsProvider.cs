@@ -5,6 +5,7 @@ using Common.Tools;
 using Mods.Helpers;
 using Mods.Serializable;
 using System.Collections.Immutable;
+using System.IO;
 using System.Text.Json;
 
 namespace Mods.Providers
@@ -51,28 +52,37 @@ namespace Mods.Providers
 
             using HttpClient client = new();
             client.Timeout = TimeSpan.FromSeconds(10);
-            await using var stream = await client.GetStreamAsync(Consts.Manifests).ConfigureAwait(false);
 
-            using StreamReader file = new(stream);
-            var fixesXml = file.ReadToEnd();
-
-            var list = JsonSerializer.Deserialize(fixesXml, DownloadableModManifestsListContext.Default.ListDownloadableAddonDto);
-
-            if (list is null)
+            try
             {
-                ThrowHelper.Exception();
+                await using var stream = await client.GetStreamAsync(Consts.Manifests).ConfigureAwait(false);
+
+                using StreamReader file = new(stream);
+                var fixesXml = file.ReadToEnd();
+
+                var list = JsonSerializer.Deserialize(fixesXml, DownloadableModManifestsListContext.Default.ListDownloadableAddonDto);
+
+                if (list is null)
+                {
+                    ThrowHelper.Exception();
+                }
+
+                _cache = [];
+
+                foreach (var mod in list)
+                {
+                    _cache.TryAdd(mod.Game, []);
+                    _cache[mod.Game].TryAdd(mod.ModType, []);
+                    _cache[mod.Game][mod.ModType].TryAdd(mod.Id, mod);
+                }
             }
-
-            _cache = [];
-
-            foreach (var mod in list)
+            catch (Exception ex)
             {
-                _cache.TryAdd(mod.Game, []);
-                _cache[mod.Game].TryAdd(mod.ModType, []);
-                _cache[mod.Game][mod.ModType].TryAdd(mod.Id, mod);
             }
-
-            _semaphore.Release();
+            finally
+            {
+                _semaphore.Release();
+            }
         }
 
 

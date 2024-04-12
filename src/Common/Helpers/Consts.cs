@@ -5,7 +5,7 @@
         /// <summary>
         /// Path to main downloadable mods manifests file
         /// </summary>
-        public const string Manifests = "https://github.com/fgsfds/Build-Mods-Repo/raw/master/manifests.json";
+        public const string Manifests = "https://raw.githubusercontent.com/fgsfds/Build-Mods-Repo/master_new/addons.json";
 
         /// <summary>
         /// GirtHub releases Url
@@ -15,7 +15,7 @@
         /// <summary>
         /// Config file
         /// </summary>
-        public const string ConfigFile = "config.json";
+        public const string ConfigFile = "config.json"; 
 
         /// <summary>
         /// Addon manifest file
