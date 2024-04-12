@@ -217,6 +217,17 @@ namespace Mods.Providers
             if (ArchiveFactory.IsArchive(pathToFile, out var _))
             {
                 using var archive = ArchiveFactory.Open(pathToFile);
+
+                var oldManifest = archive.Entries.FirstOrDefault(static x => x.Key.Equals("manifest.json"));
+                
+                if (oldManifest is not null)
+                {
+                    //deleting old versions of the mods
+                    archive.Dispose();
+                    File.Delete(pathToFile);
+                    return null;
+                }
+
                 var entry = archive.Entries.FirstOrDefault(static x => x.Key.Equals("addon.json"));
 
                 if (entry is null)
