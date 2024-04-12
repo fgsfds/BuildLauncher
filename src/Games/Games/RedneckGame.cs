@@ -40,7 +40,7 @@ namespace Games.Games
         /// <inheritdoc/>
         protected override Dictionary<string, IAddon> GetOriginalCampaigns()
         {
-            Dictionary<string, IAddon> campaigns = new(3);
+            Dictionary<string, IAddon> campaigns = new(3, StringComparer.OrdinalIgnoreCase);
 
             if (IsBaseGameInstalled)
             {

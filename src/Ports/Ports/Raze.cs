@@ -135,6 +135,15 @@ namespace Ports.Ports
                 sb.Append($@" {MainDefParam}""a""");
             }
 
+            if (mod.AdditionalDefs is not null)
+            {
+                foreach (var def in mod.AdditionalDefs)
+                {
+
+                    sb.Append($@" {AddDefParam}""{def}""");
+                }
+            }
+
 
             if (game is DukeGame dGame && mod is DukeCampaign dMod)
             {
@@ -231,7 +240,7 @@ namespace Ports.Ports
 
             if (camp.Type is AddonTypeEnum.TC)
             {
-                sb.Append($@" {AddDirectoryParam}""{game.CampaignsFolderPath}"" {AddFileParam}""{camp.FileName}""");
+                sb.Append($@" {AddFileParam}""{Path.Combine(game.CampaignsFolderPath, camp.FileName)}""");
             }
             else if (camp.Type is AddonTypeEnum.Map)
             {

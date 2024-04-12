@@ -70,7 +70,7 @@ namespace Games.Games
         /// <inheritdoc/>
         protected override Dictionary<string, IAddon> GetOriginalCampaigns()
         {
-            Dictionary<string, IAddon> campaigns = new(6);
+            Dictionary<string, IAddon> campaigns = new(6, StringComparer.OrdinalIgnoreCase);
 
             if (IsBaseGameInstalled &&
                 GameInstallFolder != DukeWTInstallPath)

@@ -68,6 +68,14 @@ namespace Ports.Ports.EDuke32
                 sb.Append($@" {MainDefParam}""a""");
             }
 
+            if (mod.AdditionalDefs is not null)
+            {
+                foreach (var def in mod.AdditionalDefs)
+                {
+                    sb.Append($@" {AddDefParam}""{def}""");
+                }
+            }
+
 
             if (game is DukeGame dGame && mod is DukeCampaign dCamp)
             {

@@ -121,7 +121,7 @@ namespace Games.Games
 
             if (enabledOnly)
             {
-                Dictionary<string, IAddon> enabled = [];
+                Dictionary<string, IAddon> enabled = new(StringComparer.OrdinalIgnoreCase);
 
                 foreach (var mod in mods)
                 {

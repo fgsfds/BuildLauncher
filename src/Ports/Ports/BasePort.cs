@@ -180,7 +180,7 @@ namespace Ports.Ports
                 foreach (var dep in autoloadMod.Dependencies)
                 {
                     if (!addons.ContainsKey(dep.Key) &&
-                        campaign.Id != dep.Key)
+                        !campaign.Id.Equals(dep.Key, StringComparison.OrdinalIgnoreCase))
                     {
                         //skipping mods that don't have every dependency
                         return false;
@@ -193,7 +193,7 @@ namespace Ports.Ports
                 foreach (var dep in autoloadMod.Incompatibles)
                 {
                     if (addons.ContainsKey(dep.Key) ||
-                        campaign.Id == dep.Key)
+                        campaign.Id.Equals(dep.Key, StringComparison.OrdinalIgnoreCase))
                     {
                         //skipping incompatible mods
                         return false;

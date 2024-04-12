@@ -51,11 +51,11 @@ namespace Mods.Providers
                 {
                     IEnumerable<string> files;
 
-                    files = Directory.GetFiles(_game.CampaignsFolderPath).Where(static x => x.EndsWith(".zip", StringComparison.InvariantCultureIgnoreCase) || x.EndsWith(".grp", StringComparison.InvariantCultureIgnoreCase));
+                    files = Directory.GetFiles(_game.CampaignsFolderPath).Where(static x => x.EndsWith(".zip", StringComparison.OrdinalIgnoreCase) || x.EndsWith(".grp", StringComparison.OrdinalIgnoreCase));
                     var camps = GetModsFromFiles(AddonTypeEnum.TC, files);
                     _cache.Add(AddonTypeEnum.TC, camps);
 
-                    files = Directory.GetFiles(_game.MapsFolderPath).Where(static x => x.EndsWith(".zip", StringComparison.InvariantCultureIgnoreCase) || x.EndsWith(".map", StringComparison.InvariantCultureIgnoreCase));
+                    files = Directory.GetFiles(_game.MapsFolderPath).Where(static x => x.EndsWith(".zip", StringComparison.OrdinalIgnoreCase) || x.EndsWith(".map", StringComparison.OrdinalIgnoreCase));
                     var maps = GetModsFromFiles(AddonTypeEnum.Map, files);
                     _cache.Add(AddonTypeEnum.Map, maps);
 
@@ -133,7 +133,7 @@ namespace Mods.Providers
         /// <param name="files">Paths to mod files</param>
         private Dictionary<string, IAddon> GetModsFromFiles(AddonTypeEnum modTypeEnum, IEnumerable<string> files)
         {
-            Dictionary<string, IAddon> addedMods = [];
+            Dictionary<string, IAddon> addedMods = new(StringComparer.OrdinalIgnoreCase);
 
             foreach (var file in files)
             {
@@ -295,7 +295,7 @@ namespace Mods.Providers
 
                     if (manifest.Dependencies is not null)
                     {
-                        dependencies = new(manifest.Dependencies.Count);
+                        dependencies = new(manifest.Dependencies.Count, StringComparer.OrdinalIgnoreCase);
 
                         //extracting official addons from dependencies
                         foreach (var dep in manifest.Dependencies)
@@ -321,7 +321,7 @@ namespace Mods.Providers
                             {
                                 wangAddon = WangAddonEnum.WangTD;
                             }
-                            else if (dep.Id.Equals(WangAddonEnum.WangWD.ToString(), StringComparison.InvariantCultureIgnoreCase))
+                            else if (dep.Id.Equals(WangAddonEnum.WangWD.ToString(), StringComparison.OrdinalIgnoreCase))
                             {
                                 wangAddon = WangAddonEnum.WangWD;
                             }
@@ -331,7 +331,7 @@ namespace Mods.Providers
                                 redneckAddon = RedneckAddonEnum.RedneckR66;
                             }
 
-                            else if (dep.Id.Equals(BloodAddonEnum.BloodCP.ToString(), StringComparison.InvariantCultureIgnoreCase))
+                            else if (dep.Id.Equals(BloodAddonEnum.BloodCP.ToString(), StringComparison.OrdinalIgnoreCase))
                             {
                                 bloodAddon = BloodAddonEnum.BloodCP;
                             }
@@ -342,7 +342,7 @@ namespace Mods.Providers
 
                     if (manifest.Incompatibles is not null)
                     {
-                        incompatibles = new(manifest.Incompatibles.Count);
+                        incompatibles = new(manifest.Incompatibles.Count, StringComparer.OrdinalIgnoreCase);
 
                         foreach (var dep in manifest.Incompatibles)
                         {
@@ -351,11 +351,11 @@ namespace Mods.Providers
                     }
                 }
             }
-            else if (pathToFile.EndsWith(".map", StringComparison.InvariantCultureIgnoreCase))
+            else if (pathToFile.EndsWith(".map", StringComparison.OrdinalIgnoreCase))
             {
                 //TODO loose maps
             }
-            else if (pathToFile.EndsWith(".grp", StringComparison.InvariantCultureIgnoreCase))
+            else if (pathToFile.EndsWith(".grp", StringComparison.OrdinalIgnoreCase))
             {
                 //"real" grps are not supported
                 return null;
