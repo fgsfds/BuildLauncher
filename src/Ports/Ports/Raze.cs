@@ -123,7 +123,18 @@ namespace Ports.Ports
         /// <inheritdoc/>
         protected override void GetStartCampaignArgs(StringBuilder sb, IGame game, IAddon mod)
         {
-            sb.Append($@" -savedir ""{Path.Combine(PathToPortFolder, "Save", mod.Title.Replace(' ', '_'))}""");
+            sb.Append($@" -savedir ""{Path.Combine(PathToPortFolder, "Save", mod.Id.Replace(' ', '_'))}""");
+
+            if (mod.MainDef is not null)
+            {
+                sb.Append($@" {MainDefParam}""{mod.MainDef}""");
+            }
+            else
+            {
+                //overriding default def so gamename.def files are ignored
+                sb.Append($@" {MainDefParam}""a""");
+            }
+
 
             if (game is DukeGame dGame && mod is DukeCampaign dMod)
             {
@@ -153,8 +164,6 @@ namespace Ports.Ports
 
         private void GetDukeArgs(StringBuilder sb, DukeGame game, DukeCampaign dMod)
         {
-            sb.Append($" -addon {(byte)dMod.RequiredAddonEnum}");
-
             if (dMod.RequiredAddonEnum is DukeAddonEnum.DukeWT)
             {
                 var config = Path.Combine(PathToPortFolder, ConfigFile);
@@ -165,17 +174,6 @@ namespace Ports.Ports
             else
             {
                 sb.Append($@" -addon {(byte)dMod.RequiredAddonEnum}");
-            }
-
-
-            if (dMod.MainDef is not null)
-            {
-                sb.Append($@" {MainDefParam}""{dMod.MainDef}""");
-            }
-            else
-            {
-                //overriding default def so gamename.def files are ignored
-                sb.Append($@" {MainDefParam}""a""");
             }
 
 
@@ -225,17 +223,6 @@ namespace Ports.Ports
             }
 
 
-            if (camp.MainDef is not null)
-            {
-                sb.Append($@" {MainDefParam}""{camp.MainDef}""");
-            }
-            else
-            {
-                //overriding default def so gamename.def files are ignored
-                sb.Append($@" {MainDefParam}""a""");
-            }
-
-
             if (camp.FileName is null)
             {
                 return;
@@ -269,17 +256,6 @@ namespace Ports.Ports
             {
                 var config = Path.Combine(PathToPortFolder, ConfigFile);
                 AddGamePathsToConfig(game.AgainInstallPath, game.ModsFolderPath, game.MapsFolderPath, config);
-            }
-
-
-            if (camp.MainDef is not null)
-            {
-                sb.Append($@" {MainDefParam}""{camp.MainDef}""");
-            }
-            else
-            {
-                //overriding default def so gamename.def files are ignored
-                sb.Append($@" {MainDefParam}""a""");
             }
 
 

@@ -250,8 +250,9 @@ namespace Mods.Providers
                     image = ImageHelper.GetCoverFromArchive(archive);
                     supportedGames = manifest.SupportedGames is null ? supportedGames : [.. manifest.SupportedGames];
                     supportedGamesCrcs = manifest.SupportedGamesCrcs is null ? null : [.. manifest.SupportedGamesCrcs];
-                    grps = manifest.Grps?.ToHashSet();
+                    supportedPorts = manifest.SupportedPorts is null ? null : [.. manifest.SupportedPorts];
 
+                    grps = manifest.Grps?.ToHashSet();
                     rts = manifest.Rts;
                     ini = manifest.Ini;
                     rff = manifest.Rff;

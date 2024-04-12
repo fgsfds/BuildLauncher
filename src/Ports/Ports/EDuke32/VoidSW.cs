@@ -64,6 +64,17 @@ namespace Ports.Ports.EDuke32
 
             sb.Append($@" {AddDirectoryParam}""{game.GameInstallFolder}""");
 
+            if (mod.MainDef is not null)
+            {
+                sb.Append($@" {MainDefParam}""{mod.MainDef}""");
+            }
+            else
+            {
+                //overriding default def so gamename.def files are ignored
+                sb.Append($@" {MainDefParam}""a""");
+            }
+
+
 
             if (game is WangGame wGame && mod is WangCampaign wMod)
             {
@@ -81,17 +92,6 @@ namespace Ports.Ports.EDuke32
             sb.Append($@" -addon{(byte)wMod.RequiredAddonEnum}");
 
             AddWangMusicFolder(sb, wGame);
-
-
-            if (wMod.MainDef is not null)
-            {
-                sb.Append($@" {MainDefParam}""{wMod.MainDef}""");
-            }
-            else
-            {
-                //overriding default def so gamename.def files are ignored
-                sb.Append($@" {MainDefParam}""a""");
-            }
 
 
             if (wMod.FileName is null)

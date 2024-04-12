@@ -58,6 +58,17 @@ namespace Ports.Ports.EDuke32
             //don't search for steam/gog installs
             sb.Append($@" -usecwd");
 
+            if (mod.MainDef is not null)
+            {
+                sb.Append($@" {MainDefParam}""{mod.MainDef}""");
+            }
+            else
+            {
+                //overriding default def so gamename.def files are ignored
+                sb.Append($@" {MainDefParam}""a""");
+            }
+
+
             if (game is DukeGame dGame && mod is DukeCampaign dCamp)
             {
                 GetDukeArgs(sb, dGame, dCamp);
@@ -92,17 +103,6 @@ namespace Ports.Ports.EDuke32
             else
             {
                 sb.Append($@" {AddDirectoryParam}""{game.GameInstallFolder}""");
-            }
-
-
-            if (camp.MainDef is not null)
-            {
-                sb.Append($@" {MainDefParam}""{camp.MainDef}""");
-            }
-            else
-            {
-                //overriding default def so gamename.def files are ignored
-                sb.Append($@" {MainDefParam}""a""");
             }
 
 

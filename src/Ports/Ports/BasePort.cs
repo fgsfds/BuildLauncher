@@ -217,17 +217,6 @@ namespace Ports.Ports
             }
 
 
-            if (bMod.MainDef is not null)
-            {
-                sb.Append($@" {MainDefParam}""{bMod.MainDef}""");
-            }
-            else
-            {
-                //overriding default def so gamename.def files are ignored
-                sb.Append($@" {MainDefParam}""a""");
-            }
-
-
             if (bMod.FileName is null)
             {
                 return;
@@ -264,17 +253,6 @@ namespace Ports.Ports
 
         protected void GetSlaveArgs(StringBuilder sb, SlaveGame sGame, SlaveCampaign sMod)
         {
-            if (sMod.MainDef is not null)
-            {
-                sb.Append($@" {MainDefParam}""{sMod.MainDef}""");
-            }
-            else
-            {
-                //overriding default def so gamename.def files are ignored
-                sb.Append($@" {MainDefParam}""a""");
-            }
-
-
             if (sMod.FileName is null)
             {
                 return;

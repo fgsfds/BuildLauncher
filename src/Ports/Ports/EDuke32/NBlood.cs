@@ -51,6 +51,17 @@ namespace Ports.Ports.EDuke32
 
             sb.Append(@$" {AddDirectoryParam}""{game.GameInstallFolder}""");
 
+            if (mod.MainDef is not null)
+            {
+                sb.Append($@" {MainDefParam}""{mod.MainDef}""");
+            }
+            else
+            {
+                //overriding default def so gamename.def files are ignored
+                sb.Append($@" {MainDefParam}""a""");
+            }
+
+
 
             if (game is BloodGame bGame && mod is BloodCampaign bMod)
             {
