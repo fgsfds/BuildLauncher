@@ -118,7 +118,7 @@ namespace Ports.Ports.EDuke32
                 return;
             }
 
-            if (camp.Id == DukeAddonEnum.WorldTour.ToString())
+            if (camp.RequiredAddonEnum is DukeAddonEnum.DukeWT)
             {
                 sb.Append($@" {AddDirectoryParam}""{game.DukeWTInstallPath}"" -addon {(byte)DukeAddonEnum.Duke3D} {AddDirectoryParam}""{Path.Combine(game.SpecialFolderPath, Consts.WTStopgap)}"" -gamegrp e32wt.grp");
             }

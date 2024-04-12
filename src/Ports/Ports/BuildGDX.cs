@@ -113,7 +113,7 @@ namespace Ports.Ports
 
         private void GetDukeArgs(StringBuilder sb, DukeGame game, IAddon camp)
         {
-            if (camp.Id == DukeAddonEnum.WorldTour.ToString())
+            if (camp.Id == DukeAddonEnum.DukeWT.ToString())
             {
                 sb.Append($@" -path ""{game.DukeWTInstallPath}""");
             }

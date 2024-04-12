@@ -6,7 +6,6 @@
         DukeDC = 1,
         DukeNW = 2,
         DukeVaca = 3,
-        WorldTour = 4,
-        Duke64 = 5
+        DukeWT = 4
     }
 }

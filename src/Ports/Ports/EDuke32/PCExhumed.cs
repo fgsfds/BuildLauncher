@@ -48,6 +48,8 @@ namespace Ports.Ports.EDuke32
             //don't search for steam/gog installs
             sb.Append($@" -usecwd");
 
+            sb.Append(@$" {AddDirectoryParam}""{game.GameInstallFolder}""");
+
             if (game is SlaveGame sGame && mod is SlaveCampaign sMod)
             {
                 GetSlaveArgs(sb, sGame, sMod);
@@ -55,44 +57,6 @@ namespace Ports.Ports.EDuke32
             else
             {
                 ThrowHelper.NotImplementedException($"Mod type {mod.Type} for game {game} is not supported");
-            }
-        }
-
-
-        private void GetSlaveArgs(StringBuilder sb, SlaveGame sGame, SlaveCampaign sMod)
-        {
-            sb.Append(@$" {AddDirectoryParam}""{sGame.GameInstallFolder}""");
-
-
-            if (sMod.MainDef is not null)
-            {
-                sb.Append($@" {MainDefParam}""{sMod.MainDef}""");
-            }
-            else
-            {
-                //overriding default def so gamename.def files are ignored
-                sb.Append($@" {MainDefParam}""a""");
-            }
-
-
-            if (sMod.FileName is null)
-            {
-                return;
-            }
-
-
-            if (sMod.Type is AddonTypeEnum.TC)
-            {
-                sb.Append($@" {AddFileParam}""{Path.Combine(sGame.CampaignsFolderPath, sMod.FileName)}""");
-            }
-            else if (sMod.Type is AddonTypeEnum.Map)
-            {
-                GetMapArgs(sb, sGame, sMod);
-            }
-            else
-            {
-                ThrowHelper.NotImplementedException($"Mod type {sMod.Type} is not supported");
-                return;
             }
         }
     }

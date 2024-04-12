@@ -1,6 +1,8 @@
 ﻿using Common.Enums;
+using Common.Enums.Addons;
 using Common.Helpers;
 using Common.Interfaces;
+using Games.Games;
 using Mods.Mods;
 using Mods.Serializable.Addon;
 using Ports.Providers;
@@ -200,6 +202,98 @@ namespace Ports.Ports
             }
 
             return true;
+        }
+
+
+        protected void GetBloodArgs(StringBuilder sb, BloodGame game, BloodCampaign bMod)
+        {
+            if (bMod.INI is not null)
+            {
+                sb.Append($@" -ini ""{bMod.INI}""");
+            }
+            else if (bMod.RequiredAddonEnum is BloodAddonEnum.BloodCP)
+            {
+                sb.Append($@" -ini ""{Consts.CrypticIni}""");
+            }
+
+
+            if (bMod.MainDef is not null)
+            {
+                sb.Append($@" {MainDefParam}""{bMod.MainDef}""");
+            }
+            else
+            {
+                //overriding default def so gamename.def files are ignored
+                sb.Append($@" {MainDefParam}""a""");
+            }
+
+
+            if (bMod.FileName is null)
+            {
+                return;
+            }
+
+
+            if (bMod.RFF is not null)
+            {
+                sb.Append($@" -rff {bMod.RFF}");
+            }
+
+
+            if (bMod.SND is not null)
+            {
+                sb.Append($@" -snd {bMod.SND}");
+            }
+
+
+            if (bMod.Type is AddonTypeEnum.TC)
+            {
+                sb.Append($@" {AddFileParam}""{Path.Combine(game.CampaignsFolderPath, bMod.FileName)}""");
+            }
+            else if (bMod.Type is AddonTypeEnum.Map)
+            {
+                GetMapArgs(sb, game, bMod);
+            }
+            else
+            {
+                ThrowHelper.NotImplementedException($"Mod type {bMod.Type} is not supported");
+                return;
+            }
+        }
+
+
+        protected void GetSlaveArgs(StringBuilder sb, SlaveGame sGame, SlaveCampaign sMod)
+        {
+            if (sMod.MainDef is not null)
+            {
+                sb.Append($@" {MainDefParam}""{sMod.MainDef}""");
+            }
+            else
+            {
+                //overriding default def so gamename.def files are ignored
+                sb.Append($@" {MainDefParam}""a""");
+            }
+
+
+            if (sMod.FileName is null)
+            {
+                return;
+            }
+
+
+            if (sMod.Type is AddonTypeEnum.TC)
+            {
+                sb.Append($@" {AddFileParam}""{Path.Combine(sGame.CampaignsFolderPath, sMod.FileName)}""");
+            }
+            else if (sMod.Type is AddonTypeEnum.Map)
+            {
+                GetMapArgs(sb, sGame, sMod);
+            }
+            else
+            {
+                ThrowHelper.NotImplementedException($"Mod type {sMod.Type} is not supported");
+                return;
+            }
         }
 
 

@@ -61,7 +61,10 @@ namespace Ports.Ports.EDuke32
         {
             //don't search for steam/gog installs
             sb.Append($@" -usecwd");
-            
+
+            sb.Append($@" {AddDirectoryParam}""{game.GameInstallFolder}""");
+
+
             if (game is WangGame wGame && mod is WangCampaign wMod)
             {
                 GetWangArgs(sb, wGame, wMod);
@@ -75,7 +78,7 @@ namespace Ports.Ports.EDuke32
 
         private void GetWangArgs(StringBuilder sb, WangGame wGame, WangCampaign wMod)
         {
-            sb.Append($@" {AddDirectoryParam}""{wGame.GameInstallFolder}"" -addon{(byte)wMod.RequiredAddonEnum}");
+            sb.Append($@" -addon{(byte)wMod.RequiredAddonEnum}");
 
             AddWangMusicFolder(sb, wGame);
 

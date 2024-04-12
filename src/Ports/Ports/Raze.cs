@@ -7,6 +7,7 @@ using Mods.Mods;
 using Ports.Providers;
 using System.Diagnostics;
 using System.Text;
+using System.Xml.Linq;
 
 namespace Ports.Ports
 {
@@ -52,6 +53,9 @@ namespace Ports.Ports
 
         /// <inheritdoc/>
         protected override string ConfigFile => "raze_portable.ini";
+
+        /// <inheritdoc/>
+        protected override string AddDirectoryParam => "-j ";
 
         /// <inheritdoc/>
         protected override string AddFileParam => "-file ";
@@ -129,17 +133,17 @@ namespace Ports.Ports
             {
                 GetBloodArgs(sb, bGame, bCamp);
             }
-            else if (game is WangGame wGame)
+            else if (game is WangGame wGame && mod is WangCampaign wCamp)
             {
-                GetWangArgs(sb, wGame, mod);
+                GetWangArgs(sb, wGame, wCamp);
             }
-            else if (game is SlaveGame sGame)
+            else if (game is SlaveGame sGame && mod is SlaveCampaign sCamp)
             {
-                GetSlaveArgs(sb, sGame, mod);
+                GetSlaveArgs(sb, sGame, sCamp);
             }
-            else if (game is RedneckGame rGame)
+            else if (game is RedneckGame rGame && mod is RedneckCampaign rCamp)
             {
-                GetRedneckArgs(sb, rGame, mod);
+                GetRedneckArgs(sb, rGame, rCamp);
             }
             else
             {
@@ -151,23 +155,52 @@ namespace Ports.Ports
         {
             sb.Append($" -addon {(byte)dMod.RequiredAddonEnum}");
 
-            if (dMod.Id == DukeAddonEnum.WorldTour.ToString())
+            if (dMod.RequiredAddonEnum is DukeAddonEnum.DukeWT)
             {
                 var config = Path.Combine(PathToPortFolder, ConfigFile);
                 AddGamePathsToConfig(game.DukeWTInstallPath, game.ModsFolderPath, game.MapsFolderPath, config);
 
-                return;
+                sb.Append($" -addon {(byte)DukeAddonEnum.Duke3D}");
             }
+            else
+            {
+                sb.Append($@" -addon {(byte)dMod.RequiredAddonEnum}");
+            }
+
+
+            if (dMod.MainDef is not null)
+            {
+                sb.Append($@" {MainDefParam}""{dMod.MainDef}""");
+            }
+            else
+            {
+                //overriding default def so gamename.def files are ignored
+                sb.Append($@" {MainDefParam}""a""");
+            }
+
 
             if (dMod.FileName is null)
             {
                 return;
             }
 
+
             if (dMod.Type is AddonTypeEnum.TC)
             {
-                //TODO
-                //sb.Append($@" -file ""{Path.Combine(game.CampaignsFolderPath, camp.FileName)}"" -con ""{camp.StartupFile}""");
+                sb.Append($@" {AddFileParam}""{Path.Combine(game.CampaignsFolderPath, dMod.FileName)}""");
+
+                if (dMod.MainCon is not null)
+                {
+                    sb.Append($@" {MainConParam}""{dMod.MainCon}""");
+                }
+
+                if (dMod.AdditionalCons?.Count > 0)
+                {
+                    foreach (var con in dMod.AdditionalCons)
+                    {
+                        sb.Append($@" {AddConParam}""{con}""");
+                    }
+                }
             }
             else if (dMod.Type is AddonTypeEnum.Map)
             {
@@ -180,80 +213,38 @@ namespace Ports.Ports
             }
         }
 
-        protected void GetBloodArgs(StringBuilder sb, BloodGame game, BloodCampaign bMod)
+        private void GetWangArgs(StringBuilder sb, WangGame game, WangCampaign camp)
         {
-            if (bMod.INI is not null)
+            if (camp.RequiredAddonEnum is WangAddonEnum.WangWD)
             {
-                sb.Append($@" -ini ""{bMod.INI}""");
+                sb.Append($" {AddFileParam}WT.GRP");
             }
-            else if (bMod.RequiredAddonEnum is BloodAddonEnum.BloodCP)
+            else if (camp.RequiredAddonEnum is WangAddonEnum.WangTD)
             {
-                sb.Append($@" -ini ""{Consts.CrypticIni}""");
-            }
-
-
-            if (bMod.FileName is null)
-            {
-                return;
+                sb.Append($" {AddFileParam}TD.GRP");
             }
 
 
-            if (bMod.RFF is not null)
+            if (camp.MainDef is not null)
             {
-                sb.Append($@" -rff {bMod.RFF}");
-            }
-
-
-            if (bMod.SND is not null)
-            {
-                sb.Append($@" -snd {bMod.SND}");
-            }
-
-
-            if (bMod.MainDef is not null)
-            {
-                sb.Append($@" {MainDefParam}""{bMod.MainDef}""");
+                sb.Append($@" {MainDefParam}""{camp.MainDef}""");
             }
             else
             {
                 //overriding default def so gamename.def files are ignored
-                sb.Append($@" {MainDefParam}a");
+                sb.Append($@" {MainDefParam}""a""");
             }
 
 
-            if (bMod.Type is AddonTypeEnum.TC)
-            {
-                sb.Append($@" {AddFileParam}""{Path.Combine(game.CampaignsFolderPath, bMod.FileName)}""");
-            }
-            else if (bMod.Type is AddonTypeEnum.Map)
-            {
-                GetMapArgs(sb, game, bMod);
-            }
-            else
-            {
-                ThrowHelper.NotImplementedException($"Mod type {bMod.Type} is not supported");
-                return;
-            }
-        }
-        private void GetWangArgs(StringBuilder sb, WangGame game, IAddon camp)
-        {
             if (camp.FileName is null)
             {
-                if (camp.Id == WangAddonEnum.WangWD.ToString())
-                {
-                    sb.Append($" {AddFileParam}WT.GRP");
-                }
-                else if (camp.Id == WangAddonEnum.WangTD.ToString())
-                {
-                    sb.Append($" {AddFileParam}TD.GRP");
-                }
-
                 return;
             }
+
 
             if (camp.Type is AddonTypeEnum.TC)
             {
-                sb.Append($@" {AddFileParam}""{Path.Combine(game.CampaignsFolderPath, camp.FileName)}""");
+                sb.Append($@" {AddDirectoryParam}""{game.CampaignsFolderPath}"" {AddFileParam}""{camp.FileName}""");
             }
             else if (camp.Type is AddonTypeEnum.Map)
             {
@@ -266,7 +257,7 @@ namespace Ports.Ports
             }
         }
 
-        private void GetRedneckArgs(StringBuilder sb, RedneckGame game, IAddon camp)
+        private void GetRedneckArgs(StringBuilder sb, RedneckGame game, RedneckCampaign camp)
         {
             if (camp.Id == RedneckAddonEnum.RedneckR66.ToString())
             {
@@ -280,36 +271,40 @@ namespace Ports.Ports
                 AddGamePathsToConfig(game.AgainInstallPath, game.ModsFolderPath, game.MapsFolderPath, config);
             }
 
-            if (camp.FileName is null)
-            {
-                return;
-            }
 
-            if (camp.Type is AddonTypeEnum.TC)
+            if (camp.MainDef is not null)
             {
-                sb.Append($@" {AddFileParam}""{Path.Combine(game.CampaignsFolderPath, camp.FileName)}""");
-            }
-            else if (camp.Type is AddonTypeEnum.Map)
-            {
-                GetMapArgs(sb, game, camp);
+                sb.Append($@" {MainDefParam}""{camp.MainDef}""");
             }
             else
             {
-                ThrowHelper.NotImplementedException($"Mod type {camp.Type} is not supported");
-                return;
+                //overriding default def so gamename.def files are ignored
+                sb.Append($@" {MainDefParam}""a""");
             }
-        }
 
-        private void GetSlaveArgs(StringBuilder sb, SlaveGame game, IAddon camp)
-        {
+
             if (camp.FileName is null)
             {
                 return;
             }
 
+
             if (camp.Type is AddonTypeEnum.TC)
             {
                 sb.Append($@" {AddFileParam}""{Path.Combine(game.CampaignsFolderPath, camp.FileName)}""");
+
+                if (camp.MainCon is not null)
+                {
+                    sb.Append($@" {MainConParam}""{camp.MainCon}""");
+                }
+
+                if (camp.AdditionalCons?.Count > 0)
+                {
+                    foreach (var con in camp.AdditionalCons)
+                    {
+                        sb.Append($@" {AddConParam}""{con}""");
+                    }
+                }
             }
             else if (camp.Type is AddonTypeEnum.Map)
             {
@@ -346,9 +341,12 @@ namespace Ports.Ports
 
                 sb.Append($@" {AddFileParam}""{aMod.FileName}""");
 
-                foreach (var def in aMod.AdditionalDefs)
+                if (aMod.AdditionalDefs is not null)
                 {
-                    sb.Append($@" {AddDefParam}""{def}""");
+                    foreach (var def in aMod.AdditionalDefs)
+                    {
+                        sb.Append($@" {AddDefParam}""{def}""");
+                    }
                 }
             }
         }

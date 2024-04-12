@@ -108,7 +108,7 @@ namespace Games.Games
 
             if (IsWorldTourInstalled)
             {
-                campaigns.Add(GameEnum.DukeWT.ToString(), new DukeCampaign()
+                campaigns.Add(DukeAddonEnum.DukeWT.ToString(), new DukeCampaign()
                 {
                     Id = GameEnum.Duke3D.ToString(),
                     Type = AddonTypeEnum.Official,
@@ -135,7 +135,7 @@ namespace Games.Games
                     AdditionalDefs = null,
                     RTS = null,
                     StartMap = null,
-                    RequiredAddonEnum = DukeAddonEnum.WorldTour
+                    RequiredAddonEnum = DukeAddonEnum.DukeWT
                 });
             }
 
@@ -271,7 +271,7 @@ namespace Games.Games
                     AdditionalDefs = null,
                     RTS = null,
                     StartMap = null,
-                    RequiredAddonEnum = DukeAddonEnum.Duke64
+                    RequiredAddonEnum = DukeAddonEnum.Duke3D
                 });
             }
 

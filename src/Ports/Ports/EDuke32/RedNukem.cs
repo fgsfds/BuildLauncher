@@ -83,15 +83,15 @@ namespace Ports.Ports.EDuke32
         {
             if (camp.Id == GameEnum.RedneckRA.ToString())
             {
-                sb.Append($@" -j ""{game.AgainInstallPath}""");
+                sb.Append($@" {AddDirectoryParam}""{game.AgainInstallPath}""");
             }
             else if (camp.Id == RedneckAddonEnum.RedneckR66.ToString())
             {
-                sb.Append($@" -j ""{game.GameInstallFolder}"" -x GAME66.CON");
+                sb.Append($@" {AddDirectoryParam}""{game.GameInstallFolder}"" -x GAME66.CON");
             }
             else
             {
-                sb.Append($@" -j ""{game.GameInstallFolder}""");
+                sb.Append($@" {AddDirectoryParam}""{game.GameInstallFolder}""");
             }
 
 

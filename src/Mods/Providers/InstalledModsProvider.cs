@@ -311,9 +311,9 @@ namespace Mods.Providers
                             {
                                 dukeAddon = DukeAddonEnum.DukeVaca;
                             }
-                            else if (dep.Id == DukeAddonEnum.WorldTour.ToString())
+                            else if (dep.Id == DukeAddonEnum.DukeWT.ToString())
                             {
-                                dukeAddon = DukeAddonEnum.WorldTour;
+                                dukeAddon = DukeAddonEnum.DukeWT;
                             }
 
                             else if (dep.Id == WangAddonEnum.WangTD.ToString())
