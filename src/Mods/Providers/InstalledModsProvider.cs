@@ -71,18 +71,6 @@ namespace Mods.Providers
         }
 
         /// <inheritdoc/>
-        public void DeleteMod(IAddon mod)
-        {
-            _cache.ThrowIfNull();
-
-            File.Delete(mod.PathToFile!);
-
-            _cache[mod.Type].Remove(mod.Id);
-
-            ModDeletedEvent?.Invoke(_game, mod.Type);
-        }
-
-        /// <inheritdoc/>
         public void AddMod(AddonTypeEnum modTypeEnum, string pathToFile)
         {
             _cache.ThrowIfNull();
@@ -107,6 +95,24 @@ namespace Mods.Providers
                 dict.Add(mod.Id, mod);
             }
         }
+
+        /// <inheritdoc/>
+        public void DeleteMod(IAddon mod)
+        {
+            _cache.ThrowIfNull();
+
+            File.Delete(mod.PathToFile!);
+
+            _cache[mod.Type].Remove(mod.Id);
+
+            ModDeletedEvent?.Invoke(_game, mod.Type);
+        }
+
+        /// <inheritdoc/>
+        public void EnableMod(string id) => ((AutoloadMod)_cache[AddonTypeEnum.Mod][id]).IsEnabled = true;
+
+        /// <inheritdoc/>
+        public void DisableMod(string id) => ((AutoloadMod)_cache[AddonTypeEnum.Mod][id]).IsEnabled = false;
 
         /// <inheritdoc/>
         public Dictionary<string, IAddon> GetInstalledMods(AddonTypeEnum modTypeEnum)

@@ -31,5 +31,17 @@ namespace Common.Interfaces
         /// </summary>
         /// <param name="createNew">Clear current cache and create new</param>
         Task CreateCache(bool createNew);
+
+        /// <summary>
+        /// Disable mod
+        /// </summary>
+        /// <param name="id">Mod id</param>
+        void DisableMod(string id);
+
+        /// <summary>
+        /// Enable mod
+        /// </summary>
+        /// <param name="id">Mod id</param>
+        void EnableMod(string id);
     }
 }

@@ -120,10 +120,12 @@ namespace BuildLauncher.ViewModels
             if (!mod.IsEnabled)
             {
                 _config.AddDisabledAutoloadMod(mod.Id);
+                Game.InstalledModsProvider.DisableMod(mod.Id);
             }
             else if (mod.IsEnabled)
             {
                 _config.RemoveDisabledAutoloadMod(mod.Id);
+                Game.InstalledModsProvider.EnableMod(mod.Id);
             }
         }
 
