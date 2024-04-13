@@ -68,6 +68,12 @@ namespace Mods.Providers
 
                 foreach (var mod in list)
                 {
+                    //hack for RR
+                    if (mod.Game is GameEnum.RedneckRA)
+                    {
+                        mod.Game = GameEnum.Redneck;
+                    }
+
                     _cache.TryAdd(mod.Game, []);
                     _cache[mod.Game].TryAdd(mod.ModType, []);
                     _cache[mod.Game][mod.ModType].TryAdd(mod.Id, mod);
