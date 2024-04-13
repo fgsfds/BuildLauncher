@@ -98,7 +98,17 @@ namespace Mods.Mods
 
             if (SupportedPorts is not null)
             {
-                description.Append(Environment.NewLine + Environment.NewLine + $"Only supported by: *{string.Join(", ", SupportedPorts)}*");
+                description.Append(Environment.NewLine + Environment.NewLine + $"Only works with: *{string.Join(", ", SupportedPorts)}*");
+            }
+
+            if (Dependencies is not null)
+            {
+                description.Append(Environment.NewLine + Environment.NewLine + $"Requires: *{string.Join(", ", Dependencies.Keys)}*");
+            }
+
+            if (Incompatibles is not null)
+            {
+                description.Append(Environment.NewLine + Environment.NewLine + $"Incompatible with: *{string.Join(", ", Incompatibles.Keys)}*");
             }
 
             return description.ToString();

@@ -201,6 +201,22 @@ namespace Ports.Ports
                 }
             }
 
+            //hack for RR and RA
+            if (autoloadMod.SupportedGames is not null &&
+                campaign is RedneckCampaign rCamp)
+            {
+                var game = rCamp.RequiredAddonEnum switch
+                {
+                    RedneckAddonEnum.Redneck or RedneckAddonEnum.RedneckR66 => GameEnum.Redneck,
+                    _ => GameEnum.RedneckRA,
+                };
+
+                if (!autoloadMod.SupportedGames.Contains(game))
+                {
+                    return false;
+                }
+            }
+
             return true;
         }
 

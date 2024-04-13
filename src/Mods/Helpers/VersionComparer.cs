@@ -76,9 +76,18 @@ namespace Mods.Helpers
                 return ThrowHelper.NotImplementedException<bool>();
             }
 
-            var result = string.CompareOrdinal(v1, v2);
+            var result = string.Compare(v1, v2);
 
-            return expected.Contains(result);
+            if (result > 0)
+            {
+                result = 1;
+            }
+            else if (result < 0)
+            {
+                result = -1;
+            }
+
+                return expected.Contains(result);
         }
     }
 }
