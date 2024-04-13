@@ -146,7 +146,7 @@ namespace Ports.Ports
             //TODO e#m#
             if (camp.StartMap is MapFileDto mapFile)
             {
-                sb.Append($@" -file ""{Path.Combine(game.MapsFolderPath, camp.FileName!)}""");
+                sb.Append($@" {AddFileParam}""{Path.Combine(game.MapsFolderPath, camp.FileName!)}""");
                 sb.Append($@" -map ""{mapFile.File}""");
             }
             else
