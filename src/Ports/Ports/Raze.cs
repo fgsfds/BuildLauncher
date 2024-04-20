@@ -45,9 +45,9 @@ namespace Ports.Ports
         public override Func<GitHubReleaseAsset, bool> WindowsReleasePredicate => static x => x.FileName.EndsWith(".zip") && !x.FileName.Contains("linux") && !x.FileName.Contains("macos");
 
         /// <inheritdoc/>
-        public override int? InstalledVersion =>
+        public override string? InstalledVersion =>
             File.Exists(FullPathToExe)
-            ? int.Parse(new string(FileVersionInfo.GetVersionInfo(FullPathToExe).FileVersion!.Where(static x => char.IsDigit(x)).ToArray()))
+            ? FileVersionInfo.GetVersionInfo(FullPathToExe).FileVersion
             : null;
 
 
@@ -55,7 +55,7 @@ namespace Ports.Ports
         protected override string ConfigFile => "raze_portable.ini";
 
         /// <inheritdoc/>
-        protected override string AddDirectoryParam => "-j ";
+        protected override string AddDirectoryParam => "-file ";
 
         /// <inheritdoc/>
         protected override string AddFileParam => "-file ";

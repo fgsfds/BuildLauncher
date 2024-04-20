@@ -48,7 +48,7 @@ namespace Ports.Ports
         /// <summary>
         /// Currently installed version
         /// </summary>
-        public abstract int? InstalledVersion { get; }
+        public abstract string? InstalledVersion { get; }
 
         /// <summary>
         /// Path to port install folder
@@ -119,10 +119,6 @@ namespace Ports.Ports
 
             BeforeStart(game, mod);
 
-            GetStartCampaignArgs(sb, game, mod);
-
-            GetAutoloadModsArgs(sb, game, mod);
-
             if (skipIntro)
             {
                 GetSkipIntroParameter(sb);
@@ -132,6 +128,10 @@ namespace Ports.Ports
             {
                 GetSkipStartupParameter(sb);
             }
+
+            GetStartCampaignArgs(sb, game, mod);
+
+            GetAutoloadModsArgs(sb, game, mod);
 
             return sb.ToString();
         }

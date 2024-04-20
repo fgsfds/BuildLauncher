@@ -45,7 +45,7 @@ namespace Ports.Ports
         public override Func<GitHubReleaseAsset, bool> WindowsReleasePredicate => throw new NotImplementedException();
 
         /// <inheritdoc/>
-        public override int? InstalledVersion => IsInstalled ? 116 : null;
+        public override string? InstalledVersion => IsInstalled ? "1.16" : null;
 
         /// <inheritdoc/>
         public override bool IsInstalled => File.Exists(Path.Combine(PathToPortFolder, "BuildGDX.jar"));

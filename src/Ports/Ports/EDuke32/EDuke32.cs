@@ -59,7 +59,7 @@ namespace Ports.Ports.EDuke32
         public override Func<GitHubReleaseAsset, bool> WindowsReleasePredicate => ThrowHelper.NotImplementedException<Func<GitHubReleaseAsset, bool>>();
 
         /// <inheritdoc/>
-        public override int? InstalledVersion
+        public override string? InstalledVersion
         {
             get
             {
@@ -70,7 +70,7 @@ namespace Ports.Ports.EDuke32
                     return null;
                 }
 
-                return int.Parse(File.ReadAllText(versionFile));
+                return File.ReadAllText(versionFile);
             }
         }
 
