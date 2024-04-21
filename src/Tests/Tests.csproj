@@ -17,8 +17,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\src\Mods\Mods.csproj" />
-    <ProjectReference Include="..\src\Ports\Ports.csproj" />
+    <ProjectReference Include="..\Mods\Mods.csproj" />
+    <ProjectReference Include="..\Ports\Ports.csproj" />
   </ItemGroup>
 
   <ItemGroup>
