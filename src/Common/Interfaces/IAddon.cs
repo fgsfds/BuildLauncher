@@ -15,6 +15,11 @@ namespace Common.Interfaces
         AddonTypeEnum Type { get; init; }
 
         /// <summary>
+        /// Port features required to run addon
+        /// </summary>
+        HashSet<FeaturesEnum>? RequiredFeatures { get; init; }
+
+        /// <summary>
         /// List of supported games
         /// </summary>
         HashSet<GameEnum>? SupportedGames { get; init; }

@@ -72,7 +72,8 @@ namespace Games.Games
                 RFF = null,
                 SND = null,
                 StartMap = null,
-                RequiredAddonEnum = BloodAddonEnum.Blood
+                RequiredAddonEnum = BloodAddonEnum.Blood,
+                RequiredFeatures = null
             });
 
             if (IsCrypticPassageInstalled)
@@ -105,7 +106,8 @@ namespace Games.Games
                     RFF = null,
                     SND = null,
                     StartMap = null,
-                    RequiredAddonEnum = BloodAddonEnum.BloodCP
+                    RequiredAddonEnum = BloodAddonEnum.BloodCP,
+                    RequiredFeatures = null
                 });
             }
 

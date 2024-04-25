@@ -13,6 +13,9 @@ namespace Mods.Mods
         public required AddonTypeEnum Type { get; init; }
 
         /// <inheritdoc/>
+        public required HashSet<FeaturesEnum>? RequiredFeatures { get; init; }
+
+        /// <inheritdoc/>
         public required string Id { get; init; }
 
         /// <inheritdoc/>

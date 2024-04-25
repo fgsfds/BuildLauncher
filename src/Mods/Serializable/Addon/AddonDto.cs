@@ -34,28 +34,28 @@ namespace Mods.Serializable
         [JsonPropertyName("preview")]
         public string? PreviewImage { get; set; }
 
-        [JsonPropertyName("GRP")]
+        [JsonPropertyName("grp")]
         [JsonConverter(typeof(SingleOrArrayConverter<string>))]
         public List<string>? Grps { get; set; }
 
-        [JsonPropertyName("CON")]
+        [JsonPropertyName("con")]
         [JsonConverter(typeof(SingleOrArrayConverter<ScriptDto>))]
         public List<ScriptDto>? Cons { get; set; }
 
-        [JsonPropertyName("DEF")]
+        [JsonPropertyName("def")]
         [JsonConverter(typeof(SingleOrArrayConverter<ScriptDto>))]
         public List<ScriptDto>? Defs { get; set; }
 
-        [JsonPropertyName("RTS")]
+        [JsonPropertyName("rts")]
         public string? Rts { get; set; }
 
-        [JsonPropertyName("INI")]
+        [JsonPropertyName("ini")]
         public string? Ini { get; set; }
 
-        [JsonPropertyName("RFF")]
+        [JsonPropertyName("rff")]
         public string? Rff { get; set; }
 
-        [JsonPropertyName("SND")]
+        [JsonPropertyName("snd")]
         public string? Snd { get; set; }
 
         [JsonPropertyName("gamecrc")]
@@ -77,9 +77,19 @@ namespace Mods.Serializable
         [JsonPropertyName("startmap")]
         [JsonConverter(typeof(IStartMapConverter))]
         public IStartMap? StartMap { get; set; }
+
+        [JsonPropertyName("features")]
+        [JsonConverter(typeof(SingleOrArrayConverter<FeaturesEnum>))]
+        public List<FeaturesEnum>? RequiredFeatures { get; set; }
     }
 
-    [JsonSourceGenerationOptions(Converters = [typeof(JsonStringEnumConverter<PortEnum>), typeof(JsonStringEnumConverter<AddonTypeEnum>)])]
+    [JsonSourceGenerationOptions(
+        Converters = [
+            typeof(JsonStringEnumConverter<PortEnum>), 
+            typeof(JsonStringEnumConverter<GameEnum>),
+            typeof(JsonStringEnumConverter<AddonTypeEnum>),
+            typeof(JsonStringEnumConverter<FeaturesEnum>)
+            ])]
     [JsonSerializable(typeof(AddonDto))]
     public sealed partial class AddonManifestContext : JsonSerializerContext;
 }

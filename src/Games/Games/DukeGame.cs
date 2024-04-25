@@ -102,7 +102,8 @@ namespace Games.Games
                     AdditionalDefs = null,
                     RTS = null,
                     StartMap = null,
-                    RequiredAddonEnum = DukeAddonEnum.Duke3D
+                    RequiredAddonEnum = DukeAddonEnum.Duke3D,
+                    RequiredFeatures = null
                 });
             }
 
@@ -135,7 +136,8 @@ namespace Games.Games
                     AdditionalDefs = null,
                     RTS = null,
                     StartMap = null,
-                    RequiredAddonEnum = DukeAddonEnum.DukeWT
+                    RequiredAddonEnum = DukeAddonEnum.DukeWT,
+                    RequiredFeatures = null
                 });
             }
 
@@ -171,7 +173,8 @@ namespace Games.Games
                         AdditionalDefs = null,
                         RTS = null,
                         StartMap = null,
-                        RequiredAddonEnum = DukeAddonEnum.DukeVaca
+                        RequiredAddonEnum = DukeAddonEnum.DukeVaca,
+                        RequiredFeatures = null
                     });
                 }
 
@@ -203,7 +206,8 @@ namespace Games.Games
                         AdditionalDefs = null,
                         RTS = null,
                         StartMap = null,
-                        RequiredAddonEnum = DukeAddonEnum.DukeNW
+                        RequiredAddonEnum = DukeAddonEnum.DukeNW,
+                        RequiredFeatures = null
                     });
                 }
 
@@ -238,7 +242,8 @@ namespace Games.Games
                         AdditionalDefs = null,
                         RTS = null,
                         StartMap = null,
-                        RequiredAddonEnum = DukeAddonEnum.DukeDC
+                        RequiredAddonEnum = DukeAddonEnum.DukeDC,
+                        RequiredFeatures = null
                     });
                 }
             }
@@ -271,7 +276,8 @@ namespace Games.Games
                     AdditionalDefs = null,
                     RTS = null,
                     StartMap = null,
-                    RequiredAddonEnum = DukeAddonEnum.Duke3D
+                    RequiredAddonEnum = DukeAddonEnum.Duke3D,
+                    RequiredFeatures = null
                 });
             }
 

@@ -119,11 +119,13 @@ namespace Mods.Providers
         {
             _cache.ThrowIfNull();
 
-            try
+            _cache.TryGetValue(modTypeEnum, out var result);
+
+            if (result is not null)
             {
-                return _cache[modTypeEnum];
+                return result;
             }
-            catch
+            else
             {
                 return [];
             }
@@ -198,6 +200,7 @@ namespace Mods.Providers
             HashSet<int>? supportedGamesCrcs = null;
             HashSet<PortEnum>? supportedPorts = null;
             HashSet<string>? grps = null;
+            HashSet<FeaturesEnum>? requiredFeatures = null;
 
             string? mainCon = null;
             HashSet<string>? addCons = null;
@@ -224,13 +227,8 @@ namespace Mods.Providers
             {
                 using var archive = ArchiveFactory.Open(pathToFile);
 
-                var oldManifest = archive.Entries.FirstOrDefault(static x => x.Key.Equals("manifest.json"));
-                
-                if (oldManifest is not null)
+                if (DeleteOld(pathToFile, archive))
                 {
-                    //deleting old versions of the mods
-                    archive.Dispose();
-                    File.Delete(pathToFile);
                     return null;
                 }
 
@@ -272,6 +270,7 @@ namespace Mods.Providers
                     rff = manifest.Rff;
                     snd = manifest.Snd;
                     startMap = manifest.StartMap;
+                    requiredFeatures = manifest.RequiredFeatures?.ToHashSet();
 
                     if (manifest.Cons is not null)
                     {
@@ -405,7 +404,8 @@ namespace Mods.Providers
                     SupportedGamesCrcs = supportedGamesCrcs,
                     Dependencies = dependencies,
                     Incompatibles = incompatibles,
-                    StartMap = startMap
+                    StartMap = startMap,
+                    RequiredFeatures = requiredFeatures
                 };
             }
             else
@@ -433,7 +433,8 @@ namespace Mods.Providers
                         MainDef = mainDef,
                         AdditionalDefs = addDefs,
                         RTS = rts,
-                        RequiredAddonEnum = dukeAddon
+                        RequiredAddonEnum = dukeAddon,
+                        RequiredFeatures = requiredFeatures
                     };
                 }
                 else if (_game.GameEnum is GameEnum.Fury)
@@ -458,7 +459,8 @@ namespace Mods.Providers
                         AdditionalCons = addCons,
                         MainDef = mainDef,
                         AdditionalDefs = addDefs,
-                        RTS = rts
+                        RTS = rts,
+                        RequiredFeatures = requiredFeatures
                     };
                 }
                 else if (_game.GameEnum is GameEnum.Wang)
@@ -481,7 +483,8 @@ namespace Mods.Providers
                         StartMap = startMap,
                         MainDef = mainDef,
                         AdditionalDefs = addDefs,
-                        RequiredAddonEnum = wangAddon
+                        RequiredAddonEnum = wangAddon,
+                        RequiredFeatures = requiredFeatures
                     };
                 }
                 else if (_game.GameEnum is GameEnum.Blood)
@@ -507,7 +510,8 @@ namespace Mods.Providers
                         INI = ini,
                         RFF = rff,
                         SND = snd,
-                        RequiredAddonEnum = bloodAddon
+                        RequiredAddonEnum = bloodAddon,
+                        RequiredFeatures = requiredFeatures
                     };
                 }
                 else if (_game.GameEnum is GameEnum.Redneck)
@@ -533,7 +537,8 @@ namespace Mods.Providers
                         MainDef = mainDef,
                         AdditionalDefs = addDefs,
                         RTS = rts,
-                        RequiredAddonEnum = redneckAddon
+                        RequiredAddonEnum = redneckAddon,
+                        RequiredFeatures = requiredFeatures
                     };
                 }
                 else if (_game.GameEnum is GameEnum.Exhumed)
@@ -555,7 +560,8 @@ namespace Mods.Providers
                         Incompatibles = incompatibles,
                         StartMap = startMap,
                         MainDef = mainDef,
-                        AdditionalDefs = addDefs
+                        AdditionalDefs = addDefs,
+                        RequiredFeatures = requiredFeatures
                     };
                 }
                 else
@@ -566,6 +572,22 @@ namespace Mods.Providers
             }
 
             return addon;
+        }
+
+        [Obsolete("delete")]
+        private bool DeleteOld(string pathToFile, IArchive archive)
+        {
+            var oldManifest = archive.Entries.FirstOrDefault(static x => x.Key.Equals("manifest.json"));
+
+            if (oldManifest is not null)
+            {
+                //deleting old versions of the mods
+                archive.Dispose();
+                File.Delete(pathToFile);
+                return true;
+            }
+
+            return false;
         }
     }
 }

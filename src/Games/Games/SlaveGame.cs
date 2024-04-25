@@ -55,7 +55,8 @@ namespace Games.Games
                     Incompatibles = null,
                     MainDef = null,
                     AdditionalDefs = null,
-                    StartMap = null
+                    StartMap = null,
+                    RequiredFeatures = null
                 });
             }
 
