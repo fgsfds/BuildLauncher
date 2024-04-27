@@ -48,10 +48,16 @@ namespace BuildLauncher.ViewModels
         /// </summary>
         [ObservableProperty]
         [NotifyPropertyChangedFor(nameof(SelectedCampaignDescription))]
+        [NotifyPropertyChangedFor(nameof(SelectedCampaignPreview))]
+        [NotifyPropertyChangedFor(nameof(IsPreviewVisible))]
         [NotifyCanExecuteChangedFor(nameof(StartCampaignCommand))]
         private IAddon? _selectedCampaign;
 
         public string SelectedCampaignDescription => SelectedCampaign is null ? string.Empty : SelectedCampaign.ToMarkdownString();
+
+        public Stream? SelectedCampaignPreview => SelectedCampaign?.Preview;
+
+        public bool IsPreviewVisible => SelectedCampaign?.Preview is not null;
 
         #endregion
 

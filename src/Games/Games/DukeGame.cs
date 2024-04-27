@@ -104,7 +104,8 @@ namespace Games.Games
                     StartMap = null,
                     RequiredAddonEnum = DukeAddonEnum.Duke3D,
                     RequiredFeatures = null,
-                    GRPs = null
+                    GRPs = null,
+                    Preview = null
                 });
             }
 
@@ -139,7 +140,8 @@ namespace Games.Games
                     StartMap = null,
                     RequiredAddonEnum = DukeAddonEnum.DukeWT,
                     RequiredFeatures = null,
-                    GRPs = null
+                    GRPs = null,
+                    Preview = null
                 });
             }
 
@@ -177,7 +179,8 @@ namespace Games.Games
                         StartMap = null,
                         RequiredAddonEnum = DukeAddonEnum.DukeVaca,
                         RequiredFeatures = null,
-                        GRPs = null
+                        GRPs = null,
+                        Preview = null
                     });
                 }
 
@@ -211,7 +214,8 @@ namespace Games.Games
                         StartMap = null,
                         RequiredAddonEnum = DukeAddonEnum.DukeNW,
                         RequiredFeatures = null,
-                        GRPs = null
+                        GRPs = null,
+                        Preview = null
                     });
                 }
 
@@ -248,7 +252,8 @@ namespace Games.Games
                         StartMap = null,
                         RequiredAddonEnum = DukeAddonEnum.DukeDC,
                         RequiredFeatures = null,
-                        GRPs = null
+                        GRPs = null,
+                        Preview = null
                     });
                 }
             }
@@ -283,7 +288,8 @@ namespace Games.Games
                     StartMap = null,
                     RequiredAddonEnum = DukeAddonEnum.Duke3D,
                     RequiredFeatures = null,
-                    GRPs = null
+                    GRPs = null,
+                    Preview = null
                 });
             }
 

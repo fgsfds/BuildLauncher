@@ -27,9 +27,15 @@ namespace Common.Helpers
         /// Get grid cover from the archive
         /// </summary>
         /// <param name="archive">Archive</param>
-        public static Stream? GetCoverFromArchive(IArchive archive)
+        public static Stream? GetCoverFromArchive(IArchive archive) => GetImageFromArchive(archive, "grid.");
+
+        /// <summary>
+        /// Get grid cover from the archive
+        /// </summary>
+        /// <param name="archive">Archive</param>
+        public static Stream? GetImageFromArchive(IArchive archive, string imageName)
         {
-            var image = archive.Entries.FirstOrDefault(static x => x.Key.StartsWith("grid."));
+            var image = archive.Entries.FirstOrDefault(x => x.Key.StartsWith(imageName));
 
             if (image is null)
             {

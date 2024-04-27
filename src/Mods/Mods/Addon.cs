@@ -52,6 +52,9 @@ namespace Mods.Mods
         public required Stream? Image { get; init; }
 
         /// <inheritdoc/>
+        public required Stream? Preview { get; init; }
+
+        /// <inheritdoc/>
         public bool IsAvailable { get; set; }
 
         /// <inheritdoc/>

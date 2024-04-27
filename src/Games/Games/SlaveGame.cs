@@ -56,7 +56,8 @@ namespace Games.Games
                     MainDef = null,
                     AdditionalDefs = null,
                     StartMap = null,
-                    RequiredFeatures = null
+                    RequiredFeatures = null,
+                    Preview = null
                 });
             }
 

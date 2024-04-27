@@ -60,6 +60,11 @@ namespace Common.Interfaces
         Stream? Image { get; init; }
 
         /// <summary>
+        /// Preview image
+        /// </summary>
+        Stream? Preview { get; init; }
+
+        /// <summary>
         /// Ports that support this campaign
         /// if null - supported by all ports that support the game
         /// </summary>

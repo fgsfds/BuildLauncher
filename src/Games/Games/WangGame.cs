@@ -66,7 +66,8 @@ namespace Games.Games
                     AdditionalDefs = null,
                     StartMap = null,
                     RequiredAddonEnum = WangAddonEnum.Wang,
-                    RequiredFeatures = null
+                    RequiredFeatures = null,
+                    Preview = null
                 });
 
                 if (IsWantonInstalled)
@@ -98,7 +99,8 @@ namespace Games.Games
                         AdditionalDefs = null,
                         StartMap = null,
                         RequiredAddonEnum = WangAddonEnum.WangWD,
-                        RequiredFeatures = null
+                        RequiredFeatures = null,
+                        Preview = null
                     });
                 }
 
@@ -131,7 +133,8 @@ namespace Games.Games
                         AdditionalDefs = null,
                         StartMap = null,
                         RequiredAddonEnum = WangAddonEnum.WangTD,
-                        RequiredFeatures = null
+                        RequiredFeatures = null,
+                        Preview = null
                     });
                 }
             }

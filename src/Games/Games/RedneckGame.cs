@@ -74,7 +74,8 @@ namespace Games.Games
                     RTS = null,
                     StartMap = null,
                     RequiredAddonEnum = RedneckAddonEnum.Redneck,
-                    RequiredFeatures = null
+                    RequiredFeatures = null,
+                    Preview = null
                 });
 
                 if (IsRoute66Installed)
@@ -104,7 +105,8 @@ namespace Games.Games
                         RTS = null,
                         StartMap = null,
                         RequiredAddonEnum = RedneckAddonEnum.RedneckR66,
-                        RequiredFeatures = null
+                        RequiredFeatures = null,
+                        Preview = null
                     });
                 }
             }
@@ -138,7 +140,8 @@ namespace Games.Games
                     RTS = null,
                     StartMap = null,
                     RequiredAddonEnum = RedneckAddonEnum.RedneckRA,
-                    RequiredFeatures = null
+                    RequiredFeatures = null,
+                    Preview = null
                 });
             }
 

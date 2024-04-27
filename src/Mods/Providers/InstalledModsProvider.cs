@@ -195,6 +195,7 @@ namespace Mods.Providers
             string? version = null;
             string? description = null;
             Stream? image = null;
+            Stream? preview = null;
 
             HashSet<GameEnum>? supportedGames = [_game.GameEnum];
             HashSet<int>? supportedGamesCrcs = null;
@@ -257,7 +258,6 @@ namespace Mods.Providers
                         description = desc;
                     }
 
-                    image = ImageHelper.GetCoverFromArchive(archive);
                     supportedGames = manifest.SupportedGames is null ? supportedGames : [.. manifest.SupportedGames];
                     supportedGamesCrcs = manifest.SupportedGamesCrcs is null ? null : [.. manifest.SupportedGamesCrcs];
                     supportedPorts = manifest.SupportedPorts is null ? null : [.. manifest.SupportedPorts];
@@ -360,6 +360,13 @@ namespace Mods.Providers
                             incompatibles.Add(dep.Id, dep.Version);
                         }
                     }
+
+                    if (manifest.PreviewImage is not null)
+                    {
+                        preview = ImageHelper.GetImageFromArchive(archive, manifest.PreviewImage);
+                    }
+
+                    image = ImageHelper.GetCoverFromArchive(archive) ?? preview;
                 }
             }
             else if (pathToFile.EndsWith(".map", StringComparison.OrdinalIgnoreCase))
@@ -403,7 +410,8 @@ namespace Mods.Providers
                     Dependencies = dependencies,
                     Incompatibles = incompatibles,
                     StartMap = startMap,
-                    RequiredFeatures = requiredFeatures
+                    RequiredFeatures = requiredFeatures,
+                    Preview = preview
                 };
             }
             else
@@ -433,7 +441,8 @@ namespace Mods.Providers
                         RTS = rts,
                         GRPs = grps,
                         RequiredAddonEnum = dukeAddon,
-                        RequiredFeatures = requiredFeatures
+                        RequiredFeatures = requiredFeatures,
+                        Preview = preview
                     };
                 }
                 else if (_game.GameEnum is GameEnum.Fury)
@@ -459,7 +468,8 @@ namespace Mods.Providers
                         MainDef = mainDef,
                         AdditionalDefs = addDefs,
                         RTS = rts,
-                        RequiredFeatures = requiredFeatures
+                        RequiredFeatures = requiredFeatures,
+                        Preview = preview
                     };
                 }
                 else if (_game.GameEnum is GameEnum.Wang)
@@ -483,7 +493,8 @@ namespace Mods.Providers
                         MainDef = mainDef,
                         AdditionalDefs = addDefs,
                         RequiredAddonEnum = wangAddon,
-                        RequiredFeatures = requiredFeatures
+                        RequiredFeatures = requiredFeatures,
+                        Preview = preview
                     };
                 }
                 else if (_game.GameEnum is GameEnum.Blood)
@@ -510,7 +521,8 @@ namespace Mods.Providers
                         RFF = rff,
                         SND = snd,
                         RequiredAddonEnum = bloodAddon,
-                        RequiredFeatures = requiredFeatures
+                        RequiredFeatures = requiredFeatures,
+                        Preview = preview
                     };
                 }
                 else if (_game.GameEnum is GameEnum.Redneck)
@@ -537,7 +549,8 @@ namespace Mods.Providers
                         AdditionalDefs = addDefs,
                         RTS = rts,
                         RequiredAddonEnum = redneckAddon,
-                        RequiredFeatures = requiredFeatures
+                        RequiredFeatures = requiredFeatures,
+                        Preview = preview
                     };
                 }
                 else if (_game.GameEnum is GameEnum.Exhumed)
@@ -560,7 +573,8 @@ namespace Mods.Providers
                         StartMap = startMap,
                         MainDef = mainDef,
                         AdditionalDefs = addDefs,
-                        RequiredFeatures = requiredFeatures
+                        RequiredFeatures = requiredFeatures,
+                        Preview = preview
                     };
                 }
                 else
