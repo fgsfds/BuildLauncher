@@ -101,7 +101,7 @@ namespace Mods.Providers
         {
             _cache.ThrowIfNull();
 
-            File.Delete(mod.PathToFile!);
+            File.Delete(mod.PathToFile);
 
             _cache[mod.Type].Remove(mod.Id);
 
@@ -172,7 +172,7 @@ namespace Mods.Providers
                         addedMods.Add(newMod.Id, newMod);
                     }
                 }
-                catch
+                catch (Exception ex)
                 {
                     continue;
                 }
@@ -215,8 +215,6 @@ namespace Mods.Providers
             Dictionary<string, string?>? dependencies = null;
             Dictionary<string, string?>? incompatibles = null;
             IStartMap? startMap = null;
-
-            //string? defFileContents = null;
 
             var dukeAddon = DukeAddonEnum.Duke3D;
             var bloodAddon = BloodAddonEnum.Blood;
@@ -433,6 +431,7 @@ namespace Mods.Providers
                         MainDef = mainDef,
                         AdditionalDefs = addDefs,
                         RTS = rts,
+                        GRPs = grps,
                         RequiredAddonEnum = dukeAddon,
                         RequiredFeatures = requiredFeatures
                     };

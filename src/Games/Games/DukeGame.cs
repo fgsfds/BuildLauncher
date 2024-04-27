@@ -103,15 +103,16 @@ namespace Games.Games
                     RTS = null,
                     StartMap = null,
                     RequiredAddonEnum = DukeAddonEnum.Duke3D,
-                    RequiredFeatures = null
+                    RequiredFeatures = null,
+                    GRPs = null
                 });
             }
 
             if (IsWorldTourInstalled)
             {
-                campaigns.Add(GameEnum.DukeWT.ToString(), new DukeCampaign()
+                campaigns.Add(GameEnum.Duke3D_WT.ToString(), new DukeCampaign()
                 {
-                    Id = GameEnum.DukeWT.ToString(),
+                    Id = GameEnum.Duke3D_WT.ToString(),
                     Type = AddonTypeEnum.Official,
                     Title = "Duke Nukem 3D World Tour",
                     Image = ImageHelper.FileNameToStream("Duke3D.dukewt.jpg"),
@@ -137,7 +138,8 @@ namespace Games.Games
                     RTS = null,
                     StartMap = null,
                     RequiredAddonEnum = DukeAddonEnum.DukeWT,
-                    RequiredFeatures = null
+                    RequiredFeatures = null,
+                    GRPs = null
                 });
             }
 
@@ -174,7 +176,8 @@ namespace Games.Games
                         RTS = null,
                         StartMap = null,
                         RequiredAddonEnum = DukeAddonEnum.DukeVaca,
-                        RequiredFeatures = null
+                        RequiredFeatures = null,
+                        GRPs = null
                     });
                 }
 
@@ -207,7 +210,8 @@ namespace Games.Games
                         RTS = null,
                         StartMap = null,
                         RequiredAddonEnum = DukeAddonEnum.DukeNW,
-                        RequiredFeatures = null
+                        RequiredFeatures = null,
+                        GRPs = null
                     });
                 }
 
@@ -243,7 +247,8 @@ namespace Games.Games
                         RTS = null,
                         StartMap = null,
                         RequiredAddonEnum = DukeAddonEnum.DukeDC,
-                        RequiredFeatures = null
+                        RequiredFeatures = null,
+                        GRPs = null
                     });
                 }
             }
@@ -277,7 +282,8 @@ namespace Games.Games
                     RTS = null,
                     StartMap = null,
                     RequiredAddonEnum = DukeAddonEnum.Duke3D,
-                    RequiredFeatures = null
+                    RequiredFeatures = null,
+                    GRPs = null
                 });
             }
 

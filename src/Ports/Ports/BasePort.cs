@@ -78,6 +78,11 @@ namespace Ports.Ports
         /// <summary>
         /// Cmd parameter to load additional file
         /// </summary>
+        protected abstract string AddGrpParam { get; }
+
+        /// <summary>
+        /// Cmd parameter to load additional file
+        /// </summary>
         protected abstract string AddFileParam { get; }
 
         /// <summary>

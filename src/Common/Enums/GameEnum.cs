@@ -2,10 +2,12 @@
 {
     public enum GameEnum
     {
-        Blood,
         Duke3D,
-        DukeWT,
-        Duke64,
+        Duke3D_13,
+        Duke3D_15,
+        Duke3D_WT,
+        Duke64, 
+        Blood,
         Wang,
         Fury,
         Exhumed,

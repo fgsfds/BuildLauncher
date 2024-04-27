@@ -173,7 +173,7 @@ namespace Games.Providers
                 GameEnum.Redneck => _redneckPath,
                 GameEnum.RedneckRA => _againPath,
                 GameEnum.Duke3D => _dukePath,
-                GameEnum.DukeWT => _dukeWtPath,
+                GameEnum.Duke3D_WT => _dukeWtPath,
                 GameEnum.Wang => _wangPath,
                 GameEnum.Fury => _furyPath,
                 GameEnum.Exhumed => _slavePath,
@@ -189,7 +189,7 @@ namespace Games.Providers
         private void FillConfig()
         {
             _config.GamePathDuke3D ??= GetPath(GameEnum.Duke3D);
-            _config.GamePathDukeWT ??= GetPath(GameEnum.DukeWT);
+            _config.GamePathDukeWT ??= GetPath(GameEnum.Duke3D_WT);
             _config.GamePathWang ??= GetPath(GameEnum.Wang);
             _config.GamePathBlood ??= GetPath(GameEnum.Blood);
             _config.GamePathFury ??= GetPath(GameEnum.Fury);

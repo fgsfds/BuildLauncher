@@ -174,7 +174,7 @@ namespace BuildLauncher.ViewModels
 
                 OnPropertyChanged(nameof(PathToDuke3D));
             }
-            else if (param.Equals(GameEnum.DukeWT.ToString()))
+            else if (param.Equals(GameEnum.Duke3D_WT.ToString()))
             {
                 PathToDukeWT = files[0].Path.LocalPath;
 
@@ -236,9 +236,9 @@ namespace BuildLauncher.ViewModels
                     OnPropertyChanged(nameof(PathToDuke3D));
                 }
             }
-            else if (param.Equals(GameEnum.DukeWT.ToString()))
+            else if (param.Equals(GameEnum.Duke3D_WT.ToString()))
             {
-                var path = _gamesAutoDetector.GetPath(GameEnum.DukeWT);
+                var path = _gamesAutoDetector.GetPath(GameEnum.Duke3D_WT);
 
                 if (path is not null)
                 {

@@ -174,6 +174,12 @@ namespace Mods.Serializable
 
                 return (TItem)Enum.Parse(typeof(PortEnum), str!, true);
             }
+            else if (typeof(TItem) == typeof(FeaturesEnum))
+            {
+                string? str = reader.GetString();
+
+                return (TItem)Enum.Parse(typeof(FeaturesEnum), str!, true);
+            }
             else
             {
                 throw new NotImplementedException();

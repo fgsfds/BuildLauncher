@@ -121,7 +121,6 @@ namespace BuildLauncher.ViewModels
         private void DeleteCampaign()
         {
             SelectedCampaign.ThrowIfNull();
-            SelectedCampaign.PathToFile.ThrowIfNull();
 
             Game.InstalledModsProvider.DeleteMod(SelectedCampaign);
 

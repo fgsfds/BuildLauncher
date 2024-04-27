@@ -72,6 +72,8 @@ namespace Ports.Ports
         /// <inheritdoc/>
         protected override string MainConParam => "-con ";
 
+        protected override string AddGrpParam => throw new NotImplementedException();
+
         /// <inheritdoc/>
         protected override void GetSkipIntroParameter(StringBuilder sb) => sb.Append(" -quick");
 

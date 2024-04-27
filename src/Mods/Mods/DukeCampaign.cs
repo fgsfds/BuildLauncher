@@ -25,6 +25,11 @@ namespace Mods.Mods
         /// <summary>
         /// Main .rts file
         /// </summary>
+        public required HashSet<string>? GRPs { get; init; }
+
+        /// <summary>
+        /// Main .rts file
+        /// </summary>
         public required string? RTS { get; init; }
     }
 }

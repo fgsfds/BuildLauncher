@@ -69,6 +69,8 @@ namespace Ports.Ports
 
         protected override string MainConParam => throw new NotImplementedException();
 
+        protected override string AddGrpParam => throw new NotImplementedException();
+
 
         /// <inheritdoc/>
         protected override void GetStartCampaignArgs(StringBuilder sb, IGame game, IAddon mod)
