@@ -25,11 +25,6 @@ public sealed partial class App : Application
 
     public override void OnFrameworkInitializationCompleted()
     {
-        var str = string.Empty;
-
-
-
-
         LoadBindings();
         SetTheme();
 
