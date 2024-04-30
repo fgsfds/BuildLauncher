@@ -37,7 +37,7 @@ namespace BuildLauncher.Controls
             {
                 Header = "Download",
                 Command = new RelayCommand(() =>
-                viewModel.DownloadModCommand.Execute(null)
+                viewModel.DownloadAddonCommand.Execute(null)
                 )
             };
 

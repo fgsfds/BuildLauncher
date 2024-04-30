@@ -6,10 +6,19 @@ namespace Common.Helpers
 {
     public static class CommonProperties
     {
+        /// <summary>
+        /// Path to the folder that contains main exe
+        /// </summary>
         public static readonly string ExeFolderPath = Directory.GetCurrentDirectory();
 
+        /// <summary>
+        /// Path to the data folder
+        /// </summary>
         public static readonly string DataFolderPath = Path.Combine(ExeFolderPath, "Data");
 
+        /// <summary>
+        /// Path to the ports folder
+        /// </summary>
         public static readonly string PortsFolderPath = Path.Combine(DataFolderPath, "Ports");
 
         /// <summary>
@@ -20,7 +29,7 @@ namespace Common.Helpers
         /// <summary>
         /// Current app version
         /// </summary>
-        public static Version CurrentVersion => Assembly.GetEntryAssembly()?.GetName().Version ?? new Version("0");
+        public static Version? CurrentVersion => Assembly.GetEntryAssembly()?.GetName().Version;
 
         /// <summary>
         /// Name of the executable file

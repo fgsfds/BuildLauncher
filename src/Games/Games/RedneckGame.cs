@@ -2,12 +2,12 @@
 using Common.Enums.Addons;
 using Common.Helpers;
 using Common.Interfaces;
-using Mods.Mods;
+using Mods.Addons;
 using Mods.Providers;
 
 namespace Games.Games
 {
-    public sealed class RedneckGame(InstalledModsProviderFactory modsProvider, DownloadableModsProviderFactory downloadableModsProviderFactory) : BaseGame(modsProvider, downloadableModsProviderFactory)
+    public sealed class RedneckGame(InstalledAddonsProviderFactory modsProvider, DownloadableAddonsProviderFactory downloadableModsProviderFactory) : BaseGame(modsProvider, downloadableModsProviderFactory)
     {
         /// <inheritdoc/>
         public override GameEnum GameEnum => GameEnum.Redneck;
@@ -64,7 +64,7 @@ namespace Games.Games
                     SupportedPorts = null,
                     PathToFile = null,
                     SupportedGames = null,
-                    SupportedGamesCrcs = null,
+                    RequiredGamesCrcs = null,
                     Dependencies = null,
                     Incompatibles = null,
                     MainCon = null,
@@ -95,7 +95,7 @@ namespace Games.Games
                         SupportedPorts = null,
                         PathToFile = null,
                         SupportedGames = null,
-                        SupportedGamesCrcs = null,
+                        RequiredGamesCrcs = null,
                         Dependencies = null,
                         Incompatibles = null,
                         MainCon = null,
@@ -130,7 +130,7 @@ namespace Games.Games
                     SupportedPorts = null,
                     PathToFile = null,
                     SupportedGames = null,
-                    SupportedGamesCrcs = null,
+                    RequiredGamesCrcs = null,
                     Dependencies = null,
                     Incompatibles = null,
                     MainCon = null,

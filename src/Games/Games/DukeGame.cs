@@ -2,7 +2,7 @@
 using Common.Enums.Addons;
 using Common.Helpers;
 using Common.Interfaces;
-using Mods.Mods;
+using Mods.Addons;
 using Mods.Providers;
 using SharpCompress.Archives;
 using System.IO.Compression;
@@ -61,7 +61,7 @@ namespace Games.Games
         public bool IsDuke64Installed => File.Exists(Duke64RomPath);
 
 
-        public DukeGame(InstalledModsProviderFactory modsProvider, DownloadableModsProviderFactory downloadableModsProviderFactory) : base(modsProvider, downloadableModsProviderFactory)
+        public DukeGame(InstalledAddonsProviderFactory modsProvider, DownloadableAddonsProviderFactory downloadableModsProviderFactory) : base(modsProvider, downloadableModsProviderFactory)
         {
             CreateWTStopgapFolder();
         }
@@ -93,7 +93,7 @@ namespace Games.Games
                     SupportedPorts = null,
                     PathToFile = null,
                     SupportedGames = null,
-                    SupportedGamesCrcs = null,
+                    RequiredGamesCrcs = null,
                     Dependencies = null,
                     Incompatibles = null,
                     MainCon = null,
@@ -129,7 +129,7 @@ namespace Games.Games
                     Version = null,
                     PathToFile = null,
                     SupportedGames = null,
-                    SupportedGamesCrcs = null,
+                    RequiredGamesCrcs = null,
                     Dependencies = null,
                     Incompatibles = null,
                     MainCon = null,
@@ -168,7 +168,7 @@ namespace Games.Games
                         SupportedPorts = [PortEnum.Raze, PortEnum.BuildGDX],
                         PathToFile = null,
                         SupportedGames = null,
-                        SupportedGamesCrcs = null,
+                        RequiredGamesCrcs = null,
                         Dependencies = null,
                         Incompatibles = null,
                         MainCon = null,
@@ -203,7 +203,7 @@ namespace Games.Games
                         SupportedPorts = null,
                         PathToFile = null,
                         SupportedGames = null,
-                        SupportedGamesCrcs = null,
+                        RequiredGamesCrcs = null,
                         Dependencies = null,
                         Incompatibles = null,
                         MainCon = null,
@@ -241,7 +241,7 @@ namespace Games.Games
                         SupportedPorts = [PortEnum.Raze, PortEnum.BuildGDX],
                         PathToFile = null,
                         SupportedGames = null,
-                        SupportedGamesCrcs = null,
+                        RequiredGamesCrcs = null,
                         Dependencies = null,
                         Incompatibles = null,
                         MainCon = null,
@@ -277,7 +277,7 @@ namespace Games.Games
                     Version = null,
                     PathToFile = null,
                     SupportedGames = null,
-                    SupportedGamesCrcs = null,
+                    RequiredGamesCrcs = null,
                     Dependencies = null,
                     Incompatibles = null,
                     MainCon = null,

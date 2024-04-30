@@ -1,6 +1,6 @@
 ﻿using Common.Enums.Addons;
 
-namespace Mods.Mods
+namespace Mods.Addons
 {
     /// <summary>
     /// Shadow Warrior campaign

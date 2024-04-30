@@ -31,7 +31,7 @@ namespace BuildLauncher.ViewModels
             _config = config;
 
             _gamesProvider.GameChangedEvent += OnGameChanged;
-            Game.DownloadableModsProvider.ModDownloadedEvent += OnModDownloaded;
+            Game.DownloadableAddonsProvider.AddonDownloadedEvent += OnAddonDownloaded;
         }
 
 
@@ -71,7 +71,7 @@ namespace BuildLauncher.ViewModels
         /// </summary>
         private async Task UpdateAsync(bool createNew)
         {
-            await Game.InstalledModsProvider.CreateCache(createNew);
+            await Game.InstalledAddonsProvider.CreateCache(createNew);
 
             OnPropertyChanged(nameof(CampaignsList));
         }
@@ -80,9 +80,9 @@ namespace BuildLauncher.ViewModels
         #region Relay Commands
 
         /// <summary>
-        /// Start selected map/campaign
+        /// Start selected campaign
         /// </summary>
-        /// <param name="command">Port to start map/campaign with</param>
+        /// <param name="command">Port to start campaign with</param>
         [RelayCommand]
         private void StartCampaign(object? command)
         {
@@ -96,7 +96,7 @@ namespace BuildLauncher.ViewModels
 
 
         /// <summary>
-        /// Open mods folder
+        /// Open campaigns folder
         /// </summary>
         [RelayCommand]
         private void OpenFolder()
@@ -120,14 +120,14 @@ namespace BuildLauncher.ViewModels
 
 
         /// <summary>
-        /// Delete selected map/campaign
+        /// Delete selected campaign
         /// </summary>
         [RelayCommand]
         private void DeleteCampaign()
         {
             SelectedCampaign.ThrowIfNull();
 
-            Game.InstalledModsProvider.DeleteMod(SelectedCampaign);
+            Game.InstalledAddonsProvider.DeleteAddon(SelectedCampaign);
 
             OnPropertyChanged(nameof(CampaignsList));
         }
@@ -160,10 +160,10 @@ namespace BuildLauncher.ViewModels
             }
         }
 
-        private void OnModDownloaded(IGame game, AddonTypeEnum modType)
+        private void OnAddonDownloaded(IGame game, AddonTypeEnum addonType)
         {
             if (game.GameEnum != Game.GameEnum ||
-                modType is not AddonTypeEnum.TC)
+                addonType is not AddonTypeEnum.TC)
             {
                 return;
             }

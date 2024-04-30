@@ -47,8 +47,14 @@
         /// </summary>
         public const string CrypticIni = "CRYPTIC.INI";
 
+        /// <summary>
+        /// Update lock file name
+        /// </summary>
         public const string UpdateFile = ".update";
 
+        /// <summary>
+        /// Update folder name
+        /// </summary>
         public const string UpdateFolder = "update";
     }
 }

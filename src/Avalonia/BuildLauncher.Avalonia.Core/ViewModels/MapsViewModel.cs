@@ -31,7 +31,7 @@ namespace BuildLauncher.ViewModels
             _config = config;
 
             _gamesProvider.GameChangedEvent += OnGameChanged;
-            Game.DownloadableModsProvider.ModDownloadedEvent += OnModDownloaded;
+            Game.DownloadableAddonsProvider.AddonDownloadedEvent += OnAddonDownloaded;
         }
 
 
@@ -45,7 +45,7 @@ namespace BuildLauncher.ViewModels
         /// </summary>
         private async Task UpdateAsync(bool createNew)
         {
-            await Game.InstalledModsProvider.CreateCache(createNew);
+            await Game.InstalledAddonsProvider.CreateCache(createNew);
 
             OnPropertyChanged(nameof(MapsList));
         }
@@ -54,12 +54,12 @@ namespace BuildLauncher.ViewModels
         #region Binding Properties
 
         /// <summary>
-        /// List of installed campaigns and maps
+        /// List of installed maps
         /// </summary>
         public IEnumerable<IAddon> MapsList => Game.GetSingleMaps().Select(x => x.Value);
 
         /// <summary>
-        /// Currently selected campaign/map
+        /// Currently selected map
         /// </summary>
         [ObservableProperty]
         [NotifyPropertyChangedFor(nameof(SelectedMapDescription))]
@@ -74,9 +74,9 @@ namespace BuildLauncher.ViewModels
         #region Relay Commands
 
         /// <summary>
-        /// Start selected map/campaign
+        /// Start selected map
         /// </summary>
-        /// <param name="command">Port to start map/campaign with</param>
+        /// <param name="command">Port to start map with</param>
         [RelayCommand]
         private void StartMap(object? command)
         {
@@ -90,7 +90,7 @@ namespace BuildLauncher.ViewModels
 
 
         /// <summary>
-        /// Open mods folder
+        /// Open maps folder
         /// </summary>
         [RelayCommand]
         private void OpenFolder()
@@ -104,7 +104,7 @@ namespace BuildLauncher.ViewModels
 
 
         /// <summary>
-        /// Refresh campaigns list
+        /// Refresh maps list
         /// </summary>
         [RelayCommand]
         private async Task RefreshListAsync()
@@ -114,14 +114,14 @@ namespace BuildLauncher.ViewModels
 
 
         /// <summary>
-        /// Delete selected map/campaign
+        /// Delete selected map
         /// </summary>
         [RelayCommand]
         private void DeleteMap()
         {
             SelectedMap.ThrowIfNull();
 
-            Game.InstalledModsProvider.DeleteMod(SelectedMap);
+            Game.InstalledAddonsProvider.DeleteAddon(SelectedMap);
 
             OnPropertyChanged(nameof(MapsList));
         }
@@ -154,10 +154,10 @@ namespace BuildLauncher.ViewModels
             }
         }
 
-        private void OnModDownloaded(IGame game, AddonTypeEnum modType)
+        private void OnAddonDownloaded(IGame game, AddonTypeEnum addonType)
         {
             if (game.GameEnum != Game.GameEnum ||
-                modType is not AddonTypeEnum.Map)
+                addonType is not AddonTypeEnum.Map)
             {
                 return;
             }

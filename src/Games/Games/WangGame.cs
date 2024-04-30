@@ -2,12 +2,12 @@
 using Common.Enums.Addons;
 using Common.Helpers;
 using Common.Interfaces;
-using Mods.Mods;
+using Mods.Addons;
 using Mods.Providers;
 
 namespace Games.Games
 {
-    public sealed class WangGame(InstalledModsProviderFactory modsProvider, DownloadableModsProviderFactory downloadableModsProviderFactory) : BaseGame(modsProvider, downloadableModsProviderFactory)
+    public sealed class WangGame(InstalledAddonsProviderFactory modsProvider, DownloadableAddonsProviderFactory downloadableModsProviderFactory) : BaseGame(modsProvider, downloadableModsProviderFactory)
     {
         /// <inheritdoc/>
         public override GameEnum GameEnum => GameEnum.Wang;
@@ -59,7 +59,7 @@ namespace Games.Games
                         """,
                     PathToFile = null,
                     SupportedGames = null,
-                    SupportedGamesCrcs = null,
+                    RequiredGamesCrcs = null,
                     Dependencies = null,
                     Incompatibles = null,
                     MainDef = null,
@@ -92,7 +92,7 @@ namespace Games.Games
                         SupportedPorts = null,
                         PathToFile = null,
                         SupportedGames = null,
-                        SupportedGamesCrcs = null,
+                        RequiredGamesCrcs = null,
                         Dependencies = null,
                         Incompatibles = null,
                         MainDef = null,
@@ -126,7 +126,7 @@ namespace Games.Games
                         SupportedPorts = null,
                         PathToFile = null,
                         SupportedGames = null,
-                        SupportedGamesCrcs = null,
+                        RequiredGamesCrcs = null,
                         Dependencies = null,
                         Incompatibles = null,
                         MainDef = null,

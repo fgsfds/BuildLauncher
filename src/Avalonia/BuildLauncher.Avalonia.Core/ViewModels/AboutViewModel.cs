@@ -11,7 +11,7 @@ namespace BuildLauncher.ViewModels
 
         #region Binding Properties
 
-        public Version CurrentVersion => CommonProperties.CurrentVersion;
+        public Version? CurrentVersion => CommonProperties.CurrentVersion;
 
         [ObservableProperty]
         private string _aboutTabHeader = "About";

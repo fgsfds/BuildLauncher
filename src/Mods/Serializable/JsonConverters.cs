@@ -174,11 +174,11 @@ namespace Mods.Serializable
 
                 return (TItem)Enum.Parse(typeof(PortEnum), str!, true);
             }
-            else if (typeof(TItem) == typeof(FeaturesEnum))
+            else if (typeof(TItem) == typeof(FeatureEnum))
             {
                 string? str = reader.GetString();
 
-                return (TItem)Enum.Parse(typeof(FeaturesEnum), str!, true);
+                return (TItem)Enum.Parse(typeof(FeatureEnum), str!, true);
             }
             else
             {

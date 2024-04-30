@@ -1,4 +1,4 @@
-﻿namespace Mods.Mods
+﻿namespace Mods.Addons
 {
     /// <summary>
     /// Powerslave campaign

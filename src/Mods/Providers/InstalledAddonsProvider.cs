@@ -4,7 +4,7 @@ using Common.Enums.Addons;
 using Common.Helpers;
 using Common.Interfaces;
 using Mods.Helpers;
-using Mods.Mods;
+using Mods.Addons;
 using Mods.Serializable;
 using SharpCompress.Archives;
 using System.Text.Json;
@@ -14,17 +14,17 @@ namespace Mods.Providers
     /// <summary>
     /// Class that provides lists of installed mods
     /// </summary>
-    public sealed class InstalledModsProvider : IInstalledModsProvider
+    public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
     {
         private readonly IGame _game;
         private readonly ConfigEntity _config;
         private readonly Dictionary<AddonTypeEnum, Dictionary<string, IAddon>> _cache;
         private readonly SemaphoreSlim _semaphore = new(1);
 
-        public event ModChanged ModDeletedEvent;
+        public event AddonChanged AddonDeletedEvent;
 
-        [Obsolete($"Don't create directly. Use {nameof(InstalledModsProvider)}.")]
-        public InstalledModsProvider(
+        [Obsolete($"Don't create directly. Use {nameof(InstalledAddonsProvider)}.")]
+        public InstalledAddonsProvider(
             IGame game,
             ConfigEntity config
             )
@@ -71,7 +71,7 @@ namespace Mods.Providers
         }
 
         /// <inheritdoc/>
-        public void AddMod(AddonTypeEnum modTypeEnum, string pathToFile)
+        public void AddAddon(AddonTypeEnum modTypeEnum, string pathToFile)
         {
             _cache.ThrowIfNull();
 
@@ -97,7 +97,7 @@ namespace Mods.Providers
         }
 
         /// <inheritdoc/>
-        public void DeleteMod(IAddon mod)
+        public void DeleteAddon(IAddon mod)
         {
             _cache.ThrowIfNull();
 
@@ -105,17 +105,17 @@ namespace Mods.Providers
 
             _cache[mod.Type].Remove(mod.Id);
 
-            ModDeletedEvent?.Invoke(_game, mod.Type);
+            AddonDeletedEvent?.Invoke(_game, mod.Type);
         }
 
         /// <inheritdoc/>
-        public void EnableMod(string id) => ((AutoloadMod)_cache[AddonTypeEnum.Mod][id]).IsEnabled = true;
+        public void EnableAddon(string id) => ((AutoloadMod)_cache[AddonTypeEnum.Mod][id]).IsEnabled = true;
 
         /// <inheritdoc/>
-        public void DisableMod(string id) => ((AutoloadMod)_cache[AddonTypeEnum.Mod][id]).IsEnabled = false;
+        public void DisableAddon(string id) => ((AutoloadMod)_cache[AddonTypeEnum.Mod][id]).IsEnabled = false;
 
         /// <inheritdoc/>
-        public Dictionary<string, IAddon> GetInstalledMods(AddonTypeEnum modTypeEnum)
+        public Dictionary<string, IAddon> GetInstalledAddon(AddonTypeEnum modTypeEnum)
         {
             _cache.ThrowIfNull();
 
@@ -201,7 +201,7 @@ namespace Mods.Providers
             HashSet<int>? supportedGamesCrcs = null;
             HashSet<PortEnum>? supportedPorts = null;
             HashSet<string>? grps = null;
-            HashSet<FeaturesEnum>? requiredFeatures = null;
+            HashSet<FeatureEnum>? requiredFeatures = null;
 
             string? mainCon = null;
             HashSet<string>? addCons = null;
@@ -406,7 +406,7 @@ namespace Mods.Providers
                     MainDef = mainDef,
                     AdditionalDefs = addDefs,
                     SupportedGames = supportedGames,
-                    SupportedGamesCrcs = supportedGamesCrcs,
+                    RequiredGamesCrcs = supportedGamesCrcs,
                     Dependencies = dependencies,
                     Incompatibles = incompatibles,
                     StartMap = startMap,
@@ -430,7 +430,7 @@ namespace Mods.Providers
                         Author = author,
                         PathToFile = pathToFile,
                         SupportedGames = supportedGames,
-                        SupportedGamesCrcs = supportedGamesCrcs,
+                        RequiredGamesCrcs = supportedGamesCrcs,
                         Dependencies = dependencies,
                         Incompatibles = incompatibles,
                         StartMap = startMap,
@@ -459,7 +459,7 @@ namespace Mods.Providers
                         Author = author,
                         PathToFile = pathToFile,
                         SupportedGames = supportedGames,
-                        SupportedGamesCrcs = supportedGamesCrcs,
+                        RequiredGamesCrcs = supportedGamesCrcs,
                         Dependencies = dependencies,
                         Incompatibles = incompatibles,
                         StartMap = startMap,
@@ -486,7 +486,7 @@ namespace Mods.Providers
                         Author = author,
                         PathToFile = pathToFile,
                         SupportedGames = supportedGames,
-                        SupportedGamesCrcs = supportedGamesCrcs,
+                        RequiredGamesCrcs = supportedGamesCrcs,
                         Dependencies = dependencies,
                         Incompatibles = incompatibles,
                         StartMap = startMap,
@@ -511,7 +511,7 @@ namespace Mods.Providers
                         Author = author,
                         PathToFile = pathToFile,
                         SupportedGames = supportedGames,
-                        SupportedGamesCrcs = supportedGamesCrcs,
+                        RequiredGamesCrcs = supportedGamesCrcs,
                         Dependencies = dependencies,
                         Incompatibles = incompatibles,
                         StartMap = startMap,
@@ -539,7 +539,7 @@ namespace Mods.Providers
                         Author = author,
                         PathToFile = pathToFile,
                         SupportedGames = supportedGames,
-                        SupportedGamesCrcs = supportedGamesCrcs,
+                        RequiredGamesCrcs = supportedGamesCrcs,
                         Dependencies = dependencies,
                         Incompatibles = incompatibles,
                         StartMap = startMap,
@@ -567,7 +567,7 @@ namespace Mods.Providers
                         Author = author,
                         PathToFile = pathToFile,
                         SupportedGames = supportedGames,
-                        SupportedGamesCrcs = supportedGamesCrcs,
+                        RequiredGamesCrcs = supportedGamesCrcs,
                         Dependencies = dependencies,
                         Incompatibles = incompatibles,
                         StartMap = startMap,

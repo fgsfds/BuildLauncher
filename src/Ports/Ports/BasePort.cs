@@ -3,7 +3,7 @@ using Common.Enums.Addons;
 using Common.Helpers;
 using Common.Interfaces;
 using Games.Games;
-using Mods.Mods;
+using Mods.Addons;
 using Mods.Serializable.Addon;
 using Ports.Providers;
 using System.Text;
@@ -41,7 +41,7 @@ namespace Ports.Ports
         public abstract Uri RepoUrl { get; }
 
         /// <summary>
-        /// Predicate to find windows release
+        /// Predicate for Windows release
         /// </summary>
         public abstract Func<GitHubReleaseAsset, bool> WindowsReleasePredicate { get; }
 
@@ -76,7 +76,7 @@ namespace Ports.Ports
         protected abstract string AddDirectoryParam { get; }
 
         /// <summary>
-        /// Cmd parameter to load additional file
+        /// Cmd parameter to load additional GRP file
         /// </summary>
         protected abstract string AddGrpParam { get; }
 

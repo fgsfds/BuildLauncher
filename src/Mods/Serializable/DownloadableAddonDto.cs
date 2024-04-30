@@ -6,7 +6,7 @@ using System.Text.Json.Serialization;
 
 namespace Mods.Serializable
 {
-    public sealed class DownloadableAddonDto : IDownloadableMod
+    public sealed class DownloadableAddonDto : IDownloadableAddon
     {
         public string Id { get; set; }
 
@@ -20,7 +20,7 @@ namespace Mods.Serializable
 
         public GameEnum Game { get; set; }
 
-        public AddonTypeEnum ModType { get; set; }
+        public AddonTypeEnum AddonType { get; set; }
 
         public string Description { get; set; }
 

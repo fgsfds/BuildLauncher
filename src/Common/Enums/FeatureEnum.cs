@@ -1,6 +1,6 @@
 ﻿namespace Common.Enums
 {
-    public enum FeaturesEnum
+    public enum FeatureEnum
     {
         EDuke32_cons,
         Hightile,

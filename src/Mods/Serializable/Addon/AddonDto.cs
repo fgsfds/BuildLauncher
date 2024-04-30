@@ -79,8 +79,8 @@ namespace Mods.Serializable
         public IStartMap? StartMap { get; set; }
 
         [JsonPropertyName("features")]
-        [JsonConverter(typeof(SingleOrArrayConverter<FeaturesEnum>))]
-        public List<FeaturesEnum>? RequiredFeatures { get; set; }
+        [JsonConverter(typeof(SingleOrArrayConverter<FeatureEnum>))]
+        public List<FeatureEnum>? RequiredFeatures { get; set; }
     }
 
     [JsonSourceGenerationOptions(
@@ -88,7 +88,7 @@ namespace Mods.Serializable
             typeof(JsonStringEnumConverter<PortEnum>),
             typeof(JsonStringEnumConverter<GameEnum>),
             typeof(JsonStringEnumConverter<AddonTypeEnum>),
-            typeof(JsonStringEnumConverter<FeaturesEnum>)
+            typeof(JsonStringEnumConverter<FeatureEnum>)
             ])]
     [JsonSerializable(typeof(AddonDto))]
     public sealed partial class AddonManifestContext : JsonSerializerContext;

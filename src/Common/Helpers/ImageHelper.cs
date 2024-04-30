@@ -35,7 +35,7 @@ namespace Common.Helpers
         /// <param name="archive">Archive</param>
         public static Stream? GetImageFromArchive(IArchive archive, string imageName)
         {
-            var image = archive.Entries.FirstOrDefault(x => x.Key.StartsWith(imageName));
+            var image = archive.Entries.FirstOrDefault(x => x.Key?.StartsWith(imageName) ?? false);
 
             if (image is null)
             {

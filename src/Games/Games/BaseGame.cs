@@ -1,7 +1,7 @@
 ﻿using Common.Enums;
 using Common.Helpers;
 using Common.Interfaces;
-using Mods.Mods;
+using Mods.Addons;
 using Mods.Providers;
 
 namespace Games.Games
@@ -30,10 +30,10 @@ namespace Games.Games
         public string SpecialFolderPath => Path.Combine(CommonProperties.DataFolderPath, ShortName, "Special");
 
         /// <inheritdoc/>
-        public IInstalledModsProvider InstalledModsProvider { get; init; }
+        public IInstalledAddonsProvider InstalledAddonsProvider { get; init; }
 
         /// <inheritdoc/>
-        public IDownloadableModsProvider DownloadableModsProvider { get; init; }
+        public IDownloadableAddonsProvider DownloadableAddonsProvider { get; init; }
 
 
         /// <inheritdoc/>
@@ -50,12 +50,12 @@ namespace Games.Games
 
 
         public BaseGame(
-            InstalledModsProviderFactory installedModsProviderFactory,
-            DownloadableModsProviderFactory downloadableModsProviderFactory
+            InstalledAddonsProviderFactory installedModsProviderFactory,
+            DownloadableAddonsProviderFactory downloadableModsProviderFactory
             )
         {
-            InstalledModsProvider = installedModsProviderFactory.GetSingleton(this);
-            DownloadableModsProvider = downloadableModsProviderFactory.GetSingleton(this);
+            InstalledAddonsProvider = installedModsProviderFactory.GetSingleton(this);
+            DownloadableAddonsProvider = downloadableModsProviderFactory.GetSingleton(this);
 
             if (!Directory.Exists(CampaignsFolderPath))
             {
@@ -86,7 +86,7 @@ namespace Games.Games
         {
             var originalCampaigns = GetOriginalCampaigns();
 
-            var customCampaigns = InstalledModsProvider.GetInstalledMods(AddonTypeEnum.TC);
+            var customCampaigns = InstalledAddonsProvider.GetInstalledAddon(AddonTypeEnum.TC);
 
             foreach (var customCamp in customCampaigns)
             {
@@ -108,7 +108,7 @@ namespace Games.Games
         /// <inheritdoc/>
         public virtual Dictionary<string, IAddon> GetSingleMaps()
         {
-            var maps = InstalledModsProvider.GetInstalledMods(AddonTypeEnum.Map);
+            var maps = InstalledAddonsProvider.GetInstalledAddon(AddonTypeEnum.Map);
 
             return maps;
         }
@@ -117,7 +117,7 @@ namespace Games.Games
         /// <inheritdoc/>
         public virtual Dictionary<string, IAddon> GetAutoloadMods(bool enabledOnly)
         {
-            var mods = InstalledModsProvider.GetInstalledMods(AddonTypeEnum.Mod);
+            var mods = InstalledAddonsProvider.GetInstalledAddon(AddonTypeEnum.Mod);
 
             if (enabledOnly)
             {

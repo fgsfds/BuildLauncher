@@ -54,9 +54,9 @@ namespace Common.Interfaces
         /// </summary>
         string SpecialFolderPath { get; }
 
-        IInstalledModsProvider InstalledModsProvider { get; init; }
+        IInstalledAddonsProvider InstalledAddonsProvider { get; init; }
 
-        IDownloadableModsProvider DownloadableModsProvider { get; init; }
+        IDownloadableAddonsProvider DownloadableAddonsProvider { get; init; }
 
         /// <summary>
         /// Get list of official addons and custom campaigns

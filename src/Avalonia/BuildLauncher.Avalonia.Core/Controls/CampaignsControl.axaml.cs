@@ -78,7 +78,7 @@ namespace BuildLauncher.Controls
             foreach (var port in _supportedPorts)
             {
                 if (port.IsInstalled &&
-                (iMod.SupportedPorts is null || iMod.SupportedPorts!.Contains(port.PortEnum)))
+                    (iMod.SupportedPorts is null || iMod.SupportedPorts!.Contains(port.PortEnum)))
                 {
                     var portButton = new MenuItem()
                     {
@@ -116,7 +116,7 @@ namespace BuildLauncher.Controls
             foreach (var control in BottomPanel.PortsButtonsPanel.Children)
             {
                 if (control is Button button &&
-                button.Command is IRelayCommand relayCommand)
+                    button.Command is IRelayCommand relayCommand)
                 {
                     relayCommand.NotifyCanExecuteChanged();
                 }

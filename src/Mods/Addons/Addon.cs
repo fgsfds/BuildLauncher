@@ -2,7 +2,7 @@
 using Common.Interfaces;
 using System.Text;
 
-namespace Mods.Mods
+namespace Mods.Addons
 {
     /// <summary>
     /// Base class for campaigns and maps
@@ -13,7 +13,7 @@ namespace Mods.Mods
         public required AddonTypeEnum Type { get; init; }
 
         /// <inheritdoc/>
-        public required HashSet<FeaturesEnum>? RequiredFeatures { get; init; }
+        public required HashSet<FeatureEnum>? RequiredFeatures { get; init; }
 
         /// <inheritdoc/>
         public required string Id { get; init; }
@@ -28,7 +28,7 @@ namespace Mods.Mods
         public required HashSet<GameEnum>? SupportedGames { get; init; }
 
         /// <inheritdoc/>
-        public required HashSet<int>? SupportedGamesCrcs { get; init; }
+        public required HashSet<int>? RequiredGamesCrcs { get; init; }
 
         /// <inheritdoc/>
         public required string? Author { get; init; }

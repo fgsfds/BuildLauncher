@@ -3,7 +3,7 @@ using Common.Enums.Addons;
 using Common.Helpers;
 using Common.Interfaces;
 using Games.Games;
-using Mods.Mods;
+using Mods.Addons;
 using Ports.Providers;
 using System.Diagnostics;
 using System.Text;
@@ -71,6 +71,7 @@ namespace Ports.Ports
         /// <inheritdoc/>
         protected override string MainConParam => "-con ";
 
+        /// <inheritdoc/>
         protected override string AddGrpParam => throw new NotImplementedException();
 
         /// <inheritdoc/>
@@ -116,7 +117,7 @@ namespace Ports.Ports
                 File.WriteAllText(config, text);
             }
 
-            AddGamePathsToConfig(game.GameInstallFolder, game.ModsFolderPath, game.MapsFolderPath, config);
+            AddGamePathsToConfig(game.GameInstallFolder, game.ModsFolderPath, config);
 
             FixRoute66Files(game, campaign);
         }
@@ -177,7 +178,7 @@ namespace Ports.Ports
             if (dMod.RequiredAddonEnum is DukeAddonEnum.DukeWT)
             {
                 var config = Path.Combine(PathToPortFolder, ConfigFile);
-                AddGamePathsToConfig(game.DukeWTInstallPath, game.ModsFolderPath, game.MapsFolderPath, config);
+                AddGamePathsToConfig(game.DukeWTInstallPath, game.ModsFolderPath, config);
 
                 sb.Append($" -addon {(byte)DukeAddonEnum.Duke3D}");
             }
@@ -265,7 +266,7 @@ namespace Ports.Ports
             if (camp.Id == GameEnum.RedneckRA.ToString())
             {
                 var config = Path.Combine(PathToPortFolder, ConfigFile);
-                AddGamePathsToConfig(game.AgainInstallPath, game.ModsFolderPath, game.MapsFolderPath, config);
+                AddGamePathsToConfig(game.AgainInstallPath, game.ModsFolderPath, config);
             }
 
 
@@ -342,6 +343,8 @@ namespace Ports.Ports
         /// </summary>
         private void FixRoute66Files(IGame game, IAddon _)
         {
+            game.GameInstallFolder.ThrowIfNull();
+
             if (game is RedneckGame)
             {
                 var tilesA2 = Path.Combine(game.GameInstallFolder, "TILES024.ART");
@@ -387,7 +390,7 @@ namespace Ports.Ports
         /// Add paths to game and mods folder to the config
         /// </summary>
         [Obsolete("Remove if this ever implemented https://github.com/ZDoom/Raze/issues/1060")]
-        private static void AddGamePathsToConfig(string gameFolder, string modsFolder, string mapsFolder, string config)
+        private static void AddGamePathsToConfig(string gameFolder, string modsFolder, string config)
         {
             var contents = File.ReadAllLines(config);
 

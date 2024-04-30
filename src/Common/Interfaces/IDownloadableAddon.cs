@@ -2,7 +2,7 @@
 
 namespace Common.Interfaces
 {
-    public interface IDownloadableMod
+    public interface IDownloadableAddon
     {
         string? Author { get; set; }
         string Description { get; set; }
@@ -13,7 +13,7 @@ namespace Common.Interfaces
         string Id { get; set; }
         bool HasNewerVersion { get; set; }
         bool IsInstalled { get; set; }
-        AddonTypeEnum ModType { get; set; }
+        AddonTypeEnum AddonType { get; set; }
         string Title { get; set; }
         string Status { get; }
         string? Version { get; set; }

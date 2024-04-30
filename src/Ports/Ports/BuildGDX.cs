@@ -63,12 +63,16 @@ namespace Ports.Ports
         /// <inheritdoc/>
         protected override string AddDefParam => throw new NotImplementedException();
 
+        /// <inheritdoc/>
         protected override string AddConParam => throw new NotImplementedException();
 
+        /// <inheritdoc/>
         protected override string MainDefParam => throw new NotImplementedException();
 
+        /// <inheritdoc/>
         protected override string MainConParam => throw new NotImplementedException();
 
+        /// <inheritdoc/>
         protected override string AddGrpParam => throw new NotImplementedException();
 
 

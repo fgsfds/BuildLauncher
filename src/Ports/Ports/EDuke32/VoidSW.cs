@@ -2,7 +2,7 @@
 using Common.Helpers;
 using Common.Interfaces;
 using Games.Games;
-using Mods.Mods;
+using Mods.Addons;
 using System.Text;
 
 namespace Ports.Ports.EDuke32

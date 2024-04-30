@@ -5,7 +5,7 @@ using Common.Interfaces;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Games.Providers;
-using Mods.Mods;
+using Mods.Addons;
 using System.Diagnostics;
 
 namespace BuildLauncher.ViewModels
@@ -30,7 +30,7 @@ namespace BuildLauncher.ViewModels
             _config = config;
 
             _gamesProvider.GameChangedEvent += OnGameChanged;
-            Game.DownloadableModsProvider.ModDownloadedEvent += OnModDownloaded;
+            Game.DownloadableAddonsProvider.AddonDownloadedEvent += OnModDownloaded;
         }
 
 
@@ -44,7 +44,7 @@ namespace BuildLauncher.ViewModels
         /// </summary>
         private async Task UpdateAsync(bool createNew)
         {
-            await Game.InstalledModsProvider.CreateCache(createNew);
+            await Game.InstalledAddonsProvider.CreateCache(createNew);
 
             OnPropertyChanged(nameof(ModsList));
         }
@@ -103,7 +103,7 @@ namespace BuildLauncher.ViewModels
         {
             SelectedMod.ThrowIfNull();
 
-            Game.InstalledModsProvider.DeleteMod(SelectedMod);
+            Game.InstalledAddonsProvider.DeleteAddon(SelectedMod);
 
             OnPropertyChanged(nameof(ModsList));
         }
@@ -120,12 +120,12 @@ namespace BuildLauncher.ViewModels
             if (!mod.IsEnabled)
             {
                 _config.AddDisabledAutoloadMod(mod.Id);
-                Game.InstalledModsProvider.DisableMod(mod.Id);
+                Game.InstalledAddonsProvider.DisableAddon(mod.Id);
             }
             else if (mod.IsEnabled)
             {
                 _config.RemoveDisabledAutoloadMod(mod.Id);
-                Game.InstalledModsProvider.EnableMod(mod.Id);
+                Game.InstalledAddonsProvider.EnableAddon(mod.Id);
             }
         }
 

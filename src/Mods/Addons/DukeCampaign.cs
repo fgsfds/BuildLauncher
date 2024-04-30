@@ -1,10 +1,17 @@
-﻿namespace Mods.Mods
+﻿using Common.Enums.Addons;
+
+namespace Mods.Addons
 {
     /// <summary>
-    /// Ion Fury campaign
+    /// Duke Nukem 3D campaign
     /// </summary>
-    public sealed class FuryCampaign : Addon
+    public sealed class DukeCampaign : Addon
     {
+        /// <summary>
+        /// Duke Addon enum
+        /// </summary>
+        public required DukeAddonEnum RequiredAddonEnum { get; init; }
+
         /// <summary>
         /// Main .con file
         /// </summary>
@@ -14,6 +21,11 @@
         /// Additional .con files
         /// </summary>
         public required HashSet<string>? AdditionalCons { get; init; }
+
+        /// <summary>
+        /// Main .rts file
+        /// </summary>
+        public required HashSet<string>? GRPs { get; init; }
 
         /// <summary>
         /// Main .rts file

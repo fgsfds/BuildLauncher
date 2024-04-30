@@ -1,17 +1,10 @@
-﻿using Common.Enums.Addons;
-
-namespace Mods.Mods
+﻿namespace Mods.Addons
 {
     /// <summary>
-    /// Redneck Rampage campaign
+    /// Ion Fury campaign
     /// </summary>
-    public sealed class RedneckCampaign : Addon
+    public sealed class FuryCampaign : Addon
     {
-        /// <summary>
-        /// Redneck Addon enum
-        /// </summary>
-        public required RedneckAddonEnum RequiredAddonEnum { get; init; }
-
         /// <summary>
         /// Main .con file
         /// </summary>
