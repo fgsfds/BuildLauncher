@@ -49,6 +49,9 @@ public sealed partial class App : Application
         base.OnFrameworkInitializationCompleted();
     }
 
+    /// <summary>
+    /// Load DI bindings
+    /// </summary>
     private static void LoadBindings()
     {
         var container = BindingsManager.Instance;
@@ -61,6 +64,9 @@ public sealed partial class App : Application
         Updater.DI.ProvidersBindings.Load(container);
     }
 
+    /// <summary>
+    /// Set theme from the config
+    /// </summary>
     private void SetTheme()
     {
         var theme = BindingsManager.Provider.GetRequiredService<ConfigProvider>().Config.Theme;

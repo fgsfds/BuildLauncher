@@ -6,6 +6,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Games.Providers;
 using Ports.Ports;
+using System.Collections.Immutable;
 using System.Diagnostics;
 
 namespace BuildLauncher.ViewModels
@@ -40,7 +41,7 @@ namespace BuildLauncher.ViewModels
         /// <summary>
         /// List of installed campaigns and maps
         /// </summary>
-        public IEnumerable<IAddon> CampaignsList => Game.GetCampaigns().Select(x => x.Value);
+        public ImmutableList<IAddon> CampaignsList => [.. Game.GetCampaigns().Select(x => x.Value)];
 
         /// <summary>
         /// Currently selected campaign/map
@@ -52,10 +53,19 @@ namespace BuildLauncher.ViewModels
         [NotifyCanExecuteChangedFor(nameof(StartCampaignCommand))]
         private IAddon? _selectedCampaign;
 
+        /// <summary>
+        /// Description of the selected campaign
+        /// </summary>
         public string SelectedCampaignDescription => SelectedCampaign is null ? string.Empty : SelectedCampaign.ToMarkdownString();
 
+        /// <summary>
+        /// Preview image of the selected campaign
+        /// </summary>
         public Stream? SelectedCampaignPreview => SelectedCampaign?.Preview;
 
+        /// <summary>
+        /// Is preview image in the description visible
+        /// </summary>
         public bool IsPreviewVisible => SelectedCampaign?.Preview is not null;
 
         #endregion

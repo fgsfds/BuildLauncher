@@ -27,6 +27,9 @@ namespace BuildLauncher.ViewModels
 
         #region Binding Properties
 
+        /// <summary>
+        /// Text of the install button
+        /// </summary>
         public string InstallButtonText
         {
             get

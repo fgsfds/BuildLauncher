@@ -68,8 +68,14 @@ namespace BuildLauncher.ViewModels
             }
         }
 
+        /// <summary>
+        /// Description of the selected addom
+        /// </summary>
         public string SelectedDownloadableDescription => SelectedDownloadableAddon is null ? string.Empty : SelectedDownloadableAddon.ToMarkdownString();
 
+        /// <summary>
+        /// Text of the download button
+        /// </summary>
         public string DownloadButtonText
         {
             get

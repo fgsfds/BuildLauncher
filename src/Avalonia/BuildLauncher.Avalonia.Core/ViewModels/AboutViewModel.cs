@@ -11,6 +11,9 @@ namespace BuildLauncher.ViewModels
 
         #region Binding Properties
 
+        /// <summary>
+        /// Current app version
+        /// </summary>
         public Version? CurrentVersion => CommonProperties.CurrentVersion;
 
         [ObservableProperty]

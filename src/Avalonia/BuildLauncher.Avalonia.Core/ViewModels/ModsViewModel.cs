@@ -6,6 +6,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Games.Providers;
 using Mods.Addons;
+using System.Collections.Immutable;
 using System.Diagnostics;
 
 namespace BuildLauncher.ViewModels
@@ -55,7 +56,7 @@ namespace BuildLauncher.ViewModels
         /// <summary>
         /// List of installed autoload mods
         /// </summary>
-        public IEnumerable<AutoloadMod> ModsList => Game.GetAutoloadMods(false).Select(x => (AutoloadMod)x.Value);
+        public ImmutableList<AutoloadMod> ModsList => [.. Game.GetAutoloadMods(false).Select(x => (AutoloadMod)x.Value)];
 
         /// <summary>
         /// Currently selected autoload mod
@@ -64,6 +65,9 @@ namespace BuildLauncher.ViewModels
         [NotifyPropertyChangedFor(nameof(SelectedModDescription))]
         private IAddon? _selectedMod;
 
+        /// <summary>
+        /// Description of the selected mod
+        /// </summary>
         public string SelectedModDescription => SelectedMod is null ? string.Empty : SelectedMod.ToMarkdownString();
 
         #endregion

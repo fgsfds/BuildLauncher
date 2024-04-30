@@ -6,6 +6,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Games.Providers;
 using Ports.Ports;
+using System.Collections.Immutable;
 using System.Diagnostics;
 
 namespace BuildLauncher.ViewModels
@@ -56,7 +57,7 @@ namespace BuildLauncher.ViewModels
         /// <summary>
         /// List of installed maps
         /// </summary>
-        public IEnumerable<IAddon> MapsList => Game.GetSingleMaps().Select(x => x.Value);
+        public ImmutableList<IAddon> MapsList => [.. Game.GetSingleMaps().Select(x => x.Value)];
 
         /// <summary>
         /// Currently selected map
@@ -66,6 +67,9 @@ namespace BuildLauncher.ViewModels
         [NotifyCanExecuteChangedFor(nameof(StartMapCommand))]
         private IAddon? _selectedMap;
 
+        /// <summary>
+        /// Description of the selected map
+        /// </summary>
         public string SelectedMapDescription => SelectedMap is null ? string.Empty : SelectedMap.ToMarkdownString();
 
         #endregion
