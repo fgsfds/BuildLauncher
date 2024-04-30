@@ -15,7 +15,7 @@
         /// <summary>
         /// Config file
         /// </summary>
-        public const string ConfigFile = "config.json"; 
+        public const string ConfigFile = "config.json";
 
         /// <summary>
         /// Addon manifest file

@@ -12,7 +12,7 @@ namespace Common.Interfaces
         /// Download progress
         /// </summary>
         Progress<float> Progress { get; }
-        
+
         /// <summary>
         /// Download mod
         /// </summary>

@@ -61,7 +61,7 @@ namespace Games.Providers
                 {
                     _dukeWtPath ??= pathToGame;
                 }
-                
+
 
                 //WANG
                 //Classic
@@ -84,7 +84,7 @@ namespace Games.Providers
                 {
                     _wangPath ??= pathToGame;
                 }
-                
+
 
                 //BLOOD
                 //FS

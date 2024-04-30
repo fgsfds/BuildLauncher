@@ -85,7 +85,7 @@ namespace Mods.Serializable
 
     [JsonSourceGenerationOptions(
         Converters = [
-            typeof(JsonStringEnumConverter<PortEnum>), 
+            typeof(JsonStringEnumConverter<PortEnum>),
             typeof(JsonStringEnumConverter<GameEnum>),
             typeof(JsonStringEnumConverter<AddonTypeEnum>),
             typeof(JsonStringEnumConverter<FeaturesEnum>)

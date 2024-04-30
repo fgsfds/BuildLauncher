@@ -6,7 +6,6 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Games.Providers;
 using Mods.Mods;
-using System.Collections.Immutable;
 using System.Diagnostics;
 
 namespace BuildLauncher.ViewModels
@@ -14,6 +13,7 @@ namespace BuildLauncher.ViewModels
     public sealed partial class ModsViewModel : ObservableObject
     {
         public readonly IGame Game;
+
         private readonly GamesProvider _gamesProvider;
         private readonly ConfigEntity _config;
 
@@ -55,7 +55,7 @@ namespace BuildLauncher.ViewModels
         /// <summary>
         /// List of installed autoload mods
         /// </summary>
-        public ImmutableList<AutoloadMod> ModsList => Game.GetAutoloadMods(false).Select(x => (AutoloadMod)x.Value).ToImmutableList();
+        public IEnumerable<AutoloadMod> ModsList => Game.GetAutoloadMods(false).Select(x => (AutoloadMod)x.Value);
 
         /// <summary>
         /// Currently selected autoload mod

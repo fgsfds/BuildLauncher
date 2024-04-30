@@ -87,7 +87,7 @@ namespace Mods.Helpers
                 result = -1;
             }
 
-                return expected.Contains(result);
+            return expected.Contains(result);
         }
     }
 }

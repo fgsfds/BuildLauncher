@@ -6,7 +6,6 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Games.Providers;
 using Ports.Ports;
-using System.Collections.Immutable;
 using System.Diagnostics;
 
 namespace BuildLauncher.ViewModels
@@ -14,6 +13,7 @@ namespace BuildLauncher.ViewModels
     public sealed partial class MapsViewModel : ObservableObject, IPortsButtonControl
     {
         public readonly IGame Game;
+
         private readonly GamesProvider _gamesProvider;
         private readonly ConfigEntity _config;
 
@@ -56,7 +56,7 @@ namespace BuildLauncher.ViewModels
         /// <summary>
         /// List of installed campaigns and maps
         /// </summary>
-        public ImmutableList<IAddon> MapsList => Game.GetSingleMaps().Select(x => x.Value).ToImmutableList();
+        public IEnumerable<IAddon> MapsList => Game.GetSingleMaps().Select(x => x.Value);
 
         /// <summary>
         /// Currently selected campaign/map

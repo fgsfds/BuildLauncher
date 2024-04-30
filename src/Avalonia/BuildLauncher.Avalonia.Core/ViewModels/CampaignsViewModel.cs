@@ -6,7 +6,6 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Games.Providers;
 using Ports.Ports;
-using System.Collections.Immutable;
 using System.Diagnostics;
 
 namespace BuildLauncher.ViewModels
@@ -41,7 +40,7 @@ namespace BuildLauncher.ViewModels
         /// <summary>
         /// List of installed campaigns and maps
         /// </summary>
-        public ImmutableList<IAddon> CampaignsList => Game.GetCampaigns().Select(x => x.Value).ToImmutableList();
+        public IEnumerable<IAddon> CampaignsList => Game.GetCampaigns().Select(x => x.Value);
 
         /// <summary>
         /// Currently selected campaign/map

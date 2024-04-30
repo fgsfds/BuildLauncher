@@ -1,5 +1,4 @@
-﻿using Common.Enums;
-using Mods.Serializable;
+﻿using Mods.Serializable;
 using System.Text.Json;
 
 namespace Tests;
