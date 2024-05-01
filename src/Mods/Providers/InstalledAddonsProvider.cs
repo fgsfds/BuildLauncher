@@ -52,15 +52,15 @@ namespace Mods.Providers
                     IEnumerable<string> files;
 
                     files = Directory.GetFiles(_game.CampaignsFolderPath).Where(static x => x.EndsWith(".zip", StringComparison.OrdinalIgnoreCase) || x.EndsWith(".grp", StringComparison.OrdinalIgnoreCase));
-                    var camps = GetModsFromFiles(AddonTypeEnum.TC, files);
+                    var camps = GetAddonsFromFiles(AddonTypeEnum.TC, files);
                     _cache.Add(AddonTypeEnum.TC, camps);
 
                     files = Directory.GetFiles(_game.MapsFolderPath).Where(static x => x.EndsWith(".zip", StringComparison.OrdinalIgnoreCase) || x.EndsWith(".map", StringComparison.OrdinalIgnoreCase));
-                    var maps = GetModsFromFiles(AddonTypeEnum.Map, files);
+                    var maps = GetAddonsFromFiles(AddonTypeEnum.Map, files);
                     _cache.Add(AddonTypeEnum.Map, maps);
 
                     files = Directory.GetFiles(_game.ModsFolderPath, "*.zip");
-                    var mods = GetModsFromFiles(AddonTypeEnum.Mod, files);
+                    var mods = GetAddonsFromFiles(AddonTypeEnum.Mod, files);
                     _cache.Add(AddonTypeEnum.Mod, mods);
                 });
             }
@@ -71,41 +71,41 @@ namespace Mods.Providers
         }
 
         /// <inheritdoc/>
-        public void AddAddon(AddonTypeEnum modTypeEnum, string pathToFile)
+        public void AddAddon(AddonTypeEnum addonType, string pathToFile)
         {
             _cache.ThrowIfNull();
 
-            var mod = GetMod(modTypeEnum, pathToFile);
+            var addon = GetAddon(addonType, pathToFile);
 
-            mod.ThrowIfNull();
+            addon.ThrowIfNull();
 
-            if (!_cache.TryGetValue(mod.Type, out _))
+            if (!_cache.TryGetValue(addon.Type, out _))
             {
-                _cache.Add(mod.Type, []);
+                _cache.Add(addon.Type, []);
             }
 
-            var dict = _cache[mod.Type];
+            var dict = _cache[addon.Type];
 
-            if (dict.TryGetValue(mod.Id, out _))
+            if (dict.TryGetValue(addon.Id, out _))
             {
-                dict[mod.Id] = mod;
+                dict[addon.Id] = addon;
             }
             else
             {
-                dict.Add(mod.Id, mod);
+                dict.Add(addon.Id, addon);
             }
         }
 
         /// <inheritdoc/>
-        public void DeleteAddon(IAddon mod)
+        public void DeleteAddon(IAddon addon)
         {
             _cache.ThrowIfNull();
 
-            File.Delete(mod.PathToFile);
+            File.Delete(addon.PathToFile);
 
-            _cache[mod.Type].Remove(mod.Id);
+            _cache[addon.Type].Remove(addon.Id);
 
-            AddonDeletedEvent?.Invoke(_game, mod.Type);
+            AddonDeletedEvent?.Invoke(_game, addon.Type);
         }
 
         /// <inheritdoc/>
@@ -115,11 +115,11 @@ namespace Mods.Providers
         public void DisableAddon(string id) => ((AutoloadMod)_cache[AddonTypeEnum.Mod][id]).IsEnabled = false;
 
         /// <inheritdoc/>
-        public Dictionary<string, IAddon> GetInstalledAddon(AddonTypeEnum modTypeEnum)
+        public Dictionary<string, IAddon> GetInstalledAddon(AddonTypeEnum addonType)
         {
             _cache.ThrowIfNull();
 
-            _cache.TryGetValue(modTypeEnum, out var result);
+            _cache.TryGetValue(addonType, out var result);
 
             if (result is not null)
             {
@@ -132,44 +132,44 @@ namespace Mods.Providers
         }
 
         /// <summary>
-        /// Get mods from list of files
+        /// Get addons from list of files
         /// </summary>
-        /// <param name="modTypeEnum">Mod type</param>
-        /// <param name="files">Paths to mod files</param>
-        private Dictionary<string, IAddon> GetModsFromFiles(AddonTypeEnum modTypeEnum, IEnumerable<string> files)
+        /// <param name="addonType">Addon type</param>
+        /// <param name="files">Paths to addon files</param>
+        private Dictionary<string, IAddon> GetAddonsFromFiles(AddonTypeEnum addonType, IEnumerable<string> files)
         {
-            Dictionary<string, IAddon> addedMods = new(StringComparer.OrdinalIgnoreCase);
+            Dictionary<string, IAddon> addedAddons = new(StringComparer.OrdinalIgnoreCase);
 
             foreach (var file in files)
             {
                 try
                 {
-                    var newMod = GetMod(modTypeEnum, file);
+                    var newAddon = GetAddon(addonType, file);
 
-                    if (newMod is null)
+                    if (newAddon is null)
                     {
                         continue;
                     }
 
-                    if (addedMods.TryGetValue(newMod.Id, out var existingMod))
+                    if (addedAddons.TryGetValue(newAddon.Id, out var existingMod))
                     {
                         if (existingMod.Version is null &&
-                            newMod.Version is not null)
+                            newAddon.Version is not null)
                         {
-                            //replacing with mod that have version
-                            addedMods[newMod.Id] = newMod;
+                            //replacing with addon that have version
+                            addedAddons[newAddon.Id] = newAddon;
                         }
                         else if (existingMod.Version is not null &&
-                                 newMod.Version is not null &&
-                                 VersionComparer.Compare(newMod.Version, existingMod.Version, ">"))
+                                 newAddon.Version is not null &&
+                                 VersionComparer.Compare(newAddon.Version, existingMod.Version, ">"))
                         {
-                            //replacing with mod that have higher version
-                            addedMods[newMod.Id] = newMod;
+                            //replacing with addon that have higher version
+                            addedAddons[newAddon.Id] = newAddon;
                         }
                     }
                     else
                     {
-                        addedMods.Add(newMod.Id, newMod);
+                        addedAddons.Add(newAddon.Id, newAddon);
                     }
                 }
                 catch (Exception ex)
@@ -178,17 +178,17 @@ namespace Mods.Providers
                 }
             }
 
-            return addedMods;
+            return addedAddons;
         }
 
         /// <summary>
-        /// Get mod from a file
+        /// Get addon from a file
         /// </summary>
-        /// <param name="modTypeEnum">Mod type</param>
-        /// <param name="pathToFile">Path to mod file</param>
-        private Addon? GetMod(AddonTypeEnum modTypeEnum, string pathToFile)
+        /// <param name="addonType">Addon type</param>
+        /// <param name="pathToFile">Path to addon file</param>
+        private Addon? GetAddon(AddonTypeEnum addonType, string pathToFile)
         {
-            var type = modTypeEnum;
+            var type = addonType;
             var id = Path.GetFileName(pathToFile);
             var title = Path.GetFileName(pathToFile);
             string? author = null;
@@ -381,7 +381,7 @@ namespace Mods.Providers
 
             Addon? addon = null;
 
-            if (modTypeEnum is AddonTypeEnum.Mod)
+            if (addonType is AddonTypeEnum.Mod)
             {
                 var isEnabled = !_config.DisabledAutoloadMods.Contains(id);
                 string? requiredAddon = null;
@@ -467,7 +467,6 @@ namespace Mods.Providers
                         AdditionalCons = addCons,
                         MainDef = mainDef,
                         AdditionalDefs = addDefs,
-                        RTS = rts,
                         RequiredFeatures = requiredFeatures,
                         Preview = preview
                     };
@@ -547,6 +546,7 @@ namespace Mods.Providers
                         AdditionalCons = addCons,
                         MainDef = mainDef,
                         AdditionalDefs = addDefs,
+                        GRPs = null,
                         RTS = rts,
                         RequiredAddonEnum = redneckAddon,
                         RequiredFeatures = requiredFeatures,

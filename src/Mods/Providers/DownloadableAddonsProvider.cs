@@ -10,7 +10,7 @@ using System.Text.Json;
 namespace Mods.Providers
 {
     /// <summary>
-    /// Class that provides lists of mods available to download
+    /// Class that provides lists of addons available to download
     /// </summary>
     public sealed class DownloadableAddonsProvider : IDownloadableAddonsProvider
     {
@@ -59,23 +59,23 @@ namespace Mods.Providers
                 using StreamReader file = new(stream);
                 var fixesXml = file.ReadToEnd();
 
-                var list = JsonSerializer.Deserialize(fixesXml, DownloadableModManifestsListContext.Default.ListDownloadableAddonDto);
+                var addons = JsonSerializer.Deserialize(fixesXml, DownloadableModManifestsListContext.Default.ListDownloadableAddonDto);
 
-                list.ThrowIfNull();
+                addons.ThrowIfNull();
 
                 _cache = [];
 
-                foreach (var mod in list)
+                foreach (var addon in addons)
                 {
                     //hack for RR
-                    if (mod.Game is GameEnum.RedneckRA)
+                    if (addon.Game is GameEnum.RedneckRA)
                     {
-                        mod.Game = GameEnum.Redneck;
+                        addon.Game = GameEnum.Redneck;
                     }
 
-                    _cache.TryAdd(mod.Game, []);
-                    _cache[mod.Game].TryAdd(mod.AddonType, []);
-                    _cache[mod.Game][mod.AddonType].TryAdd(mod.Id, mod);
+                    _cache.TryAdd(addon.Game, []);
+                    _cache[addon.Game].TryAdd(addon.AddonType, []);
+                    _cache[addon.Game][addon.AddonType].TryAdd(addon.Id, addon);
                 }
             }
             catch (Exception ex)
@@ -89,63 +89,63 @@ namespace Mods.Providers
 
 
         /// <inheritdoc/>
-        public ImmutableList<IDownloadableAddon> GetDownloadableAddons(AddonTypeEnum modTypeEnum)
+        public ImmutableList<IDownloadableAddon> GetDownloadableAddons(AddonTypeEnum addonType)
         {
-            if (_cache is null || !_cache.TryGetValue(_game.GameEnum, out var downloadableMods))
+            if (_cache is null || !_cache.TryGetValue(_game.GameEnum, out var downloadableAddons))
             {
                 return [];
             }
 
-            if (downloadableMods is null || !downloadableMods.TryGetValue(modTypeEnum, out var modTypeCache))
+            if (downloadableAddons is null || !downloadableAddons.TryGetValue(addonType, out var addonTypeCache))
             {
                 return [];
             }
 
-            var installedMods = _game.InstalledAddonsProvider.GetInstalledAddon(modTypeEnum);
+            var installedAddons = _game.InstalledAddonsProvider.GetInstalledAddon(addonType);
 
-            foreach (var downloadableMod in modTypeCache)
+            foreach (var downloadableAddon in addonTypeCache)
             {
-                if (installedMods.TryGetValue(downloadableMod.Key, out var installedMod))
+                if (installedAddons.TryGetValue(downloadableAddon.Key, out var installedAddon))
                 {
-                    downloadableMod.Value.IsInstalled = true;
+                    downloadableAddon.Value.IsInstalled = true;
 
-                    if (VersionComparer.Compare(downloadableMod.Value.Version, installedMod.Version, ">"))
+                    if (VersionComparer.Compare(downloadableAddon.Value.Version, installedAddon.Version, ">"))
                     {
-                        downloadableMod.Value.HasNewerVersion = true;
+                        downloadableAddon.Value.HasNewerVersion = true;
                     }
                 }
                 else
                 {
-                    downloadableMod.Value.IsInstalled = false;
+                    downloadableAddon.Value.IsInstalled = false;
                 }
             }
 
-            return [.. modTypeCache.Values];
+            return [.. addonTypeCache.Values];
         }
 
 
         /// <inheritdoc/>
-        public async Task DownloadAddonAsync(IDownloadableAddon mod)
+        public async Task DownloadAddonAsync(IDownloadableAddon addon)
         {
-            var url = mod.DownloadUrl;
+            var url = addon.DownloadUrl;
             var file = Path.GetFileName(url.ToString());
             string path;
 
-            if (mod.AddonType is AddonTypeEnum.TC)
+            if (addon.AddonType is AddonTypeEnum.TC)
             {
                 path = _game.CampaignsFolderPath;
             }
-            else if (mod.AddonType is AddonTypeEnum.Map)
+            else if (addon.AddonType is AddonTypeEnum.Map)
             {
                 path = _game.MapsFolderPath;
             }
-            else if (mod.AddonType is AddonTypeEnum.Mod)
+            else if (addon.AddonType is AddonTypeEnum.Mod)
             {
                 path = _game.ModsFolderPath;
             }
             else
             {
-                ThrowHelper.NotImplementedException(mod.AddonType.ToString());
+                ThrowHelper.NotImplementedException(addon.AddonType.ToString());
                 return;
             }
 
@@ -153,9 +153,9 @@ namespace Mods.Providers
 
             await _archiveTools.DownloadFileAsync(new(url), pathToFile).ConfigureAwait(false);
 
-            _game.InstalledAddonsProvider.AddAddon(mod.AddonType, pathToFile);
+            _game.InstalledAddonsProvider.AddAddon(addon.AddonType, pathToFile);
 
-            AddonDownloadedEvent?.Invoke(_game, mod.AddonType);
+            AddonDownloadedEvent?.Invoke(_game, addon.AddonType);
         }
     }
 }

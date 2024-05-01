@@ -140,22 +140,22 @@ namespace BuildLauncher.ViewModels
             OnPropertyChanged(nameof(ProgressBarValue));
         }
 
-        private void OnAddonChanged(IGame game, AddonTypeEnum modType)
+        private void OnAddonChanged(IGame game, AddonTypeEnum addonType)
         {
             if (game.GameEnum != Game.GameEnum)
             {
                 return;
             }
 
-            if (modType is AddonTypeEnum.TC)
+            if (addonType is AddonTypeEnum.TC)
             {
                 OnPropertyChanged(nameof(DownloadableCampaignsList));
             }
-            else if (modType is AddonTypeEnum.Map)
+            else if (addonType is AddonTypeEnum.Map)
             {
                 OnPropertyChanged(nameof(DownloadableMapsList));
             }
-            else if (modType is AddonTypeEnum.Mod)
+            else if (addonType is AddonTypeEnum.Mod)
             {
                 OnPropertyChanged(nameof(DownloadableModsList));
             }

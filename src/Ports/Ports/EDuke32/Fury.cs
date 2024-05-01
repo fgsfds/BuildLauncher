@@ -52,30 +52,30 @@ namespace Ports.Ports.EDuke32
 
 
         /// <inheritdoc/>
-        protected override void GetStartCampaignArgs(StringBuilder sb, IGame game, IAddon mod)
+        protected override void GetStartCampaignArgs(StringBuilder sb, IGame game, IAddon addon)
         {
-            if (mod.MainDef is not null)
+            if (addon.MainDef is not null)
             {
-                sb.Append($@" {MainDefParam}""{mod.MainDef}""");
+                sb.Append($@" {MainDefParam}""{addon.MainDef}""");
             }
             //no need to override main def
 
-            if (mod.AdditionalDefs is not null)
+            if (addon.AdditionalDefs is not null)
             {
-                foreach (var def in mod.AdditionalDefs)
+                foreach (var def in addon.AdditionalDefs)
                 {
                     sb.Append($@" {AddDefParam}""{def}""");
                 }
             }
 
 
-            if (game is FuryGame fGame && mod is FuryCampaign fCamp)
+            if (game is FuryGame fGame && addon is FuryCampaign fCamp)
             {
                 GetFuryArgs(sb, fGame, fCamp);
             }
             else
             {
-                ThrowHelper.NotImplementedException($"Mod type {mod.Type} for game {game} is not supported");
+                ThrowHelper.NotImplementedException($"Mod type {addon.Type} for game {game} is not supported");
             }
         }
 

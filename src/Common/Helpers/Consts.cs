@@ -3,7 +3,7 @@
     public static class Consts
     {
         /// <summary>
-        /// Path to main downloadable mods manifests file
+        /// Path to main downloadable addons manifests file
         /// </summary>
         public const string Manifests = "https://raw.githubusercontent.com/fgsfds/Build-Mods-Repo/master_new/addons.json";
 

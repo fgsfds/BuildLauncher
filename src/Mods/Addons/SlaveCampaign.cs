@@ -5,6 +5,6 @@
     /// </summary>
     public sealed class SlaveCampaign : Addon
     {
-        //powersalve doesn't have any unique files
+        //powersalve doesn't have any unique properties
     }
 }

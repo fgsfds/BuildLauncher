@@ -8,22 +8,31 @@ namespace Mods.Serializable
 {
     public sealed class DownloadableAddonDto : IDownloadableAddon
     {
+        [JsonPropertyName("Id")]
         public string Id { get; set; }
 
+        [JsonPropertyName("DownloadUrl")]
         public string DownloadUrl { get; set; }
 
+        [JsonPropertyName("Title")]
         public string Title { get; set; }
 
+        [JsonPropertyName("Version")]
         public string? Version { get; set; }
 
+        [JsonPropertyName("Author")]
         public string? Author { get; set; }
 
+        [JsonPropertyName("Game")]
         public GameEnum Game { get; set; }
 
+        [JsonPropertyName("AddonType")]
         public AddonTypeEnum AddonType { get; set; }
 
+        [JsonPropertyName("Description")]
         public string Description { get; set; }
 
+        [JsonPropertyName("FileSize")]
         public long FileSize { get; set; }
 
         [JsonIgnore]

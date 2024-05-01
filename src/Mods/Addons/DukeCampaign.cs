@@ -23,7 +23,7 @@ namespace Mods.Addons
         public required HashSet<string>? AdditionalCons { get; init; }
 
         /// <summary>
-        /// Main .rts file
+        /// Main .grp file
         /// </summary>
         public required HashSet<string>? GRPs { get; init; }
 

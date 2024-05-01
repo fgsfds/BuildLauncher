@@ -67,7 +67,7 @@ namespace BuildLauncher.Controls
         {
             MapsList.ContextMenu = new();
 
-            if (MapsList.SelectedItem is not IAddon iMod)
+            if (MapsList.SelectedItem is not IAddon addon)
             {
                 return;
             }
@@ -77,14 +77,12 @@ namespace BuildLauncher.Controls
             foreach (var port in _supportedPorts)
             {
                 if (port.IsInstalled &&
-                    (iMod.SupportedPorts is null || iMod.SupportedPorts!.Contains(port.PortEnum)))
+                    (addon.SupportedPorts is null || addon.SupportedPorts!.Contains(port.PortEnum)))
                 {
                     var portButton = new MenuItem()
                     {
                         Header = $"Start with {port.Name}",
-                        Command = new RelayCommand(() =>
-                                            _viewModel.StartMapCommand.Execute(port)
-                        )
+                        Command = new RelayCommand(() => _viewModel.StartMapCommand.Execute(port))
                     };
 
                     MapsList.ContextMenu.Items.Add(portButton);
@@ -102,7 +100,7 @@ namespace BuildLauncher.Controls
                 Header = "Delete",
                 Command = new RelayCommand(
                     () => _viewModel.DeleteMapCommand.Execute(null),
-                    () => iMod.Type is not AddonTypeEnum.Official
+                    () => addon.Type is not AddonTypeEnum.Official
                     )
             };
 

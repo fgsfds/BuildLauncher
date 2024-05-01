@@ -29,7 +29,7 @@ namespace Common.Helpers
         /// <summary>
         /// Current app version
         /// </summary>
-        public static Version? CurrentVersion => Assembly.GetEntryAssembly()?.GetName().Version;
+        public static Version CurrentVersion => Assembly.GetEntryAssembly()?.GetName().Version ?? ThrowHelper.NullReferenceException<Version>();
 
         /// <summary>
         /// Name of the executable file

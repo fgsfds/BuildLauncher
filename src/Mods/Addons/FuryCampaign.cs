@@ -14,10 +14,5 @@
         /// Additional .con files
         /// </summary>
         public required HashSet<string>? AdditionalCons { get; init; }
-
-        /// <summary>
-        /// Main .rts file
-        /// </summary>
-        public required string? RTS { get; init; }
     }
 }

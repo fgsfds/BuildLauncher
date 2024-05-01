@@ -14,7 +14,7 @@ namespace BuildLauncher.ViewModels
         /// <summary>
         /// Current app version
         /// </summary>
-        public Version? CurrentVersion => CommonProperties.CurrentVersion;
+        public Version CurrentVersion => CommonProperties.CurrentVersion;
 
         [ObservableProperty]
         private string _aboutTabHeader = "About";

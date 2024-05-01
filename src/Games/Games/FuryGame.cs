@@ -53,7 +53,6 @@ namespace Games.Games
                     AdditionalCons = null,
                     MainDef = null,
                     AdditionalDefs = null,
-                    RTS = null,
                     StartMap = null,
                     RequiredFeatures = null,
                     Preview = null

@@ -123,13 +123,13 @@ namespace Ports.Ports
         }
 
         /// <inheritdoc/>
-        protected override void GetStartCampaignArgs(StringBuilder sb, IGame game, IAddon mod)
+        protected override void GetStartCampaignArgs(StringBuilder sb, IGame game, IAddon addon)
         {
-            sb.Append($@" -savedir ""{Path.Combine(PathToPortFolder, "Save", mod.Id.Replace(' ', '_'))}""");
+            sb.Append($@" -savedir ""{Path.Combine(PathToPortFolder, "Save", addon.Id.Replace(' ', '_'))}""");
 
-            if (mod.MainDef is not null)
+            if (addon.MainDef is not null)
             {
-                sb.Append($@" {MainDefParam}""{mod.MainDef}""");
+                sb.Append($@" {MainDefParam}""{addon.MainDef}""");
             }
             else
             {
@@ -137,39 +137,38 @@ namespace Ports.Ports
                 sb.Append($@" {MainDefParam}""a""");
             }
 
-            if (mod.AdditionalDefs is not null)
+            if (addon.AdditionalDefs is not null)
             {
-                foreach (var def in mod.AdditionalDefs)
+                foreach (var def in addon.AdditionalDefs)
                 {
-
                     sb.Append($@" {AddDefParam}""{def}""");
                 }
             }
 
 
-            if (game is DukeGame dGame && mod is DukeCampaign dMod)
+            if (game is DukeGame dGame && addon is DukeCampaign dMod)
             {
                 GetDukeArgs(sb, dGame, dMod);
             }
-            else if (game is BloodGame bGame && mod is BloodCampaign bCamp)
+            else if (game is BloodGame bGame && addon is BloodCampaign bCamp)
             {
                 GetBloodArgs(sb, bGame, bCamp);
             }
-            else if (game is WangGame wGame && mod is WangCampaign wCamp)
+            else if (game is WangGame wGame && addon is WangCampaign wCamp)
             {
                 GetWangArgs(sb, wGame, wCamp);
             }
-            else if (game is SlaveGame sGame && mod is SlaveCampaign sCamp)
+            else if (game is SlaveGame sGame && addon is SlaveCampaign sCamp)
             {
                 GetSlaveArgs(sb, sGame, sCamp);
             }
-            else if (game is RedneckGame rGame && mod is RedneckCampaign rCamp)
+            else if (game is RedneckGame rGame && addon is RedneckCampaign rCamp)
             {
                 GetRedneckArgs(sb, rGame, rCamp);
             }
             else
             {
-                ThrowHelper.NotImplementedException($"Mod type {mod} for game {game} is not supported");
+                ThrowHelper.NotImplementedException($"Mod type {addon} for game {game} is not supported");
             }
         }
 
@@ -314,9 +313,9 @@ namespace Ports.Ports
                 return;
             }
 
-            foreach (var mod in addons)
+            foreach (var addon in addons)
             {
-                if (mod.Value is not AutoloadMod aMod)
+                if (addon.Value is not AutoloadMod aMod)
                 {
                     continue;
                 }

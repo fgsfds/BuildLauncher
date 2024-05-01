@@ -43,16 +43,16 @@ namespace Ports.Ports.EDuke32
 
 
         /// <inheritdoc/>
-        protected override void GetStartCampaignArgs(StringBuilder sb, IGame game, IAddon mod)
+        protected override void GetStartCampaignArgs(StringBuilder sb, IGame game, IAddon addon)
         {
             //don't search for steam/gog installs
             sb.Append($@" -usecwd");
 
             sb.Append(@$" {AddDirectoryParam}""{game.GameInstallFolder}""");
 
-            if (mod.MainDef is not null)
+            if (addon.MainDef is not null)
             {
-                sb.Append($@" {MainDefParam}""{mod.MainDef}""");
+                sb.Append($@" {MainDefParam}""{addon.MainDef}""");
             }
             else
             {
@@ -60,9 +60,9 @@ namespace Ports.Ports.EDuke32
                 sb.Append($@" {MainDefParam}""a""");
             }
 
-            if (mod.AdditionalDefs is not null)
+            if (addon.AdditionalDefs is not null)
             {
-                foreach (var def in mod.AdditionalDefs)
+                foreach (var def in addon.AdditionalDefs)
                 {
                     sb.Append($@" {AddDefParam}""{def}""");
                 }
@@ -70,13 +70,13 @@ namespace Ports.Ports.EDuke32
 
 
 
-            if (game is BloodGame bGame && mod is BloodCampaign bMod)
+            if (game is BloodGame bGame && addon is BloodCampaign bMod)
             {
                 GetBloodArgs(sb, bGame, bMod);
             }
             else
             {
-                ThrowHelper.NotImplementedException($"Mod type {mod.Type} for game {game} is not supported");
+                ThrowHelper.NotImplementedException($"Mod type {addon.Type} for game {game} is not supported");
             }
         }
     }

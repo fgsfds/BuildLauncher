@@ -144,10 +144,10 @@ namespace BuildLauncher.ViewModels
             }
         }
 
-        private void OnModDownloaded(IGame game, AddonTypeEnum modType)
+        private void OnModDownloaded(IGame game, AddonTypeEnum addonType)
         {
             if (game.GameEnum != Game.GameEnum ||
-                modType is not AddonTypeEnum.Mod)
+                addonType is not AddonTypeEnum.Mod)
             {
                 return;
             }

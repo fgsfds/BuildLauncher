@@ -55,9 +55,6 @@ namespace Mods.Addons
         public required Stream? Preview { get; init; }
 
         /// <inheritdoc/>
-        public bool IsAvailable { get; set; }
-
-        /// <inheritdoc/>
         public required string? MainDef { get; init; }
 
         /// <inheritdoc/>

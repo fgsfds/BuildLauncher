@@ -86,11 +86,6 @@ namespace Common.Interfaces
         Dictionary<string, string?>? Incompatibles { get; init; }
 
         /// <summary>
-        /// Does the addon have all dependencies and incompatibles in check
-        /// </summary>
-        bool IsAvailable { get; set; }
-
-        /// <summary>
         /// Main def file
         /// </summary>
         string? MainDef { get; init; }

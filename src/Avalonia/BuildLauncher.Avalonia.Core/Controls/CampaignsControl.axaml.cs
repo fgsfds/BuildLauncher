@@ -67,7 +67,7 @@ namespace BuildLauncher.Controls
         {
             CampaignsList.ContextMenu = new();
 
-            if (CampaignsList.SelectedItem is not IAddon iMod)
+            if (CampaignsList.SelectedItem is not IAddon addon)
             {
                 return;
             }
@@ -78,7 +78,7 @@ namespace BuildLauncher.Controls
             foreach (var port in _supportedPorts)
             {
                 if (port.IsInstalled &&
-                    (iMod.SupportedPorts is null || iMod.SupportedPorts!.Contains(port.PortEnum)))
+                    (addon.SupportedPorts is null || addon.SupportedPorts!.Contains(port.PortEnum)))
                 {
                     var portButton = new MenuItem()
                     {
@@ -101,7 +101,7 @@ namespace BuildLauncher.Controls
                 Header = "Delete",
                 Command = new RelayCommand(
                     () => _viewModel.DeleteCampaignCommand.Execute(null),
-                    () => iMod.Type is not AddonTypeEnum.Official
+                    () => addon.Type is not AddonTypeEnum.Official
                     )
             };
 

@@ -77,33 +77,33 @@ namespace Ports.Ports
 
 
         /// <inheritdoc/>
-        protected override void GetStartCampaignArgs(StringBuilder sb, IGame game, IAddon mod)
+        protected override void GetStartCampaignArgs(StringBuilder sb, IGame game, IAddon addon)
         {
             sb.Append(@" -jar ..\..\BuildGDX.jar");
 
             if (game is BloodGame bGame)
             {
-                GetBloodArgs(sb, bGame, mod);
+                GetBloodArgs(sb, bGame, addon);
             }
             else if (game is DukeGame dGame)
             {
-                GetDukeArgs(sb, dGame, mod);
+                GetDukeArgs(sb, dGame, addon);
             }
             else if (game is WangGame wGame)
             {
-                GetWangArgs(sb, wGame, mod);
+                GetWangArgs(sb, wGame, addon);
             }
             else if (game is SlaveGame sGame)
             {
-                GetSlaveArgs(sb, sGame, mod);
+                GetSlaveArgs(sb, sGame, addon);
             }
             else if (game is RedneckGame rGame)
             {
-                GetRedneckArgs(sb, rGame, mod);
+                GetRedneckArgs(sb, rGame, addon);
             }
             else
             {
-                ThrowHelper.NotImplementedException($"Mod type {mod} for game {game} is not supported");
+                ThrowHelper.NotImplementedException($"Mod type {addon} for game {game} is not supported");
             }
         }
 

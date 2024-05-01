@@ -116,13 +116,13 @@ namespace Ports.Ports
         /// Get command line parameters to start the game with selected campaign and autoload mods
         /// </summary>
         /// <param name="game">Game<param>
-        /// <param name="mod">Map/campaign</param>
+        /// <param name="addon">Map/campaign</param>
         /// <param name="skipIntro">Skip intro</param>
-        public string GetStartGameArgs(IGame game, IAddon mod, bool skipIntro, bool skipStartup)
+        public string GetStartGameArgs(IGame game, IAddon addon, bool skipIntro, bool skipStartup)
         {
             StringBuilder sb = new();
 
-            BeforeStart(game, mod);
+            BeforeStart(game, addon);
 
             if (skipIntro)
             {
@@ -134,9 +134,9 @@ namespace Ports.Ports
                 GetSkipStartupParameter(sb);
             }
 
-            GetStartCampaignArgs(sb, game, mod);
+            GetStartCampaignArgs(sb, game, addon);
 
-            GetAutoloadModsArgs(sb, game, mod);
+            GetAutoloadModsArgs(sb, game, addon);
 
             return sb.ToString();
         }
@@ -226,71 +226,71 @@ namespace Ports.Ports
         }
 
 
-        protected void GetBloodArgs(StringBuilder sb, BloodGame game, BloodCampaign bMod)
+        protected void GetBloodArgs(StringBuilder sb, BloodGame game, BloodCampaign bCamp)
         {
-            if (bMod.INI is not null)
+            if (bCamp.INI is not null)
             {
-                sb.Append($@" -ini ""{bMod.INI}""");
+                sb.Append($@" -ini ""{bCamp.INI}""");
             }
-            else if (bMod.RequiredAddonEnum is BloodAddonEnum.BloodCP)
+            else if (bCamp.RequiredAddonEnum is BloodAddonEnum.BloodCP)
             {
                 sb.Append($@" -ini ""{Consts.CrypticIni}""");
             }
 
 
-            if (bMod.FileName is null)
+            if (bCamp.FileName is null)
             {
                 return;
             }
 
 
-            if (bMod.RFF is not null)
+            if (bCamp.RFF is not null)
             {
-                sb.Append($@" -rff {bMod.RFF}");
+                sb.Append($@" -rff {bCamp.RFF}");
             }
 
 
-            if (bMod.SND is not null)
+            if (bCamp.SND is not null)
             {
-                sb.Append($@" -snd {bMod.SND}");
+                sb.Append($@" -snd {bCamp.SND}");
             }
 
 
-            if (bMod.Type is AddonTypeEnum.TC)
+            if (bCamp.Type is AddonTypeEnum.TC)
             {
-                sb.Append($@" {AddFileParam}""{Path.Combine(game.CampaignsFolderPath, bMod.FileName)}""");
+                sb.Append($@" {AddFileParam}""{Path.Combine(game.CampaignsFolderPath, bCamp.FileName)}""");
             }
-            else if (bMod.Type is AddonTypeEnum.Map)
+            else if (bCamp.Type is AddonTypeEnum.Map)
             {
-                GetMapArgs(sb, game, bMod);
+                GetMapArgs(sb, game, bCamp);
             }
             else
             {
-                ThrowHelper.NotImplementedException($"Mod type {bMod.Type} is not supported");
+                ThrowHelper.NotImplementedException($"Mod type {bCamp.Type} is not supported");
                 return;
             }
         }
 
 
-        protected void GetSlaveArgs(StringBuilder sb, SlaveGame sGame, SlaveCampaign sMod)
+        protected void GetSlaveArgs(StringBuilder sb, SlaveGame sGame, SlaveCampaign sCamp)
         {
-            if (sMod.FileName is null)
+            if (sCamp.FileName is null)
             {
                 return;
             }
 
 
-            if (sMod.Type is AddonTypeEnum.TC)
+            if (sCamp.Type is AddonTypeEnum.TC)
             {
-                sb.Append($@" {AddFileParam}""{Path.Combine(sGame.CampaignsFolderPath, sMod.FileName)}""");
+                sb.Append($@" {AddFileParam}""{Path.Combine(sGame.CampaignsFolderPath, sCamp.FileName)}""");
             }
-            else if (sMod.Type is AddonTypeEnum.Map)
+            else if (sCamp.Type is AddonTypeEnum.Map)
             {
-                GetMapArgs(sb, sGame, sMod);
+                GetMapArgs(sb, sGame, sCamp);
             }
             else
             {
-                ThrowHelper.NotImplementedException($"Mod type {sMod.Type} is not supported");
+                ThrowHelper.NotImplementedException($"Mod type {sCamp.Type} is not supported");
                 return;
             }
         }
@@ -308,8 +308,8 @@ namespace Ports.Ports
         /// </summary>
         /// <param name="sb">String builder for parameters</param>
         /// <param name="game">Game<param>
-        /// <param name="mod">Map/campaign</param>
-        protected abstract void GetStartCampaignArgs(StringBuilder sb, IGame game, IAddon mod);
+        /// <param name="addon">Map/campaign</param>
+        protected abstract void GetStartCampaignArgs(StringBuilder sb, IGame game, IAddon addon);
 
         /// <summary>
         /// Get command line arguments to load mods
