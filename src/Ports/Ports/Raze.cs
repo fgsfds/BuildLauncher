@@ -99,14 +99,13 @@ namespace Ports.Ports
                     [SoundfontSearch.Directories]
                     Path=$PROGDIR/soundfonts
 
-                    [Exhumed.AutoExec]
-                    Path=$PROGDIR/autoexec.cfg
-
                     [GlobalSettings]
                     gl_texture_filter=6
                     snd_alresampler=Nearest
                     gl_tonemap=5
                     hw_useindexedcolortextures=true
+                    mus_extendedlookup=true
+                    snd_extendedlookup=true
                     """;
 
                 if (!Directory.Exists(Path.GetDirectoryName(config)))
