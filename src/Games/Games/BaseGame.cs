@@ -1,6 +1,7 @@
 ﻿using Common.Enums;
 using Common.Helpers;
 using Common.Interfaces;
+using Common.Providers;
 using Mods.Addons;
 using Mods.Providers;
 
@@ -35,6 +36,8 @@ namespace Games.Games
         /// <inheritdoc/>
         public IDownloadableAddonsProvider DownloadableAddonsProvider { get; init; }
 
+        protected readonly PlaytimeProvider _playtimeProvider;
+
 
         /// <inheritdoc/>
         public abstract GameEnum GameEnum { get; }
@@ -51,11 +54,13 @@ namespace Games.Games
 
         public BaseGame(
             InstalledAddonsProviderFactory installedModsProviderFactory,
-            DownloadableAddonsProviderFactory downloadableModsProviderFactory
+            DownloadableAddonsProviderFactory downloadableModsProviderFactory,
+            PlaytimeProvider playtimeProvider
             )
         {
             InstalledAddonsProvider = installedModsProviderFactory.GetSingleton(this);
             DownloadableAddonsProvider = downloadableModsProviderFactory.GetSingleton(this);
+            _playtimeProvider = playtimeProvider;
 
             if (!Directory.Exists(CampaignsFolderPath))
             {

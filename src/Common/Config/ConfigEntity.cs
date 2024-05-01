@@ -113,6 +113,13 @@ namespace Common.Config
             ParameterChangedEvent?.Invoke(nameof(DisabledAutoloadMods));
         }
 
+        private Dictionary<string, TimeSpan>? _playtimes = null;
+        public Dictionary<string, TimeSpan>? Playtimes
+        {
+            get => _playtimes;
+            set => SetConfigParameter(ref _playtimes, value);
+        }
+
         /// <summary>
         /// Sets config parameter if changed and invokes notifier
         /// </summary>

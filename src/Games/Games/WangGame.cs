@@ -2,12 +2,17 @@
 using Common.Enums.Addons;
 using Common.Helpers;
 using Common.Interfaces;
+using Common.Providers;
 using Mods.Addons;
 using Mods.Providers;
 
 namespace Games.Games
 {
-    public sealed class WangGame(InstalledAddonsProviderFactory modsProvider, DownloadableAddonsProviderFactory downloadableModsProviderFactory) : BaseGame(modsProvider, downloadableModsProviderFactory)
+    public sealed class WangGame(
+        InstalledAddonsProviderFactory installedModsProviderFactory, 
+        DownloadableAddonsProviderFactory downloadableModsProviderFactory,
+        PlaytimeProvider playtimeProvider
+        ) : BaseGame(installedModsProviderFactory, downloadableModsProviderFactory, playtimeProvider)
     {
         /// <inheritdoc/>
         public override GameEnum GameEnum => GameEnum.Wang;
@@ -41,9 +46,10 @@ namespace Games.Games
 
             if (IsBaseGameInstalled)
             {
-                campaigns.Add(GameEnum.Wang.ToString(), new WangCampaign()
+                var wangId = nameof(GameEnum.Wang).ToLower();
+                campaigns.Add(wangId, new WangCampaign()
                 {
-                    Id = GameEnum.Wang.ToString(),
+                    Id = wangId,
                     Type = AddonTypeEnum.Official,
                     Title = "Shadow Warrior",
                     Image = ImageHelper.FileNameToStream("Wang.wang.jpg"),
@@ -67,14 +73,16 @@ namespace Games.Games
                     StartMap = null,
                     RequiredAddonEnum = WangAddonEnum.Wang,
                     RequiredFeatures = null,
-                    Preview = null
+                    Preview = null,
+                    Playtime = _playtimeProvider.GetTime(wangId)
                 });
 
                 if (IsWantonInstalled)
                 {
-                    campaigns.Add(WangAddonEnum.WangWD.ToString(), new WangCampaign()
+                    var wangWdId = nameof(WangAddonEnum.WangWD).ToLower();
+                    campaigns.Add(wangWdId, new WangCampaign()
                     {
-                        Id = WangAddonEnum.WangWD.ToString(),
+                        Id = wangWdId,
                         Type = AddonTypeEnum.Official,
                         Title = "Wanton Destruction",
                         Image = ImageHelper.FileNameToStream("Wang.wanton.jpg"),
@@ -100,15 +108,17 @@ namespace Games.Games
                         StartMap = null,
                         RequiredAddonEnum = WangAddonEnum.WangWD,
                         RequiredFeatures = null,
-                        Preview = null
+                        Preview = null,
+                        Playtime = _playtimeProvider.GetTime(wangWdId)
                     });
                 }
 
                 if (IsTwinDragonInstalled)
                 {
-                    campaigns.Add(WangAddonEnum.WangTD.ToString(), new WangCampaign()
+                    var wangTdId = nameof(WangAddonEnum.WangTD).ToLower();
+                    campaigns.Add(wangTdId, new WangCampaign()
                     {
-                        Id = WangAddonEnum.WangTD.ToString(),
+                        Id = wangTdId,
                         Type = AddonTypeEnum.Official,
                         Title = "Twin Dragon",
                         Image = ImageHelper.FileNameToStream("Wang.twin.jpg"),
@@ -134,7 +144,8 @@ namespace Games.Games
                         StartMap = null,
                         RequiredAddonEnum = WangAddonEnum.WangTD,
                         RequiredFeatures = null,
-                        Preview = null
+                        Preview = null,
+                        Playtime = _playtimeProvider.GetTime(wangTdId)
                     });
                 }
             }

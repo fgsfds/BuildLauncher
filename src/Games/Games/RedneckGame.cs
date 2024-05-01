@@ -2,12 +2,17 @@
 using Common.Enums.Addons;
 using Common.Helpers;
 using Common.Interfaces;
+using Common.Providers;
 using Mods.Addons;
 using Mods.Providers;
 
 namespace Games.Games
 {
-    public sealed class RedneckGame(InstalledAddonsProviderFactory modsProvider, DownloadableAddonsProviderFactory downloadableModsProviderFactory) : BaseGame(modsProvider, downloadableModsProviderFactory)
+    public sealed class RedneckGame(
+        InstalledAddonsProviderFactory installedModsProviderFactory,
+        DownloadableAddonsProviderFactory downloadableModsProviderFactory,
+        PlaytimeProvider playtimeProvider
+        ) : BaseGame(installedModsProviderFactory, downloadableModsProviderFactory, playtimeProvider)
     {
         /// <inheritdoc/>
         public override GameEnum GameEnum => GameEnum.Redneck;
@@ -44,9 +49,10 @@ namespace Games.Games
 
             if (IsBaseGameInstalled)
             {
-                campaigns.Add(GameEnum.Redneck.ToString(), new RedneckCampaign()
+                var redneckId = nameof(GameEnum.Redneck).ToLower();
+                campaigns.Add(redneckId, new RedneckCampaign()
                 {
-                    Id = GameEnum.Redneck.ToString(),
+                    Id = redneckId,
                     Type = AddonTypeEnum.Official,
                     Title = "Redneck Rampage",
                     Image = ImageHelper.FileNameToStream("Redneck.redneck.jpg"),
@@ -76,14 +82,16 @@ namespace Games.Games
                     StartMap = null,
                     RequiredAddonEnum = RedneckAddonEnum.Redneck,
                     RequiredFeatures = null,
-                    Preview = null
+                    Preview = null,
+                    Playtime = _playtimeProvider.GetTime(redneckId)
                 });
 
                 if (IsRoute66Installed)
                 {
-                    campaigns.Add(RedneckAddonEnum.RedneckR66.ToString(), new RedneckCampaign()
+                    var redneckR66Id = nameof(RedneckAddonEnum.RedneckR66).ToLower();
+                    campaigns.Add(redneckR66Id, new RedneckCampaign()
                     {
-                        Id = RedneckAddonEnum.RedneckR66.ToString(),
+                        Id = redneckR66Id,
                         Type = AddonTypeEnum.Official,
                         Title = "Route 66",
                         Image = ImageHelper.FileNameToStream("Redneck.route66.jpg"),
@@ -108,16 +116,18 @@ namespace Games.Games
                         StartMap = null,
                         RequiredAddonEnum = RedneckAddonEnum.RedneckR66,
                         RequiredFeatures = null,
-                        Preview = null
+                        Preview = null,
+                        Playtime = _playtimeProvider.GetTime(redneckR66Id)
                     });
                 }
             }
 
             if (IsAgainInstalled)
             {
-                campaigns.Add(GameEnum.RedneckRA.ToString(), new RedneckCampaign()
+                var redneckRaId = nameof(GameEnum.RedneckRA).ToLower();
+                campaigns.Add(redneckRaId, new RedneckCampaign()
                 {
-                    Id = GameEnum.RedneckRA.ToString(),
+                    Id = redneckRaId,
                     Type = AddonTypeEnum.Official,
                     Title = "Rides Again",
                     Image = ImageHelper.FileNameToStream("Redneck.again.jpg"),
@@ -144,7 +154,8 @@ namespace Games.Games
                     StartMap = null,
                     RequiredAddonEnum = RedneckAddonEnum.RedneckRA,
                     RequiredFeatures = null,
-                    Preview = null
+                    Preview = null,
+                    Playtime = _playtimeProvider.GetTime(redneckRaId)
                 });
             }
 

@@ -1,12 +1,17 @@
 ﻿using Common.Enums;
 using Common.Helpers;
 using Common.Interfaces;
+using Common.Providers;
 using Mods.Addons;
 using Mods.Providers;
 
 namespace Games.Games
 {
-    public sealed class FuryGame(InstalledAddonsProviderFactory modsProvider, DownloadableAddonsProviderFactory downloadableModsProviderFactory) : BaseGame(modsProvider, downloadableModsProviderFactory)
+    public sealed class FuryGame(
+        InstalledAddonsProviderFactory installedModsProviderFactory,
+        DownloadableAddonsProviderFactory downloadableModsProviderFactory,
+        PlaytimeProvider playtimeProvider
+        ) : BaseGame(installedModsProviderFactory, downloadableModsProviderFactory, playtimeProvider)
     {
         /// <inheritdoc/>
         public override GameEnum GameEnum => GameEnum.Fury;
@@ -28,9 +33,10 @@ namespace Games.Games
 
             if (IsBaseGameInstalled)
             {
-                campaigns.Add(GameEnum.Fury.ToString(), new FuryCampaign()
+                var furyId = nameof(GameEnum.Fury).ToLower();
+                campaigns.Add(furyId, new FuryCampaign()
                 {
-                    Id = GameEnum.Fury.ToString(),
+                    Id = furyId,
                     Type = AddonTypeEnum.Official,
                     Title = IsAftershock() ? "Ion Fury: Aftershock" : "Ion Fury",
                     Image = IsAftershock() ? ImageHelper.FileNameToStream("Fury.aftershock.jpg") : ImageHelper.FileNameToStream("Fury.fury.jpg"),
@@ -55,7 +61,8 @@ namespace Games.Games
                     AdditionalDefs = null,
                     StartMap = null,
                     RequiredFeatures = null,
-                    Preview = null
+                    Preview = null,
+                    Playtime = _playtimeProvider.GetTime(furyId)
                 });
             }
 

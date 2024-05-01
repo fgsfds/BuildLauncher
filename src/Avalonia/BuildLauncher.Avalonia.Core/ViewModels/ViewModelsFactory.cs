@@ -1,5 +1,6 @@
 ﻿using Common.Config;
 using Common.Enums;
+using Common.Providers;
 using Games.Providers;
 using Ports.Providers;
 using Ports.Tools;
@@ -12,18 +13,21 @@ namespace BuildLauncher.ViewModels
         private readonly ConfigEntity _config;
         private readonly PortsInstallerFactory _installerFactory;
         private readonly PortsProvider _portsProvider;
+        private readonly PlaytimeProvider _playtimeProvider;
 
         public ViewModelsFactory(
             GamesProvider gamesProvider,
             ConfigProvider configProvider,
             PortsInstallerFactory installerFactory,
-            PortsProvider portsProvider
+            PortsProvider portsProvider,
+            PlaytimeProvider playtimeProvider
             )
         {
             _gamesProvider = gamesProvider;
             _config = configProvider.Config;
             _installerFactory = installerFactory;
             _portsProvider = portsProvider;
+            _playtimeProvider = playtimeProvider;
         }
 
 #pragma warning disable CS0618 // Type or member is obsolete
@@ -36,7 +40,8 @@ namespace BuildLauncher.ViewModels
             CampaignsViewModel vm = new(
                 _gamesProvider.GetGame(gameEnum),
                 _gamesProvider,
-                _config
+                _config,
+                _playtimeProvider
                 );
 
             Task.Run(vm.InitializeAsync);
@@ -53,7 +58,8 @@ namespace BuildLauncher.ViewModels
             MapsViewModel vm = new(
                 _gamesProvider.GetGame(gameEnum),
                 _gamesProvider,
-                _config
+                _config,
+                _playtimeProvider
                 );
 
             Task.Run(vm.InitializeAsync);

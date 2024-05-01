@@ -2,6 +2,7 @@
 using Common.Enums.Addons;
 using Common.Helpers;
 using Common.Interfaces;
+using Common.Providers;
 using Mods.Addons;
 using Mods.Providers;
 using SharpCompress.Archives;
@@ -61,7 +62,11 @@ namespace Games.Games
         public bool IsDuke64Installed => File.Exists(Duke64RomPath);
 
 
-        public DukeGame(InstalledAddonsProviderFactory modsProvider, DownloadableAddonsProviderFactory downloadableModsProviderFactory) : base(modsProvider, downloadableModsProviderFactory)
+        public DukeGame(
+            InstalledAddonsProviderFactory installedModsProviderFactory, 
+            DownloadableAddonsProviderFactory downloadableModsProviderFactory,
+            PlaytimeProvider playtimeProvider
+            ) : base(installedModsProviderFactory, downloadableModsProviderFactory, playtimeProvider)
         {
             CreateWTStopgapFolder();
         }
@@ -75,9 +80,10 @@ namespace Games.Games
             if (IsBaseGameInstalled &&
                 GameInstallFolder != DukeWTInstallPath)
             {
-                campaigns.Add(nameof(GameEnum.Duke3D), new DukeCampaign()
+                var dukeId = nameof(GameEnum.Duke3D).ToLower();
+                campaigns.Add(dukeId, new DukeCampaign()
                 {
-                    Id = nameof(GameEnum.Duke3D),
+                    Id = dukeId,
                     Type = AddonTypeEnum.Official,
                     Title = "Duke Nukem 3D",
                     Image = ImageHelper.FileNameToStream("Duke3D.duke3d.jpg"),
@@ -105,15 +111,17 @@ namespace Games.Games
                     RequiredAddonEnum = DukeAddonEnum.Duke3D,
                     RequiredFeatures = null,
                     GRPs = null,
-                    Preview = null
+                    Preview = null,
+                    Playtime = _playtimeProvider.GetTime(dukeId)
                 });
             }
 
             if (IsWorldTourInstalled)
             {
-                campaigns.Add(nameof(GameEnum.Duke3D_WT), new DukeCampaign()
+                var dukeWtId = nameof(GameEnum.Duke3D_WT).ToLower();
+                campaigns.Add(dukeWtId, new DukeCampaign()
                 {
-                    Id = nameof(GameEnum.Duke3D_WT),
+                    Id = dukeWtId,
                     Type = AddonTypeEnum.Official,
                     Title = "Duke Nukem 3D World Tour",
                     Image = ImageHelper.FileNameToStream("Duke3D.dukewt.jpg"),
@@ -141,7 +149,8 @@ namespace Games.Games
                     RequiredAddonEnum = DukeAddonEnum.DukeWT,
                     RequiredFeatures = null,
                     GRPs = null,
-                    Preview = null
+                    Preview = null,
+                    Playtime = _playtimeProvider.GetTime(dukeWtId)
                 });
             }
 
@@ -149,9 +158,10 @@ namespace Games.Games
             {
                 if (IsCaribbeanInstalled)
                 {
-                    campaigns.Add(nameof(DukeAddonEnum.DukeVaca), new DukeCampaign()
+                    var dukeVacaId = nameof(DukeAddonEnum.DukeVaca).ToLower();
+                    campaigns.Add(dukeVacaId, new DukeCampaign()
                     {
-                        Id = nameof(DukeAddonEnum.DukeVaca),
+                        Id = dukeVacaId,
                         Type = AddonTypeEnum.Official,
                         Title = "Caribbean",
                         Image = ImageHelper.FileNameToStream("Duke3D.carib.jpg"),
@@ -180,15 +190,17 @@ namespace Games.Games
                         RequiredAddonEnum = DukeAddonEnum.DukeVaca,
                         RequiredFeatures = null,
                         GRPs = null,
-                        Preview = null
+                        Preview = null,
+                        Playtime = _playtimeProvider.GetTime(dukeVacaId)
                     });
                 }
 
                 if (IsNuclearWinterInstalled)
                 {
-                    campaigns.Add(nameof(DukeAddonEnum.DukeNW), new DukeCampaign()
+                    var dukeNwId = nameof(DukeAddonEnum.DukeNW).ToLower();
+                    campaigns.Add(dukeNwId, new DukeCampaign()
                     {
-                        Id = nameof(DukeAddonEnum.DukeNW),
+                        Id = dukeNwId,
                         Type = AddonTypeEnum.Official,
                         Title = "Nuclear Winter",
                         Image = ImageHelper.FileNameToStream("Duke3D.nwinter.jpg"),
@@ -215,15 +227,17 @@ namespace Games.Games
                         RequiredAddonEnum = DukeAddonEnum.DukeNW,
                         RequiredFeatures = null,
                         GRPs = null,
-                        Preview = null
+                        Preview = null,
+                        Playtime = _playtimeProvider.GetTime(dukeNwId)
                     });
                 }
 
                 if (IsDukeDCInstalled)
                 {
-                    campaigns.Add(nameof(DukeAddonEnum.DukeDC), new DukeCampaign()
+                    var dukeDcId = nameof(DukeAddonEnum.DukeDC).ToLower();
+                    campaigns.Add(dukeDcId, new DukeCampaign()
                     {
-                        Id = nameof(DukeAddonEnum.DukeDC),
+                        Id = dukeDcId,
                         Type = AddonTypeEnum.Official,
                         Title = "Duke it Out in DC",
                         Image = ImageHelper.FileNameToStream("Duke3D.dukedc.jpg"),
@@ -253,16 +267,18 @@ namespace Games.Games
                         RequiredAddonEnum = DukeAddonEnum.DukeDC,
                         RequiredFeatures = null,
                         GRPs = null,
-                        Preview = null
+                        Preview = null,
+                        Playtime = _playtimeProvider.GetTime(dukeDcId)
                     });
                 }
             }
 
             if (IsDuke64Installed)
             {
-                campaigns.Add(nameof(GameEnum.Duke64), new DukeCampaign()
+                var duke64Id = nameof(GameEnum.Duke64).ToLower();
+                campaigns.Add(duke64Id, new DukeCampaign()
                 {
-                    Id = nameof(GameEnum.Duke64),
+                    Id = duke64Id,
                     Type = AddonTypeEnum.Official,
                     Title = "Duke Nukem 64",
                     Image = ImageHelper.FileNameToStream("Duke3D.duke64.jpg"),
@@ -289,7 +305,8 @@ namespace Games.Games
                     RequiredAddonEnum = DukeAddonEnum.Duke3D,
                     RequiredFeatures = null,
                     GRPs = null,
-                    Preview = null
+                    Preview = null,
+                    Playtime = _playtimeProvider.GetTime(duke64Id)
                 });
             }
 

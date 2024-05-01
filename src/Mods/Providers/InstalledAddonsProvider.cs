@@ -8,6 +8,7 @@ using Mods.Addons;
 using Mods.Serializable;
 using SharpCompress.Archives;
 using System.Text.Json;
+using Common.Providers;
 
 namespace Mods.Providers
 {
@@ -18,6 +19,8 @@ namespace Mods.Providers
     {
         private readonly IGame _game;
         private readonly ConfigEntity _config;
+        private readonly PlaytimeProvider _playtimeProvider;
+
         private readonly Dictionary<AddonTypeEnum, Dictionary<string, IAddon>> _cache;
         private readonly SemaphoreSlim _semaphore = new(1);
 
@@ -26,11 +29,13 @@ namespace Mods.Providers
         [Obsolete($"Don't create directly. Use {nameof(InstalledAddonsProvider)}.")]
         public InstalledAddonsProvider(
             IGame game,
-            ConfigEntity config
+            ConfigEntity config,
+            PlaytimeProvider playtimeProvider
             )
         {
             _game = game;
             _config = config;
+            _playtimeProvider = playtimeProvider;
             _cache = [];
         }
 
@@ -311,24 +316,24 @@ namespace Mods.Providers
                         //extracting official addons from dependencies
                         foreach (var dep in manifest.Dependencies)
                         {
-                            if (dep.Id == nameof(DukeAddonEnum.DukeDC))
+                            if (dep.Id.Equals(nameof(DukeAddonEnum.DukeDC), StringComparison.OrdinalIgnoreCase))
                             {
                                 dukeAddon = DukeAddonEnum.DukeDC;
                             }
-                            else if (dep.Id == nameof(DukeAddonEnum.DukeNW))
+                            else if (dep.Id.Equals(nameof(DukeAddonEnum.DukeNW), StringComparison.OrdinalIgnoreCase))
                             {
                                 dukeAddon = DukeAddonEnum.DukeNW;
                             }
-                            else if (dep.Id == nameof(DukeAddonEnum.DukeVaca))
+                            else if (dep.Id.Equals(nameof(DukeAddonEnum.DukeVaca), StringComparison.OrdinalIgnoreCase))
                             {
                                 dukeAddon = DukeAddonEnum.DukeVaca;
                             }
-                            else if (dep.Id == nameof(DukeAddonEnum.DukeWT))
+                            else if (dep.Id.Equals(nameof(DukeAddonEnum.DukeWT), StringComparison.OrdinalIgnoreCase))
                             {
                                 dukeAddon = DukeAddonEnum.DukeWT;
                             }
 
-                            else if (dep.Id == nameof(WangAddonEnum.WangTD))
+                            else if (dep.Id.Equals(nameof(WangAddonEnum.WangTD), StringComparison.OrdinalIgnoreCase))
                             {
                                 wangAddon = WangAddonEnum.WangTD;
                             }
@@ -337,7 +342,7 @@ namespace Mods.Providers
                                 wangAddon = WangAddonEnum.WangWD;
                             }
 
-                            else if (dep.Id == nameof(RedneckAddonEnum.RedneckR66))
+                            else if (dep.Id.Equals(nameof(RedneckAddonEnum.RedneckR66), StringComparison.OrdinalIgnoreCase))
                             {
                                 redneckAddon = RedneckAddonEnum.RedneckR66;
                             }
@@ -411,7 +416,8 @@ namespace Mods.Providers
                     Incompatibles = incompatibles,
                     StartMap = startMap,
                     RequiredFeatures = requiredFeatures,
-                    Preview = preview
+                    Preview = preview,
+                    Playtime = _playtimeProvider.GetTime(id)
                 };
             }
             else
@@ -442,7 +448,8 @@ namespace Mods.Providers
                         GRPs = grps,
                         RequiredAddonEnum = dukeAddon,
                         RequiredFeatures = requiredFeatures,
-                        Preview = preview
+                        Preview = preview,
+                        Playtime = _playtimeProvider.GetTime(id)
                     };
                 }
                 else if (_game.GameEnum is GameEnum.Fury)
@@ -468,7 +475,8 @@ namespace Mods.Providers
                         MainDef = mainDef,
                         AdditionalDefs = addDefs,
                         RequiredFeatures = requiredFeatures,
-                        Preview = preview
+                        Preview = preview,
+                        Playtime = _playtimeProvider.GetTime(id)
                     };
                 }
                 else if (_game.GameEnum is GameEnum.Wang)
@@ -493,7 +501,8 @@ namespace Mods.Providers
                         AdditionalDefs = addDefs,
                         RequiredAddonEnum = wangAddon,
                         RequiredFeatures = requiredFeatures,
-                        Preview = preview
+                        Preview = preview,
+                        Playtime = _playtimeProvider.GetTime(id)
                     };
                 }
                 else if (_game.GameEnum is GameEnum.Blood)
@@ -521,7 +530,8 @@ namespace Mods.Providers
                         SND = snd,
                         RequiredAddonEnum = bloodAddon,
                         RequiredFeatures = requiredFeatures,
-                        Preview = preview
+                        Preview = preview,
+                        Playtime = _playtimeProvider.GetTime(id)
                     };
                 }
                 else if (_game.GameEnum is GameEnum.Redneck)
@@ -550,7 +560,8 @@ namespace Mods.Providers
                         RTS = rts,
                         RequiredAddonEnum = redneckAddon,
                         RequiredFeatures = requiredFeatures,
-                        Preview = preview
+                        Preview = preview,
+                        Playtime = _playtimeProvider.GetTime(id)
                     };
                 }
                 else if (_game.GameEnum is GameEnum.Exhumed)
@@ -574,7 +585,8 @@ namespace Mods.Providers
                         MainDef = mainDef,
                         AdditionalDefs = addDefs,
                         RequiredFeatures = requiredFeatures,
-                        Preview = preview
+                        Preview = preview,
+                        Playtime = _playtimeProvider.GetTime(id)
                     };
                 }
                 else
@@ -590,7 +602,7 @@ namespace Mods.Providers
         [Obsolete("delete")]
         private bool DeleteOld(string pathToFile, IArchive archive)
         {
-            var oldManifest = archive.Entries.FirstOrDefault(static x => x.Key.Equals("manifest.json"));
+            var oldManifest = archive.Entries.FirstOrDefault(static x => x.Key.Equals("manifest.json", StringComparison.OrdinalIgnoreCase));
 
             if (oldManifest is not null)
             {

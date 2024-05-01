@@ -2,6 +2,7 @@ using Common.Config;
 using Common.Enums;
 using Common.Helpers;
 using Common.Interfaces;
+using Common.Providers;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Games.Providers;
@@ -17,19 +18,22 @@ namespace BuildLauncher.ViewModels
 
         private readonly GamesProvider _gamesProvider;
         private readonly ConfigEntity _config;
+        private readonly PlaytimeProvider _playtimeProvider;
 
 
         [Obsolete($"Don't create directly. Use {nameof(ViewModelsFactory)}.")]
         public MapsViewModel(
             IGame game,
             GamesProvider gamesProvider,
-            ConfigEntity config
+            ConfigEntity config,
+            PlaytimeProvider playtimeProvider
             )
         {
             Game = game;
 
             _gamesProvider = gamesProvider;
             _config = config;
+            _playtimeProvider = playtimeProvider;
 
             _gamesProvider.GameChangedEvent += OnGameChanged;
             Game.DownloadableAddonsProvider.AddonDownloadedEvent += OnAddonDownloaded;
@@ -102,14 +106,19 @@ namespace BuildLauncher.ViewModels
         /// </summary>
         /// <param name="command">Port to start map with</param>
         [RelayCommand]
-        private void StartMap(object? command)
+        private async Task StartMapAsync(object? command)
         {
             command.ThrowIfNotType<BasePort>(out var port);
             SelectedMap.ThrowIfNull();
 
             var args = port.GetStartGameArgs(Game, SelectedMap, _config.SkipIntro, _config.SkipStartup);
 
-            StartPort(port.FullPathToExe, args);
+            await StartPortAsync(SelectedMap.Id, port.FullPathToExe, args);
+        }
+
+        private void StartPortAsync(string fullPathToExe, string args)
+        {
+            throw new NotImplementedException();
         }
 
 
@@ -158,15 +167,25 @@ namespace BuildLauncher.ViewModels
         /// </summary>
         /// <param name="exe">Path to port exe</param>
         /// <param name="args">Command line arguments</param>
-        private static void StartPort(string exe, string args)
+        private async Task StartPortAsync(string id, string exe, string args)
         {
-            Process.Start(new ProcessStartInfo
+            Stopwatch sw = Stopwatch.StartNew();
+
+            await Process.Start(new ProcessStartInfo
             {
                 FileName = exe,
                 UseShellExecute = true,
                 Arguments = args,
                 WorkingDirectory = Path.GetDirectoryName(exe)
-            });
+            })!.WaitForExitAsync();
+
+            sw.Stop();
+            var time = sw.Elapsed;
+
+            _playtimeProvider.AddTime(id, time);
+            SelectedMap!.UpdatePlaytime(time);
+
+            OnPropertyChanged(nameof(SelectedMapDescription));
         }
 
 

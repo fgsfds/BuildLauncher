@@ -2,12 +2,12 @@ using Common.Config;
 using Common.Enums;
 using Common.Helpers;
 using Common.Interfaces;
+using Common.Providers;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Games.Providers;
 using Ports.Ports;
 using System.Collections.Immutable;
-using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
 
 namespace BuildLauncher.ViewModels
@@ -18,19 +18,22 @@ namespace BuildLauncher.ViewModels
 
         private readonly GamesProvider _gamesProvider;
         private readonly ConfigEntity _config;
+        private readonly PlaytimeProvider _playtimeProvider;
 
 
         [Obsolete($"Don't create directly. Use {nameof(ViewModelsFactory)}.")]
         public CampaignsViewModel(
             IGame game,
             GamesProvider gamesProvider,
-            ConfigEntity config
+            ConfigEntity config,
+            PlaytimeProvider playtimeProvider
             )
         {
             Game = game;
 
             _gamesProvider = gamesProvider;
             _config = config;
+            _playtimeProvider = playtimeProvider;
 
             _gamesProvider.GameChangedEvent += OnGameChanged;
             Game.DownloadableAddonsProvider.AddonDownloadedEvent += OnAddonDownloaded;
@@ -115,14 +118,14 @@ namespace BuildLauncher.ViewModels
         /// </summary>
         /// <param name="command">Port to start campaign with</param>
         [RelayCommand]
-        private void StartCampaign(object? command)
+        private async Task StartCampaignAsync(object? command)
         {
             command.ThrowIfNotType<BasePort>(out var port);
             SelectedCampaign.ThrowIfNull();
 
             var args = port.GetStartGameArgs(Game, SelectedCampaign, _config.SkipIntro, _config.SkipStartup);
 
-            StartPort(port.FullPathToExe, args);
+            await StartPortAsync(SelectedCampaign.Id, port.FullPathToExe, args);
         }
 
 
@@ -171,15 +174,25 @@ namespace BuildLauncher.ViewModels
         /// </summary>
         /// <param name="exe">Path to port exe</param>
         /// <param name="args">Command line arguments</param>
-        private static void StartPort(string exe, string args)
+        private async Task StartPortAsync(string id, string exe, string args)
         {
-            Process.Start(new ProcessStartInfo
+            Stopwatch sw = Stopwatch.StartNew();
+
+            await Process.Start(new ProcessStartInfo
             {
                 FileName = exe,
                 UseShellExecute = true,
                 Arguments = args,
                 WorkingDirectory = Path.GetDirectoryName(exe)
-            });
+            })!.WaitForExitAsync();
+
+            sw.Stop();
+            var time = sw.Elapsed;
+
+            _playtimeProvider.AddTime(id, time);
+            SelectedCampaign!.UpdatePlaytime(time);
+
+            OnPropertyChanged(nameof(SelectedCampaignDescription));
         }
 
 

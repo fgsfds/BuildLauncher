@@ -119,7 +119,7 @@ namespace Ports.Ports
 
         private void GetDukeArgs(StringBuilder sb, DukeGame game, IAddon camp)
         {
-            if (camp.Id == DukeAddonEnum.DukeWT.ToString())
+            if (camp.Id.Equals(nameof(DukeAddonEnum.DukeWT), StringComparison.OrdinalIgnoreCase))
             {
                 sb.Append($@" -path ""{game.DukeWTInstallPath}""");
             }
@@ -141,7 +141,7 @@ namespace Ports.Ports
 
         private void GetRedneckArgs(StringBuilder sb, RedneckGame game, IAddon camp)
         {
-            if (camp.Id == GameEnum.RedneckRA.ToString())
+            if (camp.Id.Equals(nameof(GameEnum.RedneckRA), StringComparison.OrdinalIgnoreCase))
             {
                 sb.Append($@" -path ""{game.AgainInstallPath}""");
             }

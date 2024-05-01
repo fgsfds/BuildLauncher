@@ -255,13 +255,13 @@ namespace Ports.Ports
 
         private void GetRedneckArgs(StringBuilder sb, RedneckGame game, RedneckCampaign camp)
         {
-            if (camp.Id == nameof(RedneckAddonEnum.RedneckR66))
+            if (camp.Id.Equals(nameof(RedneckAddonEnum.RedneckR66), StringComparison.OrdinalIgnoreCase))
             {
                 sb.Append(" -route66");
                 return;
             }
 
-            if (camp.Id == nameof(GameEnum.RedneckRA))
+            if (camp.Id.Equals(nameof(GameEnum.RedneckRA), StringComparison.OrdinalIgnoreCase))
             {
                 var config = Path.Combine(PathToPortFolder, ConfigFile);
                 AddGamePathsToConfig(game.AgainInstallPath, game.ModsFolderPath, config);

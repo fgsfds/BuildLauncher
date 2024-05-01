@@ -2,6 +2,7 @@
 using Common.Enums;
 using Common.Helpers;
 using Common.Interfaces;
+using Common.Providers;
 using Games.Games;
 using Mods.Providers;
 
@@ -16,8 +17,9 @@ namespace Games.Providers
         public event GameChanged GameChangedEvent;
 
         private readonly ConfigEntity _config;
-        private readonly InstalledAddonsProviderFactory _modsProvider;
+        private readonly InstalledAddonsProviderFactory _installedModsProviderFactory;
         private readonly DownloadableAddonsProviderFactory _downloadableModsProviderFactory;
+        private readonly PlaytimeProvider _playtimeProvider;
 
         private readonly BloodGame _blood;
         private readonly DukeGame _duke3d;
@@ -36,43 +38,45 @@ namespace Games.Providers
 
         public GamesProvider(
             ConfigProvider config,
-            InstalledAddonsProviderFactory modsProvider,
-            DownloadableAddonsProviderFactory downloadableModsProviderFactory
+            InstalledAddonsProviderFactory installedModsProviderFactory,
+            DownloadableAddonsProviderFactory downloadableModsProviderFactory,
+            PlaytimeProvider playtimeProvider
             )
         {
             _config = config.Config;
-            _modsProvider = modsProvider;
+            _installedModsProviderFactory = installedModsProviderFactory;
             _downloadableModsProviderFactory = downloadableModsProviderFactory;
+            _playtimeProvider = playtimeProvider;
 
-            _blood = new(_modsProvider, _downloadableModsProviderFactory)
+            _blood = new(_installedModsProviderFactory, _downloadableModsProviderFactory, _playtimeProvider)
             {
                 GameInstallFolder = _config.GamePathBlood
             };
 
-            _duke3d = new(_modsProvider, _downloadableModsProviderFactory)
+            _duke3d = new(_installedModsProviderFactory, _downloadableModsProviderFactory, _playtimeProvider)
             {
                 GameInstallFolder = _config.GamePathDuke3D,
                 Duke64RomPath = _config.GamePathDuke64,
                 DukeWTInstallPath = _config.GamePathDukeWT
             };
 
-            _wang = new(_modsProvider, _downloadableModsProviderFactory)
+            _wang = new(_installedModsProviderFactory, _downloadableModsProviderFactory, _playtimeProvider)
             {
                 GameInstallFolder = _config.GamePathWang
             };
 
-            _fury = new(_modsProvider, _downloadableModsProviderFactory)
+            _fury = new(_installedModsProviderFactory, _downloadableModsProviderFactory, _playtimeProvider)
             {
                 GameInstallFolder = _config.GamePathFury
             };
 
-            _redneck = new(_modsProvider, _downloadableModsProviderFactory)
+            _redneck = new(_installedModsProviderFactory, _downloadableModsProviderFactory, _playtimeProvider)
             {
                 GameInstallFolder = _config.GamePathRedneck,
                 AgainInstallPath = _config.GamePathAgain
             };
 
-            _slave = new(_modsProvider, _downloadableModsProviderFactory)
+            _slave = new(_installedModsProviderFactory, _downloadableModsProviderFactory, _playtimeProvider)
             {
                 GameInstallFolder = _config.GamePathSlave
             };

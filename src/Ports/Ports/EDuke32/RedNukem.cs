@@ -100,11 +100,11 @@ namespace Ports.Ports.EDuke32
         /// <param name="camp">RedneckCampaign</param>
         private void GetRedneckArgs(StringBuilder sb, RedneckGame game, RedneckCampaign camp)
         {
-            if (camp.Id == GameEnum.RedneckRA.ToString())
+            if (camp.Id.Equals(nameof(GameEnum.RedneckRA), StringComparison.OrdinalIgnoreCase))
             {
                 sb.Append($@" {AddDirectoryParam}""{game.AgainInstallPath}""");
             }
-            else if (camp.Id == RedneckAddonEnum.RedneckR66.ToString())
+            else if (camp.Id.Equals(nameof(RedneckAddonEnum.RedneckR66), StringComparison.OrdinalIgnoreCase))
             {
                 sb.Append($@" {AddDirectoryParam}""{game.GameInstallFolder}"" -x GAME66.CON");
             }
@@ -179,7 +179,7 @@ namespace Ports.Ports.EDuke32
             var endMovVoc2 = Path.Combine(game.GameInstallFolder, "LN_FINAL.VOC");
 
 
-            if (campaign.Id == RedneckAddonEnum.RedneckR66.ToString())
+            if (campaign.Id.Equals(nameof(RedneckAddonEnum.RedneckR66), StringComparison.OrdinalIgnoreCase))
             {
                 File.Copy(tilesA1, tilesA2, true);
                 File.Copy(tilesB1, tilesB2, true);

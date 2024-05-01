@@ -2,15 +2,17 @@
 using Common.Enums.Addons;
 using Common.Helpers;
 using Common.Interfaces;
+using Common.Providers;
 using Mods.Addons;
 using Mods.Providers;
 
 namespace Games.Games
 {
     public sealed class BloodGame(
-        InstalledAddonsProviderFactory modsProvider,
-        DownloadableAddonsProviderFactory downloadableModsProviderFactory
-        ) : BaseGame(modsProvider, downloadableModsProviderFactory)
+        InstalledAddonsProviderFactory installedAddonsProviderFactory,
+        DownloadableAddonsProviderFactory downloadableModsProviderFactory,
+        PlaytimeProvider playtimeProvider
+        ) : BaseGame(installedAddonsProviderFactory, downloadableModsProviderFactory, playtimeProvider)
     {
         /// <inheritdoc/>
         public override GameEnum GameEnum => GameEnum.Blood;
@@ -40,9 +42,10 @@ namespace Games.Games
         {
             Dictionary<string, IAddon> campaigns = new(2, StringComparer.OrdinalIgnoreCase);
 
-            campaigns.Add(nameof(GameEnum.Blood), new BloodCampaign()
+            var bloodId = nameof(GameEnum.Blood).ToLower();
+            campaigns.Add(bloodId, new BloodCampaign()
             {
-                Id = nameof(GameEnum.Blood),
+                Id = bloodId,
                 Type = AddonTypeEnum.Official,
                 Title = "Blood",
                 Image = ImageHelper.FileNameToStream("Blood.blood.png"),
@@ -74,14 +77,17 @@ namespace Games.Games
                 StartMap = null,
                 RequiredAddonEnum = BloodAddonEnum.Blood,
                 RequiredFeatures = null,
-                Preview = null
+                Preview = null,
+                Playtime = _playtimeProvider.GetTime(bloodId)
             });
 
             if (IsCrypticPassageInstalled)
             {
-                campaigns.Add(nameof(BloodAddonEnum.BloodCP), new BloodCampaign()
+                var bloodCpId = nameof(BloodAddonEnum.BloodCP).ToLower();
+
+                campaigns.Add(bloodCpId, new BloodCampaign()
                 {
-                    Id = nameof(BloodAddonEnum.BloodCP),
+                    Id = bloodCpId,
                     Type = AddonTypeEnum.Official,
                     Title = "Cryptic Passage",
                     Image = ImageHelper.FileNameToStream("Blood.cp.jpg"),
@@ -109,7 +115,8 @@ namespace Games.Games
                     StartMap = null,
                     RequiredAddonEnum = BloodAddonEnum.BloodCP,
                     RequiredFeatures = null,
-                    Preview = null
+                    Preview = null,
+                    Playtime = _playtimeProvider.GetTime(bloodCpId)
                 });
             }
 

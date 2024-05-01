@@ -1,4 +1,5 @@
-﻿using Games.Providers;
+﻿using Common.Providers;
+using Games.Providers;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Games.DI

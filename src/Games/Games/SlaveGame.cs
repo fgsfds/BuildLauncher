@@ -1,12 +1,17 @@
 ﻿using Common.Enums;
 using Common.Helpers;
 using Common.Interfaces;
+using Common.Providers;
 using Mods.Addons;
 using Mods.Providers;
 
 namespace Games.Games
 {
-    public sealed class SlaveGame(InstalledAddonsProviderFactory modsProvider, DownloadableAddonsProviderFactory downloadableModsProviderFactory) : BaseGame(modsProvider, downloadableModsProviderFactory)
+    public sealed class SlaveGame(
+        InstalledAddonsProviderFactory installedModsProviderFactory, 
+        DownloadableAddonsProviderFactory downloadableModsProviderFactory,
+        PlaytimeProvider playtimeProvider
+        ) : BaseGame(installedModsProviderFactory, downloadableModsProviderFactory, playtimeProvider)
     {
         /// <inheritdoc/>
         public override GameEnum GameEnum => GameEnum.Exhumed;
@@ -28,9 +33,10 @@ namespace Games.Games
 
             if (IsBaseGameInstalled)
             {
-                campaigns.Add(GameEnum.Exhumed.ToString(), new SlaveCampaign()
+                var slaveId = nameof(GameEnum.Exhumed).ToLower();
+                campaigns.Add(slaveId, new SlaveCampaign()
                 {
-                    Id = GameEnum.Exhumed.ToString(),
+                    Id = slaveId,
                     Type = AddonTypeEnum.Official,
                     Title = "Powerslave",
                     Image = ImageHelper.FileNameToStream("Slave.slave.jpg"),
@@ -57,7 +63,8 @@ namespace Games.Games
                     AdditionalDefs = null,
                     StartMap = null,
                     RequiredFeatures = null,
-                    Preview = null
+                    Preview = null,
+                    Playtime = _playtimeProvider.GetTime(slaveId)
                 });
             }
 
