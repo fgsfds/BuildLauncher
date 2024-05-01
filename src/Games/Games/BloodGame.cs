@@ -40,9 +40,9 @@ namespace Games.Games
         {
             Dictionary<string, IAddon> campaigns = new(2, StringComparer.OrdinalIgnoreCase);
 
-            campaigns.Add(GameEnum.Blood.ToString(), new BloodCampaign()
+            campaigns.Add(nameof(GameEnum.Blood), new BloodCampaign()
             {
-                Id = GameEnum.Blood.ToString(),
+                Id = nameof(GameEnum.Blood),
                 Type = AddonTypeEnum.Official,
                 Title = "Blood",
                 Image = ImageHelper.FileNameToStream("Blood.blood.png"),
@@ -79,9 +79,9 @@ namespace Games.Games
 
             if (IsCrypticPassageInstalled)
             {
-                campaigns.Add(BloodAddonEnum.BloodCP.ToString(), new BloodCampaign()
+                campaigns.Add(nameof(BloodAddonEnum.BloodCP), new BloodCampaign()
                 {
-                    Id = BloodAddonEnum.BloodCP.ToString(),
+                    Id = nameof(BloodAddonEnum.BloodCP),
                     Type = AddonTypeEnum.Official,
                     Title = "Cryptic Passage",
                     Image = ImageHelper.FileNameToStream("Blood.cp.jpg"),

@@ -138,7 +138,7 @@ namespace Mods.Providers
         /// <param name="files">Paths to addon files</param>
         private Dictionary<string, IAddon> GetAddonsFromFiles(AddonTypeEnum addonType, IEnumerable<string> files)
         {
-            Dictionary<string, IAddon> addedAddons = new(StringComparer.OrdinalIgnoreCase);
+            Dictionary<string, IAddon> addedAddons = new(files.Count(), StringComparer.OrdinalIgnoreCase);
 
             foreach (var file in files)
             {
@@ -311,38 +311,38 @@ namespace Mods.Providers
                         //extracting official addons from dependencies
                         foreach (var dep in manifest.Dependencies)
                         {
-                            if (dep.Id == DukeAddonEnum.DukeDC.ToString())
+                            if (dep.Id == nameof(DukeAddonEnum.DukeDC))
                             {
                                 dukeAddon = DukeAddonEnum.DukeDC;
                             }
-                            else if (dep.Id == DukeAddonEnum.DukeNW.ToString())
+                            else if (dep.Id == nameof(DukeAddonEnum.DukeNW))
                             {
                                 dukeAddon = DukeAddonEnum.DukeNW;
                             }
-                            else if (dep.Id == DukeAddonEnum.DukeVaca.ToString())
+                            else if (dep.Id == nameof(DukeAddonEnum.DukeVaca))
                             {
                                 dukeAddon = DukeAddonEnum.DukeVaca;
                             }
-                            else if (dep.Id == DukeAddonEnum.DukeWT.ToString())
+                            else if (dep.Id == nameof(DukeAddonEnum.DukeWT))
                             {
                                 dukeAddon = DukeAddonEnum.DukeWT;
                             }
 
-                            else if (dep.Id == WangAddonEnum.WangTD.ToString())
+                            else if (dep.Id == nameof(WangAddonEnum.WangTD))
                             {
                                 wangAddon = WangAddonEnum.WangTD;
                             }
-                            else if (dep.Id.Equals(WangAddonEnum.WangWD.ToString(), StringComparison.OrdinalIgnoreCase))
+                            else if (dep.Id.Equals(nameof(WangAddonEnum.WangWD), StringComparison.OrdinalIgnoreCase))
                             {
                                 wangAddon = WangAddonEnum.WangWD;
                             }
 
-                            else if (dep.Id == RedneckAddonEnum.RedneckR66.ToString())
+                            else if (dep.Id == nameof(RedneckAddonEnum.RedneckR66))
                             {
                                 redneckAddon = RedneckAddonEnum.RedneckR66;
                             }
 
-                            else if (dep.Id.Equals(BloodAddonEnum.BloodCP.ToString(), StringComparison.OrdinalIgnoreCase))
+                            else if (dep.Id.Equals(nameof(BloodAddonEnum.BloodCP), StringComparison.OrdinalIgnoreCase))
                             {
                                 bloodAddon = BloodAddonEnum.BloodCP;
                             }

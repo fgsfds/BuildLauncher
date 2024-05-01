@@ -128,7 +128,7 @@ namespace Mods.Providers
         public async Task DownloadAddonAsync(IDownloadableAddon addon)
         {
             var url = addon.DownloadUrl;
-            var file = Path.GetFileName(url.ToString());
+            var file = Path.GetFileName(url);
             string path;
 
             if (addon.AddonType is AddonTypeEnum.TC)

@@ -75,9 +75,9 @@ namespace Games.Games
             if (IsBaseGameInstalled &&
                 GameInstallFolder != DukeWTInstallPath)
             {
-                campaigns.Add(GameEnum.Duke3D.ToString(), new DukeCampaign()
+                campaigns.Add(nameof(GameEnum.Duke3D), new DukeCampaign()
                 {
-                    Id = GameEnum.Duke3D.ToString(),
+                    Id = nameof(GameEnum.Duke3D),
                     Type = AddonTypeEnum.Official,
                     Title = "Duke Nukem 3D",
                     Image = ImageHelper.FileNameToStream("Duke3D.duke3d.jpg"),
@@ -111,9 +111,9 @@ namespace Games.Games
 
             if (IsWorldTourInstalled)
             {
-                campaigns.Add(GameEnum.Duke3D_WT.ToString(), new DukeCampaign()
+                campaigns.Add(nameof(GameEnum.Duke3D_WT), new DukeCampaign()
                 {
-                    Id = GameEnum.Duke3D_WT.ToString(),
+                    Id = nameof(GameEnum.Duke3D_WT),
                     Type = AddonTypeEnum.Official,
                     Title = "Duke Nukem 3D World Tour",
                     Image = ImageHelper.FileNameToStream("Duke3D.dukewt.jpg"),
@@ -149,9 +149,9 @@ namespace Games.Games
             {
                 if (IsCaribbeanInstalled)
                 {
-                    campaigns.Add(DukeAddonEnum.DukeVaca.ToString(), new DukeCampaign()
+                    campaigns.Add(nameof(DukeAddonEnum.DukeVaca), new DukeCampaign()
                     {
-                        Id = DukeAddonEnum.DukeVaca.ToString(),
+                        Id = nameof(DukeAddonEnum.DukeVaca),
                         Type = AddonTypeEnum.Official,
                         Title = "Caribbean",
                         Image = ImageHelper.FileNameToStream("Duke3D.carib.jpg"),
@@ -186,9 +186,9 @@ namespace Games.Games
 
                 if (IsNuclearWinterInstalled)
                 {
-                    campaigns.Add(DukeAddonEnum.DukeNW.ToString(), new DukeCampaign()
+                    campaigns.Add(nameof(DukeAddonEnum.DukeNW), new DukeCampaign()
                     {
-                        Id = DukeAddonEnum.DukeNW.ToString(),
+                        Id = nameof(DukeAddonEnum.DukeNW),
                         Type = AddonTypeEnum.Official,
                         Title = "Nuclear Winter",
                         Image = ImageHelper.FileNameToStream("Duke3D.nwinter.jpg"),
@@ -221,9 +221,9 @@ namespace Games.Games
 
                 if (IsDukeDCInstalled)
                 {
-                    campaigns.Add(DukeAddonEnum.DukeDC.ToString(), new DukeCampaign()
+                    campaigns.Add(nameof(DukeAddonEnum.DukeDC), new DukeCampaign()
                     {
-                        Id = DukeAddonEnum.DukeDC.ToString(),
+                        Id = nameof(DukeAddonEnum.DukeDC),
                         Type = AddonTypeEnum.Official,
                         Title = "Duke it Out in DC",
                         Image = ImageHelper.FileNameToStream("Duke3D.dukedc.jpg"),
@@ -260,9 +260,9 @@ namespace Games.Games
 
             if (IsDuke64Installed)
             {
-                campaigns.Add(GameEnum.Duke64.ToString(), new DukeCampaign()
+                campaigns.Add(nameof(GameEnum.Duke64), new DukeCampaign()
                 {
-                    Id = GameEnum.Duke64.ToString(),
+                    Id = nameof(GameEnum.Duke64),
                     Type = AddonTypeEnum.Official,
                     Title = "Duke Nukem 64",
                     Image = ImageHelper.FileNameToStream("Duke3D.duke64.jpg"),

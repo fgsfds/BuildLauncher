@@ -168,49 +168,49 @@ namespace BuildLauncher.ViewModels
                 return;
             }
 
-            if (param.Equals(GameEnum.Duke3D.ToString()))
+            if (param.Equals(nameof(GameEnum.Duke3D)))
             {
                 PathToDuke3D = files[0].Path.LocalPath;
 
                 OnPropertyChanged(nameof(PathToDuke3D));
             }
-            else if (param.Equals(GameEnum.Duke3D_WT.ToString()))
+            else if (param.Equals(nameof(GameEnum.Duke3D_WT)))
             {
                 PathToDukeWT = files[0].Path.LocalPath;
 
                 OnPropertyChanged(nameof(PathToDukeWT));
             }
-            else if (param.Equals(GameEnum.Blood.ToString()))
+            else if (param.Equals(nameof(GameEnum.Blood)))
             {
                 PathToBlood = files[0].Path.LocalPath;
 
                 OnPropertyChanged(nameof(PathToBlood));
             }
-            else if (param.Equals(GameEnum.Wang.ToString()))
+            else if (param.Equals(nameof(GameEnum.Wang)))
             {
                 PathToWang = files[0].Path.LocalPath;
 
                 OnPropertyChanged(nameof(PathToWang));
             }
-            else if (param.Equals(GameEnum.Redneck.ToString()))
+            else if (param.Equals(nameof(GameEnum.Redneck)))
             {
                 PathToRedneck = files[0].Path.LocalPath;
 
                 OnPropertyChanged(nameof(PathToRedneck));
             }
-            else if (param.Equals(GameEnum.RedneckRA.ToString()))
+            else if (param.Equals(nameof(GameEnum.RedneckRA)))
             {
                 PathToAgain = files[0].Path.LocalPath;
 
                 OnPropertyChanged(nameof(PathToAgain));
             }
-            else if (param.Equals(GameEnum.Fury.ToString()))
+            else if (param.Equals(nameof(GameEnum.Fury)))
             {
                 PathToFury = files[0].Path.LocalPath;
 
                 OnPropertyChanged(nameof(PathToFury));
             }
-            else if (param.Equals(GameEnum.Exhumed.ToString()))
+            else if (param.Equals(nameof(GameEnum.Exhumed)))
             {
                 PathToSlave = files[0].Path.LocalPath;
 
@@ -225,7 +225,7 @@ namespace BuildLauncher.ViewModels
         [RelayCommand]
         private void Autodetect(string param)
         {
-            if (param.Equals(GameEnum.Duke3D.ToString()))
+            if (param.Equals(nameof(GameEnum.Duke3D)))
             {
                 var path = _gamesAutoDetector.GetPath(GameEnum.Duke3D);
 
@@ -236,7 +236,7 @@ namespace BuildLauncher.ViewModels
                     OnPropertyChanged(nameof(PathToDuke3D));
                 }
             }
-            else if (param.Equals(GameEnum.Duke3D_WT.ToString()))
+            else if (param.Equals(nameof(GameEnum.Duke3D_WT)))
             {
                 var path = _gamesAutoDetector.GetPath(GameEnum.Duke3D_WT);
 
@@ -247,7 +247,7 @@ namespace BuildLauncher.ViewModels
                     OnPropertyChanged(nameof(PathToDukeWT));
                 }
             }
-            else if (param.Equals(GameEnum.Blood.ToString()))
+            else if (param.Equals(nameof(GameEnum.Blood)))
             {
                 var path = _gamesAutoDetector.GetPath(GameEnum.Blood);
 
@@ -258,7 +258,7 @@ namespace BuildLauncher.ViewModels
                     OnPropertyChanged(nameof(PathToBlood));
                 }
             }
-            else if (param.Equals(GameEnum.Wang.ToString()))
+            else if (param.Equals(nameof(GameEnum.Wang)))
             {
                 var path = _gamesAutoDetector.GetPath(GameEnum.Wang);
 
@@ -269,7 +269,7 @@ namespace BuildLauncher.ViewModels
                     OnPropertyChanged(nameof(PathToWang));
                 }
             }
-            else if (param.Equals(GameEnum.Redneck.ToString()))
+            else if (param.Equals(nameof(GameEnum.Redneck)))
             {
                 var path = _gamesAutoDetector.GetPath(GameEnum.Redneck);
 
@@ -280,7 +280,7 @@ namespace BuildLauncher.ViewModels
                     OnPropertyChanged(nameof(PathToRedneck));
                 }
             }
-            else if (param.Equals(GameEnum.RedneckRA.ToString()))
+            else if (param.Equals(nameof(GameEnum.RedneckRA)))
             {
                 var path = _gamesAutoDetector.GetPath(GameEnum.RedneckRA);
 
@@ -291,7 +291,7 @@ namespace BuildLauncher.ViewModels
                     OnPropertyChanged(nameof(PathToAgain));
                 }
             }
-            else if (param.Equals(GameEnum.Fury.ToString()))
+            else if (param.Equals(nameof(GameEnum.Fury)))
             {
                 var path = _gamesAutoDetector.GetPath(GameEnum.Fury);
 
@@ -302,7 +302,7 @@ namespace BuildLauncher.ViewModels
                     OnPropertyChanged(nameof(PathToFury));
                 }
             }
-            else if (param.Equals(GameEnum.Exhumed.ToString()))
+            else if (param.Equals(nameof(GameEnum.Exhumed)))
             {
                 var path = _gamesAutoDetector.GetPath(GameEnum.Exhumed);
 

@@ -65,21 +65,32 @@ namespace Mods.Serializable
 
         public string ToMarkdownString()
         {
-            StringBuilder description = new($"## {Title}{Environment.NewLine}");
+            StringBuilder description = new($"## {Title}");
 
             if (Version is not null)
             {
-                description.Append($"{Environment.NewLine}#### v{Version}");
+                description.Append($"\n\n#### v{Version}");
             }
 
             if (Author is not null)
             {
-                description.Append($"{Environment.NewLine}{Environment.NewLine}*by {Author}*");
+                description.Append($"\n\n*by {Author}*");
             }
 
             if (Description is not null)
             {
-                description.Append(Environment.NewLine + Environment.NewLine + Description);
+                var lines = Description.Split("\n");
+
+                for (var i = 0; i < lines.Length; i++)
+                {
+                    if (lines[i].StartsWith("http"))
+                    {
+                        var line = lines[i].Trim();
+                        lines[i] = $"[{line}]({line})";
+                    }
+                }
+
+                description.Append("\n\n").AppendJoin("\n\n", lines);
             }
 
             return description.ToString();

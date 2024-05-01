@@ -89,7 +89,7 @@ namespace Ports.Ports
             if (!File.Exists(config))
             {
                 //creating default config if it doesn't exist
-                var text = """
+                const string? DefaultConfig = """
                     [GameSearch.Directories]
                     Path=.
 
@@ -113,7 +113,7 @@ namespace Ports.Ports
                     Directory.CreateDirectory(Path.GetDirectoryName(config)!);
                 }
 
-                File.WriteAllText(config, text);
+                File.WriteAllText(config, DefaultConfig);
             }
 
             AddGamePathsToConfig(game.GameInstallFolder, game.ModsFolderPath, config);
@@ -255,13 +255,13 @@ namespace Ports.Ports
 
         private void GetRedneckArgs(StringBuilder sb, RedneckGame game, RedneckCampaign camp)
         {
-            if (camp.Id == RedneckAddonEnum.RedneckR66.ToString())
+            if (camp.Id == nameof(RedneckAddonEnum.RedneckR66))
             {
                 sb.Append(" -route66");
                 return;
             }
 
-            if (camp.Id == GameEnum.RedneckRA.ToString())
+            if (camp.Id == nameof(GameEnum.RedneckRA))
             {
                 var config = Path.Combine(PathToPortFolder, ConfigFile);
                 AddGamePathsToConfig(game.AgainInstallPath, game.ModsFolderPath, config);
@@ -401,7 +401,7 @@ namespace Ports.Ports
                     sb.AppendLine(contents[i]);
 
                     var path = gameFolder.Replace('\\', '/');
-                    sb.AppendLine("Path=" + path);
+                    sb.Append("Path=").AppendLine(path);
 
                     do
                     {
@@ -418,9 +418,9 @@ namespace Ports.Ports
                     sb.AppendLine(contents[i]);
 
                     var path = gameFolder.Replace('\\', '/');
-                    sb.AppendLine("Path=" + path);
+                    sb.Append("Path=").AppendLine(path);
                     path = modsFolder.Replace('\\', '/');
-                    sb.AppendLine("Path=" + path);
+                    sb.Append("Path=").AppendLine(path);
 
                     do
                     {

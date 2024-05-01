@@ -134,7 +134,7 @@ namespace Ports.Ports.EDuke32
         /// <param name="camp">DukeCampaign</param>
         protected void GetDukeArgs(StringBuilder sb, DukeGame game, DukeCampaign camp)
         {
-            if (camp.Id == GameEnum.Duke64.ToString())
+            if (camp.Id == nameof(GameEnum.Duke64))
             {
                 sb.Append(@$" {AddDirectoryParam}""{Path.GetDirectoryName(game.Duke64RomPath)}"" -gamegrp ""{Path.GetFileName(game.Duke64RomPath)}""");
                 return;

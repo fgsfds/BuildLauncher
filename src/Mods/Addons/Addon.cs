@@ -72,46 +72,47 @@ namespace Mods.Addons
         /// <inheritdoc/>
         public string ToMarkdownString()
         {
-            StringBuilder description = new($"## {Title}{Environment.NewLine}");
+            StringBuilder description = new($"## {Title}");
 
             if (Version is not null)
             {
-                description.Append($"{Environment.NewLine}#### v{Version}");
+                description.Append($"\n\n#### v{Version}");
             }
 
             if (Author is not null)
             {
-                description.Append($"{Environment.NewLine}{Environment.NewLine}*by {Author}*");
+                description.Append($"\n\n*by {Author}*");
             }
 
             if (Description is not null)
             {
-                var lines = Description.Split("\r\n");
+                var lines = Description.Split("\n");
 
                 for (var i = 0; i < lines.Length; i++)
                 {
                     if (lines[i].StartsWith("http"))
                     {
-                        lines[i] = $"[{lines[i]}]({lines[i]})";
+                        var line = lines[i].Trim();
+                        lines[i] = $"[{line}]({line})";
                     }
                 }
 
-                description.Append(Environment.NewLine + Environment.NewLine + string.Join(Environment.NewLine + Environment.NewLine, lines));
+                description.Append("\n\n").AppendJoin("\n\n", lines);
             }
 
             if (SupportedPorts is not null)
             {
-                description.Append(Environment.NewLine + Environment.NewLine + $"Only works with: *{string.Join(", ", SupportedPorts)}*");
+                description.Append("\n\n").Append($"Only works with: *{string.Join(", ", SupportedPorts)}*");
             }
 
             if (Dependencies is not null)
             {
-                description.Append(Environment.NewLine + Environment.NewLine + $"Requires: *{string.Join(", ", Dependencies.Keys)}*");
+                description.Append("\n\n").Append($"Requires: *{string.Join(", ", Dependencies.Keys)}*");
             }
 
             if (Incompatibles is not null)
             {
-                description.Append(Environment.NewLine + Environment.NewLine + $"Incompatible with: *{string.Join(", ", Incompatibles.Keys)}*");
+                description.Append("\n\n").Append($"Incompatible with: *{string.Join(", ", Incompatibles.Keys)}*");
             }
 
             return description.ToString();
