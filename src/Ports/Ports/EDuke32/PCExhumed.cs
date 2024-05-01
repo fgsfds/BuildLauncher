@@ -29,7 +29,7 @@ namespace Ports.Ports.EDuke32
         public override Uri RepoUrl => new("https://api.github.com/repos/nukeykt/NBlood/releases");
 
         /// <inheritdoc/>
-        public override Func<GitHubReleaseAsset, bool> WindowsReleasePredicate => static x => x.FileName.StartsWith("pcexhumed_win64");
+        public override Func<GitHubReleaseAsset, bool> WindowsReleasePredicate => static x => x.FileName.StartsWith("pcexhumed_win64", StringComparison.CurrentCultureIgnoreCase);
 
         /// <inheritdoc/>
         protected override string ConfigFile => "pcexhumed.cfg";
