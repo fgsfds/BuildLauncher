@@ -14,10 +14,15 @@
         <helpers:ImagePathToBitmapConverter x:Key="ImagePathToBitmapConverter"/>
     </UserControl.Resources>
 
-    <Grid RowDefinitions="*, auto, auto" ColumnDefinitions="2*,*">
+    <Grid RowDefinitions="auto,*,auto" ColumnDefinitions="2*,*">
+
+        <TextBox Grid.Row="0" Grid.Column="0"
+                 Margin="0,0,0,5"
+                 Watermark="Search"
+                 Text="{Binding SearchBoxText}"/>
 
         <ListBox Name="MapsList"
-                 Grid.Row="0" Grid.Column="0"
+                 Grid.Row="1" Grid.Column="0"
                  ScrollViewer.VerticalScrollBarVisibility="Disabled"
                  Padding="2"
                  ItemsSource="{Binding MapsList}"
@@ -50,7 +55,7 @@
 
         </ListBox>
 
-        <md:MarkdownScrollViewer Grid.Row="0" Grid.Column="1"
+        <md:MarkdownScrollViewer Grid.Row="1" Grid.Column="1"
                                  Margin="10,5"
                                  Markdown="{Binding SelectedMapDescription}">
 
@@ -60,7 +65,7 @@
 
         </md:MarkdownScrollViewer>
 
-        <ctrl:PortsButtonsControl Name="BottomPanel" Grid.Row="1"/>
+        <ctrl:PortsButtonsControl Name="BottomPanel" Grid.Row="2"/>
 
     </Grid>
 

@@ -131,6 +131,9 @@ namespace BuildLauncher.Controls
         private void ListBoxEmptySpaceClicked(object? sender, Avalonia.Input.PointerPressedEventArgs e)
         {
             CampaignsList.SelectedItem = null;
+            CampaignsList.Focusable = true;
+            CampaignsList.Focus();
+            CampaignsList.Focusable = false;
         }
     }
 }

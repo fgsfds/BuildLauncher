@@ -130,6 +130,9 @@ namespace BuildLauncher.Controls
         private void ListBoxEmptySpaceClicked(object? sender, Avalonia.Input.PointerPressedEventArgs e)
         {
             MapsList.SelectedItem = null;
+            MapsList.Focusable = true;
+            MapsList.Focus();
+            MapsList.Focusable = false;
         }
     }
 }

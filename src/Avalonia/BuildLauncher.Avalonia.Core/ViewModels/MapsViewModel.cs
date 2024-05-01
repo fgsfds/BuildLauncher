@@ -57,7 +57,25 @@ namespace BuildLauncher.ViewModels
         /// <summary>
         /// List of installed maps
         /// </summary>
-        public ImmutableList<IAddon> MapsList => [.. Game.GetSingleMaps().Select(x => x.Value)];
+        public ImmutableList<IAddon> MapsList
+        {
+            get
+            {
+                var result = Game.GetSingleMaps().Select(x => x.Value);
+
+                if (string.IsNullOrEmpty(SearchBoxText))
+                {
+                    return [.. result];
+                }
+
+                return [.. result.Where(x => x.Title.Contains(SearchBoxText, StringComparison.CurrentCultureIgnoreCase))];
+            }
+        }
+
+        /// <summary>
+        /// Description of the selected map
+        /// </summary>
+        public string SelectedMapDescription => SelectedMap is null ? string.Empty : SelectedMap.ToMarkdownString();
 
         /// <summary>
         /// Currently selected map
@@ -68,9 +86,11 @@ namespace BuildLauncher.ViewModels
         private IAddon? _selectedMap;
 
         /// <summary>
-        /// Description of the selected map
+        /// Search box text
         /// </summary>
-        public string SelectedMapDescription => SelectedMap is null ? string.Empty : SelectedMap.ToMarkdownString();
+        [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(MapsList))]
+        private string _searchBoxText;
 
         #endregion
 

@@ -59,16 +59,16 @@ namespace BuildLauncher.ViewModels
         public ImmutableList<AutoloadMod> ModsList => [.. Game.GetAutoloadMods(false).Select(x => (AutoloadMod)x.Value)];
 
         /// <summary>
+        /// Description of the selected mod
+        /// </summary>
+        public string SelectedModDescription => SelectedMod is null ? string.Empty : SelectedMod.ToMarkdownString();
+
+        /// <summary>
         /// Currently selected autoload mod
         /// </summary>
         [ObservableProperty]
         [NotifyPropertyChangedFor(nameof(SelectedModDescription))]
         private IAddon? _selectedMod;
-
-        /// <summary>
-        /// Description of the selected mod
-        /// </summary>
-        public string SelectedModDescription => SelectedMod is null ? string.Empty : SelectedMod.ToMarkdownString();
 
         #endregion
 

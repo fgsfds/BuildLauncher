@@ -7,6 +7,7 @@ using CommunityToolkit.Mvvm.Input;
 using Games.Providers;
 using Ports.Ports;
 using System.Collections.Immutable;
+using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
 
 namespace BuildLauncher.ViewModels
@@ -41,17 +42,20 @@ namespace BuildLauncher.ViewModels
         /// <summary>
         /// List of installed campaigns and maps
         /// </summary>
-        public ImmutableList<IAddon> CampaignsList => [.. Game.GetCampaigns().Select(x => x.Value)];
+        public ImmutableList<IAddon> CampaignsList
+        {
+            get
+            {
+                var result = Game.GetCampaigns().Select(x => x.Value);
 
-        /// <summary>
-        /// Currently selected campaign/map
-        /// </summary>
-        [ObservableProperty]
-        [NotifyPropertyChangedFor(nameof(SelectedCampaignDescription))]
-        [NotifyPropertyChangedFor(nameof(SelectedCampaignPreview))]
-        [NotifyPropertyChangedFor(nameof(IsPreviewVisible))]
-        [NotifyCanExecuteChangedFor(nameof(StartCampaignCommand))]
-        private IAddon? _selectedCampaign;
+                if (string.IsNullOrEmpty(SearchBoxText))
+                {
+                    return [.. result];
+                }
+
+                return [.. result.Where(x => x.Title.Contains(SearchBoxText, StringComparison.CurrentCultureIgnoreCase))];
+            }
+        }
 
         /// <summary>
         /// Description of the selected campaign
@@ -67,6 +71,23 @@ namespace BuildLauncher.ViewModels
         /// Is preview image in the description visible
         /// </summary>
         public bool IsPreviewVisible => SelectedCampaign?.Preview is not null;
+
+        /// <summary>
+        /// Currently selected campaign/map
+        /// </summary>
+        [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(SelectedCampaignDescription))]
+        [NotifyPropertyChangedFor(nameof(SelectedCampaignPreview))]
+        [NotifyPropertyChangedFor(nameof(IsPreviewVisible))]
+        [NotifyCanExecuteChangedFor(nameof(StartCampaignCommand))]
+        private IAddon? _selectedCampaign;
+
+        /// <summary>
+        /// Search box text
+        /// </summary>
+        [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(CampaignsList))]
+        private string _searchBoxText;
 
         #endregion
 
