@@ -112,7 +112,7 @@ namespace Ports.Providers
                 return null;
             }
 
-            return new($"https://dukeworld.com/eduke32/synthesis/latest/{fileName}", version.ToString());
+            return new($"https://dukeworld.com/eduke32/synthesis/latest/{fileName}", "r" + version.ToString());
         }
 
         [GeneratedRegex("eduke32_win64_2[^\"]*")]

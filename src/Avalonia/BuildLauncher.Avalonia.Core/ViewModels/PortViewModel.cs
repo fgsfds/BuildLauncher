@@ -56,12 +56,12 @@ namespace BuildLauncher.ViewModels
         /// <summary>
         /// Currently installed version
         /// </summary>
-        public string Version => _port.InstalledVersion?.ToString() ?? "None";
+        public string Version => _port.InstalledVersion ?? "None";
 
         /// <summary>
         /// Latest available version
         /// </summary>
-        public string LatestVersion => _release?.Version.ToString() ?? "Not available";
+        public string LatestVersion => _release?.Version ?? "Not available";
 
         /// <summary>
         /// Download/install progress
