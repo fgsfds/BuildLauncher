@@ -1,10 +1,8 @@
 ﻿using Common.Enums;
 using Common.Helpers;
 using Common.Interfaces;
-using Mods.Mods;
+using Mods.Addons;
 using Mods.Providers;
-using System.IO.Compression;
-using System.Text;
 
 namespace Games.Games
 {
@@ -31,6 +29,12 @@ namespace Games.Games
         /// <inheritdoc/>
         public string SpecialFolderPath => Path.Combine(CommonProperties.DataFolderPath, ShortName, "Special");
 
+        /// <inheritdoc/>
+        public IInstalledAddonsProvider InstalledAddonsProvider { get; init; }
+
+        /// <inheritdoc/>
+        public IDownloadableAddonsProvider DownloadableAddonsProvider { get; init; }
+
 
         /// <inheritdoc/>
         public abstract GameEnum GameEnum { get; }
@@ -42,23 +46,16 @@ namespace Games.Games
         public abstract string ShortName { get; }
 
         /// <inheritdoc/>
-        public abstract string DefFile { get; }
-
-        /// <inheritdoc/>
         public abstract List<string> RequiredFiles { get; }
-
-        public IInstalledModsProvider InstalledModsProvider { get; init; }
-
-        public IDownloadableModsProvider DownloadableModsProvider { get; init; }
 
 
         public BaseGame(
-            InstalledModsProviderFactory installedModsProviderFactory,
-            DownloadableModsProviderFactory downloadableModsProviderFactory
+            InstalledAddonsProviderFactory installedModsProviderFactory,
+            DownloadableAddonsProviderFactory downloadableModsProviderFactory
             )
         {
-            InstalledModsProvider = installedModsProviderFactory.GetSingleton(this);
-            DownloadableModsProvider = downloadableModsProviderFactory.GetSingleton(this);
+            InstalledAddonsProvider = installedModsProviderFactory.GetSingleton(this);
+            DownloadableAddonsProvider = downloadableModsProviderFactory.GetSingleton(this);
 
             if (!Directory.Exists(CampaignsFolderPath))
             {
@@ -79,33 +76,24 @@ namespace Games.Games
             {
                 Directory.CreateDirectory(SpecialFolderPath);
             }
+
+            Cleanup();
         }
 
 
         /// <inheritdoc/>
-        public virtual Dictionary<Guid, IMod> GetCampaigns()
+        public virtual Dictionary<string, IAddon> GetCampaigns()
         {
-            Dictionary<Guid, IMod> originalCampaigns = GetOriginalCampaigns();
+            var originalCampaigns = GetOriginalCampaigns();
 
-            var customCampaigns = InstalledModsProvider.GetInstalledMods(ModTypeEnum.Campaign);
+            var customCampaigns = InstalledAddonsProvider.GetInstalledAddon(AddonTypeEnum.TC);
 
             foreach (var customCamp in customCampaigns)
             {
-                if (originalCampaigns.TryGetValue(customCamp.Key, out var originalCamp))
+                if (originalCampaigns.TryGetValue(customCamp.Key, out var _))
                 {
-                    if (originalCamp.Version is null &&
-                        customCamp.Value.Version is not null)
-                    {
-                        //replacing with mod that have version
-                        originalCampaigns[customCamp.Key] = customCamp.Value;
-                    }
-                    else if (customCamp.Value.Version is not null &&
-                             originalCamp.Version is not null &&
-                             customCamp.Value.Version > originalCamp.Version)
-                    {
-                        //replacing with mod that have higher version
-                        originalCampaigns[customCamp.Key] = customCamp.Value;
-                    }
+                    //replacing original campaign with the downloaded one
+                    originalCampaigns[customCamp.Key] = customCamp.Value;
                 }
                 else
                 {
@@ -118,103 +106,41 @@ namespace Games.Games
 
 
         /// <inheritdoc/>
-        public virtual Dictionary<Guid, IMod> GetSingleMaps()
+        public virtual Dictionary<string, IAddon> GetSingleMaps()
         {
-            var maps = InstalledModsProvider.GetInstalledMods(ModTypeEnum.Map);
+            var maps = InstalledAddonsProvider.GetInstalledAddon(AddonTypeEnum.Map);
 
             return maps;
         }
 
 
         /// <inheritdoc/>
-        public virtual Dictionary<Guid, IMod> GetAutoloadMods(bool enabledOnly)
+        public virtual Dictionary<string, IAddon> GetAutoloadMods(bool enabledOnly)
         {
-            var mods = InstalledModsProvider.GetInstalledMods(ModTypeEnum.Autoload);
+            var mods = InstalledAddonsProvider.GetInstalledAddon(AddonTypeEnum.Mod);
 
             if (enabledOnly)
             {
-                Dictionary<Guid, IMod> filtered = [];
+                Dictionary<string, IAddon> enabled = new(StringComparer.OrdinalIgnoreCase);
 
                 foreach (var mod in mods)
                 {
-                    if (((AutoloadMod)mod.Value).IsEnabled)
+                    if (mod.Value is not AutoloadMod aMod)
                     {
-                        filtered.Add(mod.Key, mod.Value);
+                        ThrowHelper.ArgumentException(nameof(mod));
+                        return null;
+                    }
+
+                    if (aMod.IsEnabled)
+                    {
+                        enabled.Add(mod.Key, aMod);
                     }
                 }
 
-                return filtered;
+                return enabled;
             }
 
             return mods;
-        }
-
-
-        /// <inheritdoc/>
-        public void CreateCombinedMod(string? additionalDef = null)
-        {
-            Cleanup();
-
-            if (!Directory.Exists(ModsFolderPath))
-            {
-                return;
-            }
-
-            var combinedFolderPath = Path.Combine(SpecialFolderPath, Consts.CombinedModFolder);
-
-            if (Directory.Exists(combinedFolderPath))
-            {
-                Directory.Delete(combinedFolderPath, true);
-            }
-
-            StringBuilder newDef = new();
-
-            var files = GetAutoloadMods(true);
-
-            if (files.Count == 0)
-            {
-                return;
-            }
-
-            foreach (var file in files)
-            {
-                file.Value.ThrowIfNotType<AutoloadMod>(out var autoloadMod);
-                autoloadMod.PathToFile.ThrowIfNull();
-
-                if (!autoloadMod.IsEnabled)
-                {
-                    continue;
-                }
-
-                using var zip = ZipFile.OpenRead(autoloadMod.PathToFile);
-
-                var ini = zip.Entries.FirstOrDefault(x => x.Name.Equals(DefFile));
-
-                if (ini is null)
-                {
-                    continue;
-                }
-
-                using var stream = ini.Open();
-                using var streamReader = new StreamReader(stream);
-
-                newDef.Append(streamReader.ReadToEnd());
-                newDef.Append(Environment.NewLine);
-            }
-
-            if (additionalDef is not  null)
-            {
-                newDef.Append(additionalDef);
-            }
-
-            using var memStream = new MemoryStream(Encoding.UTF8.GetBytes(newDef.ToString()));
-
-            if (!Directory.Exists(combinedFolderPath))
-            {
-                Directory.CreateDirectory(combinedFolderPath);
-            }
-
-            File.WriteAllText(Path.Combine(combinedFolderPath, Consts.CombinedDef), newDef.ToString());
         }
 
         /// <summary>
@@ -223,16 +149,9 @@ namespace Games.Games
         [Obsolete("Remove later")]
         private void Cleanup()
         {
-            var combFile1 = Path.Combine(SpecialFolderPath, "combined.zip");
-            var combFile2 = Path.Combine(SpecialFolderPath, "z_combined.zip");
-
-            if (File.Exists(combFile1))
+            if (Directory.Exists(SpecialFolderPath))
             {
-                File.Delete(combFile1);
-            }
-            if (File.Exists(combFile2))
-            {
-                File.Delete(combFile2);
+                Directory.Delete(SpecialFolderPath, true);
             }
         }
 
@@ -241,7 +160,7 @@ namespace Games.Games
         /// Get list of original campaigns
         /// </summary>
         /// <returns></returns>
-        protected abstract Dictionary<Guid, IMod> GetOriginalCampaigns();
+        protected abstract Dictionary<string, IAddon> GetOriginalCampaigns();
 
 
         /// <summary>
@@ -270,7 +189,7 @@ namespace Games.Games
 
 
         /// <summary>
-        /// Does the file exists in the game install folder
+        /// Does the file exist in the game install folder
         /// </summary>
         /// <param name="file">File</param>
         protected bool IsInstalled(string file)

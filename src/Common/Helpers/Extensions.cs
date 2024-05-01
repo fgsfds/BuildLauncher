@@ -2,6 +2,10 @@
 {
     public static class Extensions
     {
+        /// <summary>
+        /// Convert long to size string
+        /// </summary>
+        /// <param name="size">File size</param>
         public static string ToSizeString(this long size)
         {
             if (size < 1024)

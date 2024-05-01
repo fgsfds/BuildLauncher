@@ -33,14 +33,17 @@
             <ListBox.ItemTemplate>
                 <DataTemplate>
 
-                    <Grid RowDefinitions="auto" Width="150">
+                    <Grid RowDefinitions="215" ColumnDefinitions="150" VerticalAlignment="Bottom">
 
-                        <Image RenderOptions.BitmapInterpolationMode="HighQuality"
-                               Source="{Binding Image, Converter={StaticResource ImagePathToBitmapConverter}}"
-                               Margin="10"
-                               HorizontalAlignment="Center"/>
+                        <Border Background="Black"
+                                Margin="10">
+                            <Image RenderOptions.BitmapInterpolationMode="HighQuality"
+                                   Source="{Binding Image, Converter={StaticResource ImagePathToBitmapConverter}}"
+                                   VerticalAlignment="Center"
+                                   HorizontalAlignment="Center"/>
+                        </Border>
 
-                        <TextBlock Text="{Binding DisplayName}"
+                        <TextBlock Text="{Binding Title}"
                                    Margin="10"
                                    Padding="5"
                                    Background="{Binding Path=Background, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}"
@@ -50,7 +53,7 @@
                                    VerticalAlignment="Bottom"
                                    TextWrapping="Wrap"/>
 
-                        <TextBlock Text="{Binding DisplayName}"
+                        <TextBlock Text="{Binding Title}"
                                    Margin="10"
                                    Padding="5"
                                    HorizontalAlignment="Stretch"
@@ -65,15 +68,26 @@
 
         </ListBox>
 
-        <md:MarkdownScrollViewer Grid.Row="0" Grid.Column="1"
-                                 Margin="10,5"
-                                 Markdown="{Binding SelectedCampaignDescription}">
+        <ScrollViewer Grid.Row="0" Grid.Column="1">
 
-            <md:MarkdownScrollViewer.Styles>
-                <StyleInclude Source="/Styles/MarkdownStyle.axaml"/>
-            </md:MarkdownScrollViewer.Styles>
+            <StackPanel Orientation="Vertical">
 
-        </md:MarkdownScrollViewer>
+                <Image Height="200"
+                       IsVisible="{Binding IsPreviewVisible}"
+                       Source="{Binding SelectedCampaignPreview, Converter={StaticResource ImagePathToBitmapConverter}}"/>
+
+                <md:MarkdownScrollViewer Margin="10,5"
+                                         Markdown="{Binding SelectedCampaignDescription}">
+
+                    <md:MarkdownScrollViewer.Styles>
+                        <StyleInclude Source="/Styles/MarkdownStyle.axaml"/>
+                    </md:MarkdownScrollViewer.Styles>
+
+                </md:MarkdownScrollViewer>
+
+            </StackPanel>
+
+        </ScrollViewer>
 
         <ctrl:PortsButtonsControl Name="BottomPanel" Grid.Row="1"/>
 

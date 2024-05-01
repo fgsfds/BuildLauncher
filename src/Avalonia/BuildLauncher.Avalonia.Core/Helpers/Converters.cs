@@ -1,7 +1,6 @@
 ﻿using Avalonia.Data;
 using Avalonia.Data.Converters;
 using Avalonia.Media.Imaging;
-using Avalonia.Platform;
 using Common.Helpers;
 using System.Globalization;
 
@@ -16,7 +15,7 @@ namespace BuildLauncher.Helpers
         {
             if (value is null)
             {
-                return new Bitmap(AssetLoader.Open(new Uri($"avares://BuildLauncher.Avalonia.Core/Assets/blank.png")));
+                return null;
             }
 
             value.ThrowIfNotType<Stream>(out var stream);

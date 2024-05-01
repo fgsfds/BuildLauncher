@@ -257,7 +257,7 @@
                         Width="{Binding $self.Bounds.Height}"
                         HorizontalContentAlignment="Center"
                         Command="{Binding OpenFolderPickerCommand}"
-                        CommandParameter="Again">
+                        CommandParameter="RedneckRA">
                     ...
                 </Button>
 
@@ -266,7 +266,7 @@
                         Width="{Binding $self.Bounds.Height}"
                         HorizontalContentAlignment="Center"
                         Command="{Binding AutodetectCommand}"
-                        CommandParameter="Again"
+                        CommandParameter="RedneckRA"
                         ToolTip.Tip="Autodetect">
                     ⟳
                 </Button>
@@ -286,7 +286,7 @@
                         Width="{Binding $self.Bounds.Height}"
                         HorizontalContentAlignment="Center"
                         Command="{Binding OpenFolderPickerCommand}"
-                        CommandParameter="Slave">
+                        CommandParameter="Exhumed">
                     ...
                 </Button>
 
@@ -295,7 +295,7 @@
                         Width="{Binding $self.Bounds.Height}"
                         HorizontalContentAlignment="Center"
                         Command="{Binding AutodetectCommand}"
-                        CommandParameter="Slave"
+                        CommandParameter="Exhumed"
                         ToolTip.Tip="Autodetect">
                     ⟳
                 </Button>

@@ -2,12 +2,12 @@
 using Common.Enums.Addons;
 using Common.Helpers;
 using Common.Interfaces;
-using Mods.Mods;
+using Mods.Addons;
 using Mods.Providers;
 
 namespace Games.Games
 {
-    public sealed class WangGame(InstalledModsProviderFactory modsProvider, DownloadableModsProviderFactory downloadableModsProviderFactory) : BaseGame(modsProvider, downloadableModsProviderFactory)
+    public sealed class WangGame(InstalledAddonsProviderFactory modsProvider, DownloadableAddonsProviderFactory downloadableModsProviderFactory) : BaseGame(modsProvider, downloadableModsProviderFactory)
     {
         /// <inheritdoc/>
         public override GameEnum GameEnum => GameEnum.Wang;
@@ -17,9 +17,6 @@ namespace Games.Games
 
         /// <inheritdoc/>
         public override string ShortName => "Wang";
-
-        /// <inheritdoc/>
-        public override string DefFile => "sw.def";
 
         /// <inheritdoc/>
         public override List<string> RequiredFiles => ["SW.GRP"];
@@ -38,19 +35,18 @@ namespace Games.Games
         /// <summary>
         /// Get list of original campaigns
         /// </summary>
-        protected override Dictionary<Guid, IMod> GetOriginalCampaigns()
+        protected override Dictionary<string, IAddon> GetOriginalCampaigns()
         {
-            Dictionary<Guid, IMod> campaigns = new(3);
+            Dictionary<string, IAddon> campaigns = new(3, StringComparer.OrdinalIgnoreCase);
 
             if (IsBaseGameInstalled)
             {
-                campaigns.Add(Consts.WangGuid, new WangCampaign()
+                campaigns.Add(GameEnum.Wang.ToString(), new WangCampaign()
                 {
-                    Guid = Consts.WangGuid,
-                    ModType = ModTypeEnum.Campaign,
-                    DisplayName = "Shadow Warrior",
+                    Id = GameEnum.Wang.ToString(),
+                    Type = AddonTypeEnum.Official,
+                    Title = "Shadow Warrior",
                     Image = ImageHelper.FileNameToStream("Wang.wang.jpg"),
-                    AddonEnum = WangAddonEnum.Wang,
                     Version = null,
                     SupportedPorts = null,
                     Author = "3D Realms",
@@ -61,22 +57,27 @@ namespace Games.Games
                         However, this led to corruption, and Master Zilla - the president - planned to conquer Japan using creatures from the "dark side".
                         In discovery of this, Lo Wang quit his job as a bodyguard. Master Zilla realized that not having a warrior as powerful as Lo Wang would be dangerous, and sent his creatures to battle Lo Wang.
                         """,
-                    Url = null,
-                    IsOfficial = true,
                     PathToFile = null,
-                    StartupFile = null,
-                    IsLoose = false
+                    SupportedGames = null,
+                    RequiredGamesCrcs = null,
+                    Dependencies = null,
+                    Incompatibles = null,
+                    MainDef = null,
+                    AdditionalDefs = null,
+                    StartMap = null,
+                    RequiredAddonEnum = WangAddonEnum.Wang,
+                    RequiredFeatures = null,
+                    Preview = null
                 });
 
                 if (IsWantonInstalled)
                 {
-                    campaigns.Add(Consts.WantonGuid, new WangCampaign()
+                    campaigns.Add(WangAddonEnum.WangWD.ToString(), new WangCampaign()
                     {
-                        Guid = Consts.WantonGuid,
-                        ModType = ModTypeEnum.Campaign,
-                        DisplayName = "Wanton Destruction",
+                        Id = WangAddonEnum.WangWD.ToString(),
+                        Type = AddonTypeEnum.Official,
+                        Title = "Wanton Destruction",
                         Image = ImageHelper.FileNameToStream("Wang.wanton.jpg"),
-                        AddonEnum = WangAddonEnum.Wanton,
                         Author = "Sunstorm Interactive",
                         Description = """
                             **Wanton Destruction** is an official expansion that was created by **Sunstorm Interactive** and tested by **3D Realms**, but was not released by the distributor.
@@ -89,23 +90,28 @@ namespace Games.Games
                             """,
                         Version = null,
                         SupportedPorts = null,
-                        Url = null,
-                        IsOfficial = true,
                         PathToFile = null,
-                        StartupFile = null,
-                        IsLoose = false
+                        SupportedGames = null,
+                        RequiredGamesCrcs = null,
+                        Dependencies = null,
+                        Incompatibles = null,
+                        MainDef = null,
+                        AdditionalDefs = null,
+                        StartMap = null,
+                        RequiredAddonEnum = WangAddonEnum.WangWD,
+                        RequiredFeatures = null,
+                        Preview = null
                     });
                 }
 
                 if (IsTwinDragonInstalled)
                 {
-                    campaigns.Add(Consts.TwinDragonGuid, new WangCampaign()
+                    campaigns.Add(WangAddonEnum.WangTD.ToString(), new WangCampaign()
                     {
-                        Guid = Consts.TwinDragonGuid,
-                        ModType = ModTypeEnum.Campaign,
-                        DisplayName = "Twin Dragon",
+                        Id = WangAddonEnum.WangTD.ToString(),
+                        Type = AddonTypeEnum.Official,
+                        Title = "Twin Dragon",
                         Image = ImageHelper.FileNameToStream("Wang.twin.jpg"),
-                        AddonEnum = WangAddonEnum.TwinDragon,
                         Author = "Wylde Productions, Level Infinity",
                         Description = """
                             **Twin Dragon** is an official expansion to the Shadow Warrior that was released as a free download on July 4, 1998.
@@ -118,11 +124,17 @@ namespace Games.Games
                             """,
                         Version = null,
                         SupportedPorts = null,
-                        Url = null,
-                        IsOfficial = true,
                         PathToFile = null,
-                        StartupFile = null,
-                        IsLoose = false
+                        SupportedGames = null,
+                        RequiredGamesCrcs = null,
+                        Dependencies = null,
+                        Incompatibles = null,
+                        MainDef = null,
+                        AdditionalDefs = null,
+                        StartMap = null,
+                        RequiredAddonEnum = WangAddonEnum.WangTD,
+                        RequiredFeatures = null,
+                        Preview = null
                     });
                 }
             }

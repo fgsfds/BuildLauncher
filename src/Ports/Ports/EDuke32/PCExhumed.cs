@@ -2,7 +2,7 @@
 using Common.Helpers;
 using Common.Interfaces;
 using Games.Games;
-using Mods.Mods;
+using Mods.Addons;
 using Ports.Providers;
 using System.Text;
 
@@ -23,7 +23,7 @@ namespace Ports.Ports.EDuke32
         public override string Name => "PCExhumed";
 
         /// <inheritdoc/>
-        public override List<GameEnum> SupportedGames => [GameEnum.Slave];
+        public override List<GameEnum> SupportedGames => [GameEnum.Exhumed];
 
         /// <inheritdoc/>
         public override Uri RepoUrl => new("https://api.github.com/repos/nukeykt/NBlood/releases");
@@ -31,55 +31,51 @@ namespace Ports.Ports.EDuke32
         /// <inheritdoc/>
         public override Func<GitHubReleaseAsset, bool> WindowsReleasePredicate => static x => x.FileName.StartsWith("pcexhumed_win64");
 
-
         /// <inheritdoc/>
         protected override string ConfigFile => "pcexhumed.cfg";
 
 
         /// <inheritdoc/>
-        protected override void BeforeStart(IGame game, IMod campaign)
+        protected override void BeforeStart(IGame game, IAddon campaign)
         {
-            game.CreateCombinedMod();
+            //nothing to do
         }
 
+
         /// <inheritdoc/>
-        protected override void GetStartCampaignArgs(StringBuilder sb, IGame game, IMod mod)
+        protected override void GetStartCampaignArgs(StringBuilder sb, IGame game, IAddon addon)
         {
-            if (game is not SlaveGame sGame || mod is not SlaveCampaign sCamp)
-            {
-                ThrowHelper.NotImplementedException($"Mod type {mod} for game {game} is not supported");
-                return;
-            }
+            //don't search for steam/gog installs
+            sb.Append($@" -usecwd");
 
-            sb.Append($@" -usecwd -nosetup");
-            sb.Append(@$" -j ""{game.GameInstallFolder}""");
+            sb.Append(@$" {AddDirectoryParam}""{game.GameInstallFolder}""");
 
-            if (sCamp.FileName is null)
+            if (addon.MainDef is not null)
             {
-                return;
-            }
-
-            if (sCamp.ModType is ModTypeEnum.Campaign)
-            {
-                sb.Append($@" -g ""{Path.Combine(sGame.CampaignsFolderPath, sCamp.FileName)}"" -x ""{sCamp.StartupFile}""");
-            }
-            else if (sCamp.ModType is ModTypeEnum.Map)
-            {
-                if (sCamp.IsLoose)
-                {
-                    sb.Append($@" -j ""{Path.Combine(sGame.MapsFolderPath)}""");
-                }
-                else
-                {
-                    sb.Append($@" -g ""{Path.Combine(sGame.MapsFolderPath, sCamp.FileName)}""");
-                }
-
-                sb.Append($@" -map ""{sCamp.StartupFile}""");
+                sb.Append($@" {MainDefParam}""{addon.MainDef}""");
             }
             else
             {
-                ThrowHelper.NotImplementedException($"Mod type {sCamp.ModType} is not supported");
-                return;
+                //overriding default def so gamename.def files are ignored
+                sb.Append($@" {MainDefParam}""a""");
+            }
+
+            if (addon.AdditionalDefs is not null)
+            {
+                foreach (var def in addon.AdditionalDefs)
+                {
+                    sb.Append($@" {AddDefParam}""{def}""");
+                }
+            }
+
+
+            if (game is SlaveGame sGame && addon is SlaveCampaign sMod)
+            {
+                GetSlaveArgs(sb, sGame, sMod);
+            }
+            else
+            {
+                ThrowHelper.NotImplementedException($"Mod type {addon.Type} for game {game} is not supported");
             }
         }
     }

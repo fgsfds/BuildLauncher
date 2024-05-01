@@ -1,5 +1,6 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Mods.Helpers;
 using Ports.Ports;
 using Ports.Providers;
 using Ports.Tools;
@@ -26,11 +27,14 @@ namespace BuildLauncher.ViewModels
 
         #region Binding Properties
 
+        /// <summary>
+        /// Text of the install button
+        /// </summary>
         public string InstallButtonText
         {
             get
             {
-                if (_port.IsInstalled && _port.InstalledVersion < _release?.Version)
+                if (_port.IsInstalled && VersionComparer.Compare(_port.InstalledVersion!, _release?.Version!, "<"))
                 {
                     return "Update";
                 }

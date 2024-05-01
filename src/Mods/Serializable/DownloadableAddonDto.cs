@@ -6,26 +6,33 @@ using System.Text.Json.Serialization;
 
 namespace Mods.Serializable
 {
-    public sealed class DownloadableMod : IDownloadableMod
+    public sealed class DownloadableAddonDto : IDownloadableAddon
     {
-        public Guid Guid { get; set; }
+        [JsonPropertyName("Id")]
+        public string Id { get; set; }
 
+        [JsonPropertyName("DownloadUrl")]
         public string DownloadUrl { get; set; }
 
-        public string Name { get; set; }
+        [JsonPropertyName("Title")]
+        public string Title { get; set; }
 
-        public float Version { get; set; }
+        [JsonPropertyName("Version")]
+        public string? Version { get; set; }
 
+        [JsonPropertyName("Author")]
         public string? Author { get; set; }
 
-        public string? Url { get; init; }
-
+        [JsonPropertyName("Game")]
         public GameEnum Game { get; set; }
 
-        public ModTypeEnum ModType { get; set; }
+        [JsonPropertyName("AddonType")]
+        public AddonTypeEnum AddonType { get; set; }
 
+        [JsonPropertyName("Description")]
         public string Description { get; set; }
 
+        [JsonPropertyName("FileSize")]
         public long FileSize { get; set; }
 
         [JsonIgnore]
@@ -53,26 +60,21 @@ namespace Mods.Serializable
         }
 
         [JsonIgnore]
-        public string VersionString => $"v{Version:0.0#}";
-
-        [JsonIgnore]
         public string FileSizeString => FileSize.ToSizeString();
 
 
         public string ToMarkdownString()
         {
-            StringBuilder description = new($"## {Name}{Environment.NewLine}");
+            StringBuilder description = new($"## {Title}{Environment.NewLine}");
 
-            description.Append($"{Environment.NewLine}#### v{Version:0.0#}");
+            if (Version is not null)
+            {
+                description.Append($"{Environment.NewLine}#### v{Version}");
+            }
 
             if (Author is not null)
             {
                 description.Append($"{Environment.NewLine}{Environment.NewLine}*by {Author}*");
-            }
-
-            if (Url is not null)
-            {
-                description.Append($"{Environment.NewLine}{Environment.NewLine}[{Url}]({Url})");
             }
 
             if (Description is not null)
@@ -91,9 +93,9 @@ namespace Mods.Serializable
         Converters = [
             typeof(JsonStringEnumConverter<PortEnum>),
             typeof(JsonStringEnumConverter<GameEnum>),
-            typeof(JsonStringEnumConverter<ModTypeEnum>)
+            typeof(JsonStringEnumConverter<AddonTypeEnum>)
             ]
     )]
-    [JsonSerializable(typeof(List<DownloadableMod>))]
+    [JsonSerializable(typeof(List<DownloadableAddonDto>))]
     public sealed partial class DownloadableModManifestsListContext : JsonSerializerContext;
 }

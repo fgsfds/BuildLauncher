@@ -16,8 +16,8 @@ namespace Games.Providers
         public event GameChanged GameChangedEvent;
 
         private readonly ConfigEntity _config;
-        private readonly InstalledModsProviderFactory _modsProvider;
-        private readonly DownloadableModsProviderFactory _downloadableModsProviderFactory;
+        private readonly InstalledAddonsProviderFactory _modsProvider;
+        private readonly DownloadableAddonsProviderFactory _downloadableModsProviderFactory;
 
         private readonly BloodGame _blood;
         private readonly DukeGame _duke3d;
@@ -36,8 +36,8 @@ namespace Games.Providers
 
         public GamesProvider(
             ConfigProvider config,
-            InstalledModsProviderFactory modsProvider,
-            DownloadableModsProviderFactory downloadableModsProviderFactory
+            InstalledAddonsProviderFactory modsProvider,
+            DownloadableAddonsProviderFactory downloadableModsProviderFactory
             )
         {
             _config = config.Config;
@@ -93,9 +93,9 @@ namespace Games.Providers
                 GameEnum.Duke3D => _duke3d,
                 GameEnum.Wang => _wang,
                 GameEnum.Fury => _fury,
-                GameEnum.Slave => _slave,
+                GameEnum.Exhumed => _slave,
                 GameEnum.Redneck => _redneck,
-                GameEnum.Again => _redneck,
+                GameEnum.RedneckRA => _redneck,
                 GameEnum.NAM => ThrowHelper.NotImplementedException<IGame>(),
                 GameEnum.WWIIGI => ThrowHelper.NotImplementedException<IGame>(),
                 GameEnum.TekWar => ThrowHelper.NotImplementedException<IGame>(),

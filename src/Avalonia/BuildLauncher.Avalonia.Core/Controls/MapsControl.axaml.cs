@@ -1,5 +1,6 @@
 using Avalonia.Controls;
 using BuildLauncher.ViewModels;
+using Common.Enums;
 using Common.Helpers;
 using Common.Interfaces;
 using CommunityToolkit.Mvvm.Input;
@@ -49,7 +50,7 @@ namespace BuildLauncher.Controls
                     Command = new RelayCommand(() =>
                         _viewModel.StartMapCommand.Execute(port),
                         () => port.IsInstalled && MapsList.SelectedItem is not null &&
-                        (((IMod)MapsList.SelectedItem)?.SupportedPorts is null || ((IMod)MapsList.SelectedItem).SupportedPorts!.Contains(port.PortEnum))
+                        (((IAddon)MapsList.SelectedItem)?.SupportedPorts is null || ((IAddon)MapsList.SelectedItem).SupportedPorts!.Contains(port.PortEnum))
                         ),
                     Margin = new(5),
                     Padding = new(5),
@@ -66,7 +67,7 @@ namespace BuildLauncher.Controls
         {
             MapsList.ContextMenu = new();
 
-            if (MapsList.SelectedItem is not IMod iMod)
+            if (MapsList.SelectedItem is not IAddon addon)
             {
                 return;
             }
@@ -76,14 +77,12 @@ namespace BuildLauncher.Controls
             foreach (var port in _supportedPorts)
             {
                 if (port.IsInstalled &&
-                (iMod.SupportedPorts is null || iMod.SupportedPorts!.Contains(port.PortEnum)))
+                    (addon.SupportedPorts is null || addon.SupportedPorts!.Contains(port.PortEnum)))
                 {
                     var portButton = new MenuItem()
                     {
                         Header = $"Start with {port.Name}",
-                        Command = new RelayCommand(() =>
-                                            _viewModel.StartMapCommand.Execute(port)
-                        )
+                        Command = new RelayCommand(() => _viewModel.StartMapCommand.Execute(port))
                     };
 
                     MapsList.ContextMenu.Items.Add(portButton);
@@ -101,7 +100,7 @@ namespace BuildLauncher.Controls
                 Header = "Delete",
                 Command = new RelayCommand(
                     () => _viewModel.DeleteMapCommand.Execute(null),
-                    () => !iMod.IsOfficial
+                    () => addon.Type is not AddonTypeEnum.Official
                     )
             };
 
@@ -116,7 +115,7 @@ namespace BuildLauncher.Controls
             foreach (var control in BottomPanel.PortsButtonsPanel.Children)
             {
                 if (control is Button button &&
-                button.Command is IRelayCommand relayCommand)
+                    button.Command is IRelayCommand relayCommand)
                 {
                     relayCommand.NotifyCanExecuteChanged();
                 }

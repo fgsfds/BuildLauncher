@@ -20,11 +20,6 @@ namespace Common.Interfaces
         GameEnum GameEnum { get; }
 
         /// <summary>
-        /// Def file name
-        /// </summary>
-        string DefFile { get; }
-
-        /// <summary>
         /// Game install folder
         /// </summary>
         string? GameInstallFolder { get; set; }
@@ -59,30 +54,23 @@ namespace Common.Interfaces
         /// </summary>
         string SpecialFolderPath { get; }
 
-        IInstalledModsProvider InstalledModsProvider { get; init; }
+        IInstalledAddonsProvider InstalledAddonsProvider { get; init; }
 
-        IDownloadableModsProvider DownloadableModsProvider { get; init; }
-
-
-        /// <summary>
-        /// Create combined autoload mod
-        /// </summary>
-        /// <param name="additionalDef">Additional text for def</param>
-        void CreateCombinedMod(string? additionalDef = null);
+        IDownloadableAddonsProvider DownloadableAddonsProvider { get; init; }
 
         /// <summary>
         /// Get list of official addons and custom campaigns
         /// </summary>
-        Dictionary<Guid, IMod> GetCampaigns();
+        Dictionary<string, IAddon> GetCampaigns();
 
         /// <summary>
         /// Get list of custom maps
         /// </summary>
-        Dictionary<Guid, IMod> GetSingleMaps();
+        Dictionary<string, IAddon> GetSingleMaps();
 
         /// <summary>
         /// Get list of autoload mods
         /// </summary>
-        Dictionary<Guid, IMod> GetAutoloadMods(bool enabledOnly);
+        Dictionary<string, IAddon> GetAutoloadMods(bool enabledOnly);
     }
 }

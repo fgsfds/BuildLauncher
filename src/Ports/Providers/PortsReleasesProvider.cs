@@ -21,7 +21,7 @@ namespace Ports.Providers
         {
             if (port.PortEnum is PortEnum.BuildGDX)
             {
-                return new(port.RepoUrl.ToString(), 116);
+                return new(port.RepoUrl.ToString(), "1.16");
             }
 
             if (CommonProperties.IsDevMode)
@@ -74,18 +74,17 @@ namespace Ports.Providers
         /// <summary>
         /// Get port version
         /// </summary>
-        private static int GetVersion(BasePort port, GitHubRelease? release, GitHubReleaseAsset? zip)
+        private static string GetVersion(BasePort port, GitHubRelease? release, GitHubReleaseAsset? zip)
         {
-            int version = 0;
+            string version;
 
             if (port is NotBlood)
             {
-                version = zip.UpdatedDate.Day * 1_00_0000 + zip.UpdatedDate.Month * 1_0000 + zip.UpdatedDate.Year;
+                version = (zip.UpdatedDate.Day.ToString("00") + "." + zip.UpdatedDate.Month.ToString("00") + "." + zip.UpdatedDate.Year).ToString();
             }
             else
             {
-                var numbersOnly = new string(release.TagName.Where(static x => char.IsDigit(x)).ToArray());
-                version = int.Parse(numbersOnly);
+                version = release.TagName;
             }
 
             return version;
@@ -113,7 +112,7 @@ namespace Ports.Providers
                 return null;
             }
 
-            return new($"https://dukeworld.com/eduke32/synthesis/latest/{fileName}", int.Parse(version.ToString()));
+            return new($"https://dukeworld.com/eduke32/synthesis/latest/{fileName}", version.ToString());
         }
 
         [GeneratedRegex("eduke32_win64_2[^\"]*")]
@@ -127,9 +126,9 @@ namespace Ports.Providers
     public sealed class PortRelease
     {
         public readonly string Url;
-        public readonly int Version;
+        public readonly string Version;
 
-        public PortRelease(string url, int version)
+        public PortRelease(string url, string version)
         {
             Url = url;
             Version = version;

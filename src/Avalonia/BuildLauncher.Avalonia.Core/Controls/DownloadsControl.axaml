@@ -23,7 +23,7 @@
                  Padding="2,35,2,2"
                  Grid.IsSharedSizeScope="True"
                  ItemsSource="{Binding DownloadableCampaignsList}"
-                 SelectedItem="{Binding SelectedDownloadableMod}">
+                 SelectedItem="{Binding SelectedDownloadableAddon}">
 
             <ListBox.ItemTemplate>
                 <DataTemplate>
@@ -37,13 +37,13 @@
                             <ColumnDefinition Width="*" MinWidth="0" SharedSizeGroup="Status1"/>
                         </Grid.ColumnDefinitions>
 
-                        <TextBlock Text="{Binding Name}"
+                        <TextBlock Text="{Binding Title}"
                                    Grid.Column="0"
                                    VerticalAlignment="Center"
                                    HorizontalAlignment="Left"
                                    Margin="10"/>
 
-                        <TextBlock Text="{Binding VersionString}"
+                        <TextBlock Text="{Binding Version}"
                                    Grid.Column="1"
                                    VerticalAlignment="Center"
                                    HorizontalAlignment="Right"
@@ -82,7 +82,7 @@
                  Padding="2,35,2,2"
                  Grid.IsSharedSizeScope="True"
                  ItemsSource="{Binding DownloadableMapsList}"
-                 SelectedItem="{Binding SelectedDownloadableMod}">
+                 SelectedItem="{Binding SelectedDownloadableAddon}">
 
             <ListBox.ItemTemplate>
                 <DataTemplate>
@@ -96,13 +96,13 @@
                             <ColumnDefinition Width="*" MinWidth="0" SharedSizeGroup="Status2"/>
                         </Grid.ColumnDefinitions>
 
-                        <TextBlock Text="{Binding Name}"
+                        <TextBlock Text="{Binding Title}"
                                    Grid.Column="0"
                                    VerticalAlignment="Center"
                                    HorizontalAlignment="Left"
                                    Margin="10"/>
 
-                        <TextBlock Text="{Binding VersionString}"
+                        <TextBlock Text="{Binding Version}"
                                    Grid.Column="1"
                                    VerticalAlignment="Center"
                                    HorizontalAlignment="Right"
@@ -141,7 +141,7 @@
                  Padding="2,35,2,2"
                  Grid.IsSharedSizeScope="True"
                  ItemsSource="{Binding DownloadableModsList}"
-                 SelectedItem="{Binding SelectedDownloadableMod}">
+                 SelectedItem="{Binding SelectedDownloadableAddon}">
 
             <ListBox.ItemTemplate>
                 <DataTemplate>
@@ -155,13 +155,13 @@
                             <ColumnDefinition Width="*" MinWidth="0" SharedSizeGroup="Status3"/>
                         </Grid.ColumnDefinitions>
 
-                        <TextBlock Text="{Binding Name}"
+                        <TextBlock Text="{Binding Title}"
                                    Grid.Column="0"
                                    VerticalAlignment="Center"
                                    HorizontalAlignment="Left"
                                    Margin="10"/>
 
-                        <TextBlock Text="{Binding VersionString}"
+                        <TextBlock Text="{Binding Version}"
                                    Grid.Column="1"
                                    VerticalAlignment="Center"
                                    HorizontalAlignment="Right"
@@ -207,7 +207,7 @@
               Grid.Row="1" Grid.ColumnSpan="3"
               Margin="0,10">
 
-            <Button Command="{Binding DownloadModCommand}"
+            <Button Command="{Binding DownloadAddonCommand}"
                     Grid.Column="0"
                     Margin="0,5,5,5"
                     Padding="5"

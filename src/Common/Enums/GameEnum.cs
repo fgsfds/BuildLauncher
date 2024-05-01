@@ -2,16 +2,19 @@
 {
     public enum GameEnum
     {
-        Blood,
         Duke3D,
-        DukeWT,
+        Duke3D_13,
+        Duke3D_15,
+        Duke3D_WT,
+        Duke64,
+        Blood,
         Wang,
         Fury,
-        Slave,
+        Exhumed,
         NAM,
         WWIIGI,
         Redneck,
-        Again,
+        RedneckRA,
         TekWar,
         Witchaven,
         Witchaven2

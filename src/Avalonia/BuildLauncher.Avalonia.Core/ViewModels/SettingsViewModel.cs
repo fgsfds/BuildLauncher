@@ -174,7 +174,7 @@ namespace BuildLauncher.ViewModels
 
                 OnPropertyChanged(nameof(PathToDuke3D));
             }
-            else if (param.Equals(GameEnum.DukeWT.ToString()))
+            else if (param.Equals(GameEnum.Duke3D_WT.ToString()))
             {
                 PathToDukeWT = files[0].Path.LocalPath;
 
@@ -198,7 +198,7 @@ namespace BuildLauncher.ViewModels
 
                 OnPropertyChanged(nameof(PathToRedneck));
             }
-            else if (param.Equals(GameEnum.Again.ToString()))
+            else if (param.Equals(GameEnum.RedneckRA.ToString()))
             {
                 PathToAgain = files[0].Path.LocalPath;
 
@@ -210,7 +210,7 @@ namespace BuildLauncher.ViewModels
 
                 OnPropertyChanged(nameof(PathToFury));
             }
-            else if (param.Equals(GameEnum.Slave.ToString()))
+            else if (param.Equals(GameEnum.Exhumed.ToString()))
             {
                 PathToSlave = files[0].Path.LocalPath;
 
@@ -236,9 +236,9 @@ namespace BuildLauncher.ViewModels
                     OnPropertyChanged(nameof(PathToDuke3D));
                 }
             }
-            else if (param.Equals(GameEnum.DukeWT.ToString()))
+            else if (param.Equals(GameEnum.Duke3D_WT.ToString()))
             {
-                var path = _gamesAutoDetector.GetPath(GameEnum.DukeWT);
+                var path = _gamesAutoDetector.GetPath(GameEnum.Duke3D_WT);
 
                 if (path is not null)
                 {
@@ -280,9 +280,9 @@ namespace BuildLauncher.ViewModels
                     OnPropertyChanged(nameof(PathToRedneck));
                 }
             }
-            else if (param.Equals(GameEnum.Again.ToString()))
+            else if (param.Equals(GameEnum.RedneckRA.ToString()))
             {
-                var path = _gamesAutoDetector.GetPath(GameEnum.Again);
+                var path = _gamesAutoDetector.GetPath(GameEnum.RedneckRA);
 
                 if (path is not null)
                 {
@@ -302,9 +302,9 @@ namespace BuildLauncher.ViewModels
                     OnPropertyChanged(nameof(PathToFury));
                 }
             }
-            else if (param.Equals(GameEnum.Slave.ToString()))
+            else if (param.Equals(GameEnum.Exhumed.ToString()))
             {
-                var path = _gamesAutoDetector.GetPath(GameEnum.Slave);
+                var path = _gamesAutoDetector.GetPath(GameEnum.Exhumed);
 
                 if (path is not null)
                 {

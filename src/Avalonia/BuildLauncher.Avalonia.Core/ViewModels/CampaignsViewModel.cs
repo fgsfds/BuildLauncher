@@ -32,7 +32,7 @@ namespace BuildLauncher.ViewModels
             _config = config;
 
             _gamesProvider.GameChangedEvent += OnGameChanged;
-            Game.DownloadableModsProvider.ModDownloadedEvent += OnModDownloaded;
+            Game.DownloadableAddonsProvider.AddonDownloadedEvent += OnAddonDownloaded;
         }
 
 
@@ -41,17 +41,32 @@ namespace BuildLauncher.ViewModels
         /// <summary>
         /// List of installed campaigns and maps
         /// </summary>
-        public ImmutableList<IMod> CampaignsList => Game.GetCampaigns().Select(x => x.Value).ToImmutableList();
+        public ImmutableList<IAddon> CampaignsList => [.. Game.GetCampaigns().Select(x => x.Value)];
 
         /// <summary>
         /// Currently selected campaign/map
         /// </summary>
         [ObservableProperty]
         [NotifyPropertyChangedFor(nameof(SelectedCampaignDescription))]
+        [NotifyPropertyChangedFor(nameof(SelectedCampaignPreview))]
+        [NotifyPropertyChangedFor(nameof(IsPreviewVisible))]
         [NotifyCanExecuteChangedFor(nameof(StartCampaignCommand))]
-        private IMod? _selectedCampaign;
+        private IAddon? _selectedCampaign;
 
+        /// <summary>
+        /// Description of the selected campaign
+        /// </summary>
         public string SelectedCampaignDescription => SelectedCampaign is null ? string.Empty : SelectedCampaign.ToMarkdownString();
+
+        /// <summary>
+        /// Preview image of the selected campaign
+        /// </summary>
+        public Stream? SelectedCampaignPreview => SelectedCampaign?.Preview;
+
+        /// <summary>
+        /// Is preview image in the description visible
+        /// </summary>
+        public bool IsPreviewVisible => SelectedCampaign?.Preview is not null;
 
         #endregion
 
@@ -66,7 +81,7 @@ namespace BuildLauncher.ViewModels
         /// </summary>
         private async Task UpdateAsync(bool createNew)
         {
-            await Game.InstalledModsProvider.CreateCache(createNew);
+            await Game.InstalledAddonsProvider.CreateCache(createNew);
 
             OnPropertyChanged(nameof(CampaignsList));
         }
@@ -75,9 +90,9 @@ namespace BuildLauncher.ViewModels
         #region Relay Commands
 
         /// <summary>
-        /// Start selected map/campaign
+        /// Start selected campaign
         /// </summary>
-        /// <param name="command">Port to start map/campaign with</param>
+        /// <param name="command">Port to start campaign with</param>
         [RelayCommand]
         private void StartCampaign(object? command)
         {
@@ -91,7 +106,7 @@ namespace BuildLauncher.ViewModels
 
 
         /// <summary>
-        /// Open mods folder
+        /// Open campaigns folder
         /// </summary>
         [RelayCommand]
         private void OpenFolder()
@@ -115,15 +130,14 @@ namespace BuildLauncher.ViewModels
 
 
         /// <summary>
-        /// Delete selected map/campaign
+        /// Delete selected campaign
         /// </summary>
         [RelayCommand]
         private void DeleteCampaign()
         {
             SelectedCampaign.ThrowIfNull();
-            SelectedCampaign.PathToFile.ThrowIfNull();
 
-            Game.InstalledModsProvider.DeleteMod(SelectedCampaign);
+            Game.InstalledAddonsProvider.DeleteAddon(SelectedCampaign);
 
             OnPropertyChanged(nameof(CampaignsList));
         }
@@ -156,10 +170,10 @@ namespace BuildLauncher.ViewModels
             }
         }
 
-        private void OnModDownloaded(IGame game, ModTypeEnum modType)
+        private void OnAddonDownloaded(IGame game, AddonTypeEnum addonType)
         {
             if (game.GameEnum != Game.GameEnum ||
-                modType is not ModTypeEnum.Campaign)
+                addonType is not AddonTypeEnum.TC)
             {
                 return;
             }

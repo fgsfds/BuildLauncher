@@ -14,6 +14,7 @@ namespace BuildLauncher.ViewModels
     public sealed partial class MapsViewModel : ObservableObject, IPortsButtonControl
     {
         public readonly IGame Game;
+
         private readonly GamesProvider _gamesProvider;
         private readonly ConfigEntity _config;
 
@@ -31,7 +32,7 @@ namespace BuildLauncher.ViewModels
             _config = config;
 
             _gamesProvider.GameChangedEvent += OnGameChanged;
-            Game.DownloadableModsProvider.ModDownloadedEvent += OnModDownloaded;
+            Game.DownloadableAddonsProvider.AddonDownloadedEvent += OnAddonDownloaded;
         }
 
 
@@ -45,7 +46,7 @@ namespace BuildLauncher.ViewModels
         /// </summary>
         private async Task UpdateAsync(bool createNew)
         {
-            await Game.InstalledModsProvider.CreateCache(createNew);
+            await Game.InstalledAddonsProvider.CreateCache(createNew);
 
             OnPropertyChanged(nameof(MapsList));
         }
@@ -54,18 +55,21 @@ namespace BuildLauncher.ViewModels
         #region Binding Properties
 
         /// <summary>
-        /// List of installed campaigns and maps
+        /// List of installed maps
         /// </summary>
-        public ImmutableList<IMod> MapsList => Game.GetSingleMaps().Select(x => x.Value).ToImmutableList();
+        public ImmutableList<IAddon> MapsList => [.. Game.GetSingleMaps().Select(x => x.Value)];
 
         /// <summary>
-        /// Currently selected campaign/map
+        /// Currently selected map
         /// </summary>
         [ObservableProperty]
         [NotifyPropertyChangedFor(nameof(SelectedMapDescription))]
         [NotifyCanExecuteChangedFor(nameof(StartMapCommand))]
-        private IMod? _selectedMap;
+        private IAddon? _selectedMap;
 
+        /// <summary>
+        /// Description of the selected map
+        /// </summary>
         public string SelectedMapDescription => SelectedMap is null ? string.Empty : SelectedMap.ToMarkdownString();
 
         #endregion
@@ -74,9 +78,9 @@ namespace BuildLauncher.ViewModels
         #region Relay Commands
 
         /// <summary>
-        /// Start selected map/campaign
+        /// Start selected map
         /// </summary>
-        /// <param name="command">Port to start map/campaign with</param>
+        /// <param name="command">Port to start map with</param>
         [RelayCommand]
         private void StartMap(object? command)
         {
@@ -90,7 +94,7 @@ namespace BuildLauncher.ViewModels
 
 
         /// <summary>
-        /// Open mods folder
+        /// Open maps folder
         /// </summary>
         [RelayCommand]
         private void OpenFolder()
@@ -104,7 +108,7 @@ namespace BuildLauncher.ViewModels
 
 
         /// <summary>
-        /// Refresh campaigns list
+        /// Refresh maps list
         /// </summary>
         [RelayCommand]
         private async Task RefreshListAsync()
@@ -114,14 +118,14 @@ namespace BuildLauncher.ViewModels
 
 
         /// <summary>
-        /// Delete selected map/campaign
+        /// Delete selected map
         /// </summary>
         [RelayCommand]
         private void DeleteMap()
         {
             SelectedMap.ThrowIfNull();
 
-            Game.InstalledModsProvider.DeleteMod(SelectedMap);
+            Game.InstalledAddonsProvider.DeleteAddon(SelectedMap);
 
             OnPropertyChanged(nameof(MapsList));
         }
@@ -154,10 +158,10 @@ namespace BuildLauncher.ViewModels
             }
         }
 
-        private void OnModDownloaded(IGame game, ModTypeEnum modType)
+        private void OnAddonDownloaded(IGame game, AddonTypeEnum addonType)
         {
             if (game.GameEnum != Game.GameEnum ||
-                modType is not ModTypeEnum.Map)
+                addonType is not AddonTypeEnum.Map)
             {
                 return;
             }

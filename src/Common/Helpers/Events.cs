@@ -3,5 +3,5 @@ using Common.Interfaces;
 
 namespace Common.Helpers
 {
-    public delegate void ModChanged(IGame game, ModTypeEnum modType);
+    public delegate void AddonChanged(IGame game, AddonTypeEnum modType);
 }

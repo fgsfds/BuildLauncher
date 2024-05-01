@@ -2,7 +2,7 @@
 using Common.Helpers;
 using Common.Interfaces;
 using Games.Games;
-using Mods.Mods;
+using Mods.Addons;
 using System.Text;
 
 namespace Ports.Ports.EDuke32
@@ -27,7 +27,6 @@ namespace Ports.Ports.EDuke32
         /// <inheritdoc/>
         public override string PathToPortFolder => Path.Combine(CommonProperties.PortsFolderPath, "EDuke32");
 
-
         /// <inheritdoc/>
         protected override string ConfigFile => "voidsw.cfg";
 
@@ -38,49 +37,88 @@ namespace Ports.Ports.EDuke32
         protected override string AddFileParam => "-g";
 
         /// <inheritdoc/>
+        protected override string MainDefParam => "-h";
+
+        /// <inheritdoc/>
         protected override string AddDefParam => "-mh";
+
+        /// <inheritdoc/>
+        protected override string AddConParam => ThrowHelper.NotImplementedException<string>();
+
+        /// <inheritdoc/>
+        protected override string MainConParam => ThrowHelper.NotImplementedException<string>();
 
 
         /// <inheritdoc/>
-        protected override void GetStartCampaignArgs(StringBuilder sb, IGame game, IMod mod)
+        protected override void BeforeStart(IGame game, IAddon campaign)
         {
-            if (game is not WangGame wGame || mod is not WangCampaign wCamp)
+            FixGrpInConfig();
+        }
+
+
+        /// <inheritdoc/>
+        protected override void GetStartCampaignArgs(StringBuilder sb, IGame game, IAddon addon)
+        {
+            //don't search for steam/gog installs
+            sb.Append($@" -usecwd");
+
+            sb.Append($@" {AddDirectoryParam}""{game.GameInstallFolder}""");
+
+            if (addon.MainDef is not null)
             {
-                ThrowHelper.NotImplementedException($"Mod type {mod} for game {game} is not supported");
-                return;
-            }
-
-            sb.Append($@" -usecwd -nosetup");
-
-            AddMusicFolder(sb, wGame);
-
-            sb.Append($@" -j""{wGame.GameInstallFolder}"" -addon{(byte)wCamp.AddonEnum}");
-
-            if (wCamp.FileName is null)
-            {
-                return;
-            }
-
-            if (wCamp.ModType is ModTypeEnum.Campaign)
-            {
-                sb.Append($@" -j""{wGame.CampaignsFolderPath}"" -g""{wCamp.FileName}""");
-            }
-            else if (wCamp.ModType is ModTypeEnum.Map)
-            {
-                if (wCamp.IsLoose)
-                {
-                    sb.Append($@" -j""{Path.Combine(wGame.MapsFolderPath)}""");
-                }
-                else
-                {
-                    sb.Append($@" -g""{Path.Combine(wGame.MapsFolderPath, wCamp.FileName)}""");
-                }
-
-                sb.Append($@" -map ""{wCamp.StartupFile}""");
+                sb.Append($@" {MainDefParam}""{addon.MainDef}""");
             }
             else
             {
-                ThrowHelper.NotImplementedException($"Mod type {wCamp.ModType} is not supported");
+                //overriding default def so gamename.def files are ignored
+                sb.Append($@" {MainDefParam}""a""");
+            }
+
+            if (addon.AdditionalDefs is not null)
+            {
+                foreach (var def in addon.AdditionalDefs)
+                {
+                    sb.Append($@" {AddDefParam}""{def}""");
+                }
+            }
+
+
+
+            if (game is WangGame wGame && addon is WangCampaign wMod)
+            {
+                GetWangArgs(sb, wGame, wMod);
+            }
+            else
+            {
+                ThrowHelper.NotImplementedException($"Mod type {addon.Type} for game {game} is not supported");
+            }
+        }
+
+
+        private void GetWangArgs(StringBuilder sb, WangGame wGame, WangCampaign wMod)
+        {
+            sb.Append($@" -addon{(byte)wMod.RequiredAddonEnum}");
+
+            AddWangMusicFolder(sb, wGame);
+
+
+            if (wMod.FileName is null)
+            {
+                return;
+            }
+
+
+            if (wMod.Type is AddonTypeEnum.TC)
+            {
+                sb.Append($@" {AddDirectoryParam}""{wGame.CampaignsFolderPath}"" {AddFileParam}""{wMod.FileName}""");
+            }
+            else if (wMod.Type is AddonTypeEnum.Map)
+            {
+                GetMapArgs(sb, wGame, wMod);
+            }
+            else
+            {
+                ThrowHelper.NotImplementedException($"Mod type {wMod.Type} is not supported");
                 return;
             }
         }
@@ -89,21 +127,21 @@ namespace Ports.Ports.EDuke32
         /// <summary>
         /// Add music folders to the search list if music files don't exist in the game directory
         /// </summary>
-        private static void AddMusicFolder(StringBuilder sb, IGame game)
+        private static void AddWangMusicFolder(StringBuilder sb, WangGame game)
         {
-            if (File.Exists(Path.Combine(game.GameInstallFolder, "track02.ogg")))
+            if (File.Exists(Path.Combine(game.GameInstallFolder!, "track02.ogg")))
             {
                 return;
             }
 
-            var folder = Path.Combine(game.GameInstallFolder, "MUSIC");
+            var folder = Path.Combine(game.GameInstallFolder!, "MUSIC");
             if (Directory.Exists(folder))
             {
                 sb.Append(@$" -j""{folder}""");
                 return;
             }
 
-            folder = Path.Combine(game.GameInstallFolder, "classic", "MUSIC");
+            folder = Path.Combine(game.GameInstallFolder!, "classic", "MUSIC");
             if (Directory.Exists(folder))
             {
                 sb.Append(@$" -j""{folder}""");

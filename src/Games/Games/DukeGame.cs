@@ -2,7 +2,7 @@
 using Common.Enums.Addons;
 using Common.Helpers;
 using Common.Interfaces;
-using Mods.Mods;
+using Mods.Addons;
 using Mods.Providers;
 using SharpCompress.Archives;
 using System.IO.Compression;
@@ -33,9 +33,6 @@ namespace Games.Games
         public required string? DukeWTInstallPath { get; set; }
 
         /// <inheritdoc/>
-        public override string DefFile => "duke3d.def";
-
-        /// <inheritdoc/>
         public override List<string> RequiredFiles => ["DUKE3D.GRP"];
 
         /// <summary>
@@ -64,27 +61,26 @@ namespace Games.Games
         public bool IsDuke64Installed => File.Exists(Duke64RomPath);
 
 
-        public DukeGame(InstalledModsProviderFactory modsProvider, DownloadableModsProviderFactory downloadableModsProviderFactory) : base(modsProvider, downloadableModsProviderFactory)
+        public DukeGame(InstalledAddonsProviderFactory modsProvider, DownloadableAddonsProviderFactory downloadableModsProviderFactory) : base(modsProvider, downloadableModsProviderFactory)
         {
             CreateWTStopgapFolder();
         }
 
 
         /// <inheritdoc/>
-        protected override Dictionary<Guid, IMod> GetOriginalCampaigns()
+        protected override Dictionary<string, IAddon> GetOriginalCampaigns()
         {
-            Dictionary<Guid, IMod> campaigns = new(6);
+            Dictionary<string, IAddon> campaigns = new(6, StringComparer.OrdinalIgnoreCase);
 
             if (IsBaseGameInstalled &&
                 GameInstallFolder != DukeWTInstallPath)
             {
-                campaigns.Add(Consts.Duke3dGuid, new DukeCampaign()
+                campaigns.Add(GameEnum.Duke3D.ToString(), new DukeCampaign()
                 {
-                    Guid = Consts.Duke3dGuid,
-                    ModType = ModTypeEnum.Campaign,
-                    DisplayName = "Duke Nukem 3D",
+                    Id = GameEnum.Duke3D.ToString(),
+                    Type = AddonTypeEnum.Official,
+                    Title = "Duke Nukem 3D",
                     Image = ImageHelper.FileNameToStream("Duke3D.duke3d.jpg"),
-                    AddonEnum = DukeAddonEnum.Duke3D,
                     Author = "3D Realms",
                     Description = """
                         Duke Nukem 3D is a first-person shooter developed and published by **3D Realms**.
@@ -93,40 +89,59 @@ namespace Games.Games
                         The player assumes the role of Duke Nukem, an imperious action hero, and fights through 48 levels spread across 5 episodes. The player encounters a host of enemies and fights them with a range of weaponry.
                         In the end, Duke annihilates the alien overlords and celebrates by desecrating their corpses.
                         """,
-                    StartupFile = null,
                     Version = null,
                     SupportedPorts = null,
-                    Url = null,
-                    IsOfficial = true,
                     PathToFile = null,
-                    IsLoose = false
+                    SupportedGames = null,
+                    RequiredGamesCrcs = null,
+                    Dependencies = null,
+                    Incompatibles = null,
+                    MainCon = null,
+                    AdditionalCons = null,
+                    MainDef = null,
+                    AdditionalDefs = null,
+                    RTS = null,
+                    StartMap = null,
+                    RequiredAddonEnum = DukeAddonEnum.Duke3D,
+                    RequiredFeatures = null,
+                    GRPs = null,
+                    Preview = null
                 });
             }
 
             if (IsWorldTourInstalled)
             {
-                campaigns.Add(Consts.WorldTourGuid, new DukeCampaign()
+                campaigns.Add(GameEnum.Duke3D_WT.ToString(), new DukeCampaign()
                 {
-                    Guid = Consts.WorldTourGuid,
-                    ModType = ModTypeEnum.Campaign,
-                    DisplayName = "Duke Nukem 3D World Tour",
+                    Id = GameEnum.Duke3D_WT.ToString(),
+                    Type = AddonTypeEnum.Official,
+                    Title = "Duke Nukem 3D World Tour",
                     Image = ImageHelper.FileNameToStream("Duke3D.dukewt.jpg"),
-                    AddonEnum = DukeAddonEnum.WorldTour,
                     SupportedPorts = [PortEnum.Raze, PortEnum.EDuke32, PortEnum.BuildGDX],
-                    Author = "WizardWorks",
+                    Author = "Nerve Software, Gearbox Software",
                     Description = """
-                        **Duke Nukem 3D: 20th Anniversary World Tour** is a 2016 special edition remake of Duke Nukem 3D, originally released in 1996.
-                        The remake includes all content from Duke Nukem 3D: Atomic Edition, but it adds new levels, enemies, a weapon, and several special features.
+                        **Duke Nukem 3D: 20th Anniversary World Tour** is a 2016 special edition of Duke Nukem 3D.
+                        This edition includes all content from Duke Nukem 3D: Atomic Edition, but it adds new levels, enemies, a weapon, and several special features.
 
                         The 20th Anniversary Edition includes a new fifth episode known as Alien World Order.
                         The episode was designed by Allen Blum and Richard “Levelord” Gray, both of whom designed all the levels in the original Duke Nukem 3D. 
                         """,
-                    StartupFile = null,
                     Version = null,
-                    Url = null,
-                    IsOfficial = true,
                     PathToFile = null,
-                    IsLoose = false
+                    SupportedGames = null,
+                    RequiredGamesCrcs = null,
+                    Dependencies = null,
+                    Incompatibles = null,
+                    MainCon = null,
+                    AdditionalCons = null,
+                    MainDef = null,
+                    AdditionalDefs = null,
+                    RTS = null,
+                    StartMap = null,
+                    RequiredAddonEnum = DukeAddonEnum.DukeWT,
+                    RequiredFeatures = null,
+                    GRPs = null,
+                    Preview = null
                 });
             }
 
@@ -134,13 +149,12 @@ namespace Games.Games
             {
                 if (IsCaribbeanInstalled)
                 {
-                    campaigns.Add(Consts.CaribbeanGuid, new DukeCampaign()
+                    campaigns.Add(DukeAddonEnum.DukeVaca.ToString(), new DukeCampaign()
                     {
-                        Guid = Consts.CaribbeanGuid,
-                        ModType = ModTypeEnum.Campaign,
-                        DisplayName = "Caribbean",
+                        Id = DukeAddonEnum.DukeVaca.ToString(),
+                        Type = AddonTypeEnum.Official,
+                        Title = "Caribbean",
                         Image = ImageHelper.FileNameToStream("Duke3D.carib.jpg"),
-                        AddonEnum = DukeAddonEnum.Caribbean,
                         Author = "Sunstorm Interactive",
                         Description = """
                             **Life's A Beach** is an expansion pack for the highly acclaimed first-person shooter Duke Nukem 3D. It was released on December 31, 1997 by **Sunstorm Interactive**.
@@ -149,26 +163,35 @@ namespace Games.Games
                             However, the aliens have decided that the Caribbean offers the perfect climate for a new breeding ground, so they begin laying eggs and terrorizing the local tourists.
                             Angered that his rest and relaxation is being delayed, Duke Nukem sets out on a mission for retribution against the aliens who are interrupting his vacation.
                             """,
-                        StartupFile = null,
                         Version = null,
                         //TODO remove when https://voidpoint.io/terminx/eduke32/-/issues/297 is fixed
                         SupportedPorts = [PortEnum.Raze, PortEnum.BuildGDX],
-                        Url = null,
-                        IsOfficial = true,
                         PathToFile = null,
-                        IsLoose = false
+                        SupportedGames = null,
+                        RequiredGamesCrcs = null,
+                        Dependencies = null,
+                        Incompatibles = null,
+                        MainCon = null,
+                        AdditionalCons = null,
+                        MainDef = null,
+                        AdditionalDefs = null,
+                        RTS = null,
+                        StartMap = null,
+                        RequiredAddonEnum = DukeAddonEnum.DukeVaca,
+                        RequiredFeatures = null,
+                        GRPs = null,
+                        Preview = null
                     });
                 }
 
                 if (IsNuclearWinterInstalled)
                 {
-                    campaigns.Add(Consts.NuclearWinterGuid, new DukeCampaign()
+                    campaigns.Add(DukeAddonEnum.DukeNW.ToString(), new DukeCampaign()
                     {
-                        Guid = Consts.NuclearWinterGuid,
-                        ModType = ModTypeEnum.Campaign,
-                        DisplayName = "Nuclear Winter",
+                        Id = DukeAddonEnum.DukeNW.ToString(),
+                        Type = AddonTypeEnum.Official,
+                        Title = "Nuclear Winter",
                         Image = ImageHelper.FileNameToStream("Duke3D.nwinter.jpg"),
-                        AddonEnum = DukeAddonEnum.NuclearWinter,
                         Author = "Simply Silly Software",
                         Description = """
                             **Nuclear Winter**, is a Christmas-themed expansion pack for Duke Nukem 3D. It was developed by **Simply Silly Software** and published by **WizardWorks** on December 30, 1997.
@@ -176,25 +199,34 @@ namespace Games.Games
                             Santa Claus has been captured and brainwashed by the aliens that Duke previously defeated. To make matters worse, the aliens are now supported by an enemy force calling themselves the Feminist Elven Militia.
                             Duke Nukem must travel to the North Pole in order to stop the brainwashed Santa Claus and his manipulative captors.
                             """,
-                        StartupFile = null,
                         Version = null,
                         SupportedPorts = null,
-                        Url = null,
-                        IsOfficial = true,
                         PathToFile = null,
-                        IsLoose = false
+                        SupportedGames = null,
+                        RequiredGamesCrcs = null,
+                        Dependencies = null,
+                        Incompatibles = null,
+                        MainCon = null,
+                        AdditionalCons = null,
+                        MainDef = null,
+                        AdditionalDefs = null,
+                        RTS = null,
+                        StartMap = null,
+                        RequiredAddonEnum = DukeAddonEnum.DukeNW,
+                        RequiredFeatures = null,
+                        GRPs = null,
+                        Preview = null
                     });
                 }
 
                 if (IsDukeDCInstalled)
                 {
-                    campaigns.Add(Consts.DukeDCGuid, new DukeCampaign()
+                    campaigns.Add(DukeAddonEnum.DukeDC.ToString(), new DukeCampaign()
                     {
-                        Guid = Consts.DukeDCGuid,
-                        ModType = ModTypeEnum.Campaign,
-                        DisplayName = "Duke it Out in DC",
+                        Id = DukeAddonEnum.DukeDC.ToString(),
+                        Type = AddonTypeEnum.Official,
+                        Title = "Duke it Out in DC",
                         Image = ImageHelper.FileNameToStream("Duke3D.dukedc.jpg"),
-                        AddonEnum = DukeAddonEnum.DukeDC,
                         Author = "WizardWorks",
                         Description = """
                             **Duke It Out In D.C.** is a Duke Nukem 3D expansion pack developed by Sunstorm Interactive and published by **WizardWorks** on March 17, 1997.
@@ -204,27 +236,36 @@ namespace Games.Games
                             Aliens have crash-landed into the Capitol Building and have launched a massive invasion of Washington, D.C. Duke Nukem arrives to find that the
                             alien invaders have captured several national monuments and critical government buildings, but in the end, Duke defeats the invading army and rescues the President from the Cycloid Emperor.
                             """,
-                        StartupFile = null,
                         Version = null,
                         //TODO remove when https://voidpoint.io/terminx/eduke32/-/issues/297 is fixed
                         SupportedPorts = [PortEnum.Raze, PortEnum.BuildGDX],
-                        Url = null,
-                        IsOfficial = true,
                         PathToFile = null,
-                        IsLoose = false
+                        SupportedGames = null,
+                        RequiredGamesCrcs = null,
+                        Dependencies = null,
+                        Incompatibles = null,
+                        MainCon = null,
+                        AdditionalCons = null,
+                        MainDef = null,
+                        AdditionalDefs = null,
+                        RTS = null,
+                        StartMap = null,
+                        RequiredAddonEnum = DukeAddonEnum.DukeDC,
+                        RequiredFeatures = null,
+                        GRPs = null,
+                        Preview = null
                     });
                 }
             }
 
             if (IsDuke64Installed)
             {
-                campaigns.Add(Consts.Duke64Guid, new DukeCampaign()
+                campaigns.Add(GameEnum.Duke64.ToString(), new DukeCampaign()
                 {
-                    Guid = Consts.Duke64Guid,
-                    ModType = ModTypeEnum.Campaign,
-                    DisplayName = "Duke Nukem 64",
+                    Id = GameEnum.Duke64.ToString(),
+                    Type = AddonTypeEnum.Official,
+                    Title = "Duke Nukem 64",
                     Image = ImageHelper.FileNameToStream("Duke3D.duke64.jpg"),
-                    AddonEnum = DukeAddonEnum.Duke64,
                     SupportedPorts = [PortEnum.RedNukem],
                     Author = "3D Realms, Eurocom",
                     Description = """
@@ -233,12 +274,22 @@ namespace Games.Games
                         The port also includes a four-player deathmatch mode and a two-player co-op mode via split-screen.
                         The game's mature themes have been minimized to satisfy Nintendo's adult content standards.
                         """,
-                    StartupFile = null,
                     Version = null,
-                    Url = null,
-                    IsOfficial = true,
                     PathToFile = null,
-                    IsLoose = false
+                    SupportedGames = null,
+                    RequiredGamesCrcs = null,
+                    Dependencies = null,
+                    Incompatibles = null,
+                    MainCon = null,
+                    AdditionalCons = null,
+                    MainDef = null,
+                    AdditionalDefs = null,
+                    RTS = null,
+                    StartMap = null,
+                    RequiredAddonEnum = DukeAddonEnum.Duke3D,
+                    RequiredFeatures = null,
+                    GRPs = null,
+                    Preview = null
                 });
             }
 

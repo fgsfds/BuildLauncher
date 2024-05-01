@@ -18,27 +18,27 @@ namespace BuildLauncher.ViewModels
         {
             Game = game;
 
-            Game.DownloadableModsProvider.ModDownloadedEvent += OnModChanged;
-            Game.InstalledModsProvider.ModDeletedEvent += OnModChanged;
+            Game.DownloadableAddonsProvider.AddonDownloadedEvent += OnAddonChanged;
+            Game.InstalledAddonsProvider.AddonDeletedEvent += OnAddonChanged;
         }
 
 
         #region Binding Properties
 
         /// <summary>
-        /// List of downloadanle campaigns and maps
+        /// List of downloadable campaigns
         /// </summary>
-        public ImmutableList<IDownloadableMod> DownloadableCampaignsList => Game.DownloadableModsProvider.GetDownloadableMods(ModTypeEnum.Campaign);
+        public ImmutableList<IDownloadableAddon> DownloadableCampaignsList => Game.DownloadableAddonsProvider.GetDownloadableAddons(AddonTypeEnum.TC);
 
         /// <summary>
-        /// List of downloadanle campaigns and maps
+        /// List of downloadable maps
         /// </summary>
-        public ImmutableList<IDownloadableMod> DownloadableMapsList => Game.DownloadableModsProvider.GetDownloadableMods(ModTypeEnum.Map);
+        public ImmutableList<IDownloadableAddon> DownloadableMapsList => Game.DownloadableAddonsProvider.GetDownloadableAddons(AddonTypeEnum.Map);
 
         /// <summary>
-        /// List of downloadanle autoload mods
+        /// List of downloadable autoload mods
         /// </summary>
-        public ImmutableList<IDownloadableMod> DownloadableModsList => Game.DownloadableModsProvider.GetDownloadableMods(ModTypeEnum.Autoload);
+        public ImmutableList<IDownloadableAddon> DownloadableModsList => Game.DownloadableAddonsProvider.GetDownloadableAddons(AddonTypeEnum.Mod);
 
         /// <summary>
         /// Download/install progress
@@ -48,10 +48,10 @@ namespace BuildLauncher.ViewModels
         /// <summary>
         /// Currently selected downloadable campaign, map or mod
         /// </summary>
-        private DownloadableMod? _selectedDownloadableMod;
-        public DownloadableMod? SelectedDownloadableMod
+        private DownloadableAddonDto? _selectedDownloadableAddon;
+        public DownloadableAddonDto? SelectedDownloadableAddon
         {
-            get => _selectedDownloadableMod;
+            get => _selectedDownloadableAddon;
             set
             {
                 if (value is null)
@@ -59,28 +59,34 @@ namespace BuildLauncher.ViewModels
                     return;
                 }
 
-                _selectedDownloadableMod = value;
-                OnPropertyChanged(nameof(SelectedDownloadableMod));
+                _selectedDownloadableAddon = value;
+                OnPropertyChanged(nameof(SelectedDownloadableAddon));
                 OnPropertyChanged(nameof(SelectedDownloadableDescription));
                 OnPropertyChanged(nameof(DownloadButtonText));
 
-                DownloadModCommand.NotifyCanExecuteChanged();
+                DownloadAddonCommand.NotifyCanExecuteChanged();
             }
         }
 
-        public string SelectedDownloadableDescription => SelectedDownloadableMod is null ? string.Empty : SelectedDownloadableMod.ToMarkdownString();
+        /// <summary>
+        /// Description of the selected addom
+        /// </summary>
+        public string SelectedDownloadableDescription => SelectedDownloadableAddon is null ? string.Empty : SelectedDownloadableAddon.ToMarkdownString();
 
+        /// <summary>
+        /// Text of the download button
+        /// </summary>
         public string DownloadButtonText
         {
             get
             {
-                if (SelectedDownloadableMod is null)
+                if (SelectedDownloadableAddon is null)
                 {
                     return "Download";
                 }
                 else
                 {
-                    return $"Download ({SelectedDownloadableMod.FileSize.ToSizeString()})";
+                    return $"Download ({SelectedDownloadableAddon.FileSize.ToSizeString()})";
                 }
             }
         }
@@ -96,11 +102,11 @@ namespace BuildLauncher.ViewModels
         public Task InitializeAsync() => UpdateAsync();
 
         /// <summary>
-        /// Update downloadable mods list
+        /// Update downloadable addons list
         /// </summary>
         private async Task UpdateAsync()
         {
-            await Game.DownloadableModsProvider.CreateCacheAsync().ConfigureAwait(true);
+            await Game.DownloadableAddonsProvider.CreateCacheAsync().ConfigureAwait(true);
 
             OnPropertyChanged(nameof(DownloadableCampaignsList));
             OnPropertyChanged(nameof(DownloadableMapsList));
@@ -109,21 +115,21 @@ namespace BuildLauncher.ViewModels
 
 
         /// <summary>
-        /// Download selecred mod
+        /// Download selected addon
         /// </summary>
-        [RelayCommand(CanExecute = (nameof(DownloadSelectedModCanExecute)))]
-        private async Task DownloadMod()
+        [RelayCommand(CanExecute = (nameof(DownloadSelectedAddonCanExecute)))]
+        private async Task DownloadAddon()
         {
-            SelectedDownloadableMod.ThrowIfNull();
+            SelectedDownloadableAddon.ThrowIfNull();
 
-            Game.DownloadableModsProvider.Progress.ProgressChanged += OnProgressChanged;
+            Game.DownloadableAddonsProvider.Progress.ProgressChanged += OnProgressChanged;
 
-            await Game.DownloadableModsProvider.DownloadModAsync(SelectedDownloadableMod).ConfigureAwait(false);
+            await Game.DownloadableAddonsProvider.DownloadAddonAsync(SelectedDownloadableAddon).ConfigureAwait(false);
 
-            Game.DownloadableModsProvider.Progress.ProgressChanged -= OnProgressChanged;
+            Game.DownloadableAddonsProvider.Progress.ProgressChanged -= OnProgressChanged;
             OnProgressChanged(null, 0);
         }
-        private bool DownloadSelectedModCanExecute => SelectedDownloadableMod is not null;
+        private bool DownloadSelectedAddonCanExecute => SelectedDownloadableAddon is not null;
 
         #endregion
 
@@ -134,22 +140,22 @@ namespace BuildLauncher.ViewModels
             OnPropertyChanged(nameof(ProgressBarValue));
         }
 
-        private void OnModChanged(IGame game, ModTypeEnum modType)
+        private void OnAddonChanged(IGame game, AddonTypeEnum addonType)
         {
             if (game.GameEnum != Game.GameEnum)
             {
                 return;
             }
 
-            if (modType is ModTypeEnum.Campaign)
+            if (addonType is AddonTypeEnum.TC)
             {
                 OnPropertyChanged(nameof(DownloadableCampaignsList));
             }
-            else if (modType is ModTypeEnum.Map)
+            else if (addonType is AddonTypeEnum.Map)
             {
                 OnPropertyChanged(nameof(DownloadableMapsList));
             }
-            else if (modType is ModTypeEnum.Autoload)
+            else if (addonType is AddonTypeEnum.Mod)
             {
                 OnPropertyChanged(nameof(DownloadableModsList));
             }

@@ -20,7 +20,7 @@
         <Button Grid.Column="1"
                 HorizontalAlignment="Right"
                 Padding="5"
-                Margin="5,0"
+                Margin="10,0"
                 Command="{Binding RefreshListCommand}">
             Refresh
         </Button>

@@ -1,15 +1,15 @@
 ﻿using Common.Enums;
 using Common.Helpers;
 using Common.Interfaces;
-using Mods.Mods;
+using Mods.Addons;
 using Mods.Providers;
 
 namespace Games.Games
 {
-    public sealed class SlaveGame(InstalledModsProviderFactory modsProvider, DownloadableModsProviderFactory downloadableModsProviderFactory) : BaseGame(modsProvider, downloadableModsProviderFactory)
+    public sealed class SlaveGame(InstalledAddonsProviderFactory modsProvider, DownloadableAddonsProviderFactory downloadableModsProviderFactory) : BaseGame(modsProvider, downloadableModsProviderFactory)
     {
         /// <inheritdoc/>
-        public override GameEnum GameEnum => GameEnum.Slave;
+        public override GameEnum GameEnum => GameEnum.Exhumed;
 
         /// <inheritdoc/>
         public override string FullName => "Powerslave";
@@ -18,24 +18,21 @@ namespace Games.Games
         public override string ShortName => "Slave";
 
         /// <inheritdoc/>
-        public override string DefFile => "exhumed.def";
-
-        /// <inheritdoc/>
         public override List<string> RequiredFiles => ["STUFF.DAT"];
 
 
         /// <inheritdoc/>
-        protected override Dictionary<Guid, IMod> GetOriginalCampaigns()
+        protected override Dictionary<string, IAddon> GetOriginalCampaigns()
         {
-            Dictionary<Guid, IMod> campaigns = new(1);
+            Dictionary<string, IAddon> campaigns = new(1, StringComparer.OrdinalIgnoreCase);
 
             if (IsBaseGameInstalled)
             {
-                campaigns.Add(Consts.SlaveGuid, new SlaveCampaign()
+                campaigns.Add(GameEnum.Exhumed.ToString(), new SlaveCampaign()
                 {
-                    Guid = Consts.SlaveGuid,
-                    ModType = ModTypeEnum.Campaign,
-                    DisplayName = "Powerslave",
+                    Id = GameEnum.Exhumed.ToString(),
+                    Type = AddonTypeEnum.Official,
+                    Title = "Powerslave",
                     Image = ImageHelper.FileNameToStream("Slave.slave.jpg"),
                     Author = "Lobotomy Software",
                     Description = """
@@ -49,13 +46,18 @@ namespace Games.Games
                         various minions, which include mummies, Anubis soldiers, scorpions, and evil spirits. The player's course of action is directed by the spirit of King Ramses, whose mummy was exhumed
                         from its tomb by the Kilmaat, who seek to resurrect him and use his powers to control the world.
                         """,
-                    StartupFile = null,
                     Version = null,
                     SupportedPorts = null,
-                    Url = null,
-                    IsOfficial = true,
                     PathToFile = null,
-                    IsLoose = false
+                    SupportedGames = null,
+                    RequiredGamesCrcs = null,
+                    Dependencies = null,
+                    Incompatibles = null,
+                    MainDef = null,
+                    AdditionalDefs = null,
+                    StartMap = null,
+                    RequiredFeatures = null,
+                    Preview = null
                 });
             }
 

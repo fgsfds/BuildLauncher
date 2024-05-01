@@ -1,5 +1,6 @@
 using Avalonia.Controls;
 using BuildLauncher.ViewModels;
+using Common.Enums;
 using Common.Helpers;
 using Common.Interfaces;
 using CommunityToolkit.Mvvm.Input;
@@ -49,7 +50,7 @@ namespace BuildLauncher.Controls
                     Command = new RelayCommand(() =>
                         _viewModel.StartCampaignCommand.Execute(port),
                         () => port.IsInstalled && CampaignsList.SelectedItem is not null &&
-                        (((IMod)CampaignsList.SelectedItem).SupportedPorts is null || ((IMod)CampaignsList.SelectedItem).SupportedPorts!.Contains(port.PortEnum))
+                        (((IAddon)CampaignsList.SelectedItem).SupportedPorts is null || ((IAddon)CampaignsList.SelectedItem).SupportedPorts!.Contains(port.PortEnum))
                         ),
                     Margin = new(5),
                     Padding = new(5),
@@ -66,7 +67,7 @@ namespace BuildLauncher.Controls
         {
             CampaignsList.ContextMenu = new();
 
-            if (CampaignsList.SelectedItem is not IMod iMod)
+            if (CampaignsList.SelectedItem is not IAddon addon)
             {
                 return;
             }
@@ -77,7 +78,7 @@ namespace BuildLauncher.Controls
             foreach (var port in _supportedPorts)
             {
                 if (port.IsInstalled &&
-                (iMod.SupportedPorts is null || iMod.SupportedPorts!.Contains(port.PortEnum)))
+                    (addon.SupportedPorts is null || addon.SupportedPorts!.Contains(port.PortEnum)))
                 {
                     var portButton = new MenuItem()
                     {
@@ -100,7 +101,7 @@ namespace BuildLauncher.Controls
                 Header = "Delete",
                 Command = new RelayCommand(
                     () => _viewModel.DeleteCampaignCommand.Execute(null),
-                    () => !iMod.IsOfficial
+                    () => addon.Type is not AddonTypeEnum.Official
                     )
             };
 
@@ -115,7 +116,7 @@ namespace BuildLauncher.Controls
             foreach (var control in BottomPanel.PortsButtonsPanel.Children)
             {
                 if (control is Button button &&
-                button.Command is IRelayCommand relayCommand)
+                    button.Command is IRelayCommand relayCommand)
                 {
                     relayCommand.NotifyCanExecuteChanged();
                 }

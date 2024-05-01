@@ -2,8 +2,8 @@
 {
     public enum RedneckAddonEnum : byte
     {
-        Redneck = 0,
-        Route66 = 1,
-        Again = 2
+        Redneck,
+        RedneckR66,
+        RedneckRA
     }
 }

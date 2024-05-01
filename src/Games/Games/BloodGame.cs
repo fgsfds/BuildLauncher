@@ -2,12 +2,15 @@
 using Common.Enums.Addons;
 using Common.Helpers;
 using Common.Interfaces;
-using Mods.Mods;
+using Mods.Addons;
 using Mods.Providers;
 
 namespace Games.Games
 {
-    public sealed class BloodGame(InstalledModsProviderFactory modsProvider, DownloadableModsProviderFactory downloadableModsProviderFactory) : BaseGame(modsProvider, downloadableModsProviderFactory)
+    public sealed class BloodGame(
+        InstalledAddonsProviderFactory modsProvider,
+        DownloadableAddonsProviderFactory downloadableModsProviderFactory
+        ) : BaseGame(modsProvider, downloadableModsProviderFactory)
     {
         /// <inheritdoc/>
         public override GameEnum GameEnum => GameEnum.Blood;
@@ -17,9 +20,6 @@ namespace Games.Games
 
         /// <inheritdoc/>
         public override string ShortName => FullName;
-
-        /// <inheritdoc/>
-        public override string DefFile => "blood.def";
 
         /// <inheritdoc/>
         public override List<string> RequiredFiles => [Consts.BloodIni, "BLOOD.RFF", "GUI.RFF", "SOUNDS.RFF", "SURFACE.DAT", "TILES000.ART", "VOXEL.DAT"];
@@ -36,18 +36,16 @@ namespace Games.Games
 
 
         /// <inheritdoc/>
-        protected override Dictionary<Guid, IMod> GetOriginalCampaigns()
+        protected override Dictionary<string, IAddon> GetOriginalCampaigns()
         {
-            Dictionary<Guid, IMod> campaigns = new(2);
+            Dictionary<string, IAddon> campaigns = new(2, StringComparer.OrdinalIgnoreCase);
 
-            campaigns.Add(Consts.BloodGuid, new BloodCampaign()
+            campaigns.Add(GameEnum.Blood.ToString(), new BloodCampaign()
             {
-                Guid = Consts.BloodGuid,
-                ModType = ModTypeEnum.Campaign,
-                DisplayName = "Blood",
-                StartupFile = Consts.BloodIni,
+                Id = GameEnum.Blood.ToString(),
+                Type = AddonTypeEnum.Official,
+                Title = "Blood",
                 Image = ImageHelper.FileNameToStream("Blood.blood.png"),
-                AddonEnum = BloodAddonEnum.Blood,
                 Author = "Monolith Productions",
                 Description = """
                     **Blood** is a PC game released for MS-DOS on May 31, 1997. It was developed by **Monolith Productions** and published by **GT Interactive**.
@@ -63,22 +61,30 @@ namespace Games.Games
                     """,
                 Version = null,
                 SupportedPorts = null,
-                Url = null,
-                IsOfficial = true,
                 PathToFile = null,
-                IsLoose = false
+                SupportedGames = null,
+                RequiredGamesCrcs = null,
+                Dependencies = null,
+                Incompatibles = null,
+                MainDef = null,
+                AdditionalDefs = null,
+                INI = Consts.BloodIni,
+                RFF = null,
+                SND = null,
+                StartMap = null,
+                RequiredAddonEnum = BloodAddonEnum.Blood,
+                RequiredFeatures = null,
+                Preview = null
             });
 
             if (IsCrypticPassageInstalled)
             {
-                campaigns.Add(Consts.CrypticGuid, new BloodCampaign()
+                campaigns.Add(BloodAddonEnum.BloodCP.ToString(), new BloodCampaign()
                 {
-                    Guid = Consts.CrypticGuid,
-                    ModType = ModTypeEnum.Campaign,
-                    DisplayName = "Cryptic Passage",
-                    StartupFile = Consts.CrypticIni,
+                    Id = BloodAddonEnum.BloodCP.ToString(),
+                    Type = AddonTypeEnum.Official,
+                    Title = "Cryptic Passage",
                     Image = ImageHelper.FileNameToStream("Blood.cp.jpg"),
-                    AddonEnum = BloodAddonEnum.Cryptic,
                     Author = "Sunstorm Interactive",
                     Description = """
                         **Cryptic Passage** (originally titled Passage to Transylvania) is the first of two expansion packs for Blood.
@@ -90,10 +96,20 @@ namespace Games.Games
                         """,
                     Version = null,
                     SupportedPorts = null,
-                    Url = null,
-                    IsOfficial = true,
                     PathToFile = null,
-                    IsLoose = false
+                    SupportedGames = null,
+                    RequiredGamesCrcs = null,
+                    Dependencies = null,
+                    Incompatibles = null,
+                    MainDef = null,
+                    AdditionalDefs = null,
+                    INI = Consts.CrypticIni,
+                    RFF = null,
+                    SND = null,
+                    StartMap = null,
+                    RequiredAddonEnum = BloodAddonEnum.BloodCP,
+                    RequiredFeatures = null,
+                    Preview = null
                 });
             }
 
