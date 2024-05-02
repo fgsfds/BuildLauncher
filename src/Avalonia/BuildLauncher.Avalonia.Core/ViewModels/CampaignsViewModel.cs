@@ -185,7 +185,7 @@ namespace BuildLauncher.ViewModels
         /// <param name="args">Command line arguments</param>
         private async Task StartPortAsync(string id, string exe, string args)
         {
-            Stopwatch sw = Stopwatch.StartNew();
+            var sw = Stopwatch.StartNew();
 
             await Process.Start(new ProcessStartInfo
             {

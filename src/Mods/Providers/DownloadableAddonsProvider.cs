@@ -77,7 +77,7 @@ namespace Mods.Providers
                     _cache[addon.Game][addon.AddonType].TryAdd(addon.Id, addon);
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
             }
             finally

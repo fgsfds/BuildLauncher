@@ -3,11 +3,11 @@ using Common.Enums;
 using Common.Enums.Addons;
 using Common.Helpers;
 using Common.Interfaces;
+using Common.Providers;
 using Mods.Addons;
 using Mods.Serializable;
 using SharpCompress.Archives;
 using System.Text.Json;
-using Common.Providers;
 
 namespace Mods.Providers
 {
@@ -176,7 +176,7 @@ namespace Mods.Providers
                         addedAddons.Add(newAddon.Id, newAddon);
                     }
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     continue;
                 }

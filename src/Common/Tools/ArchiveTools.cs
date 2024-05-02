@@ -104,7 +104,7 @@ namespace Common.Tools
                             Directory.CreateDirectory(directory);
                         }
 
-                        using FileStream writableStream = File.OpenWrite(fullName);
+                        using var writableStream = File.OpenWrite(fullName);
                         reader.WriteEntryTo(writableStream);
                     }
 

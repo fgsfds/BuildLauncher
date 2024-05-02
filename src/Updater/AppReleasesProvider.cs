@@ -26,7 +26,7 @@ namespace Updater
                 releases = [.. releases.Where(static x => x.IsDraft is false && x.IsPrerelease is false)];
             }
 
-            string osPostfix = string.Empty;
+            var osPostfix = string.Empty;
 
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {

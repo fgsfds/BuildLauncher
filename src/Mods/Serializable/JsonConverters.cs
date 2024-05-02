@@ -170,13 +170,13 @@ namespace Mods.Serializable
             }
             else if (typeof(TItem) == typeof(PortEnum))
             {
-                string? str = reader.GetString();
+                var str = reader.GetString();
 
                 return (TItem)Enum.Parse(typeof(PortEnum), str!, true);
             }
             else if (typeof(TItem) == typeof(FeatureEnum))
             {
-                string? str = reader.GetString();
+                var str = reader.GetString();
 
                 return (TItem)Enum.Parse(typeof(FeatureEnum), str!, true);
             }

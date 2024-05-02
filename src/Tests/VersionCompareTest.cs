@@ -1,6 +1,4 @@
-﻿using Mods.Helpers;
-
-namespace Tests
+﻿namespace Tests
 {
     public class VersionCompareTest
     {
