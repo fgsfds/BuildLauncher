@@ -111,6 +111,11 @@ namespace Ports.Ports
         /// </summary>
         protected virtual string PortFolderName => Name;
 
+        /// <summary>
+        /// Port's icon
+        /// </summary>
+        public Stream Icon => ImageHelper.FileNameToStream($"{Name}.png");
+
 
         /// <summary>
         /// Get command line parameters to start the game with selected campaign and autoload mods

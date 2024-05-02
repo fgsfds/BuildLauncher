@@ -8,6 +8,30 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Assets\BuildGDX.png" />
+    <None Remove="Assets\EDuke32.png" />
+    <None Remove="Assets\Fury.png" />
+    <None Remove="Assets\NBlood.png" />
+    <None Remove="Assets\NotBlood.png" />
+    <None Remove="Assets\PCExhumed.png" />
+    <None Remove="Assets\Raze.png" />
+    <None Remove="Assets\RedNukem.png" />
+    <None Remove="Assets\VoidSW.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Assets\BuildGDX.png" />
+    <EmbeddedResource Include="Assets\EDuke32.png" />
+    <EmbeddedResource Include="Assets\Fury.png" />
+    <EmbeddedResource Include="Assets\NotBlood.png" />
+    <EmbeddedResource Include="Assets\PCExhumed.png" />
+    <EmbeddedResource Include="Assets\Raze.png" />
+    <EmbeddedResource Include="Assets\NBlood.png" />
+    <EmbeddedResource Include="Assets\RedNukem.png" />
+    <EmbeddedResource Include="Assets\VoidSW.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AddSealed">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

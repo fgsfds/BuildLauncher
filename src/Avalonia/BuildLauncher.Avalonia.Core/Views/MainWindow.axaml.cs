@@ -1,4 +1,6 @@
 ﻿using Avalonia.Controls;
+using Avalonia.Media.Imaging;
+using Avalonia.Media;
 using BuildLauncher.ViewModels;
 using Common.Enums;
 using Games.Providers;
@@ -16,8 +18,9 @@ public sealed partial class MainWindow : Window
     public MainWindow(MainViewModel vm, GamesProvider gamesProvider, ViewModelsFactory vmFactory, PortsProvider portsProvider)
     {
         DataContext = vm;
-
         InitializeComponent();
+
+        RenderOptions.SetBitmapInterpolationMode(this, BitmapInterpolationMode.HighQuality);
 
         BloodPage.InitializeControl(GameEnum.Blood, portsProvider, vmFactory);
         DukePage.InitializeControl(GameEnum.Duke3D, portsProvider, vmFactory);

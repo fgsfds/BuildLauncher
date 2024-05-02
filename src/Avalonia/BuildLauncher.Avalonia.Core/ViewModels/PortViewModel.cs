@@ -54,6 +54,11 @@ namespace BuildLauncher.ViewModels
         public string Name => _port.Name;
 
         /// <summary>
+        /// Port's icon
+        /// </summary>
+        public Stream Icon => _port.Icon;
+
+        /// <summary>
         /// Currently installed version
         /// </summary>
         public string Version => _port.InstalledVersion ?? "None";

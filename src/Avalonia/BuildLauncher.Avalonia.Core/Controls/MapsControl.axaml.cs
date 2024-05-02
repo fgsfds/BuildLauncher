@@ -1,4 +1,6 @@
 using Avalonia.Controls;
+using Avalonia.Media;
+using BuildLauncher.Helpers;
 using BuildLauncher.ViewModels;
 using Common.Enums;
 using Common.Helpers;
@@ -6,6 +8,7 @@ using Common.Interfaces;
 using CommunityToolkit.Mvvm.Input;
 using Ports.Ports;
 using Ports.Providers;
+using System.Globalization;
 
 namespace BuildLauncher.Controls
 {
@@ -42,11 +45,19 @@ namespace BuildLauncher.Controls
         /// </summary>
         private void AddPortsButtons()
         {
+            ImagePathToBitmapConverter converter = new();
+
             foreach (var port in _supportedPorts)
             {
+                var portIcon = converter.Convert(port.Icon, typeof(IImage), null!, CultureInfo.InvariantCulture) as IImage;
+
+                StackPanel sp = new() { Orientation = Avalonia.Layout.Orientation.Horizontal };
+                sp.Children.Add(new Image() { Margin = new(0, 0, 5, 0), Height = 16, Source = portIcon });
+                sp.Children.Add(new TextBlock() { Text = port.Name });
+
                 Button button = new()
                 {
-                    Content = port.Name,
+                    Content = sp,
                     Command = new RelayCommand(() =>
                         _viewModel.StartMapCommand.Execute(port),
                         () => port.IsInstalled && MapsList.SelectedItem is not null &&
