@@ -6,15 +6,15 @@ using Tools.Tools;
 namespace Tools.Installer
 {
     /// <summary>
-    /// Class that provides releases from ports' repositories
+    /// Class that provides releases from tools' repositories
     /// </summary>
     public static partial class ToolsReleasesProvider
     {
         /// <summary>
-        /// Get the latest release of the selected port
+        /// Get the latest release of the selected tool
         /// </summary>
-        /// <param name="port">Port</param>
-        public static async Task<CommonRelease?> GetLatestReleaseAsync(BaseTool port)
+        /// <param name="tool">Tool</param>
+        public static async Task<CommonRelease?> GetLatestReleaseAsync(BaseTool tool)
         {
             if (CommonProperties.IsDevMode)
             {
@@ -29,7 +29,7 @@ namespace Tools.Installer
                 client.Timeout = TimeSpan.FromMinutes(1);
                 client.DefaultRequestHeaders.UserAgent.ParseAdd("BuildLauncher");
 
-                response = await client.GetStringAsync(port.RepoUrl).ConfigureAwait(false);
+                response = await client.GetStringAsync(tool.RepoUrl).ConfigureAwait(false);
             }
             catch (Exception)
             {
@@ -46,7 +46,7 @@ namespace Tools.Installer
                 return null;
             }
 
-            var zip = release.Assets.FirstOrDefault(port.WindowsReleasePredicate);
+            var zip = release.Assets.FirstOrDefault(tool.WindowsReleasePredicate);
 
             if (zip is null)
             {

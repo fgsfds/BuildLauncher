@@ -28,7 +28,7 @@ namespace Tools.Installer
         public Progress<float> Progress { get; init; }
 
         /// <summary>
-        /// Install port
+        /// Install tool
         /// </summary>
         /// <param name="port">Port</param>
         public async Task InstallAsync(BaseTool port)

@@ -15,7 +15,7 @@ namespace BuildLauncher.Pages
 
             var vmFactory = BindingsManager.Provider.GetRequiredService<ViewModelsFactory>();
 
-            XMAPEDIT.DataContext = vmFactory.GetToolViewModel("123");
+            XMAPEDIT.DataContext = vmFactory.GetToolViewModel();
         }
 
         /// <summary>

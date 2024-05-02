@@ -119,10 +119,9 @@ namespace BuildLauncher.ViewModels
 
 
         /// <summary>
-        /// Create <see cref="PortViewModel"/>
+        /// Create <see cref="ToolViewModel"/>
         /// </summary>
-        /// <param name="portEnum">Port enum</param>
-        public ToolViewModel GetToolViewModel(string toolName)
+        public ToolViewModel GetToolViewModel()
         {
             ToolViewModel vm = new(
                 _toolsInstallerFactory,

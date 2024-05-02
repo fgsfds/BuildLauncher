@@ -50,12 +50,12 @@ namespace BuildLauncher.ViewModels
         }
 
         /// <summary>
-        /// Name of the port
+        /// Name of the tool
         /// </summary>
         public string Name => _tool.Name;
 
         /// <summary>
-        /// Port's icon
+        /// Tool's icon
         /// </summary>
         public Stream Icon => _tool.Icon;
 
@@ -106,7 +106,7 @@ namespace BuildLauncher.ViewModels
 
 
         /// <summary>
-        /// Download and install port
+        /// Download and install tool
         /// </summary>
         [RelayCommand(CanExecute=nameof(InstallCommandCanExecute))]
         private async Task InstallAsync()

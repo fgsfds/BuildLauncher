@@ -19,7 +19,7 @@ namespace Common.Helpers
 
             var resource = ass.GetManifestResourceStream($"{ass.GetName().Name!.Split('.')[1]}.Assets.{fileName}");
 
-            //resource.ThrowIfNull();
+            resource.ThrowIfNull();
 
             return resource;
         }
