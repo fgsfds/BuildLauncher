@@ -1,6 +1,7 @@
 ﻿using Common.Tools;
 using Ports.Ports;
 using Ports.Providers;
+using Tools.Tools;
 
 namespace Ports.Tools
 {
@@ -51,6 +52,28 @@ namespace Ports.Tools
             {
                 File.WriteAllText(Path.Combine(port.PathToPortFolder, "version"), release.Version.ToString());
             }
+        }
+
+        /// <summary>
+        /// Install port
+        /// </summary>
+        /// <param name="port">Port</param>
+        public async Task InstallAsync(BaseTool port)
+        {
+            var release = await PortsReleasesProvider.GetLatestReleaseAsync(port).ConfigureAwait(false);
+
+            if (release is null)
+            {
+                return;
+            }
+
+            await _fileTools.DownloadFileAsync(new Uri(release.Url), Path.GetFileName(release.Url)).ConfigureAwait(false);
+
+            await _fileTools.UnpackArchiveAsync(Path.GetFileName(release.Url), port.PathToToolFolder).ConfigureAwait(false);
+
+            File.Delete(Path.GetFileName(release.Url));
+
+            File.WriteAllText(Path.Combine(port.PathToToolFolder, "version"), release.Version.ToString());
         }
     }
 }

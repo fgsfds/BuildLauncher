@@ -3,8 +3,8 @@ using Common.Helpers;
 using Ports.Ports;
 using Ports.Ports.EDuke32;
 using System.Text.Json;
-using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
+using Tools.Tools;
 
 namespace Ports.Providers
 {
@@ -17,7 +17,54 @@ namespace Ports.Providers
         /// Get the latest release of the selected port
         /// </summary>
         /// <param name="port">Port</param>
-        public static async Task<PortRelease?> GetLatestReleaseAsync(BasePort port)
+        public static async Task<CommonRelease?> GetLatestReleaseAsync(BaseTool port)
+        {
+            if (CommonProperties.IsDevMode)
+            {
+                return null;
+            }
+
+            string response;
+
+            try
+            {
+                using HttpClient client = new();
+                client.Timeout = TimeSpan.FromMinutes(1);
+                client.DefaultRequestHeaders.UserAgent.ParseAdd("BuildLauncher");
+
+                response = await client.GetStringAsync(port.RepoUrl).ConfigureAwait(false);
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+
+            var releases = JsonSerializer.Deserialize(response, GitHubReleaseContext.Default.ListGitHubRelease)
+                ?? ThrowHelper.Exception<List<GitHubRelease>>("Error while deserializing GitHub releases");
+
+            var release = releases.FirstOrDefault(static x => x.IsDraft is false && x.IsPrerelease is false);
+
+            if (release is null)
+            {
+                return null;
+            }
+
+            var zip = release.Assets.FirstOrDefault(port.WindowsReleasePredicate);
+
+            if (zip is null)
+            {
+                return null;
+            }
+
+            var version = release.TagName;
+
+            return new(zip.DownloadUrl, version);
+        }
+        /// <summary>
+        /// Get the latest release of the selected port
+        /// </summary>
+        /// <param name="port">Port</param>
+        public static async Task<CommonRelease?> GetLatestReleaseAsync(BasePort port)
         {
             if (port.PortEnum is PortEnum.BuildGDX)
             {
@@ -94,7 +141,7 @@ namespace Ports.Providers
         /// Hack to get EDuke32 release since dukeworld doesn't have API
         /// </summary>
         /// <param name="response">Json response</param>
-        private static PortRelease? EDuke32Hack(string response)
+        private static CommonRelease? EDuke32Hack(string response)
         {
             var regex = EDuke32WindowsReleaseRegex();
             var fileName = regex.Matches(response).FirstOrDefault();
@@ -121,53 +168,4 @@ namespace Ports.Providers
         [GeneratedRegex(@"(?<=\-)(\d*)(?=\-)")]
         private static partial Regex EDuke32VersionRegex();
     }
-
-
-    public sealed class PortRelease
-    {
-        public readonly string Url;
-        public readonly string Version;
-
-        public PortRelease(string url, string version)
-        {
-            Url = url;
-            Version = version;
-        }
-    }
-
-#pragma warning disable IDE1006 // Naming Styles
-    public sealed class GitHubRelease
-    {
-        [JsonPropertyName("tag_name")]
-        public string TagName { get; set; }
-
-        [JsonPropertyName("draft")]
-        public bool IsDraft { get; set; }
-
-        [JsonPropertyName("prerelease")]
-        public bool IsPrerelease { get; set; }
-
-        [JsonPropertyName("assets")]
-        public GitHubReleaseAsset[] Assets { get; set; }
-
-        [JsonPropertyName("body")]
-        public string Description { get; set; }
-    }
-
-    public sealed class GitHubReleaseAsset
-    {
-        [JsonPropertyName("name")]
-        public string FileName { get; set; }
-
-        [JsonPropertyName("browser_download_url")]
-        public string DownloadUrl { get; set; }
-
-        [JsonPropertyName("updated_at")]
-        public DateTime UpdatedDate { get; set; }
-    }
-#pragma warning restore IDE1006 // Naming Styles
-
-
-    [JsonSerializable(typeof(List<GitHubRelease>))]
-    internal sealed partial class GitHubReleaseContext : JsonSerializerContext { }
 }

@@ -23,7 +23,7 @@ namespace Updater
 
             if (!CommonProperties.IsDevMode)
             {
-                releases = [.. releases.Where(static x => x.draft is false && x.prerelease is false)];
+                releases = [.. releases.Where(static x => x.IsDraft is false && x.IsPrerelease is false)];
             }
 
             string osPostfix = string.Empty;
@@ -45,14 +45,14 @@ namespace Updater
 
             foreach (var release in releases)
             {
-                var asset = release.assets.FirstOrDefault(x => x.name.EndsWith(osPostfix));
+                var asset = release.Assets.FirstOrDefault(x => x.FileName.EndsWith(osPostfix));
 
                 if (asset is null)
                 {
                     continue;
                 }
 
-                var version = new Version(release.tag_name);
+                var version = new Version(release.TagName);
 
                 if (version <= currentVersion ||
                     version < update?.Version)
@@ -60,8 +60,8 @@ namespace Updater
                     continue;
                 }
 
-                var description = release.body;
-                var downloadUrl = new Uri(asset.browser_download_url);
+                var description = release.Description;
+                var downloadUrl = new Uri(asset.DownloadUrl);
 
                 update = new()
                 {

@@ -118,6 +118,12 @@
                     <pages:PortsPage x:Name="PortsPageTab"/>
                 </TabItem>
 
+                <TabItem Header="Tools" Margin="5">
+                    <pages:ToolsPage x:Name="ToolsPageTab"/>
+                </TabItem>
+
+                <TabItem IsEnabled="False" Header=""/>
+
                 <TabItem Name="SettingsTab" Header="Settings" Margin="5" >
                     <pages:SettingsPage x:Name="SettingsPageTab"/>
                 </TabItem>

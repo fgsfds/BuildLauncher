@@ -1,0 +1,43 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="BuildLauncher.Controls.ToolControl"
+             xmlns:vm="clr-namespace:BuildLauncher.ViewModels"
+             xmlns:helpers="clr-namespace:BuildLauncher.Helpers"
+             x:DataType="vm:ToolViewModel">
+
+    <UserControl.Resources>
+        <helpers:ImagePathToBitmapConverter x:Key="ImagePathToBitmapConverter"/>
+    </UserControl.Resources>
+
+    <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
+
+        <Image Source="{Binding Icon, Converter={StaticResource ImagePathToBitmapConverter}}"
+               RenderOptions.BitmapInterpolationMode="HighQuality"
+               Width="64"
+               Margin="0,0,0,5"
+               HorizontalAlignment="Center"/>
+
+        <TextBlock Text="{Binding Name, FallbackValue=Name}" FontWeight="Black" HorizontalAlignment="Center"/>
+
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+            <TextBlock Text="Installed version: "/>
+            <TextBlock Text="{Binding Version, FallbackValue=None}"/>
+        </StackPanel>
+
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+            <TextBlock Text="Latest version: " Foreground="{DynamicResource SystemAccentColor}"/>
+            <TextBlock Text="{Binding LatestVersion, FallbackValue=None}" Foreground="{DynamicResource SystemAccentColor}"/>
+        </StackPanel>
+
+        <Button Content="{Binding InstallButtonText}" HorizontalAlignment="Center" Command="{Binding InstallCommand}" Margin="5"/>
+
+        <Button HorizontalAlignment="Center" Command="{Binding StartCommand}" Margin="5">Launch...</Button>
+
+        <ProgressBar HorizontalAlignment="Center" Value="{Binding ProgressBarValue}"/>
+
+    </StackPanel>
+
+</UserControl>

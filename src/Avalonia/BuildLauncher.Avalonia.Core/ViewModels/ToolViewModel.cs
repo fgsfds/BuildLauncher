@@ -5,24 +5,26 @@ using Mods.Helpers;
 using Ports.Ports;
 using Ports.Providers;
 using Ports.Tools;
+using System.Diagnostics;
+using Tools.Tools;
 
 namespace BuildLauncher.ViewModels
 {
-    public sealed partial class PortViewModel : ObservableObject
+    public sealed partial class ToolViewModel : ObservableObject
     {
         private readonly PortsInstallerFactory _installerFactory;
-        private readonly BasePort _port;
+        private readonly BaseTool _tool;
         private CommonRelease? _release;
 
 
         [Obsolete($"Don't create directly. Use {nameof(ViewModelsFactory)}.")]
-        public PortViewModel(
+        public ToolViewModel(
             PortsInstallerFactory installerFactory,
-            BasePort port
+            BaseTool tool
             )
         {
             _installerFactory = installerFactory;
-            _port = port;
+            _tool = tool;
         }
 
 
@@ -35,12 +37,12 @@ namespace BuildLauncher.ViewModels
         {
             get
             {
-                if (_port.IsInstalled && VersionComparer.Compare(_port.InstalledVersion!, _release?.Version!, "<"))
+                if (_tool.IsInstalled && VersionComparer.Compare(_tool.InstalledVersion!, _release?.Version!, "<"))
                 {
                     return "Update";
                 }
 
-                if (_port.IsInstalled)
+                if (_tool.IsInstalled)
                 {
                     return "Reinstall";
                 }
@@ -52,17 +54,17 @@ namespace BuildLauncher.ViewModels
         /// <summary>
         /// Name of the port
         /// </summary>
-        public string Name => _port.Name;
+        public string Name => _tool.Name;
 
         /// <summary>
         /// Port's icon
         /// </summary>
-        public Stream Icon => _port.Icon;
+        public Stream Icon => _tool.Icon;
 
         /// <summary>
         /// Currently installed version
         /// </summary>
-        public string Version => _port.InstalledVersion ?? "None";
+        public string Version => _tool.InstalledVersion ?? "None";
 
         /// <summary>
         /// Latest available version
@@ -84,11 +86,25 @@ namespace BuildLauncher.ViewModels
         /// </summary>
         public async Task InitializeAsync()
         {
-            _release = await PortsReleasesProvider.GetLatestReleaseAsync(_port);
+            _release = await PortsReleasesProvider.GetLatestReleaseAsync(_tool);
 
             OnPropertyChanged(nameof(LatestVersion));
             OnPropertyChanged(nameof(InstallButtonText));
         }
+
+        /// <summary>
+        /// Initialize VM
+        /// </summary>
+        [RelayCommand(CanExecute = nameof(StartCommandCanExecute))]
+        public void Start()
+        {
+            Process.Start(new ProcessStartInfo
+            {
+                FileName = _tool.FullPathToExe,
+                UseShellExecute = true
+            });
+        }
+        public bool StartCommandCanExecute() => _tool.IsInstalled;
 
 
         /// <summary>
@@ -103,13 +119,14 @@ namespace BuildLauncher.ViewModels
             ProgressBarValue = 0;
             OnPropertyChanged(nameof(ProgressBarValue));
 
-            await installer.InstallAsync(_port);
+            await installer.InstallAsync(_tool);
 
             installer.Progress.ProgressChanged -= OnProgressChanged;
             ProgressBarValue = 0;
             OnPropertyChanged(nameof(ProgressBarValue));
             OnPropertyChanged(nameof(Version));
             OnPropertyChanged(nameof(InstallButtonText));
+            StartCommand.NotifyCanExecuteChanged();
         }
         public bool InstallCommandCanExecute() => !CommonProperties.IsDevMode;
 

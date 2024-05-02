@@ -42,6 +42,7 @@
     <ProjectReference Include="..\Common\Common.csproj" />
     <ProjectReference Include="..\Games\Games.csproj" />
     <ProjectReference Include="..\Mods\Mods.csproj" />
+    <ProjectReference Include="..\Tools\Tools.csproj" />
   </ItemGroup>
 
 </Project>

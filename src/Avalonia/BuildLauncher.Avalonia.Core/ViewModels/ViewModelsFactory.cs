@@ -4,6 +4,7 @@ using Common.Providers;
 using Games.Providers;
 using Ports.Providers;
 using Ports.Tools;
+using Tools.Tools;
 
 namespace BuildLauncher.ViewModels
 {
@@ -106,6 +107,22 @@ namespace BuildLauncher.ViewModels
             PortViewModel vm = new(
                 _installerFactory,
                 _portsProvider.GetPort(portEnum)
+                );
+
+            Task.Run(vm.InitializeAsync);
+            return vm;
+        }
+
+
+        /// <summary>
+        /// Create <see cref="PortViewModel"/>
+        /// </summary>
+        /// <param name="portEnum">Port enum</param>
+        public ToolViewModel GetToolViewModel(string toolName)
+        {
+            ToolViewModel vm = new(
+                _installerFactory,
+                new XMapEdit()
                 );
 
             Task.Run(vm.InitializeAsync);
