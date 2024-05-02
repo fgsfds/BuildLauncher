@@ -26,7 +26,8 @@ namespace Mods.Serializable
         [JsonPropertyName("Game")]
         public GameEnum Game { get; set; }
 
-        [JsonPropertyName("AddonType")]
+        //[JsonPropertyName("AddonType")]
+        [JsonPropertyName("ModType")]
         public AddonTypeEnum AddonType { get; set; }
 
         [JsonPropertyName("Description")]
