@@ -1,4 +1,6 @@
-﻿namespace Tests
+﻿using Common.Helpers;
+
+namespace Tests
 {
     public class VersionCompareTest
     {
