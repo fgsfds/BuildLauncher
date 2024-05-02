@@ -3,7 +3,6 @@ using Common.Enums;
 using Common.Enums.Addons;
 using Common.Helpers;
 using Common.Interfaces;
-using Mods.Helpers;
 using Mods.Addons;
 using Mods.Serializable;
 using SharpCompress.Archives;

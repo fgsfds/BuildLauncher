@@ -1,17 +1,17 @@
 ﻿using Common.Helpers;
+using Common.Releases;
 using System.Runtime.InteropServices;
 using System.Text.Json;
-using Updater.Entities;
 
 namespace Updater
 {
-    public static class GitHubReleasesProvider
+    public static class AppReleasesProvider
     {
         /// <summary>
         /// Return the latest new release or null if there's no newer releases
         /// </summary>
         /// <param name="currentVersion">current release version</param>
-        public static async Task<AppUpdateEntity?> GetLatestUpdateAsync(Version currentVersion)
+        public static async Task<AppRelease?> GetLatestUpdateAsync(Version currentVersion)
         {
             using HttpClient client = new();
             client.DefaultRequestHeaders.UserAgent.ParseAdd("BuildLauncher");
@@ -41,7 +41,7 @@ namespace Updater
                 ThrowHelper.PlatformNotSupportedException();
             }
 
-            AppUpdateEntity? update = null;
+            AppRelease? update = null;
 
             foreach (var release in releases)
             {
@@ -52,7 +52,7 @@ namespace Updater
                     continue;
                 }
 
-                var version = new Version(release.TagName);
+                Version version = new(release.TagName);
 
                 if (version <= currentVersion ||
                     version < update?.Version)
@@ -60,15 +60,8 @@ namespace Updater
                     continue;
                 }
 
-                var description = release.Description;
-                var downloadUrl = new Uri(asset.DownloadUrl);
 
-                update = new()
-                {
-                    Version = version,
-                    Description = description,
-                    DownloadUrl = downloadUrl
-                };
+                update = new(asset.DownloadUrl, version);
             }
 
             return update;

@@ -2,7 +2,6 @@
 using Common.Tools;
 using System.IO.Compression;
 using System.Runtime.InteropServices;
-using Updater.Entities;
 
 namespace Updater
 {
@@ -10,7 +9,7 @@ namespace Updater
     {
         private readonly ArchiveTools _archiveTools = archiveTools;
 
-        private AppUpdateEntity? _update;
+        private AppRelease? _update;
 
         /// <summary>
         /// Check GitHub for releases with version higher than current
@@ -19,7 +18,7 @@ namespace Updater
         /// <returns></returns>
         public async Task<bool> CheckForUpdates(Version currentVersion)
         {
-            _update = await GitHubReleasesProvider.GetLatestUpdateAsync(currentVersion).ConfigureAwait(false);
+            _update = await AppReleasesProvider.GetLatestUpdateAsync(currentVersion).ConfigureAwait(false);
 
             var hasUpdate = _update is not null;
 
@@ -37,7 +36,9 @@ namespace Updater
         /// <returns></returns>
         public async Task DownloadAndUnpackLatestRelease()
         {
-            var updateUrl = _update.DownloadUrl;
+            _update.ThrowIfNull();
+
+            Uri updateUrl = new(_update.Url);
 
             var fileName = Path.Combine(CommonProperties.ExeFolderPath, Path.GetFileName(updateUrl.ToString()).Trim());
 
