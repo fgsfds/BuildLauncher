@@ -47,6 +47,12 @@ namespace BuildLauncher.ViewModels
         [RelayCommand(CanExecute = (nameof(CheckForUpdatesCanExecute)))]
         private async Task CheckForUpdatesAsync()
         {
+            if (CommonProperties.IsDevMode)
+            {
+                CheckForUpdatesButtonText = "Disabled";
+                return;
+            }
+
             IsInProgress = true;
 
             bool updates;
