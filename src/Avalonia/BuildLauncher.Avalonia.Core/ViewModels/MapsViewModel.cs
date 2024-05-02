@@ -67,7 +67,7 @@ namespace BuildLauncher.ViewModels
             {
                 var result = Game.GetSingleMaps().Select(x => x.Value);
 
-                if (string.IsNullOrEmpty(SearchBoxText))
+                if (string.IsNullOrWhiteSpace(SearchBoxText))
                 {
                     return [.. result];
                 }
@@ -94,6 +94,7 @@ namespace BuildLauncher.ViewModels
         /// </summary>
         [ObservableProperty]
         [NotifyPropertyChangedFor(nameof(MapsList))]
+        [NotifyCanExecuteChangedFor(nameof(ClearSearchBoxCommand))]
         private string _searchBoxText;
 
         #endregion
@@ -158,6 +159,14 @@ namespace BuildLauncher.ViewModels
 
             OnPropertyChanged(nameof(MapsList));
         }
+
+
+        /// <summary>
+        /// Clear search bar
+        /// </summary>
+        [RelayCommand(CanExecute = nameof(ClearSearchBoxCanExecute))]
+        private void ClearSearchBox() => SearchBoxText = string.Empty;
+        private bool ClearSearchBoxCanExecute() => !string.IsNullOrEmpty(SearchBoxText);
 
         #endregion
 

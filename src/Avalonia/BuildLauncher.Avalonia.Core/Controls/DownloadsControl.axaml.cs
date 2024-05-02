@@ -17,21 +17,17 @@ namespace BuildLauncher.Controls
         /// </summary>
         public void InitializeControl()
         {
-            DataContext.ThrowIfNotType<DownloadsViewModel>(out _);
-
-            AddContextMenuButtons(DownloadableCampaignsList);
-            AddContextMenuButtons(DownloadableMapsList);
-            AddContextMenuButtons(DownloadableModsList);
+            AddContextMenuButtons(DownloadableList);
         }
 
         /// <summary>
         /// Add button to the right click menu
         /// </summary>
-        private void AddContextMenuButtons(ListBox listBox)
+        private void AddContextMenuButtons(DataGrid dataGrid)
         {
             DataContext.ThrowIfNotType<DownloadsViewModel>(out var viewModel);
 
-            listBox.ContextMenu = new();
+            dataGrid.ContextMenu = new();
 
             var downloadButton = new MenuItem()
             {
@@ -41,7 +37,7 @@ namespace BuildLauncher.Controls
                 )
             };
 
-            listBox.ContextMenu.Items.Add(downloadButton);
+            dataGrid.ContextMenu.Items.Add(downloadButton);
         }
     }
 }

@@ -16,10 +16,24 @@
 
     <Grid RowDefinitions="auto,*,auto" ColumnDefinitions="2*,*">
 
-        <TextBox Grid.Row="0" Grid.Column="0"
-                 Margin="0,0,0,5"
-                 Watermark="Search"
-                 Text="{Binding SearchBoxText}"/>
+        <Grid ColumnDefinitions="auto,*,auto"
+              Grid.Row="0" Grid.Column="0"
+              Margin="0,0,0,5">
+
+            <TextBox Name="SearchBox"
+                     Grid.Column="1"
+                     Watermark="Search"
+                     Text="{Binding SearchBoxText}"/>
+
+            <Button Grid.Column="2"
+                    Margin="5,0,0,0"
+                    Command="{Binding ClearSearchBoxCommand}"
+                    ToolTip.Tip="Clear search"
+                    Height="{Binding Bounds.Height, ElementName=SearchBox}">
+                X
+            </Button>
+
+        </Grid>
 
         <ListBox Name="CampaignsList"
                  Grid.Row="1" Grid.Column="0"

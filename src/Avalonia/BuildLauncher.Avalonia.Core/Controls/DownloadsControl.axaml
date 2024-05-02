@@ -13,187 +13,55 @@
         <helpers:ImagePathToBitmapConverter x:Key="ImagePathToBitmapConverter"/>
     </UserControl.Resources>
 
-    <Grid RowDefinitions="*,auto" ColumnDefinitions="*,*,*,*">
+    <Grid RowDefinitions="auto,*,auto" ColumnDefinitions="2*,*">
 
-        <ListBox Name="DownloadableCampaignsList"
-                 Grid.Row="0" Grid.Column="0"
-                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                 HorizontalAlignment="Stretch"
-                 Margin="0,0,2,0"
-                 Padding="2,35,2,2"
-                 Grid.IsSharedSizeScope="True"
-                 ItemsSource="{Binding DownloadableCampaignsList}"
-                 SelectedItem="{Binding SelectedDownloadableAddon}">
+        <Grid ColumnDefinitions="auto,*,auto"
+              Grid.Row="0" Grid.Column="0"
+              Margin="0,0,0,5">
 
-            <ListBox.ItemTemplate>
-                <DataTemplate>
+            <ComboBox Grid.Column="0"
+                      MinWidth="150"
+                      Margin="0,0,5,0"
+                      ItemsSource="{Binding FilterItems}"
+                      SelectedItem="{Binding FilterSelectedItem}"
+                      Height="{Binding Bounds.Height, ElementName=SearchBox}"/>
 
-                    <Grid HorizontalAlignment="Stretch">
+            <TextBox Name="SearchBox"
+                     Grid.Column="1"
+                     Watermark="Search"
+                     Text="{Binding SearchBoxText}"/>
 
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" MinWidth="100"/>
-                            <ColumnDefinition Width="*" MinWidth="0" SharedSizeGroup="Version1"/>
-                            <ColumnDefinition Width="*" MinWidth="0" SharedSizeGroup="Size1"/>
-                            <ColumnDefinition Width="*" MinWidth="0" SharedSizeGroup="Status1"/>
-                        </Grid.ColumnDefinitions>
+            <Button Grid.Column="2"
+                    Margin="5,0,0,0"
+                    Command="{Binding ClearSearchBoxCommand}"
+                    ToolTip.Tip="Clear search"
+                    Height="{Binding Bounds.Height, ElementName=SearchBox}">
+                X
+            </Button>
 
-                        <TextBlock Text="{Binding Title}"
-                                   Grid.Column="0"
-                                   VerticalAlignment="Center"
-                                   HorizontalAlignment="Left"
-                                   Margin="10"/>
+        </Grid>
 
-                        <TextBlock Text="{Binding Version}"
-                                   Grid.Column="1"
-                                   VerticalAlignment="Center"
-                                   HorizontalAlignment="Right"
-                                   Margin="10"/>
+        <DataGrid Name="DownloadableList"
+                  Grid.Row="1" Grid.Column="0"
+                  Margin="0"
+                  Padding="2"
+                  ItemsSource="{Binding DownloadableList}"
+                  SelectedItem="{Binding SelectedDownloadable}"
+                  GridLinesVisibility="Horizontal"
+                  IsReadOnly="True"
+                  CornerRadius="4"
+                  BorderThickness="1" BorderBrush="Gray">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Title" Binding="{Binding Title}" Width="*"/>
+                <DataGridTextColumn Header="Type" Binding="{Binding AddonType}" FontWeight="Bold" />
+                <DataGridTextColumn Header="Version" Binding="{Binding Version}" />
+                <DataGridTextColumn Header="Size" Binding="{Binding FileSizeString}" />
+                <DataGridTextColumn Header="Status" Binding="{Binding Status}" FontWeight="Bold" />
+            </DataGrid.Columns>
+        </DataGrid>
 
-                        <TextBlock Text="{Binding FileSizeString}"
-                                   Grid.Column="2"
-                                   VerticalAlignment="Center"
-                                   HorizontalAlignment="Right"
-                                   Margin="10"/>
-
-                        <TextBlock Text="{Binding Status}"
-                                   Grid.Column="3"
-                                   VerticalAlignment="Center"
-                                   HorizontalAlignment="Right"
-                                   FontWeight="Bold"
-                                   Margin="10"/>
-                    </Grid>
-
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
-
-        <TextBlock Grid.Row="0" Grid.Column="0"
-                   Margin="10"
-                   HorizontalAlignment="Center">
-            Campaigns
-        </TextBlock>
-
-
-
-        <ListBox Name="DownloadableMapsList"
-                 Grid.Row="0" Grid.Column="1"
-                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                 Margin="2,0"
-                 Padding="2,35,2,2"
-                 Grid.IsSharedSizeScope="True"
-                 ItemsSource="{Binding DownloadableMapsList}"
-                 SelectedItem="{Binding SelectedDownloadableAddon}">
-
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-
-                    <Grid HorizontalAlignment="Stretch">
-
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" MinWidth="100"/>
-                            <ColumnDefinition Width="*" MinWidth="0" SharedSizeGroup="Version2"/>
-                            <ColumnDefinition Width="*" MinWidth="0" SharedSizeGroup="Size2"/>
-                            <ColumnDefinition Width="*" MinWidth="0" SharedSizeGroup="Status2"/>
-                        </Grid.ColumnDefinitions>
-
-                        <TextBlock Text="{Binding Title}"
-                                   Grid.Column="0"
-                                   VerticalAlignment="Center"
-                                   HorizontalAlignment="Left"
-                                   Margin="10"/>
-
-                        <TextBlock Text="{Binding Version}"
-                                   Grid.Column="1"
-                                   VerticalAlignment="Center"
-                                   HorizontalAlignment="Right"
-                                   Margin="10"/>
-
-                        <TextBlock Text="{Binding FileSizeString}"
-                                   Grid.Column="2"
-                                   VerticalAlignment="Center"
-                                   HorizontalAlignment="Right"
-                                   Margin="10"/>
-
-                        <TextBlock Text="{Binding Status}"
-                                   Grid.Column="3"
-                                   VerticalAlignment="Center"
-                                   HorizontalAlignment="Right"
-                                   FontWeight="Bold"
-                                   Margin="10"/>
-                    </Grid>
-
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
-
-        <TextBlock Grid.Row="0" Grid.Column="1"
-                   Margin="10"
-                   HorizontalAlignment="Center">
-            Maps
-        </TextBlock>
-
-
-
-        <ListBox Name="DownloadableModsList"
-                 Grid.Row="0" Grid.Column="2"
-                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                 Margin="2,0,0,0"
-                 Padding="2,35,2,2"
-                 Grid.IsSharedSizeScope="True"
-                 ItemsSource="{Binding DownloadableModsList}"
-                 SelectedItem="{Binding SelectedDownloadableAddon}">
-
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-
-                    <Grid HorizontalAlignment="Stretch">
-
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" MinWidth="100"/>
-                            <ColumnDefinition Width="*" MinWidth="0" SharedSizeGroup="Version3"/>
-                            <ColumnDefinition Width="*" MinWidth="0" SharedSizeGroup="Size3"/>
-                            <ColumnDefinition Width="*" MinWidth="0" SharedSizeGroup="Status3"/>
-                        </Grid.ColumnDefinitions>
-
-                        <TextBlock Text="{Binding Title}"
-                                   Grid.Column="0"
-                                   VerticalAlignment="Center"
-                                   HorizontalAlignment="Left"
-                                   Margin="10"/>
-
-                        <TextBlock Text="{Binding Version}"
-                                   Grid.Column="1"
-                                   VerticalAlignment="Center"
-                                   HorizontalAlignment="Right"
-                                   Margin="10"/>
-
-                        <TextBlock Text="{Binding FileSizeString}"
-                                   Grid.Column="2"
-                                   VerticalAlignment="Center"
-                                   HorizontalAlignment="Right"
-                                   Margin="10"/>
-
-                        <TextBlock Text="{Binding Status}"
-                                   Grid.Column="3"
-                                   VerticalAlignment="Center"
-                                   HorizontalAlignment="Right"
-                                   FontWeight="Bold"
-                                   Margin="10"/>
-                    </Grid>
-
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
-
-        <TextBlock Grid.Row="0" Grid.Column="2"
-                   Margin="10"
-                   HorizontalAlignment="Center">
-            Mods
-        </TextBlock>
-
-
-
-        <md:MarkdownScrollViewer Grid.Row="0" Grid.Column="3"
+        <md:MarkdownScrollViewer Grid.Row="1" Grid.Column="1"
+                                 Grid.RowSpan="2"
                                  Margin="10,5"
                                  Markdown="{Binding SelectedDownloadableDescription}">
 
@@ -204,7 +72,7 @@
         </md:MarkdownScrollViewer>
 
         <Grid ColumnDefinitions="auto, *"
-              Grid.Row="1" Grid.ColumnSpan="3"
+              Grid.Row="2" Grid.ColumnSpan="1"
               Margin="0,10">
 
             <Button Command="{Binding DownloadAddonCommand}"

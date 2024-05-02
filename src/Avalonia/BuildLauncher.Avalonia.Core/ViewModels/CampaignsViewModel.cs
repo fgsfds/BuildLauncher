@@ -51,7 +51,7 @@ namespace BuildLauncher.ViewModels
             {
                 var result = Game.GetCampaigns().Select(x => x.Value);
 
-                if (string.IsNullOrEmpty(SearchBoxText))
+                if (string.IsNullOrWhiteSpace(SearchBoxText))
                 {
                     return [.. result];
                 }
@@ -90,6 +90,7 @@ namespace BuildLauncher.ViewModels
         /// </summary>
         [ObservableProperty]
         [NotifyPropertyChangedFor(nameof(CampaignsList))]
+        [NotifyCanExecuteChangedFor(nameof(ClearSearchBoxCommand))]
         private string _searchBoxText;
 
         #endregion
@@ -165,6 +166,14 @@ namespace BuildLauncher.ViewModels
 
             OnPropertyChanged(nameof(CampaignsList));
         }
+        
+        
+        /// <summary>
+         /// Clear search bar
+         /// </summary>
+        [RelayCommand(CanExecute = nameof(ClearSearchBoxCanExecute))]
+        private void ClearSearchBox() => SearchBoxText = string.Empty;
+        private bool ClearSearchBoxCanExecute() => !string.IsNullOrEmpty(SearchBoxText);
 
         #endregion
 

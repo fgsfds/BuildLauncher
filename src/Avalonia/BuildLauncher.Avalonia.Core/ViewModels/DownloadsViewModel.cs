@@ -20,25 +20,59 @@ namespace BuildLauncher.ViewModels
 
             Game.DownloadableAddonsProvider.AddonDownloadedEvent += OnAddonChanged;
             Game.InstalledAddonsProvider.AddonDeletedEvent += OnAddonChanged;
+
+
         }
 
 
         #region Binding Properties
 
         /// <summary>
-        /// List of downloadable campaigns
+        /// List of downloadable addons
         /// </summary>
-        public ImmutableList<IDownloadableAddon> DownloadableCampaignsList => Game.DownloadableAddonsProvider.GetDownloadableAddons(AddonTypeEnum.TC);
+        public ImmutableList<IDownloadableAddon> DownloadableList
+        {
+            get
+            {
+                IEnumerable<IDownloadableAddon> result;
 
-        /// <summary>
-        /// List of downloadable maps
-        /// </summary>
-        public ImmutableList<IDownloadableAddon> DownloadableMapsList => Game.DownloadableAddonsProvider.GetDownloadableAddons(AddonTypeEnum.Map);
+                if (FilterSelectedItem is FilterItemEnum.All)
+                {
+                    var unsorted =
+                        Game.DownloadableAddonsProvider.GetDownloadableAddons(AddonTypeEnum.TC)
+                        .Concat(Game.DownloadableAddonsProvider.GetDownloadableAddons(AddonTypeEnum.Map))
+                        .Concat(Game.DownloadableAddonsProvider.GetDownloadableAddons(AddonTypeEnum.Mod));
 
-        /// <summary>
-        /// List of downloadable autoload mods
-        /// </summary>
-        public ImmutableList<IDownloadableAddon> DownloadableModsList => Game.DownloadableAddonsProvider.GetDownloadableAddons(AddonTypeEnum.Mod);
+                    result = unsorted.OrderBy(x => x.Title);
+                }
+                else if (FilterSelectedItem is FilterItemEnum.TCs)
+                {
+                    result = Game.DownloadableAddonsProvider.GetDownloadableAddons(AddonTypeEnum.TC);
+                }
+                else if (FilterSelectedItem is FilterItemEnum.Maps)
+                {
+                    result = Game.DownloadableAddonsProvider.GetDownloadableAddons(AddonTypeEnum.Map);
+                }
+                else if (FilterSelectedItem is FilterItemEnum.Mods)
+                {
+                    result = Game.DownloadableAddonsProvider.GetDownloadableAddons(AddonTypeEnum.Mod);
+                }
+                else
+                {
+                    ThrowHelper.ArgumentOutOfRangeException(nameof(FilterSelectedItem));
+                    return null;
+                }
+
+                if (string.IsNullOrWhiteSpace(SearchBoxText))
+                {
+                    return [.. result];
+                }
+                else
+                {
+                    return [.. result.Where(x => x.Title.Contains(SearchBoxText, StringComparison.OrdinalIgnoreCase))];
+                }
+            }
+        }
 
         /// <summary>
         /// Download/install progress
@@ -48,10 +82,10 @@ namespace BuildLauncher.ViewModels
         /// <summary>
         /// Currently selected downloadable campaign, map or mod
         /// </summary>
-        private DownloadableAddonDto? _selectedDownloadableAddon;
-        public DownloadableAddonDto? SelectedDownloadableAddon
+        private DownloadableAddonDto? _selectedDownloadable;
+        public DownloadableAddonDto? SelectedDownloadable
         {
-            get => _selectedDownloadableAddon;
+            get => _selectedDownloadable;
             set
             {
                 if (value is null)
@@ -59,8 +93,8 @@ namespace BuildLauncher.ViewModels
                     return;
                 }
 
-                _selectedDownloadableAddon = value;
-                OnPropertyChanged(nameof(SelectedDownloadableAddon));
+                _selectedDownloadable = value;
+                OnPropertyChanged(nameof(SelectedDownloadable));
                 OnPropertyChanged(nameof(SelectedDownloadableDescription));
                 OnPropertyChanged(nameof(DownloadButtonText));
 
@@ -71,7 +105,7 @@ namespace BuildLauncher.ViewModels
         /// <summary>
         /// Description of the selected addom
         /// </summary>
-        public string SelectedDownloadableDescription => SelectedDownloadableAddon is null ? string.Empty : SelectedDownloadableAddon.ToMarkdownString();
+        public string SelectedDownloadableDescription => SelectedDownloadable is null ? string.Empty : SelectedDownloadable.ToMarkdownString();
 
         /// <summary>
         /// Text of the download button
@@ -80,16 +114,30 @@ namespace BuildLauncher.ViewModels
         {
             get
             {
-                if (SelectedDownloadableAddon is null)
+                if (SelectedDownloadable is null)
                 {
                     return "Download";
                 }
                 else
                 {
-                    return $"Download ({SelectedDownloadableAddon.FileSize.ToSizeString()})";
+                    return $"Download ({SelectedDownloadable.FileSize.ToSizeString()})";
                 }
             }
         }
+
+        public List<FilterItemEnum> FilterItems => Enum.GetValues(typeof(FilterItemEnum)).Cast<FilterItemEnum>().ToList();
+
+        [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(DownloadableList))]
+        private FilterItemEnum _filterSelectedItem;
+
+        /// <summary>
+        /// Search box text
+        /// </summary>
+        [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(DownloadableList))]
+        [NotifyCanExecuteChangedFor(nameof(ClearSearchBoxCommand))]
+        private string _searchBoxText;
 
         #endregion
 
@@ -108,9 +156,7 @@ namespace BuildLauncher.ViewModels
         {
             await Game.DownloadableAddonsProvider.CreateCacheAsync().ConfigureAwait(true);
 
-            OnPropertyChanged(nameof(DownloadableCampaignsList));
-            OnPropertyChanged(nameof(DownloadableMapsList));
-            OnPropertyChanged(nameof(DownloadableModsList));
+            OnPropertyChanged(nameof(DownloadableList));
         }
 
 
@@ -120,16 +166,27 @@ namespace BuildLauncher.ViewModels
         [RelayCommand(CanExecute = (nameof(DownloadSelectedAddonCanExecute)))]
         private async Task DownloadAddon()
         {
-            SelectedDownloadableAddon.ThrowIfNull();
+            if (SelectedDownloadable is null)
+            {
+                return;
+            }
 
             Game.DownloadableAddonsProvider.Progress.ProgressChanged += OnProgressChanged;
 
-            await Game.DownloadableAddonsProvider.DownloadAddonAsync(SelectedDownloadableAddon).ConfigureAwait(false);
+            await Game.DownloadableAddonsProvider.DownloadAddonAsync(SelectedDownloadable).ConfigureAwait(false);
 
             Game.DownloadableAddonsProvider.Progress.ProgressChanged -= OnProgressChanged;
             OnProgressChanged(null, 0);
         }
-        private bool DownloadSelectedAddonCanExecute => SelectedDownloadableAddon is not null;
+        private bool DownloadSelectedAddonCanExecute => SelectedDownloadable is not null;
+
+
+        /// <summary>
+        /// Clear search bar
+        /// </summary>
+        [RelayCommand(CanExecute = nameof(ClearSearchBoxCanExecute))]
+        private void ClearSearchBox() => SearchBoxText = string.Empty;
+        private bool ClearSearchBoxCanExecute() => !string.IsNullOrEmpty(SearchBoxText);
 
         #endregion
 
@@ -147,18 +204,15 @@ namespace BuildLauncher.ViewModels
                 return;
             }
 
-            if (addonType is AddonTypeEnum.TC)
-            {
-                OnPropertyChanged(nameof(DownloadableCampaignsList));
-            }
-            else if (addonType is AddonTypeEnum.Map)
-            {
-                OnPropertyChanged(nameof(DownloadableMapsList));
-            }
-            else if (addonType is AddonTypeEnum.Mod)
-            {
-                OnPropertyChanged(nameof(DownloadableModsList));
-            }
+            OnPropertyChanged(nameof(DownloadableList));
+        }
+
+        public enum FilterItemEnum
+        {
+            All,
+            TCs,
+            Maps,
+            Mods
         }
     }
 }
