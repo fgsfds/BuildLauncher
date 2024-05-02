@@ -8,18 +8,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Assets\BuildGDX.png" />
-    <None Remove="Assets\EDuke32.png" />
-    <None Remove="Assets\Fury.png" />
-    <None Remove="Assets\NBlood.png" />
-    <None Remove="Assets\NotBlood.png" />
-    <None Remove="Assets\PCExhumed.png" />
-    <None Remove="Assets\Raze.png" />
-    <None Remove="Assets\RedNukem.png" />
-    <None Remove="Assets\VoidSW.png" />
-  </ItemGroup>
-
-  <ItemGroup>
     <EmbeddedResource Include="Assets\BuildGDX.png" />
     <EmbeddedResource Include="Assets\EDuke32.png" />
     <EmbeddedResource Include="Assets\Fury.png" />
@@ -42,7 +30,6 @@
     <ProjectReference Include="..\Common\Common.csproj" />
     <ProjectReference Include="..\Games\Games.csproj" />
     <ProjectReference Include="..\Mods\Mods.csproj" />
-    <ProjectReference Include="..\Tools\Tools.csproj" />
   </ItemGroup>
 
 </Project>

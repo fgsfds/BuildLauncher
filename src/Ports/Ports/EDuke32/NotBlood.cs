@@ -24,7 +24,7 @@ namespace Ports.Ports.EDuke32
         public override List<GameEnum> SupportedGames => [GameEnum.Blood];
 
         /// <inheritdoc/>
-        public override Uri RepoUrl => new("https://api.github.com/repos/NoOneBlood/xmapedit/releases");
+        public override Uri RepoUrl => new("https://api.github.com/repos/clipmove/NotBlood/releases");
 
         /// <inheritdoc/>
         public override Func<GitHubReleaseAsset, bool> WindowsReleasePredicate => static x => x.FileName.StartsWith("notblood-win64", StringComparison.CurrentCultureIgnoreCase);

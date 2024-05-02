@@ -62,6 +62,7 @@ public sealed partial class App : Application
         Ports.DI.ProvidersBindings.Load(container);
         Mods.DI.ProvidersBindings.Load(container);
         Updater.DI.ProvidersBindings.Load(container);
+        Tools.DI.ProvidersBindings.Load(container);
     }
 
     /// <summary>

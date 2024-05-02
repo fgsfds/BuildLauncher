@@ -2,23 +2,22 @@ using Common.Helpers;
 using Common.Releases;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Ports.Providers;
-using Ports.Tools;
 using System.Diagnostics;
+using Tools.Installer;
 using Tools.Tools;
 
 namespace BuildLauncher.ViewModels
 {
     public sealed partial class ToolViewModel : ObservableObject
     {
-        private readonly PortsInstallerFactory _installerFactory;
+        private readonly ToolsInstallerFactory _installerFactory;
         private readonly BaseTool _tool;
         private CommonRelease? _release;
 
 
         [Obsolete($"Don't create directly. Use {nameof(ViewModelsFactory)}.")]
         public ToolViewModel(
-            PortsInstallerFactory installerFactory,
+            ToolsInstallerFactory installerFactory,
             BaseTool tool
             )
         {
@@ -85,7 +84,7 @@ namespace BuildLauncher.ViewModels
         /// </summary>
         public async Task InitializeAsync()
         {
-            _release = await PortsReleasesProvider.GetLatestReleaseAsync(_tool);
+            _release = await ToolsReleasesProvider.GetLatestReleaseAsync(_tool);
 
             OnPropertyChanged(nameof(LatestVersion));
             OnPropertyChanged(nameof(InstallButtonText));

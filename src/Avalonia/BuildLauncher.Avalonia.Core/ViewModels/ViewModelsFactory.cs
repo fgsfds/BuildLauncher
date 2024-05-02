@@ -2,8 +2,9 @@
 using Common.Enums;
 using Common.Providers;
 using Games.Providers;
+using Ports.Installer;
 using Ports.Providers;
-using Ports.Tools;
+using Tools.Installer;
 using Tools.Tools;
 
 namespace BuildLauncher.ViewModels
@@ -12,21 +13,24 @@ namespace BuildLauncher.ViewModels
     {
         private readonly GamesProvider _gamesProvider;
         private readonly ConfigEntity _config;
-        private readonly PortsInstallerFactory _installerFactory;
+        private readonly PortsInstallerFactory _portsInstallerFactory;
+        private readonly ToolsInstallerFactory _toolsInstallerFactory;
         private readonly PortsProvider _portsProvider;
         private readonly PlaytimeProvider _playtimeProvider;
 
         public ViewModelsFactory(
             GamesProvider gamesProvider,
             ConfigProvider configProvider,
-            PortsInstallerFactory installerFactory,
+            PortsInstallerFactory portsInstallerFactory,
+            ToolsInstallerFactory toolsInstallerFactory,
             PortsProvider portsProvider,
             PlaytimeProvider playtimeProvider
             )
         {
             _gamesProvider = gamesProvider;
             _config = configProvider.Config;
-            _installerFactory = installerFactory;
+            _portsInstallerFactory = portsInstallerFactory;
+            _toolsInstallerFactory = toolsInstallerFactory;
             _portsProvider = portsProvider;
             _playtimeProvider = playtimeProvider;
         }
@@ -105,7 +109,7 @@ namespace BuildLauncher.ViewModels
         public PortViewModel GetPortViewModel(PortEnum portEnum)
         {
             PortViewModel vm = new(
-                _installerFactory,
+                _portsInstallerFactory,
                 _portsProvider.GetPort(portEnum)
                 );
 
@@ -121,7 +125,7 @@ namespace BuildLauncher.ViewModels
         public ToolViewModel GetToolViewModel(string toolName)
         {
             ToolViewModel vm = new(
-                _installerFactory,
+                _toolsInstallerFactory,
                 new XMapEdit()
                 );
 
