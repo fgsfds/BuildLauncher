@@ -4,7 +4,6 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Ports.Installer;
 using Ports.Ports;
-using Ports.Providers;
 
 namespace BuildLauncher.ViewModels
 {
@@ -94,7 +93,7 @@ namespace BuildLauncher.ViewModels
         /// <summary>
         /// Download and install port
         /// </summary>
-        [RelayCommand(CanExecute=nameof(InstallCommandCanExecute))]
+        [RelayCommand]
         private async Task InstallAsync()
         {
             var installer = _installerFactory.Create();
@@ -111,7 +110,6 @@ namespace BuildLauncher.ViewModels
             OnPropertyChanged(nameof(Version));
             OnPropertyChanged(nameof(InstallButtonText));
         }
-        public bool InstallCommandCanExecute() => !CommonProperties.IsDevMode;
 
         #endregion
 
