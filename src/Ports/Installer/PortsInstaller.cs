@@ -48,7 +48,7 @@ namespace Ports.Installer
 
             if (port is not Raze)
             {
-                File.WriteAllText(Path.Combine(port.PathToPortFolder, "version"), release.Version.ToString());
+                File.WriteAllText(Path.Combine(port.PathToPortFolder, "version"), release.Version);
             }
         }
     }

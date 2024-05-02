@@ -46,7 +46,7 @@ namespace Tools.Installer
 
             File.Delete(Path.GetFileName(release.Url));
 
-            File.WriteAllText(Path.Combine(port.PathToToolFolder, "version"), release.Version.ToString());
+            File.WriteAllText(Path.Combine(port.PathToToolFolder, "version"), release.Version);
         }
     }
 }
