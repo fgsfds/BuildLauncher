@@ -30,6 +30,8 @@ namespace Tools.Tools
         /// <inheritdoc/>
         public override bool CanBeLaunched => _gamesProvider.GetGame(GameEnum.Duke3D).IsBaseGameInstalled;
 
+        public override string? InstallText => "Install EDuke32\nfrom Ports tab";
+
 
         public Mapster32(GamesProvider gamesProvider)
         {

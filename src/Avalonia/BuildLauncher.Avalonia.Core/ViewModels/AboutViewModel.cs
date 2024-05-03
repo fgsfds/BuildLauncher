@@ -39,7 +39,7 @@ namespace BuildLauncher.ViewModels
         /// VM initialization
         /// </summary>
         [RelayCommand]
-        private Task InitializeAsync() => CheckForUpdatesAsync();
+        private Task InitializeAsync() => CheckForUpdateAsync(false);
 
         /// <summary>
         /// Check for SSH updates
@@ -47,34 +47,9 @@ namespace BuildLauncher.ViewModels
         [RelayCommand(CanExecute = (nameof(CheckForUpdatesCanExecute)))]
         private async Task CheckForUpdatesAsync()
         {
-            IsInProgress = true;
-
-            bool updates;
-
-            try
-            {
-                CheckForUpdatesButtonText = "Checking...";
-                updates = await _updateInstaller.CheckForUpdates(CurrentVersion);
-            }
-            catch
-            {
-                CheckForUpdatesButtonText = "Error while getting updates";
-                return;
-            }
-
-            if (updates)
-            {
-                IsUpdateAvailable = true;
-
-                UpdateHeader();
-            }
-            else
-            {
-                CheckForUpdatesButtonText = "Already up-to-date";
-            }
-
-            IsInProgress = false;
+            await CheckForUpdateAsync(true);
         }
+
         private bool CheckForUpdatesCanExecute() => IsInProgress is false;
 
         /// <summary>
@@ -102,6 +77,41 @@ namespace BuildLauncher.ViewModels
             AboutTabHeader = "About" + (IsUpdateAvailable
                 ? " (UPD)"
                 : string.Empty);
+        }
+
+        /// <summary>
+        /// Check for app update
+        /// </summary>
+        /// <param name="forceCheck">Force check</param>
+        private async Task CheckForUpdateAsync(bool forceCheck)
+        {
+            IsInProgress = true;
+
+            bool updates;
+
+            try
+            {
+                CheckForUpdatesButtonText = "Checking...";
+                updates = await _updateInstaller.CheckForUpdates(CurrentVersion, forceCheck);
+            }
+            catch
+            {
+                CheckForUpdatesButtonText = "Error while getting updates";
+                return;
+            }
+
+            if (updates)
+            {
+                IsUpdateAvailable = true;
+
+                UpdateHeader();
+            }
+            else
+            {
+                CheckForUpdatesButtonText = "Already up-to-date";
+            }
+
+            IsInProgress = false;
         }
     }
 }

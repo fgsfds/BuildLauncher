@@ -20,9 +20,9 @@ namespace Updater
         /// </summary>
         /// <param name="currentVersion">Current SFD version</param>
         /// <returns></returns>
-        public async Task<bool> CheckForUpdates(Version currentVersion)
+        public async Task<bool> CheckForUpdates(Version currentVersion, bool forceCheck)
         {
-            _update = await _appReleasesProvider.GetLatestUpdateAsync(currentVersion).ConfigureAwait(false);
+            _update = await _appReleasesProvider.GetLatestUpdateAsync(currentVersion, forceCheck).ConfigureAwait(false);
 
             var hasUpdate = _update is not null;
 

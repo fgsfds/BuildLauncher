@@ -35,7 +35,7 @@ namespace Tools.Installer
         /// <param name="port">Port</param>
         public async Task InstallAsync(BaseTool port)
         {
-            var release = await _toolsReleasesProvider.GetLatestReleaseAsync(port).ConfigureAwait(false);
+            var release = await _toolsReleasesProvider.GetLatestReleaseAsync(port, false).ConfigureAwait(false);
 
             if (release is null)
             {

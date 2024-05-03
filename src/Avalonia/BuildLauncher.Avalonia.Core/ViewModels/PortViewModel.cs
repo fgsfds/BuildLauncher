@@ -76,6 +76,12 @@ namespace BuildLauncher.ViewModels
         /// </summary>
         public float ProgressBarValue { get; set; }
 
+
+        [ObservableProperty]
+        [NotifyCanExecuteChangedFor(nameof(InstallCommand))]
+        [NotifyCanExecuteChangedFor(nameof(CheckUpdateCommand))]
+        private bool _isInProgress;
+
         #endregion
 
 
@@ -86,7 +92,7 @@ namespace BuildLauncher.ViewModels
         /// </summary>
         public async Task InitializeAsync()
         {
-            _release = await _portsReleasesProvider.GetLatestReleaseAsync(_port);
+            _release = await _portsReleasesProvider.GetLatestReleaseAsync(_port, false);
 
             OnPropertyChanged(nameof(LatestVersion));
             OnPropertyChanged(nameof(InstallButtonText));
@@ -99,6 +105,8 @@ namespace BuildLauncher.ViewModels
         [RelayCommand(CanExecute = nameof(InstallCommandCanExecute))]
         private async Task InstallAsync()
         {
+            IsInProgress = true;
+
             var installer = _installerFactory.Create();
 
             installer.Progress.ProgressChanged += OnProgressChanged;
@@ -109,11 +117,32 @@ namespace BuildLauncher.ViewModels
 
             installer.Progress.ProgressChanged -= OnProgressChanged;
             ProgressBarValue = 0;
+
             OnPropertyChanged(nameof(ProgressBarValue));
             OnPropertyChanged(nameof(Version));
             OnPropertyChanged(nameof(InstallButtonText));
+
+            IsInProgress = false;
         }
-        public bool InstallCommandCanExecute() => !CommonProperties.IsDevMode;
+        public bool InstallCommandCanExecute() => !CommonProperties.IsDevMode && !IsInProgress;
+
+
+        /// <summary>
+        /// Force check for updates
+        /// </summary>
+        [RelayCommand(CanExecute = nameof(CheckUpdateCommandCanExecute))]
+        private async Task CheckUpdateAsync()
+        {
+            IsInProgress = true;
+
+            _release = await _portsReleasesProvider.GetLatestReleaseAsync(_port, true);
+
+            OnPropertyChanged(nameof(LatestVersion));
+            OnPropertyChanged(nameof(InstallButtonText));
+
+            IsInProgress = false;
+        }
+        public bool CheckUpdateCommandCanExecute() => !CommonProperties.IsDevMode && !IsInProgress;
 
 
         #endregion

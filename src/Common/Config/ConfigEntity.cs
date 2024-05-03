@@ -113,12 +113,29 @@ namespace Common.Config
             ParameterChangedEvent?.Invoke(nameof(DisabledAutoloadMods));
         }
 
-        private Dictionary<string, TimeSpan>? _playtimes = null;
-        public Dictionary<string, TimeSpan>? Playtimes
+        private Dictionary<string, TimeSpan> _playtimes = [];
+        public Dictionary<string, TimeSpan> Playtimes
         {
             get => _playtimes;
             set => SetConfigParameter(ref _playtimes, value);
         }
+
+        public Dictionary<string, string[]> LastUpdateChecks { get; set; } = [];
+
+        public void AddLastUpdateCheck(string name, string version, DateTime dateTime, string Url)
+        {
+            if (LastUpdateChecks.ContainsKey(name))
+            {
+                LastUpdateChecks[name] = [version, dateTime.ToString(), Url];
+            }
+            else
+            {
+                LastUpdateChecks.Add(name, [version, dateTime.ToString(), Url]);
+            }
+
+            ParameterChangedEvent?.Invoke(nameof(LastUpdateChecks));
+        }
+
 
         /// <summary>
         /// Sets config parameter if changed and invokes notifier

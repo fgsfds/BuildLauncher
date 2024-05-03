@@ -8,8 +8,7 @@ namespace Common.Config
         public ConfigProvider()
         {
             Config = ReadConfigFromFile();
-
-            Config.ParameterChangedEvent += OnParameterChanged; ;
+            Config.ParameterChangedEvent += OnParameterChanged;
         }
 
         /// <summary>

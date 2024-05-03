@@ -12,22 +12,30 @@
             _httpClient.DefaultRequestHeaders.UserAgent.ParseAdd("BuildLauncher");
         }
 
-        public async Task<string> GetStringAsync(string str)
+        /// <summary>
+        /// Send a GET request to the specified Uri and return the response body as a string
+        /// </summary>
+        /// <param name="url">Uri</param>
+        public async Task<string> GetStringAsync(string url)
         {
             await _semaphore.WaitAsync();
 
-            var result = await _httpClient.GetStringAsync(str).ConfigureAwait(false);
+            var result = await _httpClient.GetStringAsync(url).ConfigureAwait(false);
 
             _semaphore.Release();
 
             return result;
         }
 
-        public async Task<string> GetStringAsync(Uri str)
+        /// <summary>
+        /// Send a GET request to the specified Uri and return the response body as a string
+        /// </summary>
+        /// <param name="url">Uri</param>
+        public async Task<string> GetStringAsync(Uri url)
         {
             await _semaphore.WaitAsync();
 
-            var result = await _httpClient.GetStringAsync(str).ConfigureAwait(false);
+            var result = await _httpClient.GetStringAsync(url).ConfigureAwait(false);
 
             _semaphore.Release();
 

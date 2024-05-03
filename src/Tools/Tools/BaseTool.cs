@@ -78,6 +78,8 @@ namespace Tools.Tools
         /// </summary>
         public abstract bool CanBeLaunched { get; }
 
+        public virtual string? InstallText => null;
+
         /// <summary>
         /// Path to tool exe
         /// </summary>

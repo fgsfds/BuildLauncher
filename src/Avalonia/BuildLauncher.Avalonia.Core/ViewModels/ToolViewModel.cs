@@ -90,6 +90,17 @@ namespace BuildLauncher.ViewModels
         /// </summary>
         public bool CanBeInstalled => _tool.CanBeInstalled;
 
+        public string? InstallText => _tool.InstallText;
+
+        public bool IsInstallTextVisible => !_tool.IsInstalled && _tool.InstallText is not null;
+
+
+        [ObservableProperty]
+        [NotifyCanExecuteChangedFor(nameof(InstallCommand))]
+        [NotifyCanExecuteChangedFor(nameof(CheckUpdateCommand))]
+        [NotifyCanExecuteChangedFor(nameof(StartCommand))]
+        private bool _isInProgress;
+
         #endregion
 
 
@@ -100,7 +111,7 @@ namespace BuildLauncher.ViewModels
         /// </summary>
         public async Task InitializeAsync()
         {
-            _release = await _toolsReleasesProvider.GetLatestReleaseAsync(_tool);
+            _release = await _toolsReleasesProvider.GetLatestReleaseAsync(_tool, false);
 
             OnPropertyChanged(nameof(LatestVersion));
             OnPropertyChanged(nameof(InstallButtonText));
@@ -123,12 +134,31 @@ namespace BuildLauncher.ViewModels
 
             installer.Progress.ProgressChanged -= OnProgressChanged;
             ProgressBarValue = 0;
+
             OnPropertyChanged(nameof(ProgressBarValue));
             OnPropertyChanged(nameof(Version));
             OnPropertyChanged(nameof(InstallButtonText));
             StartCommand.NotifyCanExecuteChanged();
         }
-        public bool InstallCommandCanExecute() => !CommonProperties.IsDevMode && CanBeInstalled;
+        public bool InstallCommandCanExecute() => !CommonProperties.IsDevMode && CanBeInstalled && !IsInProgress;
+
+
+        /// <summary>
+        /// Force check for updates
+        /// </summary>
+        [RelayCommand(CanExecute = nameof(CheckUpdateCommandCanExecute))]
+        private async Task CheckUpdateAsync()
+        {
+            IsInProgress = true;
+
+            _release = await _toolsReleasesProvider.GetLatestReleaseAsync(_tool, true);
+
+            OnPropertyChanged(nameof(LatestVersion));
+            OnPropertyChanged(nameof(InstallButtonText));
+
+            IsInProgress = false;
+        }
+        public bool CheckUpdateCommandCanExecute() => !CommonProperties.IsDevMode && !IsInProgress;
 
 
         /// <summary>
@@ -147,7 +177,7 @@ namespace BuildLauncher.ViewModels
                 Arguments = args
             });
         }
-        public bool StartCommandCanExecute() => _tool.IsInstalled && _tool.CanBeLaunched;
+        public bool StartCommandCanExecute() => _tool.IsInstalled && _tool.CanBeLaunched && !IsInProgress;
 
         #endregion
 

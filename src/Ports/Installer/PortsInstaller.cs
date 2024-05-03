@@ -35,7 +35,7 @@ namespace Ports.Installer
         /// <param name="port">Port</param>
         public async Task InstallAsync(BasePort port)
         {
-            var release = await _portsReleasesProvider.GetLatestReleaseAsync(port).ConfigureAwait(false);
+            var release = await _portsReleasesProvider.GetLatestReleaseAsync(port, false).ConfigureAwait(false);
 
             if (release is null)
             {

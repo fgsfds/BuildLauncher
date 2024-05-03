@@ -1,4 +1,5 @@
-﻿using Common.Enums;
+﻿using Common.Config;
+using Common.Enums;
 using Common.Helpers;
 using Common.Releases;
 using Common.Tools;
@@ -15,18 +16,34 @@ namespace Ports.Installer
     public partial class PortsReleasesProvider
     {
         private readonly HttpClientInstance _httpClient;
+        private readonly ConfigEntity _config;
 
-        public PortsReleasesProvider(HttpClientInstance httpClient)
+        public PortsReleasesProvider(
+            HttpClientInstance httpClient,
+            ConfigProvider config
+            )
         {
             _httpClient = httpClient;
+            _config = config.Config;
         }
 
         /// <summary>
         /// Get the latest release of the selected port
         /// </summary>
         /// <param name="port">Port</param>
-        public async Task<CommonRelease?> GetLatestReleaseAsync(BasePort port)
+        public async Task<CommonRelease?> GetLatestReleaseAsync(BasePort port, bool forceCheck)
         {
+            if (!forceCheck && (_config.LastUpdateChecks?.TryGetValue(port.Name, out var value) ?? false))
+            {
+                var timeDifference = (DateTime.Now - DateTime.Parse(value[1])).TotalDays;
+
+                if (timeDifference < 7)
+                {
+                    return new(value[2], value[0]);
+                }
+            }
+
+
             if (port.PortEnum is PortEnum.BuildGDX)
             {
                 return new(port.RepoUrl.ToString(), "1.16");
@@ -77,19 +94,21 @@ namespace Ports.Installer
 
             var version = GetVersion(port, release, zip);
 
+            _config.AddLastUpdateCheck(port.Name, version, DateTime.Now, zip.DownloadUrl);
+
             return new(zip.DownloadUrl, version);
         }
 
         /// <summary>
         /// Get port version
         /// </summary>
-        private string GetVersion(BasePort port, GitHubRelease? release, GitHubReleaseAsset? zip)
+        private string GetVersion(BasePort port, GitHubRelease release, GitHubReleaseAsset zip)
         {
             string version;
 
             if (port is NotBlood)
             {
-                version = (zip.UpdatedDate.Day.ToString("00") + "." + zip.UpdatedDate.Month.ToString("00") + "." + zip.UpdatedDate.Year).ToString();
+                version = zip.UpdatedDate.Day.ToString("00") + "." + zip.UpdatedDate.Month.ToString("00") + "." + zip.UpdatedDate.Year;
             }
             else
             {
@@ -121,6 +140,9 @@ namespace Ports.Installer
                 return null;
             }
 
+
+            _config.AddLastUpdateCheck("EDuke32", "r" + version.ToString(), DateTime.Now, $"https://dukeworld.com/eduke32/synthesis/latest/{fileName}");
+            
             return new($"https://dukeworld.com/eduke32/synthesis/latest/{fileName}", "r" + version.ToString());
         }
 

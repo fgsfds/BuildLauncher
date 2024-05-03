@@ -1,4 +1,5 @@
-﻿using Common.Helpers;
+﻿using Common.Config;
+using Common.Helpers;
 using Common.Releases;
 using Common.Tools;
 using System.Runtime.InteropServices;
@@ -8,19 +9,41 @@ namespace Updater
 {
     public class AppReleasesProvider
     {
-        private readonly HttpClientInstance _httpClient;
+        private const string Launcher = "Launcher";
 
-        public AppReleasesProvider(HttpClientInstance httpClient)
+        private readonly HttpClientInstance _httpClient;
+        private readonly ConfigEntity _config;
+
+        public AppReleasesProvider(
+            HttpClientInstance httpClient,
+            ConfigProvider config
+            )
         {
             _httpClient = httpClient;
+            _config = config.Config;
         }
 
         /// <summary>
         /// Return the latest new release or null if there's no newer releases
         /// </summary>
         /// <param name="currentVersion">current release version</param>
-        public async Task<AppRelease?> GetLatestUpdateAsync(Version currentVersion)
+        public async Task<AppRelease?> GetLatestUpdateAsync(Version currentVersion, bool forceCheck)
         {
+            if (!forceCheck && (_config.LastUpdateChecks?.TryGetValue(Launcher, out var value) ?? false))
+            {
+                if (value[0] is null)
+                {
+                    return null;
+                }
+
+                var timeDifference = (DateTime.Now - DateTime.Parse(value[1])).TotalDays;
+
+                if (timeDifference < 1)
+                {
+                    return new(value[2], new(value[0]));
+                }
+            }
+
             var json = await _httpClient.GetStringAsync(Consts.GitHubReleases).ConfigureAwait(false);
 
             var releases = JsonSerializer.Deserialize(json, GitHubReleaseContext.Default.ListGitHubRelease)
@@ -68,6 +91,8 @@ namespace Updater
 
                 update = new(asset.DownloadUrl, version);
             }
+
+            _config.AddLastUpdateCheck(Launcher, update?.Version.ToString(), DateTime.Now, update?.Url);
 
             return update;
         }
