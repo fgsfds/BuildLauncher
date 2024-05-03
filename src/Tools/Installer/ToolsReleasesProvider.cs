@@ -21,6 +21,11 @@ namespace Tools.Installer
                 return null;
             }
 
+            if (tool.RepoUrl is null)
+            {
+                return null;
+            }
+
             string response;
 
             try

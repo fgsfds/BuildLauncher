@@ -1,5 +1,6 @@
 ﻿using Common.Config;
 using Common.Enums;
+using Common.Helpers;
 using Common.Providers;
 using Games.Providers;
 using Ports.Installer;
@@ -121,11 +122,27 @@ namespace BuildLauncher.ViewModels
         /// <summary>
         /// Create <see cref="ToolViewModel"/>
         /// </summary>
-        public ToolViewModel GetToolViewModel()
+        public ToolViewModel GetToolViewModel(string toolName)
         {
+            BaseTool tool;
+
+            if (toolName.Equals(nameof(XMapEdit)))
+            {
+                tool = new XMapEdit(_config);
+            }
+            else if (toolName.Equals(nameof(Mapster32)))
+            {
+                tool = new Mapster32(_config);
+            }
+            else
+            {
+                ThrowHelper.ArgumentOutOfRangeException(nameof(toolName));
+                return null;
+            }
+
             ToolViewModel vm = new(
                 _toolsInstallerFactory,
-                new XMapEdit()
+                tool
                 );
 
             Task.Run(vm.InitializeAsync);

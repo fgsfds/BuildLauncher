@@ -36,7 +36,7 @@ namespace Tools.Tools
         /// <summary>
         /// Path to tool install folder
         /// </summary>
-        public virtual string PathToToolFolder => Path.Combine(CommonProperties.ToolsFolderPath, ToolFolderName);
+        public virtual string PathToExecutableFolder => Path.Combine(CommonProperties.ToolsFolderPath, ToolFolderName);
 
         /// <summary>
         /// Is tool installed
@@ -46,7 +46,7 @@ namespace Tools.Tools
         /// <summary>
         /// Path to tool exe
         /// </summary>
-        public string FullPathToExe => Path.Combine(PathToToolFolder, Exe);
+        public string FullPathToExe => Path.Combine(PathToExecutableFolder, Exe);
 
         /// <summary>
         /// Name of the folder that contains the tool files

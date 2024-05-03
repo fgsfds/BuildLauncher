@@ -66,7 +66,7 @@ namespace Ports.Ports.EDuke32
         {
             get
             {
-                var versionFile = Path.Combine(PathToPortFolder, "version");
+                var versionFile = Path.Combine(PathToExecutableFolder, "version");
 
                 if (!File.Exists(versionFile))
                 {
@@ -235,7 +235,7 @@ namespace Ports.Ports.EDuke32
         /// </summary>
         protected void FixGrpInConfig()
         {
-            var config = Path.Combine(PathToPortFolder, ConfigFile);
+            var config = Path.Combine(PathToExecutableFolder, ConfigFile);
 
             if (!File.Exists(config))
             {

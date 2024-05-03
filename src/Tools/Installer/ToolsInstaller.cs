@@ -42,11 +42,11 @@ namespace Tools.Installer
 
             await _fileTools.DownloadFileAsync(new Uri(release.Url), Path.GetFileName(release.Url)).ConfigureAwait(false);
 
-            await _fileTools.UnpackArchiveAsync(Path.GetFileName(release.Url), port.PathToToolFolder).ConfigureAwait(false);
+            await _fileTools.UnpackArchiveAsync(Path.GetFileName(release.Url), port.PathToExecutableFolder).ConfigureAwait(false);
 
             File.Delete(Path.GetFileName(release.Url));
 
-            File.WriteAllText(Path.Combine(port.PathToToolFolder, "version"), release.Version);
+            File.WriteAllText(Path.Combine(port.PathToExecutableFolder, "version"), release.Version);
         }
     }
 }

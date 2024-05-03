@@ -48,7 +48,7 @@ namespace Ports.Ports
         public override string? InstalledVersion => IsInstalled ? "1.16" : null;
 
         /// <inheritdoc/>
-        public override bool IsInstalled => File.Exists(Path.Combine(PathToPortFolder, "BuildGDX.jar"));
+        public override bool IsInstalled => File.Exists(Path.Combine(PathToExecutableFolder, "BuildGDX.jar"));
 
 
         /// <inheritdoc/>

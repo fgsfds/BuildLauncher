@@ -84,7 +84,7 @@ namespace Ports.Ports
         /// <inheritdoc/>
         protected override void BeforeStart(IGame game, IAddon campaign)
         {
-            var config = Path.Combine(PathToPortFolder, ConfigFile);
+            var config = Path.Combine(PathToExecutableFolder, ConfigFile);
 
             if (!File.Exists(config))
             {
@@ -124,7 +124,7 @@ namespace Ports.Ports
         /// <inheritdoc/>
         protected override void GetStartCampaignArgs(StringBuilder sb, IGame game, IAddon addon)
         {
-            sb.Append($@" -savedir ""{Path.Combine(PathToPortFolder, "Save", addon.Id.Replace(' ', '_'))}""");
+            sb.Append($@" -savedir ""{Path.Combine(PathToExecutableFolder, "Save", addon.Id.Replace(' ', '_'))}""");
 
             if (addon.MainDef is not null)
             {
@@ -175,7 +175,7 @@ namespace Ports.Ports
         {
             if (dMod.RequiredAddonEnum is DukeAddonEnum.DukeWT)
             {
-                var config = Path.Combine(PathToPortFolder, ConfigFile);
+                var config = Path.Combine(PathToExecutableFolder, ConfigFile);
                 AddGamePathsToConfig(game.DukeWTInstallPath, game.ModsFolderPath, config);
 
                 sb.Append($" -addon {(byte)DukeAddonEnum.Duke3D}");
@@ -263,7 +263,7 @@ namespace Ports.Ports
 
             if (camp.Id.Equals(nameof(GameEnum.RedneckRA), StringComparison.OrdinalIgnoreCase))
             {
-                var config = Path.Combine(PathToPortFolder, ConfigFile);
+                var config = Path.Combine(PathToExecutableFolder, ConfigFile);
                 AddGamePathsToConfig(game.AgainInstallPath, game.ModsFolderPath, config);
             }
 

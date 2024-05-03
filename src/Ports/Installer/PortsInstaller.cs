@@ -42,13 +42,13 @@ namespace Ports.Installer
 
             await _fileTools.DownloadFileAsync(new Uri(release.Url), Path.GetFileName(release.Url)).ConfigureAwait(false);
 
-            await _fileTools.UnpackArchiveAsync(Path.GetFileName(release.Url), port.PathToPortFolder).ConfigureAwait(false);
+            await _fileTools.UnpackArchiveAsync(Path.GetFileName(release.Url), port.PathToExecutableFolder).ConfigureAwait(false);
 
             File.Delete(Path.GetFileName(release.Url));
 
             if (port is not Raze)
             {
-                File.WriteAllText(Path.Combine(port.PathToPortFolder, "version"), release.Version);
+                File.WriteAllText(Path.Combine(port.PathToExecutableFolder, "version"), release.Version);
             }
         }
     }

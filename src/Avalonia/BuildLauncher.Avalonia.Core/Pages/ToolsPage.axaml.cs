@@ -4,6 +4,7 @@ using Common.DI;
 using Common.Helpers;
 using Microsoft.Extensions.DependencyInjection;
 using System.Diagnostics;
+using Tools.Tools;
 
 namespace BuildLauncher.Pages
 {
@@ -15,7 +16,8 @@ namespace BuildLauncher.Pages
 
             var vmFactory = BindingsManager.Provider.GetRequiredService<ViewModelsFactory>();
 
-            XMAPEDIT.DataContext = vmFactory.GetToolViewModel();
+            XMAPEDIT.DataContext = vmFactory.GetToolViewModel(nameof(XMapEdit));
+            Mapster32.DataContext = vmFactory.GetToolViewModel(nameof(Tools.Tools.Mapster32));
         }
 
         /// <summary>

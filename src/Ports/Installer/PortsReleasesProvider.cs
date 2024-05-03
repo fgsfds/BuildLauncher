@@ -29,6 +29,11 @@ namespace Ports.Installer
                 return null;
             }
 
+            if (port.RepoUrl is null)
+            {
+                return null;
+            }
+
             string response;
 
             try

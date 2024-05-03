@@ -25,7 +25,7 @@ namespace Ports.Ports.EDuke32
         public override List<GameEnum> SupportedGames => [GameEnum.Wang];
 
         /// <inheritdoc/>
-        public override string PathToPortFolder => Path.Combine(CommonProperties.PortsFolderPath, "EDuke32");
+        public override string PathToExecutableFolder => Path.Combine(CommonProperties.PortsFolderPath, "EDuke32");
 
         /// <inheritdoc/>
         protected override string ConfigFile => "voidsw.cfg";

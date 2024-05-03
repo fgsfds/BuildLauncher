@@ -8,10 +8,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Assets\Mapster32.png" />
     <None Remove="Assets\XMAPEDIT.png" />
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Assets\Mapster32.png" />
     <EmbeddedResource Include="Assets\XMAPEDIT.png" />
   </ItemGroup>
 
