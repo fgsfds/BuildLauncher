@@ -15,7 +15,6 @@
     <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
 
         <Image Source="{Binding Icon, Converter={StaticResource ImagePathToBitmapConverter}}"
-               RenderOptions.BitmapInterpolationMode="HighQuality"
                Width="64"
                Margin="0,0,0,5"
                HorizontalAlignment="Center"/>

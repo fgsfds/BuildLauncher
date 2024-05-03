@@ -1,41 +1,29 @@
-﻿using Common.Config;
-using Common.Releases;
+﻿using Common.Releases;
+using Games.Providers;
 
 namespace Tools.Tools
 {
     public sealed class XMapEdit : BaseTool
     {
-        private readonly ConfigEntity _config;
-
-        public XMapEdit(ConfigEntity config)
-        {
-            _config = config;
-        }
+        private readonly GamesProvider _gamesProvider;
 
         public override string Exe => "xmapedit.exe";
 
         public override string Name => "XMAPEDIT";
 
-        public override string? InstalledVersion
-        {
-            get
-            {
-                var versionFile = Path.Combine(PathToExecutableFolder, "version");
-
-                if (!File.Exists(versionFile))
-                {
-                    return null;
-                }
-
-                return File.ReadAllText(versionFile);
-            }
-        }
-
         public override Uri RepoUrl => new("https://api.github.com/repos/NoOneBlood/xmapedit/releases");
 
         public override Func<GitHubReleaseAsset, bool> WindowsReleasePredicate => static x => x.FileName.EndsWith("x64.zip", StringComparison.InvariantCultureIgnoreCase);
 
-        public override string PathToExecutableFolder => _config.GamePathBlood ?? string.Empty;
+        public override string PathToExecutableFolder => _gamesProvider.GetGame(Common.Enums.GameEnum.Blood).GameInstallFolder ?? string.Empty;
 
+        public override bool CanBeLaunched => _gamesProvider.IsBloodInstalled;
+
+        public XMapEdit(GamesProvider gamesProvider)
+        {
+            _gamesProvider = gamesProvider;
+        }
+
+        public override string GetStartToolArgs() => string.Empty;
     }
 }

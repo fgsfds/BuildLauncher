@@ -15,7 +15,6 @@
     <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
 
         <Image Source="{Binding Icon, Converter={StaticResource ImagePathToBitmapConverter}}"
-               RenderOptions.BitmapInterpolationMode="HighQuality"
                Width="64"
                Margin="0,0,0,5"
                HorizontalAlignment="Center"/>
@@ -32,11 +31,16 @@
             <TextBlock Text="{Binding LatestVersion, FallbackValue=None}" Foreground="{DynamicResource SystemAccentColor}"/>
         </StackPanel>
 
-        <Button Content="{Binding InstallButtonText}" HorizontalAlignment="Center" Command="{Binding InstallCommand}" Margin="5"/>
+        <Grid ColumnDefinitions="*,*" IsVisible="{Binding CanBeInstalled}">
+            <Button Grid.Column="0" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" IsVisible="{Binding CanBeInstalled}" Content="{Binding InstallButtonText}" Command="{Binding InstallCommand}" Margin="5"/>
+            <Button Grid.Column="1" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Command="{Binding StartCommand}" Margin="5">Launch...</Button>
+        </Grid>
 
-        <Button HorizontalAlignment="Center" Command="{Binding StartCommand}" Margin="5">Launch...</Button>
+        <Grid ColumnDefinitions="*" IsVisible="{Binding !CanBeInstalled}">
+            <Button Grid.Column="0" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Command="{Binding StartCommand}" Margin="5">Launch...</Button>
+        </Grid>
 
-        <ProgressBar HorizontalAlignment="Center" Value="{Binding ProgressBarValue}"/>
+        <ProgressBar HorizontalAlignment="Center" Value="{Binding ProgressBarValue}" IsVisible="{Binding CanBeInstalled}"/>
 
     </StackPanel>
 

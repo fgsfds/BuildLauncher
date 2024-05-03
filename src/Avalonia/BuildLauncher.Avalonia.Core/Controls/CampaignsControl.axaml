@@ -56,8 +56,7 @@
 
                         <Border Background="Black"
                                 Margin="10">
-                            <Image RenderOptions.BitmapInterpolationMode="HighQuality"
-                                   Source="{Binding Image, Converter={StaticResource ImagePathToBitmapConverter}}"
+                            <Image Source="{Binding Image, Converter={StaticResource ImagePathToBitmapConverter}}"
                                    VerticalAlignment="Center"
                                    HorizontalAlignment="Center"/>
                         </Border>

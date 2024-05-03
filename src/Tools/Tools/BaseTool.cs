@@ -19,11 +19,6 @@ namespace Tools.Tools
         public abstract string Name { get; }
 
         /// <summary>
-        /// Currently installed version
-        /// </summary>
-        public abstract string? InstalledVersion { get; }
-
-        /// <summary>
         /// Url to the tool repository
         /// </summary>
         public abstract Uri RepoUrl { get; }
@@ -32,6 +27,8 @@ namespace Tools.Tools
         /// Predicate for Windows release
         /// </summary>
         public abstract Func<GitHubReleaseAsset, bool> WindowsReleasePredicate { get; }
+
+        public abstract string GetStartToolArgs();
 
         /// <summary>
         /// Path to tool install folder
@@ -44,15 +41,37 @@ namespace Tools.Tools
         public virtual bool IsInstalled => InstalledVersion is not null;
 
         /// <summary>
-        /// Path to tool exe
-        /// </summary>
-        public string FullPathToExe => Path.Combine(PathToExecutableFolder, Exe);
-
-        /// <summary>
         /// Name of the folder that contains the tool files
         /// By default is the same as <see cref="Name"/>
         /// </summary>
         protected virtual string ToolFolderName => Name;
+
+        /// <summary>
+        /// Currently installed version
+        /// </summary>
+        public virtual string? InstalledVersion
+        {
+            get
+            {
+                var versionFile = Path.Combine(PathToExecutableFolder, "version");
+
+                if (!File.Exists(versionFile))
+                {
+                    return null;
+                }
+
+                return File.ReadAllText(versionFile);
+            }
+        }
+
+        public virtual bool CanBeInstalled => true;
+
+        public abstract bool CanBeLaunched { get; }
+
+        /// <summary>
+        /// Path to tool exe
+        /// </summary>
+        public string FullPathToExe => Path.Combine(PathToExecutableFolder, Exe);
 
         /// <summary>
         /// Tool's icon

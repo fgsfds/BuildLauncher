@@ -128,11 +128,11 @@ namespace BuildLauncher.ViewModels
 
             if (toolName.Equals(nameof(XMapEdit)))
             {
-                tool = new XMapEdit(_config);
+                tool = new XMapEdit(_gamesProvider);
             }
             else if (toolName.Equals(nameof(Mapster32)))
             {
-                tool = new Mapster32(_config);
+                tool = new Mapster32(_gamesProvider);
             }
             else
             {
@@ -142,6 +142,7 @@ namespace BuildLauncher.ViewModels
 
             ToolViewModel vm = new(
                 _toolsInstallerFactory,
+                _gamesProvider,
                 tool
                 );
 
