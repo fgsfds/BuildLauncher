@@ -2,7 +2,6 @@
 using Common.Helpers;
 using Common.Interfaces;
 using Common.Tools;
-using Mods.Helpers;
 using Mods.Serializable;
 using System.Collections.Immutable;
 using System.Text.Json;
@@ -78,7 +77,7 @@ namespace Mods.Providers
                     _cache[addon.Game][addon.AddonType].TryAdd(addon.Id, addon);
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
             }
             finally

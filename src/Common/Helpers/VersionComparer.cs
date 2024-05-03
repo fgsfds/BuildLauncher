@@ -1,6 +1,4 @@
-﻿using Common.Helpers;
-
-namespace Mods.Helpers
+﻿namespace Common.Helpers
 {
     public static class VersionComparer
     {

@@ -1,15 +1,13 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Ports.Installer;
-using Ports.Providers;
+using Tools.Installer;
 
-namespace Ports.DI
+namespace Tools.DI
 {
     public static class ProvidersBindings
     {
         public static void Load(ServiceCollection container)
         {
-            container.AddSingleton<PortsInstallerFactory>();
-            container.AddSingleton<PortsProvider>();
+            container.AddSingleton<ToolsInstallerFactory>();
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using Common.Enums;
 using Common.Interfaces;
-using Ports.Providers;
+using Common.Releases;
 
 namespace Ports.Ports.EDuke32
 {

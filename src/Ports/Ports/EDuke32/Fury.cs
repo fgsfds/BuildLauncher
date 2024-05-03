@@ -2,9 +2,9 @@
 using Common.Enums;
 using Common.Helpers;
 using Common.Interfaces;
+using Common.Releases;
 using Games.Games;
 using Mods.Addons;
-using Ports.Providers;
 using System.Text;
 
 namespace Ports.Ports.EDuke32
@@ -29,7 +29,7 @@ namespace Ports.Ports.EDuke32
         public override List<GameEnum> SupportedGames => [GameEnum.Fury];
 
         /// <inheritdoc/>
-        public override string PathToPortFolder => _config.GamePathFury ?? string.Empty;
+        public override string PathToExecutableFolder => _config.GamePathFury ?? string.Empty;
 
         /// <inheritdoc/>
         public override bool IsInstalled => File.Exists(FullPathToExe);

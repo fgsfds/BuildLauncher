@@ -22,6 +22,11 @@ namespace Common.Helpers
         public static readonly string PortsFolderPath = Path.Combine(DataFolderPath, "Ports");
 
         /// <summary>
+        /// Path to the tools folder
+        /// </summary>
+        public static readonly string ToolsFolderPath = Path.Combine(DataFolderPath, "Tools");
+
+        /// <summary>
         /// Is app running in the developer mode
         /// </summary>
         public static bool IsDevMode { get; set; } = false;

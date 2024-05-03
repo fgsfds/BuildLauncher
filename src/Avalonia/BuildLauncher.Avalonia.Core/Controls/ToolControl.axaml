@@ -3,10 +3,10 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="BuildLauncher.Controls.PortControl"
+             x:Class="BuildLauncher.Controls.ToolControl"
              xmlns:vm="clr-namespace:BuildLauncher.ViewModels"
              xmlns:helpers="clr-namespace:BuildLauncher.Helpers"
-             x:DataType="vm:PortViewModel">
+             x:DataType="vm:ToolViewModel">
 
     <UserControl.Resources>
         <helpers:ImagePathToBitmapConverter x:Key="ImagePathToBitmapConverter"/>
@@ -31,9 +31,16 @@
             <TextBlock Text="{Binding LatestVersion, FallbackValue=None}" Foreground="{DynamicResource SystemAccentColor}"/>
         </StackPanel>
 
-        <Button Content="{Binding InstallButtonText}" HorizontalAlignment="Center" Command="{Binding InstallCommand}" Margin="5"/>
+        <Grid ColumnDefinitions="*,*" IsVisible="{Binding CanBeInstalled}">
+            <Button Grid.Column="0" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" IsVisible="{Binding CanBeInstalled}" Content="{Binding InstallButtonText}" Command="{Binding InstallCommand}" Margin="5"/>
+            <Button Grid.Column="1" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Command="{Binding StartCommand}" Margin="5">Launch...</Button>
+        </Grid>
 
-        <ProgressBar HorizontalAlignment="Center" Value="{Binding ProgressBarValue}"/>
+        <Grid ColumnDefinitions="*" IsVisible="{Binding !CanBeInstalled}">
+            <Button Grid.Column="0" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Command="{Binding StartCommand}" Margin="5">Launch...</Button>
+        </Grid>
+
+        <ProgressBar HorizontalAlignment="Center" Value="{Binding ProgressBarValue}" IsVisible="{Binding CanBeInstalled}"/>
 
     </StackPanel>
 

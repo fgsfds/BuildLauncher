@@ -2,9 +2,9 @@
 using Common.Enums.Addons;
 using Common.Helpers;
 using Common.Interfaces;
+using Common.Releases;
 using Games.Games;
 using Mods.Addons;
-using Ports.Providers;
 using System.Text;
 
 namespace Ports.Ports.EDuke32
@@ -66,7 +66,7 @@ namespace Ports.Ports.EDuke32
         {
             get
             {
-                var versionFile = Path.Combine(PathToPortFolder, "version");
+                var versionFile = Path.Combine(PathToExecutableFolder, "version");
 
                 if (!File.Exists(versionFile))
                 {
@@ -235,7 +235,7 @@ namespace Ports.Ports.EDuke32
         /// </summary>
         protected void FixGrpInConfig()
         {
-            var config = Path.Combine(PathToPortFolder, ConfigFile);
+            var config = Path.Combine(PathToExecutableFolder, ConfigFile);
 
             if (!File.Exists(config))
             {

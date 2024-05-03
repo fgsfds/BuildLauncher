@@ -4,19 +4,17 @@
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <AssemblyName>BuildLauncher.Ports</AssemblyName>
+    <AssemblyName>BuildLauncher.Tools</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Assets\BuildGDX.png" />
-    <EmbeddedResource Include="Assets\EDuke32.png" />
-    <EmbeddedResource Include="Assets\Fury.png" />
-    <EmbeddedResource Include="Assets\NotBlood.png" />
-    <EmbeddedResource Include="Assets\PCExhumed.png" />
-    <EmbeddedResource Include="Assets\Raze.png" />
-    <EmbeddedResource Include="Assets\NBlood.png" />
-    <EmbeddedResource Include="Assets\RedNukem.png" />
-    <EmbeddedResource Include="Assets\VoidSW.png" />
+    <None Remove="Assets\Mapster32.png" />
+    <None Remove="Assets\XMAPEDIT.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Assets\Mapster32.png" />
+    <EmbeddedResource Include="Assets\XMAPEDIT.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -29,7 +27,6 @@
   <ItemGroup>
     <ProjectReference Include="..\Common\Common.csproj" />
     <ProjectReference Include="..\Games\Games.csproj" />
-    <ProjectReference Include="..\Mods\Mods.csproj" />
   </ItemGroup>
 
 </Project>

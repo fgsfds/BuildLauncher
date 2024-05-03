@@ -1,27 +1,35 @@
+using Common.Enums;
 using Common.Helpers;
 using Common.Releases;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Ports.Installer;
-using Ports.Ports;
+using Games.Providers;
+using System.Diagnostics;
+using Tools.Installer;
+using Tools.Tools;
 
 namespace BuildLauncher.ViewModels
 {
-    public sealed partial class PortViewModel : ObservableObject
+    public sealed partial class ToolViewModel : ObservableObject
     {
-        private readonly PortsInstallerFactory _installerFactory;
-        private readonly BasePort _port;
+        private readonly ToolsInstallerFactory _installerFactory;
+        private readonly GamesProvider _gamesProvider;
+        private readonly BaseTool _tool;
         private CommonRelease? _release;
 
 
         [Obsolete($"Don't create directly. Use {nameof(ViewModelsFactory)}.")]
-        public PortViewModel(
-            PortsInstallerFactory installerFactory,
-            BasePort port
+        public ToolViewModel(
+            ToolsInstallerFactory installerFactory,
+            GamesProvider gamesProvider,
+            BaseTool tool
             )
         {
             _installerFactory = installerFactory;
-            _port = port;
+            _gamesProvider = gamesProvider;
+            _tool = tool;
+
+            _gamesProvider.GameChangedEvent += OnGameChanged;
         }
 
 
@@ -34,12 +42,12 @@ namespace BuildLauncher.ViewModels
         {
             get
             {
-                if (_port.IsInstalled && VersionComparer.Compare(_port.InstalledVersion!, _release?.Version!, "<"))
+                if (_tool.IsInstalled && VersionComparer.Compare(_tool.InstalledVersion!, _release?.Version!, "<"))
                 {
                     return "Update";
                 }
 
-                if (_port.IsInstalled)
+                if (_tool.IsInstalled)
                 {
                     return "Reinstall";
                 }
@@ -49,19 +57,19 @@ namespace BuildLauncher.ViewModels
         }
 
         /// <summary>
-        /// Name of the port
+        /// Name of the tool
         /// </summary>
-        public string Name => _port.Name;
+        public string Name => _tool.Name;
 
         /// <summary>
-        /// Port's icon
+        /// Tool's icon
         /// </summary>
-        public Stream Icon => _port.Icon;
+        public Stream Icon => _tool.Icon;
 
         /// <summary>
         /// Currently installed version
         /// </summary>
-        public string Version => _port.InstalledVersion ?? "None";
+        public string Version => _tool.InstalledVersion ?? "None";
 
         /// <summary>
         /// Latest available version
@@ -73,6 +81,11 @@ namespace BuildLauncher.ViewModels
         /// </summary>
         public float ProgressBarValue { get; set; }
 
+        /// <summary>
+        /// Can tool be installed
+        /// </summary>
+        public bool CanBeInstalled => _tool.CanBeInstalled;
+
         #endregion
 
 
@@ -83,7 +96,7 @@ namespace BuildLauncher.ViewModels
         /// </summary>
         public async Task InitializeAsync()
         {
-            _release = await PortsReleasesProvider.GetLatestReleaseAsync(_port);
+            _release = await ToolsReleasesProvider.GetLatestReleaseAsync(_tool);
 
             OnPropertyChanged(nameof(LatestVersion));
             OnPropertyChanged(nameof(InstallButtonText));
@@ -91,9 +104,9 @@ namespace BuildLauncher.ViewModels
 
 
         /// <summary>
-        /// Download and install port
+        /// Download and install tool
         /// </summary>
-        [RelayCommand(CanExecute = nameof(InstallCommandCanExecute))]
+        [RelayCommand(CanExecute=nameof(InstallCommandCanExecute))]
         private async Task InstallAsync()
         {
             var installer = _installerFactory.Create();
@@ -102,16 +115,35 @@ namespace BuildLauncher.ViewModels
             ProgressBarValue = 0;
             OnPropertyChanged(nameof(ProgressBarValue));
 
-            await installer.InstallAsync(_port);
+            await installer.InstallAsync(_tool);
 
             installer.Progress.ProgressChanged -= OnProgressChanged;
             ProgressBarValue = 0;
             OnPropertyChanged(nameof(ProgressBarValue));
             OnPropertyChanged(nameof(Version));
             OnPropertyChanged(nameof(InstallButtonText));
+            StartCommand.NotifyCanExecuteChanged();
         }
-        public bool InstallCommandCanExecute() => !CommonProperties.IsDevMode;
+        public bool InstallCommandCanExecute() => !CommonProperties.IsDevMode && CanBeInstalled;
 
+
+        /// <summary>
+        /// Initialize VM
+        /// </summary>
+        [RelayCommand(CanExecute = nameof(StartCommandCanExecute))]
+        public void Start()
+        {
+            var args = _tool.GetStartToolArgs();
+
+            Process.Start(new ProcessStartInfo
+            {
+                FileName = _tool.FullPathToExe,
+                UseShellExecute = true,
+                WorkingDirectory = _tool.PathToExecutableFolder,
+                Arguments = args
+            });
+        }
+        public bool StartCommandCanExecute() => _tool.IsInstalled && _tool.CanBeLaunched;
 
         #endregion
 
@@ -120,6 +152,14 @@ namespace BuildLauncher.ViewModels
         {
             ProgressBarValue = e;
             OnPropertyChanged(nameof(ProgressBarValue));
+        }
+
+        private void OnGameChanged(GameEnum game)
+        {
+            if (game is GameEnum.Duke3D or GameEnum.Blood)
+            {
+                StartCommand.NotifyCanExecuteChanged();
+            }
         }
     }
 }

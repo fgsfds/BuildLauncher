@@ -1,6 +1,6 @@
 ﻿using Avalonia.Controls;
-using Avalonia.Media.Imaging;
 using Avalonia.Media;
+using Avalonia.Media.Imaging;
 using BuildLauncher.ViewModels;
 using Common.Enums;
 using Games.Providers;

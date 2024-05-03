@@ -2,10 +2,10 @@
 using Common.Enums.Addons;
 using Common.Helpers;
 using Common.Interfaces;
+using Common.Releases;
 using Games.Games;
 using Mods.Addons;
 using Mods.Serializable.Addon;
-using Ports.Providers;
 using System.Text;
 
 namespace Ports.Ports
@@ -53,7 +53,7 @@ namespace Ports.Ports
         /// <summary>
         /// Path to port install folder
         /// </summary>
-        public virtual string PathToPortFolder => Path.Combine(CommonProperties.PortsFolderPath, PortFolderName);
+        public virtual string PathToExecutableFolder => Path.Combine(CommonProperties.PortsFolderPath, PortFolderName);
 
         /// <summary>
         /// Is port installed
@@ -63,7 +63,7 @@ namespace Ports.Ports
         /// <summary>
         /// Path to port exe
         /// </summary>
-        public string FullPathToExe => Path.Combine(PathToPortFolder, Exe);
+        public string FullPathToExe => Path.Combine(PathToExecutableFolder, Exe);
 
         /// <summary>
         /// Name of the config file

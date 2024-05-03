@@ -29,6 +29,7 @@
       <ProjectReference Include="..\..\Common\Common.csproj" />
       <ProjectReference Include="..\..\Games\Games.csproj" />
       <ProjectReference Include="..\..\Ports\Ports.csproj" />
+      <ProjectReference Include="..\..\Tools\Tools.csproj" />
       <ProjectReference Include="..\..\Updater\Updater.csproj" />
     </ItemGroup>
 </Project>

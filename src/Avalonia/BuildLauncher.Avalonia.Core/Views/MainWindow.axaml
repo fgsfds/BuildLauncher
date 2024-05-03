@@ -38,7 +38,7 @@
 
                     <TabItem.Header>
                         <StackPanel Orientation="Horizontal">
-                            <Image RenderOptions.BitmapInterpolationMode="HighQuality" Source="/Assets/duke3d.png" Width="24" />
+                            <Image Source="/Assets/duke3d.png" Width="24" />
                             <TextBlock Text="Duke Nukem 3D" Margin="5" />
                         </StackPanel>
                     </TabItem.Header>
@@ -51,7 +51,7 @@
 
                     <TabItem.Header>
                         <StackPanel Orientation="Horizontal">
-                            <Image RenderOptions.BitmapInterpolationMode="HighQuality" Source="/Assets/blood.png" Width="24" />
+                            <Image Source="/Assets/blood.png" Width="24" />
                             <TextBlock Text="Blood" Margin="5" />
                         </StackPanel>
                     </TabItem.Header>
@@ -64,7 +64,7 @@
 
                     <TabItem.Header>
                         <StackPanel Orientation="Horizontal">
-                            <Image RenderOptions.BitmapInterpolationMode="HighQuality" Source="/Assets/sw.png" Width="24" />
+                            <Image Source="/Assets/sw.png" Width="24" />
                             <TextBlock Text="Shadow Warrior" Margin="5" />
                         </StackPanel>
                     </TabItem.Header>
@@ -77,7 +77,7 @@
 
                     <TabItem.Header>
                         <StackPanel Orientation="Horizontal">
-                            <Image RenderOptions.BitmapInterpolationMode="HighQuality" Source="/Assets/fury.png" Width="24" />
+                            <Image Source="/Assets/fury.png" Width="24" />
                             <TextBlock Text="Ion Fury" Margin="5" />
                         </StackPanel>
                     </TabItem.Header>
@@ -90,7 +90,7 @@
 
                     <TabItem.Header>
                         <StackPanel Orientation="Horizontal">
-                            <Image RenderOptions.BitmapInterpolationMode="HighQuality" Source="/Assets/redneck.png" Width="24" />
+                            <Image Source="/Assets/redneck.png" Width="24" />
                             <TextBlock Text="Redneck Rampage" Margin="5" />
                         </StackPanel>
                     </TabItem.Header>
@@ -103,7 +103,7 @@
 
                     <TabItem.Header>
                         <StackPanel Orientation="Horizontal">
-                            <Image RenderOptions.BitmapInterpolationMode="HighQuality" Source="/Assets/slave.png" Width="24" />
+                            <Image Source="/Assets/slave.png" Width="24" />
                             <TextBlock Text="Powerslave" Margin="5" />
                         </StackPanel>
                     </TabItem.Header>
@@ -117,6 +117,12 @@
                 <TabItem Header="Ports" Margin="5">
                     <pages:PortsPage x:Name="PortsPageTab"/>
                 </TabItem>
+
+                <TabItem Header="Tools" Margin="5">
+                    <pages:ToolsPage x:Name="ToolsPageTab"/>
+                </TabItem>
+
+                <TabItem IsEnabled="False" Header=""/>
 
                 <TabItem Name="SettingsTab" Header="Settings" Margin="5" >
                     <pages:SettingsPage x:Name="SettingsPageTab"/>
