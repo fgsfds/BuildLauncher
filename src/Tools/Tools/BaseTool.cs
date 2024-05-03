@@ -28,7 +28,11 @@ namespace Tools.Tools
         /// </summary>
         public abstract Func<GitHubReleaseAsset, bool> WindowsReleasePredicate { get; }
 
+        /// <summary>
+        /// Get cmd arguments
+        /// </summary>
         public abstract string GetStartToolArgs();
+
 
         /// <summary>
         /// Path to tool install folder
@@ -64,8 +68,14 @@ namespace Tools.Tools
             }
         }
 
+        /// <summary>
+        /// Can tool be installed
+        /// </summary>
         public virtual bool CanBeInstalled => true;
 
+        /// <summary>
+        /// Can tool be launched
+        /// </summary>
         public abstract bool CanBeLaunched { get; }
 
         /// <summary>
