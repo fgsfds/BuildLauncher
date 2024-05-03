@@ -15,6 +15,8 @@ namespace Mods.Providers
     {
         private readonly IGame _game;
         private readonly ArchiveTools _archiveTools;
+        private readonly HttpClientInstance _httpClient;
+
 
         private static Dictionary<GameEnum, Dictionary<AddonTypeEnum, Dictionary<string, IDownloadableAddon>>>? _cache;
         private static readonly SemaphoreSlim _semaphore = new(1);
@@ -27,11 +29,13 @@ namespace Mods.Providers
         [Obsolete($"Don't create directly. Use {nameof(DownloadableAddonsProviderFactory)}.")]
         public DownloadableAddonsProvider(
             IGame game,
-            ArchiveTools archiveTools
+            ArchiveTools archiveTools,
+            HttpClientInstance httpClient
             )
         {
             _game = game;
             _archiveTools = archiveTools;
+            _httpClient = httpClient;
 
             Progress = _archiveTools.Progress;
         }
@@ -48,15 +52,9 @@ namespace Mods.Providers
                 return;
             }
 
-            using HttpClient client = new();
-            client.Timeout = TimeSpan.FromSeconds(10);
-
             try
             {
-                await using var stream = await client.GetStreamAsync(Consts.Manifests).ConfigureAwait(false);
-
-                using StreamReader file = new(stream);
-                var fixesXml = file.ReadToEnd();
+                var fixesXml = await _httpClient.GetStringAsync(Consts.Manifests).ConfigureAwait(false);
 
                 var addons = JsonSerializer.Deserialize(fixesXml, DownloadableModManifestsListContext.Default.ListDownloadableAddonDto);
 

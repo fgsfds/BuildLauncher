@@ -11,6 +11,7 @@ namespace Common.DI
         {
             container.AddSingleton<ConfigProvider>();
             container.AddSingleton<PlaytimeProvider>();
+            container.AddSingleton<HttpClientInstance>();
 
             container.AddTransient<ArchiveTools>();
         }

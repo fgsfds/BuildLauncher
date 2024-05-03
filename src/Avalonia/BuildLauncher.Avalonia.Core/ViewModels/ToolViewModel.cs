@@ -15,18 +15,22 @@ namespace BuildLauncher.ViewModels
         private readonly ToolsInstallerFactory _installerFactory;
         private readonly GamesProvider _gamesProvider;
         private readonly BaseTool _tool;
+        private readonly ToolsReleasesProvider _toolsReleasesProvider;
+
         private CommonRelease? _release;
 
 
         [Obsolete($"Don't create directly. Use {nameof(ViewModelsFactory)}.")]
         public ToolViewModel(
             ToolsInstallerFactory installerFactory,
+            ToolsReleasesProvider toolsReleasesProvider,
             GamesProvider gamesProvider,
             BaseTool tool
             )
         {
             _installerFactory = installerFactory;
             _gamesProvider = gamesProvider;
+            _toolsReleasesProvider = toolsReleasesProvider;
             _tool = tool;
 
             _gamesProvider.GameChangedEvent += OnGameChanged;
@@ -96,7 +100,7 @@ namespace BuildLauncher.ViewModels
         /// </summary>
         public async Task InitializeAsync()
         {
-            _release = await ToolsReleasesProvider.GetLatestReleaseAsync(_tool);
+            _release = await _toolsReleasesProvider.GetLatestReleaseAsync(_tool);
 
             OnPropertyChanged(nameof(LatestVersion));
             OnPropertyChanged(nameof(InstallButtonText));

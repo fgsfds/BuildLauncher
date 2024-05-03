@@ -3,22 +3,24 @@ using Tools.Tools;
 
 namespace Tools.Installer
 {
-    public sealed class ToolsInstallerFactory
+    public sealed class ToolsInstallerFactory(ToolsReleasesProvider toolsReleasesProvider)
     {
         /// <summary>
         /// Create <see cref="ToolsInstaller"/> instance
         /// </summary>
         /// <returns></returns>
-        public ToolsInstaller Create() => new();
+        public ToolsInstaller Create() => new(toolsReleasesProvider);
     }
 
     public sealed class ToolsInstaller
     {
         private readonly ArchiveTools _fileTools;
+        private readonly ToolsReleasesProvider _toolsReleasesProvider;
 
-        public ToolsInstaller()
+        public ToolsInstaller(ToolsReleasesProvider toolsReleasesProvider)
         {
             _fileTools = new();
+            _toolsReleasesProvider = toolsReleasesProvider;
             Progress = _fileTools.Progress;
         }
 
@@ -33,7 +35,7 @@ namespace Tools.Installer
         /// <param name="port">Port</param>
         public async Task InstallAsync(BaseTool port)
         {
-            var release = await ToolsReleasesProvider.GetLatestReleaseAsync(port).ConfigureAwait(false);
+            var release = await _toolsReleasesProvider.GetLatestReleaseAsync(port).ConfigureAwait(false);
 
             if (release is null)
             {

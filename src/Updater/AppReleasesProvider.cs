@@ -1,22 +1,27 @@
 ﻿using Common.Helpers;
 using Common.Releases;
+using Common.Tools;
 using System.Runtime.InteropServices;
 using System.Text.Json;
 
 namespace Updater
 {
-    public static class AppReleasesProvider
+    public class AppReleasesProvider
     {
+        private readonly HttpClientInstance _httpClient;
+
+        public AppReleasesProvider(HttpClientInstance httpClient)
+        {
+            _httpClient = httpClient;
+        }
+
         /// <summary>
         /// Return the latest new release or null if there's no newer releases
         /// </summary>
         /// <param name="currentVersion">current release version</param>
-        public static async Task<AppRelease?> GetLatestUpdateAsync(Version currentVersion)
+        public async Task<AppRelease?> GetLatestUpdateAsync(Version currentVersion)
         {
-            using HttpClient client = new();
-            client.DefaultRequestHeaders.UserAgent.ParseAdd("BuildLauncher");
-
-            var json = await client.GetStringAsync(Consts.GitHubReleases).ConfigureAwait(false);
+            var json = await _httpClient.GetStringAsync(Consts.GitHubReleases).ConfigureAwait(false);
 
             var releases = JsonSerializer.Deserialize(json, GitHubReleaseContext.Default.ListGitHubRelease)
                 ?? ThrowHelper.Exception<List<GitHubRelease>>("Error while deserializing GitHub releases");

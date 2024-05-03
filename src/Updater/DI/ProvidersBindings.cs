@@ -7,6 +7,7 @@ namespace Updater.DI
         public static void Load(ServiceCollection container)
         {
             container.AddSingleton<AppUpdateInstaller>();
+            container.AddSingleton<AppReleasesProvider>();
         }
     }
 }

@@ -18,6 +18,8 @@ namespace BuildLauncher.ViewModels
         private readonly ToolsInstallerFactory _toolsInstallerFactory;
         private readonly PortsProvider _portsProvider;
         private readonly PlaytimeProvider _playtimeProvider;
+        private readonly PortsReleasesProvider _portsReleasesProvider;
+        private readonly ToolsReleasesProvider _toolsReleasesProvider;
 
         public ViewModelsFactory(
             GamesProvider gamesProvider,
@@ -25,7 +27,9 @@ namespace BuildLauncher.ViewModels
             PortsInstallerFactory portsInstallerFactory,
             ToolsInstallerFactory toolsInstallerFactory,
             PortsProvider portsProvider,
-            PlaytimeProvider playtimeProvider
+            PlaytimeProvider playtimeProvider,
+            PortsReleasesProvider portsReleasesProvider,
+            ToolsReleasesProvider toolsReleasesProvider
             )
         {
             _gamesProvider = gamesProvider;
@@ -34,6 +38,8 @@ namespace BuildLauncher.ViewModels
             _toolsInstallerFactory = toolsInstallerFactory;
             _portsProvider = portsProvider;
             _playtimeProvider = playtimeProvider;
+            _portsReleasesProvider = portsReleasesProvider;
+            _toolsReleasesProvider = toolsReleasesProvider;
         }
 
 #pragma warning disable CS0618 // Type or member is obsolete
@@ -111,6 +117,7 @@ namespace BuildLauncher.ViewModels
         {
             PortViewModel vm = new(
                 _portsInstallerFactory,
+                _portsReleasesProvider,
                 _portsProvider.GetPort(portEnum)
                 );
 
@@ -142,6 +149,7 @@ namespace BuildLauncher.ViewModels
 
             ToolViewModel vm = new(
                 _toolsInstallerFactory,
+                _toolsReleasesProvider,
                 _gamesProvider,
                 tool
                 );

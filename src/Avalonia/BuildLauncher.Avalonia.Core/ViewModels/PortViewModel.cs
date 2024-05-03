@@ -10,6 +10,7 @@ namespace BuildLauncher.ViewModels
     public sealed partial class PortViewModel : ObservableObject
     {
         private readonly PortsInstallerFactory _installerFactory;
+        private readonly PortsReleasesProvider _portsReleasesProvider;
         private readonly BasePort _port;
         private CommonRelease? _release;
 
@@ -17,10 +18,12 @@ namespace BuildLauncher.ViewModels
         [Obsolete($"Don't create directly. Use {nameof(ViewModelsFactory)}.")]
         public PortViewModel(
             PortsInstallerFactory installerFactory,
+            PortsReleasesProvider portsReleasesProvider,
             BasePort port
             )
         {
             _installerFactory = installerFactory;
+            _portsReleasesProvider = portsReleasesProvider;
             _port = port;
         }
 
@@ -83,7 +86,7 @@ namespace BuildLauncher.ViewModels
         /// </summary>
         public async Task InitializeAsync()
         {
-            _release = await PortsReleasesProvider.GetLatestReleaseAsync(_port);
+            _release = await _portsReleasesProvider.GetLatestReleaseAsync(_port);
 
             OnPropertyChanged(nameof(LatestVersion));
             OnPropertyChanged(nameof(InstallButtonText));

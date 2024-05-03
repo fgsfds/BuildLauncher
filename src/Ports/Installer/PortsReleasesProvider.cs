@@ -1,6 +1,7 @@
 ﻿using Common.Enums;
 using Common.Helpers;
 using Common.Releases;
+using Common.Tools;
 using Ports.Ports;
 using Ports.Ports.EDuke32;
 using System.Text.Json;
@@ -11,13 +12,20 @@ namespace Ports.Installer
     /// <summary>
     /// Class that provides releases from ports' repositories
     /// </summary>
-    public static partial class PortsReleasesProvider
+    public partial class PortsReleasesProvider
     {
+        private readonly HttpClientInstance _httpClient;
+
+        public PortsReleasesProvider(HttpClientInstance httpClient)
+        {
+            _httpClient = httpClient;
+        }
+
         /// <summary>
         /// Get the latest release of the selected port
         /// </summary>
         /// <param name="port">Port</param>
-        public static async Task<CommonRelease?> GetLatestReleaseAsync(BasePort port)
+        public async Task<CommonRelease?> GetLatestReleaseAsync(BasePort port)
         {
             if (port.PortEnum is PortEnum.BuildGDX)
             {
@@ -38,11 +46,7 @@ namespace Ports.Installer
 
             try
             {
-                using HttpClient client = new();
-                client.Timeout = TimeSpan.FromMinutes(1);
-                client.DefaultRequestHeaders.UserAgent.ParseAdd("BuildLauncher");
-
-                response = await client.GetStringAsync(port.RepoUrl).ConfigureAwait(false);
+                response = await _httpClient.GetStringAsync(port.RepoUrl).ConfigureAwait(false);
             }
             catch (Exception)
             {
@@ -79,7 +83,7 @@ namespace Ports.Installer
         /// <summary>
         /// Get port version
         /// </summary>
-        private static string GetVersion(BasePort port, GitHubRelease? release, GitHubReleaseAsset? zip)
+        private string GetVersion(BasePort port, GitHubRelease? release, GitHubReleaseAsset? zip)
         {
             string version;
 
@@ -99,7 +103,7 @@ namespace Ports.Installer
         /// Hack to get EDuke32 release since dukeworld doesn't have API
         /// </summary>
         /// <param name="response">Json response</param>
-        private static CommonRelease? EDuke32Hack(string response)
+        private CommonRelease? EDuke32Hack(string response)
         {
             var regex = EDuke32WindowsReleaseRegex();
             var fileName = regex.Matches(response).FirstOrDefault();
@@ -121,9 +125,9 @@ namespace Ports.Installer
         }
 
         [GeneratedRegex("eduke32_win64_2[^\"]*")]
-        private static partial Regex EDuke32WindowsReleaseRegex();
+        private partial Regex EDuke32WindowsReleaseRegex();
 
         [GeneratedRegex(@"(?<=\-)(\d*)(?=\-)")]
-        private static partial Regex EDuke32VersionRegex();
+        private partial Regex EDuke32VersionRegex();
     }
 }

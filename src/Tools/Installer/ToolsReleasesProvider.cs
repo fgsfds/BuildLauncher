@@ -1,5 +1,6 @@
 ﻿using Common.Helpers;
 using Common.Releases;
+using Common.Tools;
 using System.Text.Json;
 using Tools.Tools;
 
@@ -8,13 +9,20 @@ namespace Tools.Installer
     /// <summary>
     /// Class that provides releases from tools' repositories
     /// </summary>
-    public static partial class ToolsReleasesProvider
+    public partial class ToolsReleasesProvider
     {
+        private readonly HttpClientInstance _httpClient;
+
+        public ToolsReleasesProvider(HttpClientInstance httpClient)
+        {
+            _httpClient = httpClient;
+        }
+
         /// <summary>
         /// Get the latest release of the selected tool
         /// </summary>
         /// <param name="tool">Tool</param>
-        public static async Task<CommonRelease?> GetLatestReleaseAsync(BaseTool tool)
+        public async Task<CommonRelease?> GetLatestReleaseAsync(BaseTool tool)
         {
             if (CommonProperties.IsDevMode)
             {
@@ -30,11 +38,7 @@ namespace Tools.Installer
 
             try
             {
-                using HttpClient client = new();
-                client.Timeout = TimeSpan.FromMinutes(1);
-                client.DefaultRequestHeaders.UserAgent.ParseAdd("BuildLauncher");
-
-                response = await client.GetStringAsync(tool.RepoUrl).ConfigureAwait(false);
+                response = await _httpClient.GetStringAsync(tool.RepoUrl).ConfigureAwait(false);
             }
             catch (Exception)
             {

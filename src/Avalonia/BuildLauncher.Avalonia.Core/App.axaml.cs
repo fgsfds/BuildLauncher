@@ -10,6 +10,7 @@ using Common.Config;
 using Common.DI;
 using Common.Enums;
 using Common.Helpers;
+using Common.Tools;
 using Games.Providers;
 using Microsoft.Extensions.DependencyInjection;
 using Ports.Providers;
@@ -40,6 +41,8 @@ public sealed partial class App : Application
             var portsProvider = BindingsManager.Provider.GetRequiredService<PortsProvider>();
 
             desktop.MainWindow = new MainWindow(vm, gamesProvider, vmFactory, portsProvider);
+
+            desktop.Exit += OnAppExit;
         }
         else if (ApplicationLifetime is ISingleViewApplicationLifetime)
         {
@@ -47,6 +50,12 @@ public sealed partial class App : Application
         }
 
         base.OnFrameworkInitializationCompleted();
+    }
+
+    private void OnAppExit(object? sender, ControlledApplicationLifetimeExitEventArgs e)
+    {
+        var httpClient = BindingsManager.Provider.GetRequiredService<HttpClientInstance>();
+        httpClient.Dispose();
     }
 
     /// <summary>

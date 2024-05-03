@@ -3,22 +3,24 @@ using Ports.Ports;
 
 namespace Ports.Installer
 {
-    public sealed class PortsInstallerFactory
+    public sealed class PortsInstallerFactory(PortsReleasesProvider portsReleasesProvider)
     {
         /// <summary>
         /// Create <see cref="PortsInstaller"/> instance
         /// </summary>
         /// <returns></returns>
-        public PortsInstaller Create() => new();
+        public PortsInstaller Create() => new(portsReleasesProvider);
     }
 
     public sealed class PortsInstaller
     {
         private readonly ArchiveTools _fileTools;
+        private readonly PortsReleasesProvider _portsReleasesProvider;
 
-        public PortsInstaller()
+        public PortsInstaller(PortsReleasesProvider portsReleasesProvider)
         {
             _fileTools = new();
+            _portsReleasesProvider = portsReleasesProvider;
             Progress = _fileTools.Progress;
         }
 
@@ -33,7 +35,7 @@ namespace Ports.Installer
         /// <param name="port">Port</param>
         public async Task InstallAsync(BasePort port)
         {
-            var release = await PortsReleasesProvider.GetLatestReleaseAsync(port).ConfigureAwait(false);
+            var release = await _portsReleasesProvider.GetLatestReleaseAsync(port).ConfigureAwait(false);
 
             if (release is null)
             {

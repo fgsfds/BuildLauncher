@@ -10,6 +10,7 @@ namespace Ports.DI
         {
             container.AddSingleton<PortsInstallerFactory>();
             container.AddSingleton<PortsProvider>();
+            container.AddSingleton<PortsReleasesProvider>();
         }
     }
 }

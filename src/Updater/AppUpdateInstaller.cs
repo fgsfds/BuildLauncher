@@ -5,9 +5,13 @@ using System.Runtime.InteropServices;
 
 namespace Updater
 {
-    public sealed class AppUpdateInstaller(ArchiveTools archiveTools)
+    public sealed class AppUpdateInstaller(
+        ArchiveTools archiveTools,
+        AppReleasesProvider appReleasesProvider
+        )
     {
         private readonly ArchiveTools _archiveTools = archiveTools;
+        private readonly AppReleasesProvider _appReleasesProvider = appReleasesProvider;
 
         private AppRelease? _update;
 
@@ -18,7 +22,7 @@ namespace Updater
         /// <returns></returns>
         public async Task<bool> CheckForUpdates(Version currentVersion)
         {
-            _update = await AppReleasesProvider.GetLatestUpdateAsync(currentVersion).ConfigureAwait(false);
+            _update = await _appReleasesProvider.GetLatestUpdateAsync(currentVersion).ConfigureAwait(false);
 
             var hasUpdate = _update is not null;
 

@@ -8,6 +8,7 @@ namespace Tools.DI
         public static void Load(ServiceCollection container)
         {
             container.AddSingleton<ToolsInstallerFactory>();
+            container.AddSingleton<ToolsReleasesProvider>();
         }
     }
 }
