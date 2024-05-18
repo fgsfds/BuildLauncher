@@ -1,4 +1,4 @@
-﻿using Common.Config;
+﻿using ClientCommon.Config;
 using Common.Enums;
 using Common.Helpers;
 using Microsoft.Win32;
@@ -171,10 +171,10 @@ namespace Games.Providers
             {
                 GameEnum.Blood => _bloodPath,
                 GameEnum.Redneck => _redneckPath,
-                GameEnum.RedneckRA => _againPath,
+                GameEnum.RidesAgain => _againPath,
                 GameEnum.Duke3D => _dukePath,
                 GameEnum.Duke3D_WT => _dukeWtPath,
-                GameEnum.Wang => _wangPath,
+                GameEnum.ShadowWarrior => _wangPath,
                 GameEnum.Fury => _furyPath,
                 GameEnum.Exhumed => _slavePath,
                 GameEnum.NAM => _namPath,
@@ -190,12 +190,12 @@ namespace Games.Providers
         {
             _config.GamePathDuke3D ??= GetPath(GameEnum.Duke3D);
             _config.GamePathDukeWT ??= GetPath(GameEnum.Duke3D_WT);
-            _config.GamePathWang ??= GetPath(GameEnum.Wang);
+            _config.GamePathWang ??= GetPath(GameEnum.ShadowWarrior);
             _config.GamePathBlood ??= GetPath(GameEnum.Blood);
             _config.GamePathFury ??= GetPath(GameEnum.Fury);
             _config.GamePathSlave ??= GetPath(GameEnum.Exhumed);
             _config.GamePathRedneck ??= GetPath(GameEnum.Redneck);
-            _config.GamePathAgain ??= GetPath(GameEnum.RedneckRA);
+            _config.GamePathAgain ??= GetPath(GameEnum.RidesAgain);
         }
 
 

@@ -1,8 +1,8 @@
-﻿using Common.Enums;
+﻿using ClientCommon.Providers;
+using Common.Enums;
 using Common.Enums.Addons;
 using Common.Helpers;
 using Common.Interfaces;
-using Common.Providers;
 using Mods.Addons;
 using Mods.Providers;
 
@@ -124,7 +124,7 @@ namespace Games.Games
 
             if (IsAgainInstalled)
             {
-                var redneckRaId = nameof(GameEnum.RedneckRA).ToLower();
+                var redneckRaId = nameof(GameEnum.RidesAgain).ToLower();
                 campaigns.Add(redneckRaId, new RedneckCampaign()
                 {
                     Id = redneckRaId,

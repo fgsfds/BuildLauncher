@@ -1,5 +1,5 @@
 ﻿using Avalonia;
-using Common.Helpers;
+using ClientCommon.Helpers;
 
 namespace BuildLauncher.Desktop;
 
@@ -13,7 +13,7 @@ public sealed class Program
     {
         if (args.Contains("-dev"))
         {
-            CommonProperties.IsDevMode = true;
+            ClientProperties.IsDevMode = true;
         }
 
         BuildAvaloniaApp()

@@ -6,12 +6,12 @@ namespace Mods.Providers
 {
     public class DownloadableAddonsProviderFactory(
         ArchiveTools archiveTools,
-        HttpClientInstance httpClient
+        HttpClient httpClient
         )
     {
         private readonly Dictionary<GameEnum, DownloadableAddonsProvider> _list = [];
         private readonly ArchiveTools _archiveTools = archiveTools;
-        private readonly HttpClientInstance _httpClient = httpClient;
+        private readonly HttpClient _httpClient = httpClient;
 
         /// <summary>
         /// Get or create singleton instance of the provider

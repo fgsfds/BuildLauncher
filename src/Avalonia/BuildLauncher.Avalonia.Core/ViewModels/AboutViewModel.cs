@@ -1,7 +1,7 @@
-using Common.Helpers;
+using ClientCommon;
+using ClientCommon.Helpers;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Updater;
 
 namespace BuildLauncher.ViewModels
 {
@@ -14,7 +14,7 @@ namespace BuildLauncher.ViewModels
         /// <summary>
         /// Current app version
         /// </summary>
-        public Version CurrentVersion => CommonProperties.CurrentVersion;
+        public Version CurrentVersion => ClientProperties.CurrentVersion;
 
         [ObservableProperty]
         private string _aboutTabHeader = "About";
@@ -92,7 +92,7 @@ namespace BuildLauncher.ViewModels
             try
             {
                 CheckForUpdatesButtonText = "Checking...";
-                updates = await _updateInstaller.CheckForUpdates(CurrentVersion, forceCheck);
+                updates = await _updateInstaller.CheckForUpdates(CurrentVersion);
             }
             catch
             {

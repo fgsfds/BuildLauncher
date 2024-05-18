@@ -1,4 +1,5 @@
-﻿using Common.Enums;
+﻿using ClientCommon.Helpers;
+using Common.Enums;
 using Common.Enums.Addons;
 using Common.Helpers;
 using Common.Interfaces;
@@ -38,7 +39,7 @@ namespace Ports.Ports
         /// <summary>
         /// Url to the port repository
         /// </summary>
-        public abstract Uri RepoUrl { get; }
+        public abstract Uri? RepoUrl { get; }
 
         /// <summary>
         /// Predicate for Windows release
@@ -53,7 +54,7 @@ namespace Ports.Ports
         /// <summary>
         /// Path to port install folder
         /// </summary>
-        public virtual string PathToExecutableFolder => Path.Combine(CommonProperties.PortsFolderPath, PortFolderName);
+        public virtual string PathToExecutableFolder => Path.Combine(ClientProperties.PortsFolderPath, PortFolderName);
 
         /// <summary>
         /// Is port installed
@@ -218,7 +219,7 @@ namespace Ports.Ports
                 var game = rCamp.RequiredAddonEnum switch
                 {
                     RedneckAddonEnum.Redneck or RedneckAddonEnum.RedneckR66 => GameEnum.Redneck,
-                    _ => GameEnum.RedneckRA,
+                    _ => GameEnum.RidesAgain,
                 };
 
                 if (!autoloadMod.SupportedGames.Contains(game))

@@ -27,10 +27,10 @@ namespace Ports.Ports
             [
             GameEnum.Blood,
             GameEnum.Duke3D,
-            GameEnum.Wang,
+            GameEnum.ShadowWarrior,
             GameEnum.Exhumed,
             GameEnum.Redneck,
-            GameEnum.RedneckRA,
+            GameEnum.RidesAgain,
             GameEnum.NAM,
             GameEnum.WWIIGI,
             GameEnum.Witchaven,
@@ -141,7 +141,7 @@ namespace Ports.Ports
 
         private void GetRedneckArgs(StringBuilder sb, RedneckGame game, IAddon camp)
         {
-            if (camp.Id.Equals(nameof(GameEnum.RedneckRA), StringComparison.OrdinalIgnoreCase))
+            if (camp.Id.Equals(nameof(GameEnum.RidesAgain), StringComparison.OrdinalIgnoreCase))
             {
                 sb.Append($@" -path ""{game.AgainInstallPath}""");
             }

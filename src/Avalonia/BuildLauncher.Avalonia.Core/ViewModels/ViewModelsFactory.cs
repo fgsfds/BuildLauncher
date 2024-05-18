@@ -1,12 +1,11 @@
-﻿using Common.Config;
+﻿using ClientCommon.Config;
+using ClientCommon.Providers;
 using Common.Enums;
-using Common.Helpers;
-using Common.Providers;
 using Games.Providers;
 using Ports.Installer;
 using Ports.Providers;
 using Tools.Installer;
-using Tools.Tools;
+using Tools.Providers;
 
 namespace BuildLauncher.ViewModels
 {
@@ -17,6 +16,7 @@ namespace BuildLauncher.ViewModels
         private readonly PortsInstallerFactory _portsInstallerFactory;
         private readonly ToolsInstallerFactory _toolsInstallerFactory;
         private readonly PortsProvider _portsProvider;
+        private readonly ToolsProvider _toolsProvider;
         private readonly PlaytimeProvider _playtimeProvider;
         private readonly PortsReleasesProvider _portsReleasesProvider;
         private readonly ToolsReleasesProvider _toolsReleasesProvider;
@@ -27,6 +27,7 @@ namespace BuildLauncher.ViewModels
             PortsInstallerFactory portsInstallerFactory,
             ToolsInstallerFactory toolsInstallerFactory,
             PortsProvider portsProvider,
+            ToolsProvider toolsProvider,
             PlaytimeProvider playtimeProvider,
             PortsReleasesProvider portsReleasesProvider,
             ToolsReleasesProvider toolsReleasesProvider
@@ -37,6 +38,7 @@ namespace BuildLauncher.ViewModels
             _portsInstallerFactory = portsInstallerFactory;
             _toolsInstallerFactory = toolsInstallerFactory;
             _portsProvider = portsProvider;
+            _toolsProvider = toolsProvider;
             _playtimeProvider = playtimeProvider;
             _portsReleasesProvider = portsReleasesProvider;
             _toolsReleasesProvider = toolsReleasesProvider;
@@ -129,29 +131,14 @@ namespace BuildLauncher.ViewModels
         /// <summary>
         /// Create <see cref="ToolViewModel"/>
         /// </summary>
-        public ToolViewModel GetToolViewModel(string toolName)
+        /// <param name="toolEnum">Tool enum</param>
+        public ToolViewModel GetToolViewModel(ToolEnum toolEnum)
         {
-            BaseTool tool;
-
-            if (toolName.Equals(nameof(XMapEdit)))
-            {
-                tool = new XMapEdit(_gamesProvider);
-            }
-            else if (toolName.Equals(nameof(Mapster32)))
-            {
-                tool = new Mapster32(_gamesProvider);
-            }
-            else
-            {
-                ThrowHelper.ArgumentOutOfRangeException(nameof(toolName));
-                return null;
-            }
-
             ToolViewModel vm = new(
                 _toolsInstallerFactory,
                 _toolsReleasesProvider,
                 _gamesProvider,
-                tool
+                _toolsProvider.GetTool(toolEnum)
                 );
 
             Task.Run(vm.InitializeAsync);

@@ -28,7 +28,7 @@ namespace Ports.Ports.EDuke32
             [
             GameEnum.Duke3D,
             GameEnum.Redneck,
-            GameEnum.RedneckRA,
+            GameEnum.RidesAgain,
             GameEnum.NAM,
             GameEnum.WWIIGI
             ];
@@ -100,7 +100,7 @@ namespace Ports.Ports.EDuke32
         /// <param name="camp">RedneckCampaign</param>
         private void GetRedneckArgs(StringBuilder sb, RedneckGame game, RedneckCampaign camp)
         {
-            if (camp.Id.Equals(nameof(GameEnum.RedneckRA), StringComparison.OrdinalIgnoreCase))
+            if (camp.Id.Equals(nameof(GameEnum.RidesAgain), StringComparison.OrdinalIgnoreCase))
             {
                 sb.Append($@" {AddDirectoryParam}""{game.AgainInstallPath}""");
             }

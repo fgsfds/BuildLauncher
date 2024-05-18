@@ -6,11 +6,11 @@ using Avalonia.Styling;
 using BuildLauncher.DI;
 using BuildLauncher.ViewModels;
 using BuildLauncher.Views;
-using Common.Config;
+using ClientCommon.Config;
+using ClientCommon.DI;
 using Common.DI;
 using Common.Enums;
 using Common.Helpers;
-using Common.Tools;
 using Games.Providers;
 using Microsoft.Extensions.DependencyInjection;
 using Ports.Providers;
@@ -54,7 +54,7 @@ public sealed partial class App : Application
 
     private void OnAppExit(object? sender, ControlledApplicationLifetimeExitEventArgs e)
     {
-        var httpClient = BindingsManager.Provider.GetRequiredService<HttpClientInstance>();
+        var httpClient = BindingsManager.Provider.GetRequiredService<HttpClient>();
         httpClient.Dispose();
     }
 
@@ -66,11 +66,11 @@ public sealed partial class App : Application
         var container = BindingsManager.Instance;
 
         CommonBindings.Load(container);
+        ClientCommonBindings.Load(container);
         ViewModelsBindings.Load(container);
         Games.DI.ProvidersBindings.Load(container);
         Ports.DI.ProvidersBindings.Load(container);
         Mods.DI.ProvidersBindings.Load(container);
-        Updater.DI.ProvidersBindings.Load(container);
         Tools.DI.ProvidersBindings.Load(container);
     }
 

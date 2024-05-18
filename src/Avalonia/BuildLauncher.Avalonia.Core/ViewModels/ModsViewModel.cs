@@ -1,4 +1,4 @@
-using Common.Config;
+using ClientCommon.Config;
 using Common.Enums;
 using Common.Helpers;
 using Common.Interfaces;

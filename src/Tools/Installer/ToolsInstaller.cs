@@ -42,11 +42,13 @@ namespace Tools.Installer
                 return;
             }
 
-            await _fileTools.DownloadFileAsync(new Uri(release.Url), Path.GetFileName(release.Url)).ConfigureAwait(false);
+            var filePath = Path.GetFileName(release.WindowsDownloadUrl.ToString());
 
-            await _fileTools.UnpackArchiveAsync(Path.GetFileName(release.Url), port.PathToExecutableFolder).ConfigureAwait(false);
+            await _fileTools.DownloadFileAsync(release.WindowsDownloadUrl, filePath).ConfigureAwait(false);
 
-            File.Delete(Path.GetFileName(release.Url));
+            await _fileTools.UnpackArchiveAsync(filePath, port.PathToExecutableFolder).ConfigureAwait(false);
+
+            File.Delete(filePath);
 
             File.WriteAllText(Path.Combine(port.PathToExecutableFolder, "version"), release.Version);
         }

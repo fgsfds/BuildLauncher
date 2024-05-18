@@ -1,4 +1,5 @@
-﻿using Common.Releases;
+﻿using Common.Enums;
+using Common.Releases;
 using Games.Providers;
 
 namespace Tools.Tools
@@ -14,13 +15,16 @@ namespace Tools.Tools
         public override string Name => "XMAPEDIT";
 
         /// <inheritdoc/>
+        public override ToolEnum ToolEnum => ToolEnum.XMapEdit;
+
+        /// <inheritdoc/>
         public override Uri RepoUrl => new("https://api.github.com/repos/NoOneBlood/xmapedit/releases");
 
         /// <inheritdoc/>
         public override Func<GitHubReleaseAsset, bool> WindowsReleasePredicate => static x => x.FileName.EndsWith("x64.zip", StringComparison.InvariantCultureIgnoreCase);
 
         /// <inheritdoc/>
-        public override string PathToExecutableFolder => _gamesProvider.GetGame(Common.Enums.GameEnum.Blood).GameInstallFolder ?? string.Empty;
+        public override string PathToExecutableFolder => _gamesProvider.GetGame(GameEnum.Blood).GameInstallFolder ?? string.Empty;
 
         /// <inheritdoc/>
         public override bool CanBeLaunched => _gamesProvider.IsBloodInstalled;

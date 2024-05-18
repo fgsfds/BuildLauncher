@@ -1,8 +1,8 @@
-﻿using Common.Enums;
+﻿using ClientCommon.Providers;
+using Common.Enums;
 using Common.Enums.Addons;
 using Common.Helpers;
 using Common.Interfaces;
-using Common.Providers;
 using Mods.Addons;
 using Mods.Providers;
 

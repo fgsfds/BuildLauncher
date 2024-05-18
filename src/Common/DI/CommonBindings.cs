@@ -1,5 +1,4 @@
-﻿using Common.Config;
-using Common.Providers;
+﻿using Common.API;
 using Common.Tools;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -9,9 +8,8 @@ namespace Common.DI
     {
         public static void Load(ServiceCollection container)
         {
-            container.AddSingleton<ConfigProvider>();
-            container.AddSingleton<PlaytimeProvider>();
-            container.AddSingleton<HttpClientInstance>();
+            container.AddSingleton<HttpClient>();
+            container.AddSingleton<ApiInterface>();
 
             container.AddTransient<ArchiveTools>();
         }

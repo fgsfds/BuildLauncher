@@ -1,8 +1,8 @@
-﻿using Common.Enums;
+﻿using ClientCommon.Providers;
+using Common.Enums;
 using Common.Enums.Addons;
 using Common.Helpers;
 using Common.Interfaces;
-using Common.Providers;
 using Mods.Addons;
 using Mods.Providers;
 
@@ -15,7 +15,7 @@ namespace Games.Games
         ) : BaseGame(installedModsProviderFactory, downloadableModsProviderFactory, playtimeProvider)
     {
         /// <inheritdoc/>
-        public override GameEnum GameEnum => GameEnum.Wang;
+        public override GameEnum GameEnum => GameEnum.ShadowWarrior;
 
         /// <inheritdoc/>
         public override string FullName => "Shadow Warrior";
@@ -46,7 +46,7 @@ namespace Games.Games
 
             if (IsBaseGameInstalled)
             {
-                var wangId = nameof(GameEnum.Wang).ToLower();
+                var wangId = nameof(GameEnum.ShadowWarrior).ToLower();
                 campaigns.Add(wangId, new WangCampaign()
                 {
                     Id = wangId,

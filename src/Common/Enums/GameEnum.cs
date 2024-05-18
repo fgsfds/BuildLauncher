@@ -1,22 +1,22 @@
 ﻿namespace Common.Enums
 {
-    public enum GameEnum
+    public enum GameEnum : byte
     {
-        Duke3D,
-        Duke3D_13,
-        Duke3D_15,
-        Duke3D_WT,
-        Duke64,
-        Blood,
-        Wang,
-        Fury,
-        Exhumed,
-        NAM,
-        WWIIGI,
-        Redneck,
-        RedneckRA,
-        TekWar,
-        Witchaven,
-        Witchaven2
+        Duke3D = 1,
+        Duke3D_13 = 22,
+        Duke3D_15 = 23,
+        Duke3D_WT = 24,
+        Duke64 = 2,
+        Blood = 3,
+        ShadowWarrior = 4,
+        Fury = 5,
+        Exhumed = 6,
+        NAM = 7,
+        WWIIGI = 8,
+        Redneck = 9,
+        RidesAgain = 10,
+        TekWar = 11,
+        Witchaven = 12,
+        Witchaven2 = 13
     }
 }

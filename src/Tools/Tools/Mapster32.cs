@@ -1,4 +1,5 @@
-﻿using Common.Enums;
+﻿using ClientCommon.Helpers;
+using Common.Enums;
 using Common.Helpers;
 using Common.Releases;
 using Games.Providers;
@@ -16,13 +17,16 @@ namespace Tools.Tools
         public override string Name => "Mapster32";
 
         /// <inheritdoc/>
+        public override ToolEnum ToolEnum => ToolEnum.Mapster32;
+
+        /// <inheritdoc/>
         public override Uri RepoUrl => null;
 
         /// <inheritdoc/>
         public override Func<GitHubReleaseAsset, bool> WindowsReleasePredicate => null;
 
         /// <inheritdoc/>
-        public override string PathToExecutableFolder => Path.Combine(CommonProperties.PortsFolderPath, "EDuke32");
+        public override string PathToExecutableFolder => Path.Combine(ClientProperties.PortsFolderPath, "EDuke32");
 
         /// <inheritdoc/>
         public override bool CanBeInstalled => false;
@@ -31,7 +35,6 @@ namespace Tools.Tools
         public override bool CanBeLaunched => _gamesProvider.GetGame(GameEnum.Duke3D).IsBaseGameInstalled;
 
         public override string? InstallText => "Install EDuke32\nfrom Ports tab";
-
 
         public Mapster32(GamesProvider gamesProvider)
         {

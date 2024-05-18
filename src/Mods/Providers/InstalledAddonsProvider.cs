@@ -1,9 +1,9 @@
-﻿using Common.Config;
+﻿using ClientCommon.Config;
+using ClientCommon.Providers;
 using Common.Enums;
 using Common.Enums.Addons;
 using Common.Helpers;
 using Common.Interfaces;
-using Common.Providers;
 using Mods.Addons;
 using Mods.Serializable;
 using SharpCompress.Archives;
@@ -478,7 +478,7 @@ namespace Mods.Providers
                         Playtime = _playtimeProvider.GetTime(id)
                     };
                 }
-                else if (_game.GameEnum is GameEnum.Wang)
+                else if (_game.GameEnum is GameEnum.ShadowWarrior)
                 {
                     addon = new WangCampaign()
                     {

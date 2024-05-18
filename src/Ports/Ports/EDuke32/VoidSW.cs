@@ -1,4 +1,5 @@
-﻿using Common.Enums;
+﻿using ClientCommon.Helpers;
+using Common.Enums;
 using Common.Helpers;
 using Common.Interfaces;
 using Games.Games;
@@ -22,10 +23,10 @@ namespace Ports.Ports.EDuke32
         public override string Name => "VoidSW";
 
         /// <inheritdoc/>
-        public override List<GameEnum> SupportedGames => [GameEnum.Wang];
+        public override List<GameEnum> SupportedGames => [GameEnum.ShadowWarrior];
 
         /// <inheritdoc/>
-        public override string PathToExecutableFolder => Path.Combine(CommonProperties.PortsFolderPath, "EDuke32");
+        public override string PathToExecutableFolder => Path.Combine(ClientProperties.PortsFolderPath, "EDuke32");
 
         /// <inheritdoc/>
         protected override string ConfigFile => "voidsw.cfg";

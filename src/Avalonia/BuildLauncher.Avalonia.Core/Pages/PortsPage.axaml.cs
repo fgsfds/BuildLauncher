@@ -1,8 +1,8 @@
 using Avalonia.Controls;
 using BuildLauncher.ViewModels;
+using ClientCommon.Helpers;
 using Common.DI;
 using Common.Enums;
-using Common.Helpers;
 using Microsoft.Extensions.DependencyInjection;
 using System.Diagnostics;
 
@@ -32,7 +32,7 @@ namespace BuildLauncher.Pages
         {
             Process.Start(new ProcessStartInfo
             {
-                FileName = CommonProperties.PortsFolderPath,
+                FileName = ClientProperties.PortsFolderPath,
                 UseShellExecute = true,
             });
         }

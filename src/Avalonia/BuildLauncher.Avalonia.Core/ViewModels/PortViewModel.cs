@@ -1,5 +1,6 @@
+using ClientCommon.Helpers;
+using Common.Entities;
 using Common.Helpers;
-using Common.Releases;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Ports.Installer;
@@ -12,7 +13,7 @@ namespace BuildLauncher.ViewModels
         private readonly PortsInstallerFactory _installerFactory;
         private readonly PortsReleasesProvider _portsReleasesProvider;
         private readonly BasePort _port;
-        private CommonRelease? _release;
+        private GeneralReleaseEntity? _release;
 
 
         [Obsolete($"Don't create directly. Use {nameof(ViewModelsFactory)}.")]
@@ -92,7 +93,7 @@ namespace BuildLauncher.ViewModels
         /// </summary>
         public async Task InitializeAsync()
         {
-            _release = await _portsReleasesProvider.GetLatestReleaseAsync(_port, false);
+            _release = await _portsReleasesProvider.GetLatestReleaseAsync(_port.PortEnum);
 
             OnPropertyChanged(nameof(LatestVersion));
             OnPropertyChanged(nameof(InstallButtonText));
@@ -124,7 +125,7 @@ namespace BuildLauncher.ViewModels
 
             IsInProgress = false;
         }
-        public bool InstallCommandCanExecute() => !CommonProperties.IsDevMode && !IsInProgress;
+        public bool InstallCommandCanExecute() => !ClientProperties.IsDevMode && !IsInProgress;
 
 
         /// <summary>
@@ -135,14 +136,14 @@ namespace BuildLauncher.ViewModels
         {
             IsInProgress = true;
 
-            _release = await _portsReleasesProvider.GetLatestReleaseAsync(_port, true);
+            _release = await _portsReleasesProvider.GetLatestReleaseAsync(_port.PortEnum);
 
             OnPropertyChanged(nameof(LatestVersion));
             OnPropertyChanged(nameof(InstallButtonText));
 
             IsInProgress = false;
         }
-        public bool CheckUpdateCommandCanExecute() => !CommonProperties.IsDevMode && !IsInProgress;
+        public bool CheckUpdateCommandCanExecute() => !ClientProperties.IsDevMode && !IsInProgress;
 
 
         #endregion

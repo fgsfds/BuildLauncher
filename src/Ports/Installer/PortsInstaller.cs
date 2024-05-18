@@ -35,18 +35,20 @@ namespace Ports.Installer
         /// <param name="port">Port</param>
         public async Task InstallAsync(BasePort port)
         {
-            var release = await _portsReleasesProvider.GetLatestReleaseAsync(port, false).ConfigureAwait(false);
+            var release = await _portsReleasesProvider.GetLatestReleaseAsync(port.PortEnum).ConfigureAwait(false);
 
-            if (release is null)
+            if (release is null || release.WindowsDownloadUrl is null)
             {
                 return;
             }
 
-            await _fileTools.DownloadFileAsync(new Uri(release.Url), Path.GetFileName(release.Url)).ConfigureAwait(false);
+            var fileName = Path.GetFileName(release.WindowsDownloadUrl.ToString());
 
-            await _fileTools.UnpackArchiveAsync(Path.GetFileName(release.Url), port.PathToExecutableFolder).ConfigureAwait(false);
+            await _fileTools.DownloadFileAsync(release.WindowsDownloadUrl, fileName).ConfigureAwait(false);
 
-            File.Delete(Path.GetFileName(release.Url));
+            await _fileTools.UnpackArchiveAsync(fileName, port.PathToExecutableFolder).ConfigureAwait(false);
+
+            File.Delete(fileName);
 
             if (port is not Raze)
             {

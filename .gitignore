@@ -456,3 +456,5 @@ $RECYCLE.BIN/
 /Data/Duke3D/Special/WTStopgap
 /src/Avalonia/BuildLauncher.Desktop/Properties/launchSettings.json
 /src/Avalonia/BuildLauncher.Desktop/Properties/launchSettings.json
+/Web.Server/config.json
+/Web.Server/Data

@@ -1,7 +1,8 @@
-﻿using Common.Enums;
+﻿using ClientCommon.Helpers;
+using ClientCommon.Providers;
+using Common.Enums;
 using Common.Helpers;
 using Common.Interfaces;
-using Common.Providers;
 using Mods.Addons;
 using Mods.Providers;
 
@@ -19,16 +20,16 @@ namespace Games.Games
         public bool IsBaseGameInstalled => IsInstalled(RequiredFiles);
 
         /// <inheritdoc/>
-        public string CampaignsFolderPath => Path.Combine(CommonProperties.DataFolderPath, ShortName, "Campaigns");
+        public string CampaignsFolderPath => Path.Combine(ClientProperties.DataFolderPath, ShortName, "Campaigns");
 
         /// <inheritdoc/>
-        public string MapsFolderPath => Path.Combine(CommonProperties.DataFolderPath, ShortName, "Maps");
+        public string MapsFolderPath => Path.Combine(ClientProperties.DataFolderPath, ShortName, "Maps");
 
         /// <inheritdoc/>
-        public string ModsFolderPath => Path.Combine(CommonProperties.DataFolderPath, ShortName, "Mods");
+        public string ModsFolderPath => Path.Combine(ClientProperties.DataFolderPath, ShortName, "Mods");
 
         /// <inheritdoc/>
-        public string SpecialFolderPath => Path.Combine(CommonProperties.DataFolderPath, ShortName, "Special");
+        public string SpecialFolderPath => Path.Combine(ClientProperties.DataFolderPath, ShortName, "Special");
 
         /// <inheritdoc/>
         public IInstalledAddonsProvider InstalledAddonsProvider { get; init; }

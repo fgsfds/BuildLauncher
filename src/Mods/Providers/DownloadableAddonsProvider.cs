@@ -15,7 +15,7 @@ namespace Mods.Providers
     {
         private readonly IGame _game;
         private readonly ArchiveTools _archiveTools;
-        private readonly HttpClientInstance _httpClient;
+        private readonly HttpClient _httpClient;
 
 
         private static Dictionary<GameEnum, Dictionary<AddonTypeEnum, Dictionary<string, IDownloadableAddon>>>? _cache;
@@ -30,7 +30,7 @@ namespace Mods.Providers
         public DownloadableAddonsProvider(
             IGame game,
             ArchiveTools archiveTools,
-            HttpClientInstance httpClient
+            HttpClient httpClient
             )
         {
             _game = game;
@@ -56,7 +56,7 @@ namespace Mods.Providers
             {
                 var fixesXml = await _httpClient.GetStringAsync(Consts.Manifests).ConfigureAwait(false);
 
-                var addons = JsonSerializer.Deserialize(fixesXml, DownloadableModManifestsListContext.Default.ListDownloadableAddonDto);
+                var addons = JsonSerializer.Deserialize(fixesXml, DownloadableAddonManifestListContext.Default.ListDownloadableAddonManifest);
 
                 addons.ThrowIfNull();
 
@@ -65,7 +65,7 @@ namespace Mods.Providers
                 foreach (var addon in addons)
                 {
                     //hack for RR
-                    if (addon.Game is GameEnum.RedneckRA)
+                    if (addon.Game is GameEnum.RidesAgain)
                     {
                         addon.Game = GameEnum.Redneck;
                     }

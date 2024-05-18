@@ -1,6 +1,7 @@
+using ClientCommon.Helpers;
+using Common.Entities;
 using Common.Enums;
 using Common.Helpers;
-using Common.Releases;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Games.Providers;
@@ -17,7 +18,7 @@ namespace BuildLauncher.ViewModels
         private readonly BaseTool _tool;
         private readonly ToolsReleasesProvider _toolsReleasesProvider;
 
-        private CommonRelease? _release;
+        private GeneralReleaseEntity? _release;
 
 
         [Obsolete($"Don't create directly. Use {nameof(ViewModelsFactory)}.")]
@@ -140,7 +141,7 @@ namespace BuildLauncher.ViewModels
             OnPropertyChanged(nameof(InstallButtonText));
             StartCommand.NotifyCanExecuteChanged();
         }
-        public bool InstallCommandCanExecute() => !CommonProperties.IsDevMode && CanBeInstalled && !IsInProgress;
+        public bool InstallCommandCanExecute() => !ClientProperties.IsDevMode && CanBeInstalled && !IsInProgress;
 
 
         /// <summary>
@@ -158,7 +159,7 @@ namespace BuildLauncher.ViewModels
 
             IsInProgress = false;
         }
-        public bool CheckUpdateCommandCanExecute() => !CommonProperties.IsDevMode && !IsInProgress;
+        public bool CheckUpdateCommandCanExecute() => !ClientProperties.IsDevMode && !IsInProgress;
 
 
         /// <summary>

@@ -24,7 +24,7 @@ public sealed partial class MainWindow : Window
 
         BloodPage.InitializeControl(GameEnum.Blood, portsProvider, vmFactory);
         DukePage.InitializeControl(GameEnum.Duke3D, portsProvider, vmFactory);
-        WangPage.InitializeControl(GameEnum.Wang, portsProvider, vmFactory);
+        WangPage.InitializeControl(GameEnum.ShadowWarrior, portsProvider, vmFactory);
         FuryPage.InitializeControl(GameEnum.Fury, portsProvider, vmFactory);
         RedneckPage.InitializeControl(GameEnum.Redneck, portsProvider, vmFactory);
         SlavePage.InitializeControl(GameEnum.Exhumed, portsProvider, vmFactory);

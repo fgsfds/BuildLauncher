@@ -1,4 +1,6 @@
-﻿using Common.Helpers;
+﻿using ClientCommon.Helpers;
+using Common.Enums;
+using Common.Helpers;
 using Common.Releases;
 
 namespace Tools.Tools
@@ -35,9 +37,14 @@ namespace Tools.Tools
 
 
         /// <summary>
+        /// Port enum
+        /// </summary>
+        public abstract ToolEnum ToolEnum { get; }
+
+        /// <summary>
         /// Path to tool install folder
         /// </summary>
-        public virtual string PathToExecutableFolder => Path.Combine(CommonProperties.ToolsFolderPath, ToolFolderName);
+        public virtual string PathToExecutableFolder => Path.Combine(ClientProperties.ToolsFolderPath, ToolFolderName);
 
         /// <summary>
         /// Is tool installed

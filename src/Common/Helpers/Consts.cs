@@ -56,5 +56,7 @@
         /// Update folder name
         /// </summary>
         public const string UpdateFolder = "update";
+
+        public const string Bucket = "b70f50a9-files";
     }
 }

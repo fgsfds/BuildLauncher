@@ -1,7 +1,8 @@
 using Avalonia.Controls;
 using BuildLauncher.ViewModels;
+using ClientCommon.Helpers;
 using Common.DI;
-using Common.Helpers;
+using Common.Enums;
 using Microsoft.Extensions.DependencyInjection;
 using System.Diagnostics;
 using Tools.Tools;
@@ -16,8 +17,8 @@ namespace BuildLauncher.Pages
 
             var vmFactory = BindingsManager.Provider.GetRequiredService<ViewModelsFactory>();
 
-            XMAPEDIT.DataContext = vmFactory.GetToolViewModel(nameof(XMapEdit));
-            Mapster32.DataContext = vmFactory.GetToolViewModel(nameof(Tools.Tools.Mapster32));
+            XMAPEDIT.DataContext = vmFactory.GetToolViewModel(ToolEnum.XMapEdit);
+            Mapster32.DataContext = vmFactory.GetToolViewModel(ToolEnum.Mapster32);
         }
 
         /// <summary>
@@ -27,7 +28,7 @@ namespace BuildLauncher.Pages
         {
             Process.Start(new ProcessStartInfo
             {
-                FileName = CommonProperties.ToolsFolderPath,
+                FileName = ClientProperties.ToolsFolderPath,
                 UseShellExecute = true,
             });
         }

@@ -1,4 +1,4 @@
-﻿using Common.Config;
+﻿using ClientCommon.Config;
 using Common.Enums;
 using Common.Helpers;
 using Common.Interfaces;
@@ -38,7 +38,7 @@ namespace Ports.Ports.EDuke32
         protected override string ConfigFile => "fury.cfg";
 
         /// <inheritdoc/>
-        public override Uri RepoUrl => ThrowHelper.NotImplementedException<Uri>();
+        public override Uri? RepoUrl => null;
 
         /// <inheritdoc/>
         public override Func<GitHubReleaseAsset, bool> WindowsReleasePredicate => ThrowHelper.NotImplementedException<Func<GitHubReleaseAsset, bool>>();

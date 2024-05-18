@@ -1,8 +1,8 @@
-﻿using Common.Config;
+﻿using ClientCommon.Config;
+using ClientCommon.Providers;
 using Common.Enums;
 using Common.Helpers;
 using Common.Interfaces;
-using Common.Providers;
 using Games.Games;
 using Mods.Providers;
 
@@ -95,11 +95,11 @@ namespace Games.Providers
             {
                 GameEnum.Blood => _blood,
                 GameEnum.Duke3D => _duke3d,
-                GameEnum.Wang => _wang,
+                GameEnum.ShadowWarrior => _wang,
                 GameEnum.Fury => _fury,
                 GameEnum.Exhumed => _slave,
                 GameEnum.Redneck => _redneck,
-                GameEnum.RedneckRA => _redneck,
+                GameEnum.RidesAgain => _redneck,
                 GameEnum.NAM => ThrowHelper.NotImplementedException<IGame>(),
                 GameEnum.WWIIGI => ThrowHelper.NotImplementedException<IGame>(),
                 GameEnum.TekWar => ThrowHelper.NotImplementedException<IGame>(),

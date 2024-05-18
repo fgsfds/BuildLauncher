@@ -2,7 +2,7 @@ using Avalonia;
 using Avalonia.Platform.Storage;
 using Avalonia.Styling;
 using BuildLauncher.Helpers;
-using Common.Config;
+using ClientCommon.Config;
 using Common.Enums;
 using Common.Helpers;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -186,7 +186,7 @@ namespace BuildLauncher.ViewModels
 
                 OnPropertyChanged(nameof(PathToBlood));
             }
-            else if (param.Equals(nameof(GameEnum.Wang)))
+            else if (param.Equals(nameof(GameEnum.ShadowWarrior)))
             {
                 PathToWang = files[0].Path.LocalPath;
 
@@ -198,7 +198,7 @@ namespace BuildLauncher.ViewModels
 
                 OnPropertyChanged(nameof(PathToRedneck));
             }
-            else if (param.Equals(nameof(GameEnum.RedneckRA)))
+            else if (param.Equals(nameof(GameEnum.RidesAgain)))
             {
                 PathToAgain = files[0].Path.LocalPath;
 
@@ -258,9 +258,9 @@ namespace BuildLauncher.ViewModels
                     OnPropertyChanged(nameof(PathToBlood));
                 }
             }
-            else if (param.Equals(nameof(GameEnum.Wang)))
+            else if (param.Equals(nameof(GameEnum.ShadowWarrior)))
             {
-                var path = _gamesAutoDetector.GetPath(GameEnum.Wang);
+                var path = _gamesAutoDetector.GetPath(GameEnum.ShadowWarrior);
 
                 if (path is not null)
                 {
@@ -280,9 +280,9 @@ namespace BuildLauncher.ViewModels
                     OnPropertyChanged(nameof(PathToRedneck));
                 }
             }
-            else if (param.Equals(nameof(GameEnum.RedneckRA)))
+            else if (param.Equals(nameof(GameEnum.RidesAgain)))
             {
-                var path = _gamesAutoDetector.GetPath(GameEnum.RedneckRA);
+                var path = _gamesAutoDetector.GetPath(GameEnum.RidesAgain);
 
                 if (path is not null)
                 {

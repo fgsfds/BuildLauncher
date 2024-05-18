@@ -1,7 +1,7 @@
-﻿using Common.Config;
+﻿using ClientCommon.Config;
+using ClientCommon.Providers;
 using Common.Enums;
 using Common.Interfaces;
-using Common.Providers;
 
 namespace Mods.Providers
 {

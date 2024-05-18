@@ -1,4 +1,5 @@
-﻿using Common.Config;
+﻿using ClientCommon.Config;
+using ClientCommon.Helpers;
 using Common.Enums;
 using Common.Helpers;
 using Ports.Ports;
@@ -27,9 +28,9 @@ namespace Ports.Providers
 
         public PortsProvider(ConfigProvider configProvider)
         {
-            if (!Directory.Exists(CommonProperties.PortsFolderPath))
+            if (!Directory.Exists(ClientProperties.PortsFolderPath))
             {
-                Directory.CreateDirectory(CommonProperties.PortsFolderPath);
+                Directory.CreateDirectory(ClientProperties.PortsFolderPath);
             }
 
             _config = configProvider.Config;
@@ -53,6 +54,12 @@ namespace Ports.Providers
         /// </summary>
         /// <param name="game">Game enum</param>
         public IEnumerable<BasePort> GetPortsThatSupportGame(GameEnum game) => _ports.Where(x => x.SupportedGames.Contains(game));
+
+
+        /// <summary>
+        /// Get list of all ports
+        /// </summary>
+        public IEnumerable<BasePort> GetAllPorts() => _ports;
 
         /// <summary>
         /// Get port by enum
