@@ -1,4 +1,5 @@
 ﻿using ClientCommon.Config;
+using Common;
 using Common.Entities;
 using Common.Enums;
 using System.Text.Json;
@@ -79,6 +80,27 @@ namespace ClientCommon.API
                 return releases;
             }
             catch
+            {
+                return null;
+            }
+        }
+
+        public async Task<List<DownloadableAddonEntity>?> GetAddons(GameEnum gameEnum)
+        {
+            try
+            {
+                var response = await _httpClient.GetStringAsync($"{ApiUrl}/addons/{gameEnum}").ConfigureAwait(false);
+
+                if (response is null)
+                {
+                    return null;
+                }
+
+                var addons = JsonSerializer.Deserialize(response, DownloadableAddonEntityListContext.Default.ListDownloadableAddonEntity);
+
+                return addons;
+            }
+            catch (Exception)
             {
                 return null;
             }

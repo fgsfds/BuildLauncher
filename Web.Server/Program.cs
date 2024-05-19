@@ -26,6 +26,7 @@ namespace Superheater.Web.Server
             builder.Services.AddHostedService<ToolsReleasesTask>();
 
             builder.Services.AddSingleton<AppReleasesProvider>();
+            builder.Services.AddSingleton<AddonsProvider>();
             builder.Services.AddSingleton<PortsReleasesProvider>();
             builder.Services.AddSingleton<ToolsReleasesProvider>();
             builder.Services.AddSingleton<RepositoriesProvider>();
@@ -33,7 +34,7 @@ namespace Superheater.Web.Server
             builder.Services.AddSingleton<HttpClient>(CreateHttpClient);
             builder.Services.AddSingleton<S3Client>();
 
-            builder.Services.AddSingleton<DatabaseContextFactory>();
+            //builder.Services.AddSingleton<DatabaseContextFactory>();
 
             var app = builder.Build();
 
@@ -53,8 +54,8 @@ namespace Superheater.Web.Server
 
             app.MapControllers();
 
-            var dbContext = new DatabaseContext();
-            dbContext.Dispose();
+            //var dbContext = new DatabaseContext();
+            //dbContext.Dispose();
 
             app.MapFallbackToFile("/index.html");
 

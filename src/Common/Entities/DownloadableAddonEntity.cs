@@ -6,8 +6,7 @@ using System.Text.Json.Serialization;
 
 namespace Common
 {
-    [Obsolete("Remove after moving to db")]
-    public sealed class DownloadableAddonManifest : IDownloadableAddon
+    public sealed class DownloadableAddonEntity : IDownloadableAddon
     {
         [JsonPropertyName("Id")]
         public string Id { get; set; }
@@ -111,6 +110,6 @@ namespace Common
             typeof(JsonStringEnumConverter<AddonTypeEnum>)
             ]
     )]
-    [JsonSerializable(typeof(List<DownloadableAddonManifest>))]
-    public sealed partial class DownloadableAddonManifestListContext : JsonSerializerContext;
+    [JsonSerializable(typeof(List<DownloadableAddonEntity>))]
+    public sealed partial class DownloadableAddonEntityListContext : JsonSerializerContext;
 }

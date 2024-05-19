@@ -1,10 +1,9 @@
-﻿using Common;
+﻿using ClientCommon.API;
 using Common.Enums;
 using Common.Helpers;
 using Common.Interfaces;
 using Common.Tools;
 using System.Collections.Immutable;
-using System.Text.Json;
 
 namespace Mods.Providers
 {
@@ -16,10 +15,9 @@ namespace Mods.Providers
         private readonly IGame _game;
         private readonly ArchiveTools _archiveTools;
         private readonly HttpClient _httpClient;
+        private readonly ApiInterface _apiInterface;
 
-
-        private static Dictionary<GameEnum, Dictionary<AddonTypeEnum, Dictionary<string, IDownloadableAddon>>>? _cache;
-        private static readonly SemaphoreSlim _semaphore = new(1);
+        private Dictionary<AddonTypeEnum, Dictionary<string, IDownloadableAddon>>? _cache;
 
         public event AddonChanged AddonDownloadedEvent;
 
@@ -30,12 +28,14 @@ namespace Mods.Providers
         public DownloadableAddonsProvider(
             IGame game,
             ArchiveTools archiveTools,
-            HttpClient httpClient
+            HttpClient httpClient,
+            ApiInterface apiInterface
             )
         {
             _game = game;
             _archiveTools = archiveTools;
             _httpClient = httpClient;
+            _apiInterface = apiInterface;
 
             Progress = _archiveTools.Progress;
         }
@@ -44,43 +44,24 @@ namespace Mods.Providers
         /// <inheritdoc/>
         public async Task CreateCacheAsync()
         {
-            _semaphore.Wait();
-
             if (_cache is not null)
             {
-                _semaphore.Release();
                 return;
             }
 
-            try
+            var addons = await _apiInterface.GetAddons(_game.GameEnum).ConfigureAwait(false);
+
+            if (addons is null ||  addons.Count == 0)
             {
-                var fixesXml = await _httpClient.GetStringAsync(Consts.Manifests).ConfigureAwait(false);
-
-                var addons = JsonSerializer.Deserialize(fixesXml, DownloadableAddonManifestListContext.Default.ListDownloadableAddonManifest);
-
-                addons.ThrowIfNull();
-
-                _cache = [];
-
-                foreach (var addon in addons)
-                {
-                    //hack for RR
-                    if (addon.Game is GameEnum.RidesAgain)
-                    {
-                        addon.Game = GameEnum.Redneck;
-                    }
-
-                    _cache.TryAdd(addon.Game, []);
-                    _cache[addon.Game].TryAdd(addon.AddonType, []);
-                    _cache[addon.Game][addon.AddonType].TryAdd(addon.Id, addon);
-                }
+                return;
             }
-            catch (Exception)
+
+            _cache = [];
+
+            foreach (var addon in addons)
             {
-            }
-            finally
-            {
-                _semaphore.Release();
+                _cache.TryAdd(addon.AddonType, []);
+                _cache[addon.AddonType].TryAdd(addon.Id, addon);
             }
         }
 
@@ -88,12 +69,12 @@ namespace Mods.Providers
         /// <inheritdoc/>
         public ImmutableList<IDownloadableAddon> GetDownloadableAddons(AddonTypeEnum addonType)
         {
-            if (_cache is null || !_cache.TryGetValue(_game.GameEnum, out var downloadableAddons))
+            if (_cache is null)
             {
                 return [];
             }
 
-            if (downloadableAddons is null || !downloadableAddons.TryGetValue(addonType, out var addonTypeCache))
+            if (!_cache.TryGetValue(addonType, out var addonTypeCache))
             {
                 return [];
             }

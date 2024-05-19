@@ -3,9 +3,9 @@
     public static class Consts
     {
         /// <summary>
-        /// Path to main downloadable addons manifests file
+        /// Path to the files repository
         /// </summary>
-        public const string Manifests = "https://raw.githubusercontent.com/fgsfds/Build-Mods-Repo/master_new/addons.json";
+        public const string FilesRepo = "https://files.fgsfds.link/buildlauncher";
 
         /// <summary>
         /// GirtHub releases Url

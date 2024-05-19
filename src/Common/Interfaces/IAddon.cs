@@ -73,7 +73,7 @@ namespace Common.Interfaces
         /// <summary>
         /// Addon version
         /// </summary>
-        string? Version { get; init; }
+        string Version { get; init; }
 
         /// <summary>
         /// List of addons that the current addon requires to work

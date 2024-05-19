@@ -59,7 +59,7 @@ namespace Web.Server.Database
             {
                 using var httpClient = new HttpClient();
                 var addons = httpClient.GetStringAsync("https://files.fgsfds.link/buildlauncher/addons.json").Result;
-                var addonsList = JsonSerializer.Deserialize(addons, DownloadableAddonManifestListContext.Default.ListDownloadableAddonManifest);
+                var addonsList = JsonSerializer.Deserialize(addons, DownloadableAddonEntityListContext.Default.ListDownloadableAddonEntity);
 
 
                 //TYPES

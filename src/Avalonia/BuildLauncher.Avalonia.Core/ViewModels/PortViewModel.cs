@@ -1,10 +1,12 @@
 using ClientCommon.Helpers;
 using Common.Entities;
+using Common.Enums;
 using Common.Helpers;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Ports.Installer;
 using Ports.Ports;
+using System.Globalization;
 
 namespace BuildLauncher.ViewModels
 {
@@ -38,14 +40,50 @@ namespace BuildLauncher.ViewModels
         {
             get
             {
-                if (_port.IsInstalled && VersionComparer.Compare(_port.InstalledVersion!, _release?.Version!, "<"))
-                {
-                    return "Update";
-                }
-
                 if (_port.IsInstalled)
                 {
-                    return "Reinstall";
+                    //NotBlood Hack
+                    if (_port.PortEnum is PortEnum.NotBlood)
+                    {
+                        var r1 = DateTime.TryParseExact(
+                            _port.InstalledVersion,
+                            "dd.MM.yyyy",
+                            CultureInfo.InvariantCulture,
+                            DateTimeStyles.None,
+                            out var currentVersion
+                            );
+
+                        var r2 = DateTime.TryParseExact(
+                            _release?.Version,
+                            "dd.MM.yyyy",
+                            CultureInfo.InvariantCulture,
+                            DateTimeStyles.None,
+                            out var newVersion
+                            );
+
+                        if (r1 && r2)
+                        {
+                            if (currentVersion < newVersion)
+                            {
+                                return "Update";
+                            }
+                            else
+                            {
+                                return "Reinstall";
+                            }
+                        }
+
+                        return "Install";
+                    }
+
+                    if (VersionComparer.Compare(_port.InstalledVersion!, _release?.Version!, "<"))
+                    {
+                        return "Update";
+                    }
+                    else
+                    {
+                        return "Reinstall";
+                    }
                 }
 
                 return "Install";

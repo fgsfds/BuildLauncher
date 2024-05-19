@@ -8,6 +8,8 @@ namespace BuildLauncher.Pages
 {
     public sealed partial class GamePage : UserControl
     {
+        public bool IsAlreadInitialized { get; private set; }
+
         public GamePage()
         {
             //preventing early setting of the wrong view model
@@ -29,6 +31,8 @@ namespace BuildLauncher.Pages
             MapssControl.InitializeControl(portsProvider);
             ModsControl.InitializeControl();
             DownControl.InitializeControl();
+
+            IsAlreadInitialized = true;
         }
     }
 }

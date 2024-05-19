@@ -12,7 +12,7 @@ namespace Common.Providers
             {
                 return new()
                 {
-                    RepoUrl = new("https://github.com/fgsfds/Build-Mods-Repo/raw/master/Ports/BuildGDX_v116.zip"),
+                    RepoUrl = new($"{Consts.FilesRepo}/Ports/BuildGDX_v116.zip"),
                     WindowsReleasePredicate = null,
                     LinuxReleasePredicate = null,
                 };

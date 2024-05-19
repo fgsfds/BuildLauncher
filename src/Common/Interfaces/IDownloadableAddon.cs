@@ -13,7 +13,7 @@ namespace Common.Interfaces
         string DownloadUrl { get; set; }
         long FileSize { get; set; }
         string FileSizeString { get; }
-        string? Version { get; set; }
+        string Version { get; set; }
         bool HasNewerVersion { get; set; }
         bool IsInstalled { get; set; }
         string Status { get; }

@@ -6,7 +6,7 @@ using Superheater.Web.Server.Providers;
 namespace Superheater.Web.Server.Controllers
 {
     [ApiController]
-    [Route("api/releases/")]
+    [Route("api/releases")]
     public sealed class ReleasesController : ControllerBase
     {
         private readonly AppReleasesProvider _appReleasesProvider;

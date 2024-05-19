@@ -80,8 +80,8 @@ namespace BuildLauncher.ViewModels
         /// <summary>
         /// Currently selected downloadable campaign, map or mod
         /// </summary>
-        private DownloadableAddonManifest? _selectedDownloadable;
-        public DownloadableAddonManifest? SelectedDownloadable
+        private DownloadableAddonEntity? _selectedDownloadable;
+        public DownloadableAddonEntity? SelectedDownloadable
         {
             get => _selectedDownloadable;
             set

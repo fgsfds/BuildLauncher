@@ -23,7 +23,7 @@ namespace Mods.Addons
         public required string Title { get; init; }
 
         /// <inheritdoc/>
-        public required string? Version { get; init; }
+        public required string Version { get; init; }
 
         /// <inheritdoc/>
         public required HashSet<GameEnum>? SupportedGames { get; init; }
