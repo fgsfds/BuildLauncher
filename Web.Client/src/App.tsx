@@ -24,11 +24,11 @@ function App() {
             <br/>
 
                 <a href="https://github.com/fgsfds/BuildLauncher">
-                    <img className="with-margin" src="https://cdn-icons-png.flaticon.com/512/25/25231.png" height="100"></img>
+                    <img className="with-margin" src="/github.png" height="100"></img>
                 </a>
 
                 <a href="https://discord.gg/mWvKyxR4et">
-                    <img className="with-margin" src="https://static.vecteezy.com/system/resources/previews/023/741/066/original/discord-logo-icon-social-media-icon-free-png.png" height="100"></img>
+                    <img className="with-margin" src="/discord.png" height="100"></img>
                 </a>
                 
             </div>

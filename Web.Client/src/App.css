@@ -3,6 +3,7 @@
     margin: 0 auto;
     padding: 2rem;
     text-align: center;
+    font-family: 'easvhs';
 }
 
 .with-margin {
@@ -11,4 +12,9 @@
 
 .big-font {
     font-size: 30px;
+}
+
+@font-face {
+    font-family: 'easvhs';
+    src: url('/easvhs.ttf');
 }
