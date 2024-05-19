@@ -1,4 +1,4 @@
-﻿using Common.API;
+﻿using ClientCommon.API;
 using Common.Entities;
 using Common.Enums;
 using Tools.Tools;
@@ -24,13 +24,13 @@ namespace Tools.Installer
         /// Get the latest release of the selected tool
         /// </summary>
         /// <param name="tool">Tool</param>
-        public async Task<GeneralReleaseEntity?> GetLatestReleaseAsync(BaseTool tool, bool forceCheck)
+        public async Task<GeneralReleaseEntity?> GetLatestReleaseAsync(BaseTool tool)
         {
             await _semaphore.WaitAsync().ConfigureAwait(false);
 
             if (_releases is null)
             {
-                await GetReleasesAsync().ConfigureAwait(false);
+                _releases = await GetReleasesAsync().ConfigureAwait(false);
             }
 
             _semaphore.Release();
@@ -45,9 +45,9 @@ namespace Tools.Installer
             return hasRelease ? release : null;
         }
 
-        public async Task GetReleasesAsync()
+        public async Task<Dictionary<ToolEnum, GeneralReleaseEntity>?> GetReleasesAsync()
         {
-            _releases = await _apiInterface.GetLatestToolsReleasesAsync().ConfigureAwait(false);
+            return await _apiInterface.GetLatestToolsReleasesAsync().ConfigureAwait(false);
         }
     }
 }

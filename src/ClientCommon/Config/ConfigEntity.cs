@@ -99,6 +99,13 @@ namespace ClientCommon.Config
             set => SetConfigParameter(ref _skipStartup, value);
         }
 
+        private bool _useLocalApi = false;
+        public bool UseLocalApi
+        {
+            get => _useLocalApi;
+            set => SetConfigParameter(ref _useLocalApi, value);
+        }
+
         public HashSet<string> DisabledAutoloadMods { get; set; } = [];
 
         public void AddDisabledAutoloadMod(string id)

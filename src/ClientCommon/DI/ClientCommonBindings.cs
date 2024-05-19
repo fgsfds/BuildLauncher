@@ -1,4 +1,5 @@
-﻿using ClientCommon.Config;
+﻿using ClientCommon.API;
+using ClientCommon.Config;
 using ClientCommon.Providers;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -11,6 +12,7 @@ namespace ClientCommon.DI
             container.AddSingleton<AppUpdateInstaller>();
             container.AddSingleton<ConfigProvider>();
             container.AddSingleton<PlaytimeProvider>();
+            container.AddSingleton<ApiInterface>();
         }
     }
 }

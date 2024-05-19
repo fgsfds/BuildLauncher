@@ -5,7 +5,6 @@ using Common.DI;
 using Common.Enums;
 using Microsoft.Extensions.DependencyInjection;
 using System.Diagnostics;
-using Tools.Tools;
 
 namespace BuildLauncher.Pages
 {

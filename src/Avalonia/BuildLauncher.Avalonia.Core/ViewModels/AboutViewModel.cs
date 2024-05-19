@@ -39,7 +39,7 @@ namespace BuildLauncher.ViewModels
         /// VM initialization
         /// </summary>
         [RelayCommand]
-        private Task InitializeAsync() => CheckForUpdateAsync(false);
+        private Task InitializeAsync() => CheckForUpdateAsync();
 
         /// <summary>
         /// Check for SSH updates
@@ -47,7 +47,7 @@ namespace BuildLauncher.ViewModels
         [RelayCommand(CanExecute = (nameof(CheckForUpdatesCanExecute)))]
         private async Task CheckForUpdatesAsync()
         {
-            await CheckForUpdateAsync(true);
+            await CheckForUpdateAsync();
         }
 
         private bool CheckForUpdatesCanExecute() => IsInProgress is false;
@@ -82,8 +82,7 @@ namespace BuildLauncher.ViewModels
         /// <summary>
         /// Check for app update
         /// </summary>
-        /// <param name="forceCheck">Force check</param>
-        private async Task CheckForUpdateAsync(bool forceCheck)
+        private async Task CheckForUpdateAsync()
         {
             IsInProgress = true;
 
@@ -97,6 +96,7 @@ namespace BuildLauncher.ViewModels
             catch
             {
                 CheckForUpdatesButtonText = "Error while getting updates";
+                IsInProgress = false;
                 return;
             }
 

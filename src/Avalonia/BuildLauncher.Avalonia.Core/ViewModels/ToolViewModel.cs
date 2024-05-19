@@ -112,7 +112,7 @@ namespace BuildLauncher.ViewModels
         /// </summary>
         public async Task InitializeAsync()
         {
-            _release = await _toolsReleasesProvider.GetLatestReleaseAsync(_tool, false);
+            _release = await _toolsReleasesProvider.GetLatestReleaseAsync(_tool);
 
             OnPropertyChanged(nameof(LatestVersion));
             OnPropertyChanged(nameof(InstallButtonText));
@@ -152,7 +152,7 @@ namespace BuildLauncher.ViewModels
         {
             IsInProgress = true;
 
-            _release = await _toolsReleasesProvider.GetLatestReleaseAsync(_tool, true);
+            _release = await _toolsReleasesProvider.GetLatestReleaseAsync(_tool);
 
             OnPropertyChanged(nameof(LatestVersion));
             OnPropertyChanged(nameof(InstallButtonText));

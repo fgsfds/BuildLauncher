@@ -1,4 +1,4 @@
-﻿using Common.API;
+﻿using ClientCommon.API;
 using Common.Entities;
 using Common.Enums;
 
@@ -29,7 +29,7 @@ namespace Ports.Installer
 
             if (_releases is null)
             {
-                await GetReleasesAsync().ConfigureAwait(false);
+                _releases = await GetReleasesAsync().ConfigureAwait(false);
             }
 
             _semaphore.Release();
@@ -44,9 +44,9 @@ namespace Ports.Installer
             return hasRelease ? release : null;
         }
 
-        public async Task GetReleasesAsync()
+        public async Task<Dictionary<PortEnum, GeneralReleaseEntity>?> GetReleasesAsync()
         {
-            _releases = await _apiInterface.GetLatestPortsReleasesAsync().ConfigureAwait(false);
+            return await _apiInterface.GetLatestPortsReleasesAsync().ConfigureAwait(false);
         }
     }
 }

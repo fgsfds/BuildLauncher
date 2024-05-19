@@ -314,6 +314,12 @@
                 Skip startup window
             </CheckBox>
 
+            <CheckBox IsChecked="{Binding LocalApiCheckbox}"
+                      VerticalAlignment="Center"
+                      Margin="10,5">
+                Use local API
+            </CheckBox>
+
         </StackPanel>
 
     </Grid>
