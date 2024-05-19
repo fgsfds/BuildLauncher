@@ -37,12 +37,6 @@ namespace Ports.Ports.EDuke32
         /// <inheritdoc/>
         protected override string ConfigFile => "fury.cfg";
 
-        /// <inheritdoc/>
-        public override Uri? RepoUrl => null;
-
-        /// <inheritdoc/>
-        public override Func<GitHubReleaseAsset, bool> WindowsReleasePredicate => ThrowHelper.NotImplementedException<Func<GitHubReleaseAsset, bool>>();
-
 
         /// <inheritdoc/>
         protected override void BeforeStart(IGame game, IAddon campaign)

@@ -26,12 +26,6 @@ namespace Ports.Ports.EDuke32
         public override List<GameEnum> SupportedGames => [GameEnum.Blood];
 
         /// <inheritdoc/>
-        public override Uri RepoUrl => new("https://api.github.com/repos/nukeykt/NBlood/releases");
-
-        /// <inheritdoc/>
-        public override Func<GitHubReleaseAsset, bool> WindowsReleasePredicate => static x => x.FileName.StartsWith("nblood_win64", StringComparison.CurrentCultureIgnoreCase);
-
-        /// <inheritdoc/>
         protected override string ConfigFile => "nblood.cfg";
 
 

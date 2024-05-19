@@ -2,7 +2,6 @@
 using Common.Enums.Addons;
 using Common.Helpers;
 using Common.Interfaces;
-using Common.Releases;
 using Games.Games;
 using Mods.Addons;
 using System.Text;
@@ -32,12 +31,6 @@ namespace Ports.Ports.EDuke32
             GameEnum.NAM,
             GameEnum.WWIIGI
             ];
-
-        /// <inheritdoc/>
-        public override Uri RepoUrl => new("https://api.github.com/repos/nukeykt/NBlood/releases");
-
-        /// <inheritdoc/>
-        public override Func<GitHubReleaseAsset, bool> WindowsReleasePredicate => static x => x.FileName.StartsWith("rednukem_win64", StringComparison.CurrentCultureIgnoreCase);
 
         /// <inheritdoc/>
         protected override string ConfigFile => "rednukem.cfg";

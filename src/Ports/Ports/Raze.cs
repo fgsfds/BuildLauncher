@@ -38,12 +38,6 @@ namespace Ports.Ports
             ];
 
         /// <inheritdoc/>
-        public override Uri RepoUrl => new("https://api.github.com/repos/ZDoom/Raze/releases");
-
-        /// <inheritdoc/>
-        public override Func<GitHubReleaseAsset, bool> WindowsReleasePredicate => static x => x.FileName.EndsWith(".zip", StringComparison.CurrentCultureIgnoreCase) && x.FileName.Contains("windows", StringComparison.CurrentCultureIgnoreCase);
-
-        /// <inheritdoc/>
         public override string? InstalledVersion =>
             File.Exists(FullPathToExe)
             ? FileVersionInfo.GetVersionInfo(FullPathToExe).FileVersion

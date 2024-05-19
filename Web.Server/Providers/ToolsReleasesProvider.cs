@@ -1,10 +1,9 @@
 ﻿using Common.Entities;
 using Common.Enums;
 using Common.Helpers;
+using Common.Providers;
 using Common.Releases;
 using System.Text.Json;
-using Tools.Providers;
-using Tools.Tools;
 
 namespace Superheater.Web.Server.Providers
 {
@@ -12,26 +11,26 @@ namespace Superheater.Web.Server.Providers
     {
         private readonly ILogger<ToolsReleasesProvider> _logger;
         private readonly HttpClient _httpClient;
-        private readonly ToolsProvider _toolsProvider;
+        private readonly RepositoriesProvider _repoProvider;
 
         public Dictionary<ToolEnum, GeneralReleaseEntity> ToolsReleases { get; set; }
 
         public ToolsReleasesProvider(
             ILogger<ToolsReleasesProvider> logger,
             HttpClient httpClient,
-            ToolsProvider toolsProvider
+            RepositoriesProvider repoProvider
             )
         {
             _logger = logger;
             _httpClient = httpClient;
-            _toolsProvider = toolsProvider;
+            _repoProvider = repoProvider;
 
             ToolsReleases = new();
         }
 
         public async Task GetLatestReleasesAsync()
         {
-            var tools = _toolsProvider.GetAllTools();
+            var tools = Enum.GetValues<ToolEnum>();
 
             foreach (var tool in tools)
             {
@@ -43,14 +42,16 @@ namespace Superheater.Web.Server.Providers
         /// Get the latest release of the selected port
         /// </summary>
         /// <param name="port">Port</param>
-        private async Task GetLatestReleaseAsync(BaseTool tool)
+        private async Task GetLatestReleaseAsync(ToolEnum toolEnum)
         {
-            if (tool.RepoUrl is null)
+            var repo = _repoProvider.GetToolRepo(toolEnum);
+
+            if (repo.RepoUrl is null || repo.WindowsReleasePredicate is null)
             {
                 return;
             }
 
-            var response = await _httpClient.GetStringAsync(tool.RepoUrl).ConfigureAwait(false);
+            var response = await _httpClient.GetStringAsync(repo.RepoUrl).ConfigureAwait(false);
 
             var releases = JsonSerializer.Deserialize(response, GitHubReleaseContext.Default.ListGitHubReleaseEntity)
                 ?? ThrowHelper.Exception<List<GitHubReleaseEntity>>("Error while deserializing GitHub releases");
@@ -62,7 +63,7 @@ namespace Superheater.Web.Server.Providers
                 return;
             }
 
-            var zip = release.Assets.FirstOrDefault(tool.WindowsReleasePredicate);
+            var zip = release.Assets.FirstOrDefault(repo.WindowsReleasePredicate);
 
             if (zip is null)
             {
@@ -79,7 +80,7 @@ namespace Superheater.Web.Server.Providers
                 LinuxDownloadUrl = null
             };
 
-            ToolsReleases.Add(tool.ToolEnum, portRelease);
+            ToolsReleases.Add(toolEnum, portRelease);
         }
     }
 }

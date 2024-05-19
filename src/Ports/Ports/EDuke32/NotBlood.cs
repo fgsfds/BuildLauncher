@@ -1,6 +1,5 @@
 ﻿using Common.Enums;
 using Common.Interfaces;
-using Common.Releases;
 
 namespace Ports.Ports.EDuke32
 {
@@ -20,12 +19,6 @@ namespace Ports.Ports.EDuke32
 
         /// <inheritdoc/>
         public override List<GameEnum> SupportedGames => [GameEnum.Blood];
-
-        /// <inheritdoc/>
-        public override Uri RepoUrl => new("https://api.github.com/repos/clipmove/NotBlood/releases");
-
-        /// <inheritdoc/>
-        public override Func<GitHubReleaseAsset, bool> WindowsReleasePredicate => static x => x.FileName.StartsWith("notblood-win64", StringComparison.CurrentCultureIgnoreCase);
 
         /// <inheritdoc/>
         protected override string ConfigFile => "notblood.cfg";

@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 
 namespace Games.Providers
 {
-    public class GamesAutoDetector
+    public class GamesPathsProvider
     {
         private readonly ConfigEntity _config;
 
@@ -23,7 +23,7 @@ namespace Games.Providers
         private readonly string? _witch1Path = null;
         private readonly string? _witch2Path = null;
 
-        public GamesAutoDetector(ConfigProvider configProvider)
+        public GamesPathsProvider(ConfigProvider configProvider)
         {
             _config = configProvider.Config;
 

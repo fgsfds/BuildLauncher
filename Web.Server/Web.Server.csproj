@@ -26,8 +26,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\src\Common\Common.csproj" />
-    <ProjectReference Include="..\src\Ports\Ports.csproj" />
-    <ProjectReference Include="..\src\Tools\Tools.csproj" />
     <ProjectReference Include="..\Web.Client\Web.Client.esproj">
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>

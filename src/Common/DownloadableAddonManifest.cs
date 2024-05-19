@@ -4,8 +4,9 @@ using Common.Interfaces;
 using System.Text;
 using System.Text.Json.Serialization;
 
-namespace Mods.Serializable
+namespace Common
 {
+    [Obsolete("Remove after moving to db")]
     public sealed class DownloadableAddonManifest : IDownloadableAddon
     {
         [JsonPropertyName("Id")]

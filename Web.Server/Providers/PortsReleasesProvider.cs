@@ -1,9 +1,8 @@
 ﻿using Common.Entities;
 using Common.Enums;
 using Common.Helpers;
+using Common.Providers;
 using Common.Releases;
-using Ports.Ports;
-using Ports.Providers;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 
@@ -12,17 +11,17 @@ namespace Superheater.Web.Server.Providers
     public sealed partial class PortsReleasesProvider
     {
         private readonly ILogger<PortsReleasesProvider> _logger;
-        private readonly PortsProvider _portsProvider;
+        private readonly RepositoriesProvider _repoProvider;
         private readonly HttpClient _httpClient;
 
         public Dictionary<PortEnum, GeneralReleaseEntity> PortsReleases { get; set; }
 
         public PortsReleasesProvider(
             ILogger<PortsReleasesProvider> logger,
-            PortsProvider portsProvider,
+            RepositoriesProvider repoProvider,
             HttpClient httpClient)
         {
-            _portsProvider = portsProvider;
+            _repoProvider = repoProvider;
             _logger = logger;
             _httpClient = httpClient;
 
@@ -31,7 +30,7 @@ namespace Superheater.Web.Server.Providers
 
         public async Task GetLatestReleasesAsync()
         {
-            var ports = _portsProvider.GetAllPorts();
+            var ports = Enum.GetValues<PortEnum>();
 
             foreach (var port in ports)
             {
@@ -42,26 +41,18 @@ namespace Superheater.Web.Server.Providers
         /// <summary>
         /// Get the latest release of the selected port
         /// </summary>
-        /// <param name="port">Port</param>
-        private async Task GetLatestReleaseAsync(BasePort port)
+        /// <param name="portEnum">Port</param>
+        private async Task GetLatestReleaseAsync(PortEnum portEnum)
         {
-            if (port.RepoUrl is null)
-            {
-                return;
-            }
+            var repo = _repoProvider.GetPortRepo(portEnum);
 
-            if (port.PortEnum is PortEnum.VoidSW)
-            {
-                return;
-            }
-
-            if (port.PortEnum is PortEnum.BuildGDX)
+            if (portEnum is PortEnum.BuildGDX)
             {
                 GeneralReleaseEntity bgdxRelease = new()
                 {
                     Description = string.Empty,
                     Version = "1.16",
-                    WindowsDownloadUrl = port.RepoUrl,
+                    WindowsDownloadUrl = repo.RepoUrl,
                     LinuxDownloadUrl = null
                 };
 
@@ -69,9 +60,19 @@ namespace Superheater.Web.Server.Providers
                 return;
             }
 
-            var response = await _httpClient.GetStringAsync(port.RepoUrl).ConfigureAwait(false);
+            if (repo.RepoUrl is null)
+            {
+                return;
+            }
 
-            if (port.PortEnum is PortEnum.EDuke32)
+            if (portEnum is PortEnum.VoidSW)
+            {
+                return;
+            }
+
+            var response = await _httpClient.GetStringAsync(repo.RepoUrl).ConfigureAwait(false);
+
+            if (portEnum is PortEnum.EDuke32)
             {
                 EDuke32Hack(response);
                 return;
@@ -87,7 +88,12 @@ namespace Superheater.Web.Server.Providers
                 return;
             }
 
-            var zip = release.Assets.FirstOrDefault(port.WindowsReleasePredicate);
+            if (repo.WindowsReleasePredicate is null)
+            {
+                return;
+            }
+
+            var zip = release.Assets.FirstOrDefault(repo.WindowsReleasePredicate);
 
             if (zip is null)
             {
@@ -97,22 +103,22 @@ namespace Superheater.Web.Server.Providers
             GeneralReleaseEntity portRelease = new()
             {
                 Description = release.Description,
-                Version = GetVersion(port, release, zip),
+                Version = GetVersion(portEnum, release, zip),
                 WindowsDownloadUrl = new(zip.DownloadUrl),
                 LinuxDownloadUrl = null
             };
 
-            PortsReleases.Add(port.PortEnum, portRelease);
+            PortsReleases.Add(portEnum, portRelease);
         }
 
         /// <summary>
         /// Get port version
         /// </summary>
-        private string GetVersion(BasePort port, GitHubReleaseEntity release, GitHubReleaseAsset zip)
+        private string GetVersion(PortEnum portEnum, GitHubReleaseEntity release, GitHubReleaseAsset zip)
         {
             string version;
 
-            if (port.PortEnum is PortEnum.NotBlood)
+            if (portEnum is PortEnum.NotBlood)
             {
                 version = zip.UpdatedDate.ToString("dd.MM.yyyy");
             }

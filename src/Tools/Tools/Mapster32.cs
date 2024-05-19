@@ -1,7 +1,6 @@
 ﻿using ClientCommon.Helpers;
 using Common.Enums;
 using Common.Helpers;
-using Common.Releases;
 using Games.Providers;
 
 namespace Tools.Tools
@@ -18,12 +17,6 @@ namespace Tools.Tools
 
         /// <inheritdoc/>
         public override ToolEnum ToolEnum => ToolEnum.Mapster32;
-
-        /// <inheritdoc/>
-        public override Uri RepoUrl => null;
-
-        /// <inheritdoc/>
-        public override Func<GitHubReleaseAsset, bool> WindowsReleasePredicate => null;
 
         /// <inheritdoc/>
         public override string PathToExecutableFolder => Path.Combine(ClientProperties.PortsFolderPath, "EDuke32");

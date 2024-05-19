@@ -1,7 +1,6 @@
 ﻿using Common.Enums;
 using Common.Helpers;
 using Common.Interfaces;
-using Common.Releases;
 using Games.Games;
 using Mods.Addons;
 using System.Text;
@@ -24,12 +23,6 @@ namespace Ports.Ports.EDuke32
 
         /// <inheritdoc/>
         public override List<GameEnum> SupportedGames => [GameEnum.Exhumed];
-
-        /// <inheritdoc/>
-        public override Uri RepoUrl => new("https://api.github.com/repos/nukeykt/NBlood/releases");
-
-        /// <inheritdoc/>
-        public override Func<GitHubReleaseAsset, bool> WindowsReleasePredicate => static x => x.FileName.StartsWith("pcexhumed_win64", StringComparison.CurrentCultureIgnoreCase);
 
         /// <inheritdoc/>
         protected override string ConfigFile => "pcexhumed.cfg";

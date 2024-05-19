@@ -2,7 +2,6 @@
 using Common.Enums.Addons;
 using Common.Helpers;
 using Common.Interfaces;
-using Common.Releases;
 using Games.Games;
 using Mods.Addons;
 using System.Text;
@@ -54,12 +53,6 @@ namespace Ports.Ports.EDuke32
             GameEnum.NAM,
             GameEnum.WWIIGI
             ];
-
-        /// <inheritdoc/>
-        public override Uri RepoUrl => new("https://dukeworld.com/eduke32/synthesis/latest/");
-
-        /// <inheritdoc/>
-        public override Func<GitHubReleaseAsset, bool> WindowsReleasePredicate => ThrowHelper.NotImplementedException<Func<GitHubReleaseAsset, bool>>();
 
         /// <inheritdoc/>
         public override string? InstalledVersion

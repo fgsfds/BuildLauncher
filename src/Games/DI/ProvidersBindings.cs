@@ -8,7 +8,7 @@ namespace Games.DI
         public static void Load(ServiceCollection container)
         {
             container.AddSingleton<GamesProvider>();
-            container.AddSingleton<GamesAutoDetector>();
+            container.AddSingleton<GamesPathsProvider>();
         }
     }
 }

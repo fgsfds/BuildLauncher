@@ -39,12 +39,6 @@ namespace Ports.Ports
             ];
 
         /// <inheritdoc/>
-        public override Uri RepoUrl => new("https://github.com/fgsfds/Build-Mods-Repo/raw/master/Ports/BuildGDX_v116.zip");
-
-        /// <inheritdoc/>
-        public override Func<GitHubReleaseAsset, bool> WindowsReleasePredicate => throw new NotImplementedException();
-
-        /// <inheritdoc/>
         public override string? InstalledVersion => IsInstalled ? "1.16" : null;
 
         /// <inheritdoc/>

@@ -1,7 +1,6 @@
 ﻿using ClientCommon.Helpers;
 using Common.Enums;
 using Common.Helpers;
-using Common.Releases;
 
 namespace Tools.Tools
 {
@@ -21,25 +20,15 @@ namespace Tools.Tools
         public abstract string Name { get; }
 
         /// <summary>
-        /// Url to the tool repository
-        /// </summary>
-        public abstract Uri RepoUrl { get; }
-
-        /// <summary>
-        /// Predicate for Windows release
-        /// </summary>
-        public abstract Func<GitHubReleaseAsset, bool> WindowsReleasePredicate { get; }
-
-        /// <summary>
         /// Get cmd arguments
         /// </summary>
         public abstract string GetStartToolArgs();
-
 
         /// <summary>
         /// Port enum
         /// </summary>
         public abstract ToolEnum ToolEnum { get; }
+
 
         /// <summary>
         /// Path to tool install folder

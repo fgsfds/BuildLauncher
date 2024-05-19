@@ -1,12 +1,7 @@
-using ClientCommon.Config;
-using ClientCommon.Providers;
+using Common.Providers;
 using Common.Tools;
-using Games.Providers;
-using Mods.Providers;
-using Ports.Providers;
 using Superheater.Web.Server.Providers;
 using Superheater.Web.Server.Tasks;
-using Tools.Providers;
 using Web.Server.Database;
 using Web.Server.Helpers;
 
@@ -34,18 +29,7 @@ namespace Superheater.Web.Server
             builder.Services.AddSingleton<AppReleasesProvider>();
             builder.Services.AddSingleton<PortsReleasesProvider>();
             builder.Services.AddSingleton<ToolsReleasesProvider>();
-            builder.Services.AddSingleton<PortsProvider>();
-            builder.Services.AddSingleton<ToolsProvider>();
-            builder.Services.AddSingleton<ConfigProvider>();
-
-            //TODO DELETE THESE
-            {
-                builder.Services.AddSingleton<GamesProvider>();
-                builder.Services.AddSingleton<InstalledAddonsProviderFactory>();
-                builder.Services.AddSingleton<DownloadableAddonsProviderFactory>();
-                builder.Services.AddSingleton<PlaytimeProvider>();
-                builder.Services.AddSingleton<ArchiveTools>();
-            }
+            builder.Services.AddSingleton<RepositoriesProvider>();
 
             builder.Services.AddSingleton<HttpClient>(CreateHttpClient);
             builder.Services.AddSingleton<S3Client>();

@@ -14,11 +14,11 @@ namespace BuildLauncher.ViewModels
     internal sealed partial class SettingsViewModel : ObservableObject
     {
         private readonly ConfigEntity _config;
-        private readonly GamesAutoDetector _gamesAutoDetector;
+        private readonly GamesPathsProvider _gamesAutoDetector;
 
         public SettingsViewModel(
             ConfigProvider config,
-            GamesAutoDetector gamesAutoDetector
+            GamesPathsProvider gamesAutoDetector
             )
         {
             _config = config.Config;

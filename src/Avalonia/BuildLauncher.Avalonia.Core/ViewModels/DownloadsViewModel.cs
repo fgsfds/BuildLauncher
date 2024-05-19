@@ -1,9 +1,9 @@
+using Common;
 using Common.Enums;
 using Common.Helpers;
 using Common.Interfaces;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Mods.Serializable;
 using System.Collections.Immutable;
 
 namespace BuildLauncher.ViewModels
@@ -20,8 +20,6 @@ namespace BuildLauncher.ViewModels
 
             Game.DownloadableAddonsProvider.AddonDownloadedEvent += OnAddonChanged;
             Game.InstalledAddonsProvider.AddonDeletedEvent += OnAddonChanged;
-
-
         }
 
 

@@ -37,16 +37,6 @@ namespace Ports.Ports
         public abstract List<GameEnum> SupportedGames { get; }
 
         /// <summary>
-        /// Url to the port repository
-        /// </summary>
-        public abstract Uri? RepoUrl { get; }
-
-        /// <summary>
-        /// Predicate for Windows release
-        /// </summary>
-        public abstract Func<GitHubReleaseAsset, bool> WindowsReleasePredicate { get; }
-
-        /// <summary>
         /// Currently installed version
         /// </summary>
         public abstract string? InstalledVersion { get; }
