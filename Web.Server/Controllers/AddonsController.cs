@@ -1,10 +1,9 @@
 using Common;
 using Common.Enums;
-using Common.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using Superheater.Web.Server.Providers;
+using Web.Server.Providers;
 
-namespace Superheater.Web.Server.Controllers
+namespace Web.Server.Controllers
 {
     [ApiController]
     [Route("api/addons")]

@@ -1,6 +1,6 @@
-﻿using Superheater.Web.Server.Providers;
+﻿using Web.Server.Providers;
 
-namespace Superheater.Web.Server.Tasks
+namespace Web.Server.Tasks
 {
     public sealed class PortsReleasesTask : IHostedService, IDisposable
     {

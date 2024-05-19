@@ -1,10 +1,9 @@
 using Common.Providers;
-using Superheater.Web.Server.Providers;
-using Superheater.Web.Server.Tasks;
-using Web.Server.Database;
 using Web.Server.Helpers;
+using Web.Server.Providers;
+using Web.Server.Tasks;
 
-namespace Superheater.Web.Server
+namespace Web.Server
 {
     public sealed class Program
     {

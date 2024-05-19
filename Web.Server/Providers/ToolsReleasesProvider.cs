@@ -5,7 +5,7 @@ using Common.Providers;
 using Common.Releases;
 using System.Text.Json;
 
-namespace Superheater.Web.Server.Providers
+namespace Web.Server.Providers
 {
     public sealed class ToolsReleasesProvider
     {

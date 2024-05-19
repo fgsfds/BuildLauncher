@@ -6,7 +6,7 @@ using Common.Releases;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 
-namespace Superheater.Web.Server.Providers
+namespace Web.Server.Providers
 {
     public sealed partial class PortsReleasesProvider
     {

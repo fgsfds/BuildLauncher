@@ -9,7 +9,7 @@
     <SpaRoot>..\Web.Client</SpaRoot>
     <SpaProxyLaunchCommand>npm run dev</SpaProxyLaunchCommand>
     <SpaProxyServerUrl>https://localhost:5173</SpaProxyServerUrl>
-    <AssemblyName>Superheater.$(MSBuildProjectName)</AssemblyName>
+    <AssemblyName>BuildLauncher.$(MSBuildProjectName)</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>

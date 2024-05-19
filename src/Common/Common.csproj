@@ -2,7 +2,7 @@
 
   <PropertyGroup>
       <Configurations>Debug;Release</Configurations>
-      <AssemblyName>BuildLauncher.Common</AssemblyName>
+      <AssemblyName>BuildLauncher.$(MSBuildProjectName)</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>

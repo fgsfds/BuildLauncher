@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Web;
 using Web.Server.Helpers;
 
-namespace Superheater.Web.Server.Controllers
+namespace Web.Server.Controllers
 {
     [ApiController]
     [Route("api/storage")]

@@ -2,10 +2,9 @@
 using Common.Entities;
 using Common.Enums;
 using Common.Helpers;
-using Common.Interfaces;
 using System.Text.Json;
 
-namespace Superheater.Web.Server.Providers
+namespace Web.Server.Providers
 {
     public sealed class AddonsProvider
     {

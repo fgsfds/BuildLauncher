@@ -1,9 +1,9 @@
 using Common.Entities;
 using Common.Enums;
 using Microsoft.AspNetCore.Mvc;
-using Superheater.Web.Server.Providers;
+using Web.Server.Providers;
 
-namespace Superheater.Web.Server.Controllers
+namespace Web.Server.Controllers
 {
     [ApiController]
     [Route("api/releases")]
