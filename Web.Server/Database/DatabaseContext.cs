@@ -1,8 +1,8 @@
-﻿using Common;
-using Common.Enums;
+﻿using Common.Enums;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
 using Web.Server.DbEntities;
+using Web.Server.Entities;
 
 namespace Web.Server.Database
 {
@@ -19,6 +19,7 @@ namespace Web.Server.Database
         public DbSet<ReportsDbEntity> Reports { get; set; }
         public DbSet<TagsDbEntity> Tags { get; set; }
         public DbSet<TagsListsDbEntity> TagsLists { get; set; }
+        public DbSet<DependenciesDbEntity> Dependencies { get; set; }
 
         public DatabaseContext()
         {
@@ -59,7 +60,7 @@ namespace Web.Server.Database
             {
                 using var httpClient = new HttpClient();
                 var addons = httpClient.GetStringAsync("https://files.fgsfds.link/buildlauncher/addons.json").Result;
-                var addonsList = JsonSerializer.Deserialize(addons, DownloadableAddonEntityListContext.Default.ListDownloadableAddonEntity);
+                var addonsList = JsonSerializer.Deserialize(addons, AddonsJsonEntityListContext.Default.ListAddonsJsonEntity);
 
 
                 //TYPES
@@ -137,7 +138,7 @@ namespace Web.Server.Database
                 //Versions
                 foreach (var addon in addonsList)
                 {
-                    var existing = Addons.Find(addon.Id) ?? throw new Exception("Addons doesn't exist");
+                    var existing = Addons.Find(addon.Id) ?? throw new Exception("Addon doesn't exist");
 
                     Versions.Add(new()
                     {
@@ -145,10 +146,48 @@ namespace Web.Server.Database
                         Version = addon.Version,
                         DownloadUrl = new(addon.DownloadUrl),
                         Description = addon.Description,
-                        IsDisabled = addon.IsDisabled
+                        IsDisabled = false,
+                        FileSize = addon.FileSize,
+                        Author = addon.Author,
                     });
 
                     this.SaveChanges();
+                }
+
+
+                //Dependencies
+                foreach (var addon in addonsList)
+                {
+                    if (addon.Dependencies is null)
+                    {
+                        continue;
+                    }
+
+                    var existingVersion = Versions.SingleOrDefault(x => x.AddonId == addon.Id && x.Version == addon.Version);
+
+                    if (existingVersion is null)
+                    {
+                        throw new Exception("Addon doesn't exist");
+                    }
+
+                    foreach (var dep in addon.Dependencies)
+                    {
+                        var existingDepVersion = Versions.SingleOrDefault(x => x.AddonId == dep.Key && (x.Version == dep.Value || dep.Value == null));
+
+                        if (existingDepVersion is null)
+                        {
+                            continue;
+                            //throw new Exception("Addon doesn't exist");
+                        }
+
+                        Dependencies.Add(new()
+                        {
+                            AddonVersionId = existingVersion.Id,
+                            DependencyVersionId = existingDepVersion.Id
+                        });
+
+                        this.SaveChanges();
+                    }
                 }
 
 

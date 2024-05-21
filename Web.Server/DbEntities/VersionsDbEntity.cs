@@ -22,7 +22,13 @@ namespace Web.Server.DbEntities
         public required string Version { get; set; }
 
         [Column("download_url")]
-        public required Uri DownloadUrl{ get; set; }
+        public required Uri DownloadUrl { get; set; }
+
+        [Column("file_size")]
+        public required long FileSize { get; set; }
+
+        [Column("author")]
+        public required string? Author { get; set; }
 
         [Column("description")]
         public required string? Description { get; set; }

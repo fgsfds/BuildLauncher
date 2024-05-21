@@ -2,12 +2,12 @@
 {
     public enum FeatureEnum
     {
-        EDuke32_cons,
+        EDuke32_CON,
         Hightile,
         Models,
-        Sloped_sprites,
+        Sloped_Sprites,
         TROR,
-        Wall_rotate_cstat,
+        Wall_Rotate_Cstat,
         CustomDude
     }
 }

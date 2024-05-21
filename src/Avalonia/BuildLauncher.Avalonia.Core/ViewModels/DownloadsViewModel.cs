@@ -1,4 +1,4 @@
-using Common;
+using Common.Entities;
 using Common.Enums;
 using Common.Helpers;
 using Common.Interfaces;

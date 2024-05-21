@@ -68,12 +68,12 @@ namespace BuildLauncher.ViewModels
         /// <summary>
         /// Preview image of the selected campaign
         /// </summary>
-        public Stream? SelectedCampaignPreview => SelectedCampaign?.Preview;
+        public Stream? SelectedCampaignPreview => SelectedCampaign?.PreviewImage;
 
         /// <summary>
         /// Is preview image in the description visible
         /// </summary>
-        public bool IsPreviewVisible => SelectedCampaign?.Preview is not null;
+        public bool IsPreviewVisible => SelectedCampaign?.PreviewImage is not null;
 
         /// <summary>
         /// Currently selected campaign/map

@@ -12,39 +12,37 @@ namespace Mods.Serializable
 
         [JsonRequired]
         [JsonPropertyName("type")]
-        public required AddonTypeEnum Type { get; set; }
+        public required AddonTypeEnum AddonType { get; set; }
 
+        [JsonRequired]
         [JsonPropertyName("game")]
-        [JsonConverter(typeof(SingleOrArrayConverter<GameEnum>))]
-        public List<GameEnum>? SupportedGames { get; set; }
+        public required SupportedGameDto SupportedGame { get; set; }
 
         [JsonPropertyName("title")]
-        public string? Title { get; set; }
+        public required string Title { get; set; }
+
+        [JsonPropertyName("version")]
+        public required string Version { get; set; }
 
         [JsonPropertyName("author")]
         public string? Author { get; set; }
 
-        [JsonPropertyName("version")]
-        public string? Version { get; set; }
-
         [JsonPropertyName("description")]
-        [JsonConverter(typeof(StringOrDescriptionConverter))]
-        public object? Description { get; set; }
+        public string? Description { get; set; }
 
-        [JsonPropertyName("preview")]
-        public string? PreviewImage { get; set; }
+        [JsonPropertyName("con_main")]
+        public string? MainCon { get; set; }
 
-        [JsonPropertyName("grp")]
-        [JsonConverter(typeof(SingleOrArrayConverter<string>))]
-        public List<string>? Grps { get; set; }
+        [JsonPropertyName("con_modules")]
+        //[JsonConverter(typeof(SingleOrArrayConverter<string>))]
+        public List<string>? AdditionalCons { get; set; }
 
-        [JsonPropertyName("con")]
-        [JsonConverter(typeof(SingleOrArrayConverter<ScriptDto>))]
-        public List<ScriptDto>? Cons { get; set; }
+        [JsonPropertyName("def_main")]
+        public string? MainDef { get; set; }
 
-        [JsonPropertyName("def")]
-        [JsonConverter(typeof(SingleOrArrayConverter<ScriptDto>))]
-        public List<ScriptDto>? Defs { get; set; }
+        [JsonPropertyName("def_modules")]
+        //[JsonConverter(typeof(SingleOrArrayConverter<string>))]
+        public List<string>? AdditionalDefs { get; set; }
 
         [JsonPropertyName("rts")]
         public string? Rts { get; set; }
@@ -52,35 +50,21 @@ namespace Mods.Serializable
         [JsonPropertyName("ini")]
         public string? Ini { get; set; }
 
-        [JsonPropertyName("rff")]
-        public string? Rff { get; set; }
+        [JsonPropertyName("rff_main")]
+        public string? MainRff { get; set; }
 
-        [JsonPropertyName("snd")]
-        public string? Snd { get; set; }
-
-        [JsonPropertyName("gamecrc")]
-        [JsonConverter(typeof(SingleOrArrayConverter<int>))]
-        public List<int>? SupportedGamesCrcs { get; set; }
+        [JsonPropertyName("rff_sound")]
+        public string? SoundRff { get; set; }
 
         [JsonPropertyName("dependencies")]
-        [JsonConverter(typeof(SingleOrArrayConverter<DependencyDto>))]
-        public List<DependencyDto>? Dependencies { get; set; }
+        public DependencyDto? Dependencies { get; set; }
 
         [JsonPropertyName("incompatibles")]
-        [JsonConverter(typeof(SingleOrArrayConverter<DependencyDto>))]
-        public List<DependencyDto>? Incompatibles { get; set; }
-
-        [JsonPropertyName("ports")]
-        [JsonConverter(typeof(SingleOrArrayConverter<PortEnum>))]
-        public List<PortEnum>? SupportedPorts { get; set; }
+        public DependencyDto? Incompatibles { get; set; }
 
         [JsonPropertyName("startmap")]
         [JsonConverter(typeof(IStartMapConverter))]
         public IStartMap? StartMap { get; set; }
-
-        [JsonPropertyName("features")]
-        [JsonConverter(typeof(SingleOrArrayConverter<FeatureEnum>))]
-        public List<FeatureEnum>? RequiredFeatures { get; set; }
     }
 
     [JsonSourceGenerationOptions(
@@ -89,7 +73,10 @@ namespace Mods.Serializable
             typeof(JsonStringEnumConverter<GameEnum>),
             typeof(JsonStringEnumConverter<AddonTypeEnum>),
             typeof(JsonStringEnumConverter<FeatureEnum>)
-            ])]
+            ],
+        UnmappedMemberHandling = JsonUnmappedMemberHandling.Disallow,
+        AllowTrailingCommas = true
+        )]
     [JsonSerializable(typeof(AddonDto))]
     public sealed partial class AddonManifestContext : JsonSerializerContext;
 }

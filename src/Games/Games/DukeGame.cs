@@ -86,7 +86,7 @@ namespace Games.Games
                     Id = dukeId,
                     Type = AddonTypeEnum.Official,
                     Title = "Duke Nukem 3D",
-                    Image = ImageHelper.FileNameToStream("Duke3D.duke3d.jpg"),
+                    GridImage = ImageHelper.FileNameToStream("Duke3D.duke3d.jpg"),
                     Author = "3D Realms",
                     Description = """
                         Duke Nukem 3D is a first-person shooter developed and published by **3D Realms**.
@@ -96,10 +96,9 @@ namespace Games.Games
                         In the end, Duke annihilates the alien overlords and celebrates by desecrating their corpses.
                         """,
                     Version = null,
+                    SupportedGame = GameEnum.Duke3D,
                     SupportedPorts = null,
                     PathToFile = null,
-                    SupportedGames = null,
-                    RequiredGamesCrcs = null,
                     Dependencies = null,
                     Incompatibles = null,
                     MainCon = null,
@@ -110,8 +109,7 @@ namespace Games.Games
                     StartMap = null,
                     RequiredAddonEnum = DukeAddonEnum.Duke3D,
                     RequiredFeatures = null,
-                    GRPs = null,
-                    Preview = null,
+                    PreviewImage = null,
                     Playtime = _playtimeProvider.GetTime(dukeId)
                 });
             }
@@ -124,8 +122,7 @@ namespace Games.Games
                     Id = dukeWtId,
                     Type = AddonTypeEnum.Official,
                     Title = "Duke Nukem 3D World Tour",
-                    Image = ImageHelper.FileNameToStream("Duke3D.dukewt.jpg"),
-                    SupportedPorts = [PortEnum.Raze, PortEnum.EDuke32, PortEnum.BuildGDX],
+                    GridImage = ImageHelper.FileNameToStream("Duke3D.dukewt.jpg"),
                     Author = "Nerve Software, Gearbox Software",
                     Description = """
                         **Duke Nukem 3D: 20th Anniversary World Tour** is a 2016 special edition of Duke Nukem 3D.
@@ -135,9 +132,9 @@ namespace Games.Games
                         The episode was designed by Allen Blum and Richard “Levelord” Gray, both of whom designed all the levels in the original Duke Nukem 3D. 
                         """,
                     Version = null,
+                    SupportedGame = GameEnum.Duke3D,
+                    SupportedPorts = null,
                     PathToFile = null,
-                    SupportedGames = null,
-                    RequiredGamesCrcs = null,
                     Dependencies = null,
                     Incompatibles = null,
                     MainCon = null,
@@ -148,8 +145,7 @@ namespace Games.Games
                     StartMap = null,
                     RequiredAddonEnum = DukeAddonEnum.DukeWT,
                     RequiredFeatures = null,
-                    GRPs = null,
-                    Preview = null,
+                    PreviewImage = null,
                     Playtime = _playtimeProvider.GetTime(dukeWtId)
                 });
             }
@@ -164,7 +160,7 @@ namespace Games.Games
                         Id = dukeVacaId,
                         Type = AddonTypeEnum.Official,
                         Title = "Caribbean",
-                        Image = ImageHelper.FileNameToStream("Duke3D.carib.jpg"),
+                        GridImage = ImageHelper.FileNameToStream("Duke3D.carib.jpg"),
                         Author = "Sunstorm Interactive",
                         Description = """
                             **Life's A Beach** is an expansion pack for the highly acclaimed first-person shooter Duke Nukem 3D. It was released on December 31, 1997 by **Sunstorm Interactive**.
@@ -174,11 +170,9 @@ namespace Games.Games
                             Angered that his rest and relaxation is being delayed, Duke Nukem sets out on a mission for retribution against the aliens who are interrupting his vacation.
                             """,
                         Version = null,
-                        //TODO remove when https://voidpoint.io/terminx/eduke32/-/issues/297 is fixed
-                        SupportedPorts = [PortEnum.Raze, PortEnum.BuildGDX],
+                        SupportedGame = GameEnum.Duke3D,
+                        SupportedPorts = null,
                         PathToFile = null,
-                        SupportedGames = null,
-                        RequiredGamesCrcs = null,
                         Dependencies = null,
                         Incompatibles = null,
                         MainCon = null,
@@ -189,8 +183,7 @@ namespace Games.Games
                         StartMap = null,
                         RequiredAddonEnum = DukeAddonEnum.DukeVaca,
                         RequiredFeatures = null,
-                        GRPs = null,
-                        Preview = null,
+                        PreviewImage = null,
                         Playtime = _playtimeProvider.GetTime(dukeVacaId)
                     });
                 }
@@ -203,7 +196,7 @@ namespace Games.Games
                         Id = dukeNwId,
                         Type = AddonTypeEnum.Official,
                         Title = "Nuclear Winter",
-                        Image = ImageHelper.FileNameToStream("Duke3D.nwinter.jpg"),
+                        GridImage = ImageHelper.FileNameToStream("Duke3D.nwinter.jpg"),
                         Author = "Simply Silly Software",
                         Description = """
                             **Nuclear Winter**, is a Christmas-themed expansion pack for Duke Nukem 3D. It was developed by **Simply Silly Software** and published by **WizardWorks** on December 30, 1997.
@@ -212,10 +205,9 @@ namespace Games.Games
                             Duke Nukem must travel to the North Pole in order to stop the brainwashed Santa Claus and his manipulative captors.
                             """,
                         Version = null,
+                        SupportedGame = GameEnum.Duke3D,
                         SupportedPorts = null,
                         PathToFile = null,
-                        SupportedGames = null,
-                        RequiredGamesCrcs = null,
                         Dependencies = null,
                         Incompatibles = null,
                         MainCon = null,
@@ -226,8 +218,7 @@ namespace Games.Games
                         StartMap = null,
                         RequiredAddonEnum = DukeAddonEnum.DukeNW,
                         RequiredFeatures = null,
-                        GRPs = null,
-                        Preview = null,
+                        PreviewImage = null,
                         Playtime = _playtimeProvider.GetTime(dukeNwId)
                     });
                 }
@@ -240,7 +231,7 @@ namespace Games.Games
                         Id = dukeDcId,
                         Type = AddonTypeEnum.Official,
                         Title = "Duke it Out in DC",
-                        Image = ImageHelper.FileNameToStream("Duke3D.dukedc.jpg"),
+                        GridImage = ImageHelper.FileNameToStream("Duke3D.dukedc.jpg"),
                         Author = "WizardWorks",
                         Description = """
                             **Duke It Out In D.C.** is a Duke Nukem 3D expansion pack developed by Sunstorm Interactive and published by **WizardWorks** on March 17, 1997.
@@ -251,11 +242,9 @@ namespace Games.Games
                             alien invaders have captured several national monuments and critical government buildings, but in the end, Duke defeats the invading army and rescues the President from the Cycloid Emperor.
                             """,
                         Version = null,
-                        //TODO remove when https://voidpoint.io/terminx/eduke32/-/issues/297 is fixed
-                        SupportedPorts = [PortEnum.Raze, PortEnum.BuildGDX],
+                        SupportedGame = GameEnum.Duke3D,
+                        SupportedPorts = null,
                         PathToFile = null,
-                        SupportedGames = null,
-                        RequiredGamesCrcs = null,
                         Dependencies = null,
                         Incompatibles = null,
                         MainCon = null,
@@ -266,8 +255,7 @@ namespace Games.Games
                         StartMap = null,
                         RequiredAddonEnum = DukeAddonEnum.DukeDC,
                         RequiredFeatures = null,
-                        GRPs = null,
-                        Preview = null,
+                        PreviewImage = null,
                         Playtime = _playtimeProvider.GetTime(dukeDcId)
                     });
                 }
@@ -281,8 +269,7 @@ namespace Games.Games
                     Id = duke64Id,
                     Type = AddonTypeEnum.Official,
                     Title = "Duke Nukem 64",
-                    Image = ImageHelper.FileNameToStream("Duke3D.duke64.jpg"),
-                    SupportedPorts = [PortEnum.RedNukem],
+                    GridImage = ImageHelper.FileNameToStream("Duke3D.duke64.jpg"),
                     Author = "3D Realms, Eurocom",
                     Description = """
                         **Duke Nukem 64** is the Nintendo 64 port of the first-person shooter MS-DOS/PC game Duke Nukem 3D.
@@ -291,9 +278,9 @@ namespace Games.Games
                         The game's mature themes have been minimized to satisfy Nintendo's adult content standards.
                         """,
                     Version = null,
+                    SupportedGame = GameEnum.Duke64,
+                    SupportedPorts = null,
                     PathToFile = null,
-                    SupportedGames = null,
-                    RequiredGamesCrcs = null,
                     Dependencies = null,
                     Incompatibles = null,
                     MainCon = null,
@@ -304,8 +291,7 @@ namespace Games.Games
                     StartMap = null,
                     RequiredAddonEnum = DukeAddonEnum.Duke3D,
                     RequiredFeatures = null,
-                    GRPs = null,
-                    Preview = null,
+                    PreviewImage = null,
                     Playtime = _playtimeProvider.GetTime(duke64Id)
                 });
             }

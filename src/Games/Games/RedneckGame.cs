@@ -55,7 +55,7 @@ namespace Games.Games
                     Id = redneckId,
                     Type = AddonTypeEnum.Official,
                     Title = "Redneck Rampage",
-                    Image = ImageHelper.FileNameToStream("Redneck.redneck.jpg"),
+                    GridImage = ImageHelper.FileNameToStream("Redneck.redneck.jpg"),
                     Author = "Xatrix Entertainment",
                     Description = """
                         **Redneck Rampage** is a 1997 first-person shooter game developed by **Xatrix Entertainment** and published by **Interplay**.
@@ -67,22 +67,20 @@ namespace Games.Games
                         The bosses are the Assface and the leader of the alien invasion, the Queen Vixen.
                         """,
                     Version = null,
+                    SupportedGame = GameEnum.Redneck,
                     SupportedPorts = null,
                     PathToFile = null,
-                    SupportedGames = null,
-                    RequiredGamesCrcs = null,
                     Dependencies = null,
                     Incompatibles = null,
                     MainCon = null,
                     AdditionalCons = null,
                     MainDef = null,
                     AdditionalDefs = null,
-                    GRPs = null,
                     RTS = null,
                     StartMap = null,
                     RequiredAddonEnum = RedneckAddonEnum.Redneck,
                     RequiredFeatures = null,
-                    Preview = null,
+                    PreviewImage = null,
                     Playtime = _playtimeProvider.GetTime(redneckId)
                 });
 
@@ -94,29 +92,27 @@ namespace Games.Games
                         Id = redneckR66Id,
                         Type = AddonTypeEnum.Official,
                         Title = "Route 66",
-                        Image = ImageHelper.FileNameToStream("Redneck.route66.jpg"),
+                        GridImage = ImageHelper.FileNameToStream("Redneck.route66.jpg"),
                         Author = "Sunstorm Interactive",
                         Description = """
                             **Redneck Rampage: Suckin' Grits on Route 66** is a 12-level expansion pack for Redneck Rampage. It was developed by Sunstorm Interactive and released on December 19, 1997.
                             The add-on contains several new locations and textures, as well as a new ending.
                             """,
                         Version = null,
+                        SupportedGame = GameEnum.Redneck,
                         SupportedPorts = null,
                         PathToFile = null,
-                        SupportedGames = null,
-                        RequiredGamesCrcs = null,
                         Dependencies = null,
                         Incompatibles = null,
                         MainCon = null,
                         AdditionalCons = null,
                         MainDef = null,
                         AdditionalDefs = null,
-                        GRPs = null,
                         RTS = null,
                         StartMap = null,
                         RequiredAddonEnum = RedneckAddonEnum.RedneckR66,
                         RequiredFeatures = null,
-                        Preview = null,
+                        PreviewImage = null,
                         Playtime = _playtimeProvider.GetTime(redneckR66Id)
                     });
                 }
@@ -130,7 +126,7 @@ namespace Games.Games
                     Id = redneckRaId,
                     Type = AddonTypeEnum.Official,
                     Title = "Rides Again",
-                    Image = ImageHelper.FileNameToStream("Redneck.again.jpg"),
+                    GridImage = ImageHelper.FileNameToStream("Redneck.again.jpg"),
                     Author = "Xatrix Entertainment",
                     Description = """
                         **Redneck Rampage Rides Again** is a sequel to Redneck Rampage developed by **Xatrix Entertainment** and published by **Interplay Entertainment** for MS-DOS in 1998.
@@ -139,22 +135,20 @@ namespace Games.Games
                         Along the way, they are hunted by aliens and must blast their way through jackalope farms, Disgraceland, a riverboat, a brothel and various other locales.
                         """,
                     Version = null,
+                    SupportedGame = GameEnum.RidesAgain,
                     SupportedPorts = null,
                     PathToFile = null,
-                    SupportedGames = null,
-                    RequiredGamesCrcs = null,
                     Dependencies = null,
                     Incompatibles = null,
                     MainCon = null,
                     AdditionalCons = null,
                     MainDef = null,
                     AdditionalDefs = null,
-                    GRPs = null,
                     RTS = null,
                     StartMap = null,
                     RequiredAddonEnum = RedneckAddonEnum.RedneckRA,
                     RequiredFeatures = null,
-                    Preview = null,
+                    PreviewImage = null,
                     Playtime = _playtimeProvider.GetTime(redneckRaId)
                 });
             }

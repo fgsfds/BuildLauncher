@@ -23,22 +23,19 @@ namespace Mods.Addons
         public required string Title { get; init; }
 
         /// <inheritdoc/>
-        public required string Version { get; init; }
+        public required string? Version { get; init; }
 
         /// <inheritdoc/>
-        public required HashSet<GameEnum>? SupportedGames { get; init; }
+        public required GameEnum SupportedGame { get; init; }
 
         /// <inheritdoc/>
-        public required HashSet<int>? RequiredGamesCrcs { get; init; }
+        public required HashSet<PortEnum>? SupportedPorts { get; init; }
 
         /// <inheritdoc/>
         public required string? Author { get; init; }
 
         /// <inheritdoc/>
         public required string? Description { get; init; }
-
-        /// <inheritdoc/>
-        public required HashSet<PortEnum>? SupportedPorts { get; init; }
 
         /// <inheritdoc/>
         public required Dictionary<string, string?>? Dependencies { get; init; }
@@ -50,10 +47,10 @@ namespace Mods.Addons
         public required string? PathToFile { get; init; }
 
         /// <inheritdoc/>
-        public required Stream? Image { get; init; }
+        public required Stream? GridImage { get; init; }
 
         /// <inheritdoc/>
-        public required Stream? Preview { get; init; }
+        public required Stream? PreviewImage { get; init; }
 
         /// <inheritdoc/>
         public required string? MainDef { get; init; }
@@ -102,11 +99,6 @@ namespace Mods.Addons
                 }
 
                 description.Append("\n\n").AppendJoin("\n\n", lines);
-            }
-
-            if (SupportedPorts is not null)
-            {
-                description.Append("\n\n").Append($"Only works with: *{string.Join(", ", SupportedPorts)}*");
             }
 
             if (Dependencies is not null)

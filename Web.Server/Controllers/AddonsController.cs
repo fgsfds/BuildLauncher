@@ -1,4 +1,4 @@
-using Common;
+using Common.Entities;
 using Common.Enums;
 using Microsoft.AspNetCore.Mvc;
 using Web.Server.Providers;
@@ -17,6 +17,6 @@ namespace Web.Server.Controllers
         }
 
         [HttpGet("{GameEnum}")]
-        public async Task<List<DownloadableAddonEntity>> GetAppReleaseAsync(GameEnum gameEnum) => await _addonsProvider.GetAddonsListAsync(gameEnum).ConfigureAwait(false);
+        public List<DownloadableAddonEntity> GetDownloadableAddons(GameEnum gameEnum) => _addonsProvider.GetAddonsList(gameEnum);
     }
 }

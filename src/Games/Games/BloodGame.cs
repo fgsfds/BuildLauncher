@@ -48,7 +48,7 @@ namespace Games.Games
                 Id = bloodId,
                 Type = AddonTypeEnum.Official,
                 Title = "Blood",
-                Image = ImageHelper.FileNameToStream("Blood.blood.png"),
+                GridImage = ImageHelper.FileNameToStream("Blood.blood.png"),
                 Author = "Monolith Productions",
                 Description = """
                     **Blood** is a PC game released for MS-DOS on May 31, 1997. It was developed by **Monolith Productions** and published by **GT Interactive**.
@@ -63,10 +63,9 @@ namespace Games.Games
                     Together they rose to the highest ranks and became "The Chosen", the four most esteemed generals of Tchernobog's army (the other two being Ishmael and Gabriel).
                     """,
                 Version = null,
+                SupportedGame = GameEnum.Blood,
                 SupportedPorts = null,
                 PathToFile = null,
-                SupportedGames = null,
-                RequiredGamesCrcs = null,
                 Dependencies = null,
                 Incompatibles = null,
                 MainDef = null,
@@ -77,7 +76,7 @@ namespace Games.Games
                 StartMap = null,
                 RequiredAddonEnum = BloodAddonEnum.Blood,
                 RequiredFeatures = null,
-                Preview = null,
+                PreviewImage = null,
                 Playtime = _playtimeProvider.GetTime(bloodId)
             });
 
@@ -90,7 +89,7 @@ namespace Games.Games
                     Id = bloodCpId,
                     Type = AddonTypeEnum.Official,
                     Title = "Cryptic Passage",
-                    Image = ImageHelper.FileNameToStream("Blood.cp.jpg"),
+                    GridImage = ImageHelper.FileNameToStream("Blood.cp.jpg"),
                     Author = "Sunstorm Interactive",
                     Description = """
                         **Cryptic Passage** (originally titled Passage to Transylvania) is the first of two expansion packs for Blood.
@@ -101,10 +100,9 @@ namespace Games.Games
                         He must find the scroll and take out everyone responsible for interrupting his journey.
                         """,
                     Version = null,
+                    SupportedGame = GameEnum.Blood,
                     SupportedPorts = null,
                     PathToFile = null,
-                    SupportedGames = null,
-                    RequiredGamesCrcs = null,
                     Dependencies = null,
                     Incompatibles = null,
                     MainDef = null,
@@ -115,7 +113,7 @@ namespace Games.Games
                     StartMap = null,
                     RequiredAddonEnum = BloodAddonEnum.BloodCP,
                     RequiredFeatures = null,
-                    Preview = null,
+                    PreviewImage = null,
                     Playtime = _playtimeProvider.GetTime(bloodCpId)
                 });
             }

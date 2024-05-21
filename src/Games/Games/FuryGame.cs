@@ -39,7 +39,7 @@ namespace Games.Games
                     Id = furyId,
                     Type = AddonTypeEnum.Official,
                     Title = IsAftershock() ? "Ion Fury: Aftershock" : "Ion Fury",
-                    Image = IsAftershock() ? ImageHelper.FileNameToStream("Fury.aftershock.jpg") : ImageHelper.FileNameToStream("Fury.fury.jpg"),
+                    GridImage = IsAftershock() ? ImageHelper.FileNameToStream("Fury.aftershock.jpg") : ImageHelper.FileNameToStream("Fury.fury.jpg"),
                     Author = "Voidpoint, LLC",
                     Description = """
                     **Ion Fury** (originally titled Ion Maiden) is a 2019 cyberpunk first-person shooter developed by **Voidpoint** and published by **3D Realms**.
@@ -49,10 +49,9 @@ namespace Games.Games
                     You assume the role of Shelly "Bombshell" Harrison, a bomb disposal expert aligned to the Global Defense Force. Dr. Jadus Heskel, a transhumanist cult leader, unleashes an army of cybernetically-enhanced soldiers on the futuristic dystopian city of Neo D.C., which Shelly is tasked with fighting through.
                     """,
                     Version = null,
+                    SupportedGame = GameEnum.Fury,
                     SupportedPorts = null,
                     PathToFile = null,
-                    SupportedGames = null,
-                    RequiredGamesCrcs = null,
                     Dependencies = null,
                     Incompatibles = null,
                     MainCon = null,
@@ -61,7 +60,7 @@ namespace Games.Games
                     AdditionalDefs = null,
                     StartMap = null,
                     RequiredFeatures = null,
-                    Preview = null,
+                    PreviewImage = null,
                     Playtime = _playtimeProvider.GetTime(furyId)
                 });
             }

@@ -79,7 +79,7 @@ namespace Mods.Providers
         {
             _cache.ThrowIfNull();
 
-            var addon = GetAddon(addonType, pathToFile);
+            var addon = GetAddonFromFile(addonType, pathToFile);
 
             addon.ThrowIfNull();
 
@@ -104,6 +104,7 @@ namespace Mods.Providers
         public void DeleteAddon(IAddon addon)
         {
             _cache.ThrowIfNull();
+            addon.PathToFile.ThrowIfNull();
 
             File.Delete(addon.PathToFile);
 
@@ -148,7 +149,7 @@ namespace Mods.Providers
             {
                 try
                 {
-                    var newAddon = GetAddon(addonType, file);
+                    var newAddon = GetAddonFromFile(addonType, file);
 
                     if (newAddon is null)
                     {
@@ -190,21 +191,19 @@ namespace Mods.Providers
         /// </summary>
         /// <param name="addonType">Addon type</param>
         /// <param name="pathToFile">Path to addon file</param>
-        private Addon? GetAddon(AddonTypeEnum addonType, string pathToFile)
+        private Addon? GetAddonFromFile(AddonTypeEnum addonType, string pathToFile)
         {
             var type = addonType;
             var id = Path.GetFileName(pathToFile);
             var title = Path.GetFileName(pathToFile);
+            string version = new("1.0");
+
             string? author = null;
-            string? version = null;
             string? description = null;
             Stream? image = null;
             Stream? preview = null;
 
-            HashSet<GameEnum>? supportedGames = [_game.GameEnum];
-            HashSet<int>? supportedGamesCrcs = null;
-            HashSet<PortEnum>? supportedPorts = null;
-            HashSet<string>? grps = null;
+            var supportedGame = _game.GameEnum;
             HashSet<FeatureEnum>? requiredFeatures = null;
 
             string? mainCon = null;
@@ -235,7 +234,7 @@ namespace Mods.Providers
                     return null;
                 }
 
-                var entry = archive.Entries.FirstOrDefault(static x => x.Key.Equals("addon.json"));
+                var entry = archive.Entries.FirstOrDefault(static x => x.Key!.Equals("addon.json"));
 
                 if (entry is null)
                 {
@@ -248,130 +247,98 @@ namespace Mods.Providers
                     AddonManifestContext.Default.AddonDto
                     );
 
-                if (manifest is not null)
+                if (manifest is null)
                 {
-                    type = manifest.Type;
-                    id = manifest.Id;
-                    title = manifest.Title;
-                    author = manifest.Author;
-                    version = manifest.Version;
-
-                    //TODO description
-                    if (manifest.Description is string desc)
-                    {
-                        description = desc;
-                    }
-
-                    supportedGames = manifest.SupportedGames is null ? supportedGames : [.. manifest.SupportedGames];
-                    supportedGamesCrcs = manifest.SupportedGamesCrcs is null ? null : [.. manifest.SupportedGamesCrcs];
-                    supportedPorts = manifest.SupportedPorts is null ? null : [.. manifest.SupportedPorts];
-
-                    grps = manifest.Grps?.ToHashSet();
-                    rts = manifest.Rts;
-                    ini = manifest.Ini;
-                    rff = manifest.Rff;
-                    snd = manifest.Snd;
-                    startMap = manifest.StartMap;
-                    requiredFeatures = manifest.RequiredFeatures?.ToHashSet();
-
-                    if (manifest.Cons is not null)
-                    {
-                        addCons = new(manifest.Cons.Count);
-
-                        foreach (var con in manifest.Cons)
-                        {
-                            if (con.Type is ScriptTypeEnum.Main)
-                            {
-                                mainCon = con.PathToFile;
-                            }
-                            else
-                            {
-                                addCons.Add(con.PathToFile);
-                            }
-                        }
-                    }
-
-                    if (manifest.Defs is not null)
-                    {
-                        addDefs = new(manifest.Defs.Count);
-
-                        foreach (var def in manifest.Defs)
-                        {
-                            if (def.Type is ScriptTypeEnum.Main)
-                            {
-                                mainDef = def.PathToFile;
-                            }
-                            else
-                            {
-                                addDefs.Add(def.PathToFile);
-                            }
-                        }
-                    }
-
-                    if (manifest.Dependencies is not null)
-                    {
-                        dependencies = new(manifest.Dependencies.Count, StringComparer.OrdinalIgnoreCase);
-
-                        //extracting official addons from dependencies
-                        foreach (var dep in manifest.Dependencies)
-                        {
-                            if (dep.Id.Equals(nameof(DukeAddonEnum.DukeDC), StringComparison.OrdinalIgnoreCase))
-                            {
-                                dukeAddon = DukeAddonEnum.DukeDC;
-                            }
-                            else if (dep.Id.Equals(nameof(DukeAddonEnum.DukeNW), StringComparison.OrdinalIgnoreCase))
-                            {
-                                dukeAddon = DukeAddonEnum.DukeNW;
-                            }
-                            else if (dep.Id.Equals(nameof(DukeAddonEnum.DukeVaca), StringComparison.OrdinalIgnoreCase))
-                            {
-                                dukeAddon = DukeAddonEnum.DukeVaca;
-                            }
-                            else if (dep.Id.Equals(nameof(DukeAddonEnum.DukeWT), StringComparison.OrdinalIgnoreCase))
-                            {
-                                dukeAddon = DukeAddonEnum.DukeWT;
-                            }
-
-                            else if (dep.Id.Equals(nameof(WangAddonEnum.WangTD), StringComparison.OrdinalIgnoreCase))
-                            {
-                                wangAddon = WangAddonEnum.WangTD;
-                            }
-                            else if (dep.Id.Equals(nameof(WangAddonEnum.WangWD), StringComparison.OrdinalIgnoreCase))
-                            {
-                                wangAddon = WangAddonEnum.WangWD;
-                            }
-
-                            else if (dep.Id.Equals(nameof(RedneckAddonEnum.RedneckR66), StringComparison.OrdinalIgnoreCase))
-                            {
-                                redneckAddon = RedneckAddonEnum.RedneckR66;
-                            }
-
-                            else if (dep.Id.Equals(nameof(BloodAddonEnum.BloodCP), StringComparison.OrdinalIgnoreCase))
-                            {
-                                bloodAddon = BloodAddonEnum.BloodCP;
-                            }
-
-                            dependencies.Add(dep.Id, dep.Version);
-                        }
-                    }
-
-                    if (manifest.Incompatibles is not null)
-                    {
-                        incompatibles = new(manifest.Incompatibles.Count, StringComparer.OrdinalIgnoreCase);
-
-                        foreach (var dep in manifest.Incompatibles)
-                        {
-                            incompatibles.Add(dep.Id, dep.Version);
-                        }
-                    }
-
-                    if (manifest.PreviewImage is not null)
-                    {
-                        preview = ImageHelper.GetImageFromArchive(archive, manifest.PreviewImage);
-                    }
-
-                    image = ImageHelper.GetCoverFromArchive(archive) ?? preview;
+                    return null;
                 }
+
+                type = manifest.AddonType;
+                id = manifest.Id;
+                title = manifest.Title;
+                author = manifest.Author;
+                version = manifest.Version;
+
+                //TODO description
+                if (manifest.Description is string desc)
+                {
+                    description = desc;
+                }
+
+                supportedGame = manifest.SupportedGame.Game;
+
+                rts = manifest.Rts;
+                ini = manifest.Ini;
+                rff = manifest.MainRff;
+                snd = manifest.SoundRff;
+                startMap = manifest.StartMap;
+
+                requiredFeatures = manifest.Dependencies?.RequiredFeatures?.Select(static x => x).ToHashSet();
+
+                mainCon = manifest.MainCon;
+                addCons = manifest.AdditionalCons?.ToHashSet();
+
+                mainDef = manifest.MainDef;
+                addDefs = manifest.AdditionalDefs?.ToHashSet();
+
+                if (manifest.Dependencies?.Addons is not null)
+                {
+                    dependencies = new(manifest.Dependencies.Addons.Count, StringComparer.OrdinalIgnoreCase);
+
+                    //extracting official addons from dependencies
+                    foreach (var dep in manifest.Dependencies.Addons)
+                    {
+                        if (dep.Id.Equals(nameof(DukeAddonEnum.DukeDC), StringComparison.OrdinalIgnoreCase))
+                        {
+                            dukeAddon = DukeAddonEnum.DukeDC;
+                        }
+                        else if (dep.Id.Equals(nameof(DukeAddonEnum.DukeNW), StringComparison.OrdinalIgnoreCase))
+                        {
+                            dukeAddon = DukeAddonEnum.DukeNW;
+                        }
+                        else if (dep.Id.Equals(nameof(DukeAddonEnum.DukeVaca), StringComparison.OrdinalIgnoreCase))
+                        {
+                            dukeAddon = DukeAddonEnum.DukeVaca;
+                        }
+                        else if (dep.Id.Equals(nameof(DukeAddonEnum.DukeWT), StringComparison.OrdinalIgnoreCase))
+                        {
+                            dukeAddon = DukeAddonEnum.DukeWT;
+                        }
+
+                        else if (dep.Id.Equals(nameof(WangAddonEnum.WangTD), StringComparison.OrdinalIgnoreCase))
+                        {
+                            wangAddon = WangAddonEnum.WangTD;
+                        }
+                        else if (dep.Id.Equals(nameof(WangAddonEnum.WangWD), StringComparison.OrdinalIgnoreCase))
+                        {
+                            wangAddon = WangAddonEnum.WangWD;
+                        }
+
+                        else if (dep.Id.Equals(nameof(RedneckAddonEnum.RedneckR66), StringComparison.OrdinalIgnoreCase))
+                        {
+                            redneckAddon = RedneckAddonEnum.RedneckR66;
+                        }
+
+                        else if (dep.Id.Equals(nameof(BloodAddonEnum.BloodCP), StringComparison.OrdinalIgnoreCase))
+                        {
+                            bloodAddon = BloodAddonEnum.BloodCP;
+                        }
+
+                        dependencies.Add(dep.Id, dep.Version);
+                    }
+                }
+
+                if (manifest.Incompatibles?.Addons is not null)
+                {
+                    incompatibles = new(manifest.Incompatibles.Addons.Count, StringComparer.OrdinalIgnoreCase);
+
+                    foreach (var dep in manifest.Incompatibles.Addons)
+                    {
+                        incompatibles.Add(dep.Id, dep.Version);
+                    }
+                }
+
+                preview = ImageHelper.GetImageFromArchive(archive, "eduke32_preview.png");
+                image = ImageHelper.GetCoverFromArchive(archive) ?? preview;
             }
             else if (pathToFile.EndsWith(".map", StringComparison.OrdinalIgnoreCase))
             {
@@ -399,9 +366,8 @@ namespace Mods.Providers
                 {
                     Id = id,
                     Type = AddonTypeEnum.Mod,
-                    Title = title!,
-                    Image = image,
-                    SupportedPorts = supportedPorts,
+                    Title = title,
+                    GridImage = image,
                     Description = description,
                     Version = version,
                     Author = author,
@@ -409,13 +375,13 @@ namespace Mods.Providers
                     PathToFile = pathToFile,
                     MainDef = mainDef,
                     AdditionalDefs = addDefs,
-                    SupportedGames = supportedGames,
-                    RequiredGamesCrcs = supportedGamesCrcs,
+                    SupportedGame = supportedGame,
+                    SupportedPorts = null,
                     Dependencies = dependencies,
                     Incompatibles = incompatibles,
                     StartMap = startMap,
                     RequiredFeatures = requiredFeatures,
-                    Preview = preview,
+                    PreviewImage = preview,
                     Playtime = _playtimeProvider.GetTime(id)
                 };
             }
@@ -427,15 +393,14 @@ namespace Mods.Providers
                     {
                         Id = id,
                         Type = type,
+                        SupportedGame = supportedGame,
+                        SupportedPorts = null,
                         Title = title!,
-                        Image = image,
-                        SupportedPorts = supportedPorts,
+                        GridImage = image,
                         Description = description,
                         Version = version,
                         Author = author,
                         PathToFile = pathToFile,
-                        SupportedGames = supportedGames,
-                        RequiredGamesCrcs = supportedGamesCrcs,
                         Dependencies = dependencies,
                         Incompatibles = incompatibles,
                         StartMap = startMap,
@@ -444,10 +409,9 @@ namespace Mods.Providers
                         MainDef = mainDef,
                         AdditionalDefs = addDefs,
                         RTS = rts,
-                        GRPs = grps,
                         RequiredAddonEnum = dukeAddon,
                         RequiredFeatures = requiredFeatures,
-                        Preview = preview,
+                        PreviewImage = preview,
                         Playtime = _playtimeProvider.GetTime(id)
                     };
                 }
@@ -457,15 +421,14 @@ namespace Mods.Providers
                     {
                         Id = id,
                         Type = type,
-                        Title = title!,
-                        Image = image,
-                        SupportedPorts = supportedPorts,
+                        SupportedGame = supportedGame,
+                        SupportedPorts = null,
+                        Title = title,
+                        GridImage = image,
                         Description = description,
                         Version = version,
                         Author = author,
                         PathToFile = pathToFile,
-                        SupportedGames = supportedGames,
-                        RequiredGamesCrcs = supportedGamesCrcs,
                         Dependencies = dependencies,
                         Incompatibles = incompatibles,
                         StartMap = startMap,
@@ -474,7 +437,7 @@ namespace Mods.Providers
                         MainDef = mainDef,
                         AdditionalDefs = addDefs,
                         RequiredFeatures = requiredFeatures,
-                        Preview = preview,
+                        PreviewImage = preview,
                         Playtime = _playtimeProvider.GetTime(id)
                     };
                 }
@@ -484,15 +447,14 @@ namespace Mods.Providers
                     {
                         Id = id,
                         Type = type,
-                        Title = title!,
-                        Image = image,
-                        SupportedPorts = supportedPorts,
+                        SupportedGame = supportedGame,
+                        SupportedPorts = null,
+                        Title = title,
+                        GridImage = image,
                         Description = description,
                         Version = version,
                         Author = author,
                         PathToFile = pathToFile,
-                        SupportedGames = supportedGames,
-                        RequiredGamesCrcs = supportedGamesCrcs,
                         Dependencies = dependencies,
                         Incompatibles = incompatibles,
                         StartMap = startMap,
@@ -500,7 +462,7 @@ namespace Mods.Providers
                         AdditionalDefs = addDefs,
                         RequiredAddonEnum = wangAddon,
                         RequiredFeatures = requiredFeatures,
-                        Preview = preview,
+                        PreviewImage = preview,
                         Playtime = _playtimeProvider.GetTime(id)
                     };
                 }
@@ -510,15 +472,14 @@ namespace Mods.Providers
                     {
                         Id = id,
                         Type = type,
-                        Title = title!,
-                        Image = image,
-                        SupportedPorts = supportedPorts,
+                        SupportedGame = supportedGame,
+                        SupportedPorts = null,
+                        Title = title,
+                        GridImage = image,
                         Description = description,
                         Version = version,
                         Author = author,
                         PathToFile = pathToFile,
-                        SupportedGames = supportedGames,
-                        RequiredGamesCrcs = supportedGamesCrcs,
                         Dependencies = dependencies,
                         Incompatibles = incompatibles,
                         StartMap = startMap,
@@ -529,7 +490,7 @@ namespace Mods.Providers
                         SND = snd,
                         RequiredAddonEnum = bloodAddon,
                         RequiredFeatures = requiredFeatures,
-                        Preview = preview,
+                        PreviewImage = preview,
                         Playtime = _playtimeProvider.GetTime(id)
                     };
                 }
@@ -539,15 +500,14 @@ namespace Mods.Providers
                     {
                         Id = id,
                         Type = type,
-                        Title = title!,
-                        Image = image,
-                        SupportedPorts = supportedPorts,
+                        SupportedGame = supportedGame,
+                        SupportedPorts = null,
+                        Title = title,
+                        GridImage = image,
                         Description = description,
                         Version = version,
                         Author = author,
                         PathToFile = pathToFile,
-                        SupportedGames = supportedGames,
-                        RequiredGamesCrcs = supportedGamesCrcs,
                         Dependencies = dependencies,
                         Incompatibles = incompatibles,
                         StartMap = startMap,
@@ -555,11 +515,10 @@ namespace Mods.Providers
                         AdditionalCons = addCons,
                         MainDef = mainDef,
                         AdditionalDefs = addDefs,
-                        GRPs = null,
                         RTS = rts,
                         RequiredAddonEnum = redneckAddon,
                         RequiredFeatures = requiredFeatures,
-                        Preview = preview,
+                        PreviewImage = preview,
                         Playtime = _playtimeProvider.GetTime(id)
                     };
                 }
@@ -569,22 +528,21 @@ namespace Mods.Providers
                     {
                         Id = id,
                         Type = type,
-                        Title = title!,
-                        Image = image,
-                        SupportedPorts = supportedPorts,
+                        SupportedGame = supportedGame,
+                        SupportedPorts = null,
+                        Title = title,
+                        GridImage = image,
                         Description = description,
                         Version = version,
                         Author = author,
                         PathToFile = pathToFile,
-                        SupportedGames = supportedGames,
-                        RequiredGamesCrcs = supportedGamesCrcs,
                         Dependencies = dependencies,
                         Incompatibles = incompatibles,
                         StartMap = startMap,
                         MainDef = mainDef,
                         AdditionalDefs = addDefs,
                         RequiredFeatures = requiredFeatures,
-                        Preview = preview,
+                        PreviewImage = preview,
                         Playtime = _playtimeProvider.GetTime(id)
                     };
                 }

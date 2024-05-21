@@ -169,11 +169,12 @@ namespace Ports.Ports
                 return false;
             }
 
-            if (!autoloadMod.SupportedPorts?.Contains(PortEnum) ?? false)
-            {
-                //skipping mods not supported by the current port
-                return false;
-            }
+            //TODO features
+            //if (!autoloadMod.SupportedPorts?.Contains(PortEnum) ?? false)
+            //{
+            //    //skipping mods not supported by the current port
+            //    return false;
+            //}
 
             if (autoloadMod.Dependencies is not null)
             {
@@ -202,8 +203,7 @@ namespace Ports.Ports
             }
 
             //hack for RR and RA
-            if (autoloadMod.SupportedGames is not null &&
-                campaign is RedneckCampaign rCamp)
+            if (campaign is RedneckCampaign rCamp)
             {
                 var game = rCamp.RequiredAddonEnum switch
                 {
@@ -211,7 +211,7 @@ namespace Ports.Ports
                     _ => GameEnum.RidesAgain,
                 };
 
-                if (!autoloadMod.SupportedGames.Contains(game))
+                if (autoloadMod.SupportedGame != game)
                 {
                     return false;
                 }

@@ -52,9 +52,8 @@ namespace Games.Games
                     Id = wangId,
                     Type = AddonTypeEnum.Official,
                     Title = "Shadow Warrior",
-                    Image = ImageHelper.FileNameToStream("Wang.wang.jpg"),
+                    GridImage = ImageHelper.FileNameToStream("Wang.wang.jpg"),
                     Version = null,
-                    SupportedPorts = null,
                     Author = "3D Realms",
                     Description = """
                         **Shadow Warrior** is a first-person shooter developed by **3D Realms** and released on May 13, 1997 by **GT Interactive**.
@@ -64,8 +63,8 @@ namespace Games.Games
                         In discovery of this, Lo Wang quit his job as a bodyguard. Master Zilla realized that not having a warrior as powerful as Lo Wang would be dangerous, and sent his creatures to battle Lo Wang.
                         """,
                     PathToFile = null,
-                    SupportedGames = null,
-                    RequiredGamesCrcs = null,
+                    SupportedGame = GameEnum.ShadowWarrior,
+                    SupportedPorts = null,
                     Dependencies = null,
                     Incompatibles = null,
                     MainDef = null,
@@ -73,7 +72,7 @@ namespace Games.Games
                     StartMap = null,
                     RequiredAddonEnum = WangAddonEnum.Wang,
                     RequiredFeatures = null,
-                    Preview = null,
+                    PreviewImage = null,
                     Playtime = _playtimeProvider.GetTime(wangId)
                 });
 
@@ -85,7 +84,7 @@ namespace Games.Games
                         Id = wangWdId,
                         Type = AddonTypeEnum.Official,
                         Title = "Wanton Destruction",
-                        Image = ImageHelper.FileNameToStream("Wang.wanton.jpg"),
+                        GridImage = ImageHelper.FileNameToStream("Wang.wanton.jpg"),
                         Author = "Sunstorm Interactive",
                         Description = """
                             **Wanton Destruction** is an official expansion that was created by **Sunstorm Interactive** and tested by **3D Realms**, but was not released by the distributor.
@@ -97,10 +96,9 @@ namespace Games.Games
                             The game features 12 new levels, new artwork and a few new enemy replacements, such as human enemies; though they still act like their original counterparts.
                             """,
                         Version = null,
+                        SupportedGame = GameEnum.ShadowWarrior,
                         SupportedPorts = null,
                         PathToFile = null,
-                        SupportedGames = null,
-                        RequiredGamesCrcs = null,
                         Dependencies = null,
                         Incompatibles = null,
                         MainDef = null,
@@ -108,7 +106,7 @@ namespace Games.Games
                         StartMap = null,
                         RequiredAddonEnum = WangAddonEnum.WangWD,
                         RequiredFeatures = null,
-                        Preview = null,
+                        PreviewImage = null,
                         Playtime = _playtimeProvider.GetTime(wangWdId)
                     });
                 }
@@ -121,7 +119,7 @@ namespace Games.Games
                         Id = wangTdId,
                         Type = AddonTypeEnum.Official,
                         Title = "Twin Dragon",
-                        Image = ImageHelper.FileNameToStream("Wang.twin.jpg"),
+                        GridImage = ImageHelper.FileNameToStream("Wang.twin.jpg"),
                         Author = "Wylde Productions, Level Infinity",
                         Description = """
                             **Twin Dragon** is an official expansion to the Shadow Warrior that was released as a free download on July 4, 1998.
@@ -133,10 +131,9 @@ namespace Games.Games
                             The game features 13 new levels, new sounds, artwork and a new final boss, Hung Lo, who replaced Zilla.
                             """,
                         Version = null,
+                        SupportedGame = GameEnum.ShadowWarrior,
                         SupportedPorts = null,
                         PathToFile = null,
-                        SupportedGames = null,
-                        RequiredGamesCrcs = null,
                         Dependencies = null,
                         Incompatibles = null,
                         MainDef = null,
@@ -144,7 +141,7 @@ namespace Games.Games
                         StartMap = null,
                         RequiredAddonEnum = WangAddonEnum.WangTD,
                         RequiredFeatures = null,
-                        Preview = null,
+                        PreviewImage = null,
                         Playtime = _playtimeProvider.GetTime(wangTdId)
                     });
                 }

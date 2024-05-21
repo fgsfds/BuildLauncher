@@ -1,4 +1,5 @@
 using Common.Providers;
+using Web.Server.Database;
 using Web.Server.Helpers;
 using Web.Server.Providers;
 using Web.Server.Tasks;
@@ -33,7 +34,7 @@ namespace Web.Server
             builder.Services.AddSingleton<HttpClient>(CreateHttpClient);
             builder.Services.AddSingleton<S3Client>();
 
-            //builder.Services.AddSingleton<DatabaseContextFactory>();
+            builder.Services.AddSingleton<DatabaseContextFactory>();
 
             var app = builder.Build();
 
@@ -53,8 +54,8 @@ namespace Web.Server
 
             app.MapControllers();
 
-            //var dbContext = new DatabaseContext();
-            //dbContext.Dispose();
+            var dbContext = new DatabaseContext();
+            dbContext.Dispose();
 
             app.MapFallbackToFile("/index.html");
 

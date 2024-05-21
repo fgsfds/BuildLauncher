@@ -15,19 +15,15 @@ namespace Common.Interfaces
         AddonTypeEnum Type { get; init; }
 
         /// <summary>
-        /// Port features required to run addon
-        /// </summary>
-        HashSet<FeatureEnum>? RequiredFeatures { get; init; }
-
-        /// <summary>
         /// List of supported games
         /// </summary>
-        HashSet<GameEnum>? SupportedGames { get; init; }
+        GameEnum SupportedGame { get; init; }
 
         /// <summary>
-        /// List of required games CRCs
+        /// Ports that support this campaign
+        /// if null - supported by all ports that support the game
         /// </summary>
-        HashSet<int>? RequiredGamesCrcs { get; init; }
+        HashSet<PortEnum>? SupportedPorts { get; init; }
 
         /// <summary>
         /// Name of the addon
@@ -57,23 +53,17 @@ namespace Common.Interfaces
         /// <summary>
         /// Cover image
         /// </summary>
-        Stream? Image { get; init; }
+        Stream? GridImage { get; init; }
 
         /// <summary>
         /// Preview image
         /// </summary>
-        Stream? Preview { get; init; }
-
-        /// <summary>
-        /// Ports that support this campaign
-        /// if null - supported by all ports that support the game
-        /// </summary>
-        HashSet<PortEnum>? SupportedPorts { get; init; }
+        Stream? PreviewImage { get; init; }
 
         /// <summary>
         /// Addon version
         /// </summary>
-        string Version { get; init; }
+        string? Version { get; init; }
 
         /// <summary>
         /// List of addons that the current addon requires to work

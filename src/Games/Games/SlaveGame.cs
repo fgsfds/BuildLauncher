@@ -39,7 +39,7 @@ namespace Games.Games
                     Id = slaveId,
                     Type = AddonTypeEnum.Official,
                     Title = "Powerslave",
-                    Image = ImageHelper.FileNameToStream("Slave.slave.jpg"),
+                    GridImage = ImageHelper.FileNameToStream("Slave.slave.jpg"),
                     Author = "Lobotomy Software",
                     Description = """
                         **PowerSlave**, known as **Exhumed** in Europe and **1999 AD: Resurrection of the Pharaoh** in Japan, is a first-person shooter video game developed by **Lobotomy Software**
@@ -53,17 +53,16 @@ namespace Games.Games
                         from its tomb by the Kilmaat, who seek to resurrect him and use his powers to control the world.
                         """,
                     Version = null,
+                    SupportedGame = GameEnum.Exhumed,
                     SupportedPorts = null,
                     PathToFile = null,
-                    SupportedGames = null,
-                    RequiredGamesCrcs = null,
                     Dependencies = null,
                     Incompatibles = null,
                     MainDef = null,
                     AdditionalDefs = null,
                     StartMap = null,
                     RequiredFeatures = null,
-                    Preview = null,
+                    PreviewImage = null,
                     Playtime = _playtimeProvider.GetTime(slaveId)
                 });
             }

@@ -153,14 +153,6 @@ namespace Ports.Ports.EDuke32
             {
                 sb.Append($@" {AddFileParam}""{Path.Combine(game.CampaignsFolderPath, camp.FileName)}""");
 
-                if (camp.GRPs is not null)
-                {
-                    foreach (var grp in camp.GRPs)
-                    {
-                        sb.Append($@" {AddGrpParam}""{grp}""");
-                    }
-                }
-
                 if (camp.MainCon is not null)
                 {
                     sb.Append($@" {MainConParam}""{camp.MainCon}""");

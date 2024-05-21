@@ -458,3 +458,4 @@ $RECYCLE.BIN/
 /src/Avalonia/BuildLauncher.Desktop/Properties/launchSettings.json
 /Web.Server/config.json
 /Web.Server/Data
+/src/Generator/Properties/launchSettings.json

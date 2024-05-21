@@ -1,48 +1,91 @@
-﻿using Common;
-using Common.Entities;
+﻿using Common.Entities;
 using Common.Enums;
-using Common.Helpers;
-using System.Text.Json;
+using Microsoft.EntityFrameworkCore;
+using System.Diagnostics;
+using Web.Server.DbEntities;
+using Web.Server.Helpers;
 
 namespace Web.Server.Providers
 {
     public sealed class AddonsProvider
     {
         private readonly ILogger<AppReleasesProvider> _logger;
-        private readonly HttpClient _httpClient;
+        private readonly DatabaseContextFactory _dbContextFactory;
 
         public GeneralReleaseEntity? AppRelease { get; private set; }
 
         public AddonsProvider(
             ILogger<AppReleasesProvider> logger,
-            HttpClient httpClient)
+            DatabaseContextFactory dbContextFactory)
         {
             _logger = logger;
-            _httpClient = httpClient;
+            _dbContextFactory = dbContextFactory;
         }
 
         /// <summary>
-        /// Return the latest new release or null if there's no newer releases
+        /// Return addons list for a game
         /// </summary>
-        public async Task<List<DownloadableAddonEntity>> GetAddonsListAsync(GameEnum gameEnum)
+        /// <param name="gameEnum">Game enum</param>
+        public List<DownloadableAddonEntity> GetAddonsList(GameEnum gameEnum)
         {
-            var fixesXml = await _httpClient.GetStringAsync($"{Consts.FilesRepo}/addons.json").ConfigureAwait(false);
+            using var dbContext = _dbContextFactory.Get();
 
-            var addons = JsonSerializer.Deserialize(fixesXml, DownloadableAddonEntityListContext.Default.ListDownloadableAddonEntity);
+            Stopwatch sw = new();
+            sw.Start();
 
-            addons.ThrowIfNull();
+            Dictionary<string, AddonsDbEntity>? addons;
 
-            List<DownloadableAddonEntity> result = new();
-
-            foreach (var addon in addons)
+            if (gameEnum is GameEnum.Redneck)
             {
-                //hack for RR
-                if (addon.Game == gameEnum ||
-                    (gameEnum is GameEnum.Redneck && addon.Game is GameEnum.Redneck or GameEnum.RidesAgain))
-                {
-                    result.Add(addon);
-                }
+                addons = dbContext.Addons.AsNoTracking().Where(x => x.GameId == (byte)GameEnum.Redneck || x.GameId == (byte)GameEnum.RidesAgain).ToDictionary(static x => x.Id);
             }
+            else
+            {
+                addons = dbContext.Addons.AsNoTracking().Where(x => x.GameId == (byte)gameEnum).ToDictionary(static x => x.Id);
+            }
+
+            var versions = dbContext.Versions.AsNoTracking().Where(x => addons.Keys.Contains(x.AddonId)).ToDictionary(static x => x.Id);
+            var dependencies = dbContext.Dependencies.AsNoTracking().Where(x => versions.Keys.Contains(x.AddonVersionId)).ToLookup(x => x.AddonVersionId);
+
+            List<DownloadableAddonEntity> result = new(versions.Count);
+
+            foreach (var version in versions)
+            {
+                var addon = addons[version.Value.AddonId];
+
+                List<string>? depsResult = null;
+                var addonDeps = dependencies[version.Key];
+
+                foreach (var dep in addonDeps)
+                {
+                    depsResult ??= [];
+
+                    var depVersion = versions[dep.DependencyVersionId];
+                    var depAddon = addons[depVersion.AddonId];
+
+                    depsResult.Add(depAddon.Title);
+                }
+
+                DownloadableAddonEntity newDownloadable = new()
+                {
+                    AddonType = (AddonTypeEnum)addon.AddonType,
+                    Id = addon.Id,
+                    Game = (GameEnum)addon.GameId,
+                    DownloadUrl = version.Value.DownloadUrl,
+                    Title = addon.Title,
+                    Version = version.Value.Version,
+                    FileSize = version.Value.FileSize,
+                    IsDisabled = version.Value.IsDisabled,
+                    Description = version.Value.Description,
+                    Author = version.Value.Author,
+                    Dependencies = depsResult
+                };
+
+                result.Add(newDownloadable);
+            }
+
+            sw.Stop();
+            _logger.LogInformation($"Got addons for {gameEnum} in {sw.ElapsedMilliseconds} ms.");
 
             return result;
         }

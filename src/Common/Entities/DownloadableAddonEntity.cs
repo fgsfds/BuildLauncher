@@ -4,39 +4,43 @@ using Common.Interfaces;
 using System.Text;
 using System.Text.Json.Serialization;
 
-namespace Common
+namespace Common.Entities
 {
     public sealed class DownloadableAddonEntity : IDownloadableAddon
     {
         [JsonPropertyName("Id")]
-        public string Id { get; set; }
+        public required string Id { get; set; }
+
+        [JsonPropertyName("AddonType")]
+        public required AddonTypeEnum AddonType { get; set; }
+
+        [JsonPropertyName("Game")]
+        public required GameEnum Game { get; set; }
 
         [JsonPropertyName("DownloadUrl")]
-        public string DownloadUrl { get; set; }
+        public required Uri DownloadUrl { get; set; }
 
         [JsonPropertyName("Title")]
-        public string Title { get; set; }
+        public required string Title { get; set; }
 
         [JsonPropertyName("Version")]
-        public string Version { get; set; }
+        public required string Version { get; set; }
+
+        [JsonPropertyName("FileSize")]
+        public required long FileSize { get; set; }
+
+        [JsonPropertyName("IsDisabled")]
+        public required bool IsDisabled { get; set; }
+
+        [JsonPropertyName("Dependencies")]
+        public List<string>? Dependencies { get; set; }
+
+        [JsonPropertyName("Description")]
+        public string? Description { get; set; }
 
         [JsonPropertyName("Author")]
         public string? Author { get; set; }
 
-        [JsonPropertyName("Game")]
-        public GameEnum Game { get; set; }
-
-        [JsonPropertyName("AddonType")]
-        public AddonTypeEnum AddonType { get; set; }
-
-        [JsonPropertyName("Description")]
-        public string Description { get; set; }
-
-        [JsonPropertyName("FileSize")]
-        public long FileSize { get; set; }
-
-        [JsonPropertyName("IsDisabled")]
-        public bool IsDisabled { get; set; }
 
         [JsonIgnore]
         public bool IsInstalled { get; set; }
@@ -96,6 +100,11 @@ namespace Common
                 description.Append("\n\n").AppendJoin("\n\n", lines);
             }
 
+            if (Dependencies is not null)
+            {
+                description.Append("\n\n").Append("Requires: ").AppendJoin(", ", Dependencies);
+            }
+
             return description.ToString();
         }
     }
@@ -105,7 +114,6 @@ namespace Common
         WriteIndented = true,
         DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
         Converters = [
-            typeof(JsonStringEnumConverter<PortEnum>),
             typeof(JsonStringEnumConverter<GameEnum>),
             typeof(JsonStringEnumConverter<AddonTypeEnum>)
             ]

@@ -1,4 +1,5 @@
 ﻿using Common.Enums;
+using Common.Helpers;
 using Common.Interfaces;
 using Mods.Serializable.Addon;
 using System.Text.Json;
@@ -6,32 +7,31 @@ using System.Text.Json.Serialization;
 
 namespace Mods.Serializable
 {
-    public sealed class StringOrDescriptionConverter : JsonConverter<object?>
+    public sealed class SupportedGameDtoConverter : JsonConverter<SupportedGameDto?>
     {
-        public override object? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        public override SupportedGameDto? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
-            if (reader.TokenType is JsonTokenType.String)
-            {
-                var text = reader.GetString();
-
-                return text;
-            }
-
             if (reader.TokenType is JsonTokenType.StartObject)
             {
-                try
-                {
-                    var descriptionDto = JsonSerializer.Deserialize(ref reader, DescriptionContext.Default.DescriptionDto);
+                return JsonSerializer.Deserialize(ref reader, SupportedGameDtoContext.Default.SupportedGameDto);
+            }
+            else if (reader.TokenType is JsonTokenType.String)
+            {
+                var str = reader.GetString();
+                var gameEnum = Enum.Parse<GameEnum>(str, true);
 
-                    return descriptionDto;
-                }
-                catch { }
+                SupportedGameDto dto = new()
+                { 
+                    Game = gameEnum
+                };
+
+                return dto;
             }
 
-            return null;
+            return ThrowHelper.NotImplementedException<SupportedGameDto?>();
         }
 
-        public override void Write(Utf8JsonWriter writer, object? value, JsonSerializerOptions options)
+        public override void Write(Utf8JsonWriter writer, SupportedGameDto? value, JsonSerializerOptions options)
         {
             throw new NotImplementedException();
         }
@@ -44,7 +44,6 @@ namespace Mods.Serializable
         {
             if (reader.TokenType is JsonTokenType.StartObject)
             {
-
                 try
                 {
                     return JsonSerializer.Deserialize(ref reader, MapSlotDtoContext.Default.MapSlotDto);
@@ -58,7 +57,7 @@ namespace Mods.Serializable
                 catch { }
             }
 
-            return null;
+            return ThrowHelper.NotImplementedException<IStartMap?>();
         }
 
         public override void Write(Utf8JsonWriter writer, IStartMap? value, JsonSerializerOptions options)
@@ -123,14 +122,6 @@ namespace Mods.Serializable
             else
             {
                 throw new NotImplementedException();
-
-                //writer.WriteStartArray();
-                //foreach (var item in value)
-                //{
-                //    JsonSerializer.Serialize(writer, item, options);
-                //}
-
-                //writer.WriteEndArray();
             }
         }
 
@@ -153,14 +144,6 @@ namespace Mods.Serializable
 
                     return (TItem)(object)intValue;
                 }
-            }
-            else if (typeof(TItem) == typeof(ScriptDto))
-            {
-                return (TItem)(object)JsonSerializer.Deserialize(ref reader, ScriptContext.Default.ScriptDto)!;
-            }
-            else if (typeof(TItem) == typeof(DependencyDto))
-            {
-                return (TItem)(object)JsonSerializer.Deserialize(ref reader, DependencyContext.Default.DependencyDto)!;
             }
             else if (typeof(TItem) == typeof(GameEnum))
             {
