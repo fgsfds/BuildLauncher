@@ -43,6 +43,9 @@ namespace Ports.Ports
         /// <inheritdoc/>
         public override bool IsInstalled => File.Exists(Path.Combine(PathToExecutableFolder, "BuildGDX.jar"));
 
+        /// <inheritdoc/>
+        public override List<FeatureEnum> SupportedFeatures => [];
+
 
         /// <inheritdoc/>
         protected override string ConfigFile => string.Empty;

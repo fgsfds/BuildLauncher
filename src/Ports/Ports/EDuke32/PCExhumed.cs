@@ -25,6 +25,9 @@ namespace Ports.Ports.EDuke32
         public override List<GameEnum> SupportedGames => [GameEnum.Exhumed];
 
         /// <inheritdoc/>
+        public override List<FeatureEnum> SupportedFeatures => [];
+
+        /// <inheritdoc/>
         protected override string ConfigFile => "pcexhumed.cfg";
 
 

@@ -64,7 +64,7 @@ namespace Games.Games
                     """,
                 Version = null,
                 SupportedGame = GameEnum.Blood,
-                SupportedPorts = null,
+                RequiredFeatures = null,
                 PathToFile = null,
                 Dependencies = null,
                 Incompatibles = null,
@@ -75,7 +75,6 @@ namespace Games.Games
                 SND = null,
                 StartMap = null,
                 RequiredAddonEnum = BloodAddonEnum.Blood,
-                RequiredFeatures = null,
                 PreviewImage = null,
                 Playtime = _playtimeProvider.GetTime(bloodId)
             });
@@ -101,7 +100,7 @@ namespace Games.Games
                         """,
                     Version = null,
                     SupportedGame = GameEnum.Blood,
-                    SupportedPorts = null,
+                    RequiredFeatures = null,
                     PathToFile = null,
                     Dependencies = null,
                     Incompatibles = null,
@@ -112,7 +111,6 @@ namespace Games.Games
                     SND = null,
                     StartMap = null,
                     RequiredAddonEnum = BloodAddonEnum.BloodCP,
-                    RequiredFeatures = null,
                     PreviewImage = null,
                     Playtime = _playtimeProvider.GetTime(bloodCpId)
                 });

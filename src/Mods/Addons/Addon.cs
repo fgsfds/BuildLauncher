@@ -29,9 +29,6 @@ namespace Mods.Addons
         public required GameEnum SupportedGame { get; init; }
 
         /// <inheritdoc/>
-        public required HashSet<PortEnum>? SupportedPorts { get; init; }
-
-        /// <inheritdoc/>
         public required string? Author { get; init; }
 
         /// <inheritdoc/>

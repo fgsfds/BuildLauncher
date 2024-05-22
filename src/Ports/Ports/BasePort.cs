@@ -6,6 +6,7 @@ using Common.Interfaces;
 using Games.Games;
 using Mods.Addons;
 using Mods.Serializable.Addon;
+using System.Runtime.Versioning;
 using System.Text;
 
 namespace Ports.Ports
@@ -36,6 +37,11 @@ namespace Ports.Ports
         public abstract List<GameEnum> SupportedGames { get; }
 
         /// <summary>
+        /// Features supported by the port
+        /// </summary>
+        public abstract List<FeatureEnum> SupportedFeatures { get; }
+
+        /// <summary>
         /// Currently installed version
         /// </summary>
         public abstract string? InstalledVersion { get; }
@@ -54,6 +60,7 @@ namespace Ports.Ports
         /// Path to port exe
         /// </summary>
         public string FullPathToExe => Path.Combine(PathToExecutableFolder, Exe);
+
 
         /// <summary>
         /// Name of the config file

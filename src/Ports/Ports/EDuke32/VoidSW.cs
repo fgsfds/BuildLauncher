@@ -29,6 +29,9 @@ namespace Ports.Ports.EDuke32
         public override string PathToExecutableFolder => Path.Combine(ClientProperties.PortsFolderPath, "EDuke32");
 
         /// <inheritdoc/>
+        public override List<FeatureEnum> SupportedFeatures => [];
+
+        /// <inheritdoc/>
         protected override string ConfigFile => "voidsw.cfg";
 
         /// <inheritdoc/>

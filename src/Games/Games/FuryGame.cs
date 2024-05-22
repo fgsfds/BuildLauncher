@@ -50,7 +50,7 @@ namespace Games.Games
                     """,
                     Version = null,
                     SupportedGame = GameEnum.Fury,
-                    SupportedPorts = null,
+                    RequiredFeatures = null,
                     PathToFile = null,
                     Dependencies = null,
                     Incompatibles = null,
@@ -59,7 +59,6 @@ namespace Games.Games
                     MainDef = null,
                     AdditionalDefs = null,
                     StartMap = null,
-                    RequiredFeatures = null,
                     PreviewImage = null,
                     Playtime = _playtimeProvider.GetTime(furyId)
                 });

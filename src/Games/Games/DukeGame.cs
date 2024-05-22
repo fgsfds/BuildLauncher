@@ -97,7 +97,7 @@ namespace Games.Games
                         """,
                     Version = null,
                     SupportedGame = GameEnum.Duke3D,
-                    SupportedPorts = null,
+                    RequiredFeatures = null,
                     PathToFile = null,
                     Dependencies = null,
                     Incompatibles = null,
@@ -108,7 +108,6 @@ namespace Games.Games
                     RTS = null,
                     StartMap = null,
                     RequiredAddonEnum = DukeAddonEnum.Duke3D,
-                    RequiredFeatures = null,
                     PreviewImage = null,
                     Playtime = _playtimeProvider.GetTime(dukeId)
                 });
@@ -133,7 +132,7 @@ namespace Games.Games
                         """,
                     Version = null,
                     SupportedGame = GameEnum.Duke3D,
-                    SupportedPorts = null,
+                    RequiredFeatures = null,
                     PathToFile = null,
                     Dependencies = null,
                     Incompatibles = null,
@@ -144,7 +143,6 @@ namespace Games.Games
                     RTS = null,
                     StartMap = null,
                     RequiredAddonEnum = DukeAddonEnum.DukeWT,
-                    RequiredFeatures = null,
                     PreviewImage = null,
                     Playtime = _playtimeProvider.GetTime(dukeWtId)
                 });
@@ -171,7 +169,7 @@ namespace Games.Games
                             """,
                         Version = null,
                         SupportedGame = GameEnum.Duke3D,
-                        SupportedPorts = null,
+                        RequiredFeatures = null,
                         PathToFile = null,
                         Dependencies = null,
                         Incompatibles = null,
@@ -182,7 +180,6 @@ namespace Games.Games
                         RTS = null,
                         StartMap = null,
                         RequiredAddonEnum = DukeAddonEnum.DukeVaca,
-                        RequiredFeatures = null,
                         PreviewImage = null,
                         Playtime = _playtimeProvider.GetTime(dukeVacaId)
                     });
@@ -206,7 +203,7 @@ namespace Games.Games
                             """,
                         Version = null,
                         SupportedGame = GameEnum.Duke3D,
-                        SupportedPorts = null,
+                        RequiredFeatures = null,
                         PathToFile = null,
                         Dependencies = null,
                         Incompatibles = null,
@@ -217,7 +214,6 @@ namespace Games.Games
                         RTS = null,
                         StartMap = null,
                         RequiredAddonEnum = DukeAddonEnum.DukeNW,
-                        RequiredFeatures = null,
                         PreviewImage = null,
                         Playtime = _playtimeProvider.GetTime(dukeNwId)
                     });
@@ -243,7 +239,7 @@ namespace Games.Games
                             """,
                         Version = null,
                         SupportedGame = GameEnum.Duke3D,
-                        SupportedPorts = null,
+                        RequiredFeatures = null,
                         PathToFile = null,
                         Dependencies = null,
                         Incompatibles = null,
@@ -254,7 +250,6 @@ namespace Games.Games
                         RTS = null,
                         StartMap = null,
                         RequiredAddonEnum = DukeAddonEnum.DukeDC,
-                        RequiredFeatures = null,
                         PreviewImage = null,
                         Playtime = _playtimeProvider.GetTime(dukeDcId)
                     });
@@ -279,7 +274,7 @@ namespace Games.Games
                         """,
                     Version = null,
                     SupportedGame = GameEnum.Duke64,
-                    SupportedPorts = null,
+                    RequiredFeatures = null,
                     PathToFile = null,
                     Dependencies = null,
                     Incompatibles = null,
@@ -290,7 +285,6 @@ namespace Games.Games
                     RTS = null,
                     StartMap = null,
                     RequiredAddonEnum = DukeAddonEnum.Duke3D,
-                    RequiredFeatures = null,
                     PreviewImage = null,
                     Playtime = _playtimeProvider.GetTime(duke64Id)
                 });

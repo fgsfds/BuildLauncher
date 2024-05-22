@@ -55,6 +55,9 @@ namespace Ports.Ports.EDuke32
             ];
 
         /// <inheritdoc/>
+        public override List<FeatureEnum> SupportedFeatures => [FeatureEnum.EDuke32_CON];
+
+        /// <inheritdoc/>
         public override string? InstalledVersion
         {
             get

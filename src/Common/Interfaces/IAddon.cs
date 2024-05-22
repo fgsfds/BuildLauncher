@@ -20,10 +20,9 @@ namespace Common.Interfaces
         GameEnum SupportedGame { get; init; }
 
         /// <summary>
-        /// Ports that support this campaign
-        /// if null - supported by all ports that support the game
+        /// Features required to run port
         /// </summary>
-        HashSet<PortEnum>? SupportedPorts { get; init; }
+        HashSet<FeatureEnum>? RequiredFeatures { get; init; }
 
         /// <summary>
         /// Name of the addon

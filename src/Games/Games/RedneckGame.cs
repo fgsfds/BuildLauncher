@@ -68,7 +68,7 @@ namespace Games.Games
                         """,
                     Version = null,
                     SupportedGame = GameEnum.Redneck,
-                    SupportedPorts = null,
+                    RequiredFeatures = null,
                     PathToFile = null,
                     Dependencies = null,
                     Incompatibles = null,
@@ -79,7 +79,6 @@ namespace Games.Games
                     RTS = null,
                     StartMap = null,
                     RequiredAddonEnum = RedneckAddonEnum.Redneck,
-                    RequiredFeatures = null,
                     PreviewImage = null,
                     Playtime = _playtimeProvider.GetTime(redneckId)
                 });
@@ -100,7 +99,7 @@ namespace Games.Games
                             """,
                         Version = null,
                         SupportedGame = GameEnum.Redneck,
-                        SupportedPorts = null,
+                        RequiredFeatures = null,
                         PathToFile = null,
                         Dependencies = null,
                         Incompatibles = null,
@@ -111,7 +110,6 @@ namespace Games.Games
                         RTS = null,
                         StartMap = null,
                         RequiredAddonEnum = RedneckAddonEnum.RedneckR66,
-                        RequiredFeatures = null,
                         PreviewImage = null,
                         Playtime = _playtimeProvider.GetTime(redneckR66Id)
                     });
@@ -136,7 +134,7 @@ namespace Games.Games
                         """,
                     Version = null,
                     SupportedGame = GameEnum.RidesAgain,
-                    SupportedPorts = null,
+                    RequiredFeatures = null,
                     PathToFile = null,
                     Dependencies = null,
                     Incompatibles = null,
@@ -147,7 +145,6 @@ namespace Games.Games
                     RTS = null,
                     StartMap = null,
                     RequiredAddonEnum = RedneckAddonEnum.RedneckRA,
-                    RequiredFeatures = null,
                     PreviewImage = null,
                     Playtime = _playtimeProvider.GetTime(redneckRaId)
                 });

@@ -64,14 +64,13 @@ namespace Games.Games
                         """,
                     PathToFile = null,
                     SupportedGame = GameEnum.ShadowWarrior,
-                    SupportedPorts = null,
+                    RequiredFeatures = null,
                     Dependencies = null,
                     Incompatibles = null,
                     MainDef = null,
                     AdditionalDefs = null,
                     StartMap = null,
                     RequiredAddonEnum = WangAddonEnum.Wang,
-                    RequiredFeatures = null,
                     PreviewImage = null,
                     Playtime = _playtimeProvider.GetTime(wangId)
                 });
@@ -97,7 +96,7 @@ namespace Games.Games
                             """,
                         Version = null,
                         SupportedGame = GameEnum.ShadowWarrior,
-                        SupportedPorts = null,
+                        RequiredFeatures = null,
                         PathToFile = null,
                         Dependencies = null,
                         Incompatibles = null,
@@ -105,7 +104,6 @@ namespace Games.Games
                         AdditionalDefs = null,
                         StartMap = null,
                         RequiredAddonEnum = WangAddonEnum.WangWD,
-                        RequiredFeatures = null,
                         PreviewImage = null,
                         Playtime = _playtimeProvider.GetTime(wangWdId)
                     });
@@ -132,7 +130,7 @@ namespace Games.Games
                             """,
                         Version = null,
                         SupportedGame = GameEnum.ShadowWarrior,
-                        SupportedPorts = null,
+                        RequiredFeatures = null,
                         PathToFile = null,
                         Dependencies = null,
                         Incompatibles = null,
@@ -140,7 +138,6 @@ namespace Games.Games
                         AdditionalDefs = null,
                         StartMap = null,
                         RequiredAddonEnum = WangAddonEnum.WangTD,
-                        RequiredFeatures = null,
                         PreviewImage = null,
                         Playtime = _playtimeProvider.GetTime(wangTdId)
                     });

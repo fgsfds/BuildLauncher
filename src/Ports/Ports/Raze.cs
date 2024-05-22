@@ -68,6 +68,9 @@ namespace Ports.Ports
         protected override string AddGrpParam => throw new NotImplementedException();
 
         /// <inheritdoc/>
+        public override List<FeatureEnum> SupportedFeatures => [];
+
+        /// <inheritdoc/>
         protected override void GetSkipIntroParameter(StringBuilder sb) => sb.Append(" -quick");
 
         /// <inheritdoc/>

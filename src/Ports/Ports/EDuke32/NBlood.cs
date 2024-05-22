@@ -25,6 +25,9 @@ namespace Ports.Ports.EDuke32
         public override List<GameEnum> SupportedGames => [GameEnum.Blood];
 
         /// <inheritdoc/>
+        public override List<FeatureEnum> SupportedFeatures => [FeatureEnum.CustomDude];
+
+        /// <inheritdoc/>
         protected override string ConfigFile => "nblood.cfg";
 
 

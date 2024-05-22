@@ -61,7 +61,7 @@ namespace BuildLauncher.Controls
                     Command = new RelayCommand(() =>
                         _viewModel.StartMapCommand.Execute(port),
                         () => port.IsInstalled && MapsList.SelectedItem is not null &&
-                        (((IAddon)MapsList.SelectedItem)?.SupportedPorts is null || ((IAddon)MapsList.SelectedItem).SupportedPorts!.Contains(port.PortEnum))
+                        (((IAddon)MapsList.SelectedItem)?.RequiredFeatures is null || !((IAddon)MapsList.SelectedItem).RequiredFeatures!.Except(port.SupportedFeatures).Any())
                         ),
                     Margin = new(5),
                     Padding = new(5),
@@ -88,7 +88,7 @@ namespace BuildLauncher.Controls
             foreach (var port in _supportedPorts)
             {
                 if (port.IsInstalled &&
-                    (addon.SupportedPorts is null || addon.SupportedPorts!.Contains(port.PortEnum)))
+                    (addon.RequiredFeatures is null || !addon.RequiredFeatures!.Except(port.SupportedFeatures).Any()))
                 {
                     var portButton = new MenuItem()
                     {
