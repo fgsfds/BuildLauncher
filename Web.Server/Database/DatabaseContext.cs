@@ -17,8 +17,6 @@ namespace Web.Server.Database
         public DbSet<InstallsDbEntity> Installs { get; set; }
         public DbSet<ScoresDbEntity> Scores { get; set; }
         public DbSet<ReportsDbEntity> Reports { get; set; }
-        public DbSet<TagsDbEntity> Tags { get; set; }
-        public DbSet<TagsListsDbEntity> TagsLists { get; set; }
         public DbSet<DependenciesDbEntity> Dependencies { get; set; }
 
         public DatabaseContext()
@@ -87,30 +85,6 @@ namespace Web.Server.Database
                 }
 
                 this.SaveChanges();
-
-
-                //TAGS
-                //List<TagsDbEntity> tags = new();
-
-                //foreach (var game in fixesList)
-                //{
-                //    foreach (var fix in game.Fixes)
-                //    {
-                //        if (fix.Tags is not null)
-                //        {
-                //            foreach (var tag in fix.Tags)
-                //            {
-                //                if (!tags.Any(x => x.Tag == tag))
-                //                {
-                //                    tags.Add(new() { Tag = tag });
-                //                }
-                //            }
-                //        }
-                //    }
-                //}
-
-                //Tags.AddRange(tags);
-                //this.SaveChanges();
 
 
                 //Addons
@@ -189,36 +163,6 @@ namespace Web.Server.Database
                         this.SaveChanges();
                     }
                 }
-
-
-                //TAGSLISTS
-                //foreach (var game in addonsList)
-                //{
-                //    foreach (var fix in game.Fixes)
-                //    {
-                //        var tagsList = fix.Tags;
-
-                //        if (tagsList is null)
-                //        {
-                //            continue;
-                //        }
-
-                //        foreach (var tag in tagsList)
-                //        {
-                //            var tagId = Tags.First(x => x.Tag == tag);
-
-                //            TagsListsDbEntity entiry = new()
-                //            {
-                //                AddonId = fix.Guid,
-                //                TagId = tagId.Id
-                //            };
-
-                //            TagsLists.Add(entiry);
-                //        }
-                //    }
-                //}
-
-                //this.SaveChanges();
 
                 return true;
             }
