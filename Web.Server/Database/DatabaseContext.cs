@@ -159,14 +159,30 @@ namespace Web.Server.Database
                             AddonVersionId = existingVersion.Id,
                             DependencyVersionId = existingDepVersion.Id
                         });
-
-                        this.SaveChanges();
                     }
                 }
 
+                this.SaveChanges();
+
+
+                //Scores
+                foreach (var addon in Addons.AsNoTracking().ToList())
+                {
+                    ScoresDbEntity score = new()
+                    { 
+                        AddonId = addon.Id,
+                        Score = 0 
+                    };
+
+                    Scores.Add(score);
+                }
+
+                this.SaveChanges();
+
+
                 return true;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 return false;
             }

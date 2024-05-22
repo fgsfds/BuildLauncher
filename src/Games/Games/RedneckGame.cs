@@ -80,7 +80,6 @@ namespace Games.Games
                     StartMap = null,
                     RequiredAddonEnum = RedneckAddonEnum.Redneck,
                     PreviewImage = null,
-                    Playtime = _playtimeProvider.GetTime(redneckId)
                 });
 
                 if (IsRoute66Installed)
@@ -111,7 +110,6 @@ namespace Games.Games
                         StartMap = null,
                         RequiredAddonEnum = RedneckAddonEnum.RedneckR66,
                         PreviewImage = null,
-                        Playtime = _playtimeProvider.GetTime(redneckR66Id)
                     });
                 }
             }
@@ -146,7 +144,6 @@ namespace Games.Games
                     StartMap = null,
                     RequiredAddonEnum = RedneckAddonEnum.RedneckRA,
                     PreviewImage = null,
-                    Playtime = _playtimeProvider.GetTime(redneckRaId)
                 });
             }
 

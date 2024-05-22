@@ -4,8 +4,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:md="https://github.com/whistyun/Markdown.Avalonia"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             xmlns:vm="clr-namespace:BuildLauncher.ViewModels"
              xmlns:helpers="clr-namespace:BuildLauncher.Helpers"
+             xmlns:vm="clr-namespace:BuildLauncher.ViewModels"
              xmlns:ctrl="clr-namespace:BuildLauncher.Controls"
              x:DataType="vm:CampaignsViewModel"
              x:Class="BuildLauncher.Controls.CampaignsControl">
@@ -86,28 +86,10 @@
 
         </ListBox>
 
-        <ScrollViewer Grid.Row="1" Grid.Column="1">
-
-            <StackPanel Orientation="Vertical">
-
-                <Image Height="200"
-                       IsVisible="{Binding IsPreviewVisible}"
-                       Source="{Binding SelectedCampaignPreview, Converter={StaticResource ImagePathToBitmapConverter}}"/>
-
-                <md:MarkdownScrollViewer Margin="10,5"
-                                         Markdown="{Binding SelectedCampaignDescription}">
-
-                    <md:MarkdownScrollViewer.Styles>
-                        <StyleInclude Source="/Styles/MarkdownStyle.axaml"/>
-                    </md:MarkdownScrollViewer.Styles>
-
-                </md:MarkdownScrollViewer>
-
-            </StackPanel>
-
-        </ScrollViewer>
-
         <ctrl:PortsButtonsControl Name="BottomPanel" Grid.Row="2"/>
+
+        <ctrl:RightPanelControl Name="RightPanel" Grid.Row="1" Grid.Column="1"/>
+
 
     </Grid>
 

@@ -109,7 +109,6 @@ namespace Games.Games
                     StartMap = null,
                     RequiredAddonEnum = DukeAddonEnum.Duke3D,
                     PreviewImage = null,
-                    Playtime = _playtimeProvider.GetTime(dukeId)
                 });
             }
 
@@ -144,7 +143,6 @@ namespace Games.Games
                     StartMap = null,
                     RequiredAddonEnum = DukeAddonEnum.DukeWT,
                     PreviewImage = null,
-                    Playtime = _playtimeProvider.GetTime(dukeWtId)
                 });
             }
 
@@ -181,7 +179,6 @@ namespace Games.Games
                         StartMap = null,
                         RequiredAddonEnum = DukeAddonEnum.DukeVaca,
                         PreviewImage = null,
-                        Playtime = _playtimeProvider.GetTime(dukeVacaId)
                     });
                 }
 
@@ -215,7 +212,6 @@ namespace Games.Games
                         StartMap = null,
                         RequiredAddonEnum = DukeAddonEnum.DukeNW,
                         PreviewImage = null,
-                        Playtime = _playtimeProvider.GetTime(dukeNwId)
                     });
                 }
 
@@ -251,7 +247,6 @@ namespace Games.Games
                         StartMap = null,
                         RequiredAddonEnum = DukeAddonEnum.DukeDC,
                         PreviewImage = null,
-                        Playtime = _playtimeProvider.GetTime(dukeDcId)
                     });
                 }
             }
@@ -286,7 +281,6 @@ namespace Games.Games
                     StartMap = null,
                     RequiredAddonEnum = DukeAddonEnum.Duke3D,
                     PreviewImage = null,
-                    Playtime = _playtimeProvider.GetTime(duke64Id)
                 });
             }
 

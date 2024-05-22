@@ -45,7 +45,9 @@ namespace Web.Server.Providers
             }
 
             var versions = dbContext.Versions.AsNoTracking().Where(x => addons.Keys.Contains(x.AddonId)).ToDictionary(static x => x.Id);
-            var dependencies = dbContext.Dependencies.AsNoTracking().Where(x => versions.Keys.Contains(x.AddonVersionId)).ToLookup(x => x.AddonVersionId);
+            var dependencies = dbContext.Dependencies.AsNoTracking().Where(x => versions.Keys.Contains(x.AddonVersionId)).ToLookup(static x => x.AddonVersionId);
+            var installs = dbContext.Installs.AsNoTracking().ToDictionary(static x => x.AddonId, static y => y.Installs);
+            var scores = dbContext.Scores.AsNoTracking().ToDictionary(static x => x.AddonId, static y => y.Score);
 
             List<DownloadableAddonEntity> result = new(versions.Count);
 
@@ -66,6 +68,9 @@ namespace Web.Server.Providers
                     depsResult.Add(depAddon.Title);
                 }
 
+                var hasInstalls = installs.TryGetValue(addon.Id, out var installsNumber);
+                var hasScore = scores.TryGetValue(addon.Id, out var scoreNumber);
+
                 DownloadableAddonEntity newDownloadable = new()
                 {
                     AddonType = (AddonTypeEnum)addon.AddonType,
@@ -78,7 +83,9 @@ namespace Web.Server.Providers
                     IsDisabled = version.Value.IsDisabled,
                     Description = version.Value.Description,
                     Author = version.Value.Author,
-                    Dependencies = depsResult
+                    Dependencies = depsResult,
+                    Installs = hasInstalls ? installsNumber : 0,
+                    Score = hasScore ? scoreNumber : 0
                 };
 
                 result.Add(newDownloadable);
@@ -88,6 +95,82 @@ namespace Web.Server.Providers
             _logger.LogInformation($"Got addons for {gameEnum} in {sw.ElapsedMilliseconds} ms.");
 
             return result;
+        }
+
+        internal int IncreaseAddonInstallsCount(string addonId)
+        {
+            using var dbContext = _dbContextFactory.Get();
+            var fix = dbContext.Installs.Find(addonId);
+
+            int newInstalls;
+
+            if (fix is null)
+            {
+                InstallsDbEntity newInstallsEntity = new()
+                {
+                    AddonId = addonId,
+                    Installs = 1
+                };
+
+                dbContext.Installs.Add(newInstallsEntity);
+                newInstalls = 1;
+            }
+            else
+            {
+                fix.Installs += 1;
+                newInstalls = fix.Installs;
+            }
+
+            dbContext.SaveChanges();
+            return newInstalls;
+        }
+
+        internal int ChangeAddonScore(string addonId, sbyte increment)
+        {
+            using var dbContext = _dbContextFactory.Get();
+            var fix = dbContext.Scores.Find(addonId);
+
+            int newScore;
+
+            if (fix is null)
+            {
+                ScoresDbEntity newScoreEntity = new()
+                {
+                    AddonId = addonId,
+                    Score = increment
+                };
+
+                dbContext.Scores.Add(newScoreEntity);
+                newScore = increment;
+            }
+            else
+            {
+                fix.Score += increment;
+                newScore = fix.Score;
+            }
+
+            dbContext.SaveChanges();
+            return newScore;
+        }
+
+        internal void AddReport(string addonId, string text)
+        {
+            using var dbContext = _dbContextFactory.Get();
+
+            ReportsDbEntity entity = new()
+            {
+                AddonId = addonId,
+                ReportText = text
+            };
+
+            dbContext.Reports.Add(entity);
+            dbContext.SaveChanges();
+        }
+
+        internal Dictionary<string, int> GetScores()
+        {
+            using var dbContext = _dbContextFactory.Get();
+            return dbContext.Scores.ToDictionary(static x => x.AddonId, static y => y.Score);
         }
     }
 }

@@ -1,4 +1,6 @@
+using ClientCommon.API;
 using ClientCommon.Config;
+using ClientCommon.Providers;
 using Common.Enums;
 using Common.Helpers;
 using Common.Interfaces;
@@ -11,24 +13,31 @@ using System.Diagnostics;
 
 namespace BuildLauncher.ViewModels
 {
-    public sealed partial class ModsViewModel : ObservableObject
+    public sealed partial class ModsViewModel : ObservableObject, IRightPanelControl
     {
         public readonly IGame Game;
 
         private readonly GamesProvider _gamesProvider;
         private readonly ConfigEntity _config;
+        private readonly ApiInterface _apiInterface;
+        private readonly ScoresProvider _scoresProvider;
 
 
         [Obsolete($"Don't create directly. Use {nameof(ViewModelsFactory)}.")]
         public ModsViewModel(
             IGame game,
             GamesProvider gamesProvider,
-            ConfigEntity config)
+            ConfigEntity config,
+            ApiInterface apiInterface,
+            ScoresProvider scoresProvider
+            )
         {
             Game = game;
 
             _gamesProvider = gamesProvider;
             _config = config;
+            _apiInterface = apiInterface;
+            _scoresProvider = scoresProvider;
 
             _gamesProvider.GameChangedEvent += OnGameChanged;
             Game.DownloadableAddonsProvider.AddonDownloadedEvent += OnModDownloaded;
@@ -61,14 +70,83 @@ namespace BuildLauncher.ViewModels
         /// <summary>
         /// Description of the selected mod
         /// </summary>
-        public string SelectedModDescription => SelectedMod is null ? string.Empty : SelectedMod.ToMarkdownString();
+        public string SelectedAddonDescription => SelectedMod is null ? string.Empty : SelectedMod.ToMarkdownString();
 
         /// <summary>
         /// Currently selected autoload mod
         /// </summary>
         [ObservableProperty]
-        [NotifyPropertyChangedFor(nameof(SelectedModDescription))]
+        [NotifyPropertyChangedFor(nameof(SelectedAddonScore))]
+        [NotifyPropertyChangedFor(nameof(IsSelectedAddonUpvoted))]
+        [NotifyPropertyChangedFor(nameof(IsSelectedAddonDownvoted))]
+        [NotifyPropertyChangedFor(nameof(SelectedAddonDescription))]
         private IAddon? _selectedMod;
+
+        public string? SelectedAddonPlaytime => null;
+
+        public int? SelectedAddonScore
+        {
+            get
+            {
+                if (SelectedMod is null)
+                {
+                    return null;
+                }
+
+                var hasUpvote = _scoresProvider.GetScore(SelectedMod.Id);
+
+                if (hasUpvote is not null)
+                {
+                    return hasUpvote;
+                }
+
+                return null;
+            }
+        }
+
+        public bool IsSelectedAddonUpvoted
+        {
+            get
+            {
+                if (SelectedMod is null)
+                {
+                    return false;
+                }
+
+                var hasUpvote = _config.Upvotes.TryGetValue(SelectedMod.Id, out var isUpvote);
+
+                if (hasUpvote && isUpvote)
+                {
+                    return true;
+                }
+
+                return false;
+            }
+        }
+
+        public bool IsSelectedAddonDownvoted
+        {
+            get
+            {
+                if (SelectedMod is null)
+                {
+                    return false;
+                }
+
+                var hasUpvote = _config.Upvotes.TryGetValue(SelectedMod.Id, out var isUpvote);
+
+                if (hasUpvote && !isUpvote)
+                {
+                    return true;
+                }
+
+                return false;
+            }
+        }
+
+        public bool IsPreviewVisible => false;
+
+        public Stream? SelectedAddonPreview => null;
 
         #endregion
 
@@ -131,6 +209,40 @@ namespace BuildLauncher.ViewModels
                 _config.RemoveDisabledAutoloadMod(mod.Id);
                 Game.InstalledAddonsProvider.EnableAddon(mod.Id);
             }
+        }
+
+
+        /// <summary>
+        /// Upvote fix
+        /// </summary>
+        [RelayCommand]
+        private async Task Upvote()
+        {
+            SelectedMod.ThrowIfNull();
+
+            var newScore = await _apiInterface.ChangeVoteAsync(SelectedMod, true).ConfigureAwait(true);
+            _scoresProvider.ChangeScore(SelectedMod.Id, newScore);
+
+            OnPropertyChanged(nameof(SelectedAddonScore));
+            OnPropertyChanged(nameof(IsSelectedAddonUpvoted));
+            OnPropertyChanged(nameof(IsSelectedAddonDownvoted));
+        }
+
+
+        /// <summary>
+        /// Downvote fix
+        /// </summary>
+        [RelayCommand]
+        private async Task Downvote()
+        {
+            SelectedMod.ThrowIfNull();
+
+            var newScore = await _apiInterface.ChangeVoteAsync(SelectedMod, false).ConfigureAwait(true);
+            _scoresProvider.ChangeScore(SelectedMod.Id, newScore);
+
+            OnPropertyChanged(nameof(SelectedAddonScore));
+            OnPropertyChanged(nameof(IsSelectedAddonUpvoted));
+            OnPropertyChanged(nameof(IsSelectedAddonDownvoted));
         }
 
         #endregion

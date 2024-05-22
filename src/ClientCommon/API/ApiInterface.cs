@@ -1,6 +1,8 @@
 ﻿using ClientCommon.Config;
 using Common.Entities;
 using Common.Enums;
+using Common.Interfaces;
+using System.Net.Http.Json;
 using System.Text.Json;
 
 namespace ClientCommon.API
@@ -96,6 +98,80 @@ namespace ClientCommon.API
                 }
 
                 var addons = JsonSerializer.Deserialize(response, DownloadableAddonEntityListContext.Default.ListDownloadableAddonEntity);
+
+                return addons;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
+        public async Task<int> ChangeVoteAsync(IAddon addon, bool needTpUpvote)
+        {
+            sbyte increment = 0;
+
+            var doesEntryExist = _config.Upvotes.TryGetValue(addon.Id, out var isUpvote);
+
+            if (doesEntryExist)
+            {
+                if (isUpvote && needTpUpvote)
+                {
+                    increment = -1;
+                    _config.Upvotes.Remove(addon.Id);
+                }
+                else if (isUpvote && !needTpUpvote)
+                {
+                    increment = -2;
+                    _config.Upvotes[addon.Id] = false;
+                }
+                else if (!isUpvote && needTpUpvote)
+                {
+                    increment = 2;
+                    _config.Upvotes[addon.Id] = true;
+                }
+                else if (!isUpvote && !needTpUpvote)
+                {
+                    increment = 1;
+                    _config.Upvotes.Remove(addon.Id);
+                }
+            }
+            else
+            {
+                if (needTpUpvote)
+                {
+                    increment = 1;
+                    _config.Upvotes.Add(addon.Id, true);
+                }
+                else
+                {
+                    increment = -1;
+                    _config.Upvotes.Add(addon.Id, false);
+                }
+            }
+
+            _config.ForceUpdateConfig();
+
+            using var response = await _httpClient.PutAsJsonAsync($"{ApiUrl}/addons/scores/change", new Tuple<string, sbyte>(addon.Id, increment)).ConfigureAwait(false);
+            var responseStr = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+
+            var newScore = int.TryParse(responseStr, out var newScoreInt);
+
+            return newScoreInt;
+        }
+
+        public async Task<Dictionary<string, int>?> GetScores()
+        {
+            try
+            {
+                var response = await _httpClient.GetStringAsync($"{ApiUrl}/addons/scores").ConfigureAwait(false);
+
+                if (response is null)
+                {
+                    return null;
+                }
+
+                var addons = JsonSerializer.Deserialize<Dictionary<string, int>>(response);
 
                 return addons;
             }

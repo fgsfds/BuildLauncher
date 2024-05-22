@@ -62,7 +62,6 @@ namespace Games.Games
                     AdditionalDefs = null,
                     StartMap = null,
                     PreviewImage = null,
-                    Playtime = _playtimeProvider.GetTime(slaveId)
                 });
             }
 

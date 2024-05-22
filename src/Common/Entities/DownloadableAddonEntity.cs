@@ -32,6 +32,12 @@ namespace Common.Entities
         [JsonPropertyName("IsDisabled")]
         public required bool IsDisabled { get; set; }
 
+        [JsonPropertyName("Installs")]
+        public required int Installs { get; set; }
+
+        [JsonPropertyName("Score")]
+        public required int Score { get; set; }
+
         [JsonPropertyName("Dependencies")]
         public List<string>? Dependencies { get; set; }
 

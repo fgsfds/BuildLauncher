@@ -381,7 +381,6 @@ namespace Mods.Providers
                     StartMap = startMap,
                     RequiredFeatures = requiredFeatures,
                     PreviewImage = preview,
-                    Playtime = _playtimeProvider.GetTime(id)
                 };
             }
             else
@@ -410,7 +409,6 @@ namespace Mods.Providers
                         RequiredAddonEnum = dukeAddon,
                         RequiredFeatures = requiredFeatures,
                         PreviewImage = preview,
-                        Playtime = _playtimeProvider.GetTime(id)
                     };
                 }
                 else if (_game.GameEnum is GameEnum.Fury)
@@ -435,7 +433,6 @@ namespace Mods.Providers
                         AdditionalDefs = addDefs,
                         RequiredFeatures = requiredFeatures,
                         PreviewImage = preview,
-                        Playtime = _playtimeProvider.GetTime(id)
                     };
                 }
                 else if (_game.GameEnum is GameEnum.ShadowWarrior)
@@ -459,7 +456,6 @@ namespace Mods.Providers
                         RequiredAddonEnum = wangAddon,
                         RequiredFeatures = requiredFeatures,
                         PreviewImage = preview,
-                        Playtime = _playtimeProvider.GetTime(id)
                     };
                 }
                 else if (_game.GameEnum is GameEnum.Blood)
@@ -486,7 +482,6 @@ namespace Mods.Providers
                         RequiredAddonEnum = bloodAddon,
                         RequiredFeatures = requiredFeatures,
                         PreviewImage = preview,
-                        Playtime = _playtimeProvider.GetTime(id)
                     };
                 }
                 else if (_game.GameEnum is GameEnum.Redneck)
@@ -513,7 +508,6 @@ namespace Mods.Providers
                         RequiredAddonEnum = redneckAddon,
                         RequiredFeatures = requiredFeatures,
                         PreviewImage = preview,
-                        Playtime = _playtimeProvider.GetTime(id)
                     };
                 }
                 else if (_game.GameEnum is GameEnum.Exhumed)
@@ -536,7 +530,6 @@ namespace Mods.Providers
                         AdditionalDefs = addDefs,
                         RequiredFeatures = requiredFeatures,
                         PreviewImage = preview,
-                        Playtime = _playtimeProvider.GetTime(id)
                     };
                 }
                 else

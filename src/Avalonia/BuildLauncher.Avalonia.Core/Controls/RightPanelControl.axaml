@@ -1,0 +1,70 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:md="https://github.com/whistyun/Markdown.Avalonia"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             xmlns:ctrl="clr-namespace:BuildLauncher.Controls"
+             x:Class="BuildLauncher.Controls.RightPanelControl"
+             xmlns:i="clr-namespace:Common.Interfaces;assembly=BuildLauncher.Common"
+             xmlns:helpers="clr-namespace:BuildLauncher.Helpers"
+             x:DataType="i:IRightPanelControl">
+
+    <UserControl.Resources>
+        <helpers:ImagePathToBitmapConverter x:Key="ImagePathToBitmapConverter"/>
+    </UserControl.Resources>
+
+    <Grid RowDefinitions="auto,*,auto">
+
+        <ScrollViewer Grid.Row="0">
+
+            <StackPanel Orientation="Vertical">
+
+                <Image Height="200"
+                       IsVisible="{Binding IsPreviewVisible}"
+                       Source="{Binding SelectedAddonPreview, Converter={StaticResource ImagePathToBitmapConverter}}"/>
+
+                <md:MarkdownScrollViewer Margin="10,5"
+                                         Markdown="{Binding SelectedAddonDescription}">
+
+                    <md:MarkdownScrollViewer.Styles>
+                        <StyleInclude Source="/Styles/MarkdownStyle.axaml"/>
+                    </md:MarkdownScrollViewer.Styles>
+
+                </md:MarkdownScrollViewer>
+
+            </StackPanel>
+        </ScrollViewer>
+
+
+        <TextBlock Grid.Row="1"
+                   Margin="10,5"
+                   FontWeight="Bold"
+                   FontSize="16"
+                   Foreground="{DynamicResource SystemAccentColor}"
+                   Text="{Binding SelectedAddonPlaytime}"/>
+
+
+        <StackPanel
+            Grid.Row="2"
+            Orientation="Horizontal"
+            Margin="0,0,0,5"
+            VerticalAlignment="Center"
+            HorizontalAlignment="Center"
+            IsVisible="{Binding SelectedAddonScore, Converter={x:Static ObjectConverters.IsNotNull}}">
+
+            <TextBlock Margin="3" VerticalAlignment="Center">Score:</TextBlock>
+
+            <Button IsVisible="{Binding IsSelectedAddonUpvoted}" Background="{DynamicResource SystemAccentColor}" Margin="3" Command="{Binding UpvoteCommand}">👍</Button>
+            <Button IsVisible="{Binding !IsSelectedAddonUpvoted}" Margin="3" Command="{Binding UpvoteCommand}">👍</Button>
+
+            <TextBlock Margin="3" Text="{Binding SelectedAddonScore}" VerticalAlignment="Center"></TextBlock>
+
+            <Button IsVisible="{Binding IsSelectedAddonDownvoted}" Background="{DynamicResource SystemAccentColor}" Margin="3" Command="{Binding DownvoteCommand}">👎</Button>
+            <Button IsVisible="{Binding !IsSelectedAddonDownvoted}" Margin="3" Command="{Binding DownvoteCommand}">👎</Button>
+
+        </StackPanel>
+
+    </Grid>
+
+</UserControl>

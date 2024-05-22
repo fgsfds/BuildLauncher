@@ -58,6 +58,6 @@ namespace ClientCommon.Config
                );
         }
 
-        private void OnParameterChanged(string _) => SaveConfigFile();
+        private void OnParameterChanged(string? _) => SaveConfigFile();
     }
 }

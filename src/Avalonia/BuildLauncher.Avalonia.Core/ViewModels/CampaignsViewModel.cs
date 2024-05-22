@@ -1,3 +1,4 @@
+using ClientCommon.API;
 using ClientCommon.Config;
 using ClientCommon.Providers;
 using Common.Enums;
@@ -12,13 +13,15 @@ using System.Diagnostics;
 
 namespace BuildLauncher.ViewModels
 {
-    public sealed partial class CampaignsViewModel : ObservableObject, IPortsButtonControl
+    public sealed partial class CampaignsViewModel : ObservableObject, IPortsButtonControl, IRightPanelControl
     {
         public readonly IGame Game;
 
         private readonly GamesProvider _gamesProvider;
         private readonly ConfigEntity _config;
         private readonly PlaytimeProvider _playtimeProvider;
+        private readonly ApiInterface _apiInterface;
+        private readonly ScoresProvider _scoresProvider;
 
 
         [Obsolete($"Don't create directly. Use {nameof(ViewModelsFactory)}.")]
@@ -26,7 +29,9 @@ namespace BuildLauncher.ViewModels
             IGame game,
             GamesProvider gamesProvider,
             ConfigEntity config,
-            PlaytimeProvider playtimeProvider
+            PlaytimeProvider playtimeProvider,
+            ApiInterface apiInterface,
+            ScoresProvider scoresProvider
             )
         {
             Game = game;
@@ -34,6 +39,8 @@ namespace BuildLauncher.ViewModels
             _gamesProvider = gamesProvider;
             _config = config;
             _playtimeProvider = playtimeProvider;
+            _apiInterface = apiInterface;
+            _scoresProvider = scoresProvider;
 
             _gamesProvider.GameChangedEvent += OnGameChanged;
             Game.DownloadableAddonsProvider.AddonDownloadedEvent += OnAddonDownloaded;
@@ -63,25 +70,110 @@ namespace BuildLauncher.ViewModels
         /// <summary>
         /// Description of the selected campaign
         /// </summary>
-        public string SelectedCampaignDescription => SelectedCampaign is null ? string.Empty : SelectedCampaign.ToMarkdownString();
+        public string SelectedAddonDescription => SelectedCampaign is null ? string.Empty : SelectedCampaign.ToMarkdownString();
 
         /// <summary>
         /// Preview image of the selected campaign
         /// </summary>
-        public Stream? SelectedCampaignPreview => SelectedCampaign?.PreviewImage;
+        public Stream? SelectedAddonPreview => SelectedCampaign?.PreviewImage;
 
         /// <summary>
         /// Is preview image in the description visible
         /// </summary>
         public bool IsPreviewVisible => SelectedCampaign?.PreviewImage is not null;
 
+        public int? SelectedAddonScore
+        {
+            get
+            {
+                if (SelectedCampaign is null)
+                {
+                    return null;
+                }
+
+                var hasUpvote = _scoresProvider.GetScore(SelectedCampaign.Id);
+
+                if (hasUpvote is not null)
+                {
+                    return hasUpvote;
+                }
+
+                return null;
+            }
+        }
+
+        public bool IsSelectedAddonUpvoted
+        {
+            get
+            {
+                if (SelectedCampaign is null)
+                {
+                    return false;
+                }
+
+                var hasUpvote = _config.Upvotes.TryGetValue(SelectedCampaign.Id, out var isUpvote);
+
+                if (hasUpvote && isUpvote)
+                {
+                    return true;
+                }
+
+                return false;
+            }
+        }
+
+        public bool IsSelectedAddonDownvoted
+        {
+            get
+            {
+                if (SelectedCampaign is null)
+                {
+                    return false;
+                }
+
+                var hasUpvote = _config.Upvotes.TryGetValue(SelectedCampaign.Id, out var isUpvote);
+
+                if (hasUpvote && !isUpvote)
+                {
+                    return true;
+                }
+
+                return false;
+            }
+        }
+
+
+        public string? SelectedAddonPlaytime
+        {
+            get
+            {
+                if (SelectedCampaign is null)
+                {
+                    return null;
+                }
+
+                var time = _playtimeProvider.GetTime(SelectedCampaign.Id);
+
+                if (time is not null)
+                {
+                    return $"Play time: {time.Value.ToTimeString()}";
+                }
+
+                return "Never played";
+            }
+        }
+
         /// <summary>
         /// Currently selected campaign/map
         /// </summary>
         [ObservableProperty]
-        [NotifyPropertyChangedFor(nameof(SelectedCampaignDescription))]
-        [NotifyPropertyChangedFor(nameof(SelectedCampaignPreview))]
+        [NotifyPropertyChangedFor(nameof(SelectedAddonDescription))]
+        [NotifyPropertyChangedFor(nameof(SelectedAddonPreview))]
         [NotifyPropertyChangedFor(nameof(IsPreviewVisible))]
+        [NotifyPropertyChangedFor(nameof(SelectedAddonScore))]
+        [NotifyPropertyChangedFor(nameof(IsSelectedAddonUpvoted))]
+        [NotifyPropertyChangedFor(nameof(IsSelectedAddonDownvoted))]
+        [NotifyPropertyChangedFor(nameof(SelectedAddonPlaytime))]
         [NotifyCanExecuteChangedFor(nameof(StartCampaignCommand))]
         private IAddon? _selectedCampaign;
 
@@ -166,14 +258,48 @@ namespace BuildLauncher.ViewModels
 
             OnPropertyChanged(nameof(CampaignsList));
         }
-        
-        
+
+
         /// <summary>
-         /// Clear search bar
-         /// </summary>
+        /// Clear search bar
+        /// </summary>
         [RelayCommand(CanExecute = nameof(ClearSearchBoxCanExecute))]
         private void ClearSearchBox() => SearchBoxText = string.Empty;
         private bool ClearSearchBoxCanExecute() => !string.IsNullOrEmpty(SearchBoxText);
+
+
+        /// <summary>
+        /// Upvote fix
+        /// </summary>
+        [RelayCommand]
+        private async Task Upvote()
+        {
+            SelectedCampaign.ThrowIfNull();
+            
+            var newScore = await _apiInterface.ChangeVoteAsync(SelectedCampaign, true).ConfigureAwait(true);
+            _scoresProvider.ChangeScore(SelectedCampaign.Id, newScore);
+
+            OnPropertyChanged(nameof(SelectedAddonScore));
+            OnPropertyChanged(nameof(IsSelectedAddonUpvoted));
+            OnPropertyChanged(nameof(IsSelectedAddonDownvoted));
+        }
+
+
+        /// <summary>
+        /// Downvote fix
+        /// </summary>
+        [RelayCommand]
+        private async Task Downvote()
+        {
+            SelectedCampaign.ThrowIfNull();
+
+            var newScore = await _apiInterface.ChangeVoteAsync(SelectedCampaign, false).ConfigureAwait(true);
+            _scoresProvider.ChangeScore(SelectedCampaign.Id, newScore);
+
+            OnPropertyChanged(nameof(SelectedAddonScore));
+            OnPropertyChanged(nameof(IsSelectedAddonUpvoted));
+            OnPropertyChanged(nameof(IsSelectedAddonDownvoted));
+        }
 
         #endregion
 
@@ -199,9 +325,8 @@ namespace BuildLauncher.ViewModels
             var time = sw.Elapsed;
 
             _playtimeProvider.AddTime(id, time);
-            SelectedCampaign!.UpdatePlaytime(time);
 
-            OnPropertyChanged(nameof(SelectedCampaignDescription));
+            OnPropertyChanged(nameof(SelectedAddonPlaytime));
         }
 
 

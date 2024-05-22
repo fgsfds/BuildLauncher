@@ -69,17 +69,9 @@
 
         </ListBox>
 
-        <md:MarkdownScrollViewer Grid.Row="1" Grid.Column="1"
-                                 Margin="10,5"
-                                 Markdown="{Binding SelectedMapDescription}">
-
-            <md:MarkdownScrollViewer.Styles>
-                <StyleInclude Source="/Styles/MarkdownStyle.axaml"/>
-            </md:MarkdownScrollViewer.Styles>
-
-        </md:MarkdownScrollViewer>
-
         <ctrl:PortsButtonsControl Name="BottomPanel" Grid.Row="2"/>
+
+        <ctrl:RightPanelControl Name="RightPanel" Grid.Row="1" Grid.Column="1"/>
 
     </Grid>
 

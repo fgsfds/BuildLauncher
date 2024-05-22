@@ -76,7 +76,6 @@ namespace Games.Games
                 StartMap = null,
                 RequiredAddonEnum = BloodAddonEnum.Blood,
                 PreviewImage = null,
-                Playtime = _playtimeProvider.GetTime(bloodId)
             });
 
             if (IsCrypticPassageInstalled)
@@ -112,7 +111,6 @@ namespace Games.Games
                     StartMap = null,
                     RequiredAddonEnum = BloodAddonEnum.BloodCP,
                     PreviewImage = null,
-                    Playtime = _playtimeProvider.GetTime(bloodCpId)
                 });
             }
 

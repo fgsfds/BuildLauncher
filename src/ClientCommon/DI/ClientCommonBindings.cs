@@ -13,6 +13,7 @@ namespace ClientCommon.DI
             container.AddSingleton<ConfigProvider>();
             container.AddSingleton<PlaytimeProvider>();
             container.AddSingleton<ApiInterface>();
+            container.AddSingleton<ScoresProvider>();
         }
     }
 }

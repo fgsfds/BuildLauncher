@@ -1,4 +1,5 @@
-﻿using ClientCommon.Config;
+﻿using ClientCommon.API;
+using ClientCommon.Config;
 using ClientCommon.Providers;
 using Common.Enums;
 using Games.Providers;
@@ -20,6 +21,8 @@ namespace BuildLauncher.ViewModels
         private readonly PlaytimeProvider _playtimeProvider;
         private readonly PortsReleasesProvider _portsReleasesProvider;
         private readonly ToolsReleasesProvider _toolsReleasesProvider;
+        private readonly ApiInterface _apiInterface;
+        private readonly ScoresProvider _scoresProvider;
 
         public ViewModelsFactory(
             GamesProvider gamesProvider,
@@ -30,7 +33,9 @@ namespace BuildLauncher.ViewModels
             ToolsProvider toolsProvider,
             PlaytimeProvider playtimeProvider,
             PortsReleasesProvider portsReleasesProvider,
-            ToolsReleasesProvider toolsReleasesProvider
+            ToolsReleasesProvider toolsReleasesProvider,
+            ApiInterface apiInterface,
+            ScoresProvider scoresProvider
             )
         {
             _gamesProvider = gamesProvider;
@@ -42,6 +47,8 @@ namespace BuildLauncher.ViewModels
             _playtimeProvider = playtimeProvider;
             _portsReleasesProvider = portsReleasesProvider;
             _toolsReleasesProvider = toolsReleasesProvider;
+            _apiInterface = apiInterface;
+            _scoresProvider = scoresProvider;
         }
 
 #pragma warning disable CS0618 // Type or member is obsolete
@@ -55,7 +62,9 @@ namespace BuildLauncher.ViewModels
                 _gamesProvider.GetGame(gameEnum),
                 _gamesProvider,
                 _config,
-                _playtimeProvider
+                _playtimeProvider,
+                _apiInterface,
+                _scoresProvider
                 );
 
             Task.Run(vm.InitializeAsync);
@@ -73,7 +82,9 @@ namespace BuildLauncher.ViewModels
                 _gamesProvider.GetGame(gameEnum),
                 _gamesProvider,
                 _config,
-                _playtimeProvider
+                _playtimeProvider,
+                _apiInterface,
+                _scoresProvider
                 );
 
             Task.Run(vm.InitializeAsync);
@@ -89,7 +100,9 @@ namespace BuildLauncher.ViewModels
             ModsViewModel vm = new(
                 _gamesProvider.GetGame(gameEnum),
                 _gamesProvider,
-                _config
+                _config,
+                _apiInterface,
+                _scoresProvider
                 );
 
             Task.Run(vm.InitializeAsync);

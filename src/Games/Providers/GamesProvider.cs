@@ -114,8 +114,13 @@ namespace Games.Providers
         /// Update game instance when path to the game changes in the config
         /// </summary>
         /// <param name="parameterName">Config parameter</param>
-        private void OnParameterChanged(string parameterName)
+        private void OnParameterChanged(string? parameterName)
         {
+            if (parameterName is null)
+            {
+                return;
+            }
+
             if (parameterName.Equals(nameof(_config.GamePathBlood)))
             {
                 _blood.GameInstallFolder = _config.GamePathBlood;

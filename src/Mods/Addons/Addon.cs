@@ -59,9 +59,6 @@ namespace Mods.Addons
         public required IStartMap? StartMap { get; init; }
 
         /// <inheritdoc/>
-        public required TimeSpan Playtime { get; set; }
-
-        /// <inheritdoc/>
         public string? FileName => PathToFile is null ? null : Path.GetFileName(PathToFile);
 
         public override string ToString() => Title;
@@ -108,12 +105,7 @@ namespace Mods.Addons
                 description.Append("\n\n").Append($"Incompatible with: *{string.Join(", ", Incompatibles.Keys)}*");
             }
 
-            description.Append("\n\n").Append($"#### Play time: *{Playtime.ToTimeString()}*");
-
             return description.ToString();
         }
-
-        /// <inheritdoc/>
-        public void UpdatePlaytime(TimeSpan time) => Playtime = Playtime.Add(time);
     }
 }

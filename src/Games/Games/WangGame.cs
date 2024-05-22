@@ -72,7 +72,6 @@ namespace Games.Games
                     StartMap = null,
                     RequiredAddonEnum = WangAddonEnum.Wang,
                     PreviewImage = null,
-                    Playtime = _playtimeProvider.GetTime(wangId)
                 });
 
                 if (IsWantonInstalled)
@@ -105,7 +104,6 @@ namespace Games.Games
                         StartMap = null,
                         RequiredAddonEnum = WangAddonEnum.WangWD,
                         PreviewImage = null,
-                        Playtime = _playtimeProvider.GetTime(wangWdId)
                     });
                 }
 
@@ -139,7 +137,6 @@ namespace Games.Games
                         StartMap = null,
                         RequiredAddonEnum = WangAddonEnum.WangTD,
                         PreviewImage = null,
-                        Playtime = _playtimeProvider.GetTime(wangTdId)
                     });
                 }
             }

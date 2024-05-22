@@ -12,7 +12,7 @@ namespace ClientCommon.Config
             _theme = ThemeEnum.System;
         }
 
-        public delegate void ParameterChanged(string parameterName);
+        public delegate void ParameterChanged(string? parameterName);
         public event ParameterChanged ParameterChangedEvent;
 
         private ThemeEnum _theme = ThemeEnum.System;
@@ -125,6 +125,18 @@ namespace ClientCommon.Config
         {
             get => _playtimes;
             set => SetConfigParameter(ref _playtimes, value);
+        }
+
+        private Dictionary<string, bool> _upvotes = [];
+        public Dictionary<string, bool> Upvotes
+        {
+            get => _upvotes;
+            set => SetConfigParameter(ref _upvotes, value);
+        }
+
+        public void ForceUpdateConfig()
+        {
+            ParameterChangedEvent?.Invoke(null);
         }
 
 

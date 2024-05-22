@@ -21,14 +21,14 @@ namespace ClientCommon.Providers
             }
         }
 
-        public TimeSpan GetTime(string id)
+        public TimeSpan? GetTime(string id)
         {
             if (_times.TryGetValue(id, out var time))
             {
                 return time;
             }
 
-            return TimeSpan.Zero;
+            return null;
         }
 
         public void AddTime(string id, TimeSpan time)

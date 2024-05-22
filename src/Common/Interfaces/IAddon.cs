@@ -89,21 +89,10 @@ namespace Common.Interfaces
         /// </summary>
         IStartMap? StartMap { get; init; }
 
-        /// <summary>
-        /// Time played
-        /// </summary>
-        TimeSpan Playtime { get; set; }
-
 
         /// <summary>
         /// Create markdown description of the addon
         /// </summary>
         string ToMarkdownString();
-
-        /// <summary>
-        /// Add time to current playtime
-        /// </summary>
-        /// <param name="time">Time to add</param>
-        void UpdatePlaytime(TimeSpan time);
     }
 }

@@ -56,6 +56,8 @@
                 <DataGridTextColumn Header="Type" Binding="{Binding AddonType}" FontWeight="Bold" />
                 <DataGridTextColumn Header="Version" Binding="{Binding Version}" />
                 <DataGridTextColumn Header="Size" Binding="{Binding FileSizeString}" />
+                <DataGridTextColumn Header="Score" Binding="{Binding Score}" />
+                <DataGridTextColumn Header="Downloads" Binding="{Binding Installs}" />
                 <DataGridTextColumn Header="Status" Binding="{Binding Status}" FontWeight="Bold" />
             </DataGrid.Columns>
         </DataGrid>

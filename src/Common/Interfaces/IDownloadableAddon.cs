@@ -17,6 +17,8 @@ namespace Common.Interfaces
         string Status { get; }
         string? Author { get; set; }
         string? Description { get; set; }
+        int Installs { get; set; }
+        int Score { get; set; }
 
         string ToMarkdownString();
     }
