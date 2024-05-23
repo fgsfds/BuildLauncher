@@ -5,7 +5,6 @@ using Common.Helpers;
 using Common.Interfaces;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using System.Net.Http;
 
 namespace BuildLauncher.ViewModels
 {

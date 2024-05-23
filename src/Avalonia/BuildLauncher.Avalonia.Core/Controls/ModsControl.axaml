@@ -56,7 +56,9 @@
             </ListBox.ItemTemplate>
         </ListBox>
 
-        <ctrl:RightPanelControl Name="RightPanel" Grid.Row="0" Grid.Column="2"/>
+        <ctrl:PortsButtonsControl Name="BottomPanel" Grid.Row="2"/>
+
+        <ctrl:RightPanelControl Name="RightPanel" Grid.Row="0" Grid.Column="1"/>
 
     </Grid>
 

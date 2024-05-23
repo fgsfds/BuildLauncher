@@ -108,6 +108,8 @@ namespace BuildLauncher.ViewModels
         [NotifyCanExecuteChangedFor(nameof(ClearSearchBoxCommand))]
         private string _searchBoxText;
 
+        public bool IsPortsButtonsVisible => true;
+
         #endregion
 
 

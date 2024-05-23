@@ -83,6 +83,8 @@ namespace BuildLauncher.ViewModels
             }
         }
 
+        public bool IsPortsButtonsVisible => false;
+
         #endregion
 
 

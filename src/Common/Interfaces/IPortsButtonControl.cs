@@ -7,5 +7,7 @@ namespace Common.Interfaces
         IRelayCommand? OpenFolderCommand { get; }
 
         IAsyncRelayCommand? RefreshListCommand { get; }
+
+        bool IsPortsButtonsVisible { get; }
     }
 }
