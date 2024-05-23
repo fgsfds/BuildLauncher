@@ -32,7 +32,7 @@ namespace Web.Server.Controllers
         public int IncreaseNumberOfInstalls([FromBody] string addonId) => _addonsProvider.IncreaseAddonInstallsCount(addonId);
 
 
-        [HttpPost("report")]
-        public void ReportAddon([FromBody] Tuple<string, string> message) => _addonsProvider.AddReport(message.Item1, message.Item2);
+        //[HttpPost("report")]
+        //public void ReportAddon([FromBody] Tuple<string, string> message) => _addonsProvider.AddReport(message.Item1, message.Item2);
     }
 }
