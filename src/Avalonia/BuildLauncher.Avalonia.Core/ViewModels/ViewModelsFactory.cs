@@ -101,6 +101,7 @@ namespace BuildLauncher.ViewModels
                 _gamesProvider.GetGame(gameEnum),
                 _gamesProvider,
                 _config,
+                _playtimeProvider,
                 _apiInterface,
                 _scoresProvider
                 );

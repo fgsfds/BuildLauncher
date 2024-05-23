@@ -13,15 +13,13 @@ using System.Diagnostics;
 
 namespace BuildLauncher.ViewModels
 {
-    public sealed partial class MapsViewModel : ObservableObject, IPortsButtonControl, IRightPanelControl
+    public sealed partial class MapsViewModel : RightPanelViewModel, IPortsButtonControl
     {
         public readonly IGame Game;
 
         private readonly GamesProvider _gamesProvider;
         private readonly ConfigEntity _config;
         private readonly PlaytimeProvider _playtimeProvider;
-        private readonly ApiInterface _apiInterface;
-        private readonly ScoresProvider _scoresProvider;
 
 
         [Obsolete($"Don't create directly. Use {nameof(ViewModelsFactory)}.")]
@@ -32,15 +30,13 @@ namespace BuildLauncher.ViewModels
             PlaytimeProvider playtimeProvider,
             ApiInterface apiInterface,
             ScoresProvider scoresProvider
-            )
+            ) : base(config, playtimeProvider, apiInterface, scoresProvider)
         {
             Game = game;
 
             _gamesProvider = gamesProvider;
             _config = config;
             _playtimeProvider = playtimeProvider;
-            _apiInterface = apiInterface;
-            _scoresProvider = scoresProvider;
 
             _gamesProvider.GameChangedEvent += OnGameChanged;
             Game.DownloadableAddonsProvider.AddonDownloadedEvent += OnAddonDownloaded;
@@ -83,106 +79,26 @@ namespace BuildLauncher.ViewModels
             }
         }
 
-        /// <summary>
-        /// Description of the selected map
-        /// </summary>
-        public string SelectedAddonDescription => SelectedMap is null ? string.Empty : SelectedMap.ToMarkdownString();
-
-        public string? SelectedAddonPlaytime
-        {
-            get
-            {
-                if (SelectedMap is null)
-                {
-                    return null;
-                }
-
-                var time = _playtimeProvider.GetTime(SelectedMap.Id);
-
-                if (time is not null)
-                {
-                    return $"Play time: {time.Value.ToTimeString()}";
-                }
-
-                return "Never played";
-            }
-        }
-
-        public int? SelectedAddonScore
-        {
-            get
-            {
-                if (SelectedMap is null)
-                {
-                    return null;
-                }
-
-                var hasUpvote = _scoresProvider.GetScore(SelectedMap.Id);
-
-                if (hasUpvote is not null)
-                {
-                    return hasUpvote;
-                }
-
-                return null;
-            }
-        }
-
-        public bool IsSelectedAddonUpvoted
-        {
-            get
-            {
-                if (SelectedMap is null)
-                {
-                    return false;
-                }
-
-                var hasUpvote = _config.Upvotes.TryGetValue(SelectedMap.Id, out var isUpvote);
-
-                if (hasUpvote && isUpvote)
-                {
-                    return true;
-                }
-
-                return false;
-            }
-        }
-
-        public bool IsSelectedAddonDownvoted
-        {
-            get
-            {
-                if (SelectedMap is null)
-                {
-                    return false;
-                }
-
-                var hasUpvote = _config.Upvotes.TryGetValue(SelectedMap.Id, out var isUpvote);
-
-                if (hasUpvote && !isUpvote)
-                {
-                    return true;
-                }
-
-                return false;
-            }
-        }
-
-        public bool IsPreviewVisible => false;
-
-        public Stream? SelectedAddonPreview => null;
-
+        private IAddon? _selectedAddon;
         /// <summary>
         /// Currently selected map
         /// </summary>
-        [ObservableProperty]
-        [NotifyPropertyChangedFor(nameof(SelectedAddonDescription))]
-        [NotifyPropertyChangedFor(nameof(SelectedAddonScore))]
-        [NotifyPropertyChangedFor(nameof(IsSelectedAddonUpvoted))]
-        [NotifyPropertyChangedFor(nameof(IsSelectedAddonDownvoted))]
-        [NotifyPropertyChangedFor(nameof(SelectedAddonPlaytime))]
-        [NotifyCanExecuteChangedFor(nameof(StartMapCommand))]
-        private IAddon? _selectedMap;
+        public override IAddon? SelectedAddon
+        {
+            get => _selectedAddon;
+            set
+            {
+                _selectedAddon = value;
+
+                OnPropertyChanged(nameof(SelectedAddonDescription));
+                OnPropertyChanged(nameof(SelectedAddonScore));
+                OnPropertyChanged(nameof(IsSelectedAddonUpvoted));
+                OnPropertyChanged(nameof(IsSelectedAddonDownvoted));
+                OnPropertyChanged(nameof(SelectedAddonPlaytime));
+
+                StartMapCommand.NotifyCanExecuteChanged();
+            }
+        }
 
         /// <summary>
         /// Search box text
@@ -205,11 +121,11 @@ namespace BuildLauncher.ViewModels
         private async Task StartMapAsync(object? command)
         {
             command.ThrowIfNotType<BasePort>(out var port);
-            SelectedMap.ThrowIfNull();
+            SelectedAddon.ThrowIfNull();
 
-            var args = port.GetStartGameArgs(Game, SelectedMap, _config.SkipIntro, _config.SkipStartup);
+            var args = port.GetStartGameArgs(Game, SelectedAddon, _config.SkipIntro, _config.SkipStartup);
 
-            await StartPortAsync(SelectedMap.Id, port.FullPathToExe, args);
+            await StartPortAsync(SelectedAddon.Id, port.FullPathToExe, args);
         }
 
         private void StartPortAsync(string fullPathToExe, string args)
@@ -248,9 +164,9 @@ namespace BuildLauncher.ViewModels
         [RelayCommand]
         private void DeleteMap()
         {
-            SelectedMap.ThrowIfNull();
+            SelectedAddon.ThrowIfNull();
 
-            Game.InstalledAddonsProvider.DeleteAddon(SelectedMap);
+            Game.InstalledAddonsProvider.DeleteAddon(SelectedAddon);
 
             OnPropertyChanged(nameof(MapsList));
         }
@@ -262,40 +178,6 @@ namespace BuildLauncher.ViewModels
         [RelayCommand(CanExecute = nameof(ClearSearchBoxCanExecute))]
         private void ClearSearchBox() => SearchBoxText = string.Empty;
         private bool ClearSearchBoxCanExecute() => !string.IsNullOrEmpty(SearchBoxText);
-
-
-        /// <summary>
-        /// Upvote fix
-        /// </summary>
-        [RelayCommand]
-        private async Task Upvote()
-        {
-            SelectedMap.ThrowIfNull();
-
-            var newScore = await _apiInterface.ChangeVoteAsync(SelectedMap, true).ConfigureAwait(true);
-            _scoresProvider.ChangeScore(SelectedMap.Id, newScore);
-
-            OnPropertyChanged(nameof(SelectedAddonScore));
-            OnPropertyChanged(nameof(IsSelectedAddonUpvoted));
-            OnPropertyChanged(nameof(IsSelectedAddonDownvoted));
-        }
-
-
-        /// <summary>
-        /// Downvote fix
-        /// </summary>
-        [RelayCommand]
-        private async Task Downvote()
-        {
-            SelectedMap.ThrowIfNull();
-
-            var newScore = await _apiInterface.ChangeVoteAsync(SelectedMap, false).ConfigureAwait(true);
-            _scoresProvider.ChangeScore(SelectedMap.Id, newScore);
-
-            OnPropertyChanged(nameof(SelectedAddonScore));
-            OnPropertyChanged(nameof(IsSelectedAddonUpvoted));
-            OnPropertyChanged(nameof(IsSelectedAddonDownvoted));
-        }
 
         #endregion
 

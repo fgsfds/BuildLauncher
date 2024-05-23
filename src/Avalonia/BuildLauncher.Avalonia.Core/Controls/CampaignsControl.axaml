@@ -40,7 +40,7 @@
                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                  Padding="2"
                  ItemsSource="{Binding CampaignsList}"
-                 SelectedItem="{Binding SelectedCampaign}"
+                 SelectedItem="{Binding SelectedAddon}"
                  PointerPressed="ListBoxEmptySpaceClicked">
 
             <ListBox.ItemsPanel>

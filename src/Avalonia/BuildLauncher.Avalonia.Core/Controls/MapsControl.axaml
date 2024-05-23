@@ -40,7 +40,7 @@
                  ScrollViewer.VerticalScrollBarVisibility="Disabled"
                  Padding="2"
                  ItemsSource="{Binding MapsList}"
-                 SelectedItem="{Binding SelectedMap}"
+                 SelectedItem="{Binding SelectedAddon}"
                  PointerPressed="ListBoxEmptySpaceClicked">
 
             <ListBox.ItemsPanel>

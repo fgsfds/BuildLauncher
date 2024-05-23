@@ -21,7 +21,7 @@
                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                  Padding="2"
                  ItemsSource="{Binding ModsList}"
-                 SelectedItem="{Binding SelectedMod}">
+                 SelectedItem="{Binding SelectedAddon}">
 
             <ListBox.ItemsPanel>
                 <ItemsPanelTemplate>

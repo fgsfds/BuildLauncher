@@ -13,15 +13,13 @@ using System.Diagnostics;
 
 namespace BuildLauncher.ViewModels
 {
-    public sealed partial class CampaignsViewModel : ObservableObject, IPortsButtonControl, IRightPanelControl
+    public sealed partial class CampaignsViewModel : RightPanelViewModel, IPortsButtonControl
     {
         public readonly IGame Game;
 
         private readonly GamesProvider _gamesProvider;
         private readonly ConfigEntity _config;
         private readonly PlaytimeProvider _playtimeProvider;
-        private readonly ApiInterface _apiInterface;
-        private readonly ScoresProvider _scoresProvider;
 
 
         [Obsolete($"Don't create directly. Use {nameof(ViewModelsFactory)}.")]
@@ -32,15 +30,13 @@ namespace BuildLauncher.ViewModels
             PlaytimeProvider playtimeProvider,
             ApiInterface apiInterface,
             ScoresProvider scoresProvider
-            )
+            ) : base(config, playtimeProvider, apiInterface, scoresProvider)
         {
             Game = game;
 
             _gamesProvider = gamesProvider;
             _config = config;
             _playtimeProvider = playtimeProvider;
-            _apiInterface = apiInterface;
-            _scoresProvider = scoresProvider;
 
             _gamesProvider.GameChangedEvent += OnGameChanged;
             Game.DownloadableAddonsProvider.AddonDownloadedEvent += OnAddonDownloaded;
@@ -67,115 +63,28 @@ namespace BuildLauncher.ViewModels
             }
         }
 
+        private IAddon? _selectedAddon;
         /// <summary>
-        /// Description of the selected campaign
+        /// Currently selected campaign
         /// </summary>
-        public string SelectedAddonDescription => SelectedCampaign is null ? string.Empty : SelectedCampaign.ToMarkdownString();
-
-        /// <summary>
-        /// Preview image of the selected campaign
-        /// </summary>
-        public Stream? SelectedAddonPreview => SelectedCampaign?.PreviewImage;
-
-        /// <summary>
-        /// Is preview image in the description visible
-        /// </summary>
-        public bool IsPreviewVisible => SelectedCampaign?.PreviewImage is not null;
-
-        public int? SelectedAddonScore
+        public override IAddon? SelectedAddon
         {
-            get
+            get => _selectedAddon;
+            set
             {
-                if (SelectedCampaign is null)
-                {
-                    return null;
-                }
+                _selectedAddon = value;
 
-                var hasUpvote = _scoresProvider.GetScore(SelectedCampaign.Id);
+                OnPropertyChanged(nameof(SelectedAddonDescription));
+                OnPropertyChanged(nameof(SelectedAddonPreview));
+                OnPropertyChanged(nameof(IsPreviewVisible));
+                OnPropertyChanged(nameof(SelectedAddonScore));
+                OnPropertyChanged(nameof(IsSelectedAddonUpvoted));
+                OnPropertyChanged(nameof(IsSelectedAddonDownvoted));
+                OnPropertyChanged(nameof(SelectedAddonPlaytime));
 
-                if (hasUpvote is not null)
-                {
-                    return hasUpvote;
-                }
-
-                return null;
+                StartCampaignCommand.NotifyCanExecuteChanged();
             }
         }
-
-        public bool IsSelectedAddonUpvoted
-        {
-            get
-            {
-                if (SelectedCampaign is null)
-                {
-                    return false;
-                }
-
-                var hasUpvote = _config.Upvotes.TryGetValue(SelectedCampaign.Id, out var isUpvote);
-
-                if (hasUpvote && isUpvote)
-                {
-                    return true;
-                }
-
-                return false;
-            }
-        }
-
-        public bool IsSelectedAddonDownvoted
-        {
-            get
-            {
-                if (SelectedCampaign is null)
-                {
-                    return false;
-                }
-
-                var hasUpvote = _config.Upvotes.TryGetValue(SelectedCampaign.Id, out var isUpvote);
-
-                if (hasUpvote && !isUpvote)
-                {
-                    return true;
-                }
-
-                return false;
-            }
-        }
-
-
-        public string? SelectedAddonPlaytime
-        {
-            get
-            {
-                if (SelectedCampaign is null)
-                {
-                    return null;
-                }
-
-                var time = _playtimeProvider.GetTime(SelectedCampaign.Id);
-
-                if (time is not null)
-                {
-                    return $"Play time: {time.Value.ToTimeString()}";
-                }
-
-                return "Never played";
-            }
-        }
-
-        /// <summary>
-        /// Currently selected campaign/map
-        /// </summary>
-        [ObservableProperty]
-        [NotifyPropertyChangedFor(nameof(SelectedAddonDescription))]
-        [NotifyPropertyChangedFor(nameof(SelectedAddonPreview))]
-        [NotifyPropertyChangedFor(nameof(IsPreviewVisible))]
-        [NotifyPropertyChangedFor(nameof(SelectedAddonScore))]
-        [NotifyPropertyChangedFor(nameof(IsSelectedAddonUpvoted))]
-        [NotifyPropertyChangedFor(nameof(IsSelectedAddonDownvoted))]
-        [NotifyPropertyChangedFor(nameof(SelectedAddonPlaytime))]
-        [NotifyCanExecuteChangedFor(nameof(StartCampaignCommand))]
-        private IAddon? _selectedCampaign;
 
         /// <summary>
         /// Search box text
@@ -214,11 +123,11 @@ namespace BuildLauncher.ViewModels
         private async Task StartCampaignAsync(object? command)
         {
             command.ThrowIfNotType<BasePort>(out var port);
-            SelectedCampaign.ThrowIfNull();
+            SelectedAddon.ThrowIfNull();
 
-            var args = port.GetStartGameArgs(Game, SelectedCampaign, _config.SkipIntro, _config.SkipStartup);
+            var args = port.GetStartGameArgs(Game, SelectedAddon, _config.SkipIntro, _config.SkipStartup);
 
-            await StartPortAsync(SelectedCampaign.Id, port.FullPathToExe, args);
+            await StartPortAsync(SelectedAddon.Id, port.FullPathToExe, args);
         }
 
 
@@ -252,9 +161,9 @@ namespace BuildLauncher.ViewModels
         [RelayCommand]
         private void DeleteCampaign()
         {
-            SelectedCampaign.ThrowIfNull();
+            SelectedAddon.ThrowIfNull();
 
-            Game.InstalledAddonsProvider.DeleteAddon(SelectedCampaign);
+            Game.InstalledAddonsProvider.DeleteAddon(SelectedAddon);
 
             OnPropertyChanged(nameof(CampaignsList));
         }
@@ -266,40 +175,6 @@ namespace BuildLauncher.ViewModels
         [RelayCommand(CanExecute = nameof(ClearSearchBoxCanExecute))]
         private void ClearSearchBox() => SearchBoxText = string.Empty;
         private bool ClearSearchBoxCanExecute() => !string.IsNullOrEmpty(SearchBoxText);
-
-
-        /// <summary>
-        /// Upvote fix
-        /// </summary>
-        [RelayCommand]
-        private async Task Upvote()
-        {
-            SelectedCampaign.ThrowIfNull();
-            
-            var newScore = await _apiInterface.ChangeVoteAsync(SelectedCampaign, true).ConfigureAwait(true);
-            _scoresProvider.ChangeScore(SelectedCampaign.Id, newScore);
-
-            OnPropertyChanged(nameof(SelectedAddonScore));
-            OnPropertyChanged(nameof(IsSelectedAddonUpvoted));
-            OnPropertyChanged(nameof(IsSelectedAddonDownvoted));
-        }
-
-
-        /// <summary>
-        /// Downvote fix
-        /// </summary>
-        [RelayCommand]
-        private async Task Downvote()
-        {
-            SelectedCampaign.ThrowIfNull();
-
-            var newScore = await _apiInterface.ChangeVoteAsync(SelectedCampaign, false).ConfigureAwait(true);
-            _scoresProvider.ChangeScore(SelectedCampaign.Id, newScore);
-
-            OnPropertyChanged(nameof(SelectedAddonScore));
-            OnPropertyChanged(nameof(IsSelectedAddonUpvoted));
-            OnPropertyChanged(nameof(IsSelectedAddonDownvoted));
-        }
 
         #endregion
 
