@@ -5,6 +5,7 @@ using Common.Helpers;
 using Common.Interfaces;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using System.Net.Http;
 
 namespace BuildLauncher.ViewModels
 {
@@ -142,9 +143,17 @@ namespace BuildLauncher.ViewModels
         private async Task Upvote()
         {
             SelectedAddon.ThrowIfNull();
+
+            var increment = GetIncrement(SelectedAddon, true);
             
-            var newScore = await _apiInterface.ChangeVoteAsync(SelectedAddon, true).ConfigureAwait(true);
-            _scoresProvider.ChangeScore(SelectedAddon.Id, newScore);
+            var newScore = await _apiInterface.ChangeVoteAsync(SelectedAddon, increment).ConfigureAwait(true);
+
+            if (newScore is null)
+            {
+                return;
+            }
+
+            ChangeScoreInConfig(SelectedAddon, true, newScore.Value);
 
             OnPropertyChanged(nameof(SelectedAddonScore));
             OnPropertyChanged(nameof(IsSelectedAddonUpvoted));
@@ -160,8 +169,16 @@ namespace BuildLauncher.ViewModels
         {
             SelectedAddon.ThrowIfNull();
 
-            var newScore = await _apiInterface.ChangeVoteAsync(SelectedAddon, false).ConfigureAwait(true);
-            _scoresProvider.ChangeScore(SelectedAddon.Id, newScore);
+            var increment = GetIncrement(SelectedAddon, false);
+
+            var newScore = await _apiInterface.ChangeVoteAsync(SelectedAddon, increment).ConfigureAwait(true);
+
+            if (newScore is null)
+            {
+                return;
+            }
+
+            ChangeScoreInConfig(SelectedAddon, false, newScore.Value);
 
             OnPropertyChanged(nameof(SelectedAddonScore));
             OnPropertyChanged(nameof(IsSelectedAddonUpvoted));
@@ -169,5 +186,85 @@ namespace BuildLauncher.ViewModels
         }
 
         #endregion
+
+
+        private sbyte GetIncrement(IAddon addon, bool needTpUpvote)
+        {
+            sbyte increment = 0;
+
+            var doesEntryExist = _config.Upvotes.TryGetValue(addon.Id, out var isUpvote);
+
+            if (doesEntryExist)
+            {
+                if (isUpvote && needTpUpvote)
+                {
+                    increment = -1;
+                }
+                else if (isUpvote && !needTpUpvote)
+                {
+                    increment = -2;
+                }
+                else if (!isUpvote && needTpUpvote)
+                {
+                    increment = 2;
+                }
+                else if (!isUpvote && !needTpUpvote)
+                {
+                    increment = 1;
+                }
+            }
+            else
+            {
+                if (needTpUpvote)
+                {
+                    increment = 1;
+                }
+                else
+                {
+                    increment = -1;
+                }
+            }
+
+            return increment;
+        }
+
+        private void ChangeScoreInConfig(IAddon addon, bool needTpUpvote, int newScore)
+        {
+            var doesEntryExist = _config.Upvotes.TryGetValue(addon.Id, out var isUpvote);
+
+            if (doesEntryExist)
+            {
+                if (isUpvote && needTpUpvote)
+                {
+                    _config.Upvotes.Remove(addon.Id);
+                }
+                else if (isUpvote && !needTpUpvote)
+                {
+                    _config.Upvotes[addon.Id] = false;
+                }
+                else if (!isUpvote && needTpUpvote)
+                {
+                    _config.Upvotes[addon.Id] = true;
+                }
+                else if (!isUpvote && !needTpUpvote)
+                {
+                    _config.Upvotes.Remove(addon.Id);
+                }
+            }
+            else
+            {
+                if (needTpUpvote)
+                {
+                    _config.Upvotes.Add(addon.Id, true);
+                }
+                else
+                {
+                    _config.Upvotes.Add(addon.Id, false);
+                }
+            }
+
+            _config.ForceUpdateConfig();
+            _scoresProvider.ChangeScore(addon.Id, newScore);
+        }
     }
 }

@@ -107,57 +107,26 @@ namespace ClientCommon.API
             }
         }
 
-        public async Task<int> ChangeVoteAsync(IAddon addon, bool needTpUpvote)
+        public async Task<int?> ChangeVoteAsync(IAddon addon, sbyte increment)
         {
-            sbyte increment = 0;
-
-            var doesEntryExist = _config.Upvotes.TryGetValue(addon.Id, out var isUpvote);
-
-            if (doesEntryExist)
+            try
             {
-                if (isUpvote && needTpUpvote)
+                using var response = await _httpClient.PutAsJsonAsync($"{ApiUrl}/addons/scores/change", new Tuple<string, sbyte>(addon.Id, increment)).ConfigureAwait(false);
+                var responseStr = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+
+                if (responseStr is null)
                 {
-                    increment = -1;
-                    _config.Upvotes.Remove(addon.Id);
+                    return null;
                 }
-                else if (isUpvote && !needTpUpvote)
-                {
-                    increment = -2;
-                    _config.Upvotes[addon.Id] = false;
-                }
-                else if (!isUpvote && needTpUpvote)
-                {
-                    increment = 2;
-                    _config.Upvotes[addon.Id] = true;
-                }
-                else if (!isUpvote && !needTpUpvote)
-                {
-                    increment = 1;
-                    _config.Upvotes.Remove(addon.Id);
-                }
+
+                var newScore = int.TryParse(responseStr, out var newScoreInt);
+
+                return newScore ? newScoreInt : null;
             }
-            else
+            catch (Exception)
             {
-                if (needTpUpvote)
-                {
-                    increment = 1;
-                    _config.Upvotes.Add(addon.Id, true);
-                }
-                else
-                {
-                    increment = -1;
-                    _config.Upvotes.Add(addon.Id, false);
-                }
+                return null;
             }
-
-            _config.ForceUpdateConfig();
-
-            using var response = await _httpClient.PutAsJsonAsync($"{ApiUrl}/addons/scores/change", new Tuple<string, sbyte>(addon.Id, increment)).ConfigureAwait(false);
-            var responseStr = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-
-            var newScore = int.TryParse(responseStr, out var newScoreInt);
-
-            return newScoreInt;
         }
 
         public async Task<Dictionary<string, int>?> GetScores()
