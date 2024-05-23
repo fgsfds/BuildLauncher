@@ -149,5 +149,24 @@ namespace ClientCommon.API
                 return null;
             }
         }
+
+        public async Task<bool> IncreaseNumberOfInstalls(string addonId)
+        {
+            try
+            {
+                var response = await _httpClient.PutAsJsonAsync($"{ApiUrl}/addons/installs/add", addonId).ConfigureAwait(false);
+
+                if (response is null || !response.IsSuccessStatusCode)
+                {
+                    return false;
+                }
+
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
     }
 }

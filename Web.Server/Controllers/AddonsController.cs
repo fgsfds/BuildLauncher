@@ -29,7 +29,7 @@ namespace Web.Server.Controllers
 
 
         [HttpPut("installs/add")]
-        public int AddNumberOfInstalls([FromBody] string addonId) => _addonsProvider.IncreaseAddonInstallsCount(addonId);
+        public int IncreaseNumberOfInstalls([FromBody] string addonId) => _addonsProvider.IncreaseAddonInstallsCount(addonId);
 
 
         [HttpPost("report")]

@@ -134,6 +134,9 @@ namespace Mods.Providers
 
             _game.InstalledAddonsProvider.AddAddon(addon.AddonType, pathToFile);
 
+            await _apiInterface.IncreaseNumberOfInstalls(addon.Id);
+            addon.Installs++;
+
             AddonDownloadedEvent?.Invoke(_game, addon.AddonType);
         }
     }
