@@ -86,7 +86,7 @@ namespace ClientCommon.API
             }
         }
 
-        public async Task<List<DownloadableAddonEntity>?> GetAddons(GameEnum gameEnum)
+        public async Task<List<DownloadableAddonEntity>?> GetAddonsAsync(GameEnum gameEnum)
         {
             try
             {
@@ -107,7 +107,7 @@ namespace ClientCommon.API
             }
         }
 
-        public async Task<int?> ChangeVoteAsync(IAddon addon, sbyte increment)
+        public async Task<int?> ChangeScoreAsync(IAddon addon, sbyte increment)
         {
             try
             {
@@ -129,7 +129,7 @@ namespace ClientCommon.API
             }
         }
 
-        public async Task<Dictionary<string, int>?> GetScores()
+        public async Task<Dictionary<string, int>?> GetScoresAsync()
         {
             try
             {
@@ -150,11 +150,32 @@ namespace ClientCommon.API
             }
         }
 
-        public async Task<bool> IncreaseNumberOfInstalls(string addonId)
+        public async Task<bool> IncreaseNumberOfInstallsAsync(string addonId)
         {
             try
             {
                 var response = await _httpClient.PutAsJsonAsync($"{ApiUrl}/addons/installs/add", addonId).ConfigureAwait(false);
+
+                if (response is null || !response.IsSuccessStatusCode)
+                {
+                    return false;
+                }
+
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        public async Task<bool> AddAddonToDatabaseAsync(AddonsJsonEntity addon)
+        {
+            try
+            {
+                var apiPassword = _config.ApiPassword;
+
+                var response = await _httpClient.PostAsJsonAsync($"{ApiUrl}/addons/add", new Tuple<AddonsJsonEntity, string>(addon, apiPassword)).ConfigureAwait(false);
 
                 if (response is null || !response.IsSuccessStatusCode)
                 {

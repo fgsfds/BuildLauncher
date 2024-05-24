@@ -26,7 +26,7 @@ namespace Web.Server.Providers
         /// Return addons list for a game
         /// </summary>
         /// <param name="gameEnum">Game enum</param>
-        public List<DownloadableAddonEntity> GetAddonsList(GameEnum gameEnum)
+        internal List<DownloadableAddonEntity> GetAddons(GameEnum gameEnum)
         {
             using var dbContext = _dbContextFactory.Get();
 
@@ -97,7 +97,7 @@ namespace Web.Server.Providers
             return result;
         }
 
-        internal int IncreaseAddonInstallsCount(string addonId)
+        internal int IncreaseNumberOfInstalls(string addonId)
         {
             using var dbContext = _dbContextFactory.Get();
             var fix = dbContext.Installs.Find(addonId);
@@ -125,7 +125,7 @@ namespace Web.Server.Providers
             return newInstalls;
         }
 
-        internal int ChangeAddonScore(string addonId, sbyte increment)
+        internal int ChangeScore(string addonId, sbyte increment)
         {
             using var dbContext = _dbContextFactory.Get();
             var fix = dbContext.Scores.Find(addonId);
@@ -171,6 +171,100 @@ namespace Web.Server.Providers
         {
             using var dbContext = _dbContextFactory.Get();
             return dbContext.Scores.ToDictionary(static x => x.AddonId, static y => y.Score);
+        }
+
+        internal bool AddAddonToDatabase(AddonsJsonEntity addon)
+        {
+            using var dbContext = _dbContextFactory.Get();
+
+            using (var transaction = dbContext.Database.BeginTransaction())
+            {
+                var existingAddon = dbContext.Addons.Find(addon.Id);
+
+                if (existingAddon is not null)
+                {
+                    return false;
+                }
+
+                dbContext.Addons.Add(new()
+                {
+                    Id = addon.Id,
+                    Title = addon.Title,
+                    GameId = (byte)addon.Game,
+                    AddonType = (byte)addon.AddonType
+                });
+
+                dbContext.SaveChanges();
+
+
+                var existingVersion = dbContext.Versions.SingleOrDefault(x => x.AddonId == addon.Id && x.Version == addon.Version);
+
+                if (existingVersion is not null)
+                {
+                    return false;
+                }
+
+                dbContext.Versions.Add(new()
+                {
+                    AddonId = addon.Id,
+                    Version = addon.Version,
+                    DownloadUrl = new(addon.DownloadUrl),
+                    Description = addon.Description,
+                    IsDisabled = false,
+                    FileSize = addon.FileSize,
+                    Author = addon.Author,
+                });
+
+                dbContext.SaveChanges();
+
+
+                if (addon.Dependencies is not null)
+                {
+                    existingVersion = dbContext.Versions.SingleOrDefault(x => x.AddonId == addon.Id && x.Version == addon.Version);
+
+                    if (existingVersion is null)
+                    {
+                        throw new Exception("Addon doesn't exist");
+                    }
+
+                    foreach (var dep in addon.Dependencies)
+                    {
+                        var existingDepVersion = dbContext.Versions.SingleOrDefault(x => x.AddonId == dep.Key && (x.Version == dep.Value || dep.Value == null));
+
+                        if (existingDepVersion is null)
+                        {
+                            return false;
+                        }
+
+                        dbContext.Dependencies.Add(new()
+                        {
+                            AddonVersionId = existingVersion.Id,
+                            DependencyVersionId = existingDepVersion.Id
+                        });
+                    }
+
+                    dbContext.SaveChanges();
+                }
+
+
+                var existingScore = dbContext.Scores.Find(addon.Id);
+
+                if (existingScore is null)
+                {
+                    dbContext.Scores.Add(new()
+                    {
+                        AddonId = addon.Id,
+                        Score = 0
+                    });
+
+                    dbContext.SaveChanges();
+                }
+
+
+                transaction.Commit();
+
+                return true;
+            }
         }
     }
 }

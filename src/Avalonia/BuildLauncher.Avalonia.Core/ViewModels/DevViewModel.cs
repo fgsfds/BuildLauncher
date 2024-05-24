@@ -1,0 +1,100 @@
+using Avalonia.Platform.Storage;
+using BuildLauncher.Helpers;
+using ClientCommon.Config;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using Mods;
+
+namespace BuildLauncher.ViewModels
+{
+    internal sealed partial class DevViewModel : ObservableObject
+    {
+        private readonly ConfigEntity _config;
+        private readonly FilesUploader _filesUploader;
+
+        public DevViewModel(
+            ConfigProvider config,
+            FilesUploader filesUploader
+            )
+        {
+            _config = config.Config;
+            _filesUploader = filesUploader;
+        }
+
+
+        #region Binding Properties
+
+        /// <summary>
+        /// Use local API parameter
+        /// </summary>
+        public bool LocalApiCheckbox
+        {
+            get => _config.UseLocalApi;
+            set
+            {
+                _config.UseLocalApi = value;
+                OnPropertyChanged(nameof(LocalApiCheckbox));
+            }
+        }
+
+        [ObservableProperty]
+        private string _uploadingStatusMessage = string.Empty;
+
+        #endregion
+
+
+        #region Relay Commands
+
+        [RelayCommand]
+        private async Task AddAddonAsync()
+        {
+
+            FilePickerFileType z64 = new("Zipped addon")
+            {
+                Patterns = new[] { "*.zip" }
+            };
+
+            var files = await Properties.TopLevel.StorageProvider.OpenFilePickerAsync(
+                new FilePickerOpenOptions
+                {
+                    Title = "Choose addon file",
+                    AllowMultiple = false,
+                    FileTypeFilter = [z64]
+                }).ConfigureAwait(false);
+
+            if (files.Count == 0)
+            {
+                return;
+            }
+
+            var result = await _filesUploader.AddAddonToDatabaseAsync(files[0].Path.LocalPath);
+
+            if (result)
+            {
+                UploadingStatusMessage = "Success";
+            }
+            else
+            {
+                UploadingStatusMessage = "Error";
+            }
+        }
+
+        [ObservableProperty]
+        private string _apiPasswordTextBox;
+        partial void OnApiPasswordTextBoxChanged(string value)
+        {
+            var configValue = _config.ApiPassword;
+
+            if (value.Equals(configValue))
+            {
+                return;
+            }
+            else
+            {
+                _config.ApiPassword = value;
+            }
+        }
+
+        #endregion
+    }
+}

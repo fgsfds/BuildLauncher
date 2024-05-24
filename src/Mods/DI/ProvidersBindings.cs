@@ -9,6 +9,7 @@ namespace Mods.DI
         {
             container.AddSingleton<InstalledAddonsProviderFactory>();
             container.AddSingleton<DownloadableAddonsProviderFactory>();
+            container.AddSingleton<FilesUploader>();
         }
     }
 }

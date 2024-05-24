@@ -115,19 +115,6 @@ namespace BuildLauncher.ViewModels
             }
         }
 
-        /// <summary>
-        /// Use local API parameter
-        /// </summary>
-        public bool LocalApiCheckbox
-        {
-            get => _config.UseLocalApi;
-            set
-            {
-                _config.UseLocalApi = value;
-                OnPropertyChanged(nameof(LocalApiCheckbox));
-            }
-        }
-
         #endregion
 
 

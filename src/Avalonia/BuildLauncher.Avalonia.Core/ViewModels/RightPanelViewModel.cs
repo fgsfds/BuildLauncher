@@ -145,7 +145,7 @@ namespace BuildLauncher.ViewModels
 
             var increment = GetIncrement(SelectedAddon, true);
             
-            var newScore = await _apiInterface.ChangeVoteAsync(SelectedAddon, increment).ConfigureAwait(true);
+            var newScore = await _apiInterface.ChangeScoreAsync(SelectedAddon, increment).ConfigureAwait(true);
 
             if (newScore is null)
             {
@@ -170,7 +170,7 @@ namespace BuildLauncher.ViewModels
 
             var increment = GetIncrement(SelectedAddon, false);
 
-            var newScore = await _apiInterface.ChangeVoteAsync(SelectedAddon, increment).ConfigureAwait(true);
+            var newScore = await _apiInterface.ChangeScoreAsync(SelectedAddon, increment).ConfigureAwait(true);
 
             if (newScore is null)
             {

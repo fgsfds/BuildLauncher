@@ -25,12 +25,12 @@ namespace Web.Server.Controllers
         }
 
         [HttpGet("app")]
-        public GeneralReleaseEntity? GetAppRelease() => _appReleasesProvider.AppRelease;
+        public GeneralReleaseEntity? GetLatestAppRelease() => _appReleasesProvider.AppRelease;
 
         [HttpGet("ports")]
-        public Dictionary<PortEnum, GeneralReleaseEntity> GetPortsReleases() => _portsReleasesProvider.PortsReleases;
+        public Dictionary<PortEnum, GeneralReleaseEntity> GetLatestPortsReleases() => _portsReleasesProvider.PortsReleases;
 
         [HttpGet("tools")]
-        public Dictionary<ToolEnum, GeneralReleaseEntity> GetToolsReleases() => _toolsReleasesProvider.ToolsReleases;
+        public Dictionary<ToolEnum, GeneralReleaseEntity> GetLatestToolsReleases() => _toolsReleasesProvider.ToolsReleases;
     }
 }

@@ -1,0 +1,37 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             d:DesignWidth="800"
+             d:DesignHeight="450"
+             xmlns:vm="clr-namespace:BuildLauncher.ViewModels"
+             x:DataType="vm:DevViewModel"
+             x:Class="BuildLauncher.Pages.DevPage">
+
+    <Grid RowDefinitions="auto,auto,auto,auto" Margin="5">
+
+        <CheckBox Grid.Row="0"
+                  IsChecked="{Binding LocalApiCheckbox}"
+                  VerticalAlignment="Center"
+                  Margin="0,5">
+            Use local API
+        </CheckBox>
+
+        <TextBox Grid.Row="1"
+                 Watermark="API Password"
+                 Text="{Binding ApiPasswordTextBox}"
+                 MinWidth="200"
+                 Width="300"
+                 HorizontalAlignment="Left"></TextBox>
+
+        <Button Grid.Row="2"
+                Command="{Binding AddAddonCommand}"
+                Margin="0,5">
+            Add addon...
+        </Button>
+
+        <TextBlock Grid.Row="3" Text="{Binding UploadingStatusMessage}"/>
+
+    </Grid>
+</UserControl>

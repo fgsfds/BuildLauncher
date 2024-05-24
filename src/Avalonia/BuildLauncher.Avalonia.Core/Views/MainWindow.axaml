@@ -118,11 +118,15 @@
                     <pages:PortsPage x:Name="PortsPageTab"/>
                 </TabItem>
 
-                <TabItem Header="Tools" Margin="5">
+                <TabItem Header="Tools" IsVisible="{Binding IsDevMode}" Margin="5">
                     <pages:ToolsPage x:Name="ToolsPageTab"/>
                 </TabItem>
 
                 <TabItem IsEnabled="False" Header=""/>
+
+                <TabItem Name="DevTab" Header="Dev" IsVisible="{Binding IsDevMode}" Margin="5" >
+                    <pages:DevPage x:Name="DevPageTab"/>
+                </TabItem>
 
                 <TabItem Name="SettingsTab" Header="Settings" Margin="5" >
                     <pages:SettingsPage x:Name="SettingsPageTab"/>

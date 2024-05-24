@@ -1,4 +1,5 @@
-﻿using Common.Enums;
+﻿using ClientCommon.Helpers;
+using Common.Enums;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Games.Providers;
 
@@ -48,6 +49,8 @@ public sealed partial class MainViewModel : ObservableObject
     /// Is Powerslave tab enabled
     /// </summary>
     public bool IsSlaveTabEnabled => _gamesProvider.IsSlaveInstalled;
+
+    public bool IsDevMode => ClientProperties.IsDevMode;
 
     #endregion
 

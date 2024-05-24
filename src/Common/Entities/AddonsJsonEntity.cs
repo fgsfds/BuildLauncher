@@ -1,7 +1,7 @@
 ﻿using Common.Enums;
 using System.Text.Json.Serialization;
 
-namespace Web.Server.Entities
+namespace Common.Entities
 {
     public sealed class AddonsJsonEntity
     {

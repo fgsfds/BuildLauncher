@@ -1,5 +1,4 @@
 ﻿using ClientCommon.API;
-using ClientCommon.Providers;
 using Common.Enums;
 using Common.Helpers;
 using Common.Interfaces;
@@ -15,7 +14,6 @@ namespace Mods.Providers
     {
         private readonly IGame _game;
         private readonly ArchiveTools _archiveTools;
-        private readonly HttpClient _httpClient;
         private readonly ApiInterface _apiInterface;
 
         private Dictionary<AddonTypeEnum, Dictionary<string, IDownloadableAddon>>? _cache;
@@ -29,13 +27,11 @@ namespace Mods.Providers
         public DownloadableAddonsProvider(
             IGame game,
             ArchiveTools archiveTools,
-            HttpClient httpClient,
             ApiInterface apiInterface
             )
         {
             _game = game;
             _archiveTools = archiveTools;
-            _httpClient = httpClient;
             _apiInterface = apiInterface;
 
             Progress = _archiveTools.Progress;
@@ -50,7 +46,7 @@ namespace Mods.Providers
                 return;
             }
 
-            var addons = await _apiInterface.GetAddons(_game.GameEnum).ConfigureAwait(false);
+            var addons = await _apiInterface.GetAddonsAsync(_game.GameEnum).ConfigureAwait(false);
 
             if (addons is null ||  addons.Count == 0)
             {
@@ -134,8 +130,12 @@ namespace Mods.Providers
 
             _game.InstalledAddonsProvider.AddAddon(addon.AddonType, pathToFile);
 
-            await _apiInterface.IncreaseNumberOfInstalls(addon.Id);
-            addon.Installs++;
+            var result = await _apiInterface.IncreaseNumberOfInstallsAsync(addon.Id);
+
+            if (result)
+            {
+                addon.Installs++;
+            }
 
             AddonDownloadedEvent?.Invoke(_game, addon.AddonType);
         }

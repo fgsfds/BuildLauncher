@@ -1,8 +1,8 @@
-﻿using Common.Enums;
+﻿using Common.Entities;
+using Common.Enums;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
 using Web.Server.DbEntities;
-using Web.Server.Entities;
 
 namespace Web.Server.Database
 {
@@ -182,7 +182,7 @@ namespace Web.Server.Database
 
                 return true;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return false;
             }

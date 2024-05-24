@@ -12,6 +12,7 @@ namespace BuildLauncher.DI
             container.AddSingleton<MainViewModel>();
             container.AddSingleton<SettingsViewModel>();
             container.AddSingleton<AboutViewModel>();
+            container.AddSingleton<DevViewModel>();
         }
     }
 }

@@ -1,10 +1,10 @@
-﻿using Common.Helpers;
+﻿using Common.Entities;
+using Common.Helpers;
 using Mods.Serializable;
 using SharpCompress.Archives;
 using SharpCompress.Archives.Zip;
 using SharpCompress.Common;
 using System.Text.Json;
-using Web.Server.Entities;
 
 namespace Generator
 {

@@ -17,7 +17,7 @@ namespace Web.Server.Controllers
         }
 
         [HttpGet("{GameEnum}")]
-        public List<DownloadableAddonEntity> GetDownloadableAddons(GameEnum gameEnum) => _addonsProvider.GetAddonsList(gameEnum);
+        public List<DownloadableAddonEntity> GetAddons(GameEnum gameEnum) => _addonsProvider.GetAddons(gameEnum);
 
 
         [HttpGet("scores")]
@@ -25,14 +25,26 @@ namespace Web.Server.Controllers
 
 
         [HttpPut("scores/change")]
-        public int ChangeRating([FromBody] Tuple<string, sbyte> message) => _addonsProvider.ChangeAddonScore(message.Item1, message.Item2);
+        public int ChangeScore([FromBody] Tuple<string, sbyte> message) => _addonsProvider.ChangeScore(message.Item1, message.Item2);
 
 
         [HttpPut("installs/add")]
-        public int IncreaseNumberOfInstalls([FromBody] string addonId) => _addonsProvider.IncreaseAddonInstallsCount(addonId);
+        public int IncreaseNumberOfInstalls([FromBody] string addonId) => _addonsProvider.IncreaseNumberOfInstalls(addonId);
 
 
-        //[HttpPost("report")]
-        //public void ReportAddon([FromBody] Tuple<string, string> message) => _addonsProvider.AddReport(message.Item1, message.Item2);
+        [HttpPost("add")]
+        public IResult AddAddonToDatabase([FromBody] Tuple<AddonsJsonEntity, string> message)
+        {
+            var apiPassword = Environment.GetEnvironmentVariable("ApiPass")!;
+
+            if (!apiPassword.Equals(message.Item2))
+            {
+                return Results.Forbid();
+            }
+
+            var result = _addonsProvider.AddAddonToDatabase(message.Item1);
+
+            return result ? Results.Ok() : Results.BadRequest();
+        }
     }
 }

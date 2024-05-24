@@ -134,6 +134,13 @@ namespace ClientCommon.Config
             set => SetConfigParameter(ref _upvotes, value);
         }
 
+        private string _apiPassword = string.Empty;
+        public string ApiPassword
+        {
+            get => _apiPassword;
+            set => SetConfigParameter(ref _apiPassword, value);
+        }
+
         public void ForceUpdateConfig()
         {
             ParameterChangedEvent?.Invoke(null);

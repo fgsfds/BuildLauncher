@@ -37,7 +37,7 @@ namespace ClientCommon.Providers
 
         private async Task CreateCacheAsync()
         {
-            var cache = await _apiInterface.GetScores();
+            var cache = await _apiInterface.GetScoresAsync();
 
             _cache = cache;
         }
