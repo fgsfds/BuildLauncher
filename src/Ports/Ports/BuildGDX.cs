@@ -1,5 +1,6 @@
 ﻿using Common.Enums;
 using Common.Enums.Addons;
+using Common.Enums.Versions;
 using Common.Helpers;
 using Common.Interfaces;
 using Games.Games;
@@ -115,7 +116,7 @@ namespace Ports.Ports
 
         private void GetDukeArgs(StringBuilder sb, DukeGame game, IAddon camp)
         {
-            if (camp.Id.Equals(nameof(DukeAddonEnum.DukeWT), StringComparison.OrdinalIgnoreCase))
+            if (camp.Id.Equals(nameof(DukeVersionEnum.Duke3D_WT), StringComparison.OrdinalIgnoreCase))
             {
                 sb.Append($@" -path ""{game.DukeWTInstallPath}""");
             }

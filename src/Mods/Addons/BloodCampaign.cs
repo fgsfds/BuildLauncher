@@ -8,11 +8,6 @@ namespace Mods.Addons
     public sealed class BloodCampaign : Addon
     {
         /// <summary>
-        /// Blood Addon enum
-        /// </summary>
-        public required BloodAddonEnum RequiredAddonEnum { get; init; }
-
-        /// <summary>
         /// Startup .ini file
         /// </summary>
         public required string? INI { get; init; }

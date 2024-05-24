@@ -1,5 +1,6 @@
 ﻿using ClientCommon.Helpers;
 using Common.Enums;
+using Common.Enums.Addons;
 using Common.Helpers;
 using Common.Interfaces;
 using Games.Games;
@@ -99,30 +100,44 @@ namespace Ports.Ports.EDuke32
         }
 
 
-        private void GetWangArgs(StringBuilder sb, WangGame wGame, WangCampaign wMod)
+        private void GetWangArgs(StringBuilder sb, WangGame wGame, WangCampaign camp)
         {
-            sb.Append($@" -addon{(byte)wMod.RequiredAddonEnum}");
+            if (camp.DependentAddons is not null &&
+                camp.DependentAddons.ContainsKey(WangAddonEnum.Wanton.ToString()))
+            {
+                sb.Append($@" -addon{(byte)WangAddonEnum.Wanton}");
+            }
+            else if (camp.DependentAddons is not null &&
+                     camp.DependentAddons.ContainsKey(WangAddonEnum.TwinDragon.ToString()))
+            {
+                sb.Append($@" -addon{(byte)WangAddonEnum.TwinDragon}");
+            }
+            else
+            {
+                sb.Append($@" -addon{(byte)WangAddonEnum.Base}");
+            }
+
 
             AddWangMusicFolder(sb, wGame);
 
 
-            if (wMod.FileName is null)
+            if (camp.FileName is null)
             {
                 return;
             }
 
 
-            if (wMod.Type is AddonTypeEnum.TC)
+            if (camp.Type is AddonTypeEnum.TC)
             {
-                sb.Append($@" {AddDirectoryParam}""{wGame.CampaignsFolderPath}"" {AddFileParam}""{wMod.FileName}""");
+                sb.Append($@" {AddDirectoryParam}""{wGame.CampaignsFolderPath}"" {AddFileParam}""{camp.FileName}""");
             }
-            else if (wMod.Type is AddonTypeEnum.Map)
+            else if (camp.Type is AddonTypeEnum.Map)
             {
-                GetMapArgs(sb, wGame, wMod);
+                GetMapArgs(sb, wGame, camp);
             }
             else
             {
-                ThrowHelper.NotImplementedException($"Mod type {wMod.Type} is not supported");
+                ThrowHelper.NotImplementedException($"Mod type {camp.Type} is not supported");
                 return;
             }
         }

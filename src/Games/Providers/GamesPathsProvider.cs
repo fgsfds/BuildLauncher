@@ -1,5 +1,6 @@
 ﻿using ClientCommon.Config;
 using Common.Enums;
+using Common.Enums.Versions;
 using Common.Helpers;
 using Microsoft.Win32;
 using System.Runtime.InteropServices;
@@ -173,7 +174,6 @@ namespace Games.Providers
                 GameEnum.Redneck => _redneckPath,
                 GameEnum.RidesAgain => _againPath,
                 GameEnum.Duke3D => _dukePath,
-                GameEnum.Duke3D_WT => _dukeWtPath,
                 GameEnum.ShadowWarrior => _wangPath,
                 GameEnum.Fury => _furyPath,
                 GameEnum.Exhumed => _slavePath,
@@ -186,10 +186,19 @@ namespace Games.Providers
             };
         }
 
+        public string? GetPath(DukeVersionEnum game)
+        {
+            return game switch
+            {
+                DukeVersionEnum.Duke3D_WT => _dukeWtPath,
+                _ => throw new NotImplementedException()
+            };
+        }
+
         private void FillConfig()
         {
             _config.GamePathDuke3D ??= GetPath(GameEnum.Duke3D);
-            _config.GamePathDukeWT ??= GetPath(GameEnum.Duke3D_WT);
+            _config.GamePathDukeWT ??= GetPath(DukeVersionEnum.Duke3D_WT);
             _config.GamePathWang ??= GetPath(GameEnum.ShadowWarrior);
             _config.GamePathBlood ??= GetPath(GameEnum.Blood);
             _config.GamePathFury ??= GetPath(GameEnum.Fury);

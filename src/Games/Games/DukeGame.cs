@@ -1,6 +1,7 @@
 ﻿using ClientCommon.Providers;
 using Common.Enums;
 using Common.Enums.Addons;
+using Common.Enums.Versions;
 using Common.Helpers;
 using Common.Interfaces;
 using Mods.Addons;
@@ -96,25 +97,24 @@ namespace Games.Games
                         In the end, Duke annihilates the alien overlords and celebrates by desecrating their corpses.
                         """,
                     Version = null,
-                    SupportedGame = GameEnum.Duke3D,
+                    SupportedGame = new(GameEnum.Duke3D, DukeVersionEnum.Duke3D_Atomic),
                     RequiredFeatures = null,
                     PathToFile = null,
-                    Dependencies = null,
-                    Incompatibles = null,
+                    DependentAddons = null,
+                    IncompatibleAddons = null,
                     MainCon = null,
                     AdditionalCons = null,
                     MainDef = null,
                     AdditionalDefs = null,
                     RTS = null,
                     StartMap = null,
-                    RequiredAddonEnum = DukeAddonEnum.Duke3D,
-                    PreviewImage = null,
+                    PreviewImage = null
                 });
             }
 
             if (IsWorldTourInstalled)
             {
-                var dukeWtId = nameof(GameEnum.Duke3D_WT).ToLower();
+                var dukeWtId = nameof(DukeVersionEnum.Duke3D_WT).ToLower();
                 campaigns.Add(dukeWtId, new DukeCampaign()
                 {
                     Id = dukeWtId,
@@ -130,19 +130,18 @@ namespace Games.Games
                         The episode was designed by Allen Blum and Richard “Levelord” Gray, both of whom designed all the levels in the original Duke Nukem 3D. 
                         """,
                     Version = null,
-                    SupportedGame = GameEnum.Duke3D,
+                    SupportedGame = new(GameEnum.Duke3D, DukeVersionEnum.Duke3D_WT),
                     RequiredFeatures = null,
                     PathToFile = null,
-                    Dependencies = null,
-                    Incompatibles = null,
+                    DependentAddons = null,
+                    IncompatibleAddons = null,
                     MainCon = null,
                     AdditionalCons = null,
                     MainDef = null,
                     AdditionalDefs = null,
                     RTS = null,
                     StartMap = null,
-                    RequiredAddonEnum = DukeAddonEnum.DukeWT,
-                    PreviewImage = null,
+                    PreviewImage = null
                 });
             }
 
@@ -166,19 +165,18 @@ namespace Games.Games
                             Angered that his rest and relaxation is being delayed, Duke Nukem sets out on a mission for retribution against the aliens who are interrupting his vacation.
                             """,
                         Version = null,
-                        SupportedGame = GameEnum.Duke3D,
+                        SupportedGame = new(GameEnum.Duke3D, DukeVersionEnum.Duke3D_Atomic),
                         RequiredFeatures = null,
                         PathToFile = null,
-                        Dependencies = null,
-                        Incompatibles = null,
+                        DependentAddons = new() { {DukeAddonEnum.DukeVaca.ToString(), null } },
+                        IncompatibleAddons = null,
                         MainCon = null,
                         AdditionalCons = null,
                         MainDef = null,
                         AdditionalDefs = null,
                         RTS = null,
                         StartMap = null,
-                        RequiredAddonEnum = DukeAddonEnum.DukeVaca,
-                        PreviewImage = null,
+                        PreviewImage = null
                     });
                 }
 
@@ -199,19 +197,18 @@ namespace Games.Games
                             Duke Nukem must travel to the North Pole in order to stop the brainwashed Santa Claus and his manipulative captors.
                             """,
                         Version = null,
-                        SupportedGame = GameEnum.Duke3D,
+                        SupportedGame = new(GameEnum.Duke3D, DukeVersionEnum.Duke3D_Atomic),
                         RequiredFeatures = null,
                         PathToFile = null,
-                        Dependencies = null,
-                        Incompatibles = null,
+                        DependentAddons = new() { { DukeAddonEnum.DukeNW.ToString(), null } },
+                        IncompatibleAddons = null,
                         MainCon = null,
                         AdditionalCons = null,
                         MainDef = null,
                         AdditionalDefs = null,
                         RTS = null,
                         StartMap = null,
-                        RequiredAddonEnum = DukeAddonEnum.DukeNW,
-                        PreviewImage = null,
+                        PreviewImage = null
                     });
                 }
 
@@ -234,19 +231,18 @@ namespace Games.Games
                             alien invaders have captured several national monuments and critical government buildings, but in the end, Duke defeats the invading army and rescues the President from the Cycloid Emperor.
                             """,
                         Version = null,
-                        SupportedGame = GameEnum.Duke3D,
+                        SupportedGame = new(GameEnum.Duke3D, DukeVersionEnum.Duke3D_Atomic),
                         RequiredFeatures = null,
                         PathToFile = null,
-                        Dependencies = null,
-                        Incompatibles = null,
+                        DependentAddons = new() { { DukeAddonEnum.DukeDC.ToString(), null } },
+                        IncompatibleAddons = null,
                         MainCon = null,
                         AdditionalCons = null,
                         MainDef = null,
                         AdditionalDefs = null,
                         RTS = null,
                         StartMap = null,
-                        RequiredAddonEnum = DukeAddonEnum.DukeDC,
-                        PreviewImage = null,
+                        PreviewImage = null
                     });
                 }
             }
@@ -268,19 +264,18 @@ namespace Games.Games
                         The game's mature themes have been minimized to satisfy Nintendo's adult content standards.
                         """,
                     Version = null,
-                    SupportedGame = GameEnum.Duke64,
+                    SupportedGame = new(GameEnum.Duke64),
                     RequiredFeatures = null,
                     PathToFile = null,
-                    Dependencies = null,
-                    Incompatibles = null,
+                    DependentAddons = null,
+                    IncompatibleAddons = null,
                     MainCon = null,
                     AdditionalCons = null,
                     MainDef = null,
                     AdditionalDefs = null,
                     RTS = null,
                     StartMap = null,
-                    RequiredAddonEnum = DukeAddonEnum.Duke3D,
-                    PreviewImage = null,
+                    PreviewImage = null
                 });
             }
 

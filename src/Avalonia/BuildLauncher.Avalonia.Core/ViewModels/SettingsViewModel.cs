@@ -4,6 +4,7 @@ using Avalonia.Styling;
 using BuildLauncher.Helpers;
 using ClientCommon.Config;
 using Common.Enums;
+using Common.Enums.Versions;
 using Common.Helpers;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -161,7 +162,7 @@ namespace BuildLauncher.ViewModels
                 {
                     Title = "Choose game folder",
                     AllowMultiple = false
-                }).ConfigureAwait(false);
+                }).ConfigureAwait(true);
 
             if (files.Count == 0)
             {
@@ -174,7 +175,7 @@ namespace BuildLauncher.ViewModels
 
                 OnPropertyChanged(nameof(PathToDuke3D));
             }
-            else if (param.Equals(nameof(GameEnum.Duke3D_WT)))
+            else if (param.Equals(nameof(DukeVersionEnum.Duke3D_WT)))
             {
                 PathToDukeWT = files[0].Path.LocalPath;
 
@@ -236,9 +237,9 @@ namespace BuildLauncher.ViewModels
                     OnPropertyChanged(nameof(PathToDuke3D));
                 }
             }
-            else if (param.Equals(nameof(GameEnum.Duke3D_WT)))
+            else if (param.Equals(nameof(DukeVersionEnum.Duke3D_WT)))
             {
-                var path = _gamesAutoDetector.GetPath(GameEnum.Duke3D_WT);
+                var path = _gamesAutoDetector.GetPath(DukeVersionEnum.Duke3D_WT);
 
                 if (path is not null)
                 {
@@ -333,7 +334,7 @@ namespace BuildLauncher.ViewModels
                     Title = "Choose game folder",
                     AllowMultiple = false,
                     FileTypeFilter = [z64]
-                }).ConfigureAwait(false);
+                }).ConfigureAwait(true);
 
             if (files.Count == 0)
             {

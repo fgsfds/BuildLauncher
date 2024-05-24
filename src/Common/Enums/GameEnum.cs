@@ -3,7 +3,6 @@
     public enum GameEnum : byte
     {
         Duke3D = 1,
-        Duke3D_WT = 101,
         Duke64 = 2,
         Blood = 3,
         ShadowWarrior = 4,

@@ -1,5 +1,6 @@
 ﻿using Common.Enums;
 using Common.Enums.Addons;
+using Common.Enums.Versions;
 using Common.Helpers;
 using Common.Interfaces;
 using Games.Games;
@@ -130,19 +131,39 @@ namespace Ports.Ports.EDuke32
         /// <param name="camp">DukeCampaign</param>
         protected void GetDukeArgs(StringBuilder sb, DukeGame game, DukeCampaign camp)
         {
-            if (camp.Id.Equals(nameof(GameEnum.Duke64), StringComparison.OrdinalIgnoreCase))
+            if (camp.SupportedGame.GameEnum is GameEnum.Duke64)
             {
                 sb.Append(@$" {AddDirectoryParam}""{Path.GetDirectoryName(game.Duke64RomPath)}"" -gamegrp ""{Path.GetFileName(game.Duke64RomPath)}""");
                 return;
             }
 
-            if (camp.RequiredAddonEnum is DukeAddonEnum.DukeWT)
+            if (camp.SupportedGame.GameVersion is not null &&
+                camp.SupportedGame.GameVersion.Equals(DukeVersionEnum.Duke3D_WT.ToString(), StringComparison.InvariantCultureIgnoreCase))
             {
-                sb.Append($@" {AddDirectoryParam}""{game.DukeWTInstallPath}"" -addon {(byte)DukeAddonEnum.Duke3D} {AddDirectoryParam}""{Path.Combine(game.SpecialFolderPath, Consts.WTStopgap)}"" -gamegrp e32wt.grp");
+                sb.Append($@" {AddDirectoryParam}""{game.DukeWTInstallPath}"" -addon {(byte)DukeAddonEnum.Base} {AddDirectoryParam}""{Path.Combine(game.SpecialFolderPath, Consts.WTStopgap)}"" -gamegrp e32wt.grp");
             }
             else
             {
-                sb.Append($@" {AddDirectoryParam}""{game.GameInstallFolder}"" -addon {(byte)camp.RequiredAddonEnum}");
+                byte addon = (byte)DukeAddonEnum.Base;
+
+                if (camp.DependentAddons is null)
+                {
+                    addon = (byte)DukeAddonEnum.Base;
+                }
+                else if (camp.DependentAddons.ContainsKey(DukeAddonEnum.DukeDC.ToString()))
+                {
+                    addon = (byte)DukeAddonEnum.DukeDC;
+                }
+                else if (camp.DependentAddons.ContainsKey(DukeAddonEnum.DukeNW.ToString()))
+                {
+                    addon = (byte)DukeAddonEnum.DukeNW;
+                }
+                else if (camp.DependentAddons.ContainsKey(DukeAddonEnum.DukeVaca.ToString()))
+                {
+                    addon = (byte)DukeAddonEnum.DukeVaca;
+                }
+
+                sb.Append($@" {AddDirectoryParam}""{game.GameInstallFolder}"" -addon {addon}");
             }
 
 
@@ -212,6 +233,14 @@ namespace Ports.Ports.EDuke32
                     foreach (var def in aMod.AdditionalDefs)
                     {
                         sb.Append($@" {AddDefParam}""{def}""");
+                    }
+                }
+
+                if (aMod.AdditionalCons is not null)
+                {
+                    foreach (var con in aMod.AdditionalCons)
+                    {
+                        sb.Append($@" {AddConParam}""{con}""");
                     }
                 }
             }

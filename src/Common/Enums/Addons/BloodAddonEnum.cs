@@ -2,7 +2,7 @@
 {
     public enum BloodAddonEnum : byte
     {
-        Blood,
+        Base,
         BloodCP
     }
 }

@@ -68,7 +68,6 @@ namespace Mods
             var gameName = manifest.SupportedGame.Game switch
             {
                 GameEnum.Duke3D => "Duke3D",
-                GameEnum.Duke3D_WT => "Duke3D",
                 GameEnum.Duke64 => "Duke64",
                 GameEnum.Blood => "Blood",
                 GameEnum.ShadowWarrior => "Wang",

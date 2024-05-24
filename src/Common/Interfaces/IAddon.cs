@@ -17,7 +17,7 @@ namespace Common.Interfaces
         /// <summary>
         /// List of supported games
         /// </summary>
-        GameEnum SupportedGame { get; init; }
+        GameStruct SupportedGame { get; init; }
 
         /// <summary>
         /// Features required to run port
@@ -67,12 +67,12 @@ namespace Common.Interfaces
         /// <summary>
         /// List of addons that the current addon requires to work
         /// </summary>
-        Dictionary<string, string?>? Dependencies { get; init; }
+        Dictionary<string, string?>? DependentAddons { get; init; }
 
         /// <summary>
         /// List of addons that the current addon is incompatible with
         /// </summary>
-        Dictionary<string, string?>? Incompatibles { get; init; }
+        Dictionary<string, string?>? IncompatibleAddons { get; init; }
 
         /// <summary>
         /// Main def file

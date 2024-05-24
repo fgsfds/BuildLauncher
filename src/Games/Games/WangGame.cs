@@ -63,20 +63,19 @@ namespace Games.Games
                         In discovery of this, Lo Wang quit his job as a bodyguard. Master Zilla realized that not having a warrior as powerful as Lo Wang would be dangerous, and sent his creatures to battle Lo Wang.
                         """,
                     PathToFile = null,
-                    SupportedGame = GameEnum.ShadowWarrior,
+                    SupportedGame = new(GameEnum.ShadowWarrior),
                     RequiredFeatures = null,
-                    Dependencies = null,
-                    Incompatibles = null,
+                    DependentAddons = null,
+                    IncompatibleAddons = null,
                     MainDef = null,
                     AdditionalDefs = null,
                     StartMap = null,
-                    RequiredAddonEnum = WangAddonEnum.Wang,
                     PreviewImage = null,
                 });
 
                 if (IsWantonInstalled)
                 {
-                    var wangWdId = nameof(WangAddonEnum.WangWD).ToLower();
+                    var wangWdId = nameof(WangAddonEnum.Wanton).ToLower();
                     campaigns.Add(wangWdId, new WangCampaign()
                     {
                         Id = wangWdId,
@@ -94,22 +93,21 @@ namespace Games.Games
                             The game features 12 new levels, new artwork and a few new enemy replacements, such as human enemies; though they still act like their original counterparts.
                             """,
                         Version = null,
-                        SupportedGame = GameEnum.ShadowWarrior,
+                        SupportedGame = new(GameEnum.ShadowWarrior),
                         RequiredFeatures = null,
                         PathToFile = null,
-                        Dependencies = null,
-                        Incompatibles = null,
+                        DependentAddons = new() { { WangAddonEnum.Wanton.ToString(), null } },
+                        IncompatibleAddons = null,
                         MainDef = null,
                         AdditionalDefs = null,
                         StartMap = null,
-                        RequiredAddonEnum = WangAddonEnum.WangWD,
                         PreviewImage = null,
                     });
                 }
 
                 if (IsTwinDragonInstalled)
                 {
-                    var wangTdId = nameof(WangAddonEnum.WangTD).ToLower();
+                    var wangTdId = nameof(WangAddonEnum.TwinDragon).ToLower();
                     campaigns.Add(wangTdId, new WangCampaign()
                     {
                         Id = wangTdId,
@@ -127,15 +125,14 @@ namespace Games.Games
                             The game features 13 new levels, new sounds, artwork and a new final boss, Hung Lo, who replaced Zilla.
                             """,
                         Version = null,
-                        SupportedGame = GameEnum.ShadowWarrior,
+                        SupportedGame = new(GameEnum.ShadowWarrior),
                         RequiredFeatures = null,
                         PathToFile = null,
-                        Dependencies = null,
-                        Incompatibles = null,
+                        DependentAddons = new() { { WangAddonEnum.TwinDragon.ToString(), null } },
+                        IncompatibleAddons = null,
                         MainDef = null,
                         AdditionalDefs = null,
                         StartMap = null,
-                        RequiredAddonEnum = WangAddonEnum.WangTD,
                         PreviewImage = null,
                     });
                 }

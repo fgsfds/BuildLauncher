@@ -60,7 +60,7 @@ namespace BuildLauncher.ViewModels
                     Title = "Choose addon file",
                     AllowMultiple = false,
                     FileTypeFilter = [z64]
-                }).ConfigureAwait(false);
+                }).ConfigureAwait(true);
 
             if (files.Count == 0)
             {

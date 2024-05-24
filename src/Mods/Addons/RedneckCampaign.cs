@@ -8,11 +8,6 @@ namespace Mods.Addons
     public sealed class RedneckCampaign : Addon
     {
         /// <summary>
-        /// Redneck Addon enum
-        /// </summary>
-        public required RedneckAddonEnum RequiredAddonEnum { get; init; }
-
-        /// <summary>
         /// Main .con file
         /// </summary>
         public required string? MainCon { get; init; }

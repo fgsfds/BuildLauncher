@@ -1,5 +1,6 @@
 ﻿using Common.Enums;
 using Common.Enums.Addons;
+using Common.Enums.Versions;
 using Common.Helpers;
 using Common.Interfaces;
 using Games.Games;
@@ -167,62 +168,84 @@ namespace Ports.Ports
             }
         }
 
-        private void GetDukeArgs(StringBuilder sb, DukeGame game, DukeCampaign dMod)
+        private void GetDukeArgs(StringBuilder sb, DukeGame game, DukeCampaign camp)
         {
-            if (dMod.RequiredAddonEnum is DukeAddonEnum.DukeWT)
+            if (camp.SupportedGame.GameVersion is not null &&
+                camp.SupportedGame.GameVersion.Equals(DukeVersionEnum.Duke3D_WT.ToString(), StringComparison.InvariantCultureIgnoreCase))
             {
                 var config = Path.Combine(PathToExecutableFolder, ConfigFile);
                 AddGamePathsToConfig(game.DukeWTInstallPath, game.ModsFolderPath, config);
 
-                sb.Append($" -addon {(byte)DukeAddonEnum.Duke3D}");
+                sb.Append($" -addon {(byte)DukeAddonEnum.Base}");
             }
             else
             {
-                sb.Append($@" -addon {(byte)dMod.RequiredAddonEnum}");
+                byte addon = (byte)DukeAddonEnum.Base;
+
+                if (camp.DependentAddons is null)
+                {
+                    addon = (byte)DukeAddonEnum.Base;
+                }
+                else if (camp.DependentAddons.ContainsKey(DukeAddonEnum.DukeDC.ToString()))
+                {
+                    addon = (byte)DukeAddonEnum.DukeDC;
+                }
+                else if (camp.DependentAddons.ContainsKey(DukeAddonEnum.DukeNW.ToString()))
+                {
+                    addon = (byte)DukeAddonEnum.DukeNW;
+                }
+                else if (camp.DependentAddons.ContainsKey(DukeAddonEnum.DukeVaca.ToString()))
+                {
+                    addon = (byte)DukeAddonEnum.DukeVaca;
+                }
+
+                sb.Append($@" -addon {addon}");
             }
 
 
-            if (dMod.FileName is null)
+            if (camp.FileName is null)
             {
                 return;
             }
 
 
-            if (dMod.Type is AddonTypeEnum.TC)
+            if (camp.Type is AddonTypeEnum.TC)
             {
-                sb.Append($@" {AddFileParam}""{Path.Combine(game.CampaignsFolderPath, dMod.FileName)}""");
+                sb.Append($@" {AddFileParam}""{Path.Combine(game.CampaignsFolderPath, camp.FileName)}""");
 
-                if (dMod.MainCon is not null)
+                if (camp.MainCon is not null)
                 {
-                    sb.Append($@" {MainConParam}""{dMod.MainCon}""");
+                    sb.Append($@" {MainConParam}""{camp.MainCon}""");
                 }
 
-                if (dMod.AdditionalCons?.Count > 0)
+                if (camp.AdditionalCons?.Count > 0)
                 {
-                    foreach (var con in dMod.AdditionalCons)
+                    foreach (var con in camp.AdditionalCons)
                     {
                         sb.Append($@" {AddConParam}""{con}""");
                     }
                 }
             }
-            else if (dMod.Type is AddonTypeEnum.Map)
+            else if (camp.Type is AddonTypeEnum.Map)
             {
-                GetMapArgs(sb, game, dMod);
+                GetMapArgs(sb, game, camp);
             }
             else
             {
-                ThrowHelper.NotImplementedException($"Mod type {dMod.Type} is not supported");
+                ThrowHelper.NotImplementedException($"Mod type {camp.Type} is not supported");
                 return;
             }
         }
 
         private void GetWangArgs(StringBuilder sb, WangGame game, WangCampaign camp)
         {
-            if (camp.RequiredAddonEnum is WangAddonEnum.WangWD)
+            if (camp.DependentAddons is not null &&
+                camp.DependentAddons.ContainsKey(WangAddonEnum.Wanton.ToString()))
             {
                 sb.Append($" {AddFileParam}WT.GRP");
             }
-            else if (camp.RequiredAddonEnum is WangAddonEnum.WangTD)
+            else if (camp.DependentAddons is not null &&
+                camp.DependentAddons.ContainsKey(WangAddonEnum.TwinDragon.ToString()))
             {
                 sb.Append($" {AddFileParam}TD.GRP");
             }
@@ -251,7 +274,8 @@ namespace Ports.Ports
 
         private void GetRedneckArgs(StringBuilder sb, RedneckGame game, RedneckCampaign camp)
         {
-            if (camp.Id.Equals(nameof(RedneckAddonEnum.RedneckR66), StringComparison.OrdinalIgnoreCase))
+            if (camp.DependentAddons is not null &&
+                camp.DependentAddons.ContainsKey(RedneckAddonEnum.Route66.ToString()))
             {
                 sb.Append(" -route66");
                 return;
@@ -327,6 +351,14 @@ namespace Ports.Ports
                     foreach (var def in aMod.AdditionalDefs)
                     {
                         sb.Append($@" {AddDefParam}""{def}""");
+                    }
+                }
+
+                if (aMod.AdditionalCons is not null)
+                {
+                    foreach (var con in aMod.AdditionalCons)
+                    {
+                        sb.Append($@" {AddConParam}""{con}""");
                     }
                 }
             }

@@ -63,18 +63,17 @@ namespace Games.Games
                     Together they rose to the highest ranks and became "The Chosen", the four most esteemed generals of Tchernobog's army (the other two being Ishmael and Gabriel).
                     """,
                 Version = null,
-                SupportedGame = GameEnum.Blood,
+                SupportedGame = new(GameEnum.Blood),
                 RequiredFeatures = null,
                 PathToFile = null,
-                Dependencies = null,
-                Incompatibles = null,
+                DependentAddons = null,
+                IncompatibleAddons = null,
                 MainDef = null,
                 AdditionalDefs = null,
                 INI = Consts.BloodIni,
                 RFF = null,
                 SND = null,
                 StartMap = null,
-                RequiredAddonEnum = BloodAddonEnum.Blood,
                 PreviewImage = null,
             });
 
@@ -98,18 +97,17 @@ namespace Games.Games
                         He must find the scroll and take out everyone responsible for interrupting his journey.
                         """,
                     Version = null,
-                    SupportedGame = GameEnum.Blood,
+                    SupportedGame = new(GameEnum.Blood),
                     RequiredFeatures = null,
                     PathToFile = null,
-                    Dependencies = null,
-                    Incompatibles = null,
+                    DependentAddons = new() { { BloodAddonEnum.BloodCP.ToString(), null } },
+                    IncompatibleAddons = null,
                     MainDef = null,
                     AdditionalDefs = null,
                     INI = Consts.CrypticIni,
                     RFF = null,
                     SND = null,
                     StartMap = null,
-                    RequiredAddonEnum = BloodAddonEnum.BloodCP,
                     PreviewImage = null,
                 });
             }

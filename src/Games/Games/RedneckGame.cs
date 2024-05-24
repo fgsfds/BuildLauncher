@@ -1,6 +1,7 @@
 ﻿using ClientCommon.Providers;
 using Common.Enums;
 using Common.Enums.Addons;
+using Common.Enums.Versions;
 using Common.Helpers;
 using Common.Interfaces;
 using Mods.Addons;
@@ -67,24 +68,23 @@ namespace Games.Games
                         The bosses are the Assface and the leader of the alien invasion, the Queen Vixen.
                         """,
                     Version = null,
-                    SupportedGame = GameEnum.Redneck,
+                    SupportedGame = new(GameEnum.Redneck),
                     RequiredFeatures = null,
                     PathToFile = null,
-                    Dependencies = null,
-                    Incompatibles = null,
+                    DependentAddons = null,
+                    IncompatibleAddons = null,
                     MainCon = null,
                     AdditionalCons = null,
                     MainDef = null,
                     AdditionalDefs = null,
                     RTS = null,
                     StartMap = null,
-                    RequiredAddonEnum = RedneckAddonEnum.Redneck,
                     PreviewImage = null,
                 });
 
                 if (IsRoute66Installed)
                 {
-                    var redneckR66Id = nameof(RedneckAddonEnum.RedneckR66).ToLower();
+                    var redneckR66Id = nameof(RedneckAddonEnum.Route66).ToLower();
                     campaigns.Add(redneckR66Id, new RedneckCampaign()
                     {
                         Id = redneckR66Id,
@@ -97,18 +97,17 @@ namespace Games.Games
                             The add-on contains several new locations and textures, as well as a new ending.
                             """,
                         Version = null,
-                        SupportedGame = GameEnum.Redneck,
+                        SupportedGame = new(GameEnum.Redneck),
                         RequiredFeatures = null,
                         PathToFile = null,
-                        Dependencies = null,
-                        Incompatibles = null,
+                        DependentAddons = new() { { RedneckAddonEnum.Route66.ToString(), null } },
+                        IncompatibleAddons = null,
                         MainCon = null,
                         AdditionalCons = null,
                         MainDef = null,
                         AdditionalDefs = null,
                         RTS = null,
                         StartMap = null,
-                        RequiredAddonEnum = RedneckAddonEnum.RedneckR66,
                         PreviewImage = null,
                     });
                 }
@@ -131,18 +130,17 @@ namespace Games.Games
                         Along the way, they are hunted by aliens and must blast their way through jackalope farms, Disgraceland, a riverboat, a brothel and various other locales.
                         """,
                     Version = null,
-                    SupportedGame = GameEnum.RidesAgain,
+                    SupportedGame = new(GameEnum.RidesAgain),
                     RequiredFeatures = null,
                     PathToFile = null,
-                    Dependencies = null,
-                    Incompatibles = null,
+                    DependentAddons = null,
+                    IncompatibleAddons = null,
                     MainCon = null,
                     AdditionalCons = null,
                     MainDef = null,
                     AdditionalDefs = null,
                     RTS = null,
                     StartMap = null,
-                    RequiredAddonEnum = RedneckAddonEnum.RedneckRA,
                     PreviewImage = null,
                 });
             }

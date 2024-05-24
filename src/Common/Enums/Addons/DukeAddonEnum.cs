@@ -2,10 +2,9 @@
 {
     public enum DukeAddonEnum : byte
     {
-        Duke3D = 0,
+        Base = 0,
         DukeDC = 1,
         DukeNW = 2,
-        DukeVaca = 3,
-        DukeWT = 4
+        DukeVaca = 3
     }
 }

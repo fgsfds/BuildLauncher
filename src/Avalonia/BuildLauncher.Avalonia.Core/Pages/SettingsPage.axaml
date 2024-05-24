@@ -93,7 +93,7 @@
                         Width="{Binding $self.Bounds.Height}"
                         HorizontalContentAlignment="Center"
                         Command="{Binding OpenFolderPickerCommand}"
-                        CommandParameter="DukeWT">
+                        CommandParameter="Duke3D_WT">
                     ...
                 </Button>
 
@@ -102,7 +102,7 @@
                         Width="{Binding $self.Bounds.Height}"
                         HorizontalContentAlignment="Center"
                         Command="{Binding AutodetectCommand}"
-                        CommandParameter="DukeWT"
+                        CommandParameter="Duke3D_WT"
                         ToolTip.Tip="Autodetect">
                     ⟳
                 </Button>
@@ -170,7 +170,7 @@
                         Width="{Binding $self.Bounds.Height}"
                         HorizontalContentAlignment="Center"
                         Command="{Binding OpenFolderPickerCommand}"
-                        CommandParameter="Wang">
+                        CommandParameter="ShadowWarrior">
                     ...
                 </Button>
 
@@ -179,7 +179,7 @@
                         Width="{Binding $self.Bounds.Height}"
                         HorizontalContentAlignment="Center"
                         Command="{Binding AutodetectCommand}"
-                        CommandParameter="Wang"
+                        CommandParameter="ShadowWarrior"
                         ToolTip.Tip="Autodetect">
                     ⟳
                 </Button>
@@ -257,7 +257,7 @@
                         Width="{Binding $self.Bounds.Height}"
                         HorizontalContentAlignment="Center"
                         Command="{Binding OpenFolderPickerCommand}"
-                        CommandParameter="RedneckRA">
+                        CommandParameter="RidesAgain">
                     ...
                 </Button>
 
@@ -266,7 +266,7 @@
                         Width="{Binding $self.Bounds.Height}"
                         HorizontalContentAlignment="Center"
                         Command="{Binding AutodetectCommand}"
-                        CommandParameter="RedneckRA"
+                        CommandParameter="RidesAgain"
                         ToolTip.Tip="Autodetect">
                     ⟳
                 </Button>

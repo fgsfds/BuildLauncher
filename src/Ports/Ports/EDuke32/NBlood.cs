@@ -65,7 +65,6 @@ namespace Ports.Ports.EDuke32
             }
 
 
-
             if (game is BloodGame bGame && addon is BloodCampaign bMod)
             {
                 GetBloodArgs(sb, bGame, bMod);

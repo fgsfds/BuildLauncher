@@ -171,7 +171,7 @@ namespace BuildLauncher.ViewModels
 
             Game.DownloadableAddonsProvider.Progress.ProgressChanged += OnProgressChanged;
 
-            await Game.DownloadableAddonsProvider.DownloadAddonAsync(SelectedDownloadable).ConfigureAwait(false);
+            await Game.DownloadableAddonsProvider.DownloadAddonAsync(SelectedDownloadable).ConfigureAwait(true);
 
             Game.DownloadableAddonsProvider.Progress.ProgressChanged -= OnProgressChanged;
             OnProgressChanged(null, 0);

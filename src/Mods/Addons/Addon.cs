@@ -1,4 +1,5 @@
-﻿using Common.Enums;
+﻿using Common;
+using Common.Enums;
 using Common.Interfaces;
 using System.Text;
 
@@ -13,6 +14,9 @@ namespace Mods.Addons
         public required AddonTypeEnum Type { get; init; }
 
         /// <inheritdoc/>
+        public required GameStruct SupportedGame { get; init; }
+
+        /// <inheritdoc/>
         public required HashSet<FeatureEnum>? RequiredFeatures { get; init; }
 
         /// <inheritdoc/>
@@ -25,19 +29,16 @@ namespace Mods.Addons
         public required string? Version { get; init; }
 
         /// <inheritdoc/>
-        public required GameEnum SupportedGame { get; init; }
-
-        /// <inheritdoc/>
         public required string? Author { get; init; }
 
         /// <inheritdoc/>
         public required string? Description { get; init; }
 
         /// <inheritdoc/>
-        public required Dictionary<string, string?>? Dependencies { get; init; }
+        public required Dictionary<string, string?>? DependentAddons { get; init; }
 
         /// <inheritdoc/>
-        public required Dictionary<string, string?>? Incompatibles { get; init; }
+        public required Dictionary<string, string?>? IncompatibleAddons { get; init; }
 
         /// <inheritdoc/>
         public required string? PathToFile { get; init; }
@@ -94,14 +95,14 @@ namespace Mods.Addons
                 description.Append("\n\n").AppendJoin("\n\n", lines);
             }
 
-            if (Dependencies is not null)
+            if (DependentAddons is not null)
             {
-                description.Append("\n\n").Append($"Requires: *{string.Join(", ", Dependencies.Keys)}*");
+                description.Append("\n\n").Append($"Requires: *{string.Join(", ", DependentAddons.Keys)}*");
             }
 
-            if (Incompatibles is not null)
+            if (IncompatibleAddons is not null)
             {
-                description.Append("\n\n").Append($"Incompatible with: *{string.Join(", ", Incompatibles.Keys)}*");
+                description.Append("\n\n").Append($"Incompatible with: *{string.Join(", ", IncompatibleAddons.Keys)}*");
             }
 
             return description.ToString();

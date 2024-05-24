@@ -175,29 +175,41 @@ namespace Ports.Ports
                 return false;
             }
 
-            //TODO features
-            //if (!autoloadMod.SupportedPorts?.Contains(PortEnum) ?? false)
-            //{
-            //    //skipping mods not supported by the current port
-            //    return false;
-            //}
-
-            if (autoloadMod.Dependencies is not null)
+            if (autoloadMod.SupportedGame.GameEnum != campaign.SupportedGame.GameEnum)
             {
-                foreach (var dep in autoloadMod.Dependencies)
+                //skipping mod for different game
+                return false;
+            }
+
+            if (autoloadMod.SupportedGame.GameVersion is not null &&
+                !autoloadMod.SupportedGame.GameVersion.Equals(campaign.SupportedGame.GameVersion, StringComparison.InvariantCultureIgnoreCase))
+            {
+                return false;
+            }
+
+            if (autoloadMod.RequiredFeatures is not null &&
+                autoloadMod.RequiredFeatures.Except(SupportedFeatures).Any())
+            {
+                //skipping mod that requires unsupported features
+                return false;
+            }
+
+            if (autoloadMod.DependentAddons is not null)
+            {
+                foreach (var dep in autoloadMod.DependentAddons)
                 {
                     if (!addons.ContainsKey(dep.Key) &&
                         !campaign.Id.Equals(dep.Key, StringComparison.OrdinalIgnoreCase))
                     {
-                        //skipping mods that don't have every dependency
+                        //skipping mod that doesn't have every dependency
                         return false;
                     }
                 }
             }
 
-            if (autoloadMod.Incompatibles is not null)
+            if (autoloadMod.IncompatibleAddons is not null)
             {
-                foreach (var dep in autoloadMod.Incompatibles)
+                foreach (var dep in autoloadMod.IncompatibleAddons)
                 {
                     if (addons.ContainsKey(dep.Key) ||
                         campaign.Id.Equals(dep.Key, StringComparison.OrdinalIgnoreCase))
@@ -205,21 +217,6 @@ namespace Ports.Ports
                         //skipping incompatible mods
                         return false;
                     }
-                }
-            }
-
-            //hack for RR and RA
-            if (campaign is RedneckCampaign rCamp)
-            {
-                var game = rCamp.RequiredAddonEnum switch
-                {
-                    RedneckAddonEnum.Redneck or RedneckAddonEnum.RedneckR66 => GameEnum.Redneck,
-                    _ => GameEnum.RidesAgain,
-                };
-
-                if (autoloadMod.SupportedGame != game)
-                {
-                    return false;
                 }
             }
 
@@ -233,7 +230,7 @@ namespace Ports.Ports
             {
                 sb.Append($@" -ini ""{bCamp.INI}""");
             }
-            else if (bCamp.RequiredAddonEnum is BloodAddonEnum.BloodCP)
+            else if (bCamp.DependentAddons is not null && bCamp.DependentAddons.ContainsKey(BloodAddonEnum.BloodCP.ToString()))
             {
                 sb.Append($@" -ini ""{Consts.CrypticIni}""");
             }
