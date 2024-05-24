@@ -5,6 +5,7 @@ using Common.Helpers;
 using Common.Interfaces;
 using Mods.Addons;
 using Mods.Providers;
+using System.Reflection;
 
 namespace Games.Games
 {
@@ -52,7 +53,7 @@ namespace Games.Games
                     Id = wangId,
                     Type = AddonTypeEnum.Official,
                     Title = "Shadow Warrior",
-                    GridImage = ImageHelper.FileNameToStream("Wang.wang.jpg"),
+                    GridImage = ImageHelper.FileNameToStream("Wang.wang.jpg", Assembly.GetExecutingAssembly()),
                     Version = null,
                     Author = "3D Realms",
                     Description = """
@@ -81,7 +82,7 @@ namespace Games.Games
                         Id = wangWdId,
                         Type = AddonTypeEnum.Official,
                         Title = "Wanton Destruction",
-                        GridImage = ImageHelper.FileNameToStream("Wang.wanton.jpg"),
+                        GridImage = ImageHelper.FileNameToStream("Wang.wanton.jpg", Assembly.GetExecutingAssembly()),
                         Author = "Sunstorm Interactive",
                         Description = """
                             **Wanton Destruction** is an official expansion that was created by **Sunstorm Interactive** and tested by **3D Realms**, but was not released by the distributor.
@@ -113,7 +114,7 @@ namespace Games.Games
                         Id = wangTdId,
                         Type = AddonTypeEnum.Official,
                         Title = "Twin Dragon",
-                        GridImage = ImageHelper.FileNameToStream("Wang.twin.jpg"),
+                        GridImage = ImageHelper.FileNameToStream("Wang.twin.jpg", Assembly.GetExecutingAssembly()),
                         Author = "Wylde Productions, Level Infinity",
                         Description = """
                             **Twin Dragon** is an official expansion to the Shadow Warrior that was released as a free download on July 4, 1998.

@@ -5,6 +5,7 @@ using Common.Helpers;
 using Common.Interfaces;
 using Mods.Addons;
 using Mods.Providers;
+using System.Reflection;
 
 namespace Games.Games
 {
@@ -48,7 +49,7 @@ namespace Games.Games
                 Id = bloodId,
                 Type = AddonTypeEnum.Official,
                 Title = "Blood",
-                GridImage = ImageHelper.FileNameToStream("Blood.blood.png"),
+                GridImage = ImageHelper.FileNameToStream("Blood.blood.png", Assembly.GetExecutingAssembly()),
                 Author = "Monolith Productions",
                 Description = """
                     **Blood** is a PC game released for MS-DOS on May 31, 1997. It was developed by **Monolith Productions** and published by **GT Interactive**.
@@ -86,7 +87,7 @@ namespace Games.Games
                     Id = bloodCpId,
                     Type = AddonTypeEnum.Official,
                     Title = "Cryptic Passage",
-                    GridImage = ImageHelper.FileNameToStream("Blood.cp.jpg"),
+                    GridImage = ImageHelper.FileNameToStream("Blood.cp.jpg", Assembly.GetExecutingAssembly()),
                     Author = "Sunstorm Interactive",
                     Description = """
                         **Cryptic Passage** (originally titled Passage to Transylvania) is the first of two expansion packs for Blood.

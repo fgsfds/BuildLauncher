@@ -4,6 +4,7 @@ using Common.Helpers;
 using Common.Interfaces;
 using Mods.Addons;
 using Mods.Providers;
+using System.Reflection;
 
 namespace Games.Games
 {
@@ -39,7 +40,7 @@ namespace Games.Games
                     Id = furyId,
                     Type = AddonTypeEnum.Official,
                     Title = IsAftershock() ? "Ion Fury: Aftershock" : "Ion Fury",
-                    GridImage = IsAftershock() ? ImageHelper.FileNameToStream("Fury.aftershock.jpg") : ImageHelper.FileNameToStream("Fury.fury.jpg"),
+                    GridImage = IsAftershock() ? ImageHelper.FileNameToStream("Fury.aftershock.jpg", Assembly.GetExecutingAssembly()) : ImageHelper.FileNameToStream("Fury.fury.jpg", Assembly.GetExecutingAssembly()),
                     Author = "Voidpoint, LLC",
                     Description = """
                     **Ion Fury** (originally titled Ion Maiden) is a 2019 cyberpunk first-person shooter developed by **Voidpoint** and published by **3D Realms**.

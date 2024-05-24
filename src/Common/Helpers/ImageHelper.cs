@@ -10,14 +10,11 @@ namespace Common.Helpers
         /// </summary>
         /// <param name="fileName">File name</param>
         /// <param name="ass">Assembly</param>
-        public static Stream FileNameToStream(string fileName, Assembly? ass = null)
+        public static Stream FileNameToStream(string fileName, Assembly callingAss)
         {
-            if (ass is null)
-            {
-                ass = Assembly.GetCallingAssembly();
-            }
+            var assName = callingAss.GetName().Name!.Replace("BuildLauncher.", "");
 
-            var resource = ass.GetManifestResourceStream($"{ass.GetName().Name!.Split('.')[1]}.Assets.{fileName}");
+            var resource = callingAss.GetManifestResourceStream($"{assName}.Assets.{fileName}");
 
             resource.ThrowIfNull();
 

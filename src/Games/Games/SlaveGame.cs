@@ -4,6 +4,7 @@ using Common.Helpers;
 using Common.Interfaces;
 using Mods.Addons;
 using Mods.Providers;
+using System.Reflection;
 
 namespace Games.Games
 {
@@ -39,7 +40,7 @@ namespace Games.Games
                     Id = slaveId,
                     Type = AddonTypeEnum.Official,
                     Title = "Powerslave",
-                    GridImage = ImageHelper.FileNameToStream("Slave.slave.jpg"),
+                    GridImage = ImageHelper.FileNameToStream("Slave.slave.jpg", Assembly.GetExecutingAssembly()),
                     Author = "Lobotomy Software",
                     Description = """
                         **PowerSlave**, known as **Exhumed** in Europe and **1999 AD: Resurrection of the Pharaoh** in Japan, is a first-person shooter video game developed by **Lobotomy Software**

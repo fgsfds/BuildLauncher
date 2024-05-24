@@ -87,7 +87,7 @@ namespace Games.Games
                     Id = dukeId,
                     Type = AddonTypeEnum.Official,
                     Title = "Duke Nukem 3D",
-                    GridImage = ImageHelper.FileNameToStream("Duke3D.duke3d.jpg"),
+                    GridImage = ImageHelper.FileNameToStream("Duke3D.duke3d.jpg", Assembly.GetExecutingAssembly()),
                     Author = "3D Realms",
                     Description = """
                         Duke Nukem 3D is a first-person shooter developed and published by **3D Realms**.
@@ -120,7 +120,7 @@ namespace Games.Games
                     Id = dukeWtId,
                     Type = AddonTypeEnum.Official,
                     Title = "Duke Nukem 3D World Tour",
-                    GridImage = ImageHelper.FileNameToStream("Duke3D.dukewt.jpg"),
+                    GridImage = ImageHelper.FileNameToStream("Duke3D.dukewt.jpg", Assembly.GetExecutingAssembly()),
                     Author = "Nerve Software, Gearbox Software",
                     Description = """
                         **Duke Nukem 3D: 20th Anniversary World Tour** is a 2016 special edition of Duke Nukem 3D.
@@ -155,7 +155,7 @@ namespace Games.Games
                         Id = dukeVacaId,
                         Type = AddonTypeEnum.Official,
                         Title = "Caribbean",
-                        GridImage = ImageHelper.FileNameToStream("Duke3D.carib.jpg"),
+                        GridImage = ImageHelper.FileNameToStream("Duke3D.carib.jpg", Assembly.GetExecutingAssembly()),
                         Author = "Sunstorm Interactive",
                         Description = """
                             **Life's A Beach** is an expansion pack for the highly acclaimed first-person shooter Duke Nukem 3D. It was released on December 31, 1997 by **Sunstorm Interactive**.
@@ -188,7 +188,7 @@ namespace Games.Games
                         Id = dukeNwId,
                         Type = AddonTypeEnum.Official,
                         Title = "Nuclear Winter",
-                        GridImage = ImageHelper.FileNameToStream("Duke3D.nwinter.jpg"),
+                        GridImage = ImageHelper.FileNameToStream("Duke3D.nwinter.jpg", Assembly.GetExecutingAssembly()),
                         Author = "Simply Silly Software",
                         Description = """
                             **Nuclear Winter**, is a Christmas-themed expansion pack for Duke Nukem 3D. It was developed by **Simply Silly Software** and published by **WizardWorks** on December 30, 1997.
@@ -220,7 +220,7 @@ namespace Games.Games
                         Id = dukeDcId,
                         Type = AddonTypeEnum.Official,
                         Title = "Duke it Out in DC",
-                        GridImage = ImageHelper.FileNameToStream("Duke3D.dukedc.jpg"),
+                        GridImage = ImageHelper.FileNameToStream("Duke3D.dukedc.jpg", Assembly.GetExecutingAssembly()),
                         Author = "WizardWorks",
                         Description = """
                             **Duke It Out In D.C.** is a Duke Nukem 3D expansion pack developed by Sunstorm Interactive and published by **WizardWorks** on March 17, 1997.
@@ -255,7 +255,7 @@ namespace Games.Games
                     Id = duke64Id,
                     Type = AddonTypeEnum.Official,
                     Title = "Duke Nukem 64",
-                    GridImage = ImageHelper.FileNameToStream("Duke3D.duke64.jpg"),
+                    GridImage = ImageHelper.FileNameToStream("Duke3D.duke64.jpg", Assembly.GetExecutingAssembly()),
                     Author = "3D Realms, Eurocom",
                     Description = """
                         **Duke Nukem 64** is the Nintendo 64 port of the first-person shooter MS-DOS/PC game Duke Nukem 3D.

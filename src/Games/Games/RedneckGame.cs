@@ -6,6 +6,7 @@ using Common.Helpers;
 using Common.Interfaces;
 using Mods.Addons;
 using Mods.Providers;
+using System.Reflection;
 
 namespace Games.Games
 {
@@ -56,7 +57,7 @@ namespace Games.Games
                     Id = redneckId,
                     Type = AddonTypeEnum.Official,
                     Title = "Redneck Rampage",
-                    GridImage = ImageHelper.FileNameToStream("Redneck.redneck.jpg"),
+                    GridImage = ImageHelper.FileNameToStream("Redneck.redneck.jpg", Assembly.GetExecutingAssembly()),
                     Author = "Xatrix Entertainment",
                     Description = """
                         **Redneck Rampage** is a 1997 first-person shooter game developed by **Xatrix Entertainment** and published by **Interplay**.
@@ -90,7 +91,7 @@ namespace Games.Games
                         Id = redneckR66Id,
                         Type = AddonTypeEnum.Official,
                         Title = "Route 66",
-                        GridImage = ImageHelper.FileNameToStream("Redneck.route66.jpg"),
+                        GridImage = ImageHelper.FileNameToStream("Redneck.route66.jpg", Assembly.GetExecutingAssembly()),
                         Author = "Sunstorm Interactive",
                         Description = """
                             **Redneck Rampage: Suckin' Grits on Route 66** is a 12-level expansion pack for Redneck Rampage. It was developed by Sunstorm Interactive and released on December 19, 1997.
@@ -121,7 +122,7 @@ namespace Games.Games
                     Id = redneckRaId,
                     Type = AddonTypeEnum.Official,
                     Title = "Rides Again",
-                    GridImage = ImageHelper.FileNameToStream("Redneck.again.jpg"),
+                    GridImage = ImageHelper.FileNameToStream("Redneck.again.jpg", Assembly.GetExecutingAssembly()),
                     Author = "Xatrix Entertainment",
                     Description = """
                         **Redneck Rampage Rides Again** is a sequel to Redneck Rampage developed by **Xatrix Entertainment** and published by **Interplay Entertainment** for MS-DOS in 1998.

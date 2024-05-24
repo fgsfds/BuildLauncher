@@ -1,6 +1,7 @@
 ﻿using ClientCommon.Helpers;
 using Common.Enums;
 using Common.Helpers;
+using System.Reflection;
 
 namespace Tools.Tools
 {
@@ -84,6 +85,6 @@ namespace Tools.Tools
         /// <summary>
         /// Tool's icon
         /// </summary>
-        public Stream Icon => ImageHelper.FileNameToStream($"{Name}.png");
+        public Stream Icon => ImageHelper.FileNameToStream($"{Name}.png", Assembly.GetExecutingAssembly());
     }
 }

@@ -6,6 +6,7 @@ using Common.Interfaces;
 using Games.Games;
 using Mods.Addons;
 using Mods.Serializable.Addon;
+using System.Reflection;
 using System.Text;
 
 namespace Ports.Ports
@@ -110,7 +111,7 @@ namespace Ports.Ports
         /// <summary>
         /// Port's icon
         /// </summary>
-        public Stream Icon => ImageHelper.FileNameToStream($"{Name}.png");
+        public Stream Icon => ImageHelper.FileNameToStream($"{Name}.png", Assembly.GetExecutingAssembly());
 
 
         /// <summary>
