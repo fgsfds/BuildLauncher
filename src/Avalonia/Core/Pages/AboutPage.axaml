@@ -24,7 +24,7 @@
 
                 <Grid ColumnDefinitions="auto,*, auto, auto">
                     <StackPanel Grid.Column="0" Orientation="Horizontal">
-                        <!--<Image Source="/Assets/logo.png" Width="48" />-->
+                        <Image Source="/Assets/logo.png" Width="48" RenderOptions.BitmapInterpolationMode="None" />
                         <StackPanel Orientation="Vertical" VerticalAlignment="Center">
                             <TextBlock VerticalAlignment="Center" Margin="10,0" FontSize="18">BuildLauncher</TextBlock>
                             <TextBlock VerticalAlignment="Center" Margin="10,0" FontSize="14" Text="{Binding CurrentVersion}"/>

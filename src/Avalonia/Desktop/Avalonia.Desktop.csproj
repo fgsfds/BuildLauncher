@@ -8,6 +8,7 @@
       <ApplicationManifest>app.manifest</ApplicationManifest>
       <Configurations>Debug;Release</Configurations>
       <StartupObject>BuildLauncher.Desktop.Program</StartupObject>
+      <ApplicationIcon>icon.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>

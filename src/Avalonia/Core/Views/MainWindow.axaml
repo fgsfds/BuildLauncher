@@ -8,7 +8,7 @@
         mc:Ignorable="d" d:DesignWidth="1000" d:DesignHeight="500"
         x:Class="BuildLauncher.Views.MainWindow"
         xmlns:pages="clr-namespace:BuildLauncher.Pages"
-        Icon="/Assets/avalonia-logo.ico"
+        Icon="/Assets/icon.ico"
         Title="BuildLauncher"
         WindowStartupLocation="CenterScreen"
         CanResize="True"
