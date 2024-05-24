@@ -19,6 +19,8 @@ namespace BuildLauncher.ViewModels
         {
             _config = config.Config;
             _filesUploader = filesUploader;
+
+            ApiPasswordTextBox = _config.ApiPassword;
         }
 
 

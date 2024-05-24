@@ -141,7 +141,7 @@ namespace BuildLauncher.ViewModels
             OnPropertyChanged(nameof(InstallButtonText));
             StartCommand.NotifyCanExecuteChanged();
         }
-        public bool InstallCommandCanExecute() => !ClientProperties.IsDevMode && CanBeInstalled && !IsInProgress;
+        public bool InstallCommandCanExecute() => CanBeInstalled && !IsInProgress;
 
 
         /// <summary>
@@ -159,7 +159,7 @@ namespace BuildLauncher.ViewModels
 
             IsInProgress = false;
         }
-        public bool CheckUpdateCommandCanExecute() => !ClientProperties.IsDevMode && !IsInProgress;
+        public bool CheckUpdateCommandCanExecute() => !IsInProgress;
 
 
         /// <summary>

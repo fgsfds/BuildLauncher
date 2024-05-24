@@ -163,7 +163,7 @@ namespace BuildLauncher.ViewModels
 
             IsInProgress = false;
         }
-        public bool InstallCommandCanExecute() => !ClientProperties.IsDevMode && !IsInProgress;
+        public bool InstallCommandCanExecute() => !IsInProgress;
 
 
         /// <summary>
@@ -181,7 +181,7 @@ namespace BuildLauncher.ViewModels
 
             IsInProgress = false;
         }
-        public bool CheckUpdateCommandCanExecute() => !ClientProperties.IsDevMode && !IsInProgress;
+        public bool CheckUpdateCommandCanExecute() => !IsInProgress;
 
 
         #endregion
