@@ -71,11 +71,7 @@ Another goal of this project is to create a unification standard for Build Engin
 <img align="right" src="img/img4.png">
 
 - Support for more Build Engine games
-- Support for BuildGDX and DOSBox
 - More downloadable maps, campaigns and mods
-- Downloaded content auto update
-- Better support for custom content that's not downloaded from the launcher
-- Support for loose .map files
 - Linux/Deck version
 
 </td>
@@ -93,7 +89,6 @@ Another goal of this project is to create a unification standard for Build Engin
 - Caribbean and Duke it out in DC can't be launched with EDuke32 and RedNukem
 - Wanton Destruction launched from Raze has episodes and maps names from the original game unless downloaded from the lancher
 - Skip intro checkbox doesn't work with RedNukem
-- Mods and campaigns that replace original files don't work with EDuke32 and related ports
 
 </td>
 </tr>
