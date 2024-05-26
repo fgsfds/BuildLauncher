@@ -25,11 +25,6 @@ namespace Web.Server.Providers
         /// </summary>
         public async Task GetLatestVersionAsync()
         {
-#if DEBUG
-            _logger.LogInformation("Skipping check for new release");
-            return;
-#endif
-
             _logger.LogInformation("Looking for new release");
 
             using var response = await _httpClient.GetAsync(Consts.GitHubReleases, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false);

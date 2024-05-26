@@ -3,6 +3,7 @@ using Common.Enums;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
 using Web.Server.DbEntities;
+using Web.Server.Helpers;
 
 namespace Web.Server.Database
 {
@@ -21,13 +22,14 @@ namespace Web.Server.Database
 
         public DatabaseContext()
         {
-#if DEBUG
-            if (!_isRunOnce)
+            if (ServerProperties.IsDevMode)
             {
-                Database.EnsureDeleted();
-                _isRunOnce = true;
+                if (!_isRunOnce)
+                {
+                    Database.EnsureDeleted();
+                    _isRunOnce = true;
+                }
             }
-#endif
 
             Database.EnsureCreated();
 

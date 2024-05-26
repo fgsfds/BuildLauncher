@@ -1,4 +1,5 @@
 ﻿using ClientCommon.API;
+using ClientCommon.Helpers;
 using Common.Enums;
 using Common.Helpers;
 using Common.Interfaces;
@@ -130,11 +131,14 @@ namespace Mods.Providers
 
             _game.InstalledAddonsProvider.AddAddon(addon.AddonType, pathToFile);
 
-            var result = await _apiInterface.IncreaseNumberOfInstallsAsync(addon.Id);
-
-            if (result)
+            if (!ClientProperties.IsDevMode)
             {
-                addon.Installs++;
+                var result = await _apiInterface.IncreaseNumberOfInstallsAsync(addon.Id);
+
+                if (result)
+                {
+                    addon.Installs++;
+                }
             }
 
             AddonDownloadedEvent?.Invoke(_game, addon.AddonType);

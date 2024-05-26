@@ -21,9 +21,12 @@ namespace Web.Server
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
-            builder.Services.AddHostedService<AppReleasesTask>();
-            builder.Services.AddHostedService<PortsReleasesTask>();
-            builder.Services.AddHostedService<ToolsReleasesTask>();
+            if (!builder.Environment.IsDevelopment())
+            {
+                builder.Services.AddHostedService<AppReleasesTask>();
+                builder.Services.AddHostedService<PortsReleasesTask>();
+                builder.Services.AddHostedService<ToolsReleasesTask>();
+            }
 
             builder.Services.AddSingleton<AppReleasesProvider>();
             builder.Services.AddSingleton<AddonsProvider>();
@@ -44,6 +47,8 @@ namespace Web.Server
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
+                ServerProperties.IsDevMode = true;
+
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }

@@ -30,11 +30,6 @@ namespace Web.Server.Providers
 
         public async Task GetLatestReleasesAsync()
         {
-#if DEBUG
-            _logger.LogInformation("Skipping check for new release");
-            return;
-#endif
-
             var ports = Enum.GetValues<PortEnum>();
 
             foreach (var port in ports)
