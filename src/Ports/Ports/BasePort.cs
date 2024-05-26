@@ -136,9 +136,9 @@ namespace Ports.Ports
                 GetSkipStartupParameter(sb);
             }
 
-            GetStartCampaignArgs(sb, game, addon);
-
             GetAutoloadModsArgs(sb, game, addon);
+
+            GetStartCampaignArgs(sb, game, addon);
 
             return sb.ToString();
         }
