@@ -32,20 +32,20 @@ namespace Common.Helpers
         /// <param name="time">Timespan</param>
         public static string ToTimeString(this TimeSpan time)
         {
-            if (time.Seconds < 1)
+            if (time.TotalSeconds < 1)
             {
                 return "never played";
             }
 
             StringBuilder sb = new();
 
-            if (time < TimeSpan.FromMinutes(1))
+            if (time.TotalMinutes < 1)
             {
-                if (time.Seconds > 2)
+                if (time.TotalSeconds > 2)
                 {
                     sb.Append($" {time.Seconds} seconds");
                 }
-                else if (time.Seconds >= 1)
+                else if (time.TotalSeconds >= 1)
                 {
                     sb.Append($" {time.Seconds} second");
                 }
@@ -54,13 +54,13 @@ namespace Common.Helpers
             }
 
 
-            if (time.Hours >= 2)
+            if (time.TotalHours >= 2)
             {
-                sb.Append($" {time.Hours} hours");
+                sb.Append($" {(int)time.TotalHours} hours");
             }
-            else if (time.Hours >= 1)
+            else if (time.TotalHours >= 1)
             {
-                sb.Append($" {time.Hours} hour");
+                sb.Append($" {(int)time.TotalHours} hour");
             }
 
             if (time.Minutes >= 2)
