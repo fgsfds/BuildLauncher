@@ -45,7 +45,7 @@ namespace Ports.Ports
         public override bool IsInstalled => File.Exists(Path.Combine(PathToExecutableFolder, "BuildGDX.jar"));
 
         /// <inheritdoc/>
-        public override List<FeatureEnum> SupportedFeatures => [];
+        public override List<FeatureEnum> SupportedFeatures => [FeatureEnum.WorldTourSupport];
 
 
         /// <inheritdoc/>

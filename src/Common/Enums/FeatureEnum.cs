@@ -8,6 +8,9 @@
         Sloped_Sprites,
         TROR,
         Wall_Rotate_Cstat,
-        CustomDude
+        CustomDude,
+        WorldTourSupport,
+        [Obsolete]
+        VacaDcSupport
     }
 }

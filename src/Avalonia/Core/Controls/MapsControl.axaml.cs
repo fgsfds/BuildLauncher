@@ -60,9 +60,32 @@ namespace BuildLauncher.Controls
                     Content = sp,
                     Command = new RelayCommand(() =>
                         _viewModel.StartMapCommand.Execute(port),
-                        () => port.IsInstalled && MapsList.SelectedItem is not null &&
-                        (((IAddon)MapsList.SelectedItem)?.RequiredFeatures is null || !((IAddon)MapsList.SelectedItem).RequiredFeatures!.Except(port.SupportedFeatures).Any())
-                        ),
+                        () =>
+                        {
+                            if (!port.IsInstalled)
+                            {
+                                return false;
+                            }
+
+                            if (MapsList.SelectedItem is null)
+                            {
+                                return false;
+                            }
+
+                            var selectedMap = (IAddon)MapsList.SelectedItem;
+
+                            if (port.PortEnum is PortEnum.BuildGDX)
+                            {
+                                return false;
+                            }
+
+                            if (selectedMap.RequiredFeatures is null || !selectedMap.RequiredFeatures!.Except(port.SupportedFeatures).Any())
+                            {
+                                return true;
+                            }
+
+                            return false;
+                        }),
                     Margin = new(5),
                     Padding = new(5),
                 };

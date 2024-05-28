@@ -3,6 +3,7 @@ using Avalonia.Media;
 using BuildLauncher.Helpers;
 using BuildLauncher.ViewModels;
 using Common.Enums;
+using Common.Enums.Addons;
 using Common.Helpers;
 using Common.Interfaces;
 using CommunityToolkit.Mvvm.Input;
@@ -60,9 +61,33 @@ namespace BuildLauncher.Controls
                     Content = sp,
                     Command = new RelayCommand(() =>
                         _viewModel.StartCampaignCommand.Execute(port),
-                        () => port.IsInstalled && CampaignsList.SelectedItem is not null &&
-                        (((IAddon)CampaignsList.SelectedItem).RequiredFeatures is null || !((IAddon)CampaignsList.SelectedItem).RequiredFeatures!.Except(port.SupportedFeatures).Any())
-                        ),
+                        () =>
+                        {
+                            if (!port.IsInstalled)
+                            {
+                                return false;
+                            }
+
+                            if (CampaignsList.SelectedItem is null)
+                            {
+                                return false;
+                            }
+
+                            var selectedCampaign = (IAddon)CampaignsList.SelectedItem;
+
+                            if (port.PortEnum is PortEnum.BuildGDX &&
+                                (selectedCampaign.Type is not AddonTypeEnum.Official || selectedCampaign.Id.Equals(DukeAddonEnum.DukeNW.ToString(), StringComparison.InvariantCultureIgnoreCase)))
+                            {
+                                return false;
+                            }
+
+                            if (selectedCampaign.RequiredFeatures is null || !selectedCampaign.RequiredFeatures!.Except(port.SupportedFeatures).Any())
+                            {
+                                return true;
+                            }
+
+                            return false;
+                        }),
                     Margin = new(5),
                     Padding = new(5),
                 };
