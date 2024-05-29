@@ -47,6 +47,9 @@ namespace Common.Entities
         [JsonPropertyName("Author")]
         public string? Author { get; set; }
 
+        [JsonPropertyName("UpdateDate")]
+        public DateTime UpdateDate { get; set; }
+
 
         [JsonIgnore]
         public bool IsInstalled { get; set; }
@@ -74,6 +77,29 @@ namespace Common.Entities
 
         [JsonIgnore]
         public string FileSizeString => FileSize.ToSizeString();
+
+        [JsonIgnore]
+        public string UpdateDateString
+        {
+            get
+            {
+                var now = DateTime.UtcNow;
+                var span = now - UpdateDate;
+
+                if (span.TotalDays < 1)
+                {
+                    return "Today";
+                }
+                else if (span.TotalDays < 2)
+                {
+                    return "Yesterday";
+                }
+                else
+                {
+                    return $"{(int)span.TotalDays} days ago";
+                }
+            }
+        }
 
 
         public string ToMarkdownString()

@@ -85,7 +85,8 @@ namespace Web.Server.Providers
                     Author = version.Value.Author,
                     Dependencies = depsResult,
                     Installs = hasInstalls ? installsNumber : 0,
-                    Score = hasScore ? scoreNumber : 0
+                    Score = hasScore ? scoreNumber : 0,
+                    UpdateDate = version.Value.UpdateDate
                 };
 
                 result.Add(newDownloadable);
@@ -213,6 +214,7 @@ namespace Web.Server.Providers
                     IsDisabled = false,
                     FileSize = addon.FileSize,
                     Author = addon.Author,
+                    UpdateDate = DateTime.Now.ToUniversalTime()
                 });
 
                 dbContext.SaveChanges();

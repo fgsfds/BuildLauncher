@@ -125,6 +125,7 @@ namespace Web.Server.Database
                         IsDisabled = false,
                         FileSize = addon.FileSize,
                         Author = addon.Author,
+                        UpdateDate = DateTime.Now.ToUniversalTime()
                     });
 
                     this.SaveChanges();

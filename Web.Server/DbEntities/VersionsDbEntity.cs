@@ -36,6 +36,9 @@ namespace Web.Server.DbEntities
         [Column("is_disabled")]
         public required bool IsDisabled { get; set; }
 
+        [Column("updated")]
+        public required DateTime UpdateDate { get; set; }
+
 
         public AddonsDbEntity AddonsTable { get; set; }
     }

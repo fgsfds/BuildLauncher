@@ -2,6 +2,7 @@ using Avalonia.Controls;
 using BuildLauncher.ViewModels;
 using Common.Helpers;
 using CommunityToolkit.Mvvm.Input;
+using System.ComponentModel;
 
 namespace BuildLauncher.Controls
 {

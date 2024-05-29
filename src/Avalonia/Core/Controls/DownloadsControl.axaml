@@ -47,6 +47,7 @@
                   Padding="2"
                   ItemsSource="{Binding DownloadableList}"
                   SelectedItem="{Binding SelectedDownloadable}"
+                  SelectionMode="Single"
                   GridLinesVisibility="Horizontal"
                   IsReadOnly="True"
                   CornerRadius="4"
@@ -59,6 +60,7 @@
                 <DataGridTextColumn Header="Score" Binding="{Binding Score}" />
                 <DataGridTextColumn Header="Downloads" Binding="{Binding Installs}" />
                 <DataGridTextColumn Header="Status" Binding="{Binding Status}" FontWeight="Bold" />
+                <DataGridTextColumn Header="Updated" Binding="{Binding UpdateDateString}" SortMemberPath="UpdateDate" />
             </DataGrid.Columns>
         </DataGrid>
 
