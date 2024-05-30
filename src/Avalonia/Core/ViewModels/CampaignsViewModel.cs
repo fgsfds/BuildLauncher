@@ -39,7 +39,8 @@ namespace BuildLauncher.ViewModels
             _playtimeProvider = playtimeProvider;
 
             _gamesProvider.GameChangedEvent += OnGameChanged;
-            Game.DownloadableAddonsProvider.AddonDownloadedEvent += OnAddonDownloaded;
+            Game.DownloadableAddonsProvider.AddonDownloadedEvent += OnAddonChanged;
+            Game.InstalledAddonsProvider.AddonsChangedEvent += OnAddonChanged;
         }
 
 
@@ -215,15 +216,12 @@ namespace BuildLauncher.ViewModels
             }
         }
 
-        private void OnAddonDownloaded(IGame game, AddonTypeEnum addonType)
+        private void OnAddonChanged(IGame game, AddonTypeEnum? addonType)
         {
-            if (game.GameEnum != Game.GameEnum ||
-                addonType is not AddonTypeEnum.TC)
+            if (game.GameEnum == Game.GameEnum && (addonType is AddonTypeEnum.TC || addonType is null))
             {
-                return;
+                OnPropertyChanged(nameof(CampaignsList));
             }
-
-            OnPropertyChanged(nameof(CampaignsList));
         }
     }
 }

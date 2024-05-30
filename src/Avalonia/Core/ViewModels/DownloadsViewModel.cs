@@ -19,7 +19,7 @@ namespace BuildLauncher.ViewModels
             Game = game;
 
             Game.DownloadableAddonsProvider.AddonDownloadedEvent += OnAddonChanged;
-            Game.InstalledAddonsProvider.AddonDeletedEvent += OnAddonChanged;
+            Game.InstalledAddonsProvider.AddonsChangedEvent += OnAddonChanged;
         }
 
 
@@ -195,7 +195,7 @@ namespace BuildLauncher.ViewModels
             OnPropertyChanged(nameof(ProgressBarValue));
         }
 
-        private void OnAddonChanged(IGame game, AddonTypeEnum addonType)
+        private void OnAddonChanged(IGame game, AddonTypeEnum? addonType)
         {
             if (game.GameEnum != Game.GameEnum)
             {

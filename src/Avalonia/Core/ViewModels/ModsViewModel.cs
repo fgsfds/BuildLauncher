@@ -38,7 +38,8 @@ namespace BuildLauncher.ViewModels
             _playtimeProvider = playtimeProvider;
 
             _gamesProvider.GameChangedEvent += OnGameChanged;
-            Game.DownloadableAddonsProvider.AddonDownloadedEvent += OnModDownloaded;
+            Game.DownloadableAddonsProvider.AddonDownloadedEvent += OnAddonChanged;
+            Game.InstalledAddonsProvider.AddonsChangedEvent += OnAddonChanged;
         }
 
 
@@ -157,15 +158,12 @@ namespace BuildLauncher.ViewModels
             }
         }
 
-        private void OnModDownloaded(IGame game, AddonTypeEnum addonType)
+        private void OnAddonChanged(IGame game, AddonTypeEnum? addonType)
         {
-            if (game.GameEnum != Game.GameEnum ||
-                addonType is not AddonTypeEnum.Mod)
+            if (game.GameEnum == Game.GameEnum && (addonType is AddonTypeEnum.Mod || addonType is null))
             {
-                return;
+                OnPropertyChanged(nameof(ModsList));
             }
-
-            OnPropertyChanged(nameof(ModsList));
         }
     }
 }

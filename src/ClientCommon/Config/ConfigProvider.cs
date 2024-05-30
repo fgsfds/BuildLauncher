@@ -216,6 +216,11 @@ public sealed class ConfigProvider
     {
         var setting = _dbContext.GamePaths.Find([caller]);
 
+        if (string.IsNullOrWhiteSpace(value))
+        {
+            value = null;
+        }
+
         if (setting is null)
         {
             _dbContext.GamePaths.Add(new() { Game = caller, Path = value });

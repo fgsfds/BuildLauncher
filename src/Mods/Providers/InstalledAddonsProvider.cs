@@ -21,9 +21,11 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
     private readonly PlaytimeProvider _playtimeProvider;
 
     private readonly Dictionary<AddonTypeEnum, Dictionary<string, IAddon>> _cache;
-    private readonly SemaphoreSlim _semaphore = new(1);
+    private static readonly SemaphoreSlim _semaphore = new(1);
 
-    public event AddonChanged AddonDeletedEvent;
+    private bool _isCacheUpdating = false;
+
+    public event AddonChanged AddonsChangedEvent;
 
     [Obsolete($"Don't create directly. Use {nameof(InstalledAddonsProvider)}.")]
     public InstalledAddonsProvider(
@@ -42,7 +44,8 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
     /// <inheritdoc/>
     public async Task CreateCache(bool createNew)
     {
-        _semaphore.Wait();
+        await _semaphore.WaitAsync();
+        _isCacheUpdating = true;
 
         if (createNew)
         {
@@ -55,7 +58,7 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
             {
                 IEnumerable<string> files;
 
-                files = Directory.GetFiles(_game.CampaignsFolderPath).Where(static x => x.EndsWith(".zip", StringComparison.OrdinalIgnoreCase) || x.EndsWith(".grp", StringComparison.OrdinalIgnoreCase));
+                files = Directory.GetFiles(_game.CampaignsFolderPath, "*.zip");
                 var camps = GetAddonsFromFiles(AddonTypeEnum.TC, files);
                 _cache.Add(AddonTypeEnum.TC, camps);
 
@@ -66,9 +69,11 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
                 files = Directory.GetFiles(_game.ModsFolderPath, "*.zip");
                 var mods = GetAddonsFromFiles(AddonTypeEnum.Mod, files);
                 _cache.Add(AddonTypeEnum.Mod, mods);
-            });
+            }).WaitAsync(CancellationToken.None);
         }
 
+        _isCacheUpdating = false;
+        AddonsChangedEvent?.Invoke(_game, null);
         _semaphore.Release();
 
         _cache.ThrowIfNull();
@@ -110,7 +115,7 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
 
         _cache[addon.Type].Remove(addon.Id);
 
-        AddonDeletedEvent?.Invoke(_game, addon.Type);
+        AddonsChangedEvent?.Invoke(_game, addon.Type);
     }
 
     /// <inheritdoc/>
@@ -132,6 +137,11 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
     /// <inheritdoc/>
     public Dictionary<string, IAddon> GetInstalledAddons(AddonTypeEnum addonType)
     {
+        if (_isCacheUpdating)
+        {
+            return [];
+        }
+
         _cache.ThrowIfNull();
 
         _cache.TryGetValue(addonType, out var result);
@@ -233,8 +243,6 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
         Dictionary<string, string?>? incompatibles = null;
         IStartMap? startMap = null;
 
-        DukeVersionEnum? dukeVersion = null;
-
         if (ArchiveFactory.IsArchive(pathToFile, out var _))
         {
             using var archive = ArchiveFactory.Open(pathToFile);
@@ -302,15 +310,12 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
             {
                 if (manifest.SupportedGame.Version == DukeVersionEnum.Duke3D_13D.ToString())
                 {
-                    dukeVersion = DukeVersionEnum.Duke3D_13D;
                 }
                 else if (manifest.SupportedGame.Version == DukeVersionEnum.Duke3D_Atomic.ToString())
                 {
-                    dukeVersion = DukeVersionEnum.Duke3D_Atomic;
                 }
                 else if (manifest.SupportedGame.Version == DukeVersionEnum.Duke3D_WT.ToString())
                 {
-                    dukeVersion = DukeVersionEnum.Duke3D_WT;
                 }
             }
         }

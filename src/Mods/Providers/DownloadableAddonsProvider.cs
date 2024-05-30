@@ -18,6 +18,7 @@ namespace Mods.Providers
         private readonly ApiInterface _apiInterface;
 
         private Dictionary<AddonTypeEnum, Dictionary<string, IDownloadableAddon>>? _cache;
+        private readonly SemaphoreSlim _semaphore = new(1);
 
         public event AddonChanged AddonDownloadedEvent;
 
@@ -42,8 +43,11 @@ namespace Mods.Providers
         /// <inheritdoc/>
         public async Task CreateCacheAsync()
         {
+            await _semaphore.WaitAsync();
+
             if (_cache is not null)
             {
+                _semaphore.Release();
                 return;
             }
 
@@ -51,6 +55,7 @@ namespace Mods.Providers
 
             if (addons is null ||  addons.Count == 0)
             {
+                _semaphore.Release();
                 return;
             }
 
@@ -61,6 +66,8 @@ namespace Mods.Providers
                 _cache.TryAdd(addon.AddonType, []);
                 _cache[addon.AddonType].TryAdd(addon.Id, addon);
             }
+
+            _semaphore.Release();
         }
 
 

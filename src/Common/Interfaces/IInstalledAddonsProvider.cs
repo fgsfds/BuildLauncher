@@ -5,7 +5,7 @@ namespace Common.Interfaces
 {
     public interface IInstalledAddonsProvider
     {
-        event AddonChanged AddonDeletedEvent;
+        event AddonChanged AddonsChangedEvent;
 
         /// <summary>
         /// Add addon to cache
