@@ -92,7 +92,7 @@ namespace Games.Games
         {
             var originalCampaigns = GetOriginalCampaigns();
 
-            var customCampaigns = InstalledAddonsProvider.GetInstalledAddon(AddonTypeEnum.TC);
+            var customCampaigns = InstalledAddonsProvider.GetInstalledAddons(AddonTypeEnum.TC);
 
             foreach (var customCamp in customCampaigns)
             {
@@ -114,7 +114,7 @@ namespace Games.Games
         /// <inheritdoc/>
         public virtual Dictionary<string, IAddon> GetSingleMaps()
         {
-            var maps = InstalledAddonsProvider.GetInstalledAddon(AddonTypeEnum.Map);
+            var maps = InstalledAddonsProvider.GetInstalledAddons(AddonTypeEnum.Map);
 
             return maps;
         }
@@ -123,7 +123,7 @@ namespace Games.Games
         /// <inheritdoc/>
         public virtual Dictionary<string, IAddon> GetAutoloadMods(bool enabledOnly)
         {
-            var mods = InstalledAddonsProvider.GetInstalledAddon(AddonTypeEnum.Mod);
+            var mods = InstalledAddonsProvider.GetInstalledAddons(AddonTypeEnum.Mod);
 
             if (enabledOnly)
             {

@@ -1,52 +1,107 @@
 ﻿using ClientCommon.API;
+using ClientCommon.Config;
 using Common.Helpers;
 
-namespace ClientCommon.Providers
+namespace ClientCommon.Providers;
+
+public sealed class ScoresProvider
 {
-    public sealed class ScoresProvider
+    private readonly ApiInterface _apiInterface;
+    private readonly ConfigProvider _config;
+    private Dictionary<string, int>? _cache;
+
+    public ScoresProvider(
+        ApiInterface apiInterface,
+        ConfigProvider config)
     {
-        private readonly ApiInterface _apiInterface;
-        private Dictionary<string, int>? _cache;
+        _apiInterface = apiInterface;
+        _config = config;
 
-        public ScoresProvider(ApiInterface apiInterface)
+        _ = CreateCacheAsync();
+    }
+
+
+    public Dictionary<string, int>? GetScores()
+    {
+        return _cache;
+    }
+
+
+    public int? GetScore(string id)
+    {
+        if (_cache is null)
         {
-            _apiInterface = apiInterface;
-
-            _ = CreateCacheAsync();
+            return null;
         }
 
+        var hasScore = _cache.TryGetValue(id, out var score);
 
-        public Dictionary<string, int>? GetScores()
+        return hasScore ? score : null;
+    }
+
+
+    private async Task CreateCacheAsync()
+    {
+        var cache = await _apiInterface.GetScoresAsync();
+
+        _cache = cache;
+    }
+
+    public async Task ChangeScoreAsync(string addonId, bool isUpvote)
+    {
+        _cache.ThrowIfNull();
+
+        var increment = GetIncrement(addonId, isUpvote);
+
+        var newScore = await _apiInterface.ChangeScoreAsync(addonId, increment).ConfigureAwait(false);
+
+        if (newScore is null)
         {
-            return _cache;
+            return;
         }
 
+        _cache[addonId] = newScore.Value;
 
-        public int? GetScore(string id)
+        _config.AddScore(addonId, isUpvote);
+    }
+
+    private sbyte GetIncrement(string addonId, bool needToUpvote)
+    {
+        sbyte increment = 0;
+
+        var doesEntryExist = _config.Scores.TryGetValue(addonId, out var isUpvote);
+
+        if (doesEntryExist)
         {
-            if (_cache is null)
+            if (isUpvote && needToUpvote)
             {
-                return null;
+                increment = -1;
             }
-
-            var hasScore = _cache.TryGetValue(id, out var score);
-
-            return hasScore ? score : null;
+            else if (isUpvote && !needToUpvote)
+            {
+                increment = -2;
+            }
+            else if (!isUpvote && needToUpvote)
+            {
+                increment = 2;
+            }
+            else if (!isUpvote && !needToUpvote)
+            {
+                increment = 1;
+            }
         }
-
-
-        private async Task CreateCacheAsync()
+        else
         {
-            var cache = await _apiInterface.GetScoresAsync();
-
-            _cache = cache;
+            if (needToUpvote)
+            {
+                increment = 1;
+            }
+            else
+            {
+                increment = -1;
+            }
         }
 
-        public void ChangeScore(string id, int newScore)
-        {
-            _cache.ThrowIfNull();
-
-            _cache[id] = newScore;
-        }
+        return increment;
     }
 }

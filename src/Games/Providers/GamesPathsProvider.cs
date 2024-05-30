@@ -9,7 +9,7 @@ namespace Games.Providers
 {
     public class GamesPathsProvider
     {
-        private readonly ConfigEntity _config;
+        private readonly ConfigProvider _config;
 
         private readonly string? _dukePath = null;
         private readonly string? _dukeWtPath = null;
@@ -24,9 +24,9 @@ namespace Games.Providers
         private readonly string? _witch1Path = null;
         private readonly string? _witch2Path = null;
 
-        public GamesPathsProvider(ConfigProvider configProvider)
+        public GamesPathsProvider(ConfigProvider config)
         {
-            _config = configProvider.Config;
+            _config = config;
 
             var libs = GetSteamLibraries();
 
@@ -197,14 +197,14 @@ namespace Games.Providers
 
         private void FillConfig()
         {
-            _config.GamePathDuke3D ??= GetPath(GameEnum.Duke3D);
-            _config.GamePathDukeWT ??= GetPath(DukeVersionEnum.Duke3D_WT);
-            _config.GamePathWang ??= GetPath(GameEnum.ShadowWarrior);
-            _config.GamePathBlood ??= GetPath(GameEnum.Blood);
-            _config.GamePathFury ??= GetPath(GameEnum.Fury);
-            _config.GamePathSlave ??= GetPath(GameEnum.Exhumed);
-            _config.GamePathRedneck ??= GetPath(GameEnum.Redneck);
-            _config.GamePathAgain ??= GetPath(GameEnum.RidesAgain);
+            _config.PathDuke3D ??= GetPath(GameEnum.Duke3D);
+            _config.PathDukeWT ??= GetPath(DukeVersionEnum.Duke3D_WT);
+            _config.PathWang ??= GetPath(GameEnum.ShadowWarrior);
+            _config.PathBlood ??= GetPath(GameEnum.Blood);
+            _config.PathFury ??= GetPath(GameEnum.Fury);
+            _config.PathSlave ??= GetPath(GameEnum.Exhumed);
+            _config.PathRedneck ??= GetPath(GameEnum.Redneck);
+            _config.PathRideaAgain ??= GetPath(GameEnum.RidesAgain);
         }
 
 

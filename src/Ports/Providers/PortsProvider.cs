@@ -12,7 +12,7 @@ namespace Ports.Providers
     /// </summary>
     public sealed class PortsProvider
     {
-        private readonly ConfigEntity _config;
+        private readonly ConfigProvider _config;
         private readonly List<BasePort> _ports;
 
         public BuildGDX BuildGDX { get; init; }
@@ -33,7 +33,7 @@ namespace Ports.Providers
                 Directory.CreateDirectory(ClientProperties.PortsFolderPath);
             }
 
-            _config = configProvider.Config;
+            _config = configProvider;
 
             BuildGDX = new();
             EDuke32 = new();

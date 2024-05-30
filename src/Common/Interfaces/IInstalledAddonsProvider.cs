@@ -21,10 +21,10 @@ namespace Common.Interfaces
         void DeleteAddon(IAddon addon);
 
         /// <summary>
-        /// Get installed addon
+        /// Get installed addons
         /// </summary>
         /// <param name="addonType">Addon type</param>
-        Dictionary<string, IAddon> GetInstalledAddon(AddonTypeEnum addonType);
+        Dictionary<string, IAddon> GetInstalledAddons(AddonTypeEnum addonType);
 
         /// <summary>
         /// Create cache of installed addons

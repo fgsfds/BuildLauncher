@@ -77,7 +77,7 @@ namespace Mods.Providers
                 return [];
             }
 
-            var installedAddons = _game.InstalledAddonsProvider.GetInstalledAddon(addonType);
+            var installedAddons = _game.InstalledAddonsProvider.GetInstalledAddons(addonType);
 
             foreach (var downloadableAddon in addonTypeCache)
             {

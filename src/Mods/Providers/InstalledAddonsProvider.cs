@@ -17,7 +17,7 @@ namespace Mods.Providers;
 public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
 {
     private readonly IGame _game;
-    private readonly ConfigEntity _config;
+    private readonly ConfigProvider _config;
     private readonly PlaytimeProvider _playtimeProvider;
 
     private readonly Dictionary<AddonTypeEnum, Dictionary<string, IAddon>> _cache;
@@ -28,7 +28,7 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
     [Obsolete($"Don't create directly. Use {nameof(InstalledAddonsProvider)}.")]
     public InstalledAddonsProvider(
         IGame game,
-        ConfigEntity config,
+        ConfigProvider config,
         PlaytimeProvider playtimeProvider
         )
     {
@@ -114,13 +114,23 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
     }
 
     /// <inheritdoc/>
-    public void EnableAddon(string id) => ((AutoloadMod)_cache[AddonTypeEnum.Mod][id]).IsEnabled = true;
+    public void EnableAddon(string addonId)
+    {
+        ((AutoloadMod)_cache[AddonTypeEnum.Mod][addonId]).IsEnabled = true;
+
+        _config.ChangeModState(addonId, true);
+    }
 
     /// <inheritdoc/>
-    public void DisableAddon(string id) => ((AutoloadMod)_cache[AddonTypeEnum.Mod][id]).IsEnabled = false;
+    public void DisableAddon(string addonId)
+    {
+        ((AutoloadMod)_cache[AddonTypeEnum.Mod][addonId]).IsEnabled = false;
+
+        _config.ChangeModState(addonId, false);
+    }
 
     /// <inheritdoc/>
-    public Dictionary<string, IAddon> GetInstalledAddon(AddonTypeEnum addonType)
+    public Dictionary<string, IAddon> GetInstalledAddons(AddonTypeEnum addonType)
     {
         _cache.ThrowIfNull();
 

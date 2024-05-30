@@ -17,7 +17,7 @@ namespace BuildLauncher.ViewModels
         public readonly IGame Game;
 
         private readonly GamesProvider _gamesProvider;
-        private readonly ConfigEntity _config;
+        private readonly ConfigProvider _config;
         private readonly PlaytimeProvider _playtimeProvider;
 
 
@@ -25,7 +25,7 @@ namespace BuildLauncher.ViewModels
         public ModsViewModel(
             IGame game,
             GamesProvider gamesProvider,
-            ConfigEntity config,
+            ConfigProvider config,
             PlaytimeProvider playtimeProvider,
             ApiInterface apiInterface,
             ScoresProvider scoresProvider
@@ -129,7 +129,7 @@ namespace BuildLauncher.ViewModels
 
 
         /// <summary>
-        /// Delete selected map/campaign
+        /// Enable/disable mod
         /// </summary>
         [RelayCommand]
         private void ModCheckboxPressed(object? obj)
@@ -138,12 +138,10 @@ namespace BuildLauncher.ViewModels
 
             if (!mod.IsEnabled)
             {
-                _config.AddDisabledAutoloadMod(mod.Id);
                 Game.InstalledAddonsProvider.DisableAddon(mod.Id);
             }
             else if (mod.IsEnabled)
             {
-                _config.RemoveDisabledAutoloadMod(mod.Id);
                 Game.InstalledAddonsProvider.EnableAddon(mod.Id);
             }
         }

@@ -14,7 +14,7 @@ namespace BuildLauncher.ViewModels
 {
     internal sealed partial class SettingsViewModel : ObservableObject
     {
-        private readonly ConfigEntity _config;
+        private readonly ConfigProvider _config;
         private readonly GamesPathsProvider _gamesAutoDetector;
 
         public SettingsViewModel(
@@ -22,7 +22,7 @@ namespace BuildLauncher.ViewModels
             GamesPathsProvider gamesAutoDetector
             )
         {
-            _config = config.Config;
+            _config = config;
             _gamesAutoDetector = gamesAutoDetector;
         }
 
@@ -38,56 +38,56 @@ namespace BuildLauncher.ViewModels
 
         public string? PathToBlood
         {
-            get => _config.GamePathBlood;
-            set => _config.GamePathBlood = value;
+            get => _config.PathBlood;
+            set => _config.PathBlood = value;
         }
 
         public string? PathToDuke3D
         {
-            get => _config.GamePathDuke3D;
-            set => _config.GamePathDuke3D = value;
+            get => _config.PathDuke3D;
+            set => _config.PathDuke3D = value;
         }
 
         public string? PathToDukeWT
         {
-            get => _config.GamePathDukeWT;
-            set => _config.GamePathDukeWT = value;
+            get => _config.PathDukeWT;
+            set => _config.PathDukeWT = value;
         }
 
         public string? PathToDuke64
         {
-            get => _config.GamePathDuke64;
-            set => _config.GamePathDuke64 = value;
+            get => _config.PathDuke64;
+            set => _config.PathDuke64 = value;
         }
 
         public string? PathToWang
         {
-            get => _config.GamePathWang;
-            set => _config.GamePathWang = value;
+            get => _config.PathWang;
+            set => _config.PathWang = value;
         }
 
         public string? PathToFury
         {
-            get => _config.GamePathFury;
-            set => _config.GamePathFury = value;
+            get => _config.PathFury;
+            set => _config.PathFury = value;
         }
 
         public string? PathToRedneck
         {
-            get => _config.GamePathRedneck;
-            set => _config.GamePathRedneck = value;
+            get => _config.PathRedneck;
+            set => _config.PathRedneck = value;
         }
 
         public string? PathToAgain
         {
-            get => _config.GamePathAgain;
-            set => _config.GamePathAgain = value;
+            get => _config.PathRideaAgain;
+            set => _config.PathRideaAgain = value;
         }
 
         public string? PathToSlave
         {
-            get => _config.GamePathSlave;
-            set => _config.GamePathSlave = value;
+            get => _config.PathSlave;
+            set => _config.PathSlave = value;
         }
 
         /// <summary>

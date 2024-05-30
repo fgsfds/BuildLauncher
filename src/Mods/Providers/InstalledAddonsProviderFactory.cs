@@ -6,12 +6,12 @@ using Common.Interfaces;
 namespace Mods.Providers
 {
     public class InstalledAddonsProviderFactory(
-        ConfigProvider configProvider,
+        ConfigProvider config,
         PlaytimeProvider playtimeProvider
         )
     {
         private readonly Dictionary<GameEnum, InstalledAddonsProvider> _list = [];
-        private readonly ConfigEntity _config = configProvider.Config;
+        private readonly ConfigProvider _config = config;
         private readonly PlaytimeProvider _playtimeProvider = playtimeProvider;
 
         /// <summary>

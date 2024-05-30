@@ -16,7 +16,7 @@ namespace Games.Providers
         public delegate void GameChanged(GameEnum game);
         public event GameChanged GameChangedEvent;
 
-        private readonly ConfigEntity _config;
+        private readonly ConfigProvider _config;
         private readonly InstalledAddonsProviderFactory _installedModsProviderFactory;
         private readonly DownloadableAddonsProviderFactory _downloadableModsProviderFactory;
         private readonly PlaytimeProvider _playtimeProvider;
@@ -43,42 +43,42 @@ namespace Games.Providers
             PlaytimeProvider playtimeProvider
             )
         {
-            _config = config.Config;
+            _config = config;
             _installedModsProviderFactory = installedModsProviderFactory;
             _downloadableModsProviderFactory = downloadableModsProviderFactory;
             _playtimeProvider = playtimeProvider;
 
             _blood = new(_installedModsProviderFactory, _downloadableModsProviderFactory, _playtimeProvider)
             {
-                GameInstallFolder = _config.GamePathBlood
+                GameInstallFolder = _config.PathBlood
             };
 
             _duke3d = new(_installedModsProviderFactory, _downloadableModsProviderFactory, _playtimeProvider)
             {
-                GameInstallFolder = _config.GamePathDuke3D,
-                Duke64RomPath = _config.GamePathDuke64,
-                DukeWTInstallPath = _config.GamePathDukeWT
+                GameInstallFolder = _config.PathDuke3D,
+                Duke64RomPath = _config.PathDuke64,
+                DukeWTInstallPath = _config.PathDukeWT
             };
 
             _wang = new(_installedModsProviderFactory, _downloadableModsProviderFactory, _playtimeProvider)
             {
-                GameInstallFolder = _config.GamePathWang
+                GameInstallFolder = _config.PathWang
             };
 
             _fury = new(_installedModsProviderFactory, _downloadableModsProviderFactory, _playtimeProvider)
             {
-                GameInstallFolder = _config.GamePathFury
+                GameInstallFolder = _config.PathFury
             };
 
             _redneck = new(_installedModsProviderFactory, _downloadableModsProviderFactory, _playtimeProvider)
             {
-                GameInstallFolder = _config.GamePathRedneck,
-                AgainInstallPath = _config.GamePathAgain
+                GameInstallFolder = _config.PathRedneck,
+                AgainInstallPath = _config.PathRideaAgain
             };
 
             _slave = new(_installedModsProviderFactory, _downloadableModsProviderFactory, _playtimeProvider)
             {
-                GameInstallFolder = _config.GamePathSlave
+                GameInstallFolder = _config.PathSlave
             };
 
             _config.ParameterChangedEvent += OnParameterChanged;
@@ -121,49 +121,49 @@ namespace Games.Providers
                 return;
             }
 
-            if (parameterName.Equals(nameof(_config.GamePathBlood)))
+            if (parameterName.Equals(nameof(_config.PathBlood)))
             {
-                _blood.GameInstallFolder = _config.GamePathBlood;
+                _blood.GameInstallFolder = _config.PathBlood;
                 GameChangedEvent?.Invoke(_blood.GameEnum);
             }
-            else if (parameterName.Equals(nameof(_config.GamePathDuke3D)))
+            else if (parameterName.Equals(nameof(_config.PathDuke3D)))
             {
-                _duke3d.GameInstallFolder = _config.GamePathDuke3D;
+                _duke3d.GameInstallFolder = _config.PathDuke3D;
                 GameChangedEvent?.Invoke(_duke3d.GameEnum);
             }
-            else if (parameterName.Equals(nameof(_config.GamePathDuke64)))
+            else if (parameterName.Equals(nameof(_config.PathDuke64)))
             {
-                _duke3d.Duke64RomPath = _config.GamePathDuke64;
+                _duke3d.Duke64RomPath = _config.PathDuke64;
                 GameChangedEvent?.Invoke(_duke3d.GameEnum);
             }
-            else if (parameterName.Equals(nameof(_config.GamePathDukeWT)))
+            else if (parameterName.Equals(nameof(_config.PathDukeWT)))
             {
-                _duke3d.DukeWTInstallPath = _config.GamePathDukeWT;
+                _duke3d.DukeWTInstallPath = _config.PathDukeWT;
                 GameChangedEvent?.Invoke(_duke3d.GameEnum);
             }
-            else if (parameterName.Equals(nameof(_config.GamePathWang)))
+            else if (parameterName.Equals(nameof(_config.PathWang)))
             {
-                _wang.GameInstallFolder = _config.GamePathWang;
+                _wang.GameInstallFolder = _config.PathWang;
                 GameChangedEvent?.Invoke(_wang.GameEnum);
             }
-            else if (parameterName.Equals(nameof(_config.GamePathFury)))
+            else if (parameterName.Equals(nameof(_config.PathFury)))
             {
-                _fury.GameInstallFolder = _config.GamePathFury;
+                _fury.GameInstallFolder = _config.PathFury;
                 GameChangedEvent?.Invoke(_fury.GameEnum);
             }
-            else if (parameterName.Equals(nameof(_config.GamePathRedneck)))
+            else if (parameterName.Equals(nameof(_config.PathRedneck)))
             {
-                _redneck.GameInstallFolder = _config.GamePathRedneck;
+                _redneck.GameInstallFolder = _config.PathRedneck;
                 GameChangedEvent?.Invoke(_redneck.GameEnum);
             }
-            else if (parameterName.Equals(nameof(_config.GamePathAgain)))
+            else if (parameterName.Equals(nameof(_config.PathRideaAgain)))
             {
-                _redneck.AgainInstallPath = _config.GamePathAgain;
+                _redneck.AgainInstallPath = _config.PathRideaAgain;
                 GameChangedEvent?.Invoke(_redneck.GameEnum);
             }
-            else if (parameterName.Equals(nameof(_config.GamePathSlave)))
+            else if (parameterName.Equals(nameof(_config.PathSlave)))
             {
-                _slave.GameInstallFolder = _config.GamePathSlave;
+                _slave.GameInstallFolder = _config.PathSlave;
                 GameChangedEvent?.Invoke(_slave.GameEnum);
             }
         }

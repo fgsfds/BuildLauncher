@@ -13,7 +13,7 @@ namespace BuildLauncher.ViewModels
     public sealed class ViewModelsFactory
     {
         private readonly GamesProvider _gamesProvider;
-        private readonly ConfigEntity _config;
+        private readonly ConfigProvider _config;
         private readonly PortsInstallerFactory _portsInstallerFactory;
         private readonly ToolsInstallerFactory _toolsInstallerFactory;
         private readonly PortsProvider _portsProvider;
@@ -39,7 +39,7 @@ namespace BuildLauncher.ViewModels
             )
         {
             _gamesProvider = gamesProvider;
-            _config = configProvider.Config;
+            _config = configProvider;
             _portsInstallerFactory = portsInstallerFactory;
             _toolsInstallerFactory = toolsInstallerFactory;
             _portsProvider = portsProvider;

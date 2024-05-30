@@ -18,7 +18,7 @@ namespace BuildLauncher.ViewModels
         public readonly IGame Game;
 
         private readonly GamesProvider _gamesProvider;
-        private readonly ConfigEntity _config;
+        private readonly ConfigProvider _config;
         private readonly PlaytimeProvider _playtimeProvider;
 
 
@@ -26,7 +26,7 @@ namespace BuildLauncher.ViewModels
         public CampaignsViewModel(
             IGame game,
             GamesProvider gamesProvider,
-            ConfigEntity config,
+            ConfigProvider config,
             PlaytimeProvider playtimeProvider,
             ApiInterface apiInterface,
             ScoresProvider scoresProvider

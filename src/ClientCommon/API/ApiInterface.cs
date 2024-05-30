@@ -1,7 +1,6 @@
 ﻿using ClientCommon.Config;
 using Common.Entities;
 using Common.Enums;
-using Common.Interfaces;
 using System.Net.Http.Json;
 using System.Text.Json;
 
@@ -10,16 +9,16 @@ namespace ClientCommon.API
     public sealed class ApiInterface
     {
         private readonly HttpClient _httpClient;
-        private readonly ConfigEntity _config;
+        private readonly ConfigProvider _config;
 
         private string ApiUrl => _config.UseLocalApi ? "https://localhost:7093/api" : "https://buildlauncher.fgsfds.link/api";
 
         public ApiInterface(
-            ConfigProvider configProvider,
+            ConfigProvider config,
             HttpClient httpClient
             )
         {
-            _config = configProvider.Config;
+            _config = config;
             _httpClient = httpClient;
         }
 
@@ -107,11 +106,11 @@ namespace ClientCommon.API
             }
         }
 
-        public async Task<int?> ChangeScoreAsync(IAddon addon, sbyte increment)
+        public async Task<int?> ChangeScoreAsync(string addonId, sbyte increment)
         {
             try
             {
-                using var response = await _httpClient.PutAsJsonAsync($"{ApiUrl}/addons/scores/change", new Tuple<string, sbyte>(addon.Id, increment)).ConfigureAwait(false);
+                using var response = await _httpClient.PutAsJsonAsync($"{ApiUrl}/addons/scores/change", new Tuple<string, sbyte>(addonId, increment)).ConfigureAwait(false);
                 var responseStr = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 
                 if (responseStr is null)

@@ -14,6 +14,7 @@ namespace ClientCommon.DI
             container.AddSingleton<PlaytimeProvider>();
             container.AddSingleton<ApiInterface>();
             container.AddSingleton<ScoresProvider>();
+            container.AddSingleton<DatabaseContextFactory>();
         }
     }
 }

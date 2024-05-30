@@ -9,7 +9,7 @@ namespace BuildLauncher.ViewModels
 {
     internal sealed partial class DevViewModel : ObservableObject
     {
-        private readonly ConfigEntity _config;
+        private readonly ConfigProvider _config;
         private readonly FilesUploader _filesUploader;
 
         public DevViewModel(
@@ -17,7 +17,7 @@ namespace BuildLauncher.ViewModels
             FilesUploader filesUploader
             )
         {
-            _config = config.Config;
+            _config = config;
             _filesUploader = filesUploader;
 
             ApiPasswordTextBox = _config.ApiPassword;

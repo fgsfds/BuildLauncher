@@ -79,7 +79,7 @@ public sealed partial class App : Application
     /// </summary>
     private void SetTheme()
     {
-        var theme = BindingsManager.Provider.GetRequiredService<ConfigProvider>().Config.Theme;
+        var theme = BindingsManager.Provider.GetRequiredService<ConfigProvider>().Theme;
 
         var themeEnum = theme switch
         {

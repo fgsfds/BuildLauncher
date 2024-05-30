@@ -11,9 +11,9 @@ namespace Ports.Ports.EDuke32
     /// <summary>
     /// RedNukem port
     /// </summary>
-    public sealed class Fury(ConfigEntity config) : EDuke32
+    public sealed class Fury(ConfigProvider config) : EDuke32
     {
-        private readonly ConfigEntity _config = config;
+        private readonly ConfigProvider _config = config;
 
         /// <inheritdoc/>
         public override PortEnum PortEnum => PortEnum.Fury;
@@ -28,7 +28,7 @@ namespace Ports.Ports.EDuke32
         public override List<GameEnum> SupportedGames => [GameEnum.Fury];
 
         /// <inheritdoc/>
-        public override string PathToExecutableFolder => _config.GamePathFury ?? string.Empty;
+        public override string PathToExecutableFolder => _config.PathFury ?? string.Empty;
 
         /// <inheritdoc/>
         public override bool IsInstalled => File.Exists(FullPathToExe);
