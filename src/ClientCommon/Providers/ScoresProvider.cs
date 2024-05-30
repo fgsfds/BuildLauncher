@@ -7,12 +7,12 @@ namespace ClientCommon.Providers;
 public sealed class ScoresProvider
 {
     private readonly ApiInterface _apiInterface;
-    private readonly ConfigProvider _config;
+    private readonly IConfigProvider _config;
     private Dictionary<string, int>? _cache;
 
     public ScoresProvider(
         ApiInterface apiInterface,
-        ConfigProvider config)
+        IConfigProvider config)
     {
         _apiInterface = apiInterface;
         _config = config;

@@ -5,9 +5,9 @@ namespace ClientCommon.Providers
     public sealed class PlaytimeProvider
     {
         private readonly Dictionary<string, TimeSpan> _times;
-        private readonly ConfigProvider _config;
+        private readonly IConfigProvider _config;
 
-        public PlaytimeProvider(ConfigProvider config)
+        public PlaytimeProvider(IConfigProvider config)
         {
             _config = config;
 

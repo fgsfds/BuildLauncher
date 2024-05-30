@@ -9,12 +9,12 @@ namespace ClientCommon.API
     public sealed class ApiInterface
     {
         private readonly HttpClient _httpClient;
-        private readonly ConfigProvider _config;
+        private readonly IConfigProvider _config;
 
         private string ApiUrl => _config.UseLocalApi ? "https://localhost:7093/api" : "https://buildlauncher.fgsfds.link/api";
 
         public ApiInterface(
-            ConfigProvider config,
+            IConfigProvider config,
             HttpClient httpClient
             )
         {

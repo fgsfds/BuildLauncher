@@ -12,14 +12,14 @@ public partial class RightPanelViewModel : ObservableObject, IRightPanelControl
 {
     public virtual IAddon? SelectedAddon { get; set; }
 
-    private readonly ConfigProvider _config;
+    private readonly IConfigProvider _config;
     private readonly PlaytimeProvider _playtimeProvider;
     private readonly ApiInterface _apiInterface;
     private readonly ScoresProvider _scoresProvider;
 
 
     public RightPanelViewModel(
-        ConfigProvider config,
+        IConfigProvider config,
         PlaytimeProvider playtimeProvider,
         ApiInterface apiInterface,
         ScoresProvider scoresProvider

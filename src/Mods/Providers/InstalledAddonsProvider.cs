@@ -17,7 +17,7 @@ namespace Mods.Providers;
 public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
 {
     private readonly IGame _game;
-    private readonly ConfigProvider _config;
+    private readonly IConfigProvider _config;
     private readonly PlaytimeProvider _playtimeProvider;
 
     private readonly Dictionary<AddonTypeEnum, Dictionary<string, IAddon>> _cache;
@@ -30,7 +30,7 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
     [Obsolete($"Don't create directly. Use {nameof(InstalledAddonsProvider)}.")]
     public InstalledAddonsProvider(
         IGame game,
-        ConfigProvider config,
+        IConfigProvider config,
         PlaytimeProvider playtimeProvider
         )
     {

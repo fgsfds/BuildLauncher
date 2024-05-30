@@ -16,7 +16,7 @@ namespace Games.Providers
         public delegate void GameChanged(GameEnum game);
         public event GameChanged GameChangedEvent;
 
-        private readonly ConfigProvider _config;
+        private readonly IConfigProvider _config;
         private readonly InstalledAddonsProviderFactory _installedModsProviderFactory;
         private readonly DownloadableAddonsProviderFactory _downloadableModsProviderFactory;
         private readonly PlaytimeProvider _playtimeProvider;
@@ -37,7 +37,7 @@ namespace Games.Providers
 
 
         public GamesProvider(
-            ConfigProvider config,
+            IConfigProvider config,
             InstalledAddonsProviderFactory installedModsProviderFactory,
             DownloadableAddonsProviderFactory downloadableModsProviderFactory,
             PlaytimeProvider playtimeProvider

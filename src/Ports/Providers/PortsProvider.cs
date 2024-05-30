@@ -12,7 +12,7 @@ namespace Ports.Providers
     /// </summary>
     public sealed class PortsProvider
     {
-        private readonly ConfigProvider _config;
+        private readonly IConfigProvider _config;
         private readonly List<BasePort> _ports;
 
         public BuildGDX BuildGDX { get; init; }
@@ -26,14 +26,14 @@ namespace Ports.Providers
         public Fury Fury { get; init; }
 
 
-        public PortsProvider(ConfigProvider configProvider)
+        public PortsProvider(IConfigProvider IConfigProvider)
         {
             if (!Directory.Exists(ClientProperties.PortsFolderPath))
             {
                 Directory.CreateDirectory(ClientProperties.PortsFolderPath);
             }
 
-            _config = configProvider;
+            _config = IConfigProvider;
 
             BuildGDX = new();
             EDuke32 = new();

@@ -9,11 +9,11 @@ namespace BuildLauncher.ViewModels
 {
     internal sealed partial class DevViewModel : ObservableObject
     {
-        private readonly ConfigProvider _config;
+        private readonly IConfigProvider _config;
         private readonly FilesUploader _filesUploader;
 
         public DevViewModel(
-            ConfigProvider config,
+            IConfigProvider config,
             FilesUploader filesUploader
             )
         {

@@ -9,7 +9,7 @@ namespace Games.Providers
 {
     public class GamesPathsProvider
     {
-        private readonly ConfigProvider _config;
+        private readonly IConfigProvider _config;
 
         private readonly string? _dukePath = null;
         private readonly string? _dukeWtPath = null;
@@ -24,7 +24,7 @@ namespace Games.Providers
         private readonly string? _witch1Path = null;
         private readonly string? _witch2Path = null;
 
-        public GamesPathsProvider(ConfigProvider config)
+        public GamesPathsProvider(IConfigProvider config)
         {
             _config = config;
 

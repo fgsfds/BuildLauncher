@@ -6,7 +6,7 @@ using System.Text.Json;
 
 namespace ClientCommon.Config;
 
-public sealed class ConfigProvider
+public sealed class ConfigProvider : IConfigProvider
 {
     private readonly DatabaseContext _dbContext;
 

@@ -1,4 +1,5 @@
 ﻿using Avalonia;
+using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Data.Core.Plugins;
 using Avalonia.Markup.Xaml;
@@ -14,6 +15,7 @@ using Common.Helpers;
 using Games.Providers;
 using Microsoft.Extensions.DependencyInjection;
 using Ports.Providers;
+using System.ComponentModel;
 
 namespace BuildLauncher;
 
@@ -66,7 +68,7 @@ public sealed partial class App : Application
         var container = BindingsManager.Instance;
 
         CommonBindings.Load(container);
-        ClientCommonBindings.Load(container);
+        ClientCommonBindings.Load(container, Design.IsDesignMode);
         ViewModelsBindings.Load(container);
         Games.DI.ProvidersBindings.Load(container);
         Ports.DI.ProvidersBindings.Load(container);
@@ -79,7 +81,7 @@ public sealed partial class App : Application
     /// </summary>
     private void SetTheme()
     {
-        var theme = BindingsManager.Provider.GetRequiredService<ConfigProvider>().Theme;
+        var theme = BindingsManager.Provider.GetRequiredService<IConfigProvider>().Theme;
 
         var themeEnum = theme switch
         {
