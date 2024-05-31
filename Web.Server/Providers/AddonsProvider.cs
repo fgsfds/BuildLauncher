@@ -180,20 +180,23 @@ namespace Web.Server.Providers
 
             using (var transaction = dbContext.Database.BeginTransaction())
             {
-                var existingAddon = dbContext.Addons.Find(addon.Id);
+                var existingAddon = dbContext.Addons.Find([addon.Id]);
 
                 if (existingAddon is not null)
                 {
-                    return false;
+                    existingAddon.Title = addon.Title;
+                }
+                else
+                {
+                    dbContext.Addons.Add(new()
+                    {
+                        Id = addon.Id,
+                        Title = addon.Title,
+                        GameId = (byte)addon.Game,
+                        AddonType = (byte)addon.AddonType
+                    });
                 }
 
-                dbContext.Addons.Add(new()
-                {
-                    Id = addon.Id,
-                    Title = addon.Title,
-                    GameId = (byte)addon.Game,
-                    AddonType = (byte)addon.AddonType
-                });
 
                 dbContext.SaveChanges();
 
