@@ -1,5 +1,6 @@
 ﻿using ClientCommon.Config;
 using ClientCommon.Providers;
+using Common;
 using Common.Enums;
 using Common.Enums.Versions;
 using Common.Helpers;
@@ -20,7 +21,7 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
     private readonly IConfigProvider _config;
     private readonly PlaytimeProvider _playtimeProvider;
 
-    private readonly Dictionary<AddonTypeEnum, Dictionary<string, IAddon>> _cache;
+    private readonly Dictionary<AddonTypeEnum, Dictionary<AddonVersion, IAddon>> _cache;
     private static readonly SemaphoreSlim _semaphore = new(1);
 
     private bool _isCacheUpdating = false;
@@ -95,13 +96,13 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
 
         var dict = _cache[addon.Type];
 
-        if (dict.TryGetValue(addon.Id, out _))
+        if (dict.TryGetValue(new(addon.Id, addon.Version), out _))
         {
-            dict[addon.Id] = addon;
+            dict[new(addon.Id, addon.Version)] = addon;
         }
         else
         {
-            dict.Add(addon.Id, addon);
+            dict.Add(new(addon.Id, addon.Version), addon);
         }
     }
 
@@ -113,13 +114,13 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
 
         File.Delete(addon.PathToFile);
 
-        _cache[addon.Type].Remove(addon.Id);
+        _cache[addon.Type].Remove(new(addon.Id, addon.Version));
 
         AddonsChangedEvent?.Invoke(_game, addon.Type);
     }
 
     /// <inheritdoc/>
-    public void EnableAddon(string addonId)
+    public void EnableAddon(AddonVersion addonId)
     {
         ((AutoloadMod)_cache[AddonTypeEnum.Mod][addonId]).IsEnabled = true;
 
@@ -127,7 +128,7 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
     }
 
     /// <inheritdoc/>
-    public void DisableAddon(string addonId)
+    public void DisableAddon(AddonVersion addonId)
     {
         ((AutoloadMod)_cache[AddonTypeEnum.Mod][addonId]).IsEnabled = false;
 
@@ -135,7 +136,7 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
     }
 
     /// <inheritdoc/>
-    public Dictionary<string, IAddon> GetInstalledAddons(AddonTypeEnum addonType)
+    public Dictionary<AddonVersion, IAddon> GetInstalledAddons(AddonTypeEnum addonType)
     {
         if (_isCacheUpdating)
         {
@@ -161,9 +162,9 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
     /// </summary>
     /// <param name="addonType">Addon type</param>
     /// <param name="files">Paths to addon files</param>
-    private Dictionary<string, IAddon> GetAddonsFromFiles(AddonTypeEnum addonType, IEnumerable<string> files)
+    private Dictionary<AddonVersion, IAddon> GetAddonsFromFiles(AddonTypeEnum addonType, IEnumerable<string> files)
     {
-        Dictionary<string, IAddon> addedAddons = new(files.Count(), StringComparer.OrdinalIgnoreCase);
+        Dictionary<AddonVersion, IAddon> addedAddons = new(files.Count());
 
         foreach (var file in files)
         {
@@ -176,25 +177,26 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
                     continue;
                 }
 
-                if (addedAddons.TryGetValue(newAddon.Id, out var existingMod))
+                if (newAddon is AutoloadMod &&
+                    addedAddons.TryGetValue(new(newAddon.Id, newAddon.Version), out var existingMod))
                 {
                     if (existingMod.Version is null &&
                         newAddon.Version is not null)
                     {
                         //replacing with addon that have version
-                        addedAddons[newAddon.Id] = newAddon;
+                        addedAddons[new(newAddon.Id, newAddon.Version)] = newAddon;
                     }
                     else if (existingMod.Version is not null &&
                              newAddon.Version is not null &&
                              VersionComparer.Compare(newAddon.Version, existingMod.Version, ">"))
                     {
                         //replacing with addon that have higher version
-                        addedAddons[newAddon.Id] = newAddon;
+                        addedAddons[new(newAddon.Id, newAddon.Version)] = newAddon;
                     }
                 }
                 else
                 {
-                    addedAddons.Add(newAddon.Id, newAddon);
+                    addedAddons.Add(new(newAddon.Id, newAddon.Version), newAddon);
                 }
             }
             catch (Exception)

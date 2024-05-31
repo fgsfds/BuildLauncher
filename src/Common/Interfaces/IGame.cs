@@ -61,16 +61,16 @@ namespace Common.Interfaces
         /// <summary>
         /// Get list of official addons and custom campaigns
         /// </summary>
-        Dictionary<string, IAddon> GetCampaigns();
+        Dictionary<AddonVersion, IAddon> GetCampaigns();
 
         /// <summary>
         /// Get list of custom maps
         /// </summary>
-        Dictionary<string, IAddon> GetSingleMaps();
+        Dictionary<AddonVersion, IAddon> GetSingleMaps();
 
         /// <summary>
         /// Get list of autoload mods
         /// </summary>
-        Dictionary<string, IAddon> GetAutoloadMods(bool enabledOnly);
+        Dictionary<AddonVersion, IAddon> GetAutoloadMods(bool enabledOnly);
     }
 }

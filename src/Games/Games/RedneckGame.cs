@@ -1,4 +1,5 @@
 ﻿using ClientCommon.Providers;
+using Common;
 using Common.Enums;
 using Common.Enums.Addons;
 using Common.Enums.Versions;
@@ -45,14 +46,14 @@ namespace Games.Games
 
 
         /// <inheritdoc/>
-        protected override Dictionary<string, IAddon> GetOriginalCampaigns()
+        protected override Dictionary<AddonVersion, IAddon> GetOriginalCampaigns()
         {
-            Dictionary<string, IAddon> campaigns = new(3, StringComparer.OrdinalIgnoreCase);
+            Dictionary<AddonVersion, IAddon> campaigns = new(3);
 
             if (IsBaseGameInstalled)
             {
                 var redneckId = nameof(GameEnum.Redneck).ToLower();
-                campaigns.Add(redneckId, new RedneckCampaign()
+                campaigns.Add(new(redneckId), new RedneckCampaign()
                 {
                     Id = redneckId,
                     Type = AddonTypeEnum.Official,
@@ -86,7 +87,7 @@ namespace Games.Games
                 if (IsRoute66Installed)
                 {
                     var redneckR66Id = nameof(RedneckAddonEnum.Route66).ToLower();
-                    campaigns.Add(redneckR66Id, new RedneckCampaign()
+                    campaigns.Add(new(redneckR66Id), new RedneckCampaign()
                     {
                         Id = redneckR66Id,
                         Type = AddonTypeEnum.Official,
@@ -117,7 +118,7 @@ namespace Games.Games
             if (IsAgainInstalled)
             {
                 var redneckRaId = nameof(GameEnum.RidesAgain).ToLower();
-                campaigns.Add(redneckRaId, new RedneckCampaign()
+                campaigns.Add(new(redneckRaId), new RedneckCampaign()
                 {
                     Id = redneckRaId,
                     Type = AddonTypeEnum.Official,

@@ -1,4 +1,5 @@
 ﻿using ClientCommon.Providers;
+using Common;
 using Common.Enums;
 using Common.Helpers;
 using Common.Interfaces;
@@ -28,14 +29,14 @@ namespace Games.Games
 
 
         /// <inheritdoc/>
-        protected override Dictionary<string, IAddon> GetOriginalCampaigns()
+        protected override Dictionary<AddonVersion, IAddon> GetOriginalCampaigns()
         {
-            Dictionary<string, IAddon> campaigns = new(1, StringComparer.OrdinalIgnoreCase);
+            Dictionary<AddonVersion, IAddon> campaigns = new(1);
 
             if (IsBaseGameInstalled)
             {
                 var furyId = nameof(GameEnum.Fury).ToLower();
-                campaigns.Add(furyId, new FuryCampaign()
+                campaigns.Add(new(furyId), new FuryCampaign()
                 {
                     Id = furyId,
                     Type = AddonTypeEnum.Official,

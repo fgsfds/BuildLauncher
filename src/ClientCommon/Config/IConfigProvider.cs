@@ -1,4 +1,5 @@
-﻿using Common.Enums;
+﻿using Common;
+using Common.Enums;
 using static ClientCommon.Config.ConfigProvider;
 
 namespace ClientCommon.Config;
@@ -26,5 +27,5 @@ public interface IConfigProvider
 
     void AddPlaytime(string addonId, TimeSpan playTime);
     void AddScore(string addonId, bool isUpvote);
-    void ChangeModState(string addonId, bool isEnabled);
+    void ChangeModState(AddonVersion addonId, bool isEnabled);
 }

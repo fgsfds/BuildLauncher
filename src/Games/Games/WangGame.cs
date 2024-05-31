@@ -1,4 +1,5 @@
 ﻿using ClientCommon.Providers;
+using Common;
 using Common.Enums;
 using Common.Enums.Addons;
 using Common.Helpers;
@@ -41,14 +42,14 @@ namespace Games.Games
         /// <summary>
         /// Get list of original campaigns
         /// </summary>
-        protected override Dictionary<string, IAddon> GetOriginalCampaigns()
+        protected override Dictionary<AddonVersion, IAddon> GetOriginalCampaigns()
         {
-            Dictionary<string, IAddon> campaigns = new(3, StringComparer.OrdinalIgnoreCase);
+            Dictionary<AddonVersion, IAddon> campaigns = new(3);
 
             if (IsBaseGameInstalled)
             {
                 var wangId = nameof(GameEnum.ShadowWarrior).ToLower();
-                campaigns.Add(wangId, new WangCampaign()
+                campaigns.Add(new(wangId), new WangCampaign()
                 {
                     Id = wangId,
                     Type = AddonTypeEnum.Official,
@@ -77,7 +78,7 @@ namespace Games.Games
                 if (IsWantonInstalled)
                 {
                     var wangWdId = nameof(WangAddonEnum.Wanton).ToLower();
-                    campaigns.Add(wangWdId, new WangCampaign()
+                    campaigns.Add(new(wangWdId), new WangCampaign()
                     {
                         Id = wangWdId,
                         Type = AddonTypeEnum.Official,
@@ -109,7 +110,7 @@ namespace Games.Games
                 if (IsTwinDragonInstalled)
                 {
                     var wangTdId = nameof(WangAddonEnum.TwinDragon).ToLower();
-                    campaigns.Add(wangTdId, new WangCampaign()
+                    campaigns.Add(new(wangTdId), new WangCampaign()
                     {
                         Id = wangTdId,
                         Type = AddonTypeEnum.Official,

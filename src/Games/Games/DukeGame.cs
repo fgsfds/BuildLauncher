@@ -1,4 +1,5 @@
 ﻿using ClientCommon.Providers;
+using Common;
 using Common.Enums;
 using Common.Enums.Addons;
 using Common.Enums.Versions;
@@ -74,15 +75,15 @@ namespace Games.Games
 
 
         /// <inheritdoc/>
-        protected override Dictionary<string, IAddon> GetOriginalCampaigns()
+        protected override Dictionary<AddonVersion, IAddon> GetOriginalCampaigns()
         {
-            Dictionary<string, IAddon> campaigns = new(6, StringComparer.OrdinalIgnoreCase);
+            Dictionary<AddonVersion, IAddon> campaigns = new(6);
 
             if (IsBaseGameInstalled &&
                 GameInstallFolder != DukeWTInstallPath)
             {
                 var dukeId = nameof(GameEnum.Duke3D).ToLower();
-                campaigns.Add(dukeId, new DukeCampaign()
+                campaigns.Add(new(dukeId), new DukeCampaign()
                 {
                     Id = dukeId,
                     Type = AddonTypeEnum.Official,
@@ -115,7 +116,7 @@ namespace Games.Games
             if (IsWorldTourInstalled)
             {
                 var dukeWtId = nameof(DukeVersionEnum.Duke3D_WT).ToLower();
-                campaigns.Add(dukeWtId, new DukeCampaign()
+                campaigns.Add(new(dukeWtId), new DukeCampaign()
                 {
                     Id = dukeWtId,
                     Type = AddonTypeEnum.Official,
@@ -150,7 +151,7 @@ namespace Games.Games
                 if (IsCaribbeanInstalled)
                 {
                     var dukeVacaId = nameof(DukeAddonEnum.DukeVaca).ToLower();
-                    campaigns.Add(dukeVacaId, new DukeCampaign()
+                    campaigns.Add(new(dukeVacaId), new DukeCampaign()
                     {
                         Id = dukeVacaId,
                         Type = AddonTypeEnum.Official,
@@ -183,7 +184,7 @@ namespace Games.Games
                 if (IsNuclearWinterInstalled)
                 {
                     var dukeNwId = nameof(DukeAddonEnum.DukeNW).ToLower();
-                    campaigns.Add(dukeNwId, new DukeCampaign()
+                    campaigns.Add(new(dukeNwId), new DukeCampaign()
                     {
                         Id = dukeNwId,
                         Type = AddonTypeEnum.Official,
@@ -215,7 +216,7 @@ namespace Games.Games
                 if (IsDukeDCInstalled)
                 {
                     var dukeDcId = nameof(DukeAddonEnum.DukeDC).ToLower();
-                    campaigns.Add(dukeDcId, new DukeCampaign()
+                    campaigns.Add(new(dukeDcId), new DukeCampaign()
                     {
                         Id = dukeDcId,
                         Type = AddonTypeEnum.Official,
@@ -250,7 +251,7 @@ namespace Games.Games
             if (IsDuke64Installed)
             {
                 var duke64Id = nameof(GameEnum.Duke64).ToLower();
-                campaigns.Add(duke64Id, new DukeCampaign()
+                campaigns.Add(new(duke64Id), new DukeCampaign()
                 {
                     Id = duke64Id,
                     Type = AddonTypeEnum.Official,

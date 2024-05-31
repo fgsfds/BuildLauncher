@@ -1,4 +1,5 @@
 ﻿using ClientCommon.Providers;
+using Common;
 using Common.Enums;
 using Common.Enums.Addons;
 using Common.Helpers;
@@ -39,12 +40,12 @@ namespace Games.Games
 
 
         /// <inheritdoc/>
-        protected override Dictionary<string, IAddon> GetOriginalCampaigns()
+        protected override Dictionary<AddonVersion, IAddon> GetOriginalCampaigns()
         {
-            Dictionary<string, IAddon> campaigns = new(2, StringComparer.OrdinalIgnoreCase);
+            Dictionary<AddonVersion, IAddon> campaigns = new(2);
 
             var bloodId = nameof(GameEnum.Blood).ToLower();
-            campaigns.Add(bloodId, new BloodCampaign()
+            campaigns.Add(new(bloodId), new BloodCampaign()
             {
                 Id = bloodId,
                 Type = AddonTypeEnum.Official,
@@ -82,7 +83,7 @@ namespace Games.Games
             {
                 var bloodCpId = nameof(BloodAddonEnum.BloodCP).ToLower();
 
-                campaigns.Add(bloodCpId, new BloodCampaign()
+                campaigns.Add(new(bloodCpId), new BloodCampaign()
                 {
                     Id = bloodCpId,
                     Type = AddonTypeEnum.Official,

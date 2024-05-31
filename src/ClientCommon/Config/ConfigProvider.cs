@@ -1,4 +1,5 @@
 ﻿using ClientCommon.Helpers;
+using Common;
 using Common.Enums;
 using Common.Helpers;
 using System.Runtime.CompilerServices;
@@ -106,9 +107,9 @@ public sealed class ConfigProvider : IConfigProvider
         get => [.. _dbContext.DisabledAddons.Select(x => x.AddonId)];
     }
 
-    public void ChangeModState(string addonId, bool isEnabled)
+    public void ChangeModState(AddonVersion addonId, bool isEnabled)
     {
-        var existing = _dbContext.DisabledAddons.Find([addonId]);
+        var existing = _dbContext.DisabledAddons.Find([addonId.Id]);
 
         if (existing is null)
         {
@@ -118,7 +119,7 @@ public sealed class ConfigProvider : IConfigProvider
             }
             else
             {
-                _dbContext.DisabledAddons.Add(new() { AddonId = addonId });
+                _dbContext.DisabledAddons.Add(new() { AddonId = addonId.Id });
             }
         }
         else

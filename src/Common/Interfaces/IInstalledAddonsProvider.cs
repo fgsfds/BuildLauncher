@@ -24,7 +24,7 @@ namespace Common.Interfaces
         /// Get installed addons
         /// </summary>
         /// <param name="addonType">Addon type</param>
-        Dictionary<string, IAddon> GetInstalledAddons(AddonTypeEnum addonType);
+        Dictionary<AddonVersion, IAddon> GetInstalledAddons(AddonTypeEnum addonType);
 
         /// <summary>
         /// Create cache of installed addons
@@ -36,12 +36,12 @@ namespace Common.Interfaces
         /// Disable addon
         /// </summary>
         /// <param name="id">Addon id</param>
-        void DisableAddon(string id);
+        void DisableAddon(AddonVersion id);
 
         /// <summary>
         /// Enable addon
         /// </summary>
         /// <param name="id">Addon id</param>
-        void EnableAddon(string id);
+        void EnableAddon(AddonVersion id);
     }
 }

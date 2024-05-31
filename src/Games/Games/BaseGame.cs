@@ -1,5 +1,6 @@
 ﻿using ClientCommon.Helpers;
 using ClientCommon.Providers;
+using Common;
 using Common.Enums;
 using Common.Helpers;
 using Common.Interfaces;
@@ -88,7 +89,7 @@ namespace Games.Games
 
 
         /// <inheritdoc/>
-        public virtual Dictionary<string, IAddon> GetCampaigns()
+        public virtual Dictionary<AddonVersion, IAddon> GetCampaigns()
         {
             var originalCampaigns = GetOriginalCampaigns();
 
@@ -112,7 +113,7 @@ namespace Games.Games
 
 
         /// <inheritdoc/>
-        public virtual Dictionary<string, IAddon> GetSingleMaps()
+        public virtual Dictionary<AddonVersion, IAddon> GetSingleMaps()
         {
             var maps = InstalledAddonsProvider.GetInstalledAddons(AddonTypeEnum.Map);
 
@@ -121,13 +122,13 @@ namespace Games.Games
 
 
         /// <inheritdoc/>
-        public virtual Dictionary<string, IAddon> GetAutoloadMods(bool enabledOnly)
+        public virtual Dictionary<AddonVersion, IAddon> GetAutoloadMods(bool enabledOnly)
         {
             var mods = InstalledAddonsProvider.GetInstalledAddons(AddonTypeEnum.Mod);
 
             if (enabledOnly)
             {
-                Dictionary<string, IAddon> enabled = new(StringComparer.OrdinalIgnoreCase);
+                Dictionary<AddonVersion, IAddon> enabled = new();
 
                 foreach (var mod in mods)
                 {
@@ -166,7 +167,7 @@ namespace Games.Games
         /// Get list of original campaigns
         /// </summary>
         /// <returns></returns>
-        protected abstract Dictionary<string, IAddon> GetOriginalCampaigns();
+        protected abstract Dictionary<AddonVersion, IAddon> GetOriginalCampaigns();
 
 
         /// <summary>

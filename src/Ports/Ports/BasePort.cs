@@ -1,4 +1,5 @@
 ﻿using ClientCommon.Helpers;
+using Common;
 using Common.Enums;
 using Common.Enums.Addons;
 using Common.Helpers;
@@ -168,7 +169,7 @@ namespace Ports.Ports
         /// </summary>
         /// <param name="autoloadMod">Autoload mod</param>
         /// <param name="campaign">Campaign</param>
-        protected bool ValidateAutoloadMod(AutoloadMod autoloadMod, IAddon campaign, Dictionary<string, IAddon> addons)
+        protected bool ValidateAutoloadMod(AutoloadMod autoloadMod, IAddon campaign, Dictionary<AddonVersion, IAddon> addons)
         {
             if (!autoloadMod.IsEnabled)
             {
@@ -199,7 +200,7 @@ namespace Ports.Ports
             {
                 foreach (var dep in autoloadMod.DependentAddons)
                 {
-                    if (!addons.ContainsKey(dep.Key) &&
+                    if (!addons.ContainsKey(new(dep.Key, dep.Value)) &&
                         !campaign.Id.Equals(dep.Key, StringComparison.OrdinalIgnoreCase))
                     {
                         //skipping mod that doesn't have every dependency
@@ -212,7 +213,7 @@ namespace Ports.Ports
             {
                 foreach (var dep in autoloadMod.IncompatibleAddons)
                 {
-                    if (addons.ContainsKey(dep.Key) ||
+                    if (addons.ContainsKey(new(dep.Key, dep.Value)) ||
                         campaign.Id.Equals(dep.Key, StringComparison.OrdinalIgnoreCase))
                     {
                         //skipping incompatible mods

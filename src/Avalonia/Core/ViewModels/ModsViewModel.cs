@@ -139,11 +139,11 @@ namespace BuildLauncher.ViewModels
 
             if (!mod.IsEnabled)
             {
-                Game.InstalledAddonsProvider.DisableAddon(mod.Id);
+                Game.InstalledAddonsProvider.DisableAddon(new(mod.Id, mod.Version));
             }
             else if (mod.IsEnabled)
             {
-                Game.InstalledAddonsProvider.EnableAddon(mod.Id);
+                Game.InstalledAddonsProvider.EnableAddon(new(mod.Id, mod.Version));
             }
         }
 

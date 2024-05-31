@@ -1,4 +1,5 @@
-﻿using Common.Enums;
+﻿using Common;
+using Common.Enums;
 
 namespace ClientCommon.Config;
 
@@ -30,5 +31,5 @@ public sealed class ConfigProviderFake : IConfigProvider
 
     public void AddScore(string addonId, bool isUpvote) => throw new NotImplementedException();
 
-    public void ChangeModState(string addonId, bool isEnabled) => throw new NotImplementedException();
+    public void ChangeModState(AddonVersion addonId, bool isEnabled) => throw new NotImplementedException();
 }
