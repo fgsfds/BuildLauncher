@@ -115,6 +115,11 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
 
         File.Delete(addon.PathToFile);
 
+        if (addon is LooseMap lMap && lMap.BloodIni is not null)
+        {
+            File.Delete(lMap.BloodIni);
+        }
+
         _cache[addon.Type].Remove(new(addon.Id, addon.Version));
 
         AddonsChangedEvent?.Invoke(_game, addon.Type);

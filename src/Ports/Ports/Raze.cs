@@ -304,7 +304,7 @@ namespace Ports.Ports
                 return;
             }
 
-            if (addon is not DukeCampaign rCamp)
+            if (addon is not RedneckCampaign rCamp)
             {
                 ThrowHelper.ArgumentException(nameof(addon));
                 return;

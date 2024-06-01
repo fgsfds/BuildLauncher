@@ -252,7 +252,7 @@ namespace Ports.Ports
                 }
                 else
                 {
-                    sb.Append($@" -ini ""{lMap.BloodIni}""");
+                    sb.Append($@" -ini ""{Path.GetFileName(lMap.BloodIni)}""");
                 }
 
                 GetLooseMapArgs(sb, game, addon);

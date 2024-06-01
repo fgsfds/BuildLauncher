@@ -38,6 +38,7 @@
         <ListBox Name="MapsList"
                  Grid.Row="1" Grid.Column="0"
                  ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                 ScrollViewer.HorizontalScrollBarVisibility="Auto"
                  Padding="2"
                  ItemsSource="{Binding MapsList}"
                  SelectedItem="{Binding SelectedAddon}"

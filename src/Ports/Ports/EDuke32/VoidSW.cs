@@ -89,9 +89,9 @@ namespace Ports.Ports.EDuke32
 
 
 
-            if (game is WangGame wGame && addon is WangCampaign wMod)
+            if (game is WangGame wGame)
             {
-                GetWangArgs(sb, wGame, wMod);
+                GetWangArgs(sb, wGame, addon);
             }
             else
             {
