@@ -20,8 +20,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Web.Server", "Web.Server\We
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClientCommon", "src\ClientCommon\ClientCommon.csproj", "{44EFB9C2-62DD-4F50-8FFA-AA97B83BF8B5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Generator", "src\Generator\Generator.csproj", "{6490431F-3AA7-4D56-A792-EB452258E92E}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Avalonia.Core", "src\Avalonia\Core\Avalonia.Core.csproj", "{4FA0986B-DA87-48AC-BF8B-1D9606085F85}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Avalonia.Desktop", "src\Avalonia\Desktop\Avalonia.Desktop.csproj", "{BAB09C82-3BEF-4DB4-98D3-5AD89CE93915}"
@@ -78,8 +76,15 @@ Global
 		{44EFB9C2-62DD-4F50-8FFA-AA97B83BF8B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{44EFB9C2-62DD-4F50-8FFA-AA97B83BF8B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{44EFB9C2-62DD-4F50-8FFA-AA97B83BF8B5}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6490431F-3AA7-4D56-A792-EB452258E92E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6490431F-3AA7-4D56-A792-EB452258E92E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {48D7012C-36C8-4BB1-B61F-BE38BB907CCD}
+	EndGlobalSection
+EndGlobal
+-A792-EB452258E92E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6490431F-3AA7-4D56-A792-EB452258E92E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6490431F-3AA7-4D56-A792-EB452258E92E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
