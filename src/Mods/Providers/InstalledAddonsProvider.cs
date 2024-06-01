@@ -115,9 +115,14 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
 
         File.Delete(addon.PathToFile);
 
-        if (addon is LooseMap lMap && lMap.BloodIni is not null)
+        if (addon is LooseMap lMap)
         {
-            File.Delete(lMap.BloodIni);
+            var files = Directory.GetFiles(Path.GetDirectoryName(addon.PathToFile)!, $"{Path.GetFileNameWithoutExtension(lMap.FileName)!}.*");
+
+            foreach (var file in files)
+            {
+                File.Delete(file);
+            }
         }
 
         _cache[addon.Type].Remove(new(addon.Id, addon.Version));
