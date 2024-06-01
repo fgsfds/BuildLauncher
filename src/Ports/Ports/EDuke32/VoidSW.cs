@@ -100,15 +100,27 @@ namespace Ports.Ports.EDuke32
         }
 
 
-        private void GetWangArgs(StringBuilder sb, WangGame wGame, WangCampaign camp)
+        private void GetWangArgs(StringBuilder sb, WangGame game, IAddon addon)
         {
-            if (camp.DependentAddons is not null &&
-                camp.DependentAddons.ContainsKey(WangAddonEnum.Wanton.ToString()))
+            if (addon is LooseMap)
+            {
+                GetLooseMapArgs(sb, game, addon);
+                return;
+            }
+
+            if (addon is not WangCampaign wCamp)
+            {
+                ThrowHelper.ArgumentException(nameof(addon));
+                return;
+            }
+
+            if (wCamp.DependentAddons is not null &&
+                wCamp.DependentAddons.ContainsKey(WangAddonEnum.Wanton.ToString()))
             {
                 sb.Append($@" -addon{(byte)WangAddonEnum.Wanton}");
             }
-            else if (camp.DependentAddons is not null &&
-                     camp.DependentAddons.ContainsKey(WangAddonEnum.TwinDragon.ToString()))
+            else if (wCamp.DependentAddons is not null &&
+                     wCamp.DependentAddons.ContainsKey(WangAddonEnum.TwinDragon.ToString()))
             {
                 sb.Append($@" -addon{(byte)WangAddonEnum.TwinDragon}");
             }
@@ -118,26 +130,26 @@ namespace Ports.Ports.EDuke32
             }
 
 
-            AddWangMusicFolder(sb, wGame);
+            AddWangMusicFolder(sb, game);
 
 
-            if (camp.FileName is null)
+            if (wCamp.FileName is null)
             {
                 return;
             }
 
 
-            if (camp.Type is AddonTypeEnum.TC)
+            if (wCamp.Type is AddonTypeEnum.TC)
             {
-                sb.Append($@" {AddDirectoryParam}""{wGame.CampaignsFolderPath}"" {AddFileParam}""{camp.FileName}""");
+                sb.Append($@" {AddDirectoryParam}""{game.CampaignsFolderPath}"" {AddFileParam}""{wCamp.FileName}""");
             }
-            else if (camp.Type is AddonTypeEnum.Map)
+            else if (wCamp.Type is AddonTypeEnum.Map)
             {
-                GetMapArgs(sb, wGame, camp);
+                GetMapArgs(sb, game, wCamp);
             }
             else
             {
-                ThrowHelper.NotImplementedException($"Mod type {camp.Type} is not supported");
+                ThrowHelper.NotImplementedException($"Mod type {wCamp.Type} is not supported");
                 return;
             }
         }

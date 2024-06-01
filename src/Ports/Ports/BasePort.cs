@@ -146,11 +146,10 @@ namespace Ports.Ports
 
 
         /// <summary>
-        /// Get startup args for packed and loose maps
+        /// Get startup args for manifested maps
         /// </summary>
         protected void GetMapArgs(StringBuilder sb, IGame game, IAddon camp)
         {
-            //TODO loose maps
             //TODO e#m#
             if (camp.StartMap is MapFileDto mapFile)
             {
@@ -161,6 +160,18 @@ namespace Ports.Ports
             {
                 ThrowHelper.NotImplementedException();
             }
+        }
+
+
+        /// <summary>
+        /// Get startup args for loose maps
+        /// </summary>
+        protected void GetLooseMapArgs(StringBuilder sb, IGame game, IAddon camp)
+        {
+            camp.StartMap.ThrowIfNotType<MapFileDto>(out var mapFile);
+
+            sb.Append($@" {AddDirectoryParam}""{game.MapsFolderPath}""");
+            sb.Append($@" -map ""{mapFile.File}""");
         }
 
 
@@ -226,8 +237,29 @@ namespace Ports.Ports
         }
 
 
-        protected void GetBloodArgs(StringBuilder sb, BloodGame game, BloodCampaign bCamp)
+        protected void GetBloodArgs(StringBuilder sb, BloodGame game, IAddon addon)
         {
+            if (addon is LooseMap lMap)
+            {
+                if (lMap.BloodIni is null)
+                {
+                    sb.Append($@" -ini ""{Consts.BloodIni}""");
+                }
+                else
+                {
+                    sb.Append($@" -ini ""{lMap.BloodIni}""");
+                }
+
+                GetLooseMapArgs(sb, game, addon);
+                return;
+            }
+            
+            if (addon is not BloodCampaign bCamp)
+            {
+                ThrowHelper.ArgumentException(nameof(addon));
+                return;
+            }
+
             if (bCamp.INI is not null)
             {
                 sb.Append($@" -ini ""{bCamp.INI}""");
@@ -272,8 +304,20 @@ namespace Ports.Ports
         }
 
 
-        protected void GetSlaveArgs(StringBuilder sb, SlaveGame sGame, SlaveCampaign sCamp)
+        protected void GetSlaveArgs(StringBuilder sb, SlaveGame game, IAddon addon)
         {
+            if (addon is LooseMap)
+            {
+                GetLooseMapArgs(sb, game, addon);
+                return;
+            }
+
+            if (addon is not SlaveCampaign sCamp)
+            {
+                ThrowHelper.ArgumentException(nameof(addon));
+                return;
+            }
+
             if (sCamp.FileName is null)
             {
                 return;
@@ -282,11 +326,11 @@ namespace Ports.Ports
 
             if (sCamp.Type is AddonTypeEnum.TC)
             {
-                sb.Append($@" {AddFileParam}""{Path.Combine(sGame.CampaignsFolderPath, sCamp.FileName)}""");
+                sb.Append($@" {AddFileParam}""{Path.Combine(game.CampaignsFolderPath, sCamp.FileName)}""");
             }
             else if (sCamp.Type is AddonTypeEnum.Map)
             {
-                GetMapArgs(sb, sGame, sCamp);
+                GetMapArgs(sb, game, sCamp);
             }
             else
             {

@@ -65,9 +65,9 @@ namespace Ports.Ports.EDuke32
             }
 
 
-            if (game is FuryGame fGame && addon is FuryCampaign fCamp)
+            if (game is FuryGame fGame)
             {
-                GetFuryArgs(sb, fGame, fCamp);
+                GetFuryArgs(sb, fGame, addon);
             }
             else
             {
@@ -75,38 +75,49 @@ namespace Ports.Ports.EDuke32
             }
         }
 
-        private void GetFuryArgs(StringBuilder sb, FuryGame game, FuryCampaign camp)
+        private void GetFuryArgs(StringBuilder sb, FuryGame game, IAddon addon)
         {
-            if (camp.FileName is null)
+            if (addon is LooseMap)
+            {
+                GetLooseMapArgs(sb, game, addon);
+                return;
+            }
+
+            if (addon is not FuryCampaign fCamp)
+            {
+                ThrowHelper.ArgumentException(nameof(addon));
+                return;
+            }
+
+            if (fCamp.FileName is null)
             {
                 return;
             }
 
-
-            if (camp.Type is AddonTypeEnum.TC)
+            if (fCamp.Type is AddonTypeEnum.TC)
             {
-                sb.Append($@" {AddFileParam}""{Path.Combine(game.CampaignsFolderPath, camp.FileName)}""");
+                sb.Append($@" {AddFileParam}""{Path.Combine(game.CampaignsFolderPath, fCamp.FileName)}""");
 
-                if (camp.MainCon is not null)
+                if (fCamp.MainCon is not null)
                 {
-                    sb.Append($@" {MainConParam}""{camp.MainCon}""");
+                    sb.Append($@" {MainConParam}""{fCamp.MainCon}""");
                 }
 
-                if (camp.AdditionalCons?.Count > 0)
+                if (fCamp.AdditionalCons?.Count > 0)
                 {
-                    foreach (var con in camp.AdditionalCons)
+                    foreach (var con in fCamp.AdditionalCons)
                     {
                         sb.Append($@" {AddConParam}""{con}""");
                     }
                 }
             }
-            else if (camp.Type is AddonTypeEnum.Map)
+            else if (fCamp.Type is AddonTypeEnum.Map)
             {
-                GetMapArgs(sb, game, camp);
+                GetMapArgs(sb, game, fCamp);
             }
             else
             {
-                ThrowHelper.NotImplementedException($"Mod type {camp.Type} is not supported");
+                ThrowHelper.NotImplementedException($"Mod type {fCamp.Type} is not supported");
                 return;
             }
         }

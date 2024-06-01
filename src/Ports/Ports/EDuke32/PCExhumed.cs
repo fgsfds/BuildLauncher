@@ -65,9 +65,9 @@ namespace Ports.Ports.EDuke32
             }
 
 
-            if (game is SlaveGame sGame && addon is SlaveCampaign sMod)
+            if (game is SlaveGame sGame)
             {
-                GetSlaveArgs(sb, sGame, sMod);
+                GetSlaveArgs(sb, sGame, addon);
             }
             else
             {

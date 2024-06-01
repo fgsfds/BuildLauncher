@@ -112,9 +112,9 @@ namespace Ports.Ports.EDuke32
             }
 
 
-            if (game is DukeGame dGame && addon is DukeCampaign dCamp)
+            if (game is DukeGame dGame)
             {
-                GetDukeArgs(sb, dGame, dCamp);
+                GetDukeArgs(sb, dGame, addon);
             }
             else
             {
@@ -129,74 +129,86 @@ namespace Ports.Ports.EDuke32
         /// <param name="sb">StringBuilder</param>
         /// <param name="game">DukeGame</param>
         /// <param name="camp">DukeCampaign</param>
-        protected void GetDukeArgs(StringBuilder sb, DukeGame game, DukeCampaign camp)
+        protected void GetDukeArgs(StringBuilder sb, DukeGame game, IAddon addon)
         {
-            if (camp.SupportedGame.GameEnum is GameEnum.Duke64)
+            if (addon.SupportedGame.GameEnum is GameEnum.Duke64)
             {
                 sb.Append(@$" {AddDirectoryParam}""{Path.GetDirectoryName(game.Duke64RomPath)}"" -gamegrp ""{Path.GetFileName(game.Duke64RomPath)}""");
                 return;
             }
 
-            if (camp.SupportedGame.GameVersion is not null &&
-                camp.SupportedGame.GameVersion.Equals(DukeVersionEnum.Duke3D_WT.ToString(), StringComparison.InvariantCultureIgnoreCase))
+            if (addon.SupportedGame.GameVersion is not null &&
+                addon.SupportedGame.GameVersion.Equals(DukeVersionEnum.Duke3D_WT.ToString(), StringComparison.InvariantCultureIgnoreCase))
             {
                 sb.Append($@" {AddDirectoryParam}""{game.DukeWTInstallPath}"" -addon {(byte)DukeAddonEnum.Base} {AddDirectoryParam}""{Path.Combine(game.SpecialFolderPath, Consts.WTStopgap)}"" -gamegrp e32wt.grp");
             }
             else
             {
-                byte addon = (byte)DukeAddonEnum.Base;
+                byte dukeAddon = (byte)DukeAddonEnum.Base;
 
-                if (camp.DependentAddons is null)
+                if (addon.DependentAddons is null)
                 {
-                    addon = (byte)DukeAddonEnum.Base;
+                    dukeAddon = (byte)DukeAddonEnum.Base;
                 }
-                else if (camp.DependentAddons.ContainsKey(DukeAddonEnum.DukeDC.ToString()))
+                else if (addon.DependentAddons.ContainsKey(DukeAddonEnum.DukeDC.ToString()))
                 {
-                    addon = (byte)DukeAddonEnum.DukeDC;
+                    dukeAddon = (byte)DukeAddonEnum.DukeDC;
                 }
-                else if (camp.DependentAddons.ContainsKey(DukeAddonEnum.DukeNW.ToString()))
+                else if (addon.DependentAddons.ContainsKey(DukeAddonEnum.DukeNW.ToString()))
                 {
-                    addon = (byte)DukeAddonEnum.DukeNW;
+                    dukeAddon = (byte)DukeAddonEnum.DukeNW;
                 }
-                else if (camp.DependentAddons.ContainsKey(DukeAddonEnum.DukeVaca.ToString()))
+                else if (addon.DependentAddons.ContainsKey(DukeAddonEnum.DukeVaca.ToString()))
                 {
-                    addon = (byte)DukeAddonEnum.DukeVaca;
+                    dukeAddon = (byte)DukeAddonEnum.DukeVaca;
                 }
 
-                sb.Append($@" {AddDirectoryParam}""{game.GameInstallFolder}"" -addon {addon}");
+                sb.Append($@" {AddDirectoryParam}""{game.GameInstallFolder}"" -addon {dukeAddon}");
             }
 
 
-            if (camp.FileName is null)
+            if (addon.FileName is null)
             {
                 return;
             }
 
-
-            if (camp.Type is AddonTypeEnum.TC)
+            if (addon is LooseMap)
             {
-                sb.Append($@" {AddFileParam}""{Path.Combine(game.CampaignsFolderPath, camp.FileName)}""");
+                GetLooseMapArgs(sb, game, addon);
+                return;
+            }
 
-                if (camp.MainCon is not null)
+            if (addon is not DukeCampaign dCamp)
+            {
+                ThrowHelper.ArgumentException(nameof(addon));
+                return;
+            }
+
+
+            if (dCamp.Type is AddonTypeEnum.TC)
+            {
+                sb.Append($@" {AddFileParam}""{Path.Combine(game.CampaignsFolderPath, dCamp.FileName)}""");
+
+                if (dCamp.MainCon is not null)
                 {
-                    sb.Append($@" {MainConParam}""{camp.MainCon}""");
+                    sb.Append($@" {MainConParam}""{dCamp.MainCon}""");
                 }
 
-                if (camp.AdditionalCons?.Count > 0)
+                if (dCamp.AdditionalCons?.Count > 0)
                 {
-                    foreach (var con in camp.AdditionalCons)
+                    foreach (var con in dCamp.AdditionalCons)
                     {
                         sb.Append($@" {AddConParam}""{con}""");
                     }
                 }
             }
-            else if (camp.Type is AddonTypeEnum.Map)
+            else if (dCamp.Type is AddonTypeEnum.Map)
             {
-                GetMapArgs(sb, game, camp);
+                GetMapArgs(sb, game, dCamp);
             }
             else
             {
-                ThrowHelper.NotImplementedException($"Mod type {camp.Type} is not supported");
+                ThrowHelper.NotImplementedException($"Mod type {dCamp.Type} is not supported");
                 return;
             }
         }

@@ -73,13 +73,13 @@ namespace Ports.Ports.EDuke32
             }
 
 
-            if (game is DukeGame dGame && addon is DukeCampaign dCamp)
+            if (game is DukeGame dGame )
             {
-                GetDukeArgs(sb, dGame, dCamp);
+                GetDukeArgs(sb, dGame, addon);
             }
-            else if (game is RedneckGame rGame && addon is RedneckCampaign rCamp)
+            else if (game is RedneckGame rGame)
             {
-                GetRedneckArgs(sb, rGame, rCamp);
+                GetRedneckArgs(sb, rGame, addon);
             }
             else
             {
@@ -94,14 +94,14 @@ namespace Ports.Ports.EDuke32
         /// <param name="sb">StringBuilder</param>
         /// <param name="game">RedneckGame</param>
         /// <param name="camp">RedneckCampaign</param>
-        private void GetRedneckArgs(StringBuilder sb, RedneckGame game, RedneckCampaign camp)
+        private void GetRedneckArgs(StringBuilder sb, RedneckGame game, IAddon addon)
         {
-            if (camp.SupportedGame.GameEnum is GameEnum.RidesAgain)
+            if (addon.SupportedGame.GameEnum is GameEnum.RidesAgain)
             {
                 sb.Append($@" {AddDirectoryParam}""{game.AgainInstallPath}""");
             }
-            else if (camp.DependentAddons is not null &&
-                     camp.DependentAddons.ContainsKey(RedneckAddonEnum.Route66.ToString()))
+            else if (addon.DependentAddons is not null &&
+                     addon.DependentAddons.ContainsKey(RedneckAddonEnum.Route66.ToString()))
             {
                 sb.Append($@" {AddDirectoryParam}""{game.GameInstallFolder}"" -x GAME66.CON");
             }
@@ -111,36 +111,48 @@ namespace Ports.Ports.EDuke32
             }
 
 
-            if (camp.FileName is null)
+            if (addon.FileName is null)
             {
                 return;
             }
 
-
-            if (camp.Type is AddonTypeEnum.TC)
+            if (addon is LooseMap)
             {
-                sb.Append($@" {AddFileParam}""{Path.Combine(game.CampaignsFolderPath, camp.FileName)}""");
+                GetLooseMapArgs(sb, game, addon);
+                return;
+            }
 
-                if (camp.MainCon is not null)
+            if (addon is not RedneckCampaign rCamp)
+            {
+                ThrowHelper.ArgumentException(nameof(addon));
+                return;
+            }
+
+
+            if (rCamp.Type is AddonTypeEnum.TC)
+            {
+                sb.Append($@" {AddFileParam}""{Path.Combine(game.CampaignsFolderPath, rCamp.FileName)}""");
+
+                if (rCamp.MainCon is not null)
                 {
-                    sb.Append($@" {MainConParam}""{camp.MainCon}""");
+                    sb.Append($@" {MainConParam}""{rCamp.MainCon}""");
                 }
 
-                if (camp.AdditionalCons?.Count > 0)
+                if (rCamp.AdditionalCons?.Count > 0)
                 {
-                    foreach (var con in camp.AdditionalCons)
+                    foreach (var con in rCamp.AdditionalCons)
                     {
                         sb.Append($@" {AddConParam}""{con}""");
                     }
                 }
             }
-            else if (camp.Type is AddonTypeEnum.Map)
+            else if (rCamp.Type is AddonTypeEnum.Map)
             {
-                GetMapArgs(sb, game, camp);
+                GetMapArgs(sb, game, rCamp);
             }
             else
             {
-                ThrowHelper.NotImplementedException($"Mod type {camp.Type} is not supported");
+                ThrowHelper.NotImplementedException($"Mod type {rCamp.Type} is not supported");
                 return;
             }
         }

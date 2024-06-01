@@ -7,6 +7,7 @@ using Common.Helpers;
 using Common.Interfaces;
 using Mods.Addons;
 using Mods.Serializable;
+using Mods.Serializable.Addon;
 using SharpCompress.Archives;
 using System.Text.Json;
 
@@ -245,6 +246,8 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
         Dictionary<string, string?>? incompatibles = null;
         IStartMap? startMap = null;
 
+        Addon? addon = null;
+
         if (ArchiveFactory.IsArchive(pathToFile, out var _))
         {
             using var archive = ArchiveFactory.Open(pathToFile);
@@ -323,15 +326,37 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
         }
         else if (pathToFile.EndsWith(".map", StringComparison.OrdinalIgnoreCase))
         {
-            //TODO loose maps
+            var bloodIni = pathToFile.Replace(".map", ".ini", StringComparison.InvariantCultureIgnoreCase);
+            var iniExists = File.Exists(bloodIni);
+
+            addon = new LooseMap()
+            {
+                Id = Path.GetFileName(pathToFile),
+                Type = AddonTypeEnum.Map,
+                Title = Path.GetFileName(pathToFile),
+                SupportedGame = new(supportedGame, gameVersion, gameCrc),
+                PathToFile = pathToFile,
+                StartMap = new MapFileDto() { File = Path.GetFileName(pathToFile) },
+                BloodIni = iniExists ? bloodIni : null,
+                GridImage = null,
+                Description = null,
+                Version = null,
+                Author = null,
+                MainDef = null,
+                AdditionalDefs = null,
+                DependentAddons = null,
+                IncompatibleAddons = null,
+                RequiredFeatures = null,
+                PreviewImage = null,
+            };
+
+            return addon;
         }
         else if (pathToFile.EndsWith(".grp", StringComparison.OrdinalIgnoreCase))
         {
             //"real" grps are not supported
             return null;
         }
-
-        Addon? addon = null;
 
         if (addonType is AddonTypeEnum.Mod)
         {
