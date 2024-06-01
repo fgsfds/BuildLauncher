@@ -325,7 +325,7 @@ namespace BuildLauncher.ViewModels
         {
             FilePickerFileType z64 = new("N64 ROM")
             {
-                Patterns = new[] { "*.z64" }
+                Patterns = new[] { "*.z64", "*.n64" }
             };
 
             var files = await Properties.TopLevel.StorageProvider.OpenFilePickerAsync(

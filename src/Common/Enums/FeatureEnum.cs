@@ -11,6 +11,7 @@
         CustomDude,
         WorldTourSupport,
         [Obsolete]
-        VacaDcSupport
+        VacaDcSupport,
+        Duke64Support
     }
 }

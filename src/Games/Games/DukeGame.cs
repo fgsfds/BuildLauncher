@@ -266,7 +266,7 @@ namespace Games.Games
                         """,
                     Version = null,
                     SupportedGame = new(GameEnum.Duke64),
-                    RequiredFeatures = null,
+                    RequiredFeatures = [FeatureEnum.Duke64Support],
                     PathToFile = null,
                     DependentAddons = null,
                     IncompatibleAddons = null,
