@@ -14,7 +14,7 @@
         <helpers:ImagePathToBitmapConverter x:Key="ImagePathToBitmapConverter"/>
     </UserControl.Resources>
 
-    <Grid RowDefinitions="auto,*,auto">
+    <Grid RowDefinitions="*,auto,auto">
 
         <ScrollViewer Grid.Row="0">
 
@@ -41,6 +41,7 @@
                    Margin="10,5"
                    FontWeight="Bold"
                    FontSize="16"
+                   HorizontalAlignment="Center"
                    Foreground="{DynamicResource SystemAccentColor}"
                    Text="{Binding SelectedAddonPlaytime}"/>
 
