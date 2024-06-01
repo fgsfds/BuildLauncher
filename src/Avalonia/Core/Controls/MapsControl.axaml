@@ -41,7 +41,7 @@
                  Padding="2"
                  ItemsSource="{Binding MapsList}"
                  SelectedItem="{Binding SelectedAddon}"
-                 PointerPressed="ListBoxEmptySpaceClicked">
+                 PointerPressed="OnListBoxEmptySpaceClicked">
 
             <ListBox.ItemsPanel>
                 <ItemsPanelTemplate>

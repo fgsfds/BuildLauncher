@@ -121,7 +121,7 @@ namespace Ports.Ports
         /// <param name="game">Game<param>
         /// <param name="addon">Map/campaign</param>
         /// <param name="skipIntro">Skip intro</param>
-        public string GetStartGameArgs(IGame game, IAddon addon, bool skipIntro, bool skipStartup)
+        public string GetStartGameArgs(IGame game, IAddon addon, bool skipIntro, bool skipStartup, byte? skill = null)
         {
             StringBuilder sb = new();
 
@@ -140,6 +140,11 @@ namespace Ports.Ports
             GetAutoloadModsArgs(sb, game, addon);
 
             GetStartCampaignArgs(sb, game, addon);
+
+            if (skill is not null)
+            {
+                sb.Append($" -s{skill}");
+            }
 
             return sb.ToString();
         }

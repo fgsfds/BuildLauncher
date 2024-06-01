@@ -123,12 +123,12 @@ namespace BuildLauncher.ViewModels
         [RelayCommand]
         private async Task StartMapAsync(object? command)
         {
-            command.ThrowIfNotType<BasePort>(out var port);
+            command.ThrowIfNotType<Tuple<BasePort, byte?>>(out var parameter);
             SelectedAddon.ThrowIfNull();
 
-            var args = port.GetStartGameArgs(Game, SelectedAddon, _config.SkipIntro, _config.SkipStartup);
+            var args = parameter.Item1.GetStartGameArgs(Game, SelectedAddon, _config.SkipIntro, _config.SkipStartup, parameter.Item2);
 
-            await StartPortAsync(SelectedAddon.Id, port.FullPathToExe, args);
+            await StartPortAsync(SelectedAddon.Id, parameter.Item1.FullPathToExe, args);
         }
 
         private void StartPortAsync(string fullPathToExe, string args)
