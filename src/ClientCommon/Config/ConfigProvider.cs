@@ -254,22 +254,32 @@ public sealed class ConfigProvider : IConfigProvider
         _dbContext.Settings.Add(new() { Name = nameof(config.SkipStartup), Value = config.SkipStartup.ToString() });
 
         _dbContext.Settings.Add(new() { Name = nameof(config.UseLocalApi), Value = config.UseLocalApi.ToString() });
-        _dbContext.Settings.Add(new() { Name = nameof(config.ApiPassword), Value = config.ApiPassword });
+        _dbContext.Settings.Add(new() { Name = nameof(config.ApiPassword), Value = config.ApiPassword ?? string.Empty });
 
-        foreach (var addon in config.Upvotes)
+        if (config.Upvotes is not null)
         {
-            _dbContext.Scores.Add(new() { AddonId = addon.Key, IsUpvoted = addon.Value });
+            foreach (var addon in config.Upvotes)
+            {
+                _dbContext.Scores.Add(new() { AddonId = addon.Key, IsUpvoted = addon.Value });
+            }
         }
 
-        foreach (var addon in config.DisabledAutoloadMods)
+        if (config.DisabledAutoloadMods is not null)
         {
-            _dbContext.DisabledAddons.Add(new() { AddonId = addon });
+            foreach (var addon in config.DisabledAutoloadMods)
+            {
+                _dbContext.DisabledAddons.Add(new() { AddonId = addon });
+            }
         }
 
-        foreach (var addon in config.Playtimes)
+        if (config.Playtimes is not null)
         {
-            _dbContext.Playtimes.Add(new() { AddonId = addon.Key, Playtime = addon.Value });
+            foreach (var addon in config.Playtimes)
+            {
+                _dbContext.Playtimes.Add(new() { AddonId = addon.Key, Playtime = addon.Value });
+            }
         }
+
 
         _dbContext.GamePaths.Add(new() { Game = "PathDuke3D", Path = config.GamePathDuke3D });
         _dbContext.GamePaths.Add(new() { Game = "PathDukeWT", Path = config.GamePathDukeWT });
