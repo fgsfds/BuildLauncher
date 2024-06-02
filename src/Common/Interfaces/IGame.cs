@@ -54,23 +54,9 @@ namespace Common.Interfaces
         /// </summary>
         string SpecialFolderPath { get; }
 
-        IInstalledAddonsProvider InstalledAddonsProvider { get; init; }
-
-        IDownloadableAddonsProvider DownloadableAddonsProvider { get; init; }
-
         /// <summary>
-        /// Get list of official addons and custom campaigns
+        /// Get list of original campaigns
         /// </summary>
-        Dictionary<AddonVersion, IAddon> GetCampaigns();
-
-        /// <summary>
-        /// Get list of custom maps
-        /// </summary>
-        Dictionary<AddonVersion, IAddon> GetSingleMaps();
-
-        /// <summary>
-        /// Get list of autoload mods
-        /// </summary>
-        Dictionary<AddonVersion, IAddon> GetAutoloadMods(bool enabledOnly);
+        Dictionary<AddonVersion, IAddon> GetOriginalCampaigns();
     }
 }

@@ -121,7 +121,7 @@ namespace Ports.Ports
         /// <param name="game">Game<param>
         /// <param name="addon">Map/campaign</param>
         /// <param name="skipIntro">Skip intro</param>
-        public string GetStartGameArgs(IGame game, IAddon addon, bool skipIntro, bool skipStartup, byte? skill = null)
+        public string GetStartGameArgs(IGame game, IAddon addon, Dictionary<AddonVersion, IAddon> mods, bool skipIntro, bool skipStartup, byte? skill = null)
         {
             StringBuilder sb = new();
 
@@ -137,7 +137,7 @@ namespace Ports.Ports
                 GetSkipStartupParameter(sb);
             }
 
-            GetAutoloadModsArgs(sb, game, addon);
+            GetAutoloadModsArgs(sb, game, addon, mods);
 
             GetStartCampaignArgs(sb, game, addon);
 
@@ -365,8 +365,8 @@ namespace Ports.Ports
         /// </summary>
         /// <param name="sb">String builder for parameters</param>
         /// <param name="game">Game<param>
-        /// <param name="campaign">Campaign\map<param>
-        protected abstract void GetAutoloadModsArgs(StringBuilder sb, IGame game, IAddon campaign);
+        /// <param name="addon">Campaign\map<param>
+        protected abstract void GetAutoloadModsArgs(StringBuilder sb, IGame game, IAddon addon, Dictionary<AddonVersion, IAddon> mods);
 
         /// <summary>
         /// Return command line parameter to skip intro

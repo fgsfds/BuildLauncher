@@ -7,6 +7,7 @@ using Common.Interfaces;
 using CommunityToolkit.Mvvm.Input;
 using Games.Providers;
 using Mods.Addons;
+using Mods.Providers;
 using System.Collections.Immutable;
 using System.Diagnostics;
 
@@ -19,6 +20,8 @@ namespace BuildLauncher.ViewModels
         private readonly GamesProvider _gamesProvider;
         private readonly IConfigProvider _config;
         private readonly PlaytimeProvider _playtimeProvider;
+        private readonly InstalledAddonsProvider _installedAddonsProvider;
+        private readonly DownloadableAddonsProvider _downloadableAddonsProvider;
 
 
         [Obsolete($"Don't create directly. Use {nameof(ViewModelsFactory)}.")]
@@ -28,7 +31,9 @@ namespace BuildLauncher.ViewModels
             IConfigProvider config,
             PlaytimeProvider playtimeProvider,
             ApiInterface apiInterface,
-            ScoresProvider scoresProvider
+            ScoresProvider scoresProvider,
+        InstalledAddonsProviderFactory installedAddonsProviderFactory,
+        DownloadableAddonsProviderFactory _downloadableAddonsProviderFactory
             ) : base(config, playtimeProvider, apiInterface, scoresProvider)
         {
             Game = game;
@@ -36,10 +41,12 @@ namespace BuildLauncher.ViewModels
             _gamesProvider = gamesProvider;
             _config = config;
             _playtimeProvider = playtimeProvider;
+            _installedAddonsProvider = installedAddonsProviderFactory.GetSingleton(game);
+            _downloadableAddonsProvider = _downloadableAddonsProviderFactory.GetSingleton(game);
 
             _gamesProvider.GameChangedEvent += OnGameChanged;
-            Game.DownloadableAddonsProvider.AddonDownloadedEvent += OnAddonChanged;
-            Game.InstalledAddonsProvider.AddonsChangedEvent += OnAddonChanged;
+            _installedAddonsProvider.AddonsChangedEvent += OnAddonChanged;
+            _downloadableAddonsProvider.AddonDownloadedEvent += OnAddonChanged;
         }
 
 
@@ -53,7 +60,7 @@ namespace BuildLauncher.ViewModels
         /// </summary>
         private async Task UpdateAsync(bool createNew)
         {
-            await Game.InstalledAddonsProvider.CreateCache(createNew);
+            await _installedAddonsProvider.CreateCache(createNew);
 
             OnPropertyChanged(nameof(ModsList));
         }
@@ -64,7 +71,7 @@ namespace BuildLauncher.ViewModels
         /// <summary>
         /// List of installed autoload mods
         /// </summary>
-        public ImmutableList<AutoloadMod> ModsList => [.. Game.GetAutoloadMods(false).Select(x => (AutoloadMod)x.Value)];
+        public ImmutableList<AutoloadMod> ModsList => [.. _installedAddonsProvider.GetInstalledMods().Select(x => (AutoloadMod)x.Value)];
 
         private IAddon? _selectedAddon;
         /// <summary>
@@ -123,7 +130,7 @@ namespace BuildLauncher.ViewModels
         {
             SelectedAddon.ThrowIfNull();
 
-            Game.InstalledAddonsProvider.DeleteAddon(SelectedAddon);
+            _installedAddonsProvider.DeleteAddon(SelectedAddon);
 
             OnPropertyChanged(nameof(ModsList));
         }
@@ -139,11 +146,11 @@ namespace BuildLauncher.ViewModels
 
             if (!mod.IsEnabled)
             {
-                Game.InstalledAddonsProvider.DisableAddon(new(mod.Id, mod.Version));
+                _installedAddonsProvider.DisableAddon(new(mod.Id, mod.Version));
             }
             else if (mod.IsEnabled)
             {
-                Game.InstalledAddonsProvider.EnableAddon(new(mod.Id, mod.Version));
+                _installedAddonsProvider.EnableAddon(new(mod.Id, mod.Version));
             }
         }
 

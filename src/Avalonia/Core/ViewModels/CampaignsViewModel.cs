@@ -7,6 +7,7 @@ using Common.Interfaces;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Games.Providers;
+using Mods.Providers;
 using Ports.Ports;
 using System.Collections.Immutable;
 using System.Diagnostics;
@@ -20,6 +21,8 @@ namespace BuildLauncher.ViewModels
         private readonly GamesProvider _gamesProvider;
         private readonly IConfigProvider _config;
         private readonly PlaytimeProvider _playtimeProvider;
+        private readonly InstalledAddonsProvider _installedAddonsProvider;
+        private readonly DownloadableAddonsProvider _downloadableAddonsProvider;
 
 
         [Obsolete($"Don't create directly. Use {nameof(ViewModelsFactory)}.")]
@@ -29,7 +32,9 @@ namespace BuildLauncher.ViewModels
             IConfigProvider config,
             PlaytimeProvider playtimeProvider,
             ApiInterface apiInterface,
-            ScoresProvider scoresProvider
+            ScoresProvider scoresProvider,
+            InstalledAddonsProviderFactory installedAddonsProviderFactory,
+            DownloadableAddonsProviderFactory downloadableAddonsProviderFactory
             ) : base(config, playtimeProvider, apiInterface, scoresProvider)
         {
             Game = game;
@@ -37,10 +42,12 @@ namespace BuildLauncher.ViewModels
             _gamesProvider = gamesProvider;
             _config = config;
             _playtimeProvider = playtimeProvider;
+            _installedAddonsProvider = installedAddonsProviderFactory.GetSingleton(game);
+            _downloadableAddonsProvider = downloadableAddonsProviderFactory.GetSingleton(game);
 
             _gamesProvider.GameChangedEvent += OnGameChanged;
-            Game.DownloadableAddonsProvider.AddonDownloadedEvent += OnAddonChanged;
-            Game.InstalledAddonsProvider.AddonsChangedEvent += OnAddonChanged;
+            _installedAddonsProvider.AddonsChangedEvent += OnAddonChanged;
+            _downloadableAddonsProvider.AddonDownloadedEvent += OnAddonChanged;
         }
 
 
@@ -53,7 +60,7 @@ namespace BuildLauncher.ViewModels
         {
             get
             {
-                var result = Game.GetCampaigns().Select(x => x.Value);
+                var result = _installedAddonsProvider.GetInstalledCampaigns().Select(static x => x.Value);
 
                 if (string.IsNullOrWhiteSpace(SearchBoxText))
                 {
@@ -110,7 +117,7 @@ namespace BuildLauncher.ViewModels
         /// </summary>
         private async Task UpdateAsync(bool createNew)
         {
-            await Game.InstalledAddonsProvider.CreateCache(createNew);
+            await _installedAddonsProvider.CreateCache(createNew);
 
             OnPropertyChanged(nameof(CampaignsList));
         }
@@ -128,7 +135,9 @@ namespace BuildLauncher.ViewModels
             command.ThrowIfNotType<BasePort>(out var port);
             SelectedAddon.ThrowIfNull();
 
-            var args = port.GetStartGameArgs(Game, SelectedAddon, _config.SkipIntro, _config.SkipStartup);
+            var mods = _installedAddonsProvider.GetInstalledMods();
+
+            var args = port.GetStartGameArgs(Game, SelectedAddon, mods, _config.SkipIntro, _config.SkipStartup);
 
             await StartPortAsync(SelectedAddon.Id, port.FullPathToExe, args);
         }
@@ -166,7 +175,7 @@ namespace BuildLauncher.ViewModels
         {
             SelectedAddon.ThrowIfNull();
 
-            Game.InstalledAddonsProvider.DeleteAddon(SelectedAddon);
+            _installedAddonsProvider.DeleteAddon(SelectedAddon);
 
             OnPropertyChanged(nameof(CampaignsList));
         }

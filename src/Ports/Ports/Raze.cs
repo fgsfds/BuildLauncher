@@ -1,4 +1,5 @@
-﻿using Common.Enums;
+﻿using Common;
+using Common.Enums;
 using Common.Enums.Addons;
 using Common.Enums.Versions;
 using Common.Helpers;
@@ -359,23 +360,21 @@ namespace Ports.Ports
         }
 
         /// <inheritdoc/>
-        protected override void GetAutoloadModsArgs(StringBuilder sb, IGame game, IAddon campaign)
+        protected override void GetAutoloadModsArgs(StringBuilder sb, IGame game, IAddon addon, Dictionary<AddonVersion, IAddon> mods)
         {
-            var addons = game.GetAutoloadMods(true);
-
-            if (addons.Count == 0)
+            if (mods.Count == 0)
             {
                 return;
             }
 
-            foreach (var addon in addons)
+            foreach (var mod in mods)
             {
-                if (addon.Value is not AutoloadMod aMod)
+                if (mod.Value is not AutoloadMod aMod)
                 {
                     continue;
                 }
 
-                if (!ValidateAutoloadMod(aMod, campaign, addons))
+                if (!ValidateAutoloadMod(aMod, addon, mods))
                 {
                     continue;
                 }

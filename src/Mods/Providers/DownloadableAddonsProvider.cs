@@ -17,6 +17,7 @@ public sealed class DownloadableAddonsProvider : IDownloadableAddonsProvider
     private readonly IGame _game;
     private readonly ArchiveTools _archiveTools;
     private readonly ApiInterface _apiInterface;
+    private readonly InstalledAddonsProvider _installedAddonsProvider;
 
     private Dictionary<AddonTypeEnum, Dictionary<AddonVersion, IDownloadableAddon>>? _cache;
     private readonly SemaphoreSlim _semaphore = new(1);
@@ -30,12 +31,14 @@ public sealed class DownloadableAddonsProvider : IDownloadableAddonsProvider
     public DownloadableAddonsProvider(
         IGame game,
         ArchiveTools archiveTools,
-        ApiInterface apiInterface
+        ApiInterface apiInterface,
+        InstalledAddonsProviderFactory installedAddonsProviderFactory
         )
     {
         _game = game;
         _archiveTools = archiveTools;
         _apiInterface = apiInterface;
+        _installedAddonsProvider = installedAddonsProviderFactory.GetSingleton(_game);
 
         Progress = _archiveTools.Progress;
     }
@@ -87,7 +90,7 @@ public sealed class DownloadableAddonsProvider : IDownloadableAddonsProvider
             return [];
         }
 
-        var installedAddons = _game.InstalledAddonsProvider.GetInstalledAddons(addonType);
+        var installedAddons = _installedAddonsProvider.GetInstalledAddonsByType(addonType);
 
         foreach (var downloadableAddon in addonTypeCache)
         {
@@ -102,7 +105,8 @@ public sealed class DownloadableAddonsProvider : IDownloadableAddonsProvider
             }
 
             //Death Wish hack
-            if (downloadableAddon.Key.Id.Contains("death-wish", StringComparison.InvariantCultureIgnoreCase) &&
+            if (addonType is AddonTypeEnum.TC &&
+                downloadableAddon.Key.Id.Contains("death-wish", StringComparison.InvariantCultureIgnoreCase) &&
                 downloadableAddon.Key.Version!.StartsWith('1'))
             {
                 if (existinsAddons.Contains(downloadableAddon.Key))
@@ -118,7 +122,7 @@ public sealed class DownloadableAddonsProvider : IDownloadableAddonsProvider
             }
             else
             {
-                foreach (var version in existinsAddons.Select(x => x.Version).Where(x => x is not null))
+                foreach (var version in existinsAddons.Select(static x => x.Version).Where(static x => x is not null))
                 {
                     downloadableAddon.Value.HasNewerVersion = true;
 
@@ -164,7 +168,7 @@ public sealed class DownloadableAddonsProvider : IDownloadableAddonsProvider
 
         await _archiveTools.DownloadFileAsync(url, pathToFile).ConfigureAwait(false);
 
-        _game.InstalledAddonsProvider.AddAddon(addon.AddonType, pathToFile);
+        _installedAddonsProvider.AddAddon(addon.AddonType, pathToFile);
 
         if (!ClientProperties.IsDevMode)
         {

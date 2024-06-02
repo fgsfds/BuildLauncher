@@ -1,5 +1,4 @@
 ﻿using ClientCommon.Config;
-using ClientCommon.Providers;
 using Common;
 using Common.Enums;
 using Common.Enums.Versions;
@@ -20,7 +19,6 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
 {
     private readonly IGame _game;
     private readonly IConfigProvider _config;
-    private readonly PlaytimeProvider _playtimeProvider;
 
     private readonly Dictionary<AddonTypeEnum, Dictionary<AddonVersion, IAddon>> _cache;
     private static readonly SemaphoreSlim _semaphore = new(1);
@@ -32,13 +30,11 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
     [Obsolete($"Don't create directly. Use {nameof(InstalledAddonsProvider)}.")]
     public InstalledAddonsProvider(
         IGame game,
-        IConfigProvider config,
-        PlaytimeProvider playtimeProvider
+        IConfigProvider config
         )
     {
         _game = game;
         _config = config;
-        _playtimeProvider = playtimeProvider;
         _cache = [];
     }
 
@@ -147,7 +143,56 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
     }
 
     /// <inheritdoc/>
-    public Dictionary<AddonVersion, IAddon> GetInstalledAddons(AddonTypeEnum addonType)
+    public Dictionary<AddonVersion, IAddon> GetInstalledAddonsByType(AddonTypeEnum addonType)
+    {
+        return addonType switch
+        {
+            AddonTypeEnum.TC => GetInstalledCampaigns(),
+            AddonTypeEnum.Map => GetInstalledMaps(),
+            AddonTypeEnum.Mod => GetInstalledMods(),
+            _ => throw new NotImplementedException()
+        };
+    }
+
+    /// <inheritdoc/>
+    public Dictionary<AddonVersion, IAddon> GetInstalledCampaigns()
+    {
+        var originalCampaigns = _game.GetOriginalCampaigns();
+
+        if (_isCacheUpdating)
+        {
+            return originalCampaigns;
+        }
+
+        _cache.ThrowIfNull();
+
+        _cache.TryGetValue(AddonTypeEnum.TC, out var result);
+
+        if (result is not null)
+        {
+            foreach (var customCamp in result)
+            {
+                if (originalCampaigns.TryGetValue(customCamp.Key, out var _))
+                {
+                    //replacing original campaign with the downloaded one
+                    originalCampaigns[customCamp.Key] = customCamp.Value;
+                }
+                else
+                {
+                    originalCampaigns.Add(customCamp.Key, customCamp.Value);
+                }
+            }
+
+            return originalCampaigns;
+        }
+        else
+        {
+            return [];
+        }
+    }
+
+    /// <inheritdoc/>
+    public Dictionary<AddonVersion, IAddon> GetInstalledMaps()
     {
         if (_isCacheUpdating)
         {
@@ -156,16 +201,24 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
 
         _cache.ThrowIfNull();
 
-        _cache.TryGetValue(addonType, out var result);
+        _cache.TryGetValue(AddonTypeEnum.Map, out var result);
 
-        if (result is not null)
-        {
-            return result;
-        }
-        else
+        return result is null ? [] : result;
+    }
+
+    /// <inheritdoc/>
+    public Dictionary<AddonVersion, IAddon> GetInstalledMods()
+    {
+        if (_isCacheUpdating)
         {
             return [];
         }
+
+        _cache.ThrowIfNull();
+
+        _cache.TryGetValue(AddonTypeEnum.Mod, out var result);
+
+        return result is null ? [] : result;
     }
 
     /// <summary>
@@ -552,7 +605,7 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
     [Obsolete("delete")]
     private bool DeleteOld(string pathToFile, IArchive archive)
     {
-        var oldManifest = archive.Entries.FirstOrDefault(static x => x.Key.Equals("manifest.json", StringComparison.OrdinalIgnoreCase));
+        var oldManifest = archive.Entries.FirstOrDefault(static x => x.Key!.Equals("manifest.json", StringComparison.OrdinalIgnoreCase));
 
         if (oldManifest is not null)
         {
