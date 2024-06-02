@@ -95,7 +95,7 @@ public sealed class RedneckGame : BaseGame
                     SupportedGame = new(GameEnum.Redneck),
                     RequiredFeatures = null,
                     PathToFile = null,
-                    DependentAddons = new() { { RedneckAddonEnum.Route66.ToString(), null } },
+                    DependentAddons = new(StringComparer.OrdinalIgnoreCase) { { nameof(RedneckAddonEnum.Route66), null } },
                     IncompatibleAddons = null,
                     MainCon = null,
                     AdditionalCons = null,

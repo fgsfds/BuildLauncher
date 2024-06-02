@@ -8,7 +8,7 @@ public sealed class ScoresProvider
 {
     private readonly ApiInterface _apiInterface;
     private readonly IConfigProvider _config;
-    private Dictionary<string, int>? _cache;
+    private Dictionary<string, int>? _cache = null;
 
     public ScoresProvider(
         ApiInterface apiInterface,
@@ -44,7 +44,12 @@ public sealed class ScoresProvider
     {
         var cache = await _apiInterface.GetScoresAsync();
 
-        _cache = cache;
+        if (cache is null)
+        {
+            return;
+        }
+
+        _cache = new(cache, StringComparer.OrdinalIgnoreCase);
     }
 
     public async Task ChangeScoreAsync(string addonId, bool isUpvote)

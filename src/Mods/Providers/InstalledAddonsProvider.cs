@@ -371,18 +371,19 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
             preview = ImageHelper.GetImageFromArchive(archive, "eduke32_preview.png");
             image = ImageHelper.GetCoverFromArchive(archive) ?? preview;
 
-            dependencies = manifest.Dependencies?.Addons?.ToDictionary(static x => x.Id, static x => x.Version);
-            incompatibles = manifest.Incompatibles?.Addons?.ToDictionary(static x => x.Id, static x => x.Version);
+            dependencies = manifest.Dependencies?.Addons?.ToDictionary(static x => x.Id, static x => x.Version, StringComparer.OrdinalIgnoreCase);
+            incompatibles = manifest.Incompatibles?.Addons?.ToDictionary(static x => x.Id, static x => x.Version, StringComparer.OrdinalIgnoreCase);
 
+            //TODO Duke versions
             if (manifest.SupportedGame.Version is not null)
             {
-                if (manifest.SupportedGame.Version == DukeVersionEnum.Duke3D_13D.ToString())
+                if (manifest.SupportedGame.Version == nameof(DukeVersionEnum.Duke3D_13D))
                 {
                 }
-                else if (manifest.SupportedGame.Version == DukeVersionEnum.Duke3D_Atomic.ToString())
+                else if (manifest.SupportedGame.Version == nameof(DukeVersionEnum.Duke3D_Atomic))
                 {
                 }
-                else if (manifest.SupportedGame.Version == DukeVersionEnum.Duke3D_WT.ToString())
+                else if (manifest.SupportedGame.Version == nameof(DukeVersionEnum.Duke3D_WT))
                 {
                 }
             }
@@ -425,6 +426,11 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
         {
             var isEnabled = !_config.DisabledAutoloadMods.Contains(id);
 
+            if (mainDef is not null)
+            {
+                ThrowHelper.ArgumentException($"Autoload mod can't have Main DEF");
+            }
+
             addon = new AutoloadMod()
             {
                 Id = id,
@@ -436,7 +442,7 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
                 Author = author,
                 IsEnabled = isEnabled,
                 PathToFile = pathToFile,
-                MainDef = mainDef,
+                MainDef = null,
                 AdditionalDefs = addDefs,
                 AdditionalCons = addCons,
                 SupportedGame = new(supportedGame, gameVersion, gameCrc),

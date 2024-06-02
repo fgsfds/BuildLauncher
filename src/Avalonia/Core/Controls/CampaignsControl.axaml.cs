@@ -76,7 +76,7 @@ namespace BuildLauncher.Controls
                             var selectedCampaign = (IAddon)CampaignsList.SelectedItem;
 
                             if (port.PortEnum is PortEnum.BuildGDX &&
-                                (selectedCampaign.Type is not AddonTypeEnum.Official || selectedCampaign.Id.Equals(DukeAddonEnum.DukeNW.ToString(), StringComparison.InvariantCultureIgnoreCase)))
+                                (selectedCampaign.Type is not AddonTypeEnum.Official || selectedCampaign.Id.Equals(nameof(DukeAddonEnum.DukeNW), StringComparison.InvariantCultureIgnoreCase)))
                             {
                                 return false;
                             }

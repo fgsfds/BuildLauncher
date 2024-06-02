@@ -96,7 +96,7 @@ public sealed class BloodGame : BaseGame
                 SupportedGame = new(GameEnum.Blood),
                 RequiredFeatures = null,
                 PathToFile = null,
-                DependentAddons = new() { { BloodAddonEnum.BloodCP.ToString(), null } },
+                DependentAddons = new(StringComparer.OrdinalIgnoreCase) { { nameof(BloodAddonEnum.BloodCP), null } },
                 IncompatibleAddons = null,
                 MainDef = null,
                 AdditionalDefs = null,

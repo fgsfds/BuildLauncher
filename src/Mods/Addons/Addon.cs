@@ -8,7 +8,7 @@ namespace Mods.Addons
     /// <summary>
     /// Base class for campaigns and maps
     /// </summary>
-    public class Addon : IAddon
+    public abstract class Addon : IAddon
     {
         /// <inheritdoc/>
         public required AddonTypeEnum Type { get; init; }

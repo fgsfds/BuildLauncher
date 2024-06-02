@@ -115,12 +115,12 @@ namespace Ports.Ports.EDuke32
             }
 
             if (wCamp.DependentAddons is not null &&
-                wCamp.DependentAddons.ContainsKey(WangAddonEnum.Wanton.ToString()))
+                wCamp.DependentAddons.ContainsKey(nameof(WangAddonEnum.Wanton)))
             {
                 sb.Append($@" -addon{(byte)WangAddonEnum.Wanton}");
             }
             else if (wCamp.DependentAddons is not null &&
-                     wCamp.DependentAddons.ContainsKey(WangAddonEnum.TwinDragon.ToString()))
+                     wCamp.DependentAddons.ContainsKey(nameof(WangAddonEnum.TwinDragon)))
             {
                 sb.Append($@" -addon{(byte)WangAddonEnum.TwinDragon}");
             }

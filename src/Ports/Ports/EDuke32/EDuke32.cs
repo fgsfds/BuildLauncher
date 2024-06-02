@@ -139,7 +139,7 @@ namespace Ports.Ports.EDuke32
             }
 
             if (addon.SupportedGame.GameVersion is not null &&
-                addon.SupportedGame.GameVersion.Equals(DukeVersionEnum.Duke3D_WT.ToString(), StringComparison.InvariantCultureIgnoreCase))
+                addon.SupportedGame.GameVersion.Equals(nameof(DukeVersionEnum.Duke3D_WT), StringComparison.InvariantCultureIgnoreCase))
             {
                 sb.Append($@" {AddDirectoryParam}""{game.DukeWTInstallPath}"" -addon {(byte)DukeAddonEnum.Base} {AddDirectoryParam}""{Path.Combine(game.SpecialFolderPath, Consts.WTStopgap)}"" -gamegrp e32wt.grp");
             }
@@ -151,15 +151,15 @@ namespace Ports.Ports.EDuke32
                 {
                     dukeAddon = (byte)DukeAddonEnum.Base;
                 }
-                else if (addon.DependentAddons.ContainsKey(DukeAddonEnum.DukeDC.ToString()))
+                else if (addon.DependentAddons.ContainsKey(nameof(DukeAddonEnum.DukeDC)))
                 {
                     dukeAddon = (byte)DukeAddonEnum.DukeDC;
                 }
-                else if (addon.DependentAddons.ContainsKey(DukeAddonEnum.DukeNW.ToString()))
+                else if (addon.DependentAddons.ContainsKey(nameof(DukeAddonEnum.DukeNW)))
                 {
                     dukeAddon = (byte)DukeAddonEnum.DukeNW;
                 }
-                else if (addon.DependentAddons.ContainsKey(DukeAddonEnum.DukeVaca.ToString()))
+                else if (addon.DependentAddons.ContainsKey(nameof(DukeAddonEnum.DukeVaca)))
                 {
                     dukeAddon = (byte)DukeAddonEnum.DukeVaca;
                 }

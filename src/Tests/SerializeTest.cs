@@ -5,7 +5,7 @@ using System.Text.Json;
 
 namespace Tests;
 
-public class SerializerTest
+public class SerializerTests
 {
     private const string AddonJson =
 """

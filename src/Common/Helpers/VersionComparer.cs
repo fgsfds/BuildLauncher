@@ -2,8 +2,13 @@
 {
     public static class VersionComparer
     {
-        public static bool Compare(string v1, string v2)
+        public static bool Compare(string? v1, string v2)
         {
+            if (v1 is null)
+            {
+                return true;
+            }
+
             string op;
 
             if (v2.StartsWith("=="))
@@ -41,8 +46,13 @@
             return Compare(v1, v2, op);
         }
 
-        public static bool Compare(string v1, string v2, string op)
+        public static bool Compare(string? v1, string v2, string op)
         {
+            if (v1 is null)
+            {
+                return true;
+            }
+
             List<int> expected = new(2);
 
             if (op.Equals("=="))

@@ -183,7 +183,7 @@ namespace Ports.Ports
             }
 
             if (dCamp.SupportedGame.GameVersion is not null &&
-                dCamp.SupportedGame.GameVersion.Equals(DukeVersionEnum.Duke3D_WT.ToString(), StringComparison.InvariantCultureIgnoreCase))
+                dCamp.SupportedGame.GameVersion.Equals(nameof(DukeVersionEnum.Duke3D_WT), StringComparison.InvariantCultureIgnoreCase))
             {
                 var config = Path.Combine(PathToExecutableFolder, ConfigFile);
 
@@ -199,15 +199,15 @@ namespace Ports.Ports
                 {
                     dukeAddon = (byte)DukeAddonEnum.Base;
                 }
-                else if (dCamp.DependentAddons.ContainsKey(DukeAddonEnum.DukeDC.ToString()))
+                else if (dCamp.DependentAddons.ContainsKey(nameof(DukeAddonEnum.DukeDC)))
                 {
                     dukeAddon = (byte)DukeAddonEnum.DukeDC;
                 }
-                else if (dCamp.DependentAddons.ContainsKey(DukeAddonEnum.DukeNW.ToString()))
+                else if (dCamp.DependentAddons.ContainsKey(nameof(DukeAddonEnum.DukeNW)))
                 {
                     dukeAddon = (byte)DukeAddonEnum.DukeNW;
                 }
-                else if (dCamp.DependentAddons.ContainsKey(DukeAddonEnum.DukeVaca.ToString()))
+                else if (dCamp.DependentAddons.ContainsKey(nameof(DukeAddonEnum.DukeVaca)))
                 {
                     dukeAddon = (byte)DukeAddonEnum.DukeVaca;
                 }
@@ -265,12 +265,12 @@ namespace Ports.Ports
             }
 
             if (wCamp.DependentAddons is not null &&
-                wCamp.DependentAddons.ContainsKey(WangAddonEnum.Wanton.ToString()))
+                wCamp.DependentAddons.ContainsKey(nameof(WangAddonEnum.Wanton)))
             {
                 sb.Append($" {AddFileParam}WT.GRP");
             }
             else if (wCamp.DependentAddons is not null &&
-                wCamp.DependentAddons.ContainsKey(WangAddonEnum.TwinDragon.ToString()))
+                wCamp.DependentAddons.ContainsKey(nameof(WangAddonEnum.TwinDragon)))
             {
                 sb.Append($" {AddFileParam}TD.GRP");
             }
@@ -312,7 +312,7 @@ namespace Ports.Ports
             }
 
             if (rCamp.DependentAddons is not null &&
-                rCamp.DependentAddons.ContainsKey(RedneckAddonEnum.Route66.ToString()))
+                rCamp.DependentAddons.ContainsKey(nameof(RedneckAddonEnum.Route66)))
             {
                 sb.Append(" -route66");
                 return;

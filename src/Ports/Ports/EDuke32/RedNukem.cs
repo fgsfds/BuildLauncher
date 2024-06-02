@@ -101,7 +101,7 @@ namespace Ports.Ports.EDuke32
                 sb.Append($@" {AddDirectoryParam}""{game.AgainInstallPath}""");
             }
             else if (addon.DependentAddons is not null &&
-                     addon.DependentAddons.ContainsKey(RedneckAddonEnum.Route66.ToString()))
+                     addon.DependentAddons.ContainsKey(nameof(RedneckAddonEnum.Route66)))
             {
                 sb.Append($@" {AddDirectoryParam}""{game.GameInstallFolder}"" -x GAME66.CON");
             }

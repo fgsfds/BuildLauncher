@@ -2,7 +2,7 @@
 
 namespace Tests
 {
-    public class VersionCompareTest
+    public class VersionCompareTests
     {
         [Theory]
         [InlineData("1.1", "==1.1")]

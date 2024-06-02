@@ -214,28 +214,68 @@ namespace Ports.Ports
 
             if (autoloadMod.DependentAddons is not null)
             {
-                foreach (var dep in autoloadMod.DependentAddons)
+                foreach (var dependantAddon in autoloadMod.DependentAddons)
                 {
-                    if (!addons.ContainsKey(new(dep.Key, dep.Value)) &&
-                        !campaign.Id.Equals(dep.Key, StringComparison.OrdinalIgnoreCase))
+                    if (campaign.Id.Equals(dependantAddon.Key, StringComparison.InvariantCultureIgnoreCase) &&
+                        (dependantAddon.Value is null || VersionComparer.Compare(campaign.Version, dependantAddon.Value)))
                     {
-                        //skipping mod that doesn't have every dependency
-                        return false;
+                        return true;
+                    }
+
+                    foreach (var addon in addons)
+                    {
+                        if (!dependantAddon.Key.Equals(addon.Key.Id, StringComparison.InvariantCultureIgnoreCase))
+                        {
+                            continue;
+                        }
+                        else if (dependantAddon.Value is null)
+                        {
+                            return true;
+                        }
+                        else if (VersionComparer.Compare(addon.Key.Version, dependantAddon.Value))
+                        {
+                            return true;
+                        }
                     }
                 }
+
+                return false;
             }
 
             if (autoloadMod.IncompatibleAddons is not null)
             {
-                foreach (var dep in autoloadMod.IncompatibleAddons)
+                foreach (var incompatibleAddon in autoloadMod.IncompatibleAddons)
                 {
-                    if (addons.ContainsKey(new(dep.Key, dep.Value)) ||
-                        campaign.Id.Equals(dep.Key, StringComparison.OrdinalIgnoreCase))
+                    //What a fucking mess...
+                    //if campaign id equals addon id
+                    if (campaign.Id.Equals(incompatibleAddon.Key, StringComparison.InvariantCultureIgnoreCase) &&
+                        //AND either both campaign's and addon's versions are null
+                        ((incompatibleAddon.Value is null && campaign.Version is null) ||
+                        //OR addon's version is not null and does match the comparer
+                        (incompatibleAddon.Value is not null && VersionComparer.Compare(campaign.Version, incompatibleAddon.Value))))
                     {
-                        //skipping incompatible mods
+                        //the addon is incompatible
                         return false;
                     }
+
+                    foreach (var addon in addons)
+                    {
+                        if (incompatibleAddon.Key != addon.Key.Id)
+                        {
+                            continue;
+                        }
+                        else if (incompatibleAddon.Value is null)
+                        {
+                            return false;
+                        }
+                        else if (VersionComparer.Compare(addon.Key.Version, incompatibleAddon.Value))
+                        {
+                            return false;
+                        }
+                    }
                 }
+
+                return true;
             }
 
             return true;
@@ -269,7 +309,7 @@ namespace Ports.Ports
             {
                 sb.Append($@" -ini ""{bCamp.INI}""");
             }
-            else if (bCamp.DependentAddons is not null && bCamp.DependentAddons.ContainsKey(BloodAddonEnum.BloodCP.ToString()))
+            else if (bCamp.DependentAddons is not null && bCamp.DependentAddons.ContainsKey(nameof(BloodAddonEnum.BloodCP)))
             {
                 sb.Append($@" -ini ""{Consts.CrypticIni}""");
             }
@@ -283,13 +323,13 @@ namespace Ports.Ports
 
             if (bCamp.RFF is not null)
             {
-                sb.Append($@" -rff {bCamp.RFF}");
+                sb.Append($@" -rff ""{bCamp.RFF}""");
             }
 
 
             if (bCamp.SND is not null)
             {
-                sb.Append($@" -snd {bCamp.SND}");
+                sb.Append($@" -snd ""{bCamp.SND}""");
             }
 
 
