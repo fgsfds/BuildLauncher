@@ -264,6 +264,7 @@ namespace Ports.Ports
                 return;
             }
 
+            //TODO downloaded addons support
             if (wCamp.DependentAddons is not null &&
                 wCamp.DependentAddons.ContainsKey(nameof(WangAddonEnum.Wanton)))
             {
