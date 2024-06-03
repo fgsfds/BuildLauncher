@@ -258,7 +258,7 @@ namespace Ports.Ports
                 return;
             }
 
-            if (addon is not DukeCampaign wCamp)
+            if (addon is not WangCampaign wCamp)
             {
                 ThrowHelper.ArgumentException(nameof(addon));
                 return;
