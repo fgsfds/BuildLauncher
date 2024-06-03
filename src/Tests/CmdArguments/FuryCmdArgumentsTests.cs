@@ -70,7 +70,7 @@ public class FuryCmdArgumentsTests
         Fury fury = new(new ConfigProviderFake());
 
         var args = fury.GetStartGameArgs(_dukeGame, _dukeCamp, mods, true, true, 3);
-        var expected = @$" -quick -nosetup -j ""{Directory.GetCurrentDirectory()}\Data\Fury\Mods"" -g ""enabled_mod.zip"" -mh ""ENABLED1.DEF"" -mh ""ENABLED2.DEF"" -mx ""ENABLED1.CON"" -mx ""ENABLED2.CON"" -g ""mod_incompatible_with_addon.zip"" -g ""incompatible_mod_with_compatible_version.zip"" -g ""dependant_mod.zip"" -g ""dependant_mod_with_compatible_version.zip"" -s3";
+        var expected = @$" -quick -nosetup -j ""{Directory.GetCurrentDirectory()}\Data\Fury\Mods"" -g ""enabled_mod.zip"" -mh ""ENABLED1.DEF"" -mh ""ENABLED2.DEF"" -mx ""ENABLED1.CON"" -mx ""ENABLED2.CON"" -g ""mod_incompatible_with_addon.zip"" -g ""incompatible_mod_with_compatible_version.zip"" -g ""dependant_mod.zip"" -g ""dependant_mod_with_compatible_version.zip"" -g ""feature_mod.zip"" -s3";
 
         if (OperatingSystem.IsLinux())
         {
