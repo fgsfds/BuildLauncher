@@ -739,15 +739,17 @@ public sealed partial class DevViewModel : ObservableObject
             return;
         }
 
-        if (new FileInfo(files[0].Path.LocalPath).Length > 1e+9)
+        var checkResult = _filesUploader.CheckAddonBeforeUploading(files[0].Path.LocalPath);
+
+        if (checkResult is not null)
         {
-            UploadStatus = "Can't upload file larger than 1Gb.";
+            UploadStatus = checkResult;
             return;
         }
 
-        var result = await _filesUploader.UploadFilesToFtpAsync(files[0].Path.LocalPath, CancellationToken.None);
+        var uploadResult = await _filesUploader.UploadFilesToFtpAsync(files[0].Path.LocalPath, CancellationToken.None);
 
-        if (result)
+        if (uploadResult)
         {
             UploadStatus = "Uploaded successfully";
         }
