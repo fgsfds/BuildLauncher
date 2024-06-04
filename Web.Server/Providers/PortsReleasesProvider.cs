@@ -30,6 +30,8 @@ namespace Web.Server.Providers
 
         public async Task GetLatestReleasesAsync()
         {
+            _logger.LogInformation("Looking for new ports release");
+
             var ports = Enum.GetValues<PortEnum>();
 
             foreach (var port in ports)
@@ -109,6 +111,8 @@ namespace Web.Server.Providers
             };
 
             PortsReleases.Add(portEnum, portRelease);
+
+            _logger.LogInformation($"Latest release for {portEnum.ToString()}: {portRelease.Version}");
         }
 
         /// <summary>

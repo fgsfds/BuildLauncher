@@ -25,7 +25,7 @@ namespace Web.Server.Providers
         /// </summary>
         public async Task GetLatestVersionAsync()
         {
-            _logger.LogInformation("Looking for new release");
+            _logger.LogInformation("Looking for new app release");
 
             using var response = await _httpClient.GetAsync(Consts.GitHubReleases, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false);
 

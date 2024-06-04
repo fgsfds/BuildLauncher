@@ -30,6 +30,8 @@ namespace Web.Server.Providers
 
         public async Task GetLatestReleasesAsync()
         {
+            _logger.LogInformation("Looking for new tools releases");
+
             var tools = Enum.GetValues<ToolEnum>();
 
             foreach (var tool in tools)

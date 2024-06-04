@@ -7,7 +7,6 @@ namespace Web.Server.Tasks
         private readonly ILogger<ToolsReleasesTask> _logger;
         private readonly ToolsReleasesProvider _toolsReleasesProvider;
 
-        private bool _runOnce = false;
         private Timer _timer;
 
         public ToolsReleasesTask(
@@ -21,15 +20,9 @@ namespace Web.Server.Tasks
 
         public Task StartAsync(CancellationToken stoppingToken)
         {
-            if (!_runOnce)
-            {
-                _toolsReleasesProvider.GetLatestReleasesAsync().Wait(stoppingToken);
-                _runOnce = true;
-            }
-
             _timer = new Timer(
-                DoWork, 
-                null, 
+                DoWork,
+                null,
                 TimeSpan.Zero,
                 TimeSpan.FromHours(1)
                 );

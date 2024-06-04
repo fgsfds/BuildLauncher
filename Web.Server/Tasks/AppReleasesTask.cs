@@ -7,7 +7,6 @@ namespace Web.Server.Tasks
         private readonly ILogger<AppReleasesTask> _logger;
         private readonly AppReleasesProvider _appReleasesProvider;
 
-        private bool _runOnce = false;
         private Timer _timer;
 
         public AppReleasesTask(
@@ -21,17 +20,11 @@ namespace Web.Server.Tasks
 
         public Task StartAsync(CancellationToken stoppingToken)
         {
-            if (!_runOnce)
-            {
-                _appReleasesProvider.GetLatestVersionAsync().Wait(stoppingToken);
-                _runOnce = true;
-            }
-
             _timer = new Timer(
-                DoWork, 
-                null, 
+                DoWork,
+                null,
                 TimeSpan.Zero,
-                TimeSpan.FromMinutes(5)
+                TimeSpan.FromHours(1)
                 );
 
             return Task.CompletedTask;
