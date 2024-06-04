@@ -30,6 +30,9 @@ namespace Ports.Ports.EDuke32
         /// <inheritdoc/>
         protected override string ConfigFile => "nblood.cfg";
 
+        /// <inheritdoc/>
+        protected override string SkillParam => "-s ";
+
 
         /// <inheritdoc/>
         protected override void BeforeStart(IGame game, IAddon campaign)

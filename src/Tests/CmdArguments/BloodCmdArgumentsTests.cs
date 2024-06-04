@@ -238,8 +238,8 @@ public class BloodLineArgumentsTests
 
         NBlood nblood = new();
 
-        var args = nblood.GetStartGameArgs(_bloodGame, _bloodCamp, mods, true, true);
-        var expected = @$" -quick -nosetup -j ""{Directory.GetCurrentDirectory()}\Data\Blood\Mods"" -g ""enabled_mod.zip"" -mh ""ENABLED1.DEF"" -mh ""ENABLED2.DEF"" -g ""mod_incompatible_with_addon.zip"" -g ""incompatible_mod_with_compatible_version.zip"" -g ""dependant_mod.zip"" -g ""dependant_mod_with_compatible_version.zip"" -g ""feature_mod.zip"" -usecwd -j ""D:\Games\Blood"" -h ""a""";
+        var args = nblood.GetStartGameArgs(_bloodGame, _bloodCamp, mods, true, true, 2);
+        var expected = @$" -quick -nosetup -j ""{Directory.GetCurrentDirectory()}\Data\Blood\Mods"" -g ""enabled_mod.zip"" -mh ""ENABLED1.DEF"" -mh ""ENABLED2.DEF"" -g ""mod_incompatible_with_addon.zip"" -g ""incompatible_mod_with_compatible_version.zip"" -g ""dependant_mod.zip"" -g ""dependant_mod_with_compatible_version.zip"" -g ""feature_mod.zip"" -usecwd -j ""D:\Games\Blood"" -h ""a"" -s 2";
 
         if (OperatingSystem.IsLinux())
         {
@@ -270,8 +270,8 @@ public class BloodLineArgumentsTests
 
         NBlood nblood = new();
 
-        var args = nblood.GetStartGameArgs(_bloodGame, _bloodCpCamp, mods, true, true);
-        var expected = @$" -quick -nosetup -j ""{Directory.GetCurrentDirectory()}\Data\Blood\Mods"" -g ""enabled_mod.zip"" -mh ""ENABLED1.DEF"" -mh ""ENABLED2.DEF"" -g ""mod_requires_addon.zip"" -g ""incompatible_mod_with_compatible_version.zip"" -g ""dependant_mod.zip"" -g ""dependant_mod_with_compatible_version.zip"" -g ""feature_mod.zip"" -usecwd -j ""D:\Games\Blood"" -h ""a"" -ini ""CRYPTIC.INI""";
+        var args = nblood.GetStartGameArgs(_bloodGame, _bloodCpCamp, mods, true, true, 2);
+        var expected = @$" -quick -nosetup -j ""{Directory.GetCurrentDirectory()}\Data\Blood\Mods"" -g ""enabled_mod.zip"" -mh ""ENABLED1.DEF"" -mh ""ENABLED2.DEF"" -g ""mod_requires_addon.zip"" -g ""incompatible_mod_with_compatible_version.zip"" -g ""dependant_mod.zip"" -g ""dependant_mod_with_compatible_version.zip"" -g ""feature_mod.zip"" -usecwd -j ""D:\Games\Blood"" -h ""a"" -ini ""CRYPTIC.INI"" -s 2";
 
         if (OperatingSystem.IsLinux())
         {
@@ -287,8 +287,8 @@ public class BloodLineArgumentsTests
     {
         NBlood nblood = new();
 
-        var args = nblood.GetStartGameArgs(_bloodGame, _bloodTc, [], true, true);
-        var expected = @$" -quick -nosetup -usecwd -j ""D:\Games\Blood"" -h ""a"" -ini ""TC.INI"" -rff ""TC.RFF"" -snd ""TC.SND"" -g ""{Directory.GetCurrentDirectory()}\Data\Blood\Campaigns\blood_tc.zip""";
+        var args = nblood.GetStartGameArgs(_bloodGame, _bloodTc, [], true, true, 2);
+        var expected = @$" -quick -nosetup -usecwd -j ""D:\Games\Blood"" -h ""a"" -ini ""TC.INI"" -rff ""TC.RFF"" -snd ""TC.SND"" -g ""{Directory.GetCurrentDirectory()}\Data\Blood\Campaigns\blood_tc.zip"" -s 2";
 
         if (OperatingSystem.IsLinux())
         {

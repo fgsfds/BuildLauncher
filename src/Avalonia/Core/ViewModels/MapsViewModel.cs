@@ -140,11 +140,6 @@ public sealed partial class MapsViewModel : RightPanelViewModel, IPortsButtonCon
         await StartPortAsync(SelectedAddon.Id, parameter.Item1.FullPathToExe, args);
     }
 
-    private void StartPortAsync(string fullPathToExe, string args)
-    {
-        throw new NotImplementedException();
-    }
-
 
     /// <summary>
     /// Open maps folder

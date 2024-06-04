@@ -49,6 +49,9 @@ namespace Ports.Ports.EDuke32
         protected override string MainConParam => "-x ";
 
         /// <inheritdoc/>
+        protected override string SkillParam => "-s";
+
+        /// <inheritdoc/>
         public override List<GameEnum> SupportedGames =>
             [
             GameEnum.Duke3D,

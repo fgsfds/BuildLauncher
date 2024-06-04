@@ -70,6 +70,9 @@ namespace Ports.Ports
         protected override string AddGrpParam => throw new NotImplementedException();
 
         /// <inheritdoc/>
+        protected override string SkillParam => throw new NotImplementedException();
+
+        /// <inheritdoc/>
         public override List<FeatureEnum> SupportedFeatures => [FeatureEnum.WorldTourSupport, FeatureEnum.VacaDcSupport];
 
         /// <inheritdoc/>

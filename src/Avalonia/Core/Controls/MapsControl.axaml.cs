@@ -151,7 +151,6 @@ public sealed partial class MapsControl : UserControl
 
             if (IsSkillFlyoutAvailable(port))
             {
-
                 portButton = new MenuItem()
                 {
                     Header = $"Start with {port.Name}",
@@ -219,6 +218,10 @@ public sealed partial class MapsControl : UserControl
         {
             enums = Enum.GetValues<FurySkillsEnum>().ToDictionary(static x => (byte)x, static y => y.ToReadableString());
         }
+        else if (_viewModel.Game.GameEnum is GameEnum.Blood)
+        {
+            enums = Enum.GetValues<BloodSkillsEnum>().ToDictionary(static x => (byte)x, static y => y.ToReadableString());
+        }
         else
         {
             return items;
@@ -267,7 +270,14 @@ public sealed partial class MapsControl : UserControl
             return false;
         }
 
-        if (port.PortEnum is PortEnum.EDuke32 or PortEnum.VoidSW or PortEnum.RedNukem or PortEnum.Fury)
+        if (port.PortEnum is 
+            PortEnum.EDuke32 
+            or PortEnum.VoidSW 
+            or PortEnum.RedNukem 
+            or PortEnum.Fury
+            or PortEnum.NBlood
+            or PortEnum.NotBlood
+            )
         {
             return true;
         }

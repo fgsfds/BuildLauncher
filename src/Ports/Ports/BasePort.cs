@@ -104,6 +104,11 @@ namespace Ports.Ports
         protected abstract string MainConParam { get; }
 
         /// <summary>
+        /// Cmd parameter for skill selection
+        /// </summary>
+        protected abstract string SkillParam { get; }
+
+        /// <summary>
         /// Name of the folder that contains the port files
         /// By default is the same as <see cref="Name"/>
         /// </summary>
@@ -143,7 +148,7 @@ namespace Ports.Ports
 
             if (skill is not null)
             {
-                sb.Append($" -s{skill}");
+                sb.Append($" {SkillParam}{skill}");
             }
 
             return sb.ToString();

@@ -2,11 +2,11 @@
 
 public enum BloodSkillsEnum : byte
 {
-    StillKicking = 1,
-    PinkOnTheInside = 2,
-    LightlyBroiled = 3,
-    WellDone = 4,
-    ExtraCrispy = 5
+    StillKicking = 0,
+    PinkOnTheInside = 1,
+    LightlyBroiled = 2,
+    WellDone = 3,
+    ExtraCrispy = 4
 }
 
 public static class BloodSkillsEnumHelper
