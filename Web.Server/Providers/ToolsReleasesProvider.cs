@@ -32,6 +32,8 @@ namespace Web.Server.Providers
         {
             _logger.LogInformation("Looking for new tools releases");
 
+            ToolsReleases.Clear();
+
             var tools = Enum.GetValues<ToolEnum>();
 
             foreach (var tool in tools)

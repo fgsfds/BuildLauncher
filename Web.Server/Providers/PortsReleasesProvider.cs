@@ -30,7 +30,9 @@ namespace Web.Server.Providers
 
         public async Task GetLatestReleasesAsync()
         {
-            _logger.LogInformation("Looking for new ports release");
+            _logger.LogInformation("Looking for new ports releases");
+
+            PortsReleases.Clear();
 
             var ports = Enum.GetValues<PortEnum>();
 
@@ -165,6 +167,8 @@ namespace Web.Server.Providers
             };
 
             PortsReleases.Add(PortEnum.EDuke32, release);
+
+            _logger.LogInformation($"Latest release for {nameof(PortEnum.EDuke32)}: {release.Version}");
         }
 
         [GeneratedRegex("eduke32_win64_2[^\"]*")]
