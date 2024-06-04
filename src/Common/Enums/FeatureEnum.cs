@@ -8,10 +8,13 @@
         Sloped_Sprites,
         TROR,
         Wall_Rotate_Cstat,
+        DymanicLighting,
         CustomDude,
+        [Obsolete]
         WorldTourSupport,
         [Obsolete]
         VacaDcSupport,
+        [Obsolete]
         Duke64Support
     }
 }
