@@ -3,14 +3,15 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
-             d:DesignWidth="800"
+             d:DesignWidth="1000"
              d:DesignHeight="2000"
              xmlns:vm="clr-namespace:BuildLauncher.ViewModels"
              x:DataType="vm:DevViewModel"
              x:Class="BuildLauncher.Pages.DevPage">
 
     <ScrollViewer HorizontalScrollBarVisibility="Disabled" >
-        <Grid RowDefinitions="auto,auto" IsSharedSizeScope="True">
+
+        <Grid RowDefinitions="auto,auto,auto" IsSharedSizeScope="True">
 
             <StackPanel Grid.Row="0" Orientation="Horizontal">
 
@@ -43,7 +44,29 @@
 
                 <StackPanel Orientation="Vertical">
 
-                    <TextBox></TextBox>
+                    <!--Path-->
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto" SharedSizeGroup="MySizeGroup" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="auto" />
+                            <ColumnDefinition Width="auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Grid.Column="0"
+                                   VerticalAlignment="Center"
+                                   Margin="5"
+                                   FontWeight="Bold">
+                            Path to addon:
+                        </TextBlock>
+
+                        <TextBox Grid.Column="1" Margin="5,0" Text="{Binding PathToAddonFolder}"></TextBox>
+
+                        <Button Grid.Column="2" Command="{Binding SelectAddonFolderCommand}">...</Button>
+
+                        <!--<Button Grid.Column="3" ToolTip.Tip="Load existing addon.json" Margin="5,0" Command="{Binding LoadJsonCommand}">Load addon.json...</Button>-->
+
+                    </Grid>
 
                     <!--Type-->
                     <Grid>
@@ -166,7 +189,7 @@
 
                                 <TextBox Grid.Column="1" Margin="5" Text="{Binding GameCrc}"></TextBox>
 
-                                <Button Grid.Column="2">...</Button>
+                                <Button Grid.Column="2" Command="{Binding SelectFileForCrcCommand}">...</Button>
 
                             </Grid>
 
@@ -401,12 +424,12 @@
                                 <RadioButton IsChecked="{Binding IsFileMapTypeSelected}" Grid.Column="1" GroupName="MapType" Margin="0,0,10,0">File</RadioButton>
                                 <RadioButton IsChecked="{Binding IsElMapTypeSelected}" Grid.Column="3" GroupName="MapType" Margin="0,0,15,0">E#L#</RadioButton>
 
-                                <TextBox Text="{Binding MapFileName}" IsVisible="{Binding IsFileMapTypeSelected}" MinWidth="100" Grid.Column="2" Margin="0,0,10,0"></TextBox>
+                                <TextBox VerticalContentAlignment="Center" Text="{Binding MapFileName}" IsVisible="{Binding IsFileMapTypeSelected}" MinWidth="100" Grid.Column="2" Margin="0,0,10,0"></TextBox>
 
                                 <TextBlock IsVisible="{Binding IsElMapTypeSelected}" FontWeight="Bold" Grid.Column="4" VerticalAlignment="Center" Margin="0,0,10,0">Episode</TextBlock>
-                                <TextBox Text="{Binding MapEpisode}" IsVisible="{Binding IsElMapTypeSelected}" MinWidth="50" Grid.Column="5" Margin="0,0,10,0"></TextBox>
+                                <TextBox VerticalContentAlignment="Center" Text="{Binding MapEpisode}" IsVisible="{Binding IsElMapTypeSelected}" MinWidth="50" Grid.Column="5" Margin="0,0,10,0"></TextBox>
                                 <TextBlock IsVisible="{Binding IsElMapTypeSelected}" FontWeight="Bold" Grid.Column="6" VerticalAlignment="Center" Margin="0,0,10,0">Level</TextBlock>
-                                <TextBox Text="{Binding MapLevel}" IsVisible="{Binding IsElMapTypeSelected}" MinWidth="50" Grid.Column="7" Margin="0,0,10,0"></TextBox>
+                                <TextBox VerticalContentAlignment="Center" Text="{Binding MapLevel}" IsVisible="{Binding IsElMapTypeSelected}" MinWidth="50" Grid.Column="7" Margin="0,0,10,0"></TextBox>
 
                             </Grid>
 
@@ -607,23 +630,63 @@
                                     Description:
                                 </TextBlock>
 
-                                <TextBox MinHeight="100" AcceptsReturn="True" Text="{Binding AddonDescription}" Grid.Column="1" Margin="5"></TextBox>
+                                <TextBox MinHeight="100"
+                                         AcceptsReturn="True"
+                                         Text="{Binding AddonDescription}"
+                                         Grid.Column="1" Margin="5"></TextBox>
 
                             </Grid>
 
-                            <TextBlock Foreground="Red" Text="{Binding ErrorText}"/>
-
                             <StackPanel Orientation="Horizontal">
 
-                                <Button Margin="5" Padding="10">Load addon.json...</Button>
-                                <Button Margin="5" Padding="10" Command="{Binding CreateZipCommand}" >Create ZIP</Button>
-                                <Button Margin="5" Padding="10">Upload addon</Button>
+                                <Button ToolTip.Tip="Create zip and put it into a suitable game folder"
+                                        Margin="5" Padding="10"
+                                        MinWidth="150"
+                                        HorizontalContentAlignment="Center"
+                                        Background="{DynamicResource SystemAccentColor}"
+                                        Command="{Binding PreviewJsonCommand}">
+                                    Preview json
+                                </Button>
+
+                                <Button ToolTip.Tip="Create zip and put it into a suitable game folder"
+                                        Margin="5" Padding="10"
+                                        MinWidth="150"
+                                        HorizontalContentAlignment="Center"
+                                        Background="{DynamicResource SystemAccentColor}"
+                                        Command="{Binding CreateZipCommand}">
+                                    Create ZIP
+                                </Button>
+
+                                <TextBlock VerticalAlignment="Center" Margin="5" Foreground="Red" Text="{Binding ErrorText}"/>
 
                             </StackPanel>
                         </StackPanel>
                     </StackPanel>
+
+                    <ScrollViewer HorizontalScrollBarVisibility="Auto">
+
+                        <TextBlock Text="{Binding JsonText}"
+                                   Margin="5"/>
+
+                    </ScrollViewer>
+
                 </StackPanel>
             </Expander>
+
+            <StackPanel Grid.Row="2"
+                        Orientation="Horizontal">
+
+                <Button
+                    ToolTip.Tip="Upload addon to developer's storage"
+                    Margin="5" Padding="10"
+                    Command="{Binding UploadAddonCommand}">
+                    Upload addon...
+                </Button>
+
+                <TextBlock Text="{Binding UploadStatus}"
+                           VerticalAlignment="Center"/>
+
+            </StackPanel>
         </Grid>
     </ScrollViewer>
 </UserControl>

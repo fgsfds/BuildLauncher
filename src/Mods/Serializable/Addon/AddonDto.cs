@@ -27,9 +27,6 @@ namespace Mods.Serializable
         [JsonPropertyName("author")]
         public string? Author { get; set; }
 
-        [JsonPropertyName("description")]
-        public string? Description { get; set; }
-
         [JsonPropertyName("con_main")]
         public string? MainCon { get; set; }
 
@@ -65,6 +62,9 @@ namespace Mods.Serializable
         [JsonPropertyName("startmap")]
         [JsonConverter(typeof(IStartMapConverter))]
         public IStartMap? StartMap { get; set; }
+
+        [JsonPropertyName("description")]
+        public string? Description { get; set; }
     }
 
     [JsonSourceGenerationOptions(
@@ -75,7 +75,9 @@ namespace Mods.Serializable
             typeof(JsonStringEnumConverter<FeatureEnum>)
             ],
         UnmappedMemberHandling = JsonUnmappedMemberHandling.Disallow,
-        AllowTrailingCommas = true
+        AllowTrailingCommas = true,
+        WriteIndented = true,
+        DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
         )]
     [JsonSerializable(typeof(AddonDto))]
     public sealed partial class AddonManifestContext : JsonSerializerContext;

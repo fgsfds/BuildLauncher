@@ -4,7 +4,10 @@ using Common.Enums;
 using Common.Helpers;
 using Mods.Serializable;
 using SharpCompress.Archives.Zip;
+using System;
+using System.Net.Http;
 using System.Text.Json;
+using System.Web;
 
 namespace Mods
 {
@@ -108,6 +111,39 @@ namespace Mods
             };
 
             return downMod;
+        }
+
+        public async Task<bool> UploadFilesToFtpAsync(string pathToFile, CancellationToken cancellationToken)
+        {
+            using HttpClient httpClient = new() { Timeout = Timeout.InfiniteTimeSpan };
+
+            try
+            {
+                var path = "buildlauncher_uploads/" + Guid.NewGuid() + "/" + Path.GetFileName(pathToFile);
+
+                var signedUrl = await _apiInterface.GetSignedUrlAsync(path);
+
+                using var fileStream = File.OpenRead(pathToFile);
+                using StreamContent content = new(fileStream);
+
+                using var response = await httpClient.PutAsync(signedUrl, content, cancellationToken).ConfigureAwait(false);
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    var result = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+                    return false;
+                }
+            }
+            catch (TaskCanceledException)
+            {
+                return false;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+
+            return true;
         }
     }
 }

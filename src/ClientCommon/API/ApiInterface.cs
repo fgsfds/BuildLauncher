@@ -3,6 +3,7 @@ using Common.Entities;
 using Common.Enums;
 using System.Net.Http.Json;
 using System.Text.Json;
+using System.Web;
 
 namespace ClientCommon.API
 {
@@ -186,6 +187,22 @@ namespace ClientCommon.API
             catch (Exception)
             {
                 return false;
+            }
+        }
+
+        public async Task<string?> GetSignedUrlAsync(string path)
+        {
+            try
+            {
+                var encodedPath = HttpUtility.UrlEncode(path);
+
+                var signedUrl = await _httpClient.GetStringAsync($"{ApiUrl}/storage/url/{encodedPath}").ConfigureAwait(false);
+
+                return signedUrl;
+            }
+            catch (Exception)
+            {
+                return null;
             }
         }
     }
