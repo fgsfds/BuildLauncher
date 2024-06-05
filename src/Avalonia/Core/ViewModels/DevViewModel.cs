@@ -775,5 +775,21 @@ public sealed partial class DevViewModel : ObservableObject
         }
     }
 
+    [RelayCommand]
+    private void SaveJson()
+    {
+        try
+        {
+            var addon = CreateJson();
+            var jsonStr = JsonSerializer.Serialize(addon, AddonManifestContext.Default.AddonDto);
+
+            File.WriteAllText(Path.Combine(PathToAddonFolder!, "addon.json"), jsonStr);
+        }
+        catch (Exception ex)
+        {
+            ErrorText = ex.Message;
+        }
+    }
+
     #endregion
 }

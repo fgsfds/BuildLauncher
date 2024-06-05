@@ -39,84 +39,158 @@
 
             </StackPanel>
 
+            <StackPanel Orientation="Vertical" Width="900" HorizontalAlignment="Left" Grid.Row="1" Margin="5">
 
-            <Expander Width="900" HorizontalAlignment="Left" IsExpanded="True" Grid.Row="1" Margin="5" Header="Create new addon">
+                <!--Path-->
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto" SharedSizeGroup="MySizeGroup" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="auto" />
+                        <ColumnDefinition Width="auto" />
+                    </Grid.ColumnDefinitions>
 
-                <StackPanel Orientation="Vertical">
+                    <TextBlock Grid.Column="0"
+                               VerticalAlignment="Center"
+                               Margin="5"
+                               FontWeight="Bold">
+                        Path to addon:
+                    </TextBlock>
 
-                    <!--Path-->
+                    <TextBox Grid.Column="1" Margin="5,0" Text="{Binding PathToAddonFolder}"></TextBox>
+
+                    <Button Grid.Column="2" Command="{Binding SelectAddonFolderCommand}">...</Button>
+
+                    <!--<Button Grid.Column="3" ToolTip.Tip="Load existing addon.json" Margin="5,0" Command="{Binding LoadJsonCommand}">Load addon.json...</Button>-->
+
+                </Grid>
+
+                <!--Type-->
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto" SharedSizeGroup="MySizeGroup" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Grid.Column="0"
+                               VerticalAlignment="Center"
+                               Margin="5"
+                               FontWeight="Bold">
+                        Type:
+                    </TextBlock>
+
+                    <WrapPanel Orientation="Horizontal"
+                               Grid.Column="1"
+                               Margin="5">
+
+                        <RadioButton
+                            GroupName="AddonType"
+                            Margin="0,0,10,0"
+                            ToolTip.Tip="Total conversion. Replaces main game files."
+                            IsChecked="{Binding IsTcSelected}">
+                            TC
+                        </RadioButton>
+
+                        <RadioButton
+                            GroupName="AddonType"
+                            Margin="0,0,10,0"
+                            ToolTip.Tip="Single map"
+                            IsChecked="{Binding IsMapSelected}">
+                            Map
+                        </RadioButton>
+
+                        <RadioButton
+                            GroupName="AddonType"
+                            Margin="0,0,10,0"
+                            IsChecked="{Binding IsModSelected}"
+                            ToolTip.Tip="Mod that doesn't replace main game files. Multiple mods can be loaded at the same time.">
+                            Mod
+                        </RadioButton>
+
+                    </WrapPanel>
+
+                </Grid>
+
+                <StackPanel IsVisible="{Binding IsStep2Visible}" Orientation="Vertical">
+
+                    <!--Game-->
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="auto" SharedSizeGroup="MySizeGroup" />
                             <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="auto" />
-                            <ColumnDefinition Width="auto" />
                         </Grid.ColumnDefinitions>
 
                         <TextBlock Grid.Column="0"
                                    VerticalAlignment="Center"
                                    Margin="5"
                                    FontWeight="Bold">
-                            Path to addon:
-                        </TextBlock>
-
-                        <TextBox Grid.Column="1" Margin="5,0" Text="{Binding PathToAddonFolder}"></TextBox>
-
-                        <Button Grid.Column="2" Command="{Binding SelectAddonFolderCommand}">...</Button>
-
-                        <!--<Button Grid.Column="3" ToolTip.Tip="Load existing addon.json" Margin="5,0" Command="{Binding LoadJsonCommand}">Load addon.json...</Button>-->
-
-                    </Grid>
-
-                    <!--Type-->
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="auto" SharedSizeGroup="MySizeGroup" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
-
-                        <TextBlock Grid.Column="0"
-                                   VerticalAlignment="Center"
-                                   Margin="5"
-                                   FontWeight="Bold">
-                            Type:
+                            Game:
                         </TextBlock>
 
                         <WrapPanel Orientation="Horizontal"
                                    Grid.Column="1"
                                    Margin="5">
 
-                            <RadioButton
-                                GroupName="AddonType"
-                                Margin="0,0,10,0"
-                                ToolTip.Tip="Total conversion. Replaces main game files."
-                                IsChecked="{Binding IsTcSelected}">
-                                TC
-                            </RadioButton>
-
-                            <RadioButton
-                                GroupName="AddonType"
-                                Margin="0,0,10,0"
-                                ToolTip.Tip="Single map"
-                                IsChecked="{Binding IsMapSelected}">
-                                Map
-                            </RadioButton>
-
-                            <RadioButton
-                                GroupName="AddonType"
-                                Margin="0,0,10,0"
-                                IsChecked="{Binding IsModSelected}"
-                                ToolTip.Tip="Mod that doesn't replace main game files. Multiple mods can be loaded at the same time.">
-                                Mod
-                            </RadioButton>
+                            <RadioButton GroupName="GameSelect" Margin="0,0,10,0" IsChecked="{Binding IsDukeSelected}">Duke 3D</RadioButton>
+                            <RadioButton GroupName="GameSelect" Margin="0,0,10,0" IsChecked="{Binding IsBloodSelected}">Blood</RadioButton>
+                            <RadioButton GroupName="GameSelect" Margin="0,0,10,0" IsChecked="{Binding IsWangSelected}">Shadow Warrior</RadioButton>
+                            <RadioButton GroupName="GameSelect" Margin="0,0,10,0" IsChecked="{Binding IsFurySelected}">Ion Fury</RadioButton>
+                            <RadioButton GroupName="GameSelect" Margin="0,0,10,0" IsChecked="{Binding IsRedneckSelected}">Redneck Rampage</RadioButton>
+                            <RadioButton GroupName="GameSelect" Margin="0,0,10,0" IsChecked="{Binding IsSlaveSelected}">Powerslave</RadioButton>
 
                         </WrapPanel>
 
                     </Grid>
 
-                    <StackPanel IsVisible="{Binding IsStep2Visible}" Orientation="Vertical">
+                    <StackPanel IsVisible="{Binding IsStep3Visible}" Orientation="Vertical">
 
-                        <!--Game-->
+                        <!--Duke version-->
+                        <Grid IsVisible="{Binding IsDukeSelected}">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto" SharedSizeGroup="MySizeGroup" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Grid.Column="0"
+                                       VerticalAlignment="Center"
+                                       Margin="5">
+                                Duke version:
+                            </TextBlock>
+
+                            <WrapPanel Orientation="Horizontal"
+                                       Grid.Column="1"
+                                       Margin="5">
+
+                                <RadioButton GroupName="DukeSelect" Margin="0,0,10,0" IsChecked="True">Any</RadioButton>
+                                <RadioButton GroupName="DukeSelect" Margin="0,0,10,0" IsChecked="{Binding IsDukeAtomicSelected}">Atomic</RadioButton>
+                                <RadioButton GroupName="DukeSelect" Margin="0,0,10,0" IsChecked="{Binding IsDuke13DSelected}">1.3D</RadioButton>
+                                <RadioButton GroupName="DukeSelect" Margin="0,0,10,0" IsChecked="{Binding IsDukeWTSelected}">World Tour</RadioButton>
+
+                            </WrapPanel>
+
+                        </Grid>
+
+                        <!--Crc-->
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto" SharedSizeGroup="MySizeGroup" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="auto" />
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Grid.Column="0"
+                                       VerticalAlignment="Center"
+                                       Margin="5">
+                                Game CRC:
+                            </TextBlock>
+
+                            <TextBox Grid.Column="1" Margin="5" Text="{Binding GameCrc}"></TextBox>
+
+                            <Button Grid.Column="2" Command="{Binding SelectFileForCrcCommand}">...</Button>
+
+                        </Grid>
+
+                        <!--Title-->
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="auto" SharedSizeGroup="MySizeGroup" />
@@ -127,551 +201,482 @@
                                        VerticalAlignment="Center"
                                        Margin="5"
                                        FontWeight="Bold">
-                                Game:
+                                Title:
+                            </TextBlock>
+
+                            <TextBox Text="{Binding AddonTitle}" Grid.Column="1" Margin="5"></TextBox>
+
+                        </Grid>
+
+                        <!--Id-->
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto" SharedSizeGroup="MySizeGroup" />
+                                <ColumnDefinition Width="auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Grid.Column="0"
+                                       VerticalAlignment="Center"
+                                       Margin="5"
+                                       FontWeight="Bold">
+                                Id:
+                            </TextBlock>
+
+                            <TextBlock Text="{Binding AddonIdPrefix}" Grid.Column="1" VerticalAlignment="Center" Margin="5,0,0,0"></TextBlock>
+                            <TextBox Text="{Binding AddonId}" Grid.Column="2" Margin="5"></TextBox>
+
+                        </Grid>
+
+                        <!--Version-->
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto" SharedSizeGroup="MySizeGroup" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Grid.Column="0"
+                                       VerticalAlignment="Center"
+                                       Margin="5"
+                                       FontWeight="Bold">
+                                Version:
+                            </TextBlock>
+
+                            <TextBox Grid.Column="1" Margin="5" Text="{Binding AddonVersion}"></TextBox>
+
+                        </Grid>
+
+                        <!--Author-->
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto" SharedSizeGroup="MySizeGroup" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Grid.Column="0"
+                                       VerticalAlignment="Center"
+                                       Margin="5">
+                                Author:
+                            </TextBlock>
+
+                            <TextBox Grid.Column="1" Margin="5" Text="{Binding AddonAuthor}"></TextBox>
+
+                        </Grid>
+
+                        <!--Main DEF-->
+                        <Grid IsVisible="{Binding !IsModSelected}">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto" SharedSizeGroup="MySizeGroup" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Grid.Column="0"
+                                       VerticalAlignment="Center"
+                                       Margin="5">
+                                Main DEF:
+                            </TextBlock>
+
+                            <TextBox Grid.Column="1" Margin="5" Text="{Binding MainDef}"></TextBox>
+
+                        </Grid>
+
+                        <!--Add DEF-->
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto" SharedSizeGroup="MySizeGroup" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Grid.Column="0"
+                                       VerticalAlignment="Center"
+                                       Margin="5">
+                                Additional DEFs:
+                            </TextBlock>
+
+                            <TextBox Grid.Column="1" Margin="5" Text="{Binding AdditionalDefs}" Watermark="Comma separated list"></TextBox>
+
+                        </Grid>
+
+                        <!--Main CON-->
+                        <Grid IsVisible="{Binding IsMainConAvailable}">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto" SharedSizeGroup="MySizeGroup" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Grid.Column="0"
+                                       VerticalAlignment="Center"
+                                       Margin="5">
+                                Main CON:
+                            </TextBlock>
+
+                            <TextBox Grid.Column="1" Margin="5" Text="{Binding MainCon}"></TextBox>
+
+                        </Grid>
+
+                        <!--Add CON-->
+                        <Grid IsVisible="{Binding AreDukePropertiesAvailable}">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto" SharedSizeGroup="MySizeGroup" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Grid.Column="0"
+                                       VerticalAlignment="Center"
+                                       Margin="5">
+                                Additional CONs:
+                            </TextBlock>
+
+                            <TextBox Grid.Column="1" Margin="5" Text="{Binding AdditionalCons}" Watermark="Comma separated list"></TextBox>
+
+                        </Grid>
+
+                        <!--RTS-->
+                        <Grid IsVisible="{Binding IsMainConAvailable}">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto" SharedSizeGroup="MySizeGroup" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Grid.Column="0"
+                                       VerticalAlignment="Center"
+                                       Margin="5">
+                                RTS:
+                            </TextBlock>
+
+                            <TextBox Grid.Column="1" Margin="5" Text="{Binding Rts}"></TextBox>
+
+                        </Grid>
+
+                        <!--INI-->
+                        <Grid IsVisible="{Binding AreBloodPropertiesVisible}">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto" SharedSizeGroup="MySizeGroup" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Grid.Column="0"
+                                       VerticalAlignment="Center"
+                                       Margin="5">
+                                INI:
+                            </TextBlock>
+
+                            <TextBox Grid.Column="1" Margin="5" Text="{Binding Ini}"></TextBox>
+
+                        </Grid>
+
+                        <!--Main RFF-->
+                        <Grid IsVisible="{Binding AreBloodPropertiesVisible}">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto" SharedSizeGroup="MySizeGroup" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Grid.Column="0"
+                                       VerticalAlignment="Center"
+                                       Margin="5">
+                                Main RFF:
+                            </TextBlock>
+
+                            <TextBox Grid.Column="1" Margin="5" Text="{Binding MainRff}"></TextBox>
+
+                        </Grid>
+
+                        <!--Sound RFF-->
+                        <Grid IsVisible="{Binding AreBloodPropertiesVisible}">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto" SharedSizeGroup="MySizeGroup" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Grid.Column="0"
+                                       VerticalAlignment="Center"
+                                       Margin="5">
+                                Sound RFF:
+                            </TextBlock>
+
+                            <TextBox Grid.Column="1" Margin="5" Text="{Binding SoundRff}"></TextBox>
+
+                        </Grid>
+
+                        <!--Map-->
+                        <Grid IsVisible="{Binding IsMapSelected}">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto" SharedSizeGroup="MySizeGroup" />
+                                <ColumnDefinition Width="auto" />
+                                <ColumnDefinition Width="auto" />
+                                <ColumnDefinition Width="auto" />
+                                <ColumnDefinition Width="auto" />
+                                <ColumnDefinition Width="auto" />
+                                <ColumnDefinition Width="auto" />
+                                <ColumnDefinition Width="auto" />
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Grid.Column="0"
+                                       VerticalAlignment="Center"
+                                       Margin="5">
+                                Start map:
+                            </TextBlock>
+
+                            <RadioButton IsChecked="{Binding IsFileMapTypeSelected}" Grid.Column="1" GroupName="MapType" Margin="0,0,10,0">File</RadioButton>
+                            <RadioButton IsChecked="{Binding IsElMapTypeSelected}" Grid.Column="3" GroupName="MapType" Margin="0,0,15,0">E#L#</RadioButton>
+
+                            <TextBox VerticalContentAlignment="Center" Text="{Binding MapFileName}" IsVisible="{Binding IsFileMapTypeSelected}" MinWidth="100" Grid.Column="2" Margin="0,0,10,0"></TextBox>
+
+                            <TextBlock IsVisible="{Binding IsElMapTypeSelected}" FontWeight="Bold" Grid.Column="4" VerticalAlignment="Center" Margin="0,0,10,0">Episode</TextBlock>
+                            <TextBox VerticalContentAlignment="Center" Text="{Binding MapEpisode}" IsVisible="{Binding IsElMapTypeSelected}" MinWidth="50" Grid.Column="5" Margin="0,0,10,0"></TextBox>
+                            <TextBlock IsVisible="{Binding IsElMapTypeSelected}" FontWeight="Bold" Grid.Column="6" VerticalAlignment="Center" Margin="0,0,10,0">Level</TextBlock>
+                            <TextBox VerticalContentAlignment="Center" Text="{Binding MapLevel}" IsVisible="{Binding IsElMapTypeSelected}" MinWidth="50" Grid.Column="7" Margin="0,0,10,0"></TextBox>
+
+                        </Grid>
+
+                        <!--Dependencies-->
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto" SharedSizeGroup="MySizeGroup" />
+                                <ColumnDefinition Width="auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Grid.Column="0"
+                                       VerticalAlignment="Center"
+                                       Margin="5">
+                                Dependencies:
+                            </TextBlock>
+
+                            <ListBox Grid.Column="1" ItemsSource="{Binding DependenciesList}">
+
+                                <ListBox.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <WrapPanel Orientation="Horizontal" />
+                                    </ItemsPanelTemplate>
+                                </ListBox.ItemsPanel>
+
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+
+                                        <Grid ColumnDefinitions="auto,auto,auto,auto,auto">
+
+                                            <TextBlock Grid.Column="0" VerticalAlignment="Center">Id:</TextBlock>
+
+                                            <TextBox Text="{Binding Id}"
+                                                     Name="AddonId"
+                                                     Grid.Column="1"
+                                                     Margin="3"
+                                                     HorizontalAlignment="Left"
+                                                     TextAlignment="Left"
+                                                     VerticalAlignment="Center"
+                                                     TextWrapping="NoWrap"/>
+
+                                            <TextBlock Grid.Column="2" VerticalAlignment="Center">Version:</TextBlock>
+
+                                            <TextBox Text="{Binding Version}"
+                                                     Grid.Column="3"
+                                                     Margin="3"
+                                                     HorizontalAlignment="Left"
+                                                     TextAlignment="Left"
+                                                     VerticalAlignment="Center"
+                                                     TextWrapping="NoWrap"/>
+
+                                            <Button Grid.Column="4"
+                                                    Margin="3"
+                                                    Height="{Binding Bounds.Height, ElementName=AddonId}"
+                                                    Width="{Binding Bounds.Height, ElementName=AddonId}"
+                                                    VerticalContentAlignment="Center"
+                                                    HorizontalContentAlignment="Center"
+                                                    Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=((vm:DevViewModel)DataContext).RemoveDependencyCommand}}"
+                                                    CommandParameter="{Binding}">
+                                                x
+                                            </Button>
+
+                                        </Grid>
+
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+
+
+                            </ListBox>
+
+                            <Button Grid.Column="2"
+                                    Margin="3"
+                                    Width="{Binding $self.Bounds.Height}"
+                                    HorizontalContentAlignment="Center"
+                                    Command="{Binding AddDependencyCommand}">
+                                +
+                            </Button>
+
+                        </Grid>
+
+                        <!--Features-->
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto" SharedSizeGroup="MySizeGroup" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Grid.Column="0"
+                                       VerticalAlignment="Center"
+                                       Margin="5">
+                                Features:
                             </TextBlock>
 
                             <WrapPanel Orientation="Horizontal"
                                        Grid.Column="1"
                                        Margin="5">
 
-                                <RadioButton GroupName="GameSelect" Margin="0,0,10,0" IsChecked="{Binding IsDukeSelected}">Duke 3D</RadioButton>
-                                <RadioButton GroupName="GameSelect" Margin="0,0,10,0" IsChecked="{Binding IsBloodSelected}">Blood</RadioButton>
-                                <RadioButton GroupName="GameSelect" Margin="0,0,10,0" IsChecked="{Binding IsWangSelected}">Shadow Warrior</RadioButton>
-                                <RadioButton GroupName="GameSelect" Margin="0,0,10,0" IsChecked="{Binding IsFurySelected}">Ion Fury</RadioButton>
-                                <RadioButton GroupName="GameSelect" Margin="0,0,10,0" IsChecked="{Binding IsRedneckSelected}">Redneck Rampage</RadioButton>
-                                <RadioButton GroupName="GameSelect" Margin="0,0,10,0" IsChecked="{Binding IsSlaveSelected}">Powerslave</RadioButton>
+                                <CheckBox Margin="0,0,10,0" IsChecked="{Binding IsEdukeConsSelected}" IsVisible="{Binding AreDukePropertiesAvailable}">EDuke32 CONs</CheckBox>
+                                <CheckBox Margin="0,0,10,0" IsChecked="{Binding IsCustomDudeSelected}" IsVisible="{Binding IsBloodSelected}">CustomDude</CheckBox>
+                                <CheckBox Margin="0,0,10,0" IsChecked="{Binding IsModelsSelected}">Models</CheckBox>
+                                <CheckBox Margin="0,0,10,0" IsChecked="{Binding IsHightileSelected}">Hightile</CheckBox>
+                                <CheckBox Margin="0,0,10,0" IsChecked="{Binding IsSlopedSelected}">Sloped sprites</CheckBox>
+                                <CheckBox Margin="0,0,10,0" IsChecked="{Binding IsTrorSelected}">TROR</CheckBox>
+                                <CheckBox Margin="0,0,10,0" IsChecked="{Binding IsCstatSelected}">Wall rotate cstat</CheckBox>
+                                <CheckBox Margin="0,0,10,0" IsChecked="{Binding IsLightingSelected}">Dynamic lighting</CheckBox>
 
                             </WrapPanel>
 
                         </Grid>
 
-                        <StackPanel IsVisible="{Binding IsStep3Visible}" Orientation="Vertical">
+                        <!--Incompatibilities-->
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto" SharedSizeGroup="MySizeGroup" />
+                                <ColumnDefinition Width="auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Grid.Column="0"
+                                       VerticalAlignment="Center"
+                                       Margin="5">
+                                Incompatibilities:
+                            </TextBlock>
+
+                            <ListBox Grid.Column="1" ItemsSource="{Binding IncompatibilitiesList}">
+
+                                <ListBox.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <WrapPanel Orientation="Horizontal" />
+                                    </ItemsPanelTemplate>
+                                </ListBox.ItemsPanel>
+
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+
+                                        <Grid ColumnDefinitions="auto,auto,auto,auto,auto">
+
+                                            <TextBlock Grid.Column="0" VerticalAlignment="Center">Id:</TextBlock>
+
+                                            <TextBox Text="{Binding Id}"
+                                                     Name="AddonId"
+                                                     Grid.Column="1"
+                                                     Margin="3"
+                                                     HorizontalAlignment="Left"
+                                                     TextAlignment="Left"
+                                                     VerticalAlignment="Center"
+                                                     TextWrapping="NoWrap"/>
+
+                                            <TextBlock Grid.Column="2" VerticalAlignment="Center">Version:</TextBlock>
+
+                                            <TextBox Text="{Binding Version}"
+                                                     Grid.Column="3"
+                                                     Margin="3"
+                                                     HorizontalAlignment="Left"
+                                                     TextAlignment="Left"
+                                                     VerticalAlignment="Center"
+                                                     TextWrapping="NoWrap"/>
+
+                                            <Button Grid.Column="4"
+                                                    Margin="3"
+                                                    Height="{Binding Bounds.Height, ElementName=AddonId}"
+                                                    Width="{Binding Bounds.Height, ElementName=AddonId}"
+                                                    VerticalContentAlignment="Center"
+                                                    HorizontalContentAlignment="Center"
+                                                    Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=((vm:DevViewModel)DataContext).RemoveIncompatibilityCommand}}"
+                                                    CommandParameter="{Binding}">
+                                                x
+                                            </Button>
+
+                                        </Grid>
+
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+
+
+                            </ListBox>
+
+                            <Button Grid.Column="2"
+                                    Margin="3"
+                                    Width="{Binding $self.Bounds.Height}"
+                                    HorizontalContentAlignment="Center"
+                                    Command="{Binding AddIncompatibilityCommand}">
+                                +
+                            </Button>
+
+                        </Grid>
+
+                        <!--Description-->
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto" SharedSizeGroup="MySizeGroup" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Grid.Column="0"
+                                       VerticalAlignment="Top"
+                                       Margin="5">
+                                Description:
+                            </TextBlock>
+
+                            <TextBox MinHeight="100"
+                                     AcceptsReturn="True"
+                                     Text="{Binding AddonDescription}"
+                                     Grid.Column="1" Margin="5"></TextBox>
+
+                        </Grid>
+
+                        <StackPanel Orientation="Horizontal">
+
+                            <Button ToolTip.Tip="Create zip and put it into a suitable game folder"
+                                    Margin="5" Padding="10"
+                                    MinWidth="150"
+                                    HorizontalContentAlignment="Center"
+                                    Background="{DynamicResource SystemAccentColor}"
+                                    Command="{Binding PreviewJsonCommand}">
+                                Preview JSON
+                            </Button>
+
+                            <Button ToolTip.Tip="Create zip and put it into a suitable game folder"
+                                    Margin="5" Padding="10"
+                                    MinWidth="150"
+                                    HorizontalContentAlignment="Center"
+                                    Background="{DynamicResource SystemAccentColor}"
+                                    Command="{Binding SaveJsonCommand}">
+                                Save JSON
+                            </Button>
+
+                            <Button ToolTip.Tip="Create zip and put it into a suitable game folder"
+                                    Margin="5" Padding="10"
+                                    MinWidth="150"
+                                    HorizontalContentAlignment="Center"
+                                    Background="{DynamicResource SystemAccentColor}"
+                                    Command="{Binding CreateZipCommand}">
+                                Create ZIP
+                            </Button>
+
+                            <TextBlock VerticalAlignment="Center" Margin="5" Foreground="Red" Text="{Binding ErrorText}"/>
 
-                            <!--Duke version-->
-                            <Grid IsVisible="{Binding IsDukeSelected}">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="auto" SharedSizeGroup="MySizeGroup" />
-                                    <ColumnDefinition Width="*" />
-                                </Grid.ColumnDefinitions>
-
-                                <TextBlock Grid.Column="0"
-                                           VerticalAlignment="Center"
-                                           Margin="5">
-                                    Duke version:
-                                </TextBlock>
-
-                                <WrapPanel Orientation="Horizontal"
-                                           Grid.Column="1"
-                                           Margin="5">
-
-                                    <RadioButton GroupName="DukeSelect" Margin="0,0,10,0" IsChecked="True">Any</RadioButton>
-                                    <RadioButton GroupName="DukeSelect" Margin="0,0,10,0" IsChecked="{Binding IsDukeAtomicSelected}">Atomic</RadioButton>
-                                    <RadioButton GroupName="DukeSelect" Margin="0,0,10,0" IsChecked="{Binding IsDuke13DSelected}">1.3D</RadioButton>
-                                    <RadioButton GroupName="DukeSelect" Margin="0,0,10,0" IsChecked="{Binding IsDukeWTSelected}">World Tour</RadioButton>
-
-                                </WrapPanel>
-
-                            </Grid>
-
-                            <!--Crc-->
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="auto" SharedSizeGroup="MySizeGroup" />
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="auto" />
-                                </Grid.ColumnDefinitions>
-
-                                <TextBlock Grid.Column="0"
-                                           VerticalAlignment="Center"
-                                           Margin="5">
-                                    Game CRC:
-                                </TextBlock>
-
-                                <TextBox Grid.Column="1" Margin="5" Text="{Binding GameCrc}"></TextBox>
-
-                                <Button Grid.Column="2" Command="{Binding SelectFileForCrcCommand}">...</Button>
-
-                            </Grid>
-
-                            <!--Title-->
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="auto" SharedSizeGroup="MySizeGroup" />
-                                    <ColumnDefinition Width="*" />
-                                </Grid.ColumnDefinitions>
-
-                                <TextBlock Grid.Column="0"
-                                           VerticalAlignment="Center"
-                                           Margin="5"
-                                           FontWeight="Bold">
-                                    Title:
-                                </TextBlock>
-
-                                <TextBox Text="{Binding AddonTitle}" Grid.Column="1" Margin="5"></TextBox>
-
-                            </Grid>
-
-                            <!--Id-->
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="auto" SharedSizeGroup="MySizeGroup" />
-                                    <ColumnDefinition Width="auto" />
-                                    <ColumnDefinition Width="*" />
-                                </Grid.ColumnDefinitions>
-
-                                <TextBlock Grid.Column="0"
-                                           VerticalAlignment="Center"
-                                           Margin="5"
-                                           FontWeight="Bold">
-                                    Id:
-                                </TextBlock>
-
-                                <TextBlock Text="{Binding AddonIdPrefix}" Grid.Column="1" VerticalAlignment="Center" Margin="5,0,0,0"></TextBlock>
-                                <TextBox Text="{Binding AddonId}" Grid.Column="2" Margin="5"></TextBox>
-
-                            </Grid>
-
-                            <!--Version-->
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="auto" SharedSizeGroup="MySizeGroup" />
-                                    <ColumnDefinition Width="*" />
-                                </Grid.ColumnDefinitions>
-
-                                <TextBlock Grid.Column="0"
-                                           VerticalAlignment="Center"
-                                           Margin="5"
-                                           FontWeight="Bold">
-                                    Version:
-                                </TextBlock>
-
-                                <TextBox Grid.Column="1" Margin="5" Text="{Binding AddonVersion}"></TextBox>
-
-                            </Grid>
-
-                            <!--Author-->
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="auto" SharedSizeGroup="MySizeGroup" />
-                                    <ColumnDefinition Width="*" />
-                                </Grid.ColumnDefinitions>
-
-                                <TextBlock Grid.Column="0"
-                                           VerticalAlignment="Center"
-                                           Margin="5">
-                                    Author:
-                                </TextBlock>
-
-                                <TextBox Grid.Column="1" Margin="5" Text="{Binding AddonAuthor}"></TextBox>
-
-                            </Grid>
-
-                            <!--Main DEF-->
-                            <Grid IsVisible="{Binding !IsModSelected}">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="auto" SharedSizeGroup="MySizeGroup" />
-                                    <ColumnDefinition Width="*" />
-                                </Grid.ColumnDefinitions>
-
-                                <TextBlock Grid.Column="0"
-                                           VerticalAlignment="Center"
-                                           Margin="5">
-                                    Main DEF:
-                                </TextBlock>
-
-                                <TextBox Grid.Column="1" Margin="5" Text="{Binding MainDef}"></TextBox>
-
-                            </Grid>
-
-                            <!--Add DEF-->
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="auto" SharedSizeGroup="MySizeGroup" />
-                                    <ColumnDefinition Width="*" />
-                                </Grid.ColumnDefinitions>
-
-                                <TextBlock Grid.Column="0"
-                                           VerticalAlignment="Center"
-                                           Margin="5">
-                                    Additional DEFs:
-                                </TextBlock>
-
-                                <TextBox Grid.Column="1" Margin="5" Text="{Binding AdditionalDefs}" Watermark="Comma separated list"></TextBox>
-
-                            </Grid>
-
-                            <!--Main CON-->
-                            <Grid IsVisible="{Binding IsMainConAvailable}">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="auto" SharedSizeGroup="MySizeGroup" />
-                                    <ColumnDefinition Width="*" />
-                                </Grid.ColumnDefinitions>
-
-                                <TextBlock Grid.Column="0"
-                                           VerticalAlignment="Center"
-                                           Margin="5">
-                                    Main CON:
-                                </TextBlock>
-
-                                <TextBox Grid.Column="1" Margin="5" Text="{Binding MainCon}"></TextBox>
-
-                            </Grid>
-
-                            <!--Add CON-->
-                            <Grid IsVisible="{Binding AreDukePropertiesAvailable}">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="auto" SharedSizeGroup="MySizeGroup" />
-                                    <ColumnDefinition Width="*" />
-                                </Grid.ColumnDefinitions>
-
-                                <TextBlock Grid.Column="0"
-                                           VerticalAlignment="Center"
-                                           Margin="5">
-                                    Additional CONs:
-                                </TextBlock>
-
-                                <TextBox Grid.Column="1" Margin="5" Text="{Binding AdditionalCons}" Watermark="Comma separated list"></TextBox>
-
-                            </Grid>
-
-                            <!--RTS-->
-                            <Grid IsVisible="{Binding IsMainConAvailable}">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="auto" SharedSizeGroup="MySizeGroup" />
-                                    <ColumnDefinition Width="*" />
-                                </Grid.ColumnDefinitions>
-
-                                <TextBlock Grid.Column="0"
-                                           VerticalAlignment="Center"
-                                           Margin="5">
-                                    RTS:
-                                </TextBlock>
-
-                                <TextBox Grid.Column="1" Margin="5" Text="{Binding Rts}"></TextBox>
-
-                            </Grid>
-
-                            <!--INI-->
-                            <Grid IsVisible="{Binding AreBloodPropertiesVisible}">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="auto" SharedSizeGroup="MySizeGroup" />
-                                    <ColumnDefinition Width="*" />
-                                </Grid.ColumnDefinitions>
-
-                                <TextBlock Grid.Column="0"
-                                           VerticalAlignment="Center"
-                                           Margin="5">
-                                    INI:
-                                </TextBlock>
-
-                                <TextBox Grid.Column="1" Margin="5" Text="{Binding Ini}"></TextBox>
-
-                            </Grid>
-
-                            <!--Main RFF-->
-                            <Grid IsVisible="{Binding AreBloodPropertiesVisible}">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="auto" SharedSizeGroup="MySizeGroup" />
-                                    <ColumnDefinition Width="*" />
-                                </Grid.ColumnDefinitions>
-
-                                <TextBlock Grid.Column="0"
-                                           VerticalAlignment="Center"
-                                           Margin="5">
-                                    Main RFF:
-                                </TextBlock>
-
-                                <TextBox Grid.Column="1" Margin="5" Text="{Binding MainRff}"></TextBox>
-
-                            </Grid>
-
-                            <!--Sound RFF-->
-                            <Grid IsVisible="{Binding AreBloodPropertiesVisible}">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="auto" SharedSizeGroup="MySizeGroup" />
-                                    <ColumnDefinition Width="*" />
-                                </Grid.ColumnDefinitions>
-
-                                <TextBlock Grid.Column="0"
-                                           VerticalAlignment="Center"
-                                           Margin="5">
-                                    Sound RFF:
-                                </TextBlock>
-
-                                <TextBox Grid.Column="1" Margin="5" Text="{Binding SoundRff}"></TextBox>
-
-                            </Grid>
-
-                            <!--Map-->
-                            <Grid IsVisible="{Binding IsMapSelected}">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="auto" SharedSizeGroup="MySizeGroup" />
-                                    <ColumnDefinition Width="auto" />
-                                    <ColumnDefinition Width="auto" />
-                                    <ColumnDefinition Width="auto" />
-                                    <ColumnDefinition Width="auto" />
-                                    <ColumnDefinition Width="auto" />
-                                    <ColumnDefinition Width="auto" />
-                                    <ColumnDefinition Width="auto" />
-                                </Grid.ColumnDefinitions>
-
-                                <TextBlock Grid.Column="0"
-                                           VerticalAlignment="Center"
-                                           Margin="5">
-                                    Start map:
-                                </TextBlock>
-
-                                <RadioButton IsChecked="{Binding IsFileMapTypeSelected}" Grid.Column="1" GroupName="MapType" Margin="0,0,10,0">File</RadioButton>
-                                <RadioButton IsChecked="{Binding IsElMapTypeSelected}" Grid.Column="3" GroupName="MapType" Margin="0,0,15,0">E#L#</RadioButton>
-
-                                <TextBox VerticalContentAlignment="Center" Text="{Binding MapFileName}" IsVisible="{Binding IsFileMapTypeSelected}" MinWidth="100" Grid.Column="2" Margin="0,0,10,0"></TextBox>
-
-                                <TextBlock IsVisible="{Binding IsElMapTypeSelected}" FontWeight="Bold" Grid.Column="4" VerticalAlignment="Center" Margin="0,0,10,0">Episode</TextBlock>
-                                <TextBox VerticalContentAlignment="Center" Text="{Binding MapEpisode}" IsVisible="{Binding IsElMapTypeSelected}" MinWidth="50" Grid.Column="5" Margin="0,0,10,0"></TextBox>
-                                <TextBlock IsVisible="{Binding IsElMapTypeSelected}" FontWeight="Bold" Grid.Column="6" VerticalAlignment="Center" Margin="0,0,10,0">Level</TextBlock>
-                                <TextBox VerticalContentAlignment="Center" Text="{Binding MapLevel}" IsVisible="{Binding IsElMapTypeSelected}" MinWidth="50" Grid.Column="7" Margin="0,0,10,0"></TextBox>
-
-                            </Grid>
-
-                            <!--Dependencies-->
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="auto" SharedSizeGroup="MySizeGroup" />
-                                    <ColumnDefinition Width="auto" />
-                                    <ColumnDefinition Width="*" />
-                                </Grid.ColumnDefinitions>
-
-                                <TextBlock Grid.Column="0"
-                                           VerticalAlignment="Center"
-                                           Margin="5">
-                                    Dependencies:
-                                </TextBlock>
-
-                                <ListBox Grid.Column="1" ItemsSource="{Binding DependenciesList}">
-
-                                    <ListBox.ItemsPanel>
-                                        <ItemsPanelTemplate>
-                                            <WrapPanel Orientation="Horizontal" />
-                                        </ItemsPanelTemplate>
-                                    </ListBox.ItemsPanel>
-
-                                    <ListBox.ItemTemplate>
-                                        <DataTemplate>
-
-                                            <Grid ColumnDefinitions="auto,auto,auto,auto,auto">
-
-                                                <TextBlock Grid.Column="0" VerticalAlignment="Center">Id:</TextBlock>
-
-                                                <TextBox Text="{Binding Id}"
-                                                         Name="AddonId"
-                                                         Grid.Column="1"
-                                                         Margin="3"
-                                                         HorizontalAlignment="Left"
-                                                         TextAlignment="Left"
-                                                         VerticalAlignment="Center"
-                                                         TextWrapping="NoWrap"/>
-
-                                                <TextBlock Grid.Column="2" VerticalAlignment="Center">Version:</TextBlock>
-
-                                                <TextBox Text="{Binding Version}"
-                                                         Grid.Column="3"
-                                                         Margin="3"
-                                                         HorizontalAlignment="Left"
-                                                         TextAlignment="Left"
-                                                         VerticalAlignment="Center"
-                                                         TextWrapping="NoWrap"/>
-
-                                                <Button Grid.Column="4"
-                                                        Margin="3"
-                                                        Height="{Binding Bounds.Height, ElementName=AddonId}"
-                                                        Width="{Binding Bounds.Height, ElementName=AddonId}"
-                                                        VerticalContentAlignment="Center"
-                                                        HorizontalContentAlignment="Center"
-                                                        Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=((vm:DevViewModel)DataContext).RemoveDependencyCommand}}"
-                                                        CommandParameter="{Binding}">
-                                                    x
-                                                </Button>
-
-                                            </Grid>
-
-                                        </DataTemplate>
-                                    </ListBox.ItemTemplate>
-
-
-                                </ListBox>
-
-                                <Button Grid.Column="2"
-                                        Margin="3"
-                                        Width="{Binding $self.Bounds.Height}"
-                                        HorizontalContentAlignment="Center"
-                                        Command="{Binding AddDependencyCommand}">
-                                    +
-                                </Button>
-
-                            </Grid>
-
-                            <!--Features-->
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="auto" SharedSizeGroup="MySizeGroup" />
-                                    <ColumnDefinition Width="*" />
-                                </Grid.ColumnDefinitions>
-
-                                <TextBlock Grid.Column="0"
-                                           VerticalAlignment="Center"
-                                           Margin="5">
-                                    Features:
-                                </TextBlock>
-
-                                <WrapPanel Orientation="Horizontal"
-                                           Grid.Column="1"
-                                           Margin="5">
-
-                                    <CheckBox Margin="0,0,10,0" IsChecked="{Binding IsEdukeConsSelected}" IsVisible="{Binding AreDukePropertiesAvailable}">EDuke32 CONs</CheckBox>
-                                    <CheckBox Margin="0,0,10,0" IsChecked="{Binding IsCustomDudeSelected}" IsVisible="{Binding IsBloodSelected}">CustomDude</CheckBox>
-                                    <CheckBox Margin="0,0,10,0" IsChecked="{Binding IsModelsSelected}">Models</CheckBox>
-                                    <CheckBox Margin="0,0,10,0" IsChecked="{Binding IsHightileSelected}">Hightile</CheckBox>
-                                    <CheckBox Margin="0,0,10,0" IsChecked="{Binding IsSlopedSelected}">Sloped sprites</CheckBox>
-                                    <CheckBox Margin="0,0,10,0" IsChecked="{Binding IsTrorSelected}">TROR</CheckBox>
-                                    <CheckBox Margin="0,0,10,0" IsChecked="{Binding IsCstatSelected}">Wall rotate cstat</CheckBox>
-                                    <CheckBox Margin="0,0,10,0" IsChecked="{Binding IsLightingSelected}">Dynamic lighting</CheckBox>
-
-                                </WrapPanel>
-
-                            </Grid>
-
-                            <!--Incompatibilities-->
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="auto" SharedSizeGroup="MySizeGroup" />
-                                    <ColumnDefinition Width="auto" />
-                                    <ColumnDefinition Width="*" />
-                                </Grid.ColumnDefinitions>
-
-                                <TextBlock Grid.Column="0"
-                                           VerticalAlignment="Center"
-                                           Margin="5">
-                                    Incompatibilities:
-                                </TextBlock>
-
-                                <ListBox Grid.Column="1" ItemsSource="{Binding IncompatibilitiesList}">
-
-                                    <ListBox.ItemsPanel>
-                                        <ItemsPanelTemplate>
-                                            <WrapPanel Orientation="Horizontal" />
-                                        </ItemsPanelTemplate>
-                                    </ListBox.ItemsPanel>
-
-                                    <ListBox.ItemTemplate>
-                                        <DataTemplate>
-
-                                            <Grid ColumnDefinitions="auto,auto,auto,auto,auto">
-
-                                                <TextBlock Grid.Column="0" VerticalAlignment="Center">Id:</TextBlock>
-
-                                                <TextBox Text="{Binding Id}"
-                                                         Name="AddonId"
-                                                         Grid.Column="1"
-                                                         Margin="3"
-                                                         HorizontalAlignment="Left"
-                                                         TextAlignment="Left"
-                                                         VerticalAlignment="Center"
-                                                         TextWrapping="NoWrap"/>
-
-                                                <TextBlock Grid.Column="2" VerticalAlignment="Center">Version:</TextBlock>
-
-                                                <TextBox Text="{Binding Version}"
-                                                         Grid.Column="3"
-                                                         Margin="3"
-                                                         HorizontalAlignment="Left"
-                                                         TextAlignment="Left"
-                                                         VerticalAlignment="Center"
-                                                         TextWrapping="NoWrap"/>
-
-                                                <Button Grid.Column="4"
-                                                        Margin="3"
-                                                        Height="{Binding Bounds.Height, ElementName=AddonId}"
-                                                        Width="{Binding Bounds.Height, ElementName=AddonId}"
-                                                        VerticalContentAlignment="Center"
-                                                        HorizontalContentAlignment="Center"
-                                                        Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=((vm:DevViewModel)DataContext).RemoveIncompatibilityCommand}}"
-                                                        CommandParameter="{Binding}">
-                                                    x
-                                                </Button>
-
-                                            </Grid>
-
-                                        </DataTemplate>
-                                    </ListBox.ItemTemplate>
-
-
-                                </ListBox>
-
-                                <Button Grid.Column="2"
-                                        Margin="3"
-                                        Width="{Binding $self.Bounds.Height}"
-                                        HorizontalContentAlignment="Center"
-                                        Command="{Binding AddIncompatibilityCommand}">
-                                    +
-                                </Button>
-
-                            </Grid>
-
-                            <!--Description-->
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="auto" SharedSizeGroup="MySizeGroup" />
-                                    <ColumnDefinition Width="*" />
-                                </Grid.ColumnDefinitions>
-
-                                <TextBlock Grid.Column="0"
-                                           VerticalAlignment="Top"
-                                           Margin="5">
-                                    Description:
-                                </TextBlock>
-
-                                <TextBox MinHeight="100"
-                                         AcceptsReturn="True"
-                                         Text="{Binding AddonDescription}"
-                                         Grid.Column="1" Margin="5"></TextBox>
-
-                            </Grid>
-
-                            <StackPanel Orientation="Horizontal">
-
-                                <Button ToolTip.Tip="Create zip and put it into a suitable game folder"
-                                        Margin="5" Padding="10"
-                                        MinWidth="150"
-                                        HorizontalContentAlignment="Center"
-                                        Background="{DynamicResource SystemAccentColor}"
-                                        Command="{Binding PreviewJsonCommand}">
-                                    Preview json
-                                </Button>
-
-                                <Button ToolTip.Tip="Create zip and put it into a suitable game folder"
-                                        Margin="5" Padding="10"
-                                        MinWidth="150"
-                                        HorizontalContentAlignment="Center"
-                                        Background="{DynamicResource SystemAccentColor}"
-                                        Command="{Binding CreateZipCommand}">
-                                    Create ZIP
-                                </Button>
-
-                                <TextBlock VerticalAlignment="Center" Margin="5" Foreground="Red" Text="{Binding ErrorText}"/>
-
-                            </StackPanel>
                         </StackPanel>
                     </StackPanel>
-
-                    <ScrollViewer HorizontalScrollBarVisibility="Auto">
-
-                        <TextBlock Text="{Binding JsonText}"
-                                   Margin="5"/>
-
-                    </ScrollViewer>
-
                 </StackPanel>
-            </Expander>
+
+                <ScrollViewer HorizontalScrollBarVisibility="Auto">
+
+                    <TextBlock Text="{Binding JsonText}"
+                               Margin="5"/>
+
+                </ScrollViewer>
+
+            </StackPanel>
 
             <StackPanel Grid.Row="2"
                         Orientation="Horizontal">
