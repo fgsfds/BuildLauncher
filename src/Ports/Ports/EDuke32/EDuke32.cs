@@ -60,7 +60,15 @@ namespace Ports.Ports.EDuke32
             ];
 
         /// <inheritdoc/>
-        public override List<FeatureEnum> SupportedFeatures => [FeatureEnum.EDuke32_CON, FeatureEnum.WorldTourSupport];
+        public override List<string> SupportedGamesVersions =>
+            [
+            nameof(DukeVersionEnum.Duke3D_13D),
+            nameof(DukeVersionEnum.Duke3D_Atomic),
+            nameof(DukeVersionEnum.Duke3D_WT)
+            ];
+
+        /// <inheritdoc/>
+        public override List<FeatureEnum> SupportedFeatures => [FeatureEnum.EDuke32_CON];
 
         /// <inheritdoc/>
         public override string? InstalledVersion

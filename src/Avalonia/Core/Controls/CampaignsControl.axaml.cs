@@ -75,18 +75,29 @@ namespace BuildLauncher.Controls
 
                             var selectedCampaign = (IAddon)CampaignsList.SelectedItem;
 
-                            if (port.PortEnum is PortEnum.BuildGDX &&
-                                (selectedCampaign.Type is not AddonTypeEnum.Official || selectedCampaign.Id.Equals(nameof(DukeAddonEnum.DukeNW), StringComparison.InvariantCultureIgnoreCase)))
+                            if (port.PortEnum is PortEnum.BuildGDX && selectedCampaign.Type is not AddonTypeEnum.Official)
                             {
                                 return false;
                             }
 
-                            if (selectedCampaign.RequiredFeatures is null || !selectedCampaign.RequiredFeatures!.Except(port.SupportedFeatures).Any())
+                            if (selectedCampaign.RequiredFeatures is not null &&
+                                selectedCampaign.RequiredFeatures!.Except(port.SupportedFeatures).Any())
                             {
-                                return true;
+                                return false;
                             }
 
-                            return false;
+                            if (!port.SupportedGames.Contains(selectedCampaign.SupportedGame.GameEnum))
+                            {
+                                return false;
+                            }
+
+                            if (selectedCampaign.SupportedGame.GameVersion is not null && 
+                                !port.SupportedGamesVersions.Contains(selectedCampaign.SupportedGame.GameVersion))
+                            {
+                                return false;
+                            }
+
+                            return true;
                         }),
                     Margin = new(5),
                     Padding = new(5),

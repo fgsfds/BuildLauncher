@@ -58,6 +58,11 @@ namespace Ports.Ports
         public virtual bool IsInstalled => InstalledVersion is not null;
 
         /// <summary>
+        /// Games versions supported by the port
+        /// </summary>
+        public virtual List<string> SupportedGamesVersions => [];
+
+        /// <summary>
         /// Path to port exe
         /// </summary>
         public string FullPathToExe => Path.Combine(PathToExecutableFolder, Exe);

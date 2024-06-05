@@ -1,5 +1,6 @@
 ﻿using Common.Enums;
 using Common.Enums.Addons;
+using Common.Enums.Versions;
 using Common.Helpers;
 using Common.Interfaces;
 using Games.Games;
@@ -29,11 +30,18 @@ namespace Ports.Ports.EDuke32
             GameEnum.Redneck,
             GameEnum.RidesAgain,
             GameEnum.NAM,
-            GameEnum.WWIIGI
+            GameEnum.WWIIGI,
+            GameEnum.Duke64
             ];
 
         /// <inheritdoc/>
-        public override List<FeatureEnum> SupportedFeatures => [FeatureEnum.Duke64Support];
+        public override List<string> SupportedGamesVersions =>
+            [
+            nameof(DukeVersionEnum.Duke3D_Atomic)
+            ];
+
+        /// <inheritdoc/>
+        public override List<FeatureEnum> SupportedFeatures => [];
 
         /// <inheritdoc/>
         protected override string ConfigFile => "rednukem.cfg";

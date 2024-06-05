@@ -39,13 +39,21 @@ public sealed class BuildGDX : BasePort
         ];
 
     /// <inheritdoc/>
+    public override List<string> SupportedGamesVersions =>
+        [
+        nameof(DukeVersionEnum.Duke3D_13D),
+        nameof(DukeVersionEnum.Duke3D_Atomic),
+        nameof(DukeVersionEnum.Duke3D_WT)
+        ];
+
+    /// <inheritdoc/>
     public override string? InstalledVersion => IsInstalled ? "1.16" : null;
 
     /// <inheritdoc/>
     public override bool IsInstalled => File.Exists(Path.Combine(PathToExecutableFolder, "BuildGDX.jar"));
 
     /// <inheritdoc/>
-    public override List<FeatureEnum> SupportedFeatures => [FeatureEnum.WorldTourSupport];
+    public override List<FeatureEnum> SupportedFeatures => [];
 
 
     /// <inheritdoc/>

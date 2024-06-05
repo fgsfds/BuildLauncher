@@ -39,6 +39,14 @@ namespace Ports.Ports
             ];
 
         /// <inheritdoc/>
+        public override List<string> SupportedGamesVersions =>
+            [
+            nameof(DukeVersionEnum.Duke3D_13D),
+            nameof(DukeVersionEnum.Duke3D_Atomic),
+            nameof(DukeVersionEnum.Duke3D_WT)
+            ];
+
+        /// <inheritdoc/>
         public override string? InstalledVersion =>
             File.Exists(FullPathToExe)
             ? FileVersionInfo.GetVersionInfo(FullPathToExe).FileVersion
@@ -73,7 +81,7 @@ namespace Ports.Ports
         protected override string SkillParam => throw new NotImplementedException();
 
         /// <inheritdoc/>
-        public override List<FeatureEnum> SupportedFeatures => [FeatureEnum.WorldTourSupport, FeatureEnum.VacaDcSupport];
+        public override List<FeatureEnum> SupportedFeatures => [];
 
         /// <inheritdoc/>
         protected override void GetSkipIntroParameter(StringBuilder sb) => sb.Append(" -quick");

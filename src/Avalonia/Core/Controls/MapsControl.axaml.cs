@@ -107,12 +107,24 @@ public sealed partial class MapsControl : UserControl
                         return false;
                     }
 
-                    if (selectedMap.RequiredFeatures is null || !selectedMap.RequiredFeatures!.Except(port.SupportedFeatures).Any())
+                    if (selectedMap.RequiredFeatures is not null &&
+                        selectedMap.RequiredFeatures!.Except(port.SupportedFeatures).Any())
                     {
-                        return true;
+                        return false;
                     }
 
-                    return false;
+                    if (!port.SupportedGames.Contains(selectedMap.SupportedGame.GameEnum))
+                    {
+                        return false;
+                    }
+
+                    if (selectedMap.SupportedGame.GameVersion is not null &&
+                        !port.SupportedGamesVersions.Contains(selectedMap.SupportedGame.GameVersion))
+                    {
+                        return false;
+                    }
+
+                    return true;
                 }),
                 Margin = new(5),
                 Padding = new(5),
