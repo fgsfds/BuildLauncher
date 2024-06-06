@@ -1,6 +1,5 @@
 using Avalonia.Platform.Storage;
 using BuildLauncher.Helpers;
-using ClientCommon.API;
 using ClientCommon.Config;
 using ClientCommon.Helpers;
 using Common.Enums;
@@ -77,7 +76,7 @@ public sealed partial class DevViewModel : ObservableObject
             {
                 return "fury-";
             }
-            if (IsRedneckSelected)
+            if (IsRedneckSelected || IsRidesAgainSelected)
             {
                 return "redneck-";
             }
@@ -92,7 +91,7 @@ public sealed partial class DevViewModel : ObservableObject
 
     public bool IsDevMode => ClientProperties.IsDevMode;
     public bool IsStep2Visible => IsMapSelected || IsModSelected || IsTcSelected;
-    public bool IsStep3Visible => IsDukeSelected || IsBloodSelected || IsWangSelected || IsFurySelected || IsRedneckSelected || IsSlaveSelected;
+    public bool IsStep3Visible => IsDukeSelected || IsBloodSelected || IsWangSelected || IsFurySelected || IsRedneckSelected || IsRidesAgainSelected || IsSlaveSelected;
     public bool AreDukePropertiesAvailable => IsDukeSelected || IsFurySelected || IsRedneckSelected;
     public bool IsMainConAvailable => AreDukePropertiesAvailable && !IsModSelected;
     public bool AreBloodPropertiesVisible => IsBloodSelected;
@@ -203,6 +202,13 @@ public sealed partial class DevViewModel : ObservableObject
     [NotifyPropertyChangedFor(nameof(AddonIdPrefix))]
     [NotifyPropertyChangedFor(nameof(IsStep3Visible))]
     private bool _isRedneckSelected;
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(AreDukePropertiesAvailable))]
+    [NotifyPropertyChangedFor(nameof(IsMainConAvailable))]
+    [NotifyPropertyChangedFor(nameof(AddonIdPrefix))]
+    [NotifyPropertyChangedFor(nameof(IsStep3Visible))]
+    private bool _isRidesAgainSelected;
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(AddonIdPrefix))]
@@ -375,6 +381,7 @@ public sealed partial class DevViewModel : ObservableObject
         IsWangSelected = result.SupportedGame.Game is GameEnum.ShadowWarrior;
         IsFurySelected = result.SupportedGame.Game is GameEnum.Fury;
         IsRedneckSelected = result.SupportedGame.Game is GameEnum.Redneck;
+        IsRidesAgainSelected = result.SupportedGame.Game is GameEnum.RidesAgain;
         IsSlaveSelected = result.SupportedGame.Game is GameEnum.Exhumed;
 
         var isDukeVersion = Enum.TryParse<DukeVersionEnum>(result.SupportedGame.Version, true, out var dukeVersion);
@@ -588,6 +595,7 @@ public sealed partial class DevViewModel : ObservableObject
             : IsWangSelected ? GameEnum.ShadowWarrior
             : IsFurySelected ? GameEnum.Fury
             : IsRedneckSelected ? GameEnum.Redneck
+            : IsRidesAgainSelected ? GameEnum.RidesAgain
             : IsSlaveSelected ? GameEnum.Exhumed
             : ThrowHelper.Exception<GameEnum>("Select game");
 
