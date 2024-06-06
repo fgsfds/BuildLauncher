@@ -242,6 +242,28 @@ public sealed partial class DevViewModel : ObservableObject
 
     [ObservableProperty]
     private string? _pathToAddonFolder;
+    partial void OnPathToAddonFolderChanged(string? value)
+    {
+        if (value is null)
+        {
+            return;
+        }
+
+        if (!Directory.Exists(value))
+        {
+            ErrorText = "Folder doesn't exist";
+            return;
+        }
+
+        ErrorText = null;
+
+        var addonJson = Path.Combine(value, "addon.json");
+
+        if (File.Exists(addonJson))
+        {
+            LoadJson(addonJson);
+        }
+    }
 
     [ObservableProperty]
     private string? _gameCrc;
@@ -296,12 +318,12 @@ public sealed partial class DevViewModel : ObservableObject
 
         PathToAddonFolder = folders[0].Path.LocalPath;
 
-        var addonJson = Path.Combine(PathToAddonFolder, "addon.json");
+        //var addonJson = Path.Combine(PathToAddonFolder, "addon.json");
 
-        if (File.Exists(addonJson))
-        {
-            LoadJson(addonJson);
-        }
+        //if (File.Exists(addonJson))
+        //{
+        //    LoadJson(addonJson);
+        //}
     }
 
     [RelayCommand]
@@ -522,6 +544,13 @@ public sealed partial class DevViewModel : ObservableObject
     {
         try
         {
+            if (string.IsNullOrWhiteSpace(PathToAddonFolder) &&
+                !Directory.Exists(PathToAddonFolder))
+            {
+                ErrorText = "Choose addon folder";
+                return;
+            }
+
             var addon = CreateJson();
             var jsonStr = JsonSerializer.Serialize(addon, AddonManifestContext.Default.AddonDto);
 
@@ -606,11 +635,6 @@ public sealed partial class DevViewModel : ObservableObject
             : IsDukeWTSelected ? DukeVersionEnum.Duke3D_WT
             : null;
 
-        if (string.IsNullOrWhiteSpace(PathToAddonFolder) &&
-            !Directory.Exists(PathToAddonFolder))
-        {
-            ThrowHelper.Exception("Choose existing addon folder");
-        }
         if (string.IsNullOrWhiteSpace(AddonTitle))
         {
             ThrowHelper.Exception("Select addon title");
@@ -788,6 +812,13 @@ public sealed partial class DevViewModel : ObservableObject
     {
         try
         {
+            if (string.IsNullOrWhiteSpace(PathToAddonFolder) &&
+                !Directory.Exists(PathToAddonFolder))
+            {
+                ErrorText = "Choose addon folder";
+                return;
+            }
+
             var addon = CreateJson();
             var jsonStr = JsonSerializer.Serialize(addon, AddonManifestContext.Default.AddonDto);
 
