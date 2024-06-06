@@ -72,6 +72,24 @@ public class SerializerTests
       "version": "1.0"
     }
 """;
+    
+    private const string SlotMapJson =
+"""
+    {
+      "id": "addon-id",
+      "type": "Map",
+      "game": {
+        "name": "Duke3D"
+      },
+      "title": "Addon Title",
+      "version": "1.0",
+      "author": "Author",
+      "startmap": {
+        "volume": 1,
+        "level": 2
+      }
+    }
+""";
 
     [Fact]
     public void DeserializeAddonJson()
@@ -137,6 +155,18 @@ public class SerializerTests
         }
 
         Assert.Null(result);
+    }
+    
+    [Fact]
+    public void DeserializeSlotMapJson()
+    {
+        var result = JsonSerializer.Deserialize(SlotMapJson, AddonManifestContext.Default.AddonDto);
+
+        Assert.NotNull(result);
+        Assert.IsType<MapSlotDto>(result.StartMap);
+
+        Assert.Equal(1, ((MapSlotDto)result.StartMap).Episode);
+        Assert.Equal(2, ((MapSlotDto)result.StartMap).Level);
     }
 }
 

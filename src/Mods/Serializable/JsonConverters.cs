@@ -1,7 +1,9 @@
 ﻿using Common.Enums;
 using Common.Helpers;
 using Common.Interfaces;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Mods.Serializable.Addon;
+using System.Collections.Generic;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -62,7 +64,26 @@ namespace Mods.Serializable
 
         public override void Write(Utf8JsonWriter writer, IStartMap? value, JsonSerializerOptions options)
         {
-            throw new NotImplementedException();
+            writer.WriteStartObject();
+
+            if (value is MapFileDto fileMap)
+            {
+                writer.WritePropertyName("file");
+                writer.WriteStringValue(fileMap.File);
+            }
+            else if (value is MapSlotDto slotMap)
+            {
+                writer.WritePropertyName("volume");
+                writer.WriteNumberValue(slotMap.Episode);
+                writer.WritePropertyName("level");
+                writer.WriteNumberValue(slotMap.Level);
+            }
+            else
+            {
+                ThrowHelper.NotImplementedException();
+            }
+
+            writer.WriteEndObject();
         }
     }
 

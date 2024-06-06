@@ -35,7 +35,7 @@
                     Add addon to the database...
                 </Button>
 
-                <TextBlock Margin="5" Text="{Binding UploadingStatusMessage}"/>
+                <TextBlock Margin="5" VerticalAlignment="Center" Text="{Binding UploadingStatusMessage}"/>
 
             </StackPanel>
 

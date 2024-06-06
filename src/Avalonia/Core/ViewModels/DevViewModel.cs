@@ -124,9 +124,9 @@ public sealed partial class DevViewModel : ObservableObject
     [ObservableProperty]
     private string? _mapFileName;
     [ObservableProperty]
-    private string? _mapEpisode;
+    private int? _mapEpisode;
     [ObservableProperty]
-    private string? _mapLevel;
+    private int? _mapLevel;
     [ObservableProperty]
     private bool _isDukeAtomicSelected;
     [ObservableProperty]
@@ -664,17 +664,17 @@ public sealed partial class DevViewModel : ObservableObject
 
             if (IsElMapTypeSelected)
             {
-                if (string.IsNullOrWhiteSpace(MapEpisode))
+                if (MapEpisode is null)
                 {
                     ThrowHelper.Exception("Select start map episode");
                 }
 
-                if (string.IsNullOrWhiteSpace(MapLevel))
+                if (MapLevel is null)
                 {
                     ThrowHelper.Exception("Select start map level");
                 }
 
-                startMap = new MapSlotDto() { Episode = MapEpisode, Level = MapLevel };
+                startMap = new MapSlotDto() { Episode = MapEpisode.Value, Level = MapLevel.Value };
             }
 
             if (IsFileMapTypeSelected)
@@ -784,6 +784,9 @@ public sealed partial class DevViewModel : ObservableObject
             var jsonStr = JsonSerializer.Serialize(addon, AddonManifestContext.Default.AddonDto);
 
             File.WriteAllText(Path.Combine(PathToAddonFolder!, "addon.json"), jsonStr);
+
+            JsonText = jsonStr;
+            ErrorText = "JSON saved";
         }
         catch (Exception ex)
         {

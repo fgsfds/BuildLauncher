@@ -6,10 +6,10 @@ namespace Mods.Serializable.Addon
     public class MapSlotDto : IStartMap
     {
         [JsonPropertyName("volume")]
-        public required string Episode { get; set; }
+        public required int Episode { get; set; }
 
         [JsonPropertyName("level")]
-        public required string Level { get; set; }
+        public required int Level { get; set; }
     }
 
     [JsonSerializable(typeof(MapSlotDto))]
