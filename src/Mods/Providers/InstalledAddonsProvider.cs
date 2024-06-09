@@ -157,11 +157,11 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
     /// <inheritdoc/>
     public Dictionary<AddonVersion, IAddon> GetInstalledCampaigns()
     {
-        var originalCampaigns = _game.GetOriginalCampaigns();
+        var campaigns = _game.GetOriginalCampaigns();
 
         if (_isCacheUpdating)
         {
-            return originalCampaigns;
+            return campaigns;
         }
 
         _cache.ThrowIfNull();
@@ -170,20 +170,20 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
 
         if (result is not null)
         {
-            foreach (var customCamp in result)
+            foreach (var customCamp in result.OrderBy(static x => x.Value.Title))
             {
-                if (originalCampaigns.TryGetValue(customCamp.Key, out var _))
+                if (campaigns.TryGetValue(customCamp.Key, out var _))
                 {
                     //replacing original campaign with the downloaded one
-                    originalCampaigns[customCamp.Key] = customCamp.Value;
+                    campaigns[customCamp.Key] = customCamp.Value;
                 }
                 else
                 {
-                    originalCampaigns.Add(customCamp.Key, customCamp.Value);
+                    campaigns.Add(customCamp.Key, customCamp.Value);
                 }
             }
 
-            return originalCampaigns;
+            return campaigns;
         }
         else
         {
