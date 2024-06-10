@@ -104,6 +104,7 @@ namespace Ports.Ports.EDuke32
         {
             //don't search for steam/gog installs
             sb.Append($@" -usecwd");
+            sb.Append($@" -cachesize 262144"); //set cache to 256MiB
 
             if (addon.MainDef is not null)
             {

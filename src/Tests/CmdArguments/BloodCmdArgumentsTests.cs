@@ -10,7 +10,7 @@ using Ports.Ports.EDuke32;
 namespace Tests.CmdArguments;
 
 [Collection("Sync")]
-public class BloodLineArgumentsTests
+public class BloodCmdArgumentsTests
 {
     private readonly BloodGame _bloodGame;
     private readonly BloodCampaign _bloodCamp;
@@ -19,7 +19,7 @@ public class BloodLineArgumentsTests
 
     private readonly AutoloadModsProvider _modsProvider;
 
-    public BloodLineArgumentsTests()
+    public BloodCmdArgumentsTests()
     {
         _modsProvider = new(GameEnum.Blood);
 
