@@ -57,7 +57,7 @@ public sealed class DownloadableAddonsProvider : IDownloadableAddonsProvider
 
         var addons = await _apiInterface.GetAddonsAsync(_game.GameEnum).ConfigureAwait(false);
 
-        if (addons is null ||  addons.Count == 0)
+        if (addons is null || addons.Count == 0)
         {
             _semaphore.Release();
             return;
@@ -65,7 +65,7 @@ public sealed class DownloadableAddonsProvider : IDownloadableAddonsProvider
 
         _cache = [];
 
-        addons = [.. addons.OrderBy(a => a.Title).OrderBy(a => a.Version)];
+        addons = [.. addons.Where(a => !a.IsDisabled).OrderBy(a => a.Title).OrderBy(a => a.Version)];
 
         foreach (var addon in addons)
         {

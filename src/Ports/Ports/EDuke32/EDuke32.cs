@@ -102,8 +102,7 @@ namespace Ports.Ports.EDuke32
         /// <inheritdoc/>
         protected override void GetStartCampaignArgs(StringBuilder sb, IGame game, IAddon addon)
         {
-            //don't search for steam/gog installs
-            sb.Append($@" -usecwd");
+            sb.Append($@" -usecwd"); //don't search for steam/gog installs
             sb.Append($@" -cachesize 262144"); //set cache to 256MiB
 
             if (addon.MainDef is not null)
