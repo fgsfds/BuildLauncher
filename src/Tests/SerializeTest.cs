@@ -11,6 +11,7 @@ public class SerializerTests
 """
     {
       "id": "addon-id",
+      "type": "mod",
       "game":
       {
           "name": "shadowwarrior",
@@ -97,7 +98,7 @@ public class SerializerTests
 
         Assert.NotNull(result);
 
-        Assert.Equal(AddonTypeEnum.Map, result.AddonType);
+        Assert.Equal(AddonTypeEnum.Mod, result.AddonType);
         Assert.Equal("addon-id", result.Id);
 
         Assert.Equal(GameEnum.ShadowWarrior, result.SupportedGame.Game);
@@ -139,22 +140,22 @@ public class SerializerTests
         Assert.Equal("Addon description", result.Description);
     }
     
-    //[Fact]
-    //public void DeserializeBrokenAddonJson()
-    //{
-    //    AddonDto? result = null;
+    [Fact]
+    public void DeserializeBrokenAddonJson()
+    {
+        AddonDto? result = null;
 
-    //    try
-    //    {
-    //        result = JsonSerializer.Deserialize(BrokenAddonJson, AddonManifestContext.Default.AddonDto);
-    //    }
-    //    catch (JsonException ex)
-    //    {
-    //        Assert.Contains("unknown_token", ex.Message);
-    //    }
+        try
+        {
+            result = JsonSerializer.Deserialize(BrokenAddonJson, AddonManifestContext.Default.AddonDto);
+        }
+        catch (JsonException ex)
+        {
+            Assert.Contains("unknown_token", ex.Message);
+        }
 
-    //    Assert.Null(result);
-    //}
+        Assert.Null(result);
+    }
     
     [Fact]
     public void DeserializeSlotMapJson()

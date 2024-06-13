@@ -6,32 +6,15 @@ namespace Mods.Serializable
 {
     public sealed class AddonDto
     {
-        [JsonIgnore]
-        public AddonTypeEnum AddonType
-        {
-            get
-            {
-                if (StartMap is not null)
-                {
-                    return AddonTypeEnum.Map;
-                }
-
-                if (MainCon is not null ||
-                    MainDef is not null ||
-                    Ini is not null ||
-                    MainRff is not null)
-                {
-                    return AddonTypeEnum.TC;
-                }
-
-                return AddonTypeEnum.Mod;
-            }
-        }
-
-
+        [JsonRequired]
         [JsonPropertyName("id")]
         public required string Id { get; set; }
 
+        [JsonRequired]
+        [JsonPropertyName("type")]
+        public required AddonTypeEnum AddonType { get; set; }
+
+        [JsonRequired]
         [JsonPropertyName("game")]
         public required SupportedGameDto SupportedGame { get; set; }
 
@@ -91,7 +74,7 @@ namespace Mods.Serializable
             typeof(JsonStringEnumConverter<AddonTypeEnum>),
             typeof(JsonStringEnumConverter<FeatureEnum>)
             ],
-        //UnmappedMemberHandling = JsonUnmappedMemberHandling.Disallow,
+        UnmappedMemberHandling = JsonUnmappedMemberHandling.Disallow,
         AllowTrailingCommas = true,
         WriteIndented = true,
         DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
