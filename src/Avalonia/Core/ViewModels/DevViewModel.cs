@@ -90,10 +90,9 @@ public sealed partial class DevViewModel : ObservableObject
     }
 
     public bool IsDevMode => ClientProperties.IsDevMode;
-    public bool IsStep2Visible => IsMapSelected || IsModSelected || IsTcSelected;
     public bool IsStep3Visible => IsDukeSelected || IsBloodSelected || IsWangSelected || IsFurySelected || IsRedneckSelected || IsRidesAgainSelected || IsSlaveSelected;
     public bool AreDukePropertiesAvailable => IsDukeSelected || IsFurySelected || IsRedneckSelected;
-    public bool IsMainConAvailable => AreDukePropertiesAvailable && !IsModSelected;
+    public bool IsMainConAvailable => AreDukePropertiesAvailable;
     public bool AreBloodPropertiesVisible => IsBloodSelected;
 
     [ObservableProperty]
@@ -214,19 +213,6 @@ public sealed partial class DevViewModel : ObservableObject
     [NotifyPropertyChangedFor(nameof(AddonIdPrefix))]
     [NotifyPropertyChangedFor(nameof(IsStep3Visible))]
     private bool _isSlaveSelected;
-
-    [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(IsStep2Visible))]
-    private bool _isMapSelected;
-
-    [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(IsStep2Visible))]
-    private bool _isTcSelected;
-
-    [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(IsMainConAvailable))]
-    [NotifyPropertyChangedFor(nameof(IsStep2Visible))]
-    private bool _isModSelected;
 
     [ObservableProperty]
     private bool _isElMapTypeSelected;
@@ -393,10 +379,6 @@ public sealed partial class DevViewModel : ObservableObject
         {
             return;
         }
-
-        IsTcSelected = result.AddonType is AddonTypeEnum.TC;
-        IsMapSelected = result.AddonType is AddonTypeEnum.Map;
-        IsModSelected = result.AddonType is AddonTypeEnum.Mod;
 
         IsDukeSelected = result.SupportedGame.Game is GameEnum.Duke3D;
         IsBloodSelected = result.SupportedGame.Game is GameEnum.Blood;
@@ -612,12 +594,6 @@ public sealed partial class DevViewModel : ObservableObject
     {
         ErrorText = null;
 
-        var addonType =
-              IsTcSelected ? AddonTypeEnum.TC
-            : IsMapSelected ? AddonTypeEnum.Map
-            : IsModSelected ? AddonTypeEnum.Mod
-            : ThrowHelper.Exception<AddonTypeEnum>("Select addon type");
-
         var gameEnum =
               IsDukeSelected ? GameEnum.Duke3D
             : IsBloodSelected ? GameEnum.Blood
@@ -687,42 +663,33 @@ public sealed partial class DevViewModel : ObservableObject
 
         IStartMap? startMap = null;
 
-        if (IsMapSelected)
+        if (IsElMapTypeSelected)
         {
-            if (!IsElMapTypeSelected && !IsFileMapTypeSelected)
+            if (MapEpisode is null)
             {
-                ThrowHelper.Exception("Select start map");
+                ThrowHelper.Exception("Select start map episode");
             }
 
-            if (IsElMapTypeSelected)
+            if (MapLevel is null)
             {
-                if (MapEpisode is null)
-                {
-                    ThrowHelper.Exception("Select start map episode");
-                }
-
-                if (MapLevel is null)
-                {
-                    ThrowHelper.Exception("Select start map level");
-                }
-
-                startMap = new MapSlotDto() { Episode = MapEpisode.Value, Level = MapLevel.Value };
+                ThrowHelper.Exception("Select start map level");
             }
 
-            if (IsFileMapTypeSelected)
-            {
-                if (string.IsNullOrWhiteSpace(MapFileName))
-                {
-                    ThrowHelper.Exception("Select start map file name");
-                }
-
-                startMap = new MapFileDto() { File = MapFileName };
-            }
+            startMap = new MapSlotDto() { Episode = MapEpisode.Value, Level = MapLevel.Value };
         }
+
+        if (IsFileMapTypeSelected)
+        {
+            if (string.IsNullOrWhiteSpace(MapFileName))
+            {
+                ThrowHelper.Exception("Select start map file name");
+            }
+
+            startMap = new MapFileDto() { File = MapFileName };
+        }        
 
         AddonDto addon = new()
         {
-            AddonType = addonType,
             Id = AddonIdPrefix + AddonId,
             SupportedGame = new()
             {
@@ -734,7 +701,7 @@ public sealed partial class DevViewModel : ObservableObject
             Version = AddonVersion,
             Author = string.IsNullOrWhiteSpace(AddonAuthor) ? null : AddonAuthor,
             Description = string.IsNullOrWhiteSpace(AddonDescription) ? null : AddonDescription,
-            MainDef = string.IsNullOrWhiteSpace(MainDef) || IsModSelected ? null : MainDef,
+            MainDef = string.IsNullOrWhiteSpace(MainDef) ? null : MainDef,
             AdditionalDefs = string.IsNullOrWhiteSpace(AdditionalDefs) ? null : [.. AdditionalDefs.Split(',')],
             MainCon = string.IsNullOrWhiteSpace(MainCon) || !IsMainConAvailable ? null : MainCon,
             AdditionalCons = string.IsNullOrWhiteSpace(AdditionalCons) || !AreDukePropertiesAvailable ? null : [.. AdditionalCons.Split(',')],

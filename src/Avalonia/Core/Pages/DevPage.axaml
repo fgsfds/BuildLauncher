@@ -65,53 +65,7 @@
 
                 </Grid>
 
-                <!--Type-->
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="auto" SharedSizeGroup="MySizeGroup" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
-
-                    <TextBlock Grid.Column="0"
-                               VerticalAlignment="Center"
-                               Margin="5"
-                               FontWeight="Bold">
-                        Type:
-                    </TextBlock>
-
-                    <WrapPanel Orientation="Horizontal"
-                               Grid.Column="1"
-                               Margin="5">
-
-                        <RadioButton
-                            GroupName="AddonType"
-                            Margin="0,0,10,0"
-                            ToolTip.Tip="Total conversion. Replaces main game files."
-                            IsChecked="{Binding IsTcSelected}">
-                            TC
-                        </RadioButton>
-
-                        <RadioButton
-                            GroupName="AddonType"
-                            Margin="0,0,10,0"
-                            ToolTip.Tip="Single map"
-                            IsChecked="{Binding IsMapSelected}">
-                            Map
-                        </RadioButton>
-
-                        <RadioButton
-                            GroupName="AddonType"
-                            Margin="0,0,10,0"
-                            IsChecked="{Binding IsModSelected}"
-                            ToolTip.Tip="Mod that doesn't replace main game files. Multiple mods can be loaded at the same time.">
-                            Mod
-                        </RadioButton>
-
-                    </WrapPanel>
-
-                </Grid>
-
-                <StackPanel IsVisible="{Binding IsStep2Visible}" Orientation="Vertical">
+                <StackPanel Orientation="Vertical">
 
                     <!--Game-->
                     <Grid>
@@ -265,7 +219,7 @@
                         </Grid>
 
                         <!--Main DEF-->
-                        <Grid IsVisible="{Binding !IsModSelected}">
+                        <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="auto" SharedSizeGroup="MySizeGroup" />
                                 <ColumnDefinition Width="*" />
@@ -401,7 +355,7 @@
                         </Grid>
 
                         <!--Map-->
-                        <Grid IsVisible="{Binding IsMapSelected}">
+                        <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="auto" SharedSizeGroup="MySizeGroup" />
                                 <ColumnDefinition Width="auto" />

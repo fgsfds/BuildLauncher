@@ -196,32 +196,27 @@ namespace Ports.Ports.EDuke32
                 return;
             }
 
-
             if (dCamp.Type is AddonTypeEnum.TC)
             {
                 sb.Append($@" {AddFileParam}""{Path.Combine(game.CampaignsFolderPath, dCamp.FileName)}""");
-
-                if (dCamp.MainCon is not null)
-                {
-                    sb.Append($@" {MainConParam}""{dCamp.MainCon}""");
-                }
-
-                if (dCamp.AdditionalCons?.Count > 0)
-                {
-                    foreach (var con in dCamp.AdditionalCons)
-                    {
-                        sb.Append($@" {AddConParam}""{con}""");
-                    }
-                }
             }
-            else if (dCamp.Type is AddonTypeEnum.Map)
+
+            if (dCamp.Type is AddonTypeEnum.Map)
             {
                 GetMapArgs(sb, game, dCamp);
             }
-            else
+
+            if (dCamp.MainCon is not null)
             {
-                ThrowHelper.NotImplementedException($"Mod type {dCamp.Type} is not supported");
-                return;
+                sb.Append($@" {MainConParam}""{dCamp.MainCon}""");
+            }
+
+            if (dCamp.AdditionalCons?.Count > 0)
+            {
+                foreach (var con in dCamp.AdditionalCons)
+                {
+                    sb.Append($@" {AddConParam}""{con}""");
+                }
             }
         }
 
