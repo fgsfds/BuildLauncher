@@ -45,7 +45,7 @@ internal sealed class AutoloadModsProvider
         _feature = gameEnum switch
         {
             GameEnum.Duke3D => FeatureEnum.EDuke32_CON,
-            GameEnum.Blood => FeatureEnum.CustomDude,
+            GameEnum.Blood => FeatureEnum.ModernTypes,
             GameEnum.ShadowWarrior => FeatureEnum.Models,
             GameEnum.Duke64 => FeatureEnum.Models,
             GameEnum.Exhumed => FeatureEnum.Models,

@@ -526,7 +526,7 @@
                                        Margin="5">
 
                                 <CheckBox Margin="0,0,10,0" IsChecked="{Binding IsEdukeConsSelected}" IsVisible="{Binding AreDukePropertiesAvailable}">EDuke32 CONs</CheckBox>
-                                <CheckBox Margin="0,0,10,0" IsChecked="{Binding IsCustomDudeSelected}" IsVisible="{Binding IsBloodSelected}">CustomDude</CheckBox>
+                                <CheckBox Margin="0,0,10,0" IsChecked="{Binding IsModernTypesSelected}" IsVisible="{Binding IsBloodSelected}">ModernTypes</CheckBox>
                                 <CheckBox Margin="0,0,10,0" IsChecked="{Binding IsModelsSelected}">Models</CheckBox>
                                 <CheckBox Margin="0,0,10,0" IsChecked="{Binding IsHightileSelected}">Hightile</CheckBox>
                                 <CheckBox Margin="0,0,10,0" IsChecked="{Binding IsSlopedSelected}">Sloped sprites</CheckBox>

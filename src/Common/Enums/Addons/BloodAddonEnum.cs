@@ -1,4 +1,4 @@
-﻿namespace Common.Enums.Addons
+﻿    namespace Common.Enums.Addons
 {
     public enum BloodAddonEnum : byte
     {
