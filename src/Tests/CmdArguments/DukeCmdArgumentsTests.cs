@@ -266,7 +266,7 @@ public class DukeCmdArgumentsTests
         Raze raze = new();
 
         var args = raze.GetStartGameArgs(_dukeGame, _dukeTC, [], true, true);
-        var expected = @$" -quick -nosetup -savedir ""{Directory.GetCurrentDirectory()}\Data\Ports\Raze\Save\duke-tc"" -def ""TC.DEF"" -adddef ""TC1.DEF"" -adddef ""TC2.DEF"" -addon 3 -file ""{Directory.GetCurrentDirectory()}\Data\Duke3D\Campaigns\duke_tc.zip"" -con ""TC.CON"" -addcon ""TC1.CON"" -addcon ""TC2.CON""";
+        var expected = @$" -quick -nosetup -savedir ""{Directory.GetCurrentDirectory()}\Data\Ports\Raze\Save\duke-tc"" -def ""TC.DEF"" -adddef ""TC1.DEF"" -adddef ""TC2.DEF"" -addon 3 -con ""TC.CON"" -addcon ""TC1.CON"" -addcon ""TC2.CON"" -file ""{Directory.GetCurrentDirectory()}\Data\Duke3D\Campaigns\duke_tc.zip""";
 
         if (OperatingSystem.IsLinux())
         {
@@ -355,7 +355,7 @@ public class DukeCmdArgumentsTests
         EDuke32 eduke32 = new();
 
         var args = eduke32.GetStartGameArgs(_dukeGame, _dukeTC, [], true, true);
-        var expected = @$" -quick -nosetup -usecwd -cachesize 262144 -h ""TC.DEF"" -mh ""TC1.DEF"" -mh ""TC2.DEF"" -j ""D:\Games\Duke3D"" -addon 3 -g ""{Directory.GetCurrentDirectory()}\Data\Duke3D\Campaigns\duke_tc.zip"" -x ""TC.CON"" -mx ""TC1.CON"" -mx ""TC2.CON""";
+        var expected = @$" -quick -nosetup -usecwd -cachesize 262144 -h ""TC.DEF"" -mh ""TC1.DEF"" -mh ""TC2.DEF"" -j ""D:\Games\Duke3D"" -addon 3 -x ""TC.CON"" -mx ""TC1.CON"" -mx ""TC2.CON"" -g ""{Directory.GetCurrentDirectory()}\Data\Duke3D\Campaigns\duke_tc.zip""";
 
         if (OperatingSystem.IsLinux())
         {

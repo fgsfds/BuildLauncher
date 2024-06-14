@@ -197,22 +197,23 @@ namespace Ports.Ports.EDuke32
             }
 
 
+            if (dCamp.MainCon is not null)
+            {
+                sb.Append($@" {MainConParam}""{dCamp.MainCon}""");
+            }
+
+            if (dCamp.AdditionalCons?.Count > 0)
+            {
+                foreach (var con in dCamp.AdditionalCons)
+                {
+                    sb.Append($@" {AddConParam}""{con}""");
+                }
+            }
+
+
             if (dCamp.Type is AddonTypeEnum.TC)
             {
                 sb.Append($@" {AddFileParam}""{Path.Combine(game.CampaignsFolderPath, dCamp.FileName)}""");
-
-                if (dCamp.MainCon is not null)
-                {
-                    sb.Append($@" {MainConParam}""{dCamp.MainCon}""");
-                }
-
-                if (dCamp.AdditionalCons?.Count > 0)
-                {
-                    foreach (var con in dCamp.AdditionalCons)
-                    {
-                        sb.Append($@" {AddConParam}""{con}""");
-                    }
-                }
             }
             else if (dCamp.Type is AddonTypeEnum.Map)
             {
