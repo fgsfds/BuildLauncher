@@ -19,7 +19,7 @@ public static class BloodSkillsEnumHelper
             BloodSkillsEnum.PinkOnTheInside => "Pink on the Inside",
             BloodSkillsEnum.LightlyBroiled => "Lightly Broiled",
             BloodSkillsEnum.WellDone => "Well Done",
-            BloodSkillsEnum.ExtraCrispy => "Extra Crisry",
+            BloodSkillsEnum.ExtraCrispy => "Extra Crispy",
             _ => throw new NotImplementedException(),
         };
     }
