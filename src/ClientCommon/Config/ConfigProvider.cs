@@ -19,6 +19,8 @@ public sealed class ConfigProvider : IConfigProvider
         _dbContext = dbContextFactory.Get();
 
         ConvertOldConfig();
+
+        FixTypo();
     }
 
 
@@ -176,9 +178,9 @@ public sealed class ConfigProvider : IConfigProvider
         set => SetGamePathValue(value);
     }
 
-    public string? PathRideaAgain
+    public string? PathRidesAgain
     {
-        get => _dbContext.GamePaths.Find([nameof(PathRideaAgain)])?.Path;
+        get => _dbContext.GamePaths.Find([nameof(PathRidesAgain)])?.Path;
         set => SetGamePathValue(value);
     }
 
@@ -287,7 +289,7 @@ public sealed class ConfigProvider : IConfigProvider
         _dbContext.GamePaths.Add(new() { Game = "PathWang", Path = config.GamePathWang });
         _dbContext.GamePaths.Add(new() { Game = "PathBlood", Path = config.GamePathBlood });
         _dbContext.GamePaths.Add(new() { Game = "PathRedneck", Path = config.GamePathRedneck });
-        _dbContext.GamePaths.Add(new() { Game = "PathRideaAgain", Path = config.GamePathAgain });
+        _dbContext.GamePaths.Add(new() { Game = "PathRidesAgain", Path = config.GamePathAgain });
         _dbContext.GamePaths.Add(new() { Game = "PathSlave", Path = config.GamePathSlave });
         _dbContext.GamePaths.Add(new() { Game = "PathFury", Path = config.GamePathFury });
 
@@ -295,5 +297,22 @@ public sealed class ConfigProvider : IConfigProvider
 
         fs.Dispose();
         File.Delete(Path.Combine(ClientProperties.ExeFolderPath, Consts.ConfigFile));
+    }
+
+    [Obsolete]
+    private void FixTypo()
+    {
+        var old = _dbContext.GamePaths.Find("PathRideaAgain");
+
+        if (old is not null)
+        {
+            var game = nameof(PathRidesAgain);
+            var path = old.Path;
+
+            _dbContext.GamePaths.Remove(old);
+            _dbContext.GamePaths.Add(new() { Game = game, Path = path });
+
+            _dbContext.SaveChanges();
+        }
     }
 }

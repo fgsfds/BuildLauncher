@@ -12,7 +12,7 @@ public sealed class ConfigProviderFake : IConfigProvider
     public string? PathDukeWT { get; set; } = null;
     public string? PathFury { get; set; } = null;
     public string? PathRedneck { get; set; } = null;
-    public string? PathRideaAgain { get; set; } = null;
+    public string? PathRidesAgain { get; set; } = null;
     public string? PathSlave { get; set; } = null;
     public string? PathWang { get; set; } = null;
 

@@ -13,7 +13,7 @@ public interface IConfigProvider
     string? PathDukeWT { get; set; }
     string? PathFury { get; set; }
     string? PathRedneck { get; set; }
-    string? PathRideaAgain { get; set; }
+    string? PathRidesAgain { get; set; }
     string? PathSlave { get; set; }
     string? PathWang { get; set; }
     Dictionary<string, TimeSpan> Playtimes { get; }

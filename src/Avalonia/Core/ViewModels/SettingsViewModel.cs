@@ -80,8 +80,8 @@ namespace BuildLauncher.ViewModels
 
         public string? PathToAgain
         {
-            get => _config.PathRideaAgain;
-            set => _config.PathRideaAgain = value;
+            get => _config.PathRidesAgain;
+            set => _config.PathRidesAgain = value;
         }
 
         public string? PathToSlave

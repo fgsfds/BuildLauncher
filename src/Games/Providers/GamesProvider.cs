@@ -62,7 +62,7 @@ public sealed class GamesProvider
         _redneck = new()
         {
             GameInstallFolder = _config.PathRedneck,
-            AgainInstallPath = _config.PathRideaAgain
+            AgainInstallPath = _config.PathRidesAgain
         };
 
         _slave = new()
@@ -145,9 +145,9 @@ public sealed class GamesProvider
             _redneck.GameInstallFolder = _config.PathRedneck;
             GameChangedEvent?.Invoke(_redneck.GameEnum);
         }
-        else if (parameterName.Equals(nameof(_config.PathRideaAgain)))
+        else if (parameterName.Equals(nameof(_config.PathRidesAgain)))
         {
-            _redneck.AgainInstallPath = _config.PathRideaAgain;
+            _redneck.AgainInstallPath = _config.PathRidesAgain;
             GameChangedEvent?.Invoke(_redneck.GameEnum);
         }
         else if (parameterName.Equals(nameof(_config.PathSlave)))

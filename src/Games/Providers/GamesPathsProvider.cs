@@ -204,7 +204,7 @@ namespace Games.Providers
             _config.PathFury ??= GetPath(GameEnum.Fury);
             _config.PathSlave ??= GetPath(GameEnum.Exhumed);
             _config.PathRedneck ??= GetPath(GameEnum.Redneck);
-            _config.PathRideaAgain ??= GetPath(GameEnum.RidesAgain);
+            _config.PathRidesAgain ??= GetPath(GameEnum.RidesAgain);
         }
 
 
