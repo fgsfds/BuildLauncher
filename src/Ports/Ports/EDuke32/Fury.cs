@@ -34,7 +34,16 @@ namespace Ports.Ports.EDuke32
         public override bool IsInstalled => File.Exists(FullPathToExe);
 
         /// <inheritdoc/>
-        public override List<FeatureEnum> SupportedFeatures => [FeatureEnum.EDuke32_CON];
+        public override List<FeatureEnum> SupportedFeatures =>
+            [
+            FeatureEnum.EDuke32_CON,
+            FeatureEnum.DynamicLighting,
+            FeatureEnum.Hightile,
+            FeatureEnum.Models,
+            FeatureEnum.Sloped_Sprites,
+            FeatureEnum.TROR,
+            FeatureEnum.Wall_Rotate_Cstat
+            ];
 
         /// <inheritdoc/>
         protected override string ConfigFile => "fury.cfg";

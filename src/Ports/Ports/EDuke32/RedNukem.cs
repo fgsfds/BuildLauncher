@@ -41,7 +41,11 @@ namespace Ports.Ports.EDuke32
             ];
 
         /// <inheritdoc/>
-        public override List<FeatureEnum> SupportedFeatures => [];
+        public override List<FeatureEnum> SupportedFeatures =>
+            [
+            FeatureEnum.Hightile,
+            FeatureEnum.Models
+            ];
 
         /// <inheritdoc/>
         protected override string ConfigFile => "rednukem.cfg";

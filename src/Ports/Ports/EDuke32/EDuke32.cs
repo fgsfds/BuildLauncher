@@ -77,8 +77,7 @@ namespace Ports.Ports.EDuke32
             FeatureEnum.Sloped_Sprites,
             FeatureEnum.TROR,
             FeatureEnum.Wall_Rotate_Cstat
-            ]
-        ;
+            ];
 
         /// <inheritdoc/>
         public override string? InstalledVersion

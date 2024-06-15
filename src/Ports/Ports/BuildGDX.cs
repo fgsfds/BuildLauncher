@@ -53,7 +53,12 @@ public sealed class BuildGDX : BasePort
     public override bool IsInstalled => File.Exists(Path.Combine(PathToExecutableFolder, "BuildGDX.jar"));
 
     /// <inheritdoc/>
-    public override List<FeatureEnum> SupportedFeatures => [];
+    public override List<FeatureEnum> SupportedFeatures =>
+            [
+            FeatureEnum.TROR,
+            FeatureEnum.Hightile,
+            FeatureEnum.Models
+            ];
 
 
     /// <inheritdoc/>

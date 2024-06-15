@@ -81,7 +81,12 @@ namespace Ports.Ports
         protected override string SkillParam => throw new NotImplementedException();
 
         /// <inheritdoc/>
-        public override List<FeatureEnum> SupportedFeatures => [];
+        public override List<FeatureEnum> SupportedFeatures =>
+            [
+            FeatureEnum.TROR,
+            FeatureEnum.Hightile,
+            FeatureEnum.Models
+            ];
 
         /// <inheritdoc/>
         protected override void GetSkipIntroParameter(StringBuilder sb) => sb.Append(" -quick");
