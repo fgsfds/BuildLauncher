@@ -1,6 +1,7 @@
 using ClientCommon.API;
 using ClientCommon.Config;
 using ClientCommon.Providers;
+using Common.Enums;
 using Common.Helpers;
 using Common.Interfaces;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -42,12 +43,32 @@ public partial class RightPanelViewModel : ObservableObject, IRightPanelControl
     /// <summary>
     /// Preview image of the selected campaign
     /// </summary>
-    public Stream? SelectedAddonPreview => SelectedAddon?.PreviewImage;
+    public Stream? SelectedAddonPreview
+    {
+        get
+        {
+            if (SelectedAddon is null)
+            {
+                return null;
+            }
+
+            if (SelectedAddon.Type is AddonTypeEnum.TC)
+            {
+                return SelectedAddon?.PreviewImage;
+            }
+            else if (SelectedAddon.Type is AddonTypeEnum.Map)
+            {
+                return SelectedAddon?.PreviewImage ?? SelectedAddon?.GridImage;
+            }
+
+            return null;
+        }
+    }
 
     /// <summary>
     /// Is preview image in the description visible
     /// </summary>
-    public bool IsPreviewVisible => SelectedAddon?.PreviewImage is not null;
+    public bool IsPreviewVisible => SelectedAddonPreview is not null;
 
     public int? SelectedAddonScore
     {

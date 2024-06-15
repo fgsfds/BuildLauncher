@@ -103,6 +103,8 @@ public sealed partial class MapsViewModel : RightPanelViewModel, IPortsButtonCon
             OnPropertyChanged(nameof(IsSelectedAddonUpvoted));
             OnPropertyChanged(nameof(IsSelectedAddonDownvoted));
             OnPropertyChanged(nameof(SelectedAddonPlaytime));
+            OnPropertyChanged(nameof(SelectedAddonPreview));
+            OnPropertyChanged(nameof(IsPreviewVisible));
 
             StartMapCommand.NotifyCanExecuteChanged();
         }

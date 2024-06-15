@@ -368,7 +368,7 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
             mainDef = manifest.MainDef;
             addDefs = manifest.AdditionalDefs?.ToHashSet();
 
-            preview = ImageHelper.GetImageFromArchive(archive, "eduke32_preview.png");
+            preview = ImageHelper.GetImageFromArchive(archive, "preview.png");
             image = ImageHelper.GetCoverFromArchive(archive) ?? preview;
 
             dependencies = manifest.Dependencies?.Addons?.ToDictionary(static x => x.Id, static x => x.Version, StringComparer.OrdinalIgnoreCase);
