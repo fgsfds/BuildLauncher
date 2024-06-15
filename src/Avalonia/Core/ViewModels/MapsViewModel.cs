@@ -213,7 +213,7 @@ public sealed partial class MapsViewModel : RightPanelViewModel, IPortsButtonCon
 
         _playtimeProvider.AddTime(id, time);
 
-        OnPropertyChanged(nameof(SelectedAddonDescription));
+        OnPropertyChanged(nameof(SelectedAddonPlaytime));
     }
 
 
