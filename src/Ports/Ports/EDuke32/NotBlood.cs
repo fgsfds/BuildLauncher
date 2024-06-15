@@ -23,7 +23,7 @@ namespace Ports.Ports.EDuke32
         /// <inheritdoc/>
         public override List<FeatureEnum> SupportedFeatures =>
             [
-            FeatureEnum.ModernTypes,
+            FeatureEnum.Modern_Types,
             FeatureEnum.Hightile,
             FeatureEnum.Models
             ];

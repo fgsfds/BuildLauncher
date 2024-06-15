@@ -8,7 +8,7 @@
         Sloped_Sprites,
         TROR,
         Wall_Rotate_Cstat,
-        DynamicLighting,
-        ModernTypes
+        Dynamic_Lighting,
+        Modern_Types
     }
 }

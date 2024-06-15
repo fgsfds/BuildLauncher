@@ -431,13 +431,13 @@ public sealed partial class DevViewModel : ObservableObject
         SoundRff = result.SoundRff;
 
         IsEdukeConsSelected = result.Dependencies?.RequiredFeatures is not null && result.Dependencies.RequiredFeatures.Contains(FeatureEnum.EDuke32_CON);
-        IsModernTypesSelected = result.Dependencies?.RequiredFeatures is not null && result.Dependencies.RequiredFeatures.Contains(FeatureEnum.ModernTypes);
+        IsModernTypesSelected = result.Dependencies?.RequiredFeatures is not null && result.Dependencies.RequiredFeatures.Contains(FeatureEnum.Modern_Types);
         IsModelsSelected = result.Dependencies?.RequiredFeatures is not null && result.Dependencies.RequiredFeatures.Contains(FeatureEnum.Models);
         IsHightileSelected = result.Dependencies?.RequiredFeatures is not null && result.Dependencies.RequiredFeatures.Contains(FeatureEnum.Hightile);
         IsSlopedSelected = result.Dependencies?.RequiredFeatures is not null && result.Dependencies.RequiredFeatures.Contains(FeatureEnum.Sloped_Sprites);
         IsTrorSelected = result.Dependencies?.RequiredFeatures is not null && result.Dependencies.RequiredFeatures.Contains(FeatureEnum.TROR);
         IsCstatSelected = result.Dependencies?.RequiredFeatures is not null && result.Dependencies.RequiredFeatures.Contains(FeatureEnum.Wall_Rotate_Cstat);
-        IsLightingSelected = result.Dependencies?.RequiredFeatures is not null && result.Dependencies.RequiredFeatures.Contains(FeatureEnum.DynamicLighting);
+        IsLightingSelected = result.Dependencies?.RequiredFeatures is not null && result.Dependencies.RequiredFeatures.Contains(FeatureEnum.Dynamic_Lighting);
 
         DependenciesList = result.Dependencies?.Addons is null ? [] : [.. result.Dependencies.Addons];
         IncompatibilitiesList = result.Incompatibles?.Addons is null ? [] : [.. result.Incompatibles.Addons];
@@ -662,7 +662,7 @@ public sealed partial class DevViewModel : ObservableObject
         if (IsModernTypesSelected &&
             IsBloodSelected)
         {
-            features.Add(FeatureEnum.ModernTypes);
+            features.Add(FeatureEnum.Modern_Types);
         }
         if (IsModelsSelected)
         {
@@ -686,7 +686,7 @@ public sealed partial class DevViewModel : ObservableObject
         }
         if (IsLightingSelected)
         {
-            features.Add(FeatureEnum.DynamicLighting);
+            features.Add(FeatureEnum.Dynamic_Lighting);
         }
 
         IStartMap? startMap = null;

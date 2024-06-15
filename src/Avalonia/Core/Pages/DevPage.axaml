@@ -13,7 +13,7 @@
 
         <Grid RowDefinitions="auto,auto,auto" IsSharedSizeScope="True">
 
-            <StackPanel Grid.Row="0" Orientation="Horizontal">
+            <StackPanel Grid.Row="0" Orientation="Horizontal" IsVisible="{Binding IsDevMode}">
 
                 <CheckBox IsChecked="{Binding LocalApiCheckbox}"
                           VerticalAlignment="Center"
@@ -684,7 +684,7 @@
 
                 <Button
                     ToolTip.Tip="Upload addon to developer's storage"
-                    Margin="5" Padding="10"
+                    Margin="10" Padding="10"
                     Command="{Binding UploadAddonCommand}">
                     Upload addon...
                 </Button>

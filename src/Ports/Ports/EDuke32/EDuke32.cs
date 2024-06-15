@@ -71,7 +71,7 @@ namespace Ports.Ports.EDuke32
         public override List<FeatureEnum> SupportedFeatures => 
             [
             FeatureEnum.EDuke32_CON,
-            FeatureEnum.DynamicLighting,
+            FeatureEnum.Dynamic_Lighting,
             FeatureEnum.Hightile,
             FeatureEnum.Models,
             FeatureEnum.Sloped_Sprites,
