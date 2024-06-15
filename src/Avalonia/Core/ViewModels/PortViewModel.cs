@@ -1,4 +1,3 @@
-using ClientCommon.Helpers;
 using Common.Entities;
 using Common.Enums;
 using Common.Helpers;
@@ -76,7 +75,7 @@ namespace BuildLauncher.ViewModels
                         return "Install";
                     }
 
-                    if (VersionComparer.Compare(_port.InstalledVersion!, _release?.Version!, "<"))
+                    if (IsUpdateAvailable)
                     {
                         return "Update";
                     }
@@ -111,6 +110,11 @@ namespace BuildLauncher.ViewModels
         public string LatestVersion => _release?.Version ?? "Not available";
 
         /// <summary>
+        /// Is new version of the port available
+        /// </summary>
+        public bool IsUpdateAvailable => VersionComparer.Compare(_port.InstalledVersion!, _release?.Version!, "<");
+
+        /// <summary>
         /// Download/install progress
         /// </summary>
         public float ProgressBarValue { get; set; }
@@ -135,6 +139,7 @@ namespace BuildLauncher.ViewModels
 
             OnPropertyChanged(nameof(LatestVersion));
             OnPropertyChanged(nameof(InstallButtonText));
+            OnPropertyChanged(nameof(IsUpdateAvailable));
         }
 
 
@@ -160,6 +165,7 @@ namespace BuildLauncher.ViewModels
             OnPropertyChanged(nameof(ProgressBarValue));
             OnPropertyChanged(nameof(Version));
             OnPropertyChanged(nameof(InstallButtonText));
+            OnPropertyChanged(nameof(IsUpdateAvailable));
 
             IsInProgress = false;
         }
@@ -178,6 +184,7 @@ namespace BuildLauncher.ViewModels
 
             OnPropertyChanged(nameof(LatestVersion));
             OnPropertyChanged(nameof(InstallButtonText));
+            OnPropertyChanged(nameof(IsUpdateAvailable));
 
             IsInProgress = false;
         }
