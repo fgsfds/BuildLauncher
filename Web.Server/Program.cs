@@ -26,6 +26,7 @@ namespace Web.Server
                 builder.Services.AddHostedService<AppReleasesTask>();
                 builder.Services.AddHostedService<PortsReleasesTask>();
                 builder.Services.AddHostedService<ToolsReleasesTask>();
+                builder.Services.AddHostedService<FileCheckTask>();
             }
 
             builder.Services.AddSingleton<AppReleasesProvider>();
