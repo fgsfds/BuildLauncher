@@ -76,7 +76,7 @@ public sealed partial class MapsViewModel : RightPanelViewModel, IPortsButtonCon
     {
         get
         {
-            var result = _installedAddonsProvider.GetInstalledMaps().Select(static x => x.Value);
+            var result = _installedAddonsProvider.GetInstalledMaps().Select(static x => x.Value).OrderBy(static x => x.Title);
 
             if (string.IsNullOrWhiteSpace(SearchBoxText))
             {

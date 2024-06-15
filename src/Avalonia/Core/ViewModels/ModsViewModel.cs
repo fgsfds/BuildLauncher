@@ -32,8 +32,8 @@ namespace BuildLauncher.ViewModels
             PlaytimeProvider playtimeProvider,
             ApiInterface apiInterface,
             ScoresProvider scoresProvider,
-        InstalledAddonsProviderFactory installedAddonsProviderFactory,
-        DownloadableAddonsProviderFactory _downloadableAddonsProviderFactory
+            InstalledAddonsProviderFactory installedAddonsProviderFactory,
+            DownloadableAddonsProviderFactory _downloadableAddonsProviderFactory
             ) : base(config, playtimeProvider, apiInterface, scoresProvider)
         {
             Game = game;
@@ -71,7 +71,7 @@ namespace BuildLauncher.ViewModels
         /// <summary>
         /// List of installed autoload mods
         /// </summary>
-        public ImmutableList<AutoloadMod> ModsList => [.. _installedAddonsProvider.GetInstalledMods().Select(x => (AutoloadMod)x.Value)];
+        public ImmutableList<AutoloadMod> ModsList => [.. _installedAddonsProvider.GetInstalledMods().Select(x => (AutoloadMod)x.Value).OrderBy(static x => x.Title)];
 
         private IAddon? _selectedAddon;
         /// <summary>
