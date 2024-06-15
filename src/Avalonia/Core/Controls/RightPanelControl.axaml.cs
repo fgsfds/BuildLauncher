@@ -2,7 +2,7 @@ using Avalonia.Controls;
 
 namespace BuildLauncher.Controls
 {
-    public partial class RightPanelControl : UserControl
+    public sealed partial class RightPanelControl : UserControl
     {
         public RightPanelControl()
         {

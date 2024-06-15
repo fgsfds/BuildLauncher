@@ -76,9 +76,13 @@ public sealed partial class DevViewModel : ObservableObject
             {
                 return "fury-";
             }
-            if (IsRedneckSelected || IsRidesAgainSelected)
+            if (IsRedneckSelected)
             {
                 return "redneck-";
+            }
+            if (IsRidesAgainSelected)
+            {
+                return "ridesagain-";
             }
             if (IsSlaveSelected)
             {

@@ -85,7 +85,9 @@ namespace Ports.Ports
             [
             FeatureEnum.TROR,
             FeatureEnum.Hightile,
-            FeatureEnum.Models
+            FeatureEnum.Models,
+            FeatureEnum.Sloped_Sprites,
+            FeatureEnum.Wall_Rotate_Cstat
             ];
 
         /// <inheritdoc/>
