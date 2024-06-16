@@ -1,10 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Web.Server.DbEntities
 {
-    [Index(nameof(AddonVersionId))]
     [Table(name: "dependencies", Schema = "main")]
     public sealed class DependenciesDbEntity
     {
@@ -17,13 +15,13 @@ namespace Web.Server.DbEntities
         [Column("version_id")]
         public required int AddonVersionId { get; set; }
 
-        [ForeignKey(nameof(VersionsTable2))]
-        [Column("dependency_version_id")]
-        public required int DependencyVersionId { get; set; }
+        [Column("dependency_id")]
+        public required string DependencyId { get; set; }
+
+        [Column("dependency_version")]
+        public required string? DependencyVersion { get; set; }
 
 
         public VersionsDbEntity VersionsTable { get; set; }
-        public VersionsDbEntity VersionsTable2 { get; set; }
-
     }
 }

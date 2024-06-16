@@ -60,7 +60,7 @@ namespace Web.Server.Database
             {
                 using var httpClient = new HttpClient();
                 var addons = httpClient.GetStringAsync("https://files.fgsfds.link/buildlauncher/addons.json").Result;
-                var addonsList = JsonSerializer.Deserialize(addons, AddonsJsonEntityListContext.Default.ListAddonsJsonEntity);
+                var addonsList = JsonSerializer.Deserialize(addons, AddonsJsonEntityListContext.Default.ListAddonsJsonEntity)!;
 
 
                 //TYPES
@@ -149,18 +149,11 @@ namespace Web.Server.Database
 
                     foreach (var dep in addon.Dependencies)
                     {
-                        var existingDepVersion = Versions.SingleOrDefault(x => x.AddonId == dep.Key && (x.Version == dep.Value || dep.Value == null));
-
-                        if (existingDepVersion is null)
-                        {
-                            continue;
-                            //throw new Exception("Addon doesn't exist");
-                        }
-
                         Dependencies.Add(new()
                         {
                             AddonVersionId = existingVersion.Id,
-                            DependencyVersionId = existingDepVersion.Id
+                            DependencyId = dep.Key,
+                            DependencyVersion = dep.Value
                         });
                     }
                 }

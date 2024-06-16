@@ -56,7 +56,7 @@ public sealed partial class DevViewModel : ObservableObject
         }
     }
 
-    public string? AddonIdPrefix
+    public string AddonIdPrefix
     {
         get
         {
@@ -89,7 +89,7 @@ public sealed partial class DevViewModel : ObservableObject
                 return "slave-";
             }
 
-            return null;
+            return string.Empty;
         }
     }
 

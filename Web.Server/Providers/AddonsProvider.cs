@@ -9,13 +9,13 @@ namespace Web.Server.Providers
 {
     public sealed class AddonsProvider
     {
-        private readonly ILogger<AppReleasesProvider> _logger;
+        private readonly ILogger<AddonsProvider> _logger;
         private readonly DatabaseContextFactory _dbContextFactory;
 
         public GeneralReleaseEntity? AppRelease { get; private set; }
 
         public AddonsProvider(
-            ILogger<AppReleasesProvider> logger,
+            ILogger<AddonsProvider> logger,
             DatabaseContextFactory dbContextFactory)
         {
             _logger = logger;
@@ -62,10 +62,9 @@ namespace Web.Server.Providers
                 {
                     depsResult ??= [];
 
-                    var depVersion = versions[dep.DependencyVersionId];
-                    var depAddon = addons[depVersion.AddonId];
+                    var depAddon = addons[dep.DependencyId];
 
-                    depsResult.Add(depAddon.Title);
+                    depsResult.Add(depAddon.Title + $"{(dep.DependencyVersion is not null ? $", {dep.DependencyVersion}" : string.Empty)}");
                 }
 
                 var hasInstalls = installs.TryGetValue(addon.Id, out var installsNumber);
@@ -234,17 +233,11 @@ namespace Web.Server.Providers
 
                     foreach (var dep in addon.Dependencies)
                     {
-                        var existingDepVersion = dbContext.Versions.SingleOrDefault(x => x.AddonId == dep.Key && (x.Version == dep.Value || dep.Value == null));
-
-                        if (existingDepVersion is null)
-                        {
-                            return false;
-                        }
-
                         dbContext.Dependencies.Add(new()
                         {
                             AddonVersionId = existingVersion.Id,
-                            DependencyVersionId = existingDepVersion.Id
+                            DependencyId = dep.Key,
+                            DependencyVersion = dep.Value
                         });
                     }
 

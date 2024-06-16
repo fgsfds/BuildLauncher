@@ -88,7 +88,7 @@ namespace Common.Tools
             {
                 while (reader.MoveToNextEntry())
                 {
-                    var fullName = Path.Combine(unpackTo, reader.Entry.Key);
+                    var fullName = Path.Combine(unpackTo, reader.Entry.Key!);
 
                     if (reader.Entry.IsDirectory)
                     {
