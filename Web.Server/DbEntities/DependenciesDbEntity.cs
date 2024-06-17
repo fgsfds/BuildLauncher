@@ -1,8 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Web.Server.DbEntities
 {
+    [Index(nameof(AddonVersionId))]
     [Table(name: "dependencies", Schema = "main")]
     public sealed class DependenciesDbEntity
     {
@@ -18,7 +20,7 @@ namespace Web.Server.DbEntities
         [Column("dependency_id")]
         public required string DependencyId { get; set; }
 
-        [Column("dependency_version")]
+        [Column("dependency_version", TypeName = "varchar(10)")]
         public required string? DependencyVersion { get; set; }
 
 
