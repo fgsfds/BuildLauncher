@@ -71,12 +71,12 @@ namespace Mods.Addons
 
             if (Version is not null)
             {
-                description.Append($"\n\n#### v{Version}");
+                description.Append($"{Environment.NewLine}{Environment.NewLine}#### v{Version}");
             }
 
             if (Author is not null)
             {
-                description.Append($"\n\n*by {Author}*");
+                description.Append($"{Environment.NewLine}{Environment.NewLine}*by {Author}*");
             }
 
             if (Description is not null)
@@ -92,17 +92,17 @@ namespace Mods.Addons
                     }
                 }
 
-                description.Append("\n\n").AppendJoin("\n\n", lines);
+                description.Append(Environment.NewLine + Environment.NewLine).AppendJoin(Environment.NewLine + Environment.NewLine, lines);
             }
 
-            if (DependentAddons is not null)
+            if (DependentAddons is not null && Type is not AddonTypeEnum.Official)
             {
-                description.Append("\n\n").Append($"Requires: *{string.Join(", ", DependentAddons.Keys)}*");
+                description.Append($"{Environment.NewLine}{Environment.NewLine}#### Requires:{Environment.NewLine}").AppendJoin(Environment.NewLine + Environment.NewLine, DependentAddons.Keys);
             }
 
             if (IncompatibleAddons is not null)
             {
-                description.Append("\n\n").Append($"Incompatible with: *{string.Join(", ", IncompatibleAddons.Keys)}*");
+                description.Append($"{Environment.NewLine}{Environment.NewLine}#### Incompatible with:{Environment.NewLine}").AppendJoin(Environment.NewLine + Environment.NewLine, IncompatibleAddons.Keys);
             }
 
             return description.ToString();
