@@ -10,6 +10,7 @@ using Mods.Addons;
 using Mods.Providers;
 using System.Collections.Immutable;
 using System.Diagnostics;
+using System.Linq;
 
 namespace BuildLauncher.ViewModels
 {
@@ -146,12 +147,29 @@ namespace BuildLauncher.ViewModels
 
             if (!mod.IsEnabled)
             {
+                var deps = ModsList.Where(x => x.DependentAddons?.ContainsKey(mod.Id) ?? false);
+
                 _installedAddonsProvider.DisableAddon(new(mod.Id, mod.Version));
+
+                foreach (var depMod in deps)
+                {
+                    _installedAddonsProvider.DisableAddon(new(depMod.Id, depMod.Version));
+                }
             }
             else if (mod.IsEnabled)
             {
+                var dependencies = mod.DependentAddons;
+                var depMods = dependencies is null ? [] : ModsList.Where(x => dependencies.ContainsKey(x.Id));
+
                 _installedAddonsProvider.EnableAddon(new(mod.Id, mod.Version));
+
+                foreach (var depMod in depMods)
+                {
+                    _installedAddonsProvider.EnableAddon(new(depMod.Id, depMod.Version));
+                }
             }
+
+            OnPropertyChanged(nameof(ModsList));
         }
 
         #endregion
