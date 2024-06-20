@@ -27,6 +27,27 @@ public sealed partial class DevViewModel : ObservableObject
     private readonly FilesUploader _filesUploader;
     private readonly GamesProvider _gamesProvider;
 
+    private readonly List<string> _forbiddenNames =
+        [
+        "duke3d.def",
+        "rr.def",
+        "rrra.def",
+        "nam.def",
+        "napalm.def",
+        "ww2gi.def",
+        "blood.def",
+        "sw.def",
+        "exhumed.def",
+        "game.con",
+        "defs.con",
+        "user.con",
+        "nam.con",
+        "napalm.con",
+        "ww2gi.con",
+        "blood.ini",
+        "cryptic.ini"
+        ];
+
     public DevViewModel(
         IConfigProvider config,
         FilesUploader filesUploader,
@@ -319,15 +340,6 @@ public sealed partial class DevViewModel : ObservableObject
         {
             return;
         }
-
-        PathToAddonFolder = folders[0].Path.LocalPath;
-
-        //var addonJson = Path.Combine(PathToAddonFolder, "addon.json");
-
-        //if (File.Exists(addonJson))
-        //{
-        //    LoadJson(addonJson);
-        //}
     }
 
     [RelayCommand]
@@ -614,6 +626,31 @@ public sealed partial class DevViewModel : ObservableObject
 
     private AddonDto CreateJson()
     {
+        var files = Directory.GetFiles(PathToAddonFolder!, "*", SearchOption.AllDirectories).Select(static x => Path.GetFileName(x).ToLower());
+        var forbidden = files.Intersect(_forbiddenNames);
+
+        if (forbidden.Any())
+        {
+            ThrowHelper.Exception($"Common files names can't be used. Rename these files: {string.Join(", ", forbidden)}");
+        }
+
+        if (IsBloodSelected)
+        {
+            if (files.Any(static x => x.EndsWith(".ART", StringComparison.InvariantCultureIgnoreCase)))
+            {
+                ThrowHelper.Exception($"Don't use ART files. Convert them to DEF.");
+            }
+            if (files.Any(static x => x.EndsWith(".DAT", StringComparison.InvariantCultureIgnoreCase)))
+            {
+                ThrowHelper.Exception($"Don't use DAT files. Convert them to DEF.");
+            }
+            if (files.Any(static x => x.EndsWith(".RFS", StringComparison.InvariantCultureIgnoreCase)))
+            {
+                ThrowHelper.Exception($"Addons with RFS files are not supported");
+            }
+        }
+            
+
         ErrorText = null;
 
         var addonType =

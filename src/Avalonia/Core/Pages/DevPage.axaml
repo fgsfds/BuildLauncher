@@ -664,7 +664,7 @@
                                 Create ZIP
                             </Button>
 
-                            <TextBlock VerticalAlignment="Center" Margin="5" Foreground="Red" Text="{Binding ErrorText}"/>
+                            <TextBlock TextWrapping="Wrap" MaxWidth="400" VerticalAlignment="Center" Margin="5" Foreground="Red" Text="{Binding ErrorText}"/>
 
                         </StackPanel>
                     </StackPanel>
