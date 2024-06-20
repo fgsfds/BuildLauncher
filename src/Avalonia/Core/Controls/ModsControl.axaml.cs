@@ -1,5 +1,6 @@
 using Avalonia.Controls;
 using BuildLauncher.ViewModels;
+using ClientCommon.Config;
 using Common.Helpers;
 using CommunityToolkit.Mvvm.Input;
 
@@ -15,9 +16,11 @@ namespace BuildLauncher.Controls
         /// <summary>
         /// Initialize control
         /// </summary>
-        public void InitializeControl()
+        public void InitializeControl(IConfigProvider configProvider)
         {
             DataContext.ThrowIfNotType<ModsViewModel>(out var viewModel);
+
+            RightPanel.InitializeControl(configProvider);
 
             AddContextMenuButtons(viewModel);
         }

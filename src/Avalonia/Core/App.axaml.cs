@@ -41,8 +41,9 @@ public sealed partial class App : Application
             var gamesProvider = BindingsManager.Provider.GetRequiredService<GamesProvider>();
             var vmFactory = BindingsManager.Provider.GetRequiredService<ViewModelsFactory>();
             var portsProvider = BindingsManager.Provider.GetRequiredService<PortsProvider>();
+            var configProvider = BindingsManager.Provider.GetRequiredService<IConfigProvider>();
 
-            desktop.MainWindow = new MainWindow(vm, gamesProvider, vmFactory, portsProvider);
+            desktop.MainWindow = new MainWindow(vm, gamesProvider, vmFactory, portsProvider, configProvider);
 
             desktop.Exit += OnAppExit;
         }

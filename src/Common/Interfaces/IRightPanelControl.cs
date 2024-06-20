@@ -8,10 +8,7 @@ namespace Common.Interfaces
         Stream? SelectedAddonPreview { get; }
         string? SelectedAddonDescription { get; }
         string? SelectedAddonPlaytime { get; }
-        int? SelectedAddonScore { get; }
-        bool IsSelectedAddonUpvoted { get; }
-        bool IsSelectedAddonDownvoted { get; }
-        IAsyncRelayCommand UpvoteCommand { get; }
-        IAsyncRelayCommand DownvoteCommand { get; }
+        string? SelectedAddonRating { get; }
+        IAsyncRelayCommand<string> ChangeRatingCommand { get; }
     }
 }

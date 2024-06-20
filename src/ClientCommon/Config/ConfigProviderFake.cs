@@ -15,6 +15,7 @@ public sealed class ConfigProviderFake : IConfigProvider
     public string? PathRidesAgain { get; set; } = null;
     public string? PathSlave { get; set; } = null;
     public string? PathWang { get; set; } = null;
+    public Dictionary<string, byte> Rating { get; set; } = [];
 
     public Dictionary<string, TimeSpan> Playtimes => [];
     public Dictionary<string, bool> Scores => [];
@@ -29,7 +30,7 @@ public sealed class ConfigProviderFake : IConfigProvider
 
     public void AddPlaytime(string addonId, TimeSpan playTime) => throw new NotImplementedException();
 
-    public void AddScore(string addonId, bool isUpvote) => throw new NotImplementedException();
+    public void AddScore(string addonId, byte rating) => throw new NotImplementedException();
 
     public void ChangeModState(AddonVersion addonId, bool isEnabled) => throw new NotImplementedException();
 }

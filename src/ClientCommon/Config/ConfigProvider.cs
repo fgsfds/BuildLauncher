@@ -55,31 +55,26 @@ public sealed class ConfigProvider : IConfigProvider
         set => SetSettingsValue(value);
     }
 
-    public Dictionary<string, bool> Scores
+    public Dictionary<string, byte> Rating
     {
-        get => _dbContext.Scores.ToDictionary(x => x.AddonId, x => x.IsUpvoted);
+        get => _dbContext.Rating.ToDictionary(x => x.AddonId, x => x.Rating);
     }
 
-    public void AddScore(string addonId, bool isUpvote)
+    public void AddScore(string addonId, byte rating)
     {
-        var existing = _dbContext.Scores.Find([addonId]);
+        var existing = _dbContext.Rating.Find([addonId]);
 
         if (existing is null)
         {
-            _dbContext.Scores.Add(new() { AddonId = addonId, IsUpvoted = isUpvote });
+            _dbContext.Rating.Add(new() { AddonId = addonId, Rating = rating });
         }
         else
         {
-            if (existing.IsUpvoted == isUpvote)
-            {
-                _dbContext.Scores.Remove(existing);
-            }
-
-            existing.IsUpvoted = isUpvote;
+            existing.Rating = rating;
         }
 
         _dbContext.SaveChanges();
-        ParameterChangedEvent?.Invoke(nameof(Scores));
+        ParameterChangedEvent?.Invoke(nameof(Rating));
     }
 
     public Dictionary<string, TimeSpan> Playtimes
@@ -257,14 +252,6 @@ public sealed class ConfigProvider : IConfigProvider
 
         _dbContext.Settings.Add(new() { Name = nameof(config.UseLocalApi), Value = config.UseLocalApi.ToString() });
         _dbContext.Settings.Add(new() { Name = nameof(config.ApiPassword), Value = config.ApiPassword ?? string.Empty });
-
-        if (config.Upvotes is not null)
-        {
-            foreach (var addon in config.Upvotes)
-            {
-                _dbContext.Scores.Add(new() { AddonId = addon.Key, IsUpvoted = addon.Value });
-            }
-        }
 
         if (config.DisabledAutoloadMods is not null)
         {

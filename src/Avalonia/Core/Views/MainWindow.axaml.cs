@@ -2,6 +2,7 @@
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using BuildLauncher.ViewModels;
+using ClientCommon.Config;
 using Common.Enums;
 using Games.Providers;
 using Ports.Providers;
@@ -13,6 +14,7 @@ public sealed partial class MainWindow : Window
     private readonly ViewModelsFactory _vmFactory;
     private readonly PortsProvider _portsProvider;
     private readonly GamesProvider _gamesProvider;
+    private readonly IConfigProvider _configProvider;
 
 
     public MainWindow()
@@ -24,12 +26,14 @@ public sealed partial class MainWindow : Window
         MainViewModel vm, 
         GamesProvider gamesProvider, 
         ViewModelsFactory vmFactory, 
-        PortsProvider portsProvider
+        PortsProvider portsProvider,
+        IConfigProvider configProvider
         )
     {
         _vmFactory = vmFactory;
         _portsProvider = portsProvider;
         _gamesProvider = gamesProvider;
+        _configProvider = configProvider;
 
         DataContext = vm;
         InitializeComponent();
@@ -80,32 +84,32 @@ public sealed partial class MainWindow : Window
     {
         if (_gamesProvider.IsDukeInstalled && !DukePage.IsAlreadInitialized)
         {
-            DukePage.InitializeControl(GameEnum.Duke3D, _portsProvider, _vmFactory);
+            DukePage.InitializeControl(GameEnum.Duke3D, _portsProvider, _vmFactory, _configProvider);
         }
 
         if (_gamesProvider.IsBloodInstalled && !BloodPage.IsAlreadInitialized)
         {
-            BloodPage.InitializeControl(GameEnum.Blood, _portsProvider, _vmFactory);
+            BloodPage.InitializeControl(GameEnum.Blood, _portsProvider, _vmFactory, _configProvider);
         }
 
         if (_gamesProvider.IsWangInstalled && !WangPage.IsAlreadInitialized)
         {
-            WangPage.InitializeControl(GameEnum.ShadowWarrior, _portsProvider, _vmFactory);
+            WangPage.InitializeControl(GameEnum.ShadowWarrior, _portsProvider, _vmFactory, _configProvider);
         }
 
         if (_gamesProvider.IsFuryInstalled && !FuryPage.IsAlreadInitialized)
         {
-            FuryPage.InitializeControl(GameEnum.Fury, _portsProvider, _vmFactory);
+            FuryPage.InitializeControl(GameEnum.Fury, _portsProvider, _vmFactory, _configProvider);
         }
 
         if (_gamesProvider.IsRedneckInstalled && !RedneckPage.IsAlreadInitialized)
         {
-            RedneckPage.InitializeControl(GameEnum.Redneck, _portsProvider, _vmFactory);
+            RedneckPage.InitializeControl(GameEnum.Redneck, _portsProvider, _vmFactory, _configProvider);
         }
 
         if (_gamesProvider.IsSlaveInstalled && !SlavePage.IsAlreadInitialized)
         {
-            SlavePage.InitializeControl(GameEnum.Exhumed, _portsProvider, _vmFactory);
+            SlavePage.InitializeControl(GameEnum.Exhumed, _portsProvider, _vmFactory, _configProvider);
         }
     }
 }

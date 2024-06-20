@@ -2,8 +2,8 @@ using Avalonia.Controls;
 using Avalonia.Media;
 using BuildLauncher.Helpers;
 using BuildLauncher.ViewModels;
+using ClientCommon.Config;
 using Common.Enums;
-using Common.Enums.Addons;
 using Common.Helpers;
 using Common.Interfaces;
 using CommunityToolkit.Mvvm.Input;
@@ -26,7 +26,7 @@ namespace BuildLauncher.Controls
         /// <summary>
         /// Initialize control
         /// </summary>
-        public void InitializeControl(PortsProvider portsProvider)
+        public void InitializeControl(PortsProvider portsProvider, IConfigProvider configProvider)
         {
             DataContext.ThrowIfNotType<CampaignsViewModel>(out var viewModel);
 
@@ -35,6 +35,8 @@ namespace BuildLauncher.Controls
 
             CampaignsList.SelectionChanged += OnCampaignsListSelectionChanged;
             BottomPanel.DataContext = viewModel;
+
+            RightPanel.InitializeControl(configProvider);
 
             AddPortsButtons();
 

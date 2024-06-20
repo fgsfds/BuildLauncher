@@ -23,7 +23,7 @@ public sealed class ViewModelsFactory
     private readonly PortsReleasesProvider _portsReleasesProvider;
     private readonly ToolsReleasesProvider _toolsReleasesProvider;
     private readonly ApiInterface _apiInterface;
-    private readonly ScoresProvider _scoresProvider;
+    private readonly RatingProvider _ratingProvider;
     private readonly InstalledAddonsProviderFactory _installedAddonsProviderFactory;
     private readonly DownloadableAddonsProviderFactory _downloadableAddonsProviderFactory;
 
@@ -38,7 +38,7 @@ public sealed class ViewModelsFactory
         PortsReleasesProvider portsReleasesProvider,
         ToolsReleasesProvider toolsReleasesProvider,
         ApiInterface apiInterface,
-        ScoresProvider scoresProvider,
+        RatingProvider ratingProvider,
         InstalledAddonsProviderFactory installedAddonsProviderFactory,
         DownloadableAddonsProviderFactory downloadableAddonsProviderFactory
         )
@@ -53,7 +53,7 @@ public sealed class ViewModelsFactory
         _portsReleasesProvider = portsReleasesProvider;
         _toolsReleasesProvider = toolsReleasesProvider;
         _apiInterface = apiInterface;
-        _scoresProvider = scoresProvider;
+        _ratingProvider = ratingProvider;
         _installedAddonsProviderFactory = installedAddonsProviderFactory;
         _downloadableAddonsProviderFactory = downloadableAddonsProviderFactory;
     }
@@ -71,7 +71,7 @@ public sealed class ViewModelsFactory
             _config,
             _playtimeProvider,
             _apiInterface,
-            _scoresProvider,
+            _ratingProvider,
             _installedAddonsProviderFactory,
             _downloadableAddonsProviderFactory
             );
@@ -93,7 +93,7 @@ public sealed class ViewModelsFactory
             _config,
             _playtimeProvider,
             _apiInterface,
-            _scoresProvider,
+            _ratingProvider,
             _installedAddonsProviderFactory,
             _downloadableAddonsProviderFactory
             );
@@ -114,7 +114,7 @@ public sealed class ViewModelsFactory
             _config,
             _playtimeProvider,
             _apiInterface,
-            _scoresProvider,
+            _ratingProvider,
             _installedAddonsProviderFactory,
             _downloadableAddonsProviderFactory
             );

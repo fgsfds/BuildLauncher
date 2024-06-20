@@ -25,6 +25,7 @@
                        Source="{Binding SelectedAddonPreview, Converter={StaticResource ImagePathToBitmapConverter}}"/>
 
                 <md:MarkdownScrollViewer Margin="10,5"
+                                         Name="Description"
                                          Markdown="{Binding SelectedAddonDescription}">
 
                     <md:MarkdownScrollViewer.Styles>
@@ -52,17 +53,39 @@
             Margin="0,0,0,5"
             VerticalAlignment="Center"
             HorizontalAlignment="Center"
-            IsVisible="{Binding SelectedAddonScore, Converter={x:Static ObjectConverters.IsNotNull}}">
+            IsVisible="{Binding SelectedAddonRating, Converter={x:Static ObjectConverters.IsNotNull}}">
 
-            <TextBlock Margin="3" VerticalAlignment="Center">Score:</TextBlock>
+            <TextBlock Margin="3" VerticalAlignment="Center">Rating:</TextBlock>
 
-            <Button IsVisible="{Binding IsSelectedAddonUpvoted}" Background="{DynamicResource SystemAccentColor}" Margin="3" Command="{Binding UpvoteCommand}">👍</Button>
-            <Button IsVisible="{Binding !IsSelectedAddonUpvoted}" Margin="3" Command="{Binding UpvoteCommand}">👍</Button>
+            <TextBlock Name="Rating" Margin="3" Text="{Binding SelectedAddonRating}" VerticalAlignment="Center"></TextBlock>
 
-            <TextBlock Margin="3" Text="{Binding SelectedAddonScore}" VerticalAlignment="Center"></TextBlock>
+            <StackPanel VerticalAlignment="Center" Orientation="Horizontal" Margin="0,0,0,2">
 
-            <Button IsVisible="{Binding IsSelectedAddonDownvoted}" Background="{DynamicResource SystemAccentColor}" Margin="3" Command="{Binding DownvoteCommand}">👎</Button>
-            <Button IsVisible="{Binding !IsSelectedAddonDownvoted}" Margin="3" Command="{Binding DownvoteCommand}">👎</Button>
+                <StackPanel.Styles>
+                    <Style Selector="Button:pointerover /template/ ContentPresenter">
+                        <Setter Property="Background" Value="Transparent" />
+                        <Setter Property="Foreground" Value="{Binding $parent[Button].Foreground} "/>
+                        <Setter Property="BorderBrush" Value="Transparent" />
+                    </Style>
+                    <Style Selector="Button:pressed /template/ ContentPresenter">
+                        <Setter Property="Background" Value="Transparent" />
+                        <Setter Property="Foreground" Value="{Binding $parent[Button].Foreground} "/>
+                        <Setter Property="BorderBrush" Value="Transparent" />
+                    </Style>
+                    <Style Selector="Button:disabled /template/ ContentPresenter">
+                        <Setter Property="Background" Value="Transparent" />
+                        <Setter Property="Foreground" Value="{Binding $parent[Button].Foreground} "/>
+                        <Setter Property="BorderBrush" Value="Transparent" />
+                    </Style>
+                </StackPanel.Styles>
+
+                <Button Command="{Binding ChangeRatingCommand}" CommandParameter="1" Name="Star1" Padding="0" FontSize="25" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Width="{Binding Bounds.Height, ElementName=Star1}" PointerEntered="Button_PointerEntered1" PointerExited="Button_PointerExited" Background="Transparent">☆</Button>
+                <Button Command="{Binding ChangeRatingCommand}" CommandParameter="2" Name="Star2" Padding="0" FontSize="25" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Width="{Binding Bounds.Height, ElementName=Star1}" PointerEntered="Button_PointerEntered2" PointerExited="Button_PointerExited" Background="Transparent">☆</Button>
+                <Button Command="{Binding ChangeRatingCommand}" CommandParameter="3" Name="Star3" Padding="0" FontSize="25" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Width="{Binding Bounds.Height, ElementName=Star1}" PointerEntered="Button_PointerEntered3" PointerExited="Button_PointerExited" Background="Transparent">☆</Button>
+                <Button Command="{Binding ChangeRatingCommand}" CommandParameter="4" Name="Star4" Padding="0" FontSize="25" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Width="{Binding Bounds.Height, ElementName=Star1}" PointerEntered="Button_PointerEntered4" PointerExited="Button_PointerExited" Background="Transparent">☆</Button>
+                <Button Command="{Binding ChangeRatingCommand}" CommandParameter="5" Name="Star5" Padding="0" FontSize="25" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Width="{Binding Bounds.Height, ElementName=Star1}" PointerEntered="Button_PointerEntered5" PointerExited="Button_PointerExited" Background="Transparent">☆</Button>
+
+            </StackPanel>
 
         </StackPanel>
 

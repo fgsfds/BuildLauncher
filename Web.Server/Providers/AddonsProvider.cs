@@ -47,7 +47,7 @@ namespace Web.Server.Providers
             var versions = dbContext.Versions.AsNoTracking().Where(x => addons.Keys.Contains(x.AddonId)).ToDictionary(static x => x.Id);
             var dependencies = dbContext.Dependencies.AsNoTracking().Where(x => versions.Keys.Contains(x.AddonVersionId)).ToLookup(static x => x.AddonVersionId);
             var installs = dbContext.Installs.AsNoTracking().ToDictionary(static x => x.AddonId, static y => y.Installs);
-            var scores = dbContext.Scores.AsNoTracking().ToDictionary(static x => x.AddonId, static y => y.Score);
+            var ratings = dbContext.Rating.AsNoTracking().ToDictionary(static x => x.AddonId, static y => y.Rating);
 
             List<DownloadableAddonEntity> result = new(versions.Count);
 
@@ -68,7 +68,7 @@ namespace Web.Server.Providers
                 }
 
                 var hasInstalls = installs.TryGetValue(addon.Id, out var installsNumber);
-                var hasScore = scores.TryGetValue(addon.Id, out var scoreNumber);
+                var hasRating = ratings.TryGetValue(addon.Id, out var ratingNumber);
 
                 DownloadableAddonEntity newDownloadable = new()
                 {
@@ -84,7 +84,8 @@ namespace Web.Server.Providers
                     Author = version.Value.Author,
                     Dependencies = depsResult,
                     Installs = hasInstalls ? installsNumber : 0,
-                    Score = hasScore ? scoreNumber : 0,
+                    Score = 0,
+                    Rating = hasRating ? ratingNumber : 0,
                     UpdateDate = version.Value.UpdateDate
                 };
 
@@ -125,32 +126,21 @@ namespace Web.Server.Providers
             return newInstalls;
         }
 
-        internal int ChangeScore(string addonId, sbyte increment)
+        internal decimal ChangeRating(string addonId, sbyte rating, bool isNew)
         {
             using var dbContext = _dbContextFactory.Get();
-            var fix = dbContext.Scores.Find(addonId);
+            var existingRating = dbContext.Rating.Find(addonId) ?? throw new Exception($"Rating for {addonId} is not found");
 
-            int newScore;
+            existingRating.RatingSum += rating;
 
-            if (fix is null)
+            if (isNew)
             {
-                ScoresDbEntity newScoreEntity = new()
-                {
-                    AddonId = addonId,
-                    Score = increment
-                };
-
-                dbContext.Scores.Add(newScoreEntity);
-                newScore = increment;
-            }
-            else
-            {
-                fix.Score += increment;
-                newScore = fix.Score;
+                existingRating.RatingTotal++;
             }
 
             dbContext.SaveChanges();
-            return newScore;
+
+            return existingRating.Rating;
         }
 
         internal void AddReport(string addonId, string text)
@@ -167,10 +157,10 @@ namespace Web.Server.Providers
             dbContext.SaveChanges();
         }
 
-        internal Dictionary<string, int> GetScores()
+        internal Dictionary<string, decimal> GetRating()
         {
             using var dbContext = _dbContextFactory.Get();
-            return dbContext.Scores.ToDictionary(static x => x.AddonId, static y => y.Score);
+            return dbContext.Rating.ToDictionary(static x => x.AddonId, static y => y.Rating);
         }
 
         internal bool AddAddonToDatabase(AddonsJsonEntity addon)
@@ -245,14 +235,15 @@ namespace Web.Server.Providers
                 }
 
 
-                var existingScore = dbContext.Scores.Find(addon.Id);
+                var existingScore = dbContext.Rating.Find(addon.Id);
 
                 if (existingScore is null)
                 {
-                    dbContext.Scores.Add(new()
+                    dbContext.Rating.Add(new()
                     {
                         AddonId = addon.Id,
-                        Score = 0
+                        RatingSum = 0,
+                        RatingTotal = 0
                     });
 
                     dbContext.SaveChanges();

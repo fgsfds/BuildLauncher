@@ -32,10 +32,10 @@ public sealed partial class CampaignsViewModel : RightPanelViewModel, IPortsButt
         IConfigProvider config,
         PlaytimeProvider playtimeProvider,
         ApiInterface apiInterface,
-        ScoresProvider scoresProvider,
+        RatingProvider ratingProvider,
         InstalledAddonsProviderFactory installedAddonsProviderFactory,
         DownloadableAddonsProviderFactory downloadableAddonsProviderFactory
-        ) : base(config, playtimeProvider, apiInterface, scoresProvider)
+        ) : base(config, playtimeProvider, apiInterface, ratingProvider)
     {
         Game = game;
 
@@ -85,9 +85,7 @@ public sealed partial class CampaignsViewModel : RightPanelViewModel, IPortsButt
             OnPropertyChanged(nameof(SelectedAddonDescription));
             OnPropertyChanged(nameof(SelectedAddonPreview));
             OnPropertyChanged(nameof(IsPreviewVisible));
-            OnPropertyChanged(nameof(SelectedAddonScore));
-            OnPropertyChanged(nameof(IsSelectedAddonUpvoted));
-            OnPropertyChanged(nameof(IsSelectedAddonDownvoted));
+            OnPropertyChanged(nameof(SelectedAddonRating));
             OnPropertyChanged(nameof(SelectedAddonPlaytime));
 
             StartCampaignCommand.NotifyCanExecuteChanged();

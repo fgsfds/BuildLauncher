@@ -12,7 +12,7 @@ namespace ClientCommon.DI
             container.AddSingleton<AppUpdateInstaller>();
             container.AddSingleton<PlaytimeProvider>();
             container.AddSingleton<ApiInterface>();
-            container.AddSingleton<ScoresProvider>();
+            container.AddSingleton<RatingProvider>();
 
             if (isDesigner)
             {

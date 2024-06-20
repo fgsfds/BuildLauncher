@@ -18,6 +18,7 @@ namespace Common.Interfaces
         string? Description { get; set; }
         int Installs { get; set; }
         int Score { get; set; }
+        decimal Rating{ get; set; }
         DateTime UpdateDate { get; set; }
         string FileSizeString { get; }
         string UpdateDateString { get; }

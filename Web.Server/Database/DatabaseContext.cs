@@ -16,7 +16,7 @@ namespace Web.Server.Database
         public DbSet<AddonsDbEntity> Addons { get; set; }
         public DbSet<VersionsDbEntity> Versions { get; set; }
         public DbSet<InstallsDbEntity> Installs { get; set; }
-        public DbSet<ScoresDbEntity> Scores { get; set; }
+        public DbSet<RatingsDbEntity> Rating { get; set; }
         public DbSet<ReportsDbEntity> Reports { get; set; }
         public DbSet<DependenciesDbEntity> Dependencies { get; set; }
 
@@ -164,13 +164,14 @@ namespace Web.Server.Database
                 //Scores
                 foreach (var addon in Addons.AsNoTracking().ToList())
                 {
-                    ScoresDbEntity score = new()
+                    RatingsDbEntity score = new()
                     { 
                         AddonId = addon.Id,
-                        Score = 0 
+                        RatingSum = 0,
+                        RatingTotal = 0
                     };
 
-                    Scores.Add(score);
+                    Rating.Add(score);
                 }
 
                 this.SaveChanges();

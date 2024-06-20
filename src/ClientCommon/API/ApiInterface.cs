@@ -107,11 +107,11 @@ namespace ClientCommon.API
             }
         }
 
-        public async Task<int?> ChangeScoreAsync(string addonId, sbyte increment)
+        public async Task<decimal?> ChangeScoreAsync(string addonId, sbyte score, bool isNew)
         {
             try
             {
-                using var response = await _httpClient.PutAsJsonAsync($"{ApiUrl}/addons/scores/change", new Tuple<string, sbyte>(addonId, increment)).ConfigureAwait(false);
+                using var response = await _httpClient.PutAsJsonAsync($"{ApiUrl}/addons/rating/change", new Tuple<string, sbyte, bool>(addonId, score, isNew)).ConfigureAwait(false);
                 var responseStr = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 
                 if (responseStr is null)
@@ -119,7 +119,7 @@ namespace ClientCommon.API
                     return null;
                 }
 
-                var newScore = int.TryParse(responseStr, out var newScoreInt);
+                var newScore = decimal.TryParse(responseStr, out var newScoreInt);
 
                 return newScore ? newScoreInt : null;
             }
@@ -129,18 +129,18 @@ namespace ClientCommon.API
             }
         }
 
-        public async Task<Dictionary<string, int>?> GetScoresAsync()
+        public async Task<Dictionary<string, decimal>?> GetScoresAsync()
         {
             try
             {
-                var response = await _httpClient.GetStringAsync($"{ApiUrl}/addons/scores").ConfigureAwait(false);
+                var response = await _httpClient.GetStringAsync($"{ApiUrl}/addons/rating").ConfigureAwait(false);
 
                 if (response is null)
                 {
                     return null;
                 }
 
-                var addons = JsonSerializer.Deserialize<Dictionary<string, int>>(response);
+                var addons = JsonSerializer.Deserialize<Dictionary<string, decimal>>(response);
 
                 return addons;
             }

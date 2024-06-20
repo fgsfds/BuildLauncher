@@ -32,10 +32,10 @@ public sealed partial class MapsViewModel : RightPanelViewModel, IPortsButtonCon
         IConfigProvider config,
         PlaytimeProvider playtimeProvider,
         ApiInterface apiInterface,
-        ScoresProvider scoresProvider,
+        RatingProvider ratingProvider,
         InstalledAddonsProviderFactory installedAddonsProviderFactory,
         DownloadableAddonsProviderFactory _downloadableAddonsProviderFactory
-        ) : base(config, playtimeProvider, apiInterface, scoresProvider)
+        ) : base(config, playtimeProvider, apiInterface, ratingProvider)
     {
         Game = game;
 
@@ -99,9 +99,7 @@ public sealed partial class MapsViewModel : RightPanelViewModel, IPortsButtonCon
             _selectedAddon = value;
 
             OnPropertyChanged(nameof(SelectedAddonDescription));
-            OnPropertyChanged(nameof(SelectedAddonScore));
-            OnPropertyChanged(nameof(IsSelectedAddonUpvoted));
-            OnPropertyChanged(nameof(IsSelectedAddonDownvoted));
+            OnPropertyChanged(nameof(SelectedAddonRating));
             OnPropertyChanged(nameof(SelectedAddonPlaytime));
             OnPropertyChanged(nameof(SelectedAddonPreview));
             OnPropertyChanged(nameof(IsPreviewVisible));

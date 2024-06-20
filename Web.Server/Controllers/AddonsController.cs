@@ -21,11 +21,21 @@ namespace Web.Server.Controllers
 
 
         [HttpGet("scores")]
-        public Dictionary<string, int> GetScores() => _addonsProvider.GetScores();
+        [Obsolete]
+        public Dictionary<string, int> GetScores() => [];
 
 
         [HttpPut("scores/change")]
-        public int ChangeScore([FromBody] Tuple<string, sbyte> message) => _addonsProvider.ChangeScore(message.Item1, message.Item2);
+        [Obsolete]
+        public int ChangeScore([FromBody] Tuple<string, sbyte> message) => 0;
+
+
+        [HttpGet("rating")]
+        public Dictionary<string, decimal> GetRating() => _addonsProvider.GetRating();
+
+
+        [HttpPut("rating/change")]
+        public decimal ChangeRating([FromBody] Tuple<string, sbyte, bool> message) => _addonsProvider.ChangeRating(message.Item1, message.Item2, message.Item3);
 
 
         [HttpPut("installs/add")]

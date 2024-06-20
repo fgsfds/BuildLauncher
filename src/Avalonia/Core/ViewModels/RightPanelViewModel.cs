@@ -16,20 +16,20 @@ public partial class RightPanelViewModel : ObservableObject, IRightPanelControl
     private readonly IConfigProvider _config;
     private readonly PlaytimeProvider _playtimeProvider;
     private readonly ApiInterface _apiInterface;
-    private readonly ScoresProvider _scoresProvider;
+    private readonly RatingProvider _ratingProvider;
 
 
     public RightPanelViewModel(
         IConfigProvider config,
         PlaytimeProvider playtimeProvider,
         ApiInterface apiInterface,
-        ScoresProvider scoresProvider
+        RatingProvider ratingProvider
         )
     {
         _config = config;
         _playtimeProvider = playtimeProvider;
         _apiInterface = apiInterface;
-        _scoresProvider = scoresProvider;
+        _ratingProvider = ratingProvider;
     }
 
 
@@ -70,7 +70,7 @@ public partial class RightPanelViewModel : ObservableObject, IRightPanelControl
     /// </summary>
     public bool IsPreviewVisible => SelectedAddonPreview is not null;
 
-    public int? SelectedAddonScore
+    public string? SelectedAddonRating
     {
         get
         {
@@ -79,54 +79,19 @@ public partial class RightPanelViewModel : ObservableObject, IRightPanelControl
                 return null;
             }
 
-            var hasUpvote = _scoresProvider.GetScore(SelectedAddon.Id);
+            var rating = _ratingProvider.GetRating(SelectedAddon.Id);
 
-            if (hasUpvote is not null)
+            if (rating is null)
             {
-                return hasUpvote;
+                return null;
             }
 
-            return null;
-        }
-    }
-
-    public bool IsSelectedAddonUpvoted
-    {
-        get
-        {
-            if (SelectedAddon is null)
+            if (rating == 0)
             {
-                return false;
+                return "-";
             }
 
-            var hasUpvote = _config.Scores.TryGetValue(SelectedAddon.Id, out var isUpvote);
-
-            if (hasUpvote && isUpvote)
-            {
-                return true;
-            }
-
-            return false;
-        }
-    }
-
-    public bool IsSelectedAddonDownvoted
-    {
-        get
-        {
-            if (SelectedAddon is null)
-            {
-                return false;
-            }
-
-            var hasUpvote = _config.Scores.TryGetValue(SelectedAddon.Id, out var isUpvote);
-
-            if (hasUpvote && !isUpvote)
-            {
-                return true;
-            }
-
-            return false;
+            return rating.Value.ToString("0.##");
         }
     }
 
@@ -160,31 +125,15 @@ public partial class RightPanelViewModel : ObservableObject, IRightPanelControl
     /// Upvote fix
     /// </summary>
     [RelayCommand]
-    private async Task Upvote()
+    private async Task ChangeRatingAsync(string score)
     {
         SelectedAddon.ThrowIfNull();
 
-        await _scoresProvider.ChangeScoreAsync(SelectedAddon.Id, true).ConfigureAwait(true);
+        var rating = byte.Parse(score);
 
-        OnPropertyChanged(nameof(SelectedAddonScore));
-        OnPropertyChanged(nameof(IsSelectedAddonUpvoted));
-        OnPropertyChanged(nameof(IsSelectedAddonDownvoted));
-    }
+        await _ratingProvider.ChangeScoreAsync(SelectedAddon.Id, rating).ConfigureAwait(true);
 
-
-    /// <summary>
-    /// Downvote fix
-    /// </summary>
-    [RelayCommand]
-    private async Task Downvote()
-    {
-        SelectedAddon.ThrowIfNull();
-
-        await _scoresProvider.ChangeScoreAsync(SelectedAddon.Id, false).ConfigureAwait(true);
-
-        OnPropertyChanged(nameof(SelectedAddonScore));
-        OnPropertyChanged(nameof(IsSelectedAddonUpvoted));
-        OnPropertyChanged(nameof(IsSelectedAddonDownvoted));
+        OnPropertyChanged(nameof(SelectedAddonRating));
     }
 
     #endregion        

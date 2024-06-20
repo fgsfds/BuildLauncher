@@ -3,13 +3,13 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ClientCommon.Config.DbEntities;
 
-[Table(name: "scores", Schema = "main")]
-public sealed class ScoresDbEntity
+[Table(name: "rating", Schema = "main")]
+public sealed class RatingDbEntity
 {
     [Key]
     [Column("addon_id")]
     public required string AddonId { get; set; }
     
-    [Column("is_upvoted")]
-    public required bool IsUpvoted { get; set; }
+    [Column("rating")]
+    public required byte Rating { get; set; }
 }

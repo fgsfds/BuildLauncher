@@ -2,6 +2,7 @@ using Avalonia.Controls;
 using Avalonia.Media;
 using BuildLauncher.Helpers;
 using BuildLauncher.ViewModels;
+using ClientCommon.Config;
 using Common.Enums;
 using Common.Enums.Skills;
 using Common.Helpers;
@@ -27,7 +28,7 @@ public sealed partial class MapsControl : UserControl
     /// <summary>
     /// Initialize control
     /// </summary>
-    public void InitializeControl(PortsProvider portsProvider)
+    public void InitializeControl(PortsProvider portsProvider, IConfigProvider configProvider)
     {
         DataContext.ThrowIfNotType<MapsViewModel>(out var viewModel);
 
@@ -36,6 +37,8 @@ public sealed partial class MapsControl : UserControl
 
         MapsList.SelectionChanged += OnMapsListSelectionChanged;
         BottomPanel.DataContext = viewModel;
+
+        RightPanel.InitializeControl(configProvider);
 
         CreateSkillsFlyout();
 

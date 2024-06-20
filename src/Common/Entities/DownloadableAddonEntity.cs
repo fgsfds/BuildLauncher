@@ -36,7 +36,11 @@ namespace Common.Entities
         public required int Installs { get; set; }
 
         [JsonPropertyName("Score")]
+        [Obsolete]
         public required int Score { get; set; }
+
+        [JsonPropertyName("Rating")]
+        public required decimal Rating { get; set; }
 
         [JsonPropertyName("Dependencies")]
         public List<string>? Dependencies { get; set; }
