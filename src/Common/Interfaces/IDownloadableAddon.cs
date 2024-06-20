@@ -20,8 +20,10 @@ namespace Common.Interfaces
         int Score { get; set; }
         decimal Rating{ get; set; }
         DateTime UpdateDate { get; set; }
+
         string FileSizeString { get; }
         string UpdateDateString { get; }
+        string RatingStr { get; }
 
         string ToMarkdownString();
     }

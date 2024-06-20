@@ -57,7 +57,7 @@
                 <DataGridTextColumn Header="Type" Binding="{Binding AddonType}" FontWeight="Bold" />
                 <DataGridTextColumn Header="Version" Binding="{Binding Version}" />
                 <DataGridTextColumn Header="Size" Binding="{Binding FileSizeString}" />
-                <DataGridTextColumn Header="Rating" Binding="{Binding Rating}" />
+                <DataGridTextColumn Header="Rating" Binding="{Binding RatingStr}" />
                 <DataGridTextColumn Header="Downloads" Binding="{Binding Installs}" />
                 <DataGridTextColumn Header="Updated" Binding="{Binding UpdateDateString}" SortMemberPath="UpdateDate" />
                 <DataGridTextColumn Header="Status" Binding="{Binding Status}" FontWeight="Bold" />

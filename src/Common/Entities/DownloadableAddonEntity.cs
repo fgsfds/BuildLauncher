@@ -62,6 +62,20 @@ namespace Common.Entities
         public bool HasNewerVersion { get; set; }
 
         [JsonIgnore]
+        public string RatingStr
+        {
+            get
+            {
+                if (Rating == 0)
+                {
+                    return "-";
+                }
+
+                return Rating.ToString("0.##");
+            }
+        }
+
+        [JsonIgnore]
         public string Status
         {
             get

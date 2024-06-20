@@ -84,9 +84,9 @@ public sealed partial class CampaignsViewModel : RightPanelViewModel, IPortsButt
 
             OnPropertyChanged(nameof(SelectedAddonDescription));
             OnPropertyChanged(nameof(SelectedAddonPreview));
-            OnPropertyChanged(nameof(IsPreviewVisible));
             OnPropertyChanged(nameof(SelectedAddonRating));
             OnPropertyChanged(nameof(SelectedAddonPlaytime));
+            OnPropertyChanged(nameof(IsPreviewVisible));
 
             StartCampaignCommand.NotifyCanExecuteChanged();
         }

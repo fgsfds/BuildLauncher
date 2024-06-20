@@ -19,9 +19,27 @@ public sealed class DatabaseContext : DbContext
         }
         catch
         {
-            Database.EnsureDeleted();
-            Database.Migrate();
+            ConvertOldConfig();
         }
+    }
+
+    [Obsolete]
+    private void ConvertOldConfig()
+    {
+        var settings = Settings.ToList();
+        var disabled = DisabledAddons.ToList();
+        var playtimes = Playtimes.ToList();
+        var paths = GamePaths.ToList();
+
+        Database.EnsureDeleted();
+        Database.Migrate();
+
+        Settings.AddRange(settings);
+        DisabledAddons.AddRange(disabled);
+        Playtimes.AddRange(playtimes);
+        GamePaths.AddRange(paths);
+
+        SaveChanges();
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
