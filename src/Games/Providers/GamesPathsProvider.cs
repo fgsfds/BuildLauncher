@@ -28,6 +28,19 @@ namespace Games.Providers
         {
             _config = config;
 
+            if (OperatingSystem.IsWindows())
+            {
+                var zoomPath = (string?)Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\ZOOM PLATFORM\Duke Nukem 3D - Atomic Edition", "InstallPath", null);
+
+                if (!string.IsNullOrWhiteSpace(zoomPath))
+                {
+                    if (Directory.Exists(zoomPath))
+                    {
+                        _dukePath ??= zoomPath;
+                    }
+                }
+            }
+
             var libs = GetSteamLibraries();
 
             foreach (var lib in libs)
@@ -47,19 +60,13 @@ namespace Games.Providers
                     _dukePath ??= pathToGame;
                 }
 
-                //World Tour
-                //Using WT as a base game as a last resort
-                pathToGame = Path.Combine(lib, "Duke Nukem 3D Twentieth Anniversary World Tour");
-                if (Directory.Exists(pathToGame))
-                {
-                    _dukePath ??= pathToGame;
-                }
-
 
                 //WORLD TOUR
                 pathToGame = Path.Combine(lib, "Duke Nukem 3D Twentieth Anniversary World Tour");
                 if (Directory.Exists(pathToGame))
                 {
+                    //Using WT as a base game as a last resort
+                    _dukePath ??= pathToGame;
                     _dukeWtPath ??= pathToGame;
                 }
 
@@ -126,6 +133,8 @@ namespace Games.Providers
                     _redneckPath ??= pathToGame;
                 }
 
+
+                //RIDES AGAIN
                 pathToGame = Path.Combine(lib, "Redneck Rampage Rides Again", "AGAIN");
                 if (Directory.Exists(pathToGame))
                 {
@@ -156,6 +165,7 @@ namespace Games.Providers
                     _witch1Path ??= pathToGame;
                 }
 
+                //WITCHAVEN II
                 pathToGame = Path.Combine(lib, "Witchaven II Blood Vengeance", "Original", "GAME", "WHAVEN2");
                 if (Directory.Exists(pathToGame))
                 {
@@ -190,6 +200,8 @@ namespace Games.Providers
         {
             return game switch
             {
+                DukeVersionEnum.Duke3D_13D => _dukePath,
+                DukeVersionEnum.Duke3D_Atomic => _dukePath,
                 DukeVersionEnum.Duke3D_WT => _dukeWtPath,
                 _ => throw new NotImplementedException()
             };

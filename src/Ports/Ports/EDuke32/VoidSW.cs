@@ -69,9 +69,7 @@ namespace Ports.Ports.EDuke32
         protected override void GetStartCampaignArgs(StringBuilder sb, IGame game, IAddon addon)
         {
             //don't search for steam/gog installs
-            sb.Append($@" -usecwd");
-
-            sb.Append($@" {AddDirectoryParam}""{game.GameInstallFolder}""");
+            sb.Append($@" -usecwd {AddDirectoryParam}""{game.GameInstallFolder}""");
 
             if (addon.MainDef is not null)
             {

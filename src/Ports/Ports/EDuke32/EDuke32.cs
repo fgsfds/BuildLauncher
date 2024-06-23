@@ -184,7 +184,14 @@ namespace Ports.Ports.EDuke32
                     dukeAddon = (byte)DukeAddonEnum.DukeVaca;
                 }
 
-                sb.Append($@" {AddDirectoryParam}""{game.GameInstallFolder}"" -addon {dukeAddon}");
+                sb.Append($@" {AddDirectoryParam}""{game.GameInstallFolder}""");
+
+                if (Directory.Exists(Path.Combine(game.GameInstallFolder!, "AddOns")))
+                {
+                    sb.Append($@" {AddDirectoryParam}""{Path.Combine(game.GameInstallFolder!, "AddOns")}""");
+                }
+
+                sb.Append($@" -addon {dukeAddon}");
             }
 
 

@@ -1,6 +1,7 @@
 ﻿using ClientCommon.Config;
 using Common;
 using Common.Enums;
+using Common.Enums.Addons;
 using Common.Enums.Versions;
 using Common.Helpers;
 using Common.Interfaces;
@@ -170,25 +171,17 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
 
         if (result is not null)
         {
-            foreach (var customCamp in result.OrderBy(static x => x.Value.Title))
+            foreach (var customCamp in result
+                //hack so SW addons end up at the beginning of the list
+                    .OrderByDescending(static x => x.Key.Id.Equals(nameof(WangAddonEnum.TwinDragon), StringComparison.InvariantCultureIgnoreCase))
+                    .ThenByDescending(static x => x.Key.Id.Equals(nameof(WangAddonEnum.Wanton), StringComparison.InvariantCultureIgnoreCase))
+                    .ThenBy(static x => x.Value.Title))
             {
-                if (campaigns.TryGetValue(customCamp.Key, out var _))
-                {
-                    //replacing original campaign with the downloaded one
-                    campaigns[customCamp.Key] = customCamp.Value;
-                }
-                else
-                {
-                    campaigns.Add(customCamp.Key, customCamp.Value);
-                }
+                campaigns.Add(customCamp.Key, customCamp.Value);
             }
+        }
 
-            return campaigns;
-        }
-        else
-        {
-            return [];
-        }
+        return campaigns;
     }
 
     /// <inheritdoc/>

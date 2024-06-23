@@ -487,6 +487,11 @@ namespace Ports.Ports
                     var path = gameFolder.Replace('\\', '/');
                     sb.Append("Path=").AppendLine(path);
 
+                    if (Directory.Exists(Path.Combine(gameFolder, "addons")))
+                    {
+                        sb.Append("Path=").AppendLine(path + "/addons");
+                    }
+
                     do
                     {
                         i++;
@@ -503,6 +508,12 @@ namespace Ports.Ports
 
                     var path = gameFolder.Replace('\\', '/');
                     sb.Append("Path=").AppendLine(path);
+
+                    if (Directory.Exists(Path.Combine(gameFolder, "addons")))
+                    {
+                        sb.Append("Path=").AppendLine(path + "/addons");
+                    }
+
                     path = modsFolder.Replace('\\', '/');
                     sb.Append("Path=").AppendLine(path);
 

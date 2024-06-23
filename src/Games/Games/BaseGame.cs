@@ -106,7 +106,8 @@ public abstract class BaseGame : IGame
             return false;
         }
 
-        if (!File.Exists(Path.Combine(GameInstallFolder, file)))
+        if (!File.Exists(Path.Combine(GameInstallFolder, file)) &&
+            !File.Exists(Path.Combine(GameInstallFolder, "addons", file)))
         {
             return false;
         }
