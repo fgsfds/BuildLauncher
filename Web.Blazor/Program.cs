@@ -24,12 +24,15 @@ public class Program
         // Don't run tasks in dev mode
         if (!builder.Environment.IsDevelopment())
         {
-            ServerProperties.IsDevMode = true;
-
             builder.Services.AddHostedService<AppReleasesTask>();
             builder.Services.AddHostedService<PortsReleasesTask>();
             builder.Services.AddHostedService<ToolsReleasesTask>();
             builder.Services.AddHostedService<FileCheckTask>();
+        }
+        
+        if (builder.Environment.IsDevelopment())
+        {
+            ServerProperties.IsDevMode = true;
         }
 
         builder.Services.AddSingleton<AppReleasesProvider>();
@@ -55,8 +58,6 @@ public class Program
         // Configure the HTTP request pipeline.
         if (!app.Environment.IsDevelopment())
         {
-            ServerProperties.IsDevMode = true;
-
             app.UseExceptionHandler("/Error");
             // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
             app.UseHsts();

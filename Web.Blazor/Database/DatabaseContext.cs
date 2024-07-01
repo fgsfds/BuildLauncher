@@ -26,7 +26,7 @@ namespace Web.Blazor.Database
             {
                 if (!_isRunOnce)
                 {
-                    Database.EnsureDeleted();
+                    //Database.EnsureDeleted();
                     _isRunOnce = true;
                 }
             }
