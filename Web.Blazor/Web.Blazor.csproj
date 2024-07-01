@@ -9,13 +9,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Remove="wwwroot\fonts\easvhs.ttf" />
-    <Content Remove="wwwroot\img\discord.png" />
-    <Content Remove="wwwroot\img\github.png" />
-    <Content Remove="wwwroot\img\logo.png" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Markdig" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" />
     <PackageReference Include="AWSSDK.S3" />
@@ -23,13 +16,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\src\Common\Common.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="wwwroot\fonts\easvhs.ttf" />
-    <None Include="wwwroot\img\discord.png" />
-    <None Include="wwwroot\img\github.png" />
-    <None Include="wwwroot\img\logo.png" />
   </ItemGroup>
 
 </Project>

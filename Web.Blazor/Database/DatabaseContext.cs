@@ -41,16 +41,18 @@ namespace Web.Blazor.Database
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-#if DEBUG
-            optionsBuilder.UseNpgsql("Host=localhost;Port=5432;Database=buildlauncher;Username=postgres;Password=123;Include Error Detail=True");
-#else
-
-            string dbip = Environment.GetEnvironmentVariable("DbIp")!;
-            string dbport = Environment.GetEnvironmentVariable("DbPort")!;
-            string user = Environment.GetEnvironmentVariable("DbUser")!;
-            string password = Environment.GetEnvironmentVariable("DbPass")!;
-            optionsBuilder.UseNpgsql($"Host={dbip};Port={dbport};Database=buildlauncher;Username={user};Password={password}");
-#endif
+            if (ServerProperties.IsDevMode)
+            {
+                optionsBuilder.UseNpgsql("Host=localhost;Port=5432;Database=buildlauncher;Username=postgres;Password=123;Include Error Detail=True");
+            }
+            else
+            {
+                var dbip = Environment.GetEnvironmentVariable("DbIp")!;
+                var dbport = Environment.GetEnvironmentVariable("DbPort")!;
+                var user = Environment.GetEnvironmentVariable("DbUser")!;
+                var password = Environment.GetEnvironmentVariable("DbPass")!;
+                optionsBuilder.UseNpgsql($"Host={dbip};Port={dbport};Database=buildlauncher;Username={user};Password={password}");
+            }
         }
 
         [Obsolete]

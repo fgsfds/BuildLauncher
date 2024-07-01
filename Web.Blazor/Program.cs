@@ -24,6 +24,8 @@ public class Program
         // Don't run tasks in dev mode
         if (!builder.Environment.IsDevelopment())
         {
+            ServerProperties.IsDevMode = true;
+
             builder.Services.AddHostedService<AppReleasesTask>();
             builder.Services.AddHostedService<PortsReleasesTask>();
             builder.Services.AddHostedService<ToolsReleasesTask>();
@@ -75,7 +77,7 @@ public class Program
     private static HttpClient CreateHttpClient(IServiceProvider provider)
     {
         var httpClient = new HttpClient();
-        httpClient.DefaultRequestHeaders.Add("User-Agent", "Superheater");
+        httpClient.DefaultRequestHeaders.Add("User-Agent", "BuildLauncher");
         return httpClient;
     }
 }
