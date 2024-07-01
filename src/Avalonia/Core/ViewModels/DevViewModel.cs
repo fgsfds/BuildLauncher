@@ -788,6 +788,9 @@ public sealed partial class DevViewModel : ObservableObject
             StartMap = startMap
         };
 
+        var jsonStr = JsonSerializer.Serialize(addon, AddonManifestContext.Default.AddonDto);
+        JsonText = jsonStr;
+
         return addon;
     }
 
@@ -838,9 +841,6 @@ public sealed partial class DevViewModel : ObservableObject
         try
         {
             var addon = CreateJson();
-            var jsonStr = JsonSerializer.Serialize(addon, AddonManifestContext.Default.AddonDto);
-
-            JsonText = jsonStr;
         }
         catch (Exception ex)
         {
@@ -865,7 +865,6 @@ public sealed partial class DevViewModel : ObservableObject
 
             File.WriteAllText(Path.Combine(PathToAddonFolder!, "addon.json"), jsonStr);
 
-            JsonText = jsonStr;
             ErrorText = "JSON saved";
         }
         catch (Exception ex)

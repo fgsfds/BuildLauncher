@@ -1,0 +1,59 @@
+﻿@page "/duke3d"
+
+<PageTitle>Duke Nukem 3D</PageTitle>
+
+@using Common.Entities
+@using Common.Interfaces
+@using Markdig
+@using Web.Blazor.Providers
+
+@inject AddonsProvider AddonsProvider
+
+@if (_addons == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table>
+
+        <tr>
+            <th>TCs</th>
+            <th>Maps</th>
+            <th>Mods</th>
+        </tr>
+
+        @foreach (var addon in _tcs)
+        {
+            <div>@addon.Title</div>
+            <a href="@addon.DownloadUrl">Download</a>
+        }
+
+        @foreach (var addon in _maps)
+        {
+            <div>@addon.Title</div>
+            <a href="@addon.DownloadUrl">Download</a>
+        }
+
+
+    </table>
+
+
+    <br />
+}
+
+@code {
+    private List<DownloadableAddonEntity>? _addons;
+    private IEnumerable<DownloadableAddonEntity>? _tcs;
+    private IEnumerable<DownloadableAddonEntity>? _maps;
+    private IEnumerable<DownloadableAddonEntity>? _mods;
+
+    protected override void OnInitialized()
+    {
+        _addons = AddonsProvider.GetAddons(Common.Enums.GameEnum.Duke3D);
+
+        _tcs = _addons.Where(x => x.AddonType is Common.Enums.AddonTypeEnum.TC);
+        _maps = _addons.Where(x => x.AddonType is Common.Enums.AddonTypeEnum.Map);
+        _mods = _addons.Where(x => x.AddonType is Common.Enums.AddonTypeEnum.Mod);
+    }
+}

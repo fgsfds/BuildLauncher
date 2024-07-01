@@ -1,0 +1,35 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>00d796d2-6ca4-45c9-9494-4492240aeb95</UserSecretsId>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Remove="wwwroot\fonts\easvhs.ttf" />
+    <Content Remove="wwwroot\img\discord.png" />
+    <Content Remove="wwwroot\img\github.png" />
+    <Content Remove="wwwroot\img\logo.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Markdig" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" />
+    <PackageReference Include="AWSSDK.S3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\src\Common\Common.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\fonts\easvhs.ttf" />
+    <None Include="wwwroot\img\discord.png" />
+    <None Include="wwwroot\img\github.png" />
+    <None Include="wwwroot\img\logo.png" />
+  </ItemGroup>
+
+</Project>
