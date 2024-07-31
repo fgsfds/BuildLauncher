@@ -25,11 +25,12 @@
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.10.0" />
     <PackageVersion Include="xunit" Version="2.8.1" />
     <PackageVersion Include="xunit.runner.visualstudio" Version="2.8.1" />
-    <PackageVersion Include="AWSSDK.S3" Version="3.7.309.7" />
+    <PackageVersion Include="AWSSDK.S3" Version="3.7.309.12" />
     <PackageVersion Include="ConfigureAwaitAnalyzer" Version="1.0.3" />
     <PackageVersion Include="Swashbuckle.AspNetCore" Version="6.6.2" />
     <PackageVersion Include="Microsoft.AspNetCore.SpaProxy" Version="8.0.6" />
-    <PackageVersion Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.20.1" />
+    <PackageVersion Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.21.0" />
     <PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.4" />
+      <PackageVersion Include="Markdig" Version="0.37.0" />
   </ItemGroup>
 </Project>

@@ -1,0 +1,79 @@
+﻿@using Common.Entities
+@using Common.Enums
+@using Markdig
+@using Web.Blazor.Providers
+
+@inject AddonsProvider AddonsProvider
+
+@if (_addons == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table style="margin-left: auto; margin-right: auto; table-layout:fixed; width: 100%;">
+
+        <tr>
+            <th style="padding: 15px;vertical-align:top">TCs</th>
+            <th style="padding: 15px;vertical-align:top">Maps</th>
+            <th style="padding: 15px;vertical-align:top">Mods</th>
+        </tr>
+
+        <tr>
+            <td style="padding: 15px;vertical-align:top">
+                @foreach (var addon in _addons.Where(x => x.AddonType is Common.Enums.AddonTypeEnum.TC).OrderBy(x => x.Title))
+                {
+                    if (addon.Title.Equals("Death Wish"))
+                    {
+                        <h4>@addon.Title v.@addon.Version</h4>
+                    }
+                    else
+                    {
+                        <h4>@addon.Title</h4>
+                    }
+
+                    <br />
+                    <div>@((MarkupString)@Markdown.ToHtml(addon.Description))</div>
+                    <a href="@addon.DownloadUrl">Download</a>
+                    <br />
+                    <br />
+                }
+            </td>
+            <td style="padding: 15px;vertical-align:top">
+                @foreach (var addon in _addons.Where(x => x.AddonType is Common.Enums.AddonTypeEnum.Map).OrderBy(x => x.Title))
+                {
+                    <h4>@addon.Title</h4>
+                    <br />
+                    <div>@((MarkupString)@Markdown.ToHtml(addon.Description))</div>
+                    <a href="@addon.DownloadUrl">Download</a>
+                    <br />
+                    <br />
+                }
+            </td>
+            <td style="padding: 15px;vertical-align:top">
+                @foreach (var addon in _addons.Where(x => x.AddonType is Common.Enums.AddonTypeEnum.Mod).OrderBy(x => x.Title))
+                {
+                    <h4>@addon.Title</h4>
+                    <br />
+                    <div>@((MarkupString)@Markdown.ToHtml(addon.Description))</div>
+                    <a href="@addon.DownloadUrl">Download</a>
+                    <br />
+                    <br />
+                }
+            </td>
+        </tr>
+    </table>
+}
+
+
+@code {
+    [Parameter]
+    public GameEnum Game { get; set; }
+
+    private List<DownloadableAddonEntity>? _addons;
+
+    protected override void OnInitialized()
+    {
+        _addons = AddonsProvider.GetAddons(Game);
+    }
+}
