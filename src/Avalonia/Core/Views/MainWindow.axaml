@@ -15,8 +15,9 @@
         WindowState="Maximized"
         MinWidth="1300"
         MinHeight="600"
-        ExtendClientAreaToDecorationsHint="True"
-        Background="{DynamicResource Background}">
+        ExtendClientAreaToDecorationsHint="False"
+        Background="{DynamicResource Background}"
+        >
 
     <Window.Resources>
         <ResourceDictionary>
@@ -30,7 +31,7 @@
             BorderBrush="{DynamicResource WindowBorder}"
             IsHitTestVisible="True">
 
-        <Grid RowDefinitions="25,*">
+        <Grid RowDefinitions="0,*">
 
             <TabControl Grid.Row="1" Margin="5" TabStripPlacement="Left">
 
