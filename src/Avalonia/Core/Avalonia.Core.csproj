@@ -24,6 +24,7 @@
         <PackageReference Include="Avalonia.Themes.Fluent" />
         <PackageReference Include="CommunityToolkit.Mvvm" />
         <PackageReference Include="Markdown.Avalonia" />
+        <PackageReference Include="Projektanker.Icons.Avalonia.FontAwesome" />
     </ItemGroup>
 
     <ItemGroup>

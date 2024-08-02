@@ -16,6 +16,9 @@ public sealed partial class DownloadsViewModel : ObservableObject
     public readonly InstalledAddonsProvider _installedAddonsProvider;
     public readonly DownloadableAddonsProvider _downloadableAddonsProvider;
 
+    [ObservableProperty]
+    private bool _isInProgress;
+
 
     [Obsolete($"Don't create directly. Use {nameof(ViewModelsFactory)}.")]
     public DownloadsViewModel(
@@ -97,11 +100,6 @@ public sealed partial class DownloadsViewModel : ObservableObject
         get => _selectedDownloadable;
         set
         {
-            if (value is null)
-            {
-                return;
-            }
-
             _selectedDownloadable = value;
             OnPropertyChanged(nameof(SelectedDownloadable));
             OnPropertyChanged(nameof(SelectedDownloadableDescription));
@@ -163,9 +161,27 @@ public sealed partial class DownloadsViewModel : ObservableObject
     /// </summary>
     private async Task UpdateAsync()
     {
-        await _downloadableAddonsProvider.CreateCacheAsync().ConfigureAwait(true);
+        await _downloadableAddonsProvider.CreateCacheAsync(false).ConfigureAwait(true);
 
         OnPropertyChanged(nameof(DownloadableList));
+    }
+
+
+    /// <summary>
+    /// Update downloadables list
+    /// </summary>
+    [RelayCommand]
+    private async Task Update()
+    {
+        IsInProgress = true;
+
+        await _downloadableAddonsProvider.CreateCacheAsync(true).ConfigureAwait(true);
+
+        OnPropertyChanged(nameof(DownloadableList));
+
+        SelectedDownloadable = null;
+
+        IsInProgress = false;
     }
 
 

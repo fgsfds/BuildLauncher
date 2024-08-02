@@ -45,11 +45,11 @@ public sealed class DownloadableAddonsProvider : IDownloadableAddonsProvider
 
 
     /// <inheritdoc/>
-    public async Task CreateCacheAsync()
+    public async Task CreateCacheAsync(bool createNew)
     {
         await _semaphore.WaitAsync();
 
-        if (_cache is not null)
+        if (_cache is not null && !createNew)
         {
             _semaphore.Release();
             return;

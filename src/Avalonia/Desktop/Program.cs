@@ -1,5 +1,7 @@
 ﻿using Avalonia;
 using ClientCommon.Helpers;
+using Projektanker.Icons.Avalonia.FontAwesome;
+using Projektanker.Icons.Avalonia;
 
 namespace BuildLauncher.Desktop;
 
@@ -21,9 +23,14 @@ public sealed class Program
     }
 
     // Avalonia configuration, don't remove; also used by visual designer.
-    public static AppBuilder BuildAvaloniaApp()
-        => AppBuilder.Configure<App>()
-            .UsePlatformDetect()
-            //.WithInterFont()
-            .LogToTrace();
+    private static AppBuilder BuildAvaloniaApp()
+    {
+        IconProvider.Current
+            .Register<FontAwesomeIconProvider>()
+            ;
+
+        return AppBuilder.Configure<App>()
+                .UsePlatformDetect()
+                .LogToTrace();
+    }
 }

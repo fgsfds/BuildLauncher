@@ -28,6 +28,6 @@ namespace Common.Interfaces
         /// <summary>
         /// Create cache of downloadable addons
         /// </summary>
-        Task CreateCacheAsync();
+        Task CreateCacheAsync(bool createNew);
     }
 }

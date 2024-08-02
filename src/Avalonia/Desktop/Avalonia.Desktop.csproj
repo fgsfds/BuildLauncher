@@ -17,6 +17,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Avalonia.Desktop" />
+    <PackageReference Include="Projektanker.Icons.Avalonia.FontAwesome" />
   </ItemGroup>
 
   <ItemGroup>
