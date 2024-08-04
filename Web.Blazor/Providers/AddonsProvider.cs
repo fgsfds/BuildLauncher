@@ -169,11 +169,15 @@ namespace Web.Blazor.Providers
 
             using (var transaction = dbContext.Database.BeginTransaction())
             {
+                List<VersionsDbEntity>? olderVersion = null;
+
                 var existingAddon = dbContext.Addons.Find([addon.Id]);
 
                 if (existingAddon is not null)
                 {
                     existingAddon.Title = addon.Title;
+
+                    olderVersion = [.. dbContext.Versions.Where(x => x.AddonId.Equals(existingAddon.Id))];
                 }
                 else
                 {
@@ -245,6 +249,16 @@ namespace Web.Blazor.Providers
                         RatingSum = 0,
                         RatingTotal = 0
                     });
+
+                    dbContext.SaveChanges();
+                }
+
+                if (olderVersion is not null)
+                {
+                    foreach (var version in olderVersion)
+                    {
+                        version.IsDisabled = true;
+                    }
 
                     dbContext.SaveChanges();
                 }
