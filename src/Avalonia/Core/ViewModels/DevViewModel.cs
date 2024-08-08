@@ -626,7 +626,7 @@ public sealed partial class DevViewModel : ObservableObject
 
     private AddonDto CreateJson()
     {
-        var files = Directory.GetFiles(PathToAddonFolder!, "*", SearchOption.AllDirectories).Select(static x => Path.GetFileName(x).ToLower());
+        var files = Directory.GetFiles(PathToAddonFolder!, "*", SearchOption.TopDirectoryOnly).Select(static x => Path.GetFileName(x).ToLower());
         var forbidden = files.Intersect(_forbiddenNames);
 
         if (forbidden.Any())
