@@ -1,6 +1,6 @@
 using Avalonia.Controls;
 using BuildLauncher.ViewModels;
-using ClientCommon.Config;
+using Common.Client.Config;
 using Common.Helpers;
 using CommunityToolkit.Mvvm.Input;
 

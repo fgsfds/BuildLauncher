@@ -27,7 +27,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ClientCommon\ClientCommon.csproj" />
+    <ProjectReference Include="..\Common.Client\Common.Client.csproj" />
     <ProjectReference Include="..\Common\Common.csproj" />
     <ProjectReference Include="..\Games\Games.csproj" />
     <ProjectReference Include="..\Mods\Mods.csproj" />

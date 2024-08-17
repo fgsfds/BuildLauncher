@@ -1,6 +1,6 @@
 using Avalonia.Controls;
 using BuildLauncher.ViewModels;
-using ClientCommon.Helpers;
+using Common.Client.Helpers;
 using Common.DI;
 using Common.Enums;
 using Microsoft.Extensions.DependencyInjection;

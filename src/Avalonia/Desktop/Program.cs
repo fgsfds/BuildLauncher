@@ -1,5 +1,5 @@
 ﻿using Avalonia;
-using ClientCommon.Helpers;
+using Common.Client.Helpers;
 using Projektanker.Icons.Avalonia.FontAwesome;
 using Projektanker.Icons.Avalonia;
 

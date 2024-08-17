@@ -1,4 +1,4 @@
-using ClientCommon.Config;
+using Common.Client.Config;
 using Common;
 using Common.Enums;
 using Common.Enums.Versions;

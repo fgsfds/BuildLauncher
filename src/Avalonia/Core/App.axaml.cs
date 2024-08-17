@@ -7,15 +7,14 @@ using Avalonia.Styling;
 using BuildLauncher.DI;
 using BuildLauncher.ViewModels;
 using BuildLauncher.Views;
-using ClientCommon.Config;
-using ClientCommon.DI;
+using Common.Client.Config;
+using Common.Client.DI;
 using Common.DI;
 using Common.Enums;
 using Common.Helpers;
 using Games.Providers;
 using Microsoft.Extensions.DependencyInjection;
 using Ports.Providers;
-using System.ComponentModel;
 
 namespace BuildLauncher;
 
@@ -69,7 +68,7 @@ public sealed partial class App : Application
         var container = BindingsManager.Instance;
 
         CommonBindings.Load(container);
-        ClientCommonBindings.Load(container, Design.IsDesignMode);
+        ClientBindings.Load(container, Design.IsDesignMode);
         ViewModelsBindings.Load(container);
         Games.DI.ProvidersBindings.Load(container);
         Ports.DI.ProvidersBindings.Load(container);

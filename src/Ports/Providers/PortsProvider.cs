@@ -1,5 +1,5 @@
-﻿using ClientCommon.Config;
-using ClientCommon.Helpers;
+﻿using Common.Client.Config;
+using Common.Client.Helpers;
 using Common.Enums;
 using Common.Helpers;
 using Ports.Ports;

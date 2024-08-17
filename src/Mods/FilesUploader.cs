@@ -1,4 +1,4 @@
-﻿using ClientCommon.API;
+﻿using Common.Client.API;
 using Common.Entities;
 using Common.Enums;
 using Common.Helpers;

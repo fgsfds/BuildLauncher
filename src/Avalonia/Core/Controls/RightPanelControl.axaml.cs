@@ -2,7 +2,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Media;
 using BuildLauncher.ViewModels;
-using ClientCommon.Config;
+using Common.Client.Config;
 using Common.Helpers;
 
 namespace BuildLauncher.Controls;

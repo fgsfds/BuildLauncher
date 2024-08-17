@@ -1,5 +1,5 @@
-﻿using ClientCommon.API;
-using ClientCommon.Helpers;
+﻿using Common.Client.API;
+using Common.Client.Helpers;
 using Common;
 using Common.Enums;
 using Common.Helpers;

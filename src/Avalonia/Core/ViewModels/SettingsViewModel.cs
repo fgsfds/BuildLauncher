@@ -2,7 +2,7 @@ using Avalonia;
 using Avalonia.Platform.Storage;
 using Avalonia.Styling;
 using BuildLauncher.Helpers;
-using ClientCommon.Config;
+using Common.Client.Config;
 using Common.Enums;
 using Common.Enums.Versions;
 using Common.Helpers;

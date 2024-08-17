@@ -1,6 +1,6 @@
-﻿using ClientCommon.API;
-using ClientCommon.Config;
-using ClientCommon.Providers;
+﻿using Common.Client.API;
+using Common.Client.Config;
+using Common.Client.Providers;
 using Common.Enums;
 using Games.Providers;
 using Mods.Providers;

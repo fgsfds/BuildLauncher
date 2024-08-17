@@ -1,7 +1,7 @@
 using Avalonia.Controls;
 using BuildLauncher.Controls;
 using BuildLauncher.ViewModels;
-using ClientCommon.Config;
+using Common.Client.Config;
 using Common.Enums;
 using Ports.Providers;
 

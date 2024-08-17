@@ -2,7 +2,7 @@
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using BuildLauncher.ViewModels;
-using ClientCommon.Config;
+using Common.Client.Config;
 using Common.Enums;
 using Games.Providers;
 using Ports.Providers;

@@ -1,7 +1,7 @@
 using Avalonia.Platform.Storage;
 using BuildLauncher.Helpers;
-using ClientCommon.Config;
-using ClientCommon.Helpers;
+using Common.Client.Config;
+using Common.Client.Helpers;
 using Common.Enums;
 using Common.Enums.Versions;
 using Common.Helpers;
