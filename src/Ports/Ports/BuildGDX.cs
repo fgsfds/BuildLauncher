@@ -47,7 +47,20 @@ public sealed class BuildGDX : BasePort
         ];
 
     /// <inheritdoc/>
-    public override string? InstalledVersion => IsInstalled ? "1.16" : null;
+    public override string? InstalledVersion
+    {
+        get
+        {
+            var versionFile = Path.Combine(PathToExecutableFolder, "version");
+
+            if (!File.Exists(versionFile))
+            {
+                return null;
+            }
+
+            return File.ReadAllText(versionFile);
+        }
+    }
 
     /// <inheritdoc/>
     public override bool IsInstalled => File.Exists(Path.Combine(PathToExecutableFolder, "BuildGDX.jar"));
@@ -92,7 +105,7 @@ public sealed class BuildGDX : BasePort
     /// <inheritdoc/>
     protected override void GetStartCampaignArgs(StringBuilder sb, IGame game, IAddon addon)
     {
-        sb.Append(@" -jar ..\..\BuildGDX.jar");
+        _ = sb.Append(@" -jar ..\..\BuildGDX.jar");
 
         if (game is BloodGame bGame)
         {
@@ -134,38 +147,38 @@ public sealed class BuildGDX : BasePort
     {
         if (camp.Id.Equals(nameof(DukeVersionEnum.Duke3D_WT), StringComparison.OrdinalIgnoreCase))
         {
-            sb.Append($@" -path ""{game.DukeWTInstallPath}""");
+            _ = sb.Append($@" -path ""{game.DukeWTInstallPath}""");
         }
         else
         {
-            sb.Append($@" -path ""{game.GameInstallFolder}""");
+            _ = sb.Append($@" -path ""{game.GameInstallFolder}""");
         }
     }
 
-    private void GetBloodArgs(StringBuilder sb, BloodGame game, IAddon camp)
+    private new void GetBloodArgs(StringBuilder sb, BloodGame game, IAddon camp)
     {
-        sb.Append($@" -path ""{game.GameInstallFolder}""");
+        _ = sb.Append($@" -path ""{game.GameInstallFolder}""");
     }
 
     private static void GetWangArgs(StringBuilder sb, WangGame game, IAddon camp)
     {
-        sb.Append($@" -path ""{game.GameInstallFolder}""");
+        _ = sb.Append($@" -path ""{game.GameInstallFolder}""");
     }
 
     private void GetRedneckArgs(StringBuilder sb, RedneckGame game, IAddon camp)
     {
         if (camp.Id.Equals(nameof(GameEnum.RidesAgain), StringComparison.OrdinalIgnoreCase))
         {
-            sb.Append($@" -path ""{game.AgainInstallPath}""");
+            _ = sb.Append($@" -path ""{game.AgainInstallPath}""");
         }
         else
         {
-            sb.Append($@" -path ""{game.GameInstallFolder}""");
+            _ = sb.Append($@" -path ""{game.GameInstallFolder}""");
         }
     }
 
-    private static void GetSlaveArgs(StringBuilder sb, SlaveGame game, IAddon camp)
+    private new static void GetSlaveArgs(StringBuilder sb, SlaveGame game, IAddon camp)
     {
-        sb.Append($@" -path ""{game.GameInstallFolder}""");
+        _ = sb.Append($@" -path ""{game.GameInstallFolder}""");
     }
 }

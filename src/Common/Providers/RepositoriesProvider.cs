@@ -12,7 +12,7 @@ public sealed class RepositoriesProvider
         {
             return new()
             {
-                RepoUrl = new($"{Consts.FilesRepo}/Ports/BuildGDX_v116.zip"),
+                RepoUrl = new($"{Consts.FilesRepo}/Ports/BuildGDX_v117.zip"),
                 WindowsReleasePredicate = null,
                 LinuxReleasePredicate = null,
             };

@@ -29,7 +29,7 @@ public sealed class PortsProvider
     {
         if (!Directory.Exists(ClientProperties.PortsFolderPath))
         {
-            Directory.CreateDirectory(ClientProperties.PortsFolderPath);
+            _ = Directory.CreateDirectory(ClientProperties.PortsFolderPath);
         }
 
         BuildGDX = new();

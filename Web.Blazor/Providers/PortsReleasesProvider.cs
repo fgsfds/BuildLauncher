@@ -55,7 +55,7 @@ public sealed partial class PortsReleasesProvider
             GeneralReleaseEntity bgdxRelease = new()
             {
                 Description = string.Empty,
-                Version = "1.16",
+                Version = "1.17",
                 WindowsDownloadUrl = repo.RepoUrl,
                 LinuxDownloadUrl = null
             };
