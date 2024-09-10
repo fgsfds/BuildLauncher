@@ -1,5 +1,4 @@
-﻿using Common;
-using Common.Enums;
+﻿using Common.Enums;
 using static Common.Client.Config.ConfigProvider;
 
 namespace Common.Client.Config;

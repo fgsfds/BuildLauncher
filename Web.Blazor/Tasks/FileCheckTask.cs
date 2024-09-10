@@ -1,4 +1,4 @@
-﻿using Web.Blazor.Helpers;
+﻿using Database.Server;
 
 namespace Web.Blazor.Tasks;
 
@@ -44,7 +44,7 @@ public sealed class FileCheckTask : IHostedService, IDisposable
         {
             var result = _httpClient.GetAsync(file, HttpCompletionOption.ResponseHeadersRead).Result;
 
-            if (result is null || !result.IsSuccessStatusCode)
+            if (!result.IsSuccessStatusCode)
             {
                 _logger.LogError($"File doesn't exist or unavailable: {file}");
                 continue;

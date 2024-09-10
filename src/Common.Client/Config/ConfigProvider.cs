@@ -1,8 +1,7 @@
 ﻿using Common.Client.Helpers;
-using Database.Client;
-using Common;
 using Common.Enums;
 using Common.Helpers;
+using Database.Client;
 using System.Runtime.CompilerServices;
 using System.Text.Json;
 
@@ -28,31 +27,31 @@ public sealed class ConfigProvider : IConfigProvider
     //SETTINGS
     public ThemeEnum Theme
     {
-        get => Enum.TryParse<ThemeEnum>(_dbContext.Settings.Find([nameof(Theme)])?.Value, out var result) ? result : ThemeEnum.System;
+        get => Enum.TryParse<ThemeEnum>(_dbContext.Settings.Find(nameof(Theme))?.Value, out var result) ? result : ThemeEnum.System;
         set => SetSettingsValue(value.ToString());
     }
 
     public bool SkipIntro
     {
-        get => bool.TryParse(_dbContext.Settings.Find([nameof(SkipIntro)])?.Value, out var result) && result;
+        get => bool.TryParse(_dbContext.Settings.Find(nameof(SkipIntro))?.Value, out var result) && result;
         set => SetSettingsValue(value.ToString());
     }
 
     public bool SkipStartup
     {
-        get => bool.TryParse(_dbContext.Settings.Find([nameof(SkipStartup)])?.Value, out var result) && result;
+        get => bool.TryParse(_dbContext.Settings.Find(nameof(SkipStartup))?.Value, out var result) && result;
         set => SetSettingsValue(value.ToString());
     }
 
     public bool UseLocalApi
     {
-        get => bool.TryParse(_dbContext.Settings.Find([nameof(UseLocalApi)])?.Value, out var result) && result;
+        get => bool.TryParse(_dbContext.Settings.Find(nameof(UseLocalApi))?.Value, out var result) && result;
         set => SetSettingsValue(value.ToString());
     }
 
     public string ApiPassword
     {
-        get => _dbContext.Settings.Find([nameof(ApiPassword)])?.Value ?? string.Empty;
+        get => _dbContext.Settings.Find(nameof(ApiPassword))?.Value ?? string.Empty;
         set => SetSettingsValue(value);
     }
 
@@ -107,7 +106,7 @@ public sealed class ConfigProvider : IConfigProvider
 
     public void ChangeModState(AddonVersion addonId, bool isEnabled)
     {
-        var existing = _dbContext.DisabledAddons.Find([addonId.Id]);
+        var existing = _dbContext.DisabledAddons.Find(addonId.Id);
 
         if (existing is null)
         {
@@ -140,55 +139,55 @@ public sealed class ConfigProvider : IConfigProvider
     //GAME PATHS
     public string? PathDuke3D
     {
-        get => _dbContext.GamePaths.Find([nameof(PathDuke3D)])?.Path;
+        get => _dbContext.GamePaths.Find(nameof(PathDuke3D))?.Path;
         set => SetGamePathValue(value);
     }
 
     public string? PathDukeWT
     {
-        get => _dbContext.GamePaths.Find([nameof(PathDukeWT)])?.Path;
+        get => _dbContext.GamePaths.Find(nameof(PathDukeWT))?.Path;
         set => SetGamePathValue(value);
     }
 
     public string? PathDuke64
     {
-        get => _dbContext.GamePaths.Find([nameof(PathDuke64)])?.Path;
+        get => _dbContext.GamePaths.Find(nameof(PathDuke64))?.Path;
         set => SetGamePathValue(value);
     }
 
     public string? PathWang
     {
-        get => _dbContext.GamePaths.Find([nameof(PathWang)])?.Path;
+        get => _dbContext.GamePaths.Find(nameof(PathWang))?.Path;
         set => SetGamePathValue(value);
     }
 
     public string? PathBlood
     {
-        get => _dbContext.GamePaths.Find([nameof(PathBlood)])?.Path;
+        get => _dbContext.GamePaths.Find(nameof(PathBlood))?.Path;
         set => SetGamePathValue(value);
     }
 
     public string? PathRedneck
     {
-        get => _dbContext.GamePaths.Find([nameof(PathRedneck)])?.Path;
+        get => _dbContext.GamePaths.Find(nameof(PathRedneck))?.Path;
         set => SetGamePathValue(value);
     }
 
     public string? PathRidesAgain
     {
-        get => _dbContext.GamePaths.Find([nameof(PathRidesAgain)])?.Path;
+        get => _dbContext.GamePaths.Find(nameof(PathRidesAgain))?.Path;
         set => SetGamePathValue(value);
     }
 
     public string? PathSlave
     {
-        get => _dbContext.GamePaths.Find([nameof(PathSlave)])?.Path;
+        get => _dbContext.GamePaths.Find(nameof(PathSlave))?.Path;
         set => SetGamePathValue(value);
     }
 
     public string? PathFury
     {
-        get => _dbContext.GamePaths.Find([nameof(PathFury)])?.Path;
+        get => _dbContext.GamePaths.Find(nameof(PathFury))?.Path;
         set => SetGamePathValue(value);
     }
 
@@ -196,7 +195,7 @@ public sealed class ConfigProvider : IConfigProvider
 
     private void SetSettingsValue(string value, [CallerMemberName] string caller = "")
     {
-        var setting = _dbContext.Settings.Find([caller]);
+        var setting = _dbContext.Settings.Find(caller);
 
         if (setting is null)
         {
@@ -213,7 +212,7 @@ public sealed class ConfigProvider : IConfigProvider
 
     private void SetGamePathValue(string? value, [CallerMemberName] string caller = "")
     {
-        var setting = _dbContext.GamePaths.Find([caller]);
+        var setting = _dbContext.GamePaths.Find(caller);
 
         if (string.IsNullOrWhiteSpace(value))
         {
@@ -254,20 +253,15 @@ public sealed class ConfigProvider : IConfigProvider
         _dbContext.Settings.Add(new() { Name = nameof(config.UseLocalApi), Value = config.UseLocalApi.ToString() });
         _dbContext.Settings.Add(new() { Name = nameof(config.ApiPassword), Value = config.ApiPassword ?? string.Empty });
 
-        if (config.DisabledAutoloadMods is not null)
+        
+        foreach (var addon in config.DisabledAutoloadMods)
         {
-            foreach (var addon in config.DisabledAutoloadMods)
-            {
-                _dbContext.DisabledAddons.Add(new() { AddonId = addon });
-            }
+            _dbContext.DisabledAddons.Add(new() { AddonId = addon });
         }
-
-        if (config.Playtimes is not null)
+        
+        foreach (var addon in config.Playtimes)
         {
-            foreach (var addon in config.Playtimes)
-            {
-                _dbContext.Playtimes.Add(new() { AddonId = addon.Key, Playtime = addon.Value });
-            }
+            _dbContext.Playtimes.Add(new() { AddonId = addon.Key, Playtime = addon.Value });
         }
 
 

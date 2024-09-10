@@ -1,20 +1,19 @@
 ﻿using Common.Enums;
 using System.Text.Json.Serialization;
 
-namespace Mods.Serializable
+namespace Mods.Serializable;
+
+public sealed class SupportedGameDto
 {
-    public sealed class SupportedGameDto
-    {
-        [JsonPropertyName("name")]
-        public required GameEnum Game { get; set; }
+    [JsonPropertyName("name")]
+    public required GameEnum Game { get; set; }
 
-        [JsonPropertyName("version")]
-        public string? Version { get; set; }
+    [JsonPropertyName("version")]
+    public string? Version { get; set; }
 
-        [JsonPropertyName("crc")]
-        public string? Crc { get; set; }
-    }
-
-    [JsonSerializable(typeof(SupportedGameDto))]
-    public sealed partial class SupportedGameDtoContext : JsonSerializerContext;
+    [JsonPropertyName("crc")]
+    public string? Crc { get; set; }
 }
+
+[JsonSerializable(typeof(SupportedGameDto))]
+public sealed partial class SupportedGameDtoContext : JsonSerializerContext;

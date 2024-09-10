@@ -6,7 +6,6 @@ using Common.Helpers;
 using Common.Interfaces;
 using Mods.Addons;
 using SharpCompress.Archives;
-using System.IO.Compression;
 using System.Reflection;
 using ZipArchive = SharpCompress.Archives.Zip.ZipArchive;
 

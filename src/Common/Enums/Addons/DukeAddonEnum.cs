@@ -1,10 +1,9 @@
-﻿namespace Common.Enums.Addons
+﻿namespace Common.Enums.Addons;
+
+public enum DukeAddonEnum : byte
 {
-    public enum DukeAddonEnum : byte
-    {
-        Base = 0,
-        DukeDC = 1,
-        DukeNW = 2,
-        DukeVaca = 3
-    }
+    Base = 0,
+    DukeDC = 1,
+    DukeNW = 2,
+    DukeVaca = 3
 }

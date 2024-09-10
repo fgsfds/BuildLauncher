@@ -1,0 +1,63 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+      <AssemblyName>BuildLauncher</AssemblyName>
+      <OutputType>WinExe</OutputType>
+      <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+      <SelfContained>true</SelfContained>
+      <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
+      <ApplicationManifest>app.manifest</ApplicationManifest>
+      <Configurations>Debug;Release</Configurations>
+      <StartupObject>Avalonia.Desktop.Program</StartupObject>
+      <ApplicationIcon>icon.ico</ApplicationIcon>
+  </PropertyGroup>
+    
+  <ItemGroup>
+    <None Remove="Assets\blood.png" />
+    <None Remove="Assets\discord.png" />
+    <None Remove="Assets\duke3d.png" />
+    <None Remove="Assets\fury.png" />
+    <None Remove="Assets\github.png" />
+    <None Remove="Assets\icon.ico" />
+    <None Remove="Assets\issues.png" />
+    <None Remove="Assets\logo.png" />
+    <None Remove="Assets\redneck.png" />
+    <None Remove="Assets\slave.png" />
+    <None Remove="Assets\sw.png" />
+  </ItemGroup>
+    
+  <ItemGroup>
+    <AvaloniaResource Include="Assets\blood.png" />
+    <AvaloniaResource Include="Assets\discord.png" />
+    <AvaloniaResource Include="Assets\duke3d.png" />
+    <AvaloniaResource Include="Assets\fury.png" />
+    <AvaloniaResource Include="Assets\github.png" />
+    <AvaloniaResource Include="Assets\icon.ico" />
+    <AvaloniaResource Include="Assets\issues.png" />
+    <AvaloniaResource Include="Assets\logo.png" />
+    <AvaloniaResource Include="Assets\redneck.png" />
+    <AvaloniaResource Include="Assets\slave.png" />
+    <AvaloniaResource Include="Assets\sw.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AddSealed">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Avalonia.Desktop" />
+    <PackageReference Include="Projektanker.Icons.Avalonia.FontAwesome" />
+      <PackageReference Include="Avalonia" />
+      <PackageReference Include="Avalonia.Controls.DataGrid" />
+      <PackageReference Include="Avalonia.Themes.Fluent" />
+      <PackageReference Include="CommunityToolkit.Mvvm" />
+      <PackageReference Include="Markdown.Avalonia" />
+  </ItemGroup>
+
+  <ItemGroup>
+      <ProjectReference Include="..\Common\Common.csproj" />
+      <ProjectReference Include="..\Games\Games.csproj" />
+      <ProjectReference Include="..\Ports\Ports.csproj" />
+      <ProjectReference Include="..\Tools\Tools.csproj" />
+  </ItemGroup>
+    
+</Project>

@@ -2,51 +2,50 @@
 using Common.Entities;
 using Common.Enums;
 
-namespace Ports.Installer
+namespace Ports.Installer;
+
+/// <summary>
+/// Class that provides releases from ports' repositories
+/// </summary>
+public sealed class PortsReleasesProvider
 {
-    /// <summary>
-    /// Class that provides releases from ports' repositories
-    /// </summary>
-    public sealed class PortsReleasesProvider
+    private readonly ApiInterface _apiInterface;
+
+    private Dictionary<PortEnum, GeneralReleaseEntity>? _releases;
+    private readonly SemaphoreSlim _semaphore = new(1);
+
+    public PortsReleasesProvider(ApiInterface apiInterface)
     {
-        private readonly ApiInterface _apiInterface;
+        _apiInterface = apiInterface;
+    }
 
-        private Dictionary<PortEnum, GeneralReleaseEntity>? _releases;
-        private readonly SemaphoreSlim _semaphore = new(1);
+    /// <summary>
+    /// Get the latest release of the selected port
+    /// </summary>
+    /// <param name="port">Port</param>
+    public async Task<GeneralReleaseEntity?> GetLatestReleaseAsync(PortEnum portEnum)
+    {
+        await _semaphore.WaitAsync().ConfigureAwait(false);
 
-        public PortsReleasesProvider(ApiInterface apiInterface)
+        if (_releases is null)
         {
-            _apiInterface = apiInterface;
+            _releases = await GetReleasesAsync().ConfigureAwait(false);
         }
 
-        /// <summary>
-        /// Get the latest release of the selected port
-        /// </summary>
-        /// <param name="port">Port</param>
-        public async Task<GeneralReleaseEntity?> GetLatestReleaseAsync(PortEnum portEnum)
+        _semaphore.Release();
+
+        if (_releases is null)
         {
-            await _semaphore.WaitAsync().ConfigureAwait(false);
-
-            if (_releases is null)
-            {
-                _releases = await GetReleasesAsync().ConfigureAwait(false);
-            }
-
-            _semaphore.Release();
-
-            if (_releases is null)
-            {
-                return null;
-            }
-
-            var hasRelease = _releases.TryGetValue(portEnum, out var release);
-
-            return hasRelease ? release : null;
+            return null;
         }
 
-        public async Task<Dictionary<PortEnum, GeneralReleaseEntity>?> GetReleasesAsync()
-        {
-            return await _apiInterface.GetLatestPortsReleasesAsync().ConfigureAwait(false);
-        }
+        var hasRelease = _releases.TryGetValue(portEnum, out var release);
+
+        return hasRelease ? release : null;
+    }
+
+    public async Task<Dictionary<PortEnum, GeneralReleaseEntity>?> GetReleasesAsync()
+    {
+        return await _apiInterface.GetLatestPortsReleasesAsync().ConfigureAwait(false);
     }
 }

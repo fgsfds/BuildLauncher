@@ -1,8 +1,7 @@
-﻿    namespace Common.Enums.Addons
+﻿namespace Common.Enums.Addons;
+
+public enum BloodAddonEnum : byte
 {
-    public enum BloodAddonEnum : byte
-    {
-        Base,
-        BloodCP
-    }
+    Base,
+    BloodCP
 }

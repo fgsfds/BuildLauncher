@@ -1,14 +1,13 @@
-﻿namespace Common.Enums
+﻿namespace Common.Enums;
+
+public enum FeatureEnum
 {
-    public enum FeatureEnum
-    {
-        EDuke32_CON,
-        Hightile,
-        Models,
-        Sloped_Sprites,
-        TROR,
-        Wall_Rotate_Cstat,
-        Dynamic_Lighting,
-        Modern_Types
-    }
+    EDuke32_CON,
+    Hightile,
+    Models,
+    Sloped_Sprites,
+    TROR,
+    Wall_Rotate_Cstat,
+    Dynamic_Lighting,
+    Modern_Types
 }

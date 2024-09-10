@@ -1,0 +1,41 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:i="https://github.com/projektanker/icons.avalonia"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="Avalonia.Desktop.Controls.PortsButtonsControl"
+             xmlns:in="clr-namespace:Common.Interfaces;assembly=BuildLauncher.Common"
+             x:DataType="in:IPortsButtonControl">
+
+    <Grid ColumnDefinitions="*, auto, auto" MinHeight="42" VerticalAlignment="Center" Margin="0,10">
+
+        <StackPanel Name="PortsButtonsPanel"
+                    Grid.Column="0"
+                    Orientation="Horizontal"
+                    IsVisible="{Binding IsPortsButtonsVisible}">
+
+            <TextBlock VerticalAlignment="Center">Start with: </TextBlock>
+
+        </StackPanel>
+
+        <Button Grid.Column="1"
+                HorizontalAlignment="Right"
+                ToolTip.Tip="Refresh"
+                Padding="8"
+                Margin="10,0"
+                Command="{Binding RefreshListCommand}">
+            <i:Icon Value="fa-sync" />
+        </Button>
+
+        <Button Grid.Column="2"
+                HorizontalAlignment="Right"
+                ToolTip.Tip="Open folder..."
+                Padding="8"
+                Command="{Binding OpenFolderCommand}">
+            <i:Icon Value="fa-folder-open" />
+        </Button>
+
+    </Grid>
+
+</UserControl>

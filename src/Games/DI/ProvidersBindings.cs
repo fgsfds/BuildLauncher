@@ -1,14 +1,13 @@
 ﻿using Games.Providers;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Games.DI
+namespace Games.DI;
+
+public static class ProvidersBindings
 {
-    public static class ProvidersBindings
+    public static void Load(ServiceCollection container)
     {
-        public static void Load(ServiceCollection container)
-        {
-            container.AddSingleton<GamesProvider>();
-            container.AddSingleton<GamesPathsProvider>();
-        }
+        container.AddSingleton<GamesProvider>();
+        container.AddSingleton<GamesPathsProvider>();
     }
 }

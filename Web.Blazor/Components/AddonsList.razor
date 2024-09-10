@@ -21,7 +21,7 @@ else
 
         <tr>
             <td style="padding: 15px;vertical-align:top">
-                @foreach (var addon in _addons.Where(x => x.AddonType is Common.Enums.AddonTypeEnum.TC).OrderBy(x => x.Title))
+                @foreach (var addon in _addons.Where(x => x.AddonType is AddonTypeEnum.TC).OrderBy(x => x.Title))
                 {
                     if (addon.Title.Equals("Death Wish"))
                     {

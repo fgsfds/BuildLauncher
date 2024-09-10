@@ -17,7 +17,7 @@ public sealed class DatabaseContext : DbContext
         {
             Database.Migrate();
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             ConvertOldConfig();
         }

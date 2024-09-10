@@ -1,0 +1,320 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             d:DesignWidth="800"
+             d:DesignHeight="450"
+             xmlns:vm="clr-namespace:Avalonia.Desktop.ViewModels"
+             x:DataType="vm:SettingsViewModel"
+             x:Class="Avalonia.Desktop.Pages.SettingsPage">
+
+    <Grid RowDefinitions="auto,*,auto">
+
+        <StackPanel Grid.Row="0" Orientation="Vertical">
+
+            <!--Theme selection-->
+            <Grid ColumnDefinitions="auto,*">
+
+                <StackPanel Orientation="Horizontal" Margin="5">
+
+                    <TextBlock Margin="5"
+                               VerticalAlignment="Center">
+                        Theme
+                    </TextBlock>
+
+                    <RadioButton GroupName="theme"
+                                 Margin="5"
+                                 Command="{Binding SetDefaultThemeCommand}"
+                                 IsChecked="{Binding IsDefaultTheme}">
+                        System
+                    </RadioButton>
+
+                    <RadioButton GroupName="theme"
+                                 Margin="5"
+                                 Command="{Binding SetLightThemeCommand}"
+                                 IsChecked="{Binding IsLightTheme}">
+                        Light
+                    </RadioButton>
+
+                    <RadioButton GroupName="theme"
+                                 Margin="5"
+                                 Command="{Binding SetDarkThemeCommand}"
+                                 IsChecked="{Binding IsDarkTheme}">
+                        Dark
+                    </RadioButton>
+
+                </StackPanel>
+
+            </Grid>
+
+            <Grid ColumnDefinitions="auto,*,auto,auto,auto" RowDefinitions="auto,auto,auto,auto,auto,auto,auto,auto,auto">
+
+                <!--Path to Duke 3D-->
+                <TextBlock Grid.Row="0" Grid.Column="0"
+                           VerticalAlignment="Center"
+                           Margin="10, 5">Path to Duke Nukem 3D install:</TextBlock>
+
+                <TextBox Grid.Row="0"  Grid.Column="1"
+                         Text="{Binding PathToDuke3D}"
+                         Margin="0,3"/>
+
+                <Button Grid.Row="0"  Grid.Column="2"
+                        Margin="5,0"
+                        Width="{Binding $self.Bounds.Height}"
+                        HorizontalContentAlignment="Center"
+                        Command="{Binding OpenFolderPickerCommand}"
+                        CommandParameter="Duke3D">
+                    ...
+                </Button>
+
+                <Button Grid.Row="0"  Grid.Column="3"
+                        Margin="0,0,5,0"
+                        Width="{Binding $self.Bounds.Height}"
+                        HorizontalContentAlignment="Center"
+                        Command="{Binding AutodetectCommand}"
+                        CommandParameter="Duke3D"
+                        ToolTip.Tip="Autodetect">
+                    ⟳
+                </Button>
+
+
+                <!--Path to Duke WT-->
+                <TextBlock Grid.Row="1" Grid.Column="0"
+                           VerticalAlignment="Center"
+                           Margin="10, 5">Path to Duke World Tour install:</TextBlock>
+
+                <TextBox Grid.Row="1"  Grid.Column="1"
+                         Text="{Binding PathToDukeWT}"
+                         Margin="0,3"/>
+
+                <Button Grid.Row="1"  Grid.Column="2"
+                        Margin="5,0"
+                        Width="{Binding $self.Bounds.Height}"
+                        HorizontalContentAlignment="Center"
+                        Command="{Binding OpenFolderPickerCommand}"
+                        CommandParameter="Duke3D_WT">
+                    ...
+                </Button>
+
+                <Button Grid.Row="1"  Grid.Column="3"
+                        Margin="0,0,10,0"
+                        Width="{Binding $self.Bounds.Height}"
+                        HorizontalContentAlignment="Center"
+                        Command="{Binding AutodetectCommand}"
+                        CommandParameter="Duke3D_WT"
+                        ToolTip.Tip="Autodetect">
+                    ⟳
+                </Button>
+
+
+                <!--Path to Duke 64-->
+                <TextBlock Grid.Row="2" Grid.Column="0"
+                           VerticalAlignment="Center"
+                           Margin="10, 5">Path to Duke Nukem 64 ROM:</TextBlock>
+
+                <TextBox Grid.Row="2"  Grid.Column="1"
+                         Text="{Binding PathToDuke64}"
+                         Margin="0,3"/>
+
+                <Button Grid.Row="2"  Grid.Column="2"
+                        Margin="5,0"
+                        Width="{Binding $self.Bounds.Height}"
+                        HorizontalContentAlignment="Center"
+                        Command="{Binding OpenFilePickerCommand}">
+                    ...
+                </Button>
+
+
+                <!--Path to Blood-->
+                <TextBlock Grid.Row="3" Grid.Column="0"
+                           VerticalAlignment="Center"
+                           Margin="10, 5">Path to Blood install:</TextBlock>
+
+                <TextBox Grid.Row="3" Grid.Column="1"
+
+                         Text="{Binding PathToBlood}"
+                         Margin="0,3"/>
+
+                <Button Grid.Row="3" Grid.Column="2"
+                        Margin="5,0"
+                        Width="{Binding $self.Bounds.Height}"
+                        HorizontalContentAlignment="Center"
+                        Command="{Binding OpenFolderPickerCommand}"
+                        CommandParameter="Blood">
+                    ...
+                </Button>
+
+                <Button Grid.Row="3"  Grid.Column="3"
+                        Margin="0,0,10,0"
+                        Width="{Binding $self.Bounds.Height}"
+                        HorizontalContentAlignment="Center"
+                        Command="{Binding AutodetectCommand}"
+                        CommandParameter="Blood"
+                        ToolTip.Tip="Autodetect">
+                    ⟳
+                </Button>
+
+
+                <!--Path to Shadow Warrior-->
+                <TextBlock Grid.Row="4" Grid.Column="0"
+                           VerticalAlignment="Center"
+                           Margin="10, 5">Path to Shadow Warrior install:</TextBlock>
+
+                <TextBox Grid.Row="4"  Grid.Column="1"
+                         Text="{Binding PathToWang}"
+                         Margin="0,3"/>
+
+                <Button Grid.Row="4"  Grid.Column="2"
+                        Margin="5,0"
+                        Width="{Binding $self.Bounds.Height}"
+                        HorizontalContentAlignment="Center"
+                        Command="{Binding OpenFolderPickerCommand}"
+                        CommandParameter="ShadowWarrior">
+                    ...
+                </Button>
+
+                <Button Grid.Row="4"  Grid.Column="3"
+                        Margin="0,0,10,0"
+                        Width="{Binding $self.Bounds.Height}"
+                        HorizontalContentAlignment="Center"
+                        Command="{Binding AutodetectCommand}"
+                        CommandParameter="ShadowWarrior"
+                        ToolTip.Tip="Autodetect">
+                    ⟳
+                </Button>
+
+
+                <!--Path to Ion Fury-->
+                <TextBlock Grid.Row="5" Grid.Column="0"
+                           VerticalAlignment="Center"
+                           Margin="10, 5">Path to Ion Fury install:</TextBlock>
+
+                <TextBox Grid.Row="5"  Grid.Column="1"
+                         Text="{Binding PathToFury}"
+                         Margin="0,3"/>
+
+                <Button Grid.Row="5"  Grid.Column="2"
+                        Margin="5,0"
+                        Width="{Binding $self.Bounds.Height}"
+                        HorizontalContentAlignment="Center"
+                        Command="{Binding OpenFolderPickerCommand}"
+                        CommandParameter="Fury">
+                    ...
+                </Button>
+
+                <Button Grid.Row="5"  Grid.Column="3"
+                        Margin="0,0,10,0"
+                        Width="{Binding $self.Bounds.Height}"
+                        HorizontalContentAlignment="Center"
+                        Command="{Binding AutodetectCommand}"
+                        CommandParameter="Fury"
+                        ToolTip.Tip="Autodetect">
+                    ⟳
+                </Button>
+
+
+                <!--Path to Redneck Rampage-->
+                <TextBlock Grid.Row="6" Grid.Column="0"
+                           VerticalAlignment="Center"
+                           Margin="10, 5">Path to Redneck Rampage install:</TextBlock>
+
+                <TextBox Grid.Row="6"  Grid.Column="1"
+                         Text="{Binding PathToRedneck}"
+                         Margin="0,3"/>
+
+                <Button Grid.Row="6"  Grid.Column="2"
+                        Margin="5,0"
+                        Width="{Binding $self.Bounds.Height}"
+                        HorizontalContentAlignment="Center"
+                        Command="{Binding OpenFolderPickerCommand}"
+                        CommandParameter="Redneck">
+                    ...
+                </Button>
+
+                <Button Grid.Row="6"  Grid.Column="3"
+                        Margin="0,0,10,0"
+                        Width="{Binding $self.Bounds.Height}"
+                        HorizontalContentAlignment="Center"
+                        Command="{Binding AutodetectCommand}"
+                        CommandParameter="Redneck"
+                        ToolTip.Tip="Autodetect">
+                    ⟳
+                </Button>
+
+
+                <!--Path to Redes Again-->
+                <TextBlock Grid.Row="7" Grid.Column="0"
+                           VerticalAlignment="Center"
+                           Margin="10, 5">Path to Rides Again install:</TextBlock>
+
+                <TextBox Grid.Row="7"  Grid.Column="1"
+                         Text="{Binding PathToAgain}"
+                         Margin="0,3"/>
+
+                <Button Grid.Row="7"  Grid.Column="2"
+                        Margin="5,0"
+                        Width="{Binding $self.Bounds.Height}"
+                        HorizontalContentAlignment="Center"
+                        Command="{Binding OpenFolderPickerCommand}"
+                        CommandParameter="RidesAgain">
+                    ...
+                </Button>
+
+                <Button Grid.Row="7"  Grid.Column="3"
+                        Margin="0,0,10,0"
+                        Width="{Binding $self.Bounds.Height}"
+                        HorizontalContentAlignment="Center"
+                        Command="{Binding AutodetectCommand}"
+                        CommandParameter="RidesAgain"
+                        ToolTip.Tip="Autodetect">
+                    ⟳
+                </Button>
+
+
+                <!--Path to Powerslave-->
+                <TextBlock Grid.Row="8" Grid.Column="0"
+                           VerticalAlignment="Center"
+                           Margin="10, 5">Path to Powerslave install:</TextBlock>
+
+                <TextBox Grid.Row="8"  Grid.Column="1"
+                         Text="{Binding PathToSlave}"
+                         Margin="0,3"/>
+
+                <Button Grid.Row="8"  Grid.Column="2"
+                        Margin="5,0"
+                        Width="{Binding $self.Bounds.Height}"
+                        HorizontalContentAlignment="Center"
+                        Command="{Binding OpenFolderPickerCommand}"
+                        CommandParameter="Exhumed">
+                    ...
+                </Button>
+
+                <Button Grid.Row="8"  Grid.Column="3"
+                        Margin="0,0,10,0"
+                        Width="{Binding $self.Bounds.Height}"
+                        HorizontalContentAlignment="Center"
+                        Command="{Binding AutodetectCommand}"
+                        CommandParameter="Exhumed"
+                        ToolTip.Tip="Autodetect">
+                    ⟳
+                </Button>
+
+            </Grid>
+
+            <CheckBox IsChecked="{Binding SkipIntroCheckbox}"
+                      VerticalAlignment="Center"
+                      Margin="10,5">
+                Skip intro
+            </CheckBox>
+
+            <CheckBox IsChecked="{Binding SkipStartupCheckbox}"
+                      VerticalAlignment="Center"
+                      Margin="10,0">
+                Skip startup window
+            </CheckBox>
+
+        </StackPanel>
+
+    </Grid>
+</UserControl>

@@ -1,0 +1,59 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             xmlns:vm="clr-namespace:Avalonia.Desktop.ViewModels"
+             xmlns:ctrl="clr-namespace:Avalonia.Desktop.Controls"
+             x:DataType="vm:ModsViewModel"
+             x:Class="Avalonia.Desktop.Controls.ModsControl">
+
+    <Grid RowDefinitions="*,auto" ColumnDefinitions="2*,*">
+
+        <ListBox Name="ModsList"
+                 Grid.Row="0"
+                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                 Padding="2"
+                 ItemsSource="{Binding ModsList}"
+                 SelectedItem="{Binding SelectedAddon}">
+
+            <ListBox.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel Orientation="Vertical" />
+                </ItemsPanelTemplate>
+            </ListBox.ItemsPanel>
+
+            <ListBox.ContextMenu>
+                <ContextMenu>
+                </ContextMenu>
+            </ListBox.ContextMenu>
+
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+
+                        <StackPanel Orientation="Horizontal">
+
+                            <CheckBox IsChecked="{Binding IsEnabled}"
+                                      Margin="5,0,0,0"
+                                      Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=((vm:ModsViewModel)DataContext).ModCheckboxPressedCommand}"
+                                      CommandParameter="{Binding $parent[ListBoxItem].Content}"/>
+
+                            <TextBlock Text="{Binding Title}"
+                                       VerticalAlignment="Center"
+                                       Margin="10"/>
+
+                        </StackPanel>
+
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
+        <ctrl:PortsButtonsControl Name="BottomPanel" Grid.Row="1" Grid.Column="0"/>
+
+        <ctrl:RightPanelControl Name="RightPanel" Grid.Row="0" Grid.Column="1"/>
+
+    </Grid>
+
+</UserControl>

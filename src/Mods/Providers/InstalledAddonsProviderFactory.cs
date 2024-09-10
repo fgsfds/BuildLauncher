@@ -4,7 +4,7 @@ using Common.Interfaces;
 
 namespace Mods.Providers;
 
-public class InstalledAddonsProviderFactory(
+public sealed class InstalledAddonsProviderFactory(
     IConfigProvider config
     )
 {

@@ -1,8 +1,7 @@
-﻿namespace Common.Enums.Addons
+﻿namespace Common.Enums.Addons;
+
+public enum RedneckAddonEnum : byte
 {
-    public enum RedneckAddonEnum : byte
-    {
-        Base,
-        Route66
-    }
+    Base,
+    Route66
 }

@@ -1,273 +1,272 @@
 ﻿using Common.Entities;
 using Common.Enums;
+using Database.Server;
+using Database.Server.DbEntities;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
-using Web.Blazor.DbEntities;
-using Web.Blazor.Helpers;
 
-namespace Web.Blazor.Providers
+namespace Web.Blazor.Providers;
+
+public sealed class AddonsProvider
 {
-    public sealed class AddonsProvider
+    private readonly ILogger<AddonsProvider> _logger;
+    private readonly DatabaseContextFactory _dbContextFactory;
+
+    public GeneralReleaseEntity? AppRelease { get; private set; }
+
+    public AddonsProvider(
+        ILogger<AddonsProvider> logger,
+        DatabaseContextFactory dbContextFactory)
     {
-        private readonly ILogger<AddonsProvider> _logger;
-        private readonly DatabaseContextFactory _dbContextFactory;
+        _logger = logger;
+        _dbContextFactory = dbContextFactory;
+    }
 
-        public GeneralReleaseEntity? AppRelease { get; private set; }
+    /// <summary>
+    /// Return addons list for a game
+    /// </summary>
+    /// <param name="gameEnum">Game enum</param>
+    internal List<DownloadableAddonEntity> GetAddons(GameEnum gameEnum)
+    {
+        using var dbContext = _dbContextFactory.Get();
 
-        public AddonsProvider(
-            ILogger<AddonsProvider> logger,
-            DatabaseContextFactory dbContextFactory)
+        Stopwatch sw = new();
+        sw.Start();
+
+        Dictionary<string, AddonsDbEntity>? addons;
+
+        if (gameEnum is GameEnum.Redneck)
         {
-            _logger = logger;
-            _dbContextFactory = dbContextFactory;
+            addons = dbContext.Addons.AsNoTracking().Where(x => x.GameId == (byte)GameEnum.Redneck || x.GameId == (byte)GameEnum.RidesAgain).ToDictionary(static x => x.Id);
+        }
+        else
+        {
+            addons = dbContext.Addons.AsNoTracking().Where(x => x.GameId == (byte)gameEnum).ToDictionary(static x => x.Id);
         }
 
-        /// <summary>
-        /// Return addons list for a game
-        /// </summary>
-        /// <param name="gameEnum">Game enum</param>
-        internal List<DownloadableAddonEntity> GetAddons(GameEnum gameEnum)
+        var versions = dbContext.Versions.AsNoTracking().Where(x => addons.Keys.Contains(x.AddonId)).ToDictionary(static x => x.Id);
+        var dependencies = dbContext.Dependencies.AsNoTracking().Where(x => versions.Keys.Contains(x.AddonVersionId)).ToLookup(static x => x.AddonVersionId);
+        var installs = dbContext.Installs.AsNoTracking().ToDictionary(static x => x.AddonId, static y => y.Installs);
+        var ratings = dbContext.Rating.AsNoTracking().ToDictionary(static x => x.AddonId, static y => y.Rating);
+
+        List<DownloadableAddonEntity> result = new(versions.Count);
+
+        foreach (var version in versions)
         {
-            using var dbContext = _dbContextFactory.Get();
+            var addon = addons[version.Value.AddonId];
 
-            Stopwatch sw = new();
-            sw.Start();
+            List<string>? depsResult = null;
+            var addonDeps = dependencies[version.Key];
 
-            Dictionary<string, AddonsDbEntity>? addons;
-
-            if (gameEnum is GameEnum.Redneck)
+            foreach (var dep in addonDeps)
             {
-                addons = dbContext.Addons.AsNoTracking().Where(x => x.GameId == (byte)GameEnum.Redneck || x.GameId == (byte)GameEnum.RidesAgain).ToDictionary(static x => x.Id);
-            }
-            else
-            {
-                addons = dbContext.Addons.AsNoTracking().Where(x => x.GameId == (byte)gameEnum).ToDictionary(static x => x.Id);
+                depsResult ??= [];
+
+                var depAddon = addons[dep.DependencyId];
+
+                depsResult.Add(depAddon.Title + $"{(dep.DependencyVersion is not null ? $", {dep.DependencyVersion}" : string.Empty)}");
             }
 
-            var versions = dbContext.Versions.AsNoTracking().Where(x => addons.Keys.Contains(x.AddonId)).ToDictionary(static x => x.Id);
-            var dependencies = dbContext.Dependencies.AsNoTracking().Where(x => versions.Keys.Contains(x.AddonVersionId)).ToLookup(static x => x.AddonVersionId);
-            var installs = dbContext.Installs.AsNoTracking().ToDictionary(static x => x.AddonId, static y => y.Installs);
-            var ratings = dbContext.Rating.AsNoTracking().ToDictionary(static x => x.AddonId, static y => y.Rating);
+            var hasInstalls = installs.TryGetValue(addon.Id, out var installsNumber);
+            var hasRating = ratings.TryGetValue(addon.Id, out var ratingNumber);
 
-            List<DownloadableAddonEntity> result = new(versions.Count);
-
-            foreach (var version in versions)
+            DownloadableAddonEntity newDownloadable = new()
             {
-                var addon = addons[version.Value.AddonId];
-
-                List<string>? depsResult = null;
-                var addonDeps = dependencies[version.Key];
-
-                foreach (var dep in addonDeps)
-                {
-                    depsResult ??= [];
-
-                    var depAddon = addons[dep.DependencyId];
-
-                    depsResult.Add(depAddon.Title + $"{(dep.DependencyVersion is not null ? $", {dep.DependencyVersion}" : string.Empty)}");
-                }
-
-                var hasInstalls = installs.TryGetValue(addon.Id, out var installsNumber);
-                var hasRating = ratings.TryGetValue(addon.Id, out var ratingNumber);
-
-                DownloadableAddonEntity newDownloadable = new()
-                {
-                    AddonType = (AddonTypeEnum)addon.AddonType,
-                    Id = addon.Id,
-                    Game = (GameEnum)addon.GameId,
-                    DownloadUrl = version.Value.DownloadUrl,
-                    Title = addon.Title,
-                    Version = version.Value.Version,
-                    FileSize = version.Value.FileSize,
-                    IsDisabled = version.Value.IsDisabled,
-                    Description = version.Value.Description,
-                    Author = version.Value.Author,
-                    Dependencies = depsResult,
-                    Installs = hasInstalls ? installsNumber : 0,
-                    Score = 0,
-                    Rating = hasRating ? ratingNumber : 0,
-                    UpdateDate = version.Value.UpdateDate
-                };
-
-                result.Add(newDownloadable);
-            }
-
-            sw.Stop();
-            _logger.LogInformation($"Got addons for {gameEnum} in {sw.ElapsedMilliseconds} ms.");
-
-            return result;
-        }
-
-        internal int IncreaseNumberOfInstalls(string addonId)
-        {
-            using var dbContext = _dbContextFactory.Get();
-            var fix = dbContext.Installs.Find(addonId);
-
-            int newInstalls;
-
-            if (fix is null)
-            {
-                InstallsDbEntity newInstallsEntity = new()
-                {
-                    AddonId = addonId,
-                    Installs = 1
-                };
-
-                dbContext.Installs.Add(newInstallsEntity);
-                newInstalls = 1;
-            }
-            else
-            {
-                fix.Installs += 1;
-                newInstalls = fix.Installs;
-            }
-
-            dbContext.SaveChanges();
-            return newInstalls;
-        }
-
-        internal decimal ChangeRating(string addonId, sbyte rating, bool isNew)
-        {
-            using var dbContext = _dbContextFactory.Get();
-            var existingRating = dbContext.Rating.Find(addonId) ?? throw new Exception($"Rating for {addonId} is not found");
-
-            existingRating.RatingSum += rating;
-
-            if (isNew)
-            {
-                existingRating.RatingTotal++;
-            }
-
-            dbContext.SaveChanges();
-
-            return existingRating.Rating;
-        }
-
-        internal void AddReport(string addonId, string text)
-        {
-            using var dbContext = _dbContextFactory.Get();
-
-            ReportsDbEntity entity = new()
-            {
-                AddonId = addonId,
-                ReportText = text
+                AddonType = (AddonTypeEnum)addon.AddonType,
+                Id = addon.Id,
+                Game = (GameEnum)addon.GameId,
+                DownloadUrl = version.Value.DownloadUrl,
+                Title = addon.Title,
+                Version = version.Value.Version,
+                FileSize = version.Value.FileSize,
+                IsDisabled = version.Value.IsDisabled,
+                Description = version.Value.Description,
+                Author = version.Value.Author,
+                Dependencies = depsResult,
+                Installs = hasInstalls ? installsNumber : 0,
+                Score = 0,
+                Rating = hasRating ? ratingNumber : 0,
+                UpdateDate = version.Value.UpdateDate
             };
 
-            dbContext.Reports.Add(entity);
-            dbContext.SaveChanges();
+            result.Add(newDownloadable);
         }
 
-        internal Dictionary<string, decimal> GetRating()
-        {
-            using var dbContext = _dbContextFactory.Get();
-            return dbContext.Rating.ToDictionary(static x => x.AddonId, static y => y.Rating);
-        }
+        sw.Stop();
+        _logger.LogInformation($"Got addons for {gameEnum} in {sw.ElapsedMilliseconds} ms.");
 
-        internal bool AddAddonToDatabase(AddonsJsonEntity addon)
-        {
-            using var dbContext = _dbContextFactory.Get();
+        return result;
+    }
 
-            using (var transaction = dbContext.Database.BeginTransaction())
+    internal int IncreaseNumberOfInstalls(string addonId)
+    {
+        using var dbContext = _dbContextFactory.Get();
+        var fix = dbContext.Installs.Find(addonId);
+
+        int newInstalls;
+
+        if (fix is null)
+        {
+            InstallsDbEntity newInstallsEntity = new()
             {
-                List<VersionsDbEntity>? olderVersion = null;
+                AddonId = addonId,
+                Installs = 1
+            };
 
-                var existingAddon = dbContext.Addons.Find([addon.Id]);
+            dbContext.Installs.Add(newInstallsEntity);
+            newInstalls = 1;
+        }
+        else
+        {
+            fix.Installs += 1;
+            newInstalls = fix.Installs;
+        }
 
-                if (existingAddon is not null)
+        dbContext.SaveChanges();
+        return newInstalls;
+    }
+
+    internal decimal ChangeRating(string addonId, sbyte rating, bool isNew)
+    {
+        using var dbContext = _dbContextFactory.Get();
+        var existingRating = dbContext.Rating.Find(addonId) ?? throw new Exception($"Rating for {addonId} is not found");
+
+        existingRating.RatingSum += rating;
+
+        if (isNew)
+        {
+            existingRating.RatingTotal++;
+        }
+
+        dbContext.SaveChanges();
+
+        return existingRating.Rating;
+    }
+
+    internal void AddReport(string addonId, string text)
+    {
+        using var dbContext = _dbContextFactory.Get();
+
+        ReportsDbEntity entity = new()
+        {
+            AddonId = addonId,
+            ReportText = text
+        };
+
+        dbContext.Reports.Add(entity);
+        dbContext.SaveChanges();
+    }
+
+    internal Dictionary<string, decimal> GetRating()
+    {
+        using var dbContext = _dbContextFactory.Get();
+        return dbContext.Rating.ToDictionary(static x => x.AddonId, static y => y.Rating);
+    }
+
+    internal bool AddAddonToDatabase(AddonsJsonEntity addon)
+    {
+        using var dbContext = _dbContextFactory.Get();
+
+        using (var transaction = dbContext.Database.BeginTransaction())
+        {
+            List<VersionsDbEntity>? olderVersion = null;
+
+            var existingAddon = dbContext.Addons.Find(addon.Id);
+
+            if (existingAddon is not null)
+            {
+                existingAddon.Title = addon.Title;
+
+                olderVersion = [.. dbContext.Versions.Where(x => x.AddonId.Equals(existingAddon.Id))];
+            }
+            else
+            {
+                dbContext.Addons.Add(new()
                 {
-                    existingAddon.Title = addon.Title;
+                    Id = addon.Id,
+                    Title = addon.Title,
+                    GameId = (byte)addon.Game,
+                    AddonType = (byte)addon.AddonType
+                });
+            }
 
-                    olderVersion = [.. dbContext.Versions.Where(x => x.AddonId.Equals(existingAddon.Id))];
+
+            dbContext.SaveChanges();
+
+
+            var existingVersion = dbContext.Versions.SingleOrDefault(x => x.AddonId == addon.Id && x.Version == addon.Version);
+
+            if (existingVersion is not null)
+            {
+                return false;
+            }
+
+            dbContext.Versions.Add(new()
+            {
+                AddonId = addon.Id,
+                Version = addon.Version,
+                DownloadUrl = new(addon.DownloadUrl),
+                Description = addon.Description,
+                IsDisabled = false,
+                FileSize = addon.FileSize,
+                Author = addon.Author,
+                UpdateDate = DateTime.Now.ToUniversalTime()
+            });
+
+            dbContext.SaveChanges();
+
+
+            if (addon.Dependencies is not null)
+            {
+                existingVersion = dbContext.Versions.SingleOrDefault(x => x.AddonId == addon.Id && x.Version == addon.Version);
+
+                if (existingVersion is null)
+                {
+                    throw new Exception("Addon doesn't exist");
                 }
-                else
+
+                foreach (var dep in addon.Dependencies)
                 {
-                    dbContext.Addons.Add(new()
+                    dbContext.Dependencies.Add(new()
                     {
-                        Id = addon.Id,
-                        Title = addon.Title,
-                        GameId = (byte)addon.Game,
-                        AddonType = (byte)addon.AddonType
+                        AddonVersionId = existingVersion.Id,
+                        DependencyId = dep.Key,
+                        DependencyVersion = dep.Value
                     });
                 }
 
-
                 dbContext.SaveChanges();
+            }
 
 
-                var existingVersion = dbContext.Versions.SingleOrDefault(x => x.AddonId == addon.Id && x.Version == addon.Version);
+            var existingScore = dbContext.Rating.Find(addon.Id);
 
-                if (existingVersion is not null)
-                {
-                    return false;
-                }
-
-                dbContext.Versions.Add(new()
+            if (existingScore is null)
+            {
+                dbContext.Rating.Add(new()
                 {
                     AddonId = addon.Id,
-                    Version = addon.Version,
-                    DownloadUrl = new(addon.DownloadUrl),
-                    Description = addon.Description,
-                    IsDisabled = false,
-                    FileSize = addon.FileSize,
-                    Author = addon.Author,
-                    UpdateDate = DateTime.Now.ToUniversalTime()
+                    RatingSum = 0,
+                    RatingTotal = 0
                 });
 
                 dbContext.SaveChanges();
-
-
-                if (addon.Dependencies is not null)
-                {
-                    existingVersion = dbContext.Versions.SingleOrDefault(x => x.AddonId == addon.Id && x.Version == addon.Version);
-
-                    if (existingVersion is null)
-                    {
-                        throw new Exception("Addon doesn't exist");
-                    }
-
-                    foreach (var dep in addon.Dependencies)
-                    {
-                        dbContext.Dependencies.Add(new()
-                        {
-                            AddonVersionId = existingVersion.Id,
-                            DependencyId = dep.Key,
-                            DependencyVersion = dep.Value
-                        });
-                    }
-
-                    dbContext.SaveChanges();
-                }
-
-
-                var existingScore = dbContext.Rating.Find(addon.Id);
-
-                if (existingScore is null)
-                {
-                    dbContext.Rating.Add(new()
-                    {
-                        AddonId = addon.Id,
-                        RatingSum = 0,
-                        RatingTotal = 0
-                    });
-
-                    dbContext.SaveChanges();
-                }
-
-                if (olderVersion is not null)
-                {
-                    foreach (var version in olderVersion)
-                    {
-                        version.IsDisabled = true;
-                    }
-
-                    dbContext.SaveChanges();
-                }
-
-
-                transaction.Commit();
-
-                return true;
             }
+
+            if (olderVersion is not null)
+            {
+                foreach (var version in olderVersion)
+                {
+                    version.IsDisabled = true;
+                }
+
+                dbContext.SaveChanges();
+            }
+
+
+            transaction.Commit();
+
+            return true;
         }
     }
 }

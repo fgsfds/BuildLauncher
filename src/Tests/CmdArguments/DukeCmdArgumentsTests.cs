@@ -372,7 +372,7 @@ public class DukeCmdArgumentsTests
         RedNukem redNukem = new();
 
         var args = redNukem.GetStartGameArgs(_dukeGame, _duke64Camp, [], true, true);
-        var expected = @$" -quick -nosetup -usecwd -h ""a"" -j ""D:\Games\Duke64"" -gamegrp ""rom.z64""";
+        var expected = @" -quick -nosetup -usecwd -h ""a"" -j ""D:\Games\Duke64"" -gamegrp ""rom.z64""";
 
         if (OperatingSystem.IsLinux())
         {

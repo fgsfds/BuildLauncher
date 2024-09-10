@@ -1,15 +1,14 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Mods.Providers;
 
-namespace Mods.DI
+namespace Mods.DI;
+
+public static class ProvidersBindings
 {
-    public static class ProvidersBindings
+    public static void Load(ServiceCollection container)
     {
-        public static void Load(ServiceCollection container)
-        {
-            container.AddSingleton<InstalledAddonsProviderFactory>();
-            container.AddSingleton<DownloadableAddonsProviderFactory>();
-            container.AddSingleton<FilesUploader>();
-        }
+        container.AddSingleton<InstalledAddonsProviderFactory>();
+        container.AddSingleton<DownloadableAddonsProviderFactory>();
+        container.AddSingleton<FilesUploader>();
     }
 }

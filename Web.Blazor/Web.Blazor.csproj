@@ -10,12 +10,12 @@
 
   <ItemGroup>
     <PackageReference Include="Markdig" />
-    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" />
     <PackageReference Include="AWSSDK.S3" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\src\Common\Common.csproj" />
+    <ProjectReference Include="..\src\Database.Server\Database.Server.csproj" />
   </ItemGroup>
 
   <ItemGroup>

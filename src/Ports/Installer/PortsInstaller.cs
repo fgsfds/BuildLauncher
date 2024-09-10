@@ -1,59 +1,58 @@
 ﻿using Common.Tools;
 using Ports.Ports;
 
-namespace Ports.Installer
+namespace Ports.Installer;
+
+public sealed class PortsInstallerFactory(PortsReleasesProvider portsReleasesProvider)
 {
-    public sealed class PortsInstallerFactory(PortsReleasesProvider portsReleasesProvider)
+    /// <summary>
+    /// Create <see cref="PortsInstaller"/> instance
+    /// </summary>
+    /// <returns></returns>
+    public PortsInstaller Create() => new(portsReleasesProvider);
+}
+
+public sealed class PortsInstaller
+{
+    private readonly ArchiveTools _fileTools;
+    private readonly PortsReleasesProvider _portsReleasesProvider;
+
+    public PortsInstaller(PortsReleasesProvider portsReleasesProvider)
     {
-        /// <summary>
-        /// Create <see cref="PortsInstaller"/> instance
-        /// </summary>
-        /// <returns></returns>
-        public PortsInstaller Create() => new(portsReleasesProvider);
+        _fileTools = new();
+        _portsReleasesProvider = portsReleasesProvider;
+        Progress = _fileTools.Progress;
     }
 
-    public sealed class PortsInstaller
-    {
-        private readonly ArchiveTools _fileTools;
-        private readonly PortsReleasesProvider _portsReleasesProvider;
+    /// <summary>
+    /// Installation progress
+    /// </summary>
+    public Progress<float> Progress { get; init; }
 
-        public PortsInstaller(PortsReleasesProvider portsReleasesProvider)
+    /// <summary>
+    /// Install port
+    /// </summary>
+    /// <param name="port">Port</param>
+    public async Task InstallAsync(BasePort port)
+    {
+        var release = await _portsReleasesProvider.GetLatestReleaseAsync(port.PortEnum).ConfigureAwait(false);
+
+        if (release is null || release.WindowsDownloadUrl is null)
         {
-            _fileTools = new();
-            _portsReleasesProvider = portsReleasesProvider;
-            Progress = _fileTools.Progress;
+            return;
         }
 
-        /// <summary>
-        /// Installation progress
-        /// </summary>
-        public Progress<float> Progress { get; init; }
+        var fileName = Path.GetFileName(release.WindowsDownloadUrl.ToString());
 
-        /// <summary>
-        /// Install port
-        /// </summary>
-        /// <param name="port">Port</param>
-        public async Task InstallAsync(BasePort port)
+        await _fileTools.DownloadFileAsync(release.WindowsDownloadUrl, fileName).ConfigureAwait(false);
+
+        await _fileTools.UnpackArchiveAsync(fileName, port.PathToExecutableFolder).ConfigureAwait(false);
+
+        File.Delete(fileName);
+
+        if (port is not Raze)
         {
-            var release = await _portsReleasesProvider.GetLatestReleaseAsync(port.PortEnum).ConfigureAwait(false);
-
-            if (release is null || release.WindowsDownloadUrl is null)
-            {
-                return;
-            }
-
-            var fileName = Path.GetFileName(release.WindowsDownloadUrl.ToString());
-
-            await _fileTools.DownloadFileAsync(release.WindowsDownloadUrl, fileName).ConfigureAwait(false);
-
-            await _fileTools.UnpackArchiveAsync(fileName, port.PathToExecutableFolder).ConfigureAwait(false);
-
-            File.Delete(fileName);
-
-            if (port is not Raze)
-            {
-                File.WriteAllText(Path.Combine(port.PathToExecutableFolder, "version"), release.Version);
-            }
+            File.WriteAllText(Path.Combine(port.PathToExecutableFolder, "version"), release.Version);
         }
     }
 }

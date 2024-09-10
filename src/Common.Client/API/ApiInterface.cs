@@ -5,205 +5,204 @@ using System.Net.Http.Json;
 using System.Text.Json;
 using System.Web;
 
-namespace Common.Client.API
+namespace Common.Client.API;
+
+public sealed class ApiInterface
 {
-    public sealed class ApiInterface
+    private readonly HttpClient _httpClient;
+    private readonly IConfigProvider _config;
+
+    private string ApiUrl => _config.UseLocalApi ? "https://localhost:7126/api" : "https://buildlauncher.fgsfds.link/api";
+
+    public ApiInterface(
+        IConfigProvider config,
+        HttpClient httpClient
+        )
     {
-        private readonly HttpClient _httpClient;
-        private readonly IConfigProvider _config;
+        _config = config;
+        _httpClient = httpClient;
+    }
 
-        private string ApiUrl => _config.UseLocalApi ? "https://localhost:7093/api" : "https://buildlauncher.fgsfds.link/api";
-
-        public ApiInterface(
-            IConfigProvider config,
-            HttpClient httpClient
-            )
+    public async Task<GeneralReleaseEntity?> GetLatestAppReleaseAsync()
+    {
+        try
         {
-            _config = config;
-            _httpClient = httpClient;
-        }
+            var response = await _httpClient.GetStringAsync($"{ApiUrl}/releases/app").ConfigureAwait(false);
 
-        public async Task<GeneralReleaseEntity?> GetLatestAppReleaseAsync()
-        {
-            try
-            {
-                var response = await _httpClient.GetStringAsync($"{ApiUrl}/releases/app").ConfigureAwait(false);
-
-                if (response is null || string.IsNullOrWhiteSpace(response))
-                {
-                    return null;
-                }
-
-                var release = JsonSerializer.Deserialize<GeneralReleaseEntity>(response);
-
-                return release;
-            }
-            catch
+            if (string.IsNullOrWhiteSpace(response))
             {
                 return null;
             }
+
+            var release = JsonSerializer.Deserialize<GeneralReleaseEntity>(response);
+
+            return release;
         }
-
-        public async Task<Dictionary<PortEnum, GeneralReleaseEntity>?> GetLatestPortsReleasesAsync()
+        catch
         {
-            try
-            {
-                var response = await _httpClient.GetStringAsync($"{ApiUrl}/releases/ports").ConfigureAwait(false);
+            return null;
+        }
+    }
 
-                if (response is null)
-                {
-                    return null;
-                }
+    public async Task<Dictionary<PortEnum, GeneralReleaseEntity>?> GetLatestPortsReleasesAsync()
+    {
+        try
+        {
+            var response = await _httpClient.GetStringAsync($"{ApiUrl}/releases/ports").ConfigureAwait(false);
 
-                var releases = JsonSerializer.Deserialize<Dictionary<PortEnum, GeneralReleaseEntity>>(response);
-
-                return releases;
-            }
-            catch
+            if (string.IsNullOrWhiteSpace(response))
             {
                 return null;
             }
+
+            var releases = JsonSerializer.Deserialize<Dictionary<PortEnum, GeneralReleaseEntity>>(response);
+
+            return releases;
         }
-
-        public async Task<Dictionary<ToolEnum, GeneralReleaseEntity>?> GetLatestToolsReleasesAsync()
+        catch
         {
-            try
-            {
-                var response = await _httpClient.GetStringAsync($"{ApiUrl}/releases/tools").ConfigureAwait(false);
+            return null;
+        }
+    }
 
-                if (response is null)
-                {
-                    return null;
-                }
+    public async Task<Dictionary<ToolEnum, GeneralReleaseEntity>?> GetLatestToolsReleasesAsync()
+    {
+        try
+        {
+            var response = await _httpClient.GetStringAsync($"{ApiUrl}/releases/tools").ConfigureAwait(false);
 
-                var releases = JsonSerializer.Deserialize<Dictionary<ToolEnum, GeneralReleaseEntity>>(response);
-
-                return releases;
-            }
-            catch
+            if (string.IsNullOrWhiteSpace(response))
             {
                 return null;
             }
+
+            var releases = JsonSerializer.Deserialize<Dictionary<ToolEnum, GeneralReleaseEntity>>(response);
+
+            return releases;
         }
-
-        public async Task<List<DownloadableAddonEntity>?> GetAddonsAsync(GameEnum gameEnum)
+        catch
         {
-            try
-            {
-                var response = await _httpClient.GetStringAsync($"{ApiUrl}/addons/{gameEnum}").ConfigureAwait(false);
+            return null;
+        }
+    }
 
-                if (response is null)
-                {
-                    return null;
-                }
+    public async Task<List<DownloadableAddonEntity>?> GetAddonsAsync(GameEnum gameEnum)
+    {
+        try
+        {
+            var response = await _httpClient.GetStringAsync($"{ApiUrl}/addons/{gameEnum}").ConfigureAwait(false);
 
-                var addons = JsonSerializer.Deserialize(response, DownloadableAddonEntityListContext.Default.ListDownloadableAddonEntity);
-
-                return addons;
-            }
-            catch (Exception)
+            if (string.IsNullOrWhiteSpace(response))
             {
                 return null;
             }
+
+            var addons = JsonSerializer.Deserialize(response, DownloadableAddonEntityListContext.Default.ListDownloadableAddonEntity);
+
+            return addons;
         }
-
-        public async Task<decimal?> ChangeScoreAsync(string addonId, sbyte score, bool isNew)
+        catch (Exception)
         {
-            try
-            {
-                using var response = await _httpClient.PutAsJsonAsync($"{ApiUrl}/addons/rating/change", new Tuple<string, sbyte, bool>(addonId, score, isNew)).ConfigureAwait(false);
-                var responseStr = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+            return null;
+        }
+    }
 
-                if (responseStr is null)
-                {
-                    return null;
-                }
+    public async Task<decimal?> ChangeScoreAsync(string addonId, sbyte score, bool isNew)
+    {
+        try
+        {
+            using var response = await _httpClient.PutAsJsonAsync($"{ApiUrl}/addons/rating/change", new Tuple<string, sbyte, bool>(addonId, score, isNew)).ConfigureAwait(false);
+            var responseStr = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 
-                var newScore = decimal.TryParse(responseStr, out var newScoreInt);
-
-                return newScore ? newScoreInt : null;
-            }
-            catch (Exception)
+            if (string.IsNullOrWhiteSpace(responseStr))
             {
                 return null;
             }
+
+            var newScore = decimal.TryParse(responseStr, out var newScoreInt);
+
+            return newScore ? newScoreInt : null;
         }
-
-        public async Task<Dictionary<string, decimal>?> GetScoresAsync()
+        catch (Exception)
         {
-            try
-            {
-                var response = await _httpClient.GetStringAsync($"{ApiUrl}/addons/rating").ConfigureAwait(false);
+            return null;
+        }
+    }
 
-                if (response is null)
-                {
-                    return null;
-                }
+    public async Task<Dictionary<string, decimal>?> GetScoresAsync()
+    {
+        try
+        {
+            var response = await _httpClient.GetStringAsync($"{ApiUrl}/addons/rating").ConfigureAwait(false);
 
-                var addons = JsonSerializer.Deserialize<Dictionary<string, decimal>>(response);
-
-                return addons;
-            }
-            catch (Exception)
+            if (string.IsNullOrWhiteSpace(response))
             {
                 return null;
             }
+
+            var addons = JsonSerializer.Deserialize<Dictionary<string, decimal>>(response);
+
+            return addons;
         }
-
-        public async Task<bool> IncreaseNumberOfInstallsAsync(string addonId)
+        catch (Exception)
         {
-            try
-            {
-                var response = await _httpClient.PutAsJsonAsync($"{ApiUrl}/addons/installs/add", addonId).ConfigureAwait(false);
+            return null;
+        }
+    }
 
-                if (response is null || !response.IsSuccessStatusCode)
-                {
-                    return false;
-                }
+    public async Task<bool> IncreaseNumberOfInstallsAsync(string addonId)
+    {
+        try
+        {
+            var response = await _httpClient.PutAsJsonAsync($"{ApiUrl}/addons/installs/add", addonId).ConfigureAwait(false);
 
-                return true;
-            }
-            catch (Exception)
+            if (!response.IsSuccessStatusCode)
             {
                 return false;
             }
+
+            return true;
         }
-
-        public async Task<bool> AddAddonToDatabaseAsync(AddonsJsonEntity addon)
+        catch (Exception)
         {
-            try
-            {
-                var apiPassword = _config.ApiPassword;
+            return false;
+        }
+    }
 
-                var response = await _httpClient.PostAsJsonAsync($"{ApiUrl}/addons/add", new Tuple<AddonsJsonEntity, string>(addon, apiPassword)).ConfigureAwait(false);
+    public async Task<bool> AddAddonToDatabaseAsync(AddonsJsonEntity addon)
+    {
+        try
+        {
+            var apiPassword = _config.ApiPassword;
 
-                if (response is null || !response.IsSuccessStatusCode)
-                {
-                    return false;
-                }
+            var response = await _httpClient.PostAsJsonAsync($"{ApiUrl}/addons/add", new Tuple<AddonsJsonEntity, string>(addon, apiPassword)).ConfigureAwait(false);
 
-                return true;
-            }
-            catch (Exception)
+            if (!response.IsSuccessStatusCode)
             {
                 return false;
             }
+
+            return true;
         }
-
-        public async Task<string?> GetSignedUrlAsync(string path)
+        catch (Exception)
         {
-            try
-            {
-                var encodedPath = HttpUtility.UrlEncode(path);
+            return false;
+        }
+    }
 
-                var signedUrl = await _httpClient.GetStringAsync($"{ApiUrl}/storage/url/{encodedPath}").ConfigureAwait(false);
+    public async Task<string?> GetSignedUrlAsync(string path)
+    {
+        try
+        {
+            var encodedPath = HttpUtility.UrlEncode(path);
 
-                return signedUrl;
-            }
-            catch (Exception)
-            {
-                return null;
-            }
+            var signedUrl = await _httpClient.GetStringAsync($"{ApiUrl}/storage/url/{encodedPath}").ConfigureAwait(false);
+
+            return signedUrl;
+        }
+        catch (Exception)
+        {
+            return null;
         }
     }
 }

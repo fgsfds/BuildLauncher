@@ -2,15 +2,14 @@
 using Ports.Installer;
 using Ports.Providers;
 
-namespace Ports.DI
+namespace Ports.DI;
+
+public static class ProvidersBindings
 {
-    public static class ProvidersBindings
+    public static void Load(ServiceCollection container)
     {
-        public static void Load(ServiceCollection container)
-        {
-            container.AddSingleton<PortsInstallerFactory>();
-            container.AddSingleton<PortsProvider>();
-            container.AddSingleton<PortsReleasesProvider>();
-        }
+        container.AddSingleton<PortsInstallerFactory>();
+        container.AddSingleton<PortsProvider>();
+        container.AddSingleton<PortsReleasesProvider>();
     }
 }

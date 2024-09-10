@@ -8,15 +8,12 @@ namespace Tests.CmdArguments;
 
 internal sealed class AutoloadModsProvider
 {
-    private readonly GameEnum _gameEnum;
     private readonly GameStruct _game;
     private readonly string _addon;
     private readonly FeatureEnum _feature;
 
     public AutoloadModsProvider(GameEnum gameEnum)
     {
-        _gameEnum = gameEnum;
-
         _game = gameEnum switch
         {
             GameEnum.Duke3D => new(GameEnum.Duke3D, DukeVersionEnum.Duke3D_Atomic),

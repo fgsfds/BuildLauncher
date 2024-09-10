@@ -1,15 +1,14 @@
-﻿namespace Common.Enums
+﻿namespace Common.Enums;
+
+public enum PortEnum
 {
-    public enum PortEnum
-    {
-        BuildGDX,
-        Raze,
-        EDuke32,
-        RedNukem,
-        NBlood,
-        NotBlood,
-        VoidSW,
-        PCExhumed,
-        Fury
-    }
+    BuildGDX,
+    Raze,
+    EDuke32,
+    RedNukem,
+    NBlood,
+    NotBlood,
+    VoidSW,
+    PCExhumed,
+    Fury
 }

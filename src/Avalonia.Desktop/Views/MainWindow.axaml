@@ -1,0 +1,142 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:Avalonia.Desktop.ViewModels"
+        x:DataType="vm:MainViewModel"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="1300" d:DesignHeight="600"
+        x:Class="Avalonia.Desktop.Views.MainWindow"
+        xmlns:pages="clr-namespace:Avalonia.Desktop.Pages"
+        Icon="/Assets/icon.ico"
+        Title="BuildLauncher"
+        WindowStartupLocation="CenterScreen"
+        CanResize="True"
+        WindowState="Maximized"
+        MinWidth="1300"
+        MinHeight="600"
+        ExtendClientAreaToDecorationsHint="True"
+        Background="{DynamicResource Background}"
+        >
+
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceInclude Source='/Styles/ThemedResources.axaml'/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+
+    <Border BorderThickness="1"
+            BorderBrush="{DynamicResource WindowBorder}"
+            IsHitTestVisible="True">
+
+        <Grid RowDefinitions="25,*">
+
+            <TabControl Grid.Row="1" Margin="5" TabStripPlacement="Left">
+
+                <TabItem Name="DukeTab" IsEnabled="{Binding IsDukeTabEnabled}">
+
+                    <TabItem.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="/Assets/duke3d.png" Width="24" />
+                            <TextBlock Text="Duke Nukem 3D" Margin="5" />
+                        </StackPanel>
+                    </TabItem.Header>
+
+                    <pages:GamePage x:Name="DukePage"/>
+
+                </TabItem>
+
+                <TabItem Name="BloodTab" IsEnabled="{Binding IsBloodTabEnabled}">
+
+                    <TabItem.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="/Assets/blood.png" Width="24" />
+                            <TextBlock Text="Blood" Margin="5" />
+                        </StackPanel>
+                    </TabItem.Header>
+
+                    <pages:GamePage x:Name="BloodPage"/>
+
+                </TabItem>
+
+                <TabItem Name="WangTab" IsEnabled="{Binding IsWangTabEnabled}">
+
+                    <TabItem.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="/Assets/sw.png" Width="24" />
+                            <TextBlock Text="Shadow Warrior" Margin="5" />
+                        </StackPanel>
+                    </TabItem.Header>
+
+                    <pages:GamePage x:Name="WangPage"/>
+
+                </TabItem>
+
+                <TabItem Name="FuryTab" IsEnabled="{Binding IsFuryTabEnabled}">
+
+                    <TabItem.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="/Assets/fury.png" Width="24" />
+                            <TextBlock Text="Ion Fury" Margin="5" />
+                        </StackPanel>
+                    </TabItem.Header>
+
+                    <pages:GamePage x:Name="FuryPage"/>
+
+                </TabItem>
+
+                <TabItem Name="RedneckTab" IsEnabled="{Binding IsRedneckTabEnabled}">
+
+                    <TabItem.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="/Assets/redneck.png" Width="24" />
+                            <TextBlock Text="Redneck Rampage" Margin="5" />
+                        </StackPanel>
+                    </TabItem.Header>
+
+                    <pages:GamePage x:Name="RedneckPage"/>
+
+                </TabItem>
+
+                <TabItem Name="SlaveTab" IsEnabled="{Binding IsSlaveTabEnabled}">
+
+                    <TabItem.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="/Assets/slave.png" Width="24" />
+                            <TextBlock Text="Powerslave" Margin="5" />
+                        </StackPanel>
+                    </TabItem.Header>
+
+                    <pages:GamePage x:Name="SlavePage"/>
+
+                </TabItem>
+
+                <TabItem IsEnabled="False" Header=""/>
+
+                <TabItem Header="Ports" Margin="5">
+                    <pages:PortsPage x:Name="PortsPageTab"/>
+                </TabItem>
+
+                <TabItem Header="Tools" IsVisible="{Binding IsDevMode}" Margin="5">
+                    <pages:ToolsPage x:Name="ToolsPageTab"/>
+                </TabItem>
+
+                <TabItem Name="DevTab" Header="Dev" Margin="5" >
+                    <pages:DevPage x:Name="DevPageTab"/>
+                </TabItem>
+
+                <TabItem IsEnabled="False" Header=""/>
+
+                <TabItem Name="SettingsTab" Header="Settings" Margin="5" >
+                    <pages:SettingsPage x:Name="SettingsPageTab"/>
+                </TabItem>
+
+                <TabItem Name="AboutTab" Header="{Binding ElementName=AboutPageTab, Path=((vm:AboutViewModel)DataContext).AboutTabHeader}" Margin="5" >
+                    <pages:AboutPage x:Name="AboutPageTab"/>
+                </TabItem>
+
+            </TabControl>
+        </Grid>
+    </Border>
+</Window>

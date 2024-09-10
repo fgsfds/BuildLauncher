@@ -104,7 +104,7 @@ public sealed class FilesUploader
             Description = manifest.Description,
             Author = manifest.Author,
             FileSize = fileSize,
-            Dependencies = manifest.Dependencies?.Addons is null ? null : manifest.Dependencies.Addons.ToDictionary(x => x.Id, y => y.Version)
+            Dependencies = manifest.Dependencies?.Addons?.ToDictionary(x => x.Id, y => y.Version)
         };
 
         return downMod;
@@ -120,14 +120,13 @@ public sealed class FilesUploader
 
             var signedUrl = await _apiInterface.GetSignedUrlAsync(path);
 
-            using var fileStream = File.OpenRead(pathToFile);
+            await using var fileStream = File.OpenRead(pathToFile);
             using StreamContent content = new(fileStream);
 
             using var response = await httpClient.PutAsync(signedUrl, content, cancellationToken).ConfigureAwait(false);
 
             if (!response.IsSuccessStatusCode)
             {
-                var result = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
                 return false;
             }
         }

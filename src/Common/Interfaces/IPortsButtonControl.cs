@@ -1,13 +1,12 @@
 ﻿using CommunityToolkit.Mvvm.Input;
 
-namespace Common.Interfaces
+namespace Common.Interfaces;
+
+public interface IPortsButtonControl
 {
-    public interface IPortsButtonControl
-    {
-        IRelayCommand? OpenFolderCommand { get; }
+    IRelayCommand? OpenFolderCommand { get; }
 
-        IAsyncRelayCommand? RefreshListCommand { get; }
+    IAsyncRelayCommand? RefreshListCommand { get; }
 
-        bool IsPortsButtonsVisible { get; }
-    }
+    bool IsPortsButtonsVisible { get; }
 }

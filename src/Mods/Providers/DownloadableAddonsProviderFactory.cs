@@ -5,23 +5,23 @@ using Common.Tools;
 
 namespace Mods.Providers;
 
-public class DownloadableAddonsProviderFactory
+public sealed class DownloadableAddonsProviderFactory
 {
     private readonly Dictionary<GameEnum, DownloadableAddonsProvider> _list = [];
 
     private readonly ArchiveTools _archiveTools;
     private readonly ApiInterface _apiInterface;
-    private readonly InstalledAddonsProviderFactory _installedAddonsProviderFactorty;
+    private readonly InstalledAddonsProviderFactory _installedAddonsProviderFactory;
 
     public DownloadableAddonsProviderFactory(
         ArchiveTools archiveTools,
         ApiInterface apiInterface,
-        InstalledAddonsProviderFactory installedAddonsProviderFactorty
+        InstalledAddonsProviderFactory installedAddonsProviderFactory
     )
     {
         _archiveTools = archiveTools;
         _apiInterface = apiInterface;
-        _installedAddonsProviderFactorty = installedAddonsProviderFactorty;
+        _installedAddonsProviderFactory = installedAddonsProviderFactory;
     }
 
     /// <summary>
@@ -40,7 +40,7 @@ public class DownloadableAddonsProviderFactory
             game, 
             _archiveTools, 
             _apiInterface, 
-            _installedAddonsProviderFactorty
+            _installedAddonsProviderFactory
             );
 #pragma warning restore CS0618 // Type or member is obsolete
         _list.Add(game.GameEnum, newProvider);

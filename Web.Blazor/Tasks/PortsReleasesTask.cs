@@ -1,50 +1,49 @@
 ﻿using Web.Blazor.Providers;
 
-namespace Web.Blazor.Tasks
+namespace Web.Blazor.Tasks;
+
+public sealed class PortsReleasesTask : IHostedService, IDisposable
 {
-    public sealed class PortsReleasesTask : IHostedService, IDisposable
+    private readonly ILogger<PortsReleasesTask> _logger;
+    private readonly PortsReleasesProvider _portsReleasesProvider;
+
+    private Timer _timer;
+
+    public PortsReleasesTask(
+        ILogger<PortsReleasesTask> logger,
+        PortsReleasesProvider portsReleasesProvider
+        )
     {
-        private readonly ILogger<PortsReleasesTask> _logger;
-        private readonly PortsReleasesProvider _portsReleasesProvider;
+        _logger = logger;
+        _portsReleasesProvider = portsReleasesProvider;
+    }
 
-        private Timer _timer;
+    public Task StartAsync(CancellationToken stoppingToken)
+    {
+        _timer = new Timer(
+            DoWork,
+            null,
+            TimeSpan.Zero,
+            TimeSpan.FromHours(1)
+            );
 
-        public PortsReleasesTask(
-            ILogger<PortsReleasesTask> logger,
-            PortsReleasesProvider portsReleasesProvider
-            )
-        {
-            _logger = logger;
-            _portsReleasesProvider = portsReleasesProvider;
-        }
+        return Task.CompletedTask;
+    }
 
-        public Task StartAsync(CancellationToken stoppingToken)
-        {
-            _timer = new Timer(
-                DoWork,
-                null,
-                TimeSpan.Zero,
-                TimeSpan.FromHours(1)
-                );
+    private void DoWork(object? state)
+    {
+        _ = _portsReleasesProvider.GetLatestReleasesAsync();
+    }
 
-            return Task.CompletedTask;
-        }
+    public Task StopAsync(CancellationToken stoppingToken)
+    {
+        _timer.Change(Timeout.Infinite, 0);
 
-        private void DoWork(object? state)
-        {
-            _ = _portsReleasesProvider.GetLatestReleasesAsync();
-        }
+        return Task.CompletedTask;
+    }
 
-        public Task StopAsync(CancellationToken stoppingToken)
-        {
-            _timer.Change(Timeout.Infinite, 0);
-
-            return Task.CompletedTask;
-        }
-
-        public void Dispose()
-        {
-            _timer.Dispose();
-        }
+    public void Dispose()
+    {
+        _timer.Dispose();
     }
 }

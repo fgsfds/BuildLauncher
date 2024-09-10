@@ -1,6 +1,6 @@
-﻿using Common.Client.API;
+﻿using Common;
+using Common.Client.API;
 using Common.Client.Helpers;
-using Common;
 using Common.Enums;
 using Common.Helpers;
 using Common.Interfaces;
@@ -65,7 +65,9 @@ public sealed class DownloadableAddonsProvider : IDownloadableAddonsProvider
 
         _cache = [];
 
-        addons = [.. addons.Where(a => !a.IsDisabled).OrderBy(a => a.Title).OrderBy(a => a.Version)];
+        addons = [.. addons.Where(a => !a.IsDisabled)
+            .OrderBy(a => a.Title)
+            .ThenBy(a => a.Version)];
 
         foreach (var addon in addons)
         {

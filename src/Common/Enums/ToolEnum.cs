@@ -1,8 +1,7 @@
-﻿namespace Common.Enums
+﻿namespace Common.Enums;
+
+public enum ToolEnum
 {
-    public enum ToolEnum
-    {
-        Mapster32,
-        XMapEdit
-    }
+    Mapster32,
+    XMapEdit
 }

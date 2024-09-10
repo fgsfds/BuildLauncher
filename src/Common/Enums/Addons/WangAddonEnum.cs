@@ -1,9 +1,8 @@
-﻿namespace Common.Enums.Addons
+﻿namespace Common.Enums.Addons;
+
+public enum WangAddonEnum : byte
 {
-    public enum WangAddonEnum : byte
-    {
-        Base = 0,
-        Wanton = 1,
-        TwinDragon = 2
-    }
+    Base = 0,
+    Wanton = 1,
+    TwinDragon = 2
 }

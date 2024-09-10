@@ -1,5 +1,5 @@
-﻿using Common.Client.Config;
-using Common;
+﻿using Common;
+using Common.Client.Config;
 using Common.Enums;
 using Common.Enums.Addons;
 using Common.Enums.Versions;
@@ -68,7 +68,7 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
                 files = Directory.GetFiles(_game.ModsFolderPath, "*.zip");
                 var mods = GetAddonsFromFiles(AddonTypeEnum.Mod, files);
                 _cache.Add(AddonTypeEnum.Mod, mods);
-            }).WaitAsync(CancellationToken.None);
+            }).WaitAsync(CancellationToken.None).ConfigureAwait(false);
         }
 
         _isCacheUpdating = false;
@@ -221,7 +221,7 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
     /// <param name="files">Paths to addon files</param>
     private Dictionary<AddonVersion, IAddon> GetAddonsFromFiles(AddonTypeEnum addonType, IEnumerable<string> files)
     {
-        Dictionary<AddonVersion, IAddon> addedAddons = new(files.Count());
+        Dictionary<AddonVersion, IAddon> addedAddons = [];
 
         foreach (var file in files)
         {
@@ -302,9 +302,9 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
         Dictionary<string, string?>? incompatibles = null;
         IStartMap? startMap = null;
 
-        Addon? addon = null;
+        Addon? addon;
 
-        if (ArchiveFactory.IsArchive(pathToFile, out var _))
+        if (ArchiveFactory.IsArchive(pathToFile, out _))
         {
             using var archive = ArchiveFactory.Open(pathToFile);
 
@@ -338,9 +338,9 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
             version = manifest.Version;
 
             //TODO description
-            if (manifest.Description is string desc)
+            if (manifest.Description is not null)
             {
-                description = desc;
+                description = manifest.Description;
             }
 
             supportedGame = manifest.SupportedGame.Game;
@@ -412,7 +412,6 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
         else if (pathToFile.EndsWith(".grp", StringComparison.OrdinalIgnoreCase))
         {
             //"real" grps are not supported
-            return null;
         }
 
         if (addonType is AddonTypeEnum.Mod)
@@ -421,7 +420,7 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
 
             if (mainDef is not null)
             {
-                ThrowHelper.ArgumentException($"Autoload mod can't have Main DEF");
+                ThrowHelper.ArgumentException("Autoload mod can't have Main DEF");
             }
 
             addon = new AutoloadMod()
@@ -455,7 +454,7 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
                     Id = id,
                     Type = type,
                     SupportedGame = new(supportedGame, gameVersion, gameCrc),
-                    Title = title!,
+                    Title = title,
                     GridImage = image,
                     Description = description,
                     Version = version,
