@@ -34,9 +34,21 @@
 
         <Grid Name="ButtonsGrid" ColumnDefinitions="2*,*" HorizontalAlignment="Stretch">
 
-            <Button Name="InstallButton" IsVisible="{Binding IsUpdateAvailable}" Background="{DynamicResource SystemAccentColor}" Grid.Column="0" Content="{Binding InstallButtonText}" Command="{Binding InstallCommand}" Margin="5" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center">Install</Button>
+            <Button Name="InstallButton"
+                    Grid.Column="0"
+                    Content="{Binding InstallButtonText, FallbackValue=Install}"
+                    Command="{Binding InstallCommand}"
+                    Margin="5" HorizontalAlignment="Stretch"
+                    HorizontalContentAlignment="Center"
+                    Classes.isUpdate="{Binding IsUpdateAvailable}">
 
-            <Button Name="UpdateButton" IsVisible="{Binding !IsUpdateAvailable}" Grid.Column="0" Content="{Binding InstallButtonText}" Command="{Binding InstallCommand}" Margin="5" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center">Install</Button>
+                <Button.Styles>
+                    <Style Selector="Button.isUpdate">
+                        <Setter Property="Background" Value="{DynamicResource SystemAccentColor}"/>
+                    </Style>
+                </Button.Styles>
+
+            </Button>
 
             <Button Height="{Binding #InstallButton.Bounds.Height}"
                     Grid.Column="1"
