@@ -53,7 +53,7 @@ public sealed class DatabaseContext : DbContext
         try
         {
             using var httpClient = new HttpClient();
-            var addons = httpClient.GetStringAsync("https://files.fgsfds.link/buildlauncher/addons.json").Result;
+            var addons = httpClient.GetStringAsync("http://files.fgsfds.link/buildlauncher/addons.json").Result;
             var addonsList = JsonSerializer.Deserialize(addons, AddonsJsonEntityListContext.Default.ListAddonsJsonEntity)!;
 
 

@@ -5,7 +5,7 @@ public static class Consts
     /// <summary>
     /// Path to the files repository
     /// </summary>
-    public const string FilesRepo = "https://files.fgsfds.link/buildlauncher";
+    public const string FilesRepo = "http://files.fgsfds.link/buildlauncher";
 
     /// <summary>
     /// GirtHub releases Url
