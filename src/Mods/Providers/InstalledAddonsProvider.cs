@@ -57,14 +57,28 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
             {
                 IEnumerable<string> files;
 
+                //campaigns
                 files = Directory.GetFiles(_game.CampaignsFolderPath, "*.zip");
+
+                var dirs = Directory.GetDirectories(_game.CampaignsFolderPath);
+
+                foreach (var dir in dirs)
+                {
+                    if (File.Exists(Path.Combine(dir, "addon.json")))
+                    {
+                        files = files.Append(Path.Combine(dir, "addon.json"));
+                    }
+                }
+
                 var camps = GetAddonsFromFiles(AddonTypeEnum.TC, files);
                 _cache.Add(AddonTypeEnum.TC, camps);
 
+                //maps
                 files = Directory.GetFiles(_game.MapsFolderPath).Where(static x => x.EndsWith(".zip", StringComparison.OrdinalIgnoreCase) || x.EndsWith(".map", StringComparison.OrdinalIgnoreCase));
                 var maps = GetAddonsFromFiles(AddonTypeEnum.Map, files);
                 _cache.Add(AddonTypeEnum.Map, maps);
 
+                //mods
                 files = Directory.GetFiles(_game.ModsFolderPath, "*.zip");
                 var mods = GetAddonsFromFiles(AddonTypeEnum.Mod, files);
                 _cache.Add(AddonTypeEnum.Mod, mods);
@@ -304,27 +318,44 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
 
         Addon? addon;
 
-        if (ArchiveFactory.IsArchive(pathToFile, out _))
+        if (pathToFile.EndsWith(".json") || ArchiveFactory.IsArchive(pathToFile, out _))
         {
-            using var archive = ArchiveFactory.Open(pathToFile);
+            AddonDto? manifest;
 
-            if (DeleteOld(pathToFile, archive))
+            if (pathToFile.EndsWith(".json"))
             {
-                return null;
+                var jsonText = File.ReadAllText(pathToFile);
+
+                manifest = JsonSerializer.Deserialize(
+                    jsonText,
+                    AddonManifestContext.Default.AddonDto
+                    );
             }
-
-            var entry = archive.Entries.FirstOrDefault(static x => x.Key!.Equals("addon.json"));
-
-            if (entry is null)
+            else
             {
-                //TODO add support for non-manifested mods
-                return null;
-            }
+                using var archive = ArchiveFactory.Open(pathToFile);
 
-            var manifest = JsonSerializer.Deserialize(
-                entry.OpenEntryStream(),
-                AddonManifestContext.Default.AddonDto
-                );
+                if (DeleteOld(pathToFile, archive))
+                {
+                    return null;
+                }
+
+                var entry = archive.Entries.FirstOrDefault(static x => x.Key!.Equals("addon.json"));
+
+                if (entry is null)
+                {
+                    //TODO add support for non-manifested mods
+                    return null;
+                }
+
+                manifest = JsonSerializer.Deserialize(
+                    entry.OpenEntryStream(),
+                    AddonManifestContext.Default.AddonDto
+                    );
+
+                preview = ImageHelper.GetImageFromArchive(archive, "preview.png");
+                image = ImageHelper.GetCoverFromArchive(archive) ?? preview;
+            }
 
             if (manifest is null)
             {
@@ -360,9 +391,6 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
 
             mainDef = manifest.MainDef;
             addDefs = manifest.AdditionalDefs?.ToHashSet();
-
-            preview = ImageHelper.GetImageFromArchive(archive, "preview.png");
-            image = ImageHelper.GetCoverFromArchive(archive) ?? preview;
 
             dependencies = manifest.Dependencies?.Addons?.ToDictionary(static x => x.Id, static x => x.Version, StringComparer.OrdinalIgnoreCase);
             incompatibles = manifest.Incompatibles?.Addons?.ToDictionary(static x => x.Id, static x => x.Version, StringComparer.OrdinalIgnoreCase);

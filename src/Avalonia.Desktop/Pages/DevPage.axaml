@@ -615,6 +615,11 @@
 
                         </Grid>
 
+                        <!--Need to unpack-->
+                        <Grid IsVisible="{Binding AreBloodPropertiesVisible}">
+                            <CheckBox Margin="5" IsChecked="{Binding IsNeedToUnpack}">Need to unpack</CheckBox>
+                        </Grid>
+
                         <!--Description-->
                         <Grid>
                             <Grid.ColumnDefinitions>

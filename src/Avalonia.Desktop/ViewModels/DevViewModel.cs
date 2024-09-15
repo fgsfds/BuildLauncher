@@ -173,6 +173,8 @@ public sealed partial class DevViewModel : ObservableObject
     private bool _isCstatSelected;
     [ObservableProperty]
     private bool _isLightingSelected;
+    [ObservableProperty]
+    private bool _isNeedToUnpack;
 
     [ObservableProperty]
     private string _addonTitle;
@@ -450,6 +452,7 @@ public sealed partial class DevViewModel : ObservableObject
         IsTrorSelected = result.Dependencies?.RequiredFeatures is not null && result.Dependencies.RequiredFeatures.Contains(FeatureEnum.TROR);
         IsCstatSelected = result.Dependencies?.RequiredFeatures is not null && result.Dependencies.RequiredFeatures.Contains(FeatureEnum.Wall_Rotate_Cstat);
         IsLightingSelected = result.Dependencies?.RequiredFeatures is not null && result.Dependencies.RequiredFeatures.Contains(FeatureEnum.Dynamic_Lighting);
+        IsNeedToUnpack = result.NeedToUnpack;
 
         DependenciesList = result.Dependencies?.Addons is null ? [] : [.. result.Dependencies.Addons];
         IncompatibilitiesList = result.Incompatibles?.Addons is null ? [] : [.. result.Incompatibles.Addons];
@@ -618,7 +621,7 @@ public sealed partial class DevViewModel : ObservableObject
             ThrowHelper.Exception($"Common files names can't be used. Rename these files: {string.Join(", ", forbidden)}");
         }
 
-        if (IsBloodSelected)
+        if (IsBloodSelected && !IsNeedToUnpack)
         {
             if (files.Any(static x => x.EndsWith(".ART", StringComparison.InvariantCultureIgnoreCase)))
             {
@@ -767,9 +770,10 @@ public sealed partial class DevViewModel : ObservableObject
             Ini = Ini,
             MainRff = MainRff,
             SoundRff = SoundRff,
-            Dependencies = (DependenciesList.Count == 0) && features.Count == 0 ? null : new() { Addons = DependenciesList.Count == 0 ? null : [.. DependenciesList], RequiredFeatures = features.Count == 0 ? null : features },
-            Incompatibles = (IncompatibilitiesList.Count == 0) ? null : new() { Addons = IncompatibilitiesList.Count == 0 ? null : [.. IncompatibilitiesList] },
-            StartMap = startMap
+            Dependencies = (DependenciesList is null || DependenciesList.Count == 0) && features.Count == 0 ? null : new() { Addons = DependenciesList is null || DependenciesList.Count == 0 ? null : [.. DependenciesList], RequiredFeatures = features.Count == 0 ? null : features },
+            Incompatibles = (IncompatibilitiesList is null || IncompatibilitiesList.Count == 0) ? null : new() { Addons = IncompatibilitiesList is null || IncompatibilitiesList.Count == 0 ? null : [.. IncompatibilitiesList] },
+            StartMap = startMap,
+            NeedToUnpack = IsNeedToUnpack
         };
 
         var jsonStr = JsonSerializer.Serialize(addon, AddonManifestContext.Default.AddonDto);

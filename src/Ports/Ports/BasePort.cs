@@ -128,10 +128,20 @@ public abstract class BasePort
     /// <summary>
     /// Get command line parameters to start the game with selected campaign and autoload mods
     /// </summary>
-    /// <param name="game">Game<param/>
-    /// <param name="addon">Map/campaign</param>
-    /// <param name="skipIntro">Skip intro</param>
-    public string GetStartGameArgs(IGame game, IAddon addon, Dictionary<AddonVersion, IAddon> mods, bool skipIntro, bool skipStartup, byte? skill = null)
+    /// <param name="game"></param>
+    /// <param name="addon"></param>
+    /// <param name="mods"></param>
+    /// <param name="skipIntro"></param>
+    /// <param name="skipStartup"></param>
+    /// <param name="skill"></param>
+    /// <returns></returns>
+    public string GetStartGameArgs(
+        IGame game,
+        IAddon addon,
+        Dictionary<AddonVersion, IAddon> mods,
+        bool skipIntro,
+        bool skipStartup,
+        byte? skill = null)
     {
         StringBuilder sb = new();
 
@@ -345,7 +355,14 @@ public abstract class BasePort
 
         if (bCamp.Type is AddonTypeEnum.TC)
         {
-            sb.Append($@" {AddFileParam}""{Path.Combine(game.CampaignsFolderPath, bCamp.FileName)}""");
+            if (bCamp.FileName.Equals("addon.json"))
+            {
+                sb.Append($@" -game_dir ""{Path.GetDirectoryName(bCamp.PathToFile)}""");
+            }
+            else
+            {
+                sb.Append($@" {AddFileParam}""{Path.Combine(game.CampaignsFolderPath, bCamp.FileName)}""");
+            }
         }
         else if (bCamp.Type is AddonTypeEnum.Map)
         {
