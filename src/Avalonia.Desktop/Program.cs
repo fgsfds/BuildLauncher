@@ -12,19 +12,19 @@ public sealed class Program
     [STAThread]
     public static void Main(string[] args)
     {
-        if (args.Contains("-dev"))
+        if (args.Contains("--dev"))
         {
             ClientProperties.IsDevMode = true;
         }
 
-        BuildAvaloniaApp()
+        _ = BuildAvaloniaApp()
         .StartWithClassicDesktopLifetime(args);
     }
 
     // Avalonia configuration, don't remove; also used by visual designer.
     private static AppBuilder BuildAvaloniaApp()
     {
-        IconProvider.Current
+        _ = IconProvider.Current
             .Register<FontAwesomeIconProvider>()
             ;
 
