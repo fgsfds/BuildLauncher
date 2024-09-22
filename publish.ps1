@@ -1,4 +1,4 @@
-dotnet publish ".\src\Avalonia\Desktop\Avalonia.Desktop.csproj" -p:PublishProfile=Windows
+dotnet publish ".\src\Avalonia.Desktop\Avalonia.Desktop.csproj" -p:PublishProfile=Windows
 
 $version = (Get-Item .\publish\BuildLauncher.exe).VersionInfo.FileVersion
 $version = $version.Substring(0,$version.Length-2)
