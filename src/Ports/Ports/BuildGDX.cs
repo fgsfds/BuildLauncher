@@ -149,7 +149,7 @@ public sealed class BuildGDX : BasePort
     protected override void GetSkipIntroParameter(StringBuilder sb) { }
 
     /// <inheritdoc/>
-    protected override void GetSkipStartupParameter(StringBuilder sb) => sb.Append(" -silent \"true\"");
+    protected override void GetSkipStartupParameter(StringBuilder sb) { }
 
 
     private void GetDukeArgs(StringBuilder sb, DukeGame game, IAddon camp)
@@ -162,16 +162,22 @@ public sealed class BuildGDX : BasePort
         {
             _ = sb.Append($@" -path ""{game.GameInstallFolder}""");
         }
+
+        _ = sb.Append($@" -game DUKE_NUKEM_3D");
     }
 
     private new void GetBloodArgs(StringBuilder sb, BloodGame game, IAddon camp)
     {
         _ = sb.Append($@" -path ""{game.GameInstallFolder}""");
+
+        _ = sb.Append($@" -game BLOOD");
     }
 
     private static void GetWangArgs(StringBuilder sb, WangGame game, IAddon camp)
     {
         _ = sb.Append($@" -path ""{game.GameInstallFolder}""");
+
+        _ = sb.Append($@" -game SHADOW_WARRIOR");
     }
 
     private void GetRedneckArgs(StringBuilder sb, RedneckGame game, IAddon camp)
@@ -179,15 +185,19 @@ public sealed class BuildGDX : BasePort
         if (camp.Id.Equals(nameof(GameEnum.RidesAgain), StringComparison.OrdinalIgnoreCase))
         {
             _ = sb.Append($@" -path ""{game.AgainInstallPath}""");
+            _ = sb.Append($@" -game RR_RIDES_AGAIN");
         }
         else
         {
             _ = sb.Append($@" -path ""{game.GameInstallFolder}""");
+            _ = sb.Append($@" -game REDNECK_RAMPAGE");
         }
     }
 
     private new static void GetSlaveArgs(StringBuilder sb, SlaveGame game, IAddon camp)
     {
         _ = sb.Append($@" -path ""{game.GameInstallFolder}""");
+
+        _ = sb.Append($@" -game POWERSLAVE");
     }
 }
