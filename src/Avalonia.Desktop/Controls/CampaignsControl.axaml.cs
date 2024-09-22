@@ -126,23 +126,25 @@ public sealed partial class CampaignsControl : UserControl
 
         foreach (var port in _supportedPorts)
         {
-            if (port.IsInstalled &&
-                (addon.RequiredFeatures is null || !addon.RequiredFeatures!.Except(port.SupportedFeatures).Any()))
+            if (!port.IsInstalled ||
+                (addon.RequiredFeatures is not null && addon.RequiredFeatures.Except(port.SupportedFeatures).Any()) ||
+                (addon.Type is not AddonTypeEnum.Official && port.PortEnum is PortEnum.BuildGDX))
             {
-                var portButton = new MenuItem()
-                {
-                    Header = $"Start with {port.Name}",
-                    Command = new RelayCommand(() => _viewModel.StartCampaignCommand.Execute(port))
-                };
-
-                CampaignsList.ContextMenu.Items.Add(portButton);
+                continue;
             }
 
+            var portButton = new MenuItem()
+            {
+                Header = $"Start with {port.Name}",
+                Command = new RelayCommand(() => _viewModel.StartCampaignCommand.Execute(port))
+            };
+
+            _ = CampaignsList.ContextMenu.Items.Add(portButton);
         }
 
         if (CampaignsList.ContextMenu.Items.Count > 0)
         {
-            CampaignsList.ContextMenu.Items.Add(new Separator());
+            _ = CampaignsList.ContextMenu.Items.Add(new Separator());
         }
 
         var deleteButton = new MenuItem()
@@ -154,7 +156,7 @@ public sealed partial class CampaignsControl : UserControl
                 )
         };
 
-        CampaignsList.ContextMenu.Items.Add(deleteButton);
+        _ = CampaignsList.ContextMenu.Items.Add(deleteButton);
     }
 
     /// <summary>
@@ -181,7 +183,7 @@ public sealed partial class CampaignsControl : UserControl
     {
         CampaignsList.SelectedItem = null;
         CampaignsList.Focusable = true;
-        CampaignsList.Focus();
+        _ = CampaignsList.Focus();
         CampaignsList.Focusable = false;
     }
 }
