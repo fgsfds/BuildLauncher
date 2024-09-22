@@ -75,6 +75,15 @@ public sealed class Raze : BasePort
     protected override string MainConParam => "-con ";
 
     /// <inheritdoc/>
+    protected override string AddGameDirParam => "-file ";
+
+    /// <inheritdoc/>
+    protected override string AddRffParam => "-file ";
+
+    /// <inheritdoc/>
+    protected override string AddSndParam => "-file ";
+
+    /// <inheritdoc/>
     protected override string AddGrpParam => throw new NotImplementedException();
 
     /// <inheritdoc/>
@@ -87,7 +96,8 @@ public sealed class Raze : BasePort
         FeatureEnum.Hightile,
         FeatureEnum.Models,
         FeatureEnum.Sloped_Sprites,
-        FeatureEnum.Wall_Rotate_Cstat
+        FeatureEnum.Wall_Rotate_Cstat,
+        FeatureEnum.Unpacked_Addons
         ];
 
     /// <inheritdoc/>
@@ -132,7 +142,7 @@ public sealed class Raze : BasePort
             File.WriteAllText(config, DefaultConfig);
         }
 
-        AddGamePathsToConfig(game.GameInstallFolder, game.ModsFolderPath, config);
+        AddGamePathsToConfig(game.GameInstallFolder, game.ModsFolderPath, config, campaign);
 
         FixRoute66Files(game, campaign);
     }
@@ -205,7 +215,7 @@ public sealed class Raze : BasePort
         {
             var config = Path.Combine(PathToExecutableFolder, ConfigFile);
 
-            AddGamePathsToConfig(game.DukeWTInstallPath, game.ModsFolderPath, config);
+            AddGamePathsToConfig(game.DukeWTInstallPath, game.ModsFolderPath, config, addon);
 
             sb.Append($" -addon {(byte)DukeAddonEnum.Base}");
         }
@@ -341,7 +351,7 @@ public sealed class Raze : BasePort
         if (rCamp.Id.Equals(nameof(GameEnum.RidesAgain), StringComparison.OrdinalIgnoreCase))
         {
             var config = Path.Combine(PathToExecutableFolder, ConfigFile);
-            AddGamePathsToConfig(game.AgainInstallPath, game.ModsFolderPath, config);
+            AddGamePathsToConfig(game.AgainInstallPath, game.ModsFolderPath, config, addon);
         }
 
 
@@ -472,7 +482,7 @@ public sealed class Raze : BasePort
     /// Add paths to game and mods folder to the config
     /// </summary>
     [Obsolete("Remove if this ever implemented https://github.com/ZDoom/Raze/issues/1060")]
-    private static void AddGamePathsToConfig(string gameFolder, string modsFolder, string config)
+    private static void AddGamePathsToConfig(string gameFolder, string modsFolder, string config, IAddon campaign)
     {
         var contents = File.ReadAllLines(config);
 
@@ -516,6 +526,13 @@ public sealed class Raze : BasePort
 
                 path = modsFolder.Replace('\\', '/');
                 sb.Append("Path=").AppendLine(path);
+
+                if (campaign is BloodCampaign bCamp &&
+                    bCamp.IsUnpacked)
+                {
+                    path = Path.GetDirectoryName(bCamp.PathToFile)!.Replace('\\', '/');
+                    sb.Append("Path=").AppendLine(path);
+                }
 
                 do
                 {

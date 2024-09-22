@@ -59,6 +59,9 @@ public abstract class Addon : IAddon
     public required IStartMap? StartMap { get; init; }
 
     /// <inheritdoc/>
+    public required bool IsUnpacked { get; init; }
+
+    /// <inheritdoc/>
     public string? FileName => PathToFile is null ? null : Path.GetFileName(PathToFile);
 
     public override string ToString() => Title;
@@ -71,12 +74,12 @@ public abstract class Addon : IAddon
 
         if (Version is not null)
         {
-            description.Append($"{Environment.NewLine}{Environment.NewLine}#### v{Version}");
+            _ = description.Append($"{Environment.NewLine}{Environment.NewLine}#### v{Version}");
         }
 
         if (Author is not null)
         {
-            description.Append($"{Environment.NewLine}{Environment.NewLine}*by {Author}*");
+            _ = description.Append($"{Environment.NewLine}{Environment.NewLine}*by {Author}*");
         }
 
         if (Description is not null)
@@ -92,17 +95,17 @@ public abstract class Addon : IAddon
                 }
             }
 
-            description.Append(Environment.NewLine + Environment.NewLine).AppendJoin(Environment.NewLine + Environment.NewLine, lines);
+            _ = description.Append(Environment.NewLine + Environment.NewLine).AppendJoin(Environment.NewLine + Environment.NewLine, lines);
         }
 
         if (DependentAddons is not null && Type is not AddonTypeEnum.Official)
         {
-            description.Append($"{Environment.NewLine}{Environment.NewLine}#### Requires:{Environment.NewLine}").AppendJoin(Environment.NewLine + Environment.NewLine, DependentAddons.Keys);
+            _ = description.Append($"{Environment.NewLine}{Environment.NewLine}#### Requires:{Environment.NewLine}").AppendJoin(Environment.NewLine + Environment.NewLine, DependentAddons.Keys);
         }
 
         if (IncompatibleAddons is not null)
         {
-            description.Append($"{Environment.NewLine}{Environment.NewLine}#### Incompatible with:{Environment.NewLine}").AppendJoin(Environment.NewLine + Environment.NewLine, IncompatibleAddons.Keys);
+            _ = description.Append($"{Environment.NewLine}{Environment.NewLine}#### Incompatible with:{Environment.NewLine}").AppendJoin(Environment.NewLine + Environment.NewLine, IncompatibleAddons.Keys);
         }
 
         return description.ToString();

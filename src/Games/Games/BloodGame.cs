@@ -71,6 +71,7 @@ public sealed class BloodGame : BaseGame
             SND = null,
             StartMap = null,
             PreviewImage = null,
+            IsUnpacked = false
         });
 
         if (IsCrypticPassageInstalled)
@@ -105,6 +106,7 @@ public sealed class BloodGame : BaseGame
                 SND = null,
                 StartMap = null,
                 PreviewImage = null,
+                IsUnpacked = false
             });
         }
 

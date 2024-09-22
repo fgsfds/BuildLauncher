@@ -44,7 +44,8 @@ public class WangCmdArgumentsTests
             MainDef = null,
             AdditionalDefs = null,
             StartMap = null,
-            PreviewImage = null
+            PreviewImage = null,
+            IsUnpacked = false
         };
 
         _tdCamp = new()
@@ -64,7 +65,8 @@ public class WangCmdArgumentsTests
             MainDef = null,
             AdditionalDefs = null,
             StartMap = null,
-            PreviewImage = null
+            PreviewImage = null,
+            IsUnpacked = false
         };
     }
 

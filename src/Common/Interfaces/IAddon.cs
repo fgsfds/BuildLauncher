@@ -89,6 +89,11 @@ public interface IAddon
     /// </summary>
     IStartMap? StartMap { get; init; }
 
+    /// <summary>
+    /// Is addon unpacked to a folder
+    /// </summary>
+    bool IsUnpacked { get; init; }
+
 
     /// <summary>
     /// Create markdown description of the addon

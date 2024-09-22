@@ -114,6 +114,21 @@ public abstract class BasePort
     protected abstract string SkillParam { get; }
 
     /// <summary>
+    /// Cmd parameter for setting game directory
+    /// </summary>
+    protected abstract string AddGameDirParam { get; }
+
+    /// <summary>
+    /// Cmd parameter for adding main rff file
+    /// </summary>
+    protected abstract string AddRffParam { get; }
+
+    /// <summary>
+    /// Cmd parameter for adding sound rff file
+    /// </summary>
+    protected abstract string AddSndParam { get; }
+
+    /// <summary>
     /// Name of the folder that contains the port files
     /// By default is the same as <see cref="Name"/>
     /// </summary>
@@ -163,7 +178,7 @@ public abstract class BasePort
 
         if (skill is not null)
         {
-            sb.Append($" {SkillParam}{skill}");
+            _ = sb.Append($" {SkillParam}{skill}");
         }
 
         return sb.ToString();
@@ -178,8 +193,8 @@ public abstract class BasePort
         //TODO e#m#
         if (camp.StartMap is MapFileDto mapFile)
         {
-            sb.Append($@" {AddFileParam}""{Path.Combine(game.MapsFolderPath, camp.FileName!)}""");
-            sb.Append($@" -map ""{mapFile.File}""");
+            _ = sb.Append($@" {AddFileParam}""{Path.Combine(game.MapsFolderPath, camp.FileName!)}""");
+            _ = sb.Append($@" -map ""{mapFile.File}""");
         }
         else
         {
@@ -195,17 +210,18 @@ public abstract class BasePort
     {
         camp.StartMap.ThrowIfNotType<MapFileDto>(out var mapFile);
 
-        sb.Append($@" {AddDirectoryParam}""{game.MapsFolderPath}""");
-        sb.Append($@" -map ""{mapFile.File}""");
+        _ = sb.Append($@" {AddDirectoryParam}""{game.MapsFolderPath}""");
+        _ = sb.Append($@" -map ""{mapFile.File}""");
     }
 
 
     /// <summary>
-    /// Check if autoload mod works with current port and addon
+    /// Check if autoload mod works with current port and addons
     /// </summary>
     /// <param name="autoloadMod">Autoload mod</param>
     /// <param name="campaign">Campaign</param>
-    protected bool ValidateAutoloadMod(AutoloadMod autoloadMod, IAddon campaign, Dictionary<AddonVersion, IAddon> addons)
+    /// <param name="mods">Autoload mods</param>
+    protected bool ValidateAutoloadMod(AutoloadMod autoloadMod, IAddon campaign, Dictionary<AddonVersion, IAddon> mods)
     {
         if (!autoloadMod.IsEnabled)
         {
@@ -242,7 +258,7 @@ public abstract class BasePort
                     return true;
                 }
 
-                foreach (var addon in addons)
+                foreach (var addon in mods)
                 {
                     if (!dependantAddon.Key.Equals(addon.Key.Id, StringComparison.InvariantCultureIgnoreCase))
                     {
@@ -278,7 +294,7 @@ public abstract class BasePort
                     return false;
                 }
 
-                foreach (var addon in addons)
+                foreach (var addon in mods)
                 {
                     if (incompatibleAddon.Key != addon.Key.Id)
                     {
@@ -308,11 +324,11 @@ public abstract class BasePort
         {
             if (lMap.BloodIni is null)
             {
-                sb.Append($@" -ini ""{Consts.BloodIni}""");
+                _ = sb.Append($@" -ini ""{Consts.BloodIni}""");
             }
             else
             {
-                sb.Append($@" -ini ""{Path.GetFileName(lMap.BloodIni)}""");
+                _ = sb.Append($@" -ini ""{Path.GetFileName(lMap.BloodIni)}""");
             }
 
             GetLooseMapArgs(sb, game, addon);
@@ -327,11 +343,11 @@ public abstract class BasePort
 
         if (bCamp.INI is not null)
         {
-            sb.Append($@" -ini ""{bCamp.INI}""");
+            _ = sb.Append($@" -ini ""{bCamp.INI}""");
         }
         else if (bCamp.DependentAddons is not null && bCamp.DependentAddons.ContainsKey(nameof(BloodAddonEnum.BloodCP)))
         {
-            sb.Append($@" -ini ""{Consts.CrypticIni}""");
+            _ = sb.Append($@" -ini ""{Consts.CrypticIni}""");
         }
 
 
@@ -341,27 +357,15 @@ public abstract class BasePort
         }
 
 
-        if (bCamp.RFF is not null)
-        {
-            sb.Append($@" -rff ""{bCamp.RFF}""");
-        }
-
-
-        if (bCamp.SND is not null)
-        {
-            sb.Append($@" -snd ""{bCamp.SND}""");
-        }
-
-
         if (bCamp.Type is AddonTypeEnum.TC)
         {
             if (bCamp.FileName.Equals("addon.json"))
             {
-                sb.Append($@" -game_dir ""{Path.GetDirectoryName(bCamp.PathToFile)}""");
+                _ = sb.Append($@" {AddGameDirParam}""{Path.GetDirectoryName(bCamp.PathToFile)}""");
             }
             else
             {
-                sb.Append($@" {AddFileParam}""{Path.Combine(game.CampaignsFolderPath, bCamp.FileName)}""");
+                _ = sb.Append($@" {AddFileParam}""{Path.Combine(game.CampaignsFolderPath, bCamp.FileName)}""");
             }
         }
         else if (bCamp.Type is AddonTypeEnum.Map)
@@ -372,6 +376,18 @@ public abstract class BasePort
         {
             ThrowHelper.NotImplementedException($"Mod type {bCamp.Type} is not supported");
             return;
+        }
+
+
+        if (bCamp.RFF is not null)
+        {
+            _ = sb.Append($@" {AddRffParam}""{bCamp.RFF}""");
+        }
+
+
+        if (bCamp.SND is not null)
+        {
+            _ = sb.Append($@" {AddSndParam}""{bCamp.SND}""");
         }
     }
 
@@ -398,7 +414,7 @@ public abstract class BasePort
 
         if (sCamp.Type is AddonTypeEnum.TC)
         {
-            sb.Append($@" {AddFileParam}""{Path.Combine(game.CampaignsFolderPath, sCamp.FileName)}""");
+            _ = sb.Append($@" {AddFileParam}""{Path.Combine(game.CampaignsFolderPath, sCamp.FileName)}""");
         }
         else if (sCamp.Type is AddonTypeEnum.Map)
         {
@@ -433,6 +449,7 @@ public abstract class BasePort
     /// <param name="sb">String builder for parameters</param>
     /// <param name="game">Game</param>
     /// <param name="addon">Campaign\map</param>
+    /// <param name="mods">Autoload mods</param>
     protected abstract void GetAutoloadModsArgs(StringBuilder sb, IGame game, IAddon addon, Dictionary<AddonVersion, IAddon> mods);
 
     /// <summary>

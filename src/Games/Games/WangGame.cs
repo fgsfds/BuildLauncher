@@ -56,6 +56,7 @@ public sealed class WangGame : BaseGame
                 AdditionalDefs = null,
                 StartMap = null,
                 PreviewImage = null,
+                IsUnpacked = false
             });
         }
 

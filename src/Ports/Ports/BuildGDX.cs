@@ -101,6 +101,15 @@ public sealed class BuildGDX : BasePort
     /// <inheritdoc/>
     protected override string SkillParam => throw new NotImplementedException();
 
+    /// <inheritdoc/>
+    protected override string AddGameDirParam => throw new NotImplementedException();
+
+    /// <inheritdoc/>
+    protected override string AddRffParam => throw new NotImplementedException();
+
+    /// <inheritdoc/>
+    protected override string AddSndParam => throw new NotImplementedException();
+
 
     /// <inheritdoc/>
     protected override void GetStartCampaignArgs(StringBuilder sb, IGame game, IAddon addon)

@@ -9,5 +9,6 @@ public enum FeatureEnum
     TROR,
     Wall_Rotate_Cstat,
     Dynamic_Lighting,
-    Modern_Types
+    Modern_Types,
+    Unpacked_Addons
 }

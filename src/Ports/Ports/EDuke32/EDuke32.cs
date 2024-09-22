@@ -52,6 +52,15 @@ public class EDuke32 : BasePort
     protected override string SkillParam => "-s";
 
     /// <inheritdoc/>
+    protected override string AddGameDirParam => "-game_dir ";
+
+    /// <inheritdoc/>
+    protected override string AddRffParam => throw new NotImplementedException();
+
+    /// <inheritdoc/>
+    protected override string AddSndParam => throw new NotImplementedException();
+
+    /// <inheritdoc/>
     public override List<GameEnum> SupportedGames =>
         [
         GameEnum.Duke3D,

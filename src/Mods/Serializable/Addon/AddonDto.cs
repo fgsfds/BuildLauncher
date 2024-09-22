@@ -65,9 +65,6 @@ public sealed class AddonDto
 
     [JsonPropertyName("description")]
     public string? Description { get; set; }
-
-    [JsonPropertyName("need_to_unpack")]
-    public bool NeedToUnpack { get; set; }
 }
 
 [JsonSourceGenerationOptions(

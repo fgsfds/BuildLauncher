@@ -51,7 +51,7 @@ public sealed class DownloadableAddonsProvider : IDownloadableAddonsProvider
 
         if (_cache is not null && !createNew)
         {
-            _semaphore.Release();
+            _ = _semaphore.Release();
             return;
         }
 
@@ -59,7 +59,7 @@ public sealed class DownloadableAddonsProvider : IDownloadableAddonsProvider
 
         if (addons is null || addons.Count == 0)
         {
-            _semaphore.Release();
+            _ = _semaphore.Release();
             return;
         }
 
@@ -71,11 +71,11 @@ public sealed class DownloadableAddonsProvider : IDownloadableAddonsProvider
 
         foreach (var addon in addons)
         {
-            _cache.TryAdd(addon.AddonType, []);
-            _cache[addon.AddonType].TryAdd(new(addon.Id, addon.Version), addon);
+            _ = _cache.TryAdd(addon.AddonType, []);
+            _ = _cache[addon.AddonType].TryAdd(new(addon.Id, addon.Version), addon);
         }
 
-        _semaphore.Release();
+        _ = _semaphore.Release();
     }
 
 
@@ -170,7 +170,7 @@ public sealed class DownloadableAddonsProvider : IDownloadableAddonsProvider
 
         await _archiveTools.DownloadFileAsync(url, pathToFile).ConfigureAwait(false);
 
-        _installedAddonsProvider.AddAddon(addon.AddonType, pathToFile);
+        await _installedAddonsProvider.AddAddonAsync(addon.AddonType, pathToFile).ConfigureAwait(false);
 
         if (!ClientProperties.IsDevMode)
         {

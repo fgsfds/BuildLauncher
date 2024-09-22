@@ -53,7 +53,7 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
 
         if (_cache.Count == 0)
         {
-            await Task.Run(() =>
+            await Task.Run(async () =>
             {
                 IEnumerable<string> files;
 
@@ -70,34 +70,34 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
                     }
                 }
 
-                var camps = GetAddonsFromFiles(AddonTypeEnum.TC, files);
+                var camps = await GetAddonsFromFilesAsync(AddonTypeEnum.TC, files);
                 _cache.Add(AddonTypeEnum.TC, camps);
 
                 //maps
                 files = Directory.GetFiles(_game.MapsFolderPath).Where(static x => x.EndsWith(".zip", StringComparison.OrdinalIgnoreCase) || x.EndsWith(".map", StringComparison.OrdinalIgnoreCase));
-                var maps = GetAddonsFromFiles(AddonTypeEnum.Map, files);
+                var maps = await GetAddonsFromFilesAsync(AddonTypeEnum.Map, files);
                 _cache.Add(AddonTypeEnum.Map, maps);
 
                 //mods
                 files = Directory.GetFiles(_game.ModsFolderPath, "*.zip");
-                var mods = GetAddonsFromFiles(AddonTypeEnum.Mod, files);
+                var mods = await GetAddonsFromFilesAsync(AddonTypeEnum.Mod, files);
                 _cache.Add(AddonTypeEnum.Mod, mods);
             }).WaitAsync(CancellationToken.None).ConfigureAwait(false);
         }
 
         _isCacheUpdating = false;
         AddonsChangedEvent?.Invoke(_game, null);
-        _semaphore.Release();
+        _ = _semaphore.Release();
 
         _cache.ThrowIfNull();
     }
 
     /// <inheritdoc/>
-    public void AddAddon(AddonTypeEnum addonType, string pathToFile)
+    public async Task AddAddonAsync(AddonTypeEnum addonType, string pathToFile)
     {
         _cache.ThrowIfNull();
 
-        var addon = GetAddonFromFile(addonType, pathToFile);
+        var addon = await GetAddonFromFileAsync(addonType, pathToFile);
 
         addon.ThrowIfNull();
 
@@ -124,7 +124,14 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
         _cache.ThrowIfNull();
         addon.PathToFile.ThrowIfNull();
 
-        File.Delete(addon.PathToFile);
+        if (addon.IsUnpacked)
+        {
+            Directory.Delete(Path.GetDirectoryName(addon.PathToFile)!, true);
+        }
+        else
+        {
+            File.Delete(addon.PathToFile);
+        }
 
         if (addon is LooseMap lMap)
         {
@@ -136,7 +143,7 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
             }
         }
 
-        _cache[addon.Type].Remove(new(addon.Id, addon.Version));
+        _ = _cache[addon.Type].Remove(new(addon.Id, addon.Version));
 
         AddonsChangedEvent?.Invoke(_game, addon.Type);
     }
@@ -181,7 +188,7 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
 
         _cache.ThrowIfNull();
 
-        _cache.TryGetValue(AddonTypeEnum.TC, out var result);
+        _ = _cache.TryGetValue(AddonTypeEnum.TC, out var result);
 
         if (result is not null)
         {
@@ -208,7 +215,7 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
 
         _cache.ThrowIfNull();
 
-        _cache.TryGetValue(AddonTypeEnum.Map, out var result);
+        _ = _cache.TryGetValue(AddonTypeEnum.Map, out var result);
 
         return result is null ? [] : result;
     }
@@ -223,7 +230,7 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
 
         _cache.ThrowIfNull();
 
-        _cache.TryGetValue(AddonTypeEnum.Mod, out var result);
+        _ = _cache.TryGetValue(AddonTypeEnum.Mod, out var result);
 
         return result is null ? [] : result;
     }
@@ -233,7 +240,7 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
     /// </summary>
     /// <param name="addonType">Addon type</param>
     /// <param name="files">Paths to addon files</param>
-    private Dictionary<AddonVersion, IAddon> GetAddonsFromFiles(AddonTypeEnum addonType, IEnumerable<string> files)
+    private async Task<Dictionary<AddonVersion, IAddon>> GetAddonsFromFilesAsync(AddonTypeEnum addonType, IEnumerable<string> files)
     {
         Dictionary<AddonVersion, IAddon> addedAddons = [];
 
@@ -241,7 +248,7 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
         {
             try
             {
-                var newAddon = GetAddonFromFile(addonType, file);
+                var newAddon = await GetAddonFromFileAsync(addonType, file);
 
                 if (newAddon is null)
                 {
@@ -284,7 +291,7 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
     /// </summary>
     /// <param name="addonType">Addon type</param>
     /// <param name="pathToFile">Path to addon file</param>
-    private Addon? GetAddonFromFile(AddonTypeEnum addonType, string pathToFile)
+    private async Task<Addon?> GetAddonFromFileAsync(AddonTypeEnum addonType, string pathToFile)
     {
         var type = addonType;
         var id = Path.GetFileName(pathToFile);
@@ -316,22 +323,15 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
         Dictionary<string, string?>? incompatibles = null;
         IStartMap? startMap = null;
 
+        bool isUnpacked = false;
+
         Addon? addon;
 
         if (pathToFile.EndsWith(".json") || ArchiveFactory.IsArchive(pathToFile, out _))
         {
-            AddonDto? manifest;
+            AddonDto? manifest = null;
 
-            if (pathToFile.EndsWith(".json"))
-            {
-                var jsonText = File.ReadAllText(pathToFile);
-
-                manifest = JsonSerializer.Deserialize(
-                    jsonText,
-                    AddonManifestContext.Default.AddonDto
-                    );
-            }
-            else
+            if (ArchiveFactory.IsArchive(pathToFile, out _))
             {
                 using var archive = ArchiveFactory.Open(pathToFile);
 
@@ -353,8 +353,57 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
                     AddonManifestContext.Default.AddonDto
                     );
 
-                preview = ImageHelper.GetImageFromArchive(archive, "preview.png");
-                image = ImageHelper.GetCoverFromArchive(archive) ?? preview;
+                if (manifest?.MainRff is not null || manifest?.SoundRff is not null)
+                {
+                    var fileFolder = Path.GetDirectoryName(pathToFile)!;
+                    var unpackTo = Path.Combine(fileFolder, Path.GetFileNameWithoutExtension(pathToFile));
+
+                    if (Directory.Exists(unpackTo))
+                    {
+                        Directory.Delete(unpackTo, true);
+                    }
+
+                    archive.ExtractToDirectory(unpackTo);
+                    archive.Dispose();
+
+                    File.Delete(pathToFile);
+                    pathToFile = Path.Combine(unpackTo, "addon.json");
+                }
+                else
+                {
+                    preview = ImageHelper.GetImageFromArchive(archive, "preview.png");
+                    image = ImageHelper.GetCoverFromArchive(archive) ?? preview;
+                }
+
+                isUnpacked = false;
+            }
+
+            if (pathToFile.EndsWith(".json"))
+            {
+                var jsonText = File.ReadAllText(pathToFile);
+
+                manifest = JsonSerializer.Deserialize(
+                    jsonText,
+                    AddonManifestContext.Default.AddonDto
+                    );
+
+                var addonDir = Path.GetDirectoryName(pathToFile)!;
+
+                var gridFile = Directory.GetFiles(addonDir, "grid.*");
+                var previewFile = Directory.GetFiles(addonDir, "preview.*");
+
+                if (gridFile.Length > 0)
+                {
+                    var stream = await File.ReadAllBytesAsync(gridFile[0]);
+                    image = new MemoryStream(stream);
+                }
+                if (previewFile.Length > 0)
+                {
+                    var stream = await File.ReadAllBytesAsync(previewFile[0]);
+                    preview = new MemoryStream(stream);
+                }
+
+                isUnpacked = true;
             }
 
             if (manifest is null)
@@ -385,6 +434,16 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
             startMap = manifest.StartMap;
 
             requiredFeatures = manifest.Dependencies?.RequiredFeatures?.Select(static x => x).ToHashSet();
+
+            if (isUnpacked)
+            {
+                if (requiredFeatures is null)
+                {
+                    requiredFeatures = [];
+                }
+
+                _ = requiredFeatures.Add(FeatureEnum.Unpacked_Addons);
+            }
 
             mainCon = manifest.MainCon;
             addCons = manifest.AdditionalCons?.ToHashSet();
@@ -433,6 +492,7 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
                 IncompatibleAddons = null,
                 RequiredFeatures = null,
                 PreviewImage = null,
+                IsUnpacked = true
             };
 
             return addon;
@@ -471,6 +531,7 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
                 StartMap = startMap,
                 RequiredFeatures = requiredFeatures,
                 PreviewImage = preview,
+                IsUnpacked = isUnpacked
             };
         }
         else
@@ -497,7 +558,8 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
                     AdditionalDefs = addDefs,
                     RTS = rts,
                     RequiredFeatures = requiredFeatures,
-                    PreviewImage = preview
+                    PreviewImage = preview,
+                    IsUnpacked = isUnpacked
                 };
             }
             else if (_game.GameEnum is GameEnum.Fury)
@@ -522,6 +584,7 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
                     AdditionalDefs = addDefs,
                     RequiredFeatures = requiredFeatures,
                     PreviewImage = preview,
+                    IsUnpacked = isUnpacked
                 };
             }
             else if (_game.GameEnum is GameEnum.ShadowWarrior)
@@ -544,6 +607,7 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
                     AdditionalDefs = addDefs,
                     RequiredFeatures = requiredFeatures,
                     PreviewImage = preview,
+                    IsUnpacked = isUnpacked
                 };
             }
             else if (_game.GameEnum is GameEnum.Blood)
@@ -569,6 +633,7 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
                     SND = snd,
                     RequiredFeatures = requiredFeatures,
                     PreviewImage = preview,
+                    IsUnpacked = isUnpacked
                 };
             }
             else if (_game.GameEnum is GameEnum.Redneck)
@@ -594,6 +659,7 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
                     RTS = rts,
                     RequiredFeatures = requiredFeatures,
                     PreviewImage = preview,
+                    IsUnpacked = isUnpacked
                 };
             }
             else if (_game.GameEnum is GameEnum.Exhumed)
@@ -616,6 +682,7 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
                     AdditionalDefs = addDefs,
                     RequiredFeatures = requiredFeatures,
                     PreviewImage = preview,
+                    IsUnpacked = isUnpacked
                 };
             }
             else

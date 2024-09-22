@@ -44,7 +44,8 @@ public class FuryCmdArgumentsTests
             MainDef = null,
             AdditionalDefs = null,
             StartMap = null,
-            PreviewImage = null
+            PreviewImage = null,
+            IsUnpacked = false
         };
     }
 

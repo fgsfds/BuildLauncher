@@ -37,6 +37,12 @@ public class NBlood : EDuke32
     /// <inheritdoc/>
     protected override string SkillParam => "-s ";
 
+    /// <inheritdoc/>
+    protected override string AddRffParam => "-rff ";
+
+    /// <inheritdoc/>
+    protected override string AddSndParam => "-snd ";
+
 
     /// <inheritdoc/>
     protected override void BeforeStart(IGame game, IAddon campaign)

@@ -102,7 +102,8 @@ public sealed class DukeGame : BaseGame
                 AdditionalDefs = null,
                 RTS = null,
                 StartMap = null,
-                PreviewImage = null
+                PreviewImage = null,
+                IsUnpacked = false
             });
         }
 
@@ -135,7 +136,8 @@ public sealed class DukeGame : BaseGame
                 AdditionalDefs = null,
                 RTS = null,
                 StartMap = null,
-                PreviewImage = null
+                PreviewImage = null,
+                IsUnpacked = false
             });
         }
 
@@ -170,7 +172,8 @@ public sealed class DukeGame : BaseGame
                     AdditionalDefs = null,
                     RTS = null,
                     StartMap = null,
-                    PreviewImage = null
+                    PreviewImage = null,
+                    IsUnpacked = false
                 });
             }
 
@@ -202,7 +205,8 @@ public sealed class DukeGame : BaseGame
                     AdditionalDefs = null,
                     RTS = null,
                     StartMap = null,
-                    PreviewImage = null
+                    PreviewImage = null,
+                    IsUnpacked = false
                 });
             }
 
@@ -236,7 +240,8 @@ public sealed class DukeGame : BaseGame
                     AdditionalDefs = null,
                     RTS = null,
                     StartMap = null,
-                    PreviewImage = null
+                    PreviewImage = null,
+                    IsUnpacked = false
                 });
             }
         }
@@ -269,7 +274,8 @@ public sealed class DukeGame : BaseGame
                 AdditionalDefs = null,
                 RTS = null,
                 StartMap = null,
-                PreviewImage = null
+                PreviewImage = null,
+                IsUnpacked = false
             });
         }
 

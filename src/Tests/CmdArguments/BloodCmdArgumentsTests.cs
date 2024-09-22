@@ -48,7 +48,8 @@ public class BloodCmdArgumentsTests
             PreviewImage = null,
             INI = null,
             RFF = null,
-            SND = null
+            SND = null,
+            IsUnpacked = false
         };
 
         _bloodCpCamp = new()
@@ -71,7 +72,8 @@ public class BloodCmdArgumentsTests
             PreviewImage = null,
             INI = null,
             RFF = null,
-            SND = null
+            SND = null,
+            IsUnpacked = false
         };
 
         _bloodTc = new()
@@ -94,7 +96,8 @@ public class BloodCmdArgumentsTests
             PreviewImage = null,
             INI = "TC.INI",
             RFF = "TC.RFF",
-            SND = "TC.SND"
+            SND = "TC.SND",
+            IsUnpacked = false
         };
     }
 
@@ -194,7 +197,7 @@ public class BloodCmdArgumentsTests
         Raze raze = new();
 
         var args = raze.GetStartGameArgs(_bloodGame, _bloodTc, [], true, true);
-        var expected = @$" -quick -nosetup -savedir ""{Directory.GetCurrentDirectory()}\Data\Ports\Raze\Save\blood-tc"" -def ""a"" -ini ""TC.INI"" -rff ""TC.RFF"" -snd ""TC.SND"" -file ""{Directory.GetCurrentDirectory()}\Data\Blood\Campaigns\blood_tc.zip""";
+        var expected = @$" -quick -nosetup -savedir ""{Directory.GetCurrentDirectory()}\Data\Ports\Raze\Save\blood-tc"" -def ""a"" -ini ""TC.INI"" -file ""{Directory.GetCurrentDirectory()}\Data\Blood\Campaigns\blood_tc.zip"" -file ""TC.RFF"" -file ""TC.SND""";
 
         if (OperatingSystem.IsLinux())
         {
@@ -288,7 +291,7 @@ public class BloodCmdArgumentsTests
         NBlood nblood = new();
 
         var args = nblood.GetStartGameArgs(_bloodGame, _bloodTc, [], true, true, 2);
-        var expected = @$" -quick -nosetup -usecwd -j ""D:\Games\Blood"" -h ""a"" -ini ""TC.INI"" -rff ""TC.RFF"" -snd ""TC.SND"" -g ""{Directory.GetCurrentDirectory()}\Data\Blood\Campaigns\blood_tc.zip"" -s 2";
+        var expected = @$" -quick -nosetup -usecwd -j ""D:\Games\Blood"" -h ""a"" -ini ""TC.INI"" -g ""{Directory.GetCurrentDirectory()}\Data\Blood\Campaigns\blood_tc.zip"" -rff ""TC.RFF"" -snd ""TC.SND"" -s 2";
 
         if (OperatingSystem.IsLinux())
         {
