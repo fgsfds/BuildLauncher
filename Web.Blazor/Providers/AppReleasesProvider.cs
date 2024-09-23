@@ -25,27 +25,35 @@ public sealed class AppReleasesProvider
     /// </summary>
     public async Task GetLatestVersionAsync()
     {
-        _logger.LogInformation("Looking for new app release");
-
-        using var response = await _httpClient.GetAsync(Consts.GitHubReleases, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false);
-
-        if (!response.IsSuccessStatusCode)
+        try
         {
-            _logger.LogError("Error while getting releases" + Environment.NewLine + response.StatusCode);
-            return;
+            _logger.LogInformation("Looking for new app release");
+
+            using var response = await _httpClient.GetAsync(Consts.GitHubReleases, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                _logger.LogError("Error while getting releases" + Environment.NewLine + response.StatusCode);
+                return;
+            }
+
+            var releasesJson = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+
+            var releases =
+                JsonSerializer.Deserialize(releasesJson, GitHubReleaseContext.Default.ListGitHubReleaseEntity)
+                ?? ThrowHelper.Exception<List<GitHubReleaseEntity>>("Error while deserializing GitHub releases");
+
+            releases = [.. releases.Where(static x => x.IsDraft is false && x.IsPrerelease is false).OrderByDescending(static x => new Version(x.TagName))];
+
+            var appRelease = GetAppUpdateEntity(releases[0]);
+
+            AppRelease = appRelease;
         }
-
-        var releasesJson = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-
-        var releases =
-            JsonSerializer.Deserialize(releasesJson, GitHubReleaseContext.Default.ListGitHubReleaseEntity)
-            ?? ThrowHelper.Exception<List<GitHubReleaseEntity>>("Error while deserializing GitHub releases");
-
-        releases = [.. releases.Where(static x => x.IsDraft is false && x.IsPrerelease is false).OrderByDescending(static x => new Version(x.TagName))];
-
-        var appRelease = GetAppUpdateEntity(releases[0]);
-
-        AppRelease = appRelease;
+        catch (Exception ex)
+        {
+            _logger.LogError($"Error while getting latest app release");
+            _logger.LogError(ex.ToString());
+        }
     }
 
     private GeneralReleaseEntity GetAppUpdateEntity(GitHubReleaseEntity release)

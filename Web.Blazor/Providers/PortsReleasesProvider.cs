@@ -3,6 +3,7 @@ using Common.Enums;
 using Common.Helpers;
 using Common.Providers;
 using Common.Releases;
+using Microsoft.Extensions.Logging;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 
@@ -38,7 +39,15 @@ public sealed partial class PortsReleasesProvider
 
         foreach (var port in ports)
         {
-            await GetLatestReleaseAsync(port).ConfigureAwait(false);
+            try
+            {
+                await GetLatestReleaseAsync(port).ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error while getting latest release for {port}");
+                _logger.LogError(ex.ToString());
+            }
         }
     }
 

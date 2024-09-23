@@ -1,4 +1,5 @@
 ﻿using Database.Server;
+using Microsoft.Extensions.Logging;
 
 namespace Web.Blazor.Tasks;
 
@@ -42,13 +43,22 @@ public sealed class FileCheckTask : IHostedService, IDisposable
 
         foreach (var file in files)
         {
-            var result = _httpClient.GetAsync(file, HttpCompletionOption.ResponseHeadersRead).Result;
-
-            if (!result.IsSuccessStatusCode)
+            try
             {
-                _logger.LogError($"File doesn't exist or unavailable: {file}");
-                continue;
+                var result = _httpClient.GetAsync(file, HttpCompletionOption.ResponseHeadersRead).Result;
+
+                if (!result.IsSuccessStatusCode)
+                {
+                    _logger.LogError($"File doesn't exist or unavailable: {file}");
+                    continue;
+                }
             }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error while checking file: {file}");
+                _logger.LogError(ex.ToString());
+            }
+
         }
 
         _logger.LogInformation("File check ended");
