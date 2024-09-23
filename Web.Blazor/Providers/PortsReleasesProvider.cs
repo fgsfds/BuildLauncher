@@ -3,7 +3,6 @@ using Common.Enums;
 using Common.Helpers;
 using Common.Providers;
 using Common.Releases;
-using Microsoft.Extensions.Logging;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 
@@ -20,7 +19,8 @@ public sealed partial class PortsReleasesProvider
     public PortsReleasesProvider(
         ILogger<PortsReleasesProvider> logger,
         RepositoriesProvider repoProvider,
-        HttpClient httpClient)
+        HttpClient httpClient
+        )
     {
         _repoProvider = repoProvider;
         _logger = logger;
@@ -33,15 +33,27 @@ public sealed partial class PortsReleasesProvider
     {
         _logger.LogInformation("Looking for new ports releases");
 
-        PortsReleases.Clear();
-
         var ports = Enum.GetValues<PortEnum>();
 
         foreach (var port in ports)
         {
             try
             {
-                await GetLatestReleaseAsync(port).ConfigureAwait(false);
+                var newRelease = await GetLatestReleaseAsync(port).ConfigureAwait(false);
+
+                if (newRelease is not null)
+                {
+                    var doesExist = PortsReleases.TryGetValue(port, out _);
+
+                    if (doesExist)
+                    {
+                        PortsReleases[port] = newRelease;
+                    }
+                    else
+                    {
+                        PortsReleases.Add(port, newRelease);
+                    }
+                }
             }
             catch (Exception ex)
             {
@@ -55,7 +67,7 @@ public sealed partial class PortsReleasesProvider
     /// Get the latest release of the selected port
     /// </summary>
     /// <param name="portEnum">Port</param>
-    private async Task GetLatestReleaseAsync(PortEnum portEnum)
+    private async Task<GeneralReleaseEntity?> GetLatestReleaseAsync(PortEnum portEnum)
     {
         var repo = _repoProvider.GetPortRepo(portEnum);
 
@@ -69,26 +81,24 @@ public sealed partial class PortsReleasesProvider
                 LinuxDownloadUrl = null
             };
 
-            PortsReleases.Add(PortEnum.BuildGDX, bgdxRelease);
-            return;
+            return bgdxRelease;
         }
 
         if (repo.RepoUrl is null)
         {
-            return;
+            return null;
         }
 
         if (portEnum is PortEnum.VoidSW)
         {
-            return;
+            return null;
         }
 
         var response = await _httpClient.GetStringAsync(repo.RepoUrl).ConfigureAwait(false);
 
         if (portEnum is PortEnum.EDuke32)
         {
-            EDuke32Hack(response);
-            return;
+            return EDuke32Hack(response);
         }
 
         var releases = JsonSerializer.Deserialize(response, GitHubReleaseContext.Default.ListGitHubReleaseEntity)
@@ -98,19 +108,19 @@ public sealed partial class PortsReleasesProvider
 
         if (release is null)
         {
-            return;
+            return null;
         }
 
         if (repo.WindowsReleasePredicate is null)
         {
-            return;
+            return null;
         }
 
         var zip = release.Assets.FirstOrDefault(repo.WindowsReleasePredicate);
 
         if (zip is null)
         {
-            return;
+            return null;
         }
 
         GeneralReleaseEntity portRelease = new()
@@ -121,9 +131,9 @@ public sealed partial class PortsReleasesProvider
             LinuxDownloadUrl = null
         };
 
-        PortsReleases.Add(portEnum, portRelease);
-
         _logger.LogInformation($"Latest release for {portEnum}: {portRelease.Version}");
+
+        return portRelease;
     }
 
     /// <summary>
@@ -149,14 +159,14 @@ public sealed partial class PortsReleasesProvider
     /// Hack to get EDuke32 release since dukeworld doesn't have API
     /// </summary>
     /// <param name="response">Json response</param>
-    private void EDuke32Hack(string response)
+    private GeneralReleaseEntity? EDuke32Hack(string response)
     {
         var regex = EDuke32WindowsReleaseRegex();
         var fileName = regex.Matches(response).FirstOrDefault();
 
         if (fileName is null)
         {
-            return;
+            return null;
         }
 
         var regexVersion = EDuke32VersionRegex();
@@ -164,7 +174,7 @@ public sealed partial class PortsReleasesProvider
 
         if (version is null)
         {
-            return;
+            return null;
         }
 
         GeneralReleaseEntity release = new()
@@ -175,9 +185,9 @@ public sealed partial class PortsReleasesProvider
             LinuxDownloadUrl = null
         };
 
-        PortsReleases.Add(PortEnum.EDuke32, release);
-
         _logger.LogInformation($"Latest release for {nameof(PortEnum.EDuke32)}: {release.Version}");
+
+        return release;
     }
 
     [GeneratedRegex("eduke32_win64_2[^\"]*")]

@@ -4,17 +4,12 @@ namespace Web.Blazor.Tasks;
 
 public sealed class PortsReleasesTask : IHostedService, IDisposable
 {
-    private readonly ILogger<PortsReleasesTask> _logger;
     private readonly PortsReleasesProvider _portsReleasesProvider;
 
     private Timer _timer;
 
-    public PortsReleasesTask(
-        ILogger<PortsReleasesTask> logger,
-        PortsReleasesProvider portsReleasesProvider
-        )
+    public PortsReleasesTask(PortsReleasesProvider portsReleasesProvider)
     {
-        _logger = logger;
         _portsReleasesProvider = portsReleasesProvider;
     }
 
@@ -24,7 +19,7 @@ public sealed class PortsReleasesTask : IHostedService, IDisposable
             DoWork,
             null,
             TimeSpan.Zero,
-            TimeSpan.FromHours(1)
+            TimeSpan.FromHours(6)
             );
 
         return Task.CompletedTask;
@@ -37,7 +32,7 @@ public sealed class PortsReleasesTask : IHostedService, IDisposable
 
     public Task StopAsync(CancellationToken stoppingToken)
     {
-        _timer.Change(Timeout.Infinite, 0);
+        _ = _timer.Change(Timeout.Infinite, 0);
 
         return Task.CompletedTask;
     }

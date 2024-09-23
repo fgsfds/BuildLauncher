@@ -4,17 +4,12 @@ namespace Web.Blazor.Tasks;
 
 public sealed class ToolsReleasesTask : IHostedService, IDisposable
 {
-    private readonly ILogger<ToolsReleasesTask> _logger;
     private readonly ToolsReleasesProvider _toolsReleasesProvider;
 
     private Timer _timer;
 
-    public ToolsReleasesTask(
-        ILogger<ToolsReleasesTask> logger,
-        ToolsReleasesProvider toolsReleasesProvider
-        )
+    public ToolsReleasesTask(ToolsReleasesProvider toolsReleasesProvider)
     {
-        _logger = logger;
         _toolsReleasesProvider = toolsReleasesProvider;
     }
 
@@ -24,7 +19,7 @@ public sealed class ToolsReleasesTask : IHostedService, IDisposable
             DoWork,
             null,
             TimeSpan.Zero,
-            TimeSpan.FromHours(1)
+            TimeSpan.FromHours(6)
             );
 
         return Task.CompletedTask;
@@ -37,7 +32,7 @@ public sealed class ToolsReleasesTask : IHostedService, IDisposable
 
     public Task StopAsync(CancellationToken stoppingToken)
     {
-        _timer.Change(Timeout.Infinite, 0);
+        _ = _timer.Change(Timeout.Infinite, 0);
 
         return Task.CompletedTask;
     }

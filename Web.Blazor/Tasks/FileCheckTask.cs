@@ -1,5 +1,4 @@
 ﻿using Database.Server;
-using Microsoft.Extensions.Logging;
 
 namespace Web.Blazor.Tasks;
 
@@ -66,7 +65,7 @@ public sealed class FileCheckTask : IHostedService, IDisposable
 
     public Task StopAsync(CancellationToken stoppingToken)
     {
-        _timer.Change(Timeout.Infinite, 0);
+        _ = _timer.Change(Timeout.Infinite, 0);
 
         return Task.CompletedTask;
     }

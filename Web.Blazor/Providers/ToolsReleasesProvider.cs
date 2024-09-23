@@ -38,7 +38,29 @@ public sealed class ToolsReleasesProvider
 
         foreach (var tool in tools)
         {
-            await GetLatestReleaseAsync(tool).ConfigureAwait(false);
+            try
+            {
+                var newRelease = await GetLatestReleaseAsync(tool).ConfigureAwait(false);
+
+                if (newRelease is not null)
+                {
+                    var doesExist = ToolsReleases.TryGetValue(tool, out _);
+
+                    if (doesExist)
+                    {
+                        ToolsReleases[tool] = newRelease;
+                    }
+                    else
+                    {
+                        ToolsReleases.Add(tool, newRelease);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error while getting latest release for {tool}");
+                _logger.LogError(ex.ToString());
+            }
         }
     }
 
@@ -46,13 +68,13 @@ public sealed class ToolsReleasesProvider
     /// Get the latest release of the selected port
     /// </summary>
     /// <param name="toolEnum">Tool enum</param>
-    private async Task GetLatestReleaseAsync(ToolEnum toolEnum)
+    private async Task<GeneralReleaseEntity?> GetLatestReleaseAsync(ToolEnum toolEnum)
     {
         var repo = _repoProvider.GetToolRepo(toolEnum);
 
         if (repo.RepoUrl is null || repo.WindowsReleasePredicate is null)
         {
-            return;
+            return null;
         }
 
         var response = await _httpClient.GetStringAsync(repo.RepoUrl).ConfigureAwait(false);
@@ -64,19 +86,19 @@ public sealed class ToolsReleasesProvider
 
         if (release is null)
         {
-            return;
+            return null;
         }
 
         var zip = release.Assets.FirstOrDefault(repo.WindowsReleasePredicate);
 
         if (zip is null)
         {
-            return;
+            return null;
         }
 
         var version = zip.UpdatedDate;
 
-        GeneralReleaseEntity portRelease = new()
+        GeneralReleaseEntity toolRelease = new()
         {
             Description = release.Description,
             Version = version.ToString("dd.MM.yyyy"),
@@ -84,6 +106,6 @@ public sealed class ToolsReleasesProvider
             LinuxDownloadUrl = null
         };
 
-        ToolsReleases.Add(toolEnum, portRelease);
+        return toolRelease;
     }
 }

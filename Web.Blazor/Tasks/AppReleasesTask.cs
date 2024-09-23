@@ -4,17 +4,12 @@ namespace Web.Blazor.Tasks;
 
 public sealed class AppReleasesTask : IHostedService, IDisposable
 {
-    private readonly ILogger<AppReleasesTask> _logger;
     private readonly AppReleasesProvider _appReleasesProvider;
 
     private Timer _timer;
 
-    public AppReleasesTask(
-        ILogger<AppReleasesTask> logger,
-        AppReleasesProvider appReleasesProvider
-        )
+    public AppReleasesTask(AppReleasesProvider appReleasesProvider)
     {
-        _logger = logger;
         _appReleasesProvider = appReleasesProvider;
     }
 
@@ -37,7 +32,7 @@ public sealed class AppReleasesTask : IHostedService, IDisposable
 
     public Task StopAsync(CancellationToken stoppingToken)
     {
-        _timer.Change(Timeout.Infinite, 0);
+        _ = _timer.Change(Timeout.Infinite, 0);
 
         return Task.CompletedTask;
     }
