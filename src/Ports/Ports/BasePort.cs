@@ -300,6 +300,11 @@ public abstract class BasePort
                     {
                         continue;
                     }
+                    if (addon.Value is AutoloadMod aMod &&
+                        !aMod.IsEnabled)
+                    {
+                        continue;
+                    }
                     else if (incompatibleAddon.Value is null)
                     {
                         return false;
