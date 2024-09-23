@@ -15,6 +15,7 @@ using Mods.Serializable.Addon;
 using SharpCompress.Archives;
 using SharpCompress.Archives.Zip;
 using SharpCompress.Common;
+using System;
 using System.Collections.Immutable;
 using System.Text;
 using System.Text.Json;
@@ -581,22 +582,8 @@ public sealed partial class DevViewModel : ObservableObject
                 return;
             }
 
-            StringBuilder version = new();
-
-            foreach (var ch in addon.Version)
-            {
-                if (Path.GetInvalidPathChars().Contains(ch) ||
-                    ch == '.')
-                {
-                    _ = version.Append('_');
-                }
-                else
-                {
-                    _ = version.Append(ch);
-                }
-            }
-
-            var archiveName = Path.Combine(archiveSaveFolder, $"{addon.Id}_v{version}.zip");
+            var fullName = GetAddonFullName(addon);
+            var archiveName = Path.Combine(archiveSaveFolder, fullName + ".zip");
 
             using (var archive = ZipArchive.Create())
             {
@@ -873,14 +860,34 @@ public sealed partial class DevViewModel : ObservableObject
     {
         Guard.ThrowIfNull(PathToAddonFolder);
 
-        var newFolderName = addon.Id + "_v" + addon.Version.Replace('.', '_');
-        var newFolderPath = Path.Combine(Path.GetDirectoryName(PathToAddonFolder)!, newFolderName);
+        var fullName = GetAddonFullName(addon);
+        var newFolderPath = Path.Combine(Path.GetDirectoryName(PathToAddonFolder)!, fullName);
 
         if (!PathToAddonFolder.Equals(newFolderPath))
         {
             Directory.Move(PathToAddonFolder, newFolderPath);
             PathToAddonFolder = newFolderPath;
         }
+    }
+
+    private static string GetAddonFullName(AddonDto addon)
+    {
+        StringBuilder version = new();
+
+        foreach (var ch in addon.Version)
+        {
+            if (Path.GetInvalidPathChars().Contains(ch) ||
+                ch == '.')
+            {
+                _ = version.Append('_');
+            }
+            else
+            {
+                _ = version.Append(ch);
+            }
+        }
+
+        return $"{addon.Id}_v{version}";
     }
 
     #endregion
