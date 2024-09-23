@@ -79,6 +79,8 @@ public sealed partial class ModsViewModel : RightPanelViewModel, IPortsButtonCon
             _selectedAddon = value;
 
             OnPropertyChanged(nameof(SelectedAddonDescription));
+            OnPropertyChanged(nameof(SelectedAddonPreview));
+            OnPropertyChanged(nameof(IsPreviewVisible));
             OnPropertyChanged(nameof(SelectedAddonRating));
         }
     }

@@ -50,7 +50,7 @@ public partial class RightPanelViewModel : ObservableObject, IRightPanelControl
             {
                 return SelectedAddon?.PreviewImage;
             }
-            else if (SelectedAddon.Type is AddonTypeEnum.Map)
+            else if (SelectedAddon.Type is AddonTypeEnum.Map or AddonTypeEnum.Mod)
             {
                 return SelectedAddon?.PreviewImage ?? SelectedAddon?.GridImage;
             }
