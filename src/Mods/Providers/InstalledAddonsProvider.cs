@@ -435,16 +435,6 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
 
             requiredFeatures = manifest.Dependencies?.RequiredFeatures?.Select(static x => x).ToHashSet();
 
-            if (isUnpacked)
-            {
-                if (requiredFeatures is null)
-                {
-                    requiredFeatures = [];
-                }
-
-                _ = requiredFeatures.Add(FeatureEnum.Unpacked_Addons);
-            }
-
             mainCon = manifest.MainCon;
             addCons = manifest.AdditionalCons?.ToHashSet();
 

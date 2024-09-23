@@ -96,8 +96,7 @@ public sealed class Raze : BasePort
         FeatureEnum.Hightile,
         FeatureEnum.Models,
         FeatureEnum.Sloped_Sprites,
-        FeatureEnum.Wall_Rotate_Cstat,
-        FeatureEnum.Unpacked_Addons
+        FeatureEnum.Wall_Rotate_Cstat
         ];
 
     /// <inheritdoc/>
@@ -136,7 +135,7 @@ public sealed class Raze : BasePort
 
             if (!Directory.Exists(Path.GetDirectoryName(config)))
             {
-                Directory.CreateDirectory(Path.GetDirectoryName(config)!);
+                _ = Directory.CreateDirectory(Path.GetDirectoryName(config)!);
             }
 
             File.WriteAllText(config, DefaultConfig);
@@ -150,23 +149,23 @@ public sealed class Raze : BasePort
     /// <inheritdoc/>
     protected override void GetStartCampaignArgs(StringBuilder sb, IGame game, IAddon addon)
     {
-        sb.Append($@" -savedir ""{Path.Combine(PathToExecutableFolder, "Save", addon.Id.Replace(' ', '_'))}""");
+        _ = sb.Append($@" -savedir ""{Path.Combine(PathToExecutableFolder, "Save", addon.Id.Replace(' ', '_'))}""");
 
         if (addon.MainDef is not null)
         {
-            sb.Append($@" {MainDefParam}""{addon.MainDef}""");
+            _ = sb.Append($@" {MainDefParam}""{addon.MainDef}""");
         }
         else
         {
             //overriding default def so gamename.def files are ignored
-            sb.Append($@" {MainDefParam}""a""");
+            _ = sb.Append($@" {MainDefParam}""a""");
         }
 
         if (addon.AdditionalDefs is not null)
         {
             foreach (var def in addon.AdditionalDefs)
             {
-                sb.Append($@" {AddDefParam}""{def}""");
+                _ = sb.Append($@" {AddDefParam}""{def}""");
             }
         }
 
@@ -217,7 +216,7 @@ public sealed class Raze : BasePort
 
             AddGamePathsToConfig(game.DukeWTInstallPath, game.ModsFolderPath, config, addon);
 
-            sb.Append($" -addon {(byte)DukeAddonEnum.Base}");
+            _ = sb.Append($" -addon {(byte)DukeAddonEnum.Base}");
         }
         else
         {
@@ -240,7 +239,7 @@ public sealed class Raze : BasePort
                 dukeAddon = (byte)DukeAddonEnum.DukeVaca;
             }
 
-            sb.Append($" -addon {dukeAddon}");
+            _ = sb.Append($" -addon {dukeAddon}");
         }
 
 
@@ -252,21 +251,21 @@ public sealed class Raze : BasePort
 
         if (dCamp.MainCon is not null)
         {
-            sb.Append($@" {MainConParam}""{dCamp.MainCon}""");
+            _ = sb.Append($@" {MainConParam}""{dCamp.MainCon}""");
         }
 
         if (dCamp.AdditionalCons?.Count > 0)
         {
             foreach (var con in dCamp.AdditionalCons)
             {
-                sb.Append($@" {AddConParam}""{con}""");
+                _ = sb.Append($@" {AddConParam}""{con}""");
             }
         }
 
 
         if (dCamp.Type is AddonTypeEnum.TC)
         {
-            sb.Append($@" {AddFileParam}""{Path.Combine(game.CampaignsFolderPath, dCamp.FileName)}""");
+            _ = sb.Append($@" {AddFileParam}""{Path.Combine(game.CampaignsFolderPath, dCamp.FileName)}""");
         }
         else if (dCamp.Type is AddonTypeEnum.Map)
         {
@@ -297,12 +296,12 @@ public sealed class Raze : BasePort
         if (wCamp.DependentAddons is not null &&
             wCamp.DependentAddons.ContainsKey(nameof(WangAddonEnum.Wanton)))
         {
-            sb.Append($" {AddFileParam}WT.GRP");
+            _ = sb.Append($" {AddFileParam}WT.GRP");
         }
         else if (wCamp.DependentAddons is not null &&
             wCamp.DependentAddons.ContainsKey(nameof(WangAddonEnum.TwinDragon)))
         {
-            sb.Append($" {AddFileParam}TD.GRP");
+            _ = sb.Append($" {AddFileParam}TD.GRP");
         }
 
 
@@ -314,7 +313,7 @@ public sealed class Raze : BasePort
 
         if (wCamp.Type is AddonTypeEnum.TC)
         {
-            sb.Append($@" {AddFileParam}""{Path.Combine(game.CampaignsFolderPath, wCamp.FileName)}""");
+            _ = sb.Append($@" {AddFileParam}""{Path.Combine(game.CampaignsFolderPath, wCamp.FileName)}""");
         }
         else if (wCamp.Type is AddonTypeEnum.Map)
         {
@@ -344,7 +343,7 @@ public sealed class Raze : BasePort
         if (rCamp.DependentAddons is not null &&
             rCamp.DependentAddons.ContainsKey(nameof(RedneckAddonEnum.Route66)))
         {
-            sb.Append(" -route66");
+            _ = sb.Append(" -route66");
             return;
         }
 
@@ -363,21 +362,21 @@ public sealed class Raze : BasePort
 
         if (rCamp.MainCon is not null)
         {
-            sb.Append($@" {MainConParam}""{rCamp.MainCon}""");
+            _ = sb.Append($@" {MainConParam}""{rCamp.MainCon}""");
         }
 
         if (rCamp.AdditionalCons?.Count > 0)
         {
             foreach (var con in rCamp.AdditionalCons)
             {
-                sb.Append($@" {AddConParam}""{con}""");
+                _ = sb.Append($@" {AddConParam}""{con}""");
             }
         }
 
 
         if (rCamp.Type is AddonTypeEnum.TC)
         {
-            sb.Append($@" {AddFileParam}""{Path.Combine(game.CampaignsFolderPath, rCamp.FileName)}""");
+            _ = sb.Append($@" {AddFileParam}""{Path.Combine(game.CampaignsFolderPath, rCamp.FileName)}""");
         }
         else if (rCamp.Type is AddonTypeEnum.Map)
         {
@@ -410,13 +409,13 @@ public sealed class Raze : BasePort
                 continue;
             }
 
-            sb.Append($@" {AddFileParam}""{aMod.FileName}""");
+            _ = sb.Append($@" {AddFileParam}""{aMod.FileName}""");
 
             if (aMod.AdditionalDefs is not null)
             {
                 foreach (var def in aMod.AdditionalDefs)
                 {
-                    sb.Append($@" {AddDefParam}""{def}""");
+                    _ = sb.Append($@" {AddDefParam}""{def}""");
                 }
             }
 
@@ -424,7 +423,7 @@ public sealed class Raze : BasePort
             {
                 foreach (var con in aMod.AdditionalCons)
                 {
-                    sb.Append($@" {AddConParam}""{con}""");
+                    _ = sb.Append($@" {AddConParam}""{con}""");
                 }
             }
         }
@@ -492,14 +491,14 @@ public sealed class Raze : BasePort
         {
             if (contents[i].Equals("[GameSearch.Directories]"))
             {
-                sb.AppendLine(contents[i]);
+                _ = sb.AppendLine(contents[i]);
 
                 var path = gameFolder.Replace('\\', '/');
-                sb.Append("Path=").AppendLine(path);
+                _ = sb.Append("Path=").AppendLine(path);
 
                 if (Directory.Exists(Path.Combine(gameFolder, "addons")))
                 {
-                    sb.Append("Path=").AppendLine(path + "/addons");
+                    _ = sb.Append("Path=").AppendLine(path + "/addons");
                 }
 
                 do
@@ -508,30 +507,30 @@ public sealed class Raze : BasePort
                 }
                 while (!string.IsNullOrWhiteSpace(contents[i]));
 
-                sb.AppendLine();
+                _ = sb.AppendLine();
                 continue;
             }
 
             if (contents[i].Equals("[FileSearch.Directories]"))
             {
-                sb.AppendLine(contents[i]);
+                _ = sb.AppendLine(contents[i]);
 
                 var path = gameFolder.Replace('\\', '/');
-                sb.Append("Path=").AppendLine(path);
+                _ = sb.Append("Path=").AppendLine(path);
 
                 if (Directory.Exists(Path.Combine(gameFolder, "addons")))
                 {
-                    sb.Append("Path=").AppendLine(path + "/addons");
+                    _ = sb.Append("Path=").AppendLine(path + "/addons");
                 }
 
                 path = modsFolder.Replace('\\', '/');
-                sb.Append("Path=").AppendLine(path);
+                _ = sb.Append("Path=").AppendLine(path);
 
                 if (campaign is BloodCampaign bCamp &&
                     bCamp.IsUnpacked)
                 {
                     path = Path.GetDirectoryName(bCamp.PathToFile)!.Replace('\\', '/');
-                    sb.Append("Path=").AppendLine(path);
+                    _ = sb.Append("Path=").AppendLine(path);
                 }
 
                 do
@@ -540,11 +539,11 @@ public sealed class Raze : BasePort
                 }
                 while (!string.IsNullOrWhiteSpace(contents[i]));
 
-                sb.AppendLine();
+                _ = sb.AppendLine();
                 continue;
             }
 
-            sb.AppendLine(contents[i]);
+            _ = sb.AppendLine(contents[i]);
         }
 
         var result = sb.ToString();

@@ -361,7 +361,7 @@ public abstract class BasePort
         {
             if (bCamp.FileName.Equals("addon.json"))
             {
-                _ = sb.Append($@" {AddGameDirParam}""{Path.GetDirectoryName(bCamp.PathToFile)}""");
+                _ = sb.Append($@" {AddDirectoryParam}""{Path.GetDirectoryName(bCamp.PathToFile)}""");
             }
             else
             {
