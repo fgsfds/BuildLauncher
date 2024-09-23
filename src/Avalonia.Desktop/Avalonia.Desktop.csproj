@@ -45,6 +45,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Avalonia.Desktop" />
+    <PackageReference Include="Avalonia.Diagnostics" />
     <PackageReference Include="Projektanker.Icons.Avalonia.FontAwesome" />
       <PackageReference Include="Avalonia" />
       <PackageReference Include="Avalonia.Controls.DataGrid" />

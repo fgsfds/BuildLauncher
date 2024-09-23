@@ -73,6 +73,10 @@ public sealed partial class MainWindow : Window
         }
 
         gamesProvider.GameChangedEvent += OnGameChangedEvent;
+
+#if DEBUG
+        this.AttachDevTools();
+#endif
     }
 
     private void OnGameChangedEvent(GameEnum gameEnum)
