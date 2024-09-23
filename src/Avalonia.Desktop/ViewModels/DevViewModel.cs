@@ -551,10 +551,14 @@ public sealed partial class DevViewModel : ObservableObject
                 return;
             }
 
-            var addon = CreateJson();
-            var jsonStr = JsonSerializer.Serialize(addon, AddonManifestContext.Default.AddonDto);
+            var addon = GetAddonJson(out var jsonString);
+            RenameAddonFolder(addon);
+            File.WriteAllText(Path.Combine(PathToAddonFolder!, "addon.json"), jsonString);
 
-            File.WriteAllText(Path.Combine(PathToAddonFolder!, "addon.json"), jsonStr);
+            if (addon is null)
+            {
+                return;
+            }
 
             string archiveSaveFolder;
             var game = _gamesProvider.GetGame(addon.SupportedGame.Game);
@@ -608,7 +612,7 @@ public sealed partial class DevViewModel : ObservableObject
         }
     }
 
-    private AddonDto CreateJson()
+    private AddonDto GetAddonJson(out string jsonString)
     {
         var files = Directory.GetFiles(PathToAddonFolder!, "*", SearchOption.TopDirectoryOnly).Select(static x => Path.GetFileName(x).ToLower());
         var forbidden = files.Intersect(_forbiddenNames);
@@ -774,8 +778,8 @@ public sealed partial class DevViewModel : ObservableObject
             StartMap = startMap
         };
 
-        var jsonStr = JsonSerializer.Serialize(addon, AddonManifestContext.Default.AddonDto);
-        JsonText = jsonStr;
+        jsonString = JsonSerializer.Serialize(addon, AddonManifestContext.Default.AddonDto);
+        JsonText = jsonString;
 
         return addon;
     }
@@ -826,7 +830,7 @@ public sealed partial class DevViewModel : ObservableObject
     {
         try
         {
-            _ = CreateJson();
+            _ = GetAddonJson(out _);
         }
         catch (Exception ex)
         {
@@ -846,16 +850,36 @@ public sealed partial class DevViewModel : ObservableObject
                 return;
             }
 
-            var addon = CreateJson();
-            var jsonStr = JsonSerializer.Serialize(addon, AddonManifestContext.Default.AddonDto);
+            var addon = GetAddonJson(out var jsonString);
 
-            File.WriteAllText(Path.Combine(PathToAddonFolder!, "addon.json"), jsonStr);
+            RenameAddonFolder(addon);
+
+            File.WriteAllText(Path.Combine(PathToAddonFolder!, "addon.json"), jsonString);
 
             ErrorText = "JSON saved";
         }
         catch (Exception ex)
         {
             ErrorText = ex.Message;
+            return;
+        }
+    }
+
+    /// <summary>
+    /// Rename addon folder to {addon_id}_v{addon_version}
+    /// </summary>
+    /// <param name="addon">Addon</param>
+    private void RenameAddonFolder(AddonDto addon)
+    {
+        Guard.ThrowIfNull(PathToAddonFolder);
+
+        var newFolderName = addon.Id + "_v" + addon.Version.Replace('.', '_');
+        var newFolderPath = Path.Combine(Path.GetDirectoryName(PathToAddonFolder)!, newFolderName);
+
+        if (!PathToAddonFolder.Equals(newFolderPath))
+        {
+            Directory.Move(PathToAddonFolder, newFolderPath);
+            PathToAddonFolder = newFolderPath;
         }
     }
 
