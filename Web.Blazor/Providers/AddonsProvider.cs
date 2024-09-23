@@ -84,7 +84,6 @@ public sealed class AddonsProvider
                 Author = version.Value.Author,
                 Dependencies = depsResult,
                 Installs = hasInstalls ? installsNumber : 0,
-                Score = 0,
                 Rating = hasRating ? ratingNumber : 0,
                 UpdateDate = version.Value.UpdateDate
             };
@@ -113,7 +112,7 @@ public sealed class AddonsProvider
                 Installs = 1
             };
 
-            dbContext.Installs.Add(newInstallsEntity);
+            _ = dbContext.Installs.Add(newInstallsEntity);
             newInstalls = 1;
         }
         else
@@ -122,7 +121,7 @@ public sealed class AddonsProvider
             newInstalls = fix.Installs;
         }
 
-        dbContext.SaveChanges();
+        _ = dbContext.SaveChanges();
         return newInstalls;
     }
 
@@ -138,7 +137,7 @@ public sealed class AddonsProvider
             existingRating.RatingTotal++;
         }
 
-        dbContext.SaveChanges();
+        _ = dbContext.SaveChanges();
 
         return existingRating.Rating;
     }
@@ -153,8 +152,8 @@ public sealed class AddonsProvider
             ReportText = text
         };
 
-        dbContext.Reports.Add(entity);
-        dbContext.SaveChanges();
+        _ = dbContext.Reports.Add(entity);
+        _ = dbContext.SaveChanges();
     }
 
     internal Dictionary<string, decimal> GetRating()
@@ -181,7 +180,7 @@ public sealed class AddonsProvider
             }
             else
             {
-                dbContext.Addons.Add(new()
+                _ = dbContext.Addons.Add(new()
                 {
                     Id = addon.Id,
                     Title = addon.Title,
@@ -190,8 +189,7 @@ public sealed class AddonsProvider
                 });
             }
 
-
-            dbContext.SaveChanges();
+            _ = dbContext.SaveChanges();
 
 
             var existingVersion = dbContext.Versions.SingleOrDefault(x => x.AddonId == addon.Id && x.Version == addon.Version);
@@ -201,7 +199,7 @@ public sealed class AddonsProvider
                 return false;
             }
 
-            dbContext.Versions.Add(new()
+            _ = dbContext.Versions.Add(new()
             {
                 AddonId = addon.Id,
                 Version = addon.Version,
@@ -213,7 +211,7 @@ public sealed class AddonsProvider
                 UpdateDate = DateTime.Now.ToUniversalTime()
             });
 
-            dbContext.SaveChanges();
+            _ = dbContext.SaveChanges();
 
 
             if (addon.Dependencies is not null)
@@ -227,7 +225,7 @@ public sealed class AddonsProvider
 
                 foreach (var dep in addon.Dependencies)
                 {
-                    dbContext.Dependencies.Add(new()
+                    _ = dbContext.Dependencies.Add(new()
                     {
                         AddonVersionId = existingVersion.Id,
                         DependencyId = dep.Key,
@@ -235,7 +233,7 @@ public sealed class AddonsProvider
                     });
                 }
 
-                dbContext.SaveChanges();
+                _ = dbContext.SaveChanges();
             }
 
 
@@ -243,14 +241,14 @@ public sealed class AddonsProvider
 
             if (existingScore is null)
             {
-                dbContext.Rating.Add(new()
+                _ = dbContext.Rating.Add(new()
                 {
                     AddonId = addon.Id,
                     RatingSum = 0,
                     RatingTotal = 0
                 });
 
-                dbContext.SaveChanges();
+                _ = dbContext.SaveChanges();
             }
 
             if (olderVersion is not null)
@@ -260,9 +258,8 @@ public sealed class AddonsProvider
                     version.IsDisabled = true;
                 }
 
-                dbContext.SaveChanges();
+                _ = dbContext.SaveChanges();
             }
-
 
             transaction.Commit();
 

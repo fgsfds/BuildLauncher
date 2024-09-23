@@ -17,7 +17,6 @@ public interface IDownloadableAddon
     string? Author { get; set; }
     string? Description { get; set; }
     int Installs { get; set; }
-    int Score { get; set; }
     decimal Rating{ get; set; }
     DateTime UpdateDate { get; set; }
 

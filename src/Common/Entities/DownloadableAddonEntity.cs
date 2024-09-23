@@ -35,10 +35,6 @@ public sealed class DownloadableAddonEntity : IDownloadableAddon
     [JsonPropertyName("Installs")]
     public required int Installs { get; set; }
 
-    [JsonPropertyName("Score")]
-    [Obsolete]
-    public required int Score { get; set; }
-
     [JsonPropertyName("Rating")]
     public required decimal Rating { get; set; }
 
