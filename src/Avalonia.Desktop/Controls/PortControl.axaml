@@ -52,12 +52,13 @@
 
             <Button Height="{Binding #InstallButton.Bounds.Height}"
                     Grid.Column="1"
-                    Command="{Binding CheckUpdateCommand}"
+                    Command="{Binding UninstallCommand}"
                     Margin="5"
                     HorizontalAlignment="Stretch"
                     HorizontalContentAlignment="Center"
-                    ToolTip.Tip="Check for updates">
-                <i:Icon Value="fa-sync" />
+                    IsEnabled="{Binding IsInstalled}"
+                    ToolTip.Tip="Uninstall">
+                <i:Icon Value="fa-trash" />
             </Button>
 
         </Grid>

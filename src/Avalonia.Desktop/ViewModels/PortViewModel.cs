@@ -105,6 +105,11 @@ public sealed partial class PortViewModel : ObservableObject
     public string Version => _port.InstalledVersion ?? "None";
 
     /// <summary>
+    /// Is port installed
+    /// </summary>
+    public bool IsInstalled => _port.IsInstalled;
+
+    /// <summary>
     /// Latest available version
     /// </summary>
     public string LatestVersion => _release?.Version ?? "Not available";
@@ -122,7 +127,7 @@ public sealed partial class PortViewModel : ObservableObject
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(InstallCommand))]
-    [NotifyCanExecuteChangedFor(nameof(CheckUpdateCommand))]
+    [NotifyCanExecuteChangedFor(nameof(UninstallCommand))]
     private bool _isInProgress;
 
     #endregion
@@ -140,6 +145,7 @@ public sealed partial class PortViewModel : ObservableObject
         OnPropertyChanged(nameof(LatestVersion));
         OnPropertyChanged(nameof(InstallButtonText));
         OnPropertyChanged(nameof(IsUpdateAvailable));
+        OnPropertyChanged(nameof(IsInstalled));
     }
 
 
@@ -149,25 +155,33 @@ public sealed partial class PortViewModel : ObservableObject
     [RelayCommand(CanExecute = nameof(InstallCommandCanExecute))]
     private async Task InstallAsync()
     {
-        IsInProgress = true;
+        try
+        {
+            IsInProgress = true;
 
-        var installer = _installerFactory.Create();
+            var installer = _installerFactory.Create();
 
-        installer.Progress.ProgressChanged += OnProgressChanged;
-        ProgressBarValue = 0;
-        OnPropertyChanged(nameof(ProgressBarValue));
+            installer.Progress.ProgressChanged += OnProgressChanged;
+            ProgressBarValue = 0;
+            OnPropertyChanged(nameof(ProgressBarValue));
 
-        await installer.InstallAsync(_port);
+            await installer.InstallAsync(_port);
 
-        installer.Progress.ProgressChanged -= OnProgressChanged;
-        ProgressBarValue = 0;
+            installer.Progress.ProgressChanged -= OnProgressChanged;
+            ProgressBarValue = 0;
 
-        OnPropertyChanged(nameof(ProgressBarValue));
-        OnPropertyChanged(nameof(Version));
-        OnPropertyChanged(nameof(InstallButtonText));
-        OnPropertyChanged(nameof(IsUpdateAvailable));
+            OnPropertyChanged(nameof(ProgressBarValue));
+            OnPropertyChanged(nameof(Version));
+            OnPropertyChanged(nameof(InstallButtonText));
+            OnPropertyChanged(nameof(IsUpdateAvailable));
+            OnPropertyChanged(nameof(IsInstalled));
 
-        IsInProgress = false;
+            UninstallCommand.NotifyCanExecuteChanged();
+        }
+        finally
+        {
+            IsInProgress = false;
+        }
     }
     public bool InstallCommandCanExecute() => !IsInProgress;
 
@@ -176,19 +190,25 @@ public sealed partial class PortViewModel : ObservableObject
     /// Force check for updates
     /// </summary>
     [RelayCommand(CanExecute = nameof(CheckUpdateCommandCanExecute))]
-    private async Task CheckUpdateAsync()
+    private void Uninstall()
     {
-        IsInProgress = true;
+        try
+        {
+            IsInProgress = true;
 
-        _release = await _portsReleasesProvider.GetLatestReleaseAsync(_port.PortEnum);
+            Directory.Delete(_port.PathToExecutableFolder, true);
 
-        OnPropertyChanged(nameof(LatestVersion));
-        OnPropertyChanged(nameof(InstallButtonText));
-        OnPropertyChanged(nameof(IsUpdateAvailable));
-
-        IsInProgress = false;
+            OnPropertyChanged(nameof(Version));
+            OnPropertyChanged(nameof(InstallButtonText));
+            OnPropertyChanged(nameof(IsUpdateAvailable));
+            OnPropertyChanged(nameof(IsInstalled));
+        }
+        finally
+        {
+            IsInProgress = false;
+        }
     }
-    public bool CheckUpdateCommandCanExecute() => !IsInProgress;
+    public bool CheckUpdateCommandCanExecute() => IsInstalled;
 
 
     #endregion
