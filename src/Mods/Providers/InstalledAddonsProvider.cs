@@ -353,7 +353,8 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
                     AddonManifestContext.Default.AddonDto
                     );
 
-                if (manifest?.MainRff is not null || manifest?.SoundRff is not null)
+                //need to unpack addons that contain custom RFF files
+                if (!string.IsNullOrWhiteSpace(manifest?.MainRff) || !string.IsNullOrWhiteSpace(manifest?.SoundRff))
                 {
                     var fileFolder = Path.GetDirectoryName(pathToFile)!;
                     var unpackTo = Path.Combine(fileFolder, Path.GetFileNameWithoutExtension(pathToFile));
