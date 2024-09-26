@@ -31,7 +31,7 @@ public sealed class DatabaseContext : DbContext
         var playtimes = Playtimes.ToList();
         var paths = GamePaths.ToList();
 
-        Database.EnsureDeleted();
+        _ = Database.EnsureDeleted();
         Database.Migrate();
 
         Settings.AddRange(settings);
@@ -39,11 +39,11 @@ public sealed class DatabaseContext : DbContext
         Playtimes.AddRange(playtimes);
         GamePaths.AddRange(paths);
 
-        SaveChanges();
+        _ = SaveChanges();
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        optionsBuilder.UseSqlite("Data Source=config.db");
+        _ = optionsBuilder.UseSqlite("Data Source=config.db");
     }
 }

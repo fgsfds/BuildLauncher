@@ -21,14 +21,14 @@ public sealed class FilesUploader
 
     public async Task<bool> AddAddonToDatabaseAsync(string pathToFile)
     {
-        var entity = await GetDownloadableAddonDtoAsync(pathToFile);
+        var entity = await GetDownloadableAddonDtoAsync(pathToFile).ConfigureAwait(false);
 
         if (entity is null)
         {
             return false;
         }
 
-        var result = await _apiInterface.AddAddonToDatabaseAsync(entity);
+        var result = await _apiInterface.AddAddonToDatabaseAsync(entity).ConfigureAwait(false);
 
         return result;
     }
@@ -86,7 +86,7 @@ public sealed class FilesUploader
         var downloadUrl = $"{Consts.FilesRepo}/{gameName}/{folderName}/{Path.GetFileName(pathToFile)}";
 
         using HttpClient httpClient = new();
-        var response = await httpClient.GetAsync(downloadUrl, HttpCompletionOption.ResponseHeadersRead);
+        var response = await httpClient.GetAsync(downloadUrl, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false);
 
         if (!response.IsSuccessStatusCode)
         {
@@ -118,7 +118,7 @@ public sealed class FilesUploader
         {
             var path = "buildlauncher_uploads/" + Guid.NewGuid() + "/" + Path.GetFileName(pathToFile);
 
-            var signedUrl = await _apiInterface.GetSignedUrlAsync(path);
+            var signedUrl = await _apiInterface.GetSignedUrlAsync(path).ConfigureAwait(false);
 
             await using var fileStream = File.OpenRead(pathToFile);
             using StreamContent content = new(fileStream);
@@ -157,7 +157,7 @@ public sealed class FilesUploader
         }
 
         using var archive = ZipArchive.Open(pathToFile);
-        var jsonExists = archive.Entries.Any(static x => x.Key.Equals("addon.json"));
+        var jsonExists = archive.Entries.Any(static x => x.Key!.Equals("addon.json"));
 
         if (!jsonExists)
         {

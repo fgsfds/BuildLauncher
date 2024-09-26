@@ -59,7 +59,7 @@ public sealed partial class MapsControl : UserControl
 
         foreach (var skill in skills)
         {
-            flyout.Items.Add(skill);
+            _ = flyout.Items.Add(skill);
         }
 
         _flyout = flyout;
@@ -176,7 +176,7 @@ public sealed partial class MapsControl : UserControl
 
                 foreach (var skill in skills)
                 {
-                    portButton.Items.Add(skill);
+                    _ = portButton.Items.Add(skill);
                 }
             }
             else
@@ -188,12 +188,12 @@ public sealed partial class MapsControl : UserControl
                 };
             }
 
-            MapsList.ContextMenu.Items.Add(portButton);
+            _ = MapsList.ContextMenu.Items.Add(portButton);
         }
 
         if (MapsList.ContextMenu.Items.Count > 0)
         {
-            MapsList.ContextMenu.Items.Add(new Separator());
+            _ = MapsList.ContextMenu.Items.Add(new Separator());
         }
 
         var deleteButton = new MenuItem()
@@ -205,7 +205,7 @@ public sealed partial class MapsControl : UserControl
                 )
         };
 
-        MapsList.ContextMenu.Items.Add(deleteButton);
+        _ = MapsList.ContextMenu.Items.Add(deleteButton);
     }
 
 
@@ -264,7 +264,7 @@ public sealed partial class MapsControl : UserControl
     {
         if (_flyout?.Target is not null)
         {
-            return ((Button)_flyout.Target!).CommandParameter as BasePort;
+            return ((Button)_flyout.Target!).CommandParameter as BasePort ?? ThrowHelper.Exception<BasePort>();
         }
         else if (port is not null)
         {
@@ -325,7 +325,7 @@ public sealed partial class MapsControl : UserControl
     {
         MapsList.SelectedItem = null;
         MapsList.Focusable = true;
-        MapsList.Focus();
+        _ = MapsList.Focus();
         MapsList.Focusable = false;
     }
 

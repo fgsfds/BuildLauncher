@@ -9,7 +9,7 @@ using Ports.Ports.EDuke32;
 namespace Tests.CmdArguments;
 
 [Collection("Sync")]
-public class RedneckCmdArgumentsTests
+public sealed class RedneckCmdArgumentsTests
 {
     private readonly RedneckGame _redneckGame;
     private readonly RedneckCampaign _redneckCamp;

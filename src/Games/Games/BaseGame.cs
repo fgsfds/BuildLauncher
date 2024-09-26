@@ -46,22 +46,22 @@ public abstract class BaseGame : IGame
     {
         if (!Directory.Exists(CampaignsFolderPath))
         {
-            Directory.CreateDirectory(CampaignsFolderPath);
+            _ = Directory.CreateDirectory(CampaignsFolderPath);
         }
 
         if (!Directory.Exists(MapsFolderPath))
         {
-            Directory.CreateDirectory(MapsFolderPath);
+            _ = Directory.CreateDirectory(MapsFolderPath);
         }
 
         if (!Directory.Exists(ModsFolderPath))
         {
-            Directory.CreateDirectory(ModsFolderPath);
+            _ = Directory.CreateDirectory(ModsFolderPath);
         }
 
         if (!Directory.Exists(SpecialFolderPath))
         {
-            Directory.CreateDirectory(SpecialFolderPath);
+            _ = Directory.CreateDirectory(SpecialFolderPath);
         }
     }
 
@@ -71,9 +71,10 @@ public abstract class BaseGame : IGame
 
 
     /// <summary>
-    /// Do provided files exist in the game install folder
+    /// Do provided files exist in the folder
     /// </summary>
     /// <param name="files">List of required files</param>
+    /// <param name="path">Folder where the files are searched</param>
     protected bool IsInstalled(List<string> files, string? path = null)
     {
         var gamePath = path is null ? GameInstallFolder : path;

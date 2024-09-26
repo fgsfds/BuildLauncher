@@ -47,7 +47,7 @@ public sealed class DownloadableAddonsProvider : IDownloadableAddonsProvider
     /// <inheritdoc/>
     public async Task CreateCacheAsync(bool createNew)
     {
-        await _semaphore.WaitAsync();
+        await _semaphore.WaitAsync().ConfigureAwait(false);
 
         if (_cache is not null && !createNew)
         {
@@ -174,7 +174,7 @@ public sealed class DownloadableAddonsProvider : IDownloadableAddonsProvider
 
         if (!ClientProperties.IsDevMode)
         {
-            var result = await _apiInterface.IncreaseNumberOfInstallsAsync(addon.Id);
+            var result = await _apiInterface.IncreaseNumberOfInstallsAsync(addon.Id).ConfigureAwait(false);
 
             if (result)
             {

@@ -140,7 +140,7 @@ public sealed partial class PortViewModel : ObservableObject
     /// </summary>
     public async Task InitializeAsync()
     {
-        _release = await _portsReleasesProvider.GetLatestReleaseAsync(_port.PortEnum);
+        _release = await _portsReleasesProvider.GetLatestReleaseAsync(_port.PortEnum).ConfigureAwait(true);
 
         OnPropertyChanged(nameof(LatestVersion));
         OnPropertyChanged(nameof(InstallButtonText));
@@ -165,7 +165,7 @@ public sealed partial class PortViewModel : ObservableObject
             ProgressBarValue = 0;
             OnPropertyChanged(nameof(ProgressBarValue));
 
-            await installer.InstallAsync(_port);
+            await installer.InstallAsync(_port).ConfigureAwait(true);
 
             installer.Progress.ProgressChanged -= OnProgressChanged;
             ProgressBarValue = 0;

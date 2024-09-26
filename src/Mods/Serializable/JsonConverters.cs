@@ -18,6 +18,12 @@ public sealed class SupportedGameDtoConverter : JsonConverter<SupportedGameDto?>
         else if (reader.TokenType is JsonTokenType.String)
         {
             var str = reader.GetString();
+
+            if (str is null)
+            {
+                ThrowHelper.NullReferenceException(nameof(str));
+            }
+
             var gameEnum = Enum.Parse<GameEnum>(str, true);
 
             SupportedGameDto dto = new()

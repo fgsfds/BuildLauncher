@@ -33,7 +33,7 @@ else
                     }
 
                     <br />
-                    <div>@((MarkupString)@Markdown.ToHtml(addon.Description))</div>
+                    <div>@((MarkupString)@Markdown.ToHtml(addon.Description ?? string.Empty))</div>
                     <a href="@addon.DownloadUrl">Download</a>
                     <br />
                     <br />
@@ -44,7 +44,7 @@ else
                 {
                     <h4>@addon.Title</h4>
                     <br />
-                    <div>@((MarkupString)@Markdown.ToHtml(addon.Description))</div>
+                    <div>@((MarkupString)@Markdown.ToHtml(addon.Description ?? string.Empty))</div>
                     <a href="@addon.DownloadUrl">Download</a>
                     <br />
                     <br />
@@ -55,7 +55,7 @@ else
                 {
                     <h4>@addon.Title</h4>
                     <br />
-                    <div>@((MarkupString)@Markdown.ToHtml(addon.Description))</div>
+                    <div>@((MarkupString)@Markdown.ToHtml(addon.Description ?? string.Empty))</div>
                     <a href="@addon.DownloadUrl">Download</a>
                     <br />
                     <br />

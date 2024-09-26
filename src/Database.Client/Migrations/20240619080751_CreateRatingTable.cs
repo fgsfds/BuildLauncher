@@ -5,16 +5,16 @@
 namespace Database.Client.Migrations;
 
 /// <inheritdoc />
-public partial class CreateRatingTable : Migration
+public sealed partial class CreateRatingTable : Migration
 {
     /// <inheritdoc />
     protected override void Up(MigrationBuilder migrationBuilder)
     {
-        migrationBuilder.DropTable(
+        _ = migrationBuilder.DropTable(
             name: "scores",
             schema: "main");
 
-        migrationBuilder.CreateTable(
+        _ = migrationBuilder.CreateTable(
             name: "rating",
             schema: "main",
             columns: table => new
@@ -24,18 +24,18 @@ public partial class CreateRatingTable : Migration
             },
             constraints: table =>
             {
-                table.PrimaryKey("PK_rating", x => x.addon_id);
+                _ = table.PrimaryKey("PK_rating", x => x.addon_id);
             });
     }
 
     /// <inheritdoc />
     protected override void Down(MigrationBuilder migrationBuilder)
     {
-        migrationBuilder.DropTable(
+        _ = migrationBuilder.DropTable(
             name: "rating",
             schema: "main");
 
-        migrationBuilder.CreateTable(
+        _ = migrationBuilder.CreateTable(
             name: "scores",
             schema: "main",
             columns: table => new
@@ -45,7 +45,7 @@ public partial class CreateRatingTable : Migration
             },
             constraints: table =>
             {
-                table.PrimaryKey("PK_scores", x => x.addon_id);
+                _ = table.PrimaryKey("PK_scores", x => x.addon_id);
             });
     }
 }

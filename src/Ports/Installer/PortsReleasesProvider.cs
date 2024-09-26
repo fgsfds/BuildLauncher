@@ -22,7 +22,7 @@ public sealed class PortsReleasesProvider
     /// <summary>
     /// Get the latest release of the selected port
     /// </summary>
-    /// <param name="port">Port</param>
+    /// <param name="portEnum">Port enum</param>
     public async Task<GeneralReleaseEntity?> GetLatestReleaseAsync(PortEnum portEnum)
     {
         await _semaphore.WaitAsync().ConfigureAwait(false);
@@ -32,7 +32,7 @@ public sealed class PortsReleasesProvider
             _releases = await GetReleasesAsync().ConfigureAwait(false);
         }
 
-        _semaphore.Release();
+        _ = _semaphore.Release();
 
         if (_releases is null)
         {

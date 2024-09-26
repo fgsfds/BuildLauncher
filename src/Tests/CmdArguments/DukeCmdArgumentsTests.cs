@@ -11,7 +11,7 @@ using Ports.Ports.EDuke32;
 namespace Tests.CmdArguments;
 
 [Collection("Sync")]
-public class DukeCmdArgumentsTests
+public sealed class DukeCmdArgumentsTests
 {
     private readonly DukeGame _dukeGame;
     private readonly DukeCampaign _dukeCamp;

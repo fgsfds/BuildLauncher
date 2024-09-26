@@ -66,14 +66,14 @@ public sealed class ConfigProvider : IConfigProvider
 
         if (existing is null)
         {
-            _dbContext.Rating.Add(new() { AddonId = addonId, Rating = rating });
+            _ = _dbContext.Rating.Add(new() { AddonId = addonId, Rating = rating });
         }
         else
         {
             existing.Rating = rating;
         }
 
-        _dbContext.SaveChanges();
+        _ = _dbContext.SaveChanges();
         ParameterChangedEvent?.Invoke(nameof(Rating));
     }
 
@@ -88,14 +88,14 @@ public sealed class ConfigProvider : IConfigProvider
 
         if (existing is null)
         {
-            _dbContext.Playtimes.Add(new() { AddonId = addonId, Playtime = playTime });
+            _ = _dbContext.Playtimes.Add(new() { AddonId = addonId, Playtime = playTime });
         }
         else
         {
             existing.Playtime += playTime;
         }
 
-        _dbContext.SaveChanges();
+        _ = _dbContext.SaveChanges();
         ParameterChangedEvent?.Invoke(nameof(Playtimes));
     }
 
@@ -116,14 +116,14 @@ public sealed class ConfigProvider : IConfigProvider
             }
             else
             {
-                _dbContext.DisabledAddons.Add(new() { AddonId = addonId.Id });
+                _ = _dbContext.DisabledAddons.Add(new() { AddonId = addonId.Id });
             }
         }
         else
         {
             if (isEnabled)
             {
-                _dbContext.DisabledAddons.Remove(existing);
+                _ = _dbContext.DisabledAddons.Remove(existing);
             }
             else
             {
@@ -131,7 +131,7 @@ public sealed class ConfigProvider : IConfigProvider
             }
         }
 
-        _dbContext.SaveChanges();
+        _ = _dbContext.SaveChanges();
         ParameterChangedEvent?.Invoke(nameof(DisabledAutoloadMods));
     }
 
@@ -199,14 +199,14 @@ public sealed class ConfigProvider : IConfigProvider
 
         if (setting is null)
         {
-            _dbContext.Settings.Add(new() { Name = caller, Value = value });
+            _ = _dbContext.Settings.Add(new() { Name = caller, Value = value });
         }
         else
         {
             setting.Value = value;
         }
 
-        _dbContext.SaveChanges();
+        _ = _dbContext.SaveChanges();
         ParameterChangedEvent?.Invoke(caller);
     }
 
@@ -221,14 +221,14 @@ public sealed class ConfigProvider : IConfigProvider
 
         if (setting is null)
         {
-            _dbContext.GamePaths.Add(new() { Game = caller, Path = value });
+            _ = _dbContext.GamePaths.Add(new() { Game = caller, Path = value });
         }
         else
         {
             setting.Path = value;
         }
 
-        _dbContext.SaveChanges();
+        _ = _dbContext.SaveChanges();
         ParameterChangedEvent?.Invoke(caller);
     }
 
@@ -246,36 +246,42 @@ public sealed class ConfigProvider : IConfigProvider
         FileStream fs = new(Consts.ConfigFile, FileMode.Open);
         var config = JsonSerializer.Deserialize(fs, ConfigEntityContext.Default.ConfigEntityObsolete);
 
-        _dbContext.Settings.Add(new() { Name = nameof(config.Theme), Value = config.Theme.ToString() });
-        _dbContext.Settings.Add(new() { Name = nameof(config.SkipIntro), Value = config.SkipIntro.ToString() });
-        _dbContext.Settings.Add(new() { Name = nameof(config.SkipStartup), Value = config.SkipStartup.ToString() });
+        if (config is null)
+        {
+            fs.Dispose();
+            return;
+        }
 
-        _dbContext.Settings.Add(new() { Name = nameof(config.UseLocalApi), Value = config.UseLocalApi.ToString() });
-        _dbContext.Settings.Add(new() { Name = nameof(config.ApiPassword), Value = config.ApiPassword ?? string.Empty });
+        _ = _dbContext.Settings.Add(new() { Name = nameof(config.Theme), Value = config.Theme.ToString() });
+        _ = _dbContext.Settings.Add(new() { Name = nameof(config.SkipIntro), Value = config.SkipIntro.ToString() });
+        _ = _dbContext.Settings.Add(new() { Name = nameof(config.SkipStartup), Value = config.SkipStartup.ToString() });
+
+        _ = _dbContext.Settings.Add(new() { Name = nameof(config.UseLocalApi), Value = config.UseLocalApi.ToString() });
+        _ = _dbContext.Settings.Add(new() { Name = nameof(config.ApiPassword), Value = config.ApiPassword ?? string.Empty });
 
         
         foreach (var addon in config.DisabledAutoloadMods)
         {
-            _dbContext.DisabledAddons.Add(new() { AddonId = addon });
+            _ = _dbContext.DisabledAddons.Add(new() { AddonId = addon });
         }
         
         foreach (var addon in config.Playtimes)
         {
-            _dbContext.Playtimes.Add(new() { AddonId = addon.Key, Playtime = addon.Value });
+            _ = _dbContext.Playtimes.Add(new() { AddonId = addon.Key, Playtime = addon.Value });
         }
 
 
-        _dbContext.GamePaths.Add(new() { Game = "PathDuke3D", Path = config.GamePathDuke3D });
-        _dbContext.GamePaths.Add(new() { Game = "PathDukeWT", Path = config.GamePathDukeWT });
-        _dbContext.GamePaths.Add(new() { Game = "PathDuke64", Path = config.GamePathDuke64 });
-        _dbContext.GamePaths.Add(new() { Game = "PathWang", Path = config.GamePathWang });
-        _dbContext.GamePaths.Add(new() { Game = "PathBlood", Path = config.GamePathBlood });
-        _dbContext.GamePaths.Add(new() { Game = "PathRedneck", Path = config.GamePathRedneck });
-        _dbContext.GamePaths.Add(new() { Game = "PathRidesAgain", Path = config.GamePathAgain });
-        _dbContext.GamePaths.Add(new() { Game = "PathSlave", Path = config.GamePathSlave });
-        _dbContext.GamePaths.Add(new() { Game = "PathFury", Path = config.GamePathFury });
+        _ = _dbContext.GamePaths.Add(new() { Game = "PathDuke3D", Path = config.GamePathDuke3D });
+        _ = _dbContext.GamePaths.Add(new() { Game = "PathDukeWT", Path = config.GamePathDukeWT });
+        _ = _dbContext.GamePaths.Add(new() { Game = "PathDuke64", Path = config.GamePathDuke64 });
+        _ = _dbContext.GamePaths.Add(new() { Game = "PathWang", Path = config.GamePathWang });
+        _ = _dbContext.GamePaths.Add(new() { Game = "PathBlood", Path = config.GamePathBlood });
+        _ = _dbContext.GamePaths.Add(new() { Game = "PathRedneck", Path = config.GamePathRedneck });
+        _ = _dbContext.GamePaths.Add(new() { Game = "PathRidesAgain", Path = config.GamePathAgain });
+        _ = _dbContext.GamePaths.Add(new() { Game = "PathSlave", Path = config.GamePathSlave });
+        _ = _dbContext.GamePaths.Add(new() { Game = "PathFury", Path = config.GamePathFury });
 
-        _dbContext.SaveChanges();
+        _ = _dbContext.SaveChanges();
 
         fs.Dispose();
         File.Delete(Path.Combine(ClientProperties.ExeFolderPath, Consts.ConfigFile));
@@ -291,10 +297,10 @@ public sealed class ConfigProvider : IConfigProvider
             var game = nameof(PathRidesAgain);
             var path = old.Path;
 
-            _dbContext.GamePaths.Remove(old);
-            _dbContext.GamePaths.Add(new() { Game = game, Path = path });
+            _ = _dbContext.GamePaths.Remove(old);
+            _ = _dbContext.GamePaths.Add(new() { Game = game, Path = path });
 
-            _dbContext.SaveChanges();
+            _ = _dbContext.SaveChanges();
         }
     }
 }

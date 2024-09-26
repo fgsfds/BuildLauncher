@@ -113,7 +113,7 @@ public sealed partial class CampaignsViewModel : RightPanelViewModel, IPortsButt
     /// </summary>
     private async Task UpdateAsync(bool createNew)
     {
-        await _installedAddonsProvider.CreateCache(createNew);
+        await _installedAddonsProvider.CreateCache(createNew).ConfigureAwait(true);
 
         OnPropertyChanged(nameof(CampaignsList));
     }
@@ -135,7 +135,7 @@ public sealed partial class CampaignsViewModel : RightPanelViewModel, IPortsButt
 
         var args = port.GetStartGameArgs(Game, SelectedAddon, mods, _config.SkipIntro, _config.SkipStartup);
 
-        await StartPortAsync(SelectedAddon.Id, port.FullPathToExe, args);
+        await StartPortAsync(SelectedAddon.Id, port.FullPathToExe, args).ConfigureAwait(true);
     }
 
 
@@ -145,7 +145,7 @@ public sealed partial class CampaignsViewModel : RightPanelViewModel, IPortsButt
     [RelayCommand]
     private void OpenFolder()
     {
-        Process.Start(new ProcessStartInfo
+        _ = Process.Start(new ProcessStartInfo
         {
             FileName = Game.CampaignsFolderPath,
             UseShellExecute = true,
@@ -159,7 +159,7 @@ public sealed partial class CampaignsViewModel : RightPanelViewModel, IPortsButt
     [RelayCommand]
     private async Task RefreshListAsync()
     {
-        await UpdateAsync(true);
+        await UpdateAsync(true).ConfigureAwait(true);
     }
 
 
@@ -190,6 +190,7 @@ public sealed partial class CampaignsViewModel : RightPanelViewModel, IPortsButt
     /// <summary>
     /// Start port with command line args
     /// </summary>
+    /// <param name="id">Campaign id</param>
     /// <param name="exe">Path to port exe</param>
     /// <param name="args">Command line arguments</param>
     private async Task StartPortAsync(string id, string exe, string args)
@@ -202,7 +203,7 @@ public sealed partial class CampaignsViewModel : RightPanelViewModel, IPortsButt
             UseShellExecute = true,
             Arguments = args,
             WorkingDirectory = Path.GetDirectoryName(exe)
-        })!.WaitForExitAsync();
+        })!.WaitForExitAsync().ConfigureAwait(true);
 
         sw.Stop();
         var time = sw.Elapsed;

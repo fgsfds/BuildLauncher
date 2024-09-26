@@ -9,7 +9,7 @@ using Ports.Ports.EDuke32;
 namespace Tests.CmdArguments;
 
 [Collection("Sync")]
-public class SlaveCmdArgumentsTests
+public sealed class SlaveCmdArgumentsTests
 {
     private readonly SlaveGame _slaveGame;
     private readonly SlaveCampaign _slaveCamp;

@@ -10,7 +10,7 @@ using Ports.Ports.EDuke32;
 namespace Tests.CmdArguments;
 
 [Collection("Sync")]
-public class WangCmdArgumentsTests
+public sealed class WangCmdArgumentsTests
 {
     private readonly WangGame _wangGame;
     private readonly WangCampaign _wangCamp;

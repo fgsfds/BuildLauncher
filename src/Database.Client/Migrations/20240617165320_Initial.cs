@@ -5,15 +5,15 @@
 namespace Database.Client.Migrations;
 
 /// <inheritdoc />
-public partial class Initial : Migration
+public sealed partial class Initial : Migration
 {
     /// <inheritdoc />
     protected override void Up(MigrationBuilder migrationBuilder)
     {
-        migrationBuilder.EnsureSchema(
+        _ = migrationBuilder.EnsureSchema(
             name: "main");
 
-        migrationBuilder.CreateTable(
+        _ = migrationBuilder.CreateTable(
             name: "disabled_addons",
             schema: "main",
             columns: table => new
@@ -22,10 +22,10 @@ public partial class Initial : Migration
             },
             constraints: table =>
             {
-                table.PrimaryKey("PK_disabled_addons", x => x.addon_id);
+                _ = table.PrimaryKey("PK_disabled_addons", x => x.addon_id);
             });
 
-        migrationBuilder.CreateTable(
+        _ = migrationBuilder.CreateTable(
             name: "game_paths",
             schema: "main",
             columns: table => new
@@ -35,10 +35,10 @@ public partial class Initial : Migration
             },
             constraints: table =>
             {
-                table.PrimaryKey("PK_game_paths", x => x.game);
+                _ = table.PrimaryKey("PK_game_paths", x => x.game);
             });
 
-        migrationBuilder.CreateTable(
+        _ = migrationBuilder.CreateTable(
             name: "playtimes",
             schema: "main",
             columns: table => new
@@ -48,10 +48,10 @@ public partial class Initial : Migration
             },
             constraints: table =>
             {
-                table.PrimaryKey("PK_playtimes", x => x.addon_id);
+                _ = table.PrimaryKey("PK_playtimes", x => x.addon_id);
             });
 
-        migrationBuilder.CreateTable(
+        _ = migrationBuilder.CreateTable(
             name: "scores",
             schema: "main",
             columns: table => new
@@ -61,10 +61,10 @@ public partial class Initial : Migration
             },
             constraints: table =>
             {
-                table.PrimaryKey("PK_scores", x => x.addon_id);
+                _ = table.PrimaryKey("PK_scores", x => x.addon_id);
             });
 
-        migrationBuilder.CreateTable(
+        _ = migrationBuilder.CreateTable(
             name: "settings",
             schema: "main",
             columns: table => new
@@ -74,30 +74,30 @@ public partial class Initial : Migration
             },
             constraints: table =>
             {
-                table.PrimaryKey("PK_settings", x => x.name);
+                _ = table.PrimaryKey("PK_settings", x => x.name);
             });
     }
 
     /// <inheritdoc />
     protected override void Down(MigrationBuilder migrationBuilder)
     {
-        migrationBuilder.DropTable(
+        _ = migrationBuilder.DropTable(
             name: "disabled_addons",
             schema: "main");
 
-        migrationBuilder.DropTable(
+        _ = migrationBuilder.DropTable(
             name: "game_paths",
             schema: "main");
 
-        migrationBuilder.DropTable(
+        _ = migrationBuilder.DropTable(
             name: "playtimes",
             schema: "main");
 
-        migrationBuilder.DropTable(
+        _ = migrationBuilder.DropTable(
             name: "scores",
             schema: "main");
 
-        migrationBuilder.DropTable(
+        _ = migrationBuilder.DropTable(
             name: "settings",
             schema: "main");
     }

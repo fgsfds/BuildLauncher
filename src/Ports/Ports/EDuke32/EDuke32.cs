@@ -120,24 +120,24 @@ public class EDuke32 : BasePort
     /// <inheritdoc/>
     protected override void GetStartCampaignArgs(StringBuilder sb, IGame game, IAddon addon)
     {
-        sb.Append(" -usecwd"); //don't search for steam/gog installs
-        sb.Append(" -cachesize 262144"); //set cache to 256MiB
+        _ = sb.Append(" -usecwd"); //don't search for steam/gog installs
+        _ = sb.Append(" -cachesize 262144"); //set cache to 256MiB
 
         if (addon.MainDef is not null)
         {
-            sb.Append($@" {MainDefParam}""{addon.MainDef}""");
+            _ = sb.Append($@" {MainDefParam}""{addon.MainDef}""");
         }
         else
         {
             //overriding default def so gamename.def files are ignored
-            sb.Append($@" {MainDefParam}""a""");
+            _ = sb.Append($@" {MainDefParam}""a""");
         }
 
         if (addon.AdditionalDefs is not null)
         {
             foreach (var def in addon.AdditionalDefs)
             {
-                sb.Append($@" {AddDefParam}""{def}""");
+                _ = sb.Append($@" {AddDefParam}""{def}""");
             }
         }
 
@@ -158,19 +158,19 @@ public class EDuke32 : BasePort
     /// </summary>
     /// <param name="sb">StringBuilder</param>
     /// <param name="game">DukeGame</param>
-    /// <param name="camp">DukeCampaign</param>
+    /// <param name="addon">DukeCampaign</param>
     protected void GetDukeArgs(StringBuilder sb, DukeGame game, IAddon addon)
     {
         if (addon.SupportedGame.GameEnum is GameEnum.Duke64)
         {
-            sb.Append(@$" {AddDirectoryParam}""{Path.GetDirectoryName(game.Duke64RomPath)}"" -gamegrp ""{Path.GetFileName(game.Duke64RomPath)}""");
+            _ = sb.Append(@$" {AddDirectoryParam}""{Path.GetDirectoryName(game.Duke64RomPath)}"" -gamegrp ""{Path.GetFileName(game.Duke64RomPath)}""");
             return;
         }
 
         if (addon.SupportedGame.GameVersion is not null &&
             addon.SupportedGame.GameVersion.Equals(nameof(DukeVersionEnum.Duke3D_WT), StringComparison.InvariantCultureIgnoreCase))
         {
-            sb.Append($@" {AddDirectoryParam}""{game.DukeWTInstallPath}"" -addon {(byte)DukeAddonEnum.Base} {AddDirectoryParam}""{Path.Combine(game.SpecialFolderPath, Consts.WTStopgap)}"" -gamegrp e32wt.grp");
+            _ = sb.Append($@" {AddDirectoryParam}""{game.DukeWTInstallPath}"" -addon {(byte)DukeAddonEnum.Base} {AddDirectoryParam}""{Path.Combine(game.SpecialFolderPath, Consts.WTStopgap)}"" -gamegrp e32wt.grp");
         }
         else
         {
@@ -193,14 +193,14 @@ public class EDuke32 : BasePort
                 dukeAddon = (byte)DukeAddonEnum.DukeVaca;
             }
 
-            sb.Append($@" {AddDirectoryParam}""{game.GameInstallFolder}""");
+            _ = sb.Append($@" {AddDirectoryParam}""{game.GameInstallFolder}""");
 
             if (Directory.Exists(Path.Combine(game.GameInstallFolder!, "AddOns")))
             {
-                sb.Append($@" {AddDirectoryParam}""{Path.Combine(game.GameInstallFolder!, "AddOns")}""");
+                _ = sb.Append($@" {AddDirectoryParam}""{Path.Combine(game.GameInstallFolder!, "AddOns")}""");
             }
 
-            sb.Append($" -addon {dukeAddon}");
+            _ = sb.Append($" -addon {dukeAddon}");
         }
 
 
@@ -224,21 +224,21 @@ public class EDuke32 : BasePort
 
         if (dCamp.MainCon is not null)
         {
-            sb.Append($@" {MainConParam}""{dCamp.MainCon}""");
+            _ = sb.Append($@" {MainConParam}""{dCamp.MainCon}""");
         }
 
         if (dCamp.AdditionalCons?.Count > 0)
         {
             foreach (var con in dCamp.AdditionalCons)
             {
-                sb.Append($@" {AddConParam}""{con}""");
+                _ = sb.Append($@" {AddConParam}""{con}""");
             }
         }
 
 
         if (dCamp.Type is AddonTypeEnum.TC)
         {
-            sb.Append($@" {AddFileParam}""{Path.Combine(game.CampaignsFolderPath, dCamp.FileName)}""");
+            _ = sb.Append($@" {AddFileParam}""{Path.Combine(game.CampaignsFolderPath, dCamp.FileName!)}""");
         }
         else if (dCamp.Type is AddonTypeEnum.Map)
         {
@@ -260,7 +260,7 @@ public class EDuke32 : BasePort
             return;
         }
 
-        sb.Append($@" {AddDirectoryParam}""{game.ModsFolderPath}""");
+        _ = sb.Append($@" {AddDirectoryParam}""{game.ModsFolderPath}""");
 
         foreach (var mod in mods)
         {
@@ -274,13 +274,13 @@ public class EDuke32 : BasePort
                 continue;
             }
 
-            sb.Append($@" {AddFileParam}""{aMod.FileName}""");
+            _ = sb.Append($@" {AddFileParam}""{aMod.FileName}""");
 
             if (aMod.AdditionalDefs is not null)
             {
                 foreach (var def in aMod.AdditionalDefs)
                 {
-                    sb.Append($@" {AddDefParam}""{def}""");
+                    _ = sb.Append($@" {AddDefParam}""{def}""");
                 }
             }
 
@@ -288,7 +288,7 @@ public class EDuke32 : BasePort
             {
                 foreach (var con in aMod.AdditionalCons)
                 {
-                    sb.Append($@" {AddConParam}""{con}""");
+                    _ = sb.Append($@" {AddConParam}""{con}""");
                 }
             }
         }

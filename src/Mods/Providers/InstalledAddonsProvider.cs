@@ -43,7 +43,7 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
     /// <inheritdoc/>
     public async Task CreateCache(bool createNew)
     {
-        await _semaphore.WaitAsync();
+        await _semaphore.WaitAsync().ConfigureAwait(false);
         _isCacheUpdating = true;
 
         if (createNew)
@@ -70,17 +70,17 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
                     }
                 }
 
-                var camps = await GetAddonsFromFilesAsync(AddonTypeEnum.TC, files);
+                var camps = await GetAddonsFromFilesAsync(AddonTypeEnum.TC, files).ConfigureAwait(false);
                 _cache.Add(AddonTypeEnum.TC, camps);
 
                 //maps
                 files = Directory.GetFiles(_game.MapsFolderPath).Where(static x => x.EndsWith(".zip", StringComparison.OrdinalIgnoreCase) || x.EndsWith(".map", StringComparison.OrdinalIgnoreCase));
-                var maps = await GetAddonsFromFilesAsync(AddonTypeEnum.Map, files);
+                var maps = await GetAddonsFromFilesAsync(AddonTypeEnum.Map, files).ConfigureAwait(false);
                 _cache.Add(AddonTypeEnum.Map, maps);
 
                 //mods
                 files = Directory.GetFiles(_game.ModsFolderPath, "*.zip");
-                var mods = await GetAddonsFromFilesAsync(AddonTypeEnum.Mod, files);
+                var mods = await GetAddonsFromFilesAsync(AddonTypeEnum.Mod, files).ConfigureAwait(false);
                 _cache.Add(AddonTypeEnum.Mod, mods);
             }).WaitAsync(CancellationToken.None).ConfigureAwait(false);
         }
@@ -97,7 +97,7 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
     {
         _cache.ThrowIfNull();
 
-        var addon = await GetAddonFromFileAsync(addonType, pathToFile);
+        var addon = await GetAddonFromFileAsync(addonType, pathToFile).ConfigureAwait(false);
 
         addon.ThrowIfNull();
 
@@ -248,7 +248,7 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
         {
             try
             {
-                var newAddon = await GetAddonFromFileAsync(addonType, file);
+                var newAddon = await GetAddonFromFileAsync(addonType, file).ConfigureAwait(false);
 
                 if (newAddon is null)
                 {
@@ -323,7 +323,7 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
         Dictionary<string, string?>? incompatibles = null;
         IStartMap? startMap = null;
 
-        bool isUnpacked = false;
+        var isUnpacked = false;
 
         Addon? addon;
 
@@ -395,12 +395,12 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
 
                 if (gridFile.Length > 0)
                 {
-                    var stream = await File.ReadAllBytesAsync(gridFile[0]);
+                    var stream = await File.ReadAllBytesAsync(gridFile[0]).ConfigureAwait(false);
                     image = new MemoryStream(stream);
                 }
                 if (previewFile.Length > 0)
                 {
-                    var stream = await File.ReadAllBytesAsync(previewFile[0]);
+                    var stream = await File.ReadAllBytesAsync(previewFile[0]).ConfigureAwait(false);
                     preview = new MemoryStream(stream);
                 }
 

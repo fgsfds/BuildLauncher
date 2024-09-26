@@ -141,7 +141,7 @@ public sealed class Raze : BasePort
             File.WriteAllText(config, DefaultConfig);
         }
 
-        AddGamePathsToConfig(game.GameInstallFolder, game.ModsFolderPath, config, campaign);
+        AddGamePathsToConfig(game.GameInstallFolder!, game.ModsFolderPath, config, campaign);
 
         FixRoute66Files(game, campaign);
     }
@@ -214,7 +214,7 @@ public sealed class Raze : BasePort
         {
             var config = Path.Combine(PathToExecutableFolder, ConfigFile);
 
-            AddGamePathsToConfig(game.DukeWTInstallPath, game.ModsFolderPath, config, addon);
+            AddGamePathsToConfig(game.DukeWTInstallPath!, game.ModsFolderPath, config, addon);
 
             _ = sb.Append($" -addon {(byte)DukeAddonEnum.Base}");
         }
@@ -349,8 +349,8 @@ public sealed class Raze : BasePort
 
         if (rCamp.Id.Equals(nameof(GameEnum.RidesAgain), StringComparison.OrdinalIgnoreCase))
         {
-            var config = Path.Combine(PathToExecutableFolder, ConfigFile);
-            AddGamePathsToConfig(game.AgainInstallPath, game.ModsFolderPath, config, addon);
+            var pathToConfig = Path.Combine(PathToExecutableFolder, ConfigFile);
+            AddGamePathsToConfig(game.AgainInstallPath!, game.ModsFolderPath, pathToConfig, addon);
         }
 
 

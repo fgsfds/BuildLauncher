@@ -111,7 +111,7 @@ public sealed partial class ToolViewModel : ObservableObject
     /// </summary>
     public async Task InitializeAsync()
     {
-        _release = await _toolsReleasesProvider.GetLatestReleaseAsync(_tool);
+        _release = await _toolsReleasesProvider.GetLatestReleaseAsync(_tool).ConfigureAwait(true);
 
         OnPropertyChanged(nameof(LatestVersion));
         OnPropertyChanged(nameof(InstallButtonText));
@@ -130,7 +130,7 @@ public sealed partial class ToolViewModel : ObservableObject
         ProgressBarValue = 0;
         OnPropertyChanged(nameof(ProgressBarValue));
 
-        await installer.InstallAsync(_tool);
+        await installer.InstallAsync(_tool).ConfigureAwait(true);
 
         installer.Progress.ProgressChanged -= OnProgressChanged;
         ProgressBarValue = 0;
@@ -151,7 +151,7 @@ public sealed partial class ToolViewModel : ObservableObject
     {
         IsInProgress = true;
 
-        _release = await _toolsReleasesProvider.GetLatestReleaseAsync(_tool);
+        _release = await _toolsReleasesProvider.GetLatestReleaseAsync(_tool).ConfigureAwait(true);
 
         OnPropertyChanged(nameof(LatestVersion));
         OnPropertyChanged(nameof(InstallButtonText));
@@ -169,7 +169,7 @@ public sealed partial class ToolViewModel : ObservableObject
     {
         var args = _tool.GetStartToolArgs();
 
-        Process.Start(new ProcessStartInfo
+        _ = Process.Start(new ProcessStartInfo
         {
             FileName = _tool.FullPathToExe,
             UseShellExecute = true,

@@ -64,23 +64,23 @@ public sealed class RedNukem : EDuke32
     protected override void GetStartCampaignArgs(StringBuilder sb, IGame game, IAddon addon)
     {
         //don't search for steam/gog installs
-        sb.Append(" -usecwd");
+        _ = sb.Append(" -usecwd");
 
         if (addon.MainDef is not null)
         {
-            sb.Append($@" {MainDefParam}""{addon.MainDef}""");
+            _ = sb.Append($@" {MainDefParam}""{addon.MainDef}""");
         }
         else
         {
             //overriding default def so gamename.def files are ignored
-            sb.Append($@" {MainDefParam}""a""");
+            _ = sb.Append($@" {MainDefParam}""a""");
         }
 
         if (addon.AdditionalDefs is not null)
         {
             foreach (var def in addon.AdditionalDefs)
             {
-                sb.Append($@" {AddDefParam}""{def}""");
+                _ = sb.Append($@" {AddDefParam}""{def}""");
             }
         }
 
@@ -105,21 +105,21 @@ public sealed class RedNukem : EDuke32
     /// </summary>
     /// <param name="sb">StringBuilder</param>
     /// <param name="game">RedneckGame</param>
-    /// <param name="camp">RedneckCampaign</param>
+    /// <param name="addon">RedneckCampaign</param>
     private void GetRedneckArgs(StringBuilder sb, RedneckGame game, IAddon addon)
     {
         if (addon.SupportedGame.GameEnum is GameEnum.RidesAgain)
         {
-            sb.Append($@" {AddDirectoryParam}""{game.AgainInstallPath}""");
+            _ = sb.Append($@" {AddDirectoryParam}""{game.AgainInstallPath}""");
         }
         else if (addon.DependentAddons is not null &&
                  addon.DependentAddons.ContainsKey(nameof(RedneckAddonEnum.Route66)))
         {
-            sb.Append($@" {AddDirectoryParam}""{game.GameInstallFolder}"" -x GAME66.CON");
+            _ = sb.Append($@" {AddDirectoryParam}""{game.GameInstallFolder}"" -x GAME66.CON");
         }
         else
         {
-            sb.Append($@" {AddDirectoryParam}""{game.GameInstallFolder}""");
+            _ = sb.Append($@" {AddDirectoryParam}""{game.GameInstallFolder}""");
         }
 
 
@@ -143,21 +143,21 @@ public sealed class RedNukem : EDuke32
 
         if (rCamp.MainCon is not null)
         {
-            sb.Append($@" {MainConParam}""{rCamp.MainCon}""");
+            _ = sb.Append($@" {MainConParam}""{rCamp.MainCon}""");
         }
 
         if (rCamp.AdditionalCons?.Count > 0)
         {
             foreach (var con in rCamp.AdditionalCons)
             {
-                sb.Append($@" {AddConParam}""{con}""");
+                _ = sb.Append($@" {AddConParam}""{con}""");
             }
         }
 
 
         if (rCamp.Type is AddonTypeEnum.TC)
         {
-            sb.Append($@" {AddFileParam}""{Path.Combine(game.CampaignsFolderPath, rCamp.FileName)}""");
+            _ = sb.Append($@" {AddFileParam}""{Path.Combine(game.CampaignsFolderPath, rCamp.FileName!)}""");
         }
         else if (rCamp.Type is AddonTypeEnum.Map)
         {
@@ -177,7 +177,7 @@ public sealed class RedNukem : EDuke32
     [Obsolete("Remove if RedNukem can ever properly launch R66")]
     private static void FixRoute66Files(IGame game, IAddon campaign)
     {
-        if (game is not RedneckGame rGame || !rGame.IsRoute66Installed)
+        if (game is not RedneckGame rGame || !rGame.IsRoute66Installed || game.GameInstallFolder is null)
         {
             return;
         }

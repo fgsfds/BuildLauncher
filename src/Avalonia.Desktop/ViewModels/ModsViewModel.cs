@@ -1,5 +1,3 @@
-using Common.Client.API;
-using Common.Client.Config;
 using Common.Client.Providers;
 using Common.Enums;
 using Common.Helpers;
@@ -54,7 +52,7 @@ public sealed partial class ModsViewModel : RightPanelViewModel, IPortsButtonCon
     /// </summary>
     private async Task UpdateAsync(bool createNew)
     {
-        await _installedAddonsProvider.CreateCache(createNew);
+        await _installedAddonsProvider.CreateCache(createNew).ConfigureAwait(true);
 
         OnPropertyChanged(nameof(ModsList));
     }
@@ -98,7 +96,7 @@ public sealed partial class ModsViewModel : RightPanelViewModel, IPortsButtonCon
     [RelayCommand]
     private void OpenFolder()
     {
-        Process.Start(new ProcessStartInfo
+        _ = Process.Start(new ProcessStartInfo
         {
             FileName = Game.ModsFolderPath,
             UseShellExecute = true,
@@ -112,7 +110,7 @@ public sealed partial class ModsViewModel : RightPanelViewModel, IPortsButtonCon
     [RelayCommand]
     private async Task RefreshListAsync()
     {
-        await UpdateAsync(true);
+        await UpdateAsync(true).ConfigureAwait(true);
     }
 
 

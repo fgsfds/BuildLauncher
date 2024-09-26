@@ -9,7 +9,7 @@ using Ports.Ports.EDuke32;
 namespace Tests.CmdArguments;
 
 [Collection("Sync")]
-public class FuryCmdArgumentsTests
+public sealed class FuryCmdArgumentsTests
 {
     private readonly FuryGame _dukeGame;
     private readonly FuryCampaign _dukeCamp;

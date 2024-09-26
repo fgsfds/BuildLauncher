@@ -5,7 +5,7 @@ using System.Text.Json;
 
 namespace Tests;
 
-public class SerializerTests
+public sealed class SerializerTests
 {
     private const string AddonJson =
 """
@@ -135,7 +135,7 @@ public class SerializerTests
         Assert.Equal("MAIN.RFF", result.MainRff);
         Assert.Equal("SOUND.RFF", result.SoundRff);
 
-        Assert.Equal("TEST.MAP", ((MapFileDto)result.StartMap).File);
+        Assert.Equal("TEST.MAP", ((MapFileDto)result.StartMap!).File);
 
         Assert.Equal("Addon description", result.Description);
     }
@@ -163,7 +163,7 @@ public class SerializerTests
         var result = JsonSerializer.Deserialize(SlotMapJson, AddonManifestContext.Default.AddonDto);
 
         Assert.NotNull(result);
-        Assert.IsType<MapSlotDto>(result.StartMap);
+        _ = Assert.IsType<MapSlotDto>(result.StartMap);
 
         Assert.Equal(1, ((MapSlotDto)result.StartMap).Episode);
         Assert.Equal(2, ((MapSlotDto)result.StartMap).Level);

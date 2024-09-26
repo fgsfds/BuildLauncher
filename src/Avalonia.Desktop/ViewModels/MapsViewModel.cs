@@ -59,7 +59,7 @@ public sealed partial class MapsViewModel : RightPanelViewModel, IPortsButtonCon
     /// </summary>
     private async Task UpdateAsync(bool createNew)
     {
-        await _installedAddonsProvider.CreateCache(createNew);
+        await _installedAddonsProvider.CreateCache(createNew).ConfigureAwait(true);
 
         OnPropertyChanged(nameof(MapsList));
     }
@@ -135,7 +135,7 @@ public sealed partial class MapsViewModel : RightPanelViewModel, IPortsButtonCon
 
         var args = parameter.Item1.GetStartGameArgs(Game, SelectedAddon, mods, _config.SkipIntro, _config.SkipStartup, parameter.Item2);
 
-        await StartPortAsync(SelectedAddon.Id, parameter.Item1.FullPathToExe, args);
+        await StartPortAsync(SelectedAddon.Id, parameter.Item1.FullPathToExe, args).ConfigureAwait(true);
     }
 
 
@@ -145,7 +145,7 @@ public sealed partial class MapsViewModel : RightPanelViewModel, IPortsButtonCon
     [RelayCommand]
     private void OpenFolder()
     {
-        Process.Start(new ProcessStartInfo
+        _ = Process.Start(new ProcessStartInfo
         {
             FileName = Game.MapsFolderPath,
             UseShellExecute = true,
@@ -159,7 +159,7 @@ public sealed partial class MapsViewModel : RightPanelViewModel, IPortsButtonCon
     [RelayCommand]
     private async Task RefreshListAsync()
     {
-        await UpdateAsync(true);
+        await UpdateAsync(true).ConfigureAwait(true);
     }
 
 
@@ -190,6 +190,7 @@ public sealed partial class MapsViewModel : RightPanelViewModel, IPortsButtonCon
     /// <summary>
     /// Start port with command line args
     /// </summary>
+    /// <param name="id">Map id</param>
     /// <param name="exe">Path to port exe</param>
     /// <param name="args">Command line arguments</param>
     private async Task StartPortAsync(string id, string exe, string args)
@@ -202,7 +203,7 @@ public sealed partial class MapsViewModel : RightPanelViewModel, IPortsButtonCon
             UseShellExecute = true,
             Arguments = args,
             WorkingDirectory = Path.GetDirectoryName(exe)
-        })!.WaitForExitAsync();
+        })!.WaitForExitAsync().ConfigureAwait(true);
 
         sw.Stop();
         var time = sw.Elapsed;

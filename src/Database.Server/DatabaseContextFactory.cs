@@ -1,6 +1,6 @@
 ﻿namespace Database.Server;
 
-public class DatabaseContextFactory
+public sealed class DatabaseContextFactory
 {
     private readonly bool _isDevMode;
 

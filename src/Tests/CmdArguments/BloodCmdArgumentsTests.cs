@@ -10,7 +10,7 @@ using Ports.Ports.EDuke32;
 namespace Tests.CmdArguments;
 
 [Collection("Sync")]
-public class BloodCmdArgumentsTests
+public sealed class BloodCmdArgumentsTests
 {
     private readonly BloodGame _bloodGame;
     private readonly BloodCampaign _bloodCamp;

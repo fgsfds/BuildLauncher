@@ -37,7 +37,7 @@ public sealed class ToolsInstaller
     {
         var release = await _toolsReleasesProvider.GetLatestReleaseAsync(port).ConfigureAwait(false);
 
-        if (release is null)
+        if (release?.WindowsDownloadUrl is null)
         {
             return;
         }

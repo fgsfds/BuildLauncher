@@ -47,7 +47,7 @@ public sealed partial class AboutViewModel(AppUpdateInstaller updateInstaller) :
     [RelayCommand(CanExecute = (nameof(CheckForUpdatesCanExecute)))]
     private async Task CheckForUpdatesAsync()
     {
-        await CheckForUpdateAsync();
+        await CheckForUpdateAsync().ConfigureAwait(true);
     }
 
     private bool CheckForUpdatesCanExecute() => IsInProgress is false;
@@ -91,7 +91,7 @@ public sealed partial class AboutViewModel(AppUpdateInstaller updateInstaller) :
         try
         {
             CheckForUpdatesButtonText = "Checking...";
-            updates = await _updateInstaller.CheckForUpdates(CurrentVersion);
+            updates = await _updateInstaller.CheckForUpdates(CurrentVersion).ConfigureAwait(true);
         }
         catch
         {

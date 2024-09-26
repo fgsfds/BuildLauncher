@@ -6,7 +6,7 @@ using Web.Blazor.Tasks;
 
 namespace Web.Blazor;
 
-public class Program
+public sealed class Program
 {
     public static void Main(string[] args)
     {

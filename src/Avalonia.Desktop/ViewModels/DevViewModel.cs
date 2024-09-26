@@ -15,7 +15,6 @@ using Mods.Serializable.Addon;
 using SharpCompress.Archives;
 using SharpCompress.Archives.Zip;
 using SharpCompress.Common;
-using System;
 using System.Collections.Immutable;
 using System.Text;
 using System.Text.Json;
@@ -364,7 +363,7 @@ public sealed partial class DevViewModel : ObservableObject
             return;
         }
 
-        var result = await _filesUploader.AddAddonToDatabaseAsync(files[0].Path.LocalPath);
+        var result = await _filesUploader.AddAddonToDatabaseAsync(files[0].Path.LocalPath).ConfigureAwait(true);
 
         if (result)
         {
@@ -800,7 +799,7 @@ public sealed partial class DevViewModel : ObservableObject
             return;
         }
 
-        var uploadResult = await _filesUploader.UploadFilesToFtpAsync(files[0].Path.LocalPath, CancellationToken.None);
+        var uploadResult = await _filesUploader.UploadFilesToFtpAsync(files[0].Path.LocalPath, CancellationToken.None).ConfigureAwait(true);
 
         if (uploadResult)
         {

@@ -37,7 +37,7 @@ public sealed class PortsInstaller
     {
         var release = await _portsReleasesProvider.GetLatestReleaseAsync(port.PortEnum).ConfigureAwait(false);
 
-        if (release is null || release.WindowsDownloadUrl is null)
+        if (release?.WindowsDownloadUrl is null)
         {
             return;
         }
