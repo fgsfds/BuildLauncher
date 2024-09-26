@@ -24,6 +24,9 @@ public sealed class RedNukem : EDuke32
     public override string Name => "RedNukem";
 
     /// <inheritdoc/>
+    protected override string AddGrpParam => "-g ";
+
+    /// <inheritdoc/>
     public override List<GameEnum> SupportedGames =>
         [
         GameEnum.Duke3D,

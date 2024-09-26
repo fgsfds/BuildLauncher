@@ -38,17 +38,17 @@ public sealed class DukeGame : BaseGame
     /// <summary>
     /// Is Duke it Out in DC installed
     /// </summary>
-    public bool IsDukeDCInstalled => IsInstalled("DUKEDC.GRP");
+    public bool IsDukeDCInstalled => GetDukeAddon(DukeAddonEnum.DukeDC);
 
     /// <summary>
     /// Is Nuclear Winter installed
     /// </summary>
-    public bool IsNuclearWinterInstalled => IsInstalled("NWINTER.GRP");
+    public bool IsNuclearWinterInstalled => GetDukeAddon(DukeAddonEnum.DukeNW);
 
     /// <summary>
     /// Is Caribbean installed
     /// </summary>
-    public bool IsCaribbeanInstalled => IsInstalled("VACATION.GRP");
+    public bool IsCaribbeanInstalled => GetDukeAddon(DukeAddonEnum.DukeVaca);
 
     /// <summary>
     /// Is World Tour installed
@@ -59,6 +59,11 @@ public sealed class DukeGame : BaseGame
     /// Is Duke 64 installed
     /// </summary>
     public bool IsDuke64Installed => File.Exists(Duke64RomPath);
+
+    /// <summary>
+    /// List of paths to Duke's addons folders
+    /// </summary>
+    public Dictionary<DukeAddonEnum, string> AddonsPaths { get; set; } = [];
 
 
     public DukeGame() : base()
@@ -302,5 +307,70 @@ public sealed class DukeGame : BaseGame
         using var archive = ZipArchive.Open(stream);
 
         archive.ExtractToDirectory(stopgapFolder);
+    }
+
+
+    /// <summary>
+    /// Find Duke's addon files
+    /// </summary>
+    /// <param name="addon">Duke addon</param>
+    private bool GetDukeAddon(DukeAddonEnum addon)
+    {
+        if (GameInstallFolder is null)
+        {
+            return false;
+        }
+
+        var file = addon switch
+        {
+            DukeAddonEnum.DukeDC => "DUKEDC.GRP",
+            DukeAddonEnum.DukeNW => "NWINTER.GRP",
+            DukeAddonEnum.DukeVaca => "VACATION.GRP",
+            DukeAddonEnum.Base => throw new NotImplementedException(),
+            _ => throw new NotImplementedException(),
+        };
+
+        //root
+        var path = Path.Combine(GameInstallFolder, file);
+        if (File.Exists(path))
+        {
+            AddonsPaths.AddOrReplace(addon, Path.GetDirectoryName(path));
+            return true;
+        }
+
+        //zoom
+        path = Path.Combine(GameInstallFolder, "AddOns", file);
+        if (File.Exists(path))
+        {
+            AddonsPaths.AddOrReplace(addon, Path.GetDirectoryName(path));
+            return true;
+        }
+
+        //megaton
+        path = Path.Combine(GameInstallFolder, "addons", "dc", file);
+        if (File.Exists(path))
+        {
+            AddonsPaths.AddOrReplace(addon, Path.GetDirectoryName(path));
+            return true;
+        }
+
+        //megaton
+        path = Path.Combine(GameInstallFolder, "addons", "nw", file);
+        if (File.Exists(path))
+        {
+            AddonsPaths.AddOrReplace(addon, Path.GetDirectoryName(path));
+            return true;
+        }
+
+        //megaton
+        path = Path.Combine(GameInstallFolder, "addons", "vacation", file);
+        if (File.Exists(path))
+        {
+            AddonsPaths.AddOrReplace(addon, Path.GetDirectoryName(path));
+            return true;
+        }
+
+        _ = AddonsPaths.Remove(addon);
+        return false;
     }
 }

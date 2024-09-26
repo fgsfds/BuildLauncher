@@ -141,7 +141,7 @@ public sealed class Raze : BasePort
             File.WriteAllText(config, DefaultConfig);
         }
 
-        AddGamePathsToConfig(game.GameInstallFolder!, game.ModsFolderPath, config, campaign);
+        AddGamePathsToConfig(game, campaign, game.GameInstallFolder!, config);
 
         FixRoute66Files(game, campaign);
     }
@@ -214,7 +214,7 @@ public sealed class Raze : BasePort
         {
             var config = Path.Combine(PathToExecutableFolder, ConfigFile);
 
-            AddGamePathsToConfig(game.DukeWTInstallPath!, game.ModsFolderPath, config, addon);
+            AddGamePathsToConfig(game, addon, game.DukeWTInstallPath!, config);
 
             _ = sb.Append($" -addon {(byte)DukeAddonEnum.Base}");
         }
@@ -350,7 +350,7 @@ public sealed class Raze : BasePort
         if (rCamp.Id.Equals(nameof(GameEnum.RidesAgain), StringComparison.OrdinalIgnoreCase))
         {
             var pathToConfig = Path.Combine(PathToExecutableFolder, ConfigFile);
-            AddGamePathsToConfig(game.AgainInstallPath!, game.ModsFolderPath, pathToConfig, addon);
+            AddGamePathsToConfig(game, addon, game.AgainInstallPath!, pathToConfig);
         }
 
 
@@ -480,8 +480,7 @@ public sealed class Raze : BasePort
     /// <summary>
     /// Add paths to game and mods folder to the config
     /// </summary>
-    [Obsolete("Remove if this ever implemented https://github.com/ZDoom/Raze/issues/1060")]
-    private static void AddGamePathsToConfig(string gameFolder, string modsFolder, string config, IAddon campaign)
+    private static void AddGamePathsToConfig(IGame game, IAddon campaign, string gameInstallFolder, string config)
     {
         var contents = File.ReadAllLines(config);
 
@@ -493,12 +492,18 @@ public sealed class Raze : BasePort
             {
                 _ = sb.AppendLine(contents[i]);
 
-                var path = gameFolder.Replace('\\', '/');
+                //game folder
+                var path = gameInstallFolder.Replace('\\', '/');
                 _ = sb.Append("Path=").AppendLine(path);
 
-                if (Directory.Exists(Path.Combine(gameFolder, "addons")))
+                //duke addons folders
+                if (game is DukeGame dGame)
                 {
-                    _ = sb.Append("Path=").AppendLine(path + "/addons");
+                    foreach (var folder in dGame.AddonsPaths)
+                    {
+                        path = folder.Value.Replace('\\', '/');
+                        _ = sb.Append("Path=").AppendLine(path);
+                    }
                 }
 
                 do
@@ -515,17 +520,11 @@ public sealed class Raze : BasePort
             {
                 _ = sb.AppendLine(contents[i]);
 
-                var path = gameFolder.Replace('\\', '/');
+                //mods folder
+                var path = game.ModsFolderPath.Replace('\\', '/');
                 _ = sb.Append("Path=").AppendLine(path);
 
-                if (Directory.Exists(Path.Combine(gameFolder, "addons")))
-                {
-                    _ = sb.Append("Path=").AppendLine(path + "/addons");
-                }
-
-                path = modsFolder.Replace('\\', '/');
-                _ = sb.Append("Path=").AppendLine(path);
-
+                //blood unpacked addons
                 if (campaign is BloodCampaign bCamp &&
                     bCamp.IsUnpacked)
                 {

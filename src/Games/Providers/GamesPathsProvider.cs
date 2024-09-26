@@ -54,7 +54,7 @@ public sealed class GamesPathsProvider
             }
 
             //Megaton
-            pathToGame = Path.Combine(lib, "Duke Nukem 3D", "gameroot", "classic");
+            pathToGame = Path.Combine(lib, "Duke Nukem 3D", "gameroot");
             if (Directory.Exists(pathToGame))
             {
                 _dukePath ??= pathToGame;

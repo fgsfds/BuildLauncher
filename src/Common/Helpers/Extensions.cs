@@ -43,11 +43,11 @@ public static class Extensions
         {
             if (time.TotalSeconds > 2)
             {
-                sb.Append($" {time.Seconds} seconds");
+                _ = sb.Append($" {time.Seconds} seconds");
             }
             else if (time.TotalSeconds >= 1)
             {
-                sb.Append($" {time.Seconds} second");
+                _ = sb.Append($" {time.Seconds} second");
             }
 
             return sb.ToString();
@@ -56,22 +56,40 @@ public static class Extensions
 
         if (time.TotalHours >= 2)
         {
-            sb.Append($" {(int)time.TotalHours} hours");
+            _ = sb.Append($" {(int)time.TotalHours} hours");
         }
         else if (time.TotalHours >= 1)
         {
-            sb.Append($" {(int)time.TotalHours} hour");
+            _ = sb.Append($" {(int)time.TotalHours} hour");
         }
 
         if (time.Minutes >= 2)
         {
-            sb.Append($" {time.Minutes} minutes");
+            _ = sb.Append($" {time.Minutes} minutes");
         }
         else if (time.Minutes >= 1)
         {
-            sb.Append($" {time.Minutes} minute");
+            _ = sb.Append($" {time.Minutes} minute");
         }
 
         return sb.Replace("  ", " ").ToString();
+    }
+
+    /// <summary>
+    /// Add new element or replace value of and existing element
+    /// </summary>
+    /// <param name="dict">Dictionary</param>
+    /// <param name="key">Key</param>
+    /// <param name="value">Value</param>
+    public static void AddOrReplace<TKey, TValue>(this IDictionary<TKey, TValue> dict, TKey key, TValue value)
+    {
+        if (dict.ContainsKey(key))
+        {
+            dict[key] = value;
+        }
+        else
+        {
+            dict.Add(key, value);
+        }
     }
 }

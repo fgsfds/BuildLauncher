@@ -94,25 +94,4 @@ public abstract class BaseGame : IGame
 
         return true;
     }
-
-
-    /// <summary>
-    /// Does the file exist in the game install folder
-    /// </summary>
-    /// <param name="file">File</param>
-    protected bool IsInstalled(string file)
-    {
-        if (GameInstallFolder is null)
-        {
-            return false;
-        }
-
-        if (!File.Exists(Path.Combine(GameInstallFolder, file)) &&
-            !File.Exists(Path.Combine(GameInstallFolder, "addons", file)))
-        {
-            return false;
-        }
-
-        return true;
-    }
 }

@@ -174,33 +174,57 @@ public class EDuke32 : BasePort
         }
         else
         {
-            var dukeAddon = (byte)DukeAddonEnum.Base;
-
-            if (addon.DependentAddons is null)
-            {
-                dukeAddon = (byte)DukeAddonEnum.Base;
-            }
-            else if (addon.DependentAddons.ContainsKey(nameof(DukeAddonEnum.DukeDC)))
-            {
-                dukeAddon = (byte)DukeAddonEnum.DukeDC;
-            }
-            else if (addon.DependentAddons.ContainsKey(nameof(DukeAddonEnum.DukeNW)))
-            {
-                dukeAddon = (byte)DukeAddonEnum.DukeNW;
-            }
-            else if (addon.DependentAddons.ContainsKey(nameof(DukeAddonEnum.DukeVaca)))
-            {
-                dukeAddon = (byte)DukeAddonEnum.DukeVaca;
-            }
-
             _ = sb.Append($@" {AddDirectoryParam}""{game.GameInstallFolder}""");
 
-            if (Directory.Exists(Path.Combine(game.GameInstallFolder!, "AddOns")))
+            if (addon.DependentAddons is not null)
             {
-                _ = sb.Append($@" {AddDirectoryParam}""{Path.Combine(game.GameInstallFolder!, "AddOns")}""");
-            }
+                //DUKE IT OUT IN DC
+                if (addon.DependentAddons.ContainsKey(nameof(DukeAddonEnum.DukeDC)))
+                {
+                    var addonPath = game.AddonsPaths[DukeAddonEnum.DukeDC];
 
-            _ = sb.Append($" -addon {dukeAddon}");
+                    if (!addonPath.Equals(game.GameInstallFolder))
+                    {
+                        _ = sb.Append($@" {AddDirectoryParam}""{addonPath}""");
+                    }
+
+                    _ = sb.Append($@" {AddGrpParam}DUKEDC.GRP");
+
+                    if (File.Exists(Path.Combine(addonPath, "DUKEDC.CON")))
+                    {
+                        _ = sb.Append($@" {MainConParam}DUKEDC.CON");
+                    }
+                }
+                //NUCLEAR WINTER
+                else if (addon.DependentAddons.ContainsKey(nameof(DukeAddonEnum.DukeNW)))
+                {
+                    var addonPath = game.AddonsPaths[DukeAddonEnum.DukeNW];
+
+                    if (!addonPath.Equals(game.GameInstallFolder))
+                    {
+                        _ = sb.Append($@" {AddDirectoryParam}""{addonPath}""");
+                    }
+
+                    _ = sb.Append($@" {AddGrpParam}NWINTER.GRP {MainConParam}NWINTER.CON");
+                }
+                //CARIBBEAN
+                else if (addon.DependentAddons.ContainsKey(nameof(DukeAddonEnum.DukeVaca)))
+                {
+                    var addonPath = game.AddonsPaths[DukeAddonEnum.DukeVaca];
+
+                    if (!addonPath.Equals(game.GameInstallFolder))
+                    {
+                        _ = sb.Append($@" {AddDirectoryParam}""{addonPath}""");
+                    }
+
+                    _ = sb.Append($@" {AddGrpParam}VACATION.GRP");
+
+                    if (File.Exists(Path.Combine(addonPath, "VACATION.CON")))
+                    {
+                        _ = sb.Append($@" {MainConParam}VACATION.CON");
+                    }
+                }
+            }
         }
 
 
@@ -260,7 +284,7 @@ public class EDuke32 : BasePort
             return;
         }
 
-        _ = sb.Append($@" {AddDirectoryParam}""{game.ModsFolderPath}""");
+        var enabledModsCount = 0;
 
         foreach (var mod in mods)
         {
@@ -291,6 +315,13 @@ public class EDuke32 : BasePort
                     _ = sb.Append($@" {AddConParam}""{con}""");
                 }
             }
+
+            enabledModsCount++;
+        }
+
+        if (enabledModsCount > 0)
+        {
+            _ = sb.Append($@" {AddDirectoryParam}""{game.ModsFolderPath}""");
         }
     }
 

@@ -139,7 +139,6 @@ public sealed class BloodCmdArgumentsTests
             Path=D:/Games/Blood
 
             [FileSearch.Directories]
-            Path=D:/Games/Blood
             Path={Directory.GetCurrentDirectory()}/Data/Blood/Mods
 
             [SoundfontSearch.Directories]
@@ -184,7 +183,6 @@ public sealed class BloodCmdArgumentsTests
             Path=D:/Games/Blood
 
             [FileSearch.Directories]
-            Path=D:/Games/Blood
             Path={Directory.GetCurrentDirectory()}/Data/Blood/Mods
 
             [SoundfontSearch.Directories]
@@ -214,7 +212,6 @@ public sealed class BloodCmdArgumentsTests
             Path=D:/Games/Blood
 
             [FileSearch.Directories]
-            Path=D:/Games/Blood
             Path={Directory.GetCurrentDirectory()}/Data/Blood/Mods
 
             [SoundfontSearch.Directories]
@@ -242,7 +239,7 @@ public sealed class BloodCmdArgumentsTests
         NBlood nblood = new();
 
         var args = nblood.GetStartGameArgs(_bloodGame, _bloodCamp, mods, true, true, 2);
-        var expected = @$" -quick -nosetup -j ""{Directory.GetCurrentDirectory()}\Data\Blood\Mods"" -g ""enabled_mod.zip"" -mh ""ENABLED1.DEF"" -mh ""ENABLED2.DEF"" -g ""mod_incompatible_with_addon.zip"" -g ""incompatible_mod_with_compatible_version.zip"" -g ""dependant_mod.zip"" -g ""dependant_mod_with_compatible_version.zip"" -g ""feature_mod.zip"" -usecwd -j ""D:\Games\Blood"" -h ""a"" -s 2";
+        var expected = @$" -quick -nosetup -g ""enabled_mod.zip"" -mh ""ENABLED1.DEF"" -mh ""ENABLED2.DEF"" -g ""mod_incompatible_with_addon.zip"" -g ""incompatible_mod_with_compatible_version.zip"" -g ""dependant_mod.zip"" -g ""dependant_mod_with_compatible_version.zip"" -g ""feature_mod.zip"" -j ""{Directory.GetCurrentDirectory()}\Data\Blood\Mods"" -usecwd -j ""D:\Games\Blood"" -h ""a"" -s 2";
 
         if (OperatingSystem.IsLinux())
         {
@@ -274,7 +271,7 @@ public sealed class BloodCmdArgumentsTests
         NBlood nblood = new();
 
         var args = nblood.GetStartGameArgs(_bloodGame, _bloodCpCamp, mods, true, true, 2);
-        var expected = @$" -quick -nosetup -j ""{Directory.GetCurrentDirectory()}\Data\Blood\Mods"" -g ""enabled_mod.zip"" -mh ""ENABLED1.DEF"" -mh ""ENABLED2.DEF"" -g ""mod_requires_addon.zip"" -g ""incompatible_mod_with_compatible_version.zip"" -g ""dependant_mod.zip"" -g ""dependant_mod_with_compatible_version.zip"" -g ""feature_mod.zip"" -usecwd -j ""D:\Games\Blood"" -h ""a"" -ini ""CRYPTIC.INI"" -s 2";
+        var expected = @$" -quick -nosetup -g ""enabled_mod.zip"" -mh ""ENABLED1.DEF"" -mh ""ENABLED2.DEF"" -g ""mod_requires_addon.zip"" -g ""incompatible_mod_with_compatible_version.zip"" -g ""dependant_mod.zip"" -g ""dependant_mod_with_compatible_version.zip"" -g ""feature_mod.zip"" -j ""{Directory.GetCurrentDirectory()}\Data\Blood\Mods"" -usecwd -j ""D:\Games\Blood"" -h ""a"" -ini ""CRYPTIC.INI"" -s 2";
 
         if (OperatingSystem.IsLinux())
         {

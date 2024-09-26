@@ -75,7 +75,6 @@ public sealed class SlaveCmdArgumentsTests
             Path=D:/Games/Slave
 
             [FileSearch.Directories]
-            Path=D:/Games/Slave
             Path={Directory.GetCurrentDirectory()}/Data/Slave/Mods
 
             [SoundfontSearch.Directories]
@@ -93,7 +92,7 @@ public sealed class SlaveCmdArgumentsTests
         PCExhumed pcExhumed = new();
 
         var args = pcExhumed.GetStartGameArgs(_slaveGame, _slaveCamp, mods, true, true);
-        var expected = @$" -quick -nosetup -j ""{Directory.GetCurrentDirectory()}\Data\Slave\Mods"" -g ""enabled_mod.zip"" -mh ""ENABLED1.DEF"" -mh ""ENABLED2.DEF"" -usecwd -j ""D:\Games\Slave"" -h ""a""";
+        var expected = @$" -quick -nosetup -g ""enabled_mod.zip"" -mh ""ENABLED1.DEF"" -mh ""ENABLED2.DEF"" -j ""{Directory.GetCurrentDirectory()}\Data\Slave\Mods"" -usecwd -j ""D:\Games\Slave"" -h ""a""";
 
         if (OperatingSystem.IsLinux())
         {

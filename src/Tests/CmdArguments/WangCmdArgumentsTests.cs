@@ -106,7 +106,6 @@ public sealed class WangCmdArgumentsTests
             Path=D:/Games/Wang
 
             [FileSearch.Directories]
-            Path=D:/Games/Wang
             Path={Directory.GetCurrentDirectory()}/Data/Wang/Mods
 
             [SoundfontSearch.Directories]
@@ -142,7 +141,6 @@ public sealed class WangCmdArgumentsTests
             Path=D:/Games/Wang
 
             [FileSearch.Directories]
-            Path=D:/Games/Wang
             Path={Directory.GetCurrentDirectory()}/Data/Wang/Mods
 
             [SoundfontSearch.Directories]
@@ -168,7 +166,7 @@ public sealed class WangCmdArgumentsTests
         VoidSW voidSw = new();
 
         var args = voidSw.GetStartGameArgs(_wangGame, _wangCamp, mods, true, true, 3);
-        var expected = @$" -quick -nosetup -j""{Directory.GetCurrentDirectory()}\Data\Wang\Mods"" -g""enabled_mod.zip"" -mh""ENABLED1.DEF"" -mh""ENABLED2.DEF"" -g""incompatible_mod_with_compatible_version.zip"" -g""dependant_mod.zip"" -g""dependant_mod_with_compatible_version.zip"" -usecwd -j""D:\Games\Wang"" -h""a"" -addon0 -s3";
+        var expected = @$" -quick -nosetup -g""enabled_mod.zip"" -mh""ENABLED1.DEF"" -mh""ENABLED2.DEF"" -g""incompatible_mod_with_compatible_version.zip"" -g""dependant_mod.zip"" -g""dependant_mod_with_compatible_version.zip"" -j""{Directory.GetCurrentDirectory()}\Data\Wang\Mods"" -usecwd -j""D:\Games\Wang"" -h""a"" -addon0 -s3";
 
         if (OperatingSystem.IsLinux())
         {
@@ -191,7 +189,7 @@ public sealed class WangCmdArgumentsTests
         VoidSW voidSw = new();
 
         var args = voidSw.GetStartGameArgs(_wangGame, _tdCamp, mods, true, true, 3);
-        var expected = @$" -quick -nosetup -j""{Directory.GetCurrentDirectory()}\Data\Wang\Mods"" -g""enabled_mod.zip"" -mh""ENABLED1.DEF"" -mh""ENABLED2.DEF"" -g""mod_requires_addon.zip"" -usecwd -j""D:\Games\Wang"" -h""a"" -addon0 -j""{Directory.GetCurrentDirectory()}\Data\Wang\Campaigns"" -g""TD.zip"" -s3";
+        var expected = @$" -quick -nosetup -g""enabled_mod.zip"" -mh""ENABLED1.DEF"" -mh""ENABLED2.DEF"" -g""mod_requires_addon.zip"" -j""{Directory.GetCurrentDirectory()}\Data\Wang\Mods"" -usecwd -j""D:\Games\Wang"" -h""a"" -addon0 -j""{Directory.GetCurrentDirectory()}\Data\Wang\Campaigns"" -g""TD.zip"" -s3";
 
         if (OperatingSystem.IsLinux())
         {

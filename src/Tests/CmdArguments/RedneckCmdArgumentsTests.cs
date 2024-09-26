@@ -104,7 +104,6 @@ public sealed class RedneckCmdArgumentsTests
             Path=D:/Games/Redneck
 
             [FileSearch.Directories]
-            Path=D:/Games/Redneck
             Path={Directory.GetCurrentDirectory()}/Data/Redneck/Mods
 
             [SoundfontSearch.Directories]
@@ -139,7 +138,6 @@ public sealed class RedneckCmdArgumentsTests
             Path=D:/Games/Again
 
             [FileSearch.Directories]
-            Path=D:/Games/Again
             Path={Directory.GetCurrentDirectory()}/Data/Redneck/Mods
 
             [SoundfontSearch.Directories]
@@ -157,7 +155,7 @@ public sealed class RedneckCmdArgumentsTests
         RedNukem redNukem = new();
 
         var args = redNukem.GetStartGameArgs(_redneckGame, _redneckCamp, mods, true, true);
-        var expected = @$" -quick -nosetup -j ""{Directory.GetCurrentDirectory()}\Data\Redneck\Mods"" -g ""enabled_mod.zip"" -mh ""ENABLED1.DEF"" -mh ""ENABLED2.DEF"" -usecwd -h ""a"" -j ""D:\Games\Redneck""";
+        var expected = @$" -quick -nosetup -g ""enabled_mod.zip"" -mh ""ENABLED1.DEF"" -mh ""ENABLED2.DEF"" -j ""{Directory.GetCurrentDirectory()}\Data\Redneck\Mods"" -usecwd -h ""a"" -j ""D:\Games\Redneck""";
 
         if (OperatingSystem.IsLinux())
         {
