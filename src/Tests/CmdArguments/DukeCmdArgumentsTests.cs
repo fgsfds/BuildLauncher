@@ -7,6 +7,7 @@ using Games.Games;
 using Mods.Addons;
 using Ports.Ports;
 using Ports.Ports.EDuke32;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Tests.CmdArguments;
 
@@ -141,7 +142,7 @@ public sealed class DukeCmdArgumentsTests
             Version = "1.1",
             SupportedGame = new(GameEnum.Duke3D, DukeVersionEnum.Duke3D_Atomic),
             RequiredFeatures = null,
-            PathToFile = $"{Directory.GetCurrentDirectory()}\\Data\\Duke3D\\Campaigns\\duke_tc.zip",
+            PathToFile = Path.Combine(Directory.GetCurrentDirectory(), "Data", "Duke3D", "Campaigns", "duke_tc.zip"),
             DependentAddons = new(StringComparer.OrdinalIgnoreCase) { { nameof(DukeAddonEnum.DukeVaca), null } },
             IncompatibleAddons = null,
             MainCon = "TC.CON",
@@ -272,7 +273,7 @@ public sealed class DukeCmdArgumentsTests
         Raze raze = new();
 
         var args = raze.GetStartGameArgs(_dukeGame, _dukeTcForVaca, [], true, true);
-        var expected = @$" -quick -nosetup -savedir ""{Directory.GetCurrentDirectory()}\Data\Ports\Raze\Save\duke-tc"" -def ""TC.DEF"" -adddef ""TC1.DEF"" -adddef ""TC2.DEF"" -addon 3 -con ""TC.CON"" -addcon ""TC1.CON"" -addcon ""TC2.CON"" -file ""{Directory.GetCurrentDirectory()}\Data\Duke3D\Campaigns\duke_tc.zip""";
+        var expected = @$" -quick -nosetup -savedir ""{Directory.GetCurrentDirectory()}\Data\Ports\Raze\Save\duke-tc"" -def ""TC.DEF"" -adddef ""TC1.DEF"" -adddef ""TC2.DEF"" -addon 3 -con ""TC.CON"" -addcon ""TC1.CON"" -addcon ""TC2.CON"" -file ""{Path.Combine(Directory.GetCurrentDirectory(), "Data", "Duke3D", "Campaigns", "duke_tc.zip")}""";
 
         if (OperatingSystem.IsLinux())
         {
@@ -361,7 +362,7 @@ public sealed class DukeCmdArgumentsTests
         EDuke32 eduke32 = new();
 
         var args = eduke32.GetStartGameArgs(_dukeGame, _dukeTcForVaca, [], true, true);
-        var expected = @$" -quick -nosetup -usecwd -cachesize 262144 -h ""TC.DEF"" -mh ""TC1.DEF"" -mh ""TC2.DEF"" -j ""D:\Games\Duke3D"" -j ""D:\Games\Duke3D\Vaca"" -grp VACATION.GRP -x ""TC.CON"" -mx ""TC1.CON"" -mx ""TC2.CON"" -g ""{Directory.GetCurrentDirectory()}\Data\Duke3D\Campaigns\duke_tc.zip""";
+        var expected = @$" -quick -nosetup -usecwd -cachesize 262144 -h ""TC.DEF"" -mh ""TC1.DEF"" -mh ""TC2.DEF"" -j ""D:\Games\Duke3D"" -j ""D:\Games\Duke3D\Vaca"" -grp VACATION.GRP -x ""TC.CON"" -mx ""TC1.CON"" -mx ""TC2.CON"" -g ""{Path.Combine(Directory.GetCurrentDirectory(), "Data", "Duke3D", "Campaigns", "duke_tc.zip")}""";
 
         if (OperatingSystem.IsLinux())
         {
