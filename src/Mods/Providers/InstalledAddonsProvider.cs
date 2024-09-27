@@ -136,7 +136,11 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
 
         var addon = await GetAddonFromFileAsync(addonType, pathToFile).ConfigureAwait(false);
 
-        addon.ThrowIfNull();
+        if (addon is null)
+        {
+            await CreateCache(true).ConfigureAwait(false);
+            return;
+        }
 
         if (!_cache.TryGetValue(addon.Type, out _))
         {
