@@ -18,10 +18,10 @@ public readonly struct GameStruct
     }
 
     [SetsRequiredMembers]
-    public GameStruct(GameEnum gameEnum, Enum gameVersion)
+    public GameStruct(GameEnum gameEnum, Enum? gameVersion)
     {
         GameEnum = gameEnum;
-        GameVersion = gameVersion.ToString();
+        GameVersion = gameVersion?.ToString();
         GameCrc = null;
     }
 

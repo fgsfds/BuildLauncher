@@ -262,7 +262,8 @@ public class EDuke32 : BasePort
 
         if (dCamp.Type is AddonTypeEnum.TC)
         {
-            _ = sb.Append($@" {AddFileParam}""{Path.Combine(game.CampaignsFolderPath, dCamp.FileName!)}""");
+            _ = sb.Append($@" {AddFileParam}""{dCamp.PathToFile}""");
+            //_ = sb.Append($@" {AddFileParam}""{Path.Combine(game.CampaignsFolderPath, dCamp.FileName!)}""");
         }
         else if (dCamp.Type is AddonTypeEnum.Map)
         {

@@ -94,6 +94,11 @@ public interface IAddon
     /// </summary>
     bool IsUnpacked { get; init; }
 
+    /// <summary>
+    /// Addon title with text wraping
+    /// </summary>
+    string TitleWithNewLines { get; }
+
 
     /// <summary>
     /// Create markdown description of the addon

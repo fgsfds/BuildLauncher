@@ -61,6 +61,15 @@
                                    HorizontalAlignment="Center"/>
                         </Border>
 
+                        <Viewbox Margin="20"
+                                 IsVisible="{Binding GridImage, Converter={x:Static ObjectConverters.IsNull}}">
+                            <TextBlock Foreground="{DynamicResource SystemAccentColor}"
+                                       FontSize="500"
+                                       FontWeight="Bold"
+                                       TextAlignment="Center"
+                                       Text="{Binding TitleWithNewLines}"/>
+                        </Viewbox >
+
                         <TextBlock Text="{Binding Title}"
                                    Margin="10"
                                    Padding="5"
@@ -69,7 +78,8 @@
                                    Opacity="100"
                                    TextAlignment="Center"
                                    VerticalAlignment="Bottom"
-                                   TextWrapping="Wrap"/>
+                                   TextWrapping="Wrap"
+                                   IsVisible="{Binding GridImage, Converter={x:Static ObjectConverters.IsNotNull}}"/>
 
                         <TextBlock Text="{Binding Title}"
                                    Margin="10"
@@ -77,7 +87,8 @@
                                    HorizontalAlignment="Stretch"
                                    TextAlignment="Center"
                                    VerticalAlignment="Bottom"
-                                   TextWrapping="Wrap"/>
+                                   TextWrapping="Wrap"
+                                   IsVisible="{Binding GridImage, Converter={x:Static ObjectConverters.IsNotNull}}"/>
 
                     </Grid>
 

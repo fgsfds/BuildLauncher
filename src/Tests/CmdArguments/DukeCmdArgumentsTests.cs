@@ -141,7 +141,7 @@ public sealed class DukeCmdArgumentsTests
             Version = "1.1",
             SupportedGame = new(GameEnum.Duke3D, DukeVersionEnum.Duke3D_Atomic),
             RequiredFeatures = null,
-            PathToFile = Path.Combine("D:", "Mods", "duke_tc.zip"),
+            PathToFile = $"{Directory.GetCurrentDirectory()}\\Data\\Duke3D\\Campaigns\\duke_tc.zip",
             DependentAddons = new(StringComparer.OrdinalIgnoreCase) { { nameof(DukeAddonEnum.DukeVaca), null } },
             IncompatibleAddons = null,
             MainCon = "TC.CON",

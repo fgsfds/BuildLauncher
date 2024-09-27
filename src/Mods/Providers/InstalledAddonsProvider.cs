@@ -51,45 +51,71 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
             _cache.Clear();
         }
 
-        if (_cache.Count == 0)
+        try
         {
-            await Task.Run(async () =>
+            if (_cache.Count == 0)
             {
-                IEnumerable<string> files;
-
-                //campaigns
-                files = Directory.GetFiles(_game.CampaignsFolderPath, "*.zip");
-
-                var dirs = Directory.GetDirectories(_game.CampaignsFolderPath);
-
-                foreach (var dir in dirs)
+                await Task.Run(async () =>
                 {
-                    if (File.Exists(Path.Combine(dir, "addon.json")))
+                    //campaigns
+                    List<string> filesTcs = [.. Directory.GetFiles(_game.CampaignsFolderPath, "*.zip")];
+                    List<string> foldersGrpInfos = [];
+
+                    var dirs = Directory.GetDirectories(_game.CampaignsFolderPath, "*", SearchOption.TopDirectoryOnly);
+
+                    foreach (var dir in dirs)
                     {
-                        files = files.Append(Path.Combine(dir, "addon.json"));
+                        if (File.Exists(Path.Combine(dir, "addon.json")))
+                        {
+                            filesTcs.Add(Path.Combine(dir, "addon.json"));
+                        }
+                        else if (File.Exists(Path.Combine(dir, "addons.grpinfo")))
+                        {
+                            foldersGrpInfos.Add(dir);
+                        }
                     }
-                }
 
-                var camps = await GetAddonsFromFilesAsync(AddonTypeEnum.TC, files).ConfigureAwait(false);
-                _cache.Add(AddonTypeEnum.TC, camps);
+                    var tcs = await GetAddonsFromFilesAsync(AddonTypeEnum.TC, filesTcs).ConfigureAwait(false);
+                    _cache.Add(AddonTypeEnum.TC, tcs);
 
-                //maps
-                files = Directory.GetFiles(_game.MapsFolderPath).Where(static x => x.EndsWith(".zip", StringComparison.OrdinalIgnoreCase) || x.EndsWith(".map", StringComparison.OrdinalIgnoreCase));
-                var maps = await GetAddonsFromFilesAsync(AddonTypeEnum.Map, files).ConfigureAwait(false);
-                _cache.Add(AddonTypeEnum.Map, maps);
+                    if (foldersGrpInfos.Count > 0)
+                    {
+                        var grpInfoAddons = GrpInfoProvider.GetAddonsFromGrpInfo(foldersGrpInfos);
 
-                //mods
-                files = Directory.GetFiles(_game.ModsFolderPath, "*.zip");
-                var mods = await GetAddonsFromFilesAsync(AddonTypeEnum.Mod, files).ConfigureAwait(false);
-                _cache.Add(AddonTypeEnum.Mod, mods);
-            }).WaitAsync(CancellationToken.None).ConfigureAwait(false);
+                        if (grpInfoAddons.Count > 0)
+                        {
+                            foreach (var addon in grpInfoAddons)
+                            {
+                                _cache[AddonTypeEnum.TC].Add(new(addon.Id, null), addon);
+                            }
+                        }
+                    }
+
+                    //maps
+                    var filesMaps = Directory.GetFiles(_game.MapsFolderPath).Where(static x => x.EndsWith(".zip", StringComparison.OrdinalIgnoreCase) || x.EndsWith(".map", StringComparison.OrdinalIgnoreCase));
+                    var maps = await GetAddonsFromFilesAsync(AddonTypeEnum.Map, filesMaps).ConfigureAwait(false);
+                    _cache.Add(AddonTypeEnum.Map, maps);
+
+                    //mods
+                    var filesMods = Directory.GetFiles(_game.ModsFolderPath, "*.zip");
+                    var mods = await GetAddonsFromFilesAsync(AddonTypeEnum.Mod, filesMods).ConfigureAwait(false);
+                    _cache.Add(AddonTypeEnum.Mod, mods);
+
+                }).WaitAsync(CancellationToken.None).ConfigureAwait(false);
+            }
+
+            AddonsChangedEvent?.Invoke(_game, null);
         }
-
-        _isCacheUpdating = false;
-        AddonsChangedEvent?.Invoke(_game, null);
-        _ = _semaphore.Release();
-
-        _cache.ThrowIfNull();
+        catch
+        {
+            //do nothing
+        }
+        finally
+        {
+            _isCacheUpdating = false;
+            _ = _semaphore.Release();
+            _cache.ThrowIfNull();
+        }
     }
 
     /// <inheritdoc/>

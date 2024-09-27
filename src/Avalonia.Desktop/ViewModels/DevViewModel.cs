@@ -316,10 +316,10 @@ public sealed partial class DevViewModel : ObservableObject
     }
 
     [ObservableProperty]
-    private ImmutableList<DependantAddonDto> _dependenciesList;
+    private ImmutableList<DependantAddonDto>? _dependenciesList;
 
     [ObservableProperty]
-    private ImmutableList<DependantAddonDto> _incompatibilitiesList;
+    private ImmutableList<DependantAddonDto>? _incompatibilitiesList;
 
     #endregion
 
@@ -451,8 +451,8 @@ public sealed partial class DevViewModel : ObservableObject
         IsCstatSelected = result.Dependencies?.RequiredFeatures is not null && result.Dependencies.RequiredFeatures.Contains(FeatureEnum.Wall_Rotate_Cstat);
         IsLightingSelected = result.Dependencies?.RequiredFeatures is not null && result.Dependencies.RequiredFeatures.Contains(FeatureEnum.Dynamic_Lighting);
 
-        DependenciesList = result.Dependencies?.Addons is null ? [] : [.. result.Dependencies.Addons];
-        IncompatibilitiesList = result.Incompatibles?.Addons is null ? [] : [.. result.Incompatibles.Addons];
+        DependenciesList = result.Dependencies?.Addons is null ? null : [.. result.Dependencies.Addons];
+        IncompatibilitiesList = result.Incompatibles?.Addons is null ? null : [.. result.Incompatibles.Addons];
 
         if (result.StartMap is MapFileDto mapFile)
         {
@@ -473,12 +473,20 @@ public sealed partial class DevViewModel : ObservableObject
     private void AddDependency()
     {
         DependantAddonDto newAddon = new() { Id = "", Version = null };
+
+        if (DependenciesList is null)
+        {
+            DependenciesList = [];
+        }
+
         DependenciesList = DependenciesList.Add(newAddon);
     }
 
     [RelayCommand]
     private void RemoveDependency(DependantAddonDto dependency)
     {
+        Guard.ThrowIfNull(DependenciesList);
+
         DependenciesList = DependenciesList.Remove(dependency);
     }
 
@@ -486,12 +494,20 @@ public sealed partial class DevViewModel : ObservableObject
     private void AddIncompatibility()
     {
         DependantAddonDto newAddon = new() { Id = "", Version = null };
+
+        if (IncompatibilitiesList is null)
+        {
+            IncompatibilitiesList = [];
+        }
+
         IncompatibilitiesList = IncompatibilitiesList.Add(newAddon);
     }
 
     [RelayCommand]
     private void RemoveIncompatibility(DependantAddonDto dependency)
     {
+        Guard.ThrowIfNull(IncompatibilitiesList);
+
         IncompatibilitiesList = IncompatibilitiesList.Remove(dependency);
     }
 
