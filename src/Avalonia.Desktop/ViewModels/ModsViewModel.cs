@@ -156,7 +156,7 @@ public sealed partial class ModsViewModel : RightPanelViewModel, IPortsButtonCon
             }
         }
 
-        //OnPropertyChanged(nameof(ModsList));
+        OnPropertyChanged(nameof(ModsList));
     }
 
     #endregion
