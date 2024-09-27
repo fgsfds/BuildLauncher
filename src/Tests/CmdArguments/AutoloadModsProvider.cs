@@ -73,7 +73,7 @@ internal sealed class AutoloadModsProvider
         StartMap = null,
         PreviewImage = null,
         IsEnabled = true,
-        IsUnpacked = false
+        IsFolder = false
     };
 
     public AutoloadMod EnabledMod => new()
@@ -96,7 +96,7 @@ internal sealed class AutoloadModsProvider
         StartMap = null,
         PreviewImage = null,
         IsEnabled = true,
-        IsUnpacked = false
+        IsFolder = false
     };
 
     public AutoloadMod ModThatRequiresOfficialAddon => new()
@@ -119,7 +119,7 @@ internal sealed class AutoloadModsProvider
         StartMap = null,
         PreviewImage = null,
         IsEnabled = true,
-        IsUnpacked = false
+        IsFolder = false
     };
 
     public AutoloadMod ModThatIncompatibleWithAddon => new()
@@ -142,7 +142,7 @@ internal sealed class AutoloadModsProvider
         StartMap = null,
         PreviewImage = null,
         IsEnabled = true,
-        IsUnpacked = false
+        IsFolder = false
     };
 
     public AutoloadMod IncompatibleMod => new()
@@ -165,7 +165,7 @@ internal sealed class AutoloadModsProvider
         StartMap = null,
         PreviewImage = null,
         IsEnabled = true,
-        IsUnpacked = false
+        IsFolder = false
     };
 
     public AutoloadMod IncompatibleModWithCompatibleVersion => new()
@@ -188,7 +188,7 @@ internal sealed class AutoloadModsProvider
         StartMap = null,
         PreviewImage = null,
         IsEnabled = true,
-        IsUnpacked = false
+        IsFolder = false
     };
 
     public AutoloadMod IncompatibleModWithIncompatibleVersion => new()
@@ -211,7 +211,7 @@ internal sealed class AutoloadModsProvider
         StartMap = null,
         PreviewImage = null,
         IsEnabled = true,
-        IsUnpacked = false
+        IsFolder = false
     };
 
     public AutoloadMod DependantMod => new()
@@ -234,7 +234,7 @@ internal sealed class AutoloadModsProvider
         StartMap = null,
         PreviewImage = null,
         IsEnabled = true,
-        IsUnpacked = false
+        IsFolder = false
     };
 
     public AutoloadMod DependantModWithIncompatibleVersion => new()
@@ -257,7 +257,7 @@ internal sealed class AutoloadModsProvider
         StartMap = null,
         PreviewImage = null,
         IsEnabled = true,
-        IsUnpacked = false
+        IsFolder = false
     };
 
     public AutoloadMod DependantModWithCompatibleVersion => new()
@@ -280,7 +280,7 @@ internal sealed class AutoloadModsProvider
         StartMap = null,
         PreviewImage = null,
         IsEnabled = true,
-        IsUnpacked = false
+        IsFolder = false
     };
 
     public AutoloadMod DisabledMod => new()
@@ -303,7 +303,7 @@ internal sealed class AutoloadModsProvider
         StartMap = null,
         PreviewImage = null,
         IsEnabled = false,
-        IsUnpacked = false
+        IsFolder = false
     };
 
     public AutoloadMod ModThatRequiredFeature => new()
@@ -326,7 +326,7 @@ internal sealed class AutoloadModsProvider
         StartMap = null,
         PreviewImage = null,
         IsEnabled = true,
-        IsUnpacked = false
+        IsFolder = false
     };
 
     public AutoloadMod ModForAnotherGame => new()
@@ -349,6 +349,6 @@ internal sealed class AutoloadModsProvider
         StartMap = null,
         PreviewImage = null,
         IsEnabled = true,
-        IsUnpacked = false
+        IsFolder = false
     };
 }

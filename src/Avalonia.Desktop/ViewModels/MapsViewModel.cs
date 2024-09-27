@@ -60,8 +60,6 @@ public sealed partial class MapsViewModel : RightPanelViewModel, IPortsButtonCon
     private async Task UpdateAsync(bool createNew)
     {
         await _installedAddonsProvider.CreateCache(createNew).ConfigureAwait(true);
-
-        OnPropertyChanged(nameof(MapsList));
     }
 
 
@@ -172,8 +170,6 @@ public sealed partial class MapsViewModel : RightPanelViewModel, IPortsButtonCon
         SelectedAddon.ThrowIfNull();
 
         _installedAddonsProvider.DeleteAddon(SelectedAddon);
-
-        OnPropertyChanged(nameof(MapsList));
     }
 
 

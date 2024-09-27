@@ -59,7 +59,6 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
                 {
                     //campaigns
                     List<string> filesTcs = [.. Directory.GetFiles(_game.CampaignsFolderPath, "*.zip")];
-                    List<string> foldersGrpInfos = [];
 
                     var dirs = Directory.GetDirectories(_game.CampaignsFolderPath, "*", SearchOption.TopDirectoryOnly);
 
@@ -69,14 +68,24 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
                         {
                             filesTcs.Add(Path.Combine(dir, "addon.json"));
                         }
-                        else if (File.Exists(Path.Combine(dir, "addons.grpinfo")))
-                        {
-                            foldersGrpInfos.Add(dir);
-                        }
                     }
 
                     var tcs = await GetAddonsFromFilesAsync(AddonTypeEnum.TC, filesTcs).ConfigureAwait(false);
                     _cache.Add(AddonTypeEnum.TC, tcs);
+
+
+                    //grpinfo
+                    List<string> foldersGrpInfos = [];
+
+                    var dirs2 = Directory.GetDirectories(_game.CampaignsFolderPath, "*", SearchOption.TopDirectoryOnly);
+
+                    foreach (var dir in dirs2)
+                    {
+                        if (File.Exists(Path.Combine(dir, "addons.grpinfo")))
+                        {
+                            foldersGrpInfos.Add(dir);
+                        }
+                    }
 
                     if (foldersGrpInfos.Count > 0)
                     {
@@ -91,10 +100,12 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
                         }
                     }
 
+
                     //maps
                     var filesMaps = Directory.GetFiles(_game.MapsFolderPath).Where(static x => x.EndsWith(".zip", StringComparison.OrdinalIgnoreCase) || x.EndsWith(".map", StringComparison.OrdinalIgnoreCase));
                     var maps = await GetAddonsFromFilesAsync(AddonTypeEnum.Map, filesMaps).ConfigureAwait(false);
                     _cache.Add(AddonTypeEnum.Map, maps);
+
 
                     //mods
                     var filesMods = Directory.GetFiles(_game.ModsFolderPath, "*.zip");
@@ -150,7 +161,7 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
         _cache.ThrowIfNull();
         addon.PathToFile.ThrowIfNull();
 
-        if (addon.IsUnpacked)
+        if (addon.IsFolder)
         {
             Directory.Delete(Path.GetDirectoryName(addon.PathToFile)!, true);
         }
@@ -366,6 +377,26 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
                     return null;
                 }
 
+                var grpInfo = archive.Entries.FirstOrDefault(static x => x.Key!.Equals("addons.grpinfo"));
+
+                if (grpInfo is not null)
+                {
+                    var fileFolder = Path.GetDirectoryName(pathToFile)!;
+                    var unpackTo = Path.Combine(fileFolder, Path.GetFileNameWithoutExtension(pathToFile));
+
+                    if (Directory.Exists(unpackTo))
+                    {
+                        Directory.Delete(unpackTo, true);
+                    }
+
+                    archive.ExtractToDirectory(unpackTo);
+                    archive.Dispose();
+
+                    File.Delete(pathToFile);
+
+                    return null;
+                }
+
                 var entry = archive.Entries.FirstOrDefault(static x => x.Key!.Equals("addon.json"));
 
                 if (entry is null)
@@ -509,7 +540,7 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
                 IncompatibleAddons = null,
                 RequiredFeatures = null,
                 PreviewImage = null,
-                IsUnpacked = true
+                IsFolder = false
             };
 
             return addon;
@@ -548,7 +579,7 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
                 StartMap = startMap,
                 RequiredFeatures = requiredFeatures,
                 PreviewImage = preview,
-                IsUnpacked = isUnpacked
+                IsFolder = isUnpacked
             };
         }
         else
@@ -576,7 +607,7 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
                     RTS = rts,
                     RequiredFeatures = requiredFeatures,
                     PreviewImage = preview,
-                    IsUnpacked = isUnpacked
+                    IsFolder = isUnpacked
                 };
             }
             else if (_game.GameEnum is GameEnum.Fury)
@@ -601,7 +632,7 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
                     AdditionalDefs = addDefs,
                     RequiredFeatures = requiredFeatures,
                     PreviewImage = preview,
-                    IsUnpacked = isUnpacked
+                    IsFolder = isUnpacked
                 };
             }
             else if (_game.GameEnum is GameEnum.ShadowWarrior)
@@ -624,7 +655,7 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
                     AdditionalDefs = addDefs,
                     RequiredFeatures = requiredFeatures,
                     PreviewImage = preview,
-                    IsUnpacked = isUnpacked
+                    IsFolder = isUnpacked
                 };
             }
             else if (_game.GameEnum is GameEnum.Blood)
@@ -650,7 +681,7 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
                     SND = snd,
                     RequiredFeatures = requiredFeatures,
                     PreviewImage = preview,
-                    IsUnpacked = isUnpacked
+                    IsFolder = isUnpacked
                 };
             }
             else if (_game.GameEnum is GameEnum.Redneck)
@@ -676,7 +707,7 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
                     RTS = rts,
                     RequiredFeatures = requiredFeatures,
                     PreviewImage = preview,
-                    IsUnpacked = isUnpacked
+                    IsFolder = isUnpacked
                 };
             }
             else if (_game.GameEnum is GameEnum.Exhumed)
@@ -699,7 +730,7 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
                     AdditionalDefs = addDefs,
                     RequiredFeatures = requiredFeatures,
                     PreviewImage = preview,
-                    IsUnpacked = isUnpacked
+                    IsFolder = isUnpacked
                 };
             }
             else

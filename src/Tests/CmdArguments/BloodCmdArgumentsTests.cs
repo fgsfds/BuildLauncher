@@ -49,7 +49,7 @@ public sealed class BloodCmdArgumentsTests
             INI = null,
             RFF = null,
             SND = null,
-            IsUnpacked = false
+            IsFolder = false
         };
 
         _bloodCpCamp = new()
@@ -73,7 +73,7 @@ public sealed class BloodCmdArgumentsTests
             INI = null,
             RFF = null,
             SND = null,
-            IsUnpacked = false
+            IsFolder = false
         };
 
         _bloodTc = new()
@@ -97,7 +97,7 @@ public sealed class BloodCmdArgumentsTests
             INI = "TC.INI",
             RFF = "TC.RFF",
             SND = "TC.SND",
-            IsUnpacked = false
+            IsFolder = false
         };
     }
 

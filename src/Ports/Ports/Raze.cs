@@ -526,7 +526,7 @@ public sealed class Raze : BasePort
 
                 //blood unpacked addons
                 if (campaign is BloodCampaign bCamp &&
-                    bCamp.IsUnpacked)
+                    bCamp.IsFolder)
                 {
                     path = Path.GetDirectoryName(bCamp.PathToFile)!.Replace('\\', '/');
                     _ = sb.Append("Path=").AppendLine(path);

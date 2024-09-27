@@ -58,7 +58,7 @@ public sealed class SlaveGame : BaseGame
                 AdditionalDefs = null,
                 StartMap = null,
                 PreviewImage = null,
-                IsUnpacked = false
+                IsFolder = false
             });
         }
 

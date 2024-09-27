@@ -59,7 +59,7 @@ public static class GrpInfoProvider
                     RTS = null,
                     RequiredFeatures = [FeatureEnum.EDuke32_CON],
                     PreviewImage = null,
-                    IsUnpacked = false
+                    IsFolder = false
                 };
 
                 newAddons.Add(camp);

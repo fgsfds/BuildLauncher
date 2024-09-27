@@ -92,7 +92,7 @@ public interface IAddon
     /// <summary>
     /// Is addon unpacked to a folder
     /// </summary>
-    bool IsUnpacked { get; init; }
+    bool IsFolder { get; init; }
 
     /// <summary>
     /// Addon title with text wraping

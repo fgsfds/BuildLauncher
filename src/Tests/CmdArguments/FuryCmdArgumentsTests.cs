@@ -45,7 +45,7 @@ public sealed class FuryCmdArgumentsTests
             AdditionalDefs = null,
             StartMap = null,
             PreviewImage = null,
-            IsUnpacked = false
+            IsFolder = false
         };
     }
 

@@ -53,8 +53,6 @@ public sealed partial class ModsViewModel : RightPanelViewModel, IPortsButtonCon
     private async Task UpdateAsync(bool createNew)
     {
         await _installedAddonsProvider.CreateCache(createNew).ConfigureAwait(true);
-
-        OnPropertyChanged(nameof(ModsList));
     }
 
 
@@ -123,8 +121,6 @@ public sealed partial class ModsViewModel : RightPanelViewModel, IPortsButtonCon
         SelectedAddon.ThrowIfNull();
 
         _installedAddonsProvider.DeleteAddon(SelectedAddon);
-
-        OnPropertyChanged(nameof(ModsList));
     }
 
 
@@ -160,7 +156,7 @@ public sealed partial class ModsViewModel : RightPanelViewModel, IPortsButtonCon
             }
         }
 
-        OnPropertyChanged(nameof(ModsList));
+        //OnPropertyChanged(nameof(ModsList));
     }
 
     #endregion

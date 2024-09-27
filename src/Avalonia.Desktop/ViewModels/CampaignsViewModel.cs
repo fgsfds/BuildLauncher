@@ -114,8 +114,6 @@ public sealed partial class CampaignsViewModel : RightPanelViewModel, IPortsButt
     private async Task UpdateAsync(bool createNew)
     {
         await _installedAddonsProvider.CreateCache(createNew).ConfigureAwait(true);
-
-        OnPropertyChanged(nameof(CampaignsList));
     }
 
 
@@ -172,8 +170,6 @@ public sealed partial class CampaignsViewModel : RightPanelViewModel, IPortsButt
         SelectedAddon.ThrowIfNull();
 
         _installedAddonsProvider.DeleteAddon(SelectedAddon);
-
-        OnPropertyChanged(nameof(CampaignsList));
     }
 
 

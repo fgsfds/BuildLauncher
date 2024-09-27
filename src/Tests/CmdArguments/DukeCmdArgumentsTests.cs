@@ -55,7 +55,7 @@ public sealed class DukeCmdArgumentsTests
             RTS = null,
             StartMap = null,
             PreviewImage = null,
-            IsUnpacked = false
+            IsFolder = false
         };
 
         _dukeWtCamp = new()
@@ -79,7 +79,7 @@ public sealed class DukeCmdArgumentsTests
             RTS = null,
             StartMap = null,
             PreviewImage = null,
-            IsUnpacked = false
+            IsFolder = false
         };
 
         _duke64Camp = new()
@@ -103,7 +103,7 @@ public sealed class DukeCmdArgumentsTests
             RTS = null,
             StartMap = null,
             PreviewImage = null,
-            IsUnpacked = false
+            IsFolder = false
         };
 
         _dukeVaca = new()
@@ -127,7 +127,7 @@ public sealed class DukeCmdArgumentsTests
             RTS = null,
             StartMap = null,
             PreviewImage = null,
-            IsUnpacked = false
+            IsFolder = false
         };
 
         _dukeTcForVaca = new()
@@ -151,7 +151,7 @@ public sealed class DukeCmdArgumentsTests
             AdditionalDefs = ["TC1.DEF", "TC2.DEF"],
             StartMap = null,
             PreviewImage = null,
-            IsUnpacked = false
+            IsFolder = false
         };
     }
 

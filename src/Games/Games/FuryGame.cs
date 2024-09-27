@@ -56,7 +56,7 @@ public sealed class FuryGame : BaseGame
                 AdditionalDefs = null,
                 StartMap = null,
                 PreviewImage = null,
-                IsUnpacked = false
+                IsFolder = false
             });
         }
 

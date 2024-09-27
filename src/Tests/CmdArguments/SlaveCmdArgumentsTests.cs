@@ -43,7 +43,7 @@ public sealed class SlaveCmdArgumentsTests
             AdditionalDefs = null,
             StartMap = null,
             PreviewImage = null,
-            IsUnpacked = false
+            IsFolder = false
         };
     }
 

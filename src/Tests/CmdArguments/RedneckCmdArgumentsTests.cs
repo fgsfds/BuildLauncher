@@ -48,7 +48,7 @@ public sealed class RedneckCmdArgumentsTests
             RTS = null,
             StartMap = null,
             PreviewImage = null,
-            IsUnpacked = false
+            IsFolder = false
         };
 
         _againCamp = new()
@@ -72,7 +72,7 @@ public sealed class RedneckCmdArgumentsTests
             RTS = null,
             StartMap = null,
             PreviewImage = null,
-            IsUnpacked = false
+            IsFolder = false
         };
     }
 

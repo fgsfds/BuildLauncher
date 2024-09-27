@@ -59,7 +59,7 @@ public abstract class Addon : IAddon
     public required IStartMap? StartMap { get; init; }
 
     /// <inheritdoc/>
-    public required bool IsUnpacked { get; init; }
+    public required bool IsFolder { get; init; }
 
     /// <inheritdoc/>
     public string? FileName => PathToFile is null ? null : Path.GetFileName(PathToFile);
