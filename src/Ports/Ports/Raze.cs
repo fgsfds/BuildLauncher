@@ -102,7 +102,14 @@ public sealed class Raze : BasePort
 
     public Raze() : base()
     {
-        MoveOldSavesFolder();
+        try
+        {
+            MoveOldSavesFolder();
+        }
+        catch
+        {
+            Directory.Delete(Path.Combine(PortExecutableFolderPath, "Save"));
+        }
     }
 
 

@@ -17,16 +17,16 @@ public abstract class BaseGame : IGame
     public bool IsBaseGameInstalled => IsInstalled(RequiredFiles);
 
     /// <inheritdoc/>
-    public string CampaignsFolderPath => Path.Combine(ClientProperties.DataFolderPath, ShortName, "Campaigns");
+    public string CampaignsFolderPath => Path.Combine(ClientProperties.DataFolderPath, "Addons", ShortName, "Campaigns");
 
     /// <inheritdoc/>
-    public string MapsFolderPath => Path.Combine(ClientProperties.DataFolderPath, ShortName, "Maps");
+    public string MapsFolderPath => Path.Combine(ClientProperties.DataFolderPath, "Addons", ShortName, "Maps");
 
     /// <inheritdoc/>
-    public string ModsFolderPath => Path.Combine(ClientProperties.DataFolderPath, ShortName, "Mods");
+    public string ModsFolderPath => Path.Combine(ClientProperties.DataFolderPath, "Addons", ShortName, "Mods");
 
     /// <inheritdoc/>
-    public string SpecialFolderPath => Path.Combine(ClientProperties.DataFolderPath, ShortName, "Special");
+    public string SpecialFolderPath => Path.Combine(ClientProperties.DataFolderPath, "Addons", ShortName, "Special");
 
 
     /// <inheritdoc/>
@@ -44,6 +44,15 @@ public abstract class BaseGame : IGame
 
     public BaseGame()
     {
+        try
+        {
+            MoveOldFolders();
+        }
+        catch
+        {
+            Directory.Delete(Path.Combine(ClientProperties.DataFolderPath, ShortName));
+        }
+
         if (!Directory.Exists(CampaignsFolderPath))
         {
             _ = Directory.CreateDirectory(CampaignsFolderPath);
@@ -62,6 +71,46 @@ public abstract class BaseGame : IGame
         if (!Directory.Exists(SpecialFolderPath))
         {
             _ = Directory.CreateDirectory(SpecialFolderPath);
+        }
+    }
+
+    [Obsolete]
+    private void MoveOldFolders()
+    {
+        var newGameDataFolder = Path.Combine(ClientProperties.DataFolderPath, "Addons", ShortName);
+        if (!Directory.Exists(newGameDataFolder))
+        {
+            _ = Directory.CreateDirectory(newGameDataFolder);
+        }
+
+        var oldCampsFolder = Path.Combine(ClientProperties.DataFolderPath, ShortName, "Campaigns");
+        if (Directory.Exists(oldCampsFolder))
+        {
+            Directory.Move(oldCampsFolder, CampaignsFolderPath);
+        }
+
+        var oldMapsFolder = Path.Combine(ClientProperties.DataFolderPath, ShortName, "Maps");
+        if (Directory.Exists(oldMapsFolder))
+        {
+            Directory.Move(oldMapsFolder, MapsFolderPath);
+        }
+
+        var oldModsFolder = Path.Combine(ClientProperties.DataFolderPath, ShortName, "Mods");
+        if (Directory.Exists(oldModsFolder))
+        {
+            Directory.Move(oldModsFolder, ModsFolderPath);
+        }
+
+        var oldSpecialFolder = Path.Combine(ClientProperties.DataFolderPath, ShortName, "Special");
+        if (Directory.Exists(oldSpecialFolder))
+        {
+            Directory.Move(oldSpecialFolder, SpecialFolderPath);
+        }
+
+        var oldGameDataDirectory = Path.Combine(ClientProperties.DataFolderPath, ShortName);
+        if (Directory.Exists(oldGameDataDirectory))
+        {
+            Directory.Delete(oldGameDataDirectory, true);
         }
     }
 
