@@ -87,7 +87,7 @@ public sealed class RedneckCmdArgumentsTests
         Raze raze = new();
 
         var args = raze.GetStartGameArgs(_redneckGame, _redneckCamp, mods, true, true);
-        var expected = @$" -quick -nosetup -file ""enabled_mod.zip"" -adddef ""ENABLED1.DEF"" -adddef ""ENABLED2.DEF"" -savedir ""{Directory.GetCurrentDirectory()}\Data\Ports\Raze\Save\redneck"" -def ""a""";
+        var expected = @$" -quick -nosetup -file ""enabled_mod.zip"" -adddef ""ENABLED1.DEF"" -adddef ""ENABLED2.DEF"" -savedir ""{Directory.GetCurrentDirectory()}\Data\Saves\Raze\Redneck\redneck"" -def ""a""";
 
         if (OperatingSystem.IsLinux())
         {
@@ -104,7 +104,7 @@ public sealed class RedneckCmdArgumentsTests
             Path=D:/Games/Redneck
 
             [FileSearch.Directories]
-            Path={Directory.GetCurrentDirectory()}/Data/Redneck/Mods
+            Path={Directory.GetCurrentDirectory()}/Data/Addons/Redneck/Mods
 
             [SoundfontSearch.Directories]
             """.Replace('\\', '/'), config);
@@ -121,7 +121,7 @@ public sealed class RedneckCmdArgumentsTests
         Raze raze = new();
 
         var args = raze.GetStartGameArgs(_redneckGame, _againCamp, mods, true, true);
-        var expected = @$" -quick -nosetup -file ""enabled_mod.zip"" -adddef ""ENABLED1.DEF"" -adddef ""ENABLED2.DEF"" -savedir ""{Directory.GetCurrentDirectory()}\Data\Ports\Raze\Save\ridesagain"" -def ""a""";
+        var expected = @$" -quick -nosetup -file ""enabled_mod.zip"" -adddef ""ENABLED1.DEF"" -adddef ""ENABLED2.DEF"" -savedir ""{Directory.GetCurrentDirectory()}\Data\Saves\Raze\Redneck\ridesagain"" -def ""a""";
 
         if (OperatingSystem.IsLinux())
         {
@@ -138,7 +138,7 @@ public sealed class RedneckCmdArgumentsTests
             Path=D:/Games/Again
 
             [FileSearch.Directories]
-            Path={Directory.GetCurrentDirectory()}/Data/Redneck/Mods
+            Path={Directory.GetCurrentDirectory()}/Data/Addons/Redneck/Mods
 
             [SoundfontSearch.Directories]
             """.Replace('\\', '/'), config);
@@ -155,7 +155,7 @@ public sealed class RedneckCmdArgumentsTests
         RedNukem redNukem = new();
 
         var args = redNukem.GetStartGameArgs(_redneckGame, _redneckCamp, mods, true, true);
-        var expected = @$" -quick -nosetup -g ""enabled_mod.zip"" -mh ""ENABLED1.DEF"" -mh ""ENABLED2.DEF"" -j ""{Directory.GetCurrentDirectory()}\Data\Redneck\Mods"" -usecwd -h ""a"" -j ""D:\Games\Redneck""";
+        var expected = @$" -quick -nosetup -g ""enabled_mod.zip"" -mh ""ENABLED1.DEF"" -mh ""ENABLED2.DEF"" -j ""{Directory.GetCurrentDirectory()}\Data\Addons\Redneck\Mods"" -usecwd -h ""a"" -j ""D:\Games\Redneck""";
 
         if (OperatingSystem.IsLinux())
         {

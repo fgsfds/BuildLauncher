@@ -177,7 +177,7 @@ public sealed class DukeCmdArgumentsTests
         Raze raze = new();
 
         var args = raze.GetStartGameArgs(_dukeGame, _dukeCamp, mods, true, true);
-        var expected = @$" -quick -nosetup -file ""enabled_mod.zip"" -adddef ""ENABLED1.DEF"" -adddef ""ENABLED2.DEF"" -addcon ""ENABLED1.CON"" -addcon ""ENABLED2.CON"" -file ""mod_incompatible_with_addon.zip"" -file ""incompatible_mod_with_compatible_version.zip"" -file ""dependant_mod.zip"" -file ""dependant_mod_with_compatible_version.zip"" -savedir ""{Directory.GetCurrentDirectory()}\Data\Ports\Raze\Save\duke3d"" -def ""a"" -addon 0";
+        var expected = @$" -quick -nosetup -file ""enabled_mod.zip"" -adddef ""ENABLED1.DEF"" -adddef ""ENABLED2.DEF"" -addcon ""ENABLED1.CON"" -addcon ""ENABLED2.CON"" -file ""mod_incompatible_with_addon.zip"" -file ""incompatible_mod_with_compatible_version.zip"" -file ""dependant_mod.zip"" -file ""dependant_mod_with_compatible_version.zip"" -savedir ""{Directory.GetCurrentDirectory()}\Data\Saves\Raze\Duke3D\duke3d"" -def ""a"" -addon 0";
 
         if (OperatingSystem.IsLinux())
         {
@@ -195,7 +195,7 @@ public sealed class DukeCmdArgumentsTests
             Path=D:/Games/Duke3D/Vaca
 
             [FileSearch.Directories]
-            Path={Directory.GetCurrentDirectory()}/Data/Duke3D/Mods
+            Path={Directory.GetCurrentDirectory()}/Data/Addons/Duke3D/Mods
 
             [SoundfontSearch.Directories]
             """.Replace('\\', '/'), config);
@@ -207,7 +207,7 @@ public sealed class DukeCmdArgumentsTests
         Raze raze = new();
 
         var args = raze.GetStartGameArgs(_dukeGame, _dukeWtCamp, [], true, true);
-        var expected = @$" -quick -nosetup -savedir ""{Directory.GetCurrentDirectory()}\Data\Ports\Raze\Save\duke3d_wt"" -def ""a"" -addon 0";
+        var expected = @$" -quick -nosetup -savedir ""{Directory.GetCurrentDirectory()}\Data\Saves\Raze\Duke3D\duke3d_wt"" -def ""a"" -addon 0";
 
         if (OperatingSystem.IsLinux())
         {
@@ -225,7 +225,7 @@ public sealed class DukeCmdArgumentsTests
             Path=D:/Games/Duke3D/Vaca
 
             [FileSearch.Directories]
-            Path={Directory.GetCurrentDirectory()}/Data/Duke3D/Mods
+            Path={Directory.GetCurrentDirectory()}/Data/Addons/Duke3D/Mods
 
             [SoundfontSearch.Directories]
             """.Replace('\\', '/'), config);
@@ -243,7 +243,7 @@ public sealed class DukeCmdArgumentsTests
         Raze raze = new();
 
         var args = raze.GetStartGameArgs(_dukeGame, _dukeVaca, mods, true, true);
-        var expected = @$" -quick -nosetup -file ""enabled_mod.zip"" -adddef ""ENABLED1.DEF"" -adddef ""ENABLED2.DEF"" -addcon ""ENABLED1.CON"" -addcon ""ENABLED2.CON"" -file ""mod_requires_addon.zip"" -savedir ""{Directory.GetCurrentDirectory()}\Data\Ports\Raze\Save\dukevaca"" -def ""a"" -addon 3";
+        var expected = @$" -quick -nosetup -file ""enabled_mod.zip"" -adddef ""ENABLED1.DEF"" -adddef ""ENABLED2.DEF"" -addcon ""ENABLED1.CON"" -addcon ""ENABLED2.CON"" -file ""mod_requires_addon.zip"" -savedir ""{Directory.GetCurrentDirectory()}\Data\Saves\Raze\Duke3D\dukevaca"" -def ""a"" -addon 3";
 
         if (OperatingSystem.IsLinux())
         {
@@ -261,7 +261,7 @@ public sealed class DukeCmdArgumentsTests
             Path=D:/Games/Duke3D/Vaca
 
             [FileSearch.Directories]
-            Path={Directory.GetCurrentDirectory()}/Data/Duke3D/Mods
+            Path={Directory.GetCurrentDirectory()}/Data/Addons/Duke3D/Mods
 
             [SoundfontSearch.Directories]
             """.Replace('\\', '/'), config);
@@ -273,7 +273,7 @@ public sealed class DukeCmdArgumentsTests
         Raze raze = new();
 
         var args = raze.GetStartGameArgs(_dukeGame, _dukeTcForVaca, [], true, true);
-        var expected = @$" -quick -nosetup -savedir ""{Directory.GetCurrentDirectory()}\Data\Ports\Raze\Save\duke-tc"" -def ""TC.DEF"" -adddef ""TC1.DEF"" -adddef ""TC2.DEF"" -addon 3 -con ""TC.CON"" -addcon ""TC1.CON"" -addcon ""TC2.CON"" -file ""{Path.Combine(Directory.GetCurrentDirectory(), "Data", "Duke3D", "Campaigns", "duke_tc.zip")}""";
+        var expected = @$" -quick -nosetup -savedir ""{Directory.GetCurrentDirectory()}\Data\Saves\Raze\Duke3D\duke-tc"" -def ""TC.DEF"" -adddef ""TC1.DEF"" -adddef ""TC2.DEF"" -addon 3 -con ""TC.CON"" -addcon ""TC1.CON"" -addcon ""TC2.CON"" -file ""{Path.Combine(Directory.GetCurrentDirectory(), "Data", "Addons", "Duke3D", "Campaigns", "duke_tc.zip")}""";
 
         if (OperatingSystem.IsLinux())
         {
@@ -305,7 +305,7 @@ public sealed class DukeCmdArgumentsTests
         EDuke32 eduke32 = new();
 
         var args = eduke32.GetStartGameArgs(_dukeGame, _dukeCamp, mods, true, true, 3);
-        var expected = @$" -quick -nosetup -g ""enabled_mod.zip"" -mh ""ENABLED1.DEF"" -mh ""ENABLED2.DEF"" -mx ""ENABLED1.CON"" -mx ""ENABLED2.CON"" -g ""mod_incompatible_with_addon.zip"" -g ""incompatible_mod_with_compatible_version.zip"" -g ""dependant_mod.zip"" -g ""dependant_mod_with_compatible_version.zip"" -g ""feature_mod.zip"" -j ""{Directory.GetCurrentDirectory()}\Data\Duke3D\Mods"" -usecwd -cachesize 262144 -h ""a"" -j ""D:\Games\Duke3D"" -s3";
+        var expected = @$" -quick -nosetup -g ""enabled_mod.zip"" -mh ""ENABLED1.DEF"" -mh ""ENABLED2.DEF"" -mx ""ENABLED1.CON"" -mx ""ENABLED2.CON"" -g ""mod_incompatible_with_addon.zip"" -g ""incompatible_mod_with_compatible_version.zip"" -g ""dependant_mod.zip"" -g ""dependant_mod_with_compatible_version.zip"" -g ""feature_mod.zip"" -j ""{Directory.GetCurrentDirectory()}\Data\Addons\Duke3D\Mods"" -usecwd -cachesize 262144 -h ""a"" -j ""D:\Games\Duke3D"" -s3";
 
         if (OperatingSystem.IsLinux())
         {
@@ -322,7 +322,7 @@ public sealed class DukeCmdArgumentsTests
         EDuke32 eduke32 = new();
 
         var args = eduke32.GetStartGameArgs(_dukeGame, _dukeWtCamp, [], true, true);
-        var expected = @$" -quick -nosetup -usecwd -cachesize 262144 -h ""a"" -j ""D:\Games\DukeWT"" -addon 0 -j ""{Directory.GetCurrentDirectory()}\Data\Duke3D\Special\WTStopgap"" -gamegrp e32wt.grp";
+        var expected = @$" -quick -nosetup -usecwd -cachesize 262144 -h ""a"" -j ""D:\Games\DukeWT"" -addon 0 -j ""{Directory.GetCurrentDirectory()}\Data\Addons\Duke3D\Special\WTStopgap"" -gamegrp e32wt.grp";
 
         if (OperatingSystem.IsLinux())
         {
@@ -345,7 +345,7 @@ public sealed class DukeCmdArgumentsTests
         EDuke32 eduke32 = new();
 
         var args = eduke32.GetStartGameArgs(_dukeGame, _dukeVaca, mods, true, true);
-        var expected = @$" -quick -nosetup -g ""enabled_mod.zip"" -mh ""ENABLED1.DEF"" -mh ""ENABLED2.DEF"" -mx ""ENABLED1.CON"" -mx ""ENABLED2.CON"" -g ""mod_requires_addon.zip"" -j ""{Directory.GetCurrentDirectory()}\Data\Duke3D\Mods"" -usecwd -cachesize 262144 -h ""a"" -j ""D:\Games\Duke3D"" -j ""D:\Games\Duke3D\Vaca"" -grp VACATION.GRP";
+        var expected = @$" -quick -nosetup -g ""enabled_mod.zip"" -mh ""ENABLED1.DEF"" -mh ""ENABLED2.DEF"" -mx ""ENABLED1.CON"" -mx ""ENABLED2.CON"" -g ""mod_requires_addon.zip"" -j ""{Directory.GetCurrentDirectory()}\Data\Addons\Duke3D\Mods"" -usecwd -cachesize 262144 -h ""a"" -j ""D:\Games\Duke3D"" -j ""D:\Games\Duke3D\Vaca"" -grp VACATION.GRP";
 
         if (OperatingSystem.IsLinux())
         {
@@ -411,7 +411,7 @@ public sealed class DukeCmdArgumentsTests
         RedNukem redNukem = new();
 
         var args = redNukem.GetStartGameArgs(_dukeGame, _dukeCamp, mods, true, true);
-        var expected = @$" -quick -nosetup -g ""enabled_mod.zip"" -mh ""ENABLED1.DEF"" -mh ""ENABLED2.DEF"" -mx ""ENABLED1.CON"" -mx ""ENABLED2.CON"" -g ""mod_incompatible_with_addon.zip"" -g ""incompatible_mod_with_compatible_version.zip"" -g ""dependant_mod.zip"" -g ""dependant_mod_with_compatible_version.zip"" -j ""{Directory.GetCurrentDirectory()}\Data\Duke3D\Mods"" -usecwd -h ""a"" -j ""D:\Games\Duke3D""";
+        var expected = @$" -quick -nosetup -g ""enabled_mod.zip"" -mh ""ENABLED1.DEF"" -mh ""ENABLED2.DEF"" -mx ""ENABLED1.CON"" -mx ""ENABLED2.CON"" -g ""mod_incompatible_with_addon.zip"" -g ""incompatible_mod_with_compatible_version.zip"" -g ""dependant_mod.zip"" -g ""dependant_mod_with_compatible_version.zip"" -j ""{Directory.GetCurrentDirectory()}\Data\Addons\Duke3D\Mods"" -usecwd -h ""a"" -j ""D:\Games\Duke3D""";
 
         if (OperatingSystem.IsLinux())
         {

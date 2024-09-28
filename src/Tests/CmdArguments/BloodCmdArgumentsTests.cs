@@ -122,7 +122,7 @@ public sealed class BloodCmdArgumentsTests
         Raze raze = new();
 
         var args = raze.GetStartGameArgs(_bloodGame, _bloodCamp, mods, true, true);
-        var expected = @$" -quick -nosetup -file ""enabled_mod.zip"" -adddef ""ENABLED1.DEF"" -adddef ""ENABLED2.DEF"" -file ""mod_incompatible_with_addon.zip"" -file ""incompatible_mod_with_compatible_version.zip"" -file ""dependant_mod.zip"" -file ""dependant_mod_with_compatible_version.zip"" -savedir ""{Directory.GetCurrentDirectory()}\Data\Ports\Raze\Save\blood"" -def ""a""";
+        var expected = @$" -quick -nosetup -file ""enabled_mod.zip"" -adddef ""ENABLED1.DEF"" -adddef ""ENABLED2.DEF"" -file ""mod_incompatible_with_addon.zip"" -file ""incompatible_mod_with_compatible_version.zip"" -file ""dependant_mod.zip"" -file ""dependant_mod_with_compatible_version.zip"" -savedir ""{Directory.GetCurrentDirectory()}\Data\Saves\Raze\Blood\blood"" -def ""a""";
 
         if (OperatingSystem.IsLinux())
         {
@@ -139,7 +139,7 @@ public sealed class BloodCmdArgumentsTests
             Path=D:/Games/Blood
 
             [FileSearch.Directories]
-            Path={Directory.GetCurrentDirectory()}/Data/Blood/Mods
+            Path={Directory.GetCurrentDirectory()}/Data/Addons/Blood/Mods
 
             [SoundfontSearch.Directories]
             """.Replace('\\', '/'), config);
@@ -166,7 +166,7 @@ public sealed class BloodCmdArgumentsTests
         Raze raze = new();
 
         var args = raze.GetStartGameArgs(_bloodGame, _bloodCpCamp, mods, true, true);
-        var expected = @$" -quick -nosetup -file ""enabled_mod.zip"" -adddef ""ENABLED1.DEF"" -adddef ""ENABLED2.DEF"" -file ""mod_requires_addon.zip"" -file ""incompatible_mod_with_compatible_version.zip"" -file ""dependant_mod.zip"" -file ""dependant_mod_with_compatible_version.zip"" -savedir ""{Directory.GetCurrentDirectory()}\Data\Ports\Raze\Save\bloodcp"" -def ""a"" -ini ""CRYPTIC.INI""";
+        var expected = @$" -quick -nosetup -file ""enabled_mod.zip"" -adddef ""ENABLED1.DEF"" -adddef ""ENABLED2.DEF"" -file ""mod_requires_addon.zip"" -file ""incompatible_mod_with_compatible_version.zip"" -file ""dependant_mod.zip"" -file ""dependant_mod_with_compatible_version.zip"" -savedir ""{Directory.GetCurrentDirectory()}\Data\Saves\Raze\Blood\bloodcp"" -def ""a"" -ini ""CRYPTIC.INI""";
 
         if (OperatingSystem.IsLinux())
         {
@@ -183,7 +183,7 @@ public sealed class BloodCmdArgumentsTests
             Path=D:/Games/Blood
 
             [FileSearch.Directories]
-            Path={Directory.GetCurrentDirectory()}/Data/Blood/Mods
+            Path={Directory.GetCurrentDirectory()}/Data/Addons/Blood/Mods
 
             [SoundfontSearch.Directories]
             """.Replace('\\', '/'), config);
@@ -195,7 +195,7 @@ public sealed class BloodCmdArgumentsTests
         Raze raze = new();
 
         var args = raze.GetStartGameArgs(_bloodGame, _bloodTc, [], true, true);
-        var expected = @$" -quick -nosetup -savedir ""{Directory.GetCurrentDirectory()}\Data\Ports\Raze\Save\blood-tc"" -def ""a"" -ini ""TC.INI"" -file ""{Directory.GetCurrentDirectory()}\Data\Blood\Campaigns\blood_tc.zip"" -file ""TC.RFF"" -file ""TC.SND""";
+        var expected = @$" -quick -nosetup -savedir ""{Directory.GetCurrentDirectory()}\Data\Saves\Raze\Blood\blood-tc"" -def ""a"" -ini ""TC.INI"" -file ""{Directory.GetCurrentDirectory()}\Data\Addons\Blood\Campaigns\blood_tc.zip"" -file ""TC.RFF"" -file ""TC.SND""";
 
         if (OperatingSystem.IsLinux())
         {
@@ -212,7 +212,7 @@ public sealed class BloodCmdArgumentsTests
             Path=D:/Games/Blood
 
             [FileSearch.Directories]
-            Path={Directory.GetCurrentDirectory()}/Data/Blood/Mods
+            Path={Directory.GetCurrentDirectory()}/Data/Addons/Blood/Mods
 
             [SoundfontSearch.Directories]
             """.Replace('\\', '/'), config);
@@ -239,7 +239,7 @@ public sealed class BloodCmdArgumentsTests
         NBlood nblood = new();
 
         var args = nblood.GetStartGameArgs(_bloodGame, _bloodCamp, mods, true, true, 2);
-        var expected = @$" -quick -nosetup -g ""enabled_mod.zip"" -mh ""ENABLED1.DEF"" -mh ""ENABLED2.DEF"" -g ""mod_incompatible_with_addon.zip"" -g ""incompatible_mod_with_compatible_version.zip"" -g ""dependant_mod.zip"" -g ""dependant_mod_with_compatible_version.zip"" -g ""feature_mod.zip"" -j ""{Directory.GetCurrentDirectory()}\Data\Blood\Mods"" -usecwd -j ""D:\Games\Blood"" -h ""a"" -s 2";
+        var expected = @$" -quick -nosetup -g ""enabled_mod.zip"" -mh ""ENABLED1.DEF"" -mh ""ENABLED2.DEF"" -g ""mod_incompatible_with_addon.zip"" -g ""incompatible_mod_with_compatible_version.zip"" -g ""dependant_mod.zip"" -g ""dependant_mod_with_compatible_version.zip"" -g ""feature_mod.zip"" -j ""{Directory.GetCurrentDirectory()}\Data\Addons\Blood\Mods"" -usecwd -j ""D:\Games\Blood"" -h ""a"" -s 2";
 
         if (OperatingSystem.IsLinux())
         {
@@ -271,7 +271,7 @@ public sealed class BloodCmdArgumentsTests
         NBlood nblood = new();
 
         var args = nblood.GetStartGameArgs(_bloodGame, _bloodCpCamp, mods, true, true, 2);
-        var expected = @$" -quick -nosetup -g ""enabled_mod.zip"" -mh ""ENABLED1.DEF"" -mh ""ENABLED2.DEF"" -g ""mod_requires_addon.zip"" -g ""incompatible_mod_with_compatible_version.zip"" -g ""dependant_mod.zip"" -g ""dependant_mod_with_compatible_version.zip"" -g ""feature_mod.zip"" -j ""{Directory.GetCurrentDirectory()}\Data\Blood\Mods"" -usecwd -j ""D:\Games\Blood"" -h ""a"" -ini ""CRYPTIC.INI"" -s 2";
+        var expected = @$" -quick -nosetup -g ""enabled_mod.zip"" -mh ""ENABLED1.DEF"" -mh ""ENABLED2.DEF"" -g ""mod_requires_addon.zip"" -g ""incompatible_mod_with_compatible_version.zip"" -g ""dependant_mod.zip"" -g ""dependant_mod_with_compatible_version.zip"" -g ""feature_mod.zip"" -j ""{Directory.GetCurrentDirectory()}\Data\Addons\Blood\Mods"" -usecwd -j ""D:\Games\Blood"" -h ""a"" -ini ""CRYPTIC.INI"" -s 2";
 
         if (OperatingSystem.IsLinux())
         {
@@ -288,7 +288,7 @@ public sealed class BloodCmdArgumentsTests
         NBlood nblood = new();
 
         var args = nblood.GetStartGameArgs(_bloodGame, _bloodTc, [], true, true, 2);
-        var expected = @$" -quick -nosetup -usecwd -j ""D:\Games\Blood"" -h ""a"" -ini ""TC.INI"" -g ""{Directory.GetCurrentDirectory()}\Data\Blood\Campaigns\blood_tc.zip"" -rff ""TC.RFF"" -snd ""TC.SND"" -s 2";
+        var expected = @$" -quick -nosetup -usecwd -j ""D:\Games\Blood"" -h ""a"" -ini ""TC.INI"" -g ""{Directory.GetCurrentDirectory()}\Data\Addons\Blood\Campaigns\blood_tc.zip"" -rff ""TC.RFF"" -snd ""TC.SND"" -s 2";
 
         if (OperatingSystem.IsLinux())
         {
