@@ -48,8 +48,8 @@ public sealed class Raze : BasePort
 
     /// <inheritdoc/>
     public override string? InstalledVersion =>
-        File.Exists(FullPathToExe)
-        ? FileVersionInfo.GetVersionInfo(FullPathToExe).FileVersion
+        File.Exists(PortExeFolderPath)
+        ? FileVersionInfo.GetVersionInfo(PortExeFolderPath).FileVersion
         : null;
 
 
@@ -99,6 +99,73 @@ public sealed class Raze : BasePort
         FeatureEnum.Wall_Rotate_Cstat
         ];
 
+
+    public Raze() : base()
+    {
+        MoveOldSavesFolder();
+    }
+
+
+    [Obsolete]
+    private void MoveOldSavesFolder()
+    {
+        var oldSavesFolder = Path.Combine(PortExecutableFolderPath, "Save");
+
+        if (Directory.Exists(oldSavesFolder))
+        {
+            foreach (var entry in Directory.GetDirectories(oldSavesFolder))
+            {
+                var folderName = Path.GetFileName(entry);
+
+                string gameFolder;
+
+                if (folderName.StartsWith("blood", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    gameFolder = "Blood";
+                }
+                else if (folderName.StartsWith("duke", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    gameFolder = "Duke3D";
+                }
+                else if (folderName.StartsWith("slave", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    gameFolder = "Slave";
+                }
+                else if (folderName.StartsWith("fury", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    gameFolder = "Fury";
+                }
+                else if (folderName.StartsWith("wang", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    gameFolder = "Wang";
+                }
+                else if (folderName.StartsWith("redneck", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    gameFolder = "Redneck";
+                }
+                else if (folderName.StartsWith("ridesagain", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    gameFolder = "Redneck";
+                }
+                else
+                {
+                    continue;
+                }
+
+                var gameSavesDir = Path.Combine(PortSavedGamesFolderPath, gameFolder);
+
+                if (!Directory.Exists(gameSavesDir))
+                {
+                    _ = Directory.CreateDirectory(gameSavesDir);
+                }
+
+                Directory.Move(entry, Path.Combine(gameSavesDir, folderName));
+            }
+
+            Directory.Delete(oldSavesFolder, true);
+        }
+    }
+
     /// <inheritdoc/>
     protected override void GetSkipIntroParameter(StringBuilder sb) => sb.Append(" -quick");
 
@@ -109,7 +176,7 @@ public sealed class Raze : BasePort
     /// <inheritdoc/>
     protected override void BeforeStart(IGame game, IAddon campaign)
     {
-        var config = Path.Combine(PathToExecutableFolder, ConfigFile);
+        var config = Path.Combine(PortExecutableFolderPath, ConfigFile);
 
         if (!File.Exists(config))
         {
@@ -147,9 +214,15 @@ public sealed class Raze : BasePort
     }
 
     /// <inheritdoc/>
+    public override void AfterStart(IGame game, IAddon campaign)
+    {
+        //nothing to do
+    }
+
+    /// <inheritdoc/>
     protected override void GetStartCampaignArgs(StringBuilder sb, IGame game, IAddon addon)
     {
-        _ = sb.Append($@" -savedir ""{Path.Combine(PathToExecutableFolder, "Save", addon.Id.Replace(' ', '_'))}""");
+        _ = sb.Append($@" -savedir ""{GetPathToAddonSavedGamesFolder(game.ShortName, addon.Id)}""");
 
         if (addon.MainDef is not null)
         {
@@ -212,7 +285,7 @@ public sealed class Raze : BasePort
         if (dCamp.SupportedGame.GameVersion is not null &&
             dCamp.SupportedGame.GameVersion.Equals(nameof(DukeVersionEnum.Duke3D_WT), StringComparison.InvariantCultureIgnoreCase))
         {
-            var config = Path.Combine(PathToExecutableFolder, ConfigFile);
+            var config = Path.Combine(PortExecutableFolderPath, ConfigFile);
 
             AddGamePathsToConfig(game, addon, game.DukeWTInstallPath!, config);
 
@@ -349,7 +422,7 @@ public sealed class Raze : BasePort
 
         if (rCamp.Id.Equals(nameof(GameEnum.RidesAgain), StringComparison.OrdinalIgnoreCase))
         {
-            var pathToConfig = Path.Combine(PathToExecutableFolder, ConfigFile);
+            var pathToConfig = Path.Combine(PortExecutableFolderPath, ConfigFile);
             AddGamePathsToConfig(game, addon, game.AgainInstallPath!, pathToConfig);
         }
 

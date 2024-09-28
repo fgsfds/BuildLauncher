@@ -237,8 +237,8 @@ public sealed class ConfigProvider : IConfigProvider
     [Obsolete]
     private void ConvertOldConfig()
     {
-        if (!File.Exists(Path.Combine(ClientProperties.ExeFolderPath, "config.db")) ||
-            !File.Exists(Path.Combine(ClientProperties.ExeFolderPath, Consts.ConfigFile)))
+        if (!File.Exists(Path.Combine(ClientProperties.AppExeFolderPath, "config.db")) ||
+            !File.Exists(Path.Combine(ClientProperties.AppExeFolderPath, Consts.ConfigFile)))
         {
             return;
         }
@@ -284,7 +284,7 @@ public sealed class ConfigProvider : IConfigProvider
         _ = _dbContext.SaveChanges();
 
         fs.Dispose();
-        File.Delete(Path.Combine(ClientProperties.ExeFolderPath, Consts.ConfigFile));
+        File.Delete(Path.Combine(ClientProperties.AppExeFolderPath, Consts.ConfigFile));
     }
 
     [Obsolete]

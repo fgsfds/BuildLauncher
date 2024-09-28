@@ -50,7 +50,12 @@ public abstract class BasePort
     /// <summary>
     /// Path to port install folder
     /// </summary>
-    public virtual string PathToExecutableFolder => Path.Combine(ClientProperties.PortsFolderPath, PortFolderName);
+    public virtual string PortExecutableFolderPath => Path.Combine(ClientProperties.PortsFolderPath, PortFolderName);
+
+    /// <summary>
+    /// Path to port install folder
+    /// </summary>
+    public virtual string PortSavedGamesFolderPath => Path.Combine(ClientProperties.SavedGamesFolderPath, Name);
 
     /// <summary>
     /// Is port installed
@@ -65,7 +70,7 @@ public abstract class BasePort
     /// <summary>
     /// Path to port exe
     /// </summary>
-    public string FullPathToExe => Path.Combine(PathToExecutableFolder, Exe);
+    public string PortExeFolderPath => Path.Combine(PortExecutableFolderPath, Exe);
 
 
     /// <summary>
@@ -129,6 +134,11 @@ public abstract class BasePort
     protected abstract string AddSndParam { get; }
 
     /// <summary>
+    /// Extension of the save game file
+    /// </summary>
+    protected IEnumerable<string> SaveFileExtensions => [".sav", ".esv"];
+
+    /// <summary>
     /// Name of the folder that contains the port files
     /// By default is the same as <see cref="Name"/>
     /// </summary>
@@ -138,6 +148,36 @@ public abstract class BasePort
     /// Port's icon
     /// </summary>
     public Stream Icon => ImageHelper.FileNameToStream($"{Name}.png", Assembly.GetExecutingAssembly());
+
+
+    protected BasePort()
+    {
+        if (!Directory.Exists(PortSavedGamesFolderPath))
+        {
+            _ = Directory.CreateDirectory(PortSavedGamesFolderPath);
+        }
+    }
+
+
+    /// <summary>
+    /// Get path to addon's saved games folder
+    /// </summary>
+    /// <param name="subFolder">Subbolder under port's saves folder</param>
+    /// <param name="addonId">Addon Id</param>
+    /// <returns></returns>
+    public string GetPathToAddonSavedGamesFolder(string subFolder, string addonId)
+    {
+        var folderName = addonId;
+
+        foreach (var ch in Path.GetInvalidFileNameChars())
+        {
+            folderName = folderName.Replace(ch, '_');
+        }
+
+        var result = Path.Combine(PortSavedGamesFolderPath, subFolder, folderName);
+
+        return result;
+    }
 
 
     /// <summary>
@@ -434,11 +474,18 @@ public abstract class BasePort
 
 
     /// <summary>
+    /// Method to perform after port is finished
+    /// </summary>
+    /// <param name="game">Game</param>
+    /// <param name="campaign">Campaign</param>
+    public abstract void AfterStart(IGame game, IAddon campaign);
+
+    /// <summary>
     /// Method to perform before starting the port
     /// </summary>
     /// <param name="game">Game</param>
     /// <param name="campaign">Campaign</param>
-    protected virtual void BeforeStart(IGame game, IAddon campaign) { }
+    protected abstract void BeforeStart(IGame game, IAddon campaign);
 
     /// <summary>
     /// Get command line arguments to start custom map or campaign

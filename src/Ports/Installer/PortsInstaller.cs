@@ -46,13 +46,13 @@ public sealed class PortsInstaller
 
         await _fileTools.DownloadFileAsync(release.WindowsDownloadUrl, fileName).ConfigureAwait(false);
 
-        await _fileTools.UnpackArchiveAsync(fileName, port.PathToExecutableFolder).ConfigureAwait(false);
+        await _fileTools.UnpackArchiveAsync(fileName, port.PortExecutableFolderPath).ConfigureAwait(false);
 
         File.Delete(fileName);
 
         if (port is not Raze)
         {
-            File.WriteAllText(Path.Combine(port.PathToExecutableFolder, "version"), release.Version);
+            File.WriteAllText(Path.Combine(port.PortExecutableFolderPath, "version"), release.Version);
         }
     }
 }

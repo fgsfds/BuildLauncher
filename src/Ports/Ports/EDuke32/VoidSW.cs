@@ -27,7 +27,7 @@ public sealed class VoidSW : EDuke32
     public override List<GameEnum> SupportedGames => [GameEnum.ShadowWarrior];
 
     /// <inheritdoc/>
-    public override string PathToExecutableFolder => Path.Combine(ClientProperties.PortsFolderPath, "EDuke32");
+    public override string PortExecutableFolderPath => Path.Combine(ClientProperties.PortsFolderPath, "EDuke32");
 
     /// <inheritdoc/>
     public override List<FeatureEnum> SupportedFeatures =>
@@ -61,6 +61,8 @@ public sealed class VoidSW : EDuke32
     /// <inheritdoc/>
     protected override void BeforeStart(IGame game, IAddon campaign)
     {
+        MoveSaveFiles(game, campaign);
+
         FixGrpInConfig();
     }
 

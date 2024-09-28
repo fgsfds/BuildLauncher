@@ -132,8 +132,9 @@ public sealed partial class CampaignsViewModel : RightPanelViewModel, IPortsButt
         var mods = _installedAddonsProvider.GetInstalledMods();
 
         var args = port.GetStartGameArgs(Game, SelectedAddon, mods, _config.SkipIntro, _config.SkipStartup);
+        var addon = SelectedAddon;
 
-        await StartPortAsync(SelectedAddon.Id, port.FullPathToExe, args).ConfigureAwait(true);
+        await StartPortAsync(port, addon, args).ConfigureAwait(true);
     }
 
 
@@ -186,29 +187,30 @@ public sealed partial class CampaignsViewModel : RightPanelViewModel, IPortsButt
     /// <summary>
     /// Start port with command line args
     /// </summary>
-    /// <param name="id">Campaign id</param>
-    /// <param name="exe">Path to port exe</param>
+    /// <param name="port">Port</param>
+    /// <param name="addon">Campaign</param>
     /// <param name="args">Command line arguments</param>
-    private async Task StartPortAsync(string id, string exe, string args)
+    private async Task StartPortAsync(BasePort port, IAddon addon, string args)
     {
         var sw = Stopwatch.StartNew();
 
         await Process.Start(new ProcessStartInfo
         {
-            FileName = exe,
+            FileName = port.PortExeFolderPath,
             UseShellExecute = true,
             Arguments = args,
-            WorkingDirectory = Path.GetDirectoryName(exe)
+            WorkingDirectory = Path.GetDirectoryName(port.PortExeFolderPath)
         })!.WaitForExitAsync().ConfigureAwait(true);
 
         sw.Stop();
         var time = sw.Elapsed;
 
-        _playtimeProvider.AddTime(id, time);
+        _playtimeProvider.AddTime(addon.Id, time);
 
         OnPropertyChanged(nameof(SelectedAddonPlaytime));
-    }
 
+        port.AfterStart(Game, addon);
+    }
 
     private void OnGameChanged(GameEnum parameterName)
     {

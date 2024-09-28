@@ -93,7 +93,7 @@ public class EDuke32 : BasePort
     {
         get
         {
-            var versionFile = Path.Combine(PathToExecutableFolder, "version");
+            var versionFile = Path.Combine(PortExecutableFolderPath, "version");
 
             if (!File.Exists(versionFile))
             {
@@ -114,7 +114,52 @@ public class EDuke32 : BasePort
     /// <inheritdoc/>
     protected override void BeforeStart(IGame game, IAddon campaign)
     {
+        MoveSaveFiles(game, campaign);
+
         FixGrpInConfig();
+    }
+
+    protected void MoveSaveFiles(IGame game, IAddon campaign)
+    {
+        var saveFolder = GetPathToAddonSavedGamesFolder(game.ShortName, campaign.Id);
+
+        if (Directory.Exists(saveFolder))
+        {
+            var saves = Directory.GetFiles(saveFolder);
+
+            foreach (var save in saves)
+            {
+                var destFileName = Path.Combine(PortExecutableFolderPath, Path.GetFileName(save)!);
+                File.Move(save, destFileName, true);
+            }
+        }
+    }
+
+    /// <inheritdoc/>
+    public override void AfterStart(IGame game, IAddon campaign)
+    {
+        var saveFolder = GetPathToAddonSavedGamesFolder(game.ShortName, campaign.Id);
+
+        if (!Directory.Exists(saveFolder))
+        {
+            _ = Directory.CreateDirectory(saveFolder);
+        }
+
+        var saves = from file in Directory.GetFiles(PortExecutableFolderPath)
+                   from ext in SaveFileExtensions
+                   where file.EndsWith(ext)
+                   select file;
+
+        if (!Directory.Exists(saveFolder))
+        {
+            _ = Directory.CreateDirectory(saveFolder);
+        }
+
+        foreach (var save in saves)
+        {
+            var destFileName = Path.Combine(saveFolder, Path.GetFileName(save)!);
+            File.Move(save, destFileName, true);
+        }
     }
 
     /// <inheritdoc/>
@@ -332,7 +377,7 @@ public class EDuke32 : BasePort
     /// </summary>
     protected void FixGrpInConfig()
     {
-        var config = Path.Combine(PathToExecutableFolder, ConfigFile);
+        var config = Path.Combine(PortExecutableFolderPath, ConfigFile);
 
         if (!File.Exists(config))
         {

@@ -35,6 +35,6 @@ public sealed class NotBlood : NBlood
     /// <inheritdoc/>
     protected override void BeforeStart(IGame game, IAddon campaign)
     {
-        //nothing to do
+        MoveSaveFiles(game, campaign);
     }
 }

@@ -196,7 +196,7 @@ public sealed partial class PortViewModel : ObservableObject
         {
             IsInProgress = true;
 
-            Directory.Delete(_port.PathToExecutableFolder, true);
+            Directory.Delete(_port.PortExecutableFolderPath, true);
 
             OnPropertyChanged(nameof(Version));
             OnPropertyChanged(nameof(InstallButtonText));

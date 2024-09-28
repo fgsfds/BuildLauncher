@@ -57,6 +57,8 @@ public sealed class RedNukem : EDuke32
     /// <inheritdoc/>
     protected override void BeforeStart(IGame game, IAddon campaign)
     {
+        MoveSaveFiles(game, campaign);
+
         FixGrpInConfig();
 
         FixRoute66Files(game, campaign);

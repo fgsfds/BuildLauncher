@@ -33,7 +33,7 @@ public sealed class PCExhumed : EDuke32
     /// <inheritdoc/>
     protected override void BeforeStart(IGame game, IAddon campaign)
     {
-        //nothing to do
+        MoveSaveFiles(game, campaign);
     }
 
 

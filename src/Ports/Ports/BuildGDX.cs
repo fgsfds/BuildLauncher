@@ -51,7 +51,7 @@ public sealed class BuildGDX : BasePort
     {
         get
         {
-            var versionFile = Path.Combine(PathToExecutableFolder, "version");
+            var versionFile = Path.Combine(PortExecutableFolderPath, "version");
 
             if (!File.Exists(versionFile))
             {
@@ -63,7 +63,7 @@ public sealed class BuildGDX : BasePort
     }
 
     /// <inheritdoc/>
-    public override bool IsInstalled => File.Exists(Path.Combine(PathToExecutableFolder, "BuildGDX.jar"));
+    public override bool IsInstalled => File.Exists(Path.Combine(PortExecutableFolderPath, "BuildGDX.jar"));
 
     /// <inheritdoc/>
     public override List<FeatureEnum> SupportedFeatures =>
@@ -78,38 +78,50 @@ public sealed class BuildGDX : BasePort
     protected override string ConfigFile => string.Empty;
 
     /// <inheritdoc/>
-    protected override string AddDirectoryParam => throw new NotImplementedException();
+    protected override string AddDirectoryParam => ThrowHelper.NotImplementedException<string>();
 
     /// <inheritdoc/>
-    protected override string AddFileParam => throw new NotImplementedException();
+    protected override string AddFileParam => ThrowHelper.NotImplementedException<string>();
 
     /// <inheritdoc/>
-    protected override string AddDefParam => throw new NotImplementedException();
+    protected override string AddDefParam => ThrowHelper.NotImplementedException<string>();
 
     /// <inheritdoc/>
-    protected override string AddConParam => throw new NotImplementedException();
+    protected override string AddConParam => ThrowHelper.NotImplementedException<string>();
 
     /// <inheritdoc/>
-    protected override string MainDefParam => throw new NotImplementedException();
+    protected override string MainDefParam => ThrowHelper.NotImplementedException<string>();
 
     /// <inheritdoc/>
-    protected override string MainConParam => throw new NotImplementedException();
+    protected override string MainConParam => ThrowHelper.NotImplementedException<string>();
 
     /// <inheritdoc/>
-    protected override string AddGrpParam => throw new NotImplementedException();
+    protected override string AddGrpParam => ThrowHelper.NotImplementedException<string>();
 
     /// <inheritdoc/>
-    protected override string SkillParam => throw new NotImplementedException();
+    protected override string SkillParam => ThrowHelper.NotImplementedException<string>();
 
     /// <inheritdoc/>
-    protected override string AddGameDirParam => throw new NotImplementedException();
+    protected override string AddGameDirParam => ThrowHelper.NotImplementedException<string>();
 
     /// <inheritdoc/>
-    protected override string AddRffParam => throw new NotImplementedException();
+    protected override string AddRffParam => ThrowHelper.NotImplementedException<string>();
 
     /// <inheritdoc/>
-    protected override string AddSndParam => throw new NotImplementedException();
+    protected override string AddSndParam => ThrowHelper.NotImplementedException<string>();
 
+
+    /// <inheritdoc/>
+    protected override void BeforeStart(IGame game, IAddon campaign)
+    {
+        //nothing to do
+    }
+
+    /// <inheritdoc/>
+    public override void AfterStart(IGame game, IAddon campaign)
+    {
+        //nothing to do
+    }
 
     /// <inheritdoc/>
     protected override void GetStartCampaignArgs(StringBuilder sb, IGame game, IAddon addon)
