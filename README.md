@@ -49,13 +49,15 @@ Another goal of this project is to create a unification standard for Build Engin
 <td valign="center">
 <img align="right" src="img/img3.png">
 
+- Automatically detect Build Engine games installed from Steam or Zoom platform (GOG support will be added later)
 - Download and update all major source ports for Build Engine games
 - Download custom maps, campaigns and mods for supported games
-- Launch original games, their addons, and custom content with the port of your choice
+- Launch original games, their addons, and custom content with the port of your choice without any tweaking and manual installing
+- Load multiple mods at the same time without manually editing .def files
+- Keep saved games for custom content in separate folders
+- Track your playtime for games and custom content
 - Create Would Tour Stopgap for EDuke32 automatically
-- Create combined autoload mod for EDuke32 and its forks, so more than one autoload mod can work at the same time
-- Turn autoload mods on and off
-- Keep saved games for custom content in separate folders (only for Raze so far)
+- Run Route 66 with RedNukem without renaming original files
 
 </td>
 </tr>
