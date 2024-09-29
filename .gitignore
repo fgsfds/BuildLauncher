@@ -452,8 +452,7 @@ $RECYCLE.BIN/
 !.vscode/launch.json
 !.vscode/extensions.json
 /config.json
-/Data/Duke3D/Special/WTStopgap
-/src/Avalonia/BuildLauncher.Desktop/Properties/launchSettings.json
+/Data/*
 /src/Avalonia/BuildLauncher.Desktop/Properties/launchSettings.json
 /Web.Server/config.json
 /Web.Server/Data
