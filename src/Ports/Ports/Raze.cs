@@ -48,8 +48,8 @@ public sealed class Raze : BasePort
 
     /// <inheritdoc/>
     public override string? InstalledVersion =>
-        File.Exists(PortExeFolderPath)
-        ? FileVersionInfo.GetVersionInfo(PortExeFolderPath).FileVersion
+        File.Exists(PortExeFilePath)
+        ? FileVersionInfo.GetVersionInfo(PortExeFilePath).FileVersion
         : null;
 
 
@@ -108,7 +108,7 @@ public sealed class Raze : BasePort
         }
         catch
         {
-            Directory.Delete(Path.Combine(PortExecutableFolderPath, "Save"));
+            Directory.Delete(Path.Combine(PortInstallFolderPath, "Save"));
         }
     }
 
@@ -116,7 +116,7 @@ public sealed class Raze : BasePort
     [Obsolete]
     private void MoveOldSavesFolder()
     {
-        var oldSavesFolder = Path.Combine(PortExecutableFolderPath, "Save");
+        var oldSavesFolder = Path.Combine(PortInstallFolderPath, "Save");
 
         if (Directory.Exists(oldSavesFolder))
         {
@@ -183,7 +183,7 @@ public sealed class Raze : BasePort
     /// <inheritdoc/>
     protected override void BeforeStart(IGame game, IAddon campaign)
     {
-        var config = Path.Combine(PortExecutableFolderPath, ConfigFile);
+        var config = Path.Combine(PortInstallFolderPath, ConfigFile);
 
         if (!File.Exists(config))
         {
@@ -221,7 +221,7 @@ public sealed class Raze : BasePort
     }
 
     /// <inheritdoc/>
-    public override void AfterStart(IGame game, IAddon campaign)
+    public override void AfterEnd(IGame game, IAddon campaign)
     {
         //nothing to do
     }
@@ -292,7 +292,7 @@ public sealed class Raze : BasePort
         if (dCamp.SupportedGame.GameVersion is not null &&
             dCamp.SupportedGame.GameVersion.Equals(nameof(DukeVersionEnum.Duke3D_WT), StringComparison.InvariantCultureIgnoreCase))
         {
-            var config = Path.Combine(PortExecutableFolderPath, ConfigFile);
+            var config = Path.Combine(PortInstallFolderPath, ConfigFile);
 
             AddGamePathsToConfig(game, addon, game.DukeWTInstallPath!, config);
 
@@ -355,6 +355,79 @@ public sealed class Raze : BasePort
         {
             ThrowHelper.NotImplementedException($"Mod type {dCamp.Type} is not supported");
             return;
+        }
+    }
+
+    private void GetBloodArgs(StringBuilder sb, BloodGame game, IAddon addon)
+    {
+        if (addon is LooseMap lMap)
+        {
+            if (lMap.BloodIni is null)
+            {
+                _ = sb.Append($@" -ini ""{Consts.BloodIni}""");
+            }
+            else
+            {
+                _ = sb.Append($@" -ini ""{Path.GetFileName(lMap.BloodIni)}""");
+            }
+
+            GetLooseMapArgs(sb, game, addon);
+            return;
+        }
+
+        if (addon is not BloodCampaign bCamp)
+        {
+            ThrowHelper.ArgumentException(nameof(addon));
+            return;
+        }
+
+        if (bCamp.INI is not null)
+        {
+            _ = sb.Append($@" -ini ""{bCamp.INI}""");
+        }
+        else if (bCamp.DependentAddons is not null && bCamp.DependentAddons.ContainsKey(nameof(BloodAddonEnum.BloodCP)))
+        {
+            _ = sb.Append($@" -ini ""{Consts.CrypticIni}""");
+        }
+
+
+        if (bCamp.FileName is null)
+        {
+            return;
+        }
+
+
+        if (bCamp.Type is AddonTypeEnum.TC)
+        {
+            if (bCamp.FileName.Equals("addon.json"))
+            {
+                _ = sb.Append($@" {AddDirectoryParam}""{Path.GetDirectoryName(bCamp.PathToFile)}""");
+            }
+            else
+            {
+                _ = sb.Append($@" {AddFileParam}""{Path.Combine(game.CampaignsFolderPath, bCamp.FileName)}""");
+            }
+        }
+        else if (bCamp.Type is AddonTypeEnum.Map)
+        {
+            GetMapArgs(sb, game, bCamp);
+        }
+        else
+        {
+            ThrowHelper.NotImplementedException($"Mod type {bCamp.Type} is not supported");
+            return;
+        }
+
+
+        if (bCamp.RFF is not null)
+        {
+            _ = sb.Append($@" {AddRffParam}""{bCamp.RFF}""");
+        }
+
+
+        if (bCamp.SND is not null)
+        {
+            _ = sb.Append($@" {AddSndParam}""{bCamp.SND}""");
         }
     }
 
@@ -429,7 +502,7 @@ public sealed class Raze : BasePort
 
         if (rCamp.Id.Equals(nameof(GameEnum.RidesAgain), StringComparison.OrdinalIgnoreCase))
         {
-            var pathToConfig = Path.Combine(PortExecutableFolderPath, ConfigFile);
+            var pathToConfig = Path.Combine(PortInstallFolderPath, ConfigFile);
             AddGamePathsToConfig(game, addon, game.AgainInstallPath!, pathToConfig);
         }
 

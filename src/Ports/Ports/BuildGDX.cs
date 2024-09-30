@@ -51,7 +51,7 @@ public sealed class BuildGDX : BasePort
     {
         get
         {
-            var versionFile = Path.Combine(PortExecutableFolderPath, "version");
+            var versionFile = Path.Combine(PortInstallFolderPath, "version");
 
             if (!File.Exists(versionFile))
             {
@@ -63,7 +63,7 @@ public sealed class BuildGDX : BasePort
     }
 
     /// <inheritdoc/>
-    public override bool IsInstalled => File.Exists(Path.Combine(PortExecutableFolderPath, "BuildGDX.jar"));
+    public override bool IsInstalled => File.Exists(Path.Combine(PortInstallFolderPath, "BuildGDX.jar"));
 
     /// <inheritdoc/>
     public override List<FeatureEnum> SupportedFeatures =>
@@ -118,7 +118,7 @@ public sealed class BuildGDX : BasePort
     }
 
     /// <inheritdoc/>
-    public override void AfterStart(IGame game, IAddon campaign)
+    public override void AfterEnd(IGame game, IAddon campaign)
     {
         //nothing to do
     }

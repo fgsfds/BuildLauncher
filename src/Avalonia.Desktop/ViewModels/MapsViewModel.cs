@@ -133,7 +133,7 @@ public sealed partial class MapsViewModel : RightPanelViewModel, IPortsButtonCon
 
         var args = parameter.Item1.GetStartGameArgs(Game, SelectedAddon, mods, _config.SkipIntro, _config.SkipStartup, parameter.Item2);
 
-        await StartPortAsync(SelectedAddon.Id, parameter.Item1.PortExeFolderPath, args).ConfigureAwait(true);
+        await StartPortAsync(SelectedAddon.Id, parameter.Item1.PortExeFilePath, args).ConfigureAwait(true);
     }
 
 

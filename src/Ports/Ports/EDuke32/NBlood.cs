@@ -1,7 +1,9 @@
 ﻿using Common.Enums;
+using Common.Enums.Addons;
 using Common.Helpers;
 using Common.Interfaces;
 using Games.Games;
+using Mods.Addons;
 using System.Text;
 
 namespace Ports.Ports.EDuke32;
@@ -55,25 +57,25 @@ public class NBlood : EDuke32
     protected override void GetStartCampaignArgs(StringBuilder sb, IGame game, IAddon addon)
     {
         //don't search for steam/gog installs
-        sb.Append(" -usecwd");
+        _ = sb.Append(" -usecwd");
 
-        sb.Append(@$" {AddDirectoryParam}""{game.GameInstallFolder}""");
+        _ = sb.Append(@$" {AddDirectoryParam}""{game.GameInstallFolder}""");
 
         if (addon.MainDef is not null)
         {
-            sb.Append($@" {MainDefParam}""{addon.MainDef}""");
+            _ = sb.Append($@" {MainDefParam}""{addon.MainDef}""");
         }
         else
         {
             //overriding default def so gamename.def files are ignored
-            sb.Append($@" {MainDefParam}""a""");
+            _ = sb.Append($@" {MainDefParam}""a""");
         }
 
         if (addon.AdditionalDefs is not null)
         {
             foreach (var def in addon.AdditionalDefs)
             {
-                sb.Append($@" {AddDefParam}""{def}""");
+                _ = sb.Append($@" {AddDefParam}""{def}""");
             }
         }
 
@@ -85,6 +87,90 @@ public class NBlood : EDuke32
         else
         {
             ThrowHelper.NotImplementedException($"Mod type {addon.Type} for game {game} is not supported");
+        }
+    }
+
+    protected void GetBloodArgs(StringBuilder sb, BloodGame game, IAddon addon)
+    {
+        if (addon is LooseMap lMap)
+        {
+            if (lMap.BloodIni is null)
+            {
+                _ = sb.Append($@" -ini ""{Consts.BloodIni}""");
+            }
+            else
+            {
+                _ = sb.Append($@" -ini ""{Path.GetFileName(lMap.BloodIni)}""");
+            }
+
+            GetLooseMapArgs(sb, game, addon);
+            return;
+        }
+
+        if (addon is not BloodCampaign bCamp)
+        {
+            ThrowHelper.ArgumentException(nameof(addon));
+            return;
+        }
+
+        if (bCamp.INI is not null)
+        {
+            _ = sb.Append($@" -ini ""{bCamp.INI}""");
+        }
+        else if (bCamp.DependentAddons is not null && bCamp.DependentAddons.ContainsKey(nameof(BloodAddonEnum.BloodCP)))
+        {
+            _ = sb.Append($@" -ini ""{Consts.CrypticIni}""");
+        }
+
+
+        if (bCamp.FileName is null)
+        {
+            return;
+        }
+
+
+        if (bCamp.Type is AddonTypeEnum.TC)
+        {
+            if (bCamp.FileName.Equals("addon.json"))
+            {
+                var pathToAddonFolder = Path.GetDirectoryName(bCamp.PathToFile)!;
+                var addonFolderName = Path.GetFileName(pathToAddonFolder);
+                var pathToAddonInPortFolder = Path.Combine(PortInstallFolderPath, addonFolderName);
+
+                _ = sb.Append($@" {AddGameDirParam}""{addonFolderName}""");
+
+                if (Directory.Exists(pathToAddonInPortFolder))
+                {
+                    Directory.Delete(pathToAddonInPortFolder);
+                }
+
+                _ = Directory.CreateSymbolicLink(pathToAddonInPortFolder, pathToAddonFolder);
+            }
+            else
+            {
+                _ = sb.Append($@" {AddFileParam}""{Path.Combine(game.CampaignsFolderPath, bCamp.FileName)}""");
+            }
+        }
+        else if (bCamp.Type is AddonTypeEnum.Map)
+        {
+            GetMapArgs(sb, game, bCamp);
+        }
+        else
+        {
+            ThrowHelper.NotImplementedException($"Mod type {bCamp.Type} is not supported");
+            return;
+        }
+
+
+        if (bCamp.RFF is not null)
+        {
+            _ = sb.Append($@" {AddRffParam}""{bCamp.RFF}""");
+        }
+
+
+        if (bCamp.SND is not null)
+        {
+            _ = sb.Append($@" {AddSndParam}""{bCamp.SND}""");
         }
     }
 }

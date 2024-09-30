@@ -93,7 +93,7 @@ public class EDuke32 : BasePort
     {
         get
         {
-            var versionFile = Path.Combine(PortExecutableFolderPath, "version");
+            var versionFile = Path.Combine(PortInstallFolderPath, "version");
 
             if (!File.Exists(versionFile))
             {
@@ -129,14 +129,24 @@ public class EDuke32 : BasePort
 
             foreach (var save in saves)
             {
-                var destFileName = Path.Combine(PortExecutableFolderPath, Path.GetFileName(save)!);
+                string destFileName;
+
+                if (campaign.IsFolder)
+                {
+                    destFileName = Path.Combine(Path.GetDirectoryName(campaign.PathToFile)!, Path.GetFileName(save)!);
+                }
+                else
+                {
+                    destFileName = Path.Combine(PortInstallFolderPath, Path.GetFileName(save)!);
+                }
+
                 File.Move(save, destFileName, true);
             }
         }
     }
 
     /// <inheritdoc/>
-    public override void AfterStart(IGame game, IAddon campaign)
+    public override void AfterEnd(IGame game, IAddon campaign)
     {
         var saveFolder = GetPathToAddonSavedGamesFolder(game.ShortName, campaign.Id);
 
@@ -145,10 +155,21 @@ public class EDuke32 : BasePort
             _ = Directory.CreateDirectory(saveFolder);
         }
 
-        var saves = from file in Directory.GetFiles(PortExecutableFolderPath)
-                   from ext in SaveFileExtensions
-                   where file.EndsWith(ext)
-                   select file;
+        string path;
+
+        if (campaign.IsFolder)
+        {
+            path = Path.GetDirectoryName(campaign.PathToFile)!;
+        }
+        else
+        {
+            path = PortInstallFolderPath;
+        }
+
+        var saves = from file in Directory.GetFiles(path)
+                from ext in SaveFileExtensions
+                where file.EndsWith(ext)
+                select file;
 
         if (!Directory.Exists(saveFolder))
         {
@@ -377,7 +398,7 @@ public class EDuke32 : BasePort
     /// </summary>
     protected void FixGrpInConfig()
     {
-        var config = Path.Combine(PortExecutableFolderPath, ConfigFile);
+        var config = Path.Combine(PortInstallFolderPath, ConfigFile);
 
         if (!File.Exists(config))
         {

@@ -50,7 +50,7 @@ public abstract class BasePort
     /// <summary>
     /// Path to port install folder
     /// </summary>
-    public virtual string PortExecutableFolderPath => Path.Combine(ClientProperties.PortsFolderPath, PortFolderName);
+    public virtual string PortInstallFolderPath => Path.Combine(ClientProperties.PortsFolderPath, PortFolderName);
 
     /// <summary>
     /// Path to port install folder
@@ -70,7 +70,7 @@ public abstract class BasePort
     /// <summary>
     /// Path to port exe
     /// </summary>
-    public string PortExeFolderPath => Path.Combine(PortExecutableFolderPath, Exe);
+    public string PortExeFilePath => Path.Combine(PortInstallFolderPath, Exe);
 
 
     /// <summary>
@@ -363,80 +363,6 @@ public abstract class BasePort
     }
 
 
-    protected void GetBloodArgs(StringBuilder sb, BloodGame game, IAddon addon)
-    {
-        if (addon is LooseMap lMap)
-        {
-            if (lMap.BloodIni is null)
-            {
-                _ = sb.Append($@" -ini ""{Consts.BloodIni}""");
-            }
-            else
-            {
-                _ = sb.Append($@" -ini ""{Path.GetFileName(lMap.BloodIni)}""");
-            }
-
-            GetLooseMapArgs(sb, game, addon);
-            return;
-        }
-        
-        if (addon is not BloodCampaign bCamp)
-        {
-            ThrowHelper.ArgumentException(nameof(addon));
-            return;
-        }
-
-        if (bCamp.INI is not null)
-        {
-            _ = sb.Append($@" -ini ""{bCamp.INI}""");
-        }
-        else if (bCamp.DependentAddons is not null && bCamp.DependentAddons.ContainsKey(nameof(BloodAddonEnum.BloodCP)))
-        {
-            _ = sb.Append($@" -ini ""{Consts.CrypticIni}""");
-        }
-
-
-        if (bCamp.FileName is null)
-        {
-            return;
-        }
-
-
-        if (bCamp.Type is AddonTypeEnum.TC)
-        {
-            if (bCamp.FileName.Equals("addon.json"))
-            {
-                _ = sb.Append($@" {AddDirectoryParam}""{Path.GetDirectoryName(bCamp.PathToFile)}""");
-            }
-            else
-            {
-                _ = sb.Append($@" {AddFileParam}""{Path.Combine(game.CampaignsFolderPath, bCamp.FileName)}""");
-            }
-        }
-        else if (bCamp.Type is AddonTypeEnum.Map)
-        {
-            GetMapArgs(sb, game, bCamp);
-        }
-        else
-        {
-            ThrowHelper.NotImplementedException($"Mod type {bCamp.Type} is not supported");
-            return;
-        }
-
-
-        if (bCamp.RFF is not null)
-        {
-            _ = sb.Append($@" {AddRffParam}""{bCamp.RFF}""");
-        }
-
-
-        if (bCamp.SND is not null)
-        {
-            _ = sb.Append($@" {AddSndParam}""{bCamp.SND}""");
-        }
-    }
-
-
     protected void GetSlaveArgs(StringBuilder sb, SlaveGame game, IAddon addon)
     {
         if (addon is LooseMap)
@@ -478,7 +404,7 @@ public abstract class BasePort
     /// </summary>
     /// <param name="game">Game</param>
     /// <param name="campaign">Campaign</param>
-    public abstract void AfterStart(IGame game, IAddon campaign);
+    public abstract void AfterEnd(IGame game, IAddon campaign);
 
     /// <summary>
     /// Method to perform before starting the port

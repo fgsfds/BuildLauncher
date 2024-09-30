@@ -196,10 +196,10 @@ public sealed partial class CampaignsViewModel : RightPanelViewModel, IPortsButt
 
         await Process.Start(new ProcessStartInfo
         {
-            FileName = port.PortExeFolderPath,
+            FileName = port.PortExeFilePath,
             UseShellExecute = true,
             Arguments = args,
-            WorkingDirectory = Path.GetDirectoryName(port.PortExeFolderPath)
+            WorkingDirectory = Path.GetDirectoryName(port.PortExeFilePath)
         })!.WaitForExitAsync().ConfigureAwait(true);
 
         sw.Stop();
@@ -209,7 +209,7 @@ public sealed partial class CampaignsViewModel : RightPanelViewModel, IPortsButt
 
         OnPropertyChanged(nameof(SelectedAddonPlaytime));
 
-        port.AfterStart(Game, addon);
+        port.AfterEnd(Game, addon);
     }
 
     private void OnGameChanged(GameEnum parameterName)
