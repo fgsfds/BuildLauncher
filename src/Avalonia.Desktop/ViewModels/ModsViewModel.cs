@@ -2,6 +2,7 @@ using Common.Client.Providers;
 using Common.Enums;
 using Common.Helpers;
 using Common.Interfaces;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Games.Providers;
 using Mods.Addons;
@@ -52,7 +53,9 @@ public sealed partial class ModsViewModel : RightPanelViewModel, IPortsButtonCon
     /// </summary>
     private async Task UpdateAsync(bool createNew)
     {
+        IsInProgress = true;
         await _installedAddonsProvider.CreateCache(createNew).ConfigureAwait(true);
+        IsInProgress = false;
     }
 
 
@@ -80,6 +83,12 @@ public sealed partial class ModsViewModel : RightPanelViewModel, IPortsButtonCon
             OnPropertyChanged(nameof(SelectedAddonRating));
         }
     }
+
+    /// <summary>
+    /// Is form in progress
+    /// </summary>
+    [ObservableProperty]
+    private bool _isInProgress;
 
     public bool IsPortsButtonsVisible => false;
 

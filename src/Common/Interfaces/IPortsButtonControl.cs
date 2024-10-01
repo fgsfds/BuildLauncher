@@ -9,4 +9,6 @@ public interface IPortsButtonControl
     IAsyncRelayCommand? RefreshListCommand { get; }
 
     bool IsPortsButtonsVisible { get; }
+
+    bool IsInProgress { get; set; }
 }

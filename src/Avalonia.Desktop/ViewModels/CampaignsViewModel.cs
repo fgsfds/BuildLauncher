@@ -24,31 +24,6 @@ public sealed partial class CampaignsViewModel : RightPanelViewModel, IPortsButt
     private readonly DownloadableAddonsProvider _downloadableAddonsProvider;
 
 
-    [Obsolete($"Don't create directly. Use {nameof(ViewModelsFactory)}.")]
-    public CampaignsViewModel(
-        IGame game,
-        GamesProvider gamesProvider,
-        IConfigProvider config,
-        PlaytimeProvider playtimeProvider,
-        RatingProvider ratingProvider,
-        InstalledAddonsProviderFactory installedAddonsProviderFactory,
-        DownloadableAddonsProviderFactory downloadableAddonsProviderFactory
-        ) : base(playtimeProvider, ratingProvider)
-    {
-        Game = game;
-
-        _gamesProvider = gamesProvider;
-        _config = config;
-        _playtimeProvider = playtimeProvider;
-        _installedAddonsProvider = installedAddonsProviderFactory.GetSingleton(game);
-        _downloadableAddonsProvider = downloadableAddonsProviderFactory.GetSingleton(game);
-
-        _gamesProvider.GameChangedEvent += OnGameChanged;
-        _installedAddonsProvider.AddonsChangedEvent += OnAddonChanged;
-        _downloadableAddonsProvider.AddonDownloadedEvent += OnAddonChanged;
-    }
-
-
     #region Binding Properties
 
     /// <summary>
@@ -98,9 +73,40 @@ public sealed partial class CampaignsViewModel : RightPanelViewModel, IPortsButt
     [NotifyCanExecuteChangedFor(nameof(ClearSearchBoxCommand))]
     private string _searchBoxText;
 
+    /// <summary>
+    /// Is form in progress
+    /// </summary>
+    [ObservableProperty]
+    private bool _isInProgress;
+
     public bool IsPortsButtonsVisible => true;
 
     #endregion
+
+
+    [Obsolete($"Don't create directly. Use {nameof(ViewModelsFactory)}.")]
+    public CampaignsViewModel(
+        IGame game,
+        GamesProvider gamesProvider,
+        IConfigProvider config,
+        PlaytimeProvider playtimeProvider,
+        RatingProvider ratingProvider,
+        InstalledAddonsProviderFactory installedAddonsProviderFactory,
+        DownloadableAddonsProviderFactory downloadableAddonsProviderFactory
+        ) : base(playtimeProvider, ratingProvider)
+    {
+        Game = game;
+
+        _gamesProvider = gamesProvider;
+        _config = config;
+        _playtimeProvider = playtimeProvider;
+        _installedAddonsProvider = installedAddonsProviderFactory.GetSingleton(game);
+        _downloadableAddonsProvider = downloadableAddonsProviderFactory.GetSingleton(game);
+
+        _gamesProvider.GameChangedEvent += OnGameChanged;
+        _installedAddonsProvider.AddonsChangedEvent += OnAddonChanged;
+        _downloadableAddonsProvider.AddonDownloadedEvent += OnAddonChanged;
+    }
 
 
     /// <summary>
@@ -113,7 +119,9 @@ public sealed partial class CampaignsViewModel : RightPanelViewModel, IPortsButt
     /// </summary>
     private async Task UpdateAsync(bool createNew)
     {
+        IsInProgress = true;
         await _installedAddonsProvider.CreateCache(createNew).ConfigureAwait(true);
+        IsInProgress = false;
     }
 
 

@@ -24,7 +24,8 @@
                 ToolTip.Tip="Refresh"
                 Padding="8"
                 Margin="10,0"
-                Command="{Binding RefreshListCommand}">
+                Command="{Binding RefreshListCommand}"
+                IsEnabled="{Binding !IsInProgress}">
             <i:Icon Value="fa-sync" />
         </Button>
 
