@@ -2,7 +2,6 @@
 using Common.Client.Config;
 using Common.Enums;
 using Common.Enums.Addons;
-using Common.Enums.Versions;
 using Common.Helpers;
 using Common.Interfaces;
 using Mods.Addons;
@@ -22,6 +21,8 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
     private readonly IConfigProvider _config;
 
     private readonly Dictionary<AddonTypeEnum, Dictionary<AddonVersion, IAddon>> _cache;
+    private readonly IEnumerable<string> _portExes = ["nblood.exe", "notblood.exe", "eduke32.exe"];
+
     private static readonly SemaphoreSlim _semaphore = new(1);
 
     private bool _isCacheUpdating = false;
@@ -334,158 +335,82 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
     /// <param name="pathToFile">Path to addon file</param>
     private async Task<BaseAddon?> GetAddonFromFileAsync(AddonTypeEnum addonType, string pathToFile)
     {
-        var type = addonType;
-        var id = Path.GetFileName(pathToFile);
-        var title = Path.GetFileName(pathToFile);
-        string version = new("1.0");
-
-        string? author = null;
-        string? description = null;
-        Stream? image = null;
-        Stream? preview = null;
-
         var supportedGame = _game.GameEnum;
-        string? gameVersion = null;
-        string? gameCrc = null;
 
-        HashSet<FeatureEnum>? requiredFeatures = null;
+        string id;
+        string title;
+        AddonTypeEnum type;
+        string version;
+        bool isUnpacked;
 
-        string? mainCon = null;
-        HashSet<string>? addCons = null;
-        string? mainDef = null;
-        HashSet<string>? addDefs = null;
+        string? author;
+        string? description;
+        Stream? image;
+        Stream? preview;
+        string? gameVersion;
+        string? gameCrc;
+        HashSet<FeatureEnum>? requiredFeatures;
+        string? mainCon;
+        HashSet<string>? addCons;
+        string? mainDef;
+        HashSet<string>? addDefs;
+        string? rts;
+        string? ini;
+        string? rff;
+        string? snd;
+        Dictionary<string, string?>? dependencies;
+        Dictionary<string, string?>? incompatibles;
+        IStartMap? startMap;
+        string? portOverride;
 
-        string? rts = null;
-        string? ini = null;
-        string? rff = null;
-        string? snd = null;
-
-        Dictionary<string, string?>? dependencies = null;
-        Dictionary<string, string?>? incompatibles = null;
-        IStartMap? startMap = null;
-
-        var isUnpacked = false;
-        string? portOverride = null;
-
-        BaseAddon? addon;
-
-        if (pathToFile.EndsWith(".json") || ArchiveFactory.IsArchive(pathToFile, out _))
+        if (pathToFile.EndsWith(".json"))
         {
-            AddonDto? manifest = null;
+            isUnpacked = true;
 
-            if (ArchiveFactory.IsArchive(pathToFile, out _))
-            {
-                using var archive = ArchiveFactory.Open(pathToFile);
+            var jsonText = File.ReadAllText(pathToFile);
 
-                if (DeleteOld(pathToFile, archive))
-                {
-                    return null;
-                }
-
-                var grpInfo = archive.Entries.FirstOrDefault(static x => x.Key!.Equals("addons.grpinfo"));
-
-                if (grpInfo is not null)
-                {
-                    var fileFolder = Path.GetDirectoryName(pathToFile)!;
-                    var unpackTo = Path.Combine(fileFolder, Path.GetFileNameWithoutExtension(pathToFile));
-
-                    if (Directory.Exists(unpackTo))
-                    {
-                        Directory.Delete(unpackTo, true);
-                    }
-
-                    archive.ExtractToDirectory(unpackTo);
-                    archive.Dispose();
-
-                    File.Delete(pathToFile);
-
-                    return null;
-                }
-
-                var entry = archive.Entries.FirstOrDefault(static x => x.Key!.Equals("addon.json"));
-
-                if (entry is null)
-                {
-                    //TODO add support for non-manifested mods
-                    return null;
-                }
-
-                manifest = JsonSerializer.Deserialize(
-                    entry.OpenEntryStream(),
-                    AddonManifestContext.Default.AddonDto
-                    );
-
-                //need to unpack addons that contain custom RFF files
-                if (!string.IsNullOrWhiteSpace(manifest?.MainRff) || !string.IsNullOrWhiteSpace(manifest?.SoundRff))
-                {
-                    var fileFolder = Path.GetDirectoryName(pathToFile)!;
-                    var unpackTo = Path.Combine(fileFolder, Path.GetFileNameWithoutExtension(pathToFile));
-
-                    if (Directory.Exists(unpackTo))
-                    {
-                        Directory.Delete(unpackTo, true);
-                    }
-
-                    archive.ExtractToDirectory(unpackTo);
-                    archive.Dispose();
-
-                    File.Delete(pathToFile);
-                    pathToFile = Path.Combine(unpackTo, "addon.json");
-                }
-                else
-                {
-                    preview = ImageHelper.GetImageFromArchive(archive, "preview.png");
-                    image = ImageHelper.GetCoverFromArchive(archive) ?? preview;
-                }
-
-                isUnpacked = false;
-            }
-
-            if (pathToFile.EndsWith(".json"))
-            {
-                var jsonText = File.ReadAllText(pathToFile);
-
-                manifest = JsonSerializer.Deserialize(
-                    jsonText,
-                    AddonManifestContext.Default.AddonDto
-                    );
-
-                var addonDir = Path.GetDirectoryName(pathToFile)!;
-
-                var gridFile = Directory.GetFiles(addonDir, "grid.*");
-                var previewFile = Directory.GetFiles(addonDir, "preview.*");
-
-                if (gridFile.Length > 0)
-                {
-                    var stream = await File.ReadAllBytesAsync(gridFile[0]).ConfigureAwait(false);
-                    image = new MemoryStream(stream);
-                }
-                if (previewFile.Length > 0)
-                {
-                    var stream = await File.ReadAllBytesAsync(previewFile[0]).ConfigureAwait(false);
-                    preview = new MemoryStream(stream);
-                }
-
-                isUnpacked = true;
-            }
+            var manifest = JsonSerializer.Deserialize(
+                jsonText,
+                AddonManifestContext.Default.AddonDto
+                );
 
             if (manifest is null)
             {
                 return null;
             }
 
+            var addonDir = Path.GetDirectoryName(pathToFile)!;
+
+            var gridFile = Directory.GetFiles(addonDir, "grid.*");
+            var previewFile = Directory.GetFiles(addonDir, "preview.*");
+
+            if (gridFile.Length > 0)
+            {
+                var stream = await File.ReadAllBytesAsync(gridFile[0]).ConfigureAwait(false);
+                image = new MemoryStream(stream);
+            }
+            else
+            {
+                image = null;
+            }
+
+            if (previewFile.Length > 0)
+            {
+                var stream = await File.ReadAllBytesAsync(previewFile[0]).ConfigureAwait(false);
+                preview = new MemoryStream(stream);
+            }
+            else
+            {
+                preview = null;
+            }
+
             type = manifest.AddonType;
             id = manifest.Id;
             title = manifest.Title;
             author = manifest.Author;
+            image = image ?? preview;
             version = manifest.Version;
-
-            //TODO description
-            if (manifest.Description is not null)
-            {
-                description = manifest.Description;
-            }
-
+            description = manifest.Description;
             supportedGame = manifest.SupportedGame.Game;
             gameVersion = manifest.SupportedGame.Version;
             gameCrc = manifest.SupportedGame.Crc;
@@ -494,6 +419,7 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
             ini = manifest.Ini;
             rff = manifest.MainRff;
             snd = manifest.SoundRff;
+
             startMap = manifest.StartMap;
 
             requiredFeatures = manifest.Dependencies?.RequiredFeatures?.Select(static x => x).ToHashSet();
@@ -507,45 +433,109 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
             dependencies = manifest.Dependencies?.Addons?.ToDictionary(static x => x.Id, static x => x.Version, StringComparer.OrdinalIgnoreCase);
             incompatibles = manifest.Incompatibles?.Addons?.ToDictionary(static x => x.Id, static x => x.Version, StringComparer.OrdinalIgnoreCase);
 
-            if (isUnpacked)
+            var portExe = from file in Directory.GetFiles(addonDir)
+                          from exe in _portExes
+                          where file.EndsWith(exe)
+                          select file;
+
+            portOverride = portExe.Any() ? portExe.First() : null;
+        }
+        else if (ArchiveFactory.IsArchive(pathToFile, out _))
+        {
+            using var archive = ArchiveFactory.Open(pathToFile);
+            var unpackedTo = UnpackIfNeededAndGetAddonDto(pathToFile, archive, out var manifest);
+
+            if (manifest is null)
             {
-                IEnumerable<string> portExes = ["nblood.exe", "notblood.exe", "eduke32.exe"];
+                return null;
+            }
+
+            if (unpackedTo is not null)
+            {
+                pathToFile = Path.Combine(unpackedTo, "addon.json");
+                isUnpacked = true;
+
                 var addonDir = Path.GetDirectoryName(pathToFile)!;
 
+                var gridFile = Directory.GetFiles(addonDir, "grid.*");
+                var previewFile = Directory.GetFiles(addonDir, "preview.*");
+
+                if (gridFile.Length > 0)
+                {
+                    var stream = await File.ReadAllBytesAsync(gridFile[0]).ConfigureAwait(false);
+                    image = new MemoryStream(stream);
+                }
+                else
+                {
+                    image = null;
+                }
+
+                if (previewFile.Length > 0)
+                {
+                    var stream = await File.ReadAllBytesAsync(previewFile[0]).ConfigureAwait(false);
+                    preview = new MemoryStream(stream);
+                }
+                else
+                {
+                    preview = null;
+                }
+
                 var portExe = from file in Directory.GetFiles(addonDir)
-                              from exe in portExes
+                              from exe in _portExes
                               where file.EndsWith(exe)
                               select file;
 
                 portOverride = portExe.Any() ? portExe.First() : null;
             }
-
-
-            //TODO Duke versions
-            if (manifest.SupportedGame.Version is not null)
+            else
             {
-                if (manifest.SupportedGame.Version == nameof(DukeVersionEnum.Duke3D_13D))
-                {
-                }
-                else if (manifest.SupportedGame.Version == nameof(DukeVersionEnum.Duke3D_Atomic))
-                {
-                }
-                else if (manifest.SupportedGame.Version == nameof(DukeVersionEnum.Duke3D_WT))
-                {
-                }
+                isUnpacked = false;
+                portOverride = null;
+
+                preview = ImageHelper.GetImageFromArchive(archive, "preview.png");
+                image = ImageHelper.GetCoverFromArchive(archive) ?? preview;
             }
+
+            type = manifest.AddonType;
+            id = manifest.Id;
+            title = manifest.Title;
+            author = manifest.Author;
+            image = image ?? preview;
+            version = manifest.Version;
+            description = manifest.Description;
+            supportedGame = manifest.SupportedGame.Game;
+            gameVersion = manifest.SupportedGame.Version;
+            gameCrc = manifest.SupportedGame.Crc;
+
+            rts = manifest.Rts;
+            ini = manifest.Ini;
+            rff = manifest.MainRff;
+            snd = manifest.SoundRff;
+
+            startMap = manifest.StartMap;
+
+            requiredFeatures = manifest.Dependencies?.RequiredFeatures?.Select(static x => x).ToHashSet();
+
+            mainCon = manifest.MainCon;
+            addCons = manifest.AdditionalCons?.ToHashSet();
+
+            mainDef = manifest.MainDef;
+            addDefs = manifest.AdditionalDefs?.ToHashSet();
+
+            dependencies = manifest.Dependencies?.Addons?.ToDictionary(static x => x.Id, static x => x.Version, StringComparer.OrdinalIgnoreCase);
+            incompatibles = manifest.Incompatibles?.Addons?.ToDictionary(static x => x.Id, static x => x.Version, StringComparer.OrdinalIgnoreCase);
         }
         else if (pathToFile.EndsWith(".map", StringComparison.OrdinalIgnoreCase))
         {
             var bloodIni = pathToFile.Replace(".map", ".ini", StringComparison.InvariantCultureIgnoreCase);
             var iniExists = File.Exists(bloodIni);
 
-            addon = new LooseMap()
+            var addon = new LooseMap()
             {
                 Id = Path.GetFileName(pathToFile),
                 Type = AddonTypeEnum.Map,
                 Title = Path.GetFileName(pathToFile),
-                SupportedGame = new(supportedGame, gameVersion, gameCrc),
+                SupportedGame = new(supportedGame, null, null),
                 PathToFile = pathToFile,
                 StartMap = new MapFileDto() { File = Path.GetFileName(pathToFile) },
                 BloodIni = iniExists ? bloodIni : null,
@@ -567,8 +557,13 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
         }
         else if (pathToFile.EndsWith(".grp", StringComparison.OrdinalIgnoreCase))
         {
-            //"real" grps are not supported
+            return null;
         }
+        else
+        {
+            return null;
+        }
+
 
         if (addonType is AddonTypeEnum.Mod)
         {
@@ -579,7 +574,7 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
                 ThrowHelper.ArgumentException("Autoload mod can't have Main DEF");
             }
 
-            addon = new AutoloadMod()
+            var addon = new AutoloadMod()
             {
                 Id = id,
                 Type = AddonTypeEnum.Mod,
@@ -602,12 +597,14 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
                 IsFolder = isUnpacked,
                 PortExeOverride = null
             };
+
+            return addon;
         }
         else
         {
             if (_game.GameEnum is GameEnum.Duke3D)
             {
-                addon = new DukeCampaign()
+                var addon = new DukeCampaign()
                 {
                     Id = id,
                     Type = type,
@@ -631,10 +628,12 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
                     IsFolder = isUnpacked,
                     PortExeOverride = portOverride
                 };
+
+                return addon;
             }
             else if (_game.GameEnum is GameEnum.Fury)
             {
-                addon = new FuryCampaign()
+                var addon = new FuryCampaign()
                 {
                     Id = id,
                     Type = type,
@@ -657,10 +656,12 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
                     IsFolder = isUnpacked,
                     PortExeOverride = portOverride
                 };
+
+                return addon;
             }
             else if (_game.GameEnum is GameEnum.ShadowWarrior)
             {
-                addon = new WangCampaign()
+                var addon = new WangCampaign()
                 {
                     Id = id,
                     Type = type,
@@ -681,10 +682,12 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
                     IsFolder = isUnpacked,
                     PortExeOverride = portOverride
                 };
+
+                return addon;
             }
             else if (_game.GameEnum is GameEnum.Blood)
             {
-                addon = new BloodCampaign()
+                var addon = new BloodCampaign()
                 {
                     Id = id,
                     Type = type,
@@ -708,10 +711,12 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
                     IsFolder = isUnpacked,
                     PortExeOverride = portOverride
                 };
+
+                return addon;
             }
             else if (_game.GameEnum is GameEnum.Redneck)
             {
-                addon = new RedneckCampaign()
+                var addon = new RedneckCampaign()
                 {
                     Id = id,
                     Type = type,
@@ -735,10 +740,12 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
                     IsFolder = isUnpacked,
                     PortExeOverride = portOverride
                 };
+
+                return addon;
             }
             else if (_game.GameEnum is GameEnum.Exhumed)
             {
-                addon = new SlaveCampaign()
+                var addon = new SlaveCampaign()
                 {
                     Id = id,
                     Type = type,
@@ -759,6 +766,8 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
                     IsFolder = isUnpacked,
                     PortExeOverride = portOverride
                 };
+
+                return addon;
             }
             else
             {
@@ -767,22 +776,104 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
             }
         }
 
-        return addon;
     }
 
-    [Obsolete("delete")]
-    private bool DeleteOld(string pathToFile, IArchive archive)
+    /// <summary>
+    /// Unpack archive if needed and return path to folder
+    /// </summary>
+    /// <param name="pathToFile">Path to archive</param>
+    /// <param name="archive">Archive</param>
+    /// <param name="addonDto">AddonDto</param>
+    private string? UnpackIfNeededAndGetAddonDto(string pathToFile, IArchive archive, out AddonDto? addonDto)
     {
-        var oldManifest = archive.Entries.FirstOrDefault(static x => x.Key!.Equals("manifest.json", StringComparison.OrdinalIgnoreCase));
+        IArchiveEntry? addonJson = null;
 
-        if (oldManifest is not null)
+        foreach (var file in archive.Entries)
         {
-            //deleting old versions of the mods
-            archive.Dispose();
-            File.Delete(pathToFile);
-            return true;
+            if (file.Key!.Equals("addons.grpinfo"))
+            {
+                var unpackedTo = Unpack(pathToFile, archive);
+                addonDto = null;
+                return unpackedTo;
+            }
+
+            if (file.Key!.Equals("addon.json"))
+            {
+                addonJson = file;
+            }
+            else if (_portExes.Any(x => file.Key!.EndsWith(x)))
+            {
+                var unpackedTo = Unpack(pathToFile, archive);
+                var addonJsonStr = Path.Combine(unpackedTo, "addon.json");
+
+                if (File.Exists(addonJsonStr))
+                {
+                    try
+                    {
+                        addonDto = JsonSerializer.Deserialize(
+                            File.ReadAllText(addonJsonStr),
+                            AddonManifestContext.Default.AddonDto
+                            )!;
+                        return unpackedTo;
+                    }
+                    catch
+                    {
+                        addonDto = null;
+                        return null;
+                    }
+                }
+            }
         }
 
-        return false;
+        if (addonJson is not null)
+        {
+            try
+            {
+                addonDto = JsonSerializer.Deserialize(
+                    addonJson.OpenEntryStream(),
+                    AddonManifestContext.Default.AddonDto
+                    )!;
+
+                if (addonDto.MainRff is not null || addonDto.SoundRff is not null)
+                {
+                    //need to unpack addons that contain custom RFF files
+                    var unpackedTo = Unpack(pathToFile, archive);
+                    return unpackedTo;
+                }
+
+                return null;
+            }
+            catch
+            {
+                addonDto = null;
+                return null;
+            }
+        }
+
+        addonDto = null;
+        return null;
+    }
+
+    /// <summary>
+    /// Unpack archive and return path to folder
+    /// </summary>
+    /// <param name="pathToFile">Path to archive</param>
+    /// <param name="archive">Archive</param>
+    private string Unpack(string pathToFile, IArchive archive)
+    {
+        var fileFolder = Path.GetDirectoryName(pathToFile)!;
+        var unpackTo = Path.Combine(fileFolder, Path.GetFileNameWithoutExtension(pathToFile));
+
+        if (Directory.Exists(unpackTo))
+        {
+            Directory.Delete(unpackTo, true);
+        }
+
+        archive.ExtractToDirectory(unpackTo);
+        archive.Dispose();
+
+        File.Delete(pathToFile);
+
+        return unpackTo;
     }
 }
