@@ -60,6 +60,8 @@ public class EDuke32 : BasePort
     /// <inheritdoc/>
     protected override string AddSndParam => throw new NotImplementedException();
 
+    private List<string> AdditionalFilesToSave => ["texturecache", "texturecache.index"];
+
     /// <inheritdoc/>
     public override List<GameEnum> SupportedGames =>
         [
@@ -166,20 +168,20 @@ public class EDuke32 : BasePort
             path = PortInstallFolderPath;
         }
 
-        var saves = from file in Directory.GetFiles(path)
-                from ext in SaveFileExtensions
-                where file.EndsWith(ext)
-                select file;
+        var files = from file in Directory.GetFiles(path)
+                    from ext in SaveFileExtensions.Union(AdditionalFilesToSave)
+                    where file.EndsWith(ext)
+                    select file;
 
         if (!Directory.Exists(saveFolder))
         {
             _ = Directory.CreateDirectory(saveFolder);
         }
 
-        foreach (var save in saves)
+        foreach (var file in files)
         {
-            var destFileName = Path.Combine(saveFolder, Path.GetFileName(save)!);
-            File.Move(save, destFileName, true);
+            var destFileName = Path.Combine(saveFolder, Path.GetFileName(file)!);
+            File.Move(file, destFileName, true);
         }
     }
 
