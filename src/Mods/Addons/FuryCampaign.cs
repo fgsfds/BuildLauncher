@@ -3,7 +3,7 @@
 /// <summary>
 /// Ion Fury campaign
 /// </summary>
-public sealed class FuryCampaign : Addon
+public sealed class FuryCampaign : BaseAddon
 {
     /// <summary>
     /// Main .con file

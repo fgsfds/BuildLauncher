@@ -3,7 +3,7 @@
 /// <summary>
 /// Redneck Rampage campaign
 /// </summary>
-public sealed class RedneckCampaign : Addon
+public sealed class RedneckCampaign : BaseAddon
 {
     /// <summary>
     /// Main .con file

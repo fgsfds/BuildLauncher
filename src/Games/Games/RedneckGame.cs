@@ -75,7 +75,8 @@ public sealed class RedneckGame : BaseGame
                 RTS = null,
                 StartMap = null,
                 PreviewImage = null,
-                IsFolder = false
+                IsFolder = false,
+                PortExeOverride = null
             });
 
             if (IsRoute66Installed)
@@ -105,7 +106,8 @@ public sealed class RedneckGame : BaseGame
                     RTS = null,
                     StartMap = null,
                     PreviewImage = null,
-                    IsFolder = false
+                    IsFolder = false,
+                    PortExeOverride = null
                 });
             }
         }
@@ -139,7 +141,8 @@ public sealed class RedneckGame : BaseGame
                 RTS = null,
                 StartMap = null,
                 PreviewImage = null,
-                IsFolder = false
+                IsFolder = false,
+                PortExeOverride = null
             });
         }
 

@@ -5,6 +5,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Ports.Installer;
 using Ports.Ports;
+using Ports.Providers;
 using System.Globalization;
 
 namespace Avalonia.Desktop.ViewModels;

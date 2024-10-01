@@ -95,6 +95,11 @@ public interface IAddon
     bool IsFolder { get; init; }
 
     /// <summary>
+    /// Path to the port exe that's provided with the addon
+    /// </summary>
+    string? PortExeOverride { get; init; }
+
+    /// <summary>
     /// Addon title with text wraping
     /// </summary>
     string TitleWithNewLines { get; }

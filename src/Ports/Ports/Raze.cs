@@ -345,7 +345,7 @@ public sealed class Raze : BasePort
 
         if (dCamp.Type is AddonTypeEnum.TC)
         {
-            _ = sb.Append($@" {AddFileParam}""{Path.Combine(game.CampaignsFolderPath, dCamp.FileName)}""");
+            _ = sb.Append($@" {AddFileParam}""{dCamp.PathToFile}""");
         }
         else if (dCamp.Type is AddonTypeEnum.Map)
         {
@@ -393,7 +393,7 @@ public sealed class Raze : BasePort
 
         if (wCamp.Type is AddonTypeEnum.TC)
         {
-            _ = sb.Append($@" {AddFileParam}""{Path.Combine(game.CampaignsFolderPath, wCamp.FileName)}""");
+            _ = sb.Append($@" {AddFileParam}""{wCamp.PathToFile}""");
         }
         else if (wCamp.Type is AddonTypeEnum.Map)
         {
@@ -456,7 +456,7 @@ public sealed class Raze : BasePort
 
         if (rCamp.Type is AddonTypeEnum.TC)
         {
-            _ = sb.Append($@" {AddFileParam}""{Path.Combine(game.CampaignsFolderPath, rCamp.FileName)}""");
+            _ = sb.Append($@" {AddFileParam}""{rCamp.PathToFile}""");
         }
         else if (rCamp.Type is AddonTypeEnum.Map)
         {

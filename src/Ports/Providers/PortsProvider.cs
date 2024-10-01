@@ -78,4 +78,12 @@ public sealed class PortsProvider
             _ => ThrowHelper.NotImplementedException<BasePort>()
         };
     }
+
+    public IEnumerable<string> GetPortsExes()
+    {
+        foreach (var port in _ports)
+        {
+            yield return port.Exe;
+        }
+    }
 }

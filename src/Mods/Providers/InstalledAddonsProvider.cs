@@ -332,7 +332,7 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
     /// </summary>
     /// <param name="addonType">Addon type</param>
     /// <param name="pathToFile">Path to addon file</param>
-    private async Task<Addon?> GetAddonFromFileAsync(AddonTypeEnum addonType, string pathToFile)
+    private async Task<BaseAddon?> GetAddonFromFileAsync(AddonTypeEnum addonType, string pathToFile)
     {
         var type = addonType;
         var id = Path.GetFileName(pathToFile);
@@ -365,8 +365,9 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
         IStartMap? startMap = null;
 
         var isUnpacked = false;
+        string? portOverride = null;
 
-        Addon? addon;
+        BaseAddon? addon;
 
         if (pathToFile.EndsWith(".json") || ArchiveFactory.IsArchive(pathToFile, out _))
         {
@@ -506,6 +507,20 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
             dependencies = manifest.Dependencies?.Addons?.ToDictionary(static x => x.Id, static x => x.Version, StringComparer.OrdinalIgnoreCase);
             incompatibles = manifest.Incompatibles?.Addons?.ToDictionary(static x => x.Id, static x => x.Version, StringComparer.OrdinalIgnoreCase);
 
+            if (isUnpacked)
+            {
+                IEnumerable<string> portExes = ["nblood.exe", "notblood.exe", "eduke32.exe"];
+                var addonDir = Path.GetDirectoryName(pathToFile)!;
+
+                var portExe = from file in Directory.GetFiles(addonDir)
+                              from exe in portExes
+                              where file.EndsWith(exe)
+                              select file;
+
+                portOverride = portExe.Any() ? portExe.First() : null;
+            }
+
+
             //TODO Duke versions
             if (manifest.SupportedGame.Version is not null)
             {
@@ -544,7 +559,8 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
                 IncompatibleAddons = null,
                 RequiredFeatures = null,
                 PreviewImage = null,
-                IsFolder = false
+                IsFolder = false,
+                PortExeOverride = null
             };
 
             return addon;
@@ -583,7 +599,8 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
                 StartMap = startMap,
                 RequiredFeatures = requiredFeatures,
                 PreviewImage = preview,
-                IsFolder = isUnpacked
+                IsFolder = isUnpacked,
+                PortExeOverride = null
             };
         }
         else
@@ -611,7 +628,8 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
                     RTS = rts,
                     RequiredFeatures = requiredFeatures,
                     PreviewImage = preview,
-                    IsFolder = isUnpacked
+                    IsFolder = isUnpacked,
+                    PortExeOverride = portOverride
                 };
             }
             else if (_game.GameEnum is GameEnum.Fury)
@@ -636,7 +654,8 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
                     AdditionalDefs = addDefs,
                     RequiredFeatures = requiredFeatures,
                     PreviewImage = preview,
-                    IsFolder = isUnpacked
+                    IsFolder = isUnpacked,
+                    PortExeOverride = portOverride
                 };
             }
             else if (_game.GameEnum is GameEnum.ShadowWarrior)
@@ -659,7 +678,8 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
                     AdditionalDefs = addDefs,
                     RequiredFeatures = requiredFeatures,
                     PreviewImage = preview,
-                    IsFolder = isUnpacked
+                    IsFolder = isUnpacked,
+                    PortExeOverride = portOverride
                 };
             }
             else if (_game.GameEnum is GameEnum.Blood)
@@ -685,7 +705,8 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
                     SND = snd,
                     RequiredFeatures = requiredFeatures,
                     PreviewImage = preview,
-                    IsFolder = isUnpacked
+                    IsFolder = isUnpacked,
+                    PortExeOverride = portOverride
                 };
             }
             else if (_game.GameEnum is GameEnum.Redneck)
@@ -711,7 +732,8 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
                     RTS = rts,
                     RequiredFeatures = requiredFeatures,
                     PreviewImage = preview,
-                    IsFolder = isUnpacked
+                    IsFolder = isUnpacked,
+                    PortExeOverride = portOverride
                 };
             }
             else if (_game.GameEnum is GameEnum.Exhumed)
@@ -734,7 +756,8 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
                     AdditionalDefs = addDefs,
                     RequiredFeatures = requiredFeatures,
                     PreviewImage = preview,
-                    IsFolder = isUnpacked
+                    IsFolder = isUnpacked,
+                    PortExeOverride = portOverride
                 };
             }
             else

@@ -65,17 +65,25 @@ public sealed partial class CampaignsControl : UserControl
                     _viewModel.StartCampaignCommand.Execute(port),
                     () =>
                     {
+                        if (CampaignsList?.SelectedItem is not IAddon selectedCampaign)
+                        {
+                            return false;
+                        }
+
+                        if (selectedCampaign.PortExeOverride is not null)
+                        {
+                            if (port.Exe.Equals(Path.GetFileName(selectedCampaign.PortExeOverride), StringComparison.InvariantCultureIgnoreCase))
+                            {
+                                return true;
+                            }
+
+                            return false;
+                        }
+
                         if (!port.IsInstalled)
                         {
                             return false;
                         }
-
-                        if (CampaignsList.SelectedItem is null)
-                        {
-                            return false;
-                        }
-
-                        var selectedCampaign = (IAddon)CampaignsList.SelectedItem;
 
                         if (port.PortEnum is PortEnum.BuildGDX && selectedCampaign.Type is not AddonTypeEnum.Official)
                         {

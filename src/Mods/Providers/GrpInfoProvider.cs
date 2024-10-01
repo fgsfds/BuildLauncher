@@ -59,7 +59,8 @@ public static class GrpInfoProvider
                     RTS = null,
                     RequiredFeatures = [FeatureEnum.EDuke32_CON],
                     PreviewImage = null,
-                    IsFolder = false
+                    IsFolder = false,
+                    PortExeOverride = null
                 };
 
                 newAddons.Add(camp);

@@ -162,7 +162,7 @@ public sealed class RedNukem : EDuke32
 
         if (rCamp.Type is AddonTypeEnum.TC)
         {
-            _ = sb.Append($@" {AddFileParam}""{Path.Combine(game.CampaignsFolderPath, rCamp.FileName!)}""");
+            _ = sb.Append($@" {AddFileParam}""{rCamp.PathToFile}""");
         }
         else if (rCamp.Type is AddonTypeEnum.Map)
         {

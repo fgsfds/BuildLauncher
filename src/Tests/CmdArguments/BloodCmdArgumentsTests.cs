@@ -50,7 +50,8 @@ public sealed class BloodCmdArgumentsTests
             INI = null,
             RFF = null,
             SND = null,
-            IsFolder = false
+            IsFolder = false,
+            PortExeOverride = null
         };
 
         _bloodCpCamp = new()
@@ -74,7 +75,8 @@ public sealed class BloodCmdArgumentsTests
             INI = null,
             RFF = null,
             SND = null,
-            IsFolder = false
+            IsFolder = false,
+            PortExeOverride = null
         };
 
         _bloodTc = new()
@@ -98,7 +100,8 @@ public sealed class BloodCmdArgumentsTests
             INI = "TC.INI",
             RFF = "TC.RFF",
             SND = "TC.SND",
-            IsFolder = false
+            IsFolder = false,
+            PortExeOverride = null
         };
 
         _bloodTcFolder = new()
@@ -122,7 +125,8 @@ public sealed class BloodCmdArgumentsTests
             INI = "TC.INI",
             RFF = "TC.RFF",
             SND = "TC.SND",
-            IsFolder = true
+            IsFolder = true,
+            PortExeOverride = null
         };
     }
 
@@ -220,7 +224,7 @@ public sealed class BloodCmdArgumentsTests
         Raze raze = new();
 
         var args = raze.GetStartGameArgs(_bloodGame, _bloodTc, [], true, true);
-        var expected = @$" -quick -nosetup -savedir ""{Directory.GetCurrentDirectory()}\Data\Saves\Raze\Blood\blood-tc"" -def ""a"" -ini ""TC.INI"" -file ""{Directory.GetCurrentDirectory()}\Data\Addons\Blood\Campaigns\blood_tc.zip"" -file ""TC.RFF"" -file ""TC.SND""";
+        var expected = @$" -quick -nosetup -savedir ""{Directory.GetCurrentDirectory()}\Data\Saves\Raze\Blood\blood-tc"" -def ""a"" -ini ""TC.INI"" -file ""D:\Games\Blood\blood_tc.zip"" -file ""TC.RFF"" -file ""TC.SND""";
 
         if (OperatingSystem.IsLinux())
         {
@@ -343,7 +347,7 @@ public sealed class BloodCmdArgumentsTests
         NBlood nblood = new();
 
         var args = nblood.GetStartGameArgs(_bloodGame, _bloodTc, [], true, true, 2);
-        var expected = @$" -quick -nosetup -usecwd -j ""D:\Games\Blood"" -h ""a"" -ini ""TC.INI"" -g ""{Directory.GetCurrentDirectory()}\Data\Addons\Blood\Campaigns\blood_tc.zip"" -rff ""TC.RFF"" -snd ""TC.SND"" -s 2";
+        var expected = @$" -quick -nosetup -usecwd -j ""D:\Games\Blood"" -h ""a"" -ini ""TC.INI"" -g ""D:\Games\Blood\blood_tc.zip"" -rff ""TC.RFF"" -snd ""TC.SND"" -s 2";
 
         if (OperatingSystem.IsLinux())
         {

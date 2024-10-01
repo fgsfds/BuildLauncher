@@ -63,7 +63,7 @@ public sealed class Fury(IConfigProvider config) : EDuke32
     {
         if (addon.MainDef is not null)
         {
-            sb.Append($@" {MainDefParam}""{addon.MainDef}""");
+            _ = sb.Append($@" {MainDefParam}""{addon.MainDef}""");
         }
         //no need to override main def
 
@@ -71,7 +71,7 @@ public sealed class Fury(IConfigProvider config) : EDuke32
         {
             foreach (var def in addon.AdditionalDefs)
             {
-                sb.Append($@" {AddDefParam}""{def}""");
+                _ = sb.Append($@" {AddDefParam}""{def}""");
             }
         }
 
@@ -108,21 +108,21 @@ public sealed class Fury(IConfigProvider config) : EDuke32
 
         if (fCamp.MainCon is not null)
         {
-            sb.Append($@" {MainConParam}""{fCamp.MainCon}""");
+            _ = sb.Append($@" {MainConParam}""{fCamp.MainCon}""");
         }
 
         if (fCamp.AdditionalCons?.Count > 0)
         {
             foreach (var con in fCamp.AdditionalCons)
             {
-                sb.Append($@" {AddConParam}""{con}""");
+                _ = sb.Append($@" {AddConParam}""{con}""");
             }
         }
 
 
         if (fCamp.Type is AddonTypeEnum.TC)
         {
-            sb.Append($@" {AddFileParam}""{Path.Combine(game.CampaignsFolderPath, fCamp.FileName)}""");
+            _ = sb.Append($@" {AddFileParam}""{fCamp.PathToFile}""");
         }
         else if (fCamp.Type is AddonTypeEnum.Map)
         {

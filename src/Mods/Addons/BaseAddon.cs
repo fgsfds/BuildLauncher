@@ -8,7 +8,7 @@ namespace Mods.Addons;
 /// <summary>
 /// Base class for campaigns and maps
 /// </summary>
-public abstract class Addon : IAddon
+public abstract class BaseAddon : IAddon
 {
     /// <inheritdoc/>
     public required AddonTypeEnum Type { get; init; }
@@ -60,6 +60,9 @@ public abstract class Addon : IAddon
 
     /// <inheritdoc/>
     public required bool IsFolder { get; init; }
+
+    /// <inheritdoc/>
+    public required string? PortExeOverride { get; init; }
 
     /// <inheritdoc/>
     public string? FileName => PathToFile is null ? null : Path.GetFileName(PathToFile);

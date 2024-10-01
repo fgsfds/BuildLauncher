@@ -73,7 +73,8 @@ internal sealed class AutoloadModsProvider
         StartMap = null,
         PreviewImage = null,
         IsEnabled = true,
-        IsFolder = false
+        IsFolder = false,
+        PortExeOverride = null
     };
 
     public AutoloadMod EnabledMod => new()
@@ -96,7 +97,8 @@ internal sealed class AutoloadModsProvider
         StartMap = null,
         PreviewImage = null,
         IsEnabled = true,
-        IsFolder = false
+        IsFolder = false,
+        PortExeOverride = null
     };
 
     public AutoloadMod ModThatRequiresOfficialAddon => new()
@@ -119,7 +121,8 @@ internal sealed class AutoloadModsProvider
         StartMap = null,
         PreviewImage = null,
         IsEnabled = true,
-        IsFolder = false
+        IsFolder = false,
+        PortExeOverride = null
     };
 
     public AutoloadMod ModThatIncompatibleWithAddon => new()
@@ -142,7 +145,8 @@ internal sealed class AutoloadModsProvider
         StartMap = null,
         PreviewImage = null,
         IsEnabled = true,
-        IsFolder = false
+        IsFolder = false,
+        PortExeOverride = null
     };
 
     public AutoloadMod IncompatibleMod => new()
@@ -165,7 +169,8 @@ internal sealed class AutoloadModsProvider
         StartMap = null,
         PreviewImage = null,
         IsEnabled = true,
-        IsFolder = false
+        IsFolder = false,
+        PortExeOverride = null
     };
 
     public AutoloadMod IncompatibleModWithCompatibleVersion => new()
@@ -188,7 +193,8 @@ internal sealed class AutoloadModsProvider
         StartMap = null,
         PreviewImage = null,
         IsEnabled = true,
-        IsFolder = false
+        IsFolder = false,
+        PortExeOverride = null
     };
 
     public AutoloadMod IncompatibleModWithIncompatibleVersion => new()
@@ -211,7 +217,8 @@ internal sealed class AutoloadModsProvider
         StartMap = null,
         PreviewImage = null,
         IsEnabled = true,
-        IsFolder = false
+        IsFolder = false,
+        PortExeOverride = null
     };
 
     public AutoloadMod DependantMod => new()
@@ -234,7 +241,8 @@ internal sealed class AutoloadModsProvider
         StartMap = null,
         PreviewImage = null,
         IsEnabled = true,
-        IsFolder = false
+        IsFolder = false,
+        PortExeOverride = null
     };
 
     public AutoloadMod DependantModWithIncompatibleVersion => new()
@@ -257,7 +265,8 @@ internal sealed class AutoloadModsProvider
         StartMap = null,
         PreviewImage = null,
         IsEnabled = true,
-        IsFolder = false
+        IsFolder = false,
+        PortExeOverride = null
     };
 
     public AutoloadMod DependantModWithCompatibleVersion => new()
@@ -280,7 +289,8 @@ internal sealed class AutoloadModsProvider
         StartMap = null,
         PreviewImage = null,
         IsEnabled = true,
-        IsFolder = false
+        IsFolder = false,
+        PortExeOverride = null
     };
 
     public AutoloadMod DisabledMod => new()
@@ -303,7 +313,8 @@ internal sealed class AutoloadModsProvider
         StartMap = null,
         PreviewImage = null,
         IsEnabled = false,
-        IsFolder = false
+        IsFolder = false,
+        PortExeOverride = null
     };
 
     public AutoloadMod ModThatRequiredFeature => new()
@@ -326,7 +337,8 @@ internal sealed class AutoloadModsProvider
         StartMap = null,
         PreviewImage = null,
         IsEnabled = true,
-        IsFolder = false
+        IsFolder = false,
+        PortExeOverride = null
     };
 
     public AutoloadMod ModForAnotherGame => new()
@@ -349,6 +361,7 @@ internal sealed class AutoloadModsProvider
         StartMap = null,
         PreviewImage = null,
         IsEnabled = true,
-        IsFolder = false
+        IsFolder = false,
+        PortExeOverride = null
     };
 }

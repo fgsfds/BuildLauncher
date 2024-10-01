@@ -71,23 +71,23 @@ public sealed class VoidSW : EDuke32
     protected override void GetStartCampaignArgs(StringBuilder sb, IGame game, IAddon addon)
     {
         //don't search for steam/gog installs
-        sb.Append($@" -usecwd {AddDirectoryParam}""{game.GameInstallFolder}""");
+        _ = sb.Append($@" -usecwd {AddDirectoryParam}""{game.GameInstallFolder}""");
 
         if (addon.MainDef is not null)
         {
-            sb.Append($@" {MainDefParam}""{addon.MainDef}""");
+            _ = sb.Append($@" {MainDefParam}""{addon.MainDef}""");
         }
         else
         {
             //overriding default def so gamename.def files are ignored
-            sb.Append($@" {MainDefParam}""a""");
+            _ = sb.Append($@" {MainDefParam}""a""");
         }
 
         if (addon.AdditionalDefs is not null)
         {
             foreach (var def in addon.AdditionalDefs)
             {
-                sb.Append($@" {AddDefParam}""{def}""");
+                _ = sb.Append($@" {AddDefParam}""{def}""");
             }
         }
 
@@ -121,16 +121,16 @@ public sealed class VoidSW : EDuke32
         if (wCamp.DependentAddons is not null &&
             wCamp.DependentAddons.ContainsKey(nameof(WangAddonEnum.Wanton)))
         {
-            sb.Append($" -addon{(byte)WangAddonEnum.Wanton}");
+            _ = sb.Append($" -addon{(byte)WangAddonEnum.Wanton}");
         }
         else if (wCamp.DependentAddons is not null &&
                  wCamp.DependentAddons.ContainsKey(nameof(WangAddonEnum.TwinDragon)))
         {
-            sb.Append($" -addon{(byte)WangAddonEnum.TwinDragon}");
+            _ = sb.Append($" -addon{(byte)WangAddonEnum.TwinDragon}");
         }
         else
         {
-            sb.Append($" -addon{(byte)WangAddonEnum.Base}");
+            _ = sb.Append($" -addon{(byte)WangAddonEnum.Base}");
         }
 
 
@@ -145,7 +145,7 @@ public sealed class VoidSW : EDuke32
 
         if (wCamp.Type is AddonTypeEnum.TC)
         {
-            sb.Append($@" {AddDirectoryParam}""{game.CampaignsFolderPath}"" {AddFileParam}""{wCamp.FileName}""");
+            _ = sb.Append($@" {AddDirectoryParam}""{game.CampaignsFolderPath}"" {AddFileParam}""{wCamp.FileName}""");
         }
         else if (wCamp.Type is AddonTypeEnum.Map)
         {
@@ -172,14 +172,14 @@ public sealed class VoidSW : EDuke32
         var folder = Path.Combine(game.GameInstallFolder!, "MUSIC");
         if (Directory.Exists(folder))
         {
-            sb.Append(@$" -j""{folder}""");
+            _ = sb.Append(@$" -j""{folder}""");
             return;
         }
 
         folder = Path.Combine(game.GameInstallFolder!, "classic", "MUSIC");
         if (Directory.Exists(folder))
         {
-            sb.Append(@$" -j""{folder}""");
+            _ = sb.Append(@$" -j""{folder}""");
             return;
         }
     }

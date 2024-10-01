@@ -3,7 +3,7 @@
 /// <summary>
 /// Duke Nukem 3D campaign
 /// </summary>
-public sealed class DukeCampaign : Addon
+public sealed class DukeCampaign : BaseAddon
 {
     /// <summary>
     /// Main .con file

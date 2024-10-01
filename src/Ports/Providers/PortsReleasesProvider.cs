@@ -2,7 +2,7 @@
 using Common.Entities;
 using Common.Enums;
 
-namespace Ports.Installer;
+namespace Ports.Providers;
 
 /// <summary>
 /// Class that provides releases from ports' repositories

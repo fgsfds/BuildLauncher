@@ -60,8 +60,6 @@ public class EDuke32 : BasePort
     /// <inheritdoc/>
     protected override string AddSndParam => throw new NotImplementedException();
 
-    private List<string> AdditionalFilesToSave => ["texturecache", "texturecache.index"];
-
     /// <inheritdoc/>
     public override List<GameEnum> SupportedGames =>
         [
@@ -169,7 +167,7 @@ public class EDuke32 : BasePort
         }
 
         var files = from file in Directory.GetFiles(path)
-                    from ext in SaveFileExtensions.Union(AdditionalFilesToSave)
+                    from ext in SaveFileExtensions
                     where file.EndsWith(ext)
                     select file;
 
@@ -295,21 +293,21 @@ public class EDuke32 : BasePort
             }
         }
 
-
-        if (addon.FileName is null)
-        {
-            return;
-        }
-
         if (addon is LooseMap)
         {
             GetLooseMapArgs(sb, game, addon);
             return;
         }
 
+
         if (addon is not DukeCampaign dCamp)
         {
             ThrowHelper.ArgumentException(nameof(addon));
+            return;
+        }
+
+        if (dCamp.FileName is null)
+        {
             return;
         }
 
@@ -330,8 +328,14 @@ public class EDuke32 : BasePort
 
         if (dCamp.Type is AddonTypeEnum.TC)
         {
-            _ = sb.Append($@" {AddFileParam}""{dCamp.PathToFile}""");
-            //_ = sb.Append($@" {AddFileParam}""{Path.Combine(game.CampaignsFolderPath, dCamp.FileName!)}""");
+            if (dCamp.PortExeOverride is not null)
+            {
+                //nothing to do
+            }
+            else
+            {
+                _ = sb.Append($@" {AddFileParam}""{dCamp.PathToFile}""");
+            }
         }
         else if (dCamp.Type is AddonTypeEnum.Map)
         {

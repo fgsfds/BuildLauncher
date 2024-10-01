@@ -56,7 +56,8 @@ public sealed class DukeCmdArgumentsTests
             RTS = null,
             StartMap = null,
             PreviewImage = null,
-            IsFolder = false
+            IsFolder = false,
+            PortExeOverride = null
         };
 
         _dukeWtCamp = new()
@@ -80,7 +81,8 @@ public sealed class DukeCmdArgumentsTests
             RTS = null,
             StartMap = null,
             PreviewImage = null,
-            IsFolder = false
+            IsFolder = false,
+            PortExeOverride = null
         };
 
         _duke64Camp = new()
@@ -104,7 +106,8 @@ public sealed class DukeCmdArgumentsTests
             RTS = null,
             StartMap = null,
             PreviewImage = null,
-            IsFolder = false
+            IsFolder = false,
+            PortExeOverride = null
         };
 
         _dukeVaca = new()
@@ -128,7 +131,8 @@ public sealed class DukeCmdArgumentsTests
             RTS = null,
             StartMap = null,
             PreviewImage = null,
-            IsFolder = false
+            IsFolder = false,
+            PortExeOverride = null
         };
 
         _dukeTcForVaca = new()
@@ -152,7 +156,8 @@ public sealed class DukeCmdArgumentsTests
             AdditionalDefs = ["TC1.DEF", "TC2.DEF"],
             StartMap = null,
             PreviewImage = null,
-            IsFolder = false
+            IsFolder = false,
+            PortExeOverride = null
         };
     }
 
@@ -273,7 +278,7 @@ public sealed class DukeCmdArgumentsTests
         Raze raze = new();
 
         var args = raze.GetStartGameArgs(_dukeGame, _dukeTcForVaca, [], true, true);
-        var expected = @$" -quick -nosetup -savedir ""{Directory.GetCurrentDirectory()}\Data\Saves\Raze\Duke3D\duke-tc"" -def ""TC.DEF"" -adddef ""TC1.DEF"" -adddef ""TC2.DEF"" -addon 3 -con ""TC.CON"" -addcon ""TC1.CON"" -addcon ""TC2.CON"" -file ""{Path.Combine(Directory.GetCurrentDirectory(), "Data", "Addons", "Duke3D", "Campaigns", "duke_tc.zip")}""";
+        var expected = @$" -quick -nosetup -savedir ""{Directory.GetCurrentDirectory()}\Data\Saves\Raze\Duke3D\duke-tc"" -def ""TC.DEF"" -adddef ""TC1.DEF"" -adddef ""TC2.DEF"" -addon 3 -con ""TC.CON"" -addcon ""TC1.CON"" -addcon ""TC2.CON"" -file ""{Path.Combine(Directory.GetCurrentDirectory(), "Data", "Duke3D", "Campaigns", "duke_tc.zip")}""";
 
         if (OperatingSystem.IsLinux())
         {

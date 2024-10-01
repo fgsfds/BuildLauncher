@@ -194,12 +194,14 @@ public sealed partial class CampaignsViewModel : RightPanelViewModel, IPortsButt
     {
         var sw = Stopwatch.StartNew();
 
+        var portExe = addon.PortExeOverride is not null ? addon.PortExeOverride : port.PortExeFilePath;
+
         await Process.Start(new ProcessStartInfo
         {
-            FileName = port.PortExeFilePath,
+            FileName = portExe,
             UseShellExecute = true,
             Arguments = args,
-            WorkingDirectory = Path.GetDirectoryName(port.PortExeFilePath)
+            WorkingDirectory = Path.GetDirectoryName(portExe)
         })!.WaitForExitAsync().ConfigureAwait(true);
 
         sw.Stop();

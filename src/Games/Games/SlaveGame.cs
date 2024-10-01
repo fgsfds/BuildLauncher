@@ -58,7 +58,8 @@ public sealed class SlaveGame : BaseGame
                 AdditionalDefs = null,
                 StartMap = null,
                 PreviewImage = null,
-                IsFolder = false
+                IsFolder = false,
+                PortExeOverride = null
             });
         }
 

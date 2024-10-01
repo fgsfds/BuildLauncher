@@ -233,7 +233,7 @@ public abstract class BasePort
         //TODO e#m#
         if (camp.StartMap is MapFileDto mapFile)
         {
-            _ = sb.Append($@" {AddFileParam}""{Path.Combine(game.MapsFolderPath, camp.FileName!)}""");
+            _ = sb.Append($@" {AddFileParam}""{camp.PathToFile}""");
             _ = sb.Append($@" -map ""{mapFile.File}""");
         }
         else
@@ -403,13 +403,17 @@ public abstract class BasePort
 
         if (bCamp.Type is AddonTypeEnum.TC)
         {
-            if (bCamp.FileName.Equals("addon.json"))
+            if (bCamp.PortExeOverride is not null)
+            {
+                //nothing to do
+            }
+            else if (bCamp.FileName.Equals("addon.json"))
             {
                 _ = sb.Append($@" {AddGameDirParam}""{Path.GetDirectoryName(bCamp.PathToFile)}""");
             }
             else
             {
-                _ = sb.Append($@" {AddFileParam}""{Path.Combine(game.CampaignsFolderPath, bCamp.FileName)}""");
+                _ = sb.Append($@" {AddFileParam}""{bCamp.PathToFile}""");
             }
         }
         else if (bCamp.Type is AddonTypeEnum.Map)
@@ -457,7 +461,7 @@ public abstract class BasePort
 
         if (sCamp.Type is AddonTypeEnum.TC)
         {
-            _ = sb.Append($@" {AddFileParam}""{Path.Combine(game.CampaignsFolderPath, sCamp.FileName)}""");
+            _ = sb.Append($@" {AddFileParam}""{sCamp.PathToFile}""");
         }
         else if (sCamp.Type is AddonTypeEnum.Map)
         {

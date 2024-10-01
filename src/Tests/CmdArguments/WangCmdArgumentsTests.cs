@@ -45,7 +45,8 @@ public sealed class WangCmdArgumentsTests
             AdditionalDefs = null,
             StartMap = null,
             PreviewImage = null,
-            IsFolder = false
+            IsFolder = false,
+            PortExeOverride = null
         };
 
         _tdCamp = new()
@@ -66,7 +67,8 @@ public sealed class WangCmdArgumentsTests
             AdditionalDefs = null,
             StartMap = null,
             PreviewImage = null,
-            IsFolder = false
+            IsFolder = false,
+            PortExeOverride = null
         };
     }
 
@@ -124,7 +126,7 @@ public sealed class WangCmdArgumentsTests
         Raze raze = new();
 
         var args = raze.GetStartGameArgs(_wangGame, _tdCamp, mods, true, true);
-        var expected = @$" -quick -nosetup -file ""enabled_mod.zip"" -adddef ""ENABLED1.DEF"" -adddef ""ENABLED2.DEF"" -file ""mod_requires_addon.zip"" -savedir ""{Directory.GetCurrentDirectory()}\Data\Saves\Raze\Wang\twindragon"" -def ""a"" -file ""{Directory.GetCurrentDirectory()}\Data\Addons\Wang\Campaigns\TD.zip""";
+        var expected = @$" -quick -nosetup -file ""enabled_mod.zip"" -adddef ""ENABLED1.DEF"" -adddef ""ENABLED2.DEF"" -file ""mod_requires_addon.zip"" -savedir ""{Directory.GetCurrentDirectory()}\Data\Saves\Raze\Wang\twindragon"" -def ""a"" -file ""D:\Games\Wang\TD.zip""";
 
         if (OperatingSystem.IsLinux())
         {
