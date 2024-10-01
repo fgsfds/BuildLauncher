@@ -16,6 +16,7 @@ public sealed class BloodCmdArgumentsTests
     private readonly BloodCampaign _bloodCamp;
     private readonly BloodCampaign _bloodCpCamp;
     private readonly BloodCampaign _bloodTc;
+    private readonly BloodCampaign _bloodTcFolder;
 
     private readonly AutoloadModsProvider _modsProvider;
 
@@ -98,6 +99,30 @@ public sealed class BloodCmdArgumentsTests
             RFF = "TC.RFF",
             SND = "TC.SND",
             IsFolder = false
+        };
+
+        _bloodTcFolder = new()
+        {
+            Id = "blood-tc-folder",
+            Type = AddonTypeEnum.TC,
+            Title = "Blood TC",
+            GridImage = null,
+            Author = null,
+            Description = null,
+            Version = null,
+            SupportedGame = new(GameEnum.Blood),
+            RequiredFeatures = null,
+            PathToFile = Path.Combine("D:", "Games", "Blood", "blood_tc_folder", "addon.json"),
+            DependentAddons = null,
+            IncompatibleAddons = null,
+            MainDef = null,
+            AdditionalDefs = null,
+            StartMap = null,
+            PreviewImage = null,
+            INI = "TC.INI",
+            RFF = "TC.RFF",
+            SND = "TC.SND",
+            IsFolder = true
         };
     }
 
@@ -219,6 +244,36 @@ public sealed class BloodCmdArgumentsTests
     }
 
     [Fact]
+    public void RazeTCFolderTest()
+    {
+        Raze raze = new();
+
+        var args = raze.GetStartGameArgs(_bloodGame, _bloodTcFolder, [], true, true);
+        var expected = @$" -quick -nosetup -savedir ""{Directory.GetCurrentDirectory()}\Data\Saves\Raze\Blood\blood-tc-folder"" -def ""a"" -ini ""TC.INI"" -file ""D:\Games\Blood\blood_tc_folder"" -file ""TC.RFF"" -file ""TC.SND""";
+
+        if (OperatingSystem.IsLinux())
+        {
+            args = args.Replace('\\', Path.DirectorySeparatorChar);
+            expected = expected.Replace('\\', Path.DirectorySeparatorChar);
+        }
+
+        Assert.Equal(expected, args);
+
+        var config = File.ReadAllText(Path.Combine(Directory.GetCurrentDirectory(), "Data", "Ports", "Raze", "raze_portable.ini"));
+
+        Assert.StartsWith($"""
+            [GameSearch.Directories]
+            Path=D:/Games/Blood
+
+            [FileSearch.Directories]
+            Path={Directory.GetCurrentDirectory()}/Data/Addons/Blood/Mods
+            Path=D:/Games/Blood/blood_tc_folder
+
+            [SoundfontSearch.Directories]
+            """.Replace('\\', '/'), config);
+    }
+
+    [Fact]
     public void NBloodTest()
     {
         var mods = new List<AutoloadMod>() {
@@ -289,6 +344,23 @@ public sealed class BloodCmdArgumentsTests
 
         var args = nblood.GetStartGameArgs(_bloodGame, _bloodTc, [], true, true, 2);
         var expected = @$" -quick -nosetup -usecwd -j ""D:\Games\Blood"" -h ""a"" -ini ""TC.INI"" -g ""{Directory.GetCurrentDirectory()}\Data\Addons\Blood\Campaigns\blood_tc.zip"" -rff ""TC.RFF"" -snd ""TC.SND"" -s 2";
+
+        if (OperatingSystem.IsLinux())
+        {
+            args = args.Replace('\\', Path.DirectorySeparatorChar);
+            expected = expected.Replace('\\', Path.DirectorySeparatorChar);
+        }
+
+        Assert.Equal(expected, args);
+    }
+
+    [Fact]
+    public void NBloodTCFolderTest()
+    {
+        NBlood nblood = new();
+
+        var args = nblood.GetStartGameArgs(_bloodGame, _bloodTcFolder, [], true, true, 2);
+        var expected = @$" -quick -nosetup -usecwd -j ""D:\Games\Blood"" -h ""a"" -ini ""TC.INI"" -game_dir ""D:\Games\Blood\blood_tc_folder"" -rff ""TC.RFF"" -snd ""TC.SND"" -s 2";
 
         if (OperatingSystem.IsLinux())
         {
