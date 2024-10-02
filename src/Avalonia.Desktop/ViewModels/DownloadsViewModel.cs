@@ -2,6 +2,7 @@ using Common.Entities;
 using Common.Enums;
 using Common.Helpers;
 using Common.Interfaces;
+using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Mods.Providers;
@@ -71,7 +72,7 @@ public sealed partial class DownloadsViewModel : ObservableObject
             }
             else
             {
-                ThrowHelper.ArgumentOutOfRangeException(nameof(FilterSelectedItem));
+                ThrowHelper.ThrowArgumentOutOfRangeException(nameof(FilterSelectedItem));
                 return null;
             }
 

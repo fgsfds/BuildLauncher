@@ -5,6 +5,7 @@ using Common.Enums;
 using Common.Helpers;
 using Common.Interfaces;
 using Common.Tools;
+using CommunityToolkit.Diagnostics;
 using System.Collections.Immutable;
 
 namespace Mods.Providers;
@@ -162,7 +163,7 @@ public sealed class DownloadableAddonsProvider : IDownloadableAddonsProvider
         }
         else
         {
-            ThrowHelper.NotImplementedException(addon.AddonType.ToString());
+            ThrowHelper.ThrowNotSupportedException(addon.AddonType.ToString());
             return;
         }
 

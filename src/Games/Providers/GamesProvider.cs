@@ -1,7 +1,7 @@
 ﻿using Common.Client.Config;
 using Common.Enums;
-using Common.Helpers;
 using Common.Interfaces;
+using CommunityToolkit.Diagnostics;
 using Games.Games;
 
 namespace Games.Providers;
@@ -89,12 +89,12 @@ public sealed class GamesProvider
             GameEnum.Exhumed => _slave,
             GameEnum.Redneck => _redneck,
             GameEnum.RidesAgain => _redneck,
-            GameEnum.NAM => ThrowHelper.NotImplementedException<IGame>(),
-            GameEnum.WWIIGI => ThrowHelper.NotImplementedException<IGame>(),
-            GameEnum.TekWar => ThrowHelper.NotImplementedException<IGame>(),
-            GameEnum.Witchaven => ThrowHelper.NotImplementedException<IGame>(),
-            GameEnum.Witchaven2 => ThrowHelper.NotImplementedException<IGame>(),
-            _ => ThrowHelper.NotImplementedException<IGame>()
+            GameEnum.NAM => ThrowHelper.ThrowNotSupportedException<IGame>(),
+            GameEnum.WWIIGI => ThrowHelper.ThrowNotSupportedException<IGame>(),
+            GameEnum.TekWar => ThrowHelper.ThrowNotSupportedException<IGame>(),
+            GameEnum.Witchaven => ThrowHelper.ThrowNotSupportedException<IGame>(),
+            GameEnum.Witchaven2 => ThrowHelper.ThrowNotSupportedException<IGame>(),
+            _ => ThrowHelper.ThrowArgumentOutOfRangeException<IGame>()
         };
     }
 

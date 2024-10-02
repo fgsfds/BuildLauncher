@@ -1,6 +1,6 @@
 ﻿using Common.Client.Helpers;
 using Common.Enums;
-using Common.Helpers;
+using CommunityToolkit.Diagnostics;
 using Games.Providers;
 
 namespace Tools.Tools;
@@ -39,9 +39,10 @@ public sealed class Mapster32 : BaseTool
     public override string GetStartToolArgs()
     {
         var game = _gamesProvider.GetGame(GameEnum.Duke3D);
+
         if (!game.IsBaseGameInstalled)
         {
-            ThrowHelper.Exception();
+            ThrowHelper.ThrowNotSupportedException();
         }
 
         return $@"-game_dir ""{game.GameInstallFolder}""";

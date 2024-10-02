@@ -1,6 +1,6 @@
 ﻿using Common.Enums;
-using Common.Helpers;
 using Common.Interfaces;
+using CommunityToolkit.Diagnostics;
 using Games.Games;
 using System.Text;
 
@@ -41,25 +41,25 @@ public sealed class PCExhumed : EDuke32
     protected override void GetStartCampaignArgs(StringBuilder sb, IGame game, IAddon addon)
     {
         //don't search for steam/gog installs
-        sb.Append(" -usecwd");
+        _ = sb.Append(" -usecwd");
 
-        sb.Append(@$" {AddDirectoryParam}""{game.GameInstallFolder}""");
+        _ = sb.Append(@$" {AddDirectoryParam}""{game.GameInstallFolder}""");
 
         if (addon.MainDef is not null)
         {
-            sb.Append($@" {MainDefParam}""{addon.MainDef}""");
+            _ = sb.Append($@" {MainDefParam}""{addon.MainDef}""");
         }
         else
         {
             //overriding default def so gamename.def files are ignored
-            sb.Append($@" {MainDefParam}""a""");
+            _ = sb.Append($@" {MainDefParam}""a""");
         }
 
         if (addon.AdditionalDefs is not null)
         {
             foreach (var def in addon.AdditionalDefs)
             {
-                sb.Append($@" {AddDefParam}""{def}""");
+                _ = sb.Append($@" {AddDefParam}""{def}""");
             }
         }
 
@@ -70,7 +70,7 @@ public sealed class PCExhumed : EDuke32
         }
         else
         {
-            ThrowHelper.NotImplementedException($"Mod type {addon.Type} for game {game} is not supported");
+            ThrowHelper.ThrowNotSupportedException($"Mod type {addon.Type} for game {game} is not supported");
         }
     }
 }

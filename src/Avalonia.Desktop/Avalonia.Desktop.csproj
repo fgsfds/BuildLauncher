@@ -46,6 +46,7 @@
     </PackageReference>
     <PackageReference Include="Avalonia.Desktop" />
     <PackageReference Include="Avalonia.Diagnostics" />
+    <PackageReference Include="CommunityToolkit.Diagnostics" />
     <PackageReference Include="ConfigureAwaitAnalyzer">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

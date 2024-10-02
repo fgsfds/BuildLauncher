@@ -3,6 +3,7 @@ using Common.Enums.Addons;
 using Common.Enums.Versions;
 using Common.Helpers;
 using Common.Interfaces;
+using CommunityToolkit.Diagnostics;
 using Games.Games;
 using Mods.Addons;
 using System.Text;
@@ -100,7 +101,7 @@ public sealed class RedNukem : EDuke32
         }
         else
         {
-            ThrowHelper.NotImplementedException($"Mod type {addon.Type} for game {game} is not supported");
+            ThrowHelper.ThrowNotSupportedException($"Mod type {addon.Type} for game {game} is not supported");
         }
     }
 
@@ -139,11 +140,8 @@ public sealed class RedNukem : EDuke32
             return;
         }
 
-        if (addon is not RedneckCampaign rCamp)
-        {
-            ThrowHelper.ArgumentException(nameof(addon));
-            return;
-        }
+
+        Guard2.ThrowIfNotType<RedneckCampaign>(addon, out var rCamp);
 
 
         if (rCamp.MainCon is not null)
@@ -170,7 +168,7 @@ public sealed class RedNukem : EDuke32
         }
         else
         {
-            ThrowHelper.NotImplementedException($"Mod type {rCamp.Type} is not supported");
+            ThrowHelper.ThrowNotSupportedException($"Mod type {rCamp.Type} is not supported");
             return;
         }
     }

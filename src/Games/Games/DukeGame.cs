@@ -4,6 +4,7 @@ using Common.Enums.Addons;
 using Common.Enums.Versions;
 using Common.Helpers;
 using Common.Interfaces;
+using CommunityToolkit.Diagnostics;
 using Mods.Addons;
 using SharpCompress.Archives;
 using System.Reflection;
@@ -308,7 +309,7 @@ public sealed class DukeGame : BaseGame
 
         using var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("Games.Assets.WTStopgap.zip");
 
-        stream.ThrowIfNull();
+        Guard.IsNotNull(stream);
 
         using var archive = ZipArchive.Open(stream);
 
@@ -332,8 +333,8 @@ public sealed class DukeGame : BaseGame
             DukeAddonEnum.DukeDC => "DUKEDC.GRP",
             DukeAddonEnum.DukeNW => "NWINTER.GRP",
             DukeAddonEnum.DukeVaca => "VACATION.GRP",
-            DukeAddonEnum.Base => throw new NotImplementedException(),
-            _ => throw new NotImplementedException(),
+            DukeAddonEnum.Base => ThrowHelper.ThrowArgumentOutOfRangeException<string>(),
+            _ => ThrowHelper.ThrowArgumentOutOfRangeException<string>(),
         };
 
         //root

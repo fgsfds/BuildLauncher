@@ -1,4 +1,6 @@
-﻿namespace Common.Enums.Skills;
+﻿using CommunityToolkit.Diagnostics;
+
+namespace Common.Enums.Skills;
 
 public enum FurySkillsEnum : byte
 {
@@ -20,8 +22,7 @@ public static class FurySkillsEnumHelper
             FurySkillsEnum.UltraViscera => "Ultra Viscera",
             FurySkillsEnum.MaximumFury => "Maximum Fury",
             FurySkillsEnum.AngelOfDeath => "Angel of Death",
-            _ => throw new NotImplementedException(),
+            _ => ThrowHelper.ThrowArgumentOutOfRangeException<string>(nameof(skill))
         };
     }
-
 }

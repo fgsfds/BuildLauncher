@@ -1,7 +1,7 @@
 ﻿using Common.Client.Config;
 using Common.Enums;
 using Common.Enums.Versions;
-using Common.Helpers;
+using CommunityToolkit.Diagnostics;
 using Microsoft.Win32;
 using System.Runtime.InteropServices;
 
@@ -191,8 +191,8 @@ public sealed class GamesPathsProvider
             GameEnum.WWIIGI => _wwiiPath,
             GameEnum.Witchaven => _witch1Path,
             GameEnum.Witchaven2 => _witch2Path,
-            GameEnum.TekWar => throw new NotImplementedException(),
-            _ => throw new NotImplementedException()
+            GameEnum.TekWar => ThrowHelper.ThrowNotSupportedException<string>(),
+            _ => ThrowHelper.ThrowNotSupportedException<string>()
         };
     }
 
@@ -203,7 +203,7 @@ public sealed class GamesPathsProvider
             DukeVersionEnum.Duke3D_13D => _dukePath,
             DukeVersionEnum.Duke3D_Atomic => _dukePath,
             DukeVersionEnum.Duke3D_WT => _dukeWtPath,
-            _ => throw new NotImplementedException()
+            _ => ThrowHelper.ThrowNotSupportedException<string>()
         };
     }
 
@@ -294,7 +294,7 @@ public sealed class GamesPathsProvider
         }
         else
         {
-            return ThrowHelper.PlatformNotSupportedException<string>("Can't identify platform");
+            return ThrowHelper.ThrowPlatformNotSupportedException<string>("Can't identify platform");
         }
 
         if (!Directory.Exists(result))

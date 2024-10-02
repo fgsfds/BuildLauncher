@@ -1,8 +1,8 @@
 ﻿using Common.Entities;
 using Common.Enums;
-using Common.Helpers;
 using Common.Providers;
 using Common.Releases;
+using CommunityToolkit.Diagnostics;
 using System.Text.Json;
 
 namespace Web.Blazor.Providers;
@@ -80,7 +80,7 @@ public sealed class ToolsReleasesProvider
         var response = await _httpClient.GetStringAsync(repo.RepoUrl).ConfigureAwait(false);
 
         var releases = JsonSerializer.Deserialize(response, GitHubReleaseContext.Default.ListGitHubReleaseEntity)
-            ?? ThrowHelper.Exception<List<GitHubReleaseEntity>>("Error while deserializing GitHub releases");
+            ?? ThrowHelper.ThrowFormatException<List<GitHubReleaseEntity>>("Error while deserializing GitHub releases");
 
         var release = releases.FirstOrDefault(static x => x.IsDraft is false && x.IsPrerelease is false);
 

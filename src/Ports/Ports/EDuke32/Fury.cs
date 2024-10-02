@@ -2,6 +2,7 @@
 using Common.Enums;
 using Common.Helpers;
 using Common.Interfaces;
+using CommunityToolkit.Diagnostics;
 using Games.Games;
 using Mods.Addons;
 using System.Text;
@@ -82,7 +83,7 @@ public sealed class Fury(IConfigProvider config) : EDuke32
         }
         else
         {
-            ThrowHelper.NotImplementedException($"Mod type {addon.Type} for game {game} is not supported");
+            ThrowHelper.ThrowNotSupportedException($"Mod type {addon.Type} for game {game} is not supported");
         }
     }
 
@@ -94,11 +95,8 @@ public sealed class Fury(IConfigProvider config) : EDuke32
             return;
         }
 
-        if (addon is not FuryCampaign fCamp)
-        {
-            ThrowHelper.ArgumentException(nameof(addon));
-            return;
-        }
+
+        Guard2.ThrowIfNotType<FuryCampaign>(addon, out var fCamp);
 
         if (fCamp.FileName is null)
         {
@@ -130,7 +128,7 @@ public sealed class Fury(IConfigProvider config) : EDuke32
         }
         else
         {
-            ThrowHelper.NotImplementedException($"Mod type {fCamp.Type} is not supported");
+            ThrowHelper.ThrowNotSupportedException($"Mod type {fCamp.Type} is not supported");
             return;
         }
     }

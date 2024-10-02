@@ -3,6 +3,7 @@ using Common.Client.Helpers;
 using Common.Entities;
 using Common.Helpers;
 using Common.Tools;
+using CommunityToolkit.Diagnostics;
 using System.IO.Compression;
 using System.Runtime.InteropServices;
 
@@ -51,8 +52,7 @@ public sealed class AppUpdateInstaller
     /// <returns></returns>
     public async Task DownloadAndUnpackLatestRelease()
     {
-        _update.ThrowIfNull();
-        _update.WindowsDownloadUrl.ThrowIfNull();
+        Guard.IsNotNull(_update?.WindowsDownloadUrl);
 
         var updateUrl = _update.WindowsDownloadUrl;
 

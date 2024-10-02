@@ -1,5 +1,6 @@
 ﻿using Common.Entities;
 using Common.Enums;
+using CommunityToolkit.Diagnostics;
 using Database.Server;
 using Database.Server.DbEntities;
 using Microsoft.EntityFrameworkCore;
@@ -128,7 +129,7 @@ public sealed class AddonsProvider
     internal decimal ChangeRating(string addonId, sbyte rating, bool isNew)
     {
         using var dbContext = _dbContextFactory.Get();
-        var existingRating = dbContext.Rating.Find(addonId) ?? throw new Exception($"Rating for {addonId} is not found");
+        var existingRating = dbContext.Rating.Find(addonId) ?? ThrowHelper.ThrowExternalException<RatingsDbEntity>($"Rating for {addonId} is not found");
 
         existingRating.RatingSum += rating;
 
@@ -218,10 +219,7 @@ public sealed class AddonsProvider
             {
                 existingVersion = dbContext.Versions.SingleOrDefault(x => x.AddonId == addon.Id && x.Version == addon.Version);
 
-                if (existingVersion is null)
-                {
-                    throw new Exception("Addon doesn't exist");
-                }
+                Guard.IsNotNull(existingVersion);
 
                 foreach (var dep in addon.Dependencies)
                 {

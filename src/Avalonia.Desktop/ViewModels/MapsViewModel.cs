@@ -3,6 +3,7 @@ using Common.Client.Providers;
 using Common.Enums;
 using Common.Helpers;
 using Common.Interfaces;
+using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Games.Providers;
@@ -135,7 +136,7 @@ public sealed partial class MapsViewModel : RightPanelViewModel, IPortsButtonCon
     private async Task StartMapAsync(object? command)
     {
         command.ThrowIfNotType<Tuple<BasePort, byte?>>(out var parameter);
-        SelectedAddon.ThrowIfNull();
+        Guard.IsNotNull(SelectedAddon);
 
         var mods = _installedAddonsProvider.GetInstalledMods();
 
@@ -175,7 +176,7 @@ public sealed partial class MapsViewModel : RightPanelViewModel, IPortsButtonCon
     [RelayCommand]
     private void DeleteMap()
     {
-        SelectedAddon.ThrowIfNull();
+        Guard.IsNotNull(SelectedAddon);
 
         _installedAddonsProvider.DeleteAddon(SelectedAddon);
     }

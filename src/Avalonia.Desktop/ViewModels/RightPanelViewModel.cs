@@ -2,6 +2,7 @@ using Common.Client.Providers;
 using Common.Enums;
 using Common.Helpers;
 using Common.Interfaces;
+using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
@@ -119,7 +120,7 @@ public partial class RightPanelViewModel : ObservableObject, IRightPanelControl
     [RelayCommand]
     private async Task ChangeRatingAsync(string score)
     {
-        SelectedAddon.ThrowIfNull();
+        Guard.IsNotNull(SelectedAddon);
 
         var rating = byte.Parse(score);
 

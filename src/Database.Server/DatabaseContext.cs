@@ -1,5 +1,6 @@
 ﻿using Common.Entities;
 using Common.Enums;
+using CommunityToolkit.Diagnostics;
 using Database.Server.DbEntities;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
@@ -62,7 +63,7 @@ public sealed class DatabaseContext : DbContext
 
             foreach (var type in addonTypes)
             {
-                AddonTypes.Add(new()
+                _ = AddonTypes.Add(new()
                 { 
                     Id = (byte)type, 
                     Type = type.ToString() 
@@ -74,13 +75,13 @@ public sealed class DatabaseContext : DbContext
 
             foreach (var type in gamesTypes)
             {
-                Games.Add(new() { 
+                _ = Games.Add(new() { 
                     Id = (byte)type, 
                     Name = type.ToString()
                 });
             }
 
-            this.SaveChanges();
+            _ = SaveChanges();
 
 
             //Addons
@@ -93,7 +94,7 @@ public sealed class DatabaseContext : DbContext
                     continue;
                 }
 
-                Addons.Add(new()
+                _ = Addons.Add(new()
                 {
                     Id = addon.Id,
                     Title = addon.Title,
@@ -101,16 +102,16 @@ public sealed class DatabaseContext : DbContext
                     AddonType = (byte)addon.AddonType
                 });
 
-                this.SaveChanges();
+                _ = SaveChanges();
             }
 
 
             //Versions
             foreach (var addon in addonsList)
             {
-                var existing = Addons.Find(addon.Id) ?? throw new Exception("Addon doesn't exist");
+                var existing = Addons.Find(addon.Id) ?? ThrowHelper.ThrowMissingMemberException<AddonsDbEntity>("Addon doesn't exist");
 
-                Versions.Add(new()
+                _ = Versions.Add(new()
                 {
                     AddonId = existing.Id,
                     Version = addon.Version,
@@ -122,7 +123,7 @@ public sealed class DatabaseContext : DbContext
                     UpdateDate = DateTime.Now.ToUniversalTime()
                 });
 
-                this.SaveChanges();
+                _ = SaveChanges();
             }
 
 
@@ -136,14 +137,11 @@ public sealed class DatabaseContext : DbContext
 
                 var existingVersion = Versions.SingleOrDefault(x => x.AddonId == addon.Id && x.Version == addon.Version);
 
-                if (existingVersion is null)
-                {
-                    throw new Exception("Addon doesn't exist");
-                }
+                Guard.IsNotNull(existingVersion);
 
                 foreach (var dep in addon.Dependencies)
                 {
-                    Dependencies.Add(new()
+                    _ = Dependencies.Add(new()
                     {
                         AddonVersionId = existingVersion.Id,
                         DependencyId = dep.Key,
@@ -152,7 +150,7 @@ public sealed class DatabaseContext : DbContext
                 }
             }
 
-            this.SaveChanges();
+            _ = SaveChanges();
 
 
             //Scores
@@ -165,10 +163,10 @@ public sealed class DatabaseContext : DbContext
                     RatingTotal = 0
                 };
 
-                Rating.Add(score);
+                _ = Rating.Add(score);
             }
 
-            this.SaveChanges();
+            _ = SaveChanges();
 
 
             return true;

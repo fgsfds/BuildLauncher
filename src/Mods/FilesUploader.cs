@@ -2,6 +2,7 @@
 using Common.Entities;
 using Common.Enums;
 using Common.Helpers;
+using CommunityToolkit.Diagnostics;
 using Mods.Serializable;
 using SharpCompress.Archives.Zip;
 using System.Text.Json;
@@ -62,7 +63,7 @@ public sealed class FilesUploader
             AddonTypeEnum.TC => "Campaigns",
             AddonTypeEnum.Map => "Maps",
             AddonTypeEnum.Mod => "Mods",
-            _ => throw new NotImplementedException(),
+            _ => ThrowHelper.ThrowNotSupportedException<string>(),
         };
 
         var gameName = manifest.SupportedGame.Game switch
@@ -80,7 +81,7 @@ public sealed class FilesUploader
             GameEnum.TekWar => "TekWar",
             GameEnum.Witchaven => "WH",
             GameEnum.Witchaven2 => "WH2",
-            _ => throw new NotImplementedException(),
+            _ => ThrowHelper.ThrowNotSupportedException<string>(),
         };
 
         var downloadUrl = $"{Consts.FilesRepo}/{gameName}/{folderName}/{Path.GetFileName(pathToFile)}";

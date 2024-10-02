@@ -1,4 +1,5 @@
 ﻿using Common.Enums;
+using CommunityToolkit.Diagnostics;
 
 namespace Common.Client.Config;
 
@@ -27,9 +28,9 @@ public sealed class ConfigProviderFake : IConfigProvider
 
     public event ConfigProvider.ParameterChanged ParameterChangedEvent;
 
-    public void AddPlaytime(string addonId, TimeSpan playTime) => throw new NotImplementedException();
+    public void AddPlaytime(string addonId, TimeSpan playTime) => ThrowHelper.ThrowNotSupportedException();
 
-    public void AddScore(string addonId, byte rating) => throw new NotImplementedException();
+    public void AddScore(string addonId, byte rating) => ThrowHelper.ThrowNotSupportedException();
 
-    public void ChangeModState(AddonVersion addonId, bool isEnabled) => throw new NotImplementedException();
+    public void ChangeModState(AddonVersion addonId, bool isEnabled) => ThrowHelper.ThrowNotSupportedException();
 }

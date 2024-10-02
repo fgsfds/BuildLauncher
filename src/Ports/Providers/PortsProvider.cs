@@ -1,7 +1,7 @@
 ﻿using Common.Client.Config;
 using Common.Client.Helpers;
 using Common.Enums;
-using Common.Helpers;
+using CommunityToolkit.Diagnostics;
 using Ports.Ports;
 using Ports.Ports.EDuke32;
 
@@ -75,7 +75,7 @@ public sealed class PortsProvider
             PortEnum.VoidSW => VoidSW,
             PortEnum.PCExhumed => PCExhumed,
             PortEnum.Fury => Fury,
-            _ => ThrowHelper.NotImplementedException<BasePort>()
+            _ => ThrowHelper.ThrowArgumentOutOfRangeException<BasePort>()
         };
     }
 

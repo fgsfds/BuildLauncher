@@ -1,4 +1,6 @@
-﻿namespace Common.Enums.Skills;
+﻿using CommunityToolkit.Diagnostics;
+
+namespace Common.Enums.Skills;
 
 public enum BloodSkillsEnum : byte
 {
@@ -20,7 +22,7 @@ public static class BloodSkillsEnumHelper
             BloodSkillsEnum.LightlyBroiled => "Lightly Broiled",
             BloodSkillsEnum.WellDone => "Well Done",
             BloodSkillsEnum.ExtraCrispy => "Extra Crispy",
-            _ => throw new NotImplementedException(),
+            _ => ThrowHelper.ThrowArgumentOutOfRangeException<string>(nameof(skill))
         };
     }
 

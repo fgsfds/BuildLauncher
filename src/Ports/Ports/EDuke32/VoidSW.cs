@@ -3,6 +3,7 @@ using Common.Enums;
 using Common.Enums.Addons;
 using Common.Helpers;
 using Common.Interfaces;
+using CommunityToolkit.Diagnostics;
 using Games.Games;
 using Mods.Addons;
 using System.Text;
@@ -52,10 +53,10 @@ public sealed class VoidSW : EDuke32
     protected override string AddDefParam => "-mh";
 
     /// <inheritdoc/>
-    protected override string AddConParam => ThrowHelper.NotImplementedException<string>();
+    protected override string AddConParam => ThrowHelper.ThrowNotSupportedException<string>();
 
     /// <inheritdoc/>
-    protected override string MainConParam => ThrowHelper.NotImplementedException<string>();
+    protected override string MainConParam => ThrowHelper.ThrowNotSupportedException<string>();
 
 
     /// <inheritdoc/>
@@ -99,7 +100,7 @@ public sealed class VoidSW : EDuke32
         }
         else
         {
-            ThrowHelper.NotImplementedException($"Mod type {addon.Type} for game {game} is not supported");
+            ThrowHelper.ThrowNotSupportedException($"Mod type {addon.Type} for game {game} is not supported");
         }
     }
 
@@ -112,11 +113,8 @@ public sealed class VoidSW : EDuke32
             return;
         }
 
-        if (addon is not WangCampaign wCamp)
-        {
-            ThrowHelper.ArgumentException(nameof(addon));
-            return;
-        }
+
+        Guard2.ThrowIfNotType<WangCampaign>(addon, out var wCamp);
 
         if (wCamp.DependentAddons is not null &&
             wCamp.DependentAddons.ContainsKey(nameof(WangAddonEnum.Wanton)))
@@ -153,7 +151,7 @@ public sealed class VoidSW : EDuke32
         }
         else
         {
-            ThrowHelper.NotImplementedException($"Mod type {wCamp.Type} is not supported");
+            ThrowHelper.ThrowNotSupportedException($"Mod type {wCamp.Type} is not supported");
             return;
         }
     }

@@ -4,6 +4,7 @@ using Common.Enums;
 using Common.Enums.Addons;
 using Common.Helpers;
 using Common.Interfaces;
+using CommunityToolkit.Diagnostics;
 using Games.Games;
 using Mods.Addons;
 using Mods.Serializable.Addon;
@@ -238,7 +239,7 @@ public abstract class BasePort
         }
         else
         {
-            ThrowHelper.NotImplementedException();
+            ThrowHelper.ThrowNotSupportedException();
         }
     }
 
@@ -379,11 +380,7 @@ public abstract class BasePort
             return;
         }
 
-        if (addon is not BloodCampaign bCamp)
-        {
-            ThrowHelper.ArgumentException(nameof(addon));
-            return;
-        }
+        Guard2.ThrowIfNotType<BloodCampaign>(addon, out var bCamp);
 
         if (bCamp.INI is not null)
         {
@@ -422,7 +419,7 @@ public abstract class BasePort
         }
         else
         {
-            ThrowHelper.NotImplementedException($"Mod type {bCamp.Type} is not supported");
+            ThrowHelper.ThrowNotSupportedException($"Mod type {bCamp.Type} is not supported");
             return;
         }
 
@@ -447,11 +444,7 @@ public abstract class BasePort
             return;
         }
 
-        if (addon is not SlaveCampaign sCamp)
-        {
-            ThrowHelper.ArgumentException(nameof(addon));
-            return;
-        }
+        Guard2.ThrowIfNotType<SlaveCampaign>(addon, out var sCamp);
 
         if (sCamp.FileName is null)
         {
@@ -469,7 +462,7 @@ public abstract class BasePort
         }
         else
         {
-            ThrowHelper.NotImplementedException($"Mod type {sCamp.Type} is not supported");
+            ThrowHelper.ThrowNotSupportedException($"Mod type {sCamp.Type} is not supported");
             return;
         }
     }

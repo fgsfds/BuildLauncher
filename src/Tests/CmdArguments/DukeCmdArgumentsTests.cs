@@ -7,7 +7,6 @@ using Games.Games;
 using Mods.Addons;
 using Ports.Ports;
 using Ports.Ports.EDuke32;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Tests.CmdArguments;
 

@@ -1,6 +1,7 @@
 ﻿using Common.Enums;
 using Common.Helpers;
 using Common.Releases;
+using CommunityToolkit.Diagnostics;
 
 namespace Common.Providers;
 
@@ -83,7 +84,7 @@ public sealed class RepositoriesProvider
         }
         else
         {
-            return ThrowHelper.NotImplementedException<RepositoryEntity>(portEnum.ToString());
+            return ThrowHelper.ThrowNotSupportedException<RepositoryEntity>(portEnum.ToString());
         }
     }
 
@@ -109,7 +110,7 @@ public sealed class RepositoriesProvider
         }
         else
         {
-            return ThrowHelper.NotImplementedException<RepositoryEntity>(toolEnum.ToString());
+            return ThrowHelper.ThrowNotSupportedException<RepositoryEntity>(toolEnum.ToString());
         }
     }
 }

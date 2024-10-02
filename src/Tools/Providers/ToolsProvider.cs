@@ -1,6 +1,6 @@
 ﻿using Common.Client.Helpers;
 using Common.Enums;
-using Common.Helpers;
+using CommunityToolkit.Diagnostics;
 using Games.Providers;
 using Tools.Tools;
 
@@ -46,7 +46,7 @@ public sealed class ToolsProvider
         {
             ToolEnum.Mapster32 => Mapster32,
             ToolEnum.XMapEdit => XMapEdit,
-            _ => ThrowHelper.NotImplementedException<BaseTool>()
+            _ => ThrowHelper.ThrowArgumentOutOfRangeException<BaseTool>()
         };
     }
 }

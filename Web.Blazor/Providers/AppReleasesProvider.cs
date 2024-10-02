@@ -1,6 +1,7 @@
 ﻿using Common.Entities;
 using Common.Helpers;
 using Common.Releases;
+using CommunityToolkit.Diagnostics;
 using System.Text.Json;
 
 namespace Web.Blazor.Providers;
@@ -42,7 +43,7 @@ public sealed class AppReleasesProvider
 
             var releases =
                 JsonSerializer.Deserialize(releasesJson, GitHubReleaseContext.Default.ListGitHubReleaseEntity)
-                ?? ThrowHelper.Exception<List<GitHubReleaseEntity>>("Error while deserializing GitHub releases");
+                ?? ThrowHelper.ThrowFormatException<List<GitHubReleaseEntity>>("Error while deserializing GitHub releases");
 
             releases = [.. releases.Where(static x => x.IsDraft is false && x.IsPrerelease is false).OrderByDescending(static x => new Version(x.TagName))];
 

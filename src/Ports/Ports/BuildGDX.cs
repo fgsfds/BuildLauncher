@@ -1,8 +1,8 @@
 ﻿using Common;
 using Common.Enums;
 using Common.Enums.Versions;
-using Common.Helpers;
 using Common.Interfaces;
+using CommunityToolkit.Diagnostics;
 using Games.Games;
 using System.Text;
 
@@ -78,37 +78,37 @@ public sealed class BuildGDX : BasePort
     protected override string ConfigFile => string.Empty;
 
     /// <inheritdoc/>
-    protected override string AddDirectoryParam => ThrowHelper.NotImplementedException<string>();
+    protected override string AddDirectoryParam => ThrowHelper.ThrowNotSupportedException<string>();
 
     /// <inheritdoc/>
-    protected override string AddFileParam => ThrowHelper.NotImplementedException<string>();
+    protected override string AddFileParam => ThrowHelper.ThrowNotSupportedException<string>();
 
     /// <inheritdoc/>
-    protected override string AddDefParam => ThrowHelper.NotImplementedException<string>();
+    protected override string AddDefParam => ThrowHelper.ThrowNotSupportedException<string>();
 
     /// <inheritdoc/>
-    protected override string AddConParam => ThrowHelper.NotImplementedException<string>();
+    protected override string AddConParam => ThrowHelper.ThrowNotSupportedException<string>();
 
     /// <inheritdoc/>
-    protected override string MainDefParam => ThrowHelper.NotImplementedException<string>();
+    protected override string MainDefParam => ThrowHelper.ThrowNotSupportedException<string>();
 
     /// <inheritdoc/>
-    protected override string MainConParam => ThrowHelper.NotImplementedException<string>();
+    protected override string MainConParam => ThrowHelper.ThrowNotSupportedException<string>();
 
     /// <inheritdoc/>
-    protected override string AddGrpParam => ThrowHelper.NotImplementedException<string>();
+    protected override string AddGrpParam => ThrowHelper.ThrowNotSupportedException<string>();
 
     /// <inheritdoc/>
-    protected override string SkillParam => ThrowHelper.NotImplementedException<string>();
+    protected override string SkillParam => ThrowHelper.ThrowNotSupportedException<string>();
 
     /// <inheritdoc/>
-    protected override string AddGameDirParam => ThrowHelper.NotImplementedException<string>();
+    protected override string AddGameDirParam => ThrowHelper.ThrowNotSupportedException<string>();
 
     /// <inheritdoc/>
-    protected override string AddRffParam => ThrowHelper.NotImplementedException<string>();
+    protected override string AddRffParam => ThrowHelper.ThrowNotSupportedException<string>();
 
     /// <inheritdoc/>
-    protected override string AddSndParam => ThrowHelper.NotImplementedException<string>();
+    protected override string AddSndParam => ThrowHelper.ThrowNotSupportedException<string>();
 
 
     /// <inheritdoc/>
@@ -150,7 +150,7 @@ public sealed class BuildGDX : BasePort
         }
         else
         {
-            ThrowHelper.NotImplementedException($"Mod type {addon} for game {game} is not supported");
+            ThrowHelper.ThrowNotSupportedException($"Mod type {addon} for game {game} is not supported");
         }
     }
 

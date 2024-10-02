@@ -3,6 +3,7 @@ using Common.Client.Providers;
 using Common.Enums;
 using Common.Helpers;
 using Common.Interfaces;
+using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Games.Providers;
@@ -135,7 +136,7 @@ public sealed partial class CampaignsViewModel : RightPanelViewModel, IPortsButt
     private async Task StartCampaignAsync(object? command)
     {
         command.ThrowIfNotType<BasePort>(out var port);
-        SelectedAddon.ThrowIfNull();
+        Guard.IsNotNull(SelectedAddon);
 
         var mods = _installedAddonsProvider.GetInstalledMods();
 
@@ -176,7 +177,7 @@ public sealed partial class CampaignsViewModel : RightPanelViewModel, IPortsButt
     [RelayCommand]
     private void DeleteCampaign()
     {
-        SelectedAddon.ThrowIfNull();
+        Guard.IsNotNull(SelectedAddon);
 
         _installedAddonsProvider.DeleteAddon(SelectedAddon);
     }

@@ -4,6 +4,7 @@ using Common.Enums.Addons;
 using Common.Enums.Versions;
 using Common.Helpers;
 using Common.Interfaces;
+using CommunityToolkit.Diagnostics;
 using Games.Games;
 using Mods.Addons;
 using System.Text;
@@ -55,10 +56,10 @@ public class EDuke32 : BasePort
     protected override string AddGameDirParam => "-game_dir ";
 
     /// <inheritdoc/>
-    protected override string AddRffParam => throw new NotImplementedException();
+    protected override string AddRffParam => ThrowHelper.ThrowNotSupportedException<string>();
 
     /// <inheritdoc/>
-    protected override string AddSndParam => throw new NotImplementedException();
+    protected override string AddSndParam => ThrowHelper.ThrowNotSupportedException<string>();
 
     /// <inheritdoc/>
     public override List<GameEnum> SupportedGames =>
@@ -214,7 +215,7 @@ public class EDuke32 : BasePort
         }
         else
         {
-            ThrowHelper.NotImplementedException($"Mod type {addon.Type} for game {game} is not supported");
+            ThrowHelper.ThrowNotSupportedException($"Mod type {addon.Type} for game {game} is not supported");
         }
     }
 
@@ -300,11 +301,7 @@ public class EDuke32 : BasePort
         }
 
 
-        if (addon is not DukeCampaign dCamp)
-        {
-            ThrowHelper.ArgumentException(nameof(addon));
-            return;
-        }
+        Guard2.ThrowIfNotType<DukeCampaign>(addon, out var dCamp);
 
         if (dCamp.FileName is null)
         {
@@ -343,7 +340,7 @@ public class EDuke32 : BasePort
         }
         else
         {
-            ThrowHelper.NotImplementedException($"Mod type {dCamp.Type} is not supported");
+            ThrowHelper.ThrowNotSupportedException($"Mod type {dCamp.Type} is not supported");
             return;
         }
     }

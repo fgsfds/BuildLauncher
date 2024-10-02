@@ -1,4 +1,6 @@
-﻿namespace Common.Helpers;
+﻿using CommunityToolkit.Diagnostics;
+
+namespace Common.Helpers;
 
 public static class VersionComparer
 {
@@ -81,7 +83,7 @@ public static class VersionComparer
         }
         else
         {
-            return ThrowHelper.NotImplementedException<bool>();
+            return ThrowHelper.ThrowNotSupportedException<bool>();
         }
 
         var result = string.Compare(v1, v2);

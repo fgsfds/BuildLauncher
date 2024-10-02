@@ -72,11 +72,7 @@ public sealed partial class RightPanelControl : UserControl
 
     private void SetStars()
     {
-        if (DataContext is not RightPanelViewModel rightPanelViewModel)
-        {
-            ThrowHelper.ArgumentException();
-            return;
-        }
+        Guard2.ThrowIfNotType<RightPanelViewModel>(DataContext, out var rightPanelViewModel);
 
         if (rightPanelViewModel.SelectedAddon is null)
         {

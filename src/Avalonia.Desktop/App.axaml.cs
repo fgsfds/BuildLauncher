@@ -10,7 +10,7 @@ using Common.Client.Config;
 using Common.Client.DI;
 using Common.DI;
 using Common.Enums;
-using Common.Helpers;
+using CommunityToolkit.Diagnostics;
 using Games.Providers;
 using Microsoft.Extensions.DependencyInjection;
 using Ports.Providers;
@@ -47,7 +47,7 @@ public sealed class App : Application
         }
         else if (ApplicationLifetime is ISingleViewApplicationLifetime)
         {
-            ThrowHelper.NotImplementedException();
+            ThrowHelper.ThrowNotSupportedException();
         }
 
         base.OnFrameworkInitializationCompleted();
@@ -87,7 +87,7 @@ public sealed class App : Application
             ThemeEnum.System => ThemeVariant.Default,
             ThemeEnum.Light => ThemeVariant.Light,
             ThemeEnum.Dark => ThemeVariant.Dark,
-            _ => ThrowHelper.ArgumentOutOfRangeException<ThemeVariant>(theme.ToString())
+            _ => ThrowHelper.ThrowArgumentOutOfRangeException<ThemeVariant>(theme.ToString())
         };
 
         RequestedThemeVariant = themeEnum;

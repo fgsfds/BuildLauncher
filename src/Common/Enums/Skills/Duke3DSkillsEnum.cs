@@ -1,4 +1,6 @@
-﻿namespace Common.Enums.Skills;
+﻿using CommunityToolkit.Diagnostics;
+
+namespace Common.Enums.Skills;
 
 public enum Duke3DSkillsEnum : byte
 {
@@ -18,8 +20,7 @@ public static class Duke3DSkillsEnumHelper
             Duke3DSkillsEnum.LetsRock => "Let's Rock",
             Duke3DSkillsEnum.ComeGetSome => "Come Get Some",
             Duke3DSkillsEnum.DamnImGood => "Damn I'm Good",
-            _ => throw new NotImplementedException(),
+            _ => ThrowHelper.ThrowArgumentOutOfRangeException<string>(nameof(skill))
         };
     }
-
 }

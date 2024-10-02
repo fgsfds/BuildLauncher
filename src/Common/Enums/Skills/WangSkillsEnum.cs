@@ -1,4 +1,6 @@
-﻿namespace Common.Enums.Skills;
+﻿using CommunityToolkit.Diagnostics;
+
+namespace Common.Enums.Skills;
 
 public enum WangSkillsEnum : byte
 {
@@ -18,8 +20,7 @@ public static class WangSkillsEnumHelper
             WangSkillsEnum.IHaveNoFear => "I Have No Fear",
             WangSkillsEnum.WhoWantsWang => "Who Wants Wang",
             WangSkillsEnum.NoPainNoGain => "No Pain No Gain",
-            _ => throw new NotImplementedException(),
+            _ => ThrowHelper.ThrowArgumentOutOfRangeException<string>(nameof(skill))
         };
     }
-
 }

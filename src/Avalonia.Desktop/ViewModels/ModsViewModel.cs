@@ -2,6 +2,7 @@ using Common.Client.Providers;
 using Common.Enums;
 using Common.Helpers;
 using Common.Interfaces;
+using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Games.Providers;
@@ -127,7 +128,7 @@ public sealed partial class ModsViewModel : RightPanelViewModel, IPortsButtonCon
     [RelayCommand]
     private void DeleteMod()
     {
-        SelectedAddon.ThrowIfNull();
+        Guard.IsNotNull(SelectedAddon);
 
         _installedAddonsProvider.DeleteAddon(SelectedAddon);
     }

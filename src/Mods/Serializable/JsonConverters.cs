@@ -1,6 +1,6 @@
 ﻿using Common.Enums;
-using Common.Helpers;
 using Common.Interfaces;
+using CommunityToolkit.Diagnostics;
 using Mods.Serializable.Addon;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -21,7 +21,7 @@ public sealed class SupportedGameDtoConverter : JsonConverter<SupportedGameDto?>
 
             if (str is null)
             {
-                ThrowHelper.NullReferenceException(nameof(str));
+                ThrowHelper.ThrowArgumentNullException(nameof(str));
             }
 
             var gameEnum = Enum.Parse<GameEnum>(str, true);
@@ -34,12 +34,12 @@ public sealed class SupportedGameDtoConverter : JsonConverter<SupportedGameDto?>
             return dto;
         }
 
-        return ThrowHelper.NotImplementedException<SupportedGameDto?>();
+        return ThrowHelper.ThrowNotSupportedException<SupportedGameDto?>();
     }
 
     public override void Write(Utf8JsonWriter writer, SupportedGameDto? value, JsonSerializerOptions options)
     {
-        throw new NotImplementedException();
+        ThrowHelper.ThrowNotSupportedException();
     }
 }
 
@@ -63,7 +63,7 @@ public sealed class IStartMapConverter : JsonConverter<IStartMap?>
             catch { }
         }
 
-        return ThrowHelper.NotImplementedException<IStartMap?>();
+        return ThrowHelper.ThrowNotSupportedException<IStartMap?>();
     }
 
     public override void Write(Utf8JsonWriter writer, IStartMap? value, JsonSerializerOptions options)
@@ -84,7 +84,7 @@ public sealed class IStartMapConverter : JsonConverter<IStartMap?>
         }
         else
         {
-            ThrowHelper.NotImplementedException();
+            ThrowHelper.ThrowNotSupportedException();
         }
 
         writer.WriteEndObject();
@@ -146,7 +146,7 @@ public sealed class SingleOrArrayConverter<TItem> : JsonConverter<List<TItem>>
         }
         else
         {
-            throw new NotImplementedException();
+            ThrowHelper.ThrowNotSupportedException();
         }
     }
 
@@ -190,7 +190,7 @@ public sealed class SingleOrArrayConverter<TItem> : JsonConverter<List<TItem>>
         }
         else
         {
-            throw new NotImplementedException();
+            ThrowHelper.ThrowNotSupportedException();
         }
 
         return default;

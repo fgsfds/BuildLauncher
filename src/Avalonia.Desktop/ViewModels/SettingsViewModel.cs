@@ -4,7 +4,7 @@ using Avalonia.Styling;
 using Common.Client.Config;
 using Common.Enums;
 using Common.Enums.Versions;
-using Common.Helpers;
+using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Games.Providers;
@@ -123,7 +123,7 @@ internal sealed partial class SettingsViewModel : ObservableObject
     [RelayCommand]
     private void SetDefaultTheme()
     {
-        Application.Current.ThrowIfNull();
+        Guard.IsNotNull(Application.Current);
 
         Application.Current.RequestedThemeVariant = ThemeVariant.Default;
         _config.Theme = ThemeEnum.System;
@@ -133,7 +133,7 @@ internal sealed partial class SettingsViewModel : ObservableObject
     [RelayCommand]
     private void SetLightTheme()
     {
-        Application.Current.ThrowIfNull();
+        Guard.IsNotNull(Application.Current);
 
         Application.Current.RequestedThemeVariant = ThemeVariant.Light;
         _config.Theme = ThemeEnum.Light;
@@ -143,7 +143,7 @@ internal sealed partial class SettingsViewModel : ObservableObject
     [RelayCommand]
     private void SetDarkTheme()
     {
-        Application.Current.ThrowIfNull();
+        Guard.IsNotNull(Application.Current);
 
         Application.Current.RequestedThemeVariant = ThemeVariant.Dark;
         _config.Theme = ThemeEnum.Dark;

@@ -4,6 +4,7 @@ using Common.Enums;
 using Common.Enums.Addons;
 using Common.Helpers;
 using Common.Interfaces;
+using CommunityToolkit.Diagnostics;
 using Mods.Addons;
 using Mods.Serializable;
 using Mods.Serializable.Addon;
@@ -126,14 +127,14 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
         {
             _isCacheUpdating = false;
             _ = _semaphore.Release();
-            _cache.ThrowIfNull();
+            Guard.IsNotNull(_cache);
         }
     }
 
     /// <inheritdoc/>
     public async Task AddAddonAsync(AddonTypeEnum addonType, string pathToFile)
     {
-        _cache.ThrowIfNull();
+        Guard.IsNotNull(_cache);
 
         var addon = await GetAddonFromFileAsync(addonType, pathToFile).ConfigureAwait(false);
 
@@ -163,8 +164,8 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
     /// <inheritdoc/>
     public void DeleteAddon(IAddon addon)
     {
-        _cache.ThrowIfNull();
-        addon.PathToFile.ThrowIfNull();
+        Guard.IsNotNull(_cache);
+        Guard.IsNotNull(addon.PathToFile);
 
         if (addon.IsFolder)
         {
@@ -214,7 +215,7 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
             AddonTypeEnum.TC => GetInstalledCampaigns(),
             AddonTypeEnum.Map => GetInstalledMaps(),
             AddonTypeEnum.Mod => GetInstalledMods(),
-            _ => throw new NotImplementedException()
+            _ => ThrowHelper.ThrowNotSupportedException<Dictionary<AddonVersion, IAddon>>()
         };
     }
 
@@ -228,7 +229,7 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
             return campaigns;
         }
 
-        _cache.ThrowIfNull();
+        Guard.IsNotNull(_cache);
 
         _ = _cache.TryGetValue(AddonTypeEnum.TC, out var result);
 
@@ -255,7 +256,7 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
             return [];
         }
 
-        _cache.ThrowIfNull();
+        Guard.IsNotNull(_cache);
 
         _ = _cache.TryGetValue(AddonTypeEnum.Map, out var result);
 
@@ -270,7 +271,7 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
             return [];
         }
 
-        _cache.ThrowIfNull();
+        Guard.IsNotNull(_cache);
 
         _ = _cache.TryGetValue(AddonTypeEnum.Mod, out var result);
 
@@ -571,7 +572,7 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
 
             if (mainDef is not null)
             {
-                ThrowHelper.ArgumentException("Autoload mod can't have Main DEF");
+                ThrowHelper.ThrowArgumentException("Autoload mod can't have Main DEF");
             }
 
             var addon = new AutoloadMod()
@@ -771,7 +772,7 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
             }
             else
             {
-                ThrowHelper.NotImplementedException();
+                ThrowHelper.ThrowNotSupportedException();
                 return null;
             }
         }

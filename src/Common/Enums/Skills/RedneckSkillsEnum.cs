@@ -1,4 +1,6 @@
-﻿namespace Common.Enums.Skills;
+﻿using CommunityToolkit.Diagnostics;
+
+namespace Common.Enums.Skills;
 
 public enum RedneckSkillsEnum : byte
 {
@@ -20,8 +22,7 @@ public static class RedneckSkillsEnumHelper
             RedneckSkillsEnum.HardAss => "Hard Ass",
             RedneckSkillsEnum.KillBilly => "Killbilly",
             RedneckSkillsEnum.Psychobilly => "Psychobilly",
-            _ => throw new NotImplementedException(),
+            _ => ThrowHelper.ThrowArgumentOutOfRangeException<string>(nameof(skill))
         };
     }
-
 }

@@ -7,6 +7,7 @@ using Common.Enums;
 using Common.Enums.Skills;
 using Common.Helpers;
 using Common.Interfaces;
+using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.Input;
 using Ports.Ports;
 using Ports.Providers;
@@ -264,14 +265,14 @@ public sealed partial class MapsControl : UserControl
     {
         if (_flyout?.Target is not null)
         {
-            return ((Button)_flyout.Target!).CommandParameter as BasePort ?? ThrowHelper.Exception<BasePort>();
+            return ((Button)_flyout.Target!).CommandParameter as BasePort ?? ThrowHelper.ThrowFormatException<BasePort>();
         }
         else if (port is not null)
         {
             return port;
         }
 
-        return ThrowHelper.ArgumentOutOfRangeException<BasePort>(nameof(port));
+        return ThrowHelper.ThrowArgumentOutOfRangeException<BasePort>(nameof(port));
     }
 
     /// <summary>

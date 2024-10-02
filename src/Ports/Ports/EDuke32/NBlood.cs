@@ -1,9 +1,7 @@
 ﻿using Common.Enums;
-using Common.Enums.Addons;
-using Common.Helpers;
 using Common.Interfaces;
+using CommunityToolkit.Diagnostics;
 using Games.Games;
-using Mods.Addons;
 using System.Text;
 
 namespace Ports.Ports.EDuke32;
@@ -86,7 +84,7 @@ public class NBlood : EDuke32
         }
         else
         {
-            ThrowHelper.NotImplementedException($"Mod type {addon.Type} for game {game} is not supported");
+            ThrowHelper.ThrowNotSupportedException($"Mod type {addon.Type} for game {game} is not supported");
         }
     }
 }

@@ -4,8 +4,8 @@ using Common.Client.Config;
 using Common.Client.Helpers;
 using Common.Enums;
 using Common.Enums.Versions;
-using Common.Helpers;
 using Common.Interfaces;
+using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Games.Providers;
@@ -485,7 +485,7 @@ public sealed partial class DevViewModel : ObservableObject
     [RelayCommand]
     private void RemoveDependency(DependantAddonDto dependency)
     {
-        Guard.ThrowIfNull(DependenciesList);
+        Guard.IsNotNull(DependenciesList);
 
         DependenciesList = DependenciesList.Remove(dependency);
     }
@@ -506,7 +506,7 @@ public sealed partial class DevViewModel : ObservableObject
     [RelayCommand]
     private void RemoveIncompatibility(DependantAddonDto dependency)
     {
-        Guard.ThrowIfNull(IncompatibilitiesList);
+        Guard.IsNotNull(IncompatibilitiesList);
 
         IncompatibilitiesList = IncompatibilitiesList.Remove(dependency);
     }
@@ -593,7 +593,7 @@ public sealed partial class DevViewModel : ObservableObject
             }
             else
             {
-                ThrowHelper.ArgumentOutOfRangeException(nameof(addon.AddonType));
+                ThrowHelper.ThrowArgumentOutOfRangeException(nameof(addon.AddonType));
                 return;
             }
 
@@ -621,7 +621,7 @@ public sealed partial class DevViewModel : ObservableObject
 
         if (forbidden.Any())
         {
-            ThrowHelper.Exception($"Common files names can't be used. Rename these files: {string.Join(", ", forbidden)}");
+            ThrowHelper.ThrowMissingFieldException($"Common files names can't be used. Rename these files: {string.Join(", ", forbidden)}");
         }
 
         if (IsBloodSelected &&
@@ -630,15 +630,15 @@ public sealed partial class DevViewModel : ObservableObject
         {
             if (files.Any(static x => x.EndsWith(".ART", StringComparison.InvariantCultureIgnoreCase)))
             {
-                ThrowHelper.Exception("Don't use ART files. Convert them to DEF.");
+                ThrowHelper.ThrowMissingFieldException("Don't use ART files. Convert them to DEF.");
             }
             if (files.Any(static x => x.EndsWith(".DAT", StringComparison.InvariantCultureIgnoreCase)))
             {
-                ThrowHelper.Exception("Don't use DAT files. Convert them to DEF.");
+                ThrowHelper.ThrowMissingFieldException("Don't use DAT files. Convert them to DEF.");
             }
             if (files.Any(static x => x.EndsWith(".RFS", StringComparison.InvariantCultureIgnoreCase)))
             {
-                ThrowHelper.Exception("Addons with RFS files are not supported");
+                ThrowHelper.ThrowMissingFieldException("Addons with RFS files are not supported");
             }
         }
             
@@ -649,7 +649,7 @@ public sealed partial class DevViewModel : ObservableObject
               IsTcSelected ? AddonTypeEnum.TC
             : IsMapSelected ? AddonTypeEnum.Map
             : IsModSelected ? AddonTypeEnum.Mod
-            : ThrowHelper.Exception<AddonTypeEnum>("Select addon type");
+            : ThrowHelper.ThrowArgumentOutOfRangeException<AddonTypeEnum>("Select addon type");
 
         var gameEnum =
               IsDukeSelected ? GameEnum.Duke3D
@@ -659,7 +659,7 @@ public sealed partial class DevViewModel : ObservableObject
             : IsRedneckSelected ? GameEnum.Redneck
             : IsRidesAgainSelected ? GameEnum.RidesAgain
             : IsSlaveSelected ? GameEnum.Exhumed
-            : ThrowHelper.Exception<GameEnum>("Select game");
+            : ThrowHelper.ThrowArgumentOutOfRangeException<GameEnum>("Select game");
 
         DukeVersionEnum? dukeVersion =
               !IsDukeSelected ? null
@@ -670,15 +670,15 @@ public sealed partial class DevViewModel : ObservableObject
 
         if (string.IsNullOrWhiteSpace(AddonTitle))
         {
-            ThrowHelper.Exception("Select addon title");
+            ThrowHelper.ThrowMissingFieldException("Select addon title");
         }
         if (string.IsNullOrWhiteSpace(AddonId))
         {
-            ThrowHelper.Exception("Select addon id");
+            ThrowHelper.ThrowMissingFieldException("Select addon id");
         }
         if (string.IsNullOrWhiteSpace(AddonVersion))
         {
-            ThrowHelper.Exception("Select addon version");
+            ThrowHelper.ThrowMissingFieldException("Select addon version");
         }
 
         List<FeatureEnum> features = [];
@@ -724,19 +724,19 @@ public sealed partial class DevViewModel : ObservableObject
         {
             if (!IsElMapTypeSelected && !IsFileMapTypeSelected)
             {
-                ThrowHelper.Exception("Select start map");
+                ThrowHelper.ThrowMissingFieldException("Select start map");
             }
 
             if (IsElMapTypeSelected)
             {
                 if (MapEpisode is null)
                 {
-                    ThrowHelper.Exception("Select start map episode");
+                    ThrowHelper.ThrowMissingFieldException("Select start map episode");
                 }
 
                 if (MapLevel is null)
                 {
-                    ThrowHelper.Exception("Select start map level");
+                    ThrowHelper.ThrowMissingFieldException("Select start map level");
                 }
 
                 startMap = new MapSlotDto() { Episode = MapEpisode.Value, Level = MapLevel.Value };
@@ -746,7 +746,7 @@ public sealed partial class DevViewModel : ObservableObject
             {
                 if (string.IsNullOrWhiteSpace(MapFileName))
                 {
-                    ThrowHelper.Exception("Select start map file name");
+                    ThrowHelper.ThrowMissingFieldException("Select start map file name");
                 }
 
                 startMap = new MapFileDto() { File = MapFileName };
@@ -873,7 +873,7 @@ public sealed partial class DevViewModel : ObservableObject
     /// <param name="addon">Addon</param>
     private void RenameAddonFolder(AddonDto addon)
     {
-        Guard.ThrowIfNull(PathToAddonFolder);
+        Guard.IsNotNull(PathToAddonFolder);
 
         var fullName = GetAddonFullName(addon);
         var newFolderPath = Path.Combine(Path.GetDirectoryName(PathToAddonFolder)!, fullName);

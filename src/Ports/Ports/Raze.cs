@@ -4,6 +4,7 @@ using Common.Enums.Addons;
 using Common.Enums.Versions;
 using Common.Helpers;
 using Common.Interfaces;
+using CommunityToolkit.Diagnostics;
 using Games.Games;
 using Mods.Addons;
 using System.Diagnostics;
@@ -84,10 +85,10 @@ public sealed class Raze : BasePort
     protected override string AddSndParam => "-file ";
 
     /// <inheritdoc/>
-    protected override string AddGrpParam => throw new NotImplementedException();
+    protected override string AddGrpParam => ThrowHelper.ThrowNotSupportedException<string>();
 
     /// <inheritdoc/>
-    protected override string SkillParam => throw new NotImplementedException();
+    protected override string SkillParam => ThrowHelper.ThrowNotSupportedException<string>();
 
     /// <inheritdoc/>
     public override List<FeatureEnum> SupportedFeatures =>
@@ -271,7 +272,7 @@ public sealed class Raze : BasePort
         }
         else
         {
-            ThrowHelper.NotImplementedException($"Mod type {addon} for game {game} is not supported");
+            ThrowHelper.ThrowNotSupportedException($"Mod type {addon} for game {game} is not supported");
         }
     }
 
@@ -283,11 +284,8 @@ public sealed class Raze : BasePort
             return;
         }
 
-        if (addon is not DukeCampaign dCamp)
-        {
-            ThrowHelper.ArgumentException(nameof(addon));
-            return;
-        }
+
+        Guard2.ThrowIfNotType<DukeCampaign>(addon, out var dCamp);
 
         if (dCamp.SupportedGame.GameVersion is not null &&
             dCamp.SupportedGame.GameVersion.Equals(nameof(DukeVersionEnum.Duke3D_WT), StringComparison.InvariantCultureIgnoreCase))
@@ -353,7 +351,7 @@ public sealed class Raze : BasePort
         }
         else
         {
-            ThrowHelper.NotImplementedException($"Mod type {dCamp.Type} is not supported");
+            ThrowHelper.ThrowNotSupportedException($"Mod type {dCamp.Type} is not supported");
             return;
         }
     }
@@ -366,11 +364,8 @@ public sealed class Raze : BasePort
             return;
         }
 
-        if (addon is not WangCampaign wCamp)
-        {
-            ThrowHelper.ArgumentException(nameof(addon));
-            return;
-        }
+
+        Guard2.ThrowIfNotType<WangCampaign>(addon, out var wCamp);
 
         //TODO downloaded addons support
         if (wCamp.DependentAddons is not null &&
@@ -401,7 +396,7 @@ public sealed class Raze : BasePort
         }
         else
         {
-            ThrowHelper.NotImplementedException($"Mod type {wCamp.Type} is not supported");
+            ThrowHelper.ThrowNotSupportedException($"Mod type {wCamp.Type} is not supported");
             return;
         }
     }
@@ -414,11 +409,8 @@ public sealed class Raze : BasePort
             return;
         }
 
-        if (addon is not RedneckCampaign rCamp)
-        {
-            ThrowHelper.ArgumentException(nameof(addon));
-            return;
-        }
+
+        Guard2.ThrowIfNotType<RedneckCampaign>(addon, out var rCamp);
 
         if (rCamp.DependentAddons is not null &&
             rCamp.DependentAddons.ContainsKey(nameof(RedneckAddonEnum.Route66)))
@@ -464,7 +456,7 @@ public sealed class Raze : BasePort
         }
         else
         {
-            ThrowHelper.NotImplementedException($"Mod type {rCamp.Type} is not supported");
+            ThrowHelper.ThrowNotSupportedException($"Mod type {rCamp.Type} is not supported");
             return;
         }
     }
@@ -514,7 +506,7 @@ public sealed class Raze : BasePort
     /// </summary>
     private void FixRoute66Files(IGame game, IAddon _)
     {
-        game.GameInstallFolder.ThrowIfNull();
+        Guard.IsNotNull(game.GameInstallFolder);
 
         if (game is RedneckGame)
         {
