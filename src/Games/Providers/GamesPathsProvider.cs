@@ -20,7 +20,7 @@ public sealed class GamesPathsProvider
     private readonly string? _againPath = null;
     private readonly string? _slavePath = null;
     private readonly string? _namPath = null;
-    private readonly string? _wwiiPath = null;
+    private readonly string? _ww2giPath = null;
     private readonly string? _witch1Path = null;
     private readonly string? _witch2Path = null;
 
@@ -154,7 +154,7 @@ public sealed class GamesPathsProvider
             pathToGame = Path.Combine(lib, "World War II GI", "WW2GI");
             if (Directory.Exists(pathToGame))
             {
-                _wwiiPath ??= pathToGame;
+                _ww2giPath ??= pathToGame;
             }
 
 
@@ -188,7 +188,7 @@ public sealed class GamesPathsProvider
             GameEnum.Fury => _furyPath,
             GameEnum.Exhumed => _slavePath,
             GameEnum.NAM => _namPath,
-            GameEnum.WWIIGI => _wwiiPath,
+            GameEnum.WW2GI => _ww2giPath,
             GameEnum.Witchaven => _witch1Path,
             GameEnum.Witchaven2 => _witch2Path,
             GameEnum.TekWar => ThrowHelper.ThrowNotSupportedException<string>(),
@@ -217,6 +217,8 @@ public sealed class GamesPathsProvider
         _config.PathSlave ??= GetPath(GameEnum.Exhumed);
         _config.PathRedneck ??= GetPath(GameEnum.Redneck);
         _config.PathRidesAgain ??= GetPath(GameEnum.RidesAgain);
+        _config.PathNam ??= GetPath(GameEnum.NAM);
+        _config.PathWW2GI ??= GetPath(GameEnum.WW2GI);
     }
 
 

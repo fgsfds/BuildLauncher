@@ -22,6 +22,8 @@ public sealed class GamesProvider
     private readonly RedneckGame _redneck;
     private readonly FuryGame _fury;
     private readonly SlaveGame _slave;
+    private readonly NamGame _nam;
+    private readonly WW2GIGame _ww2gi;
 
     public bool IsBloodInstalled => _blood.IsBaseGameInstalled;
     public bool IsDukeInstalled => _duke3d.IsBaseGameInstalled || _duke3d.IsWorldTourInstalled || _duke3d.IsDuke64Installed;
@@ -29,6 +31,8 @@ public sealed class GamesProvider
     public bool IsFuryInstalled => _fury.IsBaseGameInstalled;
     public bool IsRedneckInstalled => _redneck.IsBaseGameInstalled || _redneck.IsAgainInstalled;
     public bool IsSlaveInstalled => _slave.IsBaseGameInstalled;
+    public bool IsNamInstalled => _nam.IsBaseGameInstalled;
+    public bool IsWW2GIInstalled => _ww2gi.IsBaseGameInstalled;
 
 
     public GamesProvider(
@@ -70,6 +74,16 @@ public sealed class GamesProvider
             GameInstallFolder = _config.PathSlave
         };
 
+        _nam = new()
+        {
+            GameInstallFolder = _config.PathNam
+        };
+
+        _ww2gi = new()
+        {
+            GameInstallFolder = _config.PathWW2GI
+        };
+
         _config.ParameterChangedEvent += OnParameterChanged;
     }
 
@@ -89,8 +103,8 @@ public sealed class GamesProvider
             GameEnum.Exhumed => _slave,
             GameEnum.Redneck => _redneck,
             GameEnum.RidesAgain => _redneck,
-            GameEnum.NAM => ThrowHelper.ThrowNotSupportedException<IGame>(),
-            GameEnum.WWIIGI => ThrowHelper.ThrowNotSupportedException<IGame>(),
+            GameEnum.NAM => _nam,
+            GameEnum.WW2GI => _ww2gi,
             GameEnum.TekWar => ThrowHelper.ThrowNotSupportedException<IGame>(),
             GameEnum.Witchaven => ThrowHelper.ThrowNotSupportedException<IGame>(),
             GameEnum.Witchaven2 => ThrowHelper.ThrowNotSupportedException<IGame>(),
@@ -154,6 +168,16 @@ public sealed class GamesProvider
         {
             _slave.GameInstallFolder = _config.PathSlave;
             GameChangedEvent?.Invoke(_slave.GameEnum);
+        }
+        else if (parameterName.Equals(nameof(_config.PathNam)))
+        {
+            _nam.GameInstallFolder = _config.PathNam;
+            GameChangedEvent?.Invoke(_nam.GameEnum);
+        }
+        else if (parameterName.Equals(nameof(_config.PathWW2GI)))
+        {
+            _ww2gi.GameInstallFolder = _config.PathWW2GI;
+            GameChangedEvent?.Invoke(_ww2gi.GameEnum);
         }
     }
 }

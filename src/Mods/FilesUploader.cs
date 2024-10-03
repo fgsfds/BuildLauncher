@@ -75,7 +75,7 @@ public sealed class FilesUploader
             GameEnum.Fury => "Fury",
             GameEnum.Exhumed => "Slave",
             GameEnum.NAM => "NAM",
-            GameEnum.WWIIGI => "WWII",
+            GameEnum.WW2GI => "WW2GI",
             GameEnum.Redneck => "Redneck",
             GameEnum.RidesAgain => "Redneck",
             GameEnum.TekWar => "TekWar",

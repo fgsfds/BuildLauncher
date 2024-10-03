@@ -67,6 +67,14 @@ public sealed partial class MainWindow : Window
         {
             SlaveTab.IsSelected = true;
         }
+        else if (gamesProvider.IsNamInstalled)
+        {
+            NamTab.IsSelected = true;
+        }
+        else if (gamesProvider.IsWW2GIInstalled)
+        {
+            WW2GITab.IsSelected = true;
+        }
         else
         {
             SettingsTab.IsSelected = true;
@@ -114,6 +122,16 @@ public sealed partial class MainWindow : Window
         if (_gamesProvider.IsSlaveInstalled && !SlavePage.IsAlreadInitialized)
         {
             SlavePage.InitializeControl(GameEnum.Exhumed, _portsProvider, _vmFactory, _configProvider);
+        }
+
+        if (_gamesProvider.IsNamInstalled && !NamPage.IsAlreadInitialized)
+        {
+            NamPage.InitializeControl(GameEnum.NAM, _portsProvider, _vmFactory, _configProvider);
+        }
+
+        if (_gamesProvider.IsWW2GIInstalled && !WW2GIPage.IsAlreadInitialized)
+        {
+            WW2GIPage.InitializeControl(GameEnum.WW2GI, _portsProvider, _vmFactory, _configProvider);
         }
     }
 }

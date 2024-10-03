@@ -32,7 +32,7 @@ public sealed class BuildGDX : BasePort
         GameEnum.Redneck,
         GameEnum.RidesAgain,
         GameEnum.NAM,
-        GameEnum.WWIIGI,
+        GameEnum.WW2GI,
         GameEnum.Witchaven,
         GameEnum.Witchaven2,
         GameEnum.TekWar
@@ -94,6 +94,9 @@ public sealed class BuildGDX : BasePort
 
     /// <inheritdoc/>
     protected override string MainConParam => ThrowHelper.ThrowNotSupportedException<string>();
+
+    /// <inheritdoc/>
+    protected override string MainGrpParam => ThrowHelper.ThrowNotSupportedException<string>();
 
     /// <inheritdoc/>
     protected override string AddGrpParam => ThrowHelper.ThrowNotSupportedException<string>();

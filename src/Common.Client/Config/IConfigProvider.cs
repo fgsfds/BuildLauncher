@@ -15,6 +15,8 @@ public interface IConfigProvider
     string? PathRidesAgain { get; set; }
     string? PathSlave { get; set; }
     string? PathWang { get; set; }
+    string? PathNam { get; set; }
+    string? PathWW2GI { get; set; }
     Dictionary<string, TimeSpan> Playtimes { get; }
     Dictionary<string, byte> Rating { get; }
     bool SkipIntro { get; set; }

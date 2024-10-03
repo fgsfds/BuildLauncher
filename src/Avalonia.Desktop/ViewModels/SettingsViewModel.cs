@@ -89,6 +89,18 @@ internal sealed partial class SettingsViewModel : ObservableObject
         set => _config.PathSlave = value;
     }
 
+    public string? PathToNam
+    {
+        get => _config.PathNam;
+        set => _config.PathNam = value;
+    }
+
+    public string? PathToWW2GI
+    {
+        get => _config.PathWW2GI;
+        set => _config.PathWW2GI = value;
+    }
+
     /// <summary>
     /// Skip intro parameter
     /// </summary>
@@ -216,6 +228,18 @@ internal sealed partial class SettingsViewModel : ObservableObject
 
             OnPropertyChanged(nameof(PathToSlave));
         }
+        else if (param.Equals(nameof(GameEnum.NAM)))
+        {
+            PathToNam = files[0].Path.LocalPath;
+
+            OnPropertyChanged(nameof(PathToNam));
+        }
+        else if (param.Equals(nameof(GameEnum.WW2GI)))
+        {
+            PathToWW2GI = files[0].Path.LocalPath;
+
+            OnPropertyChanged(nameof(PathToWW2GI));
+        }
     }
 
 
@@ -311,6 +335,28 @@ internal sealed partial class SettingsViewModel : ObservableObject
                 PathToSlave = path;
 
                 OnPropertyChanged(nameof(PathToSlave));
+            }
+        }
+        else if (param.Equals(nameof(GameEnum.NAM)))
+        {
+            var path = _gamesAutoDetector.GetPath(GameEnum.NAM);
+
+            if (path is not null)
+            {
+                PathToNam = path;
+
+                OnPropertyChanged(nameof(PathToNam));
+            }
+        }
+        else if (param.Equals(nameof(GameEnum.WW2GI)))
+        {
+            var path = _gamesAutoDetector.GetPath(GameEnum.WW2GI);
+
+            if (path is not null)
+            {
+                PathToWW2GI = path;
+
+                OnPropertyChanged(nameof(PathToWW2GI));
             }
         }
     }

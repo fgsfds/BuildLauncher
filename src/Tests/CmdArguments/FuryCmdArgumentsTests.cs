@@ -12,7 +12,7 @@ namespace Tests.CmdArguments;
 public sealed class FuryCmdArgumentsTests
 {
     private readonly FuryGame _dukeGame;
-    private readonly FuryCampaign _dukeCamp;
+    private readonly DukeCampaign _dukeCamp;
 
     private readonly AutoloadModsProvider _modsProvider;
 
@@ -42,6 +42,7 @@ public sealed class FuryCmdArgumentsTests
             MainCon = null,
             AdditionalCons = null,
             MainDef = null,
+            RTS = null,
             AdditionalDefs = null,
             StartMap = null,
             PreviewImage = null,

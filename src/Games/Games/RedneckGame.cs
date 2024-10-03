@@ -46,7 +46,7 @@ public sealed class RedneckGame : BaseGame
         if (IsBaseGameInstalled)
         {
             var redneckId = nameof(GameEnum.Redneck).ToLower();
-            campaigns.Add(new(redneckId), new RedneckCampaign()
+            campaigns.Add(new(redneckId), new DukeCampaign()
             {
                 Id = redneckId,
                 Type = AddonTypeEnum.Official,
@@ -82,7 +82,7 @@ public sealed class RedneckGame : BaseGame
             if (IsRoute66Installed)
             {
                 var redneckR66Id = nameof(RedneckAddonEnum.Route66).ToLower();
-                campaigns.Add(new(redneckR66Id), new RedneckCampaign()
+                campaigns.Add(new(redneckR66Id), new DukeCampaign()
                 {
                     Id = redneckR66Id,
                     Type = AddonTypeEnum.Official,
@@ -115,7 +115,7 @@ public sealed class RedneckGame : BaseGame
         if (IsAgainInstalled)
         {
             var redneckRaId = nameof(GameEnum.RidesAgain).ToLower();
-            campaigns.Add(new(redneckRaId), new RedneckCampaign()
+            campaigns.Add(new(redneckRaId), new DukeCampaign()
             {
                 Id = redneckRaId,
                 Type = AddonTypeEnum.Official,

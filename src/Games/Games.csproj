@@ -18,6 +18,7 @@
     <EmbeddedResource Include="Assets\Duke3D\nwinter.jpg" />
     <EmbeddedResource Include="Assets\Fury\aftershock.jpg" />
     <EmbeddedResource Include="Assets\Fury\fury.jpg" />
+    <EmbeddedResource Include="Assets\NAM\nam.jpg" />
     <EmbeddedResource Include="Assets\Redneck\again.jpg" />
     <EmbeddedResource Include="Assets\Redneck\redneck.jpg" />
     <EmbeddedResource Include="Assets\Redneck\route66.jpg" />
@@ -26,6 +27,8 @@
     <EmbeddedResource Include="Assets\Wang\wang.jpg" />
     <EmbeddedResource Include="Assets\Wang\wanton.jpg" />
     <EmbeddedResource Include="Assets\WTStopgap.zip" />
+    <EmbeddedResource Include="Assets\WW2GI\platoon.jpg" />
+    <EmbeddedResource Include="Assets\WW2GI\ww2gi.jpg" />
   </ItemGroup>
 
   <ItemGroup>

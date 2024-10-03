@@ -48,7 +48,7 @@
 
             </Grid>
 
-            <Grid ColumnDefinitions="auto,*,auto,auto,auto" RowDefinitions="auto,auto,auto,auto,auto,auto,auto,auto,auto">
+            <Grid ColumnDefinitions="auto,*,auto,auto,auto" RowDefinitions="auto,auto,auto,auto,auto,auto,auto,auto,auto,auto,auto">
 
                 <!--Path to Duke 3D-->
                 <TextBlock Grid.Row="0" Grid.Column="0"
@@ -296,6 +296,64 @@
                         HorizontalContentAlignment="Center"
                         Command="{Binding AutodetectCommand}"
                         CommandParameter="Exhumed"
+                        ToolTip.Tip="Autodetect">
+                    ⟳
+                </Button>
+
+
+                <!--Path to NAM-->
+                <TextBlock Grid.Row="9" Grid.Column="0"
+                           VerticalAlignment="Center"
+                           Margin="10, 5">Path to NAM install:</TextBlock>
+
+                <TextBox Grid.Row="9"  Grid.Column="1"
+                         Text="{Binding PathToNam}"
+                         Margin="0,3"/>
+
+                <Button Grid.Row="9"  Grid.Column="2"
+                        Margin="5,0"
+                        Width="{Binding $self.Bounds.Height}"
+                        HorizontalContentAlignment="Center"
+                        Command="{Binding OpenFolderPickerCommand}"
+                        CommandParameter="NAM">
+                    ...
+                </Button>
+
+                <Button Grid.Row="9"  Grid.Column="3"
+                        Margin="0,0,10,0"
+                        Width="{Binding $self.Bounds.Height}"
+                        HorizontalContentAlignment="Center"
+                        Command="{Binding AutodetectCommand}"
+                        CommandParameter="NAM"
+                        ToolTip.Tip="Autodetect">
+                    ⟳
+                </Button>
+
+
+                <!--Path to WW2GI-->
+                <TextBlock Grid.Row="10" Grid.Column="0"
+                           VerticalAlignment="Center"
+                           Margin="10, 5">Path to WWII GI install:</TextBlock>
+
+                <TextBox Grid.Row="10"  Grid.Column="1"
+                         Text="{Binding PathToWW2GI}"
+                         Margin="0,3"/>
+
+                <Button Grid.Row="10"  Grid.Column="2"
+                        Margin="5,0"
+                        Width="{Binding $self.Bounds.Height}"
+                        HorizontalContentAlignment="Center"
+                        Command="{Binding OpenFolderPickerCommand}"
+                        CommandParameter="WW2GI">
+                    ...
+                </Button>
+
+                <Button Grid.Row="10"  Grid.Column="3"
+                        Margin="0,0,10,0"
+                        Width="{Binding $self.Bounds.Height}"
+                        HorizontalContentAlignment="Center"
+                        Command="{Binding AutodetectCommand}"
+                        CommandParameter="WW2GI"
                         ToolTip.Tip="Autodetect">
                     ⟳
                 </Button>

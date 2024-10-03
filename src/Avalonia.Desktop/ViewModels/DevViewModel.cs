@@ -109,6 +109,14 @@ public sealed partial class DevViewModel : ObservableObject
             {
                 return "slave-";
             }
+            if (IsNAMSelected)
+            {
+                return "nam-";
+            }
+            if (IsWW2GISelected)
+            {
+                return "ww2gi-";
+            }
 
             return string.Empty;
         }
@@ -116,8 +124,8 @@ public sealed partial class DevViewModel : ObservableObject
 
     public bool IsDevMode => ClientProperties.IsDevMode;
     public bool IsStep2Visible => IsMapSelected || IsModSelected || IsTcSelected;
-    public bool IsStep3Visible => IsDukeSelected || IsBloodSelected || IsWangSelected || IsFurySelected || IsRedneckSelected || IsRidesAgainSelected || IsSlaveSelected;
-    public bool AreDukePropertiesAvailable => IsDukeSelected || IsFurySelected || IsRedneckSelected;
+    public bool IsStep3Visible => IsDukeSelected || IsBloodSelected || IsWangSelected || IsFurySelected || IsRedneckSelected || IsRidesAgainSelected || IsSlaveSelected || IsNAMSelected || IsWW2GISelected;
+    public bool AreDukePropertiesAvailable => IsDukeSelected || IsFurySelected || IsRedneckSelected || IsNAMSelected || IsWW2GISelected;
     public bool IsMainConAvailable => AreDukePropertiesAvailable && !IsModSelected;
     public bool AreBloodPropertiesVisible => IsBloodSelected;
 
@@ -234,6 +242,20 @@ public sealed partial class DevViewModel : ObservableObject
     [NotifyPropertyChangedFor(nameof(AddonIdPrefix))]
     [NotifyPropertyChangedFor(nameof(IsStep3Visible))]
     private bool _isRidesAgainSelected;
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(AreDukePropertiesAvailable))]
+    [NotifyPropertyChangedFor(nameof(IsMainConAvailable))]
+    [NotifyPropertyChangedFor(nameof(AddonIdPrefix))]
+    [NotifyPropertyChangedFor(nameof(IsStep3Visible))]
+    private bool _isNAMSelected;
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(AreDukePropertiesAvailable))]
+    [NotifyPropertyChangedFor(nameof(IsMainConAvailable))]
+    [NotifyPropertyChangedFor(nameof(AddonIdPrefix))]
+    [NotifyPropertyChangedFor(nameof(IsStep3Visible))]
+    private bool _isWW2GISelected;
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(AddonIdPrefix))]
@@ -421,6 +443,8 @@ public sealed partial class DevViewModel : ObservableObject
         IsRedneckSelected = result.SupportedGame.Game is GameEnum.Redneck;
         IsRidesAgainSelected = result.SupportedGame.Game is GameEnum.RidesAgain;
         IsSlaveSelected = result.SupportedGame.Game is GameEnum.Exhumed;
+        IsNAMSelected = result.SupportedGame.Game is GameEnum.NAM;
+        IsWW2GISelected = result.SupportedGame.Game is GameEnum.WW2GI;
 
         var isDukeVersion = Enum.TryParse<DukeVersionEnum>(result.SupportedGame.Version, true, out var dukeVersion);
         IsDuke13DSelected = isDukeVersion && dukeVersion is DukeVersionEnum.Duke3D_13D;
@@ -659,6 +683,8 @@ public sealed partial class DevViewModel : ObservableObject
             : IsRedneckSelected ? GameEnum.Redneck
             : IsRidesAgainSelected ? GameEnum.RidesAgain
             : IsSlaveSelected ? GameEnum.Exhumed
+            : IsNAMSelected ? GameEnum.NAM
+            : IsWW2GISelected ? GameEnum.WW2GI
             : ThrowHelper.ThrowArgumentOutOfRangeException<GameEnum>("Select game");
 
         DukeVersionEnum? dukeVersion =
@@ -854,9 +880,9 @@ public sealed partial class DevViewModel : ObservableObject
 
             var addon = GetAddonJson(out var jsonString);
 
-            RenameAddonFolder(addon);
-
             File.WriteAllText(Path.Combine(PathToAddonFolder!, "addon.json"), jsonString);
+
+            RenameAddonFolder(addon);
 
             ErrorText = "JSON saved";
         }

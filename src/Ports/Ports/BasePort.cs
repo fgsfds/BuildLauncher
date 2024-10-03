@@ -2,6 +2,7 @@
 using Common.Client.Helpers;
 using Common.Enums;
 using Common.Enums.Addons;
+using Common.Enums.Versions;
 using Common.Helpers;
 using Common.Interfaces;
 using CommunityToolkit.Diagnostics;
@@ -83,6 +84,11 @@ public abstract class BasePort
     /// Cmd parameter to add folder to search path
     /// </summary>
     protected abstract string AddDirectoryParam { get; }
+
+    /// <summary>
+    /// Cmd parameter to load main GRP file
+    /// </summary>
+    protected abstract string MainGrpParam { get; }
 
     /// <summary>
     /// Cmd parameter to load additional GRP file
@@ -463,6 +469,76 @@ public abstract class BasePort
         else
         {
             ThrowHelper.ThrowNotSupportedException($"Mod type {sCamp.Type} is not supported");
+            return;
+        }
+    }
+
+    protected void GetNamWW2GIArgs(StringBuilder sb, IGame game, IAddon addon)
+    {
+        Guard2.ThrowIfNotType<DukeCampaign>(addon, out var dCamp);
+
+        if (addon is LooseMap)
+        {
+            GetLooseMapArgs(sb, game, addon);
+            return;
+        }
+
+
+        if (game is NamGame)
+        {
+            _ = sb.Append($" -nam {MainGrpParam}NAM.GRP");
+        }
+        else if (game is WW2GIGame)
+        {
+            _ = sb.Append($" -ww2gi {MainGrpParam}WW2GI.GRP");
+        }
+        else
+        {
+            ThrowHelper.ThrowNotSupportedException();
+        }
+        
+
+        if (addon.Id.Equals(nameof(WW2GIAddonEnum.Platoon).ToLower()))
+        {
+            _ = sb.Append($" {AddGrpParam}PLATOONL.DAT {MainConParam}PLATOONL.DEF");
+        }
+        else if(dCamp.MainCon is null)
+        {
+            _ = sb.Append($" {MainConParam}GAME.CON");
+        }
+
+
+        if (dCamp.FileName is null)
+        {
+            return;
+        }
+
+
+        if (dCamp.MainCon is not null)
+        {
+            _ = sb.Append($@" {MainConParam}""{dCamp.MainCon}""");
+        }
+
+        if (dCamp.AdditionalCons?.Count > 0)
+        {
+            foreach (var con in dCamp.AdditionalCons)
+            {
+                _ = sb.Append($@" {AddConParam}""{con}""");
+            }
+        }
+
+
+        if (dCamp.Type is AddonTypeEnum.TC)
+        {
+            _ = sb.Append($@" {AddFileParam}""{dCamp.PathToFile}""");
+        }
+        else if (dCamp.Type is AddonTypeEnum.Map)
+        {
+            GetMapArgs(sb, game, dCamp);
+        }
+        else
+        {
+            ThrowHelper.ThrowNotSupportedException($"Mod type {dCamp.Type} is not supported");
             return;
         }
     }

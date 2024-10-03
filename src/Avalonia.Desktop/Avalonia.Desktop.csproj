@@ -12,20 +12,6 @@
   </PropertyGroup>
     
   <ItemGroup>
-    <None Remove="Assets\blood.png" />
-    <None Remove="Assets\discord.png" />
-    <None Remove="Assets\duke3d.png" />
-    <None Remove="Assets\fury.png" />
-    <None Remove="Assets\github.png" />
-    <None Remove="Assets\icon.ico" />
-    <None Remove="Assets\issues.png" />
-    <None Remove="Assets\logo.png" />
-    <None Remove="Assets\redneck.png" />
-    <None Remove="Assets\slave.png" />
-    <None Remove="Assets\sw.png" />
-  </ItemGroup>
-    
-  <ItemGroup>
     <AvaloniaResource Include="Assets\blood.png" />
     <AvaloniaResource Include="Assets\discord.png" />
     <AvaloniaResource Include="Assets\duke3d.png" />
@@ -34,9 +20,11 @@
     <AvaloniaResource Include="Assets\icon.ico" />
     <AvaloniaResource Include="Assets\issues.png" />
     <AvaloniaResource Include="Assets\logo.png" />
+    <AvaloniaResource Include="Assets\nam.png" />
     <AvaloniaResource Include="Assets\redneck.png" />
     <AvaloniaResource Include="Assets\slave.png" />
     <AvaloniaResource Include="Assets\sw.png" />
+    <AvaloniaResource Include="Assets\ww2gi.png" />
   </ItemGroup>
 
   <ItemGroup>

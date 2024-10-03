@@ -191,6 +191,18 @@ public sealed class ConfigProvider : IConfigProvider
         set => SetGamePathValue(value);
     }
 
+    public string? PathNam
+    {
+        get => _dbContext.GamePaths.Find(nameof(PathNam))?.Path;
+        set => SetGamePathValue(value);
+    }
+
+    public string? PathWW2GI
+    {
+        get => _dbContext.GamePaths.Find(nameof(PathWW2GI))?.Path;
+        set => SetGamePathValue(value);
+    }
+
 
 
     private void SetSettingsValue(string value, [CallerMemberName] string caller = "")

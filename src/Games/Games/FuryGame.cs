@@ -30,7 +30,7 @@ public sealed class FuryGame : BaseGame
         if (IsBaseGameInstalled)
         {
             var furyId = nameof(GameEnum.Fury).ToLower();
-            campaigns.Add(new(furyId), new FuryCampaign()
+            campaigns.Add(new(furyId), new DukeCampaign()
             {
                 Id = furyId,
                 Type = AddonTypeEnum.Official,
@@ -54,6 +54,7 @@ public sealed class FuryGame : BaseGame
                 AdditionalCons = null,
                 MainDef = null,
                 AdditionalDefs = null,
+                RTS = null,
                 StartMap = null,
                 PreviewImage = null,
                 IsFolder = false,

@@ -29,6 +29,9 @@ public class EDuke32 : BasePort
     protected override string ConfigFile => "eduke32.cfg";
 
     /// <inheritdoc/>
+    protected override string MainGrpParam => "-game_grp ";
+
+    /// <inheritdoc/>
     protected override string AddGrpParam => "-grp ";
 
     /// <inheritdoc/>
@@ -66,7 +69,7 @@ public class EDuke32 : BasePort
         [
         GameEnum.Duke3D,
         GameEnum.NAM,
-        GameEnum.WWIIGI
+        GameEnum.WW2GI
         ];
 
     /// <inheritdoc/>
@@ -213,6 +216,18 @@ public class EDuke32 : BasePort
         {
             GetDukeArgs(sb, dGame, addon);
         }
+        else if (game is NamGame nGame)
+        {
+            _ = sb.Append($@" {AddDirectoryParam}""{game.GameInstallFolder}""");
+
+            GetNamWW2GIArgs(sb, nGame, addon);
+        }
+        else if (game is WW2GIGame giGame)
+        {
+            _ = sb.Append($@" {AddDirectoryParam}""{game.GameInstallFolder}""");
+
+            GetNamWW2GIArgs(sb, giGame, addon);
+        }
         else
         {
             ThrowHelper.ThrowNotSupportedException($"Mod type {addon.Type} for game {game} is not supported");
@@ -228,6 +243,8 @@ public class EDuke32 : BasePort
     /// <param name="addon">DukeCampaign</param>
     protected void GetDukeArgs(StringBuilder sb, DukeGame game, IAddon addon)
     {
+        Guard2.ThrowIfNotType<DukeCampaign>(addon, out var dCamp);
+
         if (addon.SupportedGame.GameEnum is GameEnum.Duke64)
         {
             _ = sb.Append(@$" {AddDirectoryParam}""{Path.GetDirectoryName(game.Duke64RomPath)}"" -gamegrp ""{Path.GetFileName(game.Duke64RomPath)}""");
@@ -300,8 +317,6 @@ public class EDuke32 : BasePort
             return;
         }
 
-
-        Guard2.ThrowIfNotType<DukeCampaign>(addon, out var dCamp);
 
         if (dCamp.FileName is null)
         {

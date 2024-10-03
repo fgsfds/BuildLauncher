@@ -34,7 +34,7 @@ public sealed class RedNukem : EDuke32
         GameEnum.Redneck,
         GameEnum.RidesAgain,
         GameEnum.NAM,
-        GameEnum.WWIIGI,
+        GameEnum.WW2GI,
         GameEnum.Duke64
         ];
 
@@ -99,6 +99,18 @@ public sealed class RedNukem : EDuke32
         {
             GetRedneckArgs(sb, rGame, addon);
         }
+        else if (game is NamGame nGame)
+        {
+            _ = sb.Append($@" {AddDirectoryParam}""{game.GameInstallFolder}""");
+
+            GetNamWW2GIArgs(sb, nGame, addon);
+        }
+        else if (game is WW2GIGame giGame)
+        {
+            _ = sb.Append($@" {AddDirectoryParam}""{game.GameInstallFolder}""");
+
+            GetNamWW2GIArgs(sb, giGame, addon);
+        }
         else
         {
             ThrowHelper.ThrowNotSupportedException($"Mod type {addon.Type} for game {game} is not supported");
@@ -111,7 +123,7 @@ public sealed class RedNukem : EDuke32
     /// </summary>
     /// <param name="sb">StringBuilder</param>
     /// <param name="game">RedneckGame</param>
-    /// <param name="addon">RedneckCampaign</param>
+    /// <param name="addon">DukeCampaign</param>
     private void GetRedneckArgs(StringBuilder sb, RedneckGame game, IAddon addon)
     {
         if (addon.SupportedGame.GameEnum is GameEnum.RidesAgain)
@@ -141,7 +153,7 @@ public sealed class RedNukem : EDuke32
         }
 
 
-        Guard2.ThrowIfNotType<RedneckCampaign>(addon, out var rCamp);
+        Guard2.ThrowIfNotType<DukeCampaign>(addon, out var rCamp);
 
 
         if (rCamp.MainCon is not null)

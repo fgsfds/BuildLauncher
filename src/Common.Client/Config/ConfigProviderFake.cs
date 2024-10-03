@@ -15,6 +15,8 @@ public sealed class ConfigProviderFake : IConfigProvider
     public string? PathRidesAgain { get; set; } = null;
     public string? PathSlave { get; set; } = null;
     public string? PathWang { get; set; } = null;
+    public string? PathNam { get; set; } = null;
+    public string? PathWW2GI { get; set; } = null;
     public Dictionary<string, byte> Rating { get; set; } = [];
 
     public Dictionary<string, TimeSpan> Playtimes => [];

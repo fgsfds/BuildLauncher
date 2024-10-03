@@ -138,6 +138,8 @@
                             <RadioButton GroupName="GameSelect" Margin="0,0,10,0" IsChecked="{Binding IsRedneckSelected}">Redneck Rampage</RadioButton>
                             <RadioButton GroupName="GameSelect" Margin="0,0,10,0" IsChecked="{Binding IsRidesAgainSelected}">Rides Again</RadioButton>
                             <RadioButton GroupName="GameSelect" Margin="0,0,10,0" IsChecked="{Binding IsSlaveSelected}">Powerslave</RadioButton>
+                            <RadioButton GroupName="GameSelect" Margin="0,0,10,0" IsChecked="{Binding IsNAMSelected}">NAM</RadioButton>
+                            <RadioButton GroupName="GameSelect" Margin="0,0,10,0" IsChecked="{Binding IsWW2GISelected}">WWII GI</RadioButton>
 
                         </WrapPanel>
 

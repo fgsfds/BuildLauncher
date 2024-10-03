@@ -9,7 +9,7 @@ public enum GameEnum : byte
     Fury = 5,
     Exhumed = 6,
     NAM = 7,
-    WWIIGI = 8,
+    WW2GI = 8,
     Redneck = 9,
     RidesAgain = 10,
     TekWar = 11,

@@ -603,7 +603,12 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
         }
         else
         {
-            if (_game.GameEnum is GameEnum.Duke3D)
+            if (_game.GameEnum
+                is GameEnum.Duke3D
+                or GameEnum.Fury
+                or GameEnum.Redneck
+                or GameEnum.NAM
+                or GameEnum.WW2GI)
             {
                 var addon = new DukeCampaign()
                 {
@@ -624,34 +629,6 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
                     MainDef = mainDef,
                     AdditionalDefs = addDefs,
                     RTS = rts,
-                    RequiredFeatures = requiredFeatures,
-                    PreviewImage = preview,
-                    IsFolder = isUnpacked,
-                    PortExeOverride = portOverride
-                };
-
-                return addon;
-            }
-            else if (_game.GameEnum is GameEnum.Fury)
-            {
-                var addon = new FuryCampaign()
-                {
-                    Id = id,
-                    Type = type,
-                    SupportedGame = new(supportedGame, gameVersion, gameCrc),
-                    Title = title,
-                    GridImage = image,
-                    Description = description,
-                    Version = version,
-                    Author = author,
-                    PathToFile = pathToFile,
-                    DependentAddons = dependencies,
-                    IncompatibleAddons = incompatibles,
-                    StartMap = startMap,
-                    MainCon = mainCon,
-                    AdditionalCons = addCons,
-                    MainDef = mainDef,
-                    AdditionalDefs = addDefs,
                     RequiredFeatures = requiredFeatures,
                     PreviewImage = preview,
                     IsFolder = isUnpacked,
@@ -715,35 +692,6 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
 
                 return addon;
             }
-            else if (_game.GameEnum is GameEnum.Redneck)
-            {
-                var addon = new RedneckCampaign()
-                {
-                    Id = id,
-                    Type = type,
-                    SupportedGame = new(supportedGame, gameVersion, gameCrc),
-                    Title = title,
-                    GridImage = image,
-                    Description = description,
-                    Version = version,
-                    Author = author,
-                    PathToFile = pathToFile,
-                    DependentAddons = dependencies,
-                    IncompatibleAddons = incompatibles,
-                    StartMap = startMap,
-                    MainCon = mainCon,
-                    AdditionalCons = addCons,
-                    MainDef = mainDef,
-                    AdditionalDefs = addDefs,
-                    RTS = rts,
-                    RequiredFeatures = requiredFeatures,
-                    PreviewImage = preview,
-                    IsFolder = isUnpacked,
-                    PortExeOverride = portOverride
-                };
-
-                return addon;
-            }
             else if (_game.GameEnum is GameEnum.Exhumed)
             {
                 var addon = new SlaveCampaign()
@@ -776,7 +724,6 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
                 return null;
             }
         }
-
     }
 
     /// <summary>

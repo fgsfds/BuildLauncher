@@ -25,6 +25,7 @@ internal sealed class AutoloadModsProvider
             GameEnum.Redneck => new(GameEnum.Redneck),
             GameEnum.RidesAgain => new(GameEnum.RidesAgain),
             GameEnum.Fury => new(GameEnum.Fury),
+            GameEnum.NAM => new(GameEnum.NAM),
             _ => ThrowHelper.ThrowNotSupportedException<GameStruct>()
         };
 
@@ -37,6 +38,7 @@ internal sealed class AutoloadModsProvider
             GameEnum.Fury => "",
             GameEnum.Duke64 => "",
             GameEnum.Exhumed => "",
+            GameEnum.NAM => "",
             _ => ThrowHelper.ThrowNotSupportedException<string>()
         };
 
@@ -50,6 +52,7 @@ internal sealed class AutoloadModsProvider
             GameEnum.Redneck => FeatureEnum.Models,
             GameEnum.RidesAgain => FeatureEnum.Models,
             GameEnum.Fury => FeatureEnum.EDuke32_CON,
+            GameEnum.NAM => FeatureEnum.Models,
             _ => ThrowHelper.ThrowNotSupportedException<FeatureEnum>()
         };
     }

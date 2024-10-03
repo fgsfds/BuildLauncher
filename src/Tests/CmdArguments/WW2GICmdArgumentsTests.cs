@@ -1,5 +1,6 @@
 using Common;
 using Common.Enums;
+using Common.Enums.Addons;
 using Common.Interfaces;
 using Games.Games;
 using Mods.Addons;
@@ -9,34 +10,33 @@ using Ports.Ports.EDuke32;
 namespace Tests.CmdArguments;
 
 [Collection("Sync")]
-public sealed class RedneckCmdArgumentsTests
+public sealed class WW2GICmdArgumentsTests
 {
-    private readonly RedneckGame _redneckGame;
-    private readonly DukeCampaign _redneckCamp;
-    private readonly DukeCampaign _againCamp;
+    private readonly WW2GIGame _ww2Game;
+    private readonly DukeCampaign _ww2Camp;
+    private readonly DukeCampaign _platoonCamp;
 
     private readonly AutoloadModsProvider _modsProvider;
 
-    public RedneckCmdArgumentsTests()
+    public WW2GICmdArgumentsTests()
     {
         _modsProvider = new(GameEnum.Redneck);
 
-        _redneckGame = new()
+        _ww2Game = new()
         {
-            GameInstallFolder = Path.Combine("D:", "Games", "Redneck"),
-            AgainInstallPath = Path.Combine("D:", "Games", "Again"),
+            GameInstallFolder = Path.Combine("D:", "Games", "WW2GI")
         };
 
-        _redneckCamp = new()
+        _ww2Camp = new()
         {
-            Id = nameof(GameEnum.Redneck).ToLower(),
+            Id = nameof(GameEnum.WW2GI).ToLower(),
             Type = AddonTypeEnum.Official,
-            Title = "Redneck Rampage",
+            Title = "World War II GI",
             GridImage = null,
             Author = null,
             Description = null,
             Version = null,
-            SupportedGame = new(GameEnum.Redneck),
+            SupportedGame = new(GameEnum.WW2GI),
             RequiredFeatures = null,
             PathToFile = null,
             DependentAddons = null,
@@ -52,16 +52,16 @@ public sealed class RedneckCmdArgumentsTests
             PortExeOverride = null
         };
 
-        _againCamp = new()
+        _platoonCamp = new()
         {
-            Id = nameof(GameEnum.RidesAgain).ToLower(),
+            Id = nameof(WW2GIAddonEnum.Platoon).ToLower(),
             Type = AddonTypeEnum.Official,
-            Title = "Rides Again",
+            Title = "Platoon Leader",
             GridImage = null,
             Author = null,
             Description = null,
             Version = null,
-            SupportedGame = new(GameEnum.Redneck),
+            SupportedGame = new(GameEnum.WW2GI),
             RequiredFeatures = null,
             PathToFile = null,
             DependentAddons = null,
@@ -88,8 +88,8 @@ public sealed class RedneckCmdArgumentsTests
 
         Raze raze = new();
 
-        var args = raze.GetStartGameArgs(_redneckGame, _redneckCamp, mods, true, true);
-        var expected = @$" -quick -nosetup -file ""enabled_mod.zip"" -adddef ""ENABLED1.DEF"" -adddef ""ENABLED2.DEF"" -savedir ""{Directory.GetCurrentDirectory()}\Data\Saves\Raze\Redneck\redneck"" -def ""a""";
+        var args = raze.GetStartGameArgs(_ww2Game, _ww2Camp, mods, true, true);
+        var expected = @$" -quick -nosetup -savedir ""{Directory.GetCurrentDirectory()}\Data\Saves\Raze\WW2GI\ww2gi"" -def ""a"" -ww2gi -file WW2GI.GRP -con GAME.CON";
 
         if (OperatingSystem.IsLinux())
         {
@@ -103,17 +103,17 @@ public sealed class RedneckCmdArgumentsTests
 
         Assert.StartsWith($"""
             [GameSearch.Directories]
-            Path=D:/Games/Redneck
+            Path=D:/Games/WW2GI
 
             [FileSearch.Directories]
-            Path={Directory.GetCurrentDirectory()}/Data/Addons/Redneck/Mods
+            Path={Directory.GetCurrentDirectory()}/Data/Addons/WW2GI/Mods
 
             [SoundfontSearch.Directories]
             """.Replace('\\', '/'), config);
     }
 
     [Fact]
-    public void RazeAgainTest()
+    public void RazePlatoonTest()
     {
         var mods = new List<AutoloadMod>() {
             _modsProvider.EnabledMod,
@@ -122,8 +122,8 @@ public sealed class RedneckCmdArgumentsTests
 
         Raze raze = new();
 
-        var args = raze.GetStartGameArgs(_redneckGame, _againCamp, mods, true, true);
-        var expected = @$" -quick -nosetup -file ""enabled_mod.zip"" -adddef ""ENABLED1.DEF"" -adddef ""ENABLED2.DEF"" -savedir ""{Directory.GetCurrentDirectory()}\Data\Saves\Raze\Redneck\ridesagain"" -def ""a""";
+        var args = raze.GetStartGameArgs(_ww2Game, _platoonCamp, mods, true, true);
+        var expected = @$" -quick -nosetup -savedir ""{Directory.GetCurrentDirectory()}\Data\Saves\Raze\WW2GI\platoon"" -def ""a"" -ww2gi -file WW2GI.GRP -file PLATOONL.DAT -con PLATOONL.DEF";
 
         if (OperatingSystem.IsLinux())
         {
@@ -137,27 +137,49 @@ public sealed class RedneckCmdArgumentsTests
 
         Assert.StartsWith($"""
             [GameSearch.Directories]
-            Path=D:/Games/Again
+            Path=D:/Games/WW2GI
 
             [FileSearch.Directories]
-            Path={Directory.GetCurrentDirectory()}/Data/Addons/Redneck/Mods
+            Path={Directory.GetCurrentDirectory()}/Data/Addons/WW2GI/Mods
 
             [SoundfontSearch.Directories]
             """.Replace('\\', '/'), config);
     }
 
     [Fact]
-    public void RedNukemTest()
+    public void EDuke32Test()
     {
         var mods = new List<AutoloadMod>() {
             _modsProvider.EnabledMod,
             _modsProvider.IncompatibleMod,
         }.ToDictionary(x => new AddonVersion(x.Id, x.Version), x => (IAddon)x);
 
-        RedNukem redNukem = new();
+        EDuke32 eDuke = new();
 
-        var args = redNukem.GetStartGameArgs(_redneckGame, _redneckCamp, mods, true, true);
-        var expected = @$" -quick -nosetup -g ""enabled_mod.zip"" -mh ""ENABLED1.DEF"" -mh ""ENABLED2.DEF"" -j ""{Directory.GetCurrentDirectory()}\Data\Addons\Redneck\Mods"" -usecwd -h ""a"" -j ""D:\Games\Redneck""";
+        var args = eDuke.GetStartGameArgs(_ww2Game, _ww2Camp, mods, true, true);
+        var expected = @$" -quick -nosetup -usecwd -cachesize 262144 -h ""a"" -j ""D:\Games\WW2GI"" -ww2gi -game_grp WW2GI.GRP -x GAME.CON";
+
+        if (OperatingSystem.IsLinux())
+        {
+            args = args.Replace('\\', Path.DirectorySeparatorChar);
+            expected = expected.Replace('\\', Path.DirectorySeparatorChar);
+        }
+
+        Assert.Equal(expected, args);
+    }
+
+    [Fact]
+    public void EDuke32PlatoonTest()
+    {
+        var mods = new List<AutoloadMod>() {
+            _modsProvider.EnabledMod,
+            _modsProvider.IncompatibleMod,
+        }.ToDictionary(x => new AddonVersion(x.Id, x.Version), x => (IAddon)x);
+
+        EDuke32 eDuke = new();
+
+        var args = eDuke.GetStartGameArgs(_ww2Game, _platoonCamp, mods, true, true);
+        var expected = @$" -quick -nosetup -usecwd -cachesize 262144 -h ""a"" -j ""D:\Games\WW2GI"" -ww2gi -game_grp WW2GI.GRP -grp PLATOONL.DAT -x PLATOONL.DEF";
 
         if (OperatingSystem.IsLinux())
         {

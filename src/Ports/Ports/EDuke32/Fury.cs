@@ -96,7 +96,7 @@ public sealed class Fury(IConfigProvider config) : EDuke32
         }
 
 
-        Guard2.ThrowIfNotType<FuryCampaign>(addon, out var fCamp);
+        Guard2.ThrowIfNotType<DukeCampaign>(addon, out var fCamp);
 
         if (fCamp.FileName is null)
         {

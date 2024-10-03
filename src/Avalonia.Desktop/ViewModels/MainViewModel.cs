@@ -50,6 +50,16 @@ public sealed partial class MainViewModel : ObservableObject
     /// </summary>
     public bool IsSlaveTabEnabled => _gamesProvider.IsSlaveInstalled;
 
+    /// <summary>
+    /// Is NAM tab enabled
+    /// </summary>
+    public bool IsNamTabEnabled => _gamesProvider.IsNamInstalled;
+
+    /// <summary>
+    /// Is WW2I tab enabled
+    /// </summary>
+    public bool IsWW2GITabEnabled => _gamesProvider.IsWW2GIInstalled;
+
     public bool IsDevMode => ClientProperties.IsDevMode;
 
     #endregion
@@ -66,5 +76,7 @@ public sealed partial class MainViewModel : ObservableObject
         OnPropertyChanged(nameof(IsFuryTabEnabled));
         OnPropertyChanged(nameof(IsRedneckTabEnabled));
         OnPropertyChanged(nameof(IsSlaveTabEnabled));
+        OnPropertyChanged(nameof(IsNamTabEnabled));
+        OnPropertyChanged(nameof(IsWW2GITabEnabled));
     }
 }

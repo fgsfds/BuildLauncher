@@ -36,7 +36,7 @@ public sealed class Raze : BasePort
         GameEnum.Redneck,
         GameEnum.RidesAgain,
         GameEnum.NAM,
-        GameEnum.WWIIGI
+        GameEnum.WW2GI
         ];
 
     /// <inheritdoc/>
@@ -58,9 +58,6 @@ public sealed class Raze : BasePort
     protected override string ConfigFile => "raze_portable.ini";
 
     /// <inheritdoc/>
-    protected override string AddDirectoryParam => "-file ";
-
-    /// <inheritdoc/>
     protected override string AddFileParam => "-file ";
 
     /// <inheritdoc/>
@@ -76,16 +73,22 @@ public sealed class Raze : BasePort
     protected override string MainConParam => "-con ";
 
     /// <inheritdoc/>
-    protected override string AddGameDirParam => "-file ";
+    protected override string AddDirectoryParam => AddFileParam;
 
     /// <inheritdoc/>
-    protected override string AddRffParam => "-file ";
+    protected override string AddGameDirParam => AddFileParam;
 
     /// <inheritdoc/>
-    protected override string AddSndParam => "-file ";
+    protected override string AddRffParam => AddFileParam;
 
     /// <inheritdoc/>
-    protected override string AddGrpParam => ThrowHelper.ThrowNotSupportedException<string>();
+    protected override string AddSndParam => AddFileParam;
+
+    /// <inheritdoc/>
+    protected override string MainGrpParam => AddFileParam;
+
+    /// <inheritdoc/>
+    protected override string AddGrpParam => AddFileParam;
 
     /// <inheritdoc/>
     protected override string SkillParam => ThrowHelper.ThrowNotSupportedException<string>();
@@ -254,6 +257,14 @@ public sealed class Raze : BasePort
         {
             GetDukeArgs(sb, dGame, addon);
         }
+        else if (game is NamGame nGame)
+        {
+            GetNamWW2GIArgs(sb, nGame, addon);
+        }
+        else if (game is WW2GIGame giGame)
+        {
+            GetNamWW2GIArgs(sb, giGame, addon);
+        }
         else if (game is BloodGame bGame)
         {
             GetBloodArgs(sb, bGame, addon);
@@ -278,14 +289,15 @@ public sealed class Raze : BasePort
 
     private void GetDukeArgs(StringBuilder sb, DukeGame game, IAddon addon)
     {
+        Guard2.ThrowIfNotType<DukeCampaign>(addon, out var dCamp);
+
+
         if (addon is LooseMap)
         {
             GetLooseMapArgs(sb, game, addon);
             return;
         }
 
-
-        Guard2.ThrowIfNotType<DukeCampaign>(addon, out var dCamp);
 
         if (dCamp.SupportedGame.GameVersion is not null &&
             dCamp.SupportedGame.GameVersion.Equals(nameof(DukeVersionEnum.Duke3D_WT), StringComparison.InvariantCultureIgnoreCase))
@@ -358,14 +370,15 @@ public sealed class Raze : BasePort
 
     private void GetWangArgs(StringBuilder sb, WangGame game, IAddon addon)
     {
+        Guard2.ThrowIfNotType<WangCampaign>(addon, out var wCamp);
+
+
         if (addon is LooseMap)
         {
             GetLooseMapArgs(sb, game, addon);
             return;
         }
 
-
-        Guard2.ThrowIfNotType<WangCampaign>(addon, out var wCamp);
 
         //TODO downloaded addons support
         if (wCamp.DependentAddons is not null &&
@@ -403,14 +416,15 @@ public sealed class Raze : BasePort
 
     private void GetRedneckArgs(StringBuilder sb, RedneckGame game, IAddon addon)
     {
+        Guard2.ThrowIfNotType<DukeCampaign>(addon, out var rCamp);
+
+
         if (addon is LooseMap)
         {
             GetLooseMapArgs(sb, game, addon);
             return;
         }
 
-
-        Guard2.ThrowIfNotType<RedneckCampaign>(addon, out var rCamp);
 
         if (rCamp.DependentAddons is not null &&
             rCamp.DependentAddons.ContainsKey(nameof(RedneckAddonEnum.Route66)))

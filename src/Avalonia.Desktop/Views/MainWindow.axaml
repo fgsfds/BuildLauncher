@@ -13,7 +13,7 @@
         CanResize="True"
         WindowState="Maximized"
         MinWidth="1300"
-        MinHeight="600"
+        MinHeight="700"
         ExtendClientAreaToDecorationsHint="True"
         Background="{DynamicResource Background}"
         >
@@ -109,6 +109,32 @@
                     </TabItem.Header>
 
                     <pages:GamePage x:Name="SlavePage"/>
+
+                </TabItem>
+
+                <TabItem Name="NamTab" IsEnabled="{Binding IsNamTabEnabled}">
+
+                    <TabItem.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="/Assets/nam.png" Width="24" />
+                            <TextBlock Text="NAM" Margin="5" />
+                        </StackPanel>
+                    </TabItem.Header>
+
+                    <pages:GamePage x:Name="NamPage"/>
+
+                </TabItem>
+
+                <TabItem Name="WW2GITab" IsEnabled="{Binding IsWW2GITabEnabled}">
+
+                    <TabItem.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="/Assets/ww2gi.png" Width="24" />
+                            <TextBlock Text="WWII GI" Margin="5" />
+                        </StackPanel>
+                    </TabItem.Header>
+
+                    <pages:GamePage x:Name="WW2GIPage"/>
 
                 </TabItem>
 
