@@ -96,7 +96,7 @@ public sealed class NamCmdArgumentsTests
         RedNukem redNukem = new();
 
         var args = redNukem.GetStartGameArgs(_namGame, _namCamp, mods, true, true);
-        var expected = @$" -quick -nosetup -g ""enabled_mod.zip"" -mh ""ENABLED1.DEF"" -mh ""ENABLED2.DEF"" -j ""{Directory.GetCurrentDirectory()}\Data\Addons\NAM\Mods"" -usecwd -h ""a"" -j ""D:\Games\NAM"" -nam -game_grp NAM.GRP -x GAME.CON";
+        var expected = @$" -quick -nosetup -g ""enabled_mod.zip"" -mh ""ENABLED1.DEF"" -mh ""ENABLED2.DEF"" -j ""{Directory.GetCurrentDirectory()}\Data\Addons\NAM\Mods"" -usecwd -h ""a"" -j ""D:\Games\NAM"" -nam -gamegrp NAM.GRP -x GAME.CON";
 
         if (OperatingSystem.IsLinux())
         {
@@ -118,7 +118,7 @@ public sealed class NamCmdArgumentsTests
         RedNukem redNukem = new();
 
         var args = redNukem.GetStartGameArgs(_namGame, _namCamp, mods, true, true);
-        var expected = @$" -quick -nosetup -g ""enabled_mod.zip"" -mh ""ENABLED1.DEF"" -mh ""ENABLED2.DEF"" -j ""{Directory.GetCurrentDirectory()}\Data\Addons\NAM\Mods"" -usecwd -h ""a"" -j ""D:\Games\NAM"" -nam -game_grp NAM.GRP -x GAME.CON";
+        var expected = @$" -quick -nosetup -g ""enabled_mod.zip"" -mh ""ENABLED1.DEF"" -mh ""ENABLED2.DEF"" -j ""{Directory.GetCurrentDirectory()}\Data\Addons\NAM\Mods"" -usecwd -h ""a"" -j ""D:\Games\NAM"" -nam -gamegrp NAM.GRP -x GAME.CON";
 
         if (OperatingSystem.IsLinux())
         {

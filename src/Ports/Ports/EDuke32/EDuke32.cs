@@ -29,7 +29,7 @@ public class EDuke32 : BasePort
     protected override string ConfigFile => "eduke32.cfg";
 
     /// <inheritdoc/>
-    protected override string MainGrpParam => "-game_grp ";
+    protected override string MainGrpParam => "-gamegrp ";
 
     /// <inheritdoc/>
     protected override string AddGrpParam => "-grp ";
@@ -247,14 +247,14 @@ public class EDuke32 : BasePort
 
         if (addon.SupportedGame.GameEnum is GameEnum.Duke64)
         {
-            _ = sb.Append(@$" {AddDirectoryParam}""{Path.GetDirectoryName(game.Duke64RomPath)}"" -gamegrp ""{Path.GetFileName(game.Duke64RomPath)}""");
+            _ = sb.Append(@$" {AddDirectoryParam}""{Path.GetDirectoryName(game.Duke64RomPath)}"" {MainGrpParam}""{Path.GetFileName(game.Duke64RomPath)}""");
             return;
         }
 
         if (addon.SupportedGame.GameVersion is not null &&
             addon.SupportedGame.GameVersion.Equals(nameof(DukeVersionEnum.Duke3D_WT), StringComparison.InvariantCultureIgnoreCase))
         {
-            _ = sb.Append($@" {AddDirectoryParam}""{game.DukeWTInstallPath}"" -addon {(byte)DukeAddonEnum.Base} {AddDirectoryParam}""{Path.Combine(game.SpecialFolderPath, Consts.WTStopgap)}"" -gamegrp e32wt.grp {AddDefParam}e32wt.def");
+            _ = sb.Append($@" {AddDirectoryParam}""{game.DukeWTInstallPath}"" -addon {(byte)DukeAddonEnum.Base} {AddDirectoryParam}""{Path.Combine(game.SpecialFolderPath, Consts.WTStopgap)}"" {MainGrpParam}e32wt.grp {AddDefParam}e32wt.def");
         }
         else
         {
