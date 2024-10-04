@@ -32,7 +32,6 @@ public sealed class BuildGDX : BasePort
         GameEnum.Redneck,
         GameEnum.RidesAgain,
         GameEnum.NAM,
-        GameEnum.WW2GI,
         GameEnum.Witchaven,
         GameEnum.Witchaven2,
         GameEnum.TekWar
@@ -151,6 +150,10 @@ public sealed class BuildGDX : BasePort
         {
             GetRedneckArgs(sb, rGame, addon);
         }
+        else if (game is NamGame nGame)
+        {
+            GetNamArgs(sb, nGame, addon);
+        }
         else
         {
             ThrowHelper.ThrowNotSupportedException($"Mod type {addon} for game {game} is not supported");
@@ -214,5 +217,12 @@ public sealed class BuildGDX : BasePort
         _ = sb.Append($@" -path ""{game.GameInstallFolder}""");
 
         _ = sb.Append($@" -game POWERSLAVE");
+    }
+
+    private static void GetNamArgs(StringBuilder sb, NamGame game, IAddon camp)
+    {
+        _ = sb.Append($@" -path ""{game.GameInstallFolder}""");
+
+        _ = sb.Append($@" -game NAM");
     }
 }
