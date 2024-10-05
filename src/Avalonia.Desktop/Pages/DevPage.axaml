@@ -107,14 +107,6 @@
                             Mod
                         </RadioButton>
 
-                        <RadioButton
-                            GroupName="AddonType"
-                            Margin="0,0,10,0"
-                            IsChecked="{Binding IsStandaloneSelected}"
-                            ToolTip.Tip="Standalone game/TC.">
-                            Standalone
-                        </RadioButton>
-
                     </WrapPanel>
 
                 </Grid>
@@ -148,6 +140,7 @@
                             <RadioButton GroupName="GameSelect" Margin="0,0,10,0" IsChecked="{Binding IsSlaveSelected}">Powerslave</RadioButton>
                             <RadioButton GroupName="GameSelect" Margin="0,0,10,0" IsChecked="{Binding IsNAMSelected}">NAM</RadioButton>
                             <RadioButton GroupName="GameSelect" Margin="0,0,10,0" IsChecked="{Binding IsWW2GISelected}">WWII GI</RadioButton>
+                            <RadioButton GroupName="GameSelect" Margin="0,0,10,0" IsChecked="{Binding IsStandaloneSelected}">Standalone</RadioButton>
 
                         </WrapPanel>
 

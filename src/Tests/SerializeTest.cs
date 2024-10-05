@@ -95,7 +95,10 @@ public sealed class SerializerTests
 """
     {
       "id": "game-id",
-      "type": "Standalone",
+      "type": "TC",
+      "game": {
+        "name": "Standalone"
+      },
       "title": "Standalone Game",
       "version": "1.0",
       "author": "Author",
@@ -191,7 +194,8 @@ public sealed class SerializerTests
 
         Assert.NotNull(result);
 
-        Assert.Equal(AddonTypeEnum.Standalone, result.AddonType);
+        Assert.Equal(AddonTypeEnum.TC, result.AddonType);
+        Assert.Equal(GameEnum.Standalone, result.SupportedGame.Game);
         Assert.Equal("Standalone Game", result.Title);
         Assert.Equal("eduke32.exe", result.Executables![OSEnum.Windows]);
         Assert.Equal("eduke32", result.Executables![OSEnum.Linux]);

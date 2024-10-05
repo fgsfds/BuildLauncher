@@ -411,9 +411,9 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
             image = image ?? preview;
             version = manifest.Version;
             description = manifest.Description;
-            supportedGame = manifest.SupportedGame?.Game ?? GameEnum.Standalone;
-            gameVersion = manifest.SupportedGame?.Version;
-            gameCrc = manifest.SupportedGame?.Crc;
+            supportedGame = manifest.SupportedGame.Game;
+            gameVersion = manifest.SupportedGame.Version;
+            gameCrc = manifest.SupportedGame.Crc;
 
             rts = manifest.Rts;
             ini = manifest.Ini;
@@ -502,9 +502,9 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
             image = image ?? preview;
             version = manifest.Version;
             description = manifest.Description;
-            supportedGame = manifest.SupportedGame?.Game ?? GameEnum.Standalone;
-            gameVersion = manifest.SupportedGame?.Version;
-            gameCrc = manifest.SupportedGame?.Crc;
+            supportedGame = manifest.SupportedGame.Game;
+            gameVersion = manifest.SupportedGame.Version;
+            gameCrc = manifest.SupportedGame.Crc;
 
             rts = manifest.Rts;
             ini = manifest.Ini;

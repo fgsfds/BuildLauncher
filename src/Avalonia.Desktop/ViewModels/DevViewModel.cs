@@ -447,23 +447,23 @@ public sealed partial class DevViewModel : ObservableObject
         IsMapSelected = result.AddonType is AddonTypeEnum.Map;
         IsModSelected = result.AddonType is AddonTypeEnum.Mod;
 
-        IsDukeSelected = result.SupportedGame?.Game is GameEnum.Duke3D;
-        IsBloodSelected = result.SupportedGame?.Game is GameEnum.Blood;
-        IsWangSelected = result.SupportedGame?.Game is GameEnum.ShadowWarrior;
-        IsFurySelected = result.SupportedGame?.Game is GameEnum.Fury;
-        IsRedneckSelected = result.SupportedGame?.Game is GameEnum.Redneck;
-        IsRidesAgainSelected = result.SupportedGame?.Game is GameEnum.RidesAgain;
-        IsSlaveSelected = result.SupportedGame?.Game is GameEnum.Exhumed;
-        IsNAMSelected = result.SupportedGame?.Game is GameEnum.NAM;
-        IsWW2GISelected = result.SupportedGame?.Game is GameEnum.WW2GI;
-        IsStandaloneSelected = result.SupportedGame is null;
+        IsDukeSelected = result.SupportedGame.Game is GameEnum.Duke3D;
+        IsBloodSelected = result.SupportedGame.Game is GameEnum.Blood;
+        IsWangSelected = result.SupportedGame.Game is GameEnum.ShadowWarrior;
+        IsFurySelected = result.SupportedGame.Game is GameEnum.Fury;
+        IsRedneckSelected = result.SupportedGame.Game is GameEnum.Redneck;
+        IsRidesAgainSelected = result.SupportedGame.Game is GameEnum.RidesAgain;
+        IsSlaveSelected = result.SupportedGame.Game is GameEnum.Exhumed;
+        IsNAMSelected = result.SupportedGame.Game is GameEnum.NAM;
+        IsWW2GISelected = result.SupportedGame.Game is GameEnum.WW2GI;
+        IsStandaloneSelected = result.SupportedGame.Game is GameEnum.Standalone;
 
-        var isDukeVersion = Enum.TryParse<DukeVersionEnum>(result.SupportedGame?.Version, true, out var dukeVersion);
+        var isDukeVersion = Enum.TryParse<DukeVersionEnum>(result.SupportedGame.Version, true, out var dukeVersion);
         IsDuke13DSelected = isDukeVersion && dukeVersion is DukeVersionEnum.Duke3D_13D;
         IsDukeAtomicSelected = isDukeVersion && dukeVersion is DukeVersionEnum.Duke3D_Atomic;
         IsDukeWTSelected = isDukeVersion && dukeVersion is DukeVersionEnum.Duke3D_WT;
 
-        GameCrc = result.SupportedGame?.Crc;
+        GameCrc = result.SupportedGame.Crc;
 
         AddonTitle = result.Title;
         AddonId = string.IsNullOrEmpty(AddonIdPrefix) ? result.Id : result.Id.Replace(AddonIdPrefix, "");
@@ -504,8 +504,16 @@ public sealed partial class DevViewModel : ObservableObject
 
         AddonDescription = result.Description;
 
-        WindowsExecutable = result.Executables?[OSEnum.Windows] ?? string.Empty;
-        LinuxExecutable = result.Executables?[OSEnum.Linux] ?? string.Empty;
+        if (result.Executables is not null)
+        {
+            WindowsExecutable = result.Executables.TryGetValue(OSEnum.Windows, out var winExe) ? winExe : null;
+            LinuxExecutable = result.Executables.TryGetValue(OSEnum.Linux, out var linExe) ? linExe : null;
+        }
+        else
+        {
+            WindowsExecutable = null;
+            LinuxExecutable = null;
+        }
     }
 
     [RelayCommand]
@@ -616,7 +624,7 @@ public sealed partial class DevViewModel : ObservableObject
             }
 
             string archiveSaveFolder;
-            var game = _gamesProvider.GetGame(addon.SupportedGame?.Game ?? GameEnum.Standalone);
+            var game = _gamesProvider.GetGame(addon.SupportedGame.Game);
 
             if (addon.AddonType is AddonTypeEnum.TC)
             {
@@ -688,7 +696,7 @@ public sealed partial class DevViewModel : ObservableObject
               IsTcSelected ? AddonTypeEnum.TC
             : IsMapSelected ? AddonTypeEnum.Map
             : IsModSelected ? AddonTypeEnum.Mod
-            : AddonTypeEnum.Standalone;
+            : ThrowHelper.ThrowArgumentOutOfRangeException<AddonTypeEnum>("Select addon type");
 
         var gameEnum =
               IsDukeSelected ? GameEnum.Duke3D
@@ -811,7 +819,7 @@ public sealed partial class DevViewModel : ObservableObject
         {
             AddonType = addonType,
             Id = AddonIdPrefix + AddonId,
-            SupportedGame = IsStandaloneSelected ? null : new()
+            SupportedGame = new()
             {
                 Game = gameEnum,
                 Version = dukeVersion?.ToString(),

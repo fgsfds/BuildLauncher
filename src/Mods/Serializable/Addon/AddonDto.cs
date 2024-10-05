@@ -15,16 +15,16 @@ public sealed class AddonDto
     public required AddonTypeEnum AddonType { get; set; }
 
     [JsonRequired]
+    [JsonPropertyName("game")]
+    public required SupportedGameDto SupportedGame { get; set; }
+
+    [JsonRequired]
     [JsonPropertyName("title")]
     public required string Title { get; set; }
 
     [JsonRequired]
     [JsonPropertyName("version")]
     public required string Version { get; set; }
-
-
-    [JsonPropertyName("game")]
-    public SupportedGameDto? SupportedGame { get; set; }
 
     [JsonPropertyName("author")]
     public string? Author { get; set; }

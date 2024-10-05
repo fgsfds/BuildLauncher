@@ -81,6 +81,7 @@ public sealed class FilesUploader
             GameEnum.TekWar => "TekWar",
             GameEnum.Witchaven => "WH",
             GameEnum.Witchaven2 => "WH2",
+            GameEnum.Standalone => "Standalone",
             _ => ThrowHelper.ThrowNotSupportedException<string>(),
         };
 
