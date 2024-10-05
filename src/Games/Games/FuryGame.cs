@@ -58,7 +58,7 @@ public sealed class FuryGame : BaseGame
                 StartMap = null,
                 PreviewImage = null,
                 IsFolder = false,
-                PortExeOverride = null
+                Executables = null
             });
         }
 

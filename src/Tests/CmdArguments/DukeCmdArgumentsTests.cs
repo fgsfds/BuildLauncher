@@ -56,7 +56,7 @@ public sealed class DukeCmdArgumentsTests
             StartMap = null,
             PreviewImage = null,
             IsFolder = false,
-            PortExeOverride = null
+            Executables = null
         };
 
         _dukeWtCamp = new()
@@ -81,7 +81,7 @@ public sealed class DukeCmdArgumentsTests
             StartMap = null,
             PreviewImage = null,
             IsFolder = false,
-            PortExeOverride = null
+            Executables = null
         };
 
         _duke64Camp = new()
@@ -106,7 +106,7 @@ public sealed class DukeCmdArgumentsTests
             StartMap = null,
             PreviewImage = null,
             IsFolder = false,
-            PortExeOverride = null
+            Executables = null
         };
 
         _dukeVaca = new()
@@ -131,7 +131,7 @@ public sealed class DukeCmdArgumentsTests
             StartMap = null,
             PreviewImage = null,
             IsFolder = false,
-            PortExeOverride = null
+            Executables = null
         };
 
         _dukeTcForVaca = new()
@@ -156,7 +156,7 @@ public sealed class DukeCmdArgumentsTests
             StartMap = null,
             PreviewImage = null,
             IsFolder = false,
-            PortExeOverride = null
+            Executables = null
         };
     }
 

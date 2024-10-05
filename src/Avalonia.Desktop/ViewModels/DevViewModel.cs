@@ -124,7 +124,7 @@ public sealed partial class DevViewModel : ObservableObject
 
     public bool IsDevMode => ClientProperties.IsDevMode;
     public bool IsStep2Visible => IsMapSelected || IsModSelected || IsTcSelected;
-    public bool IsStep3Visible => IsDukeSelected || IsBloodSelected || IsWangSelected || IsFurySelected || IsRedneckSelected || IsRidesAgainSelected || IsSlaveSelected || IsNAMSelected || IsWW2GISelected;
+    public bool IsStep3Visible => IsDukeSelected || IsBloodSelected || IsWangSelected || IsFurySelected || IsRedneckSelected || IsRidesAgainSelected || IsSlaveSelected || IsNAMSelected || IsWW2GISelected || IsStandaloneSelected;
     public bool AreDukePropertiesAvailable => IsDukeSelected || IsFurySelected || IsRedneckSelected || IsNAMSelected || IsWW2GISelected;
     public bool IsMainConAvailable => AreDukePropertiesAvailable && !IsModSelected;
     public bool AreBloodPropertiesVisible => IsBloodSelected;
@@ -155,6 +155,10 @@ public sealed partial class DevViewModel : ObservableObject
     private string? _soundRff;
     [ObservableProperty]
     private string? _mapFileName;
+    [ObservableProperty]
+    private string? _windowsExecutable;
+    [ObservableProperty]
+    private string? _linuxExecutable;
     [ObservableProperty]
     private int? _mapEpisode;
     [ObservableProperty]
@@ -261,6 +265,13 @@ public sealed partial class DevViewModel : ObservableObject
     [NotifyPropertyChangedFor(nameof(AddonIdPrefix))]
     [NotifyPropertyChangedFor(nameof(IsStep3Visible))]
     private bool _isSlaveSelected;
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(AddonIdPrefix))]
+    [NotifyPropertyChangedFor(nameof(IsStep3Visible))]
+    [NotifyPropertyChangedFor(nameof(WindowsExecutable))]
+    [NotifyPropertyChangedFor(nameof(LinuxExecutable))]
+    private bool _isStandaloneSelected;
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(IsStep2Visible))]
@@ -436,25 +447,26 @@ public sealed partial class DevViewModel : ObservableObject
         IsMapSelected = result.AddonType is AddonTypeEnum.Map;
         IsModSelected = result.AddonType is AddonTypeEnum.Mod;
 
-        IsDukeSelected = result.SupportedGame.Game is GameEnum.Duke3D;
-        IsBloodSelected = result.SupportedGame.Game is GameEnum.Blood;
-        IsWangSelected = result.SupportedGame.Game is GameEnum.ShadowWarrior;
-        IsFurySelected = result.SupportedGame.Game is GameEnum.Fury;
-        IsRedneckSelected = result.SupportedGame.Game is GameEnum.Redneck;
-        IsRidesAgainSelected = result.SupportedGame.Game is GameEnum.RidesAgain;
-        IsSlaveSelected = result.SupportedGame.Game is GameEnum.Exhumed;
-        IsNAMSelected = result.SupportedGame.Game is GameEnum.NAM;
-        IsWW2GISelected = result.SupportedGame.Game is GameEnum.WW2GI;
+        IsDukeSelected = result.SupportedGame?.Game is GameEnum.Duke3D;
+        IsBloodSelected = result.SupportedGame?.Game is GameEnum.Blood;
+        IsWangSelected = result.SupportedGame?.Game is GameEnum.ShadowWarrior;
+        IsFurySelected = result.SupportedGame?.Game is GameEnum.Fury;
+        IsRedneckSelected = result.SupportedGame?.Game is GameEnum.Redneck;
+        IsRidesAgainSelected = result.SupportedGame?.Game is GameEnum.RidesAgain;
+        IsSlaveSelected = result.SupportedGame?.Game is GameEnum.Exhumed;
+        IsNAMSelected = result.SupportedGame?.Game is GameEnum.NAM;
+        IsWW2GISelected = result.SupportedGame?.Game is GameEnum.WW2GI;
+        IsStandaloneSelected = result.SupportedGame is null;
 
-        var isDukeVersion = Enum.TryParse<DukeVersionEnum>(result.SupportedGame.Version, true, out var dukeVersion);
+        var isDukeVersion = Enum.TryParse<DukeVersionEnum>(result.SupportedGame?.Version, true, out var dukeVersion);
         IsDuke13DSelected = isDukeVersion && dukeVersion is DukeVersionEnum.Duke3D_13D;
         IsDukeAtomicSelected = isDukeVersion && dukeVersion is DukeVersionEnum.Duke3D_Atomic;
         IsDukeWTSelected = isDukeVersion && dukeVersion is DukeVersionEnum.Duke3D_WT;
 
-        GameCrc = result.SupportedGame.Crc;
+        GameCrc = result.SupportedGame?.Crc;
 
         AddonTitle = result.Title;
-        AddonId = result.Id.Replace(AddonIdPrefix, "");
+        AddonId = string.IsNullOrEmpty(AddonIdPrefix) ? result.Id : result.Id.Replace(AddonIdPrefix, "");
         AddonVersion = result.Version;
         AddonAuthor = result.Author;
         MainDef = result.MainDef;
@@ -491,6 +503,9 @@ public sealed partial class DevViewModel : ObservableObject
         }
 
         AddonDescription = result.Description;
+
+        WindowsExecutable = result.Executables?[OSEnum.Windows] ?? string.Empty;
+        LinuxExecutable = result.Executables?[OSEnum.Linux] ?? string.Empty;
     }
 
     [RelayCommand]
@@ -601,7 +616,7 @@ public sealed partial class DevViewModel : ObservableObject
             }
 
             string archiveSaveFolder;
-            var game = _gamesProvider.GetGame(addon.SupportedGame.Game);
+            var game = _gamesProvider.GetGame(addon.SupportedGame?.Game ?? GameEnum.Standalone);
 
             if (addon.AddonType is AddonTypeEnum.TC)
             {
@@ -673,7 +688,7 @@ public sealed partial class DevViewModel : ObservableObject
               IsTcSelected ? AddonTypeEnum.TC
             : IsMapSelected ? AddonTypeEnum.Map
             : IsModSelected ? AddonTypeEnum.Mod
-            : ThrowHelper.ThrowArgumentOutOfRangeException<AddonTypeEnum>("Select addon type");
+            : AddonTypeEnum.Standalone;
 
         var gameEnum =
               IsDukeSelected ? GameEnum.Duke3D
@@ -685,6 +700,7 @@ public sealed partial class DevViewModel : ObservableObject
             : IsSlaveSelected ? GameEnum.Exhumed
             : IsNAMSelected ? GameEnum.NAM
             : IsWW2GISelected ? GameEnum.WW2GI
+            : IsStandaloneSelected ? GameEnum.Standalone
             : ThrowHelper.ThrowArgumentOutOfRangeException<GameEnum>("Select game");
 
         DukeVersionEnum? dukeVersion =
@@ -779,11 +795,23 @@ public sealed partial class DevViewModel : ObservableObject
             }
         }
 
+        Dictionary<OSEnum, string> executables = [];
+
+        if (!string.IsNullOrWhiteSpace(WindowsExecutable))
+        {
+            executables.Add(OSEnum.Windows, WindowsExecutable);
+        }
+
+        if (!string.IsNullOrWhiteSpace(LinuxExecutable))
+        {
+            executables.Add(OSEnum.Linux, LinuxExecutable);
+        }
+
         AddonDto addon = new()
         {
             AddonType = addonType,
             Id = AddonIdPrefix + AddonId,
-            SupportedGame = new()
+            SupportedGame = IsStandaloneSelected ? null : new()
             {
                 Game = gameEnum,
                 Version = dukeVersion?.ToString(),
@@ -803,7 +831,8 @@ public sealed partial class DevViewModel : ObservableObject
             SoundRff = string.IsNullOrWhiteSpace(SoundRff) ? null : SoundRff,
             Dependencies = (DependenciesList is null || DependenciesList.Count == 0) && features.Count == 0 ? null : new() { Addons = DependenciesList is null || DependenciesList.Count == 0 ? null : [.. DependenciesList], RequiredFeatures = features.Count == 0 ? null : features },
             Incompatibles = (IncompatibilitiesList is null || IncompatibilitiesList.Count == 0) ? null : new() { Addons = IncompatibilitiesList is null || IncompatibilitiesList.Count == 0 ? null : [.. IncompatibilitiesList] },
-            StartMap = startMap
+            StartMap = startMap,
+            Executables = executables.Count == 0 ? null : executables
         };
 
         jsonString = JsonSerializer.Serialize(addon, AddonManifestContext.Default.AddonDto);

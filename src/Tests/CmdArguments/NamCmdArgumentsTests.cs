@@ -47,7 +47,7 @@ public sealed class NamCmdArgumentsTests
             StartMap = null,
             PreviewImage = null,
             IsFolder = false,
-            PortExeOverride = null
+            Executables = null
         };
     }
 

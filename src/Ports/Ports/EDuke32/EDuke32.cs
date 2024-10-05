@@ -154,11 +154,6 @@ public class EDuke32 : BasePort
     {
         var saveFolder = GetPathToAddonSavedGamesFolder(game.ShortName, campaign.Id);
 
-        if (!Directory.Exists(saveFolder))
-        {
-            _ = Directory.CreateDirectory(saveFolder);
-        }
-
         string path;
 
         if (campaign.IsFolder)
@@ -340,7 +335,7 @@ public class EDuke32 : BasePort
 
         if (dCamp.Type is AddonTypeEnum.TC)
         {
-            if (dCamp.PortExeOverride is not null)
+            if (dCamp.Executables is not null)
             {
                 //nothing to do
             }

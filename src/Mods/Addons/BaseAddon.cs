@@ -62,7 +62,7 @@ public abstract class BaseAddon : IAddon
     public required bool IsFolder { get; init; }
 
     /// <inheritdoc/>
-    public required string? PortExeOverride { get; init; }
+    public required Dictionary<OSEnum, string>? Executables { get; init; }
 
     /// <inheritdoc/>
     public string? FileName => PathToFile is null ? null : Path.GetFileName(PathToFile);

@@ -133,5 +133,10 @@ public sealed partial class MainWindow : Window
         {
             WW2GIPage.InitializeControl(GameEnum.WW2GI, _portsProvider, _vmFactory, _configProvider);
         }
+
+        if (!StandalonePage.IsAlreadInitialized)
+        {
+            StandalonePage.InitializeControl(GameEnum.Standalone, _portsProvider, _vmFactory, _configProvider);
+        }
     }
 }

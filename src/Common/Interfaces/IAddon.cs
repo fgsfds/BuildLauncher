@@ -90,14 +90,14 @@ public interface IAddon
     IStartMap? StartMap { get; init; }
 
     /// <summary>
+    /// Map that will be started when the addon is loaded
+    /// </summary>
+    Dictionary<OSEnum, string>? Executables { get; init; }
+
+    /// <summary>
     /// Is addon unpacked to a folder
     /// </summary>
     bool IsFolder { get; init; }
-
-    /// <summary>
-    /// Path to the port exe that's provided with the addon
-    /// </summary>
-    string? PortExeOverride { get; init; }
 
     /// <summary>
     /// Addon title with text wraping

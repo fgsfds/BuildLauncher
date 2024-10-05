@@ -46,7 +46,7 @@ public sealed class WangCmdArgumentsTests
             StartMap = null,
             PreviewImage = null,
             IsFolder = false,
-            PortExeOverride = null
+            Executables = null
         };
 
         _tdCamp = new()
@@ -68,7 +68,7 @@ public sealed class WangCmdArgumentsTests
             StartMap = null,
             PreviewImage = null,
             IsFolder = false,
-            PortExeOverride = null
+            Executables = null
         };
     }
 

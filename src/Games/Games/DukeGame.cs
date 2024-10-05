@@ -110,7 +110,7 @@ public sealed class DukeGame : BaseGame
                 StartMap = null,
                 PreviewImage = null,
                 IsFolder = false,
-                PortExeOverride = null
+                Executables = null
             });
         }
 
@@ -145,7 +145,7 @@ public sealed class DukeGame : BaseGame
                 StartMap = null,
                 PreviewImage = null,
                 IsFolder = false,
-                PortExeOverride = null
+                Executables = null
             });
         }
 
@@ -182,7 +182,7 @@ public sealed class DukeGame : BaseGame
                     StartMap = null,
                     PreviewImage = null,
                     IsFolder = false,
-                    PortExeOverride = null
+                    Executables = null
                 });
             }
 
@@ -216,7 +216,7 @@ public sealed class DukeGame : BaseGame
                     StartMap = null,
                     PreviewImage = null,
                     IsFolder = false,
-                    PortExeOverride = null
+                    Executables = null
                 });
             }
 
@@ -252,7 +252,7 @@ public sealed class DukeGame : BaseGame
                     StartMap = null,
                     PreviewImage = null,
                     IsFolder = false,
-                    PortExeOverride = null
+                    Executables = null
                 });
             }
         }
@@ -287,7 +287,7 @@ public sealed class DukeGame : BaseGame
                 StartMap = null,
                 PreviewImage = null,
                 IsFolder = false,
-                PortExeOverride = null
+                Executables = null
             });
         }
 

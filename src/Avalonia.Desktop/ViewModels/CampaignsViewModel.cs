@@ -1,12 +1,12 @@
 using Common.Client.Config;
 using Common.Client.Providers;
 using Common.Enums;
-using Common.Helpers;
 using Common.Interfaces;
 using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Games.Providers;
+using Mods.Addons;
 using Mods.Providers;
 using Ports.Ports;
 using System.Collections.Immutable;
@@ -131,19 +131,29 @@ public sealed partial class CampaignsViewModel : RightPanelViewModel, IPortsButt
     /// <summary>
     /// Start selected campaign
     /// </summary>
-    /// <param name="command">Port to start campaign with</param>
+    /// <param name="value">Port to start campaign with</param>
     [RelayCommand]
-    private async Task StartCampaignAsync(object? command)
+    private async Task StartCampaignAsync(object? value)
     {
-        command.ThrowIfNotType<BasePort>(out var port);
         Guard.IsNotNull(SelectedAddon);
 
-        var mods = _installedAddonsProvider.GetInstalledMods();
+        if (value is BasePort port)
+        {
+            var mods = _installedAddonsProvider.GetInstalledMods();
 
-        var args = port.GetStartGameArgs(Game, SelectedAddon, mods, _config.SkipIntro, _config.SkipStartup);
-        var addon = SelectedAddon;
+            var args = port.GetStartGameArgs(Game, SelectedAddon, mods, _config.SkipIntro, _config.SkipStartup);
+            var addon = SelectedAddon;
 
-        await StartPortAsync(port, addon, args).ConfigureAwait(true);
+            await StartPortAsync(port, addon, args).ConfigureAwait(true);
+        }
+        else if (SelectedAddon is StandaloneAddon standalone)
+        {
+            await StartPortAsync(standalone).ConfigureAwait(true);
+        }
+        else
+        {
+            ThrowHelper.ThrowNotSupportedException();
+        }
     }
 
 
@@ -203,11 +213,11 @@ public sealed partial class CampaignsViewModel : RightPanelViewModel, IPortsButt
     {
         var sw = Stopwatch.StartNew();
 
-        var portExe = addon.PortExeOverride is not null ? addon.PortExeOverride : port.PortExeFilePath;
+        var portExe = addon.Executables?[OSEnum.Windows] is not null ? addon.Executables[OSEnum.Windows] : port.PortExeFilePath;
 
         await Process.Start(new ProcessStartInfo
         {
-            FileName = portExe,
+            FileName = Path.GetFileName(portExe),
             UseShellExecute = true,
             Arguments = args,
             WorkingDirectory = Path.GetDirectoryName(portExe)
@@ -221,6 +231,29 @@ public sealed partial class CampaignsViewModel : RightPanelViewModel, IPortsButt
         OnPropertyChanged(nameof(SelectedAddonPlaytime));
 
         port.AfterEnd(Game, addon);
+    }
+
+    /// <summary>
+    /// Start port with command line args
+    /// </summary>
+    /// <param name="addon">Campaign</param>
+    private async Task StartPortAsync(StandaloneAddon addon)
+    {
+        var sw = Stopwatch.StartNew();
+
+        await Process.Start(new ProcessStartInfo
+        {
+            FileName = Path.GetFileName(addon.Executables![OSEnum.Windows]),
+            UseShellExecute = true,
+            WorkingDirectory = Path.GetDirectoryName(addon.PathToFile)
+        })!.WaitForExitAsync().ConfigureAwait(true);
+
+        sw.Stop();
+        var time = sw.Elapsed;
+
+        _playtimeProvider.AddTime(addon.Id, time);
+
+        OnPropertyChanged(nameof(SelectedAddonPlaytime));
     }
 
     private void OnGameChanged(GameEnum parameterName)

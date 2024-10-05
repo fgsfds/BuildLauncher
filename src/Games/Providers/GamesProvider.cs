@@ -24,6 +24,7 @@ public sealed class GamesProvider
     private readonly SlaveGame _slave;
     private readonly NamGame _nam;
     private readonly WW2GIGame _ww2gi;
+    private readonly StandaloneGame _standalone;
 
     public bool IsBloodInstalled => _blood.IsBaseGameInstalled;
     public bool IsDukeInstalled => _duke3d.IsBaseGameInstalled || _duke3d.IsWorldTourInstalled || _duke3d.IsDuke64Installed;
@@ -84,6 +85,8 @@ public sealed class GamesProvider
             GameInstallFolder = _config.PathWW2GI
         };
 
+        _standalone = new();
+
         _config.ParameterChangedEvent += OnParameterChanged;
     }
 
@@ -105,6 +108,7 @@ public sealed class GamesProvider
             GameEnum.RidesAgain => _redneck,
             GameEnum.NAM => _nam,
             GameEnum.WW2GI => _ww2gi,
+            GameEnum.Standalone => _standalone,
             GameEnum.TekWar => ThrowHelper.ThrowNotSupportedException<IGame>(),
             GameEnum.Witchaven => ThrowHelper.ThrowNotSupportedException<IGame>(),
             GameEnum.Witchaven2 => ThrowHelper.ThrowNotSupportedException<IGame>(),

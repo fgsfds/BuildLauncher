@@ -51,7 +51,7 @@ public sealed class BloodCmdArgumentsTests
             RFF = null,
             SND = null,
             IsFolder = false,
-            PortExeOverride = null
+            Executables = null
         };
 
         _bloodCpCamp = new()
@@ -76,7 +76,7 @@ public sealed class BloodCmdArgumentsTests
             RFF = null,
             SND = null,
             IsFolder = false,
-            PortExeOverride = null
+            Executables = null
         };
 
         _bloodTc = new()
@@ -101,7 +101,7 @@ public sealed class BloodCmdArgumentsTests
             RFF = "TC.RFF",
             SND = "TC.SND",
             IsFolder = false,
-            PortExeOverride = null
+            Executables = null
         };
 
         _bloodTcFolder = new()
@@ -126,7 +126,7 @@ public sealed class BloodCmdArgumentsTests
             RFF = "TC.RFF",
             SND = "TC.SND",
             IsFolder = true,
-            PortExeOverride = null
+            Executables = null
         };
     }
 

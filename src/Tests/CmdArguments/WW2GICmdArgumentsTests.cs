@@ -49,7 +49,7 @@ public sealed class WW2GICmdArgumentsTests
             StartMap = null,
             PreviewImage = null,
             IsFolder = false,
-            PortExeOverride = null
+            Executables = null
         };
 
         _platoonCamp = new()
@@ -74,7 +74,7 @@ public sealed class WW2GICmdArgumentsTests
             StartMap = null,
             PreviewImage = null,
             IsFolder = false,
-            PortExeOverride = null
+            Executables = null
         };
     }
 

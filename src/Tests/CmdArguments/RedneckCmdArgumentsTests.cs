@@ -49,7 +49,7 @@ public sealed class RedneckCmdArgumentsTests
             StartMap = null,
             PreviewImage = null,
             IsFolder = false,
-            PortExeOverride = null
+            Executables = null
         };
 
         _againCamp = new()
@@ -74,7 +74,7 @@ public sealed class RedneckCmdArgumentsTests
             StartMap = null,
             PreviewImage = null,
             IsFolder = false,
-            PortExeOverride = null
+            Executables = null
         };
     }
 

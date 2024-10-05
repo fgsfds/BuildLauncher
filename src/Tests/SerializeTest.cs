@@ -90,6 +90,21 @@ public sealed class SerializerTests
       }
     }
 """;
+    
+    private const string StandaloneJson =
+"""
+    {
+      "id": "game-id",
+      "type": "Standalone",
+      "title": "Standalone Game",
+      "version": "1.0",
+      "author": "Author",
+      "executables": {
+        "Windows": "eduke32.exe",
+        "Linux": "eduke32"
+      }
+    }
+""";
 
     [Fact]
     public void DeserializeAddonJson()
@@ -167,6 +182,19 @@ public sealed class SerializerTests
 
         Assert.Equal(1, ((MapSlotDto)result.StartMap).Episode);
         Assert.Equal(2, ((MapSlotDto)result.StartMap).Level);
+    }
+    
+    [Fact]
+    public void DeserializeStandaloneJson()
+    {
+        var result = JsonSerializer.Deserialize(StandaloneJson, AddonManifestContext.Default.AddonDto);
+
+        Assert.NotNull(result);
+
+        Assert.Equal(AddonTypeEnum.Standalone, result.AddonType);
+        Assert.Equal("Standalone Game", result.Title);
+        Assert.Equal("eduke32.exe", result.Executables![OSEnum.Windows]);
+        Assert.Equal("eduke32", result.Executables![OSEnum.Linux]);
     }
 }
 

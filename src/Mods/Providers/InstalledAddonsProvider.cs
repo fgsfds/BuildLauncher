@@ -22,7 +22,6 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
     private readonly IConfigProvider _config;
 
     private readonly Dictionary<AddonTypeEnum, Dictionary<AddonVersion, IAddon>> _cache;
-    private readonly IEnumerable<string> _portExes = ["nblood.exe", "notblood.exe", "eduke32.exe"];
 
     private static readonly SemaphoreSlim _semaphore = new(1);
 
@@ -362,7 +361,7 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
         Dictionary<string, string?>? dependencies;
         Dictionary<string, string?>? incompatibles;
         IStartMap? startMap;
-        string? portOverride;
+        Dictionary<OSEnum, string>? executables;
 
         if (pathToFile.EndsWith(".json"))
         {
@@ -412,9 +411,9 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
             image = image ?? preview;
             version = manifest.Version;
             description = manifest.Description;
-            supportedGame = manifest.SupportedGame.Game;
-            gameVersion = manifest.SupportedGame.Version;
-            gameCrc = manifest.SupportedGame.Crc;
+            supportedGame = manifest.SupportedGame?.Game ?? GameEnum.Standalone;
+            gameVersion = manifest.SupportedGame?.Version;
+            gameCrc = manifest.SupportedGame?.Crc;
 
             rts = manifest.Rts;
             ini = manifest.Ini;
@@ -434,12 +433,19 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
             dependencies = manifest.Dependencies?.Addons?.ToDictionary(static x => x.Id, static x => x.Version, StringComparer.OrdinalIgnoreCase);
             incompatibles = manifest.Incompatibles?.Addons?.ToDictionary(static x => x.Id, static x => x.Version, StringComparer.OrdinalIgnoreCase);
 
-            var portExe = from file in Directory.GetFiles(addonDir)
-                          from exe in _portExes
-                          where file.EndsWith(exe)
-                          select file;
+            if (manifest.Executables is not null)
+            {
+                executables = [];
 
-            portOverride = portExe.Any() ? portExe.First() : null;
+                foreach (var exe in manifest.Executables)
+                {
+                    executables.Add(exe.Key, Path.Combine(Path.GetDirectoryName(pathToFile)!, exe.Value));
+                }
+            }
+            else
+            {
+                executables = null;
+            }
         }
         else if (ArchiveFactory.IsArchive(pathToFile, out _))
         {
@@ -480,18 +486,10 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
                 {
                     preview = null;
                 }
-
-                var portExe = from file in Directory.GetFiles(addonDir)
-                              from exe in _portExes
-                              where file.EndsWith(exe)
-                              select file;
-
-                portOverride = portExe.Any() ? portExe.First() : null;
             }
             else
             {
                 isUnpacked = false;
-                portOverride = null;
 
                 preview = ImageHelper.GetImageFromArchive(archive, "preview.png");
                 image = ImageHelper.GetCoverFromArchive(archive) ?? preview;
@@ -504,9 +502,9 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
             image = image ?? preview;
             version = manifest.Version;
             description = manifest.Description;
-            supportedGame = manifest.SupportedGame.Game;
-            gameVersion = manifest.SupportedGame.Version;
-            gameCrc = manifest.SupportedGame.Crc;
+            supportedGame = manifest.SupportedGame?.Game ?? GameEnum.Standalone;
+            gameVersion = manifest.SupportedGame?.Version;
+            gameCrc = manifest.SupportedGame?.Crc;
 
             rts = manifest.Rts;
             ini = manifest.Ini;
@@ -525,6 +523,20 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
 
             dependencies = manifest.Dependencies?.Addons?.ToDictionary(static x => x.Id, static x => x.Version, StringComparer.OrdinalIgnoreCase);
             incompatibles = manifest.Incompatibles?.Addons?.ToDictionary(static x => x.Id, static x => x.Version, StringComparer.OrdinalIgnoreCase);
+
+            if (manifest.Executables is not null)
+            {
+                executables = [];
+
+                foreach (var exe in manifest.Executables)
+                {
+                    executables.Add(exe.Key, Path.Combine(Path.GetDirectoryName(pathToFile)!, exe.Value));
+                }
+            }
+            else
+            {
+                executables = null;
+            }
         }
         else if (pathToFile.EndsWith(".map", StringComparison.OrdinalIgnoreCase))
         {
@@ -551,7 +563,7 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
                 RequiredFeatures = null,
                 PreviewImage = null,
                 IsFolder = false,
-                PortExeOverride = null
+                Executables = null
             };
 
             return addon;
@@ -596,7 +608,7 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
                 RequiredFeatures = requiredFeatures,
                 PreviewImage = preview,
                 IsFolder = isUnpacked,
-                PortExeOverride = null
+                Executables = null
             };
 
             return addon;
@@ -632,7 +644,7 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
                     RequiredFeatures = requiredFeatures,
                     PreviewImage = preview,
                     IsFolder = isUnpacked,
-                    PortExeOverride = portOverride
+                    Executables = executables
                 };
 
                 return addon;
@@ -658,7 +670,7 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
                     RequiredFeatures = requiredFeatures,
                     PreviewImage = preview,
                     IsFolder = isUnpacked,
-                    PortExeOverride = portOverride
+                    Executables = executables
                 };
 
                 return addon;
@@ -687,7 +699,7 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
                     RequiredFeatures = requiredFeatures,
                     PreviewImage = preview,
                     IsFolder = isUnpacked,
-                    PortExeOverride = portOverride
+                    Executables = executables
                 };
 
                 return addon;
@@ -713,7 +725,33 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
                     RequiredFeatures = requiredFeatures,
                     PreviewImage = preview,
                     IsFolder = isUnpacked,
-                    PortExeOverride = portOverride
+                    Executables = executables
+                };
+
+                return addon;
+            }
+            else if (_game.GameEnum is GameEnum.Standalone)
+            {
+                var addon = new StandaloneAddon()
+                {
+                    Id = id,
+                    Type = type,
+                    SupportedGame = new(supportedGame, gameVersion, gameCrc),
+                    Title = title,
+                    GridImage = image,
+                    Description = description,
+                    Version = version,
+                    Author = author,
+                    PathToFile = pathToFile,
+                    DependentAddons = dependencies,
+                    IncompatibleAddons = incompatibles,
+                    StartMap = startMap,
+                    MainDef = mainDef,
+                    AdditionalDefs = addDefs,
+                    RequiredFeatures = requiredFeatures,
+                    PreviewImage = preview,
+                    IsFolder = isUnpacked,
+                    Executables = executables
                 };
 
                 return addon;
@@ -740,6 +778,7 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
         {
             if (file.Key!.Equals("addons.grpinfo"))
             {
+                //need to unpack archive with grpinfo
                 var unpackedTo = Unpack(pathToFile, archive);
                 addonDto = null;
                 return unpackedTo;
@@ -748,28 +787,6 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
             if (file.Key!.Equals("addon.json"))
             {
                 addonJson = file;
-            }
-            else if (_portExes.Any(x => file.Key!.EndsWith(x)))
-            {
-                var unpackedTo = Unpack(pathToFile, archive);
-                var addonJsonStr = Path.Combine(unpackedTo, "addon.json");
-
-                if (File.Exists(addonJsonStr))
-                {
-                    try
-                    {
-                        addonDto = JsonSerializer.Deserialize(
-                            File.ReadAllText(addonJsonStr),
-                            AddonManifestContext.Default.AddonDto
-                            )!;
-                        return unpackedTo;
-                    }
-                    catch
-                    {
-                        addonDto = null;
-                        return null;
-                    }
-                }
             }
         }
 
@@ -785,6 +802,13 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
                 if (addonDto.MainRff is not null || addonDto.SoundRff is not null)
                 {
                     //need to unpack addons that contain custom RFF files
+                    var unpackedTo = Unpack(pathToFile, archive);
+                    return unpackedTo;
+                }
+
+                if (addonDto.Executables is not null)
+                {
+                    //need to unpack addons with custom executables
                     var unpackedTo = Unpack(pathToFile, archive);
                     return unpackedTo;
                 }

@@ -62,7 +62,7 @@ public sealed class NamGame : BaseGame
                 StartMap = null,
                 PreviewImage = null,
                 IsFolder = false,
-                PortExeOverride = null
+                Executables = null
             });
         }
 

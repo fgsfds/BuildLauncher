@@ -54,5 +54,11 @@
       <ProjectReference Include="..\Ports\Ports.csproj" />
       <ProjectReference Include="..\Tools\Tools.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Pages\StandalonePage.axaml.cs">
+      <DependentUpon>StandalonePage.axaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
     
 </Project>

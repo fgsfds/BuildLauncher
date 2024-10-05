@@ -76,7 +76,7 @@ public sealed class RedneckGame : BaseGame
                 StartMap = null,
                 PreviewImage = null,
                 IsFolder = false,
-                PortExeOverride = null
+                Executables = null
             });
 
             if (IsRoute66Installed)
@@ -107,7 +107,7 @@ public sealed class RedneckGame : BaseGame
                     StartMap = null,
                     PreviewImage = null,
                     IsFolder = false,
-                    PortExeOverride = null
+                    Executables = null
                 });
             }
         }
@@ -142,7 +142,7 @@ public sealed class RedneckGame : BaseGame
                 StartMap = null,
                 PreviewImage = null,
                 IsFolder = false,
-                PortExeOverride = null
+                Executables = null
             });
         }
 

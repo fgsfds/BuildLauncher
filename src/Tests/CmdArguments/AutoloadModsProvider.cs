@@ -78,7 +78,7 @@ internal sealed class AutoloadModsProvider
         PreviewImage = null,
         IsEnabled = true,
         IsFolder = false,
-        PortExeOverride = null
+        Executables = null
     };
 
     public AutoloadMod EnabledMod => new()
@@ -102,7 +102,7 @@ internal sealed class AutoloadModsProvider
         PreviewImage = null,
         IsEnabled = true,
         IsFolder = false,
-        PortExeOverride = null
+        Executables = null
     };
 
     public AutoloadMod ModThatRequiresOfficialAddon => new()
@@ -126,7 +126,7 @@ internal sealed class AutoloadModsProvider
         PreviewImage = null,
         IsEnabled = true,
         IsFolder = false,
-        PortExeOverride = null
+        Executables = null
     };
 
     public AutoloadMod ModThatIncompatibleWithAddon => new()
@@ -150,7 +150,7 @@ internal sealed class AutoloadModsProvider
         PreviewImage = null,
         IsEnabled = true,
         IsFolder = false,
-        PortExeOverride = null
+        Executables = null
     };
 
     public AutoloadMod IncompatibleMod => new()
@@ -174,7 +174,7 @@ internal sealed class AutoloadModsProvider
         PreviewImage = null,
         IsEnabled = true,
         IsFolder = false,
-        PortExeOverride = null
+        Executables = null
     };
 
     public AutoloadMod IncompatibleModWithCompatibleVersion => new()
@@ -198,7 +198,7 @@ internal sealed class AutoloadModsProvider
         PreviewImage = null,
         IsEnabled = true,
         IsFolder = false,
-        PortExeOverride = null
+        Executables = null
     };
 
     public AutoloadMod IncompatibleModWithIncompatibleVersion => new()
@@ -222,7 +222,7 @@ internal sealed class AutoloadModsProvider
         PreviewImage = null,
         IsEnabled = true,
         IsFolder = false,
-        PortExeOverride = null
+        Executables = null
     };
 
     public AutoloadMod DependantMod => new()
@@ -246,7 +246,7 @@ internal sealed class AutoloadModsProvider
         PreviewImage = null,
         IsEnabled = true,
         IsFolder = false,
-        PortExeOverride = null
+        Executables = null
     };
 
     public AutoloadMod DependantModWithIncompatibleVersion => new()
@@ -270,7 +270,7 @@ internal sealed class AutoloadModsProvider
         PreviewImage = null,
         IsEnabled = true,
         IsFolder = false,
-        PortExeOverride = null
+        Executables = null
     };
 
     public AutoloadMod DependantModWithCompatibleVersion => new()
@@ -294,7 +294,7 @@ internal sealed class AutoloadModsProvider
         PreviewImage = null,
         IsEnabled = true,
         IsFolder = false,
-        PortExeOverride = null
+        Executables = null
     };
 
     public AutoloadMod DisabledMod => new()
@@ -318,7 +318,7 @@ internal sealed class AutoloadModsProvider
         PreviewImage = null,
         IsEnabled = false,
         IsFolder = false,
-        PortExeOverride = null
+        Executables = null
     };
 
     public AutoloadMod ModThatRequiredFeature => new()
@@ -342,7 +342,7 @@ internal sealed class AutoloadModsProvider
         PreviewImage = null,
         IsEnabled = true,
         IsFolder = false,
-        PortExeOverride = null
+        Executables = null
     };
 
     public AutoloadMod ModForAnotherGame => new()
@@ -366,6 +366,6 @@ internal sealed class AutoloadModsProvider
         PreviewImage = null,
         IsEnabled = true,
         IsFolder = false,
-        PortExeOverride = null
+        Executables = null
     };
 }

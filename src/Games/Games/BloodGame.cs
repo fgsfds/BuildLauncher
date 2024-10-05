@@ -72,7 +72,7 @@ public sealed class BloodGame : BaseGame
             StartMap = null,
             PreviewImage = null,
             IsFolder = false,
-            PortExeOverride = null
+            Executables = null
         });
 
         if (IsCrypticPassageInstalled)
@@ -108,7 +108,7 @@ public sealed class BloodGame : BaseGame
                 StartMap = null,
                 PreviewImage = null,
                 IsFolder = false,
-                PortExeOverride = null
+                Executables = null
             });
         }
 

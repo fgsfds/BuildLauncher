@@ -75,7 +75,7 @@ public sealed class ViewModelsFactory
             _downloadableAddonsProviderFactory
             );
 
-        Task.Run(vm.InitializeAsync);
+        _ = Task.Run(vm.InitializeAsync);
         return vm;
     }
 
@@ -96,7 +96,7 @@ public sealed class ViewModelsFactory
             _downloadableAddonsProviderFactory
             );
 
-        Task.Run(vm.InitializeAsync);
+        _ = Task.Run(vm.InitializeAsync);
         return vm;
     }
 
@@ -115,7 +115,7 @@ public sealed class ViewModelsFactory
             _downloadableAddonsProviderFactory
             );
 
-        Task.Run(vm.InitializeAsync);
+        _ = Task.Run(vm.InitializeAsync);
         return vm;
     }
 
@@ -131,7 +131,7 @@ public sealed class ViewModelsFactory
             _downloadableAddonsProviderFactory
             );
 
-        Task.Run(vm.InitializeAsync);
+        _ = Task.Run(vm.InitializeAsync);
         return vm;
     }
 
@@ -148,7 +148,7 @@ public sealed class ViewModelsFactory
             _portsProvider.GetPort(portEnum)
             );
 
-        Task.Run(vm.InitializeAsync);
+        _ = Task.Run(vm.InitializeAsync);
         return vm;
     }
 
@@ -166,7 +166,7 @@ public sealed class ViewModelsFactory
             _toolsProvider.GetTool(toolEnum)
             );
 
-        Task.Run(vm.InitializeAsync);
+        _ = Task.Run(vm.InitializeAsync);
         return vm;
     }
 #pragma warning restore CS0618 // Type or member is obsolete

@@ -15,6 +15,8 @@ namespace Avalonia.Desktop.Controls;
 
 public sealed partial class CampaignsControl : UserControl
 {
+    private const string BuiltInPortStr = "Built-in port";
+
     private IEnumerable<BasePort> _supportedPorts;
     private CampaignsViewModel _viewModel;
 
@@ -50,6 +52,33 @@ public sealed partial class CampaignsControl : UserControl
     {
         ImagePathToBitmapConverter converter = new();
 
+        if (_viewModel.Game.GameEnum is GameEnum.Standalone)
+        {
+            TextBlock textBlock = new() { Text = BuiltInPortStr };
+
+            Button button = new()
+            {
+                Content = textBlock,
+                Command = new RelayCommand(() =>
+                    _viewModel.StartCampaignCommand.Execute(null),
+                    () =>
+                    {
+                        if (CampaignsList?.SelectedItem is not IAddon selectedCampaign)
+                        {
+                            return false;
+                        }
+
+                        return true;
+                    }),
+                Margin = new(5),
+                Padding = new(5),
+            };
+
+            BottomPanel.PortsButtonsPanel.Children.Add(button);
+
+            return;
+        }
+
         foreach (var port in _supportedPorts)
         {
             var portIcon = converter.Convert(port.Icon, typeof(IImage), null!, CultureInfo.InvariantCulture) as IImage;
@@ -58,7 +87,7 @@ public sealed partial class CampaignsControl : UserControl
             sp.Children.Add(new Image() { Margin = new(0, 0, 5, 0), Height = 16, Source = portIcon });
             sp.Children.Add(new TextBlock() { Text = port.Name });
 
-            Button button = new()
+            Button portButton = new()
             {
                 Content = sp,
                 Command = new RelayCommand(() =>
@@ -70,9 +99,9 @@ public sealed partial class CampaignsControl : UserControl
                             return false;
                         }
 
-                        if (selectedCampaign.PortExeOverride is not null)
+                        if (selectedCampaign.Executables?[OSEnum.Windows] is not null)
                         {
-                            if (port.Exe.Equals(Path.GetFileName(selectedCampaign.PortExeOverride), StringComparison.InvariantCultureIgnoreCase))
+                            if (port.Exe.Equals(Path.GetFileName(selectedCampaign.Executables[OSEnum.Windows]), StringComparison.InvariantCultureIgnoreCase))
                             {
                                 return true;
                             }
@@ -113,8 +142,34 @@ public sealed partial class CampaignsControl : UserControl
                 Padding = new(5),
             };
 
-            BottomPanel.PortsButtonsPanel.Children.Add(button);
+            BottomPanel.PortsButtonsPanel.Children.Add(portButton);
         }
+
+        Button customPortButton = new()
+        {
+            Content = new TextBlock() { Text = BuiltInPortStr },
+            Command = new RelayCommand(() =>
+                _viewModel.StartCampaignCommand.Execute(null),
+                    () =>
+                    {
+                        if (CampaignsList?.SelectedItem is not IAddon selectedCampaign)
+                        {
+                            return false;
+                        }
+
+                        if (selectedCampaign.Executables is null)
+                        {
+                            return false;
+                        }
+
+                        return true;
+                    }),
+            Margin = new(5),
+            Padding = new(5),
+            IsVisible = false
+        };
+
+        BottomPanel.PortsButtonsPanel.Children.Add(customPortButton);
     }
 
     /// <summary>
@@ -172,12 +227,30 @@ public sealed partial class CampaignsControl : UserControl
     /// </summary>
     private void OnCampaignsListSelectionChanged(object? sender, SelectionChangedEventArgs e)
     {
+        var overridesExistingPort = false;
+
         foreach (var control in BottomPanel.PortsButtonsPanel.Children)
         {
             if (control is Button button &&
                 button.Command is IRelayCommand relayCommand)
             {
                 relayCommand.NotifyCanExecuteChanged();
+
+                if (CampaignsList?.SelectedItem is IAddon addon)
+                {
+                    if (addon.Executables is not null &&
+                        button.IsEnabled)
+                    {
+                        overridesExistingPort = true;
+                    }
+                }
+
+                if (!overridesExistingPort &&
+                    button.Content is TextBlock tb &&
+                    tb.Text!.Equals(BuiltInPortStr))
+                {
+                    button.IsVisible = CampaignsList?.SelectedItem is IAddon selectedCampaign && selectedCampaign.Executables is not null;
+                }
             }
         }
 

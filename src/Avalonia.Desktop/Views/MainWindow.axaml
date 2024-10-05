@@ -138,6 +138,16 @@
 
                 </TabItem>
 
+                <TabItem Name="StandaloneTab" IsEnabled="True">
+
+                    <TabItem.Header>
+                        <TextBlock Text="Standalone" Margin="5" />
+                    </TabItem.Header>
+
+                    <pages:StandalonePage x:Name="StandalonePage"/>
+
+                </TabItem>
+
                 <TabItem IsEnabled="False" Header=""/>
 
                 <TabItem Header="Ports" Margin="5">

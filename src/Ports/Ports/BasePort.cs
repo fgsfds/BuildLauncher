@@ -2,7 +2,6 @@
 using Common.Client.Helpers;
 using Common.Enums;
 using Common.Enums.Addons;
-using Common.Enums.Versions;
 using Common.Helpers;
 using Common.Interfaces;
 using CommunityToolkit.Diagnostics;
@@ -406,9 +405,9 @@ public abstract class BasePort
 
         if (bCamp.Type is AddonTypeEnum.TC)
         {
-            if (bCamp.PortExeOverride is not null)
+            if (bCamp.Executables is not null)
             {
-                //nothing to do
+                //don't add game dir it the port is overridden
             }
             else if (bCamp.FileName.Equals("addon.json"))
             {
