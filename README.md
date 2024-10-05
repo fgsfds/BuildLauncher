@@ -29,12 +29,15 @@ Another goal of this project is to create a unification standard for Build Engin
 <td valign="center">
 <img align="right" src="img/img2.png">
 
-- Duke Nukem 3D (including Caribbean, Nuclear Winter, Duke it out in DC, World Tour and  Duke 64)
+- Duke Nukem 3D (including Caribbean, Nuclear Winter, Duke it out in DC, World Tour and Duke 64)
 - Shadow Warrior (including Wanton Destruction and Twin Dragon)
 - Blood (including Cryptic Passage)
 - Redneck Rampage, Route 66 and Rides Again
 - Ion Fury
 - Powerslave
+- NAM
+- World War II GI
+- and standalone Build Engine games
 
 </td>
 </tr>
