@@ -17,6 +17,7 @@ public sealed class BloodCmdArgumentsTests
     private readonly BloodCampaign _bloodCpCamp;
     private readonly BloodCampaign _bloodTc;
     private readonly BloodCampaign _bloodTcFolder;
+    private readonly BloodCampaign _bloodTcExeOverride;
 
     private readonly AutoloadModsProvider _modsProvider;
 
@@ -127,6 +128,31 @@ public sealed class BloodCmdArgumentsTests
             SND = "TC.SND",
             IsFolder = true,
             Executables = null
+        };
+
+        _bloodTcExeOverride = new()
+        {
+            Id = "blood-tc-exe-override",
+            Type = AddonTypeEnum.TC,
+            Title = "Blood TC",
+            GridImage = null,
+            Author = null,
+            Description = null,
+            Version = null,
+            SupportedGame = new(GameEnum.Blood),
+            RequiredFeatures = null,
+            PathToFile = Path.Combine("D:", "Games", "Blood", "blood_tc_folder", "addon.json"),
+            DependentAddons = null,
+            IncompatibleAddons = null,
+            MainDef = null,
+            AdditionalDefs = null,
+            StartMap = null,
+            PreviewImage = null,
+            INI = "TC.INI",
+            RFF = "TC.RFF",
+            SND = "TC.SND",
+            IsFolder = true,
+            Executables = new() { { OSEnum.Windows, "nblood.exe" } }
         };
     }
 
@@ -365,6 +391,23 @@ public sealed class BloodCmdArgumentsTests
 
         var args = nblood.GetStartGameArgs(_bloodGame, _bloodTcFolder, [], true, true, 2);
         var expected = @$" -quick -nosetup -usecwd -j ""D:\Games\Blood"" -h ""a"" -ini ""TC.INI"" -game_dir ""D:\Games\Blood\blood_tc_folder"" -rff ""TC.RFF"" -snd ""TC.SND"" -s 2";
+
+        if (OperatingSystem.IsLinux())
+        {
+            args = args.Replace('\\', Path.DirectorySeparatorChar);
+            expected = expected.Replace('\\', Path.DirectorySeparatorChar);
+        }
+
+        Assert.Equal(expected, args);
+    }
+
+    [Fact]
+    public void NBloodTcExeOverride()
+    {
+        NBlood nblood = new();
+
+        var args = nblood.GetStartGameArgs(_bloodGame, _bloodTcExeOverride, [], true, true, 2);
+        var expected = @$" -quick -nosetup -usecwd -j ""D:\Games\Blood"" -h ""a"" -ini ""TC.INI"" -rff ""TC.RFF"" -snd ""TC.SND"" -s 2";
 
         if (OperatingSystem.IsLinux())
         {
