@@ -31,6 +31,7 @@
     <PackageReference Include="AddSealed" PrivateAssets="all" />
     <PackageReference Include="Avalonia.Desktop" />
     <PackageReference Include="Avalonia.Diagnostics" />
+    <PackageReference Include="Avalonia.Fonts.Inter" />
     <PackageReference Include="CommunityToolkit.Diagnostics" />
     <PackageReference Include="ConfigureAwaitAnalyzer" PrivateAssets="all" />
     <PackageReference Include="Projektanker.Icons.Avalonia.FontAwesome" />
