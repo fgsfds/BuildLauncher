@@ -44,40 +44,6 @@ public sealed partial class PortViewModel : ObservableObject
         {
             if (_port.IsInstalled)
             {
-                //NotBlood Hack
-                if (_port.PortEnum is PortEnum.NotBlood)
-                {
-                    var r1 = DateTime.TryParseExact(
-                        _port.InstalledVersion,
-                        "dd.MM.yyyy",
-                        CultureInfo.InvariantCulture,
-                        DateTimeStyles.None,
-                        out var currentVersion
-                        );
-
-                    var r2 = DateTime.TryParseExact(
-                        _release?.Version,
-                        "dd.MM.yyyy",
-                        CultureInfo.InvariantCulture,
-                        DateTimeStyles.None,
-                        out var newVersion
-                        );
-
-                    if (r1 && r2)
-                    {
-                        if (currentVersion < newVersion)
-                        {
-                            return "Update";
-                        }
-                        else
-                        {
-                            return "Reinstall";
-                        }
-                    }
-
-                    return "Install";
-                }
-
                 if (IsUpdateAvailable)
                 {
                     return "Update";
@@ -120,7 +86,42 @@ public sealed partial class PortViewModel : ObservableObject
     /// <summary>
     /// Is new version of the port available
     /// </summary>
-    public bool IsUpdateAvailable => VersionComparer.Compare(_port.InstalledVersion!, _release?.Version!, "<");
+    public bool IsUpdateAvailable
+    {
+        get
+        {
+            if (_port.PortEnum is PortEnum.NotBlood)
+            {
+                var r1 = DateTime.TryParseExact(
+                    _port.InstalledVersion,
+                    "dd.MM.yyyy",
+                    CultureInfo.InvariantCulture,
+                    DateTimeStyles.None,
+                    out var currentVersion
+                    );
+
+                var r2 = DateTime.TryParseExact(
+                    _release?.Version,
+                    "dd.MM.yyyy",
+                    CultureInfo.InvariantCulture,
+                    DateTimeStyles.None,
+                    out var newVersion
+                    );
+
+                if (r1 && r2)
+                {
+                    if (currentVersion < newVersion)
+                    {
+                        return true;
+                    }
+                }
+
+                return false;
+            }
+
+            return VersionComparer.Compare(_port.InstalledVersion!, _release?.Version!, "<");
+        }
+    }
 
     /// <summary>
     /// Can port be installed
