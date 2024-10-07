@@ -37,7 +37,7 @@
                     Command="{Binding ClearSearchBoxCommand}"
                     ToolTip.Tip="Clear search"
                     Height="{Binding Bounds.Height, ElementName=SearchBox}">
-                <i:Icon Value="fa-xmark" />
+                <i:Icon Value="mdi-close" />
             </Button>
 
         </Grid>
@@ -58,6 +58,7 @@
                 <Style Selector="DataGridCell:selected:current /template/ Rectangle">
                     <Setter Property="Stroke" Value="Transparent"/>
                 </Style>
+
             </DataGrid.Styles>
 
 
@@ -106,7 +107,7 @@
                     Padding="8"
                     Margin="10,0,0,0"
                     Command="{Binding UpdateCommand}">
-                <i:Icon Value="fa-sync" />
+                <i:Icon Value="mdi-refresh" />
             </Button>
 
             <Button Grid.Column="2"
@@ -114,7 +115,7 @@
                     HorizontalAlignment="Right"
                     Padding="8"
                     Margin="10,0,0,0">
-                <i:Icon Value="fa-sync" Animation="Spin" />
+                <i:Icon Value="mdi-refresh" Animation="Spin" />
             </Button>
 
         </Grid>

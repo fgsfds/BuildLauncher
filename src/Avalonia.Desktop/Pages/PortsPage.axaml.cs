@@ -2,7 +2,6 @@ using Avalonia.Controls;
 using Avalonia.Desktop.ViewModels;
 using Common.Client.Helpers;
 using Common.DI;
-using Common.Enums;
 using Microsoft.Extensions.DependencyInjection;
 using System.Diagnostics;
 
@@ -16,13 +15,7 @@ public sealed partial class PortsPage : UserControl
 
         var vmFactory = BindingsManager.Provider.GetRequiredService<ViewModelsFactory>();
 
-        Raze.DataContext = vmFactory.GetPortViewModel(PortEnum.Raze);
-        NBlood.DataContext = vmFactory.GetPortViewModel(PortEnum.NBlood);
-        NotBlood.DataContext = vmFactory.GetPortViewModel(PortEnum.NotBlood);
-        PCExhumed.DataContext = vmFactory.GetPortViewModel(PortEnum.PCExhumed);
-        RedNukem.DataContext = vmFactory.GetPortViewModel(PortEnum.RedNukem);
-        EDuke32.DataContext = vmFactory.GetPortViewModel(PortEnum.EDuke32);
-        BuildGDX.DataContext = vmFactory.GetPortViewModel(PortEnum.BuildGDX);
+        DataContext = vmFactory.GetPortsViewModel();
     }
 
     /// <summary>
@@ -30,7 +23,7 @@ public sealed partial class PortsPage : UserControl
     /// </summary>
     private void OpenPortsFolderCommand(object? sender, Interactivity.RoutedEventArgs e)
     {
-        Process.Start(new ProcessStartInfo
+        _ = Process.Start(new ProcessStartInfo
         {
             FileName = ClientProperties.PortsFolderPath,
             UseShellExecute = true,

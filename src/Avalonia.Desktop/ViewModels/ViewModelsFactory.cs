@@ -1,5 +1,4 @@
-﻿using Common.Client.API;
-using Common.Client.Config;
+﻿using Common.Client.Config;
 using Common.Client.Providers;
 using Common.Enums;
 using Games.Providers;
@@ -22,7 +21,6 @@ public sealed class ViewModelsFactory
     private readonly PlaytimeProvider _playtimeProvider;
     private readonly PortsReleasesProvider _portsReleasesProvider;
     private readonly ToolsReleasesProvider _toolsReleasesProvider;
-    private readonly ApiInterface _apiInterface;
     private readonly RatingProvider _ratingProvider;
     private readonly InstalledAddonsProviderFactory _installedAddonsProviderFactory;
     private readonly DownloadableAddonsProviderFactory _downloadableAddonsProviderFactory;
@@ -37,7 +35,6 @@ public sealed class ViewModelsFactory
         PlaytimeProvider playtimeProvider,
         PortsReleasesProvider portsReleasesProvider,
         ToolsReleasesProvider toolsReleasesProvider,
-        ApiInterface apiInterface,
         RatingProvider ratingProvider,
         InstalledAddonsProviderFactory installedAddonsProviderFactory,
         DownloadableAddonsProviderFactory downloadableAddonsProviderFactory
@@ -52,7 +49,6 @@ public sealed class ViewModelsFactory
         _playtimeProvider = playtimeProvider;
         _portsReleasesProvider = portsReleasesProvider;
         _toolsReleasesProvider = toolsReleasesProvider;
-        _apiInterface = apiInterface;
         _ratingProvider = ratingProvider;
         _installedAddonsProviderFactory = installedAddonsProviderFactory;
         _downloadableAddonsProviderFactory = downloadableAddonsProviderFactory;
@@ -169,5 +165,22 @@ public sealed class ViewModelsFactory
         _ = Task.Run(vm.InitializeAsync);
         return vm;
     }
+
+
+    /// <summary>
+    /// Create <see cref="PortsViewModel"/>
+    /// </summary>
+    public PortsViewModel GetPortsViewModel()
+    {
+        PortsViewModel vm = new(
+            _portsInstallerFactory,
+            _portsReleasesProvider,
+            this
+            );
+
+        _ = Task.Run(vm.Initialize);
+        return vm;
+    }
+
 #pragma warning restore CS0618 // Type or member is obsolete
 }

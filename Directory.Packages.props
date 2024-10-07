@@ -20,6 +20,7 @@
     </PackageVersion>
     <PackageVersion Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.8" />
     <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
+    <PackageVersion Include="Projektanker.Icons.Avalonia.MaterialDesign" Version="9.4.1" />
     <PackageVersion Include="SharpCompress" Version="0.38.0" />
     <PackageVersion Include="coverlet.collector" Version="6.0.2" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.11.1" />
@@ -30,10 +31,8 @@
     <PackageVersion Include="ConfigureAwaitAnalyzer" Version="1.1.0" />
     <PackageVersion Include="Swashbuckle.AspNetCore" Version="6.8.1" />
     <PackageVersion Include="Microsoft.AspNetCore.SpaProxy" Version="8.0.8" />
-    <PackageVersion Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.21.0" />
     <PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.8" />
     <PackageVersion Include="Markdig" Version="0.37.0" />
-    <PackageVersion Include="Projektanker.Icons.Avalonia.FontAwesome" Version="9.4.1" />
     <PackageVersion Include="System.Text.Json" Version="8.0.4" />
   </ItemGroup>
 </Project>

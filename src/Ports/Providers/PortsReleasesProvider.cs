@@ -10,9 +10,8 @@ namespace Ports.Providers;
 public sealed class PortsReleasesProvider
 {
     private readonly ApiInterface _apiInterface;
-
-    private Dictionary<PortEnum, GeneralReleaseEntity>? _releases;
     private readonly SemaphoreSlim _semaphore = new(1);
+    private Dictionary<PortEnum, GeneralReleaseEntity>? _releases;
 
     public PortsReleasesProvider(ApiInterface apiInterface)
     {

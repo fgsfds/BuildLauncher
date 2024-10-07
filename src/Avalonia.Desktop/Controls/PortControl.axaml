@@ -40,6 +40,7 @@
                     Command="{Binding InstallCommand}"
                     Margin="5" HorizontalAlignment="Stretch"
                     HorizontalContentAlignment="Center"
+                    IsEnabled="{Binding CanBeInstalled}"
                     Classes.isUpdate="{Binding IsUpdateAvailable}">
 
                 <Button.Styles>
@@ -58,7 +59,7 @@
                     HorizontalContentAlignment="Center"
                     IsEnabled="{Binding IsInstalled}"
                     ToolTip.Tip="Uninstall">
-                <i:Icon Value="fa-trash" />
+                <i:Icon Value="mdi-delete" />
             </Button>
 
         </Grid>

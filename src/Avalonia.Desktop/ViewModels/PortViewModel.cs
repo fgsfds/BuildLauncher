@@ -17,6 +17,8 @@ public sealed partial class PortViewModel : ObservableObject
     private readonly BasePort _port;
     private GeneralReleaseEntity? _release;
 
+    public event EventHandler PortChangedEvent;
+
 
     [Obsolete($"Don't create directly. Use {nameof(ViewModelsFactory)}.")]
     public PortViewModel(
@@ -121,14 +123,17 @@ public sealed partial class PortViewModel : ObservableObject
     public bool IsUpdateAvailable => VersionComparer.Compare(_port.InstalledVersion!, _release?.Version!, "<");
 
     /// <summary>
+    /// Can port be installed
+    /// </summary>
+    public bool CanBeInstalled => !IsInProgress && _release is not null;
+
+    /// <summary>
     /// Download/install progress
     /// </summary>
     public float ProgressBarValue { get; set; }
 
-
     [ObservableProperty]
-    [NotifyCanExecuteChangedFor(nameof(InstallCommand))]
-    [NotifyCanExecuteChangedFor(nameof(UninstallCommand))]
+    [NotifyPropertyChangedFor(nameof(CanBeInstalled))]
     private bool _isInProgress;
 
     #endregion
@@ -141,19 +146,26 @@ public sealed partial class PortViewModel : ObservableObject
     /// </summary>
     public async Task InitializeAsync()
     {
+        IsInProgress = true;
+
         _release = await _portsReleasesProvider.GetLatestReleaseAsync(_port.PortEnum).ConfigureAwait(true);
 
         OnPropertyChanged(nameof(LatestVersion));
         OnPropertyChanged(nameof(InstallButtonText));
         OnPropertyChanged(nameof(IsUpdateAvailable));
         OnPropertyChanged(nameof(IsInstalled));
+        OnPropertyChanged(nameof(CanBeInstalled));
+
+        IsInProgress = false;
+
+        PortChangedEvent?.Invoke(this, EventArgs.Empty);
     }
 
 
     /// <summary>
     /// Download and install port
     /// </summary>
-    [RelayCommand(CanExecute = nameof(InstallCommandCanExecute))]
+    [RelayCommand]
     private async Task InstallAsync()
     {
         try
@@ -182,15 +194,15 @@ public sealed partial class PortViewModel : ObservableObject
         finally
         {
             IsInProgress = false;
+            PortChangedEvent?.Invoke(this, EventArgs.Empty);
         }
     }
-    public bool InstallCommandCanExecute() => !IsInProgress;
 
 
     /// <summary>
     /// Force check for updates
     /// </summary>
-    [RelayCommand(CanExecute = nameof(CheckUpdateCommandCanExecute))]
+    [RelayCommand(CanExecute = nameof(UninstallCommandCanExecute))]
     private void Uninstall()
     {
         try
@@ -207,9 +219,10 @@ public sealed partial class PortViewModel : ObservableObject
         finally
         {
             IsInProgress = false;
+            PortChangedEvent?.Invoke(this, EventArgs.Empty);
         }
     }
-    public bool CheckUpdateCommandCanExecute() => IsInstalled;
+    public bool UninstallCommandCanExecute => IsInstalled;
 
 
     #endregion

@@ -34,12 +34,12 @@
     <PackageReference Include="Avalonia.Fonts.Inter" />
     <PackageReference Include="CommunityToolkit.Diagnostics" />
     <PackageReference Include="ConfigureAwaitAnalyzer" PrivateAssets="all" />
-    <PackageReference Include="Projektanker.Icons.Avalonia.FontAwesome" />
       <PackageReference Include="Avalonia" />
       <PackageReference Include="Avalonia.Controls.DataGrid" />
       <PackageReference Include="Avalonia.Themes.Fluent" />
       <PackageReference Include="CommunityToolkit.Mvvm" />
       <PackageReference Include="Markdown.Avalonia" />
+      <PackageReference Include="Projektanker.Icons.Avalonia.MaterialDesign" />
       <PackageReference Include="System.Private.Uri" />
   </ItemGroup>
 

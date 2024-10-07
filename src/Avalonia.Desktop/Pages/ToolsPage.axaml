@@ -42,7 +42,7 @@
                 Grid.Row="1"
                 HorizontalAlignment="Right"
                 Click="OpenToolsFolderCommand">
-            <i:Icon Value="fa-folder-open" />
+            <i:Icon Value="mdi-folder-open" />
         </Button>
 
     </Grid>

@@ -1,9 +1,11 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:i="https://github.com/projektanker/icons.avalonia"
              d:DesignWidth="800"
              d:DesignHeight="450"
              xmlns:ctrl="clr-namespace:Avalonia.Desktop.Controls"
+             xmlns:vm="clr-namespace:Avalonia.Desktop.ViewModels"
              x:Class="Avalonia.Desktop.Pages.GamePage">
 
     <Grid RowDefinitions="*">
@@ -21,7 +23,15 @@
                 <ctrl:ModsControl Name="ModsControl"/>
             </TabItem>
 
-            <TabItem Header="Downloads" Margin="5">
+            <TabItem Margin="5">
+
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Downloads"/>
+                        <i:Icon Foreground="Crimson" IsVisible="{Binding ElementName=DownControl, Path=((vm:DownloadsViewModel)DataContext).HasUpdates}" Margin="5,0,0,0" Value="mdi-alert-decagram" />
+                    </StackPanel>
+                </TabItem.Header>
+
                 <ctrl:DownloadsControl Name="DownControl"/>
             </TabItem>
 

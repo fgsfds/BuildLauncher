@@ -1,9 +1,10 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:vm="using:Avalonia.Desktop.ViewModels"
-        x:DataType="vm:MainViewModel"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:i="https://github.com/projektanker/icons.avalonia"
+        xmlns:vm="using:Avalonia.Desktop.ViewModels"
+        x:DataType="vm:MainViewModel"
         mc:Ignorable="d" d:DesignWidth="1300" d:DesignHeight="600"
         x:Class="Avalonia.Desktop.Views.MainWindow"
         xmlns:pages="clr-namespace:Avalonia.Desktop.Pages"
@@ -34,6 +35,7 @@
 
             <TabControl Grid.Row="1" Margin="5" TabStripPlacement="Left">
 
+                <!--Duke 3D-->
                 <TabItem Name="DukeTab" IsEnabled="{Binding IsDukeTabEnabled}">
 
                     <TabItem.Header>
@@ -47,6 +49,7 @@
 
                 </TabItem>
 
+                <!--Blood-->
                 <TabItem Name="BloodTab" IsEnabled="{Binding IsBloodTabEnabled}">
 
                     <TabItem.Header>
@@ -60,6 +63,7 @@
 
                 </TabItem>
 
+                <!--Wang-->
                 <TabItem Name="WangTab" IsEnabled="{Binding IsWangTabEnabled}">
 
                     <TabItem.Header>
@@ -73,6 +77,7 @@
 
                 </TabItem>
 
+                <!--Fury-->
                 <TabItem Name="FuryTab" IsEnabled="{Binding IsFuryTabEnabled}">
 
                     <TabItem.Header>
@@ -86,6 +91,7 @@
 
                 </TabItem>
 
+                <!--RR-->
                 <TabItem Name="RedneckTab" IsEnabled="{Binding IsRedneckTabEnabled}">
 
                     <TabItem.Header>
@@ -99,6 +105,7 @@
 
                 </TabItem>
 
+                <!--PS-->
                 <TabItem Name="SlaveTab" IsEnabled="{Binding IsSlaveTabEnabled}">
 
                     <TabItem.Header>
@@ -112,6 +119,7 @@
 
                 </TabItem>
 
+                <!--NAM-->
                 <TabItem Name="NamTab" IsEnabled="{Binding IsNamTabEnabled}">
 
                     <TabItem.Header>
@@ -125,6 +133,7 @@
 
                 </TabItem>
 
+                <!--WW2-->
                 <TabItem Name="WW2GITab" IsEnabled="{Binding IsWW2GITabEnabled}">
 
                     <TabItem.Header>
@@ -138,6 +147,7 @@
 
                 </TabItem>
 
+                <!--Standalone-->
                 <TabItem Name="StandaloneTab" IsEnabled="True">
 
                     <TabItem.Header>
@@ -150,25 +160,46 @@
 
                 <TabItem IsEnabled="False" Header=""/>
 
-                <TabItem Header="Ports" Margin="5">
+                <!--Ports-->
+                <TabItem Name="PortsTab" Margin="5">
+
+                    <TabItem.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Ports"/>
+                            <i:Icon Foreground="Crimson" IsVisible="{Binding ElementName=PortsPageTab, Path=((vm:PortsViewModel)DataContext).HasUpdates}" Margin="5,0,0,0" Value="mdi-alert-decagram" />
+                        </StackPanel>
+                    </TabItem.Header>
+
                     <pages:PortsPage x:Name="PortsPageTab"/>
                 </TabItem>
 
+                <!--Tools-->
                 <TabItem Header="Tools" IsVisible="{Binding IsDevMode}" Margin="5">
                     <pages:ToolsPage x:Name="ToolsPageTab"/>
                 </TabItem>
 
+                <!--Dev-->
                 <TabItem Name="DevTab" Header="Dev" Margin="5" >
                     <pages:DevPage x:Name="DevPageTab"/>
                 </TabItem>
 
                 <TabItem IsEnabled="False" Header=""/>
 
+                <!--Settings-->
                 <TabItem Name="SettingsTab" Header="Settings" Margin="5" >
                     <pages:SettingsPage x:Name="SettingsPageTab"/>
                 </TabItem>
 
-                <TabItem Name="AboutTab" Header="{Binding ElementName=AboutPageTab, Path=((vm:AboutViewModel)DataContext).AboutTabHeader}" Margin="5" >
+                <!--About-->
+                <TabItem Name="AboutTab" Margin="5" >
+
+                    <TabItem.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="About"/>
+                            <i:Icon Foreground="Crimson" IsVisible="{Binding ElementName=AboutPageTab, Path=((vm:AboutViewModel)DataContext).IsUpdateAvailable}" Margin="5,0,0,0" Value="mdi-alert-decagram" />
+                        </StackPanel>
+                    </TabItem.Header>
+
                     <pages:AboutPage x:Name="AboutPageTab"/>
                 </TabItem>
 

@@ -26,7 +26,7 @@
                 Margin="10,0"
                 Command="{Binding RefreshListCommand}"
                 IsEnabled="{Binding !IsInProgress}">
-            <i:Icon Value="fa-sync" />
+            <i:Icon Value="mdi-refresh" />
         </Button>
 
         <Button Grid.Column="2"
@@ -34,7 +34,7 @@
                 ToolTip.Tip="Open folder..."
                 Padding="8"
                 Command="{Binding OpenFolderCommand}">
-            <i:Icon Value="fa-folder-open" />
+            <i:Icon Value="mdi-folder-open" />
         </Button>
 
     </Grid>

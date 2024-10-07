@@ -25,7 +25,7 @@
                     Command="{Binding ClearSearchBoxCommand}"
                     ToolTip.Tip="Clear search"
                     Height="{Binding Bounds.Height, ElementName=SearchBox}">
-                <i:Icon Value="fa-xmark" />
+                <i:Icon Value="mdi-close" />
             </Button>
 
         </Grid>

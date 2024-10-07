@@ -17,28 +17,14 @@ public sealed partial class DownloadsViewModel : ObservableObject
     public readonly InstalledAddonsProvider _installedAddonsProvider;
     public readonly DownloadableAddonsProvider _downloadableAddonsProvider;
 
+
+    #region Binding Properties
+
     [ObservableProperty]
     private bool _isInProgress;
 
-
-    [Obsolete($"Don't create directly. Use {nameof(ViewModelsFactory)}.")]
-    public DownloadsViewModel(
-        IGame game,
-        InstalledAddonsProviderFactory installedAddonsProviderFactory,
-        DownloadableAddonsProviderFactory downloadableAddonsProviderFactory
-        )
-    {
-        Game = game;
-
-        _installedAddonsProvider = installedAddonsProviderFactory.GetSingleton(game);
-        _downloadableAddonsProvider = downloadableAddonsProviderFactory.GetSingleton(game);
-
-        _installedAddonsProvider.AddonsChangedEvent += OnAddonChanged;
-        _downloadableAddonsProvider.AddonDownloadedEvent += OnAddonChanged;
-    }
-
-
-    #region Binding Properties
+    [ObservableProperty]
+    private bool _hasUpdates;
 
     /// <summary>
     /// List of downloadable addons
@@ -78,12 +64,15 @@ public sealed partial class DownloadsViewModel : ObservableObject
 
             if (string.IsNullOrWhiteSpace(SearchBoxText))
             {
-                return [.. result];
             }
             else
             {
-                return [.. result.Where(x => x.Title.Contains(SearchBoxText, StringComparison.OrdinalIgnoreCase))];
+                result = result.Where(x => x.Title.Contains(SearchBoxText, StringComparison.OrdinalIgnoreCase));
             }
+
+            HasUpdates = result.Any(x => x.HasNewerVersion);
+
+            return [.. result];
         }
     }
 
@@ -95,20 +84,11 @@ public sealed partial class DownloadsViewModel : ObservableObject
     /// <summary>
     /// Currently selected downloadable campaign, map or mod
     /// </summary>
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(SelectedDownloadableDescription))]
+    [NotifyPropertyChangedFor(nameof(DownloadButtonText))]
+    [NotifyCanExecuteChangedFor(nameof(DownloadAddonCommand))]
     private DownloadableAddonEntity? _selectedDownloadable;
-    public DownloadableAddonEntity? SelectedDownloadable
-    {
-        get => _selectedDownloadable;
-        set
-        {
-            _selectedDownloadable = value;
-            OnPropertyChanged(nameof(SelectedDownloadable));
-            OnPropertyChanged(nameof(SelectedDownloadableDescription));
-            OnPropertyChanged(nameof(DownloadButtonText));
-
-            DownloadAddonCommand.NotifyCanExecuteChanged();
-        }
-    }
 
     /// <summary>
     /// Description of the selected addom
@@ -150,21 +130,32 @@ public sealed partial class DownloadsViewModel : ObservableObject
     #endregion
 
 
+    [Obsolete($"Don't create directly. Use {nameof(ViewModelsFactory)}.")]
+    public DownloadsViewModel(
+        IGame game,
+        InstalledAddonsProviderFactory installedAddonsProviderFactory,
+        DownloadableAddonsProviderFactory downloadableAddonsProviderFactory
+        )
+    {
+        Game = game;
+
+        _installedAddonsProvider = installedAddonsProviderFactory.GetSingleton(game);
+        _downloadableAddonsProvider = downloadableAddonsProviderFactory.GetSingleton(game);
+
+        _installedAddonsProvider.AddonsChangedEvent += OnAddonChanged;
+        _downloadableAddonsProvider.AddonDownloadedEvent += OnAddonChanged;
+    }
+
+
     #region Relay Commands
 
     /// <summary>
     /// VM initialization
     /// </summary>
-    public Task InitializeAsync() => UpdateAsync();
-
-    /// <summary>
-    /// Update downloadable addons list
-    /// </summary>
-    private async Task UpdateAsync()
-    {
-        await _downloadableAddonsProvider.CreateCacheAsync(false).ConfigureAwait(true);
-
-        OnPropertyChanged(nameof(DownloadableList));
+    public Task InitializeAsync() 
+    { 
+        Thread.Sleep(2000); 
+        return UpdateAsync(false); 
     }
 
 
@@ -172,11 +163,11 @@ public sealed partial class DownloadsViewModel : ObservableObject
     /// Update downloadables list
     /// </summary>
     [RelayCommand]
-    private async Task Update()
+    private async Task UpdateAsync(bool? createNew)
     {
         IsInProgress = true;
 
-        await _downloadableAddonsProvider.CreateCacheAsync(true).ConfigureAwait(true);
+        await _downloadableAddonsProvider.CreateCacheAsync(createNew ?? true).ConfigureAwait(true);
 
         OnPropertyChanged(nameof(DownloadableList));
 

@@ -1,6 +1,6 @@
 ﻿using Common.Client.Helpers;
 using Projektanker.Icons.Avalonia;
-using Projektanker.Icons.Avalonia.FontAwesome;
+using Projektanker.Icons.Avalonia.MaterialDesign;
 
 namespace Avalonia.Desktop;
 
@@ -25,7 +25,7 @@ public sealed class Program
     private static AppBuilder BuildAvaloniaApp()
     {
         _ = IconProvider.Current
-            .Register<FontAwesomeIconProvider>()
+            .Register<MaterialDesignIconProvider>()
             ;
 
         return AppBuilder.Configure<App>()

@@ -21,7 +21,7 @@ public sealed class DownloadableAddonsProvider : IDownloadableAddonsProvider
     private readonly InstalledAddonsProvider _installedAddonsProvider;
 
     private Dictionary<AddonTypeEnum, Dictionary<AddonVersion, IDownloadableAddon>>? _cache;
-    private readonly SemaphoreSlim _semaphore = new(1);
+    private static readonly SemaphoreSlim _semaphore = new(1);
 
     public event AddonChanged AddonDownloadedEvent;
 
