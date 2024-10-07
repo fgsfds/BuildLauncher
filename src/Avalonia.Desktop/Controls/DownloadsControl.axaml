@@ -87,7 +87,7 @@
 
         <Grid ColumnDefinitions="auto, *, auto"
               Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="1"
-              Margin="0,10">
+              Margin="0,12">
 
             <Button Command="{Binding DownloadAddonCommand}"
                     Grid.Column="0"
