@@ -42,7 +42,7 @@ public static class ImageHelper
             return null;
         }
 
-        using var defStream = (SharpCompress.Compressors.Deflate.DeflateStream)image.OpenEntryStream();
+        using var defStream = image.OpenEntryStream();
         using MemoryStream memStream = new();
 
         defStream.CopyTo(memStream);
