@@ -8,6 +8,7 @@ using Avalonia.Markup.Xaml;
 using Avalonia.Styling;
 using Common.Client.Config;
 using Common.Client.DI;
+using Common.Client.Helpers;
 using Common.DI;
 using Common.Enums;
 using CommunityToolkit.Diagnostics;
@@ -27,6 +28,7 @@ public sealed class App : Application
 
     public override void OnFrameworkInitializationCompleted()
     {
+        RenameConfig();
         LoadBindings();
         SetTheme();
 
@@ -53,6 +55,18 @@ public sealed class App : Application
         }
 
         base.OnFrameworkInitializationCompleted();
+    }
+
+    [Obsolete]
+    private static void RenameConfig()
+    {
+        var oldConfigPath = Path.Combine(ClientProperties.AppExeFolderPath, "config.db");
+        var newConfigPath = Path.Combine(ClientProperties.AppExeFolderPath, "BuildLauncher.db");
+
+        if (File.Exists(oldConfigPath))
+        {
+            File.Move(oldConfigPath, newConfigPath, true);
+        }
     }
 
     private void OnAppExit(object? sender, ControlledApplicationLifetimeExitEventArgs e)
