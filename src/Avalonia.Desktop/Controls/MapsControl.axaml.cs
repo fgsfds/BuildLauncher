@@ -256,6 +256,7 @@ public sealed partial class MapsControl : UserControl
                 new MenuItem()
                 {
                     Header = e.Value,
+                    Margin = new(5),
                     Command = new RelayCommand(() => _viewModel.StartMapCommand.Execute(new Tuple<BasePort, byte?>(GetPort(port), e.Key)
                     ))
                 });
