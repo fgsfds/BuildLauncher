@@ -1,6 +1,7 @@
 using Avalonia.Controls;
 using Avalonia.Desktop.Helpers;
 using Avalonia.Desktop.ViewModels;
+using Avalonia.Input;
 using Avalonia.Media;
 using Common.Client.Config;
 using Common.Enums;
@@ -9,6 +10,7 @@ using Common.Helpers;
 using Common.Interfaces;
 using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.Input;
+using Mods.Providers;
 using Ports.Ports;
 using Ports.Providers;
 using System.Globalization;
@@ -18,6 +20,7 @@ namespace Avalonia.Desktop.Controls;
 public sealed partial class MapsControl : UserControl
 {
     private IEnumerable<BasePort> _supportedPorts;
+    private InstalledAddonsProvider _installedAddonsProvider;
     private MapsViewModel _viewModel;
     private MenuFlyout? _flyout = null;
 
@@ -29,12 +32,16 @@ public sealed partial class MapsControl : UserControl
     /// <summary>
     /// Initialize control
     /// </summary>
-    public void InitializeControl(PortsProvider portsProvider, IConfigProvider configProvider)
+    public void InitializeControl(
+        PortsProvider portsProvider,
+        InstalledAddonsProviderFactory installedAddonsProviderFactory,
+        IConfigProvider configProvider)
     {
         DataContext.ThrowIfNotType<MapsViewModel>(out var viewModel);
 
         _viewModel = viewModel;
         _supportedPorts = portsProvider.GetPortsThatSupportGame(_viewModel.Game.GameEnum);
+        _installedAddonsProvider = installedAddonsProviderFactory.GetSingleton(_viewModel.Game);
 
         MapsList.SelectionChanged += OnMapsListSelectionChanged;
         BottomPanel.DataContext = viewModel;
@@ -338,6 +345,21 @@ public sealed partial class MapsControl : UserControl
         if (IsSkillFlyoutAvailable(port))
         {
             _flyout!.ShowAt(button);
+        }
+    }
+
+    private async void FilesDataGrid_DropAsync(object sender, DragEventArgs e)
+    {
+        var files = e.Data.GetFiles();
+
+        if (files is not null && files.Any())
+        {
+            var filePaths = files.Select(f => f.Path.LocalPath);
+
+            foreach (var file in filePaths)
+            {
+                var isAdded = await _installedAddonsProvider.CopyAddonIntoFolder(file).ConfigureAwait(false);
+            }
         }
     }
 }

@@ -9,7 +9,9 @@ using Mods.Addons;
 using Mods.Serializable;
 using Mods.Serializable.Addon;
 using SharpCompress.Archives;
+using System;
 using System.Text.Json;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Mods.Providers;
 
@@ -38,6 +40,59 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
         _game = game;
         _config = config;
         _cache = [];
+    }
+
+
+    /// <summary>
+    /// Try to parse and copy addon into suitable folder
+    /// </summary>
+    /// <param name="pathToFile">Path to addon file</param>
+    public async Task<bool> CopyAddonIntoFolder(string pathToFile)
+    {
+        if (!pathToFile.EndsWith(".zip", StringComparison.OrdinalIgnoreCase) &&
+            !pathToFile.EndsWith(".map", StringComparison.OrdinalIgnoreCase))
+        {
+            return false;
+        }
+
+        var addon = GetGameAndTypeFromFile(pathToFile);
+
+        if (addon is null)
+        {
+            return false;
+        }
+
+        if (addon.Item1 != _game.GameEnum)
+        {
+            return false;
+        }
+
+        string folderToPutFile;
+
+        if (addon.Item2 is AddonTypeEnum.TC)
+        {
+            folderToPutFile = _game.CampaignsFolderPath;
+        }
+        else if (addon.Item2 is AddonTypeEnum.Map)
+        {
+            folderToPutFile = _game.MapsFolderPath;
+        }
+        else if (addon.Item2 is AddonTypeEnum.Mod)
+        {
+            folderToPutFile = _game.ModsFolderPath;
+        }
+        else
+        {
+            return false;
+        }
+
+        var newPathToFile = Path.Combine(folderToPutFile, Path.GetFileName(pathToFile));
+
+        File.Copy(pathToFile, newPathToFile, true);
+
+        await AddAddonAsync(newPathToFile).ConfigureAwait(false);
+
+        return true;
     }
 
 
@@ -71,7 +126,7 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
                         }
                     }
 
-                    var tcs = await GetAddonsFromFilesAsync(AddonTypeEnum.TC, filesTcs).ConfigureAwait(false);
+                    var tcs = await GetAddonsFromFilesAsync(filesTcs).ConfigureAwait(false);
                     _cache.Add(AddonTypeEnum.TC, tcs);
 
 
@@ -104,13 +159,13 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
 
                     //maps
                     var filesMaps = Directory.GetFiles(_game.MapsFolderPath).Where(static x => x.EndsWith(".zip", StringComparison.OrdinalIgnoreCase) || x.EndsWith(".map", StringComparison.OrdinalIgnoreCase));
-                    var maps = await GetAddonsFromFilesAsync(AddonTypeEnum.Map, filesMaps).ConfigureAwait(false);
+                    var maps = await GetAddonsFromFilesAsync(filesMaps).ConfigureAwait(false);
                     _cache.Add(AddonTypeEnum.Map, maps);
 
 
                     //mods
                     var filesMods = Directory.GetFiles(_game.ModsFolderPath, "*.zip");
-                    var mods = await GetAddonsFromFilesAsync(AddonTypeEnum.Mod, filesMods).ConfigureAwait(false);
+                    var mods = await GetAddonsFromFilesAsync(filesMods).ConfigureAwait(false);
                     _cache.Add(AddonTypeEnum.Mod, mods);
 
                 }).WaitAsync(CancellationToken.None).ConfigureAwait(false);
@@ -131,11 +186,11 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
     }
 
     /// <inheritdoc/>
-    public async Task AddAddonAsync(AddonTypeEnum addonType, string pathToFile)
+    public async Task AddAddonAsync(string pathToFile)
     {
         Guard.IsNotNull(_cache);
 
-        var addon = await GetAddonFromFileAsync(addonType, pathToFile).ConfigureAwait(false);
+        var addon = await GetAddonFromFileAsync(pathToFile).ConfigureAwait(false);
 
         if (addon is null)
         {
@@ -158,6 +213,8 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
         {
             dict.Add(new(addon.Id, addon.Version), addon);
         }
+
+        AddonsChangedEvent?.Invoke(_game, addon.Type);
     }
 
     /// <inheritdoc/>
@@ -280,9 +337,8 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
     /// <summary>
     /// Get addons from list of files
     /// </summary>
-    /// <param name="addonType">Addon type</param>
     /// <param name="files">Paths to addon files</param>
-    private async Task<Dictionary<AddonVersion, IAddon>> GetAddonsFromFilesAsync(AddonTypeEnum addonType, IEnumerable<string> files)
+    private async Task<Dictionary<AddonVersion, IAddon>> GetAddonsFromFilesAsync(IEnumerable<string> files)
     {
         Dictionary<AddonVersion, IAddon> addedAddons = [];
 
@@ -290,7 +346,7 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
         {
             try
             {
-                var newAddon = await GetAddonFromFileAsync(addonType, file).ConfigureAwait(false);
+                var newAddon = await GetAddonFromFileAsync(file).ConfigureAwait(false);
 
                 if (newAddon is null)
                 {
@@ -329,11 +385,49 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
     }
 
     /// <summary>
+    /// Get game enum and addon type enum from a file
+    /// </summary>
+    /// <param name="pathToFile">Path to file</param>
+    private Tuple<GameEnum, AddonTypeEnum>? GetGameAndTypeFromFile(string pathToFile)
+    {
+        if (ArchiveFactory.IsArchive(pathToFile, out _))
+        {
+            using var archive = ArchiveFactory.Open(pathToFile);
+            var manifestFile = archive.Entries.FirstOrDefault(static x => x.Key!.Equals("addon.json", StringComparison.OrdinalIgnoreCase));
+
+            if (manifestFile is null)
+            {
+                return null;
+            }
+
+            var manifest = JsonSerializer.Deserialize(
+                manifestFile.OpenEntryStream(),
+                AddonManifestContext.Default.AddonDto
+                )!;
+
+            if (manifest is null)
+            {
+                return null;
+            }
+
+            var supportedGame = manifest.SupportedGame.Game;
+            var type = manifest.AddonType;
+
+            return new(supportedGame, type);
+        }
+        else if (pathToFile.EndsWith(".map", StringComparison.OrdinalIgnoreCase))
+        {
+            return new(_game.GameEnum, AddonTypeEnum.Map);
+        }
+
+        return null;
+    }
+
+    /// <summary>
     /// Get addon from a file
     /// </summary>
-    /// <param name="addonType">Addon type</param>
     /// <param name="pathToFile">Path to addon file</param>
-    private async Task<BaseAddon?> GetAddonFromFileAsync(AddonTypeEnum addonType, string pathToFile)
+    private async Task<BaseAddon?> GetAddonFromFileAsync(string pathToFile)
     {
         var supportedGame = _game.GameEnum;
 
@@ -578,7 +672,7 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
         }
 
 
-        if (addonType is AddonTypeEnum.Mod)
+        if (type is AddonTypeEnum.Mod)
         {
             var isEnabled = !_config.DisabledAutoloadMods.Contains(id);
 

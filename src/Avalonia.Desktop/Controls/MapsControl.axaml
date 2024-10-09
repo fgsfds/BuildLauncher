@@ -37,7 +37,9 @@
                  Padding="2"
                  ItemsSource="{Binding MapsList}"
                  SelectedItem="{Binding SelectedAddon}"
-                 PointerPressed="OnListBoxEmptySpaceClicked">
+                 PointerPressed="OnListBoxEmptySpaceClicked"
+                 DragDrop.AllowDrop="True"
+                 DragDrop.Drop="FilesDataGrid_DropAsync">
 
             <ListBox.ItemsPanel>
                 <ItemsPanelTemplate>

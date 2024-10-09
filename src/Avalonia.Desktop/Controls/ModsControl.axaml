@@ -15,7 +15,9 @@
                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                  Padding="2"
                  ItemsSource="{Binding ModsList}"
-                 SelectedItem="{Binding SelectedAddon}">
+                 SelectedItem="{Binding SelectedAddon}"
+                 DragDrop.AllowDrop="True"
+                 DragDrop.Drop="FilesDataGrid_DropAsync">
 
             <ListBox.ItemsPanel>
                 <ItemsPanelTemplate>

@@ -10,9 +10,8 @@ public interface IInstalledAddonsProvider
     /// <summary>
     /// Add addon to cache
     /// </summary>
-    /// <param name="addonType">Addon type</param>
     /// <param name="pathToFile">Path to addon file</param>
-    Task AddAddonAsync(AddonTypeEnum addonType, string pathToFile);
+    Task AddAddonAsync(string pathToFile);
 
     /// <summary>
     /// Delete addon from cache and disk

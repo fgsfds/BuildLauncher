@@ -171,7 +171,7 @@ public sealed class DownloadableAddonsProvider : IDownloadableAddonsProvider
 
         await _archiveTools.DownloadFileAsync(url, pathToFile).ConfigureAwait(false);
 
-        await _installedAddonsProvider.AddAddonAsync(addon.AddonType, pathToFile).ConfigureAwait(false);
+        await _installedAddonsProvider.AddAddonAsync(pathToFile).ConfigureAwait(false);
 
         if (!ClientProperties.IsDevMode)
         {

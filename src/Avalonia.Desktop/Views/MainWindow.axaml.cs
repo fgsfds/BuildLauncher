@@ -5,6 +5,7 @@ using Avalonia.Media.Imaging;
 using Common.Client.Config;
 using Common.Enums;
 using Games.Providers;
+using Mods.Providers;
 using Ports.Providers;
 
 namespace Avalonia.Desktop.Views;
@@ -14,6 +15,7 @@ public sealed partial class MainWindow : Window
     private readonly ViewModelsFactory _vmFactory;
     private readonly PortsProvider _portsProvider;
     private readonly GamesProvider _gamesProvider;
+    private readonly InstalledAddonsProviderFactory _installedAddonsProviderFactory;
     private readonly IConfigProvider _configProvider;
 
 
@@ -26,13 +28,15 @@ public sealed partial class MainWindow : Window
         MainViewModel vm, 
         GamesProvider gamesProvider, 
         ViewModelsFactory vmFactory, 
+        InstalledAddonsProviderFactory installedAddonsProviderFactory, 
         PortsProvider portsProvider,
         IConfigProvider configProvider
         )
     {
-        _vmFactory = vmFactory;
         _portsProvider = portsProvider;
         _gamesProvider = gamesProvider;
+        _installedAddonsProviderFactory = installedAddonsProviderFactory;
+        _vmFactory = vmFactory;
         _configProvider = configProvider;
 
         DataContext = vm;
@@ -96,47 +100,47 @@ public sealed partial class MainWindow : Window
     {
         if (_gamesProvider.IsDukeInstalled && !DukePage.IsAlreadInitialized)
         {
-            DukePage.InitializeControl(GameEnum.Duke3D, _portsProvider, _vmFactory, _configProvider);
+            DukePage.InitializeControl(GameEnum.Duke3D, _portsProvider, _vmFactory, _installedAddonsProviderFactory, _configProvider);
         }
 
         if (_gamesProvider.IsBloodInstalled && !BloodPage.IsAlreadInitialized)
         {
-            BloodPage.InitializeControl(GameEnum.Blood, _portsProvider, _vmFactory, _configProvider);
+            BloodPage.InitializeControl(GameEnum.Blood, _portsProvider, _vmFactory, _installedAddonsProviderFactory, _configProvider);
         }
 
         if (_gamesProvider.IsWangInstalled && !WangPage.IsAlreadInitialized)
         {
-            WangPage.InitializeControl(GameEnum.ShadowWarrior, _portsProvider, _vmFactory, _configProvider);
+            WangPage.InitializeControl(GameEnum.ShadowWarrior, _portsProvider, _vmFactory, _installedAddonsProviderFactory, _configProvider);
         }
 
         if (_gamesProvider.IsFuryInstalled && !FuryPage.IsAlreadInitialized)
         {
-            FuryPage.InitializeControl(GameEnum.Fury, _portsProvider, _vmFactory, _configProvider);
+            FuryPage.InitializeControl(GameEnum.Fury, _portsProvider, _vmFactory, _installedAddonsProviderFactory, _configProvider);
         }
 
         if (_gamesProvider.IsRedneckInstalled && !RedneckPage.IsAlreadInitialized)
         {
-            RedneckPage.InitializeControl(GameEnum.Redneck, _portsProvider, _vmFactory, _configProvider);
+            RedneckPage.InitializeControl(GameEnum.Redneck, _portsProvider, _vmFactory, _installedAddonsProviderFactory, _configProvider);
         }
 
         if (_gamesProvider.IsSlaveInstalled && !SlavePage.IsAlreadInitialized)
         {
-            SlavePage.InitializeControl(GameEnum.Exhumed, _portsProvider, _vmFactory, _configProvider);
+            SlavePage.InitializeControl(GameEnum.Exhumed, _portsProvider, _vmFactory, _installedAddonsProviderFactory, _configProvider);
         }
 
         if (_gamesProvider.IsNamInstalled && !NamPage.IsAlreadInitialized)
         {
-            NamPage.InitializeControl(GameEnum.NAM, _portsProvider, _vmFactory, _configProvider);
+            NamPage.InitializeControl(GameEnum.NAM, _portsProvider, _vmFactory, _installedAddonsProviderFactory, _configProvider);
         }
 
         if (_gamesProvider.IsWW2GIInstalled && !WW2GIPage.IsAlreadInitialized)
         {
-            WW2GIPage.InitializeControl(GameEnum.WW2GI, _portsProvider, _vmFactory, _configProvider);
+            WW2GIPage.InitializeControl(GameEnum.WW2GI, _portsProvider, _vmFactory, _installedAddonsProviderFactory, _configProvider);
         }
 
         if (!StandalonePage.IsAlreadInitialized)
         {
-            StandalonePage.InitializeControl(GameEnum.Standalone, _portsProvider, _vmFactory, _configProvider);
+            StandalonePage.InitializeControl(GameEnum.Standalone, _portsProvider, _installedAddonsProviderFactory, _vmFactory, _configProvider);
         }
     }
 }

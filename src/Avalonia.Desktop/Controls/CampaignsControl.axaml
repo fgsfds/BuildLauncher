@@ -41,7 +41,9 @@
                  Padding="2"
                  ItemsSource="{Binding CampaignsList}"
                  SelectedItem="{Binding SelectedAddon}"
-                 PointerPressed="ListBoxEmptySpaceClicked">
+                 PointerPressed="ListBoxEmptySpaceClicked"
+                 DragDrop.AllowDrop="True"
+                 DragDrop.Drop="FilesDataGrid_DropAsync">
 
             <ListBox.ItemsPanel>
                 <ItemsPanelTemplate>

@@ -13,6 +13,7 @@ using Common.Enums;
 using CommunityToolkit.Diagnostics;
 using Games.Providers;
 using Microsoft.Extensions.DependencyInjection;
+using Mods.Providers;
 using Ports.Providers;
 
 namespace Avalonia.Desktop;
@@ -39,9 +40,10 @@ public sealed class App : Application
             var gamesProvider = BindingsManager.Provider.GetRequiredService<GamesProvider>();
             var vmFactory = BindingsManager.Provider.GetRequiredService<ViewModelsFactory>();
             var portsProvider = BindingsManager.Provider.GetRequiredService<PortsProvider>();
+            var installedAddonsProviderFactory = BindingsManager.Provider.GetRequiredService<InstalledAddonsProviderFactory>();
             var configProvider = BindingsManager.Provider.GetRequiredService<IConfigProvider>();
 
-            desktop.MainWindow = new MainWindow(vm, gamesProvider, vmFactory, portsProvider, configProvider);
+            desktop.MainWindow = new MainWindow(vm, gamesProvider, vmFactory, installedAddonsProviderFactory, portsProvider, configProvider);
 
             desktop.Exit += OnAppExit;
         }

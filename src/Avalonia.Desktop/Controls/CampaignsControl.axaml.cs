@@ -1,12 +1,14 @@
 using Avalonia.Controls;
 using Avalonia.Desktop.Helpers;
 using Avalonia.Desktop.ViewModels;
+using Avalonia.Input;
 using Avalonia.Media;
 using Common.Client.Config;
 using Common.Enums;
 using Common.Helpers;
 using Common.Interfaces;
 using CommunityToolkit.Mvvm.Input;
+using Mods.Providers;
 using Ports.Ports;
 using Ports.Providers;
 using System.Globalization;
@@ -19,6 +21,7 @@ public sealed partial class CampaignsControl : UserControl
 
     private IEnumerable<BasePort> _supportedPorts;
     private CampaignsViewModel _viewModel;
+    private InstalledAddonsProvider _installedAddonsProvider;
 
     public CampaignsControl()
     {
@@ -28,12 +31,17 @@ public sealed partial class CampaignsControl : UserControl
     /// <summary>
     /// Initialize control
     /// </summary>
-    public void InitializeControl(PortsProvider portsProvider, IConfigProvider configProvider)
+    public void InitializeControl(
+        PortsProvider portsProvider, 
+        InstalledAddonsProviderFactory installedAddonsProviderFactory,
+        IConfigProvider configProvider
+        )
     {
         DataContext.ThrowIfNotType<CampaignsViewModel>(out var viewModel);
 
         _viewModel = viewModel;
         _supportedPorts = portsProvider.GetPortsThatSupportGame(_viewModel.Game.GameEnum);
+        _installedAddonsProvider = installedAddonsProviderFactory.GetSingleton(_viewModel.Game);
 
         CampaignsList.SelectionChanged += OnCampaignsListSelectionChanged;
         BottomPanel.DataContext = viewModel;
@@ -266,5 +274,20 @@ public sealed partial class CampaignsControl : UserControl
         CampaignsList.Focusable = true;
         _ = CampaignsList.Focus();
         CampaignsList.Focusable = false;
+    }
+
+    private async void FilesDataGrid_DropAsync(object sender, DragEventArgs e)
+    {
+        var files = e.Data.GetFiles();
+
+        if (files is not null && files.Any())
+        {
+            var filePaths = files.Select(f => f.Path.LocalPath);
+
+            foreach (var file in filePaths)
+            {
+                var isAdded = await _installedAddonsProvider.CopyAddonIntoFolder(file).ConfigureAwait(false);
+            }
+        }
     }
 }
