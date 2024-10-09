@@ -2,6 +2,7 @@
 using Common.Client.Providers;
 using Common.Enums;
 using Games.Providers;
+using Microsoft.Extensions.Logging;
 using Mods.Providers;
 using Ports.Installer;
 using Ports.Providers;
@@ -24,6 +25,7 @@ public sealed class ViewModelsFactory
     private readonly RatingProvider _ratingProvider;
     private readonly InstalledAddonsProviderFactory _installedAddonsProviderFactory;
     private readonly DownloadableAddonsProviderFactory _downloadableAddonsProviderFactory;
+    private readonly ILogger _logger;
 
     public ViewModelsFactory(
         GamesProvider gamesProvider,
@@ -37,7 +39,8 @@ public sealed class ViewModelsFactory
         ToolsReleasesProvider toolsReleasesProvider,
         RatingProvider ratingProvider,
         InstalledAddonsProviderFactory installedAddonsProviderFactory,
-        DownloadableAddonsProviderFactory downloadableAddonsProviderFactory
+        DownloadableAddonsProviderFactory downloadableAddonsProviderFactory,
+        ILogger logger
         )
     {
         _gamesProvider = gamesProvider;
@@ -52,6 +55,7 @@ public sealed class ViewModelsFactory
         _ratingProvider = ratingProvider;
         _installedAddonsProviderFactory = installedAddonsProviderFactory;
         _downloadableAddonsProviderFactory = downloadableAddonsProviderFactory;
+        _logger = logger;
     }
 
 #pragma warning disable CS0618 // Type or member is obsolete
@@ -68,7 +72,8 @@ public sealed class ViewModelsFactory
             _playtimeProvider,
             _ratingProvider,
             _installedAddonsProviderFactory,
-            _downloadableAddonsProviderFactory
+            _downloadableAddonsProviderFactory,
+            _logger
             );
 
         _ = Task.Run(vm.InitializeAsync);
@@ -89,7 +94,8 @@ public sealed class ViewModelsFactory
             _playtimeProvider,
             _ratingProvider,
             _installedAddonsProviderFactory,
-            _downloadableAddonsProviderFactory
+            _downloadableAddonsProviderFactory,
+            _logger
             );
 
         _ = Task.Run(vm.InitializeAsync);

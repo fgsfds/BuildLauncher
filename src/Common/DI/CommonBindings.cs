@@ -1,6 +1,8 @@
-﻿using Common.Providers;
+﻿using Common.Helpers;
+using Common.Providers;
 using Common.Tools;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 namespace Common.DI;
 
@@ -8,13 +10,13 @@ public static class CommonBindings
 {
     public static void Load(ServiceCollection container)
     {
-        container.AddSingleton<HttpClient>(CreateHttpClient);
-        container.AddSingleton<RepositoriesProvider>();
+        _ = container.AddSingleton<HttpClient>(CreateHttpClient);
+        _ = container.AddSingleton<RepositoriesProvider>();
 
-        container.AddTransient<ArchiveTools>();
+        _ = container.AddTransient<ArchiveTools>();
     }
 
-    private static HttpClient CreateHttpClient(IServiceProvider provider)
+    private static HttpClient CreateHttpClient(IServiceProvider service)
     {
         var httpClient = new HttpClient();
         httpClient.DefaultRequestHeaders.Add("User-Agent", "BuildLauncher");

@@ -7,6 +7,7 @@ using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Games.Providers;
+using Microsoft.Extensions.Logging;
 using Mods.Providers;
 using Ports.Ports;
 using System.Collections.Immutable;
@@ -23,6 +24,7 @@ public sealed partial class MapsViewModel : RightPanelViewModel, IPortsButtonCon
     private readonly PlaytimeProvider _playtimeProvider;
     private readonly InstalledAddonsProvider _installedAddonsProvider;
     private readonly DownloadableAddonsProvider _downloadableAddonsProvider;
+    private readonly ILogger _logger;
 
 
     /// <summary>
@@ -109,7 +111,8 @@ public sealed partial class MapsViewModel : RightPanelViewModel, IPortsButtonCon
         PlaytimeProvider playtimeProvider,
         RatingProvider ratingProvider,
         InstalledAddonsProviderFactory installedAddonsProviderFactory,
-        DownloadableAddonsProviderFactory _downloadableAddonsProviderFactory
+        DownloadableAddonsProviderFactory _downloadableAddonsProviderFactory,
+        ILogger logger
         ) : base(playtimeProvider, ratingProvider)
     {
         Game = game;
@@ -119,6 +122,7 @@ public sealed partial class MapsViewModel : RightPanelViewModel, IPortsButtonCon
         _playtimeProvider = playtimeProvider;
         _installedAddonsProvider = installedAddonsProviderFactory.GetSingleton(game);
         _downloadableAddonsProvider = _downloadableAddonsProviderFactory.GetSingleton(game);
+        _logger = logger;
 
         _gamesProvider.GameChangedEvent += OnGameChanged;
         _installedAddonsProvider.AddonsChangedEvent += OnAddonChanged;
@@ -141,6 +145,10 @@ public sealed partial class MapsViewModel : RightPanelViewModel, IPortsButtonCon
         var mods = _installedAddonsProvider.GetInstalledMods();
 
         var args = parameter.Item1.GetStartGameArgs(Game, SelectedAddon, mods, _config.SkipIntro, _config.SkipStartup, parameter.Item2);
+
+        _logger.LogInformation($"=== Starting map {SelectedAddon.Id} for {Game.FullName} ===");
+        _logger.LogInformation($"Path to port exe {parameter.Item1.PortExeFilePath}");
+        _logger.LogInformation($"Startup args: {args}");
 
         await StartPortAsync(SelectedAddon.Id, parameter.Item1.PortExeFilePath, args).ConfigureAwait(true);
     }
