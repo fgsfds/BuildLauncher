@@ -148,7 +148,8 @@ public sealed class ViewModelsFactory
         PortViewModel vm = new(
             _portsInstallerFactory,
             _portsReleasesProvider,
-            _portsProvider.GetPort(portEnum)
+            _portsProvider.GetPort(portEnum),
+            _logger
             );
 
         _ = Task.Run(vm.InitializeAsync);

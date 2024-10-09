@@ -1,7 +1,9 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
+using Avalonia.Controls.Notifications;
 using Avalonia.Data.Core.Plugins;
 using Avalonia.Desktop.DI;
+using Avalonia.Desktop.Helpers;
 using Avalonia.Desktop.ViewModels;
 using Avalonia.Desktop.Views;
 using Avalonia.Markup.Xaml;
@@ -22,6 +24,9 @@ namespace Avalonia.Desktop;
 
 public sealed class App : Application
 {
+    public static WindowNotificationManager NotificationManager { get; private set; }
+    public static Random Random { get; private set; }
+
     private static ILogger? _logger = null;
 
     public override void Initialize()
@@ -61,6 +66,15 @@ public sealed class App : Application
             {
                 ThrowHelper.ThrowNotSupportedException();
             }
+
+            NotificationManager = new(AvaloniaProperties.TopLevel)
+            {
+                MaxItems = 3,
+                Position = NotificationPosition.TopRight,
+                Margin = new(0, 50, 10, 0)
+            };
+
+            Random = new();
 
             base.OnFrameworkInitializationCompleted();
         }

@@ -362,7 +362,7 @@ public sealed partial class DevViewModel : ObservableObject
     [RelayCommand]
     private async Task SelectAddonFolder()
     {
-        var folders = await Properties.TopLevel.StorageProvider.OpenFolderPickerAsync(
+        var folders = await AvaloniaProperties.TopLevel.StorageProvider.OpenFolderPickerAsync(
             new FolderPickerOpenOptions
             {
                 Title = "Choose addon folder",
@@ -383,7 +383,7 @@ public sealed partial class DevViewModel : ObservableObject
             Patterns = ["*.zip"]
         };
 
-        var files = await Properties.TopLevel.StorageProvider.OpenFilePickerAsync(
+        var files = await AvaloniaProperties.TopLevel.StorageProvider.OpenFilePickerAsync(
             new FilePickerOpenOptions
             {
                 Title = "Choose addon file",
@@ -416,7 +416,7 @@ public sealed partial class DevViewModel : ObservableObject
             Patterns = ["addon.json"]
         };
 
-        var files = await Properties.TopLevel.StorageProvider.OpenFilePickerAsync(
+        var files = await AvaloniaProperties.TopLevel.StorageProvider.OpenFilePickerAsync(
             new FilePickerOpenOptions
             {
                 Title = "Choose addon.json",
@@ -561,7 +561,7 @@ public sealed partial class DevViewModel : ObservableObject
     [RelayCommand]
     private async Task SelectFileForCrcAsync()
     {
-        var files = await Properties.TopLevel.StorageProvider.OpenFilePickerAsync(
+        var files = await AvaloniaProperties.TopLevel.StorageProvider.OpenFilePickerAsync(
             new FilePickerOpenOptions
             {
                 Title = "Choose file",
@@ -857,7 +857,7 @@ public sealed partial class DevViewModel : ObservableObject
             Patterns = ["*.zip"]
         };
 
-        var files = await Properties.TopLevel.StorageProvider.OpenFilePickerAsync(
+        var files = await AvaloniaProperties.TopLevel.StorageProvider.OpenFilePickerAsync(
             new FilePickerOpenOptions
             {
                 Title = "Choose addon file",

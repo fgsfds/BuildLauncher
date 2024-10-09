@@ -168,7 +168,7 @@ internal sealed partial class SettingsViewModel : ObservableObject
     [RelayCommand]
     private async Task OpenFolderPickerAsync(string param)
     {
-        var files = await Properties.TopLevel.StorageProvider.OpenFolderPickerAsync(
+        var files = await AvaloniaProperties.TopLevel.StorageProvider.OpenFolderPickerAsync(
             new FolderPickerOpenOptions
             {
                 Title = "Choose game folder",
@@ -373,7 +373,7 @@ internal sealed partial class SettingsViewModel : ObservableObject
             Patterns = [ "*.z64", "*.n64" ]
         };
 
-        var files = await Properties.TopLevel.StorageProvider.OpenFilePickerAsync(
+        var files = await AvaloniaProperties.TopLevel.StorageProvider.OpenFilePickerAsync(
             new FilePickerOpenOptions
             {
                 Title = "Choose game folder",

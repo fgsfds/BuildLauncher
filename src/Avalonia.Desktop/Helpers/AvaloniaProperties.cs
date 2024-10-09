@@ -4,7 +4,7 @@ using CommunityToolkit.Diagnostics;
 
 namespace Avalonia.Desktop.Helpers;
 
-public static class Properties
+public static class AvaloniaProperties
 {
     public static Window MainWindow => (Application.Current?.ApplicationLifetime as IClassicDesktopStyleApplicationLifetime)?.MainWindow
         ?? ThrowHelper.ThrowArgumentNullException<Window>(nameof(MainWindow));

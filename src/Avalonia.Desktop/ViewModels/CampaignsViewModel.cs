@@ -1,3 +1,4 @@
+using Avalonia.Controls.Notifications;
 using Common.Client.Config;
 using Common.Client.Providers;
 using Common.Enums;
@@ -167,6 +168,14 @@ public sealed partial class CampaignsViewModel : RightPanelViewModel, IPortsButt
         }
         catch (Exception ex)
         {
+            var length = App.Random.Next(1, 100);
+            var repeatedString = new string('\u200B', length);
+
+            App.NotificationManager.Show(
+                "Critical error! Exception is written to the log.",
+                NotificationType.Error
+                );
+
             _logger.LogCritical(ex, "=== Critical error ===");
         }
     }

@@ -3,6 +3,7 @@ using Common.Enums;
 using Common.Helpers;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Microsoft.Extensions.Logging;
 using Ports.Installer;
 using Ports.Ports;
 using Ports.Providers;
@@ -16,6 +17,7 @@ public sealed partial class PortViewModel : ObservableObject
     private readonly PortsReleasesProvider _portsReleasesProvider;
     private readonly BasePort _port;
     private GeneralReleaseEntity? _release;
+    private ILogger _logger;
 
     public event EventHandler PortChangedEvent;
 
@@ -24,7 +26,8 @@ public sealed partial class PortViewModel : ObservableObject
     public PortViewModel(
         PortsInstallerFactory installerFactory,
         PortsReleasesProvider portsReleasesProvider,
-        BasePort port
+        BasePort port,
+        ILogger logger
         )
     {
         _installerFactory = installerFactory;
