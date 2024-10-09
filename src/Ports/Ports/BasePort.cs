@@ -275,7 +275,8 @@ public abstract class BasePort
             return false;
         }
 
-        if (autoloadMod.SupportedGame.GameEnum != campaign.SupportedGame.GameEnum)
+        if (autoloadMod.SupportedGame.GameEnum != campaign.SupportedGame.GameEnum &&
+            !(autoloadMod.SupportedGame.GameEnum is GameEnum.Redneck && campaign.SupportedGame.GameEnum is GameEnum.RidesAgain))
         {
             //skipping mod for different game
             return false;

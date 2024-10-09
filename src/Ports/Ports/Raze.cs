@@ -430,7 +430,7 @@ public sealed class Raze : BasePort
             return;
         }
 
-        if (rCamp.Id.Equals(nameof(GameEnum.RidesAgain), StringComparison.OrdinalIgnoreCase))
+        if (rCamp.SupportedGame.GameEnum is GameEnum.RidesAgain)
         {
             var pathToConfig = Path.Combine(PortInstallFolderPath, ConfigFile);
             AddGamePathsToConfig(game, addon, game.AgainInstallPath!, pathToConfig);

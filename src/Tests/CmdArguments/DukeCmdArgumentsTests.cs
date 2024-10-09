@@ -321,7 +321,7 @@ public sealed class DukeCmdArgumentsTests
     }
 
     [Fact]
-    public void Eduke32WtTest()
+    public void EDuke32WtTest()
     {
         EDuke32 eduke32 = new();
 
@@ -338,7 +338,7 @@ public sealed class DukeCmdArgumentsTests
     }
 
     [Fact]
-    public void Eduke32VacaTest()
+    public void EDuke32VacaTest()
     {
         var mods = new List<AutoloadMod>() {
             _modsProvider.EnabledModWithCons,
@@ -361,7 +361,7 @@ public sealed class DukeCmdArgumentsTests
     }
 
     [Fact]
-    public void EdukeTCTest()
+    public void EDuke32TCTest()
     {
         EDuke32 eduke32 = new();
 
@@ -416,6 +416,46 @@ public sealed class DukeCmdArgumentsTests
 
         var args = redNukem.GetStartGameArgs(_dukeGame, _dukeCamp, mods, true, true);
         var expected = @$" -quick -nosetup -g ""enabled_mod.zip"" -mh ""ENABLED1.DEF"" -mh ""ENABLED2.DEF"" -mx ""ENABLED1.CON"" -mx ""ENABLED2.CON"" -g ""mod_incompatible_with_addon.zip"" -g ""incompatible_mod_with_compatible_version.zip"" -g ""dependant_mod.zip"" -g ""dependant_mod_with_compatible_version.zip"" -j ""{Directory.GetCurrentDirectory()}\Data\Addons\Duke3D\Mods"" -usecwd -h ""a"" -j ""D:\Games\Duke3D""";
+
+        if (OperatingSystem.IsLinux())
+        {
+            args = args.Replace('\\', Path.DirectorySeparatorChar);
+            expected = expected.Replace('\\', Path.DirectorySeparatorChar);
+        }
+
+        Assert.Equal(expected, args);
+    }
+
+    [Fact]
+    public void RedNukemVacaTest()
+    {
+        var mods = new List<AutoloadMod>() {
+            _modsProvider.EnabledModWithCons,
+            _modsProvider.ModThatRequiresOfficialAddon,
+            _modsProvider.ModThatIncompatibleWithAddon
+        }.ToDictionary(x => new AddonVersion(x.Id, x.Version), x => (IAddon)x);
+
+        RedNukem eduke32 = new();
+
+        var args = eduke32.GetStartGameArgs(_dukeGame, _dukeVaca, mods, true, true);
+        var expected = @$" -quick -nosetup -g ""enabled_mod.zip"" -mh ""ENABLED1.DEF"" -mh ""ENABLED2.DEF"" -mx ""ENABLED1.CON"" -mx ""ENABLED2.CON"" -g ""mod_requires_addon.zip"" -j ""{Directory.GetCurrentDirectory()}\Data\Addons\Duke3D\Mods"" -usecwd -h ""a"" -j ""D:\Games\Duke3D"" -j ""D:\Games\Duke3D\Vaca"" -g VACATION.GRP";
+
+        if (OperatingSystem.IsLinux())
+        {
+            args = args.Replace('\\', Path.DirectorySeparatorChar);
+            expected = expected.Replace('\\', Path.DirectorySeparatorChar);
+        }
+
+        Assert.Equal(expected, args);
+    }
+
+    [Fact]
+    public void RedNukemTCTest()
+    {
+        RedNukem eduke32 = new();
+
+        var args = eduke32.GetStartGameArgs(_dukeGame, _dukeTcForVaca, [], true, true);
+        var expected = @$" -quick -nosetup -usecwd -h ""TC.DEF"" -mh ""TC1.DEF"" -mh ""TC2.DEF"" -j ""D:\Games\Duke3D"" -j ""D:\Games\Duke3D\Vaca"" -g VACATION.GRP -x ""TC.CON"" -mx ""TC1.CON"" -mx ""TC2.CON"" -g ""{Path.Combine(Directory.GetCurrentDirectory(), "Data", "Duke3D", "Campaigns", "duke_tc.zip")}""";
 
         if (OperatingSystem.IsLinux())
         {

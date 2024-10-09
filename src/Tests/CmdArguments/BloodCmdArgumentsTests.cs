@@ -417,4 +417,119 @@ public sealed class BloodCmdArgumentsTests
 
         Assert.Equal(expected, args);
     }
+
+    [Fact]
+    public void NotBloodTest()
+    {
+        var mods = new List<AutoloadMod>() {
+            _modsProvider.EnabledMod,
+            _modsProvider.DisabledMod,
+            _modsProvider.ModThatRequiresOfficialAddon,
+            _modsProvider.ModThatIncompatibleWithAddon,
+            _modsProvider.IncompatibleMod,
+            _modsProvider.IncompatibleModWithIncompatibleVersion,
+            _modsProvider.IncompatibleModWithCompatibleVersion,
+            _modsProvider.DependantMod,
+            _modsProvider.DependantModWithCompatibleVersion,
+            _modsProvider.DependantModWithIncompatibleVersion,
+            _modsProvider.ModForAnotherGame,
+            _modsProvider.ModThatRequiredFeature
+        }.ToDictionary(x => new AddonVersion(x.Id, x.Version), x => (IAddon)x);
+
+        NotBlood notblood = new();
+
+        var args = notblood.GetStartGameArgs(_bloodGame, _bloodCamp, mods, true, true, 2);
+        var expected = @$" -quick -nosetup -g ""enabled_mod.zip"" -mh ""ENABLED1.DEF"" -mh ""ENABLED2.DEF"" -g ""mod_incompatible_with_addon.zip"" -g ""incompatible_mod_with_compatible_version.zip"" -g ""dependant_mod.zip"" -g ""dependant_mod_with_compatible_version.zip"" -g ""feature_mod.zip"" -j ""{Directory.GetCurrentDirectory()}\Data\Addons\Blood\Mods"" -usecwd -j ""D:\Games\Blood"" -h ""a"" -s 2";
+
+        if (OperatingSystem.IsLinux())
+        {
+            args = args.Replace('\\', Path.DirectorySeparatorChar);
+            expected = expected.Replace('\\', Path.DirectorySeparatorChar);
+        }
+
+        Assert.Equal(expected, args);
+    }
+
+    [Fact]
+    public void NotBloodCPTest()
+    {
+        var mods = new List<AutoloadMod>() {
+            _modsProvider.EnabledMod,
+            _modsProvider.DisabledMod,
+            _modsProvider.ModThatRequiresOfficialAddon,
+            _modsProvider.ModThatIncompatibleWithAddon,
+            _modsProvider.IncompatibleMod,
+            _modsProvider.IncompatibleModWithIncompatibleVersion,
+            _modsProvider.IncompatibleModWithCompatibleVersion,
+            _modsProvider.DependantMod,
+            _modsProvider.DependantModWithCompatibleVersion,
+            _modsProvider.DependantModWithIncompatibleVersion,
+            _modsProvider.ModForAnotherGame,
+            _modsProvider.ModThatRequiredFeature
+        }.ToDictionary(x => new AddonVersion(x.Id, x.Version), x => (IAddon)x);
+
+        NotBlood notblood = new();
+
+        var args = notblood.GetStartGameArgs(_bloodGame, _bloodCpCamp, mods, true, true, 2);
+        var expected = @$" -quick -nosetup -g ""enabled_mod.zip"" -mh ""ENABLED1.DEF"" -mh ""ENABLED2.DEF"" -g ""mod_requires_addon.zip"" -g ""incompatible_mod_with_compatible_version.zip"" -g ""dependant_mod.zip"" -g ""dependant_mod_with_compatible_version.zip"" -g ""feature_mod.zip"" -j ""{Directory.GetCurrentDirectory()}\Data\Addons\Blood\Mods"" -usecwd -j ""D:\Games\Blood"" -h ""a"" -ini ""CRYPTIC.INI"" -s 2";
+
+        if (OperatingSystem.IsLinux())
+        {
+            args = args.Replace('\\', Path.DirectorySeparatorChar);
+            expected = expected.Replace('\\', Path.DirectorySeparatorChar);
+        }
+
+        Assert.Equal(expected, args);
+    }
+
+    [Fact]
+    public void NotBloodTCTest()
+    {
+        NotBlood notblood = new();
+
+        var args = notblood.GetStartGameArgs(_bloodGame, _bloodTc, [], true, true, 2);
+        var expected = @$" -quick -nosetup -usecwd -j ""D:\Games\Blood"" -h ""a"" -ini ""TC.INI"" -g ""D:\Games\Blood\blood_tc.zip"" -rff ""TC.RFF"" -snd ""TC.SND"" -s 2";
+
+        if (OperatingSystem.IsLinux())
+        {
+            args = args.Replace('\\', Path.DirectorySeparatorChar);
+            expected = expected.Replace('\\', Path.DirectorySeparatorChar);
+        }
+
+        Assert.Equal(expected, args);
+    }
+
+    [Fact]
+    public void NotBloodTCFolderTest()
+    {
+        NotBlood notblood = new();
+
+        var args = notblood.GetStartGameArgs(_bloodGame, _bloodTcFolder, [], true, true, 2);
+        var expected = @$" -quick -nosetup -usecwd -j ""D:\Games\Blood"" -h ""a"" -ini ""TC.INI"" -game_dir ""D:\Games\Blood\blood_tc_folder"" -rff ""TC.RFF"" -snd ""TC.SND"" -s 2";
+
+        if (OperatingSystem.IsLinux())
+        {
+            args = args.Replace('\\', Path.DirectorySeparatorChar);
+            expected = expected.Replace('\\', Path.DirectorySeparatorChar);
+        }
+
+        Assert.Equal(expected, args);
+    }
+
+    [Fact]
+    public void NotBloodTcExeOverride()
+    {
+        NotBlood notblood = new();
+
+        var args = notblood.GetStartGameArgs(_bloodGame, _bloodTcExeOverride, [], true, true, 2);
+        var expected = @$" -quick -nosetup -usecwd -j ""D:\Games\Blood"" -h ""a"" -ini ""TC.INI"" -rff ""TC.RFF"" -snd ""TC.SND"" -s 2";
+
+        if (OperatingSystem.IsLinux())
+        {
+            args = args.Replace('\\', Path.DirectorySeparatorChar);
+            expected = expected.Replace('\\', Path.DirectorySeparatorChar);
+        }
+
+        Assert.Equal(expected, args);
+    }
 }

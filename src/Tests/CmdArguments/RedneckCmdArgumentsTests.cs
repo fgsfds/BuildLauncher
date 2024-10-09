@@ -61,7 +61,7 @@ public sealed class RedneckCmdArgumentsTests
             Author = null,
             Description = null,
             Version = null,
-            SupportedGame = new(GameEnum.Redneck),
+            SupportedGame = new(GameEnum.RidesAgain),
             RequiredFeatures = null,
             PathToFile = null,
             DependentAddons = null,
@@ -158,6 +158,28 @@ public sealed class RedneckCmdArgumentsTests
 
         var args = redNukem.GetStartGameArgs(_redneckGame, _redneckCamp, mods, true, true);
         var expected = @$" -quick -nosetup -g ""enabled_mod.zip"" -mh ""ENABLED1.DEF"" -mh ""ENABLED2.DEF"" -j ""{Directory.GetCurrentDirectory()}\Data\Addons\Redneck\Mods"" -usecwd -h ""a"" -j ""D:\Games\Redneck""";
+
+        if (OperatingSystem.IsLinux())
+        {
+            args = args.Replace('\\', Path.DirectorySeparatorChar);
+            expected = expected.Replace('\\', Path.DirectorySeparatorChar);
+        }
+
+        Assert.Equal(expected, args);
+    }
+
+    [Fact]
+    public void RedNukemAgainTest()
+    {
+        var mods = new List<AutoloadMod>() {
+            _modsProvider.EnabledMod,
+            _modsProvider.IncompatibleMod,
+        }.ToDictionary(x => new AddonVersion(x.Id, x.Version), x => (IAddon)x);
+
+        RedNukem redNukem = new();
+
+        var args = redNukem.GetStartGameArgs(_redneckGame, _againCamp, mods, true, true);
+        var expected = @$" -quick -nosetup -g ""enabled_mod.zip"" -mh ""ENABLED1.DEF"" -mh ""ENABLED2.DEF"" -j ""{Directory.GetCurrentDirectory()}\Data\Addons\Redneck\Mods"" -usecwd -h ""a"" -j ""D:\Games\Again""";
 
         if (OperatingSystem.IsLinux())
         {
