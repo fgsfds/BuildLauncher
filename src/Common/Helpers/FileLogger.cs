@@ -34,6 +34,11 @@ public sealed class FileLogger : ILogger
             var line = $"[{logLevel}] {message}{Environment.NewLine}";
 
             _logFileWriter.Write(Encoding.ASCII.GetBytes(line));
+
+            if (exception is not null)
+            {
+                _logFileWriter.Write(Encoding.ASCII.GetBytes(exception.ToString() + Environment.NewLine));
+            }
             _logFileWriter.Flush();
         }
         catch
@@ -49,7 +54,7 @@ public sealed class FileLoggerProvider : ILoggerProvider
 
     public FileLoggerProvider(FileStream logFileWriter)
     {
-        _logFileWriter = logFileWriter ?? throw new ArgumentNullException(nameof(logFileWriter));
+        _logFileWriter = logFileWriter;
     }
 
     public ILogger CreateLogger(string categoryName)

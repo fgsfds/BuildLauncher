@@ -5,6 +5,7 @@ using Common.Interfaces;
 using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Microsoft.Extensions.Logging;
 using Mods.Providers;
 using System.Collections.Immutable;
 
@@ -16,6 +17,7 @@ public sealed partial class DownloadsViewModel : ObservableObject
 
     public readonly InstalledAddonsProvider _installedAddonsProvider;
     public readonly DownloadableAddonsProvider _downloadableAddonsProvider;
+    private readonly ILogger _logger;
 
 
     #region Binding Properties
@@ -134,13 +136,15 @@ public sealed partial class DownloadsViewModel : ObservableObject
     public DownloadsViewModel(
         IGame game,
         InstalledAddonsProviderFactory installedAddonsProviderFactory,
-        DownloadableAddonsProviderFactory downloadableAddonsProviderFactory
+        DownloadableAddonsProviderFactory downloadableAddonsProviderFactory,
+        ILogger logger
         )
     {
         Game = game;
 
         _installedAddonsProvider = installedAddonsProviderFactory.GetSingleton(game);
         _downloadableAddonsProvider = downloadableAddonsProviderFactory.GetSingleton(game);
+        _logger = logger;
 
         _installedAddonsProvider.AddonsChangedEvent += OnAddonChanged;
         _downloadableAddonsProvider.AddonDownloadedEvent += OnAddonChanged;
@@ -183,6 +187,8 @@ public sealed partial class DownloadsViewModel : ObservableObject
     [RelayCommand(CanExecute = (nameof(DownloadSelectedAddonCanExecute)))]
     private async Task DownloadAddon()
     {
+        try
+        { 
         if (SelectedDownloadable is null)
         {
             return;
@@ -194,6 +200,11 @@ public sealed partial class DownloadsViewModel : ObservableObject
 
         _downloadableAddonsProvider.Progress.ProgressChanged -= OnProgressChanged;
         OnProgressChanged(null, 0);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogCritical(ex, "=== Critical error ===");
+        }
     }
     private bool DownloadSelectedAddonCanExecute => SelectedDownloadable is not null;
 

@@ -1,6 +1,7 @@
 ﻿using Common.Client.Helpers;
 using Projektanker.Icons.Avalonia;
 using Projektanker.Icons.Avalonia.MaterialDesign;
+using System.Runtime.ExceptionServices;
 
 namespace Avalonia.Desktop;
 
@@ -16,9 +17,28 @@ public sealed class Program
         {
             ClientProperties.IsDevMode = true;
         }
+        try
+        {
+            //AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
+            _ = BuildAvaloniaApp().StartWithClassicDesktopLifetime(args);
+        }
+        catch (Exception ex)
+        {
+            ExceptionDispatchInfo.Capture(ex).Throw();
+        }
+    }
 
-        _ = BuildAvaloniaApp()
-        .StartWithClassicDesktopLifetime(args);
+    private static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+    {
+        if (!ClientProperties.IsDevMode)
+        {
+            var exe = Path.Combine(ClientProperties.AppExeFolderPath, ClientProperties.ExecutableName);
+            var args = "--crash " + $@"""{e.ExceptionObject}""";
+
+            _ = System.Diagnostics.Process.Start(exe, args);
+        }
+
+        Environment.FailFast(string.Empty);
     }
 
     // Avalonia configuration, don't remove; also used by visual designer.

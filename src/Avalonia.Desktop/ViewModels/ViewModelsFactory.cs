@@ -130,7 +130,8 @@ public sealed class ViewModelsFactory
         DownloadsViewModel vm = new(
             _gamesProvider.GetGame(gameEnum),
             _installedAddonsProviderFactory,
-            _downloadableAddonsProviderFactory
+            _downloadableAddonsProviderFactory,
+            _logger
             );
 
         _ = Task.Run(vm.InitializeAsync);

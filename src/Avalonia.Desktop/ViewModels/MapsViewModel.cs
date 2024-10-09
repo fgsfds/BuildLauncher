@@ -139,18 +139,25 @@ public sealed partial class MapsViewModel : RightPanelViewModel, IPortsButtonCon
     [RelayCommand]
     private async Task StartMapAsync(object? command)
     {
-        command.ThrowIfNotType<Tuple<BasePort, byte?>>(out var parameter);
-        Guard.IsNotNull(SelectedAddon);
+        try
+        {
+            command.ThrowIfNotType<Tuple<BasePort, byte?>>(out var parameter);
+            Guard.IsNotNull(SelectedAddon);
 
-        var mods = _installedAddonsProvider.GetInstalledMods();
+            var mods = _installedAddonsProvider.GetInstalledMods();
 
-        var args = parameter.Item1.GetStartGameArgs(Game, SelectedAddon, mods, _config.SkipIntro, _config.SkipStartup, parameter.Item2);
+            var args = parameter.Item1.GetStartGameArgs(Game, SelectedAddon, mods, _config.SkipIntro, _config.SkipStartup, parameter.Item2);
 
-        _logger.LogInformation($"=== Starting map {SelectedAddon.Id} for {Game.FullName} ===");
-        _logger.LogInformation($"Path to port exe {parameter.Item1.PortExeFilePath}");
-        _logger.LogInformation($"Startup args: {args}");
+            _logger.LogInformation($"=== Starting map {SelectedAddon.Id} for {Game.FullName} ===");
+            _logger.LogInformation($"Path to port exe {parameter.Item1.PortExeFilePath}");
+            _logger.LogInformation($"Startup args: {args}");
 
-        await StartPortAsync(SelectedAddon.Id, parameter.Item1.PortExeFilePath, args).ConfigureAwait(true);
+            await StartPortAsync(SelectedAddon.Id, parameter.Item1.PortExeFilePath, args).ConfigureAwait(true);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogCritical(ex, "=== Critical error ===");
+        }
     }
 
 

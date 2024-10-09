@@ -139,28 +139,35 @@ public sealed partial class CampaignsViewModel : RightPanelViewModel, IPortsButt
     [RelayCommand]
     private async Task StartCampaignAsync(object? value)
     {
-        Guard.IsNotNull(SelectedAddon);
-
-        if (value is BasePort port)
+        try
         {
-            var mods = _installedAddonsProvider.GetInstalledMods();
+            Guard.IsNotNull(SelectedAddon);
 
-            var args = port.GetStartGameArgs(Game, SelectedAddon, mods, _config.SkipIntro, _config.SkipStartup);
-            var addon = SelectedAddon;
+            if (value is BasePort port)
+            {
+                var mods = _installedAddonsProvider.GetInstalledMods();
 
-            _logger.LogInformation($"=== Starting addon {SelectedAddon.Id} for {Game.FullName} ===");
-            _logger.LogInformation($"Path to port exe {port.PortExeFilePath}");
-            _logger.LogInformation($"Startup args: {args}");
+                var args = port.GetStartGameArgs(Game, SelectedAddon, mods, _config.SkipIntro, _config.SkipStartup);
+                var addon = SelectedAddon;
 
-            await StartPortAsync(port, addon, args).ConfigureAwait(true);
+                _logger.LogInformation("=== Starting addon {SelectedAddon.Id} for {Game.FullName} ===", SelectedAddon.Id, Game.FullName);
+                _logger.LogInformation("Path to port exe {port.PortExeFilePath}", port.PortExeFilePath);
+                _logger.LogInformation("Startup args: {args}", args);
+
+                await StartPortAsync(port, addon, args).ConfigureAwait(true);
+            }
+            else if (SelectedAddon is StandaloneAddon standalone)
+            {
+                await StartPortAsync(standalone).ConfigureAwait(true);
+            }
+            else
+            {
+                ThrowHelper.ThrowNotSupportedException();
+            }
         }
-        else if (SelectedAddon is StandaloneAddon standalone)
+        catch (Exception ex)
         {
-            await StartPortAsync(standalone).ConfigureAwait(true);
-        }
-        else
-        {
-            ThrowHelper.ThrowNotSupportedException();
+            _logger.LogCritical(ex, "=== Critical error ===");
         }
     }
 

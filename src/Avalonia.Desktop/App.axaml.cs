@@ -11,7 +11,6 @@ using Common.Client.DI;
 using Common.Client.Helpers;
 using Common.DI;
 using Common.Enums;
-using Common.Helpers;
 using CommunityToolkit.Diagnostics;
 using Games.Providers;
 using Microsoft.Extensions.DependencyInjection;
@@ -23,6 +22,8 @@ namespace Avalonia.Desktop;
 
 public sealed class App : Application
 {
+    private static ILogger? _logger = null;
+
     public override void Initialize()
     {
         AvaloniaXamlLoader.Load(this);
@@ -32,31 +33,46 @@ public sealed class App : Application
     {
         RenameConfig();
         LoadBindings();
-        SetTheme();
 
-        // Line below is needed to remove Avalonia data validation.
-        // Without this line you will get duplicate validations from both Avalonia and CT
-        BindingPlugins.DataValidators.RemoveAt(0);
+        _logger = BindingsManager.Provider.GetRequiredService<ILogger>();
 
-        if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+        try
         {
-            var vm = BindingsManager.Provider.GetRequiredService<MainViewModel>();
-            var gamesProvider = BindingsManager.Provider.GetRequiredService<GamesProvider>();
-            var vmFactory = BindingsManager.Provider.GetRequiredService<ViewModelsFactory>();
-            var portsProvider = BindingsManager.Provider.GetRequiredService<PortsProvider>();
-            var installedAddonsProviderFactory = BindingsManager.Provider.GetRequiredService<InstalledAddonsProviderFactory>();
-            var configProvider = BindingsManager.Provider.GetRequiredService<IConfigProvider>();
+            SetTheme();
 
-            desktop.MainWindow = new MainWindow(vm, gamesProvider, vmFactory, installedAddonsProviderFactory, portsProvider, configProvider);
+            // Line below is needed to remove Avalonia data validation.
+            // Without this line you will get duplicate validations from both Avalonia and CT
+            BindingPlugins.DataValidators.RemoveAt(0);
 
-            desktop.Exit += OnAppExit;
+            if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+            {
+                var vm = BindingsManager.Provider.GetRequiredService<MainViewModel>();
+                var gamesProvider = BindingsManager.Provider.GetRequiredService<GamesProvider>();
+                var vmFactory = BindingsManager.Provider.GetRequiredService<ViewModelsFactory>();
+                var portsProvider = BindingsManager.Provider.GetRequiredService<PortsProvider>();
+                var installedAddonsProviderFactory = BindingsManager.Provider.GetRequiredService<InstalledAddonsProviderFactory>();
+                var configProvider = BindingsManager.Provider.GetRequiredService<IConfigProvider>();
+
+                desktop.MainWindow = new MainWindow(vm, gamesProvider, vmFactory, installedAddonsProviderFactory, portsProvider, configProvider);
+
+                desktop.Exit += OnAppExit;
+            }
+            else if (ApplicationLifetime is ISingleViewApplicationLifetime)
+            {
+                ThrowHelper.ThrowNotSupportedException();
+            }
+
+            base.OnFrameworkInitializationCompleted();
         }
-        else if (ApplicationLifetime is ISingleViewApplicationLifetime)
+        catch (Exception ex)
         {
-            ThrowHelper.ThrowNotSupportedException();
-        }
+            if (Design.IsDesignMode)
+            {
+                return;
+            }
 
-        base.OnFrameworkInitializationCompleted();
+            _logger?.LogCritical(ex, "== Critical error ==");
+        }
     }
 
     [Obsolete]
