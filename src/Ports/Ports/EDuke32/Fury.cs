@@ -89,6 +89,11 @@ public sealed class Fury(IConfigProvider config) : EDuke32
 
     private void GetFuryArgs(StringBuilder sb, FuryGame game, IAddon addon)
     {
+        if (addon.FileName is null)
+        {
+            return;
+        }
+
         if (addon is LooseMap)
         {
             GetLooseMapArgs(sb, game, addon);
@@ -97,12 +102,6 @@ public sealed class Fury(IConfigProvider config) : EDuke32
 
 
         Guard2.ThrowIfNotType<DukeCampaign>(addon, out var fCamp);
-
-        if (fCamp.FileName is null)
-        {
-            return;
-        }
-
 
         if (fCamp.MainCon is not null)
         {

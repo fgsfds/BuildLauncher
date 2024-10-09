@@ -289,15 +289,14 @@ public sealed class Raze : BasePort
 
     private void GetDukeArgs(StringBuilder sb, DukeGame game, IAddon addon)
     {
-        Guard2.ThrowIfNotType<DukeCampaign>(addon, out var dCamp);
-
-
         if (addon is LooseMap)
         {
             GetLooseMapArgs(sb, game, addon);
             return;
         }
 
+
+        Guard2.ThrowIfNotType<DukeCampaign>(addon, out var dCamp);
 
         if (dCamp.SupportedGame.GameVersion is not null &&
             dCamp.SupportedGame.GameVersion.Equals(nameof(DukeVersionEnum.Duke3D_WT), StringComparison.InvariantCultureIgnoreCase))
@@ -370,15 +369,14 @@ public sealed class Raze : BasePort
 
     private void GetWangArgs(StringBuilder sb, WangGame game, IAddon addon)
     {
-        Guard2.ThrowIfNotType<WangCampaign>(addon, out var wCamp);
-
-
         if (addon is LooseMap)
         {
             GetLooseMapArgs(sb, game, addon);
             return;
         }
 
+
+        Guard2.ThrowIfNotType<WangCampaign>(addon, out var wCamp);
 
         //TODO downloaded addons support
         if (wCamp.DependentAddons is not null &&
@@ -416,15 +414,14 @@ public sealed class Raze : BasePort
 
     private void GetRedneckArgs(StringBuilder sb, RedneckGame game, IAddon addon)
     {
-        Guard2.ThrowIfNotType<DukeCampaign>(addon, out var rCamp);
-
-
         if (addon is LooseMap)
         {
             GetLooseMapArgs(sb, game, addon);
             return;
         }
 
+
+        Guard2.ThrowIfNotType<DukeCampaign>(addon, out var rCamp);
 
         if (rCamp.DependentAddons is not null &&
             rCamp.DependentAddons.ContainsKey(nameof(RedneckAddonEnum.Route66)))

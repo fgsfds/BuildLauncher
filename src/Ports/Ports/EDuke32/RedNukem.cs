@@ -155,7 +155,6 @@ public sealed class RedNukem : EDuke32
 
         Guard2.ThrowIfNotType<DukeCampaign>(addon, out var rCamp);
 
-
         if (rCamp.MainCon is not null)
         {
             _ = sb.Append($@" {MainConParam}""{rCamp.MainCon}""");

@@ -238,8 +238,6 @@ public class EDuke32 : BasePort
     /// <param name="addon">DukeCampaign</param>
     protected void GetDukeArgs(StringBuilder sb, DukeGame game, IAddon addon)
     {
-        Guard2.ThrowIfNotType<DukeCampaign>(addon, out var dCamp);
-
         if (addon.SupportedGame.GameEnum is GameEnum.Duke64)
         {
             _ = sb.Append(@$" {AddDirectoryParam}""{Path.GetDirectoryName(game.Duke64RomPath)}"" {MainGrpParam}""{Path.GetFileName(game.Duke64RomPath)}""");
@@ -306,6 +304,11 @@ public class EDuke32 : BasePort
             }
         }
 
+        if (addon.FileName is null)
+        {
+            return;
+        }
+
         if (addon is LooseMap)
         {
             GetLooseMapArgs(sb, game, addon);
@@ -313,10 +316,7 @@ public class EDuke32 : BasePort
         }
 
 
-        if (dCamp.FileName is null)
-        {
-            return;
-        }
+        Guard2.ThrowIfNotType<DukeCampaign>(addon, out var dCamp);
 
 
         if (dCamp.MainCon is not null)

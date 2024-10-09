@@ -385,6 +385,7 @@ public abstract class BasePort
             return;
         }
 
+
         Guard2.ThrowIfNotType<BloodCampaign>(addon, out var bCamp);
 
         if (bCamp.INI is not null)
@@ -449,13 +450,13 @@ public abstract class BasePort
             return;
         }
 
+
         Guard2.ThrowIfNotType<SlaveCampaign>(addon, out var sCamp);
 
         if (sCamp.FileName is null)
         {
             return;
         }
-
 
         if (sCamp.Type is AddonTypeEnum.TC)
         {
@@ -474,15 +475,6 @@ public abstract class BasePort
 
     protected void GetNamWW2GIArgs(StringBuilder sb, IGame game, IAddon addon)
     {
-        Guard2.ThrowIfNotType<DukeCampaign>(addon, out var dCamp);
-
-        if (addon is LooseMap)
-        {
-            GetLooseMapArgs(sb, game, addon);
-            return;
-        }
-
-
         if (game is NamGame)
         {
             _ = sb.Append($" -nam {MainGrpParam}NAM.GRP");
@@ -495,7 +487,16 @@ public abstract class BasePort
         {
             ThrowHelper.ThrowNotSupportedException();
         }
-        
+
+
+        if (addon is LooseMap)
+        {
+            GetLooseMapArgs(sb, game, addon);
+            return;
+        }
+
+
+        Guard2.ThrowIfNotType<DukeCampaign>(addon, out var dCamp);
 
         if (addon.Id.Equals(nameof(WW2GIAddonEnum.Platoon).ToLower()))
         {
