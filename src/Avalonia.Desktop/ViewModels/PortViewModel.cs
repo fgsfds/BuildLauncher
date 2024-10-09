@@ -90,6 +90,11 @@ public sealed partial class PortViewModel : ObservableObject
     {
         get
         {
+            if (!_port.IsInstalled)
+            {
+                return false;
+            }
+
             if (_port.PortEnum is PortEnum.NotBlood)
             {
                 var r1 = DateTime.TryParseExact(
