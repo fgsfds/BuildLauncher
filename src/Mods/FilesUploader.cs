@@ -12,11 +12,16 @@ namespace Mods;
 public sealed class FilesUploader
 {
     private readonly ApiInterface _apiInterface;
+    private readonly HttpClient _httpClient;
 
 
-    public FilesUploader(ApiInterface apiInterface)
+    public FilesUploader(
+        ApiInterface apiInterface,
+        HttpClient httpClient
+        )
     {
         _apiInterface = apiInterface;
+        _httpClient = httpClient;
     }
 
 
@@ -87,8 +92,7 @@ public sealed class FilesUploader
 
         var downloadUrl = $"{Consts.FilesRepo}/{gameName}/{folderName}/{Path.GetFileName(pathToFile)}";
 
-        using HttpClient httpClient = new();
-        var response = await httpClient.GetAsync(downloadUrl, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false);
+        var response = await _httpClient.GetAsync(downloadUrl, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false);
 
         if (!response.IsSuccessStatusCode)
         {

@@ -78,7 +78,7 @@ public sealed class Program
 
     private static HttpClient CreateHttpClient(IServiceProvider provider)
     {
-        var httpClient = new HttpClient();
+        HttpClient httpClient = new();
         httpClient.DefaultRequestHeaders.Add("User-Agent", "BuildLauncher");
         return httpClient;
     }

@@ -1,8 +1,6 @@
-﻿using Common.Helpers;
-using Common.Providers;
+﻿using Common.Providers;
 using Common.Tools;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 
 namespace Common.DI;
 
@@ -18,7 +16,7 @@ public static class CommonBindings
 
     private static HttpClient CreateHttpClient(IServiceProvider service)
     {
-        var httpClient = new HttpClient();
+        HttpClient httpClient = new();
         httpClient.DefaultRequestHeaders.Add("User-Agent", "BuildLauncher");
         httpClient.Timeout = TimeSpan.FromSeconds(10);
         return httpClient;
