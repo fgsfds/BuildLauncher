@@ -16,10 +16,47 @@ public sealed class DatabaseContext : DbContext
     public DbSet<ReportsDbEntity> Reports { get; set; }
     public DbSet<DependenciesDbEntity> Dependencies { get; set; }
 
+
+    public DatabaseContext()
+    {
+        _isDevMode = true;
+        Database.Migrate();
+    }
+
     public DatabaseContext(bool isDevMode)
     {
         _isDevMode = isDevMode;
+
+        var isMigrated = Database.GetPendingMigrations().Any();
+
+        var games = Games.ToList();
+        var types = AddonTypes.ToList();
+        var addons = Addons.ToList();
+        var versions = Versions.ToList();
+        var installs = Installs.ToList();
+        var ratings = Rating.ToList();
+        var dependencies = Dependencies.ToList();
+
+        if (isMigrated)
+        {
+            Database.EnsureDeleted();
+        }
+
+        Database.Migrate();
+
+        if (isMigrated)
+        {
+            Games.AddRange(games);
+            AddonTypes.AddRange(types);
+            Addons.AddRange(addons);
+            Versions.AddRange(versions);
+            Installs.AddRange(installs);
+            //Rating.AddRange(ratings);
+            Dependencies.AddRange(dependencies);
+            this.SaveChanges();
+        }
     }
+
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
