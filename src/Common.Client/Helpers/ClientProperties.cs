@@ -10,12 +10,12 @@ public static class ClientProperties
     /// <summary>
     /// Path to the folder that contains main exe
     /// </summary>
-    public static readonly string AppExeFolderPath = Environment.CurrentDirectory;
+    public static readonly string WorkingFolder = Environment.CurrentDirectory;
 
     /// <summary>
     /// Path to the data folder
     /// </summary>
-    public static readonly string DataFolderPath = Path.Combine(AppExeFolderPath, "Data");
+    public static readonly string DataFolderPath = Path.Combine(WorkingFolder, "Data");
 
     /// <summary>
     /// Path to the ports folder
@@ -35,7 +35,7 @@ public static class ClientProperties
     /// <summary>
     /// Is app running in the developer mode
     /// </summary>
-    public static bool IsDevMode { get; set; } = false;
+    public static bool IsDeveloperMode { get; set; } = false;
 
     /// <summary>
     /// Current app version

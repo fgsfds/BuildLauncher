@@ -147,6 +147,34 @@
 
                 </TabItem>
 
+                <!--Witchaven-->
+                <TabItem Name="WitchavenTab" IsEnabled="{Binding IsWitchavenTabEnabled}">
+
+                    <TabItem.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="/Assets/wh.png" Width="24" />
+                            <TextBlock Text="Witchaven" Margin="5" />
+                        </StackPanel>
+                    </TabItem.Header>
+
+                    <pages:GamePage x:Name="WitchavenPage"/>
+
+                </TabItem>
+
+                <!--TekWar-->
+                <TabItem Name="TekWarTab" IsEnabled="{Binding IsTekWarTabEnabled}">
+
+                    <TabItem.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="/Assets/tw.png" Width="24" />
+                            <TextBlock Text="TekWar" Margin="5" />
+                        </StackPanel>
+                    </TabItem.Header>
+
+                    <pages:GamePage x:Name="TekWarPage"/>
+
+                </TabItem>
+
                 <!--Standalone-->
                 <TabItem Name="StandaloneTab" IsEnabled="True">
 
@@ -174,7 +202,7 @@
                 </TabItem>
 
                 <!--Tools-->
-                <TabItem Header="Tools" IsVisible="{Binding IsDevMode}" Margin="5">
+                <TabItem Header="Tools" IsVisible="{Binding IsDeveloperMode}" Margin="5">
                     <pages:ToolsPage x:Name="ToolsPageTab"/>
                 </TabItem>
 

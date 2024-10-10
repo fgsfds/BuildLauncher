@@ -203,6 +203,24 @@ public sealed class ConfigProvider : IConfigProvider
         set => SetGamePathValue(value);
     }
 
+    public string? PathWitchaven
+    {
+        get => _dbContext.GamePaths.Find(nameof(PathWitchaven))?.Path;
+        set => SetGamePathValue(value);
+    }
+
+    public string? PathWitchaven2
+    {
+        get => _dbContext.GamePaths.Find(nameof(PathWitchaven2))?.Path;
+        set => SetGamePathValue(value);
+    }
+
+    public string? PathTekWar
+    {
+        get => _dbContext.GamePaths.Find(nameof(PathTekWar))?.Path;
+        set => SetGamePathValue(value);
+    }
+
 
 
     private void SetSettingsValue(string value, [CallerMemberName] string caller = "")
@@ -249,8 +267,8 @@ public sealed class ConfigProvider : IConfigProvider
     [Obsolete]
     private void ConvertOldConfig()
     {
-        if (!File.Exists(Path.Combine(ClientProperties.AppExeFolderPath, "config.db")) ||
-            !File.Exists(Path.Combine(ClientProperties.AppExeFolderPath, Consts.ConfigFile)))
+        if (!File.Exists(Path.Combine(ClientProperties.WorkingFolder, "config.db")) ||
+            !File.Exists(Path.Combine(ClientProperties.WorkingFolder, Consts.ConfigFile)))
         {
             return;
         }
@@ -296,7 +314,7 @@ public sealed class ConfigProvider : IConfigProvider
         _ = _dbContext.SaveChanges();
 
         fs.Dispose();
-        File.Delete(Path.Combine(ClientProperties.AppExeFolderPath, Consts.ConfigFile));
+        File.Delete(Path.Combine(ClientProperties.WorkingFolder, Consts.ConfigFile));
     }
 
     [Obsolete]

@@ -60,7 +60,20 @@ public sealed partial class MainViewModel : ObservableObject
     /// </summary>
     public bool IsWW2GITabEnabled => _gamesProvider.IsWW2GIInstalled;
 
-    public bool IsDevMode => ClientProperties.IsDevMode;
+    /// <summary>
+    /// Is WW2I tab enabled
+    /// </summary>
+    public bool IsWitchavenTabEnabled => _gamesProvider.IsWitchavenInstalled;
+
+    /// <summary>
+    /// Is WW2I tab enabled
+    /// </summary>
+    public bool IsTekWarTabEnabled => _gamesProvider.IsTekWarInstalled;
+
+    /// <summary>
+    /// Is app running in the developer mode
+    /// </summary>
+    public bool IsDeveloperMode => ClientProperties.IsDeveloperMode;
 
     #endregion
 

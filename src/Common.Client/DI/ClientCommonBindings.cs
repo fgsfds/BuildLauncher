@@ -20,6 +20,10 @@ public static class ClientBindings
 
         if (isDesigner)
         {
+            using ILoggerFactory factory = LoggerFactory.Create(builder => builder.AddDebug());
+            ILogger logger = factory.CreateLogger("Debug logger");
+
+            _ = container.AddSingleton<ILogger>(logger);
             _ = container.AddSingleton<IConfigProvider, ConfigProviderFake>();
         }
         else
@@ -32,7 +36,7 @@ public static class ClientBindings
 
     private static ILogger CreateLogger(IServiceProvider service)
     {
-        string logFilePath = Path.Combine(ClientProperties.AppExeFolderPath, "BuildLauncher.log");
+        string logFilePath = Path.Combine(ClientProperties.WorkingFolder, "BuildLauncher.log");
         var logger = FileLoggerFactory.Create(logFilePath);
 
         return logger;

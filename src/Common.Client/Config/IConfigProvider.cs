@@ -17,6 +17,9 @@ public interface IConfigProvider
     string? PathWang { get; set; }
     string? PathNam { get; set; }
     string? PathWW2GI { get; set; }
+    string? PathWitchaven { get; set; }
+    string? PathWitchaven2 { get; set; }
+    string? PathTekWar { get; set; }
     Dictionary<string, TimeSpan> Playtimes { get; }
     Dictionary<string, byte> Rating { get; }
     bool SkipIntro { get; set; }

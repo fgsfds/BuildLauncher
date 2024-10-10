@@ -48,7 +48,7 @@
 
             </Grid>
 
-            <Grid ColumnDefinitions="auto,*,auto,auto,auto" RowDefinitions="auto,auto,auto,auto,auto,auto,auto,auto,auto,auto,auto">
+            <Grid ColumnDefinitions="auto,*,auto,auto,auto" RowDefinitions="auto,auto,auto,auto,auto,auto,auto,auto,auto,auto,auto,auto,auto,auto">
 
                 <!--Path to Duke 3D-->
                 <TextBlock Grid.Row="0" Grid.Column="0"
@@ -356,6 +356,83 @@
                         CommandParameter="WW2GI"
                         ToolTip.Tip="Autodetect">
                     ⟳
+                </Button>
+
+
+                <!--Path to Witchaven-->
+                <TextBlock Grid.Row="11" Grid.Column="0"
+                           VerticalAlignment="Center"
+                           Margin="10, 5">Path to Witchaven install:</TextBlock>
+
+                <TextBox Grid.Row="11"  Grid.Column="1"
+                         Text="{Binding PathToWitchaven}"
+                         Margin="0,3"/>
+
+                <Button Grid.Row="11"  Grid.Column="2"
+                        Margin="5,0"
+                        Width="{Binding $self.Bounds.Height}"
+                        HorizontalContentAlignment="Center"
+                        Command="{Binding OpenFolderPickerCommand}"
+                        CommandParameter="Witchaven">
+                    ...
+                </Button>
+
+                <Button Grid.Row="11"  Grid.Column="3"
+                        Margin="0,0,10,0"
+                        Width="{Binding $self.Bounds.Height}"
+                        HorizontalContentAlignment="Center"
+                        Command="{Binding AutodetectCommand}"
+                        CommandParameter="Witchaven"
+                        ToolTip.Tip="Autodetect">
+                    ⟳
+                </Button>
+
+
+                <!--Path to Witchaven2-->
+                <TextBlock Grid.Row="12" Grid.Column="0"
+                           VerticalAlignment="Center"
+                           Margin="10, 5">Path to Witchaven II install:</TextBlock>
+
+                <TextBox Grid.Row="12"  Grid.Column="1"
+                         Text="{Binding PathToWitchaven2}"
+                         Margin="0,3"/>
+
+                <Button Grid.Row="12"  Grid.Column="2"
+                        Margin="5,0"
+                        Width="{Binding $self.Bounds.Height}"
+                        HorizontalContentAlignment="Center"
+                        Command="{Binding OpenFolderPickerCommand}"
+                        CommandParameter="Witchaven2">
+                    ...
+                </Button>
+
+                <Button Grid.Row="12"  Grid.Column="3"
+                        Margin="0,0,10,0"
+                        Width="{Binding $self.Bounds.Height}"
+                        HorizontalContentAlignment="Center"
+                        Command="{Binding AutodetectCommand}"
+                        CommandParameter="Witchaven2"
+                        ToolTip.Tip="Autodetect">
+                    ⟳
+                </Button>
+
+
+                <!--Path to TekWar-->
+                <TextBlock Grid.Row="13" Grid.Column="0"
+                           VerticalAlignment="Center"
+                           Margin="10, 5">Path to TekWart install:</TextBlock>
+
+                <TextBox Grid.Row="13"  Grid.Column="1"
+                         Text="{Binding PathToTekWar}"
+                         Margin="0,3"/>
+
+                <Button Grid.Row="13"  Grid.Column="2"
+                        Margin="5,0"
+                        Width="{Binding $self.Bounds.Height}"
+                        HorizontalContentAlignment="Center"
+                        Command="{Binding OpenFolderPickerCommand}"
+                        CommandParameter="TekWar">
+                    ...
                 </Button>
 
             </Grid>

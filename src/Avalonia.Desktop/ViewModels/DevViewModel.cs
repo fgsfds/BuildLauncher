@@ -122,7 +122,7 @@ public sealed partial class DevViewModel : ObservableObject
         }
     }
 
-    public bool IsDevMode => ClientProperties.IsDevMode;
+    public bool IsDeveloperMode => ClientProperties.IsDeveloperMode;
     public bool IsStep2Visible => IsMapSelected || IsModSelected || IsTcSelected;
     public bool IsStep3Visible => IsDukeSelected || IsBloodSelected || IsWangSelected || IsFurySelected || IsRedneckSelected || IsRidesAgainSelected || IsSlaveSelected || IsNAMSelected || IsWW2GISelected || IsStandaloneSelected;
     public bool AreDukePropertiesAvailable => IsDukeSelected || IsFurySelected || IsRedneckSelected || IsNAMSelected || IsWW2GISelected;

@@ -13,7 +13,7 @@
 
         <Grid RowDefinitions="auto,auto,auto" IsSharedSizeScope="True">
 
-            <StackPanel Grid.Row="0" Orientation="Horizontal" IsVisible="{Binding IsDevMode}">
+            <StackPanel Grid.Row="0" Orientation="Horizontal" IsVisible="{Binding IsDeveloperMode}">
 
                 <CheckBox IsChecked="{Binding LocalApiCheckbox}"
                           VerticalAlignment="Center"

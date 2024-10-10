@@ -24,6 +24,8 @@ public sealed class GamesProvider
     private readonly SlaveGame _slave;
     private readonly NamGame _nam;
     private readonly WW2GIGame _ww2gi;
+    private readonly WitchavenGame _witch;
+    private readonly TekWarGame _tekwar;
     private readonly StandaloneGame _standalone;
 
     public bool IsBloodInstalled => _blood.IsBaseGameInstalled;
@@ -34,6 +36,8 @@ public sealed class GamesProvider
     public bool IsSlaveInstalled => _slave.IsBaseGameInstalled;
     public bool IsNamInstalled => _nam.IsBaseGameInstalled;
     public bool IsWW2GIInstalled => _ww2gi.IsBaseGameInstalled;
+    public bool IsWitchavenInstalled => _witch.IsBaseGameInstalled || _witch.IsWitchaven2Installed;
+    public bool IsTekWarInstalled => _tekwar.IsBaseGameInstalled;
 
 
     public GamesProvider(
@@ -85,6 +89,17 @@ public sealed class GamesProvider
             GameInstallFolder = _config.PathWW2GI
         };
 
+        _witch = new()
+        {
+            GameInstallFolder = _config.PathWitchaven,
+            Witchaven2InstallPath = _config.PathWitchaven2
+        };
+
+        _tekwar = new()
+        {
+            GameInstallFolder = _config.PathTekWar
+        };
+
         _standalone = new();
 
         _config.ParameterChangedEvent += OnParameterChanged;
@@ -109,9 +124,9 @@ public sealed class GamesProvider
             GameEnum.NAM => _nam,
             GameEnum.WW2GI => _ww2gi,
             GameEnum.Standalone => _standalone,
-            GameEnum.TekWar => ThrowHelper.ThrowNotSupportedException<IGame>(),
-            GameEnum.Witchaven => ThrowHelper.ThrowNotSupportedException<IGame>(),
-            GameEnum.Witchaven2 => ThrowHelper.ThrowNotSupportedException<IGame>(),
+            GameEnum.TekWar => _tekwar,
+            GameEnum.Witchaven => _witch,
+            GameEnum.Witchaven2 => _witch,
             _ => ThrowHelper.ThrowArgumentOutOfRangeException<IGame>()
         };
     }
@@ -182,6 +197,16 @@ public sealed class GamesProvider
         {
             _ww2gi.GameInstallFolder = _config.PathWW2GI;
             GameChangedEvent?.Invoke(_ww2gi.GameEnum);
+        }
+        else if (parameterName.Equals(nameof(_config.PathWitchaven)))
+        {
+            _witch.GameInstallFolder = _config.PathWitchaven;
+            GameChangedEvent?.Invoke(_witch.GameEnum);
+        }
+        else if (parameterName.Equals(nameof(_config.PathTekWar)))
+        {
+            _tekwar.GameInstallFolder = _config.PathTekWar;
+            GameChangedEvent?.Invoke(_tekwar.GameEnum);
         }
     }
 }

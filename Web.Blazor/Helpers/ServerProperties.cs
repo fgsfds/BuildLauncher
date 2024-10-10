@@ -2,5 +2,5 @@
 
 public static class ServerProperties
 {
-    public static bool IsDevMode { get; set; } = false;
+    public static bool IsDeveloperMode { get; set; } = false;
 }

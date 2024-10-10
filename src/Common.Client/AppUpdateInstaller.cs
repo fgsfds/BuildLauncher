@@ -56,7 +56,7 @@ public sealed class AppUpdateInstaller
 
         var updateUrl = _update.WindowsDownloadUrl;
 
-        var fileName = Path.Combine(ClientProperties.AppExeFolderPath, Path.GetFileName(updateUrl.ToString()).Trim());
+        var fileName = Path.Combine(ClientProperties.WorkingFolder, Path.GetFileName(updateUrl.ToString()).Trim());
 
         if (File.Exists(fileName))
         {
@@ -65,7 +65,7 @@ public sealed class AppUpdateInstaller
 
         await _archiveTools.DownloadFileAsync(updateUrl, fileName).ConfigureAwait(false);
 
-        ZipFile.ExtractToDirectory(fileName, Path.Combine(ClientProperties.AppExeFolderPath, Consts.UpdateFolder), true);
+        ZipFile.ExtractToDirectory(fileName, Path.Combine(ClientProperties.WorkingFolder, Consts.UpdateFolder), true);
 
         File.Delete(fileName);
 
@@ -77,7 +77,7 @@ public sealed class AppUpdateInstaller
     /// </summary>
     public static void InstallUpdate()
     {
-        var dir = ClientProperties.AppExeFolderPath;
+        var dir = ClientProperties.WorkingFolder;
         var updateDir = Path.Combine(dir, Consts.UpdateFolder);
         var oldExe = Path.Combine(dir, ClientProperties.ExecutableName);
         var newExe = Path.Combine(updateDir, ClientProperties.ExecutableName);

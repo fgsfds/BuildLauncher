@@ -27,6 +27,8 @@ public sealed class App : Application
     public static WindowNotificationManager NotificationManager { get; private set; }
     public static Random Random { get; private set; }
 
+    //private static readonly Mutex _mutex = new(false, "BuildLauncher");
+
     private static ILogger? _logger = null;
 
     public override void Initialize()
@@ -36,6 +38,28 @@ public sealed class App : Application
 
     public override void OnFrameworkInitializationCompleted()
     {
+        //if (!Design.IsDesignMode)
+        //{
+        //    if (!DoesHaveWriteAccess(ClientProperties.WorkingFolder))
+        //    {
+        //        var messageBox = new MessageBox($"""
+        //        Superheater doesn't have write access to
+        //        {ClientProperties.WorkingFolder}
+        //        and can't be launched. 
+        //        Move it to the folder where you have write access.
+        //        """);
+        //        messageBox.Show();
+        //        return;
+        //    }
+
+        //    if (!_mutex.WaitOne(1000, false))
+        //    {
+        //        var messageBox = new MessageBox($"You can't launch multiple instances of Superheater");
+        //        messageBox.Show();
+        //        return;
+        //    }
+        //}
+
         RenameConfig();
         LoadBindings();
 
@@ -44,6 +68,15 @@ public sealed class App : Application
         try
         {
             SetTheme();
+            
+            if (ClientProperties.IsDeveloperMode)
+            {
+                _logger.LogInformation("Started in developer mode");
+            }
+
+            _logger.LogInformation($"BuildLauncher version: {ClientProperties.CurrentVersion}");
+            _logger.LogInformation($"Operating system: {Environment.OSVersion}");
+            _logger.LogInformation($"Working folder is {ClientProperties.WorkingFolder}");
 
             // Line below is needed to remove Avalonia data validation.
             // Without this line you will get duplicate validations from both Avalonia and CT
@@ -92,8 +125,8 @@ public sealed class App : Application
     [Obsolete]
     private static void RenameConfig()
     {
-        var oldConfigPath = Path.Combine(ClientProperties.AppExeFolderPath, "config.db");
-        var newConfigPath = Path.Combine(ClientProperties.AppExeFolderPath, "BuildLauncher.db");
+        var oldConfigPath = Path.Combine(ClientProperties.WorkingFolder, "config.db");
+        var newConfigPath = Path.Combine(ClientProperties.WorkingFolder, "BuildLauncher.db");
 
         if (File.Exists(oldConfigPath))
         {

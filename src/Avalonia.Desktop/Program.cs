@@ -15,7 +15,7 @@ public sealed class Program
     {
         if (args.Contains("--dev"))
         {
-            ClientProperties.IsDevMode = true;
+            ClientProperties.IsDeveloperMode = true;
         }
         try
         {
@@ -30,9 +30,9 @@ public sealed class Program
 
     private static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
     {
-        if (!ClientProperties.IsDevMode)
+        if (!ClientProperties.IsDeveloperMode)
         {
-            var exe = Path.Combine(ClientProperties.AppExeFolderPath, ClientProperties.ExecutableName);
+            var exe = Path.Combine(ClientProperties.WorkingFolder, ClientProperties.ExecutableName);
             var args = "--crash " + $@"""{e.ExceptionObject}""";
 
             _ = System.Diagnostics.Process.Start(exe, args);

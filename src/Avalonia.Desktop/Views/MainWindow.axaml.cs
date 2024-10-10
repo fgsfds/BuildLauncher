@@ -79,6 +79,10 @@ public sealed partial class MainWindow : Window
         {
             WW2GITab.IsSelected = true;
         }
+        else if (gamesProvider.IsWitchavenInstalled)
+        {
+            WitchavenTab.IsSelected = true;
+        }
         else
         {
             SettingsTab.IsSelected = true;
@@ -136,6 +140,16 @@ public sealed partial class MainWindow : Window
         if (_gamesProvider.IsWW2GIInstalled && !WW2GIPage.IsAlreadInitialized)
         {
             WW2GIPage.InitializeControl(GameEnum.WW2GI, _portsProvider, _vmFactory, _installedAddonsProviderFactory, _configProvider);
+        }
+
+        if (_gamesProvider.IsWitchavenInstalled && !WitchavenPage.IsAlreadInitialized)
+        {
+            WitchavenPage.InitializeControl(GameEnum.Witchaven, _portsProvider, _vmFactory, _installedAddonsProviderFactory, _configProvider);
+        }
+
+        if (_gamesProvider.IsTekWarInstalled && !TekWarPage.IsAlreadInitialized)
+        {
+            TekWarPage.InitializeControl(GameEnum.TekWar, _portsProvider, _vmFactory, _installedAddonsProviderFactory, _configProvider);
         }
 
         if (!StandalonePage.IsAlreadInitialized)

@@ -33,7 +33,7 @@ public sealed class Program
         
         if (builder.Environment.IsDevelopment())
         {
-            ServerProperties.IsDevMode = true;
+            ServerProperties.IsDeveloperMode = true;
         }
 
         _ = builder.Services.AddSingleton<AppReleasesProvider>();

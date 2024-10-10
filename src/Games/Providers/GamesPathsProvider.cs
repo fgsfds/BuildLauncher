@@ -23,6 +23,7 @@ public sealed class GamesPathsProvider
     private readonly string? _ww2giPath = null;
     private readonly string? _witch1Path = null;
     private readonly string? _witch2Path = null;
+    private readonly string? _twPath = null;
 
     public GamesPathsProvider(IConfigProvider config)
     {
@@ -191,7 +192,7 @@ public sealed class GamesPathsProvider
             GameEnum.WW2GI => _ww2giPath,
             GameEnum.Witchaven => _witch1Path,
             GameEnum.Witchaven2 => _witch2Path,
-            GameEnum.TekWar => ThrowHelper.ThrowNotSupportedException<string>(),
+            GameEnum.TekWar => _twPath,
             _ => ThrowHelper.ThrowNotSupportedException<string>()
         };
     }
@@ -219,6 +220,9 @@ public sealed class GamesPathsProvider
         _config.PathRidesAgain ??= GetPath(GameEnum.RidesAgain);
         _config.PathNam ??= GetPath(GameEnum.NAM);
         _config.PathWW2GI ??= GetPath(GameEnum.WW2GI);
+        _config.PathWitchaven ??= GetPath(GameEnum.Witchaven);
+        _config.PathWitchaven2 ??= GetPath(GameEnum.Witchaven2);
+        _config.PathTekWar ??= GetPath(GameEnum.TekWar);
     }
 
 

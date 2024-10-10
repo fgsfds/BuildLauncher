@@ -101,6 +101,24 @@ internal sealed partial class SettingsViewModel : ObservableObject
         set => _config.PathWW2GI = value;
     }
 
+    public string? PathToWitchaven
+    {
+        get => _config.PathWitchaven;
+        set => _config.PathWitchaven = value;
+    }
+
+    public string? PathToWitchaven2
+    {
+        get => _config.PathWitchaven2;
+        set => _config.PathWitchaven2 = value;
+    }
+
+    public string? PathToTekWar
+    {
+        get => _config.PathTekWar;
+        set => _config.PathTekWar = value;
+    }
+
     /// <summary>
     /// Skip intro parameter
     /// </summary>
@@ -240,6 +258,24 @@ internal sealed partial class SettingsViewModel : ObservableObject
 
             OnPropertyChanged(nameof(PathToWW2GI));
         }
+        else if (param.Equals(nameof(GameEnum.Witchaven)))
+        {
+            PathToWitchaven = files[0].Path.LocalPath;
+
+            OnPropertyChanged(nameof(PathToWitchaven));
+        }
+        else if (param.Equals(nameof(GameEnum.Witchaven2)))
+        {
+            PathToWitchaven2 = files[0].Path.LocalPath;
+
+            OnPropertyChanged(nameof(PathToWitchaven2));
+        }
+        else if (param.Equals(nameof(GameEnum.TekWar)))
+        {
+            PathToTekWar = files[0].Path.LocalPath;
+
+            OnPropertyChanged(nameof(PathToTekWar));
+        }
     }
 
 
@@ -357,6 +393,39 @@ internal sealed partial class SettingsViewModel : ObservableObject
                 PathToWW2GI = path;
 
                 OnPropertyChanged(nameof(PathToWW2GI));
+            }
+        }
+        else if (param.Equals(nameof(GameEnum.Witchaven)))
+        {
+            var path = _gamesAutoDetector.GetPath(GameEnum.Witchaven);
+
+            if (path is not null)
+            {
+                PathToWitchaven = path;
+
+                OnPropertyChanged(nameof(PathToWitchaven));
+            }
+        }
+        else if (param.Equals(nameof(GameEnum.Witchaven2)))
+        {
+            var path = _gamesAutoDetector.GetPath(GameEnum.Witchaven2);
+
+            if (path is not null)
+            {
+                PathToWitchaven2 = path;
+
+                OnPropertyChanged(nameof(PathToWitchaven2));
+            }
+        }
+        else if (param.Equals(nameof(GameEnum.TekWar)))
+        {
+            var path = _gamesAutoDetector.GetPath(GameEnum.TekWar);
+
+            if (path is not null)
+            {
+                PathToTekWar = path;
+
+                OnPropertyChanged(nameof(PathToTekWar));
             }
         }
     }

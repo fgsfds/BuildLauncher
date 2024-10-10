@@ -154,6 +154,14 @@ public sealed class BuildGDX : BasePort
         {
             GetNamArgs(sb, nGame, addon);
         }
+        else if (game is WitchavenGame whGame)
+        {
+            GetWitchavenArgs(sb, whGame, addon);
+        }
+        else if (game is TekWarGame tGame)
+        {
+            GetTekWarArgs(sb, tGame, addon);
+        }
         else
         {
             ThrowHelper.ThrowNotSupportedException($"Mod type {addon} for game {game} is not supported");
@@ -224,5 +232,26 @@ public sealed class BuildGDX : BasePort
         _ = sb.Append($@" -path ""{game.GameInstallFolder}""");
 
         _ = sb.Append($@" -game NAM");
+    }
+
+    private static void GetWitchavenArgs(StringBuilder sb, WitchavenGame game, IAddon camp)
+    {
+        if (camp.Id.Equals(nameof(GameEnum.Witchaven2), StringComparison.OrdinalIgnoreCase))
+        {
+            _ = sb.Append($@" -path ""{game.Witchaven2InstallPath}""");
+            _ = sb.Append($@" -game WITCHAVEN_2");
+        }
+        else
+        {
+            _ = sb.Append($@" -path ""{game.GameInstallFolder}""");
+            _ = sb.Append($@" -game WITCHAVEN");
+        }
+    }
+
+    private static void GetTekWarArgs(StringBuilder sb, TekWarGame game, IAddon camp)
+    {
+        _ = sb.Append($@" -path ""{game.GameInstallFolder}""");
+
+        _ = sb.Append($@" -game TEKWAR");
     }
 }

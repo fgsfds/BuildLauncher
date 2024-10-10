@@ -173,7 +173,7 @@ public sealed class DownloadableAddonsProvider : IDownloadableAddonsProvider
 
         await _installedAddonsProvider.AddAddonAsync(pathToFile).ConfigureAwait(false);
 
-        if (!ClientProperties.IsDevMode)
+        if (!ClientProperties.IsDeveloperMode)
         {
             var result = await _apiInterface.IncreaseNumberOfInstallsAsync(addon.Id).ConfigureAwait(false);
 
