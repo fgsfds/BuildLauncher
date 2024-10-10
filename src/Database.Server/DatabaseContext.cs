@@ -16,10 +16,19 @@ public sealed class DatabaseContext : DbContext
     public DbSet<ReportsDbEntity> Reports { get; set; }
     public DbSet<DependenciesDbEntity> Dependencies { get; set; }
 
+
+    public DatabaseContext()
+    {
+        _isDevMode = true;
+        Database.Migrate();
+    }
+
     public DatabaseContext(bool isDevMode)
     {
         _isDevMode = isDevMode;
+        Database.Migrate();
     }
+
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
