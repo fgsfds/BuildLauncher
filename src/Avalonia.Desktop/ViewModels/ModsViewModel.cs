@@ -142,27 +142,37 @@ public sealed partial class ModsViewModel : RightPanelViewModel, IPortsButtonCon
     {
         obj.ThrowIfNotType<AutoloadMod>(out var mod);
 
+        //disabling
         if (!mod.IsEnabled)
         {
-            var deps = ModsList.Where(x => x.DependentAddons?.ContainsKey(mod.Id) ?? false);
-
             _installedAddonsProvider.DisableAddon(new(mod.Id, mod.Version));
 
-            foreach (var depMod in deps)
+            var dependants = ModsList.Where(x => x.DependentAddons?.ContainsKey(mod.Id) ?? false);
+
+            foreach (var depMod in dependants)
             {
                 _installedAddonsProvider.DisableAddon(new(depMod.Id, depMod.Version));
             }
         }
-        else if (mod.IsEnabled)
+        //enabling
+        else
         {
+            _installedAddonsProvider.EnableAddon(new(mod.Id, mod.Version));
+
             var dependencies = mod.DependentAddons;
             var depMods = dependencies is null ? [] : ModsList.Where(x => dependencies.ContainsKey(x.Id));
-
-            _installedAddonsProvider.EnableAddon(new(mod.Id, mod.Version));
 
             foreach (var depMod in depMods)
             {
                 _installedAddonsProvider.EnableAddon(new(depMod.Id, depMod.Version));
+            }
+
+            var incompatibles = mod.IncompatibleAddons;
+            var incMods = incompatibles is null ? [] : ModsList.Where(x => incompatibles.ContainsKey(x.Id));
+
+            foreach (var incMod in incMods)
+            {
+                _installedAddonsProvider.DisableAddon(new(incMod.Id, incMod.Version));
             }
         }
 
