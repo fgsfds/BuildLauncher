@@ -91,5 +91,7 @@ public sealed partial class MainViewModel : ObservableObject
         OnPropertyChanged(nameof(IsSlaveTabEnabled));
         OnPropertyChanged(nameof(IsNamTabEnabled));
         OnPropertyChanged(nameof(IsWW2GITabEnabled));
+        OnPropertyChanged(nameof(IsWitchavenTabEnabled));
+        OnPropertyChanged(nameof(IsTekWarTabEnabled));
     }
 }

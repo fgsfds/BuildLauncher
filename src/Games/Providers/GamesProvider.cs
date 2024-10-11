@@ -200,6 +200,11 @@ public sealed class GamesProvider
             _witch.GameInstallFolder = _config.PathWitchaven;
             GameChangedEvent?.Invoke(_witch.GameEnum);
         }
+        else if (parameterName.Equals(nameof(_config.PathWitchaven2)))
+        {
+            _witch.Witchaven2InstallPath = _config.PathWitchaven2;
+            GameChangedEvent?.Invoke(_witch.GameEnum);
+        }
         else if (parameterName.Equals(nameof(_config.PathTekWar)))
         {
             _tekwar.GameInstallFolder = _config.PathTekWar;

@@ -83,6 +83,10 @@ public sealed partial class MainWindow : Window
         {
             WitchavenTab.IsSelected = true;
         }
+        else if (gamesProvider.IsTekWarInstalled)
+        {
+            TekWarTab.IsSelected = true;
+        }
         else
         {
             SettingsTab.IsSelected = true;
