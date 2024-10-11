@@ -1,13 +1,15 @@
-﻿using Common.Client.Config;
+﻿using Api.Common.Requests;
+using Api.Common.Responses;
 using Common.Entities;
 using Common.Enums;
+using Common.Interfaces;
 using System.Net.Http.Json;
 using System.Text.Json;
 using System.Web;
 
-namespace Common.Client.API;
+namespace Api.Common.Interface;
 
-public sealed class ApiInterface
+public sealed partial class ApiInterface
 {
     private readonly HttpClient _httpClient;
     private readonly IConfigProvider _config;
@@ -23,83 +25,33 @@ public sealed class ApiInterface
         _httpClient = httpClient;
     }
 
-    public async Task<GeneralReleaseEntity?> GetLatestAppReleaseAsync()
-    {
-        try
-        {
-            var response = await _httpClient.GetStringAsync($"{ApiUrl}/releases/app").ConfigureAwait(false);
-
-            if (string.IsNullOrWhiteSpace(response))
-            {
-                return null;
-            }
-
-            var release = JsonSerializer.Deserialize<GeneralReleaseEntity>(response);
-
-            return release;
-        }
-        catch
-        {
-            return null;
-        }
-    }
-
-    public async Task<Dictionary<PortEnum, GeneralReleaseEntity>?> GetLatestPortsReleasesAsync()
-    {
-        try
-        {
-            var response = await _httpClient.GetStringAsync($"{ApiUrl}/releases/ports").ConfigureAwait(false);
-
-            if (string.IsNullOrWhiteSpace(response))
-            {
-                return null;
-            }
-
-            var releases = JsonSerializer.Deserialize<Dictionary<PortEnum, GeneralReleaseEntity>>(response);
-
-            return releases;
-        }
-        catch
-        {
-            return null;
-        }
-    }
-
-    public async Task<Dictionary<ToolEnum, GeneralReleaseEntity>?> GetLatestToolsReleasesAsync()
-    {
-        try
-        {
-            var response = await _httpClient.GetStringAsync($"{ApiUrl}/releases/tools").ConfigureAwait(false);
-
-            if (string.IsNullOrWhiteSpace(response))
-            {
-                return null;
-            }
-
-            var releases = JsonSerializer.Deserialize<Dictionary<ToolEnum, GeneralReleaseEntity>>(response);
-
-            return releases;
-        }
-        catch
-        {
-            return null;
-        }
-    }
-
     public async Task<List<DownloadableAddonEntity>?> GetAddonsAsync(GameEnum gameEnum)
     {
         try
         {
-            var response = await _httpClient.GetStringAsync($"{ApiUrl}/addons/{gameEnum}").ConfigureAwait(false);
+            GetAddonsRequest message = new()
+            {
+                GameEnum = gameEnum
+            };
 
-            if (string.IsNullOrWhiteSpace(response))
+            using HttpRequestMessage requestMessage = new(HttpMethod.Get, "https://buildlauncher.fgsfds.link/api2/addons");
+            requestMessage.Content = JsonContent.Create(message);
+
+            var response = await _httpClient.SendAsync(requestMessage).ConfigureAwait(false);
+
+            if (response is null || !response.IsSuccessStatusCode)
             {
                 return null;
             }
 
-            var addons = JsonSerializer.Deserialize(response, DownloadableAddonEntityListContext.Default.ListDownloadableAddonEntity);
+            var addons = await response.Content.ReadFromJsonAsync<GetAddonsResponse>().ConfigureAwait(false);
 
-            return addons;
+            if (addons is null)
+            {
+                return null;
+            }
+
+            return addons.AddonsList;
         }
         catch (Exception)
         {

@@ -1,6 +1,5 @@
 using Avalonia.Desktop.Helpers;
 using Avalonia.Platform.Storage;
-using Common.Client.Config;
 using Common.Client.Helpers;
 using Common.Enums;
 using Common.Enums.Versions;

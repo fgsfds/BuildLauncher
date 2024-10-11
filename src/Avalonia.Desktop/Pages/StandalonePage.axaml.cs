@@ -1,7 +1,7 @@
 using Avalonia.Controls;
 using Avalonia.Desktop.ViewModels;
-using Common.Client.Config;
 using Common.Enums;
+using Common.Interfaces;
 using Mods.Providers;
 using Ports.Providers;
 
@@ -26,7 +26,8 @@ public sealed partial class StandalonePage : UserControl
         PortsProvider portsProvider,
         InstalledAddonsProviderFactory installedAddonsProviderFactory,
         ViewModelsFactory vmFactory,
-        IConfigProvider configProvider)
+        IConfigProvider configProvider
+        )
     {
         CampControl.DataContext = vmFactory.GetCampaignsViewModel(gameEnum);
         DownControl.DataContext = vmFactory.GetDownloadsViewModel(gameEnum);

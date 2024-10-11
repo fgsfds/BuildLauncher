@@ -2,8 +2,8 @@
 using Avalonia.Desktop.ViewModels;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
-using Common.Client.Config;
 using Common.Enums;
+using Common.Interfaces;
 using Games.Providers;
 using Mods.Providers;
 using Ports.Providers;

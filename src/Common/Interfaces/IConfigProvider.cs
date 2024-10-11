@@ -1,7 +1,6 @@
 ﻿using Common.Enums;
-using static Common.Client.Config.ConfigProvider;
 
-namespace Common.Client.Config;
+namespace Common.Interfaces;
 public interface IConfigProvider
 {
     string ApiPassword { get; set; }
@@ -27,6 +26,7 @@ public interface IConfigProvider
     ThemeEnum Theme { get; set; }
     bool UseLocalApi { get; set; }
 
+    delegate void ParameterChanged(string? parameterName);
     event ParameterChanged ParameterChangedEvent;
 
     void AddPlaytime(string addonId, TimeSpan playTime);

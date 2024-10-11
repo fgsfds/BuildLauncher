@@ -3,8 +3,9 @@ using Common.Enums;
 using Microsoft.AspNetCore.Mvc;
 using Web.Blazor.Providers;
 
-namespace Web.Blazor.Controllers;
+namespace Web.Blazor.ControllersV1;
 
+[Obsolete]
 [ApiController]
 [Route("api/addons")]
 public sealed class AddonsController : ControllerBase
@@ -16,32 +17,37 @@ public sealed class AddonsController : ControllerBase
         _addonsProvider = addonsProvider;
     }
 
+    [Obsolete]
     [HttpGet("{GameEnum}")]
     public List<DownloadableAddonEntity> GetAddons(GameEnum gameEnum) => _addonsProvider.GetAddons(gameEnum);
 
 
-    [HttpGet("scores")]
     [Obsolete]
+    [HttpGet("scores")]
     public Dictionary<string, int> GetScores() => [];
 
 
-    [HttpPut("scores/change")]
     [Obsolete]
+    [HttpPut("scores/change")]
     public int ChangeScore([FromBody] Tuple<string, sbyte> message) => 0;
 
 
+    [Obsolete]
     [HttpGet("rating")]
     public Dictionary<string, decimal> GetRating() => _addonsProvider.GetRating();
 
 
+    [Obsolete]
     [HttpPut("rating/change")]
     public decimal ChangeRating([FromBody] Tuple<string, sbyte, bool> message) => _addonsProvider.ChangeRating(message.Item1, message.Item2, message.Item3);
 
 
+    [Obsolete]
     [HttpPut("installs/add")]
     public int IncreaseNumberOfInstalls([FromBody] string addonId) => _addonsProvider.IncreaseNumberOfInstalls(addonId);
 
 
+    [Obsolete]
     [HttpPost("add")]
     public IResult AddAddonToDatabase([FromBody] Tuple<AddonsJsonEntity, string> message)
     {

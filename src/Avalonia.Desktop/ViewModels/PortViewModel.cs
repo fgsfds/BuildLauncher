@@ -17,7 +17,7 @@ public sealed partial class PortViewModel : ObservableObject
     private readonly PortsReleasesProvider _portsReleasesProvider;
     private readonly BasePort _port;
     private GeneralReleaseEntity? _release;
-    private ILogger _logger;
+    private readonly ILogger _logger;
 
     public event EventHandler PortChangedEvent;
 

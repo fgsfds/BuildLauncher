@@ -1,5 +1,4 @@
 ﻿using Common;
-using Common.Client.Config;
 using Common.Enums;
 using Common.Enums.Addons;
 using Common.Helpers;
@@ -9,9 +8,7 @@ using Mods.Addons;
 using Mods.Serializable;
 using Mods.Serializable.Addon;
 using SharpCompress.Archives;
-using System;
 using System.Text.Json;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace Mods.Providers;
 

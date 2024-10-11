@@ -1,5 +1,5 @@
-﻿using Common.Client.API;
-using Common.Client.Config;
+﻿using Api.Common.Interface;
+using Common.Interfaces;
 using CommunityToolkit.Diagnostics;
 
 namespace Common.Client.Providers;
@@ -12,7 +12,8 @@ public sealed class RatingProvider
 
     public RatingProvider(
         ApiInterface apiInterface,
-        IConfigProvider config)
+        IConfigProvider config
+        )
     {
         _apiInterface = apiInterface;
         _config = config;

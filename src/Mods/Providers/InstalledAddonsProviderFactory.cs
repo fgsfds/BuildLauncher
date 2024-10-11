@@ -1,16 +1,18 @@
-﻿using Common.Client.Config;
-using Common.Enums;
+﻿using Common.Enums;
 using Common.Interfaces;
 
 namespace Mods.Providers;
 
-public sealed class InstalledAddonsProviderFactory(
-    IConfigProvider config
-    )
+public sealed class InstalledAddonsProviderFactory
 {
     private readonly Dictionary<GameEnum, InstalledAddonsProvider> _list = [];
 
-    private readonly IConfigProvider _config = config;
+    private readonly IConfigProvider _config;
+
+    public InstalledAddonsProviderFactory(IConfigProvider config)
+    {
+        _config = config;
+    }
 
     /// <summary>
     /// Get or create singleton instance of the provider

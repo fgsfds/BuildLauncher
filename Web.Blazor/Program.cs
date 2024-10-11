@@ -47,6 +47,7 @@ public sealed class Program
 
         _ = builder.Services.AddSingleton<DatabaseContextFactory>(x => new(builder.Environment.IsDevelopment()));
 
+        _ = builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<Program>());
 
         var app = builder.Build();
 

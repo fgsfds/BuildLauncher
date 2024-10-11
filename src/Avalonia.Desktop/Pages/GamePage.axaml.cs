@@ -1,7 +1,7 @@
 using Avalonia.Controls;
 using Avalonia.Desktop.ViewModels;
-using Common.Client.Config;
 using Common.Enums;
+using Common.Interfaces;
 using Mods.Providers;
 using Ports.Providers;
 

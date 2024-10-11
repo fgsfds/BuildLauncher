@@ -1,5 +1,7 @@
 ﻿using Common.Enums;
+using Common.Interfaces;
 using CommunityToolkit.Diagnostics;
+using static Common.Interfaces.IConfigProvider;
 
 namespace Common.Client.Config;
 
@@ -31,7 +33,7 @@ public sealed class ConfigProviderFake : IConfigProvider
     public bool SkipStartup { get; set; } = false;
     public bool UseLocalApi { get; set; } = true;
 
-    public event ConfigProvider.ParameterChanged ParameterChangedEvent;
+    public event ParameterChanged ParameterChangedEvent;
 
     public void AddPlaytime(string addonId, TimeSpan playTime) => ThrowHelper.ThrowNotSupportedException();
 

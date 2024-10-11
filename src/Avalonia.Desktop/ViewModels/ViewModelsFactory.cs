@@ -1,6 +1,6 @@
-﻿using Common.Client.Config;
-using Common.Client.Providers;
+﻿using Common.Client.Providers;
 using Common.Enums;
+using Common.Interfaces;
 using Games.Providers;
 using Microsoft.Extensions.Logging;
 using Mods.Providers;

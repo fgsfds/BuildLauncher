@@ -1,8 +1,8 @@
 using Avalonia.Controls;
 using Avalonia.Desktop.ViewModels;
 using Avalonia.Input;
-using Common.Client.Config;
 using Common.Helpers;
+using Common.Interfaces;
 using CommunityToolkit.Mvvm.Input;
 using Mods.Providers;
 

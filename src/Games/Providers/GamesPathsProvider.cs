@@ -1,6 +1,6 @@
-﻿using Common.Client.Config;
-using Common.Enums;
+﻿using Common.Enums;
 using Common.Enums.Versions;
+using Common.Interfaces;
 using CommunityToolkit.Diagnostics;
 using Microsoft.Win32;
 using System.Runtime.InteropServices;

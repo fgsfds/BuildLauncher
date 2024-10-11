@@ -1,8 +1,9 @@
-﻿using Common.Client.API;
+﻿using Api.Common.Interface;
 using Common.Client.Config;
 using Common.Client.Helpers;
 using Common.Client.Providers;
 using Common.Helpers;
+using Common.Interfaces;
 using Database.Client;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -20,8 +21,8 @@ public static class ClientBindings
 
         if (isDesigner)
         {
-            using ILoggerFactory factory = LoggerFactory.Create(builder => builder.AddDebug());
-            ILogger logger = factory.CreateLogger("Debug logger");
+            using var factory = LoggerFactory.Create(builder => builder.AddDebug());
+            var logger = factory.CreateLogger("Debug logger");
 
             _ = container.AddSingleton<ILogger>(logger);
             _ = container.AddSingleton<IConfigProvider, ConfigProviderFake>();
@@ -36,7 +37,7 @@ public static class ClientBindings
 
     private static ILogger CreateLogger(IServiceProvider service)
     {
-        string logFilePath = Path.Combine(ClientProperties.WorkingFolder, "BuildLauncher.log");
+        var logFilePath = Path.Combine(ClientProperties.WorkingFolder, "BuildLauncher.log");
         var logger = FileLoggerFactory.Create(logFilePath);
 
         return logger;

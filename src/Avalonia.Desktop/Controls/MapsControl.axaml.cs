@@ -3,7 +3,6 @@ using Avalonia.Desktop.Helpers;
 using Avalonia.Desktop.ViewModels;
 using Avalonia.Input;
 using Avalonia.Media;
-using Common.Client.Config;
 using Common.Enums;
 using Common.Enums.Skills;
 using Common.Helpers;

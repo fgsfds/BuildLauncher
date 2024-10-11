@@ -83,7 +83,7 @@ public static class FileLoggerFactory
             //nothing to do
         }
 
-        using ILoggerFactory loggerFactory = LoggerFactory.Create(builder =>
+        using var loggerFactory = LoggerFactory.Create(builder =>
         {
             if (_logFileWriter is not null)
             {

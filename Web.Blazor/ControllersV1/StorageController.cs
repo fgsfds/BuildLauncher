@@ -2,8 +2,9 @@ using Microsoft.AspNetCore.Mvc;
 using System.Web;
 using Web.Blazor.Helpers;
 
-namespace Web.Blazor.Controllers;
+namespace Web.Blazor.ControllersV1;
 
+[Obsolete]
 [ApiController]
 [Route("api/storage")]
 public sealed class StorageController : ControllerBase
@@ -15,6 +16,7 @@ public sealed class StorageController : ControllerBase
         _s3controller = s3controller;
     }
 
+    [Obsolete]
     [HttpGet("url/{path}")]
     public string GetSignedUrl(string path)
     {

@@ -1,5 +1,4 @@
-﻿using Common.Client.Config;
-using Common.Enums;
+﻿using Common.Enums;
 using Common.Interfaces;
 using CommunityToolkit.Diagnostics;
 using Games.Games;
@@ -40,9 +39,7 @@ public sealed class GamesProvider
     public bool IsTekWarInstalled => _tekwar.IsBaseGameInstalled;
 
 
-    public GamesProvider(
-        IConfigProvider config
-        )
+    public GamesProvider(IConfigProvider config)
     {
         _config = config;
 

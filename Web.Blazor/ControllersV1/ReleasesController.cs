@@ -3,8 +3,9 @@ using Common.Enums;
 using Microsoft.AspNetCore.Mvc;
 using Web.Blazor.Providers;
 
-namespace Web.Blazor.Controllers;
+namespace Web.Blazor.ControllersV1;
 
+[Obsolete]
 [ApiController]
 [Route("api/releases")]
 public sealed class ReleasesController : ControllerBase
@@ -24,12 +25,15 @@ public sealed class ReleasesController : ControllerBase
         _toolsReleasesProvider = toolsReleasesProvider;
     }
 
+    [Obsolete]
     [HttpGet("app")]
     public GeneralReleaseEntity? GetLatestAppRelease() => _appReleasesProvider.AppRelease;
 
+    [Obsolete]
     [HttpGet("ports")]
     public Dictionary<PortEnum, GeneralReleaseEntity> GetLatestPortsReleases() => _portsReleasesProvider.PortsReleases;
 
+    [Obsolete]
     [HttpGet("tools")]
     public Dictionary<ToolEnum, GeneralReleaseEntity> GetLatestToolsReleases() => _toolsReleasesProvider.ToolsReleases;
 }
