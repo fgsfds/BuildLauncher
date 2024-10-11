@@ -32,7 +32,7 @@
             <TextBlock Text="{Binding LatestVersion, FallbackValue=None}" Foreground="{DynamicResource SystemAccentColor}"/>
         </StackPanel>
 
-        <Grid Name="ButtonsGrid" ColumnDefinitions="2*,*" HorizontalAlignment="Stretch">
+        <Grid Name="ButtonsGrid" ColumnDefinitions="2*,*,*" HorizontalAlignment="Stretch">
 
             <Button Name="InstallButton"
                     Grid.Column="0"
@@ -57,11 +57,23 @@
 
             <Button Height="{Binding #InstallButton.Bounds.Height}"
                     Grid.Column="1"
+                    Command="{Binding OpenFolderCommand}"
+                    Margin="5"
+                    HorizontalAlignment="Stretch"
+                    HorizontalContentAlignment="Center"
+                    IsEnabled="{Binding IsInstalled}"
+                    ToolTip.Tip="Uninstall">
+                <i:Icon Value="mdi-folder-open" />
+            </Button>
+
+            <Button Height="{Binding #InstallButton.Bounds.Height}"
+                    Grid.Column="2"
                     Command="{Binding UninstallCommand}"
                     Margin="5"
                     HorizontalAlignment="Stretch"
                     HorizontalContentAlignment="Center"
                     IsEnabled="{Binding IsInstalled}"
+                    Background="Crimson"
                     ToolTip.Tip="Uninstall">
                 <i:Icon Value="mdi-delete" />
             </Button>

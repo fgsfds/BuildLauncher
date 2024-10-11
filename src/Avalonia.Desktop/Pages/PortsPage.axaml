@@ -11,48 +11,35 @@
              x:DataType="vm:PortsViewModel"
              x:Class="Avalonia.Desktop.Pages.PortsPage">
 
-    <Grid RowDefinitions="*,auto">
+    <ScrollViewer HorizontalScrollBarVisibility="Disabled">
 
-        <ScrollViewer HorizontalScrollBarVisibility="Disabled">
+        <ItemsControl Name="PortsList"
+                      ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                      ItemsSource="{Binding PortsList}"
+                      Padding="2">
 
-            <ItemsControl Name="PortsList"
-                          Grid.Row="1" Grid.Column="0"
-                          ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                          ItemsSource="{Binding PortsList}"
-                          Padding="2">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel Orientation="Horizontal"/>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
 
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <WrapPanel Orientation="Horizontal"/>
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
 
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition SharedSizeGroup="SharedGroup" />
+                        </Grid.ColumnDefinitions>
+                        <ctrl:PortControl Margin="10"/>
+                    </Grid>
 
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition SharedSizeGroup="SharedGroup" />
-                            </Grid.ColumnDefinitions>
-                            <ctrl:PortControl Margin="10"/>
-                        </Grid>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
 
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
+        </ItemsControl>
 
-            </ItemsControl>
-
-        </ScrollViewer>
-
-        <Button Margin="10,10,10,15"
-                Padding="8"
-                Grid.Row="1"
-                HorizontalAlignment="Right"
-                Click="OpenPortsFolderCommand">
-            <i:Icon Value="mdi-folder-open" />
-        </Button>
-
-    </Grid>
+    </ScrollViewer>
 
 
 

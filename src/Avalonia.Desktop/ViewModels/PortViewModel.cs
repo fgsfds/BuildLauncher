@@ -1,3 +1,4 @@
+using Common.Client.Helpers;
 using Common.Entities;
 using Common.Enums;
 using Common.Helpers;
@@ -7,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using Ports.Installer;
 using Ports.Ports;
 using Ports.Providers;
+using System.Diagnostics;
 using System.Globalization;
 
 namespace Avalonia.Desktop.ViewModels;
@@ -211,7 +213,7 @@ public sealed partial class PortViewModel : ObservableObject
     /// <summary>
     /// Force check for updates
     /// </summary>
-    [RelayCommand(CanExecute = nameof(UninstallCommandCanExecute))]
+    [RelayCommand]
     private void Uninstall()
     {
         try
@@ -231,7 +233,20 @@ public sealed partial class PortViewModel : ObservableObject
             PortChangedEvent?.Invoke(this, EventArgs.Empty);
         }
     }
-    public bool UninstallCommandCanExecute => IsInstalled;
+
+
+    /// <summary>
+    /// Open port folder
+    /// </summary>
+    [RelayCommand]
+    private void OpenFolder()
+    {
+        _ = Process.Start(new ProcessStartInfo
+        {
+            FileName = _port.PortInstallFolderPath,
+            UseShellExecute = true,
+        });
+    }
 
 
     #endregion
