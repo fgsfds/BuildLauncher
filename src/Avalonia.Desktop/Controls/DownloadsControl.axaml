@@ -63,14 +63,14 @@
 
 
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Title" Binding="{Binding Title}" FontSize="12" Width="*"/>
-                <DataGridTextColumn Header="Type" Binding="{Binding AddonType}" FontSize="12" FontWeight="Bold" />
-                <DataGridTextColumn Header="Version" Binding="{Binding Version}" FontSize="12" />
-                <DataGridTextColumn Header="Size" Binding="{Binding FileSizeString}" FontSize="12" />
-                <DataGridTextColumn Header="Rating" Binding="{Binding RatingStr}" FontSize="12" />
-                <DataGridTextColumn Header="Downloads" Binding="{Binding Installs}" FontSize="12" />
-                <DataGridTextColumn Header="Updated" Binding="{Binding UpdateDateString}" FontSize="12" SortMemberPath="UpdateDate" />
-                <DataGridTextColumn Header="Status" Binding="{Binding Status}" FontSize="12" FontWeight="Bold" />
+                <DataGridTextColumn Header="Title" Binding="{Binding Title}" FontSize="12" Width="3*"/>
+                <DataGridTextColumn Header="Type" Binding="{Binding AddonType}" FontSize="12" FontWeight="Bold" Width="*" />
+                <DataGridTextColumn Header="Version" Binding="{Binding Version}" FontSize="12" Width="*" />
+                <DataGridTextColumn Header="Size" Binding="{Binding FileSizeString}" FontSize="12" Width="*" />
+                <DataGridTextColumn Header="Rating" Binding="{Binding RatingStr}" FontSize="12" Width="*" />
+                <DataGridTextColumn Header="Downloads" Binding="{Binding Installs}" FontSize="12" Width="*" />
+                <DataGridTextColumn Header="Updated" Binding="{Binding UpdateDateString}" FontSize="12" Width="*" SortMemberPath="UpdateDate" />
+                <DataGridTextColumn Header="Status" Binding="{Binding Status}" FontSize="12" FontWeight="Bold" Width="*" />
             </DataGrid.Columns>
         </DataGrid>
 
