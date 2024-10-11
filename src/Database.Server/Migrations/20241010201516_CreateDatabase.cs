@@ -111,6 +111,14 @@ public sealed partial class CreateDatabase : Migration
                     onDelete: ReferentialAction.Cascade);
             });
 
+        _ = migrationBuilder.Sql("""
+            alter table main.ratings
+                drop column rating cascade;
+
+            alter table main.ratings
+                add column rating decimal(3,2) NOT NULL GENERATED ALWAYS AS (CASE rating_total WHEN 0 THEN 0 ELSE (rating_sum / rating_total) END) STORED;
+            """);
+
         _ = migrationBuilder.CreateTable(
             name: "reports",
             schema: "main",

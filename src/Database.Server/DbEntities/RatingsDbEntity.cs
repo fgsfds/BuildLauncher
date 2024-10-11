@@ -21,7 +21,6 @@ public sealed class RatingsDbEntity
 
     [Column("rating")]
     [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
-    [DefaultValue("CASE rating_total WHEN 0 THEN 0 ELSE (rating_sum / rating_total) END")]
     public decimal Rating { get; set; }
 
 
