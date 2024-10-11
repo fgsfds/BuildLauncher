@@ -1,5 +1,6 @@
 using Avalonia.Controls;
 using Avalonia.Desktop.ViewModels;
+using Avalonia.Interactivity;
 using Avalonia.Media;
 using Common.Helpers;
 using Common.Interfaces;
@@ -9,7 +10,10 @@ namespace Avalonia.Desktop.Controls;
 public sealed partial class RightPanelControl : UserControl
 {
     private readonly IBrush HightlightColor = SolidColorBrush.Parse("#FFCC00");
+    private readonly IBrush DisabledColor = SolidColorBrush.Parse("#919191");
     private IConfigProvider _configProvider;
+
+    private RightPanelViewModel _viewModel;
 
     public RightPanelControl()
     {
@@ -19,10 +23,9 @@ public sealed partial class RightPanelControl : UserControl
     public void InitializeControl(IConfigProvider configProvider)
     {
         _configProvider = configProvider;
-        SetStars();
 
-        Description.PropertyChanged += OnPropertyChanged;
-        Rating.PropertyChanged += OnPropertyChanged;
+        Guard2.ThrowIfNotType<RightPanelViewModel>(DataContext, out var rightPanelViewModel);
+        _viewModel = rightPanelViewModel;
     }
 
     private void Button_PointerEntered1(object? sender, Input.PointerEventArgs e)
@@ -72,14 +75,17 @@ public sealed partial class RightPanelControl : UserControl
 
     private void SetStars()
     {
-        Guard2.ThrowIfNotType<RightPanelViewModel>(DataContext, out var rightPanelViewModel);
-
-        if (rightPanelViewModel.SelectedAddon is null)
+        if (_viewModel?.SelectedAddon is null)
         {
             return;
         }
 
-        var hasRating = _configProvider.Rating.TryGetValue(rightPanelViewModel.SelectedAddon.Id, out var rating);
+        if (!Star1.IsEnabled)
+        {
+            return;
+        }
+
+        var hasRating = _configProvider.Rating.TryGetValue(_viewModel.SelectedAddon.Id, out var rating);
 
         var theme = Application.Current!.ActualThemeVariant;
         _ = Application.Current.TryGetResource("ButtonForeground", theme, out var defaultColor);
@@ -165,7 +171,86 @@ public sealed partial class RightPanelControl : UserControl
         }
     }
 
-    private void OnPropertyChanged(object? sender, AvaloniaPropertyChangedEventArgs e)
+    public async void Button_Click1(object sender, RoutedEventArgs args)
+    {
+        ChangeStarsState(false);
+
+        var command = _viewModel.ChangeRatingCommand;
+        await command.ExecuteAsync("1").ConfigureAwait(true);
+
+        ChangeStarsState(true);
+
+        SetStars();
+    }
+
+    public async void Button_Click2(object sender, RoutedEventArgs args)
+    {
+        ChangeStarsState(false);
+
+        var command = _viewModel.ChangeRatingCommand;
+        await command.ExecuteAsync("2").ConfigureAwait(true);
+
+        ChangeStarsState(true);
+
+        SetStars();
+    }
+
+    public async void Button_Click3(object sender, RoutedEventArgs args)
+    {
+        ChangeStarsState(false);
+
+        var command = _viewModel.ChangeRatingCommand;
+        await command.ExecuteAsync("3").ConfigureAwait(true);
+
+        ChangeStarsState(true);
+
+        SetStars();
+    }
+
+    public async void Button_Click4(object sender, RoutedEventArgs args)
+    {
+        ChangeStarsState(false);
+
+        var command = _viewModel.ChangeRatingCommand;
+        await command.ExecuteAsync("4").ConfigureAwait(true);
+
+        ChangeStarsState(true);
+
+        SetStars();
+    }
+
+    public async void Button_Click5(object sender, RoutedEventArgs args)
+    {
+        ChangeStarsState(false);
+
+        var command = _viewModel.ChangeRatingCommand;
+        await command.ExecuteAsync("5").ConfigureAwait(true);
+
+        ChangeStarsState(true);
+
+        SetStars();
+    }
+
+
+    private void ChangeStarsState(bool isEnabled)
+    {
+        Star1.IsEnabled = isEnabled;
+        Star2.IsEnabled = isEnabled;
+        Star3.IsEnabled = isEnabled;
+        Star4.IsEnabled = isEnabled;
+        Star5.IsEnabled = isEnabled;
+
+        if (!isEnabled)
+        {
+            Star1.Foreground = DisabledColor;
+            Star2.Foreground = DisabledColor;
+            Star3.Foreground = DisabledColor;
+            Star4.Foreground = DisabledColor;
+            Star5.Foreground = DisabledColor;
+        }
+    }
+
+    private void Button_PointerExited(object? sender, Input.PointerEventArgs e)
     {
         if (sender is null)
         {
@@ -175,7 +260,7 @@ public sealed partial class RightPanelControl : UserControl
         SetStars();
     }
 
-    private void Button_PointerExited(object? sender, Input.PointerEventArgs e)
+    private void Rating_PropertyChanged(object? sender, AvaloniaPropertyChangedEventArgs e)
     {
         if (sender is null)
         {
