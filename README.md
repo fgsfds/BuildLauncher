@@ -37,6 +37,8 @@ Another goal of this project is to create a unification standard for Build Engin
 - Powerslave
 - NAM
 - World War II GI
+- Witchaven I & II
+- TekWar
 - and standalone Build Engine games
 
 </td>
@@ -75,9 +77,9 @@ Another goal of this project is to create a unification standard for Build Engin
 <td valign="center">
 <img align="right" src="img/img4.png">
 
-- Support for more Build Engine games
+- DosBox support
 - More downloadable maps, campaigns and mods
-- Linux/Deck version
+- Linux/Deck support
 
 </td>
 </tr>
