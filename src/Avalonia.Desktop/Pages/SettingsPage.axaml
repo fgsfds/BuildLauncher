@@ -2,9 +2,10 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:i="https://github.com/projektanker/icons.avalonia"
              mc:Ignorable="d"
              d:DesignWidth="800"
-             d:DesignHeight="450"
+             d:DesignHeight="600"
              xmlns:vm="clr-namespace:Avalonia.Desktop.ViewModels"
              x:DataType="vm:SettingsViewModel"
              x:Class="Avalonia.Desktop.Pages.SettingsPage">
@@ -59,7 +60,8 @@
                          Text="{Binding PathToDuke3D}"
                          Margin="0,3"/>
 
-                <Button Grid.Row="0"  Grid.Column="2"
+                <Button Name="ChooseFolderButton"
+                        Grid.Row="0"  Grid.Column="2"
                         Margin="5,0"
                         Width="{Binding $self.Bounds.Height}"
                         HorizontalContentAlignment="Center"
@@ -69,13 +71,13 @@
                 </Button>
 
                 <Button Grid.Row="0"  Grid.Column="3"
-                        Margin="0,0,5,0"
+                        Height="{Binding #ChooseFolderButton.Bounds.Height}"
                         Width="{Binding $self.Bounds.Height}"
                         HorizontalContentAlignment="Center"
                         Command="{Binding AutodetectCommand}"
                         CommandParameter="Duke3D"
                         ToolTip.Tip="Autodetect">
-                    ⟳
+                    <i:Icon Value="mdi-refresh" />
                 </Button>
 
 
@@ -89,7 +91,7 @@
                          Margin="0,3"/>
 
                 <Button Grid.Row="1"  Grid.Column="2"
-                        Margin="5,0"
+                        Margin="5,3"
                         Width="{Binding $self.Bounds.Height}"
                         HorizontalContentAlignment="Center"
                         Command="{Binding OpenFolderPickerCommand}"
@@ -98,13 +100,13 @@
                 </Button>
 
                 <Button Grid.Row="1"  Grid.Column="3"
-                        Margin="0,0,10,0"
+                        Height="{Binding #ChooseFolderButton.Bounds.Height}"
                         Width="{Binding $self.Bounds.Height}"
                         HorizontalContentAlignment="Center"
                         Command="{Binding AutodetectCommand}"
                         CommandParameter="Duke3D_WT"
                         ToolTip.Tip="Autodetect">
-                    ⟳
+                    <i:Icon Value="mdi-refresh" />
                 </Button>
 
 
@@ -146,13 +148,13 @@
                 </Button>
 
                 <Button Grid.Row="3"  Grid.Column="3"
-                        Margin="0,0,10,0"
+                        Height="{Binding #ChooseFolderButton.Bounds.Height}"
                         Width="{Binding $self.Bounds.Height}"
                         HorizontalContentAlignment="Center"
                         Command="{Binding AutodetectCommand}"
                         CommandParameter="Blood"
                         ToolTip.Tip="Autodetect">
-                    ⟳
+                    <i:Icon Value="mdi-refresh" />
                 </Button>
 
 
@@ -175,13 +177,13 @@
                 </Button>
 
                 <Button Grid.Row="4"  Grid.Column="3"
-                        Margin="0,0,10,0"
+                        Height="{Binding #ChooseFolderButton.Bounds.Height}"
                         Width="{Binding $self.Bounds.Height}"
                         HorizontalContentAlignment="Center"
                         Command="{Binding AutodetectCommand}"
                         CommandParameter="ShadowWarrior"
                         ToolTip.Tip="Autodetect">
-                    ⟳
+                    <i:Icon Value="mdi-refresh" />
                 </Button>
 
 
@@ -204,13 +206,13 @@
                 </Button>
 
                 <Button Grid.Row="5"  Grid.Column="3"
-                        Margin="0,0,10,0"
+                        Height="{Binding #ChooseFolderButton.Bounds.Height}"
                         Width="{Binding $self.Bounds.Height}"
                         HorizontalContentAlignment="Center"
                         Command="{Binding AutodetectCommand}"
                         CommandParameter="Fury"
                         ToolTip.Tip="Autodetect">
-                    ⟳
+                    <i:Icon Value="mdi-refresh" />
                 </Button>
 
 
@@ -233,13 +235,13 @@
                 </Button>
 
                 <Button Grid.Row="6"  Grid.Column="3"
-                        Margin="0,0,10,0"
+                        Height="{Binding #ChooseFolderButton.Bounds.Height}"
                         Width="{Binding $self.Bounds.Height}"
                         HorizontalContentAlignment="Center"
                         Command="{Binding AutodetectCommand}"
                         CommandParameter="Redneck"
                         ToolTip.Tip="Autodetect">
-                    ⟳
+                    <i:Icon Value="mdi-refresh" />
                 </Button>
 
 
@@ -262,13 +264,13 @@
                 </Button>
 
                 <Button Grid.Row="7"  Grid.Column="3"
-                        Margin="0,0,10,0"
+                        Height="{Binding #ChooseFolderButton.Bounds.Height}"
                         Width="{Binding $self.Bounds.Height}"
                         HorizontalContentAlignment="Center"
                         Command="{Binding AutodetectCommand}"
                         CommandParameter="RidesAgain"
                         ToolTip.Tip="Autodetect">
-                    ⟳
+                    <i:Icon Value="mdi-refresh" />
                 </Button>
 
 
@@ -291,13 +293,13 @@
                 </Button>
 
                 <Button Grid.Row="8"  Grid.Column="3"
-                        Margin="0,0,10,0"
+                        Height="{Binding #ChooseFolderButton.Bounds.Height}"
                         Width="{Binding $self.Bounds.Height}"
                         HorizontalContentAlignment="Center"
                         Command="{Binding AutodetectCommand}"
                         CommandParameter="Exhumed"
                         ToolTip.Tip="Autodetect">
-                    ⟳
+                    <i:Icon Value="mdi-refresh" />
                 </Button>
 
 
@@ -320,13 +322,13 @@
                 </Button>
 
                 <Button Grid.Row="9"  Grid.Column="3"
-                        Margin="0,0,10,0"
+                        Height="{Binding #ChooseFolderButton.Bounds.Height}"
                         Width="{Binding $self.Bounds.Height}"
                         HorizontalContentAlignment="Center"
                         Command="{Binding AutodetectCommand}"
                         CommandParameter="NAM"
                         ToolTip.Tip="Autodetect">
-                    ⟳
+                    <i:Icon Value="mdi-refresh" />
                 </Button>
 
 
@@ -349,13 +351,13 @@
                 </Button>
 
                 <Button Grid.Row="10"  Grid.Column="3"
-                        Margin="0,0,10,0"
+                        Height="{Binding #ChooseFolderButton.Bounds.Height}"
                         Width="{Binding $self.Bounds.Height}"
                         HorizontalContentAlignment="Center"
                         Command="{Binding AutodetectCommand}"
                         CommandParameter="WW2GI"
                         ToolTip.Tip="Autodetect">
-                    ⟳
+                    <i:Icon Value="mdi-refresh" />
                 </Button>
 
 
@@ -378,13 +380,13 @@
                 </Button>
 
                 <Button Grid.Row="11"  Grid.Column="3"
-                        Margin="0,0,10,0"
+                        Height="{Binding #ChooseFolderButton.Bounds.Height}"
                         Width="{Binding $self.Bounds.Height}"
                         HorizontalContentAlignment="Center"
                         Command="{Binding AutodetectCommand}"
                         CommandParameter="Witchaven"
                         ToolTip.Tip="Autodetect">
-                    ⟳
+                    <i:Icon Value="mdi-refresh" />
                 </Button>
 
 
@@ -408,12 +410,13 @@
 
                 <Button Grid.Row="12"  Grid.Column="3"
                         Margin="0,0,10,0"
+                        Height="{Binding #ChooseFolderButton.Bounds.Height}"
                         Width="{Binding $self.Bounds.Height}"
                         HorizontalContentAlignment="Center"
                         Command="{Binding AutodetectCommand}"
                         CommandParameter="Witchaven2"
                         ToolTip.Tip="Autodetect">
-                    ⟳
+                    <i:Icon Value="mdi-refresh" />
                 </Button>
 
 

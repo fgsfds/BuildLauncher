@@ -119,6 +119,8 @@ public sealed class App : Application
             }
 
             _logger?.LogCritical(ex, "== Critical error ==");
+
+            Environment.FailFast(Environment.StackTrace);
         }
     }
 

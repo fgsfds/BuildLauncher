@@ -140,85 +140,85 @@ public sealed class ConfigProvider : IConfigProvider
     //GAME PATHS
     public string? PathDuke3D
     {
-        get => _dbContext.GamePaths.Find(nameof(PathDuke3D))?.Path;
+        get => _dbContext.GamePaths.Find(nameof(PathDuke3D))?.Path?.TrimEnd(Path.DirectorySeparatorChar);
         set => SetGamePathValue(value);
     }
 
     public string? PathDukeWT
     {
-        get => _dbContext.GamePaths.Find(nameof(PathDukeWT))?.Path;
+        get => _dbContext.GamePaths.Find(nameof(PathDukeWT))?.Path?.TrimEnd(Path.DirectorySeparatorChar);
         set => SetGamePathValue(value);
     }
 
     public string? PathDuke64
     {
-        get => _dbContext.GamePaths.Find(nameof(PathDuke64))?.Path;
+        get => _dbContext.GamePaths.Find(nameof(PathDuke64))?.Path?.TrimEnd(Path.DirectorySeparatorChar);
         set => SetGamePathValue(value);
     }
 
     public string? PathWang
     {
-        get => _dbContext.GamePaths.Find(nameof(PathWang))?.Path;
+        get => _dbContext.GamePaths.Find(nameof(PathWang))?.Path?.TrimEnd(Path.DirectorySeparatorChar);
         set => SetGamePathValue(value);
     }
 
     public string? PathBlood
     {
-        get => _dbContext.GamePaths.Find(nameof(PathBlood))?.Path;
+        get => _dbContext.GamePaths.Find(nameof(PathBlood))?.Path?.TrimEnd(Path.DirectorySeparatorChar);
         set => SetGamePathValue(value);
     }
 
     public string? PathRedneck
     {
-        get => _dbContext.GamePaths.Find(nameof(PathRedneck))?.Path;
+        get => _dbContext.GamePaths.Find(nameof(PathRedneck))?.Path?.TrimEnd(Path.DirectorySeparatorChar);
         set => SetGamePathValue(value);
     }
 
     public string? PathRidesAgain
     {
-        get => _dbContext.GamePaths.Find(nameof(PathRidesAgain))?.Path;
+        get => _dbContext.GamePaths.Find(nameof(PathRidesAgain))?.Path?.TrimEnd(Path.DirectorySeparatorChar);
         set => SetGamePathValue(value);
     }
 
     public string? PathSlave
     {
-        get => _dbContext.GamePaths.Find(nameof(PathSlave))?.Path;
+        get => _dbContext.GamePaths.Find(nameof(PathSlave))?.Path?.TrimEnd(Path.DirectorySeparatorChar);
         set => SetGamePathValue(value);
     }
 
     public string? PathFury
     {
-        get => _dbContext.GamePaths.Find(nameof(PathFury))?.Path;
+        get => _dbContext.GamePaths.Find(nameof(PathFury))?.Path?.TrimEnd(Path.DirectorySeparatorChar);
         set => SetGamePathValue(value);
     }
 
     public string? PathNam
     {
-        get => _dbContext.GamePaths.Find(nameof(PathNam))?.Path;
+        get => _dbContext.GamePaths.Find(nameof(PathNam))?.Path?.TrimEnd(Path.DirectorySeparatorChar);
         set => SetGamePathValue(value);
     }
 
     public string? PathWW2GI
     {
-        get => _dbContext.GamePaths.Find(nameof(PathWW2GI))?.Path;
+        get => _dbContext.GamePaths.Find(nameof(PathWW2GI))?.Path?.TrimEnd(Path.DirectorySeparatorChar);
         set => SetGamePathValue(value);
     }
 
     public string? PathWitchaven
     {
-        get => _dbContext.GamePaths.Find(nameof(PathWitchaven))?.Path;
+        get => _dbContext.GamePaths.Find(nameof(PathWitchaven))?.Path?.TrimEnd(Path.DirectorySeparatorChar);
         set => SetGamePathValue(value);
     }
 
     public string? PathWitchaven2
     {
-        get => _dbContext.GamePaths.Find(nameof(PathWitchaven2))?.Path;
+        get => _dbContext.GamePaths.Find(nameof(PathWitchaven2))?.Path?.TrimEnd(Path.DirectorySeparatorChar);
         set => SetGamePathValue(value);
     }
 
     public string? PathTekWar
     {
-        get => _dbContext.GamePaths.Find(nameof(PathTekWar))?.Path;
+        get => _dbContext.GamePaths.Find(nameof(PathTekWar))?.Path?.TrimEnd(Path.DirectorySeparatorChar);
         set => SetGamePathValue(value);
     }
 
@@ -244,6 +244,8 @@ public sealed class ConfigProvider : IConfigProvider
     private void SetGamePathValue(string? value, [CallerMemberName] string caller = "")
     {
         var setting = _dbContext.GamePaths.Find(caller);
+
+        value = value?.TrimEnd(Path.DirectorySeparatorChar);
 
         if (string.IsNullOrWhiteSpace(value))
         {

@@ -62,7 +62,7 @@
                     HorizontalAlignment="Stretch"
                     HorizontalContentAlignment="Center"
                     IsEnabled="{Binding IsInstalled}"
-                    ToolTip.Tip="Uninstall">
+                    ToolTip.Tip="Open port folder...">
                 <i:Icon Value="mdi-folder-open" />
             </Button>
 
