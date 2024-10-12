@@ -1,13 +1,13 @@
-﻿using Common;
+﻿using Addons.Addons;
+using Common;
 using Common.Client.Helpers;
 using Common.Enums;
 using Common.Enums.Addons;
 using Common.Helpers;
 using Common.Interfaces;
+using Common.Serializable.Addon;
 using CommunityToolkit.Diagnostics;
 using Games.Games;
-using Mods.Addons;
-using Mods.Serializable.Addon;
 using System.Reflection;
 using System.Text;
 
@@ -375,7 +375,7 @@ public abstract class BasePort
         {
             if (lMap.BloodIni is null)
             {
-                _ = sb.Append($@" -ini ""{Consts.BloodIni}""");
+                _ = sb.Append($@" -ini ""{ClientConsts.BloodIni}""");
             }
             else
             {
@@ -395,7 +395,7 @@ public abstract class BasePort
         }
         else if (bCamp.DependentAddons is not null && bCamp.DependentAddons.ContainsKey(nameof(BloodAddonEnum.BloodCP)))
         {
-            _ = sb.Append($@" -ini ""{Consts.CrypticIni}""");
+            _ = sb.Append($@" -ini ""{ClientConsts.CrypticIni}""");
         }
 
 
@@ -503,7 +503,7 @@ public abstract class BasePort
         {
             _ = sb.Append($" {AddGrpParam}PLATOONL.DAT {MainConParam}PLATOONL.DEF");
         }
-        else if(dCamp.MainCon is null)
+        else if (dCamp.MainCon is null)
         {
             _ = sb.Append($" {MainConParam}GAME.CON");
         }

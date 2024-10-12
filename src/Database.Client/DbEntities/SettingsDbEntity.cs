@@ -9,7 +9,7 @@ public sealed class SettingsDbEntity
     [Key]
     [Column("name")]
     public required string Name { get; set; }
-    
+
     [Column("value")]
     public required string Value { get; set; }
 }

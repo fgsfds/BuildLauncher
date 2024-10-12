@@ -1,9 +1,9 @@
-﻿using Common;
+﻿using Addons.Addons;
+using Common;
 using Common.Enums;
 using Common.Enums.Addons;
 using Common.Enums.Versions;
 using CommunityToolkit.Diagnostics;
-using Mods.Addons;
 
 namespace Tests.CmdArguments;
 
@@ -69,7 +69,7 @@ internal sealed class AutoloadModsProvider
         SupportedGame = _game,
         IncompatibleAddons = null,
         RequiredFeatures = null,
-        PathToFile = Path.Combine("D:","Mods","enabled_mod.zip"),
+        PathToFile = Path.Combine("D:", "Mods", "enabled_mod.zip"),
         DependentAddons = null,
         AdditionalCons = ["ENABLED1.CON", "ENABLED2.CON"],
         MainDef = null,
@@ -93,7 +93,7 @@ internal sealed class AutoloadModsProvider
         SupportedGame = _game,
         IncompatibleAddons = null,
         RequiredFeatures = null,
-        PathToFile = Path.Combine("D:","Mods","enabled_mod.zip"),
+        PathToFile = Path.Combine("D:", "Mods", "enabled_mod.zip"),
         DependentAddons = null,
         AdditionalCons = null,
         MainDef = null,
@@ -117,7 +117,7 @@ internal sealed class AutoloadModsProvider
         SupportedGame = _game,
         IncompatibleAddons = null,
         RequiredFeatures = null,
-        PathToFile = Path.Combine("D:","Mods","mod_requires_addon.zip"),
+        PathToFile = Path.Combine("D:", "Mods", "mod_requires_addon.zip"),
         DependentAddons = new(StringComparer.OrdinalIgnoreCase) { { _addon, null } },
         AdditionalCons = null,
         MainDef = null,
@@ -142,7 +142,7 @@ internal sealed class AutoloadModsProvider
         IncompatibleAddons = new(StringComparer.OrdinalIgnoreCase) { { _addon, null } },
         DependentAddons = null,
         RequiredFeatures = null,
-        PathToFile = Path.Combine("D:","Mods","mod_incompatible_with_addon.zip"),
+        PathToFile = Path.Combine("D:", "Mods", "mod_incompatible_with_addon.zip"),
         AdditionalCons = null,
         MainDef = null,
         AdditionalDefs = null,
@@ -164,7 +164,7 @@ internal sealed class AutoloadModsProvider
         Version = "1.0",
         SupportedGame = _game,
         RequiredFeatures = null,
-        PathToFile = Path.Combine("D:","Mods", "!!!!!!!!!!NOPE!!!!!!!!!!"),
+        PathToFile = Path.Combine("D:", "Mods", "!!!!!!!!!!NOPE!!!!!!!!!!"),
         DependentAddons = null,
         IncompatibleAddons = new(StringComparer.OrdinalIgnoreCase) { { "enabledMod", null } },
         AdditionalCons = null,
@@ -188,7 +188,7 @@ internal sealed class AutoloadModsProvider
         Version = "1.0",
         SupportedGame = _game,
         RequiredFeatures = null,
-        PathToFile = Path.Combine("D:","Mods","incompatible_mod_with_compatible_version.zip"),
+        PathToFile = Path.Combine("D:", "Mods", "incompatible_mod_with_compatible_version.zip"),
         DependentAddons = null,
         IncompatibleAddons = new(StringComparer.OrdinalIgnoreCase) { { "enabledMod", "<=1.0" } },
         AdditionalCons = null,
@@ -212,7 +212,7 @@ internal sealed class AutoloadModsProvider
         Version = "1.0",
         SupportedGame = _game,
         RequiredFeatures = null,
-        PathToFile = Path.Combine("D:","Mods", "!!!!!!!!!!NOPE!!!!!!!!!!"),
+        PathToFile = Path.Combine("D:", "Mods", "!!!!!!!!!!NOPE!!!!!!!!!!"),
         DependentAddons = null,
         IncompatibleAddons = new(StringComparer.OrdinalIgnoreCase) { { "enabledMod", ">1.1" } },
         AdditionalCons = null,
@@ -236,7 +236,7 @@ internal sealed class AutoloadModsProvider
         Version = "1.0",
         SupportedGame = _game,
         RequiredFeatures = null,
-        PathToFile = Path.Combine("D:","Mods","dependant_mod.zip"),
+        PathToFile = Path.Combine("D:", "Mods", "dependant_mod.zip"),
         DependentAddons = new(StringComparer.OrdinalIgnoreCase) { { "enabledMod", null } },
         IncompatibleAddons = null,
         AdditionalCons = null,
@@ -260,7 +260,7 @@ internal sealed class AutoloadModsProvider
         Version = "1.0",
         SupportedGame = _game,
         RequiredFeatures = null,
-        PathToFile = Path.Combine("D:","Mods", "!!!!!!!!!!NOPE!!!!!!!!!!"),
+        PathToFile = Path.Combine("D:", "Mods", "!!!!!!!!!!NOPE!!!!!!!!!!"),
         DependentAddons = new(StringComparer.OrdinalIgnoreCase) { { "enabledMod", "<=1.0" } },
         IncompatibleAddons = null,
         AdditionalCons = null,
@@ -284,7 +284,7 @@ internal sealed class AutoloadModsProvider
         Version = "1.0",
         SupportedGame = _game,
         RequiredFeatures = null,
-        PathToFile = Path.Combine("D:","Mods","dependant_mod_with_compatible_version.zip"),
+        PathToFile = Path.Combine("D:", "Mods", "dependant_mod_with_compatible_version.zip"),
         DependentAddons = new(StringComparer.OrdinalIgnoreCase) { { "enabledMod", ">1.1" } },
         IncompatibleAddons = null,
         AdditionalCons = null,
@@ -308,7 +308,7 @@ internal sealed class AutoloadModsProvider
         Version = "1.0",
         SupportedGame = _game,
         RequiredFeatures = null,
-        PathToFile = Path.Combine("D:","Mods", "!!!!!!!!!!NOPE!!!!!!!!!!"),
+        PathToFile = Path.Combine("D:", "Mods", "!!!!!!!!!!NOPE!!!!!!!!!!"),
         DependentAddons = null,
         IncompatibleAddons = null,
         AdditionalCons = null,
@@ -332,7 +332,7 @@ internal sealed class AutoloadModsProvider
         Version = "1.0",
         SupportedGame = _game,
         RequiredFeatures = [_feature],
-        PathToFile = Path.Combine("D:","Mods","feature_mod.zip"),
+        PathToFile = Path.Combine("D:", "Mods", "feature_mod.zip"),
         DependentAddons = null,
         IncompatibleAddons = null,
         AdditionalCons = null,
@@ -356,7 +356,7 @@ internal sealed class AutoloadModsProvider
         Version = "1.0",
         SupportedGame = new(GameEnum.TekWar),
         RequiredFeatures = null,
-        PathToFile = Path.Combine("D:","Mods", "!!!!!!!!!!NOPE!!!!!!!!!!"),
+        PathToFile = Path.Combine("D:", "Mods", "!!!!!!!!!!NOPE!!!!!!!!!!"),
         DependentAddons = null,
         IncompatibleAddons = null,
         AdditionalCons = null,

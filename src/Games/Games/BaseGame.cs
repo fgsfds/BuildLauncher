@@ -1,5 +1,4 @@
-﻿using Common;
-using Common.Client.Helpers;
+﻿using Common.Client.Helpers;
 using Common.Enums;
 using Common.Interfaces;
 
@@ -113,10 +112,6 @@ public abstract class BaseGame : IGame
             Directory.Delete(oldGameDataDirectory, true);
         }
     }
-
-
-    /// <inheritdoc/>
-    public abstract Dictionary<AddonVersion, IAddon> GetOriginalCampaigns();
 
 
     /// <summary>

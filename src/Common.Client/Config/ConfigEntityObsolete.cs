@@ -1,4 +1,4 @@
-﻿using Common.Enums;
+﻿using Common.Client.Enums;
 using System.Text.Json.Serialization;
 
 namespace Common.Client.Config;

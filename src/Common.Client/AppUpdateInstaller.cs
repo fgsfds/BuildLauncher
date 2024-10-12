@@ -1,8 +1,7 @@
-﻿using Api.Common.Interface;
+﻿using Common.Client.Api;
 using Common.Client.Helpers;
+using Common.Client.Tools;
 using Common.Entities;
-using Common.Helpers;
-using Common.Tools;
 using CommunityToolkit.Diagnostics;
 using System.IO.Compression;
 using System.Runtime.InteropServices;
@@ -65,11 +64,11 @@ public sealed class AppUpdateInstaller
 
         await _archiveTools.DownloadFileAsync(updateUrl, fileName).ConfigureAwait(false);
 
-        ZipFile.ExtractToDirectory(fileName, Path.Combine(ClientProperties.WorkingFolder, Consts.UpdateFolder), true);
+        ZipFile.ExtractToDirectory(fileName, Path.Combine(ClientProperties.WorkingFolder, ClientConsts.UpdateFolder), true);
 
         File.Delete(fileName);
 
-        await File.Create(Consts.UpdateFile).DisposeAsync().ConfigureAwait(false);
+        await File.Create(ClientConsts.UpdateFile).DisposeAsync().ConfigureAwait(false);
     }
 
     /// <summary>
@@ -78,7 +77,7 @@ public sealed class AppUpdateInstaller
     public static void InstallUpdate()
     {
         var dir = ClientProperties.WorkingFolder;
-        var updateDir = Path.Combine(dir, Consts.UpdateFolder);
+        var updateDir = Path.Combine(dir, ClientConsts.UpdateFolder);
         var oldExe = Path.Combine(dir, ClientProperties.ExecutableName);
         var newExe = Path.Combine(updateDir, ClientProperties.ExecutableName);
 
@@ -88,13 +87,13 @@ public sealed class AppUpdateInstaller
         //moving new file
         File.Move(newExe, oldExe, true);
 
-        File.Delete(Path.Combine(dir, Consts.UpdateFile));
-        Directory.Delete(Path.Combine(dir, Consts.UpdateFolder), true);
+        File.Delete(Path.Combine(dir, ClientConsts.UpdateFile));
+        Directory.Delete(Path.Combine(dir, ClientConsts.UpdateFolder), true);
 
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
         {
             //starting new version of the app
-            System.Diagnostics.Process.Start(oldExe);
+            _ = System.Diagnostics.Process.Start(oldExe);
         }
         else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
         {

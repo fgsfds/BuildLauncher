@@ -1,13 +1,14 @@
+using Addons.Providers;
 using Avalonia.Controls;
 using Avalonia.Desktop.Helpers;
 using Avalonia.Desktop.ViewModels;
 using Avalonia.Input;
 using Avalonia.Media;
+using Common.Client.Interfaces;
 using Common.Enums;
 using Common.Helpers;
 using Common.Interfaces;
 using CommunityToolkit.Mvvm.Input;
-using Mods.Providers;
 using Ports.Ports;
 using Ports.Providers;
 using System.Globalization;
@@ -31,7 +32,7 @@ public sealed partial class CampaignsControl : UserControl
     /// Initialize control
     /// </summary>
     public void InitializeControl(
-        PortsProvider portsProvider, 
+        PortsProvider portsProvider,
         InstalledAddonsProviderFactory installedAddonsProviderFactory,
         IConfigProvider configProvider
         )
@@ -137,7 +138,7 @@ public sealed partial class CampaignsControl : UserControl
                             return false;
                         }
 
-                        if (selectedCampaign.SupportedGame.GameVersion is not null && 
+                        if (selectedCampaign.SupportedGame.GameVersion is not null &&
                             !port.SupportedGamesVersions.Contains(selectedCampaign.SupportedGame.GameVersion))
                         {
                             return false;

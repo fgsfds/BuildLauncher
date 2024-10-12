@@ -21,7 +21,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Mods\Mods.csproj" />
     <ProjectReference Include="..\Ports\Ports.csproj" />
   </ItemGroup>
 

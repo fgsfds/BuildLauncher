@@ -1,10 +1,10 @@
+using Addons.Addons;
 using Common;
 using Common.Enums;
 using Common.Enums.Addons;
 using Common.Enums.Versions;
 using Common.Interfaces;
 using Games.Games;
-using Mods.Addons;
 using Ports.Ports;
 using Ports.Ports.EDuke32;
 
@@ -31,7 +31,7 @@ public sealed class DukeCmdArgumentsTests
             Duke64RomPath = Path.Combine("D:", "Games", "Duke64", "rom.z64"),
             DukeWTInstallPath = Path.Combine("D:", "Games", "DukeWT"),
             GameInstallFolder = Path.Combine("D:", "Games", "Duke3D"),
-            AddonsPaths = new() { {DukeAddonEnum.DukeVaca , Path.Combine("D:", "Games", "Duke3D", "Vaca") } }
+            AddonsPaths = new() { { DukeAddonEnum.DukeVaca, Path.Combine("D:", "Games", "Duke3D", "Vaca") } }
         };
 
         _dukeCamp = new()
@@ -150,7 +150,7 @@ public sealed class DukeCmdArgumentsTests
             IncompatibleAddons = null,
             MainCon = "TC.CON",
             RTS = "TC.RTS",
-            AdditionalCons = [ "TC1.CON", "TC2.CON" ],
+            AdditionalCons = ["TC1.CON", "TC2.CON"],
             MainDef = "TC.DEF",
             AdditionalDefs = ["TC1.DEF", "TC2.DEF"],
             StartMap = null,

@@ -1,3 +1,4 @@
+using Addons.Providers;
 using Common.Entities;
 using Common.Enums;
 using Common.Helpers;
@@ -6,7 +7,6 @@ using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.Logging;
-using Mods.Providers;
 using System.Collections.Immutable;
 
 namespace Avalonia.Desktop.ViewModels;
@@ -156,10 +156,10 @@ public sealed partial class DownloadsViewModel : ObservableObject
     /// <summary>
     /// VM initialization
     /// </summary>
-    public Task InitializeAsync() 
-    { 
-        Thread.Sleep(2000); 
-        return UpdateAsync(false); 
+    public Task InitializeAsync()
+    {
+        Thread.Sleep(2000);
+        return UpdateAsync(false);
     }
 
 
@@ -188,18 +188,18 @@ public sealed partial class DownloadsViewModel : ObservableObject
     private async Task DownloadAddon()
     {
         try
-        { 
-        if (SelectedDownloadable is null)
         {
-            return;
-        }
+            if (SelectedDownloadable is null)
+            {
+                return;
+            }
 
-        _downloadableAddonsProvider.Progress.ProgressChanged += OnProgressChanged;
+            _downloadableAddonsProvider.Progress.ProgressChanged += OnProgressChanged;
 
-        await _downloadableAddonsProvider.DownloadAddonAsync(SelectedDownloadable).ConfigureAwait(true);
+            await _downloadableAddonsProvider.DownloadAddonAsync(SelectedDownloadable).ConfigureAwait(true);
 
-        _downloadableAddonsProvider.Progress.ProgressChanged -= OnProgressChanged;
-        OnProgressChanged(null, 0);
+            _downloadableAddonsProvider.Progress.ProgressChanged -= OnProgressChanged;
+            OnProgressChanged(null, 0);
         }
         catch (Exception ex)
         {

@@ -1,11 +1,11 @@
-﻿using Avalonia.Controls;
+﻿using Addons.Providers;
+using Avalonia.Controls;
 using Avalonia.Desktop.ViewModels;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
+using Common.Client.Interfaces;
 using Common.Enums;
-using Common.Interfaces;
 using Games.Providers;
-using Mods.Providers;
 using Ports.Providers;
 
 namespace Avalonia.Desktop.Views;
@@ -25,10 +25,10 @@ public sealed partial class MainWindow : Window
     }
 
     public MainWindow(
-        MainViewModel vm, 
-        GamesProvider gamesProvider, 
-        ViewModelsFactory vmFactory, 
-        InstalledAddonsProviderFactory installedAddonsProviderFactory, 
+        MainViewModel vm,
+        GamesProvider gamesProvider,
+        ViewModelsFactory vmFactory,
+        InstalledAddonsProviderFactory installedAddonsProviderFactory,
         PortsProvider portsProvider,
         IConfigProvider configProvider
         )

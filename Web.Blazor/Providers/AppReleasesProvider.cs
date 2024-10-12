@@ -1,6 +1,6 @@
 ﻿using Common.Entities;
 using Common.Helpers;
-using Common.Releases;
+using Common.Server.Entities;
 using CommunityToolkit.Diagnostics;
 using System.Text.Json;
 
@@ -67,7 +67,7 @@ public sealed class AppReleasesProvider
         {
             Version = release.TagName,
             Description = release.Description,
-            WindowsDownloadUrl = windowsAsset is null? null : new Uri(windowsAsset.DownloadUrl),
+            WindowsDownloadUrl = windowsAsset is null ? null : new Uri(windowsAsset.DownloadUrl),
             LinuxDownloadUrl = linuxAsset is null ? null : new Uri(linuxAsset.DownloadUrl)
         };
 

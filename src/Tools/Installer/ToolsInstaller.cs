@@ -1,4 +1,4 @@
-﻿using Common.Tools;
+﻿using Common.Client.Tools;
 using Tools.Tools;
 
 namespace Tools.Installer;

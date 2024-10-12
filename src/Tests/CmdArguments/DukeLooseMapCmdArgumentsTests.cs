@@ -1,10 +1,10 @@
+using Addons.Addons;
 using Common;
 using Common.Enums;
 using Common.Enums.Versions;
 using Common.Interfaces;
+using Common.Serializable.Addon;
 using Games.Games;
-using Mods.Addons;
-using Mods.Serializable.Addon;
 using Ports.Ports;
 using Ports.Ports.EDuke32;
 

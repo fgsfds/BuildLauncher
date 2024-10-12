@@ -1,4 +1,5 @@
-﻿using Common;
+﻿using Addons.Addons;
+using Common;
 using Common.Enums;
 using Common.Enums.Addons;
 using Common.Enums.Versions;
@@ -6,7 +7,6 @@ using Common.Helpers;
 using Common.Interfaces;
 using CommunityToolkit.Diagnostics;
 using Games.Games;
-using Mods.Addons;
 using System.Diagnostics;
 using System.Text;
 

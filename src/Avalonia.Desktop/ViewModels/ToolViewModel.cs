@@ -121,7 +121,7 @@ public sealed partial class ToolViewModel : ObservableObject
     /// <summary>
     /// Download and install tool
     /// </summary>
-    [RelayCommand(CanExecute=nameof(InstallCommandCanExecute))]
+    [RelayCommand(CanExecute = nameof(InstallCommandCanExecute))]
     private async Task InstallAsync()
     {
         var installer = _installerFactory.Create();

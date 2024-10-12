@@ -1,9 +1,4 @@
-﻿using Common;
-using Common.Enums;
-using Common.Helpers;
-using Common.Interfaces;
-using Mods.Addons;
-using System.Reflection;
+﻿using Common.Enums;
 
 namespace Games.Games;
 
@@ -32,47 +27,5 @@ public sealed class TekWarGame : BaseGame
 
             return result;
         }
-    }
-
-
-    /// <inheritdoc/>
-    public override Dictionary<AddonVersion, IAddon> GetOriginalCampaigns()
-    {
-        Dictionary<AddonVersion, IAddon> campaigns = new(1);
-
-        if (IsBaseGameInstalled)
-        {
-            var namId = nameof(GameEnum.TekWar).ToLower();
-            campaigns.Add(new(namId), new DukeCampaign()
-            {
-                Id = namId,
-                Type = AddonTypeEnum.Official,
-                Title = "TekWar",
-                GridImage = ImageHelper.FileNameToStream("TekWar.tekwar.jpg", Assembly.GetExecutingAssembly()),
-                Author = "Capstone Software",
-                Description = """
-                    You're an ex-cop who was sentenced to cryo sleep. When you awake you are recruited by the Cosmos Detective Agency as a hitman. Why? Cause there's a dangerous new drug on the streets of New LA: Tek!
-                    
-                    Take out the seven Tek Lords and their minions in 7 missions, but spare those innocent civilians.
-                    """,
-                Version = null,
-                SupportedGame = new(GameEnum.TekWar),
-                RequiredFeatures = null,
-                PathToFile = null,
-                DependentAddons = null,
-                IncompatibleAddons = null,
-                MainCon = null,
-                AdditionalCons = null,
-                RTS = null,
-                MainDef = null,
-                AdditionalDefs = null,
-                StartMap = null,
-                PreviewImage = null,
-                IsFolder = false,
-                Executables = null
-            });
-        }
-
-        return campaigns;
     }
 }

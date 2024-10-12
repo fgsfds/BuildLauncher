@@ -1,4 +1,6 @@
-﻿using Common;
+﻿using Addons.Addons;
+using Common;
+using Common.Client.Helpers;
 using Common.Enums;
 using Common.Enums.Addons;
 using Common.Enums.Versions;
@@ -6,7 +8,6 @@ using Common.Helpers;
 using Common.Interfaces;
 using CommunityToolkit.Diagnostics;
 using Games.Games;
-using Mods.Addons;
 using System.Text;
 
 namespace Ports.Ports.EDuke32;
@@ -81,7 +82,7 @@ public class EDuke32 : BasePort
         ];
 
     /// <inheritdoc/>
-    public override List<FeatureEnum> SupportedFeatures => 
+    public override List<FeatureEnum> SupportedFeatures =>
         [
         FeatureEnum.EDuke32_CON,
         FeatureEnum.Dynamic_Lighting,
@@ -247,7 +248,7 @@ public class EDuke32 : BasePort
         if (addon.SupportedGame.GameVersion is not null &&
             addon.SupportedGame.GameVersion.Equals(nameof(DukeVersionEnum.Duke3D_WT), StringComparison.InvariantCultureIgnoreCase))
         {
-            _ = sb.Append($@" {AddDirectoryParam}""{game.DukeWTInstallPath}"" -addon {(byte)DukeAddonEnum.Base} {AddDirectoryParam}""{Path.Combine(game.SpecialFolderPath, Consts.WTStopgap)}"" {MainGrpParam}e32wt.grp {AddDefParam}e32wt.def");
+            _ = sb.Append($@" {AddDirectoryParam}""{game.DukeWTInstallPath}"" -addon {(byte)DukeAddonEnum.Base} {AddDirectoryParam}""{Path.Combine(game.SpecialFolderPath, ClientConsts.WTStopgap)}"" {MainGrpParam}e32wt.grp {AddDefParam}e32wt.def");
         }
         else
         {

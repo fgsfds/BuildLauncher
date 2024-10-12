@@ -1,7 +1,7 @@
-﻿using Common.Enums;
-using Common.Interfaces;
+﻿using Common.Client.Enums;
+using Common.Client.Interfaces;
 using CommunityToolkit.Diagnostics;
-using static Common.Interfaces.IConfigProvider;
+using static Common.Client.Interfaces.IConfigProvider;
 
 namespace Common.Client.Config;
 

@@ -1,8 +1,8 @@
+using Addons.Providers;
 using Avalonia.Controls;
 using Avalonia.Desktop.ViewModels;
+using Common.Client.Interfaces;
 using Common.Enums;
-using Common.Interfaces;
-using Mods.Providers;
 using Ports.Providers;
 
 namespace Avalonia.Desktop.Pages;
@@ -26,7 +26,8 @@ public sealed partial class GamePage : UserControl
         PortsProvider portsProvider,
         ViewModelsFactory vmFactory,
         InstalledAddonsProviderFactory installedAddonsProviderFactory,
-        IConfigProvider configProvider)
+        IConfigProvider configProvider
+        )
     {
         CampControl.DataContext = vmFactory.GetCampaignsViewModel(gameEnum);
         MapssControl.DataContext = vmFactory.GetMapsViewModel(gameEnum);

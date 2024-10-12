@@ -1,9 +1,9 @@
+using Addons.Addons;
 using Common;
 using Common.Client.Config;
 using Common.Enums;
 using Common.Interfaces;
 using Games.Games;
-using Mods.Addons;
 using Ports.Ports.EDuke32;
 
 namespace Tests.CmdArguments;

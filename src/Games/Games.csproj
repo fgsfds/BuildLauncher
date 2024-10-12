@@ -8,41 +8,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Assets\Blood\blood.png" />
-    <EmbeddedResource Include="Assets\Blood\cp.jpg" />
-    <EmbeddedResource Include="Assets\Duke3D\carib.jpg" />
-    <EmbeddedResource Include="Assets\Duke3D\duke3d.jpg" />
-    <EmbeddedResource Include="Assets\Duke3D\duke64.jpg" />
-    <EmbeddedResource Include="Assets\Duke3D\dukedc.jpg" />
-    <EmbeddedResource Include="Assets\Duke3D\dukewt.jpg" />
-    <EmbeddedResource Include="Assets\Duke3D\nwinter.jpg" />
-    <EmbeddedResource Include="Assets\Fury\aftershock.jpg" />
-    <EmbeddedResource Include="Assets\Fury\fury.jpg" />
-    <EmbeddedResource Include="Assets\NAM\nam.jpg" />
-    <EmbeddedResource Include="Assets\Redneck\again.jpg" />
-    <EmbeddedResource Include="Assets\Redneck\redneck.jpg" />
-    <EmbeddedResource Include="Assets\Redneck\route66.jpg" />
-    <EmbeddedResource Include="Assets\Slave\slave.jpg" />
-    <EmbeddedResource Include="Assets\TekWar\tekwar.jpg" />
-    <EmbeddedResource Include="Assets\Wang\twin.jpg" />
-    <EmbeddedResource Include="Assets\Wang\wang.jpg" />
-    <EmbeddedResource Include="Assets\Wang\wanton.jpg" />
-    <EmbeddedResource Include="Assets\Witchaven\wh1.jpg" />
-    <EmbeddedResource Include="Assets\Witchaven\wh2.jpg" />
-    <EmbeddedResource Include="Assets\WTStopgap.zip" />
-    <EmbeddedResource Include="Assets\WW2GI\platoon.jpg" />
-    <EmbeddedResource Include="Assets\WW2GI\ww2gi.jpg" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="AddSealed" PrivateAssets="all" />
     <PackageReference Include="CommunityToolkit.Diagnostics" />
     <PackageReference Include="ConfigureAwaitAnalyzer" PrivateAssets="all" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Common\Common.csproj" />
-    <ProjectReference Include="..\Mods\Mods.csproj" />
+    <ProjectReference Include="..\Common.Client\Common.Client.csproj" />
+    <ProjectReference Include="..\Common.Common\Common.Common.csproj" />
   </ItemGroup>
 
 </Project>

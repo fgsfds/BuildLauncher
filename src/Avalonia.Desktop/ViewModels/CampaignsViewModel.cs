@@ -1,4 +1,7 @@
+using Addons.Addons;
+using Addons.Providers;
 using Avalonia.Controls.Notifications;
+using Common.Client.Interfaces;
 using Common.Client.Providers;
 using Common.Enums;
 using Common.Interfaces;
@@ -7,8 +10,6 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Games.Providers;
 using Microsoft.Extensions.Logging;
-using Mods.Addons;
-using Mods.Providers;
 using Ports.Ports;
 using System.Collections.Immutable;
 using System.Diagnostics;

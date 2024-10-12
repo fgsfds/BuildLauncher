@@ -1,9 +1,10 @@
 using Avalonia.Desktop.Helpers;
 using Avalonia.Platform.Storage;
 using Avalonia.Styling;
+using Common.Client.Enums;
+using Common.Client.Interfaces;
 using Common.Enums;
 using Common.Enums.Versions;
-using Common.Interfaces;
 using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -439,7 +440,7 @@ internal sealed partial class SettingsViewModel : ObservableObject
     {
         FilePickerFileType z64 = new("N64 ROM")
         {
-            Patterns = [ "*.z64", "*.n64" ]
+            Patterns = ["*.z64", "*.n64"]
         };
 
         var files = await AvaloniaProperties.TopLevel.StorageProvider.OpenFilePickerAsync(

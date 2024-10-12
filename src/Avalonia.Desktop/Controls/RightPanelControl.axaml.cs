@@ -2,8 +2,8 @@ using Avalonia.Controls;
 using Avalonia.Desktop.ViewModels;
 using Avalonia.Interactivity;
 using Avalonia.Media;
+using Common.Client.Interfaces;
 using Common.Helpers;
-using Common.Interfaces;
 
 namespace Avalonia.Desktop.Controls;
 

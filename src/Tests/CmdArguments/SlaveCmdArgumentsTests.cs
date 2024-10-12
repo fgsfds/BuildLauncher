@@ -1,8 +1,8 @@
+using Addons.Addons;
 using Common;
 using Common.Enums;
 using Common.Interfaces;
 using Games.Games;
-using Mods.Addons;
 using Ports.Ports;
 using Ports.Ports.EDuke32;
 
@@ -60,7 +60,7 @@ public sealed class SlaveCmdArgumentsTests
 
         var args = raze.GetStartGameArgs(_slaveGame, _slaveCamp, mods, true, true);
         var expected = @$" -quick -nosetup -file ""enabled_mod.zip"" -adddef ""ENABLED1.DEF"" -adddef ""ENABLED2.DEF"" -savedir ""{Directory.GetCurrentDirectory()}\Data\Saves\Raze\Slave\exhumed"" -def ""a""";
-   
+
         if (OperatingSystem.IsLinux())
         {
             args = args.Replace('\\', Path.DirectorySeparatorChar);

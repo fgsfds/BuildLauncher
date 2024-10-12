@@ -5,9 +5,9 @@
              xmlns:md="https://github.com/whistyun/Markdown.Avalonia"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Avalonia.Desktop.Controls.RightPanelControl"
-             xmlns:i="clr-namespace:Common.Interfaces;assembly=BuildLauncher.Common"
+             xmlns:in="clr-namespace:Common.Client.Interfaces;assembly=BuildLauncher.Common.Client"
              xmlns:helpers="clr-namespace:Avalonia.Desktop.Helpers"
-             x:DataType="i:IRightPanelControl">
+             x:DataType="in:IRightPanelControl">
 
     <UserControl.Resources>
         <helpers:ImagePathToBitmapConverter x:Key="ImagePathToBitmapConverter"/>

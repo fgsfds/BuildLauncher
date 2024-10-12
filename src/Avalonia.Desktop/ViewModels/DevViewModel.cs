@@ -1,16 +1,16 @@
 using Avalonia.Desktop.Helpers;
 using Avalonia.Platform.Storage;
 using Common.Client.Helpers;
+using Common.Client.Interfaces;
+using Common.Client.Tools;
 using Common.Enums;
 using Common.Enums.Versions;
 using Common.Interfaces;
+using Common.Serializable.Addon;
 using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Games.Providers;
-using Mods;
-using Mods.Serializable;
-using Mods.Serializable.Addon;
 using SharpCompress.Archives;
 using SharpCompress.Archives.Zip;
 using SharpCompress.Common;
@@ -469,9 +469,9 @@ public sealed partial class DevViewModel : ObservableObject
         AddonVersion = result.Version;
         AddonAuthor = result.Author;
         MainDef = result.MainDef;
-        AdditionalDefs = result.AdditionalDefs is null? null : string.Join(',', result.AdditionalDefs);
+        AdditionalDefs = result.AdditionalDefs is null ? null : string.Join(',', result.AdditionalDefs);
         MainCon = result.MainCon;
-        AdditionalCons = result.AdditionalCons is null? null : string.Join(',', result.AdditionalCons);
+        AdditionalCons = result.AdditionalCons is null ? null : string.Join(',', result.AdditionalCons);
         Rts = result.Rts;
         Ini = result.Ini;
         MainRff = result.MainRff;
@@ -687,7 +687,7 @@ public sealed partial class DevViewModel : ObservableObject
                 ThrowHelper.ThrowMissingFieldException("Addons with RFS files are not supported");
             }
         }
-            
+
 
         ErrorText = null;
 
@@ -884,7 +884,7 @@ public sealed partial class DevViewModel : ObservableObject
             UploadStatus = "Uploaded successfully";
         }
         else
-        { 
+        {
             UploadStatus = "Error while uploading file";
         }
     }

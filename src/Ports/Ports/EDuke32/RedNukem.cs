@@ -1,11 +1,11 @@
-﻿using Common.Enums;
+﻿using Addons.Addons;
+using Common.Enums;
 using Common.Enums.Addons;
 using Common.Enums.Versions;
 using Common.Helpers;
 using Common.Interfaces;
 using CommunityToolkit.Diagnostics;
 using Games.Games;
-using Mods.Addons;
 using System.Text;
 
 namespace Ports.Ports.EDuke32;
@@ -91,7 +91,7 @@ public sealed class RedNukem : EDuke32
         }
 
 
-        if (game is DukeGame dGame )
+        if (game is DukeGame dGame)
         {
             GetDukeArgs(sb, dGame, addon);
         }

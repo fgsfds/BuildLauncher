@@ -1,6 +1,5 @@
 ﻿using Common.Client.Helpers;
 using Common.Enums;
-using Common.Helpers;
 using System.Reflection;
 
 namespace Tools.Tools;
@@ -14,7 +13,7 @@ public abstract class BaseTool
     /// Is tool installed
     /// </summary>
     public bool IsInstalled => InstalledVersion is not null;
-    
+
     /// <summary>
     /// Main executable
     /// </summary>

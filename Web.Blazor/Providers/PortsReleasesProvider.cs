@@ -1,7 +1,7 @@
 ﻿using Common.Entities;
 using Common.Enums;
-using Common.Providers;
-using Common.Releases;
+using Common.Server.Entities;
+using Common.Server.Providers;
 using CommunityToolkit.Diagnostics;
 using System.Text.Json;
 using System.Text.RegularExpressions;

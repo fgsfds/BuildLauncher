@@ -12,7 +12,7 @@ public sealed class AddonsDbEntity
     [Key]
     [Column("id")]
     [DatabaseGenerated(DatabaseGeneratedOption.None)]
-    public required string Id{ get; init; }
+    public required string Id { get; init; }
 
     [ForeignKey(nameof(GameTable))]
     [Column("game_id")]

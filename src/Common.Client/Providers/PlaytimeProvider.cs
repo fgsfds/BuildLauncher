@@ -1,4 +1,4 @@
-﻿using Common.Interfaces;
+﻿using Common.Client.Interfaces;
 
 namespace Common.Client.Providers;
 

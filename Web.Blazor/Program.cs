@@ -1,4 +1,4 @@
-using Common.Providers;
+using Common.Server.Providers;
 using Database.Server;
 using Web.Blazor.Helpers;
 using Web.Blazor.Providers;
@@ -30,7 +30,7 @@ public sealed class Program
             //_ = builder.Services.AddHostedService<ToolsReleasesTask>();
             _ = builder.Services.AddHostedService<FileCheckTask>();
         }
-        
+
         if (builder.Environment.IsDevelopment())
         {
             ServerProperties.IsDeveloperMode = true;

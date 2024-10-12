@@ -1,4 +1,5 @@
-﻿using Avalonia.Controls;
+﻿using Addons.Providers;
+using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Controls.Notifications;
 using Avalonia.Data.Core.Plugins;
@@ -9,15 +10,13 @@ using Avalonia.Desktop.Views;
 using Avalonia.Markup.Xaml;
 using Avalonia.Styling;
 using Common.Client.DI;
+using Common.Client.Enums;
 using Common.Client.Helpers;
-using Common.DI;
-using Common.Enums;
-using Common.Interfaces;
+using Common.Client.Interfaces;
 using CommunityToolkit.Diagnostics;
 using Games.Providers;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Mods.Providers;
 using Ports.Providers;
 
 namespace Avalonia.Desktop;
@@ -68,7 +67,7 @@ public sealed class App : Application
         try
         {
             SetTheme();
-            
+
             if (ClientProperties.IsDeveloperMode)
             {
                 _logger.LogInformation("Started in developer mode");
@@ -149,12 +148,11 @@ public sealed class App : Application
     {
         var container = BindingsManager.Instance;
 
-        CommonBindings.Load(container);
         ClientBindings.Load(container, Design.IsDesignMode);
         ViewModelsBindings.Load(container);
         Games.DI.ProvidersBindings.Load(container);
         Ports.DI.ProvidersBindings.Load(container);
-        Mods.DI.ProvidersBindings.Load(container);
+        Addons.DI.ProvidersBindings.Load(container);
         Tools.DI.ProvidersBindings.Load(container);
     }
 

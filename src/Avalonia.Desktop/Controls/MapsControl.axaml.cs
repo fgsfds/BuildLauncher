@@ -1,15 +1,16 @@
+using Addons.Providers;
 using Avalonia.Controls;
 using Avalonia.Desktop.Helpers;
 using Avalonia.Desktop.ViewModels;
 using Avalonia.Input;
 using Avalonia.Media;
+using Common.Client.Enums.Skills;
+using Common.Client.Interfaces;
 using Common.Enums;
-using Common.Enums.Skills;
 using Common.Helpers;
 using Common.Interfaces;
 using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.Input;
-using Mods.Providers;
 using Ports.Ports;
 using Ports.Providers;
 using System.Globalization;
@@ -34,7 +35,8 @@ public sealed partial class MapsControl : UserControl
     public void InitializeControl(
         PortsProvider portsProvider,
         InstalledAddonsProviderFactory installedAddonsProviderFactory,
-        IConfigProvider configProvider)
+        IConfigProvider configProvider
+        )
     {
         DataContext.ThrowIfNotType<MapsViewModel>(out var viewModel);
 
@@ -293,10 +295,10 @@ public sealed partial class MapsControl : UserControl
             return false;
         }
 
-        if (port.PortEnum is 
-            PortEnum.EDuke32 
-            or PortEnum.VoidSW 
-            or PortEnum.RedNukem 
+        if (port.PortEnum is
+            PortEnum.EDuke32
+            or PortEnum.VoidSW
+            or PortEnum.RedNukem
             or PortEnum.Fury
             or PortEnum.NBlood
             or PortEnum.NotBlood

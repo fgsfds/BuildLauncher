@@ -1,6 +1,5 @@
 ﻿using Common.Enums;
-using Mods.Serializable;
-using Mods.Serializable.Addon;
+using Common.Serializable.Addon;
 using System.Text.Json;
 
 namespace Tests;
@@ -54,7 +53,7 @@ public sealed class SerializerTests
       "startmap": { "file": "TEST.MAP" },
     }
 """;
-    
+
     private const string BrokenAddonJson =
 """
     {
@@ -72,7 +71,7 @@ public sealed class SerializerTests
       "version": "1.0"
     }
 """;
-    
+
     private const string SlotMapJson =
 """
     {
@@ -90,7 +89,7 @@ public sealed class SerializerTests
       }
     }
 """;
-    
+
     private const string StandaloneJson =
 """
     {
@@ -157,7 +156,7 @@ public sealed class SerializerTests
 
         Assert.Equal("Addon description", result.Description);
     }
-    
+
     [Fact]
     public void DeserializeBrokenAddonJson()
     {
@@ -174,7 +173,7 @@ public sealed class SerializerTests
 
         Assert.Null(result);
     }
-    
+
     [Fact]
     public void DeserializeSlotMapJson()
     {
@@ -186,7 +185,7 @@ public sealed class SerializerTests
         Assert.Equal(1, ((MapSlotDto)result.StartMap).Episode);
         Assert.Equal(2, ((MapSlotDto)result.StartMap).Level);
     }
-    
+
     [Fact]
     public void DeserializeStandaloneJson()
     {

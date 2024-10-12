@@ -1,10 +1,10 @@
+using Addons.Providers;
 using Avalonia.Controls;
 using Avalonia.Desktop.ViewModels;
 using Avalonia.Input;
+using Common.Client.Interfaces;
 using Common.Helpers;
-using Common.Interfaces;
 using CommunityToolkit.Mvvm.Input;
-using Mods.Providers;
 
 namespace Avalonia.Desktop.Controls;
 
@@ -22,7 +22,7 @@ public sealed partial class ModsControl : UserControl
     /// Initialize control
     /// </summary>
     public void InitializeControl(
-        InstalledAddonsProviderFactory installedAddonsProviderFactory, 
+        InstalledAddonsProviderFactory installedAddonsProviderFactory,
         IConfigProvider configProvider
         )
     {

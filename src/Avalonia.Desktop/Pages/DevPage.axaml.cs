@@ -1,6 +1,6 @@
 using Avalonia.Controls;
 using Avalonia.Desktop.ViewModels;
-using Common.DI;
+using Common.Client.DI;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Avalonia.Desktop.Pages;

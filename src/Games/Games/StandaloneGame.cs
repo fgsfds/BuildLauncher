@@ -1,6 +1,4 @@
-﻿using Common;
-using Common.Enums;
-using Common.Interfaces;
+﻿using Common.Enums;
 
 namespace Games.Games;
 
@@ -17,7 +15,4 @@ public sealed class StandaloneGame : BaseGame
 
     /// <inheritdoc/>
     public override List<string> RequiredFiles => [];
-
-    /// <inheritdoc/>
-    public override Dictionary<AddonVersion, IAddon> GetOriginalCampaigns() => [];
 }

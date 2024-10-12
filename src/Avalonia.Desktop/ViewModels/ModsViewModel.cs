@@ -1,3 +1,6 @@
+using Addons.Addons;
+using Addons.Providers;
+using Common.Client.Interfaces;
 using Common.Client.Providers;
 using Common.Enums;
 using Common.Helpers;
@@ -6,8 +9,6 @@ using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Games.Providers;
-using Mods.Addons;
-using Mods.Providers;
 using System.Collections.Immutable;
 using System.Diagnostics;
 

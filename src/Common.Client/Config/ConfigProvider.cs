@@ -1,11 +1,10 @@
-﻿using Common.Client.Helpers;
-using Common.Enums;
-using Common.Helpers;
-using Common.Interfaces;
+﻿using Common.Client.Enums;
+using Common.Client.Helpers;
+using Common.Client.Interfaces;
 using Database.Client;
 using System.Runtime.CompilerServices;
 using System.Text.Json;
-using static Common.Interfaces.IConfigProvider;
+using static Common.Client.Interfaces.IConfigProvider;
 
 namespace Common.Client.Config;
 
@@ -271,12 +270,12 @@ public sealed class ConfigProvider : IConfigProvider
     private void ConvertOldConfig()
     {
         if (!File.Exists(Path.Combine(ClientProperties.WorkingFolder, "config.db")) ||
-            !File.Exists(Path.Combine(ClientProperties.WorkingFolder, Consts.ConfigFile)))
+            !File.Exists(Path.Combine(ClientProperties.WorkingFolder, ClientConsts.ConfigFile)))
         {
             return;
         }
 
-        FileStream fs = new(Consts.ConfigFile, FileMode.Open);
+        FileStream fs = new(ClientConsts.ConfigFile, FileMode.Open);
         var config = JsonSerializer.Deserialize(fs, ConfigEntityContext.Default.ConfigEntityObsolete);
 
         if (config is null)
@@ -292,12 +291,12 @@ public sealed class ConfigProvider : IConfigProvider
         _ = _dbContext.Settings.Add(new() { Name = nameof(config.UseLocalApi), Value = config.UseLocalApi.ToString() });
         _ = _dbContext.Settings.Add(new() { Name = nameof(config.ApiPassword), Value = config.ApiPassword ?? string.Empty });
 
-        
+
         foreach (var addon in config.DisabledAutoloadMods)
         {
             _ = _dbContext.DisabledAddons.Add(new() { AddonId = addon });
         }
-        
+
         foreach (var addon in config.Playtimes)
         {
             _ = _dbContext.Playtimes.Add(new() { AddonId = addon.Key, Playtime = addon.Value });
@@ -317,7 +316,7 @@ public sealed class ConfigProvider : IConfigProvider
         _ = _dbContext.SaveChanges();
 
         fs.Dispose();
-        File.Delete(Path.Combine(ClientProperties.WorkingFolder, Consts.ConfigFile));
+        File.Delete(Path.Combine(ClientProperties.WorkingFolder, ClientConsts.ConfigFile));
     }
 
     [Obsolete]

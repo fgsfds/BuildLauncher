@@ -1,3 +1,4 @@
+using Common.Client.Interfaces;
 using Common.Client.Providers;
 using Common.Enums;
 using Common.Helpers;
