@@ -231,34 +231,16 @@ public sealed partial class CampaignsControl : UserControl
     }
 
     /// <summary>
-    /// Update CanExecute for ports buttons and context menu buttons when selected campaign changed
+    /// Update available ports buttons
     /// </summary>
     private void OnCampaignsListSelectionChanged(object? sender, SelectionChangedEventArgs e)
     {
-        var overridesExistingPort = false;
-
         foreach (var control in BottomPanel.PortsButtonsPanel.Children)
         {
             if (control is Button button &&
                 button.Command is IRelayCommand relayCommand)
             {
                 relayCommand.NotifyCanExecuteChanged();
-
-                if (CampaignsList?.SelectedItem is IAddon addon)
-                {
-                    if (addon.Executables is not null &&
-                        button.IsEnabled)
-                    {
-                        overridesExistingPort = true;
-                    }
-                }
-
-                if (!overridesExistingPort &&
-                    button.Content is TextBlock tb &&
-                    tb.Text!.Equals(BuiltInPortStr))
-                {
-                    button.IsVisible = CampaignsList?.SelectedItem is IAddon selectedCampaign && selectedCampaign.Executables is not null;
-                }
             }
         }
 
@@ -276,6 +258,9 @@ public sealed partial class CampaignsControl : UserControl
         CampaignsList.Focusable = false;
     }
 
+    /// <summary>
+    /// Drag'n'drop handler
+    /// </summary>
     private async void FilesDataGrid_DropAsync(object sender, DragEventArgs e)
     {
         var files = e.Data.GetFiles();
