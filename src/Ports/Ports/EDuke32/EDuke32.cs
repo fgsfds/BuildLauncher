@@ -8,6 +8,9 @@ using Common.Helpers;
 using Common.Interfaces;
 using CommunityToolkit.Diagnostics;
 using Games.Games;
+using SharpCompress.Archives;
+using SharpCompress.Archives.Zip;
+using System.Reflection;
 using System.Text;
 
 namespace Ports.Ports.EDuke32;
@@ -108,6 +111,40 @@ public class EDuke32 : BasePort
             return File.ReadAllText(versionFile);
         }
     }
+
+
+    public EDuke32()
+    {
+        CreateWTStopgapFolder();
+    }
+
+
+    /// <summary>
+    /// Create folder with files required for World Tour to work with EDuke32
+    /// </summary>
+    private void CreateWTStopgapFolder()
+    {
+        if (PortEnum is not PortEnum.EDuke32)
+        {
+            return;
+        }
+
+        var stopgapFolder = Path.Combine(PortInstallFolderPath, ClientConsts.WTStopgap);
+
+        if (Directory.Exists(stopgapFolder))
+        {
+            return;
+        }
+
+        using var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("Ports.Assets.WTStopgap.zip");
+
+        Guard.IsNotNull(stream);
+
+        using var archive = ZipArchive.Open(stream);
+
+        archive.ExtractToDirectory(stopgapFolder);
+    }
+
 
     /// <inheritdoc/>
     protected override void GetSkipIntroParameter(StringBuilder sb) => sb.Append(" -quick");
@@ -248,7 +285,7 @@ public class EDuke32 : BasePort
         if (addon.SupportedGame.GameVersion is not null &&
             addon.SupportedGame.GameVersion.Equals(nameof(DukeVersionEnum.Duke3D_WT), StringComparison.InvariantCultureIgnoreCase))
         {
-            _ = sb.Append($@" {AddDirectoryParam}""{game.DukeWTInstallPath}"" -addon {(byte)DukeAddonEnum.Base} {AddDirectoryParam}""{Path.Combine(game.SpecialFolderPath, ClientConsts.WTStopgap)}"" {MainGrpParam}e32wt.grp {AddDefParam}e32wt.def");
+            _ = sb.Append($@" {AddDirectoryParam}""{game.DukeWTInstallPath}"" -addon {(byte)DukeAddonEnum.Base} {AddDirectoryParam}""{Path.Combine(PortInstallFolderPath, ClientConsts.WTStopgap)}"" {MainGrpParam}e32wt.grp {AddDefParam}e32wt.def");
         }
         else
         {

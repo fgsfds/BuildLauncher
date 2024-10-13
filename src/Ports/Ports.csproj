@@ -17,6 +17,7 @@
     <EmbeddedResource Include="Assets\NBlood.png" />
     <EmbeddedResource Include="Assets\RedNukem.png" />
     <EmbeddedResource Include="Assets\VoidSW.png" />
+    <EmbeddedResource Include="Assets\WTStopgap.zip" />
   </ItemGroup>
 
   <ItemGroup>

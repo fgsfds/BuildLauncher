@@ -12,9 +12,9 @@ namespace Ports.Ports.EDuke32;
 /// <summary>
 /// RedNukem port
 /// </summary>
-public sealed class Fury(IConfigProvider config) : EDuke32
+public sealed class Fury : EDuke32
 {
-    private readonly IConfigProvider _config = config;
+    private readonly IConfigProvider _config;
 
     /// <inheritdoc/>
     public override PortEnum PortEnum => PortEnum.Fury;
@@ -48,6 +48,12 @@ public sealed class Fury(IConfigProvider config) : EDuke32
 
     /// <inheritdoc/>
     protected override string ConfigFile => "fury.cfg";
+
+
+    public Fury(IConfigProvider config)
+    {
+        _config = config;
+    }
 
 
     /// <inheritdoc/>

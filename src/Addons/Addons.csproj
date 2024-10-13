@@ -29,7 +29,6 @@
     <EmbeddedResource Include="Assets\Wang\wanton.jpg" />
     <EmbeddedResource Include="Assets\Witchaven\wh1.jpg" />
     <EmbeddedResource Include="Assets\Witchaven\wh2.jpg" />
-    <EmbeddedResource Include="Assets\WTStopgap.zip" />
     <EmbeddedResource Include="Assets\WW2GI\platoon.jpg" />
     <EmbeddedResource Include="Assets\WW2GI\ww2gi.jpg" />
   </ItemGroup>

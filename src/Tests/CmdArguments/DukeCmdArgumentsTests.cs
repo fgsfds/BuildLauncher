@@ -326,7 +326,7 @@ public sealed class DukeCmdArgumentsTests
         EDuke32 eduke32 = new();
 
         var args = eduke32.GetStartGameArgs(_dukeGame, _dukeWtCamp, [], true, true);
-        var expected = @$" -quick -nosetup -usecwd -cachesize 262144 -h ""a"" -j ""D:\Games\DukeWT"" -addon 0 -j ""{Directory.GetCurrentDirectory()}\Data\Addons\Duke3D\Special\WTStopgap"" -gamegrp e32wt.grp -mh e32wt.def";
+        var expected = @$" -quick -nosetup -usecwd -cachesize 262144 -h ""a"" -j ""D:\Games\DukeWT"" -addon 0 -j ""{Directory.GetCurrentDirectory()}\Data\Ports\EDuke32\WTStopgap"" -gamegrp e32wt.grp -mh e32wt.def";
 
         if (OperatingSystem.IsLinux())
         {

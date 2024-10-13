@@ -25,6 +25,7 @@ public abstract class BaseGame : IGame
     public string ModsFolderPath => Path.Combine(ClientProperties.DataFolderPath, "Addons", ShortName, "Mods");
 
     /// <inheritdoc/>
+    [Obsolete]
     public string SpecialFolderPath => Path.Combine(ClientProperties.DataFolderPath, "Addons", ShortName, "Special");
 
 
@@ -41,7 +42,7 @@ public abstract class BaseGame : IGame
     public abstract List<string> RequiredFiles { get; }
 
 
-    public BaseGame()
+    protected BaseGame()
     {
         try
         {
@@ -67,9 +68,9 @@ public abstract class BaseGame : IGame
             _ = Directory.CreateDirectory(ModsFolderPath);
         }
 
-        if (!Directory.Exists(SpecialFolderPath))
+        if (Directory.Exists(SpecialFolderPath))
         {
-            _ = Directory.CreateDirectory(SpecialFolderPath);
+            Directory.Delete(SpecialFolderPath, true);
         }
     }
 

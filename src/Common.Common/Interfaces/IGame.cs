@@ -48,9 +48,4 @@ public interface IGame
     /// Path to autoload mods folder
     /// </summary>
     string ModsFolderPath { get; }
-
-    /// <summary>
-    /// Path to special folder
-    /// </summary>
-    string SpecialFolderPath { get; }
 }

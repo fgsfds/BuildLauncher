@@ -64,34 +64,6 @@ public sealed class DukeGame : BaseGame
     public Dictionary<DukeAddonEnum, string> AddonsPaths { get; set; } = [];
 
 
-    public DukeGame() : base()
-    {
-        CreateWTStopgapFolder();
-    }
-
-
-    /// <summary>
-    /// Create folder with files required for World Tour to work with EDuke32
-    /// </summary>
-    private void CreateWTStopgapFolder()
-    {
-        var stopgapFolder = Path.Combine(SpecialFolderPath, ClientConsts.WTStopgap);
-
-        if (Directory.Exists(stopgapFolder))
-        {
-            return;
-        }
-
-        using var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("Games.Assets.WTStopgap.zip");
-
-        Guard.IsNotNull(stream);
-
-        using var archive = ZipArchive.Open(stream);
-
-        archive.ExtractToDirectory(stopgapFolder);
-    }
-
-
     /// <summary>
     /// Find Duke's addon files
     /// </summary>
