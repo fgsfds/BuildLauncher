@@ -276,8 +276,7 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
     /// <inheritdoc/>
     public Dictionary<AddonVersion, IAddon> GetInstalledCampaigns()
     {
-        OriginalCampaignsProvider originalCampaignsProvider = new(_game);
-        var campaigns = originalCampaignsProvider.GetOriginalCampaigns();
+        var campaigns = OriginalCampaignsProvider.GetOriginalCampaigns(_game);
 
         if (_isCacheUpdating)
         {

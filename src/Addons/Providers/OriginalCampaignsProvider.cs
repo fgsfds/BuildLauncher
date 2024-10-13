@@ -12,30 +12,23 @@ using System.Reflection;
 
 namespace Addons.Providers;
 
-public sealed class OriginalCampaignsProvider
+public static class OriginalCampaignsProvider
 {
-    private readonly IGame _game;
-
-    public OriginalCampaignsProvider(IGame game)
-    {
-        _game = game;
-    }
-
     /// <inheritdoc/>
-    public Dictionary<AddonVersion, IAddon> GetOriginalCampaigns()
+    public static Dictionary<AddonVersion, IAddon> GetOriginalCampaigns(IGame game)
     {
-        return _game.GameEnum switch
+        return game.GameEnum switch
         {
-            GameEnum.Duke3D => GetDuke3DCampaigns(),
-            GameEnum.Blood => GetBloodCampaigns(),
-            GameEnum.ShadowWarrior => GetWangCampaigns(),
-            GameEnum.Fury => GetFuryCampaigns(),
-            GameEnum.Exhumed => GetSlaveCampaigns(),
-            GameEnum.NAM => GetNamCampaigns(),
-            GameEnum.WW2GI => GetWw2Campaigns(),
-            GameEnum.Redneck => GetRedneckCampaigns(),
-            GameEnum.TekWar => GetTekWarCampaigns(),
-            GameEnum.Witchaven => GetWitchavenCampaigns(),
+            GameEnum.Duke3D => GetDuke3DCampaigns(game),
+            GameEnum.Blood => GetBloodCampaigns(game),
+            GameEnum.ShadowWarrior => GetWangCampaigns(game),
+            GameEnum.Fury => GetFuryCampaigns(game),
+            GameEnum.Exhumed => GetSlaveCampaigns(game),
+            GameEnum.NAM => GetNamCampaigns(game),
+            GameEnum.WW2GI => GetWw2Campaigns(game),
+            GameEnum.Redneck => GetRedneckCampaigns(game),
+            GameEnum.TekWar => GetTekWarCampaigns(game),
+            GameEnum.Witchaven => GetWitchavenCampaigns(game),
 
             GameEnum.Standalone => [],
 
@@ -47,9 +40,9 @@ public sealed class OriginalCampaignsProvider
         };
     }
 
-    private Dictionary<AddonVersion, IAddon> GetDuke3DCampaigns()
+    private static Dictionary<AddonVersion, IAddon> GetDuke3DCampaigns(IGame game)
     {
-        Guard2.ThrowIfNotType<DukeGame>(_game, out var dGame);
+        Guard2.ThrowIfNotType<DukeGame>(game, out var dGame);
 
         Dictionary<AddonVersion, IAddon> campaigns = new(6);
 
@@ -270,9 +263,9 @@ public sealed class OriginalCampaignsProvider
 
 
     /// <inheritdoc/>
-    private Dictionary<AddonVersion, IAddon> GetBloodCampaigns()
+    private static Dictionary<AddonVersion, IAddon> GetBloodCampaigns(IGame game)
     {
-        Guard2.ThrowIfNotType<BloodGame>(_game, out BloodGame? bGame);
+        Guard2.ThrowIfNotType<BloodGame>(game, out BloodGame? bGame);
 
         Dictionary<AddonVersion, IAddon> campaigns = new(2);
 
@@ -357,9 +350,9 @@ public sealed class OriginalCampaignsProvider
     /// <summary>
     /// Get list of original campaigns
     /// </summary>
-    private Dictionary<AddonVersion, IAddon> GetWangCampaigns()
+    private static Dictionary<AddonVersion, IAddon> GetWangCampaigns(IGame game)
     {
-        Guard2.ThrowIfNotType<WangGame>(_game, out var wGame);
+        Guard2.ThrowIfNotType<WangGame>(game, out var wGame);
 
         Dictionary<AddonVersion, IAddon> campaigns = new(1);
 
@@ -400,9 +393,9 @@ public sealed class OriginalCampaignsProvider
 
 
     /// <inheritdoc/>
-    private Dictionary<AddonVersion, IAddon> GetFuryCampaigns()
+    private static Dictionary<AddonVersion, IAddon> GetFuryCampaigns(IGame game)
     {
-        Guard2.ThrowIfNotType<FuryGame>(_game, out var fGame);
+        Guard2.ThrowIfNotType<FuryGame>(game, out var fGame);
 
         Dictionary<AddonVersion, IAddon> campaigns = new(1);
 
@@ -447,7 +440,7 @@ public sealed class OriginalCampaignsProvider
     /// <summary>
     /// Is Aftershock addon installed
     /// </summary>
-    private bool IsAftershock(FuryGame fGame)
+    private static bool IsAftershock(FuryGame fGame)
     {
         if (fGame.GameInstallFolder is null)
         {
@@ -473,9 +466,9 @@ public sealed class OriginalCampaignsProvider
 
 
     /// <inheritdoc/>
-    private Dictionary<AddonVersion, IAddon> GetRedneckCampaigns()
+    private static Dictionary<AddonVersion, IAddon> GetRedneckCampaigns(IGame game)
     {
-        Guard2.ThrowIfNotType<RedneckGame>(_game, out var rGame);
+        Guard2.ThrowIfNotType<RedneckGame>(game, out var rGame);
 
         Dictionary<AddonVersion, IAddon> campaigns = new(3);
 
@@ -587,9 +580,9 @@ public sealed class OriginalCampaignsProvider
 
 
     /// <inheritdoc/>
-    private Dictionary<AddonVersion, IAddon> GetNamCampaigns()
+    private static Dictionary<AddonVersion, IAddon> GetNamCampaigns(IGame game)
     {
-        Guard2.ThrowIfNotType<NamGame>(_game, out var nGame);
+        Guard2.ThrowIfNotType<NamGame>(game, out var nGame);
 
         Dictionary<AddonVersion, IAddon> campaigns = new(1);
 
@@ -637,9 +630,9 @@ public sealed class OriginalCampaignsProvider
 
 
     /// <inheritdoc/>
-    private Dictionary<AddonVersion, IAddon> GetWw2Campaigns()
+    private static Dictionary<AddonVersion, IAddon> GetWw2Campaigns(IGame game)
     {
-        Guard2.ThrowIfNotType<WW2GIGame>(_game, out var wGame);
+        Guard2.ThrowIfNotType<WW2GIGame>(game, out var wGame);
 
         Dictionary<AddonVersion, IAddon> campaigns = new(1);
 
@@ -716,9 +709,9 @@ public sealed class OriginalCampaignsProvider
 
 
     /// <inheritdoc/>
-    private Dictionary<AddonVersion, IAddon> GetTekWarCampaigns()
+    private static Dictionary<AddonVersion, IAddon> GetTekWarCampaigns(IGame game)
     {
-        Guard2.ThrowIfNotType<TekWarGame>(_game, out var tGame);
+        Guard2.ThrowIfNotType<TekWarGame>(game, out var tGame);
 
         Dictionary<AddonVersion, IAddon> campaigns = new(1);
 
@@ -760,9 +753,9 @@ public sealed class OriginalCampaignsProvider
 
 
     /// <inheritdoc/>
-    private Dictionary<AddonVersion, IAddon> GetSlaveCampaigns()
+    private static Dictionary<AddonVersion, IAddon> GetSlaveCampaigns(IGame game)
     {
-        Guard2.ThrowIfNotType<SlaveGame>(_game, out var sGame);
+        Guard2.ThrowIfNotType<SlaveGame>(game, out var sGame);
 
         Dictionary<AddonVersion, IAddon> campaigns = new(1);
 
@@ -807,9 +800,9 @@ public sealed class OriginalCampaignsProvider
 
 
     /// <inheritdoc/>
-    private Dictionary<AddonVersion, IAddon> GetWitchavenCampaigns()
+    private static Dictionary<AddonVersion, IAddon> GetWitchavenCampaigns(IGame game)
     {
-        Guard2.ThrowIfNotType<WitchavenGame>(_game, out var wGame);
+        Guard2.ThrowIfNotType<WitchavenGame>(game, out var wGame);
 
         Dictionary<AddonVersion, IAddon> campaigns = new(1);
 
