@@ -68,6 +68,7 @@ public sealed class WangLooseMapsCmdArgumentsTests
 
         Raze raze = new();
 
+        raze.BeforeStart(_wangGame, _looseMap);
         var args = raze.GetStartGameArgs(_wangGame, _looseMap, mods, true, true);
         var expected = @$" -quick -nosetup -file ""enabled_mod.zip"" -adddef ""ENABLED1.DEF"" -adddef ""ENABLED2.DEF"" -file ""incompatible_mod_with_compatible_version.zip"" -file ""dependant_mod.zip"" -file ""dependant_mod_with_compatible_version.zip"" -savedir ""{Directory.GetCurrentDirectory()}\Data\Saves\Raze\Wang\loose-map"" -def ""a"" -file ""{Directory.GetCurrentDirectory()}\Data\Addons\Wang\Maps"" -map ""LOOSE.MAP""";
 

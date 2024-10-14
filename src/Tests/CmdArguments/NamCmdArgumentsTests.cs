@@ -61,6 +61,7 @@ public sealed class NamCmdArgumentsTests
 
         Raze raze = new();
 
+        raze.BeforeStart(_namGame, _namCamp);
         var args = raze.GetStartGameArgs(_namGame, _namCamp, mods, true, true);
         var expected = @$" -quick -nosetup -file ""enabled_mod.zip"" -adddef ""ENABLED1.DEF"" -adddef ""ENABLED2.DEF"" -savedir ""{Directory.GetCurrentDirectory()}\Data\Saves\Raze\NAM\nam"" -def ""a"" -nam -file NAM.GRP -con GAME.CON";
 

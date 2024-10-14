@@ -10,5 +10,6 @@ public enum PortEnum
     NotBlood,
     VoidSW,
     PCExhumed,
-    Fury
+    Fury,
+    Stub
 }

@@ -25,6 +25,7 @@ public sealed partial class MapsViewModel : RightPanelViewModel, IPortsButtonCon
     private readonly PlaytimeProvider _playtimeProvider;
     private readonly InstalledAddonsProvider _installedAddonsProvider;
     private readonly DownloadableAddonsProvider _downloadableAddonsProvider;
+    private readonly PortStarter _portStarter;
     private readonly ILogger _logger;
 
 
@@ -113,6 +114,7 @@ public sealed partial class MapsViewModel : RightPanelViewModel, IPortsButtonCon
         RatingProvider ratingProvider,
         InstalledAddonsProviderFactory installedAddonsProviderFactory,
         DownloadableAddonsProviderFactory _downloadableAddonsProviderFactory,
+        PortStarter portStarter,
         ILogger logger
         ) : base(playtimeProvider, ratingProvider)
     {
@@ -123,6 +125,7 @@ public sealed partial class MapsViewModel : RightPanelViewModel, IPortsButtonCon
         _playtimeProvider = playtimeProvider;
         _installedAddonsProvider = installedAddonsProviderFactory.GetSingleton(game);
         _downloadableAddonsProvider = _downloadableAddonsProviderFactory.GetSingleton(game);
+        _portStarter = portStarter;
         _logger = logger;
 
         _gamesProvider.GameChangedEvent += OnGameChanged;
@@ -145,15 +148,9 @@ public sealed partial class MapsViewModel : RightPanelViewModel, IPortsButtonCon
             command.ThrowIfNotType<Tuple<BasePort, byte?>>(out var parameter);
             Guard.IsNotNull(SelectedAddon);
 
-            var mods = _installedAddonsProvider.GetInstalledMods();
+            await _portStarter.StartAsync(parameter.Item1, Game, SelectedAddon, parameter.Item2, _config.SkipIntro, _config.SkipStartup).ConfigureAwait(true);
 
-            var args = parameter.Item1.GetStartGameArgs(Game, SelectedAddon, mods, _config.SkipIntro, _config.SkipStartup, parameter.Item2);
-
-            _logger.LogInformation($"=== Starting map {SelectedAddon.Id} for {Game.FullName} ===");
-            _logger.LogInformation($"Path to port exe {parameter.Item1.PortExeFilePath}");
-            _logger.LogInformation($"Startup args: {args}");
-
-            await StartPortAsync(SelectedAddon.Id, parameter.Item1.PortExeFilePath, args).ConfigureAwait(true);
+            OnPropertyChanged(nameof(SelectedAddonPlaytime));
         }
         catch (Exception ex)
         {
@@ -214,33 +211,6 @@ public sealed partial class MapsViewModel : RightPanelViewModel, IPortsButtonCon
     private bool ClearSearchBoxCanExecute() => !string.IsNullOrEmpty(SearchBoxText);
 
     #endregion
-
-
-    /// <summary>
-    /// Start port with command line args
-    /// </summary>
-    /// <param name="id">Map id</param>
-    /// <param name="exe">Path to port exe</param>
-    /// <param name="args">Command line arguments</param>
-    private async Task StartPortAsync(string id, string exe, string args)
-    {
-        var sw = Stopwatch.StartNew();
-
-        await Process.Start(new ProcessStartInfo
-        {
-            FileName = exe,
-            UseShellExecute = true,
-            Arguments = args,
-            WorkingDirectory = Path.GetDirectoryName(exe)
-        })!.WaitForExitAsync().ConfigureAwait(true);
-
-        sw.Stop();
-        var time = sw.Elapsed;
-
-        _playtimeProvider.AddTime(id, time);
-
-        OnPropertyChanged(nameof(SelectedAddonPlaytime));
-    }
 
 
     private void OnGameChanged(GameEnum parameterName)

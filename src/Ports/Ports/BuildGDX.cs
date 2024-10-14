@@ -114,7 +114,7 @@ public sealed class BuildGDX : BasePort
 
 
     /// <inheritdoc/>
-    protected override void BeforeStart(IGame game, IAddon campaign)
+    public override void BeforeStart(IGame game, IAddon campaign)
     {
         //nothing to do
     }

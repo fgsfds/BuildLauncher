@@ -5,6 +5,7 @@ using Common.Enums;
 using Games.Providers;
 using Microsoft.Extensions.Logging;
 using Ports.Installer;
+using Ports.Ports;
 using Ports.Providers;
 using Tools.Installer;
 using Tools.Providers;
@@ -25,6 +26,7 @@ public sealed class ViewModelsFactory
     private readonly RatingProvider _ratingProvider;
     private readonly InstalledAddonsProviderFactory _installedAddonsProviderFactory;
     private readonly DownloadableAddonsProviderFactory _downloadableAddonsProviderFactory;
+    private readonly PortStarter _portStarter;
     private readonly ILogger _logger;
 
     public ViewModelsFactory(
@@ -40,6 +42,7 @@ public sealed class ViewModelsFactory
         RatingProvider ratingProvider,
         InstalledAddonsProviderFactory installedAddonsProviderFactory,
         DownloadableAddonsProviderFactory downloadableAddonsProviderFactory,
+        PortStarter portStarter,
         ILogger logger
         )
     {
@@ -55,6 +58,7 @@ public sealed class ViewModelsFactory
         _ratingProvider = ratingProvider;
         _installedAddonsProviderFactory = installedAddonsProviderFactory;
         _downloadableAddonsProviderFactory = downloadableAddonsProviderFactory;
+        _portStarter = portStarter;
         _logger = logger;
     }
 
@@ -73,6 +77,7 @@ public sealed class ViewModelsFactory
             _ratingProvider,
             _installedAddonsProviderFactory,
             _downloadableAddonsProviderFactory,
+            _portStarter,
             _logger
             );
 
@@ -95,6 +100,7 @@ public sealed class ViewModelsFactory
             _ratingProvider,
             _installedAddonsProviderFactory,
             _downloadableAddonsProviderFactory,
+            _portStarter,
             _logger
             );
 

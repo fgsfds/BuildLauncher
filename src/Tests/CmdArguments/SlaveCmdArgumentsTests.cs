@@ -58,6 +58,7 @@ public sealed class SlaveCmdArgumentsTests
 
         Raze raze = new();
 
+        raze.BeforeStart(_slaveGame, _slaveCamp);
         var args = raze.GetStartGameArgs(_slaveGame, _slaveCamp, mods, true, true);
         var expected = @$" -quick -nosetup -file ""enabled_mod.zip"" -adddef ""ENABLED1.DEF"" -adddef ""ENABLED2.DEF"" -savedir ""{Directory.GetCurrentDirectory()}\Data\Saves\Raze\Slave\exhumed"" -def ""a""";
 

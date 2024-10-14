@@ -176,6 +176,7 @@ public sealed class BloodCmdArgumentsTests
 
         Raze raze = new();
 
+        raze.BeforeStart(_bloodGame, _bloodCamp);
         var args = raze.GetStartGameArgs(_bloodGame, _bloodCamp, mods, true, true);
         var expected = @$" -quick -nosetup -file ""enabled_mod.zip"" -adddef ""ENABLED1.DEF"" -adddef ""ENABLED2.DEF"" -file ""mod_incompatible_with_addon.zip"" -file ""incompatible_mod_with_compatible_version.zip"" -file ""dependant_mod.zip"" -file ""dependant_mod_with_compatible_version.zip"" -savedir ""{Directory.GetCurrentDirectory()}\Data\Saves\Raze\Blood\blood"" -def ""a""";
 
@@ -220,6 +221,7 @@ public sealed class BloodCmdArgumentsTests
 
         Raze raze = new();
 
+        raze.BeforeStart(_bloodGame, _bloodCamp);
         var args = raze.GetStartGameArgs(_bloodGame, _bloodCpCamp, mods, true, true);
         var expected = @$" -quick -nosetup -file ""enabled_mod.zip"" -adddef ""ENABLED1.DEF"" -adddef ""ENABLED2.DEF"" -file ""mod_requires_addon.zip"" -file ""incompatible_mod_with_compatible_version.zip"" -file ""dependant_mod.zip"" -file ""dependant_mod_with_compatible_version.zip"" -savedir ""{Directory.GetCurrentDirectory()}\Data\Saves\Raze\Blood\bloodcp"" -def ""a"" -ini ""CRYPTIC.INI""";
 
@@ -249,6 +251,7 @@ public sealed class BloodCmdArgumentsTests
     {
         Raze raze = new();
 
+        raze.BeforeStart(_bloodGame, _bloodTc);
         var args = raze.GetStartGameArgs(_bloodGame, _bloodTc, [], true, true);
         var expected = @$" -quick -nosetup -savedir ""{Directory.GetCurrentDirectory()}\Data\Saves\Raze\Blood\blood-tc"" -def ""a"" -ini ""TC.INI"" -file ""D:\Games\Blood\blood_tc.zip"" -file ""TC.RFF"" -file ""TC.SND""";
 
@@ -278,6 +281,7 @@ public sealed class BloodCmdArgumentsTests
     {
         Raze raze = new();
 
+        raze.BeforeStart(_bloodGame, _bloodTcFolder);
         var args = raze.GetStartGameArgs(_bloodGame, _bloodTcFolder, [], true, true);
         var expected = @$" -quick -nosetup -savedir ""{Directory.GetCurrentDirectory()}\Data\Saves\Raze\Blood\blood-tc-folder"" -def ""a"" -ini ""TC.INI"" -file ""D:\Games\Blood\blood_tc_folder"" -file ""TC.RFF"" -file ""TC.SND""";
 

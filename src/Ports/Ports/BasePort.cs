@@ -1,4 +1,5 @@
 ﻿using Addons.Addons;
+using Addons.Helpers;
 using Common;
 using Common.Client.Helpers;
 using Common.Enums;
@@ -207,8 +208,6 @@ public abstract class BasePort
     {
         StringBuilder sb = new();
 
-        BeforeStart(game, addon);
-
         if (skipIntro)
         {
             GetSkipIntroParameter(sb);
@@ -261,115 +260,6 @@ public abstract class BasePort
         _ = sb.Append($@" -map ""{mapFile.File}""");
     }
 
-
-    /// <summary>
-    /// Check if autoload mod works with current port and addons
-    /// </summary>
-    /// <param name="autoloadMod">Autoload mod</param>
-    /// <param name="campaign">Campaign</param>
-    /// <param name="mods">Autoload mods</param>
-    protected bool ValidateAutoloadMod(AutoloadMod autoloadMod, IAddon campaign, Dictionary<AddonVersion, IAddon> mods)
-    {
-        if (!autoloadMod.IsEnabled)
-        {
-            //skipping disabled mods
-            return false;
-        }
-
-        if (autoloadMod.SupportedGame.GameEnum != campaign.SupportedGame.GameEnum &&
-            !(autoloadMod.SupportedGame.GameEnum is GameEnum.Redneck && campaign.SupportedGame.GameEnum is GameEnum.RidesAgain))
-        {
-            //skipping mod for different game
-            return false;
-        }
-
-        if (autoloadMod.SupportedGame.GameVersion is not null &&
-            !autoloadMod.SupportedGame.GameVersion.Equals(campaign.SupportedGame.GameVersion, StringComparison.InvariantCultureIgnoreCase))
-        {
-            return false;
-        }
-
-        if (autoloadMod.RequiredFeatures is not null &&
-            autoloadMod.RequiredFeatures.Except(SupportedFeatures).Any())
-        {
-            //skipping mod that requires unsupported features
-            return false;
-        }
-
-        if (autoloadMod.DependentAddons is not null)
-        {
-            foreach (var dependantAddon in autoloadMod.DependentAddons)
-            {
-                if (campaign.Id.Equals(dependantAddon.Key, StringComparison.InvariantCultureIgnoreCase) &&
-                    (dependantAddon.Value is null || VersionComparer.Compare(campaign.Version, dependantAddon.Value)))
-                {
-                    return true;
-                }
-
-                foreach (var addon in mods)
-                {
-                    if (!dependantAddon.Key.Equals(addon.Key.Id, StringComparison.InvariantCultureIgnoreCase))
-                    {
-                        continue;
-                    }
-                    else if (dependantAddon.Value is null)
-                    {
-                        return true;
-                    }
-                    else if (VersionComparer.Compare(addon.Key.Version, dependantAddon.Value))
-                    {
-                        return true;
-                    }
-                }
-            }
-
-            return false;
-        }
-
-        if (autoloadMod.IncompatibleAddons is not null)
-        {
-            foreach (var incompatibleAddon in autoloadMod.IncompatibleAddons)
-            {
-                //What a fucking mess...
-                //if campaign id equals addon id
-                if (campaign.Id.Equals(incompatibleAddon.Key, StringComparison.InvariantCultureIgnoreCase) &&
-                    //AND either both campaign's and addon's versions are null
-                    ((incompatibleAddon.Value is null && campaign.Version is null) ||
-                    //OR addon's version is not null and does match the comparer
-                    (incompatibleAddon.Value is not null && VersionComparer.Compare(campaign.Version, incompatibleAddon.Value))))
-                {
-                    //the addon is incompatible
-                    return false;
-                }
-
-                foreach (var addon in mods)
-                {
-                    if (incompatibleAddon.Key != addon.Key.Id)
-                    {
-                        continue;
-                    }
-                    if (addon.Value is AutoloadMod aMod &&
-                        !aMod.IsEnabled)
-                    {
-                        continue;
-                    }
-                    else if (incompatibleAddon.Value is null)
-                    {
-                        return false;
-                    }
-                    else if (VersionComparer.Compare(addon.Key.Version, incompatibleAddon.Value))
-                    {
-                        return false;
-                    }
-                }
-            }
-
-            return true;
-        }
-
-        return true;
-    }
-
     protected void GetBloodArgs(StringBuilder sb, BloodGame game, IAddon addon)
     {
         if (addon is LooseMap lMap)
@@ -410,7 +300,7 @@ public abstract class BasePort
         {
             if (bCamp.Executables is not null)
             {
-                //don't add game dir it the port is overridden
+                //don't add addon dir if the port is overridden
             }
             else if (bCamp.FileName.Equals("addon.json"))
             {
@@ -545,6 +435,63 @@ public abstract class BasePort
         }
     }
 
+    /// <summary>
+    /// Get command line arguments to load mods
+    /// </summary>
+    /// <param name="sb">String builder for parameters</param>
+    /// <param name="game">Game</param>
+    /// <param name="addon">Campaign\map</param>
+    /// <param name="mods">Autoload mods</param>
+    protected virtual void GetAutoloadModsArgs(StringBuilder sb, IGame game, IAddon addon, Dictionary<AddonVersion, IAddon> mods)
+    {
+        if (mods.Count == 0)
+        {
+            return;
+        }
+
+        var enabledModsCount = 0;
+
+        foreach (var mod in mods)
+        {
+            if (mod.Value is not AutoloadMod aMod)
+            {
+                continue;
+            }
+
+            if (!AutoloadModsValidator.ValidateAutoloadMod(aMod, addon, mods, SupportedFeatures))
+            {
+                continue;
+            }
+
+            _ = sb.Append($@" {AddFileParam}""{aMod.FileName}""");
+
+            if (aMod.AdditionalDefs is not null)
+            {
+                foreach (var def in aMod.AdditionalDefs)
+                {
+                    _ = sb.Append($@" {AddDefParam}""{def}""");
+                }
+            }
+
+            if (aMod.AdditionalCons is not null)
+            {
+                foreach (var con in aMod.AdditionalCons)
+                {
+                    _ = sb.Append($@" {AddConParam}""{con}""");
+                }
+            }
+
+            enabledModsCount++;
+        }
+
+        if (enabledModsCount > 0 &&
+            //Raze sets mods dir in the config
+            PortEnum is not PortEnum.Raze)
+        {
+            _ = sb.Append($@" {AddDirectoryParam}""{game.ModsFolderPath}""");
+        }
+    }
+
 
     /// <summary>
     /// Method to perform after port is finished
@@ -558,7 +505,7 @@ public abstract class BasePort
     /// </summary>
     /// <param name="game">Game</param>
     /// <param name="campaign">Campaign</param>
-    protected abstract void BeforeStart(IGame game, IAddon campaign);
+    public abstract void BeforeStart(IGame game, IAddon campaign);
 
     /// <summary>
     /// Get command line arguments to start custom map or campaign
@@ -567,15 +514,6 @@ public abstract class BasePort
     /// <param name="game">Game</param>
     /// <param name="addon">Map/campaign</param>
     protected abstract void GetStartCampaignArgs(StringBuilder sb, IGame game, IAddon addon);
-
-    /// <summary>
-    /// Get command line arguments to load mods
-    /// </summary>
-    /// <param name="sb">String builder for parameters</param>
-    /// <param name="game">Game</param>
-    /// <param name="addon">Campaign\map</param>
-    /// <param name="mods">Autoload mods</param>
-    protected abstract void GetAutoloadModsArgs(StringBuilder sb, IGame game, IAddon addon, Dictionary<AddonVersion, IAddon> mods);
 
     /// <summary>
     /// Return command line parameter to skip intro

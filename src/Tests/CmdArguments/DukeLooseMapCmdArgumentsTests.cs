@@ -73,6 +73,7 @@ public sealed class DukeLooseMapCmdArgumentsTests
 
         Raze raze = new();
 
+        raze.BeforeStart(_dukeGame, _dukeLooseMap);
         var args = raze.GetStartGameArgs(_dukeGame, _dukeLooseMap, mods, true, true);
         var expected = @$" -quick -nosetup -file ""enabled_mod.zip"" -adddef ""ENABLED1.DEF"" -adddef ""ENABLED2.DEF"" -addcon ""ENABLED1.CON"" -addcon ""ENABLED2.CON"" -file ""mod_incompatible_with_addon.zip"" -file ""incompatible_mod_with_compatible_version.zip"" -file ""dependant_mod.zip"" -file ""dependant_mod_with_compatible_version.zip"" -savedir ""{Directory.GetCurrentDirectory()}\Data\Saves\Raze\Duke3D\loose-map"" -def ""a"" -file ""{Directory.GetCurrentDirectory()}\Data\Addons\Duke3D\Maps"" -map ""LOOSE.MAP""";
 

@@ -88,6 +88,7 @@ public sealed class WW2GICmdArgumentsTests
 
         Raze raze = new();
 
+        raze.BeforeStart(_ww2Game, _ww2Camp);
         var args = raze.GetStartGameArgs(_ww2Game, _ww2Camp, mods, true, true);
         var expected = @$" -quick -nosetup -savedir ""{Directory.GetCurrentDirectory()}\Data\Saves\Raze\WW2GI\ww2gi"" -def ""a"" -ww2gi -file WW2GI.GRP -con GAME.CON";
 
@@ -122,6 +123,7 @@ public sealed class WW2GICmdArgumentsTests
 
         Raze raze = new();
 
+        raze.BeforeStart(_ww2Game, _platoonCamp);
         var args = raze.GetStartGameArgs(_ww2Game, _platoonCamp, mods, true, true);
         var expected = @$" -quick -nosetup -savedir ""{Directory.GetCurrentDirectory()}\Data\Saves\Raze\WW2GI\platoon"" -def ""a"" -ww2gi -file WW2GI.GRP -file PLATOONL.DAT -con PLATOONL.DEF";
 

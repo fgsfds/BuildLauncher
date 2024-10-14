@@ -45,7 +45,7 @@ public class NBlood : EDuke32
 
 
     /// <inheritdoc/>
-    protected override void BeforeStart(IGame game, IAddon campaign)
+    public override void BeforeStart(IGame game, IAddon campaign)
     {
         MoveSaveFiles(game, campaign);
     }

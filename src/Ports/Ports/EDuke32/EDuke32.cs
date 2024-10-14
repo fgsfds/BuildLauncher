@@ -1,4 +1,5 @@
 ﻿using Addons.Addons;
+using Addons.Helpers;
 using Common;
 using Common.Client.Helpers;
 using Common.Enums;
@@ -154,7 +155,7 @@ public class EDuke32 : BasePort
 
 
     /// <inheritdoc/>
-    protected override void BeforeStart(IGame game, IAddon campaign)
+    public override void BeforeStart(IGame game, IAddon campaign)
     {
         MoveSaveFiles(game, campaign);
 
@@ -190,6 +191,7 @@ public class EDuke32 : BasePort
     /// <inheritdoc/>
     public override void AfterEnd(IGame game, IAddon campaign)
     {
+        //copying saved games into separate folder
         var saveFolder = GetPathToAddonSavedGamesFolder(game.ShortName, campaign.Id);
 
         string path;
@@ -375,7 +377,7 @@ public class EDuke32 : BasePort
         {
             if (dCamp.Executables is not null)
             {
-                //nothing to do
+                //don't add addon dir if the port is overridden
             }
             else
             {
@@ -390,56 +392,6 @@ public class EDuke32 : BasePort
         {
             ThrowHelper.ThrowNotSupportedException($"Mod type {dCamp.Type} is not supported");
             return;
-        }
-    }
-
-
-    /// <inheritdoc/>
-    protected override void GetAutoloadModsArgs(StringBuilder sb, IGame game, IAddon addon, Dictionary<AddonVersion, IAddon> mods)
-    {
-        if (mods.Count == 0)
-        {
-            return;
-        }
-
-        var enabledModsCount = 0;
-
-        foreach (var mod in mods)
-        {
-            if (mod.Value is not AutoloadMod aMod)
-            {
-                continue;
-            }
-
-            if (!ValidateAutoloadMod(aMod, addon, mods))
-            {
-                continue;
-            }
-
-            _ = sb.Append($@" {AddFileParam}""{aMod.FileName}""");
-
-            if (aMod.AdditionalDefs is not null)
-            {
-                foreach (var def in aMod.AdditionalDefs)
-                {
-                    _ = sb.Append($@" {AddDefParam}""{def}""");
-                }
-            }
-
-            if (aMod.AdditionalCons is not null)
-            {
-                foreach (var con in aMod.AdditionalCons)
-                {
-                    _ = sb.Append($@" {AddConParam}""{con}""");
-                }
-            }
-
-            enabledModsCount++;
-        }
-
-        if (enabledModsCount > 0)
-        {
-            _ = sb.Append($@" {AddDirectoryParam}""{game.ModsFolderPath}""");
         }
     }
 

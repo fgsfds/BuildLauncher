@@ -68,7 +68,7 @@ public sealed partial class CampaignsControl : UserControl
             {
                 Content = textBlock,
                 Command = new RelayCommand(() =>
-                    _viewModel.StartCampaignCommand.Execute(null),
+                    _viewModel.StartCampaignCommand.Execute(new StubPort()),
                     () =>
                     {
                         if (CampaignsList?.SelectedItem is not IAddon selectedCampaign)

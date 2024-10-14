@@ -1,4 +1,5 @@
 ﻿using Addons.Addons;
+using Addons.Helpers;
 using Common;
 using Common.Enums;
 using Common.Enums.Addons;
@@ -185,7 +186,7 @@ public sealed class Raze : BasePort
 
 
     /// <inheritdoc/>
-    protected override void BeforeStart(IGame game, IAddon campaign)
+    public override void BeforeStart(IGame game, IAddon campaign)
     {
         var config = Path.Combine(PortInstallFolderPath, ConfigFile);
 
@@ -469,46 +470,6 @@ public sealed class Raze : BasePort
         {
             ThrowHelper.ThrowNotSupportedException($"Mod type {rCamp.Type} is not supported");
             return;
-        }
-    }
-
-    /// <inheritdoc/>
-    protected override void GetAutoloadModsArgs(StringBuilder sb, IGame game, IAddon addon, Dictionary<AddonVersion, IAddon> mods)
-    {
-        if (mods.Count == 0)
-        {
-            return;
-        }
-
-        foreach (var mod in mods)
-        {
-            if (mod.Value is not AutoloadMod aMod)
-            {
-                continue;
-            }
-
-            if (!ValidateAutoloadMod(aMod, addon, mods))
-            {
-                continue;
-            }
-
-            _ = sb.Append($@" {AddFileParam}""{aMod.FileName}""");
-
-            if (aMod.AdditionalDefs is not null)
-            {
-                foreach (var def in aMod.AdditionalDefs)
-                {
-                    _ = sb.Append($@" {AddDefParam}""{def}""");
-                }
-            }
-
-            if (aMod.AdditionalCons is not null)
-            {
-                foreach (var con in aMod.AdditionalCons)
-                {
-                    _ = sb.Append($@" {AddConParam}""{con}""");
-                }
-            }
         }
     }
 

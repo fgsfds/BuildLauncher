@@ -70,6 +70,7 @@ public sealed class BloodLooseMapCmdArgumentsTests
 
         Raze raze = new();
 
+        raze.BeforeStart(_bloodGame, _looseMap);
         var args = raze.GetStartGameArgs(_bloodGame, _looseMap, mods, true, true);
         var expected = @$" -quick -nosetup -file ""enabled_mod.zip"" -adddef ""ENABLED1.DEF"" -adddef ""ENABLED2.DEF"" -file ""mod_incompatible_with_addon.zip"" -file ""incompatible_mod_with_compatible_version.zip"" -file ""dependant_mod.zip"" -file ""dependant_mod_with_compatible_version.zip"" -savedir ""{Directory.GetCurrentDirectory()}\Data\Saves\Raze\Blood\loose-map"" -def ""a"" -ini ""BLOOD.INI"" -file ""{Directory.GetCurrentDirectory()}\Data\Addons\Blood\Maps"" -map ""LOOSE.MAP""";
 

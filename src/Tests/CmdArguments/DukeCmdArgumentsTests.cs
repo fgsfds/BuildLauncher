@@ -180,6 +180,7 @@ public sealed class DukeCmdArgumentsTests
 
         Raze raze = new();
 
+        raze.BeforeStart(_dukeGame, _dukeCamp);
         var args = raze.GetStartGameArgs(_dukeGame, _dukeCamp, mods, true, true);
         var expected = @$" -quick -nosetup -file ""enabled_mod.zip"" -adddef ""ENABLED1.DEF"" -adddef ""ENABLED2.DEF"" -addcon ""ENABLED1.CON"" -addcon ""ENABLED2.CON"" -file ""mod_incompatible_with_addon.zip"" -file ""incompatible_mod_with_compatible_version.zip"" -file ""dependant_mod.zip"" -file ""dependant_mod_with_compatible_version.zip"" -savedir ""{Directory.GetCurrentDirectory()}\Data\Saves\Raze\Duke3D\duke3d"" -def ""a"" -addon 0";
 
@@ -246,6 +247,7 @@ public sealed class DukeCmdArgumentsTests
 
         Raze raze = new();
 
+        raze.BeforeStart(_dukeGame, _dukeVaca);
         var args = raze.GetStartGameArgs(_dukeGame, _dukeVaca, mods, true, true);
         var expected = @$" -quick -nosetup -file ""enabled_mod.zip"" -adddef ""ENABLED1.DEF"" -adddef ""ENABLED2.DEF"" -addcon ""ENABLED1.CON"" -addcon ""ENABLED2.CON"" -file ""mod_requires_addon.zip"" -savedir ""{Directory.GetCurrentDirectory()}\Data\Saves\Raze\Duke3D\dukevaca"" -def ""a"" -addon 3";
 
