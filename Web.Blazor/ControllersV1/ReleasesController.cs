@@ -54,10 +54,21 @@ public sealed class ReleasesController : ControllerBase
 
         foreach (var release in releases)
         {
+            string version;
+
+            if (release.Key is PortEnum.NotBlood)
+            {
+                version = DateTime.Parse(release.Value.Version).ToString("dd.MM.yyyy");
+            }
+            else
+            {
+                version = release.Value.Version;
+            }
+
             result.Add(release.Key, new GeneralReleaseEntityObsolete()
             {
                 Description = release.Value.Description,
-                Version = release.Value.Version,
+                Version = version,
                 WindowsDownloadUrl = release.Value.DownloadUrl,
                 LinuxDownloadUrl = null
             });

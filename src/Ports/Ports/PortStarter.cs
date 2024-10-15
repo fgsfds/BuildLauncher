@@ -1,4 +1,5 @@
 ﻿using Addons.Providers;
+using Common.Client.Helpers;
 using Common.Client.Providers;
 using Common.Enums;
 using Common.Interfaces;
@@ -70,7 +71,7 @@ public sealed class PortStarter
     /// <param name="args">Command line arguments</param>
     private async Task StartPortAsync(BasePort port, IAddon addon, string args)
     {
-        var portExe = addon.Executables?[OSEnum.Windows] is not null ? addon.Executables[OSEnum.Windows] : port.PortExeFilePath;
+        var portExe = addon.Executables?[ClientProperties.OSEnum] is not null ? addon.Executables[ClientProperties.OSEnum] : port.PortExeFilePath;
 
         await Process.Start(new ProcessStartInfo
         {

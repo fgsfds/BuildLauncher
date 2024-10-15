@@ -1,4 +1,5 @@
-﻿using CommunityToolkit.Diagnostics;
+﻿using Common.Enums;
+using CommunityToolkit.Diagnostics;
 using System.Diagnostics;
 using System.Reflection;
 using System.Runtime.InteropServices;
@@ -41,6 +42,25 @@ public static class ClientProperties
     /// Current app version
     /// </summary>
     public static Version CurrentVersion => Assembly.GetEntryAssembly()?.GetName().Version ?? ThrowHelper.ThrowArgumentNullException<Version>();
+
+    public static OSEnum OSEnum
+    {
+        get
+        {
+            if (OperatingSystem.IsWindows())
+            {
+                return OSEnum.Windows;
+            }
+            else if (OperatingSystem.IsLinux())
+            {
+                return OSEnum.Linux;
+            }
+            else
+            {
+                return ThrowHelper.ThrowArgumentOutOfRangeException<OSEnum>("Unsupported OS");
+            }
+        }
+    }
 
     /// <summary>
     /// Name of the executable file

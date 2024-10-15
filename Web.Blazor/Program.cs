@@ -43,9 +43,9 @@ public sealed class Program
         {
             _ = builder.Services.AddHostedService<FileCheckTask>();
             _ = builder.Services.AddHostedService<PortsReleasesTask>();
+            _ = builder.Services.AddHostedService<AppReleasesTask>();
             //_ = builder.Services.AddHostedService<ToolsReleasesTask>();
         }
-            _ = builder.Services.AddHostedService<AppReleasesTask>();
 
         if (builder.Environment.IsDevelopment())
         {

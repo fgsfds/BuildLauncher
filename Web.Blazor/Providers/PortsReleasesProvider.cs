@@ -189,7 +189,7 @@ public sealed partial class PortsReleasesProvider
 
         if (portEnum is PortEnum.NotBlood)
         {
-            version = asset.UpdatedDate.ToString("dd.MM.yyyy");
+            version = asset.UpdatedDate.ToUniversalTime().ToString();
         }
         else
         {

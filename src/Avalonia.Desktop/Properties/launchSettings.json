@@ -3,6 +3,10 @@
     "BuildLauncher.Desktop": {
       "commandName": "Project",
       "commandLineArgs": "--dev"
+    },
+    "WSL": {
+      "commandName": "WSL2",
+      "distributionName": ""
     }
   }
 }
