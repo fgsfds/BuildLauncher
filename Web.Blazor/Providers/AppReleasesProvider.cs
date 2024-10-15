@@ -64,7 +64,7 @@ public sealed class AppReleasesProvider
                     DownloadUrl = new Uri(windowsAsset.DownloadUrl)
                 };
 
-                AppRelease.Add(OSEnum.Windows, winRelease);
+                AppRelease.AddOrReplace(OSEnum.Windows, winRelease);
             }
 
             if (linuxAsset is not null)
