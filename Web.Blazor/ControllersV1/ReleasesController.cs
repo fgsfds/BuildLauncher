@@ -47,6 +47,11 @@ public sealed class ReleasesController : ControllerBase
         Dictionary<PortEnum, GeneralReleaseEntityObsolete> result = [];
         var releases = _portsReleasesProvider.WindowsReleases;
 
+        if (releases is null)
+        {
+            return result;
+        }
+
         foreach (var release in releases)
         {
             result.Add(release.Key, new GeneralReleaseEntityObsolete()

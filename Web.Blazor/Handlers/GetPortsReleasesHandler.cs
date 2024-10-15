@@ -7,7 +7,7 @@ using Web.Blazor.Providers;
 
 namespace Web.Blazor.Handlers;
 
-public sealed class GetPortsReleasesHandler : IRequestHandler<GetPortsReleasesRequest, GetPortsReleasesResponse>
+public sealed class GetPortsReleasesHandler : IRequestHandler<GetPortsReleasesRequest, GetPortsReleasesResponse?>
 {
     private readonly PortsReleasesProvider _portsReleasesProvider;
 
@@ -16,7 +16,7 @@ public sealed class GetPortsReleasesHandler : IRequestHandler<GetPortsReleasesRe
         _portsReleasesProvider = portsReleasesProvider;
     }
 
-    public Task<GetPortsReleasesResponse> Handle(GetPortsReleasesRequest request, CancellationToken cancellationToken)
+    public Task<GetPortsReleasesResponse?> Handle(GetPortsReleasesRequest request, CancellationToken cancellationToken)
     {
         Dictionary<PortEnum, GeneralReleaseEntity>? releases = [];
 
@@ -29,11 +29,16 @@ public sealed class GetPortsReleasesHandler : IRequestHandler<GetPortsReleasesRe
             releases = _portsReleasesProvider.LinuxReleases;
         }
 
+        if (releases is null)
+        {
+            return Task.FromResult<GetPortsReleasesResponse?>(null);
+        }
+
         GetPortsReleasesResponse response = new()
         {
             PortsReleases = releases
         };
 
-        return Task.FromResult(response);
+        return Task.FromResult<GetPortsReleasesResponse?>(response);
     }
 }

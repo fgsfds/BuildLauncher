@@ -5,7 +5,7 @@ using MediatR;
 
 namespace Api.Common.Requests;
 
-public sealed class GetAppReleaseRequest : IRequest<GetAppReleaseResponse>
+public sealed class GetAppReleaseRequest : IRequest<GetAppReleaseResponse?>
 {
     public required OSEnum OSEnum { get; set; }
 }

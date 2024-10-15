@@ -1,5 +1,8 @@
-﻿using Common.Entities;
+﻿using Api.Common.Requests;
+using Api.Common.Responses;
+using Common.Entities;
 using Common.Enums;
+using System.Net.Http.Json;
 using System.Text.Json;
 
 namespace Common.Client.Api;
@@ -10,16 +13,29 @@ public sealed partial class ApiInterface
     {
         try
         {
-            var response = await _httpClient.GetStringAsync($"{ApiUrl}/releases/app").ConfigureAwait(false);
+            GetAppReleaseRequest message = new()
+            {
+                OSEnum = OSEnum.Windows
+            };
 
-            if (string.IsNullOrWhiteSpace(response))
+            using HttpRequestMessage requestMessage = new(HttpMethod.Get, $"{ApiUrl}/releases/app");
+            requestMessage.Content = JsonContent.Create(message);
+
+            var response = await _httpClient.SendAsync(requestMessage).ConfigureAwait(false);
+
+            if (response is null || !response.IsSuccessStatusCode)
             {
                 return null;
             }
 
-            var release = JsonSerializer.Deserialize(response, GeneralReleaseEntityContext.Default.GeneralReleaseEntity);
+            var update = await response.Content.ReadFromJsonAsync<GetAppReleaseResponse>().ConfigureAwait(false);
 
-            return release;
+            if (update is null)
+            {
+                return null;
+            }
+
+            return update.AppRelease;
         }
         catch
         {

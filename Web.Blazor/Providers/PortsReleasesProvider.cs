@@ -15,8 +15,8 @@ public sealed partial class PortsReleasesProvider
     private readonly RepositoriesProvider _repoProvider;
     private readonly HttpClient _httpClient;
 
-    public Dictionary<PortEnum, GeneralReleaseEntity> WindowsReleases { get; set; }
-    public Dictionary<PortEnum, GeneralReleaseEntity> LinuxReleases { get; set; }
+    public Dictionary<PortEnum, GeneralReleaseEntity>? WindowsReleases { get; set; }
+    public Dictionary<PortEnum, GeneralReleaseEntity>? LinuxReleases { get; set; }
 
     public PortsReleasesProvider(
         ILogger<PortsReleasesProvider> logger,
@@ -27,9 +27,6 @@ public sealed partial class PortsReleasesProvider
         _repoProvider = repoProvider;
         _logger = logger;
         _httpClient = httpClient;
-
-        WindowsReleases = [];
-        LinuxReleases = [];
     }
 
     public async Task GetLatestReleasesAsync()
@@ -48,6 +45,9 @@ public sealed partial class PortsReleasesProvider
             try
             {
                 var newRelease = await GetLatestReleaseAsync(port).ConfigureAwait(false);
+
+                WindowsReleases ??= [];
+                LinuxReleases ??= [];
 
                 if (newRelease is not null)
                 {

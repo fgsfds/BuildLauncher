@@ -47,43 +47,45 @@ public sealed class AppReleasesProvider
                 ?? ThrowHelper.ThrowFormatException<List<GitHubReleaseEntity>>("Error while deserializing GitHub releases");
 
             releases = [.. releases.Where(static x => x.IsDraft is false && x.IsPrerelease is false).OrderByDescending(static x => new Version(x.TagName))];
+            var release = releases[0];
 
-            var appRelease = GetAppUpdateEntity(releases[0]);
+            var windowsAsset = release.Assets.FirstOrDefault(x => x.FileName.EndsWith("win-x64.zip"))!;
+            var linuxAsset = release.Assets.FirstOrDefault(x => x.FileName.EndsWith("linux-x64.zip"))!;
 
-            AppRelease = appRelease;
+            if (windowsAsset is not null)
+            {
+                _logger.LogInformation($"Found Windows release for BuildLauncher: {release.TagName}");
+
+                GeneralReleaseEntity winRelease = new()
+                {
+                    SupportedOS = OSEnum.Windows,
+                    Version = release.TagName,
+                    Description = release.Description,
+                    DownloadUrl = new Uri(windowsAsset.DownloadUrl)
+                };
+
+                AppRelease.Add(OSEnum.Windows, winRelease);
+            }
+
+            if (linuxAsset is not null)
+            {
+                _logger.LogInformation($"Found Linux release for BuildLauncher: {release.TagName}");
+
+                GeneralReleaseEntity linRelease = new()
+                {
+                    SupportedOS = OSEnum.Linux,
+                    Version = release.TagName,
+                    Description = release.Description,
+                    DownloadUrl = new Uri(linuxAsset.DownloadUrl)
+                };
+
+                AppRelease.Add(OSEnum.Linux, linRelease);
+            }
         }
         catch (Exception ex)
         {
             _logger.LogError($"Error while getting latest app release");
             _logger.LogError(ex.ToString());
         }
-    }
-
-    private Dictionary<OSEnum, GeneralReleaseEntity> GetAppUpdateEntity(GitHubReleaseEntity release)
-    {
-        var windowsAsset = release.Assets.FirstOrDefault(x => x.FileName.EndsWith("win-x64.zip"))!;
-        var linuxAsset = release.Assets.FirstOrDefault(x => x.FileName.EndsWith("linux-x64.zip"))!;
-
-        GeneralReleaseEntity winRelease = new()
-        {
-            SupportedOS = OSEnum.Windows,
-            Version = release.TagName,
-            Description = release.Description,
-            DownloadUrl = new Uri(windowsAsset.DownloadUrl)
-        };
-
-        GeneralReleaseEntity linRelease = new()
-        {
-            SupportedOS = OSEnum.Linux,
-            Version = release.TagName,
-            Description = release.Description,
-            DownloadUrl = new Uri(linuxAsset.DownloadUrl)
-        };
-
-        return new()
-        { 
-            { OSEnum.Windows, winRelease },
-            { OSEnum.Linux, linRelease }
-        };
     }
 }

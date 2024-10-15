@@ -14,7 +14,7 @@ public sealed partial class ApiInterface
     private readonly HttpClient _httpClient;
     private readonly IConfigProvider _config;
 
-    private string ApiUrl => _config.UseLocalApi ? "https://localhost:7126/api" : "https://buildlauncher.fgsfds.link/api";
+    private string ApiUrl => _config.UseLocalApi ? "https://localhost:7126/api" : "https://buildlauncher.fgsfds.link/api2";
 
     public ApiInterface(
         IConfigProvider config,

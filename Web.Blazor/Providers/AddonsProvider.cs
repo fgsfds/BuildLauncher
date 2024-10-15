@@ -27,7 +27,8 @@ public sealed class AddonsProvider
     /// Return addons list for a game
     /// </summary>
     /// <param name="gameEnum">Game enum</param>
-    internal List<DownloadableAddonEntity> GetAddons(GameEnum gameEnum)
+    /// <param name="dontLog">Don't log statistics</param>
+    internal List<DownloadableAddonEntity> GetAddons(GameEnum gameEnum, bool dontLog = false)
     {
         using var dbContext = _dbContextFactory.Get();
 
@@ -93,7 +94,11 @@ public sealed class AddonsProvider
         }
 
         sw.Stop();
-        _logger.LogInformation($"Got addons for {gameEnum} in {sw.ElapsedMilliseconds} ms.");
+
+        if (!dontLog)
+        {
+            _logger.LogInformation($"Got {result.Count} addons for {gameEnum} in {sw.ElapsedMilliseconds} ms.");
+        }
 
         return result;
     }
