@@ -1,4 +1,5 @@
 ﻿using Common.Entities;
+using Common.Enums;
 using Common.Helpers;
 using Common.Server.Entities;
 using CommunityToolkit.Diagnostics;
@@ -11,7 +12,7 @@ public sealed class AppReleasesProvider
     private readonly ILogger<AppReleasesProvider> _logger;
     private readonly HttpClient _httpClient;
 
-    public GeneralReleaseEntity? AppRelease { get; private set; }
+    public Dictionary<OSEnum, GeneralReleaseEntity> AppRelease { get; private set; } = [];
 
     public AppReleasesProvider(
         ILogger<AppReleasesProvider> logger,
@@ -42,7 +43,7 @@ public sealed class AppReleasesProvider
             var releasesJson = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 
             var releases =
-                JsonSerializer.Deserialize(releasesJson, GitHubReleaseContext.Default.ListGitHubReleaseEntity)
+                JsonSerializer.Deserialize(releasesJson, GitHubReleaseEntityContext.Default.ListGitHubReleaseEntity)
                 ?? ThrowHelper.ThrowFormatException<List<GitHubReleaseEntity>>("Error while deserializing GitHub releases");
 
             releases = [.. releases.Where(static x => x.IsDraft is false && x.IsPrerelease is false).OrderByDescending(static x => new Version(x.TagName))];
@@ -58,19 +59,31 @@ public sealed class AppReleasesProvider
         }
     }
 
-    private GeneralReleaseEntity GetAppUpdateEntity(GitHubReleaseEntity release)
+    private Dictionary<OSEnum, GeneralReleaseEntity> GetAppUpdateEntity(GitHubReleaseEntity release)
     {
-        var windowsAsset = release.Assets.FirstOrDefault(x => x.FileName.EndsWith("win-x64.zip"));
-        var linuxAsset = release.Assets.FirstOrDefault(x => x.FileName.EndsWith("linux-x64.zip"));
+        var windowsAsset = release.Assets.FirstOrDefault(x => x.FileName.EndsWith("win-x64.zip"))!;
+        var linuxAsset = release.Assets.FirstOrDefault(x => x.FileName.EndsWith("linux-x64.zip"))!;
 
-        GeneralReleaseEntity update = new()
+        GeneralReleaseEntity winRelease = new()
         {
+            SupportedOS = OSEnum.Windows,
             Version = release.TagName,
             Description = release.Description,
-            WindowsDownloadUrl = windowsAsset is null ? null : new Uri(windowsAsset.DownloadUrl),
-            LinuxDownloadUrl = linuxAsset is null ? null : new Uri(linuxAsset.DownloadUrl)
+            DownloadUrl = new Uri(windowsAsset.DownloadUrl)
         };
 
-        return update;
+        GeneralReleaseEntity linRelease = new()
+        {
+            SupportedOS = OSEnum.Linux,
+            Version = release.TagName,
+            Description = release.Description,
+            DownloadUrl = new Uri(linuxAsset.DownloadUrl)
+        };
+
+        return new()
+        { 
+            { OSEnum.Windows, winRelease },
+            { OSEnum.Linux, linRelease }
+        };
     }
 }

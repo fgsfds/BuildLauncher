@@ -37,14 +37,14 @@ public sealed class ToolsInstaller
     {
         var release = await _toolsReleasesProvider.GetLatestReleaseAsync(port).ConfigureAwait(false);
 
-        if (release?.WindowsDownloadUrl is null)
+        if (release?.DownloadUrl is null)
         {
             return;
         }
 
-        var filePath = Path.GetFileName(release.WindowsDownloadUrl.ToString());
+        var filePath = Path.GetFileName(release.DownloadUrl.ToString());
 
-        await _fileTools.DownloadFileAsync(release.WindowsDownloadUrl, filePath).ConfigureAwait(false);
+        await _fileTools.DownloadFileAsync(release.DownloadUrl, filePath).ConfigureAwait(false);
 
         await _fileTools.UnpackArchiveAsync(filePath, port.PathToExecutableFolder).ConfigureAwait(false);
 

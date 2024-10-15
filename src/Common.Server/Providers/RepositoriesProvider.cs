@@ -23,8 +23,8 @@ public sealed class RepositoriesProvider
             return new()
             {
                 RepoUrl = new("https://api.github.com/repos/ZDoom/Raze/releases"),
-                WindowsReleasePredicate = static x => x.FileName.EndsWith(".zip", StringComparison.CurrentCultureIgnoreCase) && x.FileName.Contains("windows", StringComparison.CurrentCultureIgnoreCase),
-                LinuxReleasePredicate = null,
+                WindowsReleasePredicate = static x => x.FileName.EndsWith("windows.zip", StringComparison.OrdinalIgnoreCase),
+                LinuxReleasePredicate = static x => x.FileName.EndsWith("linux-portable.tar.xz", StringComparison.OrdinalIgnoreCase)
             };
         }
         else if (portEnum is PortEnum.EDuke32 or PortEnum.VoidSW)
@@ -41,7 +41,7 @@ public sealed class RepositoriesProvider
             return new()
             {
                 RepoUrl = new("https://api.github.com/repos/nukeykt/NBlood/releases"),
-                WindowsReleasePredicate = static x => x.FileName.StartsWith("nblood_win64", StringComparison.CurrentCultureIgnoreCase),
+                WindowsReleasePredicate = static x => x.FileName.StartsWith("nblood_win64", StringComparison.OrdinalIgnoreCase),
                 LinuxReleasePredicate = null,
             };
         }
@@ -50,8 +50,8 @@ public sealed class RepositoriesProvider
             return new()
             {
                 RepoUrl = new("https://api.github.com/repos/clipmove/NotBlood/releases"),
-                WindowsReleasePredicate = static x => x.FileName.StartsWith("notblood-win64", StringComparison.CurrentCultureIgnoreCase),
-                LinuxReleasePredicate = null,
+                WindowsReleasePredicate = static x => x.FileName.EndsWith("win64.zip", StringComparison.OrdinalIgnoreCase),
+                LinuxReleasePredicate = static x => x.FileName.EndsWith("linux-clang.zip", StringComparison.OrdinalIgnoreCase)
             };
         }
         else if (portEnum is PortEnum.PCExhumed)
@@ -59,7 +59,7 @@ public sealed class RepositoriesProvider
             return new()
             {
                 RepoUrl = new("https://api.github.com/repos/nukeykt/NBlood/releases"),
-                WindowsReleasePredicate = static x => x.FileName.StartsWith("pcexhumed_win64", StringComparison.CurrentCultureIgnoreCase),
+                WindowsReleasePredicate = static x => x.FileName.StartsWith("pcexhumed_win64", StringComparison.OrdinalIgnoreCase),
                 LinuxReleasePredicate = null,
             };
         }
@@ -68,7 +68,7 @@ public sealed class RepositoriesProvider
             return new()
             {
                 RepoUrl = new("https://api.github.com/repos/nukeykt/NBlood/releases"),
-                WindowsReleasePredicate = static x => x.FileName.StartsWith("rednukem_win64", StringComparison.CurrentCultureIgnoreCase),
+                WindowsReleasePredicate = static x => x.FileName.StartsWith("rednukem_win64", StringComparison.OrdinalIgnoreCase),
                 LinuxReleasePredicate = null,
             };
         }

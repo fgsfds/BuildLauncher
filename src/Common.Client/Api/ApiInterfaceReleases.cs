@@ -17,7 +17,7 @@ public sealed partial class ApiInterface
                 return null;
             }
 
-            var release = JsonSerializer.Deserialize<GeneralReleaseEntity>(response);
+            var release = JsonSerializer.Deserialize(response, GeneralReleaseEntityContext.Default.GeneralReleaseEntity);
 
             return release;
         }
@@ -59,9 +59,9 @@ public sealed partial class ApiInterface
                 return null;
             }
 
-            var releases = JsonSerializer.Deserialize<Dictionary<ToolEnum, GeneralReleaseEntity>>(response);
+            //var releases = JsonSerializer.Deserialize<Dictionary<ToolEnum, GeneralReleaseEntity>>(response);
 
-            return releases;
+            return [];
         }
         catch
         {

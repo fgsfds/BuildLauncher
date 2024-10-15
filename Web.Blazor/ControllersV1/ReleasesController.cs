@@ -12,28 +12,56 @@ public sealed class ReleasesController : ControllerBase
 {
     private readonly AppReleasesProvider _appReleasesProvider;
     private readonly PortsReleasesProvider _portsReleasesProvider;
-    private readonly ToolsReleasesProvider _toolsReleasesProvider;
 
     public ReleasesController(
         AppReleasesProvider appReleasesProvider,
-        PortsReleasesProvider portsReleasesProvider,
-        ToolsReleasesProvider toolsReleasesProvider
+        PortsReleasesProvider portsReleasesProvider
         )
     {
         _appReleasesProvider = appReleasesProvider;
         _portsReleasesProvider = portsReleasesProvider;
-        _toolsReleasesProvider = toolsReleasesProvider;
     }
 
     [Obsolete]
     [HttpGet("app")]
-    public GeneralReleaseEntity? GetLatestAppRelease() => _appReleasesProvider.AppRelease;
+    public GeneralReleaseEntityObsolete? GetLatestAppRelease()
+    {
+        if (_appReleasesProvider.AppRelease?.TryGetValue(OSEnum.Windows, out var winRelease) ?? false)
+        {
+            return new GeneralReleaseEntityObsolete()
+            {
+                Description = winRelease.Description,
+                Version = winRelease.Version,
+                WindowsDownloadUrl = winRelease.DownloadUrl,
+                LinuxDownloadUrl = null
+            };
+        }
+
+        return null;
+    }
 
     [Obsolete]
     [HttpGet("ports")]
-    public Dictionary<PortEnum, GeneralReleaseEntity> GetLatestPortsReleases() => _portsReleasesProvider.PortsReleases;
+    public Dictionary<PortEnum, GeneralReleaseEntityObsolete> GetLatestPortsReleases()
+    {
+        Dictionary<PortEnum, GeneralReleaseEntityObsolete> result = [];
+        var releases = _portsReleasesProvider.WindowsReleases;
+
+        foreach (var release in releases)
+        {
+            result.Add(release.Key, new GeneralReleaseEntityObsolete()
+            {
+                Description = release.Value.Description,
+                Version = release.Value.Version,
+                WindowsDownloadUrl = release.Value.DownloadUrl,
+                LinuxDownloadUrl = null
+            });
+        }
+
+        return result;
+    }
 
     [Obsolete]
     [HttpGet("tools")]
-    public Dictionary<ToolEnum, GeneralReleaseEntity> GetLatestToolsReleases() => _toolsReleasesProvider.ToolsReleases;
+    public Dictionary<ToolEnum, GeneralReleaseEntityObsolete> GetLatestToolsReleases() => [];
 }

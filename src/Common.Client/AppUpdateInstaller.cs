@@ -51,9 +51,9 @@ public sealed class AppUpdateInstaller
     /// <returns></returns>
     public async Task DownloadAndUnpackLatestRelease()
     {
-        Guard.IsNotNull(_update?.WindowsDownloadUrl);
+        Guard.IsNotNull(_update?.DownloadUrl);
 
-        var updateUrl = _update.WindowsDownloadUrl;
+        var updateUrl = _update.DownloadUrl;
 
         var fileName = Path.Combine(ClientProperties.WorkingFolder, Path.GetFileName(updateUrl.ToString()).Trim());
 

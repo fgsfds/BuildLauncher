@@ -1,5 +1,6 @@
 ﻿using Common.Entities;
 using Common.Enums;
+using Common.Helpers;
 using Common.Server.Entities;
 using Common.Server.Providers;
 using CommunityToolkit.Diagnostics;
@@ -14,7 +15,8 @@ public sealed partial class PortsReleasesProvider
     private readonly RepositoriesProvider _repoProvider;
     private readonly HttpClient _httpClient;
 
-    public Dictionary<PortEnum, GeneralReleaseEntity> PortsReleases { get; set; }
+    public Dictionary<PortEnum, GeneralReleaseEntity> WindowsReleases { get; set; }
+    public Dictionary<PortEnum, GeneralReleaseEntity> LinuxReleases { get; set; }
 
     public PortsReleasesProvider(
         ILogger<PortsReleasesProvider> logger,
@@ -26,7 +28,8 @@ public sealed partial class PortsReleasesProvider
         _logger = logger;
         _httpClient = httpClient;
 
-        PortsReleases = [];
+        WindowsReleases = [];
+        LinuxReleases = [];
     }
 
     public async Task GetLatestReleasesAsync()
@@ -37,21 +40,29 @@ public sealed partial class PortsReleasesProvider
 
         foreach (var port in ports)
         {
+            if (port is PortEnum.Stub)
+            {
+                continue;
+            }
+
             try
             {
                 var newRelease = await GetLatestReleaseAsync(port).ConfigureAwait(false);
 
                 if (newRelease is not null)
                 {
-                    var doesExist = PortsReleases.TryGetValue(port, out _);
+                    var doesWinExist = newRelease.TryGetValue(OSEnum.Windows, out var winRelease);
 
-                    if (doesExist)
+                    if (doesWinExist)
                     {
-                        PortsReleases[port] = newRelease;
-                    }
-                    else
+                        WindowsReleases.AddOrReplace(port, winRelease);
+                    } 
+                    
+                    var doesLinExist = newRelease.TryGetValue(OSEnum.Linux, out var linRelease);
+
+                    if (doesWinExist)
                     {
-                        PortsReleases.Add(port, newRelease);
+                        LinuxReleases.AddOrReplace(port, linRelease);
                     }
                 }
             }
@@ -67,21 +78,23 @@ public sealed partial class PortsReleasesProvider
     /// Get the latest release of the selected port
     /// </summary>
     /// <param name="portEnum">Port</param>
-    private async Task<GeneralReleaseEntity?> GetLatestReleaseAsync(PortEnum portEnum)
+    private async Task<Dictionary<OSEnum, GeneralReleaseEntity>?> GetLatestReleaseAsync(PortEnum portEnum)
     {
         var repo = _repoProvider.GetPortRepo(portEnum);
+
+        Dictionary<OSEnum, GeneralReleaseEntity>? result = null;
 
         if (portEnum is PortEnum.BuildGDX)
         {
             GeneralReleaseEntity bgdxRelease = new()
             {
+                SupportedOS = OSEnum.Windows,
                 Description = string.Empty,
                 Version = "1.17",
-                WindowsDownloadUrl = repo.RepoUrl,
-                LinuxDownloadUrl = null
+                DownloadUrl = repo.RepoUrl
             };
 
-            return bgdxRelease;
+            return new() { { OSEnum.Windows, bgdxRelease } };
         }
 
         if (repo.RepoUrl is null)
@@ -98,54 +111,85 @@ public sealed partial class PortsReleasesProvider
 
         if (portEnum is PortEnum.EDuke32)
         {
-            return EDuke32Hack(response);
+            var edukeRelease = EDuke32Hack(response);
+            return edukeRelease is null ? null : new() { { OSEnum.Windows, edukeRelease } };
         }
 
-        var releases = JsonSerializer.Deserialize(response, GitHubReleaseContext.Default.ListGitHubReleaseEntity)
+        var allRreleases = JsonSerializer.Deserialize(response, GitHubReleaseEntityContext.Default.ListGitHubReleaseEntity)
             ?? ThrowHelper.ThrowFormatException<List<GitHubReleaseEntity>>("Error while deserializing GitHub releases");
 
-        var release = releases.FirstOrDefault(static x => x.IsDraft is false && x.IsPrerelease is false);
+        var releases = allRreleases.Where(static x => x.IsDraft is false && x.IsPrerelease is false);
 
-        if (release is null)
+        if (releases is null)
         {
             return null;
         }
 
-        if (repo.WindowsReleasePredicate is null)
+        if (repo.WindowsReleasePredicate is not null)
         {
-            return null;
+            foreach (var release in releases)
+            {
+                var winAss = release.Assets.FirstOrDefault(x => repo.WindowsReleasePredicate(x));
+
+                if (winAss is not null)
+                {
+                    GeneralReleaseEntity portRelease = new()
+                    {
+                        SupportedOS = OSEnum.Windows,
+                        Description = release.Description,
+                        Version = GetVersion(portEnum, release, winAss),
+                        DownloadUrl = winAss is null ? null : new(winAss.DownloadUrl),
+                    };
+
+                    result ??= [];
+                    result.Add(OSEnum.Windows, portRelease);
+
+                    _logger.LogInformation($"Latest Windows release for {portEnum}: {portRelease.Version}");
+
+                    break;
+                }
+            }
         }
 
-        var zip = release.Assets.FirstOrDefault(repo.WindowsReleasePredicate);
-
-        if (zip is null)
+        if (repo.LinuxReleasePredicate is not null)
         {
-            return null;
+            foreach (var release in releases)
+            {
+                var linAss = release.Assets.FirstOrDefault(x => repo.LinuxReleasePredicate(x));
+
+                if (linAss is not null)
+                {
+                    GeneralReleaseEntity portRelease = new()
+                    {
+                        SupportedOS = OSEnum.Linux,
+                        Description = release.Description,
+                        Version = GetVersion(portEnum, release, linAss),
+                        DownloadUrl = linAss is null ? null : new(linAss.DownloadUrl),
+                    };
+
+                    result ??= [];
+                    result.Add(OSEnum.Linux, portRelease);
+
+                    _logger.LogInformation($"Latest Linux release for {portEnum}: {portRelease.Version}");
+
+                    break;
+                }
+            }
         }
 
-        GeneralReleaseEntity portRelease = new()
-        {
-            Description = release.Description,
-            Version = GetVersion(portEnum, release, zip),
-            WindowsDownloadUrl = new(zip.DownloadUrl),
-            LinuxDownloadUrl = null
-        };
-
-        _logger.LogInformation($"Latest release for {portEnum}: {portRelease.Version}");
-
-        return portRelease;
+        return result;
     }
 
     /// <summary>
     /// Get port version
     /// </summary>
-    private string GetVersion(PortEnum portEnum, GitHubReleaseEntity release, GitHubReleaseAsset zip)
+    private string GetVersion(PortEnum portEnum, GitHubReleaseEntity release, GitHubReleaseAsset asset)
     {
         string version;
 
         if (portEnum is PortEnum.NotBlood)
         {
-            version = zip.UpdatedDate.ToString("dd.MM.yyyy");
+            version = asset.UpdatedDate.ToString("dd.MM.yyyy");
         }
         else
         {
@@ -179,10 +223,10 @@ public sealed partial class PortsReleasesProvider
 
         GeneralReleaseEntity release = new()
         {
+            SupportedOS = OSEnum.Windows,
             Description = string.Empty,
             Version = "r" + version,
-            WindowsDownloadUrl = new($"https://dukeworld.com/eduke32/synthesis/latest/{fileName}"),
-            LinuxDownloadUrl = null
+            DownloadUrl = new($"https://dukeworld.com/eduke32/synthesis/latest/{fileName}")
         };
 
         _logger.LogInformation($"Latest release for {nameof(PortEnum.EDuke32)}: {release.Version}");
