@@ -29,9 +29,14 @@ public sealed class AppUpdateInstaller
     /// </summary>
     /// <param name="currentVersion">Current SFD version</param>
     /// <returns></returns>
-    public async Task<bool> CheckForUpdates(Version currentVersion)
+    public async Task<bool?> CheckForUpdates(Version currentVersion)
     {
         var release = await _apiInterface.GetLatestAppReleaseAsync().ConfigureAwait(false);
+
+        if (release is null)
+        {
+            return null;
+        }
 
         if (release is not null &&
             new Version(release.Version) > currentVersion)

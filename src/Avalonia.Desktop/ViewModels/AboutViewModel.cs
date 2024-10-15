@@ -86,7 +86,7 @@ public sealed partial class AboutViewModel(AppUpdateInstaller updateInstaller) :
     {
         IsInProgress = true;
 
-        bool updates;
+        bool? updates;
 
         try
         {
@@ -100,7 +100,11 @@ public sealed partial class AboutViewModel(AppUpdateInstaller updateInstaller) :
             return;
         }
 
-        if (updates)
+        if (updates is null)
+        {
+            CheckForUpdatesButtonText = "Error while getting updates";
+        }
+        else if (updates.Value)
         {
             IsUpdateAvailable = true;
 
