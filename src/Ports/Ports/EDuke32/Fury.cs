@@ -20,7 +20,10 @@ public sealed class Fury : EDuke32
     public override PortEnum PortEnum => PortEnum.Fury;
 
     /// <inheritdoc/>
-    public override string Exe => "fury.exe";
+    protected override string WinExe => "fury.exe";
+
+    /// <inheritdoc/>
+    protected override string LinExe => ThrowHelper.ThrowNotSupportedException<string>();
 
     /// <inheritdoc/>
     public override string Name => "Fury";

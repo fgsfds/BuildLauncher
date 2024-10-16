@@ -19,7 +19,10 @@ public sealed class VoidSW : EDuke32
     public override PortEnum PortEnum => PortEnum.VoidSW;
 
     /// <inheritdoc/>
-    public override string Exe => "voidsw.exe";
+    protected override string WinExe => "voidsw.exe";
+
+    /// <inheritdoc/>
+    protected override string LinExe => ThrowHelper.ThrowNotSupportedException<string>();
 
     /// <inheritdoc/>
     public override string Name => "VoidSW";

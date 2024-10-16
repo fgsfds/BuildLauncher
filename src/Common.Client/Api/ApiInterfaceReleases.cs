@@ -1,6 +1,7 @@
 ﻿using Api.Common.Requests;
 using Api.Common.Responses;
 using Common.Client.Helpers;
+using Common.Common.Helpers;
 using Common.Entities;
 using Common.Enums;
 using System.Net.Http.Json;
@@ -15,7 +16,7 @@ public sealed partial class ApiInterface
         {
             GetAppReleaseRequest message = new()
             {
-                OSEnum = ClientProperties.OSEnum
+                OSEnum = CommonProperties.OSEnum
             };
 
             using HttpRequestMessage requestMessage = new(HttpMethod.Get, $"{ApiUrl}/releases/app");
@@ -49,7 +50,7 @@ public sealed partial class ApiInterface
         {
             GetPortsReleasesRequest message = new()
             {
-                OSEnum = ClientProperties.OSEnum
+                OSEnum = CommonProperties.OSEnum
             };
 
             using HttpRequestMessage requestMessage = new(HttpMethod.Get, $"{ApiUrl}/releases/ports");

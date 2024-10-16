@@ -12,7 +12,10 @@ public sealed class NotBlood : NBlood
     public override PortEnum PortEnum => PortEnum.NotBlood;
 
     /// <inheritdoc/>
-    public override string Exe => "notblood.exe";
+    protected override string WinExe => "notblood.exe";
+
+    /// <inheritdoc/>
+    protected override string LinExe => "notblood";
 
     /// <inheritdoc/>
     public override string Name => "NotBlood";

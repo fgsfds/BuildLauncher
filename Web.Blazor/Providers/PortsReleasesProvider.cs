@@ -115,10 +115,10 @@ public sealed partial class PortsReleasesProvider
             return edukeRelease is null ? null : new() { { OSEnum.Windows, edukeRelease } };
         }
 
-        var allRreleases = JsonSerializer.Deserialize(response, GitHubReleaseEntityContext.Default.ListGitHubReleaseEntity)
+        var allReleases = JsonSerializer.Deserialize(response, GitHubReleaseEntityContext.Default.ListGitHubReleaseEntity)
             ?? ThrowHelper.ThrowFormatException<List<GitHubReleaseEntity>>("Error while deserializing GitHub releases");
 
-        var releases = allRreleases.Where(static x => x.IsDraft is false && x.IsPrerelease is false);
+        var releases = allReleases.Where(static x => x.IsDraft is false && x.IsPrerelease is false);
 
         if (releases is null)
         {

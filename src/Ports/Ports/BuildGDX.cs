@@ -17,7 +17,10 @@ public sealed class BuildGDX : BasePort
     public override PortEnum PortEnum => PortEnum.BuildGDX;
 
     /// <inheritdoc/>
-    public override string Exe => Path.Combine("jre", "bin", "javaw.exe");
+    protected override string WinExe => Path.Combine("jre", "bin", "javaw.exe");
+
+    /// <inheritdoc/>
+    protected override string LinExe => ThrowHelper.ThrowNotSupportedException<string>();
 
     /// <inheritdoc/>
     public override string Name => "BuildGDX";

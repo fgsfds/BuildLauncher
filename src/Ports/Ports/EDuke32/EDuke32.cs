@@ -25,7 +25,10 @@ public class EDuke32 : BasePort
     public override PortEnum PortEnum => PortEnum.EDuke32;
 
     /// <inheritdoc/>
-    public override string Exe => "eduke32.exe";
+    protected override string WinExe => "eduke32.exe";
+
+    /// <inheritdoc/>
+    protected override string LinExe => ThrowHelper.ThrowNotSupportedException<string>();
 
     /// <inheritdoc/>
     public override string Name => "EDuke32";
