@@ -15,7 +15,10 @@ public class NBlood : EDuke32
     public override PortEnum PortEnum => PortEnum.NBlood;
 
     /// <inheritdoc/>
-    public override string Exe => "nblood.exe";
+    protected override string WinExe => "nblood.exe";
+
+    /// <inheritdoc/>
+    protected override string LinExe => ThrowHelper.ThrowNotSupportedException<string>();
 
     /// <inheritdoc/>
     public override string Name => "NBlood";

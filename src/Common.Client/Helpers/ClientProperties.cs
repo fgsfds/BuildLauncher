@@ -43,25 +43,6 @@ public static class ClientProperties
     /// </summary>
     public static Version CurrentVersion => Assembly.GetEntryAssembly()?.GetName().Version ?? ThrowHelper.ThrowArgumentNullException<Version>();
 
-    public static OSEnum OSEnum
-    {
-        get
-        {
-            if (OperatingSystem.IsWindows())
-            {
-                return OSEnum.Windows;
-            }
-            else if (OperatingSystem.IsLinux())
-            {
-                return OSEnum.Linux;
-            }
-            else
-            {
-                return ThrowHelper.ThrowArgumentOutOfRangeException<OSEnum>("Unsupported OS");
-            }
-        }
-    }
-
     /// <summary>
     /// Name of the executable file
     /// </summary>

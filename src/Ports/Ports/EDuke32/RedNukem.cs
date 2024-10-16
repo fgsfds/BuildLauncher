@@ -19,7 +19,10 @@ public sealed class RedNukem : EDuke32
     public override PortEnum PortEnum => PortEnum.RedNukem;
 
     /// <inheritdoc/>
-    public override string Exe => "rednukem.exe";
+    protected override string WinExe => "rednukem.exe";
+
+    /// <inheritdoc/>
+    protected override string LinExe => ThrowHelper.ThrowNotSupportedException<string>();
 
     /// <inheritdoc/>
     public override string Name => "RedNukem";
