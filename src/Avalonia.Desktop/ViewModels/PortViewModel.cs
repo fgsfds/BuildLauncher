@@ -14,13 +14,15 @@ namespace Avalonia.Desktop.ViewModels;
 
 public sealed partial class PortViewModel : ObservableObject
 {
+    public BasePort Port { get; init; }
+
     private readonly PortsInstallerFactory _installerFactory;
     private readonly PortsReleasesProvider _portsReleasesProvider;
-    private readonly BasePort _port;
     private GeneralReleaseEntity? _release;
     private readonly ILogger _logger;
 
-    public event EventHandler PortChangedEvent;
+    public delegate void PortChanged(PortEnum portEnum);
+    public event PortChanged PortChangedEvent;
 
 
     [Obsolete($"Don't create directly. Use {nameof(ViewModelsFactory)}.")]
@@ -33,7 +35,7 @@ public sealed partial class PortViewModel : ObservableObject
     {
         _installerFactory = installerFactory;
         _portsReleasesProvider = portsReleasesProvider;
-        _port = port;
+        Port = port;
     }
 
 
@@ -46,7 +48,7 @@ public sealed partial class PortViewModel : ObservableObject
     {
         get
         {
-            if (_port.IsInstalled)
+            if (Port.IsInstalled)
             {
                 if (IsUpdateAvailable)
                 {
@@ -65,27 +67,59 @@ public sealed partial class PortViewModel : ObservableObject
     /// <summary>
     /// Name of the port
     /// </summary>
-    public string Name => _port.Name;
+    public string Name => Port.Name;
 
     /// <summary>
     /// Port's icon
     /// </summary>
-    public Stream Icon => _port.Icon;
+    public Stream Icon => Port.Icon;
 
     /// <summary>
     /// Currently installed version
     /// </summary>
-    public string Version => _port.InstalledVersion ?? "None";
+    public string Version
+    {
+        get
+        {
+            if (Port.InstalledVersion is null)
+            {
+                return "None";
+            }
+
+            if (Port.PortEnum is PortEnum.NotBlood)
+            {
+                return DateTime.Parse(Port.InstalledVersion).ToString("dd.MM.yyyy");
+            }
+
+            return Port.InstalledVersion;
+        }
+    }
 
     /// <summary>
     /// Is port installed
     /// </summary>
-    public bool IsInstalled => _port.IsInstalled;
+    public bool IsInstalled => Port.IsInstalled;
 
     /// <summary>
     /// Latest available version
     /// </summary>
-    public string LatestVersion => _release?.Version ?? "Not available";
+    public string LatestVersion
+    {
+        get
+        {
+            if (_release?.Version is null)
+            {
+                return "Not available";
+            }
+
+            if (Port.PortEnum is PortEnum.NotBlood)
+            {
+                return DateTime.Parse(_release.Version).ToString("dd.MM.yyyy");
+            }
+
+            return _release?.Version ?? "Not available";
+        }
+    }
 
     /// <summary>
     /// Is new version of the port available
@@ -94,26 +128,35 @@ public sealed partial class PortViewModel : ObservableObject
     {
         get
         {
-            if (!_port.IsInstalled)
+            if (!Port.IsInstalled)
             {
                 return false;
             }
 
-            if (_port.PortEnum is PortEnum.NotBlood)
+            if (Port.PortEnum is PortEnum.NotBlood)
             {
-                var r1 = DateTime.TryParseExact(
-                    _port.InstalledVersion,
-                    "dd.MM.yyyy",
+                var r1 = DateTime.TryParse(
+                    Port.InstalledVersion,
                     CultureInfo.InvariantCulture,
-                    DateTimeStyles.None,
+                    DateTimeStyles.AssumeUniversal,
                     out var currentVersion
                     );
 
-                var r2 = DateTime.TryParseExact(
+                if (!r1)
+                {
+                    r1 = DateTime.TryParseExact(
+                        Port.InstalledVersion,
+                        "dd.MM.yyyy",
+                        CultureInfo.InvariantCulture,
+                        DateTimeStyles.None,
+                        out currentVersion
+                        );
+                }
+
+                var r2 = DateTime.TryParse(
                     _release?.Version,
-                    "dd.MM.yyyy",
                     CultureInfo.InvariantCulture,
-                    DateTimeStyles.None,
+                    DateTimeStyles.AssumeUniversal,
                     out var newVersion
                     );
 
@@ -128,7 +171,7 @@ public sealed partial class PortViewModel : ObservableObject
                 return false;
             }
 
-            return VersionComparer.Compare(_port.InstalledVersion!, _release?.Version!, "<");
+            return VersionComparer.Compare(Port.InstalledVersion!, _release?.Version!, "<");
         }
     }
 
@@ -158,7 +201,7 @@ public sealed partial class PortViewModel : ObservableObject
     {
         IsInProgress = true;
 
-        _release = await _portsReleasesProvider.GetLatestReleaseAsync(_port.PortEnum).ConfigureAwait(true);
+        _release = await _portsReleasesProvider.GetLatestReleaseAsync(Port.PortEnum).ConfigureAwait(true);
 
         OnPropertyChanged(nameof(LatestVersion));
         OnPropertyChanged(nameof(InstallButtonText));
@@ -168,7 +211,7 @@ public sealed partial class PortViewModel : ObservableObject
 
         IsInProgress = false;
 
-        PortChangedEvent?.Invoke(this, EventArgs.Empty);
+        PortChangedEvent?.Invoke(Port.PortEnum);
     }
 
 
@@ -188,7 +231,7 @@ public sealed partial class PortViewModel : ObservableObject
             ProgressBarValue = 0;
             OnPropertyChanged(nameof(ProgressBarValue));
 
-            await installer.InstallAsync(_port).ConfigureAwait(true);
+            await installer.InstallAsync(Port).ConfigureAwait(true);
 
             installer.Progress.ProgressChanged -= OnProgressChanged;
             ProgressBarValue = 0;
@@ -204,7 +247,7 @@ public sealed partial class PortViewModel : ObservableObject
         finally
         {
             IsInProgress = false;
-            PortChangedEvent?.Invoke(this, EventArgs.Empty);
+            PortChangedEvent?.Invoke(Port.PortEnum);
         }
     }
 
@@ -219,7 +262,7 @@ public sealed partial class PortViewModel : ObservableObject
         {
             IsInProgress = true;
 
-            Directory.Delete(_port.PortInstallFolderPath, true);
+            Directory.Delete(Port.PortInstallFolderPath, true);
 
             OnPropertyChanged(nameof(Version));
             OnPropertyChanged(nameof(InstallButtonText));
@@ -229,7 +272,7 @@ public sealed partial class PortViewModel : ObservableObject
         finally
         {
             IsInProgress = false;
-            PortChangedEvent?.Invoke(this, EventArgs.Empty);
+            PortChangedEvent?.Invoke(Port.PortEnum);
         }
     }
 
@@ -242,7 +285,7 @@ public sealed partial class PortViewModel : ObservableObject
     {
         _ = Process.Start(new ProcessStartInfo
         {
-            FileName = _port.PortInstallFolderPath,
+            FileName = Port.PortInstallFolderPath,
             UseShellExecute = true,
         });
     }

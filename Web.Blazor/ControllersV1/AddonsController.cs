@@ -21,6 +21,10 @@ public sealed class AddonsController : ControllerBase
     [HttpGet("{GameEnum}")]
     public List<DownloadableAddonEntity> GetAddons(GameEnum gameEnum) => _addonsProvider.GetAddons(gameEnum);
 
+    [Obsolete]
+    [HttpGet("ping")]
+    public List<DownloadableAddonEntity> Ping() => _addonsProvider.GetAddons(GameEnum.Duke3D, true);
+
 
     [Obsolete]
     [HttpGet("scores")]

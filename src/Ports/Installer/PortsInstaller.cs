@@ -38,14 +38,14 @@ public sealed class PortsInstaller
     {
         var release = await _portsReleasesProvider.GetLatestReleaseAsync(port.PortEnum).ConfigureAwait(false);
 
-        if (release?.WindowsDownloadUrl is null)
+        if (release?.DownloadUrl is null)
         {
             return;
         }
 
-        var fileName = Path.GetFileName(release.WindowsDownloadUrl.ToString());
+        var fileName = Path.GetFileName(release.DownloadUrl.ToString());
 
-        await _fileTools.DownloadFileAsync(release.WindowsDownloadUrl, fileName).ConfigureAwait(false);
+        await _fileTools.DownloadFileAsync(release.DownloadUrl, fileName).ConfigureAwait(false);
 
         await _fileTools.UnpackArchiveAsync(fileName, port.PortInstallFolderPath).ConfigureAwait(false);
 
