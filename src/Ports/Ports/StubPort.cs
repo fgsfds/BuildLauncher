@@ -9,7 +9,9 @@ public sealed class StubPort : BasePort
 {
     public override PortEnum PortEnum => PortEnum.Stub;
 
-    public override string Exe => string.Empty;
+    protected override string WinExe => string.Empty;
+
+    protected override string LinExe => string.Empty;
 
     public override string Name => string.Empty;
 

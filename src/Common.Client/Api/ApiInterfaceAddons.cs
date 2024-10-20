@@ -14,7 +14,7 @@ public sealed partial class ApiInterface
     private readonly HttpClient _httpClient;
     private readonly IConfigProvider _config;
 
-    private string ApiUrl => _config.UseLocalApi ? "https://localhost:7126/api" : "https://buildlauncher.fgsfds.link/api";
+    private string ApiUrl => _config.UseLocalApi ? "https://localhost:7126/api" : "https://buildlauncher.fgsfds.link/api2";
 
     public ApiInterface(
         IConfigProvider config,
@@ -34,7 +34,7 @@ public sealed partial class ApiInterface
                 GameEnum = gameEnum
             };
 
-            using HttpRequestMessage requestMessage = new(HttpMethod.Get, "https://buildlauncher.fgsfds.link/api2/addons");
+            using HttpRequestMessage requestMessage = new(HttpMethod.Get, $"{ApiUrl}/addons");
             requestMessage.Content = JsonContent.Create(message);
 
             var response = await _httpClient.SendAsync(requestMessage).ConfigureAwait(false);

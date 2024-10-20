@@ -20,6 +20,10 @@ public sealed class GitHubReleaseEntity
     public string Description { get; set; }
 }
 
+[JsonSerializable(typeof(List<GitHubReleaseEntity>))]
+public sealed partial class GitHubReleaseEntityContext : JsonSerializerContext;
+
+
 public sealed class GitHubReleaseAsset
 {
     [JsonPropertyName("name")]
@@ -32,6 +36,5 @@ public sealed class GitHubReleaseAsset
     public DateTime UpdatedDate { get; set; }
 }
 
-
-[JsonSerializable(typeof(List<GitHubReleaseEntity>))]
-public sealed partial class GitHubReleaseContext : JsonSerializerContext;
+[JsonSerializable(typeof(List<GitHubReleaseAsset>))]
+public sealed partial class GitHubReleaseAssetContext : JsonSerializerContext;

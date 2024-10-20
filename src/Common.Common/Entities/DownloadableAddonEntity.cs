@@ -120,11 +120,11 @@ public sealed class DownloadableAddonEntity : IDownloadableAddon
     {
         StringBuilder description = new($"## {Title}");
 
-        description.Append($"{Environment.NewLine}{Environment.NewLine}#### v{Version}");
+        _ = description.Append($"{Environment.NewLine}{Environment.NewLine}#### v{Version}");
 
         if (Author is not null)
         {
-            description.Append($"{Environment.NewLine}{Environment.NewLine}*by {Author}*");
+            _ = description.Append($"{Environment.NewLine}{Environment.NewLine}*by {Author}*");
         }
 
         if (Description is not null)
@@ -140,12 +140,12 @@ public sealed class DownloadableAddonEntity : IDownloadableAddon
                 }
             }
 
-            description.Append(Environment.NewLine + Environment.NewLine).AppendJoin(Environment.NewLine + Environment.NewLine, lines);
+            _ = description.Append(Environment.NewLine + Environment.NewLine).AppendJoin(Environment.NewLine + Environment.NewLine, lines);
         }
 
         if (Dependencies is not null)
         {
-            description.Append($"{Environment.NewLine}{Environment.NewLine}#### Requires:{Environment.NewLine}").AppendJoin(Environment.NewLine + Environment.NewLine, Dependencies);
+            _ = description.Append($"{Environment.NewLine}{Environment.NewLine}#### Requires:{Environment.NewLine}").AppendJoin(Environment.NewLine + Environment.NewLine, Dependencies);
         }
 
         return description.ToString();

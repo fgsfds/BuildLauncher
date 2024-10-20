@@ -1,6 +1,10 @@
-﻿using Common.Entities;
+﻿using Api.Common.Requests;
+using Api.Common.Responses;
+using Common.Client.Helpers;
+using Common.Common.Helpers;
+using Common.Entities;
 using Common.Enums;
-using System.Text.Json;
+using System.Net.Http.Json;
 
 namespace Common.Client.Api;
 
@@ -10,16 +14,29 @@ public sealed partial class ApiInterface
     {
         try
         {
-            var response = await _httpClient.GetStringAsync($"{ApiUrl}/releases/app").ConfigureAwait(false);
+            GetAppReleaseRequest message = new()
+            {
+                OSEnum = CommonProperties.OSEnum
+            };
 
-            if (string.IsNullOrWhiteSpace(response))
+            using HttpRequestMessage requestMessage = new(HttpMethod.Get, $"{ApiUrl}/releases/app");
+            requestMessage.Content = JsonContent.Create(message);
+
+            var response = await _httpClient.SendAsync(requestMessage).ConfigureAwait(false);
+
+            if (response is null || !response.IsSuccessStatusCode)
             {
                 return null;
             }
 
-            var release = JsonSerializer.Deserialize<GeneralReleaseEntity>(response);
+            var update = await response.Content.ReadFromJsonAsync<GetAppReleaseResponse>().ConfigureAwait(false);
 
-            return release;
+            if (update is null)
+            {
+                return null;
+            }
+
+            return update.AppRelease;
         }
         catch
         {
@@ -31,16 +48,29 @@ public sealed partial class ApiInterface
     {
         try
         {
-            var response = await _httpClient.GetStringAsync($"{ApiUrl}/releases/ports").ConfigureAwait(false);
+            GetPortsReleasesRequest message = new()
+            {
+                OSEnum = CommonProperties.OSEnum
+            };
 
-            if (string.IsNullOrWhiteSpace(response))
+            using HttpRequestMessage requestMessage = new(HttpMethod.Get, $"{ApiUrl}/releases/ports");
+            requestMessage.Content = JsonContent.Create(message);
+
+            var response = await _httpClient.SendAsync(requestMessage).ConfigureAwait(false);
+
+            if (response is null || !response.IsSuccessStatusCode)
             {
                 return null;
             }
 
-            var releases = JsonSerializer.Deserialize<Dictionary<PortEnum, GeneralReleaseEntity>>(response);
+            var update = await response.Content.ReadFromJsonAsync<GetPortsReleasesResponse>().ConfigureAwait(false);
 
-            return releases;
+            if (update is null)
+            {
+                return null;
+            }
+
+            return update.PortsReleases;
         }
         catch
         {
@@ -52,16 +82,16 @@ public sealed partial class ApiInterface
     {
         try
         {
-            var response = await _httpClient.GetStringAsync($"{ApiUrl}/releases/tools").ConfigureAwait(false);
+            //var response = await _httpClient.GetStringAsync($"{ApiUrl}/releases/tools").ConfigureAwait(false);
 
-            if (string.IsNullOrWhiteSpace(response))
-            {
-                return null;
-            }
+            //if (string.IsNullOrWhiteSpace(response))
+            //{
+            //    return null;
+            //}
 
-            var releases = JsonSerializer.Deserialize<Dictionary<ToolEnum, GeneralReleaseEntity>>(response);
+            //var releases = JsonSerializer.Deserialize<Dictionary<ToolEnum, GeneralReleaseEntity>>(response);
 
-            return releases;
+            return [];
         }
         catch
         {

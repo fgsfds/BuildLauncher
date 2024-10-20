@@ -7,11 +7,11 @@ namespace Web.Blazor.ControllersV2;
 
 [ApiController]
 [Route("api2/addons")]
-public sealed class AddonsController : ControllerBase
+public sealed class ReleasesController : ControllerBase
 {
     private readonly IMediator _mediator;
 
-    public AddonsController(IMediator mediator)
+    public ReleasesController(IMediator mediator)
     {
         _mediator = mediator;
     }
@@ -21,14 +21,12 @@ public sealed class AddonsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<ActionResult<GetAddonsResponse>> GetAddonsMediator(GetAddonsRequest request)
     {
-        var result = await _mediator.Send(request);
+        var response = await _mediator.Send(request);
 
-        if (result is null)
+        if (response is null)
         {
             return StatusCode(500);
         }
-
-        GetAddonsResponse response = new() { AddonsList = result.AddonsList };
 
         return Ok(response);
     }

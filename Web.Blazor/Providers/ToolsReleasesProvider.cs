@@ -79,7 +79,7 @@ public sealed class ToolsReleasesProvider
 
         var response = await _httpClient.GetStringAsync(repo.RepoUrl).ConfigureAwait(false);
 
-        var releases = JsonSerializer.Deserialize(response, GitHubReleaseContext.Default.ListGitHubReleaseEntity)
+        var releases = JsonSerializer.Deserialize(response, GitHubReleaseEntityContext.Default.ListGitHubReleaseEntity)
             ?? ThrowHelper.ThrowFormatException<List<GitHubReleaseEntity>>("Error while deserializing GitHub releases");
 
         var release = releases.FirstOrDefault(static x => x.IsDraft is false && x.IsPrerelease is false);
@@ -100,10 +100,10 @@ public sealed class ToolsReleasesProvider
 
         GeneralReleaseEntity toolRelease = new()
         {
+            SupportedOS = OSEnum.Windows,
             Description = release.Description,
             Version = version.ToString("dd.MM.yyyy"),
-            WindowsDownloadUrl = new(zip.DownloadUrl),
-            LinuxDownloadUrl = null
+            DownloadUrl = new(zip.DownloadUrl)
         };
 
         return toolRelease;

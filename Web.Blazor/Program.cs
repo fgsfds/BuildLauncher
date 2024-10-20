@@ -1,3 +1,6 @@
+using Common.Entities;
+using Common.Serializable.Addon;
+using Common.Server.Entities;
 using Common.Server.Providers;
 using Database.Server;
 using Web.Blazor.Helpers;
@@ -20,15 +23,28 @@ public sealed class Program
         {
             jsonOptions.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
             jsonOptions.JsonSerializerOptions.PropertyNamingPolicy = null;
+
+            jsonOptions.JsonSerializerOptions.TypeInfoResolverChain.Add(AddonsJsonEntityListContext.Default);
+            jsonOptions.JsonSerializerOptions.TypeInfoResolverChain.Add(DownloadableAddonEntityListContext.Default);
+            jsonOptions.JsonSerializerOptions.TypeInfoResolverChain.Add(GeneralReleaseEntityContext.Default);
+            jsonOptions.JsonSerializerOptions.TypeInfoResolverChain.Add(GeneralReleaseEntityObsoleteContext.Default);
+            jsonOptions.JsonSerializerOptions.TypeInfoResolverChain.Add(AddonManifestContext.Default);
+            jsonOptions.JsonSerializerOptions.TypeInfoResolverChain.Add(DependencyDtoContext.Default);
+            jsonOptions.JsonSerializerOptions.TypeInfoResolverChain.Add(DependantAddonDtoContext.Default);
+            jsonOptions.JsonSerializerOptions.TypeInfoResolverChain.Add(MapFileDtoContext.Default);
+            jsonOptions.JsonSerializerOptions.TypeInfoResolverChain.Add(MapSlotDtoContext.Default);
+            jsonOptions.JsonSerializerOptions.TypeInfoResolverChain.Add(SupportedGameDtoContext.Default);
+            jsonOptions.JsonSerializerOptions.TypeInfoResolverChain.Add(GitHubReleaseEntityContext.Default);
+            jsonOptions.JsonSerializerOptions.TypeInfoResolverChain.Add(GitHubReleaseAssetContext.Default);
         });
 
         // Don't run tasks in dev mode
         if (!builder.Environment.IsDevelopment())
         {
-            _ = builder.Services.AddHostedService<AppReleasesTask>();
-            _ = builder.Services.AddHostedService<PortsReleasesTask>();
-            //_ = builder.Services.AddHostedService<ToolsReleasesTask>();
             _ = builder.Services.AddHostedService<FileCheckTask>();
+            _ = builder.Services.AddHostedService<PortsReleasesTask>();
+            _ = builder.Services.AddHostedService<AppReleasesTask>();
+            //_ = builder.Services.AddHostedService<ToolsReleasesTask>();
         }
 
         if (builder.Environment.IsDevelopment())
