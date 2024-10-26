@@ -15,7 +15,10 @@ public sealed class PCExhumed : EDuke32
     public override PortEnum PortEnum => PortEnum.PCExhumed;
 
     /// <inheritdoc/>
-    public override string Exe => "pcexhumed.exe";
+    protected override string WinExe => "pcexhumed.exe";
+
+    /// <inheritdoc/>
+    protected override string LinExe => ThrowHelper.ThrowNotSupportedException<string>();
 
     /// <inheritdoc/>
     public override string Name => "PCExhumed";

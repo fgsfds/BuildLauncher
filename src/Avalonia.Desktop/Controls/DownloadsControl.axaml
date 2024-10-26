@@ -58,7 +58,6 @@
                 <Style Selector="DataGridCell:selected:current /template/ Rectangle">
                     <Setter Property="Stroke" Value="Transparent"/>
                 </Style>
-
             </DataGrid.Styles>
 
 

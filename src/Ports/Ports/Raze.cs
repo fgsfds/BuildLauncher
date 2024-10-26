@@ -22,7 +22,10 @@ public sealed class Raze : BasePort
     public override PortEnum PortEnum => PortEnum.Raze;
 
     /// <inheritdoc/>
-    public override string Exe => "raze.exe";
+    protected override string WinExe => "raze.exe";
+
+    /// <inheritdoc/>
+    protected override string LinExe => "raze";
 
     /// <inheritdoc/>
     public override string Name => "Raze";

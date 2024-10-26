@@ -6,5 +6,5 @@ namespace Api.Common.Requests;
 
 public sealed class GetAddonsRequest : IRequest<GetAddonsResponse>
 {
-    public GameEnum GameEnum { get; set; }
+    public required GameEnum GameEnum { get; set; }
 }

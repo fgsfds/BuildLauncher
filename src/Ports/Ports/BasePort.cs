@@ -2,6 +2,7 @@
 using Addons.Helpers;
 using Common;
 using Common.Client.Helpers;
+using Common.Common.Helpers;
 using Common.Enums;
 using Common.Enums.Addons;
 using Common.Helpers;
@@ -27,7 +28,28 @@ public abstract class BasePort
     /// <summary>
     /// Main executable
     /// </summary>
-    public abstract string Exe { get; }
+    public string Exe
+    {
+        get
+        {
+            return CommonProperties.OSEnum switch
+            {
+                OSEnum.Windows => WinExe,
+                OSEnum.Linux => LinExe,
+                _ => ThrowHelper.ThrowArgumentOutOfRangeException<string>(CommonProperties.OSEnum.ToString())
+            };
+        }
+    }
+
+    /// <summary>
+    /// Windows executable
+    /// </summary>
+    protected abstract string WinExe { get; }
+
+    /// <summary>
+    /// Linux executable
+    /// </summary>
+    protected abstract string LinExe { get; }
 
     /// <summary>
     /// Name of the port
