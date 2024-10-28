@@ -1,4 +1,5 @@
 ﻿using Database.Server;
+using Microsoft.EntityFrameworkCore;
 
 namespace Web.Blazor.Tasks;
 
@@ -38,13 +39,18 @@ public sealed class FileCheckTask : IHostedService, IDisposable
         _logger.LogInformation("File check started");
 
         using var dbContext = _dbContextFactory.Get();
-        var files = dbContext.Versions.Select(v => v.DownloadUrl).ToList();
+        var files = dbContext.Versions.AsNoTracking().ToList();
 
         foreach (var file in files)
         {
             try
             {
-                var result = _httpClient.GetAsync(file, HttpCompletionOption.ResponseHeadersRead).Result;
+                if (file.IsDisabled)
+                {
+                    continue;
+                }
+
+                var result = _httpClient.GetAsync(file.DownloadUrl, HttpCompletionOption.ResponseHeadersRead).Result;
 
                 if (!result.IsSuccessStatusCode)
                 {
