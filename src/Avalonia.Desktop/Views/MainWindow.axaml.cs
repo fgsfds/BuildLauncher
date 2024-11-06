@@ -106,52 +106,52 @@ public sealed partial class MainWindow : Window
 
     private void InitializePages()
     {
-        if (_gamesProvider.IsDukeInstalled && !DukePage.IsAlreadInitialized)
+        if (_gamesProvider.IsDukeInstalled && !DukePage.IsAlreadyInitialized)
         {
             DukePage.InitializeControl(GameEnum.Duke3D, _portsProvider, _vmFactory, _installedAddonsProviderFactory, _configProvider);
         }
 
-        if (_gamesProvider.IsBloodInstalled && !BloodPage.IsAlreadInitialized)
+        if (_gamesProvider.IsBloodInstalled && !BloodPage.IsAlreadyInitialized)
         {
             BloodPage.InitializeControl(GameEnum.Blood, _portsProvider, _vmFactory, _installedAddonsProviderFactory, _configProvider);
         }
 
-        if (_gamesProvider.IsWangInstalled && !WangPage.IsAlreadInitialized)
+        if (_gamesProvider.IsWangInstalled && !WangPage.IsAlreadyInitialized)
         {
             WangPage.InitializeControl(GameEnum.ShadowWarrior, _portsProvider, _vmFactory, _installedAddonsProviderFactory, _configProvider);
         }
 
-        if (_gamesProvider.IsFuryInstalled && !FuryPage.IsAlreadInitialized)
+        if (_gamesProvider.IsFuryInstalled && !FuryPage.IsAlreadyInitialized)
         {
             FuryPage.InitializeControl(GameEnum.Fury, _portsProvider, _vmFactory, _installedAddonsProviderFactory, _configProvider);
         }
 
-        if (_gamesProvider.IsRedneckInstalled && !RedneckPage.IsAlreadInitialized)
+        if (_gamesProvider.IsRedneckInstalled && !RedneckPage.IsAlreadyInitialized)
         {
             RedneckPage.InitializeControl(GameEnum.Redneck, _portsProvider, _vmFactory, _installedAddonsProviderFactory, _configProvider);
         }
 
-        if (_gamesProvider.IsSlaveInstalled && !SlavePage.IsAlreadInitialized)
+        if (_gamesProvider.IsSlaveInstalled && !SlavePage.IsAlreadyInitialized)
         {
             SlavePage.InitializeControl(GameEnum.Exhumed, _portsProvider, _vmFactory, _installedAddonsProviderFactory, _configProvider);
         }
 
-        if (_gamesProvider.IsNamInstalled && !NamPage.IsAlreadInitialized)
+        if (_gamesProvider.IsNamInstalled && !NamPage.IsAlreadyInitialized)
         {
             NamPage.InitializeControl(GameEnum.NAM, _portsProvider, _vmFactory, _installedAddonsProviderFactory, _configProvider);
         }
 
-        if (_gamesProvider.IsWW2GIInstalled && !WW2GIPage.IsAlreadInitialized)
+        if (_gamesProvider.IsWW2GIInstalled && !WW2GIPage.IsAlreadyInitialized)
         {
             WW2GIPage.InitializeControl(GameEnum.WW2GI, _portsProvider, _vmFactory, _installedAddonsProviderFactory, _configProvider);
         }
 
-        if (_gamesProvider.IsWitchavenInstalled && !WitchavenPage.IsAlreadInitialized)
+        if (_gamesProvider.IsWitchavenInstalled && !WitchavenPage.IsAlreadyInitialized)
         {
             WitchavenPage.InitializeControl(GameEnum.Witchaven, _portsProvider, _vmFactory, _installedAddonsProviderFactory, _configProvider);
         }
 
-        if (_gamesProvider.IsTekWarInstalled && !TekWarPage.IsAlreadInitialized)
+        if (_gamesProvider.IsTekWarInstalled && !TekWarPage.IsAlreadyInitialized)
         {
             TekWarPage.InitializeControl(GameEnum.TekWar, _portsProvider, _vmFactory, _installedAddonsProviderFactory, _configProvider);
         }

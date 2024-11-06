@@ -162,39 +162,5 @@ public sealed class ViewModelsFactory
         return vm;
     }
 
-
-    /// <summary>
-    /// Create <see cref="ToolViewModel"/>
-    /// </summary>
-    /// <param name="toolEnum">Tool enum</param>
-    public ToolViewModel GetToolViewModel(ToolEnum toolEnum)
-    {
-        ToolViewModel vm = new(
-            _toolsInstallerFactory,
-            _toolsReleasesProvider,
-            _gamesProvider,
-            _toolsProvider.GetTool(toolEnum)
-            );
-
-        _ = Task.Run(vm.InitializeAsync);
-        return vm;
-    }
-
-
-    /// <summary>
-    /// Create <see cref="PortsViewModel"/>
-    /// </summary>
-    public PortsViewModel GetPortsViewModel()
-    {
-        PortsViewModel vm = new(
-            _portsInstallerFactory,
-            _portsReleasesProvider,
-            this
-            );
-
-        _ = Task.Run(vm.Initialize);
-        return vm;
-    }
-
 #pragma warning restore CS0618 // Type or member is obsolete
 }

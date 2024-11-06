@@ -1,7 +1,12 @@
-﻿using Common.Client.Helpers;
+﻿using Common.Client;
+using Common.Client.Helpers;
+using Common.Client.Interfaces;
+using Common.Client.Tools;
 using Common.Enums;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Games.Providers;
+using Ports.Installer;
+using Ports.Providers;
 
 namespace Avalonia.Desktop.ViewModels;
 
@@ -10,15 +15,39 @@ public sealed partial class MainViewModel : ObservableObject
     private readonly GamesProvider _gamesProvider;
 
     public MainViewModel(
-        GamesProvider gamesProvider)
+        IConfigProvider configProvider,
+        FilesUploader filesUploader,
+        GamesProvider gamesProvider,
+        AppUpdateInstaller appUpdateInstaller,
+        PortsInstallerFactory portsInstallerFactory,
+        PortsReleasesProvider portsReleasesProvider,
+        ViewModelsFactory viewModelsFactory,
+        GamesPathsProvider gamesPathsProvider
+        )
     {
         _gamesProvider = gamesProvider;
-
         _gamesProvider.GameChangedEvent += OnGameChanged;
+
+        DevPageViewModel = new DevViewModel(configProvider, filesUploader, gamesProvider);
+        AboutPageViewModel = new AboutViewModel(appUpdateInstaller);
+        PortsPageViewModel = new PortsViewModel(portsInstallerFactory, portsReleasesProvider, viewModelsFactory);
+        SettingsPageViewModel = new SettingsViewModel(configProvider, gamesPathsProvider);
     }
 
 
     #region Binding Properties
+
+    [ObservableProperty]
+    private DevViewModel _devPageViewModel;
+
+    [ObservableProperty]
+    private AboutViewModel _aboutPageViewModel;
+
+    [ObservableProperty]
+    private PortsViewModel _portsPageViewModel;
+
+    [ObservableProperty]
+    private SettingsViewModel _settingsPageViewModel;
 
     /// <summary>
     /// Is Blood tab enabled

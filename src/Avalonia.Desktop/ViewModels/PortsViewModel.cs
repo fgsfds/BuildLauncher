@@ -30,7 +30,6 @@ public sealed partial class PortsViewModel : ObservableObject
     public ImmutableList<PortViewModel> PortsList { get; set; } = [];
 
 
-    [Obsolete($"Don't create directly. Use {nameof(ViewModelsFactory)}.")]
     public PortsViewModel(
         PortsInstallerFactory installerFactory,
         PortsReleasesProvider portsReleasesProvider,
@@ -40,13 +39,15 @@ public sealed partial class PortsViewModel : ObservableObject
         _installerFactory = installerFactory;
         _portsReleasesProvider = portsReleasesProvider;
         _viewModelsFactory = viewModelsFactory;
+
+        Initialize();
     }
 
 
     /// <summary>
     /// Initialize VM
     /// </summary>
-    public void Initialize()
+    private void Initialize()
     {
         lock (_lock)
         {

@@ -12,18 +12,18 @@ using Games.Providers;
 
 namespace Avalonia.Desktop.ViewModels;
 
-internal sealed partial class SettingsViewModel : ObservableObject
+public sealed partial class SettingsViewModel : ObservableObject
 {
     private readonly IConfigProvider _config;
-    private readonly GamesPathsProvider _gamesAutoDetector;
+    private readonly GamesPathsProvider _gamesPathsProvider;
 
     public SettingsViewModel(
         IConfigProvider config,
-        GamesPathsProvider gamesAutoDetector
+        GamesPathsProvider gamesPathsProvider
         )
     {
         _config = config;
-        _gamesAutoDetector = gamesAutoDetector;
+        _gamesPathsProvider = gamesPathsProvider;
     }
 
 
@@ -288,7 +288,7 @@ internal sealed partial class SettingsViewModel : ObservableObject
     {
         if (param.Equals(nameof(GameEnum.Duke3D)))
         {
-            var path = _gamesAutoDetector.GetPath(GameEnum.Duke3D);
+            var path = _gamesPathsProvider.GetPath(GameEnum.Duke3D);
 
             if (path is not null)
             {
@@ -299,7 +299,7 @@ internal sealed partial class SettingsViewModel : ObservableObject
         }
         else if (param.Equals(nameof(DukeVersionEnum.Duke3D_WT)))
         {
-            var path = _gamesAutoDetector.GetPath(DukeVersionEnum.Duke3D_WT);
+            var path = _gamesPathsProvider.GetPath(DukeVersionEnum.Duke3D_WT);
 
             if (path is not null)
             {
@@ -310,7 +310,7 @@ internal sealed partial class SettingsViewModel : ObservableObject
         }
         else if (param.Equals(nameof(GameEnum.Blood)))
         {
-            var path = _gamesAutoDetector.GetPath(GameEnum.Blood);
+            var path = _gamesPathsProvider.GetPath(GameEnum.Blood);
 
             if (path is not null)
             {
@@ -321,7 +321,7 @@ internal sealed partial class SettingsViewModel : ObservableObject
         }
         else if (param.Equals(nameof(GameEnum.ShadowWarrior)))
         {
-            var path = _gamesAutoDetector.GetPath(GameEnum.ShadowWarrior);
+            var path = _gamesPathsProvider.GetPath(GameEnum.ShadowWarrior);
 
             if (path is not null)
             {
@@ -332,7 +332,7 @@ internal sealed partial class SettingsViewModel : ObservableObject
         }
         else if (param.Equals(nameof(GameEnum.Redneck)))
         {
-            var path = _gamesAutoDetector.GetPath(GameEnum.Redneck);
+            var path = _gamesPathsProvider.GetPath(GameEnum.Redneck);
 
             if (path is not null)
             {
@@ -343,7 +343,7 @@ internal sealed partial class SettingsViewModel : ObservableObject
         }
         else if (param.Equals(nameof(GameEnum.RidesAgain)))
         {
-            var path = _gamesAutoDetector.GetPath(GameEnum.RidesAgain);
+            var path = _gamesPathsProvider.GetPath(GameEnum.RidesAgain);
 
             if (path is not null)
             {
@@ -354,7 +354,7 @@ internal sealed partial class SettingsViewModel : ObservableObject
         }
         else if (param.Equals(nameof(GameEnum.Fury)))
         {
-            var path = _gamesAutoDetector.GetPath(GameEnum.Fury);
+            var path = _gamesPathsProvider.GetPath(GameEnum.Fury);
 
             if (path is not null)
             {
@@ -365,7 +365,7 @@ internal sealed partial class SettingsViewModel : ObservableObject
         }
         else if (param.Equals(nameof(GameEnum.Exhumed)))
         {
-            var path = _gamesAutoDetector.GetPath(GameEnum.Exhumed);
+            var path = _gamesPathsProvider.GetPath(GameEnum.Exhumed);
 
             if (path is not null)
             {
@@ -376,7 +376,7 @@ internal sealed partial class SettingsViewModel : ObservableObject
         }
         else if (param.Equals(nameof(GameEnum.NAM)))
         {
-            var path = _gamesAutoDetector.GetPath(GameEnum.NAM);
+            var path = _gamesPathsProvider.GetPath(GameEnum.NAM);
 
             if (path is not null)
             {
@@ -387,7 +387,7 @@ internal sealed partial class SettingsViewModel : ObservableObject
         }
         else if (param.Equals(nameof(GameEnum.WW2GI)))
         {
-            var path = _gamesAutoDetector.GetPath(GameEnum.WW2GI);
+            var path = _gamesPathsProvider.GetPath(GameEnum.WW2GI);
 
             if (path is not null)
             {
@@ -398,7 +398,7 @@ internal sealed partial class SettingsViewModel : ObservableObject
         }
         else if (param.Equals(nameof(GameEnum.Witchaven)))
         {
-            var path = _gamesAutoDetector.GetPath(GameEnum.Witchaven);
+            var path = _gamesPathsProvider.GetPath(GameEnum.Witchaven);
 
             if (path is not null)
             {
@@ -409,7 +409,7 @@ internal sealed partial class SettingsViewModel : ObservableObject
         }
         else if (param.Equals(nameof(GameEnum.Witchaven2)))
         {
-            var path = _gamesAutoDetector.GetPath(GameEnum.Witchaven2);
+            var path = _gamesPathsProvider.GetPath(GameEnum.Witchaven2);
 
             if (path is not null)
             {
@@ -420,7 +420,7 @@ internal sealed partial class SettingsViewModel : ObservableObject
         }
         else if (param.Equals(nameof(GameEnum.TekWar)))
         {
-            var path = _gamesAutoDetector.GetPath(GameEnum.TekWar);
+            var path = _gamesPathsProvider.GetPath(GameEnum.TekWar);
 
             if (path is not null)
             {

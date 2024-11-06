@@ -667,7 +667,7 @@ public sealed partial class DevViewModel : ObservableObject
 
         if (forbidden.Any())
         {
-            ThrowHelper.ThrowMissingFieldException($"Common files names can't be used. Rename these files: {string.Join(", ", forbidden)}");
+            //ThrowHelper.ThrowMissingFieldException($"Common files names can't be used. Rename these files: {string.Join(", ", forbidden)}");
         }
 
         if (IsBloodSelected &&

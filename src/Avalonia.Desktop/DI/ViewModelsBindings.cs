@@ -7,11 +7,8 @@ public static class ViewModelsBindings
 {
     public static void Load(ServiceCollection container)
     {
-        container.AddSingleton<ViewModelsFactory>();
+        _ = container.AddSingleton<ViewModelsFactory>();
 
-        container.AddSingleton<MainViewModel>();
-        container.AddSingleton<SettingsViewModel>();
-        container.AddSingleton<AboutViewModel>();
-        container.AddSingleton<DevViewModel>();
+        _ = container.AddSingleton<MainViewModel>();
     }
 }

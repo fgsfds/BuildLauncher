@@ -194,41 +194,36 @@
                     <TabItem.Header>
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="Ports"/>
-                            <i:Icon Foreground="Crimson" IsVisible="{Binding ElementName=PortsPageTab, Path=((vm:PortsViewModel)DataContext).HasUpdates}" Margin="5,0,0,0" Value="mdi-alert-decagram" />
+                            <i:Icon Foreground="Crimson" DataContext="{Binding PortsPageViewModel}" IsVisible="{Binding HasUpdates}" Margin="5,0,0,0" Value="mdi-alert-decagram" />
                         </StackPanel>
                     </TabItem.Header>
 
-                    <pages:PortsPage x:Name="PortsPageTab"/>
-                </TabItem>
-
-                <!--Tools-->
-                <TabItem Header="Tools" IsVisible="{Binding IsDeveloperMode}" Margin="5">
-                    <pages:ToolsPage x:Name="ToolsPageTab"/>
+                    <pages:PortsPage x:Name="PortsPageTab" DataContext="{Binding PortsPageViewModel}"/>
                 </TabItem>
 
                 <!--Dev-->
                 <TabItem Name="DevTab" Header="Dev" Margin="5" >
-                    <pages:DevPage x:Name="DevPageTab"/>
+                    <pages:DevPage x:Name="DevPageTab" DataContext="{Binding DevPageViewModel}"/>
                 </TabItem>
 
                 <TabItem IsEnabled="False" Header=""/>
 
                 <!--Settings-->
                 <TabItem Name="SettingsTab" Header="Settings" Margin="5" >
-                    <pages:SettingsPage x:Name="SettingsPageTab"/>
+                    <pages:SettingsPage x:Name="SettingsPageTab" DataContext="{Binding SettingsPageViewModel}"/>
                 </TabItem>
 
                 <!--About-->
-                <TabItem Name="AboutTab" Margin="5" >
+                <TabItem Name="AboutTab" Margin="5">
 
                     <TabItem.Header>
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="About"/>
-                            <i:Icon Foreground="Crimson" IsVisible="{Binding ElementName=AboutPageTab, Path=((vm:AboutViewModel)DataContext).IsUpdateAvailable}" Margin="5,0,0,0" Value="mdi-alert-decagram" />
+                            <i:Icon Foreground="Crimson" DataContext="{Binding AboutPageViewModel}" IsVisible="{Binding IsUpdateAvailable}" Margin="5,0,0,0" Value="mdi-alert-decagram" />
                         </StackPanel>
                     </TabItem.Header>
 
-                    <pages:AboutPage x:Name="AboutPageTab"/>
+                    <pages:AboutPage x:Name="AboutPageTab" DataContext="{Binding AboutPageViewModel}"/>
                 </TabItem>
 
             </TabControl>

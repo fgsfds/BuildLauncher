@@ -9,7 +9,7 @@ namespace Avalonia.Desktop.Pages;
 
 public sealed partial class GamePage : UserControl
 {
-    public bool IsAlreadInitialized { get; private set; }
+    public bool IsAlreadyInitialized { get; private set; }
 
     public GamePage()
     {
@@ -39,6 +39,6 @@ public sealed partial class GamePage : UserControl
         ModsControl.InitializeControl(installedAddonsProviderFactory, configProvider);
         DownControl.InitializeControl();
 
-        IsAlreadInitialized = true;
+        IsAlreadyInitialized = true;
     }
 }

@@ -5,9 +5,9 @@ using CommunityToolkit.Mvvm.Input;
 
 namespace Avalonia.Desktop.ViewModels;
 
-public sealed partial class AboutViewModel(AppUpdateInstaller updateInstaller) : ObservableObject
+public sealed partial class AboutViewModel : ObservableObject
 {
-    private readonly AppUpdateInstaller _updateInstaller = updateInstaller;
+    private readonly AppUpdateInstaller _updateInstaller;
 
     #region Binding Properties
 
@@ -33,13 +33,14 @@ public sealed partial class AboutViewModel(AppUpdateInstaller updateInstaller) :
     #endregion Binding Properties
 
 
-    #region Relay Commands
+    public AboutViewModel(AppUpdateInstaller updateInstaller)
+    {
+        _updateInstaller = updateInstaller;
+        _ = CheckForUpdateAsync();
+    }
 
-    /// <summary>
-    /// VM initialization
-    /// </summary>
-    [RelayCommand]
-    private Task InitializeAsync() => CheckForUpdateAsync();
+
+    #region Relay Commands
 
     /// <summary>
     /// Check for SSH updates
