@@ -1,18 +1,12 @@
-using Common.Entities;
 using Common.Enums;
 using CommunityToolkit.Mvvm.ComponentModel;
-using Ports.Installer;
-using Ports.Providers;
 using System.Collections.Immutable;
 
 namespace Avalonia.Desktop.ViewModels;
 
 public sealed partial class PortsViewModel : ObservableObject
 {
-    private readonly PortsInstallerFactory _installerFactory;
-    private readonly PortsReleasesProvider _portsReleasesProvider;
     private readonly ViewModelsFactory _viewModelsFactory;
-    private readonly GeneralReleaseEntity? _release;
     private readonly Dictionary<PortEnum, bool> _updatesList = [];
     private readonly object _lock = new();
 
@@ -31,13 +25,9 @@ public sealed partial class PortsViewModel : ObservableObject
 
 
     public PortsViewModel(
-        PortsInstallerFactory installerFactory,
-        PortsReleasesProvider portsReleasesProvider,
         ViewModelsFactory viewModelsFactory
         )
     {
-        _installerFactory = installerFactory;
-        _portsReleasesProvider = portsReleasesProvider;
         _viewModelsFactory = viewModelsFactory;
 
         Initialize();

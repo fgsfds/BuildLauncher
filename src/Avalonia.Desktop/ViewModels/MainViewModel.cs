@@ -30,7 +30,7 @@ public sealed partial class MainViewModel : ObservableObject
 
         DevPageViewModel = new DevViewModel(configProvider, filesUploader, gamesProvider);
         AboutPageViewModel = new AboutViewModel(appUpdateInstaller);
-        PortsPageViewModel = new PortsViewModel(portsInstallerFactory, portsReleasesProvider, viewModelsFactory);
+        PortsPageViewModel = new PortsViewModel(viewModelsFactory);
         SettingsPageViewModel = new SettingsViewModel(configProvider, gamesPathsProvider);
     }
 
