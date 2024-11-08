@@ -1,84 +1,84 @@
-using Common.Common.Providers;
-using Common.Entities;
-using Common.Enums;
-using Microsoft.AspNetCore.Mvc;
-using Web.Blazor.Providers;
+//using Common.Common.Providers;
+//using Common.Entities;
+//using Common.Enums;
+//using Microsoft.AspNetCore.Mvc;
+//using Web.Blazor.Providers;
 
-namespace Web.Blazor.ControllersV1;
+//namespace Web.Blazor.ControllersV1;
 
-[Obsolete]
-[ApiController]
-[Route("api/releases")]
-public sealed class ReleasesController : ControllerBase
-{
-    private readonly AppReleasesProvider _appReleasesProvider;
-    private readonly PortsReleasesProvider _portsReleasesProvider;
+//[Obsolete]
+//[ApiController]
+//[Route("api/releases")]
+//public sealed class ReleasesController : ControllerBase
+//{
+//    private readonly AppReleasesProvider _appReleasesProvider;
+//    private readonly PortsReleasesProvider _portsReleasesProvider;
 
-    public ReleasesController(
-        AppReleasesProvider appReleasesProvider,
-        PortsReleasesProvider portsReleasesProvider
-        )
-    {
-        _appReleasesProvider = appReleasesProvider;
-        _portsReleasesProvider = portsReleasesProvider;
-    }
+//    public ReleasesController(
+//        AppReleasesProvider appReleasesProvider,
+//        PortsReleasesProvider portsReleasesProvider
+//        )
+//    {
+//        _appReleasesProvider = appReleasesProvider;
+//        _portsReleasesProvider = portsReleasesProvider;
+//    }
 
-    [Obsolete]
-    [HttpGet("app")]
-    public GeneralReleaseEntityObsolete? GetLatestAppRelease()
-    {
-        if (_appReleasesProvider.AppRelease?.TryGetValue(OSEnum.Windows, out var winRelease) ?? false)
-        {
-            return new GeneralReleaseEntityObsolete()
-            {
-                Description = winRelease.Description,
-                Version = winRelease.Version,
-                WindowsDownloadUrl = winRelease.DownloadUrl,
-                LinuxDownloadUrl = null
-            };
-        }
+//    [Obsolete]
+//    [HttpGet("app")]
+//    public GeneralReleaseEntityObsolete? GetLatestAppRelease()
+//    {
+//        if (_appReleasesProvider.AppRelease?.TryGetValue(OSEnum.Windows, out var winRelease) ?? false)
+//        {
+//            return new GeneralReleaseEntityObsolete()
+//            {
+//                Description = winRelease.Description,
+//                Version = winRelease.Version,
+//                WindowsDownloadUrl = winRelease.DownloadUrl,
+//                LinuxDownloadUrl = null
+//            };
+//        }
 
-        return null;
-    }
+//        return null;
+//    }
 
-    [Obsolete]
-    [HttpGet("ports")]
-    public Dictionary<PortEnum, GeneralReleaseEntityObsolete> GetLatestPortsReleases()
-    {
-        Dictionary<PortEnum, GeneralReleaseEntityObsolete> result = [];
-        var releases = _portsReleasesProvider.WindowsReleases;
+//    [Obsolete]
+//    [HttpGet("ports")]
+//    public Dictionary<PortEnum, GeneralReleaseEntityObsolete> GetLatestPortsReleases()
+//    {
+//        Dictionary<PortEnum, GeneralReleaseEntityObsolete> result = [];
+//        var releases = _portsReleasesProvider.WindowsReleases;
 
-        if (releases is null)
-        {
-            return result;
-        }
+//        if (releases is null)
+//        {
+//            return result;
+//        }
 
-        foreach (var release in releases)
-        {
-            string version;
+//        foreach (var release in releases)
+//        {
+//            string version;
 
-            if (release.Key is PortEnum.NotBlood)
-            {
-                version = DateTime.Parse(release.Value.Version).ToString("dd.MM.yyyy");
-            }
-            else
-            {
-                version = release.Value.Version;
-            }
+//            if (release.Key is PortEnum.NotBlood)
+//            {
+//                version = DateTime.Parse(release.Value.Version).ToString("dd.MM.yyyy");
+//            }
+//            else
+//            {
+//                version = release.Value.Version;
+//            }
 
-            result.Add(release.Key, new GeneralReleaseEntityObsolete()
-            {
-                Description = release.Value.Description,
-                Version = version,
-                WindowsDownloadUrl = release.Value.DownloadUrl,
-                LinuxDownloadUrl = null
-            });
-        }
+//            result.Add(release.Key, new GeneralReleaseEntityObsolete()
+//            {
+//                Description = release.Value.Description,
+//                Version = version,
+//                WindowsDownloadUrl = release.Value.DownloadUrl,
+//                LinuxDownloadUrl = null
+//            });
+//        }
 
-        return result;
-    }
+//        return result;
+//    }
 
-    [Obsolete]
-    [HttpGet("tools")]
-    public Dictionary<ToolEnum, GeneralReleaseEntityObsolete> GetLatestToolsReleases() => [];
-}
+//    [Obsolete]
+//    [HttpGet("tools")]
+//    public Dictionary<ToolEnum, GeneralReleaseEntityObsolete> GetLatestToolsReleases() => [];
+//}

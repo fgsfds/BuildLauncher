@@ -26,7 +26,6 @@ public sealed class Program
             jsonOptions.JsonSerializerOptions.TypeInfoResolverChain.Add(AddonsJsonEntityListContext.Default);
             jsonOptions.JsonSerializerOptions.TypeInfoResolverChain.Add(DownloadableAddonEntityListContext.Default);
             jsonOptions.JsonSerializerOptions.TypeInfoResolverChain.Add(GeneralReleaseEntityContext.Default);
-            jsonOptions.JsonSerializerOptions.TypeInfoResolverChain.Add(GeneralReleaseEntityObsoleteContext.Default);
             jsonOptions.JsonSerializerOptions.TypeInfoResolverChain.Add(AddonManifestContext.Default);
             jsonOptions.JsonSerializerOptions.TypeInfoResolverChain.Add(DependencyDtoContext.Default);
             jsonOptions.JsonSerializerOptions.TypeInfoResolverChain.Add(DependantAddonDtoContext.Default);
