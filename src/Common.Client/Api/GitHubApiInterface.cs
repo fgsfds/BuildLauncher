@@ -1,22 +1,25 @@
 ﻿using Common.Client.Interfaces;
+using Common.Common.Helpers;
+using Common.Common.Providers;
 using Common.Entities;
 using Common.Enums;
+using CommunityToolkit.Diagnostics;
 
 namespace Common.Client.Api;
 
 public sealed class GitHubApiInterface : IApiInterface
 {
-    private readonly HttpClient _httpClient;
-    private readonly IConfigProvider _config;
+    private readonly PortsReleasesProvider _portsReleasesProvider;
+    private readonly AppReleasesProvider _appReleasesProvider;
 
 
     public GitHubApiInterface(
-        IConfigProvider config,
-        HttpClient httpClient
+        PortsReleasesProvider portsReleasesProvider,
+        AppReleasesProvider appReleasesProvider
         )
     {
-        _config = config;
-        _httpClient = httpClient;
+        _portsReleasesProvider = portsReleasesProvider;
+        _appReleasesProvider = appReleasesProvider;
     }
 
 
@@ -25,14 +28,25 @@ public sealed class GitHubApiInterface : IApiInterface
         return Task.FromResult<List<DownloadableAddonEntity>?>(null);
     }
 
-    public Task<GeneralReleaseEntity?> GetLatestAppReleaseAsync()
+    public async Task<GeneralReleaseEntity?> GetLatestAppReleaseAsync()
     {
-        return Task.FromResult<GeneralReleaseEntity?>(null);
+        await _appReleasesProvider.GetLatestVersionAsync().ConfigureAwait(false);
+
+        var result = _appReleasesProvider.AppRelease[CommonProperties.OSEnum];
+
+        return result;
     }
 
-    public Task<Dictionary<PortEnum, GeneralReleaseEntity>?> GetLatestPortsReleasesAsync()
+    public async Task<Dictionary<PortEnum, GeneralReleaseEntity>?> GetLatestPortsReleasesAsync()
     {
-        return Task.FromResult<Dictionary<PortEnum, GeneralReleaseEntity>?>(null);
+        await _portsReleasesProvider.GetLatestReleasesAsync().ConfigureAwait(false);
+
+        return CommonProperties.OSEnum switch
+        {
+            OSEnum.Windows => _portsReleasesProvider.WindowsReleases,
+            OSEnum.Linux => _portsReleasesProvider.LinuxReleases,
+            _ => ThrowHelper.ThrowNotSupportedException<Dictionary<PortEnum, GeneralReleaseEntity>?>(CommonProperties.OSEnum.ToString())
+        };
     }
 
     public Task<string?> GetSignedUrlAsync(string path)

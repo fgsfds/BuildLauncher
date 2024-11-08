@@ -1,4 +1,4 @@
-﻿using Common.Client.Api;
+﻿using Common.Client.Interfaces;
 using Common.Entities;
 using Common.Enums;
 using Tools.Tools;
@@ -33,7 +33,7 @@ public sealed class ToolsReleasesProvider
             _releases = await GetReleasesAsync().ConfigureAwait(false);
         }
 
-        _semaphore.Release();
+        _ = _semaphore.Release();
 
         if (_releases is null)
         {

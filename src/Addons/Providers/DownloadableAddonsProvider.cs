@@ -1,5 +1,4 @@
 ﻿using Common;
-using Common.Client.Api;
 using Common.Client.Helpers;
 using Common.Client.Interfaces;
 using Common.Client.Tools;
@@ -98,11 +97,11 @@ public sealed class DownloadableAddonsProvider : IDownloadableAddonsProvider
 
         foreach (var downloadableAddon in addonTypeCache)
         {
-            var existinsAddons = installedAddons.Where(x => x.Key.Id == downloadableAddon.Key.Id).Select(x => x.Key);
+            var existingAddons = installedAddons.Where(x => x.Key.Id == downloadableAddon.Key.Id).Select(x => x.Key);
 
             downloadableAddon.Value.IsInstalled = true;
 
-            if (!existinsAddons.Any())
+            if (!existingAddons.Any())
             {
                 downloadableAddon.Value.IsInstalled = false;
                 continue;
@@ -113,7 +112,7 @@ public sealed class DownloadableAddonsProvider : IDownloadableAddonsProvider
                 downloadableAddon.Key.Id.Contains("death-wish", StringComparison.InvariantCultureIgnoreCase) &&
                 downloadableAddon.Key.Version!.StartsWith('1'))
             {
-                if (existinsAddons.Contains(downloadableAddon.Key))
+                if (existingAddons.Contains(downloadableAddon.Key))
                 {
                     downloadableAddon.Value.IsInstalled = true;
                 }
@@ -126,7 +125,7 @@ public sealed class DownloadableAddonsProvider : IDownloadableAddonsProvider
             }
             else
             {
-                foreach (var existingVersion in existinsAddons.Select(static x => x.Version).Where(static x => x is not null))
+                foreach (var existingVersion in existingAddons.Select(static x => x.Version).Where(static x => x is not null))
                 {
                     downloadableAddon.Value.HasNewerVersion = true;
 

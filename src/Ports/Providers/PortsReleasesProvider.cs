@@ -1,4 +1,4 @@
-﻿using Common.Client.Api;
+﻿using Common.Client.Interfaces;
 using Common.Entities;
 using Common.Enums;
 

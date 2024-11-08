@@ -17,4 +17,9 @@
     <ProjectReference Include="..\Common.Common\Common.Common.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Entities\" />
+    <Folder Include="Providers\" />
+  </ItemGroup>
+
 </Project>

@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace Common.Server.Entities;
+namespace Common.Entities;
 
 public sealed class GitHubReleaseEntity
 {

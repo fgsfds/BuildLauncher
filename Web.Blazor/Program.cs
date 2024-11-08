@@ -1,7 +1,6 @@
+using Common.Common.Providers;
 using Common.Entities;
 using Common.Serializable.Addon;
-using Common.Server.Entities;
-using Common.Server.Providers;
 using Database.Server;
 using Web.Blazor.Helpers;
 using Web.Blazor.Providers;

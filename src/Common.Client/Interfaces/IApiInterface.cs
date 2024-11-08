@@ -1,7 +1,7 @@
 ﻿using Common.Entities;
 using Common.Enums;
 
-namespace Common.Client.Api;
+namespace Common.Client.Interfaces;
 
 public interface IApiInterface
 {

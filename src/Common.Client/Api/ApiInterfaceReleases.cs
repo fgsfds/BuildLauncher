@@ -80,24 +80,5 @@ public sealed partial class ApiInterface
         }
     }
 
-    public async Task<Dictionary<ToolEnum, GeneralReleaseEntity>?> GetLatestToolsReleasesAsync()
-    {
-        try
-        {
-            //var response = await _httpClient.GetStringAsync($"{ApiUrl}/releases/tools").ConfigureAwait(false);
-
-            //if (string.IsNullOrWhiteSpace(response))
-            //{
-            //    return null;
-            //}
-
-            //var releases = JsonSerializer.Deserialize<Dictionary<ToolEnum, GeneralReleaseEntity>>(response);
-
-            return [];
-        }
-        catch
-        {
-            return null;
-        }
-    }
+    public async Task<Dictionary<ToolEnum, GeneralReleaseEntity>?> GetLatestToolsReleasesAsync() => null;
 }

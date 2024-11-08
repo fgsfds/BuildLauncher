@@ -1,5 +1,4 @@
-﻿using Common.Client.Api;
-using Common.Client.Interfaces;
+﻿using Common.Client.Interfaces;
 using CommunityToolkit.Diagnostics;
 
 namespace Common.Client.Providers;

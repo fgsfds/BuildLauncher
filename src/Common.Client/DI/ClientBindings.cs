@@ -4,6 +4,7 @@ using Common.Client.Helpers;
 using Common.Client.Interfaces;
 using Common.Client.Providers;
 using Common.Client.Tools;
+using Common.Common.Providers;
 using Common.Helpers;
 using Database.Client;
 using Microsoft.Extensions.DependencyInjection;
@@ -22,6 +23,11 @@ public static class ClientBindings
         _ = container.AddSingleton<HttpClient>(CreateHttpClient);
         _ = container.AddTransient<ArchiveTools>();
         _ = container.AddSingleton<FilesUploader>();
+
+        _ = container.AddSingleton<AppReleasesProvider>();
+        _ = container.AddSingleton<PortsReleasesProvider>();
+        _ = container.AddSingleton<RepositoriesProvider>();
+        _ = container.AddSingleton<ToolsReleasesProvider>();
 
         if (isDesigner)
         {

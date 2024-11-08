@@ -1,21 +1,21 @@
 ﻿using Common.Entities;
 using Common.Enums;
 using Common.Helpers;
-using Common.Server.Entities;
 using CommunityToolkit.Diagnostics;
+using Microsoft.Extensions.Logging;
 using System.Text.Json;
 
-namespace Web.Blazor.Providers;
+namespace Common.Common.Providers;
 
 public sealed class AppReleasesProvider
 {
-    private readonly ILogger<AppReleasesProvider> _logger;
+    private readonly ILogger _logger;
     private readonly HttpClient _httpClient;
 
     public Dictionary<OSEnum, GeneralReleaseEntity> AppRelease { get; private set; } = [];
 
     public AppReleasesProvider(
-        ILogger<AppReleasesProvider> logger,
+        ILogger logger,
         HttpClient httpClient
         )
     {
