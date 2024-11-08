@@ -15,8 +15,8 @@ public sealed partial class DownloadsViewModel : ObservableObject
 {
     public readonly IGame Game;
 
-    public readonly InstalledAddonsProvider _installedAddonsProvider;
-    public readonly DownloadableAddonsProvider _downloadableAddonsProvider;
+    private readonly InstalledAddonsProvider _installedAddonsProvider;
+    private readonly DownloadableAddonsProvider _downloadableAddonsProvider;
     private readonly ILogger _logger;
 
 
