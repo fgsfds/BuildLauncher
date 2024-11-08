@@ -18,7 +18,7 @@ public sealed class DownloadableAddonsProvider : IDownloadableAddonsProvider
 {
     private readonly IGame _game;
     private readonly ArchiveTools _archiveTools;
-    private readonly ApiInterface _apiInterface;
+    private readonly IApiInterface _apiInterface;
     private readonly InstalledAddonsProvider _installedAddonsProvider;
 
     private Dictionary<AddonTypeEnum, Dictionary<AddonVersion, IDownloadableAddon>>? _cache;
@@ -33,7 +33,7 @@ public sealed class DownloadableAddonsProvider : IDownloadableAddonsProvider
     public DownloadableAddonsProvider(
         IGame game,
         ArchiveTools archiveTools,
-        ApiInterface apiInterface,
+        IApiInterface apiInterface,
         InstalledAddonsProviderFactory installedAddonsProviderFactory
         )
     {

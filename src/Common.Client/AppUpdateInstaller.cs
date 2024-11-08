@@ -11,13 +11,13 @@ namespace Common.Client;
 public sealed class AppUpdateInstaller
 {
     private readonly ArchiveTools _archiveTools;
-    private readonly ApiInterface _apiInterface;
+    private readonly IApiInterface _apiInterface;
 
     private GeneralReleaseEntity? _update;
 
     public AppUpdateInstaller(
         ArchiveTools archiveTools,
-        ApiInterface apiInterface
+        IApiInterface apiInterface
         )
     {
         _archiveTools = archiveTools;

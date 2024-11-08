@@ -10,12 +10,12 @@ namespace Tools.Installer;
 /// </summary>
 public sealed class ToolsReleasesProvider
 {
-    private readonly ApiInterface _apiInterface;
+    private readonly IApiInterface _apiInterface;
 
     private Dictionary<ToolEnum, GeneralReleaseEntity>? _releases;
     private readonly SemaphoreSlim _semaphore = new(1);
 
-    public ToolsReleasesProvider(ApiInterface apiInterface)
+    public ToolsReleasesProvider(IApiInterface apiInterface)
     {
         _apiInterface = apiInterface;
     }

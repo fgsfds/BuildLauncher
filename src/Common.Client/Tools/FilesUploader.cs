@@ -11,12 +11,12 @@ namespace Common.Client.Tools;
 
 public sealed class FilesUploader
 {
-    private readonly ApiInterface _apiInterface;
+    private readonly IApiInterface _apiInterface;
     private readonly HttpClient _httpClient;
 
 
     public FilesUploader(
-        ApiInterface apiInterface,
+        IApiInterface apiInterface,
         HttpClient httpClient
         )
     {

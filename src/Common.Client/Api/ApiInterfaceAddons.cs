@@ -9,7 +9,7 @@ using System.Web;
 
 namespace Common.Client.Api;
 
-public sealed partial class ApiInterface
+public sealed partial class ApiInterface : IApiInterface
 {
     private readonly HttpClient _httpClient;
     private readonly IConfigProvider _config;

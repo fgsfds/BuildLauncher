@@ -9,11 +9,11 @@ namespace Ports.Providers;
 /// </summary>
 public sealed class PortsReleasesProvider
 {
-    private readonly ApiInterface _apiInterface;
+    private readonly IApiInterface _apiInterface;
     private readonly SemaphoreSlim _semaphore = new(1);
     private Dictionary<PortEnum, GeneralReleaseEntity>? _releases;
 
-    public PortsReleasesProvider(ApiInterface apiInterface)
+    public PortsReleasesProvider(IApiInterface apiInterface)
     {
         _apiInterface = apiInterface;
     }

@@ -17,7 +17,7 @@ public static class ClientBindings
     {
         _ = container.AddSingleton<AppUpdateInstaller>();
         _ = container.AddSingleton<PlaytimeProvider>();
-        _ = container.AddSingleton<ApiInterface>();
+        _ = container.AddSingleton<IApiInterface, GitHubApiInterface>();
         _ = container.AddSingleton<RatingProvider>();
         _ = container.AddSingleton<HttpClient>(CreateHttpClient);
         _ = container.AddTransient<ArchiveTools>();
