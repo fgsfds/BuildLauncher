@@ -92,7 +92,7 @@ public sealed class ArchiveTools
 
                 if (reader.Entry.IsDirectory)
                 {
-                    Directory.CreateDirectory(fullName);
+                    _ = Directory.CreateDirectory(fullName);
                 }
                 else
                 {
@@ -101,7 +101,7 @@ public sealed class ArchiveTools
                     if (directory is not null &&
                         !Directory.Exists(directory))
                     {
-                        Directory.CreateDirectory(directory);
+                        _ = Directory.CreateDirectory(directory);
                     }
 
                     using var writableStream = File.OpenWrite(fullName);

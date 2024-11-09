@@ -9,12 +9,12 @@ using System.Web;
 
 namespace Common.Client.Api;
 
-public sealed partial class ApiInterface
+public sealed partial class ApiInterface : IApiInterface
 {
     private readonly HttpClient _httpClient;
     private readonly IConfigProvider _config;
 
-    private string ApiUrl => _config.UseLocalApi ? "https://localhost:7126/api" : "https://buildlauncher.fgsfds.link/api2";
+    private string ApiUrl => _config.UseLocalApi ? "https://localhost:7126/api" : "https://buildlauncher.fgsfds.link/api";
 
     public ApiInterface(
         IConfigProvider config,

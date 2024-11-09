@@ -1,17 +1,16 @@
-﻿using Common.Client.Api;
-using Common.Client.Interfaces;
+﻿using Common.Client.Interfaces;
 using CommunityToolkit.Diagnostics;
 
 namespace Common.Client.Providers;
 
 public sealed class RatingProvider
 {
-    private readonly ApiInterface _apiInterface;
+    private readonly IApiInterface _apiInterface;
     private readonly IConfigProvider _config;
     private Dictionary<string, decimal>? _cache = null;
 
     public RatingProvider(
-        ApiInterface apiInterface,
+        IApiInterface apiInterface,
         IConfigProvider config
         )
     {

@@ -1,9 +1,7 @@
 ﻿using Common.Client.Enums;
-using Common.Client.Helpers;
 using Common.Client.Interfaces;
 using Database.Client;
 using System.Runtime.CompilerServices;
-using System.Text.Json;
 using static Common.Client.Interfaces.IConfigProvider;
 
 namespace Common.Client.Config;
@@ -17,10 +15,6 @@ public sealed class ConfigProvider : IConfigProvider
     public ConfigProvider(DatabaseContextFactory dbContextFactory)
     {
         _dbContext = dbContextFactory.Get();
-
-        ConvertOldConfig();
-
-        FixTypo();
     }
 
 
@@ -262,77 +256,5 @@ public sealed class ConfigProvider : IConfigProvider
 
         _ = _dbContext.SaveChanges();
         ParameterChangedEvent?.Invoke(caller);
-    }
-
-
-
-    [Obsolete]
-    private void ConvertOldConfig()
-    {
-        if (!File.Exists(Path.Combine(ClientProperties.WorkingFolder, "config.db")) ||
-            !File.Exists(Path.Combine(ClientProperties.WorkingFolder, ClientConsts.ConfigFile)))
-        {
-            return;
-        }
-
-        FileStream fs = new(ClientConsts.ConfigFile, FileMode.Open);
-        var config = JsonSerializer.Deserialize(fs, ConfigEntityContext.Default.ConfigEntityObsolete);
-
-        if (config is null)
-        {
-            fs.Dispose();
-            return;
-        }
-
-        _ = _dbContext.Settings.Add(new() { Name = nameof(config.Theme), Value = config.Theme.ToString() });
-        _ = _dbContext.Settings.Add(new() { Name = nameof(config.SkipIntro), Value = config.SkipIntro.ToString() });
-        _ = _dbContext.Settings.Add(new() { Name = nameof(config.SkipStartup), Value = config.SkipStartup.ToString() });
-
-        _ = _dbContext.Settings.Add(new() { Name = nameof(config.UseLocalApi), Value = config.UseLocalApi.ToString() });
-        _ = _dbContext.Settings.Add(new() { Name = nameof(config.ApiPassword), Value = config.ApiPassword ?? string.Empty });
-
-
-        foreach (var addon in config.DisabledAutoloadMods)
-        {
-            _ = _dbContext.DisabledAddons.Add(new() { AddonId = addon });
-        }
-
-        foreach (var addon in config.Playtimes)
-        {
-            _ = _dbContext.Playtimes.Add(new() { AddonId = addon.Key, Playtime = addon.Value });
-        }
-
-
-        _ = _dbContext.GamePaths.Add(new() { Game = "PathDuke3D", Path = config.GamePathDuke3D });
-        _ = _dbContext.GamePaths.Add(new() { Game = "PathDukeWT", Path = config.GamePathDukeWT });
-        _ = _dbContext.GamePaths.Add(new() { Game = "PathDuke64", Path = config.GamePathDuke64 });
-        _ = _dbContext.GamePaths.Add(new() { Game = "PathWang", Path = config.GamePathWang });
-        _ = _dbContext.GamePaths.Add(new() { Game = "PathBlood", Path = config.GamePathBlood });
-        _ = _dbContext.GamePaths.Add(new() { Game = "PathRedneck", Path = config.GamePathRedneck });
-        _ = _dbContext.GamePaths.Add(new() { Game = "PathRidesAgain", Path = config.GamePathAgain });
-        _ = _dbContext.GamePaths.Add(new() { Game = "PathSlave", Path = config.GamePathSlave });
-        _ = _dbContext.GamePaths.Add(new() { Game = "PathFury", Path = config.GamePathFury });
-
-        _ = _dbContext.SaveChanges();
-
-        fs.Dispose();
-        File.Delete(Path.Combine(ClientProperties.WorkingFolder, ClientConsts.ConfigFile));
-    }
-
-    [Obsolete]
-    private void FixTypo()
-    {
-        var old = _dbContext.GamePaths.Find("PathRideaAgain");
-
-        if (old is not null)
-        {
-            var game = nameof(PathRidesAgain);
-            var path = old.Path;
-
-            _ = _dbContext.GamePaths.Remove(old);
-            _ = _dbContext.GamePaths.Add(new() { Game = game, Path = path });
-
-            _ = _dbContext.SaveChanges();
-        }
     }
 }

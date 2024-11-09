@@ -7,9 +7,9 @@ namespace Web.Blazor.Handlers;
 
 public sealed class GetAddonsHandler : IRequestHandler<GetAddonsRequest, GetAddonsResponse>
 {
-    private readonly AddonsProvider _addonsProvider;
+    private readonly DatabaseAddonsProvider _addonsProvider;
 
-    public GetAddonsHandler(AddonsProvider addonsProvider)
+    public GetAddonsHandler(DatabaseAddonsProvider addonsProvider)
     {
         _addonsProvider = addonsProvider;
     }

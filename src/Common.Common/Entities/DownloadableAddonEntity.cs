@@ -30,13 +30,7 @@ public sealed class DownloadableAddonEntity : IDownloadableAddon
     public required long FileSize { get; set; }
 
     [JsonPropertyName("IsDisabled")]
-    public required bool IsDisabled { get; set; }
-
-    [JsonPropertyName("Installs")]
-    public required int Installs { get; set; }
-
-    [JsonPropertyName("Rating")]
-    public required decimal Rating { get; set; }
+    public bool IsDisabled { get; set; }
 
     [JsonPropertyName("Dependencies")]
     public List<string>? Dependencies { get; set; }
@@ -46,6 +40,12 @@ public sealed class DownloadableAddonEntity : IDownloadableAddon
 
     [JsonPropertyName("Author")]
     public string? Author { get; set; }
+
+    [JsonPropertyName("Installs")]
+    public int? Installs { get; set; }
+
+    [JsonPropertyName("Rating")]
+    public decimal? Rating { get; set; }
 
     [JsonPropertyName("UpdateDate")]
     public DateTime UpdateDate { get; set; }
@@ -62,12 +62,17 @@ public sealed class DownloadableAddonEntity : IDownloadableAddon
     {
         get
         {
+            if (!Rating.HasValue)
+            {
+                return string.Empty;
+            }
+
             if (Rating == 0)
             {
                 return "-";
             }
 
-            return Rating.ToString("0.##");
+            return Rating.Value.ToString("0.##");
         }
     }
 

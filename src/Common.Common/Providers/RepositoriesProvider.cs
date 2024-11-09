@@ -1,9 +1,9 @@
-﻿using Common.Enums;
+﻿using Common.Entities;
+using Common.Enums;
 using Common.Helpers;
-using Common.Server.Entities;
 using CommunityToolkit.Diagnostics;
 
-namespace Common.Server.Providers;
+namespace Common.Common.Providers;
 
 public sealed class RepositoriesProvider
 {

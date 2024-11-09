@@ -1,5 +1,5 @@
-﻿using Common.Client.Api;
-using Common.Client.Helpers;
+﻿using Common.Client.Helpers;
+using Common.Client.Interfaces;
 using Common.Client.Tools;
 using Common.Entities;
 using CommunityToolkit.Diagnostics;
@@ -11,13 +11,13 @@ namespace Common.Client;
 public sealed class AppUpdateInstaller
 {
     private readonly ArchiveTools _archiveTools;
-    private readonly ApiInterface _apiInterface;
+    private readonly IApiInterface _apiInterface;
 
     private GeneralReleaseEntity? _update;
 
     public AppUpdateInstaller(
         ArchiveTools archiveTools,
-        ApiInterface apiInterface
+        IApiInterface apiInterface
         )
     {
         _archiveTools = archiveTools;

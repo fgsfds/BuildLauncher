@@ -1,22 +1,21 @@
 ﻿using Common.Entities;
 using Common.Enums;
-using Common.Server.Entities;
-using Common.Server.Providers;
 using CommunityToolkit.Diagnostics;
+using Microsoft.Extensions.Logging;
 using System.Text.Json;
 
-namespace Web.Blazor.Providers;
+namespace Common.Common.Providers;
 
 public sealed class ToolsReleasesProvider
 {
-    private readonly ILogger<ToolsReleasesProvider> _logger;
+    private readonly ILogger _logger;
     private readonly HttpClient _httpClient;
     private readonly RepositoriesProvider _repoProvider;
 
     public Dictionary<ToolEnum, GeneralReleaseEntity> ToolsReleases { get; set; }
 
     public ToolsReleasesProvider(
-        ILogger<ToolsReleasesProvider> logger,
+        ILogger logger,
         HttpClient httpClient,
         RepositoriesProvider repoProvider
         )

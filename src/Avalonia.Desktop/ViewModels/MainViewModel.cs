@@ -5,8 +5,6 @@ using Common.Client.Tools;
 using Common.Enums;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Games.Providers;
-using Ports.Installer;
-using Ports.Providers;
 
 namespace Avalonia.Desktop.ViewModels;
 
@@ -19,8 +17,6 @@ public sealed partial class MainViewModel : ObservableObject
         FilesUploader filesUploader,
         GamesProvider gamesProvider,
         AppUpdateInstaller appUpdateInstaller,
-        PortsInstallerFactory portsInstallerFactory,
-        PortsReleasesProvider portsReleasesProvider,
         ViewModelsFactory viewModelsFactory,
         GamesPathsProvider gamesPathsProvider
         )

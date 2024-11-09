@@ -15,8 +15,8 @@ public sealed partial class DownloadsViewModel : ObservableObject
 {
     public readonly IGame Game;
 
-    public readonly InstalledAddonsProvider _installedAddonsProvider;
-    public readonly DownloadableAddonsProvider _downloadableAddonsProvider;
+    private readonly InstalledAddonsProvider _installedAddonsProvider;
+    private readonly DownloadableAddonsProvider _downloadableAddonsProvider;
     private readonly ILogger _logger;
 
 
@@ -93,7 +93,7 @@ public sealed partial class DownloadsViewModel : ObservableObject
     private DownloadableAddonEntity? _selectedDownloadable;
 
     /// <summary>
-    /// Description of the selected addom
+    /// Description of the selected addon
     /// </summary>
     public string SelectedDownloadableDescription => SelectedDownloadable is null ? string.Empty : SelectedDownloadable.ToMarkdownString();
 
@@ -164,7 +164,7 @@ public sealed partial class DownloadsViewModel : ObservableObject
 
 
     /// <summary>
-    /// Update downloadables list
+    /// Update downloadable list
     /// </summary>
     [RelayCommand]
     private async Task UpdateAsync(bool? createNew)

@@ -1,17 +1,16 @@
 ﻿using Common.Entities;
 using Common.Enums;
 using Common.Helpers;
-using Common.Server.Entities;
-using Common.Server.Providers;
 using CommunityToolkit.Diagnostics;
+using Microsoft.Extensions.Logging;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 
-namespace Web.Blazor.Providers;
+namespace Common.Common.Providers;
 
 public sealed partial class PortsReleasesProvider
 {
-    private readonly ILogger<PortsReleasesProvider> _logger;
+    private readonly ILogger _logger;
     private readonly RepositoriesProvider _repoProvider;
     private readonly HttpClient _httpClient;
 
@@ -19,7 +18,7 @@ public sealed partial class PortsReleasesProvider
     public Dictionary<PortEnum, GeneralReleaseEntity>? LinuxReleases { get; set; }
 
     public PortsReleasesProvider(
-        ILogger<PortsReleasesProvider> logger,
+        ILogger logger,
         RepositoriesProvider repoProvider,
         HttpClient httpClient
         )
@@ -37,7 +36,7 @@ public sealed partial class PortsReleasesProvider
 
         foreach (var port in ports)
         {
-            if (port is PortEnum.Stub)
+            if (port is PortEnum.Stub or PortEnum.Fury)
             {
                 continue;
             }
@@ -56,8 +55,8 @@ public sealed partial class PortsReleasesProvider
                     if (doesWinExist)
                     {
                         WindowsReleases.AddOrReplace(port, winRelease);
-                    } 
-                    
+                    }
+
                     var doesLinExist = newRelease.TryGetValue(OSEnum.Linux, out var linRelease);
 
                     if (doesWinExist)

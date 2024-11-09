@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Web.Blazor.ControllersV2;
 
 [ApiController]
-[Route("api2/addons")]
+[Route("api/addons")]
 public sealed class ReleasesController : ControllerBase
 {
     private readonly IMediator _mediator;

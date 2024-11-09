@@ -46,6 +46,7 @@
                    Text="{Binding SelectedAddonPlaytime}"/>
 
 
+        <!--Rating-->
         <StackPanel Orientation="Horizontal"
                     Margin="10,5"
                     HorizontalAlignment="Center"

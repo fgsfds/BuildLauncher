@@ -1,4 +1,4 @@
-﻿using Common.Client.Api;
+﻿using Common.Client.Interfaces;
 using Common.Client.Tools;
 using Common.Enums;
 using Common.Interfaces;
@@ -10,14 +10,14 @@ public sealed class DownloadableAddonsProviderFactory
     private readonly Dictionary<GameEnum, DownloadableAddonsProvider> _list = [];
 
     private readonly ArchiveTools _archiveTools;
-    private readonly ApiInterface _apiInterface;
+    private readonly IApiInterface _apiInterface;
     private readonly InstalledAddonsProviderFactory _installedAddonsProviderFactory;
 
     public DownloadableAddonsProviderFactory(
         ArchiveTools archiveTools,
-        ApiInterface apiInterface,
+        IApiInterface apiInterface,
         InstalledAddonsProviderFactory installedAddonsProviderFactory
-    )
+        )
     {
         _archiveTools = archiveTools;
         _apiInterface = apiInterface;

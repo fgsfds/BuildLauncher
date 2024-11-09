@@ -1,4 +1,4 @@
-﻿using Common.Client.Api;
+﻿using Common.Client.Interfaces;
 using Common.Entities;
 using Common.Enums;
 using Tools.Tools;
@@ -10,12 +10,12 @@ namespace Tools.Installer;
 /// </summary>
 public sealed class ToolsReleasesProvider
 {
-    private readonly ApiInterface _apiInterface;
+    private readonly IApiInterface _apiInterface;
 
     private Dictionary<ToolEnum, GeneralReleaseEntity>? _releases;
     private readonly SemaphoreSlim _semaphore = new(1);
 
-    public ToolsReleasesProvider(ApiInterface apiInterface)
+    public ToolsReleasesProvider(IApiInterface apiInterface)
     {
         _apiInterface = apiInterface;
     }
@@ -33,7 +33,7 @@ public sealed class ToolsReleasesProvider
             _releases = await GetReleasesAsync().ConfigureAwait(false);
         }
 
-        _semaphore.Release();
+        _ = _semaphore.Release();
 
         if (_releases is null)
         {

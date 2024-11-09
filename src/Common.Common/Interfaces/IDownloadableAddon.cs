@@ -16,8 +16,8 @@ public interface IDownloadableAddon
     string Status { get; }
     string? Author { get; set; }
     string? Description { get; set; }
-    int Installs { get; set; }
-    decimal Rating { get; set; }
+    int? Installs { get; set; }
+    decimal? Rating { get; set; }
     DateTime UpdateDate { get; set; }
 
     string FileSizeString { get; }

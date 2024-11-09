@@ -17,9 +17,7 @@ public sealed class ViewModelsFactory
     private readonly GamesProvider _gamesProvider;
     private readonly IConfigProvider _config;
     private readonly PortsInstallerFactory _portsInstallerFactory;
-    private readonly ToolsInstallerFactory _toolsInstallerFactory;
     private readonly PortsProvider _portsProvider;
-    private readonly ToolsProvider _toolsProvider;
     private readonly PlaytimeProvider _playtimeProvider;
     private readonly PortsReleasesProvider _portsReleasesProvider;
     private readonly ToolsReleasesProvider _toolsReleasesProvider;
@@ -33,9 +31,7 @@ public sealed class ViewModelsFactory
         GamesProvider gamesProvider,
         IConfigProvider IConfigProvider,
         PortsInstallerFactory portsInstallerFactory,
-        ToolsInstallerFactory toolsInstallerFactory,
         PortsProvider portsProvider,
-        ToolsProvider toolsProvider,
         PlaytimeProvider playtimeProvider,
         PortsReleasesProvider portsReleasesProvider,
         ToolsReleasesProvider toolsReleasesProvider,
@@ -49,9 +45,7 @@ public sealed class ViewModelsFactory
         _gamesProvider = gamesProvider;
         _config = IConfigProvider;
         _portsInstallerFactory = portsInstallerFactory;
-        _toolsInstallerFactory = toolsInstallerFactory;
         _portsProvider = portsProvider;
-        _toolsProvider = toolsProvider;
         _playtimeProvider = playtimeProvider;
         _portsReleasesProvider = portsReleasesProvider;
         _toolsReleasesProvider = toolsReleasesProvider;

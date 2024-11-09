@@ -1,4 +1,4 @@
-﻿using Web.Blazor.Providers;
+﻿using Common.Common.Providers;
 
 namespace Web.Blazor.Tasks;
 

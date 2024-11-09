@@ -1,7 +1,6 @@
+using Common.Common.Providers;
 using Common.Entities;
 using Common.Serializable.Addon;
-using Common.Server.Entities;
-using Common.Server.Providers;
 using Database.Server;
 using Web.Blazor.Helpers;
 using Web.Blazor.Providers;
@@ -27,7 +26,6 @@ public sealed class Program
             jsonOptions.JsonSerializerOptions.TypeInfoResolverChain.Add(AddonsJsonEntityListContext.Default);
             jsonOptions.JsonSerializerOptions.TypeInfoResolverChain.Add(DownloadableAddonEntityListContext.Default);
             jsonOptions.JsonSerializerOptions.TypeInfoResolverChain.Add(GeneralReleaseEntityContext.Default);
-            jsonOptions.JsonSerializerOptions.TypeInfoResolverChain.Add(GeneralReleaseEntityObsoleteContext.Default);
             jsonOptions.JsonSerializerOptions.TypeInfoResolverChain.Add(AddonManifestContext.Default);
             jsonOptions.JsonSerializerOptions.TypeInfoResolverChain.Add(DependencyDtoContext.Default);
             jsonOptions.JsonSerializerOptions.TypeInfoResolverChain.Add(DependantAddonDtoContext.Default);
@@ -53,7 +51,7 @@ public sealed class Program
         }
 
         _ = builder.Services.AddSingleton<AppReleasesProvider>();
-        _ = builder.Services.AddSingleton<AddonsProvider>();
+        _ = builder.Services.AddSingleton<DatabaseAddonsProvider>();
         _ = builder.Services.AddSingleton<PortsReleasesProvider>();
         _ = builder.Services.AddSingleton<ToolsReleasesProvider>();
         _ = builder.Services.AddSingleton<RepositoriesProvider>();
