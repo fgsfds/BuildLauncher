@@ -13,6 +13,11 @@ public static class Consts
     public const string GitHubReleases = "https://api.github.com/repos/fgsfds/BuildLauncher/releases";
 
     /// <summary>
+    /// Link to addons.json file
+    /// </summary>
+    public const string AddonsJsonUrl = "https://raw.githubusercontent.com/fgsfds/BuildLauncher/refs/heads/master/db/addons.json";
+
+    /// <summary>
     /// Addon manifest file
     /// </summary>
     public const string AddonManifest = "addon.json";

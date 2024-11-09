@@ -3,6 +3,7 @@ using Common.Common.Helpers;
 using Common.Common.Providers;
 using Common.Entities;
 using Common.Enums;
+using Common.Helpers;
 using CommunityToolkit.Diagnostics;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -39,7 +40,7 @@ public sealed class GitHubApiInterface : IApiInterface
         {
             if (_addonsJson is null)
             {
-                var addons = await _httpClient.GetStringAsync("https://raw.githubusercontent.com/fgsfds/BuildLauncher/refs/heads/branches/githubapi/db/addons.json").ConfigureAwait(false);
+                var addons = await _httpClient.GetStringAsync(Consts.AddonsJsonUrl).ConfigureAwait(false);
 
                 JsonSerializerOptions options = new();
                 options.Converters.Add(new JsonStringEnumConverter<AddonTypeEnum>());
