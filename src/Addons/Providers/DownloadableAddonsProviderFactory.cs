@@ -17,7 +17,7 @@ public sealed class DownloadableAddonsProviderFactory
         ArchiveTools archiveTools,
         IApiInterface apiInterface,
         InstalledAddonsProviderFactory installedAddonsProviderFactory
-    )
+        )
     {
         _archiveTools = archiveTools;
         _apiInterface = apiInterface;

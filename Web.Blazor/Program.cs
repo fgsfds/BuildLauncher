@@ -51,7 +51,7 @@ public sealed class Program
         }
 
         _ = builder.Services.AddSingleton<AppReleasesProvider>();
-        _ = builder.Services.AddSingleton<AddonsProvider>();
+        _ = builder.Services.AddSingleton<DatabaseAddonsProvider>();
         _ = builder.Services.AddSingleton<PortsReleasesProvider>();
         _ = builder.Services.AddSingleton<ToolsReleasesProvider>();
         _ = builder.Services.AddSingleton<RepositoriesProvider>();

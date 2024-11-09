@@ -30,7 +30,7 @@ public sealed class DownloadableAddonEntity : IDownloadableAddon
     public required long FileSize { get; set; }
 
     [JsonPropertyName("IsDisabled")]
-    public required bool IsDisabled { get; set; }
+    public bool IsDisabled { get; set; }
 
     [JsonPropertyName("Dependencies")]
     public List<string>? Dependencies { get; set; }

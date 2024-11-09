@@ -4,6 +4,8 @@ using Common.Common.Providers;
 using Common.Entities;
 using Common.Enums;
 using CommunityToolkit.Diagnostics;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace Common.Client.Api;
 
@@ -11,21 +13,61 @@ public sealed class GitHubApiInterface : IApiInterface
 {
     private readonly PortsReleasesProvider _portsReleasesProvider;
     private readonly AppReleasesProvider _appReleasesProvider;
+    private readonly HttpClient _httpClient;
+
+    private static Dictionary<GameEnum, List<DownloadableAddonEntity>>? _addonsJson = null;
+    private SemaphoreSlim _semaphore = new(1);
 
 
     public GitHubApiInterface(
         PortsReleasesProvider portsReleasesProvider,
-        AppReleasesProvider appReleasesProvider
+        AppReleasesProvider appReleasesProvider,
+        HttpClient httpClient
         )
     {
         _portsReleasesProvider = portsReleasesProvider;
         _appReleasesProvider = appReleasesProvider;
+        _httpClient = httpClient;
     }
 
 
-    public Task<List<DownloadableAddonEntity>?> GetAddonsAsync(GameEnum gameEnum)
+    public async Task<List<DownloadableAddonEntity>?> GetAddonsAsync(GameEnum gameEnum)
     {
-        return Task.FromResult<List<DownloadableAddonEntity>?>(null);
+        await _semaphore.WaitAsync().ConfigureAwait(false);
+
+        try
+        {
+            if (_addonsJson is null)
+            {
+                var addons = await _httpClient.GetStringAsync("https://raw.githubusercontent.com/fgsfds/BuildLauncher/refs/heads/branches/githubapi/db/addons.json").ConfigureAwait(false);
+
+                JsonSerializerOptions options = new();
+                options.Converters.Add(new JsonStringEnumConverter<AddonTypeEnum>());
+                options.Converters.Add(new JsonStringEnumConverter<GameEnum>());
+                options.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+
+                _addonsJson = JsonSerializer.Deserialize<Dictionary<GameEnum, List<DownloadableAddonEntity>>>(addons, options);
+
+                if (_addonsJson is null)
+                {
+                    ThrowHelper.ThrowArgumentNullException();
+                }
+
+                return _addonsJson.TryGetValue(gameEnum, out var result) ? result : null;
+            }
+            else
+            {
+                return _addonsJson.TryGetValue(gameEnum, out var result) ? result : null;
+            }
+        }
+        catch
+        {
+            return [];
+        }
+        finally
+        {
+            _ = _semaphore.Release();
+        }
     }
 
     public async Task<GeneralReleaseEntity?> GetLatestAppReleaseAsync()
