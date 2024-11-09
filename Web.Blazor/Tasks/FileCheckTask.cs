@@ -5,14 +5,14 @@ namespace Web.Blazor.Tasks;
 
 public sealed class FileCheckTask : IHostedService, IDisposable
 {
-    private readonly ILogger<AppReleasesTask> _logger;
+    private readonly ILogger<FileCheckTask> _logger;
     private readonly DatabaseContextFactory _dbContextFactory;
     private readonly HttpClient _httpClient;
 
     private Timer _timer;
 
     public FileCheckTask(
-        ILogger<AppReleasesTask> logger,
+        ILogger<FileCheckTask> logger,
         DatabaseContextFactory dbContextFactory,
         HttpClient httpClient
         )
@@ -54,13 +54,13 @@ public sealed class FileCheckTask : IHostedService, IDisposable
 
                 if (!result.IsSuccessStatusCode)
                 {
-                    _logger.LogError($"File doesn't exist or unavailable: {file}");
+                    _logger.LogError($"File doesn't exist or unavailable: {file.AddonId}");
                     continue;
                 }
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Error while checking file: {file}");
+                _logger.LogError($"Error while checking file: {file.AddonId}");
                 _logger.LogError(ex.ToString());
             }
 
