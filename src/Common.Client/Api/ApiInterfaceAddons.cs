@@ -1,10 +1,10 @@
 ﻿using Api.Common.Requests;
 using Api.Common.Responses;
+using Common.Client.Helpers;
 using Common.Client.Interfaces;
 using Common.Entities;
 using Common.Enums;
 using System.Net.Http.Json;
-using System.Text.Json;
 using System.Web;
 
 namespace Common.Client.Api;
@@ -31,7 +31,8 @@ public sealed partial class ApiInterface
         {
             GetAddonsRequest message = new()
             {
-                GameEnum = gameEnum
+                GameEnum = gameEnum,
+                //ClientVersion = ClientProperties.CurrentVersion
             };
 
             using HttpRequestMessage requestMessage = new(HttpMethod.Get, $"{ApiUrl}/addons");
@@ -59,6 +60,40 @@ public sealed partial class ApiInterface
         }
     }
 
+    public async Task<Dictionary<string, decimal>?> GetRatingsAsync()
+    {
+        try
+        {
+            GetRatingsRequest message = new()
+            {
+                ClientVersion = ClientProperties.CurrentVersion
+            };
+
+            using HttpRequestMessage requestMessage = new(HttpMethod.Get, $"{ApiUrl}/addons/ratings");
+            requestMessage.Content = JsonContent.Create(message);
+
+            var response = await _httpClient.SendAsync(requestMessage).ConfigureAwait(false);
+
+            if (response is null || !response.IsSuccessStatusCode)
+            {
+                return null;
+            }
+
+            var ratings = await response.Content.ReadFromJsonAsync<GetRatingsResponse>().ConfigureAwait(false);
+
+            if (ratings is null)
+            {
+                return null;
+            }
+
+            return ratings.Ratings;
+        }
+        catch (Exception)
+        {
+            return null;
+        }
+    }
+
     public async Task<decimal?> ChangeScoreAsync(string addonId, sbyte score, bool isNew)
     {
         try
@@ -74,27 +109,6 @@ public sealed partial class ApiInterface
             var newScore = decimal.TryParse(responseStr, out var newScoreInt);
 
             return newScore ? newScoreInt : null;
-        }
-        catch (Exception)
-        {
-            return null;
-        }
-    }
-
-    public async Task<Dictionary<string, decimal>?> GetScoresAsync()
-    {
-        try
-        {
-            var response = await _httpClient.GetStringAsync($"{ApiUrl}/addons/rating").ConfigureAwait(false);
-
-            if (string.IsNullOrWhiteSpace(response))
-            {
-                return null;
-            }
-
-            var addons = JsonSerializer.Deserialize<Dictionary<string, decimal>>(response);
-
-            return addons;
         }
         catch (Exception)
         {

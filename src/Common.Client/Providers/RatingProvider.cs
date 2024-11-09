@@ -37,7 +37,7 @@ public sealed class RatingProvider
 
     private async Task CreateCacheAsync()
     {
-        var cache = await _apiInterface.GetScoresAsync().ConfigureAwait(false);
+        var cache = await _apiInterface.GetRatingsAsync().ConfigureAwait(false);
 
         if (cache is null)
         {

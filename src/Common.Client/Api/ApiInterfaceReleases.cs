@@ -16,7 +16,8 @@ public sealed partial class ApiInterface
         {
             GetAppReleaseRequest message = new()
             {
-                OSEnum = CommonProperties.OSEnum
+                OSEnum = CommonProperties.OSEnum,
+                ClientVersion = ClientProperties.CurrentVersion
             };
 
             using HttpRequestMessage requestMessage = new(HttpMethod.Get, $"{ApiUrl}/releases/app");
@@ -50,7 +51,8 @@ public sealed partial class ApiInterface
         {
             GetPortsReleasesRequest message = new()
             {
-                OSEnum = CommonProperties.OSEnum
+                OSEnum = CommonProperties.OSEnum,
+                ClientVersion = ClientProperties.CurrentVersion
             };
 
             using HttpRequestMessage requestMessage = new(HttpMethod.Get, $"{ApiUrl}/releases/ports");
