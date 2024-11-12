@@ -18,7 +18,7 @@ public sealed partial class ModsViewModel : RightPanelViewModel, IPortsButtonCon
 {
     public readonly IGame Game;
 
-    private readonly GamesProvider _gamesProvider;
+    private readonly InstalledGamesProvider _gamesProvider;
     private readonly InstalledAddonsProvider _installedAddonsProvider;
     private readonly DownloadableAddonsProvider _downloadableAddonsProvider;
 
@@ -26,7 +26,7 @@ public sealed partial class ModsViewModel : RightPanelViewModel, IPortsButtonCon
     [Obsolete($"Don't create directly. Use {nameof(ViewModelsFactory)}.")]
     public ModsViewModel(
         IGame game,
-        GamesProvider gamesProvider,
+        InstalledGamesProvider gamesProvider,
         PlaytimeProvider playtimeProvider,
         RatingProvider ratingProvider,
         InstalledAddonsProviderFactory installedAddonsProviderFactory,

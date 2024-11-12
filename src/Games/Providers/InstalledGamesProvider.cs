@@ -9,10 +9,10 @@ namespace Games.Providers;
 /// <summary>
 /// Class that provides singleton instances of game types
 /// </summary>
-public sealed class GamesProvider
+public sealed class InstalledGamesProvider
 {
     public delegate void GameChanged(GameEnum game);
-    public event GameChanged GameChangedEvent;
+    public event GameChanged? GameChangedEvent;
 
     private readonly IConfigProvider _config;
 
@@ -40,7 +40,7 @@ public sealed class GamesProvider
     public bool IsTekWarInstalled => _tekwar.IsBaseGameInstalled;
 
 
-    public GamesProvider(IConfigProvider config)
+    public InstalledGamesProvider(IConfigProvider config)
     {
         _config = config;
 

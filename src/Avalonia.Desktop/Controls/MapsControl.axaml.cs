@@ -27,13 +27,17 @@ public sealed partial class MapsControl : UserControl
     public MapsControl()
     {
         InitializeComponent();
+
+        _supportedPorts = null!;
+        _installedAddonsProvider = null!;
+        _viewModel = null!;
     }
 
     /// <summary>
     /// Initialize control
     /// </summary>
     public void InitializeControl(
-        PortsProvider portsProvider,
+        InstalledPortsProvider portsProvider,
         InstalledAddonsProviderFactory installedAddonsProviderFactory,
         IConfigProvider configProvider
         )

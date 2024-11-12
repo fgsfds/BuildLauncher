@@ -16,6 +16,9 @@ public sealed partial class ModsControl : UserControl
     public ModsControl()
     {
         InitializeComponent();
+
+        _viewModel = null!;
+        _installedAddonsProvider = null!;
     }
 
     /// <summary>

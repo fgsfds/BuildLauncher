@@ -24,10 +24,7 @@ public static class ClientBindings
         _ = container.AddTransient<ArchiveTools>();
         _ = container.AddSingleton<FilesUploader>();
 
-        _ = container.AddSingleton<AppReleasesProvider>();
-        _ = container.AddSingleton<PortsReleasesProvider>();
-        _ = container.AddSingleton<RepositoriesProvider>();
-        _ = container.AddSingleton<ToolsReleasesProvider>();
+        _ = container.AddSingleton<RepoAppReleasesRetriever>();
 
         if (isDesigner)
         {

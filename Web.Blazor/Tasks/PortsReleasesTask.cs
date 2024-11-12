@@ -1,15 +1,16 @@
-﻿using Common.Common.Providers;
-using Web.Blazor.Providers;
+﻿using Common.Common.Interfaces;
+using Common.Entities;
+using Common.Enums;
 
 namespace Web.Blazor.Tasks;
 
 public sealed class PortsReleasesTask : IHostedService, IDisposable
 {
-    private readonly PortsReleasesProvider _portsReleasesProvider;
+    private readonly IRetriever<Dictionary<PortEnum, GeneralReleaseEntity>?> _portsReleasesProvider;
 
-    private Timer _timer;
+    private Timer? _timer;
 
-    public PortsReleasesTask(PortsReleasesProvider portsReleasesProvider)
+    public PortsReleasesTask(IRetriever<Dictionary<PortEnum, GeneralReleaseEntity>?> portsReleasesProvider)
     {
         _portsReleasesProvider = portsReleasesProvider;
     }
@@ -28,18 +29,18 @@ public sealed class PortsReleasesTask : IHostedService, IDisposable
 
     private void DoWork(object? state)
     {
-        _ = _portsReleasesProvider.GetLatestReleasesAsync();
+        _ = _portsReleasesProvider.RetrieveAsync();
     }
 
     public Task StopAsync(CancellationToken stoppingToken)
     {
-        _ = _timer.Change(Timeout.Infinite, 0);
+        _ = _timer?.Change(Timeout.Infinite, 0);
 
         return Task.CompletedTask;
     }
 
     public void Dispose()
     {
-        _timer.Dispose();
+        _timer?.Dispose();
     }
 }

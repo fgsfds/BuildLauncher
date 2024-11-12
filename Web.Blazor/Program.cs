@@ -1,5 +1,7 @@
+using Common.Common.Interfaces;
 using Common.Common.Providers;
 using Common.Entities;
+using Common.Enums;
 using Common.Serializable.Addon;
 using Database.Server;
 using Web.Blazor.Helpers;
@@ -50,11 +52,9 @@ public sealed class Program
             ServerProperties.IsDeveloperMode = true;
         }
 
-        _ = builder.Services.AddSingleton<AppReleasesProvider>();
-        _ = builder.Services.AddSingleton<DatabaseAddonsProvider>();
-        _ = builder.Services.AddSingleton<PortsReleasesProvider>();
-        _ = builder.Services.AddSingleton<ToolsReleasesProvider>();
-        _ = builder.Services.AddSingleton<RepositoriesProvider>();
+        _ = builder.Services.AddSingleton<RepoAppReleasesRetriever>();
+        _ = builder.Services.AddSingleton<DatabaseAddonsRetriever>();
+        _ = builder.Services.AddSingleton<IRetriever<Dictionary<PortEnum, GeneralReleaseEntity>?>>();
 
         _ = builder.Services.AddSingleton<HttpClient>(CreateHttpClient);
         _ = builder.Services.AddSingleton<S3Client>();

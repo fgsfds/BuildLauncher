@@ -4,20 +4,20 @@ using CommunityToolkit.Diagnostics;
 using Microsoft.Extensions.Logging;
 using System.Text.Json;
 
-namespace Common.Common.Providers;
+namespace Tools.Providers;
 
-public sealed class ToolsReleasesProvider
+internal sealed class ToolsReleasesRepoRetriever
 {
     private readonly ILogger _logger;
     private readonly HttpClient _httpClient;
-    private readonly RepositoriesProvider _repoProvider;
+    private readonly ToolsRepositoriesProvider _repoProvider;
 
     public Dictionary<ToolEnum, GeneralReleaseEntity> ToolsReleases { get; set; }
 
-    public ToolsReleasesProvider(
+    public ToolsReleasesRepoRetriever(
         ILogger logger,
         HttpClient httpClient,
-        RepositoriesProvider repoProvider
+        ToolsRepositoriesProvider repoProvider
         )
     {
         _logger = logger;

@@ -5,7 +5,7 @@ namespace Tools.Tools;
 
 public sealed class XMapEdit : BaseTool
 {
-    private readonly GamesProvider _gamesProvider;
+    private readonly InstalledGamesProvider _gamesProvider;
 
     /// <inheritdoc/>
     public override string Exe => "xmapedit.exe";
@@ -23,7 +23,7 @@ public sealed class XMapEdit : BaseTool
     public override bool CanBeLaunched => _gamesProvider.IsBloodInstalled;
 
 
-    public XMapEdit(GamesProvider gamesProvider)
+    public XMapEdit(InstalledGamesProvider gamesProvider)
     {
         _gamesProvider = gamesProvider;
     }

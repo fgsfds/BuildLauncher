@@ -27,7 +27,7 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
 
     private bool _isCacheUpdating = false;
 
-    public event AddonChanged AddonsChangedEvent;
+    public event AddonChanged? AddonsChangedEvent;
 
     [Obsolete($"Don't create directly. Use {nameof(InstalledAddonsProvider)}.")]
     public InstalledAddonsProvider(
@@ -398,10 +398,12 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
                 return null;
             }
 
+            using var stream = manifestFile.OpenEntryStream();
+
             var manifest = JsonSerializer.Deserialize(
-                manifestFile.OpenEntryStream(),
+                stream,
                 AddonManifestContext.Default.AddonDto
-                )!;
+                );
 
             if (manifest is null)
             {
@@ -886,8 +888,10 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
         {
             try
             {
+                using var stream = addonJson.OpenEntryStream();
+
                 addonDto = JsonSerializer.Deserialize(
-                    addonJson.OpenEntryStream(),
+                    stream,
                     AddonManifestContext.Default.AddonDto
                     )!;
 
@@ -934,7 +938,6 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
         }
 
         archive.ExtractToDirectory(unpackTo);
-        archive.Dispose();
 
         File.Delete(pathToFile);
 

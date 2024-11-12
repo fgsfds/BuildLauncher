@@ -22,7 +22,7 @@ public sealed partial class PortViewModel : ObservableObject
     private readonly ILogger _logger;
 
     public delegate void PortChanged(PortEnum portEnum);
-    public event PortChanged PortChangedEvent;
+    public event PortChanged? PortChangedEvent;
 
 
     [Obsolete($"Don't create directly. Use {nameof(ViewModelsFactory)}.")]
@@ -35,6 +35,7 @@ public sealed partial class PortViewModel : ObservableObject
     {
         _installerFactory = installerFactory;
         _portsReleasesProvider = portsReleasesProvider;
+        _logger = logger;
         Port = port;
     }
 

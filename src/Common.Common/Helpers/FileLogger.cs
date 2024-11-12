@@ -70,7 +70,7 @@ public sealed class FileLoggerProvider : ILoggerProvider
 
 public static class FileLoggerFactory
 {
-    private static FileStream _logFileWriter;
+    private static FileStream? _logFileWriter;
 
     public static ILogger Create(string logFilePath)
     {

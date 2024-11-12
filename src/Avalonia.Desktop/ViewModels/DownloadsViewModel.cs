@@ -127,7 +127,7 @@ public sealed partial class DownloadsViewModel : ObservableObject
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(DownloadableList))]
     [NotifyCanExecuteChangedFor(nameof(ClearSearchBoxCommand))]
-    private string _searchBoxText;
+    private string _searchBoxText = string.Empty;
 
     #endregion
 

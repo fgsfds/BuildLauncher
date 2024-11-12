@@ -7,14 +7,14 @@ using System.Text.Json;
 
 namespace Common.Common.Providers;
 
-public sealed class AppReleasesProvider
+public sealed class RepoAppReleasesRetriever
 {
     private readonly ILogger _logger;
     private readonly HttpClient _httpClient;
 
     public Dictionary<OSEnum, GeneralReleaseEntity> AppRelease { get; private set; } = [];
 
-    public AppReleasesProvider(
+    public RepoAppReleasesRetriever(
         ILogger logger,
         HttpClient httpClient
         )

@@ -33,7 +33,7 @@ public sealed class ConfigProviderFake : IConfigProvider
     public bool SkipStartup { get; set; } = false;
     public bool UseLocalApi { get; set; } = true;
 
-    public event ParameterChanged ParameterChangedEvent;
+    public event ParameterChanged? ParameterChangedEvent;
 
     public void AddPlaytime(string addonId, TimeSpan playTime) => ThrowHelper.ThrowNotSupportedException();
 

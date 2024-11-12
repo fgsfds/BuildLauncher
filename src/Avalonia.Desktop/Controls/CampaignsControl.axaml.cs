@@ -26,13 +26,17 @@ public sealed partial class CampaignsControl : UserControl
     public CampaignsControl()
     {
         InitializeComponent();
+
+        _supportedPorts = null!;
+        _viewModel = null!;
+        _installedAddonsProvider = null!;
     }
 
     /// <summary>
     /// Initialize control
     /// </summary>
     public void InitializeControl(
-        PortsProvider portsProvider,
+        InstalledPortsProvider portsProvider,
         InstalledAddonsProviderFactory installedAddonsProviderFactory,
         IConfigProvider configProvider
         )

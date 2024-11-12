@@ -23,7 +23,7 @@ public sealed class DownloadableAddonsProvider : IDownloadableAddonsProvider
     private Dictionary<AddonTypeEnum, Dictionary<AddonVersion, IDownloadableAddon>>? _cache;
     private static readonly SemaphoreSlim _semaphore = new(1);
 
-    public event AddonChanged AddonDownloadedEvent;
+    public event AddonChanged? AddonDownloadedEvent;
 
     /// <inheritdoc/>
     public Progress<float> Progress { get; private set; }

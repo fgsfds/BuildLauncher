@@ -7,9 +7,9 @@ namespace Web.Blazor.Handlers;
 
 public sealed class GetAppReleaseHandler : IRequestHandler<GetAppReleaseRequest, GetAppReleaseResponse?>
 {
-    private readonly AppReleasesProvider _appReleasesProvider;
+    private readonly RepoAppReleasesRetriever _appReleasesProvider;
 
-    public GetAppReleaseHandler(AppReleasesProvider appReleasesProvider)
+    public GetAppReleaseHandler(RepoAppReleasesRetriever appReleasesProvider)
     {
         _appReleasesProvider = appReleasesProvider;
     }

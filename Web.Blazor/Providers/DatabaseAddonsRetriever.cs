@@ -8,15 +8,15 @@ using System.Diagnostics;
 
 namespace Web.Blazor.Providers;
 
-public sealed class DatabaseAddonsProvider
+public sealed class DatabaseAddonsRetriever
 {
-    private readonly ILogger<DatabaseAddonsProvider> _logger;
+    private readonly ILogger<DatabaseAddonsRetriever> _logger;
     private readonly DatabaseContextFactory _dbContextFactory;
 
     public GeneralReleaseEntity? AppRelease { get; private set; }
 
-    public DatabaseAddonsProvider(
-        ILogger<DatabaseAddonsProvider> logger,
+    public DatabaseAddonsRetriever(
+        ILogger<DatabaseAddonsRetriever> logger,
         DatabaseContextFactory dbContextFactory)
     {
         _logger = logger;

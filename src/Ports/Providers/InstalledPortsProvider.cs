@@ -10,7 +10,7 @@ namespace Ports.Providers;
 /// <summary>
 /// Class that provides singleton instances of port types
 /// </summary>
-public sealed class PortsProvider
+public sealed class InstalledPortsProvider
 {
     private readonly List<BasePort> _ports;
 
@@ -25,7 +25,7 @@ public sealed class PortsProvider
     public Fury Fury { get; init; }
 
 
-    public PortsProvider(IConfigProvider config)
+    public InstalledPortsProvider(IConfigProvider config)
     {
         if (!Directory.Exists(ClientProperties.PortsFolderPath))
         {

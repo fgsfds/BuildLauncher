@@ -17,7 +17,7 @@ public sealed class ToolsProvider
     public XMapEdit XMapEdit { get; init; }
 
 
-    public ToolsProvider(GamesProvider gamesProvider)
+    public ToolsProvider(InstalledGamesProvider gamesProvider)
     {
         if (!Directory.Exists(ClientProperties.ToolsFolderPath))
         {

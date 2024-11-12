@@ -7,7 +7,7 @@ public static class ProvidersBindings
 {
     public static void Load(ServiceCollection container)
     {
-        container.AddSingleton<GamesProvider>();
-        container.AddSingleton<GamesPathsProvider>();
+        _ = container.AddSingleton<InstalledGamesProvider>();
+        _ = container.AddSingleton<GamesPathsProvider>();
     }
 }

@@ -7,9 +7,9 @@ namespace Web.Blazor.Handlers;
 
 public sealed class GetRatingsHandler : IRequestHandler<GetRatingsRequest, GetRatingsResponse>
 {
-    private readonly DatabaseAddonsProvider _addonsProvider;
+    private readonly DatabaseAddonsRetriever _addonsProvider;
 
-    public GetRatingsHandler(DatabaseAddonsProvider addonsProvider)
+    public GetRatingsHandler(DatabaseAddonsRetriever addonsProvider)
     {
         _addonsProvider = addonsProvider;
     }
@@ -18,8 +18,8 @@ public sealed class GetRatingsHandler : IRequestHandler<GetRatingsRequest, GetRa
     {
         var ratings = _addonsProvider.GetRating();
 
-        GetRatingsResponse response = new() 
-        { 
+        GetRatingsResponse response = new()
+        {
             Ratings = ratings
         };
 

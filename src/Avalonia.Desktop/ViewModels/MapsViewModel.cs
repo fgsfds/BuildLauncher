@@ -20,7 +20,7 @@ public sealed partial class MapsViewModel : RightPanelViewModel, IPortsButtonCon
 {
     public readonly IGame Game;
 
-    private readonly GamesProvider _gamesProvider;
+    private readonly InstalledGamesProvider _gamesProvider;
     private readonly IConfigProvider _config;
     private readonly PlaytimeProvider _playtimeProvider;
     private readonly InstalledAddonsProvider _installedAddonsProvider;
@@ -92,7 +92,7 @@ public sealed partial class MapsViewModel : RightPanelViewModel, IPortsButtonCon
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(MapsList))]
     [NotifyCanExecuteChangedFor(nameof(ClearSearchBoxCommand))]
-    private string _searchBoxText;
+    private string _searchBoxText = string.Empty;
 
     /// <summary>
     /// Is form in progress
@@ -108,7 +108,7 @@ public sealed partial class MapsViewModel : RightPanelViewModel, IPortsButtonCon
     [Obsolete($"Don't create directly. Use {nameof(ViewModelsFactory)}.")]
     public MapsViewModel(
         IGame game,
-        GamesProvider gamesProvider,
+        InstalledGamesProvider gamesProvider,
         IConfigProvider config,
         PlaytimeProvider playtimeProvider,
         RatingProvider ratingProvider,

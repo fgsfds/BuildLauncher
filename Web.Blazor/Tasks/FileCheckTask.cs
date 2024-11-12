@@ -9,7 +9,7 @@ public sealed class FileCheckTask : IHostedService, IDisposable
     private readonly DatabaseContextFactory _dbContextFactory;
     private readonly HttpClient _httpClient;
 
-    private Timer _timer;
+    private Timer? _timer;
 
     public FileCheckTask(
         ILogger<FileCheckTask> logger,
@@ -71,13 +71,13 @@ public sealed class FileCheckTask : IHostedService, IDisposable
 
     public Task StopAsync(CancellationToken stoppingToken)
     {
-        _ = _timer.Change(Timeout.Infinite, 0);
+        _ = _timer?.Change(Timeout.Infinite, 0);
 
         return Task.CompletedTask;
     }
 
     public void Dispose()
     {
-        _timer.Dispose();
+        _timer?.Dispose();
     }
 }

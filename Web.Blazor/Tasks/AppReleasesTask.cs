@@ -4,11 +4,11 @@ namespace Web.Blazor.Tasks;
 
 public sealed class AppReleasesTask : IHostedService, IDisposable
 {
-    private readonly AppReleasesProvider _appReleasesProvider;
+    private readonly RepoAppReleasesRetriever _appReleasesProvider;
 
-    private Timer _timer;
+    private Timer? _timer;
 
-    public AppReleasesTask(AppReleasesProvider appReleasesProvider)
+    public AppReleasesTask(RepoAppReleasesRetriever appReleasesProvider)
     {
         _appReleasesProvider = appReleasesProvider;
     }
@@ -32,13 +32,13 @@ public sealed class AppReleasesTask : IHostedService, IDisposable
 
     public Task StopAsync(CancellationToken stoppingToken)
     {
-        _ = _timer.Change(Timeout.Infinite, 0);
+        _ = _timer?.Change(Timeout.Infinite, 0);
 
         return Task.CompletedTask;
     }
 
     public void Dispose()
     {
-        _timer.Dispose();
+        _timer?.Dispose();
     }
 }

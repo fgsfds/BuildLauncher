@@ -1,4 +1,6 @@
-﻿using Common.Entities;
+﻿using Common.Common.Helpers;
+using Common.Common.Interfaces;
+using Common.Entities;
 using Common.Enums;
 using Common.Helpers;
 using CommunityToolkit.Diagnostics;
@@ -6,33 +8,28 @@ using Microsoft.Extensions.Logging;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 
-namespace Common.Common.Providers;
+namespace Ports.Providers;
 
-public sealed partial class PortsReleasesProvider
+internal sealed partial class PortsReleasesRepoRetriever : IRetriever<Dictionary<PortEnum, GeneralReleaseEntity>?>
 {
     private readonly ILogger _logger;
-    private readonly RepositoriesProvider _repoProvider;
     private readonly HttpClient _httpClient;
 
-    public Dictionary<PortEnum, GeneralReleaseEntity>? WindowsReleases { get; set; }
-    public Dictionary<PortEnum, GeneralReleaseEntity>? LinuxReleases { get; set; }
-
-    public PortsReleasesProvider(
+    public PortsReleasesRepoRetriever(
         ILogger logger,
-        RepositoriesProvider repoProvider,
         HttpClient httpClient
         )
     {
-        _repoProvider = repoProvider;
         _logger = logger;
         _httpClient = httpClient;
     }
 
-    public async Task GetLatestReleasesAsync()
+    public async Task<Dictionary<PortEnum, GeneralReleaseEntity>?> RetrieveAsync()
     {
         _logger.LogInformation("Looking for new ports releases");
 
         var ports = Enum.GetValues<PortEnum>();
+        Dictionary<PortEnum, GeneralReleaseEntity>? result = [];
 
         foreach (var port in ports)
         {
@@ -43,25 +40,13 @@ public sealed partial class PortsReleasesProvider
 
             try
             {
-                var newRelease = await GetLatestReleaseAsync(port).ConfigureAwait(false);
+                var releases = await GetLatestReleaseAsync(port).ConfigureAwait(false);
 
-                WindowsReleases ??= [];
-                LinuxReleases ??= [];
-
-                if (newRelease is not null)
+                if (releases is not null)
                 {
-                    var doesWinExist = newRelease.TryGetValue(OSEnum.Windows, out var winRelease);
-
-                    if (doesWinExist)
+                    if (releases.TryGetValue(CommonProperties.OSEnum, out var winRelease))
                     {
-                        WindowsReleases.AddOrReplace(port, winRelease);
-                    }
-
-                    var doesLinExist = newRelease.TryGetValue(OSEnum.Linux, out var linRelease);
-
-                    if (doesWinExist)
-                    {
-                        LinuxReleases.AddOrReplace(port, linRelease);
+                        result.AddOrReplace(port, winRelease);
                     }
                 }
             }
@@ -71,6 +56,8 @@ public sealed partial class PortsReleasesProvider
                 _logger.LogError(ex.ToString());
             }
         }
+
+        return result;
     }
 
     /// <summary>
@@ -79,7 +66,7 @@ public sealed partial class PortsReleasesProvider
     /// <param name="portEnum">Port</param>
     private async Task<Dictionary<OSEnum, GeneralReleaseEntity>?> GetLatestReleaseAsync(PortEnum portEnum)
     {
-        var repo = _repoProvider.GetPortRepo(portEnum);
+        var repo = PortsRepositoriesProvider.GetPortRepo(portEnum);
 
         Dictionary<OSEnum, GeneralReleaseEntity>? result = null;
 

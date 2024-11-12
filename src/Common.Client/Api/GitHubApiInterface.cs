@@ -1,5 +1,6 @@
 ﻿using Common.Client.Interfaces;
 using Common.Common.Helpers;
+using Common.Common.Interfaces;
 using Common.Common.Providers;
 using Common.Entities;
 using Common.Enums;
@@ -12,8 +13,8 @@ namespace Common.Client.Api;
 
 public sealed class GitHubApiInterface : IApiInterface
 {
-    private readonly PortsReleasesProvider _portsReleasesProvider;
-    private readonly AppReleasesProvider _appReleasesProvider;
+    private readonly IRetriever<Dictionary<PortEnum, GeneralReleaseEntity>?> _portsReleasesRetriever;
+    private readonly RepoAppReleasesRetriever _appReleasesProvider;
     private readonly HttpClient _httpClient;
 
     private static Dictionary<GameEnum, List<DownloadableAddonEntity>>? _addonsJson = null;
@@ -21,12 +22,12 @@ public sealed class GitHubApiInterface : IApiInterface
 
 
     public GitHubApiInterface(
-        PortsReleasesProvider portsReleasesProvider,
-        AppReleasesProvider appReleasesProvider,
+        IRetriever<Dictionary<PortEnum, GeneralReleaseEntity>?> portsReleasesProvider,
+        RepoAppReleasesRetriever appReleasesProvider,
         HttpClient httpClient
         )
     {
-        _portsReleasesProvider = portsReleasesProvider;
+        _portsReleasesRetriever = portsReleasesProvider;
         _appReleasesProvider = appReleasesProvider;
         _httpClient = httpClient;
     }
@@ -42,12 +43,7 @@ public sealed class GitHubApiInterface : IApiInterface
             {
                 var addons = await _httpClient.GetStringAsync(Consts.AddonsJsonUrl).ConfigureAwait(false);
 
-                JsonSerializerOptions options = new();
-                options.Converters.Add(new JsonStringEnumConverter<AddonTypeEnum>());
-                options.Converters.Add(new JsonStringEnumConverter<GameEnum>());
-                options.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
-
-                _addonsJson = JsonSerializer.Deserialize<Dictionary<GameEnum, List<DownloadableAddonEntity>>>(addons, options);
+                _addonsJson = JsonSerializer.Deserialize(addons, AddonsListContext.Default.DictionaryGameEnumListDownloadableAddonEntity);
 
                 if (_addonsJson is null)
                 {
@@ -82,14 +78,9 @@ public sealed class GitHubApiInterface : IApiInterface
 
     public async Task<Dictionary<PortEnum, GeneralReleaseEntity>?> GetLatestPortsReleasesAsync()
     {
-        await _portsReleasesProvider.GetLatestReleasesAsync().ConfigureAwait(false);
+        var result = await _portsReleasesRetriever.RetrieveAsync().ConfigureAwait(false);
 
-        return CommonProperties.OSEnum switch
-        {
-            OSEnum.Windows => _portsReleasesProvider.WindowsReleases,
-            OSEnum.Linux => _portsReleasesProvider.LinuxReleases,
-            _ => ThrowHelper.ThrowNotSupportedException<Dictionary<PortEnum, GeneralReleaseEntity>?>(CommonProperties.OSEnum.ToString())
-        };
+        return result;
     }
 
     public Task<string?> GetSignedUrlAsync(string path)
@@ -112,3 +103,15 @@ public sealed class GitHubApiInterface : IApiInterface
 
     #endregion
 }
+
+
+[JsonSourceGenerationOptions(
+    WriteIndented = true,
+    DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+    Converters = [
+        typeof(JsonStringEnumConverter<GameEnum>),
+        typeof(JsonStringEnumConverter<AddonTypeEnum>)
+        ]
+)]
+[JsonSerializable(typeof(Dictionary<GameEnum, List<DownloadableAddonEntity>>))]
+public sealed partial class AddonsListContext : JsonSerializerContext;

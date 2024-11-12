@@ -7,7 +7,7 @@ namespace Tools.Tools;
 
 public sealed class Mapster32 : BaseTool
 {
-    private readonly GamesProvider _gamesProvider;
+    private readonly InstalledGamesProvider _gamesProvider;
 
     /// <inheritdoc/>
     public override string Exe => "mapster32.exe";
@@ -29,7 +29,7 @@ public sealed class Mapster32 : BaseTool
 
     public override string InstallText => "Install EDuke32\nfrom Ports tab";
 
-    public Mapster32(GamesProvider gamesProvider)
+    public Mapster32(InstalledGamesProvider gamesProvider)
     {
         _gamesProvider = gamesProvider;
     }

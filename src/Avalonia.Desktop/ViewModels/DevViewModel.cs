@@ -24,7 +24,7 @@ public sealed partial class DevViewModel : ObservableObject
 {
     private readonly IConfigProvider _config;
     private readonly FilesUploader _filesUploader;
-    private readonly GamesProvider _gamesProvider;
+    private readonly InstalledGamesProvider _gamesProvider;
 
     private readonly List<string> _forbiddenNames =
         [
@@ -47,10 +47,11 @@ public sealed partial class DevViewModel : ObservableObject
         "cryptic.ini"
         ];
 
+
     public DevViewModel(
         IConfigProvider config,
         FilesUploader filesUploader,
-        GamesProvider gamesProvider
+        InstalledGamesProvider gamesProvider
         )
     {
         _config = config;
@@ -129,9 +130,9 @@ public sealed partial class DevViewModel : ObservableObject
     public bool AreBloodPropertiesVisible => IsBloodSelected;
 
     [ObservableProperty]
-    private string _addonId;
+    private string _addonId = string.Empty;
     [ObservableProperty]
-    private string _addonVersion;
+    private string _addonVersion = string.Empty;
     [ObservableProperty]
     private string? _addonAuthor;
     [ObservableProperty]
@@ -186,7 +187,7 @@ public sealed partial class DevViewModel : ObservableObject
     private bool _isLightingSelected;
 
     [ObservableProperty]
-    private string _addonTitle;
+    private string _addonTitle = string.Empty;
     partial void OnAddonTitleChanged(string value)
     {
         StringBuilder sb = new(value.Length);

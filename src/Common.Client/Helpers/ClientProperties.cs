@@ -1,5 +1,4 @@
-﻿using Common.Enums;
-using CommunityToolkit.Diagnostics;
+﻿using CommunityToolkit.Diagnostics;
 using System.Diagnostics;
 using System.Reflection;
 using System.Runtime.InteropServices;

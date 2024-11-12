@@ -8,16 +8,15 @@ using Ports.Installer;
 using Ports.Ports;
 using Ports.Providers;
 using Tools.Installer;
-using Tools.Providers;
 
 namespace Avalonia.Desktop.ViewModels;
 
 public sealed class ViewModelsFactory
 {
-    private readonly GamesProvider _gamesProvider;
+    private readonly InstalledGamesProvider _gamesProvider;
     private readonly IConfigProvider _config;
     private readonly PortsInstallerFactory _portsInstallerFactory;
-    private readonly PortsProvider _portsProvider;
+    private readonly InstalledPortsProvider _portsProvider;
     private readonly PlaytimeProvider _playtimeProvider;
     private readonly PortsReleasesProvider _portsReleasesProvider;
     private readonly ToolsReleasesProvider _toolsReleasesProvider;
@@ -28,10 +27,10 @@ public sealed class ViewModelsFactory
     private readonly ILogger _logger;
 
     public ViewModelsFactory(
-        GamesProvider gamesProvider,
+        InstalledGamesProvider gamesProvider,
         IConfigProvider IConfigProvider,
         PortsInstallerFactory portsInstallerFactory,
-        PortsProvider portsProvider,
+        InstalledPortsProvider portsProvider,
         PlaytimeProvider playtimeProvider,
         PortsReleasesProvider portsReleasesProvider,
         ToolsReleasesProvider toolsReleasesProvider,

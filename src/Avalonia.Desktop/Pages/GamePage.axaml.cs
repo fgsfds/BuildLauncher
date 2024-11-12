@@ -23,7 +23,7 @@ public sealed partial class GamePage : UserControl
     /// </summary>
     public void InitializeControl(
         GameEnum gameEnum,
-        PortsProvider portsProvider,
+        InstalledPortsProvider portsProvider,
         ViewModelsFactory vmFactory,
         InstalledAddonsProviderFactory installedAddonsProviderFactory,
         IConfigProvider configProvider

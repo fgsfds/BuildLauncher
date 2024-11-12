@@ -5,7 +5,7 @@ dotnet_diagnostic.IDE0058.severity = warning
 
 dotnet_diagnostic.CA2002.severity = warning
 
-dotnet_diagnostic.CS8618.severity = none
+dotnet_diagnostic.CS8618.severity = error
 
 # XML doc warnings
 dotnet_diagnostic.CS1591.severity = none
@@ -45,6 +45,7 @@ dotnet_diagnostic.IDE0079.severity = none
 
 # CA2000: Dispose objects before losing scope
 dotnet_diagnostic.CA2000.severity = error
+dotnet_diagnostic.CA2213.severity = error
 csharp_indent_labels = one_less_than_current
 csharp_using_directive_placement = outside_namespace:silent
 csharp_prefer_simple_using_statement = true:suggestion
@@ -176,4 +177,3 @@ dotnet_style_qualification_for_property = false:silent
 dotnet_style_qualification_for_method = false:silent
 dotnet_style_qualification_for_event = false:silent
 dotnet_diagnostic.CA1806.severity = error
-dotnet_diagnostic.CA2254.severity = none

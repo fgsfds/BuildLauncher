@@ -13,8 +13,8 @@ namespace Avalonia.Desktop.Views;
 public sealed partial class MainWindow : Window
 {
     private readonly ViewModelsFactory _vmFactory;
-    private readonly PortsProvider _portsProvider;
-    private readonly GamesProvider _gamesProvider;
+    private readonly InstalledPortsProvider _portsProvider;
+    private readonly InstalledGamesProvider _gamesProvider;
     private readonly InstalledAddonsProviderFactory _installedAddonsProviderFactory;
     private readonly IConfigProvider _configProvider;
 
@@ -22,14 +22,20 @@ public sealed partial class MainWindow : Window
     public MainWindow()
     {
         InitializeComponent();
+
+        _portsProvider = null!;
+        _gamesProvider = null!;
+        _installedAddonsProviderFactory = null!;
+        _vmFactory = null!;
+        _configProvider = null!;
     }
 
     public MainWindow(
         MainViewModel vm,
-        GamesProvider gamesProvider,
+        InstalledGamesProvider gamesProvider,
         ViewModelsFactory vmFactory,
         InstalledAddonsProviderFactory installedAddonsProviderFactory,
-        PortsProvider portsProvider,
+        InstalledPortsProvider portsProvider,
         IConfigProvider configProvider
         )
     {

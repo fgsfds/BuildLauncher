@@ -10,12 +10,12 @@ namespace Avalonia.Desktop.ViewModels;
 
 public sealed partial class MainViewModel : ObservableObject
 {
-    private readonly GamesProvider _gamesProvider;
+    private readonly InstalledGamesProvider _gamesProvider;
 
     public MainViewModel(
         IConfigProvider configProvider,
         FilesUploader filesUploader,
-        GamesProvider gamesProvider,
+        InstalledGamesProvider gamesProvider,
         AppUpdateInstaller appUpdateInstaller,
         ViewModelsFactory viewModelsFactory,
         GamesPathsProvider gamesPathsProvider

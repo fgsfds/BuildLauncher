@@ -3,11 +3,11 @@ using Common.Enums;
 using Common.Helpers;
 using CommunityToolkit.Diagnostics;
 
-namespace Common.Common.Providers;
+namespace Ports.Providers;
 
-public sealed class RepositoriesProvider
+internal static class PortsRepositoriesProvider
 {
-    public RepositoryEntity GetPortRepo(PortEnum portEnum)
+    public static RepositoryEntity GetPortRepo(PortEnum portEnum)
     {
         if (portEnum is PortEnum.BuildGDX)
         {
@@ -87,35 +87,9 @@ public sealed class RepositoriesProvider
             return ThrowHelper.ThrowNotSupportedException<RepositoryEntity>(portEnum.ToString());
         }
     }
-
-    public RepositoryEntity GetToolRepo(ToolEnum toolEnum)
-    {
-        if (toolEnum is ToolEnum.XMapEdit)
-        {
-            return new()
-            {
-                RepoUrl = new("https://api.github.com/repos/NoOneBlood/xmapedit/releases"),
-                WindowsReleasePredicate = static x => x.FileName.EndsWith("x64.zip", StringComparison.InvariantCultureIgnoreCase),
-                LinuxReleasePredicate = null
-            };
-        }
-        else if (toolEnum is ToolEnum.Mapster32)
-        {
-            return new()
-            {
-                RepoUrl = null,
-                WindowsReleasePredicate = null,
-                LinuxReleasePredicate = null
-            };
-        }
-        else
-        {
-            return ThrowHelper.ThrowNotSupportedException<RepositoryEntity>(toolEnum.ToString());
-        }
-    }
 }
 
-public readonly struct RepositoryEntity
+internal readonly struct RepositoryEntity
 {
     public required Uri? RepoUrl { get; init; }
     public required Func<GitHubReleaseAsset, bool>? WindowsReleasePredicate { get; init; }

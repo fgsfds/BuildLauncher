@@ -30,6 +30,14 @@ public sealed class App : Application
 
     private static ILogger? _logger = null;
 
+
+    static App()
+    {
+        NotificationManager = null!;
+        Random = null!;
+    }
+
+
     public override void Initialize()
     {
         AvaloniaXamlLoader.Load(this);
@@ -84,9 +92,9 @@ public sealed class App : Application
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
             {
                 var vm = BindingsManager.Provider.GetRequiredService<MainViewModel>();
-                var gamesProvider = BindingsManager.Provider.GetRequiredService<GamesProvider>();
+                var gamesProvider = BindingsManager.Provider.GetRequiredService<InstalledGamesProvider>();
                 var vmFactory = BindingsManager.Provider.GetRequiredService<ViewModelsFactory>();
-                var portsProvider = BindingsManager.Provider.GetRequiredService<PortsProvider>();
+                var portsProvider = BindingsManager.Provider.GetRequiredService<InstalledPortsProvider>();
                 var installedAddonsProviderFactory = BindingsManager.Provider.GetRequiredService<InstalledAddonsProviderFactory>();
                 var configProvider = BindingsManager.Provider.GetRequiredService<IConfigProvider>();
 

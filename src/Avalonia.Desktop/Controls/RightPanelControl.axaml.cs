@@ -11,13 +11,16 @@ public sealed partial class RightPanelControl : UserControl
 {
     private readonly IBrush HightlightColor = SolidColorBrush.Parse("#FFCC00");
     private readonly IBrush DisabledColor = SolidColorBrush.Parse("#919191");
-    private IConfigProvider _configProvider;
 
+    private IConfigProvider _configProvider;
     private RightPanelViewModel _viewModel;
 
     public RightPanelControl()
     {
         InitializeComponent();
+
+        _configProvider = null!;
+        _viewModel = null!;
     }
 
     public void InitializeControl(IConfigProvider configProvider)

@@ -25,9 +25,4 @@ public interface IDownloadableAddonsProvider
     /// </summary>
     /// <param name="addonType">Addon type</param>
     ImmutableList<IDownloadableAddon> GetDownloadableAddons(AddonTypeEnum addonType);
-
-    /// <summary>
-    /// Create cache of downloadable addons
-    /// </summary>
-    Task CreateCacheAsync(bool createNew);
 }
