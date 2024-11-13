@@ -21,6 +21,8 @@ public sealed class GitHubReleaseEntity
     public string Description { get; set; }
 }
 
+
+[JsonSourceGenerationOptions(RespectNullableAnnotations = true)]
 [JsonSerializable(typeof(List<GitHubReleaseEntity>))]
 public sealed partial class GitHubReleaseEntityContext : JsonSerializerContext;
 
@@ -37,5 +39,7 @@ public sealed class GitHubReleaseAsset
     public DateTime UpdatedDate { get; set; }
 }
 
+
+[JsonSourceGenerationOptions(RespectNullableAnnotations = true)]
 [JsonSerializable(typeof(List<GitHubReleaseAsset>))]
 public sealed partial class GitHubReleaseAssetContext : JsonSerializerContext;

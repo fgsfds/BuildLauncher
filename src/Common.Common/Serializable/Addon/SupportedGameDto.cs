@@ -15,5 +15,7 @@ public sealed class SupportedGameDto
     public string? Crc { get; set; }
 }
 
+
+[JsonSourceGenerationOptions(RespectNullableAnnotations = true)]
 [JsonSerializable(typeof(SupportedGameDto))]
 public sealed partial class SupportedGameDtoContext : JsonSerializerContext;

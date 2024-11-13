@@ -22,6 +22,10 @@ public sealed class GeneralReleaseEntity
     /// </summary>
     public required Uri? DownloadUrl { get; init; }
 }
-[JsonSourceGenerationOptions(Converters = [typeof(JsonStringEnumConverter<GameEnum>)])]
+
+
+[JsonSourceGenerationOptions(
+    Converters = [typeof(JsonStringEnumConverter<GameEnum>)]
+    )]
 [JsonSerializable(typeof(List<GeneralReleaseEntity>))]
 public sealed partial class GeneralReleaseEntityContext : JsonSerializerContext;

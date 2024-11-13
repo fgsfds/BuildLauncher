@@ -108,6 +108,7 @@ public sealed class GitHubApiInterface : IApiInterface
 [JsonSourceGenerationOptions(
     WriteIndented = true,
     DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+    RespectNullableAnnotations = true,
     Converters = [
         typeof(JsonStringEnumConverter<GameEnum>),
         typeof(JsonStringEnumConverter<AddonTypeEnum>)

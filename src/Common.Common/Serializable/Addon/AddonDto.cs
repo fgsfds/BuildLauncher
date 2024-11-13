@@ -83,7 +83,8 @@ public sealed class AddonDto
     UnmappedMemberHandling = JsonUnmappedMemberHandling.Disallow,
     AllowTrailingCommas = true,
     WriteIndented = true,
-    DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
+    DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+    RespectNullableAnnotations = true
     )]
 [JsonSerializable(typeof(AddonDto))]
 public sealed partial class AddonManifestContext : JsonSerializerContext;

@@ -12,6 +12,8 @@ public sealed class DependencyDto
     public List<FeatureEnum>? RequiredFeatures { get; set; }
 }
 
+
+[JsonSourceGenerationOptions(RespectNullableAnnotations = true)]
 [JsonSerializable(typeof(DependencyDto))]
 public sealed partial class DependencyDtoContext : JsonSerializerContext;
 
@@ -25,5 +27,7 @@ public sealed class DependantAddonDto
     public string? Version { get; set; }
 }
 
+
+[JsonSourceGenerationOptions(RespectNullableAnnotations = true)]
 [JsonSerializable(typeof(DependantAddonDto))]
 public sealed partial class DependantAddonDtoContext : JsonSerializerContext;

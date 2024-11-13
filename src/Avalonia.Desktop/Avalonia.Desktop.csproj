@@ -10,10 +10,6 @@
       <StartupObject>Avalonia.Desktop.Program</StartupObject>
       <ApplicationIcon>icon.ico</ApplicationIcon>
   </PropertyGroup>
-  <ItemGroup>
-    <None Remove="Assets\tw.png" />
-    <None Remove="Assets\wh.png" />
-  </ItemGroup>
     
   <ItemGroup>
     <AvaloniaResource Include="Assets\blood.png" />
@@ -29,9 +25,6 @@
     <AvaloniaResource Include="Assets\slave.png" />
     <AvaloniaResource Include="Assets\sw.png" />
     <AvaloniaResource Include="Assets\ww2gi.png" />
-  </ItemGroup>
-    
-  <ItemGroup>
     <AvaloniaResource Include="Assets\tw.png" />
     <AvaloniaResource Include="Assets\wh.png" />
   </ItemGroup>
@@ -43,25 +36,19 @@
     <PackageReference Include="Avalonia.Fonts.Inter" />
     <PackageReference Include="CommunityToolkit.Diagnostics" />
     <PackageReference Include="ConfigureAwaitAnalyzer" PrivateAssets="all" />
-      <PackageReference Include="Avalonia" />
-      <PackageReference Include="Avalonia.Controls.DataGrid" />
-      <PackageReference Include="Avalonia.Themes.Fluent" />
-      <PackageReference Include="CommunityToolkit.Mvvm" />
-      <PackageReference Include="Markdown.Avalonia" />
-      <PackageReference Include="Projektanker.Icons.Avalonia.MaterialDesign" />
-      <PackageReference Include="System.Private.Uri" />
+    <PackageReference Include="Avalonia" />
+    <PackageReference Include="Avalonia.Controls.DataGrid" />
+    <PackageReference Include="Avalonia.Themes.Fluent" />
+    <PackageReference Include="CommunityToolkit.Mvvm" />
+    <PackageReference Include="Markdown.Avalonia" />
+    <PackageReference Include="Projektanker.Icons.Avalonia.MaterialDesign" />
+    <PackageReference Include="System.Private.Uri" />
   </ItemGroup>
 
   <ItemGroup>
       <ProjectReference Include="..\Games\Games.csproj" />
       <ProjectReference Include="..\Ports\Ports.csproj" />
       <ProjectReference Include="..\Tools\Tools.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Update="Pages\StandalonePage.axaml.cs">
-      <DependentUpon>StandalonePage.axaml</DependentUpon>
-    </Compile>
   </ItemGroup>
     
 </Project>

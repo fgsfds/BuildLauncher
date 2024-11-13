@@ -6,7 +6,7 @@ public static class BindingsManager
 {
     private static ServiceCollection? _instance;
     private static ServiceProvider? _provider;
-    private static readonly object _syncRoot = new();
+    private static readonly Lock _lock = new();
 
     public static ServiceCollection Instance
     {
@@ -14,7 +14,7 @@ public static class BindingsManager
         {
             if (_instance is null)
             {
-                lock (_syncRoot)
+                using (_lock.EnterScope())
                 {
                     _instance = new ServiceCollection();
                 }
@@ -30,7 +30,7 @@ public static class BindingsManager
         {
             if (_provider is null)
             {
-                lock (_syncRoot)
+                using (_lock.EnterScope())
                 {
                     _provider = Instance.BuildServiceProvider();
                 }

@@ -1,7 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-      <Configurations>Debug;Release</Configurations>
       <AssemblyName>BuildLauncher.$(MSBuildProjectName)</AssemblyName>
   </PropertyGroup>
 

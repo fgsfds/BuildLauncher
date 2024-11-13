@@ -8,13 +8,13 @@ public sealed partial class PortsViewModel : ObservableObject
 {
     private readonly ViewModelsFactory _viewModelsFactory;
     private readonly Dictionary<PortEnum, bool> _updatesList = [];
-    private readonly object _lock = new();
+    private readonly Lock _lock = new();
 
-    public bool HasUpdates
+    public bool HasUpdates  
     {
         get
         {
-            lock (_lock)
+            using (_lock.EnterScope())
             {
                 return _updatesList.Values.Any(x => x);
             }
@@ -39,7 +39,7 @@ public sealed partial class PortsViewModel : ObservableObject
     /// </summary>
     private void Initialize()
     {
-        lock (_lock)
+        using (_lock.EnterScope())
         {
             var edukeVm = _viewModelsFactory.GetPortViewModel(PortEnum.EDuke32);
             edukeVm.PortChangedEvent += OnPortChanged;

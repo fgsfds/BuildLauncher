@@ -12,5 +12,7 @@ public sealed class MapSlotDto : IStartMap
     public required int Level { get; set; }
 }
 
+
+[JsonSourceGenerationOptions(RespectNullableAnnotations = true)]
 [JsonSerializable(typeof(MapSlotDto))]
 public sealed partial class MapSlotDtoContext : JsonSerializerContext;
