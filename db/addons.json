@@ -280,13 +280,13 @@
       "Id": "duke3d-alien-armageddon",
       "AddonType": "TC",
       "Game": "Duke3D",
-      "DownloadUrl": "https://global.s3.cloud.ru/buildlauncher/Duke3D/Campaigns/duke3d-alien-armageddon_v5_52.zip",
+      "DownloadUrl": "https://global.s3.cloud.ru/buildlauncher/Duke3D/Campaigns/duke3d-alien-armageddon_v5_58b.zip",
       "Title": "Alien Armageddon",
-      "Version": "5.52",
-      "FileSize": 662479698,
+      "Version": "5.58b",
+      "FileSize": 636240117,
       "Description": "https://www.moddb.com/mods/duke-nukem-alien-armageddon\r\n\r\nAlien Armageddon is a mod for Duke Nukem 3D which adds many new high quality enemies, sexy NPCs, and a second playable character, all featured in epic new adventures. Some of the community\u0027s best talent have come together to make this amazing free expansion to the Duke 3D universe.",
       "Author": "DukeBoss ",
-      "UpdateDate": "2024-11-05T13:24:57.905118Z"
+      "UpdateDate": "2024-11-16T07:49:57.905118Z"
     }
   ],
   "Blood": [
