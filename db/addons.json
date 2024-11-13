@@ -19,7 +19,7 @@
       "DownloadUrl": "https://global.s3.cloud.ru/buildlauncher/Duke3D/Campaigns/duke3d-starship-troopers_v1_0.zip",
       "Title": "Starship Troopers",
       "Version": "1.0",
-      "FileSize": 29128818,
+      "FileSize": 29216101,
       "Description": "Starship Troopers TC is a total conversion for Duke Nukem 3D. It was created by Bgame Productions. It features new levels, new weapons, new sprites for the player (MI trooper) and enemies, new graphics, new items, and new music. The mod was well-known for the high level of quality on Dukeworld.",
       "Author": "Bgame Productions",
       "UpdateDate": "2024-06-25T16:08:35.178219Z"
@@ -43,7 +43,7 @@
       "DownloadUrl": "https://global.s3.cloud.ru/buildlauncher/Duke3D/Maps/duke3d-penthouse_v1_0.zip",
       "Title": "Penthouse Paradise",
       "Version": "1.0",
-      "FileSize": 2161775,
+      "FileSize": 2182128,
       "Description": "The Duke Nukem 3D Penthouse Paradise level chronicles the little talked about R\u0026R period for Duke Nukem between the original Duke Nukem 3D Game and the Duke Nukem 3D: Plutonium Pak, the expansion addition.\n\nInquiring minds and the tabloids have been dying (and not by Duke\u0027s hands) to find out what happened to our intergalactic hero when he went for...a little R\u0026R.\n\nFinally, this shocking level reveals all! While Duke was trying to establish a little beach-head, the Aliens have dropped in to break up his fun in the sun and spoil a couple of Penthouse photo shoots to boot. It\u0027s up to our man, Duke Nukem, to save the day - again.\n\nWith no time to play with his favorite Pets or work on his tan, Duke Nukem says, Somebody\u0027s gonna friggin\u0027 pay for screwin\u0027 up my vacation!\n\nWill Duke save the day, the shoots, and finally get that babe, a stogie and a bottle of Jack?\n\nIt\u0027s up to you to find out!",
       "Author": "Intersphere Communications, Ltd. and Tyler Matthews",
       "UpdateDate": "2024-05-29T00:00:00Z"
@@ -55,7 +55,7 @@
       "DownloadUrl": "https://global.s3.cloud.ru/buildlauncher/Duke3D/Maps/duke3d-fear-of-the-dark_v1_0.zip",
       "Title": "Fear of the Dark",
       "Version": "1.0",
-      "FileSize": 221438,
+      "FileSize": 219636,
       "Description": "It is a dark and cold winter night when Duke enters an abandoned space research facility. Something horrible, awakened by the scientists, lurks deep inside the darkness - hidden beyond the stars...",
       "Author": "DannyFromNewOrleans",
       "UpdateDate": "2024-06-15T14:33:50.766237Z"
@@ -151,7 +151,7 @@
       "DownloadUrl": "https://global.s3.cloud.ru/buildlauncher/Duke3D/Mods/duke3d-voxel-pack.zip",
       "Title": "Voxel Pack",
       "Version": "2.0-rc2",
-      "FileSize": 4659060,
+      "FileSize": 4225971,
       "Description": "https://github.com/NightFright2k19/duke3d_voxelpack\r\n\r\nVoxel replacements for sprites in Duke Nukem 3D",
       "UpdateDate": "2024-05-24T00:00:00Z"
     },
@@ -173,7 +173,7 @@
       "DownloadUrl": "https://global.s3.cloud.ru/buildlauncher/Duke3D/Campaigns/duke3d-dukehard_v1_2_2.zip",
       "Title": "Duke Hard",
       "Version": "1.2.2",
-      "FileSize": 44931372,
+      "FileSize": 44510922,
       "Description": "https://www.moddb.com/mods/duke-hard\r\n\r\nInspired by the movie Die Hard, the episode consists of 17 levels by 15 different map designers and progresses from the lobby to the rooftop of a skyscraper. Each level is confined to its own floor of the building, and although each floor features a different theme, various design constraints ensure a certain degree of consistency throughout the episode.",
       "Author": "Duke4",
       "UpdateDate": "2024-06-06T00:00:00Z"
@@ -185,7 +185,7 @@
       "DownloadUrl": "https://global.s3.cloud.ru/buildlauncher/Duke3D/Campaigns/duke3d-dnf2013_v1_02.zip",
       "Title": "Duke Nukem Forever 2013",
       "Version": "1.02",
-      "FileSize": 44699639,
+      "FileSize": 44381102,
       "Description": "https://msdn.duke4.net/dnf2013.php\n\nDuke Nukem Forever 2013 is a 5-level mod for Duke Nukem 3D. It\u0027s essentially what Duke Nukem Forever, the game, might have been if it had been released as an expansion for Duke Nukem 3D. The assets and the levels have been greatly influenced and inspired by the 2001 Duke Nukem Forever E3 trailer, the very trailer that seemed to promise the imminent arrival of the best video game ever. Other trailers and preview screenshots were also used as sources.\n\nAlso includes 3-map DLC.",
       "Author": "Gambini, Mikko Sandt, DavoX, Micky C",
       "UpdateDate": "2024-05-24T00:00:00Z"
@@ -197,7 +197,7 @@
       "DownloadUrl": "https://global.s3.cloud.ru/buildlauncher/Duke3D/Mods/duke3d-sprite-fixes.zip",
       "Title": "Sprite Fixes",
       "Version": "1.0",
-      "FileSize": 232622,
+      "FileSize": 232074,
       "Description": "This pack contains widescrren fixes and minor graphical fixes for sprites in Duke 3D and its official addons",
       "UpdateDate": "2024-05-30T10:37:30.631987Z"
     },
@@ -208,7 +208,7 @@
       "DownloadUrl": "https://global.s3.cloud.ru/buildlauncher/Duke3D/Campaigns/duke3d-new-invasion_v1_0R.zip",
       "Title": "New Invasion",
       "Version": "1.0R",
-      "FileSize": 3045857,
+      "FileSize": 3045841,
       "Description": "https://forums.duke4.net/topic/12489-release-new-invasion-episode-1-ms-dos/\r\n\r\nEnjoying semi-retirement, living out his days in a top floor penthouse, Duke is startled by a series of missiles raining on the city. Hearing his old EDF communicator chattering in his pocket, he sets out to destroy the alien menace one more time. Duke must make his way across town to the old church, board a train, take a ride on a plane and confront whoever is responsible for this attack. You know the drill, rip \u0027em a new one.",
       "Author": "High Treason",
       "UpdateDate": "2024-09-16T05:47:57.081683Z"
@@ -220,7 +220,7 @@
       "DownloadUrl": "https://global.s3.cloud.ru/buildlauncher/Duke3D/Campaigns/duke3d-fm7x_v1_0.zip",
       "Title": "FM7X",
       "Version": "1.0",
-      "FileSize": 23589842,
+      "FileSize": 23589825,
       "Description": "https://forums.duke4.net/topic/12447-release-fm7x-the-complete-fernando-marquez-7-episode-full-steel-balled-pack\r\n\r\n\u0022It\u0027s time to abort your whole freakin\u0027 species\u0022 \u2013 Duke swore in this final speech to the alien queen as she was blown up into many liquid pulps of blood and splatter in her aquatic hideout.\r\nA year has passed since that miraculous event. Duke Nukem, a hero in his own right, is well known and highly respected - the tough macho man the world needed to be safe from any threats the earth might face. Nowadays, the man himself has been resting without a single worry. Nothing could be more perfect than a good old tasty wine, a few cigarettes scattered on the living room table, and even some R\u0026R, which he never grows tired of.\r\nFast forward a few days later \u2013 a huge spectrum of colors sparks through the sky of the United States and a massive spaceship sweeps down to earth as fast as a flashlight, ripping apart a huge chunk of earth and trembling down the whole damn country.\r\n\u0022Really? They are back! But, how is that possible?\u0022, Duke shrugs while glancing at the wrecked streets near his place. It seems they will attempt another try to conquer our planet. But unlike the prior attempt, they account for Duke\u2019s interference, and they are well prepared this time (or at least they think so\u2026)\r\nSuddenly, but completely expected, Duke\u0027s telephone rings uncontrollably... \u0022Well, I guess it\u2019s time to do another favor to the world...\u0022, he mutters as he answers the phone, greets the Colonel and awaits new instructions.",
       "Author": "Fernando M\u00E1rquez",
       "UpdateDate": "2024-09-16T05:48:00.221448Z"
@@ -271,7 +271,7 @@
       "DownloadUrl": "https://global.s3.cloud.ru/buildlauncher/Duke3D/Campaigns/duke3d-legacy-edition_v2_0_5_1.zip",
       "Title": "Legacy Edition",
       "Version": "2.0.5.1",
-      "FileSize": 585807377,
+      "FileSize": 585807406,
       "Description": "https://www.moddb.com/mods/duke-nukem-3d-legacy-edition/\r\n\r\nDuke Nukem 3D is back, rebalanced, remixed and HARDER. A mix between the old and the new, play with new (legacy) weapons, against new (legacy) enemies. Legacy Edition will make you sweat, be strategic, jump, run, dodge and blow everything away. Play the original 4 episodes with beta/alpha elements remixed into the game.\r\n\r\nHail to the Kinng, Baby!",
       "Author": "Marcos",
       "UpdateDate": "2024-10-13T06:44:05.74Z"
@@ -297,7 +297,7 @@
       "DownloadUrl": "https://global.s3.cloud.ru/buildlauncher/Blood/Mods/blood-voxel-pack_v0_96_1.zip",
       "Title": "Voxel Pack",
       "Version": "0.96.1",
-      "FileSize": 3875228,
+      "FileSize": 3896039,
       "Description": "https://github.com/fgsfds/Blood-Voxel-Pack/\r\n\r\nVoxel replacements for sprites in Blood",
       "UpdateDate": "2024-05-24T00:00:00Z"
     },
@@ -347,7 +347,7 @@
       "DownloadUrl": "https://global.s3.cloud.ru/buildlauncher/Blood/Campaigns/blood-500mil_v5_1_1.zip",
       "Title": "500 Milliliters of /vr/",
       "Version": "5.1.1",
-      "FileSize": 44797712,
+      "FileSize": 48148349,
       "Description": "500 Milliliters of /vr/ is a community add-on by members of the /vr/ board on 4chan released on February 1, 2021. It features six levels created by three authors, and features numerous replaced assets. Four levels are available for Bloodbath. It is named as a play on the 200 Minutes of /vr/ and related community projects for Doom.",
       "Author": "4chan",
       "UpdateDate": "2024-05-30T00:00:00Z"
@@ -359,7 +359,7 @@
       "DownloadUrl": "https://global.s3.cloud.ru/buildlauncher/Blood/Campaigns/blood-the-cult_v1_1.zip",
       "Title": "The Cult",
       "Version": "1.1",
-      "FileSize": 607593,
+      "FileSize": 607584,
       "Description": "https://www.moddb.com/mods/blood-the-cult\r\n\r\nBLOOD: the Cult is a new episode that contains 5 single player maps for original Blood.",
       "Author": "bifurcator_x",
       "UpdateDate": "2024-08-04T13:51:31.700654Z"
@@ -371,7 +371,7 @@
       "DownloadUrl": "https://global.s3.cloud.ru/buildlauncher/Blood/Mods/blood-smooth_v1_1.zip",
       "Title": "SmoothBlood",
       "Version": "1.1",
-      "FileSize": 688138,
+      "FileSize": 711846,
       "Description": "https://www.moddb.com/mods/smoothblood\r\n\r\nThis is a modification for Blood which allows playing the game with smoother weapon animations. This mod supports all so far modern ways of playing Blood, which are NBlood, Raze, BloodGDX and Fresh Supply. DOS version is not supported.",
       "Author": "Dzierzan, Phredreeke",
       "UpdateDate": "2024-05-24T00:00:00Z"
@@ -383,7 +383,7 @@
       "DownloadUrl": "https://global.s3.cloud.ru/buildlauncher/Blood/Campaigns/blood-hostile-takeover_v1_1.zip",
       "Title": "Hostile Takeover",
       "Version": "1.1",
-      "FileSize": 725849,
+      "FileSize": 782503,
       "Description": "Hostile Takeover is a 2001 fan add-on for Blood by Dustin \u0022Bloatoid\u0022 Twilley, previous creator of Inherit the Earth (1999) and much later Death Wish (2011, 2017-2020). It features a ghost town, underwater base, carnival and island level, among others.",
       "Author": "Bloatoid",
       "UpdateDate": "2024-05-24T00:00:00Z"
@@ -395,7 +395,7 @@
       "DownloadUrl": "https://global.s3.cloud.ru/buildlauncher/Blood/Mods/blood-black-phantasm_v1_0.zip",
       "Title": "Black Phantasm",
       "Version": "1.0",
-      "FileSize": 241262,
+      "FileSize": 261479,
       "Description": "https://www.moddb.com/games/blood/addons/black-phantasm\r\n\r\nThis pack replaces Phantasm sprites with the black variant",
       "Author": "Dzierzan",
       "UpdateDate": "2024-05-24T00:00:00Z"
@@ -407,7 +407,7 @@
       "DownloadUrl": "https://global.s3.cloud.ru/buildlauncher/Blood/Mods/blood-cultists-with-guns_v2_0.zip",
       "Title": "Cultists with correct guns",
       "Version": "2.0",
-      "FileSize": 1441294,
+      "FileSize": 1456465,
       "Description": "https://www.moddb.com/games/blood/addons/cultists-with-correct-guns\r\n\r\nThis mod gives every cultist his correct weapon. So that means you\u0027ll see Ackolyte with actual TNT, Cultist with a shotgun, Fanatic with a tommy gun and finally Zealot with tesla gun.\r\n\r\nAlso included:\r\n\r\n- actual gibbing animation for innocents,\r\n\r\n- differrent sprites for cultist\u0027s electrocution,\r\n\r\n- Stone Gargoygle having actual blue eyes when shooting,\r\n\r\n- Blood Alpha Cultist\u0027s beast transformation animation",
       "Author": "Dzierzan",
       "UpdateDate": "2024-05-24T00:00:00Z"
@@ -479,7 +479,7 @@
       "DownloadUrl": "https://global.s3.cloud.ru/buildlauncher/Blood/Campaigns/blood-lost-episode_v1_0.zip",
       "Title": "The Lost Episode",
       "Version": "1.0",
-      "FileSize": 430978,
+      "FileSize": 522438,
       "Description": "https://www.moddb.com/games/blood/addons/the-lost-episode\r\n\r\nThis Episode is made up of eight maps taken straight from the leaked alpha. There are minor changes in aesthetics in a few of the maps however teh author made sure to keep all maps as close to the original author\u0027s intentions and art direction as possible.",
       "Author": "Maz",
       "UpdateDate": "2024-05-24T00:00:00Z"
@@ -503,7 +503,7 @@
       "DownloadUrl": "https://global.s3.cloud.ru/buildlauncher/Blood/Campaigns/blood-inherit_v1_0.zip",
       "Title": "Inherit the Earth",
       "Version": "1.0",
-      "FileSize": 533772,
+      "FileSize": 575803,
       "Description": "When Tchernobog was defeated in the Hall of Epiphany, He was forced to return to His own realm. The power and rage released by Caleb while fighting the Dreaming god was partly absorbed, and had allowed Tchernobog to lay dormant gathering energy to follow on with His plan to open the Gateway- the connection between the realms of the living and the damned. Would Caleb be able to stop the revived Daemon Tchernobog? Contains a total of 3 episodes.",
       "Author": "Bloatoid",
       "UpdateDate": "2024-05-24T00:00:00Z"
@@ -515,7 +515,7 @@
       "DownloadUrl": "https://global.s3.cloud.ru/buildlauncher/Blood/Campaigns/blood-frmeat2_v2_3_1.zip",
       "Title": "French Meat 2",
       "Version": "2.3.1",
-      "FileSize": 2662432,
+      "FileSize": 3005649,
       "Description": "https://www.moddb.com/mods/french-meat-2\r\n\r\nAfter the French Meat episode for BLOOD, the second with 8 new maps including new tiles and soundtracks for an adventure with a unique atmosphere immersed in the heart of paradise island colonized by the pirates of Cabal! kill them all, make a maximum of death, blow them up, slaughter them wherever they are.\r\n\r\nINCLUDING :\r\n\r\n- French Meat episode 1 updated : 9 maps\r\n\r\n- French Meat episode 2 : 8 maps \u002B new tiles",
       "Author": "TEDD",
       "UpdateDate": "2024-05-30T00:00:00Z"
@@ -539,7 +539,7 @@
       "DownloadUrl": "https://global.s3.cloud.ru/buildlauncher/Blood/Campaigns/blood-fotd_v1_1_1.zip",
       "Title": "Fate of the Damned",
       "Version": "1.1.1",
-      "FileSize": 120177346,
+      "FileSize": 119168013,
       "Description": "https://www.moddb.com/mods/fate-of-the-damned\r\n\r\nFate of the Damned is a meticulously crafted custom campaign for BLOOD which aims to speculate and explore another shadowed path that Caleb might\u0027ve undertaken. While taking care to never stray far from the gameplay formula that made BLOOD so gripping, the campaign will see Caleb journey through new environments that he has not seen before. Gruesome new discoveries await as Caleb tears through hordes of the undead, and nothing is left unscathed in his quest for vengeance.The version 1.1 release contains the following features:\r\n\r\n- 2 episodes consisting of 18 maps total, which fully support Single Player, Co-operative, BloodBath and Capture the Flag across all difficulty settings.\r\n\r\n- A series of exhilarating, all new, low resolution cutscenes which tell the campaign\u0027s story.\r\n\r\n- Lots of new, chilling music as an optional extra.\r\n\r\n- A splash of custom art that is used sparingly.\r\n\r\n- A large amount of fiendish secrets waiting to be discovered.\r\n\r\n- Challenging and occasionally downright unfair encounters with BLOOD\u0027s monsters, unsuitable for those whose faith is weak.\r\n\r\n- Support for the NBlood and BloodGDX ports - to a point.",
       "Author": "Daedalus",
       "UpdateDate": "2024-05-30T00:00:00Z"
@@ -551,7 +551,7 @@
       "DownloadUrl": "https://global.s3.cloud.ru/buildlauncher/Blood/Campaigns/blood-cwhhrot_v1_3_1.zip",
       "Title": "Caleb Will Have His Revenge On Toronto",
       "Version": "1.3.1",
-      "FileSize": 56929071,
+      "FileSize": 56929073,
       "Description": "https://www.bloodgame.ru/forum/topic.php?forum=2\u0026topic=105\r\n\r\nPart of the saga of the cheerful Caleb - Scum Of Dallas, who by the will of fate turned out to be deceived by a vile Canadian hockey player. Betting is a risky business, especially when there is a corrupt rat lurking in your favorite team. That\u0027s what happened to our hero: Canadian hockey player Adam Ace received a tempting offer to drain the final match of the World Cup in exchange for eternal life and sold his incorruptible soul to the well-known Cabal sect. What does sports have to do with it, you ask? The thing is that tired of immortality and endless wanderings, Caleb found an outlet in sports betting and put all his fortune accumulated over a long time spent under the wing of fortune and a unique flair for victory on the above-mentioned unfortunate national team. This leads to another question: what about the Bondage of this? The answer is immediately revealed - knowing that Caleb will not forgive Ace for such a setup of the maple leaf country (and in fact the loss of money), the goal of the distraught fanatics who lost their great and powerful, to track down, find and destroy our dead man, so to speak, for bait.",
       "Author": "Frances Rampage",
       "UpdateDate": "2024-05-31T03:43:17.377858Z"
@@ -575,7 +575,7 @@
       "DownloadUrl": "https://global.s3.cloud.ru/buildlauncher/Blood/Campaigns/blood-faitd_v1_3.zip",
       "Title": "Final Alone in the Dark",
       "Version": "1.3",
-      "FileSize": 39707866,
+      "FileSize": 39707906,
       "Description": "https://www.moddb.com/mods/final-alone-in-the-dark\n\nAfter one and a half years of work we are ready to officially introduce you this addon. For a long time we\u0027ve been thinking of how to preserve the atmosphere of this game loved by all of us, but at the same time to extend the existing limits, bring up new gameplay and experience. This time we\u0027ve gone far beyond simple fan map-making and are going to prove to you that Blood is not this hopeless even without source code. From the beginning BAITD was aimed at expanding gameplay, it can\u0027t be limited by common gameplay borders, so here you\u0027re going to see a lot of new features.",
       "Author": "NoOne",
       "UpdateDate": "2024-09-22T15:35:00.59665Z"
@@ -623,7 +623,7 @@
       "DownloadUrl": "https://global.s3.cloud.ru/buildlauncher/Blood/Campaigns/blood-trauma-therapy_v2_5.zip",
       "Title": "Trauma Therapy",
       "Version": "2.5",
-      "FileSize": 87308876,
+      "FileSize": 87308930,
       "Description": "https://www.moddb.com/mods/blood-trauma-therapy\n\nCaleb has won over the Cabal and destroyed the evil god Tchernobog. A short time has passed but Caleb can not find any rest. He is tormented by horrid dreams and visions that are haunting him and he has trouble distinguishing reality from dream. Awaking one day in hospital having no idea how he got there he sees only one solution to his agony. He has to find the three vessels of Tchernobog\u0027s Aura to resurrect him and kill him for the last time in hope of finding peace and rest.",
       "Author": "Thomas \u0022BloodyTom\u0022 Ziehl",
       "UpdateDate": "2024-09-22T15:35:03.001523Z"
@@ -671,7 +671,7 @@
       "DownloadUrl": "https://global.s3.cloud.ru/buildlauncher/Blood/Campaigns/blood-no-hope-in-sight_v0_2.zip",
       "Title": "No Hope In Sight",
       "Version": "0.2",
-      "FileSize": 31411824,
+      "FileSize": 31411825,
       "Description": "http://cruo.bloodgame.ru/nhis/\r\n\r\n This is the demo map of the new episode. The project makes use of modern features for mappers that extends Blood\u0027s trigger system a lot.",
       "Author": "NoOne",
       "UpdateDate": "2024-10-27T12:25:29.226315Z"
@@ -683,7 +683,7 @@
       "DownloadUrl": "https://global.s3.cloud.ru/buildlauncher/Blood/Campaigns/blood-carnage-continues_v1_1.zip",
       "Title": "The Carnage Continues",
       "Version": "1.1",
-      "FileSize": 36203054,
+      "FileSize": 36203055,
       "Author": "B Harry",
       "UpdateDate": "2024-10-27T13:44:26.301329Z"
     }
@@ -742,7 +742,7 @@
       "DownloadUrl": "https://global.s3.cloud.ru/buildlauncher/Wang/Campaigns/wang-wanton_v2.zip",
       "Title": "Wanton Destruction",
       "Version": "2.0",
-      "FileSize": 3425624,
+      "FileSize": 3330026,
       "Description": "Wanton Destruction is an official expansion that was created by Sunstorm Interactive and tested by 3D Realms, but was not released by the distributor. It was found on September 5, 2005 and was released for free.\r\n\r\nThe add-on chronicles Lo Wang\u0027s adventures after the original game. He visits his relatives in USA, but is forced to fight off Zilla\u0027s forces again. The game culminates with a battle against Master Zilla above the streets of Tokyo, which ends with Master Zilla\u0027s death.\r\n\r\nThe game features 12 new levels, new artwork and a few new enemy replacements, such as human enemies; though they still act like their original counterparts.",
       "Author": "Sunstorm Interactive",
       "UpdateDate": "2024-05-24T00:00:00Z"
@@ -766,7 +766,7 @@
       "DownloadUrl": "https://global.s3.cloud.ru/buildlauncher/Wang/Campaigns/wang-twin-dragon_v2.zip",
       "Title": "Twin Dragon",
       "Version": "2.0",
-      "FileSize": 5270152,
+      "FileSize": 5108268,
       "Description": "Twin Dragon is an official expansion to the Shadow Warrior that was released as a free download on July 4, 1998.\r\n\r\nThe game reveals that Lo Wang has a twin brother, Hung Lo, with whom he was separated in early childhood. Hung Lo becomes a dark person whose goal is to destroy the world. Similar to Master Zilla, he uses the creatures from the dark side, criminal underworld and Zilla\u0027s remnants to further his goals. Lo Wang has to journey through his dark minions, reach his palace and defeat the evil Twin Dragon Hung Lo once and for all. When he reaches the palace, Lo Wang defeats his brother by shooting a Nuke at him, which kills Hung Lo in the process.\r\n\r\nThe game features 13 new levels, new sounds, artwork and a new final boss, Hung Lo, who replaced Zilla.",
       "Author": "Wylde Productions, Level Infinity",
       "UpdateDate": "2024-05-24T00:00:00Z"
@@ -801,7 +801,7 @@
       "DownloadUrl": "https://global.s3.cloud.ru/buildlauncher/Wang/Campaigns/wang-swc-20th_v1_0.zip",
       "Title": "Shadow Warrior Central 20th",
       "Version": "1.0",
-      "FileSize": 29425516,
+      "FileSize": 29425506,
       "Description": "https://swcentral.weebly.com/swc20.html\r\n\r\nLo Wang is once again called to action to defeat Zilla and his minions!",
       "Author": "Robman",
       "UpdateDate": "2024-08-01T11:33:14.769649Z"
@@ -892,13 +892,13 @@
       "Id": "fury-spymaps3",
       "AddonType": "Map",
       "Game": "Fury",
-      "DownloadUrl": "https://global.s3.cloud.ru/buildlauncher/Fury/Maps/fury-spymaps1.zip",
+      "DownloadUrl": "https://global.s3.cloud.ru/buildlauncher/Fury/Maps/fury-spymaps3.zip",
       "Title": "SPYmaps 3",
       "Version": "1.0",
       "FileSize": 274478,
       "Description": "https://www.moddb.com/mods/spymaps-ion-fury",
       "Author": "SPYmaps",
-      "UpdateDate": "2024-05-24T00:00:00Z"
+      "UpdateDate": "2024-11-13T00:00:00Z"
     },
     {
       "Id": "fury-voxel-pack",
@@ -1042,7 +1042,7 @@
       "DownloadUrl": "https://global.s3.cloud.ru/buildlauncher/Redneck/Mods/redneck-music.zip",
       "Title": "Redneck Rampage Soundtrack",
       "Version": "1.0",
-      "FileSize": 62197670,
+      "FileSize": 62197673,
       "Description": "Original soundtrack for Redneck Rampage and Route 66",
       "UpdateDate": "2024-05-24T00:00:00Z"
     }

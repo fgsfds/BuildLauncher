@@ -9,7 +9,6 @@
   <ItemGroup>
     <PackageReference Include="AddSealed" PrivateAssets="all" />
     <PackageReference Include="CommunityToolkit.Diagnostics" />
-    <PackageReference Include="ConfigureAwaitAnalyzer" PrivateAssets="all" />
     <PackageReference Include="coverlet.collector" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" />
     <PackageReference Include="xunit" />

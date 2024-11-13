@@ -43,7 +43,7 @@ public sealed class GitHubApiInterface : IApiInterface
             {
                 var addons = await _httpClient.GetStringAsync(Consts.AddonsJsonUrl).ConfigureAwait(false);
 
-                _addonsJson = JsonSerializer.Deserialize(addons, AddonsListContext.Default.DictionaryGameEnumListDownloadableAddonEntity);
+                _addonsJson = JsonSerializer.Deserialize(addons, DownloadableAddonsDictionaryContext.Default.DictionaryGameEnumListDownloadableAddonEntity);
 
                 if (_addonsJson is null)
                 {
@@ -103,16 +103,3 @@ public sealed class GitHubApiInterface : IApiInterface
 
     #endregion
 }
-
-
-[JsonSourceGenerationOptions(
-    WriteIndented = true,
-    DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
-    RespectNullableAnnotations = true,
-    Converters = [
-        typeof(JsonStringEnumConverter<GameEnum>),
-        typeof(JsonStringEnumConverter<AddonTypeEnum>)
-        ]
-)]
-[JsonSerializable(typeof(Dictionary<GameEnum, List<DownloadableAddonEntity>>))]
-public sealed partial class AddonsListContext : JsonSerializerContext;

@@ -198,19 +198,19 @@
                         </StackPanel>
                     </TabItem.Header>
 
-                    <pages:PortsPage x:Name="PortsPageTab" DataContext="{Binding PortsPageViewModel}"/>
+                    <pages:PortsPage DataContext="{Binding PortsPageViewModel}"/>
                 </TabItem>
 
                 <!--Dev-->
                 <TabItem Name="DevTab" Header="Dev" Margin="5" >
-                    <pages:DevPage x:Name="DevPageTab" DataContext="{Binding DevPageViewModel}"/>
+                    <pages:DevPage DataContext="{Binding DevPageViewModel}"/>
                 </TabItem>
 
                 <TabItem IsEnabled="False" Header=""/>
 
                 <!--Settings-->
                 <TabItem Name="SettingsTab" Header="Settings" Margin="5" >
-                    <pages:SettingsPage x:Name="SettingsPageTab" DataContext="{Binding SettingsPageViewModel}"/>
+                    <pages:SettingsPage DataContext="{Binding SettingsPageViewModel}"/>
                 </TabItem>
 
                 <!--About-->
@@ -223,7 +223,7 @@
                         </StackPanel>
                     </TabItem.Header>
 
-                    <pages:AboutPage x:Name="AboutPageTab" DataContext="{Binding AboutPageViewModel}"/>
+                    <pages:AboutPage DataContext="{Binding AboutPageViewModel}"/>
                 </TabItem>
 
             </TabControl>

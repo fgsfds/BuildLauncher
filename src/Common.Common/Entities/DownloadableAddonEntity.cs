@@ -167,5 +167,5 @@ public sealed class DownloadableAddonEntity : IDownloadableAddon
         typeof(JsonStringEnumConverter<AddonTypeEnum>)
         ]
 )]
-[JsonSerializable(typeof(List<DownloadableAddonEntity>))]
-public sealed partial class DownloadableAddonEntityListContext : JsonSerializerContext;
+[JsonSerializable(typeof(Dictionary<GameEnum, List<DownloadableAddonEntity>>))]
+public sealed partial class DownloadableAddonsDictionaryContext : JsonSerializerContext;
