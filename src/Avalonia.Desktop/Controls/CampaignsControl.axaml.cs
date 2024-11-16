@@ -216,7 +216,6 @@ public sealed partial class CampaignsControl : UserControl
 
         if (customPorts.Count < 1)
         {
-
             return;
         }
 
@@ -228,7 +227,7 @@ public sealed partial class CampaignsControl : UserControl
                 Padding = new(5),
                 Command = new RelayCommand(() => _viewModel.StartCampaignCommand.Execute(port))
             };
-            
+
             _ = flyout.Items.Add(item);
         }
 
@@ -241,7 +240,7 @@ public sealed partial class CampaignsControl : UserControl
             IsVisible = true
         };
 
-        customPortButton.Click += (sender, e) => 
+        customPortButton.Click += (sender, e) =>
         {
             flyout.ShowAt(customPortButton);
         };

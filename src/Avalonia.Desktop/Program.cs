@@ -17,6 +17,10 @@ public sealed class Program
         {
             ClientProperties.IsDeveloperMode = true;
         }
+        if (args.Contains("--offline"))
+        {
+            ClientProperties.IsOfflineMode = true;
+        }
         try
         {
             //AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;

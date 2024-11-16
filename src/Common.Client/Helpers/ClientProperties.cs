@@ -38,6 +38,11 @@ public static class ClientProperties
     public static bool IsDeveloperMode { get; set; } = false;
 
     /// <summary>
+    /// Is app running in offline mode
+    /// </summary>
+    public static bool IsOfflineMode { get; set; }
+
+    /// <summary>
     /// Current app version
     /// </summary>
     public static Version CurrentVersion => Assembly.GetEntryAssembly()?.GetName().Version ?? ThrowHelper.ThrowArgumentNullException<Version>();

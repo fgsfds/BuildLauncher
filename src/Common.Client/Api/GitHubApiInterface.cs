@@ -1,4 +1,5 @@
-﻿using Common.Client.Interfaces;
+﻿using Common.Client.Helpers;
+using Common.Client.Interfaces;
 using Common.Common.Helpers;
 using Common.Common.Interfaces;
 using Common.Common.Providers;
@@ -7,7 +8,6 @@ using Common.Enums;
 using Common.Helpers;
 using CommunityToolkit.Diagnostics;
 using System.Text.Json;
-using System.Text.Json.Serialization;
 
 namespace Common.Client.Api;
 
@@ -35,6 +35,11 @@ public sealed class GitHubApiInterface : IApiInterface
 
     public async Task<List<DownloadableAddonEntity>?> GetAddonsAsync(GameEnum gameEnum)
     {
+        if (ClientProperties.IsOfflineMode)
+        {
+            return [];
+        }
+
         await _semaphore.WaitAsync().ConfigureAwait(false);
 
         try
@@ -69,6 +74,11 @@ public sealed class GitHubApiInterface : IApiInterface
 
     public async Task<GeneralReleaseEntity?> GetLatestAppReleaseAsync()
     {
+        if (ClientProperties.IsOfflineMode)
+        {
+            return null;
+        }
+
         await _appReleasesProvider.GetLatestVersionAsync().ConfigureAwait(false);
 
         var result = _appReleasesProvider.AppRelease[CommonProperties.OSEnum];
@@ -78,6 +88,11 @@ public sealed class GitHubApiInterface : IApiInterface
 
     public async Task<Dictionary<PortEnum, GeneralReleaseEntity>?> GetLatestPortsReleasesAsync()
     {
+        if (ClientProperties.IsOfflineMode)
+        {
+            return [];
+        }
+
         var result = await _portsReleasesRetriever.RetrieveAsync().ConfigureAwait(false);
 
         return result;
