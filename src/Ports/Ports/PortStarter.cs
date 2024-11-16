@@ -35,8 +35,8 @@ public sealed class PortStarter
     /// <param name="skill">Skill level</param>
     /// <param name="skipIntro">Skip intro</param>
     /// <param name="skipStartup">Skip startup window</param>
-    /// <returns></returns>
-    public async Task StartAsync(BasePort port, IGame game, IAddon addon, byte? skill, bool skipIntro, bool skipStartup)
+    /// <param name="pathToExe">Path to custom port's exe</param>
+    public async Task StartAsync(BasePort port, IGame game, IAddon addon, byte? skill, bool skipIntro, bool skipStartup, string? pathToExe = null)
     {
         var sw = Stopwatch.StartNew();
 
@@ -52,7 +52,7 @@ public sealed class PortStarter
         _logger.LogInformation($"Startup args:{args}");
         _logger.LogInformation($"Startup args length: {args.Length}");
 
-        await StartPortAsync(port, addon, args).ConfigureAwait(false);
+        await StartPortAsync(port, addon, args, pathToExe).ConfigureAwait(false);
 
         sw.Stop();
         var time = sw.Elapsed;
@@ -69,16 +69,30 @@ public sealed class PortStarter
     /// <param name="port">Port</param>
     /// <param name="addon">Campaign</param>
     /// <param name="args">Command line arguments</param>
-    private async Task StartPortAsync(BasePort port, IAddon addon, string args)
+    /// <param name="pathToExe">Path to custom port's exe</param>
+    private async Task StartPortAsync(BasePort port, IAddon addon, string args, string? pathToExe = null)
     {
-        var portExe = addon.Executables?[CommonProperties.OSEnum] is not null ? addon.Executables[CommonProperties.OSEnum] : port.PortExeFilePath;
+        string exe;
+
+        if (pathToExe is not null)
+        {
+            exe = pathToExe;
+        }
+        else if (addon.Executables?[CommonProperties.OSEnum] is not null)
+        {
+            exe = addon.Executables[CommonProperties.OSEnum];
+        }
+        else
+        {
+            exe = port.PortExeFilePath;
+        }
 
         await Process.Start(new ProcessStartInfo
         {
-            FileName = Path.GetFileName(portExe),
+            FileName = Path.GetFileName(exe),
             UseShellExecute = true,
             Arguments = args,
-            WorkingDirectory = Path.GetDirectoryName(portExe)
+            WorkingDirectory = Path.GetDirectoryName(exe)
         })!.WaitForExitAsync().ConfigureAwait(false);
     }
 }

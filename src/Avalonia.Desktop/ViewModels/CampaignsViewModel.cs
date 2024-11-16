@@ -3,7 +3,6 @@ using Avalonia.Controls.Notifications;
 using Common.Client.Interfaces;
 using Common.Client.Providers;
 using Common.Enums;
-using Common.Helpers;
 using Common.Interfaces;
 using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -11,6 +10,7 @@ using CommunityToolkit.Mvvm.Input;
 using Games.Providers;
 using Microsoft.Extensions.Logging;
 using Ports.Ports;
+using Ports.Providers;
 using System.Collections.Immutable;
 using System.Diagnostics;
 
@@ -145,10 +145,20 @@ public sealed partial class CampaignsViewModel : RightPanelViewModel, IPortsButt
     {
         try
         {
-            command.ThrowIfNotType<BasePort>(out var port);
             Guard.IsNotNull(SelectedAddon);
 
-            await _portStarter.StartAsync(port, Game, SelectedAddon, null, _config.SkipIntro, _config.SkipStartup).ConfigureAwait(true);
+            if (command is BasePort port)
+            {
+                await _portStarter.StartAsync(port, Game, SelectedAddon, null, _config.SkipIntro, _config.SkipStartup).ConfigureAwait(true);
+            }
+            else if (command is CustomPort customPort)
+            {
+                await _portStarter.StartAsync(customPort.BasePort, Game, SelectedAddon, null, _config.SkipIntro, _config.SkipStartup, customPort.Path).ConfigureAwait(true);
+            }
+            else
+            {
+                ThrowHelper.ThrowArgumentOutOfRangeException(nameof(command));
+            }
 
             OnPropertyChanged(nameof(SelectedAddonPlaytime));
         }

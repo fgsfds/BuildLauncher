@@ -49,6 +49,7 @@ public sealed partial class ModsControl : UserControl
         var deleteButton = new MenuItem()
         {
             Header = "Delete",
+            Padding = new(5),
             Command = new RelayCommand(() => viewModel.DeleteModCommand.Execute(null))
         };
 

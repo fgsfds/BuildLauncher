@@ -18,10 +18,12 @@ namespace Avalonia.Desktop.Controls;
 public sealed partial class CampaignsControl : UserControl
 {
     private const string BuiltInPortStr = "Built-in port";
+    private const string CustomPortStr = "Custom port";
 
     private IEnumerable<BasePort> _supportedPorts;
     private CampaignsViewModel _viewModel;
     private InstalledAddonsProvider _installedAddonsProvider;
+    private InstalledPortsProvider _portsProvider;
 
     public CampaignsControl()
     {
@@ -30,6 +32,7 @@ public sealed partial class CampaignsControl : UserControl
         _supportedPorts = null!;
         _viewModel = null!;
         _installedAddonsProvider = null!;
+        _portsProvider = null!;
     }
 
     /// <summary>
@@ -44,6 +47,9 @@ public sealed partial class CampaignsControl : UserControl
         DataContext.ThrowIfNotType<CampaignsViewModel>(out var viewModel);
 
         _viewModel = viewModel;
+        _portsProvider = portsProvider;
+        _portsProvider.CustomPortChangedEvent += OnCustomPortChanged;
+
         _supportedPorts = portsProvider.GetPortsThatSupportGame(_viewModel.Game.GameEnum);
         _installedAddonsProvider = installedAddonsProviderFactory.GetSingleton(_viewModel.Game);
 
@@ -53,8 +59,13 @@ public sealed partial class CampaignsControl : UserControl
         RightPanel.InitializeControl(configProvider);
 
         AddPortsButtons();
+        //AddContextMenuButtons();
+    }
 
+    private void OnCustomPortChanged(object? sender, EventArgs e)
+    {
         AddContextMenuButtons();
+        AddCustomPortsButton();
     }
 
     /// <summary>
@@ -182,6 +193,60 @@ public sealed partial class CampaignsControl : UserControl
         };
 
         BottomPanel.PortsButtonsPanel.Children.Add(customPortButton);
+
+        AddCustomPortsButton();
+    }
+
+    /// <summary>
+    /// Add button with custom ports
+    /// </summary>
+    private void AddCustomPortsButton()
+    {
+        var existing = BottomPanel.PortsButtonsPanel.Children.FirstOrDefault(x => x is Button button && button.Content is TextBlock text && text.Text.Equals(CustomPortStr));
+
+        if (existing is not null)
+        {
+            _ = BottomPanel.PortsButtonsPanel.Children.Remove(existing);
+        }
+
+        MenuFlyout flyout = new();
+        flyout.Placement = PlacementMode.Top;
+
+        var customPorts = _portsProvider.GetCustomPorts(_viewModel.Game.GameEnum);
+
+        if (customPorts.Count < 1)
+        {
+
+            return;
+        }
+
+        foreach (var port in customPorts)
+        {
+            MenuItem item = new()
+            {
+                Header = port.Name,
+                Padding = new(5),
+                Command = new RelayCommand(() => _viewModel.StartCampaignCommand.Execute(port))
+            };
+            
+            _ = flyout.Items.Add(item);
+        }
+
+        Button customPortButton = new()
+        {
+            Content = new TextBlock() { Text = CustomPortStr },
+            Margin = new(5),
+            Padding = new(5),
+            IsEnabled = false,
+            IsVisible = true
+        };
+
+        customPortButton.Click += (sender, e) => 
+        {
+            flyout.ShowAt(customPortButton);
+        };
+
+        BottomPanel.PortsButtonsPanel.Children.Add(customPortButton);
     }
 
     /// <summary>
@@ -211,6 +276,7 @@ public sealed partial class CampaignsControl : UserControl
             var portButton = new MenuItem()
             {
                 Header = $"Start with {port.Name}",
+                Padding = new(5),
                 Command = new RelayCommand(() => _viewModel.StartCampaignCommand.Execute(port))
             };
 
@@ -222,9 +288,39 @@ public sealed partial class CampaignsControl : UserControl
             _ = CampaignsList.ContextMenu.Items.Add(new Separator());
         }
 
+
+        byte cPortsCount = 0;
+        var customPorts = _portsProvider.GetCustomPorts(_viewModel.Game.GameEnum);
+
+        foreach (var port in customPorts)
+        {
+            if ((addon.RequiredFeatures is not null && addon.RequiredFeatures.Except(port.BasePort.SupportedFeatures).Any()) ||
+                (addon.Type is not AddonTypeEnum.Official && port.BasePort.PortEnum is PortEnum.BuildGDX))
+            {
+                continue;
+            }
+
+            var portButton = new MenuItem()
+            {
+                Header = $"Start with {port.Name}",
+                Padding = new(5),
+                Command = new RelayCommand(() => _viewModel.StartCampaignCommand.Execute(port))
+            };
+
+            _ = CampaignsList.ContextMenu.Items.Add(portButton);
+            cPortsCount++;
+        }
+
+        if (cPortsCount > 0)
+        {
+            _ = CampaignsList.ContextMenu.Items.Add(new Separator());
+        }
+
+
         var deleteButton = new MenuItem()
         {
             Header = "Delete",
+            Padding = new(5),
             Command = new RelayCommand(
                 () => _viewModel.DeleteCampaignCommand.Execute(null),
                 () => addon.Type is not AddonTypeEnum.Official
@@ -235,7 +331,7 @@ public sealed partial class CampaignsControl : UserControl
     }
 
     /// <summary>
-    /// Update available ports buttons
+    /// Invoked on selected campaign changed
     /// </summary>
     private void OnCampaignsListSelectionChanged(object? sender, SelectionChangedEventArgs e)
     {
@@ -246,6 +342,13 @@ public sealed partial class CampaignsControl : UserControl
             {
                 relayCommand.NotifyCanExecuteChanged();
             }
+        }
+
+        var customPortButton = BottomPanel.PortsButtonsPanel.Children.FirstOrDefault(x => x is Button button && button.Content is TextBlock text && text.Text.Equals(CustomPortStr));
+
+        if (customPortButton is Button customPortButton2)
+        {
+            customPortButton2.IsEnabled = CampaignsList.SelectedItem is not null;
         }
 
         AddContextMenuButtons();

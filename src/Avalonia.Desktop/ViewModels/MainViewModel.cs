@@ -5,6 +5,8 @@ using Common.Client.Tools;
 using Common.Enums;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Games.Providers;
+using Microsoft.Extensions.Logging;
+using Ports.Providers;
 
 namespace Avalonia.Desktop.ViewModels;
 
@@ -16,9 +18,11 @@ public sealed partial class MainViewModel : ObservableObject
         IConfigProvider configProvider,
         FilesUploader filesUploader,
         InstalledGamesProvider gamesProvider,
+        InstalledPortsProvider portsProvider,
         AppUpdateInstaller appUpdateInstaller,
         ViewModelsFactory viewModelsFactory,
-        GamesPathsProvider gamesPathsProvider
+        GamesPathsProvider gamesPathsProvider,
+        ILogger logger
         )
     {
         _gamesProvider = gamesProvider;
@@ -26,7 +30,7 @@ public sealed partial class MainViewModel : ObservableObject
 
         DevPageViewModel = new DevViewModel(configProvider, filesUploader, gamesProvider);
         AboutPageViewModel = new AboutViewModel(appUpdateInstaller);
-        PortsPageViewModel = new PortsViewModel(viewModelsFactory);
+        PortsPageViewModel = new PortsViewModel(viewModelsFactory, portsProvider, logger);
         SettingsPageViewModel = new SettingsViewModel(configProvider, gamesPathsProvider);
     }
 

@@ -182,6 +182,7 @@ public sealed partial class MapsControl : UserControl
                 portButton = new MenuItem()
                 {
                     Header = $"Start with {port.Name}",
+                    Padding = new(5),
                     CommandParameter = port
                 };
 
@@ -197,6 +198,7 @@ public sealed partial class MapsControl : UserControl
                 portButton = new MenuItem()
                 {
                     Header = $"Start with {port.Name}",
+                    Padding = new(5),
                     Command = new RelayCommand(() => _viewModel.StartMapCommand.Execute(new Tuple<BasePort, byte?>(port, null)))
                 };
             }
@@ -212,6 +214,7 @@ public sealed partial class MapsControl : UserControl
         var deleteButton = new MenuItem()
         {
             Header = "Delete",
+            Padding = new(5),
             Command = new RelayCommand(
                 () => _viewModel.DeleteMapCommand.Execute(null),
                 () => addon.Type is not AddonTypeEnum.Official
@@ -261,7 +264,7 @@ public sealed partial class MapsControl : UserControl
                 new MenuItem()
                 {
                     Header = e.Value,
-                    Margin = new(5),
+                    Padding = new(5),
                     Command = new RelayCommand(() => _viewModel.StartMapCommand.Execute(new Tuple<BasePort, byte?>(GetPort(port), e.Key)
                     ))
                 });

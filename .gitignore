@@ -457,3 +457,4 @@ $RECYCLE.BIN/
 /Web.Server/config.json
 /Web.Server/Data
 /src/Generator/Properties/launchSettings.json
+/src/Database.Client/BuildLauncher.db

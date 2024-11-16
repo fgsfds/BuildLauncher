@@ -5,7 +5,7 @@
              xmlns:i="https://github.com/projektanker/icons.avalonia"
              mc:Ignorable="d"
              d:DesignWidth="800"
-             d:DesignHeight="450"
+             d:DesignHeight="750"
              xmlns:vm="clr-namespace:Avalonia.Desktop.ViewModels"
              xmlns:ctrl="clr-namespace:Avalonia.Desktop.Controls"
              x:DataType="vm:PortsViewModel"
@@ -13,34 +13,88 @@
 
     <ScrollViewer HorizontalScrollBarVisibility="Disabled">
 
-        <ItemsControl Name="PortsList"
-                      ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                      ItemsSource="{Binding PortsList}"
-                      Padding="2">
+        <Grid RowDefinitions="auto,auto,auto,auto,*">
 
-            <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <WrapPanel Orientation="Horizontal"/>
-                </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
+            <ItemsControl Name="PortsList" Grid.Row="0"
+                          ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                          ItemsSource="{Binding PortsList}"
+                          Padding="2">
 
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel Orientation="Horizontal"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
 
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition SharedSizeGroup="SharedGroup" />
-                        </Grid.ColumnDefinitions>
-                        <ctrl:PortControl Margin="10"/>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition SharedSizeGroup="SharedGroup" />
+                            </Grid.ColumnDefinitions>
+                            <ctrl:PortControl Margin="10"/>
+                        </Grid>
+
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+
+            </ItemsControl>
+
+            <TextBlock Text="Custom Ports" Grid.Row="1" Margin="5" FontWeight="Bold"/>
+
+            <DataGrid ItemsSource="{Binding CustomPorts}" Grid.Row="2" GridLinesVisibility="All" Margin="5" SelectedItem="{Binding SelectedCustomPort}">
+
+                <DataGrid.Styles>
+                    <Style Selector="DataGridCell:selected:current /template/ Rectangle">
+                        <Setter Property="Stroke" Value="Transparent"/>
+                    </Style>
+                </DataGrid.Styles>
+
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Name" Binding="{Binding Name}" FontSize="12" Width="*" CanUserSort="False" IsReadOnly="True" />
+                    <DataGridTextColumn Header="Path" Binding="{Binding Path}" FontSize="12" Width="3*" CanUserSort="False" IsReadOnly="True" />
+                    <DataGridTextColumn Header="Port" Binding="{Binding PortEnum}" FontSize="12" Width="3*" CanUserSort="False" IsReadOnly="True" />
+                </DataGrid.Columns>
+
+            </DataGrid>
+
+            <StackPanel Orientation="Horizontal" Grid.Row="3" HorizontalAlignment="Right">
+                <Button Content="Add" Margin="5" Command="{Binding AddCustomPortCommand}" CommandParameter="True"/>
+                <Button Content="Edit" Margin="5" Command="{Binding EditCustomPortCommand}" CommandParameter="False"/>
+                <Button Content="Delete" Margin="5" Command="{Binding DeleteCustomPortCommand}"/>
+            </StackPanel>
+
+            <Grid ColumnDefinitions="*,2*,*" RowDefinitions="*,auto,*" Grid.RowSpan="5" IsVisible="{Binding IsEditorVisible}">
+
+                <Border Grid.Column="1" Grid.Row="1"
+                        BorderBrush="{DynamicResource SystemAccentColor}"
+                        BorderThickness="1"
+                        Background="{DynamicResource Background}"
+                        Padding="10"
+                        CornerRadius="5">
+
+                    <Grid RowDefinitions="auto,auto,auto,auto,auto">
+
+                        <TextBox Watermark="Name" Padding="5" Grid.Row="0" Margin="5" Text="{Binding SelectedCustomPortName}" />
+
+                        <Grid ColumnDefinitions="*,auto" Grid.Row="1" HorizontalAlignment="Stretch">
+                            <TextBox Watermark="Path" Padding="5" Margin="5" HorizontalAlignment="Stretch" Text="{Binding SelectedCustomPortPath}" />
+                            <Button Content="..." Margin="5" Padding="5" Grid.Column="1" Command="{Binding SelectPortExeCommand}"/>
+                        </Grid>
+
+                        <ComboBox Grid.Row="2" Padding="5" HorizontalAlignment="Stretch" Margin="5" ItemsSource="{Binding PortsTypes}" SelectedItem="{Binding SelectedCustomPortType}"/>
+
+                        <TextBlock Grid.Row="3" Margin="5" Text="{Binding ErrorMessage}" TextWrapping="Wrap" HorizontalAlignment="Center" Foreground="Crimson"/>
+
+                        <StackPanel Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Center">
+                            <Button Content="Save" Margin="5" Command="{Binding SaveCustomPortCommand}"/>
+                            <Button Content="Cancel" Margin="5" Command="{Binding CancelCommand}"/>
+                        </StackPanel>
+
                     </Grid>
-
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-
-        </ItemsControl>
-
+                </Border>
+            </Grid>
+        </Grid>
     </ScrollViewer>
-
-
-
 </UserControl>

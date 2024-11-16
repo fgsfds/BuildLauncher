@@ -32,11 +32,12 @@ public sealed partial class DownloadsControl : UserControl
         var downloadButton = new MenuItem()
         {
             Header = "Download",
+            Padding = new(5),
             Command = new RelayCommand(() =>
             viewModel.DownloadAddonCommand.Execute(null)
             )
         };
 
-        dataGrid.ContextMenu.Items.Add(downloadButton);
+        _ = dataGrid.ContextMenu.Items.Add(downloadButton);
     }
 }

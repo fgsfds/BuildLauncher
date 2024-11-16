@@ -12,4 +12,12 @@
         <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\Common.Common\Common.Common.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Migrations\" />
+    </ItemGroup>
+
 </Project>
