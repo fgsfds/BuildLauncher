@@ -35,18 +35,22 @@ public sealed class GitHubApiInterface : IApiInterface
 
     public async Task<List<DownloadableAddonEntity>?> GetAddonsAsync(GameEnum gameEnum)
     {
-        if (ClientProperties.IsOfflineMode)
-        {
-            return [];
-        }
-
         await _semaphore.WaitAsync().ConfigureAwait(false);
 
         try
         {
             if (_addonsJson is null)
             {
-                var addons = await _httpClient.GetStringAsync(Consts.AddonsJsonUrl).ConfigureAwait(false);
+                string? addons;
+
+                if (ClientProperties.IsOfflineMode)
+                {
+                    addons = File.ReadAllText(@"..\..\..\..\db\addons.json");
+                }
+                else
+                {
+                    addons = await _httpClient.GetStringAsync(Consts.AddonsJsonUrl).ConfigureAwait(false);
+                }
 
                 _addonsJson = JsonSerializer.Deserialize(addons, DownloadableAddonsDictionaryContext.Default.DictionaryGameEnumListDownloadableAddonEntity);
 
@@ -54,13 +58,9 @@ public sealed class GitHubApiInterface : IApiInterface
                 {
                     ThrowHelper.ThrowArgumentNullException();
                 }
-
-                return _addonsJson.TryGetValue(gameEnum, out var result) ? result : null;
             }
-            else
-            {
-                return _addonsJson.TryGetValue(gameEnum, out var result) ? result : null;
-            }
+            
+            return _addonsJson.TryGetValue(gameEnum, out var result) ? result : null;
         }
         catch
         {
