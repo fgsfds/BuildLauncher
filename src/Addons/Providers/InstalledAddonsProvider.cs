@@ -939,6 +939,7 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
 
         archive.ExtractToDirectory(unpackTo);
 
+        archive.Dispose();
         File.Delete(pathToFile);
 
         return unpackTo;
