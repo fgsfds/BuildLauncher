@@ -25,5 +25,5 @@ public static class Consts
     /// <summary>
     /// S3 bucket address
     /// </summary>
-    public const string Bucket = "b70f50a9-files";
+    public const string Bucket = "";
 }

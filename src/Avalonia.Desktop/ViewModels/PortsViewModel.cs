@@ -106,11 +106,11 @@ public sealed partial class PortsViewModel : ObservableObject
             var repeatedString = new string('\u200B', length);
 
             App.NotificationManager.Show(
-                "Critical error! Exception is written to the log.",
+                "Critical error! Exception is written to the log." + repeatedString,
                 NotificationType.Error
                 );
 
-            _logger.LogCritical(ex, "=== Critical error ===");
+            _logger.LogCritical(ex, "=== Error while adding custom prot ===");
         }
     }
 
@@ -138,11 +138,11 @@ public sealed partial class PortsViewModel : ObservableObject
             var repeatedString = new string('\u200B', length);
 
             App.NotificationManager.Show(
-                "Critical error! Exception is written to the log.",
+                "Critical error! Exception is written to the log." + repeatedString,
                 NotificationType.Error
                 );
 
-            _logger.LogCritical(ex, "=== Critical error ===");
+            _logger.LogCritical(ex, "=== Error while editing custom port ===");
         }
     }
     private bool EditCustomPortCanExecute => SelectedCustomPort is not null;
@@ -165,11 +165,11 @@ public sealed partial class PortsViewModel : ObservableObject
             var repeatedString = new string('\u200B', length);
 
             App.NotificationManager.Show(
-                "Critical error! Exception is written to the log.",
+                "Critical error! Exception is written to the log." + repeatedString,
                 NotificationType.Error
                 );
 
-            _logger.LogCritical(ex, "=== Critical error ===");
+            _logger.LogCritical(ex, "=== Error while deleting custom port ===");
         }
     }
     private bool DeleteCustomPortCanExecute => SelectedCustomPort is not null;
@@ -226,11 +226,11 @@ public sealed partial class PortsViewModel : ObservableObject
             var repeatedString = new string('\u200B', length);
 
             App.NotificationManager.Show(
-                "Critical error! Exception is written to the log.",
+                "Critical error! Exception is written to the log." + repeatedString,
                 NotificationType.Error
                 );
 
-            _logger.LogCritical(ex, "=== Critical error ===");
+            _logger.LogCritical(ex, "=== Error while saving custom port ===");
         }
         finally
         {
@@ -274,11 +274,11 @@ public sealed partial class PortsViewModel : ObservableObject
             var repeatedString = new string('\u200B', length);
 
             App.NotificationManager.Show(
-                "Critical error! Exception is written to the log.",
+                "Critical error! Exception is written to the log." + repeatedString,
                 NotificationType.Error
                 );
 
-            _logger.LogCritical(ex, "=== Critical error ===");
+            _logger.LogCritical(ex, "=== Error while selecting exe from custom port ===");
         }
     }
 

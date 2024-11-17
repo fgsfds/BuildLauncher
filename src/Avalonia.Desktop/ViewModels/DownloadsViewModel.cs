@@ -1,4 +1,5 @@
 using Addons.Providers;
+using Avalonia.Controls.Notifications;
 using Common.Entities;
 using Common.Enums;
 using Common.Helpers;
@@ -203,7 +204,15 @@ public sealed partial class DownloadsViewModel : ObservableObject
         }
         catch (Exception ex)
         {
-            _logger.LogCritical(ex, "=== Critical error ===");
+            var length = App.Random.Next(1, 100);
+            var repeatedString = new string('\u200B', length);
+
+            App.NotificationManager.Show(
+                "Critical error! Exception is written to the log." + repeatedString,
+                NotificationType.Error
+                );
+
+            _logger.LogCritical(ex, $"=== Error while downloading addon {SelectedDownloadable?.DownloadUrl} ===");
         }
     }
     private bool DownloadSelectedAddonCanExecute => SelectedDownloadable is not null;

@@ -158,11 +158,11 @@ public sealed partial class MapsViewModel : RightPanelViewModel, IPortsButtonCon
             var repeatedString = new string('\u200B', length);
 
             App.NotificationManager.Show(
-                "Critical error! Exception is written to the log.",
+                "Critical error! Exception is written to the log." + repeatedString,
                 NotificationType.Error
                 );
 
-            _logger.LogCritical(ex, "=== Critical error ===");
+            _logger.LogCritical(ex, $"=== Error while starting map {SelectedAddon?.Title} ===");
         }
     }
 

@@ -1,3 +1,4 @@
+using Avalonia.Controls.Notifications;
 using Common.Entities;
 using Common.Enums;
 using Common.Helpers;
@@ -245,6 +246,18 @@ public sealed partial class PortViewModel : ObservableObject
 
             UninstallCommand.NotifyCanExecuteChanged();
         }
+        catch (Exception ex)
+        {
+            var length = App.Random.Next(1, 100);
+            var repeatedString = new string('\u200B', length);
+
+            App.NotificationManager.Show(
+                "Critical error! Exception is written to the log." + repeatedString,
+                NotificationType.Error
+                );
+
+            _logger.LogCritical(ex, $"Error while installing port {Port.PortEnum}");
+        }
         finally
         {
             IsInProgress = false;
@@ -269,6 +282,18 @@ public sealed partial class PortViewModel : ObservableObject
             OnPropertyChanged(nameof(InstallButtonText));
             OnPropertyChanged(nameof(IsUpdateAvailable));
             OnPropertyChanged(nameof(IsInstalled));
+        }
+        catch (Exception ex)
+        {
+            var length = App.Random.Next(1, 100);
+            var repeatedString = new string('\u200B', length);
+
+            App.NotificationManager.Show(
+                "Critical error! Exception is written to the log." + repeatedString,
+                NotificationType.Error
+                );
+
+            _logger.LogCritical(ex, $"Error while uninstalling port {Port.PortEnum}");
         }
         finally
         {
