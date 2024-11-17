@@ -21,6 +21,7 @@ public sealed class DownloadableAddonsProvider : IDownloadableAddonsProvider
     private readonly InstalledAddonsProvider _installedAddonsProvider;
 
     private Dictionary<AddonTypeEnum, Dictionary<AddonVersion, IDownloadableAddon>>? _cache;
+
     private static readonly SemaphoreSlim _semaphore = new(1);
 
     public event AddonChanged? AddonDownloadedEvent;
@@ -48,35 +49,38 @@ public sealed class DownloadableAddonsProvider : IDownloadableAddonsProvider
     /// <inheritdoc/>
     public async Task CreateCacheAsync(bool createNew)
     {
-        await _semaphore.WaitAsync().ConfigureAwait(false);
-
-        if (_cache is not null && !createNew)
+        try
         {
-            _ = _semaphore.Release();
-            return;
-        }
+            await _semaphore.WaitAsync().ConfigureAwait(false);
 
-        var addons = await _apiInterface.GetAddonsAsync(_game.GameEnum).ConfigureAwait(false);
+            if (_cache is not null && !createNew)
+            {
+                return;
+            }
 
-        if (addons is null || addons.Count == 0)
-        {
-            _ = _semaphore.Release();
-            return;
-        }
+            var addons = await _apiInterface.GetAddonsAsync(_game.GameEnum).ConfigureAwait(false);
 
-        _cache = [];
+            if (addons is null || addons.Count == 0)
+            {
+                return;
+            }
 
-        addons = [.. addons.Where(a => !a.IsDisabled)
+            _cache = [];
+
+            addons = [.. addons.Where(a => !a.IsDisabled)
             .OrderBy(a => a.Title)
             .ThenBy(a => a.Version)];
 
-        foreach (var addon in addons)
-        {
-            _ = _cache.TryAdd(addon.AddonType, []);
-            _ = _cache[addon.AddonType].TryAdd(new(addon.Id, addon.Version), addon);
+            foreach (var addon in addons)
+            {
+                _ = _cache.TryAdd(addon.AddonType, []);
+                _ = _cache[addon.AddonType].TryAdd(new(addon.Id, addon.Version), addon);
+            }
         }
-
-        _ = _semaphore.Release();
+        finally
+        {
+            _ = _semaphore.Release();
+        }
     }
 
 
@@ -143,7 +147,10 @@ public sealed class DownloadableAddonsProvider : IDownloadableAddonsProvider
 
 
     /// <inheritdoc/>
-    public async Task DownloadAddonAsync(IDownloadableAddon addon)
+    public async Task DownloadAddonAsync(
+        IDownloadableAddon addon,
+        CancellationToken cancellationToken
+        )
     {
         var url = addon.DownloadUrl;
         var file = Path.GetFileName(url.ToString());
@@ -169,7 +176,12 @@ public sealed class DownloadableAddonsProvider : IDownloadableAddonsProvider
 
         var pathToFile = Path.Combine(path, file);
 
-        await _archiveTools.DownloadFileAsync(url, pathToFile).ConfigureAwait(false);
+        var isDownloaded = await _archiveTools.DownloadFileAsync(url, pathToFile, cancellationToken).ConfigureAwait(false);
+
+        if (!isDownloaded)
+        {
+            return;
+        }
 
         await _installedAddonsProvider.AddAddonAsync(pathToFile).ConfigureAwait(false);
 

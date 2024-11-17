@@ -2,6 +2,7 @@
 using Common.Helpers;
 using Common.Interfaces;
 using System.Collections.Immutable;
+using System.Threading;
 
 namespace Common.Client.Interfaces;
 
@@ -18,7 +19,8 @@ public interface IDownloadableAddonsProvider
     /// Download addon
     /// </summary>
     /// <param name="addon">Addon</param>
-    Task DownloadAddonAsync(IDownloadableAddon addon);
+    /// <param name="cancellationToken">Cancellation token</param>
+    Task DownloadAddonAsync(IDownloadableAddon addon, CancellationToken cancellationToken);
 
     /// <summary>
     /// Download addon

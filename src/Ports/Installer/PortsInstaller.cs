@@ -45,7 +45,7 @@ public sealed class PortsInstaller
 
         var fileName = Path.GetFileName(release.DownloadUrl.ToString());
 
-        await _fileTools.DownloadFileAsync(release.DownloadUrl, fileName).ConfigureAwait(false);
+        _ = await _fileTools.DownloadFileAsync(release.DownloadUrl, fileName, CancellationToken.None).ConfigureAwait(false);
 
         await _fileTools.UnpackArchiveAsync(fileName, port.PortInstallFolderPath).ConfigureAwait(false);
 

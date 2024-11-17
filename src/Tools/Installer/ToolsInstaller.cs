@@ -44,7 +44,7 @@ public sealed class ToolsInstaller
 
         var filePath = Path.GetFileName(release.DownloadUrl.ToString());
 
-        await _fileTools.DownloadFileAsync(release.DownloadUrl, filePath).ConfigureAwait(false);
+        _ = await _fileTools.DownloadFileAsync(release.DownloadUrl, filePath, CancellationToken.None).ConfigureAwait(false);
 
         await _fileTools.UnpackArchiveAsync(filePath, port.PathToExecutableFolder).ConfigureAwait(false);
 

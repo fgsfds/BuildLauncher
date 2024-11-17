@@ -1,5 +1,6 @@
 using Addons.Providers;
 using Avalonia.Controls.Notifications;
+using Avalonia.Threading;
 using Common.Entities;
 using Common.Enums;
 using Common.Helpers;
@@ -18,12 +19,15 @@ public sealed partial class DownloadsViewModel : ObservableObject
 
     private readonly InstalledAddonsProvider _installedAddonsProvider;
     private readonly DownloadableAddonsProvider _downloadableAddonsProvider;
+
+    private CancellationTokenSource? _cancellationTokenSource;
     private readonly ILogger _logger;
 
 
     #region Binding Properties
 
     [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(CancelDownloadCommand))]
     private bool _isInProgress;
 
     [ObservableProperty]
@@ -157,10 +161,13 @@ public sealed partial class DownloadsViewModel : ObservableObject
     /// <summary>
     /// VM initialization
     /// </summary>
-    public Task InitializeAsync()
+    public async Task InitializeAsync()
     {
-        Thread.Sleep(2000);
-        return UpdateAsync(false);
+        await Task.Delay(2000).ConfigureAwait(false);
+
+        await Dispatcher.UIThread.InvokeAsync(
+            async () => await UpdateAsync(false).ConfigureAwait(false)
+            ).ConfigureAwait(false);
     }
 
 
@@ -170,15 +177,24 @@ public sealed partial class DownloadsViewModel : ObservableObject
     [RelayCommand]
     private async Task UpdateAsync(bool? createNew)
     {
-        IsInProgress = true;
+        try
+        {
+            IsInProgress = true;
 
-        await _downloadableAddonsProvider.CreateCacheAsync(createNew ?? true).ConfigureAwait(true);
+            await _downloadableAddonsProvider.CreateCacheAsync(createNew ?? true).ConfigureAwait(true);
 
-        OnPropertyChanged(nameof(DownloadableList));
+            OnPropertyChanged(nameof(DownloadableList));
 
-        SelectedDownloadable = null;
-
-        IsInProgress = false;
+            SelectedDownloadable = null;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogCritical(ex, "=== Error while updating downloadable addons ===");
+        }
+        finally
+        {
+            IsInProgress = false;
+        }
     }
 
 
@@ -190,6 +206,10 @@ public sealed partial class DownloadsViewModel : ObservableObject
     {
         try
         {
+            IsInProgress = true;
+
+            _cancellationTokenSource = new();
+
             if (SelectedDownloadable is null)
             {
                 return;
@@ -197,7 +217,7 @@ public sealed partial class DownloadsViewModel : ObservableObject
 
             _downloadableAddonsProvider.Progress.ProgressChanged += OnProgressChanged;
 
-            await _downloadableAddonsProvider.DownloadAddonAsync(SelectedDownloadable).ConfigureAwait(true);
+            await _downloadableAddonsProvider.DownloadAddonAsync(SelectedDownloadable, _cancellationTokenSource.Token).ConfigureAwait(true);
 
             _downloadableAddonsProvider.Progress.ProgressChanged -= OnProgressChanged;
             OnProgressChanged(null, 0);
@@ -214,8 +234,43 @@ public sealed partial class DownloadsViewModel : ObservableObject
 
             _logger.LogCritical(ex, $"=== Error while downloading addon {SelectedDownloadable?.DownloadUrl} ===");
         }
+        finally
+        {
+            IsInProgress = false;
+        }
     }
     private bool DownloadSelectedAddonCanExecute => SelectedDownloadable is not null;
+
+
+    /// <summary>
+    /// Cancel addon download
+    /// </summary>
+    [RelayCommand(CanExecute = (nameof(CancelDownloadCanExecute)))]
+    private void CancelDownload()
+    {
+        try
+        {
+            Guard.IsNotNull(_cancellationTokenSource);
+            _cancellationTokenSource.Cancel();
+        }
+        catch (Exception ex)
+        {
+            var length = App.Random.Next(1, 100);
+            var repeatedString = new string('\u200B', length);
+
+            App.NotificationManager.Show(
+                "Critical error! Exception is written to the log." + repeatedString,
+                NotificationType.Error
+                );
+
+            _logger.LogCritical(ex, $"=== Error while cancelling downloading of {SelectedDownloadable?.DownloadUrl} ===");
+        }
+        finally
+        {
+            IsInProgress = false;
+        }
+    }
+    private bool CancelDownloadCanExecute => IsInProgress;
 
 
     /// <summary>

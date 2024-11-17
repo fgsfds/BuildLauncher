@@ -92,7 +92,15 @@
                     Grid.Column="0"
                     Margin="0,5,5,5"
                     Padding="5"
-                    Content="{Binding DownloadButtonText, FallbackValue= Download}"/>
+                    Content="{Binding DownloadButtonText, FallbackValue= Download}"
+                    IsVisible="{Binding !IsInProgress}"/>
+
+            <Button Command="{Binding CancelDownloadCommand}"
+                    Grid.Column="0"
+                    Margin="0,5,5,5"
+                    Padding="5"
+                    Content="Cancel"
+                    IsVisible="{Binding IsInProgress}"/>
 
             <ProgressBar Value="{Binding ProgressBarValue}"
                          Height="10"

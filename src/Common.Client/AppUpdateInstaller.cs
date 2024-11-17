@@ -67,7 +67,7 @@ public sealed class AppUpdateInstaller
             File.Delete(fileName);
         }
 
-        await _archiveTools.DownloadFileAsync(updateUrl, fileName).ConfigureAwait(false);
+        _ = await _archiveTools.DownloadFileAsync(updateUrl, fileName, CancellationToken.None).ConfigureAwait(false);
 
         ZipFile.ExtractToDirectory(fileName, Path.Combine(ClientProperties.WorkingFolder, ClientConsts.UpdateFolder), true);
 

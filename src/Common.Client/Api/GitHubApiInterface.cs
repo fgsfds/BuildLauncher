@@ -16,9 +16,9 @@ public sealed class GitHubApiInterface : IApiInterface
     private readonly IRetriever<Dictionary<PortEnum, GeneralReleaseEntity>?> _portsReleasesRetriever;
     private readonly RepoAppReleasesRetriever _appReleasesProvider;
     private readonly HttpClient _httpClient;
-
-    private static Dictionary<GameEnum, List<DownloadableAddonEntity>>? _addonsJson = null;
-    private SemaphoreSlim _semaphore = new(1);
+    private readonly SemaphoreSlim _semaphore = new(1);
+    
+    private Dictionary<GameEnum, List<DownloadableAddonEntity>>? _addonsJson = null;
 
 
     public GitHubApiInterface(
