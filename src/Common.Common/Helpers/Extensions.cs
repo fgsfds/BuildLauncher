@@ -12,18 +12,18 @@ public static class Extensions
     {
         if (size < 1024)
         {
-            return $"{size}B";
+            return $"{size} B";
         }
         else if (size < 1024 * 1024)
         {
-            return $"{size / 1024}Kb";
+            return $"{size / 1024} KB";
         }
         else if (size < 1024 * 1024 * 1024)
         {
-            return $"{size / 1024 / 1024}Mb";
+            return $"{size / 1024 / 1024} MB";
         }
 
-        return $"{size / 1024 / 1024 / 1024}Gb";
+        return $"{size / 1024 / 1024 / 1024} GB";
     }
 
     /// <summary>

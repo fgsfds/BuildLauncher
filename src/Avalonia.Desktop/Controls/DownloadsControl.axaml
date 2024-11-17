@@ -65,7 +65,7 @@
                 <DataGridTextColumn Header="Title" Binding="{Binding Title}" FontSize="12" Width="3*"/>
                 <DataGridTextColumn Header="Type" Binding="{Binding AddonType}" FontSize="12" FontWeight="Bold" Width="*" />
                 <DataGridTextColumn Header="Version" Binding="{Binding Version}" FontSize="12" Width="*" />
-                <DataGridTextColumn Header="Size" Binding="{Binding FileSizeString}" FontSize="12" Width="*" />
+                <DataGridTextColumn Header="Size" Binding="{Binding FileSizeString}" FontSize="12" Width="*" SortMemberPath="FileSize" />
                 <DataGridTextColumn IsVisible="False" Header="Rating" Binding="{Binding RatingStr}" FontSize="12" Width="*" />
                 <DataGridTextColumn IsVisible="False" Header="Downloads" Binding="{Binding Installs}" FontSize="12" Width="*" />
                 <DataGridTextColumn Header="Updated" Binding="{Binding UpdateDateString}" FontSize="12" Width="*" SortMemberPath="UpdateDate" />

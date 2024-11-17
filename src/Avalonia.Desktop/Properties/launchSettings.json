@@ -2,7 +2,7 @@
   "profiles": {
     "BuildLauncher.Desktop": {
       "commandName": "Project",
-      "commandLineArgs": "--dev --offline"
+      "commandLineArgs": "--dev"
     },
     "WSL": {
       "commandName": "WSL2",
