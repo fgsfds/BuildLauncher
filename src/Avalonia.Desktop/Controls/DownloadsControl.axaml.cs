@@ -1,5 +1,6 @@
 using Avalonia.Controls;
 using Avalonia.Desktop.ViewModels;
+using Common.Entities;
 using Common.Helpers;
 using CommunityToolkit.Mvvm.Input;
 
@@ -39,5 +40,19 @@ public sealed partial class DownloadsControl : UserControl
         };
 
         _ = dataGrid.ContextMenu.Items.Add(downloadButton);
+    }
+
+    private void DataGrid_SelectionChanged(object? sender, SelectionChangedEventArgs e)
+    {
+        var viewModel = DataContext as DownloadsViewModel;
+
+        List<DownloadableAddonEntity> list = [];
+
+        foreach (var a in DownloadableList.SelectedItems)
+        {
+            list.Add((DownloadableAddonEntity)a);
+        }
+
+        viewModel!.SelectedDownloadableList = list;
     }
 }

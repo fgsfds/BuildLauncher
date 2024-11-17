@@ -98,6 +98,16 @@ public sealed partial class DownloadsViewModel : ObservableObject
     private DownloadableAddonEntity? _selectedDownloadable;
 
     /// <summary>
+    /// Currently selected downloadable campaign, map or mod
+    /// </summary>
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(DownloadButtonText))]
+    private List<DownloadableAddonEntity>? _selectedDownloadableList;
+
+    [ObservableProperty]
+    private string _progressMessage = string.Empty;
+
+    /// <summary>
     /// Description of the selected addon
     /// </summary>
     public string SelectedDownloadableDescription => SelectedDownloadable is null ? string.Empty : SelectedDownloadable.ToMarkdownString();
@@ -109,18 +119,18 @@ public sealed partial class DownloadsViewModel : ObservableObject
     {
         get
         {
-            if (SelectedDownloadable is null)
+            if (SelectedDownloadableList is null or [])
             {
                 return "Download";
             }
             else
             {
-                return $"Download ({SelectedDownloadable.FileSize.ToSizeString()})";
+                return $"Download ({SelectedDownloadableList.Sum(x => x.FileSize).ToSizeString()})";
             }
         }
     }
 
-    public List<FilterItemEnum> FilterItems => Enum.GetValues(typeof(FilterItemEnum)).Cast<FilterItemEnum>().ToList();
+    public List<FilterItemEnum> FilterItems => [.. Enum.GetValues<FilterItemEnum>()];
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(DownloadableList))]
@@ -206,21 +216,38 @@ public sealed partial class DownloadsViewModel : ObservableObject
     {
         try
         {
-            IsInProgress = true;
-
-            _cancellationTokenSource = new();
-
-            if (SelectedDownloadable is null)
+            if (SelectedDownloadableList is null or [])
             {
                 return;
             }
 
+            List<DownloadableAddonEntity> filesToDownload = [.. SelectedDownloadableList];
+
+            IsInProgress = true;
+
+            _cancellationTokenSource = new();
+
             _downloadableAddonsProvider.Progress.ProgressChanged += OnProgressChanged;
 
-            await _downloadableAddonsProvider.DownloadAddonAsync(SelectedDownloadable, _cancellationTokenSource.Token).ConfigureAwait(true);
+            byte downloadCount = 1;
 
-            _downloadableAddonsProvider.Progress.ProgressChanged -= OnProgressChanged;
-            OnProgressChanged(null, 0);
+            foreach (var item in filesToDownload)
+            {
+                if (_cancellationTokenSource.IsCancellationRequested)
+                {
+                    ThrowHelper.ThrowOperationCanceledException();
+                }
+
+                ProgressMessage = $"Downloading {item.Title}. File {downloadCount} of {filesToDownload.Count}.";
+
+                await _downloadableAddonsProvider.DownloadAddonAsync(item, _cancellationTokenSource.Token).ConfigureAwait(true);
+
+                downloadCount++;
+            }
+        }
+        catch (OperationCanceledException)
+        {
+            //nothing to do
         }
         catch (Exception ex)
         {
@@ -236,7 +263,10 @@ public sealed partial class DownloadsViewModel : ObservableObject
         }
         finally
         {
+            _downloadableAddonsProvider.Progress.ProgressChanged -= OnProgressChanged;
+            OnProgressChanged(null, 0);
             IsInProgress = false;
+            ProgressMessage = string.Empty;
         }
     }
     private bool DownloadSelectedAddonCanExecute => SelectedDownloadable is not null;

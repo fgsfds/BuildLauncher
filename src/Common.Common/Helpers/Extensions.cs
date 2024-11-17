@@ -10,20 +10,20 @@ public static class Extensions
     /// <param name="size">File size</param>
     public static string ToSizeString(this long size)
     {
-        if (size < 1024)
+        if (size < 1000)
         {
-            return $"{size} B";
+            return size.ToString("0") + "B";
         }
-        else if (size < 1024 * 1024)
+        else if (size < 1000 * 1000)
         {
-            return $"{size / 1024} KB";
+            return (size / 1000).ToString("0") + "KB";
         }
-        else if (size < 1024 * 1024 * 1024)
+        else if (size < 1000 * 1000 * 1000)
         {
-            return $"{size / 1024 / 1024} MB";
+            return (size * 1e-6).ToString("0") + "MB";
         }
 
-        return $"{size / 1024 / 1024 / 1024} GB";
+        return (size * 1e-9).ToString("0.##") + "GB";
     }
 
     /// <summary>
