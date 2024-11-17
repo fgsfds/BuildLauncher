@@ -263,6 +263,7 @@ public sealed partial class DownloadsViewModel : ObservableObject
         }
         finally
         {
+            _cancellationTokenSource?.Dispose();
             _downloadableAddonsProvider.Progress.ProgressChanged -= OnProgressChanged;
             OnProgressChanged(null, 0);
             IsInProgress = false;
@@ -278,27 +279,8 @@ public sealed partial class DownloadsViewModel : ObservableObject
     [RelayCommand(CanExecute = (nameof(CancelDownloadCanExecute)))]
     private void CancelDownload()
     {
-        try
-        {
-            Guard.IsNotNull(_cancellationTokenSource);
-            _cancellationTokenSource.Cancel();
-        }
-        catch (Exception ex)
-        {
-            var length = App.Random.Next(1, 100);
-            var repeatedString = new string('\u200B', length);
-
-            App.NotificationManager.Show(
-                "Critical error! Exception is written to the log." + repeatedString,
-                NotificationType.Error
-                );
-
-            _logger.LogCritical(ex, $"=== Error while cancelling downloading of {SelectedDownloadable?.DownloadUrl} ===");
-        }
-        finally
-        {
-            IsInProgress = false;
-        }
+        Guard.IsNotNull(_cancellationTokenSource);
+        _cancellationTokenSource.Cancel();
     }
     private bool CancelDownloadCanExecute => IsInProgress;
 
