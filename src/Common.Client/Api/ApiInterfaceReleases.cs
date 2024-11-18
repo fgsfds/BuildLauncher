@@ -25,7 +25,7 @@ public sealed partial class ApiInterface
 
             var response = await _httpClient.SendAsync(requestMessage).ConfigureAwait(false);
 
-            if (response is null || !response.IsSuccessStatusCode)
+            if (response?.IsSuccessStatusCode is not true)
             {
                 return null;
             }
@@ -60,7 +60,7 @@ public sealed partial class ApiInterface
 
             var response = await _httpClient.SendAsync(requestMessage).ConfigureAwait(false);
 
-            if (response is null || !response.IsSuccessStatusCode)
+            if (response?.IsSuccessStatusCode is not true)
             {
                 return null;
             }
@@ -80,5 +80,5 @@ public sealed partial class ApiInterface
         }
     }
 
-    public async Task<Dictionary<ToolEnum, GeneralReleaseEntity>?> GetLatestToolsReleasesAsync() => null;
+    public Task<Dictionary<ToolEnum, GeneralReleaseEntity>?> GetLatestToolsReleasesAsync() => null!;
 }

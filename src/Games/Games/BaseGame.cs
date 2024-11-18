@@ -24,10 +24,6 @@ public abstract class BaseGame : IGame
     /// <inheritdoc/>
     public string ModsFolderPath => Path.Combine(ClientProperties.DataFolderPath, "Addons", ShortName, "Mods");
 
-    /// <inheritdoc/>
-    [Obsolete]
-    public string SpecialFolderPath => Path.Combine(ClientProperties.DataFolderPath, "Addons", ShortName, "Special");
-
 
     /// <inheritdoc/>
     public abstract GameEnum GameEnum { get; }
@@ -68,9 +64,15 @@ public abstract class BaseGame : IGame
             _ = Directory.CreateDirectory(ModsFolderPath);
         }
 
-        if (Directory.Exists(SpecialFolderPath))
+        DeleteSpecial();
+    }
+
+    [Obsolete]
+    private void DeleteSpecial()
+    {
+        if (Directory.Exists(Path.Combine(ClientProperties.DataFolderPath, "Addons", ShortName, "Special")))
         {
-            Directory.Delete(SpecialFolderPath, true);
+            Directory.Delete(Path.Combine(ClientProperties.DataFolderPath, "Addons", ShortName, "Special"), true);
         }
     }
 
@@ -101,12 +103,6 @@ public abstract class BaseGame : IGame
             Directory.Move(oldModsFolder, ModsFolderPath);
         }
 
-        var oldSpecialFolder = Path.Combine(ClientProperties.DataFolderPath, ShortName, "Special");
-        if (Directory.Exists(oldSpecialFolder))
-        {
-            Directory.Move(oldSpecialFolder, SpecialFolderPath);
-        }
-
         var oldGameDataDirectory = Path.Combine(ClientProperties.DataFolderPath, ShortName);
         if (Directory.Exists(oldGameDataDirectory))
         {
@@ -122,7 +118,7 @@ public abstract class BaseGame : IGame
     /// <param name="path">Folder where the files are searched</param>
     protected bool IsInstalled(List<string> files, string? path = null)
     {
-        var gamePath = path is null ? GameInstallFolder : path;
+        var gamePath = path ?? GameInstallFolder;
 
         if (gamePath is null)
         {

@@ -33,7 +33,7 @@ public sealed class S3Client : IDisposable
     {
         GetPreSignedUrlRequest request = new()
         {
-            BucketName = Consts.Bucket,
+            //BucketName = Consts.Bucket,
             Key = file,
             Expires = DateTime.Now.AddHours(1),
             Verb = HttpVerb.PUT

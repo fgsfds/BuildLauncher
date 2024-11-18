@@ -24,10 +24,12 @@ public sealed class DownloadableAddonsProvider : IDownloadableAddonsProvider
 
     private static readonly SemaphoreSlim _semaphore = new(1);
 
+    /// <inheritdoc/>
     public event AddonChanged? AddonDownloadedEvent;
 
     /// <inheritdoc/>
-    public Progress<float> Progress { get; private set; }
+    public Progress<float> Progress { get; }
+
 
     [Obsolete($"Don't create directly. Use {nameof(DownloadableAddonsProviderFactory)}.")]
     public DownloadableAddonsProvider(
@@ -116,16 +118,7 @@ public sealed class DownloadableAddonsProvider : IDownloadableAddonsProvider
                 downloadableAddon.Key.Id.Contains("death-wish", StringComparison.InvariantCultureIgnoreCase) &&
                 downloadableAddon.Key.Version!.StartsWith('1'))
             {
-                if (existingAddons.Contains(downloadableAddon.Key))
-                {
-                    downloadableAddon.Value.IsInstalled = true;
-                }
-                else
-                {
-                    downloadableAddon.Value.IsInstalled = false;
-                }
-
-                continue;
+                downloadableAddon.Value.IsInstalled = existingAddons.Contains(downloadableAddon.Key);
             }
             else
             {

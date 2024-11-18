@@ -30,15 +30,13 @@ public static class AutoloadModsValidator
             return false;
         }
 
-        if (autoloadMod.SupportedGame.GameVersion is not null &&
-            !autoloadMod.SupportedGame.GameVersion.Equals(campaign.SupportedGame.GameVersion, StringComparison.InvariantCultureIgnoreCase))
+        if (autoloadMod.SupportedGame.GameVersion?.Equals(campaign.SupportedGame.GameVersion, StringComparison.OrdinalIgnoreCase) is false)
         {
             //skipping mod for different game version
             return false;
         }
 
-        if (autoloadMod.RequiredFeatures is not null &&
-            autoloadMod.RequiredFeatures.Except(features).Any())
+        if (autoloadMod.RequiredFeatures?.Except(features).Any() is true)
         {
             //skipping mod that requires unsupported features
             return false;

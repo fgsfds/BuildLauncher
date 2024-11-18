@@ -52,8 +52,7 @@ internal sealed partial class PortsReleasesRepoRetriever : IRetriever<Dictionary
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Error while getting latest release for {port}");
-                _logger.LogError(ex.ToString());
+                _logger.LogCritical(ex, $"Error while getting latest release for {port}");
             }
         }
 
@@ -104,7 +103,7 @@ internal sealed partial class PortsReleasesRepoRetriever : IRetriever<Dictionary
         var allReleases = JsonSerializer.Deserialize(response, GitHubReleaseEntityContext.Default.ListGitHubReleaseEntity)
             ?? ThrowHelper.ThrowFormatException<List<GitHubReleaseEntity>>("Error while deserializing GitHub releases");
 
-        var releases = allReleases.Where(static x => x.IsDraft is false && x.IsPrerelease is false);
+        var releases = allReleases.Where(static x => !x.IsDraft && !x.IsPrerelease);
 
         if (releases is null)
         {
@@ -171,18 +170,12 @@ internal sealed partial class PortsReleasesRepoRetriever : IRetriever<Dictionary
     /// </summary>
     private string GetVersion(PortEnum portEnum, GitHubReleaseEntity release, GitHubReleaseAsset asset)
     {
-        string version;
-
         if (portEnum is PortEnum.NotBlood)
         {
-            version = asset.UpdatedDate.ToUniversalTime().ToString();
-        }
-        else
-        {
-            version = release.TagName;
+            return asset.UpdatedDate.ToUniversalTime().ToString();
         }
 
-        return version;
+        return release.TagName;
     }
 
     /// <summary>

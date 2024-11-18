@@ -211,7 +211,7 @@ public sealed partial class PortsViewModel : ObservableObject
             ErrorMessage = string.Empty;
 
             _installedPortsProvider.AddOrChangeCustomPort(
-                SelectedCustomPort.HasValue ? SelectedCustomPort.Value.Name : null,
+                SelectedCustomPort?.Name,
                 SelectedCustomPortName,
                 SelectedCustomPortPath,
                 SelectedCustomPortType.Value

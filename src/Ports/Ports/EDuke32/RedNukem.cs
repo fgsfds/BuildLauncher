@@ -133,8 +133,7 @@ public sealed class RedNukem : EDuke32
         {
             _ = sb.Append($@" {AddDirectoryParam}""{game.AgainInstallPath}""");
         }
-        else if (addon.DependentAddons is not null &&
-                 addon.DependentAddons.ContainsKey(nameof(RedneckAddonEnum.Route66)))
+        else if (addon.DependentAddons?.ContainsKey(nameof(RedneckAddonEnum.Route66)) is true)
         {
             _ = sb.Append($@" {AddDirectoryParam}""{game.GameInstallFolder}"" -x GAME66.CON");
         }
@@ -156,7 +155,7 @@ public sealed class RedNukem : EDuke32
         }
 
 
-        Guard2.ThrowIfNotType<DukeCampaign>(addon, out var rCamp);
+        addon.ThrowIfNotType<DukeCampaign>(out var rCamp);
 
         if (rCamp.MainCon is not null)
         {
@@ -178,7 +177,7 @@ public sealed class RedNukem : EDuke32
         }
         else if (rCamp.Type is AddonTypeEnum.Map)
         {
-            GetMapArgs(sb, game, rCamp);
+            GetMapArgs(sb, rCamp);
         }
         else
         {

@@ -69,10 +69,7 @@ public sealed partial class DownloadsViewModel : ObservableObject
                 return null;
             }
 
-            if (string.IsNullOrWhiteSpace(SearchBoxText))
-            {
-            }
-            else
+            if (!string.IsNullOrWhiteSpace(SearchBoxText))
             {
                 result = result.Where(x => x.Title.Contains(SearchBoxText, StringComparison.OrdinalIgnoreCase));
             }
@@ -211,7 +208,7 @@ public sealed partial class DownloadsViewModel : ObservableObject
     /// <summary>
     /// Download selected addon
     /// </summary>
-    [RelayCommand(CanExecute = (nameof(DownloadSelectedAddonCanExecute)))]
+    [RelayCommand(CanExecute = nameof(DownloadSelectedAddonCanExecute))]
     private async Task DownloadAddon()
     {
         try
@@ -276,7 +273,7 @@ public sealed partial class DownloadsViewModel : ObservableObject
     /// <summary>
     /// Cancel addon download
     /// </summary>
-    [RelayCommand(CanExecute = (nameof(CancelDownloadCanExecute)))]
+    [RelayCommand(CanExecute = nameof(CancelDownloadCanExecute))]
     private void CancelDownload()
     {
         Guard.IsNotNull(_cancellationTokenSource);

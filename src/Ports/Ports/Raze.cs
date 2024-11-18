@@ -360,7 +360,7 @@ public sealed class Raze : BasePort
         }
         else if (dCamp.Type is AddonTypeEnum.Map)
         {
-            GetMapArgs(sb, game, dCamp);
+            GetMapArgs(sb, dCamp);
         }
         else
         {
@@ -405,7 +405,7 @@ public sealed class Raze : BasePort
         }
         else if (wCamp.Type is AddonTypeEnum.Map)
         {
-            GetMapArgs(sb, game, wCamp);
+            GetMapArgs(sb, wCamp);
         }
         else
         {
@@ -465,7 +465,7 @@ public sealed class Raze : BasePort
         }
         else if (rCamp.Type is AddonTypeEnum.Map)
         {
-            GetMapArgs(sb, game, rCamp);
+            GetMapArgs(sb, rCamp);
         }
         else
         {

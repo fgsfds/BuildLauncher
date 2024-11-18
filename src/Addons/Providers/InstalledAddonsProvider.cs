@@ -314,7 +314,7 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
 
         _ = _cache.TryGetValue(AddonTypeEnum.Map, out var result);
 
-        return result is null ? [] : result;
+        return result ?? [];
     }
 
     /// <inheritdoc/>
@@ -329,7 +329,7 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
 
         _ = _cache.TryGetValue(AddonTypeEnum.Mod, out var result);
 
-        return result is null ? [] : result;
+        return result ?? [];
     }
 
     /// <summary>
@@ -370,7 +370,7 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
                 }
                 else
                 {
-                    addedAddons.Add(new(newAddon.Id, newAddon.Version), newAddon);
+                    _ = addedAddons.TryAdd(new(newAddon.Id, newAddon.Version), newAddon);
                 }
             }
             catch (Exception)
@@ -502,98 +502,7 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
             id = manifest.Id;
             title = manifest.Title;
             author = manifest.Author;
-            image = image ?? preview;
-            version = manifest.Version;
-            description = manifest.Description;
-            supportedGame = manifest.SupportedGame.Game;
-            gameVersion = manifest.SupportedGame.Version;
-            gameCrc = manifest.SupportedGame.Crc;
-
-            rts = manifest.Rts;
-            ini = manifest.Ini;
-            rff = manifest.MainRff;
-            snd = manifest.SoundRff;
-
-            startMap = manifest.StartMap;
-
-            requiredFeatures = manifest.Dependencies?.RequiredFeatures?.Select(static x => x).ToHashSet();
-
-            mainCon = manifest.MainCon;
-            addCons = manifest.AdditionalCons?.ToHashSet();
-
-            mainDef = manifest.MainDef;
-            addDefs = manifest.AdditionalDefs?.ToHashSet();
-
-            dependencies = manifest.Dependencies?.Addons?.ToDictionary(static x => x.Id, static x => x.Version, StringComparer.OrdinalIgnoreCase);
-            incompatibles = manifest.Incompatibles?.Addons?.ToDictionary(static x => x.Id, static x => x.Version, StringComparer.OrdinalIgnoreCase);
-
-            if (manifest.Executables is not null)
-            {
-                executables = [];
-
-                foreach (var exe in manifest.Executables)
-                {
-                    executables.Add(exe.Key, Path.Combine(Path.GetDirectoryName(pathToFile)!, exe.Value));
-                }
-            }
-            else
-            {
-                executables = null;
-            }
-        }
-        else if (ArchiveFactory.IsArchive(pathToFile, out _))
-        {
-            using var archive = ArchiveFactory.Open(pathToFile);
-            var unpackedTo = UnpackIfNeededAndGetAddonDto(pathToFile, archive, out var manifest);
-
-            if (manifest is null)
-            {
-                return null;
-            }
-
-            if (unpackedTo is not null)
-            {
-                pathToFile = Path.Combine(unpackedTo, "addon.json");
-                isUnpacked = true;
-
-                var addonDir = Path.GetDirectoryName(pathToFile)!;
-
-                var gridFile = Directory.GetFiles(addonDir, "grid.*");
-                var previewFile = Directory.GetFiles(addonDir, "preview.*");
-
-                if (gridFile.Length > 0)
-                {
-                    var stream = await File.ReadAllBytesAsync(gridFile[0]).ConfigureAwait(false);
-                    image = new MemoryStream(stream);
-                }
-                else
-                {
-                    image = null;
-                }
-
-                if (previewFile.Length > 0)
-                {
-                    var stream = await File.ReadAllBytesAsync(previewFile[0]).ConfigureAwait(false);
-                    preview = new MemoryStream(stream);
-                }
-                else
-                {
-                    preview = null;
-                }
-            }
-            else
-            {
-                isUnpacked = false;
-
-                preview = ImageHelper.GetImageFromArchive(archive, "preview.png");
-                image = ImageHelper.GetCoverFromArchive(archive) ?? preview;
-            }
-
-            type = manifest.AddonType;
-            id = manifest.Id;
-            title = manifest.Title;
-            author = manifest.Author;
-            image = image ?? preview;
+            image ??= preview;
             version = manifest.Version;
             description = manifest.Description;
             supportedGame = manifest.SupportedGame.Game;
@@ -661,6 +570,97 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
             };
 
             return addon;
+        }
+        else if (ArchiveFactory.IsArchive(pathToFile, out _))
+        {
+            using var archive = ArchiveFactory.Open(pathToFile);
+            var unpackedTo = UnpackIfNeededAndGetAddonDto(pathToFile, archive, out var manifest);
+
+            if (manifest is null)
+            {
+                return null;
+            }
+
+            if (unpackedTo is not null)
+            {
+                pathToFile = Path.Combine(unpackedTo, "addon.json");
+                isUnpacked = true;
+
+                var addonDir = Path.GetDirectoryName(pathToFile)!;
+
+                var gridFile = Directory.GetFiles(addonDir, "grid.*");
+                var previewFile = Directory.GetFiles(addonDir, "preview.*");
+
+                if (gridFile.Length > 0)
+                {
+                    var stream = await File.ReadAllBytesAsync(gridFile[0]).ConfigureAwait(false);
+                    image = new MemoryStream(stream);
+                }
+                else
+                {
+                    image = null;
+                }
+
+                if (previewFile.Length > 0)
+                {
+                    var stream = await File.ReadAllBytesAsync(previewFile[0]).ConfigureAwait(false);
+                    preview = new MemoryStream(stream);
+                }
+                else
+                {
+                    preview = null;
+                }
+            }
+            else
+            {
+                isUnpacked = false;
+
+                preview = ImageHelper.GetImageFromArchive(archive, "preview.png");
+                image = ImageHelper.GetCoverFromArchive(archive) ?? preview;
+            }
+
+            type = manifest.AddonType;
+            id = manifest.Id;
+            title = manifest.Title;
+            author = manifest.Author;
+            image ??= preview;
+            version = manifest.Version;
+            description = manifest.Description;
+            supportedGame = manifest.SupportedGame.Game;
+            gameVersion = manifest.SupportedGame.Version;
+            gameCrc = manifest.SupportedGame.Crc;
+
+            rts = manifest.Rts;
+            ini = manifest.Ini;
+            rff = manifest.MainRff;
+            snd = manifest.SoundRff;
+
+            startMap = manifest.StartMap;
+
+            requiredFeatures = manifest.Dependencies?.RequiredFeatures?.Select(static x => x).ToHashSet();
+
+            mainCon = manifest.MainCon;
+            addCons = manifest.AdditionalCons?.ToHashSet();
+
+            mainDef = manifest.MainDef;
+            addDefs = manifest.AdditionalDefs?.ToHashSet();
+
+            dependencies = manifest.Dependencies?.Addons?.ToDictionary(static x => x.Id, static x => x.Version, StringComparer.OrdinalIgnoreCase);
+            incompatibles = manifest.Incompatibles?.Addons?.ToDictionary(static x => x.Id, static x => x.Version, StringComparer.OrdinalIgnoreCase);
+
+            if (manifest.Executables is not null)
+            {
+                executables = [];
+
+                foreach (var exe in manifest.Executables)
+                {
+                    executables.Add(exe.Key, Path.Combine(Path.GetDirectoryName(pathToFile)!, exe.Value));
+                }
+            }
+            else
+            {
+                executables = null;
+            }
         }
         else if (pathToFile.EndsWith(".grp", StringComparison.OrdinalIgnoreCase))
         {

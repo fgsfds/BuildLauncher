@@ -150,7 +150,7 @@ public sealed class VoidSW : EDuke32
         }
         else if (wCamp.Type is AddonTypeEnum.Map)
         {
-            GetMapArgs(sb, game, wCamp);
+            GetMapArgs(sb, wCamp);
         }
         else
         {

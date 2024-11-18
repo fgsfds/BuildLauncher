@@ -132,7 +132,7 @@ public sealed class Fury : EDuke32
         }
         else if (fCamp.Type is AddonTypeEnum.Map)
         {
-            GetMapArgs(sb, game, fCamp);
+            GetMapArgs(sb, fCamp);
         }
         else
         {

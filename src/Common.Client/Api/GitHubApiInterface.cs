@@ -17,7 +17,7 @@ public sealed class GitHubApiInterface : IApiInterface
     private readonly RepoAppReleasesRetriever _appReleasesProvider;
     private readonly HttpClient _httpClient;
     private readonly SemaphoreSlim _semaphore = new(1);
-    
+
     private Dictionary<GameEnum, List<DownloadableAddonEntity>>? _addonsJson = null;
 
 
@@ -59,7 +59,7 @@ public sealed class GitHubApiInterface : IApiInterface
                     ThrowHelper.ThrowArgumentNullException();
                 }
             }
-            
+
             return _addonsJson.TryGetValue(gameEnum, out var result) ? result : null;
         }
         catch

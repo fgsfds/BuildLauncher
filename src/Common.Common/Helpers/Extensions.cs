@@ -81,7 +81,7 @@ public static class Extensions
     /// <param name="dict">Dictionary</param>
     /// <param name="key">Key</param>
     /// <param name="value">Value</param>
-    public static void AddOrReplace<TKey, TValue>(this IDictionary<TKey, TValue> dict, TKey key, TValue value)
+    public static void AddOrReplace<TKey, TValue>(this IDictionary<TKey, TValue> dict, TKey key, TValue value) where TKey : notnull
     {
         if (dict.ContainsKey(key))
         {

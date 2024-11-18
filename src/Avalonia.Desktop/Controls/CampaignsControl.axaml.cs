@@ -84,15 +84,7 @@ public sealed partial class CampaignsControl : UserControl
                 Content = textBlock,
                 Command = new RelayCommand(() =>
                     _viewModel.StartCampaignCommand.Execute(new StubPort()),
-                    () =>
-                    {
-                        if (CampaignsList?.SelectedItem is not IAddon selectedCampaign)
-                        {
-                            return false;
-                        }
-
-                        return true;
-                    }),
+                    () => CampaignsList?.SelectedItem is IAddon selectedCampaign),
                 Margin = new(5),
                 Padding = new(5),
             };
@@ -104,7 +96,7 @@ public sealed partial class CampaignsControl : UserControl
 
         foreach (var port in _supportedPorts)
         {
-            var portIcon = converter.Convert(port.Icon, typeof(IImage), null!, CultureInfo.InvariantCulture) as IImage;
+            var portIcon = converter.Convert(port.Icon, typeof(IImage), null, CultureInfo.InvariantCulture) as IImage;
 
             StackPanel sp = new() { Orientation = Layout.Orientation.Horizontal };
             sp.Children.Add(new Image() { Margin = new(0, 0, 5, 0), Height = 16, Source = portIcon });
@@ -124,12 +116,7 @@ public sealed partial class CampaignsControl : UserControl
 
                         if (selectedCampaign.Executables?[OSEnum.Windows] is not null)
                         {
-                            if (port.Exe.Equals(Path.GetFileName(selectedCampaign.Executables[OSEnum.Windows]), StringComparison.InvariantCultureIgnoreCase))
-                            {
-                                return true;
-                            }
-
-                            return false;
+                            return port.Exe.Equals(Path.GetFileName(selectedCampaign.Executables[OSEnum.Windows]), StringComparison.InvariantCultureIgnoreCase);
                         }
 
                         if (!port.IsInstalled)
@@ -202,7 +189,9 @@ public sealed partial class CampaignsControl : UserControl
     /// </summary>
     private void AddCustomPortsButton()
     {
-        var existing = BottomPanel.PortsButtonsPanel.Children.FirstOrDefault(x => x is Button button && button.Content is TextBlock text && text.Text.Equals(CustomPortStr));
+        var existing = BottomPanel.PortsButtonsPanel.Children.FirstOrDefault(
+            x => x is Button button && button.Content is TextBlock text && text.Text?.Equals(CustomPortStr) is true
+            );
 
         if (existing is not null)
         {
@@ -240,10 +229,7 @@ public sealed partial class CampaignsControl : UserControl
             IsVisible = true
         };
 
-        customPortButton.Click += (sender, e) =>
-        {
-            flyout.ShowAt(customPortButton);
-        };
+        customPortButton.Click += (sender, e) => flyout.ShowAt(customPortButton);
 
         BottomPanel.PortsButtonsPanel.Children.Add(customPortButton);
     }
@@ -266,7 +252,7 @@ public sealed partial class CampaignsControl : UserControl
         foreach (var port in _supportedPorts)
         {
             if (!port.IsInstalled ||
-                (addon.RequiredFeatures is not null && addon.RequiredFeatures.Except(port.SupportedFeatures).Any()) ||
+                (addon.RequiredFeatures?.Except(port.SupportedFeatures).Any() is true) ||
                 (addon.Type is not AddonTypeEnum.Official && port.PortEnum is PortEnum.BuildGDX))
             {
                 continue;
@@ -293,7 +279,7 @@ public sealed partial class CampaignsControl : UserControl
 
         foreach (var port in customPorts)
         {
-            if ((addon.RequiredFeatures is not null && addon.RequiredFeatures.Except(port.BasePort.SupportedFeatures).Any()) ||
+            if ((addon.RequiredFeatures?.Except(port.BasePort.SupportedFeatures).Any() is true) ||
                 (addon.Type is not AddonTypeEnum.Official && port.BasePort.PortEnum is PortEnum.BuildGDX))
             {
                 continue;
@@ -343,7 +329,9 @@ public sealed partial class CampaignsControl : UserControl
             }
         }
 
-        var customPortButton = BottomPanel.PortsButtonsPanel.Children.FirstOrDefault(x => x is Button button && button.Content is TextBlock text && text.Text.Equals(CustomPortStr));
+        var customPortButton = BottomPanel.PortsButtonsPanel.Children.FirstOrDefault(
+            x => x is Button button && button.Content is TextBlock text && text.Text?.Equals(CustomPortStr) is true
+            );
 
         if (customPortButton is Button customPortButton2)
         {
@@ -371,7 +359,7 @@ public sealed partial class CampaignsControl : UserControl
     {
         var files = e.Data.GetFiles();
 
-        if (files is not null && files.Any())
+        if (files?.Any() is true)
         {
             var filePaths = files.Select(f => f.Path.LocalPath);
 

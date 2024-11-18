@@ -256,7 +256,7 @@ public abstract class BasePort
     /// <summary>
     /// Get startup args for manifested maps
     /// </summary>
-    protected void GetMapArgs(StringBuilder sb, IGame game, IAddon camp)
+    protected void GetMapArgs(StringBuilder sb, IAddon camp)
     {
         //TODO e#m#
         if (camp.StartMap is MapFileDto mapFile)
@@ -300,13 +300,13 @@ public abstract class BasePort
         }
 
 
-        Guard2.ThrowIfNotType<BloodCampaign>(addon, out var bCamp);
+        addon.ThrowIfNotType<BloodCampaign>(out var bCamp);
 
         if (bCamp.INI is not null)
         {
             _ = sb.Append($@" -ini ""{bCamp.INI}""");
         }
-        else if (bCamp.DependentAddons is not null && bCamp.DependentAddons.ContainsKey(nameof(BloodAddonEnum.BloodCP)))
+        else if (bCamp.DependentAddons?.ContainsKey(nameof(BloodAddonEnum.BloodCP)) is true)
         {
             _ = sb.Append($@" -ini ""{ClientConsts.CrypticIni}""");
         }
@@ -335,7 +335,7 @@ public abstract class BasePort
         }
         else if (bCamp.Type is AddonTypeEnum.Map)
         {
-            GetMapArgs(sb, game, bCamp);
+            GetMapArgs(sb, bCamp);
         }
         else
         {
@@ -365,7 +365,7 @@ public abstract class BasePort
         }
 
 
-        Guard2.ThrowIfNotType<SlaveCampaign>(addon, out var sCamp);
+        addon.ThrowIfNotType<SlaveCampaign>(out var sCamp);
 
         if (sCamp.FileName is null)
         {
@@ -378,7 +378,7 @@ public abstract class BasePort
         }
         else if (sCamp.Type is AddonTypeEnum.Map)
         {
-            GetMapArgs(sb, game, sCamp);
+            GetMapArgs(sb, sCamp);
         }
         else
         {
@@ -410,7 +410,7 @@ public abstract class BasePort
         }
 
 
-        Guard2.ThrowIfNotType<DukeCampaign>(addon, out var dCamp);
+        addon.ThrowIfNotType<DukeCampaign>(out var dCamp);
 
         if (addon.Id.Equals(nameof(WW2GIAddonEnum.Platoon).ToLower()))
         {
@@ -448,7 +448,7 @@ public abstract class BasePort
         }
         else if (dCamp.Type is AddonTypeEnum.Map)
         {
-            GetMapArgs(sb, game, dCamp);
+            GetMapArgs(sb, dCamp);
         }
         else
         {

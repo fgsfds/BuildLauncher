@@ -387,7 +387,7 @@ public class EDuke32 : BasePort
         }
         else if (dCamp.Type is AddonTypeEnum.Map)
         {
-            GetMapArgs(sb, game, dCamp);
+            GetMapArgs(sb, dCamp);
         }
         else
         {

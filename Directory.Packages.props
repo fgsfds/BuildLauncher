@@ -26,6 +26,7 @@
     <PackageVersion Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.0" />
     <PackageVersion Include="Microsoft.Extensions.Logging.Debug" Version="9.0.0" />
     <PackageVersion Include="Projektanker.Icons.Avalonia.MaterialDesign" Version="9.4.1" />
+    <PackageVersion Include="Roslynator.Analyzers" Version="4.12.9" />
     <PackageVersion Include="SharpCompress" Version="0.38.0" />
     <PackageVersion Include="coverlet.collector" Version="6.0.2" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.11.1" />
@@ -36,7 +37,7 @@
     <PackageVersion Include="ConfigureAwaitAnalyzer" Version="1.1.0" />
     <PackageVersion Include="Swashbuckle.AspNetCore" Version="7.0.0" />
     <PackageVersion Include="Microsoft.AspNetCore.SpaProxy" Version="9.0.0" />
-    <PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.10" />
+    <PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.0" />
     <PackageVersion Include="Markdig" Version="0.38.0" />
     <PackageVersion Include="System.Text.Json" Version="9.0.0" />
   </ItemGroup>

@@ -84,7 +84,7 @@ public sealed class DukeGame : BaseGame
         var path = Path.Combine(GameInstallFolder, file);
         if (File.Exists(path))
         {
-            AddonsPaths.AddOrReplace(addon, Path.GetDirectoryName(path));
+            AddonsPaths!.AddOrReplace(addon, Path.GetDirectoryName(path));
             return true;
         }
 
@@ -92,7 +92,7 @@ public sealed class DukeGame : BaseGame
         path = Path.Combine(GameInstallFolder, "AddOns", file);
         if (File.Exists(path))
         {
-            AddonsPaths.AddOrReplace(addon, Path.GetDirectoryName(path));
+            AddonsPaths!.AddOrReplace(addon, Path.GetDirectoryName(path));
             return true;
         }
 
@@ -100,7 +100,7 @@ public sealed class DukeGame : BaseGame
         path = Path.Combine(GameInstallFolder, "addons", "dc", file);
         if (File.Exists(path))
         {
-            AddonsPaths.AddOrReplace(addon, Path.GetDirectoryName(path));
+            AddonsPaths!.AddOrReplace(addon, Path.GetDirectoryName(path));
             return true;
         }
 
@@ -108,7 +108,7 @@ public sealed class DukeGame : BaseGame
         path = Path.Combine(GameInstallFolder, "addons", "nw", file);
         if (File.Exists(path))
         {
-            AddonsPaths.AddOrReplace(addon, Path.GetDirectoryName(path));
+            AddonsPaths!.AddOrReplace(addon, Path.GetDirectoryName(path));
             return true;
         }
 
@@ -116,7 +116,7 @@ public sealed class DukeGame : BaseGame
         path = Path.Combine(GameInstallFolder, "addons", "vacation", file);
         if (File.Exists(path))
         {
-            AddonsPaths.AddOrReplace(addon, Path.GetDirectoryName(path));
+            AddonsPaths!.AddOrReplace(addon, Path.GetDirectoryName(path));
             return true;
         }
 

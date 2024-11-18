@@ -40,7 +40,7 @@ public sealed partial class ApiInterface : IApiInterface
 
             var response = await _httpClient.SendAsync(requestMessage).ConfigureAwait(false);
 
-            if (response is null || !response.IsSuccessStatusCode)
+            if (response?.IsSuccessStatusCode is not true)
             {
                 return null;
             }
@@ -74,7 +74,7 @@ public sealed partial class ApiInterface : IApiInterface
 
             var response = await _httpClient.SendAsync(requestMessage).ConfigureAwait(false);
 
-            if (response is null || !response.IsSuccessStatusCode)
+            if (response?.IsSuccessStatusCode is not true)
             {
                 return null;
             }
@@ -122,12 +122,7 @@ public sealed partial class ApiInterface : IApiInterface
         {
             var response = await _httpClient.PutAsJsonAsync($"{ApiUrl}/addons/installs/add", addonId).ConfigureAwait(false);
 
-            if (!response.IsSuccessStatusCode)
-            {
-                return false;
-            }
-
-            return true;
+            return response.IsSuccessStatusCode;
         }
         catch (Exception)
         {
@@ -143,12 +138,7 @@ public sealed partial class ApiInterface : IApiInterface
 
             var response = await _httpClient.PostAsJsonAsync($"{ApiUrl}/addons/add", new Tuple<AddonsJsonEntity, string>(addon, apiPassword)).ConfigureAwait(false);
 
-            if (!response.IsSuccessStatusCode)
-            {
-                return false;
-            }
-
-            return true;
+            return response.IsSuccessStatusCode;
         }
         catch (Exception)
         {
