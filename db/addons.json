@@ -148,12 +148,12 @@
       "Id": "duke3d-voxel-pack",
       "AddonType": "Mod",
       "Game": "Duke3D",
-      "DownloadUrl": "https://global.s3.cloud.ru/buildlauncher/Duke3D/Mods/duke3d-voxel-pack.zip",
+      "DownloadUrl": "https://global.s3.cloud.ru/buildlauncher/Duke3D/Mods/duke3d-voxel-pack_v2_0-rc2.zip",
       "Title": "Voxel Pack",
       "Version": "2.0-rc2",
-      "FileSize": 4225971,
+      "FileSize": 13424239,
       "Description": "https://github.com/NightFright2k19/duke3d_voxelpack\r\n\r\nVoxel replacements for sprites in Duke Nukem 3D",
-      "UpdateDate": "2024-05-24T00:00:00Z"
+      "UpdateDate": "2024-11-20T13:23:00Z"
     },
     {
       "Id": "duke3d-wt-uncensor",
