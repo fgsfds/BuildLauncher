@@ -1,18 +1,23 @@
 ﻿using Common.Client.Interfaces;
 using Common.Enums;
 using Common.Interfaces;
+using Microsoft.Extensions.Logging;
 
 namespace Addons.Providers;
 
 public sealed class InstalledAddonsProviderFactory
 {
     private readonly Dictionary<GameEnum, InstalledAddonsProvider> _list = [];
-
     private readonly IConfigProvider _config;
+    private readonly ILogger _logger;
 
-    public InstalledAddonsProviderFactory(IConfigProvider config)
+    public InstalledAddonsProviderFactory(
+        IConfigProvider config,
+        ILogger logger
+        )
     {
         _config = config;
+        _logger = logger;
     }
 
     /// <summary>
@@ -27,7 +32,7 @@ public sealed class InstalledAddonsProviderFactory
         }
 
 #pragma warning disable CS0618 // Type or member is obsolete
-        InstalledAddonsProvider newProvider = new(game, _config);
+        InstalledAddonsProvider newProvider = new(game, _config, _logger);
 #pragma warning restore CS0618 // Type or member is obsolete
         _list.Add(game.GameEnum, newProvider);
 

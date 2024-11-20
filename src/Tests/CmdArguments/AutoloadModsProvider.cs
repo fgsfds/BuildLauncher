@@ -107,7 +107,7 @@ internal sealed class AutoloadModsProvider
 
     public AutoloadMod ModThatRequiresOfficialAddon => new()
     {
-        Id = "modThatRequiredOfficialAddon",
+        Id = "modThatRequiresOfficialAddon",
         Type = AddonTypeEnum.Mod,
         Title = "modThatRequiredOfficialAddon",
         GridImage = null,
@@ -179,9 +179,9 @@ internal sealed class AutoloadModsProvider
 
     public AutoloadMod IncompatibleModWithCompatibleVersion => new()
     {
-        Id = "incompatibleModWithIncompatibleVersion",
+        Id = "incompatibleModWithCompatibleVersion",
         Type = AddonTypeEnum.Mod,
-        Title = "incompatibleModWithIncompatibleVersion",
+        Title = "incompatibleModWithCompatibleVersion",
         GridImage = null,
         Author = null,
         Description = null,
@@ -189,7 +189,7 @@ internal sealed class AutoloadModsProvider
         SupportedGame = _game,
         RequiredFeatures = null,
         PathToFile = Path.Combine("D:", "Mods", "incompatible_mod_with_compatible_version.zip"),
-        DependentAddons = null,
+        DependentAddons = new(StringComparer.OrdinalIgnoreCase) { { "enabledMod", null } },
         IncompatibleAddons = new(StringComparer.OrdinalIgnoreCase) { { "enabledMod", "<=1.0" } },
         AdditionalCons = null,
         MainDef = null,
@@ -203,9 +203,9 @@ internal sealed class AutoloadModsProvider
 
     public AutoloadMod IncompatibleModWithIncompatibleVersion => new()
     {
-        Id = "incompatibleModWithCompatibleVersion",
+        Id = "incompatibleModWithIncompatibleVersion",
         Type = AddonTypeEnum.Mod,
-        Title = "incompatibleModWithCompatibleVersion",
+        Title = "incompatibleModWithIncompatibleVersion",
         GridImage = null,
         Author = null,
         Description = null,
@@ -213,7 +213,7 @@ internal sealed class AutoloadModsProvider
         SupportedGame = _game,
         RequiredFeatures = null,
         PathToFile = Path.Combine("D:", "Mods", "!!!!!!!!!!NOPE!!!!!!!!!!"),
-        DependentAddons = null,
+        DependentAddons = new(StringComparer.OrdinalIgnoreCase) { { "enabledMod", null } },
         IncompatibleAddons = new(StringComparer.OrdinalIgnoreCase) { { "enabledMod", ">1.1" } },
         AdditionalCons = null,
         MainDef = null,
@@ -225,18 +225,18 @@ internal sealed class AutoloadModsProvider
         Executables = null
     };
 
-    public AutoloadMod DependantMod => new()
+    public AutoloadMod DependentMod => new()
     {
-        Id = "dependantMod",
+        Id = "dependentMod",
         Type = AddonTypeEnum.Mod,
-        Title = "dependantMod",
+        Title = "dependentMod",
         GridImage = null,
         Author = null,
         Description = null,
         Version = "1.0",
         SupportedGame = _game,
         RequiredFeatures = null,
-        PathToFile = Path.Combine("D:", "Mods", "dependant_mod.zip"),
+        PathToFile = Path.Combine("D:", "Mods", "dependent_mod.zip"),
         DependentAddons = new(StringComparer.OrdinalIgnoreCase) { { "enabledMod", null } },
         IncompatibleAddons = null,
         AdditionalCons = null,
@@ -248,12 +248,37 @@ internal sealed class AutoloadModsProvider
         IsFolder = false,
         Executables = null
     };
+    
 
-    public AutoloadMod DependantModWithIncompatibleVersion => new()
+    public AutoloadMod MultipleDependenciesMod => new()
     {
-        Id = "dependantModWithIncompatibleVersion",
+        Id = "multipleDependenciesMod",
         Type = AddonTypeEnum.Mod,
-        Title = "dependantModWithIncompatibleVersion",
+        Title = "multipleDependenciesMod",
+        GridImage = null,
+        Author = null,
+        Description = null,
+        Version = "1.0",
+        SupportedGame = _game,
+        RequiredFeatures = null,
+        PathToFile = Path.Combine("D:", "Mods", "!!!!!!!!!!NOPE!!!!!!!!!!"),
+        DependentAddons = new(StringComparer.OrdinalIgnoreCase) { { "enabledMod", null }, { "someMod", null } },
+        IncompatibleAddons = null,
+        AdditionalCons = null,
+        MainDef = null,
+        AdditionalDefs = null,
+        StartMap = null,
+        PreviewImage = null,
+        IsEnabled = true,
+        IsFolder = false,
+        Executables = null
+    };
+
+    public AutoloadMod DependentModWithIncompatibleVersion => new()
+    {
+        Id = "dependentModWithIncompatibleVersion",
+        Type = AddonTypeEnum.Mod,
+        Title = "dependentModWithIncompatibleVersion",
         GridImage = null,
         Author = null,
         Description = null,
@@ -273,18 +298,18 @@ internal sealed class AutoloadModsProvider
         Executables = null
     };
 
-    public AutoloadMod DependantModWithCompatibleVersion => new()
+    public AutoloadMod DependentModWithCompatibleVersion => new()
     {
-        Id = "dependantModWithCompatibleVersion",
+        Id = "dependentModWithCompatibleVersion",
         Type = AddonTypeEnum.Mod,
-        Title = "dependantModWithCompatibleVersion",
+        Title = "dependentModWithCompatibleVersion",
         GridImage = null,
         Author = null,
         Description = null,
         Version = "1.0",
         SupportedGame = _game,
         RequiredFeatures = null,
-        PathToFile = Path.Combine("D:", "Mods", "dependant_mod_with_compatible_version.zip"),
+        PathToFile = Path.Combine("D:", "Mods", "dependent_mod_with_compatible_version.zip"),
         DependentAddons = new(StringComparer.OrdinalIgnoreCase) { { "enabledMod", ">1.1" } },
         IncompatibleAddons = null,
         AdditionalCons = null,

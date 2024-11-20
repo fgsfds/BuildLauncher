@@ -82,9 +82,9 @@ public sealed class WangCmdArgumentsTests
             _modsProvider.DisabledMod,
             _modsProvider.IncompatibleModWithIncompatibleVersion,
             _modsProvider.IncompatibleModWithCompatibleVersion,
-            _modsProvider.DependantMod,
-            _modsProvider.DependantModWithCompatibleVersion,
-            _modsProvider.DependantModWithIncompatibleVersion,
+            _modsProvider.DependentMod,
+            _modsProvider.DependentModWithCompatibleVersion,
+            _modsProvider.DependentModWithIncompatibleVersion,
             _modsProvider.ModForAnotherGame
         }.ToDictionary(x => new AddonVersion(x.Id, x.Version), x => (IAddon)x);
 
@@ -92,7 +92,7 @@ public sealed class WangCmdArgumentsTests
 
         raze.BeforeStart(_wangGame, _wangCamp);
         var args = raze.GetStartGameArgs(_wangGame, _wangCamp, mods, true, true);
-        var expected = @$" -quick -nosetup -file ""enabled_mod.zip"" -adddef ""ENABLED1.DEF"" -adddef ""ENABLED2.DEF"" -file ""incompatible_mod_with_compatible_version.zip"" -file ""dependant_mod.zip"" -file ""dependant_mod_with_compatible_version.zip"" -savedir ""{Directory.GetCurrentDirectory()}\Data\Saves\Raze\Wang\shadowwarrior"" -def ""a""";
+        var expected = @$" -quick -nosetup -file ""enabled_mod.zip"" -adddef ""ENABLED1.DEF"" -adddef ""ENABLED2.DEF"" -file ""incompatible_mod_with_compatible_version.zip"" -file ""dependent_mod.zip"" -file ""dependent_mod_with_compatible_version.zip"" -savedir ""{Directory.GetCurrentDirectory()}\Data\Saves\Raze\Wang\shadowwarrior"" -def ""a""";
 
         if (OperatingSystem.IsLinux())
         {
@@ -161,16 +161,16 @@ public sealed class WangCmdArgumentsTests
             _modsProvider.DisabledMod,
             _modsProvider.IncompatibleModWithIncompatibleVersion,
             _modsProvider.IncompatibleModWithCompatibleVersion,
-            _modsProvider.DependantMod,
-            _modsProvider.DependantModWithCompatibleVersion,
-            _modsProvider.DependantModWithIncompatibleVersion,
+            _modsProvider.DependentMod,
+            _modsProvider.DependentModWithCompatibleVersion,
+            _modsProvider.DependentModWithIncompatibleVersion,
             _modsProvider.ModForAnotherGame
         }.ToDictionary(x => new AddonVersion(x.Id, x.Version), x => (IAddon)x);
 
         VoidSW voidSw = new();
 
         var args = voidSw.GetStartGameArgs(_wangGame, _wangCamp, mods, true, true, 3);
-        var expected = @$" -quick -nosetup -g""enabled_mod.zip"" -mh""ENABLED1.DEF"" -mh""ENABLED2.DEF"" -g""incompatible_mod_with_compatible_version.zip"" -g""dependant_mod.zip"" -g""dependant_mod_with_compatible_version.zip"" -j""{Directory.GetCurrentDirectory()}\Data\Addons\Wang\Mods"" -usecwd -j""D:\Games\Wang"" -h""a"" -addon0 -s3";
+        var expected = @$" -quick -nosetup -g""enabled_mod.zip"" -mh""ENABLED1.DEF"" -mh""ENABLED2.DEF"" -g""incompatible_mod_with_compatible_version.zip"" -g""dependent_mod.zip"" -g""dependent_mod_with_compatible_version.zip"" -j""{Directory.GetCurrentDirectory()}\Data\Addons\Wang\Mods"" -usecwd -j""D:\Games\Wang"" -h""a"" -addon0 -s3";
 
         if (OperatingSystem.IsLinux())
         {

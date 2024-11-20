@@ -62,9 +62,9 @@ public sealed class FuryCmdArgumentsTests
             _modsProvider.IncompatibleMod,
             _modsProvider.IncompatibleModWithIncompatibleVersion,
             _modsProvider.IncompatibleModWithCompatibleVersion,
-            _modsProvider.DependantMod,
-            _modsProvider.DependantModWithCompatibleVersion,
-            _modsProvider.DependantModWithIncompatibleVersion,
+            _modsProvider.DependentMod,
+            _modsProvider.DependentModWithCompatibleVersion,
+            _modsProvider.DependentModWithIncompatibleVersion,
             _modsProvider.ModForAnotherGame,
             _modsProvider.ModThatRequiredFeature
         }.ToDictionary(x => new AddonVersion(x.Id, x.Version), x => (IAddon)x);
@@ -72,7 +72,7 @@ public sealed class FuryCmdArgumentsTests
         Fury fury = new(new ConfigProviderFake());
 
         var args = fury.GetStartGameArgs(_dukeGame, _dukeCamp, mods, true, true, 3);
-        var expected = @$" -quick -nosetup -g ""enabled_mod.zip"" -mh ""ENABLED1.DEF"" -mh ""ENABLED2.DEF"" -mx ""ENABLED1.CON"" -mx ""ENABLED2.CON"" -g ""mod_incompatible_with_addon.zip"" -g ""incompatible_mod_with_compatible_version.zip"" -g ""dependant_mod.zip"" -g ""dependant_mod_with_compatible_version.zip"" -g ""feature_mod.zip"" -j ""{Directory.GetCurrentDirectory()}\Data\Addons\Fury\Mods"" -s3";
+        var expected = @$" -quick -nosetup -g ""enabled_mod.zip"" -mh ""ENABLED1.DEF"" -mh ""ENABLED2.DEF"" -mx ""ENABLED1.CON"" -mx ""ENABLED2.CON"" -g ""mod_incompatible_with_addon.zip"" -g ""incompatible_mod_with_compatible_version.zip"" -g ""dependent_mod.zip"" -g ""dependent_mod_with_compatible_version.zip"" -g ""feature_mod.zip"" -j ""{Directory.GetCurrentDirectory()}\Data\Addons\Fury\Mods"" -s3";
 
         if (OperatingSystem.IsLinux())
         {

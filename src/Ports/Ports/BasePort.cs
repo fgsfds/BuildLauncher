@@ -472,6 +472,7 @@ public abstract class BasePort
         }
 
         var enabledModsCount = 0;
+        HashSet<string> addedModsFiles = [];
 
         foreach (var mod in mods)
         {
@@ -485,7 +486,11 @@ public abstract class BasePort
                 continue;
             }
 
-            _ = sb.Append($@" {AddFileParam}""{aMod.FileName}""");
+            if (!addedModsFiles.TryGetValue(mod.Value.FileName!, out _))
+            {
+                _ = addedModsFiles.Add(mod.Value.FileName!);
+                _ = sb.Append($@" {AddFileParam}""{aMod.FileName}""");
+            }
 
             if (aMod.AdditionalDefs is not null)
             {
