@@ -73,6 +73,7 @@ public static class AutoloadModsValidator
                     (dependentAddon.Value is null || VersionComparer.Compare(campaign.Version, dependentAddon.Value)))
                 {
                     passedDependenciesCount++;
+                    continue;
                 }
 
                 foreach (var addon in mods)
