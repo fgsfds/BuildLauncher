@@ -533,6 +533,18 @@
       "UpdateDate": "2024-05-24T00:00:00Z"
     },
     {
+      "Id": "blood-death-wish-ost",
+      "AddonType": "TC",
+      "Game": "Blood",
+      "DownloadUrl": "https://global.s3.cloud.ru/buildlauncher/Blood/Campaigns/blood-death-wish-ost_v1_7_9.zip",
+      "Title": "Death Wish with OST",
+      "Version": "1.7.9",
+      "FileSize": 89348848,
+      "Description": "https://www.moddb.com/mods/death-wish-for-blood\r\n\r\nCaleb will need to muster all his strength to take down the mighty Tchernobog, who has managed to free himself from the grip of death.\r\n\r\nDeath Wish is a campaign for Blood with over 30 new levels, cut scenes, and more. All levels have been adapted so that Co-op play is not only possible, but enhanced with a helpful checkpoint system. The campaign includes several secret levels which all connect back to their episodes through special transitional missions.\r\n\r\nThe entire mod was developed by a single mapper, Bloatoid, who has been editing with the Build engine for many years. The original Death Wish was created between January 2010 and October 2011. Updates have been made over the years based on feedback from players and observing online streamers, as well as the addition of several extra secret levels. A 4th episode is in development.\r\n\r\nLet the festival of Blood continue!\r\n\r\nIncludes Soundtrack Addon by Speedy\r\n\r\nhttps://www.moddb.com/mods/death-wish-for-blood/downloads/dw-soundtrack-addon-by-speedy",
+      "Author": "Bloatoid",
+      "UpdateDate": "2024-11-21T19:45:00Z"
+    },
+    {
       "Id": "blood-fotd",
       "AddonType": "TC",
       "Game": "Blood",
