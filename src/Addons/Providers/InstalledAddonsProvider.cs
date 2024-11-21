@@ -887,30 +887,30 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
     /// <param name="addonDtos">AddonDto</param>
     private string? UnpackIfNeededAndGetAddonDto(string pathToFile, IArchive archive, out List<AddonDto>? addonDtos)
     {
-        string? unpackedTo = null;
-
-        if (archive.Entries.Any(static x => x.Key!.Equals("addons.grpinfo", StringComparison.OrdinalIgnoreCase)))
-        {
-            //need to unpack archive with grpinfo
-            unpackedTo = Unpack(pathToFile, archive);
-            addonDtos = null;
-            return unpackedTo;
-        }
-
-        var addonJsons = archive.Entries.Where(static x => x.Key!.StartsWith("addon") && x.Key!.EndsWith(".json"));
-
-        if (addonJsons?.Any() is not true)
-        {
-            addonDtos = null;
-            return null;
-        }
-
         try
         {
-            using var stream = addonJsons.First().OpenEntryStream();
+            string? unpackedTo = null;
+
+            if (archive.Entries.Any(static x => x.Key!.Equals("addons.grpinfo", StringComparison.OrdinalIgnoreCase)))
+            {
+                //need to unpack archive with grpinfo
+                unpackedTo = Unpack(pathToFile, archive);
+                addonDtos = null;
+                return unpackedTo;
+            }
+
+            var addonJsonsInsideArchive = archive.Entries.Where(static x => x.Key!.StartsWith("addon") && x.Key!.EndsWith(".json"));
+
+            if (addonJsonsInsideArchive?.Any() is not true)
+            {
+                addonDtos = null;
+                return null;
+            }
+
+            using var addonJsonStream = addonJsonsInsideArchive.First().OpenEntryStream();
 
             var addonDto = JsonSerializer.Deserialize(
-                stream,
+                addonJsonStream,
                 AddonManifestContext.Default.AddonDto
                 )!;
 
@@ -925,29 +925,50 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
                 //need to unpack addons with custom executables
                 unpackedTo = Unpack(pathToFile, archive);
             }
+
+            List<AddonDto> result = [];
+
+            if (unpackedTo is not null)
+            {
+                var unpackedAddonJsons = Directory.GetFiles(unpackedTo, "addon*.json");
+
+                foreach (var addonJson in unpackedAddonJsons)
+                {
+                    var text = File.ReadAllText(addonJson);
+
+                    var addonDto2 = JsonSerializer.Deserialize(
+                        text,
+                        AddonManifestContext.Default.AddonDto
+                        )!;
+
+                    result.Add(addonDto2);
+                }
+            }
+            else
+            {
+                foreach (var addonJson in addonJsonsInsideArchive)
+                {
+                    using var addonJsonStream2 = addonJson.OpenEntryStream();
+
+                    var addonDto2 = JsonSerializer.Deserialize(
+                        addonJsonStream2,
+                        AddonManifestContext.Default.AddonDto
+                        )!;
+
+                    result.Add(addonDto2);
+                }
+            }
+
+            addonDtos = result.Count > 0 ? result : null;
+            return unpackedTo;
         }
-        catch
+        catch (Exception ex)
         {
+            _logger.LogCritical(ex, "=== Error while unpacking archive ===");
+
             addonDtos = null;
             return null;
         }
-
-        List<AddonDto> result = [];
-
-        foreach (var addonJson in addonJsons)
-        {
-            using var stream = addonJson.OpenEntryStream();
-
-            var addonDto = JsonSerializer.Deserialize(
-                stream,
-                AddonManifestContext.Default.AddonDto
-                )!;
-
-            result.Add(addonDto);
-        }
-
-        addonDtos = result.Count > 0 ? result : null;
-        return unpackedTo;
     }
 
     /// <summary>
