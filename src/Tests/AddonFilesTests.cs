@@ -118,5 +118,6 @@ public sealed class AddonFilesTests : IDisposable
 
         Assert.False(File.Exists(pathToFile));
         Assert.True(Directory.Exists(pathToFile.Replace(".zip", "")));
+        Assert.True(File.Exists(Path.Combine(pathToFile.Replace(".zip", ""), "addons.grpinfo")));
     }
 }

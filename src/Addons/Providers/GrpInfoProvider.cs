@@ -25,7 +25,8 @@ public static class GrpInfoProvider
                 continue;
             }
 
-            var addons = Parse(grpInfo, grps.Length);
+            var fileContent = File.ReadAllLines(grpInfo);
+            var addons = Parse(fileContent, grps.Length);
 
             foreach (var grp in grps)
             {
@@ -73,17 +74,15 @@ public static class GrpInfoProvider
     /// <summary>
     /// Parse grpinfo file
     /// </summary>
-    /// <param name="pathToFile">Path to grpinfo file</param>
+    /// <param name="fileContent">Content of the grpinfo file</param>
     /// <param name="grpsCount">Number of found grps</param>
-    private static List<GrpInfo> Parse(string pathToFile, int grpsCount)
+    private static List<GrpInfo> Parse(string[] fileContent, int grpsCount)
     {
-        var file = File.ReadAllLines(pathToFile);
-
         List<GrpInfo> addons = new(grpsCount);
 
-        for (var i = 0; i < file.Length; i++)
+        for (var i = 0; i < fileContent.Length; i++)
         {
-            if (!file[i].Trim().StartsWith("grpinfo"))
+            if (!fileContent[i].Trim().StartsWith("grpinfo"))
             {
                 continue;
             }
@@ -101,7 +100,7 @@ public static class GrpInfoProvider
             {
                 try
                 {
-                    var str = file[i];
+                    var str = fileContent[i];
 
                     if (str.Trim().StartsWith('}'))
                     {
