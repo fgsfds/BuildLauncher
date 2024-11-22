@@ -371,10 +371,10 @@
       "DownloadUrl": "https://global.s3.cloud.ru/buildlauncher/Blood/Mods/blood-smooth_v1_1.zip",
       "Title": "SmoothBlood",
       "Version": "1.1",
-      "FileSize": 711846,
-      "Description": "https://www.moddb.com/mods/smoothblood\r\n\r\nThis is a modification for Blood which allows playing the game with smoother weapon animations. This mod supports all so far modern ways of playing Blood, which are NBlood, Raze, BloodGDX and Fresh Supply. DOS version is not supported.",
+      "FileSize": 713410,
+      "Description": "https://www.moddb.com/mods/smoothblood\r\n\r\nThis is a modification for Blood which allows playing the game with smoother weapon animations.",
       "Author": "Dzierzan, Phredreeke",
-      "UpdateDate": "2024-05-24T00:00:00Z"
+      "UpdateDate": "2024-11-22T11:54:00Z"
     },
     {
       "Id": "blood-hostile-takeover",
@@ -656,13 +656,13 @@
       "Id": "blood-willard",
       "AddonType": "TC",
       "Game": "Blood",
-      "DownloadUrl": "https://global.s3.cloud.ru/buildlauncher/Blood/Campaigns/blood-willard_v1_1_1.zip",
+      "DownloadUrl": "https://global.s3.cloud.ru/buildlauncher/Blood/Campaigns/blood-willard_v1_12.zip",
       "Title": "Willard",
-      "Version": "1.1.1",
-      "FileSize": 72528855,
+      "Version": "1.12",
+      "FileSize": 72547885,
       "Description": "https://www.moddb.com/downloads/willard\r\n\r\nThis is the full version of Willard, consisting of 5 levels. It takes place a few decades after the original game, in and around a remote ghost town far out in the woods. Strange things have been reported from the area and Caleb goes to investigate... The story is told from messages, make sure you read any square or rectangular shaped books you find (not the voxel books). While it certainly has action in places, it\u2019s more about atmosphere.",
       "Author": "Bloodskar",
-      "UpdateDate": "2024-10-13T12:14:33.445716Z"
+      "UpdateDate": "2024-11-22T14:13:00Z"
     },
     {
       "Id": "blood-bloody-pulp-fiction",
