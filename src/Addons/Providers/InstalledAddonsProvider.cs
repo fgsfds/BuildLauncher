@@ -136,21 +136,19 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
 
 
                     //grpinfo
-                    List<string> foldersGrpInfos = [];
+                    List<string> foldersWithGrpInfos = [];
 
-                    var dirs2 = Directory.GetDirectories(_game.CampaignsFolderPath, "*", SearchOption.TopDirectoryOnly);
-
-                    foreach (var dir in dirs2)
+                    foreach (var dir in dirs)
                     {
                         if (File.Exists(Path.Combine(dir, "addons.grpinfo")))
                         {
-                            foldersGrpInfos.Add(dir);
+                            foldersWithGrpInfos.Add(dir);
                         }
                     }
 
-                    if (foldersGrpInfos.Count > 0)
+                    if (foldersWithGrpInfos.Count > 0)
                     {
-                        var grpInfoAddons = GrpInfoProvider.GetAddonsFromGrpInfo(foldersGrpInfos);
+                        var grpInfoAddons = GrpInfoProvider.GetAddonsFromGrpInfo(foldersWithGrpInfos);
 
                         if (grpInfoAddons.Count > 0)
                         {
@@ -171,6 +169,38 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
                     //mods
                     var filesMods = Directory.GetFiles(_game.ModsFolderPath, "*.zip");
                     var mods = await GetAddonsFromFilesAsync(filesMods).ConfigureAwait(false);
+
+
+                    //enabling/disabling addons
+                    foreach (var mod in mods)
+                    {
+                        if (((AutoloadMod)mod.Value).IsEnabled)
+                        {
+                            var dependants = mods.Where(x => x.Value.DependentAddons?.ContainsKey(mod.Key.Id) ?? false);
+
+                            foreach (var depMod in dependants)
+                            {
+                                ((AutoloadMod)depMod.Value).IsEnabled = true;
+                            }
+
+                            var incompatibles = mods.Where(x => x.Value.IncompatibleAddons?.ContainsKey(mod.Key.Id) ?? false);
+
+                            foreach (var incMod in incompatibles)
+                            {
+                                ((AutoloadMod)incMod.Value).IsEnabled = false;
+                            }
+                        }
+                        else if (!((AutoloadMod)mod.Value).IsEnabled)
+                        {
+                            var dependants = mods.Where(x => x.Value.DependentAddons?.ContainsKey(mod.Key.Id) ?? false);
+
+                            foreach (var depMod in dependants)
+                            {
+                                ((AutoloadMod)depMod.Value).IsEnabled = false;
+                            }
+                        }
+                    }
+
                     _cache.Add(AddonTypeEnum.Mod, mods);
 
                 }).WaitAsync(CancellationToken.None).ConfigureAwait(false);
