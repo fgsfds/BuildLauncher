@@ -280,13 +280,25 @@
       "Id": "duke3d-alien-armageddon",
       "AddonType": "TC",
       "Game": "Duke3D",
-      "DownloadUrl": "https://global.s3.cloud.ru/buildlauncher/Duke3D/Campaigns/duke3d-alien-armageddon_v5_58b.zip",
+      "DownloadUrl": "https://global.s3.cloud.ru/buildlauncher/Duke3D/Campaigns/duke3d-alien-armageddon_v5_62.zip",
       "Title": "Alien Armageddon",
-      "Version": "5.58b",
-      "FileSize": 636240117,
+      "Version": "5.62",
+      "FileSize": 636302530,
       "Description": "https://www.moddb.com/mods/duke-nukem-alien-armageddon\r\n\r\nAlien Armageddon is a mod for Duke Nukem 3D which adds many new high quality enemies, sexy NPCs, and a second playable character, all featured in epic new adventures. Some of the community\u0027s best talent have come together to make this amazing free expansion to the Duke 3D universe.",
-      "Author": "DukeBoss ",
-      "UpdateDate": "2024-11-16T07:49:57.905118Z"
+      "Author": "DukeBoss",
+      "UpdateDate": "2024-11-24T16:15:43.1741941Z"
+    },
+    {
+      "Id": "duke3d-blast-radius",
+      "AddonType": "TC",
+      "Game": "Duke3D",
+      "DownloadUrl": "https://global.s3.cloud.ru/buildlauncher/Duke3D/Campaigns/duke3d-blast-radius_v5_0_6.zip",
+      "Title": "Blast Radius",
+      "Version": "5.0.6",
+      "FileSize": 42581364,
+      "Description": "https://www.moddb.com/mods/duke-nukem-3d-blast-radius\r\n\r\nFour years in the making (2019 2023), Blast Radius is a fan add-on for the Apogee/3D Realms classic 1996 FPS Duke Nukem 3D by ck3d. Originally a new main episode of 15 maps (estimated blind playthrough length: 20\u002B hours) introducing 40\u002B new types of alien scum, as of v. 5.0.0, it has spread to include a six-level demo for its continuation: Zero Zone, as well as reinterpretations of the original \u0022L.A. Meltdown\u0022, \u0022Lunar Apocalypse\u0022 \u0026 \u0022Shrapnel City\u0022 Duke 3D episodes each into one big level.",
+      "Author": "Aymeric \u0027ck3d\u0027 Nocus",
+      "UpdateDate": "2024-11-24T16:16:48.7623393Z"
     }
   ],
   "Blood": [
