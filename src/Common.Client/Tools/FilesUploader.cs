@@ -27,20 +27,20 @@ public sealed class FilesUploader
 
     public async Task<bool> AddAddonToDatabaseAsync(string pathToFile)
     {
-        var entity = await GetDownloadableAddonDtoAsync(pathToFile).ConfigureAwait(false);
+        var downloadAddonEntity = await GetDownloadableAddonDtoAsync(pathToFile).ConfigureAwait(false);
 
-        if (entity is null)
+        if (downloadAddonEntity is null)
         {
             return false;
         }
 
-        var result = await _apiInterface.AddAddonToDatabaseAsync(entity).ConfigureAwait(false);
+        var result = await _apiInterface.AddAddonToDatabaseAsync(downloadAddonEntity).ConfigureAwait(false);
 
         return result;
     }
 
 
-    private async Task<AddonsJsonEntity?> GetDownloadableAddonDtoAsync(string pathToFile)
+    private async Task<DownloadableAddonEntity?> GetDownloadableAddonDtoAsync(string pathToFile)
     {
         using var archive = ZipArchive.Open(pathToFile);
         var addonJson = archive.Entries.FirstOrDefault(static x => x.Key == "addon.json");
@@ -99,77 +99,21 @@ public sealed class FilesUploader
             return null;
         }
 
-        AddonsJsonEntity downMod = new()
+        DownloadableAddonEntity downloadableAddon = new()
         {
             Id = manifest.Id,
             Title = manifest.Title,
-            DownloadUrl = downloadUrl,
+            DownloadUrl = new(downloadUrl),
             Game = manifest.SupportedGame.Game,
             AddonType = manifest.AddonType,
             Version = manifest.Version,
             Description = manifest.Description,
             Author = manifest.Author,
             FileSize = fileSize,
-            Dependencies = manifest.Dependencies?.Addons?.ToDictionary(x => x.Id, y => y.Version)
+            Dependencies = manifest.Dependencies?.Addons?.Select(d => d.Id)?.ToList(),
+            UpdateDate = DateTime.UtcNow
         };
 
-        return downMod;
-    }
-
-    public async Task<bool> UploadFilesToFtpAsync(string pathToFile, CancellationToken cancellationToken)
-    {
-        using HttpClient httpClient = new() { Timeout = Timeout.InfiniteTimeSpan };
-
-        try
-        {
-            var path = "buildlauncher_uploads/" + Guid.NewGuid() + "/" + Path.GetFileName(pathToFile);
-
-            var signedUrl = await _apiInterface.GetSignedUrlAsync(path).ConfigureAwait(false);
-
-            await using var fileStream = File.OpenRead(pathToFile);
-            using StreamContent content = new(fileStream);
-
-            using var response = await httpClient.PutAsync(signedUrl, content, cancellationToken).ConfigureAwait(false);
-
-            if (!response.IsSuccessStatusCode)
-            {
-                return false;
-            }
-        }
-        catch (TaskCanceledException)
-        {
-            return false;
-        }
-        catch (Exception)
-        {
-            return false;
-        }
-
-        return true;
-    }
-
-    public string? CheckAddonBeforeUploading(string pathToFile)
-    {
-        if (new FileInfo(pathToFile).Length > 1e+9)
-        {
-            return "Can't upload file larger than 1Gb.";
-        }
-
-        var isArchive = ZipArchive.IsZipFile(pathToFile);
-
-        if (!isArchive)
-        {
-            return "File is not an archive";
-        }
-
-        using var archive = ZipArchive.Open(pathToFile);
-        var jsonExists = archive.Entries.Any(static x => x.Key!.Equals("addon.json"));
-
-        if (!jsonExists)
-        {
-            return "Archive doesn't have addon.json";
-        }
-
-        return null;
+        return downloadableAddon;
     }
 }

@@ -14,13 +14,14 @@
         <Grid RowDefinitions="auto,auto,auto" IsSharedSizeScope="True">
 
             <!--<StackPanel Grid.Row="0"  Margin="5" Orientation="Horizontal" IsVisible="{Binding IsDeveloperMode}">-->
-            <StackPanel Grid.Row="0"  Margin="5" Orientation="Horizontal" IsVisible="False">
+            <StackPanel Grid.Row="0" Margin="5" Orientation="Horizontal">
 
                 <CheckBox IsChecked="{Binding LocalApiCheckbox}"
                           VerticalAlignment="Center"
-                          Margin="5">
-                    Use local API
-                </CheckBox>
+                          Margin="5"
+                          Content="Use local API"
+                          IsVisible="False"
+                          />
 
                 <TextBox Watermark="API Password"
                          PasswordChar="*"
@@ -29,11 +30,15 @@
                          Width="300"
                          HorizontalAlignment="Left"
                          VerticalContentAlignment="Center"
-                         Margin="5"/>
+                         Margin="5"
+                         IsVisible="False"
+                         />
 
                 <Button Command="{Binding AddAddonCommand}"
                         Margin="5"
-                        IsVisible="False">
+                        IsVisible="{Binding IsDeveloperMode}"
+                        Padding="5"
+                        >
                     Add addon to the database...
                 </Button>
 

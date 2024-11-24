@@ -45,7 +45,7 @@ public sealed class GitHubApiInterface : IApiInterface
 
                 if (ClientProperties.IsOfflineMode)
                 {
-                    addons = File.ReadAllText(@"..\..\..\..\db\addons.json");
+                    addons = File.ReadAllText(Consts.PathToAddonsJson);
                 }
                 else
                 {
@@ -98,15 +98,51 @@ public sealed class GitHubApiInterface : IApiInterface
         return result;
     }
 
-    public Task<string?> GetSignedUrlAsync(string path)
+    public Task<bool> AddAddonToDatabaseAsync(DownloadableAddonEntity addon)
     {
-        return Task.FromResult<string?>(null);
+        var addonsJson = File.ReadAllText(Consts.PathToAddonsJson);
+        var addons = JsonSerializer.Deserialize(addonsJson, DownloadableAddonsDictionaryContext.Default.DictionaryGameEnumListDownloadableAddonEntity);
+
+        if (addons is null)
+        {
+            ThrowHelper.ThrowFormatException("Error while deserializing addons.json");
+            return Task.FromResult(false);
+        }
+
+        if (!addons.TryGetValue(addon.Game, out _))
+        {
+            addons[addon.Game] = [];
+        }
+
+        var existingAddon = addons[addon.Game].FirstOrDefault(x => x.Id.Equals(addon.Id));
+
+        if (existingAddon is not null)
+        {
+            _ = addons[addon.Game].Remove(existingAddon);
+        }
+
+        for (var i = 0; i < addon.Dependencies?.Count; i++)
+        {
+            var readableName = addons[addon.Game].FirstOrDefault(x => x.Id.Equals(addon.Dependencies[i]));
+
+            if (readableName is not null)
+            {
+                addon.Dependencies[i] = readableName.Title;
+            }
+        }
+
+        addons[addon.Game].Add(addon);
+
+        var newAddonsJson = JsonSerializer.Serialize(addons, DownloadableAddonsDictionaryContext.Default.DictionaryGameEnumListDownloadableAddonEntity);
+        File.WriteAllText(Consts.PathToAddonsJson, newAddonsJson);
+
+        return Task.FromResult(true);
     }
 
 
     #region Not Implemented
 
-    public Task<bool> AddAddonToDatabaseAsync(AddonsJsonEntity addon) => Task.FromResult(false);
+    public Task<string?> GetSignedUrlAsync(string path) => Task.FromResult<string?>(null);
 
     public Task<decimal?> ChangeScoreAsync(string addonId, sbyte score, bool isNew) => Task.FromResult<decimal?>(null);
 

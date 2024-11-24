@@ -29,6 +29,7 @@ public sealed class DownloadableAddonEntity : IDownloadableAddon
     [JsonPropertyName("FileSize")]
     public required long FileSize { get; set; }
 
+    [JsonIgnore]
     [JsonPropertyName("IsDisabled")]
     public bool IsDisabled { get; set; }
 

@@ -130,13 +130,13 @@ public sealed partial class ApiInterface : IApiInterface
         }
     }
 
-    public async Task<bool> AddAddonToDatabaseAsync(AddonsJsonEntity addon)
+    public async Task<bool> AddAddonToDatabaseAsync(DownloadableAddonEntity addon)
     {
         try
         {
             var apiPassword = _config.ApiPassword;
 
-            var response = await _httpClient.PostAsJsonAsync($"{ApiUrl}/addons/add", new Tuple<AddonsJsonEntity, string>(addon, apiPassword)).ConfigureAwait(false);
+            var response = await _httpClient.PostAsJsonAsync($"{ApiUrl}/addons/add", new Tuple<DownloadableAddonEntity, string>(addon, apiPassword)).ConfigureAwait(false);
 
             return response.IsSuccessStatusCode;
         }
