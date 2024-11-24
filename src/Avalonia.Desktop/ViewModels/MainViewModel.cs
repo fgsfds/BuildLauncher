@@ -28,7 +28,7 @@ public sealed partial class MainViewModel : ObservableObject
         _gamesProvider = gamesProvider;
         _gamesProvider.GameChangedEvent += OnGameChanged;
 
-        DevPageViewModel = new DevViewModel(configProvider, filesUploader, gamesProvider);
+        DevPageViewModel = new DevViewModel(configProvider, filesUploader, gamesProvider, logger);
         AboutPageViewModel = new AboutViewModel(appUpdateInstaller);
         PortsPageViewModel = new PortsViewModel(viewModelsFactory, portsProvider, logger);
         SettingsPageViewModel = new SettingsViewModel(configProvider, gamesPathsProvider);

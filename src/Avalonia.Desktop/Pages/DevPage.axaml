@@ -13,7 +13,8 @@
 
         <Grid RowDefinitions="auto,auto,auto" IsSharedSizeScope="True">
 
-            <StackPanel Grid.Row="0"  Margin="5" Orientation="Horizontal" IsVisible="{Binding IsDeveloperMode}">
+            <!--<StackPanel Grid.Row="0"  Margin="5" Orientation="Horizontal" IsVisible="{Binding IsDeveloperMode}">-->
+            <StackPanel Grid.Row="0"  Margin="5" Orientation="Horizontal" IsVisible="False">
 
                 <CheckBox IsChecked="{Binding LocalApiCheckbox}"
                           VerticalAlignment="Center"
@@ -61,8 +62,6 @@
                     <TextBox Grid.Column="1" Margin="5,0" Text="{Binding PathToAddonFolder}"></TextBox>
 
                     <Button Grid.Column="2" Command="{Binding SelectAddonFolderCommand}">...</Button>
-
-                    <!--<Button Grid.Column="3" ToolTip.Tip="Load existing addon.json" Margin="5,0" Command="{Binding LoadJsonCommand}">Load addon.json...</Button>-->
 
                 </Grid>
 
@@ -620,14 +619,22 @@
 
                     </Grid>
 
-                    <Grid RowDefinitions="auto,auto" ColumnDefinitions="auto, *">
+                    <!--Executables-->
+                    <Grid RowDefinitions="auto,auto">
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"  SharedSizeGroup="MySizeGroup"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
 
                         <TextBlock Grid.Row="0" Grid.Column="0"
                                    Margin="5"
+                                   VerticalAlignment="Center"
                                    Text="Windows executable"/>
 
                         <TextBlock Grid.Row="1" Grid.Column="0"
                                    Margin="5"
+                                   VerticalAlignment="Center"
                                    Text="Linux executable"/>
 
                         <TextBox Grid.Row="0" Grid.Column="1"
@@ -656,13 +663,16 @@
                         <TextBox MinHeight="100"
                                  AcceptsReturn="True"
                                  Text="{Binding AddonDescription}"
+                                 TextWrapping="Wrap"
                                  Grid.Column="1" Margin="5"></TextBox>
 
                     </Grid>
 
+                    <!--Buttons-->
                     <StackPanel Orientation="Horizontal">
 
                         <Button ToolTip.Tip="Create zip and put it into a suitable game folder"
+                                IsEnabled="{Binding !IsInProgress}"
                                 Margin="5" Padding="10"
                                 MinWidth="150"
                                 HorizontalContentAlignment="Center"
@@ -671,7 +681,8 @@
                             Preview JSON
                         </Button>
 
-                        <Button ToolTip.Tip="Create zip and put it into a suitable game folder"
+                        <Button ToolTip.Tip="Save addon.json and rename addon folder"
+                                IsEnabled="{Binding !IsInProgress}"
                                 Margin="5" Padding="10"
                                 MinWidth="150"
                                 HorizontalContentAlignment="Center"
@@ -681,6 +692,7 @@
                         </Button>
 
                         <Button ToolTip.Tip="Create zip and put it into a suitable game folder"
+                                IsEnabled="{Binding !IsInProgress}"
                                 Margin="5" Padding="10"
                                 MinWidth="150"
                                 HorizontalContentAlignment="Center"
@@ -689,35 +701,42 @@
                             Create ZIP
                         </Button>
 
-                        <TextBlock TextWrapping="Wrap" MaxWidth="400" VerticalAlignment="Center" Margin="5" Foreground="Red" Text="{Binding ErrorText}"/>
+                        <Button ToolTip.Tip="Submit addon to the developer"
+                                IsEnabled="{Binding !IsInProgress}"
+                                Margin="5" Padding="10"
+                                MinWidth="150"
+                                HorizontalContentAlignment="Center"
+                                Background="{DynamicResource SystemAccentColor}"
+                                Command="{Binding SubmitAddonCommand}">
+                            Submit addon
+                        </Button>
 
                     </StackPanel>
+
+                    <TextBlock TextWrapping="Wrap"
+                               MaxWidth="900"
+                               HorizontalAlignment="Left"
+                               VerticalAlignment="Center"
+                               Margin="5"
+                               Text="{Binding ErrorText}"
+                               Foreground="{Binding ErrorTextColor}"
+                               />
+
                 </StackPanel>
 
-                <ScrollViewer HorizontalScrollBarVisibility="Auto">
+                <ProgressBar IsVisible="{Binding IsInProgress}"
+                             Height="20"
+                             Value="{Binding ProgressBarValue}"
+                             />
 
-                    <TextBlock Text="{Binding JsonText}"
-                               Margin="5"/>
-
-                </ScrollViewer>
-
-            </StackPanel>
-
-            <StackPanel Grid.Row="2"
-                        Orientation="Horizontal"
-                        IsVisible="False">
-
-                <Button
-                    ToolTip.Tip="Upload addon to developer's storage"
-                    Margin="10" Padding="10"
-                    Command="{Binding UploadAddonCommand}">
-                    Upload addon...
-                </Button>
-
-                <TextBlock Text="{Binding UploadStatus}"
-                           VerticalAlignment="Center"/>
+                <TextBlock Text="{Binding JsonText}"
+                           Margin="5"
+                           TextWrapping="Wrap"
+                           HorizontalAlignment="Left"
+                           />
 
             </StackPanel>
+
         </Grid>
     </ScrollViewer>
 </UserControl>
