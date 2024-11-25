@@ -1,8 +1,6 @@
-using Avalonia.Controls;
 using Avalonia.Desktop.Helpers;
 using Avalonia.Media;
 using Avalonia.Platform.Storage;
-using Common.Client.Api;
 using Common.Client.Helpers;
 using Common.Client.Interfaces;
 using Common.Client.Tools;
@@ -15,16 +13,13 @@ using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Games.Providers;
-using Microsoft.EntityFrameworkCore.Query.Internal;
 using Microsoft.Extensions.Logging;
 using SharpCompress.Archives;
 using SharpCompress.Archives.Zip;
 using SharpCompress.Common;
-using System;
 using System.Collections.Immutable;
 using System.Text;
 using System.Text.Json;
-using System.Threading;
 
 namespace Avalonia.Desktop.ViewModels;
 
@@ -128,6 +123,14 @@ public sealed partial class DevViewModel : ObservableObject
             {
                 return "ww2gi-";
             }
+            if (IsWitchaven1Selected)
+            {
+                return "wh1-";
+            }
+            if (IsWitchaven2Selected)
+            {
+                return "wh2-";
+            }
 
             return string.Empty;
         }
@@ -135,7 +138,7 @@ public sealed partial class DevViewModel : ObservableObject
 
     public bool IsDeveloperMode => ClientProperties.IsDeveloperMode;
     public bool IsStep2Visible => IsMapSelected || IsModSelected || IsTcSelected;
-    public bool IsStep3Visible => IsDukeSelected || IsBloodSelected || IsWangSelected || IsFurySelected || IsRedneckSelected || IsRidesAgainSelected || IsSlaveSelected || IsNAMSelected || IsWW2GISelected || IsStandaloneSelected;
+    public bool IsStep3Visible => IsDukeSelected || IsBloodSelected || IsWangSelected || IsFurySelected || IsRedneckSelected || IsRidesAgainSelected || IsSlaveSelected || IsNAMSelected || IsWW2GISelected || IsStandaloneSelected || IsWitchaven1Selected || IsWitchaven2Selected;
     public bool AreDukePropertiesAvailable => IsDukeSelected || IsFurySelected || IsRedneckSelected || IsNAMSelected || IsWW2GISelected;
     public bool IsMainConAvailable => AreDukePropertiesAvailable && !IsModSelected;
     public bool AreBloodPropertiesVisible => IsBloodSelected;
@@ -284,6 +287,16 @@ public sealed partial class DevViewModel : ObservableObject
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(AddonIdPrefix))]
     [NotifyPropertyChangedFor(nameof(IsStep3Visible))]
+    private bool _isWitchaven1Selected;
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(AddonIdPrefix))]
+    [NotifyPropertyChangedFor(nameof(IsStep3Visible))]
+    private bool _isWitchaven2Selected;
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(AddonIdPrefix))]
+    [NotifyPropertyChangedFor(nameof(IsStep3Visible))]
     [NotifyPropertyChangedFor(nameof(WindowsExecutable))]
     [NotifyPropertyChangedFor(nameof(LinuxExecutable))]
     private bool _isStandaloneSelected;
@@ -339,6 +352,8 @@ public sealed partial class DevViewModel : ObservableObject
         {
             LoadJson(addonJson);
         }
+
+        OnPropertyChanged(nameof(AddonIdPrefix));
     }
 
     [ObservableProperty]
@@ -543,7 +558,8 @@ public sealed partial class DevViewModel : ObservableObject
             await using var fileStream = File.OpenRead(pathToArchive);
             using StreamContent content = new(fileStream);
 
-            new Task(() => {
+            new Task(() =>
+            {
                 while (fileStream.CanSeek)
                 {
                     ProgressBarValue = (int)(fileStream.Position / (double)fileStream.Length * 100);
@@ -682,6 +698,8 @@ public sealed partial class DevViewModel : ObservableObject
             : IsSlaveSelected ? GameEnum.Exhumed
             : IsNAMSelected ? GameEnum.NAM
             : IsWW2GISelected ? GameEnum.WW2GI
+            : IsWitchaven1Selected ? GameEnum.Witchaven
+            : IsWitchaven2Selected ? GameEnum.Witchaven2
             : IsStandaloneSelected ? GameEnum.Standalone
             : ThrowHelper.ThrowArgumentOutOfRangeException<GameEnum>("Select game");
 
@@ -847,6 +865,8 @@ public sealed partial class DevViewModel : ObservableObject
         IsSlaveSelected = result.SupportedGame.Game is GameEnum.Exhumed;
         IsNAMSelected = result.SupportedGame.Game is GameEnum.NAM;
         IsWW2GISelected = result.SupportedGame.Game is GameEnum.WW2GI;
+        IsWitchaven1Selected = result.SupportedGame.Game is GameEnum.Witchaven;
+        IsWitchaven2Selected = result.SupportedGame.Game is GameEnum.Witchaven2;
         IsStandaloneSelected = result.SupportedGame.Game is GameEnum.Standalone;
 
         var isDukeVersion = Enum.TryParse<DukeVersionEnum>(result.SupportedGame.Version, true, out var dukeVersion);
@@ -1021,7 +1041,7 @@ public sealed partial class DevViewModel : ObservableObject
                     }
                 }
 
-                var zip =  new Task(() => archive.SaveTo(pathToArchive, CompressionType.Deflate));
+                var zip = new Task(() => archive.SaveTo(pathToArchive, CompressionType.Deflate));
                 zip.Start();
                 await zip.WaitAsync(CancellationToken.None).ConfigureAwait(true);
             }
