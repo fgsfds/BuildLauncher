@@ -7,6 +7,7 @@ using Common.Entities;
 using Common.Enums;
 using Common.Helpers;
 using CommunityToolkit.Diagnostics;
+using Microsoft.Extensions.Logging;
 using System.Text.Json;
 
 namespace Common.Client.Api;
@@ -16,6 +17,7 @@ public sealed class GitHubApiInterface : IApiInterface
     private readonly IRetriever<Dictionary<PortEnum, GeneralReleaseEntity>?> _portsReleasesRetriever;
     private readonly RepoAppReleasesRetriever _appReleasesProvider;
     private readonly HttpClient _httpClient;
+    private readonly ILogger _logger;
     private readonly SemaphoreSlim _semaphore = new(1);
 
     private Dictionary<GameEnum, List<DownloadableAddonEntity>>? _addonsJson = null;
@@ -24,12 +26,14 @@ public sealed class GitHubApiInterface : IApiInterface
     public GitHubApiInterface(
         IRetriever<Dictionary<PortEnum, GeneralReleaseEntity>?> portsReleasesProvider,
         RepoAppReleasesRetriever appReleasesProvider,
-        HttpClient httpClient
+        HttpClient httpClient,
+        ILogger logger
         )
     {
         _portsReleasesRetriever = portsReleasesProvider;
         _appReleasesProvider = appReleasesProvider;
         _httpClient = httpClient;
+        _logger = logger;
     }
 
 
@@ -60,10 +64,27 @@ public sealed class GitHubApiInterface : IApiInterface
                 }
             }
 
+            if (gameEnum is GameEnum.Redneck)
+            {
+                _ = _addonsJson.TryGetValue(GameEnum.Redneck, out var rrAddons);
+                _ = _addonsJson.TryGetValue(GameEnum.RidesAgain, out var againAddons);
+
+                return [..rrAddons ?? [], ..againAddons ?? []];
+            }
+            
+            if (gameEnum is GameEnum.Witchaven)
+            {
+                _ = _addonsJson.TryGetValue(GameEnum.Witchaven, out var w1Addons);
+                _ = _addonsJson.TryGetValue(GameEnum.Witchaven2, out var w2Addons);
+
+                return [..w1Addons ?? [], ..w2Addons ?? []];
+            }
+
             return _addonsJson.TryGetValue(gameEnum, out var result) ? result : null;
         }
-        catch
+        catch (Exception ex)
         {
+            _logger.LogCritical(ex, "=== Error while getting addons from GitHub ===");
             return [];
         }
         finally
