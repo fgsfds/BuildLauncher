@@ -288,8 +288,7 @@ public sealed partial class DownloadsViewModel : ObservableObject
     [RelayCommand(CanExecute = nameof(CancelDownloadCanExecute))]
     private void CancelDownload()
     {
-        Guard.IsNotNull(_cancellationTokenSource);
-        _cancellationTokenSource.Cancel();
+        _cancellationTokenSource?.Cancel();
     }
     private bool CancelDownloadCanExecute => IsInProgress;
 
