@@ -4,13 +4,15 @@ using Ports.Providers;
 
 namespace Ports.Installer;
 
-public sealed class PortsInstallerFactory(PortsReleasesProvider portsReleasesProvider)
+public sealed class PortsInstallerFactory(
+    PortsReleasesProvider portsReleasesProvider,
+    HttpClient httpClient
+    )
 {
     /// <summary>
     /// Create <see cref="PortsInstaller"/> instance
     /// </summary>
-    /// <returns></returns>
-    public PortsInstaller Create() => new(portsReleasesProvider);
+    public PortsInstaller Create() => new(portsReleasesProvider, httpClient);
 }
 
 public sealed class PortsInstaller
@@ -18,9 +20,12 @@ public sealed class PortsInstaller
     private readonly ArchiveTools _fileTools;
     private readonly PortsReleasesProvider _portsReleasesProvider;
 
-    public PortsInstaller(PortsReleasesProvider portsReleasesProvider)
+    public PortsInstaller(
+        PortsReleasesProvider portsReleasesProvider,
+        HttpClient httpClient
+        )
     {
-        _fileTools = new();
+        _fileTools = new(httpClient);
         _portsReleasesProvider = portsReleasesProvider;
         Progress = _fileTools.Progress;
     }

@@ -6,6 +6,7 @@ using Common.Enums;
 using Common.Helpers;
 using Common.Interfaces;
 using CommunityToolkit.Diagnostics;
+using Microsoft.Extensions.Logging;
 using System.Collections.Immutable;
 
 namespace Addons.Providers;
@@ -19,6 +20,7 @@ public sealed class DownloadableAddonsProvider : IDownloadableAddonsProvider
     private readonly ArchiveTools _archiveTools;
     private readonly IApiInterface _apiInterface;
     private readonly InstalledAddonsProvider _installedAddonsProvider;
+    private readonly ILogger _logger;
 
     private Dictionary<AddonTypeEnum, Dictionary<AddonVersion, IDownloadableAddon>>? _cache;
 
@@ -36,20 +38,22 @@ public sealed class DownloadableAddonsProvider : IDownloadableAddonsProvider
         IGame game,
         ArchiveTools archiveTools,
         IApiInterface apiInterface,
-        InstalledAddonsProviderFactory installedAddonsProviderFactory
+        InstalledAddonsProviderFactory installedAddonsProviderFactory,
+        ILogger logger
         )
     {
         _game = game;
         _archiveTools = archiveTools;
         _apiInterface = apiInterface;
+        _logger = logger;
+
         _installedAddonsProvider = installedAddonsProviderFactory.GetSingleton(_game);
 
         Progress = _archiveTools.Progress;
     }
 
-
     /// <inheritdoc/>
-    public async Task CreateCacheAsync(bool createNew)
+    public async Task<bool> CreateCacheAsync(bool createNew)
     {
         try
         {
@@ -57,14 +61,19 @@ public sealed class DownloadableAddonsProvider : IDownloadableAddonsProvider
 
             if (_cache is not null && !createNew)
             {
-                return;
+                return true;
             }
 
             var addons = await _apiInterface.GetAddonsAsync(_game.GameEnum).ConfigureAwait(false);
 
-            if (addons is null || addons.Count == 0)
+            if (addons is null)
             {
-                return;
+                return false;
+            }
+
+            if (addons.Count == 0)
+            {
+                return true;
             }
 
             _cache = [];
@@ -78,6 +87,13 @@ public sealed class DownloadableAddonsProvider : IDownloadableAddonsProvider
                 _ = _cache.TryAdd(addon.AddonType, []);
                 _ = _cache[addon.AddonType].TryAdd(new(addon.Id, addon.Version), addon);
             }
+
+            return true;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogCritical(ex, $"=== Error while creating downloadable cache for {_game.GameEnum} ===");
+            return false;
         }
         finally
         {

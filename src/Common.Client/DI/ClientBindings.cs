@@ -54,7 +54,7 @@ public static class ClientBindings
     {
         HttpClient httpClient = new();
         httpClient.DefaultRequestHeaders.Add("User-Agent", "BuildLauncher");
-        httpClient.Timeout = TimeSpan.FromSeconds(10);
+        httpClient.Timeout = TimeSpan.FromSeconds(30);
         return httpClient;
     }
 }

@@ -5,10 +5,17 @@ namespace Common.Client.Tools;
 
 public sealed class ArchiveTools
 {
+    private readonly HttpClient _httpClient;
+
     /// <summary>
     /// Operation progress
     /// </summary>
     public readonly Progress<float> Progress = new();
+
+    public ArchiveTools(HttpClient httpClient)
+    {
+        _httpClient = httpClient;
+    }
 
     /// <summary>
     /// Download archive
@@ -35,10 +42,7 @@ public sealed class ArchiveTools
 
         try
         {
-            using HttpClient client = new();
-            client.Timeout = TimeSpan.FromSeconds(10);
-
-            using var response = await client.GetAsync(url, HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+            var response = await _httpClient.GetAsync(url, HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
 
             if (!response.IsSuccessStatusCode)
             {

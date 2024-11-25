@@ -80,12 +80,12 @@ public sealed class GitHubApiInterface : IApiInterface
                 return [..w1Addons ?? [], ..w2Addons ?? []];
             }
 
-            return _addonsJson.TryGetValue(gameEnum, out var result) ? result : null;
+            return _addonsJson.TryGetValue(gameEnum, out var result) ? result : [];
         }
         catch (Exception ex)
         {
             _logger.LogCritical(ex, "=== Error while getting addons from GitHub ===");
-            return [];
+            return null;
         }
         finally
         {

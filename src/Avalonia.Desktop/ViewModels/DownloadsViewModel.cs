@@ -188,7 +188,19 @@ public sealed partial class DownloadsViewModel : ObservableObject
         {
             IsInProgress = true;
 
-            await _downloadableAddonsProvider.CreateCacheAsync(createNew ?? true).ConfigureAwait(true);
+            var result = await _downloadableAddonsProvider.CreateCacheAsync(createNew ?? true).ConfigureAwait(true);
+
+            if (!result)
+            {
+                var length = App.Random.Next(1, 100);
+                var repeatedString = new string('\u200B', length);
+
+                App.NotificationManager.Show(
+                    $"Error while getting downloadable addons for{Environment.NewLine}{Game.FullName}" + repeatedString,
+                    NotificationType.Error
+                    );
+            }
+
 
             OnPropertyChanged(nameof(DownloadableList));
 

@@ -22,8 +22,15 @@ public interface IDownloadableAddonsProvider
     Task DownloadAddonAsync(IDownloadableAddon addon, CancellationToken cancellationToken);
 
     /// <summary>
-    /// Download addon
+    /// Get a list of downloadable addons
     /// </summary>
     /// <param name="addonType">Addon type</param>
     ImmutableList<IDownloadableAddon> GetDownloadableAddons(AddonTypeEnum addonType);
+
+    /// <summary>
+    /// Create downloadable addons cache
+    /// </summary>
+    /// <param name="createNew">Drop existing cache and create new</param>
+    /// <returns>Is cache created successfully</returns>
+    Task<bool> CreateCacheAsync(bool createNew);
 }

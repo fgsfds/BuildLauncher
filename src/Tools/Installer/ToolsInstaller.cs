@@ -3,13 +3,16 @@ using Tools.Tools;
 
 namespace Tools.Installer;
 
-public sealed class ToolsInstallerFactory(ToolsReleasesProvider toolsReleasesProvider)
+public sealed class ToolsInstallerFactory(
+    ToolsReleasesProvider toolsReleasesProvider,
+    HttpClient httpClient
+    )
 {
     /// <summary>
     /// Create <see cref="ToolsInstaller"/> instance
     /// </summary>
     /// <returns></returns>
-    public ToolsInstaller Create() => new(toolsReleasesProvider);
+    public ToolsInstaller Create() => new(toolsReleasesProvider, httpClient);
 }
 
 public sealed class ToolsInstaller
@@ -17,9 +20,12 @@ public sealed class ToolsInstaller
     private readonly ArchiveTools _fileTools;
     private readonly ToolsReleasesProvider _toolsReleasesProvider;
 
-    public ToolsInstaller(ToolsReleasesProvider toolsReleasesProvider)
+    public ToolsInstaller(
+        ToolsReleasesProvider toolsReleasesProvider,
+        HttpClient httpClient
+        )
     {
-        _fileTools = new();
+        _fileTools = new(httpClient);
         _toolsReleasesProvider = toolsReleasesProvider;
         Progress = _fileTools.Progress;
     }
