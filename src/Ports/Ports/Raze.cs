@@ -102,7 +102,8 @@ public sealed class Raze : BasePort
         FeatureEnum.Hightile,
         FeatureEnum.Models,
         FeatureEnum.Sloped_Sprites,
-        FeatureEnum.Wall_Rotate_Cstat
+        FeatureEnum.Wall_Rotate_Cstat,
+        FeatureEnum.SndInfo
         ];
 
 

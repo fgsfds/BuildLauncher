@@ -543,6 +543,7 @@
                             <CheckBox Margin="0,0,10,0" IsChecked="{Binding IsTrorSelected}">TROR</CheckBox>
                             <CheckBox Margin="0,0,10,0" IsChecked="{Binding IsCstatSelected}">Wall rotate cstat</CheckBox>
                             <CheckBox Margin="0,0,10,0" IsChecked="{Binding IsLightingSelected}">Dynamic lighting</CheckBox>
+                            <CheckBox Margin="0,0,10,0" IsChecked="{Binding IsSndInfoSelected}">SndInfo support</CheckBox>
 
                         </WrapPanel>
 
