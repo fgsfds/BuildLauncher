@@ -299,6 +299,18 @@
       "Description": "https://www.moddb.com/mods/duke-nukem-3d-blast-radius\r\n\r\nFour years in the making (2019 2023), Blast Radius is a fan add-on for the Apogee/3D Realms classic 1996 FPS Duke Nukem 3D by ck3d. Originally a new main episode of 15 maps (estimated blind playthrough length: 20\u002B hours) introducing 40\u002B new types of alien scum, as of v. 5.0.0, it has spread to include a six-level demo for its continuation: Zero Zone, as well as reinterpretations of the original \u0022L.A. Meltdown\u0022, \u0022Lunar Apocalypse\u0022 \u0026 \u0022Shrapnel City\u0022 Duke 3D episodes each into one big level.",
       "Author": "Aymeric \u0027ck3d\u0027 Nocus",
       "UpdateDate": "2024-11-24T16:16:48.7623393Z"
+    },
+    {
+      "Id": "duke3d-hq-sounds",
+      "AddonType": "Mod",
+      "Game": "Duke3D",
+      "DownloadUrl": "https://global.s3.cloud.ru/buildlauncher/Duke3D/Mods/duke3d-hq-sounds_v1_0.zip",
+      "Title": "High Quality Sound Effects",
+      "Version": "1.0",
+      "FileSize": 80539278,
+      "Description": "https://www.moddb.com/mods/duke-nukem-3d-high-quality-sound-effects\r\n\r\nThe purpose of this mod is to replace vanilla sound effects of Duke Nukem 3D with high quality ones.",
+      "Author": "Dzierzan",
+      "UpdateDate": "2024-11-26T11:14:28.900007Z"
     }
   ],
   "Blood": [
