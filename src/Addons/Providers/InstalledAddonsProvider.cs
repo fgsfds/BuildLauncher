@@ -170,38 +170,26 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
                     var filesMods = Directory.GetFiles(_game.ModsFolderPath, "*.zip");
                     var mods = await GetAddonsFromFilesAsync(filesMods).ConfigureAwait(false);
 
+                    _cache.Add(AddonTypeEnum.Mod, mods);
 
                     //enabling/disabling addons
                     foreach (var mod in mods)
                     {
-                        if (((AutoloadMod)mod.Value).IsEnabled)
+                        if (mod.Value is not AutoloadMod autoloadMod)
                         {
-                            var dependants = mods.Where(x => x.Value.DependentAddons?.ContainsKey(mod.Key.Id) ?? false);
-
-                            foreach (var depMod in dependants)
-                            {
-                                ((AutoloadMod)depMod.Value).IsEnabled = true;
-                            }
-
-                            var incompatibles = mods.Where(x => x.Value.IncompatibleAddons?.ContainsKey(mod.Key.Id) ?? false);
-
-                            foreach (var incMod in incompatibles)
-                            {
-                                ((AutoloadMod)incMod.Value).IsEnabled = false;
-                            }
+                            _logger.LogError($"=== Error while enabling/disabling addon {mod.Key.Id}");
+                            continue;
                         }
-                        else if (!((AutoloadMod)mod.Value).IsEnabled)
-                        {
-                            var dependants = mods.Where(x => x.Value.DependentAddons?.ContainsKey(mod.Key.Id) ?? false);
 
-                            foreach (var depMod in dependants)
-                            {
-                                ((AutoloadMod)depMod.Value).IsEnabled = false;
-                            }
+                        if (autoloadMod.IsEnabled)
+                        {
+                            EnableAddon(mod.Key);
+                        }
+                        else if (!autoloadMod.IsEnabled)
+                        {
+                            DisableAddon(mod.Key);
                         }
                     }
-
-                    _cache.Add(AddonTypeEnum.Mod, mods);
 
                 }).WaitAsync(CancellationToken.None).ConfigureAwait(false);
             }
@@ -289,19 +277,54 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
     }
 
     /// <inheritdoc/>
-    public void EnableAddon(AddonVersion addonId)
+    public void EnableAddon(AddonVersion addon)
     {
-        ((AutoloadMod)_cache[AddonTypeEnum.Mod][addonId]).IsEnabled = true;
+        if (!_cache[AddonTypeEnum.Mod].TryGetValue(addon, out var mod) ||
+            mod is not AutoloadMod autoloadMod)
+        {
+            return;
+        }
 
-        _config.ChangeModState(addonId, true);
+        autoloadMod.IsEnabled = true;
+
+        if (autoloadMod.DependentAddons is not null)
+        {
+            foreach (var dep in autoloadMod.DependentAddons)
+            {
+                EnableAddon(new() { Id = dep.Key, Version = dep.Value });
+            }
+        }
+
+        if (autoloadMod.IncompatibleAddons is not null)
+        {
+            foreach (var inc in autoloadMod.IncompatibleAddons)
+            {
+                DisableAddon(new() { Id = inc.Key, Version = inc.Value });
+            }
+        }
+
+        _config.ChangeModState(addon, true);
     }
 
     /// <inheritdoc/>
-    public void DisableAddon(AddonVersion addonId)
+    public void DisableAddon(AddonVersion addon)
     {
-        ((AutoloadMod)_cache[AddonTypeEnum.Mod][addonId]).IsEnabled = false;
+        if (!_cache[AddonTypeEnum.Mod].TryGetValue(addon, out var mod) ||
+            mod is not AutoloadMod autoloadMod)
+        {
+            return;
+        }
 
-        _config.ChangeModState(addonId, false);
+        autoloadMod.IsEnabled = false;
+
+        var deps = _cache[AddonTypeEnum.Mod].Where(x => x.Value.DependentAddons?.ContainsKey(autoloadMod.Id) ?? false);
+
+        foreach (var dep in deps)
+        {
+            DisableAddon(dep.Key);
+        }
+
+        _config.ChangeModState(addon, false);
     }
 
     /// <inheritdoc/>
@@ -399,7 +422,7 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
                     try
                     {
                         if (newAddon is AutoloadMod &&
-                        addedAddons.TryGetValue(new(newAddon.Id, newAddon.Version), out var existingMod))
+                            addedAddons.TryGetValue(new(newAddon.Id, newAddon.Version), out var existingMod))
                         {
                             if (existingMod.Version is null &&
                                 newAddon.Version is not null)

@@ -25,4 +25,30 @@ public readonly struct AddonVersion
         Id = title;
         Version = null;
     }
+
+    public override bool Equals([NotNullWhen(true)] object? obj)
+    {
+        if (obj is not AddonVersion addon)
+        {
+            throw new ArgumentNullException(nameof(obj));
+        }
+
+        if ((Version is null || addon.Version is null) &&
+            Id.Equals(addon.Id))
+        {
+            return true;
+        }
+
+        return base.Equals(obj);
+    }
+
+    public static bool operator ==(AddonVersion left, AddonVersion right)
+    {
+        return left.Equals(right);
+    }
+
+    public static bool operator !=(AddonVersion left, AddonVersion right)
+    {
+        return !(left == right);
+    }
 }
