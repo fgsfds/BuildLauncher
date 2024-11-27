@@ -307,10 +307,10 @@
       "DownloadUrl": "https://global.s3.cloud.ru/buildlauncher/Duke3D/Mods/duke3d-hq-sounds_v1_0.zip",
       "Title": "High Quality Sound Effects",
       "Version": "1.0",
-      "FileSize": 80539278,
+      "FileSize": 80539044,
       "Description": "https://www.moddb.com/mods/duke-nukem-3d-high-quality-sound-effects\r\n\r\nThe purpose of this mod is to replace vanilla sound effects of Duke Nukem 3D with high quality ones.",
       "Author": "Dzierzan",
-      "UpdateDate": "2024-11-26T11:14:28.900007Z"
+      "UpdateDate": "2024-11-27T04:16:04.6533519Z"
     }
   ],
   "Blood": [
@@ -722,6 +722,18 @@
       "FileSize": 36203055,
       "Author": "B Harry",
       "UpdateDate": "2024-10-27T13:44:26.301329Z"
+    },
+    {
+      "Id": "blood-hq-sounds",
+      "AddonType": "Mod",
+      "Game": "Blood",
+      "DownloadUrl": "https://global.s3.cloud.ru/buildlauncher/Blood/Mods/blood-hq-sounds_v1_3.zip",
+      "Title": "High Quality Sound Effects",
+      "Version": "1.3",
+      "FileSize": 143108327,
+      "Description": "https://www.moddb.com/mods/blood-high-quality-sound-effects\r\n\r\nThis mod replaces original sounds with high quality ones based on actual sources. If a specifc source was not found, then a sound was upscaled.",
+      "Author": "Dzierzan",
+      "UpdateDate": "2024-11-27T04:16:10.0009265Z"
     }
   ],
   "ShadowWarrior": [
