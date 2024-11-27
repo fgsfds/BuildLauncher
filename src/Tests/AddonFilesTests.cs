@@ -17,8 +17,11 @@ public sealed class AddonFilesTests : IDisposable
     public AddonFilesTests()
     {
         var game = new Mock<IGame>();
+        _ = game.Setup(x => x.GameEnum).Returns(Common.Enums.GameEnum.Blood);
+
         var config = new Mock<IConfigProvider>();
         _ = config.Setup(x => x.DisabledAutoloadMods).Returns([]);
+
         var logger = new Mock<ILogger>();
 
         _installedAddonsProvider = new(game.Object, config.Object, logger.Object);
@@ -119,5 +122,27 @@ public sealed class AddonFilesTests : IDisposable
         Assert.False(File.Exists(pathToFile));
         Assert.True(Directory.Exists(pathToFile.Replace(".zip", "")));
         Assert.True(File.Exists(Path.Combine(pathToFile.Replace(".zip", ""), "addons.grpinfo")));
+    }
+
+    [Fact]
+    public async Task WhatLiesBeneathTest()
+    {
+        _ = Directory.CreateDirectory("FilesTemp");
+        File.Copy(Path.Combine("Files", "WhatLiesBeneathAddon.zip"), Path.Combine("FilesTemp", "WhatLiesBeneathAddon.zip"));
+
+        var pathToFile = Path.Combine(Directory.GetCurrentDirectory(), "FilesTemp", "WhatLiesBeneathAddon.zip");
+
+        var result = await (Task<Dictionary<AddonVersion, IAddon>>)_getAddonsFromFilesAsync.Invoke(_installedAddonsProvider, [(object)new List<string>() { pathToFile }])!;
+
+        _ = Assert.Single(result);
+
+        var a = result.First();
+
+        Assert.Equal("blood-what-lies-beneath", a.Key.Id);
+        Assert.Equal("1.1.7", a.Key.Version);
+        Assert.Equal("What Lies Beneath", a.Value.Title);
+
+        Assert.False(File.Exists(pathToFile));
+        Assert.True(Directory.Exists(pathToFile.Replace(".zip", "")));
     }
 }

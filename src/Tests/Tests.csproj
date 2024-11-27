@@ -10,6 +10,7 @@
     <None Remove="Files\GrpInfoAddon.zip" />
     <None Remove="Files\TEST.MAP" />
     <None Remove="Files\UnpackedAddon.zip" />
+    <None Remove="Files\WhatLiesBeneathAddon.zip" />
     <None Remove="Files\ZippedAddon.zip" />
   </ItemGroup>
 
@@ -40,6 +41,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Files\UnpackedAddon.zip">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Files\WhatLiesBeneathAddon.zip">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Files\ZippedAddon.zip">

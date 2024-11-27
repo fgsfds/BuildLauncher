@@ -973,8 +973,7 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
                 //need to unpack addons that contain custom RFF files
                 unpackedTo = Unpack(pathToFile, archive);
             }
-
-            if (addonDto.Executables is not null)
+            else if (addonDto.Executables is not null)
             {
                 //need to unpack addons with custom executables
                 unpackedTo = Unpack(pathToFile, archive);
