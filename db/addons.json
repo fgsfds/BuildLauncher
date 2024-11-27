@@ -133,18 +133,6 @@
       "UpdateDate": "2024-05-24T00:00:00Z"
     },
     {
-      "Id": "duke3d-nude-patch",
-      "AddonType": "Mod",
-      "Game": "Duke3D",
-      "DownloadUrl": "https://global.s3.cloud.ru/buildlauncher/Duke3D/Mods/duke3d-nude-patch.zip",
-      "Title": "Nude Patch",
-      "Version": "0.91",
-      "FileSize": 359154,
-      "Description": "This mod provides art replacement that partially or fully removes clothes from female NPCs and posters in OG Duke 3D and its addons",
-      "Author": "fgsfds",
-      "UpdateDate": "2024-05-24T00:00:00Z"
-    },
-    {
       "Id": "duke3d-voxel-pack",
       "AddonType": "Mod",
       "Game": "Duke3D",
@@ -154,17 +142,6 @@
       "FileSize": 13424239,
       "Description": "https://github.com/NightFright2k19/duke3d_voxelpack\r\n\r\nVoxel replacements for sprites in Duke Nukem 3D",
       "UpdateDate": "2024-11-20T13:23:00Z"
-    },
-    {
-      "Id": "duke3d-wt-uncensor",
-      "AddonType": "Mod",
-      "Game": "Duke3D",
-      "DownloadUrl": "https://global.s3.cloud.ru/buildlauncher/Duke3D/Mods/duke3d-wt-uncensor.zip",
-      "Title": "World Tour Red Crosses",
-      "Version": "1.0",
-      "FileSize": 88966,
-      "Description": "This mod brings back red crosses of the medkits in World Tour edition of the game",
-      "UpdateDate": "2024-05-24T00:00:00Z"
     },
     {
       "Id": "duke3d-dukehard",
@@ -191,17 +168,6 @@
       "UpdateDate": "2024-05-24T00:00:00Z"
     },
     {
-      "Id": "duke3d-sprite-fixes",
-      "AddonType": "Mod",
-      "Game": "Duke3D",
-      "DownloadUrl": "https://global.s3.cloud.ru/buildlauncher/Duke3D/Mods/duke3d-sprite-fixes.zip",
-      "Title": "Sprite Fixes",
-      "Version": "1.0",
-      "FileSize": 232074,
-      "Description": "This pack contains widescrren fixes and minor graphical fixes for sprites in Duke 3D and its official addons",
-      "UpdateDate": "2024-05-30T10:37:30.631987Z"
-    },
-    {
       "Id": "duke3d-new-invasion",
       "AddonType": "TC",
       "Game": "Duke3D",
@@ -224,18 +190,6 @@
       "Description": "https://forums.duke4.net/topic/12447-release-fm7x-the-complete-fernando-marquez-7-episode-full-steel-balled-pack\r\n\r\n\u0022It\u0027s time to abort your whole freakin\u0027 species\u0022 \u2013 Duke swore in this final speech to the alien queen as she was blown up into many liquid pulps of blood and splatter in her aquatic hideout.\r\nA year has passed since that miraculous event. Duke Nukem, a hero in his own right, is well known and highly respected - the tough macho man the world needed to be safe from any threats the earth might face. Nowadays, the man himself has been resting without a single worry. Nothing could be more perfect than a good old tasty wine, a few cigarettes scattered on the living room table, and even some R\u0026R, which he never grows tired of.\r\nFast forward a few days later \u2013 a huge spectrum of colors sparks through the sky of the United States and a massive spaceship sweeps down to earth as fast as a flashlight, ripping apart a huge chunk of earth and trembling down the whole damn country.\r\n\u0022Really? They are back! But, how is that possible?\u0022, Duke shrugs while glancing at the wrecked streets near his place. It seems they will attempt another try to conquer our planet. But unlike the prior attempt, they account for Duke\u2019s interference, and they are well prepared this time (or at least they think so\u2026)\r\nSuddenly, but completely expected, Duke\u0027s telephone rings uncontrollably... \u0022Well, I guess it\u2019s time to do another favor to the world...\u0022, he mutters as he answers the phone, greets the Colonel and awaits new instructions.",
       "Author": "Fernando M\u00E1rquez",
       "UpdateDate": "2024-09-16T05:48:00.221448Z"
-    },
-    {
-      "Id": "duke3d-save-the-babes",
-      "AddonType": "Mod",
-      "Game": "Duke3D",
-      "DownloadUrl": "https://global.s3.cloud.ru/buildlauncher/Duke3D/Mods/duke3d-save-the-babes_v1_0.zip",
-      "Title": "Save the Babes",
-      "Version": "1.0",
-      "FileSize": 122072,
-      "Description": "[https://kidmarscat.itch.io/savebabes](https://kidmarscat.itch.io/savebabes)\r\n\r\nSave the Babes for Duke Nukem 3D is a mod that gives the player the ability to save the babes found in the game! To save a babe, simply press the [Use] button in front of any babe featured in the game, and she will be rescued out, giving the player a \u002B20 health bonus for each babe saved!\r\n\r\n**Warning:** This mod will remove the ability to tip the babes or have them speak back to Duke. This mod will NOT remove the ability to kill any babes, accidentally or otherwise, so be careful!",
-      "Author": "Kid MarsCat",
-      "UpdateDate": "2024-09-23T09:13:24.543068Z"
     },
     {
       "Id": "duke3d-dukedc-midi-pack",
@@ -311,6 +265,52 @@
       "Description": "https://www.moddb.com/mods/duke-nukem-3d-high-quality-sound-effects\r\n\r\nThe purpose of this mod is to replace vanilla sound effects of Duke Nukem 3D with high quality ones.",
       "Author": "Dzierzan",
       "UpdateDate": "2024-11-27T04:16:04.6533519Z"
+    },
+    {
+      "Id": "duke3d-sprite-fixes",
+      "AddonType": "Mod",
+      "Game": "Duke3D",
+      "DownloadUrl": "https://global.s3.cloud.ru/buildlauncher/Duke3D/Mods/duke3d-sprite-fixes_v1_0.zip",
+      "Title": "Sprite Fixes",
+      "Version": "1.0",
+      "FileSize": 230013,
+      "Description": "This pack contains widescrren fixes and minor graphical fixes for sprites in Duke 3D and its official addons",
+      "UpdateDate": "2024-11-27T07:21:26.9520434Z"
+    },
+    {
+      "Id": "duke3d-wt-red-crosses",
+      "AddonType": "Mod",
+      "Game": "Duke3D",
+      "DownloadUrl": "https://global.s3.cloud.ru/buildlauncher/Duke3D/Mods/duke3d-wt-red-crosses_v1_0.zip",
+      "Title": "World Tour Red Crosses",
+      "Version": "1.0",
+      "FileSize": 9374,
+      "Description": "This mod brings back red crosses of the medkits in World Tour edition of the game",
+      "UpdateDate": "2024-11-27T07:21:28.9895753Z"
+    },
+    {
+      "Id": "duke3d-nude-patch",
+      "AddonType": "Mod",
+      "Game": "Duke3D",
+      "DownloadUrl": "https://global.s3.cloud.ru/buildlauncher/Duke3D/Mods/duke3d-nude-patch_v0_91.zip",
+      "Title": "Nude Patch",
+      "Version": "0.91",
+      "FileSize": 358799,
+      "Description": "This mod provides art replacement that partially or fully removes clothes from female NPCs and posters in OG Duke 3D and its addons",
+      "Author": "fgsfds",
+      "UpdateDate": "2024-11-27T07:22:03.8344305Z"
+    },
+    {
+      "Id": "duke3d-save-the-babes",
+      "AddonType": "Mod",
+      "Game": "Duke3D",
+      "DownloadUrl": "https://global.s3.cloud.ru/buildlauncher/Duke3D/Mods/duke3d-save-the-babes_v1_0.zip",
+      "Title": "Save the Babes",
+      "Version": "1.0",
+      "FileSize": 122094,
+      "Description": "https://kidmarscat.itch.io/savebabes\r\n\r\nSave the Babes for Duke Nukem 3D is a mod that gives the player the ability to save the babes found in the game! To save a babe, simply press the [Use] button in front of any babe featured in the game, and she will be rescued out, giving the player a \u002B20 health bonus for each babe saved!\r\n\r\n**Warning:** This mod will remove the ability to tip the babes or have them speak back to Duke. This mod will NOT remove the ability to kill any babes, accidentally or otherwise, so be careful!",
+      "Author": "Kid MarsCat",
+      "UpdateDate": "2024-11-27T07:22:39.4335728Z"
     }
   ],
   "Blood": [
@@ -738,17 +738,6 @@
   ],
   "ShadowWarrior": [
     {
-      "Id": "wang-voxel-pack",
-      "AddonType": "Mod",
-      "Game": "ShadowWarrior",
-      "DownloadUrl": "https://global.s3.cloud.ru/buildlauncher/Wang/Mods/wang-voxel-pack.zip",
-      "Title": "Voxel Pack",
-      "Version": "0.1",
-      "FileSize": 1399813,
-      "Description": "https://github.com/fgsfds/Shadow-Warrior-Voxel-Pack\n\nAdditional voxel models for Shadow Warrior 1997 video game",
-      "UpdateDate": "2024-05-24T00:00:00Z"
-    },
-    {
       "Id": "wang-intime",
       "AddonType": "TC",
       "Game": "ShadowWarrior",
@@ -796,18 +785,6 @@
       "UpdateDate": "2024-05-24T00:00:00Z"
     },
     {
-      "Id": "wang-hq-sounds",
-      "AddonType": "Mod",
-      "Game": "ShadowWarrior",
-      "DownloadUrl": "https://global.s3.cloud.ru/buildlauncher/Wang/Mods/wang-hq-sounds.zip",
-      "Title": "High Quality Sound Effects",
-      "Version": "1.0",
-      "FileSize": 101020055,
-      "Description": "https://www.moddb.com/mods/shadow-warrior-high-quality-sound-effects\n\nThis mod replaces original sounds with high quality ones based on actual sources. If a specifc source was not found, then a sound was upscaled.",
-      "Author": "Dzierzan",
-      "UpdateDate": "2024-05-24T00:00:00Z"
-    },
-    {
       "Id": "twindragon",
       "AddonType": "TC",
       "Game": "ShadowWarrior",
@@ -832,17 +809,6 @@
       "UpdateDate": "2024-05-24T00:00:00Z"
     },
     {
-      "Id": "wang-widescreen",
-      "AddonType": "Mod",
-      "Game": "ShadowWarrior",
-      "DownloadUrl": "https://global.s3.cloud.ru/buildlauncher/Wang/Mods/wang-widescreen.zip",
-      "Title": "Widescreen Fixes",
-      "Version": "1.0",
-      "FileSize": 104151,
-      "Description": "This file provides widescreen graphics for Shadow Warrior weapons",
-      "UpdateDate": "2024-05-24T00:00:00Z"
-    },
-    {
       "Id": "wang-swc-20th",
       "AddonType": "TC",
       "Game": "ShadowWarrior",
@@ -853,38 +819,6 @@
       "Description": "https://swcentral.weebly.com/swc20.html\r\n\r\nLo Wang is once again called to action to defeat Zilla and his minions!",
       "Author": "Robman",
       "UpdateDate": "2024-08-01T11:33:14.769649Z"
-    },
-    {
-      "Id": "wang-hq-sounds-td",
-      "AddonType": "Mod",
-      "Game": "ShadowWarrior",
-      "DownloadUrl": "https://global.s3.cloud.ru/buildlauncher/Wang/Mods/wang-hq-sounds-td.zip",
-      "Title": "High Quality Sound Effects for Twin Dragon",
-      "Version": "1.0",
-      "FileSize": 14214799,
-      "Dependencies": [
-        "High Quality Sound Effects",
-        "Twin Dragon"
-      ],
-      "Description": "https://www.moddb.com/mods/shadow-warrior-high-quality-sound-effects\n\nThis mod replaces original sounds with high quality ones based on actual sources. If a specifc source was not found, then a sound was upscaled.",
-      "Author": "Dzierzan",
-      "UpdateDate": "2024-05-24T00:00:00Z"
-    },
-    {
-      "Id": "wang-hq-sounds-wd",
-      "AddonType": "Mod",
-      "Game": "ShadowWarrior",
-      "DownloadUrl": "https://global.s3.cloud.ru/buildlauncher/Wang/Mods/wang-hq-sounds-wd.zip",
-      "Title": "High Quality Sound Effects for Wanton Destruction",
-      "Version": "1.0",
-      "FileSize": 7272972,
-      "Dependencies": [
-        "Wanton Destruction",
-        "High Quality Sound Effects"
-      ],
-      "Description": "https://www.moddb.com/mods/shadow-warrior-high-quality-sound-effects\n\nThis mod replaces original sounds with high quality ones based on actual sources. If a specifc source was not found, then a sound was upscaled.",
-      "Author": "Dzierzan",
-      "UpdateDate": "2024-05-24T00:00:00Z"
     },
     {
       "Id": "wang-tonight",
@@ -909,6 +843,72 @@
       "Description": "https://www.moddb.com/mods/the-red-dragon-clan/downloads/the-red-dragon-clan\r\n\r\nLo wang is in Los angeles to teach his knowledge of Master Leep to his students,\r\nBut at some point a mysterious cult called The Red Dragon Clan is terrorizing the city of L.A.",
       "Author": "MarkKaminari00",
       "UpdateDate": "2024-09-24T07:21:01.47918Z"
+    },
+    {
+      "Id": "wang-hq-sounds",
+      "AddonType": "Mod",
+      "Game": "ShadowWarrior",
+      "DownloadUrl": "https://global.s3.cloud.ru/buildlauncher/Wang/Mods/wang-hq-sounds_v1_0.zip",
+      "Title": "High Quality Sound Effects",
+      "Version": "1.0",
+      "FileSize": 101020065,
+      "Description": "https://www.moddb.com/mods/shadow-warrior-high-quality-sound-effects\n\nThis mod replaces original sounds with high quality ones based on actual sources. If a specifc source was not found, then a sound was upscaled.",
+      "Author": "Dzierzan",
+      "UpdateDate": "2024-11-27T07:34:56.3369659Z"
+    },
+    {
+      "Id": "wang-hq-sounds-td",
+      "AddonType": "Mod",
+      "Game": "ShadowWarrior",
+      "DownloadUrl": "https://global.s3.cloud.ru/buildlauncher/Wang/Mods/wang-hq-sounds-td_v1_0.zip",
+      "Title": "High Quality Sound Effects for Twin Dragon",
+      "Version": "1.0",
+      "FileSize": 14214808,
+      "Dependencies": [
+        "Twin Dragon",
+        "High Quality Sound Effects"
+      ],
+      "Description": "https://www.moddb.com/mods/shadow-warrior-high-quality-sound-effects\n\nThis mod replaces original sounds with high quality ones based on actual sources. If a specifc source was not found, then a sound was upscaled.",
+      "Author": "Dzierzan",
+      "UpdateDate": "2024-11-27T07:34:58.0121493Z"
+    },
+    {
+      "Id": "wang-hq-sounds-wd",
+      "AddonType": "Mod",
+      "Game": "ShadowWarrior",
+      "DownloadUrl": "https://global.s3.cloud.ru/buildlauncher/Wang/Mods/wang-hq-sounds-wd_v1_0.zip",
+      "Title": "High Quality Sound Effects for Wanton Destruction",
+      "Version": "1.0",
+      "FileSize": 7272979,
+      "Dependencies": [
+        "Wanton Destruction",
+        "High Quality Sound Effects"
+      ],
+      "Description": "https://www.moddb.com/mods/shadow-warrior-high-quality-sound-effects\n\nThis mod replaces original sounds with high quality ones based on actual sources. If a specifc source was not found, then a sound was upscaled.",
+      "Author": "Dzierzan",
+      "UpdateDate": "2024-11-27T07:34:59.5854538Z"
+    },
+    {
+      "Id": "wang-voxel-pack",
+      "AddonType": "Mod",
+      "Game": "ShadowWarrior",
+      "DownloadUrl": "https://global.s3.cloud.ru/buildlauncher/Wang/Mods/wang-voxel-pack_v0_1.zip",
+      "Title": "Voxel Pack",
+      "Version": "0.1",
+      "FileSize": 1396687,
+      "Description": "https://github.com/fgsfds/Shadow-Warrior-Voxel-Pack\n\nAdditional voxel models for Shadow Warrior 1997 video game",
+      "UpdateDate": "2024-11-27T07:35:01.0048958Z"
+    },
+    {
+      "Id": "wang-widescreen",
+      "AddonType": "Mod",
+      "Game": "ShadowWarrior",
+      "DownloadUrl": "https://global.s3.cloud.ru/buildlauncher/Wang/Mods/wang-widescreen_v1_0.zip",
+      "Title": "Widescreen Fixes",
+      "Version": "1.0",
+      "FileSize": 104032,
+      "Description": "This file provides widescreen graphics for Shadow Warrior weapons",
+      "UpdateDate": "2024-11-27T07:35:02.4449292Z"
     }
   ],
   "Fury": [
@@ -952,26 +952,15 @@
       "Id": "fury-voxel-pack",
       "AddonType": "Mod",
       "Game": "Fury",
-      "DownloadUrl": "https://global.s3.cloud.ru/buildlauncher/Fury/Mods/fury-voxel-pack.zip",
+      "DownloadUrl": "https://global.s3.cloud.ru/buildlauncher/Fury/Mods/fury-voxel-pack_v0_4.zip",
       "Title": "Voxel Pack",
       "Version": "0.4",
-      "FileSize": 1340531,
+      "FileSize": 1340414,
       "Description": "https://github.com/Dzierzan/IonFury-Voxel-Pack\r\n\r\nVoxel replacements for sprites in Ion Fury",
-      "UpdateDate": "2024-05-24T00:00:00Z"
+      "UpdateDate": "2024-11-27T07:32:10.9927337Z"
     }
   ],
   "Exhumed": [
-    {
-      "Id": "slave-voxel-pack",
-      "AddonType": "Mod",
-      "Game": "Exhumed",
-      "DownloadUrl": "https://global.s3.cloud.ru/buildlauncher/Slave/Mods/slave-voxel-pack.zip",
-      "Title": "Voxel Pack",
-      "Version": "0.16",
-      "FileSize": 643839,
-      "Description": "https://github.com/fgsfds/Powerslave-Voxel-Pack/r/n/r/nThis pack provides voxel replacements for sprites in Powerslave/Exhumed",
-      "UpdateDate": "2024-05-24T00:00:00Z"
-    },
     {
       "Id": "slave-forgo",
       "AddonType": "Map",
@@ -1009,29 +998,6 @@
       "UpdateDate": "2024-05-24T00:00:00Z"
     },
     {
-      "Id": "slave-m60",
-      "AddonType": "Mod",
-      "Game": "Exhumed",
-      "DownloadUrl": "https://global.s3.cloud.ru/buildlauncher/Slave/Mods/slave-m60.zip",
-      "Title": "Alternative M60",
-      "Version": "1.0",
-      "FileSize": 28396,
-      "Description": "https://www.moddb.com/games/powerslave/addons/psm60/r/n/r/nA simple addon which replaces M60 weapon with alternative one.",
-      "UpdateDate": "2024-05-24T00:00:00Z"
-    },
-    {
-      "Id": "slave-hq-sounds",
-      "AddonType": "Mod",
-      "Game": "Exhumed",
-      "DownloadUrl": "https://global.s3.cloud.ru/buildlauncher/Slave/Mods/slave-hq-sounds.zip",
-      "Title": "High Quality Sound Effects",
-      "Version": "1.0",
-      "FileSize": 13052761,
-      "Description": "https://www.moddb.com/mods/powerslave-exhumed-high-quality-sound-effects/r/n/r/nThe purpose of this mod is to replace vanilla sound effects of Powerslave (Exhumed) with high quality ones.",
-      "Author": "Dzierzan",
-      "UpdateDate": "2024-05-24T00:00:00Z"
-    },
-    {
       "Id": "slave-totfatw",
       "AddonType": "Map",
       "Game": "Exhumed",
@@ -1042,6 +1008,40 @@
       "Description": "https://www.moddb.com/games/powerslave/addons/temple-of-the-fire-and-the-water/r/n/r/nThe Kilmaat plans were thwarted, however the remaining troops are up to no good. You must venture into the Temple of the Fire and the Water and retrieve the ashes of Anubis before they use them for their evil deeds.\r\n\r\nThis level can be completed in two different ways. The advised way is clockwise, as it features a more natural progression. I can perfectly be finished counter-clockwise, but it\u0027ll be more quirky, because of the quirky weapons ;)",
       "Author": "pagb666",
       "UpdateDate": "2024-05-24T00:00:00Z"
+    },
+    {
+      "Id": "slave-hq-sounds",
+      "AddonType": "Mod",
+      "Game": "Exhumed",
+      "DownloadUrl": "https://global.s3.cloud.ru/buildlauncher/Slave/Mods/slave-hq-sounds_v1_0.zip",
+      "Title": "High Quality Sound Effects",
+      "Version": "1.0",
+      "FileSize": 13052766,
+      "Description": "https://www.moddb.com/mods/powerslave-exhumed-high-quality-sound-effects/r/n/r/nThe purpose of this mod is to replace vanilla sound effects of Powerslave (Exhumed) with high quality ones.",
+      "Author": "Dzierzan",
+      "UpdateDate": "2024-11-27T07:28:33.6404711Z"
+    },
+    {
+      "Id": "slave-m60",
+      "AddonType": "Mod",
+      "Game": "Exhumed",
+      "DownloadUrl": "https://global.s3.cloud.ru/buildlauncher/Slave/Mods/slave-m60_v1_0.zip",
+      "Title": "Alternative M60",
+      "Version": "1.0",
+      "FileSize": 28038,
+      "Description": "https://www.moddb.com/games/powerslave/addons/psm60/r/n/r/nA simple addon which replaces M60 weapon with alternative one.",
+      "UpdateDate": "2024-11-27T07:28:35.3614717Z"
+    },
+    {
+      "Id": "slave-voxel-pack",
+      "AddonType": "Mod",
+      "Game": "Exhumed",
+      "DownloadUrl": "https://global.s3.cloud.ru/buildlauncher/Slave/Mods/slave-voxel-pack_v0_16.zip",
+      "Title": "Voxel Pack",
+      "Version": "0.16",
+      "FileSize": 643464,
+      "Description": "https://github.com/fgsfds/Powerslave-Voxel-Pack/r/n/r/nThis pack provides voxel replacements for sprites in Powerslave/Exhumed",
+      "UpdateDate": "2024-11-27T07:28:37.15612Z"
     }
   ],
   "NAM": [
