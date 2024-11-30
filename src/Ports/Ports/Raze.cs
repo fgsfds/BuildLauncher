@@ -496,11 +496,18 @@ public sealed class Raze : BasePort
                 _ = sb.Append("Path=").AppendLine(path);
 
                 //duke addons folders
-                if (game is DukeGame dGame)
+                if (game is DukeGame dGame && !campaign.Id.Equals(nameof(DukeVersionEnum.Duke3D_WT), StringComparison.OrdinalIgnoreCase))
                 {
-                    foreach (var folder in dGame.AddonsPaths)
+                    var addonPaths = dGame.AddonsPaths.Values.Distinct();
+
+                    foreach (var folder in addonPaths)
                     {
-                        path = folder.Value.Replace('\\', '/');
+                        if (folder.Equals(gameInstallFolder))
+                        {
+                            continue;
+                        }
+
+                        path = folder.Replace('\\', '/');
                         _ = sb.Append("Path=").AppendLine(path);
                     }
                 }

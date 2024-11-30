@@ -228,7 +228,6 @@ public sealed class DukeCmdArgumentsTests
         Assert.StartsWith($"""
             [GameSearch.Directories]
             Path=D:/Games/DukeWT
-            Path=D:/Games/Duke3D/Vaca
 
             [FileSearch.Directories]
             Path={Directory.GetCurrentDirectory()}/Data/Addons/Duke3D/Mods
