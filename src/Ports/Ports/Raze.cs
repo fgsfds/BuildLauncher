@@ -224,7 +224,9 @@ public sealed class Raze : BasePort
 
         AddGamePathsToConfig(game, campaign, game.GameInstallFolder!, config);
 
-        FixRoute66Files(game, campaign);
+        RestoreRoute66Files(game);
+
+        RestoreWtFiles(game);
     }
 
     /// <inheritdoc/>
@@ -471,55 +473,6 @@ public sealed class Raze : BasePort
         else
         {
             ThrowHelper.ThrowNotSupportedException($"Mod type {rCamp.Type} is not supported");
-            return;
-        }
-    }
-
-    /// <summary>
-    /// Remove route 66 art files overrides used for RedNukem
-    /// </summary>
-    private void FixRoute66Files(IGame game, IAddon _)
-    {
-        Guard.IsNotNull(game.GameInstallFolder);
-
-        if (game is RedneckGame)
-        {
-            var tilesA2 = Path.Combine(game.GameInstallFolder, "TILES024.ART");
-            var tilesB2 = Path.Combine(game.GameInstallFolder, "TILES025.ART");
-            var turdMovAnm2 = Path.Combine(game.GameInstallFolder, "TURDMOV.ANM");
-            var turdMovVoc2 = Path.Combine(game.GameInstallFolder, "TURDMOV.VOC");
-            var endMovAnm2 = Path.Combine(game.GameInstallFolder, "RR_OUTRO.ANM");
-            var endMovVoc2 = Path.Combine(game.GameInstallFolder, "LN_FINAL.VOC");
-
-            if (File.Exists(tilesA2))
-            {
-                File.Delete(tilesA2);
-            }
-
-            if (File.Exists(tilesB2))
-            {
-                File.Delete(tilesB2);
-            }
-
-            if (File.Exists(turdMovAnm2))
-            {
-                File.Delete(turdMovAnm2);
-            }
-
-            if (File.Exists(turdMovVoc2))
-            {
-                File.Delete(turdMovVoc2);
-            }
-
-            if (File.Exists(endMovAnm2))
-            {
-                File.Delete(endMovAnm2);
-            }
-
-            if (File.Exists(endMovVoc2))
-            {
-                File.Delete(endMovVoc2);
-            }
         }
     }
 

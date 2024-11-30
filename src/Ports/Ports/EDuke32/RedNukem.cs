@@ -66,6 +66,8 @@ public sealed class RedNukem : EDuke32
         FixGrpInConfig();
 
         FixRoute66Files(game, campaign);
+
+        FixWtFiles(game, campaign);
     }
 
 
@@ -191,12 +193,14 @@ public sealed class RedNukem : EDuke32
     /// Override original art files with route 66's ones or remove overrides
     /// </summary>
     [Obsolete("Remove if RedNukem can ever properly launch R66")]
-    private static void FixRoute66Files(IGame game, IAddon campaign)
+    private void FixRoute66Files(IGame game, IAddon campaign)
     {
-        if (game is not RedneckGame rGame || !rGame.IsRoute66Installed || game.GameInstallFolder is null)
+        if (game is not RedneckGame)
         {
             return;
         }
+
+        Guard.IsNotNull(game.GameInstallFolder);
 
         var tilesA1 = Path.Combine(game.GameInstallFolder, "TILESA66.ART");
         var tilesA2 = Path.Combine(game.GameInstallFolder, "TILES024.ART");
@@ -228,35 +232,7 @@ public sealed class RedNukem : EDuke32
         }
         else
         {
-            if (File.Exists(tilesA2))
-            {
-                File.Delete(tilesA2);
-            }
-
-            if (File.Exists(tilesB2))
-            {
-                File.Delete(tilesB2);
-            }
-
-            if (File.Exists(turdMovAnm2))
-            {
-                File.Delete(turdMovAnm2);
-            }
-
-            if (File.Exists(turdMovVoc2))
-            {
-                File.Delete(turdMovVoc2);
-            }
-
-            if (File.Exists(endMovAnm2))
-            {
-                File.Delete(endMovAnm2);
-            }
-
-            if (File.Exists(endMovVoc2))
-            {
-                File.Delete(endMovVoc2);
-            }
+            RestoreRoute66Files(game);
         }
     }
 }

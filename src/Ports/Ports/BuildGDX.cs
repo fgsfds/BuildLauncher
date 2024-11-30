@@ -119,7 +119,9 @@ public sealed class BuildGDX : BasePort
     /// <inheritdoc/>
     public override void BeforeStart(IGame game, IAddon campaign)
     {
-        //nothing to do
+        RestoreRoute66Files(game);
+
+        RestoreWtFiles(game);
     }
 
     /// <inheritdoc/>

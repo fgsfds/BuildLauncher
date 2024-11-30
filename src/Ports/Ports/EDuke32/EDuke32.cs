@@ -161,6 +161,8 @@ public class EDuke32 : BasePort
         MoveSaveFiles(game, campaign);
 
         FixGrpInConfig();
+
+        FixWtFiles(game, campaign);
     }
 
     protected void MoveSaveFiles(IGame game, IAddon campaign)
@@ -421,5 +423,59 @@ public class EDuke32 : BasePort
         }
 
         File.WriteAllLines(config, contents);
+    }
+
+    /// <summary>
+    /// Rename WT's ART files if custom campaign is launched
+    /// </summary>
+    protected void FixWtFiles(IGame game, IAddon campaign)
+    {
+        if (game is not DukeGame)
+        {
+            return;
+        }
+
+        Guard.IsNotNull(game.GameInstallFolder);
+
+        var art1 = Path.Combine(game.GameInstallFolder, "TILES009.ART");
+        var art1r = Path.Combine(game.GameInstallFolder, "TILES009._ART");
+
+        var art2 = Path.Combine(game.GameInstallFolder, "TILES020.ART");
+        var art2r = Path.Combine(game.GameInstallFolder, "TILES020._ART");
+
+        var art3 = Path.Combine(game.GameInstallFolder, "TILES021.ART");
+        var art3r = Path.Combine(game.GameInstallFolder, "TILES021._ART");
+
+        var art4 = Path.Combine(game.GameInstallFolder, "TILES022.ART");
+        var art4r = Path.Combine(game.GameInstallFolder, "TILES022._ART");
+
+
+        if (campaign.Id.Equals(nameof(DukeVersionEnum.Duke3D_WT), StringComparison.OrdinalIgnoreCase))
+        {
+            RestoreWtFiles(game);
+        }
+        else
+        {
+            if (File.Exists(art1))
+            {
+                File.Move(art1, art1r, true);
+            }
+
+            if (File.Exists(art2))
+            {
+                File.Move(art2, art2r, true);
+            }
+
+            if (File.Exists(art3))
+            {
+                File.Move(art3, art3r, true);
+            }
+
+            if (File.Exists(art4))
+            {
+                File.Move(art4, art4r, true);
+            }
+        }
+        
     }
 }
