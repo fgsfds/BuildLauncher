@@ -1,11 +1,9 @@
-﻿using Addons.Providers;
-using Avalonia.Controls;
+﻿using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Controls.Notifications;
 using Avalonia.Data.Core.Plugins;
 using Avalonia.Desktop.DI;
 using Avalonia.Desktop.Helpers;
-using Avalonia.Desktop.ViewModels;
 using Avalonia.Desktop.Views;
 using Avalonia.Markup.Xaml;
 using Avalonia.Styling;
@@ -14,10 +12,8 @@ using Common.Client.Enums;
 using Common.Client.Helpers;
 using Common.Client.Interfaces;
 using CommunityToolkit.Diagnostics;
-using Games.Providers;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Ports.Providers;
 
 namespace Avalonia.Desktop;
 
@@ -91,14 +87,8 @@ public sealed class App : Application
 
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
             {
-                var vm = BindingsManager.Provider.GetRequiredService<MainViewModel>();
-                var gamesProvider = BindingsManager.Provider.GetRequiredService<InstalledGamesProvider>();
-                var vmFactory = BindingsManager.Provider.GetRequiredService<ViewModelsFactory>();
-                var portsProvider = BindingsManager.Provider.GetRequiredService<InstalledPortsProvider>();
-                var installedAddonsProviderFactory = BindingsManager.Provider.GetRequiredService<InstalledAddonsProviderFactory>();
-                var configProvider = BindingsManager.Provider.GetRequiredService<IConfigProvider>();
-
-                desktop.MainWindow = new MainWindow(vm, gamesProvider, vmFactory, installedAddonsProviderFactory, portsProvider, configProvider);
+                // DI entry point
+                desktop.MainWindow = BindingsManager.Provider.GetRequiredService<MainWindow>();
 
                 desktop.Exit += OnAppExit;
             }
@@ -157,7 +147,7 @@ public sealed class App : Application
         var container = BindingsManager.Instance;
 
         ClientBindings.Load(container, Design.IsDesignMode);
-        ViewModelsBindings.Load(container);
+        GuiBindings.Load(container);
         Games.DI.ProvidersBindings.Load(container);
         Ports.DI.ProvidersBindings.Load(container);
         Addons.DI.ProvidersBindings.Load(container);
