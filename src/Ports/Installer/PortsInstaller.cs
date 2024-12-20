@@ -1,4 +1,5 @@
 ﻿using Common.Client.Tools;
+using Microsoft.Extensions.Logging;
 using Ports.Ports;
 using Ports.Providers;
 
@@ -6,13 +7,14 @@ namespace Ports.Installer;
 
 public sealed class PortsInstallerFactory(
     PortsReleasesProvider portsReleasesProvider,
-    HttpClient httpClient
+    HttpClient httpClient,
+    ILogger logger
     )
 {
     /// <summary>
     /// Create <see cref="PortsInstaller"/> instance
     /// </summary>
-    public PortsInstaller Create() => new(portsReleasesProvider, httpClient);
+    public PortsInstaller Create() => new(portsReleasesProvider, httpClient, logger);
 }
 
 public sealed class PortsInstaller
@@ -22,10 +24,11 @@ public sealed class PortsInstaller
 
     public PortsInstaller(
         PortsReleasesProvider portsReleasesProvider,
-        HttpClient httpClient
+        HttpClient httpClient,
+        ILogger logger
         )
     {
-        _fileTools = new(httpClient);
+        _fileTools = new(httpClient, logger);
         _portsReleasesProvider = portsReleasesProvider;
         Progress = _fileTools.Progress;
     }

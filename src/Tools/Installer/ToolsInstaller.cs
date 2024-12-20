@@ -1,18 +1,20 @@
 ﻿using Common.Client.Tools;
+using Microsoft.Extensions.Logging;
 using Tools.Tools;
 
 namespace Tools.Installer;
 
 public sealed class ToolsInstallerFactory(
     ToolsReleasesProvider toolsReleasesProvider,
-    HttpClient httpClient
+    HttpClient httpClient,
+    ILogger logger
     )
 {
     /// <summary>
     /// Create <see cref="ToolsInstaller"/> instance
     /// </summary>
     /// <returns></returns>
-    public ToolsInstaller Create() => new(toolsReleasesProvider, httpClient);
+    public ToolsInstaller Create() => new(toolsReleasesProvider, httpClient, logger);
 }
 
 public sealed class ToolsInstaller
@@ -22,10 +24,11 @@ public sealed class ToolsInstaller
 
     public ToolsInstaller(
         ToolsReleasesProvider toolsReleasesProvider,
-        HttpClient httpClient
+        HttpClient httpClient,
+        ILogger logger
         )
     {
-        _fileTools = new(httpClient);
+        _fileTools = new(httpClient, logger);
         _toolsReleasesProvider = toolsReleasesProvider;
         Progress = _fileTools.Progress;
     }

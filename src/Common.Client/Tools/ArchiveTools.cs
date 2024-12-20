@@ -1,20 +1,27 @@
 ﻿using CommunityToolkit.Diagnostics;
+using Microsoft.Extensions.Logging;
 using SharpCompress.Archives;
+using System.Net.Http.Headers;
 
 namespace Common.Client.Tools;
 
 public sealed class ArchiveTools
 {
     private readonly HttpClient _httpClient;
+    private readonly ILogger _logger;
 
     /// <summary>
     /// Operation progress
     /// </summary>
     public readonly Progress<float> Progress = new();
 
-    public ArchiveTools(HttpClient httpClient)
+    public ArchiveTools(
+        HttpClient httpClient,
+        ILogger logger
+        )
     {
         _httpClient = httpClient;
+        _logger = logger;
     }
 
     /// <summary>
@@ -30,6 +37,8 @@ public sealed class ArchiveTools
         CancellationToken cancellationToken
         )
     {
+        _logger.LogInformation($"Starting file downloading: {url}");
+
         IProgress<float> progress = Progress;
         var tempFile = filePath + ".temp";
 
@@ -38,25 +47,25 @@ public sealed class ArchiveTools
             File.Delete(tempFile);
         }
 
-        FileStream? file = null;
+        var response = await _httpClient.GetAsync(url, HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+
+        if (!response.IsSuccessStatusCode)
+        {
+            ThrowHelper.ThrowExternalException($"Error while downloading {url}, error: {response.StatusCode}");
+        }
+
+        await using var source = await response.Content.ReadAsStreamAsync(cancellationToken).ConfigureAwait(false);
+        var contentLength = response.Content.Headers.ContentLength;
+
+        _logger.LogInformation($"File length is {contentLength}");
+
+        FileStream fileStream = new(tempFile, FileMode.Create, FileAccess.Write, FileShare.None);
 
         try
         {
-            var response = await _httpClient.GetAsync(url, HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-
-            if (!response.IsSuccessStatusCode)
-            {
-                ThrowHelper.ThrowExternalException($"Error while downloading {url}, error: {response.StatusCode}");
-            }
-
-            await using var source = await response.Content.ReadAsStreamAsync(cancellationToken).ConfigureAwait(false);
-            var contentLength = response.Content.Headers.ContentLength;
-
-            file = new(tempFile, FileMode.Create, FileAccess.Write, FileShare.None);
-
             if (!contentLength.HasValue)
             {
-                await source.CopyToAsync(file, cancellationToken).ConfigureAwait(false);
+                await source.CopyToAsync(fileStream, cancellationToken).ConfigureAwait(false);
             }
             else
             {
@@ -66,22 +75,21 @@ public sealed class ArchiveTools
 
                 while ((bytesRead = await source.ReadAsync(buffer, cancellationToken).ConfigureAwait(false)) != 0)
                 {
-                    await file.WriteAsync(buffer.AsMemory(0, bytesRead), cancellationToken).ConfigureAwait(false);
+                    await fileStream.WriteAsync(buffer.AsMemory(0, bytesRead), cancellationToken).ConfigureAwait(false);
                     totalBytesRead += bytesRead;
                     progress.Report(totalBytesRead / (long)contentLength * 100);
                 }
             }
-
-            await file.DisposeAsync().ConfigureAwait(false);
-            File.Move(tempFile, filePath, true);
-
-            return true;
+        }
+        catch (HttpIOException)
+        {
+            await ContinueDownload(url, contentLength, fileStream!, cancellationToken).ConfigureAwait(false);
         }
         catch (OperationCanceledException)
         {
-            if (file is not null)
+            if (fileStream is not null)
             {
-                await file.DisposeAsync().ConfigureAwait(false);
+                await fileStream.DisposeAsync().ConfigureAwait(false);
             }
 
             if (File.Exists(tempFile))
@@ -91,6 +99,14 @@ public sealed class ArchiveTools
 
             return false;
         }
+        finally
+        {
+            await fileStream.DisposeAsync().ConfigureAwait(false);
+        }
+
+        _logger.LogInformation("Downloading finished, renaming temp file");
+        File.Move(tempFile, filePath, true);
+        return true;
     }
 
     /// <summary>
@@ -100,7 +116,8 @@ public sealed class ArchiveTools
     /// <param name="unpackTo">Directory to unpack archive to</param>
     public async Task UnpackArchiveAsync(
         string pathToArchive,
-        string unpackTo)
+        string unpackTo
+        )
     {
         IProgress<float> progress = Progress;
 
@@ -140,5 +157,49 @@ public sealed class ArchiveTools
                 entryNumber++;
             }
         }).ConfigureAwait(false);
+    }
+
+
+    /// <summary>
+    /// Continue download after network error
+    /// </summary>
+    /// <param name="url">Url to the file</param>
+    /// <param name="contentLength">Total content length</param>
+    /// <param name="fileStream">File stream to write to</param>
+    /// <param name="cancellationToken">Cancellation token</param>
+    private async Task ContinueDownload(
+        Uri url,
+        long? contentLength,
+        FileStream fileStream,
+        CancellationToken cancellationToken
+        )
+    {
+        _logger.LogInformation($"Trying to continue downloading after failing");
+
+        try
+        {
+            using HttpRequestMessage request = new()
+            {
+                RequestUri = url,
+                Method = HttpMethod.Get
+            };
+
+            request.Headers.Range = new RangeHeaderValue(fileStream.Position, contentLength);
+
+            using var response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+
+            if (response.StatusCode is not System.Net.HttpStatusCode.PartialContent)
+            {
+                ThrowHelper.ThrowInvalidOperationException("Error while downloading a file: " + response.StatusCode);
+            }
+
+            await using var source = await response.Content.ReadAsStreamAsync(cancellationToken).ConfigureAwait(false);
+
+            await source.CopyToAsync(fileStream, cancellationToken).ConfigureAwait(false);
+        }
+        catch (HttpIOException)
+        {
+            await ContinueDownload(url, contentLength, fileStream, cancellationToken).ConfigureAwait(false);
+        }
     }
 }
