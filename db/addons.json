@@ -318,12 +318,12 @@
       "Id": "blood-voxel-pack",
       "AddonType": "Mod",
       "Game": "Blood",
-      "DownloadUrl": "https://s3.fgsfds.link/buildlauncher/Blood/Mods/blood-voxel-pack_v0_96_1.zip",
+      "DownloadUrl": "https://github.com/fgsfds/Blood-Voxel-Pack/releases/download/0.97.0/blood-voxel-pack_v0_97.zip",
       "Title": "Voxel Pack",
-      "Version": "0.96.1",
-      "FileSize": 3896039,
+      "Version": "0.97",
+      "FileSize": 4679162,
       "Description": "https://github.com/fgsfds/Blood-Voxel-Pack/\r\n\r\nVoxel replacements for sprites in Blood",
-      "UpdateDate": "2024-05-24T00:00:00Z"
+      "UpdateDate": "2024-12-25T20:43:00Z"
     },
     {
       "Id": "blood-polished-cp",
