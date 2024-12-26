@@ -48,7 +48,7 @@ public static class VersionComparer
         return Compare(v1, v2, op);
     }
 
-    public static bool Compare(string? v1, string v2, string op)
+    public static bool Compare(string? v1, string? v2, string op)
     {
         if (v1 is null)
         {

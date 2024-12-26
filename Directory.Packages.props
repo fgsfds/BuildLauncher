@@ -26,7 +26,7 @@
     <PackageVersion Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.0" />
     <PackageVersion Include="Microsoft.Extensions.Logging.Debug" Version="9.0.0" />
     <PackageVersion Include="Moq" Version="4.20.72" />
-    <PackageVersion Include="Projektanker.Icons.Avalonia.MaterialDesign" Version="9.5.0" />
+    <PackageVersion Include="Projektanker.Icons.Avalonia.MaterialDesign" Version="9.6.0" />
     <PackageVersion Include="Roslynator.Analyzers" Version="4.12.10" />
     <PackageVersion Include="SharpCompress" Version="0.38.0" />
     <PackageVersion Include="coverlet.collector" Version="6.0.2" />
@@ -34,7 +34,7 @@
     <PackageVersion Include="System.Private.Uri" Version="4.3.2" />
     <PackageVersion Include="xunit" Version="2.9.2" />
     <PackageVersion Include="xunit.runner.visualstudio" Version="3.0.0" />
-    <PackageVersion Include="AWSSDK.S3" Version="3.7.410.8" />
+    <PackageVersion Include="AWSSDK.S3" Version="3.7.410.11" />
     <PackageVersion Include="ConfigureAwaitAnalyzer" Version="1.1.0" />
     <PackageVersion Include="Swashbuckle.AspNetCore" Version="7.2.0" />
     <PackageVersion Include="Microsoft.AspNetCore.SpaProxy" Version="9.0.0" />

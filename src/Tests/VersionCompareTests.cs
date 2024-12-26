@@ -33,4 +33,13 @@ public sealed class VersionCompareTests
 
         Assert.True(result);
     }
+
+    [Theory]
+    [InlineData(null, null, "==")]
+    public void CompareTest3(string? v1, string? v2, string c)
+    {
+        var result = VersionComparer.Compare(v1, v2, c);
+
+        Assert.True(result);
+    }
 }

@@ -304,6 +304,13 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
             }
         }
 
+        var otherVersions = _cache[AddonTypeEnum.Mod].Where(x => x.Key.Id == addon.Id && !VersionComparer.Compare(x.Key.Version, addon.Version, "=="));
+
+        foreach (var version in otherVersions)
+        {
+            DisableAddon(version.Key);
+        }
+
         _config.ChangeModState(addon, true);
     }
 
