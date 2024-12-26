@@ -555,7 +555,7 @@ public sealed partial class DevViewModel : ObservableObject
             IsInProgress = true;
 
             var fileName = Path.GetFileName(pathToArchive);
-            var uploadUrl = Consts.FilesRepo + "/Uploads/" + Guid.NewGuid() + "/" + fileName;
+            var uploadUrl = Consts.UploadsFolder + "/" + Guid.NewGuid() + "/" + fileName;
 
             await using var fileStream = File.OpenRead(pathToArchive);
             using StreamContent content = new(fileStream);
@@ -578,6 +578,18 @@ public sealed partial class DevViewModel : ObservableObject
             {
                 var errorMessage = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
                 SetErrorMessage(errorMessage, true);
+                return;
+            }
+
+            using var check = await httpClient.GetAsync(uploadUrl, HttpCompletionOption.ResponseHeadersRead, CancellationToken.None).ConfigureAwait(true);
+
+            FileInfo fileSize = new(pathToArchive); 
+
+            if (!check.IsSuccessStatusCode ||
+                check.Content.Headers.ContentLength != fileSize.Length)
+            {
+                SetErrorMessage("Error while uploading file", true);
+                return;
             }
 
             SetErrorMessage("Uploaded successfully", false);
