@@ -28,7 +28,7 @@
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="Downloads"/>
-                        <i:Icon Foreground="Crimson" IsVisible="{Binding ElementName=DownControl, Path=((vm:DownloadsViewModel)DataContext).HasUpdates}" Margin="5,0,0,0" Value="mdi-alert-decagram" />
+                        <i:Icon Foreground="Crimson" ToolTip.Tip="Updates available" IsVisible="{Binding ElementName=DownControl, Path=((vm:DownloadsViewModel)DataContext).HasUpdates}" Margin="5,0,0,0" Value="mdi-alert-decagram" />
                     </StackPanel>
                 </TabItem.Header>
 
