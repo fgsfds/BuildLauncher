@@ -69,20 +69,20 @@ public sealed class AddonFilesTests : IDisposable
 
         var pathToFile = Path.Combine(Directory.GetCurrentDirectory(), "FilesTemp", "UnpackedAddon.zip");
 
-        var result = await (Task<Dictionary<AddonVersion, IAddon>>)_getAddonsFromFilesAsync.Invoke(_installedAddonsProvider, [(object)new List<string>() { pathToFile }])!;
+        var result = await (Task<Dictionary<AddonVersion, IAddon>>)_getAddonsFromFilesAsync.Invoke(_installedAddonsProvider, [new List<string>() { pathToFile }])!;
 
         Assert.Equal(2, result.Count);
 
-        var a = result.First();
-        var b = result.Last();
+        var a = result[new() { Id = "blood-voxel-pack", Version = "p292" }];
+        var b = result[new() { Id = "blood-voxel-pack-2", Version = "p292-2" }];
 
-        Assert.Equal("blood-voxel-pack", a.Key.Id);
-        Assert.Equal("p292", a.Key.Version);
-        Assert.Equal("Voxel Pack", a.Value.Title);
+        Assert.Equal("blood-voxel-pack", a.Id);
+        Assert.Equal("p292", a.Version);
+        Assert.Equal("Voxel Pack", a.Title);
 
-        Assert.Equal("blood-voxel-pack-2", b.Key.Id);
-        Assert.Equal("p292-2", b.Key.Version);
-        Assert.Equal("Voxel Pack 2", b.Value.Title);
+        Assert.Equal("blood-voxel-pack-2", b.Id);
+        Assert.Equal("p292-2", b.Version);
+        Assert.Equal("Voxel Pack 2", b.Title);
 
         Assert.False(File.Exists(pathToFile));
         Assert.True(Directory.Exists(pathToFile.Replace(".zip", "")));
