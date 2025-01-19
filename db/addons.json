@@ -219,18 +219,6 @@
       "UpdateDate": "2024-06-06T13:40:17.224386Z"
     },
     {
-      "Id": "duke3d-legacy-edition",
-      "AddonType": "TC",
-      "Game": "Duke3D",
-      "DownloadUrl": "https://s3.fgsfds.link/buildlauncher/Duke3D/Campaigns/duke3d-legacy-edition_v2_0_5_1.zip",
-      "Title": "Legacy Edition",
-      "Version": "2.0.5.1",
-      "FileSize": 585807406,
-      "Description": "https://www.moddb.com/mods/duke-nukem-3d-legacy-edition/\r\n\r\nDuke Nukem 3D is back, rebalanced, remixed and HARDER. A mix between the old and the new, play with new (legacy) weapons, against new (legacy) enemies. Legacy Edition will make you sweat, be strategic, jump, run, dodge and blow everything away. Play the original 4 episodes with beta/alpha elements remixed into the game.\r\n\r\nHail to the Kinng, Baby!",
-      "Author": "Marcos",
-      "UpdateDate": "2024-10-13T06:44:05.74Z"
-    },
-    {
       "Id": "duke3d-alien-armageddon",
       "AddonType": "TC",
       "Game": "Duke3D",
@@ -311,6 +299,29 @@
       "Description": "https://kidmarscat.itch.io/savebabes\r\n\r\nSave the Babes for Duke Nukem 3D is a mod that gives the player the ability to save the babes found in the game! To save a babe, simply press the [Use] button in front of any babe featured in the game, and she will be rescued out, giving the player a \u002B20 health bonus for each babe saved!\r\n\r\n**Warning:** This mod will remove the ability to tip the babes or have them speak back to Duke. This mod will NOT remove the ability to kill any babes, accidentally or otherwise, so be careful!",
       "Author": "Kid MarsCat",
       "UpdateDate": "2024-11-27T07:22:39.4335728Z"
+    },
+    {
+      "Id": "duke3d-dick-suckem",
+      "AddonType": "TC",
+      "Game": "Duke3D",
+      "DownloadUrl": "https://s3.fgsfds.link/buildlauncher/Duke3D/Campaigns/duke3d-dick-suckem_v1_0.zip",
+      "Title": "Dick Suckem",
+      "Version": "1.0",
+      "FileSize": 58118969,
+      "Description": "https://www.moddb.com/games/duke-nukem-3d/addons/ms-paint-duke-nukem-dick-suckem\r\n\r\nDuke Nukem 3D but all sprites and graphics are redrawn using MSPAINT. Nothing serious. Just a joke mod made for fun and also to test my patience.",
+      "UpdateDate": "2025-01-19T16:53:48.9240204Z"
+    },
+    {
+      "Id": "duke3d-legacy-edition",
+      "AddonType": "TC",
+      "Game": "Duke3D",
+      "DownloadUrl": "https://s3.fgsfds.link/buildlauncher/Duke3D/Campaigns/duke3d-legacy-edition_v2_0_8_1.zip",
+      "Title": "Legacy Edition",
+      "Version": "2.0.8.1",
+      "FileSize": 711425132,
+      "Description": "https://www.moddb.com/mods/duke-nukem-3d-legacy-edition/\r\n\r\nDuke Nukem 3D is back, rebalanced, remixed and HARDER. A mix between the old and the new, play with new (legacy) weapons, against new (legacy) enemies. Legacy Edition will make you sweat, be strategic, jump, run, dodge and blow everything away. Play the original 4 episodes with beta/alpha elements remixed into the game.\r\n\r\nHail to the King, Baby!",
+      "Author": "ItsMarcolino123",
+      "UpdateDate": "2025-01-19T17:50:19.9703918Z"
     }
   ],
   "Blood": [
@@ -421,18 +432,6 @@
       "Version": "1.0",
       "FileSize": 261479,
       "Description": "https://www.moddb.com/games/blood/addons/black-phantasm\r\n\r\nThis pack replaces Phantasm sprites with the black variant",
-      "Author": "Dzierzan",
-      "UpdateDate": "2024-05-24T00:00:00Z"
-    },
-    {
-      "Id": "blood-cultists-with-guns",
-      "AddonType": "Mod",
-      "Game": "Blood",
-      "DownloadUrl": "https://s3.fgsfds.link/buildlauncher/Blood/Mods/blood-cultists-with-guns_v2_0.zip",
-      "Title": "Cultists with correct guns",
-      "Version": "2.0",
-      "FileSize": 1456465,
-      "Description": "https://www.moddb.com/games/blood/addons/cultists-with-correct-guns\r\n\r\nThis mod gives every cultist his correct weapon. So that means you\u0027ll see Ackolyte with actual TNT, Cultist with a shotgun, Fanatic with a tommy gun and finally Zealot with tesla gun.\r\n\r\nAlso included:\r\n\r\n- actual gibbing animation for innocents,\r\n\r\n- differrent sprites for cultist\u0027s electrocution,\r\n\r\n- Stone Gargoygle having actual blue eyes when shooting,\r\n\r\n- Blood Alpha Cultist\u0027s beast transformation animation",
       "Author": "Dzierzan",
       "UpdateDate": "2024-05-24T00:00:00Z"
     },
@@ -734,6 +733,54 @@
       "Description": "https://www.moddb.com/mods/blood-high-quality-sound-effects\r\n\r\nThis mod replaces original sounds with high quality ones based on actual sources. If a specifc source was not found, then a sound was upscaled.",
       "Author": "Dzierzan",
       "UpdateDate": "2024-11-27T04:16:10.0009265Z"
+    },
+    {
+      "Id": "blood-innocent-gibbing",
+      "AddonType": "Mod",
+      "Game": "Blood",
+      "DownloadUrl": "https://s3.fgsfds.link/buildlauncher/Blood/Mods/blood-innocent-gibbing_v1_0.zip",
+      "Title": "Innocent - Gibbing",
+      "Version": "1.0",
+      "FileSize": 58814,
+      "Description": "https://www.moddb.com/games/blood/addons/innocent-gibbing\r\n\r\nThis addon adds gibbing animation for Innocents.",
+      "Author": "Dzierzan",
+      "UpdateDate": "2025-01-19T16:51:20.9929873Z"
+    },
+    {
+      "Id": "blood-cultists-with-guns",
+      "AddonType": "Mod",
+      "Game": "Blood",
+      "DownloadUrl": "https://s3.fgsfds.link/buildlauncher/Blood/Mods/blood-cultists-with-guns_v3_0.zip",
+      "Title": "Cultists With Correct Guns",
+      "Version": "3.0",
+      "FileSize": 1404519,
+      "Description": "https://www.moddb.com/games/blood/addons/cultists-with-correct-guns\r\n\r\nThis mod gives every cultist his correct weapon. So that means you\u0027ll see Ackolyte with actual TNT, Cultist with a shotgun, Fanatic with a tommy gun and finally Zealot with tesla gun.\r\n\r\nAlso included:\r\n\r\n- Different sprites for Cultist\u0027s electrocution\r\n\r\n- Blood Alpha Cultist\u0027s beast transformation animation",
+      "Author": "Dzierzan",
+      "UpdateDate": "2025-01-19T16:51:23.9494324Z"
+    },
+    {
+      "Id": "blood-gargoyle-blue-eyes",
+      "AddonType": "Mod",
+      "Game": "Blood",
+      "DownloadUrl": "https://s3.fgsfds.link/buildlauncher/Blood/Mods/blood-gargoyle-blue-eyes_v1_0.zip",
+      "Title": "Stone Gargoyle - Blue Muzzle Flash",
+      "Version": "1.0",
+      "FileSize": 29221,
+      "Description": "https://www.moddb.com/games/blood/addons/stone-gargoyle-blue-muzzle-flash\r\n\r\nThis addon disables grey palette applied to shooting sprites of Stone Gargoyle, revealing intended blue muzzle flash.\r\n\r\nWhen you browse through Blood game sprites, you may notice that Stone Gargoyle has shooting sprites with blue muzzle flash, but in game it\u0027s grey-ish. It\u0027s because the shooting animation still has grey palette applied to it. In my opinion it is an oversight from the developers.\r\n\r\nThis addon restores that by simply disabling grey palette for shooting animation only.",
+      "Author": "Dzierzan",
+      "UpdateDate": "2025-01-19T16:51:26.295086Z"
+    },
+    {
+      "Id": "blood-cultists-no-melting",
+      "AddonType": "Mod",
+      "Game": "Blood",
+      "DownloadUrl": "https://s3.fgsfds.link/buildlauncher/Blood/Mods/blood-cultists-no-melting_v1_0.zip",
+      "Title": "Cultists - No Melting",
+      "Version": "1.0",
+      "FileSize": 5347,
+      "Description": "https://www.moddb.com/games/blood/addons/cultists-no-melting\r\n\r\nThis addon removes melting animation of cultist\u0027s dead body.",
+      "Author": "Dzierzan",
+      "UpdateDate": "2025-01-19T16:51:29.4555705Z"
     }
   ],
   "ShadowWarrior": [
