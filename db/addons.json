@@ -956,6 +956,18 @@
       "FileSize": 104032,
       "Description": "This file provides widescreen graphics for Shadow Warrior weapons",
       "UpdateDate": "2024-11-27T07:35:02.4449292Z"
+    },
+    {
+      "Id": "wang-beta-weapons",
+      "AddonType": "Mod",
+      "Game": "ShadowWarrior",
+      "DownloadUrl": "https://s3.fgsfds.link/buildlauncher/Wang/Mods/wang-beta-weapons_v1_0.zip",
+      "Title": "Beta Weapons",
+      "Version": "1.0",
+      "FileSize": 541605,
+      "Description": "https://www.moddb.com/games/shadow-warrior/addons/beta-weapons1\r\n\r\nThis is a very simple addon for Shadow Warrior game which replaces vanilla weapons sprites with beta ones (at least the ones from the latest betas).",
+      "Author": "Dzierzan",
+      "UpdateDate": "2025-01-20T16:53:35.2429518Z"
     }
   ],
   "Fury": [
