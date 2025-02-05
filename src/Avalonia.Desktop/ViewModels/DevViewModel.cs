@@ -438,11 +438,11 @@ public sealed partial class DevViewModel : ObservableObject
 
         if (result)
         {
-            UploadingStatusMessage = "Success";
+            SetErrorMessage("Success", false);
         }
         else
         {
-            UploadingStatusMessage = "Error";
+            SetErrorMessage("Error", true);
         }
     }
 
@@ -517,7 +517,7 @@ public sealed partial class DevViewModel : ObservableObject
             }
 
             crc_table[i] = crc;
-        };
+        }
 
         crc = 0xFFFFFFFF;
 
@@ -583,7 +583,7 @@ public sealed partial class DevViewModel : ObservableObject
 
             using var check = await httpClient.GetAsync(uploadUrl, HttpCompletionOption.ResponseHeadersRead, CancellationToken.None).ConfigureAwait(true);
 
-            FileInfo fileSize = new(pathToArchive); 
+            FileInfo fileSize = new(pathToArchive);
 
             if (!check.IsSuccessStatusCode ||
                 check.Content.Headers.ContentLength != fileSize.Length)
@@ -1047,7 +1047,7 @@ public sealed partial class DevViewModel : ObservableObject
                     {
                         var fileInfo = new FileInfo(path);
                         _ = archive.AddEntry(
-                            path.Substring(PathToAddonFolder.Length),
+                            path[PathToAddonFolder.Length..],
                             fileInfo.OpenRead(),
                             true,
                             fileInfo.Length,
