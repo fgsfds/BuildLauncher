@@ -80,15 +80,15 @@ public sealed class GamesPathsProvider
                 _wangPath ??= pathToGame;
             }
 
-            //Redux
-            pathToGame = Path.Combine(lib, "Shadow Warrior Classic", "gameroot");
+            //Free
+            pathToGame = Path.Combine(lib, "Shadow Warrior Original", "gameroot");
             if (Directory.Exists(pathToGame))
             {
                 _wangPath ??= pathToGame;
             }
 
-            //Free
-            pathToGame = Path.Combine(lib, "Shadow Warrior Original", "gameroot");
+            //Redux
+            pathToGame = Path.Combine(lib, "Shadow Warrior Classic", "gameroot");
             if (Directory.Exists(pathToGame))
             {
                 _wangPath ??= pathToGame;
