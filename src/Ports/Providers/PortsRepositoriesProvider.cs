@@ -1,6 +1,5 @@
 ﻿using Common.Entities;
 using Common.Enums;
-using Common.Helpers;
 using CommunityToolkit.Diagnostics;
 
 namespace Ports.Providers;
@@ -13,8 +12,8 @@ internal static class PortsRepositoriesProvider
         {
             return new()
             {
-                RepoUrl = new($"{Consts.FilesRepo}/Ports/BuildGDX_v117.zip"),
-                WindowsReleasePredicate = null,
+                RepoUrl = new("https://api.github.com/repos/fgsfds/BuildGDX-Releases/releases"),
+                WindowsReleasePredicate = static x => x.FileName.EndsWith("windows.zip", StringComparison.OrdinalIgnoreCase),
                 LinuxReleasePredicate = null,
             };
         }

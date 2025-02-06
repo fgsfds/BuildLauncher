@@ -69,19 +69,6 @@ internal sealed partial class PortsReleasesRepoRetriever : IRetriever<Dictionary
 
         Dictionary<OSEnum, GeneralReleaseEntity>? result = null;
 
-        if (portEnum is PortEnum.BuildGDX)
-        {
-            GeneralReleaseEntity bgdxRelease = new()
-            {
-                SupportedOS = OSEnum.Windows,
-                Description = string.Empty,
-                Version = "1.17",
-                DownloadUrl = repo.RepoUrl
-            };
-
-            return new() { { OSEnum.Windows, bgdxRelease } };
-        }
-
         if (repo.RepoUrl is null)
         {
             return null;

@@ -34,7 +34,7 @@
     <PackageVersion Include="System.Private.Uri" Version="4.3.2" />
     <PackageVersion Include="xunit" Version="2.9.3" />
     <PackageVersion Include="xunit.runner.visualstudio" Version="3.0.1" />
-    <PackageVersion Include="AWSSDK.S3" Version="3.7.413.3" />
+    <PackageVersion Include="AWSSDK.S3" Version="3.7.413.4" />
     <PackageVersion Include="ConfigureAwaitAnalyzer" Version="1.1.0" />
     <PackageVersion Include="Swashbuckle.AspNetCore" Version="7.2.0" />
     <PackageVersion Include="Microsoft.AspNetCore.SpaProxy" Version="9.0.1" />
