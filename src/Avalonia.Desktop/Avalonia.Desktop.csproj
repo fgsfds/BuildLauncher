@@ -42,10 +42,7 @@
     <PackageReference Include="CommunityToolkit.Mvvm" />
     <PackageReference Include="Markdown.Avalonia" />
     <PackageReference Include="Projektanker.Icons.Avalonia.MaterialDesign" />
-    <PackageReference Include="Roslynator.Analyzers">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
+    <PackageReference Include="Roslynator.Analyzers" PrivateAssets="all" />
     <PackageReference Include="System.Private.Uri" />
   </ItemGroup>
 

@@ -11,10 +11,7 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" />
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" />
-    <PackageReference Include="Roslynator.Analyzers">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
+    <PackageReference Include="Roslynator.Analyzers" PrivateAssets="all" />
     <PackageReference Include="SharpCompress" />
     <PackageReference Include="CommunityToolkit.Mvvm" />
   </ItemGroup>
