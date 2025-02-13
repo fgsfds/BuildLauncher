@@ -1003,9 +1003,9 @@ public sealed partial class DevViewModel : ObservableObject
                 return null;
             }
 
-            var addon = GetAddonJson(out var jsonString);
+            SaveJson();
 
-            RenameAddonFolder(addon);
+            var addon = GetAddonJson(out var jsonString);
 
             File.WriteAllText(Path.Combine(PathToAddonFolder!, "addon.json"), jsonString);
 
