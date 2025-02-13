@@ -64,13 +64,13 @@
       "Id": "duke3d-addon-compilation",
       "AddonType": "TC",
       "Game": "Duke3D",
-      "DownloadUrl": "https://s3.fgsfds.link/buildlauncher/Duke3D/Campaigns/duke3d-addon-compilation.zip",
+      "DownloadUrl": "https://s3.fgsfds.link/buildlauncher/Duke3D/Campaigns/duke3d-addon-compilation_v4_0_1.zip",
       "Title": "EDuke32 Addon Compilation",
-      "Version": "4.0",
-      "FileSize": 1384490145,
+      "Version": "4.0.1",
+      "FileSize": 1418951274,
       "Description": "https://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/\n\nThis pack is a compilation of great episodes and/or total conversions for Duke Nukem 3D. It will only work with the EDuke32 port.\n\nTo avoid misunderstandings and disappointment: This is *NOT* supposed to be any kind of \u0022ultimate\u0022 compilation of all the greatest addons ever created for the game. There are countless more amazing community-based projects out there which are well worth your time - even though they are not part of this collection. \n\nConsider this as a small peek into the enjoyable world of Duke Nukem 3D modding and an encouragement to explore forums and mod databases for more. Enjoy!",
       "Author": "NightFright",
-      "UpdateDate": "2024-09-27T15:13:49.941Z"
+      "UpdateDate": "2025-02-13T09:54:00.000Z"
     },
     {
       "Id": "duke3d-its-zerohour",
@@ -322,6 +322,18 @@
       "Description": "https://www.moddb.com/mods/duke-nukem-3d-legacy-edition/\r\n\r\nDuke Nukem 3D is back, rebalanced, remixed and HARDER. A mix between the old and the new, play with new (legacy) weapons, against new (legacy) enemies. Legacy Edition will make you sweat, be strategic, jump, run, dodge and blow everything away. Play the original 4 episodes with beta/alpha elements remixed into the game.\r\n\r\nHail to the King, Baby!",
       "Author": "ItsMarcolino123",
       "UpdateDate": "2025-01-19T17:50:19.9703918Z"
+    },
+    {
+      "Id": "duke3d-duke-forces",
+      "AddonType": "TC",
+      "Game": "Duke3D",
+      "DownloadUrl": "https://s3.fgsfds.link/buildlauncher/Duke3D/Campaigns/duke3d-duke-forces_v2_10.zip",
+      "Title": "Duke Forces",
+      "Version": "2.10",
+      "FileSize": 253201577,
+      "Description": "https://www.moddb.com/mods/duke-forces\r\n\r\nDuke Forces is a modification of Duke Nukem 3D, inspired by the Star Wars Dark Forces series. It works with all Duke Nukem 3D levels and automatically converts weapons, enemies, textures, sprites, music...pretty much everything into Star Wars content.",
+      "Author": "DeeperThought",
+      "UpdateDate": "2025-02-09T17:00:20.8438804Z"
     }
   ],
   "Blood": [
