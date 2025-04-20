@@ -175,7 +175,14 @@ public sealed class RedNukem : EDuke32
 
         if (rCamp.Type is AddonTypeEnum.TC)
         {
-            _ = sb.Append($@" {AddFileParam}""{rCamp.PathToFile}""");
+            if (rCamp.Executables is not null)
+            {
+                //don't add addon dir if the port is overridden
+            }
+            else
+            {
+                _ = sb.Append($@" {AddFileParam}""{rCamp.PathToFile}""");
+            }
         }
         else if (rCamp.Type is AddonTypeEnum.Map)
         {
