@@ -70,7 +70,7 @@
       "FileSize": 1418951274,
       "Description": "https://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/\n\nThis pack is a compilation of great episodes and/or total conversions for Duke Nukem 3D. It will only work with the EDuke32 port.\n\nTo avoid misunderstandings and disappointment: This is *NOT* supposed to be any kind of \u0022ultimate\u0022 compilation of all the greatest addons ever created for the game. There are countless more amazing community-based projects out there which are well worth your time - even though they are not part of this collection. \n\nConsider this as a small peek into the enjoyable world of Duke Nukem 3D modding and an encouragement to explore forums and mod databases for more. Enjoy!",
       "Author": "NightFright",
-      "UpdateDate": "2025-02-13T09:54:00.000Z"
+      "UpdateDate": "2025-02-13T09:54:00Z"
     },
     {
       "Id": "duke3d-its-zerohour",
@@ -793,6 +793,18 @@
       "Description": "https://www.moddb.com/games/blood/addons/cultists-no-melting\r\n\r\nThis addon removes melting animation of cultist\u0027s dead body.",
       "Author": "Dzierzan",
       "UpdateDate": "2025-01-19T16:51:29.4555705Z"
+    },
+    {
+      "Id": "blood-bloodbasket",
+      "AddonType": "TC",
+      "Game": "Blood",
+      "DownloadUrl": "http://s3.fgsfds.link/buildlauncher/Blood/Campaigns/blood-bloodbasket_v1_0.zip",
+      "Title": "Bloodbasket",
+      "Version": "1.0",
+      "FileSize": 1054169,
+      "Description": "The first community Map Jam by The Blood Discord Channel. Bloodbasket includes four distinctive and varied maps full of blood, dread and secrets!",
+      "Author": "daMann, Damien Azreal, BloodyTom, Matthan",
+      "UpdateDate": "2025-04-20T15:38:43.5701503Z"
     }
   ],
   "ShadowWarrior": [
