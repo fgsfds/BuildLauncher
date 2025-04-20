@@ -77,7 +77,7 @@ public abstract class BasePort
     public virtual string PortInstallFolderPath => Path.Combine(ClientProperties.PortsFolderPath, PortFolderName);
 
     /// <summary>
-    /// Path to port install folder
+    /// Path to port saved games folder
     /// </summary>
     public virtual string PortSavedGamesFolderPath => Path.Combine(ClientProperties.SavedGamesFolderPath, Name);
 
@@ -191,7 +191,7 @@ public abstract class BasePort
     /// <summary>
     /// Get path to addon's saved games folder
     /// </summary>
-    /// <param name="subFolder">Subbolder under port's saves folder</param>
+    /// <param name="subFolder">Subfolder under port's saves folder</param>
     /// <param name="addonId">Addon Id</param>
     /// <returns></returns>
     public string GetPathToAddonSavedGamesFolder(string subFolder, string addonId)
@@ -218,7 +218,6 @@ public abstract class BasePort
     /// <param name="skipIntro"></param>
     /// <param name="skipStartup"></param>
     /// <param name="skill"></param>
-    /// <returns></returns>
     public string GetStartGameArgs(
         IGame game,
         IAddon addon,

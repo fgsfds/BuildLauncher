@@ -114,11 +114,11 @@ public static class AutoloadModsValidator
                 //What a fucking mess...
                 //if campaign id equals addon id
                 if (campaign.Id.Equals(incompatibleAddon.Key, StringComparison.InvariantCultureIgnoreCase) &&
-                    //AND either campaign's id is null
+                    //AND either incompatible addon's version is null
                     (incompatibleAddon.Value is null ||
-                    //OR addon's versions are null
+                    //OR campaign's version is null
                     campaign.Version is null ||
-                    //OR addon's version is not null and does match the comparer
+                    //OR addon's version is not null and matches the comparer
                     (incompatibleAddon.Value is not null && VersionComparer.Compare(campaign.Version, incompatibleAddon.Value))
                     ))
                 {
