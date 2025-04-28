@@ -3,12 +3,12 @@
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
   </PropertyGroup>
   <ItemGroup>
-    <PackageVersion Include="Avalonia" Version="11.2.7" />
-    <PackageVersion Include="Avalonia.Controls.DataGrid" Version="11.2.7" />
-    <PackageVersion Include="Avalonia.Desktop" Version="11.2.7" />
-    <PackageVersion Include="Avalonia.Themes.Fluent" Version="11.2.7" />
-    <PackageVersion Include="Avalonia.Diagnostics" Version="11.2.7" />
-    <PackageVersion Include="Avalonia.Fonts.Inter" Version="11.2.7" />
+    <PackageVersion Include="Avalonia" Version="11.2.8" />
+    <PackageVersion Include="Avalonia.Controls.DataGrid" Version="11.2.8" />
+    <PackageVersion Include="Avalonia.Desktop" Version="11.2.8" />
+    <PackageVersion Include="Avalonia.Themes.Fluent" Version="11.2.8" />
+    <PackageVersion Include="Avalonia.Diagnostics" Version="11.2.8" />
+    <PackageVersion Include="Avalonia.Fonts.Inter" Version="11.2.8" />
     <PackageVersion Include="AddSealed" Version="0.6.0" />
     <PackageVersion Include="CommunityToolkit.Diagnostics" Version="8.4.0" />
     <PackageVersion Include="CommunityToolkit.Mvvm" Version="8.4.0" />
@@ -34,12 +34,12 @@
     <PackageVersion Include="System.Private.Uri" Version="4.3.2" />
     <PackageVersion Include="xunit" Version="2.9.3" />
     <PackageVersion Include="xunit.runner.visualstudio" Version="3.0.2" />
-    <PackageVersion Include="AWSSDK.S3" Version="3.7.416.12" />
+    <PackageVersion Include="AWSSDK.S3" Version="4.0.0.1" />
     <PackageVersion Include="ConfigureAwaitAnalyzer" Version="1.1.0" />
     <PackageVersion Include="Swashbuckle.AspNetCore" Version="8.1.1" />
     <PackageVersion Include="Microsoft.AspNetCore.SpaProxy" Version="9.0.4" />
     <PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.4" />
-    <PackageVersion Include="Markdig" Version="0.41.0" />
+    <PackageVersion Include="Markdig" Version="0.41.1" />
     <PackageVersion Include="System.Text.Json" Version="9.0.4" />
   </ItemGroup>
 </Project>
