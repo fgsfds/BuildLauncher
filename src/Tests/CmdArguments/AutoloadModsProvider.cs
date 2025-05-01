@@ -248,7 +248,7 @@ internal sealed class AutoloadModsProvider
         IsFolder = false,
         Executables = null
     };
-    
+
 
     public AutoloadMod MultipleDependenciesMod => new()
     {

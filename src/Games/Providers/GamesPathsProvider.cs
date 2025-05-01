@@ -259,7 +259,7 @@ public sealed class GamesPathsProvider
 
             var dirLine = line.Split('"');
 
-            var dir = dirLine.ElementAt(dirLine.Length - 2).Trim();
+            var dir = dirLine[^2].Trim();
 
             if (Directory.Exists(dir))
             {

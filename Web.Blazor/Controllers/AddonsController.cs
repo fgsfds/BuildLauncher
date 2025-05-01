@@ -3,23 +3,23 @@ using Api.Common.Responses;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Web.Blazor.ControllersV2;
+namespace Web.Blazor.Controllers;
 
 [ApiController]
-[Route("api/releases")]
-public sealed class AddonsController : ControllerBase
+[Route("api/addons")]
+public sealed class ReleasesController : ControllerBase
 {
     private readonly IMediator _mediator;
 
-    public AddonsController(IMediator mediator)
+    public ReleasesController(IMediator mediator)
     {
         _mediator = mediator;
     }
 
-    [HttpGet("ports")]
+    [HttpGet()]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult<GetPortsReleasesResponse>> GetPortsReleasesMediator(GetPortsReleasesRequest request)
+    public async Task<ActionResult<GetAddonsResponse>> GetAddons(GetAddonsRequest request)
     {
         var response = await _mediator.Send(request);
 
@@ -31,10 +31,10 @@ public sealed class AddonsController : ControllerBase
         return Ok(response);
     }
 
-    [HttpGet("app")]
+    [HttpGet("ratings")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult<GetAppReleaseResponse>> GetAppReleaseMediator(GetAppReleaseRequest request)
+    public async Task<ActionResult<GetRatingsResponse>> GetRating(GetRatingsRequest request)
     {
         var response = await _mediator.Send(request);
 

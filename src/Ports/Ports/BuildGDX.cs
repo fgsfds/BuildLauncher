@@ -194,21 +194,21 @@ public sealed class BuildGDX : BasePort
             _ = sb.Append($@" -path ""{game.GameInstallFolder}""");
         }
 
-        _ = sb.Append($@" -game DUKE_NUKEM_3D");
+        _ = sb.Append(" -game DUKE_NUKEM_3D");
     }
 
     private new void GetBloodArgs(StringBuilder sb, BloodGame game, IAddon camp)
     {
         _ = sb.Append($@" -path ""{game.GameInstallFolder}""");
 
-        _ = sb.Append($@" -game BLOOD");
+        _ = sb.Append(" -game BLOOD");
     }
 
     private static void GetWangArgs(StringBuilder sb, WangGame game, IAddon camp)
     {
         _ = sb.Append($@" -path ""{game.GameInstallFolder}""");
 
-        _ = sb.Append($@" -game SHADOW_WARRIOR");
+        _ = sb.Append(" -game SHADOW_WARRIOR");
     }
 
     private void GetRedneckArgs(StringBuilder sb, RedneckGame game, IAddon camp)
@@ -216,12 +216,12 @@ public sealed class BuildGDX : BasePort
         if (camp.Id.Equals(nameof(GameEnum.RidesAgain), StringComparison.OrdinalIgnoreCase))
         {
             _ = sb.Append($@" -path ""{game.AgainInstallPath}""");
-            _ = sb.Append($@" -game RR_RIDES_AGAIN");
+            _ = sb.Append(" -game RR_RIDES_AGAIN");
         }
         else
         {
             _ = sb.Append($@" -path ""{game.GameInstallFolder}""");
-            _ = sb.Append($@" -game REDNECK_RAMPAGE");
+            _ = sb.Append(" -game REDNECK_RAMPAGE");
         }
     }
 
@@ -229,14 +229,14 @@ public sealed class BuildGDX : BasePort
     {
         _ = sb.Append($@" -path ""{game.GameInstallFolder}""");
 
-        _ = sb.Append($@" -game POWERSLAVE");
+        _ = sb.Append(" -game POWERSLAVE");
     }
 
     private static void GetNamArgs(StringBuilder sb, NamGame game, IAddon camp)
     {
         _ = sb.Append($@" -path ""{game.GameInstallFolder}""");
 
-        _ = sb.Append($@" -game NAM");
+        _ = sb.Append(" -game NAM");
     }
 
     private static void GetWitchavenArgs(StringBuilder sb, WitchavenGame game, IAddon camp)
@@ -244,12 +244,12 @@ public sealed class BuildGDX : BasePort
         if (camp.Id.Equals(nameof(GameEnum.Witchaven2), StringComparison.OrdinalIgnoreCase))
         {
             _ = sb.Append($@" -path ""{game.Witchaven2InstallPath}""");
-            _ = sb.Append($@" -game WITCHAVEN_2");
+            _ = sb.Append(" -game WITCHAVEN_2");
         }
         else
         {
             _ = sb.Append($@" -path ""{game.GameInstallFolder}""");
-            _ = sb.Append($@" -game WITCHAVEN");
+            _ = sb.Append(" -game WITCHAVEN");
         }
     }
 
@@ -257,6 +257,6 @@ public sealed class BuildGDX : BasePort
     {
         _ = sb.Append($@" -path ""{game.GameInstallFolder}""");
 
-        _ = sb.Append($@" -game TEKWAR");
+        _ = sb.Append(" -game TEKWAR");
     }
 }

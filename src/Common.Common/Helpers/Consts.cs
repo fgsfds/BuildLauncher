@@ -1,6 +1,4 @@
-﻿using System.Runtime.CompilerServices;
-
-namespace Common.Helpers;
+﻿namespace Common.Helpers;
 
 public static class Consts
 {
@@ -8,7 +6,7 @@ public static class Consts
     /// Path to the files repository
     /// </summary>
     public const string FilesRepo = "http://s3.fgsfds.link/buildlauncher";
-    
+
     /// <summary>
     /// Path to the files repository
     /// </summary>
@@ -28,8 +26,6 @@ public static class Consts
     /// Addon manifest file
     /// </summary>
     public const string AddonManifest = "addon.json";
-
-    public const string PathToAddonsJson = @"..\..\..\..\db\addons.json";
 
     /// <summary>
     /// S3 bucket address

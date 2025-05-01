@@ -21,7 +21,7 @@ public sealed class ToolsProvider
     {
         if (!Directory.Exists(ClientProperties.ToolsFolderPath))
         {
-            Directory.CreateDirectory(ClientProperties.ToolsFolderPath);
+            _ = Directory.CreateDirectory(ClientProperties.ToolsFolderPath);
         }
 
         Mapster32 = new(gamesProvider);

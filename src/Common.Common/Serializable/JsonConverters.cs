@@ -52,13 +52,13 @@ public sealed class IStartMapConverter : JsonConverter<IStartMap?>
         {
             try
             {
-                return JsonSerializer.Deserialize(ref reader, MapSlotDtoContext.Default.MapSlotDto);
+                return JsonSerializer.Deserialize(ref reader, MapFileDtoContext.Default.MapFileDto);
             }
             catch { }
 
             try
             {
-                return JsonSerializer.Deserialize(ref reader, MapFileDtoContext.Default.MapFileDto);
+                return JsonSerializer.Deserialize(ref reader, MapSlotDtoContext.Default.MapSlotDto);
             }
             catch { }
         }

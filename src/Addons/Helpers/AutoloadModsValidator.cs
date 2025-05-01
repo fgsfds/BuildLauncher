@@ -82,7 +82,7 @@ public static class AutoloadModsValidator
                     {
                         continue;
                     }
-                    
+
                     if (dependentAddon.Value is null)
                     {
                         passedDependenciesCount++;
@@ -107,54 +107,52 @@ public static class AutoloadModsValidator
     /// </summary>
     private static bool CheckIncompatibles(AutoloadMod autoloadMod, IAddon campaign, Dictionary<AddonVersion, IAddon> mods)
     {
-        if (autoloadMod.IncompatibleAddons is not null)
+        if (autoloadMod.IncompatibleAddons is null)
         {
-            foreach (var incompatibleAddon in autoloadMod.IncompatibleAddons)
+            return true;
+        }
+
+        foreach (var incompatibleAddon in autoloadMod.IncompatibleAddons)
+        {
+            //What a fucking mess...
+            //if campaign id equals addon id
+            if (campaign.Id.Equals(incompatibleAddon.Key, StringComparison.InvariantCultureIgnoreCase) &&
+                //AND either incompatible addon's version is null
+                (incompatibleAddon.Value is null ||
+                //OR campaign's version is null
+                campaign.Version is null ||
+                //OR addon's and campaigns's versions match
+                VersionComparer.Compare(campaign.Version, incompatibleAddon.Value)
+                ))
             {
-                //What a fucking mess...
-                //if campaign id equals addon id
-                if (campaign.Id.Equals(incompatibleAddon.Key, StringComparison.InvariantCultureIgnoreCase) &&
-                    //AND either incompatible addon's version is null
-                    (incompatibleAddon.Value is null ||
-                    //OR campaign's version is null
-                    campaign.Version is null ||
-                    //OR addon's version is not null and matches the comparer
-                    (incompatibleAddon.Value is not null && VersionComparer.Compare(campaign.Version, incompatibleAddon.Value))
-                    ))
-                {
-                    //the addon is incompatible
-                    return false;
-                }
-
-                foreach (var addon in mods)
-                {
-                    if (incompatibleAddon.Key != addon.Key.Id)
-                    {
-                        continue;
-                    }
-
-                    if (addon.Value is AutoloadMod aMod &&
-                        !aMod.IsEnabled)
-                    {
-                        continue;
-                    }
-                    
-                    if (incompatibleAddon.Value is null)
-                    {
-                        return false;
-                    }
-                    else if (VersionComparer.Compare(addon.Key.Version, incompatibleAddon.Value))
-                    {
-                        return false;
-                    }
-                }
+                //the addon is incompatible
+                return false;
             }
 
-            return true;
+            foreach (var addon in mods)
+            {
+                if (incompatibleAddon.Key != addon.Key.Id)
+                {
+                    continue;
+                }
+
+                if (addon.Value is AutoloadMod aMod &&
+                    !aMod.IsEnabled)
+                {
+                    continue;
+                }
+
+                if (incompatibleAddon.Value is null)
+                {
+                    return false;
+                }
+                else if (VersionComparer.Compare(addon.Key.Version, incompatibleAddon.Value))
+                {
+                    return false;
+                }
+            }
         }
-        else
-        {
-            return true;
-        }
+
+        return true;
     }
 }

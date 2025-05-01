@@ -7,6 +7,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.Logging;
 using Ports.Providers;
+using System.Collections.Concurrent;
 using System.Collections.Immutable;
 
 namespace Avalonia.Desktop.ViewModels;
@@ -15,23 +16,13 @@ public sealed partial class PortsViewModel : ObservableObject
 {
     private readonly ViewModelsFactory _viewModelsFactory;
     private readonly InstalledPortsProvider _installedPortsProvider;
-    private readonly Dictionary<PortEnum, bool> _updatesList = [];
-    private readonly Lock _lock = new();
+    private readonly ConcurrentDictionary<PortEnum, bool> _updatesList = [];
     private readonly SemaphoreSlim _semaphore = new(1);
     private readonly ILogger _logger;
 
     private bool _isNewPort;
 
-    public bool HasUpdates
-    {
-        get
-        {
-            using (_lock.EnterScope())
-            {
-                return _updatesList.Values.Any(x => x);
-            }
-        }
-    }
+    public bool HasUpdates => _updatesList.Values.Any(x => x);
 
 
     public PortsViewModel(
@@ -288,39 +279,36 @@ public sealed partial class PortsViewModel : ObservableObject
     /// </summary>
     private void Initialize()
     {
-        using (_lock.EnterScope())
-        {
-            var edukeVm = _viewModelsFactory.GetPortViewModel(PortEnum.EDuke32);
-            edukeVm.PortChangedEvent += OnPortChanged;
-            _updatesList.Add(PortEnum.EDuke32, false);
+        var edukeVm = _viewModelsFactory.GetPortViewModel(PortEnum.EDuke32);
+        edukeVm.PortChangedEvent += OnPortChanged;
+        _ = _updatesList.TryAdd(PortEnum.EDuke32, false);
 
-            var razeVm = _viewModelsFactory.GetPortViewModel(PortEnum.Raze);
-            razeVm.PortChangedEvent += OnPortChanged;
-            _updatesList.Add(PortEnum.Raze, false);
+        var razeVm = _viewModelsFactory.GetPortViewModel(PortEnum.Raze);
+        razeVm.PortChangedEvent += OnPortChanged;
+        _ = _updatesList.TryAdd(PortEnum.Raze, false);
 
-            var nbloodVm = _viewModelsFactory.GetPortViewModel(PortEnum.NBlood);
-            nbloodVm.PortChangedEvent += OnPortChanged;
-            _updatesList.Add(PortEnum.NBlood, false);
+        var nbloodVm = _viewModelsFactory.GetPortViewModel(PortEnum.NBlood);
+        nbloodVm.PortChangedEvent += OnPortChanged;
+        _ = _updatesList.TryAdd(PortEnum.NBlood, false);
 
-            var notbloodVm = _viewModelsFactory.GetPortViewModel(PortEnum.NotBlood);
-            notbloodVm.PortChangedEvent += OnPortChanged;
-            _updatesList.Add(PortEnum.NotBlood, false);
+        var notbloodVm = _viewModelsFactory.GetPortViewModel(PortEnum.NotBlood);
+        notbloodVm.PortChangedEvent += OnPortChanged;
+        _ = _updatesList.TryAdd(PortEnum.NotBlood, false);
 
-            var pcexVm = _viewModelsFactory.GetPortViewModel(PortEnum.PCExhumed);
-            pcexVm.PortChangedEvent += OnPortChanged;
-            _updatesList.Add(PortEnum.PCExhumed, false);
+        var pcexVm = _viewModelsFactory.GetPortViewModel(PortEnum.PCExhumed);
+        pcexVm.PortChangedEvent += OnPortChanged;
+        _ = _updatesList.TryAdd(PortEnum.PCExhumed, false);
 
-            var rednukemVm = _viewModelsFactory.GetPortViewModel(PortEnum.RedNukem);
-            rednukemVm.PortChangedEvent += OnPortChanged;
-            _updatesList.Add(PortEnum.RedNukem, false);
+        var rednukemVm = _viewModelsFactory.GetPortViewModel(PortEnum.RedNukem);
+        rednukemVm.PortChangedEvent += OnPortChanged;
+        _ = _updatesList.TryAdd(PortEnum.RedNukem, false);
 
-            var bgdxVm = _viewModelsFactory.GetPortViewModel(PortEnum.BuildGDX);
-            bgdxVm.PortChangedEvent += OnPortChanged;
-            _updatesList.Add(PortEnum.BuildGDX, false);
+        var bgdxVm = _viewModelsFactory.GetPortViewModel(PortEnum.BuildGDX);
+        bgdxVm.PortChangedEvent += OnPortChanged;
+        _ = _updatesList.TryAdd(PortEnum.BuildGDX, false);
 
-            PortsList = [edukeVm, razeVm, nbloodVm, notbloodVm, pcexVm, rednukemVm, bgdxVm];
-            OnPropertyChanged(nameof(PortsList));
-        }
+        PortsList = [edukeVm, razeVm, nbloodVm, notbloodVm, pcexVm, rednukemVm, bgdxVm];
+        OnPropertyChanged(nameof(PortsList));
     }
 
     private void OnPortChanged(PortEnum portEnum)

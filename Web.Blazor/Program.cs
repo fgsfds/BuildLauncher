@@ -56,10 +56,10 @@ public sealed class Program
         _ = builder.Services.AddSingleton<DatabaseAddonsRetriever>();
         _ = builder.Services.AddSingleton<IRetriever<Dictionary<PortEnum, GeneralReleaseEntity>?>>();
 
-        _ = builder.Services.AddSingleton<HttpClient>(CreateHttpClient);
+        _ = builder.Services.AddSingleton(CreateHttpClient);
         _ = builder.Services.AddSingleton<S3Client>();
 
-        _ = builder.Services.AddSingleton<DatabaseContextFactory>(x => new(builder.Environment.IsDevelopment()));
+        _ = builder.Services.AddSingleton<DatabaseContextFactory>(_ => new(builder.Environment.IsDevelopment()));
 
         _ = builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<Program>());
 

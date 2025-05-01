@@ -287,8 +287,7 @@ public class EDuke32 : BasePort
             return;
         }
 
-        if (addon.SupportedGame.GameVersion is not null &&
-            addon.SupportedGame.GameVersion.Equals(nameof(DukeVersionEnum.Duke3D_WT), StringComparison.InvariantCultureIgnoreCase))
+        if (addon.SupportedGame.GameVersion?.Equals(nameof(DukeVersionEnum.Duke3D_WT), StringComparison.InvariantCultureIgnoreCase) == true)
         {
             _ = sb.Append($@" {AddDirectoryParam}""{game.DukeWTInstallPath}"" -addon {(byte)DukeAddonEnum.Base} {AddDirectoryParam}""{Path.Combine(PortInstallFolderPath, ClientConsts.WTStopgap)}"" {MainGrpParam}e32wt.grp {AddDefParam}e32wt.def");
         }
@@ -308,11 +307,11 @@ public class EDuke32 : BasePort
                         _ = sb.Append($@" {AddDirectoryParam}""{addonPath}""");
                     }
 
-                    _ = sb.Append($@" {AddGrpParam}DUKEDC.GRP");
+                    _ = sb.Append($" {AddGrpParam}DUKEDC.GRP");
 
                     if (File.Exists(Path.Combine(addonPath, "DUKEDC.CON")))
                     {
-                        _ = sb.Append($@" {MainConParam}DUKEDC.CON");
+                        _ = sb.Append($" {MainConParam}DUKEDC.CON");
                     }
                 }
                 //NUCLEAR WINTER
@@ -325,7 +324,7 @@ public class EDuke32 : BasePort
                         _ = sb.Append($@" {AddDirectoryParam}""{addonPath}""");
                     }
 
-                    _ = sb.Append($@" {AddGrpParam}NWINTER.GRP {MainConParam}NWINTER.CON");
+                    _ = sb.Append($" {AddGrpParam}NWINTER.GRP {MainConParam}NWINTER.CON");
                 }
                 //CARIBBEAN
                 else if (addon.DependentAddons.ContainsKey(nameof(DukeAddonEnum.DukeVaca)))
@@ -337,11 +336,11 @@ public class EDuke32 : BasePort
                         _ = sb.Append($@" {AddDirectoryParam}""{addonPath}""");
                     }
 
-                    _ = sb.Append($@" {AddGrpParam}VACATION.GRP");
+                    _ = sb.Append($" {AddGrpParam}VACATION.GRP");
 
                     if (File.Exists(Path.Combine(addonPath, "VACATION.CON")))
                     {
-                        _ = sb.Append($@" {MainConParam}VACATION.CON");
+                        _ = sb.Append($" {MainConParam}VACATION.CON");
                     }
                 }
             }
@@ -359,7 +358,7 @@ public class EDuke32 : BasePort
         }
 
 
-        Guard2.ThrowIfNotType<DukeCampaign>(addon, out var dCamp);
+        addon.ThrowIfNotType(out DukeCampaign dCamp);
 
 
         if (dCamp.MainCon is not null)
@@ -476,6 +475,6 @@ public class EDuke32 : BasePort
                 File.Move(art4, art4r, true);
             }
         }
-        
+
     }
 }

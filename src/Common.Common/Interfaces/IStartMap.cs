@@ -1,5 +1,3 @@
 ﻿namespace Common.Interfaces;
 
-public interface IStartMap
-{
-}
+public interface IStartMap;

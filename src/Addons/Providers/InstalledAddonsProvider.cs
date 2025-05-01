@@ -31,7 +31,7 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
 
     public event AddonChanged? AddonsChangedEvent;
 
-    [Obsolete($"Don't create directly. Use {nameof(InstalledAddonsProvider)}.")]
+    [Obsolete($"Don't create directly. Use {nameof(InstalledAddonsProviderFactory)}.")]
     public InstalledAddonsProvider(
         IGame game,
         IConfigProvider config,

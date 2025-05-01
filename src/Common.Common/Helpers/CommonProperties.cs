@@ -1,7 +1,7 @@
 ﻿using Common.Enums;
 using CommunityToolkit.Diagnostics;
 
-namespace Common.Common.Helpers;
+namespace Common.Helpers;
 
 public static class CommonProperties
 {

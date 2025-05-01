@@ -117,15 +117,13 @@ public sealed class VoidSW : EDuke32
         }
 
 
-        Guard2.ThrowIfNotType<WangCampaign>(addon, out var wCamp);
+        addon.ThrowIfNotType<WangCampaign>(out var wCamp);
 
-        if (wCamp.DependentAddons is not null &&
-            wCamp.DependentAddons.ContainsKey(nameof(WangAddonEnum.Wanton)))
+        if (wCamp.DependentAddons?.ContainsKey(nameof(WangAddonEnum.Wanton)) == true)
         {
             _ = sb.Append($" -addon{(byte)WangAddonEnum.Wanton}");
         }
-        else if (wCamp.DependentAddons is not null &&
-                 wCamp.DependentAddons.ContainsKey(nameof(WangAddonEnum.TwinDragon)))
+        else if (wCamp.DependentAddons?.ContainsKey(nameof(WangAddonEnum.TwinDragon)) == true)
         {
             _ = sb.Append($" -addon{(byte)WangAddonEnum.TwinDragon}");
         }

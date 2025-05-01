@@ -4,9 +4,7 @@ using Avalonia.Desktop.Helpers;
 using Avalonia.Desktop.ViewModels;
 using Avalonia.Input;
 using Avalonia.Media;
-using Common.Client.Interfaces;
 using Common.Enums;
-using Common.Helpers;
 using Common.Interfaces;
 using CommunityToolkit.Mvvm.Input;
 using Ports.Ports;
@@ -20,52 +18,37 @@ public sealed partial class CampaignsControl : UserControl
     private const string BuiltInPortStr = "Built-in port";
     private const string CustomPortStr = "Custom port";
 
-    private IEnumerable<BasePort> _supportedPorts;
-    private CampaignsViewModel _viewModel;
-    private InstalledAddonsProvider _installedAddonsProvider;
-    private InstalledPortsProvider _portsProvider;
+    private readonly IEnumerable<BasePort> _supportedPorts;
+    private readonly CampaignsViewModel _viewModel;
+    private readonly InstalledPortsProvider _portsProvider;
+    private readonly InstalledAddonsProvider _addonsProvider;
 
     public CampaignsControl()
     {
         InitializeComponent();
 
-        _supportedPorts = null!;
-        _viewModel = null!;
-        _installedAddonsProvider = null!;
+        _supportedPorts = [];
         _portsProvider = null!;
+        _addonsProvider = null!;
+        _viewModel = null!;
     }
 
-    /// <summary>
-    /// Initialize control
-    /// </summary>
-    public void InitializeControl(
+    public CampaignsControl(
+        CampaignsViewModel viewModel,
         InstalledPortsProvider portsProvider,
-        InstalledAddonsProviderFactory installedAddonsProviderFactory,
-        IConfigProvider configProvider
+        InstalledAddonsProvider addonsProvider
         )
     {
-        DataContext.ThrowIfNotType<CampaignsViewModel>(out var viewModel);
+        InitializeComponent();
 
-        _viewModel = viewModel;
+        _supportedPorts = portsProvider.GetPortsThatSupportGame(viewModel.Game.GameEnum);
         _portsProvider = portsProvider;
-        _portsProvider.CustomPortChangedEvent += OnCustomPortChanged;
-
-        _supportedPorts = portsProvider.GetPortsThatSupportGame(_viewModel.Game.GameEnum);
-        _installedAddonsProvider = installedAddonsProviderFactory.GetSingleton(_viewModel.Game);
-
-        CampaignsList.SelectionChanged += OnCampaignsListSelectionChanged;
-        BottomPanel.DataContext = viewModel;
-
-        RightPanel.InitializeControl(configProvider);
+        _addonsProvider = addonsProvider;
+        _viewModel = viewModel;
 
         AddPortsButtons();
-        //AddContextMenuButtons();
-    }
 
-    private void OnCustomPortChanged(object? sender, EventArgs e)
-    {
-        AddContextMenuButtons();
-        AddCustomPortsButton();
+        _portsProvider.CustomPortChangedEvent += OnCustomPortChanged;
     }
 
     /// <summary>
@@ -129,8 +112,7 @@ public sealed partial class CampaignsControl : UserControl
                             return false;
                         }
 
-                        if (selectedCampaign.RequiredFeatures is not null &&
-                            selectedCampaign.RequiredFeatures!.Except(port.SupportedFeatures).Any())
+                        if (selectedCampaign.RequiredFeatures?.Except(port.SupportedFeatures).Any() is true)
                         {
                             return false;
                         }
@@ -341,10 +323,16 @@ public sealed partial class CampaignsControl : UserControl
         AddContextMenuButtons();
     }
 
+    private void OnCustomPortChanged(object? sender, EventArgs e)
+    {
+        AddContextMenuButtons();
+        AddCustomPortsButton();
+    }
+
     /// <summary>
     /// Reset selected item when empty space is clicked
     /// </summary>
-    private void ListBoxEmptySpaceClicked(object? sender, Input.PointerPressedEventArgs e)
+    private void OnCampaignsListEmptySpaceClicked(object? sender, Input.PointerPressedEventArgs e)
     {
         CampaignsList.SelectedItem = null;
         CampaignsList.Focusable = true;
@@ -355,7 +343,7 @@ public sealed partial class CampaignsControl : UserControl
     /// <summary>
     /// Drag'n'drop handler
     /// </summary>
-    private async void FilesDataGrid_DropAsync(object sender, DragEventArgs e)
+    private async void OnCampaignsListDrop(object sender, DragEventArgs e)
     {
         var files = e.Data.GetFiles();
 
@@ -365,7 +353,7 @@ public sealed partial class CampaignsControl : UserControl
 
             foreach (var file in filePaths)
             {
-                var isAdded = await _installedAddonsProvider.CopyAddonIntoFolder(file).ConfigureAwait(false);
+                var isAdded = await _addonsProvider.CopyAddonIntoFolder(file).ConfigureAwait(false);
             }
         }
     }

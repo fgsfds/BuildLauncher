@@ -5,9 +5,9 @@
              xmlns:md="https://github.com/whistyun/Markdown.Avalonia"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Avalonia.Desktop.Controls.RightPanelControl"
-             xmlns:in="clr-namespace:Common.Client.Interfaces;assembly=BuildLauncher.Common.Client"
+             xmlns:vm="clr-namespace:Avalonia.Desktop.ViewModels"
              xmlns:helpers="clr-namespace:Avalonia.Desktop.Helpers"
-             x:DataType="in:IRightPanelControl">
+             x:DataType="vm:RightPanelViewModel">
 
     <UserControl.Resources>
         <helpers:ImagePathToBitmapConverter x:Key="ImagePathToBitmapConverter"/>
@@ -36,7 +36,6 @@
             </StackPanel>
         </ScrollViewer>
 
-
         <TextBlock Grid.Row="1"
                    Margin="10,5"
                    FontWeight="Bold"
@@ -44,54 +43,6 @@
                    HorizontalAlignment="Center"
                    Foreground="{DynamicResource SystemAccentColor}"
                    Text="{Binding SelectedAddonPlaytime}"/>
-
-
-        <!--Rating-->
-        <StackPanel Orientation="Horizontal"
-                    Margin="10,5"
-                    HorizontalAlignment="Center"
-                    Grid.Row="2"
-                    IsVisible="{Binding SelectedAddonRating, Converter={x:Static ObjectConverters.IsNotNull}}">
-
-            <TextBlock Margin="3" VerticalAlignment="Center" Text="Rating:"/>
-
-            <TextBlock Name="Rating" FontWeight="Bold" Margin="3" Text="{Binding SelectedAddonRating}" PropertyChanged="Rating_PropertyChanged" VerticalAlignment="Center"/>
-
-        </StackPanel>
-
-
-        <StackPanel Grid.Row="3"
-                    Orientation="Horizontal"
-                    Margin="0,0,0,5"
-                    VerticalAlignment="Center"
-                    HorizontalAlignment="Center"
-                    IsVisible="{Binding SelectedAddonRating, Converter={x:Static ObjectConverters.IsNotNull}}">
-
-            <StackPanel.Styles>
-                <Style Selector="Button:pointerover /template/ ContentPresenter">
-                    <Setter Property="Background" Value="Transparent" />
-                    <Setter Property="Foreground" Value="{Binding $parent[Button].Foreground} "/>
-                    <Setter Property="BorderBrush" Value="Transparent" />
-                </Style>
-                <Style Selector="Button:pressed /template/ ContentPresenter">
-                    <Setter Property="Background" Value="Transparent" />
-                    <Setter Property="Foreground" Value="{Binding $parent[Button].Foreground} "/>
-                    <Setter Property="BorderBrush" Value="Transparent" />
-                </Style>
-                <Style Selector="Button:disabled /template/ ContentPresenter">
-                    <Setter Property="Background" Value="Transparent" />
-                    <Setter Property="Foreground" Value="{Binding $parent[Button].Foreground} "/>
-                    <Setter Property="BorderBrush" Value="Transparent" />
-                </Style>
-            </StackPanel.Styles>
-
-            <Button Name="Star1" Padding="0" FontSize="25" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Width="{Binding Bounds.Height, ElementName=Star1}" Click="Button_Click1" PointerEntered="Button_PointerEntered1" PointerExited="Button_PointerExited" Background="Transparent">☆</Button>
-            <Button Name="Star2" Padding="0" FontSize="25" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Width="{Binding Bounds.Height, ElementName=Star1}" Click="Button_Click2" PointerEntered="Button_PointerEntered2" PointerExited="Button_PointerExited" Background="Transparent">☆</Button>
-            <Button Name="Star3" Padding="0" FontSize="25" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Width="{Binding Bounds.Height, ElementName=Star1}" Click="Button_Click3" PointerEntered="Button_PointerEntered3" PointerExited="Button_PointerExited" Background="Transparent">☆</Button>
-            <Button Name="Star4" Padding="0" FontSize="25" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Width="{Binding Bounds.Height, ElementName=Star1}" Click="Button_Click4" PointerEntered="Button_PointerEntered4" PointerExited="Button_PointerExited" Background="Transparent">☆</Button>
-            <Button Name="Star5" Padding="0" FontSize="25" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Width="{Binding Bounds.Height, ElementName=Star1}" Click="Button_Click5" PointerEntered="Button_PointerEntered5" PointerExited="Button_PointerExited" Background="Transparent">☆</Button>
-
-        </StackPanel>
 
     </Grid>
 

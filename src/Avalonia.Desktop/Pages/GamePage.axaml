@@ -6,21 +6,22 @@
              d:DesignHeight="450"
              xmlns:ctrl="clr-namespace:Avalonia.Desktop.Controls"
              xmlns:vm="clr-namespace:Avalonia.Desktop.ViewModels"
+             x:DataType="vm:GamePageViewModel"
              x:Class="Avalonia.Desktop.Pages.GamePage">
 
     <Grid RowDefinitions="*">
 
         <TabControl>
             <TabItem Header="Campaigns" Margin="5">
-                <ctrl:CampaignsControl Name="CampControl"/>
+                <UserControl Content="{Binding Campaigns}"/>
             </TabItem>
 
-            <TabItem Header="Maps" Margin="5">
-                <ctrl:MapsControl Name="MapssControl"/>
+            <TabItem Header="Maps" Margin="5" IsVisible="{Binding Maps, Converter={x:Static ObjectConverters.IsNotNull}, FallbackValue=False}}">
+                <UserControl Content="{Binding Maps}"/>
             </TabItem>
 
-            <TabItem Header="Mods" Margin="5">
-                <ctrl:ModsControl Name="ModsControl"/>
+            <TabItem Header="Mods" Margin="5" IsVisible="{Binding Maps, Converter={x:Static ObjectConverters.IsNotNull}, FallbackValue=False}}">
+                <UserControl Content="{Binding Mods}"/>
             </TabItem>
 
             <TabItem Margin="5">
@@ -28,11 +29,11 @@
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="Downloads"/>
-                        <i:Icon Foreground="Crimson" ToolTip.Tip="Updates available" IsVisible="{Binding ElementName=DownControl, Path=((vm:DownloadsViewModel)DataContext).HasUpdates}" Margin="5,0,0,0" Value="mdi-alert-decagram" />
+                        <i:Icon Foreground="Crimson" ToolTip.Tip="Updates available" IsVisible="{Binding ElementName=DownControl, Path=((vm:DownloadsViewModel)DataContext).HasUpdates, FallbackValue=False}" Margin="5,0,0,0" Value="mdi-alert-decagram" />
                     </StackPanel>
                 </TabItem.Header>
 
-                <ctrl:DownloadsControl Name="DownControl"/>
+                <UserControl x:Name="DownControl" Content="{Binding Downloads}"/>
             </TabItem>
 
         </TabControl>

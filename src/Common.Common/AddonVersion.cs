@@ -51,4 +51,10 @@ public readonly struct AddonVersion
     {
         return !(left == right);
     }
+
+    public override int GetHashCode()
+    {
+        var str = Id + Version;
+        return str.GetHashCode();
+    }
 }

@@ -1,4 +1,3 @@
-using Common.Client.Interfaces;
 using Common.Client.Providers;
 using Common.Enums;
 using Common.Helpers;
@@ -9,7 +8,7 @@ using CommunityToolkit.Mvvm.Input;
 
 namespace Avalonia.Desktop.ViewModels;
 
-public partial class RightPanelViewModel : ObservableObject, IRightPanelControl
+public partial class RightPanelViewModel : ObservableObject
 {
     public virtual IAddon? SelectedAddon { get; set; }
 
@@ -41,16 +40,11 @@ public partial class RightPanelViewModel : ObservableObject, IRightPanelControl
     {
         get
         {
-            if (SelectedAddon is null)
-            {
-                return null;
-            }
-
-            if (SelectedAddon.Type is AddonTypeEnum.TC)
+            if (SelectedAddon?.Type is AddonTypeEnum.TC)
             {
                 return SelectedAddon?.PreviewImage;
             }
-            else if (SelectedAddon.Type is AddonTypeEnum.Map or AddonTypeEnum.Mod)
+            else if (SelectedAddon?.Type is AddonTypeEnum.Map or AddonTypeEnum.Mod)
             {
                 return SelectedAddon?.PreviewImage ?? SelectedAddon?.GridImage;
             }

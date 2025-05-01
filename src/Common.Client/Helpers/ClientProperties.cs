@@ -69,4 +69,29 @@ public static class ClientProperties
             }
         }
     }
+
+    /// <summary>
+    /// Path to local addons.json
+    /// </summary>
+    public static string? PathToLocalAddonsJson
+    {
+        get
+        {
+            var path1 = Path.Combine(WorkingFolder, @"..\..\..\..\db\addons.json");
+
+            if (File.Exists(path1))
+            {
+                return path1;
+            }
+
+            var path2 = Path.Combine(WorkingFolder, @"db\addons.json");
+
+            if (File.Exists(path2))
+            {
+                return path2;
+            }
+
+            return null;
+        }
+    }
 }

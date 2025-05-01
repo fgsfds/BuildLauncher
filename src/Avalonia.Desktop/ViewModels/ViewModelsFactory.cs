@@ -1,6 +1,8 @@
 ﻿using Addons.Providers;
+using Common.Client;
 using Common.Client.Interfaces;
 using Common.Client.Providers;
+using Common.Client.Tools;
 using Common.Enums;
 using Games.Providers;
 using Microsoft.Extensions.Logging;
@@ -24,6 +26,9 @@ public sealed class ViewModelsFactory
     private readonly InstalledAddonsProviderFactory _installedAddonsProviderFactory;
     private readonly DownloadableAddonsProviderFactory _downloadableAddonsProviderFactory;
     private readonly PortStarter _portStarter;
+    private readonly FilesUploader _filesUploader;
+    private readonly AppUpdateInstaller _appUpdateInstaller;
+    private readonly GamesPathsProvider _gamesPathsProvider;
     private readonly ILogger _logger;
 
     public ViewModelsFactory(
@@ -38,6 +43,9 @@ public sealed class ViewModelsFactory
         InstalledAddonsProviderFactory installedAddonsProviderFactory,
         DownloadableAddonsProviderFactory downloadableAddonsProviderFactory,
         PortStarter portStarter,
+        FilesUploader filesUploader,
+        AppUpdateInstaller appUpdateInstaller,
+        GamesPathsProvider gamesPathsProvider,
         ILogger logger
         )
     {
@@ -52,10 +60,30 @@ public sealed class ViewModelsFactory
         _installedAddonsProviderFactory = installedAddonsProviderFactory;
         _downloadableAddonsProviderFactory = downloadableAddonsProviderFactory;
         _portStarter = portStarter;
+        _filesUploader = filesUploader;
+        _appUpdateInstaller = appUpdateInstaller;
+        _gamesPathsProvider = gamesPathsProvider;
         _logger = logger;
     }
 
 #pragma warning disable CS0618 // Type or member is obsolete
+
+    public MainWindowViewModel GetMainWindowViewModel()
+    {
+        MainWindowViewModel vm = new(
+            _config,
+            _filesUploader,
+            _gamesProvider,
+            _portsProvider,
+            _appUpdateInstaller,
+            this,
+            _gamesPathsProvider,
+            _logger
+            );
+
+        return vm;
+    }
+
     /// <summary>
     /// Create <see cref="CampaignsViewModel"/>
     /// </summary>

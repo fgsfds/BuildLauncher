@@ -28,10 +28,7 @@ public sealed class ToolsReleasesProvider
     {
         await _semaphore.WaitAsync().ConfigureAwait(false);
 
-        if (_releases is null)
-        {
-            _releases = await GetReleasesAsync().ConfigureAwait(false);
-        }
+        _releases ??= await GetReleasesAsync().ConfigureAwait(false);
 
         _ = _semaphore.Release();
 

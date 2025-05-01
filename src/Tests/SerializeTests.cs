@@ -136,12 +136,12 @@ public sealed class SerializerTests
         var depsIds = result.Dependencies!.Addons!.Select(x => x.Id);
         Assert.Contains("Addon1", depsIds);
         Assert.Contains("Addon2", depsIds);
-        Assert.Equal("1.0", result.Dependencies!.Addons!.Last().Version);
+        Assert.Equal("1.0", result.Dependencies!.Addons![^1].Version);
 
         var incompIds = result.Incompatibles!.Addons!.Select(x => x.Id);
         Assert.Contains("IncompatibleAddon1", incompIds);
         Assert.Contains("IncompatibleAddon2", incompIds);
-        Assert.Equal("1.1", result.Incompatibles!.Addons!.Last().Version);
+        Assert.Equal("1.1", result.Incompatibles!.Addons![^1].Version);
 
         var depsFeatures = result.Dependencies!.RequiredFeatures!;
         Assert.Contains(FeatureEnum.EDuke32_CON, depsFeatures);

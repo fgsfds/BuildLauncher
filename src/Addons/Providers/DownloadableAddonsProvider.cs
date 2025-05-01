@@ -142,7 +142,7 @@ public sealed class DownloadableAddonsProvider : IDownloadableAddonsProvider
                 {
                     downloadableAddon.Value.HasNewerVersion = true;
 
-                    if (VersionComparer.Compare(downloadableAddon.Value.Version, existingVersion!, "<="))
+                    if (VersionComparer.Compare(downloadableAddon.Value.Version, existingVersion, "<="))
                     {
                         downloadableAddon.Value.HasNewerVersion = false;
                         break;

@@ -17,9 +17,6 @@ public sealed partial class AboutViewModel : ObservableObject
     public Version CurrentVersion => ClientProperties.CurrentVersion;
 
     [ObservableProperty]
-    private string _aboutTabHeader = "About";
-
-    [ObservableProperty]
     private string _checkForUpdatesButtonText = string.Empty;
 
     [ObservableProperty]
@@ -45,18 +42,14 @@ public sealed partial class AboutViewModel : ObservableObject
     /// <summary>
     /// Check for SSH updates
     /// </summary>
-    [RelayCommand(CanExecute = (nameof(CheckForUpdatesCanExecute)))]
-    private async Task CheckForUpdatesAsync()
-    {
-        await CheckForUpdateAsync().ConfigureAwait(true);
-    }
-
-    private bool CheckForUpdatesCanExecute() => IsInProgress is false;
+    [RelayCommand(CanExecute = nameof(CheckForUpdatesCanExecute))]
+    private Task CheckForUpdatesAsync() => CheckForUpdateAsync();
+    private bool CheckForUpdatesCanExecute() => !IsInProgress;
 
     /// <summary>
     /// Download and install SSH update
     /// </summary>
-    [RelayCommand(CanExecute = (nameof(DownloadAndInstallCanExecute)))]
+    [RelayCommand(CanExecute = nameof(DownloadAndInstallCanExecute))]
     private async Task DownloadAndInstallAsync()
     {
         IsInProgress = true;
@@ -69,16 +62,6 @@ public sealed partial class AboutViewModel : ObservableObject
 
     #endregion Relay Commands
 
-
-    /// <summary>
-    /// Update tab header
-    /// </summary>
-    private void UpdateHeader()
-    {
-        AboutTabHeader = "About" + (IsUpdateAvailable
-            ? " (UPD)"
-            : string.Empty);
-    }
 
     /// <summary>
     /// Check for app update
@@ -108,8 +91,6 @@ public sealed partial class AboutViewModel : ObservableObject
         else if (updates.Value)
         {
             IsUpdateAvailable = true;
-
-            UpdateHeader();
         }
         else
         {

@@ -30,24 +30,25 @@
                     Command="{Binding ClearSearchBoxCommand}"
                     ToolTip.Tip="Clear search"
                     Height="{Binding Bounds.Height, ElementName=SearchBox}">
-                <i:Icon Value="mdi-close" />
+                <i:Icon Value="mdi-close"/>
             </Button>
 
         </Grid>
 
         <ListBox Name="CampaignsList"
+                 SelectionChanged="OnCampaignsListSelectionChanged"
                  Grid.Row="1" Grid.Column="0"
                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                  Padding="2"
                  ItemsSource="{Binding CampaignsList}"
                  SelectedItem="{Binding SelectedAddon}"
-                 PointerPressed="ListBoxEmptySpaceClicked"
+                 PointerPressed="OnCampaignsListEmptySpaceClicked"
                  DragDrop.AllowDrop="True"
-                 DragDrop.Drop="FilesDataGrid_DropAsync">
+                 DragDrop.Drop="OnCampaignsListDrop">
 
             <ListBox.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <WrapPanel Orientation="Horizontal" />
+                    <WrapPanel Orientation="Horizontal"/>
                 </ItemsPanelTemplate>
             </ListBox.ItemsPanel>
 

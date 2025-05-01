@@ -1,18 +1,20 @@
 ﻿using Common.Client.Helpers;
 using Projektanker.Icons.Avalonia;
 using Projektanker.Icons.Avalonia.MaterialDesign;
-using System.Runtime.ExceptionServices;
+using System.Runtime.InteropServices;
 
 namespace Avalonia.Desktop;
 
-public sealed class Program
+public sealed partial class Program
 {
     // Initialization code. Don't use any Avalonia, third-party APIs or any
     // SynchronizationContext-reliant code before AppMain is called: things aren't initialized
     // yet and stuff might break.
     [STAThread]
-    public static void Main(string[] args)
+    public static int Main(string[] args)
     {
+        var exitCode = 0;
+
         if (args.Contains("--dev"))
         {
             ClientProperties.IsDeveloperMode = true;
@@ -21,28 +23,27 @@ public sealed class Program
         {
             ClientProperties.IsOfflineMode = true;
         }
+
         try
         {
-            //AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
-            _ = BuildAvaloniaApp().StartWithClassicDesktopLifetime(args);
+            var builder = BuildAvaloniaApp();
+
+            exitCode = App.Run(builder);
         }
         catch (Exception ex)
         {
-            ExceptionDispatchInfo.Capture(ex).Throw();
-        }
-    }
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                WinMsgBox.Show(
+                    "Critical error",
+                    ex.ToString()
+                    );
+            }
 
-    private static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
-    {
-        if (!ClientProperties.IsDeveloperMode)
-        {
-            var exe = Path.Combine(ClientProperties.WorkingFolder, ClientProperties.ExecutableName);
-            var args = "--crash " + $@"""{e.ExceptionObject}""";
-
-            _ = System.Diagnostics.Process.Start(exe, args);
+            exitCode = -1;
         }
 
-        Environment.FailFast(string.Empty);
+        return exitCode;
     }
 
     // Avalonia configuration, don't remove; also used by visual designer.
@@ -56,5 +57,16 @@ public sealed class Program
                 .UsePlatformDetect()
                 .WithInterFont()
                 .LogToTrace();
+    }
+
+    private static partial class WinMsgBox
+    {
+        [LibraryImport("user32.dll", EntryPoint = "MessageBoxW", StringMarshalling = StringMarshalling.Utf16)]
+        private static partial int MessageBox(IntPtr hWnd, string? text, string? caption, int type);
+
+        public static void Show(string? title, string? text)
+        {
+            _ = MessageBox(IntPtr.Zero, text, title, 0);
+        }
     }
 }

@@ -8,8 +8,8 @@ public static class ProvidersBindings
 {
     public static void Load(ServiceCollection container)
     {
-        container.AddSingleton<ToolsInstallerFactory>();
-        container.AddSingleton<ToolsReleasesProvider>();
-        container.AddSingleton<ToolsProvider>();
+        _ = container.AddSingleton<ToolsInstallerFactory>();
+        _ = container.AddSingleton<ToolsReleasesProvider>();
+        _ = container.AddSingleton<ToolsProvider>();
     }
 }

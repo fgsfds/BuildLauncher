@@ -174,7 +174,7 @@ public sealed class ArchiveTools
         CancellationToken cancellationToken
         )
     {
-        _logger.LogInformation($"Trying to continue downloading after failing");
+        _logger.LogInformation("Trying to continue downloading after failing");
 
         try
         {

@@ -4,9 +4,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:i="https://github.com/projektanker/icons.avalonia"
         xmlns:vm="using:Avalonia.Desktop.ViewModels"
-        x:DataType="vm:MainViewModel"
+        x:Class="Avalonia.Desktop.MainWindow"
+        x:DataType="vm:MainWindowViewModel"
         mc:Ignorable="d" d:DesignWidth="1300" d:DesignHeight="600"
-        x:Class="Avalonia.Desktop.Views.MainWindow"
         xmlns:pages="clr-namespace:Avalonia.Desktop.Pages"
         Icon="/Assets/icon.ico"
         Title="BuildLauncher"
@@ -16,8 +16,7 @@
         MinWidth="1300"
         MinHeight="700"
         ExtendClientAreaToDecorationsHint="True"
-        Background="{DynamicResource Background}"
-        >
+        Background="{DynamicResource Background}">
 
     <Window.Resources>
         <ResourceDictionary>
@@ -45,7 +44,7 @@
                         </StackPanel>
                     </TabItem.Header>
 
-                    <pages:GamePage x:Name="DukePage"/>
+                    <pages:GamePage DataContext="{Binding DukeViewModel}"/>
 
                 </TabItem>
 
@@ -59,7 +58,7 @@
                         </StackPanel>
                     </TabItem.Header>
 
-                    <pages:GamePage x:Name="BloodPage"/>
+                    <pages:GamePage DataContext="{Binding BloodViewModel}"/>
 
                 </TabItem>
 
@@ -73,7 +72,7 @@
                         </StackPanel>
                     </TabItem.Header>
 
-                    <pages:GamePage x:Name="WangPage"/>
+                    <pages:GamePage DataContext="{Binding WangViewModel}"/>
 
                 </TabItem>
 
@@ -87,7 +86,7 @@
                         </StackPanel>
                     </TabItem.Header>
 
-                    <pages:GamePage x:Name="FuryPage"/>
+                    <pages:GamePage DataContext="{Binding FuryViewModel}"/>
 
                 </TabItem>
 
@@ -101,7 +100,7 @@
                         </StackPanel>
                     </TabItem.Header>
 
-                    <pages:GamePage x:Name="RedneckPage"/>
+                    <pages:GamePage DataContext="{Binding RedneckViewModel}"/>
 
                 </TabItem>
 
@@ -115,7 +114,7 @@
                         </StackPanel>
                     </TabItem.Header>
 
-                    <pages:GamePage x:Name="SlavePage"/>
+                    <pages:GamePage DataContext="{Binding SlaveViewModel}"/>
 
                 </TabItem>
 
@@ -129,7 +128,7 @@
                         </StackPanel>
                     </TabItem.Header>
 
-                    <pages:GamePage x:Name="NamPage"/>
+                    <pages:GamePage DataContext="{Binding NamViewModel}"/>
 
                 </TabItem>
 
@@ -143,7 +142,7 @@
                         </StackPanel>
                     </TabItem.Header>
 
-                    <pages:GamePage x:Name="WW2GIPage"/>
+                    <pages:GamePage DataContext="{Binding WWIIViewModel}"/>
 
                 </TabItem>
 
@@ -157,7 +156,7 @@
                         </StackPanel>
                     </TabItem.Header>
 
-                    <pages:GamePage x:Name="WitchavenPage"/>
+                    <pages:GamePage DataContext="{Binding WitchavenViewModel}"/>
 
                 </TabItem>
 
@@ -171,7 +170,7 @@
                         </StackPanel>
                     </TabItem.Header>
 
-                    <pages:GamePage x:Name="TekWarPage"/>
+                    <pages:GamePage DataContext="{Binding TekWarViewModel}"/>
 
                 </TabItem>
 
@@ -182,7 +181,7 @@
                         <TextBlock Text="Standalone" Margin="5" />
                     </TabItem.Header>
 
-                    <pages:StandalonePage x:Name="StandalonePage"/>
+                    <pages:GamePage DataContext="{Binding StandaloneViewModel}"/>
 
                 </TabItem>
 

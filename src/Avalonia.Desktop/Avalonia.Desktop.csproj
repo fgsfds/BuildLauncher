@@ -9,6 +9,7 @@
       <Configurations>Debug;Release</Configurations>
       <StartupObject>Avalonia.Desktop.Program</StartupObject>
       <ApplicationIcon>icon.ico</ApplicationIcon>
+      <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
     
   <ItemGroup>

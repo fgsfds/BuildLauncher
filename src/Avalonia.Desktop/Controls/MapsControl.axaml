@@ -38,6 +38,7 @@
                  ItemsSource="{Binding MapsList}"
                  SelectedItem="{Binding SelectedAddon}"
                  PointerPressed="OnListBoxEmptySpaceClicked"
+                 SelectionChanged="OnMapsListSelectionChanged"
                  DragDrop.AllowDrop="True"
                  DragDrop.Drop="FilesDataGrid_DropAsync">
 

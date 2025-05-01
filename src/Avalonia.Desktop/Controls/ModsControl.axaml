@@ -17,7 +17,7 @@
                  ItemsSource="{Binding ModsList}"
                  SelectedItem="{Binding SelectedAddon}"
                  DragDrop.AllowDrop="True"
-                 DragDrop.Drop="FilesDataGrid_DropAsync">
+                 DragDrop.Drop="OnModsListDrop">
 
             <ListBox.ItemsPanel>
                 <ItemsPanelTemplate>
@@ -27,6 +27,9 @@
 
             <ListBox.ContextMenu>
                 <ContextMenu>
+                    <MenuItem Header="Delete"
+                              Padding="5"
+                              Command="{Binding DeleteModCommand}"/>
                 </ContextMenu>
             </ListBox.ContextMenu>
 

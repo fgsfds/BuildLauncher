@@ -159,7 +159,7 @@ public sealed class WW2GICmdArgumentsTests
         EDuke32 eDuke = new();
 
         var args = eDuke.GetStartGameArgs(_ww2Game, _ww2Camp, mods, true, true);
-        var expected = @$" -quick -nosetup -usecwd -cachesize 262144 -h ""a"" -j ""D:\Games\WW2GI"" -ww2gi -gamegrp WW2GI.GRP -x GAME.CON";
+        var expected = @" -quick -nosetup -usecwd -cachesize 262144 -h ""a"" -j ""D:\Games\WW2GI"" -ww2gi -gamegrp WW2GI.GRP -x GAME.CON";
 
         if (OperatingSystem.IsLinux())
         {
@@ -181,7 +181,7 @@ public sealed class WW2GICmdArgumentsTests
         EDuke32 eDuke = new();
 
         var args = eDuke.GetStartGameArgs(_ww2Game, _platoonCamp, mods, true, true);
-        var expected = @$" -quick -nosetup -usecwd -cachesize 262144 -h ""a"" -j ""D:\Games\WW2GI"" -ww2gi -gamegrp WW2GI.GRP -grp PLATOONL.DAT -x PLATOONL.DEF";
+        var expected = @" -quick -nosetup -usecwd -cachesize 262144 -h ""a"" -j ""D:\Games\WW2GI"" -ww2gi -gamegrp WW2GI.GRP -grp PLATOONL.DAT -x PLATOONL.DEF";
 
         if (OperatingSystem.IsLinux())
         {

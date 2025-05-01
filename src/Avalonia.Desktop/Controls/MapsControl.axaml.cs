@@ -5,7 +5,6 @@ using Avalonia.Desktop.ViewModels;
 using Avalonia.Input;
 using Avalonia.Media;
 using Common.Client.Enums.Skills;
-using Common.Client.Interfaces;
 using Common.Enums;
 using Common.Helpers;
 using Common.Interfaces;
@@ -19,44 +18,30 @@ namespace Avalonia.Desktop.Controls;
 
 public sealed partial class MapsControl : UserControl
 {
-    private IEnumerable<BasePort> _supportedPorts;
-    private InstalledAddonsProvider _installedAddonsProvider;
-    private MapsViewModel _viewModel;
-    private MenuFlyout? _flyout = null;
+    private readonly IEnumerable<BasePort> _supportedPorts = [];
+    private readonly InstalledAddonsProvider _installedAddonsProvider = null!;
+    private readonly MapsViewModel _viewModel = null!;
+    private MenuFlyout? _flyout;
 
     public MapsControl()
     {
         InitializeComponent();
-
-        _supportedPorts = null!;
-        _installedAddonsProvider = null!;
-        _viewModel = null!;
     }
 
-    /// <summary>
-    /// Initialize control
-    /// </summary>
-    public void InitializeControl(
+    public MapsControl(
+        MapsViewModel viewModel,
         InstalledPortsProvider portsProvider,
-        InstalledAddonsProviderFactory installedAddonsProviderFactory,
-        IConfigProvider configProvider
+        InstalledAddonsProvider addonsProvider
         )
     {
-        DataContext.ThrowIfNotType<MapsViewModel>(out var viewModel);
+        InitializeComponent();
 
         _viewModel = viewModel;
-        _supportedPorts = portsProvider.GetPortsThatSupportGame(_viewModel.Game.GameEnum);
-        _installedAddonsProvider = installedAddonsProviderFactory.GetSingleton(_viewModel.Game);
-
-        MapsList.SelectionChanged += OnMapsListSelectionChanged;
-        BottomPanel.DataContext = viewModel;
-
-        RightPanel.InitializeControl(configProvider);
+        _supportedPorts = portsProvider.GetPortsThatSupportGame(viewModel.Game.GameEnum);
+        _installedAddonsProvider = addonsProvider;
 
         CreateSkillsFlyout();
-
         AddPortsButtons();
-
         AddContextMenuButtons();
     }
 
@@ -87,7 +72,7 @@ public sealed partial class MapsControl : UserControl
 
         foreach (var port in _supportedPorts)
         {
-            var portIcon = converter.Convert(port.Icon, typeof(IImage), null!, CultureInfo.InvariantCulture) as IImage;
+            var portIcon = converter.Convert(port.Icon, typeof(IImage), null, CultureInfo.InvariantCulture) as IImage;
 
             StackPanel sp = new() { Orientation = Layout.Orientation.Horizontal };
             sp.Children.Add(new Image() { Margin = new(0, 0, 5, 0), Height = 16, Source = portIcon });
@@ -169,7 +154,7 @@ public sealed partial class MapsControl : UserControl
         foreach (var port in _supportedPorts)
         {
             if (!port.IsInstalled ||
-                (addon.RequiredFeatures is not null && addon.RequiredFeatures!.Except(port.SupportedFeatures).Any()) ||
+                addon.RequiredFeatures?.Except(port.SupportedFeatures).Any() is true ||
                 port.PortEnum is PortEnum.BuildGDX)
             {
                 continue;
@@ -302,19 +287,13 @@ public sealed partial class MapsControl : UserControl
             return false;
         }
 
-        if (port.PortEnum is
-            PortEnum.EDuke32
+        return port.PortEnum
+            is PortEnum.EDuke32
             or PortEnum.VoidSW
             or PortEnum.RedNukem
             or PortEnum.Fury
             or PortEnum.NBlood
-            or PortEnum.NotBlood
-            )
-        {
-            return true;
-        }
-
-        return false;
+            or PortEnum.NotBlood;
     }
 
 
@@ -348,7 +327,7 @@ public sealed partial class MapsControl : UserControl
 
     private void OnPortButtonClicked(object? sender, Interactivity.RoutedEventArgs e)
     {
-        sender.ThrowIfNotType<Button>(out var button);
+        sender.ThrowIfNotType(out Button button);
         button.CommandParameter.ThrowIfNotType<BasePort>(out var port);
 
         if (IsSkillFlyoutAvailable(port))
@@ -361,7 +340,7 @@ public sealed partial class MapsControl : UserControl
     {
         var files = e.Data.GetFiles();
 
-        if (files is not null && files.Any())
+        if (files?.Any() is true)
         {
             var filePaths = files.Select(f => f.Path.LocalPath);
 

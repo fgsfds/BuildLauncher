@@ -48,7 +48,7 @@
                   Padding="2"
                   ItemsSource="{Binding DownloadableList}"
                   SelectedItem="{Binding SelectedDownloadable}"
-                  SelectionChanged="DataGrid_SelectionChanged"
+                  SelectionChanged="OnDownloadableListSelectionChanged"
                   GridLinesVisibility="Horizontal"
                   IsReadOnly="True"
                   CornerRadius="4"
@@ -59,6 +59,14 @@
                     <Setter Property="Stroke" Value="Transparent"/>
                 </Style>
             </DataGrid.Styles>
+
+            <DataGrid.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="Download"
+                              Padding="5"
+                              Command="{Binding DownloadAddonCommand}"/>
+                </ContextMenu>
+            </DataGrid.ContextMenu>
 
 
             <DataGrid.Columns>

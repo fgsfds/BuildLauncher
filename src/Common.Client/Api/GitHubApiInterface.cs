@@ -1,6 +1,5 @@
 ﻿using Common.Client.Helpers;
 using Common.Client.Interfaces;
-using Common.Common.Helpers;
 using Common.Common.Interfaces;
 using Common.Common.Providers;
 using Common.Entities;
@@ -49,7 +48,12 @@ public sealed class GitHubApiInterface : IApiInterface
 
                 if (ClientProperties.IsOfflineMode)
                 {
-                    addons = File.ReadAllText(Consts.PathToAddonsJson);
+                    if (ClientProperties.PathToLocalAddonsJson is null)
+                    {
+                        return null;
+                    }
+
+                    addons = File.ReadAllText(ClientProperties.PathToLocalAddonsJson);
                 }
                 else
                 {
@@ -69,15 +73,15 @@ public sealed class GitHubApiInterface : IApiInterface
                 _ = _addonsJson.TryGetValue(GameEnum.Redneck, out var rrAddons);
                 _ = _addonsJson.TryGetValue(GameEnum.RidesAgain, out var againAddons);
 
-                return [..rrAddons ?? [], ..againAddons ?? []];
+                return [.. rrAddons ?? [], .. againAddons ?? []];
             }
-            
+
             if (gameEnum is GameEnum.Witchaven)
             {
                 _ = _addonsJson.TryGetValue(GameEnum.Witchaven, out var w1Addons);
                 _ = _addonsJson.TryGetValue(GameEnum.Witchaven2, out var w2Addons);
 
-                return [..w1Addons ?? [], ..w2Addons ?? []];
+                return [.. w1Addons ?? [], .. w2Addons ?? []];
             }
 
             return _addonsJson.TryGetValue(gameEnum, out var result) ? result : [];
@@ -121,7 +125,13 @@ public sealed class GitHubApiInterface : IApiInterface
 
     public Task<bool> AddAddonToDatabaseAsync(DownloadableAddonEntity addon)
     {
-        var addonsJson = File.ReadAllText(Consts.PathToAddonsJson);
+        if (ClientProperties.PathToLocalAddonsJson is null)
+        {
+            ThrowHelper.ThrowFormatException("Can't find local addons.json");
+            return Task.FromResult(false);
+        }
+
+        var addonsJson = File.ReadAllText(ClientProperties.PathToLocalAddonsJson);
         var addons = JsonSerializer.Deserialize(addonsJson, DownloadableAddonsDictionaryContext.Default.DictionaryGameEnumListDownloadableAddonEntity);
 
         if (addons is null)
@@ -155,7 +165,7 @@ public sealed class GitHubApiInterface : IApiInterface
         addons[addon.Game].Add(addon);
 
         var newAddonsJson = JsonSerializer.Serialize(addons, DownloadableAddonsDictionaryContext.Default.DictionaryGameEnumListDownloadableAddonEntity);
-        File.WriteAllText(Consts.PathToAddonsJson, newAddonsJson);
+        File.WriteAllText(ClientProperties.PathToLocalAddonsJson, newAddonsJson);
 
         return Task.FromResult(true);
     }

@@ -81,7 +81,7 @@ internal sealed class ToolsReleasesRepoRetriever
         var releases = JsonSerializer.Deserialize(response, GitHubReleaseEntityContext.Default.ListGitHubReleaseEntity)
             ?? ThrowHelper.ThrowFormatException<List<GitHubReleaseEntity>>("Error while deserializing GitHub releases");
 
-        var release = releases.FirstOrDefault(static x => x.IsDraft is false && x.IsPrerelease is false);
+        var release = releases.FirstOrDefault(static x => !x.IsDraft && !x.IsPrerelease);
 
         if (release is null)
         {

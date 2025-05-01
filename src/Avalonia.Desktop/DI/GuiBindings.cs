@@ -1,5 +1,5 @@
-﻿using Avalonia.Desktop.ViewModels;
-using Avalonia.Desktop.Views;
+﻿using Avalonia.Desktop.Misc;
+using Avalonia.Desktop.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Avalonia.Desktop.DI;
@@ -10,8 +10,8 @@ public static class GuiBindings
     {
         _ = container.AddSingleton<ViewModelsFactory>();
 
-        _ = container.AddSingleton<MainViewModel>();
+        _ = container.AddSingleton<MainWindowViewModel>();
 
-        _ = container.AddSingleton<MainWindow>();
+        _ = container.AddSingleton<ViewLocator>();
     }
 }

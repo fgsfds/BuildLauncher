@@ -13,7 +13,7 @@ public sealed class DatabaseAddonsRetriever
     private readonly ILogger<DatabaseAddonsRetriever> _logger;
     private readonly DatabaseContextFactory _dbContextFactory;
 
-    public GeneralReleaseEntity? AppRelease { get; private set; }
+    public GeneralReleaseEntity? AppRelease { get; }
 
     public DatabaseAddonsRetriever(
         ILogger<DatabaseAddonsRetriever> logger,
@@ -123,7 +123,7 @@ public sealed class DatabaseAddonsRetriever
         }
         else
         {
-            fix.Installs += 1;
+            fix.Installs++;
             newInstalls = fix.Installs;
         }
 

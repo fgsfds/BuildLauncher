@@ -12,7 +12,7 @@ public sealed class RepoAppReleasesRetriever
     private readonly ILogger _logger;
     private readonly HttpClient _httpClient;
 
-    public Dictionary<OSEnum, GeneralReleaseEntity> AppRelease { get; private set; } = [];
+    public Dictionary<OSEnum, GeneralReleaseEntity> AppRelease { get; } = [];
 
     public RepoAppReleasesRetriever(
         ILogger logger,
@@ -46,7 +46,7 @@ public sealed class RepoAppReleasesRetriever
                 JsonSerializer.Deserialize(releasesJson, GitHubReleaseEntityContext.Default.ListGitHubReleaseEntity)
                 ?? ThrowHelper.ThrowFormatException<List<GitHubReleaseEntity>>("Error while deserializing GitHub releases");
 
-            releases = [.. releases.Where(static x => x.IsDraft is false && x.IsPrerelease is false).OrderByDescending(static x => new Version(x.TagName))];
+            releases = [.. releases.Where(static x => !x.IsDraft && !x.IsPrerelease).OrderByDescending(static x => new Version(x.TagName))];
             var release = releases[0];
 
             var windowsAsset = release.Assets.FirstOrDefault(x => x.FileName.EndsWith("win-x64.zip"))!;
@@ -84,7 +84,7 @@ public sealed class RepoAppReleasesRetriever
         }
         catch (Exception ex)
         {
-            _logger.LogError($"Error while getting latest app release");
+            _logger.LogError("Error while getting latest app release");
             _logger.LogError(ex.ToString());
         }
     }
