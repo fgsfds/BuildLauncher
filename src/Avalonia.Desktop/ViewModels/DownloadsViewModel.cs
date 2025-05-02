@@ -82,7 +82,7 @@ public sealed partial class DownloadsViewModel : ObservableObject
     /// <summary>
     /// Description of the selected addon
     /// </summary>
-    public string SelectedDownloadableDescription => string.Empty; /*SelectedDownloadable is null ? string.Empty : SelectedDownloadable.ToMarkdownString();*/
+    public string SelectedDownloadableDescription => SelectedDownloads.FirstOrDefault()?.ToMarkdownString() ?? string.Empty;
 
     /// <summary>
     /// Text of the download button
