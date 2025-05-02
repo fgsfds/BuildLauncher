@@ -46,9 +46,34 @@
                  DragDrop.AllowDrop="True"
                  DragDrop.Drop="OnCampaignsListDrop">
 
+            <ListBox.Styles>
+
+                <Style Selector="ListBoxItem /template/ ContentPresenter#PART_ContentPresenter">
+                    <Setter Property="RenderTransform" Value="scale(1,1)"/>
+                    <Setter Property="Transitions">
+                        <Setter.Value>
+                            <Transitions>
+                                <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.1"/>
+                            </Transitions>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+
+                <Style Selector="ListBoxItem:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+                    <Setter Property="Background" Value=""/>
+                    <Setter Property="RenderTransform" Value="scale(1.05)"/>
+                </Style>
+
+                <Style Selector="ListBoxItem:selected /template/ ContentPresenter#PART_ContentPresenter">
+                    <Setter Property="Background" Value=""/>
+                    <Setter Property="RenderTransform" Value="scale(1.1)"/>
+                </Style>
+
+            </ListBox.Styles>
+
             <ListBox.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <WrapPanel Orientation="Horizontal"/>
+                    <ctrl:AnimatedWrapPanel Orientation="Horizontal"/>
                 </ItemsPanelTemplate>
             </ListBox.ItemsPanel>
 
@@ -57,12 +82,20 @@
 
                     <Grid RowDefinitions="215" ColumnDefinitions="150" VerticalAlignment="Bottom">
 
+                        <Grid.Styles>
+
+                        </Grid.Styles>
+
+
                         <Border Background="Black"
-                                Margin="10">
-                            <Image Source="{Binding GridImage, Converter={StaticResource ImagePathToBitmapConverter}}"
-                                   VerticalAlignment="Center"
-                                   HorizontalAlignment="Center"/>
-                        </Border>
+                                Margin="10"
+                                IsVisible="{Binding GridImage, Converter={x:Static ObjectConverters.IsNull}}"/>
+
+                        <Image Source="{Binding GridImage, Converter={StaticResource ImagePathToBitmapConverter}}"
+                               Margin="10"
+                               VerticalAlignment="Center"
+                               HorizontalAlignment="Center"
+                               IsVisible="{Binding GridImage, Converter={x:Static ObjectConverters.IsNotNull}}"/>
 
                         <Viewbox Margin="20"
                                  IsVisible="{Binding GridImage, Converter={x:Static ObjectConverters.IsNull}}">
@@ -78,7 +111,7 @@
                                    Padding="5"
                                    Background="{Binding Path=Background, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}"
                                    HorizontalAlignment="Stretch"
-                                   Opacity="100"
+                                   Opacity="0.6"
                                    TextAlignment="Center"
                                    VerticalAlignment="Bottom"
                                    TextWrapping="Wrap"
