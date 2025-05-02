@@ -1,6 +1,6 @@
-﻿using Common.Enums;
+﻿using Common.Entities;
+using Common.Enums;
 using Common.Helpers;
-using Common.Interfaces;
 using System.Collections.Immutable;
 
 namespace Common.Client.Interfaces;
@@ -19,13 +19,13 @@ public interface IDownloadableAddonsProvider
     /// </summary>
     /// <param name="addon">Addon</param>
     /// <param name="cancellationToken">Cancellation token</param>
-    Task DownloadAddonAsync(IDownloadableAddon addon, CancellationToken cancellationToken);
+    Task DownloadAddonAsync(DownloadableAddonEntity addon, CancellationToken cancellationToken);
 
     /// <summary>
     /// Get a list of downloadable addons
     /// </summary>
     /// <param name="addonType">Addon type</param>
-    ImmutableList<IDownloadableAddon> GetDownloadableAddons(AddonTypeEnum addonType);
+    ImmutableList<DownloadableAddonEntity> GetDownloadableAddons(AddonTypeEnum addonType);
 
     /// <summary>
     /// Create downloadable addons cache

@@ -1,12 +1,11 @@
 ﻿using Common.Enums;
 using Common.Helpers;
-using Common.Interfaces;
 using System.Text;
 using System.Text.Json.Serialization;
 
 namespace Common.Entities;
 
-public sealed class DownloadableAddonEntity : IDownloadableAddon
+public sealed class DownloadableAddonEntity
 {
     [JsonPropertyName("Id")]
     public required string Id { get; set; }

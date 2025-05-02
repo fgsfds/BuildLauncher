@@ -16,7 +16,8 @@
         MinWidth="1300"
         MinHeight="700"
         ExtendClientAreaToDecorationsHint="True"
-        Background="{DynamicResource Background}">
+        Background="{DynamicResource Background}"
+        ClipToBounds="True">
 
     <Window.Resources>
         <ResourceDictionary>

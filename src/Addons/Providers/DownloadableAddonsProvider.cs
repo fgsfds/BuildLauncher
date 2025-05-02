@@ -2,6 +2,7 @@
 using Common.Client.Helpers;
 using Common.Client.Interfaces;
 using Common.Client.Tools;
+using Common.Entities;
 using Common.Enums;
 using Common.Helpers;
 using Common.Interfaces;
@@ -22,7 +23,7 @@ public sealed class DownloadableAddonsProvider : IDownloadableAddonsProvider
     private readonly InstalledAddonsProvider _installedAddonsProvider;
     private readonly ILogger _logger;
 
-    private Dictionary<AddonTypeEnum, Dictionary<AddonVersion, IDownloadableAddon>>? _cache;
+    private Dictionary<AddonTypeEnum, Dictionary<AddonVersion, DownloadableAddonEntity>>? _cache;
 
     private static readonly SemaphoreSlim _semaphore = new(1);
 
@@ -103,7 +104,7 @@ public sealed class DownloadableAddonsProvider : IDownloadableAddonsProvider
 
 
     /// <inheritdoc/>
-    public ImmutableList<IDownloadableAddon> GetDownloadableAddons(AddonTypeEnum addonType)
+    public ImmutableList<DownloadableAddonEntity> GetDownloadableAddons(AddonTypeEnum addonType)
     {
         if (_cache is null)
         {
@@ -157,7 +158,7 @@ public sealed class DownloadableAddonsProvider : IDownloadableAddonsProvider
 
     /// <inheritdoc/>
     public async Task DownloadAddonAsync(
-        IDownloadableAddon addon,
+        DownloadableAddonEntity addon,
         CancellationToken cancellationToken
         )
     {

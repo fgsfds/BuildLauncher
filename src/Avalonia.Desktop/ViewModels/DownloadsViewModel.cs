@@ -10,6 +10,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.Logging;
 using System.Collections.Immutable;
+using System.Collections.ObjectModel;
 
 namespace Avalonia.Desktop.ViewModels;
 
@@ -26,21 +27,14 @@ public sealed partial class DownloadsViewModel : ObservableObject
 
     #region Binding Properties
 
-    [ObservableProperty]
-    [NotifyCanExecuteChangedFor(nameof(CancelDownloadCommand))]
-    private bool _isInProgress;
-
-    [ObservableProperty]
-    private bool _hasUpdates;
-
     /// <summary>
     /// List of downloadable addons
     /// </summary>
-    public ImmutableList<IDownloadableAddon> DownloadableList
+    public ImmutableList<DownloadableAddonEntity> DownloadableList
     {
         get
         {
-            IEnumerable<IDownloadableAddon> result;
+            IEnumerable<DownloadableAddonEntity> result;
 
             if (FilterSelectedItem is FilterItemEnum.All)
             {
@@ -86,28 +80,9 @@ public sealed partial class DownloadsViewModel : ObservableObject
     public float ProgressBarValue { get; set; }
 
     /// <summary>
-    /// Currently selected downloadable campaign, map or mod
-    /// </summary>
-    [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(SelectedDownloadableDescription))]
-    [NotifyPropertyChangedFor(nameof(DownloadButtonText))]
-    [NotifyCanExecuteChangedFor(nameof(DownloadAddonCommand))]
-    private DownloadableAddonEntity? _selectedDownloadable;
-
-    /// <summary>
-    /// Currently selected downloadable campaign, map or mod
-    /// </summary>
-    [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(DownloadButtonText))]
-    private List<DownloadableAddonEntity>? _selectedDownloadableList;
-
-    [ObservableProperty]
-    private string _progressMessage = string.Empty;
-
-    /// <summary>
     /// Description of the selected addon
     /// </summary>
-    public string SelectedDownloadableDescription => SelectedDownloadable is null ? string.Empty : SelectedDownloadable.ToMarkdownString();
+    public string SelectedDownloadableDescription => string.Empty; /*SelectedDownloadable is null ? string.Empty : SelectedDownloadable.ToMarkdownString();*/
 
     /// <summary>
     /// Text of the download button
@@ -116,18 +91,34 @@ public sealed partial class DownloadsViewModel : ObservableObject
     {
         get
         {
-            if (SelectedDownloadableList is null or [])
+            if (SelectedDownloads is null or [])
             {
                 return "Download";
             }
             else
             {
-                return $"Download ({SelectedDownloadableList.Sum(x => x.FileSize).ToSizeString()})";
+                return $"Download ({SelectedDownloads.Sum(x => x.FileSize).ToSizeString()})";
             }
         }
     }
 
     public List<FilterItemEnum> FilterItems => [.. Enum.GetValues<FilterItemEnum>()];
+
+    [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(CancelDownloadCommand))]
+    private bool _isInProgress;
+
+    [ObservableProperty]
+    private bool _hasUpdates;
+
+    /// <summary>
+    /// Currently selected downloadable campaigns, maps or mods
+    /// </summary>
+    [ObservableProperty]
+    private ObservableCollection<DownloadableAddonEntity> _selectedDownloads = [];
+
+    [ObservableProperty]
+    private string _progressMessage = string.Empty;
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(DownloadableList))]
@@ -160,6 +151,7 @@ public sealed partial class DownloadsViewModel : ObservableObject
 
         _installedAddonsProvider.AddonsChangedEvent += OnAddonChanged;
         _downloadableAddonsProvider.AddonDownloadedEvent += OnAddonChanged;
+        SelectedDownloads.CollectionChanged += OnSelectedDownloadsChanged;
     }
 
 
@@ -204,7 +196,7 @@ public sealed partial class DownloadsViewModel : ObservableObject
 
             OnPropertyChanged(nameof(DownloadableList));
 
-            SelectedDownloadable = null;
+            SelectedDownloads.Clear();
         }
         catch (Exception ex)
         {
@@ -223,14 +215,17 @@ public sealed partial class DownloadsViewModel : ObservableObject
     [RelayCommand(CanExecute = nameof(DownloadSelectedAddonCanExecute))]
     private async Task DownloadAddon()
     {
+        DownloadableAddonEntity? _currentDownloadable = null;
+
         try
         {
-            if (SelectedDownloadableList is null or [])
+
+            if (SelectedDownloads is null or [])
             {
                 return;
             }
 
-            List<DownloadableAddonEntity> filesToDownload = [.. SelectedDownloadableList];
+            List<DownloadableAddonEntity> filesToDownload = [.. SelectedDownloads];
 
             IsInProgress = true;
 
@@ -242,6 +237,8 @@ public sealed partial class DownloadsViewModel : ObservableObject
 
             foreach (var item in filesToDownload)
             {
+                _currentDownloadable = item;
+
                 if (_cancellationTokenSource.IsCancellationRequested)
                 {
                     ThrowHelper.ThrowOperationCanceledException();
@@ -268,7 +265,7 @@ public sealed partial class DownloadsViewModel : ObservableObject
                 NotificationType.Error
                 );
 
-            _logger.LogCritical(ex, $"=== Error while downloading addon {SelectedDownloadable?.DownloadUrl} ===");
+            _logger.LogCritical(ex, $"=== Error while downloading addon {_currentDownloadable?.DownloadUrl} ===");
         }
         finally
         {
@@ -279,7 +276,7 @@ public sealed partial class DownloadsViewModel : ObservableObject
             ProgressMessage = string.Empty;
         }
     }
-    private bool DownloadSelectedAddonCanExecute => SelectedDownloadable is not null;
+    private bool DownloadSelectedAddonCanExecute => true; /*SelectedDownloadable is not null;*/
 
 
     /// <summary>
@@ -317,6 +314,13 @@ public sealed partial class DownloadsViewModel : ObservableObject
         }
 
         OnPropertyChanged(nameof(DownloadableList));
+    }
+
+    private void OnSelectedDownloadsChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+    {
+        OnPropertyChanged(nameof(SelectedDownloadableDescription));
+        OnPropertyChanged(nameof(DownloadButtonText));
+        DownloadAddonCommand.NotifyCanExecuteChanged();
     }
 
     public enum FilterItemEnum
