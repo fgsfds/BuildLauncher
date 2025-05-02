@@ -169,25 +169,19 @@ public class EDuke32 : BasePort
     {
         var saveFolder = GetPathToAddonSavedGamesFolder(game.ShortName, campaign.Id);
 
-        if (Directory.Exists(saveFolder))
+        if (!Directory.Exists(saveFolder))
         {
-            var saves = Directory.GetFiles(saveFolder);
+            return;
+        }
 
-            foreach (var save in saves)
-            {
-                string destFileName;
+        var saves = Directory.GetFiles(saveFolder);
 
-                if (campaign.IsFolder)
-                {
-                    destFileName = Path.Combine(Path.GetDirectoryName(campaign.PathToFile)!, Path.GetFileName(save)!);
-                }
-                else
-                {
-                    destFileName = Path.Combine(PortInstallFolderPath, Path.GetFileName(save)!);
-                }
+        string firstPart = campaign.IsFolder ? Path.GetDirectoryName(campaign.PathToFile)! : PortInstallFolderPath;
 
-                File.Move(save, destFileName, true);
-            }
+        foreach (var save in saves)
+        {
+            var destFileName = Path.Combine(firstPart, Path.GetFileName(save)!);
+            File.Move(save, destFileName, true);
         }
     }
 
@@ -475,6 +469,5 @@ public class EDuke32 : BasePort
                 File.Move(art4, art4r, true);
             }
         }
-
     }
 }
