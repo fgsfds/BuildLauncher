@@ -30,7 +30,7 @@ public sealed partial class DevViewModel : ObservableObject
     private readonly InstalledGamesProvider _gamesProvider;
     private readonly ILogger _logger;
 
-    private readonly List<string> _forbiddenNames =
+    private readonly HashSet<string> _forbiddenNames =
         [
         "duke3d.def",
         "rr.def",
@@ -79,69 +79,32 @@ public sealed partial class DevViewModel : ObservableObject
         set
         {
             _config.UseLocalApi = value;
-            OnPropertyChanged(nameof(LocalApiCheckbox));
+            OnPropertyChanged();
         }
     }
 
-    public string AddonIdPrefix
+    public string AddonIdPrefix => SelectedGame switch
     {
-        get
-        {
-            if (IsDukeSelected)
-            {
-                return "duke3d-";
-            }
-            if (IsBloodSelected)
-            {
-                return "blood-";
-            }
-            if (IsWangSelected)
-            {
-                return "wang-";
-            }
-            if (IsFurySelected)
-            {
-                return "fury-";
-            }
-            if (IsRedneckSelected)
-            {
-                return "redneck-";
-            }
-            if (IsRidesAgainSelected)
-            {
-                return "ridesagain-";
-            }
-            if (IsSlaveSelected)
-            {
-                return "slave-";
-            }
-            if (IsNAMSelected)
-            {
-                return "nam-";
-            }
-            if (IsWW2GISelected)
-            {
-                return "ww2gi-";
-            }
-            if (IsWitchaven1Selected)
-            {
-                return "wh1-";
-            }
-            if (IsWitchaven2Selected)
-            {
-                return "wh2-";
-            }
-
-            return string.Empty;
-        }
-    }
+        GameEnum.Duke3D => "duke3d-",
+        GameEnum.Blood => "blood-",
+        GameEnum.ShadowWarrior => "wang-",
+        GameEnum.Fury => "fury-",
+        GameEnum.Redneck => "redneck-",
+        GameEnum.RidesAgain => "ridesagain-",
+        GameEnum.Exhumed => "slave-",
+        GameEnum.NAM => "nam-",
+        GameEnum.WW2GI => "ww2gi-",
+        GameEnum.Witchaven => "wh1-",
+        GameEnum.Witchaven2 => "wh2-",
+        _ => string.Empty
+    };
 
     public bool IsDeveloperMode => ClientProperties.IsDeveloperMode;
     public bool IsStep2Visible => IsMapSelected || IsModSelected || IsTcSelected;
-    public bool IsStep3Visible => IsDukeSelected || IsBloodSelected || IsWangSelected || IsFurySelected || IsRedneckSelected || IsRidesAgainSelected || IsSlaveSelected || IsNAMSelected || IsWW2GISelected || IsStandaloneSelected || IsWitchaven1Selected || IsWitchaven2Selected;
-    public bool AreDukePropertiesAvailable => IsDukeSelected || IsFurySelected || IsRedneckSelected || IsNAMSelected || IsWW2GISelected;
+    public bool IsStep3Visible => SelectedGame is not null;
+    public bool AreDukePropertiesAvailable => SelectedGame is GameEnum.Duke3D or GameEnum.Fury or GameEnum.Redneck or GameEnum.RidesAgain or GameEnum.NAM or GameEnum.WW2GI;
     public bool IsMainConAvailable => AreDukePropertiesAvailable && !IsModSelected;
-    public bool AreBloodPropertiesVisible => IsBloodSelected;
+    public bool AreBloodPropertiesAvailable => SelectedGame is GameEnum.Blood;
 
     [ObservableProperty]
     private string _addonId = string.Empty;
@@ -228,80 +191,16 @@ public sealed partial class DevViewModel : ObservableObject
         OnPropertyChanged(nameof(AddonId));
     }
 
-    [ObservableProperty]
+
     [NotifyPropertyChangedFor(nameof(AreDukePropertiesAvailable))]
     [NotifyPropertyChangedFor(nameof(IsMainConAvailable))]
     [NotifyPropertyChangedFor(nameof(AddonIdPrefix))]
     [NotifyPropertyChangedFor(nameof(IsStep3Visible))]
-    private bool _isDukeSelected;
-
-    [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(AreBloodPropertiesVisible))]
-    [NotifyPropertyChangedFor(nameof(AddonIdPrefix))]
-    [NotifyPropertyChangedFor(nameof(IsStep3Visible))]
-    private bool _isBloodSelected;
-
-    [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(AddonIdPrefix))]
-    [NotifyPropertyChangedFor(nameof(IsStep3Visible))]
-    private bool _isWangSelected;
-
-    [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(AreDukePropertiesAvailable))]
-    [NotifyPropertyChangedFor(nameof(IsMainConAvailable))]
-    [NotifyPropertyChangedFor(nameof(AddonIdPrefix))]
-    [NotifyPropertyChangedFor(nameof(IsStep3Visible))]
-    private bool _isFurySelected;
-
-    [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(AreDukePropertiesAvailable))]
-    [NotifyPropertyChangedFor(nameof(IsMainConAvailable))]
-    [NotifyPropertyChangedFor(nameof(AddonIdPrefix))]
-    [NotifyPropertyChangedFor(nameof(IsStep3Visible))]
-    private bool _isRedneckSelected;
-
-    [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(AreDukePropertiesAvailable))]
-    [NotifyPropertyChangedFor(nameof(IsMainConAvailable))]
-    [NotifyPropertyChangedFor(nameof(AddonIdPrefix))]
-    [NotifyPropertyChangedFor(nameof(IsStep3Visible))]
-    private bool _isRidesAgainSelected;
-
-    [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(AreDukePropertiesAvailable))]
-    [NotifyPropertyChangedFor(nameof(IsMainConAvailable))]
-    [NotifyPropertyChangedFor(nameof(AddonIdPrefix))]
-    [NotifyPropertyChangedFor(nameof(IsStep3Visible))]
-    private bool _isNAMSelected;
-
-    [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(AreDukePropertiesAvailable))]
-    [NotifyPropertyChangedFor(nameof(IsMainConAvailable))]
-    [NotifyPropertyChangedFor(nameof(AddonIdPrefix))]
-    [NotifyPropertyChangedFor(nameof(IsStep3Visible))]
-    private bool _isWW2GISelected;
-
-    [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(AddonIdPrefix))]
-    [NotifyPropertyChangedFor(nameof(IsStep3Visible))]
-    private bool _isSlaveSelected;
-
-    [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(AddonIdPrefix))]
-    [NotifyPropertyChangedFor(nameof(IsStep3Visible))]
-    private bool _isWitchaven1Selected;
-
-    [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(AddonIdPrefix))]
-    [NotifyPropertyChangedFor(nameof(IsStep3Visible))]
-    private bool _isWitchaven2Selected;
-
-    [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(AddonIdPrefix))]
-    [NotifyPropertyChangedFor(nameof(IsStep3Visible))]
+    [NotifyPropertyChangedFor(nameof(AreBloodPropertiesAvailable))]
     [NotifyPropertyChangedFor(nameof(WindowsExecutable))]
     [NotifyPropertyChangedFor(nameof(LinuxExecutable))]
-    private bool _isStandaloneSelected;
+    [ObservableProperty]
+    private GameEnum? _selectedGame;
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(IsStep2Visible))]
@@ -355,7 +254,7 @@ public sealed partial class DevViewModel : ObservableObject
             LoadJson(addonJson);
         }
 
-        OnPropertyChanged(nameof(AddonIdPrefix));
+        OnPropertyChanged(nameof(SelectedGame));
     }
 
     [ObservableProperty]
@@ -664,7 +563,7 @@ public sealed partial class DevViewModel : ObservableObject
         var files = Directory.GetFiles(PathToAddonFolder, "*", SearchOption.TopDirectoryOnly).Select(static x => Path.GetFileName(x).ToLower());
         var forbidden = files.Intersect(_forbiddenNames);
 
-        if (!IsStandaloneSelected &&
+        if (SelectedGame is not GameEnum.Standalone &&
             WindowsExecutable is null &&
             LinuxExecutable is null &&
             MainRff is null &&
@@ -675,7 +574,7 @@ public sealed partial class DevViewModel : ObservableObject
                 ThrowHelper.ThrowMissingFieldException($"Common file names can't be used. Rename these files: {string.Join(", ", forbidden)}");
             }
 
-            if (IsBloodSelected &&
+            if (SelectedGame is GameEnum.Blood &&
                 string.IsNullOrWhiteSpace(MainRff) &&
                 string.IsNullOrWhiteSpace(SoundRff))
             {
@@ -702,27 +601,14 @@ public sealed partial class DevViewModel : ObservableObject
             : IsModSelected ? AddonTypeEnum.Mod
             : ThrowHelper.ThrowArgumentOutOfRangeException<AddonTypeEnum>("Select addon type");
 
-        var gameEnum =
-              IsDukeSelected ? GameEnum.Duke3D
-            : IsBloodSelected ? GameEnum.Blood
-            : IsWangSelected ? GameEnum.ShadowWarrior
-            : IsFurySelected ? GameEnum.Fury
-            : IsRedneckSelected ? GameEnum.Redneck
-            : IsRidesAgainSelected ? GameEnum.RidesAgain
-            : IsSlaveSelected ? GameEnum.Exhumed
-            : IsNAMSelected ? GameEnum.NAM
-            : IsWW2GISelected ? GameEnum.WW2GI
-            : IsWitchaven1Selected ? GameEnum.Witchaven
-            : IsWitchaven2Selected ? GameEnum.Witchaven2
-            : IsStandaloneSelected ? GameEnum.Standalone
-            : ThrowHelper.ThrowArgumentOutOfRangeException<GameEnum>("Select game");
+        var gameEnum = SelectedGame ?? ThrowHelper.ThrowArgumentOutOfRangeException<GameEnum>("Select game");
 
         DukeVersionEnum? dukeVersion =
-              !IsDukeSelected ? null
-            : IsDukeAtomicSelected ? DukeVersionEnum.Duke3D_Atomic
-            : IsDuke13DSelected ? DukeVersionEnum.Duke3D_13D
-            : IsDukeWTSelected ? DukeVersionEnum.Duke3D_WT
-            : null;
+              SelectedGame is not GameEnum.Duke3D ? null
+              : IsDukeAtomicSelected ? DukeVersionEnum.Duke3D_Atomic
+              : IsDuke13DSelected ? DukeVersionEnum.Duke3D_13D
+              : IsDukeWTSelected ? DukeVersionEnum.Duke3D_WT
+              : null;
 
         if (string.IsNullOrWhiteSpace(AddonTitle))
         {
@@ -745,7 +631,7 @@ public sealed partial class DevViewModel : ObservableObject
             features.Add(FeatureEnum.EDuke32_CON);
         }
         if (IsModernTypesSelected &&
-            IsBloodSelected)
+            SelectedGame is GameEnum.Blood)
         {
             features.Add(FeatureEnum.Modern_Types);
         }
@@ -874,18 +760,7 @@ public sealed partial class DevViewModel : ObservableObject
         IsMapSelected = result.AddonType is AddonTypeEnum.Map;
         IsModSelected = result.AddonType is AddonTypeEnum.Mod;
 
-        IsDukeSelected = result.SupportedGame.Game is GameEnum.Duke3D;
-        IsBloodSelected = result.SupportedGame.Game is GameEnum.Blood;
-        IsWangSelected = result.SupportedGame.Game is GameEnum.ShadowWarrior;
-        IsFurySelected = result.SupportedGame.Game is GameEnum.Fury;
-        IsRedneckSelected = result.SupportedGame.Game is GameEnum.Redneck;
-        IsRidesAgainSelected = result.SupportedGame.Game is GameEnum.RidesAgain;
-        IsSlaveSelected = result.SupportedGame.Game is GameEnum.Exhumed;
-        IsNAMSelected = result.SupportedGame.Game is GameEnum.NAM;
-        IsWW2GISelected = result.SupportedGame.Game is GameEnum.WW2GI;
-        IsWitchaven1Selected = result.SupportedGame.Game is GameEnum.Witchaven;
-        IsWitchaven2Selected = result.SupportedGame.Game is GameEnum.Witchaven2;
-        IsStandaloneSelected = result.SupportedGame.Game is GameEnum.Standalone;
+        SelectedGame = result.SupportedGame.Game;
 
         var isDukeVersion = Enum.TryParse<DukeVersionEnum>(result.SupportedGame.Version, true, out var dukeVersion);
         IsDuke13DSelected = isDukeVersion && dukeVersion is DukeVersionEnum.Duke3D_13D;

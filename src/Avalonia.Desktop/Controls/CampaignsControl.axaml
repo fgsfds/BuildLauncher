@@ -14,6 +14,7 @@
         <helpers:ImagePathToBitmapConverter x:Key="ImagePathToBitmapConverter"/>
     </UserControl.Resources>
 
+
     <Grid RowDefinitions="auto,*,auto" ColumnDefinitions="2*,*">
 
         <Grid ColumnDefinitions="auto,*,auto"

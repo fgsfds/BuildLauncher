@@ -22,7 +22,6 @@ public sealed partial class CampaignsViewModel : RightPanelViewModel, IPortsButt
 
     private readonly InstalledGamesProvider _gamesProvider;
     private readonly IConfigProvider _config;
-    private readonly PlaytimeProvider _playtimeProvider;
     private readonly InstalledAddonsProvider _installedAddonsProvider;
     private readonly DownloadableAddonsProvider _downloadableAddonsProvider;
     private readonly PortStarter _portStarter;
@@ -106,7 +105,6 @@ public sealed partial class CampaignsViewModel : RightPanelViewModel, IPortsButt
 
         _gamesProvider = gamesProvider;
         _config = config;
-        _playtimeProvider = playtimeProvider;
         _installedAddonsProvider = installedAddonsProviderFactory.GetSingleton(game);
         _downloadableAddonsProvider = downloadableAddonsProviderFactory.GetSingleton(game);
         _portStarter = portStarter;

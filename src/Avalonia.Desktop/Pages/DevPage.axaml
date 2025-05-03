@@ -6,10 +6,22 @@
              d:DesignWidth="1000"
              d:DesignHeight="2000"
              xmlns:vm="clr-namespace:Avalonia.Desktop.ViewModels"
+             xmlns:helpers="clr-namespace:Avalonia.Desktop.Helpers"
              x:DataType="vm:DevViewModel"
              x:Class="Avalonia.Desktop.Pages.DevPage">
 
+    <UserControl.Resources>
+        <helpers:GameStringToEnumConverter x:Key="GameStringToEnumConverter"/>
+    </UserControl.Resources>
+
+
     <ScrollViewer HorizontalScrollBarVisibility="Disabled" >
+
+        <ScrollViewer.Styles>
+            <Style Selector="RadioButton">
+                <Setter Property="Margin" Value="0,0,30,0"/>
+            </Style>
+        </ScrollViewer.Styles>
 
         <WrapPanel Orientation="Horizontal">
 
@@ -33,8 +45,7 @@
                              HorizontalAlignment="Left"
                              VerticalContentAlignment="Center"
                              Margin="5"
-                             IsVisible="False"
-                             />
+                             IsVisible="False"/>
 
                     <TextBlock Margin="5" VerticalAlignment="Center" Text="{Binding UploadingStatusMessage}"/>
 
@@ -54,9 +65,8 @@
                         <TextBlock Grid.Column="0"
                                    VerticalAlignment="Center"
                                    Margin="5"
-                                   FontWeight="Bold">
-                            Path to addon:
-                        </TextBlock>
+                                   FontWeight="Bold"
+                                   Text="Path to addon:"/>
 
                         <TextBox Grid.Column="1" Margin="5,0" Text="{Binding PathToAddonFolder}"></TextBox>
 
@@ -74,37 +84,27 @@
                         <TextBlock Grid.Column="0"
                                    VerticalAlignment="Center"
                                    Margin="5"
-                                   FontWeight="Bold">
-                            Type:
-                        </TextBlock>
+                                   FontWeight="Bold"
+                                   Text="Type:"/>
 
                         <WrapPanel Orientation="Horizontal"
                                    Grid.Column="1"
                                    Margin="5">
 
-                            <RadioButton
-                                GroupName="AddonType"
-                                Margin="0,0,10,0"
-                                ToolTip.Tip="Total conversion. Replaces main game files."
-                                IsChecked="{Binding IsTcSelected}">
-                                TC
-                            </RadioButton>
+                            <RadioButton GroupName="AddonType"
+                                         IsChecked="{Binding IsTcSelected}"
+                                         Content="TC"
+                                         ToolTip.Tip="Total conversion. Replaces main game files."/>
 
-                            <RadioButton
-                                GroupName="AddonType"
-                                Margin="0,0,10,0"
-                                ToolTip.Tip="Single map"
-                                IsChecked="{Binding IsMapSelected}">
-                                Map
-                            </RadioButton>
+                            <RadioButton GroupName="AddonType"
+                                         IsChecked="{Binding IsMapSelected}"
+                                         Content="Map"
+                                         ToolTip.Tip="Single map"/>
 
-                            <RadioButton
-                                GroupName="AddonType"
-                                Margin="0,0,10,0"
-                                IsChecked="{Binding IsModSelected}"
-                                ToolTip.Tip="Mod that doesn't replace main game files. Multiple mods can be loaded at the same time.">
-                                Mod
-                            </RadioButton>
+                            <RadioButton GroupName="AddonType"
+                                         IsChecked="{Binding IsModSelected}"
+                                         Content="Mod"
+                                         ToolTip.Tip="Mod that doesn't replace main game files. Multiple mods can be loaded at the same time."/>
 
                         </WrapPanel>
 
@@ -122,28 +122,60 @@
                             <TextBlock Grid.Column="0"
                                        VerticalAlignment="Center"
                                        Margin="5"
-                                       FontWeight="Bold">
-                                Game:
-                            </TextBlock>
+                                       FontWeight="Bold"
+                                       Text="Game:"/>
 
-                            <WrapPanel Orientation="Horizontal"
-                                       Grid.Column="1"
-                                       Margin="5">
+                            <UniformGrid Columns="4" Margin="5" Grid.Column="1">
 
-                                <RadioButton GroupName="GameSelect" Margin="0,0,10,0" IsChecked="{Binding IsDukeSelected}">Duke 3D</RadioButton>
-                                <RadioButton GroupName="GameSelect" Margin="0,0,10,0" IsChecked="{Binding IsBloodSelected}">Blood</RadioButton>
-                                <RadioButton GroupName="GameSelect" Margin="0,0,10,0" IsChecked="{Binding IsWangSelected}">Shadow Warrior</RadioButton>
-                                <RadioButton GroupName="GameSelect" Margin="0,0,10,0" IsChecked="{Binding IsFurySelected}">Ion Fury</RadioButton>
-                                <RadioButton GroupName="GameSelect" Margin="0,0,10,0" IsChecked="{Binding IsRedneckSelected}">Redneck Rampage</RadioButton>
-                                <RadioButton GroupName="GameSelect" Margin="0,0,10,0" IsChecked="{Binding IsRidesAgainSelected}">Rides Again</RadioButton>
-                                <RadioButton GroupName="GameSelect" Margin="0,0,10,0" IsChecked="{Binding IsSlaveSelected}">Powerslave</RadioButton>
-                                <RadioButton GroupName="GameSelect" Margin="0,0,10,0" IsChecked="{Binding IsNAMSelected}">NAM</RadioButton>
-                                <RadioButton GroupName="GameSelect" Margin="0,0,10,0" IsChecked="{Binding IsWW2GISelected}">WWII GI</RadioButton>
-                                <RadioButton GroupName="GameSelect" Margin="0,0,10,0" IsChecked="{Binding IsWitchaven1Selected}">Witchaven</RadioButton>
-                                <RadioButton GroupName="GameSelect" Margin="0,0,10,0" IsChecked="{Binding IsWitchaven2Selected}">Witchaven II</RadioButton>
-                                <RadioButton GroupName="GameSelect" Margin="0,0,10,0" IsChecked="{Binding IsStandaloneSelected}">Standalone</RadioButton>
+                                <RadioButton GroupName="GameSelect"
+                                             Content="Duke 3D"
+                                             IsChecked="{Binding SelectedGame, Converter={StaticResource GameStringToEnumConverter}, ConverterParameter=Duke3D}"/>
 
-                            </WrapPanel>
+                                <RadioButton GroupName="GameSelect"
+                                             Content="Blood"
+                                             IsChecked="{Binding SelectedGame, Mode=TwoWay, Converter={StaticResource GameStringToEnumConverter}, ConverterParameter=Blood}"/>
+
+                                <RadioButton GroupName="GameSelect"
+                                             Content="Shadow Warrior"
+                                             IsChecked="{Binding SelectedGame, Mode=TwoWay, Converter={StaticResource GameStringToEnumConverter}, ConverterParameter=ShadowWarrior}"/>
+
+                                <RadioButton GroupName="GameSelect"
+                                             Content="Ion Fury"
+                                             IsChecked="{Binding SelectedGame, Mode=TwoWay, Converter={StaticResource GameStringToEnumConverter}, ConverterParameter=Fury}"/>
+
+                                <RadioButton GroupName="GameSelect"
+                                             Content="Redneck Rampage"
+                                             IsChecked="{Binding SelectedGame, Mode=TwoWay, Converter={StaticResource GameStringToEnumConverter}, ConverterParameter=Redneck}"/>
+
+                                <RadioButton GroupName="GameSelect"
+                                             Content="Rised Again"
+                                             IsChecked="{Binding SelectedGame, Mode=TwoWay, Converter={StaticResource GameStringToEnumConverter}, ConverterParameter=RidesAgain}"/>
+
+                                <RadioButton GroupName="GameSelect"
+                                             Content="Powerslave"
+                                             IsChecked="{Binding SelectedGame, Mode=TwoWay, Converter={StaticResource GameStringToEnumConverter}, ConverterParameter=Exhumed}"/>
+
+                                <RadioButton GroupName="GameSelect"
+                                             Content="NAM"
+                                             IsChecked="{Binding SelectedGame, Mode=TwoWay, Converter={StaticResource GameStringToEnumConverter}, ConverterParameter=NAM}"/>
+
+                                <RadioButton GroupName="GameSelect"
+                                             Content="WWII GI"
+                                             IsChecked="{Binding SelectedGame, Mode=TwoWay, Converter={StaticResource GameStringToEnumConverter}, ConverterParameter=WW2GI}"/>
+
+                                <RadioButton GroupName="GameSelect"
+                                             Content="Witchaven"
+                                             IsChecked="{Binding SelectedGame, Mode=TwoWay, Converter={StaticResource GameStringToEnumConverter}, ConverterParameter=Witchaven}"/>
+
+                                <RadioButton GroupName="GameSelect"
+                                             Content="Witchaven II"
+                                             IsChecked="{Binding SelectedGame, Mode=TwoWay, Converter={StaticResource GameStringToEnumConverter}, ConverterParameter=Witchaven2}"/>
+
+                                <RadioButton GroupName="GameSelect"
+                                             Content="Standalone"
+                                             IsChecked="{Binding SelectedGame, Mode=TwoWay, Converter={StaticResource GameStringToEnumConverter}, ConverterParameter=Standalone}"/>
+
+                            </UniformGrid>
 
                         </Grid>
                     </StackPanel>
@@ -151,7 +183,7 @@
                     <StackPanel IsVisible="{Binding IsStep3Visible}" Orientation="Vertical">
 
                         <!--Duke version-->
-                        <Grid IsVisible="{Binding IsDukeSelected}">
+                        <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="auto" SharedSizeGroup="MySizeGroup" />
                                 <ColumnDefinition Width="*" />
@@ -159,18 +191,17 @@
 
                             <TextBlock Grid.Column="0"
                                        VerticalAlignment="Center"
-                                       Margin="5">
-                                Duke version:
-                            </TextBlock>
+                                       Margin="5"
+                                       Text="Duke version:"/>
 
                             <WrapPanel Orientation="Horizontal"
                                        Grid.Column="1"
                                        Margin="5">
 
-                                <RadioButton GroupName="DukeSelect" Margin="0,0,10,0" IsChecked="True">Any</RadioButton>
-                                <RadioButton GroupName="DukeSelect" Margin="0,0,10,0" IsChecked="{Binding IsDukeAtomicSelected}">Atomic</RadioButton>
-                                <RadioButton GroupName="DukeSelect" Margin="0,0,10,0" IsChecked="{Binding IsDuke13DSelected}">1.3D</RadioButton>
-                                <RadioButton GroupName="DukeSelect" Margin="0,0,10,0" IsChecked="{Binding IsDukeWTSelected}">World Tour</RadioButton>
+                                <RadioButton GroupName="DukeSelect" IsChecked="True">Any</RadioButton>
+                                <RadioButton GroupName="DukeSelect" IsChecked="{Binding IsDukeAtomicSelected}">Atomic</RadioButton>
+                                <RadioButton GroupName="DukeSelect" IsChecked="{Binding IsDuke13DSelected}">1.3D</RadioButton>
+                                <RadioButton GroupName="DukeSelect" IsChecked="{Binding IsDukeWTSelected}">World Tour</RadioButton>
 
                             </WrapPanel>
 
@@ -186,9 +217,8 @@
 
                             <TextBlock Grid.Column="0"
                                        VerticalAlignment="Center"
-                                       Margin="5">
-                                Game CRC:
-                            </TextBlock>
+                                       Margin="5"
+                                       Text="Game CRC:"/>
 
                             <TextBox Grid.Column="1" Margin="5" Text="{Binding GameCrc}"></TextBox>
 
@@ -206,9 +236,8 @@
                             <TextBlock Grid.Column="0"
                                        VerticalAlignment="Center"
                                        Margin="5"
-                                       FontWeight="Bold">
-                                Title:
-                            </TextBlock>
+                                       FontWeight="Bold"
+                                       Text="Title:"/>
 
                             <TextBox Text="{Binding AddonTitle}" Grid.Column="1" Margin="5"></TextBox>
 
@@ -243,9 +272,8 @@
                             <TextBlock Grid.Column="0"
                                        VerticalAlignment="Center"
                                        Margin="5"
-                                       FontWeight="Bold">
-                                Version:
-                            </TextBlock>
+                                       FontWeight="Bold"
+                                       Text="Version:"/>
 
                             <TextBox Grid.Column="1" Margin="5" Text="{Binding AddonVersion}"></TextBox>
 
@@ -354,7 +382,7 @@
                         </Grid>
 
                         <!--INI-->
-                        <Grid IsVisible="{Binding AreBloodPropertiesVisible}">
+                        <Grid IsVisible="{Binding AreBloodPropertiesAvailable}">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="auto" SharedSizeGroup="MySizeGroup" />
                                 <ColumnDefinition Width="*" />
@@ -371,7 +399,7 @@
                         </Grid>
 
                         <!--Main RFF-->
-                        <Grid IsVisible="{Binding AreBloodPropertiesVisible}">
+                        <Grid IsVisible="{Binding AreBloodPropertiesAvailable}">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="auto" SharedSizeGroup="MySizeGroup" />
                                 <ColumnDefinition Width="*" />
@@ -388,7 +416,7 @@
                         </Grid>
 
                         <!--Sound RFF-->
-                        <Grid IsVisible="{Binding AreBloodPropertiesVisible}">
+                        <Grid IsVisible="{Binding AreBloodPropertiesAvailable}">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="auto" SharedSizeGroup="MySizeGroup" />
                                 <ColumnDefinition Width="*" />
@@ -419,11 +447,10 @@
 
                             <TextBlock Grid.Column="0"
                                        VerticalAlignment="Center"
-                                       Margin="5">
-                                Start map:
-                            </TextBlock>
+                                       Margin="5"
+                                       Text="Start map:"/>
 
-                            <RadioButton IsChecked="{Binding IsFileMapTypeSelected}" Grid.Column="1" GroupName="MapType" Margin="0,0,10,0">File</RadioButton>
+                            <RadioButton IsChecked="{Binding IsFileMapTypeSelected}" Grid.Column="1" GroupName="MapType" Margin="5,0,10,0">File</RadioButton>
                             <RadioButton IsChecked="{Binding IsElMapTypeSelected}" Grid.Column="3" GroupName="MapType" Margin="0,0,15,0">E#L#</RadioButton>
 
                             <TextBox VerticalContentAlignment="Center" Text="{Binding MapFileName}" IsVisible="{Binding IsFileMapTypeSelected}" MinWidth="100" Grid.Column="2" Margin="0,0,10,0"></TextBox>
@@ -521,25 +548,24 @@
 
                             <TextBlock Grid.Column="0"
                                        VerticalAlignment="Center"
-                                       Margin="5">
-                                Features:
-                            </TextBlock>
+                                       Margin="5"
+                                       Text="Features:"/>
 
-                            <WrapPanel Orientation="Horizontal"
-                                       Grid.Column="1"
-                                       Margin="5">
+                            <UniformGrid Columns="3"
+                                         Grid.Column="1"
+                                         Margin="5">
 
-                                <CheckBox Margin="0,0,10,0" IsChecked="{Binding IsEdukeConsSelected}" IsVisible="{Binding AreDukePropertiesAvailable}">EDuke32 CONs</CheckBox>
-                                <CheckBox Margin="0,0,10,0" IsChecked="{Binding IsModernTypesSelected}" IsVisible="{Binding IsBloodSelected}">ModernTypes</CheckBox>
-                                <CheckBox Margin="0,0,10,0" IsChecked="{Binding IsModelsSelected}">Models</CheckBox>
-                                <CheckBox Margin="0,0,10,0" IsChecked="{Binding IsHightileSelected}">Hightile</CheckBox>
-                                <CheckBox Margin="0,0,10,0" IsChecked="{Binding IsSlopedSelected}">Sloped sprites</CheckBox>
-                                <CheckBox Margin="0,0,10,0" IsChecked="{Binding IsTrorSelected}">TROR</CheckBox>
-                                <CheckBox Margin="0,0,10,0" IsChecked="{Binding IsCstatSelected}">Wall rotate cstat</CheckBox>
-                                <CheckBox Margin="0,0,10,0" IsChecked="{Binding IsLightingSelected}">Dynamic lighting</CheckBox>
-                                <CheckBox Margin="0,0,10,0" IsChecked="{Binding IsSndInfoSelected}">SndInfo support</CheckBox>
+                                <CheckBox IsChecked="{Binding IsEdukeConsSelected}" IsVisible="{Binding AreDukePropertiesAvailable}">EDuke32 CONs</CheckBox>
+                                <CheckBox IsChecked="{Binding IsModernTypesSelected}" IsVisible="{Binding AreBloodPropertiesAvailable}">ModernTypes</CheckBox>
+                                <CheckBox IsChecked="{Binding IsModelsSelected}">Models</CheckBox>
+                                <CheckBox IsChecked="{Binding IsHightileSelected}">Hightile</CheckBox>
+                                <CheckBox IsChecked="{Binding IsSlopedSelected}">Sloped sprites</CheckBox>
+                                <CheckBox IsChecked="{Binding IsTrorSelected}">TROR</CheckBox>
+                                <CheckBox IsChecked="{Binding IsCstatSelected}">Wall rotate cstat</CheckBox>
+                                <CheckBox IsChecked="{Binding IsLightingSelected}">Dynamic lighting</CheckBox>
+                                <CheckBox IsChecked="{Binding IsSndInfoSelected}" IsVisible="{Binding AreBloodPropertiesAvailable}">SndInfo support</CheckBox>
 
-                            </WrapPanel>
+                            </UniformGrid>
 
                         </Grid>
 
@@ -712,14 +738,6 @@
                                 Submit addon
                             </Button>
 
-                            <Button Command="{Binding AddAddonCommand}"
-                                    Margin="5" Padding="10"
-                                    MinWidth="150"
-                                    IsVisible="{Binding IsDeveloperMode}"
-                                    >
-                                Add addon to the database...
-                            </Button>
-
                         </StackPanel>
 
                         <TextBlock TextWrapping="Wrap"
@@ -728,26 +746,29 @@
                                    VerticalAlignment="Center"
                                    Margin="5"
                                    Text="{Binding ErrorText}"
-                                   Foreground="{Binding ErrorTextColor}"
-                                   />
+                                   Foreground="{Binding ErrorTextColor}"/>
 
                     </StackPanel>
 
                     <ProgressBar IsVisible="{Binding IsInProgress}"
                                  Height="20"
-                                 Value="{Binding ProgressBarValue}"
-                                 />
+                                 Value="{Binding ProgressBarValue}"/>
 
                 </StackPanel>
 
             </Grid>
 
+            <Button Command="{Binding AddAddonCommand}"
+                    Margin="5,10,5,10" Padding="10"
+                    MinWidth="150"
+                    IsVisible="{Binding IsDeveloperMode}"
+                    Content="Add addon to the database..."/>
+
             <TextBlock Text="{Binding JsonText}"
                        Margin="5"
                        TextWrapping="Wrap"
                        HorizontalAlignment="Left"
-                       MaxWidth="500"
-                       />
+                       MaxWidth="500"/>
 
         </WrapPanel>
 
