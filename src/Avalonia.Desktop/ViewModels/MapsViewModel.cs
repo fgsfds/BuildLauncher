@@ -1,5 +1,6 @@
 using Addons.Providers;
 using Avalonia.Controls.Notifications;
+using Avalonia.Desktop.Misc;
 using Common.Client.Interfaces;
 using Common.Client.Providers;
 using Common.Enums;
@@ -154,11 +155,8 @@ public sealed partial class MapsViewModel : RightPanelViewModel, IPortsButtonCon
         }
         catch (Exception ex)
         {
-            var length = App.Random.Next(1, 100);
-            var repeatedString = new string('\u200B', length);
-
-            App.NotificationManager.Show(
-                "Critical error! Exception is written to the log." + repeatedString,
+            NotificationsHelper.Show(
+                "Critical error! Exception is written to the log.",
                 NotificationType.Error
                 );
 

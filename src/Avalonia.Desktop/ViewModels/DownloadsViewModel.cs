@@ -1,5 +1,6 @@
 using Addons.Providers;
 using Avalonia.Controls.Notifications;
+using Avalonia.Desktop.Misc;
 using Avalonia.Threading;
 using Common.Entities;
 using Common.Enums;
@@ -184,11 +185,8 @@ public sealed partial class DownloadsViewModel : ObservableObject
 
             if (!result)
             {
-                var length = App.Random.Next(1, 100);
-                var repeatedString = new string('\u200B', length);
-
-                App.NotificationManager.Show(
-                    $"Error while getting downloadable addons for{Environment.NewLine}{Game.FullName}" + repeatedString,
+                NotificationsHelper.Show(
+                    $"Error while getting downloadable addons for{Environment.NewLine}{Game.FullName}",
                     NotificationType.Error
                     );
             }
@@ -257,11 +255,8 @@ public sealed partial class DownloadsViewModel : ObservableObject
         }
         catch (Exception ex)
         {
-            var length = App.Random.Next(1, 100);
-            var repeatedString = new string('\u200B', length);
-
-            App.NotificationManager.Show(
-                "Critical error! Exception is written to the log." + repeatedString,
+            NotificationsHelper.Show(
+                "Critical error! Exception is written to the log.",
                 NotificationType.Error
                 );
 

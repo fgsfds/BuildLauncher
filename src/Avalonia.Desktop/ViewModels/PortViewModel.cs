@@ -1,4 +1,5 @@
 using Avalonia.Controls.Notifications;
+using Avalonia.Desktop.Misc;
 using Common.Entities;
 using Common.Enums;
 using Common.Helpers;
@@ -248,11 +249,8 @@ public sealed partial class PortViewModel : ObservableObject
         }
         catch (Exception ex)
         {
-            var length = App.Random.Next(1, 100);
-            var repeatedString = new string('\u200B', length);
-
-            App.NotificationManager.Show(
-                "Critical error! Exception is written to the log." + repeatedString,
+            NotificationsHelper.Show(
+                "Critical error! Exception is written to the log.",
                 NotificationType.Error
                 );
 
@@ -285,11 +283,8 @@ public sealed partial class PortViewModel : ObservableObject
         }
         catch (Exception ex)
         {
-            var length = App.Random.Next(1, 100);
-            var repeatedString = new string('\u200B', length);
-
-            App.NotificationManager.Show(
-                "Critical error! Exception is written to the log." + repeatedString,
+            NotificationsHelper.Show(
+                "Critical error! Exception is written to the log.",
                 NotificationType.Error
                 );
 

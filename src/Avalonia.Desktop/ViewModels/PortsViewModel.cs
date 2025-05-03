@@ -1,5 +1,6 @@
 using Avalonia.Controls.Notifications;
 using Avalonia.Desktop.Helpers;
+using Avalonia.Desktop.Misc;
 using Avalonia.Platform.Storage;
 using Common.Enums;
 using CommunityToolkit.Diagnostics;
@@ -93,11 +94,8 @@ public sealed partial class PortsViewModel : ObservableObject
         }
         catch (Exception ex)
         {
-            var length = App.Random.Next(1, 100);
-            var repeatedString = new string('\u200B', length);
-
-            App.NotificationManager.Show(
-                "Critical error! Exception is written to the log." + repeatedString,
+            NotificationsHelper.Show(
+                "Critical error! Exception is written to the log.",
                 NotificationType.Error
                 );
 
@@ -125,11 +123,8 @@ public sealed partial class PortsViewModel : ObservableObject
         }
         catch (Exception ex)
         {
-            var length = App.Random.Next(1, 100);
-            var repeatedString = new string('\u200B', length);
-
-            App.NotificationManager.Show(
-                "Critical error! Exception is written to the log." + repeatedString,
+            NotificationsHelper.Show(
+                "Critical error! Exception is written to the log.",
                 NotificationType.Error
                 );
 
@@ -152,11 +147,8 @@ public sealed partial class PortsViewModel : ObservableObject
         }
         catch (Exception ex)
         {
-            var length = App.Random.Next(1, 100);
-            var repeatedString = new string('\u200B', length);
-
-            App.NotificationManager.Show(
-                "Critical error! Exception is written to the log." + repeatedString,
+            NotificationsHelper.Show(
+                "Critical error! Exception is written to the log.",
                 NotificationType.Error
                 );
 
@@ -213,11 +205,8 @@ public sealed partial class PortsViewModel : ObservableObject
         }
         catch (Exception ex)
         {
-            var length = App.Random.Next(1, 100);
-            var repeatedString = new string('\u200B', length);
-
-            App.NotificationManager.Show(
-                "Critical error! Exception is written to the log." + repeatedString,
+            NotificationsHelper.Show(
+                "Critical error! Exception is written to the log.",
                 NotificationType.Error
                 );
 
@@ -261,11 +250,8 @@ public sealed partial class PortsViewModel : ObservableObject
         }
         catch (Exception ex)
         {
-            var length = App.Random.Next(1, 100);
-            var repeatedString = new string('\u200B', length);
-
-            App.NotificationManager.Show(
-                "Critical error! Exception is written to the log." + repeatedString,
+            NotificationsHelper.Show(
+                "Critical error! Exception is written to the log.",
                 NotificationType.Error
                 );
 

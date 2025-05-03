@@ -1,8 +1,6 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
-using Avalonia.Controls.Notifications;
 using Avalonia.Desktop.DI;
-using Avalonia.Desktop.Helpers;
 using Avalonia.Desktop.Misc;
 using Avalonia.Desktop.ViewModels;
 using Avalonia.Markup.Xaml;
@@ -19,9 +17,6 @@ namespace Avalonia.Desktop;
 
 public sealed class App : Application
 {
-    public static WindowNotificationManager NotificationManager { get; private set; } = null!;
-    public static Random Random { get; private set; } = null!;
-
     private static App _app = null!;
 
     public override void Initialize()
@@ -54,8 +49,6 @@ public sealed class App : Application
 
         lifetime.MainWindow = new MainWindow();
         lifetime.MainWindow.DataContext = vmFactory.GetMainWindowViewModel();
-
-        InitializeStatics();
 
         if (ClientProperties.IsDeveloperMode)
         {
@@ -92,18 +85,6 @@ public sealed class App : Application
         }
 
         return code;
-    }
-
-    private static void InitializeStatics()
-    {
-        Random = new();
-
-        NotificationManager = new(AvaloniaProperties.TopLevel)
-        {
-            MaxItems = 3,
-            Position = NotificationPosition.TopRight,
-            Margin = new(0, 50, 10, 0)
-        };
     }
 
     /// <summary>
