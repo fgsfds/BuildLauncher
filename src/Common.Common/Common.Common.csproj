@@ -14,6 +14,7 @@
     <PackageReference Include="Roslynator.Analyzers" PrivateAssets="all" />
     <PackageReference Include="SharpCompress" />
     <PackageReference Include="CommunityToolkit.Mvvm" />
+    <PackageReference Include="System.IO.Hashing" />
   </ItemGroup>
 
 </Project>

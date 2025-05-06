@@ -24,26 +24,26 @@
                         Theme
                     </TextBlock>
 
-                    <RadioButton GroupName="theme"
+                    <RadioButton Content="System"
+                                 GroupName="theme"
                                  Margin="5"
-                                 Command="{Binding SetDefaultThemeCommand}"
-                                 IsChecked="{Binding IsDefaultTheme}">
-                        System
-                    </RadioButton>
+                                 Command="{Binding SetThemeCommand}"
+                                 CommandParameter="System"
+                                 IsChecked="{Binding IsDefaultTheme}"/>
 
-                    <RadioButton GroupName="theme"
+                    <RadioButton Content="Light"
+                                 GroupName="theme"
                                  Margin="5"
-                                 Command="{Binding SetLightThemeCommand}"
-                                 IsChecked="{Binding IsLightTheme}">
-                        Light
-                    </RadioButton>
+                                 Command="{Binding SetThemeCommand}"
+                                 CommandParameter="Light"
+                                 IsChecked="{Binding IsLightTheme}"/>
 
-                    <RadioButton GroupName="theme"
+                    <RadioButton Content="Dark"
+                                 GroupName="theme"
                                  Margin="5"
-                                 Command="{Binding SetDarkThemeCommand}"
-                                 IsChecked="{Binding IsDarkTheme}">
-                        Dark
-                    </RadioButton>
+                                 Command="{Binding SetThemeCommand}"
+                                 CommandParameter="Dark"
+                                 IsChecked="{Binding IsDarkTheme}"/>
 
                 </StackPanel>
 

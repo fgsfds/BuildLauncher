@@ -401,41 +401,11 @@ public sealed partial class DevViewModel : ObservableObject
             return;
         }
 
-        var source = File.ReadAllBytes(files[0].Path.LocalPath);
-
-        var crc_table = new uint[256];
-        uint crc;
-
-        for (uint i = 0; i < 256; i++)
-        {
-            crc = i;
-
-            for (uint j = 0; j < 8; j++)
-            {
-                crc = (crc & 1) != 0 ? (crc >> 1) ^ 0xEDB88320 : crc >> 1;
-            }
-
-            crc_table[i] = crc;
-        }
-
-        crc = 0xFFFFFFFF;
-
-        foreach (var s in source)
-        {
-            crc = crc_table[(crc ^ s) & 0xFF] ^ (crc >> 8);
-        }
-
-        crc ^= 0xFFFFFFFF;
-
-        GameCrc = "0x" + crc.ToString("X");
+        GameCrc = Crc32Helper.GetCrc32(files[0].Path.LocalPath.ToString(), true);
     }
-
 
     [RelayCommand]
-    private async Task CreateZipAsync()
-    {
-        _ = await CreateZipInternalAsync().ConfigureAwait(false);
-    }
+    private Task<string?> CreateZipAsync() => CreateZipInternalAsync();
 
 
     [RelayCommand]

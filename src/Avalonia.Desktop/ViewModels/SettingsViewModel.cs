@@ -3,6 +3,7 @@ using Avalonia.Platform.Storage;
 using Avalonia.Styling;
 using Common.Client.Enums;
 using Common.Client.Interfaces;
+using Common.Common.Helpers;
 using Common.Enums;
 using Common.Enums.Versions;
 using CommunityToolkit.Diagnostics;
@@ -129,7 +130,7 @@ public sealed partial class SettingsViewModel : ObservableObject
         set
         {
             _config.SkipIntro = value;
-            OnPropertyChanged(nameof(SkipIntroCheckbox));
+            OnPropertyChanged();
         }
     }
 
@@ -142,7 +143,7 @@ public sealed partial class SettingsViewModel : ObservableObject
         set
         {
             _config.SkipStartup = value;
-            OnPropertyChanged(nameof(SkipStartupCheckbox));
+            OnPropertyChanged();
         }
     }
 
@@ -152,32 +153,24 @@ public sealed partial class SettingsViewModel : ObservableObject
     #region Relay Commands
 
     [RelayCommand]
-    private void SetDefaultTheme()
+    private void SetTheme(object? param)
     {
         Guard.IsNotNull(Application.Current);
 
-        Application.Current.RequestedThemeVariant = ThemeVariant.Default;
-        _config.Theme = ThemeEnum.System;
-    }
+        if (!EnumHelper.TryParse<ThemeEnum>(param, out var themeEnum))
+        {
+            ThrowHelper.ThrowInvalidOperationException();
+        }
 
+        Application.Current.RequestedThemeVariant = themeEnum.Value switch
+        {
+            ThemeEnum.System => ThemeVariant.Default,
+            ThemeEnum.Light => ThemeVariant.Light,
+            ThemeEnum.Dark => ThemeVariant.Dark,
+            _ => ThrowHelper.ThrowArgumentOutOfRangeException<ThemeVariant>(),
+        };
 
-    [RelayCommand]
-    private void SetLightTheme()
-    {
-        Guard.IsNotNull(Application.Current);
-
-        Application.Current.RequestedThemeVariant = ThemeVariant.Light;
-        _config.Theme = ThemeEnum.Light;
-    }
-
-
-    [RelayCommand]
-    private void SetDarkTheme()
-    {
-        Guard.IsNotNull(Application.Current);
-
-        Application.Current.RequestedThemeVariant = ThemeVariant.Dark;
-        _config.Theme = ThemeEnum.Dark;
+        _config.Theme = themeEnum.Value;
     }
 
 
@@ -281,7 +274,7 @@ public sealed partial class SettingsViewModel : ObservableObject
 
 
     /// <summary>
-    /// Replace path to game with autp detected one
+    /// Replace path to game with auto detected one
     /// </summary>
     [RelayCommand]
     private void Autodetect(string param)

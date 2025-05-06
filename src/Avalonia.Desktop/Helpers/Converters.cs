@@ -1,6 +1,7 @@
 ﻿using Avalonia.Data;
 using Avalonia.Data.Converters;
 using Avalonia.Media.Imaging;
+using Common.Common.Helpers;
 using Common.Enums;
 using Common.Helpers;
 using System.Globalization;
@@ -41,12 +42,7 @@ public sealed class GameStringToEnumConverter : IValueConverter
             return false;
         }
 
-        if (parameter is not string paramStr)
-        {
-            throw new NotImplementedException();
-        }
-
-        if (!Enum.TryParse<GameEnum>(paramStr, out var gameEnum))
+        if (!EnumHelper.TryParse<GameEnum>(parameter, out var gameEnum))
         {
             throw new NotImplementedException();
         }
@@ -61,17 +57,12 @@ public sealed class GameStringToEnumConverter : IValueConverter
             return AvaloniaProperty.UnsetValue;
         }
 
-        if (parameter is not string paramStr)
-        {
-            throw new NotImplementedException();
-        }
-
         if (!valueBool)
         {
             return AvaloniaProperty.UnsetValue;
         }
 
-        if (!Enum.TryParse<GameEnum>(paramStr, out var gameEnum))
+        if (!EnumHelper.TryParse<GameEnum>(parameter, out var gameEnum))
         {
             throw new NotImplementedException();
         }

@@ -12,11 +12,6 @@ public sealed class ConfigProvider : IConfigProvider
 
     public event ParameterChanged? ParameterChangedEvent;
 
-    public ConfigProvider(DatabaseContextFactory dbContextFactory)
-    {
-        _dbContext = dbContextFactory.Get();
-    }
-
 
     //SETTINGS
     public ThemeEnum Theme
@@ -27,19 +22,19 @@ public sealed class ConfigProvider : IConfigProvider
 
     public bool SkipIntro
     {
-        get => bool.TryParse(_dbContext.Settings.Find(nameof(SkipIntro))?.Value, out var result) && result;
+        get => GetBoolValue(nameof(SkipIntro));
         set => SetSettingsValue(value.ToString());
     }
 
     public bool SkipStartup
     {
-        get => bool.TryParse(_dbContext.Settings.Find(nameof(SkipStartup))?.Value, out var result) && result;
+        get => GetBoolValue(nameof(SkipStartup));
         set => SetSettingsValue(value.ToString());
     }
 
     public bool UseLocalApi
     {
-        get => bool.TryParse(_dbContext.Settings.Find(nameof(UseLocalApi))?.Value, out var result) && result;
+        get => GetBoolValue(nameof(UseLocalApi));
         set => SetSettingsValue(value.ToString());
     }
 
@@ -49,10 +44,103 @@ public sealed class ConfigProvider : IConfigProvider
         set => SetSettingsValue(value);
     }
 
-    public Dictionary<string, byte> Rating
+    //GAME PATHS
+    public string? PathDuke3D
     {
-        get => _dbContext.Rating.ToDictionary(x => x.AddonId, x => x.Rating);
+        get => GetGamePath(nameof(PathDuke3D));
+        set => SetGamePathValue(value);
     }
+
+    public string? PathDukeWT
+    {
+        get => GetGamePath(nameof(PathDukeWT));
+        set => SetGamePathValue(value);
+    }
+
+    public string? PathDuke64
+    {
+        get => GetGamePath(nameof(PathDuke64));
+        set => SetGamePathValue(value);
+    }
+
+    public string? PathWang
+    {
+        get => GetGamePath(nameof(PathWang));
+        set => SetGamePathValue(value);
+    }
+
+    public string? PathBlood
+    {
+        get => GetGamePath(nameof(PathBlood));
+        set => SetGamePathValue(value);
+    }
+
+    public string? PathRedneck
+    {
+        get => GetGamePath(nameof(PathRedneck));
+        set => SetGamePathValue(value);
+    }
+
+    public string? PathRidesAgain
+    {
+        get => GetGamePath(nameof(PathRidesAgain));
+        set => SetGamePathValue(value);
+    }
+
+    public string? PathSlave
+    {
+        get => GetGamePath(nameof(PathSlave));
+        set => SetGamePathValue(value);
+    }
+
+    public string? PathFury
+    {
+        get => GetGamePath(nameof(PathFury));
+        set => SetGamePathValue(value);
+    }
+
+    public string? PathNam
+    {
+        get => GetGamePath(nameof(PathNam));
+        set => SetGamePathValue(value);
+    }
+
+    public string? PathWW2GI
+    {
+        get => GetGamePath(nameof(PathWW2GI));
+        set => SetGamePathValue(value);
+    }
+
+    public string? PathWitchaven
+    {
+        get => GetGamePath(nameof(PathWitchaven));
+        set => SetGamePathValue(value);
+    }
+
+    public string? PathWitchaven2
+    {
+        get => GetGamePath(nameof(PathWitchaven2));
+        set => SetGamePathValue(value);
+    }
+
+    public string? PathTekWar
+    {
+        get => GetGamePath(nameof(PathTekWar));
+        set => SetGamePathValue(value);
+    }
+
+    public Dictionary<string, byte> Rating => _dbContext.Rating.ToDictionary(x => x.AddonId, x => x.Rating);
+
+    public Dictionary<string, TimeSpan> Playtimes => _dbContext.Playtimes.ToDictionary(x => x.AddonId, x => x.Playtime);
+
+    public HashSet<string> DisabledAutoloadMods => [.. _dbContext.DisabledAddons.Select(x => x.AddonId)];
+
+
+    public ConfigProvider(DatabaseContextFactory dbContextFactory)
+    {
+        _dbContext = dbContextFactory.Get();
+    }
+
 
     public void AddScore(string addonId, byte rating)
     {
@@ -71,11 +159,6 @@ public sealed class ConfigProvider : IConfigProvider
         ParameterChangedEvent?.Invoke(nameof(Rating));
     }
 
-    public Dictionary<string, TimeSpan> Playtimes
-    {
-        get => _dbContext.Playtimes.ToDictionary(x => x.AddonId, x => x.Playtime);
-    }
-
     public void AddPlaytime(string addonId, TimeSpan playTime)
     {
         var existing = _dbContext.Playtimes.Find([addonId]);
@@ -91,11 +174,6 @@ public sealed class ConfigProvider : IConfigProvider
 
         _ = _dbContext.SaveChanges();
         ParameterChangedEvent?.Invoke(nameof(Playtimes));
-    }
-
-    public HashSet<string> DisabledAutoloadMods
-    {
-        get => [.. _dbContext.DisabledAddons.Select(x => x.AddonId)];
     }
 
     public void ChangeModState(AddonVersion addonId, bool isEnabled)
@@ -130,92 +208,9 @@ public sealed class ConfigProvider : IConfigProvider
     }
 
 
-    //GAME PATHS
-    public string? PathDuke3D
-    {
-        get => _dbContext.GamePaths.Find(nameof(PathDuke3D))?.Path?.TrimEnd(Path.DirectorySeparatorChar);
-        set => SetGamePathValue(value);
-    }
+    private string? GetGamePath(string propertyName) => _dbContext.GamePaths.Find(propertyName)?.Path?.TrimEnd(Path.DirectorySeparatorChar);
 
-    public string? PathDukeWT
-    {
-        get => _dbContext.GamePaths.Find(nameof(PathDukeWT))?.Path?.TrimEnd(Path.DirectorySeparatorChar);
-        set => SetGamePathValue(value);
-    }
-
-    public string? PathDuke64
-    {
-        get => _dbContext.GamePaths.Find(nameof(PathDuke64))?.Path?.TrimEnd(Path.DirectorySeparatorChar);
-        set => SetGamePathValue(value);
-    }
-
-    public string? PathWang
-    {
-        get => _dbContext.GamePaths.Find(nameof(PathWang))?.Path?.TrimEnd(Path.DirectorySeparatorChar);
-        set => SetGamePathValue(value);
-    }
-
-    public string? PathBlood
-    {
-        get => _dbContext.GamePaths.Find(nameof(PathBlood))?.Path?.TrimEnd(Path.DirectorySeparatorChar);
-        set => SetGamePathValue(value);
-    }
-
-    public string? PathRedneck
-    {
-        get => _dbContext.GamePaths.Find(nameof(PathRedneck))?.Path?.TrimEnd(Path.DirectorySeparatorChar);
-        set => SetGamePathValue(value);
-    }
-
-    public string? PathRidesAgain
-    {
-        get => _dbContext.GamePaths.Find(nameof(PathRidesAgain))?.Path?.TrimEnd(Path.DirectorySeparatorChar);
-        set => SetGamePathValue(value);
-    }
-
-    public string? PathSlave
-    {
-        get => _dbContext.GamePaths.Find(nameof(PathSlave))?.Path?.TrimEnd(Path.DirectorySeparatorChar);
-        set => SetGamePathValue(value);
-    }
-
-    public string? PathFury
-    {
-        get => _dbContext.GamePaths.Find(nameof(PathFury))?.Path?.TrimEnd(Path.DirectorySeparatorChar);
-        set => SetGamePathValue(value);
-    }
-
-    public string? PathNam
-    {
-        get => _dbContext.GamePaths.Find(nameof(PathNam))?.Path?.TrimEnd(Path.DirectorySeparatorChar);
-        set => SetGamePathValue(value);
-    }
-
-    public string? PathWW2GI
-    {
-        get => _dbContext.GamePaths.Find(nameof(PathWW2GI))?.Path?.TrimEnd(Path.DirectorySeparatorChar);
-        set => SetGamePathValue(value);
-    }
-
-    public string? PathWitchaven
-    {
-        get => _dbContext.GamePaths.Find(nameof(PathWitchaven))?.Path?.TrimEnd(Path.DirectorySeparatorChar);
-        set => SetGamePathValue(value);
-    }
-
-    public string? PathWitchaven2
-    {
-        get => _dbContext.GamePaths.Find(nameof(PathWitchaven2))?.Path?.TrimEnd(Path.DirectorySeparatorChar);
-        set => SetGamePathValue(value);
-    }
-
-    public string? PathTekWar
-    {
-        get => _dbContext.GamePaths.Find(nameof(PathTekWar))?.Path?.TrimEnd(Path.DirectorySeparatorChar);
-        set => SetGamePathValue(value);
-    }
-
-
+    private bool GetBoolValue(string propertyName) => bool.TryParse(_dbContext.Settings.Find(propertyName)?.Value, out var result) && result;
 
     private void SetSettingsValue(string value, [CallerMemberName] string caller = "")
     {
