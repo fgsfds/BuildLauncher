@@ -49,96 +49,120 @@
 
             <ListBox.Styles>
 
-                <Style Selector="ListBoxItem /template/ ContentPresenter#PART_ContentPresenter">
-                    <Setter Property="RenderTransform" Value="scale(1,1)"/>
-                    <Setter Property="Transitions">
-                        <Setter.Value>
-                            <Transitions>
-                                <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.1"/>
-                            </Transitions>
-                        </Setter.Value>
-                    </Setter>
-                </Style>
+                <Style Selector="ListBoxItem">
+                    <Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter">
+                        <Setter Property="Background" Value=""/>
+                        <Setter Property="RenderTransform" Value="scale(0.92)"/>
+                        <Setter Property="Transitions">
+                            <Setter.Value>
+                                <Transitions>
+                                    <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.1"/>
+                                </Transitions>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
 
-                <Style Selector="ListBoxItem:pointerover /template/ ContentPresenter#PART_ContentPresenter">
-                    <Setter Property="Background" Value=""/>
-                    <Setter Property="RenderTransform" Value="scale(1.05)"/>
-                </Style>
+                    <Style Selector="^ Image#HightlightOverlay">
+                        <Setter Property="Opacity" Value="0.00"/>
+                        <Setter Property="Transitions">
+                            <Setter.Value>
+                                <Transitions>
+                                    <DoubleTransition Property="Opacity" Duration="0:0:0.5"/>
+                                </Transitions>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
 
-                <Style Selector="ListBoxItem:selected /template/ ContentPresenter#PART_ContentPresenter">
-                    <Setter Property="Background" Value=""/>
-                    <Setter Property="RenderTransform" Value="scale(1.1)"/>
-                </Style>
+                    <Style Selector="^:pointerover">
+                        <Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter">
+                            <Setter Property="Background" Value=""/>
+                            <Setter Property="RenderTransform" Value="scale(0.96)"/>
+                        </Style>
 
+                        <Style Selector="^ Image#HightlightOverlay">
+                            <Setter Property="Opacity" Value="0.2"/>
+                        </Style>
+                    </Style>
+
+                    <Style Selector="^:selected">
+                        <Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter">
+                            <Setter Property="Background" Value=""/>
+                            <Setter Property="RenderTransform" Value="scale(1.0)"/>
+                        </Style>
+
+                        <Style Selector="^ Image#HightlightOverlay">
+                            <Setter Property="Opacity" Value="0.25"/>
+                        </Style>
+                    </Style>
+
+                </Style>
             </ListBox.Styles>
+
 
             <ListBox.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <ctrl:AnimatedWrapPanel Orientation="Horizontal"/>
+                    <ctrl:AnimatedWrapPanel Orientation="Horizontal" ItemSpacing="3" LineSpacing="0"/>
                 </ItemsPanelTemplate>
             </ListBox.ItemsPanel>
 
             <ListBox.ItemTemplate>
                 <DataTemplate>
 
-                    <Grid RowDefinitions="215" ColumnDefinitions="150" VerticalAlignment="Bottom">
+                    <Grid Width="140" Height="210">
 
-                        <Grid.Styles>
+                        <Grid IsVisible="{Binding GridImage, Converter={x:Static ObjectConverters.IsNotNull}}>">
 
-                        </Grid.Styles>
+                                <Image Source="{Binding GridImage, Converter={StaticResource ImagePathToBitmapConverter}}"
+                                       VerticalAlignment="Center"
+                                       HorizontalAlignment="Center"/>
 
+                                <TextBlock Text="{Binding Title}"
+                                           Padding="5"
+                                           Background="{Binding Path=Background, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}"
+                                           HorizontalAlignment="Stretch"
+                                           Opacity="0.6"
+                                           TextAlignment="Center"
+                                           VerticalAlignment="Bottom"
+                                           TextWrapping="Wrap"/>
 
-                        <Border Background="Black"
-                                Margin="10"
-                                IsVisible="{Binding GridImage, Converter={x:Static ObjectConverters.IsNull}}"/>
+                                <TextBlock Text="{Binding Title}"
+                                           Padding="5"
+                                           HorizontalAlignment="Stretch"
+                                           TextAlignment="Center"
+                                           VerticalAlignment="Bottom"
+                                           TextWrapping="WrapWithOverflow"/>
+                            </Grid>
 
-                        <Image Source="{Binding GridImage, Converter={StaticResource ImagePathToBitmapConverter}}"
-                               Margin="10"
-                               VerticalAlignment="Center"
-                               HorizontalAlignment="Center"
-                               IsVisible="{Binding GridImage, Converter={x:Static ObjectConverters.IsNotNull}}"/>
+                            <Grid IsVisible="{Binding GridImage, Converter={x:Static ObjectConverters.IsNull}}">
 
-                        <Viewbox Margin="20"
-                                 IsVisible="{Binding GridImage, Converter={x:Static ObjectConverters.IsNull}}">
-                            <TextBlock Foreground="{DynamicResource SystemAccentColor}"
-                                       FontSize="500"
-                                       FontWeight="Bold"
-                                       TextAlignment="Center"
-                                       Text="{Binding TitleWithNewLines}"/>
-                        </Viewbox >
+                                <Border Background="Black"/>
 
-                        <TextBlock Text="{Binding Title}"
-                                   Margin="10"
-                                   Padding="5"
-                                   Background="{Binding Path=Background, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}"
-                                   HorizontalAlignment="Stretch"
-                                   Opacity="0.6"
-                                   TextAlignment="Center"
-                                   VerticalAlignment="Bottom"
-                                   TextWrapping="Wrap"
-                                   IsVisible="{Binding GridImage, Converter={x:Static ObjectConverters.IsNotNull}}"/>
+                                <Viewbox>
+                                    <TextBlock Foreground="{DynamicResource SystemAccentColor}"
+                                               Margin="20"
+                                               FontSize="500"
+                                               FontWeight="Bold"
+                                               TextAlignment="Center"
+                                               Text="{Binding TitleWithNewLines}"/>
+                                </Viewbox >
+                            </Grid>
 
-                        <TextBlock Text="{Binding Title}"
-                                   Margin="10"
-                                   Padding="5"
-                                   HorizontalAlignment="Stretch"
-                                   TextAlignment="Center"
-                                   VerticalAlignment="Bottom"
-                                   TextWrapping="Wrap"
-                                   IsVisible="{Binding GridImage, Converter={x:Static ObjectConverters.IsNotNull}}"/>
+                            <Image x:Name="HightlightOverlay"
+                                   Source="avares://BuildLauncher/Assets/overlay.png"
+                                   VerticalAlignment="Center"
+                                   HorizontalAlignment="Center"/>
 
-                    </Grid>
+                        </Grid>
 
-                </DataTemplate>
-            </ListBox.ItemTemplate>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
 
-        </ListBox>
+            </ListBox>
 
-        <ctrl:PortsButtonsControl Name="BottomPanel" Grid.Row="2" Grid.Column="0"/>
+            <ctrl:PortsButtonsControl Name="BottomPanel" Grid.Row="2" Grid.Column="0"/>
 
-        <ctrl:RightPanelControl Name="RightPanel" Grid.Row="1" Grid.Column="1"/>
+            <ctrl:RightPanelControl Name="RightPanel" Grid.Row="1" Grid.Column="1"/>
 
+        </Grid>
 
-    </Grid>
-
-</UserControl>
+    </UserControl>

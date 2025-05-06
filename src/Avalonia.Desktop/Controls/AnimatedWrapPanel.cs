@@ -53,6 +53,11 @@ public sealed class AnimatedWrapPanel : WrapPanel
 
         foreach (var child in Children)
         {
+            if (!EnableAnimations)
+            {
+                continue;
+            }
+
             if (!child.IsEffectivelyVisible)
             {
                 continue;
@@ -60,29 +65,19 @@ public sealed class AnimatedWrapPanel : WrapPanel
 
             var currentPosition = child.Bounds;
 
-            if (_previousBounds.TryGetValue(child, out var previousPosition))
+            if (!_previousBounds.TryGetValue(child, out var previousPosition))
+            {
+                _previousBounds[child] = currentPosition;
+            }
+            else
             {
                 var xDelta = previousPosition.X - currentPosition.X;
                 var yDelta = previousPosition.Y - currentPosition.Y;
 
-                if (EnableAnimations && (Math.Abs(xDelta) > 0.5 || Math.Abs(yDelta) > 0.5))
+                if (Math.Abs(xDelta) > 0.5 || Math.Abs(yDelta) > 0.5)
                 {
-                    if (child.RenderTransform is not TranslateTransform transform)
-                    {
-                        transform = new TranslateTransform();
-                        child.RenderTransform = transform;
-                        child.RenderTransformOrigin = RelativePoint.TopLeft;
-                    }
-
-                    transform.X = xDelta;
-                    transform.Y = yDelta;
-
                     _ = Animate(child, xDelta, yDelta);
                 }
-            }
-            else
-            {
-                _previousBounds[child] = currentPosition;
             }
         }
 
@@ -91,6 +86,17 @@ public sealed class AnimatedWrapPanel : WrapPanel
 
     private async Task Animate(Control controlToAnimate, double fromX, double fromY)
     {
+        if (controlToAnimate.RenderTransform is not TranslateTransform transform)
+        {
+            transform = new TranslateTransform();
+            controlToAnimate.RenderTransform = transform;
+            controlToAnimate.RenderTransformOrigin = RelativePoint.TopLeft;
+        }
+
+        transform.X = fromX;
+        transform.Y = fromY;
+
+
         if (_runningAnimationsCtss.TryGetValue(controlToAnimate, out var existingAnimation))
         {
             existingAnimation.Cancel();
