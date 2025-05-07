@@ -891,9 +891,11 @@ public sealed partial class DevViewModel : ObservableObject
                     foreach (var path in files)
                     {
                         var fileInfo = new FileInfo(path);
+                        using FileStream? fileStream = fileInfo.OpenRead();
+
                         _ = archive.AddEntry(
                             path[PathToAddonFolder.Length..],
-                            fileInfo.OpenRead(),
+                            fileStream,
                             true,
                             fileInfo.Length,
                             fileInfo.LastWriteTime

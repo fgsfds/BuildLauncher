@@ -98,7 +98,7 @@ public sealed class AppUpdateInstaller
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
         {
             //starting new version of the app
-            _ = System.Diagnostics.Process.Start(oldExe);
+            using var process = System.Diagnostics.Process.Start(oldExe);
         }
         else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
         {

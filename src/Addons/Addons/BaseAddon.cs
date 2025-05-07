@@ -10,6 +10,8 @@ namespace Addons.Addons;
 /// </summary>
 public abstract class BaseAddon : IAddon
 {
+    private bool _disposed;
+
     /// <inheritdoc/>
     public required AddonTypeEnum Type { get; init; }
 
@@ -115,5 +117,13 @@ public abstract class BaseAddon : IAddon
         }
 
         return description.ToString();
+    }
+
+    public virtual void Dispose()
+    {
+        ObjectDisposedException.ThrowIf(_disposed, this);
+
+        _disposed = true;
+        GC.SuppressFinalize(this);
     }
 }

@@ -13,7 +13,7 @@ public sealed partial class AboutPage : UserControl
 
     private void DiscordClick(object sender, RoutedEventArgs e)
     {
-        _ = Process.Start(new ProcessStartInfo
+        using var process = Process.Start(new ProcessStartInfo
         {
             FileName = "https://discord.gg/mWvKyxR4et",
             UseShellExecute = true
@@ -22,7 +22,7 @@ public sealed partial class AboutPage : UserControl
 
     private void GitHubClick(object sender, RoutedEventArgs e)
     {
-        _ = Process.Start(new ProcessStartInfo
+        using var process = Process.Start(new ProcessStartInfo
         {
             FileName = "https://github.com/fgsfds/BuildLauncher",
             UseShellExecute = true
@@ -31,7 +31,7 @@ public sealed partial class AboutPage : UserControl
 
     private void GitHubIssuesClick(object sender, RoutedEventArgs e)
     {
-        _ = Process.Start(new ProcessStartInfo
+        using var process = Process.Start(new ProcessStartInfo
         {
             FileName = "https://github.com/fgsfds/BuildLauncher/issues/new",
             UseShellExecute = true
@@ -40,7 +40,7 @@ public sealed partial class AboutPage : UserControl
 
     private void ShowChangelogClick(object sender, RoutedEventArgs e)
     {
-        _ = Process.Start(new ProcessStartInfo
+        using var process = Process.Start(new ProcessStartInfo
         {
             FileName = "https://github.com/fgsfds/BuildLauncher/releases",
             UseShellExecute = true

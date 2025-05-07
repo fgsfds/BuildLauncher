@@ -50,7 +50,7 @@ public sealed class FileCheckTask : IHostedService, IDisposable
                     continue;
                 }
 
-                var result = _httpClient.GetAsync(file.DownloadUrl, HttpCompletionOption.ResponseHeadersRead).Result;
+                using var result = _httpClient.GetAsync(file.DownloadUrl, HttpCompletionOption.ResponseHeadersRead).Result;
 
                 if (!result.IsSuccessStatusCode)
                 {

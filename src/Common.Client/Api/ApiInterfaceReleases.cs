@@ -23,7 +23,7 @@ public sealed partial class ApiInterface
             using HttpRequestMessage requestMessage = new(HttpMethod.Get, $"{ApiUrl}/releases/app");
             requestMessage.Content = JsonContent.Create(message);
 
-            var response = await _httpClient.SendAsync(requestMessage).ConfigureAwait(false);
+            using var response = await _httpClient.SendAsync(requestMessage).ConfigureAwait(false);
 
             if (response?.IsSuccessStatusCode is not true)
             {
@@ -58,7 +58,7 @@ public sealed partial class ApiInterface
             using HttpRequestMessage requestMessage = new(HttpMethod.Get, $"{ApiUrl}/releases/ports");
             requestMessage.Content = JsonContent.Create(message);
 
-            var response = await _httpClient.SendAsync(requestMessage).ConfigureAwait(false);
+            using var response = await _httpClient.SendAsync(requestMessage).ConfigureAwait(false);
 
             if (response?.IsSuccessStatusCode is not true)
             {

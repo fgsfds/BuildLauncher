@@ -6,6 +6,7 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Avalonia.Desktop.Controls.RightPanelControl"
              xmlns:vm="clr-namespace:Avalonia.Desktop.ViewModels"
+             xmlns:c="clr-namespace:Avalonia.Desktop.Controls"
              xmlns:helpers="clr-namespace:Avalonia.Desktop.Helpers"
              x:DataType="vm:RightPanelViewModel">
 
@@ -19,9 +20,9 @@
 
             <StackPanel Orientation="Vertical">
 
-                <Image Height="200"
-                       IsVisible="{Binding IsPreviewVisible}"
-                       Source="{Binding SelectedAddonPreview, Converter={StaticResource ImagePathToBitmapConverter}}"/>
+                <c:AutoDisposableImage Height="200"
+                                       IsVisible="{Binding IsPreviewVisible}"
+                                       Source="{Binding SelectedAddonPreview, Converter={StaticResource ImagePathToBitmapConverter}}"/>
 
                 <md:MarkdownScrollViewer Margin="10,5"
                                          Name="Description"

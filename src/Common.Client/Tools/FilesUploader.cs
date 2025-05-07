@@ -50,8 +50,10 @@ public sealed class FilesUploader
             return null;
         }
 
+        await using var stream = addonJson.OpenEntryStream();
+
         var manifest = JsonSerializer.Deserialize(
-            addonJson.OpenEntryStream(),
+            stream,
             AddonManifestContext.Default.AddonDto
             );
 
@@ -92,7 +94,7 @@ public sealed class FilesUploader
 
         var downloadUrl = $"{Consts.FilesRepo}/{gameName}/{folderName}/{Path.GetFileName(pathToFile)}";
 
-        var response = await _httpClient.GetAsync(downloadUrl, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false);
+        using var response = await _httpClient.GetAsync(downloadUrl, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false);
 
         if (!response.IsSuccessStatusCode)
         {

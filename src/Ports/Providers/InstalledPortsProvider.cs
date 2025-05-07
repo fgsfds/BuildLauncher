@@ -164,7 +164,7 @@ public sealed class InstalledPortsProvider
     {
         _customPorts.Clear();
 
-        var dbContent = _databaseContextFactory.Get();
+        using DatabaseContext? dbContent = _databaseContextFactory.Get();
 
         foreach (var port in dbContent.CustomPorts.OrderBy(static x => x.Name))
         {

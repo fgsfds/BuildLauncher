@@ -179,7 +179,7 @@ public sealed partial class CampaignsViewModel : RightPanelViewModel, IPortsButt
     [RelayCommand]
     private void OpenFolder()
     {
-        _ = Process.Start(new ProcessStartInfo
+        using var process = Process.Start(new ProcessStartInfo
         {
             FileName = Game.CampaignsFolderPath,
             UseShellExecute = true,

@@ -105,8 +105,16 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
         await _semaphore.WaitAsync().ConfigureAwait(false);
         _isCacheUpdating = true;
 
-        if (createNew)
+        if (createNew && _cache.Count > 0)
         {
+            foreach (var a in _cache.Values)
+            {
+                foreach (var b in  a.Values)
+                {
+                    b.Dispose();
+                }
+            }
+
             _cache.Clear();
         }
 
@@ -250,9 +258,6 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
         Guard.IsNotNull(_cache);
         Guard.IsNotNull(addon.PathToFile);
 
-        addon.GridImage?.Dispose();
-        addon.PreviewImage?.Dispose();
-
         if (addon.IsFolder)
         {
             Directory.Delete(Path.GetDirectoryName(addon.PathToFile)!, true);
@@ -275,6 +280,8 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
         _ = _cache[addon.Type].Remove(new(addon.Id, addon.Version));
 
         AddonsChangedEvent?.Invoke(_game, addon.Type);
+
+        addon.Dispose();
     }
 
     /// <inheritdoc/>

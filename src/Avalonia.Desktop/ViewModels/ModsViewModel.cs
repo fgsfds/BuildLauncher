@@ -105,7 +105,7 @@ public sealed partial class ModsViewModel : RightPanelViewModel, IPortsButtonCon
     [RelayCommand]
     private void OpenFolder()
     {
-        _ = Process.Start(new ProcessStartInfo
+        using var process = Process.Start(new ProcessStartInfo
         {
             FileName = Game.ModsFolderPath,
             UseShellExecute = true,

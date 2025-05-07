@@ -304,7 +304,7 @@ public sealed partial class PortViewModel : ObservableObject
     [RelayCommand]
     private void OpenFolder()
     {
-        _ = Process.Start(new ProcessStartInfo
+        using var process = Process.Start(new ProcessStartInfo
         {
             FileName = Port.PortInstallFolderPath,
             UseShellExecute = true,

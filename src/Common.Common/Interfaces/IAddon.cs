@@ -2,7 +2,7 @@
 
 namespace Common.Interfaces;
 
-public interface IAddon
+public interface IAddon : IDisposable
 {
     /// <summary>
     /// Addon ID

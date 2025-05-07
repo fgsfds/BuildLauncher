@@ -171,7 +171,7 @@ public sealed partial class MapsViewModel : RightPanelViewModel, IPortsButtonCon
     [RelayCommand]
     private void OpenFolder()
     {
-        _ = Process.Start(new ProcessStartInfo
+        using var process = Process.Start(new ProcessStartInfo
         {
             FileName = Game.MapsFolderPath,
             UseShellExecute = true,

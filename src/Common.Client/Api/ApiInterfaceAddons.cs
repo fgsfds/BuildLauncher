@@ -38,7 +38,7 @@ public sealed partial class ApiInterface : IApiInterface
             using HttpRequestMessage requestMessage = new(HttpMethod.Get, $"{ApiUrl}/addons");
             requestMessage.Content = JsonContent.Create(message);
 
-            var response = await _httpClient.SendAsync(requestMessage).ConfigureAwait(false);
+            using HttpResponseMessage? response = await _httpClient.SendAsync(requestMessage).ConfigureAwait(false);
 
             if (response?.IsSuccessStatusCode is not true)
             {
@@ -72,7 +72,7 @@ public sealed partial class ApiInterface : IApiInterface
             using HttpRequestMessage requestMessage = new(HttpMethod.Get, $"{ApiUrl}/addons/ratings");
             requestMessage.Content = JsonContent.Create(message);
 
-            var response = await _httpClient.SendAsync(requestMessage).ConfigureAwait(false);
+            using var response = await _httpClient.SendAsync(requestMessage).ConfigureAwait(false);
 
             if (response?.IsSuccessStatusCode is not true)
             {
@@ -120,7 +120,7 @@ public sealed partial class ApiInterface : IApiInterface
     {
         try
         {
-            var response = await _httpClient.PutAsJsonAsync($"{ApiUrl}/addons/installs/add", addonId).ConfigureAwait(false);
+            using var response = await _httpClient.PutAsJsonAsync($"{ApiUrl}/addons/installs/add", addonId).ConfigureAwait(false);
 
             return response.IsSuccessStatusCode;
         }
@@ -136,7 +136,7 @@ public sealed partial class ApiInterface : IApiInterface
         {
             var apiPassword = _config.ApiPassword;
 
-            var response = await _httpClient.PostAsJsonAsync($"{ApiUrl}/addons/add", new Tuple<DownloadableAddonEntity, string>(addon, apiPassword)).ConfigureAwait(false);
+            using var response = await _httpClient.PostAsJsonAsync($"{ApiUrl}/addons/add", new Tuple<DownloadableAddonEntity, string>(addon, apiPassword)).ConfigureAwait(false);
 
             return response.IsSuccessStatusCode;
         }
