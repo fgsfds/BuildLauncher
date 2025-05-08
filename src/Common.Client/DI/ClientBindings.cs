@@ -16,38 +16,44 @@ public static class ClientBindings
 {
     public static void Load(ServiceCollection container, bool isDesigner)
     {
+        _ = container.AddTransient<ArchiveTools>();
+
         _ = container.AddSingleton<AppUpdateInstaller>();
         _ = container.AddSingleton<PlaytimeProvider>();
         _ = container.AddSingleton<IApiInterface, GitHubApiInterface>();
         _ = container.AddSingleton<RatingProvider>();
         _ = container.AddSingleton<HttpClient>(CreateHttpClient);
-        _ = container.AddTransient<ArchiveTools>();
         _ = container.AddSingleton<FilesUploader>();
-
         _ = container.AddSingleton<RepoAppReleasesRetriever>();
 
         if (isDesigner)
         {
-            using var factory = LoggerFactory.Create(builder => builder.AddDebug());
-            var logger = factory.CreateLogger("Debug logger");
-
-            _ = container.AddSingleton<ILogger>(logger);
             _ = container.AddSingleton<IConfigProvider, ConfigProviderFake>();
+
+            _ = container
+                .AddLogging(x => x
+                    .ClearProviders()
+                    .AddDebug()
+                    );
         }
         else
         {
-            _ = container.AddSingleton<ILogger>(CreateLogger);
             _ = container.AddSingleton<IConfigProvider, ConfigProvider>();
             _ = container.AddSingleton<DatabaseContextFactory>();
+
+            _ = container
+                .AddLogging(x => x
+                    .ClearProviders()
+                    .AddFile(Path.Combine(ClientProperties.WorkingFolder, "BuildLauncher.log"))
+                    .AddDebug()
+                    );
         }
-    }
 
-    private static ILogger CreateLogger(IServiceProvider service)
-    {
-        var logFilePath = Path.Combine(ClientProperties.WorkingFolder, "BuildLauncher.log");
-        var logger = FileLoggerFactory.Create(logFilePath);
-
-        return logger;
+        _ = container.AddSingleton<ILogger>(sp =>
+        {
+            var factory = sp.GetRequiredService<ILoggerFactory>();
+            return factory.CreateLogger("Default");
+        });
     }
 
     private static HttpClient CreateHttpClient(IServiceProvider service)

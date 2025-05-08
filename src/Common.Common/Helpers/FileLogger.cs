@@ -1,100 +1,75 @@
-﻿using Microsoft.Extensions.Logging;
-using System.Text;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 namespace Common.Helpers;
 
 public sealed class FileLogger : ILogger
 {
-    private readonly FileStream _logFileWriter;
+    private readonly string _path;
 
-    public FileLogger(FileStream logFileWriter)
+    public FileLogger(string path)
     {
-        _logFileWriter = logFileWriter;
+        _path = path;
+
+        try
+        {
+            File.WriteAllText(_path, string.Empty);
+        }
+        catch
+        {
+            // nothing to do
+        }
     }
 
-    public IDisposable? BeginScope<TState>(TState state) where TState : notnull => null;
+    public IDisposable? BeginScope<TState>(TState state) => null;
 
-    public bool IsEnabled(LogLevel logLevel) => true;
+    public bool IsEnabled(LogLevel level) => true;
 
     public void Log<TState>(
-        LogLevel logLevel,
+        LogLevel level,
         EventId eventId,
         TState state,
         Exception? exception,
         Func<TState, Exception?, string> formatter)
     {
-        if (!IsEnabled(logLevel))
+        if (!IsEnabled(level))
         {
             return;
         }
 
         try
         {
-            var message = formatter(state, exception);
-            var line = $"[{logLevel}] {message}{Environment.NewLine}";
+            var msg = formatter(state, exception);
+            var line = $"[{DateTime.Now:dd.MM.yy HH:mm:ss}] {msg}{Environment.NewLine}";
 
-            _logFileWriter.Write(Encoding.ASCII.GetBytes(line));
+            File.AppendAllText(_path, line);
 
             if (exception is not null)
             {
-                _logFileWriter.Write(Encoding.ASCII.GetBytes(exception + Environment.NewLine));
+                File.AppendAllText(_path, exception + Environment.NewLine);
             }
-            _logFileWriter.Flush();
+
         }
         catch
         {
-            //nothing to do
+            // nothing to do
         }
     }
 }
 
 public sealed class FileLoggerProvider : ILoggerProvider
 {
-    private readonly FileStream _logFileWriter;
-
-    public FileLoggerProvider(FileStream logFileWriter)
-    {
-        _logFileWriter = logFileWriter;
-    }
-
-    public ILogger CreateLogger(string categoryName)
-    {
-        return new FileLogger(_logFileWriter);
-    }
-
-    public void Dispose()
-    {
-        _logFileWriter.Dispose();
-    }
+    private readonly string _path;
+    public FileLoggerProvider(string path) => _path = path;
+    public ILogger CreateLogger(string categoryName) => new FileLogger(_path);
+    public void Dispose() { }
 }
 
-public static class FileLoggerFactory
+public static class FileLoggerExtensions
 {
-    private static FileStream? _logFileWriter;
-
-    public static ILogger Create(string logFilePath)
+    public static ILoggingBuilder AddFile(this ILoggingBuilder builder, string path)
     {
-        try
-        {
-            _logFileWriter = File.Open(logFilePath, FileMode.Create, FileAccess.ReadWrite, FileShare.Read);
-        }
-        catch
-        {
-            //nothing to do
-        }
-
-        using var loggerFactory = LoggerFactory.Create(builder =>
-        {
-            if (_logFileWriter is not null)
-            {
-                _ = builder.AddProvider(new FileLoggerProvider(_logFileWriter));
-            }
-
-            _ = builder.AddDebug();
-        });
-
-        var logger = loggerFactory.CreateLogger(string.Empty);
-
-        return logger;
+        _ = builder.Services.AddSingleton<ILoggerProvider>(_ => new FileLoggerProvider(path));
+        return builder;
     }
 }
