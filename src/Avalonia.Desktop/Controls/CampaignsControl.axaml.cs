@@ -56,7 +56,7 @@ public sealed partial class CampaignsControl : UserControl
     /// </summary>
     private void AddPortsButtons()
     {
-        ImagePathToBitmapConverter converter = new();
+        StreamToBitmapConverter converter = new();
 
         if (_viewModel.Game.GameEnum is GameEnum.Standalone)
         {

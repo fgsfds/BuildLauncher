@@ -11,7 +11,7 @@ namespace Avalonia.Desktop.Helpers;
 /// <summary>
 /// Converts Stream to Bitmap
 /// </summary>
-public sealed class ImagePathToBitmapConverter : IValueConverter
+public sealed class StreamToBitmapConverter : IValueConverter
 {
     public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
@@ -24,12 +24,13 @@ public sealed class ImagePathToBitmapConverter : IValueConverter
 
         stream.Position = 0;
 
-        return new Bitmap(stream);
+        return Bitmap.DecodeToHeight(stream, 210, BitmapInterpolationMode.HighQuality);
+
     }
 
     public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
-        return new BindingNotification(new NotImplementedException($"ConvertBack method for {nameof(ImagePathToBitmapConverter)} is not implemented."));
+        return new BindingNotification(new NotImplementedException($"ConvertBack method for {nameof(StreamToBitmapConverter)} is not implemented."));
     }
 }
 

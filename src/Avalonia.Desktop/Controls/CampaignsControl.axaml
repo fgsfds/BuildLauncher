@@ -11,7 +11,7 @@
              x:Class="Avalonia.Desktop.Controls.CampaignsControl">
 
     <UserControl.Resources>
-        <helpers:ImagePathToBitmapConverter x:Key="ImagePathToBitmapConverter"/>
+        <helpers:StreamToBitmapConverter x:Key="StreamToBitmapConverter"/>
     </UserControl.Resources>
 
 
@@ -112,7 +112,7 @@
 
                         <Grid IsVisible="{Binding GridImage, Converter={x:Static ObjectConverters.IsNotNull}}>">
 
-                                <ctrl:AutoDisposableImage Source="{Binding GridImage, Converter={StaticResource ImagePathToBitmapConverter}}"
+                                <ctrl:AutoDisposableImage Source="{Binding GridImage, Converter={StaticResource StreamToBitmapConverter}}"
                                                           VerticalAlignment="Center"
                                                           HorizontalAlignment="Center"/>
 

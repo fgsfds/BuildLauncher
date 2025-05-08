@@ -10,12 +10,12 @@
              x:DataType="vm:PortViewModel">
 
     <UserControl.Resources>
-        <helpers:ImagePathToBitmapConverter x:Key="ImagePathToBitmapConverter"/>
+        <helpers:StreamToBitmapConverter x:Key="StreamToBitmapConverter"/>
     </UserControl.Resources>
 
     <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
 
-        <Image Source="{Binding Icon, Converter={StaticResource ImagePathToBitmapConverter}}"
+        <Image Source="{Binding Icon, Converter={StaticResource StreamToBitmapConverter}}"
                Width="64"
                Margin="0,0,0,5"
                HorizontalAlignment="Center"/>

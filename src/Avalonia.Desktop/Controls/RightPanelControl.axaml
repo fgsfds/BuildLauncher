@@ -11,7 +11,7 @@
              x:DataType="vm:RightPanelViewModel">
 
     <UserControl.Resources>
-        <helpers:ImagePathToBitmapConverter x:Key="ImagePathToBitmapConverter"/>
+        <helpers:StreamToBitmapConverter x:Key="StreamToBitmapConverter"/>
     </UserControl.Resources>
 
     <Grid RowDefinitions="*,auto,auto,auto,auto">
@@ -22,7 +22,7 @@
 
                 <c:AutoDisposableImage Height="200"
                                        IsVisible="{Binding IsPreviewVisible}"
-                                       Source="{Binding SelectedAddonPreview, Converter={StaticResource ImagePathToBitmapConverter}}"/>
+                                       Source="{Binding SelectedAddonPreview, Converter={StaticResource StreamToBitmapConverter}}"/>
 
                 <md:MarkdownScrollViewer Margin="10,5"
                                          Name="Description"

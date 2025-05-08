@@ -68,7 +68,7 @@ public sealed partial class MapsControl : UserControl
     /// </summary>
     private void AddPortsButtons()
     {
-        ImagePathToBitmapConverter converter = new();
+        StreamToBitmapConverter converter = new();
 
         foreach (var port in _supportedPorts)
         {

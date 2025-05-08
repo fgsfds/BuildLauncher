@@ -11,10 +11,6 @@
              x:DataType="vm:DownloadsViewModel"
              x:Class="Avalonia.Desktop.Controls.DownloadsControl">
 
-    <UserControl.Resources>
-        <helpers:ImagePathToBitmapConverter x:Key="ImagePathToBitmapConverter"/>
-    </UserControl.Resources>
-
     <Grid RowDefinitions="auto,*,auto,auto" ColumnDefinitions="2*,*">
 
         <Grid ColumnDefinitions="auto,*,auto"
