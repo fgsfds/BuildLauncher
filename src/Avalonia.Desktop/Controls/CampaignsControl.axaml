@@ -108,7 +108,8 @@
             <ListBox.ItemTemplate>
                 <DataTemplate>
 
-                    <Grid Width="140" Height="210">
+                    <Grid Width="{x:Static helpers:DesktopConsts.GridImageWidth}"
+                          Height="{x:Static helpers:DesktopConsts.GridImageHeight}">
 
                         <Grid IsVisible="{Binding GridImage, Converter={x:Static ObjectConverters.IsNotNull}}>">
 

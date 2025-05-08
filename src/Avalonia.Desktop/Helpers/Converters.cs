@@ -24,7 +24,7 @@ public sealed class StreamToBitmapConverter : IValueConverter
 
         stream.Position = 0;
 
-        return Bitmap.DecodeToHeight(stream, 210, BitmapInterpolationMode.HighQuality);
+        return Bitmap.DecodeToHeight(stream, (int)DesktopConsts.GridImageHeight, BitmapInterpolationMode.HighQuality);
 
     }
 
