@@ -1,3 +1,4 @@
+using Addons.Addons;
 using Addons.Providers;
 using Avalonia.Controls;
 using Avalonia.Desktop.Helpers;
@@ -22,6 +23,8 @@ public sealed partial class CampaignsControl : UserControl
     private readonly CampaignsViewModel _viewModel;
     private readonly InstalledPortsProvider _portsProvider;
     private readonly InstalledAddonsProvider _addonsProvider;
+
+    private IEnumerable<BaseAddon>? _oldItems;
 
     public CampaignsControl()
     {
@@ -49,6 +52,31 @@ public sealed partial class CampaignsControl : UserControl
         AddPortsButtons();
 
         _portsProvider.CustomPortChangedEvent += OnCustomPortChanged;
+        //CampaignsList.PropertyChanged += OnCampaignsListPropertyChanged;
+    }
+
+    [Obsolete("Not sure if required")]
+    private void OnCampaignsListPropertyChanged(object? sender, AvaloniaPropertyChangedEventArgs e)
+    {
+        if (e.Property.Name.Equals("ItemsSource"))
+        {
+            var newItems = CampaignsList.Items.OfType<BaseAddon>();
+
+            if (_oldItems is not null)
+            {
+                foreach (var item in _oldItems)
+                {
+                    var existingItem = newItems.FirstOrDefault(x => x.Id.Equals(item.Id) && (x.Version?.Equals(item.Version) ?? true));
+
+                    if (existingItem is null || item != existingItem)
+                    {
+                        item.Dispose();
+                    }
+                }
+            }
+
+            _oldItems = newItems;
+        }
     }
 
     /// <summary>

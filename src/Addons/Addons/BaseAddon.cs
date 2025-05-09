@@ -121,7 +121,13 @@ public abstract class BaseAddon : IAddon
 
     public virtual void Dispose()
     {
-        ObjectDisposedException.ThrowIf(_disposed, this);
+        if (_disposed)
+        {
+            return;
+        }
+
+        GridImage?.Dispose();
+        PreviewImage?.Dispose();
 
         _disposed = true;
         GC.SuppressFinalize(this);
