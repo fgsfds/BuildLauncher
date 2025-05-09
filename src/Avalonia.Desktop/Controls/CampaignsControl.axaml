@@ -14,7 +14,6 @@
         <helpers:StreamToBitmapConverter x:Key="StreamToBitmapConverter"/>
     </UserControl.Resources>
 
-
     <Grid RowDefinitions="auto,*,auto" ColumnDefinitions="2*,*">
 
         <Grid ColumnDefinitions="auto,*,auto"
@@ -48,7 +47,6 @@
                  DragDrop.Drop="OnCampaignsListDrop">
 
             <ListBox.Styles>
-
                 <Style Selector="ListBoxItem">
                     <Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter">
                         <Setter Property="Background" Value=""/>
@@ -62,7 +60,7 @@
                         </Setter>
                     </Style>
 
-                    <Style Selector="^ ctrl|AutoDisposableImage#HightlightOverlay">
+                    <Style Selector="^ Image#HightlightOverlay">
                         <Setter Property="Opacity" Value="0.00"/>
                         <Setter Property="Transitions">
                             <Setter.Value>
@@ -79,7 +77,7 @@
                             <Setter Property="RenderTransform" Value="scale(0.96)"/>
                         </Style>
 
-                        <Style Selector="^ ctrl|AutoDisposableImage#HightlightOverlay">
+                        <Style Selector="^ Image#HightlightOverlay">
                             <Setter Property="Opacity" Value="0.2"/>
                         </Style>
                     </Style>
@@ -90,7 +88,7 @@
                             <Setter Property="RenderTransform" Value="scale(1.0)"/>
                         </Style>
 
-                        <Style Selector="^ ctrl|AutoDisposableImage#HightlightOverlay">
+                        <Style Selector="^ Image#HightlightOverlay">
                             <Setter Property="Opacity" Value="0.25"/>
                         </Style>
                     </Style>
@@ -113,9 +111,9 @@
 
                         <Grid IsVisible="{Binding GridImage, Converter={x:Static ObjectConverters.IsNotNull}}>">
 
-                                <ctrl:AutoDisposableImage Source="{Binding GridImage, Converter={StaticResource StreamToBitmapConverter}}"
-                                                          VerticalAlignment="Center"
-                                                          HorizontalAlignment="Center"/>
+                                <Image Source="{Binding GridImage, Converter={StaticResource StreamToBitmapConverter}}"
+                                       VerticalAlignment="Center"
+                                       HorizontalAlignment="Center"/>
 
                                 <TextBlock Text="{Binding Title}"
                                            Padding="5"
@@ -148,10 +146,10 @@
                                 </Viewbox >
                             </Grid>
 
-                            <ctrl:AutoDisposableImage x:Name="HightlightOverlay"
-                                                      Source="avares://BuildLauncher/Assets/overlay.png"
-                                                      VerticalAlignment="Center"
-                                                      HorizontalAlignment="Center"/>
+                            <Image x:Name="HightlightOverlay"
+                                   Source="{StaticResource HighlightOverlayBitmap}"
+                                   VerticalAlignment="Center"
+                                   HorizontalAlignment="Center"/>
 
                         </Grid>
 

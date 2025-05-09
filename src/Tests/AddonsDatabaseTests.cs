@@ -51,7 +51,6 @@ public sealed class AddonsDatabaseTests
                 if (header.Content.Headers.ContentLength != size)
                 {
                     _ = sb.AppendLine($"File {url} size doesn't match. Expected {size} got {header.Content.Headers.ContentLength}");
-                    continue;
                 }
             }
         }
