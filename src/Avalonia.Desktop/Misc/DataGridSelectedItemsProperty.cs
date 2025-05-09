@@ -17,7 +17,7 @@ public sealed class DataGridSelectedItemsProperty
 
     static DataGridSelectedItemsProperty()
     {
-        using var process = SelectedItemsProperty.Changed.AddClassHandler<DataGrid>((grid, e) =>
+        var process = SelectedItemsProperty.Changed.AddClassHandler<DataGrid>((grid, e) =>
         {
             grid.SelectionChanged -= OnSelectionChanged;
 

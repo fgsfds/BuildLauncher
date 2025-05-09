@@ -28,7 +28,6 @@ public sealed class AppUpdateInstaller
     /// Check GitHub for releases with version higher than current
     /// </summary>
     /// <param name="currentVersion">Current SFD version</param>
-    /// <returns></returns>
     public async Task<bool?> CheckForUpdates(Version currentVersion)
     {
         var release = await _apiInterface.GetLatestAppReleaseAsync().ConfigureAwait(false);
@@ -51,9 +50,8 @@ public sealed class AppUpdateInstaller
     }
 
     /// <summary>
-    /// Download latest release from Github and create update lock file
+    /// Download latest release from GitHub and create update lock file
     /// </summary>
-    /// <returns></returns>
     public async Task DownloadAndUnpackLatestRelease()
     {
         Guard.IsNotNull(_update?.DownloadUrl);
@@ -98,7 +96,7 @@ public sealed class AppUpdateInstaller
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
         {
             //starting new version of the app
-            using var process = System.Diagnostics.Process.Start(oldExe);
+            _ = System.Diagnostics.Process.Start(oldExe);
         }
         else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
         {
