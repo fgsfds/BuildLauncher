@@ -44,7 +44,7 @@ public static class ClientBindings
             _ = container
                 .AddLogging(x => x
                     .ClearProviders()
-                    .AddFile(Path.Combine(ClientProperties.WorkingFolder, "BuildLauncher.log"))
+                    .AddFile(ClientProperties.PathToLogFile)
                     .AddDebug()
                     );
         }

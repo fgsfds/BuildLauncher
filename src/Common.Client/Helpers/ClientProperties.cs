@@ -94,4 +94,6 @@ public static class ClientProperties
             return null;
         }
     }
+
+    public static string PathToLogFile => Path.Combine(WorkingFolder, "BuildLauncher.log");
 }
