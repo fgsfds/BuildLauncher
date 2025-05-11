@@ -9,6 +9,7 @@ using Common.Helpers;
 using Database.Client;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using System.Net;
 
 namespace Common.Client.DI;
 
@@ -58,9 +59,27 @@ public static class ClientBindings
 
     private static HttpClient CreateHttpClient(IServiceProvider service)
     {
+        if (ClientProperties.IsOfflineMode)
+        {
+            return new HttpClient(new FakeHttpMessageHandler());
+        }
+
         HttpClient httpClient = new();
         httpClient.DefaultRequestHeaders.Add("User-Agent", "BuildLauncher");
         httpClient.Timeout = TimeSpan.FromSeconds(30);
         return httpClient;
+    }
+    public class FakeHttpMessageHandler : HttpMessageHandler
+    {
+        protected override Task<HttpResponseMessage> SendAsync(
+            HttpRequestMessage request, CancellationToken cancellationToken)
+        {
+            var response = new HttpResponseMessage(HttpStatusCode.OK)
+            {
+                Content = new StringContent("Fake response")
+            };
+
+            return Task.FromResult(response);
+        }
     }
 }

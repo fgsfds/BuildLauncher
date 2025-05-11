@@ -26,7 +26,7 @@ public sealed class RepoAppReleasesRetriever
     /// <summary>
     /// Return the latest new release or null if there's no newer releases
     /// </summary>
-    public async Task GetLatestVersionAsync()
+    public async Task GetLatestVersionAsync(bool includePreReleases)
     {
         try
         {
@@ -46,7 +46,15 @@ public sealed class RepoAppReleasesRetriever
                 JsonSerializer.Deserialize(releasesJson, GitHubReleaseEntityContext.Default.ListGitHubReleaseEntity)
                 ?? ThrowHelper.ThrowFormatException<List<GitHubReleaseEntity>>("Error while deserializing GitHub releases");
 
-            releases = [.. releases.Where(static x => !x.IsDraft && !x.IsPrerelease).OrderByDescending(static x => new Version(x.TagName))];
+            if (includePreReleases)
+            {
+                releases = [.. releases.OrderByDescending(static x => new Version(x.TagName))];
+            }
+            else
+            {
+                releases = [.. releases.Where(static x => !x.IsDraft && !x.IsPrerelease).OrderByDescending(static x => new Version(x.TagName))];
+            }
+
             var release = releases[0];
 
             var windowsAsset = release.Assets.FirstOrDefault(x => x.FileName.EndsWith("win-x64.zip"))!;
@@ -54,7 +62,7 @@ public sealed class RepoAppReleasesRetriever
 
             if (windowsAsset is not null)
             {
-                _logger.LogInformation($"Found Windows release for BuildLauncher: {release.TagName}");
+                _logger.LogInformation($"Found Windows release {release.TagName}");
 
                 GeneralReleaseEntity winRelease = new()
                 {
@@ -69,7 +77,7 @@ public sealed class RepoAppReleasesRetriever
 
             if (linuxAsset is not null)
             {
-                _logger.LogInformation($"Found Linux release for BuildLauncher: {release.TagName}");
+                _logger.LogInformation($"Found Linux release {release.TagName}");
 
                 GeneralReleaseEntity linRelease = new()
                 {

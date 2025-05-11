@@ -3,6 +3,7 @@ using Common.Client.Interfaces;
 using Common.Client.Tools;
 using Common.Entities;
 using CommunityToolkit.Diagnostics;
+using Microsoft.Extensions.Logging;
 using System.IO.Compression;
 using System.Runtime.InteropServices;
 
@@ -12,16 +13,19 @@ public sealed class AppUpdateInstaller
 {
     private readonly ArchiveTools _archiveTools;
     private readonly IApiInterface _apiInterface;
+    private readonly ILogger _logger;
 
     private GeneralReleaseEntity? _update;
 
     public AppUpdateInstaller(
         ArchiveTools archiveTools,
-        IApiInterface apiInterface
+        IApiInterface apiInterface,
+        ILogger logger
         )
     {
         _archiveTools = archiveTools;
         _apiInterface = apiInterface;
+        _logger = logger;
     }
 
     /// <summary>
@@ -41,9 +45,9 @@ public sealed class AppUpdateInstaller
             new Version(release.Version) > currentVersion)
         {
             _update = release;
-            return true;
+            _logger.LogInformation($"Found new version {_update.Version}");
 
-            //Logger.Info($"Found new version {_update!.Version}");
+            return true;
         }
 
         return false;

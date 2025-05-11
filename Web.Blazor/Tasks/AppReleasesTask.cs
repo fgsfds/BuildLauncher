@@ -27,7 +27,7 @@ public sealed class AppReleasesTask : IHostedService, IDisposable
 
     private void DoWork(object? state)
     {
-        _ = _appReleasesProvider.GetLatestVersionAsync();
+        _ = _appReleasesProvider.GetLatestVersionAsync(false);
     }
 
     public Task StopAsync(CancellationToken stoppingToken)

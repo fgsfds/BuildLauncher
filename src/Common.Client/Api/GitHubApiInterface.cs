@@ -104,7 +104,7 @@ public sealed class GitHubApiInterface : IApiInterface
             return null;
         }
 
-        await _appReleasesProvider.GetLatestVersionAsync().ConfigureAwait(false);
+        await _appReleasesProvider.GetLatestVersionAsync(ClientProperties.IsDeveloperMode).ConfigureAwait(false);
 
         var result = _appReleasesProvider.AppRelease[CommonProperties.OSEnum];
 
