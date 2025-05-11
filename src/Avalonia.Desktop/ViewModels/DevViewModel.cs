@@ -445,7 +445,7 @@ public sealed partial class DevViewModel : ObservableObject
 
             if (!response.IsSuccessStatusCode)
             {
-                var errorMessage = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+                var errorMessage = await response.Content.ReadAsStringAsync().ConfigureAwait(true);
                 SetErrorMessage(errorMessage, true);
                 return;
             }

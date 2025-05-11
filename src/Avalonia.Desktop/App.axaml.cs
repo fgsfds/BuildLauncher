@@ -31,7 +31,7 @@ public sealed class App : Application
 
         using ClassicDesktopStyleApplicationLifetime lifetime = new()
         {
-            ShutdownMode = ShutdownMode.OnMainWindowClose
+            ShutdownMode = ShutdownMode.OnMainWindowClose,
         };
 
         _ = builder.SetupWithLifetime(lifetime);

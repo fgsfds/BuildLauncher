@@ -56,7 +56,7 @@ public sealed partial class ModsViewModel : RightPanelViewModel, IPortsButtonCon
     private async Task UpdateAsync(bool createNew)
     {
         IsInProgress = true;
-        await _installedAddonsProvider.CreateCache(createNew).ConfigureAwait(true);
+        await _installedAddonsProvider.CreateCache(createNew, AddonTypeEnum.Mod).ConfigureAwait(true);
         IsInProgress = false;
     }
 
@@ -66,7 +66,7 @@ public sealed partial class ModsViewModel : RightPanelViewModel, IPortsButtonCon
     /// <summary>
     /// List of installed autoload mods
     /// </summary>
-    public ImmutableList<AutoloadMod> ModsList => [.. _installedAddonsProvider.GetInstalledMods().Select(x => (AutoloadMod)x.Value).OrderBy(static x => x.Title)];
+    public ImmutableList<AutoloadMod> ModsList => [.. _installedAddonsProvider.GetInstalledAddonsByType(AddonTypeEnum.Mod).Select(x => (AutoloadMod)x.Value).OrderBy(static x => x.Title)];
 
     private IAddon? _selectedAddon;
     /// <summary>
@@ -168,9 +168,9 @@ public sealed partial class ModsViewModel : RightPanelViewModel, IPortsButtonCon
         }
     }
 
-    private void OnAddonChanged(IGame game, AddonTypeEnum? addonType)
+    private void OnAddonChanged(IGame game, AddonTypeEnum addonType)
     {
-        if (game.GameEnum == Game.GameEnum && (addonType is AddonTypeEnum.Mod || addonType is null))
+        if (game.GameEnum == Game.GameEnum && (addonType is AddonTypeEnum.Mod))
         {
             OnPropertyChanged(nameof(ModsList));
         }

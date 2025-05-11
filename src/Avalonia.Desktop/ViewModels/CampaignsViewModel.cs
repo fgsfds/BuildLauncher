@@ -38,7 +38,7 @@ public sealed partial class CampaignsViewModel : RightPanelViewModel, IPortsButt
     {
         get
         {
-            var result = _installedAddonsProvider.GetInstalledCampaigns().Select(static x => x.Value);
+            var result = _installedAddonsProvider.GetInstalledAddonsByType(AddonTypeEnum.TC).Select(static x => x.Value);
 
             if (string.IsNullOrWhiteSpace(SearchBoxText))
             {
@@ -128,7 +128,7 @@ public sealed partial class CampaignsViewModel : RightPanelViewModel, IPortsButt
     private async Task UpdateAsync(bool createNew)
     {
         IsInProgress = true;
-        await _installedAddonsProvider.CreateCache(createNew).ConfigureAwait(true);
+        await _installedAddonsProvider.CreateCache(createNew, AddonTypeEnum.TC).ConfigureAwait(true);
         IsInProgress = false;
     }
 
@@ -191,10 +191,7 @@ public sealed partial class CampaignsViewModel : RightPanelViewModel, IPortsButt
     /// Refresh campaigns list
     /// </summary>
     [RelayCommand]
-    private async Task RefreshListAsync()
-    {
-        await UpdateAsync(true).ConfigureAwait(true);
-    }
+    private Task RefreshListAsync() => UpdateAsync(true);
 
 
     /// <summary>
@@ -227,9 +224,9 @@ public sealed partial class CampaignsViewModel : RightPanelViewModel, IPortsButt
         }
     }
 
-    private void OnAddonChanged(IGame game, AddonTypeEnum? addonType)
+    private void OnAddonChanged(IGame game, AddonTypeEnum addonType)
     {
-        if (game.GameEnum == Game.GameEnum && (addonType is AddonTypeEnum.TC || addonType is null))
+        if (game.GameEnum == Game.GameEnum && (addonType is AddonTypeEnum.TC))
         {
             OnPropertyChanged(nameof(CampaignsList));
         }

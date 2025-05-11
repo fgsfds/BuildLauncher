@@ -41,7 +41,7 @@ public sealed partial class MapsViewModel : RightPanelViewModel, IPortsButtonCon
     private async Task UpdateAsync(bool createNew)
     {
         IsInProgress = true;
-        await _installedAddonsProvider.CreateCache(createNew).ConfigureAwait(true);
+        await _installedAddonsProvider.CreateCache(createNew, AddonTypeEnum.Map).ConfigureAwait(true);
         IsInProgress = false;
     }
 
@@ -55,7 +55,7 @@ public sealed partial class MapsViewModel : RightPanelViewModel, IPortsButtonCon
     {
         get
         {
-            var result = _installedAddonsProvider.GetInstalledMaps().Select(static x => x.Value).OrderBy(static x => x.Title);
+            var result = _installedAddonsProvider.GetInstalledAddonsByType(AddonTypeEnum.Map).Select(static x => x.Value).OrderBy(static x => x.Title);
 
             if (string.IsNullOrWhiteSpace(SearchBoxText))
             {
@@ -219,9 +219,9 @@ public sealed partial class MapsViewModel : RightPanelViewModel, IPortsButtonCon
         }
     }
 
-    private void OnAddonChanged(IGame game, AddonTypeEnum? addonType)
+    private void OnAddonChanged(IGame game, AddonTypeEnum addonType)
     {
-        if (game.GameEnum == Game.GameEnum && (addonType is AddonTypeEnum.Map || addonType is null))
+        if (game.GameEnum == Game.GameEnum && (addonType is AddonTypeEnum.Map))
         {
             OnPropertyChanged(nameof(MapsList));
         }

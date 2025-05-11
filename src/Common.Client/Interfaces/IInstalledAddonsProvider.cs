@@ -24,28 +24,13 @@ public interface IInstalledAddonsProvider
     /// Get list od installed addons of a type
     /// </summary>
     /// <param name="addonType">Addon type</param>
-    Dictionary<AddonVersion, IAddon> GetInstalledAddonsByType(AddonTypeEnum addonType);
-
-    /// <summary>
-    /// Get installed campaigns
-    /// </summary>
-    Dictionary<AddonVersion, IAddon> GetInstalledCampaigns();
-
-    /// <summary>
-    /// Get installed maps
-    /// </summary>
-    Dictionary<AddonVersion, IAddon> GetInstalledMaps();
-
-    /// <summary>
-    /// Get installed mods
-    /// </summary>
-    Dictionary<AddonVersion, IAddon> GetInstalledMods();
+    IReadOnlyDictionary<AddonVersion, IAddon> GetInstalledAddonsByType(AddonTypeEnum addonType);
 
     /// <summary>
     /// Create cache of installed addons
     /// </summary>
     /// <param name="createNew">Clear current cache and create new</param>
-    Task CreateCache(bool createNew);
+    Task CreateCache(bool createNew, AddonTypeEnum addonType);
 
     /// <summary>
     /// Disable addon

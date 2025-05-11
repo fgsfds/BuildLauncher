@@ -220,7 +220,7 @@ public abstract class BasePort
     public string GetStartGameArgs(
         IGame game,
         IAddon addon,
-        Dictionary<AddonVersion, IAddon> mods,
+        IEnumerable<KeyValuePair<AddonVersion, IAddon>> mods,
         bool skipIntro,
         bool skipStartup,
         byte? skill = null
@@ -462,9 +462,9 @@ public abstract class BasePort
     /// <param name="game">Game</param>
     /// <param name="addon">Campaign\map</param>
     /// <param name="mods">Autoload mods</param>
-    protected virtual void GetAutoloadModsArgs(StringBuilder sb, IGame game, IAddon addon, Dictionary<AddonVersion, IAddon> mods)
+    protected virtual void GetAutoloadModsArgs(StringBuilder sb, IGame game, IAddon addon, IEnumerable<KeyValuePair<AddonVersion, IAddon>> mods)
     {
-        if (mods.Count == 0)
+        if (!mods.Any())
         {
             return;
         }

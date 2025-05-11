@@ -55,7 +55,7 @@ public sealed class StubPort : BasePort
     {
     }
 
-    protected override void GetAutoloadModsArgs(StringBuilder sb, IGame game, IAddon addon, Dictionary<AddonVersion, IAddon> mods)
+    protected override void GetAutoloadModsArgs(StringBuilder sb, IGame game, IAddon addon, IEnumerable<KeyValuePair<AddonVersion, IAddon>> mods)
     {
     }
 

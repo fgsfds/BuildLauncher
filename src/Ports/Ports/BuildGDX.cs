@@ -195,7 +195,7 @@ public sealed class BuildGDX : BasePort
     }
 
     /// <inheritdoc/>
-    protected override void GetAutoloadModsArgs(StringBuilder sb, IGame _, IAddon addon, Dictionary<AddonVersion, IAddon> mods) { }
+    protected override void GetAutoloadModsArgs(StringBuilder sb, IGame _, IAddon addon, IEnumerable<KeyValuePair<AddonVersion, IAddon>> mods) { }
 
     /// <inheritdoc/>
     protected override void GetSkipIntroParameter(StringBuilder sb) { }

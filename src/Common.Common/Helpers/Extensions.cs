@@ -92,4 +92,11 @@ public static class Extensions
             dict.Add(key, value);
         }
     }
+
+    public static void AddRange<TKey, TValue>(this Dictionary<TKey, TValue> target, IDictionary<TKey, TValue> source)
+    {
+        foreach (var kv in source)
+            target[kv.Key] = kv.Value; // Overwrites existing keys
+    }
+
 }

@@ -163,11 +163,8 @@ public sealed partial class DownloadsViewModel : ObservableObject
     /// </summary>
     public async Task InitializeAsync()
     {
-        await Task.Delay(2000).ConfigureAwait(false);
-
-        await Dispatcher.UIThread.InvokeAsync(
-            async () => await UpdateAsync(false).ConfigureAwait(false)
-            ).ConfigureAwait(false);
+        await Task.Delay(2000).ConfigureAwait(true);
+        await UpdateAsync(false).ConfigureAwait(true);
     }
 
 
@@ -301,7 +298,7 @@ public sealed partial class DownloadsViewModel : ObservableObject
         OnPropertyChanged(nameof(ProgressBarValue));
     }
 
-    private void OnAddonChanged(IGame game, AddonTypeEnum? addonType)
+    private void OnAddonChanged(IGame game, AddonTypeEnum addonType)
     {
         if (game.GameEnum != Game.GameEnum)
         {
