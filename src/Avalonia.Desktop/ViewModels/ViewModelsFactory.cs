@@ -1,4 +1,5 @@
 ﻿using Addons.Providers;
+using Avalonia.Desktop.Misc;
 using Common.Client;
 using Common.Client.Interfaces;
 using Common.Client.Providers;
@@ -29,6 +30,7 @@ public sealed class ViewModelsFactory
     private readonly FilesUploader _filesUploader;
     private readonly AppUpdateInstaller _appUpdateInstaller;
     private readonly GamesPathsProvider _gamesPathsProvider;
+    private readonly BitmapsCache _bitmapsCache;
     private readonly ILogger _logger;
 
     public ViewModelsFactory(
@@ -46,6 +48,7 @@ public sealed class ViewModelsFactory
         FilesUploader filesUploader,
         AppUpdateInstaller appUpdateInstaller,
         GamesPathsProvider gamesPathsProvider,
+        BitmapsCache bitmapsCache,
         ILogger logger
         )
     {
@@ -63,6 +66,7 @@ public sealed class ViewModelsFactory
         _filesUploader = filesUploader;
         _appUpdateInstaller = appUpdateInstaller;
         _gamesPathsProvider = gamesPathsProvider;
+        _bitmapsCache = bitmapsCache;
         _logger = logger;
     }
 
@@ -99,6 +103,7 @@ public sealed class ViewModelsFactory
             _installedAddonsProviderFactory,
             _downloadableAddonsProviderFactory,
             _portStarter,
+            _bitmapsCache,
             _logger
             );
 
@@ -122,6 +127,7 @@ public sealed class ViewModelsFactory
             _installedAddonsProviderFactory,
             _downloadableAddonsProviderFactory,
             _portStarter,
+            _bitmapsCache,
             _logger
             );
 
@@ -141,7 +147,8 @@ public sealed class ViewModelsFactory
             _playtimeProvider,
             _ratingProvider,
             _installedAddonsProviderFactory,
-            _downloadableAddonsProviderFactory
+            _downloadableAddonsProviderFactory,
+            _bitmapsCache
             );
 
         _ = Task.Run(vm.InitializeAsync);

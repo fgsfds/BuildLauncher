@@ -7,12 +7,7 @@
              x:Class="Avalonia.Desktop.Controls.RightPanelControl"
              xmlns:vm="clr-namespace:Avalonia.Desktop.ViewModels"
              xmlns:c="clr-namespace:Avalonia.Desktop.Controls"
-             xmlns:helpers="clr-namespace:Avalonia.Desktop.Helpers"
              x:DataType="vm:RightPanelViewModel">
-
-    <UserControl.Resources>
-        <helpers:StreamToBitmapConverter x:Key="StreamToBitmapConverter"/>
-    </UserControl.Resources>
 
     <Grid RowDefinitions="*,auto,auto,auto,auto">
 
@@ -22,7 +17,7 @@
 
                 <Image Height="200"
                        IsVisible="{Binding IsPreviewVisible}"
-                       Source="{Binding SelectedAddonPreview, Converter={StaticResource StreamToBitmapConverter}}"/>
+                       Source="{Binding SelectedAddonPreview}"/>
 
                 <md:MarkdownScrollViewer Margin="10,5"
                                          Name="Description"

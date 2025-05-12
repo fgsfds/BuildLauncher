@@ -1,6 +1,7 @@
 ﻿using Common;
 using Common.Enums;
 using Common.Interfaces;
+using System.Collections.Immutable;
 using System.Text;
 
 namespace Addons.Addons;
@@ -10,8 +11,6 @@ namespace Addons.Addons;
 /// </summary>
 public abstract class BaseAddon : IAddon
 {
-    private bool _disposed;
-
     /// <inheritdoc/>
     public required AddonTypeEnum Type { get; init; }
 
@@ -19,7 +18,7 @@ public abstract class BaseAddon : IAddon
     public required GameStruct SupportedGame { get; init; }
 
     /// <inheritdoc/>
-    public required HashSet<FeatureEnum>? RequiredFeatures { get; init; }
+    public required ImmutableArray<FeatureEnum>? RequiredFeatures { get; init; }
 
     /// <inheritdoc/>
     public required string Id { get; init; }
@@ -37,25 +36,25 @@ public abstract class BaseAddon : IAddon
     public required string? Description { get; init; }
 
     /// <inheritdoc/>
-    public required Dictionary<string, string?>? DependentAddons { get; init; }
+    public required IReadOnlyDictionary<string, string?>? DependentAddons { get; init; }
 
     /// <inheritdoc/>
-    public required Dictionary<string, string?>? IncompatibleAddons { get; init; }
+    public required IReadOnlyDictionary<string, string?>? IncompatibleAddons { get; init; }
 
     /// <inheritdoc/>
     public required string? PathToFile { get; init; }
 
     /// <inheritdoc/>
-    public required Stream? GridImage { get; init; }
+    public required long? GridImageHash { get; init; }
 
     /// <inheritdoc/>
-    public required Stream? PreviewImage { get; init; }
+    public required long? PreviewImageHash { get; init; }
 
     /// <inheritdoc/>
     public required string? MainDef { get; init; }
 
     /// <inheritdoc/>
-    public required HashSet<string>? AdditionalDefs { get; init; }
+    public required ImmutableArray<string>? AdditionalDefs { get; init; }
 
     /// <inheritdoc/>
     public required IStartMap? StartMap { get; init; }
@@ -64,7 +63,7 @@ public abstract class BaseAddon : IAddon
     public required bool IsFolder { get; init; }
 
     /// <inheritdoc/>
-    public required Dictionary<OSEnum, string>? Executables { get; init; }
+    public required IReadOnlyDictionary<OSEnum, string>? Executables { get; init; }
 
     /// <inheritdoc/>
     public string? FileName => PathToFile is null ? null : Path.GetFileName(PathToFile);
@@ -117,19 +116,5 @@ public abstract class BaseAddon : IAddon
         }
 
         return description.ToString();
-    }
-
-    public virtual void Dispose()
-    {
-        if (_disposed)
-        {
-            return;
-        }
-
-        GridImage?.Dispose();
-        PreviewImage?.Dispose();
-
-        _disposed = true;
-        GC.SuppressFinalize(this);
     }
 }

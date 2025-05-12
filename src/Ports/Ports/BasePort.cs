@@ -2,6 +2,7 @@
 using Addons.Helpers;
 using Common;
 using Common.Client.Helpers;
+using Common.Common.Helpers;
 using Common.Enums;
 using Common.Enums.Addons;
 using Common.Helpers;
@@ -9,7 +10,6 @@ using Common.Interfaces;
 using Common.Serializable.Addon;
 using CommunityToolkit.Diagnostics;
 using Games.Games;
-using System.Reflection;
 using System.Text;
 
 namespace Ports.Ports;
@@ -175,7 +175,7 @@ public abstract class BasePort
     /// <summary>
     /// Port's icon
     /// </summary>
-    public Stream Icon => ImageHelper.FileNameToStream($"{Name}.png", Assembly.GetExecutingAssembly());
+    public long IconId => PortEnum.GetUniqueHash();
 
 
     protected BasePort()
@@ -363,7 +363,7 @@ public abstract class BasePort
         }
 
 
-        addon.ThrowIfNotType<SlaveCampaign>(out var sCamp);
+        addon.ThrowIfNotType<GenericCampaign>(out var sCamp);
 
         if (sCamp.FileName is null)
         {
@@ -431,7 +431,7 @@ public abstract class BasePort
             _ = sb.Append($@" {MainConParam}""{dCamp.MainCon}""");
         }
 
-        if (dCamp.AdditionalCons?.Count > 0)
+        if (dCamp.AdditionalCons?.Any() is true)
         {
             foreach (var con in dCamp.AdditionalCons)
             {

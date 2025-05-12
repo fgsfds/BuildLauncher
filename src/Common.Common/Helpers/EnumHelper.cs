@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using System.Runtime.CompilerServices;
 
 namespace Common.Common.Helpers;
 
@@ -20,5 +21,13 @@ public static class EnumHelper
 
         result = parseResult;
         return true;
+    }
+
+    public static long GetUniqueHash(this Enum e)
+    {
+        var a = e.GetType().GetHashCode();
+        var b = e.GetHashCode();
+
+        return a + b;
     }
 }

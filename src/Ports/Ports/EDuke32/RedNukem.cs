@@ -164,7 +164,7 @@ public sealed class RedNukem : EDuke32
             _ = sb.Append($@" {MainConParam}""{rCamp.MainCon}""");
         }
 
-        if (rCamp.AdditionalCons?.Count > 0)
+        if (rCamp.AdditionalCons?.Any() is true)
         {
             foreach (var con in rCamp.AdditionalCons)
             {

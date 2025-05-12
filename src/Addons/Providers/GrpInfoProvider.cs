@@ -45,7 +45,8 @@ public static class GrpInfoProvider
                     Type = AddonTypeEnum.TC,
                     SupportedGame = new(GameEnum.Duke3D, addon.DukeVersion),
                     Title = addon.Name,
-                    GridImage = null,
+                    GridImageHash = null,
+                    PreviewImageHash = null,
                     Description = null,
                     Version = null,
                     Author = null,
@@ -59,7 +60,6 @@ public static class GrpInfoProvider
                     AdditionalDefs = [addon.AddDef],
                     RTS = null,
                     RequiredFeatures = [FeatureEnum.EDuke32_CON],
-                    PreviewImage = null,
                     IsFolder = false,
                     Executables = null
                 };

@@ -1,5 +1,6 @@
 ﻿using Addons.Providers;
 using Common;
+using Common.Client.Cache;
 using Common.Client.Interfaces;
 using Common.Interfaces;
 using Microsoft.Extensions.Logging;
@@ -22,9 +23,11 @@ public sealed class AddonFilesTests : IDisposable
         var config = new Mock<IConfigProvider>();
         _ = config.Setup(x => x.DisabledAutoloadMods).Returns([]);
 
+        var bmCache = new Mock<ICacheAdder<Stream>>();
+
         var logger = new Mock<ILogger>();
 
-        _installedAddonsProvider = new(game.Object, config.Object, logger.Object);
+        _installedAddonsProvider = new(game.Object, config.Object, logger.Object, bmCache.Object);
         _getAddonsFromFilesAsync = typeof(InstalledAddonsProvider).GetMethod("GetAddonsFromFilesAsync", BindingFlags.NonPublic | BindingFlags.Instance)!;
     }
 

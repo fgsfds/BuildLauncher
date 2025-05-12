@@ -1,4 +1,5 @@
 ﻿using Common.Client.Helpers;
+using Common.Common.Helpers;
 using Common.Enums;
 using System.Reflection;
 
@@ -84,5 +85,5 @@ public abstract class BaseTool
     /// <summary>
     /// Tool's icon
     /// </summary>
-    public Stream Icon => ImageHelper.FileNameToStream($"{Name}.png", Assembly.GetExecutingAssembly());
+    public long IconId => ToolEnum.GetUniqueHash();
 }

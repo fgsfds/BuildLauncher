@@ -1,10 +1,10 @@
 using Addons.Providers;
 using Avalonia.Controls;
-using Avalonia.Desktop.Helpers;
+using Avalonia.Desktop.Misc;
 using Avalonia.Desktop.ViewModels;
 using Avalonia.Input;
-using Avalonia.Media;
 using Common.Client.Enums.Skills;
+using Common.Common.Helpers;
 using Common.Enums;
 using Common.Helpers;
 using Common.Interfaces;
@@ -12,7 +12,6 @@ using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.Input;
 using Ports.Ports;
 using Ports.Providers;
-using System.Globalization;
 
 namespace Avalonia.Desktop.Controls;
 
@@ -21,6 +20,8 @@ public sealed partial class MapsControl : UserControl
     private readonly IEnumerable<BasePort> _supportedPorts = [];
     private readonly InstalledAddonsProvider _installedAddonsProvider = null!;
     private readonly MapsViewModel _viewModel = null!;
+    private readonly BitmapsCache _bitmapsCache = null!;
+
     private MenuFlyout? _flyout;
 
     public MapsControl()
@@ -31,7 +32,8 @@ public sealed partial class MapsControl : UserControl
     public MapsControl(
         MapsViewModel viewModel,
         InstalledPortsProvider portsProvider,
-        InstalledAddonsProvider addonsProvider
+        InstalledAddonsProvider addonsProvider,
+        BitmapsCache bitmapsCache
         )
     {
         InitializeComponent();
@@ -39,6 +41,7 @@ public sealed partial class MapsControl : UserControl
         _viewModel = viewModel;
         _supportedPorts = portsProvider.GetPortsThatSupportGame(viewModel.Game.GameEnum);
         _installedAddonsProvider = addonsProvider;
+        _bitmapsCache = bitmapsCache;
 
         CreateSkillsFlyout();
         AddPortsButtons();
@@ -68,11 +71,9 @@ public sealed partial class MapsControl : UserControl
     /// </summary>
     private void AddPortsButtons()
     {
-        StreamToBitmapConverter converter = new();
-
         foreach (var port in _supportedPorts)
         {
-            var portIcon = converter.Convert(port.Icon, typeof(IImage), null, CultureInfo.InvariantCulture) as IImage;
+            var portIcon = _bitmapsCache.GetFromCache(port.PortEnum.GetUniqueHash());
 
             StackPanel sp = new() { Orientation = Layout.Orientation.Horizontal };
             sp.Children.Add(new Image() { Margin = new(0, 0, 5, 0), Height = 16, Source = portIcon });

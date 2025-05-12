@@ -1,5 +1,6 @@
 ﻿using Addons.Addons;
 using Common;
+using Common.Client.Cache;
 using Common.Client.Helpers;
 using Common.Client.Interfaces;
 using Common.Enums;
@@ -8,8 +9,10 @@ using Common.Helpers;
 using Common.Interfaces;
 using Common.Serializable.Addon;
 using CommunityToolkit.Diagnostics;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using SharpCompress.Archives;
+using System.Collections.Immutable;
 using System.Text.Json;
 
 namespace Addons.Providers;
@@ -22,6 +25,7 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
     private readonly IGame _game;
     private readonly IConfigProvider _config;
     private readonly ILogger _logger;
+    private readonly ICacheAdder<Stream> _bitmapsCache;
 
     private readonly Dictionary<AddonVersion, IAddon> _campaignsCache = [];
     private readonly Dictionary<AddonVersion, IAddon> _mapsCache = [];
@@ -37,12 +41,14 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
     public InstalledAddonsProvider(
         IGame game,
         IConfigProvider config,
-        ILogger logger
+        ILogger logger,
+        ICacheAdder<Stream> bitmapsCache
         )
     {
         _game = game;
         _config = config;
         _logger = logger;
+        _bitmapsCache = bitmapsCache;
     }
 
 
@@ -109,33 +115,9 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
 
         if (createNew)
         {
-            if (addonType is AddonTypeEnum.TC)
-            {
-                foreach (var a in _campaignsCache.Values)
-                {
-                    a.Dispose();
-                }
-
-                _campaignsCache.Clear();
-            }
-            else if (addonType is AddonTypeEnum.Map)
-            {
-                foreach (var a in _mapsCache.Values)
-                {
-                    a.Dispose();
-                }
-
-                _campaignsCache.Clear();
-            }
-            else if (addonType is AddonTypeEnum.Mod)
-            {
-                foreach (var a in _modsCache.Values)
-                {
-                    a.Dispose();
-                }
-
-                _campaignsCache.Clear();
-            }
+            _campaignsCache.Clear();
+            _campaignsCache.Clear();
+            _campaignsCache.Clear();
         }
 
         try
@@ -322,8 +304,6 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
         }
 
         AddonsChangedEvent?.Invoke(_game, addon.Type);
-
-        addon.Dispose();
     }
 
     /// <inheritdoc/>
@@ -427,12 +407,14 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
                 .ThenByDescending(static x => x.Key.Id.Equals(nameof(WangAddonEnum.Wanton), StringComparison.InvariantCultureIgnoreCase))
                 .ThenBy(static x => x.Value.Title))
             {
-                campaigns.Add(customCamp.Key, customCamp.Value);
             }
         }
         else
         {
-            campaigns.AddRange(_campaignsCache);
+            foreach (var customCamp in _campaignsCache.OrderBy(static x => x.Value.Title))
+            {
+                campaigns.Add(customCamp.Key, customCamp.Value);
+            }
         }
 
         return campaigns;
@@ -599,29 +581,33 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
 
             if (gridFile.Length > 0)
             {
-                var stream = await File.ReadAllBytesAsync(gridFile[0]).ConfigureAwait(false);
-                carcass.Image = new MemoryStream(stream);
+                var crc = Crc32Helper.GetCrc32(gridFile[0]);
+                await using var stream = File.OpenRead(gridFile[0]);
+                _ = _bitmapsCache.TryAddGridToCache(crc, stream);
+                carcass.GridImageHash = crc;
             }
             else
             {
-                carcass.Image = null;
+                carcass.GridImageHash = null;
             }
 
             if (previewFile.Length > 0)
             {
-                var stream = await File.ReadAllBytesAsync(previewFile[0]).ConfigureAwait(false);
-                carcass.Preview = new MemoryStream(stream);
+                var crc = Crc32Helper.GetCrc32(previewFile[0]);
+                await using var stream = File.OpenRead(previewFile[0]);
+                _ = _bitmapsCache.TryAddGridToCache(crc, stream);
+                carcass.PreviewImageHash = crc;
             }
             else
             {
-                carcass.Preview = null;
+                carcass.PreviewImageHash = null;
             }
 
             carcass.Type = manifest.AddonType;
             carcass.Id = manifest.Id;
             carcass.Title = manifest.Title;
             carcass.Author = manifest.Author;
-            carcass.Image ??= carcass.Preview;
+            carcass.GridImageHash ??= carcass.PreviewImageHash;
             carcass.Version = manifest.Version;
             carcass.Description = manifest.Description;
             carcass.SupportedGame = manifest.SupportedGame.Game;
@@ -635,13 +621,13 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
 
             carcass.StartMap = manifest.StartMap;
 
-            carcass.RequiredFeatures = manifest.Dependencies?.RequiredFeatures?.Select(static x => x).ToHashSet();
+            carcass.RequiredFeatures = manifest.Dependencies?.RequiredFeatures?.Select(static x => x).ToImmutableArray();
 
             carcass.MainCon = manifest.MainCon;
-            carcass.AddCons = manifest.AdditionalCons?.ToHashSet();
+            carcass.AddCons = manifest.AdditionalCons?.ToImmutableArray();
 
             carcass.MainDef = manifest.MainDef;
-            carcass.AddDefs = manifest.AdditionalDefs?.ToHashSet();
+            carcass.AddDefs = manifest.AdditionalDefs?.ToImmutableArray();
 
             carcass.Dependencies = manifest.Dependencies?.Addons?.ToDictionary(static x => x.Id, static x => x.Version, StringComparer.OrdinalIgnoreCase);
             carcass.Incompatibles = manifest.Incompatibles?.Addons?.ToDictionary(static x => x.Id, static x => x.Version, StringComparer.OrdinalIgnoreCase);
@@ -676,7 +662,7 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
                 PathToFile = pathToFile,
                 StartMap = new MapFileDto() { File = Path.GetFileName(pathToFile) },
                 BloodIni = iniExists ? bloodIni : null,
-                GridImage = null,
+                GridImageHash = null,
                 Description = null,
                 Version = null,
                 Author = null,
@@ -685,7 +671,7 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
                 DependentAddons = null,
                 IncompatibleAddons = null,
                 RequiredFeatures = null,
-                PreviewImage = null,
+                PreviewImageHash = null,
                 IsFolder = false,
                 Executables = null
             };
@@ -703,8 +689,8 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
             }
 
             bool isUnpacked = false;
-            Stream? image;
-            Stream? preview;
+            long? gridImageHash;
+            long? previewImageHash;
 
             if (unpackedTo is not null)
             {
@@ -718,30 +704,45 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
 
                 if (gridFile.Length > 0)
                 {
-                    var stream = await File.ReadAllBytesAsync(gridFile[0]).ConfigureAwait(false);
-                    image = new MemoryStream(stream);
+                    gridImageHash = Crc32Helper.GetCrc32(gridFile[0]);
+                    await using var stream = File.OpenRead(gridFile[0]);
+                    _ = _bitmapsCache.TryAddGridToCache(gridImageHash.Value, stream);
                 }
                 else
                 {
-                    image = null;
+                    gridImageHash = null;
                 }
 
                 if (previewFile.Length > 0)
                 {
-                    var stream = await File.ReadAllBytesAsync(previewFile[0]).ConfigureAwait(false);
-                    preview = new MemoryStream(stream);
+                    previewImageHash = Crc32Helper.GetCrc32(previewFile[0]);
+                    await using var stream = File.OpenRead(previewFile[0]);
+                    _ = _bitmapsCache.TryAddGridToCache(previewImageHash.Value, stream);
                 }
                 else
                 {
-                    preview = null;
+                    previewImageHash = null;
                 }
             }
             else
             {
                 isUnpacked = false;
 
-                preview = ImageHelper.GetImageFromArchive(archive, "preview.png");
-                image = ImageHelper.GetCoverFromArchive(archive) ?? preview;
+                (gridImageHash, Stream? gridImageStream) = ImageHelper.GetCoverFromArchive(archive);
+                (previewImageHash, Stream? previewImageStream) = ImageHelper.GetPreviewFromArchive(archive);
+
+                if (gridImageHash is not null && gridImageStream is not null)
+                {
+                    _ = _bitmapsCache.TryAddGridToCache(gridImageHash.Value, gridImageStream);
+                    gridImageStream.Dispose();
+                }
+
+                if (previewImageHash is not null && previewImageStream is not null)
+                {
+                    _ = _bitmapsCache.TryAddGridToCache(previewImageHash.Value, previewImageStream);
+                    previewImageStream.Dispose();
+                }
+
             }
 
             foreach (var manifest in manifests)
@@ -749,14 +750,13 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
                 AddonCarcass carcass = new();
 
                 carcass.IsUnpacked = isUnpacked;
-                carcass.Image = image;
-                carcass.Preview = preview;
+                carcass.GridImageHash = gridImageHash ?? previewImageHash;
+                carcass.PreviewImageHash = previewImageHash;
 
                 carcass.Type = manifest.AddonType;
                 carcass.Id = manifest.Id;
                 carcass.Title = manifest.Title;
                 carcass.Author = manifest.Author;
-                carcass.Image ??= carcass.Preview;
                 carcass.Version = manifest.Version;
                 carcass.Description = manifest.Description;
                 carcass.SupportedGame = manifest.SupportedGame.Game;
@@ -770,13 +770,13 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
 
                 carcass.StartMap = manifest.StartMap;
 
-                carcass.RequiredFeatures = manifest.Dependencies?.RequiredFeatures?.Select(static x => x).ToHashSet();
+                carcass.RequiredFeatures = manifest.Dependencies?.RequiredFeatures?.Select(static x => x).ToImmutableArray();
 
                 carcass.MainCon = manifest.MainCon;
-                carcass.AddCons = manifest.AdditionalCons?.ToHashSet();
+                carcass.AddCons = manifest.AdditionalCons?.ToImmutableArray();
 
                 carcass.MainDef = manifest.MainDef;
-                carcass.AddDefs = manifest.AdditionalDefs?.ToHashSet();
+                carcass.AddDefs = manifest.AdditionalDefs?.ToImmutableArray();
 
                 carcass.Dependencies = manifest.Dependencies?.Addons?.ToDictionary(static x => x.Id, static x => x.Version, StringComparer.OrdinalIgnoreCase);
                 carcass.Incompatibles = manifest.Incompatibles?.Addons?.ToDictionary(static x => x.Id, static x => x.Version, StringComparer.OrdinalIgnoreCase);
@@ -825,7 +825,8 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
                     Id = carcass.Id,
                     Type = AddonTypeEnum.Mod,
                     Title = carcass.Title,
-                    GridImage = carcass.Image,
+                    GridImageHash = carcass.GridImageHash,
+                    PreviewImageHash = carcass.PreviewImageHash,
                     Description = carcass.Description,
                     Version = carcass.Version,
                     Author = carcass.Author,
@@ -839,7 +840,6 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
                     IncompatibleAddons = carcass.Incompatibles,
                     StartMap = carcass.StartMap,
                     RequiredFeatures = carcass.RequiredFeatures,
-                    PreviewImage = carcass.Preview,
                     IsFolder = carcass.IsUnpacked,
                     Executables = null
                 };
@@ -861,7 +861,8 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
                         Type = carcass.Type,
                         SupportedGame = new(carcass.SupportedGame, carcass.GameVersion, carcass.GameCrc),
                         Title = carcass.Title,
-                        GridImage = carcass.Image,
+                        GridImageHash = carcass.GridImageHash,
+                        PreviewImageHash = carcass.PreviewImageHash,
                         Description = carcass.Description,
                         Version = carcass.Version,
                         Author = carcass.Author,
@@ -875,7 +876,6 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
                         AdditionalDefs = carcass.AddDefs,
                         RTS = carcass.Rts,
                         RequiredFeatures = carcass.RequiredFeatures,
-                        PreviewImage = carcass.Preview,
                         IsFolder = carcass.IsUnpacked,
                         Executables = carcass.Executables
                     };
@@ -884,13 +884,14 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
                 }
                 else if (_game.GameEnum is GameEnum.ShadowWarrior)
                 {
-                    var addon = new WangCampaign()
+                    var addon = new GenericCampaign()
                     {
                         Id = carcass.Id,
                         Type = carcass.Type,
                         SupportedGame = new(carcass.SupportedGame, carcass.GameVersion, carcass.GameCrc),
                         Title = carcass.Title,
-                        GridImage = carcass.Image,
+                        GridImageHash = carcass.GridImageHash,
+                        PreviewImageHash = carcass.PreviewImageHash,
                         Description = carcass.Description,
                         Version = carcass.Version,
                         Author = carcass.Author,
@@ -901,7 +902,6 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
                         MainDef = carcass.MainDef,
                         AdditionalDefs = carcass.AddDefs,
                         RequiredFeatures = carcass.RequiredFeatures,
-                        PreviewImage = carcass.Preview,
                         IsFolder = carcass.IsUnpacked,
                         Executables = carcass.Executables
                     };
@@ -916,7 +916,8 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
                         Type = carcass.Type,
                         SupportedGame = new(carcass.SupportedGame, carcass.GameVersion, carcass.GameCrc),
                         Title = carcass.Title,
-                        GridImage = carcass.Image,
+                        GridImageHash = carcass.GridImageHash,
+                        PreviewImageHash = carcass.PreviewImageHash,
                         Description = carcass.Description,
                         Version = carcass.Version,
                         Author = carcass.Author,
@@ -930,7 +931,6 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
                         RFF = carcass.Rff,
                         SND = carcass.Snd,
                         RequiredFeatures = carcass.RequiredFeatures,
-                        PreviewImage = carcass.Preview,
                         IsFolder = carcass.IsUnpacked,
                         Executables = carcass.Executables
                     };
@@ -939,13 +939,14 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
                 }
                 else if (_game.GameEnum is GameEnum.Exhumed)
                 {
-                    var addon = new SlaveCampaign()
+                    var addon = new GenericCampaign()
                     {
                         Id = carcass.Id,
                         Type = carcass.Type,
                         SupportedGame = new(carcass.SupportedGame, carcass.GameVersion, carcass.GameCrc),
                         Title = carcass.Title,
-                        GridImage = carcass.Image,
+                        GridImageHash = carcass.GridImageHash,
+                        PreviewImageHash = carcass.PreviewImageHash,
                         Description = carcass.Description,
                         Version = carcass.Version,
                         Author = carcass.Author,
@@ -956,7 +957,6 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
                         MainDef = carcass.MainDef,
                         AdditionalDefs = carcass.AddDefs,
                         RequiredFeatures = carcass.RequiredFeatures,
-                        PreviewImage = carcass.Preview,
                         IsFolder = carcass.IsUnpacked,
                         Executables = carcass.Executables
                     };
@@ -971,7 +971,8 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
                         Type = carcass.Type,
                         SupportedGame = new(carcass.SupportedGame, carcass.GameVersion, carcass.GameCrc),
                         Title = carcass.Title,
-                        GridImage = carcass.Image,
+                        GridImageHash = carcass.GridImageHash,
+                        PreviewImageHash = carcass.PreviewImageHash,
                         Description = carcass.Description,
                         Version = carcass.Version,
                         Author = carcass.Author,
@@ -982,7 +983,6 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
                         MainDef = carcass.MainDef,
                         AdditionalDefs = carcass.AddDefs,
                         RequiredFeatures = carcass.RequiredFeatures,
-                        PreviewImage = carcass.Preview,
                         IsFolder = carcass.IsUnpacked,
                         Executables = carcass.Executables
                     };
@@ -1124,15 +1124,15 @@ internal struct AddonCarcass
     public bool IsUnpacked { get; set; }
     public string? Author { get; set; }
     public string? Description { get; set; }
-    public Stream? Image { get; set; }
-    public Stream? Preview { get; set; }
+    public long? GridImageHash { get; set; }
+    public long? PreviewImageHash { get; set; }
     public string? GameVersion { get; set; }
     public string? GameCrc { get; set; }
-    public HashSet<FeatureEnum>? RequiredFeatures { get; set; }
+    public ImmutableArray<FeatureEnum>? RequiredFeatures { get; set; }
     public string? MainCon { get; set; }
-    public HashSet<string>? AddCons { get; set; }
+    public ImmutableArray<string>? AddCons { get; set; }
     public string? MainDef { get; set; }
-    public HashSet<string>? AddDefs { get; set; }
+    public ImmutableArray<string>? AddDefs { get; set; }
     public string? Rts { get; set; }
     public string? Ini { get; set; }
     public string? Rff { get; set; }

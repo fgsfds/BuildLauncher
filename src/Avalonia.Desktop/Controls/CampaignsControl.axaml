@@ -10,10 +10,6 @@
              x:DataType="vm:CampaignsViewModel"
              x:Class="Avalonia.Desktop.Controls.CampaignsControl">
 
-    <UserControl.Resources>
-        <helpers:StreamToBitmapConverter x:Key="StreamToBitmapConverter"/>
-    </UserControl.Resources>
-
     <Grid RowDefinitions="auto,*,auto" ColumnDefinitions="2*,*">
 
         <Grid ColumnDefinitions="auto,*,auto"
@@ -109,13 +105,14 @@
                     <Grid Width="{x:Static helpers:DesktopConsts.GridImageWidth}"
                           Height="{x:Static helpers:DesktopConsts.GridImageHeight}">
 
-                        <Grid IsVisible="{Binding GridImage, Converter={x:Static ObjectConverters.IsNotNull}}>">
+                        <Grid IsVisible="{Binding GridImageHash, Converter={x:Static ObjectConverters.IsNotNull}}>">
 
-                                <Image Source="{Binding GridImage, Converter={StaticResource StreamToBitmapConverter}}"
+                                <Image Source="{Binding GridImageHash, Converter={StaticResource CachedHashToBitmapConverter}}"
                                        VerticalAlignment="Center"
                                        HorizontalAlignment="Center"/>
 
                                 <TextBlock Text="{Binding Title}"
+                                           Margin="0 0 0 -2"
                                            Padding="5"
                                            Background="{Binding Path=Background, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}"
                                            HorizontalAlignment="Stretch"
@@ -125,6 +122,7 @@
                                            TextWrapping="Wrap"/>
 
                                 <TextBlock Text="{Binding Title}"
+                                           Margin="0 0 0 -2"
                                            Padding="5"
                                            HorizontalAlignment="Stretch"
                                            TextAlignment="Center"
@@ -132,7 +130,7 @@
                                            TextWrapping="WrapWithOverflow"/>
                             </Grid>
 
-                            <Grid IsVisible="{Binding GridImage, Converter={x:Static ObjectConverters.IsNull}}">
+                            <Grid IsVisible="{Binding GridImageHash, Converter={x:Static ObjectConverters.IsNull}}">
 
                                 <Border Background="Black"/>
 

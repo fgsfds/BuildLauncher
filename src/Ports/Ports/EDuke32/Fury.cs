@@ -117,7 +117,7 @@ public sealed class Fury : EDuke32
             _ = sb.Append($@" {MainConParam}""{fCamp.MainCon}""");
         }
 
-        if (fCamp.AdditionalCons?.Count > 0)
+        if (fCamp.AdditionalCons?.Any() is true)
         {
             foreach (var con in fCamp.AdditionalCons)
             {

@@ -1,5 +1,6 @@
 ﻿using Avalonia.Data;
 using Avalonia.Data.Converters;
+using Avalonia.Desktop.Misc;
 using Avalonia.Media.Imaging;
 using Common.Common.Helpers;
 using Common.Enums;
@@ -11,8 +12,15 @@ namespace Avalonia.Desktop.Helpers;
 /// <summary>
 /// Converts Stream to Bitmap
 /// </summary>
-public sealed class StreamToBitmapConverter : IValueConverter
+public sealed class CachedHashToBitmapConverter : IValueConverter
 {
+    private readonly BitmapsCache _bitmapsCache;
+
+    public CachedHashToBitmapConverter(BitmapsCache bitmapsCache)
+    {
+        _bitmapsCache = bitmapsCache;
+    }
+
     public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
         if (value is null)
@@ -20,17 +28,20 @@ public sealed class StreamToBitmapConverter : IValueConverter
             return null;
         }
 
-        value.ThrowIfNotType<Stream>(out var stream);
+        if (value is not long valueStr)
+        {
+            return null;
+        }
 
-        stream.Position = 0;
+        var bitmap = _bitmapsCache.GetFromCache(valueStr);
 
-        return Bitmap.DecodeToHeight(stream, (int)DesktopConsts.GridImageHeight, BitmapInterpolationMode.HighQuality);
+        return bitmap;
 
     }
 
     public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
-        return new BindingNotification(new NotImplementedException($"ConvertBack method for {nameof(StreamToBitmapConverter)} is not implemented."));
+        return new BindingNotification(new NotImplementedException($"ConvertBack method for {nameof(CachedHashToBitmapConverter)} is not implemented."));
     }
 }
 

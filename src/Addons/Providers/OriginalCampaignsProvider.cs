@@ -1,6 +1,7 @@
 ﻿using Addons.Addons;
 using Common;
 using Common.Client.Helpers;
+using Common.Common.Helpers;
 using Common.Enums;
 using Common.Enums.Addons;
 using Common.Enums.Versions;
@@ -54,7 +55,8 @@ public static class OriginalCampaignsProvider
                 Id = dukeWtId,
                 Type = AddonTypeEnum.Official,
                 Title = "Duke Nukem 3D World Tour",
-                GridImage = ImageHelper.FileNameToStream("Duke3D.dukewt.jpg", Assembly.GetExecutingAssembly()),
+                GridImageHash = DukeVersionEnum.Duke3D_WT.GetUniqueHash(),
+                PreviewImageHash = null,
                 Author = "Nerve Software, Gearbox Software",
                 Description = """
                     **Duke Nukem 3D: 20th Anniversary World Tour** is a 2016 special edition of Duke Nukem 3D.
@@ -75,7 +77,6 @@ public static class OriginalCampaignsProvider
                 AdditionalDefs = null,
                 RTS = null,
                 StartMap = null,
-                PreviewImage = null,
                 IsFolder = false,
                 Executables = null
             });
@@ -91,7 +92,8 @@ public static class OriginalCampaignsProvider
                     Id = dukeId,
                     Type = AddonTypeEnum.Official,
                     Title = "Duke Nukem 3D",
-                    GridImage = ImageHelper.FileNameToStream("Duke3D.duke3d.jpg", Assembly.GetExecutingAssembly()),
+                    GridImageHash = GameEnum.Duke3D.GetUniqueHash(),
+                    PreviewImageHash = null,
                     Author = "3D Realms",
                     Description = """
                     Duke Nukem 3D is a first-person shooter developed and published by **3D Realms**.
@@ -112,7 +114,6 @@ public static class OriginalCampaignsProvider
                     AdditionalDefs = null,
                     RTS = null,
                     StartMap = null,
-                    PreviewImage = null,
                     IsFolder = false,
                     Executables = null
                 });
@@ -126,7 +127,8 @@ public static class OriginalCampaignsProvider
                     Id = dukeVacaId,
                     Type = AddonTypeEnum.Official,
                     Title = "Caribbean",
-                    GridImage = ImageHelper.FileNameToStream("Duke3D.carib.jpg", Assembly.GetExecutingAssembly()),
+                    GridImageHash = DukeAddonEnum.DukeVaca.GetUniqueHash(),
+                    PreviewImageHash = null,
                     Author = "Sunstorm Interactive",
                     Description = """
                         **Life's A Beach** is an expansion pack for the highly acclaimed first-person shooter Duke Nukem 3D. It was released on December 31, 1997 by **Sunstorm Interactive**.
@@ -139,7 +141,7 @@ public static class OriginalCampaignsProvider
                     SupportedGame = new(GameEnum.Duke3D, DukeVersionEnum.Duke3D_Atomic),
                     RequiredFeatures = null,
                     PathToFile = null,
-                    DependentAddons = new(StringComparer.OrdinalIgnoreCase) { { nameof(DukeAddonEnum.DukeVaca), null } },
+                    DependentAddons = new Dictionary<string, string?>(StringComparer.OrdinalIgnoreCase) { { nameof(DukeAddonEnum.DukeVaca), null } },
                     IncompatibleAddons = null,
                     MainCon = null,
                     AdditionalCons = null,
@@ -147,7 +149,6 @@ public static class OriginalCampaignsProvider
                     AdditionalDefs = null,
                     RTS = null,
                     StartMap = null,
-                    PreviewImage = null,
                     IsFolder = false,
                     Executables = null
                 });
@@ -161,7 +162,7 @@ public static class OriginalCampaignsProvider
                     Id = dukeNwId,
                     Type = AddonTypeEnum.Official,
                     Title = "Nuclear Winter",
-                    GridImage = ImageHelper.FileNameToStream("Duke3D.nwinter.jpg", Assembly.GetExecutingAssembly()),
+                    GridImageHash = DukeAddonEnum.DukeNW.GetUniqueHash(),
                     Author = "Simply Silly Software",
                     Description = """
                         **Nuclear Winter**, is a Christmas-themed expansion pack for Duke Nukem 3D. It was developed by **Simply Silly Software** and published by **WizardWorks** on December 30, 1997.
@@ -173,7 +174,7 @@ public static class OriginalCampaignsProvider
                     SupportedGame = new(GameEnum.Duke3D, DukeVersionEnum.Duke3D_Atomic),
                     RequiredFeatures = null,
                     PathToFile = null,
-                    DependentAddons = new(StringComparer.OrdinalIgnoreCase) { { nameof(DukeAddonEnum.DukeNW), null } },
+                    DependentAddons = new Dictionary<string, string?>(StringComparer.OrdinalIgnoreCase) { { nameof(DukeAddonEnum.DukeNW), null } },
                     IncompatibleAddons = null,
                     MainCon = null,
                     AdditionalCons = null,
@@ -181,7 +182,7 @@ public static class OriginalCampaignsProvider
                     AdditionalDefs = null,
                     RTS = null,
                     StartMap = null,
-                    PreviewImage = null,
+                    PreviewImageHash = null,
                     IsFolder = false,
                     Executables = null
                 });
@@ -195,7 +196,7 @@ public static class OriginalCampaignsProvider
                     Id = dukeDcId,
                     Type = AddonTypeEnum.Official,
                     Title = "Duke it Out in DC",
-                    GridImage = ImageHelper.FileNameToStream("Duke3D.dukedc.jpg", Assembly.GetExecutingAssembly()),
+                    GridImageHash = DukeAddonEnum.DukeDC.GetUniqueHash(),
                     Author = "WizardWorks",
                     Description = """
                         **Duke It Out In D.C.** is a Duke Nukem 3D expansion pack developed by Sunstorm Interactive and published by **WizardWorks** on March 17, 1997.
@@ -209,7 +210,7 @@ public static class OriginalCampaignsProvider
                     SupportedGame = new(GameEnum.Duke3D, DukeVersionEnum.Duke3D_Atomic),
                     RequiredFeatures = null,
                     PathToFile = null,
-                    DependentAddons = new(StringComparer.OrdinalIgnoreCase) { { nameof(DukeAddonEnum.DukeDC), null } },
+                    DependentAddons = new Dictionary<string, string?>(StringComparer.OrdinalIgnoreCase) { { nameof(DukeAddonEnum.DukeDC), null } },
                     IncompatibleAddons = null,
                     MainCon = null,
                     AdditionalCons = null,
@@ -217,7 +218,7 @@ public static class OriginalCampaignsProvider
                     AdditionalDefs = null,
                     RTS = null,
                     StartMap = null,
-                    PreviewImage = null,
+                    PreviewImageHash = null,
                     IsFolder = false,
                     Executables = null
                 });
@@ -232,7 +233,7 @@ public static class OriginalCampaignsProvider
                 Id = duke64Id,
                 Type = AddonTypeEnum.Official,
                 Title = "Duke Nukem 64",
-                GridImage = ImageHelper.FileNameToStream("Duke3D.duke64.jpg", Assembly.GetExecutingAssembly()),
+                GridImageHash = GameEnum.Duke64.GetUniqueHash(),
                 Author = "3D Realms, Eurocom",
                 Description = """
                     **Duke Nukem 64** is the Nintendo 64 port of the first-person shooter MS-DOS/PC game Duke Nukem 3D.
@@ -252,7 +253,7 @@ public static class OriginalCampaignsProvider
                 AdditionalDefs = null,
                 RTS = null,
                 StartMap = null,
-                PreviewImage = null,
+                PreviewImageHash = null,
                 IsFolder = false,
                 Executables = null
             });
@@ -275,7 +276,7 @@ public static class OriginalCampaignsProvider
             Id = bloodId,
             Type = AddonTypeEnum.Official,
             Title = "Blood",
-            GridImage = ImageHelper.FileNameToStream("Blood.blood.png", Assembly.GetExecutingAssembly()),
+            GridImageHash = GameEnum.Blood.GetUniqueHash(),
             Author = "Monolith Productions",
             Description = """
                 **Blood** is a PC game released for MS-DOS on May 31, 1997. It was developed by **Monolith Productions** and published by **GT Interactive**.
@@ -301,7 +302,7 @@ public static class OriginalCampaignsProvider
             RFF = null,
             SND = null,
             StartMap = null,
-            PreviewImage = null,
+            PreviewImageHash = null,
             IsFolder = false,
             Executables = null
         });
@@ -315,7 +316,7 @@ public static class OriginalCampaignsProvider
                 Id = bloodCpId,
                 Type = AddonTypeEnum.Official,
                 Title = "Cryptic Passage",
-                GridImage = ImageHelper.FileNameToStream("Blood.cp.jpg", Assembly.GetExecutingAssembly()),
+                GridImageHash = BloodAddonEnum.BloodCP.GetUniqueHash(),
                 Author = "Sunstorm Interactive",
                 Description = """
                     **Cryptic Passage** (originally titled Passage to Transylvania) is the first of two expansion packs for Blood.
@@ -329,7 +330,7 @@ public static class OriginalCampaignsProvider
                 SupportedGame = new(GameEnum.Blood),
                 RequiredFeatures = null,
                 PathToFile = null,
-                DependentAddons = new(StringComparer.OrdinalIgnoreCase) { { nameof(BloodAddonEnum.BloodCP), null } },
+                DependentAddons = new Dictionary<string, string?>(StringComparer.OrdinalIgnoreCase) { { nameof(BloodAddonEnum.BloodCP), null } },
                 IncompatibleAddons = null,
                 MainDef = null,
                 AdditionalDefs = null,
@@ -337,7 +338,7 @@ public static class OriginalCampaignsProvider
                 RFF = null,
                 SND = null,
                 StartMap = null,
-                PreviewImage = null,
+                PreviewImageHash = null,
                 IsFolder = false,
                 Executables = null
             });
@@ -359,12 +360,12 @@ public static class OriginalCampaignsProvider
         if (wGame.IsBaseGameInstalled)
         {
             var wangId = nameof(GameEnum.ShadowWarrior).ToLower();
-            campaigns.Add(new(wangId), new WangCampaign()
+            campaigns.Add(new(wangId), new GenericCampaign()
             {
                 Id = wangId,
                 Type = AddonTypeEnum.Official,
                 Title = "Shadow Warrior",
-                GridImage = ImageHelper.FileNameToStream("Wang.wang.jpg", Assembly.GetExecutingAssembly()),
+                GridImageHash = GameEnum.ShadowWarrior.GetUniqueHash(),
                 Version = null,
                 Author = "3D Realms",
                 Description = """
@@ -382,7 +383,7 @@ public static class OriginalCampaignsProvider
                 MainDef = null,
                 AdditionalDefs = null,
                 StartMap = null,
-                PreviewImage = null,
+                PreviewImageHash = null,
                 IsFolder = false,
                 Executables = null
             });
@@ -407,7 +408,7 @@ public static class OriginalCampaignsProvider
                 Id = furyId,
                 Type = AddonTypeEnum.Official,
                 Title = IsAftershock(fGame) ? "Ion Fury: Aftershock" : "Ion Fury",
-                GridImage = IsAftershock(fGame) ? ImageHelper.FileNameToStream("Fury.aftershock.jpg", Assembly.GetExecutingAssembly()) : ImageHelper.FileNameToStream("Fury.fury.jpg", Assembly.GetExecutingAssembly()),
+                GridImageHash = IsAftershock(fGame) ? "Aftershock".GetHashCode() : GameEnum.Fury.GetUniqueHash(),
                 Author = "Voidpoint, LLC",
                 Description = """
                 **Ion Fury** (originally titled Ion Maiden) is a 2019 cyberpunk first-person shooter developed by **Voidpoint** and published by **3D Realms**.
@@ -428,7 +429,7 @@ public static class OriginalCampaignsProvider
                 AdditionalDefs = null,
                 RTS = null,
                 StartMap = null,
-                PreviewImage = null,
+                PreviewImageHash = null,
                 IsFolder = false,
                 Executables = null
             });
@@ -475,7 +476,7 @@ public static class OriginalCampaignsProvider
                 Id = redneckId,
                 Type = AddonTypeEnum.Official,
                 Title = "Redneck Rampage",
-                GridImage = ImageHelper.FileNameToStream("Redneck.redneck.jpg", Assembly.GetExecutingAssembly()),
+                GridImageHash = GameEnum.Redneck.GetUniqueHash(),
                 Author = "Xatrix Entertainment",
                 Description = """
                     **Redneck Rampage** is a 1997 first-person shooter game developed by **Xatrix Entertainment** and published by **Interplay**.
@@ -498,7 +499,7 @@ public static class OriginalCampaignsProvider
                 AdditionalDefs = null,
                 RTS = null,
                 StartMap = null,
-                PreviewImage = null,
+                PreviewImageHash = null,
                 IsFolder = false,
                 Executables = null
             });
@@ -511,7 +512,7 @@ public static class OriginalCampaignsProvider
                     Id = redneckR66Id,
                     Type = AddonTypeEnum.Official,
                     Title = "Route 66",
-                    GridImage = ImageHelper.FileNameToStream("Redneck.route66.jpg", Assembly.GetExecutingAssembly()),
+                    GridImageHash = RedneckAddonEnum.Route66.GetUniqueHash(),
                     Author = "Sunstorm Interactive",
                     Description = """
                         **Redneck Rampage: Suckin' Grits on Route 66** is a 12-level expansion pack for Redneck Rampage. It was developed by Sunstorm Interactive and released on December 19, 1997.
@@ -521,7 +522,7 @@ public static class OriginalCampaignsProvider
                     SupportedGame = new(GameEnum.Redneck),
                     RequiredFeatures = null,
                     PathToFile = null,
-                    DependentAddons = new(StringComparer.OrdinalIgnoreCase) { { nameof(RedneckAddonEnum.Route66), null } },
+                    DependentAddons = new Dictionary<string, string?>(StringComparer.OrdinalIgnoreCase) { { nameof(RedneckAddonEnum.Route66), null } },
                     IncompatibleAddons = null,
                     MainCon = null,
                     AdditionalCons = null,
@@ -529,7 +530,7 @@ public static class OriginalCampaignsProvider
                     AdditionalDefs = null,
                     RTS = null,
                     StartMap = null,
-                    PreviewImage = null,
+                    PreviewImageHash = null,
                     IsFolder = false,
                     Executables = null
                 });
@@ -544,7 +545,7 @@ public static class OriginalCampaignsProvider
                 Id = redneckRaId,
                 Type = AddonTypeEnum.Official,
                 Title = "Rides Again",
-                GridImage = ImageHelper.FileNameToStream("Redneck.again.jpg", Assembly.GetExecutingAssembly()),
+                GridImageHash = GameEnum.RidesAgain.GetUniqueHash(),
                 Author = "Xatrix Entertainment",
                 Description = """
                     **Redneck Rampage Rides Again** is a sequel to Redneck Rampage developed by **Xatrix Entertainment** and published by **Interplay Entertainment** for MS-DOS in 1998.
@@ -564,7 +565,7 @@ public static class OriginalCampaignsProvider
                 AdditionalDefs = null,
                 RTS = null,
                 StartMap = null,
-                PreviewImage = null,
+                PreviewImageHash = null,
                 IsFolder = false,
                 Executables = null
             });
@@ -589,7 +590,7 @@ public static class OriginalCampaignsProvider
                 Id = namId,
                 Type = AddonTypeEnum.Official,
                 Title = "NAM",
-                GridImage = ImageHelper.FileNameToStream("NAM.nam.jpg", Assembly.GetExecutingAssembly()),
+                GridImageHash = GameEnum.NAM.GetUniqueHash(),
                 Author = "TNT Team",
                 Description = """
                     You are Alan 'The Bear' Westmoreland, Marine Corps sergeant. The trouble starts on a deadly Viet Cong raid. Here the jungle is your battleground.
@@ -614,7 +615,7 @@ public static class OriginalCampaignsProvider
                 MainDef = null,
                 AdditionalDefs = null,
                 StartMap = null,
-                PreviewImage = null,
+                PreviewImageHash = null,
                 IsFolder = false,
                 Executables = null
             });
@@ -639,7 +640,7 @@ public static class OriginalCampaignsProvider
                 Id = ww2id,
                 Type = AddonTypeEnum.Official,
                 Title = "World War II GI",
-                GridImage = ImageHelper.FileNameToStream("WW2GI.ww2gi.jpg", Assembly.GetExecutingAssembly()),
+                GridImageHash = GameEnum.WW2GI.GetUniqueHash(),
                 Author = "TNT Team",
                 Description = """
                     **WWII GI** is the invasion of Normandy. The paranoia. The fear. the intensity that was D-Day. You will experience it first hand.
@@ -660,7 +661,7 @@ public static class OriginalCampaignsProvider
                 MainDef = null,
                 AdditionalDefs = null,
                 StartMap = null,
-                PreviewImage = null,
+                PreviewImageHash = null,
                 IsFolder = false,
                 Executables = null
             });
@@ -674,7 +675,7 @@ public static class OriginalCampaignsProvider
                 Id = platoon,
                 Type = AddonTypeEnum.Official,
                 Title = "Platoon Leader",
-                GridImage = ImageHelper.FileNameToStream("WW2GI.platoon.jpg", Assembly.GetExecutingAssembly()),
+                GridImageHash = WW2GIAddonEnum.Platoon.GetUniqueHash(),
                 Author = "TNT Team",
                 Description = """
                     **Platoon Leader** is an add-on for GT Interactive game WWII GI.
@@ -693,7 +694,7 @@ public static class OriginalCampaignsProvider
                 MainDef = null,
                 AdditionalDefs = null,
                 StartMap = null,
-                PreviewImage = null,
+                PreviewImageHash = null,
                 IsFolder = false,
                 Executables = null
             });
@@ -718,7 +719,7 @@ public static class OriginalCampaignsProvider
                 Id = namId,
                 Type = AddonTypeEnum.Official,
                 Title = "TekWar",
-                GridImage = ImageHelper.FileNameToStream("TekWar.tekwar.jpg", Assembly.GetExecutingAssembly()),
+                GridImageHash = GameEnum.TekWar.GetUniqueHash(),
                 Author = "Capstone Software",
                 Description = """
                     You're an ex-cop who was sentenced to cryo sleep. When you awake you are recruited by the Cosmos Detective Agency as a hitman. Why? Cause there's a dangerous new drug on the streets of New LA: Tek!
@@ -737,7 +738,7 @@ public static class OriginalCampaignsProvider
                 MainDef = null,
                 AdditionalDefs = null,
                 StartMap = null,
-                PreviewImage = null,
+                PreviewImageHash = null,
                 IsFolder = false,
                 Executables = null
             });
@@ -757,12 +758,12 @@ public static class OriginalCampaignsProvider
         if (sGame.IsBaseGameInstalled)
         {
             var slaveId = nameof(GameEnum.Exhumed).ToLower();
-            campaigns.Add(new(slaveId), new SlaveCampaign()
+            campaigns.Add(new(slaveId), new GenericCampaign()
             {
                 Id = slaveId,
                 Type = AddonTypeEnum.Official,
                 Title = "Powerslave",
-                GridImage = ImageHelper.FileNameToStream("Slave.slave.jpg", Assembly.GetExecutingAssembly()),
+                GridImageHash = GameEnum.Exhumed.GetUniqueHash(),
                 Author = "Lobotomy Software",
                 Description = """
                     **PowerSlave**, known as **Exhumed** in Europe and **1999 AD: Resurrection of the Pharaoh** in Japan, is a first-person shooter video game developed by **Lobotomy Software**
@@ -784,7 +785,7 @@ public static class OriginalCampaignsProvider
                 MainDef = null,
                 AdditionalDefs = null,
                 StartMap = null,
-                PreviewImage = null,
+                PreviewImageHash = null,
                 IsFolder = false,
                 Executables = null
             });
@@ -804,12 +805,12 @@ public static class OriginalCampaignsProvider
         if (wGame.IsBaseGameInstalled)
         {
             var namId = nameof(GameEnum.Witchaven).ToLower();
-            campaigns.Add(new(namId), new DukeCampaign()
+            campaigns.Add(new(namId), new GenericCampaign()
             {
                 Id = namId,
                 Type = AddonTypeEnum.Official,
                 Title = "Witchaven",
-                GridImage = ImageHelper.FileNameToStream("Witchaven.wh1.jpg", Assembly.GetExecutingAssembly()),
+                GridImageHash = GameEnum.Witchaven.GetUniqueHash(),
                 Author = "Capstone Software",
                 Description = """
                     Descend into a dark and gruesome nightmare!
@@ -824,13 +825,10 @@ public static class OriginalCampaignsProvider
                 PathToFile = null,
                 DependentAddons = null,
                 IncompatibleAddons = null,
-                MainCon = null,
-                AdditionalCons = null,
-                RTS = null,
                 MainDef = null,
                 AdditionalDefs = null,
                 StartMap = null,
-                PreviewImage = null,
+                PreviewImageHash = null,
                 IsFolder = false,
                 Executables = null
             });
@@ -839,12 +837,12 @@ public static class OriginalCampaignsProvider
         if (wGame.IsWitchaven2Installed)
         {
             var namId = nameof(GameEnum.Witchaven2).ToLower();
-            campaigns.Add(new(namId), new DukeCampaign()
+            campaigns.Add(new(namId), new GenericCampaign()
             {
                 Id = namId,
                 Type = AddonTypeEnum.Official,
                 Title = "Witchaven II",
-                GridImage = ImageHelper.FileNameToStream("Witchaven.wh2.jpg", Assembly.GetExecutingAssembly()),
+                GridImageHash = GameEnum.Witchaven2.GetUniqueHash(),
                 Author = "Capstone Software",
                 Description = """
                     The witches have been destroyed in their lair on the Island of Char!
@@ -861,13 +859,10 @@ public static class OriginalCampaignsProvider
                 PathToFile = null,
                 DependentAddons = null,
                 IncompatibleAddons = null,
-                MainCon = null,
-                AdditionalCons = null,
-                RTS = null,
                 MainDef = null,
                 AdditionalDefs = null,
                 StartMap = null,
-                PreviewImage = null,
+                PreviewImageHash = null,
                 IsFolder = false,
                 Executables = null
             });

@@ -116,8 +116,9 @@ public sealed partial class MapsViewModel : RightPanelViewModel, IPortsButtonCon
         InstalledAddonsProviderFactory installedAddonsProviderFactory,
         DownloadableAddonsProviderFactory _downloadableAddonsProviderFactory,
         PortStarter portStarter,
+        BitmapsCache bitmapsCache,
         ILogger logger
-        ) : base(playtimeProvider, ratingProvider)
+        ) : base(playtimeProvider, ratingProvider, bitmapsCache)
     {
         Game = game;
 

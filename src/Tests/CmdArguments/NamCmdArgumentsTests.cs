@@ -30,7 +30,7 @@ public sealed class NamCmdArgumentsTests
             Id = nameof(GameEnum.NAM).ToLower(),
             Type = AddonTypeEnum.Official,
             Title = "NAM",
-            GridImage = null,
+            GridImageHash = null,
             Author = null,
             Description = null,
             Version = null,
@@ -45,7 +45,7 @@ public sealed class NamCmdArgumentsTests
             AdditionalDefs = null,
             RTS = null,
             StartMap = null,
-            PreviewImage = null,
+            PreviewImageHash = null,
             IsFolder = false,
             Executables = null
         };

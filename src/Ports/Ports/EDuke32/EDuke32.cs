@@ -360,7 +360,7 @@ public class EDuke32 : BasePort
             _ = sb.Append($@" {MainConParam}""{dCamp.MainCon}""");
         }
 
-        if (dCamp.AdditionalCons?.Count > 0)
+        if (dCamp.AdditionalCons?.Any() is true)
         {
             foreach (var con in dCamp.AdditionalCons)
             {

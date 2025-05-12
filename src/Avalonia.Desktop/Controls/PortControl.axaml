@@ -5,17 +5,12 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Avalonia.Desktop.Controls.PortControl"
              xmlns:vm="clr-namespace:Avalonia.Desktop.ViewModels"
-             xmlns:helpers="clr-namespace:Avalonia.Desktop.Helpers"
              xmlns:i="https://github.com/projektanker/icons.avalonia"
              x:DataType="vm:PortViewModel">
 
-    <UserControl.Resources>
-        <helpers:StreamToBitmapConverter x:Key="StreamToBitmapConverter"/>
-    </UserControl.Resources>
-
     <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
 
-        <Image Source="{Binding Icon, Converter={StaticResource StreamToBitmapConverter}}"
+        <Image Source="{Binding IconId, Converter={StaticResource CachedHashToBitmapConverter}}"
                Width="64"
                Margin="0,0,0,5"
                HorizontalAlignment="Center"/>

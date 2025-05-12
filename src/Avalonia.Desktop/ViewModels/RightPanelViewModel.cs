@@ -1,5 +1,6 @@
+using Avalonia.Desktop.Misc;
+using Avalonia.Media.Imaging;
 using Common.Client.Providers;
-using Common.Enums;
 using Common.Helpers;
 using Common.Interfaces;
 using CommunityToolkit.Diagnostics;
@@ -14,15 +15,18 @@ public partial class RightPanelViewModel : ObservableObject
 
     private readonly PlaytimeProvider _playtimeProvider;
     private readonly RatingProvider _ratingProvider;
+    private readonly BitmapsCache _bitmapsCache;
 
 
     public RightPanelViewModel(
         PlaytimeProvider playtimeProvider,
-        RatingProvider ratingProvider
+        RatingProvider ratingProvider,
+        BitmapsCache bitmapsCache
         )
     {
         _playtimeProvider = playtimeProvider;
         _ratingProvider = ratingProvider;
+        _bitmapsCache = bitmapsCache;
     }
 
 
@@ -36,20 +40,11 @@ public partial class RightPanelViewModel : ObservableObject
     /// <summary>
     /// Preview image of the selected campaign
     /// </summary>
-    public Stream? SelectedAddonPreview
+    public Bitmap? SelectedAddonPreview
     {
         get
         {
-            if (SelectedAddon?.Type is AddonTypeEnum.TC)
-            {
-                return SelectedAddon?.PreviewImage;
-            }
-            else if (SelectedAddon?.Type is AddonTypeEnum.Map or AddonTypeEnum.Mod)
-            {
-                return SelectedAddon?.PreviewImage ?? SelectedAddon?.GridImage;
-            }
-
-            return null;
+            return SelectedAddon?.PreviewImageHash is null ? null : _bitmapsCache.GetFromCache(SelectedAddon.PreviewImageHash.Value);
         }
     }
 

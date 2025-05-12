@@ -13,8 +13,8 @@ namespace Tests.CmdArguments;
 public sealed class WangCmdArgumentsTests
 {
     private readonly WangGame _wangGame;
-    private readonly WangCampaign _wangCamp;
-    private readonly WangCampaign _tdCamp;
+    private readonly GenericCampaign _wangCamp;
+    private readonly GenericCampaign _tdCamp;
 
     private readonly AutoloadModsProvider _modsProvider;
 
@@ -32,7 +32,8 @@ public sealed class WangCmdArgumentsTests
             Id = nameof(GameEnum.ShadowWarrior).ToLower(),
             Type = AddonTypeEnum.Official,
             Title = "Shadow Warrior",
-            GridImage = null,
+            GridImageHash = null,
+            PreviewImageHash = null,
             Author = null,
             Description = null,
             Version = null,
@@ -44,7 +45,6 @@ public sealed class WangCmdArgumentsTests
             MainDef = null,
             AdditionalDefs = null,
             StartMap = null,
-            PreviewImage = null,
             IsFolder = false,
             Executables = null
         };
@@ -54,7 +54,8 @@ public sealed class WangCmdArgumentsTests
             Id = nameof(WangAddonEnum.TwinDragon).ToLower(),
             Type = AddonTypeEnum.TC,
             Title = "Twin Dragon",
-            GridImage = null,
+            GridImageHash = null,
+            PreviewImageHash = null,
             Author = null,
             Description = null,
             Version = null,
@@ -66,7 +67,6 @@ public sealed class WangCmdArgumentsTests
             MainDef = null,
             AdditionalDefs = null,
             StartMap = null,
-            PreviewImage = null,
             IsFolder = false,
             Executables = null
         };

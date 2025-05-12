@@ -401,7 +401,7 @@ public sealed partial class DevViewModel : ObservableObject
             return;
         }
 
-        GameCrc = Crc32Helper.GetCrc32(files[0].Path.LocalPath.ToString(), true);
+        GameCrc = Crc32Helper.GetCrc32Hex(files[0].Path.LocalPath);
     }
 
     [RelayCommand]

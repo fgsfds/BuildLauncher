@@ -1,4 +1,6 @@
-﻿namespace Addons.Addons;
+﻿using System.Collections.Immutable;
+
+namespace Addons.Addons;
 
 public sealed class AutoloadMod : BaseAddon
 {
@@ -10,5 +12,5 @@ public sealed class AutoloadMod : BaseAddon
     /// <summary>
     /// List of additional cons
     /// </summary>
-    public required HashSet<string>? AdditionalCons { get; set; }
+    public required ImmutableArray<string>? AdditionalCons { get; set; }
 }

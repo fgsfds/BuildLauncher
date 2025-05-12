@@ -26,20 +26,26 @@ public static class ImageHelper
     /// Get grid cover from the archive
     /// </summary>
     /// <param name="archive">Archive</param>
-    public static Stream? GetCoverFromArchive(IArchive archive) => GetImageFromArchive(archive, "grid.");
+    public static (long? crc, Stream? stream) GetCoverFromArchive(IArchive archive) => GetImageFromArchive(archive, "grid.");
+
+    /// <summary>
+    /// Get grid cover from the archive
+    /// </summary>
+    /// <param name="archive">Archive</param>
+    public static (long? crc, Stream? stream) GetPreviewFromArchive(IArchive archive) => GetImageFromArchive(archive, "preview.");
 
     /// <summary>
     /// Get grid cover from the archive
     /// </summary>
     /// <param name="archive">Archive</param>
     /// <param name="imageName">Name of the image</param>
-    public static Stream? GetImageFromArchive(IArchive archive, string imageName)
+    private static (long? crc, Stream? stream) GetImageFromArchive(IArchive archive, string imageName)
     {
         var image = archive.Entries.FirstOrDefault(x => x.Key?.StartsWith(imageName) ?? false);
 
         if (image is null)
         {
-            return null;
+            return (null, null);
         }
 
         using var defStream = image.OpenEntryStream();
@@ -49,6 +55,6 @@ public static class ImageHelper
 
         var buffer = memStream.GetBuffer();
 
-        return new MemoryStream(buffer);
+        return (image.Crc, new MemoryStream(buffer));
     }
 }

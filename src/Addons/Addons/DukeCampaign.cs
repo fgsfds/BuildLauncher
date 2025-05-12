@@ -1,4 +1,6 @@
-﻿namespace Addons.Addons;
+﻿using System.Collections.Immutable;
+
+namespace Addons.Addons;
 
 /// <summary>
 /// Duke Nukem 3D campaign
@@ -13,7 +15,7 @@ public sealed class DukeCampaign : BaseAddon
     /// <summary>
     /// Additional .con files
     /// </summary>
-    public required HashSet<string>? AdditionalCons { get; init; }
+    public required ImmutableArray<string>? AdditionalCons { get; init; }
 
     /// <summary>
     /// Main .rts file

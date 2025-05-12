@@ -30,7 +30,7 @@ public sealed class FuryCmdArgumentsTests
             Id = nameof(GameEnum.Duke3D).ToLower(),
             Type = AddonTypeEnum.Official,
             Title = "Ion Fury",
-            GridImage = null,
+            GridImageHash = null,
             Author = null,
             Description = null,
             Version = null,
@@ -45,7 +45,7 @@ public sealed class FuryCmdArgumentsTests
             RTS = null,
             AdditionalDefs = null,
             StartMap = null,
-            PreviewImage = null,
+            PreviewImageHash = null,
             IsFolder = false,
             Executables = null
         };

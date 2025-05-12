@@ -12,7 +12,7 @@ namespace Tests.CmdArguments;
 public sealed class SlaveCmdArgumentsTests
 {
     private readonly SlaveGame _slaveGame;
-    private readonly SlaveCampaign _slaveCamp;
+    private readonly GenericCampaign _slaveCamp;
 
     private readonly AutoloadModsProvider _modsProvider;
 
@@ -30,7 +30,8 @@ public sealed class SlaveCmdArgumentsTests
             Id = nameof(GameEnum.Exhumed).ToLower(),
             Type = AddonTypeEnum.Official,
             Title = "Slave",
-            GridImage = null,
+            GridImageHash = null,
+            PreviewImageHash = null,
             Author = null,
             Description = null,
             Version = null,
@@ -42,7 +43,6 @@ public sealed class SlaveCmdArgumentsTests
             MainDef = null,
             AdditionalDefs = null,
             StartMap = null,
-            PreviewImage = null,
             IsFolder = false,
             Executables = null
         };

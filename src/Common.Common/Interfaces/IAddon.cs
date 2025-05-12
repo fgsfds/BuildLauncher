@@ -1,8 +1,9 @@
 ﻿using Common.Enums;
+using System.Collections.Immutable;
 
 namespace Common.Interfaces;
 
-public interface IAddon : IDisposable
+public interface IAddon
 {
     /// <summary>
     /// Addon ID
@@ -22,7 +23,7 @@ public interface IAddon : IDisposable
     /// <summary>
     /// Features required to run port
     /// </summary>
-    HashSet<FeatureEnum>? RequiredFeatures { get; init; }
+    ImmutableArray<FeatureEnum>? RequiredFeatures { get; init; }
 
     /// <summary>
     /// Name of the addon
@@ -52,12 +53,12 @@ public interface IAddon : IDisposable
     /// <summary>
     /// Cover image
     /// </summary>
-    Stream? GridImage { get; init; }
+    long? GridImageHash { get; init; }
 
     /// <summary>
     /// Preview image
     /// </summary>
-    Stream? PreviewImage { get; init; }
+    long? PreviewImageHash { get; init; }
 
     /// <summary>
     /// Addon version
@@ -67,12 +68,12 @@ public interface IAddon : IDisposable
     /// <summary>
     /// List of addons that the current addon requires to work
     /// </summary>
-    Dictionary<string, string?>? DependentAddons { get; init; }
+    IReadOnlyDictionary<string, string?>? DependentAddons { get; init; }
 
     /// <summary>
     /// List of addons that the current addon is incompatible with
     /// </summary>
-    Dictionary<string, string?>? IncompatibleAddons { get; init; }
+    IReadOnlyDictionary<string, string?>? IncompatibleAddons { get; init; }
 
     /// <summary>
     /// Main def file
@@ -82,7 +83,7 @@ public interface IAddon : IDisposable
     /// <summary>
     /// Additional def files
     /// </summary>
-    HashSet<string>? AdditionalDefs { get; init; }
+    ImmutableArray<string>? AdditionalDefs { get; init; }
 
     /// <summary>
     /// Map that will be started when the addon is loaded
@@ -92,7 +93,7 @@ public interface IAddon : IDisposable
     /// <summary>
     /// Map that will be started when the addon is loaded
     /// </summary>
-    Dictionary<OSEnum, string>? Executables { get; init; }
+    IReadOnlyDictionary<OSEnum, string>? Executables { get; init; }
 
     /// <summary>
     /// Is addon unpacked to a folder

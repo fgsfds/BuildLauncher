@@ -75,7 +75,7 @@ public sealed partial class PortViewModel : ObservableObject
     /// <summary>
     /// Port's icon
     /// </summary>
-    public Stream Icon => Port.Icon;
+    public long IconId => Port.IconId;
 
     /// <summary>
     /// Currently installed version

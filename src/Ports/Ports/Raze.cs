@@ -348,7 +348,7 @@ public sealed class Raze : BasePort
             _ = sb.Append($@" {MainConParam}""{dCamp.MainCon}""");
         }
 
-        if (dCamp.AdditionalCons?.Count > 0)
+        if (dCamp.AdditionalCons?.Any() is true)
         {
             foreach (var con in dCamp.AdditionalCons)
             {
@@ -381,7 +381,7 @@ public sealed class Raze : BasePort
         }
 
 
-        Guard2.ThrowIfNotType<WangCampaign>(addon, out var wCamp);
+        Guard2.ThrowIfNotType<GenericCampaign>(addon, out var wCamp);
 
         //TODO downloaded addons support
         if (wCamp.DependentAddons is not null &&
@@ -453,7 +453,7 @@ public sealed class Raze : BasePort
             _ = sb.Append($@" {MainConParam}""{rCamp.MainCon}""");
         }
 
-        if (rCamp.AdditionalCons?.Count > 0)
+        if (rCamp.AdditionalCons?.Any() is true)
         {
             foreach (var con in rCamp.AdditionalCons)
             {

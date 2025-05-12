@@ -32,7 +32,7 @@ public sealed class RedneckCmdArgumentsTests
             Id = nameof(GameEnum.Redneck).ToLower(),
             Type = AddonTypeEnum.Official,
             Title = "Redneck Rampage",
-            GridImage = null,
+            GridImageHash = null,
             Author = null,
             Description = null,
             Version = null,
@@ -47,7 +47,7 @@ public sealed class RedneckCmdArgumentsTests
             AdditionalDefs = null,
             RTS = null,
             StartMap = null,
-            PreviewImage = null,
+            PreviewImageHash = null,
             IsFolder = false,
             Executables = null
         };
@@ -57,7 +57,7 @@ public sealed class RedneckCmdArgumentsTests
             Id = nameof(GameEnum.RidesAgain).ToLower(),
             Type = AddonTypeEnum.Official,
             Title = "Rides Again",
-            GridImage = null,
+            GridImageHash = null,
             Author = null,
             Description = null,
             Version = null,
@@ -72,7 +72,7 @@ public sealed class RedneckCmdArgumentsTests
             AdditionalDefs = null,
             RTS = null,
             StartMap = null,
-            PreviewImage = null,
+            PreviewImageHash = null,
             IsFolder = false,
             Executables = null
         };

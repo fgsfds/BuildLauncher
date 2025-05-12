@@ -9,6 +9,7 @@ namespace Common.Client.Config;
 public sealed class ConfigProvider : IConfigProvider
 {
     private readonly DatabaseContext _dbContext;
+    private readonly Lock _lock = new();
 
     public event ParameterChanged? ParameterChangedEvent;
 
@@ -144,67 +145,76 @@ public sealed class ConfigProvider : IConfigProvider
 
     public void AddScore(string addonId, byte rating)
     {
-        var existing = _dbContext.Rating.Find([addonId]);
-
-        if (existing is null)
+        using (_lock.EnterScope())
         {
-            _ = _dbContext.Rating.Add(new() { AddonId = addonId, Rating = rating });
-        }
-        else
-        {
-            existing.Rating = rating;
-        }
+            var existing = _dbContext.Rating.Find([addonId]);
 
-        _ = _dbContext.SaveChanges();
-        ParameterChangedEvent?.Invoke(nameof(Rating));
+            if (existing is null)
+            {
+                _ = _dbContext.Rating.Add(new() { AddonId = addonId, Rating = rating });
+            }
+            else
+            {
+                existing.Rating = rating;
+            }
+
+            _ = _dbContext.SaveChanges();
+            ParameterChangedEvent?.Invoke(nameof(Rating));
+        }
     }
 
     public void AddPlaytime(string addonId, TimeSpan playTime)
     {
-        var existing = _dbContext.Playtimes.Find([addonId]);
-
-        if (existing is null)
+        using (_lock.EnterScope())
         {
-            _ = _dbContext.Playtimes.Add(new() { AddonId = addonId, Playtime = playTime });
-        }
-        else
-        {
-            existing.Playtime += playTime;
-        }
+            var existing = _dbContext.Playtimes.Find([addonId]);
 
-        _ = _dbContext.SaveChanges();
-        ParameterChangedEvent?.Invoke(nameof(Playtimes));
+            if (existing is null)
+            {
+                _ = _dbContext.Playtimes.Add(new() { AddonId = addonId, Playtime = playTime });
+            }
+            else
+            {
+                existing.Playtime += playTime;
+            }
+
+            _ = _dbContext.SaveChanges();
+            ParameterChangedEvent?.Invoke(nameof(Playtimes));
+        }
     }
 
     public void ChangeModState(AddonVersion addonId, bool isEnabled)
     {
-        var existing = _dbContext.DisabledAddons.Find(addonId.Id);
-
-        if (existing is null)
+        using (_lock.EnterScope())
         {
-            if (isEnabled)
+            var existing = _dbContext.DisabledAddons.Find(addonId.Id);
+
+            if (existing is null)
             {
-                return;
+                if (isEnabled)
+                {
+                    return;
+                }
+                else
+                {
+                    _ = _dbContext.DisabledAddons.Add(new() { AddonId = addonId.Id });
+                }
             }
             else
             {
-                _ = _dbContext.DisabledAddons.Add(new() { AddonId = addonId.Id });
+                if (isEnabled)
+                {
+                    _ = _dbContext.DisabledAddons.Remove(existing);
+                }
+                else
+                {
+                    return;
+                }
             }
-        }
-        else
-        {
-            if (isEnabled)
-            {
-                _ = _dbContext.DisabledAddons.Remove(existing);
-            }
-            else
-            {
-                return;
-            }
-        }
 
-        _ = _dbContext.SaveChanges();
-        ParameterChangedEvent?.Invoke(nameof(DisabledAutoloadMods));
+            _ = _dbContext.SaveChanges();
+            ParameterChangedEvent?.Invoke(nameof(DisabledAutoloadMods));
+        }
     }
 
 
@@ -214,42 +224,48 @@ public sealed class ConfigProvider : IConfigProvider
 
     private void SetSettingsValue(string value, [CallerMemberName] string caller = "")
     {
-        var setting = _dbContext.Settings.Find(caller);
-
-        if (setting is null)
+        using (_lock.EnterScope())
         {
-            _ = _dbContext.Settings.Add(new() { Name = caller, Value = value });
-        }
-        else
-        {
-            setting.Value = value;
-        }
+            var setting = _dbContext.Settings.Find(caller);
 
-        _ = _dbContext.SaveChanges();
-        ParameterChangedEvent?.Invoke(caller);
+            if (setting is null)
+            {
+                _ = _dbContext.Settings.Add(new() { Name = caller, Value = value });
+            }
+            else
+            {
+                setting.Value = value;
+            }
+
+            _ = _dbContext.SaveChanges();
+            ParameterChangedEvent?.Invoke(caller);
+        }
     }
 
     private void SetGamePathValue(string? value, [CallerMemberName] string caller = "")
     {
-        var setting = _dbContext.GamePaths.Find(caller);
-
-        value = value?.TrimEnd(Path.DirectorySeparatorChar);
-
-        if (string.IsNullOrWhiteSpace(value))
+        using (_lock.EnterScope())
         {
-            value = null;
-        }
+            var setting = _dbContext.GamePaths.Find(caller);
 
-        if (setting is null)
-        {
-            _ = _dbContext.GamePaths.Add(new() { Game = caller, Path = value });
-        }
-        else
-        {
-            setting.Path = value;
-        }
+            value = value?.TrimEnd(Path.DirectorySeparatorChar);
 
-        _ = _dbContext.SaveChanges();
-        ParameterChangedEvent?.Invoke(caller);
+            if (string.IsNullOrWhiteSpace(value))
+            {
+                value = null;
+            }
+
+            if (setting is null)
+            {
+                _ = _dbContext.GamePaths.Add(new() { Game = caller, Path = value });
+            }
+            else
+            {
+                setting.Path = value;
+            }
+
+            _ = _dbContext.SaveChanges();
+            ParameterChangedEvent?.Invoke(caller);
+        }
     }
 }

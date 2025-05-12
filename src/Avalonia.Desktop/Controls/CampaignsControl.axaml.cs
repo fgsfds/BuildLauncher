@@ -1,16 +1,14 @@
-using Addons.Addons;
 using Addons.Providers;
 using Avalonia.Controls;
-using Avalonia.Desktop.Helpers;
+using Avalonia.Desktop.Misc;
 using Avalonia.Desktop.ViewModels;
 using Avalonia.Input;
-using Avalonia.Media;
+using Common.Common.Helpers;
 using Common.Enums;
 using Common.Interfaces;
 using CommunityToolkit.Mvvm.Input;
 using Ports.Ports;
 using Ports.Providers;
-using System.Globalization;
 
 namespace Avalonia.Desktop.Controls;
 
@@ -23,8 +21,7 @@ public sealed partial class CampaignsControl : UserControl
     private readonly CampaignsViewModel _viewModel;
     private readonly InstalledPortsProvider _portsProvider;
     private readonly InstalledAddonsProvider _addonsProvider;
-
-    private IEnumerable<BaseAddon>? _oldItems;
+    private readonly BitmapsCache _bitmapsCache;
 
     public CampaignsControl()
     {
@@ -34,12 +31,14 @@ public sealed partial class CampaignsControl : UserControl
         _portsProvider = null!;
         _addonsProvider = null!;
         _viewModel = null!;
+        _bitmapsCache = null!;
     }
 
     public CampaignsControl(
         CampaignsViewModel viewModel,
         InstalledPortsProvider portsProvider,
-        InstalledAddonsProvider addonsProvider
+        InstalledAddonsProvider addonsProvider,
+        BitmapsCache bitmapsCache
         )
     {
         InitializeComponent();
@@ -48,35 +47,11 @@ public sealed partial class CampaignsControl : UserControl
         _portsProvider = portsProvider;
         _addonsProvider = addonsProvider;
         _viewModel = viewModel;
+        _bitmapsCache = bitmapsCache;
 
         AddPortsButtons();
 
         _portsProvider.CustomPortChangedEvent += OnCustomPortChanged;
-        //CampaignsList.PropertyChanged += OnCampaignsListPropertyChanged;
-    }
-
-    [Obsolete("Not sure if required")]
-    private void OnCampaignsListPropertyChanged(object? sender, AvaloniaPropertyChangedEventArgs e)
-    {
-        if (e.Property.Name.Equals("ItemsSource"))
-        {
-            var newItems = CampaignsList.Items.OfType<BaseAddon>();
-
-            if (_oldItems is not null)
-            {
-                foreach (var item in _oldItems)
-                {
-                    var existingItem = newItems.FirstOrDefault(x => x.Id.Equals(item.Id) && (x.Version?.Equals(item.Version) ?? true));
-
-                    if (existingItem is null || item != existingItem)
-                    {
-                        item.Dispose();
-                    }
-                }
-            }
-
-            _oldItems = newItems;
-        }
     }
 
     /// <summary>
@@ -84,8 +59,6 @@ public sealed partial class CampaignsControl : UserControl
     /// </summary>
     private void AddPortsButtons()
     {
-        StreamToBitmapConverter converter = new();
-
         if (_viewModel.Game.GameEnum is GameEnum.Standalone)
         {
             TextBlock textBlock = new() { Text = BuiltInPortStr };
@@ -107,7 +80,7 @@ public sealed partial class CampaignsControl : UserControl
 
         foreach (var port in _supportedPorts)
         {
-            var portIcon = converter.Convert(port.Icon, typeof(IImage), null, CultureInfo.InvariantCulture) as IImage;
+            var portIcon = _bitmapsCache.GetFromCache(port.PortEnum.GetUniqueHash());
 
             StackPanel sp = new() { Orientation = Layout.Orientation.Horizontal };
             sp.Children.Add(new Image() { Margin = new(0, 0, 5, 0), Height = 16, Source = portIcon });

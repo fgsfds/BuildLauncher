@@ -117,7 +117,7 @@ public sealed class VoidSW : EDuke32
         }
 
 
-        addon.ThrowIfNotType<WangCampaign>(out var wCamp);
+        addon.ThrowIfNotType<GenericCampaign>(out var wCamp);
 
         if (wCamp.DependentAddons?.ContainsKey(nameof(WangAddonEnum.Wanton)) == true)
         {

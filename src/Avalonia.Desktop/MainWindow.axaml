@@ -36,7 +36,7 @@
             <TabControl Grid.Row="1" Margin="5" TabStripPlacement="Left">
 
                 <!--Duke 3D-->
-                <TabItem Name="DukeTab" IsEnabled="{Binding IsDukeTabEnabled}">
+                <TabItem Name="DukeTab" IsEnabled="{Binding IsDukeTabEnabled}" >
 
                     <TabItem.Header>
                         <StackPanel Orientation="Horizontal">

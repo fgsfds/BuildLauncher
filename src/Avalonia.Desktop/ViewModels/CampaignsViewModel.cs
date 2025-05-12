@@ -99,8 +99,9 @@ public sealed partial class CampaignsViewModel : RightPanelViewModel, IPortsButt
         InstalledAddonsProviderFactory installedAddonsProviderFactory,
         DownloadableAddonsProviderFactory downloadableAddonsProviderFactory,
         PortStarter portStarter,
+        BitmapsCache bitmapsCache,
         ILogger logger
-        ) : base(playtimeProvider, ratingProvider)
+        ) : base(playtimeProvider, ratingProvider, bitmapsCache)
     {
         Game = game;
 

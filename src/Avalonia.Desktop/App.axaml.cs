@@ -1,6 +1,7 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Desktop.DI;
+using Avalonia.Desktop.Helpers;
 using Avalonia.Desktop.Misc;
 using Avalonia.Desktop.ViewModels;
 using Avalonia.Markup.Xaml;
@@ -45,7 +46,11 @@ public sealed class App : Application
 
         SetTheme(config.Theme);
 
+        var bitmapsCache = BindingsManager.Provider.GetRequiredService<BitmapsCache>();
+        bitmapsCache.InitializeCache();
+
         _app.DataTemplates.Add(viewLocator);
+        _app.Resources.Add(new("CachedHashToBitmapConverter", new CachedHashToBitmapConverter(bitmapsCache)));
 
         lifetime.MainWindow = new MainWindow();
         lifetime.MainWindow.DataContext = vmFactory.GetMainWindowViewModel();

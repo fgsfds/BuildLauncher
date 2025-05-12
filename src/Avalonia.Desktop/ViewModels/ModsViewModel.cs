@@ -1,5 +1,6 @@
 using Addons.Addons;
 using Addons.Providers;
+using Avalonia.Desktop.Misc;
 using Common.Client.Interfaces;
 using Common.Client.Providers;
 using Common.Enums;
@@ -30,14 +31,15 @@ public sealed partial class ModsViewModel : RightPanelViewModel, IPortsButtonCon
         PlaytimeProvider playtimeProvider,
         RatingProvider ratingProvider,
         InstalledAddonsProviderFactory installedAddonsProviderFactory,
-        DownloadableAddonsProviderFactory _downloadableAddonsProviderFactory
-        ) : base(playtimeProvider, ratingProvider)
+        DownloadableAddonsProviderFactory downloadableAddonsProviderFactory,
+        BitmapsCache bitmapsCache
+        ) : base(playtimeProvider, ratingProvider, bitmapsCache)
     {
         Game = game;
 
         _gamesProvider = gamesProvider;
         _installedAddonsProvider = installedAddonsProviderFactory.GetSingleton(game);
-        _downloadableAddonsProvider = _downloadableAddonsProviderFactory.GetSingleton(game);
+        _downloadableAddonsProvider = downloadableAddonsProviderFactory.GetSingleton(game);
 
         _gamesProvider.GameChangedEvent += OnGameChanged;
         _installedAddonsProvider.AddonsChangedEvent += OnAddonChanged;

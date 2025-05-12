@@ -14,7 +14,6 @@
         <helpers:GameStringToEnumConverter x:Key="GameStringToEnumConverter"/>
     </UserControl.Resources>
 
-
     <ScrollViewer HorizontalScrollBarVisibility="Disabled" >
 
         <ScrollViewer.Styles>
@@ -754,15 +753,15 @@
                                  Height="20"
                                  Value="{Binding ProgressBarValue}"/>
 
+                    <Button Command="{Binding AddAddonCommand}"
+                            Margin="0, 10" Padding="10"
+                            MinWidth="150"
+                            IsVisible="{Binding IsDeveloperMode}"
+                            Content="Add addon to the database..."/>
+
                 </StackPanel>
 
             </Grid>
-
-            <Button Command="{Binding AddAddonCommand}"
-                    Margin="5,10,5,10" Padding="10"
-                    MinWidth="150"
-                    IsVisible="{Binding IsDeveloperMode}"
-                    Content="Add addon to the database..."/>
 
             <TextBlock Text="{Binding JsonText}"
                        Margin="5"

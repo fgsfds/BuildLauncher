@@ -32,7 +32,7 @@ public sealed class WW2GICmdArgumentsTests
             Id = nameof(GameEnum.WW2GI).ToLower(),
             Type = AddonTypeEnum.Official,
             Title = "World War II GI",
-            GridImage = null,
+            GridImageHash = null,
             Author = null,
             Description = null,
             Version = null,
@@ -47,7 +47,7 @@ public sealed class WW2GICmdArgumentsTests
             AdditionalDefs = null,
             RTS = null,
             StartMap = null,
-            PreviewImage = null,
+            PreviewImageHash = null,
             IsFolder = false,
             Executables = null
         };
@@ -57,7 +57,7 @@ public sealed class WW2GICmdArgumentsTests
             Id = nameof(WW2GIAddonEnum.Platoon).ToLower(),
             Type = AddonTypeEnum.Official,
             Title = "Platoon Leader",
-            GridImage = null,
+            GridImageHash = null,
             Author = null,
             Description = null,
             Version = null,
@@ -72,7 +72,7 @@ public sealed class WW2GICmdArgumentsTests
             AdditionalDefs = null,
             RTS = null,
             StartMap = null,
-            PreviewImage = null,
+            PreviewImageHash = null,
             IsFolder = false,
             Executables = null
         };
