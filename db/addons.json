@@ -783,18 +783,6 @@
       "UpdateDate": "2025-01-19T16:51:29.4555705Z"
     },
     {
-      "Id": "blood-bloodbasket",
-      "AddonType": "TC",
-      "Game": "Blood",
-      "DownloadUrl": "http://s3.fgsfds.link/buildlauncher/Blood/Campaigns/blood-bloodbasket_v1_0.zip",
-      "Title": "Bloodbasket",
-      "Version": "1.0",
-      "FileSize": 1054169,
-      "Description": "The first community Map Jam by The Blood Discord Channel. Bloodbasket includes four distinctive and varied maps full of blood, dread and secrets!",
-      "Author": "daMann, Damien Azreal, BloodyTom, Matthan",
-      "UpdateDate": "2025-04-20T15:38:43.5701503Z"
-    },
-    {
       "Id": "blood-out-for-blood",
       "AddonType": "TC",
       "Game": "Blood",
@@ -805,6 +793,18 @@
       "Description": "Out for Blood is a six large level fan add-on (with one secret level) for Blood by Thomas \u0022BloodyTom\u0022 Ziehl, later author of Trauma Therapy, released on August 3, 2019.",
       "Author": "BloodyTom",
       "UpdateDate": "2025-05-02T18:47:41.3928734Z"
+    },
+    {
+      "Id": "blood-bloodbasket",
+      "AddonType": "TC",
+      "Game": "Blood",
+      "DownloadUrl": "http://s3.fgsfds.link/buildlauncher/Blood/Campaigns/blood-bloodbasket_v1_1.zip",
+      "Title": "Bloodbasket",
+      "Version": "1.1",
+      "FileSize": 6486277,
+      "Description": "The first community Map Jam by The Blood Discord Channel. Bloodbasket includes four distinctive and varied maps full of blood, dread and secrets! Caleb will have to fight his way through office cubicles, haunting forests, lava caves and come face to face with a big ass spider!",
+      "Author": "daMann, Damien Azreal, BloodyTom, Matthan",
+      "UpdateDate": "2025-05-13T04:30:46.5863362Z"
     }
   ],
   "ShadowWarrior": [
