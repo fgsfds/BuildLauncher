@@ -407,6 +407,7 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
                 .ThenByDescending(static x => x.Key.Id.Equals(nameof(WangAddonEnum.Wanton), StringComparison.InvariantCultureIgnoreCase))
                 .ThenBy(static x => x.Value.Title))
             {
+                campaigns.Add(customCamp.Key, customCamp.Value);
             }
         }
         else
