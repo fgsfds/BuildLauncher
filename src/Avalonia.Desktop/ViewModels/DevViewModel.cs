@@ -880,6 +880,8 @@ public sealed partial class DevViewModel : ObservableObject
 
             SetErrorMessage("Making zip. Please wait.", false);
 
+            List<FileStream> fileStreams = [];
+
             using (var archive = ZipArchive.Create())
             {
                 using (archive.PauseEntryRebuilding())
@@ -891,7 +893,8 @@ public sealed partial class DevViewModel : ObservableObject
                     foreach (var path in files)
                     {
                         var fileInfo = new FileInfo(path);
-                        using FileStream? fileStream = fileInfo.OpenRead();
+                        FileStream? fileStream = fileInfo.OpenRead();
+                        fileStreams.Add(fileStream);
 
                         _ = archive.AddEntry(
                             path[PathToAddonFolder.Length..],
@@ -903,13 +906,14 @@ public sealed partial class DevViewModel : ObservableObject
 
                         currentFile++;
                         ProgressBarValue = (int)(currentFile / (double)filesCount * 100);
-                        await Task.Delay(1).ConfigureAwait(true);
                     }
                 }
 
-                var zip = new Task(() => archive.SaveTo(pathToArchive, CompressionType.Deflate));
-                zip.Start();
-                await zip.WaitAsync(CancellationToken.None).ConfigureAwait(true);
+                var task = new Task(() => archive.SaveTo(pathToArchive, CompressionType.Deflate));
+                task.Start();
+                await task.WaitAsync(CancellationToken.None).ConfigureAwait(true);
+
+                fileStreams.ForEach(x => x.Dispose());
             }
 
             SetErrorMessage("Zip created successfully. Go to the game page and press Refresh.", false);
