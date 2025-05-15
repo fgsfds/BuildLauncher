@@ -119,10 +119,7 @@ public sealed partial class ModsViewModel : RightPanelViewModel, IPortsButtonCon
     /// Refresh campaigns list
     /// </summary>
     [RelayCommand]
-    private async Task RefreshListAsync()
-    {
-        await UpdateAsync(true).ConfigureAwait(true);
-    }
+    private Task RefreshListAsync() => UpdateAsync(true);
 
 
     /// <summary>
@@ -146,7 +143,7 @@ public sealed partial class ModsViewModel : RightPanelViewModel, IPortsButtonCon
         obj.ThrowIfNotType<AutoloadMod>(out var mod);
 
         //disabling
-        if (!mod.IsEnabled)
+        if (mod.IsEnabled)
         {
             _installedAddonsProvider.DisableAddon(new(mod.Id, mod.Version));
         }

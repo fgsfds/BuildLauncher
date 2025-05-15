@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using Common.Helpers;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Common;
 
@@ -33,13 +34,12 @@ public readonly struct AddonVersion
             throw new ArgumentNullException(nameof(obj));
         }
 
-        if ((Version is null || addon.Version is null) &&
-            Id.Equals(addon.Id))
+        if (!Id.Equals(addon.Id, StringComparison.OrdinalIgnoreCase))
         {
-            return true;
+            return false;
         }
 
-        return base.Equals(obj);
+        return VersionComparer.Compare(Version, addon.Version, "==");
     }
 
     public static bool operator ==(AddonVersion left, AddonVersion right)

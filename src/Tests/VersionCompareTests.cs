@@ -13,7 +13,9 @@ public sealed class VersionCompareTests
     [InlineData("1.1", ">1.0")]
     [InlineData("1.1", "<1.3")]
     [InlineData(null, "==1")]
-    public void CompareTestTrue(string? v1, string v2)
+    [InlineData("1", null)]
+    [InlineData(null, null)]
+    public void CompareTestTrue(string? v1, string? v2)
     {
         var result = VersionComparer.Compare(v1, v2);
 
@@ -34,25 +36,19 @@ public sealed class VersionCompareTests
     }
 
     [Theory]
-    [InlineData("1.1-a1", "==1.1-a1")]
-    [InlineData("1.1-a1", ">=1.1-a1")]
-    [InlineData("1.1-a1", ">=1.1-a0")]
-    [InlineData("1.1-a1", "<=1.1-a1")]
-    [InlineData("1.1-a1", "<=1.1-a2")]
-    [InlineData("1.1-a1", ">1.1-a0")]
-    [InlineData("1.1-a1", "<1.1-a3")]
-    public void CompareTest2(string v1, string v2)
-    {
-        var result = VersionComparer.Compare(v1, v2);
-
-        Assert.True(result);
-    }
-
-    [Theory]
+    [InlineData("1.1-a1", "1.1-a1", "==")]
+    [InlineData("1.1-a1", "1.1-a1", ">=")]
+    [InlineData("1.1-a1", "1.1-a0", ">=")]
+    [InlineData("1.1-a1", "1.1-a1", "<=")]
+    [InlineData("1.1-a1", "1.1-a2", "<=")]
+    [InlineData("1.1-a1", "1.1-a0", ">")]
+    [InlineData("1.1-a1", "1.1-a3", "<")]
+    [InlineData(null, "1", "==")]
+    [InlineData("1", null, "==")]
     [InlineData(null, null, "==")]
-    public void CompareTest3(string? v1, string? v2, string c)
+    public void CompareTest2(string? v1, string? v2, string op)
     {
-        var result = VersionComparer.Compare(v1, v2, c);
+        var result = VersionComparer.Compare(v1, v2, op);
 
         Assert.True(result);
     }
