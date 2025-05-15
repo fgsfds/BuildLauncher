@@ -4,9 +4,9 @@ namespace Common.Helpers;
 
 public static class VersionComparer
 {
-    public static bool Compare(string? v1, string v2)
+    public static bool Compare(string? v1, string? v2)
     {
-        if (v1 is null)
+        if (v1 is null || v2 is null)
         {
             return true;
         }
@@ -50,7 +50,7 @@ public static class VersionComparer
 
     public static bool Compare(string? v1, string? v2, string op)
     {
-        if (v1 is null)
+        if (v1 is null || v2 is null)
         {
             return true;
         }

@@ -113,11 +113,17 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
 
         _isCacheUpdating = true;
 
+        var cache = addonType switch
+        {
+            AddonTypeEnum.TC => _campaignsCache,
+            AddonTypeEnum.Map => _mapsCache,
+            AddonTypeEnum.Mod => _modsCache,
+            _ => throw new NotImplementedException(),
+        };
+
         if (createNew)
         {
-            _campaignsCache.Clear();
-            _campaignsCache.Clear();
-            _campaignsCache.Clear();
+            cache.Clear();
         }
 
         try
@@ -241,26 +247,28 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
             return;
         }
 
-        //foreach (var addon in addons)
-        //{
-        //    if (!_cache.TryGetValue(addon.Type, out _))
-        //    {
-        //        _cache.Add(addon.Type, []);
-        //    }
+        foreach (var addon in addons)
+        {
+            var cache = addon.Type switch
+            {
+                AddonTypeEnum.TC => _campaignsCache,
+                AddonTypeEnum.Map => _mapsCache,
+                AddonTypeEnum.Mod => _modsCache,
+                _ => throw new NotImplementedException(),
+            };
 
-        //    var dict = _cache[addon.Type];
 
-        //    if (dict.TryGetValue(new(addon.Id, addon.Version), out _))
-        //    {
-        //        dict[new(addon.Id, addon.Version)] = addon;
-        //    }
-        //    else
-        //    {
-        //        dict.Add(new(addon.Id, addon.Version), addon);
-        //    }
+            if (cache.TryGetValue(new(addon.Id, addon.Version), out _))
+            {
+                cache[new(addon.Id, addon.Version)] = addon;
+            }
+            else
+            {
+                cache.Add(new(addon.Id, addon.Version), addon);
+            }
 
-        //    AddonsChangedEvent?.Invoke(_game, addon.Type);
-        //}
+            AddonsChangedEvent?.Invoke(_game, addon.Type);
+        }
     }
 
     /// <inheritdoc/>
@@ -309,8 +317,14 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
     /// <inheritdoc/>
     public void EnableAddon(AddonVersion addon)
     {
-        if (!_modsCache.TryGetValue(addon, out var mod) ||
-            mod is not AutoloadMod autoloadMod)
+        var existing = _modsCache.FirstOrDefault(x => x.Key.Equals(addon));
+
+        if (existing.Value is not AutoloadMod autoloadMod)
+        {
+            return;
+        }
+
+        if (autoloadMod.IsEnabled)
         {
             return;
         }
@@ -333,13 +347,12 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
             }
         }
 
-        var otherVersions =
-            from moda in _modsCache
-            where moda.Key.Id.Equals(addon.Id)
-            && VersionComparer.Compare(moda.Key.Version, addon.Version, "==")
-            && moda.Value.FileName!.Equals(mod.FileName)
-            select moda;
-
+        var otherVersions = _modsCache
+             .Where(x =>
+                 x.Key.Id == addon.Id &&
+                 !VersionComparer.Compare(x.Key.Version, addon.Version, "==") &&
+                 !x.Value.FileName!.Equals(autoloadMod.FileName)
+                 );
 
         foreach (var version in otherVersions)
         {
@@ -352,8 +365,14 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
     /// <inheritdoc/>
     public void DisableAddon(AddonVersion addon)
     {
-        if (!_modsCache.TryGetValue(addon, out var mod) ||
-            mod is not AutoloadMod autoloadMod)
+        var existing = _modsCache.FirstOrDefault(x => x.Key.Equals(addon));
+
+        if (existing.Value is not AutoloadMod autoloadMod)
+        {
+            return;
+        }
+
+        if (!autoloadMod.IsEnabled)
         {
             return;
         }
