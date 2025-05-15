@@ -34,7 +34,7 @@
                     Command="{Binding ClearSearchBoxCommand}"
                     ToolTip.Tip="Clear search"
                     Height="{Binding Bounds.Height, ElementName=SearchBox}">
-                <i:Icon Value="mdi-close" />
+                <i:Icon Value="fa-xmark" />
             </Button>
 
         </Grid>
@@ -127,7 +127,7 @@
                     Padding="8"
                     Margin="10,0,0,0"
                     Command="{Binding UpdateCommand}">
-                <i:Icon Value="mdi-refresh" />
+                <i:Icon Value="fa-rotate" />
             </Button>
 
             <Button Grid.Column="2"
@@ -135,7 +135,7 @@
                     HorizontalAlignment="Right"
                     Padding="8"
                     Margin="10,0,0,0">
-                <i:Icon Value="mdi-refresh" Animation="Spin" />
+                <i:Icon Value="fa-rotate" Animation="Spin" />
             </Button>
 
         </Grid>

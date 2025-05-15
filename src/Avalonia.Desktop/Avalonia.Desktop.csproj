@@ -14,12 +14,9 @@
     
   <ItemGroup>
     <AvaloniaResource Include="Assets\blood.png" />
-    <AvaloniaResource Include="Assets\discord.png" />
     <AvaloniaResource Include="Assets\duke3d.png" />
     <AvaloniaResource Include="Assets\fury.png" />
-    <AvaloniaResource Include="Assets\github.png" />
     <AvaloniaResource Include="Assets\icon.ico" />
-    <AvaloniaResource Include="Assets\issues.png" />
     <AvaloniaResource Include="Assets\logo.png" />
     <AvaloniaResource Include="Assets\nam.png" />
     <AvaloniaResource Include="Assets\overlay.png" />
@@ -47,7 +44,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Markdown.Avalonia" />
-    <PackageReference Include="Projektanker.Icons.Avalonia.MaterialDesign" />
+    <PackageReference Include="Projektanker.Icons.Avalonia.FontAwesome" />
     <PackageReference Include="Roslynator.Analyzers" PrivateAssets="all" />
     <PackageReference Include="System.Private.Uri" />
   </ItemGroup>

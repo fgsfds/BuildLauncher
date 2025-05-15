@@ -2,6 +2,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:i="https://github.com/projektanker/icons.avalonia"
              mc:Ignorable="d"
              d:DesignWidth="800"
              d:DesignHeight="450"
@@ -37,13 +38,31 @@
                 </Grid>
             </Border>
 
+            <!--Patreon-->
+            <Button Padding="10"
+                    Margin="10"
+                    HorizontalAlignment="Stretch"
+                    Click="PatreonClick">
+                <StackPanel Orientation="Horizontal">
+
+                    <i:Icon Value="fa-patreon" FontSize="48" />
+
+                    <StackPanel Orientation="Vertical" VerticalAlignment="Center">
+                        <TextBlock VerticalAlignment="Center" Margin="10,0" FontSize="18">Patreon</TextBlock>
+                        <TextBlock VerticalAlignment="Center" Margin="10,0" FontSize="14">Support me on Patreon</TextBlock>
+                    </StackPanel>
+                </StackPanel>
+            </Button>
+
             <!--Discord-->
             <Button Padding="10"
                     Margin="10"
                     HorizontalAlignment="Stretch"
                     Click="DiscordClick">
                 <StackPanel Orientation="Horizontal">
-                    <Image Source="/Assets/discord.png" Width="48" />
+
+                    <i:Icon Value="fa-discord" FontSize="48" />
+
                     <StackPanel Orientation="Vertical" VerticalAlignment="Center">
                         <TextBlock VerticalAlignment="Center" Margin="10,0" FontSize="18">Discord server</TextBlock>
                         <TextBlock VerticalAlignment="Center" Margin="10,0" FontSize="14">Join discussion on Discord</TextBlock>
@@ -57,7 +76,9 @@
                     HorizontalAlignment="Stretch"
                     Click="GitHubClick">
                 <StackPanel Orientation="Horizontal">
-                    <Image Source="/Assets/github.png" Width="48" />
+
+                    <i:Icon Value="fa-github" FontSize="48" />
+
                     <StackPanel Orientation="Vertical" VerticalAlignment="Center">
                         <TextBlock VerticalAlignment="Center" Margin="10,0" FontSize="18">GitHub repository</TextBlock>
                         <TextBlock VerticalAlignment="Center" Margin="10,0" FontSize="14">BuildLauncher is free and open source</TextBlock>
@@ -72,7 +93,9 @@
                     Click="GitHubIssuesClick">
 
                 <StackPanel Orientation="Horizontal">
-                    <Image Source="/Assets/issues.png" Width="48" />
+
+                    <i:Icon Value="fa-bug" FontSize="48" />
+
                     <StackPanel Orientation="Vertical" VerticalAlignment="Center">
                         <TextBlock VerticalAlignment="Center" Margin="10,0" FontSize="18">Report a problem</TextBlock>
                         <TextBlock VerticalAlignment="Center" Margin="10,0" FontSize="14">Create issue on GitHub</TextBlock>

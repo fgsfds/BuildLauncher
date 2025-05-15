@@ -58,7 +58,7 @@
                     HorizontalContentAlignment="Center"
                     IsEnabled="{Binding IsInstalled}"
                     ToolTip.Tip="Open port folder...">
-                <i:Icon Value="mdi-folder-open" />
+                <i:Icon Value="fa-folder-open" />
             </Button>
 
             <Button Height="{Binding #InstallButton.Bounds.Height}"
@@ -70,7 +70,7 @@
                     IsEnabled="{Binding IsInstalled}"
                     Background="Crimson"
                     ToolTip.Tip="Uninstall">
-                <i:Icon Value="mdi-delete" />
+                <i:Icon Value="fa-trash" />
             </Button>
 
         </Grid>

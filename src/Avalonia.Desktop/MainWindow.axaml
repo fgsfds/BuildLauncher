@@ -194,7 +194,7 @@
                     <TabItem.Header>
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="Ports"/>
-                            <i:Icon Foreground="Crimson" ToolTip.Tip="Updates available" DataContext="{Binding PortsPageViewModel}" IsVisible="{Binding HasUpdates}" Margin="5,0,0,0" Value="mdi-alert-decagram" />
+                            <i:Icon Foreground="Crimson" ToolTip.Tip="Updates available" DataContext="{Binding PortsPageViewModel}" IsVisible="{Binding HasUpdates}" Margin="5,0,0,0" Value="fa-circle-exclamation" />
                         </StackPanel>
                     </TabItem.Header>
 
@@ -219,7 +219,7 @@
                     <TabItem.Header>
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="About"/>
-                            <i:Icon Foreground="Crimson" ToolTip.Tip="App update available" DataContext="{Binding AboutPageViewModel}" IsVisible="{Binding IsUpdateAvailable}" Margin="5,0,0,0" Value="mdi-alert-decagram" />
+                            <i:Icon Foreground="Crimson" ToolTip.Tip="App update available" DataContext="{Binding AboutPageViewModel}" IsVisible="{Binding IsUpdateAvailable}" Margin="5,0,0,0" Value="fa-circle-exclamation" />
                         </StackPanel>
                     </TabItem.Header>
 

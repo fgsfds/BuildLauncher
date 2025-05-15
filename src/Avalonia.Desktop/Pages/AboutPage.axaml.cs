@@ -11,6 +11,15 @@ public sealed partial class AboutPage : UserControl
         InitializeComponent();
     }
 
+    private void PatreonClick(object sender, RoutedEventArgs e)
+    {
+        using var process = Process.Start(new ProcessStartInfo
+        {
+            FileName = "https://www.patreon.com/fgsfds",
+            UseShellExecute = true
+        });
+    }
+
     private void DiscordClick(object sender, RoutedEventArgs e)
     {
         using var process = Process.Start(new ProcessStartInfo

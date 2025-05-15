@@ -77,7 +77,7 @@
                         Command="{Binding AutodetectCommand}"
                         CommandParameter="Duke3D"
                         ToolTip.Tip="Autodetect">
-                    <i:Icon Value="mdi-refresh" />
+                    <i:Icon Value="fa-rotate" />
                 </Button>
 
 
@@ -106,7 +106,7 @@
                         Command="{Binding AutodetectCommand}"
                         CommandParameter="Duke3D_WT"
                         ToolTip.Tip="Autodetect">
-                    <i:Icon Value="mdi-refresh" />
+                    <i:Icon Value="fa-rotate" />
                 </Button>
 
 
@@ -154,7 +154,7 @@
                         Command="{Binding AutodetectCommand}"
                         CommandParameter="Blood"
                         ToolTip.Tip="Autodetect">
-                    <i:Icon Value="mdi-refresh" />
+                    <i:Icon Value="fa-rotate" />
                 </Button>
 
 
@@ -183,7 +183,7 @@
                         Command="{Binding AutodetectCommand}"
                         CommandParameter="ShadowWarrior"
                         ToolTip.Tip="Autodetect">
-                    <i:Icon Value="mdi-refresh" />
+                    <i:Icon Value="fa-rotate" />
                 </Button>
 
 
@@ -212,7 +212,7 @@
                         Command="{Binding AutodetectCommand}"
                         CommandParameter="Fury"
                         ToolTip.Tip="Autodetect">
-                    <i:Icon Value="mdi-refresh" />
+                    <i:Icon Value="fa-rotate" />
                 </Button>
 
 
@@ -241,7 +241,7 @@
                         Command="{Binding AutodetectCommand}"
                         CommandParameter="Redneck"
                         ToolTip.Tip="Autodetect">
-                    <i:Icon Value="mdi-refresh" />
+                    <i:Icon Value="fa-rotate" />
                 </Button>
 
 
@@ -270,7 +270,7 @@
                         Command="{Binding AutodetectCommand}"
                         CommandParameter="RidesAgain"
                         ToolTip.Tip="Autodetect">
-                    <i:Icon Value="mdi-refresh" />
+                    <i:Icon Value="fa-rotate" />
                 </Button>
 
 
@@ -299,7 +299,7 @@
                         Command="{Binding AutodetectCommand}"
                         CommandParameter="Exhumed"
                         ToolTip.Tip="Autodetect">
-                    <i:Icon Value="mdi-refresh" />
+                    <i:Icon Value="fa-rotate" />
                 </Button>
 
 
@@ -328,7 +328,7 @@
                         Command="{Binding AutodetectCommand}"
                         CommandParameter="NAM"
                         ToolTip.Tip="Autodetect">
-                    <i:Icon Value="mdi-refresh" />
+                    <i:Icon Value="fa-rotate" />
                 </Button>
 
 
@@ -357,7 +357,7 @@
                         Command="{Binding AutodetectCommand}"
                         CommandParameter="WW2GI"
                         ToolTip.Tip="Autodetect">
-                    <i:Icon Value="mdi-refresh" />
+                    <i:Icon Value="fa-rotate" />
                 </Button>
 
 
@@ -386,7 +386,7 @@
                         Command="{Binding AutodetectCommand}"
                         CommandParameter="Witchaven"
                         ToolTip.Tip="Autodetect">
-                    <i:Icon Value="mdi-refresh" />
+                    <i:Icon Value="fa-rotate" />
                 </Button>
 
 
@@ -416,7 +416,7 @@
                         Command="{Binding AutodetectCommand}"
                         CommandParameter="Witchaven2"
                         ToolTip.Tip="Autodetect">
-                    <i:Icon Value="mdi-refresh" />
+                    <i:Icon Value="fa-rotate" />
                 </Button>
 
 
