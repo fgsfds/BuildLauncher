@@ -43,8 +43,5 @@ public sealed class PortsReleasesProvider
         return hasRelease ? release : null;
     }
 
-    public async Task<Dictionary<PortEnum, GeneralReleaseEntity>?> GetReleasesAsync()
-    {
-        return await _apiInterface.GetLatestPortsReleasesAsync().ConfigureAwait(false);
-    }
+    public Task<Dictionary<PortEnum, GeneralReleaseEntity>?> GetReleasesAsync() => _apiInterface.GetLatestPortsReleasesAsync();
 }

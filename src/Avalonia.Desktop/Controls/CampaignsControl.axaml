@@ -32,6 +32,7 @@
         </Grid>
 
         <ListBox Name="CampaignsList"
+                 IsEnabled="{Binding !IsInProgress}"
                  SelectionChanged="OnCampaignsListSelectionChanged"
                  Grid.Row="1" Grid.Column="0"
                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"

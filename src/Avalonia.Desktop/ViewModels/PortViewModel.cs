@@ -136,6 +136,11 @@ public sealed partial class PortViewModel : ObservableObject
                 return false;
             }
 
+            if (_release is null)
+            {
+                return false;
+            }
+
             if (Port.PortEnum is PortEnum.NotBlood)
             {
                 var r1 = DateTime.TryParse(
@@ -163,12 +168,9 @@ public sealed partial class PortViewModel : ObservableObject
                     out var newVersion
                     );
 
-                if (r1 && r2)
+                if (r1 && r2 && currentVersion < newVersion)
                 {
-                    if (currentVersion < newVersion)
-                    {
-                        return true;
-                    }
+                    return true;
                 }
 
                 return false;
