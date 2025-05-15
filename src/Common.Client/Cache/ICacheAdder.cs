@@ -8,5 +8,7 @@ public interface ICacheAdder<T>
 
     bool TryAddGridToCache(long id, T item);
 
+    bool TryAddPreviewToCache(long id, T item);
+
     bool TryRemoveFromCache(long id);
 }

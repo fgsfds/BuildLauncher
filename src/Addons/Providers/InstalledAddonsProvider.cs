@@ -596,7 +596,7 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
             {
                 var crc = Crc32Helper.GetCrc32(previewFile[0]);
                 await using var stream = File.OpenRead(previewFile[0]);
-                _ = _bitmapsCache.TryAddGridToCache(crc, stream);
+                _ = _bitmapsCache.TryAddPreviewToCache(crc, stream);
                 carcass.PreviewImageHash = crc;
             }
             else
@@ -718,7 +718,7 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
                 {
                     previewImageHash = Crc32Helper.GetCrc32(previewFile[0]);
                     await using var stream = File.OpenRead(previewFile[0]);
-                    _ = _bitmapsCache.TryAddGridToCache(previewImageHash.Value, stream);
+                    _ = _bitmapsCache.TryAddPreviewToCache(previewImageHash.Value, stream);
                 }
                 else
                 {
@@ -740,7 +740,7 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
 
                 if (previewImageHash is not null && previewImageStream is not null)
                 {
-                    _ = _bitmapsCache.TryAddGridToCache(previewImageHash.Value, previewImageStream);
+                    _ = _bitmapsCache.TryAddPreviewToCache(previewImageHash.Value, previewImageStream);
                     previewImageStream.Dispose();
                 }
 

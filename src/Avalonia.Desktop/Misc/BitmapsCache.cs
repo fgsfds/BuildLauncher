@@ -45,6 +45,17 @@ public sealed class BitmapsCache : ICacheAdder<Stream>, ICacheGetter<Bitmap>
         return _cache.TryAdd(id, bitmap);
     }
 
+    public bool TryAddPreviewToCache(long id, Stream item)
+    {
+        if (_cache.TryGetValue(id, out _))
+        {
+            return false;
+        }
+
+        Bitmap bitmap = Bitmap.DecodeToWidth(item, 320);
+        return _cache.TryAdd(id, bitmap);
+    }
+
     public bool TryRemoveFromCache(long id)
     {
         if (_cache.Remove(id, out var bitmap))
