@@ -423,7 +423,7 @@
                 <!--Path to TekWar-->
                 <TextBlock Grid.Row="13" Grid.Column="0"
                            VerticalAlignment="Center"
-                           Margin="10, 5">Path to TekWart install:</TextBlock>
+                           Margin="10, 5">Path to TekWar install:</TextBlock>
 
                 <TextBox Grid.Row="13"  Grid.Column="1"
                          Text="{Binding PathToTekWar}"
