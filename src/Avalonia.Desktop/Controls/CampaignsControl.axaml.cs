@@ -314,11 +314,11 @@ public sealed partial class CampaignsControl : UserControl
 
         var customPortButton = BottomPanel.PortsButtonsPanel.Children.FirstOrDefault(
             x => x is Button button && button.Content is TextBlock text && text.Text?.Equals(CustomPortStr) is true
-            );
+            ) as Button;
 
-        if (customPortButton is Button customPortButton2)
+        if (customPortButton is not null)
         {
-            customPortButton2.IsEnabled = CampaignsList.SelectedItem is not null;
+            customPortButton.IsEnabled = CampaignsList.SelectedItem is not null;
         }
 
         AddContextMenuButtons();
