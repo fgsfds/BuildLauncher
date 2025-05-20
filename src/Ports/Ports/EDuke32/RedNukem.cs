@@ -61,6 +61,8 @@ public sealed class RedNukem : EDuke32
     /// <inheritdoc/>
     public override void BeforeStart(IGame game, IAddon campaign)
     {
+        CreateBlankDemo();
+
         MoveSaveFiles(game, campaign);
 
         FixGrpInConfig();
@@ -76,6 +78,7 @@ public sealed class RedNukem : EDuke32
     {
         //don't search for steam/gog installs
         _ = sb.Append(" -usecwd");
+        _ = sb.Append(" -d blank.edm");
 
         if (addon.MainDef is not null)
         {
@@ -240,6 +243,16 @@ public sealed class RedNukem : EDuke32
         else
         {
             RestoreRoute66Files(game);
+        }
+    }
+
+    private void CreateBlankDemo()
+    {
+        var blankDemo = Path.Combine(PortInstallFolderPath, "blank.edm");
+
+        if (!File.Exists(blankDemo))
+        {
+            using var a = File.CreateText(blankDemo);
         }
     }
 }
