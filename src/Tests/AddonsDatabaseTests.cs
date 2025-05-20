@@ -1,4 +1,6 @@
 ﻿using Common.Entities;
+using Minio;
+using Minio.DataModel.Args;
 using System.Text;
 using System.Text.Json;
 using Xunit.Abstractions;
@@ -23,6 +25,7 @@ public sealed class AddonsDatabaseTests
         }
 
         using HttpClient httpClient = new();
+
         httpClient.DefaultRequestHeaders.Add("User-Agent", "BuildLauncher");
         httpClient.Timeout = TimeSpan.FromSeconds(30);
 
@@ -53,6 +56,69 @@ public sealed class AddonsDatabaseTests
                     _ = sb.AppendLine($"File {url} size doesn't match. Expected {size} got {header.Content.Headers.ContentLength}");
                 }
             }
+        }
+
+        _output.WriteLine(sb.ToString());
+        Assert.True(sb.Length < 1);
+    }
+
+    [Fact]
+    public async Task LooseFilesTest()
+    {
+        if (!OperatingSystem.IsWindows())
+        {
+            return;
+        }
+
+        var addonsJsonString = File.ReadAllText("../../../../db/addons.json");
+        var addonsJson = JsonSerializer.Deserialize(addonsJsonString, DownloadableAddonsDictionaryContext.Default.DictionaryGameEnumListDownloadableAddonEntity);
+
+        Assert.NotNull(addonsJson);
+
+
+        List<string>? addonsUrls = new List<string>();
+
+        foreach (var a in addonsJson.Values)
+        {
+            foreach (var b in a)
+            {
+                addonsUrls.Add(b.DownloadUrl.ToString());
+            }
+        }
+
+        var access = Environment.GetEnvironmentVariable("MINIO_ACCESS_KEY");
+        var secret = Environment.GetEnvironmentVariable("MINIO_SECRET_KEY");
+
+        Assert.NotNull(access);
+        Assert.NotNull(secret);
+
+        using var minio = new MinioClient()
+            .WithEndpoint("s3.fgsfds.link:9000")
+            .WithCredentials(access, secretKey: secret)
+            .Build();
+
+        var args = new ListObjectsArgs()
+            .WithBucket("buildlauncher")
+            .WithRecursive(true);
+
+        var files = new List<string>();
+        await foreach (var item in minio.ListObjectsEnumAsync(args))
+        {
+            if (item.Key.EndsWith('/'))
+            {
+                continue;
+            }
+
+            files.Add("http://s3.fgsfds.link/buildlauncher/" + item.Key);
+        }
+
+        var loose = files.Except(addonsUrls);
+
+        StringBuilder sb = new();
+
+        foreach (var item in loose)
+        {
+            _ = sb.AppendLine($"File {item} is loose.");
         }
 
         _output.WriteLine(sb.ToString());
