@@ -9,7 +9,6 @@ using Common.Helpers;
 using Common.Interfaces;
 using Common.Serializable.Addon;
 using CommunityToolkit.Diagnostics;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using SharpCompress.Archives;
 using System.Collections.Immutable;
@@ -148,6 +147,12 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
                     }
 
                     var tcs = await GetAddonsFromFilesAsync(filesTcs).ConfigureAwait(false);
+
+                    foreach (var wrongFile in tcs.Where(x => x.Value.Type is not AddonTypeEnum.TC))
+                    {
+                        _logger.LogError($"File {wrongFile.Value.FileName} of type {wrongFile.Value.Type} is in the Campaigns folder");
+                    }
+
                     _campaignsCache.AddRange(tcs);
 
                     //grpinfo
@@ -182,6 +187,12 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
                     //maps
                     var filesMaps = Directory.GetFiles(_game.MapsFolderPath).Where(static x => x.EndsWith(".zip", StringComparison.OrdinalIgnoreCase) || x.EndsWith(".map", StringComparison.OrdinalIgnoreCase));
                     var maps = await GetAddonsFromFilesAsync(filesMaps).ConfigureAwait(false);
+
+                    foreach (var wrongFile in maps.Where(x => x.Value.Type is not AddonTypeEnum.Map))
+                    {
+                        _logger.LogError($"File {wrongFile.Value.FileName} of type {wrongFile.Value.Type} is in the Maps folder");
+                    }
+
                     _mapsCache.AddRange(maps);
                 }
 
@@ -191,6 +202,11 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
                     //mods
                     var filesMods = Directory.GetFiles(_game.ModsFolderPath, "*.zip");
                     var mods = await GetAddonsFromFilesAsync(filesMods).ConfigureAwait(false);
+
+                    foreach (var wrongFile in mods.Where(x => x.Value.Type is not AddonTypeEnum.Mod))
+                    {
+                        _logger.LogError($"File {wrongFile.Value.FileName} of type {wrongFile.Value.Type} is in the Mods folder");
+                    }
 
                     _modsCache.AddRange(mods);
                 }
