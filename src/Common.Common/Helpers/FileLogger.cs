@@ -40,7 +40,7 @@ public sealed class FileLogger : ILogger
         try
         {
             var msg = formatter(state, exception);
-            var line = $"[{DateTime.Now:dd.MM.yy HH:mm:ss}] {msg}{Environment.NewLine}";
+            var line = $"[{level + "]",-12}  [{DateTime.Now:dd.MM.yy HH:mm:ss}]  {msg}{Environment.NewLine}";
 
             File.AppendAllText(_path, line);
 
