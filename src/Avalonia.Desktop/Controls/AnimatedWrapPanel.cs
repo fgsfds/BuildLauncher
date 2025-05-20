@@ -3,6 +3,7 @@ using Avalonia.Animation.Easings;
 using Avalonia.Controls;
 using Avalonia.Media;
 using Avalonia.Styling;
+using Avalonia.Threading;
 using System.Collections.Specialized;
 
 namespace Avalonia.Desktop.Controls;
@@ -12,6 +13,9 @@ namespace Avalonia.Desktop.Controls;
 /// </summary>
 public sealed class AnimatedWrapPanel : WrapPanel
 {
+    private const bool EnableAnimationsDefault = true;
+    private const int AnimationDurationDefault = 300;
+
     // Everything runs in the UI thread, so no need for the thread safe dictionaries
     private readonly Dictionary<Visual, Rect> _previousBounds = [];
     private readonly Dictionary<Visual, CancellationTokenSource> _runningAnimationsCtss = [];
@@ -20,22 +24,22 @@ public sealed class AnimatedWrapPanel : WrapPanel
     /// <summary>
     /// Whether to enable animations. Can be turned off for performance-critical scenarios.
     /// </summary>
-    public static readonly AvaloniaProperty<bool> EnableAnimationsProperty = AvaloniaProperty.Register<AnimatedWrapPanel, bool>(nameof(EnableAnimations), defaultValue: true);
+    public static readonly AvaloniaProperty<bool> EnableAnimationsProperty = AvaloniaProperty.Register<AnimatedWrapPanel, bool>(nameof(EnableAnimations), defaultValue: EnableAnimationsDefault);
 
     public bool EnableAnimations
     {
-        get => (bool?)GetValue(EnableAnimationsProperty) ?? false;
+        get => (bool?)GetValue(EnableAnimationsProperty) ?? EnableAnimationsDefault;
         set => SetValue(EnableAnimationsProperty, value);
     }
 
     /// <summary>
     /// Duration of the animations in milliseconds.
     /// </summary>
-    public static readonly AvaloniaProperty<int> AnimationDurationProperty = AvaloniaProperty.Register<AnimatedWrapPanel, int>(nameof(AnimationDuration), defaultValue: 300);
+    public static readonly AvaloniaProperty<int> AnimationDurationProperty = AvaloniaProperty.Register<AnimatedWrapPanel, int>(nameof(AnimationDuration), defaultValue: AnimationDurationDefault);
 
     public int AnimationDuration
     {
-        get => (int?)GetValue(AnimationDurationProperty) ?? 300;
+        get => (int?)GetValue(AnimationDurationProperty) ?? AnimationDurationDefault;
         set => SetValue(AnimationDurationProperty, value);
     }
 
@@ -68,17 +72,29 @@ public sealed class AnimatedWrapPanel : WrapPanel
             if (!_previousBounds.TryGetValue(child, out var previousPosition))
             {
                 _previousBounds[child] = currentPosition;
+                continue;
             }
-            else
-            {
-                var xDelta = previousPosition.X - currentPosition.X;
-                var yDelta = previousPosition.Y - currentPosition.Y;
 
-                if (Math.Abs(xDelta) > 0.5 || Math.Abs(yDelta) > 0.5)
-                {
-                    _ = Animate(child, xDelta, yDelta);
-                }
+            var xDelta = previousPosition.X - currentPosition.X;
+            var yDelta = previousPosition.Y - currentPosition.Y;
+
+            if (Math.Abs(xDelta) < 1 && Math.Abs(yDelta) < 1)
+            {
+                continue;
             }
+
+
+            if (child.RenderTransform is not TranslateTransform transform)
+            {
+                transform = new TranslateTransform();
+                child.RenderTransform = transform;
+                child.RenderTransformOrigin = RelativePoint.TopLeft;
+            }
+
+            transform.X = xDelta;
+            transform.Y = yDelta;
+
+            _ = Dispatcher.UIThread.Invoke(async () => await Animate(child, xDelta, yDelta).ConfigureAwait(true));
         }
 
         return result;
@@ -86,21 +102,17 @@ public sealed class AnimatedWrapPanel : WrapPanel
 
     private async Task Animate(Control controlToAnimate, double fromX, double fromY)
     {
-        if (controlToAnimate.RenderTransform is not TranslateTransform transform)
+        if (_runningAnimationsCtss.TryGetValue(controlToAnimate, out var existingAnimationCts))
         {
-            transform = new TranslateTransform();
-            controlToAnimate.RenderTransform = transform;
-            controlToAnimate.RenderTransformOrigin = RelativePoint.TopLeft;
-        }
-
-        transform.X = fromX;
-        transform.Y = fromY;
-
-
-        if (_runningAnimationsCtss.TryGetValue(controlToAnimate, out var existingAnimation))
-        {
-            existingAnimation.Cancel();
-            existingAnimation.Dispose();
+            try
+            {
+                existingAnimationCts.Cancel();
+                existingAnimationCts.Dispose();
+            }
+            catch
+            {
+                //nothing to do
+            }
         }
 
         var currentAnimationCts = new CancellationTokenSource();
@@ -152,31 +164,45 @@ public sealed class AnimatedWrapPanel : WrapPanel
         {
             //nothing to do
         }
-        finally
+
+        if (_runningAnimationsCtss.Remove(controlToAnimate, out var cts))
         {
-            if (_runningAnimationsCtss.Remove(controlToAnimate, out var cts))
+            try
             {
                 cts.Cancel();
                 cts.Dispose();
             }
-
-            _previousBounds[controlToAnimate] = controlToAnimate.Bounds;
+            catch
+            {
+                //nothing to do
+            }
         }
+
+        _previousBounds[controlToAnimate] = controlToAnimate.Bounds;
     }
 
     private void OnChildrenChanged(object? sender, NotifyCollectionChangedEventArgs e)
     {
-        if (e.OldItems is not null)
+        if (e.OldItems is null)
         {
-            foreach (Control control in e.OldItems)
-            {
-                _ = _previousBounds.Remove(control);
-                _ = _animationsCache.Remove(control);
+            return;
+        }
 
-                if (_runningAnimationsCtss.Remove(control, out var cts))
+        foreach (Control control in e.OldItems)
+        {
+            _ = _previousBounds.Remove(control);
+            _ = _animationsCache.Remove(control);
+
+            if (_runningAnimationsCtss.Remove(control, out var cts))
+            {
+                try
                 {
                     cts.Cancel();
                     cts.Dispose();
+                }
+                catch
+                {
+                    //nothing to do
                 }
             }
         }
