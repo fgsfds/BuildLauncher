@@ -2,6 +2,7 @@ using Avalonia.Desktop.Helpers;
 using Avalonia.Platform.Storage;
 using Avalonia.Styling;
 using Common.Client.Enums;
+using Common.Client.Helpers;
 using Common.Client.Interfaces;
 using Common.Common.Helpers;
 using Common.Enums;
@@ -10,6 +11,7 @@ using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Games.Providers;
+using System.Diagnostics;
 
 namespace Avalonia.Desktop.ViewModels;
 
@@ -452,6 +454,23 @@ public sealed partial class SettingsViewModel : ObservableObject
         PathToDuke64 = files[0].Path.LocalPath;
 
         OnPropertyChanged(nameof(PathToDuke64));
+    }
+
+
+    /// <summary>
+    /// Open log file
+    /// </summary>
+    [RelayCommand]
+    private void OpenLog()
+    {
+        if (File.Exists(ClientProperties.PathToLogFile))
+        {
+            using var _ = Process.Start(new ProcessStartInfo
+            {
+                FileName = ClientProperties.PathToLogFile,
+                UseShellExecute = true
+            });
+        }
     }
 
     #endregion

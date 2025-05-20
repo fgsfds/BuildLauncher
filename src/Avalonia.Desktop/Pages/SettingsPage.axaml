@@ -452,6 +452,12 @@
                 Skip startup window
             </CheckBox>
 
+            <Button VerticalAlignment="Center"
+                    Command="{Binding OpenLogCommand}"
+                    Margin="10">
+                Open log...
+            </Button>
+
         </StackPanel>
 
     </Grid>
