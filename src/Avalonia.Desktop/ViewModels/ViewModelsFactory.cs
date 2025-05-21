@@ -1,5 +1,6 @@
 ﻿using Addons.Providers;
 using Avalonia.Desktop.Misc;
+using Avalonia.Threading;
 using Common.Client;
 using Common.Client.Interfaces;
 using Common.Client.Providers;
@@ -107,7 +108,7 @@ public sealed class ViewModelsFactory
             _logger
             );
 
-        _ = Task.Run(vm.InitializeAsync);
+        _ = Dispatcher.UIThread.Invoke(vm.InitializeAsync);
         return vm;
     }
 
@@ -131,7 +132,7 @@ public sealed class ViewModelsFactory
             _logger
             );
 
-        _ = Task.Run(vm.InitializeAsync);
+        _ = Dispatcher.UIThread.Invoke(vm.InitializeAsync);
         return vm;
     }
 
@@ -151,7 +152,7 @@ public sealed class ViewModelsFactory
             _bitmapsCache
             );
 
-        _ = Task.Run(vm.InitializeAsync);
+        _ = Dispatcher.UIThread.Invoke(vm.InitializeAsync);
         return vm;
     }
 
@@ -168,7 +169,7 @@ public sealed class ViewModelsFactory
             _logger
             );
 
-        _ = Task.Run(vm.InitializeAsync);
+        _ = Dispatcher.UIThread.Invoke(vm.InitializeAsync);
         return vm;
     }
 
@@ -186,7 +187,7 @@ public sealed class ViewModelsFactory
             _logger
             );
 
-        _ = Task.Run(vm.InitializeAsync);
+        _ = Dispatcher.UIThread.Invoke(vm.InitializeAsync);
         return vm;
     }
 
