@@ -86,21 +86,6 @@ Another goal of this project is to create a unification standard for Build Engin
 
 <tr>
 <td align="center" valign="middle">
-<b>Known issues</b>
-</td>
-</tr>
-
-<tr>
-<td valign="center">
-
-- Wanton Destruction launched from Raze has episodes and maps names from the original game unless downloaded from the lancher
-- Skip intro checkbox doesn't work with RedNukem
-
-</td>
-</tr>
-
-<tr>
-<td align="center" valign="middle">
 <b>How to use</b>
 </td>
 </tr>
