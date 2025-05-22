@@ -99,7 +99,7 @@ public sealed class WangCmdArgumentsTests
             " -file \"incompatible_mod_with_compatible_version.zip\"" +
             " -file \"dependent_mod.zip\"" +
             " -file \"dependent_mod_with_compatible_version.zip\"" +
-            $" -savedir \"{Directory.GetCurrentDirectory()}\\Data\\Saves\\Raze\\Wang\\shadowwarrior\"" +
+            $" -savedir \"{Directory.GetCurrentDirectory()}\\Data\\Saves\\Raze\\Wang\\wang\"" +
             " -def \"a\"" +
             " -quick" +
             " -nosetup" +

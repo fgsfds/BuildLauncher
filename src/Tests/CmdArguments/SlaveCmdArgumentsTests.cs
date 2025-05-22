@@ -64,7 +64,7 @@ public sealed class SlaveCmdArgumentsTests
             $" -file \"enabled_mod.zip\"" +
             $" -adddef \"ENABLED1.DEF\"" +
             $" -adddef \"ENABLED2.DEF\"" +
-            $" -savedir \"{Directory.GetCurrentDirectory()}\\Data\\Saves\\Raze\\Slave\\exhumed\"" +
+            $" -savedir \"{Directory.GetCurrentDirectory()}\\Data\\Saves\\Raze\\Slave\\slave\"" +
             $" -def \"a\"" +
             $" -quick" +
             $" -nosetup" +

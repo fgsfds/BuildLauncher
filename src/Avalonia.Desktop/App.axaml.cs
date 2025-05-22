@@ -13,6 +13,7 @@ using Common.Client.Interfaces;
 using CommunityToolkit.Diagnostics;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Ports.Providers;
 
 namespace Avalonia.Desktop;
 
@@ -69,6 +70,9 @@ public sealed class App : Application
         logger.LogInformation($"Operating system: {Environment.OSVersion}");
         logger.LogInformation($"Working folder is {ClientProperties.WorkingFolder}");
 
+        var portsProvider = BindingsManager.Provider.GetRequiredService<InstalledPortsProvider>();
+        RenameSaveFolder(portsProvider);
+
         try
         {
             code = lifetime.Start();
@@ -90,6 +94,38 @@ public sealed class App : Application
         }
 
         return code;
+    }
+
+
+    [Obsolete("Remove some time later")]
+    private static void RenameSaveFolder(InstalledPortsProvider portsProvider)
+    {
+        IEnumerable<string> paths =
+            [
+                portsProvider.BuildGDX.PortSavedGamesFolderPath,
+                portsProvider.VoidSW.PortSavedGamesFolderPath,
+                portsProvider.PCExhumed.PortSavedGamesFolderPath,
+                portsProvider.Raze.PortSavedGamesFolderPath
+            ];
+
+        foreach (var path in paths)
+        {
+            var swPath = Path.Combine(path, "Wang", "shadowwarrior");
+            var wangPath = Path.Combine(path, "Wang", "wang");
+
+            var exPath = Path.Combine(path, "Slave", "exhumed");
+            var slavePath = Path.Combine(path, "Slave", "slave");
+
+            if (Directory.Exists(swPath))
+            {
+                Directory.Move(swPath, wangPath);
+            }
+            
+            if (Directory.Exists(exPath))
+            {
+                Directory.Move(exPath, slavePath);
+            }
+        }
     }
 
     /// <summary>
