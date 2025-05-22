@@ -185,9 +185,9 @@ public sealed class GamesPathsProvider
             GameEnum.Redneck => _redneckPath,
             GameEnum.RidesAgain => _againPath,
             GameEnum.Duke3D => _dukePath,
-            GameEnum.ShadowWarrior => _wangPath,
+            GameEnum.Wang => _wangPath,
             GameEnum.Fury => _furyPath,
-            GameEnum.Exhumed => _slavePath,
+            GameEnum.Slave => _slavePath,
             GameEnum.NAM => _namPath,
             GameEnum.WW2GI => _ww2giPath,
             GameEnum.Witchaven => _witch1Path,
@@ -212,10 +212,10 @@ public sealed class GamesPathsProvider
     {
         _config.PathDuke3D ??= GetPath(GameEnum.Duke3D);
         _config.PathDukeWT ??= GetPath(DukeVersionEnum.Duke3D_WT);
-        _config.PathWang ??= GetPath(GameEnum.ShadowWarrior);
+        _config.PathWang ??= GetPath(GameEnum.Wang);
         _config.PathBlood ??= GetPath(GameEnum.Blood);
         _config.PathFury ??= GetPath(GameEnum.Fury);
-        _config.PathSlave ??= GetPath(GameEnum.Exhumed);
+        _config.PathSlave ??= GetPath(GameEnum.Slave);
         _config.PathRedneck ??= GetPath(GameEnum.Redneck);
         _config.PathRidesAgain ??= GetPath(GameEnum.RidesAgain);
         _config.PathNam ??= GetPath(GameEnum.NAM);

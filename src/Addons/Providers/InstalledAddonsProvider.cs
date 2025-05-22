@@ -434,7 +434,7 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
             return campaigns;
         }
 
-        if (_game.GameEnum is GameEnum.ShadowWarrior)
+        if (_game.GameEnum is GameEnum.Wang)
         {
             //hack to make SW addons appear at the top of the list
             foreach (var customCamp in _campaignsCache
@@ -918,7 +918,7 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
 
                     addons.Add(addon);
                 }
-                else if (_game.GameEnum is GameEnum.ShadowWarrior)
+                else if (_game.GameEnum is GameEnum.Wang)
                 {
                     var addon = new GenericCampaign()
                     {
@@ -973,7 +973,7 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
 
                     addons.Add(addon);
                 }
-                else if (_game.GameEnum is GameEnum.Exhumed)
+                else if (_game.GameEnum is GameEnum.Slave)
                 {
                     var addon = new GenericCampaign()
                     {

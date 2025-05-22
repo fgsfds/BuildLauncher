@@ -48,10 +48,10 @@ public sealed class MainWindowViewModel : ObservableObject
             );
 
         WangViewModel = new(
-            viewModelsFactory.GetCampaignsViewModel(GameEnum.ShadowWarrior),
-            viewModelsFactory.GetMapsViewModel(GameEnum.ShadowWarrior),
-            viewModelsFactory.GetModsViewModel(GameEnum.ShadowWarrior),
-            viewModelsFactory.GetDownloadsViewModel(GameEnum.ShadowWarrior)
+            viewModelsFactory.GetCampaignsViewModel(GameEnum.Wang),
+            viewModelsFactory.GetMapsViewModel(GameEnum.Wang),
+            viewModelsFactory.GetModsViewModel(GameEnum.Wang),
+            viewModelsFactory.GetDownloadsViewModel(GameEnum.Wang)
             );
 
         FuryViewModel = new(
@@ -69,10 +69,10 @@ public sealed class MainWindowViewModel : ObservableObject
             );
 
         SlaveViewModel = new(
-            viewModelsFactory.GetCampaignsViewModel(GameEnum.Exhumed),
-            viewModelsFactory.GetMapsViewModel(GameEnum.Exhumed),
-            viewModelsFactory.GetModsViewModel(GameEnum.Exhumed),
-            viewModelsFactory.GetDownloadsViewModel(GameEnum.Exhumed)
+            viewModelsFactory.GetCampaignsViewModel(GameEnum.Slave),
+            viewModelsFactory.GetMapsViewModel(GameEnum.Slave),
+            viewModelsFactory.GetModsViewModel(GameEnum.Slave),
+            viewModelsFactory.GetDownloadsViewModel(GameEnum.Slave)
             );
 
         NamViewModel = new(

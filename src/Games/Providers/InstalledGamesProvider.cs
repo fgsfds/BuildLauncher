@@ -114,9 +114,9 @@ public sealed class InstalledGamesProvider
         {
             GameEnum.Blood => _blood,
             GameEnum.Duke3D => _duke3d,
-            GameEnum.ShadowWarrior => _wang,
+            GameEnum.Wang => _wang,
             GameEnum.Fury => _fury,
-            GameEnum.Exhumed => _slave,
+            GameEnum.Slave => _slave,
             GameEnum.Redneck => _redneck,
             GameEnum.RidesAgain => _redneck,
             GameEnum.NAM => _nam,

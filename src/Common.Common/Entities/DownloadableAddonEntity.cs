@@ -1,4 +1,5 @@
-﻿using Common.Enums;
+﻿using Common.Common.Helpers;
+using Common.Enums;
 using Common.Helpers;
 using System.Text;
 using System.Text.Json.Serialization;
@@ -14,6 +15,7 @@ public sealed class DownloadableAddonEntity
     public required AddonTypeEnum AddonType { get; set; }
 
     [JsonPropertyName("Game")]
+    [JsonConverter(typeof(GameEnumJsonConverter))]
     public required GameEnum Game { get; set; }
 
     [JsonPropertyName("DownloadUrl")]
@@ -163,7 +165,8 @@ public sealed class DownloadableAddonEntity
     DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
     RespectNullableAnnotations = true,
     Converters = [
-        typeof(JsonStringEnumConverter<GameEnum>),
+        //typeof(JsonStringEnumConverter<GameEnum>),
+        typeof(GameEnumJsonConverter),
         typeof(JsonStringEnumConverter<AddonTypeEnum>)
         ]
 )]

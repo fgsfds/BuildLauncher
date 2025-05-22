@@ -22,9 +22,9 @@ public static class OriginalCampaignsProvider
         {
             GameEnum.Duke3D => GetDuke3DCampaigns(game),
             GameEnum.Blood => GetBloodCampaigns(game),
-            GameEnum.ShadowWarrior => GetWangCampaigns(game),
+            GameEnum.Wang => GetWangCampaigns(game),
             GameEnum.Fury => GetFuryCampaigns(game),
-            GameEnum.Exhumed => GetSlaveCampaigns(game),
+            GameEnum.Slave => GetSlaveCampaigns(game),
             GameEnum.NAM => GetNamCampaigns(game),
             GameEnum.WW2GI => GetWw2Campaigns(game),
             GameEnum.Redneck => GetRedneckCampaigns(game),
@@ -359,13 +359,13 @@ public static class OriginalCampaignsProvider
 
         if (wGame.IsBaseGameInstalled)
         {
-            var wangId = nameof(GameEnum.ShadowWarrior).ToLower();
+            var wangId = nameof(GameEnum.Wang).ToLower();
             campaigns.Add(new(wangId), new GenericCampaign()
             {
                 Id = wangId,
                 Type = AddonTypeEnum.Official,
                 Title = "Shadow Warrior",
-                GridImageHash = GameEnum.ShadowWarrior.GetUniqueHash(),
+                GridImageHash = GameEnum.Wang.GetUniqueHash(),
                 Version = null,
                 Author = "3D Realms",
                 Description = """
@@ -376,7 +376,7 @@ public static class OriginalCampaignsProvider
                     In discovery of this, Lo Wang quit his job as a bodyguard. Master Zilla realized that not having a warrior as powerful as Lo Wang would be dangerous, and sent his creatures to battle Lo Wang.
                     """,
                 PathToFile = null,
-                SupportedGame = new(GameEnum.ShadowWarrior),
+                SupportedGame = new(GameEnum.Wang),
                 RequiredFeatures = null,
                 DependentAddons = null,
                 IncompatibleAddons = null,
@@ -757,13 +757,13 @@ public static class OriginalCampaignsProvider
 
         if (sGame.IsBaseGameInstalled)
         {
-            var slaveId = nameof(GameEnum.Exhumed).ToLower();
+            var slaveId = nameof(GameEnum.Slave).ToLower();
             campaigns.Add(new(slaveId), new GenericCampaign()
             {
                 Id = slaveId,
                 Type = AddonTypeEnum.Official,
                 Title = "Powerslave",
-                GridImageHash = GameEnum.Exhumed.GetUniqueHash(),
+                GridImageHash = GameEnum.Slave.GetUniqueHash(),
                 Author = "Lobotomy Software",
                 Description = """
                     **PowerSlave**, known as **Exhumed** in Europe and **1999 AD: Resurrection of the Pharaoh** in Japan, is a first-person shooter video game developed by **Lobotomy Software**
@@ -777,7 +777,7 @@ public static class OriginalCampaignsProvider
                     from its tomb by the Kilmaat, who seek to resurrect him and use his powers to control the world.
                     """,
                 Version = null,
-                SupportedGame = new(GameEnum.Exhumed),
+                SupportedGame = new(GameEnum.Slave),
                 RequiredFeatures = null,
                 PathToFile = null,
                 DependentAddons = null,

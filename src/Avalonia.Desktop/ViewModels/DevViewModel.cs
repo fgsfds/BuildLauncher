@@ -87,11 +87,11 @@ public sealed partial class DevViewModel : ObservableObject
     {
         GameEnum.Duke3D => "duke3d-",
         GameEnum.Blood => "blood-",
-        GameEnum.ShadowWarrior => "wang-",
+        GameEnum.Wang => "wang-",
         GameEnum.Fury => "fury-",
         GameEnum.Redneck => "redneck-",
         GameEnum.RidesAgain => "ridesagain-",
-        GameEnum.Exhumed => "slave-",
+        GameEnum.Slave => "slave-",
         GameEnum.NAM => "nam-",
         GameEnum.WW2GI => "ww2gi-",
         GameEnum.Witchaven => "wh1-",

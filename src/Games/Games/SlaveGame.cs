@@ -5,7 +5,7 @@ namespace Games.Games;
 public sealed class SlaveGame : BaseGame
 {
     /// <inheritdoc/>
-    public override GameEnum GameEnum => GameEnum.Exhumed;
+    public override GameEnum GameEnum => GameEnum.Slave;
 
     /// <inheritdoc/>
     public override string FullName => "Powerslave";

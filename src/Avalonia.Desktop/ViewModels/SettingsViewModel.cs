@@ -212,7 +212,7 @@ public sealed partial class SettingsViewModel : ObservableObject
 
             OnPropertyChanged(nameof(PathToBlood));
         }
-        else if (param.Equals(nameof(GameEnum.ShadowWarrior)))
+        else if (param.Equals(nameof(GameEnum.Wang)))
         {
             PathToWang = files[0].Path.LocalPath;
 
@@ -236,7 +236,7 @@ public sealed partial class SettingsViewModel : ObservableObject
 
             OnPropertyChanged(nameof(PathToFury));
         }
-        else if (param.Equals(nameof(GameEnum.Exhumed)))
+        else if (param.Equals(nameof(GameEnum.Slave)))
         {
             PathToSlave = files[0].Path.LocalPath;
 
@@ -314,9 +314,9 @@ public sealed partial class SettingsViewModel : ObservableObject
                 OnPropertyChanged(nameof(PathToBlood));
             }
         }
-        else if (param.Equals(nameof(GameEnum.ShadowWarrior)))
+        else if (param.Equals(nameof(GameEnum.Wang)))
         {
-            var path = _gamesPathsProvider.GetPath(GameEnum.ShadowWarrior);
+            var path = _gamesPathsProvider.GetPath(GameEnum.Wang);
 
             if (path is not null)
             {
@@ -358,9 +358,9 @@ public sealed partial class SettingsViewModel : ObservableObject
                 OnPropertyChanged(nameof(PathToFury));
             }
         }
-        else if (param.Equals(nameof(GameEnum.Exhumed)))
+        else if (param.Equals(nameof(GameEnum.Slave)))
         {
-            var path = _gamesPathsProvider.GetPath(GameEnum.Exhumed);
+            var path = _gamesPathsProvider.GetPath(GameEnum.Slave);
 
             if (path is not null)
             {

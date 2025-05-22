@@ -19,7 +19,7 @@ public sealed class WangLooseMapsCmdArgumentsTests
 
     public WangLooseMapsCmdArgumentsTests()
     {
-        _modsProvider = new(GameEnum.ShadowWarrior);
+        _modsProvider = new(GameEnum.Wang);
 
         _wangGame = new()
         {
@@ -35,7 +35,7 @@ public sealed class WangLooseMapsCmdArgumentsTests
             Author = null,
             Description = null,
             Version = null,
-            SupportedGame = new(GameEnum.ShadowWarrior),
+            SupportedGame = new(GameEnum.Wang),
             RequiredFeatures = null,
             PathToFile = Path.Combine("Maps", "LOOSE.MAP"),
             DependentAddons = null,

@@ -18,7 +18,7 @@ public sealed class SlaveCmdArgumentsTests
 
     public SlaveCmdArgumentsTests()
     {
-        _modsProvider = new(GameEnum.Exhumed);
+        _modsProvider = new(GameEnum.Slave);
 
         _slaveGame = new()
         {
@@ -27,7 +27,7 @@ public sealed class SlaveCmdArgumentsTests
 
         _slaveCamp = new()
         {
-            Id = nameof(GameEnum.Exhumed).ToLower(),
+            Id = nameof(GameEnum.Slave).ToLower(),
             Type = AddonTypeEnum.Official,
             Title = "Slave",
             GridImageHash = null,
@@ -35,7 +35,7 @@ public sealed class SlaveCmdArgumentsTests
             Author = null,
             Description = null,
             Version = null,
-            SupportedGame = new(GameEnum.Exhumed),
+            SupportedGame = new(GameEnum.Slave),
             RequiredFeatures = null,
             PathToFile = null,
             DependentAddons = null,

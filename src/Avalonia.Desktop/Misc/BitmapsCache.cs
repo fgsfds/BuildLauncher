@@ -122,7 +122,7 @@ public sealed class BitmapsCache : ICacheAdder<Stream>, ICacheGetter<Bitmap>
 
 
         using var ps = ImageHelper.FileNameToStream("Slave.slave.jpg", addonsAss);
-        _ = TryAddGridToCache(GameEnum.Exhumed.GetUniqueHash(), ps);
+        _ = TryAddGridToCache(GameEnum.Slave.GetUniqueHash(), ps);
 
 
         using var tw = ImageHelper.FileNameToStream("TekWar.tekwar.jpg", addonsAss);
@@ -133,7 +133,7 @@ public sealed class BitmapsCache : ICacheAdder<Stream>, ICacheGetter<Bitmap>
         _ = TryAddGridToCache(WangAddonEnum.TwinDragon.GetUniqueHash(), td);
 
         using var wang = ImageHelper.FileNameToStream("Wang.wang.jpg", addonsAss);
-        _ = TryAddGridToCache(GameEnum.ShadowWarrior.GetUniqueHash(), wang);
+        _ = TryAddGridToCache(GameEnum.Wang.GetUniqueHash(), wang);
 
         using var wd = ImageHelper.FileNameToStream("Wang.wanton.jpg", addonsAss);
         _ = TryAddGridToCache(WangAddonEnum.Wanton.GetUniqueHash(), wd);

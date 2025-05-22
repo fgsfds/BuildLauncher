@@ -172,7 +172,7 @@
                         Width="{Binding $self.Bounds.Height}"
                         HorizontalContentAlignment="Center"
                         Command="{Binding OpenFolderPickerCommand}"
-                        CommandParameter="ShadowWarrior">
+                        CommandParameter="Wang">
                     ...
                 </Button>
 
@@ -181,7 +181,7 @@
                         Width="{Binding $self.Bounds.Height}"
                         HorizontalContentAlignment="Center"
                         Command="{Binding AutodetectCommand}"
-                        CommandParameter="ShadowWarrior"
+                        CommandParameter="Wang"
                         ToolTip.Tip="Autodetect">
                     <i:Icon Value="fa-rotate" />
                 </Button>
@@ -288,7 +288,7 @@
                         Width="{Binding $self.Bounds.Height}"
                         HorizontalContentAlignment="Center"
                         Command="{Binding OpenFolderPickerCommand}"
-                        CommandParameter="Exhumed">
+                        CommandParameter="Slave">
                     ...
                 </Button>
 
@@ -297,7 +297,7 @@
                         Width="{Binding $self.Bounds.Height}"
                         HorizontalContentAlignment="Center"
                         Command="{Binding AutodetectCommand}"
-                        CommandParameter="Exhumed"
+                        CommandParameter="Slave"
                         ToolTip.Tip="Autodetect">
                     <i:Icon Value="fa-rotate" />
                 </Button>

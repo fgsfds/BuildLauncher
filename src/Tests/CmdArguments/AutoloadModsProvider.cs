@@ -20,8 +20,8 @@ internal sealed class AutoloadModsProvider
             GameEnum.Duke3D => new(GameEnum.Duke3D, DukeVersionEnum.Duke3D_Atomic),
             GameEnum.Duke64 => new(GameEnum.Duke64),
             GameEnum.Blood => new(GameEnum.Blood),
-            GameEnum.ShadowWarrior => new(GameEnum.ShadowWarrior),
-            GameEnum.Exhumed => new(GameEnum.Exhumed),
+            GameEnum.Wang => new(GameEnum.Wang),
+            GameEnum.Slave => new(GameEnum.Slave),
             GameEnum.Redneck => new(GameEnum.Redneck),
             GameEnum.RidesAgain => new(GameEnum.RidesAgain),
             GameEnum.Fury => new(GameEnum.Fury),
@@ -33,11 +33,11 @@ internal sealed class AutoloadModsProvider
         {
             GameEnum.Duke3D => nameof(DukeAddonEnum.DukeVaca).ToLower(),
             GameEnum.Blood => nameof(BloodAddonEnum.BloodCP).ToLower(),
-            GameEnum.ShadowWarrior => nameof(WangAddonEnum.TwinDragon).ToLower(),
+            GameEnum.Wang => nameof(WangAddonEnum.TwinDragon).ToLower(),
             GameEnum.Redneck => nameof(RedneckAddonEnum.Route66).ToLower(),
             GameEnum.Fury => "",
             GameEnum.Duke64 => "",
-            GameEnum.Exhumed => "",
+            GameEnum.Slave => "",
             GameEnum.NAM => "",
             _ => ThrowHelper.ThrowNotSupportedException<string>()
         };
@@ -46,9 +46,9 @@ internal sealed class AutoloadModsProvider
         {
             GameEnum.Duke3D => FeatureEnum.EDuke32_CON,
             GameEnum.Blood => FeatureEnum.Modern_Types,
-            GameEnum.ShadowWarrior => FeatureEnum.Models,
+            GameEnum.Wang => FeatureEnum.Models,
             GameEnum.Duke64 => FeatureEnum.Models,
-            GameEnum.Exhumed => FeatureEnum.Models,
+            GameEnum.Slave => FeatureEnum.Models,
             GameEnum.Redneck => FeatureEnum.Models,
             GameEnum.RidesAgain => FeatureEnum.Models,
             GameEnum.Fury => FeatureEnum.EDuke32_CON,

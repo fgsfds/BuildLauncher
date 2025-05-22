@@ -20,7 +20,7 @@ public sealed class WangCmdArgumentsTests
 
     public WangCmdArgumentsTests()
     {
-        _modsProvider = new(GameEnum.ShadowWarrior);
+        _modsProvider = new(GameEnum.Wang);
 
         _wangGame = new()
         {
@@ -29,7 +29,7 @@ public sealed class WangCmdArgumentsTests
 
         _wangCamp = new()
         {
-            Id = nameof(GameEnum.ShadowWarrior).ToLower(),
+            Id = nameof(GameEnum.Wang).ToLower(),
             Type = AddonTypeEnum.Official,
             Title = "Shadow Warrior",
             GridImageHash = null,
@@ -37,7 +37,7 @@ public sealed class WangCmdArgumentsTests
             Author = null,
             Description = null,
             Version = null,
-            SupportedGame = new(GameEnum.ShadowWarrior),
+            SupportedGame = new(GameEnum.Wang),
             RequiredFeatures = null,
             PathToFile = null,
             DependentAddons = null,
@@ -59,7 +59,7 @@ public sealed class WangCmdArgumentsTests
             Author = null,
             Description = null,
             Version = null,
-            SupportedGame = new(GameEnum.ShadowWarrior),
+            SupportedGame = new(GameEnum.Wang),
             RequiredFeatures = null,
             PathToFile = Path.Combine("D:", "Games", "Wang", "TD.zip"),
             DependentAddons = null,

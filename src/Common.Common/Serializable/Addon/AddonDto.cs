@@ -1,4 +1,5 @@
-﻿using Common.Enums;
+﻿using Common.Common.Helpers;
+using Common.Enums;
 using Common.Interfaces;
 using System.Text.Json.Serialization;
 
@@ -75,7 +76,8 @@ public sealed class AddonDto
 [JsonSourceGenerationOptions(
     Converters = [
         typeof(JsonStringEnumConverter<PortEnum>),
-        typeof(JsonStringEnumConverter<GameEnum>),
+        //typeof(JsonStringEnumConverter<GameEnum>),
+        typeof(GameEnumJsonConverter),
         typeof(JsonStringEnumConverter<AddonTypeEnum>),
         typeof(JsonStringEnumConverter<OSEnum>),
         typeof(JsonStringEnumConverter<FeatureEnum>)

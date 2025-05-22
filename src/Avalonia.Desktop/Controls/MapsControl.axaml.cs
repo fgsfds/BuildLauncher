@@ -223,7 +223,7 @@ public sealed partial class MapsControl : UserControl
         {
             enums = Enum.GetValues<Duke3DSkillsEnum>().ToDictionary(static x => (byte)x, static y => y.ToReadableString());
         }
-        else if (_viewModel.Game.GameEnum is GameEnum.ShadowWarrior)
+        else if (_viewModel.Game.GameEnum is GameEnum.Wang)
         {
             enums = Enum.GetValues<WangSkillsEnum>().ToDictionary(static x => (byte)x, static y => y.ToReadableString());
         }

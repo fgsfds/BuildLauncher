@@ -118,7 +118,7 @@ public sealed class SerializerTests
         Assert.Equal(AddonTypeEnum.Mod, result.AddonType);
         Assert.Equal("addon-id", result.Id);
 
-        Assert.Equal(GameEnum.ShadowWarrior, result.SupportedGame.Game);
+        Assert.Equal(GameEnum.Wang, result.SupportedGame.Game);
         Assert.Equal("1.3d", result.SupportedGame.Version);
         Assert.Equal("0x982AFE4A", result.SupportedGame.Crc);
 

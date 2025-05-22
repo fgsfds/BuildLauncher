@@ -136,7 +136,7 @@
 
                                 <RadioButton GroupName="GameSelect"
                                              Content="Shadow Warrior"
-                                             IsChecked="{Binding SelectedGame, Mode=TwoWay, Converter={StaticResource GameStringToEnumConverter}, ConverterParameter=ShadowWarrior}"/>
+                                             IsChecked="{Binding SelectedGame, Mode=TwoWay, Converter={StaticResource GameStringToEnumConverter}, ConverterParameter=Wang}"/>
 
                                 <RadioButton GroupName="GameSelect"
                                              Content="Ion Fury"
@@ -152,7 +152,7 @@
 
                                 <RadioButton GroupName="GameSelect"
                                              Content="Powerslave"
-                                             IsChecked="{Binding SelectedGame, Mode=TwoWay, Converter={StaticResource GameStringToEnumConverter}, ConverterParameter=Exhumed}"/>
+                                             IsChecked="{Binding SelectedGame, Mode=TwoWay, Converter={StaticResource GameStringToEnumConverter}, ConverterParameter=Slave}"/>
 
                                 <RadioButton GroupName="GameSelect"
                                              Content="NAM"

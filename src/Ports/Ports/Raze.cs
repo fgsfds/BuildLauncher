@@ -33,8 +33,8 @@ public sealed class Raze : BasePort
         [
         GameEnum.Blood,
         GameEnum.Duke3D,
-        GameEnum.ShadowWarrior,
-        GameEnum.Exhumed,
+        GameEnum.Wang,
+        GameEnum.Slave,
         GameEnum.Redneck,
         GameEnum.RidesAgain,
         GameEnum.NAM,
