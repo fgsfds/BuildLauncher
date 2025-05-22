@@ -183,7 +183,22 @@ public sealed class DukeCmdArgumentsTests
 
         raze.BeforeStart(_dukeGame, _dukeCamp);
         var args = raze.GetStartGameArgs(_dukeGame, _dukeCamp, mods, true, true);
-        var expected = @$" -quick -nosetup -file ""enabled_mod.zip"" -adddef ""ENABLED1.DEF"" -adddef ""ENABLED2.DEF"" -addcon ""ENABLED1.CON"" -addcon ""ENABLED2.CON"" -file ""mod_incompatible_with_addon.zip"" -file ""incompatible_mod_with_compatible_version.zip"" -file ""dependent_mod.zip"" -file ""dependent_mod_with_compatible_version.zip"" -savedir ""{Directory.GetCurrentDirectory()}\Data\Saves\Raze\Duke3D\duke3d"" -def ""a"" -addon 0";
+        var expected = $"" +
+            $" -file \"enabled_mod.zip\"" +
+            $" -adddef \"ENABLED1.DEF\"" +
+            $" -adddef \"ENABLED2.DEF\"" +
+            $" -addcon \"ENABLED1.CON\"" +
+            $" -addcon \"ENABLED2.CON\"" +
+            $" -file \"mod_incompatible_with_addon.zip\"" +
+            $" -file \"incompatible_mod_with_compatible_version.zip\"" +
+            $" -file \"dependent_mod.zip\"" +
+            $" -file \"dependent_mod_with_compatible_version.zip\"" +
+            $" -savedir \"{Directory.GetCurrentDirectory()}\\Data\\Saves\\Raze\\Duke3D\\duke3d\"" +
+            $" -def \"a\"" +
+            $" -addon 0" +
+            $" -quick" +
+            $" -nosetup" +
+            $"";
 
         if (OperatingSystem.IsLinux())
         {
@@ -213,7 +228,13 @@ public sealed class DukeCmdArgumentsTests
         Raze raze = new();
 
         var args = raze.GetStartGameArgs(_dukeGame, _dukeWtCamp, [], true, true);
-        var expected = @$" -quick -nosetup -savedir ""{Directory.GetCurrentDirectory()}\Data\Saves\Raze\Duke3D\duke3d_wt"" -def ""a"" -addon 0";
+        var expected = $"" +
+            $" -savedir \"{Directory.GetCurrentDirectory()}\\Data\\Saves\\Raze\\Duke3D\\duke3d_wt\"" +
+            $" -def \"a\"" +
+            $" -addon 0" +
+            $" -quick" +
+            $" -nosetup" +
+            $"";
 
         if (OperatingSystem.IsLinux())
         {
@@ -249,7 +270,19 @@ public sealed class DukeCmdArgumentsTests
 
         raze.BeforeStart(_dukeGame, _dukeVaca);
         var args = raze.GetStartGameArgs(_dukeGame, _dukeVaca, mods, true, true);
-        var expected = @$" -quick -nosetup -file ""enabled_mod.zip"" -adddef ""ENABLED1.DEF"" -adddef ""ENABLED2.DEF"" -addcon ""ENABLED1.CON"" -addcon ""ENABLED2.CON"" -file ""mod_requires_addon.zip"" -savedir ""{Directory.GetCurrentDirectory()}\Data\Saves\Raze\Duke3D\dukevaca"" -def ""a"" -addon 3";
+        var expected = $"" +
+            $" -file \"enabled_mod.zip\"" +
+            $" -adddef \"ENABLED1.DEF\"" +
+            $" -adddef \"ENABLED2.DEF\"" +
+            $" -addcon \"ENABLED1.CON\"" +
+            $" -addcon \"ENABLED2.CON\"" +
+            $" -file \"mod_requires_addon.zip\"" +
+            $" -savedir \"{Directory.GetCurrentDirectory()}\\Data\\Saves\\Raze\\Duke3D\\dukevaca\"" +
+            $" -def \"a\"" +
+            $" -addon 3" +
+            $" -quick" +
+            $" -nosetup" +
+            $"";
 
         if (OperatingSystem.IsLinux())
         {
@@ -279,7 +312,19 @@ public sealed class DukeCmdArgumentsTests
         Raze raze = new();
 
         var args = raze.GetStartGameArgs(_dukeGame, _dukeTcForVaca, [], true, true);
-        var expected = @$" -quick -nosetup -savedir ""{Directory.GetCurrentDirectory()}\Data\Saves\Raze\Duke3D\duke-tc"" -def ""TC.DEF"" -adddef ""TC1.DEF"" -adddef ""TC2.DEF"" -addon 3 -con ""TC.CON"" -addcon ""TC1.CON"" -addcon ""TC2.CON"" -file ""{Path.Combine(Directory.GetCurrentDirectory(), "Data", "Duke3D", "Campaigns", "duke_tc.zip")}""";
+        var expected = $"" +
+            $" -savedir \"{Directory.GetCurrentDirectory()}\\Data\\Saves\\Raze\\Duke3D\\duke-tc\"" +
+            $" -def \"TC.DEF\"" +
+            $" -adddef \"TC1.DEF\"" +
+            $" -adddef \"TC2.DEF\"" +
+            $" -addon 3" +
+            $" -con \"TC.CON\"" +
+            $" -addcon \"TC1.CON\"" +
+            $" -addcon \"TC2.CON\"" +
+            $" -file \"{Path.Combine(Directory.GetCurrentDirectory(), "Data", "Duke3D", "Campaigns", "duke_tc.zip")}\"" +
+            $" -quick" +
+            $" -nosetup" +
+            $"";
 
         if (OperatingSystem.IsLinux())
         {
@@ -312,7 +357,26 @@ public sealed class DukeCmdArgumentsTests
         EDuke32 eduke32 = new();
 
         var args = eduke32.GetStartGameArgs(_dukeGame, _dukeCamp, mods, true, true, 3);
-        var expected = @$" -quick -nosetup -g ""enabled_mod.zip"" -mh ""ENABLED1.DEF"" -mh ""ENABLED2.DEF"" -mx ""ENABLED1.CON"" -mx ""ENABLED2.CON"" -g ""mod_incompatible_with_addon.zip"" -g ""incompatible_mod_with_compatible_version.zip"" -g ""dependent_mod.zip"" -g ""dependent_mod_with_compatible_version.zip"" -g ""feature_mod.zip"" -j ""{Directory.GetCurrentDirectory()}\Data\Addons\Duke3D\Mods"" -usecwd -cachesize 262144 -h ""a"" -j ""D:\Games\Duke3D"" -s3";
+        var expected = "" +
+            $" -g \"enabled_mod.zip\"" +
+            $" -mh \"ENABLED1.DEF\"" +
+            $" -mh \"ENABLED2.DEF\"" +
+            $" -mx \"ENABLED1.CON\"" +
+            $" -mx \"ENABLED2.CON\"" +
+            $" -g \"mod_incompatible_with_addon.zip\"" +
+            $" -g \"incompatible_mod_with_compatible_version.zip\"" +
+            $" -g \"dependent_mod.zip\"" +
+            $" -g \"dependent_mod_with_compatible_version.zip\"" +
+            $" -g \"feature_mod.zip\"" +
+            $" -j \"{Directory.GetCurrentDirectory()}\\Data\\Addons\\Duke3D\\Mods\"" +
+            $" -usecwd" +
+            $" -cachesize 262144" +
+            $" -h \"a\"" +
+            $" -j \"D:\\Games\\Duke3D\"" +
+            $" -s3" +
+            $" -quick" +
+            $" -nosetup" +
+            $"";
 
         if (OperatingSystem.IsLinux())
         {
@@ -329,7 +393,18 @@ public sealed class DukeCmdArgumentsTests
         EDuke32 eduke32 = new();
 
         var args = eduke32.GetStartGameArgs(_dukeGame, _dukeWtCamp, [], true, true);
-        var expected = @$" -quick -nosetup -usecwd -cachesize 262144 -h ""a"" -j ""D:\Games\DukeWT"" -addon 0 -j ""{Directory.GetCurrentDirectory()}\Data\Ports\EDuke32\WTStopgap"" -gamegrp e32wt.grp -mh e32wt.def";
+        var expected = $"" +
+            $" -usecwd" +
+            $" -cachesize 262144" +
+            $" -h \"a\"" +
+            $" -j \"D:\\Games\\DukeWT\"" +
+            $" -addon 0" +
+            $" -j \"{Directory.GetCurrentDirectory()}\\Data\\Ports\\EDuke32\\WTStopgap\"" +
+            $" -gamegrp e32wt.grp" +
+            $" -mh e32wt.def" +
+            $" -quick" +
+            $" -nosetup" +
+            $"";
 
         if (OperatingSystem.IsLinux())
         {
@@ -352,7 +427,23 @@ public sealed class DukeCmdArgumentsTests
         EDuke32 eduke32 = new();
 
         var args = eduke32.GetStartGameArgs(_dukeGame, _dukeVaca, mods, true, true);
-        var expected = @$" -quick -nosetup -g ""enabled_mod.zip"" -mh ""ENABLED1.DEF"" -mh ""ENABLED2.DEF"" -mx ""ENABLED1.CON"" -mx ""ENABLED2.CON"" -g ""mod_requires_addon.zip"" -j ""{Directory.GetCurrentDirectory()}\Data\Addons\Duke3D\Mods"" -usecwd -cachesize 262144 -h ""a"" -j ""D:\Games\Duke3D"" -j ""D:\Games\Duke3D\Vaca"" -grp VACATION.GRP";
+        var expected = $"" +
+            $" -g \"enabled_mod.zip\"" +
+            $" -mh \"ENABLED1.DEF\"" +
+            $" -mh \"ENABLED2.DEF\"" +
+            $" -mx \"ENABLED1.CON\"" +
+            $" -mx \"ENABLED2.CON\"" +
+            $" -g \"mod_requires_addon.zip\"" +
+            $" -j \"{Directory.GetCurrentDirectory()}\\Data\\Addons\\Duke3D\\Mods\"" +
+            $" -usecwd" +
+            $" -cachesize 262144" +
+            $" -h \"a\"" +
+            $" -j \"D:\\Games\\Duke3D\"" +
+            $" -j \"D:\\Games\\Duke3D\\Vaca\"" +
+            $" -grp VACATION.GRP" +
+            $" -quick" +
+            $" -nosetup" +
+            $"";
 
         if (OperatingSystem.IsLinux())
         {
@@ -369,7 +460,22 @@ public sealed class DukeCmdArgumentsTests
         EDuke32 eduke32 = new();
 
         var args = eduke32.GetStartGameArgs(_dukeGame, _dukeTcForVaca, [], true, true);
-        var expected = @$" -quick -nosetup -usecwd -cachesize 262144 -h ""TC.DEF"" -mh ""TC1.DEF"" -mh ""TC2.DEF"" -j ""D:\Games\Duke3D"" -j ""D:\Games\Duke3D\Vaca"" -grp VACATION.GRP -x ""TC.CON"" -mx ""TC1.CON"" -mx ""TC2.CON"" -g ""{Path.Combine(Directory.GetCurrentDirectory(), "Data", "Duke3D", "Campaigns", "duke_tc.zip")}""";
+        var expected = $"" +
+            $" -usecwd" +
+            $" -cachesize 262144" +
+            $" -h \"TC.DEF\"" +
+            $" -mh \"TC1.DEF\"" +
+            $" -mh \"TC2.DEF\"" +
+            $" -j \"D:\\Games\\Duke3D\"" +
+            $" -j \"D:\\Games\\Duke3D\\Vaca\"" +
+            $" -grp VACATION.GRP" +
+            $" -x \"TC.CON\"" +
+            $" -mx \"TC1.CON\"" +
+            $" -mx \"TC2.CON\"" +
+            $" -g \"{Path.Combine(Directory.GetCurrentDirectory(), "Data", "Duke3D", "Campaigns", "duke_tc.zip")}\"" +
+            $" -quick" +
+            $" -nosetup" +
+            $"";
 
         if (OperatingSystem.IsLinux())
         {
@@ -386,7 +492,15 @@ public sealed class DukeCmdArgumentsTests
         RedNukem redNukem = new();
 
         var args = redNukem.GetStartGameArgs(_dukeGame, _duke64Camp, [], true, true);
-        var expected = @" -quick -nosetup -usecwd -h ""a"" -j ""D:\Games\Duke64"" -gamegrp ""rom.z64""";
+        var expected = "" +
+            " -usecwd" +
+            " -d blank.edm" +
+            " -h \"a\"" +
+            " -j \"D:\\Games\\Duke64\"" +
+            " -gamegrp \"rom.z64\"" +
+            " -quick" +
+            " -nosetup" +
+            "";
 
         if (OperatingSystem.IsLinux())
         {
@@ -419,7 +533,24 @@ public sealed class DukeCmdArgumentsTests
         RedNukem redNukem = new();
 
         var args = redNukem.GetStartGameArgs(_dukeGame, _dukeCamp, mods, true, true);
-        var expected = @$" -quick -nosetup -g ""enabled_mod.zip"" -mh ""ENABLED1.DEF"" -mh ""ENABLED2.DEF"" -mx ""ENABLED1.CON"" -mx ""ENABLED2.CON"" -g ""mod_incompatible_with_addon.zip"" -g ""incompatible_mod_with_compatible_version.zip"" -g ""dependent_mod.zip"" -g ""dependent_mod_with_compatible_version.zip"" -j ""{Directory.GetCurrentDirectory()}\Data\Addons\Duke3D\Mods"" -usecwd -h ""a"" -j ""D:\Games\Duke3D""";
+        var expected = $"" +
+            $" -g \"enabled_mod.zip\"" +
+            $" -mh \"ENABLED1.DEF\"" +
+            $" -mh \"ENABLED2.DEF\"" +
+            $" -mx \"ENABLED1.CON\"" +
+            $" -mx \"ENABLED2.CON\"" +
+            $" -g \"mod_incompatible_with_addon.zip\"" +
+            $" -g \"incompatible_mod_with_compatible_version.zip\"" +
+            $" -g \"dependent_mod.zip\"" +
+            $" -g \"dependent_mod_with_compatible_version.zip\"" +
+            $" -j \"{Directory.GetCurrentDirectory()}\\Data\\Addons\\Duke3D\\Mods\"" +
+            $" -usecwd" +
+            " -d blank.edm" +
+            $" -h \"a\"" +
+            $" -j \"D:\\Games\\Duke3D\"" +
+            $" -quick" +
+            $" -nosetup" +
+            $"";
 
         if (OperatingSystem.IsLinux())
         {
@@ -442,7 +573,23 @@ public sealed class DukeCmdArgumentsTests
         RedNukem eduke32 = new();
 
         var args = eduke32.GetStartGameArgs(_dukeGame, _dukeVaca, mods, true, true);
-        var expected = @$" -quick -nosetup -g ""enabled_mod.zip"" -mh ""ENABLED1.DEF"" -mh ""ENABLED2.DEF"" -mx ""ENABLED1.CON"" -mx ""ENABLED2.CON"" -g ""mod_requires_addon.zip"" -j ""{Directory.GetCurrentDirectory()}\Data\Addons\Duke3D\Mods"" -usecwd -h ""a"" -j ""D:\Games\Duke3D"" -j ""D:\Games\Duke3D\Vaca"" -g VACATION.GRP";
+        var expected = $"" +
+            $" -g \"enabled_mod.zip\"" +
+            $" -mh \"ENABLED1.DEF\"" +
+            $" -mh \"ENABLED2.DEF\"" +
+            $" -mx \"ENABLED1.CON\"" +
+            $" -mx \"ENABLED2.CON\"" +
+            $" -g \"mod_requires_addon.zip\"" +
+            $" -j \"{Directory.GetCurrentDirectory()}\\Data\\Addons\\Duke3D\\Mods\"" +
+            $" -usecwd" +
+            " -d blank.edm" +
+            $" -h \"a\"" +
+            $" -j \"D:\\Games\\Duke3D\"" +
+            $" -j \"D:\\Games\\Duke3D\\Vaca\"" +
+            $" -g VACATION.GRP" +
+            $" -quick" +
+            $" -nosetup"
+            ;
 
         if (OperatingSystem.IsLinux())
         {
@@ -459,7 +606,22 @@ public sealed class DukeCmdArgumentsTests
         RedNukem eduke32 = new();
 
         var args = eduke32.GetStartGameArgs(_dukeGame, _dukeTcForVaca, [], true, true);
-        var expected = @$" -quick -nosetup -usecwd -h ""TC.DEF"" -mh ""TC1.DEF"" -mh ""TC2.DEF"" -j ""D:\Games\Duke3D"" -j ""D:\Games\Duke3D\Vaca"" -g VACATION.GRP -x ""TC.CON"" -mx ""TC1.CON"" -mx ""TC2.CON"" -g ""{Path.Combine(Directory.GetCurrentDirectory(), "Data", "Duke3D", "Campaigns", "duke_tc.zip")}""";
+        var expected = $"" +
+            $" -usecwd" +
+            " -d blank.edm" +
+            $" -h \"TC.DEF\"" +
+            $" -mh \"TC1.DEF\"" +
+            $" -mh \"TC2.DEF\"" +
+            $" -j \"D:\\Games\\Duke3D\"" +
+            $" -j \"D:\\Games\\Duke3D\\Vaca\"" +
+            $" -g VACATION.GRP" +
+            $" -x \"TC.CON\"" +
+            $" -mx \"TC1.CON\"" +
+            $" -mx \"TC2.CON\"" +
+            $" -g \"{Path.Combine(Directory.GetCurrentDirectory(), "Data", "Duke3D", "Campaigns", "duke_tc.zip")}\"" +
+            $" -quick" +
+            $" -nosetup" +
+            $"";
 
         if (OperatingSystem.IsLinux())
         {

@@ -70,7 +70,20 @@ public sealed class WangLooseMapsCmdArgumentsTests
 
         raze.BeforeStart(_wangGame, _looseMap);
         var args = raze.GetStartGameArgs(_wangGame, _looseMap, mods, true, true);
-        var expected = @$" -quick -nosetup -file ""enabled_mod.zip"" -adddef ""ENABLED1.DEF"" -adddef ""ENABLED2.DEF"" -file ""incompatible_mod_with_compatible_version.zip"" -file ""dependent_mod.zip"" -file ""dependent_mod_with_compatible_version.zip"" -savedir ""{Directory.GetCurrentDirectory()}\Data\Saves\Raze\Wang\loose-map"" -def ""a"" -file ""{Directory.GetCurrentDirectory()}\Data\Addons\Wang\Maps"" -map ""LOOSE.MAP""";
+        var expected = $"" +
+            $" -file \"enabled_mod.zip\"" +
+            $" -adddef \"ENABLED1.DEF\"" +
+            $" -adddef \"ENABLED2.DEF\"" +
+            $" -file \"incompatible_mod_with_compatible_version.zip\"" +
+            $" -file \"dependent_mod.zip\"" +
+            $" -file \"dependent_mod_with_compatible_version.zip\"" +
+            $" -savedir \"{Directory.GetCurrentDirectory()}\\Data\\Saves\\Raze\\Wang\\loose-map\"" +
+            $" -def \"a\"" +
+            $" -file \"{Directory.GetCurrentDirectory()}\\Data\\Addons\\Wang\\Maps\"" +
+            $" -map \"LOOSE.MAP\"" +
+            $" -quick" +
+            $" -nosetup" +
+            $"";
 
         if (OperatingSystem.IsLinux())
         {
@@ -112,7 +125,23 @@ public sealed class WangLooseMapsCmdArgumentsTests
         VoidSW voidSw = new();
 
         var args = voidSw.GetStartGameArgs(_wangGame, _looseMap, mods, true, true, 3);
-        var expected = @$" -quick -nosetup -g""enabled_mod.zip"" -mh""ENABLED1.DEF"" -mh""ENABLED2.DEF"" -g""incompatible_mod_with_compatible_version.zip"" -g""dependent_mod.zip"" -g""dependent_mod_with_compatible_version.zip"" -j""{Directory.GetCurrentDirectory()}\Data\Addons\Wang\Mods"" -usecwd -j""D:\Games\Wang"" -h""a"" -j""{Directory.GetCurrentDirectory()}\Data\Addons\Wang\Maps"" -map ""LOOSE.MAP"" -s3";
+        var expected = $"" +
+            $" -g\"enabled_mod.zip\"" +
+            $" -mh\"ENABLED1.DEF\"" +
+            $" -mh\"ENABLED2.DEF\"" +
+            $" -g\"incompatible_mod_with_compatible_version.zip\"" +
+            $" -g\"dependent_mod.zip\"" +
+            $" -g\"dependent_mod_with_compatible_version.zip\"" +
+            $" -j\"{Directory.GetCurrentDirectory()}\\Data\\Addons\\Wang\\Mods\"" +
+            $" -usecwd" +
+            $" -j\"D:\\Games\\Wang\"" +
+            $" -h\"a\"" +
+            $" -j\"{Directory.GetCurrentDirectory()}\\Data\\Addons\\Wang\\Maps\"" +
+            $" -map \"LOOSE.MAP\"" +
+            $" -s3" +
+            $" -quick" +
+            $" -nosetup" +
+            $"";
 
         if (OperatingSystem.IsLinux())
         {

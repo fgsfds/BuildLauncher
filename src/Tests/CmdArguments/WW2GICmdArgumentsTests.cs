@@ -90,7 +90,14 @@ public sealed class WW2GICmdArgumentsTests
 
         raze.BeforeStart(_ww2Game, _ww2Camp);
         var args = raze.GetStartGameArgs(_ww2Game, _ww2Camp, mods, true, true);
-        var expected = @$" -quick -nosetup -savedir ""{Directory.GetCurrentDirectory()}\Data\Saves\Raze\WW2GI\ww2gi"" -def ""a"" -ww2gi -file WW2GI.GRP -con GAME.CON";
+        var expected = $"" +
+            $" -savedir \"{Directory.GetCurrentDirectory()}\\Data\\Saves\\Raze\\WW2GI\\ww2gi\"" +
+            $" -def \"a\" -ww2gi" +
+            $" -file WW2GI.GRP" +
+            $" -con GAME.CON" +
+            $" -quick" +
+            $" -nosetup" +
+            $"";
 
         if (OperatingSystem.IsLinux())
         {
@@ -125,7 +132,16 @@ public sealed class WW2GICmdArgumentsTests
 
         raze.BeforeStart(_ww2Game, _platoonCamp);
         var args = raze.GetStartGameArgs(_ww2Game, _platoonCamp, mods, true, true);
-        var expected = @$" -quick -nosetup -savedir ""{Directory.GetCurrentDirectory()}\Data\Saves\Raze\WW2GI\platoon"" -def ""a"" -ww2gi -file WW2GI.GRP -file PLATOONL.DAT -con PLATOONL.DEF";
+        var expected = $"" +
+            $" -savedir \"{Directory.GetCurrentDirectory()}\\Data\\Saves\\Raze\\WW2GI\\platoon\"" +
+            $" -def \"a\"" +
+            $" -ww2gi" +
+            $" -file WW2GI.GRP" +
+            $" -file PLATOONL.DAT" +
+            $" -con PLATOONL.DEF" +
+            $" -quick" +
+            $" -nosetup" +
+            $"";
 
         if (OperatingSystem.IsLinux())
         {
@@ -159,7 +175,17 @@ public sealed class WW2GICmdArgumentsTests
         EDuke32 eDuke = new();
 
         var args = eDuke.GetStartGameArgs(_ww2Game, _ww2Camp, mods, true, true);
-        var expected = @" -quick -nosetup -usecwd -cachesize 262144 -h ""a"" -j ""D:\Games\WW2GI"" -ww2gi -gamegrp WW2GI.GRP -x GAME.CON";
+        var expected = "" +
+            " -usecwd" +
+            " -cachesize 262144" +
+            " -h \"a\"" +
+            " -j \"D:\\Games\\WW2GI\"" +
+            " -ww2gi" +
+            " -gamegrp WW2GI.GRP" +
+            " -x GAME.CON" +
+            " -quick" +
+            " -nosetup" +
+            "";
 
         if (OperatingSystem.IsLinux())
         {
@@ -181,7 +207,17 @@ public sealed class WW2GICmdArgumentsTests
         EDuke32 eDuke = new();
 
         var args = eDuke.GetStartGameArgs(_ww2Game, _platoonCamp, mods, true, true);
-        var expected = @" -quick -nosetup -usecwd -cachesize 262144 -h ""a"" -j ""D:\Games\WW2GI"" -ww2gi -gamegrp WW2GI.GRP -grp PLATOONL.DAT -x PLATOONL.DEF";
+        var expected = "" +
+            " -usecwd" +
+            " -cachesize 262144" +
+            " -h \"a\"" +
+            " -j \"D:\\Games\\WW2GI\"" +
+            " -ww2gi -gamegrp WW2GI.GRP" +
+            " -grp PLATOONL.DAT" +
+            " -x PLATOONL.DEF" +
+            " -quick" +
+            " -nosetup" +
+            "";
 
         if (OperatingSystem.IsLinux())
         {

@@ -90,7 +90,15 @@ public sealed class RedneckCmdArgumentsTests
 
         raze.BeforeStart(_redneckGame, _redneckCamp);
         var args = raze.GetStartGameArgs(_redneckGame, _redneckCamp, mods, true, true);
-        var expected = @$" -quick -nosetup -file ""enabled_mod.zip"" -adddef ""ENABLED1.DEF"" -adddef ""ENABLED2.DEF"" -savedir ""{Directory.GetCurrentDirectory()}\Data\Saves\Raze\Redneck\redneck"" -def ""a""";
+        var expected = $"" +
+            $" -file \"enabled_mod.zip\"" +
+            $" -adddef \"ENABLED1.DEF\"" +
+            $" -adddef \"ENABLED2.DEF\"" +
+            $" -savedir \"{Directory.GetCurrentDirectory()}\\Data\\Saves\\Raze\\Redneck\\redneck\"" +
+            $" -def \"a\"" +
+            $" -quick" +
+            $" -nosetup" +
+            $"";
 
         if (OperatingSystem.IsLinux())
         {
@@ -125,7 +133,15 @@ public sealed class RedneckCmdArgumentsTests
 
         raze.BeforeStart(_redneckGame, _againCamp);
         var args = raze.GetStartGameArgs(_redneckGame, _againCamp, mods, true, true);
-        var expected = @$" -quick -nosetup -file ""enabled_mod.zip"" -adddef ""ENABLED1.DEF"" -adddef ""ENABLED2.DEF"" -savedir ""{Directory.GetCurrentDirectory()}\Data\Saves\Raze\Redneck\ridesagain"" -def ""a""";
+        var expected = $"" +
+            $" -file \"enabled_mod.zip\"" +
+            $" -adddef \"ENABLED1.DEF\"" +
+            $" -adddef \"ENABLED2.DEF\"" +
+            $" -savedir \"{Directory.GetCurrentDirectory()}\\Data\\Saves\\Raze\\Redneck\\ridesagain\"" +
+            $" -def \"a\"" +
+            $" -quick" +
+            $" -nosetup" +
+            $"";
 
         if (OperatingSystem.IsLinux())
         {
@@ -159,7 +175,18 @@ public sealed class RedneckCmdArgumentsTests
         RedNukem redNukem = new();
 
         var args = redNukem.GetStartGameArgs(_redneckGame, _redneckCamp, mods, true, true);
-        var expected = @$" -quick -nosetup -g ""enabled_mod.zip"" -mh ""ENABLED1.DEF"" -mh ""ENABLED2.DEF"" -j ""{Directory.GetCurrentDirectory()}\Data\Addons\Redneck\Mods"" -usecwd -h ""a"" -j ""D:\Games\Redneck""";
+        var expected = $"" +
+            $" -g \"enabled_mod.zip\"" +
+            $" -mh \"ENABLED1.DEF\"" +
+            $" -mh \"ENABLED2.DEF\"" +
+            $" -j \"{Directory.GetCurrentDirectory()}\\Data\\Addons\\Redneck\\Mods\"" +
+            $" -usecwd" +
+            " -d blank.edm" +
+            $" -h \"a\"" +
+            $" -j \"D:\\Games\\Redneck\"" +
+            $" -quick" +
+            $" -nosetup" +
+            $"";
 
         if (OperatingSystem.IsLinux())
         {
@@ -181,7 +208,18 @@ public sealed class RedneckCmdArgumentsTests
         RedNukem redNukem = new();
 
         var args = redNukem.GetStartGameArgs(_redneckGame, _againCamp, mods, true, true);
-        var expected = @$" -quick -nosetup -g ""enabled_mod.zip"" -mh ""ENABLED1.DEF"" -mh ""ENABLED2.DEF"" -j ""{Directory.GetCurrentDirectory()}\Data\Addons\Redneck\Mods"" -usecwd -h ""a"" -j ""D:\Games\Again""";
+        var expected = $"" +
+            $" -g \"enabled_mod.zip\"" +
+            $" -mh \"ENABLED1.DEF\"" +
+            $" -mh \"ENABLED2.DEF\"" +
+            $" -j \"{Directory.GetCurrentDirectory()}\\Data\\Addons\\Redneck\\Mods\"" +
+            $" -usecwd" +
+            " -d blank.edm" + 
+            $" -h \"a\"" +
+            $" -j \"D:\\Games\\Again\"" +
+            $" -quick" +
+            $" -nosetup" +
+            $"";
 
         if (OperatingSystem.IsLinux())
         {

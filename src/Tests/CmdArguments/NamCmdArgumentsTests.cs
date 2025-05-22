@@ -63,7 +63,18 @@ public sealed class NamCmdArgumentsTests
 
         raze.BeforeStart(_namGame, _namCamp);
         var args = raze.GetStartGameArgs(_namGame, _namCamp, mods, true, true);
-        var expected = @$" -quick -nosetup -file ""enabled_mod.zip"" -adddef ""ENABLED1.DEF"" -adddef ""ENABLED2.DEF"" -savedir ""{Directory.GetCurrentDirectory()}\Data\Saves\Raze\NAM\nam"" -def ""a"" -nam -file NAM.GRP -con GAME.CON";
+        var expected = $"" +
+            $" -file \"enabled_mod.zip\"" +
+            $" -adddef \"ENABLED1.DEF\"" +
+            $" -adddef \"ENABLED2.DEF\"" +
+            $" -savedir \"{Directory.GetCurrentDirectory()}\\Data\\Saves\\Raze\\NAM\\nam\"" +
+            $" -def \"a\"" +
+            $" -nam" +
+            $" -file NAM.GRP" +
+            $" -con GAME.CON" +
+            $" -quick" +
+            $" -nosetup" +
+            $"";
 
         if (OperatingSystem.IsLinux())
         {
@@ -94,10 +105,24 @@ public sealed class NamCmdArgumentsTests
             _modsProvider.IncompatibleMod,
         }.ToDictionary(x => new AddonVersion(x.Id, x.Version), x => (IAddon)x);
 
-        RedNukem redNukem = new();
+        EDuke32 eduke32 = new();
 
-        var args = redNukem.GetStartGameArgs(_namGame, _namCamp, mods, true, true);
-        var expected = @$" -quick -nosetup -g ""enabled_mod.zip"" -mh ""ENABLED1.DEF"" -mh ""ENABLED2.DEF"" -j ""{Directory.GetCurrentDirectory()}\Data\Addons\NAM\Mods"" -usecwd -h ""a"" -j ""D:\Games\NAM"" -nam -gamegrp NAM.GRP -x GAME.CON";
+        var args = eduke32.GetStartGameArgs(_namGame, _namCamp, mods, true, true);
+        var expected = $"" +
+            $" -g \"enabled_mod.zip\"" +
+            $" -mh \"ENABLED1.DEF\"" +
+            $" -mh \"ENABLED2.DEF\"" +
+            $" -j \"{Directory.GetCurrentDirectory()}\\Data\\Addons\\NAM\\Mods\"" +
+            $" -usecwd" +
+            " -cachesize 262144" +
+            $" -h \"a\"" +
+            $" -j \"D:\\Games\\NAM\"" +
+            $" -nam" +
+            $" -gamegrp NAM.GRP" +
+            $" -x GAME.CON" +
+            $" -quick" +
+            $" -nosetup" +
+            $"";
 
         if (OperatingSystem.IsLinux())
         {
@@ -119,7 +144,21 @@ public sealed class NamCmdArgumentsTests
         RedNukem redNukem = new();
 
         var args = redNukem.GetStartGameArgs(_namGame, _namCamp, mods, true, true);
-        var expected = @$" -quick -nosetup -g ""enabled_mod.zip"" -mh ""ENABLED1.DEF"" -mh ""ENABLED2.DEF"" -j ""{Directory.GetCurrentDirectory()}\Data\Addons\NAM\Mods"" -usecwd -h ""a"" -j ""D:\Games\NAM"" -nam -gamegrp NAM.GRP -x GAME.CON";
+        var expected = $"" +
+            $" -g \"enabled_mod.zip\"" +
+            $" -mh \"ENABLED1.DEF\"" +
+            $" -mh \"ENABLED2.DEF\"" +
+            $" -j \"{Directory.GetCurrentDirectory()}\\Data\\Addons\\NAM\\Mods\"" +
+            $" -usecwd" +
+            " -d blank.edm" +
+            $" -h \"a\"" +
+            $" -j \"D:\\Games\\NAM\"" +
+            $" -nam" +
+            $" -gamegrp NAM.GRP" +
+            $" -x GAME.CON" +
+            $" -quick" +
+            $" -nosetup" +
+            $"";
 
         if (OperatingSystem.IsLinux())
         {
