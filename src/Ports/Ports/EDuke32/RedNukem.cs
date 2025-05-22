@@ -63,6 +63,8 @@ public sealed class RedNukem : EDuke32
     {
         CreateBlankDemo();
 
+        CreateOrDeleteBlankAnm(true);
+
         MoveSaveFiles(game, campaign);
 
         FixGrpInConfig();
@@ -125,6 +127,60 @@ public sealed class RedNukem : EDuke32
         }
     }
 
+    /// <inheritdoc/>
+    protected override void GetSkipIntroParameter(StringBuilder sb)
+    {
+        _ = sb.Append(" -quick");
+        CreateOrDeleteBlankAnm(false);
+    }
+
+    /// <summary>
+    /// Create or delete blank anm file.
+    /// </summary>
+    /// <param name="isDelete">Delete file.</param>
+    private void CreateOrDeleteBlankAnm(bool isDelete)
+    {
+        IEnumerable<string> files =
+            [
+                Path.Combine(PortInstallFolderPath, "LOGO.ANM"),
+                Path.Combine(PortInstallFolderPath, "XATLOGO.ANM"),
+                Path.Combine(PortInstallFolderPath, "REDNECK.ANM"),
+                Path.Combine(PortInstallFolderPath, "RR_INTRO.ANM"),
+                Path.Combine(PortInstallFolderPath, "REDINT.MVE"),
+            ];
+
+        foreach (var file in files)
+        {
+            if (isDelete)
+            {
+                if (File.Exists(file))
+                {
+                    try
+                    {
+                        File.Delete(file);
+                    }
+                    catch
+                    {
+                        //do nothing
+                    }
+                }
+            }
+            else
+            {
+                if (!File.Exists(file))
+                {
+                    try
+                    {
+                        using var _ = File.CreateText(file);
+                    }
+                    catch
+                    {
+                        //do nothing
+                    }
+                }
+            }
+        }
+    }
 
     /// <summary>
     /// Get startup agrs for Redneck Rampage
@@ -252,7 +308,14 @@ public sealed class RedNukem : EDuke32
 
         if (!File.Exists(blankDemo))
         {
-            using var a = File.CreateText(blankDemo);
+            try
+            {
+                using var _ = File.CreateText(blankDemo);
+            }
+            catch
+            {
+                //do nothing
+            }
         }
     }
 }

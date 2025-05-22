@@ -228,6 +228,15 @@ public abstract class BasePort
     {
         StringBuilder sb = new();
 
+        GetAutoloadModsArgs(sb, game, addon, mods);
+
+        GetStartCampaignArgs(sb, game, addon);
+
+        if (skill is not null)
+        {
+            _ = sb.Append($" {SkillParam}{skill}");
+        }
+
         if (skipIntro)
         {
             GetSkipIntroParameter(sb);
@@ -236,15 +245,6 @@ public abstract class BasePort
         if (skipStartup)
         {
             GetSkipStartupParameter(sb);
-        }
-
-        GetAutoloadModsArgs(sb, game, addon, mods);
-
-        GetStartCampaignArgs(sb, game, addon);
-
-        if (skill is not null)
-        {
-            _ = sb.Append($" {SkillParam}{skill}");
         }
 
         return sb.ToString();
