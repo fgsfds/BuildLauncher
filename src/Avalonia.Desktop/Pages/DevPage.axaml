@@ -14,15 +14,15 @@
         <helpers:GameStringToEnumConverter x:Key="GameStringToEnumConverter"/>
     </UserControl.Resources>
 
-    <ScrollViewer HorizontalScrollBarVisibility="Disabled" >
+    <WrapPanel Orientation="Horizontal">
 
-        <ScrollViewer.Styles>
-            <Style Selector="RadioButton">
-                <Setter Property="Margin" Value="0,0,30,0"/>
-            </Style>
-        </ScrollViewer.Styles>
+        <ScrollViewer HorizontalScrollBarVisibility="Disabled" >
 
-        <WrapPanel Orientation="Horizontal">
+            <ScrollViewer.Styles>
+                <Style Selector="RadioButton">
+                    <Setter Property="Margin" Value="0,0,30,0"/>
+                </Style>
+            </ScrollViewer.Styles>
 
             <Grid RowDefinitions="auto,auto,auto" IsSharedSizeScope="True">
 
@@ -739,29 +739,34 @@
 
                         </StackPanel>
 
-                        <TextBlock TextWrapping="Wrap"
-                                   MaxWidth="900"
-                                   HorizontalAlignment="Left"
-                                   VerticalAlignment="Center"
-                                   Margin="5"
-                                   Text="{Binding ErrorText}"
-                                   Foreground="{Binding ErrorTextColor}"/>
-
                     </StackPanel>
 
                     <ProgressBar IsVisible="{Binding IsInProgress}"
+                                 Margin="5"
                                  Height="20"
                                  Value="{Binding ProgressBarValue}"/>
 
                     <Button Command="{Binding AddAddonCommand}"
-                            Margin="0, 10" Padding="10"
+                            Margin="5" Padding="10"
                             MinWidth="150"
                             IsVisible="{Binding IsDeveloperMode}"
-                            Content="Add addon to the database..."/>
+                            Content="Add addons to the database..."/>
+
+                    <TextBlock TextWrapping="Wrap"
+                               MaxWidth="900"
+                               HorizontalAlignment="Left"
+                               VerticalAlignment="Center"
+                               Margin="10"
+                               Text="{Binding ErrorText}"
+                               Foreground="{Binding ErrorTextColor}"/>
 
                 </StackPanel>
 
             </Grid>
+
+        </ScrollViewer>
+
+        <ScrollViewer>
 
             <TextBlock Text="{Binding JsonText}"
                        Margin="5"
@@ -769,7 +774,7 @@
                        HorizontalAlignment="Left"
                        MaxWidth="500"/>
 
-        </WrapPanel>
+        </ScrollViewer>
 
-    </ScrollViewer>
+    </WrapPanel>
 </UserControl>

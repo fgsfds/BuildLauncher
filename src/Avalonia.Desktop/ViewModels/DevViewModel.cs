@@ -241,7 +241,7 @@ public sealed partial class DevViewModel : ObservableObject
 
         if (!Directory.Exists(value))
         {
-            SetErrorMessage("Folder doesn't exist", true);
+            SetResultMessage("Folder doesn't exist", true);
             return;
         }
 
@@ -324,7 +324,7 @@ public sealed partial class DevViewModel : ObservableObject
             new FilePickerOpenOptions
             {
                 Title = "Choose addon file",
-                AllowMultiple = false,
+                AllowMultiple = true,
                 FileTypeFilter = [z64]
             }).ConfigureAwait(true);
 
@@ -333,16 +333,27 @@ public sealed partial class DevViewModel : ObservableObject
             return;
         }
 
-        var result = await _filesUploader.AddAddonToDatabaseAsync(files[0].Path.LocalPath).ConfigureAwait(true);
+        StringBuilder errors = new();
 
-        if (result)
+        foreach (var file in files)
         {
-            SetErrorMessage("Success", false);
+            var result = await _filesUploader.AddAddonToDatabaseAsync(file.Path.LocalPath).ConfigureAwait(true);
+
+            if (!result)
+            {
+                _ = errors.AppendLine($"Error while adding {file}");
+            }
+        }
+
+        if (errors.Length > 0)
+        {
+            SetResultMessage(errors.ToString(), true);
         }
         else
         {
-            SetErrorMessage("Error", true);
+            SetResultMessage("Success", false);
         }
+        
     }
 
 
@@ -420,7 +431,7 @@ public sealed partial class DevViewModel : ObservableObject
 
         try
         {
-            SetErrorMessage("Uploading file. Please wait.", false);
+            SetResultMessage("Uploading file. Please wait.", false);
             IsInProgress = true;
 
             var fileName = Path.GetFileName(pathToArchive);
@@ -446,7 +457,7 @@ public sealed partial class DevViewModel : ObservableObject
             if (!response.IsSuccessStatusCode)
             {
                 var errorMessage = await response.Content.ReadAsStringAsync().ConfigureAwait(true);
-                SetErrorMessage(errorMessage, true);
+                SetResultMessage(errorMessage, true);
                 return;
             }
 
@@ -457,11 +468,11 @@ public sealed partial class DevViewModel : ObservableObject
             if (!check.IsSuccessStatusCode ||
                 check.Content.Headers.ContentLength != fileSize.Length)
             {
-                SetErrorMessage("Error while uploading file", true);
+                SetResultMessage("Error while uploading file", true);
                 return;
             }
 
-            SetErrorMessage("Uploaded successfully", false);
+            SetResultMessage("Uploaded successfully", false);
         }
         catch (TaskCanceledException)
         {
@@ -470,7 +481,7 @@ public sealed partial class DevViewModel : ObservableObject
         catch (Exception ex)
         {
             _logger.LogCritical(ex, "Error while uploading fix");
-            SetErrorMessage(ex.ToString(), true);
+            SetResultMessage(ex.ToString(), true);
         }
         finally
         {
@@ -489,7 +500,7 @@ public sealed partial class DevViewModel : ObservableObject
         }
         catch (Exception ex)
         {
-            SetErrorMessage(ex.Message, true);
+            SetResultMessage(ex.Message, true);
         }
     }
 
@@ -502,7 +513,7 @@ public sealed partial class DevViewModel : ObservableObject
             if (string.IsNullOrWhiteSpace(PathToAddonFolder) &&
                 !Directory.Exists(PathToAddonFolder))
             {
-                SetErrorMessage("Choose addon folder", true);
+                SetResultMessage("Choose addon folder", true);
                 return;
             }
 
@@ -512,11 +523,11 @@ public sealed partial class DevViewModel : ObservableObject
 
             RenameAddonFolder(addon);
 
-            SetErrorMessage("JSON saved", false);
+            SetResultMessage("JSON saved", false);
         }
         catch (Exception ex)
         {
-            SetErrorMessage(ex.Message, true);
+            SetResultMessage(ex.Message, true);
         }
     }
 
@@ -829,12 +840,20 @@ public sealed partial class DevViewModel : ObservableObject
         return $"{addon.Id}_v{version}";
     }
 
-    private void SetErrorMessage(string message, bool isError)
+    /// <summary>
+    /// Set result message.
+    /// </summary>
+    /// <param name="message">Message.</param>
+    /// <param name="isError">Is error.</param>
+    private void SetResultMessage(string message, bool isError)
     {
         ErrorTextColor = isError ? SolidColorBrush.Parse("Red") : SolidColorBrush.Parse("Green");
         ErrorText = message;
     }
 
+    /// <summary>
+    /// Create zip archive with addon files.
+    /// </summary>
     private async Task<string?> CreateZipInternalAsync()
     {
         try
@@ -844,7 +863,7 @@ public sealed partial class DevViewModel : ObservableObject
             if (string.IsNullOrWhiteSpace(PathToAddonFolder) &&
                 !Directory.Exists(PathToAddonFolder))
             {
-                SetErrorMessage("Choose addon folder", true);
+                SetResultMessage("Choose addon folder", true);
                 return null;
             }
 
@@ -878,7 +897,7 @@ public sealed partial class DevViewModel : ObservableObject
             var fullName = GetAddonFullName(addon);
             var pathToArchive = Path.Combine(archiveSaveFolder, fullName + ".zip");
 
-            SetErrorMessage("Making zip. Please wait.", false);
+            SetResultMessage("Making zip. Please wait.", false);
 
             List<FileStream> fileStreams = [];
 
@@ -916,12 +935,12 @@ public sealed partial class DevViewModel : ObservableObject
                 fileStreams.ForEach(x => x.Dispose());
             }
 
-            SetErrorMessage("Zip created successfully. Go to the game page and press Refresh.", false);
+            SetResultMessage("Zip created successfully. Go to the game page and press Refresh.", false);
             return pathToArchive;
         }
         catch (Exception ex)
         {
-            SetErrorMessage(ex.Message, true);
+            SetResultMessage(ex.Message, true);
             return null;
         }
         finally
