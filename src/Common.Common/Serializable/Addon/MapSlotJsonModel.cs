@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace Common.Serializable.Addon;
 
-public sealed class MapSlotDto : IStartMap
+public sealed class MapSlotJsonModel : IStartMap
 {
     [JsonPropertyName("volume")]
     public required int Episode { get; set; }
@@ -14,5 +14,5 @@ public sealed class MapSlotDto : IStartMap
 
 
 [JsonSourceGenerationOptions(RespectNullableAnnotations = true)]
-[JsonSerializable(typeof(MapSlotDto))]
-public sealed partial class MapSlotDtoContext : JsonSerializerContext;
+[JsonSerializable(typeof(MapSlotJsonModel))]
+public sealed partial class MapSlotJsonModelContext : JsonSerializerContext;

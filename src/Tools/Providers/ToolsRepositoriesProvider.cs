@@ -1,4 +1,4 @@
-﻿using Common.Entities;
+﻿using Common.Common.Serializable.Downloadable;
 using Common.Enums;
 using CommunityToolkit.Diagnostics;
 

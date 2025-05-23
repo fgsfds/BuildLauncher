@@ -1,9 +1,9 @@
 ﻿using Common.Enums;
 using System.Text.Json.Serialization;
 
-namespace Common.Entities;
+namespace Common.Common.Serializable.Downloadable;
 
-public sealed class GeneralReleaseEntity
+public sealed class GeneralReleaseJsonModel
 {
     public required OSEnum SupportedOS { get; init; }
 
@@ -27,5 +27,5 @@ public sealed class GeneralReleaseEntity
 [JsonSourceGenerationOptions(
     Converters = [typeof(JsonStringEnumConverter<GameEnum>)]
     )]
-[JsonSerializable(typeof(List<GeneralReleaseEntity>))]
-public sealed partial class GeneralReleaseEntityContext : JsonSerializerContext;
+[JsonSerializable(typeof(List<GeneralReleaseJsonModel>))]
+public sealed partial class GeneralReleaseJsonModelContext : JsonSerializerContext;

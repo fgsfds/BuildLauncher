@@ -39,7 +39,7 @@ public static class GrpInfoProvider
                     continue;
                 }
 
-                DukeCampaign camp = new()
+                DukeCampaignEntity camp = new()
                 {
                     Id = addon.Name.ToLower().Replace(" ", "_"),
                     Type = AddonTypeEnum.TC,
@@ -57,7 +57,7 @@ public static class GrpInfoProvider
                     MainCon = addon.MainCon,
                     AdditionalCons = null,
                     MainDef = null,
-                    AdditionalDefs = [addon.AddDef],
+                    AdditionalDefs = addon.AddDef is null ? null : [addon.AddDef],
                     RTS = null,
                     RequiredFeatures = [FeatureEnum.EDuke32_CON],
                     IsFolder = false,

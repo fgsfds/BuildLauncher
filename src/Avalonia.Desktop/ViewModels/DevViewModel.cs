@@ -283,10 +283,10 @@ public sealed partial class DevViewModel : ObservableObject
     }
 
     [ObservableProperty]
-    private ImmutableList<DependantAddonDto>? _dependenciesList;
+    private ImmutableList<DependantAddonJsonModel>? _dependenciesList;
 
     [ObservableProperty]
-    private ImmutableList<DependantAddonDto>? _incompatibilitiesList;
+    private ImmutableList<DependantAddonJsonModel>? _incompatibilitiesList;
 
     #endregion
 
@@ -353,14 +353,14 @@ public sealed partial class DevViewModel : ObservableObject
         {
             SetResultMessage("Success", false);
         }
-        
+
     }
 
 
     [RelayCommand]
     private void AddDependency()
     {
-        DependantAddonDto newAddon = new() { Id = "", Version = null };
+        DependantAddonJsonModel newAddon = new() { Id = "", Version = null };
 
         DependenciesList ??= [];
 
@@ -369,7 +369,7 @@ public sealed partial class DevViewModel : ObservableObject
 
 
     [RelayCommand]
-    private void RemoveDependency(DependantAddonDto dependency)
+    private void RemoveDependency(DependantAddonJsonModel dependency)
     {
         Guard.IsNotNull(DependenciesList);
 
@@ -380,7 +380,7 @@ public sealed partial class DevViewModel : ObservableObject
     [RelayCommand]
     private void AddIncompatibility()
     {
-        DependantAddonDto newAddon = new() { Id = "", Version = null };
+        DependantAddonJsonModel newAddon = new() { Id = "", Version = null };
 
         IncompatibilitiesList ??= [];
 
@@ -389,7 +389,7 @@ public sealed partial class DevViewModel : ObservableObject
 
 
     [RelayCommand]
-    private void RemoveIncompatibility(DependantAddonDto dependency)
+    private void RemoveIncompatibility(DependantAddonJsonModel dependency)
     {
         Guard.IsNotNull(IncompatibilitiesList);
 
@@ -534,7 +534,7 @@ public sealed partial class DevViewModel : ObservableObject
     #endregion
 
 
-    private AddonDto GetAddonJson(out string jsonString)
+    private AddonJsonModel GetAddonJson(out string jsonString)
     {
         if (PathToAddonFolder is null)
         {
@@ -666,7 +666,7 @@ public sealed partial class DevViewModel : ObservableObject
                     ThrowHelper.ThrowMissingFieldException("Select start map level");
                 }
 
-                startMap = new MapSlotDto() { Episode = MapEpisode.Value, Level = MapLevel.Value };
+                startMap = new MapSlotJsonModel() { Episode = MapEpisode.Value, Level = MapLevel.Value };
             }
 
             if (IsFileMapTypeSelected)
@@ -676,7 +676,7 @@ public sealed partial class DevViewModel : ObservableObject
                     ThrowHelper.ThrowMissingFieldException("Select start map file name");
                 }
 
-                startMap = new MapFileDto() { File = MapFileName };
+                startMap = new MapFileJsonModel() { File = MapFileName };
             }
         }
 
@@ -692,7 +692,7 @@ public sealed partial class DevViewModel : ObservableObject
             executables.Add(OSEnum.Linux, LinuxExecutable);
         }
 
-        AddonDto addon = new()
+        AddonJsonModel addon = new()
         {
             AddonType = addonType,
             Id = AddonIdPrefix + AddonId,
@@ -720,7 +720,7 @@ public sealed partial class DevViewModel : ObservableObject
             Executables = executables.Count == 0 ? null : executables
         };
 
-        jsonString = JsonSerializer.Serialize(addon, AddonManifestContext.Default.AddonDto);
+        jsonString = JsonSerializer.Serialize(addon, AddonManifestContext.Default.AddonJsonModel);
         JsonText = jsonString;
 
         return addon;
@@ -730,7 +730,7 @@ public sealed partial class DevViewModel : ObservableObject
     {
         var jsonStr = File.ReadAllText(pathToFile);
 
-        var result = JsonSerializer.Deserialize(jsonStr, AddonManifestContext.Default.AddonDto);
+        var result = JsonSerializer.Deserialize(jsonStr, AddonManifestContext.Default.AddonJsonModel);
 
         if (result is null)
         {
@@ -776,12 +776,12 @@ public sealed partial class DevViewModel : ObservableObject
         DependenciesList = result.Dependencies?.Addons is null ? null : [.. result.Dependencies.Addons];
         IncompatibilitiesList = result.Incompatibles?.Addons is null ? null : [.. result.Incompatibles.Addons];
 
-        if (result.StartMap is MapFileDto mapFile)
+        if (result.StartMap is MapFileJsonModel mapFile)
         {
             IsFileMapTypeSelected = true;
             MapFileName = mapFile.File;
         }
-        else if (result.StartMap is MapSlotDto slotFile)
+        else if (result.StartMap is MapSlotJsonModel slotFile)
         {
             IsElMapTypeSelected = true;
             MapEpisode = slotFile.Episode;
@@ -806,7 +806,7 @@ public sealed partial class DevViewModel : ObservableObject
     /// Rename addon folder to {addon_id}_v{addon_version}
     /// </summary>
     /// <param name="addon">Addon</param>
-    private void RenameAddonFolder(AddonDto addon)
+    private void RenameAddonFolder(AddonJsonModel addon)
     {
         Guard.IsNotNull(PathToAddonFolder);
 
@@ -820,7 +820,7 @@ public sealed partial class DevViewModel : ObservableObject
         }
     }
 
-    private static string GetAddonFullName(AddonDto addon)
+    private static string GetAddonFullName(AddonJsonModel addon)
     {
         StringBuilder version = new();
 

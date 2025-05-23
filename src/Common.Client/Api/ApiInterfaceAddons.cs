@@ -2,7 +2,7 @@
 using Api.Common.Responses;
 using Common.Client.Helpers;
 using Common.Client.Interfaces;
-using Common.Entities;
+using Common.Common.Serializable.Downloadable;
 using Common.Enums;
 using System.Net.Http.Json;
 using System.Web;
@@ -25,7 +25,7 @@ public sealed partial class ApiInterface : IApiInterface
         _httpClient = httpClient;
     }
 
-    public async Task<List<DownloadableAddonEntity>?> GetAddonsAsync(GameEnum gameEnum)
+    public async Task<List<DownloadableAddonJsonModel>?> GetAddonsAsync(GameEnum gameEnum)
     {
         try
         {
@@ -130,13 +130,13 @@ public sealed partial class ApiInterface : IApiInterface
         }
     }
 
-    public async Task<bool> AddAddonToDatabaseAsync(DownloadableAddonEntity addon)
+    public async Task<bool> AddAddonToDatabaseAsync(DownloadableAddonJsonModel addon)
     {
         try
         {
             var apiPassword = _config.ApiPassword;
 
-            using var response = await _httpClient.PostAsJsonAsync($"{ApiUrl}/addons/add", new Tuple<DownloadableAddonEntity, string>(addon, apiPassword)).ConfigureAwait(false);
+            using var response = await _httpClient.PostAsJsonAsync($"{ApiUrl}/addons/add", new Tuple<DownloadableAddonJsonModel, string>(addon, apiPassword)).ConfigureAwait(false);
 
             return response.IsSuccessStatusCode;
         }

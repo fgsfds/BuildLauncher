@@ -1,12 +1,12 @@
-﻿using Common.Common.Helpers;
-using Common.Enums;
+﻿using Common.Enums;
 using Common.Helpers;
+using Common.Serializable;
 using System.Text;
 using System.Text.Json.Serialization;
 
-namespace Common.Entities;
+namespace Common.Common.Serializable.Downloadable;
 
-public sealed class DownloadableAddonEntity
+public sealed class DownloadableAddonJsonModel
 {
     [JsonPropertyName("Id")]
     public required string Id { get; set; }
@@ -170,5 +170,5 @@ public sealed class DownloadableAddonEntity
         typeof(JsonStringEnumConverter<AddonTypeEnum>)
         ]
 )]
-[JsonSerializable(typeof(Dictionary<GameEnum, List<DownloadableAddonEntity>>))]
-public sealed partial class DownloadableAddonsDictionaryContext : JsonSerializerContext;
+[JsonSerializable(typeof(Dictionary<GameEnum, List<DownloadableAddonJsonModel>>))]
+public sealed partial class DownloadableAddonJsonModelDictionaryContext : JsonSerializerContext;

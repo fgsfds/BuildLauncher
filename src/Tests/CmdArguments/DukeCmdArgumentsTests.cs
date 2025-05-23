@@ -14,11 +14,11 @@ namespace Tests.CmdArguments;
 public sealed class DukeCmdArgumentsTests
 {
     private readonly DukeGame _dukeGame;
-    private readonly DukeCampaign _dukeCamp;
-    private readonly DukeCampaign _dukeVaca;
-    private readonly DukeCampaign _dukeTcForVaca;
-    private readonly DukeCampaign _dukeWtCamp;
-    private readonly DukeCampaign _duke64Camp;
+    private readonly DukeCampaignEntity _dukeCamp;
+    private readonly DukeCampaignEntity _dukeVaca;
+    private readonly DukeCampaignEntity _dukeTcForVaca;
+    private readonly DukeCampaignEntity _dukeWtCamp;
+    private readonly DukeCampaignEntity _duke64Camp;
 
     private readonly AutoloadModsProvider _modsProvider;
 
@@ -163,7 +163,7 @@ public sealed class DukeCmdArgumentsTests
     [Fact]
     public void RazeTest()
     {
-        var mods = new List<AutoloadMod>() {
+        var mods = new List<AutoloadModEntity>() {
             _modsProvider.EnabledModWithCons,
             _modsProvider.DisabledMod,
             _modsProvider.ModThatRequiresOfficialAddon,
@@ -260,7 +260,7 @@ public sealed class DukeCmdArgumentsTests
     [Fact]
     public void RazeVacaTest()
     {
-        var mods = new List<AutoloadMod>() {
+        var mods = new List<AutoloadModEntity>() {
             _modsProvider.EnabledModWithCons,
             _modsProvider.ModThatRequiresOfficialAddon,
             _modsProvider.ModThatIncompatibleWithAddon
@@ -338,7 +338,7 @@ public sealed class DukeCmdArgumentsTests
     [Fact]
     public void EDuke32Test()
     {
-        var mods = new List<AutoloadMod>() {
+        var mods = new List<AutoloadModEntity>() {
             _modsProvider.EnabledModWithCons,
             _modsProvider.DisabledMod,
             _modsProvider.ModThatRequiresOfficialAddon,
@@ -418,7 +418,7 @@ public sealed class DukeCmdArgumentsTests
     [Fact]
     public void EDuke32VacaTest()
     {
-        var mods = new List<AutoloadMod>() {
+        var mods = new List<AutoloadModEntity>() {
             _modsProvider.EnabledModWithCons,
             _modsProvider.ModThatRequiresOfficialAddon,
             _modsProvider.ModThatIncompatibleWithAddon
@@ -514,7 +514,7 @@ public sealed class DukeCmdArgumentsTests
     [Fact]
     public void RedNukemTest()
     {
-        var mods = new List<AutoloadMod>() {
+        var mods = new List<AutoloadModEntity>() {
             _modsProvider.EnabledModWithCons,
             _modsProvider.DisabledMod,
             _modsProvider.ModThatRequiresOfficialAddon,
@@ -564,7 +564,7 @@ public sealed class DukeCmdArgumentsTests
     [Fact]
     public void RedNukemVacaTest()
     {
-        var mods = new List<AutoloadMod>() {
+        var mods = new List<AutoloadModEntity>() {
             _modsProvider.EnabledModWithCons,
             _modsProvider.ModThatRequiresOfficialAddon,
             _modsProvider.ModThatIncompatibleWithAddon

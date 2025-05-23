@@ -111,7 +111,7 @@ public sealed class SerializerTests
     [Fact]
     public void DeserializeAddonJson()
     {
-        var result = JsonSerializer.Deserialize(AddonJson, AddonManifestContext.Default.AddonDto);
+        var result = JsonSerializer.Deserialize(AddonJson, AddonManifestContext.Default.AddonJsonModel);
 
         Assert.NotNull(result);
 
@@ -152,7 +152,7 @@ public sealed class SerializerTests
         Assert.Equal("MAIN.RFF", result.MainRff);
         Assert.Equal("SOUND.RFF", result.SoundRff);
 
-        Assert.Equal("TEST.MAP", ((MapFileDto)result.StartMap!).File);
+        Assert.Equal("TEST.MAP", ((MapFileJsonModel)result.StartMap!).File);
 
         Assert.Equal("Addon description", result.Description);
     }
@@ -160,11 +160,11 @@ public sealed class SerializerTests
     [Fact]
     public void DeserializeBrokenAddonJson()
     {
-        AddonDto? result = null;
+        AddonJsonModel? result = null;
 
         try
         {
-            result = JsonSerializer.Deserialize(BrokenAddonJson, AddonManifestContext.Default.AddonDto);
+            result = JsonSerializer.Deserialize(BrokenAddonJson, AddonManifestContext.Default.AddonJsonModel);
         }
         catch (JsonException ex)
         {
@@ -177,19 +177,19 @@ public sealed class SerializerTests
     [Fact]
     public void DeserializeSlotMapJson()
     {
-        var result = JsonSerializer.Deserialize(SlotMapJson, AddonManifestContext.Default.AddonDto);
+        var result = JsonSerializer.Deserialize(SlotMapJson, AddonManifestContext.Default.AddonJsonModel);
 
         Assert.NotNull(result);
-        _ = Assert.IsType<MapSlotDto>(result.StartMap);
+        _ = Assert.IsType<MapSlotJsonModel>(result.StartMap);
 
-        Assert.Equal(1, ((MapSlotDto)result.StartMap).Episode);
-        Assert.Equal(2, ((MapSlotDto)result.StartMap).Level);
+        Assert.Equal(1, ((MapSlotJsonModel)result.StartMap).Episode);
+        Assert.Equal(2, ((MapSlotJsonModel)result.StartMap).Level);
     }
 
     [Fact]
     public void DeserializeStandaloneJson()
     {
-        var result = JsonSerializer.Deserialize(StandaloneJson, AddonManifestContext.Default.AddonDto);
+        var result = JsonSerializer.Deserialize(StandaloneJson, AddonManifestContext.Default.AddonJsonModel);
 
         Assert.NotNull(result);
 

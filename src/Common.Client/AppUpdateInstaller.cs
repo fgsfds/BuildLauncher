@@ -1,7 +1,7 @@
 ﻿using Common.Client.Helpers;
 using Common.Client.Interfaces;
 using Common.Client.Tools;
-using Common.Entities;
+using Common.Common.Serializable.Downloadable;
 using CommunityToolkit.Diagnostics;
 using Microsoft.Extensions.Logging;
 using System.IO.Compression;
@@ -15,7 +15,7 @@ public sealed class AppUpdateInstaller
     private readonly IApiInterface _apiInterface;
     private readonly ILogger _logger;
 
-    private GeneralReleaseEntity? _update;
+    private GeneralReleaseJsonModel? _update;
 
     public AppUpdateInstaller(
         ArchiveTools archiveTools,

@@ -3,10 +3,10 @@ using System.Text.Json.Serialization;
 
 namespace Common.Serializable.Addon;
 
-public sealed class DependencyDto
+public sealed class DependencyJsonModel
 {
     [JsonPropertyName("addons")]
-    public List<DependantAddonDto>? Addons { get; set; }
+    public List<DependantAddonJsonModel>? Addons { get; set; }
 
     [JsonPropertyName("features")]
     public List<FeatureEnum>? RequiredFeatures { get; set; }
@@ -14,11 +14,11 @@ public sealed class DependencyDto
 
 
 [JsonSourceGenerationOptions(RespectNullableAnnotations = true)]
-[JsonSerializable(typeof(DependencyDto))]
+[JsonSerializable(typeof(DependencyJsonModel))]
 public sealed partial class DependencyDtoContext : JsonSerializerContext;
 
 
-public sealed class DependantAddonDto
+public sealed class DependantAddonJsonModel
 {
     [JsonPropertyName("id")]
     public required string Id { get; set; }
@@ -29,5 +29,5 @@ public sealed class DependantAddonDto
 
 
 [JsonSourceGenerationOptions(RespectNullableAnnotations = true)]
-[JsonSerializable(typeof(DependantAddonDto))]
-public sealed partial class DependantAddonDtoContext : JsonSerializerContext;
+[JsonSerializable(typeof(DependantAddonJsonModel))]
+public sealed partial class DependantAddonJsonModelContext : JsonSerializerContext;

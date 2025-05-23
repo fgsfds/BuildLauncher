@@ -2,7 +2,6 @@
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;
 using Avalonia.Desktop.Controls;
-using Avalonia.Desktop.Helpers;
 using Avalonia.Desktop.ViewModels;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Ports.Providers;

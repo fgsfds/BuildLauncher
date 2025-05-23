@@ -1,8 +1,8 @@
-﻿using Common.Entities;
+﻿using System.Text;
+using System.Text.Json;
+using Common.Common.Serializable.Downloadable;
 using Minio;
 using Minio.DataModel.Args;
-using System.Text;
-using System.Text.Json;
 using Xunit.Abstractions;
 
 namespace Tests;
@@ -30,7 +30,7 @@ public sealed class AddonsDatabaseTests
         httpClient.Timeout = TimeSpan.FromSeconds(30);
 
         var addonsJsonString = File.ReadAllText("../../../../db/addons.json");
-        var addonsJson = JsonSerializer.Deserialize(addonsJsonString, DownloadableAddonsDictionaryContext.Default.DictionaryGameEnumListDownloadableAddonEntity);
+        var addonsJson = JsonSerializer.Deserialize(addonsJsonString, DownloadableAddonJsonModelDictionaryContext.Default.DictionaryGameEnumListDownloadableAddonJsonModel);
 
         Assert.NotNull(addonsJson);
 
@@ -71,7 +71,7 @@ public sealed class AddonsDatabaseTests
         }
 
         var addonsJsonString = File.ReadAllText("../../../../db/addons.json");
-        var addonsJson = JsonSerializer.Deserialize(addonsJsonString, DownloadableAddonsDictionaryContext.Default.DictionaryGameEnumListDownloadableAddonEntity);
+        var addonsJson = JsonSerializer.Deserialize(addonsJsonString, DownloadableAddonJsonModelDictionaryContext.Default.DictionaryGameEnumListDownloadableAddonJsonModel);
 
         Assert.NotNull(addonsJson);
 

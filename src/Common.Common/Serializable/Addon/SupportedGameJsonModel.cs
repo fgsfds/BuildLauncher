@@ -1,10 +1,9 @@
-﻿using Common.Common.Helpers;
-using Common.Enums;
+﻿using Common.Enums;
 using System.Text.Json.Serialization;
 
 namespace Common.Serializable.Addon;
 
-public sealed class SupportedGameDto
+public sealed class SupportedGameJsonModel
 {
     [JsonPropertyName("name")]
     [JsonConverter(typeof(GameEnumJsonConverter))]
@@ -24,5 +23,5 @@ public sealed class SupportedGameDto
         typeof(GameEnumJsonConverter)
         ]
     )]
-[JsonSerializable(typeof(SupportedGameDto))]
-public sealed partial class SupportedGameDtoContext : JsonSerializerContext;
+[JsonSerializable(typeof(SupportedGameJsonModel))]
+public sealed partial class SupportedGameJsonModelContext : JsonSerializerContext;

@@ -2,7 +2,7 @@
 using Common.Client.Interfaces;
 using Common.Common.Interfaces;
 using Common.Common.Providers;
-using Common.Entities;
+using Common.Common.Serializable.Downloadable;
 using Common.Enums;
 using Common.Helpers;
 using CommunityToolkit.Diagnostics;
@@ -13,17 +13,17 @@ namespace Common.Client.Api;
 
 public sealed class GitHubApiInterface : IApiInterface
 {
-    private readonly IRetriever<Dictionary<PortEnum, GeneralReleaseEntity>?> _portsReleasesRetriever;
+    private readonly IRetriever<Dictionary<PortEnum, GeneralReleaseJsonModel>?> _portsReleasesRetriever;
     private readonly RepoAppReleasesRetriever _appReleasesProvider;
     private readonly HttpClient _httpClient;
     private readonly ILogger _logger;
     private readonly SemaphoreSlim _semaphore = new(1);
 
-    private Dictionary<GameEnum, List<DownloadableAddonEntity>>? _addonsJson = null;
+    private Dictionary<GameEnum, List<DownloadableAddonJsonModel>>? _addonsJson = null;
 
 
     public GitHubApiInterface(
-        IRetriever<Dictionary<PortEnum, GeneralReleaseEntity>?> portsReleasesProvider,
+        IRetriever<Dictionary<PortEnum, GeneralReleaseJsonModel>?> portsReleasesProvider,
         RepoAppReleasesRetriever appReleasesProvider,
         HttpClient httpClient,
         ILogger logger
@@ -36,7 +36,7 @@ public sealed class GitHubApiInterface : IApiInterface
     }
 
 
-    public async Task<List<DownloadableAddonEntity>?> GetAddonsAsync(GameEnum gameEnum)
+    public async Task<List<DownloadableAddonJsonModel>?> GetAddonsAsync(GameEnum gameEnum)
     {
         await _semaphore.WaitAsync().ConfigureAwait(false);
 
@@ -60,7 +60,7 @@ public sealed class GitHubApiInterface : IApiInterface
                     addons = await _httpClient.GetStringAsync(Consts.AddonsJsonUrl).ConfigureAwait(false);
                 }
 
-                _addonsJson = JsonSerializer.Deserialize(addons, DownloadableAddonsDictionaryContext.Default.DictionaryGameEnumListDownloadableAddonEntity);
+                _addonsJson = JsonSerializer.Deserialize(addons, DownloadableAddonJsonModelDictionaryContext.Default.DictionaryGameEnumListDownloadableAddonJsonModel);
 
                 if (_addonsJson is null)
                 {
@@ -97,7 +97,7 @@ public sealed class GitHubApiInterface : IApiInterface
         }
     }
 
-    public async Task<GeneralReleaseEntity?> GetLatestAppReleaseAsync()
+    public async Task<GeneralReleaseJsonModel?> GetLatestAppReleaseAsync()
     {
         if (ClientProperties.IsOfflineMode)
         {
@@ -111,7 +111,7 @@ public sealed class GitHubApiInterface : IApiInterface
         return result;
     }
 
-    public async Task<Dictionary<PortEnum, GeneralReleaseEntity>?> GetLatestPortsReleasesAsync()
+    public async Task<Dictionary<PortEnum, GeneralReleaseJsonModel>?> GetLatestPortsReleasesAsync()
     {
         if (ClientProperties.IsOfflineMode)
         {
@@ -123,7 +123,7 @@ public sealed class GitHubApiInterface : IApiInterface
         return result;
     }
 
-    public Task<bool> AddAddonToDatabaseAsync(DownloadableAddonEntity addon)
+    public Task<bool> AddAddonToDatabaseAsync(DownloadableAddonJsonModel addon)
     {
         if (ClientProperties.PathToLocalAddonsJson is null)
         {
@@ -132,7 +132,7 @@ public sealed class GitHubApiInterface : IApiInterface
         }
 
         var addonsJson = File.ReadAllText(ClientProperties.PathToLocalAddonsJson);
-        var addons = JsonSerializer.Deserialize(addonsJson, DownloadableAddonsDictionaryContext.Default.DictionaryGameEnumListDownloadableAddonEntity);
+        var addons = JsonSerializer.Deserialize(addonsJson, DownloadableAddonJsonModelDictionaryContext.Default.DictionaryGameEnumListDownloadableAddonJsonModel);
 
         if (addons is null)
         {
@@ -164,7 +164,7 @@ public sealed class GitHubApiInterface : IApiInterface
 
         addons[addon.Game].Add(addon);
 
-        var newAddonsJson = JsonSerializer.Serialize(addons, DownloadableAddonsDictionaryContext.Default.DictionaryGameEnumListDownloadableAddonEntity);
+        var newAddonsJson = JsonSerializer.Serialize(addons, DownloadableAddonJsonModelDictionaryContext.Default.DictionaryGameEnumListDownloadableAddonJsonModel);
         File.WriteAllText(ClientProperties.PathToLocalAddonsJson, newAddonsJson);
 
         return Task.FromResult(true);
@@ -177,7 +177,7 @@ public sealed class GitHubApiInterface : IApiInterface
 
     public Task<decimal?> ChangeScoreAsync(string addonId, sbyte score, bool isNew) => Task.FromResult<decimal?>(null);
 
-    public Task<Dictionary<ToolEnum, GeneralReleaseEntity>?> GetLatestToolsReleasesAsync() => Task.FromResult<Dictionary<ToolEnum, GeneralReleaseEntity>?>(null);
+    public Task<Dictionary<ToolEnum, GeneralReleaseJsonModel>?> GetLatestToolsReleasesAsync() => Task.FromResult<Dictionary<ToolEnum, GeneralReleaseJsonModel>?>(null);
 
     public Task<Dictionary<string, decimal>?> GetRatingsAsync() => Task.FromResult<Dictionary<string, decimal>?>(null);
 

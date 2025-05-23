@@ -12,7 +12,7 @@ namespace Tests.CmdArguments;
 public sealed class NamCmdArgumentsTests
 {
     private readonly NamGame _namGame;
-    private readonly DukeCampaign _namCamp;
+    private readonly DukeCampaignEntity _namCamp;
 
     private readonly AutoloadModsProvider _modsProvider;
 
@@ -54,7 +54,7 @@ public sealed class NamCmdArgumentsTests
     [Fact]
     public void RazeTest()
     {
-        var mods = new List<AutoloadMod>() {
+        var mods = new List<AutoloadModEntity>() {
             _modsProvider.EnabledMod,
             _modsProvider.IncompatibleMod,
         }.ToDictionary(x => new AddonVersion(x.Id, x.Version), x => (IAddon)x);
@@ -100,7 +100,7 @@ public sealed class NamCmdArgumentsTests
     [Fact]
     public void EDuke32Test()
     {
-        var mods = new List<AutoloadMod>() {
+        var mods = new List<AutoloadModEntity>() {
             _modsProvider.EnabledMod,
             _modsProvider.IncompatibleMod,
         }.ToDictionary(x => new AddonVersion(x.Id, x.Version), x => (IAddon)x);
@@ -136,7 +136,7 @@ public sealed class NamCmdArgumentsTests
     [Fact]
     public void RedNukemTest()
     {
-        var mods = new List<AutoloadMod>() {
+        var mods = new List<AutoloadModEntity>() {
             _modsProvider.EnabledMod,
             _modsProvider.IncompatibleMod,
         }.ToDictionary(x => new AddonVersion(x.Id, x.Version), x => (IAddon)x);

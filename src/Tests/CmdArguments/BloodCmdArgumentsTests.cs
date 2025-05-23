@@ -13,11 +13,11 @@ namespace Tests.CmdArguments;
 public sealed class BloodCmdArgumentsTests
 {
     private readonly BloodGame _bloodGame;
-    private readonly BloodCampaign _bloodCamp;
-    private readonly BloodCampaign _bloodCpCamp;
-    private readonly BloodCampaign _bloodTc;
-    private readonly BloodCampaign _bloodTcFolder;
-    private readonly BloodCampaign _bloodTcExeOverride;
+    private readonly BloodCampaignEntity _bloodCamp;
+    private readonly BloodCampaignEntity _bloodCpCamp;
+    private readonly BloodCampaignEntity _bloodTc;
+    private readonly BloodCampaignEntity _bloodTcFolder;
+    private readonly BloodCampaignEntity _bloodTcExeOverride;
 
     private readonly AutoloadModsProvider _modsProvider;
 
@@ -159,7 +159,7 @@ public sealed class BloodCmdArgumentsTests
     [Fact]
     public void RazeTest()
     {
-        var mods = new List<AutoloadMod>() {
+        var mods = new List<AutoloadModEntity>() {
             _modsProvider.EnabledMod,
             _modsProvider.DisabledMod,
             _modsProvider.ModThatRequiresOfficialAddon,
@@ -205,7 +205,7 @@ public sealed class BloodCmdArgumentsTests
     [Fact]
     public void RazeCpTest()
     {
-        var mods = new List<AutoloadMod>() {
+        var mods = new List<AutoloadModEntity>() {
             _modsProvider.EnabledMod,
             _modsProvider.DisabledMod,
             _modsProvider.ModThatRequiresOfficialAddon,
@@ -311,7 +311,7 @@ public sealed class BloodCmdArgumentsTests
     [Fact]
     public void NBloodTest()
     {
-        var mods = new List<AutoloadMod>() {
+        var mods = new List<AutoloadModEntity>() {
             _modsProvider.EnabledMod,
             _modsProvider.DisabledMod,
             _modsProvider.ModThatRequiresOfficialAddon,
@@ -344,7 +344,7 @@ public sealed class BloodCmdArgumentsTests
     [Fact]
     public void NBloodCPTest()
     {
-        var mods = new List<AutoloadMod>() {
+        var mods = new List<AutoloadModEntity>() {
             _modsProvider.EnabledMod,
             _modsProvider.DisabledMod,
             _modsProvider.ModThatRequiresOfficialAddon,
@@ -427,7 +427,7 @@ public sealed class BloodCmdArgumentsTests
     [Fact]
     public void NotBloodTest()
     {
-        var mods = new List<AutoloadMod>() {
+        var mods = new List<AutoloadModEntity>() {
             _modsProvider.EnabledMod,
             _modsProvider.DisabledMod,
             _modsProvider.ModThatRequiresOfficialAddon,
@@ -459,7 +459,7 @@ public sealed class BloodCmdArgumentsTests
     [Fact]
     public void NotBloodCPTest()
     {
-        var mods = new List<AutoloadMod>() {
+        var mods = new List<AutoloadModEntity>() {
             _modsProvider.EnabledMod,
             _modsProvider.DisabledMod,
             _modsProvider.ModThatRequiresOfficialAddon,

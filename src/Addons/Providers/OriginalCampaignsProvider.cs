@@ -9,7 +9,6 @@ using Common.Helpers;
 using Common.Interfaces;
 using CommunityToolkit.Diagnostics;
 using Games.Games;
-using System.Reflection;
 
 namespace Addons.Providers;
 
@@ -50,7 +49,7 @@ public static class OriginalCampaignsProvider
         if (dGame.IsWorldTourInstalled)
         {
             var dukeWtId = nameof(DukeVersionEnum.Duke3D_WT).ToLower();
-            campaigns.Add(new(dukeWtId), new DukeCampaign()
+            campaigns.Add(new(dukeWtId), new DukeCampaignEntity()
             {
                 Id = dukeWtId,
                 Type = AddonTypeEnum.Official,
@@ -87,7 +86,7 @@ public static class OriginalCampaignsProvider
             if (dGame.GameInstallFolder != dGame.DukeWTInstallPath)
             {
                 var dukeId = nameof(GameEnum.Duke3D).ToLower();
-                campaigns.Add(new(dukeId), new DukeCampaign()
+                campaigns.Add(new(dukeId), new DukeCampaignEntity()
                 {
                     Id = dukeId,
                     Type = AddonTypeEnum.Official,
@@ -122,7 +121,7 @@ public static class OriginalCampaignsProvider
             if (dGame.IsCaribbeanInstalled)
             {
                 var dukeVacaId = nameof(DukeAddonEnum.DukeVaca).ToLower();
-                campaigns.Add(new(dukeVacaId), new DukeCampaign()
+                campaigns.Add(new(dukeVacaId), new DukeCampaignEntity()
                 {
                     Id = dukeVacaId,
                     Type = AddonTypeEnum.Official,
@@ -157,7 +156,7 @@ public static class OriginalCampaignsProvider
             if (dGame.IsNuclearWinterInstalled)
             {
                 var dukeNwId = nameof(DukeAddonEnum.DukeNW).ToLower();
-                campaigns.Add(new(dukeNwId), new DukeCampaign()
+                campaigns.Add(new(dukeNwId), new DukeCampaignEntity()
                 {
                     Id = dukeNwId,
                     Type = AddonTypeEnum.Official,
@@ -191,7 +190,7 @@ public static class OriginalCampaignsProvider
             if (dGame.IsDukeDCInstalled)
             {
                 var dukeDcId = nameof(DukeAddonEnum.DukeDC).ToLower();
-                campaigns.Add(new(dukeDcId), new DukeCampaign()
+                campaigns.Add(new(dukeDcId), new DukeCampaignEntity()
                 {
                     Id = dukeDcId,
                     Type = AddonTypeEnum.Official,
@@ -228,7 +227,7 @@ public static class OriginalCampaignsProvider
         if (dGame.IsDuke64Installed)
         {
             var duke64Id = nameof(GameEnum.Duke64).ToLower();
-            campaigns.Add(new(duke64Id), new DukeCampaign()
+            campaigns.Add(new(duke64Id), new DukeCampaignEntity()
             {
                 Id = duke64Id,
                 Type = AddonTypeEnum.Official,
@@ -271,7 +270,7 @@ public static class OriginalCampaignsProvider
         Dictionary<AddonVersion, IAddon> campaigns = new(2);
 
         var bloodId = nameof(GameEnum.Blood).ToLower();
-        campaigns.Add(new(bloodId), new BloodCampaign()
+        campaigns.Add(new(bloodId), new BloodCampaignEntity()
         {
             Id = bloodId,
             Type = AddonTypeEnum.Official,
@@ -311,7 +310,7 @@ public static class OriginalCampaignsProvider
         {
             var bloodCpId = nameof(BloodAddonEnum.BloodCP).ToLower();
 
-            campaigns.Add(new(bloodCpId), new BloodCampaign()
+            campaigns.Add(new(bloodCpId), new BloodCampaignEntity()
             {
                 Id = bloodCpId,
                 Type = AddonTypeEnum.Official,
@@ -360,7 +359,7 @@ public static class OriginalCampaignsProvider
         if (wGame.IsBaseGameInstalled)
         {
             var wangId = nameof(GameEnum.Wang).ToLower();
-            campaigns.Add(new(wangId), new GenericCampaign()
+            campaigns.Add(new(wangId), new GenericCampaignEntity()
             {
                 Id = wangId,
                 Type = AddonTypeEnum.Official,
@@ -403,7 +402,7 @@ public static class OriginalCampaignsProvider
         if (fGame.IsBaseGameInstalled)
         {
             var furyId = nameof(GameEnum.Fury).ToLower();
-            campaigns.Add(new(furyId), new DukeCampaign()
+            campaigns.Add(new(furyId), new DukeCampaignEntity()
             {
                 Id = furyId,
                 Type = AddonTypeEnum.Official,
@@ -471,7 +470,7 @@ public static class OriginalCampaignsProvider
         if (rGame.IsBaseGameInstalled)
         {
             var redneckId = nameof(GameEnum.Redneck).ToLower();
-            campaigns.Add(new(redneckId), new DukeCampaign()
+            campaigns.Add(new(redneckId), new DukeCampaignEntity()
             {
                 Id = redneckId,
                 Type = AddonTypeEnum.Official,
@@ -507,7 +506,7 @@ public static class OriginalCampaignsProvider
             if (rGame.IsRoute66Installed)
             {
                 var redneckR66Id = nameof(RedneckAddonEnum.Route66).ToLower();
-                campaigns.Add(new(redneckR66Id), new DukeCampaign()
+                campaigns.Add(new(redneckR66Id), new DukeCampaignEntity()
                 {
                     Id = redneckR66Id,
                     Type = AddonTypeEnum.Official,
@@ -540,7 +539,7 @@ public static class OriginalCampaignsProvider
         if (rGame.IsAgainInstalled)
         {
             var redneckRaId = nameof(GameEnum.RidesAgain).ToLower();
-            campaigns.Add(new(redneckRaId), new DukeCampaign()
+            campaigns.Add(new(redneckRaId), new DukeCampaignEntity()
             {
                 Id = redneckRaId,
                 Type = AddonTypeEnum.Official,
@@ -585,7 +584,7 @@ public static class OriginalCampaignsProvider
         if (nGame.IsBaseGameInstalled)
         {
             var namId = nameof(GameEnum.NAM).ToLower();
-            campaigns.Add(new(namId), new DukeCampaign()
+            campaigns.Add(new(namId), new DukeCampaignEntity()
             {
                 Id = namId,
                 Type = AddonTypeEnum.Official,
@@ -635,7 +634,7 @@ public static class OriginalCampaignsProvider
         if (wGame.IsBaseGameInstalled)
         {
             var ww2id = nameof(GameEnum.WW2GI).ToLower();
-            campaigns.Add(new(ww2id), new DukeCampaign()
+            campaigns.Add(new(ww2id), new DukeCampaignEntity()
             {
                 Id = ww2id,
                 Type = AddonTypeEnum.Official,
@@ -670,7 +669,7 @@ public static class OriginalCampaignsProvider
         if (wGame.IsPlatoonInstalled)
         {
             var platoon = nameof(WW2GIAddonEnum.Platoon).ToLower();
-            campaigns.Add(new(platoon), new DukeCampaign()
+            campaigns.Add(new(platoon), new DukeCampaignEntity()
             {
                 Id = platoon,
                 Type = AddonTypeEnum.Official,
@@ -714,7 +713,7 @@ public static class OriginalCampaignsProvider
         if (tGame.IsBaseGameInstalled)
         {
             var namId = nameof(GameEnum.TekWar).ToLower();
-            campaigns.Add(new(namId), new DukeCampaign()
+            campaigns.Add(new(namId), new DukeCampaignEntity()
             {
                 Id = namId,
                 Type = AddonTypeEnum.Official,
@@ -758,7 +757,7 @@ public static class OriginalCampaignsProvider
         if (sGame.IsBaseGameInstalled)
         {
             var slaveId = nameof(GameEnum.Slave).ToLower();
-            campaigns.Add(new(slaveId), new GenericCampaign()
+            campaigns.Add(new(slaveId), new GenericCampaignEntity()
             {
                 Id = slaveId,
                 Type = AddonTypeEnum.Official,
@@ -805,7 +804,7 @@ public static class OriginalCampaignsProvider
         if (wGame.IsBaseGameInstalled)
         {
             var namId = nameof(GameEnum.Witchaven).ToLower();
-            campaigns.Add(new(namId), new GenericCampaign()
+            campaigns.Add(new(namId), new GenericCampaignEntity()
             {
                 Id = namId,
                 Type = AddonTypeEnum.Official,
@@ -837,7 +836,7 @@ public static class OriginalCampaignsProvider
         if (wGame.IsWitchaven2Installed)
         {
             var namId = nameof(GameEnum.Witchaven2).ToLower();
-            campaigns.Add(new(namId), new GenericCampaign()
+            campaigns.Add(new(namId), new GenericCampaignEntity()
             {
                 Id = namId,
                 Type = AddonTypeEnum.Official,

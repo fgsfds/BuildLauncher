@@ -27,9 +27,10 @@ public interface IInstalledAddonsProvider
     IReadOnlyDictionary<AddonVersion, IAddon> GetInstalledAddonsByType(AddonTypeEnum addonType);
 
     /// <summary>
-    /// Create cache of installed addons
+    /// Create cache of installed addons.
     /// </summary>
-    /// <param name="createNew">Clear current cache and create new</param>
+    /// <param name="createNew">Clear current cache and create new.</param>
+    /// <param name="addonType">Addon type.</param>
     Task CreateCache(bool createNew, AddonTypeEnum addonType);
 
     /// <summary>

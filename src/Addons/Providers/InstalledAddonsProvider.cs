@@ -215,7 +215,7 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
                 //enabling/disabling addons
                 foreach (var mod in _modsCache)
                 {
-                    if (mod.Value is not AutoloadMod autoloadMod)
+                    if (mod.Value is not AutoloadModEntity autoloadMod)
                     {
                         _logger.LogError($"=== Error while enabling/disabling addon {mod.Key.Id}");
                         continue;
@@ -304,7 +304,7 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
             File.Delete(addon.PathToFile);
         }
 
-        if (addon is LooseMap lMap)
+        if (addon is LooseMapEntity lMap)
         {
             var files = Directory.GetFiles(Path.GetDirectoryName(addon.PathToFile)!, $"{Path.GetFileNameWithoutExtension(lMap.FileName)!}.*");
 
@@ -335,7 +335,7 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
     {
         var existing = _modsCache.FirstOrDefault(x => x.Key.Equals(addon));
 
-        if (existing.Value is not AutoloadMod autoloadMod)
+        if (existing.Value is not AutoloadModEntity autoloadMod)
         {
             return;
         }
@@ -383,7 +383,7 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
     {
         var existing = _modsCache.FirstOrDefault(x => x.Key.Equals(addon));
 
-        if (existing.Value is not AutoloadMod autoloadMod)
+        if (existing.Value is not AutoloadModEntity autoloadMod)
         {
             return;
         }
@@ -506,7 +506,7 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
                 {
                     try
                     {
-                        if (newAddon is AutoloadMod &&
+                        if (newAddon is AutoloadModEntity &&
                             addedAddons.TryGetValue(new(newAddon.Id, newAddon.Version), out var existingMod))
                         {
                             if (existingMod.Version is null &&
@@ -563,7 +563,7 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
 
             var manifest = JsonSerializer.Deserialize(
                 stream,
-                AddonManifestContext.Default.AddonDto
+                AddonManifestContext.Default.AddonJsonModel
                 );
 
             if (manifest is null)
@@ -588,7 +588,7 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
     /// Get addon from a file
     /// </summary>
     /// <param name="pathToFile">Path to addon file</param>
-    private async Task<List<BaseAddon>?> GetAddonFromFileAsync(string pathToFile)
+    private async Task<List<BaseAddonEntity>?> GetAddonFromFileAsync(string pathToFile)
     {
         List<AddonCarcass> carcasses = [];
 
@@ -602,7 +602,7 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
 
             var manifest = JsonSerializer.Deserialize(
                 jsonText,
-                AddonManifestContext.Default.AddonDto
+                AddonManifestContext.Default.AddonJsonModel
                 );
 
             if (manifest is null)
@@ -689,14 +689,14 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
             var bloodIni = pathToFile.Replace(".map", ".ini", StringComparison.InvariantCultureIgnoreCase);
             var iniExists = File.Exists(bloodIni);
 
-            var addon = new LooseMap()
+            var addon = new LooseMapEntity()
             {
                 Id = Path.GetFileName(pathToFile),
                 Type = AddonTypeEnum.Map,
                 Title = Path.GetFileName(pathToFile),
                 SupportedGame = new(_game.GameEnum, null, null),
                 PathToFile = pathToFile,
-                StartMap = new MapFileDto() { File = Path.GetFileName(pathToFile) },
+                StartMap = new MapFileJsonModel() { File = Path.GetFileName(pathToFile) },
                 BloodIni = iniExists ? bloodIni : null,
                 GridImageHash = null,
                 Description = null,
@@ -843,7 +843,7 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
             return null;
         }
 
-        List<BaseAddon> addons = [];
+        List<BaseAddonEntity> addons = [];
 
         foreach (var carcass in carcasses)
         {
@@ -856,7 +856,7 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
                     ThrowHelper.ThrowArgumentException("Autoload mod can't have Main DEF");
                 }
 
-                var addon = new AutoloadMod()
+                var addon = new AutoloadModEntity()
                 {
                     Id = carcass.Id,
                     Type = AddonTypeEnum.Mod,
@@ -891,7 +891,7 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
                     or GameEnum.NAM
                     or GameEnum.WW2GI)
                 {
-                    var addon = new DukeCampaign()
+                    var addon = new DukeCampaignEntity()
                     {
                         Id = carcass.Id,
                         Type = carcass.Type,
@@ -920,7 +920,7 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
                 }
                 else if (_game.GameEnum is GameEnum.Wang)
                 {
-                    var addon = new GenericCampaign()
+                    var addon = new GenericCampaignEntity()
                     {
                         Id = carcass.Id,
                         Type = carcass.Type,
@@ -946,7 +946,7 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
                 }
                 else if (_game.GameEnum is GameEnum.Blood)
                 {
-                    var addon = new BloodCampaign()
+                    var addon = new BloodCampaignEntity()
                     {
                         Id = carcass.Id,
                         Type = carcass.Type,
@@ -975,7 +975,7 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
                 }
                 else if (_game.GameEnum is GameEnum.Slave)
                 {
-                    var addon = new GenericCampaign()
+                    var addon = new GenericCampaignEntity()
                     {
                         Id = carcass.Id,
                         Type = carcass.Type,
@@ -1001,7 +1001,7 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
                 }
                 else if (_game.GameEnum is GameEnum.Standalone)
                 {
-                    var addon = new StandaloneAddon()
+                    var addon = new StandaloneEntity()
                     {
                         Id = carcass.Id,
                         Type = carcass.Type,
@@ -1041,7 +1041,7 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
     /// <param name="pathToFile">Path to archive</param>
     /// <param name="archive">Archive</param>
     /// <param name="addonDtos">AddonDto</param>
-    private string? UnpackIfNeededAndGetAddonDto(string pathToFile, IArchive archive, out List<AddonDto>? addonDtos)
+    private string? UnpackIfNeededAndGetAddonDto(string pathToFile, IArchive archive, out List<AddonJsonModel>? addonDtos)
     {
         try
         {
@@ -1067,7 +1067,7 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
 
             var addonDto = JsonSerializer.Deserialize(
                 addonJsonStream,
-                AddonManifestContext.Default.AddonDto
+                AddonManifestContext.Default.AddonJsonModel
                 )!;
 
             if (addonDto.MainRff is not null || addonDto.SoundRff is not null)
@@ -1081,7 +1081,7 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
                 unpackedTo = Unpack(pathToFile, archive);
             }
 
-            List<AddonDto> result = [];
+            List<AddonJsonModel> result = [];
 
             if (unpackedTo is not null)
             {
@@ -1093,7 +1093,7 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
 
                     var addonDto2 = JsonSerializer.Deserialize(
                         text,
-                        AddonManifestContext.Default.AddonDto
+                        AddonManifestContext.Default.AddonJsonModel
                         )!;
 
                     result.Add(addonDto2);
@@ -1107,7 +1107,7 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
 
                     var addonDto2 = JsonSerializer.Deserialize(
                         addonJsonStream2,
-                        AddonManifestContext.Default.AddonDto
+                        AddonManifestContext.Default.AddonJsonModel
                         )!;
 
                     result.Add(addonDto2);

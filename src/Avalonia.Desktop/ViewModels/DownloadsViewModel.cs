@@ -1,8 +1,7 @@
 using Addons.Providers;
 using Avalonia.Controls.Notifications;
 using Avalonia.Desktop.Misc;
-using Avalonia.Threading;
-using Common.Entities;
+using Common.Common.Serializable.Downloadable;
 using Common.Enums;
 using Common.Helpers;
 using Common.Interfaces;
@@ -31,11 +30,11 @@ public sealed partial class DownloadsViewModel : ObservableObject
     /// <summary>
     /// List of downloadable addons
     /// </summary>
-    public ImmutableList<DownloadableAddonEntity> DownloadableList
+    public ImmutableList<DownloadableAddonJsonModel> DownloadableList
     {
         get
         {
-            IEnumerable<DownloadableAddonEntity> result;
+            IEnumerable<DownloadableAddonJsonModel> result;
 
             if (FilterSelectedItem is FilterItemEnum.All)
             {
@@ -116,7 +115,7 @@ public sealed partial class DownloadsViewModel : ObservableObject
     /// Currently selected downloadable campaigns, maps or mods
     /// </summary>
     [ObservableProperty]
-    private ObservableCollection<DownloadableAddonEntity> _selectedDownloads = [];
+    private ObservableCollection<DownloadableAddonJsonModel> _selectedDownloads = [];
 
     [ObservableProperty]
     private string _progressMessage = string.Empty;
@@ -210,7 +209,7 @@ public sealed partial class DownloadsViewModel : ObservableObject
     [RelayCommand(CanExecute = nameof(DownloadSelectedAddonCanExecute))]
     private async Task DownloadAddon()
     {
-        DownloadableAddonEntity? _currentDownloadable = null;
+        DownloadableAddonJsonModel? _currentDownloadable = null;
 
         try
         {
@@ -220,7 +219,7 @@ public sealed partial class DownloadsViewModel : ObservableObject
                 return;
             }
 
-            List<DownloadableAddonEntity> filesToDownload = [.. SelectedDownloads];
+            List<DownloadableAddonJsonModel> filesToDownload = [.. SelectedDownloads];
 
             IsInProgress = true;
 

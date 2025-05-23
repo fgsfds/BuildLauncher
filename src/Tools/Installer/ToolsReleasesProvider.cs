@@ -1,5 +1,5 @@
 ﻿using Common.Client.Interfaces;
-using Common.Entities;
+using Common.Common.Serializable.Downloadable;
 using Common.Enums;
 using Tools.Tools;
 
@@ -12,7 +12,7 @@ public sealed class ToolsReleasesProvider
 {
     private readonly IApiInterface _apiInterface;
 
-    private Dictionary<ToolEnum, GeneralReleaseEntity>? _releases;
+    private Dictionary<ToolEnum, GeneralReleaseJsonModel>? _releases;
     private readonly SemaphoreSlim _semaphore = new(1);
 
     public ToolsReleasesProvider(IApiInterface apiInterface)
@@ -24,7 +24,7 @@ public sealed class ToolsReleasesProvider
     /// Get the latest release of the selected tool
     /// </summary>
     /// <param name="tool">Tool</param>
-    public async Task<GeneralReleaseEntity?> GetLatestReleaseAsync(BaseTool tool)
+    public async Task<GeneralReleaseJsonModel?> GetLatestReleaseAsync(BaseTool tool)
     {
         await _semaphore.WaitAsync().ConfigureAwait(false);
 
@@ -42,7 +42,7 @@ public sealed class ToolsReleasesProvider
         return hasRelease ? release : null;
     }
 
-    public async Task<Dictionary<ToolEnum, GeneralReleaseEntity>?> GetReleasesAsync()
+    public async Task<Dictionary<ToolEnum, GeneralReleaseJsonModel>?> GetReleasesAsync()
     {
         return await _apiInterface.GetLatestToolsReleasesAsync().ConfigureAwait(false);
     }

@@ -2,18 +2,19 @@
 using Common.Interfaces;
 using Common.Serializable.Addon;
 using CommunityToolkit.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace Common.Serializable;
 
-public sealed class SupportedGameDtoConverter : JsonConverter<SupportedGameDto?>
+public sealed class SupportedGameDtoConverter : JsonConverter<SupportedGameJsonModel?>
 {
-    public override SupportedGameDto? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    public override SupportedGameJsonModel? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
         if (reader.TokenType is JsonTokenType.StartObject)
         {
-            return JsonSerializer.Deserialize(ref reader, SupportedGameDtoContext.Default.SupportedGameDto);
+            return JsonSerializer.Deserialize(ref reader, SupportedGameJsonModelContext.Default.SupportedGameJsonModel);
         }
         else if (reader.TokenType is JsonTokenType.String)
         {
@@ -26,7 +27,7 @@ public sealed class SupportedGameDtoConverter : JsonConverter<SupportedGameDto?>
 
             var gameEnum = Enum.Parse<GameEnum>(str, true);
 
-            SupportedGameDto dto = new()
+            SupportedGameJsonModel dto = new()
             {
                 Game = gameEnum
             };
@@ -34,10 +35,10 @@ public sealed class SupportedGameDtoConverter : JsonConverter<SupportedGameDto?>
             return dto;
         }
 
-        return ThrowHelper.ThrowNotSupportedException<SupportedGameDto?>();
+        return ThrowHelper.ThrowNotSupportedException<SupportedGameJsonModel?>();
     }
 
-    public override void Write(Utf8JsonWriter writer, SupportedGameDto? value, JsonSerializerOptions options)
+    public override void Write(Utf8JsonWriter writer, SupportedGameJsonModel? value, JsonSerializerOptions options)
     {
         ThrowHelper.ThrowNotSupportedException();
     }
@@ -52,13 +53,13 @@ public sealed class IStartMapConverter : JsonConverter<IStartMap?>
         {
             try
             {
-                return JsonSerializer.Deserialize(ref reader, MapFileDtoContext.Default.MapFileDto);
+                return JsonSerializer.Deserialize(ref reader, MapFileJsonModelContext.Default.MapFileJsonModel);
             }
             catch { }
 
             try
             {
-                return JsonSerializer.Deserialize(ref reader, MapSlotDtoContext.Default.MapSlotDto);
+                return JsonSerializer.Deserialize(ref reader, MapSlotJsonModelContext.Default.MapSlotJsonModel);
             }
             catch { }
         }
@@ -70,12 +71,12 @@ public sealed class IStartMapConverter : JsonConverter<IStartMap?>
     {
         writer.WriteStartObject();
 
-        if (value is MapFileDto fileMap)
+        if (value is MapFileJsonModel fileMap)
         {
             writer.WritePropertyName("file");
             writer.WriteStringValue(fileMap.File);
         }
-        else if (value is MapSlotDto slotMap)
+        else if (value is MapSlotJsonModel slotMap)
         {
             writer.WritePropertyName("volume");
             writer.WriteNumberValue(slotMap.Episode);
@@ -196,3 +197,41 @@ public sealed class IStartMapConverter : JsonConverter<IStartMap?>
 //        return default;
 //    }
 //}
+
+public sealed class GameEnumJsonConverter : JsonConverter<GameEnum>
+{
+    public override GameEnum Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    {
+        var value = reader.GetString();
+        Guard.IsNotNullOrWhiteSpace(value);
+
+        if (Enum.TryParse<GameEnum>(value, true, out var gameEnum))
+        {
+            return gameEnum;
+        }
+
+        if (value.Equals("ShadowWarrior", StringComparison.OrdinalIgnoreCase))
+        {
+            return GameEnum.Wang;
+        }
+        else if (value.Equals("Exhumed", StringComparison.OrdinalIgnoreCase))
+        {
+            return GameEnum.Slave;
+        }
+        else
+        {
+            return ThrowHelper.ThrowArgumentOutOfRangeException<GameEnum>(value);
+        }
+    }
+
+    public override void Write(Utf8JsonWriter writer, GameEnum value, JsonSerializerOptions options)
+    {
+        writer.WriteStringValue(value.ToString());
+    }
+
+    public override GameEnum ReadAsPropertyName(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        => Read(ref reader, typeToConvert, options);
+
+    public override void WriteAsPropertyName(Utf8JsonWriter writer, [DisallowNull] GameEnum value, JsonSerializerOptions options)
+        => Write(writer, value, options);
+}

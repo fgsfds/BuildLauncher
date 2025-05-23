@@ -13,8 +13,8 @@ namespace Tests.CmdArguments;
 public sealed class WangCmdArgumentsTests
 {
     private readonly WangGame _wangGame;
-    private readonly GenericCampaign _wangCamp;
-    private readonly GenericCampaign _tdCamp;
+    private readonly GenericCampaignEntity _wangCamp;
+    private readonly GenericCampaignEntity _tdCamp;
 
     private readonly AutoloadModsProvider _modsProvider;
 
@@ -75,7 +75,7 @@ public sealed class WangCmdArgumentsTests
     [Fact]
     public void RazeTest()
     {
-        var mods = new List<AutoloadMod>() {
+        var mods = new List<AutoloadModEntity>() {
             _modsProvider.EnabledMod,
             _modsProvider.ModThatRequiresOfficialAddon,
             _modsProvider.IncompatibleMod,
@@ -129,7 +129,7 @@ public sealed class WangCmdArgumentsTests
     [Fact]
     public void RazeTdTest()
     {
-        var mods = new List<AutoloadMod>() {
+        var mods = new List<AutoloadModEntity>() {
             _modsProvider.EnabledMod,
             _modsProvider.ModThatRequiresOfficialAddon,
             _modsProvider.ModThatIncompatibleWithAddon,
@@ -175,7 +175,7 @@ public sealed class WangCmdArgumentsTests
     [Fact]
     public void VoidSWTest()
     {
-        var mods = new List<AutoloadMod>() {
+        var mods = new List<AutoloadModEntity>() {
             _modsProvider.EnabledMod,
             _modsProvider.ModThatRequiresOfficialAddon,
             _modsProvider.IncompatibleMod,
@@ -220,7 +220,7 @@ public sealed class WangCmdArgumentsTests
     [Fact]
     public void VoidSWTdTest()
     {
-        var mods = new List<AutoloadMod>() {
+        var mods = new List<AutoloadModEntity>() {
             _modsProvider.EnabledMod,
             _modsProvider.ModThatRequiresOfficialAddon,
             _modsProvider.ModThatIncompatibleWithAddon,

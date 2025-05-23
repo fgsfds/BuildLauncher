@@ -1,4 +1,4 @@
-﻿using Common.Entities;
+﻿using Common.Common.Serializable.Downloadable;
 using Common.Enums;
 using CommunityToolkit.Diagnostics;
 using Microsoft.Extensions.Logging;
@@ -12,7 +12,7 @@ internal sealed class ToolsReleasesRepoRetriever
     private readonly HttpClient _httpClient;
     private readonly ToolsRepositoriesProvider _repoProvider;
 
-    public Dictionary<ToolEnum, GeneralReleaseEntity> ToolsReleases { get; set; }
+    public Dictionary<ToolEnum, GeneralReleaseJsonModel> ToolsReleases { get; set; }
 
     public ToolsReleasesRepoRetriever(
         ILogger logger,
@@ -67,7 +67,7 @@ internal sealed class ToolsReleasesRepoRetriever
     /// Get the latest release of the selected port
     /// </summary>
     /// <param name="toolEnum">Tool enum</param>
-    private async Task<GeneralReleaseEntity?> GetLatestReleaseAsync(ToolEnum toolEnum)
+    private async Task<GeneralReleaseJsonModel?> GetLatestReleaseAsync(ToolEnum toolEnum)
     {
         var repo = _repoProvider.GetToolRepo(toolEnum);
 
@@ -78,8 +78,8 @@ internal sealed class ToolsReleasesRepoRetriever
 
         var response = await _httpClient.GetStringAsync(repo.RepoUrl).ConfigureAwait(false);
 
-        var releases = JsonSerializer.Deserialize(response, GitHubReleaseEntityContext.Default.ListGitHubReleaseEntity)
-            ?? ThrowHelper.ThrowFormatException<List<GitHubReleaseEntity>>("Error while deserializing GitHub releases");
+        var releases = JsonSerializer.Deserialize(response, GitHubReleaseEntityContext.Default.ListGitHubReleaseJsonModel)
+            ?? ThrowHelper.ThrowFormatException<List<GitHubReleaseJsonModel>>("Error while deserializing GitHub releases");
 
         var release = releases.FirstOrDefault(static x => !x.IsDraft && !x.IsPrerelease);
 
@@ -97,7 +97,7 @@ internal sealed class ToolsReleasesRepoRetriever
 
         var version = zip.UpdatedDate;
 
-        GeneralReleaseEntity toolRelease = new()
+        GeneralReleaseJsonModel toolRelease = new()
         {
             SupportedOS = OSEnum.Windows,
             Description = release.Description,

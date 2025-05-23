@@ -1,4 +1,4 @@
-﻿using Common.Entities;
+﻿using Common.Common.Serializable.Downloadable;
 using Common.Enums;
 using Common.Helpers;
 using CommunityToolkit.Diagnostics;
@@ -12,7 +12,7 @@ public sealed class RepoAppReleasesRetriever
     private readonly ILogger _logger;
     private readonly HttpClient _httpClient;
 
-    public Dictionary<OSEnum, GeneralReleaseEntity> AppRelease { get; } = [];
+    public Dictionary<OSEnum, GeneralReleaseJsonModel> AppRelease { get; } = [];
 
     public RepoAppReleasesRetriever(
         ILogger logger,
@@ -43,8 +43,8 @@ public sealed class RepoAppReleasesRetriever
             var releasesJson = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 
             var releases =
-                JsonSerializer.Deserialize(releasesJson, GitHubReleaseEntityContext.Default.ListGitHubReleaseEntity)
-                ?? ThrowHelper.ThrowFormatException<List<GitHubReleaseEntity>>("Error while deserializing GitHub releases");
+                JsonSerializer.Deserialize(releasesJson, GitHubReleaseEntityContext.Default.ListGitHubReleaseJsonModel)
+                ?? ThrowHelper.ThrowFormatException<List<GitHubReleaseJsonModel>>("Error while deserializing GitHub releases");
 
             if (includePreReleases)
             {
@@ -64,7 +64,7 @@ public sealed class RepoAppReleasesRetriever
             {
                 _logger.LogInformation($"Found Windows release {release.TagName}");
 
-                GeneralReleaseEntity winRelease = new()
+                GeneralReleaseJsonModel winRelease = new()
                 {
                     SupportedOS = OSEnum.Windows,
                     Version = release.TagName,
@@ -79,7 +79,7 @@ public sealed class RepoAppReleasesRetriever
             {
                 _logger.LogInformation($"Found Linux release {release.TagName}");
 
-                GeneralReleaseEntity linRelease = new()
+                GeneralReleaseJsonModel linRelease = new()
                 {
                     SupportedOS = OSEnum.Linux,
                     Version = release.TagName,

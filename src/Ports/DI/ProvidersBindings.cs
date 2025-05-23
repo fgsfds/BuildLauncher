@@ -1,5 +1,5 @@
 ﻿using Common.Common.Interfaces;
-using Common.Entities;
+using Common.Common.Serializable.Downloadable;
 using Common.Enums;
 using Microsoft.Extensions.DependencyInjection;
 using Ports.Installer;
@@ -16,6 +16,6 @@ public static class ProvidersBindings
         _ = container.AddSingleton<InstalledPortsProvider>();
         _ = container.AddSingleton<PortsReleasesProvider>();
         _ = container.AddSingleton<PortStarter>();
-        _ = container.AddSingleton<IRetriever<Dictionary<PortEnum, GeneralReleaseEntity>?>, PortsReleasesRepoRetriever>();
+        _ = container.AddSingleton<IRetriever<Dictionary<PortEnum, GeneralReleaseJsonModel>?>, PortsReleasesRepoRetriever>();
     }
 }

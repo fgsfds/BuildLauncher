@@ -103,14 +103,14 @@ public sealed class Fury : EDuke32
             return;
         }
 
-        if (addon is LooseMap)
+        if (addon is LooseMapEntity)
         {
             GetLooseMapArgs(sb, game, addon);
             return;
         }
 
 
-        Guard2.ThrowIfNotType<DukeCampaign>(addon, out var fCamp);
+        Guard2.ThrowIfNotType<DukeCampaignEntity>(addon, out var fCamp);
 
         if (fCamp.MainCon is not null)
         {

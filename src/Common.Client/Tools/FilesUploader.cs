@@ -1,5 +1,5 @@
 ﻿using Common.Client.Interfaces;
-using Common.Entities;
+using Common.Common.Serializable.Downloadable;
 using Common.Enums;
 using Common.Helpers;
 using Common.Serializable.Addon;
@@ -40,7 +40,7 @@ public sealed class FilesUploader
     }
 
 
-    private async Task<DownloadableAddonEntity?> GetDownloadableAddonDtoAsync(string pathToFile)
+    private async Task<DownloadableAddonJsonModel?> GetDownloadableAddonDtoAsync(string pathToFile)
     {
         using var archive = ZipArchive.Open(pathToFile);
         var addonJson = archive.Entries.FirstOrDefault(static x => x.Key == "addon.json");
@@ -54,7 +54,7 @@ public sealed class FilesUploader
 
         var manifest = JsonSerializer.Deserialize(
             stream,
-            AddonManifestContext.Default.AddonDto
+            AddonManifestContext.Default.AddonJsonModel
             );
 
         FileInfo fileInfo = new(pathToFile);
@@ -101,7 +101,7 @@ public sealed class FilesUploader
             return null;
         }
 
-        DownloadableAddonEntity downloadableAddon = new()
+        DownloadableAddonJsonModel downloadableAddon = new()
         {
             Id = manifest.Id,
             Title = manifest.Title,

@@ -1,5 +1,6 @@
-﻿using Common.Entities;
+﻿using Common.Common.Serializable.Downloadable;
 using Common.Enums;
+using Common.Serializable.Addon;
 using CommunityToolkit.Diagnostics;
 using Database.Server;
 using Database.Server.DbEntities;
@@ -13,7 +14,7 @@ public sealed class DatabaseAddonsRetriever
     private readonly ILogger<DatabaseAddonsRetriever> _logger;
     private readonly DatabaseContextFactory _dbContextFactory;
 
-    public GeneralReleaseEntity? AppRelease { get; }
+    public GeneralReleaseJsonModel? AppRelease { get; }
 
     public DatabaseAddonsRetriever(
         ILogger<DatabaseAddonsRetriever> logger,
@@ -28,7 +29,7 @@ public sealed class DatabaseAddonsRetriever
     /// </summary>
     /// <param name="gameEnum">Game enum</param>
     /// <param name="dontLog">Don't log statistics</param>
-    internal List<DownloadableAddonEntity> GetAddons(GameEnum gameEnum, bool dontLog = false)
+    internal List<DownloadableAddonJsonModel> GetAddons(GameEnum gameEnum, bool dontLog = false)
     {
         using var dbContext = _dbContextFactory.Get();
 
@@ -51,7 +52,7 @@ public sealed class DatabaseAddonsRetriever
         var installs = dbContext.Installs.AsNoTracking().ToDictionary(static x => x.AddonId, static y => y.Installs);
         var ratings = dbContext.Rating.AsNoTracking().ToDictionary(static x => x.AddonId, static y => y.Rating);
 
-        List<DownloadableAddonEntity> result = new(versions.Count);
+        List<DownloadableAddonJsonModel> result = new(versions.Count);
 
         foreach (var version in versions)
         {
@@ -72,7 +73,7 @@ public sealed class DatabaseAddonsRetriever
             var hasInstalls = installs.TryGetValue(addon.Id, out var installsNumber);
             var hasRating = ratings.TryGetValue(addon.Id, out var ratingNumber);
 
-            DownloadableAddonEntity newDownloadable = new()
+            DownloadableAddonJsonModel newDownloadable = new()
             {
                 AddonType = (AddonTypeEnum)addon.AddonType,
                 Id = addon.Id,
@@ -168,7 +169,7 @@ public sealed class DatabaseAddonsRetriever
         return dbContext.Rating.ToDictionary(static x => x.AddonId, static y => y.Rating);
     }
 
-    internal bool AddAddonToDatabase(AddonsJsonEntity addon)
+    internal bool AddAddonToDatabase(AddonJsonModel addon)
     {
         using var dbContext = _dbContextFactory.Get();
 
@@ -190,7 +191,7 @@ public sealed class DatabaseAddonsRetriever
                 {
                     Id = addon.Id,
                     Title = addon.Title,
-                    GameId = (byte)addon.Game,
+                    GameId = (byte)addon.SupportedGame.Game,
                     AddonType = (byte)addon.AddonType
                 });
             }
@@ -209,10 +210,10 @@ public sealed class DatabaseAddonsRetriever
             {
                 AddonId = addon.Id,
                 Version = addon.Version,
-                DownloadUrl = new(addon.DownloadUrl),
+                DownloadUrl = null!, //TODO fix
                 Description = addon.Description,
                 IsDisabled = false,
-                FileSize = addon.FileSize,
+                FileSize = 0, //TODO fix
                 Author = addon.Author,
                 UpdateDate = DateTime.Now.ToUniversalTime()
             });
@@ -226,13 +227,13 @@ public sealed class DatabaseAddonsRetriever
 
                 Guard.IsNotNull(existingVersion);
 
-                foreach (var dep in addon.Dependencies)
+                foreach (var dep in addon.Dependencies.Addons)
                 {
                     _ = dbContext.Dependencies.Add(new()
                     {
                         AddonVersionId = existingVersion.Id,
-                        DependencyId = dep.Key,
-                        DependencyVersion = dep.Value
+                        DependencyId = dep.Id,
+                        DependencyVersion = dep.Version
                     });
                 }
 

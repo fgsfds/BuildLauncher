@@ -1,11 +1,10 @@
-﻿using Common.Common.Helpers;
-using Common.Enums;
+﻿using Common.Enums;
 using Common.Interfaces;
 using System.Text.Json.Serialization;
 
 namespace Common.Serializable.Addon;
 
-public sealed class AddonDto
+public sealed class AddonJsonModel
 {
     [JsonRequired]
     [JsonPropertyName("id")]
@@ -17,7 +16,7 @@ public sealed class AddonDto
 
     [JsonRequired]
     [JsonPropertyName("game")]
-    public required SupportedGameDto SupportedGame { get; set; }
+    public required SupportedGameJsonModel SupportedGame { get; set; }
 
     [JsonRequired]
     [JsonPropertyName("title")]
@@ -57,10 +56,10 @@ public sealed class AddonDto
     public string? SoundRff { get; set; }
 
     [JsonPropertyName("dependencies")]
-    public DependencyDto? Dependencies { get; set; }
+    public DependencyJsonModel? Dependencies { get; set; }
 
     [JsonPropertyName("incompatibles")]
-    public DependencyDto? Incompatibles { get; set; }
+    public DependencyJsonModel? Incompatibles { get; set; }
 
     [JsonPropertyName("startmap")]
     [JsonConverter(typeof(IStartMapConverter))]
@@ -88,5 +87,5 @@ public sealed class AddonDto
     DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
     RespectNullableAnnotations = true
     )]
-[JsonSerializable(typeof(AddonDto))]
+[JsonSerializable(typeof(AddonJsonModel))]
 public sealed partial class AddonManifestContext : JsonSerializerContext;

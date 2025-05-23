@@ -12,8 +12,8 @@ namespace Tests.CmdArguments;
 public sealed class RedneckCmdArgumentsTests
 {
     private readonly RedneckGame _redneckGame;
-    private readonly DukeCampaign _redneckCamp;
-    private readonly DukeCampaign _againCamp;
+    private readonly DukeCampaignEntity _redneckCamp;
+    private readonly DukeCampaignEntity _againCamp;
 
     private readonly AutoloadModsProvider _modsProvider;
 
@@ -81,7 +81,7 @@ public sealed class RedneckCmdArgumentsTests
     [Fact]
     public void RazeTest()
     {
-        var mods = new List<AutoloadMod>() {
+        var mods = new List<AutoloadModEntity>() {
             _modsProvider.EnabledMod,
             _modsProvider.IncompatibleMod,
         }.ToDictionary(x => new AddonVersion(x.Id, x.Version), x => (IAddon)x);
@@ -124,7 +124,7 @@ public sealed class RedneckCmdArgumentsTests
     [Fact]
     public void RazeAgainTest()
     {
-        var mods = new List<AutoloadMod>() {
+        var mods = new List<AutoloadModEntity>() {
             _modsProvider.EnabledMod,
             _modsProvider.IncompatibleMod,
         }.ToDictionary(x => new AddonVersion(x.Id, x.Version), x => (IAddon)x);
@@ -167,7 +167,7 @@ public sealed class RedneckCmdArgumentsTests
     [Fact]
     public void RedNukemTest()
     {
-        var mods = new List<AutoloadMod>() {
+        var mods = new List<AutoloadModEntity>() {
             _modsProvider.EnabledMod,
             _modsProvider.IncompatibleMod,
         }.ToDictionary(x => new AddonVersion(x.Id, x.Version), x => (IAddon)x);
@@ -200,7 +200,7 @@ public sealed class RedneckCmdArgumentsTests
     [Fact]
     public void RedNukemAgainTest()
     {
-        var mods = new List<AutoloadMod>() {
+        var mods = new List<AutoloadModEntity>() {
             _modsProvider.EnabledMod,
             _modsProvider.IncompatibleMod,
         }.ToDictionary(x => new AddonVersion(x.Id, x.Version), x => (IAddon)x);
@@ -214,7 +214,7 @@ public sealed class RedneckCmdArgumentsTests
             $" -mh \"ENABLED2.DEF\"" +
             $" -j \"{Directory.GetCurrentDirectory()}\\Data\\Addons\\Redneck\\Mods\"" +
             $" -usecwd" +
-            " -d blank.edm" + 
+            " -d blank.edm" +
             $" -h \"a\"" +
             $" -j \"D:\\Games\\Again\"" +
             $" -quick" +

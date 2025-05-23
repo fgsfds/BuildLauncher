@@ -13,8 +13,8 @@ namespace Tests.CmdArguments;
 public sealed class WW2GICmdArgumentsTests
 {
     private readonly WW2GIGame _ww2Game;
-    private readonly DukeCampaign _ww2Camp;
-    private readonly DukeCampaign _platoonCamp;
+    private readonly DukeCampaignEntity _ww2Camp;
+    private readonly DukeCampaignEntity _platoonCamp;
 
     private readonly AutoloadModsProvider _modsProvider;
 
@@ -81,7 +81,7 @@ public sealed class WW2GICmdArgumentsTests
     [Fact]
     public void RazeTest()
     {
-        var mods = new List<AutoloadMod>() {
+        var mods = new List<AutoloadModEntity>() {
             _modsProvider.EnabledMod,
             _modsProvider.IncompatibleMod,
         }.ToDictionary(x => new AddonVersion(x.Id, x.Version), x => (IAddon)x);
@@ -123,7 +123,7 @@ public sealed class WW2GICmdArgumentsTests
     [Fact]
     public void RazePlatoonTest()
     {
-        var mods = new List<AutoloadMod>() {
+        var mods = new List<AutoloadModEntity>() {
             _modsProvider.EnabledMod,
             _modsProvider.IncompatibleMod,
         }.ToDictionary(x => new AddonVersion(x.Id, x.Version), x => (IAddon)x);
@@ -167,7 +167,7 @@ public sealed class WW2GICmdArgumentsTests
     [Fact]
     public void EDuke32Test()
     {
-        var mods = new List<AutoloadMod>() {
+        var mods = new List<AutoloadModEntity>() {
             _modsProvider.EnabledMod,
             _modsProvider.IncompatibleMod,
         }.ToDictionary(x => new AddonVersion(x.Id, x.Version), x => (IAddon)x);
@@ -199,7 +199,7 @@ public sealed class WW2GICmdArgumentsTests
     [Fact]
     public void EDuke32PlatoonTest()
     {
-        var mods = new List<AutoloadMod>() {
+        var mods = new List<AutoloadModEntity>() {
             _modsProvider.EnabledMod,
             _modsProvider.IncompatibleMod,
         }.ToDictionary(x => new AddonVersion(x.Id, x.Version), x => (IAddon)x);

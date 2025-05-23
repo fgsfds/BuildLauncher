@@ -120,7 +120,7 @@ public sealed class App : Application
             {
                 Directory.Move(swPath, wangPath);
             }
-            
+
             if (Directory.Exists(exPath))
             {
                 Directory.Move(exPath, slavePath);

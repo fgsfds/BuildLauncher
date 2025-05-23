@@ -57,7 +57,7 @@ internal sealed class AutoloadModsProvider
         };
     }
 
-    public AutoloadMod EnabledModWithCons => new()
+    public AutoloadModEntity EnabledModWithCons => new()
     {
         Id = "enabledMod",
         Type = AddonTypeEnum.Mod,
@@ -81,7 +81,7 @@ internal sealed class AutoloadModsProvider
         Executables = null
     };
 
-    public AutoloadMod EnabledMod => new()
+    public AutoloadModEntity EnabledMod => new()
     {
         Id = "enabledMod",
         Type = AddonTypeEnum.Mod,
@@ -105,7 +105,7 @@ internal sealed class AutoloadModsProvider
         Executables = null
     };
 
-    public AutoloadMod ModThatRequiresOfficialAddon => new()
+    public AutoloadModEntity ModThatRequiresOfficialAddon => new()
     {
         Id = "modThatRequiresOfficialAddon",
         Type = AddonTypeEnum.Mod,
@@ -129,7 +129,7 @@ internal sealed class AutoloadModsProvider
         Executables = null
     };
 
-    public AutoloadMod ModThatIncompatibleWithAddon => new()
+    public AutoloadModEntity ModThatIncompatibleWithAddon => new()
     {
         Id = "modThatIncompatibleWithVaca",
         Type = AddonTypeEnum.Mod,
@@ -153,7 +153,7 @@ internal sealed class AutoloadModsProvider
         Executables = null
     };
 
-    public AutoloadMod IncompatibleMod => new()
+    public AutoloadModEntity IncompatibleMod => new()
     {
         Id = "incompatibleMod",
         Type = AddonTypeEnum.Mod,
@@ -177,7 +177,7 @@ internal sealed class AutoloadModsProvider
         Executables = null
     };
 
-    public AutoloadMod IncompatibleModWithCompatibleVersion => new()
+    public AutoloadModEntity IncompatibleModWithCompatibleVersion => new()
     {
         Id = "incompatibleModWithCompatibleVersion",
         Type = AddonTypeEnum.Mod,
@@ -201,7 +201,7 @@ internal sealed class AutoloadModsProvider
         Executables = null
     };
 
-    public AutoloadMod IncompatibleModWithIncompatibleVersion => new()
+    public AutoloadModEntity IncompatibleModWithIncompatibleVersion => new()
     {
         Id = "incompatibleModWithIncompatibleVersion",
         Type = AddonTypeEnum.Mod,
@@ -225,7 +225,7 @@ internal sealed class AutoloadModsProvider
         Executables = null
     };
 
-    public AutoloadMod DependentMod => new()
+    public AutoloadModEntity DependentMod => new()
     {
         Id = "dependentMod",
         Type = AddonTypeEnum.Mod,
@@ -250,7 +250,7 @@ internal sealed class AutoloadModsProvider
     };
 
 
-    public AutoloadMod MultipleDependenciesMod => new()
+    public AutoloadModEntity MultipleDependenciesMod => new()
     {
         Id = "multipleDependenciesMod",
         Type = AddonTypeEnum.Mod,
@@ -274,7 +274,7 @@ internal sealed class AutoloadModsProvider
         Executables = null
     };
 
-    public AutoloadMod DependentModWithIncompatibleVersion => new()
+    public AutoloadModEntity DependentModWithIncompatibleVersion => new()
     {
         Id = "dependentModWithIncompatibleVersion",
         Type = AddonTypeEnum.Mod,
@@ -298,7 +298,7 @@ internal sealed class AutoloadModsProvider
         Executables = null
     };
 
-    public AutoloadMod DependentModWithCompatibleVersion => new()
+    public AutoloadModEntity DependentModWithCompatibleVersion => new()
     {
         Id = "dependentModWithCompatibleVersion",
         Type = AddonTypeEnum.Mod,
@@ -322,7 +322,7 @@ internal sealed class AutoloadModsProvider
         Executables = null
     };
 
-    public AutoloadMod DisabledMod => new()
+    public AutoloadModEntity DisabledMod => new()
     {
         Id = "disabledMod",
         Type = AddonTypeEnum.Mod,
@@ -346,7 +346,7 @@ internal sealed class AutoloadModsProvider
         Executables = null
     };
 
-    public AutoloadMod ModThatRequiredFeature => new()
+    public AutoloadModEntity ModThatRequiredFeature => new()
     {
         Id = "eduke32mod",
         Type = AddonTypeEnum.Mod,
@@ -370,7 +370,7 @@ internal sealed class AutoloadModsProvider
         Executables = null
     };
 
-    public AutoloadMod ModForAnotherGame => new()
+    public AutoloadModEntity ModForAnotherGame => new()
     {
         Id = "somegame-mod",
         Type = AddonTypeEnum.Mod,

@@ -1,5 +1,5 @@
 ﻿using Common.Common.Interfaces;
-using Common.Entities;
+using Common.Common.Serializable.Downloadable;
 using Common.Enums;
 using Common.Helpers;
 using CommunityToolkit.Diagnostics;
@@ -9,7 +9,7 @@ using System.Text.RegularExpressions;
 
 namespace Ports.Providers;
 
-internal sealed partial class PortsReleasesRepoRetriever : IRetriever<Dictionary<PortEnum, GeneralReleaseEntity>?>
+internal sealed partial class PortsReleasesRepoRetriever : IRetriever<Dictionary<PortEnum, GeneralReleaseJsonModel>?>
 {
     private readonly ILogger _logger;
     private readonly HttpClient _httpClient;
@@ -23,12 +23,12 @@ internal sealed partial class PortsReleasesRepoRetriever : IRetriever<Dictionary
         _httpClient = httpClient;
     }
 
-    public async Task<Dictionary<PortEnum, GeneralReleaseEntity>?> RetrieveAsync()
+    public async Task<Dictionary<PortEnum, GeneralReleaseJsonModel>?> RetrieveAsync()
     {
         _logger.LogInformation("Looking for new ports releases");
 
         var ports = Enum.GetValues<PortEnum>();
-        Dictionary<PortEnum, GeneralReleaseEntity>? result = [];
+        Dictionary<PortEnum, GeneralReleaseJsonModel>? result = [];
 
         foreach (var port in ports)
         {
@@ -62,11 +62,11 @@ internal sealed partial class PortsReleasesRepoRetriever : IRetriever<Dictionary
     /// Get the latest release of the selected port
     /// </summary>
     /// <param name="portEnum">Port</param>
-    private async Task<Dictionary<OSEnum, GeneralReleaseEntity>?> GetLatestReleaseAsync(PortEnum portEnum)
+    private async Task<Dictionary<OSEnum, GeneralReleaseJsonModel>?> GetLatestReleaseAsync(PortEnum portEnum)
     {
         var repo = PortsRepositoriesProvider.GetPortRepo(portEnum);
 
-        Dictionary<OSEnum, GeneralReleaseEntity>? result = null;
+        Dictionary<OSEnum, GeneralReleaseJsonModel>? result = null;
 
         if (repo.RepoUrl is null)
         {
@@ -86,8 +86,8 @@ internal sealed partial class PortsReleasesRepoRetriever : IRetriever<Dictionary
             return edukeRelease is null ? null : new() { { OSEnum.Windows, edukeRelease } };
         }
 
-        var allReleases = JsonSerializer.Deserialize(response, GitHubReleaseEntityContext.Default.ListGitHubReleaseEntity)
-            ?? ThrowHelper.ThrowFormatException<List<GitHubReleaseEntity>>("Error while deserializing GitHub releases");
+        var allReleases = JsonSerializer.Deserialize(response, GitHubReleaseEntityContext.Default.ListGitHubReleaseJsonModel)
+            ?? ThrowHelper.ThrowFormatException<List<GitHubReleaseJsonModel>>("Error while deserializing GitHub releases");
 
         var releases = allReleases.Where(static x => !x.IsDraft && !x.IsPrerelease);
 
@@ -104,7 +104,7 @@ internal sealed partial class PortsReleasesRepoRetriever : IRetriever<Dictionary
 
                 if (winAss is not null)
                 {
-                    GeneralReleaseEntity portRelease = new()
+                    GeneralReleaseJsonModel portRelease = new()
                     {
                         SupportedOS = OSEnum.Windows,
                         Description = release.Description,
@@ -130,7 +130,7 @@ internal sealed partial class PortsReleasesRepoRetriever : IRetriever<Dictionary
 
                 if (linAss is not null)
                 {
-                    GeneralReleaseEntity portRelease = new()
+                    GeneralReleaseJsonModel portRelease = new()
                     {
                         SupportedOS = OSEnum.Linux,
                         Description = release.Description,
@@ -154,7 +154,7 @@ internal sealed partial class PortsReleasesRepoRetriever : IRetriever<Dictionary
     /// <summary>
     /// Get port version
     /// </summary>
-    private string GetVersion(PortEnum portEnum, GitHubReleaseEntity release, GitHubReleaseAsset asset)
+    private string GetVersion(PortEnum portEnum, GitHubReleaseJsonModel release, GitHubReleaseAsset asset)
     {
         if (portEnum is PortEnum.NotBlood)
         {
@@ -168,7 +168,7 @@ internal sealed partial class PortsReleasesRepoRetriever : IRetriever<Dictionary
     /// Hack to get EDuke32 release since dukeworld doesn't have API
     /// </summary>
     /// <param name="response">Json response</param>
-    private GeneralReleaseEntity? EDuke32Hack(string response)
+    private GeneralReleaseJsonModel? EDuke32Hack(string response)
     {
         var regex = EDuke32WindowsReleaseRegex();
         var fileName = regex.Matches(response).FirstOrDefault();
@@ -186,7 +186,7 @@ internal sealed partial class PortsReleasesRepoRetriever : IRetriever<Dictionary
             return null;
         }
 
-        GeneralReleaseEntity release = new()
+        GeneralReleaseJsonModel release = new()
         {
             SupportedOS = OSEnum.Windows,
             Description = string.Empty,

@@ -13,7 +13,7 @@ namespace Tests.CmdArguments;
 public sealed class BloodLooseMapCmdArgumentsTests
 {
     private readonly BloodGame _bloodGame;
-    private readonly LooseMap _looseMap;
+    private readonly LooseMapEntity _looseMap;
 
     private readonly AutoloadModsProvider _modsProvider;
 
@@ -42,7 +42,7 @@ public sealed class BloodLooseMapCmdArgumentsTests
             IncompatibleAddons = null,
             MainDef = null,
             AdditionalDefs = null,
-            StartMap = new MapFileDto() { File = "LOOSE.MAP" },
+            StartMap = new MapFileJsonModel() { File = "LOOSE.MAP" },
             PreviewImageHash = null,
             IsFolder = false,
             Executables = null,
@@ -53,7 +53,7 @@ public sealed class BloodLooseMapCmdArgumentsTests
     [Fact]
     public void RazeTest()
     {
-        var mods = new List<AutoloadMod>() {
+        var mods = new List<AutoloadModEntity>() {
             _modsProvider.EnabledMod,
             _modsProvider.DisabledMod,
             _modsProvider.ModThatRequiresOfficialAddon,
@@ -98,7 +98,7 @@ public sealed class BloodLooseMapCmdArgumentsTests
     [Fact]
     public void NBloodTest()
     {
-        var mods = new List<AutoloadMod>() {
+        var mods = new List<AutoloadModEntity>() {
             _modsProvider.EnabledMod,
             _modsProvider.DisabledMod,
             _modsProvider.ModThatRequiresOfficialAddon,
@@ -130,7 +130,7 @@ public sealed class BloodLooseMapCmdArgumentsTests
     [Fact]
     public void NotBloodTest()
     {
-        var mods = new List<AutoloadMod>() {
+        var mods = new List<AutoloadModEntity>() {
             _modsProvider.EnabledMod,
             _modsProvider.DisabledMod,
             _modsProvider.ModThatRequiresOfficialAddon,

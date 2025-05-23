@@ -68,7 +68,7 @@ public sealed partial class ModsViewModel : RightPanelViewModel, IPortsButtonCon
     /// <summary>
     /// List of installed autoload mods
     /// </summary>
-    public ImmutableList<AutoloadMod> ModsList => [.. _installedAddonsProvider.GetInstalledAddonsByType(AddonTypeEnum.Mod).Select(x => (AutoloadMod)x.Value).OrderBy(static x => x.Title)];
+    public ImmutableList<AutoloadModEntity> ModsList => [.. _installedAddonsProvider.GetInstalledAddonsByType(AddonTypeEnum.Mod).Select(x => (AutoloadModEntity)x.Value).OrderBy(static x => x.Title)];
 
     private IAddon? _selectedAddon;
     /// <summary>
@@ -140,7 +140,7 @@ public sealed partial class ModsViewModel : RightPanelViewModel, IPortsButtonCon
     [RelayCommand]
     private void ModCheckboxPressed(object? obj)
     {
-        obj.ThrowIfNotType<AutoloadMod>(out var mod);
+        obj.ThrowIfNotType<AutoloadModEntity>(out var mod);
 
         //disabling
         if (mod.IsEnabled)

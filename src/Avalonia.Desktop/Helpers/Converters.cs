@@ -1,10 +1,8 @@
 ﻿using Avalonia.Data;
 using Avalonia.Data.Converters;
 using Avalonia.Desktop.Misc;
-using Avalonia.Media.Imaging;
 using Common.Common.Helpers;
 using Common.Enums;
-using Common.Helpers;
 using System.Globalization;
 
 namespace Avalonia.Desktop.Helpers;

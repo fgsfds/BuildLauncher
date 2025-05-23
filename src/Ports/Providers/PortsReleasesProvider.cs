@@ -1,5 +1,5 @@
 ﻿using Common.Client.Interfaces;
-using Common.Entities;
+using Common.Common.Serializable.Downloadable;
 using Common.Enums;
 
 namespace Ports.Providers;
@@ -11,7 +11,7 @@ public sealed class PortsReleasesProvider
 {
     private readonly IApiInterface _apiInterface;
     private readonly SemaphoreSlim _semaphore = new(1);
-    private Dictionary<PortEnum, GeneralReleaseEntity>? _releases;
+    private Dictionary<PortEnum, GeneralReleaseJsonModel>? _releases;
 
     public PortsReleasesProvider(IApiInterface apiInterface)
     {
@@ -22,7 +22,7 @@ public sealed class PortsReleasesProvider
     /// Get the latest release of the selected port
     /// </summary>
     /// <param name="portEnum">Port enum</param>
-    public async Task<GeneralReleaseEntity?> GetLatestReleaseAsync(PortEnum portEnum)
+    public async Task<GeneralReleaseJsonModel?> GetLatestReleaseAsync(PortEnum portEnum)
     {
         await _semaphore.WaitAsync().ConfigureAwait(false);
 
@@ -43,5 +43,5 @@ public sealed class PortsReleasesProvider
         return hasRelease ? release : null;
     }
 
-    public Task<Dictionary<PortEnum, GeneralReleaseEntity>?> GetReleasesAsync() => _apiInterface.GetLatestPortsReleasesAsync();
+    public Task<Dictionary<PortEnum, GeneralReleaseJsonModel>?> GetReleasesAsync() => _apiInterface.GetLatestPortsReleasesAsync();
 }

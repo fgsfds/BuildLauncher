@@ -1,6 +1,6 @@
 using Common.Common.Interfaces;
 using Common.Common.Providers;
-using Common.Entities;
+using Common.Common.Serializable.Downloadable;
 using Common.Enums;
 using Common.Serializable.Addon;
 using Database.Server;
@@ -20,23 +20,23 @@ public sealed class Program
         _ = builder.Services.AddRazorPages();
         _ = builder.Services.AddServerSideBlazor();
 
-        _ = builder.Services.AddControllers().AddJsonOptions(jsonOptions =>
+        _ = builder.Services.AddControllers().AddJsonOptions((Action<Microsoft.AspNetCore.Mvc.JsonOptions>)(jsonOptions =>
         {
             jsonOptions.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
             jsonOptions.JsonSerializerOptions.PropertyNamingPolicy = null;
 
-            jsonOptions.JsonSerializerOptions.TypeInfoResolverChain.Add(AddonsJsonEntityListContext.Default);
-            jsonOptions.JsonSerializerOptions.TypeInfoResolverChain.Add(DownloadableAddonsDictionaryContext.Default);
-            jsonOptions.JsonSerializerOptions.TypeInfoResolverChain.Add(GeneralReleaseEntityContext.Default);
+            jsonOptions.JsonSerializerOptions.TypeInfoResolverChain.Add(AddonManifestContext.Default);
+            jsonOptions.JsonSerializerOptions.TypeInfoResolverChain.Add(DownloadableAddonJsonModelDictionaryContext.Default);
+            jsonOptions.JsonSerializerOptions.TypeInfoResolverChain.Add(GeneralReleaseJsonModelContext.Default);
             jsonOptions.JsonSerializerOptions.TypeInfoResolverChain.Add(AddonManifestContext.Default);
             jsonOptions.JsonSerializerOptions.TypeInfoResolverChain.Add(DependencyDtoContext.Default);
-            jsonOptions.JsonSerializerOptions.TypeInfoResolverChain.Add(DependantAddonDtoContext.Default);
-            jsonOptions.JsonSerializerOptions.TypeInfoResolverChain.Add(MapFileDtoContext.Default);
-            jsonOptions.JsonSerializerOptions.TypeInfoResolverChain.Add(MapSlotDtoContext.Default);
-            jsonOptions.JsonSerializerOptions.TypeInfoResolverChain.Add(SupportedGameDtoContext.Default);
+            jsonOptions.JsonSerializerOptions.TypeInfoResolverChain.Add(DependantAddonJsonModelContext.Default);
+            jsonOptions.JsonSerializerOptions.TypeInfoResolverChain.Add(MapFileJsonModelContext.Default);
+            jsonOptions.JsonSerializerOptions.TypeInfoResolverChain.Add(MapSlotJsonModelContext.Default);
+            jsonOptions.JsonSerializerOptions.TypeInfoResolverChain.Add(SupportedGameJsonModelContext.Default);
             jsonOptions.JsonSerializerOptions.TypeInfoResolverChain.Add(GitHubReleaseEntityContext.Default);
             jsonOptions.JsonSerializerOptions.TypeInfoResolverChain.Add(GitHubReleaseAssetContext.Default);
-        });
+        }));
 
         // Don't run tasks in dev mode
         if (!builder.Environment.IsDevelopment())
@@ -54,7 +54,7 @@ public sealed class Program
 
         _ = builder.Services.AddSingleton<RepoAppReleasesRetriever>();
         _ = builder.Services.AddSingleton<DatabaseAddonsRetriever>();
-        _ = builder.Services.AddSingleton<IRetriever<Dictionary<PortEnum, GeneralReleaseEntity>?>>();
+        _ = builder.Services.AddSingleton<IRetriever<Dictionary<PortEnum, GeneralReleaseJsonModel>?>>();
 
         _ = builder.Services.AddSingleton(CreateHttpClient);
         _ = builder.Services.AddSingleton<S3Client>();

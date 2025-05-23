@@ -1,7 +1,7 @@
 ﻿using Api.Common.Requests;
 using Api.Common.Responses;
 using Common.Client.Helpers;
-using Common.Entities;
+using Common.Common.Serializable.Downloadable;
 using Common.Enums;
 using Common.Helpers;
 using System.Net.Http.Json;
@@ -10,7 +10,7 @@ namespace Common.Client.Api;
 
 public sealed partial class ApiInterface
 {
-    public async Task<GeneralReleaseEntity?> GetLatestAppReleaseAsync()
+    public async Task<GeneralReleaseJsonModel?> GetLatestAppReleaseAsync()
     {
         try
         {
@@ -45,7 +45,7 @@ public sealed partial class ApiInterface
         }
     }
 
-    public async Task<Dictionary<PortEnum, GeneralReleaseEntity>?> GetLatestPortsReleasesAsync()
+    public async Task<Dictionary<PortEnum, GeneralReleaseJsonModel>?> GetLatestPortsReleasesAsync()
     {
         try
         {
@@ -80,5 +80,5 @@ public sealed partial class ApiInterface
         }
     }
 
-    public Task<Dictionary<ToolEnum, GeneralReleaseEntity>?> GetLatestToolsReleasesAsync() => null!;
+    public Task<Dictionary<ToolEnum, GeneralReleaseJsonModel>?> GetLatestToolsReleasesAsync() => null!;
 }

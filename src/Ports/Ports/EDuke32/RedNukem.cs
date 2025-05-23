@@ -209,14 +209,14 @@ public sealed class RedNukem : EDuke32
             return;
         }
 
-        if (addon is LooseMap)
+        if (addon is LooseMapEntity)
         {
             GetLooseMapArgs(sb, game, addon);
             return;
         }
 
 
-        addon.ThrowIfNotType<DukeCampaign>(out var rCamp);
+        addon.ThrowIfNotType<DukeCampaignEntity>(out var rCamp);
 
         if (rCamp.MainCon is not null)
         {

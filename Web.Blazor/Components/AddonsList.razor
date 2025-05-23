@@ -1,4 +1,4 @@
-﻿@using Common.Entities
+﻿@using Common.Common.Serializable.Downloadable
 @using Common.Enums
 @using Markdig
 @using Web.Blazor.Providers
@@ -70,7 +70,7 @@ else
     [Parameter]
     public GameEnum Game { get; set; }
 
-    private List<DownloadableAddonEntity>? _addons;
+    private List<DownloadableAddonJsonModel>? _addons;
 
     protected override void OnInitialized()
     {

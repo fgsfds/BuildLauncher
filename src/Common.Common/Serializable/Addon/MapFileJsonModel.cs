@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace Common.Serializable.Addon;
 
-public sealed class MapFileDto : IStartMap
+public sealed class MapFileJsonModel : IStartMap
 {
     [JsonPropertyName("file")]
     public required string File { get; set; }
@@ -11,5 +11,5 @@ public sealed class MapFileDto : IStartMap
 
 
 [JsonSourceGenerationOptions(RespectNullableAnnotations = true)]
-[JsonSerializable(typeof(MapFileDto))]
-public sealed partial class MapFileDtoContext : JsonSerializerContext;
+[JsonSerializable(typeof(MapFileJsonModel))]
+public sealed partial class MapFileJsonModelContext : JsonSerializerContext;

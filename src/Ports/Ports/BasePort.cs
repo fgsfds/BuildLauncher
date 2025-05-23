@@ -257,7 +257,7 @@ public abstract class BasePort
     protected void GetMapArgs(StringBuilder sb, IAddon camp)
     {
         //TODO e#m#
-        if (camp.StartMap is MapFileDto mapFile)
+        if (camp.StartMap is MapFileJsonModel mapFile)
         {
             _ = sb.Append($@" {AddFileParam}""{camp.PathToFile}""");
             _ = sb.Append($@" -map ""{mapFile.File}""");
@@ -274,7 +274,7 @@ public abstract class BasePort
     /// </summary>
     protected void GetLooseMapArgs(StringBuilder sb, IGame game, IAddon camp)
     {
-        camp.StartMap.ThrowIfNotType<MapFileDto>(out var mapFile);
+        camp.StartMap.ThrowIfNotType<MapFileJsonModel>(out var mapFile);
 
         _ = sb.Append($@" {AddDirectoryParam}""{game.MapsFolderPath}""");
         _ = sb.Append($@" -map ""{mapFile.File}""");
@@ -282,7 +282,7 @@ public abstract class BasePort
 
     protected void GetBloodArgs(StringBuilder sb, BloodGame game, IAddon addon)
     {
-        if (addon is LooseMap lMap)
+        if (addon is LooseMapEntity lMap)
         {
             if (lMap.BloodIni is null)
             {
@@ -298,7 +298,7 @@ public abstract class BasePort
         }
 
 
-        addon.ThrowIfNotType<BloodCampaign>(out var bCamp);
+        addon.ThrowIfNotType<BloodCampaignEntity>(out var bCamp);
 
         if (bCamp.INI is not null)
         {
@@ -356,14 +356,14 @@ public abstract class BasePort
 
     protected void GetSlaveArgs(StringBuilder sb, SlaveGame game, IAddon addon)
     {
-        if (addon is LooseMap)
+        if (addon is LooseMapEntity)
         {
             GetLooseMapArgs(sb, game, addon);
             return;
         }
 
 
-        addon.ThrowIfNotType<GenericCampaign>(out var sCamp);
+        addon.ThrowIfNotType<GenericCampaignEntity>(out var sCamp);
 
         if (sCamp.FileName is null)
         {
@@ -401,14 +401,14 @@ public abstract class BasePort
         }
 
 
-        if (addon is LooseMap)
+        if (addon is LooseMapEntity)
         {
             GetLooseMapArgs(sb, game, addon);
             return;
         }
 
 
-        addon.ThrowIfNotType<DukeCampaign>(out var dCamp);
+        addon.ThrowIfNotType<DukeCampaignEntity>(out var dCamp);
 
         if (addon.Id.Equals(nameof(WW2GIAddonEnum.Platoon).ToLower()))
         {
@@ -474,7 +474,7 @@ public abstract class BasePort
 
         foreach (var mod in mods)
         {
-            if (mod.Value is not AutoloadMod aMod)
+            if (mod.Value is not AutoloadModEntity aMod)
             {
                 continue;
             }

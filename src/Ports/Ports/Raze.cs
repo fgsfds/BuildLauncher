@@ -294,14 +294,14 @@ public sealed class Raze : BasePort
 
     private void GetDukeArgs(StringBuilder sb, DukeGame game, IAddon addon)
     {
-        if (addon is LooseMap)
+        if (addon is LooseMapEntity)
         {
             GetLooseMapArgs(sb, game, addon);
             return;
         }
 
 
-        Guard2.ThrowIfNotType<DukeCampaign>(addon, out var dCamp);
+        Guard2.ThrowIfNotType<DukeCampaignEntity>(addon, out var dCamp);
 
         if (dCamp.SupportedGame.GameVersion is not null &&
             dCamp.SupportedGame.GameVersion.Equals(nameof(DukeVersionEnum.Duke3D_WT), StringComparison.InvariantCultureIgnoreCase))
@@ -374,14 +374,14 @@ public sealed class Raze : BasePort
 
     private void GetWangArgs(StringBuilder sb, WangGame game, IAddon addon)
     {
-        if (addon is LooseMap)
+        if (addon is LooseMapEntity)
         {
             GetLooseMapArgs(sb, game, addon);
             return;
         }
 
 
-        Guard2.ThrowIfNotType<GenericCampaign>(addon, out var wCamp);
+        Guard2.ThrowIfNotType<GenericCampaignEntity>(addon, out var wCamp);
 
         //TODO downloaded addons support
         if (wCamp.DependentAddons is not null &&
@@ -419,14 +419,14 @@ public sealed class Raze : BasePort
 
     private void GetRedneckArgs(StringBuilder sb, RedneckGame game, IAddon addon)
     {
-        if (addon is LooseMap)
+        if (addon is LooseMapEntity)
         {
             GetLooseMapArgs(sb, game, addon);
             return;
         }
 
 
-        Guard2.ThrowIfNotType<DukeCampaign>(addon, out var rCamp);
+        Guard2.ThrowIfNotType<DukeCampaignEntity>(addon, out var rCamp);
 
         if (rCamp.DependentAddons is not null &&
             rCamp.DependentAddons.ContainsKey(nameof(RedneckAddonEnum.Route66)))
@@ -531,7 +531,7 @@ public sealed class Raze : BasePort
                 _ = sb.Append("Path=").AppendLine(path);
 
                 //blood unpacked addons
-                if (campaign is BloodCampaign bCamp &&
+                if (campaign is BloodCampaignEntity bCamp &&
                     bCamp.IsFolder)
                 {
                     path = Path.GetDirectoryName(bCamp.PathToFile)!.Replace('\\', '/');

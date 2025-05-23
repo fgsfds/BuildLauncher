@@ -9,7 +9,7 @@ namespace Addons.Addons;
 /// <summary>
 /// Base class for campaigns and maps
 /// </summary>
-public abstract class BaseAddon : IAddon
+public abstract class BaseAddonEntity : IAddon
 {
     /// <inheritdoc/>
     public required AddonTypeEnum Type { get; init; }

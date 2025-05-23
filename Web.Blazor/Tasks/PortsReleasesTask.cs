@@ -1,16 +1,16 @@
 ﻿using Common.Common.Interfaces;
-using Common.Entities;
+using Common.Common.Serializable.Downloadable;
 using Common.Enums;
 
 namespace Web.Blazor.Tasks;
 
 public sealed class PortsReleasesTask : IHostedService, IDisposable
 {
-    private readonly IRetriever<Dictionary<PortEnum, GeneralReleaseEntity>?> _portsReleasesProvider;
+    private readonly IRetriever<Dictionary<PortEnum, GeneralReleaseJsonModel>?> _portsReleasesProvider;
 
     private Timer? _timer;
 
-    public PortsReleasesTask(IRetriever<Dictionary<PortEnum, GeneralReleaseEntity>?> portsReleasesProvider)
+    public PortsReleasesTask(IRetriever<Dictionary<PortEnum, GeneralReleaseJsonModel>?> portsReleasesProvider)
     {
         _portsReleasesProvider = portsReleasesProvider;
     }

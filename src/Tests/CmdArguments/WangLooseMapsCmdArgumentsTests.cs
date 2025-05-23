@@ -13,7 +13,7 @@ namespace Tests.CmdArguments;
 public sealed class WangLooseMapsCmdArgumentsTests
 {
     private readonly WangGame _wangGame;
-    private readonly LooseMap _looseMap;
+    private readonly LooseMapEntity _looseMap;
 
     private readonly AutoloadModsProvider _modsProvider;
 
@@ -42,7 +42,7 @@ public sealed class WangLooseMapsCmdArgumentsTests
             IncompatibleAddons = null,
             MainDef = null,
             AdditionalDefs = null,
-            StartMap = new MapFileDto() { File = "LOOSE.MAP" },
+            StartMap = new MapFileJsonModel() { File = "LOOSE.MAP" },
             PreviewImageHash = null,
             IsFolder = false,
             Executables = null,
@@ -53,7 +53,7 @@ public sealed class WangLooseMapsCmdArgumentsTests
     [Fact]
     public void RazeTest()
     {
-        var mods = new List<AutoloadMod>() {
+        var mods = new List<AutoloadModEntity>() {
             _modsProvider.EnabledMod,
             _modsProvider.ModThatRequiresOfficialAddon,
             _modsProvider.IncompatibleMod,
@@ -109,7 +109,7 @@ public sealed class WangLooseMapsCmdArgumentsTests
     [Fact]
     public void VoidSWTest()
     {
-        var mods = new List<AutoloadMod>() {
+        var mods = new List<AutoloadModEntity>() {
             _modsProvider.EnabledMod,
             _modsProvider.ModThatRequiresOfficialAddon,
             _modsProvider.IncompatibleMod,
