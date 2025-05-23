@@ -100,11 +100,6 @@ public interface IAddon
     /// </summary>
     bool IsFolder { get; init; }
 
-    /// <summary>
-    /// Addon title with text wraping
-    /// </summary>
-    string TitleWithNewLines { get; }
-
 
     /// <summary>
     /// Create markdown description of the addon

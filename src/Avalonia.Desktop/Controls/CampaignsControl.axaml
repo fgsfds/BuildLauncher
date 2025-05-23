@@ -10,6 +10,10 @@
              x:DataType="vm:CampaignsViewModel"
              x:Class="Avalonia.Desktop.Controls.CampaignsControl">
 
+    <UserControl.Resources>
+        <helpers:StringToWrappedConverter x:Key="StringToWrappedConverter"/>
+    </UserControl.Resources>
+
     <Grid RowDefinitions="auto,*,auto" ColumnDefinitions="2*,*">
 
         <Grid ColumnDefinitions="auto,*,auto"
@@ -141,7 +145,7 @@
                                                FontSize="500"
                                                FontWeight="Bold"
                                                TextAlignment="Center"
-                                               Text="{Binding TitleWithNewLines}"/>
+                                               Text="{Binding Title, Converter={StaticResource StringToWrappedConverter}}"/>
                                 </Viewbox >
                             </Grid>
 

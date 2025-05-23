@@ -3,6 +3,7 @@ using Avalonia.Data.Converters;
 using Avalonia.Desktop.Misc;
 using Common.Common.Helpers;
 using Common.Enums;
+using CommunityToolkit.Diagnostics;
 using System.Globalization;
 
 namespace Avalonia.Desktop.Helpers;
@@ -78,5 +79,26 @@ public sealed class GameStringToEnumConverter : IValueConverter
         }
 
         return gameEnum;
+    }
+}
+
+/// <summary>
+/// Converts a string by replacing spaces with newline characters.
+/// </summary>
+public sealed class StringToWrappedConverter : IValueConverter
+{
+    public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
+    {
+        if (value is not string valueStr)
+        {
+            return false;
+        }
+
+        return valueStr.Replace(" ", Environment.NewLine);
+    }
+
+    public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
+    {
+        return ThrowHelper.ThrowNotSupportedException<object>();
     }
 }

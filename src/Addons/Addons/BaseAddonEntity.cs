@@ -68,9 +68,6 @@ public abstract class BaseAddonEntity : IAddon
     /// <inheritdoc/>
     public string? FileName => PathToFile is null ? null : Path.GetFileName(PathToFile);
 
-    /// <inheritdoc/>
-    public string TitleWithNewLines => Title.Replace(" ", Environment.NewLine);
-
     public override string ToString() => Title;
 
 
