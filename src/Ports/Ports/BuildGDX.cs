@@ -1,10 +1,10 @@
-﻿using Common;
+﻿using System.Text;
+using Common;
 using Common.Enums;
 using Common.Enums.Versions;
 using Common.Interfaces;
 using CommunityToolkit.Diagnostics;
 using Games.Games;
-using System.Text;
 
 namespace Ports.Ports;
 
@@ -130,7 +130,7 @@ public sealed class BuildGDX : BasePort
     public override void AfterEnd(IGame game, IAddon campaign)
     {
         //copying saved games into separate folder
-        var saveFolder = GetPathToAddonSavedGamesFolder(game.ShortName, campaign.Id);
+        var saveFolder = GetPathToAddonSavedGamesFolder(game.ShortName, campaign.AddonId.Id);
 
         string path = game.GameInstallFolder ?? ThrowHelper.ThrowArgumentNullException<string>();
 
@@ -195,7 +195,7 @@ public sealed class BuildGDX : BasePort
     }
 
     /// <inheritdoc/>
-    protected override void GetAutoloadModsArgs(StringBuilder sb, IGame _, IAddon addon, IEnumerable<KeyValuePair<AddonVersion, IAddon>> mods) { }
+    protected override void GetAutoloadModsArgs(StringBuilder sb, IGame _, IAddon addon, IEnumerable<KeyValuePair<AddonId, IAddon>> mods) { }
 
     /// <inheritdoc/>
     protected override void GetSkipIntroParameter(StringBuilder sb) { }
@@ -206,7 +206,7 @@ public sealed class BuildGDX : BasePort
 
     private void GetDukeArgs(StringBuilder sb, DukeGame game, IAddon camp)
     {
-        if (camp.Id.Equals(nameof(DukeVersionEnum.Duke3D_WT), StringComparison.OrdinalIgnoreCase))
+        if (camp.AddonId.Id.Equals(nameof(DukeVersionEnum.Duke3D_WT), StringComparison.OrdinalIgnoreCase))
         {
             _ = sb.Append($@" -path ""{game.DukeWTInstallPath}""");
         }
@@ -234,7 +234,7 @@ public sealed class BuildGDX : BasePort
 
     private void GetRedneckArgs(StringBuilder sb, RedneckGame game, IAddon camp)
     {
-        if (camp.Id.Equals(nameof(GameEnum.RidesAgain), StringComparison.OrdinalIgnoreCase))
+        if (camp.AddonId.Id.Equals(nameof(GameEnum.RidesAgain), StringComparison.OrdinalIgnoreCase))
         {
             _ = sb.Append($@" -path ""{game.AgainInstallPath}""");
             _ = sb.Append(" -game RR_RIDES_AGAIN");
@@ -262,7 +262,7 @@ public sealed class BuildGDX : BasePort
 
     private static void GetWitchavenArgs(StringBuilder sb, WitchavenGame game, IAddon camp)
     {
-        if (camp.Id.Equals(nameof(GameEnum.Witchaven2), StringComparison.OrdinalIgnoreCase))
+        if (camp.AddonId.Id.Equals(nameof(GameEnum.Witchaven2), StringComparison.OrdinalIgnoreCase))
         {
             _ = sb.Append($@" -path ""{game.Witchaven2InstallPath}""");
             _ = sb.Append(" -game WITCHAVEN_2");
@@ -283,7 +283,7 @@ public sealed class BuildGDX : BasePort
 
     private void MoveSaveFiles(IGame game, IAddon campaign)
     {
-        var saveFolder = GetPathToAddonSavedGamesFolder(game.ShortName, campaign.Id);
+        var saveFolder = GetPathToAddonSavedGamesFolder(game.ShortName, campaign.AddonId.Id);
 
         if (!Directory.Exists(saveFolder))
         {

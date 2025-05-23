@@ -1,3 +1,6 @@
+using System.Collections.Immutable;
+using System.Text;
+using System.Text.Json;
 using Avalonia.Desktop.Helpers;
 using Avalonia.Media;
 using Avalonia.Platform.Storage;
@@ -17,9 +20,6 @@ using Microsoft.Extensions.Logging;
 using SharpCompress.Archives;
 using SharpCompress.Archives.Zip;
 using SharpCompress.Common;
-using System.Collections.Immutable;
-using System.Text;
-using System.Text.Json;
 
 namespace Avalonia.Desktop.ViewModels;
 

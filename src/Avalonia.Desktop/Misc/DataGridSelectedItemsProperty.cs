@@ -1,6 +1,6 @@
-﻿using Avalonia.Controls;
+﻿using System.Collections;
+using Avalonia.Controls;
 using Avalonia.Data;
-using System.Collections;
 
 namespace Avalonia.Desktop.Misc;
 

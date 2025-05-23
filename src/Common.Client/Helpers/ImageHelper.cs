@@ -1,6 +1,6 @@
-﻿using CommunityToolkit.Diagnostics;
+﻿using System.Reflection;
+using CommunityToolkit.Diagnostics;
 using SharpCompress.Archives;
-using System.Reflection;
 
 namespace Common.Client.Helpers;
 

@@ -1,5 +1,5 @@
-﻿using Common.Enums;
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
+using Common.Enums;
 
 namespace Common.Common.Serializable.Downloadable;
 

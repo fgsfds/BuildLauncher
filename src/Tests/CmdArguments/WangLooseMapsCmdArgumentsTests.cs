@@ -1,5 +1,4 @@
 using Addons.Addons;
-using Common;
 using Common.Enums;
 using Common.Interfaces;
 using Common.Serializable.Addon;
@@ -28,13 +27,12 @@ public sealed class WangLooseMapsCmdArgumentsTests
 
         _looseMap = new()
         {
-            Id = "loose-map",
+            AddonId = new("loose-map", null),
             Type = AddonTypeEnum.Map,
             Title = "Loose map",
             GridImageHash = null,
             Author = null,
             Description = null,
-            Version = null,
             SupportedGame = new(GameEnum.Wang),
             RequiredFeatures = null,
             PathToFile = Path.Combine("Maps", "LOOSE.MAP"),
@@ -64,7 +62,7 @@ public sealed class WangLooseMapsCmdArgumentsTests
             _modsProvider.DependentModWithCompatibleVersion,
             _modsProvider.DependentModWithIncompatibleVersion,
             _modsProvider.ModForAnotherGame
-        }.ToDictionary(x => new AddonVersion(x.Id, x.Version), x => (IAddon)x);
+        }.ToDictionary(x => x.AddonId, x => (IAddon)x);
 
         Raze raze = new();
 
@@ -120,7 +118,7 @@ public sealed class WangLooseMapsCmdArgumentsTests
             _modsProvider.DependentModWithCompatibleVersion,
             _modsProvider.DependentModWithIncompatibleVersion,
             _modsProvider.ModForAnotherGame
-        }.ToDictionary(x => new AddonVersion(x.Id, x.Version), x => (IAddon)x);
+        }.ToDictionary(x => x.AddonId, x => (IAddon)x);
 
         VoidSW voidSw = new();
 

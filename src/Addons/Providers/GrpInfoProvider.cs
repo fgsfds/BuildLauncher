@@ -1,4 +1,5 @@
 ﻿using Addons.Addons;
+using Common;
 using Common.Enums;
 using Common.Enums.Versions;
 using Common.Interfaces;
@@ -39,16 +40,17 @@ public static class GrpInfoProvider
                     continue;
                 }
 
+                AddonId version = new(addon.Name.ToLower().Replace(" ", "_"), null);
+
                 DukeCampaignEntity camp = new()
                 {
-                    Id = addon.Name.ToLower().Replace(" ", "_"),
+                    AddonId = version,
                     Type = AddonTypeEnum.TC,
                     SupportedGame = new(GameEnum.Duke3D, addon.DukeVersion),
                     Title = addon.Name,
                     GridImageHash = null,
                     PreviewImageHash = null,
                     Description = null,
-                    Version = null,
                     Author = null,
                     PathToFile = grp,
                     DependentAddons = null,
@@ -61,7 +63,8 @@ public static class GrpInfoProvider
                     RTS = null,
                     RequiredFeatures = [FeatureEnum.EDuke32_CON],
                     IsFolder = false,
-                    Executables = null
+                    Executables = null,
+                    IsFavorite = false
                 };
 
                 newAddons.Add(camp);

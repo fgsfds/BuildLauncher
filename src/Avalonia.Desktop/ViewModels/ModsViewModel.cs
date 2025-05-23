@@ -1,3 +1,5 @@
+using System.Collections.Immutable;
+using System.Diagnostics;
 using Addons.Addons;
 using Addons.Providers;
 using Avalonia.Desktop.Misc;
@@ -10,8 +12,6 @@ using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Games.Providers;
-using System.Collections.Immutable;
-using System.Diagnostics;
 
 namespace Avalonia.Desktop.ViewModels;
 
@@ -145,12 +145,12 @@ public sealed partial class ModsViewModel : RightPanelViewModel, IPortsButtonCon
         //disabling
         if (mod.IsEnabled)
         {
-            _installedAddonsProvider.DisableAddon(new(mod.Id, mod.Version));
+            _installedAddonsProvider.DisableAddon(mod.AddonId);
         }
         //enabling
         else
         {
-            _installedAddonsProvider.EnableAddon(new(mod.Id, mod.Version));
+            _installedAddonsProvider.EnableAddon(mod.AddonId);
         }
 
         OnPropertyChanged(nameof(ModsList));

@@ -1,5 +1,4 @@
 using Addons.Addons;
-using Common;
 using Common.Enums;
 using Common.Enums.Addons;
 using Common.Enums.Versions;
@@ -36,13 +35,12 @@ public sealed class DukeCmdArgumentsTests
 
         _dukeCamp = new()
         {
-            Id = nameof(GameEnum.Duke3D).ToLower(),
+            AddonId = new(nameof(GameEnum.Duke3D).ToLower(), null),
             Type = AddonTypeEnum.Official,
             Title = "Duke Nukem 3D",
             GridImageHash = null,
             Author = null,
             Description = null,
-            Version = null,
             SupportedGame = new(GameEnum.Duke3D, DukeVersionEnum.Duke3D_Atomic),
             RequiredFeatures = null,
             PathToFile = null,
@@ -61,13 +59,12 @@ public sealed class DukeCmdArgumentsTests
 
         _dukeWtCamp = new()
         {
-            Id = nameof(DukeVersionEnum.Duke3D_WT).ToLower(),
+            AddonId = new(nameof(DukeVersionEnum.Duke3D_WT).ToLower(), null),
             Type = AddonTypeEnum.Official,
             Title = "Duke Nukem 3D World Tour",
             GridImageHash = null,
             Author = null,
             Description = null,
-            Version = null,
             SupportedGame = new(GameEnum.Duke3D, DukeVersionEnum.Duke3D_WT),
             RequiredFeatures = null,
             PathToFile = null,
@@ -86,13 +83,12 @@ public sealed class DukeCmdArgumentsTests
 
         _duke64Camp = new()
         {
-            Id = nameof(GameEnum.Duke64).ToLower(),
+            AddonId = new(nameof(GameEnum.Duke64).ToLower(), null),
             Type = AddonTypeEnum.Official,
             Title = "Duke Nukem 64",
             GridImageHash = null,
             Author = null,
             Description = null,
-            Version = null,
             SupportedGame = new(GameEnum.Duke64),
             RequiredFeatures = null,
             PathToFile = null,
@@ -111,13 +107,12 @@ public sealed class DukeCmdArgumentsTests
 
         _dukeVaca = new()
         {
-            Id = "dukevaca",
+            AddonId = new("dukevaca", null),
             Type = AddonTypeEnum.Official,
             Title = "Duke Nukem 3D Caribbean",
             GridImageHash = null,
             Author = null,
             Description = null,
-            Version = null,
             SupportedGame = new(GameEnum.Duke3D, DukeVersionEnum.Duke3D_Atomic),
             RequiredFeatures = null,
             PathToFile = null,
@@ -136,13 +131,12 @@ public sealed class DukeCmdArgumentsTests
 
         _dukeTcForVaca = new()
         {
-            Id = "duke-tc",
+            AddonId = new("duke-tc", "1.1"),
             Type = AddonTypeEnum.TC,
             Title = "Duke Nukem 3D TC",
             GridImageHash = null,
             Author = null,
             Description = null,
-            Version = "1.1",
             SupportedGame = new(GameEnum.Duke3D, DukeVersionEnum.Duke3D_Atomic),
             RequiredFeatures = null,
             PathToFile = Path.Combine(Directory.GetCurrentDirectory(), "Data", "Duke3D", "Campaigns", "duke_tc.zip"),
@@ -158,6 +152,7 @@ public sealed class DukeCmdArgumentsTests
             IsFolder = false,
             Executables = null
         };
+
     }
 
     [Fact]
@@ -177,7 +172,7 @@ public sealed class DukeCmdArgumentsTests
             _modsProvider.ModForAnotherGame,
             _modsProvider.ModThatRequiredFeature,
             _modsProvider.MultipleDependenciesMod
-        }.ToDictionary(x => new AddonVersion(x.Id, x.Version), x => (IAddon)x);
+        }.ToDictionary(x => x.AddonId, x => (IAddon)x);
 
         Raze raze = new();
 
@@ -264,7 +259,7 @@ public sealed class DukeCmdArgumentsTests
             _modsProvider.EnabledModWithCons,
             _modsProvider.ModThatRequiresOfficialAddon,
             _modsProvider.ModThatIncompatibleWithAddon
-        }.ToDictionary(x => new AddonVersion(x.Id, x.Version), x => (IAddon)x);
+        }.ToDictionary(x => x.AddonId, x => (IAddon)x);
 
         Raze raze = new();
 
@@ -352,7 +347,7 @@ public sealed class DukeCmdArgumentsTests
             _modsProvider.ModForAnotherGame,
             _modsProvider.ModThatRequiredFeature,
             _modsProvider.MultipleDependenciesMod
-        }.ToDictionary(x => new AddonVersion(x.Id, x.Version), x => (IAddon)x);
+        }.ToDictionary(x => x.AddonId, x => (IAddon)x);
 
         EDuke32 eduke32 = new();
 
@@ -422,7 +417,7 @@ public sealed class DukeCmdArgumentsTests
             _modsProvider.EnabledModWithCons,
             _modsProvider.ModThatRequiresOfficialAddon,
             _modsProvider.ModThatIncompatibleWithAddon
-        }.ToDictionary(x => new AddonVersion(x.Id, x.Version), x => (IAddon)x);
+        }.ToDictionary(x => x.AddonId, x => (IAddon)x);
 
         EDuke32 eduke32 = new();
 
@@ -528,7 +523,7 @@ public sealed class DukeCmdArgumentsTests
             _modsProvider.ModForAnotherGame,
             _modsProvider.ModThatRequiredFeature,
             _modsProvider.MultipleDependenciesMod
-        }.ToDictionary(x => new AddonVersion(x.Id, x.Version), x => (IAddon)x);
+        }.ToDictionary(x => x.AddonId, x => (IAddon)x);
 
         RedNukem redNukem = new();
 
@@ -568,7 +563,7 @@ public sealed class DukeCmdArgumentsTests
             _modsProvider.EnabledModWithCons,
             _modsProvider.ModThatRequiresOfficialAddon,
             _modsProvider.ModThatIncompatibleWithAddon
-        }.ToDictionary(x => new AddonVersion(x.Id, x.Version), x => (IAddon)x);
+        }.ToDictionary(x => x.AddonId, x => (IAddon)x);
 
         RedNukem eduke32 = new();
 

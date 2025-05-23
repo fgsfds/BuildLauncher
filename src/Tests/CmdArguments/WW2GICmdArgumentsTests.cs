@@ -1,5 +1,4 @@
 using Addons.Addons;
-using Common;
 using Common.Enums;
 using Common.Enums.Addons;
 using Common.Interfaces;
@@ -29,13 +28,12 @@ public sealed class WW2GICmdArgumentsTests
 
         _ww2Camp = new()
         {
-            Id = nameof(GameEnum.WW2GI).ToLower(),
+            AddonId = new(nameof(GameEnum.WW2GI).ToLower(), null),
             Type = AddonTypeEnum.Official,
             Title = "World War II GI",
             GridImageHash = null,
             Author = null,
             Description = null,
-            Version = null,
             SupportedGame = new(GameEnum.WW2GI),
             RequiredFeatures = null,
             PathToFile = null,
@@ -54,13 +52,12 @@ public sealed class WW2GICmdArgumentsTests
 
         _platoonCamp = new()
         {
-            Id = nameof(WW2GIAddonEnum.Platoon).ToLower(),
+            AddonId = new(nameof(WW2GIAddonEnum.Platoon).ToLower(), null),
             Type = AddonTypeEnum.Official,
             Title = "Platoon Leader",
             GridImageHash = null,
             Author = null,
             Description = null,
-            Version = null,
             SupportedGame = new(GameEnum.WW2GI),
             RequiredFeatures = null,
             PathToFile = null,
@@ -84,7 +81,7 @@ public sealed class WW2GICmdArgumentsTests
         var mods = new List<AutoloadModEntity>() {
             _modsProvider.EnabledMod,
             _modsProvider.IncompatibleMod,
-        }.ToDictionary(x => new AddonVersion(x.Id, x.Version), x => (IAddon)x);
+        }.ToDictionary(x => x.AddonId, x => (IAddon)x);
 
         Raze raze = new();
 
@@ -126,7 +123,7 @@ public sealed class WW2GICmdArgumentsTests
         var mods = new List<AutoloadModEntity>() {
             _modsProvider.EnabledMod,
             _modsProvider.IncompatibleMod,
-        }.ToDictionary(x => new AddonVersion(x.Id, x.Version), x => (IAddon)x);
+        }.ToDictionary(x => x.AddonId, x => (IAddon)x);
 
         Raze raze = new();
 
@@ -170,7 +167,7 @@ public sealed class WW2GICmdArgumentsTests
         var mods = new List<AutoloadModEntity>() {
             _modsProvider.EnabledMod,
             _modsProvider.IncompatibleMod,
-        }.ToDictionary(x => new AddonVersion(x.Id, x.Version), x => (IAddon)x);
+        }.ToDictionary(x => x.AddonId, x => (IAddon)x);
 
         EDuke32 eDuke = new();
 
@@ -202,7 +199,7 @@ public sealed class WW2GICmdArgumentsTests
         var mods = new List<AutoloadModEntity>() {
             _modsProvider.EnabledMod,
             _modsProvider.IncompatibleMod,
-        }.ToDictionary(x => new AddonVersion(x.Id, x.Version), x => (IAddon)x);
+        }.ToDictionary(x => x.AddonId, x => (IAddon)x);
 
         EDuke32 eDuke = new();
 

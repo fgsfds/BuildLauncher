@@ -1,8 +1,8 @@
-﻿using Common;
+﻿using System.Collections.Immutable;
+using System.Text;
+using Common;
 using Common.Enums;
 using Common.Interfaces;
-using System.Collections.Immutable;
-using System.Text;
 
 namespace Addons.Addons;
 
@@ -11,6 +11,9 @@ namespace Addons.Addons;
 /// </summary>
 public abstract class BaseAddonEntity : IAddon
 {
+    /// <inheritdoc/>
+    public required AddonId AddonId { get; init; }
+
     /// <inheritdoc/>
     public required AddonTypeEnum Type { get; init; }
 
@@ -21,13 +24,7 @@ public abstract class BaseAddonEntity : IAddon
     public required ImmutableArray<FeatureEnum>? RequiredFeatures { get; init; }
 
     /// <inheritdoc/>
-    public required string Id { get; init; }
-
-    /// <inheritdoc/>
     public required string Title { get; init; }
-
-    /// <inheritdoc/>
-    public required string? Version { get; init; }
 
     /// <inheritdoc/>
     public required string? Author { get; init; }
@@ -63,6 +60,9 @@ public abstract class BaseAddonEntity : IAddon
     public required bool IsFolder { get; init; }
 
     /// <inheritdoc/>
+    public bool IsFavorite { get; set; }
+
+    /// <inheritdoc/>
     public required IReadOnlyDictionary<OSEnum, string>? Executables { get; init; }
 
     /// <inheritdoc/>
@@ -76,9 +76,9 @@ public abstract class BaseAddonEntity : IAddon
     {
         StringBuilder description = new($"## {Title}");
 
-        if (Version is not null)
+        if (AddonId.Version is not null)
         {
-            _ = description.Append($"{Environment.NewLine}{Environment.NewLine}#### v{Version}");
+            _ = description.Append($"{Environment.NewLine}{Environment.NewLine}#### v{AddonId.Version}");
         }
 
         if (Author is not null)

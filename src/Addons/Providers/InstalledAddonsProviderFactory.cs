@@ -12,16 +12,19 @@ public sealed class InstalledAddonsProviderFactory
     private readonly Dictionary<GameEnum, InstalledAddonsProvider> _list = [];
     private readonly IConfigProvider _config;
     private readonly ICacheAdder<Stream> _bitmapsCache;
+    private readonly OriginalCampaignsProvider _originalCampaignsProvider;
     private readonly ILogger _logger;
 
     public InstalledAddonsProviderFactory(
         IConfigProvider config,
         [FromKeyedServices("Bitmaps")] ICacheAdder<Stream> bitmapsCache,
+        OriginalCampaignsProvider originalCampaignsProvider,
         ILogger logger
         )
     {
         _config = config;
         _bitmapsCache = bitmapsCache;
+        _originalCampaignsProvider = originalCampaignsProvider;
         _logger = logger;
     }
 
@@ -37,7 +40,7 @@ public sealed class InstalledAddonsProviderFactory
         }
 
 #pragma warning disable CS0618 // Type or member is obsolete
-        InstalledAddonsProvider newProvider = new(game, _config, _logger, _bitmapsCache);
+        InstalledAddonsProvider newProvider = new(game, _config, _logger, _bitmapsCache, _originalCampaignsProvider);
 #pragma warning restore CS0618 // Type or member is obsolete
         _list.Add(game.GameEnum, newProvider);
 

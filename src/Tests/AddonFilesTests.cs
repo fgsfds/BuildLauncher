@@ -1,11 +1,11 @@
-﻿using Addons.Providers;
+﻿using System.Reflection;
+using Addons.Providers;
 using Common;
 using Common.Client.Cache;
 using Common.Client.Interfaces;
 using Common.Interfaces;
 using Microsoft.Extensions.Logging;
 using Moq;
-using System.Reflection;
 
 namespace Tests;
 
@@ -22,12 +22,13 @@ public sealed class AddonFilesTests : IDisposable
 
         var config = new Mock<IConfigProvider>();
         _ = config.Setup(x => x.DisabledAutoloadMods).Returns([]);
+        _ = config.Setup(x => x.FavoriteAddons).Returns([]);
 
         var bmCache = new Mock<ICacheAdder<Stream>>();
-
         var logger = new Mock<ILogger>();
+        OriginalCampaignsProvider originalCampaignsProvider = new(config.Object);
 
-        _installedAddonsProvider = new(game.Object, config.Object, logger.Object, bmCache.Object);
+        _installedAddonsProvider = new(game.Object, config.Object, logger.Object, bmCache.Object, originalCampaignsProvider);
         _getAddonsFromFilesAsync = typeof(InstalledAddonsProvider).GetMethod("GetAddonsFromFilesAsync", BindingFlags.NonPublic | BindingFlags.Instance)!;
     }
 
@@ -45,7 +46,7 @@ public sealed class AddonFilesTests : IDisposable
 
         var pathToFile = Path.Combine(Directory.GetCurrentDirectory(), "FilesTemp", "ZippedAddon.zip");
 
-        var result = await (Task<Dictionary<AddonVersion, IAddon>>)_getAddonsFromFilesAsync.Invoke(_installedAddonsProvider, [(object)new List<string>() { pathToFile }])!;
+        var result = await (Task<Dictionary<AddonId, IAddon>>)_getAddonsFromFilesAsync.Invoke(_installedAddonsProvider, [(object)new List<string>() { pathToFile }])!;
 
         Assert.Equal(2, result.Count);
 
@@ -72,19 +73,19 @@ public sealed class AddonFilesTests : IDisposable
 
         var pathToFile = Path.Combine(Directory.GetCurrentDirectory(), "FilesTemp", "UnpackedAddon.zip");
 
-        var result = await (Task<Dictionary<AddonVersion, IAddon>>)_getAddonsFromFilesAsync.Invoke(_installedAddonsProvider, [new List<string>() { pathToFile }])!;
+        var result = await (Task<Dictionary<AddonId, IAddon>>)_getAddonsFromFilesAsync.Invoke(_installedAddonsProvider, [new List<string>() { pathToFile }])!;
 
         Assert.Equal(2, result.Count);
 
-        var a = result[new() { Id = "blood-voxel-pack", Version = "p292" }];
-        var b = result[new() { Id = "blood-voxel-pack-2", Version = "p292-2" }];
+        var a = result[new("blood-voxel-pack", "p292")];
+        var b = result[new("blood-voxel-pack-2", "p292-2")];
 
-        Assert.Equal("blood-voxel-pack", a.Id);
-        Assert.Equal("p292", a.Version);
+        Assert.Equal("blood-voxel-pack", a.AddonId.Id);
+        Assert.Equal("p292", a.AddonId.Version);
         Assert.Equal("Voxel Pack", a.Title);
 
-        Assert.Equal("blood-voxel-pack-2", b.Id);
-        Assert.Equal("p292-2", b.Version);
+        Assert.Equal("blood-voxel-pack-2", b.AddonId.Id);
+        Assert.Equal("p292-2", b.AddonId.Version);
         Assert.Equal("Voxel Pack 2", b.Title);
 
         Assert.False(File.Exists(pathToFile));
@@ -99,7 +100,7 @@ public sealed class AddonFilesTests : IDisposable
 
         var pathToFile = Path.Combine(Directory.GetCurrentDirectory(), "FilesTemp", "TEST.MAP");
 
-        var result = await (Task<Dictionary<AddonVersion, IAddon>>)_getAddonsFromFilesAsync.Invoke(_installedAddonsProvider, [(object)new List<string>() { pathToFile }])!;
+        var result = await (Task<Dictionary<AddonId, IAddon>>)_getAddonsFromFilesAsync.Invoke(_installedAddonsProvider, [(object)new List<string>() { pathToFile }])!;
 
         var map = Assert.Single(result);
 
@@ -118,7 +119,7 @@ public sealed class AddonFilesTests : IDisposable
 
         var pathToFile = Path.Combine(Directory.GetCurrentDirectory(), "FilesTemp", "GrpInfoAddon.zip");
 
-        var result = await (Task<Dictionary<AddonVersion, IAddon>>)_getAddonsFromFilesAsync.Invoke(_installedAddonsProvider, [(object)new List<string>() { pathToFile }])!;
+        var result = await (Task<Dictionary<AddonId, IAddon>>)_getAddonsFromFilesAsync.Invoke(_installedAddonsProvider, [(object)new List<string>() { pathToFile }])!;
 
         Assert.Empty(result);
 
@@ -135,7 +136,7 @@ public sealed class AddonFilesTests : IDisposable
 
         var pathToFile = Path.Combine(Directory.GetCurrentDirectory(), "FilesTemp", "WhatLiesBeneathAddon.zip");
 
-        var result = await (Task<Dictionary<AddonVersion, IAddon>>)_getAddonsFromFilesAsync.Invoke(_installedAddonsProvider, [(object)new List<string>() { pathToFile }])!;
+        var result = await (Task<Dictionary<AddonId, IAddon>>)_getAddonsFromFilesAsync.Invoke(_installedAddonsProvider, [(object)new List<string>() { pathToFile }])!;
 
         _ = Assert.Single(result);
 

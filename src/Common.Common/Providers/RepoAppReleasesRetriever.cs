@@ -1,9 +1,9 @@
-﻿using Common.Common.Serializable.Downloadable;
+﻿using System.Text.Json;
+using Common.Common.Serializable.Downloadable;
 using Common.Enums;
 using Common.Helpers;
 using CommunityToolkit.Diagnostics;
 using Microsoft.Extensions.Logging;
-using System.Text.Json;
 
 namespace Common.Common.Providers;
 

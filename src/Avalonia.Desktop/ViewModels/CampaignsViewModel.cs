@@ -1,9 +1,13 @@
+using System.Collections.Immutable;
+using System.Diagnostics;
 using Addons.Providers;
 using Avalonia.Controls.Notifications;
+using Avalonia.Desktop.Helpers;
 using Avalonia.Desktop.Misc;
 using Common.Client.Interfaces;
 using Common.Client.Providers;
 using Common.Enums;
+using Common.Helpers;
 using Common.Interfaces;
 using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -12,8 +16,6 @@ using Games.Providers;
 using Microsoft.Extensions.Logging;
 using Ports.Ports;
 using Ports.Providers;
-using System.Collections.Immutable;
-using System.Diagnostics;
 
 namespace Avalonia.Desktop.ViewModels;
 
@@ -28,6 +30,8 @@ public sealed partial class CampaignsViewModel : RightPanelViewModel, IPortsButt
     private readonly PortStarter _portStarter;
     private readonly ILogger _logger;
 
+    private readonly SeparatorItem _separator = new();
+
 
     #region Binding Properties
 
@@ -38,14 +42,34 @@ public sealed partial class CampaignsViewModel : RightPanelViewModel, IPortsButt
     {
         get
         {
-            var result = _installedAddonsProvider.GetInstalledAddonsByType(AddonTypeEnum.TC).Select(static x => x.Value);
+            var addons = _installedAddonsProvider.GetInstalledAddonsByType(AddonTypeEnum.TC);
 
-            if (string.IsNullOrWhiteSpace(SearchBoxText))
+            var isSearchEmpty = string.IsNullOrWhiteSpace(SearchBoxText);
+            List<IAddon> favorites = [];
+            List<IAddon> list = new(addons.Count);
+
+            foreach (var addon in addons)
             {
-                return [.. result];
+                if (!isSearchEmpty && !addon.Value.Title.Contains(SearchBoxText, StringComparison.InvariantCultureIgnoreCase))
+                {
+                    continue;
+                }
+
+                if (addon.Value.IsFavorite)
+                {
+                    favorites.Add(addon.Value);
+                    continue;
+                }
+
+                list.Add(addon.Value);
             }
 
-            return [.. result.Where(x => x.Title.Contains(SearchBoxText, StringComparison.CurrentCultureIgnoreCase))];
+            if (favorites.Count > 0)
+            {
+                return [.. favorites, _separator, .. list];
+            }
+
+            return [.. list];
         }
     }
 
@@ -213,6 +237,36 @@ public sealed partial class CampaignsViewModel : RightPanelViewModel, IPortsButt
     [RelayCommand(CanExecute = nameof(ClearSearchBoxCanExecute))]
     private void ClearSearchBox() => SearchBoxText = string.Empty;
     private bool ClearSearchBoxCanExecute() => !string.IsNullOrEmpty(SearchBoxText);
+
+
+    /// <summary>
+    /// Delete selected campaign
+    /// </summary>
+    [RelayCommand]
+    private void AddToFavorite(object? value)
+    {
+        value.ThrowIfNotType<IAddon>(out var addon);
+
+        _config.ChangeFavoriteState(addon.AddonId, true);
+        addon.IsFavorite = true;
+
+        OnPropertyChanged(nameof(CampaignsList));
+    }
+
+
+    /// <summary>
+    /// Delete selected campaign
+    /// </summary>
+    [RelayCommand]
+    private void RemoveFromFavorite(object? value)
+    {
+        value.ThrowIfNotType<IAddon>(out var addon);
+
+        _config.ChangeFavoriteState(addon.AddonId, false);
+        addon.IsFavorite = false;
+
+        OnPropertyChanged(nameof(CampaignsList));
+    }
 
     #endregion
 

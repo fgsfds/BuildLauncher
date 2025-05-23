@@ -1,8 +1,8 @@
-﻿using Common.Enums;
+﻿using System.Text;
+using System.Text.Json.Serialization;
+using Common.Enums;
 using Common.Helpers;
 using Common.Serializable;
-using System.Text;
-using System.Text.Json.Serialization;
 
 namespace Common.Common.Serializable.Downloadable;
 

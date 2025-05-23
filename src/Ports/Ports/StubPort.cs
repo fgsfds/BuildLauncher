@@ -1,7 +1,7 @@
-﻿using Common;
+﻿using System.Text;
+using Common;
 using Common.Enums;
 using Common.Interfaces;
-using System.Text;
 
 namespace Ports.Ports;
 
@@ -55,7 +55,7 @@ public sealed class StubPort : BasePort
     {
     }
 
-    protected override void GetAutoloadModsArgs(StringBuilder sb, IGame game, IAddon addon, IEnumerable<KeyValuePair<AddonVersion, IAddon>> mods)
+    protected override void GetAutoloadModsArgs(StringBuilder sb, IGame game, IAddon addon, IEnumerable<KeyValuePair<AddonId, IAddon>> mods)
     {
     }
 

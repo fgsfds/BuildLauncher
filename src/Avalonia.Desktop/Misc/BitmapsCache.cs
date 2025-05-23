@@ -1,4 +1,5 @@
-﻿using Addons.Addons;
+﻿using System.Collections.Concurrent;
+using Addons.Addons;
 using Avalonia.Desktop.Helpers;
 using Avalonia.Media.Imaging;
 using Common.Client.Cache;
@@ -8,7 +9,6 @@ using Common.Enums;
 using Common.Enums.Addons;
 using Common.Enums.Versions;
 using Ports.Ports;
-using System.Collections.Concurrent;
 
 namespace Avalonia.Desktop.Misc;
 

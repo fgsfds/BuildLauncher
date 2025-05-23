@@ -1,5 +1,4 @@
 using Addons.Addons;
-using Common;
 using Common.Enums;
 using Common.Interfaces;
 using Games.Games;
@@ -29,13 +28,12 @@ public sealed class RedneckCmdArgumentsTests
 
         _redneckCamp = new()
         {
-            Id = nameof(GameEnum.Redneck).ToLower(),
+            AddonId = new(nameof(GameEnum.Redneck).ToLower(), null),
             Type = AddonTypeEnum.Official,
             Title = "Redneck Rampage",
             GridImageHash = null,
             Author = null,
             Description = null,
-            Version = null,
             SupportedGame = new(GameEnum.Redneck),
             RequiredFeatures = null,
             PathToFile = null,
@@ -54,13 +52,12 @@ public sealed class RedneckCmdArgumentsTests
 
         _againCamp = new()
         {
-            Id = nameof(GameEnum.RidesAgain).ToLower(),
+            AddonId = new(nameof(GameEnum.RidesAgain).ToLower(), null),
             Type = AddonTypeEnum.Official,
             Title = "Rides Again",
             GridImageHash = null,
             Author = null,
             Description = null,
-            Version = null,
             SupportedGame = new(GameEnum.RidesAgain),
             RequiredFeatures = null,
             PathToFile = null,
@@ -84,7 +81,7 @@ public sealed class RedneckCmdArgumentsTests
         var mods = new List<AutoloadModEntity>() {
             _modsProvider.EnabledMod,
             _modsProvider.IncompatibleMod,
-        }.ToDictionary(x => new AddonVersion(x.Id, x.Version), x => (IAddon)x);
+        }.ToDictionary(x => x.AddonId, x => (IAddon)x);
 
         Raze raze = new();
 
@@ -127,7 +124,7 @@ public sealed class RedneckCmdArgumentsTests
         var mods = new List<AutoloadModEntity>() {
             _modsProvider.EnabledMod,
             _modsProvider.IncompatibleMod,
-        }.ToDictionary(x => new AddonVersion(x.Id, x.Version), x => (IAddon)x);
+        }.ToDictionary(x => x.AddonId, x => (IAddon)x);
 
         Raze raze = new();
 
@@ -170,7 +167,7 @@ public sealed class RedneckCmdArgumentsTests
         var mods = new List<AutoloadModEntity>() {
             _modsProvider.EnabledMod,
             _modsProvider.IncompatibleMod,
-        }.ToDictionary(x => new AddonVersion(x.Id, x.Version), x => (IAddon)x);
+        }.ToDictionary(x => x.AddonId, x => (IAddon)x);
 
         RedNukem redNukem = new();
 
@@ -203,7 +200,7 @@ public sealed class RedneckCmdArgumentsTests
         var mods = new List<AutoloadModEntity>() {
             _modsProvider.EnabledMod,
             _modsProvider.IncompatibleMod,
-        }.ToDictionary(x => new AddonVersion(x.Id, x.Version), x => (IAddon)x);
+        }.ToDictionary(x => x.AddonId, x => (IAddon)x);
 
         RedNukem redNukem = new();
 

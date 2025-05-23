@@ -1,8 +1,8 @@
-﻿using Common.Client;
+﻿using System.Runtime.InteropServices;
+using Common.Client;
 using Common.Client.Helpers;
 using Projektanker.Icons.Avalonia;
 using Projektanker.Icons.Avalonia.FontAwesome;
-using System.Runtime.InteropServices;
 
 namespace Avalonia.Desktop;
 

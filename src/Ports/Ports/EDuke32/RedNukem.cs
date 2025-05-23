@@ -1,4 +1,5 @@
-﻿using Addons.Addons;
+﻿using System.Text;
+using Addons.Addons;
 using Common.Enums;
 using Common.Enums.Addons;
 using Common.Enums.Versions;
@@ -6,7 +7,6 @@ using Common.Helpers;
 using Common.Interfaces;
 using CommunityToolkit.Diagnostics;
 using Games.Games;
-using System.Text;
 
 namespace Ports.Ports.EDuke32;
 
@@ -287,7 +287,7 @@ public sealed class RedNukem : EDuke32
         var endMovVoc2 = Path.Combine(game.GameInstallFolder, "LN_FINAL.VOC");
 
 
-        if (campaign.Id.Equals(nameof(RedneckAddonEnum.Route66), StringComparison.OrdinalIgnoreCase))
+        if (campaign.AddonId.Id.Equals(nameof(RedneckAddonEnum.Route66), StringComparison.OrdinalIgnoreCase))
         {
             File.Copy(tilesA1, tilesA2, true);
             File.Copy(tilesB1, tilesB2, true);

@@ -1,10 +1,10 @@
-﻿using Avalonia.Data;
+﻿using System.Globalization;
+using Avalonia.Data;
 using Avalonia.Data.Converters;
 using Avalonia.Desktop.Misc;
 using Common.Common.Helpers;
 using Common.Enums;
 using CommunityToolkit.Diagnostics;
-using System.Globalization;
 
 namespace Avalonia.Desktop.Helpers;
 

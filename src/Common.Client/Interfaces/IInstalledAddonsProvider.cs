@@ -24,7 +24,7 @@ public interface IInstalledAddonsProvider
     /// Get list od installed addons of a type
     /// </summary>
     /// <param name="addonType">Addon type</param>
-    IReadOnlyDictionary<AddonVersion, IAddon> GetInstalledAddonsByType(AddonTypeEnum addonType);
+    IReadOnlyDictionary<AddonId, IAddon> GetInstalledAddonsByType(AddonTypeEnum addonType);
 
     /// <summary>
     /// Create cache of installed addons.
@@ -37,11 +37,11 @@ public interface IInstalledAddonsProvider
     /// Disable addon
     /// </summary>
     /// <param name="id">Addon id</param>
-    void DisableAddon(AddonVersion id);
+    void DisableAddon(AddonId id);
 
     /// <summary>
     /// Enable addon
     /// </summary>
     /// <param name="id">Addon id</param>
-    void EnableAddon(AddonVersion id);
+    void EnableAddon(AddonId id);
 }

@@ -1,5 +1,5 @@
-﻿using Common.Enums;
-using System.Collections.Immutable;
+﻿using System.Collections.Immutable;
+using Common.Enums;
 
 namespace Common.Interfaces;
 
@@ -8,7 +8,7 @@ public interface IAddon
     /// <summary>
     /// Addon ID
     /// </summary>
-    string Id { get; init; }
+    AddonId AddonId { get; init; }
 
     /// <summary>
     /// Type of the addon
@@ -61,11 +61,6 @@ public interface IAddon
     long? PreviewImageHash { get; init; }
 
     /// <summary>
-    /// Addon version
-    /// </summary>
-    string? Version { get; init; }
-
-    /// <summary>
     /// List of addons that the current addon requires to work
     /// </summary>
     IReadOnlyDictionary<string, string?>? DependentAddons { get; init; }
@@ -99,6 +94,11 @@ public interface IAddon
     /// Is addon unpacked to a folder
     /// </summary>
     bool IsFolder { get; init; }
+
+    /// <summary>
+    /// Is the item marked as a favorite.
+    /// </summary>
+    bool IsFavorite { get; set; }
 
 
     /// <summary>

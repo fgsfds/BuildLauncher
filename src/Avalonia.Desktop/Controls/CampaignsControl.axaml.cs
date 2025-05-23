@@ -1,5 +1,6 @@
 using Addons.Providers;
 using Avalonia.Controls;
+using Avalonia.Desktop.Helpers;
 using Avalonia.Desktop.Misc;
 using Avalonia.Desktop.ViewModels;
 using Avalonia.Input;
@@ -231,6 +232,29 @@ public sealed partial class CampaignsControl : UserControl
 
         CampaignsList.ContextMenu.Items.Clear();
 
+        MenuItem favoriteButton;
+
+        if (addon.IsFavorite)
+        {
+            favoriteButton = new MenuItem()
+            {
+                Header = "Remove from favorites",
+                Padding = new(5),
+                Command = new RelayCommand(() => _viewModel.RemoveFromFavoriteCommand.Execute(CampaignsList.SelectedItem))
+            };
+        }
+        else
+        {
+            favoriteButton = new MenuItem()
+            {
+                Header = "Add to favorites",
+                Padding = new(5),
+                Command = new RelayCommand(() => _viewModel.AddToFavoriteCommand.Execute(CampaignsList.SelectedItem))
+            };
+        }
+
+        _ = CampaignsList.ContextMenu.Items.Add(favoriteButton);
+        _ = CampaignsList.ContextMenu.Items.Add(new Separator());
 
         foreach (var port in _supportedPorts)
         {
@@ -356,6 +380,16 @@ public sealed partial class CampaignsControl : UserControl
             {
                 var isAdded = await _addonsProvider.CopyAddonIntoFolder(file).ConfigureAwait(false);
             }
+        }
+    }
+
+    private void ListBox_ContainerPrepared(object? sender, Avalonia.Controls.ContainerPreparedEventArgs e)
+    {
+        if (e.Container is ListBoxItem item &&
+            item.Content is SeparatorItem)
+        {
+            item.IsHitTestVisible = false;
+            item.Focusable = false;
         }
     }
 }

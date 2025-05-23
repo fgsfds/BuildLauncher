@@ -1,7 +1,8 @@
-﻿using Common.Client.Enums;
+﻿using System.Runtime.CompilerServices;
+using Common.Client.Enums;
 using Common.Client.Interfaces;
+using CommunityToolkit.Diagnostics;
 using Database.Client;
-using System.Runtime.CompilerServices;
 using static Common.Client.Interfaces.IConfigProvider;
 
 namespace Common.Client.Config;
@@ -136,6 +137,7 @@ public sealed class ConfigProvider : IConfigProvider
 
     public HashSet<string> DisabledAutoloadMods => [.. _dbContext.DisabledAddons.Select(x => x.AddonId)];
 
+    public HashSet<AddonId> FavoriteAddons => [.. _dbContext.Favorites.Select(x => new AddonId(x.AddonId, x.Version.Equals(string.Empty) ? null : x.Version))];
 
     public ConfigProvider(DatabaseContextFactory dbContextFactory)
     {
@@ -183,7 +185,7 @@ public sealed class ConfigProvider : IConfigProvider
         }
     }
 
-    public void ChangeModState(AddonVersion addonId, bool isEnabled)
+    public void ChangeModState(AddonId addonId, bool isEnabled)
     {
         using (_lock.EnterScope())
         {
@@ -214,6 +216,28 @@ public sealed class ConfigProvider : IConfigProvider
 
             _ = _dbContext.SaveChanges();
             ParameterChangedEvent?.Invoke(nameof(DisabledAutoloadMods));
+        }
+    }
+
+    public void ChangeFavoriteState(AddonId addonVersion, bool isEnabled)
+    {
+        using (_lock.EnterScope())
+        {
+            if (isEnabled)
+            {
+                _ = _dbContext.Favorites.Add(new() { AddonId = addonVersion.Id, Version = addonVersion.Version ?? string.Empty });
+            }
+            else
+            {
+                var existing = _dbContext.Favorites.Find(addonVersion.Id, addonVersion.Version ?? string.Empty);
+
+                Guard.IsNotNull(existing);
+
+                _ = _dbContext.Favorites.Remove(existing);
+            }
+
+            _ = _dbContext.SaveChanges();
+            ParameterChangedEvent?.Invoke(nameof(FavoriteAddons));
         }
     }
 

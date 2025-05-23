@@ -59,13 +59,12 @@ internal sealed class AutoloadModsProvider
 
     public AutoloadModEntity EnabledModWithCons => new()
     {
-        Id = "enabledMod",
+        AddonId = new("enabledMod", "1.5"),
         Type = AddonTypeEnum.Mod,
         Title = "enabledMod",
         GridImageHash = null,
         Author = null,
         Description = null,
-        Version = "1.5",
         SupportedGame = _game,
         IncompatibleAddons = null,
         RequiredFeatures = null,
@@ -83,13 +82,12 @@ internal sealed class AutoloadModsProvider
 
     public AutoloadModEntity EnabledMod => new()
     {
-        Id = "enabledMod",
+        AddonId = new("enabledMod", "1.5"),
         Type = AddonTypeEnum.Mod,
         Title = "enabledMod",
         GridImageHash = null,
         Author = null,
         Description = null,
-        Version = "1.5",
         SupportedGame = _game,
         IncompatibleAddons = null,
         RequiredFeatures = null,
@@ -107,13 +105,12 @@ internal sealed class AutoloadModsProvider
 
     public AutoloadModEntity ModThatRequiresOfficialAddon => new()
     {
-        Id = "modThatRequiresOfficialAddon",
+        AddonId = new("modThatRequiresOfficialAddon", "1.5"),
         Type = AddonTypeEnum.Mod,
         Title = "modThatRequiredOfficialAddon",
         GridImageHash = null,
         Author = null,
         Description = null,
-        Version = "1.5",
         SupportedGame = _game,
         IncompatibleAddons = null,
         RequiredFeatures = null,
@@ -131,13 +128,12 @@ internal sealed class AutoloadModsProvider
 
     public AutoloadModEntity ModThatIncompatibleWithAddon => new()
     {
-        Id = "modThatIncompatibleWithVaca",
+        AddonId = new("modThatIncompatibleWithVaca", "1.5"),
         Type = AddonTypeEnum.Mod,
         Title = "modThatIncompatibleWithVaca",
         GridImageHash = null,
         Author = null,
         Description = null,
-        Version = "1.5",
         SupportedGame = _game,
         IncompatibleAddons = new Dictionary<string, string?>(StringComparer.OrdinalIgnoreCase) { { _addon, null } },
         DependentAddons = null,
@@ -155,13 +151,12 @@ internal sealed class AutoloadModsProvider
 
     public AutoloadModEntity IncompatibleMod => new()
     {
-        Id = "incompatibleMod",
+        AddonId = new("incompatibleMod", "1.0"),
         Type = AddonTypeEnum.Mod,
         Title = "incompatibleMod",
         GridImageHash = null,
         Author = null,
         Description = null,
-        Version = "1.0",
         SupportedGame = _game,
         RequiredFeatures = null,
         PathToFile = Path.Combine("D:", "Mods", "!!!!!!!!!!NOPE!!!!!!!!!!"),
@@ -179,13 +174,12 @@ internal sealed class AutoloadModsProvider
 
     public AutoloadModEntity IncompatibleModWithCompatibleVersion => new()
     {
-        Id = "incompatibleModWithCompatibleVersion",
+        AddonId = new("incompatibleModWithCompatibleVersion", "1.0"),
         Type = AddonTypeEnum.Mod,
         Title = "incompatibleModWithCompatibleVersion",
         GridImageHash = null,
         Author = null,
         Description = null,
-        Version = "1.0",
         SupportedGame = _game,
         RequiredFeatures = null,
         PathToFile = Path.Combine("D:", "Mods", "incompatible_mod_with_compatible_version.zip"),
@@ -203,13 +197,12 @@ internal sealed class AutoloadModsProvider
 
     public AutoloadModEntity IncompatibleModWithIncompatibleVersion => new()
     {
-        Id = "incompatibleModWithIncompatibleVersion",
+        AddonId = new("incompatibleModWithIncompatibleVersion", "1.0"),
         Type = AddonTypeEnum.Mod,
         Title = "incompatibleModWithIncompatibleVersion",
         GridImageHash = null,
         Author = null,
         Description = null,
-        Version = "1.0",
         SupportedGame = _game,
         RequiredFeatures = null,
         PathToFile = Path.Combine("D:", "Mods", "!!!!!!!!!!NOPE!!!!!!!!!!"),
@@ -227,13 +220,12 @@ internal sealed class AutoloadModsProvider
 
     public AutoloadModEntity DependentMod => new()
     {
-        Id = "dependentMod",
+        AddonId = new("dependentMod", "1.0"),
         Type = AddonTypeEnum.Mod,
         Title = "dependentMod",
         GridImageHash = null,
         Author = null,
         Description = null,
-        Version = "1.0",
         SupportedGame = _game,
         RequiredFeatures = null,
         PathToFile = Path.Combine("D:", "Mods", "dependent_mod.zip"),
@@ -252,13 +244,12 @@ internal sealed class AutoloadModsProvider
 
     public AutoloadModEntity MultipleDependenciesMod => new()
     {
-        Id = "multipleDependenciesMod",
+        AddonId = new("multipleDependenciesMod", "1.0"),
         Type = AddonTypeEnum.Mod,
         Title = "multipleDependenciesMod",
         GridImageHash = null,
         Author = null,
         Description = null,
-        Version = "1.0",
         SupportedGame = _game,
         RequiredFeatures = null,
         PathToFile = Path.Combine("D:", "Mods", "!!!!!!!!!!NOPE!!!!!!!!!!"),
@@ -276,13 +267,12 @@ internal sealed class AutoloadModsProvider
 
     public AutoloadModEntity DependentModWithIncompatibleVersion => new()
     {
-        Id = "dependentModWithIncompatibleVersion",
+        AddonId = new("dependentModWithIncompatibleVersion", "1.0"),
         Type = AddonTypeEnum.Mod,
         Title = "dependentModWithIncompatibleVersion",
         GridImageHash = null,
         Author = null,
         Description = null,
-        Version = "1.0",
         SupportedGame = _game,
         RequiredFeatures = null,
         PathToFile = Path.Combine("D:", "Mods", "!!!!!!!!!!NOPE!!!!!!!!!!"),
@@ -300,13 +290,12 @@ internal sealed class AutoloadModsProvider
 
     public AutoloadModEntity DependentModWithCompatibleVersion => new()
     {
-        Id = "dependentModWithCompatibleVersion",
+        AddonId = new("dependentModWithCompatibleVersion", "1.0"),
         Type = AddonTypeEnum.Mod,
         Title = "dependentModWithCompatibleVersion",
         GridImageHash = null,
         Author = null,
         Description = null,
-        Version = "1.0",
         SupportedGame = _game,
         RequiredFeatures = null,
         PathToFile = Path.Combine("D:", "Mods", "dependent_mod_with_compatible_version.zip"),
@@ -324,13 +313,12 @@ internal sealed class AutoloadModsProvider
 
     public AutoloadModEntity DisabledMod => new()
     {
-        Id = "disabledMod",
+        AddonId = new("disabledMod", "1.0"),
         Type = AddonTypeEnum.Mod,
         Title = "disabledMod",
         GridImageHash = null,
         Author = null,
         Description = null,
-        Version = "1.0",
         SupportedGame = _game,
         RequiredFeatures = null,
         PathToFile = Path.Combine("D:", "Mods", "!!!!!!!!!!NOPE!!!!!!!!!!"),
@@ -348,13 +336,12 @@ internal sealed class AutoloadModsProvider
 
     public AutoloadModEntity ModThatRequiredFeature => new()
     {
-        Id = "eduke32mod",
+        AddonId = new("eduke32mod", "1.0"),
         Type = AddonTypeEnum.Mod,
         Title = "eduke32mod",
         GridImageHash = null,
         Author = null,
         Description = null,
-        Version = "1.0",
         SupportedGame = _game,
         RequiredFeatures = [_feature],
         PathToFile = Path.Combine("D:", "Mods", "feature_mod.zip"),
@@ -372,13 +359,12 @@ internal sealed class AutoloadModsProvider
 
     public AutoloadModEntity ModForAnotherGame => new()
     {
-        Id = "somegame-mod",
+        AddonId = new("somegame-mod", "1.0"),
         Type = AddonTypeEnum.Mod,
         Title = "modForAnotherGame",
         GridImageHash = null,
         Author = null,
         Description = null,
-        Version = "1.0",
         SupportedGame = new(GameEnum.TekWar),
         RequiredFeatures = null,
         PathToFile = Path.Combine("D:", "Mods", "!!!!!!!!!!NOPE!!!!!!!!!!"),

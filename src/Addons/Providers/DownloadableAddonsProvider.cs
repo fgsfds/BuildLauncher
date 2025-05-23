@@ -1,4 +1,5 @@
-﻿using Common;
+﻿using System.Collections.Immutable;
+using Common;
 using Common.Client.Helpers;
 using Common.Client.Interfaces;
 using Common.Client.Tools;
@@ -8,7 +9,6 @@ using Common.Helpers;
 using Common.Interfaces;
 using CommunityToolkit.Diagnostics;
 using Microsoft.Extensions.Logging;
-using System.Collections.Immutable;
 
 namespace Addons.Providers;
 
@@ -23,7 +23,7 @@ public sealed class DownloadableAddonsProvider : IDownloadableAddonsProvider
     private readonly InstalledAddonsProvider _installedAddonsProvider;
     private readonly ILogger _logger;
 
-    private Dictionary<AddonTypeEnum, Dictionary<AddonVersion, DownloadableAddonJsonModel>>? _cache;
+    private Dictionary<AddonTypeEnum, Dictionary<AddonId, DownloadableAddonJsonModel>>? _cache;
 
     private static readonly SemaphoreSlim _semaphore = new(1);
 

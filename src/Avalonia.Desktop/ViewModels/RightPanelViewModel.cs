@@ -62,7 +62,7 @@ public partial class RightPanelViewModel : ObservableObject
                 return null;
             }
 
-            var rating = _ratingProvider.GetRating(SelectedAddon.Id);
+            var rating = _ratingProvider.GetRating(SelectedAddon.AddonId.Id);
 
             if (rating is null)
             {
@@ -88,7 +88,7 @@ public partial class RightPanelViewModel : ObservableObject
                 return null;
             }
 
-            var time = _playtimeProvider.GetTime(SelectedAddon.Id);
+            var time = _playtimeProvider.GetTime(SelectedAddon.AddonId.Id);
 
             if (time is not null)
             {
@@ -114,7 +114,7 @@ public partial class RightPanelViewModel : ObservableObject
 
         var rating = byte.Parse(score);
 
-        await _ratingProvider.ChangeScoreAsync(SelectedAddon.Id, rating).ConfigureAwait(true);
+        await _ratingProvider.ChangeScoreAsync(SelectedAddon.AddonId.Id, rating).ConfigureAwait(true);
 
         OnPropertyChanged(nameof(SelectedAddonRating));
     }

@@ -15,7 +15,7 @@ public static class AutoloadModsValidator
     /// <param name="campaign">Campaign</param>
     /// <param name="mods">Autoload mods</param>
     /// <param name="features">Features supported by the port</param>
-    public static bool ValidateAutoloadMod(AutoloadModEntity autoloadMod, IAddon campaign, IEnumerable<KeyValuePair<AddonVersion, IAddon>> mods, List<FeatureEnum> features)
+    public static bool ValidateAutoloadMod(AutoloadModEntity autoloadMod, IAddon campaign, IEnumerable<KeyValuePair<AddonId, IAddon>> mods, List<FeatureEnum> features)
     {
         if (!autoloadMod.IsEnabled)
         {
@@ -61,7 +61,7 @@ public static class AutoloadModsValidator
     private static bool CheckDependencies(
         AutoloadModEntity autoloadMod,
         IAddon campaign,
-        IEnumerable<KeyValuePair<AddonVersion, IAddon>> mods)
+        IEnumerable<KeyValuePair<AddonId, IAddon>> mods)
     {
         if (autoloadMod.DependentAddons is not null)
         {
@@ -69,8 +69,8 @@ public static class AutoloadModsValidator
 
             foreach (var dependentAddon in autoloadMod.DependentAddons)
             {
-                if (dependentAddon.Key.Equals(campaign.Id, StringComparison.InvariantCultureIgnoreCase) &&
-                    (dependentAddon.Value is null || VersionComparer.Compare(campaign.Version, dependentAddon.Value)))
+                if (dependentAddon.Key.Equals(campaign.AddonId.Id, StringComparison.InvariantCultureIgnoreCase) &&
+                    (dependentAddon.Value is null || VersionComparer.Compare(campaign.AddonId.Version, dependentAddon.Value)))
                 {
                     passedDependenciesCount++;
                     continue;
@@ -108,7 +108,7 @@ public static class AutoloadModsValidator
     private static bool CheckIncompatibles(
         AutoloadModEntity autoloadMod,
         IAddon campaign,
-        IEnumerable<KeyValuePair<AddonVersion,
+        IEnumerable<KeyValuePair<AddonId,
             IAddon>> mods
         )
     {
@@ -121,13 +121,13 @@ public static class AutoloadModsValidator
         {
             //What a fucking mess...
             //if campaign id equals addon id
-            if (campaign.Id.Equals(incompatibleAddon.Key, StringComparison.InvariantCultureIgnoreCase) &&
+            if (campaign.AddonId.Id.Equals(incompatibleAddon.Key, StringComparison.InvariantCultureIgnoreCase) &&
                 //AND either incompatible addon's version is null
                 (incompatibleAddon.Value is null ||
                 //OR campaign's version is null
-                campaign.Version is null ||
+                campaign.AddonId.Version is null ||
                 //OR addon's and campaigns's versions match
-                VersionComparer.Compare(campaign.Version, incompatibleAddon.Value)
+                VersionComparer.Compare(campaign.AddonId.Version, incompatibleAddon.Value)
                 ))
             {
                 //the addon is incompatible

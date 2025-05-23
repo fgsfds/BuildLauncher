@@ -1,4 +1,5 @@
-﻿using Addons.Addons;
+﻿using System.Text;
+using Addons.Addons;
 using Addons.Helpers;
 using Common;
 using Common.Client.Helpers;
@@ -10,7 +11,6 @@ using Common.Interfaces;
 using Common.Serializable.Addon;
 using CommunityToolkit.Diagnostics;
 using Games.Games;
-using System.Text;
 
 namespace Ports.Ports;
 
@@ -220,7 +220,7 @@ public abstract class BasePort
     public string GetStartGameArgs(
         IGame game,
         IAddon addon,
-        IEnumerable<KeyValuePair<AddonVersion, IAddon>> mods,
+        IEnumerable<KeyValuePair<AddonId, IAddon>> mods,
         bool skipIntro,
         bool skipStartup,
         byte? skill = null
@@ -410,7 +410,7 @@ public abstract class BasePort
 
         addon.ThrowIfNotType<DukeCampaignEntity>(out var dCamp);
 
-        if (addon.Id.Equals(nameof(WW2GIAddonEnum.Platoon).ToLower()))
+        if (addon.AddonId.Id.Equals(nameof(WW2GIAddonEnum.Platoon).ToLower()))
         {
             _ = sb.Append($" {AddGrpParam}PLATOONL.DAT {MainConParam}PLATOONL.DEF");
         }
@@ -462,7 +462,7 @@ public abstract class BasePort
     /// <param name="game">Game</param>
     /// <param name="addon">Campaign\map</param>
     /// <param name="mods">Autoload mods</param>
-    protected virtual void GetAutoloadModsArgs(StringBuilder sb, IGame game, IAddon addon, IEnumerable<KeyValuePair<AddonVersion, IAddon>> mods)
+    protected virtual void GetAutoloadModsArgs(StringBuilder sb, IGame game, IAddon addon, IEnumerable<KeyValuePair<AddonId, IAddon>> mods)
     {
         if (!mods.Any())
         {

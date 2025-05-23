@@ -1,4 +1,6 @@
-﻿using Addons.Addons;
+﻿using System.Reflection;
+using System.Text;
+using Addons.Addons;
 using Common.Client.Helpers;
 using Common.Enums;
 using Common.Enums.Addons;
@@ -9,8 +11,6 @@ using CommunityToolkit.Diagnostics;
 using Games.Games;
 using SharpCompress.Archives;
 using SharpCompress.Archives.Zip;
-using System.Reflection;
-using System.Text;
 
 namespace Ports.Ports.EDuke32;
 
@@ -167,7 +167,7 @@ public class EDuke32 : BasePort
 
     protected void MoveSaveFiles(IGame game, IAddon campaign)
     {
-        var saveFolder = GetPathToAddonSavedGamesFolder(game.ShortName, campaign.Id);
+        var saveFolder = GetPathToAddonSavedGamesFolder(game.ShortName, campaign.AddonId.Id);
 
         if (!Directory.Exists(saveFolder))
         {
@@ -189,7 +189,7 @@ public class EDuke32 : BasePort
     public override void AfterEnd(IGame game, IAddon campaign)
     {
         //copying saved games into separate folder
-        var saveFolder = GetPathToAddonSavedGamesFolder(game.ShortName, campaign.Id);
+        var saveFolder = GetPathToAddonSavedGamesFolder(game.ShortName, campaign.AddonId.Id);
 
         string path;
 
@@ -443,7 +443,7 @@ public class EDuke32 : BasePort
         var art4r = Path.Combine(game.GameInstallFolder, "TILES022._ART");
 
 
-        if (campaign.Id.Equals(nameof(DukeVersionEnum.Duke3D_WT), StringComparison.OrdinalIgnoreCase))
+        if (campaign.AddonId.Id.Equals(nameof(DukeVersionEnum.Duke3D_WT), StringComparison.OrdinalIgnoreCase))
         {
             RestoreWtFiles(game);
         }

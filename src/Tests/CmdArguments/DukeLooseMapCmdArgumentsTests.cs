@@ -1,5 +1,4 @@
 using Addons.Addons;
-using Common;
 using Common.Enums;
 using Common.Enums.Versions;
 using Common.Interfaces;
@@ -31,13 +30,12 @@ public sealed class DukeLooseMapCmdArgumentsTests
 
         _dukeLooseMap = new()
         {
-            Id = "loose-map",
+            AddonId = new("loose-map", null),
             Type = AddonTypeEnum.Map,
             Title = "Loose map",
             GridImageHash = null,
             Author = null,
             Description = null,
-            Version = null,
             SupportedGame = new(GameEnum.Duke3D, DukeVersionEnum.Duke3D_Atomic),
             RequiredFeatures = null,
             PathToFile = Path.Combine("Maps", "LOOSE.MAP"),
@@ -69,7 +67,7 @@ public sealed class DukeLooseMapCmdArgumentsTests
             _modsProvider.DependentModWithIncompatibleVersion,
             _modsProvider.ModForAnotherGame,
             _modsProvider.ModThatRequiredFeature
-        }.ToDictionary(x => new AddonVersion(x.Id, x.Version), x => (IAddon)x);
+        }.ToDictionary(x => x.AddonId, x => (IAddon)x);
 
         Raze raze = new();
 
@@ -130,7 +128,7 @@ public sealed class DukeLooseMapCmdArgumentsTests
             _modsProvider.DependentModWithIncompatibleVersion,
             _modsProvider.ModForAnotherGame,
             _modsProvider.ModThatRequiredFeature
-        }.ToDictionary(x => new AddonVersion(x.Id, x.Version), x => (IAddon)x);
+        }.ToDictionary(x => x.AddonId, x => (IAddon)x);
 
         EDuke32 eduke32 = new();
 
@@ -183,7 +181,7 @@ public sealed class DukeLooseMapCmdArgumentsTests
             _modsProvider.DependentModWithIncompatibleVersion,
             _modsProvider.ModForAnotherGame,
             _modsProvider.ModThatRequiredFeature
-        }.ToDictionary(x => new AddonVersion(x.Id, x.Version), x => (IAddon)x);
+        }.ToDictionary(x => x.AddonId, x => (IAddon)x);
 
         RedNukem redNukem = new();
 

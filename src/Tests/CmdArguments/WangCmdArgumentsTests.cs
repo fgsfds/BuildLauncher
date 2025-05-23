@@ -1,5 +1,4 @@
 using Addons.Addons;
-using Common;
 using Common.Enums;
 using Common.Enums.Addons;
 using Common.Interfaces;
@@ -29,14 +28,13 @@ public sealed class WangCmdArgumentsTests
 
         _wangCamp = new()
         {
-            Id = nameof(GameEnum.Wang).ToLower(),
+            AddonId = new(nameof(GameEnum.Wang).ToLower(), null),
             Type = AddonTypeEnum.Official,
             Title = "Shadow Warrior",
             GridImageHash = null,
             PreviewImageHash = null,
             Author = null,
             Description = null,
-            Version = null,
             SupportedGame = new(GameEnum.Wang),
             RequiredFeatures = null,
             PathToFile = null,
@@ -51,14 +49,13 @@ public sealed class WangCmdArgumentsTests
 
         _tdCamp = new()
         {
-            Id = nameof(WangAddonEnum.TwinDragon).ToLower(),
+            AddonId = new(nameof(WangAddonEnum.TwinDragon).ToLower(), null),
             Type = AddonTypeEnum.TC,
             Title = "Twin Dragon",
             GridImageHash = null,
             PreviewImageHash = null,
             Author = null,
             Description = null,
-            Version = null,
             SupportedGame = new(GameEnum.Wang),
             RequiredFeatures = null,
             PathToFile = Path.Combine("D:", "Games", "Wang", "TD.zip"),
@@ -86,7 +83,7 @@ public sealed class WangCmdArgumentsTests
             _modsProvider.DependentModWithCompatibleVersion,
             _modsProvider.DependentModWithIncompatibleVersion,
             _modsProvider.ModForAnotherGame
-        }.ToDictionary(x => new AddonVersion(x.Id, x.Version), x => (IAddon)x);
+        }.ToDictionary(x => x.AddonId, x => (IAddon)x);
 
         Raze raze = new();
 
@@ -133,7 +130,7 @@ public sealed class WangCmdArgumentsTests
             _modsProvider.EnabledMod,
             _modsProvider.ModThatRequiresOfficialAddon,
             _modsProvider.ModThatIncompatibleWithAddon,
-        }.ToDictionary(x => new AddonVersion(x.Id, x.Version), x => (IAddon)x);
+        }.ToDictionary(x => x.AddonId, x => (IAddon)x);
 
         Raze raze = new();
 
@@ -186,7 +183,7 @@ public sealed class WangCmdArgumentsTests
             _modsProvider.DependentModWithCompatibleVersion,
             _modsProvider.DependentModWithIncompatibleVersion,
             _modsProvider.ModForAnotherGame
-        }.ToDictionary(x => new AddonVersion(x.Id, x.Version), x => (IAddon)x);
+        }.ToDictionary(x => x.AddonId, x => (IAddon)x);
 
         VoidSW voidSw = new();
 
@@ -224,7 +221,7 @@ public sealed class WangCmdArgumentsTests
             _modsProvider.EnabledMod,
             _modsProvider.ModThatRequiresOfficialAddon,
             _modsProvider.ModThatIncompatibleWithAddon,
-        }.ToDictionary(x => new AddonVersion(x.Id, x.Version), x => (IAddon)x);
+        }.ToDictionary(x => x.AddonId, x => (IAddon)x);
 
         VoidSW voidSw = new();
 

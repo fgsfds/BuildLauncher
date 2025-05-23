@@ -1,3 +1,5 @@
+using System.Collections.Immutable;
+using System.Diagnostics;
 using Addons.Providers;
 using Avalonia.Controls.Notifications;
 using Avalonia.Desktop.Misc;
@@ -12,8 +14,6 @@ using CommunityToolkit.Mvvm.Input;
 using Games.Providers;
 using Microsoft.Extensions.Logging;
 using Ports.Ports;
-using System.Collections.Immutable;
-using System.Diagnostics;
 
 namespace Avalonia.Desktop.ViewModels;
 

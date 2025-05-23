@@ -1,15 +1,15 @@
-﻿using Common.Helpers;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
+using Common.Helpers;
 
 namespace Common;
 
-public readonly struct AddonVersion
+public sealed class AddonId
 {
-    public required readonly string Id { get; init; }
-    public required readonly string? Version { get; init; }
+    public string Id { get; }
+    public string? Version { get; }
 
     [SetsRequiredMembers]
-    public AddonVersion(
+    public AddonId(
         string title,
         string? version
         )
@@ -19,7 +19,7 @@ public readonly struct AddonVersion
     }
 
     [SetsRequiredMembers]
-    public AddonVersion(
+    public AddonId(
         string title
         )
     {
@@ -29,7 +29,7 @@ public readonly struct AddonVersion
 
     public override bool Equals([NotNullWhen(true)] object? obj)
     {
-        if (obj is not AddonVersion addon)
+        if (obj is not AddonId addon)
         {
             throw new ArgumentNullException(nameof(obj));
         }
@@ -42,12 +42,12 @@ public readonly struct AddonVersion
         return VersionComparer.Compare(Version, addon.Version, "==");
     }
 
-    public static bool operator ==(AddonVersion left, AddonVersion right)
+    public static bool operator ==(AddonId left, AddonId right)
     {
         return left.Equals(right);
     }
 
-    public static bool operator !=(AddonVersion left, AddonVersion right)
+    public static bool operator !=(AddonId left, AddonId right)
     {
         return !(left == right);
     }

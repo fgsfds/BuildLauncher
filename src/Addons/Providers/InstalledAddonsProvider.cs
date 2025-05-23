@@ -1,4 +1,7 @@
-﻿using Addons.Addons;
+﻿using System.Collections.Immutable;
+using System.Runtime.Intrinsics.Arm;
+using System.Text.Json;
+using Addons.Addons;
 using Common;
 using Common.Client.Cache;
 using Common.Client.Helpers;
@@ -11,8 +14,6 @@ using Common.Serializable.Addon;
 using CommunityToolkit.Diagnostics;
 using Microsoft.Extensions.Logging;
 using SharpCompress.Archives;
-using System.Collections.Immutable;
-using System.Text.Json;
 
 namespace Addons.Providers;
 
@@ -25,10 +26,11 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
     private readonly IConfigProvider _config;
     private readonly ILogger _logger;
     private readonly ICacheAdder<Stream> _bitmapsCache;
+    private readonly OriginalCampaignsProvider _originalCampaignsProvider;
 
-    private readonly Dictionary<AddonVersion, IAddon> _campaignsCache = [];
-    private readonly Dictionary<AddonVersion, IAddon> _mapsCache = [];
-    private readonly Dictionary<AddonVersion, IAddon> _modsCache = [];
+    private readonly Dictionary<AddonId, IAddon> _campaignsCache = [];
+    private readonly Dictionary<AddonId, IAddon> _mapsCache = [];
+    private readonly Dictionary<AddonId, IAddon> _modsCache = [];
 
     private static readonly SemaphoreSlim _semaphore = new(1);
 
@@ -41,13 +43,15 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
         IGame game,
         IConfigProvider config,
         ILogger logger,
-        ICacheAdder<Stream> bitmapsCache
+        ICacheAdder<Stream> bitmapsCache,
+        OriginalCampaignsProvider originalCampaignsProvider
         )
     {
         _game = game;
         _config = config;
         _logger = logger;
         _bitmapsCache = bitmapsCache;
+        _originalCampaignsProvider = originalCampaignsProvider;
     }
 
 
@@ -175,7 +179,7 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
                         {
                             foreach (var addon in grpInfoAddons)
                             {
-                                _campaignsCache.Add(new(addon.Id, null), addon);
+                                _campaignsCache.Add(new(addon.AddonId.Id, null), addon);
                             }
                         }
                     }
@@ -274,13 +278,13 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
             };
 
 
-            if (cache.TryGetValue(new(addon.Id, addon.Version), out _))
+            if (cache.TryGetValue(addon.AddonId, out _))
             {
-                cache[new(addon.Id, addon.Version)] = addon;
+                cache[addon.AddonId] = addon;
             }
             else
             {
-                cache.Add(new(addon.Id, addon.Version), addon);
+                cache.Add(addon.AddonId, addon);
             }
 
             AddonsChangedEvent?.Invoke(_game, addon.Type);
@@ -316,22 +320,22 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
 
         if (addon.Type is AddonTypeEnum.TC)
         {
-            _ = _campaignsCache.Remove(new(addon.Id, addon.Version));
+            _ = _campaignsCache.Remove(addon.AddonId);
         }
         else if (addon.Type is AddonTypeEnum.Map)
         {
-            _ = _mapsCache.Remove(new(addon.Id, addon.Version));
+            _ = _mapsCache.Remove(addon.AddonId);
         }
         else if (addon.Type is AddonTypeEnum.Mod)
         {
-            _ = _modsCache.Remove(new(addon.Id, addon.Version));
+            _ = _modsCache.Remove(addon.AddonId);
         }
 
         AddonsChangedEvent?.Invoke(_game, addon.Type);
     }
 
     /// <inheritdoc/>
-    public void EnableAddon(AddonVersion addon)
+    public void EnableAddon(AddonId addon)
     {
         var existing = _modsCache.FirstOrDefault(x => x.Key.Equals(addon));
 
@@ -351,7 +355,7 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
         {
             foreach (var dep in autoloadMod.DependentAddons)
             {
-                EnableAddon(new() { Id = dep.Key, Version = dep.Value });
+                EnableAddon(new(dep.Key, dep.Value));
             }
         }
 
@@ -359,7 +363,7 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
         {
             foreach (var inc in autoloadMod.IncompatibleAddons)
             {
-                DisableAddon(new() { Id = inc.Key, Version = inc.Value });
+                DisableAddon(new(inc.Key, inc.Value));
             }
         }
 
@@ -379,7 +383,7 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
     }
 
     /// <inheritdoc/>
-    public void DisableAddon(AddonVersion addon)
+    public void DisableAddon(AddonId addon)
     {
         var existing = _modsCache.FirstOrDefault(x => x.Key.Equals(addon));
 
@@ -395,7 +399,7 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
 
         autoloadMod.IsEnabled = false;
 
-        var deps = _modsCache.Where(x => x.Value.DependentAddons?.ContainsKey(autoloadMod.Id) ?? false);
+        var deps = _modsCache.Where(x => x.Value.DependentAddons?.ContainsKey(autoloadMod.AddonId.Id) ?? false);
 
         foreach (var dep in deps)
         {
@@ -406,21 +410,21 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
     }
 
     /// <inheritdoc/>
-    public IReadOnlyDictionary<AddonVersion, IAddon> GetInstalledAddonsByType(AddonTypeEnum addonType)
+    public IReadOnlyDictionary<AddonId, IAddon> GetInstalledAddonsByType(AddonTypeEnum addonType)
     {
         return addonType switch
         {
             AddonTypeEnum.TC => GetInstalledCampaigns(),
             AddonTypeEnum.Map => GetInstalledMaps(),
             AddonTypeEnum.Mod => GetInstalledMods(),
-            _ => ThrowHelper.ThrowNotSupportedException<Dictionary<AddonVersion, IAddon>>()
+            _ => ThrowHelper.ThrowNotSupportedException<Dictionary<AddonId, IAddon>>()
         };
     }
 
     /// <inheritdoc/>
-    private IReadOnlyDictionary<AddonVersion, IAddon> GetInstalledCampaigns()
+    private IReadOnlyDictionary<AddonId, IAddon> GetInstalledCampaigns()
     {
-        var campaigns = OriginalCampaignsProvider.GetOriginalCampaigns(_game);
+        var campaigns = _originalCampaignsProvider.GetOriginalCampaigns(_game);
 
         if (_isCacheUpdating)
         {
@@ -457,11 +461,11 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
     }
 
     /// <inheritdoc/>
-    private IReadOnlyDictionary<AddonVersion, IAddon> GetInstalledMaps()
+    private IReadOnlyDictionary<AddonId, IAddon> GetInstalledMaps()
     {
         if (_isCacheUpdating)
         {
-            return new Dictionary<AddonVersion, IAddon>();
+            return new Dictionary<AddonId, IAddon>();
         }
 
         Guard.IsNotNull(_mapsCache);
@@ -470,11 +474,11 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
     }
 
     /// <inheritdoc/>
-    private IReadOnlyDictionary<AddonVersion, IAddon> GetInstalledMods()
+    private IReadOnlyDictionary<AddonId, IAddon> GetInstalledMods()
     {
         if (_isCacheUpdating)
         {
-            return new Dictionary<AddonVersion, IAddon>();
+            return new Dictionary<AddonId, IAddon>();
         }
 
         Guard.IsNotNull(_modsCache);
@@ -486,9 +490,9 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
     /// Get addons from list of files
     /// </summary>
     /// <param name="files">Paths to addon files</param>
-    private async Task<Dictionary<AddonVersion, IAddon>> GetAddonsFromFilesAsync(IEnumerable<string> files)
+    private async Task<Dictionary<AddonId, IAddon>> GetAddonsFromFilesAsync(IEnumerable<string> files)
     {
-        Dictionary<AddonVersion, IAddon> addedAddons = [];
+        Dictionary<AddonId, IAddon> addedAddons = [];
 
         foreach (var file in files)
         {
@@ -507,25 +511,25 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
                     try
                     {
                         if (newAddon is AutoloadModEntity &&
-                            addedAddons.TryGetValue(new(newAddon.Id, newAddon.Version), out var existingMod))
+                            addedAddons.TryGetValue(newAddon.AddonId, out var existingMod))
                         {
-                            if (existingMod.Version is null &&
-                                newAddon.Version is not null)
+                            if (existingMod.AddonId.Version is null &&
+                                newAddon.AddonId.Version is not null)
                             {
                                 //replacing with addon that have version
-                                addedAddons[new(newAddon.Id, newAddon.Version)] = newAddon;
+                                addedAddons[newAddon.AddonId] = newAddon;
                             }
-                            else if (existingMod.Version is not null &&
-                                     newAddon.Version is not null &&
-                                     VersionComparer.Compare(newAddon.Version, existingMod.Version, ">"))
+                            else if (existingMod.AddonId.Version is not null &&
+                                     newAddon.AddonId.Version is not null &&
+                                     VersionComparer.Compare(newAddon.AddonId.Version, existingMod.AddonId.Version, ">"))
                             {
                                 //replacing with addon that have higher version
-                                addedAddons[new(newAddon.Id, newAddon.Version)] = newAddon;
+                                addedAddons[newAddon.AddonId] = newAddon;
                             }
                         }
                         else
                         {
-                            _ = addedAddons.TryAdd(new(newAddon.Id, newAddon.Version), newAddon);
+                            _ = addedAddons.TryAdd(newAddon.AddonId, newAddon);
                         }
                     }
                     catch (Exception)
@@ -688,10 +692,11 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
         {
             var bloodIni = pathToFile.Replace(".map", ".ini", StringComparison.InvariantCultureIgnoreCase);
             var iniExists = File.Exists(bloodIni);
+            AddonId id = new(Path.GetFileName(pathToFile), null);
 
             var addon = new LooseMapEntity()
             {
-                Id = Path.GetFileName(pathToFile),
+                AddonId = id,
                 Type = AddonTypeEnum.Map,
                 Title = Path.GetFileName(pathToFile),
                 SupportedGame = new(_game.GameEnum, null, null),
@@ -700,7 +705,6 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
                 BloodIni = iniExists ? bloodIni : null,
                 GridImageHash = null,
                 Description = null,
-                Version = null,
                 Author = null,
                 MainDef = null,
                 AdditionalDefs = null,
@@ -709,7 +713,8 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
                 RequiredFeatures = null,
                 PreviewImageHash = null,
                 IsFolder = false,
-                Executables = null
+                Executables = null,
+                IsFavorite = _config.FavoriteAddons.Contains(id)
             };
 
             return [addon];
@@ -856,15 +861,16 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
                     ThrowHelper.ThrowArgumentException("Autoload mod can't have Main DEF");
                 }
 
+                AddonId id = new(carcass.Id, carcass.Version);
+
                 var addon = new AutoloadModEntity()
                 {
-                    Id = carcass.Id,
+                    AddonId = id,
                     Type = AddonTypeEnum.Mod,
                     Title = carcass.Title,
                     GridImageHash = carcass.GridImageHash,
                     PreviewImageHash = carcass.PreviewImageHash,
                     Description = carcass.Description,
-                    Version = carcass.Version,
                     Author = carcass.Author,
                     IsEnabled = isEnabled,
                     PathToFile = pathToFile,
@@ -877,7 +883,8 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
                     StartMap = carcass.StartMap,
                     RequiredFeatures = carcass.RequiredFeatures,
                     IsFolder = carcass.IsUnpacked,
-                    Executables = null
+                    Executables = null,
+                    IsFavorite = _config.FavoriteAddons.Contains(id)
                 };
 
                 addons.Add(addon);
@@ -893,14 +900,13 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
                 {
                     var addon = new DukeCampaignEntity()
                     {
-                        Id = carcass.Id,
+                        AddonId = new(carcass.Id, carcass.Version),
                         Type = carcass.Type,
                         SupportedGame = new(carcass.SupportedGame, carcass.GameVersion, carcass.GameCrc),
                         Title = carcass.Title,
                         GridImageHash = carcass.GridImageHash,
                         PreviewImageHash = carcass.PreviewImageHash,
                         Description = carcass.Description,
-                        Version = carcass.Version,
                         Author = carcass.Author,
                         PathToFile = pathToFile,
                         DependentAddons = carcass.Dependencies,
@@ -913,7 +919,8 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
                         RTS = carcass.Rts,
                         RequiredFeatures = carcass.RequiredFeatures,
                         IsFolder = carcass.IsUnpacked,
-                        Executables = carcass.Executables
+                        Executables = carcass.Executables,
+                        IsFavorite = _config.FavoriteAddons.Contains(new(carcass.Id, carcass.Version))
                     };
 
                     addons.Add(addon);
@@ -922,14 +929,13 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
                 {
                     var addon = new GenericCampaignEntity()
                     {
-                        Id = carcass.Id,
+                        AddonId = new(carcass.Id, carcass.Version),
                         Type = carcass.Type,
                         SupportedGame = new(carcass.SupportedGame, carcass.GameVersion, carcass.GameCrc),
                         Title = carcass.Title,
                         GridImageHash = carcass.GridImageHash,
                         PreviewImageHash = carcass.PreviewImageHash,
                         Description = carcass.Description,
-                        Version = carcass.Version,
                         Author = carcass.Author,
                         PathToFile = pathToFile,
                         DependentAddons = carcass.Dependencies,
@@ -939,7 +945,8 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
                         AdditionalDefs = carcass.AddDefs,
                         RequiredFeatures = carcass.RequiredFeatures,
                         IsFolder = carcass.IsUnpacked,
-                        Executables = carcass.Executables
+                        Executables = carcass.Executables,
+                        IsFavorite = _config.FavoriteAddons.Contains(new(carcass.Id, carcass.Version))
                     };
 
                     addons.Add(addon);
@@ -948,14 +955,13 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
                 {
                     var addon = new BloodCampaignEntity()
                     {
-                        Id = carcass.Id,
+                        AddonId = new(carcass.Id, carcass.Version),
                         Type = carcass.Type,
                         SupportedGame = new(carcass.SupportedGame, carcass.GameVersion, carcass.GameCrc),
                         Title = carcass.Title,
                         GridImageHash = carcass.GridImageHash,
                         PreviewImageHash = carcass.PreviewImageHash,
                         Description = carcass.Description,
-                        Version = carcass.Version,
                         Author = carcass.Author,
                         PathToFile = pathToFile,
                         DependentAddons = carcass.Dependencies,
@@ -968,7 +974,8 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
                         SND = carcass.Snd,
                         RequiredFeatures = carcass.RequiredFeatures,
                         IsFolder = carcass.IsUnpacked,
-                        Executables = carcass.Executables
+                        Executables = carcass.Executables,
+                        IsFavorite = _config.FavoriteAddons.Contains(new(carcass.Id, carcass.Version))
                     };
 
                     addons.Add(addon);
@@ -977,14 +984,13 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
                 {
                     var addon = new GenericCampaignEntity()
                     {
-                        Id = carcass.Id,
+                        AddonId = new(carcass.Id, carcass.Version),
                         Type = carcass.Type,
                         SupportedGame = new(carcass.SupportedGame, carcass.GameVersion, carcass.GameCrc),
                         Title = carcass.Title,
                         GridImageHash = carcass.GridImageHash,
                         PreviewImageHash = carcass.PreviewImageHash,
                         Description = carcass.Description,
-                        Version = carcass.Version,
                         Author = carcass.Author,
                         PathToFile = pathToFile,
                         DependentAddons = carcass.Dependencies,
@@ -994,7 +1000,8 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
                         AdditionalDefs = carcass.AddDefs,
                         RequiredFeatures = carcass.RequiredFeatures,
                         IsFolder = carcass.IsUnpacked,
-                        Executables = carcass.Executables
+                        Executables = carcass.Executables,
+                        IsFavorite = _config.FavoriteAddons.Contains(new(carcass.Id, carcass.Version))
                     };
 
                     addons.Add(addon);
@@ -1003,14 +1010,13 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
                 {
                     var addon = new StandaloneEntity()
                     {
-                        Id = carcass.Id,
+                        AddonId = new(carcass.Id, carcass.Version),
                         Type = carcass.Type,
                         SupportedGame = new(carcass.SupportedGame, carcass.GameVersion, carcass.GameCrc),
                         Title = carcass.Title,
                         GridImageHash = carcass.GridImageHash,
                         PreviewImageHash = carcass.PreviewImageHash,
                         Description = carcass.Description,
-                        Version = carcass.Version,
                         Author = carcass.Author,
                         PathToFile = pathToFile,
                         DependentAddons = carcass.Dependencies,
@@ -1020,7 +1026,8 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
                         AdditionalDefs = carcass.AddDefs,
                         RequiredFeatures = carcass.RequiredFeatures,
                         IsFolder = carcass.IsUnpacked,
-                        Executables = carcass.Executables
+                        Executables = carcass.Executables,
+                        IsFavorite = _config.FavoriteAddons.Contains(new(carcass.Id, carcass.Version))
                     };
 
                     addons.Add(addon);

@@ -1,5 +1,5 @@
-﻿using Common.Interfaces;
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
+using Common.Interfaces;
 
 namespace Common.Serializable.Addon;
 

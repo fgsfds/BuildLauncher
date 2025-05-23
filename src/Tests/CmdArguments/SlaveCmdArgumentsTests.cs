@@ -1,5 +1,4 @@
 using Addons.Addons;
-using Common;
 using Common.Enums;
 using Common.Interfaces;
 using Games.Games;
@@ -27,14 +26,13 @@ public sealed class SlaveCmdArgumentsTests
 
         _slaveCamp = new()
         {
-            Id = nameof(GameEnum.Slave).ToLower(),
+            AddonId = new(nameof(GameEnum.Slave).ToLower(), null),
             Type = AddonTypeEnum.Official,
             Title = "Slave",
             GridImageHash = null,
             PreviewImageHash = null,
             Author = null,
             Description = null,
-            Version = null,
             SupportedGame = new(GameEnum.Slave),
             RequiredFeatures = null,
             PathToFile = null,
@@ -54,7 +52,7 @@ public sealed class SlaveCmdArgumentsTests
         var mods = new List<AutoloadModEntity>() {
             _modsProvider.EnabledMod,
             _modsProvider.IncompatibleMod,
-        }.ToDictionary(x => new AddonVersion(x.Id, x.Version), x => (IAddon)x);
+        }.ToDictionary(x => x.AddonId, x => (IAddon)x);
 
         Raze raze = new();
 
@@ -97,7 +95,7 @@ public sealed class SlaveCmdArgumentsTests
         var mods = new List<AutoloadModEntity>() {
             _modsProvider.EnabledMod,
             _modsProvider.IncompatibleMod,
-        }.ToDictionary(x => new AddonVersion(x.Id, x.Version), x => (IAddon)x);
+        }.ToDictionary(x => x.AddonId, x => (IAddon)x);
 
         PCExhumed pcExhumed = new();
 

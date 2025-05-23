@@ -1,10 +1,10 @@
-﻿using Addons.Providers;
+﻿using System.Diagnostics;
+using Addons.Providers;
 using Common.Client.Providers;
 using Common.Enums;
 using Common.Helpers;
 using Common.Interfaces;
 using Microsoft.Extensions.Logging;
-using System.Diagnostics;
 
 namespace Ports.Ports;
 
@@ -47,7 +47,7 @@ public sealed class PortStarter
 
         var args = port.GetStartGameArgs(game, addon, mods, skipIntro, skipStartup, skill);
 
-        _logger.LogInformation($"=== Starting addon {addon.Id} for {game.FullName} ===");
+        _logger.LogInformation($"=== Starting addon {addon.AddonId.Id} for {game.FullName} ===");
         _logger.LogInformation($"Path to port exe {addon.Executables?[OSEnum.Windows] ?? port.PortExeFilePath}");
         _logger.LogInformation($"Startup args:{args}");
         _logger.LogInformation($"Startup args length: {args.Length}");
@@ -57,7 +57,7 @@ public sealed class PortStarter
         sw.Stop();
         var time = sw.Elapsed;
 
-        _playtimeProvider.AddTime(addon.Id, time);
+        _playtimeProvider.AddTime(addon.AddonId.Id, time);
 
         port.AfterEnd(game, addon);
     }

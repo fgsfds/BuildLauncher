@@ -33,11 +33,15 @@ public sealed class ConfigProviderFake : IConfigProvider
     public bool SkipStartup { get; set; } = false;
     public bool UseLocalApi { get; set; } = true;
 
+    public HashSet<AddonId> FavoriteAddons => [];
+
     public event ParameterChanged? ParameterChangedEvent;
 
     public void AddPlaytime(string addonId, TimeSpan playTime) => ThrowHelper.ThrowNotSupportedException();
 
     public void AddScore(string addonId, byte rating) => ThrowHelper.ThrowNotSupportedException();
 
-    public void ChangeModState(AddonVersion addonId, bool isEnabled) => ThrowHelper.ThrowNotSupportedException();
+    public void ChangeFavoriteState(AddonId addonVersion, bool isEnabled) => ThrowHelper.ThrowNotSupportedException();
+
+    public void ChangeModState(AddonId addonId, bool isEnabled) => ThrowHelper.ThrowNotSupportedException();
 }

@@ -1,3 +1,5 @@
+using System.Diagnostics;
+using System.Globalization;
 using Avalonia.Controls.Notifications;
 using Avalonia.Desktop.Misc;
 using Common.Common.Serializable.Downloadable;
@@ -9,8 +11,6 @@ using Microsoft.Extensions.Logging;
 using Ports.Installer;
 using Ports.Ports;
 using Ports.Providers;
-using System.Diagnostics;
-using System.Globalization;
 
 namespace Avalonia.Desktop.ViewModels;
 

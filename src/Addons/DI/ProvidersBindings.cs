@@ -9,5 +9,6 @@ public static class ProvidersBindings
     {
         _ = container.AddSingleton<InstalledAddonsProviderFactory>();
         _ = container.AddSingleton<DownloadableAddonsProviderFactory>();
+        _ = container.AddSingleton<OriginalCampaignsProvider>();
     }
 }

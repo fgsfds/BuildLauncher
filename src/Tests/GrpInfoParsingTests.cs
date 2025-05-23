@@ -1,6 +1,6 @@
-﻿using Addons.Providers;
+﻿using System.Reflection;
+using Addons.Providers;
 using Common.Enums.Versions;
-using System.Reflection;
 
 namespace Tests;
 public sealed class GrpInfoParsingTests

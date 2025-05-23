@@ -1,7 +1,7 @@
-﻿using CommunityToolkit.Diagnostics;
+﻿using System.Net.Http.Headers;
+using CommunityToolkit.Diagnostics;
 using Microsoft.Extensions.Logging;
 using SharpCompress.Archives;
-using System.Net.Http.Headers;
 
 namespace Common.Client.Tools;
 

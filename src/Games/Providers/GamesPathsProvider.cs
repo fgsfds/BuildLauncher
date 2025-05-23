@@ -1,9 +1,9 @@
-﻿using Common.Client.Interfaces;
+﻿using System.Runtime.InteropServices;
+using Common.Client.Interfaces;
 using Common.Enums;
 using Common.Enums.Versions;
 using CommunityToolkit.Diagnostics;
 using Microsoft.Win32;
-using System.Runtime.InteropServices;
 
 namespace Games.Providers;
 

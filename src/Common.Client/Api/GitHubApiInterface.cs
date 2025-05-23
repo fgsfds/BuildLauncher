@@ -1,4 +1,5 @@
-﻿using Common.Client.Helpers;
+﻿using System.Text.Json;
+using Common.Client.Helpers;
 using Common.Client.Interfaces;
 using Common.Common.Interfaces;
 using Common.Common.Providers;
@@ -7,7 +8,6 @@ using Common.Enums;
 using Common.Helpers;
 using CommunityToolkit.Diagnostics;
 using Microsoft.Extensions.Logging;
-using System.Text.Json;
 
 namespace Common.Client.Api;
 

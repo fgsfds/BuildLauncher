@@ -13,6 +13,7 @@ public sealed class DatabaseContext : DbContext
     public DbSet<SettingsDbEntity> Settings { get; set; }
     public DbSet<GamePathsDbEntity> GamePaths { get; set; }
     public DbSet<CustomPortsDbEntity> CustomPorts { get; set; }
+    public DbSet<FavoritesDbEntity> Favorites { get; set; }
 
     public DatabaseContext()
     {

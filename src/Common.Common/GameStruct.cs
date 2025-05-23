@@ -1,13 +1,13 @@
-﻿using Common.Enums;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
+using Common.Enums;
 
 namespace Common;
 
 public readonly struct GameStruct
 {
-    public required GameEnum GameEnum { get; init; }
-    public required string? GameVersion { get; init; }
-    public required string? GameCrc { get; init; }
+    public GameEnum GameEnum { get; }
+    public string? GameVersion { get; }
+    public string? GameCrc { get; }
 
     [SetsRequiredMembers]
     public GameStruct(GameEnum gameEnum)

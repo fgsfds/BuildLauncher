@@ -6,6 +6,7 @@ public interface IConfigProvider
 {
     string ApiPassword { get; set; }
     HashSet<string> DisabledAutoloadMods { get; }
+    HashSet<AddonId> FavoriteAddons { get; }
     string? PathBlood { get; set; }
     string? PathDuke3D { get; set; }
     string? PathDuke64 { get; set; }
@@ -32,5 +33,6 @@ public interface IConfigProvider
 
     void AddPlaytime(string addonId, TimeSpan playTime);
     void AddScore(string addonId, byte rating);
-    void ChangeModState(AddonVersion addonId, bool isEnabled);
+    void ChangeModState(AddonId addonVersion, bool isEnabled);
+    void ChangeFavoriteState(AddonId addonVersion, bool isEnabled);
 }

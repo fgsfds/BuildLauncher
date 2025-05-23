@@ -1,4 +1,6 @@
-﻿using Addons.Addons;
+﻿using System.Diagnostics;
+using System.Text;
+using Addons.Addons;
 using Common.Enums;
 using Common.Enums.Addons;
 using Common.Enums.Versions;
@@ -6,8 +8,6 @@ using Common.Helpers;
 using Common.Interfaces;
 using CommunityToolkit.Diagnostics;
 using Games.Games;
-using System.Diagnostics;
-using System.Text;
 
 namespace Ports.Ports;
 
@@ -238,7 +238,7 @@ public sealed class Raze : BasePort
     /// <inheritdoc/>
     protected override void GetStartCampaignArgs(StringBuilder sb, IGame game, IAddon addon)
     {
-        _ = sb.Append($@" -savedir ""{GetPathToAddonSavedGamesFolder(game.ShortName, addon.Id)}""");
+        _ = sb.Append($@" -savedir ""{GetPathToAddonSavedGamesFolder(game.ShortName, addon.AddonId.Id)}""");
 
         if (addon.MainDef is not null)
         {
@@ -496,7 +496,7 @@ public sealed class Raze : BasePort
                 _ = sb.Append("Path=").AppendLine(path);
 
                 //duke addons folders
-                if (game is DukeGame dGame && !campaign.Id.Equals(nameof(DukeVersionEnum.Duke3D_WT), StringComparison.OrdinalIgnoreCase))
+                if (game is DukeGame dGame && !campaign.AddonId.Id.Equals(nameof(DukeVersionEnum.Duke3D_WT), StringComparison.OrdinalIgnoreCase))
                 {
                     var addonPaths = dGame.AddonsPaths.Values.Distinct();
 

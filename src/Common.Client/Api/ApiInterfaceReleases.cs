@@ -1,10 +1,10 @@
-﻿using Api.Common.Requests;
+﻿using System.Net.Http.Json;
+using Api.Common.Requests;
 using Api.Common.Responses;
 using Common.Client.Helpers;
 using Common.Common.Serializable.Downloadable;
 using Common.Enums;
 using Common.Helpers;
-using System.Net.Http.Json;
 
 namespace Common.Client.Api;
 

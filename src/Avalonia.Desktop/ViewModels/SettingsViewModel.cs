@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using Avalonia.Desktop.Helpers;
 using Avalonia.Platform.Storage;
 using Avalonia.Styling;
@@ -11,7 +12,6 @@ using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Games.Providers;
-using System.Diagnostics;
 
 namespace Avalonia.Desktop.ViewModels;
 

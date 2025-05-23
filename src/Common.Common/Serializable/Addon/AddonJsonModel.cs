@@ -1,6 +1,6 @@
-﻿using Common.Enums;
+﻿using System.Text.Json.Serialization;
+using Common.Enums;
 using Common.Interfaces;
-using System.Text.Json.Serialization;
 
 namespace Common.Serializable.Addon;
 

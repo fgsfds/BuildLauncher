@@ -1,4 +1,5 @@
-﻿using Common.Client.Api;
+﻿using System.Net;
+using Common.Client.Api;
 using Common.Client.Config;
 using Common.Client.Helpers;
 using Common.Client.Interfaces;
@@ -9,7 +10,6 @@ using Common.Helpers;
 using Database.Client;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using System.Net;
 
 namespace Common.Client.DI;
 

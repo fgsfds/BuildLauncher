@@ -1,5 +1,4 @@
 using Addons.Addons;
-using Common;
 using Common.Client.Config;
 using Common.Enums;
 using Common.Interfaces;
@@ -27,13 +26,12 @@ public sealed class FuryCmdArgumentsTests
 
         _dukeCamp = new()
         {
-            Id = nameof(GameEnum.Duke3D).ToLower(),
+            AddonId = new(nameof(GameEnum.Fury).ToLower(), null),
             Type = AddonTypeEnum.Official,
             Title = "Ion Fury",
             GridImageHash = null,
             Author = null,
             Description = null,
-            Version = null,
             SupportedGame = new(GameEnum.Fury),
             RequiredFeatures = null,
             PathToFile = null,
@@ -67,7 +65,7 @@ public sealed class FuryCmdArgumentsTests
             _modsProvider.DependentModWithIncompatibleVersion,
             _modsProvider.ModForAnotherGame,
             _modsProvider.ModThatRequiredFeature
-        }.ToDictionary(x => new AddonVersion(x.Id, x.Version), x => (IAddon)x);
+        }.ToDictionary(x => x.AddonId, x => (IAddon)x);
 
         Fury fury = new(new ConfigProviderFake());
 

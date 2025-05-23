@@ -1,6 +1,7 @@
 ﻿using Addons.Addons;
 using Common;
 using Common.Client.Helpers;
+using Common.Client.Interfaces;
 using Common.Common.Helpers;
 using Common.Enums;
 using Common.Enums.Addons;
@@ -12,10 +13,18 @@ using Games.Games;
 
 namespace Addons.Providers;
 
-public static class OriginalCampaignsProvider
+public sealed class OriginalCampaignsProvider
 {
+    private readonly IConfigProvider _config;
+
+    public OriginalCampaignsProvider(IConfigProvider config)
+    {
+        _config = config;
+    }
+
+
     /// <inheritdoc/>
-    public static Dictionary<AddonVersion, IAddon> GetOriginalCampaigns(IGame game)
+    public Dictionary<AddonId, IAddon> GetOriginalCampaigns(IGame game)
     {
         return game.GameEnum switch
         {
@@ -32,26 +41,28 @@ public static class OriginalCampaignsProvider
 
             GameEnum.Standalone => [],
 
-            GameEnum.Duke64 => ThrowHelper.ThrowNotSupportedException<Dictionary<AddonVersion, IAddon>>(),
-            GameEnum.RidesAgain => ThrowHelper.ThrowNotSupportedException<Dictionary<AddonVersion, IAddon>>(),
-            GameEnum.Witchaven2 => ThrowHelper.ThrowNotSupportedException<Dictionary<AddonVersion, IAddon>>(),
+            GameEnum.Duke64 => ThrowHelper.ThrowNotSupportedException<Dictionary<AddonId, IAddon>>(),
+            GameEnum.RidesAgain => ThrowHelper.ThrowNotSupportedException<Dictionary<AddonId, IAddon>>(),
+            GameEnum.Witchaven2 => ThrowHelper.ThrowNotSupportedException<Dictionary<AddonId, IAddon>>(),
 
-            _ => ThrowHelper.ThrowArgumentOutOfRangeException<Dictionary<AddonVersion, IAddon>>()
+            _ => ThrowHelper.ThrowArgumentOutOfRangeException<Dictionary<AddonId, IAddon>>()
         };
     }
 
-    private static Dictionary<AddonVersion, IAddon> GetDuke3DCampaigns(IGame game)
+    private Dictionary<AddonId, IAddon> GetDuke3DCampaigns(IGame game)
     {
         game.ThrowIfNotType(out DukeGame dGame);
 
-        Dictionary<AddonVersion, IAddon> campaigns = new(6);
+        Dictionary<AddonId, IAddon> campaigns = new(6);
 
         if (dGame.IsWorldTourInstalled)
         {
             var dukeWtId = nameof(DukeVersionEnum.Duke3D_WT).ToLower();
-            campaigns.Add(new(dukeWtId), new DukeCampaignEntity()
+            AddonId version = new(dukeWtId, null);
+
+            campaigns.Add(version, new DukeCampaignEntity()
             {
-                Id = dukeWtId,
+                AddonId = version,
                 Type = AddonTypeEnum.Official,
                 Title = "Duke Nukem 3D World Tour",
                 GridImageHash = DukeVersionEnum.Duke3D_WT.GetUniqueHash(),
@@ -64,7 +75,6 @@ public static class OriginalCampaignsProvider
                     The 20th Anniversary Edition includes a new fifth episode known as Alien World Order.
                     The episode was designed by Allen Blum and Richard “Levelord” Gray, both of whom designed all the levels in the original Duke Nukem 3D. 
                     """,
-                Version = null,
                 SupportedGame = new(GameEnum.Duke3D, DukeVersionEnum.Duke3D_WT),
                 RequiredFeatures = null,
                 PathToFile = null,
@@ -77,7 +87,8 @@ public static class OriginalCampaignsProvider
                 RTS = null,
                 StartMap = null,
                 IsFolder = false,
-                Executables = null
+                Executables = null,
+                IsFavorite = _config.FavoriteAddons.Contains(version)
             });
         }
 
@@ -86,9 +97,11 @@ public static class OriginalCampaignsProvider
             if (dGame.GameInstallFolder != dGame.DukeWTInstallPath)
             {
                 var dukeId = nameof(GameEnum.Duke3D).ToLower();
-                campaigns.Add(new(dukeId), new DukeCampaignEntity()
+                AddonId version = new(dukeId, null);
+
+                campaigns.Add(version, new DukeCampaignEntity()
                 {
-                    Id = dukeId,
+                    AddonId = version,
                     Type = AddonTypeEnum.Official,
                     Title = "Duke Nukem 3D",
                     GridImageHash = GameEnum.Duke3D.GetUniqueHash(),
@@ -101,7 +114,6 @@ public static class OriginalCampaignsProvider
                     The player assumes the role of Duke Nukem, an imperious action hero, and fights through 48 levels spread across 5 episodes. The player encounters a host of enemies and fights them with a range of weaponry.
                     In the end, Duke annihilates the alien overlords and celebrates by desecrating their corpses.
                     """,
-                    Version = null,
                     SupportedGame = new(GameEnum.Duke3D, DukeVersionEnum.Duke3D_Atomic),
                     RequiredFeatures = null,
                     PathToFile = null,
@@ -114,16 +126,19 @@ public static class OriginalCampaignsProvider
                     RTS = null,
                     StartMap = null,
                     IsFolder = false,
-                    Executables = null
+                    Executables = null,
+                    IsFavorite = _config.FavoriteAddons.Contains(version)
                 });
             }
 
             if (dGame.IsCaribbeanInstalled)
             {
                 var dukeVacaId = nameof(DukeAddonEnum.DukeVaca).ToLower();
-                campaigns.Add(new(dukeVacaId), new DukeCampaignEntity()
+                AddonId version = new(dukeVacaId, null);
+
+                campaigns.Add(version, new DukeCampaignEntity()
                 {
-                    Id = dukeVacaId,
+                    AddonId = version,
                     Type = AddonTypeEnum.Official,
                     Title = "Caribbean",
                     GridImageHash = DukeAddonEnum.DukeVaca.GetUniqueHash(),
@@ -136,7 +151,6 @@ public static class OriginalCampaignsProvider
                         However, the aliens have decided that the Caribbean offers the perfect climate for a new breeding ground, so they begin laying eggs and terrorizing the local tourists.
                         Angered that his rest and relaxation is being delayed, Duke Nukem sets out on a mission for retribution against the aliens who are interrupting his vacation.
                         """,
-                    Version = null,
                     SupportedGame = new(GameEnum.Duke3D, DukeVersionEnum.Duke3D_Atomic),
                     RequiredFeatures = null,
                     PathToFile = null,
@@ -149,16 +163,19 @@ public static class OriginalCampaignsProvider
                     RTS = null,
                     StartMap = null,
                     IsFolder = false,
-                    Executables = null
+                    Executables = null,
+                    IsFavorite = _config.FavoriteAddons.Contains(version)
                 });
             }
 
             if (dGame.IsNuclearWinterInstalled)
             {
                 var dukeNwId = nameof(DukeAddonEnum.DukeNW).ToLower();
-                campaigns.Add(new(dukeNwId), new DukeCampaignEntity()
+                AddonId version = new(dukeNwId, null);
+
+                campaigns.Add(version, new DukeCampaignEntity()
                 {
-                    Id = dukeNwId,
+                    AddonId = version,
                     Type = AddonTypeEnum.Official,
                     Title = "Nuclear Winter",
                     GridImageHash = DukeAddonEnum.DukeNW.GetUniqueHash(),
@@ -169,7 +186,6 @@ public static class OriginalCampaignsProvider
                         Santa Claus has been captured and brainwashed by the aliens that Duke previously defeated. To make matters worse, the aliens are now supported by an enemy force calling themselves the Feminist Elven Militia.
                         Duke Nukem must travel to the North Pole in order to stop the brainwashed Santa Claus and his manipulative captors.
                         """,
-                    Version = null,
                     SupportedGame = new(GameEnum.Duke3D, DukeVersionEnum.Duke3D_Atomic),
                     RequiredFeatures = null,
                     PathToFile = null,
@@ -183,16 +199,19 @@ public static class OriginalCampaignsProvider
                     StartMap = null,
                     PreviewImageHash = null,
                     IsFolder = false,
-                    Executables = null
+                    Executables = null,
+                    IsFavorite = _config.FavoriteAddons.Contains(version)
                 });
             }
 
             if (dGame.IsDukeDCInstalled)
             {
                 var dukeDcId = nameof(DukeAddonEnum.DukeDC).ToLower();
-                campaigns.Add(new(dukeDcId), new DukeCampaignEntity()
+                AddonId version = new(dukeDcId, null);
+
+                campaigns.Add(version, new DukeCampaignEntity()
                 {
-                    Id = dukeDcId,
+                    AddonId = version,
                     Type = AddonTypeEnum.Official,
                     Title = "Duke it Out in DC",
                     GridImageHash = DukeAddonEnum.DukeDC.GetUniqueHash(),
@@ -205,7 +224,6 @@ public static class OriginalCampaignsProvider
                         Aliens have crash-landed into the Capitol Building and have launched a massive invasion of Washington, D.C. Duke Nukem arrives to find that the
                         alien invaders have captured several national monuments and critical government buildings, but in the end, Duke defeats the invading army and rescues the President from the Cycloid Emperor.
                         """,
-                    Version = null,
                     SupportedGame = new(GameEnum.Duke3D, DukeVersionEnum.Duke3D_Atomic),
                     RequiredFeatures = null,
                     PathToFile = null,
@@ -219,7 +237,8 @@ public static class OriginalCampaignsProvider
                     StartMap = null,
                     PreviewImageHash = null,
                     IsFolder = false,
-                    Executables = null
+                    Executables = null,
+                    IsFavorite = _config.FavoriteAddons.Contains(version)
                 });
             }
         }
@@ -227,9 +246,11 @@ public static class OriginalCampaignsProvider
         if (dGame.IsDuke64Installed)
         {
             var duke64Id = nameof(GameEnum.Duke64).ToLower();
-            campaigns.Add(new(duke64Id), new DukeCampaignEntity()
+            AddonId version = new(duke64Id, null);
+
+            campaigns.Add(version, new DukeCampaignEntity()
             {
-                Id = duke64Id,
+                AddonId = version,
                 Type = AddonTypeEnum.Official,
                 Title = "Duke Nukem 64",
                 GridImageHash = GameEnum.Duke64.GetUniqueHash(),
@@ -240,7 +261,6 @@ public static class OriginalCampaignsProvider
                     The port also includes a four-player deathmatch mode and a two-player co-op mode via split-screen.
                     The game's mature themes have been minimized to satisfy Nintendo's adult content standards.
                     """,
-                Version = null,
                 SupportedGame = new(GameEnum.Duke64),
                 RequiredFeatures = null,
                 PathToFile = null,
@@ -254,7 +274,8 @@ public static class OriginalCampaignsProvider
                 StartMap = null,
                 PreviewImageHash = null,
                 IsFolder = false,
-                Executables = null
+                Executables = null,
+                IsFavorite = _config.FavoriteAddons.Contains(version)
             });
         }
 
@@ -263,21 +284,24 @@ public static class OriginalCampaignsProvider
 
 
     /// <inheritdoc/>
-    private static Dictionary<AddonVersion, IAddon> GetBloodCampaigns(IGame game)
+    private Dictionary<AddonId, IAddon> GetBloodCampaigns(IGame game)
     {
         game.ThrowIfNotType(out BloodGame bGame);
 
-        Dictionary<AddonVersion, IAddon> campaigns = new(2);
+        Dictionary<AddonId, IAddon> campaigns = new(2);
 
-        var bloodId = nameof(GameEnum.Blood).ToLower();
-        campaigns.Add(new(bloodId), new BloodCampaignEntity()
         {
-            Id = bloodId,
-            Type = AddonTypeEnum.Official,
-            Title = "Blood",
-            GridImageHash = GameEnum.Blood.GetUniqueHash(),
-            Author = "Monolith Productions",
-            Description = """
+            var bloodId = nameof(GameEnum.Blood).ToLower();
+            AddonId version = new(bloodId, null);
+
+            campaigns.Add(version, new BloodCampaignEntity()
+            {
+                AddonId = version,
+                Type = AddonTypeEnum.Official,
+                Title = "Blood",
+                GridImageHash = GameEnum.Blood.GetUniqueHash(),
+                Author = "Monolith Productions",
+                Description = """
                 **Blood** is a PC game released for MS-DOS on May 31, 1997. It was developed by **Monolith Productions** and published by **GT Interactive**.
 
                 The game became well-known for its copious amounts of violence and numerous stylistic and cultural references to literary and cinematic horror works.
@@ -289,30 +313,32 @@ public static class OriginalCampaignsProvider
                 Half-crazy and rambling, Caleb nursed her back to health. It is implied that she later became Caleb's lover, and introduced him to the cult.
                 Together they rose to the highest ranks and became "The Chosen", the four most esteemed generals of Tchernobog's army (the other two being Ishmael and Gabriel).
                 """,
-            Version = null,
-            SupportedGame = new(GameEnum.Blood),
-            RequiredFeatures = null,
-            PathToFile = null,
-            DependentAddons = null,
-            IncompatibleAddons = null,
-            MainDef = null,
-            AdditionalDefs = null,
-            INI = ClientConsts.BloodIni,
-            RFF = null,
-            SND = null,
-            StartMap = null,
-            PreviewImageHash = null,
-            IsFolder = false,
-            Executables = null
-        });
+                SupportedGame = new(GameEnum.Blood),
+                RequiredFeatures = null,
+                PathToFile = null,
+                DependentAddons = null,
+                IncompatibleAddons = null,
+                MainDef = null,
+                AdditionalDefs = null,
+                INI = ClientConsts.BloodIni,
+                RFF = null,
+                SND = null,
+                StartMap = null,
+                PreviewImageHash = null,
+                IsFolder = false,
+                Executables = null,
+                IsFavorite = _config.FavoriteAddons.Contains(version)
+            });
+        }
 
         if (bGame.IsCrypticPassageInstalled)
         {
             var bloodCpId = nameof(BloodAddonEnum.BloodCP).ToLower();
+            AddonId version = new(bloodCpId, null);
 
-            campaigns.Add(new(bloodCpId), new BloodCampaignEntity()
+            campaigns.Add(version, new BloodCampaignEntity()
             {
-                Id = bloodCpId,
+                AddonId = version,
                 Type = AddonTypeEnum.Official,
                 Title = "Cryptic Passage",
                 GridImageHash = BloodAddonEnum.BloodCP.GetUniqueHash(),
@@ -325,7 +351,6 @@ public static class OriginalCampaignsProvider
                     This scroll is said to be capable of upsetting the balance in the otherworld, but Caleb finds himself detoured by the forces of Tchernobog and the Cabal.
                     He must find the scroll and take out everyone responsible for interrupting his journey.
                     """,
-                Version = null,
                 SupportedGame = new(GameEnum.Blood),
                 RequiredFeatures = null,
                 PathToFile = null,
@@ -339,7 +364,8 @@ public static class OriginalCampaignsProvider
                 StartMap = null,
                 PreviewImageHash = null,
                 IsFolder = false,
-                Executables = null
+                Executables = null,
+                IsFavorite = _config.FavoriteAddons.Contains(version)
             });
         }
 
@@ -350,22 +376,23 @@ public static class OriginalCampaignsProvider
     /// <summary>
     /// Get list of original campaigns
     /// </summary>
-    private static Dictionary<AddonVersion, IAddon> GetWangCampaigns(IGame game)
+    private Dictionary<AddonId, IAddon> GetWangCampaigns(IGame game)
     {
         game.ThrowIfNotType(out WangGame wGame);
 
-        Dictionary<AddonVersion, IAddon> campaigns = new(1);
+        Dictionary<AddonId, IAddon> campaigns = new(1);
 
         if (wGame.IsBaseGameInstalled)
         {
             var wangId = nameof(GameEnum.Wang).ToLower();
-            campaigns.Add(new(wangId), new GenericCampaignEntity()
+            AddonId version = new(wangId, null);
+
+            campaigns.Add(version, new GenericCampaignEntity()
             {
-                Id = wangId,
+                AddonId = version,
                 Type = AddonTypeEnum.Official,
                 Title = "Shadow Warrior",
                 GridImageHash = GameEnum.Wang.GetUniqueHash(),
-                Version = null,
                 Author = "3D Realms",
                 Description = """
                     **Shadow Warrior** is a first-person shooter developed by **3D Realms** and released on May 13, 1997 by **GT Interactive**.
@@ -384,7 +411,8 @@ public static class OriginalCampaignsProvider
                 StartMap = null,
                 PreviewImageHash = null,
                 IsFolder = false,
-                Executables = null
+                Executables = null,
+                IsFavorite = _config.FavoriteAddons.Contains(version)
             });
         }
 
@@ -393,18 +421,20 @@ public static class OriginalCampaignsProvider
 
 
     /// <inheritdoc/>
-    private static Dictionary<AddonVersion, IAddon> GetFuryCampaigns(IGame game)
+    private Dictionary<AddonId, IAddon> GetFuryCampaigns(IGame game)
     {
         game.ThrowIfNotType(out FuryGame fGame);
 
-        Dictionary<AddonVersion, IAddon> campaigns = new(1);
+        Dictionary<AddonId, IAddon> campaigns = new(1);
 
         if (fGame.IsBaseGameInstalled)
         {
             var furyId = nameof(GameEnum.Fury).ToLower();
-            campaigns.Add(new(furyId), new DukeCampaignEntity()
+            AddonId version = new(furyId, null);
+
+            campaigns.Add(version, new DukeCampaignEntity()
             {
-                Id = furyId,
+                AddonId = version,
                 Type = AddonTypeEnum.Official,
                 Title = IsAftershock(fGame) ? "Ion Fury: Aftershock" : "Ion Fury",
                 GridImageHash = IsAftershock(fGame) ? "Aftershock".GetHashCode() : GameEnum.Fury.GetUniqueHash(),
@@ -416,7 +446,6 @@ public static class OriginalCampaignsProvider
 
                 You assume the role of Shelly "Bombshell" Harrison, a bomb disposal expert aligned to the Global Defense Force. Dr. Jadus Heskel, a transhumanist cult leader, unleashes an army of cybernetically-enhanced soldiers on the futuristic dystopian city of Neo D.C., which Shelly is tasked with fighting through.
                 """,
-                Version = null,
                 SupportedGame = new(GameEnum.Fury),
                 RequiredFeatures = null,
                 PathToFile = null,
@@ -430,7 +459,8 @@ public static class OriginalCampaignsProvider
                 StartMap = null,
                 PreviewImageHash = null,
                 IsFolder = false,
-                Executables = null
+                Executables = null,
+                IsFavorite = _config.FavoriteAddons.Contains(version)
             });
         }
 
@@ -440,7 +470,7 @@ public static class OriginalCampaignsProvider
     /// <summary>
     /// Is Aftershock addon installed
     /// </summary>
-    private static bool IsAftershock(FuryGame fGame)
+    private bool IsAftershock(FuryGame fGame)
     {
         if (fGame.GameInstallFolder is null)
         {
@@ -461,23 +491,26 @@ public static class OriginalCampaignsProvider
 
 
     /// <inheritdoc/>
-    private static Dictionary<AddonVersion, IAddon> GetRedneckCampaigns(IGame game)
+    private Dictionary<AddonId, IAddon> GetRedneckCampaigns(IGame game)
     {
         game.ThrowIfNotType(out RedneckGame rGame);
 
-        Dictionary<AddonVersion, IAddon> campaigns = new(3);
+        Dictionary<AddonId, IAddon> campaigns = new(3);
 
         if (rGame.IsBaseGameInstalled)
         {
-            var redneckId = nameof(GameEnum.Redneck).ToLower();
-            campaigns.Add(new(redneckId), new DukeCampaignEntity()
             {
-                Id = redneckId,
-                Type = AddonTypeEnum.Official,
-                Title = "Redneck Rampage",
-                GridImageHash = GameEnum.Redneck.GetUniqueHash(),
-                Author = "Xatrix Entertainment",
-                Description = """
+                var redneckId = nameof(GameEnum.Redneck).ToLower();
+                AddonId version = new(redneckId, null);
+
+                campaigns.Add(version, new DukeCampaignEntity()
+                {
+                    AddonId = version,
+                    Type = AddonTypeEnum.Official,
+                    Title = "Redneck Rampage",
+                    GridImageHash = GameEnum.Redneck.GetUniqueHash(),
+                    Author = "Xatrix Entertainment",
+                    Description = """
                     **Redneck Rampage** is a 1997 first-person shooter game developed by **Xatrix Entertainment** and published by **Interplay**.
                     The game is a first-person shooter with a variety of weapons and levels, and has a hillbilly theme, primarily taking place in a fictional Arkansas town.
                     Many of the weapons and power-ups border on the nonsensical, and in some ways the game is a parody of both first-person shooter games and rural American life.
@@ -486,29 +519,32 @@ public static class OriginalCampaignsProvider
                     The brothers battle through such locales as a meat packing plant and a trailer park, and battle evil clones of their neighbors. There are also male and female alien enemies.
                     The bosses are the Assface and the leader of the alien invasion, the Queen Vixen.
                     """,
-                Version = null,
-                SupportedGame = new(GameEnum.Redneck),
-                RequiredFeatures = null,
-                PathToFile = null,
-                DependentAddons = null,
-                IncompatibleAddons = null,
-                MainCon = null,
-                AdditionalCons = null,
-                MainDef = null,
-                AdditionalDefs = null,
-                RTS = null,
-                StartMap = null,
-                PreviewImageHash = null,
-                IsFolder = false,
-                Executables = null
-            });
+                    SupportedGame = new(GameEnum.Redneck),
+                    RequiredFeatures = null,
+                    PathToFile = null,
+                    DependentAddons = null,
+                    IncompatibleAddons = null,
+                    MainCon = null,
+                    AdditionalCons = null,
+                    MainDef = null,
+                    AdditionalDefs = null,
+                    RTS = null,
+                    StartMap = null,
+                    PreviewImageHash = null,
+                    IsFolder = false,
+                    Executables = null,
+                    IsFavorite = _config.FavoriteAddons.Contains(version)
+                });
+            }
 
             if (rGame.IsRoute66Installed)
             {
                 var redneckR66Id = nameof(RedneckAddonEnum.Route66).ToLower();
-                campaigns.Add(new(redneckR66Id), new DukeCampaignEntity()
+                AddonId version = new(redneckR66Id, null);
+
+                campaigns.Add(version, new DukeCampaignEntity()
                 {
-                    Id = redneckR66Id,
+                    AddonId = version,
                     Type = AddonTypeEnum.Official,
                     Title = "Route 66",
                     GridImageHash = RedneckAddonEnum.Route66.GetUniqueHash(),
@@ -517,7 +553,6 @@ public static class OriginalCampaignsProvider
                         **Redneck Rampage: Suckin' Grits on Route 66** is a 12-level expansion pack for Redneck Rampage. It was developed by Sunstorm Interactive and released on December 19, 1997.
                         The add-on contains several new locations and textures, as well as a new ending.
                         """,
-                    Version = null,
                     SupportedGame = new(GameEnum.Redneck),
                     RequiredFeatures = null,
                     PathToFile = null,
@@ -531,7 +566,8 @@ public static class OriginalCampaignsProvider
                     StartMap = null,
                     PreviewImageHash = null,
                     IsFolder = false,
-                    Executables = null
+                    Executables = null,
+                    IsFavorite = _config.FavoriteAddons.Contains(version)
                 });
             }
         }
@@ -539,9 +575,11 @@ public static class OriginalCampaignsProvider
         if (rGame.IsAgainInstalled)
         {
             var redneckRaId = nameof(GameEnum.RidesAgain).ToLower();
-            campaigns.Add(new(redneckRaId), new DukeCampaignEntity()
+            AddonId version = new(redneckRaId, null);
+
+            campaigns.Add(version, new DukeCampaignEntity()
             {
-                Id = redneckRaId,
+                AddonId = version,
                 Type = AddonTypeEnum.Official,
                 Title = "Rides Again",
                 GridImageHash = GameEnum.RidesAgain.GetUniqueHash(),
@@ -552,7 +590,6 @@ public static class OriginalCampaignsProvider
                     After Leonard and Bubba crash-land a UFO, they find themselves in the middle of the desert.
                     Along the way, they are hunted by aliens and must blast their way through jackalope farms, Disgraceland, a riverboat, a brothel and various other locales.
                     """,
-                Version = null,
                 SupportedGame = new(GameEnum.RidesAgain),
                 RequiredFeatures = null,
                 PathToFile = null,
@@ -566,7 +603,8 @@ public static class OriginalCampaignsProvider
                 StartMap = null,
                 PreviewImageHash = null,
                 IsFolder = false,
-                Executables = null
+                Executables = null,
+                IsFavorite = _config.FavoriteAddons.Contains(version)
             });
         }
 
@@ -575,18 +613,20 @@ public static class OriginalCampaignsProvider
 
 
     /// <inheritdoc/>
-    private static Dictionary<AddonVersion, IAddon> GetNamCampaigns(IGame game)
+    private Dictionary<AddonId, IAddon> GetNamCampaigns(IGame game)
     {
         game.ThrowIfNotType(out NamGame nGame);
 
-        Dictionary<AddonVersion, IAddon> campaigns = new(1);
+        Dictionary<AddonId, IAddon> campaigns = new(1);
 
         if (nGame.IsBaseGameInstalled)
         {
             var namId = nameof(GameEnum.NAM).ToLower();
-            campaigns.Add(new(namId), new DukeCampaignEntity()
+            AddonId version = new(namId, null);
+
+            campaigns.Add(version, new DukeCampaignEntity()
             {
-                Id = namId,
+                AddonId = version,
                 Type = AddonTypeEnum.Official,
                 Title = "NAM",
                 GridImageHash = GameEnum.NAM.GetUniqueHash(),
@@ -602,7 +642,6 @@ public static class OriginalCampaignsProvider
 
                     NAM is the first game of its kind. NAM IS WAR!
                     """,
-                Version = null,
                 SupportedGame = new(GameEnum.NAM),
                 RequiredFeatures = null,
                 PathToFile = null,
@@ -616,7 +655,8 @@ public static class OriginalCampaignsProvider
                 StartMap = null,
                 PreviewImageHash = null,
                 IsFolder = false,
-                Executables = null
+                Executables = null,
+                IsFavorite = _config.FavoriteAddons.Contains(version)
             });
         }
 
@@ -625,18 +665,20 @@ public static class OriginalCampaignsProvider
 
 
     /// <inheritdoc/>
-    private static Dictionary<AddonVersion, IAddon> GetWw2Campaigns(IGame game)
+    private Dictionary<AddonId, IAddon> GetWw2Campaigns(IGame game)
     {
         game.ThrowIfNotType(out WW2GIGame wGame);
 
-        Dictionary<AddonVersion, IAddon> campaigns = new(1);
+        Dictionary<AddonId, IAddon> campaigns = new(1);
 
         if (wGame.IsBaseGameInstalled)
         {
             var ww2id = nameof(GameEnum.WW2GI).ToLower();
-            campaigns.Add(new(ww2id), new DukeCampaignEntity()
+            AddonId version = new(ww2id, null);
+
+            campaigns.Add(version, new DukeCampaignEntity()
             {
-                Id = ww2id,
+                AddonId = version,
                 Type = AddonTypeEnum.Official,
                 Title = "World War II GI",
                 GridImageHash = GameEnum.WW2GI.GetUniqueHash(),
@@ -648,7 +690,6 @@ public static class OriginalCampaignsProvider
 
                     This is D-Day!
                     """,
-                Version = null,
                 SupportedGame = new(GameEnum.WW2GI),
                 RequiredFeatures = null,
                 PathToFile = null,
@@ -662,16 +703,19 @@ public static class OriginalCampaignsProvider
                 StartMap = null,
                 PreviewImageHash = null,
                 IsFolder = false,
-                Executables = null
+                Executables = null,
+                IsFavorite = _config.FavoriteAddons.Contains(version)
             });
         }
 
         if (wGame.IsPlatoonInstalled)
         {
             var platoon = nameof(WW2GIAddonEnum.Platoon).ToLower();
-            campaigns.Add(new(platoon), new DukeCampaignEntity()
+            AddonId version = new(platoon, null);
+
+            campaigns.Add(version, new DukeCampaignEntity()
             {
-                Id = platoon,
+                AddonId = version,
                 Type = AddonTypeEnum.Official,
                 Title = "Platoon Leader",
                 GridImageHash = WW2GIAddonEnum.Platoon.GetUniqueHash(),
@@ -681,7 +725,6 @@ public static class OriginalCampaignsProvider
 
                     This add-on features three single-player-only levels: one WWII Pacific and two Vietnam War scenarios. Includes many new effects and features not seen in the game WWII GI.
                     """,
-                Version = null,
                 SupportedGame = new(GameEnum.WW2GI),
                 RequiredFeatures = null,
                 PathToFile = null,
@@ -695,7 +738,8 @@ public static class OriginalCampaignsProvider
                 StartMap = null,
                 PreviewImageHash = null,
                 IsFolder = false,
-                Executables = null
+                Executables = null,
+                IsFavorite = _config.FavoriteAddons.Contains(version)
             });
         }
 
@@ -704,18 +748,20 @@ public static class OriginalCampaignsProvider
 
 
     /// <inheritdoc/>
-    private static Dictionary<AddonVersion, IAddon> GetTekWarCampaigns(IGame game)
+    private Dictionary<AddonId, IAddon> GetTekWarCampaigns(IGame game)
     {
         game.ThrowIfNotType(out TekWarGame tGame);
 
-        Dictionary<AddonVersion, IAddon> campaigns = new(1);
+        Dictionary<AddonId, IAddon> campaigns = new(1);
 
         if (tGame.IsBaseGameInstalled)
         {
-            var namId = nameof(GameEnum.TekWar).ToLower();
-            campaigns.Add(new(namId), new DukeCampaignEntity()
+            var tekwarId = nameof(GameEnum.TekWar).ToLower();
+            AddonId version = new(tekwarId, null);
+
+            campaigns.Add(version, new DukeCampaignEntity()
             {
-                Id = namId,
+                AddonId = version,
                 Type = AddonTypeEnum.Official,
                 Title = "TekWar",
                 GridImageHash = GameEnum.TekWar.GetUniqueHash(),
@@ -725,7 +771,6 @@ public static class OriginalCampaignsProvider
                     
                     Take out the seven Tek Lords and their minions in 7 missions, but spare those innocent civilians.
                     """,
-                Version = null,
                 SupportedGame = new(GameEnum.TekWar),
                 RequiredFeatures = null,
                 PathToFile = null,
@@ -739,7 +784,8 @@ public static class OriginalCampaignsProvider
                 StartMap = null,
                 PreviewImageHash = null,
                 IsFolder = false,
-                Executables = null
+                Executables = null,
+                IsFavorite = _config.FavoriteAddons.Contains(version)
             });
         }
 
@@ -748,18 +794,20 @@ public static class OriginalCampaignsProvider
 
 
     /// <inheritdoc/>
-    private static Dictionary<AddonVersion, IAddon> GetSlaveCampaigns(IGame game)
+    private Dictionary<AddonId, IAddon> GetSlaveCampaigns(IGame game)
     {
         game.ThrowIfNotType(out SlaveGame sGame);
 
-        Dictionary<AddonVersion, IAddon> campaigns = new(1);
+        Dictionary<AddonId, IAddon> campaigns = new(1);
 
         if (sGame.IsBaseGameInstalled)
         {
             var slaveId = nameof(GameEnum.Slave).ToLower();
-            campaigns.Add(new(slaveId), new GenericCampaignEntity()
+            AddonId version = new(slaveId, null);
+
+            campaigns.Add(version, new GenericCampaignEntity()
             {
-                Id = slaveId,
+                AddonId = version,
                 Type = AddonTypeEnum.Official,
                 Title = "Powerslave",
                 GridImageHash = GameEnum.Slave.GetUniqueHash(),
@@ -775,7 +823,6 @@ public static class OriginalCampaignsProvider
                     various minions, which include mummies, Anubis soldiers, scorpions, and evil spirits. The player's course of action is directed by the spirit of King Ramses, whose mummy was exhumed
                     from its tomb by the Kilmaat, who seek to resurrect him and use his powers to control the world.
                     """,
-                Version = null,
                 SupportedGame = new(GameEnum.Slave),
                 RequiredFeatures = null,
                 PathToFile = null,
@@ -786,7 +833,8 @@ public static class OriginalCampaignsProvider
                 StartMap = null,
                 PreviewImageHash = null,
                 IsFolder = false,
-                Executables = null
+                Executables = null,
+                IsFavorite = _config.FavoriteAddons.Contains(version)
             });
         }
 
@@ -795,18 +843,20 @@ public static class OriginalCampaignsProvider
 
 
     /// <inheritdoc/>
-    private static Dictionary<AddonVersion, IAddon> GetWitchavenCampaigns(IGame game)
+    private Dictionary<AddonId, IAddon> GetWitchavenCampaigns(IGame game)
     {
         game.ThrowIfNotType(out WitchavenGame wGame);
 
-        Dictionary<AddonVersion, IAddon> campaigns = new(1);
+        Dictionary<AddonId, IAddon> campaigns = new(1);
 
         if (wGame.IsBaseGameInstalled)
         {
-            var namId = nameof(GameEnum.Witchaven).ToLower();
-            campaigns.Add(new(namId), new GenericCampaignEntity()
+            var whId = nameof(GameEnum.Witchaven).ToLower();
+            AddonId version = new(whId, null);
+
+            campaigns.Add(version, new GenericCampaignEntity()
             {
-                Id = namId,
+                AddonId = version,
                 Type = AddonTypeEnum.Official,
                 Title = "Witchaven",
                 GridImageHash = GameEnum.Witchaven.GetUniqueHash(),
@@ -818,7 +868,6 @@ public static class OriginalCampaignsProvider
                     
                     Dare to enter this 3D Hell... Dare to enter Witchaven!
                     """,
-                Version = null,
                 SupportedGame = new(GameEnum.Witchaven),
                 RequiredFeatures = null,
                 PathToFile = null,
@@ -829,16 +878,19 @@ public static class OriginalCampaignsProvider
                 StartMap = null,
                 PreviewImageHash = null,
                 IsFolder = false,
-                Executables = null
+                Executables = null,
+                IsFavorite = _config.FavoriteAddons.Contains(version)
             });
         }
 
         if (wGame.IsWitchaven2Installed)
         {
-            var namId = nameof(GameEnum.Witchaven2).ToLower();
-            campaigns.Add(new(namId), new GenericCampaignEntity()
+            var wh2Id = nameof(GameEnum.Witchaven2).ToLower();
+            AddonId version = new(wh2Id, null);
+
+            campaigns.Add(version, new GenericCampaignEntity()
             {
-                Id = namId,
+                AddonId = version,
                 Type = AddonTypeEnum.Official,
                 Title = "Witchaven II",
                 GridImageHash = GameEnum.Witchaven2.GetUniqueHash(),
@@ -852,7 +904,6 @@ public static class OriginalCampaignsProvider
                     
                     Alone in the land that you have fought so fiercely to protect, you must gather your strength and use your anger to fight for Blood Vengeance.
                     """,
-                Version = null,
                 SupportedGame = new(GameEnum.Witchaven2),
                 RequiredFeatures = null,
                 PathToFile = null,
@@ -863,7 +914,8 @@ public static class OriginalCampaignsProvider
                 StartMap = null,
                 PreviewImageHash = null,
                 IsFolder = false,
-                Executables = null
+                Executables = null,
+                IsFavorite = _config.FavoriteAddons.Contains(version)
             });
         }
 

@@ -1,5 +1,4 @@
 using Addons.Addons;
-using Common;
 using Common.Enums;
 using Common.Interfaces;
 using Games.Games;
@@ -27,13 +26,12 @@ public sealed class NamCmdArgumentsTests
 
         _namCamp = new()
         {
-            Id = nameof(GameEnum.NAM).ToLower(),
+            AddonId = new(nameof(GameEnum.NAM).ToLower(), null),
             Type = AddonTypeEnum.Official,
             Title = "NAM",
             GridImageHash = null,
             Author = null,
             Description = null,
-            Version = null,
             SupportedGame = new(GameEnum.NAM),
             RequiredFeatures = null,
             PathToFile = null,
@@ -57,7 +55,7 @@ public sealed class NamCmdArgumentsTests
         var mods = new List<AutoloadModEntity>() {
             _modsProvider.EnabledMod,
             _modsProvider.IncompatibleMod,
-        }.ToDictionary(x => new AddonVersion(x.Id, x.Version), x => (IAddon)x);
+        }.ToDictionary(x => x.AddonId, x => (IAddon)x);
 
         Raze raze = new();
 
@@ -103,7 +101,7 @@ public sealed class NamCmdArgumentsTests
         var mods = new List<AutoloadModEntity>() {
             _modsProvider.EnabledMod,
             _modsProvider.IncompatibleMod,
-        }.ToDictionary(x => new AddonVersion(x.Id, x.Version), x => (IAddon)x);
+        }.ToDictionary(x => x.AddonId, x => (IAddon)x);
 
         EDuke32 eduke32 = new();
 
@@ -139,7 +137,7 @@ public sealed class NamCmdArgumentsTests
         var mods = new List<AutoloadModEntity>() {
             _modsProvider.EnabledMod,
             _modsProvider.IncompatibleMod,
-        }.ToDictionary(x => new AddonVersion(x.Id, x.Version), x => (IAddon)x);
+        }.ToDictionary(x => x.AddonId, x => (IAddon)x);
 
         RedNukem redNukem = new();
 

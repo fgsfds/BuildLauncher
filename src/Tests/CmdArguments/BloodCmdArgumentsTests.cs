@@ -1,5 +1,4 @@
 using Addons.Addons;
-using Common;
 using Common.Enums;
 using Common.Enums.Addons;
 using Common.Interfaces;
@@ -32,13 +31,12 @@ public sealed class BloodCmdArgumentsTests
 
         _bloodCamp = new()
         {
-            Id = nameof(GameEnum.Blood).ToLower(),
+            AddonId = new(nameof(GameEnum.Blood).ToLower(), null),
             Type = AddonTypeEnum.Official,
             Title = "Blood",
             GridImageHash = null,
             Author = null,
             Description = null,
-            Version = null,
             SupportedGame = new(GameEnum.Blood),
             RequiredFeatures = null,
             PathToFile = null,
@@ -57,13 +55,12 @@ public sealed class BloodCmdArgumentsTests
 
         _bloodCpCamp = new()
         {
-            Id = nameof(BloodAddonEnum.BloodCP).ToLower(),
+            AddonId = new(nameof(BloodAddonEnum.BloodCP).ToLower(), null),
             Type = AddonTypeEnum.Official,
             Title = "Cryptic Passage",
             GridImageHash = null,
             Author = null,
             Description = null,
-            Version = null,
             SupportedGame = new(GameEnum.Blood),
             RequiredFeatures = null,
             PathToFile = null,
@@ -82,13 +79,12 @@ public sealed class BloodCmdArgumentsTests
 
         _bloodTc = new()
         {
-            Id = "blood-tc",
+            AddonId = new("blood-tc", null),
             Type = AddonTypeEnum.TC,
             Title = "Blood TC",
             GridImageHash = null,
             Author = null,
             Description = null,
-            Version = null,
             SupportedGame = new(GameEnum.Blood),
             RequiredFeatures = null,
             PathToFile = Path.Combine("D:", "Games", "Blood", "blood_tc.zip"),
@@ -107,13 +103,12 @@ public sealed class BloodCmdArgumentsTests
 
         _bloodTcFolder = new()
         {
-            Id = "blood-tc-folder",
+            AddonId = new("blood-tc-folder", null),
             Type = AddonTypeEnum.TC,
             Title = "Blood TC",
             GridImageHash = null,
             Author = null,
             Description = null,
-            Version = null,
             SupportedGame = new(GameEnum.Blood),
             RequiredFeatures = null,
             PathToFile = Path.Combine("D:", "Games", "Blood", "blood_tc_folder", "addon.json"),
@@ -132,13 +127,12 @@ public sealed class BloodCmdArgumentsTests
 
         _bloodTcExeOverride = new()
         {
-            Id = "blood-tc-exe-override",
+            AddonId = new("blood-tc-exe-override", null),
             Type = AddonTypeEnum.TC,
             Title = "Blood TC",
             GridImageHash = null,
             Author = null,
             Description = null,
-            Version = null,
             SupportedGame = new(GameEnum.Blood),
             RequiredFeatures = null,
             PathToFile = Path.Combine("D:", "Games", "Blood", "blood_tc_folder", "addon.json"),
@@ -154,6 +148,7 @@ public sealed class BloodCmdArgumentsTests
             IsFolder = true,
             Executables = new Dictionary<OSEnum, string>() { { OSEnum.Windows, "nblood.exe" } }
         };
+
     }
 
     [Fact]
@@ -173,7 +168,7 @@ public sealed class BloodCmdArgumentsTests
             _modsProvider.ModForAnotherGame,
             _modsProvider.ModThatRequiredFeature,
             _modsProvider.MultipleDependenciesMod
-        }.ToDictionary(x => new AddonVersion(x.Id, x.Version), x => (IAddon)x);
+        }.ToDictionary(x => x.AddonId, x => (IAddon)x);
 
         Raze raze = new();
 
@@ -218,7 +213,7 @@ public sealed class BloodCmdArgumentsTests
             _modsProvider.DependentModWithIncompatibleVersion,
             _modsProvider.ModForAnotherGame,
             _modsProvider.ModThatRequiredFeature
-        }.ToDictionary(x => new AddonVersion(x.Id, x.Version), x => (IAddon)x);
+        }.ToDictionary(x => x.AddonId, x => (IAddon)x);
 
         Raze raze = new();
 
@@ -325,7 +320,7 @@ public sealed class BloodCmdArgumentsTests
             _modsProvider.ModForAnotherGame,
             _modsProvider.ModThatRequiredFeature,
             _modsProvider.MultipleDependenciesMod
-        }.ToDictionary(x => new AddonVersion(x.Id, x.Version), x => (IAddon)x);
+        }.ToDictionary(x => x.AddonId, x => (IAddon)x);
 
         NBlood nblood = new();
 
@@ -357,7 +352,7 @@ public sealed class BloodCmdArgumentsTests
             _modsProvider.DependentModWithIncompatibleVersion,
             _modsProvider.ModForAnotherGame,
             _modsProvider.ModThatRequiredFeature
-        }.ToDictionary(x => new AddonVersion(x.Id, x.Version), x => (IAddon)x);
+        }.ToDictionary(x => x.AddonId, x => (IAddon)x);
 
         NBlood nblood = new();
 
@@ -440,7 +435,7 @@ public sealed class BloodCmdArgumentsTests
             _modsProvider.DependentModWithIncompatibleVersion,
             _modsProvider.ModForAnotherGame,
             _modsProvider.ModThatRequiredFeature
-        }.ToDictionary(x => new AddonVersion(x.Id, x.Version), x => (IAddon)x);
+        }.ToDictionary(x => x.AddonId, x => (IAddon)x);
 
         NotBlood notblood = new();
 
@@ -472,7 +467,7 @@ public sealed class BloodCmdArgumentsTests
             _modsProvider.DependentModWithIncompatibleVersion,
             _modsProvider.ModForAnotherGame,
             _modsProvider.ModThatRequiredFeature
-        }.ToDictionary(x => new AddonVersion(x.Id, x.Version), x => (IAddon)x);
+        }.ToDictionary(x => x.AddonId, x => (IAddon)x);
 
         NotBlood notblood = new();
 

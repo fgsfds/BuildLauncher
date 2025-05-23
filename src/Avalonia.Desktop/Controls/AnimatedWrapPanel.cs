@@ -1,10 +1,10 @@
-﻿using Avalonia.Animation;
+﻿using System.Collections.Specialized;
+using Avalonia.Animation;
 using Avalonia.Animation.Easings;
 using Avalonia.Controls;
 using Avalonia.Media;
 using Avalonia.Styling;
 using Avalonia.Threading;
-using System.Collections.Specialized;
 
 namespace Avalonia.Desktop.Controls;
 
