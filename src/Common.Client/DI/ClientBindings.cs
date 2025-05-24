@@ -69,6 +69,7 @@ public static class ClientBindings
         httpClient.Timeout = TimeSpan.FromSeconds(30);
         return httpClient;
     }
+
     public class FakeHttpMessageHandler : HttpMessageHandler
     {
         protected override Task<HttpResponseMessage> SendAsync(

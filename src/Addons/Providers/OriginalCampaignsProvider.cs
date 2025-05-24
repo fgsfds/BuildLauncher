@@ -23,7 +23,12 @@ public sealed class OriginalCampaignsProvider
     }
 
 
-    /// <inheritdoc/>
+    /// <summary>
+    /// Retrieves the original campaigns associated with the specified game.
+    /// </summary>
+    /// <param name="game">The game for which to retrieve the original campaigns.</param>
+    /// <returns>A dictionary where the keys are <see cref="AddonId"/> values representing the unique identifiers of the
+    /// campaigns,  and the values are <see cref="IAddon"/> instances representing the campaign details.</returns>
     public Dictionary<AddonId, IAddon> GetOriginalCampaigns(IGame game)
     {
         return game.GameEnum switch
