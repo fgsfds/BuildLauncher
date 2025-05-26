@@ -40,7 +40,7 @@ public static class ClientBindings
         else
         {
             _ = container.AddSingleton<IConfigProvider, ConfigProvider>();
-            _ = container.AddSingleton<DatabaseContextFactory>();
+            _ = container.AddDbContextFactory<DatabaseContext>();
 
             _ = container
                 .AddLogging(x => x

@@ -5,6 +5,7 @@ using Common.Enums;
 using CommunityToolkit.Diagnostics;
 using Database.Client;
 using Database.Client.DbEntities;
+using Microsoft.EntityFrameworkCore;
 using Ports.Ports;
 using Ports.Ports.EDuke32;
 
@@ -15,7 +16,7 @@ namespace Ports.Providers;
 /// </summary>
 public sealed class InstalledPortsProvider
 {
-    private readonly DatabaseContextFactory _databaseContextFactory;
+    private readonly IDbContextFactory<DatabaseContext> _dbContextFactory;
 
     private readonly List<BasePort> _builtInPorts;
     private readonly List<CustomPort> _customPorts = [];
@@ -35,10 +36,10 @@ public sealed class InstalledPortsProvider
 
     public InstalledPortsProvider(
         IConfigProvider config,
-        DatabaseContextFactory databaseContextFactory
+        IDbContextFactory<DatabaseContext> dbContextFactory
         )
     {
-        _databaseContextFactory = databaseContextFactory;
+        _dbContextFactory = dbContextFactory;
 
         if (!Directory.Exists(ClientProperties.PortsFolderPath))
         {
@@ -112,7 +113,7 @@ public sealed class InstalledPortsProvider
         PortEnum newType
         )
     {
-        using var dbContext = _databaseContextFactory.Get();
+        using var dbContext = _dbContextFactory.CreateDbContext();
 
         var existingPort = dbContext.CustomPorts.Find(oldName);
 
@@ -142,7 +143,7 @@ public sealed class InstalledPortsProvider
     /// <param name="portName">Name of the port</param>
     public void DeleteCustomPort(string portName)
     {
-        using var dbContext = _databaseContextFactory.Get();
+        using var dbContext = _dbContextFactory.CreateDbContext();
 
         var portToDelete = dbContext.CustomPorts.Find(portName);
 
@@ -164,9 +165,9 @@ public sealed class InstalledPortsProvider
     {
         _customPorts.Clear();
 
-        using DatabaseContext? dbContent = _databaseContextFactory.Get();
+        using var dbContext = _dbContextFactory.CreateDbContext();
 
-        foreach (var port in dbContent.CustomPorts.OrderBy(static x => x.Name))
+        foreach (var port in dbContext.CustomPorts.OrderBy(static x => x.Name))
         {
             _customPorts.Add(new() { Name = port.Name, Path = port.PathToExe, BasePort = _builtInPorts.First(x => x.PortEnum == port.PortEnum) });
         }
