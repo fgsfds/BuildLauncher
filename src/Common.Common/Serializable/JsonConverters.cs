@@ -232,6 +232,8 @@ public sealed class GameEnumJsonConverter : JsonConverter<GameEnum>
     public override GameEnum ReadAsPropertyName(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         => Read(ref reader, typeToConvert, options);
 
-    public override void WriteAsPropertyName(Utf8JsonWriter writer, [DisallowNull] GameEnum value, JsonSerializerOptions options)
-        => Write(writer, value, options);
+    public override void WriteAsPropertyName(Utf8JsonWriter writer, GameEnum value, JsonSerializerOptions options)
+    {
+        writer.WritePropertyName(value.ToString());
+    }
 }
