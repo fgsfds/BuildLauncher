@@ -334,6 +334,126 @@
       "Description": "https://www.moddb.com/mods/duke-forces\r\n\r\nDuke Forces is a modification of Duke Nukem 3D, inspired by the Star Wars Dark Forces series. It works with all Duke Nukem 3D levels and automatically converts weapons, enemies, textures, sprites, music...pretty much everything into Star Wars content.",
       "Author": "DeeperThought",
       "UpdateDate": "2025-02-09T17:00:20.8438804Z"
+    },
+    {
+      "Id": "duke3d-genetic",
+      "AddonType": "TC",
+      "Game": "Duke3D",
+      "DownloadUrl": "http://s3.fgsfds.link/buildlauncher/Duke3D/Campaigns/duke3d-genetic_v1_0.zip",
+      "Title": "Genetic",
+      "Version": "1.0",
+      "FileSize": 29350013,
+      "Description": "https://www.moddb.com/mods/duke-nukem-3d-genetic-updated-2007-version\r\n\r\nThis mod was created by George-William \u0022Jaco\u0022 Bernard and originally released on February 23, 1999. At the time, it only included the Last Reaction and Water Bases episodes. Jaco released the final episode, Chimera, as a separate download on February 5, 2001. However, Jaco noted that he had lost his motivation to complete the episode, so he released Chimera in an incomplete form. Big City Nights, the last level of the Chimera episode, had a non-functioning Nuke Button, and it was missing a hidden area with a planned \u0022stargate\u0022 that would lead to a secret level. Four more levels were also planned: Deeper and Deeper, The Nest, The Hunt, and Another World. The final level was planned to feature a yellow alien boss that resembled the new enemy seen on the title screen. Mikko Sandt, an experienced level designer and owner of a Duke Nukem fan site, was able to connect with Jaco several years after the release of Chimera and offered to finish the episode on his behalf. Jaco agreed and provided Sandt with all the unused materials he had planned to use to finish the episode. However, there were not many unused materials. Using what little he was given, Sandt repurposed the scrapped materials to create Hidden Zone, a new final level for the mod. According to Sandt, Hidden Zone primarily consisted of two map files that he had merely stitched together. The new level was released on February 27, 2007 as a separate download. \r\n\r\n**For the first time ever, all of these separate releases have been merged into a single, cohesive mod for your convenience. Enjoy!**",
+      "Author": "George-William Bernard",
+      "UpdateDate": "2025-05-26T15:09:14.9798288Z"
+    },
+    {
+      "Id": "duke3d-daikarin",
+      "AddonType": "TC",
+      "Game": "Duke3D",
+      "DownloadUrl": "http://s3.fgsfds.link/buildlauncher/Duke3D/Campaigns/duke3d-daikarin_v1_0.zip",
+      "Title": "DaikariN",
+      "Version": "1.0",
+      "FileSize": 1484132,
+      "Description": "Earth Defence Forces leader has been killed just when a strange artifact has been uncovered. Therefore Duke goes to investigate this at the EDF center. In the meantime, experiments on the artifact reveals its ability to teleport in space and time.\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/",
+      "Author": "Gabriele R. \u0027saarek\u0027 Giaminardi",
+      "UpdateDate": "2025-05-26T15:09:14.984464Z"
+    },
+    {
+      "Id": "duke3d-math-pak",
+      "AddonType": "TC",
+      "Game": "Duke3D",
+      "DownloadUrl": "http://s3.fgsfds.link/buildlauncher/Duke3D/Campaigns/duke3d-math-pak_v1_0.zip",
+      "Title": "MatH Pak",
+      "Version": "1.0",
+      "FileSize": 1487549,
+      "Description": "This pack has some very atmospheric maps. You start in a common city area before entering a desolated factory. The last regular level is set in war-torn Bosnia with great ambient sounds, some traps and destroyed buildings. Finding the secret exit pays off, you will be in for some space action with very original, uncommon design. There is no boss fight at the end, you just get to a map with some credits.\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/",
+      "Author": "Matjaz \u0027MatH\u0027 M.",
+      "UpdateDate": "2025-05-26T15:09:14.9860209Z"
+    },
+    {
+      "Id": "duke3d-american-assault",
+      "AddonType": "TC",
+      "Game": "Duke3D",
+      "DownloadUrl": "http://s3.fgsfds.link/buildlauncher/Duke3D/Campaigns/duke3d-american-assault_v1_0.zip",
+      "Title": "American Assault",
+      "Version": "1.0",
+      "FileSize": 3149856,
+      "Description": "Three episodes with 25 levels (1 secret). Duke visits famous places in the US such as the Sunset Boulevard or San Francisco. Several new weapons are available, e.g. the double-barreled shotgun from Doom II (which is fun), a gatling gun (hybrid of Duke3D and Shadow Warrior chainguns), nuclear pipebombs, the Super Devastator (from \u0022Duke Xtreme\u0022) and more.\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/",
+      "Author": "Wardie Entertainment",
+      "UpdateDate": "2025-05-26T15:09:14.9875302Z"
+    },
+    {
+      "Id": "duke3d-the-gate",
+      "AddonType": "TC",
+      "Game": "Duke3D",
+      "DownloadUrl": "http://s3.fgsfds.link/buildlauncher/Duke3D/Campaigns/duke3d-the-gate_v1_0.zip",
+      "Title": "The Gate",
+      "Version": "1.0",
+      "FileSize": 14838433,
+      "Description": "A true masterpiece. Providing 4 episodes with 24 levels, it is named by many as *THE* classic total conversion for Duke3D. While there is only one new weapon (CD Thrower as Freezer replacement) and one new, difficult (!) enemy (cloaking Predators which can wield any weapon and move really fast), there is lots of new art, an awesome custom soundtrack and level design which is really remarkable. \r\n\r\nThe first map is a bit confusing due to its size and difficult keycard search, but keep playing. You will visit awesome locations like the Mars bar from \u0022Total Recall\u0022 (including a finale just like in the movie), a trip to the top of Mt. Everest, abandoned spaceports and a lot more.\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/",
+      "Author": "BDP Team",
+      "UpdateDate": "2025-05-26T15:09:14.9889906Z"
+    },
+    {
+      "Id": "duke3d-god-of-war",
+      "AddonType": "TC",
+      "Game": "Duke3D",
+      "DownloadUrl": "http://s3.fgsfds.link/buildlauncher/Duke3D/Campaigns/duke3d-god-of-war_v1_0.zip",
+      "Title": "God of War",
+      "Version": "1.0",
+      "FileSize": 1544927,
+      "Description": "https://www.benbradley.com/mods.html\r\n\r\nGod of War is a free mod for Duke Nukem 3D version 1.5. This means that all you need play it is Duke 3D with either the Plutonium Pak, or the Atomic Edition. The mod is designed and built in a traditional \u0027addon pack\u0027 style. It contains three groups of levels.\r\n\r\nThe first is a new single-player episode containing seven maps. This takes Duke on a new journey; starting in town near L.A, then travelling through canyons to an EDF earth base, a moon base, an alien mothership, and finally to his destination: Mars.\r\n\r\nThe second group of levels are designed exclusively for multiplayer. There are five Dukematch maps, set in a variety of locations, including the alien homeworld, Mars, and umm... something called \u0027Kwake\u0027.\r\n\r\nThe last episode contains maps for a new multiplayer game: \u0027Arena\u0027. In an Arena game, two players fight to the death in a map no bigger than a few rooms. All maps are different, but each map also features one specific weapon. As soon as a player spawns they are given that weapon with infinite ammunition.\r\nThe single-player episode features three new enemies and a new boss. In Duke\u0027s favour there are also two new weapons; the \u0027Fire-Thrower\u0027, which spits out flames and can be used to rapidly set fire to large areas. There is also a prototype weapon, the \u0027Forcegun\u0027. This is basically a force-field in a gun - as well as damaging enemies it also propels them away. Naturally, these weapons are also available in Dukematch and Arena games.\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/",
+      "Author": "Ben \u0027Existence\u0027 Bradley",
+      "UpdateDate": "2025-05-26T15:09:14.9906389Z"
+    },
+    {
+      "Id": "duke3d-duke-is-ten",
+      "AddonType": "TC",
+      "Game": "Duke3D",
+      "DownloadUrl": "http://s3.fgsfds.link/buildlauncher/Duke3D/Campaigns/duke3d-duke-is-ten_v1_0.zip",
+      "Title": "Duke Is Ten",
+      "Version": "1.0",
+      "FileSize": 989846,
+      "Description": "The challenge: give a group of premier mappers from the community just three days to create a set of maps centered on the theme \u0022ten\u0022 to celebrate DukeNukem3D\u0027s 10 year release anniversary. Given the short amount of time to create the maps you shouldn\u2019t expect to be wowed by phenomenal architecture, incredible detailing, or flawless design. What you should expect is a test of your game playing skills. Are you up to it?\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/",
+      "Author": "Geoffrey van Dijk, Maarten van Oostrum, Iggy, William Gee et al.",
+      "UpdateDate": "2025-05-26T15:09:14.9922893Z"
+    },
+    {
+      "Id": "duke3d-downtown-journey",
+      "AddonType": "TC",
+      "Game": "Duke3D",
+      "DownloadUrl": "http://s3.fgsfds.link/buildlauncher/Duke3D/Campaigns/duke3d-downtown-journey_v1_1.zip",
+      "Title": "Downtown Journey",
+      "Version": "1.1",
+      "FileSize": 652759,
+      "Description": "https://www.moddb.com/mods/pretomurara\r\n\r\nAn entire new episode for Duke Nukem 3D Atomic made in a Pentium MMX. There\u0027s no history yet. The idea was just to create a sequence of connected levels exploring urban places and daily situations, like take a metro or visit an abandoned asylum ;)\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/",
+      "Author": "Preto Murara",
+      "UpdateDate": "2025-05-26T15:09:14.9938063Z"
+    },
+    {
+      "Id": "duke3d-jj-duke-nukem-3d",
+      "AddonType": "TC",
+      "Game": "Duke3D",
+      "DownloadUrl": "http://s3.fgsfds.link/buildlauncher/Duke3D/Campaigns/duke3d-jj-duke-nukem-3d_v1_0.zip",
+      "Title": "JJ Duke Nukem 3D",
+      "Version": "1.0",
+      "FileSize": 4200277,
+      "Description": "The same old story. Duke crashes down in a stolen alien cruiser but this time he is a little closer to home. Look for the new features. There\u0027s a special powerup called the SuperDukePak and a new actors amongst other things.\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/",
+      "Author": "Jonathon Fowler and Jason Bredhauer",
+      "UpdateDate": "2025-05-26T15:09:14.9953111Z"
+    },
+    {
+      "Id": "duke3d-back-in-business",
+      "AddonType": "TC",
+      "Game": "Duke3D",
+      "DownloadUrl": "http://s3.fgsfds.link/buildlauncher/Duke3D/Campaigns/duke3d-back-in-business_v1_0.zip",
+      "Title": "Back in Business",
+      "Version": "1.0",
+      "FileSize": 26024022,
+      "Description": "https://forums.duke4.net/topic/11506-release-back-in-business-episode/\r\n\r\nAfter fighting off the alien invasions one after another for a couple of years, Duke finally decided to settle down a bit and concentrate on his own business. As a successful entrepreneur, he founded a chain network of fast food restaurants, strip clubs, bars and casinos. Today marks the opening of his newest casino in Los Angeles, \u201CThe Lady Killer Casino\u201D. With everything ready and in place, Duke watched some porn on his laptop, took a sip of Martini with vodka (shaken, not stirred!), decided it tastes like shit after years of abusing Jack Daniels and fat-ass Cuban cigars, and poured the contents of his glass into the plant. \u201CCheers\u201D, sneered Duke, as the ground beneath the plant greedily drained every last drip of the alcohol. Duke looked at his watch and noticed it\u2019s quarter to 8 \u2013 that means 15 more minutes until the casino opens. Should be enough time for a quicky with the new croupier chick, Millie Perkins, who\u2019s been eyeballing him all the time during the opening preparations (while ostentatiously licking or sucking on her fingers whenever their eyes met). Before leaving his office, he made sure the pistol is safely stored in a hideout behind a painting \u2013 just in case if anything goes wrong\u2026\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/",
+      "Author": "Alex \u0027Aleks\u0027 Pistol",
+      "UpdateDate": "2025-05-26T15:09:14.9992618Z"
     }
   ],
   "Blood": [
@@ -807,11 +927,11 @@
       "UpdateDate": "2025-05-13T04:30:46.5863362Z"
     }
   ],
-  "ShadowWarrior": [
+  "Wang": [
     {
       "Id": "wang-intime",
       "AddonType": "TC",
-      "Game": "ShadowWarrior",
+      "Game": "Wang",
       "DownloadUrl": "http://s3.fgsfds.link/buildlauncher/Wang/Campaigns/wang-intime_v1_1.zip",
       "Title": "Lo Wang in Time",
       "Version": "1.1",
@@ -822,7 +942,7 @@
     {
       "Id": "wang-park",
       "AddonType": "TC",
-      "Game": "ShadowWarrior",
+      "Game": "Wang",
       "DownloadUrl": "http://s3.fgsfds.link/buildlauncher/Wang/Campaigns/wang-park_v1_6.zip",
       "Title": "Park",
       "Version": "1.6",
@@ -834,7 +954,7 @@
     {
       "Id": "wang-wiwy",
       "AddonType": "TC",
-      "Game": "ShadowWarrior",
+      "Game": "Wang",
       "DownloadUrl": "http://s3.fgsfds.link/buildlauncher/Wang/Campaigns/wang-wiwy_v1_1.zip",
       "Title": "When I Was Young",
       "Version": "1.1",
@@ -846,7 +966,7 @@
     {
       "Id": "wanton",
       "AddonType": "TC",
-      "Game": "ShadowWarrior",
+      "Game": "Wang",
       "DownloadUrl": "http://s3.fgsfds.link/buildlauncher/Wang/Campaigns/wang-wanton_v2.zip",
       "Title": "Wanton Destruction",
       "Version": "2.0",
@@ -858,7 +978,7 @@
     {
       "Id": "twindragon",
       "AddonType": "TC",
-      "Game": "ShadowWarrior",
+      "Game": "Wang",
       "DownloadUrl": "http://s3.fgsfds.link/buildlauncher/Wang/Campaigns/wang-twin-dragon_v2.zip",
       "Title": "Twin Dragon",
       "Version": "2.0",
@@ -870,7 +990,7 @@
     {
       "Id": "wang-lastwarrior",
       "AddonType": "TC",
-      "Game": "ShadowWarrior",
+      "Game": "Wang",
       "DownloadUrl": "http://s3.fgsfds.link/buildlauncher/Wang/Campaigns/wang-lastwarrior_v1_1.zip",
       "Title": "The Last Warrior",
       "Version": "1.1",
@@ -882,7 +1002,7 @@
     {
       "Id": "wang-swc-20th",
       "AddonType": "TC",
-      "Game": "ShadowWarrior",
+      "Game": "Wang",
       "DownloadUrl": "http://s3.fgsfds.link/buildlauncher/Wang/Campaigns/wang-swc-20th_v1_0.zip",
       "Title": "Shadow Warrior Central 20th",
       "Version": "1.0",
@@ -894,7 +1014,7 @@
     {
       "Id": "wang-tonight",
       "AddonType": "TC",
-      "Game": "ShadowWarrior",
+      "Game": "Wang",
       "DownloadUrl": "http://s3.fgsfds.link/buildlauncher/Wang/Campaigns/wang-tonight_v1_2.zip",
       "Title": "Tonight Never Ends",
       "Version": "1.2",
@@ -906,7 +1026,7 @@
     {
       "Id": "wang-the-red-dragon-clan",
       "AddonType": "TC",
-      "Game": "ShadowWarrior",
+      "Game": "Wang",
       "DownloadUrl": "http://s3.fgsfds.link/buildlauncher/Wang/Campaigns/wang-the-red-dragon-clan_v1_4.zip",
       "Title": "The Red Dragon Clan",
       "Version": "1.4",
@@ -918,7 +1038,7 @@
     {
       "Id": "wang-hq-sounds",
       "AddonType": "Mod",
-      "Game": "ShadowWarrior",
+      "Game": "Wang",
       "DownloadUrl": "http://s3.fgsfds.link/buildlauncher/Wang/Mods/wang-hq-sounds_v1_0.zip",
       "Title": "High Quality Sound Effects",
       "Version": "1.0",
@@ -930,7 +1050,7 @@
     {
       "Id": "wang-hq-sounds-td",
       "AddonType": "Mod",
-      "Game": "ShadowWarrior",
+      "Game": "Wang",
       "DownloadUrl": "http://s3.fgsfds.link/buildlauncher/Wang/Mods/wang-hq-sounds-td_v1_0.zip",
       "Title": "High Quality Sound Effects for Twin Dragon",
       "Version": "1.0",
@@ -946,7 +1066,7 @@
     {
       "Id": "wang-hq-sounds-wd",
       "AddonType": "Mod",
-      "Game": "ShadowWarrior",
+      "Game": "Wang",
       "DownloadUrl": "http://s3.fgsfds.link/buildlauncher/Wang/Mods/wang-hq-sounds-wd_v1_0.zip",
       "Title": "High Quality Sound Effects for Wanton Destruction",
       "Version": "1.0",
@@ -962,7 +1082,7 @@
     {
       "Id": "wang-voxel-pack",
       "AddonType": "Mod",
-      "Game": "ShadowWarrior",
+      "Game": "Wang",
       "DownloadUrl": "http://s3.fgsfds.link/buildlauncher/Wang/Mods/wang-voxel-pack_v0_1.zip",
       "Title": "Voxel Pack",
       "Version": "0.1",
@@ -973,7 +1093,7 @@
     {
       "Id": "wang-widescreen",
       "AddonType": "Mod",
-      "Game": "ShadowWarrior",
+      "Game": "Wang",
       "DownloadUrl": "http://s3.fgsfds.link/buildlauncher/Wang/Mods/wang-widescreen_v1_0.zip",
       "Title": "Widescreen Fixes",
       "Version": "1.0",
@@ -984,7 +1104,7 @@
     {
       "Id": "wang-beta-weapons",
       "AddonType": "Mod",
-      "Game": "ShadowWarrior",
+      "Game": "Wang",
       "DownloadUrl": "http://s3.fgsfds.link/buildlauncher/Wang/Mods/wang-beta-weapons_v1_0.zip",
       "Title": "Beta Weapons",
       "Version": "1.0",
@@ -1043,11 +1163,11 @@
       "UpdateDate": "2024-11-27T07:32:10.9927337Z"
     }
   ],
-  "Exhumed": [
+  "Slave": [
     {
       "Id": "slave-forgo",
       "AddonType": "Map",
-      "Game": "Exhumed",
+      "Game": "Slave",
       "DownloadUrl": "http://s3.fgsfds.link/buildlauncher/Slave/Maps/slave-forgo_v1_0.zip",
       "Title": "Forgotten Sanctuary",
       "Version": "1.0",
@@ -1059,7 +1179,7 @@
     {
       "Id": "slave-ruins",
       "AddonType": "TC",
-      "Game": "Exhumed",
+      "Game": "Slave",
       "DownloadUrl": "http://s3.fgsfds.link/buildlauncher/Slave/Campaigns/slave-ruins_v1_0.zip",
       "Title": "Return to Ruins",
       "Version": "1.0",
@@ -1071,7 +1191,7 @@
     {
       "Id": "slave-elgizah",
       "AddonType": "Map",
-      "Game": "Exhumed",
+      "Game": "Slave",
       "DownloadUrl": "http://s3.fgsfds.link/buildlauncher/Slave/Maps/slave-elgizah_v1_0.zip",
       "Title": "El-Gizah",
       "Version": "1.0",
@@ -1083,7 +1203,7 @@
     {
       "Id": "slave-totfatw",
       "AddonType": "Map",
-      "Game": "Exhumed",
+      "Game": "Slave",
       "DownloadUrl": "http://s3.fgsfds.link/buildlauncher/Slave/Maps/slave-totfatw_v1_0.zip",
       "Title": "Temple of the Fire and the Water",
       "Version": "1.0",
@@ -1095,7 +1215,7 @@
     {
       "Id": "slave-hq-sounds",
       "AddonType": "Mod",
-      "Game": "Exhumed",
+      "Game": "Slave",
       "DownloadUrl": "http://s3.fgsfds.link/buildlauncher/Slave/Mods/slave-hq-sounds_v1_0.zip",
       "Title": "High Quality Sound Effects",
       "Version": "1.0",
@@ -1107,7 +1227,7 @@
     {
       "Id": "slave-m60",
       "AddonType": "Mod",
-      "Game": "Exhumed",
+      "Game": "Slave",
       "DownloadUrl": "http://s3.fgsfds.link/buildlauncher/Slave/Mods/slave-m60_v1_0.zip",
       "Title": "Alternative M60",
       "Version": "1.0",
@@ -1118,7 +1238,7 @@
     {
       "Id": "slave-voxel-pack",
       "AddonType": "Mod",
-      "Game": "Exhumed",
+      "Game": "Slave",
       "DownloadUrl": "http://s3.fgsfds.link/buildlauncher/Slave/Mods/slave-voxel-pack_v0_16.zip",
       "Title": "Voxel Pack",
       "Version": "0.16",
