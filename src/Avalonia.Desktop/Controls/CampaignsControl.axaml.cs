@@ -4,9 +4,13 @@ using Avalonia.Desktop.Helpers;
 using Avalonia.Desktop.Misc;
 using Avalonia.Desktop.ViewModels;
 using Avalonia.Input;
+using Avalonia.Rendering.Composition;
+using Avalonia.Rendering.Composition.Animations;
 using Common.Common.Helpers;
 using Common.Enums;
+using Common.Helpers;
 using Common.Interfaces;
+using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.Input;
 using Ports.Ports;
 using Ports.Providers;
@@ -23,6 +27,8 @@ public sealed partial class CampaignsControl : UserControl
     private readonly InstalledPortsProvider _portsProvider;
     private readonly InstalledAddonsProvider _addonsProvider;
     private readonly BitmapsCache _bitmapsCache;
+
+    private ImplicitAnimationCollection? _implicitAnimations;
 
     public CampaignsControl()
     {
@@ -383,13 +389,59 @@ public sealed partial class CampaignsControl : UserControl
         }
     }
 
-    private void ListBox_ContainerPrepared(object? sender, Avalonia.Controls.ContainerPreparedEventArgs e)
+    private void OnListBoxContainerPrepared(object? sender, ContainerPreparedEventArgs e)
     {
-        if (e.Container is ListBoxItem item &&
-            item.Content is SeparatorItem)
+        if (e.Container is ListBoxItem item)
         {
-            item.IsHitTestVisible = false;
-            item.Focusable = false;
+            if (item.Content is SeparatorItem)
+            {
+                item.IsHitTestVisible = false;
+                item.Focusable = false;
+            }
+            else
+            {
+                if (_implicitAnimations != null)
+                {
+                    EnsureImplicitAnimationsAsync(item);
+                }
+            }
+        }
+    }
+
+    private void OnControlAttachedToVisualTree(object? sender, VisualTreeAttachmentEventArgs e)
+    {
+        if (_implicitAnimations == null)
+        {
+            var compositor = ElementComposition.GetElementVisual(this)?.Compositor;
+
+            Guard.IsNotNull(compositor);
+
+            var offsetAnimation = compositor.CreateVector3KeyFrameAnimation();
+            offsetAnimation.Target = "Offset";
+            offsetAnimation.InsertExpressionKeyFrame(1.0f, "this.FinalValue");
+            offsetAnimation.Duration = TimeSpan.FromMilliseconds(400);
+
+            var animationGroup = compositor.CreateAnimationGroup();
+            animationGroup.Add(offsetAnimation);
+
+            _implicitAnimations = compositor.CreateImplicitAnimationCollection();
+            _implicitAnimations["Offset"] = animationGroup;
+        }
+    }
+
+    private async void EnsureImplicitAnimationsAsync(Control control)
+    {
+        for (int i = 0; i < 5; i++)
+        {
+            var visual = ElementComposition.GetElementVisual(control);
+
+            if (visual != null)
+            {
+                visual.ImplicitAnimations = _implicitAnimations;
+                return;
+            }
+
+            await Task.Delay(50).ConfigureAwait(true);
         }
     }
 }
