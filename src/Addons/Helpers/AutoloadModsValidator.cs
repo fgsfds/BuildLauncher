@@ -69,8 +69,15 @@ public static class AutoloadModsValidator
 
             foreach (var dependentAddon in autoloadMod.DependentAddons)
             {
-                if (dependentAddon.Key.Equals(campaign.AddonId.Id, StringComparison.InvariantCultureIgnoreCase) &&
+                if (campaign.AddonId.Id.Equals(dependentAddon.Key, StringComparison.InvariantCultureIgnoreCase) &&
                     (dependentAddon.Value is null || VersionComparer.Compare(campaign.AddonId.Version, dependentAddon.Value)))
+                {
+                    passedDependenciesCount++;
+                    continue;
+                }
+
+                if (campaign.DependentAddons?.TryGetValue(dependentAddon.Key, out var dependentAddonVersion) ?? false &&
+                    (dependentAddon.Value is null || VersionComparer.Compare(dependentAddonVersion, dependentAddon.Value)))
                 {
                     passedDependenciesCount++;
                     continue;
