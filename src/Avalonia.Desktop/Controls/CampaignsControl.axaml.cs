@@ -431,6 +431,8 @@ public sealed partial class CampaignsControl : UserControl
 
     private async void EnsureImplicitAnimationsAsync(Control control)
     {
+        await Task.Delay(500).ConfigureAwait(true);
+
         for (int i = 0; i < 5; i++)
         {
             var visual = ElementComposition.GetElementVisual(control);
