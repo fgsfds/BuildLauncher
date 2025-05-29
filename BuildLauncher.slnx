@@ -1,0 +1,25 @@
+<Solution>
+  <Folder Name="/.start/">
+    <Project Path="src/Avalonia.Desktop/Avalonia.Desktop.csproj" />
+    <Project Path="Web.Blazor/Web.Blazor.csproj" />
+  </Folder>
+  <Folder Name="/Api/">
+    <Project Path="src/Api.Common/Api.Common.csproj" />
+  </Folder>
+  <Folder Name="/Common/">
+    <Project Path="src/Common.Client/Common.Client.csproj" />
+    <Project Path="src/Common.Common/Common.Common.csproj" />
+    <Project Path="src/Common.Server/Common.Server.csproj" />
+  </Folder>
+  <Folder Name="/Database/">
+    <Project Path="src/Database.Client/Database.Client.csproj" />
+    <Project Path="src/Database.Server/Database.Server.csproj" />
+  </Folder>
+  <Folder Name="/Systems/">
+    <Project Path="src/Addons/Addons.csproj" />
+    <Project Path="src/Games/Games.csproj" />
+    <Project Path="src/Ports/Ports.csproj" />
+    <Project Path="src/Tools/Tools.csproj" />
+  </Folder>
+  <Project Path="src/Tests/Tests.csproj" />
+</Solution>
