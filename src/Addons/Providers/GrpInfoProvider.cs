@@ -3,6 +3,7 @@ using Common;
 using Common.Enums;
 using Common.Enums.Versions;
 using Common.Interfaces;
+using CommunityToolkit.Diagnostics;
 
 namespace Addons.Providers;
 
@@ -11,15 +12,22 @@ public static class GrpInfoProvider
     /// <summary>
     /// Get list of addons from grpinfo file
     /// </summary>
-    /// <param name="foldersGrpInfos">Folders to search for grpinfo and grps</param>
-    public static List<IAddon> GetAddonsFromGrpInfo(List<string> foldersGrpInfos)
+    public static List<IAddon>? GetAddonsFromGrpInfo(string campaignsFolder)
     {
         List<IAddon> newAddons = [];
 
-        foreach (var folder in foldersGrpInfos)
+        var grpInfos = Directory.GetFiles(campaignsFolder, "*.grpinfo", SearchOption.AllDirectories);
+
+        if (grpInfos.Length == 0)
         {
-            var grpInfo = Path.Combine(folder, "addons.grpinfo");
-            var grps = Directory.GetFiles(folder, "*.grp");
+            return null;
+        }
+
+        foreach (var grpInfo in grpInfos)
+        {
+            var grpInfoFolder = Path.GetDirectoryName(grpInfo) ?? ThrowHelper.ThrowInvalidOperationException<string>();
+
+            var grps = Directory.GetFiles(grpInfoFolder, "*.grp", SearchOption.TopDirectoryOnly);
 
             if (grps.Length == 0)
             {
@@ -33,9 +41,9 @@ public static class GrpInfoProvider
             {
                 var fileSize = new FileInfo(grp).Length;
 
-                var addon = addons.Find(x => x.Size == fileSize);
+                var addon = addons.FirstOrDefault(x => x.Size == fileSize);
 
-                if (addon.Name is null)
+                if (addon.Equals(default(GrpInfo)) || addon.Name is null)
                 {
                     continue;
                 }

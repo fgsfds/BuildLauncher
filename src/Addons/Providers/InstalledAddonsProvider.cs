@@ -160,26 +160,17 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
                     _campaignsCache.AddRange(tcs);
 
                     //grpinfo
-                    List<string> foldersWithGrpInfos = [];
-                    dirs = Directory.GetDirectories(_game.CampaignsFolderPath, "*", SearchOption.TopDirectoryOnly);
+                    var grpInfoAddons = GrpInfoProvider.GetAddonsFromGrpInfo(_game.CampaignsFolderPath);
 
-                    foreach (var dir in dirs)
+                    if (grpInfoAddons?.Count > 0)
                     {
-                        if (File.Exists(Path.Combine(dir, "addons.grpinfo")))
+                        foreach (var addon in grpInfoAddons)
                         {
-                            foldersWithGrpInfos.Add(dir);
-                        }
-                    }
+                            var result = _campaignsCache.TryAdd(new(addon.AddonId.Id, null), addon);
 
-                    if (foldersWithGrpInfos.Count > 0)
-                    {
-                        var grpInfoAddons = GrpInfoProvider.GetAddonsFromGrpInfo(foldersWithGrpInfos);
-
-                        if (grpInfoAddons.Count > 0)
-                        {
-                            foreach (var addon in grpInfoAddons)
+                            if (!result)
                             {
-                                _campaignsCache.Add(new(addon.AddonId.Id, null), addon);
+                                _logger.LogError($"Failed to add {addon.FileName} to the campaigns list.");
                             }
                         }
                     }
