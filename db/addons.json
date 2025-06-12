@@ -685,6 +685,18 @@
       "Description": "Critical Mass is a 3 level episode with 4 new weapons and new (or modified) enemies, including boss.\r\nA secret nuclear research facility is under control of the aliens. The only way in is by a special teleport located at a EDF weaponry research building. After killing the aliens the only way out is by a escape turboplane at the hangar. \r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/",
       "Author": "Vitor \u0027Bocao\u0027 de Paulo",
       "UpdateDate": "2025-05-28T17:17:18.5671246Z"
+    },
+    {
+      "Id": "duke3d-duke-nukem-advance-tc",
+      "AddonType": "TC",
+      "Game": "Duke3D",
+      "DownloadUrl": "http://s3.fgsfds.link/buildlauncher/Duke3D/Campaigns/duke3d-duke-nukem-advance-tc_v_8.zip",
+      "Title": "Duke Nukem Advance TC",
+      "Version": ".8",
+      "FileSize": 23321413,
+      "Description": "https://www.moddb.com/mods/duke-nukem-advance-tc\r\nThe GBA game brought to Build! This mod for Duke 3D includes the entire campaign from Duke Nukem Advance by Torus Games, complete with all of its exclusive enemies, assets, and even in-level cutscenes!\r\n\r\nSince the GBA game runs on the Doom engine, this isn\u0027t a one-to-one port of the original. Instead, this is an attempt to bring the experience over to the more familiar game feel of the Build engine while staying faithful to the original\u0027s design. There\u0027s also optional enhancements such as voice clips in cutscenes and the ability to switch between the two completely different scripts the game has, which can be found in the mod\u0027s custom menu in-game.\r\n\r\nSpecial thanks to:\r\nGianni Matragrano for providing Duke lines for the cutscenes as one of the mod\u0027s options.\r\nVoxelvoid for sharing the work they\u0027ve done on their DNA4PC project on GitHub, which is how this got started.",
+      "Author": "branung",
+      "UpdateDate": "2025-06-12T15:49:56.6146112Z"
     }
   ],
   "Blood": [
