@@ -109,7 +109,7 @@ public sealed class AddonsDatabaseTests
                 continue;
             }
 
-            files.Add("http://s3.fgsfds.link/buildlauncher/" + item.Key);
+            files.Add("https://s3.fgsfds.link/buildlauncher/" + item.Key);
         }
 
         var loose = files.Except(addonsUrls);
