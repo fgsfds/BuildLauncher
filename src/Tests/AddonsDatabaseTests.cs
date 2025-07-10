@@ -109,6 +109,11 @@ public sealed class AddonsDatabaseTests
                 continue;
             }
 
+            if (item.Key.EndsWith("s3browser-sync-metadata", StringComparison.OrdinalIgnoreCase))
+            {
+                continue;
+            }
+
             files.Add("https://s3.fgsfds.link/buildlauncher/" + item.Key);
         }
 

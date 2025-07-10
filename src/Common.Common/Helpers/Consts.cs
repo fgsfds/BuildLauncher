@@ -5,12 +5,12 @@ public static class Consts
     /// <summary>
     /// Path to the files repository
     /// </summary>
-    public const string FilesRepo = "http://s3.fgsfds.link/buildlauncher";
+    public const string FilesRepo = "https://s3.fgsfds.link/buildlauncher";
 
     /// <summary>
     /// Path to the files repository
     /// </summary>
-    public const string UploadsFolder = "http://s3.fgsfds.link/uploads/buildlauncher";
+    public const string UploadsFolder = "https://s3.fgsfds.link/uploads/buildlauncher";
 
     /// <summary>
     /// GirtHub releases Url
