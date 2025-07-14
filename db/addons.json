@@ -2120,6 +2120,30 @@
       "FileSize": 62197673,
       "Description": "Original soundtrack for Redneck Rampage and Route 66",
       "UpdateDate": "2024-05-24T00:00:00Z"
+    },
+    {
+      "Id": "redneck-rampage-revision",
+      "AddonType": "TC",
+      "Game": "Redneck",
+      "DownloadUrl": "https://s3.fgsfds.link/buildlauncher/Redneck/Campaigns/redneck-rampage-revision_v3_7.zip",
+      "Title": "Redneck Rampage Revision",
+      "Version": "3.7",
+      "FileSize": 11316555,
+      "Description": "https://www.moddb.com/mods/redneck-rampage-revision/downloads\r\n\r\nA standalone mod that attempts to correct the shortcomings of Redneck Rampage and its sequel.",
+      "Author": " shellcracker",
+      "UpdateDate": "2025-07-14T04:41:00.6699602Z"
+    },
+    {
+      "Id": "redneck-rampage-route66-revision",
+      "AddonType": "TC",
+      "Game": "Redneck",
+      "DownloadUrl": "https://s3.fgsfds.link/buildlauncher/Redneck/Campaigns/redneck-rampage-route66-revision_v3_7.zip",
+      "Title": "Redneck Rampage Route 66 Revision",
+      "Version": "3.7",
+      "FileSize": 8782618,
+      "Description": "https://www.moddb.com/mods/redneck-rampage-revision/downloads\r\n\r\nA standalone mod that attempts to correct the shortcomings of Redneck Rampage and its sequel.",
+      "Author": "shellcracker",
+      "UpdateDate": "2025-07-14T04:41:01.1997227Z"
     }
   ],
   "RidesAgain": [
@@ -2133,6 +2157,18 @@
       "FileSize": 37404199,
       "Description": "Original soundtrack for Redneck Rampage Rides Again",
       "UpdateDate": "2024-06-15T08:58:46.049225Z"
+    },
+    {
+      "Id": "ridesagain-redneck-redneck-rampage-rides-revision",
+      "AddonType": "TC",
+      "Game": "RidesAgain",
+      "DownloadUrl": "https://s3.fgsfds.link/buildlauncher/Redneck/Campaigns/ridesagain-redneck-redneck-rampage-rides-revision_v3_7.zip",
+      "Title": "Redneck Rampage Rides Again Revision",
+      "Version": "3.7",
+      "FileSize": 8972793,
+      "Description": "https://www.moddb.com/mods/redneck-rampage-revision/downloads\r\n\r\nA standalone mod that attempts to correct the shortcomings of Redneck Rampage and its sequel.",
+      "Author": " shellcracker",
+      "UpdateDate": "2025-07-14T04:41:01.5946377Z"
     }
   ],
   "Standalone": [
