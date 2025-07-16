@@ -712,8 +712,7 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
         }
         else if (ArchiveFactory.IsArchive(pathToFile, out _))
         {
-            using var archive = ArchiveFactory.Open(pathToFile);
-            var unpackedTo = UnpackIfNeededAndGetAddonDto(pathToFile, archive, out var manifests);
+            var unpackedTo = UnpackIfNeededAndGetAddonDto(pathToFile, out var manifests);
 
             if (manifests is null or [])
             {
@@ -758,7 +757,8 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
             }
             else
             {
-                isUnpacked = false;
+                isUnpacked = false; 
+                using var archive = ArchiveFactory.Open(pathToFile);
 
                 (gridImageHash, Stream? gridImageStream) = ImageHelper.GetCoverFromArchive(archive);
                 (previewImageHash, Stream? previewImageStream) = ImageHelper.GetPreviewFromArchive(archive);
@@ -1037,12 +1037,13 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
     /// Unpack archive if needed and return path to folder
     /// </summary>
     /// <param name="pathToFile">Path to archive</param>
-    /// <param name="archive">Archive</param>
     /// <param name="addonDtos">AddonDto</param>
-    private string? UnpackIfNeededAndGetAddonDto(string pathToFile, IArchive archive, out List<AddonJsonModel>? addonDtos)
+    private string? UnpackIfNeededAndGetAddonDto(string pathToFile, out List<AddonJsonModel>? addonDtos)
     {
         try
         {
+            using var archive = ArchiveFactory.Open(pathToFile);
+
             string? unpackedTo = null;
 
             if (archive.Entries.Any(static x => x.Key!.Equals("addons.grpinfo", StringComparison.OrdinalIgnoreCase)))
@@ -1083,6 +1084,9 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
 
             if (unpackedTo is not null)
             {
+                archive?.Dispose();
+                File.Delete(pathToFile);
+
                 var unpackedAddonJsons = Directory.GetFiles(unpackedTo, "addon*.json");
 
                 foreach (var addonJson in unpackedAddonJsons)
@@ -1140,9 +1144,6 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
         }
 
         archive.ExtractToDirectory(unpackTo);
-
-        archive.Dispose();
-        File.Delete(pathToFile);
 
         return unpackTo;
     }

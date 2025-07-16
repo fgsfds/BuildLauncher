@@ -5,7 +5,7 @@ using Avalonia.Platform;
 
 namespace Avalonia.Desktop;
 
-public sealed partial class MainWindow : Window
+public sealed partial class MainWindow : Window, IDisposable
 {
     private readonly Stream? _overlayStream;
 
@@ -23,6 +23,11 @@ public sealed partial class MainWindow : Window
         var uri = new Uri("avares://BuildLauncher/Assets/overlay.png");
         _overlayStream = AssetLoader.Open(uri);
         Resources["HighlightOverlayBitmap"] = new Bitmap(_overlayStream);
+    }
+
+    public void Dispose()
+    {
+        _overlayStream?.Dispose();
     }
 
     private void OnWindowClosing(object? sender, Avalonia.Controls.WindowClosingEventArgs e)
