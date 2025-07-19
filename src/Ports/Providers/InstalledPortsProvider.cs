@@ -32,6 +32,7 @@ public sealed class InstalledPortsProvider
     public RedNukem RedNukem { get; init; }
     public VoidSW VoidSW { get; init; }
     public Fury Fury { get; init; }
+    public DosBox DosBox { get; init; }
 
 
     public InstalledPortsProvider(
@@ -55,8 +56,9 @@ public sealed class InstalledPortsProvider
         RedNukem = new();
         VoidSW = new();
         Fury = new(config);
+        DosBox = new();
 
-        _builtInPorts = [BuildGDX, EDuke32, NBlood, NotBlood, PCExhumed, Raze, RedNukem, VoidSW, Fury];
+        _builtInPorts = [Raze, EDuke32, NBlood, NotBlood, PCExhumed, RedNukem, VoidSW, Fury, BuildGDX, DosBox];
 
         UpdateCustomPortsList();
     }
@@ -85,6 +87,7 @@ public sealed class InstalledPortsProvider
             PortEnum.VoidSW => VoidSW,
             PortEnum.PCExhumed => PCExhumed,
             PortEnum.Fury => Fury,
+            PortEnum.DosBox => DosBox,
             _ => ThrowHelper.ThrowArgumentOutOfRangeException<BasePort>()
         };
     }
@@ -174,10 +177,10 @@ public sealed class InstalledPortsProvider
     }
 }
 
-public readonly struct CustomPort
+public sealed class CustomPort
 {
-    public required readonly string Name { get; init; }
-    public required readonly string Path { get; init; }
-    public required readonly BasePort BasePort { get; init; }
-    public readonly PortEnum PortEnum => BasePort.PortEnum;
+    public required string Name { get; init; }
+    public required string Path { get; init; }
+    public required BasePort BasePort { get; init; }
+    public PortEnum PortEnum => BasePort.PortEnum;
 }

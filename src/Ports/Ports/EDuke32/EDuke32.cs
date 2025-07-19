@@ -95,7 +95,8 @@ public class EDuke32 : BasePort
         FeatureEnum.Models,
         FeatureEnum.Sloped_Sprites,
         FeatureEnum.TROR,
-        FeatureEnum.Wall_Rotate_Cstat
+        FeatureEnum.Wall_Rotate_Cstat,
+        FeatureEnum.TileFromTexture
         ];
 
     /// <inheritdoc/>

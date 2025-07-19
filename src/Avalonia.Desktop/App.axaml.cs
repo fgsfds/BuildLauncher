@@ -53,7 +53,9 @@ public sealed class App : Application
         _app.DataTemplates.Add(viewLocator);
         _app.Resources.Add(new("CachedHashToBitmapConverter", new CachedHashToBitmapConverter(bitmapsCache)));
 
-        lifetime.MainWindow = new MainWindow();
+        using MainWindow mainWindow = new();
+
+        lifetime.MainWindow = mainWindow;
         lifetime.MainWindow.DataContext = vmFactory.GetMainWindowViewModel();
 
         if (ClientProperties.IsDeveloperMode)

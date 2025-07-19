@@ -1,4 +1,5 @@
 ﻿using Common.Client.Tools;
+using Common.Enums;
 using Microsoft.Extensions.Logging;
 using Ports.Ports;
 using Ports.Providers;
@@ -55,7 +56,7 @@ public sealed class PortsInstaller
 
         _ = await _fileTools.DownloadFileAsync(release.DownloadUrl, fileName, CancellationToken.None).ConfigureAwait(false);
 
-        await _fileTools.UnpackArchiveAsync(fileName, port.PortInstallFolderPath).ConfigureAwait(false);
+        await _fileTools.UnpackArchiveAsync(fileName, port.PortInstallFolderPath, port.PortEnum is PortEnum.DosBox).ConfigureAwait(false);
 
         File.Delete(fileName);
 

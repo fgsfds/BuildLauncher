@@ -77,7 +77,7 @@ public sealed partial class MapsControl : UserControl
 
             StackPanel sp = new() { Orientation = Layout.Orientation.Horizontal };
             sp.Children.Add(new Image() { Margin = new(0, 0, 5, 0), Height = 16, Source = portIcon });
-            sp.Children.Add(new TextBlock() { Text = port.Name });
+            sp.Children.Add(new TextBlock() { Text = port.ShortName });
 
             Button button = new()
             {
@@ -167,7 +167,7 @@ public sealed partial class MapsControl : UserControl
             {
                 portButton = new MenuItem()
                 {
-                    Header = $"Start with {port.Name}",
+                    Header = $"Start with {port.ShortName}",
                     Padding = new(5),
                     CommandParameter = port
                 };
@@ -183,7 +183,7 @@ public sealed partial class MapsControl : UserControl
             {
                 portButton = new MenuItem()
                 {
-                    Header = $"Start with {port.Name}",
+                    Header = $"Start with {port.ShortName}",
                     Padding = new(5),
                     Command = new RelayCommand(() => _viewModel.StartMapCommand.Execute(new Tuple<BasePort, byte?>(port, null)))
                 };

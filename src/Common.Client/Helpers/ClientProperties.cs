@@ -20,6 +20,11 @@ public static class ClientProperties
     /// <summary>
     /// Path to the ports folder
     /// </summary>
+    public static readonly string TempFolderPath = Path.Combine(DataFolderPath, "Temp");
+
+    /// <summary>
+    /// Path to the ports folder
+    /// </summary>
     public static readonly string PortsFolderPath = Path.Combine(DataFolderPath, "Ports");
 
     /// <summary>

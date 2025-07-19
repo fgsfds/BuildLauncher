@@ -71,13 +71,21 @@ internal static class PortsRepositoriesProvider
                 LinuxReleasePredicate = null,
             };
         }
-
         else if (portEnum is PortEnum.Fury)
         {
             return new()
             {
                 RepoUrl = null,
                 WindowsReleasePredicate = null,
+                LinuxReleasePredicate = null,
+            };
+        }
+        else if (portEnum is PortEnum.DosBox)
+        {
+            return new()
+            {
+                RepoUrl = new("https://api.github.com/repos/dosbox-staging/dosbox-staging/releases"),
+                WindowsReleasePredicate = static x => x.FileName.StartsWith("dosbox-staging-windows-x64", StringComparison.OrdinalIgnoreCase) && x.FileName.EndsWith("zip", StringComparison.OrdinalIgnoreCase),
                 LinuxReleasePredicate = null,
             };
         }

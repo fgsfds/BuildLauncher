@@ -114,9 +114,11 @@ public sealed class ArchiveTools
     /// </summary>
     /// <param name="pathToArchive">Absolute path to archive file</param>
     /// <param name="unpackTo">Directory to unpack archive to</param>
+    /// <param name="isSubfolder">Unpack content from a subfolder inside the archive</param>
     public async Task UnpackArchiveAsync(
         string pathToArchive,
-        string unpackTo
+        string unpackTo,
+        bool isSubfolder = false
         )
     {
         IProgress<float> progress = Progress;
@@ -132,7 +134,19 @@ public sealed class ArchiveTools
 
             while (reader.MoveToNextEntry())
             {
-                var fullName = Path.Combine(unpackTo, reader.Entry.Key!);
+                var fileName = reader.Entry.Key!;
+
+                if (isSubfolder)
+                {
+                    fileName = fileName[(fileName.IndexOf('/') + 1)..];
+                }
+
+                if (string.IsNullOrWhiteSpace(fileName))
+                {
+                    continue;
+                }
+
+                var fullName = Path.Combine(unpackTo, fileName);
 
                 if (reader.Entry.IsDirectory)
                 {

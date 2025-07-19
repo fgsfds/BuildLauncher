@@ -28,7 +28,8 @@ public sealed class NotBlood : NBlood
         [
         FeatureEnum.Modern_Types,
         FeatureEnum.Hightile,
-        FeatureEnum.Models
+        FeatureEnum.Models,
+        FeatureEnum.TileFromTexture
         ];
 
     /// <inheritdoc/>

@@ -3,6 +3,7 @@ using Avalonia.Controls;
 using Avalonia.Controls.Templates;
 using Avalonia.Desktop.Controls;
 using Avalonia.Desktop.ViewModels;
+using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Ports.Providers;
 
@@ -34,13 +35,13 @@ public sealed class ViewLocator : IDataTemplate
             return control;
         }
 
-        UserControl newControl = data switch
+        var newControl = data switch
         {
             CampaignsViewModel campsVm => new CampaignsControl(campsVm, _installedPortsProvider, _installedAddonsProviderFactory.GetSingleton(campsVm.Game), _bitmapsCache),
             MapsViewModel mapsVm => new MapsControl(mapsVm, _installedPortsProvider, _installedAddonsProviderFactory.GetSingleton(mapsVm.Game), _bitmapsCache),
             ModsViewModel modsVM => new ModsControl(_installedAddonsProviderFactory.GetSingleton(modsVM.Game)),
             DownloadsViewModel => new DownloadsControl(),
-            _ => throw new NotImplementedException($"Can't find control for {data} ViewModel.")
+            _ => ThrowHelper.ThrowNotSupportedException<UserControl>($"Can't find control for {data} ViewModel.")
         };
 
         _controlsCache.Add(data, newControl);

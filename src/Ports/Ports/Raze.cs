@@ -103,7 +103,8 @@ public sealed class Raze : BasePort
         FeatureEnum.Models,
         FeatureEnum.Sloped_Sprites,
         FeatureEnum.Wall_Rotate_Cstat,
-        FeatureEnum.SndInfo
+        FeatureEnum.SndInfo,
+        FeatureEnum.TileFromTexture
         ];
 
 

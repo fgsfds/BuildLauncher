@@ -80,5 +80,6 @@ public sealed partial class ApiInterface
         }
     }
 
-    public Task<Dictionary<ToolEnum, GeneralReleaseJsonModel>?> GetLatestToolsReleasesAsync() => null!;
+    public Task<Dictionary<ToolEnum, GeneralReleaseJsonModel>?> GetLatestToolsReleasesAsync()
+        => Task.FromResult<Dictionary<ToolEnum, GeneralReleaseJsonModel>?>(null);
 }

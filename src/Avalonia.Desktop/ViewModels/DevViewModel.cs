@@ -899,7 +899,7 @@ public sealed partial class DevViewModel : ObservableObject
 
             SetResultMessage("Making zip. Please wait.", false);
 
-            List<FileStream> fileStreams = [];
+            List<FileStream> fileStreams = new();
 
             using (var archive = ZipArchive.Create())
             {
@@ -912,7 +912,7 @@ public sealed partial class DevViewModel : ObservableObject
                     foreach (var path in files)
                     {
                         var fileInfo = new FileInfo(path);
-                        FileStream? fileStream = fileInfo.OpenRead();
+                        var fileStream = fileInfo.OpenRead();
                         fileStreams.Add(fileStream);
 
                         _ = archive.AddEntry(

@@ -10,5 +10,6 @@ public enum FeatureEnum
     Wall_Rotate_Cstat,
     Dynamic_Lighting,
     Modern_Types,
-    SndInfo
+    SndInfo,
+    TileFromTexture
 }
