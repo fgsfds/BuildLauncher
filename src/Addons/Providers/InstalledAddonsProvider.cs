@@ -1052,6 +1052,9 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
                 //need to unpack archive with grpinfo
                 unpackedTo = Unpack(pathToFile, archive);
                 addonDtos = null;
+                archive?.Dispose();
+                File.Delete(pathToFile);
+
                 return unpackedTo;
             }
 
