@@ -434,8 +434,8 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
         {
             //hack to make SW addons appear at the top of the list
             foreach (var customCamp in _campaignsCache
-                .OrderByDescending(static x => x.Key.Id.Equals(nameof(WangAddonEnum.TwinDragon), StringComparison.InvariantCultureIgnoreCase))
-                .ThenByDescending(static x => x.Key.Id.Equals(nameof(WangAddonEnum.Wanton), StringComparison.InvariantCultureIgnoreCase))
+                .OrderByDescending(static x => x.Key.Id.Equals(nameof(WangAddonEnum.TwinDragon), StringComparison.OrdinalIgnoreCase))
+                .ThenByDescending(static x => x.Key.Id.Equals(nameof(WangAddonEnum.Wanton), StringComparison.OrdinalIgnoreCase))
                 .ThenBy(static x => x.Value.Title))
             {
                 campaigns.Add(customCamp.Key, customCamp.Value);
@@ -682,7 +682,7 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
         }
         else if (pathToFile.EndsWith(".map", StringComparison.OrdinalIgnoreCase))
         {
-            var bloodIni = pathToFile.Replace(".map", ".ini", StringComparison.InvariantCultureIgnoreCase);
+            var bloodIni = pathToFile.Replace(".map", ".ini", StringComparison.OrdinalIgnoreCase);
             var iniExists = File.Exists(bloodIni);
             AddonId id = new(Path.GetFileName(pathToFile), null);
 

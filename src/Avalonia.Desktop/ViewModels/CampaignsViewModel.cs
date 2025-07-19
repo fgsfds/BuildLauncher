@@ -50,7 +50,7 @@ public sealed partial class CampaignsViewModel : RightPanelViewModel, IPortsButt
 
             foreach (var addon in addons)
             {
-                if (!isSearchEmpty && !addon.Value.Title.Contains(SearchBoxText, StringComparison.InvariantCultureIgnoreCase))
+                if (!isSearchEmpty && !addon.Value.Title.Contains(SearchBoxText, StringComparison.OrdinalIgnoreCase))
                 {
                     continue;
                 }

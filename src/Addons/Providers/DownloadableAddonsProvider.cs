@@ -132,7 +132,7 @@ public sealed class DownloadableAddonsProvider : IDownloadableAddonsProvider
 
             //Death Wish hack
             if (addonType is AddonTypeEnum.TC &&
-                downloadableAddon.Key.Id.Contains("death-wish", StringComparison.InvariantCultureIgnoreCase) &&
+                downloadableAddon.Key.Id.Contains("death-wish", StringComparison.OrdinalIgnoreCase) &&
                 downloadableAddon.Key.Version!.StartsWith('1'))
             {
                 downloadableAddon.Value.IsInstalled = existingAddons.Contains(downloadableAddon.Key);

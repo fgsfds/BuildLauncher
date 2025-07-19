@@ -107,7 +107,7 @@ public sealed partial class CampaignsControl : UserControl
 
                         if (selectedCampaign.Executables?[OSEnum.Windows] is not null)
                         {
-                            return port.Exe.Equals(Path.GetFileName(selectedCampaign.Executables[OSEnum.Windows]), StringComparison.InvariantCultureIgnoreCase);
+                            return port.Exe.Equals(Path.GetFileName(selectedCampaign.Executables[OSEnum.Windows]), StringComparison.OrdinalIgnoreCase);
                         }
 
                         if (!port.IsInstalled)
@@ -136,10 +136,17 @@ public sealed partial class CampaignsControl : UserControl
                             return false;
                         }
 
-                        if (port.PortEnum is PortEnum.DosBox
-                            && (selectedCampaign.MainDef is not null || selectedCampaign.AdditionalDefs is not null))
+                        if (port.PortEnum is PortEnum.DosBox)
                         {
-                            return false;
+                            if (selectedCampaign.MainDef is not null || selectedCampaign.AdditionalDefs is not null)
+                            {
+                                return false;
+                            }
+
+                            if (_viewModel.Game.GameEnum is GameEnum.Duke3D && selectedCampaign.Type is not AddonTypeEnum.Official)
+                            {
+                                return false;
+                            }
                         }
 
                         return true;

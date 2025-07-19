@@ -181,7 +181,7 @@ public sealed partial class PortsViewModel : ObservableObject
                 ErrorMessage = "Port type is required";
                 return;
             }
-            if (CustomPorts.Any(x => x.Name.Equals(SelectedCustomPortName, StringComparison.InvariantCultureIgnoreCase)) && _isNewPort)
+            if (CustomPorts.Any(x => x.Name.Equals(SelectedCustomPortName, StringComparison.OrdinalIgnoreCase)) && _isNewPort)
             {
                 ErrorMessage = "Port with the same name already exists";
                 return;

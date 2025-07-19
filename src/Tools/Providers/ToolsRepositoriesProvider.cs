@@ -13,7 +13,7 @@ internal sealed class ToolsRepositoriesProvider
             return new()
             {
                 RepoUrl = new("https://api.github.com/repos/NoOneBlood/xmapedit/releases"),
-                WindowsReleasePredicate = static x => x.FileName.EndsWith("x64.zip", StringComparison.InvariantCultureIgnoreCase),
+                WindowsReleasePredicate = static x => x.FileName.EndsWith("x64.zip", StringComparison.OrdinalIgnoreCase),
                 LinuxReleasePredicate = null
             };
         }

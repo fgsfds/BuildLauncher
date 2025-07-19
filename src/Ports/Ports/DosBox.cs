@@ -1,5 +1,4 @@
-﻿using System;
-using System.Text;
+﻿using System.Text;
 using Addons.Addons;
 using Common;
 using Common.Client.Helpers;
@@ -151,7 +150,7 @@ public sealed class DosBox : BasePort
     /// <inheritdoc/>
     protected override void GetStartCampaignArgs(StringBuilder sb, IGame game, IAddon addon)
     {
-        _ = sb.Append(" -c \"cycles max\" -c \"core dynamic\"");
+        _ = sb.Append(" --noconsole -c \"cycles max\" -c \"core dynamic\"");
 
         if (game is BloodGame bGame)
         {
@@ -171,30 +170,30 @@ public sealed class DosBox : BasePort
 
     private static void GetDukeArgs(StringBuilder sb, DukeGame game, IAddon addon)
     {
-        _ = sb.Append($" -c \"mount c \\\"{game.GameInstallFolder}\"\" -c \"c:\"");
+        _ = sb.Append($@" -c ""mount c \""{game.GameInstallFolder}"""" -c ""c:""");
 
-        if (addon.AddonId.Id.Equals(nameof(DukeAddonEnum.DukeVaca), StringComparison.InvariantCultureIgnoreCase))
+        if (addon.AddonId.Id.Equals(nameof(DukeAddonEnum.DukeVaca), StringComparison.OrdinalIgnoreCase))
         {
             var pathToAddonFolder = game.AddonsPaths[DukeAddonEnum.DukeVaca];
-            _ = sb.Append($" -c \"mount d \\\"{pathToAddonFolder}\"\"");
-            _ = sb.Append($" -c \"VACATION.EXE /gd:\\\\VACATION.GRP /xd:\\\\VACATION.CON");
+            _ = sb.Append($@" -c ""mount d \""{pathToAddonFolder}""""");
+            _ = sb.Append(@" -c ""VACATION.EXE /gd:\\VACATION.GRP /xd:\\VACATION.CON");
         }
-        else if (addon.AddonId.Id.Equals(nameof(DukeAddonEnum.DukeDC), StringComparison.InvariantCultureIgnoreCase))
+        else if (addon.AddonId.Id.Equals(nameof(DukeAddonEnum.DukeDC), StringComparison.OrdinalIgnoreCase))
         {
             var pathToAddonFolder = game.AddonsPaths[DukeAddonEnum.DukeDC];
-            _ = sb.Append($" -c \"mount d \\\"{pathToAddonFolder}\"\"");
-            _ = sb.Append($" -c \"DUKE3D.EXE /gd:\\\\DUKEDC.GRP /xd:\\\\DUKEDC.CON");
+            _ = sb.Append($@" -c ""mount d \""{pathToAddonFolder}""""");
+            _ = sb.Append(@" -c ""DUKE3D.EXE /gd:\\DUKEDC.GRP /xd:\\DUKEDC.CON");
         }
-        else if (addon.AddonId.Id.Equals(nameof(DukeAddonEnum.DukeNW), StringComparison.InvariantCultureIgnoreCase))
+        else if (addon.AddonId.Id.Equals(nameof(DukeAddonEnum.DukeNW), StringComparison.OrdinalIgnoreCase))
         {
             var pathToAddonFolder = game.AddonsPaths[DukeAddonEnum.DukeNW];
-            _ = sb.Append($" -c \"mount d \\\"{pathToAddonFolder}\"\"");
-            _ = sb.Append($" -c \"DUKE3D.EXE /gd:\\\\NWINTER.GRP /xd:\\\\NWINTER.CON");
+            _ = sb.Append($@" -c ""mount d \""{pathToAddonFolder}""""");
+            _ = sb.Append(@" -c ""DUKE3D.EXE /gd:\\NWINTER.GRP /xd:\\NWINTER.CON");
         }
         else if (addon is LooseMapEntity map)
         {
-            _ = sb.Append($" -c \"mount d \\\"{game.MapsFolderPath}\"\"");
-            _ = sb.Append($" -c \"DUKE3D.EXE -map d:\\\\{map.FileName}");
+            _ = sb.Append($@" -c ""mount d \""{game.MapsFolderPath}""""");
+            _ = sb.Append($@" -c ""DUKE3D.EXE -map d:\\{map.FileName}");
         }
         else
         {
@@ -204,30 +203,31 @@ public sealed class DosBox : BasePort
 
     private static void GetRedneckArgs(StringBuilder sb, RedneckGame game, IAddon addon)
     {
-        if (addon.AddonId.Id.Equals(nameof(GameEnum.Redneck), StringComparison.InvariantCultureIgnoreCase))
+        if (addon.AddonId.Id.Equals(nameof(GameEnum.Redneck), StringComparison.OrdinalIgnoreCase))
         {
-            _ = sb.Append($" -c \"mount c \\\"{game.GameInstallFolder}\"\" -c \"c:\"");
+            _ = sb.Append($@" -c ""mount c \""{game.GameInstallFolder}"""" -c ""c:""");
             _ = sb.Append(" -c RR.EXE");
         }
-        else if (addon.AddonId.Id.Equals(nameof(GameEnum.RidesAgain), StringComparison.InvariantCultureIgnoreCase))
+        else if (addon.AddonId.Id.Equals(nameof(GameEnum.RidesAgain), StringComparison.OrdinalIgnoreCase))
         {
-            _ = sb.Append($" -c \"mount c \\\"{game.AgainInstallPath}\"\" -c \"c:\"");
+            _ = sb.Append($@" -c ""mount c \""{game.AgainInstallPath}"""" -c ""c:""");
             _ = sb.Append(" -c RA.EXE");
         }
-        else if (addon.AddonId.Id.Equals(nameof(RedneckAddonEnum.Route66), StringComparison.InvariantCultureIgnoreCase))
+        else if (addon.AddonId.Id.Equals(nameof(RedneckAddonEnum.Route66), StringComparison.OrdinalIgnoreCase))
         {
-            _ = sb.Append($" -c \"mount c \\\"{game.GameInstallFolder}\"\" -c \"c:\"");
+            _ = sb.Append($@" -c ""mount c \""{game.GameInstallFolder}"""" -c ""c:""");
             _ = sb.Append(" -c ROUTE66.EXE");
         }
     }
 
     protected override void GetBloodArgs(StringBuilder sb, BloodGame game, IAddon addon)
     {
-        if (addon.AddonId.Id.Equals(nameof(BloodAddonEnum.BloodCP), StringComparison.InvariantCultureIgnoreCase))
+        if (addon.AddonId.Id.Equals(nameof(BloodAddonEnum.BloodCP), StringComparison.OrdinalIgnoreCase))
         {
+            _ = sb.Append(@$" -c ""mount c \""{game.GameInstallFolder}"""" -c ""c:""");
             _ = sb.Append(" -c CRYPTIC.EXE");
         }
-        else if (addon.Type is AddonTypeEnum.TC && addon is BloodCampaignEntity bCamp)
+        else if (addon is BloodCampaignEntity bCamp && bCamp.Type is AddonTypeEnum.TC)
         {
             if (Directory.Exists(ClientProperties.TempFolderPath))
             {
@@ -274,12 +274,18 @@ public sealed class DosBox : BasePort
                 }
             }
 
-            _ = sb.Append(@$" -c ""mount c ""{ClientProperties.TempFolderPath}"""" -c ""c:""");
+            _ = sb.Append(@$" -c ""mount c \""{ClientProperties.TempFolderPath}"""" -c ""c:""");
             _ = sb.Append(@$" -c ""BLOOD.EXE -ini {bCamp.INI}""");
+        }
+        else if (addon is LooseMapEntity map)
+        {
+            _ = sb.Append(@$" -c ""mount c \""{game.GameInstallFolder}"""" -c ""c:""");
+            _ = sb.Append(@$" -c ""mount d \""{game.MapsFolderPath}""""");
+            _ = sb.Append(@$" -c ""BLOOD.EXE -map d:\\{map.FileName}""");
         }
         else
         {
-            _ = sb.Append(@$" -c ""mount c ""{game.GameInstallFolder}"""" -c ""c:""");
+            _ = sb.Append(@$" -c ""mount c \""{game.GameInstallFolder}"""" -c ""c:""");
             _ = sb.Append(" -c BLOOD.EXE");
         }
     }
