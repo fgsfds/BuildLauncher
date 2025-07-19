@@ -91,7 +91,7 @@ public sealed partial class CampaignsControl : UserControl
 
             StackPanel sp = new() { Orientation = Layout.Orientation.Horizontal };
             sp.Children.Add(new Image() { Margin = new(0, 0, 5, 0), Height = 16, Source = portIcon });
-            sp.Children.Add(new TextBlock() { Text = port.Name });
+            sp.Children.Add(new TextBlock() { Text = port.ShortName });
 
             Button portButton = new()
             {
@@ -132,6 +132,12 @@ public sealed partial class CampaignsControl : UserControl
 
                         if (selectedCampaign.SupportedGame.GameVersion is not null &&
                             !port.SupportedGamesVersions.Contains(selectedCampaign.SupportedGame.GameVersion))
+                        {
+                            return false;
+                        }
+
+                        if (port.PortEnum is PortEnum.DosBox
+                            && (selectedCampaign.MainDef is not null || selectedCampaign.AdditionalDefs is not null))
                         {
                             return false;
                         }
@@ -273,7 +279,7 @@ public sealed partial class CampaignsControl : UserControl
 
             var portButton = new MenuItem()
             {
-                Header = $"Start with {port.Name}",
+                Header = $"Start with {port.ShortName}",
                 Padding = new(5),
                 Command = new RelayCommand(() => _viewModel.StartCampaignCommand.Execute(port))
             };

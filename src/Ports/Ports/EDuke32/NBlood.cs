@@ -31,7 +31,8 @@ public class NBlood : EDuke32
         [
         FeatureEnum.Modern_Types,
         FeatureEnum.Hightile,
-        FeatureEnum.Models
+        FeatureEnum.Models,
+        FeatureEnum.TileFromTexture
         ];
 
     /// <inheritdoc/>

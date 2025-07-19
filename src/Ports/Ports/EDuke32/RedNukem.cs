@@ -51,7 +51,8 @@ public sealed class RedNukem : EDuke32
     public override List<FeatureEnum> SupportedFeatures =>
         [
         FeatureEnum.Hightile,
-        FeatureEnum.Models
+        FeatureEnum.Models,
+        FeatureEnum.TileFromTexture
         ];
 
     /// <inheritdoc/>

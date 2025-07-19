@@ -12,6 +12,7 @@ using Common.Helpers;
 using Common.Interfaces;
 using Common.Serializable.Addon;
 using CommunityToolkit.Diagnostics;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using SharpCompress.Archives;
 
@@ -43,7 +44,7 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
         IGame game,
         IConfigProvider config,
         ILogger logger,
-        ICacheAdder<Stream> bitmapsCache,
+        [FromKeyedServices("Bitmaps")] ICacheAdder<Stream> bitmapsCache,
         OriginalCampaignsProvider originalCampaignsProvider
         )
     {
@@ -121,7 +122,7 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
             AddonTypeEnum.TC => _campaignsCache,
             AddonTypeEnum.Map => _mapsCache,
             AddonTypeEnum.Mod => _modsCache,
-            _ => throw new NotImplementedException(),
+            _ => ThrowHelper.ThrowNotSupportedException<Dictionary<AddonId, IAddon>>(),
         };
 
         if (createNew)
@@ -265,7 +266,7 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
                 AddonTypeEnum.TC => _campaignsCache,
                 AddonTypeEnum.Map => _mapsCache,
                 AddonTypeEnum.Mod => _modsCache,
-                _ => throw new NotImplementedException(),
+                _ => ThrowHelper.ThrowNotSupportedException<Dictionary<AddonId, IAddon>>(),
             };
 
 

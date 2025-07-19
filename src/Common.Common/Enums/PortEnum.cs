@@ -11,5 +11,6 @@ public enum PortEnum : byte
     NotBlood = 7,
     BuildGDX = 8,
     Fury = 9,
-    Stub = 10
+    Stub = 10,
+    DosBox = 11
 }

@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using Common.Helpers;
+using CommunityToolkit.Diagnostics;
 
 namespace Common;
 
@@ -31,7 +32,8 @@ public sealed class AddonId
     {
         if (obj is not AddonId addon)
         {
-            throw new ArgumentNullException(nameof(obj));
+            ThrowHelper.ThrowArgumentNullException(nameof(obj));
+            return false;
         }
 
         if (!Id.Equals(addon.Id, StringComparison.OrdinalIgnoreCase))
