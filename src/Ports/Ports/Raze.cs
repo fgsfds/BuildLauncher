@@ -103,7 +103,8 @@ public sealed class Raze : BasePort
         FeatureEnum.Models,
         FeatureEnum.Sloped_Sprites,
         FeatureEnum.Wall_Rotate_Cstat,
-        FeatureEnum.SndInfo
+        FeatureEnum.SndInfo,
+        FeatureEnum.TileFromTexture
         ];
 
 
@@ -133,31 +134,31 @@ public sealed class Raze : BasePort
 
                 string gameFolder;
 
-                if (folderName.StartsWith("blood", StringComparison.InvariantCultureIgnoreCase))
+                if (folderName.StartsWith("blood", StringComparison.OrdinalIgnoreCase))
                 {
                     gameFolder = "Blood";
                 }
-                else if (folderName.StartsWith("duke", StringComparison.InvariantCultureIgnoreCase))
+                else if (folderName.StartsWith("duke", StringComparison.OrdinalIgnoreCase))
                 {
                     gameFolder = "Duke3D";
                 }
-                else if (folderName.StartsWith("slave", StringComparison.InvariantCultureIgnoreCase))
+                else if (folderName.StartsWith("slave", StringComparison.OrdinalIgnoreCase))
                 {
                     gameFolder = "Slave";
                 }
-                else if (folderName.StartsWith("fury", StringComparison.InvariantCultureIgnoreCase))
+                else if (folderName.StartsWith("fury", StringComparison.OrdinalIgnoreCase))
                 {
                     gameFolder = "Fury";
                 }
-                else if (folderName.StartsWith("wang", StringComparison.InvariantCultureIgnoreCase))
+                else if (folderName.StartsWith("wang", StringComparison.OrdinalIgnoreCase))
                 {
                     gameFolder = "Wang";
                 }
-                else if (folderName.StartsWith("redneck", StringComparison.InvariantCultureIgnoreCase))
+                else if (folderName.StartsWith("redneck", StringComparison.OrdinalIgnoreCase))
                 {
                     gameFolder = "Redneck";
                 }
-                else if (folderName.StartsWith("ridesagain", StringComparison.InvariantCultureIgnoreCase))
+                else if (folderName.StartsWith("ridesagain", StringComparison.OrdinalIgnoreCase))
                 {
                     gameFolder = "Redneck";
                 }
@@ -304,7 +305,7 @@ public sealed class Raze : BasePort
         Guard2.ThrowIfNotType<DukeCampaignEntity>(addon, out var dCamp);
 
         if (dCamp.SupportedGame.GameVersion is not null &&
-            dCamp.SupportedGame.GameVersion.Equals(nameof(DukeVersionEnum.Duke3D_WT), StringComparison.InvariantCultureIgnoreCase))
+            dCamp.SupportedGame.GameVersion.Equals(nameof(DukeVersionEnum.Duke3D_WT), StringComparison.OrdinalIgnoreCase))
         {
             var config = Path.Combine(PortInstallFolderPath, ConfigFile);
 

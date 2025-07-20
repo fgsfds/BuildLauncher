@@ -11,7 +11,7 @@ public sealed class PlaytimeProvider
     {
         _config = config;
 
-        _times = new(_config.Playtimes, StringComparer.InvariantCultureIgnoreCase);
+        _times = new(_config.Playtimes, StringComparer.OrdinalIgnoreCase);
     }
 
     public TimeSpan? GetTime(string id)

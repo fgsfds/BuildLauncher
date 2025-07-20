@@ -12,10 +12,9 @@ using Ports.Ports;
 
 namespace Avalonia.Desktop.Misc;
 
-public sealed class BitmapsCache : ICacheAdder<Stream>, ICacheGetter<Bitmap>
+public sealed class BitmapsCache : ICacheAdder<Stream>, ICacheGetter<Bitmap>, IDisposable
 {
     private readonly ConcurrentDictionary<long, Bitmap> _cache = [];
-
 
     public void InitializeCache()
     {
@@ -183,5 +182,17 @@ public sealed class BitmapsCache : ICacheAdder<Stream>, ICacheGetter<Bitmap>
 
         using var vsw = ImageHelper.FileNameToStream("VoidSW.png", portsAss);
         _ = TryAddToCache(PortEnum.VoidSW.GetUniqueHash(), vsw);
+
+        using var db = ImageHelper.FileNameToStream("DosBox.png", portsAss);
+        _ = TryAddToCache(PortEnum.DosBox.GetUniqueHash(), db);
+    }
+
+
+    public void Dispose()
+    {
+        foreach (var bitmap in _cache.Values)
+        {
+            bitmap.Dispose();
+        }
     }
 }

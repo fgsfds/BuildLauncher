@@ -46,7 +46,8 @@ public sealed class Fury : EDuke32
         FeatureEnum.Models,
         FeatureEnum.Sloped_Sprites,
         FeatureEnum.TROR,
-        FeatureEnum.Wall_Rotate_Cstat
+        FeatureEnum.Wall_Rotate_Cstat,
+        FeatureEnum.TileFromTexture
         ];
 
     /// <inheritdoc/>
@@ -62,7 +63,7 @@ public sealed class Fury : EDuke32
     /// <inheritdoc/>
     public override void BeforeStart(IGame game, IAddon campaign)
     {
-        MoveSaveFiles(game, campaign);
+        MoveSaveFilesFromGameFolder(game, campaign);
 
         FixGrpInConfig();
     }

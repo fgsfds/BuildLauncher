@@ -27,7 +27,7 @@ public sealed class PCExhumed : EDuke32
     public override List<GameEnum> SupportedGames => [GameEnum.Slave];
 
     /// <inheritdoc/>
-    public override List<FeatureEnum> SupportedFeatures => [];
+    public override List<FeatureEnum> SupportedFeatures => [FeatureEnum.TileFromTexture];
 
     /// <inheritdoc/>
     protected override string ConfigFile => "pcexhumed.cfg";
@@ -36,7 +36,7 @@ public sealed class PCExhumed : EDuke32
     /// <inheritdoc/>
     public override void BeforeStart(IGame game, IAddon campaign)
     {
-        MoveSaveFiles(game, campaign);
+        MoveSaveFilesFromGameFolder(game, campaign);
     }
 
 

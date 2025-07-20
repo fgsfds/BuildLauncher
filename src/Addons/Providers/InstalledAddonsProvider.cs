@@ -12,6 +12,7 @@ using Common.Helpers;
 using Common.Interfaces;
 using Common.Serializable.Addon;
 using CommunityToolkit.Diagnostics;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using SharpCompress.Archives;
 
@@ -43,7 +44,7 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
         IGame game,
         IConfigProvider config,
         ILogger logger,
-        ICacheAdder<Stream> bitmapsCache,
+        [FromKeyedServices("Bitmaps")] ICacheAdder<Stream> bitmapsCache,
         OriginalCampaignsProvider originalCampaignsProvider
         )
     {
@@ -121,7 +122,7 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
             AddonTypeEnum.TC => _campaignsCache,
             AddonTypeEnum.Map => _mapsCache,
             AddonTypeEnum.Mod => _modsCache,
-            _ => throw new NotImplementedException(),
+            _ => ThrowHelper.ThrowNotSupportedException<Dictionary<AddonId, IAddon>>(),
         };
 
         if (createNew)
@@ -265,7 +266,7 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
                 AddonTypeEnum.TC => _campaignsCache,
                 AddonTypeEnum.Map => _mapsCache,
                 AddonTypeEnum.Mod => _modsCache,
-                _ => throw new NotImplementedException(),
+                _ => ThrowHelper.ThrowNotSupportedException<Dictionary<AddonId, IAddon>>(),
             };
 
 
@@ -433,8 +434,8 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
         {
             //hack to make SW addons appear at the top of the list
             foreach (var customCamp in _campaignsCache
-                .OrderByDescending(static x => x.Key.Id.Equals(nameof(WangAddonEnum.TwinDragon), StringComparison.InvariantCultureIgnoreCase))
-                .ThenByDescending(static x => x.Key.Id.Equals(nameof(WangAddonEnum.Wanton), StringComparison.InvariantCultureIgnoreCase))
+                .OrderByDescending(static x => x.Key.Id.Equals(nameof(WangAddonEnum.TwinDragon), StringComparison.OrdinalIgnoreCase))
+                .ThenByDescending(static x => x.Key.Id.Equals(nameof(WangAddonEnum.Wanton), StringComparison.OrdinalIgnoreCase))
                 .ThenBy(static x => x.Value.Title))
             {
                 campaigns.Add(customCamp.Key, customCamp.Value);
@@ -681,7 +682,7 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
         }
         else if (pathToFile.EndsWith(".map", StringComparison.OrdinalIgnoreCase))
         {
-            var bloodIni = pathToFile.Replace(".map", ".ini", StringComparison.InvariantCultureIgnoreCase);
+            var bloodIni = pathToFile.Replace(".map", ".ini", StringComparison.OrdinalIgnoreCase);
             var iniExists = File.Exists(bloodIni);
             AddonId id = new(Path.GetFileName(pathToFile), null);
 
@@ -712,8 +713,7 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
         }
         else if (ArchiveFactory.IsArchive(pathToFile, out _))
         {
-            using var archive = ArchiveFactory.Open(pathToFile);
-            var unpackedTo = UnpackIfNeededAndGetAddonDto(pathToFile, archive, out var manifests);
+            var unpackedTo = UnpackIfNeededAndGetAddonDto(pathToFile, out var manifests);
 
             if (manifests is null or [])
             {
@@ -758,7 +758,8 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
             }
             else
             {
-                isUnpacked = false;
+                isUnpacked = false; 
+                using var archive = ArchiveFactory.Open(pathToFile);
 
                 (gridImageHash, Stream? gridImageStream) = ImageHelper.GetCoverFromArchive(archive);
                 (previewImageHash, Stream? previewImageStream) = ImageHelper.GetPreviewFromArchive(archive);
@@ -1037,12 +1038,13 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
     /// Unpack archive if needed and return path to folder
     /// </summary>
     /// <param name="pathToFile">Path to archive</param>
-    /// <param name="archive">Archive</param>
     /// <param name="addonDtos">AddonDto</param>
-    private string? UnpackIfNeededAndGetAddonDto(string pathToFile, IArchive archive, out List<AddonJsonModel>? addonDtos)
+    private string? UnpackIfNeededAndGetAddonDto(string pathToFile, out List<AddonJsonModel>? addonDtos)
     {
         try
         {
+            using var archive = ArchiveFactory.Open(pathToFile);
+
             string? unpackedTo = null;
 
             if (archive.Entries.Any(static x => x.Key!.Equals("addons.grpinfo", StringComparison.OrdinalIgnoreCase)))
@@ -1050,6 +1052,9 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
                 //need to unpack archive with grpinfo
                 unpackedTo = Unpack(pathToFile, archive);
                 addonDtos = null;
+                archive?.Dispose();
+                File.Delete(pathToFile);
+
                 return unpackedTo;
             }
 
@@ -1083,6 +1088,9 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
 
             if (unpackedTo is not null)
             {
+                archive?.Dispose();
+                File.Delete(pathToFile);
+
                 var unpackedAddonJsons = Directory.GetFiles(unpackedTo, "addon*.json");
 
                 foreach (var addonJson in unpackedAddonJsons)
@@ -1140,9 +1148,6 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
         }
 
         archive.ExtractToDirectory(unpackTo);
-
-        archive.Dispose();
-        File.Delete(pathToFile);
 
         return unpackTo;
     }

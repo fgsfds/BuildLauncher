@@ -6,6 +6,7 @@ using Avalonia.Desktop.ViewModels;
 using Avalonia.Input;
 using Avalonia.Rendering.Composition;
 using Avalonia.Rendering.Composition.Animations;
+using Common;
 using Common.Common.Helpers;
 using Common.Enums;
 using Common.Helpers;
@@ -91,7 +92,7 @@ public sealed partial class CampaignsControl : UserControl
 
             StackPanel sp = new() { Orientation = Layout.Orientation.Horizontal };
             sp.Children.Add(new Image() { Margin = new(0, 0, 5, 0), Height = 16, Source = portIcon });
-            sp.Children.Add(new TextBlock() { Text = port.Name });
+            sp.Children.Add(new TextBlock() { Text = port.ShortName });
 
             Button portButton = new()
             {
@@ -107,7 +108,7 @@ public sealed partial class CampaignsControl : UserControl
 
                         if (selectedCampaign.Executables?[OSEnum.Windows] is not null)
                         {
-                            return port.Exe.Equals(Path.GetFileName(selectedCampaign.Executables[OSEnum.Windows]), StringComparison.InvariantCultureIgnoreCase);
+                            return port.Exe.Equals(Path.GetFileName(selectedCampaign.Executables[OSEnum.Windows]), StringComparison.OrdinalIgnoreCase);
                         }
 
                         if (!port.IsInstalled)
@@ -134,6 +135,24 @@ public sealed partial class CampaignsControl : UserControl
                             !port.SupportedGamesVersions.Contains(selectedCampaign.SupportedGame.GameVersion))
                         {
                             return false;
+                        }
+
+                        if (port.PortEnum is PortEnum.DosBox)
+                        {
+                            if (selectedCampaign.MainDef is not null || selectedCampaign.AdditionalDefs is not null)
+                            {
+                                return false;
+                            }
+
+                            if (_viewModel.Game.GameEnum is GameEnum.Duke3D && selectedCampaign.Type is not AddonTypeEnum.Official)
+                            {
+                                return false;
+                            }
+
+                            if (_viewModel.Game.GameEnum is GameEnum.Wang && selectedCampaign.AddonId != new AddonId(nameof(GameEnum.Wang)))
+                            {
+                                return false;
+                            }
                         }
 
                         return true;
@@ -273,7 +292,7 @@ public sealed partial class CampaignsControl : UserControl
 
             var portButton = new MenuItem()
             {
-                Header = $"Start with {port.Name}",
+                Header = $"Start with {port.ShortName}",
                 Padding = new(5),
                 Command = new RelayCommand(() => _viewModel.StartCampaignCommand.Execute(port))
             };

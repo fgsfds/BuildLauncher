@@ -31,7 +31,8 @@ public class NBlood : EDuke32
         [
         FeatureEnum.Modern_Types,
         FeatureEnum.Hightile,
-        FeatureEnum.Models
+        FeatureEnum.Models,
+        FeatureEnum.TileFromTexture
         ];
 
     /// <inheritdoc/>
@@ -50,7 +51,7 @@ public class NBlood : EDuke32
     /// <inheritdoc/>
     public override void BeforeStart(IGame game, IAddon campaign)
     {
-        MoveSaveFiles(game, campaign);
+        MoveSaveFilesFromGameFolder(game, campaign);
     }
 
 

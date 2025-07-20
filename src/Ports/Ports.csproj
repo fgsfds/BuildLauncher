@@ -5,7 +5,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Assets\DosBox.png" />
+    <None Remove="Assets\DosBox.svg" />
+  </ItemGroup>
+
+  <ItemGroup>
     <EmbeddedResource Include="Assets\BuildGDX.png" />
+    <EmbeddedResource Include="Assets\DosBox.png" />
     <EmbeddedResource Include="Assets\EDuke32.png" />
     <EmbeddedResource Include="Assets\Fury.png" />
     <EmbeddedResource Include="Assets\NotBlood.png" />

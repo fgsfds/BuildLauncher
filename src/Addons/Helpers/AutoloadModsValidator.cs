@@ -69,7 +69,7 @@ public static class AutoloadModsValidator
 
             foreach (var dependentAddon in autoloadMod.DependentAddons)
             {
-                if (campaign.AddonId.Id.Equals(dependentAddon.Key, StringComparison.InvariantCultureIgnoreCase) &&
+                if (campaign.AddonId.Id.Equals(dependentAddon.Key, StringComparison.OrdinalIgnoreCase) &&
                     (dependentAddon.Value is null || VersionComparer.Compare(campaign.AddonId.Version, dependentAddon.Value)))
                 {
                     passedDependenciesCount++;
@@ -85,7 +85,7 @@ public static class AutoloadModsValidator
 
                 foreach (var addon in mods)
                 {
-                    if (!dependentAddon.Key.Equals(addon.Key.Id, StringComparison.InvariantCultureIgnoreCase))
+                    if (!dependentAddon.Key.Equals(addon.Key.Id, StringComparison.OrdinalIgnoreCase))
                     {
                         continue;
                     }
@@ -128,7 +128,7 @@ public static class AutoloadModsValidator
         {
             //What a fucking mess...
             //if campaign id equals addon id
-            if (campaign.AddonId.Id.Equals(incompatibleAddon.Key, StringComparison.InvariantCultureIgnoreCase) &&
+            if (campaign.AddonId.Id.Equals(incompatibleAddon.Key, StringComparison.OrdinalIgnoreCase) &&
                 //AND either incompatible addon's version is null
                 (incompatibleAddon.Value is null ||
                 //OR campaign's version is null

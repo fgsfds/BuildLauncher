@@ -65,14 +65,12 @@ public sealed class BuildGDX : BasePort
     }
 
     /// <inheritdoc/>
-    public override bool IsInstalled => File.Exists(Path.Combine(PortInstallFolderPath, "BuildGDX.jar"));
-
-    /// <inheritdoc/>
     public override List<FeatureEnum> SupportedFeatures =>
             [
             FeatureEnum.TROR,
             FeatureEnum.Hightile,
-            FeatureEnum.Models
+            FeatureEnum.Models,
+            FeatureEnum.TileFromTexture
             ];
 
 
@@ -119,7 +117,7 @@ public sealed class BuildGDX : BasePort
     /// <inheritdoc/>
     public override void BeforeStart(IGame game, IAddon campaign)
     {
-        MoveSaveFiles(game, campaign);
+        MoveSaveFilesToGameFolder(game, campaign);
 
         RestoreRoute66Files(game);
 
@@ -129,26 +127,7 @@ public sealed class BuildGDX : BasePort
     /// <inheritdoc/>
     public override void AfterEnd(IGame game, IAddon campaign)
     {
-        //copying saved games into separate folder
-        var saveFolder = GetPathToAddonSavedGamesFolder(game.ShortName, campaign.AddonId.Id);
-
-        string path = game.GameInstallFolder ?? ThrowHelper.ThrowArgumentNullException<string>();
-
-        var files = from file in Directory.GetFiles(path)
-                    from ext in SaveFileExtensions
-                    where file.EndsWith(ext)
-                    select file;
-
-        if (!Directory.Exists(saveFolder))
-        {
-            _ = Directory.CreateDirectory(saveFolder);
-        }
-
-        foreach (var file in files)
-        {
-            var destFileName = Path.Combine(saveFolder, Path.GetFileName(file)!);
-            File.Move(file, destFileName, true);
-        }
+        MoveSaveFilesFromGameFolder(game, campaign);
     }
 
     /// <inheritdoc/>
@@ -279,23 +258,5 @@ public sealed class BuildGDX : BasePort
         _ = sb.Append($@" -path ""{game.GameInstallFolder}""");
 
         _ = sb.Append(" -game TEKWAR");
-    }
-
-    private void MoveSaveFiles(IGame game, IAddon campaign)
-    {
-        var saveFolder = GetPathToAddonSavedGamesFolder(game.ShortName, campaign.AddonId.Id);
-
-        if (!Directory.Exists(saveFolder))
-        {
-            return;
-        }
-
-        var saves = Directory.GetFiles(saveFolder);
-
-        foreach (var save in saves)
-        {
-            string destFileName = Path.Combine(game.GameInstallFolder!, Path.GetFileName(save)!);
-            File.Move(save, destFileName, true);
-        }
     }
 }

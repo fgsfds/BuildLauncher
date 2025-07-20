@@ -28,7 +28,8 @@ public sealed class NotBlood : NBlood
         [
         FeatureEnum.Modern_Types,
         FeatureEnum.Hightile,
-        FeatureEnum.Models
+        FeatureEnum.Models,
+        FeatureEnum.TileFromTexture
         ];
 
     /// <inheritdoc/>
@@ -38,6 +39,6 @@ public sealed class NotBlood : NBlood
     /// <inheritdoc/>
     public override void BeforeStart(IGame game, IAddon campaign)
     {
-        MoveSaveFiles(game, campaign);
+        MoveSaveFilesFromGameFolder(game, campaign);
     }
 }

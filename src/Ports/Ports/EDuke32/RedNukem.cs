@@ -51,7 +51,8 @@ public sealed class RedNukem : EDuke32
     public override List<FeatureEnum> SupportedFeatures =>
         [
         FeatureEnum.Hightile,
-        FeatureEnum.Models
+        FeatureEnum.Models,
+        FeatureEnum.TileFromTexture
         ];
 
     /// <inheritdoc/>
@@ -65,7 +66,7 @@ public sealed class RedNukem : EDuke32
 
         CreateOrDeleteBlankAnm(true);
 
-        MoveSaveFiles(game, campaign);
+        MoveSaveFilesFromGameFolder(game, campaign);
 
         FixGrpInConfig();
 

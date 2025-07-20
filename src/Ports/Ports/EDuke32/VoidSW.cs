@@ -37,7 +37,8 @@ public sealed class VoidSW : EDuke32
     public override List<FeatureEnum> SupportedFeatures =>
         [
         FeatureEnum.Hightile,
-        FeatureEnum.Models
+        FeatureEnum.Models,
+        FeatureEnum.TileFromTexture
         ];
 
     /// <inheritdoc/>
@@ -65,7 +66,7 @@ public sealed class VoidSW : EDuke32
     /// <inheritdoc/>
     public override void BeforeStart(IGame game, IAddon campaign)
     {
-        MoveSaveFiles(game, campaign);
+        MoveSaveFilesFromGameFolder(game, campaign);
 
         FixGrpInConfig();
     }

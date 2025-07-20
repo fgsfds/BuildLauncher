@@ -56,6 +56,12 @@ public abstract class BasePort
     public abstract string Name { get; }
 
     /// <summary>
+    /// Name of the folder that contains the port files
+    /// By default is the same as <see cref="Name"/>
+    /// </summary>
+    public virtual string ShortName => Name;
+
+    /// <summary>
     /// Games supported by the port
     /// </summary>
     public abstract List<GameEnum> SupportedGames { get; }
@@ -73,7 +79,7 @@ public abstract class BasePort
     /// <summary>
     /// Path to port install folder
     /// </summary>
-    public virtual string PortInstallFolderPath => Path.Combine(ClientProperties.PortsFolderPath, PortFolderName);
+    public virtual string PortInstallFolderPath => Path.Combine(ClientProperties.PortsFolderPath, ShortName);
 
     /// <summary>
     /// Path to port saved games folder
@@ -167,12 +173,6 @@ public abstract class BasePort
     protected IEnumerable<string> SaveFileExtensions => [".sav", ".esv"];
 
     /// <summary>
-    /// Name of the folder that contains the port files
-    /// By default is the same as <see cref="Name"/>
-    /// </summary>
-    private string PortFolderName => Name;
-
-    /// <summary>
     /// Port's icon
     /// </summary>
     public long IconId => PortEnum.GetUniqueHash();
@@ -254,7 +254,7 @@ public abstract class BasePort
     /// <summary>
     /// Get startup args for manifested maps
     /// </summary>
-    protected void GetMapArgs(StringBuilder sb, IAddon camp)
+    protected virtual void GetMapArgs(StringBuilder sb, IAddon camp)
     {
         //TODO e#m#
         if (camp.StartMap is MapFileJsonModel mapFile)
@@ -272,7 +272,7 @@ public abstract class BasePort
     /// <summary>
     /// Get startup args for loose maps
     /// </summary>
-    protected void GetLooseMapArgs(StringBuilder sb, IGame game, IAddon camp)
+    protected virtual void GetLooseMapArgs(StringBuilder sb, IGame game, IAddon camp)
     {
         camp.StartMap.ThrowIfNotType<MapFileJsonModel>(out var mapFile);
 
@@ -280,7 +280,7 @@ public abstract class BasePort
         _ = sb.Append($@" -map ""{mapFile.File}""");
     }
 
-    protected void GetBloodArgs(StringBuilder sb, BloodGame game, IAddon addon)
+    protected virtual void GetBloodArgs(StringBuilder sb, BloodGame game, IAddon addon)
     {
         if (addon is LooseMapEntity lMap)
         {
@@ -354,7 +354,7 @@ public abstract class BasePort
         }
     }
 
-    protected void GetSlaveArgs(StringBuilder sb, SlaveGame game, IAddon addon)
+    protected virtual void GetSlaveArgs(StringBuilder sb, SlaveGame game, IAddon addon)
     {
         if (addon is LooseMapEntity)
         {
@@ -385,7 +385,7 @@ public abstract class BasePort
         }
     }
 
-    protected void GetNamWW2GIArgs(StringBuilder sb, IGame game, IAddon addon)
+    protected virtual void GetNamWW2GIArgs(StringBuilder sb, IGame game, IAddon addon)
     {
         if (game is NamGame)
         {
@@ -682,6 +682,48 @@ public abstract class BasePort
             {
                 File.Move(art4r, art4, true);
             }
+        }
+    }
+
+    protected virtual void MoveSaveFilesToGameFolder(IGame game, IAddon campaign)
+    {
+        var saveFolder = GetPathToAddonSavedGamesFolder(game.ShortName, campaign.AddonId.Id);
+
+        if (!Directory.Exists(saveFolder))
+        {
+            return;
+        }
+
+        var saves = Directory.GetFiles(saveFolder);
+
+        foreach (var save in saves)
+        {
+            string destFileName = Path.Combine(game.GameInstallFolder!, Path.GetFileName(save)!);
+            File.Move(save, destFileName, true);
+        }
+    }
+
+    protected virtual void MoveSaveFilesFromGameFolder(IGame game, IAddon campaign)
+    {
+        //copying saved games into separate folder
+        var saveFolder = GetPathToAddonSavedGamesFolder(game.ShortName, campaign.AddonId.Id);
+
+        string path = game.GameInstallFolder ?? ThrowHelper.ThrowArgumentNullException<string>();
+
+        var files = from file in Directory.GetFiles(path)
+                    from ext in SaveFileExtensions
+                    where file.EndsWith(ext, StringComparison.OrdinalIgnoreCase)
+                    select file;
+
+        if (!Directory.Exists(saveFolder))
+        {
+            _ = Directory.CreateDirectory(saveFolder);
+        }
+
+        foreach (var file in files)
+        {
+            var destFileName = Path.Combine(saveFolder, Path.GetFileName(file)!);
+            File.Move(file, destFileName, true);
         }
     }
 }

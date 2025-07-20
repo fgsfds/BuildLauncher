@@ -53,6 +53,7 @@ public sealed partial class PortsViewModel : ObservableObject
         PortEnum.NotBlood,
         PortEnum.RedNukem,
         PortEnum.PCExhumed,
+        PortEnum.DosBox,
         ];
 
     [ObservableProperty]
@@ -112,9 +113,9 @@ public sealed partial class PortsViewModel : ObservableObject
         try
         {
             ErrorMessage = string.Empty;
-            SelectedCustomPortName = SelectedCustomPort.Value.Name;
-            SelectedCustomPortPath = SelectedCustomPort.Value.Path;
-            SelectedCustomPortType = SelectedCustomPort.Value.PortEnum;
+            SelectedCustomPortName = SelectedCustomPort.Name;
+            SelectedCustomPortPath = SelectedCustomPort.Path;
+            SelectedCustomPortType = SelectedCustomPort.PortEnum;
 
             IsEditorVisible = true;
             _isNewPort = false;
@@ -141,7 +142,7 @@ public sealed partial class PortsViewModel : ObservableObject
 
         try
         {
-            _installedPortsProvider.DeleteCustomPort(SelectedCustomPort.Value.Name);
+            _installedPortsProvider.DeleteCustomPort(SelectedCustomPort.Name);
 
             OnPropertyChanged(nameof(CustomPorts));
         }
@@ -180,7 +181,7 @@ public sealed partial class PortsViewModel : ObservableObject
                 ErrorMessage = "Port type is required";
                 return;
             }
-            if (CustomPorts.Any(x => x.Name.Equals(SelectedCustomPortName, StringComparison.InvariantCultureIgnoreCase)) && _isNewPort)
+            if (CustomPorts.Any(x => x.Name.Equals(SelectedCustomPortName, StringComparison.OrdinalIgnoreCase)) && _isNewPort)
             {
                 ErrorMessage = "Port with the same name already exists";
                 return;
@@ -293,7 +294,11 @@ public sealed partial class PortsViewModel : ObservableObject
         bgdxVm.PortChangedEvent += OnPortChanged;
         _ = _updatesList.TryAdd(PortEnum.BuildGDX, false);
 
-        PortsList = [edukeVm, razeVm, nbloodVm, notbloodVm, pcexVm, rednukemVm, bgdxVm];
+        var dosBoxVm = _viewModelsFactory.GetPortViewModel(PortEnum.DosBox);
+        dosBoxVm.PortChangedEvent += OnPortChanged;
+        _ = _updatesList.TryAdd(PortEnum.DosBox, false);
+
+        PortsList = [edukeVm, razeVm, nbloodVm, notbloodVm, pcexVm, rednukemVm, bgdxVm, dosBoxVm];
         OnPropertyChanged(nameof(PortsList));
     }
 

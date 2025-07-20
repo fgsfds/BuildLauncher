@@ -559,15 +559,15 @@ public sealed partial class DevViewModel : ObservableObject
                 string.IsNullOrWhiteSpace(MainRff) &&
                 string.IsNullOrWhiteSpace(SoundRff))
             {
-                if (files.Any(static x => x.EndsWith(".ART", StringComparison.InvariantCultureIgnoreCase)))
+                if (files.Any(static x => x.EndsWith(".ART", StringComparison.OrdinalIgnoreCase)))
                 {
                     ThrowHelper.ThrowMissingFieldException("Don't use ART files. Convert them to DEF.");
                 }
-                if (files.Any(static x => x.EndsWith(".DAT", StringComparison.InvariantCultureIgnoreCase)))
+                if (files.Any(static x => x.EndsWith(".DAT", StringComparison.OrdinalIgnoreCase)))
                 {
                     ThrowHelper.ThrowMissingFieldException("Don't use DAT files. Convert them to DEF.");
                 }
-                if (files.Any(static x => x.EndsWith(".RFS", StringComparison.InvariantCultureIgnoreCase)))
+                if (files.Any(static x => x.EndsWith(".RFS", StringComparison.OrdinalIgnoreCase)))
                 {
                     ThrowHelper.ThrowMissingFieldException("Addons with RFS files are not supported");
                 }
@@ -899,7 +899,7 @@ public sealed partial class DevViewModel : ObservableObject
 
             SetResultMessage("Making zip. Please wait.", false);
 
-            List<FileStream> fileStreams = [];
+            List<FileStream> fileStreams = new();
 
             using (var archive = ZipArchive.Create())
             {
@@ -912,7 +912,7 @@ public sealed partial class DevViewModel : ObservableObject
                     foreach (var path in files)
                     {
                         var fileInfo = new FileInfo(path);
-                        FileStream? fileStream = fileInfo.OpenRead();
+                        var fileStream = fileInfo.OpenRead();
                         fileStreams.Add(fileStream);
 
                         _ = archive.AddEntry(
