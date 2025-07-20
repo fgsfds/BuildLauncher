@@ -38,13 +38,13 @@ public sealed class DosBox : BasePort
         GameEnum.Blood,
         GameEnum.Duke3D,
         GameEnum.Wang,
-        GameEnum.Slave,
+        //GameEnum.Slave,
         GameEnum.Redneck,
         GameEnum.RidesAgain,
-        GameEnum.NAM,
-        GameEnum.Witchaven,
-        GameEnum.Witchaven2,
-        GameEnum.TekWar
+        //GameEnum.NAM,
+        //GameEnum.Witchaven,
+        //GameEnum.Witchaven2,
+        //GameEnum.TekWar
         ];
 
     /// <inheritdoc/>
@@ -145,6 +145,10 @@ public sealed class DosBox : BasePort
         {
             GetRedneckArgs(sb, rGame, addon);
         }
+        else if (game is WangGame wGame)
+        {
+            GetWangArgs(sb, wGame);
+        }
 
         _ = sb.Append(" -c \"exit\"");
     }
@@ -180,6 +184,12 @@ public sealed class DosBox : BasePort
         {
             _ = sb.Append(" -c DUKE3D.EXE");
         }
+    }
+
+    private static void GetWangArgs(StringBuilder sb, WangGame game)
+    {
+        _ = sb.Append($@" -c ""mount c \""{game.GameInstallFolder}"""" -c ""c:""");
+        _ = sb.Append(" -c Sw.EXE");
     }
 
     private static void GetRedneckArgs(StringBuilder sb, RedneckGame game, IAddon addon)

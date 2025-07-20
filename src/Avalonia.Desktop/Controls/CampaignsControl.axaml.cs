@@ -6,6 +6,7 @@ using Avalonia.Desktop.ViewModels;
 using Avalonia.Input;
 using Avalonia.Rendering.Composition;
 using Avalonia.Rendering.Composition.Animations;
+using Common;
 using Common.Common.Helpers;
 using Common.Enums;
 using Common.Helpers;
@@ -144,6 +145,11 @@ public sealed partial class CampaignsControl : UserControl
                             }
 
                             if (_viewModel.Game.GameEnum is GameEnum.Duke3D && selectedCampaign.Type is not AddonTypeEnum.Official)
+                            {
+                                return false;
+                            }
+
+                            if (_viewModel.Game.GameEnum is GameEnum.Wang && selectedCampaign.AddonId != new AddonId(nameof(GameEnum.Wang)))
                             {
                                 return false;
                             }
