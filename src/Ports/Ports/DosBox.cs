@@ -117,34 +117,15 @@ public sealed class DosBox : BasePort
     /// <inheritdoc/>
     public override void BeforeStart(IGame game, IAddon campaign)
     {
-        //MoveSaveFiles(game, campaign);
+        MoveSaveFilesToGameFolder(game, campaign);
 
-        //RestoreRoute66Files(game);
+        RestoreRoute66Files(game);
     }
 
     /// <inheritdoc/>
     public override void AfterEnd(IGame game, IAddon campaign)
     {
-        ////copying saved games into separate folder
-        //var saveFolder = GetPathToAddonSavedGamesFolder(game.ShortName, campaign.AddonId.Id);
-
-        //string path = game.GameInstallFolder ?? ThrowHelper.ThrowArgumentNullException<string>();
-
-        //var files = from file in Directory.GetFiles(path)
-        //            from ext in SaveFileExtensions
-        //            where file.EndsWith(ext)
-        //            select file;
-
-        //if (!Directory.Exists(saveFolder))
-        //{
-        //    _ = Directory.CreateDirectory(saveFolder);
-        //}
-
-        //foreach (var file in files)
-        //{
-        //    var destFileName = Path.Combine(saveFolder, Path.GetFileName(file)!);
-        //    File.Move(file, destFileName, true);
-        //}
+        MoveSaveFilesFromGameFolder(game, campaign);
     }
 
     /// <inheritdoc/>
@@ -298,22 +279,4 @@ public sealed class DosBox : BasePort
 
     /// <inheritdoc/>
     protected override void GetSkipStartupParameter(StringBuilder sb) { }
-
-    private void MoveSaveFiles(IGame game, IAddon campaign)
-    {
-        var saveFolder = GetPathToAddonSavedGamesFolder(game.ShortName, campaign.AddonId.Id);
-
-        if (!Directory.Exists(saveFolder))
-        {
-            return;
-        }
-
-        var saves = Directory.GetFiles(saveFolder);
-
-        foreach (var save in saves)
-        {
-            string destFileName = Path.Combine(game.GameInstallFolder!, Path.GetFileName(save)!);
-            File.Move(save, destFileName, true);
-        }
-    }
 }

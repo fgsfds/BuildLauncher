@@ -159,65 +159,17 @@ public class EDuke32 : BasePort
     /// <inheritdoc/>
     public override void BeforeStart(IGame game, IAddon campaign)
     {
-        MoveSaveFiles(game, campaign);
+        MoveSaveFilesFromGameFolder(game, campaign);
 
         FixGrpInConfig();
 
         FixWtFiles(game, campaign);
     }
 
-    protected void MoveSaveFiles(IGame game, IAddon campaign)
-    {
-        var saveFolder = GetPathToAddonSavedGamesFolder(game.ShortName, campaign.AddonId.Id);
-
-        if (!Directory.Exists(saveFolder))
-        {
-            return;
-        }
-
-        var saves = Directory.GetFiles(saveFolder);
-
-        string firstPart = campaign.IsFolder ? Path.GetDirectoryName(campaign.PathToFile)! : PortInstallFolderPath;
-
-        foreach (var save in saves)
-        {
-            var destFileName = Path.Combine(firstPart, Path.GetFileName(save)!);
-            File.Move(save, destFileName, true);
-        }
-    }
-
     /// <inheritdoc/>
     public override void AfterEnd(IGame game, IAddon campaign)
     {
-        //copying saved games into separate folder
-        var saveFolder = GetPathToAddonSavedGamesFolder(game.ShortName, campaign.AddonId.Id);
-
-        string path;
-
-        if (campaign.IsFolder)
-        {
-            path = Path.GetDirectoryName(campaign.PathToFile)!;
-        }
-        else
-        {
-            path = PortInstallFolderPath;
-        }
-
-        var files = from file in Directory.GetFiles(path)
-                    from ext in SaveFileExtensions
-                    where file.EndsWith(ext)
-                    select file;
-
-        if (!Directory.Exists(saveFolder))
-        {
-            _ = Directory.CreateDirectory(saveFolder);
-        }
-
-        foreach (var file in files)
-        {
-            var destFileName = Path.Combine(saveFolder, Path.GetFileName(file)!);
-            File.Move(file, destFileName, true);
-        }
+        MoveSaveFilesToGameFolder(game, campaign);
     }
 
     /// <inheritdoc/>
@@ -469,6 +421,59 @@ public class EDuke32 : BasePort
             {
                 File.Move(art4, art4r, true);
             }
+        }
+    }
+
+    protected override void MoveSaveFilesToGameFolder(IGame game, IAddon campaign)
+    {
+        //copying saved games into separate folder
+        var saveFolder = GetPathToAddonSavedGamesFolder(game.ShortName, campaign.AddonId.Id);
+
+        string path;
+
+        if (campaign.IsFolder)
+        {
+            path = Path.GetDirectoryName(campaign.PathToFile)!;
+        }
+        else
+        {
+            path = PortInstallFolderPath;
+        }
+
+        var files = from file in Directory.GetFiles(path)
+                    from ext in SaveFileExtensions
+                    where file.EndsWith(ext)
+                    select file;
+
+        if (!Directory.Exists(saveFolder))
+        {
+            _ = Directory.CreateDirectory(saveFolder);
+        }
+
+        foreach (var file in files)
+        {
+            var destFileName = Path.Combine(saveFolder, Path.GetFileName(file)!);
+            File.Move(file, destFileName, true);
+        }
+    }
+
+    protected override void MoveSaveFilesFromGameFolder(IGame game, IAddon campaign)
+    {
+        var saveFolder = GetPathToAddonSavedGamesFolder(game.ShortName, campaign.AddonId.Id);
+
+        if (!Directory.Exists(saveFolder))
+        {
+            return;
+        }
+
+        var saves = Directory.GetFiles(saveFolder);
+
+        string firstPart = campaign.IsFolder ? Path.GetDirectoryName(campaign.PathToFile)! : PortInstallFolderPath;
+
+        foreach (var save in saves)
+        {
+            var destFileName = Path.Combine(firstPart, Path.GetFileName(save)!);
+            File.Move(save, destFileName, true);
         }
     }
 }

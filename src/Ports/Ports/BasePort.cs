@@ -684,4 +684,46 @@ public abstract class BasePort
             }
         }
     }
+
+    protected virtual void MoveSaveFilesToGameFolder(IGame game, IAddon campaign)
+    {
+        var saveFolder = GetPathToAddonSavedGamesFolder(game.ShortName, campaign.AddonId.Id);
+
+        if (!Directory.Exists(saveFolder))
+        {
+            return;
+        }
+
+        var saves = Directory.GetFiles(saveFolder);
+
+        foreach (var save in saves)
+        {
+            string destFileName = Path.Combine(game.GameInstallFolder!, Path.GetFileName(save)!);
+            File.Move(save, destFileName, true);
+        }
+    }
+
+    protected virtual void MoveSaveFilesFromGameFolder(IGame game, IAddon campaign)
+    {
+        //copying saved games into separate folder
+        var saveFolder = GetPathToAddonSavedGamesFolder(game.ShortName, campaign.AddonId.Id);
+
+        string path = game.GameInstallFolder ?? ThrowHelper.ThrowArgumentNullException<string>();
+
+        var files = from file in Directory.GetFiles(path)
+                    from ext in SaveFileExtensions
+                    where file.EndsWith(ext, StringComparison.OrdinalIgnoreCase)
+                    select file;
+
+        if (!Directory.Exists(saveFolder))
+        {
+            _ = Directory.CreateDirectory(saveFolder);
+        }
+
+        foreach (var file in files)
+        {
+            var destFileName = Path.Combine(saveFolder, Path.GetFileName(file)!);
+            File.Move(file, destFileName, true);
+        }
+    }
 }

@@ -66,7 +66,7 @@ public sealed class RedNukem : EDuke32
 
         CreateOrDeleteBlankAnm(true);
 
-        MoveSaveFiles(game, campaign);
+        MoveSaveFilesFromGameFolder(game, campaign);
 
         FixGrpInConfig();
 
