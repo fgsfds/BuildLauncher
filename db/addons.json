@@ -1278,6 +1278,18 @@
       "Description": "25th Century Duke is an add-on episode set in the 25th Century, a time where the global population is exceeding the 300 billion mark. The environment has been depleeted so much so that the creation of oxygen now rests in the hands of big industries. The cities of the world reach higher and higher for the clouds. Scenarios not dis-similar to those found in the cult movies BladeRunner and The Fifth Element.\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/",
       "Author": "Kaotik Industries",
       "UpdateDate": "2025-07-10T12:30:27.0704098Z"
+    },
+    {
+      "Id": "duke3d-quest-for-alqaeda",
+      "AddonType": "TC",
+      "Game": "Duke3D",
+      "DownloadUrl": "https://s3.fgsfds.link/buildlauncher/Duke3D/Campaigns/duke3d-quest-for-alqaeda_v1_0.zip",
+      "Title": "Quest for Al-Qa\u0027eda",
+      "Version": "1.0",
+      "FileSize": 7734373,
+      "Description": "*This uses a modified .grp from the EDuke32 Addon Compilation by NightFright*",
+      "Author": "Jesse Petrilla, Geoffrey \u0027Fakir\u0027 van Dijk \u0026 Devastator",
+      "UpdateDate": "2025-08-11T10:46:48.192795Z"
     }
   ],
   "Blood": [
