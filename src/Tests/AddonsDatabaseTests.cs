@@ -26,7 +26,7 @@ public sealed class AddonsDatabaseTests
 
         using HttpClient httpClient = new();
 
-        httpClient.DefaultRequestHeaders.Add("User-Agent", "BuildLauncher");
+        httpClient.DefaultRequestHeaders.Add("User-Agent", "UnitTest");
         httpClient.Timeout = TimeSpan.FromSeconds(30);
 
         var addonsJsonString = File.ReadAllText("../../../../db/addons.json");
@@ -93,7 +93,7 @@ public sealed class AddonsDatabaseTests
         Assert.NotNull(secret);
 
         using var minio = new MinioClient()
-            .WithEndpoint("s3.fgsfds.link:9000")
+            .WithEndpoint("s3.fgsfds.link")
             .WithCredentials(access, secretKey: secret)
             .Build();
 
