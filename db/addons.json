@@ -219,18 +219,6 @@
       "UpdateDate": "2024-06-06T13:40:17.224386Z"
     },
     {
-      "Id": "duke3d-blast-radius",
-      "AddonType": "TC",
-      "Game": "Duke3D",
-      "DownloadUrl": "https://s3.fgsfds.link/buildlauncher/Duke3D/Campaigns/duke3d-blast-radius_v5_0_6.zip",
-      "Title": "Blast Radius",
-      "Version": "5.0.6",
-      "FileSize": 42581364,
-      "Description": "https://www.moddb.com/mods/duke-nukem-3d-blast-radius\r\n\r\nFour years in the making (2019 2023), Blast Radius is a fan add-on for the Apogee/3D Realms classic 1996 FPS Duke Nukem 3D by ck3d. Originally a new main episode of 15 maps (estimated blind playthrough length: 20\u002B hours) introducing 40\u002B new types of alien scum, as of v. 5.0.0, it has spread to include a six-level demo for its continuation: Zero Zone, as well as reinterpretations of the original \u0022L.A. Meltdown\u0022, \u0022Lunar Apocalypse\u0022 \u0026 \u0022Shrapnel City\u0022 Duke 3D episodes each into one big level.",
-      "Author": "Aymeric \u0027ck3d\u0027 Nocus",
-      "UpdateDate": "2024-11-24T16:16:48.7623393Z"
-    },
-    {
       "Id": "duke3d-hq-sounds",
       "AddonType": "Mod",
       "Game": "Duke3D",
@@ -360,18 +348,6 @@
       "UpdateDate": "2025-05-26T15:09:14.9860209Z"
     },
     {
-      "Id": "duke3d-american-assault",
-      "AddonType": "TC",
-      "Game": "Duke3D",
-      "DownloadUrl": "https://s3.fgsfds.link/buildlauncher/Duke3D/Campaigns/duke3d-american-assault_v1_0.zip",
-      "Title": "American Assault",
-      "Version": "1.0",
-      "FileSize": 3149856,
-      "Description": "Three episodes with 25 levels (1 secret). Duke visits famous places in the US such as the Sunset Boulevard or San Francisco. Several new weapons are available, e.g. the double-barreled shotgun from Doom II (which is fun), a gatling gun (hybrid of Duke3D and Shadow Warrior chainguns), nuclear pipebombs, the Super Devastator (from \u0022Duke Xtreme\u0022) and more.\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/",
-      "Author": "Wardie Entertainment",
-      "UpdateDate": "2025-05-26T15:09:14.9875302Z"
-    },
-    {
       "Id": "duke3d-the-gate",
       "AddonType": "TC",
       "Game": "Duke3D",
@@ -430,18 +406,6 @@
       "Description": "The same old story. Duke crashes down in a stolen alien cruiser but this time he is a little closer to home. Look for the new features. There\u0027s a special powerup called the SuperDukePak and a new actors amongst other things.\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/",
       "Author": "Jonathon Fowler and Jason Bredhauer",
       "UpdateDate": "2025-05-26T15:09:14.9953111Z"
-    },
-    {
-      "Id": "duke3d-back-in-business",
-      "AddonType": "TC",
-      "Game": "Duke3D",
-      "DownloadUrl": "https://s3.fgsfds.link/buildlauncher/Duke3D/Campaigns/duke3d-back-in-business_v1_0.zip",
-      "Title": "Back in Business",
-      "Version": "1.0",
-      "FileSize": 26024022,
-      "Description": "https://forums.duke4.net/topic/11506-release-back-in-business-episode/\r\n\r\nAfter fighting off the alien invasions one after another for a couple of years, Duke finally decided to settle down a bit and concentrate on his own business. As a successful entrepreneur, he founded a chain network of fast food restaurants, strip clubs, bars and casinos. Today marks the opening of his newest casino in Los Angeles, \u201CThe Lady Killer Casino\u201D. With everything ready and in place, Duke watched some porn on his laptop, took a sip of Martini with vodka (shaken, not stirred!), decided it tastes like shit after years of abusing Jack Daniels and fat-ass Cuban cigars, and poured the contents of his glass into the plant. \u201CCheers\u201D, sneered Duke, as the ground beneath the plant greedily drained every last drip of the alcohol. Duke looked at his watch and noticed it\u2019s quarter to 8 \u2013 that means 15 more minutes until the casino opens. Should be enough time for a quicky with the new croupier chick, Millie Perkins, who\u2019s been eyeballing him all the time during the opening preparations (while ostentatiously licking or sucking on her fingers whenever their eyes met). Before leaving his office, he made sure the pistol is safely stored in a hideout behind a painting \u2013 just in case if anything goes wrong\u2026\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/",
-      "Author": "Alex \u0027Aleks\u0027 Pistol",
-      "UpdateDate": "2025-05-26T15:09:14.9992618Z"
     },
     {
       "Id": "duke3d-taking-boise",
@@ -637,18 +601,6 @@
       "Description": "You are part of the CIA\u0027s U.S. Protection Agency. Your the guy who saves the U.S. government from those hostile terroist groups. The CIA section your assigned to, MERC \u0022Major Endagerment Restraining Crew\u0022, is always ready for a good fight. Last week you shut down business at the local militia training camp, which housed several anti-government leaders. But this week you just feel like relaxing, and maybe making a trip to the beach.\r\n\r\nThis morning you wake up to the sound of a door shutting. You quickly get up and load your gun, but whoever it was is already gone. \u0022What\u0027s this?\u0022, you ask yourself as you stare at your TV stand. \u0022It looks like one of those CIA message disks.\u0022\r\n\r\n\u0022Great they just had to ruin your vacation, didn\u0027t they.\u0022\r\n\u0022Well I guess I better see what this is all about.\u0022, you mumble as you get up and slip the disk into your computer.\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/",
       "Author": "Ryan \u0027Heyyo\u0027 Conner et al.",
       "UpdateDate": "2025-05-28T17:17:18.5609493Z"
-    },
-    {
-      "Id": "duke3d-quest-for-hussein",
-      "AddonType": "TC",
-      "Game": "Duke3D",
-      "DownloadUrl": "https://s3.fgsfds.link/buildlauncher/Duke3D/Campaigns/duke3d-quest-for-hussein_v1_0.zip",
-      "Title": "Quest for Hussein",
-      "Version": "1.0",
-      "FileSize": 7694116,
-      "Description": "Inevitable sequel to \u0022Quest for Al-Qa\u0027eda\u0022. Another standalone TC which lets you fight hordes of stereotype Arab enemies in 6 short levels that won\u0027t take you longer than 3-5min each. This time with a boss fight (Hussein, obviously), though. It\u0027s something!\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/",
-      "Author": "J. Petrilla, G. \u0027Fakir\u0027 van Dijk \u0026 K. \u0027Kef_Nukem\u0027 Cools",
-      "UpdateDate": "2025-05-28T17:17:18.5632604Z"
     },
     {
       "Id": "duke3d-borg-nukem",
@@ -1157,18 +1109,6 @@
       "UpdateDate": "2025-07-10T12:30:23.1420101Z"
     },
     {
-      "Id": "duke3d-aqua-trilogy",
-      "AddonType": "TC",
-      "Game": "Duke3D",
-      "DownloadUrl": "https://s3.fgsfds.link/buildlauncher/Duke3D/Campaigns/duke3d-aqua-trilogy_v1_0.zip",
-      "Title": "Aqua Trilogy",
-      "Version": "1.0",
-      "FileSize": 434227,
-      "Description": "3 levels with lots of underwater action. Was supposed to become an episode with at least 6 maps, but remained half-finished. Steal a mini sub (Aqua) to steal an experimental battle sub (Aqua2) which you use to enter the Aqua prison island (Aqua3). The episode was supposed to continue on the Jupiter moon Io, but it never happened.\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/",
-      "Author": "Ben Roffelsen",
-      "UpdateDate": "2025-07-10T12:30:23.5762573Z"
-    },
-    {
       "Id": "duke3d-bobsp-series",
       "AddonType": "TC",
       "Game": "Duke3D",
@@ -1193,18 +1133,6 @@
       "UpdateDate": "2025-07-10T12:30:24.1579514Z"
     },
     {
-      "Id": "duke3d-alien-vs-predator",
-      "AddonType": "TC",
-      "Game": "Duke3D",
-      "DownloadUrl": "https://s3.fgsfds.link/buildlauncher/Duke3D/Campaigns/duke3d-alien-vs-predator_v1_0.zip",
-      "Title": "Alien vs Predator",
-      "Version": "1.0",
-      "FileSize": 10787288,
-      "Description": "\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/",
-      "Author": "Slawomir \u0027LAW\u0027 Lawrynowicz",
-      "UpdateDate": "2025-07-10T12:30:24.4613801Z"
-    },
-    {
       "Id": "duke3d-alien-invasion",
       "AddonType": "TC",
       "Game": "Duke3D",
@@ -1215,33 +1143,6 @@
       "Description": "24 levels, alot of levels borrow elements from Blood and Hexen, and classic gameplay with all new environments.\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/",
       "Author": "Fred Hero",
       "UpdateDate": "2025-07-10T12:30:24.8809841Z"
-    },
-    {
-      "Id": "duke3d-alien-extermination-new-edition",
-      "AddonType": "TC",
-      "Game": "Duke3D",
-      "DownloadUrl": "https://s3.fgsfds.link/buildlauncher/Duke3D/Campaigns/duke3d-alien-extermination-new-edition_v1_0.zip",
-      "Title": "Alien Extermination: New Edition",
-      "Version": "1.0",
-      "FileSize": 11595228,
-      "Description": "https://forums.duke4.net/topic/9932-alien-extermination-tc-new-edition/\r\n\r\nFor a long time I\u0027ve been a huge fan of Alien movies. Being so popular, this franchise have spawned countless fan works, such as mods \u0026 maps for various games, including Duke 3D. Sadly, most of the projects are either have very few levels (AVD, Alien), or simply aren\u0027t polished enough, such as the case with ifamous Alien Extermination (AKA Alienz TC), released in 2000.\r\n\r\nAlienz TC was one of the first Duke 3D mods I\u0027ve ever played, and it always confused the hell out of me. It has tons of levels, some of which are quite good, but it also has tons of bugs, questionable artwork, no original music (plays standard Duke 3D tracks) \u0026 lots of unused content. Even the gameplay is extremely unbalanced. It bugs me that such huge TC is so underdeveloped and unpolished, unlike other mods, such as the classic Aliens TC for DOOM, for example. This is why I decided to make Alienz TC: New Edition. I honestly think Alien Extermination has a lot of potential, and after updating it and fixing numorous errors, I found myself enjoying it quite a bit. If you\u0027re a fan of Aliens and you never played the original Alienz TC, this is a good opportunity to try it out!\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/",
-      "Author": "Widowmaker, Zykov Eddy et al.",
-      "UpdateDate": "2025-07-10T12:30:25.3396165Z"
-    },
-    {
-      "Id": "duke3d-alfs-resort",
-      "AddonType": "TC",
-      "Game": "Duke3D",
-      "DownloadUrl": "https://s3.fgsfds.link/buildlauncher/Duke3D/Campaigns/duke3d-alfs-resort_v1_0.zip",
-      "Title": "ALF\u0027s Resort",
-      "Version": "1.0",
-      "FileSize": 3605163,
-      "Dependencies": [
-        "dukevaca"
-      ],
-      "Description": "A big resort for Duke Nukem 3D, using the add-on \u0027Duke Caribbean, Life\u0027s a Beach\u0027!\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/",
-      "Author": "ALF",
-      "UpdateDate": "2025-07-10T12:30:25.7690444Z"
     },
     {
       "Id": "duke3d-ageofevil",
@@ -1278,6 +1179,309 @@
       "Description": "25th Century Duke is an add-on episode set in the 25th Century, a time where the global population is exceeding the 300 billion mark. The environment has been depleeted so much so that the creation of oxygen now rests in the hands of big industries. The cities of the world reach higher and higher for the clouds. Scenarios not dis-similar to those found in the cult movies BladeRunner and The Fifth Element.\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/",
       "Author": "Kaotik Industries",
       "UpdateDate": "2025-07-10T12:30:27.0704098Z"
+    },
+    {
+      "Id": "duke3d-dukevr",
+      "AddonType": "TC",
+      "Game": "Duke3D",
+      "DownloadUrl": "https://s3.fgsfds.link/buildlauncher/Duke3D/Campaigns/duke3d-dukevr_v1_0.zip",
+      "Title": "DukeVR",
+      "Version": "1.0",
+      "FileSize": 226250,
+      "Description": "Training map set with 3 episodes and 18 maps. Each episode is harder than the previous one (blue = easy, green = medium, red = hard). Focus is completely shifting from visual to pure puzzle solving which you will notice right away after loading the first map: Besides a basic matrix-style texture, the levels look very bland and unfinished. The challenge is to complete the maps without dying and as fast as possible - usually requiring a certain strategy that you need to figure out first.\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/",
+      "Author": "Geoffrey \u0027Fakir\u0027 van Dijk",
+      "UpdateDate": "2025-09-09T10:46:49.9143172Z"
+    },
+    {
+      "Id": "duke3d-duke-is-007",
+      "AddonType": "TC",
+      "Game": "Duke3D",
+      "DownloadUrl": "https://s3.fgsfds.link/buildlauncher/Duke3D/Campaigns/duke3d-duke-is-007_v1_0.zip",
+      "Title": "Duke is 007",
+      "Version": "1.0",
+      "FileSize": 577541,
+      "Description": "While intended to become a James Bond TC, this project was never finished. However, 6 really nice maps remained. You will visit interesting locations like a flying plane, an underwater base or a Russian missile silo.\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/",
+      "Author": "Jason Bredhauer",
+      "UpdateDate": "2025-09-09T10:46:50.2270717Z"
+    },
+    {
+      "Id": "duke3d-duke-city",
+      "AddonType": "TC",
+      "Game": "Duke3D",
+      "DownloadUrl": "https://s3.fgsfds.link/buildlauncher/Duke3D/Campaigns/duke3d-duke-city_v5_4.zip",
+      "Title": "Duke City",
+      "Version": "5.4",
+      "FileSize": 525153,
+      "Description": "DukeCity is a set of FIVE maps, taking place in a realistic-looking city. Each of the five parts will make you travel through really many locations.\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/",
+      "Author": "Yves Bresson",
+      "UpdateDate": "2025-09-09T10:46:50.3263176Z"
+    },
+    {
+      "Id": "duke3d-dn64-revisited",
+      "AddonType": "TC",
+      "Game": "Duke3D",
+      "DownloadUrl": "https://s3.fgsfds.link/buildlauncher/Duke3D/Campaigns/duke3d-dn64-revisited_v1_0.zip",
+      "Title": "DN64 Revisited",
+      "Version": "1.0",
+      "FileSize": 17209503,
+      "Description": "This is a mini episode where you go back to some of the Duke Nukem 64 DM only maps except this time Duke is in for a little surprise!\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/",
+      "Author": "Duke64Nukem",
+      "UpdateDate": "2025-09-09T10:46:50.4978318Z"
+    },
+    {
+      "Id": "duke3d-death-drive",
+      "AddonType": "TC",
+      "Game": "Duke3D",
+      "DownloadUrl": "https://s3.fgsfds.link/buildlauncher/Duke3D/Campaigns/duke3d-death-drive_v1_0.zip",
+      "Title": "Death Drive",
+      "Version": "1.0",
+      "FileSize": 1013744,
+      "Description": "DEATH DRIVE is a 5-level action packed episode taking a lot of inspiration from classic L.A. Meltdown levels and a more recent release Metropolitan Mayhem yet with a twist of my own style and challenging fights of my own map \u0022Slaughterfest\u0022.\r\nBasically it\u0027s a huge battle from the very beginning till the very end if played on the intended difficulty setting. What makes it a bit different from the rest is the fact that every single map of this episode was made less then in 20 hours each.\r\nI tried my very best to make them visually good and fun to play. It\u0027s up for you to judge whether I\u0027ve accomplished my goal or not. \r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/",
+      "Author": "Mister Sinister",
+      "UpdateDate": "2025-09-09T10:46:50.6285671Z"
+    },
+    {
+      "Id": "duke3d-dark-place-series",
+      "AddonType": "TC",
+      "Game": "Duke3D",
+      "DownloadUrl": "https://s3.fgsfds.link/buildlauncher/Duke3D/Campaigns/duke3d-dark-place-series_v1_0.zip",
+      "Title": "Dark Place Series",
+      "Version": "1.0",
+      "FileSize": 758993,
+      "Description": "Collection of all 5 maps of the \u0022Dark Place\u0022 series by Taivo Maripuu, grouped into an episode.\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/",
+      "Author": "Taivo Maripuu",
+      "UpdateDate": "2025-09-09T10:46:50.7299584Z"
+    },
+    {
+      "Id": "duke3d-countdown-to-christmas",
+      "AddonType": "TC",
+      "Game": "Duke3D",
+      "DownloadUrl": "https://s3.fgsfds.link/buildlauncher/Duke3D/Campaigns/duke3d-countdown-to-christmas_v1_0.zip",
+      "Title": "Countdown to Christmas",
+      "Version": "1.0",
+      "FileSize": 1937707,
+      "Description": "3 rather short maps with Christmas theme, using \u0022Nuclear Winter\u0022 assets and connected through a small story being told with ingame text messages.\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/",
+      "Author": "Sanek",
+      "UpdateDate": "2025-09-09T10:46:50.900953Z"
+    },
+    {
+      "Id": "duke3d-alfs-resort",
+      "AddonType": "TC",
+      "Game": "Duke3D",
+      "DownloadUrl": "https://s3.fgsfds.link/buildlauncher/Duke3D/Campaigns/duke3d-alfs-resort_v1_0.zip",
+      "Title": "ALF\u0027s Resort",
+      "Version": "1.0",
+      "FileSize": 3605163,
+      "Dependencies": [
+        "dukevaca"
+      ],
+      "Description": "A big resort for Duke Nukem 3D, using the add-on \u0027Duke Caribbean, Life\u0027s a Beach\u0027!\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/",
+      "Author": "ALF",
+      "UpdateDate": "2025-09-09T10:46:51.0322965Z"
+    },
+    {
+      "Id": "duke3d-back-in-business",
+      "AddonType": "TC",
+      "Game": "Duke3D",
+      "DownloadUrl": "https://s3.fgsfds.link/buildlauncher/Duke3D/Campaigns/duke3d-back-in-business_v1_0.zip",
+      "Title": "Back in Business",
+      "Version": "1.0",
+      "FileSize": 26024022,
+      "Description": "https://forums.duke4.net/topic/11506-release-back-in-business-episode/\r\n\r\nAfter fighting off the alien invasions one after another for a couple of years, Duke finally decided to settle down a bit and concentrate on his own business. As a successful entrepreneur, he founded a chain network of fast food restaurants, strip clubs, bars and casinos. Today marks the opening of his newest casino in Los Angeles, \u201CThe Lady Killer Casino\u201D. With everything ready and in place, Duke watched some porn on his laptop, took a sip of Martini with vodka (shaken, not stirred!), decided it tastes like shit after years of abusing Jack Daniels and fat-ass Cuban cigars, and poured the contents of his glass into the plant. \u201CCheers\u201D, sneered Duke, as the ground beneath the plant greedily drained every last drip of the alcohol. Duke looked at his watch and noticed it\u2019s quarter to 8 \u2013 that means 15 more minutes until the casino opens. Should be enough time for a quicky with the new croupier chick, Millie Perkins, who\u2019s been eyeballing him all the time during the opening preparations (while ostentatiously licking or sucking on her fingers whenever their eyes met). Before leaving his office, he made sure the pistol is safely stored in a hideout behind a painting \u2013 just in case if anything goes wrong\u2026\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/",
+      "Author": "Alex \u0027Aleks\u0027 Pistol",
+      "UpdateDate": "2025-09-09T10:46:51.1633351Z"
+    },
+    {
+      "Id": "duke3d-blast-radius",
+      "AddonType": "TC",
+      "Game": "Duke3D",
+      "DownloadUrl": "https://s3.fgsfds.link/buildlauncher/Duke3D/Campaigns/duke3d-blast-radius_v5_0_6.zip",
+      "Title": "Blast Radius",
+      "Version": "5.0.6",
+      "FileSize": 42581364,
+      "Description": "https://www.moddb.com/mods/duke-nukem-3d-blast-radius\r\n\r\nFour years in the making (2019 2023), Blast Radius is a fan add-on for the Apogee/3D Realms classic 1996 FPS Duke Nukem 3D by ck3d. Originally a new main episode of 15 maps (estimated blind playthrough length: 20\u002B hours) introducing 40\u002B new types of alien scum, as of v. 5.0.0, it has spread to include a six-level demo for its continuation: Zero Zone, as well as reinterpretations of the original \u0022L.A. Meltdown\u0022, \u0022Lunar Apocalypse\u0022 \u0026 \u0022Shrapnel City\u0022 Duke 3D episodes each into one big level.",
+      "Author": "Aymeric \u0027ck3d\u0027 Nocus",
+      "UpdateDate": "2025-09-09T10:46:51.3688214Z"
+    },
+    {
+      "Id": "duke3d-aqua-trilogy",
+      "AddonType": "TC",
+      "Game": "Duke3D",
+      "DownloadUrl": "https://s3.fgsfds.link/buildlauncher/Duke3D/Campaigns/duke3d-aqua-trilogy_v1_0.zip",
+      "Title": "Aqua Trilogy",
+      "Version": "1.0",
+      "FileSize": 434227,
+      "Description": "3 levels with lots of underwater action. Was supposed to become an episode with at least 6 maps, but remained half-finished. Steal a mini sub (Aqua) to steal an experimental battle sub (Aqua2) which you use to enter the Aqua prison island (Aqua3). The episode was supposed to continue on the Jupiter moon Io, but it never happened.\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/",
+      "Author": "Ben Roffelsen",
+      "UpdateDate": "2025-09-09T10:46:51.6631Z"
+    },
+    {
+      "Id": "duke3d-american-assault",
+      "AddonType": "TC",
+      "Game": "Duke3D",
+      "DownloadUrl": "https://s3.fgsfds.link/buildlauncher/Duke3D/Campaigns/duke3d-american-assault_v1_0.zip",
+      "Title": "American Assault",
+      "Version": "1.0",
+      "FileSize": 3149856,
+      "Description": "Three episodes with 25 levels (1 secret). Duke visits famous places in the US such as the Sunset Boulevard or San Francisco. Several new weapons are available, e.g. the double-barreled shotgun from Doom II (which is fun), a gatling gun (hybrid of Duke3D and Shadow Warrior chainguns), nuclear pipebombs, the Super Devastator (from \u0022Duke Xtreme\u0022) and more.\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/",
+      "Author": "Wardie Entertainment",
+      "UpdateDate": "2025-09-09T10:46:51.9685614Z"
+    },
+    {
+      "Id": "duke3d-alien-vs-predator",
+      "AddonType": "TC",
+      "Game": "Duke3D",
+      "DownloadUrl": "https://s3.fgsfds.link/buildlauncher/Duke3D/Campaigns/duke3d-alien-vs-predator_v1_0.zip",
+      "Title": "Alien vs Predator",
+      "Version": "1.0",
+      "FileSize": 10787288,
+      "Description": "\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/",
+      "Author": "Slawomir \u0027LAW\u0027 Lawrynowicz",
+      "UpdateDate": "2025-09-09T10:46:52.0725271Z"
+    },
+    {
+      "Id": "duke3d-alien-extermination-new-edition",
+      "AddonType": "TC",
+      "Game": "Duke3D",
+      "DownloadUrl": "https://s3.fgsfds.link/buildlauncher/Duke3D/Campaigns/duke3d-alien-extermination-new-edition_v1_0.zip",
+      "Title": "Alien Extermination: New Edition",
+      "Version": "1.0",
+      "FileSize": 11595228,
+      "Description": "https://forums.duke4.net/topic/9932-alien-extermination-tc-new-edition/\r\n\r\nFor a long time I\u0027ve been a huge fan of Alien movies. Being so popular, this franchise have spawned countless fan works, such as mods \u0026 maps for various games, including Duke 3D. Sadly, most of the projects are either have very few levels (AVD, Alien), or simply aren\u0027t polished enough, such as the case with ifamous Alien Extermination (AKA Alienz TC), released in 2000.\r\n\r\nAlienz TC was one of the first Duke 3D mods I\u0027ve ever played, and it always confused the hell out of me. It has tons of levels, some of which are quite good, but it also has tons of bugs, questionable artwork, no original music (plays standard Duke 3D tracks) \u0026 lots of unused content. Even the gameplay is extremely unbalanced. It bugs me that such huge TC is so underdeveloped and unpolished, unlike other mods, such as the classic Aliens TC for DOOM, for example. This is why I decided to make Alienz TC: New Edition. I honestly think Alien Extermination has a lot of potential, and after updating it and fixing numorous errors, I found myself enjoying it quite a bit. If you\u0027re a fan of Aliens and you never played the original Alienz TC, this is a good opportunity to try it out!\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/",
+      "Author": "Widowmaker, Zykov Eddy et al.",
+      "UpdateDate": "2025-09-09T10:46:52.3726259Z"
+    },
+    {
+      "Id": "duke3d-quest-for-hussein",
+      "AddonType": "TC",
+      "Game": "Duke3D",
+      "DownloadUrl": "https://s3.fgsfds.link/buildlauncher/Duke3D/Campaigns/duke3d-quest-for-hussein_v1_0.zip",
+      "Title": "Quest for Hussein",
+      "Version": "1.0",
+      "FileSize": 7694116,
+      "Description": "Inevitable sequel to \u0022Quest for Al-Qa\u0027eda\u0022. Another standalone TC which lets you fight hordes of stereotype Arab enemies in 6 short levels that won\u0027t take you longer than 3-5min each. This time with a boss fight (Hussein, obviously), though. It\u0027s something!\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/",
+      "Author": "J. Petrilla, G. \u0027Fakir\u0027 van Dijk \u0026 K. \u0027Kef_Nukem\u0027 Cools",
+      "UpdateDate": "2025-09-09T10:46:52.9741275Z"
+    },
+    {
+      "Id": "duke3d-crucial-conflict",
+      "AddonType": "TC",
+      "Game": "Duke3D",
+      "DownloadUrl": "https://s3.fgsfds.link/buildlauncher/Duke3D/Campaigns/duke3d-crucial-conflict_v1_0.zip",
+      "Title": "Crucial Conflict",
+      "Version": "1.0",
+      "FileSize": 681137,
+      "Description": "Maarten\u0027s Crucial Conflict is a trilogy aboutan alien attack on Europe. But there\u0027s more to the story than just shooting baddies! Explore detailed bases, solve puzzles kick butt in this mini three-map episode!\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/",
+      "Author": "Maarten Pinxten",
+      "UpdateDate": "2025-09-09T10:46:53.2753359Z"
+    },
+    {
+      "Id": "duke3d-quest-for-alqaeda",
+      "AddonType": "TC",
+      "Game": "Duke3D",
+      "DownloadUrl": "https://s3.fgsfds.link/buildlauncher/Duke3D/Campaigns/duke3d-quest-for-alqaeda_v1_0.zip",
+      "Title": "Quest for Al-Qa\u0027eda",
+      "Version": "1.0",
+      "FileSize": 7734716,
+      "Description": "A TC that was released as a standalone \u0022exploitation\u0022 game after 9/11. It only consists of three small levels in an Arabian setting with low details and two different types of enemies, but it\u0027s still kinda fun for as long as it lasts (no longer than 10-15 mins, though). Weapons are \u0022borrowed\u0022 from other TCs, mostly \u0022Platoon\u0022. The Arab enemies won\u0027t talk much - their stupid mumblings are funny at first, but they may get on your nerves quickly. BTW: Don\u0027t expect to kill Osama...\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/",
+      "Author": "Jesse Petrilla, Geoffrey \u0027Fakir\u0027 van Dijk \u0026 Devastator",
+      "UpdateDate": "2025-09-09T10:51:13.9734029Z"
+    },
+    {
+      "Id": "duke3d-infestation-in-time",
+      "AddonType": "TC",
+      "Game": "Duke3D",
+      "DownloadUrl": "https://s3.fgsfds.link/buildlauncher/Duke3D/Campaigns/duke3d-infestation-in-time_v1_0.zip",
+      "Title": "Infestation in Time",
+      "Version": "1.0",
+      "FileSize": 25266006,
+      "Description": "https://www.moddb.com/mods/zykov-eddy\r\n\r\n5 years have passed since the last invasion of aliens. Duke Nukem has already become the senior agent of EDF and lives now on a quiet street, in his house.\r\nOne morning he heard gunshots and a police siren. When he looked out the window, he raised his eyebrows - the whole street was filled with aliens. Again! To get more information, Duke switched on his computer and checked his email:\r\n============\r\nFrom: EDF\r\nTo: Duke Nukem\r\nDuke, we have problems, as you are discovered already. At this time the aliens came from the future. In order to our realm they used an time machine. Here is your orders: go to the subway station at a secret base EDF, then move in time and destroy alien time machine.\r\nGood luck!\r\n============\r\nAfter reading email, Duke Nukem took his gun and said:\r\n\u0022How many times i have to kick Alien arses to calm them down?...\u0022 \r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/",
+      "Author": "Zykov Eddy",
+      "UpdateDate": "2025-09-20T10:42:38.4892552Z"
+    },
+    {
+      "Id": "duke3d-high-treason-series",
+      "AddonType": "TC",
+      "Game": "Duke3D",
+      "DownloadUrl": "https://s3.fgsfds.link/buildlauncher/Duke3D/Campaigns/duke3d-high-treason-series_v1_0.zip",
+      "Title": "High Treason Series",
+      "Version": "1.0",
+      "FileSize": 24255396,
+      "Description": "*This uses a modified .grp from the EDuke32 Addon Compilation by NightFright*",
+      "Author": "High Treason",
+      "UpdateDate": "2025-09-20T10:42:38.9450512Z"
+    },
+    {
+      "Id": "duke3d-haunted-nukem",
+      "AddonType": "TC",
+      "Game": "Duke3D",
+      "DownloadUrl": "https://s3.fgsfds.link/buildlauncher/Duke3D/Campaigns/duke3d-haunted-nukem_v1_0.zip",
+      "Title": "Haunted Nukem",
+      "Version": "1.0",
+      "FileSize": 76540293,
+      "Description": "https://www.moddb.com/mods/haunted-nukem\r\n\r\nDuke is having a nightmare, what he does not realize is how much blood lies ahead. Duke has to take the (blood) elevators to the core of the horror and stop the beast. The aliens that Duke has killed in the past have somehow brought Duke into a realm that doesn\u0027t exist. Its a dark place with almost no escape. If Duke can\u0027t make it through he will never awaken this deep sleep. There is most likely some updates coming. hope you enjoy!\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/",
+      "Author": "Duke64Nukem \u0026 Team",
+      "UpdateDate": "2025-09-20T10:42:39.2946303Z"
+    },
+    {
+      "Id": "duke3d-grins-of-divinity",
+      "AddonType": "TC",
+      "Game": "Duke3D",
+      "DownloadUrl": "https://s3.fgsfds.link/buildlauncher/Duke3D/Campaigns/duke3d-grins-of-divinity_v1_0.zip",
+      "Title": "Grins of Divinity",
+      "Version": "1.0",
+      "FileSize": 11859837,
+      "Description": "As with all things in the universe, good has a cyclical nature. A young upstart scientist named Epala was studying trans-dimension shifting enhancements when accidentally discovering how to alter time and space. His invention could now allow the Shoven to travel back in time. Evalist caught news of this development from an scientist friend. Evalist desperately wanted to question Epala alone before proceeding with a full Council meeting. It was too late. Epala built a network of military staff contacts and had already met with the Military Division Council Member who after questioning him called for an emergency Council Meeting. Evalist was both angered and frustrated by the new invention. It could unravel all the work he risked his very life to accomplish. Evalist realized more than most that he was charting the future of the Shoven species. Someone else had realized this as well. And that person or persons probably have another direction in mind with this new technology and new Bakpri army. Imagine combining time travel, plasma weaponry and legions of battle-hardened warriors.\r\n\r\nA disaster was brewing.\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/",
+      "Author": "BIG Productions",
+      "UpdateDate": "2025-09-20T10:42:39.6239615Z"
+    },
+    {
+      "Id": "duke3d-fusion-redux-2018",
+      "AddonType": "TC",
+      "Game": "Duke3D",
+      "DownloadUrl": "https://s3.fgsfds.link/buildlauncher/Duke3D/Campaigns/duke3d-fusion-redux-2018_v1_0.zip",
+      "Title": "Fusion Redux 2018",
+      "Version": "1.0",
+      "FileSize": 107708566,
+      "Description": "Fusion is a Duke Nukem 3D TC that mixes weapons, enemies, art and level concepts from diverse FPS games, including Half-Life, Unreal, Quake I and II, and Blood.\r\nThe original release included three six-level episodes. A new version, called Fusion Redux, was released by James \u0022JBlade\u0022 Stanfield. This improved version adds support for EDuke32, adding some Polymer lighting to the original maps and replacing some sprites with their original model counterparts.\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/",
+      "Author": "Roberto Diaz, James \u0027Jblade\u0027 Stanfield \u0026 Mere_Duke",
+      "UpdateDate": "2025-09-20T10:42:39.9979283Z"
+    },
+    {
+      "Id": "duke3d-fbsp-trilogy",
+      "AddonType": "TC",
+      "Game": "Duke3D",
+      "DownloadUrl": "https://s3.fgsfds.link/buildlauncher/Duke3D/Campaigns/duke3d-fbsp-trilogy_v1_0.zip",
+      "Title": "FbSp Trilogy",
+      "Version": "1.0",
+      "FileSize": 682536,
+      "Description": "3 SP maps by Geoffrey \u0027Fakir\u0027 van Dijk, grouped to a one three-level episode.\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/",
+      "Author": "Geoffrey \u0027Fakir\u0027 van Dijk",
+      "UpdateDate": "2025-09-20T10:42:40.3971263Z"
+    },
+    {
+      "Id": "duke3d-eye-of-cul-episode",
+      "AddonType": "TC",
+      "Game": "Duke3D",
+      "DownloadUrl": "https://s3.fgsfds.link/buildlauncher/Duke3D/Campaigns/duke3d-eye-of-cul-episode_v1_0.zip",
+      "Title": "Eye of Cul Episode",
+      "Version": "1.0",
+      "FileSize": 1065275,
+      "Description": "8 maps (1 secret) with mostly urban/industrial setting. Don\u0027t judge the episode too soon by its first two maps which are rather average. Design gets better and also darker later on as you fight through burning cities overrun by a satanic alien cult. The last two levels are heavily inspired by \u0022Blood\u0022, leading you through a cemetery until you reach the church of the cult where you have to eliminate all resistance.\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/",
+      "Author": "Eye del Cul",
+      "UpdateDate": "2025-09-20T10:42:40.7623343Z"
+    },
+    {
+      "Id": "duke3d-epic",
+      "AddonType": "TC",
+      "Game": "Duke3D",
+      "DownloadUrl": "https://s3.fgsfds.link/buildlauncher/Duke3D/Campaigns/duke3d-epic_v1_0.zip",
+      "Title": "Epic",
+      "Version": "1.0",
+      "FileSize": 2245994,
+      "Description": "Mini episode with 2 levels, featuring custom textures (Egyptian style). You start on a space station before being teleported to Egypt and finally ending up in a modern city with a huge movie theater where the finale takes place. The new textures are what makes this mod particularly interesting.\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/",
+      "Author": "Fermion",
+      "UpdateDate": "2025-09-20T10:42:40.8698144Z"
     }
   ],
   "Blood": [
