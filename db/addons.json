@@ -121,18 +121,6 @@
       "UpdateDate": "2024-05-29T00:00:00Z"
     },
     {
-      "Id": "duke3d-liquidator",
-      "AddonType": "TC",
-      "Game": "Duke3D",
-      "DownloadUrl": "https://s3.fgsfds.link/buildlauncher/Duke3D/Campaigns/duke3d-liquidator_v1_5.zip",
-      "Title": "Liquidator 3D",
-      "Version": "1.5",
-      "FileSize": 25048637,
-      "Description": "https://github.com/fgsfds/Liquidator-3D\r\n\r\nLiquidator is an obscure Russian game illegally made using Build Engine and published in 1998 by Akella Company, who later made an infamous Postal 3.\r\n\r\nThe game includes all-new graphics, sounds, and 3 campaigns with total of 6 maps.",
-      "Author": "fgsfds, A.B.T., Partizan Software",
-      "UpdateDate": "2024-05-24T00:00:00Z"
-    },
-    {
       "Id": "duke3d-voxel-pack",
       "AddonType": "Mod",
       "Game": "Duke3D",
@@ -1482,6 +1470,18 @@
       "Description": "Mini episode with 2 levels, featuring custom textures (Egyptian style). You start on a space station before being teleported to Egypt and finally ending up in a modern city with a huge movie theater where the finale takes place. The new textures are what makes this mod particularly interesting.\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/",
       "Author": "Fermion",
       "UpdateDate": "2025-09-20T10:42:40.8698144Z"
+    },
+    {
+      "Id": "duke3d-liquidator",
+      "AddonType": "TC",
+      "Game": "Duke3D",
+      "DownloadUrl": "https://s3.fgsfds.link/buildlauncher/Duke3D/Campaigns/duke3d-liquidator_v1_5.zip",
+      "Title": "Liquidator 3D",
+      "Version": "1.5",
+      "FileSize": 25466491,
+      "Description": "https://github.com/fgsfds/Liquidator-3D\r\n\r\nLiquidator is an obscure Russian game illegally made using Build Engine and published in 1998 by Akella Company, who later made an infamous Postal 3.\r\n\r\nThe game includes all-new graphics, sounds, and 3 campaigns with total of 6 maps.",
+      "Author": "fgsfds, A.B.T., Partizan Software",
+      "UpdateDate": "2025-10-02T16:54:30.3220281Z"
     }
   ],
   "Blood": [
