@@ -162,38 +162,36 @@ public sealed partial class PortsViewModel : ObservableObject
     [RelayCommand]
     private void SaveCustomPort()
     {
+        IsEditorVisible = true;
+
+        if (string.IsNullOrWhiteSpace(SelectedCustomPortName))
+        {
+            ErrorMessage = "Name is required";
+            return;
+        }
+        if (string.IsNullOrWhiteSpace(SelectedCustomPortPath))
+        {
+            ErrorMessage = "Path to exe is required";
+            return;
+        }
+        if (SelectedCustomPortType is null)
+        {
+            ErrorMessage = "Port type is required";
+            return;
+        }
+        if (CustomPorts.Any(x => x.Name.Equals(SelectedCustomPortName, StringComparison.OrdinalIgnoreCase)) && _isNewPort)
+        {
+            ErrorMessage = "Port with the same name already exists";
+            return;
+        }
+        if (!File.Exists(SelectedCustomPortPath))
+        {
+            ErrorMessage = "Executable doesn't exist";
+            return;
+        }
+
         try
         {
-            IsEditorVisible = true;
-
-            if (string.IsNullOrWhiteSpace(SelectedCustomPortName))
-            {
-                ErrorMessage = "Name is required";
-                return;
-            }
-            if (string.IsNullOrWhiteSpace(SelectedCustomPortPath))
-            {
-                ErrorMessage = "Path to exe is required";
-                return;
-            }
-            if (SelectedCustomPortType is null)
-            {
-                ErrorMessage = "Port type is required";
-                return;
-            }
-            if (CustomPorts.Any(x => x.Name.Equals(SelectedCustomPortName, StringComparison.OrdinalIgnoreCase)) && _isNewPort)
-            {
-                ErrorMessage = "Port with the same name already exists";
-                return;
-            }
-            if (!File.Exists(SelectedCustomPortPath))
-            {
-                ErrorMessage = "Executable doesn't exist";
-                return;
-            }
-
-            ErrorMessage = string.Empty;
-
             _installedPortsProvider.AddOrChangeCustomPort(
                 SelectedCustomPort?.Name,
                 SelectedCustomPortName,
@@ -215,6 +213,7 @@ public sealed partial class PortsViewModel : ObservableObject
         }
         finally
         {
+            ErrorMessage = string.Empty;
             IsEditorVisible = false;
 
             _ = _semaphore.Release();

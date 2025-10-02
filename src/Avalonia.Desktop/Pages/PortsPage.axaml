@@ -65,6 +65,7 @@
                 <Button Content="Delete" Margin="5" Command="{Binding DeleteCustomPortCommand}"/>
             </StackPanel>
 
+            <!--Custom port editor popup-->
             <Grid ColumnDefinitions="*,2*,*" RowDefinitions="*,auto,*" Grid.RowSpan="5" IsVisible="{Binding IsEditorVisible}">
 
                 <Border Grid.Column="1" Grid.Row="1"

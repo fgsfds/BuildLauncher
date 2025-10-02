@@ -9,6 +9,7 @@
             <BoxShadows x:Key='Shadow'>0 0 5 Black</BoxShadows>
         </ResourceDictionary>
         <ResourceDictionary x:Key='Light'>
+            <SolidColorBrush x:Key='Background'>White</SolidColorBrush>
             <SolidColorBrush x:Key='PopupBackground'>DarkGray</SolidColorBrush>
             <SolidColorBrush x:Key='WindowBorder'>DarkGray</SolidColorBrush>
             <BoxShadows x:Key='Shadow'>0 0 5 DarkGray</BoxShadows>
