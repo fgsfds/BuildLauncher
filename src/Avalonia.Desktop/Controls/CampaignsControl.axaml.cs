@@ -99,64 +99,7 @@ public sealed partial class CampaignsControl : UserControl
                 Content = sp,
                 Command = new RelayCommand(() =>
                     _viewModel.StartCampaignCommand.Execute(port),
-                    () =>
-                    {
-                        if (CampaignsList?.SelectedItem is not IAddon selectedCampaign)
-                        {
-                            return false;
-                        }
-
-                        if (selectedCampaign.Executables?[OSEnum.Windows] is not null)
-                        {
-                            return port.Exe.Equals(Path.GetFileName(selectedCampaign.Executables[OSEnum.Windows]), StringComparison.OrdinalIgnoreCase);
-                        }
-
-                        if (!port.IsInstalled)
-                        {
-                            return false;
-                        }
-
-                        if (port.PortEnum is PortEnum.BuildGDX && selectedCampaign.Type is not AddonTypeEnum.Official)
-                        {
-                            return false;
-                        }
-
-                        if (selectedCampaign.RequiredFeatures?.Except(port.SupportedFeatures).Any() is true)
-                        {
-                            return false;
-                        }
-
-                        if (!port.SupportedGames.Contains(selectedCampaign.SupportedGame.GameEnum))
-                        {
-                            return false;
-                        }
-
-                        if (selectedCampaign.SupportedGame.GameVersion is not null &&
-                            !port.SupportedGamesVersions.Contains(selectedCampaign.SupportedGame.GameVersion))
-                        {
-                            return false;
-                        }
-
-                        if (port.PortEnum is PortEnum.DosBox)
-                        {
-                            if (selectedCampaign.MainDef is not null || selectedCampaign.AdditionalDefs is not null)
-                            {
-                                return false;
-                            }
-
-                            if (_viewModel.Game.GameEnum is GameEnum.Duke3D && selectedCampaign.Type is not AddonTypeEnum.Official)
-                            {
-                                return false;
-                            }
-
-                            if (_viewModel.Game.GameEnum is GameEnum.Wang && selectedCampaign.AddonId != new AddonId(nameof(GameEnum.Wang)))
-                            {
-                                return false;
-                            }
-                        }
-
-                        return true;
-                    }),
+                    () => PortsHelper.CheckPortRequirements(CampaignsList.SelectedItem, _viewModel.Game.GameEnum, port)),
                 Margin = new(5),
                 Padding = new(5),
             };
@@ -283,9 +226,7 @@ public sealed partial class CampaignsControl : UserControl
 
         foreach (var port in _supportedPorts)
         {
-            if (!port.IsInstalled ||
-                (addon.RequiredFeatures?.Except(port.SupportedFeatures).Any() is true) ||
-                (addon.Type is not AddonTypeEnum.Official && port.PortEnum is PortEnum.BuildGDX))
+            if (!PortsHelper.CheckPortRequirements(CampaignsList.SelectedItem, _viewModel.Game.GameEnum, port))
             {
                 continue;
             }
@@ -300,7 +241,7 @@ public sealed partial class CampaignsControl : UserControl
             _ = CampaignsList.ContextMenu.Items.Add(portButton);
         }
 
-        if (CampaignsList.ContextMenu.Items.Count > 0)
+        if (CampaignsList.ContextMenu.Items.Count > 2)
         {
             _ = CampaignsList.ContextMenu.Items.Add(new Separator());
         }

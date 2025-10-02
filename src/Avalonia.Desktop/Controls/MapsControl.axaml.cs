@@ -1,5 +1,6 @@
 using Addons.Providers;
 using Avalonia.Controls;
+using Avalonia.Desktop.Helpers;
 using Avalonia.Desktop.Misc;
 using Avalonia.Desktop.ViewModels;
 using Avalonia.Input;
@@ -90,44 +91,7 @@ public sealed partial class MapsControl : UserControl
                         _viewModel.StartMapCommand.Execute(new Tuple<BasePort, byte?>(port, null));
                     }
                 },
-                () =>
-                {
-                    if (!port.IsInstalled)
-                    {
-                        return false;
-                    }
-
-                    if (MapsList.SelectedItem is null)
-                    {
-                        return false;
-                    }
-
-                    var selectedMap = (IAddon)MapsList.SelectedItem;
-
-                    if (port.PortEnum is PortEnum.BuildGDX)
-                    {
-                        return false;
-                    }
-
-                    if (selectedMap.RequiredFeatures is not null &&
-                        selectedMap.RequiredFeatures!.Except(port.SupportedFeatures).Any())
-                    {
-                        return false;
-                    }
-
-                    if (!port.SupportedGames.Contains(selectedMap.SupportedGame.GameEnum))
-                    {
-                        return false;
-                    }
-
-                    if (selectedMap.SupportedGame.GameVersion is not null &&
-                        !port.SupportedGamesVersions.Contains(selectedMap.SupportedGame.GameVersion))
-                    {
-                        return false;
-                    }
-
-                    return true;
-                }),
+                () => PortsHelper.CheckPortRequirements(MapsList.SelectedItem, _viewModel.Game.GameEnum, port)),
                 Margin = new(5),
                 Padding = new(5),
             };
@@ -154,9 +118,7 @@ public sealed partial class MapsControl : UserControl
 
         foreach (var port in _supportedPorts)
         {
-            if (!port.IsInstalled ||
-                addon.RequiredFeatures?.Except(port.SupportedFeatures).Any() is true ||
-                port.PortEnum is PortEnum.BuildGDX)
+            if (!PortsHelper.CheckPortRequirements(MapsList.SelectedItem, _viewModel.Game.GameEnum, port))
             {
                 continue;
             }
