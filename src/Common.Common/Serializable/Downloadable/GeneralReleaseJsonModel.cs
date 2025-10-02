@@ -25,7 +25,7 @@ public sealed class GeneralReleaseJsonModel
 
 
 [JsonSourceGenerationOptions(
-    Converters = [typeof(JsonStringEnumConverter<GameEnum>)]
+    Converters = [typeof(JsonStringEnumConverter<OSEnum>)]
     )]
 [JsonSerializable(typeof(List<GeneralReleaseJsonModel>))]
 public sealed partial class GeneralReleaseJsonModelContext : JsonSerializerContext;
