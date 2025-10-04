@@ -9,6 +9,9 @@ namespace Tests;
 
 public sealed class AddonsDatabaseTests
 {
+    private const string BucketAddress = "http://176.222.52.233:9000/buildlauncher/";
+    //private const string BucketAddress = "https://s3.fgsfds.link/buildlauncher/";
+
     private readonly ITestOutputHelper _output;
 
     public AddonsDatabaseTests(ITestOutputHelper output)
@@ -92,7 +95,9 @@ public sealed class AddonsDatabaseTests
         Assert.NotNull(access);
         Assert.NotNull(secret);
 
-        using var minio = new MinioClient()
+        using var minio = new MinioClient();
+
+        using var client = minio
             .WithEndpoint("s3.fgsfds.link")
             .WithCredentials(access, secretKey: secret)
             .Build();
@@ -102,7 +107,7 @@ public sealed class AddonsDatabaseTests
             .WithRecursive(true);
 
         var files = new List<string>();
-        await foreach (var item in minio.ListObjectsEnumAsync(args))
+        await foreach (var item in client.ListObjectsEnumAsync(args))
         {
             if (item.Key.EndsWith('/'))
             {
@@ -114,7 +119,7 @@ public sealed class AddonsDatabaseTests
                 continue;
             }
 
-            files.Add("https://s3.fgsfds.link/buildlauncher/" + item.Key);
+            files.Add(BucketAddress + item.Key);
         }
 
         var loose = files.Except(addonsUrls);
