@@ -39,10 +39,7 @@
     <PackageReference Include="Avalonia.Controls.DataGrid" />
     <PackageReference Include="Avalonia.Themes.Fluent" />
     <PackageReference Include="CommunityToolkit.Mvvm" />
-    <PackageReference Include="IDisposableAnalyzers">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
+    <PackageReference Include="IDisposableAnalyzers" PrivateAssets="all" />
     <PackageReference Include="Markdown.Avalonia" />
     <PackageReference Include="Projektanker.Icons.Avalonia.FontAwesome" />
     <PackageReference Include="Roslynator.Analyzers" PrivateAssets="all" />
