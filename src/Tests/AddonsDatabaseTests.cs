@@ -1,6 +1,7 @@
 ﻿using System.Text;
 using System.Text.Json;
 using Common.Common.Serializable.Downloadable;
+using Common.Helpers;
 using Minio;
 using Minio.DataModel.Args;
 using Xunit.Abstractions;
@@ -9,9 +10,6 @@ namespace Tests;
 
 public sealed class AddonsDatabaseTests
 {
-    private const string BucketAddress = "http://176.222.52.233:9000/buildlauncher/";
-    //private const string BucketAddress = "https://s3.fgsfds.link/buildlauncher/";
-
     private readonly ITestOutputHelper _output;
 
     public AddonsDatabaseTests(ITestOutputHelper output)
@@ -95,19 +93,20 @@ public sealed class AddonsDatabaseTests
         Assert.NotNull(access);
         Assert.NotNull(secret);
 
-        using var minio = new MinioClient();
-
-        using var client = minio
-            .WithEndpoint("s3.fgsfds.link")
-            .WithCredentials(access, secretKey: secret)
+        using var minioClient = new MinioClient();
+        using var iMinioClient = minioClient
+            .WithEndpoint(Consts.S3Endpoint.Split("//").Last())
+            .WithCredentials(access, secret)
+            .WithSSL(false)
             .Build();
 
         var args = new ListObjectsArgs()
             .WithBucket("buildlauncher")
             .WithRecursive(true);
 
-        var files = new List<string>();
-        await foreach (var item in client.ListObjectsEnumAsync(args))
+        var filesInBucket = new List<string>();
+
+        await foreach (var item in iMinioClient.ListObjectsEnumAsync(args))
         {
             if (item.Key.EndsWith('/'))
             {
@@ -119,16 +118,16 @@ public sealed class AddonsDatabaseTests
                 continue;
             }
 
-            files.Add(BucketAddress + item.Key);
+            filesInBucket.Add(Consts.FilesRepo + item.Key);
         }
 
-        var loose = files.Except(addonsUrls);
+        var loose = filesInBucket.Except(addonsUrls);
 
         StringBuilder sb = new();
 
         foreach (var item in loose)
         {
-            _ = sb.AppendLine($"File {item} is loose.");
+            _ = sb.AppendLine($"[Error] File {item} is loose.");
         }
 
         _output.WriteLine(sb.ToString());
