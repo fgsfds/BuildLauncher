@@ -11,6 +11,8 @@ using Common.Client.Enums;
 using Common.Client.Helpers;
 using Common.Client.Interfaces;
 using CommunityToolkit.Diagnostics;
+using Database.Client;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Ports.Providers;
@@ -39,6 +41,11 @@ public sealed class App : Application
         _ = builder.SetupWithLifetime(lifetime);
 
         LoadBindings();
+
+        FixDatabase();
+
+        using var dbContext = BindingsManager.Provider.GetRequiredService<IDbContextFactory<DatabaseContext>>().CreateDbContext();
+        dbContext.Database.Migrate();
 
         var config = BindingsManager.Provider.GetRequiredService<IConfigProvider>();
         var viewLocator = BindingsManager.Provider.GetRequiredService<ViewLocator>();
@@ -159,5 +166,27 @@ public sealed class App : Application
         };
 
         _app.RequestedThemeVariant = themeEnum;
+    }
+
+    /// <summary>
+    /// Remove database logs leftovers.
+    /// </summary>
+    private static void FixDatabase()
+    {
+        if (Design.IsDesignMode)
+        {
+            return;
+        }
+
+        var files = Directory.GetFiles(ClientProperties.WorkingFolder);
+
+        foreach (var file in files)
+        {
+            if (file.EndsWith(".db-wal", StringComparison.OrdinalIgnoreCase)
+                || file.EndsWith(".db-shm", StringComparison.OrdinalIgnoreCase))
+            {
+                File.Delete(file);
+            }
+        }
     }
 }

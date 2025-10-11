@@ -15,11 +15,6 @@ public sealed class DatabaseContext : DbContext
     public DbSet<CustomPortsDbEntity> CustomPorts { get; set; }
     public DbSet<FavoritesDbEntity> Favorites { get; set; }
 
-    public DatabaseContext()
-    {
-        Database.Migrate();
-    }
-
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         _ = optionsBuilder.ConfigureWarnings(x =>
