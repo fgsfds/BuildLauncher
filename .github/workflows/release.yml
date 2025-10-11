@@ -1,0 +1,87 @@
+name: Create release
+
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+
+permissions:
+  contents: write 
+
+jobs:
+
+  build-windows:
+    name: Build Windows
+    runs-on: windows-latest
+    outputs:
+      version_nodots: ${{ steps.get_version.outputs.version_nodots }}
+      version_dotted: ${{ steps.get_version.outputs.version_dotted }}
+    if: ${{ github.event_name == 'push' && contains(github.event.head_commit.message, '[release]') }}
+
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 9.0.x
+
+      - name: Publish (Windows)
+        shell: pwsh
+        run: |
+          dotnet publish ".\src\Avalonia.Desktop\Avalonia.Desktop.csproj" -p:PublishProfile=Windows -c Release -o ./publish
+
+      - name: Get version
+        id: get_version
+        shell: pwsh
+        run: |
+          $exe = Join-Path $PWD 'publish\BuildLauncher.exe'
+          if (-not (Test-Path $exe)) { Write-Error "Executable not found: $exe" }
+          $version = (Get-Item $exe).VersionInfo.FileVersion
+          $withDots = $version.Substring(0,$version.Length-2)
+          $withoutDots = $withDots.Replace('.','')
+          echo "version_dotted=$withDots"   >> $env:GITHUB_OUTPUT
+          echo "version_nodots=$withoutDots" >> $env:GITHUB_OUTPUT
+
+      - name: Zip Windows build
+        shell: pwsh
+        run: |
+          ls .\publish\
+          $v = "${{ steps.get_version.outputs.version_nodots }}"
+          $dest = Join-Path $PWD "publish\buildlauncher_${v}_win-x64.zip"
+          if (Test-Path $dest) { Remove-Item $dest }
+          Compress-Archive -Path ".\publish\BuildLauncher.exe" -DestinationPath $dest
+          Write-Host "Created $dest"
+
+      - name: Upload Windows artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: buildlauncher-win
+          path: publish/buildlauncher_${{ steps.get_version.outputs.version_nodots }}_win-x64.zip
+
+  release:
+    name: Create release
+    runs-on: ubuntu-latest
+    needs:
+      - build-windows
+    if: ${{ github.event_name == 'push' && contains(github.event.head_commit.message, '[release]') }}
+    steps:
+      - name: Download Windows artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: buildlauncher-win
+          path: publish
+
+      - name: Create release (and upload assets)
+        uses: ncipollo/release-action@v1
+        with:
+          tag: ${{ needs.build-windows.outputs.version_dotted}}
+          name: v${{ needs.build-windows.outputs.version_dotted }}
+          body: |
+            Automated release created by GitHub Actions.
+          artifacts: publish/**/*.zip
+          draft: false
+          prerelease: true
