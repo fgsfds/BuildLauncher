@@ -1601,6 +1601,18 @@
       "Description": "Many Duke3D fans consider this 22 level-pack being like a semi-official expansion for the game. Map quality, atmosphere and enjoyable gameplay provide hours of fun.\r\n\r\nMany levels are quite dark and ammo might be rare sometimes, making the game harder somewhat. The second episode is more original than the first, with an underwater setting and some new enemies like the Ice Octabrain (shoots Freezer crystals) or small hunter drones.\r\n\r\nA must-play!\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/",
       "Author": "George-William Bernard",
       "UpdateDate": "2025-10-19T11:31:52.9415795Z"
+    },
+    {
+      "Id": "duke3d-decay",
+      "AddonType": "TC",
+      "Game": "Duke3D",
+      "DownloadUrl": "http://176.222.52.233:9000/buildlauncher/Duke3D/Campaigns/duke3d-decay_v1_0.zip",
+      "Title": "Decay",
+      "Version": "1.0",
+      "FileSize": 203036599,
+      "Description": "https://www.moddb.com/mods/decay2\r\n\r\nDECAY is a game based on Duke Nukem 3D powered by EDuke32. It\u0027s a horror first person shooter surrounding the events of a zombie apocalypse and aftermath.",
+      "Author": "Thought Process",
+      "UpdateDate": "2025-10-19T13:42:43.0046736Z"
     }
   ],
   "Blood": [
