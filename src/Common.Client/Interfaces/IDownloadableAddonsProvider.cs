@@ -1,7 +1,7 @@
 ﻿using System.Collections.Immutable;
-using Common.Common.Serializable.Downloadable;
-using Common.Enums;
-using Common.Helpers;
+using Common.All.Enums;
+using Common.All.Helpers;
+using Common.All.Serializable.Downloadable;
 
 namespace Common.Client.Interfaces;
 

@@ -1,6 +1,6 @@
-﻿using Common.Client.Interfaces;
-using Common.Enums;
-using Common.Interfaces;
+﻿using Common.All.Enums;
+using Common.All.Interfaces;
+using Common.Client.Interfaces;
 using CommunityToolkit.Diagnostics;
 using Games.Games;
 

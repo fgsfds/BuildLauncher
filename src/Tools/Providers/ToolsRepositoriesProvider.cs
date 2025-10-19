@@ -1,5 +1,5 @@
-﻿using Common.Common.Serializable.Downloadable;
-using Common.Enums;
+﻿using Common.All.Enums;
+using Common.All.Serializable.Downloadable;
 using CommunityToolkit.Diagnostics;
 
 namespace Tools.Providers;

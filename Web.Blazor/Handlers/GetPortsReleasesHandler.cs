@@ -1,8 +1,8 @@
 ﻿using Api.Common.Requests;
 using Api.Common.Responses;
-using Common.Common.Interfaces;
-using Common.Common.Serializable.Downloadable;
-using Common.Enums;
+using Common.All.Enums;
+using Common.All.Interfaces;
+using Common.All.Serializable.Downloadable;
 using MediatR;
 
 namespace Web.Blazor.Handlers;

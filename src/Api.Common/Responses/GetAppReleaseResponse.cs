@@ -1,4 +1,4 @@
-﻿using Common.Common.Serializable.Downloadable;
+﻿using Common.All.Serializable.Downloadable;
 
 namespace Api.Common.Responses;
 

@@ -1,16 +1,15 @@
 ﻿using System.Collections.Immutable;
-using System.Runtime.Intrinsics.Arm;
 using System.Text.Json;
 using Addons.Addons;
-using Common;
+using Common.All;
+using Common.All.Enums;
+using Common.All.Enums.Addons;
+using Common.All.Helpers;
+using Common.All.Interfaces;
+using Common.All.Serializable.Addon;
 using Common.Client.Cache;
 using Common.Client.Helpers;
 using Common.Client.Interfaces;
-using Common.Enums;
-using Common.Enums.Addons;
-using Common.Helpers;
-using Common.Interfaces;
-using Common.Serializable.Addon;
 using CommunityToolkit.Diagnostics;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -758,7 +757,7 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
             }
             else
             {
-                isUnpacked = false; 
+                isUnpacked = false;
                 using var archive = ArchiveFactory.Open(pathToFile);
 
                 (gridImageHash, Stream? gridImageStream) = ImageHelper.GetCoverFromArchive(archive);

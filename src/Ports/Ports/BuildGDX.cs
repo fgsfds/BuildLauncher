@@ -1,8 +1,8 @@
 ﻿using System.Text;
-using Common;
-using Common.Enums;
-using Common.Enums.Versions;
-using Common.Interfaces;
+using Common.All;
+using Common.All.Enums;
+using Common.All.Enums.Versions;
+using Common.All.Interfaces;
 using CommunityToolkit.Diagnostics;
 using Games.Games;
 

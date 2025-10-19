@@ -1,7 +1,7 @@
 ﻿using System.Runtime.InteropServices;
+using Common.All.Enums;
+using Common.All.Enums.Versions;
 using Common.Client.Interfaces;
-using Common.Enums;
-using Common.Enums.Versions;
 using CommunityToolkit.Diagnostics;
 using Microsoft.Win32;
 

@@ -1,6 +1,6 @@
-﻿using Common.Enums;
-using Common.Enums.Addons;
-using Common.Helpers;
+﻿using Common.All.Enums;
+using Common.All.Enums.Addons;
+using Common.All.Helpers;
 using CommunityToolkit.Diagnostics;
 
 namespace Games.Games;

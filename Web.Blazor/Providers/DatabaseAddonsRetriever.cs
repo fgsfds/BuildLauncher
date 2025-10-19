@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
-using Common.Common.Serializable.Downloadable;
-using Common.Enums;
-using Common.Serializable.Addon;
+using Common.All.Enums;
+using Common.All.Serializable.Addon;
+using Common.All.Serializable.Downloadable;
 using CommunityToolkit.Diagnostics;
 using Database.Server;
 using Database.Server.DbEntities;

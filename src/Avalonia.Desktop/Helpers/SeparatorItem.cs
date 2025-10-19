@@ -1,8 +1,8 @@
 ﻿using System.Collections.Immutable;
 using System.Diagnostics.CodeAnalysis;
-using Common;
-using Common.Enums;
-using Common.Interfaces;
+using Common.All;
+using Common.All.Enums;
+using Common.All.Interfaces;
 
 namespace Avalonia.Desktop.Helpers;
 

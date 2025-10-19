@@ -1,6 +1,6 @@
-﻿using Common.Client.Interfaces;
-using Common.Common.Serializable.Downloadable;
-using Common.Enums;
+﻿using Common.All.Enums;
+using Common.All.Serializable.Downloadable;
+using Common.Client.Interfaces;
 using Tools.Tools;
 
 namespace Tools.Installer;

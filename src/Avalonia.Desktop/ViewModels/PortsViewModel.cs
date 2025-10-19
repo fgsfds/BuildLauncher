@@ -4,7 +4,7 @@ using Avalonia.Controls.Notifications;
 using Avalonia.Desktop.Helpers;
 using Avalonia.Desktop.Misc;
 using Avalonia.Platform.Storage;
-using Common.Enums;
+using Common.All.Enums;
 using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;

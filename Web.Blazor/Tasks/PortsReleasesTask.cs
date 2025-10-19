@@ -1,6 +1,6 @@
-﻿using Common.Common.Interfaces;
-using Common.Common.Serializable.Downloadable;
-using Common.Enums;
+﻿using Common.All.Enums;
+using Common.All.Interfaces;
+using Common.All.Serializable.Downloadable;
 
 namespace Web.Blazor.Tasks;
 

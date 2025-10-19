@@ -1,8 +1,9 @@
 ﻿using System.Reflection;
 using Addons.Providers;
-using Common.Enums.Versions;
+using Common.All.Enums.Versions;
 
 namespace Tests;
+
 public sealed class GrpInfoParsingTests
 {
     private readonly MethodInfo _parse;

@@ -1,7 +1,7 @@
-﻿using Common.Client.Cache;
+﻿using Common.All.Enums;
+using Common.All.Interfaces;
+using Common.Client.Cache;
 using Common.Client.Interfaces;
-using Common.Enums;
-using Common.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 

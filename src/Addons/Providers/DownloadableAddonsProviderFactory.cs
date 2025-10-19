@@ -1,7 +1,7 @@
-﻿using Common.Client.Interfaces;
+﻿using Common.All.Enums;
+using Common.All.Interfaces;
+using Common.Client.Interfaces;
 using Common.Client.Tools;
-using Common.Enums;
-using Common.Interfaces;
 using Microsoft.Extensions.Logging;
 
 namespace Addons.Providers;

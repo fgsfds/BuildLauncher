@@ -1,9 +1,10 @@
 ﻿using System.Reflection;
 using Addons.Providers;
-using Common;
+using Common.All;
+using Common.All.Enums;
+using Common.All.Interfaces;
 using Common.Client.Cache;
 using Common.Client.Interfaces;
-using Common.Interfaces;
 using Microsoft.Extensions.Logging;
 using Moq;
 
@@ -18,7 +19,7 @@ public sealed class AddonFilesTests : IDisposable
     public AddonFilesTests()
     {
         var game = new Mock<IGame>();
-        _ = game.Setup(x => x.GameEnum).Returns(Common.Enums.GameEnum.Blood);
+        _ = game.Setup(x => x.GameEnum).Returns(GameEnum.Blood);
 
         var config = new Mock<IConfigProvider>();
         _ = config.Setup(x => x.DisabledAutoloadMods).Returns([]);

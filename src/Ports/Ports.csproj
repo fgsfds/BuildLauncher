@@ -33,6 +33,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Addons\Addons.csproj" />
+    <ProjectReference Include="..\Common.All\Common.All.csproj" />
     <ProjectReference Include="..\Games\Games.csproj" />
   </ItemGroup>
 

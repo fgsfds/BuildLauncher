@@ -1,8 +1,8 @@
-using Common.Common.Interfaces;
-using Common.Common.Providers;
-using Common.Common.Serializable.Downloadable;
-using Common.Enums;
-using Common.Serializable.Addon;
+using Common.All.Enums;
+using Common.All.Interfaces;
+using Common.All.Providers;
+using Common.All.Serializable.Addon;
+using Common.All.Serializable.Downloadable;
 using Database.Server;
 using Web.Blazor.Helpers;
 using Web.Blazor.Providers;

@@ -1,7 +1,7 @@
 ﻿using Addons.Addons;
-using Common;
-using Common.Enums;
-using Common.Interfaces;
+using Common.All;
+using Common.All.Enums;
+using Common.All.Interfaces;
 using Ports.Ports;
 
 namespace Avalonia.Desktop.Helpers;

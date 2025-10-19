@@ -7,8 +7,8 @@
     <Project Path="src/Api.Common/Api.Common.csproj" />
   </Folder>
   <Folder Name="/Common/">
+    <Project Path="src/Common.All/Common.All.csproj" />
     <Project Path="src/Common.Client/Common.Client.csproj" />
-    <Project Path="src/Common.Common/Common.Common.csproj" />
     <Project Path="src/Common.Server/Common.Server.csproj" />
   </Folder>
   <Folder Name="/Database/">

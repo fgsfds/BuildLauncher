@@ -1,4 +1,4 @@
-﻿using Common.Enums;
+﻿using Common.All.Enums;
 
 namespace Games.Games;
 

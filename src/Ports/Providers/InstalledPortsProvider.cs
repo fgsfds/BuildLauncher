@@ -1,7 +1,7 @@
 ﻿using System.Collections.Immutable;
+using Common.All.Enums;
 using Common.Client.Helpers;
 using Common.Client.Interfaces;
-using Common.Enums;
 using CommunityToolkit.Diagnostics;
 using Database.Client;
 using Database.Client.DbEntities;

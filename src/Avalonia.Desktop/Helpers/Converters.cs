@@ -2,8 +2,8 @@
 using Avalonia.Data;
 using Avalonia.Data.Converters;
 using Avalonia.Desktop.Misc;
-using Common.Common.Helpers;
-using Common.Enums;
+using Common.All.Enums;
+using Common.All.Helpers;
 using CommunityToolkit.Diagnostics;
 
 namespace Avalonia.Desktop.Helpers;

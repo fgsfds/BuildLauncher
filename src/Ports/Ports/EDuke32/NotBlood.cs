@@ -1,5 +1,5 @@
-﻿using Common.Enums;
-using Common.Interfaces;
+﻿using Common.All.Enums;
+using Common.All.Interfaces;
 
 namespace Ports.Ports.EDuke32;
 

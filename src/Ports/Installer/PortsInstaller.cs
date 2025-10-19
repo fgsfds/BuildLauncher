@@ -1,5 +1,5 @@
-﻿using Common.Client.Tools;
-using Common.Enums;
+﻿using Common.All.Enums;
+using Common.Client.Tools;
 using Microsoft.Extensions.Logging;
 using Ports.Ports;
 using Ports.Providers;

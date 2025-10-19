@@ -1,11 +1,11 @@
 ﻿using Addons.Providers;
 using Avalonia.Desktop.Misc;
 using Avalonia.Threading;
+using Common.All.Enums;
 using Common.Client;
 using Common.Client.Interfaces;
 using Common.Client.Providers;
 using Common.Client.Tools;
-using Common.Enums;
 using Games.Providers;
 using Microsoft.Extensions.Logging;
 using Ports.Installer;

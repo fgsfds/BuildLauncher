@@ -1,8 +1,8 @@
-﻿using Common.Client;
+﻿using Common.All.Enums;
+using Common.Client;
 using Common.Client.Helpers;
 using Common.Client.Interfaces;
 using Common.Client.Tools;
-using Common.Enums;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Games.Providers;
 using Microsoft.Extensions.Logging;

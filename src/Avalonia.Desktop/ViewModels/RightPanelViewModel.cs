@@ -1,8 +1,8 @@
 using Avalonia.Desktop.Misc;
 using Avalonia.Media.Imaging;
+using Common.All.Helpers;
+using Common.All.Interfaces;
 using Common.Client.Providers;
-using Common.Helpers;
-using Common.Interfaces;
 using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;

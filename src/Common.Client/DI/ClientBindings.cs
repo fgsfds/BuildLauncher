@@ -1,12 +1,12 @@
 ﻿using System.Net;
+using Common.All.Helpers;
+using Common.All.Providers;
 using Common.Client.Api;
 using Common.Client.Config;
 using Common.Client.Helpers;
 using Common.Client.Interfaces;
 using Common.Client.Providers;
 using Common.Client.Tools;
-using Common.Common.Providers;
-using Common.Helpers;
 using Database.Client;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -70,7 +70,7 @@ public static class ClientBindings
         return httpClient;
     }
 
-    public class FakeHttpMessageHandler : HttpMessageHandler
+    public sealed class FakeHttpMessageHandler : HttpMessageHandler
     {
         protected override Task<HttpResponseMessage> SendAsync(
             HttpRequestMessage request, CancellationToken cancellationToken)

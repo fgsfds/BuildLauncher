@@ -1,5 +1,5 @@
 ﻿using Api.Common.Responses;
-using Common.Enums;
+using Common.All.Enums;
 using MediatR;
 
 namespace Api.Common.Requests;

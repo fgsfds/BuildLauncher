@@ -1,6 +1,6 @@
 ﻿using System.Text.Json;
-using Common.Common.Serializable.Downloadable;
-using Common.Enums;
+using Common.All.Enums;
+using Common.All.Serializable.Downloadable;
 using CommunityToolkit.Diagnostics;
 using Microsoft.Extensions.Logging;
 

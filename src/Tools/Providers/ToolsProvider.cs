@@ -1,5 +1,5 @@
-﻿using Common.Client.Helpers;
-using Common.Enums;
+﻿using Common.All.Enums;
+using Common.Client.Helpers;
 using CommunityToolkit.Diagnostics;
 using Games.Providers;
 using Tools.Tools;

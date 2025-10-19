@@ -1,5 +1,5 @@
-﻿@using Common.Common.Serializable.Downloadable
-@using Common.Enums
+﻿@using Common.All.Serializable.Downloadable
+@using Common.All.Enums
 @using Markdig
 @using Web.Blazor.Providers
 
@@ -40,7 +40,7 @@ else
                 }
             </td>
             <td style="padding: 15px;vertical-align:top">
-                @foreach (var addon in _addons.Where(x => x.AddonType is Common.Enums.AddonTypeEnum.Map).OrderBy(x => x.Title))
+                @foreach (var addon in _addons.Where(x => x.AddonType is Common.All.Enums.AddonTypeEnum.Map).OrderBy(x => x.Title))
                 {
                     <h4>@addon.Title</h4>
                     <br />
@@ -51,7 +51,7 @@ else
                 }
             </td>
             <td style="padding: 15px;vertical-align:top">
-                @foreach (var addon in _addons.Where(x => x.AddonType is Common.Enums.AddonTypeEnum.Mod).OrderBy(x => x.Title))
+                @foreach (var addon in _addons.Where(x => x.AddonType is Common.All.Enums.AddonTypeEnum.Mod).OrderBy(x => x.Title))
                 {
                     <h4>@addon.Title</h4>
                     <br />

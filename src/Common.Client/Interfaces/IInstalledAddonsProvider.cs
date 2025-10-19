@@ -1,6 +1,7 @@
-﻿using Common.Enums;
-using Common.Helpers;
-using Common.Interfaces;
+﻿using Common.All;
+using Common.All.Enums;
+using Common.All.Helpers;
+using Common.All.Interfaces;
 
 namespace Common.Client.Interfaces;
 

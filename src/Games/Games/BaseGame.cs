@@ -1,6 +1,6 @@
-﻿using Common.Client.Helpers;
-using Common.Enums;
-using Common.Interfaces;
+﻿using Common.All.Enums;
+using Common.All.Interfaces;
+using Common.Client.Helpers;
 
 namespace Games.Games;
 

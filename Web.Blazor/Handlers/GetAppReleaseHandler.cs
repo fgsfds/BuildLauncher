@@ -1,6 +1,6 @@
 ﻿using Api.Common.Requests;
 using Api.Common.Responses;
-using Common.Common.Providers;
+using Common.All.Providers;
 using MediatR;
 
 namespace Web.Blazor.Handlers;

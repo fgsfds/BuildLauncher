@@ -1,9 +1,9 @@
 ﻿using System.Text.Json;
 using System.Text.RegularExpressions;
-using Common.Common.Interfaces;
-using Common.Common.Serializable.Downloadable;
-using Common.Enums;
-using Common.Helpers;
+using Common.All.Enums;
+using Common.All.Helpers;
+using Common.All.Interfaces;
+using Common.All.Serializable.Downloadable;
 using CommunityToolkit.Diagnostics;
 using Microsoft.Extensions.Logging;
 
