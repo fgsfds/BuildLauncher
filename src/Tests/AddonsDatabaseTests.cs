@@ -118,7 +118,7 @@ public sealed class AddonsDatabaseTests
                 continue;
             }
 
-            filesInBucket.Add(Consts.FilesRepo + item.Key);
+            filesInBucket.Add(Consts.FilesRepo + "/" + item.Key);
         }
 
         var loose = filesInBucket.Except(addonsUrls);

@@ -2,17 +2,17 @@
 
 public static class Consts
 {
-    public const string S3Endpoint = "http://176.222.52.233:9000/";
+    public const string S3Endpoint = "http://176.222.52.233:9000";
 
     /// <summary>
     /// Path to the files repository
     /// </summary>
-    public const string FilesRepo = $"{S3Endpoint}buildlauncher/";
+    public const string FilesRepo = $"{S3Endpoint}/buildlauncher";
 
     /// <summary>
     /// Path to the uploads folder
     /// </summary>
-    public const string UploadsFolder = $"{S3Endpoint}uploads/buildlauncher/";
+    public const string UploadsFolder = $"{S3Endpoint}/uploads/buildlauncher";
 
     /// <summary>
     /// GirtHub releases Url
