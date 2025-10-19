@@ -58,7 +58,19 @@ public sealed class InstalledPortsProvider
         Fury = new(config);
         DosBox = new();
 
-        _builtInPorts = [Raze, EDuke32, NBlood, NotBlood, PCExhumed, RedNukem, VoidSW, Fury, BuildGDX, DosBox];
+        _builtInPorts =
+        [
+            EDuke32,
+            RedNukem,
+            NBlood,
+            NotBlood,
+            PCExhumed,
+            VoidSW,
+            Fury,
+            Raze,
+            BuildGDX,
+            DosBox
+        ];
 
         UpdateCustomPortsList();
     }
