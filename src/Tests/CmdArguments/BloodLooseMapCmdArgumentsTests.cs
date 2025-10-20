@@ -63,7 +63,7 @@ public sealed class BloodLooseMapCmdArgumentsTests
             _modsProvider.DependentModWithCompatibleVersion,
             _modsProvider.DependentModWithIncompatibleVersion,
             _modsProvider.ModForAnotherGame,
-            _modsProvider.ModThatRequiredFeature
+            _modsProvider.ModThatRequiresFeature
         }.ToDictionary(x => x.AddonId, x => (IAddon)x);
 
         Raze raze = new();
@@ -108,7 +108,7 @@ public sealed class BloodLooseMapCmdArgumentsTests
             _modsProvider.DependentModWithCompatibleVersion,
             _modsProvider.DependentModWithIncompatibleVersion,
             _modsProvider.ModForAnotherGame,
-            _modsProvider.ModThatRequiredFeature
+            _modsProvider.ModThatRequiresFeature
         }.ToDictionary(x => x.AddonId, x => (IAddon)x);
 
         NBlood nblood = new();
@@ -140,7 +140,7 @@ public sealed class BloodLooseMapCmdArgumentsTests
             _modsProvider.DependentModWithCompatibleVersion,
             _modsProvider.DependentModWithIncompatibleVersion,
             _modsProvider.ModForAnotherGame,
-            _modsProvider.ModThatRequiredFeature
+            _modsProvider.ModThatRequiresFeature
         }.ToDictionary(x => x.AddonId, x => (IAddon)x);
 
         NotBlood notblood = new();

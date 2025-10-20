@@ -170,7 +170,7 @@ public sealed class DukeCmdArgumentsTests
             _modsProvider.DependentModWithCompatibleVersion,
             _modsProvider.DependentModWithIncompatibleVersion,
             _modsProvider.ModForAnotherGame,
-            _modsProvider.ModThatRequiredFeature,
+            _modsProvider.ModThatRequiresFeature,
             _modsProvider.MultipleDependenciesMod
         }.ToDictionary(x => x.AddonId, x => (IAddon)x);
 
@@ -345,7 +345,7 @@ public sealed class DukeCmdArgumentsTests
             _modsProvider.DependentModWithCompatibleVersion,
             _modsProvider.DependentModWithIncompatibleVersion,
             _modsProvider.ModForAnotherGame,
-            _modsProvider.ModThatRequiredFeature,
+            _modsProvider.ModThatRequiresFeature,
             _modsProvider.MultipleDependenciesMod
         }.ToDictionary(x => x.AddonId, x => (IAddon)x);
 
@@ -521,7 +521,7 @@ public sealed class DukeCmdArgumentsTests
             _modsProvider.DependentModWithCompatibleVersion,
             _modsProvider.DependentModWithIncompatibleVersion,
             _modsProvider.ModForAnotherGame,
-            _modsProvider.ModThatRequiredFeature,
+            _modsProvider.ModThatRequiresFeature,
             _modsProvider.MultipleDependenciesMod
         }.ToDictionary(x => x.AddonId, x => (IAddon)x);
 

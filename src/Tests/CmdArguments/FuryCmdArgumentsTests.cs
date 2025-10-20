@@ -64,7 +64,7 @@ public sealed class FuryCmdArgumentsTests
             _modsProvider.DependentModWithCompatibleVersion,
             _modsProvider.DependentModWithIncompatibleVersion,
             _modsProvider.ModForAnotherGame,
-            _modsProvider.ModThatRequiredFeature
+            _modsProvider.ModThatRequiresFeature
         }.ToDictionary(x => x.AddonId, x => (IAddon)x);
 
         Fury fury = new(new ConfigProviderFake());

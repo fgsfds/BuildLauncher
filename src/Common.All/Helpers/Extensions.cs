@@ -99,4 +99,9 @@ public static class Extensions
             target[kv.Key] = kv.Value; // Overwrites existing keys
     }
 
+    public static void AddRange<TKey, TValue>(this Dictionary<TKey, TValue> target, IEnumerable<KeyValuePair<TKey, TValue>> source)
+    {
+        foreach (var kv in source)
+            target[kv.Key] = kv.Value; // Overwrites existing keys
+    }
 }

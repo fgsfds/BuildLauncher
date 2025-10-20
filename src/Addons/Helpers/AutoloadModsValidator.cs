@@ -42,6 +42,30 @@ public static class AutoloadModsValidator
             return false;
         }
 
+        //check if campaign is incomatible with this or all addons
+        if (campaign.IncompatibleAddons is not null)
+        {
+            foreach (var incompatibleAddon in campaign.IncompatibleAddons)
+            {
+                if (incompatibleAddon.Key.Equals("*"))
+                {
+                    return false;
+                }
+
+                if (incompatibleAddon.Key != autoloadMod.AddonId.Id)
+                {
+                    continue;
+                }
+
+                var areEqual = VersionComparer.Compare(incompatibleAddon.Value, autoloadMod.AddonId.Version);
+
+                if (areEqual)
+                {
+                    return false;
+                }
+            }
+        }
+
         var areDependenciesPassed = CheckDependencies(autoloadMod, campaign, mods);
 
         if (!areDependenciesPassed)
@@ -110,57 +134,35 @@ public static class AutoloadModsValidator
     }
 
     /// <summary>
-    /// Check if addon doesn't have any loaded incompatibles
+    /// Checks if mod is incompatible with other enabled addons or campaign
     /// </summary>
     private static bool CheckIncompatibles(
         AutoloadModEntity autoloadMod,
         IAddon campaign,
-        IEnumerable<KeyValuePair<AddonId,
-            IAddon>> mods
+        IEnumerable<KeyValuePair<AddonId, IAddon>> mods
         )
     {
-        if (autoloadMod.IncompatibleAddons is null)
+        var campaignIncompatibles = campaign.IncompatibleAddons?.ToDictionary() ?? [];
+        campaignIncompatibles.Add(campaign.AddonId.Id, campaign.AddonId.Version);
+        campaignIncompatibles.AddRange(mods.Where(x => x.Value is AutoloadModEntity { IsEnabled: true }).ToDictionary(x => x.Key.Id, x => x.Key.Version));
+
+        if (autoloadMod.IncompatibleAddons is not null)
         {
-            return true;
-        }
-
-        foreach (var incompatibleAddon in autoloadMod.IncompatibleAddons)
-        {
-            //What a fucking mess...
-            //if campaign id equals addon id
-            if (campaign.AddonId.Id.Equals(incompatibleAddon.Key, StringComparison.OrdinalIgnoreCase) &&
-                //AND either incompatible addon's version is null
-                (incompatibleAddon.Value is null ||
-                //OR campaign's version is null
-                campaign.AddonId.Version is null ||
-                //OR addon's and campaigns's versions match
-                VersionComparer.Compare(campaign.AddonId.Version, incompatibleAddon.Value)
-                ))
+            foreach (var a in campaignIncompatibles)
             {
-                //the addon is incompatible
-                return false;
-            }
+                foreach (var b in autoloadMod.IncompatibleAddons)
+                {
+                    if (a.Key != b.Key)
+                    {
+                        continue;
+                    }
 
-            foreach (var addon in mods)
-            {
-                if (incompatibleAddon.Key != addon.Key.Id)
-                {
-                    continue;
-                }
+                    var areEqual = VersionComparer.Compare(a.Value, b.Value);
 
-                if (addon.Value is AutoloadModEntity aMod &&
-                    !aMod.IsEnabled)
-                {
-                    continue;
-                }
-
-                if (incompatibleAddon.Value is null)
-                {
-                    return false;
-                }
-                else if (VersionComparer.Compare(addon.Key.Version, incompatibleAddon.Value))
-                {
-                    return false;
+                    if (areEqual)
+                    {
+                        return false;
+                    }
                 }
             }
         }

@@ -17,6 +17,8 @@ public sealed class BloodCmdArgumentsTests
     private readonly BloodCampaignEntity _bloodTc;
     private readonly BloodCampaignEntity _bloodTcFolder;
     private readonly BloodCampaignEntity _bloodTcExeOverride;
+    private readonly BloodCampaignEntity _bloodTcIncompatibleWithEnabledMod;
+    private readonly BloodCampaignEntity _bloodTcIncompatibleWithEverything;
 
     private readonly AutoloadModsProvider _modsProvider;
 
@@ -149,6 +151,54 @@ public sealed class BloodCmdArgumentsTests
             Executables = new Dictionary<OSEnum, string>() { { OSEnum.Windows, "nblood.exe" } }
         };
 
+        _bloodTcIncompatibleWithEnabledMod = new()
+        {
+            AddonId = new("blood-tc-imcompatible-with-enabled", null),
+            Type = AddonTypeEnum.TC,
+            Title = "Blood TC",
+            GridImageHash = null,
+            Author = null,
+            Description = null,
+            SupportedGame = new(GameEnum.Blood),
+            RequiredFeatures = null,
+            PathToFile = Path.Combine("D:", "Games", "Blood", "blood_tc_folder", "addon.json"),
+            DependentAddons = null,
+            IncompatibleAddons = new Dictionary<string, string?>(StringComparer.OrdinalIgnoreCase) { { "enabledMod", null } },
+            MainDef = null,
+            AdditionalDefs = null,
+            StartMap = null,
+            PreviewImageHash = null,
+            INI = "TC.INI",
+            RFF = "TC.RFF",
+            SND = "TC.SND",
+            IsFolder = true,
+            Executables = null
+        };
+
+        _bloodTcIncompatibleWithEverything = new()
+        {
+            AddonId = new("blood-tc-imcompatible-with-everything", null),
+            Type = AddonTypeEnum.TC,
+            Title = "Blood TC",
+            GridImageHash = null,
+            Author = null,
+            Description = null,
+            SupportedGame = new(GameEnum.Blood),
+            RequiredFeatures = null,
+            PathToFile = Path.Combine("D:", "Games", "Blood", "blood_tc_folder", "addon.json"),
+            DependentAddons = null,
+            IncompatibleAddons = new Dictionary<string, string?>(StringComparer.OrdinalIgnoreCase) { { "*", null } },
+            MainDef = null,
+            AdditionalDefs = null,
+            StartMap = null,
+            PreviewImageHash = null,
+            INI = "TC.INI",
+            RFF = "TC.RFF",
+            SND = "TC.SND",
+            IsFolder = true,
+            Executables = null
+        };
+
     }
 
     [Fact]
@@ -166,7 +216,7 @@ public sealed class BloodCmdArgumentsTests
             _modsProvider.DependentModWithCompatibleVersion,
             _modsProvider.DependentModWithIncompatibleVersion,
             _modsProvider.ModForAnotherGame,
-            _modsProvider.ModThatRequiredFeature,
+            _modsProvider.ModThatRequiresFeature,
             _modsProvider.MultipleDependenciesMod
         }.ToDictionary(x => x.AddonId, x => (IAddon)x);
 
@@ -212,7 +262,7 @@ public sealed class BloodCmdArgumentsTests
             _modsProvider.DependentModWithCompatibleVersion,
             _modsProvider.DependentModWithIncompatibleVersion,
             _modsProvider.ModForAnotherGame,
-            _modsProvider.ModThatRequiredFeature
+            _modsProvider.ModThatRequiresFeature
         }.ToDictionary(x => x.AddonId, x => (IAddon)x);
 
         Raze raze = new();
@@ -318,7 +368,7 @@ public sealed class BloodCmdArgumentsTests
             _modsProvider.DependentModWithCompatibleVersion,
             _modsProvider.DependentModWithIncompatibleVersion,
             _modsProvider.ModForAnotherGame,
-            _modsProvider.ModThatRequiredFeature,
+            _modsProvider.ModThatRequiresFeature,
             _modsProvider.MultipleDependenciesMod
         }.ToDictionary(x => x.AddonId, x => (IAddon)x);
 
@@ -351,7 +401,7 @@ public sealed class BloodCmdArgumentsTests
             _modsProvider.DependentModWithCompatibleVersion,
             _modsProvider.DependentModWithIncompatibleVersion,
             _modsProvider.ModForAnotherGame,
-            _modsProvider.ModThatRequiredFeature
+            _modsProvider.ModThatRequiresFeature
         }.ToDictionary(x => x.AddonId, x => (IAddon)x);
 
         NBlood nblood = new();
@@ -434,7 +484,7 @@ public sealed class BloodCmdArgumentsTests
             _modsProvider.DependentModWithCompatibleVersion,
             _modsProvider.DependentModWithIncompatibleVersion,
             _modsProvider.ModForAnotherGame,
-            _modsProvider.ModThatRequiredFeature
+            _modsProvider.ModThatRequiresFeature
         }.ToDictionary(x => x.AddonId, x => (IAddon)x);
 
         NotBlood notblood = new();
@@ -466,7 +516,7 @@ public sealed class BloodCmdArgumentsTests
             _modsProvider.DependentModWithCompatibleVersion,
             _modsProvider.DependentModWithIncompatibleVersion,
             _modsProvider.ModForAnotherGame,
-            _modsProvider.ModThatRequiredFeature
+            _modsProvider.ModThatRequiresFeature
         }.ToDictionary(x => x.AddonId, x => (IAddon)x);
 
         NotBlood notblood = new();
@@ -524,6 +574,60 @@ public sealed class BloodCmdArgumentsTests
 
         var args = notblood.GetStartGameArgs(_bloodGame, _bloodTcExeOverride, [], true, true, 2);
         var expected = @" -usecwd -j ""D:\Games\Blood"" -h ""a"" -ini ""TC.INI"" -rff ""TC.RFF"" -snd ""TC.SND"" -s 2 -quick -nosetup";
+
+        if (OperatingSystem.IsLinux())
+        {
+            args = args.Replace('\\', Path.DirectorySeparatorChar);
+            expected = expected.Replace('\\', Path.DirectorySeparatorChar);
+        }
+
+        Assert.Equal(expected, args);
+    }
+
+    [Fact]
+    public void NBloodIncompatibleWithEnabledModTest()
+    {
+        var mods = new List<AutoloadModEntity>() {
+            _modsProvider.EnabledMod,
+            _modsProvider.ModThatIncompatibleWithAddon
+        }.ToDictionary(x => x.AddonId, x => (IAddon)x);
+
+        NotBlood notblood = new();
+
+        var args = notblood.GetStartGameArgs(_bloodGame, _bloodTcIncompatibleWithEnabledMod, mods, true, true, 2);
+        var expected = @$" -g ""mod_incompatible_with_addon.zip"" -j ""{Directory.GetCurrentDirectory()}\Data\Addons\Blood\Mods"" -usecwd -j ""D:\Games\Blood"" -h ""a"" -ini ""TC.INI"" -game_dir ""D:\Games\Blood\blood_tc_folder"" -rff ""TC.RFF"" -snd ""TC.SND"" -s 2 -quick -nosetup";
+
+        if (OperatingSystem.IsLinux())
+        {
+            args = args.Replace('\\', Path.DirectorySeparatorChar);
+            expected = expected.Replace('\\', Path.DirectorySeparatorChar);
+        }
+
+        Assert.Equal(expected, args);
+    }
+
+    [Fact]
+    public void NBloodIncompatibleWithEverythingTest()
+    {
+        var mods = new List<AutoloadModEntity>() {
+            _modsProvider.EnabledMod,
+            _modsProvider.DisabledMod,
+            _modsProvider.ModThatRequiresOfficialAddon,
+            _modsProvider.ModThatIncompatibleWithAddon,
+            _modsProvider.IncompatibleMod,
+            _modsProvider.IncompatibleModWithIncompatibleVersion,
+            _modsProvider.IncompatibleModWithCompatibleVersion,
+            _modsProvider.DependentMod,
+            _modsProvider.DependentModWithCompatibleVersion,
+            _modsProvider.DependentModWithIncompatibleVersion,
+            _modsProvider.ModForAnotherGame,
+            _modsProvider.ModThatRequiresFeature
+        }.ToDictionary(x => x.AddonId, x => (IAddon)x);
+
+        NotBlood notblood = new();
+
+        var args = notblood.GetStartGameArgs(_bloodGame, _bloodTcIncompatibleWithEverything, mods, true, true, 2);
+        var expected = @$" -usecwd -j ""D:\Games\Blood"" -h ""a"" -ini ""TC.INI"" -game_dir ""D:\Games\Blood\blood_tc_folder"" -rff ""TC.RFF"" -snd ""TC.SND"" -s 2 -quick -nosetup";
 
         if (OperatingSystem.IsLinux())
         {

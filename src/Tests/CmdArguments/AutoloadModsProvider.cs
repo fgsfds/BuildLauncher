@@ -334,7 +334,7 @@ internal sealed class AutoloadModsProvider
         Executables = null
     };
 
-    public AutoloadModEntity ModThatRequiredFeature => new()
+    public AutoloadModEntity ModThatRequiresFeature => new()
     {
         AddonId = new("eduke32mod", "1.0"),
         Type = AddonTypeEnum.Mod,

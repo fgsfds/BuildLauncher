@@ -66,7 +66,7 @@ public sealed class DukeLooseMapCmdArgumentsTests
             _modsProvider.DependentModWithCompatibleVersion,
             _modsProvider.DependentModWithIncompatibleVersion,
             _modsProvider.ModForAnotherGame,
-            _modsProvider.ModThatRequiredFeature
+            _modsProvider.ModThatRequiresFeature
         }.ToDictionary(x => x.AddonId, x => (IAddon)x);
 
         Raze raze = new();
@@ -127,7 +127,7 @@ public sealed class DukeLooseMapCmdArgumentsTests
             _modsProvider.DependentModWithCompatibleVersion,
             _modsProvider.DependentModWithIncompatibleVersion,
             _modsProvider.ModForAnotherGame,
-            _modsProvider.ModThatRequiredFeature
+            _modsProvider.ModThatRequiresFeature
         }.ToDictionary(x => x.AddonId, x => (IAddon)x);
 
         EDuke32 eduke32 = new();
@@ -180,7 +180,7 @@ public sealed class DukeLooseMapCmdArgumentsTests
             _modsProvider.DependentModWithCompatibleVersion,
             _modsProvider.DependentModWithIncompatibleVersion,
             _modsProvider.ModForAnotherGame,
-            _modsProvider.ModThatRequiredFeature
+            _modsProvider.ModThatRequiresFeature
         }.ToDictionary(x => x.AddonId, x => (IAddon)x);
 
         RedNukem redNukem = new();
