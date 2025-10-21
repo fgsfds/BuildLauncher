@@ -32,9 +32,9 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
     private readonly Dictionary<AddonId, IAddon> _mapsCache = [];
     private readonly Dictionary<AddonId, IAddon> _modsCache = [];
 
-    private static readonly SemaphoreSlim _semaphore = new(1);
+    private readonly SemaphoreSlim _semaphore = new(1);
 
-    private bool _isCacheUpdating;
+    private volatile bool _isCacheUpdating;
 
     public event AddonChanged? AddonsChangedEvent;
 
@@ -131,104 +131,98 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
 
         try
         {
-            await Task.Run(async () =>
+            if (_campaignsCache.Count == 0)
             {
-                if (_campaignsCache.Count == 0)
+                //campaigns
+                List<string> filesTcs = [.. Directory.GetFiles(_game.CampaignsFolderPath, "*.zip")];
+
+                var dirs = Directory.GetDirectories(_game.CampaignsFolderPath, "*", SearchOption.TopDirectoryOnly);
+
+                foreach (var dir in dirs)
                 {
-                    //campaigns
-                    List<string> filesTcs = [.. Directory.GetFiles(_game.CampaignsFolderPath, "*.zip")];
+                    var addonJsons = Directory.GetFiles(dir, "addon*.json");
 
-                    var dirs = Directory.GetDirectories(_game.CampaignsFolderPath, "*", SearchOption.TopDirectoryOnly);
-
-                    foreach (var dir in dirs)
+                    if (addonJsons.Length > 0)
                     {
-                        var addonJsons = Directory.GetFiles(dir, "addon*.json");
-
-                        if (addonJsons.Length > 0)
-                        {
-                            filesTcs.AddRange(addonJsons);
-                        }
+                        filesTcs.AddRange(addonJsons);
                     }
+                }
 
-                    var tcs = await GetAddonsFromFilesAsync(filesTcs).ConfigureAwait(false);
+                var tcs = await GetAddonsFromFilesAsync(filesTcs).ConfigureAwait(false);
 
-                    foreach (var wrongFile in tcs.Where(x => x.Value.Type is not AddonTypeEnum.TC))
+                foreach (var wrongFile in tcs.Where(x => x.Value.Type is not AddonTypeEnum.TC))
+                {
+                    _logger.LogError($"File {wrongFile.Value.FileName} of type {wrongFile.Value.Type} is in the Campaigns folder");
+                }
+
+                _campaignsCache.AddRange(tcs);
+
+                //grpinfo
+                var grpInfoAddons = GrpInfoProvider.GetAddonsFromGrpInfo(_game.CampaignsFolderPath);
+
+                if (grpInfoAddons?.Count > 0)
+                {
+                    foreach (var addon in grpInfoAddons)
                     {
-                        _logger.LogError($"File {wrongFile.Value.FileName} of type {wrongFile.Value.Type} is in the Campaigns folder");
-                    }
+                        var result = _campaignsCache.TryAdd(new(addon.AddonId.Id, null), addon);
 
-                    _campaignsCache.AddRange(tcs);
-
-                    //grpinfo
-                    var grpInfoAddons = GrpInfoProvider.GetAddonsFromGrpInfo(_game.CampaignsFolderPath);
-
-                    if (grpInfoAddons?.Count > 0)
-                    {
-                        foreach (var addon in grpInfoAddons)
+                        if (!result)
                         {
-                            var result = _campaignsCache.TryAdd(new(addon.AddonId.Id, null), addon);
-
-                            if (!result)
-                            {
-                                _logger.LogError($"Failed to add {addon.FileName} to the campaigns list.");
-                            }
+                            _logger.LogError($"Failed to add {addon.FileName} to the campaigns list.");
                         }
                     }
                 }
+            }
 
 
-                if (_mapsCache.Count == 0)
+            if (_mapsCache.Count == 0)
+            {
+                //maps
+                var filesMaps = Directory.GetFiles(_game.MapsFolderPath).Where(static x => x.EndsWith(".zip", StringComparison.OrdinalIgnoreCase) || x.EndsWith(".map", StringComparison.OrdinalIgnoreCase));
+                var maps = await GetAddonsFromFilesAsync(filesMaps).ConfigureAwait(false);
+
+                foreach (var wrongFile in maps.Where(x => x.Value.Type is not AddonTypeEnum.Map))
                 {
-                    //maps
-                    var filesMaps = Directory.GetFiles(_game.MapsFolderPath).Where(static x => x.EndsWith(".zip", StringComparison.OrdinalIgnoreCase) || x.EndsWith(".map", StringComparison.OrdinalIgnoreCase));
-                    var maps = await GetAddonsFromFilesAsync(filesMaps).ConfigureAwait(false);
-
-                    foreach (var wrongFile in maps.Where(x => x.Value.Type is not AddonTypeEnum.Map))
-                    {
-                        _logger.LogError($"File {wrongFile.Value.FileName} of type {wrongFile.Value.Type} is in the Maps folder");
-                    }
-
-                    _mapsCache.AddRange(maps);
+                    _logger.LogError($"File {wrongFile.Value.FileName} of type {wrongFile.Value.Type} is in the Maps folder");
                 }
 
+                _mapsCache.AddRange(maps);
+            }
 
-                if (_modsCache.Count == 0)
+
+            if (_modsCache.Count == 0)
+            {
+                //mods
+                var filesMods = Directory.GetFiles(_game.ModsFolderPath, "*.zip");
+                var mods = await GetAddonsFromFilesAsync(filesMods).ConfigureAwait(false);
+
+                foreach (var wrongFile in mods.Where(x => x.Value.Type is not AddonTypeEnum.Mod))
                 {
-                    //mods
-                    var filesMods = Directory.GetFiles(_game.ModsFolderPath, "*.zip");
-                    var mods = await GetAddonsFromFilesAsync(filesMods).ConfigureAwait(false);
-
-                    foreach (var wrongFile in mods.Where(x => x.Value.Type is not AddonTypeEnum.Mod))
-                    {
-                        _logger.LogError($"File {wrongFile.Value.FileName} of type {wrongFile.Value.Type} is in the Mods folder");
-                    }
-
-                    _modsCache.AddRange(mods);
+                    _logger.LogError($"File {wrongFile.Value.FileName} of type {wrongFile.Value.Type} is in the Mods folder");
                 }
 
+                _modsCache.AddRange(mods);
+            }
 
-                //enabling/disabling addons
-                foreach (var mod in _modsCache)
+
+            //enabling/disabling addons
+            foreach (var mod in _modsCache)
+            {
+                if (mod.Value is not AutoloadModEntity autoloadMod)
                 {
-                    if (mod.Value is not AutoloadModEntity autoloadMod)
-                    {
-                        _logger.LogError($"=== Error while enabling/disabling addon {mod.Key.Id}");
-                        continue;
-                    }
-
-                    if (autoloadMod.IsEnabled)
-                    {
-                        EnableAddon(mod.Key);
-                    }
-                    else if (!autoloadMod.IsEnabled)
-                    {
-                        DisableAddon(mod.Key);
-                    }
+                    _logger.LogError($"=== Error while enabling/disabling addon {mod.Key.Id}");
+                    continue;
                 }
 
-            }).WaitAsync(CancellationToken.None).ConfigureAwait(false);
-
-            AddonsChangedEvent?.Invoke(_game, addonType);
+                if (autoloadMod.IsEnabled)
+                {
+                    EnableAddon(mod.Key);
+                }
+                else if (!autoloadMod.IsEnabled)
+                {
+                    DisableAddon(mod.Key);
+                }
+            }
         }
         catch (Exception ex)
         {
@@ -241,6 +235,8 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
             Guard.IsNotNull(_campaignsCache);
             Guard.IsNotNull(_mapsCache);
             Guard.IsNotNull(_modsCache);
+
+            AddonsChangedEvent?.Invoke(_game, addonType);
         }
     }
 

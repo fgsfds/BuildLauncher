@@ -18,7 +18,7 @@
         ExtendClientAreaToDecorationsHint="True"
         Background="{DynamicResource Background}"
         ClipToBounds="True"
-        Closing="OnWindowClosing">
+        Opened="OnWindowOpened">
 
     <Window.Resources>
         <ResourceDictionary>
@@ -37,7 +37,7 @@
             <TabControl Grid.Row="1" Margin="5" TabStripPlacement="Left">
 
                 <!--Duke 3D-->
-                <TabItem Name="DukeTab" IsEnabled="{Binding IsDukeTabEnabled}" >
+                <TabItem x:Name="DukeTab" IsEnabled="{Binding IsDukeTabEnabled}" >
 
                     <TabItem.Header>
                         <StackPanel Orientation="Horizontal">
@@ -51,7 +51,7 @@
                 </TabItem>
 
                 <!--Blood-->
-                <TabItem Name="BloodTab" IsEnabled="{Binding IsBloodTabEnabled}">
+                <TabItem x:Name="BloodTab" IsEnabled="{Binding IsBloodTabEnabled}">
 
                     <TabItem.Header>
                         <StackPanel Orientation="Horizontal">
@@ -65,7 +65,7 @@
                 </TabItem>
 
                 <!--Wang-->
-                <TabItem Name="WangTab" IsEnabled="{Binding IsWangTabEnabled}">
+                <TabItem x:Name="WangTab" IsEnabled="{Binding IsWangTabEnabled}">
 
                     <TabItem.Header>
                         <StackPanel Orientation="Horizontal">
@@ -79,7 +79,7 @@
                 </TabItem>
 
                 <!--Fury-->
-                <TabItem Name="FuryTab" IsEnabled="{Binding IsFuryTabEnabled}">
+                <TabItem x:Name="FuryTab" IsEnabled="{Binding IsFuryTabEnabled}">
 
                     <TabItem.Header>
                         <StackPanel Orientation="Horizontal">
@@ -93,7 +93,7 @@
                 </TabItem>
 
                 <!--RR-->
-                <TabItem Name="RedneckTab" IsEnabled="{Binding IsRedneckTabEnabled}">
+                <TabItem x:Name="RedneckTab" IsEnabled="{Binding IsRedneckTabEnabled}">
 
                     <TabItem.Header>
                         <StackPanel Orientation="Horizontal">
@@ -107,7 +107,7 @@
                 </TabItem>
 
                 <!--PS-->
-                <TabItem Name="SlaveTab" IsEnabled="{Binding IsSlaveTabEnabled}">
+                <TabItem x:Name="SlaveTab" IsEnabled="{Binding IsSlaveTabEnabled}">
 
                     <TabItem.Header>
                         <StackPanel Orientation="Horizontal">
@@ -121,7 +121,7 @@
                 </TabItem>
 
                 <!--NAM-->
-                <TabItem Name="NamTab" IsEnabled="{Binding IsNamTabEnabled}">
+                <TabItem x:Name="NamTab" IsEnabled="{Binding IsNamTabEnabled}">
 
                     <TabItem.Header>
                         <StackPanel Orientation="Horizontal">
@@ -135,7 +135,7 @@
                 </TabItem>
 
                 <!--WW2-->
-                <TabItem Name="WW2GITab" IsEnabled="{Binding IsWW2GITabEnabled}">
+                <TabItem x:Name="WW2GITab" IsEnabled="{Binding IsWW2GITabEnabled}">
 
                     <TabItem.Header>
                         <StackPanel Orientation="Horizontal">
@@ -149,7 +149,7 @@
                 </TabItem>
 
                 <!--Witchaven-->
-                <TabItem Name="WitchavenTab" IsEnabled="{Binding IsWitchavenTabEnabled}">
+                <TabItem x:Name="WitchavenTab" IsEnabled="{Binding IsWitchavenTabEnabled}">
 
                     <TabItem.Header>
                         <StackPanel Orientation="Horizontal">
@@ -163,7 +163,7 @@
                 </TabItem>
 
                 <!--TekWar-->
-                <TabItem Name="TekWarTab" IsEnabled="{Binding IsTekWarTabEnabled}">
+                <TabItem x:Name="TekWarTab" IsEnabled="{Binding IsTekWarTabEnabled}">
 
                     <TabItem.Header>
                         <StackPanel Orientation="Horizontal">
@@ -177,7 +177,7 @@
                 </TabItem>
 
                 <!--Standalone-->
-                <TabItem Name="StandaloneTab" IsEnabled="True">
+                <TabItem x:Name="StandaloneTab" IsEnabled="True">
 
                     <TabItem.Header>
                         <TextBlock Text="Standalone" Margin="5" />
@@ -190,7 +190,7 @@
                 <TabItem IsEnabled="False" Header=""/>
 
                 <!--Ports-->
-                <TabItem Name="PortsTab" Margin="5">
+                <TabItem x:Name="PortsTab" Margin="5">
 
                     <TabItem.Header>
                         <StackPanel Orientation="Horizontal">
@@ -203,19 +203,19 @@
                 </TabItem>
 
                 <!--Dev-->
-                <TabItem Name="DevTab" Header="Dev" Margin="5" >
+                <TabItem x:Name="DevTab" Header="Dev" Margin="5" >
                     <pages:DevPage DataContext="{Binding DevPageViewModel}"/>
                 </TabItem>
 
                 <TabItem IsEnabled="False" Header=""/>
 
                 <!--Settings-->
-                <TabItem Name="SettingsTab" Header="Settings" Margin="5" >
+                <TabItem x:Name="SettingsTab" IsSelected="True" Header="Settings" Margin="5" >
                     <pages:SettingsPage DataContext="{Binding SettingsPageViewModel}"/>
                 </TabItem>
 
                 <!--About-->
-                <TabItem Name="AboutTab" Margin="5">
+                <TabItem x:Name="AboutTab" Margin="5">
 
                     <TabItem.Header>
                         <StackPanel Orientation="Horizontal">

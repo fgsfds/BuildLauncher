@@ -2,15 +2,20 @@
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
+using Games.Providers;
 
 namespace Avalonia.Desktop;
 
 public sealed partial class MainWindow : Window, IDisposable
 {
+    private readonly InstalledGamesProvider _installedGamesProvider;
     private readonly Stream? _overlayStream;
+    private readonly Bitmap? _overlayBitmap;
 
-    public MainWindow()
+    public MainWindow(InstalledGamesProvider installedGamesProvider)
     {
+        ArgumentNullException.ThrowIfNull(installedGamesProvider);
+        _installedGamesProvider = installedGamesProvider;
 
 #if DEBUG
         this.AttachDevTools();
@@ -22,16 +27,57 @@ public sealed partial class MainWindow : Window, IDisposable
 
         var uri = new Uri("avares://BuildLauncher/Assets/overlay.png");
         _overlayStream = AssetLoader.Open(uri);
-        Resources["HighlightOverlayBitmap"] = new Bitmap(_overlayStream);
+        _overlayBitmap = new Bitmap(_overlayStream);
+        Resources["HighlightOverlayBitmap"] = _overlayBitmap;
     }
 
     public void Dispose()
     {
+        _overlayBitmap?.Dispose();
         _overlayStream?.Dispose();
     }
 
-    private void OnWindowClosing(object? sender, Avalonia.Controls.WindowClosingEventArgs e)
+    private void OnWindowOpened(object? sender, EventArgs e)
     {
-        _overlayStream?.Dispose();
+        if (_installedGamesProvider.IsDukeInstalled)
+        {
+            DukeTab.IsSelected = true;
+        }
+        else if (_installedGamesProvider.IsBloodInstalled)
+        {
+            BloodTab.IsSelected = true;
+        }
+        else if (_installedGamesProvider.IsWangInstalled)
+        {
+            WangTab.IsSelected = true;
+        }
+        else if (_installedGamesProvider.IsFuryInstalled)
+        {
+            FuryTab.IsSelected = true;
+        }
+        else if (_installedGamesProvider.IsRedneckInstalled)
+        {
+            RedneckTab.IsSelected = true;
+        }
+        else if (_installedGamesProvider.IsSlaveInstalled)
+        {
+            SlaveTab.IsSelected = true;
+        }
+        else if (_installedGamesProvider.IsNamInstalled)
+        {
+            NamTab.IsSelected = true;
+        }
+        else if (_installedGamesProvider.IsWW2GIInstalled)
+        {
+            WW2GITab.IsSelected = true;
+        }
+        else if (_installedGamesProvider.IsWitchavenInstalled)
+        {
+            WitchavenTab.IsSelected = true;
+        }
+        else if (_installedGamesProvider.IsTekWarInstalled)
+        {
+            TekWarTab.IsSelected = true;
+        }
     }
 }

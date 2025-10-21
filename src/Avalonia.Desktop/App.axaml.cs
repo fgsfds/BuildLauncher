@@ -12,6 +12,7 @@ using Common.Client.Helpers;
 using Common.Client.Interfaces;
 using CommunityToolkit.Diagnostics;
 using Database.Client;
+using Games.Providers;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -51,6 +52,7 @@ public sealed class App : Application
         var viewLocator = BindingsManager.Provider.GetRequiredService<ViewLocator>();
         var vmFactory = BindingsManager.Provider.GetRequiredService<ViewModelsFactory>();
         var logger = BindingsManager.Provider.GetRequiredService<ILogger>();
+        var installedGamesProvider = BindingsManager.Provider.GetRequiredService<InstalledGamesProvider>();
 
         SetTheme(config.Theme);
 
@@ -60,7 +62,7 @@ public sealed class App : Application
         _app.DataTemplates.Add(viewLocator);
         _app.Resources.Add(new("CachedHashToBitmapConverter", new CachedHashToBitmapConverter(bitmapsCache)));
 
-        using MainWindow mainWindow = new();
+        using MainWindow mainWindow = new(installedGamesProvider);
 
         lifetime.MainWindow = mainWindow;
         lifetime.MainWindow.DataContext = vmFactory.GetMainWindowViewModel();
