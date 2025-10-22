@@ -46,21 +46,39 @@ jobs:
           echo "version_dotted=$withDots"   >> $env:GITHUB_OUTPUT
           echo "version_nodots=$withoutDots" >> $env:GITHUB_OUTPUT
 
+      - name: Upload unsigned Windows artifact
+        id: upload-unsigned-artifact
+        uses: actions/upload-artifact@v4
+        with: 
+          path: publish/BuildLauncher.exe
+
+      - name: Signing
+        uses: signpath/github-action-submit-signing-request@v1
+        with:
+          api-token: '${{ secrets.SIGNPATH_API_TOKEN }}'
+          organization-id: '645943cb-48f7-4758-a33d-7aad2a18e1a9'
+          project-slug: 'BuildLauncher'
+          signing-policy-slug: 'test-signing'
+          github-artifact-id: '${{ steps.upload-unsigned-artifact.outputs.artifact-id }}'
+          wait-for-completion: true
+          output-artifact-directory: 'publish/signed/'
+          artifact-configuration-slug: 'zip'
+
       - name: Zip Windows build
         shell: pwsh
         run: |
-          ls .\publish\
+          ls .\publish\signed\
           $v = "${{ steps.get_version.outputs.version_nodots }}"
-          $dest = Join-Path $PWD "publish\buildlauncher_${v}_win-x64.zip"
+          $dest = Join-Path $PWD "publish\signed\buildlauncher_${v}_win-x64.zip"
           if (Test-Path $dest) { Remove-Item $dest }
-          Compress-Archive -Path ".\publish\BuildLauncher.exe" -DestinationPath $dest
+          Compress-Archive -Path ".\publish\signed\BuildLauncher.exe" -DestinationPath $dest
           Write-Host "Created $dest"
 
-      - name: Upload Windows artifact
+      - name: Upload signed Windows artifact
         uses: actions/upload-artifact@v4
         with:
           name: buildlauncher-win
-          path: publish/buildlauncher_${{ steps.get_version.outputs.version_nodots }}_win-x64.zip
+          path: publish/signed/buildlauncher_${{ steps.get_version.outputs.version_nodots }}_win-x64.zip
 
   release:
     name: Create release
@@ -73,7 +91,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: buildlauncher-win
-          path: publish
+          path: publish/signed
 
       - name: Create release (and upload assets)
         uses: ncipollo/release-action@v1
