@@ -1613,6 +1613,78 @@
       "Description": "https://www.moddb.com/mods/decay2\r\n\r\nDECAY is a game based on Duke Nukem 3D powered by EDuke32. It\u0027s a horror first person shooter surrounding the events of a zombie apocalypse and aftermath.",
       "Author": "Thought Process",
       "UpdateDate": "2025-10-19T13:42:43.0046736Z"
+    },
+    {
+      "Id": "duke3d-rendezvous",
+      "AddonType": "TC",
+      "Game": "Duke3D",
+      "DownloadUrl": "http://176.222.52.233:9000/buildlauncher/Duke3D/Campaigns/duke3d-rendezvous_v1_0.zip",
+      "Title": "Rendezvous",
+      "Version": "1.0",
+      "FileSize": 833863,
+      "Description": "Unfinished episode with 3 quite complex and long levels (20-40min playtime each). It starts out with some caverns and underground bases, then it continues into some canyons before you end up in a huge city. You\u0027ll be amazed by the impressive amount of details, strong shading and elaborate sector work the author used here. The last map also uses some custom art which improves visuals even more.\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/",
+      "Author": "Henri \u0027RazorZ\u0027 K",
+      "UpdateDate": "2025-10-23T12:02:07.4082231Z"
+    },
+    {
+      "Id": "duke3d-red-series",
+      "AddonType": "TC",
+      "Game": "Duke3D",
+      "DownloadUrl": "http://176.222.52.233:9000/buildlauncher/Duke3D/Campaigns/duke3d-red-series_v1_0.zip",
+      "Title": "Red Series",
+      "Version": "1.0",
+      "FileSize": 6272500,
+      "Description": "Starting in the desert, Duke must enter a liner, sink it and stop an alien army from invading Earth en masse. Very atmospheric, especially \u0022Red3\u0022 which is kind of spooky and tries to keep you on the edge with darkness and creepy Protector Drone sounds.\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/",
+      "Author": "Merlijn van Oostrum",
+      "UpdateDate": "2025-10-23T12:02:07.4181905Z"
+    },
+    {
+      "Id": "duke3d-pray-your-prayers-2000",
+      "AddonType": "TC",
+      "Game": "Duke3D",
+      "DownloadUrl": "http://176.222.52.233:9000/buildlauncher/Duke3D/Campaigns/duke3d-pray-your-prayers-2000_v1_0.zip",
+      "Title": "Pray Your Prayers 2000",
+      "Version": "1.0",
+      "FileSize": 4435971,
+      "Description": "A couple of years after saving Earth from aliens, Duke Nukem joined the Earth Defense Forces as a trainer, maintaining his typical routine of gyms and nightclubs.\n\nMeanwhile, alien survivors from the last invasion have been secretly rebuilding their strength and numbers underground, swearing revenge on Earth and, specifically, on Duke. They established bases in abandoned military facilities worldwide and developed new, powerful weaponry.\n\nTwo weeks ago, the EDF noticed activity at these facilities and lost contact with dispatched agents. Suspecting a new invasion, the EDF contacted Duke, who, furious, accepted the mission on the sole condition that \u0022no aliens would be left alive.\u0022\r\n\r\n\u0022This is the last time,\u0022 said Duke, \u0022the friggin\u0027 last time those aliens are gonna piss me off.\u0022\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/",
+      "Author": "Daniel \u0027Shambler\u0027 Ewald et al.",
+      "UpdateDate": "2025-10-23T12:02:07.4220902Z"
+    },
+    {
+      "Id": "duke3d-platoon-tc",
+      "AddonType": "TC",
+      "Game": "Duke3D",
+      "DownloadUrl": "http://176.222.52.233:9000/buildlauncher/Duke3D/Campaigns/duke3d-platoon-tc_v1_0.zip",
+      "Title": "Platoon TC",
+      "Version": "1.0",
+      "FileSize": 4843966,
+      "Description": "Platoon is a total conversion (TC) add-on for Duke Nukem 3D v1.3D. The TC takes place in the Vietnam War. You are the lieutenant of the 2nd Platoon, Company B. Your tour of duty takes you from the fierce firefights in the jungle to the dark and booby-trapped underground tunnel systems.\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/",
+      "Author": "The TNT Team",
+      "UpdateDate": "2025-10-23T12:02:07.4247431Z"
+    },
+    {
+      "Id": "duke3d-outpost-x",
+      "AddonType": "TC",
+      "Game": "Duke3D",
+      "DownloadUrl": "http://176.222.52.233:9000/buildlauncher/Duke3D/Campaigns/duke3d-outpost-x_v1_0.zip",
+      "Title": "Outpost X",
+      "Version": "1.0",
+      "FileSize": 5855477,
+      "Description": "Briefing: At the end of the previous map (Space Map Number DUNNO) you boarded a teleporter that has now taken you down to the planet below. You have teleported to a valley near a small city where you should find answers and discover your goal. In the way however is Outpost X, a hi-tech base employed by the aliens. Nobody is sure what exactly is being done there but it is not your mission to find out: You must enter Outpost X through the valley and exit it at the other side.\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/",
+      "Author": "Cedric \u0027Sang\u0027 Haegeman",
+      "UpdateDate": "2025-10-23T12:02:07.4274771Z"
+    },
+    {
+      "Id": "duke3d-operation-xenocide",
+      "AddonType": "TC",
+      "Game": "Duke3D",
+      "DownloadUrl": "http://176.222.52.233:9000/buildlauncher/Duke3D/Campaigns/duke3d-operation-xenocide_v1_0.zip",
+      "Title": "Operation Xenocide",
+      "Version": "1.0",
+      "FileSize": 287034,
+      "Description": "2-level mini episode in space with about 30 minutes of playtime. Second level is more sophisticated than the first, featuring more eye candy and better design. Pay attention to switches on the opposite side of switch panels and remember that you will need to use the jetpack, especially in the second level (to get the keycards).\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/",
+      "Author": "Brian Marchman",
+      "UpdateDate": "2025-10-23T12:02:07.4300746Z"
     }
   ],
   "Blood": [
@@ -1967,18 +2039,6 @@
       "UpdateDate": "2024-11-22T14:13:00Z"
     },
     {
-      "Id": "blood-bloody-pulp-fiction",
-      "AddonType": "TC",
-      "Game": "Blood",
-      "DownloadUrl": "http://176.222.52.233:9000/buildlauncher/Blood/Campaigns/blood-bloody-pulp-fiction_v1_3.zip",
-      "Title": "Bloody Pulp Fiction",
-      "Version": "1.3",
-      "FileSize": 120287289,
-      "Description": "https://bpf.deathmask.net/\r\n\r\nDeadland awaits Caleb as he is thrust into action once again by the determined Cabal who are stopping at nothing to kill, enslave, pillage, ravage, and bring forth unholy darkness in it\u0027s wake.\r\nCaleb, now in the present, wants nothing more than to avoid the Cabal and forget any ties to Tchernobog, but the world is Decaying as the Remnants of the Cabal spread through out the globe like a Cancer.\r\n\r\nExperience up to 18 levels of fast paced, adrenaline-soaked, bloodthirsty action in some of the most detailed and frantic maps ever made for Blood. Experience snowy cities, malls, dockside ports, graveyards, haunting forests, gigantic sea-faring ships, old forgotten towns along Route66, torture chambers, a dilapidated carnival site, Cabal strongholds, and much more.",
-      "Author": "BPF Team",
-      "UpdateDate": "2024-10-26T20:22:18.079687Z"
-    },
-    {
       "Id": "blood-no-hope-in-sight",
       "AddonType": "TC",
       "Game": "Blood",
@@ -2084,6 +2144,18 @@
       "Description": "The first community Map Jam by The Blood Discord Channel. Bloodbasket includes four distinctive and varied maps full of blood, dread and secrets! Caleb will have to fight his way through office cubicles, haunting forests, lava caves and come face to face with a big ass spider!",
       "Author": "daMann, Damien Azreal, BloodyTom, Matthan",
       "UpdateDate": "2025-05-13T04:30:46.5863362Z"
+    },
+    {
+      "Id": "blood-bloody-pulp-fiction",
+      "AddonType": "TC",
+      "Game": "Blood",
+      "DownloadUrl": "http://176.222.52.233:9000/buildlauncher/Blood/Campaigns/blood-bloody-pulp-fiction_v1_3_1.zip",
+      "Title": "Bloody Pulp Fiction",
+      "Version": "1.3.1",
+      "FileSize": 117755433,
+      "Description": "https://bpf.deathmask.net/\r\n\r\nDeadland awaits Caleb as he is thrust into action once again by the determined Cabal who are stopping at nothing to kill, enslave, pillage, ravage, and bring forth unholy darkness in it\u0027s wake.\r\nCaleb, now in the present, wants nothing more than to avoid the Cabal and forget any ties to Tchernobog, but the world is Decaying as the Remnants of the Cabal spread through out the globe like a Cancer.\r\n\r\nExperience up to 18 levels of fast paced, adrenaline-soaked, bloodthirsty action in some of the most detailed and frantic maps ever made for Blood. Experience snowy cities, malls, dockside ports, graveyards, haunting forests, gigantic sea-faring ships, old forgotten towns along Route66, torture chambers, a dilapidated carnival site, Cabal strongholds, and much more.",
+      "Author": "BPF Team",
+      "UpdateDate": "2025-10-23T12:02:12.1704295Z"
     }
   ],
   "Wang": [
