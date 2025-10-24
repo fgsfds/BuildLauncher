@@ -1919,18 +1919,6 @@
       "UpdateDate": "2024-11-21T19:45:00Z"
     },
     {
-      "Id": "blood-fotd",
-      "AddonType": "TC",
-      "Game": "Blood",
-      "DownloadUrl": "http://176.222.52.233:9000/buildlauncher/Blood/Campaigns/blood-fotd_v1_1_1.zip",
-      "Title": "Fate of the Damned",
-      "Version": "1.1.1",
-      "FileSize": 119168013,
-      "Description": "https://www.moddb.com/mods/fate-of-the-damned\r\n\r\nFate of the Damned is a meticulously crafted custom campaign for BLOOD which aims to speculate and explore another shadowed path that Caleb might\u0027ve undertaken. While taking care to never stray far from the gameplay formula that made BLOOD so gripping, the campaign will see Caleb journey through new environments that he has not seen before. Gruesome new discoveries await as Caleb tears through hordes of the undead, and nothing is left unscathed in his quest for vengeance.The version 1.1 release contains the following features:\r\n\r\n- 2 episodes consisting of 18 maps total, which fully support Single Player, Co-operative, BloodBath and Capture the Flag across all difficulty settings.\r\n\r\n- A series of exhilarating, all new, low resolution cutscenes which tell the campaign\u0027s story.\r\n\r\n- Lots of new, chilling music as an optional extra.\r\n\r\n- A splash of custom art that is used sparingly.\r\n\r\n- A large amount of fiendish secrets waiting to be discovered.\r\n\r\n- Challenging and occasionally downright unfair encounters with BLOOD\u0027s monsters, unsuitable for those whose faith is weak.\r\n\r\n- Support for the NBlood and BloodGDX ports - to a point.",
-      "Author": "Daedalus",
-      "UpdateDate": "2024-05-30T00:00:00Z"
-    },
-    {
       "Id": "blood-cwhhrot",
       "AddonType": "TC",
       "Game": "Blood",
@@ -2156,6 +2144,18 @@
       "Description": "https://bpf.deathmask.net/\r\n\r\nDeadland awaits Caleb as he is thrust into action once again by the determined Cabal who are stopping at nothing to kill, enslave, pillage, ravage, and bring forth unholy darkness in it\u0027s wake.\r\nCaleb, now in the present, wants nothing more than to avoid the Cabal and forget any ties to Tchernobog, but the world is Decaying as the Remnants of the Cabal spread through out the globe like a Cancer.\r\n\r\nExperience up to 18 levels of fast paced, adrenaline-soaked, bloodthirsty action in some of the most detailed and frantic maps ever made for Blood. Experience snowy cities, malls, dockside ports, graveyards, haunting forests, gigantic sea-faring ships, old forgotten towns along Route66, torture chambers, a dilapidated carnival site, Cabal strongholds, and much more.",
       "Author": "BPF Team",
       "UpdateDate": "2025-10-23T12:02:12.1704295Z"
+    },
+    {
+      "Id": "blood-fotd",
+      "AddonType": "TC",
+      "Game": "Blood",
+      "DownloadUrl": "http://176.222.52.233:9000/buildlauncher/Blood/Campaigns/blood-fotd_v1_1_2.zip",
+      "Title": "Fate of the Damned",
+      "Version": "1.1.2",
+      "FileSize": 119745824,
+      "Description": "https://www.moddb.com/mods/fate-of-the-damned\r\n\r\nFate of the Damned is a meticulously crafted custom campaign for BLOOD which aims to speculate and explore another shadowed path that Caleb might\u0027ve undertaken. While taking care to never stray far from the gameplay formula that made BLOOD so gripping, the campaign will see Caleb journey through new environments that he has not seen before. Gruesome new discoveries await as Caleb tears through hordes of the undead, and nothing is left unscathed in his quest for vengeance.The version 1.1 release contains the following features:\r\n\r\n- 2 episodes consisting of 18 maps total, which fully support Single Player, Co-operative, BloodBath and Capture the Flag across all difficulty settings.\r\n\r\n- A series of exhilarating, all new, low resolution cutscenes which tell the campaign\u0027s story.\r\n\r\n- Lots of new, chilling music as an optional extra.\r\n\r\n- A splash of custom art that is used sparingly.\r\n\r\n- A large amount of fiendish secrets waiting to be discovered.\r\n\r\n- Challenging and occasionally downright unfair encounters with BLOOD\u0027s monsters, unsuitable for those whose faith is weak.\r\n\r\n- Support for the NBlood and BloodGDX ports - to a point.",
+      "Author": "Daedalus",
+      "UpdateDate": "2025-10-24T05:23:06.1307334Z"
     }
   ],
   "Wang": [
