@@ -51,6 +51,20 @@ public sealed partial class DevViewModel : ObservableObject
         "cryptic.ini"
         ];
 
+    private readonly HashSet<string> _forbiddenOggs =
+        [
+        "blood00.ogg",
+        "blood01.ogg",
+        "blood02.ogg",
+        "blood03.ogg",
+        "blood04.ogg",
+        "blood05.ogg",
+        "blood06.ogg",
+        "blood07.ogg",
+        "blood08.ogg",
+        "blood09.ogg"
+        ];
+
 
     public DevViewModel(
         IConfigProvider config,
@@ -542,7 +556,6 @@ public sealed partial class DevViewModel : ObservableObject
         }
 
         var files = Directory.GetFiles(PathToAddonFolder, "*", SearchOption.TopDirectoryOnly).Select(static x => Path.GetFileName(x).ToLower());
-        var forbidden = files.Intersect(_forbiddenNames);
 
         if (SelectedGame is not GameEnum.Standalone &&
             WindowsExecutable is null &&
@@ -550,26 +563,34 @@ public sealed partial class DevViewModel : ObservableObject
             MainRff is null &&
             SoundRff is null)
         {
+            var forbidden = files.Intersect(_forbiddenNames);
+
             if (forbidden.Any())
             {
                 ThrowHelper.ThrowMissingFieldException($"Common file names can't be used. Rename these files: {string.Join(", ", forbidden)}");
             }
 
-            if (SelectedGame is GameEnum.Blood &&
-                string.IsNullOrWhiteSpace(MainRff) &&
-                string.IsNullOrWhiteSpace(SoundRff))
+            if (SelectedGame is GameEnum.Blood)
             {
-                if (files.Any(static x => x.EndsWith(".ART", StringComparison.OrdinalIgnoreCase)))
+                if (string.IsNullOrWhiteSpace(MainRff) && string.IsNullOrWhiteSpace(SoundRff))
                 {
-                    ThrowHelper.ThrowMissingFieldException("Don't use ART files. Convert them to DEF.");
+                    if (files.Any(static x => x.EndsWith(".ART", StringComparison.OrdinalIgnoreCase)))
+                    {
+                        ThrowHelper.ThrowMissingFieldException("Don't use ART files. Convert them to DEF.");
+                    }
+                    if (files.Any(static x => x.EndsWith(".DAT", StringComparison.OrdinalIgnoreCase)))
+                    {
+                        ThrowHelper.ThrowMissingFieldException("Don't use DAT files. Convert them to DEF.");
+                    }
+                    if (files.Any(static x => x.EndsWith(".RFS", StringComparison.OrdinalIgnoreCase)))
+                    {
+                        ThrowHelper.ThrowMissingFieldException("Addons with RFS files are not supported");
+                    }
                 }
-                if (files.Any(static x => x.EndsWith(".DAT", StringComparison.OrdinalIgnoreCase)))
+
+                if (files.Intersect(_forbiddenOggs).Any())
                 {
-                    ThrowHelper.ThrowMissingFieldException("Don't use DAT files. Convert them to DEF.");
-                }
-                if (files.Any(static x => x.EndsWith(".RFS", StringComparison.OrdinalIgnoreCase)))
-                {
-                    ThrowHelper.ThrowMissingFieldException("Addons with RFS files are not supported");
+                    ThrowHelper.ThrowMissingFieldException("blood00.ogg - blood09.ogg can't be used, start with blood10.ogg");
                 }
             }
         }
