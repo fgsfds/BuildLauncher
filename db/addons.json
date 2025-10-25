@@ -1919,18 +1919,6 @@
       "UpdateDate": "2024-11-21T19:45:00Z"
     },
     {
-      "Id": "blood-cwhhrot",
-      "AddonType": "TC",
-      "Game": "Blood",
-      "DownloadUrl": "http://176.222.52.233:9000/buildlauncher/Blood/Campaigns/blood-cwhhrot_v1_3_1.zip",
-      "Title": "Caleb Will Have His Revenge On Toronto",
-      "Version": "1.3.1",
-      "FileSize": 56929073,
-      "Description": "https://www.bloodgame.ru/forum/topic.php?forum=2\u0026topic=105\r\n\r\nPart of the saga of the cheerful Caleb - Scum Of Dallas, who by the will of fate turned out to be deceived by a vile Canadian hockey player. Betting is a risky business, especially when there is a corrupt rat lurking in your favorite team. That\u0027s what happened to our hero: Canadian hockey player Adam Ace received a tempting offer to drain the final match of the World Cup in exchange for eternal life and sold his incorruptible soul to the well-known Cabal sect. What does sports have to do with it, you ask? The thing is that tired of immortality and endless wanderings, Caleb found an outlet in sports betting and put all his fortune accumulated over a long time spent under the wing of fortune and a unique flair for victory on the above-mentioned unfortunate national team. This leads to another question: what about the Bondage of this? The answer is immediately revealed - knowing that Caleb will not forgive Ace for such a setup of the maple leaf country (and in fact the loss of money), the goal of the distraught fanatics who lost their great and powerful, to track down, find and destroy our dead man, so to speak, for bait.",
-      "Author": "Frances Rampage",
-      "UpdateDate": "2024-05-31T03:43:17.377858Z"
-    },
-    {
       "Id": "blood-eviction",
       "AddonType": "TC",
       "Game": "Blood",
@@ -2156,6 +2144,18 @@
       "Description": "https://www.moddb.com/mods/fate-of-the-damned\r\n\r\nFate of the Damned is a meticulously crafted custom campaign for BLOOD which aims to speculate and explore another shadowed path that Caleb might\u0027ve undertaken. While taking care to never stray far from the gameplay formula that made BLOOD so gripping, the campaign will see Caleb journey through new environments that he has not seen before. Gruesome new discoveries await as Caleb tears through hordes of the undead, and nothing is left unscathed in his quest for vengeance.The version 1.1 release contains the following features:\r\n\r\n- 2 episodes consisting of 18 maps total, which fully support Single Player, Co-operative, BloodBath and Capture the Flag across all difficulty settings.\r\n\r\n- A series of exhilarating, all new, low resolution cutscenes which tell the campaign\u0027s story.\r\n\r\n- Lots of new, chilling music as an optional extra.\r\n\r\n- A splash of custom art that is used sparingly.\r\n\r\n- A large amount of fiendish secrets waiting to be discovered.\r\n\r\n- Challenging and occasionally downright unfair encounters with BLOOD\u0027s monsters, unsuitable for those whose faith is weak.\r\n\r\n- Support for the NBlood and BloodGDX ports - to a point.",
       "Author": "Daedalus",
       "UpdateDate": "2025-10-24T05:23:06.1307334Z"
+    },
+    {
+      "Id": "blood-cwhhrot",
+      "AddonType": "TC",
+      "Game": "Blood",
+      "DownloadUrl": "http://176.222.52.233:9000/buildlauncher/Blood/Campaigns/blood-cwhhrot_v1_3_2.zip",
+      "Title": "Caleb Will Have His Revenge On Toronto",
+      "Version": "1.3.2",
+      "FileSize": 56917658,
+      "Description": "https://www.bloodgame.ru/forum/topic.php?forum=2\u0026topic=105\r\n\r\nPart of the saga of the cheerful Caleb - Scum Of Dallas, who by the will of fate turned out to be deceived by a vile Canadian hockey player. Betting is a risky business, especially when there is a corrupt rat lurking in your favorite team. That\u0027s what happened to our hero: Canadian hockey player Adam Ace received a tempting offer to drain the final match of the World Cup in exchange for eternal life and sold his incorruptible soul to the well-known Cabal sect. What does sports have to do with it, you ask? The thing is that tired of immortality and endless wanderings, Caleb found an outlet in sports betting and put all his fortune accumulated over a long time spent under the wing of fortune and a unique flair for victory on the above-mentioned unfortunate national team. This leads to another question: what about the Bondage of this? The answer is immediately revealed - knowing that Caleb will not forgive Ace for such a setup of the maple leaf country (and in fact the loss of money), the goal of the distraught fanatics who lost their great and powerful, to track down, find and destroy our dead man, so to speak, for bait.",
+      "Author": "Frances Rampage",
+      "UpdateDate": "2025-10-25T10:34:40.6676756Z"
     }
   ],
   "Wang": [
