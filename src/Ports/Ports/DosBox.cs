@@ -217,8 +217,11 @@ public sealed class DosBox : BasePort
         {
             _ = sb.Append(@$" -c ""mount c \""{game.GameInstallFolder}"""" -c ""c:""");
             _ = sb.Append(" -c CRYPTIC.EXE");
+
+            return;
         }
-        else if (addon is BloodCampaignEntity bCamp && bCamp.Type is AddonTypeEnum.TC)
+
+        if (addon is BloodCampaignEntity bCamp && bCamp.Type is AddonTypeEnum.TC)
         {
             if (Directory.Exists(ClientProperties.TempFolderPath))
             {
@@ -230,6 +233,12 @@ public sealed class DosBox : BasePort
             foreach (var filePath in Directory.GetFiles(game.GameInstallFolder))
             {
                 string fileName = Path.GetFileName(filePath);
+
+                if (fileName.EndsWith(".DEM", StringComparison.OrdinalIgnoreCase))
+                {
+                    continue;
+                }
+
                 string destFile = Path.Combine(ClientProperties.TempFolderPath, fileName);
                 File.Copy(filePath, destFile, overwrite: true);
             }
@@ -266,19 +275,22 @@ public sealed class DosBox : BasePort
             }
 
             _ = sb.Append(@$" -c ""mount c \""{ClientProperties.TempFolderPath}"""" -c ""c:""");
-            _ = sb.Append(@$" -c ""BLOOD.EXE -ini {bCamp.INI}""");
+            _ = sb.Append(@$" -c ""BLOOD.EXE -ini {bCamp.INI} {(bCamp.RFF is null ? string.Empty : $"-RFF {bCamp.RFF}")} {(bCamp.SND is null ? string.Empty : $"-snd {bCamp.SND}")}""");
+
+            return;
         }
-        else if (addon is LooseMapEntity map)
+
+        if (addon is LooseMapEntity map)
         {
             _ = sb.Append(@$" -c ""mount c \""{game.GameInstallFolder}"""" -c ""c:""");
             _ = sb.Append(@$" -c ""mount d \""{game.MapsFolderPath}""""");
             _ = sb.Append(@$" -c ""BLOOD.EXE -map d:\\{map.FileName}""");
+
+            return;
         }
-        else
-        {
-            _ = sb.Append(@$" -c ""mount c \""{game.GameInstallFolder}"""" -c ""c:""");
-            _ = sb.Append(" -c BLOOD.EXE");
-        }
+
+        _ = sb.Append(@$" -c ""mount c \""{game.GameInstallFolder}"""" -c ""c:""");
+        _ = sb.Append(" -c BLOOD.EXE");
     }
 
     /// <inheritdoc/>
