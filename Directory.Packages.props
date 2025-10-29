@@ -4,7 +4,7 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageVersion Include="Avalonia" Version="11.3.8" />
-    <PackageVersion Include="Avalonia.Controls.DataGrid" Version="11.3.7" />
+    <PackageVersion Include="Avalonia.Controls.DataGrid" Version="11.3.8" />
     <PackageVersion Include="Avalonia.Desktop" Version="11.3.8" />
     <PackageVersion Include="Avalonia.Themes.Fluent" Version="11.3.8" />
     <PackageVersion Include="Avalonia.Diagnostics" Version="11.3.8" />
@@ -14,7 +14,7 @@
     <PackageVersion Include="CommunityToolkit.Mvvm" Version="8.4.0" />
     <PackageVersion Include="IDisposableAnalyzers" Version="4.0.8" />
     <PackageVersion Include="Markdown.Avalonia" Version="11.0.2" />
-    <PackageVersion Include="MediatR" Version="13.0.0" />
+    <PackageVersion Include="MediatR" Version="13.1.0" />
     <PackageVersion Include="Microsoft.EntityFrameworkCore" Version="9.0.10" />
     <PackageVersion Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.10">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -41,7 +41,7 @@
     <PackageVersion Include="Swashbuckle.AspNetCore" Version="9.0.6" />
     <PackageVersion Include="Microsoft.AspNetCore.SpaProxy" Version="9.0.10" />
     <PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.4" />
-    <PackageVersion Include="Markdig" Version="0.42.0" />
+    <PackageVersion Include="Markdig" Version="0.43.0" />
     <PackageVersion Include="System.Text.Json" Version="9.0.10" />
   </ItemGroup>
 </Project>

@@ -67,6 +67,9 @@ public sealed class App : Application
         lifetime.MainWindow = mainWindow;
         lifetime.MainWindow.DataContext = vmFactory.GetMainWindowViewModel();
 
+        //initialize
+        _ = NotificationsHelper.NotificationManager;
+
         if (ClientProperties.IsDeveloperMode)
         {
             logger.LogInformation("Starting in developer mode");
