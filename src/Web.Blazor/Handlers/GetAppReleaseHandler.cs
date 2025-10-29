@@ -16,7 +16,7 @@ public sealed class GetAppReleaseHandler : IRequestHandler<GetAppReleaseRequest,
 
     public async Task<GetAppReleaseResponse?> Handle(GetAppReleaseRequest request, CancellationToken cancellationToken)
     {
-        var releases = await _appReleasesProvider.GetLatestReleaseAsync(false);
+        var releases = await _appReleasesProvider.GetLatestReleaseAsync(false).ConfigureAwait(false);
 
         if (releases?.TryGetValue(request.OSEnum, out var release) is not true)
         {

@@ -1,7 +1,7 @@
 <Solution>
   <Folder Name="/.start/">
     <Project Path="src/Avalonia.Desktop/Avalonia.Desktop.csproj" />
-    <Project Path="Web.Blazor/Web.Blazor.csproj" />
+    <Project Path="src/Web.Blazor/Web.Blazor.csproj" />
   </Folder>
   <Folder Name="/Api/">
     <Project Path="src/Api.Common/Api.Common.csproj" />
