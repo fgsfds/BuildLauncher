@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Assets\DOSBlood.png" />
     <EmbeddedResource Include="Assets\Mapster32.png" />
     <EmbeddedResource Include="Assets\XMAPEDIT.png" />
   </ItemGroup>

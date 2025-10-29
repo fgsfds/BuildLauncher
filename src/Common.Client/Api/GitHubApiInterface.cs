@@ -13,8 +13,9 @@ namespace Common.Client.Api;
 
 public sealed class GitHubApiInterface : IApiInterface
 {
-    private readonly IRetriever<Dictionary<PortEnum, GeneralReleaseJsonModel>?> _portsReleasesRetriever;
-    private readonly RepoAppReleasesRetriever _appReleasesProvider;
+    private readonly IReleaseProvider<PortEnum> _portsReleasesProvider;
+    private readonly IReleaseProvider<ToolEnum> _toolsReleasesProvider;
+    private readonly RepoAppReleasesProvider _appReleasesProvider;
     private readonly HttpClient _httpClient;
     private readonly ILogger _logger;
     private readonly SemaphoreSlim _semaphore = new(1);
@@ -23,13 +24,15 @@ public sealed class GitHubApiInterface : IApiInterface
 
 
     public GitHubApiInterface(
-        IRetriever<Dictionary<PortEnum, GeneralReleaseJsonModel>?> portsReleasesProvider,
-        RepoAppReleasesRetriever appReleasesProvider,
+        IReleaseProvider<PortEnum> portsReleasesProvider,
+        IReleaseProvider<ToolEnum> toolsReleasesRetriever,
+        RepoAppReleasesProvider appReleasesProvider,
         HttpClient httpClient,
         ILogger logger
         )
     {
-        _portsReleasesRetriever = portsReleasesProvider;
+        _portsReleasesProvider = portsReleasesProvider;
+        _toolsReleasesProvider = toolsReleasesRetriever;
         _appReleasesProvider = appReleasesProvider;
         _httpClient = httpClient;
         _logger = logger;
@@ -104,23 +107,48 @@ public sealed class GitHubApiInterface : IApiInterface
             return null;
         }
 
-        await _appReleasesProvider.GetLatestVersionAsync(ClientProperties.IsDeveloperMode).ConfigureAwait(false);
+        var result = await _appReleasesProvider.GetLatestReleaseAsync(ClientProperties.IsDeveloperMode).ConfigureAwait(false);
 
-        var result = _appReleasesProvider.AppRelease[CommonProperties.OSEnum];
+        if (result?.TryGetValue(CommonProperties.OSEnum, out var release) is true)
+        {
+            return release;
+        }
 
-        return result;
+        return null;
     }
 
-    public async Task<Dictionary<PortEnum, GeneralReleaseJsonModel>?> GetLatestPortsReleasesAsync()
+    public async Task<GeneralReleaseJsonModel?> GetLatestPortReleaseAsync(PortEnum portEnum)
     {
         if (ClientProperties.IsOfflineMode)
         {
-            return [];
+            return null;
         }
 
-        var result = await _portsReleasesRetriever.RetrieveAsync().ConfigureAwait(false);
+        var result = await _portsReleasesProvider.GetLatestReleaseAsync(portEnum).ConfigureAwait(false);
 
-        return result;
+        if (result?.TryGetValue(CommonProperties.OSEnum, out var release) is true)
+        {
+            return release;
+        }
+
+        return null;
+    }
+
+    public async Task<GeneralReleaseJsonModel?> GetLatestToolReleaseAsync(ToolEnum toolEnum)
+    {
+        if (ClientProperties.IsOfflineMode)
+        {
+            return null;
+        }
+
+        var result = await _toolsReleasesProvider.GetLatestReleaseAsync(toolEnum).ConfigureAwait(false);
+
+        if (result?.TryGetValue(CommonProperties.OSEnum, out var release) is true)
+        {
+            return release;
+        }
+
+        return null;
     }
 
     public Task<bool> AddAddonToDatabaseAsync(DownloadableAddonJsonModel addon)
@@ -176,8 +204,6 @@ public sealed class GitHubApiInterface : IApiInterface
     public Task<string?> GetSignedUrlAsync(string path) => Task.FromResult<string?>(null);
 
     public Task<decimal?> ChangeScoreAsync(string addonId, sbyte score, bool isNew) => Task.FromResult<decimal?>(null);
-
-    public Task<Dictionary<ToolEnum, GeneralReleaseJsonModel>?> GetLatestToolsReleasesAsync() => Task.FromResult<Dictionary<ToolEnum, GeneralReleaseJsonModel>?>(null);
 
     public Task<Dictionary<string, decimal>?> GetRatingsAsync() => Task.FromResult<Dictionary<string, decimal>?>(null);
 

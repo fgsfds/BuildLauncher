@@ -1,4 +1,5 @@
 ﻿using Common.All.Enums;
+using Common.Client.Interfaces;
 using Common.Client.Tools;
 using Microsoft.Extensions.Logging;
 using Ports.Ports;
@@ -7,30 +8,37 @@ using Ports.Providers;
 namespace Ports.Installer;
 
 public sealed class PortsInstallerFactory(
-    PortsReleasesProvider portsReleasesProvider,
+    IApiInterface apiInterface,
     HttpClient httpClient,
-    ILogger logger
+    ILogger logger,
+    InstalledPortsProvider portsProvider
     )
 {
     /// <summary>
     /// Create <see cref="PortsInstaller"/> instance
     /// </summary>
-    public PortsInstaller Create() => new(portsReleasesProvider, httpClient, logger);
+    public PortsInstaller Create(PortEnum portEnum) => new(portEnum, apiInterface, httpClient, portsProvider, logger);
 }
 
 public sealed class PortsInstaller
 {
+    private readonly PortEnum _portEnum;
+    private readonly InstalledPortsProvider _portsProvider;
     private readonly ArchiveTools _fileTools;
-    private readonly PortsReleasesProvider _portsReleasesProvider;
+    private readonly IApiInterface _apiInterface;
 
     public PortsInstaller(
-        PortsReleasesProvider portsReleasesProvider,
+        PortEnum portEnum,
+        IApiInterface apiInterface,
         HttpClient httpClient,
+        InstalledPortsProvider portsProvider,
         ILogger logger
         )
     {
+        _portEnum = portEnum;
+        _portsProvider = portsProvider;
         _fileTools = new(httpClient, logger);
-        _portsReleasesProvider = portsReleasesProvider;
+        _apiInterface = apiInterface;
         Progress = _fileTools.Progress;
     }
 
@@ -42,10 +50,11 @@ public sealed class PortsInstaller
     /// <summary>
     /// Install port
     /// </summary>
-    /// <param name="port">Port</param>
-    public async Task InstallAsync(BasePort port)
+    public async Task InstallAsync()
     {
-        var release = await _portsReleasesProvider.GetLatestReleaseAsync(port.PortEnum).ConfigureAwait(false);
+        var port = _portsProvider.GetPort(_portEnum);
+
+        var release = await _apiInterface.GetLatestPortReleaseAsync(port.PortEnum).ConfigureAwait(false);
 
         if (release?.DownloadUrl is null)
         {
@@ -64,5 +73,11 @@ public sealed class PortsInstaller
         {
             File.WriteAllText(Path.Combine(port.PortInstallFolderPath, "version"), release.Version);
         }
+    }
+
+    public void Uninstall()
+    {
+        var port = _portsProvider.GetPort(_portEnum);
+        Directory.Delete(port.PortInstallFolderPath, true);
     }
 }

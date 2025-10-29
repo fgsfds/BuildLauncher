@@ -3,9 +3,9 @@ using Avalonia.Desktop.Helpers;
 
 namespace Avalonia.Desktop.Controls;
 
-public sealed partial class PortControl : UserControl
+public sealed partial class ToolControl : UserControl
 {
-    public PortControl()
+    public ToolControl()
     {
         if (Design.IsDesignMode)
         {

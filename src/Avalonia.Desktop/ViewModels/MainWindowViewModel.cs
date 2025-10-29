@@ -7,6 +7,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using Games.Providers;
 using Microsoft.Extensions.Logging;
 using Ports.Providers;
+using Tools.Providers;
 
 namespace Avalonia.Desktop.ViewModels;
 
@@ -19,6 +20,7 @@ public sealed class MainWindowViewModel : ObservableObject
         FilesUploader filesUploader,
         InstalledGamesProvider gamesProvider,
         InstalledPortsProvider portsProvider,
+        InstalledToolsProvider toolsProvider,
         AppUpdateInstaller appUpdateInstaller,
         ViewModelsFactory viewModelsFactory,
         GamesPathsProvider gamesPathsProvider,
@@ -31,6 +33,7 @@ public sealed class MainWindowViewModel : ObservableObject
         DevPageViewModel = new DevViewModel(configProvider, filesUploader, gamesProvider, logger);
         AboutPageViewModel = new AboutViewModel(appUpdateInstaller);
         PortsPageViewModel = new PortsViewModel(viewModelsFactory, portsProvider, logger);
+        ToolsPageViewModel = new ToolsViewModel(viewModelsFactory);
         SettingsPageViewModel = new SettingsViewModel(configProvider, gamesPathsProvider);
 
         DukeViewModel = new(
@@ -119,6 +122,8 @@ public sealed class MainWindowViewModel : ObservableObject
     public AboutViewModel AboutPageViewModel { get; init; }
 
     public PortsViewModel PortsPageViewModel { get; init; }
+
+    public ToolsViewModel ToolsPageViewModel { get; init; }
 
     public SettingsViewModel SettingsPageViewModel { get; init; }
 

@@ -1,4 +1,3 @@
-using System.Collections.Concurrent;
 using System.Collections.Immutable;
 using Avalonia.Controls.Notifications;
 using Avalonia.Desktop.Helpers;
@@ -17,14 +16,13 @@ public sealed partial class PortsViewModel : ObservableObject
 {
     private readonly ViewModelsFactory _viewModelsFactory;
     private readonly InstalledPortsProvider _installedPortsProvider;
-    private readonly ConcurrentDictionary<PortEnum, bool> _updatesList = [];
     private readonly SemaphoreSlim _semaphore = new(1);
     private readonly ILogger _logger;
 
     private bool _isNewPort;
 
-    public bool HasUpdates => _updatesList.Values.Any(x => x);
-
+    [ObservableProperty]
+    private bool _hasUpdates = false;
 
     public PortsViewModel(
         ViewModelsFactory viewModelsFactory,
@@ -38,7 +36,6 @@ public sealed partial class PortsViewModel : ObservableObject
 
         Initialize();
     }
-
 
     public ImmutableList<PortViewModel> PortsList { get; set; } = [];
 
@@ -267,35 +264,27 @@ public sealed partial class PortsViewModel : ObservableObject
     {
         var edukeVm = _viewModelsFactory.GetPortViewModel(PortEnum.EDuke32);
         edukeVm.PortChangedEvent += OnPortChanged;
-        _ = _updatesList.TryAdd(PortEnum.EDuke32, false);
 
         var razeVm = _viewModelsFactory.GetPortViewModel(PortEnum.Raze);
         razeVm.PortChangedEvent += OnPortChanged;
-        _ = _updatesList.TryAdd(PortEnum.Raze, false);
 
         var nbloodVm = _viewModelsFactory.GetPortViewModel(PortEnum.NBlood);
         nbloodVm.PortChangedEvent += OnPortChanged;
-        _ = _updatesList.TryAdd(PortEnum.NBlood, false);
 
         var notbloodVm = _viewModelsFactory.GetPortViewModel(PortEnum.NotBlood);
         notbloodVm.PortChangedEvent += OnPortChanged;
-        _ = _updatesList.TryAdd(PortEnum.NotBlood, false);
 
         var pcexVm = _viewModelsFactory.GetPortViewModel(PortEnum.PCExhumed);
         pcexVm.PortChangedEvent += OnPortChanged;
-        _ = _updatesList.TryAdd(PortEnum.PCExhumed, false);
 
         var rednukemVm = _viewModelsFactory.GetPortViewModel(PortEnum.RedNukem);
         rednukemVm.PortChangedEvent += OnPortChanged;
-        _ = _updatesList.TryAdd(PortEnum.RedNukem, false);
 
         var bgdxVm = _viewModelsFactory.GetPortViewModel(PortEnum.BuildGDX);
         bgdxVm.PortChangedEvent += OnPortChanged;
-        _ = _updatesList.TryAdd(PortEnum.BuildGDX, false);
 
         var dosBoxVm = _viewModelsFactory.GetPortViewModel(PortEnum.DosBox);
         dosBoxVm.PortChangedEvent += OnPortChanged;
-        _ = _updatesList.TryAdd(PortEnum.DosBox, false);
 
         PortsList = [edukeVm, razeVm, nbloodVm, notbloodVm, pcexVm, rednukemVm, bgdxVm, dosBoxVm];
         OnPropertyChanged(nameof(PortsList));
@@ -303,8 +292,11 @@ public sealed partial class PortsViewModel : ObservableObject
 
     private void OnPortChanged(PortEnum portEnum)
     {
-        _updatesList[portEnum] = PortsList.Find(x => x.Port.PortEnum == portEnum)!.IsUpdateAvailable;
+        var isUpdateAvailable = PortsList.Find(x => x.Port.PortEnum == portEnum)?.IsUpdateAvailable ?? false;
 
-        OnPropertyChanged(nameof(HasUpdates));
+        if (!HasUpdates && isUpdateAvailable)
+        {
+            HasUpdates = true;
+        }
     }
 }

@@ -26,11 +26,20 @@ internal static class PortsRepositoriesProvider
                 LinuxReleasePredicate = static x => x.FileName.EndsWith("linux-portable.tar.xz", StringComparison.OrdinalIgnoreCase)
             };
         }
-        else if (portEnum is PortEnum.EDuke32 or PortEnum.VoidSW)
+        else if (portEnum is PortEnum.EDuke32)
         {
             return new()
             {
                 RepoUrl = new("https://dukeworld.com/eduke32/synthesis/latest/"),
+                WindowsReleasePredicate = null,
+                LinuxReleasePredicate = null,
+            };
+        }
+        else if (portEnum is PortEnum.VoidSW)
+        {
+            return new()
+            {
+                RepoUrl = null,
                 WindowsReleasePredicate = null,
                 LinuxReleasePredicate = null,
             };

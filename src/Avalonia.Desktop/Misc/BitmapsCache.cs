@@ -9,6 +9,7 @@ using Common.All.Helpers;
 using Common.Client.Cache;
 using Common.Client.Helpers;
 using Ports.Ports;
+using Tools.Tools;
 
 namespace Avalonia.Desktop.Misc;
 
@@ -20,6 +21,7 @@ public sealed class BitmapsCache : ICacheAdder<Stream>, ICacheGetter<Bitmap>, ID
     {
         InitOfficialCampaignsCache();
         InitPortsCache();
+        InitToolsCache();
     }
 
     public bool TryAddToCache(long id, Stream item)
@@ -185,6 +187,20 @@ public sealed class BitmapsCache : ICacheAdder<Stream>, ICacheGetter<Bitmap>, ID
 
         using var db = ImageHelper.FileNameToStream("DosBox.png", portsAss);
         _ = TryAddToCache(PortEnum.DosBox.GetUniqueHash(), db);
+    }
+
+    private void InitToolsCache()
+    {
+        var portsAss = typeof(BaseTool).Assembly;
+
+        using var mapster32 = ImageHelper.FileNameToStream("Mapster32.png", portsAss);
+        _ = TryAddToCache(ToolEnum.Mapster32.GetUniqueHash(), mapster32);
+
+        using var xmapedit = ImageHelper.FileNameToStream("XMAPEDIT.png", portsAss);
+        _ = TryAddToCache(ToolEnum.XMapEdit.GetUniqueHash(), xmapedit);
+
+        using var dosblood = ImageHelper.FileNameToStream("DOSBlood.png", portsAss);
+        _ = TryAddToCache(ToolEnum.DOSBlood.GetUniqueHash(), dosblood);
     }
 
 

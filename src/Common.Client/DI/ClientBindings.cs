@@ -25,7 +25,7 @@ public static class ClientBindings
         _ = container.AddSingleton<RatingProvider>();
         _ = container.AddSingleton<HttpClient>(CreateHttpClient);
         _ = container.AddSingleton<FilesUploader>();
-        _ = container.AddSingleton<RepoAppReleasesRetriever>();
+        _ = container.AddSingleton<RepoAppReleasesProvider>();
 
         if (isDesigner)
         {

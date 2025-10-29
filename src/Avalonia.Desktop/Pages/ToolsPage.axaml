@@ -1,0 +1,45 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:i="https://github.com/projektanker/icons.avalonia"
+             mc:Ignorable="d"
+             d:DesignWidth="800"
+             d:DesignHeight="750"
+             xmlns:vm="clr-namespace:Avalonia.Desktop.ViewModels"
+             xmlns:ctrl="clr-namespace:Avalonia.Desktop.Controls"
+             x:DataType="vm:ToolsViewModel"
+             x:Class="Avalonia.Desktop.Pages.ToolsPage">
+
+    <ScrollViewer HorizontalScrollBarVisibility="Disabled">
+
+        <Grid RowDefinitions="auto,auto,auto,auto,*">
+
+            <ItemsControl Name="ToolsList" Grid.Row="0"
+                          ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                          ItemsSource="{Binding ToolsList}"
+                          Padding="2">
+
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel Orientation="Horizontal"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition SharedSizeGroup="SharedGroup" />
+                            </Grid.ColumnDefinitions>
+                            <ctrl:ToolControl Margin="10"/>
+                        </Grid>
+
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+
+            </ItemsControl>
+        </Grid>
+    </ScrollViewer>
+</UserControl>

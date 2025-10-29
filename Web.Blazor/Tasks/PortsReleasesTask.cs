@@ -6,11 +6,11 @@ namespace Web.Blazor.Tasks;
 
 public sealed class PortsReleasesTask : IHostedService, IDisposable
 {
-    private readonly IRetriever<Dictionary<PortEnum, GeneralReleaseJsonModel>?> _portsReleasesProvider;
+    private readonly IReleaseProvider<PortEnum> _portsReleasesProvider;
 
     private Timer? _timer;
 
-    public PortsReleasesTask(IRetriever<Dictionary<PortEnum, GeneralReleaseJsonModel>?> portsReleasesProvider)
+    public PortsReleasesTask(IReleaseProvider<PortEnum> portsReleasesProvider)
     {
         _portsReleasesProvider = portsReleasesProvider;
     }
@@ -29,7 +29,7 @@ public sealed class PortsReleasesTask : IHostedService, IDisposable
 
     private void DoWork(object? state)
     {
-        _ = _portsReleasesProvider.RetrieveAsync();
+        //_ = _portsReleasesProvider.RetrieveAsync();
     }
 
     public Task StopAsync(CancellationToken stoppingToken)

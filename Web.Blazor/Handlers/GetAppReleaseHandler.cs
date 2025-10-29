@@ -7,20 +7,20 @@ namespace Web.Blazor.Handlers;
 
 public sealed class GetAppReleaseHandler : IRequestHandler<GetAppReleaseRequest, GetAppReleaseResponse?>
 {
-    private readonly RepoAppReleasesRetriever _appReleasesProvider;
+    private readonly RepoAppReleasesProvider _appReleasesProvider;
 
-    public GetAppReleaseHandler(RepoAppReleasesRetriever appReleasesProvider)
+    public GetAppReleaseHandler(RepoAppReleasesProvider appReleasesProvider)
     {
         _appReleasesProvider = appReleasesProvider;
     }
 
-    public Task<GetAppReleaseResponse?> Handle(GetAppReleaseRequest request, CancellationToken cancellationToken)
+    public async Task<GetAppReleaseResponse?> Handle(GetAppReleaseRequest request, CancellationToken cancellationToken)
     {
-        _ = _appReleasesProvider.AppRelease.TryGetValue(request.OSEnum, out var release);
+        var releases = await _appReleasesProvider.GetLatestReleaseAsync(false);
 
-        if (release is null)
+        if (releases?.TryGetValue(request.OSEnum, out var release) is not true)
         {
-            return Task.FromResult<GetAppReleaseResponse?>(null);
+            return null;
         }
 
         GetAppReleaseResponse response = new()
@@ -28,6 +28,6 @@ public sealed class GetAppReleaseHandler : IRequestHandler<GetAppReleaseRequest,
             AppRelease = release
         };
 
-        return Task.FromResult<GetAppReleaseResponse?>(response);
+        return response;
     }
 }

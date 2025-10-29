@@ -12,6 +12,7 @@ using Ports.Installer;
 using Ports.Ports;
 using Ports.Providers;
 using Tools.Installer;
+using Tools.Providers;
 
 namespace Avalonia.Desktop.ViewModels;
 
@@ -20,10 +21,11 @@ public sealed class ViewModelsFactory
     private readonly InstalledGamesProvider _gamesProvider;
     private readonly IConfigProvider _config;
     private readonly PortsInstallerFactory _portsInstallerFactory;
+    private readonly ToolsInstallerFactory _toolsInstallerFactory;
     private readonly InstalledPortsProvider _portsProvider;
+    private readonly InstalledToolsProvider _toolsProvider;
     private readonly PlaytimeProvider _playtimeProvider;
-    private readonly PortsReleasesProvider _portsReleasesProvider;
-    private readonly ToolsReleasesProvider _toolsReleasesProvider;
+    private readonly IApiInterface _apiInterface;
     private readonly RatingProvider _ratingProvider;
     private readonly InstalledAddonsProviderFactory _installedAddonsProviderFactory;
     private readonly DownloadableAddonsProviderFactory _downloadableAddonsProviderFactory;
@@ -38,10 +40,11 @@ public sealed class ViewModelsFactory
         InstalledGamesProvider gamesProvider,
         IConfigProvider IConfigProvider,
         PortsInstallerFactory portsInstallerFactory,
+        ToolsInstallerFactory toolsInstallerFactory,
         InstalledPortsProvider portsProvider,
+        InstalledToolsProvider toolsProvider,
         PlaytimeProvider playtimeProvider,
-        PortsReleasesProvider portsReleasesProvider,
-        ToolsReleasesProvider toolsReleasesProvider,
+        IApiInterface apiInterface,
         RatingProvider ratingProvider,
         InstalledAddonsProviderFactory installedAddonsProviderFactory,
         DownloadableAddonsProviderFactory downloadableAddonsProviderFactory,
@@ -56,10 +59,11 @@ public sealed class ViewModelsFactory
         _gamesProvider = gamesProvider;
         _config = IConfigProvider;
         _portsInstallerFactory = portsInstallerFactory;
+        _toolsInstallerFactory = toolsInstallerFactory;
         _portsProvider = portsProvider;
+        _toolsProvider = toolsProvider;
         _playtimeProvider = playtimeProvider;
-        _portsReleasesProvider = portsReleasesProvider;
-        _toolsReleasesProvider = toolsReleasesProvider;
+        _apiInterface = apiInterface;
         _ratingProvider = ratingProvider;
         _installedAddonsProviderFactory = installedAddonsProviderFactory;
         _downloadableAddonsProviderFactory = downloadableAddonsProviderFactory;
@@ -80,6 +84,7 @@ public sealed class ViewModelsFactory
             _filesUploader,
             _gamesProvider,
             _portsProvider,
+            _toolsProvider,
             _appUpdateInstaller,
             this,
             _gamesPathsProvider,
@@ -182,8 +187,26 @@ public sealed class ViewModelsFactory
     {
         PortViewModel vm = new(
             _portsInstallerFactory,
-            _portsReleasesProvider,
+            _apiInterface,
             _portsProvider.GetPort(portEnum),
+            _logger
+            );
+
+        _ = Dispatcher.UIThread.Invoke(vm.InitializeAsync);
+        return vm;
+    }
+
+
+    /// <summary>
+    /// Create <see cref="PortViewModel"/>
+    /// </summary>
+    /// <param name="portEnum">Port enum</param>
+    public ToolViewModel GetToolViewModel(ToolEnum portEnum)
+    {
+        ToolViewModel vm = new(
+            _toolsInstallerFactory,
+            _apiInterface,
+            _toolsProvider.GetTool(portEnum),
             _logger
             );
 

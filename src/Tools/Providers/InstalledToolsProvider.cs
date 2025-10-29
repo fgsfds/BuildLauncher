@@ -7,45 +7,48 @@ using Tools.Tools;
 namespace Tools.Providers;
 
 /// <summary>
-/// Class that provides singleton instances of port types
+/// Class that provides singleton instances of tool types
 /// </summary>
-public sealed class ToolsProvider
+public sealed class InstalledToolsProvider
 {
     private readonly List<BaseTool> _tools;
 
-    public Mapster32 Mapster32 { get; init; }
-    public XMapEdit XMapEdit { get; init; }
+    private readonly Mapster32 _mapster32;
+    private readonly XMapEdit _xMapEdit;
+    private readonly DOSBlood _dosBlood;
 
 
-    public ToolsProvider(InstalledGamesProvider gamesProvider)
+    public InstalledToolsProvider(InstalledGamesProvider gamesProvider)
     {
         if (!Directory.Exists(ClientProperties.ToolsFolderPath))
         {
             _ = Directory.CreateDirectory(ClientProperties.ToolsFolderPath);
         }
 
-        Mapster32 = new(gamesProvider);
-        XMapEdit = new(gamesProvider);
+        _mapster32 = new(gamesProvider);
+        _xMapEdit = new(gamesProvider);
+        _dosBlood = new(gamesProvider);
 
-        _tools = [Mapster32, XMapEdit];
+        _tools = [_mapster32, _xMapEdit, _dosBlood];
     }
 
 
     /// <summary>
-    /// Get list of all ports
+    /// Get list of all tools
     /// </summary>
     public IEnumerable<BaseTool> GetAllTools() => _tools;
 
     /// <summary>
-    /// Get port by enum
+    /// Get tool by enum
     /// </summary>
-    /// <param name="toolEnum">Port enum</param>
+    /// <param name="toolEnum">Tool enum</param>
     public BaseTool GetTool(ToolEnum toolEnum)
     {
         return toolEnum switch
         {
-            ToolEnum.Mapster32 => Mapster32,
-            ToolEnum.XMapEdit => XMapEdit,
+            ToolEnum.Mapster32 => _mapster32,
+            ToolEnum.XMapEdit => _xMapEdit,
+            ToolEnum.DOSBlood => _dosBlood,
             _ => ThrowHelper.ThrowArgumentOutOfRangeException<BaseTool>()
         };
     }

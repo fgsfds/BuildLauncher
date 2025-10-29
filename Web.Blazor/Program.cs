@@ -52,9 +52,10 @@ public sealed class Program
             ServerProperties.IsDeveloperMode = true;
         }
 
-        _ = builder.Services.AddSingleton<RepoAppReleasesRetriever>();
+        _ = builder.Services.AddSingleton<RepoAppReleasesProvider>();
         _ = builder.Services.AddSingleton<DatabaseAddonsRetriever>();
-        _ = builder.Services.AddSingleton<IRetriever<Dictionary<PortEnum, GeneralReleaseJsonModel>?>>();
+        _ = builder.Services.AddSingleton<IReleaseProvider<PortEnum>>();
+        _ = builder.Services.AddSingleton<IReleaseProvider<ToolEnum>>();
 
         _ = builder.Services.AddSingleton(CreateHttpClient);
         _ = builder.Services.AddSingleton<S3Client>();

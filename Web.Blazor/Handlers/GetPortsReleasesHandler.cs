@@ -9,9 +9,9 @@ namespace Web.Blazor.Handlers;
 
 public sealed class GetPortsReleasesHandler : IRequestHandler<GetPortsReleasesRequest, GetPortsReleasesResponse?>
 {
-    private readonly IRetriever<Dictionary<PortEnum, GeneralReleaseJsonModel>?> _portsReleasesRetriever;
+    private readonly IReleaseProvider<PortEnum> _portsReleasesRetriever;
 
-    public GetPortsReleasesHandler(IRetriever<Dictionary<PortEnum, GeneralReleaseJsonModel>?> portsReleasesProvider)
+    public GetPortsReleasesHandler(IReleaseProvider<PortEnum> portsReleasesProvider)
     {
         _portsReleasesRetriever = portsReleasesProvider;
     }

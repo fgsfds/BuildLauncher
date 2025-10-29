@@ -4,9 +4,9 @@ using CommunityToolkit.Diagnostics;
 
 namespace Tools.Providers;
 
-internal sealed class ToolsRepositoriesProvider
+internal static class ToolsRepositoriesProvider
 {
-    public RepositoryEntity GetToolRepo(ToolEnum toolEnum)
+    public static RepositoryEntity GetToolRepo(ToolEnum toolEnum)
     {
         if (toolEnum is ToolEnum.XMapEdit)
         {
@@ -23,6 +23,15 @@ internal sealed class ToolsRepositoriesProvider
             {
                 RepoUrl = null,
                 WindowsReleasePredicate = null,
+                LinuxReleasePredicate = null
+            };
+        }
+        else if (toolEnum is ToolEnum.DOSBlood)
+        {
+            return new()
+            {
+                RepoUrl = new("https://api.github.com/repos/clipmove/DOSBlood/releases"),
+                WindowsReleasePredicate = static x => x.FileName.EndsWith(".zip", StringComparison.OrdinalIgnoreCase),
                 LinuxReleasePredicate = null
             };
         }

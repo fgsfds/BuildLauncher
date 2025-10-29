@@ -7,14 +7,14 @@ using Microsoft.Extensions.Logging;
 
 namespace Common.All.Providers;
 
-public sealed class RepoAppReleasesRetriever
+public sealed class RepoAppReleasesProvider
 {
     private readonly ILogger _logger;
     private readonly HttpClient _httpClient;
 
-    public Dictionary<OSEnum, GeneralReleaseJsonModel> AppRelease { get; } = [];
+    private Dictionary<OSEnum, GeneralReleaseJsonModel>? _appRelease = null;
 
-    public RepoAppReleasesRetriever(
+    public RepoAppReleasesProvider(
         ILogger logger,
         HttpClient httpClient
         )
@@ -26,10 +26,15 @@ public sealed class RepoAppReleasesRetriever
     /// <summary>
     /// Return the latest new release or null if there's no newer releases
     /// </summary>
-    public async Task GetLatestVersionAsync(bool includePreReleases)
+    public async Task<Dictionary<OSEnum, GeneralReleaseJsonModel>?> GetLatestReleaseAsync(bool includePreReleases)
     {
         try
         {
+            if (_appRelease is not null)
+            {
+                return _appRelease;
+            }
+
             _logger.LogInformation("Looking for new app release");
 
             using var response = await _httpClient.GetAsync(Consts.GitHubReleases, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false);
@@ -37,7 +42,7 @@ public sealed class RepoAppReleasesRetriever
             if (!response.IsSuccessStatusCode)
             {
                 _logger.LogError("Error while getting releases" + Environment.NewLine + response.StatusCode);
-                return;
+                return null;
             }
 
             var releasesJson = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
@@ -60,6 +65,8 @@ public sealed class RepoAppReleasesRetriever
             var windowsAsset = release.Assets.FirstOrDefault(x => x.FileName.EndsWith("win-x64.zip"))!;
             var linuxAsset = release.Assets.FirstOrDefault(x => x.FileName.EndsWith("linux-x64.zip"))!;
 
+            _appRelease = [];
+
             if (windowsAsset is not null)
             {
                 _logger.LogInformation($"Found Windows release {release.TagName}");
@@ -72,7 +79,7 @@ public sealed class RepoAppReleasesRetriever
                     DownloadUrl = new Uri(windowsAsset.DownloadUrl)
                 };
 
-                AppRelease.AddOrReplace(OSEnum.Windows, winRelease);
+                _appRelease.AddOrReplace(OSEnum.Windows, winRelease);
             }
 
             if (linuxAsset is not null)
@@ -87,13 +94,15 @@ public sealed class RepoAppReleasesRetriever
                     DownloadUrl = new Uri(linuxAsset.DownloadUrl)
                 };
 
-                AppRelease.Add(OSEnum.Linux, linRelease);
+                _appRelease.Add(OSEnum.Linux, linRelease);
             }
+
+            return _appRelease;
         }
         catch (Exception ex)
         {
-            _logger.LogError("Error while getting latest app release");
-            _logger.LogError(ex.ToString());
+            _logger.LogCritical(ex, "Error while getting latest app release");
+            return null;
         }
     }
 }

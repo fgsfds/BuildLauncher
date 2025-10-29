@@ -1,23 +1,23 @@
 ﻿using System.Collections.Concurrent;
 using System.Text.Json;
-using System.Text.RegularExpressions;
 using Common.All.Enums;
 using Common.All.Interfaces;
 using Common.All.Serializable.Downloadable;
 using CommunityToolkit.Diagnostics;
 using Microsoft.Extensions.Logging;
 
-namespace Ports.Providers;
+namespace Tools.Providers;
 
-public sealed partial class PortsReleasesProvider : IReleaseProvider<PortEnum>
+public sealed class ToolsReleasesProvider : IReleaseProvider<ToolEnum>
 {
-    private readonly ConcurrentDictionary<PortEnum, Dictionary<OSEnum, GeneralReleaseJsonModel>?> _releases = [];
+    private readonly ConcurrentDictionary<ToolEnum, Dictionary<OSEnum, GeneralReleaseJsonModel>?> _releases = [];
 
     private static readonly SemaphoreSlim _semaphore = new(1);
+
     private readonly ILogger _logger;
     private readonly HttpClient _httpClient;
 
-    public PortsReleasesProvider(
+    public ToolsReleasesProvider(
         ILogger logger,
         HttpClient httpClient
         )
@@ -27,16 +27,16 @@ public sealed partial class PortsReleasesProvider : IReleaseProvider<PortEnum>
     }
 
     /// <summary>
-    /// Get the latest release of the selected port
+    /// Get the latest release of the selected tool
     /// </summary>
-    /// <param name="portEnum">Port</param>
-    public async Task<Dictionary<OSEnum, GeneralReleaseJsonModel>?> GetLatestReleaseAsync(PortEnum portEnum)
+    /// <param name="toolEnum">Tool</param>
+    public async Task<Dictionary<OSEnum, GeneralReleaseJsonModel>?> GetLatestReleaseAsync(ToolEnum toolEnum)
     {
         try
         {
-            _logger.LogInformation($"Looking for new {portEnum} release.");
+            _logger.LogInformation($"Looking for new {toolEnum} release.");
 
-            var repo = PortsRepositoriesProvider.GetPortRepo(portEnum);
+            var repo = ToolsRepositoriesProvider.GetToolRepo(toolEnum);
 
             if (repo.RepoUrl is null)
             {
@@ -45,18 +45,12 @@ public sealed partial class PortsReleasesProvider : IReleaseProvider<PortEnum>
 
             await _semaphore.WaitAsync().ConfigureAwait(false);
 
-            if (_releases.TryGetValue(portEnum, out var existingRelease))
+            if (_releases.TryGetValue(toolEnum, out var existingRelease))
             {
                 return existingRelease;
             }
 
             var response = await _httpClient.GetStringAsync(repo.RepoUrl).ConfigureAwait(false);
-
-            if (portEnum is PortEnum.EDuke32)
-            {
-                var edukeRelease = EDuke32Hack(response);
-                return edukeRelease is null ? null : new() { { OSEnum.Windows, edukeRelease } };
-            }
 
             var allReleases = JsonSerializer.Deserialize(response, GitHubReleaseEntityContext.Default.ListGitHubReleaseJsonModel)
                 ?? ThrowHelper.ThrowFormatException<List<GitHubReleaseJsonModel>>("Error while deserializing GitHub releases");
@@ -78,18 +72,18 @@ public sealed partial class PortsReleasesProvider : IReleaseProvider<PortEnum>
 
                     if (winAss is not null)
                     {
-                        GeneralReleaseJsonModel portRelease = new()
+                        GeneralReleaseJsonModel toolRelease = new()
                         {
                             SupportedOS = OSEnum.Windows,
                             Description = release.Description,
-                            Version = GetVersion(portEnum, release, winAss),
+                            Version = GetVersion(toolEnum, release, winAss),
                             DownloadUrl = winAss is null ? null : new(winAss.DownloadUrl),
                         };
 
                         result ??= [];
-                        result.Add(OSEnum.Windows, portRelease);
+                        result.Add(OSEnum.Windows, toolRelease);
 
-                        _logger.LogInformation($"Latest Windows release for {portEnum}: {portRelease.Version}.");
+                        _logger.LogInformation($"Latest Windows release for {toolEnum}: {toolRelease.Version}.");
 
                         break;
                     }
@@ -104,25 +98,25 @@ public sealed partial class PortsReleasesProvider : IReleaseProvider<PortEnum>
 
                     if (linAss is not null)
                     {
-                        GeneralReleaseJsonModel portRelease = new()
+                        GeneralReleaseJsonModel toolRelease = new()
                         {
                             SupportedOS = OSEnum.Linux,
                             Description = release.Description,
-                            Version = GetVersion(portEnum, release, linAss),
+                            Version = GetVersion(toolEnum, release, linAss),
                             DownloadUrl = linAss is null ? null : new(linAss.DownloadUrl),
                         };
 
                         result ??= [];
-                        result.Add(OSEnum.Linux, portRelease);
+                        result.Add(OSEnum.Linux, toolRelease);
 
-                        _logger.LogInformation($"Latest Linux release for {portEnum}: {portRelease.Version}.");
+                        _logger.LogInformation($"Latest Linux release for {toolEnum}: {toolRelease.Version}.");
 
                         break;
                     }
                 }
             }
 
-            _ = _releases.TryAdd(portEnum, result);
+            _ = _releases.TryAdd(toolEnum, result);
 
             await Task.Delay(TimeSpan.FromSeconds(1)).ConfigureAwait(false);
 
@@ -130,7 +124,7 @@ public sealed partial class PortsReleasesProvider : IReleaseProvider<PortEnum>
         }
         catch (Exception ex)
         {
-            _logger.LogCritical(ex, $"Error while getting latest release for {portEnum}.");
+            _logger.LogCritical(ex, $"Error while getting latest release for {toolEnum}.");
             return null;
         }
         finally
@@ -143,56 +137,15 @@ public sealed partial class PortsReleasesProvider : IReleaseProvider<PortEnum>
     }
 
     /// <summary>
-    /// Get port version
+    /// Get tool version
     /// </summary>
-    private string GetVersion(PortEnum portEnum, GitHubReleaseJsonModel release, GitHubReleaseAsset asset)
+    private string GetVersion(ToolEnum toolEnum, GitHubReleaseJsonModel release, GitHubReleaseAsset asset)
     {
-        if (portEnum is PortEnum.NotBlood)
+        if (toolEnum is ToolEnum.XMapEdit or ToolEnum.DOSBlood)
         {
             return asset.UpdatedDate.ToUniversalTime().ToString();
         }
 
         return release.TagName;
     }
-
-    /// <summary>
-    /// Hack to get EDuke32 release since dukeworld doesn't have API
-    /// </summary>
-    /// <param name="response">Json response</param>
-    private GeneralReleaseJsonModel? EDuke32Hack(string response)
-    {
-        var regex = EDuke32WindowsReleaseRegex();
-        var fileName = regex.Matches(response).FirstOrDefault();
-
-        if (fileName is null)
-        {
-            return null;
-        }
-
-        var regexVersion = EDuke32VersionRegex();
-        var version = regexVersion.Matches(fileName.ToString()).FirstOrDefault();
-
-        if (version is null)
-        {
-            return null;
-        }
-
-        GeneralReleaseJsonModel release = new()
-        {
-            SupportedOS = OSEnum.Windows,
-            Description = string.Empty,
-            Version = "r" + version,
-            DownloadUrl = new($"https://dukeworld.com/eduke32/synthesis/latest/{fileName}")
-        };
-
-        _logger.LogInformation($"Latest Windows release for {nameof(PortEnum.EDuke32)}: {release.Version}");
-
-        return release;
-    }
-
-    [GeneratedRegex("eduke32_win64_2[^\"]*")]
-    private partial Regex EDuke32WindowsReleaseRegex();
-
-    [GeneratedRegex(@"(?<=\-)(\d*)(?=\-)")]
-    private partial Regex EDuke32VersionRegex();
 }

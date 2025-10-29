@@ -3,5 +3,6 @@
 public enum ToolEnum
 {
     Mapster32,
-    XMapEdit
+    XMapEdit,
+    DOSBlood
 }

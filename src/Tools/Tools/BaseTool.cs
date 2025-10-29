@@ -1,6 +1,7 @@
 ﻿using Common.All.Enums;
 using Common.All.Helpers;
 using Common.Client.Helpers;
+using CommunityToolkit.Diagnostics;
 
 namespace Tools.Tools;
 
@@ -10,14 +11,35 @@ namespace Tools.Tools;
 public abstract class BaseTool
 {
     /// <summary>
-    /// Is tool installed
+    /// Tool enum
     /// </summary>
-    public bool IsInstalled => InstalledVersion is not null;
+    public abstract ToolEnum ToolEnum { get; }
 
     /// <summary>
     /// Main executable
     /// </summary>
-    public abstract string Exe { get; }
+    public string Exe
+    {
+        get
+        {
+            return CommonProperties.OSEnum switch
+            {
+                OSEnum.Windows => WinExe,
+                OSEnum.Linux => LinExe,
+                _ => ThrowHelper.ThrowArgumentOutOfRangeException<string>(CommonProperties.OSEnum.ToString())
+            };
+        }
+    }
+
+    /// <summary>
+    /// Windows executable
+    /// </summary>
+    protected abstract string WinExe { get; }
+
+    /// <summary>
+    /// Linux executable
+    /// </summary>
+    protected abstract string LinExe { get; }
 
     /// <summary>
     /// Name of the tool
@@ -25,35 +47,23 @@ public abstract class BaseTool
     public abstract string Name { get; }
 
     /// <summary>
-    /// Get cmd arguments
+    /// Is tool installed
     /// </summary>
-    public abstract string GetStartToolArgs();
-
-    /// <summary>
-    /// Port enum
-    /// </summary>
-    public abstract ToolEnum ToolEnum { get; }
-
+    public bool IsInstalled => InstalledVersion is not null;
 
     /// <summary>
     /// Path to tool install folder
     /// </summary>
-    public virtual string PathToExecutableFolder => Path.Combine(ClientProperties.ToolsFolderPath, ToolFolderName);
-
-    /// <summary>
-    /// Name of the folder that contains the tool files
-    /// By default is the same as <see cref="Name"/>
-    /// </summary>
-    private string ToolFolderName => Name;
+    public virtual string ToolInstallFolderPath => Path.Combine(ClientProperties.ToolsFolderPath, Name);
 
     /// <summary>
     /// Currently installed version
     /// </summary>
-    public string? InstalledVersion
+    public virtual string? InstalledVersion
     {
         get
         {
-            var versionFile = Path.Combine(PathToExecutableFolder, "version");
+            var versionFile = Path.Combine(ToolInstallFolderPath, "version");
 
             if (!File.Exists(versionFile))
             {
@@ -79,10 +89,15 @@ public abstract class BaseTool
     /// <summary>
     /// Path to tool exe
     /// </summary>
-    public string FullPathToExe => Path.Combine(PathToExecutableFolder, Exe);
+    public string ToolExeFilePath => Path.Combine(ToolInstallFolderPath, Exe);
 
     /// <summary>
     /// Tool's icon
     /// </summary>
     public long IconId => ToolEnum.GetUniqueHash();
+
+    /// <summary>
+    /// Get cmd arguments
+    /// </summary>
+    public abstract string GetStartToolArgs();
 }

@@ -4,11 +4,11 @@ namespace Web.Blazor.Tasks;
 
 public sealed class AppReleasesTask : IHostedService, IDisposable
 {
-    private readonly RepoAppReleasesRetriever _appReleasesProvider;
+    private readonly RepoAppReleasesProvider _appReleasesProvider;
 
     private Timer? _timer;
 
-    public AppReleasesTask(RepoAppReleasesRetriever appReleasesProvider)
+    public AppReleasesTask(RepoAppReleasesProvider appReleasesProvider)
     {
         _appReleasesProvider = appReleasesProvider;
     }
@@ -27,7 +27,7 @@ public sealed class AppReleasesTask : IHostedService, IDisposable
 
     private void DoWork(object? state)
     {
-        _ = _appReleasesProvider.GetLatestVersionAsync(false);
+        _ = _appReleasesProvider.GetLatestReleaseAsync(false);
     }
 
     public Task StopAsync(CancellationToken stoppingToken)
