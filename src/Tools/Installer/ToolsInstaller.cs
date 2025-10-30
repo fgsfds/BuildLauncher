@@ -92,8 +92,12 @@ public sealed class ToolsInstaller
         {
             var pathToBlood = _gamesProvider.GetGame(GameEnum.Blood).GameInstallFolder ?? throw new Exception();
             var bloodExe = Path.Combine(pathToBlood, "BLOOD.EXE");
+            var bloodExeBak = bloodExe + ".BAK";
 
-            File.Move(bloodExe, bloodExe + ".BAK", true);
+            if (!File.Exists(bloodExeBak))
+            {
+                File.Move(bloodExe, bloodExe + ".BAK", true);
+            }
         }
 
         await _fileTools.UnpackArchiveAsync(filePath, tool.ToolInstallFolderPath).ConfigureAwait(false);
