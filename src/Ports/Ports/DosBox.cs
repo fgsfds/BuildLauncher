@@ -131,7 +131,7 @@ public sealed class DosBox : BasePort
     /// <inheritdoc/>
     protected override void GetStartCampaignArgs(StringBuilder sb, IGame game, IAddon addon)
     {
-        _ = sb.Append(" --noconsole -c \"cycles max\" -c \"core dynamic\"");
+        _ = sb.Append(@" --noconsole -c ""cycles max"" -c ""core dynamic""");
 
         if (game is BloodGame bGame)
         {

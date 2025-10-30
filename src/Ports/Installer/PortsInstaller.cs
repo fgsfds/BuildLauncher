@@ -73,6 +73,16 @@ public sealed class PortsInstaller
         {
             File.WriteAllText(Path.Combine(port.PortInstallFolderPath, "version"), release.Version);
         }
+
+        if (port is DosBox)
+        {
+            File.WriteAllText(Path.Combine(port.PortInstallFolderPath, "dosbox-staging.conf"),
+                """
+                [dosbox]
+                memsize = 64
+                
+                """);
+        }
     }
 
     public void Uninstall()
