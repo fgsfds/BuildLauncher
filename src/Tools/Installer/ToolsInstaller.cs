@@ -10,7 +10,8 @@ namespace Tools.Installer;
 public sealed class ToolsInstallerFactory(
     IApiInterface apiInterface,
     InstalledGamesProvider gamesProvider,
-    HttpClient httpClient,
+    FilesDownloader filesDownloader,
+    ArchiveTools archiveTools,
     ILogger logger,
     InstalledToolsProvider toolsProvider
     )
@@ -18,93 +19,106 @@ public sealed class ToolsInstallerFactory(
     /// <summary>
     /// Create <see cref="ToolsInstaller"/> instance
     /// </summary>
-    public ToolsInstaller Create(ToolEnum toolEnum) => new(toolEnum, apiInterface, gamesProvider, httpClient, toolsProvider, logger);
+    public ToolsInstaller Create(ToolEnum toolEnum) => new(toolEnum, apiInterface, gamesProvider, filesDownloader, archiveTools, toolsProvider, logger);
 }
 
 public sealed class ToolsInstaller
 {
     private readonly ToolEnum _toolEnum;
     private readonly IApiInterface _apiInterface;
-    private readonly ArchiveTools _fileTools;
+    private readonly FilesDownloader _filesDownloader;
+    private readonly ArchiveTools _archiveTools;
     private readonly InstalledGamesProvider _gamesProvider;
     private readonly InstalledToolsProvider _toolsProvider;
+
+    /// <summary>
+    /// Installation progress
+    /// </summary>
+    public Progress<float> Progress { get; init; } = new();
 
     public ToolsInstaller(
         ToolEnum toolEnum,
         IApiInterface apiInterface,
         InstalledGamesProvider gamesProvider,
-        HttpClient httpClient,
+        FilesDownloader filesDownloader,
+        ArchiveTools archiveTools,
         InstalledToolsProvider toolsProvider,
         ILogger logger
         )
     {
         _toolEnum = toolEnum;
         _toolsProvider = toolsProvider;
-        _fileTools = new(httpClient, logger);
+        _filesDownloader = filesDownloader;
+        _archiveTools = archiveTools;
         _apiInterface = apiInterface;
         _gamesProvider = gamesProvider;
-        Progress = _fileTools.Progress;
     }
-
-    /// <summary>
-    /// Installation progress
-    /// </summary>
-    public Progress<float> Progress { get; init; }
 
     /// <summary>
     /// Install tool
     /// </summary>
     public async Task InstallAsync()
     {
-        var tool = _toolsProvider.GetTool(_toolEnum);
-
-        var release = await _apiInterface.GetLatestToolReleaseAsync(tool.ToolEnum).ConfigureAwait(false);
-
-        if (release?.DownloadUrl is null)
+        try
         {
-            return;
-        }
+            _filesDownloader.ProgressChanged += OnProgressChanged;
+            _archiveTools.ProgressChanged += OnProgressChanged;
 
-        var filePath = Path.GetFileName(release.DownloadUrl.ToString());
+            var tool = _toolsProvider.GetTool(_toolEnum);
 
-        _ = await _fileTools.DownloadFileAsync(release.DownloadUrl, filePath, CancellationToken.None).ConfigureAwait(false);
+            var release = await _apiInterface.GetLatestToolReleaseAsync(tool.ToolEnum).ConfigureAwait(false);
 
-        if (tool.ToolEnum is ToolEnum.XMapEdit)
-        {
-            var pathToBlood = _gamesProvider.GetGame(GameEnum.Blood).GameInstallFolder ?? throw new Exception();
-
-            _ = Directory.CreateDirectory(tool.ToolInstallFolderPath);
-
-            var files = Directory.GetFiles(pathToBlood);
-            foreach (var file in files)
+            if (release?.DownloadUrl is null)
             {
-                if (!file.EndsWith(".exe", StringComparison.CurrentCultureIgnoreCase)
-                    && !file.EndsWith(".ogg", StringComparison.CurrentCultureIgnoreCase)
-                    && !file.EndsWith(".txt", StringComparison.CurrentCultureIgnoreCase))
+                return;
+            }
+
+            var filePath = Path.GetFileName(release.DownloadUrl.ToString());
+
+            _ = await _filesDownloader.DownloadFileAsync(release.DownloadUrl, filePath, CancellationToken.None).ConfigureAwait(false);
+
+            if (tool.ToolEnum is ToolEnum.XMapEdit)
+            {
+                var pathToBlood = _gamesProvider.GetGame(GameEnum.Blood).GameInstallFolder ?? throw new Exception();
+
+                _ = Directory.CreateDirectory(tool.ToolInstallFolderPath);
+
+                var files = Directory.GetFiles(pathToBlood);
+                foreach (var file in files)
                 {
-                    string fileName = Path.GetFileName(file);
-                    File.Copy(file, Path.Combine(tool.ToolInstallFolderPath, fileName), true);
+                    if (!file.EndsWith(".exe", StringComparison.CurrentCultureIgnoreCase)
+                        && !file.EndsWith(".ogg", StringComparison.CurrentCultureIgnoreCase)
+                        && !file.EndsWith(".txt", StringComparison.CurrentCultureIgnoreCase))
+                    {
+                        string fileName = Path.GetFileName(file);
+                        File.Copy(file, Path.Combine(tool.ToolInstallFolderPath, fileName), true);
+                    }
                 }
             }
-        }
 
-        if (tool.ToolEnum is ToolEnum.DOSBlood)
-        {
-            var pathToBlood = _gamesProvider.GetGame(GameEnum.Blood).GameInstallFolder ?? throw new Exception();
-            var bloodExe = Path.Combine(pathToBlood, "BLOOD.EXE");
-            var bloodExeBak = bloodExe + ".BAK";
-
-            if (!File.Exists(bloodExeBak))
+            if (tool.ToolEnum is ToolEnum.DOSBlood)
             {
-                File.Move(bloodExe, bloodExe + ".BAK", true);
+                var pathToBlood = _gamesProvider.GetGame(GameEnum.Blood).GameInstallFolder ?? throw new Exception();
+                var bloodExe = Path.Combine(pathToBlood, "BLOOD.EXE");
+                var bloodExeBak = bloodExe + ".BAK";
+
+                if (!File.Exists(bloodExeBak))
+                {
+                    File.Move(bloodExe, bloodExe + ".BAK", true);
+                }
             }
+
+            await _archiveTools.UnpackArchiveAsync(filePath, tool.ToolInstallFolderPath).ConfigureAwait(false);
+
+            File.Delete(filePath);
+
+            File.WriteAllText(Path.Combine(tool.ToolInstallFolderPath, "version"), release.Version);
         }
-
-        await _fileTools.UnpackArchiveAsync(filePath, tool.ToolInstallFolderPath).ConfigureAwait(false);
-
-        File.Delete(filePath);
-
-        File.WriteAllText(Path.Combine(tool.ToolInstallFolderPath, "version"), release.Version);
+        finally
+        {
+            _filesDownloader.ProgressChanged -= OnProgressChanged;
+            _archiveTools.ProgressChanged -= OnProgressChanged;
+        }
     }
 
     public void Uninstall()
@@ -132,5 +146,10 @@ public sealed class ToolsInstaller
             Directory.Delete(tool.ToolInstallFolderPath, true);
         }
 
+    }
+
+    private void OnProgressChanged(object? sender, float e)
+    {
+        ((IProgress<float>)Progress).Report(e);
     }
 }

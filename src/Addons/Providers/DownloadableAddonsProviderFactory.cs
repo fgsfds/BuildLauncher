@@ -11,18 +11,21 @@ public sealed class DownloadableAddonsProviderFactory
     private readonly Dictionary<GameEnum, DownloadableAddonsProvider> _list = [];
 
     private readonly ArchiveTools _archiveTools;
+    private readonly FilesDownloader _filesDownloader;
     private readonly IApiInterface _apiInterface;
     private readonly InstalledAddonsProviderFactory _installedAddonsProviderFactory;
     private readonly ILogger _logger;
 
     public DownloadableAddonsProviderFactory(
         ArchiveTools archiveTools,
+        FilesDownloader filesDownloader,
         IApiInterface apiInterface,
         InstalledAddonsProviderFactory installedAddonsProviderFactory,
         ILogger logger
         )
     {
         _archiveTools = archiveTools;
+        _filesDownloader = filesDownloader;
         _apiInterface = apiInterface;
         _installedAddonsProviderFactory = installedAddonsProviderFactory;
         _logger = logger;
@@ -43,6 +46,7 @@ public sealed class DownloadableAddonsProviderFactory
         DownloadableAddonsProvider newProvider = new(
             game,
             _archiveTools,
+            _filesDownloader,
             _apiInterface,
             _installedAddonsProviderFactory,
             _logger

@@ -19,6 +19,7 @@ public sealed class DownloadableAddonsProvider : IDownloadableAddonsProvider
 {
     private readonly IGame _game;
     private readonly ArchiveTools _archiveTools;
+    private readonly FilesDownloader _filesDownloader;
     private readonly IApiInterface _apiInterface;
     private readonly InstalledAddonsProvider _installedAddonsProvider;
     private readonly ILogger _logger;
@@ -31,13 +32,14 @@ public sealed class DownloadableAddonsProvider : IDownloadableAddonsProvider
     public event AddonChanged? AddonDownloadedEvent;
 
     /// <inheritdoc/>
-    public Progress<float> Progress { get; }
+    public Progress<float> Progress { get; } = new();
 
 
     [Obsolete($"Don't create directly. Use {nameof(DownloadableAddonsProviderFactory)}.")]
     public DownloadableAddonsProvider(
         IGame game,
         ArchiveTools archiveTools,
+        FilesDownloader filesDownloader,
         IApiInterface apiInterface,
         InstalledAddonsProviderFactory installedAddonsProviderFactory,
         ILogger logger
@@ -45,12 +47,11 @@ public sealed class DownloadableAddonsProvider : IDownloadableAddonsProvider
     {
         _game = game;
         _archiveTools = archiveTools;
+        _filesDownloader = filesDownloader;
         _apiInterface = apiInterface;
         _logger = logger;
 
         _installedAddonsProvider = installedAddonsProviderFactory.GetSingleton(_game);
-
-        Progress = _archiveTools.Progress;
     }
 
     /// <inheritdoc/>
@@ -162,49 +163,65 @@ public sealed class DownloadableAddonsProvider : IDownloadableAddonsProvider
         CancellationToken cancellationToken
         )
     {
-        var url = addon.DownloadUrl;
-        var file = Path.GetFileName(url.ToString());
-        string path;
-
-        if (addon.AddonType is AddonTypeEnum.TC)
+        try
         {
-            path = _game.CampaignsFolderPath;
-        }
-        else if (addon.AddonType is AddonTypeEnum.Map)
-        {
-            path = _game.MapsFolderPath;
-        }
-        else if (addon.AddonType is AddonTypeEnum.Mod)
-        {
-            path = _game.ModsFolderPath;
-        }
-        else
-        {
-            ThrowHelper.ThrowNotSupportedException(addon.AddonType.ToString());
-            return;
-        }
+            _filesDownloader.ProgressChanged += OnProgressChanged;
+            _archiveTools.ProgressChanged += OnProgressChanged;
 
-        var pathToFile = Path.Combine(path, file);
+            var url = addon.DownloadUrl;
+            var file = Path.GetFileName(url.ToString());
+            string path;
 
-        var isDownloaded = await _archiveTools.DownloadFileAsync(url, pathToFile, cancellationToken).ConfigureAwait(false);
-
-        if (!isDownloaded)
-        {
-            return;
-        }
-
-        await _installedAddonsProvider.AddAddonAsync(pathToFile).ConfigureAwait(false);
-
-        if (!ClientProperties.IsDeveloperMode)
-        {
-            var result = await _apiInterface.IncreaseNumberOfInstallsAsync(addon.Id).ConfigureAwait(false);
-
-            if (result)
+            if (addon.AddonType is AddonTypeEnum.TC)
             {
-                addon.Installs++;
+                path = _game.CampaignsFolderPath;
             }
-        }
+            else if (addon.AddonType is AddonTypeEnum.Map)
+            {
+                path = _game.MapsFolderPath;
+            }
+            else if (addon.AddonType is AddonTypeEnum.Mod)
+            {
+                path = _game.ModsFolderPath;
+            }
+            else
+            {
+                ThrowHelper.ThrowNotSupportedException(addon.AddonType.ToString());
+                return;
+            }
 
-        AddonDownloadedEvent?.Invoke(_game, addon.AddonType);
+            var pathToFile = Path.Combine(path, file);
+
+            var isDownloaded = await _filesDownloader.DownloadFileAsync(url, pathToFile, cancellationToken).ConfigureAwait(false);
+
+            if (!isDownloaded)
+            {
+                return;
+            }
+
+            await _installedAddonsProvider.AddAddonAsync(pathToFile).ConfigureAwait(false);
+
+            if (!ClientProperties.IsDeveloperMode)
+            {
+                var result = await _apiInterface.IncreaseNumberOfInstallsAsync(addon.Id).ConfigureAwait(false);
+
+                if (result)
+                {
+                    addon.Installs++;
+                }
+            }
+
+            AddonDownloadedEvent?.Invoke(_game, addon.AddonType);
+        }
+        finally
+        {
+            _filesDownloader.ProgressChanged -= OnProgressChanged;
+            _archiveTools.ProgressChanged -= OnProgressChanged;
+        }
+    }
+
+    private void OnProgressChanged(object? sender, float e)
+    {
+        ((IProgress<float>)Progress).Report(e);
     }
 }

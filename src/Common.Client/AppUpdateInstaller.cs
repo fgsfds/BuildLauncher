@@ -11,19 +11,19 @@ namespace Common.Client;
 
 public sealed class AppUpdateInstaller
 {
-    private readonly ArchiveTools _archiveTools;
+    private readonly FilesDownloader _filesDownloader;
     private readonly IApiInterface _apiInterface;
     private readonly ILogger _logger;
 
     private GeneralReleaseJsonModel? _update;
 
     public AppUpdateInstaller(
-        ArchiveTools archiveTools,
+        FilesDownloader filesDownloader,
         IApiInterface apiInterface,
         ILogger logger
         )
     {
-        _archiveTools = archiveTools;
+        _filesDownloader = filesDownloader;
         _apiInterface = apiInterface;
         _logger = logger;
     }
@@ -69,7 +69,7 @@ public sealed class AppUpdateInstaller
             File.Delete(fileName);
         }
 
-        _ = await _archiveTools.DownloadFileAsync(updateUrl, fileName, CancellationToken.None).ConfigureAwait(false);
+        _ = await _filesDownloader.DownloadFileAsync(updateUrl, fileName, CancellationToken.None).ConfigureAwait(false);
 
         ZipFile.ExtractToDirectory(fileName, Path.Combine(ClientProperties.WorkingFolder, ClientConsts.UpdateFolder), true);
 
@@ -99,8 +99,10 @@ public sealed class AppUpdateInstaller
 
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
         {
+#pragma warning disable IDISP004 // Don't ignore created IDisposable
             //starting new version of the app
             _ = System.Diagnostics.Process.Start(oldExe);
+#pragma warning restore IDISP004 // Don't ignore created IDisposable
         }
         else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
         {
