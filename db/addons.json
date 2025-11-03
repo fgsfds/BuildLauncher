@@ -1685,6 +1685,129 @@
       "Description": "2-level mini episode in space with about 30 minutes of playtime. Second level is more sophisticated than the first, featuring more eye candy and better design. Pay attention to switches on the opposite side of switch panels and remember that you will need to use the jetpack, especially in the second level (to get the keycards).\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/",
       "Author": "Brian Marchman",
       "UpdateDate": "2025-10-23T12:02:07.4300746Z"
+    },
+    {
+      "Id": "duke3d-total-duke",
+      "AddonType": "TC",
+      "Game": "Duke3D",
+      "DownloadUrl": "http://176.222.52.233:9000/buildlauncher/Duke3D/Campaigns/duke3d-total-duke_v1_0.zip",
+      "Title": "Total Duke",
+      "Version": "1.0",
+      "FileSize": 2079179,
+      "Description": "Nice city episode with 11 levels (2 of them are secret) featuring casino, bank, movie theater, bars, skyscrapers, office buildings and more to explore before facing a Cycloid Emperor in the finale. \r\n\r\nEven though the levels still lack some detail from a modern point of view, they are designed well and finding secrets is rewarding.\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/",
+      "Author": "Juha \u0027Turpuli\u0027 Laaksonen",
+      "UpdateDate": "2025-11-03T16:48:41.3268533Z"
+    },
+    {
+      "Id": "duke3d-total-apocalypse",
+      "AddonType": "TC",
+      "Game": "Duke3D",
+      "DownloadUrl": "http://176.222.52.233:9000/buildlauncher/Duke3D/Campaigns/duke3d-total-apocalypse_v1_0.zip",
+      "Title": "Total Apocalypse",
+      "Version": "1.0",
+      "FileSize": 2523591,
+      "Description": "11 levels which are sometimes a bit repetitive due to many buildings/rooms that need to be checked and rather basic (\u0022square\u0022) map layout, but locations are interesting: Among other places, you visit a fun fair, a graveyard, a huge mansion and (right before the end) even an alien-infested temple inspired by id\u0027s all-time classic Doom. \r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/",
+      "Author": "Juan Daniel \u0027Papamonos\u0027 Alcobre",
+      "UpdateDate": "2025-11-03T16:48:41.3369527Z"
+    },
+    {
+      "Id": "duke3d-the-real-bad-ass",
+      "AddonType": "TC",
+      "Game": "Duke3D",
+      "DownloadUrl": "http://176.222.52.233:9000/buildlauncher/Duke3D/Campaigns/duke3d-the-real-bad-ass_v1_0.zip",
+      "Title": "The Real Bad Ass",
+      "Version": "1.0",
+      "FileSize": 457310,
+      "Description": "Episode with 7 maps (\u002B1 secret), starting in space and then changing to urban scenarios. Level design is rather blocky/square-based, but after the first three (quite short) maps, it gets better and more complex.\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/",
+      "Author": "Ray Tracer",
+      "UpdateDate": "2025-11-03T16:48:41.3406037Z"
+    },
+    {
+      "Id": "duke3d-the-day-after",
+      "AddonType": "TC",
+      "Game": "Duke3D",
+      "DownloadUrl": "http://176.222.52.233:9000/buildlauncher/Duke3D/Campaigns/duke3d-the-day-after_v1_0.zip",
+      "Title": "The Day After",
+      "Version": "1.0",
+      "FileSize": 790678,
+      "Description": "Pipeline intended to create an episode which he wanted to name \u0022The Day After\u0022. Unfortunately, only maps 1, 3, 6 and 7 were released. This presentation groups the maps together in proper order to form a mini episode. 3 Dukematch levels by the same author are included as bonus.\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/",
+      "Author": "Pipeline",
+      "UpdateDate": "2025-11-03T16:48:41.3428491Z"
+    },
+    {
+      "Id": "duke3d-the-asteroid",
+      "AddonType": "TC",
+      "Game": "Duke3D",
+      "DownloadUrl": "http://176.222.52.233:9000/buildlauncher/Duke3D/Campaigns/duke3d-the-asteroid_v1_0.zip",
+      "Title": "The Asteroid",
+      "Version": "1.0",
+      "FileSize": 473457,
+      "Description": "Mini episode in space with 4 levels. Many hate this one because of its switch puzzle at the end of level 3 and the collapsing rooms in the final level. However, the maps are well designed in general and you fight against a Cyber Battlelord in the finale with tons of hitpoints. Be sure to save often (and at the right time)!\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/",
+      "Author": "Ray Tracer",
+      "UpdateDate": "2025-11-03T16:48:41.3449482Z"
+    },
+    {
+      "Id": "duke3d-tamduke",
+      "AddonType": "TC",
+      "Game": "Duke3D",
+      "DownloadUrl": "http://176.222.52.233:9000/buildlauncher/Duke3D/Campaigns/duke3d-tamduke_v1_0.zip",
+      "Title": "TamDuke",
+      "Version": "1.0",
+      "FileSize": 2089780,
+      "Description": "Nine levels based on real locations - A hilarious secret level - Three different difficulty levels - Tons of secret places kuva History and trivia TamDuke has been under development for over 10 years. During this period, we have jumped from the original Build level editor to the newer Mapster and EDuke engine features. Over the years, we faced many problems related to the level editors, map geometry as well as engine limitations. Several of the maps in the episode are just as big as the EDuke engine allows. \r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/",
+      "Author": "pmw",
+      "UpdateDate": "2025-11-03T16:48:41.3471916Z"
+    },
+    {
+      "Id": "duke3d-super-nukem-bros",
+      "AddonType": "TC",
+      "Game": "Duke3D",
+      "DownloadUrl": "http://176.222.52.233:9000/buildlauncher/Duke3D/Campaigns/duke3d-super-nukem-bros_v1_0.zip",
+      "Title": "Super Nukem Bros.",
+      "Version": "1.0",
+      "FileSize": 17522317,
+      "Description": "Based on Super Mario Bros. for NES, Super Nukem Bros. is an opportunity to blast alien maggots as Duke in the Mushroom Kingdom! Somehow, Duke crash lands in the Mushroom Kingdom and is greeted with even more pesky aliens. Is Duke dreaming all of this? Is he tripping on magic mushrooms? Who knows! \r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/",
+      "Author": "NukemDave",
+      "UpdateDate": "2025-11-03T16:48:41.3494913Z"
+    },
+    {
+      "Id": "duke3d-space-mission",
+      "AddonType": "TC",
+      "Game": "Duke3D",
+      "DownloadUrl": "http://176.222.52.233:9000/buildlauncher/Duke3D/Campaigns/duke3d-space-mission_v1_0.zip",
+      "Title": "Space Mission",
+      "Version": "1.0",
+      "FileSize": 11018897,
+      "Description": "2 space maps with low gravity effects and a functional space suit. The story: Aliens have taken over a space station and use its communication relays. It\u0027s up to Duke to liberate the station and chase the invaders to a mining facility where generators need to be destroyed before escaping with a shuttle. The whole pack should take you about 30 mins to complete.\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/",
+      "Author": "Paul \u0027High Treason\u0027 Monteray",
+      "UpdateDate": "2025-11-03T16:48:41.3516155Z"
+    },
+    {
+      "Id": "duke3d-sharks-cove",
+      "AddonType": "TC",
+      "Game": "Duke3D",
+      "DownloadUrl": "http://176.222.52.233:9000/buildlauncher/Duke3D/Campaigns/duke3d-sharks-cove_v1_0.zip",
+      "Title": "Shark\u0027s Cove",
+      "Version": "1.0",
+      "FileSize": 266595,
+      "Dependencies": [
+        "dukevaca"
+      ],
+      "Description": "One year before HangNail started to work on \u0022Vacation Cove\u0022, he made these two Caribbean-style maps which were supposed to be the beginning of a full episode that never got finished. Don\u0027t be too surprised if the levels look very similar to \u0022Vacation Cove\u0022 since it appears this work was used as a base for that episode.\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/",
+      "Author": "N. E. \u0027HangNail\u0027 Voigt",
+      "UpdateDate": "2025-11-03T16:48:41.3548932Z"
+    },
+    {
+      "Id": "duke3d-savior-of-alien-era",
+      "AddonType": "TC",
+      "Game": "Duke3D",
+      "DownloadUrl": "http://176.222.52.233:9000/buildlauncher/Duke3D/Campaigns/duke3d-savior-of-alien-era_v1_0.zip",
+      "Title": "Savior of Alien Era",
+      "Version": "1.0",
+      "FileSize": 1396173,
+      "Description": "6 maps by Robert \u0027underTaker\u0027 Wypi\u00F3r which are sequels to each other, released in episodic form.\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/",
+      "Author": "Robert \u0027underTaker\u0027 Wypi\u00F3r",
+      "UpdateDate": "2025-11-03T16:48:41.3572287Z"
     }
   ],
   "Blood": [
@@ -2396,18 +2519,6 @@
   ],
   "Slave": [
     {
-      "Id": "slave-forgo",
-      "AddonType": "Map",
-      "Game": "Slave",
-      "DownloadUrl": "http://176.222.52.233:9000/buildlauncher/Slave/Maps/slave-forgo_v1_0.zip",
-      "Title": "Forgotten Sanctuary",
-      "Version": "1.0",
-      "FileSize": 74920,
-      "Description": "https://www.moddb.com/games/powerslave/addons/forgotten-sanctuary",
-      "Author": "Korbac",
-      "UpdateDate": "2024-05-24T00:00:00Z"
-    },
-    {
       "Id": "slave-ruins",
       "AddonType": "TC",
       "Game": "Slave",
@@ -2426,10 +2537,22 @@
       "DownloadUrl": "http://176.222.52.233:9000/buildlauncher/Slave/Maps/slave-elgizah_v1_0.zip",
       "Title": "El-Gizah",
       "Version": "1.0",
-      "FileSize": 40507,
-      "Description": "https://www.moddb.com/games/powerslave/addons/el-gizah/r/n/r/nMedium sized map for a Exhumed/Powerslave game. Level features a marsh, desert, pyramid, temple and of course the mighty Sphinx.",
+      "FileSize": 40511,
+      "Description": "https://www.moddb.com/games/powerslave/addons/el-gizah\r\n\r\nMedium sized map for a Exhumed/Powerslave game. Level features a marsh, desert, pyramid, temple and of course the mighty Sphinx.",
       "Author": "Slawomir LAW Lawrynowicz",
-      "UpdateDate": "2024-05-24T00:00:00Z"
+      "UpdateDate": "2025-11-03T16:48:56.6279564Z"
+    },
+    {
+      "Id": "slave-forgo",
+      "AddonType": "Map",
+      "Game": "Slave",
+      "DownloadUrl": "http://176.222.52.233:9000/buildlauncher/Slave/Maps/slave-forgo_v1_0.zip",
+      "Title": "Forgotten Sanctuary",
+      "Version": "1.0",
+      "FileSize": 74920,
+      "Description": "https://www.moddb.com/games/powerslave/addons/forgotten-sanctuary",
+      "Author": "Korbac",
+      "UpdateDate": "2025-11-03T16:48:56.6306704Z"
     },
     {
       "Id": "slave-totfatw",
@@ -2438,10 +2561,10 @@
       "DownloadUrl": "http://176.222.52.233:9000/buildlauncher/Slave/Maps/slave-totfatw_v1_0.zip",
       "Title": "Temple of the Fire and the Water",
       "Version": "1.0",
-      "FileSize": 3098153,
-      "Description": "https://www.moddb.com/games/powerslave/addons/temple-of-the-fire-and-the-water/r/n/r/nThe Kilmaat plans were thwarted, however the remaining troops are up to no good. You must venture into the Temple of the Fire and the Water and retrieve the ashes of Anubis before they use them for their evil deeds.\r\n\r\nThis level can be completed in two different ways. The advised way is clockwise, as it features a more natural progression. I can perfectly be finished counter-clockwise, but it\u0027ll be more quirky, because of the quirky weapons ;)",
+      "FileSize": 3098157,
+      "Description": "https://www.moddb.com/games/powerslave/addons/temple-of-the-fire-and-the-water\r\n\r\nThe Kilmaat plans were thwarted, however the remaining troops are up to no good. You must venture into the Temple of the Fire and the Water and retrieve the ashes of Anubis before they use them for their evil deeds.\r\n\r\nThis level can be completed in two different ways. The advised way is clockwise, as it features a more natural progression. I can perfectly be finished counter-clockwise, but it\u0027ll be more quirky, because of the quirky weapons ;)",
       "Author": "pagb666",
-      "UpdateDate": "2024-05-24T00:00:00Z"
+      "UpdateDate": "2025-11-03T16:48:56.6328835Z"
     },
     {
       "Id": "slave-hq-sounds",
@@ -2450,10 +2573,10 @@
       "DownloadUrl": "http://176.222.52.233:9000/buildlauncher/Slave/Mods/slave-hq-sounds_v1_0.zip",
       "Title": "High Quality Sound Effects",
       "Version": "1.0",
-      "FileSize": 13052766,
-      "Description": "https://www.moddb.com/mods/powerslave-exhumed-high-quality-sound-effects/r/n/r/nThe purpose of this mod is to replace vanilla sound effects of Powerslave (Exhumed) with high quality ones.",
+      "FileSize": 13052767,
+      "Description": "https://www.moddb.com/mods/powerslave-exhumed-high-quality-sound-effects\r\n\r\nThe purpose of this mod is to replace vanilla sound effects of Powerslave (Exhumed) with high quality ones.",
       "Author": "Dzierzan",
-      "UpdateDate": "2024-11-27T07:28:33.6404711Z"
+      "UpdateDate": "2025-11-03T16:49:01.6312081Z"
     },
     {
       "Id": "slave-m60",
@@ -2462,9 +2585,9 @@
       "DownloadUrl": "http://176.222.52.233:9000/buildlauncher/Slave/Mods/slave-m60_v1_0.zip",
       "Title": "Alternative M60",
       "Version": "1.0",
-      "FileSize": 28038,
-      "Description": "https://www.moddb.com/games/powerslave/addons/psm60/r/n/r/nA simple addon which replaces M60 weapon with alternative one.",
-      "UpdateDate": "2024-11-27T07:28:35.3614717Z"
+      "FileSize": 28036,
+      "Description": "https://www.moddb.com/games/powerslave/addons/psm60\r\n\r\nA simple addon which replaces M60 weapon with alternative one.",
+      "UpdateDate": "2025-11-03T16:49:01.6336768Z"
     },
     {
       "Id": "slave-voxel-pack",
@@ -2473,9 +2596,9 @@
       "DownloadUrl": "http://176.222.52.233:9000/buildlauncher/Slave/Mods/slave-voxel-pack_v0_16.zip",
       "Title": "Voxel Pack",
       "Version": "0.16",
-      "FileSize": 643464,
-      "Description": "https://github.com/fgsfds/Powerslave-Voxel-Pack/r/n/r/nThis pack provides voxel replacements for sprites in Powerslave/Exhumed",
-      "UpdateDate": "2024-11-27T07:28:37.15612Z"
+      "FileSize": 643467,
+      "Description": "https://github.com/fgsfds/Powerslave-Voxel-Pack\r\n\r\nThis pack provides voxel replacements for sprites in Powerslave/Exhumed",
+      "UpdateDate": "2025-11-03T16:49:01.6365817Z"
     }
   ],
   "NAM": [
