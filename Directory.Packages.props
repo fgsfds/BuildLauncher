@@ -10,11 +10,11 @@
     <PackageVersion Include="Avalonia.Diagnostics" Version="11.3.8" />
     <PackageVersion Include="Avalonia.Fonts.Inter" Version="11.3.8" />
     <PackageVersion Include="AddSealed" Version="0.6.0" />
+    <PackageVersion Include="ClassIsland.Markdown.Avalonia.Tight" Version="11.0.3.4" />
     <PackageVersion Include="CommunityToolkit.Diagnostics" Version="8.4.0" />
     <PackageVersion Include="CommunityToolkit.Mvvm" Version="8.4.0" />
     <PackageVersion Include="Downloader" Version="4.0.3" />
     <PackageVersion Include="IDisposableAnalyzers" Version="4.0.8" />
-    <PackageVersion Include="Markdown.Avalonia" Version="11.0.2" />
     <PackageVersion Include="MediatR" Version="13.1.0" />
     <PackageVersion Include="Microsoft.EntityFrameworkCore" Version="9.0.10" />
     <PackageVersion Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.10">
@@ -27,7 +27,7 @@
     <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="9.0.10" />
     <PackageVersion Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.10" />
     <PackageVersion Include="Microsoft.Extensions.Logging.Debug" Version="9.0.10" />
-    <PackageVersion Include="Minio" Version="6.0.5" />
+    <PackageVersion Include="Minio" Version="7.0.0" />
     <PackageVersion Include="Moq" Version="4.20.72" />
     <PackageVersion Include="Projektanker.Icons.Avalonia.FontAwesome" Version="9.6.2" />
     <PackageVersion Include="Roslynator.Analyzers" Version="4.14.1" />
