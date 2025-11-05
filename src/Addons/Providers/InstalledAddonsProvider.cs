@@ -65,6 +65,7 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
         if (!pathToFile.EndsWith(".zip", StringComparison.OrdinalIgnoreCase) &&
             !pathToFile.EndsWith(".map", StringComparison.OrdinalIgnoreCase))
         {
+            _logger.LogError("File is not .zip or .map.");
             return false;
         }
 
@@ -72,11 +73,13 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
 
         if (addon is null)
         {
+            _logger.LogError("Can't get addon from the file.");
             return false;
         }
 
         if (addon.Item1 != _game.GameEnum)
         {
+            _logger.LogError($"Addon is for the wrong game: {addon.Item1}.");
             return false;
         }
 
@@ -96,6 +99,7 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
         }
         else
         {
+            _logger.LogError($"Unknown addon type: {addon.Item2}.");
             return false;
         }
 

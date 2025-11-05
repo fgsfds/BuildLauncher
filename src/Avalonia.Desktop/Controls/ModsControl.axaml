@@ -17,7 +17,7 @@
                  ItemsSource="{Binding ModsList}"
                  SelectedItem="{Binding SelectedAddon}"
                  DragDrop.AllowDrop="True"
-                 DragDrop.Drop="OnModsListDrop">
+                 DragDrop.Drop="OnDrop">
 
             <ListBox.ItemsPanel>
                 <ItemsPanelTemplate>

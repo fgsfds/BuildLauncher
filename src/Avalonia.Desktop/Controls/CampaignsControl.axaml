@@ -117,7 +117,7 @@
                      PointerPressed="OnCampaignsListEmptySpaceClicked"
                      ContainerPrepared="OnListBoxContainerPrepared"
                      DragDrop.AllowDrop="True"
-                     DragDrop.Drop="OnCampaignsListDrop">
+                     DragDrop.Drop="OnDrop">
 
                 <ListBox.Styles>
 

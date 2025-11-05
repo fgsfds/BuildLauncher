@@ -1,9 +1,9 @@
 using Addons.Providers;
 using Avalonia.Controls;
+using Avalonia.Desktop.Controls.Bases;
 using Avalonia.Desktop.Helpers;
 using Avalonia.Desktop.Misc;
 using Avalonia.Desktop.ViewModels;
-using Avalonia.Input;
 using Avalonia.Rendering.Composition;
 using Avalonia.Rendering.Composition.Animations;
 using Common.All.Enums;
@@ -16,7 +16,7 @@ using Ports.Providers;
 
 namespace Avalonia.Desktop.Controls;
 
-public sealed partial class CampaignsControl : UserControl
+public sealed partial class CampaignsControl : DroppableControl
 {
     private const string BuiltInPortStr = "Built-in port";
     private const string CustomPortStr = "Custom port";
@@ -24,18 +24,16 @@ public sealed partial class CampaignsControl : UserControl
     private readonly IEnumerable<BasePort> _supportedPorts;
     private readonly CampaignsViewModel _viewModel;
     private readonly InstalledPortsProvider _portsProvider;
-    private readonly InstalledAddonsProvider _addonsProvider;
     private readonly BitmapsCache _bitmapsCache;
 
     private ImplicitAnimationCollection? _implicitAnimations;
 
-    public CampaignsControl()
+    public CampaignsControl() : base(null!)
     {
         InitializeComponent();
 
         _supportedPorts = [];
         _portsProvider = null!;
-        _addonsProvider = null!;
         _viewModel = null!;
         _bitmapsCache = null!;
     }
@@ -43,15 +41,14 @@ public sealed partial class CampaignsControl : UserControl
     public CampaignsControl(
         CampaignsViewModel viewModel,
         InstalledPortsProvider portsProvider,
-        InstalledAddonsProvider addonsProvider,
+        InstalledAddonsProvider installedAddonsProvider,
         BitmapsCache bitmapsCache
-        )
+        ) : base(installedAddonsProvider)
     {
         InitializeComponent();
 
         _supportedPorts = portsProvider.GetPortsThatSupportGame(viewModel.Game.GameEnum);
         _portsProvider = portsProvider;
-        _addonsProvider = addonsProvider;
         _viewModel = viewModel;
         _bitmapsCache = bitmapsCache;
 
@@ -327,24 +324,6 @@ public sealed partial class CampaignsControl : UserControl
         CampaignsList.Focusable = true;
         _ = CampaignsList.Focus();
         CampaignsList.Focusable = false;
-    }
-
-    /// <summary>
-    /// Drag'n'drop handler
-    /// </summary>
-    private async void OnCampaignsListDrop(object sender, DragEventArgs e)
-    {
-        var files = e.Data.GetFiles();
-
-        if (files?.Any() is true)
-        {
-            var filePaths = files.Select(f => f.Path.LocalPath);
-
-            foreach (var file in filePaths)
-            {
-                var isAdded = await _addonsProvider.CopyAddonIntoFolder(file).ConfigureAwait(false);
-            }
-        }
     }
 
     private void OnListBoxContainerPrepared(object? sender, ContainerPreparedEventArgs e)

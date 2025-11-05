@@ -1,9 +1,9 @@
 using Addons.Providers;
 using Avalonia.Controls;
+using Avalonia.Desktop.Controls.Bases;
 using Avalonia.Desktop.Helpers;
 using Avalonia.Desktop.Misc;
 using Avalonia.Desktop.ViewModels;
-using Avalonia.Input;
 using Common.All.Enums;
 using Common.All.Helpers;
 using Common.All.Interfaces;
@@ -15,16 +15,15 @@ using Ports.Providers;
 
 namespace Avalonia.Desktop.Controls;
 
-public sealed partial class MapsControl : UserControl
+public sealed partial class MapsControl : DroppableControl
 {
     private readonly IEnumerable<BasePort> _supportedPorts = [];
-    private readonly InstalledAddonsProvider _installedAddonsProvider = null!;
     private readonly MapsViewModel _viewModel = null!;
     private readonly BitmapsCache _bitmapsCache = null!;
 
     private MenuFlyout? _flyout;
 
-    public MapsControl()
+    public MapsControl() : base(null!)
     {
         InitializeComponent();
     }
@@ -32,15 +31,14 @@ public sealed partial class MapsControl : UserControl
     public MapsControl(
         MapsViewModel viewModel,
         InstalledPortsProvider portsProvider,
-        InstalledAddonsProvider addonsProvider,
+        InstalledAddonsProvider installedAddonsProvider,
         BitmapsCache bitmapsCache
-        )
+        ) : base(installedAddonsProvider)
     {
         InitializeComponent();
 
         _viewModel = viewModel;
         _supportedPorts = portsProvider.GetPortsThatSupportGame(viewModel.Game.GameEnum);
-        _installedAddonsProvider = addonsProvider;
         _bitmapsCache = bitmapsCache;
 
         CreateSkillsFlyout();
@@ -295,21 +293,6 @@ public sealed partial class MapsControl : UserControl
         if (IsSkillFlyoutAvailable(port))
         {
             _flyout!.ShowAt(button);
-        }
-    }
-
-    private async void FilesDataGrid_DropAsync(object sender, DragEventArgs e)
-    {
-        var files = e.Data.GetFiles();
-
-        if (files?.Any() is true)
-        {
-            var filePaths = files.Select(f => f.Path.LocalPath);
-
-            foreach (var file in filePaths)
-            {
-                var isAdded = await _installedAddonsProvider.CopyAddonIntoFolder(file).ConfigureAwait(false);
-            }
         }
     }
 }
