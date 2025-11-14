@@ -2042,18 +2042,6 @@
       "UpdateDate": "2024-11-21T19:45:00Z"
     },
     {
-      "Id": "blood-eviction",
-      "AddonType": "TC",
-      "Game": "Blood",
-      "DownloadUrl": "http://176.222.52.233:9000/buildlauncher/Blood/Campaigns/blood-eviction_v1_5.zip",
-      "Title": "Eviction",
-      "Version": "1.5",
-      "FileSize": 31606216,
-      "Description": "https://www.moddb.com/mods/eviction-addon-for-blood\r\n\r\nEviction is an add-on I have been working on over the past 3-4 years. At this release, it contains 5 highly detailed levels that surpass the original limits of the vanilla game. 4 of which are campaign levels with an additional multiplayer level. It contains five new enemies! Over 35\u002B secrets to be found and dozens of side areas to explore! Randomized keycodes and clues for secrets. Meaning each time you play the code and clue will be unique! Modern effects like patrolling enemies and low gravity!",
-      "Author": "Austin \u0022SpillSomeBlood\u0022 Adams",
-      "UpdateDate": "2024-09-23T07:24:25.157333Z"
-    },
-    {
       "Id": "blood-faitd",
       "AddonType": "TC",
       "Game": "Blood",
@@ -2112,18 +2100,6 @@
       "Description": "https://www.moddb.com/mods/blood-trauma-therapy\n\nCaleb has won over the Cabal and destroyed the evil god Tchernobog. A short time has passed but Caleb can not find any rest. He is tormented by horrid dreams and visions that are haunting him and he has trouble distinguishing reality from dream. Awaking one day in hospital having no idea how he got there he sees only one solution to his agony. He has to find the three vessels of Tchernobog\u0027s Aura to resurrect him and kill him for the last time in hope of finding peace and rest.",
       "Author": "Thomas \u0022BloodyTom\u0022 Ziehl",
       "UpdateDate": "2024-09-22T15:35:03.001523Z"
-    },
-    {
-      "Id": "blood-what-lies-beneath",
-      "AddonType": "TC",
-      "Game": "Blood",
-      "DownloadUrl": "http://176.222.52.233:9000/buildlauncher/Blood/Campaigns/blood-what-lies-beneath_v1_1_7.zip",
-      "Title": "What Lies Beneath",
-      "Version": "1.1.7",
-      "FileSize": 275290541,
-      "Description": "https://www.moddb.com/mods/blood-what-lies-beneath\r\n\r\nFollow Caleb who is lost at sea to a mysterious island. What will he discover beneath the surface, in the bowels of the island? A dark cult has taken over a mansion, its surroundings and the secrets beneath the reef.\r\n\r\nThis is a non-linear addon for Blood. Fight the way you want, choose your own path through the island and find places otherwise kept a secret. Find clues to progress with tomes around the island.\r\n\r\nComes with its own executable due to technical reasons.",
-      "Author": "BloodyTom",
-      "UpdateDate": "2024-11-17T08:57:30.016268Z"
     },
     {
       "Id": "blood-willard",
@@ -2279,6 +2255,30 @@
       "Description": "https://www.bloodgame.ru/forum/topic.php?forum=2\u0026topic=105\r\n\r\nPart of the saga of the cheerful Caleb - Scum Of Dallas, who by the will of fate turned out to be deceived by a vile Canadian hockey player. Betting is a risky business, especially when there is a corrupt rat lurking in your favorite team. That\u0027s what happened to our hero: Canadian hockey player Adam Ace received a tempting offer to drain the final match of the World Cup in exchange for eternal life and sold his incorruptible soul to the well-known Cabal sect. What does sports have to do with it, you ask? The thing is that tired of immortality and endless wanderings, Caleb found an outlet in sports betting and put all his fortune accumulated over a long time spent under the wing of fortune and a unique flair for victory on the above-mentioned unfortunate national team. This leads to another question: what about the Bondage of this? The answer is immediately revealed - knowing that Caleb will not forgive Ace for such a setup of the maple leaf country (and in fact the loss of money), the goal of the distraught fanatics who lost their great and powerful, to track down, find and destroy our dead man, so to speak, for bait.",
       "Author": "Frances Rampage",
       "UpdateDate": "2025-10-25T10:34:40.6676756Z"
+    },
+    {
+      "Id": "blood-eviction",
+      "AddonType": "TC",
+      "Game": "Blood",
+      "DownloadUrl": "http://176.222.52.233:9000/buildlauncher/Blood/Campaigns/blood-eviction_v1_5_1.zip",
+      "Title": "Eviction",
+      "Version": "1.5.1",
+      "FileSize": 34222523,
+      "Description": "https://www.moddb.com/mods/eviction-addon-for-blood\r\n\r\nEviction is an add-on I have been working on over the past 3-4 years. At this release, it contains 5 highly detailed levels that surpass the original limits of the vanilla game. 4 of which are campaign levels with an additional multiplayer level. It contains five new enemies! Over 35\u002B secrets to be found and dozens of side areas to explore! Randomized keycodes and clues for secrets. Meaning each time you play the code and clue will be unique! Modern effects like patrolling enemies and low gravity!",
+      "Author": "Austin \u0022SpillSomeBlood\u0022 Adams",
+      "UpdateDate": "2025-11-14T07:35:01.0197567Z"
+    },
+    {
+      "Id": "blood-what-lies-beneath",
+      "AddonType": "TC",
+      "Game": "Blood",
+      "DownloadUrl": "http://176.222.52.233:9000/buildlauncher/Blood/Campaigns/blood-what-lies-beneath_v1_5.zip",
+      "Title": "What Lies Beneath",
+      "Version": "1.5",
+      "FileSize": 383600798,
+      "Description": "https://www.moddb.com/mods/blood-what-lies-beneath\r\n\r\nFollow Caleb who is lost at sea to a mysterious island. What will he discover beneath the surface, in the bowels of the island? A dark cult has taken over a mansion, its surroundings and the secrets beneath the reef.\r\n\r\nThis is a non-linear addon for Blood. Fight the way you want, choose your own path through the island and find places otherwise kept a secret. Find clues to progress with tomes around the island.\r\n\r\nComes with its own executable due to technical reasons.",
+      "Author": "BloodyTom",
+      "UpdateDate": "2025-11-14T08:49:21.6277812Z"
     }
   ],
   "Wang": [
