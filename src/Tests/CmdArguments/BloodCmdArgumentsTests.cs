@@ -148,7 +148,7 @@ public sealed class BloodCmdArgumentsTests
             RFF = "TC.RFF",
             SND = "TC.SND",
             IsFolder = true,
-            Executables = new Dictionary<OSEnum, string>() { { OSEnum.Windows, "nblood.exe" } }
+            Executables = new Dictionary<OSEnum, Dictionary<PortEnum, string>>() { { OSEnum.Windows, new Dictionary<PortEnum, string>() { { PortEnum.NBlood, "nblood.exe" } } } }
         };
 
         _bloodTcIncompatibleWithEnabledMod = new()

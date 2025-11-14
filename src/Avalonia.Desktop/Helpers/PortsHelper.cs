@@ -28,7 +28,7 @@ public static class PortsHelper
 
         if (addon.Executables?[OSEnum.Windows] is not null)
         {
-            return port.Exe.Equals(Path.GetFileName(addon.Executables[OSEnum.Windows]), StringComparison.OrdinalIgnoreCase);
+            return addon.Executables[OSEnum.Windows].ContainsKey(port.PortEnum);
         }
 
         if (addon.RequiredFeatures?.Except(port.SupportedFeatures).Any() is true)

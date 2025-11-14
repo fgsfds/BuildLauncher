@@ -656,20 +656,70 @@
                             <TextBlock Grid.Row="0" Grid.Column="0"
                                        Margin="5"
                                        VerticalAlignment="Center"
-                                       Text="Windows executable"/>
+                                       Text="Windows executables:"/>
 
                             <TextBlock Grid.Row="1" Grid.Column="0"
                                        Margin="5"
                                        VerticalAlignment="Center"
-                                       Text="Linux executable"/>
+                                       Text="Linux executables:"/>
 
-                            <TextBox Grid.Row="0" Grid.Column="1"
-                                     Margin="5"
-                                     Text="{Binding WindowsExecutable}"/>
+                            <WrapPanel Grid.Row="0" Grid.Column="1"
+                                       Orientation="Horizontal">
 
-                            <TextBox Grid.Row="1" Grid.Column="1"
-                                     Margin="5"
-                                     Text="{Binding LinuxExecutable}"/>
+                                <TextBlock Margin="5"
+                                           VerticalAlignment="Center"
+                                           Text="NBlood:"/>
+
+                                <TextBox Margin="5"
+                                         MinWidth="150"
+                                         Text="{Binding WindowsNBloodExe}"/>
+
+                                <TextBlock Margin="5"
+                                           VerticalAlignment="Center"
+                                           Text="NotBlood:"/>
+
+                                <TextBox Margin="5"
+                                         MinWidth="150"
+                                         Text="{Binding WindowsNotBloodExe}"/>
+
+                                <TextBlock Margin="5"
+                                           VerticalAlignment="Center"
+                                           Text="EDuke32:"/>
+
+                                <TextBox Margin="5"
+                                         MinWidth="150"
+                                         Text="{Binding WindowsEDukeExe}"/>
+
+                            </WrapPanel>
+
+                            <WrapPanel Grid.Row="1" Grid.Column="1"
+                                       Orientation="Horizontal">
+
+                                <TextBlock Margin="5"
+                                           VerticalAlignment="Center"
+                                           Text="NBlood:"/>
+
+                                <TextBox Margin="5"
+                                         MinWidth="150"
+                                         Text="{Binding LinuxNBloodExe}"/>
+
+                                <TextBlock Margin="5"
+                                           VerticalAlignment="Center"
+                                           Text="NotBlood:"/>
+
+                                <TextBox Margin="5"
+                                         MinWidth="150"
+                                         Text="{Binding LinuxNotBloodExe}"/>
+
+                                <TextBlock Margin="5"
+                                           VerticalAlignment="Center"
+                                           Text="EDuke32:"/>
+
+                                <TextBox Margin="5"
+                                         MinWidth="150"
+                                         Text="{Binding LinuxEDukeExe}"/>
+
+                            </WrapPanel>
 
                         </Grid>
 

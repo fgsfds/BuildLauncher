@@ -33,14 +33,12 @@ public sealed class AddonJsonModel
     public string? MainCon { get; set; }
 
     [JsonPropertyName("con_modules")]
-    //[JsonConverter(typeof(SingleOrArrayConverter<string>))]
     public List<string>? AdditionalCons { get; set; }
 
     [JsonPropertyName("def_main")]
     public string? MainDef { get; set; }
 
     [JsonPropertyName("def_modules")]
-    //[JsonConverter(typeof(SingleOrArrayConverter<string>))]
     public List<string>? AdditionalDefs { get; set; }
 
     [JsonPropertyName("rts")]
@@ -69,16 +67,18 @@ public sealed class AddonJsonModel
     public string? Description { get; set; }
 
     [JsonPropertyName("executables")]
-    public Dictionary<OSEnum, string>? Executables { get; set; }
+    [JsonConverter(typeof(ExecutablesConverter))]
+    public Dictionary<OSEnum, Dictionary<PortEnum, string>>? Executables { get; set; }
+
+    [Obsolete]
+    public Dictionary<OSEnum, string>? ExecutablesOld { get; } = null;
 }
 
 [JsonSourceGenerationOptions(
     Converters = [
-        typeof(JsonStringEnumConverter<PortEnum>),
-        //typeof(JsonStringEnumConverter<GameEnum>),
-        typeof(GameEnumJsonConverter),
         typeof(JsonStringEnumConverter<AddonTypeEnum>),
         typeof(JsonStringEnumConverter<OSEnum>),
+        typeof(JsonStringEnumConverter<PortEnum>),
         typeof(JsonStringEnumConverter<FeatureEnum>)
         ],
     UnmappedMemberHandling = JsonUnmappedMemberHandling.Disallow,

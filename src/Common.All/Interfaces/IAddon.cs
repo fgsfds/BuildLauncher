@@ -88,7 +88,7 @@ public interface IAddon
     /// <summary>
     /// Map that will be started when the addon is loaded
     /// </summary>
-    IReadOnlyDictionary<OSEnum, string>? Executables { get; init; }
+    Dictionary<OSEnum, Dictionary<PortEnum, string>>? Executables { get; init; }
 
     /// <summary>
     /// Is addon unpacked to a folder

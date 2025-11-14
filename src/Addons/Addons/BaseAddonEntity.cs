@@ -63,7 +63,7 @@ public abstract class BaseAddonEntity : IAddon
     public bool IsFavorite { get; set; }
 
     /// <inheritdoc/>
-    public required IReadOnlyDictionary<OSEnum, string>? Executables { get; init; }
+    public required Dictionary<OSEnum, Dictionary<PortEnum, string>>? Executables { get; init; }
 
     /// <inheritdoc/>
     public string? FileName => PathToFile is null ? null : Path.GetFileName(PathToFile);

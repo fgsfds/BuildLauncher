@@ -29,7 +29,7 @@ public sealed class SeparatorItem : IAddon
     public string? MainDef { get => throw new NotImplementedException(); init => throw new NotImplementedException(); }
     public ImmutableArray<string>? AdditionalDefs { get => throw new NotImplementedException(); init => throw new NotImplementedException(); }
     public IStartMap? StartMap { get => throw new NotImplementedException(); init => throw new NotImplementedException(); }
-    public IReadOnlyDictionary<OSEnum, string>? Executables { get => throw new NotImplementedException(); init => throw new NotImplementedException(); }
+    public Dictionary<OSEnum, Dictionary<PortEnum, string>>? Executables { get => throw new NotImplementedException(); init => throw new NotImplementedException(); }
     public bool IsFolder { get => throw new NotImplementedException(); init => throw new NotImplementedException(); }
     public bool IsFavorite { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
     public string ToMarkdownString() => throw new NotImplementedException();

@@ -90,7 +90,7 @@ public sealed class SerializerTests
     }
 """;
 
-    private const string StandaloneJson =
+    private const string StandaloneJsonOld =
 """
     {
       "id": "game-id",
@@ -104,6 +104,28 @@ public sealed class SerializerTests
       "executables": {
         "Windows": "eduke32.exe",
         "Linux": "eduke32"
+      }
+    }
+""";
+
+    private const string StandaloneJson =
+"""
+    {
+      "id": "game-id",
+      "type": "TC",
+      "game": {
+        "name": "Standalone"
+      },
+      "title": "Standalone Game",
+      "version": "1.0",
+      "author": "Author",
+      "executables": {
+        "Windows": {
+          "EDuke32": "eduke32.exe"
+        },
+        "Linux": {
+          "EDuke32": "eduke32"
+        },
       }
     }
 """;
@@ -187,6 +209,20 @@ public sealed class SerializerTests
     }
 
     [Fact]
+    public void DeserializeStandaloneJsonOld()
+    {
+        var result = JsonSerializer.Deserialize(StandaloneJsonOld, AddonManifestContext.Default.AddonJsonModel);
+
+        Assert.NotNull(result);
+
+        Assert.Equal(AddonTypeEnum.TC, result.AddonType);
+        Assert.Equal(GameEnum.Standalone, result.SupportedGame.Game);
+        Assert.Equal("Standalone Game", result.Title);
+        Assert.Equal("eduke32.exe", result.Executables?[OSEnum.Windows]?[PortEnum.EDuke32]);
+        Assert.Equal("eduke32", result.Executables?[OSEnum.Linux]?[PortEnum.EDuke32]);
+    }
+
+    [Fact]
     public void DeserializeStandaloneJson()
     {
         var result = JsonSerializer.Deserialize(StandaloneJson, AddonManifestContext.Default.AddonJsonModel);
@@ -196,8 +232,8 @@ public sealed class SerializerTests
         Assert.Equal(AddonTypeEnum.TC, result.AddonType);
         Assert.Equal(GameEnum.Standalone, result.SupportedGame.Game);
         Assert.Equal("Standalone Game", result.Title);
-        Assert.Equal("eduke32.exe", result.Executables![OSEnum.Windows]);
-        Assert.Equal("eduke32", result.Executables![OSEnum.Linux]);
+        Assert.Equal("eduke32.exe", result.Executables?[OSEnum.Windows]?[PortEnum.EDuke32]);
+        Assert.Equal("eduke32", result.Executables?[OSEnum.Linux]?[PortEnum.EDuke32]);
     }
 }
 

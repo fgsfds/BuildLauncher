@@ -667,9 +667,14 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
             {
                 carcass.Executables = [];
 
-                foreach (var exe in manifest.Executables)
+                foreach (var osPortsPair in manifest.Executables)
                 {
-                    carcass.Executables.Add(exe.Key, Path.Combine(Path.GetDirectoryName(pathToFile)!, exe.Value));
+                    carcass.Executables.Add(osPortsPair.Key, []);
+
+                    foreach (var x in osPortsPair.Value)
+                    {
+                        carcass.Executables[osPortsPair.Key].Add(x.Key, Path.Combine(Path.GetDirectoryName(pathToFile)!, x.Value));
+                    }
                 }
             }
             else
@@ -817,9 +822,14 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
                 {
                     carcass.Executables = [];
 
-                    foreach (var exe in manifest.Executables)
+                    foreach (var osPortsPair in manifest.Executables)
                     {
-                        carcass.Executables.Add(exe.Key, Path.Combine(Path.GetDirectoryName(pathToFile)!, exe.Value));
+                        carcass.Executables.Add(osPortsPair.Key, []);
+
+                        foreach (var x in osPortsPair.Value)
+                        {
+                            carcass.Executables[osPortsPair.Key].Add(x.Key, Path.Combine(Path.GetDirectoryName(pathToFile)!, x.Value));
+                        }
                     }
                 }
                 else
@@ -1178,5 +1188,5 @@ internal struct AddonCarcass
     public Dictionary<string, string?>? Dependencies { get; set; }
     public Dictionary<string, string?>? Incompatibles { get; set; }
     public IStartMap? StartMap { get; set; }
-    public Dictionary<OSEnum, string>? Executables { get; set; }
+    public Dictionary<OSEnum, Dictionary<PortEnum, string>>? Executables { get; set; }
 }

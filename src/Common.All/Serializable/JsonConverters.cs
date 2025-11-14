@@ -91,6 +91,100 @@ public sealed class IStartMapConverter : JsonConverter<IStartMap?>
     }
 }
 
+public sealed class ExecutablesConverter : JsonConverter<Dictionary<OSEnum, Dictionary<PortEnum, string>>?>
+{
+    public override Dictionary<OSEnum, Dictionary<PortEnum, string>>? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    {
+        if (reader.TokenType is JsonTokenType.StartObject)
+        {
+            try
+            {
+                return JsonSerializer.Deserialize(ref reader, AddonManifestContext.Default.DictionaryOSEnumDictionaryPortEnumString);
+            }
+            catch { }
+
+            try
+            {
+                var old = JsonSerializer.Deserialize(ref reader, AddonManifestContext.Default.DictionaryOSEnumString);
+
+                if (old is not null)
+                {
+                    Dictionary<OSEnum, Dictionary<PortEnum, string>> result = [];
+
+                    if (old.TryGetValue(OSEnum.Windows, out var winPort))
+                    {
+                        result.Add(OSEnum.Windows, []);
+
+                        if (winPort.StartsWith("nblood"))
+                        {
+                            result[OSEnum.Windows].Add(PortEnum.NBlood, winPort);
+                        }
+                        else if (winPort.StartsWith("notblood"))
+                        {
+                            result[OSEnum.Windows].Add(PortEnum.NotBlood, winPort);
+                        }
+                        else if (winPort.StartsWith("eduke"))
+                        {
+                            result[OSEnum.Windows].Add(PortEnum.EDuke32, winPort);
+                        }
+                    }
+
+                    if (old.TryGetValue(OSEnum.Linux, out var linPort))
+                    {
+                        result.Add(OSEnum.Linux, []);
+
+                        if (linPort.StartsWith("nblood"))
+                        {
+                            result[OSEnum.Linux].Add(PortEnum.NBlood, linPort);
+                        }
+                        else if (linPort.StartsWith("notblood"))
+                        {
+                            result[OSEnum.Linux].Add(PortEnum.NotBlood, linPort);
+                        }
+                        else if (linPort.StartsWith("eduke"))
+                        {
+                            result[OSEnum.Linux].Add(PortEnum.EDuke32, linPort);
+                        }
+                    }
+
+                    return result;
+                }
+
+                return null;
+            }
+            catch { }
+        }
+
+        return ThrowHelper.ThrowNotSupportedException<Dictionary<OSEnum, Dictionary<PortEnum, string>>?>();
+    }
+
+    public override void Write(Utf8JsonWriter writer, Dictionary<OSEnum, Dictionary<PortEnum, string>>? value, JsonSerializerOptions options)
+    {
+        if (value is null)
+        {
+            writer.WriteNullValue();
+            return;
+        }
+
+        writer.WriteStartObject();
+
+        foreach (var osEntry in value)
+        {
+            writer.WritePropertyName(osEntry.Key.ToString());
+            writer.WriteStartObject();
+
+            foreach (var portEntry in osEntry.Value)
+            {
+                writer.WriteString(portEntry.Key.ToString(), portEntry.Value);
+            }
+
+            writer.WriteEndObject();
+        }
+
+        writer.WriteEndObject();
+    }
+}
+
 
 //public sealed class SingleOrArrayConverter<TItem> : JsonConverter<List<TItem>>
 //{

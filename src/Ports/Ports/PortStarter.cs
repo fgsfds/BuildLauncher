@@ -1,7 +1,6 @@
 ﻿using System.Diagnostics;
 using Addons.Providers;
 using Common.All.Enums;
-using Common.All.Helpers;
 using Common.All.Interfaces;
 using Common.Client.Providers;
 using Microsoft.Extensions.Logging;
@@ -47,8 +46,10 @@ public sealed class PortStarter
 
         var args = port.GetStartGameArgs(game, addon, mods, skipIntro, skipStartup, skill);
 
+        _ = addon.Executables?[OSEnum.Windows].TryGetValue(port.PortEnum, out pathToExe);
+
         _logger.LogInformation($"=== Starting addon {addon.AddonId.Id} for {game.FullName} ===");
-        _logger.LogInformation($"Path to port exe {addon.Executables?[OSEnum.Windows] ?? port.PortExeFilePath}");
+        _logger.LogInformation($"Path to port exe {pathToExe}");
         _logger.LogInformation($"Startup args:{args}");
         _logger.LogInformation($"Startup args length: {args.Length}");
 
@@ -77,10 +78,6 @@ public sealed class PortStarter
         if (pathToExe is not null)
         {
             exe = pathToExe;
-        }
-        else if (addon.Executables?[CommonProperties.OSEnum] is not null)
-        {
-            exe = addon.Executables[CommonProperties.OSEnum];
         }
         else
         {

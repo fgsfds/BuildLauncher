@@ -146,10 +146,20 @@ public sealed partial class DevViewModel : ObservableObject
     private string? _soundRff;
     [ObservableProperty]
     private string? _mapFileName;
+
     [ObservableProperty]
-    private string? _windowsExecutable;
+    private string? _windowsNBloodExe;
     [ObservableProperty]
-    private string? _linuxExecutable;
+    private string? _linuxNBloodExe;
+    [ObservableProperty]
+    private string? _windowsNotBloodExe;
+    [ObservableProperty]
+    private string? _linuxNotBloodExe;
+    [ObservableProperty]
+    private string? _windowsEDukeExe;
+    [ObservableProperty]
+    private string? _linuxEDukeExe;
+
     [ObservableProperty]
     private int? _mapEpisode;
     [ObservableProperty]
@@ -211,8 +221,12 @@ public sealed partial class DevViewModel : ObservableObject
     [NotifyPropertyChangedFor(nameof(AddonIdPrefix))]
     [NotifyPropertyChangedFor(nameof(IsStep3Visible))]
     [NotifyPropertyChangedFor(nameof(AreBloodPropertiesAvailable))]
-    [NotifyPropertyChangedFor(nameof(WindowsExecutable))]
-    [NotifyPropertyChangedFor(nameof(LinuxExecutable))]
+    [NotifyPropertyChangedFor(nameof(WindowsNBloodExe))]
+    [NotifyPropertyChangedFor(nameof(WindowsNotBloodExe))]
+    [NotifyPropertyChangedFor(nameof(WindowsEDukeExe))]
+    [NotifyPropertyChangedFor(nameof(LinuxNBloodExe))]
+    [NotifyPropertyChangedFor(nameof(LinuxNotBloodExe))]
+    [NotifyPropertyChangedFor(nameof(LinuxEDukeExe))]
     [ObservableProperty]
     private GameEnum? _selectedGame;
 
@@ -558,8 +572,12 @@ public sealed partial class DevViewModel : ObservableObject
         var files = Directory.GetFiles(PathToAddonFolder, "*", SearchOption.TopDirectoryOnly).Select(static x => Path.GetFileName(x).ToLower());
 
         if (SelectedGame is not GameEnum.Standalone &&
-            WindowsExecutable is null &&
-            LinuxExecutable is null &&
+            WindowsNBloodExe is null &&
+            WindowsNotBloodExe is null &&
+            WindowsEDukeExe is null &&
+            LinuxNBloodExe is null &&
+            LinuxNotBloodExe is null &&
+            LinuxEDukeExe is null &&
             MainRff is null &&
             SoundRff is null)
         {
@@ -701,16 +719,37 @@ public sealed partial class DevViewModel : ObservableObject
             }
         }
 
-        Dictionary<OSEnum, string> executables = [];
+        Dictionary<OSEnum, Dictionary<PortEnum, string>>? executables = [];
 
-        if (!string.IsNullOrWhiteSpace(WindowsExecutable))
+        if (!string.IsNullOrWhiteSpace(WindowsNBloodExe))
         {
-            executables.Add(OSEnum.Windows, WindowsExecutable);
+            _ = executables.TryAdd(OSEnum.Windows, []);
+            executables[OSEnum.Windows].Add(PortEnum.NBlood, WindowsNBloodExe);
         }
-
-        if (!string.IsNullOrWhiteSpace(LinuxExecutable))
+        if (!string.IsNullOrWhiteSpace(WindowsNotBloodExe))
         {
-            executables.Add(OSEnum.Linux, LinuxExecutable);
+            _ = executables.TryAdd(OSEnum.Windows, []);
+            executables[OSEnum.Windows].Add(PortEnum.NotBlood, WindowsNotBloodExe);
+        }
+        if (!string.IsNullOrWhiteSpace(WindowsEDukeExe))
+        {
+            _ = executables.TryAdd(OSEnum.Windows, []);
+            executables[OSEnum.Windows].Add(PortEnum.EDuke32, WindowsEDukeExe);
+        }
+        if (!string.IsNullOrWhiteSpace(LinuxNBloodExe))
+        {
+            _ = executables.TryAdd(OSEnum.Linux, []);
+            executables[OSEnum.Linux].Add(PortEnum.NBlood, LinuxNBloodExe);
+        }
+        if (!string.IsNullOrWhiteSpace(LinuxNotBloodExe))
+        {
+            _ = executables.TryAdd(OSEnum.Linux, []);
+            executables[OSEnum.Linux].Add(PortEnum.NotBlood, LinuxNotBloodExe);
+        }
+        if (!string.IsNullOrWhiteSpace(LinuxEDukeExe))
+        {
+            _ = executables.TryAdd(OSEnum.Linux, []);
+            executables[OSEnum.Linux].Add(PortEnum.EDuke32, LinuxEDukeExe);
         }
 
         AddonJsonModel addon = new()
@@ -813,13 +852,34 @@ public sealed partial class DevViewModel : ObservableObject
 
         if (result.Executables is not null)
         {
-            WindowsExecutable = result.Executables.TryGetValue(OSEnum.Windows, out var winExe) ? winExe : null;
-            LinuxExecutable = result.Executables.TryGetValue(OSEnum.Linux, out var linExe) ? linExe : null;
+            if (result.Executables.TryGetValue(OSEnum.Windows, out var windowsExes))
+            {
+                _ = windowsExes.TryGetValue(PortEnum.EDuke32, out var exe1);
+                WindowsEDukeExe = exe1;
+                _ = windowsExes.TryGetValue(PortEnum.NBlood, out var exe2);
+                WindowsNBloodExe = exe2;
+                _ = windowsExes.TryGetValue(PortEnum.NotBlood, out var exe3);
+                WindowsNotBloodExe = exe3;
+            }
+
+            if (result.Executables.TryGetValue(OSEnum.Linux, out var linuxExes))
+            {
+                _ = linuxExes.TryGetValue(PortEnum.EDuke32, out var exe1);
+                LinuxEDukeExe = exe1;
+                _ = linuxExes.TryGetValue(PortEnum.NBlood, out var exe2);
+                LinuxNBloodExe = exe2;
+                _ = linuxExes.TryGetValue(PortEnum.NotBlood, out var exe3);
+                LinuxNotBloodExe = exe3;
+            }
         }
         else
         {
-            WindowsExecutable = null;
-            LinuxExecutable = null;
+            WindowsEDukeExe = null;
+            WindowsNBloodExe = null;
+            WindowsNotBloodExe = null;
+            LinuxEDukeExe = null;
+            LinuxNBloodExe = null;
+            LinuxNotBloodExe = null;
         }
     }
 
