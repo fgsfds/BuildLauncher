@@ -1,6 +1,7 @@
 using System.Collections.Immutable;
 using Common.All.Enums;
 using CommunityToolkit.Mvvm.ComponentModel;
+using Tools.Tools;
 
 namespace Avalonia.Desktop.ViewModels;
 
@@ -14,29 +15,30 @@ public sealed partial class ToolsViewModel : ObservableObject
     public ImmutableList<ToolViewModel> ToolsList { get; set; } = [];
 
     public ToolsViewModel(
-        ViewModelsFactory viewModelsFactory
+        ViewModelsFactory viewModelsFactory,
+        IEnumerable<BaseTool> tools
         )
     {
         _viewModelsFactory = viewModelsFactory;
 
-        Initialize();
+        Initialize(tools);
     }
 
     /// <summary>
     /// Initialize VM
     /// </summary>
-    private void Initialize()
+    private void Initialize(IEnumerable<BaseTool> tools)
     {
-        var edukeVm = _viewModelsFactory.GetToolViewModel(ToolEnum.XMapEdit);
-        edukeVm.ToolChangedEvent += OnToolChanged;
+        List<ToolViewModel> viewModels = new(tools.Count());
 
-        var razeVm = _viewModelsFactory.GetToolViewModel(ToolEnum.Mapster32);
-        razeVm.ToolChangedEvent += OnToolChanged;
+        foreach (var tool in tools)
+        {
+            var vm = _viewModelsFactory.GetToolViewModel(tool);
+            vm.ToolChangedEvent += OnToolChanged;
+            viewModels.Add(vm);
+        }
 
-        var dosbloodVm = _viewModelsFactory.GetToolViewModel(ToolEnum.DOSBlood);
-        dosbloodVm.ToolChangedEvent += OnToolChanged;
-
-        ToolsList = [edukeVm, razeVm, dosbloodVm];
+        ToolsList = [.. viewModels];
         OnPropertyChanged(nameof(ToolsList));
     }
 

@@ -6,6 +6,7 @@ using Avalonia.Desktop.Misc;
 using Avalonia.Desktop.ViewModels;
 using Avalonia.Markup.Xaml;
 using Avalonia.Styling;
+using Common.All.Enums;
 using Common.Client.DI;
 using Common.Client.Enums;
 using Common.Client.Helpers;
@@ -116,10 +117,10 @@ public sealed class App : Application
     {
         IEnumerable<string> paths =
             [
-                portsProvider.BuildGDX.PortSavedGamesFolderPath,
-                portsProvider.VoidSW.PortSavedGamesFolderPath,
-                portsProvider.PCExhumed.PortSavedGamesFolderPath,
-                portsProvider.Raze.PortSavedGamesFolderPath
+                portsProvider.GetPort(PortEnum.BuildGDX).PortSavedGamesFolderPath,
+                portsProvider.GetPort(PortEnum.VoidSW).PortSavedGamesFolderPath,
+                portsProvider.GetPort(PortEnum.PCExhumed).PortSavedGamesFolderPath,
+                portsProvider.GetPort(PortEnum.Raze).PortSavedGamesFolderPath
             ];
 
         foreach (var path in paths)
@@ -151,10 +152,16 @@ public sealed class App : Application
 
         ClientBindings.Load(container, Design.IsDesignMode);
         GuiBindings.Load(container);
+
         Games.DI.ProvidersBindings.Load(container);
+
         Ports.DI.ProvidersBindings.Load(container);
-        Addons.DI.ProvidersBindings.Load(container);
+        Ports.DI.PortsBindings.Load(container);
+
         Tools.DI.ProvidersBindings.Load(container);
+        Tools.DI.ToolsBindings.Load(container);
+
+        Addons.DI.ProvidersBindings.Load(container);
     }
 
     /// <summary>

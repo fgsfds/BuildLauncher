@@ -1,13 +1,11 @@
 ﻿using System.Collections.Immutable;
 using Common.All.Enums;
 using Common.Client.Helpers;
-using Common.Client.Interfaces;
 using CommunityToolkit.Diagnostics;
 using Database.Client;
 using Database.Client.DbEntities;
 using Microsoft.EntityFrameworkCore;
 using Ports.Ports;
-using Ports.Ports.EDuke32;
 
 namespace Ports.Providers;
 
@@ -18,26 +16,14 @@ public sealed class InstalledPortsProvider
 {
     private readonly IDbContextFactory<DatabaseContext> _dbContextFactory;
 
-    private readonly List<BasePort> _builtInPorts;
+    public Dictionary<PortEnum, BasePort> _ports = [];
     private readonly List<CustomPort> _customPorts = [];
 
     public event EventHandler? CustomPortChangedEvent;
 
-    public BuildGDX BuildGDX { get; init; }
-    public EDuke32 EDuke32 { get; init; }
-    public NBlood NBlood { get; init; }
-    public NotBlood NotBlood { get; init; }
-    public PCExhumed PCExhumed { get; init; }
-    public Raze Raze { get; init; }
-    public RedNukem RedNukem { get; init; }
-    public VoidSW VoidSW { get; init; }
-    public Fury Fury { get; init; }
-    public DosBox DosBox { get; init; }
-
-
     public InstalledPortsProvider(
-        IConfigProvider config,
-        IDbContextFactory<DatabaseContext> dbContextFactory
+        IDbContextFactory<DatabaseContext> dbContextFactory,
+        IEnumerable<BasePort> ports
         )
     {
         _dbContextFactory = dbContextFactory;
@@ -47,62 +33,26 @@ public sealed class InstalledPortsProvider
             _ = Directory.CreateDirectory(ClientProperties.PortsFolderPath);
         }
 
-        BuildGDX = new();
-        EDuke32 = new();
-        NBlood = new();
-        NotBlood = new();
-        PCExhumed = new();
-        Raze = new();
-        RedNukem = new();
-        VoidSW = new();
-        Fury = new(config);
-        DosBox = new();
-
-        _builtInPorts =
-        [
-            EDuke32,
-            RedNukem,
-            NBlood,
-            NotBlood,
-            PCExhumed,
-            VoidSW,
-            Fury,
-            Raze,
-            BuildGDX,
-            DosBox
-        ];
+        foreach (var port in ports)
+        {
+            _ports.Add(port.PortEnum, port);
+        }
 
         UpdateCustomPortsList();
     }
-
 
     /// <summary>
     /// Get list of ports that support selected game
     /// </summary>
     /// <param name="game">Game enum</param>
-    public IEnumerable<BasePort> GetPortsThatSupportGame(GameEnum game) => _builtInPorts.Where(x => x.SupportedGames.Contains(game));
+    public IEnumerable<BasePort> GetPortsThatSupportGame(GameEnum game) => _ports.Values.Where(x => x.SupportedGames.Contains(game));
 
     /// <summary>
     /// Get port by enum
     /// </summary>
     /// <param name="portEnum">Port enum</param>
-    public BasePort GetPort(PortEnum portEnum)
-    {
-        return portEnum switch
-        {
-            PortEnum.BuildGDX => BuildGDX,
-            PortEnum.Raze => Raze,
-            PortEnum.EDuke32 => EDuke32,
-            PortEnum.RedNukem => RedNukem,
-            PortEnum.NBlood => NBlood,
-            PortEnum.NotBlood => NotBlood,
-            PortEnum.VoidSW => VoidSW,
-            PortEnum.PCExhumed => PCExhumed,
-            PortEnum.Fury => Fury,
-            PortEnum.DosBox => DosBox,
-            _ => ThrowHelper.ThrowArgumentOutOfRangeException<BasePort>()
-        };
-    }
+    public BasePort GetPort(PortEnum portEnum) =>
+        _ports.TryGetValue(portEnum, out var port) ? port : throw new ArgumentException();
 
     /// <summary>
     /// Get list of custom ports
@@ -184,7 +134,7 @@ public sealed class InstalledPortsProvider
 
         foreach (var port in dbContext.CustomPorts.OrderBy(static x => x.Name))
         {
-            _customPorts.Add(new() { Name = port.Name, Path = port.PathToExe, BasePort = _builtInPorts.First(x => x.PortEnum == port.PortEnum) });
+            _customPorts.Add(new() { Name = port.Name, Path = port.PathToExe, BasePort = _ports.Values.First(x => x.PortEnum == port.PortEnum) });
         }
     }
 }

@@ -176,6 +176,11 @@ public abstract class BasePort
     /// </summary>
     public long IconId => PortEnum.GetUniqueHash();
 
+    /// <summary>
+    /// Can this port be downloaded.
+    /// </summary>
+    public virtual bool IsDownloadable => true;
+
 
     protected BasePort()
     {

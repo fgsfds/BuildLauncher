@@ -62,6 +62,9 @@ public sealed class VoidSW : EDuke32
     /// <inheritdoc/>
     protected override string MainConParam => ThrowHelper.ThrowNotSupportedException<string>();
 
+    /// <inheritdoc/>
+    public override bool IsDownloadable => false;
+
 
     /// <inheritdoc/>
     public override void BeforeStart(IGame game, IAddon campaign)

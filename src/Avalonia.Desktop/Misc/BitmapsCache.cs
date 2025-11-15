@@ -16,6 +16,17 @@ namespace Avalonia.Desktop.Misc;
 public sealed class BitmapsCache : ICacheAdder<Stream>, ICacheGetter<Bitmap>, IDisposable
 {
     private readonly ConcurrentDictionary<long, Bitmap> _cache = [];
+    private readonly IEnumerable<BasePort> _ports;
+    private readonly IEnumerable<BaseTool> _tools;
+
+    public BitmapsCache(
+        IEnumerable<BasePort> ports,
+        IEnumerable<BaseTool> tools
+        )
+    {
+        _ports = ports;
+        _tools = tools;
+    }
 
     public void InitializeCache()
     {
@@ -158,49 +169,22 @@ public sealed class BitmapsCache : ICacheAdder<Stream>, ICacheGetter<Bitmap>, ID
     {
         var portsAss = typeof(BasePort).Assembly;
 
-        using var bgdx = ImageHelper.FileNameToStream("BuildGDX.png", portsAss);
-        _ = TryAddToCache(PortEnum.BuildGDX.GetUniqueHash(), bgdx);
-
-        using var ed = ImageHelper.FileNameToStream("EDuke32.png", portsAss);
-        _ = TryAddToCache(PortEnum.EDuke32.GetUniqueHash(), ed);
-
-        using var fury = ImageHelper.FileNameToStream("Fury.png", portsAss);
-        _ = TryAddToCache(PortEnum.Fury.GetUniqueHash(), fury);
-
-        using var nblood = ImageHelper.FileNameToStream("NBlood.png", portsAss);
-        _ = TryAddToCache(PortEnum.NBlood.GetUniqueHash(), nblood);
-
-        using var notblood = ImageHelper.FileNameToStream("NotBlood.png", portsAss);
-        _ = TryAddToCache(PortEnum.NotBlood.GetUniqueHash(), notblood);
-
-        using var pcex = ImageHelper.FileNameToStream("PCExhumed.png", portsAss);
-        _ = TryAddToCache(PortEnum.PCExhumed.GetUniqueHash(), pcex);
-
-        using var raze = ImageHelper.FileNameToStream("Raze.png", portsAss);
-        _ = TryAddToCache(PortEnum.Raze.GetUniqueHash(), raze);
-
-        using var rn = ImageHelper.FileNameToStream("RedNukem.png", portsAss);
-        _ = TryAddToCache(PortEnum.RedNukem.GetUniqueHash(), rn);
-
-        using var vsw = ImageHelper.FileNameToStream("VoidSW.png", portsAss);
-        _ = TryAddToCache(PortEnum.VoidSW.GetUniqueHash(), vsw);
-
-        using var db = ImageHelper.FileNameToStream("DosBox.png", portsAss);
-        _ = TryAddToCache(PortEnum.DosBox.GetUniqueHash(), db);
+        foreach (var port in _ports)
+        {
+            using var png = ImageHelper.FileNameToStream($"{port.ShortName}.png", portsAss);
+            _ = TryAddToCache(port.PortEnum.GetUniqueHash(), png);
+        }
     }
 
     private void InitToolsCache()
     {
-        var portsAss = typeof(BaseTool).Assembly;
+        var toolsAss = typeof(BaseTool).Assembly;
 
-        using var mapster32 = ImageHelper.FileNameToStream("Mapster32.png", portsAss);
-        _ = TryAddToCache(ToolEnum.Mapster32.GetUniqueHash(), mapster32);
-
-        using var xmapedit = ImageHelper.FileNameToStream("XMAPEDIT.png", portsAss);
-        _ = TryAddToCache(ToolEnum.XMapEdit.GetUniqueHash(), xmapedit);
-
-        using var dosblood = ImageHelper.FileNameToStream("DOSBlood.png", portsAss);
-        _ = TryAddToCache(ToolEnum.DOSBlood.GetUniqueHash(), dosblood);
+        foreach (var port in _tools)
+        {
+            using var png = ImageHelper.FileNameToStream($"{port.Name}.png", toolsAss);
+            _ = TryAddToCache(port.ToolEnum.GetUniqueHash(), png);
+        }
     }
 
 

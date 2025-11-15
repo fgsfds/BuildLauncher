@@ -63,7 +63,7 @@ public sealed class FilesDownloader
         try
         {
             _downloadService.DownloadProgressChanged += OnDownloadProgressChangedEvent;
-             await _downloadService.DownloadFileTaskAsync(url.ToString(), tempFile, cancellationToken).ConfigureAwait(false);
+            await _downloadService.DownloadFileTaskAsync(url.ToString(), tempFile, cancellationToken).ConfigureAwait(false);
 
             if (_downloadService.Status is DownloadStatus.Stopped or DownloadStatus.Failed)
             {

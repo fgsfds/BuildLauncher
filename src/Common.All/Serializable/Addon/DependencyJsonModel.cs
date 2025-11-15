@@ -13,7 +13,7 @@ public sealed class DependencyJsonModel
 }
 
 [JsonSourceGenerationOptions(
-    Converters = [ typeof(JsonStringEnumConverter<FeatureEnum>) ],
+    Converters = [typeof(JsonStringEnumConverter<FeatureEnum>)],
     RespectNullableAnnotations = true
     )]
 [JsonSerializable(typeof(DependencyJsonModel))]

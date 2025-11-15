@@ -13,6 +13,7 @@ using Ports.Ports;
 using Ports.Providers;
 using Tools.Installer;
 using Tools.Providers;
+using Tools.Tools;
 
 namespace Avalonia.Desktop.ViewModels;
 
@@ -34,6 +35,8 @@ public sealed class ViewModelsFactory
     private readonly AppUpdateInstaller _appUpdateInstaller;
     private readonly GamesPathsProvider _gamesPathsProvider;
     private readonly BitmapsCache _bitmapsCache;
+    private readonly IEnumerable<BasePort> _ports;
+    private readonly IEnumerable<BaseTool> _tools;
     private readonly ILogger _logger;
 
     public ViewModelsFactory(
@@ -53,6 +56,8 @@ public sealed class ViewModelsFactory
         AppUpdateInstaller appUpdateInstaller,
         GamesPathsProvider gamesPathsProvider,
         BitmapsCache bitmapsCache,
+        IEnumerable<BasePort> ports,
+        IEnumerable<BaseTool> tools,
         ILogger logger
         )
     {
@@ -72,6 +77,8 @@ public sealed class ViewModelsFactory
         _appUpdateInstaller = appUpdateInstaller;
         _gamesPathsProvider = gamesPathsProvider;
         _bitmapsCache = bitmapsCache;
+        _ports = ports;
+        _tools = tools;
         _logger = logger;
     }
 
@@ -88,6 +95,8 @@ public sealed class ViewModelsFactory
             _appUpdateInstaller,
             this,
             _gamesPathsProvider,
+            _ports,
+            _tools,
             _logger
             );
 
@@ -182,13 +191,13 @@ public sealed class ViewModelsFactory
     /// <summary>
     /// Create <see cref="PortViewModel"/>
     /// </summary>
-    /// <param name="portEnum">Port enum</param>
-    public PortViewModel GetPortViewModel(PortEnum portEnum)
+    /// <param name="port">Port enum</param>
+    public PortViewModel GetPortViewModel(BasePort port)
     {
         PortViewModel vm = new(
             _portsInstallerFactory,
             _apiInterface,
-            _portsProvider.GetPort(portEnum),
+            port,
             _logger
             );
 
@@ -200,13 +209,13 @@ public sealed class ViewModelsFactory
     /// <summary>
     /// Create <see cref="PortViewModel"/>
     /// </summary>
-    /// <param name="portEnum">Port enum</param>
-    public ToolViewModel GetToolViewModel(ToolEnum portEnum)
+    /// <param name="tool">Port enum</param>
+    public ToolViewModel GetToolViewModel(BaseTool tool)
     {
         ToolViewModel vm = new(
             _toolsInstallerFactory,
             _apiInterface,
-            _toolsProvider.GetTool(portEnum),
+            tool,
             _logger
             );
 

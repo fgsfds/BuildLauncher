@@ -8,6 +8,7 @@ using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.Logging;
+using Ports.Ports;
 using Ports.Providers;
 
 namespace Avalonia.Desktop.ViewModels;
@@ -21,37 +22,14 @@ public sealed partial class PortsViewModel : ObservableObject
 
     private bool _isNewPort;
 
-    [ObservableProperty]
-    private bool _hasUpdates = false;
-
-    public PortsViewModel(
-        ViewModelsFactory viewModelsFactory,
-        InstalledPortsProvider installedPortsProvider,
-        ILogger logger
-        )
-    {
-        _viewModelsFactory = viewModelsFactory;
-        _installedPortsProvider = installedPortsProvider;
-        _logger = logger;
-
-        Initialize();
-    }
+    public ImmutableList<CustomPort> CustomPorts => _installedPortsProvider.GetCustomPorts();
 
     public ImmutableList<PortViewModel> PortsList { get; set; } = [];
 
-    public ImmutableList<CustomPort> CustomPorts => _installedPortsProvider.GetCustomPorts();
+    public ImmutableList<PortEnum> PortsTypes { get; }
 
-    public List<PortEnum> PortsTypes =>
-        [
-        PortEnum.EDuke32,
-        PortEnum.Raze,
-        PortEnum.VoidSW,
-        PortEnum.NBlood,
-        PortEnum.NotBlood,
-        PortEnum.RedNukem,
-        PortEnum.PCExhumed,
-        PortEnum.DosBox,
-        ];
+    [ObservableProperty]
+    private bool _hasUpdates = false;
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(EditCustomPortCommand))]
@@ -73,6 +51,21 @@ public sealed partial class PortsViewModel : ObservableObject
     [ObservableProperty]
     private string _errorMessage = string.Empty;
 
+    public PortsViewModel(
+        ViewModelsFactory viewModelsFactory,
+        InstalledPortsProvider installedPortsProvider,
+        IEnumerable<BasePort> ports,
+        ILogger logger
+        )
+    {
+        _viewModelsFactory = viewModelsFactory;
+        _installedPortsProvider = installedPortsProvider;
+        _logger = logger;
+
+        PortsTypes = [.. ports.Select(x => x.PortEnum)];
+
+        Initialize(ports);
+    }
 
     [RelayCommand]
     private async Task AddCustomPortAsync()
@@ -260,33 +253,18 @@ public sealed partial class PortsViewModel : ObservableObject
     /// <summary>
     /// Initialize VM
     /// </summary>
-    private void Initialize()
+    private void Initialize(IEnumerable<BasePort> ports)
     {
-        var edukeVm = _viewModelsFactory.GetPortViewModel(PortEnum.EDuke32);
-        edukeVm.PortChangedEvent += OnPortChanged;
+        List<PortViewModel> viewModels = new(ports.Count());
 
-        var razeVm = _viewModelsFactory.GetPortViewModel(PortEnum.Raze);
-        razeVm.PortChangedEvent += OnPortChanged;
+        foreach (var port in ports.Where(x => x.IsDownloadable))
+        {
+            var vm = _viewModelsFactory.GetPortViewModel(port);
+            vm.PortChangedEvent += OnPortChanged;
+            viewModels.Add(vm);
+        }
 
-        var nbloodVm = _viewModelsFactory.GetPortViewModel(PortEnum.NBlood);
-        nbloodVm.PortChangedEvent += OnPortChanged;
-
-        var notbloodVm = _viewModelsFactory.GetPortViewModel(PortEnum.NotBlood);
-        notbloodVm.PortChangedEvent += OnPortChanged;
-
-        var pcexVm = _viewModelsFactory.GetPortViewModel(PortEnum.PCExhumed);
-        pcexVm.PortChangedEvent += OnPortChanged;
-
-        var rednukemVm = _viewModelsFactory.GetPortViewModel(PortEnum.RedNukem);
-        rednukemVm.PortChangedEvent += OnPortChanged;
-
-        var bgdxVm = _viewModelsFactory.GetPortViewModel(PortEnum.BuildGDX);
-        bgdxVm.PortChangedEvent += OnPortChanged;
-
-        var dosBoxVm = _viewModelsFactory.GetPortViewModel(PortEnum.DosBox);
-        dosBoxVm.PortChangedEvent += OnPortChanged;
-
-        PortsList = [edukeVm, razeVm, nbloodVm, notbloodVm, pcexVm, rednukemVm, bgdxVm, dosBoxVm];
+        PortsList = [.. viewModels];
         OnPropertyChanged(nameof(PortsList));
     }
 

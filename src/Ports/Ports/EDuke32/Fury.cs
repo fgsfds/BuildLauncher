@@ -53,6 +53,9 @@ public sealed class Fury : EDuke32
     /// <inheritdoc/>
     protected override string ConfigFile => "fury.cfg";
 
+    /// <inheritdoc/>
+    public override bool IsDownloadable => false;
+
 
     public Fury(IConfigProvider config)
     {

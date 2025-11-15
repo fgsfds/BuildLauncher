@@ -9,7 +9,7 @@ public sealed partial class ToolControl : UserControl
     {
         if (Design.IsDesignMode)
         {
-            Resources.Add(new("CachedHashToBitmapConverter", new CachedHashToBitmapConverter(new())));
+            Resources.Add(new("CachedHashToBitmapConverter", new CachedHashToBitmapConverter(new([], []))));
         }
 
         InitializeComponent();
