@@ -14,6 +14,8 @@ public sealed partial class Program
     [STAThread]
     public static int Main(string[] args)
     {
+        Directory.SetCurrentDirectory(AppDomain.CurrentDomain.BaseDirectory);
+
         if (File.Exists(Path.Combine(ClientProperties.WorkingFolder, ClientConsts.UpdateFile)))
         {
             AppUpdateInstaller.InstallUpdate();
