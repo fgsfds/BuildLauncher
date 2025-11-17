@@ -138,11 +138,3 @@ public sealed class InstalledPortsProvider
         }
     }
 }
-
-public sealed class CustomPort
-{
-    public required string Name { get; init; }
-    public required string Path { get; init; }
-    public required BasePort BasePort { get; init; }
-    public PortEnum PortEnum => BasePort.PortEnum;
-}

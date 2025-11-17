@@ -15,7 +15,6 @@ using CommunityToolkit.Mvvm.Input;
 using Games.Providers;
 using Microsoft.Extensions.Logging;
 using Ports.Ports;
-using Ports.Providers;
 
 namespace Avalonia.Desktop.ViewModels;
 
