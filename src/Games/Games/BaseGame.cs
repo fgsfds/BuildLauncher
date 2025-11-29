@@ -70,15 +70,6 @@ public abstract class BaseGame
 
     protected BaseGame()
     {
-        try
-        {
-            MoveOldFolders();
-        }
-        catch
-        {
-            Directory.Delete(Path.Combine(ClientProperties.DataFolderPath, ShortName));
-        }
-
         if (!Directory.Exists(CampaignsFolderPath))
         {
             _ = Directory.CreateDirectory(CampaignsFolderPath);
@@ -93,8 +84,6 @@ public abstract class BaseGame
         {
             _ = Directory.CreateDirectory(ModsFolderPath);
         }
-
-        DeleteSpecial();
     }
 
 
@@ -121,49 +110,5 @@ public abstract class BaseGame
         }
 
         return true;
-    }
-
-
-    [Obsolete]
-    private void DeleteSpecial()
-    {
-        if (Directory.Exists(Path.Combine(ClientProperties.DataFolderPath, "Addons", ShortName, "Special")))
-        {
-            Directory.Delete(Path.Combine(ClientProperties.DataFolderPath, "Addons", ShortName, "Special"), true);
-        }
-    }
-
-    [Obsolete]
-    private void MoveOldFolders()
-    {
-        var newGameDataFolder = Path.Combine(ClientProperties.DataFolderPath, "Addons", ShortName);
-        if (!Directory.Exists(newGameDataFolder))
-        {
-            _ = Directory.CreateDirectory(newGameDataFolder);
-        }
-
-        var oldCampsFolder = Path.Combine(ClientProperties.DataFolderPath, ShortName, "Campaigns");
-        if (Directory.Exists(oldCampsFolder))
-        {
-            Directory.Move(oldCampsFolder, CampaignsFolderPath);
-        }
-
-        var oldMapsFolder = Path.Combine(ClientProperties.DataFolderPath, ShortName, "Maps");
-        if (Directory.Exists(oldMapsFolder))
-        {
-            Directory.Move(oldMapsFolder, MapsFolderPath);
-        }
-
-        var oldModsFolder = Path.Combine(ClientProperties.DataFolderPath, ShortName, "Mods");
-        if (Directory.Exists(oldModsFolder))
-        {
-            Directory.Move(oldModsFolder, ModsFolderPath);
-        }
-
-        var oldGameDataDirectory = Path.Combine(ClientProperties.DataFolderPath, ShortName);
-        if (Directory.Exists(oldGameDataDirectory))
-        {
-            Directory.Delete(oldGameDataDirectory, true);
-        }
     }
 }

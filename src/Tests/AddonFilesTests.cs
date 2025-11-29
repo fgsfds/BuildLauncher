@@ -21,6 +21,8 @@ public sealed class AddonFilesTests : IDisposable
     {
         var game = new Mock<BaseGame>();
         _ = game.Setup(x => x.GameEnum).Returns(GameEnum.Blood);
+        _ = game.Setup(x => x.FullName).Returns("Blood");
+        _ = game.Setup(x => x.ShortName).Returns("Blood");
 
         var config = new Mock<IConfigProvider>();
         _ = config.Setup(x => x.DisabledAutoloadMods).Returns([]);
