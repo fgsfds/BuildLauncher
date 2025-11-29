@@ -1,3 +1,4 @@
+using Addons.Addons;
 using Addons.Providers;
 using Avalonia.Controls;
 using Avalonia.Desktop.Controls.Bases;
@@ -6,7 +7,6 @@ using Avalonia.Desktop.Misc;
 using Avalonia.Desktop.ViewModels;
 using Common.All.Enums;
 using Common.All.Helpers;
-using Common.All.Interfaces;
 using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.Input;
 using Ports.Ports;
@@ -109,7 +109,7 @@ public sealed partial class MapsControl : DroppableControl
     {
         MapsList.ContextMenu = new();
 
-        if (MapsList.SelectedItem is not IAddon addon)
+        if (MapsList.SelectedItem is not BaseAddon addon)
         {
             return;
         }

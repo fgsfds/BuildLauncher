@@ -1,7 +1,7 @@
+using Addons.Addons;
 using Avalonia.Desktop.Misc;
 using Avalonia.Media.Imaging;
 using Common.All.Helpers;
-using Common.All.Interfaces;
 using Common.Client.Providers;
 using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -11,7 +11,7 @@ namespace Avalonia.Desktop.ViewModels;
 
 public partial class RightPanelViewModel : ObservableObject
 {
-    public virtual IAddon? SelectedAddon { get; set; }
+    public virtual BaseAddon? SelectedAddon { get; set; }
 
     private readonly PlaytimeProvider _playtimeProvider;
     private readonly RatingProvider _ratingProvider;

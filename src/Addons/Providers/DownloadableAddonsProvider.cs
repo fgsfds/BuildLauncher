@@ -15,7 +15,7 @@ namespace Addons.Providers;
 /// <summary>
 /// Class that provides lists of addons available to download
 /// </summary>
-public sealed class DownloadableAddonsProvider : IDownloadableAddonsProvider
+public sealed class DownloadableAddonsProvider
 {
     private readonly BaseGame _game;
     private readonly ArchiveTools _archiveTools;
@@ -28,10 +28,11 @@ public sealed class DownloadableAddonsProvider : IDownloadableAddonsProvider
 
     private static readonly SemaphoreSlim _semaphore = new(1);
 
-    /// <inheritdoc/>
     public event AddonChanged? AddonDownloadedEvent;
 
-    /// <inheritdoc/>
+    /// <summary>
+    /// Download progress
+    /// </summary>
     public Progress<float> Progress { get; } = new();
 
 
@@ -54,7 +55,11 @@ public sealed class DownloadableAddonsProvider : IDownloadableAddonsProvider
         _installedAddonsProvider = installedAddonsProviderFactory.GetSingleton(_game);
     }
 
-    /// <inheritdoc/>
+    /// <summary>
+    /// Create downloadable addons cache
+    /// </summary>
+    /// <param name="createNew">Drop existing cache and create new</param>
+    /// <returns>Is cache created successfully</returns>
     public async Task<bool> CreateCacheAsync(bool createNew)
     {
         try
@@ -103,8 +108,10 @@ public sealed class DownloadableAddonsProvider : IDownloadableAddonsProvider
         }
     }
 
-
-    /// <inheritdoc/>
+    /// <summary>
+    /// Get a list of downloadable addons
+    /// </summary>
+    /// <param name="addonType">Addon type</param>
     public ImmutableList<DownloadableAddonJsonModel> GetDownloadableAddons(AddonTypeEnum addonType)
     {
         if (_cache is null)
@@ -156,8 +163,11 @@ public sealed class DownloadableAddonsProvider : IDownloadableAddonsProvider
         return [.. addonTypeCache.Values];
     }
 
-
-    /// <inheritdoc/>
+    /// <summary>
+    /// Download addon
+    /// </summary>
+    /// <param name="addon">Addon</param>
+    /// <param name="cancellationToken">Cancellation token</param>
     public async Task DownloadAddonAsync(
         DownloadableAddonJsonModel addon,
         CancellationToken cancellationToken

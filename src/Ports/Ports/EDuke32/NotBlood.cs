@@ -1,5 +1,5 @@
-﻿using Common.All.Enums;
-using Common.All.Interfaces;
+﻿using Addons.Addons;
+using Common.All.Enums;
 using Games.Games;
 
 namespace Ports.Ports.EDuke32;
@@ -38,7 +38,7 @@ public sealed class NotBlood : NBlood
 
 
     /// <inheritdoc/>
-    public override void BeforeStart(BaseGame game, IAddon campaign)
+    public override void BeforeStart(BaseGame game, BaseAddon campaign)
     {
         MoveSaveFilesFromGameFolder(game, campaign);
     }

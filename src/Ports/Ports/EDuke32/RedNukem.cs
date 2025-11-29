@@ -4,7 +4,6 @@ using Common.All.Enums;
 using Common.All.Enums.Addons;
 using Common.All.Enums.Versions;
 using Common.All.Helpers;
-using Common.All.Interfaces;
 using CommunityToolkit.Diagnostics;
 using Games.Games;
 
@@ -60,7 +59,7 @@ public sealed class RedNukem : EDuke32
 
 
     /// <inheritdoc/>
-    public override void BeforeStart(BaseGame game, IAddon campaign)
+    public override void BeforeStart(BaseGame game, BaseAddon campaign)
     {
         CreateBlankDemo();
 
@@ -77,7 +76,7 @@ public sealed class RedNukem : EDuke32
 
 
     /// <inheritdoc/>
-    protected override void GetStartCampaignArgs(StringBuilder sb, BaseGame game, IAddon addon)
+    protected override void GetStartCampaignArgs(StringBuilder sb, BaseGame game, BaseAddon addon)
     {
         //don't search for steam/gog installs
         _ = sb.Append(" -usecwd");
@@ -189,7 +188,7 @@ public sealed class RedNukem : EDuke32
     /// <param name="sb">StringBuilder</param>
     /// <param name="game">RedneckGame</param>
     /// <param name="addon">DukeCampaign</param>
-    private void GetRedneckArgs(StringBuilder sb, RedneckGame game, IAddon addon)
+    private void GetRedneckArgs(StringBuilder sb, RedneckGame game, BaseAddon addon)
     {
         if (addon.SupportedGame.GameEnum is GameEnum.RidesAgain)
         {
@@ -260,7 +259,7 @@ public sealed class RedNukem : EDuke32
     /// Override original art files with route 66's ones or remove overrides
     /// </summary>
     [Obsolete("Remove if RedNukem can ever properly launch R66")]
-    private void FixRoute66Files(BaseGame game, IAddon campaign)
+    private void FixRoute66Files(BaseGame game, BaseAddon campaign)
     {
         if (game is not RedneckGame)
         {

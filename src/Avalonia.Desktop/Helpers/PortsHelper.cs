@@ -1,7 +1,6 @@
 ﻿using Addons.Addons;
 using Common.All;
 using Common.All.Enums;
-using Common.All.Interfaces;
 using Ports.Ports;
 
 namespace Avalonia.Desktop.Helpers;
@@ -16,7 +15,7 @@ public static class PortsHelper
     /// <param name="port">Port.</param>
     public static bool CheckPortRequirements(object? obj, GameEnum game, BasePort port)
     {
-        if (obj is not IAddon addon)
+        if (obj is not BaseAddon addon)
         {
             return false;
         }

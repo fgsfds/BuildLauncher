@@ -1,6 +1,5 @@
 using Addons.Addons;
 using Common.All.Enums;
-using Common.All.Interfaces;
 using Common.Client.Config;
 using Games.Games;
 using Ports.Ports.EDuke32;
@@ -44,7 +43,7 @@ public sealed class FuryCmdArgumentsTests
             AdditionalDefs = null,
             StartMap = null,
             PreviewImageHash = null,
-            IsFolder = false,
+            IsUnpacked = false,
             Executables = null
         };
     }
@@ -65,7 +64,7 @@ public sealed class FuryCmdArgumentsTests
             _modsProvider.DependentModWithIncompatibleVersion,
             _modsProvider.ModForAnotherGame,
             _modsProvider.ModThatRequiresFeature
-        }.ToDictionary(x => x.AddonId, x => (IAddon)x);
+        }.ToDictionary(x => x.AddonId, x => (BaseAddon)x);
 
         Fury fury = new(new ConfigProviderFake());
 

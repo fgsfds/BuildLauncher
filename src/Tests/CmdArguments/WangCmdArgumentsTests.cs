@@ -1,7 +1,6 @@
 using Addons.Addons;
 using Common.All.Enums;
 using Common.All.Enums.Addons;
-using Common.All.Interfaces;
 using Games.Games;
 using Ports.Ports;
 using Ports.Ports.EDuke32;
@@ -43,7 +42,7 @@ public sealed class WangCmdArgumentsTests
             MainDef = null,
             AdditionalDefs = null,
             StartMap = null,
-            IsFolder = false,
+            IsUnpacked = false,
             Executables = null
         };
 
@@ -64,7 +63,7 @@ public sealed class WangCmdArgumentsTests
             MainDef = null,
             AdditionalDefs = null,
             StartMap = null,
-            IsFolder = false,
+            IsUnpacked = false,
             Executables = null
         };
     }
@@ -83,7 +82,7 @@ public sealed class WangCmdArgumentsTests
             _modsProvider.DependentModWithCompatibleVersion,
             _modsProvider.DependentModWithIncompatibleVersion,
             _modsProvider.ModForAnotherGame
-        }.ToDictionary(x => x.AddonId, x => (IAddon)x);
+        }.ToDictionary(x => x.AddonId, x => (BaseAddon)x);
 
         Raze raze = new();
 
@@ -130,7 +129,7 @@ public sealed class WangCmdArgumentsTests
             _modsProvider.EnabledMod,
             _modsProvider.ModThatRequiresOfficialAddon,
             _modsProvider.ModThatIncompatibleWithAddon,
-        }.ToDictionary(x => x.AddonId, x => (IAddon)x);
+        }.ToDictionary(x => x.AddonId, x => (BaseAddon)x);
 
         Raze raze = new();
 
@@ -183,7 +182,7 @@ public sealed class WangCmdArgumentsTests
             _modsProvider.DependentModWithCompatibleVersion,
             _modsProvider.DependentModWithIncompatibleVersion,
             _modsProvider.ModForAnotherGame
-        }.ToDictionary(x => x.AddonId, x => (IAddon)x);
+        }.ToDictionary(x => x.AddonId, x => (BaseAddon)x);
 
         VoidSW voidSw = new();
 
@@ -221,7 +220,7 @@ public sealed class WangCmdArgumentsTests
             _modsProvider.EnabledMod,
             _modsProvider.ModThatRequiresOfficialAddon,
             _modsProvider.ModThatIncompatibleWithAddon,
-        }.ToDictionary(x => x.AddonId, x => (IAddon)x);
+        }.ToDictionary(x => x.AddonId, x => (BaseAddon)x);
 
         VoidSW voidSw = new();
 

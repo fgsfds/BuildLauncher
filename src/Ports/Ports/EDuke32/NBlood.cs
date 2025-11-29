@@ -1,6 +1,6 @@
 ﻿using System.Text;
+using Addons.Addons;
 using Common.All.Enums;
-using Common.All.Interfaces;
 using CommunityToolkit.Diagnostics;
 using Games.Games;
 
@@ -49,14 +49,14 @@ public class NBlood : EDuke32
 
 
     /// <inheritdoc/>
-    public override void BeforeStart(BaseGame game, IAddon campaign)
+    public override void BeforeStart(BaseGame game, BaseAddon campaign)
     {
         MoveSaveFilesFromGameFolder(game, campaign);
     }
 
 
     /// <inheritdoc/>
-    protected override void GetStartCampaignArgs(StringBuilder sb, BaseGame game, IAddon addon)
+    protected override void GetStartCampaignArgs(StringBuilder sb, BaseGame game, BaseAddon addon)
     {
         //don't search for steam/gog installs
         _ = sb.Append(" -usecwd");

@@ -4,7 +4,6 @@ using Common.All.Enums;
 using Common.All.Enums.Addons;
 using Common.All.Enums.Versions;
 using Common.All.Helpers;
-using Common.All.Interfaces;
 using Common.Client.Helpers;
 using Common.Client.Interfaces;
 using CommunityToolkit.Diagnostics;
@@ -27,8 +26,8 @@ public sealed class OriginalCampaignsProvider
     /// </summary>
     /// <param name="game">The game for which to retrieve the original campaigns.</param>
     /// <returns>A dictionary where the keys are <see cref="AddonId"/> values representing the unique identifiers of the
-    /// campaigns,  and the values are <see cref="IAddon"/> instances representing the campaign details.</returns>
-    public Dictionary<AddonId, IAddon> GetOriginalCampaigns(BaseGame game)
+    /// campaigns,  and the values are <see cref="BaseAddon"/> instances representing the campaign details.</returns>
+    public Dictionary<AddonId, BaseAddon> GetOriginalCampaigns(BaseGame game)
     {
         return game.GameEnum switch
         {
@@ -45,19 +44,19 @@ public sealed class OriginalCampaignsProvider
 
             GameEnum.Standalone => [],
 
-            GameEnum.Duke64 => ThrowHelper.ThrowNotSupportedException<Dictionary<AddonId, IAddon>>(),
-            GameEnum.RidesAgain => ThrowHelper.ThrowNotSupportedException<Dictionary<AddonId, IAddon>>(),
-            GameEnum.Witchaven2 => ThrowHelper.ThrowNotSupportedException<Dictionary<AddonId, IAddon>>(),
+            GameEnum.Duke64 => ThrowHelper.ThrowNotSupportedException<Dictionary<AddonId, BaseAddon>>(),
+            GameEnum.RidesAgain => ThrowHelper.ThrowNotSupportedException<Dictionary<AddonId, BaseAddon>>(),
+            GameEnum.Witchaven2 => ThrowHelper.ThrowNotSupportedException<Dictionary<AddonId, BaseAddon>>(),
 
-            _ => ThrowHelper.ThrowArgumentOutOfRangeException<Dictionary<AddonId, IAddon>>()
+            _ => ThrowHelper.ThrowArgumentOutOfRangeException<Dictionary<AddonId, BaseAddon>>()
         };
     }
 
-    private Dictionary<AddonId, IAddon> GetDuke3DCampaigns(BaseGame game)
+    private Dictionary<AddonId, BaseAddon> GetDuke3DCampaigns(BaseGame game)
     {
         game.ThrowIfNotType(out DukeGame dGame);
 
-        Dictionary<AddonId, IAddon> campaigns = new(6);
+        Dictionary<AddonId, BaseAddon> campaigns = new(6);
 
         if (dGame.IsWorldTourInstalled)
         {
@@ -90,7 +89,7 @@ public sealed class OriginalCampaignsProvider
                 AdditionalDefs = null,
                 RTS = null,
                 StartMap = null,
-                IsFolder = false,
+                IsUnpacked = false,
                 Executables = null,
                 IsFavorite = _config.FavoriteAddons.Contains(version)
             });
@@ -129,7 +128,7 @@ public sealed class OriginalCampaignsProvider
                     AdditionalDefs = null,
                     RTS = null,
                     StartMap = null,
-                    IsFolder = false,
+                    IsUnpacked = false,
                     Executables = null,
                     IsFavorite = _config.FavoriteAddons.Contains(version)
                 });
@@ -166,7 +165,7 @@ public sealed class OriginalCampaignsProvider
                     AdditionalDefs = null,
                     RTS = null,
                     StartMap = null,
-                    IsFolder = false,
+                    IsUnpacked = false,
                     Executables = null,
                     IsFavorite = _config.FavoriteAddons.Contains(version)
                 });
@@ -202,7 +201,7 @@ public sealed class OriginalCampaignsProvider
                     RTS = null,
                     StartMap = null,
                     PreviewImageHash = null,
-                    IsFolder = false,
+                    IsUnpacked = false,
                     Executables = null,
                     IsFavorite = _config.FavoriteAddons.Contains(version)
                 });
@@ -240,7 +239,7 @@ public sealed class OriginalCampaignsProvider
                     RTS = null,
                     StartMap = null,
                     PreviewImageHash = null,
-                    IsFolder = false,
+                    IsUnpacked = false,
                     Executables = null,
                     IsFavorite = _config.FavoriteAddons.Contains(version)
                 });
@@ -277,7 +276,7 @@ public sealed class OriginalCampaignsProvider
                 RTS = null,
                 StartMap = null,
                 PreviewImageHash = null,
-                IsFolder = false,
+                IsUnpacked = false,
                 Executables = null,
                 IsFavorite = _config.FavoriteAddons.Contains(version)
             });
@@ -288,11 +287,11 @@ public sealed class OriginalCampaignsProvider
 
 
     /// <inheritdoc/>
-    private Dictionary<AddonId, IAddon> GetBloodCampaigns(BaseGame game)
+    private Dictionary<AddonId, BaseAddon> GetBloodCampaigns(BaseGame game)
     {
         game.ThrowIfNotType(out BloodGame bGame);
 
-        Dictionary<AddonId, IAddon> campaigns = new(2);
+        Dictionary<AddonId, BaseAddon> campaigns = new(2);
 
         {
             var bloodId = nameof(GameEnum.Blood).ToLower();
@@ -329,7 +328,7 @@ public sealed class OriginalCampaignsProvider
                 SND = null,
                 StartMap = null,
                 PreviewImageHash = null,
-                IsFolder = false,
+                IsUnpacked = false,
                 Executables = null,
                 IsFavorite = _config.FavoriteAddons.Contains(version)
             });
@@ -367,7 +366,7 @@ public sealed class OriginalCampaignsProvider
                 SND = null,
                 StartMap = null,
                 PreviewImageHash = null,
-                IsFolder = false,
+                IsUnpacked = false,
                 Executables = null,
                 IsFavorite = _config.FavoriteAddons.Contains(version)
             });
@@ -380,11 +379,11 @@ public sealed class OriginalCampaignsProvider
     /// <summary>
     /// Get list of original campaigns
     /// </summary>
-    private Dictionary<AddonId, IAddon> GetWangCampaigns(BaseGame game)
+    private Dictionary<AddonId, BaseAddon> GetWangCampaigns(BaseGame game)
     {
         game.ThrowIfNotType(out WangGame wGame);
 
-        Dictionary<AddonId, IAddon> campaigns = new(1);
+        Dictionary<AddonId, BaseAddon> campaigns = new(1);
 
         if (wGame.IsBaseGameInstalled)
         {
@@ -414,7 +413,7 @@ public sealed class OriginalCampaignsProvider
                 AdditionalDefs = null,
                 StartMap = null,
                 PreviewImageHash = null,
-                IsFolder = false,
+                IsUnpacked = false,
                 Executables = null,
                 IsFavorite = _config.FavoriteAddons.Contains(version)
             });
@@ -425,11 +424,11 @@ public sealed class OriginalCampaignsProvider
 
 
     /// <inheritdoc/>
-    private Dictionary<AddonId, IAddon> GetFuryCampaigns(BaseGame game)
+    private Dictionary<AddonId, BaseAddon> GetFuryCampaigns(BaseGame game)
     {
         game.ThrowIfNotType(out FuryGame fGame);
 
-        Dictionary<AddonId, IAddon> campaigns = new(1);
+        Dictionary<AddonId, BaseAddon> campaigns = new(1);
 
         if (fGame.IsBaseGameInstalled)
         {
@@ -462,7 +461,7 @@ public sealed class OriginalCampaignsProvider
                 RTS = null,
                 StartMap = null,
                 PreviewImageHash = null,
-                IsFolder = false,
+                IsUnpacked = false,
                 Executables = null,
                 IsFavorite = _config.FavoriteAddons.Contains(version)
             });
@@ -495,11 +494,11 @@ public sealed class OriginalCampaignsProvider
 
 
     /// <inheritdoc/>
-    private Dictionary<AddonId, IAddon> GetRedneckCampaigns(BaseGame game)
+    private Dictionary<AddonId, BaseAddon> GetRedneckCampaigns(BaseGame game)
     {
         game.ThrowIfNotType(out RedneckGame rGame);
 
-        Dictionary<AddonId, IAddon> campaigns = new(3);
+        Dictionary<AddonId, BaseAddon> campaigns = new(3);
 
         if (rGame.IsBaseGameInstalled)
         {
@@ -535,7 +534,7 @@ public sealed class OriginalCampaignsProvider
                     RTS = null,
                     StartMap = null,
                     PreviewImageHash = null,
-                    IsFolder = false,
+                    IsUnpacked = false,
                     Executables = null,
                     IsFavorite = _config.FavoriteAddons.Contains(version)
                 });
@@ -569,7 +568,7 @@ public sealed class OriginalCampaignsProvider
                     RTS = null,
                     StartMap = null,
                     PreviewImageHash = null,
-                    IsFolder = false,
+                    IsUnpacked = false,
                     Executables = null,
                     IsFavorite = _config.FavoriteAddons.Contains(version)
                 });
@@ -606,7 +605,7 @@ public sealed class OriginalCampaignsProvider
                 RTS = null,
                 StartMap = null,
                 PreviewImageHash = null,
-                IsFolder = false,
+                IsUnpacked = false,
                 Executables = null,
                 IsFavorite = _config.FavoriteAddons.Contains(version)
             });
@@ -617,11 +616,11 @@ public sealed class OriginalCampaignsProvider
 
 
     /// <inheritdoc/>
-    private Dictionary<AddonId, IAddon> GetNamCampaigns(BaseGame game)
+    private Dictionary<AddonId, BaseAddon> GetNamCampaigns(BaseGame game)
     {
         game.ThrowIfNotType(out NamGame nGame);
 
-        Dictionary<AddonId, IAddon> campaigns = new(1);
+        Dictionary<AddonId, BaseAddon> campaigns = new(1);
 
         if (nGame.IsBaseGameInstalled)
         {
@@ -658,7 +657,7 @@ public sealed class OriginalCampaignsProvider
                 AdditionalDefs = null,
                 StartMap = null,
                 PreviewImageHash = null,
-                IsFolder = false,
+                IsUnpacked = false,
                 Executables = null,
                 IsFavorite = _config.FavoriteAddons.Contains(version)
             });
@@ -669,11 +668,11 @@ public sealed class OriginalCampaignsProvider
 
 
     /// <inheritdoc/>
-    private Dictionary<AddonId, IAddon> GetWw2Campaigns(BaseGame game)
+    private Dictionary<AddonId, BaseAddon> GetWw2Campaigns(BaseGame game)
     {
         game.ThrowIfNotType(out WW2GIGame wGame);
 
-        Dictionary<AddonId, IAddon> campaigns = new(1);
+        Dictionary<AddonId, BaseAddon> campaigns = new(1);
 
         if (wGame.IsBaseGameInstalled)
         {
@@ -706,7 +705,7 @@ public sealed class OriginalCampaignsProvider
                 AdditionalDefs = null,
                 StartMap = null,
                 PreviewImageHash = null,
-                IsFolder = false,
+                IsUnpacked = false,
                 Executables = null,
                 IsFavorite = _config.FavoriteAddons.Contains(version)
             });
@@ -741,7 +740,7 @@ public sealed class OriginalCampaignsProvider
                 AdditionalDefs = null,
                 StartMap = null,
                 PreviewImageHash = null,
-                IsFolder = false,
+                IsUnpacked = false,
                 Executables = null,
                 IsFavorite = _config.FavoriteAddons.Contains(version)
             });
@@ -752,11 +751,11 @@ public sealed class OriginalCampaignsProvider
 
 
     /// <inheritdoc/>
-    private Dictionary<AddonId, IAddon> GetTekWarCampaigns(BaseGame game)
+    private Dictionary<AddonId, BaseAddon> GetTekWarCampaigns(BaseGame game)
     {
         game.ThrowIfNotType(out TekWarGame tGame);
 
-        Dictionary<AddonId, IAddon> campaigns = new(1);
+        Dictionary<AddonId, BaseAddon> campaigns = new(1);
 
         if (tGame.IsBaseGameInstalled)
         {
@@ -787,7 +786,7 @@ public sealed class OriginalCampaignsProvider
                 AdditionalDefs = null,
                 StartMap = null,
                 PreviewImageHash = null,
-                IsFolder = false,
+                IsUnpacked = false,
                 Executables = null,
                 IsFavorite = _config.FavoriteAddons.Contains(version)
             });
@@ -798,11 +797,11 @@ public sealed class OriginalCampaignsProvider
 
 
     /// <inheritdoc/>
-    private Dictionary<AddonId, IAddon> GetSlaveCampaigns(BaseGame game)
+    private Dictionary<AddonId, BaseAddon> GetSlaveCampaigns(BaseGame game)
     {
         game.ThrowIfNotType(out SlaveGame sGame);
 
-        Dictionary<AddonId, IAddon> campaigns = new(1);
+        Dictionary<AddonId, BaseAddon> campaigns = new(1);
 
         if (sGame.IsBaseGameInstalled)
         {
@@ -836,7 +835,7 @@ public sealed class OriginalCampaignsProvider
                 AdditionalDefs = null,
                 StartMap = null,
                 PreviewImageHash = null,
-                IsFolder = false,
+                IsUnpacked = false,
                 Executables = null,
                 IsFavorite = _config.FavoriteAddons.Contains(version)
             });
@@ -847,11 +846,11 @@ public sealed class OriginalCampaignsProvider
 
 
     /// <inheritdoc/>
-    private Dictionary<AddonId, IAddon> GetWitchavenCampaigns(BaseGame game)
+    private Dictionary<AddonId, BaseAddon> GetWitchavenCampaigns(BaseGame game)
     {
         game.ThrowIfNotType(out WitchavenGame wGame);
 
-        Dictionary<AddonId, IAddon> campaigns = new(1);
+        Dictionary<AddonId, BaseAddon> campaigns = new(1);
 
         if (wGame.IsBaseGameInstalled)
         {
@@ -881,7 +880,7 @@ public sealed class OriginalCampaignsProvider
                 AdditionalDefs = null,
                 StartMap = null,
                 PreviewImageHash = null,
-                IsFolder = false,
+                IsUnpacked = false,
                 Executables = null,
                 IsFavorite = _config.FavoriteAddons.Contains(version)
             });
@@ -917,7 +916,7 @@ public sealed class OriginalCampaignsProvider
                 AdditionalDefs = null,
                 StartMap = null,
                 PreviewImageHash = null,
-                IsFolder = false,
+                IsUnpacked = false,
                 Executables = null,
                 IsFavorite = _config.FavoriteAddons.Contains(version)
             });

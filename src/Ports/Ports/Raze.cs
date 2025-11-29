@@ -5,7 +5,6 @@ using Common.All.Enums;
 using Common.All.Enums.Addons;
 using Common.All.Enums.Versions;
 using Common.All.Helpers;
-using Common.All.Interfaces;
 using CommunityToolkit.Diagnostics;
 using Games.Games;
 
@@ -192,7 +191,7 @@ public sealed class Raze : BasePort
 
 
     /// <inheritdoc/>
-    public override void BeforeStart(BaseGame game, IAddon campaign)
+    public override void BeforeStart(BaseGame game, BaseAddon campaign)
     {
         var config = Path.Combine(PortInstallFolderPath, ConfigFile);
 
@@ -234,13 +233,13 @@ public sealed class Raze : BasePort
     }
 
     /// <inheritdoc/>
-    public override void AfterEnd(BaseGame game, IAddon campaign)
+    public override void AfterEnd(BaseGame game, BaseAddon campaign)
     {
         //nothing to do
     }
 
     /// <inheritdoc/>
-    protected override void GetStartCampaignArgs(StringBuilder sb, BaseGame game, IAddon addon)
+    protected override void GetStartCampaignArgs(StringBuilder sb, BaseGame game, BaseAddon addon)
     {
         _ = sb.Append($@" -savedir ""{GetPathToAddonSavedGamesFolder(game.ShortName, addon.AddonId.Id)}""");
 
@@ -296,7 +295,7 @@ public sealed class Raze : BasePort
         }
     }
 
-    private void GetDukeArgs(StringBuilder sb, DukeGame game, IAddon addon)
+    private void GetDukeArgs(StringBuilder sb, DukeGame game, BaseAddon addon)
     {
         if (addon is LooseMapEntity)
         {
@@ -376,7 +375,7 @@ public sealed class Raze : BasePort
         }
     }
 
-    private void GetWangArgs(StringBuilder sb, WangGame game, IAddon addon)
+    private void GetWangArgs(StringBuilder sb, WangGame game, BaseAddon addon)
     {
         if (addon is LooseMapEntity)
         {
@@ -421,7 +420,7 @@ public sealed class Raze : BasePort
         }
     }
 
-    private void GetRedneckArgs(StringBuilder sb, RedneckGame game, IAddon addon)
+    private void GetRedneckArgs(StringBuilder sb, RedneckGame game, BaseAddon addon)
     {
         if (addon is LooseMapEntity)
         {
@@ -483,7 +482,7 @@ public sealed class Raze : BasePort
     /// <summary>
     /// Add paths to game and mods folder to the config
     /// </summary>
-    private static void AddGamePathsToConfig(BaseGame game, IAddon campaign, string gameInstallFolder, string config)
+    private static void AddGamePathsToConfig(BaseGame game, BaseAddon campaign, string gameInstallFolder, string config)
     {
         var contents = File.ReadAllLines(config);
 
@@ -536,7 +535,7 @@ public sealed class Raze : BasePort
 
                 //blood unpacked addons
                 if (campaign is BloodCampaignEntity bCamp &&
-                    bCamp.IsFolder)
+                    bCamp.IsUnpacked)
                 {
                     path = Path.GetDirectoryName(bCamp.PathToFile)!.Replace('\\', '/');
                     _ = sb.Append("Path=").AppendLine(path);

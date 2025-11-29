@@ -1,12 +1,12 @@
 using System.Collections.Immutable;
 using System.Diagnostics;
+using Addons.Addons;
 using Addons.Providers;
 using Avalonia.Controls.Notifications;
 using Avalonia.Desktop.Helpers;
 using Avalonia.Desktop.Misc;
 using Common.All.Enums;
 using Common.All.Helpers;
-using Common.All.Interfaces;
 using Common.Client.Interfaces;
 using Common.Client.Providers;
 using CommunityToolkit.Diagnostics;
@@ -38,15 +38,15 @@ public sealed partial class CampaignsViewModel : RightPanelViewModel, IPortsButt
     /// <summary>
     /// List of installed campaigns and maps
     /// </summary>
-    public ImmutableList<IAddon> CampaignsList
+    public ImmutableList<BaseAddon> CampaignsList
     {
         get
         {
             var addons = _installedAddonsProvider.GetInstalledAddonsByType(AddonTypeEnum.TC);
 
             var isSearchEmpty = string.IsNullOrWhiteSpace(SearchBoxText);
-            List<IAddon> favorites = [];
-            List<IAddon> list = new(addons.Count);
+            List<BaseAddon> favorites = [];
+            List<BaseAddon> list = new(addons.Count);
 
             foreach (var addon in addons)
             {
@@ -73,11 +73,11 @@ public sealed partial class CampaignsViewModel : RightPanelViewModel, IPortsButt
         }
     }
 
-    private IAddon? _selectedAddon;
+    private BaseAddon? _selectedAddon;
     /// <summary>
     /// Currently selected campaign
     /// </summary>
-    public override IAddon? SelectedAddon
+    public override BaseAddon? SelectedAddon
     {
         get => _selectedAddon;
         set
@@ -245,7 +245,7 @@ public sealed partial class CampaignsViewModel : RightPanelViewModel, IPortsButt
     [RelayCommand]
     private void AddToFavorite(object? value)
     {
-        value.ThrowIfNotType<IAddon>(out var addon);
+        value.ThrowIfNotType<BaseAddon>(out var addon);
 
         _config.ChangeFavoriteState(addon.AddonId, true);
         addon.IsFavorite = true;
@@ -260,7 +260,7 @@ public sealed partial class CampaignsViewModel : RightPanelViewModel, IPortsButt
     [RelayCommand]
     private void RemoveFromFavorite(object? value)
     {
-        value.ThrowIfNotType<IAddon>(out var addon);
+        value.ThrowIfNotType<BaseAddon>(out var addon);
 
         _config.ChangeFavoriteState(addon.AddonId, false);
         addon.IsFavorite = false;

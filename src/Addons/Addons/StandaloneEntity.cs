@@ -1,3 +1,3 @@
 ﻿namespace Addons.Addons;
 
-public sealed class StandaloneEntity : BaseAddonEntity;
+public sealed class StandaloneEntity : BaseAddon;

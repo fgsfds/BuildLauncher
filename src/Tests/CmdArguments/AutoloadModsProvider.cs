@@ -76,7 +76,7 @@ internal sealed class AutoloadModsProvider
         StartMap = null,
         PreviewImageHash = null,
         IsEnabled = true,
-        IsFolder = false,
+        IsUnpacked = false,
         Executables = null
     };
 
@@ -99,7 +99,7 @@ internal sealed class AutoloadModsProvider
         StartMap = null,
         PreviewImageHash = null,
         IsEnabled = true,
-        IsFolder = false,
+        IsUnpacked = false,
         Executables = null
     };
 
@@ -122,7 +122,7 @@ internal sealed class AutoloadModsProvider
         StartMap = null,
         PreviewImageHash = null,
         IsEnabled = true,
-        IsFolder = false,
+        IsUnpacked = false,
         Executables = null
     };
 
@@ -145,7 +145,7 @@ internal sealed class AutoloadModsProvider
         StartMap = null,
         PreviewImageHash = null,
         IsEnabled = true,
-        IsFolder = false,
+        IsUnpacked = false,
         Executables = null
     };
 
@@ -168,7 +168,7 @@ internal sealed class AutoloadModsProvider
         StartMap = null,
         PreviewImageHash = null,
         IsEnabled = true,
-        IsFolder = false,
+        IsUnpacked = false,
         Executables = null
     };
 
@@ -191,7 +191,7 @@ internal sealed class AutoloadModsProvider
         StartMap = null,
         PreviewImageHash = null,
         IsEnabled = true,
-        IsFolder = false,
+        IsUnpacked = false,
         Executables = null
     };
 
@@ -214,7 +214,7 @@ internal sealed class AutoloadModsProvider
         StartMap = null,
         PreviewImageHash = null,
         IsEnabled = true,
-        IsFolder = false,
+        IsUnpacked = false,
         Executables = null
     };
 
@@ -237,7 +237,7 @@ internal sealed class AutoloadModsProvider
         StartMap = null,
         PreviewImageHash = null,
         IsEnabled = true,
-        IsFolder = false,
+        IsUnpacked = false,
         Executables = null
     };
 
@@ -261,7 +261,7 @@ internal sealed class AutoloadModsProvider
         StartMap = null,
         PreviewImageHash = null,
         IsEnabled = true,
-        IsFolder = false,
+        IsUnpacked = false,
         Executables = null
     };
 
@@ -284,7 +284,7 @@ internal sealed class AutoloadModsProvider
         StartMap = null,
         PreviewImageHash = null,
         IsEnabled = true,
-        IsFolder = false,
+        IsUnpacked = false,
         Executables = null
     };
 
@@ -307,7 +307,7 @@ internal sealed class AutoloadModsProvider
         StartMap = null,
         PreviewImageHash = null,
         IsEnabled = true,
-        IsFolder = false,
+        IsUnpacked = false,
         Executables = null
     };
 
@@ -330,7 +330,7 @@ internal sealed class AutoloadModsProvider
         StartMap = null,
         PreviewImageHash = null,
         IsEnabled = false,
-        IsFolder = false,
+        IsUnpacked = false,
         Executables = null
     };
 
@@ -353,7 +353,7 @@ internal sealed class AutoloadModsProvider
         StartMap = null,
         PreviewImageHash = null,
         IsEnabled = true,
-        IsFolder = false,
+        IsUnpacked = false,
         Executables = null
     };
 
@@ -376,7 +376,7 @@ internal sealed class AutoloadModsProvider
         StartMap = null,
         PreviewImageHash = null,
         IsEnabled = true,
-        IsFolder = false,
+        IsUnpacked = false,
         Executables = null
     };
 }

@@ -1,6 +1,5 @@
 using Addons.Addons;
 using Common.All.Enums;
-using Common.All.Interfaces;
 using Common.All.Serializable.Addon;
 using Games.Games;
 using Ports.Ports;
@@ -42,7 +41,7 @@ public sealed class WangLooseMapsCmdArgumentsTests
             AdditionalDefs = null,
             StartMap = new MapFileJsonModel() { File = "LOOSE.MAP" },
             PreviewImageHash = null,
-            IsFolder = false,
+            IsUnpacked = false,
             Executables = null,
             BloodIni = null,
         };
@@ -62,7 +61,7 @@ public sealed class WangLooseMapsCmdArgumentsTests
             _modsProvider.DependentModWithCompatibleVersion,
             _modsProvider.DependentModWithIncompatibleVersion,
             _modsProvider.ModForAnotherGame
-        }.ToDictionary(x => x.AddonId, x => (IAddon)x);
+        }.ToDictionary(x => x.AddonId, x => (BaseAddon)x);
 
         Raze raze = new();
 
@@ -118,7 +117,7 @@ public sealed class WangLooseMapsCmdArgumentsTests
             _modsProvider.DependentModWithCompatibleVersion,
             _modsProvider.DependentModWithIncompatibleVersion,
             _modsProvider.ModForAnotherGame
-        }.ToDictionary(x => x.AddonId, x => (IAddon)x);
+        }.ToDictionary(x => x.AddonId, x => (BaseAddon)x);
 
         VoidSW voidSw = new();
 

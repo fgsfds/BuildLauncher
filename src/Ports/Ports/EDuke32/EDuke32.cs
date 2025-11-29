@@ -5,7 +5,6 @@ using Common.All.Enums;
 using Common.All.Enums.Addons;
 using Common.All.Enums.Versions;
 using Common.All.Helpers;
-using Common.All.Interfaces;
 using Common.Client.Helpers;
 using CommunityToolkit.Diagnostics;
 using Games.Games;
@@ -157,7 +156,7 @@ public class EDuke32 : BasePort
 
 
     /// <inheritdoc/>
-    public override void BeforeStart(BaseGame game, IAddon campaign)
+    public override void BeforeStart(BaseGame game, BaseAddon campaign)
     {
         MoveSaveFilesFromGameFolder(game, campaign);
 
@@ -167,13 +166,13 @@ public class EDuke32 : BasePort
     }
 
     /// <inheritdoc/>
-    public override void AfterEnd(BaseGame game, IAddon campaign)
+    public override void AfterEnd(BaseGame game, BaseAddon campaign)
     {
         MoveSaveFilesToGameFolder(game, campaign);
     }
 
     /// <inheritdoc/>
-    protected override void GetStartCampaignArgs(StringBuilder sb, BaseGame game, IAddon addon)
+    protected override void GetStartCampaignArgs(StringBuilder sb, BaseGame game, BaseAddon addon)
     {
         _ = sb.Append(" -usecwd"); //don't search for steam/gog installs
         _ = sb.Append(" -cachesize 262144"); //set cache to 256MiB
@@ -226,7 +225,7 @@ public class EDuke32 : BasePort
     /// <param name="sb">StringBuilder</param>
     /// <param name="game">DukeGame</param>
     /// <param name="addon">DukeCampaign</param>
-    protected void GetDukeArgs(StringBuilder sb, DukeGame game, IAddon addon)
+    protected void GetDukeArgs(StringBuilder sb, DukeGame game, BaseAddon addon)
     {
         if (addon.SupportedGame.GameEnum is GameEnum.Duke64)
         {
@@ -374,7 +373,7 @@ public class EDuke32 : BasePort
     /// <summary>
     /// Rename WT's ART files if custom campaign is launched
     /// </summary>
-    protected void FixWtFiles(BaseGame game, IAddon campaign)
+    protected void FixWtFiles(BaseGame game, BaseAddon campaign)
     {
         if (game is not DukeGame)
         {
@@ -424,14 +423,14 @@ public class EDuke32 : BasePort
         }
     }
 
-    protected override void MoveSaveFilesToGameFolder(BaseGame game, IAddon campaign)
+    protected override void MoveSaveFilesToGameFolder(BaseGame game, BaseAddon campaign)
     {
         //copying saved games into separate folder
         var saveFolder = GetPathToAddonSavedGamesFolder(game.ShortName, campaign.AddonId.Id);
 
         string path;
 
-        if (campaign.IsFolder)
+        if (campaign.IsUnpacked)
         {
             path = Path.GetDirectoryName(campaign.PathToFile)!;
         }
@@ -457,7 +456,7 @@ public class EDuke32 : BasePort
         }
     }
 
-    protected override void MoveSaveFilesFromGameFolder(BaseGame game, IAddon campaign)
+    protected override void MoveSaveFilesFromGameFolder(BaseGame game, BaseAddon campaign)
     {
         var saveFolder = GetPathToAddonSavedGamesFolder(game.ShortName, campaign.AddonId.Id);
 
@@ -468,7 +467,7 @@ public class EDuke32 : BasePort
 
         var saves = Directory.GetFiles(saveFolder);
 
-        string firstPart = campaign.IsFolder ? Path.GetDirectoryName(campaign.PathToFile)! : PortInstallFolderPath;
+        string firstPart = campaign.IsUnpacked ? Path.GetDirectoryName(campaign.PathToFile)! : PortInstallFolderPath;
 
         foreach (var save in saves)
         {

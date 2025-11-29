@@ -4,7 +4,6 @@ using Common.All;
 using Common.All.Enums;
 using Common.All.Enums.Addons;
 using Common.All.Enums.Versions;
-using Common.All.Interfaces;
 using Common.Client.Helpers;
 using CommunityToolkit.Diagnostics;
 using Games.Games;
@@ -118,7 +117,7 @@ public sealed class DosBox : BasePort
 
 
     /// <inheritdoc/>
-    public override void BeforeStart(BaseGame game, IAddon campaign)
+    public override void BeforeStart(BaseGame game, BaseAddon campaign)
     {
         MoveSaveFilesToGameFolder(game, campaign);
 
@@ -126,13 +125,13 @@ public sealed class DosBox : BasePort
     }
 
     /// <inheritdoc/>
-    public override void AfterEnd(BaseGame game, IAddon campaign)
+    public override void AfterEnd(BaseGame game, BaseAddon campaign)
     {
         MoveSaveFilesFromGameFolder(game, campaign);
     }
 
     /// <inheritdoc/>
-    protected override void GetStartCampaignArgs(StringBuilder sb, BaseGame game, IAddon addon)
+    protected override void GetStartCampaignArgs(StringBuilder sb, BaseGame game, BaseAddon addon)
     {
         _ = sb.Append(@" --noconsole -c ""cycles max"" -c ""core dynamic""");
 
@@ -156,7 +155,7 @@ public sealed class DosBox : BasePort
         _ = sb.Append(" -c \"exit\"");
     }
 
-    private static void GetDukeArgs(StringBuilder sb, DukeGame game, IAddon addon)
+    private static void GetDukeArgs(StringBuilder sb, DukeGame game, BaseAddon addon)
     {
         _ = sb.Append($@" -c ""mount c \""{game.GameInstallFolder}"""" -c ""c:""");
 
@@ -195,7 +194,7 @@ public sealed class DosBox : BasePort
         _ = sb.Append(" -c Sw.EXE");
     }
 
-    private static void GetRedneckArgs(StringBuilder sb, RedneckGame game, IAddon addon)
+    private static void GetRedneckArgs(StringBuilder sb, RedneckGame game, BaseAddon addon)
     {
         if (addon.AddonId.Id.Equals(nameof(GameEnum.Redneck), StringComparison.OrdinalIgnoreCase))
         {
@@ -214,7 +213,7 @@ public sealed class DosBox : BasePort
         }
     }
 
-    protected override void GetBloodArgs(StringBuilder sb, BloodGame game, IAddon addon)
+    protected override void GetBloodArgs(StringBuilder sb, BloodGame game, BaseAddon addon)
     {
         if (addon.AddonId.Id.Equals(nameof(BloodAddonEnum.BloodCP), StringComparison.OrdinalIgnoreCase))
         {
@@ -246,7 +245,7 @@ public sealed class DosBox : BasePort
                 File.Copy(filePath, destFile, overwrite: true);
             }
 
-            if (addon.IsFolder)
+            if (addon.IsUnpacked)
             {
                 foreach (var filePath in Directory.GetFiles(Path.GetDirectoryName(addon.PathToFile)))
                 {
@@ -297,7 +296,7 @@ public sealed class DosBox : BasePort
     }
 
     /// <inheritdoc/>
-    protected override void GetAutoloadModsArgs(StringBuilder sb, BaseGame _, IAddon addon, IEnumerable<KeyValuePair<AddonId, IAddon>> mods) { }
+    protected override void GetAutoloadModsArgs(StringBuilder sb, BaseGame _, BaseAddon addon, IEnumerable<KeyValuePair<AddonId, BaseAddon>> mods) { }
 
     /// <inheritdoc/>
     protected override void GetSkipIntroParameter(StringBuilder sb) { }

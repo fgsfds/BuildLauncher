@@ -2,7 +2,7 @@
 
 namespace Addons.Addons;
 
-public sealed class AutoloadModEntity : BaseAddonEntity
+public sealed class AutoloadModEntity : BaseAddon
 {
     /// <summary>
     /// Is mod enabled

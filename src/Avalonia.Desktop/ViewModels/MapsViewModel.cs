@@ -1,11 +1,11 @@
 using System.Collections.Immutable;
 using System.Diagnostics;
+using Addons.Addons;
 using Addons.Providers;
 using Avalonia.Controls.Notifications;
 using Avalonia.Desktop.Misc;
 using Common.All.Enums;
 using Common.All.Helpers;
-using Common.All.Interfaces;
 using Common.Client.Interfaces;
 using Common.Client.Providers;
 using CommunityToolkit.Diagnostics;
@@ -52,7 +52,7 @@ public sealed partial class MapsViewModel : RightPanelViewModel, IPortsButtonCon
     /// <summary>
     /// List of installed maps
     /// </summary>
-    public ImmutableList<IAddon> MapsList
+    public ImmutableList<BaseAddon> MapsList
     {
         get
         {
@@ -67,11 +67,11 @@ public sealed partial class MapsViewModel : RightPanelViewModel, IPortsButtonCon
         }
     }
 
-    private IAddon? _selectedAddon;
+    private BaseAddon? _selectedAddon;
     /// <summary>
     /// Currently selected map
     /// </summary>
-    public override IAddon? SelectedAddon
+    public override BaseAddon? SelectedAddon
     {
         get => _selectedAddon;
         set

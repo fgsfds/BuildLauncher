@@ -2,7 +2,6 @@
 using Common.All;
 using Common.All.Enums;
 using Common.All.Enums.Versions;
-using Common.All.Interfaces;
 using CommunityToolkit.Diagnostics;
 
 namespace Addons.Providers;
@@ -12,9 +11,9 @@ public static class GrpInfoProvider
     /// <summary>
     /// Get list of addons from grpinfo file
     /// </summary>
-    public static List<IAddon>? GetAddonsFromGrpInfo(string campaignsFolder)
+    public static List<BaseAddon>? GetAddonsFromGrpInfo(string campaignsFolder)
     {
-        List<IAddon> newAddons = [];
+        List<BaseAddon> newAddons = [];
 
         var grpInfos = Directory.GetFiles(campaignsFolder, "*.grpinfo", SearchOption.AllDirectories);
 
@@ -70,7 +69,7 @@ public static class GrpInfoProvider
                     AdditionalDefs = addon.AddDef is null ? null : [addon.AddDef],
                     RTS = null,
                     RequiredFeatures = [FeatureEnum.EDuke32_CON],
-                    IsFolder = false,
+                    IsUnpacked = false,
                     Executables = null,
                     IsFavorite = false
                 };

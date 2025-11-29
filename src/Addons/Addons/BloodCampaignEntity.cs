@@ -3,7 +3,7 @@
 /// <summary>
 /// Blood campaign
 /// </summary>
-public sealed class BloodCampaignEntity : BaseAddonEntity
+public sealed class BloodCampaignEntity : BaseAddon
 {
     /// <summary>
     /// Startup .ini file

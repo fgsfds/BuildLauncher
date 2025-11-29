@@ -5,7 +5,6 @@ using Common.All;
 using Common.All.Enums;
 using Common.All.Enums.Addons;
 using Common.All.Helpers;
-using Common.All.Interfaces;
 using Common.All.Serializable.Addon;
 using Common.Client.Helpers;
 using CommunityToolkit.Diagnostics;
@@ -228,8 +227,8 @@ public abstract class BasePort
     /// <param name="skill"></param>
     public string GetStartGameArgs(
         BaseGame game,
-        IAddon addon,
-        IEnumerable<KeyValuePair<AddonId, IAddon>> mods,
+        BaseAddon addon,
+        IEnumerable<KeyValuePair<AddonId, BaseAddon>> mods,
         bool skipIntro,
         bool skipStartup,
         byte? skill = null
@@ -263,7 +262,7 @@ public abstract class BasePort
     /// <summary>
     /// Get startup args for manifested maps
     /// </summary>
-    protected virtual void GetMapArgs(StringBuilder sb, IAddon camp)
+    protected virtual void GetMapArgs(StringBuilder sb, BaseAddon camp)
     {
         //TODO e#m#
         if (camp.StartMap is MapFileJsonModel mapFile)
@@ -281,7 +280,7 @@ public abstract class BasePort
     /// <summary>
     /// Get startup args for loose maps
     /// </summary>
-    protected virtual void GetLooseMapArgs(StringBuilder sb, BaseGame game, IAddon camp)
+    protected virtual void GetLooseMapArgs(StringBuilder sb, BaseGame game, BaseAddon camp)
     {
         camp.StartMap.ThrowIfNotType<MapFileJsonModel>(out var mapFile);
 
@@ -289,7 +288,7 @@ public abstract class BasePort
         _ = sb.Append($@" -map ""{mapFile.File}""");
     }
 
-    protected virtual void GetBloodArgs(StringBuilder sb, BloodGame game, IAddon addon)
+    protected virtual void GetBloodArgs(StringBuilder sb, BloodGame game, BaseAddon addon)
     {
         if (addon is LooseMapEntity lMap)
         {
@@ -363,7 +362,7 @@ public abstract class BasePort
         }
     }
 
-    protected virtual void GetSlaveArgs(StringBuilder sb, SlaveGame game, IAddon addon)
+    protected virtual void GetSlaveArgs(StringBuilder sb, SlaveGame game, BaseAddon addon)
     {
         if (addon is LooseMapEntity)
         {
@@ -394,7 +393,7 @@ public abstract class BasePort
         }
     }
 
-    protected virtual void GetNamWW2GIArgs(StringBuilder sb, BaseGame game, IAddon addon)
+    protected virtual void GetNamWW2GIArgs(StringBuilder sb, BaseGame game, BaseAddon addon)
     {
         if (game is NamGame)
         {
@@ -419,7 +418,7 @@ public abstract class BasePort
 
         addon.ThrowIfNotType<DukeCampaignEntity>(out var dCamp);
 
-        if (addon.AddonId.Id.Equals(nameof(WW2GIAddonEnum.Platoon).ToLower()))
+        if (addon.AddonId.Id.Equals(nameof(WW2GIAddonEnum.Platoon), StringComparison.OrdinalIgnoreCase))
         {
             _ = sb.Append($" {AddGrpParam}PLATOONL.DAT {MainConParam}PLATOONL.DEF");
         }
@@ -471,7 +470,7 @@ public abstract class BasePort
     /// <param name="game">Game</param>
     /// <param name="addon">Campaign\map</param>
     /// <param name="mods">Autoload mods</param>
-    protected virtual void GetAutoloadModsArgs(StringBuilder sb, BaseGame game, IAddon addon, IEnumerable<KeyValuePair<AddonId, IAddon>> mods)
+    protected virtual void GetAutoloadModsArgs(StringBuilder sb, BaseGame game, BaseAddon addon, IEnumerable<KeyValuePair<AddonId, BaseAddon>> mods)
     {
         if (!mods.Any())
         {
@@ -532,14 +531,14 @@ public abstract class BasePort
     /// </summary>
     /// <param name="game">Game</param>
     /// <param name="campaign">Campaign</param>
-    public abstract void AfterEnd(BaseGame game, IAddon campaign);
+    public abstract void AfterEnd(BaseGame game, BaseAddon campaign);
 
     /// <summary>
     /// Method to perform before starting the port
     /// </summary>
     /// <param name="game">Game</param>
     /// <param name="campaign">Campaign</param>
-    public abstract void BeforeStart(BaseGame game, IAddon campaign);
+    public abstract void BeforeStart(BaseGame game, BaseAddon campaign);
 
     /// <summary>
     /// Get command line arguments to start custom map or campaign
@@ -547,7 +546,7 @@ public abstract class BasePort
     /// <param name="sb">String builder for parameters</param>
     /// <param name="game">Game</param>
     /// <param name="addon">Map/campaign</param>
-    protected abstract void GetStartCampaignArgs(StringBuilder sb, BaseGame game, IAddon addon);
+    protected abstract void GetStartCampaignArgs(StringBuilder sb, BaseGame game, BaseAddon addon);
 
     /// <summary>
     /// Return command line parameter to skip intro
@@ -694,7 +693,7 @@ public abstract class BasePort
         }
     }
 
-    protected virtual void MoveSaveFilesToGameFolder(BaseGame game, IAddon campaign)
+    protected virtual void MoveSaveFilesToGameFolder(BaseGame game, BaseAddon campaign)
     {
         var saveFolder = GetPathToAddonSavedGamesFolder(game.ShortName, campaign.AddonId.Id);
 
@@ -712,7 +711,7 @@ public abstract class BasePort
         }
     }
 
-    protected virtual void MoveSaveFilesFromGameFolder(BaseGame game, IAddon campaign)
+    protected virtual void MoveSaveFilesFromGameFolder(BaseGame game, BaseAddon campaign)
     {
         //copying saved games into separate folder
         var saveFolder = GetPathToAddonSavedGamesFolder(game.ShortName, campaign.AddonId.Id);

@@ -2,7 +2,6 @@
 using Common.All;
 using Common.All.Enums;
 using Common.All.Helpers;
-using Common.All.Interfaces;
 
 namespace Addons.Helpers;
 
@@ -15,7 +14,7 @@ public static class AutoloadModsValidator
     /// <param name="campaign">Campaign</param>
     /// <param name="mods">Autoload mods</param>
     /// <param name="features">Features supported by the port</param>
-    public static bool ValidateAutoloadMod(AutoloadModEntity autoloadMod, IAddon campaign, IEnumerable<KeyValuePair<AddonId, IAddon>> mods, List<FeatureEnum> features)
+    public static bool ValidateAutoloadMod(AutoloadModEntity autoloadMod, BaseAddon campaign, IEnumerable<KeyValuePair<AddonId, BaseAddon>> mods, List<FeatureEnum> features)
     {
         if (!autoloadMod.IsEnabled)
         {
@@ -84,8 +83,8 @@ public static class AutoloadModsValidator
     /// </summary>
     private static bool CheckDependencies(
         AutoloadModEntity autoloadMod,
-        IAddon campaign,
-        IEnumerable<KeyValuePair<AddonId, IAddon>> mods)
+        BaseAddon campaign,
+        IEnumerable<KeyValuePair<AddonId, BaseAddon>> mods)
     {
         if (autoloadMod.DependentAddons is not null)
         {
@@ -138,8 +137,8 @@ public static class AutoloadModsValidator
     /// </summary>
     private static bool CheckIncompatibles(
         AutoloadModEntity autoloadMod,
-        IAddon campaign,
-        IEnumerable<KeyValuePair<AddonId, IAddon>> mods
+        BaseAddon campaign,
+        IEnumerable<KeyValuePair<AddonId, BaseAddon>> mods
         )
     {
         var campaignIncompatibles = campaign.IncompatibleAddons?.ToDictionary() ?? [];

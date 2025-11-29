@@ -9,69 +9,107 @@ namespace Addons.Addons;
 /// <summary>
 /// Base class for campaigns and maps
 /// </summary>
-public abstract class BaseAddonEntity : IAddon
+public abstract class BaseAddon
 {
-    /// <inheritdoc/>
+    /// <summary>
+    /// Addon ID
+    /// </summary>
     public required AddonId AddonId { get; init; }
 
-    /// <inheritdoc/>
+    /// <summary>
+    /// Type of the addon
+    /// </summary>
     public required AddonTypeEnum Type { get; init; }
 
-    /// <inheritdoc/>
+    /// <summary>
+    /// List of supported games
+    /// </summary>
     public required GameStruct SupportedGame { get; init; }
 
-    /// <inheritdoc/>
-    public required ImmutableArray<FeatureEnum>? RequiredFeatures { get; init; }
-
-    /// <inheritdoc/>
+    /// <summary>
+    /// Name of the addon
+    /// </summary>
     public required string Title { get; init; }
 
-    /// <inheritdoc/>
+    /// <summary>
+    /// Addon author
+    /// </summary>
     public required string? Author { get; init; }
 
-    /// <inheritdoc/>
+    /// <summary>
+    /// Addon description
+    /// </summary>
     public required string? Description { get; init; }
 
-    /// <inheritdoc/>
+    /// <summary>
+    /// Features required to run addon
+    /// </summary>
+    public required ImmutableArray<FeatureEnum>? RequiredFeatures { get; init; }
+
+    /// <summary>
+    /// List of addons that the current addon requires to work
+    /// </summary>
     public required IReadOnlyDictionary<string, string?>? DependentAddons { get; init; }
 
-    /// <inheritdoc/>
+    /// <summary>
+    /// List of addons that the current addon is incompatible with
+    /// </summary>
     public required IReadOnlyDictionary<string, string?>? IncompatibleAddons { get; init; }
 
-    /// <inheritdoc/>
+    /// <summary>
+    /// Path to addon file
+    /// </summary>
     public required string? PathToFile { get; init; }
 
-    /// <inheritdoc/>
+    /// <summary>
+    /// Cover image hash
+    /// </summary>
     public required long? GridImageHash { get; init; }
 
-    /// <inheritdoc/>
+    /// <summary>
+    /// Preview image hash
+    /// </summary>
     public required long? PreviewImageHash { get; init; }
 
-    /// <inheritdoc/>
+    /// <summary>
+    /// Main def file
+    /// </summary>
     public required string? MainDef { get; init; }
 
-    /// <inheritdoc/>
+    /// <summary>
+    /// Additional def files
+    /// </summary>
     public required ImmutableArray<string>? AdditionalDefs { get; init; }
 
-    /// <inheritdoc/>
+    /// <summary>
+    /// Map that will be started when the addon is loaded
+    /// </summary>
     public required IStartMap? StartMap { get; init; }
 
-    /// <inheritdoc/>
-    public required bool IsFolder { get; init; }
+    /// <summary>
+    /// Is addon unpacked to a folder
+    /// </summary>
+    public required bool IsUnpacked { get; init; }
 
-    /// <inheritdoc/>
+    /// <summary>
+    /// Is the item marked as a favorite.
+    /// </summary>
     public bool IsFavorite { get; set; }
 
     /// <inheritdoc/>
     public required Dictionary<OSEnum, Dictionary<PortEnum, string>>? Executables { get; init; }
 
-    /// <inheritdoc/>
+    /// <summary>
+    /// Name of the addon file
+    /// </summary>
     public string? FileName => PathToFile is null ? null : Path.GetFileName(PathToFile);
 
+    /// <inheritdoc/>
     public override string ToString() => Title;
 
-
-    /// <inheritdoc/>
+    /// <summary>
+    /// Create markdown description of the addon
+    /// </summary>
     public string ToMarkdownString()
     {
         StringBuilder description = new($"## {Title}");

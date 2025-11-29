@@ -5,7 +5,7 @@ namespace Addons.Addons;
 /// <summary>
 /// Duke Nukem 3D campaign
 /// </summary>
-public sealed class DukeCampaignEntity : BaseAddonEntity
+public sealed class DukeCampaignEntity : BaseAddon
 {
     /// <summary>
     /// Main .con file

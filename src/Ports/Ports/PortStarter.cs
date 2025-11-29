@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
+using Addons.Addons;
 using Addons.Providers;
 using Common.All.Enums;
-using Common.All.Interfaces;
 using Common.Client.Providers;
 using Games.Games;
 using Microsoft.Extensions.Logging;
@@ -36,7 +36,7 @@ public sealed class PortStarter
     /// <param name="skipIntro">Skip intro</param>
     /// <param name="skipStartup">Skip startup window</param>
     /// <param name="pathToExe">Path to custom port's exe</param>
-    public async Task StartAsync(BasePort port, BaseGame game, IAddon addon, byte? skill, bool skipIntro, bool skipStartup, string? pathToExe = null)
+    public async Task StartAsync(BasePort port, BaseGame game, BaseAddon addon, byte? skill, bool skipIntro, bool skipStartup, string? pathToExe = null)
     {
         var sw = Stopwatch.StartNew();
 
@@ -72,7 +72,7 @@ public sealed class PortStarter
     /// <param name="addon">Campaign</param>
     /// <param name="args">Command line arguments</param>
     /// <param name="pathToExe">Path to custom port's exe</param>
-    private async Task StartPortAsync(BasePort port, IAddon addon, string args, string? pathToExe = null)
+    private async Task StartPortAsync(BasePort port, BaseAddon addon, string args, string? pathToExe = null)
     {
         string exe;
 

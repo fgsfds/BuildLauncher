@@ -2,7 +2,6 @@ using Addons.Addons;
 using Common.All.Enums;
 using Common.All.Enums.Addons;
 using Common.All.Enums.Versions;
-using Common.All.Interfaces;
 using Games.Games;
 using Ports.Ports;
 using Ports.Ports.EDuke32;
@@ -53,7 +52,7 @@ public sealed class DukeCmdArgumentsTests
             RTS = null,
             StartMap = null,
             PreviewImageHash = null,
-            IsFolder = false,
+            IsUnpacked = false,
             Executables = null
         };
 
@@ -77,7 +76,7 @@ public sealed class DukeCmdArgumentsTests
             RTS = null,
             StartMap = null,
             PreviewImageHash = null,
-            IsFolder = false,
+            IsUnpacked = false,
             Executables = null
         };
 
@@ -101,7 +100,7 @@ public sealed class DukeCmdArgumentsTests
             RTS = null,
             StartMap = null,
             PreviewImageHash = null,
-            IsFolder = false,
+            IsUnpacked = false,
             Executables = null
         };
 
@@ -125,7 +124,7 @@ public sealed class DukeCmdArgumentsTests
             RTS = null,
             StartMap = null,
             PreviewImageHash = null,
-            IsFolder = false,
+            IsUnpacked = false,
             Executables = null
         };
 
@@ -149,7 +148,7 @@ public sealed class DukeCmdArgumentsTests
             AdditionalDefs = ["TC1.DEF", "TC2.DEF"],
             StartMap = null,
             PreviewImageHash = null,
-            IsFolder = false,
+            IsUnpacked = false,
             Executables = null
         };
 
@@ -172,7 +171,7 @@ public sealed class DukeCmdArgumentsTests
             _modsProvider.ModForAnotherGame,
             _modsProvider.ModThatRequiresFeature,
             _modsProvider.MultipleDependenciesMod
-        }.ToDictionary(x => x.AddonId, x => (IAddon)x);
+        }.ToDictionary(x => x.AddonId, x => (BaseAddon)x);
 
         Raze raze = new();
 
@@ -259,7 +258,7 @@ public sealed class DukeCmdArgumentsTests
             _modsProvider.EnabledModWithCons,
             _modsProvider.ModThatRequiresOfficialAddon,
             _modsProvider.ModThatIncompatibleWithAddon
-        }.ToDictionary(x => x.AddonId, x => (IAddon)x);
+        }.ToDictionary(x => x.AddonId, x => (BaseAddon)x);
 
         Raze raze = new();
 
@@ -347,7 +346,7 @@ public sealed class DukeCmdArgumentsTests
             _modsProvider.ModForAnotherGame,
             _modsProvider.ModThatRequiresFeature,
             _modsProvider.MultipleDependenciesMod
-        }.ToDictionary(x => x.AddonId, x => (IAddon)x);
+        }.ToDictionary(x => x.AddonId, x => (BaseAddon)x);
 
         EDuke32 eduke32 = new();
 
@@ -417,7 +416,7 @@ public sealed class DukeCmdArgumentsTests
             _modsProvider.EnabledModWithCons,
             _modsProvider.ModThatRequiresOfficialAddon,
             _modsProvider.ModThatIncompatibleWithAddon
-        }.ToDictionary(x => x.AddonId, x => (IAddon)x);
+        }.ToDictionary(x => x.AddonId, x => (BaseAddon)x);
 
         EDuke32 eduke32 = new();
 
@@ -523,7 +522,7 @@ public sealed class DukeCmdArgumentsTests
             _modsProvider.ModForAnotherGame,
             _modsProvider.ModThatRequiresFeature,
             _modsProvider.MultipleDependenciesMod
-        }.ToDictionary(x => x.AddonId, x => (IAddon)x);
+        }.ToDictionary(x => x.AddonId, x => (BaseAddon)x);
 
         RedNukem redNukem = new();
 
@@ -563,7 +562,7 @@ public sealed class DukeCmdArgumentsTests
             _modsProvider.EnabledModWithCons,
             _modsProvider.ModThatRequiresOfficialAddon,
             _modsProvider.ModThatIncompatibleWithAddon
-        }.ToDictionary(x => x.AddonId, x => (IAddon)x);
+        }.ToDictionary(x => x.AddonId, x => (BaseAddon)x);
 
         RedNukem eduke32 = new();
 

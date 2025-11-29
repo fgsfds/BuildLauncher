@@ -1,8 +1,8 @@
 ﻿using System.Text;
+using Addons.Addons;
 using Common.All;
 using Common.All.Enums;
 using Common.All.Enums.Versions;
-using Common.All.Interfaces;
 using CommunityToolkit.Diagnostics;
 using Games.Games;
 
@@ -118,7 +118,7 @@ public sealed class BuildGDX : BasePort
 
 
     /// <inheritdoc/>
-    public override void BeforeStart(BaseGame game, IAddon campaign)
+    public override void BeforeStart(BaseGame game, BaseAddon campaign)
     {
         MoveSaveFilesToGameFolder(game, campaign);
 
@@ -128,13 +128,13 @@ public sealed class BuildGDX : BasePort
     }
 
     /// <inheritdoc/>
-    public override void AfterEnd(BaseGame game, IAddon campaign)
+    public override void AfterEnd(BaseGame game, BaseAddon campaign)
     {
         MoveSaveFilesFromGameFolder(game, campaign);
     }
 
     /// <inheritdoc/>
-    protected override void GetStartCampaignArgs(StringBuilder sb, BaseGame game, IAddon addon)
+    protected override void GetStartCampaignArgs(StringBuilder sb, BaseGame game, BaseAddon addon)
     {
         _ = sb.Append(@" -jar ..\..\BuildGDX.jar");
 
@@ -177,7 +177,7 @@ public sealed class BuildGDX : BasePort
     }
 
     /// <inheritdoc/>
-    protected override void GetAutoloadModsArgs(StringBuilder sb, BaseGame _, IAddon addon, IEnumerable<KeyValuePair<AddonId, IAddon>> mods) { }
+    protected override void GetAutoloadModsArgs(StringBuilder sb, BaseGame _, BaseAddon addon, IEnumerable<KeyValuePair<AddonId, BaseAddon>> mods) { }
 
     /// <inheritdoc/>
     protected override void GetSkipIntroParameter(StringBuilder sb) { }
@@ -186,7 +186,7 @@ public sealed class BuildGDX : BasePort
     protected override void GetSkipStartupParameter(StringBuilder sb) { }
 
 
-    private void GetDukeArgs(StringBuilder sb, DukeGame game, IAddon camp)
+    private void GetDukeArgs(StringBuilder sb, DukeGame game, BaseAddon camp)
     {
         if (camp.AddonId.Id.Equals(nameof(DukeVersionEnum.Duke3D_WT), StringComparison.OrdinalIgnoreCase))
         {
@@ -200,21 +200,21 @@ public sealed class BuildGDX : BasePort
         _ = sb.Append(" -game DUKE_NUKEM_3D");
     }
 
-    private new void GetBloodArgs(StringBuilder sb, BloodGame game, IAddon camp)
+    private new void GetBloodArgs(StringBuilder sb, BloodGame game, BaseAddon camp)
     {
         _ = sb.Append($@" -path ""{game.GameInstallFolder}""");
 
         _ = sb.Append(" -game BLOOD");
     }
 
-    private static void GetWangArgs(StringBuilder sb, WangGame game, IAddon camp)
+    private static void GetWangArgs(StringBuilder sb, WangGame game, BaseAddon camp)
     {
         _ = sb.Append($@" -path ""{game.GameInstallFolder}""");
 
         _ = sb.Append(" -game SHADOW_WARRIOR");
     }
 
-    private void GetRedneckArgs(StringBuilder sb, RedneckGame game, IAddon camp)
+    private void GetRedneckArgs(StringBuilder sb, RedneckGame game, BaseAddon camp)
     {
         if (camp.AddonId.Id.Equals(nameof(GameEnum.RidesAgain), StringComparison.OrdinalIgnoreCase))
         {
@@ -228,21 +228,21 @@ public sealed class BuildGDX : BasePort
         }
     }
 
-    private new static void GetSlaveArgs(StringBuilder sb, SlaveGame game, IAddon camp)
+    private new static void GetSlaveArgs(StringBuilder sb, SlaveGame game, BaseAddon camp)
     {
         _ = sb.Append($@" -path ""{game.GameInstallFolder}""");
 
         _ = sb.Append(" -game POWERSLAVE");
     }
 
-    private static void GetNamArgs(StringBuilder sb, NamGame game, IAddon camp)
+    private static void GetNamArgs(StringBuilder sb, NamGame game, BaseAddon camp)
     {
         _ = sb.Append($@" -path ""{game.GameInstallFolder}""");
 
         _ = sb.Append(" -game NAM");
     }
 
-    private static void GetWitchavenArgs(StringBuilder sb, WitchavenGame game, IAddon camp)
+    private static void GetWitchavenArgs(StringBuilder sb, WitchavenGame game, BaseAddon camp)
     {
         if (camp.AddonId.Id.Equals(nameof(GameEnum.Witchaven2), StringComparison.OrdinalIgnoreCase))
         {
@@ -256,7 +256,7 @@ public sealed class BuildGDX : BasePort
         }
     }
 
-    private static void GetTekWarArgs(StringBuilder sb, TekWarGame game, IAddon camp)
+    private static void GetTekWarArgs(StringBuilder sb, TekWarGame game, BaseAddon camp)
     {
         _ = sb.Append($@" -path ""{game.GameInstallFolder}""");
 

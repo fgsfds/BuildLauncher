@@ -1,7 +1,6 @@
 using Addons.Addons;
 using Common.All.Enums;
 using Common.All.Enums.Addons;
-using Common.All.Interfaces;
 using Games.Games;
 using Ports.Ports;
 using Ports.Ports.EDuke32;
@@ -51,7 +50,7 @@ public sealed class BloodCmdArgumentsTests
             INI = null,
             RFF = null,
             SND = null,
-            IsFolder = false,
+            IsUnpacked = false,
             Executables = null
         };
 
@@ -75,7 +74,7 @@ public sealed class BloodCmdArgumentsTests
             INI = null,
             RFF = null,
             SND = null,
-            IsFolder = false,
+            IsUnpacked = false,
             Executables = null
         };
 
@@ -99,7 +98,7 @@ public sealed class BloodCmdArgumentsTests
             INI = "TC.INI",
             RFF = "TC.RFF",
             SND = "TC.SND",
-            IsFolder = false,
+            IsUnpacked = false,
             Executables = null
         };
 
@@ -123,7 +122,7 @@ public sealed class BloodCmdArgumentsTests
             INI = "TC.INI",
             RFF = "TC.RFF",
             SND = "TC.SND",
-            IsFolder = true,
+            IsUnpacked = true,
             Executables = null
         };
 
@@ -147,7 +146,7 @@ public sealed class BloodCmdArgumentsTests
             INI = "TC.INI",
             RFF = "TC.RFF",
             SND = "TC.SND",
-            IsFolder = true,
+            IsUnpacked = true,
             Executables = new Dictionary<OSEnum, Dictionary<PortEnum, string>>() { { OSEnum.Windows, new Dictionary<PortEnum, string>() { { PortEnum.NBlood, "nblood.exe" } } } }
         };
 
@@ -171,7 +170,7 @@ public sealed class BloodCmdArgumentsTests
             INI = "TC.INI",
             RFF = "TC.RFF",
             SND = "TC.SND",
-            IsFolder = true,
+            IsUnpacked = true,
             Executables = null
         };
 
@@ -195,7 +194,7 @@ public sealed class BloodCmdArgumentsTests
             INI = "TC.INI",
             RFF = "TC.RFF",
             SND = "TC.SND",
-            IsFolder = true,
+            IsUnpacked = true,
             Executables = null
         };
 
@@ -218,7 +217,7 @@ public sealed class BloodCmdArgumentsTests
             _modsProvider.ModForAnotherGame,
             _modsProvider.ModThatRequiresFeature,
             _modsProvider.MultipleDependenciesMod
-        }.ToDictionary(x => x.AddonId, x => (IAddon)x);
+        }.ToDictionary(x => x.AddonId, x => (BaseAddon)x);
 
         Raze raze = new();
 
@@ -263,7 +262,7 @@ public sealed class BloodCmdArgumentsTests
             _modsProvider.DependentModWithIncompatibleVersion,
             _modsProvider.ModForAnotherGame,
             _modsProvider.ModThatRequiresFeature
-        }.ToDictionary(x => x.AddonId, x => (IAddon)x);
+        }.ToDictionary(x => x.AddonId, x => (BaseAddon)x);
 
         Raze raze = new();
 
@@ -370,7 +369,7 @@ public sealed class BloodCmdArgumentsTests
             _modsProvider.ModForAnotherGame,
             _modsProvider.ModThatRequiresFeature,
             _modsProvider.MultipleDependenciesMod
-        }.ToDictionary(x => x.AddonId, x => (IAddon)x);
+        }.ToDictionary(x => x.AddonId, x => (BaseAddon)x);
 
         NBlood nblood = new();
 
@@ -402,7 +401,7 @@ public sealed class BloodCmdArgumentsTests
             _modsProvider.DependentModWithIncompatibleVersion,
             _modsProvider.ModForAnotherGame,
             _modsProvider.ModThatRequiresFeature
-        }.ToDictionary(x => x.AddonId, x => (IAddon)x);
+        }.ToDictionary(x => x.AddonId, x => (BaseAddon)x);
 
         NBlood nblood = new();
 
@@ -485,7 +484,7 @@ public sealed class BloodCmdArgumentsTests
             _modsProvider.DependentModWithIncompatibleVersion,
             _modsProvider.ModForAnotherGame,
             _modsProvider.ModThatRequiresFeature
-        }.ToDictionary(x => x.AddonId, x => (IAddon)x);
+        }.ToDictionary(x => x.AddonId, x => (BaseAddon)x);
 
         NotBlood notblood = new();
 
@@ -517,7 +516,7 @@ public sealed class BloodCmdArgumentsTests
             _modsProvider.DependentModWithIncompatibleVersion,
             _modsProvider.ModForAnotherGame,
             _modsProvider.ModThatRequiresFeature
-        }.ToDictionary(x => x.AddonId, x => (IAddon)x);
+        }.ToDictionary(x => x.AddonId, x => (BaseAddon)x);
 
         NotBlood notblood = new();
 
@@ -590,7 +589,7 @@ public sealed class BloodCmdArgumentsTests
         var mods = new List<AutoloadModEntity>() {
             _modsProvider.EnabledMod,
             _modsProvider.ModThatIncompatibleWithAddon
-        }.ToDictionary(x => x.AddonId, x => (IAddon)x);
+        }.ToDictionary(x => x.AddonId, x => (BaseAddon)x);
 
         NotBlood notblood = new();
 
@@ -622,7 +621,7 @@ public sealed class BloodCmdArgumentsTests
             _modsProvider.DependentModWithIncompatibleVersion,
             _modsProvider.ModForAnotherGame,
             _modsProvider.ModThatRequiresFeature
-        }.ToDictionary(x => x.AddonId, x => (IAddon)x);
+        }.ToDictionary(x => x.AddonId, x => (BaseAddon)x);
 
         NotBlood notblood = new();
 

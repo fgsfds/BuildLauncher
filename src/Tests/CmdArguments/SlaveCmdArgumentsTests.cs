@@ -1,6 +1,5 @@
 using Addons.Addons;
 using Common.All.Enums;
-using Common.All.Interfaces;
 using Games.Games;
 using Ports.Ports;
 using Ports.Ports.EDuke32;
@@ -41,7 +40,7 @@ public sealed class SlaveCmdArgumentsTests
             MainDef = null,
             AdditionalDefs = null,
             StartMap = null,
-            IsFolder = false,
+            IsUnpacked = false,
             Executables = null
         };
     }
@@ -52,7 +51,7 @@ public sealed class SlaveCmdArgumentsTests
         var mods = new List<AutoloadModEntity>() {
             _modsProvider.EnabledMod,
             _modsProvider.IncompatibleMod,
-        }.ToDictionary(x => x.AddonId, x => (IAddon)x);
+        }.ToDictionary(x => x.AddonId, x => (BaseAddon)x);
 
         Raze raze = new();
 
@@ -95,7 +94,7 @@ public sealed class SlaveCmdArgumentsTests
         var mods = new List<AutoloadModEntity>() {
             _modsProvider.EnabledMod,
             _modsProvider.IncompatibleMod,
-        }.ToDictionary(x => x.AddonId, x => (IAddon)x);
+        }.ToDictionary(x => x.AddonId, x => (BaseAddon)x);
 
         PCExhumed pcExhumed = new();
 

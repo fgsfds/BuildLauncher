@@ -1,6 +1,5 @@
 using Addons.Addons;
 using Common.All.Enums;
-using Common.All.Interfaces;
 using Common.All.Serializable.Addon;
 using Games.Games;
 using Ports.Ports;
@@ -42,7 +41,7 @@ public sealed class BloodLooseMapCmdArgumentsTests
             AdditionalDefs = null,
             StartMap = new MapFileJsonModel() { File = "LOOSE.MAP" },
             PreviewImageHash = null,
-            IsFolder = false,
+            IsUnpacked = false,
             Executables = null,
             BloodIni = null,
         };
@@ -64,7 +63,7 @@ public sealed class BloodLooseMapCmdArgumentsTests
             _modsProvider.DependentModWithIncompatibleVersion,
             _modsProvider.ModForAnotherGame,
             _modsProvider.ModThatRequiresFeature
-        }.ToDictionary(x => x.AddonId, x => (IAddon)x);
+        }.ToDictionary(x => x.AddonId, x => (BaseAddon)x);
 
         Raze raze = new();
 
@@ -109,7 +108,7 @@ public sealed class BloodLooseMapCmdArgumentsTests
             _modsProvider.DependentModWithIncompatibleVersion,
             _modsProvider.ModForAnotherGame,
             _modsProvider.ModThatRequiresFeature
-        }.ToDictionary(x => x.AddonId, x => (IAddon)x);
+        }.ToDictionary(x => x.AddonId, x => (BaseAddon)x);
 
         NBlood nblood = new();
 
@@ -141,7 +140,7 @@ public sealed class BloodLooseMapCmdArgumentsTests
             _modsProvider.DependentModWithIncompatibleVersion,
             _modsProvider.ModForAnotherGame,
             _modsProvider.ModThatRequiresFeature
-        }.ToDictionary(x => x.AddonId, x => (IAddon)x);
+        }.ToDictionary(x => x.AddonId, x => (BaseAddon)x);
 
         NotBlood notblood = new();
 

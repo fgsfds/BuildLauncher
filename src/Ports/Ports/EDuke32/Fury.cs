@@ -2,7 +2,6 @@
 using Addons.Addons;
 using Common.All.Enums;
 using Common.All.Helpers;
-using Common.All.Interfaces;
 using Common.Client.Interfaces;
 using CommunityToolkit.Diagnostics;
 using Games.Games;
@@ -64,7 +63,7 @@ public sealed class Fury : EDuke32
 
 
     /// <inheritdoc/>
-    public override void BeforeStart(BaseGame game, IAddon campaign)
+    public override void BeforeStart(BaseGame game, BaseAddon campaign)
     {
         MoveSaveFilesFromGameFolder(game, campaign);
 
@@ -73,7 +72,7 @@ public sealed class Fury : EDuke32
 
 
     /// <inheritdoc/>
-    protected override void GetStartCampaignArgs(StringBuilder sb, BaseGame game, IAddon addon)
+    protected override void GetStartCampaignArgs(StringBuilder sb, BaseGame game, BaseAddon addon)
     {
         if (addon.MainDef is not null)
         {
@@ -100,7 +99,7 @@ public sealed class Fury : EDuke32
         }
     }
 
-    private void GetFuryArgs(StringBuilder sb, FuryGame game, IAddon addon)
+    private void GetFuryArgs(StringBuilder sb, FuryGame game, BaseAddon addon)
     {
         if (addon.FileName is null)
         {

@@ -84,7 +84,7 @@ public sealed class BitmapsCache : ICacheAdder<Stream>, ICacheGetter<Bitmap>, ID
 
     private void InitOfficialCampaignsCache()
     {
-        var addonsAss = typeof(BaseAddonEntity).Assembly;
+        var addonsAss = typeof(BaseAddon).Assembly;
 
         using var blood = ImageHelper.FileNameToStream("Blood.blood.png", addonsAss);
         _ = TryAddGridToCache(GameEnum.Blood.GetUniqueHash(), blood);

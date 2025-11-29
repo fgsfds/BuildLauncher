@@ -3,6 +3,6 @@
 /// <summary>
 /// Campaign for a game that doesn't have any unique properties
 /// </summary>
-public sealed class GenericCampaignEntity : BaseAddonEntity
+public sealed class GenericCampaignEntity : BaseAddon
 {
 }

@@ -1,6 +1,5 @@
 using Addons.Addons;
 using Common.All.Enums;
-using Common.All.Interfaces;
 using Games.Games;
 using Ports.Ports;
 using Ports.Ports.EDuke32;
@@ -44,7 +43,7 @@ public sealed class NamCmdArgumentsTests
             RTS = null,
             StartMap = null,
             PreviewImageHash = null,
-            IsFolder = false,
+            IsUnpacked = false,
             Executables = null
         };
     }
@@ -55,7 +54,7 @@ public sealed class NamCmdArgumentsTests
         var mods = new List<AutoloadModEntity>() {
             _modsProvider.EnabledMod,
             _modsProvider.IncompatibleMod,
-        }.ToDictionary(x => x.AddonId, x => (IAddon)x);
+        }.ToDictionary(x => x.AddonId, x => (BaseAddon)x);
 
         Raze raze = new();
 
@@ -101,7 +100,7 @@ public sealed class NamCmdArgumentsTests
         var mods = new List<AutoloadModEntity>() {
             _modsProvider.EnabledMod,
             _modsProvider.IncompatibleMod,
-        }.ToDictionary(x => x.AddonId, x => (IAddon)x);
+        }.ToDictionary(x => x.AddonId, x => (BaseAddon)x);
 
         EDuke32 eduke32 = new();
 
@@ -137,7 +136,7 @@ public sealed class NamCmdArgumentsTests
         var mods = new List<AutoloadModEntity>() {
             _modsProvider.EnabledMod,
             _modsProvider.IncompatibleMod,
-        }.ToDictionary(x => x.AddonId, x => (IAddon)x);
+        }.ToDictionary(x => x.AddonId, x => (BaseAddon)x);
 
         RedNukem redNukem = new();
 

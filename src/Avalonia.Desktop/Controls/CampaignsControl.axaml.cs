@@ -1,3 +1,4 @@
+using Addons.Addons;
 using Addons.Providers;
 using Avalonia.Controls;
 using Avalonia.Desktop.Controls.Bases;
@@ -8,7 +9,6 @@ using Avalonia.Rendering.Composition;
 using Avalonia.Rendering.Composition.Animations;
 using Common.All.Enums;
 using Common.All.Helpers;
-using Common.All.Interfaces;
 using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.Input;
 using Ports.Ports;
@@ -71,7 +71,7 @@ public sealed partial class CampaignsControl : DroppableControl
                 Content = textBlock,
                 Command = new RelayCommand(() =>
                     _viewModel.StartCampaignCommand.Execute(new StubPort()),
-                    () => CampaignsList?.SelectedItem is IAddon selectedCampaign),
+                    () => CampaignsList?.SelectedItem is BaseAddon selectedCampaign),
                 Margin = new(5),
                 Padding = new(5),
             };
@@ -109,7 +109,7 @@ public sealed partial class CampaignsControl : DroppableControl
                 _viewModel.StartCampaignCommand.Execute(null),
                     () =>
                     {
-                        if (CampaignsList?.SelectedItem is not IAddon selectedCampaign)
+                        if (CampaignsList?.SelectedItem is not BaseAddon selectedCampaign)
                         {
                             return false;
                         }
@@ -188,7 +188,7 @@ public sealed partial class CampaignsControl : DroppableControl
     {
         CampaignsList.ContextMenu = new();
 
-        if (CampaignsList.SelectedItem is not IAddon addon)
+        if (CampaignsList.SelectedItem is not BaseAddon addon)
         {
             return;
         }

@@ -7,7 +7,7 @@
              xmlns:helpers="clr-namespace:Avalonia.Desktop.Helpers"
              xmlns:vm="clr-namespace:Avalonia.Desktop.ViewModels"
              xmlns:ctrl="clr-namespace:Avalonia.Desktop.Controls"
-             xmlns:in="clr-namespace:Common.All.Interfaces;assembly=BuildLauncher.Common.All"
+             xmlns:in="clr-namespace:Addons.Addons;assembly=BuildLauncher.Addons"
              x:DataType="vm:CampaignsViewModel"
              AttachedToVisualTree="OnControlAttachedToVisualTree"
              x:Class="Avalonia.Desktop.Controls.CampaignsControl">
@@ -23,7 +23,7 @@
             <TextBlock Height="50" Width="{Binding #CampaignsList.Bounds.Width}"/>
         </DataTemplate>
 
-        <DataTemplate x:DataType="in:IAddon">
+        <DataTemplate x:DataType="in:BaseAddon">
 
             <Grid Width="{x:Static helpers:DesktopConsts.GridImageWidth}"
                   Height="{x:Static helpers:DesktopConsts.GridImageHeight}">

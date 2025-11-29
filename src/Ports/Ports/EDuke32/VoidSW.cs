@@ -3,7 +3,6 @@ using Addons.Addons;
 using Common.All.Enums;
 using Common.All.Enums.Addons;
 using Common.All.Helpers;
-using Common.All.Interfaces;
 using Common.Client.Helpers;
 using CommunityToolkit.Diagnostics;
 using Games.Games;
@@ -67,7 +66,7 @@ public sealed class VoidSW : EDuke32
 
 
     /// <inheritdoc/>
-    public override void BeforeStart(BaseGame game, IAddon campaign)
+    public override void BeforeStart(BaseGame game, BaseAddon campaign)
     {
         MoveSaveFilesFromGameFolder(game, campaign);
 
@@ -76,7 +75,7 @@ public sealed class VoidSW : EDuke32
 
 
     /// <inheritdoc/>
-    protected override void GetStartCampaignArgs(StringBuilder sb, BaseGame game, IAddon addon)
+    protected override void GetStartCampaignArgs(StringBuilder sb, BaseGame game, BaseAddon addon)
     {
         //don't search for steam/gog installs
         _ = sb.Append($@" -usecwd {AddDirectoryParam}""{game.GameInstallFolder}""");
@@ -112,7 +111,7 @@ public sealed class VoidSW : EDuke32
     }
 
 
-    private void GetWangArgs(StringBuilder sb, WangGame game, IAddon addon)
+    private void GetWangArgs(StringBuilder sb, WangGame game, BaseAddon addon)
     {
         if (addon is LooseMapEntity)
         {

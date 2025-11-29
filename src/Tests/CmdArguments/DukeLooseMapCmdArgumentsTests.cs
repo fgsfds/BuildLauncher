@@ -1,7 +1,6 @@
 using Addons.Addons;
 using Common.All.Enums;
 using Common.All.Enums.Versions;
-using Common.All.Interfaces;
 using Common.All.Serializable.Addon;
 using Games.Games;
 using Ports.Ports;
@@ -45,7 +44,7 @@ public sealed class DukeLooseMapCmdArgumentsTests
             AdditionalDefs = null,
             StartMap = new MapFileJsonModel() { File = "LOOSE.MAP" },
             PreviewImageHash = null,
-            IsFolder = false,
+            IsUnpacked = false,
             Executables = null,
             BloodIni = null,
         };
@@ -67,7 +66,7 @@ public sealed class DukeLooseMapCmdArgumentsTests
             _modsProvider.DependentModWithIncompatibleVersion,
             _modsProvider.ModForAnotherGame,
             _modsProvider.ModThatRequiresFeature
-        }.ToDictionary(x => x.AddonId, x => (IAddon)x);
+        }.ToDictionary(x => x.AddonId, x => (BaseAddon)x);
 
         Raze raze = new();
 
@@ -128,7 +127,7 @@ public sealed class DukeLooseMapCmdArgumentsTests
             _modsProvider.DependentModWithIncompatibleVersion,
             _modsProvider.ModForAnotherGame,
             _modsProvider.ModThatRequiresFeature
-        }.ToDictionary(x => x.AddonId, x => (IAddon)x);
+        }.ToDictionary(x => x.AddonId, x => (BaseAddon)x);
 
         EDuke32 eduke32 = new();
 
@@ -181,7 +180,7 @@ public sealed class DukeLooseMapCmdArgumentsTests
             _modsProvider.DependentModWithIncompatibleVersion,
             _modsProvider.ModForAnotherGame,
             _modsProvider.ModThatRequiresFeature
-        }.ToDictionary(x => x.AddonId, x => (IAddon)x);
+        }.ToDictionary(x => x.AddonId, x => (BaseAddon)x);
 
         RedNukem redNukem = new();
 

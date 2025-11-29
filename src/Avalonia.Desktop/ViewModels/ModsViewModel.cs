@@ -5,7 +5,6 @@ using Addons.Providers;
 using Avalonia.Desktop.Misc;
 using Common.All.Enums;
 using Common.All.Helpers;
-using Common.All.Interfaces;
 using Common.Client.Interfaces;
 using Common.Client.Providers;
 using CommunityToolkit.Diagnostics;
@@ -71,11 +70,11 @@ public sealed partial class ModsViewModel : RightPanelViewModel, IPortsButtonCon
     /// </summary>
     public ImmutableList<AutoloadModEntity> ModsList => [.. _installedAddonsProvider.GetInstalledAddonsByType(AddonTypeEnum.Mod).Select(x => (AutoloadModEntity)x.Value).OrderBy(static x => x.Title)];
 
-    private IAddon? _selectedAddon;
+    private BaseAddon? _selectedAddon;
     /// <summary>
     /// Currently selected autoload mod
     /// </summary>
-    public override IAddon? SelectedAddon
+    public override BaseAddon? SelectedAddon
     {
         get => _selectedAddon;
         set
