@@ -1,4 +1,5 @@
 ﻿using Common.All.Enums;
+using Games.Skills;
 
 namespace Games.Games;
 
@@ -66,4 +67,7 @@ public sealed class WitchavenGame : BaseGame
     /// Is Witchaven 2 installed
     /// </summary>
     public bool IsWitchaven2Installed => IsInstalled(Witchaven2RequiredFiles, Witchaven2InstallPath);
+
+    /// <inheritdoc/>
+    public override Enum? Skills => null;
 }

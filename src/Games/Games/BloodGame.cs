@@ -1,5 +1,6 @@
 ﻿using Common.All.Enums;
 using Common.Client.Helpers;
+using Games.Skills;
 
 namespace Games.Games;
 
@@ -26,4 +27,7 @@ public sealed class BloodGame : BaseGame
     /// Is Cryptic Passage instaleld
     /// </summary>
     public bool IsCrypticPassageInstalled => IsInstalled(RequiredCPFiles);
+
+    /// <inheritdoc/>
+    public override Enum Skills => new BloodSkillsEnum();
 }

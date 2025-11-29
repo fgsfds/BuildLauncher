@@ -37,6 +37,9 @@ public abstract class BaseGame : IGame
     /// <inheritdoc/>
     public abstract List<string> RequiredFiles { get; }
 
+    /// <inheritdoc/>
+    public abstract Enum? Skills { get; }
+
 
     protected BaseGame()
     {

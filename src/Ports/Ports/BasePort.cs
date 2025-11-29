@@ -181,6 +181,11 @@ public abstract class BasePort
     /// </summary>
     public virtual bool IsDownloadable => true;
 
+    /// <summary>
+    /// Is it possible to select skill level from command line.
+    /// </summary>
+    public virtual bool IsSkillSelectionAvailable => true;
+
 
     protected BasePort()
     {

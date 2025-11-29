@@ -73,6 +73,9 @@ public sealed class BuildGDX : BasePort
             FeatureEnum.TileFromTexture
             ];
 
+    /// <inheritdoc/>
+    public override bool IsSkillSelectionAvailable => false;
+
 
     /// <inheritdoc/>
     protected override string ConfigFile => string.Empty;

@@ -1,4 +1,5 @@
 ﻿using Common.All.Enums;
+using Games.Skills;
 
 namespace Games.Games;
 
@@ -30,4 +31,7 @@ public sealed class RedneckGame : BaseGame
     /// Is Rides Again installed
     /// </summary>
     public bool IsAgainInstalled => IsInstalled(["REDNECK.GRP", "BIKER.CON"], AgainInstallPath);
+
+    /// <inheritdoc/>
+    public override Enum Skills => new RedneckSkillsEnum();
 }

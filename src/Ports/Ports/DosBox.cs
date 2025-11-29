@@ -73,6 +73,9 @@ public sealed class DosBox : BasePort
     /// <inheritdoc/>
     public override List<FeatureEnum> SupportedFeatures => [];
 
+    /// <inheritdoc/>
+    public override bool IsSkillSelectionAvailable => false;
+
 
     /// <inheritdoc/>
     protected override string ConfigFile => string.Empty;

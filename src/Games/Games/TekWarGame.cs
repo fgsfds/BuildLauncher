@@ -28,4 +28,7 @@ public sealed class TekWarGame : BaseGame
             return result;
         }
     }
+
+    /// <inheritdoc/>
+    public override Enum? Skills => null;
 }

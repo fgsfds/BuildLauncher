@@ -15,4 +15,7 @@ public sealed class StandaloneGame : BaseGame
 
     /// <inheritdoc/>
     public override List<string> RequiredFiles => [];
+
+    /// <inheritdoc/>
+    public override Enum? Skills => null;
 }

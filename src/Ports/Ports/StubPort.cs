@@ -21,6 +21,8 @@ public sealed class StubPort : BasePort
 
     public override string? InstalledVersion => string.Empty;
 
+    public override bool IsSkillSelectionAvailable => false;
+
     protected override string ConfigFile => string.Empty;
 
     protected override string AddDirectoryParam => string.Empty;

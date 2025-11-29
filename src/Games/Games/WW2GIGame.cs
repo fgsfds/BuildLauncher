@@ -1,4 +1,5 @@
 ﻿using Common.All.Enums;
+using Games.Skills;
 
 namespace Games.Games;
 
@@ -19,5 +20,11 @@ public sealed class WW2GIGame : BaseGame
     /// <inheritdoc/>
     private List<string> PlatoonFiles => ["PLATOONL.DAT", "PLATOONL.DEF"];
 
+    /// <summary>
+    /// Is Platoon addon installed.
+    /// </summary>
     public bool IsPlatoonInstalled => IsInstalled(PlatoonFiles);
+
+    /// <inheritdoc/>
+    public override Enum Skills => new WWIISkillsEnum();
 }

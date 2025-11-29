@@ -1,4 +1,5 @@
 ﻿using Common.All.Enums;
+using Games.Skills;
 
 namespace Games.Games;
 
@@ -15,4 +16,7 @@ public sealed class NamGame : BaseGame
 
     /// <inheritdoc/>
     public override List<string> RequiredFiles => ["NAM.GRP"];
+
+    /// <inheritdoc/>
+    public override Enum Skills => new NamSkillsEnum();
 }

@@ -1,4 +1,6 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
+using CommunityToolkit.Diagnostics;
 
 namespace Common.All.Helpers;
 
@@ -28,5 +30,29 @@ public static class EnumHelper
         var b = e.GetHashCode();
 
         return a + b;
+    }
+
+    public static string GetDescription(this Enum value)
+    {
+        var type = value.GetType();
+
+        var field = type.GetField(value.ToString());
+
+        if (field is null)
+        {
+            return ThrowHelper.ThrowInvalidDataException<string>();
+        }
+
+        var attr = field
+            .GetCustomAttributes(typeof(DescriptionAttribute), false)
+            .Cast<DescriptionAttribute>()
+            .FirstOrDefault();
+
+        if (attr is null)
+        {
+            return ThrowHelper.ThrowInvalidDataException<string>();
+        }
+
+        return attr.Description;
     }
 }

@@ -2,6 +2,7 @@
 using Common.All.Enums.Addons;
 using Common.All.Helpers;
 using CommunityToolkit.Diagnostics;
+using Games.Skills;
 
 namespace Games.Games;
 
@@ -58,6 +59,9 @@ public sealed class DukeGame : BaseGame
     /// List of paths to Duke's addons folders
     /// </summary>
     public Dictionary<DukeAddonEnum, string> AddonsPaths { get; set; } = [];
+
+    /// <inheritdoc/>
+    public override Enum Skills => new Duke3DSkillsEnum();
 
 
     /// <summary>

@@ -15,4 +15,7 @@ public sealed class SlaveGame : BaseGame
 
     /// <inheritdoc/>
     public override List<string> RequiredFiles => ["STUFF.DAT"];
+
+    /// <inheritdoc/>
+    public override Enum? Skills => null;
 }

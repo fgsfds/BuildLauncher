@@ -7,7 +7,6 @@ using Avalonia.Desktop.ViewModels;
 using Common.All.Enums;
 using Common.All.Helpers;
 using Common.All.Interfaces;
-using Common.Client.Enums.Skills;
 using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.Input;
 using Ports.Ports;
@@ -41,7 +40,11 @@ public sealed partial class MapsControl : DroppableControl
         _supportedPorts = portsProvider.GetPortsThatSupportGame(viewModel.Game.GameEnum);
         _bitmapsCache = bitmapsCache;
 
-        CreateSkillsFlyout();
+        if (_viewModel.Game.AreSkillsAvailble)
+        {
+            CreateSkillsFlyout();
+        }
+
         AddPortsButtons();
         AddContextMenuButtons();
     }
@@ -175,33 +178,16 @@ public sealed partial class MapsControl : DroppableControl
     /// </summary>
     private List<MenuItem> GetSkillMenusItems(BasePort? port = null)
     {
-        List<MenuItem> items = [];
-        Dictionary<byte, string> enums;
+        ArgumentNullException.ThrowIfNull(_viewModel.Game.Skills);
 
-        if (_viewModel.Game.GameEnum is GameEnum.Duke3D)
-        {
-            enums = Enum.GetValues<Duke3DSkillsEnum>().ToDictionary(static x => (byte)x, static y => y.ToReadableString());
-        }
-        else if (_viewModel.Game.GameEnum is GameEnum.Wang)
-        {
-            enums = Enum.GetValues<WangSkillsEnum>().ToDictionary(static x => (byte)x, static y => y.ToReadableString());
-        }
-        else if (_viewModel.Game.GameEnum is GameEnum.Redneck)
-        {
-            enums = Enum.GetValues<RedneckSkillsEnum>().ToDictionary(static x => (byte)x, static y => y.ToReadableString());
-        }
-        else if (_viewModel.Game.GameEnum is GameEnum.Fury)
-        {
-            enums = Enum.GetValues<FurySkillsEnum>().ToDictionary(static x => (byte)x, static y => y.ToReadableString());
-        }
-        else if (_viewModel.Game.GameEnum is GameEnum.Blood)
-        {
-            enums = Enum.GetValues<BloodSkillsEnum>().ToDictionary(static x => (byte)x, static y => y.ToReadableString());
-        }
-        else
-        {
-            return items;
-        }
+        List<MenuItem> items = new(5);
+
+        var enums = Enum.GetValues(_viewModel.Game.Skills.GetType())
+            .Cast<Enum>()
+            .ToDictionary(
+            Convert.ToByte,
+            e => e.GetDescription()
+            );
 
         foreach (var e in enums)
         {
@@ -240,21 +226,8 @@ public sealed partial class MapsControl : DroppableControl
     /// Is skill flyout menu availably
     /// </summary>
     /// <param name="port">Port</param>
-    private bool IsSkillFlyoutAvailable(BasePort port)
-    {
-        if (_flyout is null)
-        {
-            return false;
-        }
-
-        return port.PortEnum
-            is PortEnum.EDuke32
-            or PortEnum.VoidSW
-            or PortEnum.RedNukem
-            or PortEnum.Fury
-            or PortEnum.NBlood
-            or PortEnum.NotBlood;
-    }
+    private bool IsSkillFlyoutAvailable(BasePort port) =>
+        _flyout is not null && port.IsSkillSelectionAvailable && _viewModel.Game.AreSkillsAvailble;
 
 
     /// <summary>

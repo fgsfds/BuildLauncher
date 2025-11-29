@@ -55,6 +55,9 @@ public sealed class Raze : BasePort
         ? FileVersionInfo.GetVersionInfo(PortExeFilePath).FileVersion
         : null;
 
+    /// <inheritdoc/>
+    public override bool IsSkillSelectionAvailable => false;
+
 
     /// <inheritdoc/>
     protected override string ConfigFile => "raze_portable.ini";

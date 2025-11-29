@@ -1,4 +1,5 @@
-﻿using Common.All.Enums;
+﻿using System.Diagnostics.CodeAnalysis;
+using Common.All.Enums;
 
 namespace Common.All.Interfaces;
 
@@ -48,4 +49,16 @@ public interface IGame
     /// Path to autoload mods folder
     /// </summary>
     string ModsFolderPath { get; }
+
+    /// <summary>
+    /// Does this game have skill levels.
+    /// </summary>
+    [MemberNotNullWhen(true, nameof(Skills))]
+    bool AreSkillsAvailble => Skills is not null;
+
+    /// <summary>
+    /// Enumeration of the available skill levels.
+    /// <see langword="null"/> if game doesn't have skills.
+    /// </summary>
+    Enum? Skills { get; }
 }
