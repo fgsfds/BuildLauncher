@@ -227,7 +227,7 @@ public abstract class BasePort
     /// <param name="skipStartup"></param>
     /// <param name="skill"></param>
     public string GetStartGameArgs(
-        IGame game,
+        BaseGame game,
         IAddon addon,
         IEnumerable<KeyValuePair<AddonId, IAddon>> mods,
         bool skipIntro,
@@ -281,7 +281,7 @@ public abstract class BasePort
     /// <summary>
     /// Get startup args for loose maps
     /// </summary>
-    protected virtual void GetLooseMapArgs(StringBuilder sb, IGame game, IAddon camp)
+    protected virtual void GetLooseMapArgs(StringBuilder sb, BaseGame game, IAddon camp)
     {
         camp.StartMap.ThrowIfNotType<MapFileJsonModel>(out var mapFile);
 
@@ -394,7 +394,7 @@ public abstract class BasePort
         }
     }
 
-    protected virtual void GetNamWW2GIArgs(StringBuilder sb, IGame game, IAddon addon)
+    protected virtual void GetNamWW2GIArgs(StringBuilder sb, BaseGame game, IAddon addon)
     {
         if (game is NamGame)
         {
@@ -471,7 +471,7 @@ public abstract class BasePort
     /// <param name="game">Game</param>
     /// <param name="addon">Campaign\map</param>
     /// <param name="mods">Autoload mods</param>
-    protected virtual void GetAutoloadModsArgs(StringBuilder sb, IGame game, IAddon addon, IEnumerable<KeyValuePair<AddonId, IAddon>> mods)
+    protected virtual void GetAutoloadModsArgs(StringBuilder sb, BaseGame game, IAddon addon, IEnumerable<KeyValuePair<AddonId, IAddon>> mods)
     {
         if (!mods.Any())
         {
@@ -532,14 +532,14 @@ public abstract class BasePort
     /// </summary>
     /// <param name="game">Game</param>
     /// <param name="campaign">Campaign</param>
-    public abstract void AfterEnd(IGame game, IAddon campaign);
+    public abstract void AfterEnd(BaseGame game, IAddon campaign);
 
     /// <summary>
     /// Method to perform before starting the port
     /// </summary>
     /// <param name="game">Game</param>
     /// <param name="campaign">Campaign</param>
-    public abstract void BeforeStart(IGame game, IAddon campaign);
+    public abstract void BeforeStart(BaseGame game, IAddon campaign);
 
     /// <summary>
     /// Get command line arguments to start custom map or campaign
@@ -547,7 +547,7 @@ public abstract class BasePort
     /// <param name="sb">String builder for parameters</param>
     /// <param name="game">Game</param>
     /// <param name="addon">Map/campaign</param>
-    protected abstract void GetStartCampaignArgs(StringBuilder sb, IGame game, IAddon addon);
+    protected abstract void GetStartCampaignArgs(StringBuilder sb, BaseGame game, IAddon addon);
 
     /// <summary>
     /// Return command line parameter to skip intro
@@ -566,7 +566,7 @@ public abstract class BasePort
     /// <summary>
     /// Remove route 66 art files overrides used for RedNukem
     /// </summary>
-    protected void RestoreRoute66Files(IGame game)
+    protected void RestoreRoute66Files(BaseGame game)
     {
         if (game is not RedneckGame)
         {
@@ -616,7 +616,7 @@ public abstract class BasePort
     /// <summary>
     /// Restore WT's ART files
     /// </summary>
-    protected void RestoreWtFiles(IGame game)
+    protected void RestoreWtFiles(BaseGame game)
     {
         if (game is not DukeGame dGame)
         {
@@ -694,7 +694,7 @@ public abstract class BasePort
         }
     }
 
-    protected virtual void MoveSaveFilesToGameFolder(IGame game, IAddon campaign)
+    protected virtual void MoveSaveFilesToGameFolder(BaseGame game, IAddon campaign)
     {
         var saveFolder = GetPathToAddonSavedGamesFolder(game.ShortName, campaign.AddonId.Id);
 
@@ -712,7 +712,7 @@ public abstract class BasePort
         }
     }
 
-    protected virtual void MoveSaveFilesFromGameFolder(IGame game, IAddon campaign)
+    protected virtual void MoveSaveFilesFromGameFolder(BaseGame game, IAddon campaign)
     {
         //copying saved games into separate folder
         var saveFolder = GetPathToAddonSavedGamesFolder(game.ShortName, campaign.AddonId.Id);

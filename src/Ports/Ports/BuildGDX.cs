@@ -118,7 +118,7 @@ public sealed class BuildGDX : BasePort
 
 
     /// <inheritdoc/>
-    public override void BeforeStart(IGame game, IAddon campaign)
+    public override void BeforeStart(BaseGame game, IAddon campaign)
     {
         MoveSaveFilesToGameFolder(game, campaign);
 
@@ -128,13 +128,13 @@ public sealed class BuildGDX : BasePort
     }
 
     /// <inheritdoc/>
-    public override void AfterEnd(IGame game, IAddon campaign)
+    public override void AfterEnd(BaseGame game, IAddon campaign)
     {
         MoveSaveFilesFromGameFolder(game, campaign);
     }
 
     /// <inheritdoc/>
-    protected override void GetStartCampaignArgs(StringBuilder sb, IGame game, IAddon addon)
+    protected override void GetStartCampaignArgs(StringBuilder sb, BaseGame game, IAddon addon)
     {
         _ = sb.Append(@" -jar ..\..\BuildGDX.jar");
 
@@ -177,7 +177,7 @@ public sealed class BuildGDX : BasePort
     }
 
     /// <inheritdoc/>
-    protected override void GetAutoloadModsArgs(StringBuilder sb, IGame _, IAddon addon, IEnumerable<KeyValuePair<AddonId, IAddon>> mods) { }
+    protected override void GetAutoloadModsArgs(StringBuilder sb, BaseGame _, IAddon addon, IEnumerable<KeyValuePair<AddonId, IAddon>> mods) { }
 
     /// <inheritdoc/>
     protected override void GetSkipIntroParameter(StringBuilder sb) { }

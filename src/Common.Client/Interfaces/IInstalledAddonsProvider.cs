@@ -1,14 +1,11 @@
 ﻿using Common.All;
 using Common.All.Enums;
-using Common.All.Helpers;
 using Common.All.Interfaces;
 
 namespace Common.Client.Interfaces;
 
 public interface IInstalledAddonsProvider
 {
-    event AddonChanged AddonsChangedEvent;
-
     /// <summary>
     /// Add addon to cache
     /// </summary>

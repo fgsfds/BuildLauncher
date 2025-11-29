@@ -192,7 +192,7 @@ public sealed class Raze : BasePort
 
 
     /// <inheritdoc/>
-    public override void BeforeStart(IGame game, IAddon campaign)
+    public override void BeforeStart(BaseGame game, IAddon campaign)
     {
         var config = Path.Combine(PortInstallFolderPath, ConfigFile);
 
@@ -234,13 +234,13 @@ public sealed class Raze : BasePort
     }
 
     /// <inheritdoc/>
-    public override void AfterEnd(IGame game, IAddon campaign)
+    public override void AfterEnd(BaseGame game, IAddon campaign)
     {
         //nothing to do
     }
 
     /// <inheritdoc/>
-    protected override void GetStartCampaignArgs(StringBuilder sb, IGame game, IAddon addon)
+    protected override void GetStartCampaignArgs(StringBuilder sb, BaseGame game, IAddon addon)
     {
         _ = sb.Append($@" -savedir ""{GetPathToAddonSavedGamesFolder(game.ShortName, addon.AddonId.Id)}""");
 
@@ -270,9 +270,9 @@ public sealed class Raze : BasePort
         {
             GetNamWW2GIArgs(sb, nGame, addon);
         }
-        else if (game is WW2GIGame giGame)
+        else if (game is WW2GIGame gBaseGame)
         {
-            GetNamWW2GIArgs(sb, giGame, addon);
+            GetNamWW2GIArgs(sb, gBaseGame, addon);
         }
         else if (game is BloodGame bGame)
         {
@@ -483,7 +483,7 @@ public sealed class Raze : BasePort
     /// <summary>
     /// Add paths to game and mods folder to the config
     /// </summary>
-    private static void AddGamePathsToConfig(IGame game, IAddon campaign, string gameInstallFolder, string config)
+    private static void AddGamePathsToConfig(BaseGame game, IAddon campaign, string gameInstallFolder, string config)
     {
         var contents = File.ReadAllLines(config);
 

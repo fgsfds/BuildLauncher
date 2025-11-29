@@ -3,6 +3,7 @@ using Addons.Providers;
 using Common.All.Enums;
 using Common.All.Interfaces;
 using Common.Client.Providers;
+using Games.Games;
 using Microsoft.Extensions.Logging;
 
 namespace Ports.Ports;
@@ -35,7 +36,7 @@ public sealed class PortStarter
     /// <param name="skipIntro">Skip intro</param>
     /// <param name="skipStartup">Skip startup window</param>
     /// <param name="pathToExe">Path to custom port's exe</param>
-    public async Task StartAsync(BasePort port, IGame game, IAddon addon, byte? skill, bool skipIntro, bool skipStartup, string? pathToExe = null)
+    public async Task StartAsync(BasePort port, BaseGame game, IAddon addon, byte? skill, bool skipIntro, bool skipStartup, string? pathToExe = null)
     {
         var sw = Stopwatch.StartNew();
 

@@ -2,6 +2,7 @@
 using Common.All;
 using Common.All.Enums;
 using Common.All.Interfaces;
+using Games.Games;
 
 namespace Ports.Ports;
 
@@ -49,15 +50,15 @@ public sealed class StubPort : BasePort
 
     protected override string AddSndParam => string.Empty;
 
-    public override void AfterEnd(IGame game, IAddon campaign)
+    public override void AfterEnd(BaseGame game, IAddon campaign)
     {
     }
 
-    public override void BeforeStart(IGame game, IAddon campaign)
+    public override void BeforeStart(BaseGame game, IAddon campaign)
     {
     }
 
-    protected override void GetAutoloadModsArgs(StringBuilder sb, IGame game, IAddon addon, IEnumerable<KeyValuePair<AddonId, IAddon>> mods)
+    protected override void GetAutoloadModsArgs(StringBuilder sb, BaseGame game, IAddon addon, IEnumerable<KeyValuePair<AddonId, IAddon>> mods)
     {
     }
 
@@ -69,7 +70,7 @@ public sealed class StubPort : BasePort
     {
     }
 
-    protected override void GetStartCampaignArgs(StringBuilder sb, IGame game, IAddon addon)
+    protected override void GetStartCampaignArgs(StringBuilder sb, BaseGame game, IAddon addon)
     {
     }
 }

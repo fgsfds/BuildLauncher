@@ -2,12 +2,12 @@
 using Common.All;
 using Common.All.Enums;
 using Common.All.Helpers;
-using Common.All.Interfaces;
 using Common.All.Serializable.Downloadable;
 using Common.Client.Helpers;
 using Common.Client.Interfaces;
 using Common.Client.Tools;
 using CommunityToolkit.Diagnostics;
+using Games.Games;
 using Microsoft.Extensions.Logging;
 
 namespace Addons.Providers;
@@ -17,7 +17,7 @@ namespace Addons.Providers;
 /// </summary>
 public sealed class DownloadableAddonsProvider : IDownloadableAddonsProvider
 {
-    private readonly IGame _game;
+    private readonly BaseGame _game;
     private readonly ArchiveTools _archiveTools;
     private readonly FilesDownloader _filesDownloader;
     private readonly IApiInterface _apiInterface;
@@ -37,7 +37,7 @@ public sealed class DownloadableAddonsProvider : IDownloadableAddonsProvider
 
     [Obsolete($"Don't create directly. Use {nameof(DownloadableAddonsProviderFactory)}.")]
     public DownloadableAddonsProvider(
-        IGame game,
+        BaseGame game,
         ArchiveTools archiveTools,
         FilesDownloader filesDownloader,
         IApiInterface apiInterface,
@@ -211,7 +211,7 @@ public sealed class DownloadableAddonsProvider : IDownloadableAddonsProvider
                 }
             }
 
-            AddonDownloadedEvent?.Invoke(_game, addon.AddonType);
+            AddonDownloadedEvent?.Invoke(_game.GameEnum, addon.AddonType);
         }
         finally
         {

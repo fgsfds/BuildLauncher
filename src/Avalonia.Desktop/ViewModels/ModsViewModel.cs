@@ -11,13 +11,14 @@ using Common.Client.Providers;
 using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Games.Games;
 using Games.Providers;
 
 namespace Avalonia.Desktop.ViewModels;
 
 public sealed partial class ModsViewModel : RightPanelViewModel, IPortsButtonControl
 {
-    public readonly IGame Game;
+    public readonly BaseGame Game;
 
     private readonly InstalledGamesProvider _gamesProvider;
     private readonly InstalledAddonsProvider _installedAddonsProvider;
@@ -26,7 +27,7 @@ public sealed partial class ModsViewModel : RightPanelViewModel, IPortsButtonCon
 
     [Obsolete($"Don't create directly. Use {nameof(ViewModelsFactory)}.")]
     public ModsViewModel(
-        IGame game,
+        BaseGame game,
         InstalledGamesProvider gamesProvider,
         PlaytimeProvider playtimeProvider,
         RatingProvider ratingProvider,
@@ -167,9 +168,9 @@ public sealed partial class ModsViewModel : RightPanelViewModel, IPortsButtonCon
         }
     }
 
-    private void OnAddonChanged(IGame game, AddonTypeEnum addonType)
+    private void OnAddonChanged(GameEnum game, AddonTypeEnum addonType)
     {
-        if (game.GameEnum == Game.GameEnum && (addonType is AddonTypeEnum.Mod))
+        if (game == Game.GameEnum && (addonType is AddonTypeEnum.Mod))
         {
             OnPropertyChanged(nameof(ModsList));
         }

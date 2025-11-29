@@ -1,14 +1,11 @@
 ﻿using System.Collections.Immutable;
 using Common.All.Enums;
-using Common.All.Helpers;
 using Common.All.Serializable.Downloadable;
 
 namespace Common.Client.Interfaces;
 
 public interface IDownloadableAddonsProvider
 {
-    event AddonChanged AddonDownloadedEvent;
-
     /// <summary>
     /// Download progress
     /// </summary>

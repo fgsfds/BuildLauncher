@@ -1,7 +1,7 @@
 ﻿using Common.All.Enums;
-using Common.All.Interfaces;
 using Common.Client.Cache;
 using Common.Client.Interfaces;
+using Games.Games;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
@@ -32,7 +32,7 @@ public sealed class InstalledAddonsProviderFactory
     /// Get or create singleton instance of the provider
     /// </summary>
     /// <param name="game">Game</param>
-    public InstalledAddonsProvider GetSingleton(IGame game)
+    public InstalledAddonsProvider GetSingleton(BaseGame game)
     {
         if (_list.TryGetValue(game.GameEnum, out var value))
         {

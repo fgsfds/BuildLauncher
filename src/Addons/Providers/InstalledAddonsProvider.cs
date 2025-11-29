@@ -11,6 +11,7 @@ using Common.Client.Cache;
 using Common.Client.Helpers;
 using Common.Client.Interfaces;
 using CommunityToolkit.Diagnostics;
+using Games.Games;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using SharpCompress.Archives;
@@ -22,7 +23,7 @@ namespace Addons.Providers;
 /// </summary>
 public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
 {
-    private readonly IGame _game;
+    private readonly BaseGame _game;
     private readonly IConfigProvider _config;
     private readonly ILogger _logger;
     private readonly ICacheAdder<Stream> _bitmapsCache;
@@ -40,7 +41,7 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
 
     [Obsolete($"Don't create directly. Use {nameof(InstalledAddonsProviderFactory)}.")]
     public InstalledAddonsProvider(
-        IGame game,
+        BaseGame game,
         IConfigProvider config,
         ILogger logger,
         [FromKeyedServices("Bitmaps")] ICacheAdder<Stream> bitmapsCache,
@@ -240,7 +241,7 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
             Guard.IsNotNull(_mapsCache);
             Guard.IsNotNull(_modsCache);
 
-            AddonsChangedEvent?.Invoke(_game, addonType);
+            AddonsChangedEvent?.Invoke(_game.GameEnum, addonType);
         }
     }
 
@@ -278,7 +279,7 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
                 cache.Add(addon.AddonId, addon);
             }
 
-            AddonsChangedEvent?.Invoke(_game, addon.Type);
+            AddonsChangedEvent?.Invoke(_game.GameEnum, addon.Type);
         }
     }
 
@@ -322,7 +323,7 @@ public sealed class InstalledAddonsProvider : IInstalledAddonsProvider
             _ = _modsCache.Remove(addon.AddonId);
         }
 
-        AddonsChangedEvent?.Invoke(_game, addon.Type);
+        AddonsChangedEvent?.Invoke(_game.GameEnum, addon.Type);
     }
 
     /// <inheritdoc/>

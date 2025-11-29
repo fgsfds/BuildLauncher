@@ -5,6 +5,7 @@ using Common.All.Enums;
 using Common.All.Interfaces;
 using Common.Client.Cache;
 using Common.Client.Interfaces;
+using Games.Games;
 using Microsoft.Extensions.Logging;
 using Moq;
 
@@ -18,7 +19,7 @@ public sealed class AddonFilesTests : IDisposable
 
     public AddonFilesTests()
     {
-        var game = new Mock<IGame>();
+        var game = new Mock<BaseGame>();
         _ = game.Setup(x => x.GameEnum).Returns(GameEnum.Blood);
 
         var config = new Mock<IConfigProvider>();

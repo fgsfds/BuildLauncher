@@ -157,7 +157,7 @@ public class EDuke32 : BasePort
 
 
     /// <inheritdoc/>
-    public override void BeforeStart(IGame game, IAddon campaign)
+    public override void BeforeStart(BaseGame game, IAddon campaign)
     {
         MoveSaveFilesFromGameFolder(game, campaign);
 
@@ -167,13 +167,13 @@ public class EDuke32 : BasePort
     }
 
     /// <inheritdoc/>
-    public override void AfterEnd(IGame game, IAddon campaign)
+    public override void AfterEnd(BaseGame game, IAddon campaign)
     {
         MoveSaveFilesToGameFolder(game, campaign);
     }
 
     /// <inheritdoc/>
-    protected override void GetStartCampaignArgs(StringBuilder sb, IGame game, IAddon addon)
+    protected override void GetStartCampaignArgs(StringBuilder sb, BaseGame game, IAddon addon)
     {
         _ = sb.Append(" -usecwd"); //don't search for steam/gog installs
         _ = sb.Append(" -cachesize 262144"); //set cache to 256MiB
@@ -207,11 +207,11 @@ public class EDuke32 : BasePort
 
             GetNamWW2GIArgs(sb, nGame, addon);
         }
-        else if (game is WW2GIGame giGame)
+        else if (game is WW2GIGame gBaseGame)
         {
             _ = sb.Append($@" {AddDirectoryParam}""{game.GameInstallFolder}""");
 
-            GetNamWW2GIArgs(sb, giGame, addon);
+            GetNamWW2GIArgs(sb, gBaseGame, addon);
         }
         else
         {
@@ -374,7 +374,7 @@ public class EDuke32 : BasePort
     /// <summary>
     /// Rename WT's ART files if custom campaign is launched
     /// </summary>
-    protected void FixWtFiles(IGame game, IAddon campaign)
+    protected void FixWtFiles(BaseGame game, IAddon campaign)
     {
         if (game is not DukeGame)
         {
@@ -424,7 +424,7 @@ public class EDuke32 : BasePort
         }
     }
 
-    protected override void MoveSaveFilesToGameFolder(IGame game, IAddon campaign)
+    protected override void MoveSaveFilesToGameFolder(BaseGame game, IAddon campaign)
     {
         //copying saved games into separate folder
         var saveFolder = GetPathToAddonSavedGamesFolder(game.ShortName, campaign.AddonId.Id);
@@ -457,7 +457,7 @@ public class EDuke32 : BasePort
         }
     }
 
-    protected override void MoveSaveFilesFromGameFolder(IGame game, IAddon campaign)
+    protected override void MoveSaveFilesFromGameFolder(BaseGame game, IAddon campaign)
     {
         var saveFolder = GetPathToAddonSavedGamesFolder(game.ShortName, campaign.AddonId.Id);
 

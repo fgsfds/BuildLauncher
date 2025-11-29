@@ -64,7 +64,7 @@ public sealed class Fury : EDuke32
 
 
     /// <inheritdoc/>
-    public override void BeforeStart(IGame game, IAddon campaign)
+    public override void BeforeStart(BaseGame game, IAddon campaign)
     {
         MoveSaveFilesFromGameFolder(game, campaign);
 
@@ -73,7 +73,7 @@ public sealed class Fury : EDuke32
 
 
     /// <inheritdoc/>
-    protected override void GetStartCampaignArgs(StringBuilder sb, IGame game, IAddon addon)
+    protected override void GetStartCampaignArgs(StringBuilder sb, BaseGame game, IAddon addon)
     {
         if (addon.MainDef is not null)
         {

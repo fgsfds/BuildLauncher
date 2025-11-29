@@ -1,5 +1,5 @@
-﻿using Common.All.Enums;
-using Common.All.Interfaces;
+﻿using System.Diagnostics.CodeAnalysis;
+using Common.All.Enums;
 using Common.Client.Helpers;
 
 namespace Games.Games;
@@ -7,37 +7,64 @@ namespace Games.Games;
 /// <summary>
 /// Base class that encapsulates logic for working with games and their mods
 /// </summary>
-public abstract class BaseGame : IGame
+public abstract class BaseGame
 {
-    /// <inheritdoc/>
+    /// <summary>
+    /// Game install folder
+    /// </summary>
     public string? GameInstallFolder { get; set; }
 
-    /// <inheritdoc/>
+    /// <summary>
+    /// Is base game installed
+    /// </summary>
     public bool IsBaseGameInstalled => IsInstalled(RequiredFiles);
 
-    /// <inheritdoc/>
+    /// <summary>
+    /// Path to custom campaigns folder
+    /// </summary>
     public string CampaignsFolderPath => Path.Combine(ClientProperties.DataFolderPath, "Addons", ShortName, "Campaigns");
 
-    /// <inheritdoc/>
+    /// <summary>
+    /// Path to custom maps folder
+    /// </summary>
     public string MapsFolderPath => Path.Combine(ClientProperties.DataFolderPath, "Addons", ShortName, "Maps");
 
-    /// <inheritdoc/>
+    /// <summary>
+    /// Path to autoload mods folder
+    /// </summary>
     public string ModsFolderPath => Path.Combine(ClientProperties.DataFolderPath, "Addons", ShortName, "Mods");
 
+    /// <summary>
+    /// Does this game have skill levels.
+    /// </summary>
+    [MemberNotNullWhen(true, nameof(Skills))]
+    public bool AreSkillsAvailble => Skills is not null;
 
-    /// <inheritdoc/>
+
+    /// <summary>
+    /// Game enum
+    /// </summary>
     public abstract GameEnum GameEnum { get; }
 
-    /// <inheritdoc/>
+    /// <summary>
+    /// Full name of the game
+    /// </summary>
     public abstract string FullName { get; }
 
-    /// <inheritdoc/>
+    /// <summary>
+    /// Short name of the game
+    /// </summary>
     public abstract string ShortName { get; }
 
-    /// <inheritdoc/>
+    /// <summary>
+    /// List of files required for the base game to work
+    /// </summary>
     public abstract List<string> RequiredFiles { get; }
 
-    /// <inheritdoc/>
+    /// <summary>
+    /// Enumeration of the available skill levels.
+    /// <see langword="null"/> if game doesn't have skills.
+    /// </summary>
     public abstract Enum? Skills { get; }
 
 
@@ -69,6 +96,33 @@ public abstract class BaseGame : IGame
 
         DeleteSpecial();
     }
+
+
+    /// <summary>
+    /// Do provided files exist in the folder
+    /// </summary>
+    /// <param name="files">List of required files</param>
+    /// <param name="path">Folder where the files are searched</param>
+    protected bool IsInstalled(List<string> files, string? path = null)
+    {
+        var gamePath = path ?? GameInstallFolder;
+
+        if (gamePath is null)
+        {
+            return false;
+        }
+
+        foreach (var file in files)
+        {
+            if (!File.Exists(Path.Combine(gamePath, file)))
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
 
     [Obsolete]
     private void DeleteSpecial()
@@ -111,31 +165,5 @@ public abstract class BaseGame : IGame
         {
             Directory.Delete(oldGameDataDirectory, true);
         }
-    }
-
-
-    /// <summary>
-    /// Do provided files exist in the folder
-    /// </summary>
-    /// <param name="files">List of required files</param>
-    /// <param name="path">Folder where the files are searched</param>
-    protected bool IsInstalled(List<string> files, string? path = null)
-    {
-        var gamePath = path ?? GameInstallFolder;
-
-        if (gamePath is null)
-        {
-            return false;
-        }
-
-        foreach (var file in files)
-        {
-            if (!File.Exists(Path.Combine(gamePath, file)))
-            {
-                return false;
-            }
-        }
-
-        return true;
     }
 }

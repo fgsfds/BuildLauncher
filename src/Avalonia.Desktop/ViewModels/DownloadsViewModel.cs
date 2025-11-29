@@ -5,18 +5,18 @@ using Avalonia.Controls.Notifications;
 using Avalonia.Desktop.Misc;
 using Common.All.Enums;
 using Common.All.Helpers;
-using Common.All.Interfaces;
 using Common.All.Serializable.Downloadable;
 using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Games.Games;
 using Microsoft.Extensions.Logging;
 
 namespace Avalonia.Desktop.ViewModels;
 
 public sealed partial class DownloadsViewModel : ObservableObject
 {
-    public readonly IGame Game;
+    public readonly BaseGame Game;
 
     private readonly InstalledAddonsProvider _installedAddonsProvider;
     private readonly DownloadableAddonsProvider _downloadableAddonsProvider;
@@ -137,7 +137,7 @@ public sealed partial class DownloadsViewModel : ObservableObject
 
     [Obsolete($"Don't create directly. Use {nameof(ViewModelsFactory)}.")]
     public DownloadsViewModel(
-        IGame game,
+        BaseGame game,
         InstalledAddonsProviderFactory installedAddonsProviderFactory,
         DownloadableAddonsProviderFactory downloadableAddonsProviderFactory,
         ILogger logger
@@ -297,9 +297,9 @@ public sealed partial class DownloadsViewModel : ObservableObject
         OnPropertyChanged(nameof(ProgressBarValue));
     }
 
-    private void OnAddonChanged(IGame game, AddonTypeEnum addonType)
+    private void OnAddonChanged(GameEnum game, AddonTypeEnum addonType)
     {
-        if (game.GameEnum != Game.GameEnum)
+        if (game != Game.GameEnum)
         {
             return;
         }

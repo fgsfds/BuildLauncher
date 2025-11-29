@@ -1,5 +1,4 @@
 ﻿using Common.All.Enums;
-using Common.All.Interfaces;
 using Common.Client.Interfaces;
 using CommunityToolkit.Diagnostics;
 using Games.Games;
@@ -108,7 +107,7 @@ public sealed class InstalledGamesProvider
     /// Get game by enum
     /// </summary>
     /// <param name="gameEnum">Game enum</param>
-    public IGame GetGame(GameEnum gameEnum)
+    public BaseGame GetGame(GameEnum gameEnum)
     {
         return gameEnum switch
         {
@@ -125,7 +124,7 @@ public sealed class InstalledGamesProvider
             GameEnum.TekWar => _tekwar,
             GameEnum.Witchaven => _witch,
             GameEnum.Witchaven2 => _witch,
-            _ => ThrowHelper.ThrowArgumentOutOfRangeException<IGame>()
+            _ => ThrowHelper.ThrowArgumentOutOfRangeException<BaseGame>()
         };
     }
 

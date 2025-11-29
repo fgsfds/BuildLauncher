@@ -60,7 +60,7 @@ public sealed class RedNukem : EDuke32
 
 
     /// <inheritdoc/>
-    public override void BeforeStart(IGame game, IAddon campaign)
+    public override void BeforeStart(BaseGame game, IAddon campaign)
     {
         CreateBlankDemo();
 
@@ -77,7 +77,7 @@ public sealed class RedNukem : EDuke32
 
 
     /// <inheritdoc/>
-    protected override void GetStartCampaignArgs(StringBuilder sb, IGame game, IAddon addon)
+    protected override void GetStartCampaignArgs(StringBuilder sb, BaseGame game, IAddon addon)
     {
         //don't search for steam/gog installs
         _ = sb.Append(" -usecwd");
@@ -260,7 +260,7 @@ public sealed class RedNukem : EDuke32
     /// Override original art files with route 66's ones or remove overrides
     /// </summary>
     [Obsolete("Remove if RedNukem can ever properly launch R66")]
-    private void FixRoute66Files(IGame game, IAddon campaign)
+    private void FixRoute66Files(BaseGame game, IAddon campaign)
     {
         if (game is not RedneckGame)
         {

@@ -11,6 +11,7 @@ using Common.Client.Providers;
 using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Games.Games;
 using Games.Providers;
 using Microsoft.Extensions.Logging;
 using Ports.Ports;
@@ -19,7 +20,7 @@ namespace Avalonia.Desktop.ViewModels;
 
 public sealed partial class MapsViewModel : RightPanelViewModel, IPortsButtonControl
 {
-    public readonly IGame Game;
+    public readonly BaseGame Game;
 
     private readonly InstalledGamesProvider _gamesProvider;
     private readonly IConfigProvider _config;
@@ -108,7 +109,7 @@ public sealed partial class MapsViewModel : RightPanelViewModel, IPortsButtonCon
 
     [Obsolete($"Don't create directly. Use {nameof(ViewModelsFactory)}.")]
     public MapsViewModel(
-        IGame game,
+        BaseGame game,
         InstalledGamesProvider gamesProvider,
         IConfigProvider config,
         PlaytimeProvider playtimeProvider,
@@ -220,9 +221,9 @@ public sealed partial class MapsViewModel : RightPanelViewModel, IPortsButtonCon
         }
     }
 
-    private void OnAddonChanged(IGame game, AddonTypeEnum addonType)
+    private void OnAddonChanged(GameEnum game, AddonTypeEnum addonType)
     {
-        if (game.GameEnum == Game.GameEnum && (addonType is AddonTypeEnum.Map))
+        if (game == Game.GameEnum && (addonType is AddonTypeEnum.Map))
         {
             OnPropertyChanged(nameof(MapsList));
         }

@@ -1,7 +1,7 @@
 ﻿using Common.All.Enums;
-using Common.All.Interfaces;
 using Common.Client.Interfaces;
 using Common.Client.Tools;
+using Games.Games;
 using Microsoft.Extensions.Logging;
 
 namespace Addons.Providers;
@@ -35,7 +35,7 @@ public sealed class DownloadableAddonsProviderFactory
     /// Get or create singleton instance of the provider
     /// </summary>
     /// <param name="game">Game</param>
-    public DownloadableAddonsProvider GetSingleton(IGame game)
+    public DownloadableAddonsProvider GetSingleton(BaseGame game)
     {
         if (_list.TryGetValue(game.GameEnum, out var value))
         {

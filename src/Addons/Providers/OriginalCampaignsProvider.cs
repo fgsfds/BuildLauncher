@@ -28,7 +28,7 @@ public sealed class OriginalCampaignsProvider
     /// <param name="game">The game for which to retrieve the original campaigns.</param>
     /// <returns>A dictionary where the keys are <see cref="AddonId"/> values representing the unique identifiers of the
     /// campaigns,  and the values are <see cref="IAddon"/> instances representing the campaign details.</returns>
-    public Dictionary<AddonId, IAddon> GetOriginalCampaigns(IGame game)
+    public Dictionary<AddonId, IAddon> GetOriginalCampaigns(BaseGame game)
     {
         return game.GameEnum switch
         {
@@ -53,7 +53,7 @@ public sealed class OriginalCampaignsProvider
         };
     }
 
-    private Dictionary<AddonId, IAddon> GetDuke3DCampaigns(IGame game)
+    private Dictionary<AddonId, IAddon> GetDuke3DCampaigns(BaseGame game)
     {
         game.ThrowIfNotType(out DukeGame dGame);
 
@@ -288,7 +288,7 @@ public sealed class OriginalCampaignsProvider
 
 
     /// <inheritdoc/>
-    private Dictionary<AddonId, IAddon> GetBloodCampaigns(IGame game)
+    private Dictionary<AddonId, IAddon> GetBloodCampaigns(BaseGame game)
     {
         game.ThrowIfNotType(out BloodGame bGame);
 
@@ -380,7 +380,7 @@ public sealed class OriginalCampaignsProvider
     /// <summary>
     /// Get list of original campaigns
     /// </summary>
-    private Dictionary<AddonId, IAddon> GetWangCampaigns(IGame game)
+    private Dictionary<AddonId, IAddon> GetWangCampaigns(BaseGame game)
     {
         game.ThrowIfNotType(out WangGame wGame);
 
@@ -425,7 +425,7 @@ public sealed class OriginalCampaignsProvider
 
 
     /// <inheritdoc/>
-    private Dictionary<AddonId, IAddon> GetFuryCampaigns(IGame game)
+    private Dictionary<AddonId, IAddon> GetFuryCampaigns(BaseGame game)
     {
         game.ThrowIfNotType(out FuryGame fGame);
 
@@ -495,7 +495,7 @@ public sealed class OriginalCampaignsProvider
 
 
     /// <inheritdoc/>
-    private Dictionary<AddonId, IAddon> GetRedneckCampaigns(IGame game)
+    private Dictionary<AddonId, IAddon> GetRedneckCampaigns(BaseGame game)
     {
         game.ThrowIfNotType(out RedneckGame rGame);
 
@@ -617,7 +617,7 @@ public sealed class OriginalCampaignsProvider
 
 
     /// <inheritdoc/>
-    private Dictionary<AddonId, IAddon> GetNamCampaigns(IGame game)
+    private Dictionary<AddonId, IAddon> GetNamCampaigns(BaseGame game)
     {
         game.ThrowIfNotType(out NamGame nGame);
 
@@ -669,7 +669,7 @@ public sealed class OriginalCampaignsProvider
 
 
     /// <inheritdoc/>
-    private Dictionary<AddonId, IAddon> GetWw2Campaigns(IGame game)
+    private Dictionary<AddonId, IAddon> GetWw2Campaigns(BaseGame game)
     {
         game.ThrowIfNotType(out WW2GIGame wGame);
 
@@ -752,7 +752,7 @@ public sealed class OriginalCampaignsProvider
 
 
     /// <inheritdoc/>
-    private Dictionary<AddonId, IAddon> GetTekWarCampaigns(IGame game)
+    private Dictionary<AddonId, IAddon> GetTekWarCampaigns(BaseGame game)
     {
         game.ThrowIfNotType(out TekWarGame tGame);
 
@@ -798,7 +798,7 @@ public sealed class OriginalCampaignsProvider
 
 
     /// <inheritdoc/>
-    private Dictionary<AddonId, IAddon> GetSlaveCampaigns(IGame game)
+    private Dictionary<AddonId, IAddon> GetSlaveCampaigns(BaseGame game)
     {
         game.ThrowIfNotType(out SlaveGame sGame);
 
@@ -847,7 +847,7 @@ public sealed class OriginalCampaignsProvider
 
 
     /// <inheritdoc/>
-    private Dictionary<AddonId, IAddon> GetWitchavenCampaigns(IGame game)
+    private Dictionary<AddonId, IAddon> GetWitchavenCampaigns(BaseGame game)
     {
         game.ThrowIfNotType(out WitchavenGame wGame);
 
