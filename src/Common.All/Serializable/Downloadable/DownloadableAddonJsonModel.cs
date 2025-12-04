@@ -51,6 +51,9 @@ public sealed class DownloadableAddonJsonModel
     [JsonPropertyName("UpdateDate")]
     public DateTime UpdateDate { get; set; }
 
+    [JsonPropertyName("MD5")]
+    public string MD5 { get; set; } = string.Empty;
+
 
     [JsonIgnore]
     public bool IsInstalled { get; set; }

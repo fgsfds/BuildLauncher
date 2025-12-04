@@ -35,7 +35,8 @@ public sealed class AddonsDatabaseTests
 
         Assert.NotNull(addonsJson);
 
-        StringBuilder sb = new();
+        StringBuilder sbFails = new();
+        StringBuilder sbSuccesses = new();
 
         foreach (var pair in addonsJson)
         {
@@ -43,24 +44,52 @@ public sealed class AddonsDatabaseTests
             {
                 var url = addon.DownloadUrl;
                 var size = addon.FileSize;
+                var md5 = addon.MD5;
 
                 using var header = await httpClient.GetAsync(url, HttpCompletionOption.ResponseHeadersRead);
 
                 if (!header.IsSuccessStatusCode)
                 {
-                    _ = sb.AppendLine($"File {url} doesn't exist.");
+                    _ = sbFails.AppendLine($"[Error] File {url} doesn't exist.");
                     continue;
                 }
 
                 if (header.Content.Headers.ContentLength != size)
                 {
-                    _ = sb.AppendLine($"File {url} size doesn't match. Expected {size} got {header.Content.Headers.ContentLength}");
+                    _ = sbFails.AppendLine($"[Error] File {url} size doesn't match. Expected {size} got {header.Content.Headers.ContentLength}");
+                }
+
+                if (md5 is null)
+                {
+                    _ = sbFails.AppendLine($"[Error] File {url} doesn't have MD5 in the database.");
+                }
+
+                if (header.Headers.ETag?.Tag is null)
+                {
+                    _ = sbFails.AppendLine($"[Error] File {url} doesn't have ETag.");
+                }
+                else
+                {
+                    var md5e = header.Headers.ETag.Tag.Replace("\"", "");
+
+                    if (md5e.Contains('-'))
+                    {
+                        _ = sbFails.AppendLine($"[Error] File {url} has incorrect ETag.");
+                    }
+                    else if (!md5e.Equals(md5, StringComparison.OrdinalIgnoreCase))
+                    {
+                        _ = sbFails.AppendLine($"[Error] File {url} has wrong MD5.");
+                    }
+                    else
+                    {
+                        _ = sbSuccesses.AppendLine($"[Info] File's {url} MD5 matches: {md5}.");
+                    }
                 }
             }
         }
 
-        _output.WriteLine(sb.ToString());
-        Assert.True(sb.Length < 1);
+        _output.WriteLine(sbSuccesses.ToString());
+        Assert.True(sbFails.Length < 1, sbFails.ToString());
     }
 
     [Fact]

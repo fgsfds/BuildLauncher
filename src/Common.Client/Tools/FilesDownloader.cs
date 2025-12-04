@@ -77,7 +77,7 @@ public sealed class FilesDownloader
         }
         catch (Exception ex)
         {
-            _logger.LogCritical(ex, "");
+            _logger.LogCritical(ex, $"Error while downloading {url}.");
             return false;
         }
 

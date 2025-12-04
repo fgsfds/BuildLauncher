@@ -240,7 +240,15 @@ public sealed partial class DownloadsViewModel : ObservableObject
 
                 ProgressMessage = $"Downloading {item.Title}. File {downloadCount} of {filesToDownload.Count}.";
 
-                await _downloadableAddonsProvider.DownloadAddonAsync(item, _cancellationTokenSource.Token).ConfigureAwait(true);
+                var isDownloaded = await _downloadableAddonsProvider.DownloadAddonAsync(item, _cancellationTokenSource.Token).ConfigureAwait(true);
+
+                if (!isDownloaded)
+                {
+                    NotificationsHelper.Show(
+                        $"Error while downloading {item.Title}.",
+                        NotificationType.Error
+                        );
+                }
 
                 downloadCount++;
             }

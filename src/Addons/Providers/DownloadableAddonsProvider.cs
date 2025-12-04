@@ -1,4 +1,5 @@
 ﻿using System.Collections.Immutable;
+using System.Security.Cryptography;
 using Common.All;
 using Common.All.Enums;
 using Common.All.Helpers;
@@ -168,7 +169,7 @@ public sealed class DownloadableAddonsProvider
     /// </summary>
     /// <param name="addon">Addon</param>
     /// <param name="cancellationToken">Cancellation token</param>
-    public async Task DownloadAddonAsync(
+    public async Task<bool> DownloadAddonAsync(
         DownloadableAddonJsonModel addon,
         CancellationToken cancellationToken
         )
@@ -197,7 +198,7 @@ public sealed class DownloadableAddonsProvider
             else
             {
                 ThrowHelper.ThrowNotSupportedException(addon.AddonType.ToString());
-                return;
+                return false;
             }
 
             var pathToFile = Path.Combine(path, file);
@@ -206,7 +207,21 @@ public sealed class DownloadableAddonsProvider
 
             if (!isDownloaded)
             {
-                return;
+                _logger.LogError($"Error while downloading {addon.Title}.");
+                return false;
+            }
+
+            var doesMd5Match = await CheckFileMD5Async(pathToFile, addon.MD5, cancellationToken).ConfigureAwait(false);
+
+            if (!doesMd5Match)
+            {
+                if (File.Exists(pathToFile))
+                {
+                    File.Delete(pathToFile);
+                }
+
+                _logger.LogError($"File hash for {addon.Title} doesn't match.");
+                return false;
             }
 
             await _installedAddonsProvider.AddAddonAsync(pathToFile).ConfigureAwait(false);
@@ -222,12 +237,38 @@ public sealed class DownloadableAddonsProvider
             }
 
             AddonDownloadedEvent?.Invoke(_game.GameEnum, addon.AddonType);
+
+            return true;
         }
         finally
         {
             _filesDownloader.ProgressChanged -= OnProgressChanged;
             _archiveTools.ProgressChanged -= OnProgressChanged;
         }
+    }
+
+
+    /// <summary>
+    /// Check MD5 of the local file
+    /// </summary>
+    /// <param name="filePath">Full path to the file</param>
+    /// <param name="fixMD5">MD5 that the file's hash will be compared to</param>
+    /// <param name="cancellationToken">Cancellation token</param>
+    /// <returns>true if check is passed</returns>
+    private static async Task<bool> CheckFileMD5Async(
+        string filePath,
+        string fixMD5,
+        CancellationToken cancellationToken
+        )
+    {
+        using var md5 = MD5.Create();
+
+        await using var stream = File.OpenRead(filePath);
+
+        var hash = await md5.ComputeHashAsync(stream, cancellationToken).ConfigureAwait(false);
+        var hashStr = Convert.ToHexString(hash);
+
+        return fixMD5.Equals(hashStr, StringComparison.OrdinalIgnoreCase);
     }
 
     private void OnProgressChanged(object? sender, float e)

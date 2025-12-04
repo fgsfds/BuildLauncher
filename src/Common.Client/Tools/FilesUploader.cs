@@ -1,4 +1,6 @@
-﻿using System.Text.Json;
+﻿using System.Security.Cryptography;
+using System.Text.Json;
+using System.Threading;
 using Common.All.Enums;
 using Common.All.Helpers;
 using Common.All.Serializable.Addon;
@@ -6,6 +8,7 @@ using Common.All.Serializable.Downloadable;
 using Common.Client.Interfaces;
 using CommunityToolkit.Diagnostics;
 using SharpCompress.Archives.Zip;
+using SharpCompress.Common;
 
 namespace Common.Client.Tools;
 
@@ -101,6 +104,11 @@ public sealed class FilesUploader
             return null;
         }
 
+        using var md5 = MD5.Create();
+        await using var fileStream = File.OpenRead(pathToFile);
+        var hash = await md5.ComputeHashAsync(fileStream, CancellationToken.None).ConfigureAwait(false);
+        var hashStr = Convert.ToHexString(hash);
+
         DownloadableAddonJsonModel downloadableAddon = new()
         {
             Id = manifest.Id,
@@ -113,7 +121,8 @@ public sealed class FilesUploader
             Author = manifest.Author,
             FileSize = fileSize,
             Dependencies = manifest.Dependencies?.Addons?.Select(d => d.Id)?.ToList(),
-            UpdateDate = DateTime.UtcNow
+            UpdateDate = DateTime.UtcNow,
+            MD5 = hashStr
         };
 
         return downloadableAddon;
