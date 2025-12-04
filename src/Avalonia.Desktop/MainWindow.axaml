@@ -34,6 +34,56 @@
 
         <Grid RowDefinitions="25,*">
 
+            <Grid x:Name="ConsentWindow"
+                  RowDefinitions="*,auto,*"
+                  ColumnDefinitions="*,auto,*"
+                  Grid.RowSpan="2"
+                  IsVisible="False"
+                  ZIndex="999">
+
+                <Canvas Grid.RowSpan="3" Grid.ColumnSpan="3"
+                        IsHitTestVisible="True"
+                        Background="Black"
+                        Opacity="0.5"/>
+
+                <Border Grid.Column="1" Grid.Row="1"
+                        BorderThickness="1"
+                        BorderBrush="{DynamicResource SystemAccentColor}"
+                        Background="{DynamicResource Background}"
+                        MaxWidth="800">
+
+                    <StackPanel Orientation="Vertical">
+
+                        <TextBlock Grid.Column="1" Grid.Row="1"
+                                   Margin="50"
+                                   TextWrapping="Wrap"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center">
+                            BuildLauncher is a community-driven utility designed to help users manage and launch third-party source ports, mods, custom campaigns, and maps for their licensed Build Engine games.
+                            <LineBreak/>
+                            <LineBreak/>
+                            This Software is not affiliated with or endorsed by the original game rights holders or any associated entities.
+                            <LineBreak/>
+                            <LineBreak/>
+                            Use this Software and the associated content at your own discretion. Please be aware that using third-party modifications may occasionally lead to game instability or technical conflicts.
+                            <LineBreak/>
+                            <LineBreak/>
+                            While we aim for a seamless experience, we cannot guarantee the performance or compatibility of external content. The developers of this Software are not responsible for any technical issues or data loss that may arise from using community-made fixes.
+                        </TextBlock>
+
+                        <Button HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Margin="10,0,10,30"
+                                Padding="50,10"
+                                Content="OK"
+                                Click="OnConsentButtonClick"/>
+
+                    </StackPanel>
+
+                </Border>
+
+            </Grid>
+
             <TabControl Grid.Row="1" Margin="5" TabStripPlacement="Left">
 
                 <!--Duke 3D-->

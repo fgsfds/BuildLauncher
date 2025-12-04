@@ -9,6 +9,7 @@ namespace Common.Client.Config;
 public sealed class ConfigProviderFake : IConfigProvider
 {
     public string ApiPassword { get; set; } = string.Empty;
+    public bool IsConsented { get; set; } = true;
     public string? PathBlood { get; set; } = null;
     public string? PathDuke3D { get; set; } = null;
     public string? PathDuke64 { get; set; } = null;

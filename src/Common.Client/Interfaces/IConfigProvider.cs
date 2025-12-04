@@ -8,6 +8,7 @@ public interface IConfigProvider
     string ApiPassword { get; set; }
     HashSet<string> DisabledAutoloadMods { get; }
     HashSet<AddonId> FavoriteAddons { get; }
+    bool IsConsented { get; set; }
     string? PathBlood { get; set; }
     string? PathDuke3D { get; set; }
     string? PathDuke64 { get; set; }

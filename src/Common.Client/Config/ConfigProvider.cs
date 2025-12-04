@@ -57,6 +57,13 @@ public sealed class ConfigProvider : IConfigProvider
         set => SetSettingsValue(value);
     }
 
+    public bool IsConsented
+    {
+        get => GetBoolValue(nameof(IsConsented));
+        set => SetSettingsValue(value.ToString());
+    }
+
+
     //GAME PATHS
     public string? PathDuke3D
     {

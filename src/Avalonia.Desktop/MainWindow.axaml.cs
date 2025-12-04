@@ -1,7 +1,9 @@
 ﻿using Avalonia.Controls;
+using Avalonia.Interactivity;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
+using Common.Client.Interfaces;
 using Games.Providers;
 
 namespace Avalonia.Desktop;
@@ -9,12 +11,19 @@ namespace Avalonia.Desktop;
 public sealed partial class MainWindow : Window, IDisposable
 {
     private readonly InstalledGamesProvider _installedGamesProvider;
+    private readonly IConfigProvider _config;
     private readonly Bitmap? _overlayBitmap;
 
-    public MainWindow(InstalledGamesProvider installedGamesProvider)
+    public MainWindow(
+        InstalledGamesProvider installedGamesProvider,
+        IConfigProvider config
+        )
     {
         ArgumentNullException.ThrowIfNull(installedGamesProvider);
+        ArgumentNullException.ThrowIfNull(config);
+
         _installedGamesProvider = installedGamesProvider;
+        _config = config;
 
 #if DEBUG
         this.AttachDevTools();
@@ -37,6 +46,11 @@ public sealed partial class MainWindow : Window, IDisposable
 
     private void OnWindowOpened(object? sender, EventArgs e)
     {
+        if (!_config.IsConsented)
+        {
+            ConsentWindow.IsVisible = true;
+        }
+
         if (_installedGamesProvider.IsDukeInstalled)
         {
             DukeTab.IsSelected = true;
@@ -77,5 +91,11 @@ public sealed partial class MainWindow : Window, IDisposable
         {
             TekWarTab.IsSelected = true;
         }
+    }
+
+    private void OnConsentButtonClick(object? sender, RoutedEventArgs e)
+    {
+        ConsentWindow.IsVisible = false;
+        _config.IsConsented = true;
     }
 }
