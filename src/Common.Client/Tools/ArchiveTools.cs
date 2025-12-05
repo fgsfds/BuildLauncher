@@ -31,51 +31,45 @@ public sealed class ArchiveTools
     {
         var entryNumber = 1f;
 
-        await Task.Run(() =>
+        using var archive = ArchiveFactory.Open(pathToArchive);
+        var count = archive.Entries.Count();
+
+        foreach (var entry in archive.Entries)
         {
-            using var archive = ArchiveFactory.Open(pathToArchive);
-            using var reader = archive.ExtractAllEntries();
+            var fileName = entry.Key!;
 
-            var count = archive.Entries.Count();
-
-            while (reader.MoveToNextEntry())
+            if (isSubfolder)
             {
-                var fileName = reader.Entry.Key!;
-
-                if (isSubfolder)
-                {
-                    fileName = fileName[(fileName.IndexOf('/') + 1)..];
-                }
-
-                if (string.IsNullOrWhiteSpace(fileName))
-                {
-                    continue;
-                }
-
-                var fullName = Path.Combine(unpackTo, fileName);
-
-                if (reader.Entry.IsDirectory)
-                {
-                    _ = Directory.CreateDirectory(fullName);
-                }
-                else
-                {
-                    var directory = Path.GetDirectoryName(fullName);
-
-                    if (directory is not null &&
-                        !Directory.Exists(directory))
-                    {
-                        _ = Directory.CreateDirectory(directory);
-                    }
-
-                    using var writableStream = File.OpenWrite(fullName);
-                    reader.WriteEntryTo(writableStream);
-                }
-
-                ProgressChanged?.Invoke(this, entryNumber / count * 100);
-
-                entryNumber++;
+                fileName = fileName[(fileName.IndexOf('/') + 1)..];
             }
-        }).ConfigureAwait(false);
+
+            if (string.IsNullOrWhiteSpace(fileName))
+            {
+                continue;
+            }
+
+            var fullName = Path.Combine(unpackTo, fileName);
+
+            if (entry.IsDirectory)
+            {
+                _ = Directory.CreateDirectory(fullName);
+            }
+            else
+            {
+                var directory = Path.GetDirectoryName(fullName);
+
+                if (directory is not null &&
+                    !Directory.Exists(directory))
+                {
+                    _ = Directory.CreateDirectory(directory);
+                }
+
+                await entry.WriteToFileAsync(fullName).ConfigureAwait(false);
+            }
+
+            ProgressChanged?.Invoke(this, entryNumber / count * 100);
+
+            entryNumber++;
+        }
     }
 }
