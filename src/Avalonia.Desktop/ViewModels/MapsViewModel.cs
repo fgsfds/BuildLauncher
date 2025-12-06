@@ -119,7 +119,7 @@ public sealed partial class MapsViewModel : RightPanelViewModel, IPortsButtonCon
         PortStarter portStarter,
         BitmapsCache bitmapsCache,
         ILogger logger
-        ) : base(playtimeProvider, ratingProvider, bitmapsCache)
+        ) : base(playtimeProvider, ratingProvider, bitmapsCache, config)
     {
         Game = game;
 

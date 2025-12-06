@@ -29,6 +29,7 @@ public sealed class ConfigProviderFake : IConfigProvider
     public Dictionary<string, TimeSpan> Playtimes => [];
     public Dictionary<string, bool> Scores => [];
     public HashSet<string> DisabledAutoloadMods => [];
+    public HashSet<string> GetEnabledOptions(string addonId) => [];
 
     public ThemeEnum Theme { get; set; } = ThemeEnum.System;
     public bool SkipIntro { get; set; } = false;
@@ -42,6 +43,8 @@ public sealed class ConfigProviderFake : IConfigProvider
     public void AddPlaytime(string addonId, TimeSpan playTime) => ThrowHelper.ThrowNotSupportedException();
 
     public void AddScore(string addonId, byte rating) => ThrowHelper.ThrowNotSupportedException();
+
+    public void ChangeAddonOptionState(string addonId, string option, bool isEnabled) => ThrowHelper.ThrowNotSupportedException();
 
     public void ChangeFavoriteState(AddonId addonVersion, bool isEnabled) => ThrowHelper.ThrowNotSupportedException();
 

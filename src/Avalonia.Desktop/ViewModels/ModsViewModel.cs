@@ -32,8 +32,9 @@ public sealed partial class ModsViewModel : RightPanelViewModel, IPortsButtonCon
         RatingProvider ratingProvider,
         InstalledAddonsProviderFactory installedAddonsProviderFactory,
         DownloadableAddonsProviderFactory downloadableAddonsProviderFactory,
-        BitmapsCache bitmapsCache
-        ) : base(playtimeProvider, ratingProvider, bitmapsCache)
+        BitmapsCache bitmapsCache,
+        IConfigProvider config
+        ) : base(playtimeProvider, ratingProvider, bitmapsCache, config)
     {
         Game = game;
 

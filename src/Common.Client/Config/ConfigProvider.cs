@@ -181,9 +181,21 @@ public sealed class ConfigProvider : IConfigProvider
         get
         {
             using var dbContext = _dbContextFactory.CreateDbContext();
-            HashSet<AddonId> value = [.. dbContext.Favorites.Select(x => new AddonId(x.AddonId, x.Version.Equals(string.Empty) ? null : x.Version))];
-            return value;
+            return [.. dbContext.Favorites.Select(x => new AddonId(x.AddonId, x.Version.Equals(string.Empty) ? null : x.Version))];
         }
+    }
+
+    public HashSet<string> GetEnabledOptions(string addonId)
+    {
+        using var dbContext = _dbContextFactory.CreateDbContext();
+        var existing = dbContext.Options.FirstOrDefault(x => x.AddonId.Equals(addonId));
+
+        if (existing is null)
+        {
+            return [];
+        }
+
+        return [.. existing.EnabledOptions.Split(';')];
     }
 
     public ConfigProvider(IDbContextFactory<DatabaseContext> dbContextFactory)
@@ -282,6 +294,38 @@ public sealed class ConfigProvider : IConfigProvider
 
         _ = dbContext.SaveChanges();
         ParameterChangedEvent?.Invoke(nameof(FavoriteAddons));
+    }
+
+    public void ChangeAddonOptionState(string addonId, string option, bool isEnabled)
+    {
+        using var dbContext = _dbContextFactory.CreateDbContext();
+        var existing = dbContext.Options.FirstOrDefault(x => x.AddonId.Equals(addonId));
+
+        if (isEnabled)
+        {
+            if (existing is not null)
+            {
+                var enabled = existing.EnabledOptions.Split(';').ToList();
+                enabled.Add(option);
+
+                existing.EnabledOptions = string.Join(';', enabled);
+            }
+            else
+            {
+                _ = dbContext.Options.Add(new() { AddonId = addonId, EnabledOptions = option });
+            }
+        }
+        else
+        {
+            Guard.IsNotNull(existing);
+
+            var enabled = existing.EnabledOptions.Split(';').ToList();
+            _ = enabled.Remove(option);
+
+            existing.EnabledOptions = string.Join(';', enabled);
+        }
+
+        _ = dbContext.SaveChanges();
     }
 
 
