@@ -12,6 +12,7 @@ public sealed class BloodCmdArgumentsTests
 {
     private readonly BloodGame _bloodGame;
     private readonly BloodCampaignEntity _bloodCamp;
+    private readonly BloodCampaignEntity _bloodCampWithOptions;
     private readonly BloodCampaignEntity _bloodCpCamp;
     private readonly BloodCampaignEntity _bloodTc;
     private readonly BloodCampaignEntity _bloodTcFolder;
@@ -53,6 +54,34 @@ public sealed class BloodCmdArgumentsTests
             IsUnpacked = false,
             Executables = null,
             Options = null
+        };
+
+        _bloodCampWithOptions = new()
+        {
+            AddonId = new(nameof(GameEnum.Blood).ToLower(), null),
+            Type = AddonTypeEnum.Official,
+            Title = "Blood",
+            GridImageHash = null,
+            Author = null,
+            Description = null,
+            SupportedGame = new(GameEnum.Blood),
+            RequiredFeatures = null,
+            PathToFile = null,
+            DependentAddons = null,
+            IncompatibleAddons = null,
+            MainDef = null,
+            AdditionalDefs = null,
+            StartMap = null,
+            PreviewImageHash = null,
+            INI = null,
+            RFF = null,
+            SND = null,
+            IsUnpacked = false,
+            Executables = null,
+            Options = new() {
+                { "option 1", new() { { "OPT.DEF", OptionalParameterTypeEnum.DEF } } },
+                { "option 2", new() { { "OPT2.DEF", OptionalParameterTypeEnum.DEF }, { "OPT2_2.DEF", OptionalParameterTypeEnum.DEF } } },
+            }
         };
 
         _bloodCpCamp = new()
@@ -634,6 +663,23 @@ public sealed class BloodCmdArgumentsTests
 
         var args = notblood.GetStartGameArgs(_bloodGame, _bloodTcIncompatibleWithEverything, mods, [], true, true, 2);
         var expected = @$" -usecwd -j ""D:\Games\Blood"" -h ""a"" -ini ""TC.INI"" -game_dir ""D:\Games\Blood\blood_tc_folder"" -rff ""TC.RFF"" -snd ""TC.SND"" -s 2 -quick -nosetup";
+
+        if (OperatingSystem.IsLinux())
+        {
+            args = args.Replace('\\', Path.DirectorySeparatorChar);
+            expected = expected.Replace('\\', Path.DirectorySeparatorChar);
+        }
+
+        Assert.Equal(expected, args);
+    }
+
+    [Fact]
+    public void BloodWithOptionsTest()
+    {
+        NBlood nblood = new();
+
+        var args = nblood.GetStartGameArgs(_bloodGame, _bloodCampWithOptions, [], ["option 2"], true, true, 2);
+        var expected = @$" -usecwd -j ""D:\Games\Blood"" -h ""a"" -mh ""OPT2.DEF"" -mh ""OPT2_2.DEF"" -s 2 -quick -nosetup";
 
         if (OperatingSystem.IsLinux())
         {
