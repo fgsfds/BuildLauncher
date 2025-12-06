@@ -51,6 +51,22 @@ public sealed class SerializerTests
       },
       "description": "Addon description",
       "startmap": { "file": "TEST.MAP" },
+      "options":
+      [
+          { 
+              "name": "option 1",
+              "parameters": {
+                  "opt1.def": "DEF"
+              }
+          },
+          { 
+              "name": "option 2",
+              "parameters": {
+                  "opt2.def": "DEF",
+                  "opt2_2.def": "DEF"
+              }
+          },
+      ]
     }
 """;
 

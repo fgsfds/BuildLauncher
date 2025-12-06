@@ -14,6 +14,7 @@ public sealed class DatabaseContext : DbContext
     public DbSet<GamePathsDbEntity> GamePaths { get; set; }
     public DbSet<CustomPortsDbEntity> CustomPorts { get; set; }
     public DbSet<FavoritesDbEntity> Favorites { get; set; }
+    public DbSet<OptionsDbEntity> Options { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {

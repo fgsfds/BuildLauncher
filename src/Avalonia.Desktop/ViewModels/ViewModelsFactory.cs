@@ -163,7 +163,8 @@ public sealed class ViewModelsFactory
             _ratingProvider,
             _installedAddonsProviderFactory,
             _downloadableAddonsProviderFactory,
-            _bitmapsCache
+            _bitmapsCache,
+            _config
             );
 
         _ = Dispatcher.UIThread.Invoke(vm.InitializeAsync);

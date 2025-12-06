@@ -70,6 +70,9 @@ public sealed class AddonJsonModel
     [JsonConverter(typeof(ExecutablesConverter))]
     public Dictionary<OSEnum, Dictionary<PortEnum, string>>? Executables { get; set; }
 
+    [JsonPropertyName("options")]
+    public List<OptionJsonModel>? Options { get; set; }
+
     [Obsolete]
     public Dictionary<OSEnum, string>? ExecutablesOld { get; } = null;
 }
@@ -79,7 +82,8 @@ public sealed class AddonJsonModel
         typeof(JsonStringEnumConverter<AddonTypeEnum>),
         typeof(JsonStringEnumConverter<OSEnum>),
         typeof(JsonStringEnumConverter<PortEnum>),
-        typeof(JsonStringEnumConverter<FeatureEnum>)
+        typeof(JsonStringEnumConverter<FeatureEnum>),
+        typeof(JsonStringEnumConverter<OptionalParameterTypeEnum>)
         ],
     UnmappedMemberHandling = JsonUnmappedMemberHandling.Disallow,
     AllowTrailingCommas = true,

@@ -699,6 +699,28 @@ public sealed class InstalledAddonsProvider
                 carcass.Executables = null;
             }
 
+            if (manifest.Options is not null)
+            {
+                carcass.Options = [];
+
+                foreach (var option in manifest.Options)
+                {
+                    carcass.Options.Add(option.OptionName, []);
+
+                    if (option.Parameters is not null)
+                    {
+                        foreach (var param in option.Parameters)
+                        {
+                            carcass.Options[option.OptionName].Add(param.Key, param.Value);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                carcass.Options = null;
+            }
+
             carcasses.Add(carcass);
         }
         else if (pathToFile.EndsWith(".map", StringComparison.OrdinalIgnoreCase))
@@ -727,6 +749,7 @@ public sealed class InstalledAddonsProvider
                 PreviewImageHash = null,
                 IsUnpacked = false,
                 Executables = null,
+                Options = null,
                 IsFavorite = _config.FavoriteAddons.Contains(id)
             };
 
@@ -854,6 +877,28 @@ public sealed class InstalledAddonsProvider
                     carcass.Executables = null;
                 }
 
+                if (manifest.Options is not null)
+                {
+                    carcass.Options = [];
+
+                    foreach (var option in manifest.Options)
+                    {
+                        carcass.Options.Add(option.OptionName, []);
+
+                        if (option.Parameters is not null)
+                        {
+                            foreach (var param in option.Parameters)
+                            {
+                                carcass.Options[option.OptionName].Add(param.Key, param.Value);
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    carcass.Options = null;
+                }
+                
                 carcasses.Add(carcass);
             }
         }
@@ -902,6 +947,7 @@ public sealed class InstalledAddonsProvider
                     RequiredFeatures = carcass.RequiredFeatures,
                     IsUnpacked = carcass.IsUnpacked,
                     Executables = null,
+                    Options = null,
                     IsFavorite = _config.FavoriteAddons.Contains(id)
                 };
 
@@ -938,6 +984,7 @@ public sealed class InstalledAddonsProvider
                         RequiredFeatures = carcass.RequiredFeatures,
                         IsUnpacked = carcass.IsUnpacked,
                         Executables = carcass.Executables,
+                        Options = carcass.Options,
                         IsFavorite = _config.FavoriteAddons.Contains(new(carcass.Id, carcass.Version))
                     };
 
@@ -964,6 +1011,7 @@ public sealed class InstalledAddonsProvider
                         RequiredFeatures = carcass.RequiredFeatures,
                         IsUnpacked = carcass.IsUnpacked,
                         Executables = carcass.Executables,
+                        Options = carcass.Options,
                         IsFavorite = _config.FavoriteAddons.Contains(new(carcass.Id, carcass.Version))
                     };
 
@@ -993,6 +1041,7 @@ public sealed class InstalledAddonsProvider
                         RequiredFeatures = carcass.RequiredFeatures,
                         IsUnpacked = carcass.IsUnpacked,
                         Executables = carcass.Executables,
+                        Options = carcass.Options,
                         IsFavorite = _config.FavoriteAddons.Contains(new(carcass.Id, carcass.Version))
                     };
 
@@ -1019,6 +1068,7 @@ public sealed class InstalledAddonsProvider
                         RequiredFeatures = carcass.RequiredFeatures,
                         IsUnpacked = carcass.IsUnpacked,
                         Executables = carcass.Executables,
+                        Options = carcass.Options,
                         IsFavorite = _config.FavoriteAddons.Contains(new(carcass.Id, carcass.Version))
                     };
 
@@ -1045,6 +1095,7 @@ public sealed class InstalledAddonsProvider
                         RequiredFeatures = carcass.RequiredFeatures,
                         IsUnpacked = carcass.IsUnpacked,
                         Executables = carcass.Executables,
+                        Options = carcass.Options,
                         IsFavorite = _config.FavoriteAddons.Contains(new(carcass.Id, carcass.Version))
                     };
 
@@ -1206,4 +1257,5 @@ internal struct AddonCarcass
     public Dictionary<string, string?>? Incompatibles { get; set; }
     public IStartMap? StartMap { get; set; }
     public Dictionary<OSEnum, Dictionary<PortEnum, string>>? Executables { get; set; }
+    public Dictionary<string, Dictionary<string, OptionalParameterTypeEnum>>? Options { get; set; }
 }

@@ -43,7 +43,8 @@ public sealed class WangCmdArgumentsTests
             AdditionalDefs = null,
             StartMap = null,
             IsUnpacked = false,
-            Executables = null
+            Executables = null,
+            Options = null
         };
 
         _tdCamp = new()
@@ -64,7 +65,8 @@ public sealed class WangCmdArgumentsTests
             AdditionalDefs = null,
             StartMap = null,
             IsUnpacked = false,
-            Executables = null
+            Executables = null,
+            Options = null
         };
     }
 
@@ -87,7 +89,7 @@ public sealed class WangCmdArgumentsTests
         Raze raze = new();
 
         raze.BeforeStart(_wangGame, _wangCamp);
-        var args = raze.GetStartGameArgs(_wangGame, _wangCamp, mods, true, true);
+        var args = raze.GetStartGameArgs(_wangGame, _wangCamp, mods, [], true, true);
         var expected = "" +
             " -file \"enabled_mod.zip\"" +
             " -adddef \"ENABLED1.DEF\"" +
@@ -134,7 +136,7 @@ public sealed class WangCmdArgumentsTests
         Raze raze = new();
 
         raze.BeforeStart(_wangGame, _tdCamp);
-        var args = raze.GetStartGameArgs(_wangGame, _tdCamp, mods, true, true);
+        var args = raze.GetStartGameArgs(_wangGame, _tdCamp, mods, [], true, true);
         var expected = "" +
             " -file \"enabled_mod.zip\"" +
             " -adddef \"ENABLED1.DEF\"" +
@@ -186,7 +188,7 @@ public sealed class WangCmdArgumentsTests
 
         VoidSW voidSw = new();
 
-        var args = voidSw.GetStartGameArgs(_wangGame, _wangCamp, mods, true, true, 3);
+        var args = voidSw.GetStartGameArgs(_wangGame, _wangCamp, mods, [], true, true, 3);
         var expected = "" +
             " -g\"enabled_mod.zip\"" +
             " -mh\"ENABLED1.DEF\"" +
@@ -224,7 +226,7 @@ public sealed class WangCmdArgumentsTests
 
         VoidSW voidSw = new();
 
-        var args = voidSw.GetStartGameArgs(_wangGame, _tdCamp, mods, true, true, 3);
+        var args = voidSw.GetStartGameArgs(_wangGame, _tdCamp, mods, [], true, true, 3);
         var expected = "" +
             " -g\"enabled_mod.zip\"" +
             " -mh\"ENABLED1.DEF\"" +

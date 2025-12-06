@@ -71,7 +71,8 @@ public static class GrpInfoProvider
                     RequiredFeatures = [FeatureEnum.EDuke32_CON],
                     IsUnpacked = false,
                     Executables = null,
-                    IsFavorite = false
+                    IsFavorite = false,
+                    Options = null
                 };
 
                 newAddons.Add(camp);

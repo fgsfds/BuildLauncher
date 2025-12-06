@@ -53,7 +53,8 @@ public sealed class DukeCmdArgumentsTests
             StartMap = null,
             PreviewImageHash = null,
             IsUnpacked = false,
-            Executables = null
+            Executables = null,
+            Options = null
         };
 
         _dukeWtCamp = new()
@@ -77,7 +78,8 @@ public sealed class DukeCmdArgumentsTests
             StartMap = null,
             PreviewImageHash = null,
             IsUnpacked = false,
-            Executables = null
+            Executables = null,
+            Options = null
         };
 
         _duke64Camp = new()
@@ -101,7 +103,8 @@ public sealed class DukeCmdArgumentsTests
             StartMap = null,
             PreviewImageHash = null,
             IsUnpacked = false,
-            Executables = null
+            Executables = null,
+            Options = null
         };
 
         _dukeVaca = new()
@@ -125,7 +128,8 @@ public sealed class DukeCmdArgumentsTests
             StartMap = null,
             PreviewImageHash = null,
             IsUnpacked = false,
-            Executables = null
+            Executables = null,
+            Options = null
         };
 
         _dukeTcForVaca = new()
@@ -149,7 +153,8 @@ public sealed class DukeCmdArgumentsTests
             StartMap = null,
             PreviewImageHash = null,
             IsUnpacked = false,
-            Executables = null
+            Executables = null,
+            Options = null
         };
 
     }
@@ -176,7 +181,7 @@ public sealed class DukeCmdArgumentsTests
         Raze raze = new();
 
         raze.BeforeStart(_dukeGame, _dukeCamp);
-        var args = raze.GetStartGameArgs(_dukeGame, _dukeCamp, mods, true, true);
+        var args = raze.GetStartGameArgs(_dukeGame, _dukeCamp, mods, [], true, true);
         var expected = $"" +
             $" -file \"enabled_mod.zip\"" +
             $" -adddef \"ENABLED1.DEF\"" +
@@ -221,7 +226,7 @@ public sealed class DukeCmdArgumentsTests
     {
         Raze raze = new();
 
-        var args = raze.GetStartGameArgs(_dukeGame, _dukeWtCamp, [], true, true);
+        var args = raze.GetStartGameArgs(_dukeGame, _dukeWtCamp, [], [], true, true);
         var expected = $"" +
             $" -savedir \"{Directory.GetCurrentDirectory()}\\Data\\Saves\\Raze\\Duke3D\\duke3d_wt\"" +
             $" -def \"a\"" +
@@ -263,7 +268,7 @@ public sealed class DukeCmdArgumentsTests
         Raze raze = new();
 
         raze.BeforeStart(_dukeGame, _dukeVaca);
-        var args = raze.GetStartGameArgs(_dukeGame, _dukeVaca, mods, true, true);
+        var args = raze.GetStartGameArgs(_dukeGame, _dukeVaca, mods, [], true, true);
         var expected = $"" +
             $" -file \"enabled_mod.zip\"" +
             $" -adddef \"ENABLED1.DEF\"" +
@@ -305,7 +310,7 @@ public sealed class DukeCmdArgumentsTests
     {
         Raze raze = new();
 
-        var args = raze.GetStartGameArgs(_dukeGame, _dukeTcForVaca, [], true, true);
+        var args = raze.GetStartGameArgs(_dukeGame, _dukeTcForVaca, [], [], true, true);
         var expected = $"" +
             $" -savedir \"{Directory.GetCurrentDirectory()}\\Data\\Saves\\Raze\\Duke3D\\duke-tc\"" +
             $" -def \"TC.DEF\"" +
@@ -350,7 +355,7 @@ public sealed class DukeCmdArgumentsTests
 
         EDuke32 eduke32 = new();
 
-        var args = eduke32.GetStartGameArgs(_dukeGame, _dukeCamp, mods, true, true, 3);
+        var args = eduke32.GetStartGameArgs(_dukeGame, _dukeCamp, mods, [],true, true, 3);
         var expected = "" +
             $" -g \"enabled_mod.zip\"" +
             $" -mh \"ENABLED1.DEF\"" +
@@ -386,7 +391,7 @@ public sealed class DukeCmdArgumentsTests
     {
         EDuke32 eduke32 = new();
 
-        var args = eduke32.GetStartGameArgs(_dukeGame, _dukeWtCamp, [], true, true);
+        var args = eduke32.GetStartGameArgs(_dukeGame, _dukeWtCamp, [], [], true, true);
         var expected = $"" +
             $" -usecwd" +
             $" -cachesize 262144" +
@@ -420,7 +425,7 @@ public sealed class DukeCmdArgumentsTests
 
         EDuke32 eduke32 = new();
 
-        var args = eduke32.GetStartGameArgs(_dukeGame, _dukeVaca, mods, true, true);
+        var args = eduke32.GetStartGameArgs(_dukeGame, _dukeVaca, mods, [], true, true);
         var expected = $"" +
             $" -g \"enabled_mod.zip\"" +
             $" -mh \"ENABLED1.DEF\"" +
@@ -453,7 +458,7 @@ public sealed class DukeCmdArgumentsTests
     {
         EDuke32 eduke32 = new();
 
-        var args = eduke32.GetStartGameArgs(_dukeGame, _dukeTcForVaca, [], true, true);
+        var args = eduke32.GetStartGameArgs(_dukeGame, _dukeTcForVaca, [], [], true, true);
         var expected = $"" +
             $" -usecwd" +
             $" -cachesize 262144" +
@@ -485,7 +490,7 @@ public sealed class DukeCmdArgumentsTests
     {
         RedNukem redNukem = new();
 
-        var args = redNukem.GetStartGameArgs(_dukeGame, _duke64Camp, [], true, true);
+        var args = redNukem.GetStartGameArgs(_dukeGame, _duke64Camp, [], [], true, true);
         var expected = "" +
             " -usecwd" +
             " -d blank.edm" +
@@ -526,7 +531,7 @@ public sealed class DukeCmdArgumentsTests
 
         RedNukem redNukem = new();
 
-        var args = redNukem.GetStartGameArgs(_dukeGame, _dukeCamp, mods, true, true);
+        var args = redNukem.GetStartGameArgs(_dukeGame, _dukeCamp, mods, [], true, true);
         var expected = $"" +
             $" -g \"enabled_mod.zip\"" +
             $" -mh \"ENABLED1.DEF\"" +
@@ -566,7 +571,7 @@ public sealed class DukeCmdArgumentsTests
 
         RedNukem eduke32 = new();
 
-        var args = eduke32.GetStartGameArgs(_dukeGame, _dukeVaca, mods, true, true);
+        var args = eduke32.GetStartGameArgs(_dukeGame, _dukeVaca, mods, [], true, true);
         var expected = $"" +
             $" -g \"enabled_mod.zip\"" +
             $" -mh \"ENABLED1.DEF\"" +
@@ -599,7 +604,7 @@ public sealed class DukeCmdArgumentsTests
     {
         RedNukem eduke32 = new();
 
-        var args = eduke32.GetStartGameArgs(_dukeGame, _dukeTcForVaca, [], true, true);
+        var args = eduke32.GetStartGameArgs(_dukeGame, _dukeTcForVaca, [], [], true, true);
         var expected = $"" +
             $" -usecwd" +
             " -d blank.edm" +

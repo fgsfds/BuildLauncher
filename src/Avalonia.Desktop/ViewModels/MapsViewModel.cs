@@ -119,7 +119,7 @@ public sealed partial class MapsViewModel : RightPanelViewModel, IPortsButtonCon
         PortStarter portStarter,
         BitmapsCache bitmapsCache,
         ILogger logger
-        ) : base(playtimeProvider, ratingProvider, bitmapsCache)
+        ) : base(playtimeProvider, ratingProvider, bitmapsCache, config)
     {
         Game = game;
 
@@ -151,7 +151,14 @@ public sealed partial class MapsViewModel : RightPanelViewModel, IPortsButtonCon
             command.ThrowIfNotType<Tuple<BasePort, byte?>>(out var parameter);
             Guard.IsNotNull(SelectedAddon);
 
-            await _portStarter.StartAsync(parameter.Item1, Game, SelectedAddon, parameter.Item2, _config.SkipIntro, _config.SkipStartup).ConfigureAwait(true);
+            await _portStarter.StartAsync(
+                parameter.Item1,
+                Game,
+                SelectedAddon,
+                [],
+                parameter.Item2,
+                _config.SkipIntro,
+                _config.SkipStartup).ConfigureAwait(true);
 
             OnPropertyChanged(nameof(SelectedAddonPlaytime));
         }

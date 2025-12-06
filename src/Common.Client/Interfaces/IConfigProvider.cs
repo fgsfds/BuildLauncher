@@ -37,4 +37,6 @@ public interface IConfigProvider
     void AddScore(string addonId, byte rating);
     void ChangeModState(AddonId addonVersion, bool isEnabled);
     void ChangeFavoriteState(AddonId addonVersion, bool isEnabled);
+    void ChangeAddonOptionState(string addonId, string option, bool isEnabled);
+    HashSet<string> GetEnabledOptions(string addonId);
 }

@@ -77,7 +77,8 @@ internal sealed class AutoloadModsProvider
         PreviewImageHash = null,
         IsEnabled = true,
         IsUnpacked = false,
-        Executables = null
+        Executables = null,
+        Options = null
     };
 
     public AutoloadModEntity EnabledMod => new()
@@ -100,7 +101,8 @@ internal sealed class AutoloadModsProvider
         PreviewImageHash = null,
         IsEnabled = true,
         IsUnpacked = false,
-        Executables = null
+        Executables = null,
+        Options = null
     };
 
     public AutoloadModEntity ModThatRequiresOfficialAddon => new()
@@ -123,7 +125,8 @@ internal sealed class AutoloadModsProvider
         PreviewImageHash = null,
         IsEnabled = true,
         IsUnpacked = false,
-        Executables = null
+        Executables = null,
+        Options = null
     };
 
     public AutoloadModEntity ModThatIncompatibleWithAddon => new()
@@ -146,7 +149,8 @@ internal sealed class AutoloadModsProvider
         PreviewImageHash = null,
         IsEnabled = true,
         IsUnpacked = false,
-        Executables = null
+        Executables = null,
+        Options = null
     };
 
     public AutoloadModEntity IncompatibleMod => new()
@@ -169,7 +173,8 @@ internal sealed class AutoloadModsProvider
         PreviewImageHash = null,
         IsEnabled = true,
         IsUnpacked = false,
-        Executables = null
+        Executables = null,
+        Options = null
     };
 
     public AutoloadModEntity IncompatibleModWithCompatibleVersion => new()
@@ -192,7 +197,8 @@ internal sealed class AutoloadModsProvider
         PreviewImageHash = null,
         IsEnabled = true,
         IsUnpacked = false,
-        Executables = null
+        Executables = null,
+        Options = null
     };
 
     public AutoloadModEntity IncompatibleModWithIncompatibleVersion => new()
@@ -215,7 +221,8 @@ internal sealed class AutoloadModsProvider
         PreviewImageHash = null,
         IsEnabled = true,
         IsUnpacked = false,
-        Executables = null
+        Executables = null,
+        Options = null
     };
 
     public AutoloadModEntity DependentMod => new()
@@ -238,7 +245,8 @@ internal sealed class AutoloadModsProvider
         PreviewImageHash = null,
         IsEnabled = true,
         IsUnpacked = false,
-        Executables = null
+        Executables = null,
+        Options = null
     };
 
 
@@ -262,7 +270,8 @@ internal sealed class AutoloadModsProvider
         PreviewImageHash = null,
         IsEnabled = true,
         IsUnpacked = false,
-        Executables = null
+        Executables = null,
+        Options = null
     };
 
     public AutoloadModEntity DependentModWithIncompatibleVersion => new()
@@ -285,7 +294,8 @@ internal sealed class AutoloadModsProvider
         PreviewImageHash = null,
         IsEnabled = true,
         IsUnpacked = false,
-        Executables = null
+        Executables = null,
+        Options = null
     };
 
     public AutoloadModEntity DependentModWithCompatibleVersion => new()
@@ -308,7 +318,8 @@ internal sealed class AutoloadModsProvider
         PreviewImageHash = null,
         IsEnabled = true,
         IsUnpacked = false,
-        Executables = null
+        Executables = null,
+        Options = null
     };
 
     public AutoloadModEntity DisabledMod => new()
@@ -331,7 +342,8 @@ internal sealed class AutoloadModsProvider
         PreviewImageHash = null,
         IsEnabled = false,
         IsUnpacked = false,
-        Executables = null
+        Executables = null,
+        Options = null
     };
 
     public AutoloadModEntity ModThatRequiresFeature => new()
@@ -354,7 +366,8 @@ internal sealed class AutoloadModsProvider
         PreviewImageHash = null,
         IsEnabled = true,
         IsUnpacked = false,
-        Executables = null
+        Executables = null,
+        Options = null
     };
 
     public AutoloadModEntity ModForAnotherGame => new()
@@ -377,6 +390,7 @@ internal sealed class AutoloadModsProvider
         PreviewImageHash = null,
         IsEnabled = true,
         IsUnpacked = false,
-        Executables = null
+        Executables = null,
+        Options = null
     };
 }

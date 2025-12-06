@@ -91,7 +91,8 @@ public sealed class OriginalCampaignsProvider
                 StartMap = null,
                 IsUnpacked = false,
                 Executables = null,
-                IsFavorite = _config.FavoriteAddons.Contains(version)
+                IsFavorite = _config.FavoriteAddons.Contains(version),
+                Options = null
             });
         }
 
@@ -130,7 +131,8 @@ public sealed class OriginalCampaignsProvider
                     StartMap = null,
                     IsUnpacked = false,
                     Executables = null,
-                    IsFavorite = _config.FavoriteAddons.Contains(version)
+                    IsFavorite = _config.FavoriteAddons.Contains(version),
+                    Options = null
                 });
             }
 
@@ -167,7 +169,8 @@ public sealed class OriginalCampaignsProvider
                     StartMap = null,
                     IsUnpacked = false,
                     Executables = null,
-                    IsFavorite = _config.FavoriteAddons.Contains(version)
+                    IsFavorite = _config.FavoriteAddons.Contains(version),
+                    Options = null
                 });
             }
 
@@ -203,7 +206,8 @@ public sealed class OriginalCampaignsProvider
                     PreviewImageHash = null,
                     IsUnpacked = false,
                     Executables = null,
-                    IsFavorite = _config.FavoriteAddons.Contains(version)
+                    IsFavorite = _config.FavoriteAddons.Contains(version),
+                    Options = null
                 });
             }
 
@@ -241,7 +245,8 @@ public sealed class OriginalCampaignsProvider
                     PreviewImageHash = null,
                     IsUnpacked = false,
                     Executables = null,
-                    IsFavorite = _config.FavoriteAddons.Contains(version)
+                    IsFavorite = _config.FavoriteAddons.Contains(version),
+                    Options = null
                 });
             }
         }
@@ -278,7 +283,8 @@ public sealed class OriginalCampaignsProvider
                 PreviewImageHash = null,
                 IsUnpacked = false,
                 Executables = null,
-                IsFavorite = _config.FavoriteAddons.Contains(version)
+                IsFavorite = _config.FavoriteAddons.Contains(version),
+                Options = null
             });
         }
 
@@ -330,7 +336,8 @@ public sealed class OriginalCampaignsProvider
                 PreviewImageHash = null,
                 IsUnpacked = false,
                 Executables = null,
-                IsFavorite = _config.FavoriteAddons.Contains(version)
+                IsFavorite = _config.FavoriteAddons.Contains(version),
+                Options = null
             });
         }
 
@@ -368,7 +375,8 @@ public sealed class OriginalCampaignsProvider
                 PreviewImageHash = null,
                 IsUnpacked = false,
                 Executables = null,
-                IsFavorite = _config.FavoriteAddons.Contains(version)
+                IsFavorite = _config.FavoriteAddons.Contains(version),
+                Options = null
             });
         }
 
@@ -415,7 +423,8 @@ public sealed class OriginalCampaignsProvider
                 PreviewImageHash = null,
                 IsUnpacked = false,
                 Executables = null,
-                IsFavorite = _config.FavoriteAddons.Contains(version)
+                IsFavorite = _config.FavoriteAddons.Contains(version),
+                Options = null
             });
         }
 
@@ -463,7 +472,8 @@ public sealed class OriginalCampaignsProvider
                 PreviewImageHash = null,
                 IsUnpacked = false,
                 Executables = null,
-                IsFavorite = _config.FavoriteAddons.Contains(version)
+                IsFavorite = _config.FavoriteAddons.Contains(version),
+                Options = null
             });
         }
 
@@ -536,7 +546,8 @@ public sealed class OriginalCampaignsProvider
                     PreviewImageHash = null,
                     IsUnpacked = false,
                     Executables = null,
-                    IsFavorite = _config.FavoriteAddons.Contains(version)
+                    IsFavorite = _config.FavoriteAddons.Contains(version),
+                    Options = null
                 });
             }
 
@@ -570,7 +581,8 @@ public sealed class OriginalCampaignsProvider
                     PreviewImageHash = null,
                     IsUnpacked = false,
                     Executables = null,
-                    IsFavorite = _config.FavoriteAddons.Contains(version)
+                    IsFavorite = _config.FavoriteAddons.Contains(version),
+                    Options = null
                 });
             }
         }
@@ -607,7 +619,8 @@ public sealed class OriginalCampaignsProvider
                 PreviewImageHash = null,
                 IsUnpacked = false,
                 Executables = null,
-                IsFavorite = _config.FavoriteAddons.Contains(version)
+                IsFavorite = _config.FavoriteAddons.Contains(version),
+                Options = null
             });
         }
 
@@ -659,7 +672,8 @@ public sealed class OriginalCampaignsProvider
                 PreviewImageHash = null,
                 IsUnpacked = false,
                 Executables = null,
-                IsFavorite = _config.FavoriteAddons.Contains(version)
+                IsFavorite = _config.FavoriteAddons.Contains(version),
+                Options = null
             });
         }
 
@@ -707,7 +721,8 @@ public sealed class OriginalCampaignsProvider
                 PreviewImageHash = null,
                 IsUnpacked = false,
                 Executables = null,
-                IsFavorite = _config.FavoriteAddons.Contains(version)
+                IsFavorite = _config.FavoriteAddons.Contains(version),
+                Options = null
             });
         }
 
@@ -742,7 +757,8 @@ public sealed class OriginalCampaignsProvider
                 PreviewImageHash = null,
                 IsUnpacked = false,
                 Executables = null,
-                IsFavorite = _config.FavoriteAddons.Contains(version)
+                IsFavorite = _config.FavoriteAddons.Contains(version),
+                Options = null
             });
         }
 
@@ -788,7 +804,8 @@ public sealed class OriginalCampaignsProvider
                 PreviewImageHash = null,
                 IsUnpacked = false,
                 Executables = null,
-                IsFavorite = _config.FavoriteAddons.Contains(version)
+                IsFavorite = _config.FavoriteAddons.Contains(version),
+                Options = null
             });
         }
 
@@ -837,7 +854,8 @@ public sealed class OriginalCampaignsProvider
                 PreviewImageHash = null,
                 IsUnpacked = false,
                 Executables = null,
-                IsFavorite = _config.FavoriteAddons.Contains(version)
+                IsFavorite = _config.FavoriteAddons.Contains(version),
+                Options = null
             });
         }
 
@@ -882,7 +900,8 @@ public sealed class OriginalCampaignsProvider
                 PreviewImageHash = null,
                 IsUnpacked = false,
                 Executables = null,
-                IsFavorite = _config.FavoriteAddons.Contains(version)
+                IsFavorite = _config.FavoriteAddons.Contains(version),
+                Options = null
             });
         }
 
@@ -918,7 +937,8 @@ public sealed class OriginalCampaignsProvider
                 PreviewImageHash = null,
                 IsUnpacked = false,
                 Executables = null,
-                IsFavorite = _config.FavoriteAddons.Contains(version)
+                IsFavorite = _config.FavoriteAddons.Contains(version),
+                Options = null
             });
         }
 

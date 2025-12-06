@@ -96,8 +96,15 @@ public abstract class BaseAddon
     /// </summary>
     public bool IsFavorite { get; set; }
 
-    /// <inheritdoc/>
+    /// <summary>
+    /// List of built-in executables.
+    /// </summary>
     public required Dictionary<OSEnum, Dictionary<PortEnum, string>>? Executables { get; init; }
+
+    /// <summary>
+    /// List of optional settings.
+    /// </summary>
+    public required Dictionary<string, Dictionary<string, OptionalParameterTypeEnum>>? Options { get; init; }
 
     /// <summary>
     /// Name of the addon file
