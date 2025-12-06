@@ -1,3 +1,4 @@
+using System.Collections.ObjectModel;
 using Addons.Addons;
 using Avalonia.Desktop.Misc;
 using Avalonia.Media.Imaging;
@@ -40,13 +41,7 @@ public partial class RightPanelViewModel : ObservableObject
     /// <summary>
     /// Preview image of the selected campaign
     /// </summary>
-    public Bitmap? SelectedAddonPreview
-    {
-        get
-        {
-            return SelectedAddon?.PreviewImageHash is null ? null : _bitmapsCache.GetFromCache(SelectedAddon.PreviewImageHash.Value);
-        }
-    }
+    public Bitmap? SelectedAddonPreview => SelectedAddon?.PreviewImageHash is null ? null : _bitmapsCache.GetFromCache(SelectedAddon.PreviewImageHash.Value);
 
     /// <summary>
     /// Is preview image in the description visible
@@ -99,6 +94,10 @@ public partial class RightPanelViewModel : ObservableObject
         }
     }
 
+    public bool HasOptions => SelectedAddon?.Options is not null;
+
+    public ObservableCollection<AddonOption> AddonOptions { get; } = new();
+
     #endregion
 
 
@@ -119,5 +118,36 @@ public partial class RightPanelViewModel : ObservableObject
         OnPropertyChanged(nameof(SelectedAddonRating));
     }
 
-    #endregion        
+    #endregion      
+
+
+    protected void UpdateAddonOptions()
+    {
+        AddonOptions.Clear();
+
+        if (SelectedAddon?.Options is null)
+        {
+            return;
+        }
+
+        foreach (var option in SelectedAddon.Options)
+        {
+            AddonOptions.Add(new(option.Key, false));
+        }
+
+        OnPropertyChanged(nameof(HasOptions));
+    }
+
+
+    public sealed class AddonOption
+    {
+        public string Name { get; set; }
+        public bool IsEnabled { get; set; }
+
+        public AddonOption(string name, bool isEnabled)
+        {
+            Name = name;
+            IsEnabled = isEnabled;
+        }
+    }
 }

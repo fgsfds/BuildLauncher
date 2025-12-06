@@ -36,7 +36,15 @@ public sealed class PortStarter
     /// <param name="skipIntro">Skip intro</param>
     /// <param name="skipStartup">Skip startup window</param>
     /// <param name="pathToExe">Path to custom port's exe</param>
-    public async Task StartAsync(BasePort port, BaseGame game, BaseAddon addon, byte? skill, bool skipIntro, bool skipStartup, string? pathToExe = null)
+    public async Task StartAsync(
+        BasePort port,
+        BaseGame game,
+        BaseAddon addon,
+        IEnumerable<string> enabledOptions,
+        byte? skill,
+        bool skipIntro,
+        bool skipStartup,
+        string? pathToExe = null)
     {
         var sw = Stopwatch.StartNew();
 
@@ -45,7 +53,7 @@ public sealed class PortStarter
         var installedAddonsProvider = _installedAddonsProviderFactory.GetSingleton(game);
         var mods = installedAddonsProvider.GetInstalledAddonsByType(AddonTypeEnum.Mod);
 
-        var args = port.GetStartGameArgs(game, addon, mods, skipIntro, skipStartup, skill);
+        var args = port.GetStartGameArgs(game, addon, mods, enabledOptions, skipIntro, skipStartup, skill);
 
         _ = addon.Executables?[OSEnum.Windows].TryGetValue(port.PortEnum, out pathToExe);
 

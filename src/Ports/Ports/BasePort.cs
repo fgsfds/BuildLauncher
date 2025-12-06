@@ -9,6 +9,7 @@ using Common.All.Serializable.Addon;
 using Common.Client.Helpers;
 using CommunityToolkit.Diagnostics;
 using Games.Games;
+using Microsoft.EntityFrameworkCore;
 
 namespace Ports.Ports;
 
@@ -229,6 +230,7 @@ public abstract class BasePort
         BaseGame game,
         BaseAddon addon,
         IEnumerable<KeyValuePair<AddonId, BaseAddon>> mods,
+        IEnumerable<string> enabledOptions,
         bool skipIntro,
         bool skipStartup,
         byte? skill = null
@@ -239,6 +241,11 @@ public abstract class BasePort
         GetAutoloadModsArgs(sb, game, addon, mods);
 
         GetStartCampaignArgs(sb, game, addon);
+
+        if (enabledOptions.Any())
+        {
+            GetOptionsArgs(sb, game, addon, enabledOptions);
+        }
 
         if (skill is not null)
         {
@@ -256,6 +263,36 @@ public abstract class BasePort
         }
 
         return sb.ToString();
+    }
+
+    protected virtual void GetOptionsArgs(
+        StringBuilder sb,
+        BaseGame game,
+        BaseAddon addon,
+        IEnumerable<string> enabledOptions
+        )
+    {
+        ArgumentNullException.ThrowIfNull(addon.Options);
+
+        foreach (var optionName in enabledOptions)
+        {
+            if (!addon.Options.TryGetValue(optionName, out var options))
+            {
+                throw new KeyNotFoundException();
+            }
+
+            foreach (var option in options)
+            {
+                if (option.Value is OptionalParameterTypeEnum.DEF)
+                {
+                    _ = sb.Append($@" {AddDefParam}""{option.Key}""");
+                }
+                else
+                {
+                    throw new ArgumentOutOfRangeException();
+                }
+            }
+        }
     }
 
 

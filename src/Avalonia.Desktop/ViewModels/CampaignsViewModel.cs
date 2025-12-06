@@ -90,6 +90,8 @@ public sealed partial class CampaignsViewModel : RightPanelViewModel, IPortsButt
             OnPropertyChanged(nameof(SelectedAddonPlaytime));
             OnPropertyChanged(nameof(IsPreviewVisible));
 
+            UpdateAddonOptions();
+
             StartCampaignCommand.NotifyCanExecuteChanged();
         }
     }
@@ -171,13 +173,32 @@ public sealed partial class CampaignsViewModel : RightPanelViewModel, IPortsButt
         {
             Guard.IsNotNull(SelectedAddon);
 
+            var enabledOptions = AddonOptions.Where(x => x.IsEnabled).Select(x => x.Name);
+
             if (command is BasePort port)
             {
-                await _portStarter.StartAsync(port, Game, SelectedAddon, null, _config.SkipIntro, _config.SkipStartup).ConfigureAwait(true);
+                await _portStarter.StartAsync(
+                    port,
+                    Game,
+                    SelectedAddon,
+                    enabledOptions,
+                    null,
+                    _config.SkipIntro,
+                    _config.SkipStartup
+                    ).ConfigureAwait(true);
             }
             else if (command is CustomPort customPort)
             {
-                await _portStarter.StartAsync(customPort.BasePort, Game, SelectedAddon, null, _config.SkipIntro, _config.SkipStartup, customPort.Path).ConfigureAwait(true);
+                await _portStarter.StartAsync(
+                    customPort.BasePort,
+                    Game,
+                    SelectedAddon,
+                    enabledOptions,
+                    null,
+                    _config.SkipIntro,
+                    _config.SkipStartup,
+                    customPort.Path
+                    ).ConfigureAwait(true);
             }
             else
             {
