@@ -51,7 +51,8 @@ public sealed class BloodCmdArgumentsTests
             RFF = null,
             SND = null,
             IsUnpacked = false,
-            Executables = null
+            Executables = null,
+            Options = null
         };
 
         _bloodCpCamp = new()
@@ -75,7 +76,8 @@ public sealed class BloodCmdArgumentsTests
             RFF = null,
             SND = null,
             IsUnpacked = false,
-            Executables = null
+            Executables = null,
+            Options = null
         };
 
         _bloodTc = new()
@@ -99,7 +101,8 @@ public sealed class BloodCmdArgumentsTests
             RFF = "TC.RFF",
             SND = "TC.SND",
             IsUnpacked = false,
-            Executables = null
+            Executables = null,
+            Options = null
         };
 
         _bloodTcFolder = new()
@@ -123,7 +126,8 @@ public sealed class BloodCmdArgumentsTests
             RFF = "TC.RFF",
             SND = "TC.SND",
             IsUnpacked = true,
-            Executables = null
+            Executables = null,
+            Options = null
         };
 
         _bloodTcExeOverride = new()
@@ -147,7 +151,8 @@ public sealed class BloodCmdArgumentsTests
             RFF = "TC.RFF",
             SND = "TC.SND",
             IsUnpacked = true,
-            Executables = new Dictionary<OSEnum, Dictionary<PortEnum, string>>() { { OSEnum.Windows, new Dictionary<PortEnum, string>() { { PortEnum.NBlood, "nblood.exe" } } } }
+            Executables = new Dictionary<OSEnum, Dictionary<PortEnum, string>>() { { OSEnum.Windows, new Dictionary<PortEnum, string>() { { PortEnum.NBlood, "nblood.exe" } } } },
+            Options = null
         };
 
         _bloodTcIncompatibleWithEnabledMod = new()
@@ -171,7 +176,8 @@ public sealed class BloodCmdArgumentsTests
             RFF = "TC.RFF",
             SND = "TC.SND",
             IsUnpacked = true,
-            Executables = null
+            Executables = null,
+            Options = null
         };
 
         _bloodTcIncompatibleWithEverything = new()
@@ -195,7 +201,8 @@ public sealed class BloodCmdArgumentsTests
             RFF = "TC.RFF",
             SND = "TC.SND",
             IsUnpacked = true,
-            Executables = null
+            Executables = null,
+            Options = null
         };
 
     }
@@ -222,7 +229,7 @@ public sealed class BloodCmdArgumentsTests
         Raze raze = new();
 
         raze.BeforeStart(_bloodGame, _bloodCamp);
-        var args = raze.GetStartGameArgs(_bloodGame, _bloodCamp, mods, true, true);
+        var args = raze.GetStartGameArgs(_bloodGame, _bloodCamp, mods, [], true, true);
         var expected = @$" -file ""enabled_mod.zip"" -adddef ""ENABLED1.DEF"" -adddef ""ENABLED2.DEF"" -file ""mod_incompatible_with_addon.zip"" -file ""incompatible_mod_with_compatible_version.zip"" -file ""dependent_mod.zip"" -file ""dependent_mod_with_compatible_version.zip"" -savedir ""{Directory.GetCurrentDirectory()}\Data\Saves\Raze\Blood\blood"" -def ""a"" -quick -nosetup";
 
         if (OperatingSystem.IsLinux())
@@ -267,7 +274,7 @@ public sealed class BloodCmdArgumentsTests
         Raze raze = new();
 
         raze.BeforeStart(_bloodGame, _bloodCamp);
-        var args = raze.GetStartGameArgs(_bloodGame, _bloodCpCamp, mods, true, true);
+        var args = raze.GetStartGameArgs(_bloodGame, _bloodCpCamp, mods, [], true, true);
         var expected = @$" -file ""enabled_mod.zip"" -adddef ""ENABLED1.DEF"" -adddef ""ENABLED2.DEF"" -file ""mod_requires_addon.zip"" -file ""incompatible_mod_with_compatible_version.zip"" -file ""dependent_mod.zip"" -file ""dependent_mod_with_compatible_version.zip"" -savedir ""{Directory.GetCurrentDirectory()}\Data\Saves\Raze\Blood\bloodcp"" -def ""a"" -ini ""CRYPTIC.INI"" -quick -nosetup";
 
         if (OperatingSystem.IsLinux())
@@ -297,7 +304,7 @@ public sealed class BloodCmdArgumentsTests
         Raze raze = new();
 
         raze.BeforeStart(_bloodGame, _bloodTc);
-        var args = raze.GetStartGameArgs(_bloodGame, _bloodTc, [], true, true);
+        var args = raze.GetStartGameArgs(_bloodGame, _bloodTc, [], [], true, true);
         var expected = @$" -savedir ""{Directory.GetCurrentDirectory()}\Data\Saves\Raze\Blood\blood-tc"" -def ""a"" -ini ""TC.INI"" -file ""D:\Games\Blood\blood_tc.zip"" -file ""TC.RFF"" -file ""TC.SND"" -quick -nosetup";
 
         if (OperatingSystem.IsLinux())
@@ -327,7 +334,7 @@ public sealed class BloodCmdArgumentsTests
         Raze raze = new();
 
         raze.BeforeStart(_bloodGame, _bloodTcFolder);
-        var args = raze.GetStartGameArgs(_bloodGame, _bloodTcFolder, [], true, true);
+        var args = raze.GetStartGameArgs(_bloodGame, _bloodTcFolder, [], [], true, true);
         var expected = @$" -savedir ""{Directory.GetCurrentDirectory()}\Data\Saves\Raze\Blood\blood-tc-folder"" -def ""a"" -ini ""TC.INI"" -file ""D:\Games\Blood\blood_tc_folder"" -file ""TC.RFF"" -file ""TC.SND"" -quick -nosetup";
 
         if (OperatingSystem.IsLinux())
@@ -373,7 +380,7 @@ public sealed class BloodCmdArgumentsTests
 
         NBlood nblood = new();
 
-        var args = nblood.GetStartGameArgs(_bloodGame, _bloodCamp, mods, true, true, 2);
+        var args = nblood.GetStartGameArgs(_bloodGame, _bloodCamp, mods, [], true, true, 2);
         var expected = @$" -g ""enabled_mod.zip"" -mh ""ENABLED1.DEF"" -mh ""ENABLED2.DEF"" -g ""mod_incompatible_with_addon.zip"" -g ""incompatible_mod_with_compatible_version.zip"" -g ""dependent_mod.zip"" -g ""dependent_mod_with_compatible_version.zip"" -g ""feature_mod.zip"" -j ""{Directory.GetCurrentDirectory()}\Data\Addons\Blood\Mods"" -usecwd -j ""D:\Games\Blood"" -h ""a"" -s 2 -quick -nosetup";
 
         if (OperatingSystem.IsLinux())
@@ -405,7 +412,7 @@ public sealed class BloodCmdArgumentsTests
 
         NBlood nblood = new();
 
-        var args = nblood.GetStartGameArgs(_bloodGame, _bloodCpCamp, mods, true, true, 2);
+        var args = nblood.GetStartGameArgs(_bloodGame, _bloodCpCamp, mods, [], true, true, 2);
         var expected = @$" -g ""enabled_mod.zip"" -mh ""ENABLED1.DEF"" -mh ""ENABLED2.DEF"" -g ""mod_requires_addon.zip"" -g ""incompatible_mod_with_compatible_version.zip"" -g ""dependent_mod.zip"" -g ""dependent_mod_with_compatible_version.zip"" -g ""feature_mod.zip"" -j ""{Directory.GetCurrentDirectory()}\Data\Addons\Blood\Mods"" -usecwd -j ""D:\Games\Blood"" -h ""a"" -ini ""CRYPTIC.INI"" -s 2 -quick -nosetup";
 
         if (OperatingSystem.IsLinux())
@@ -422,7 +429,7 @@ public sealed class BloodCmdArgumentsTests
     {
         NBlood nblood = new();
 
-        var args = nblood.GetStartGameArgs(_bloodGame, _bloodTc, [], true, true, 2);
+        var args = nblood.GetStartGameArgs(_bloodGame, _bloodTc, [], [], true, true, 2);
         var expected = @" -usecwd -j ""D:\Games\Blood"" -h ""a"" -ini ""TC.INI"" -g ""D:\Games\Blood\blood_tc.zip"" -rff ""TC.RFF"" -snd ""TC.SND"" -s 2 -quick -nosetup";
 
         if (OperatingSystem.IsLinux())
@@ -439,7 +446,7 @@ public sealed class BloodCmdArgumentsTests
     {
         NBlood nblood = new();
 
-        var args = nblood.GetStartGameArgs(_bloodGame, _bloodTcFolder, [], true, true, 2);
+        var args = nblood.GetStartGameArgs(_bloodGame, _bloodTcFolder, [], [], true, true, 2);
         var expected = @" -usecwd -j ""D:\Games\Blood"" -h ""a"" -ini ""TC.INI"" -game_dir ""D:\Games\Blood\blood_tc_folder"" -rff ""TC.RFF"" -snd ""TC.SND"" -s 2 -quick -nosetup";
 
         if (OperatingSystem.IsLinux())
@@ -456,7 +463,7 @@ public sealed class BloodCmdArgumentsTests
     {
         NBlood nblood = new();
 
-        var args = nblood.GetStartGameArgs(_bloodGame, _bloodTcExeOverride, [], true, true, 2);
+        var args = nblood.GetStartGameArgs(_bloodGame, _bloodTcExeOverride, [], [], true, true, 2);
         var expected = @" -usecwd -j ""D:\Games\Blood"" -h ""a"" -ini ""TC.INI"" -rff ""TC.RFF"" -snd ""TC.SND"" -s 2 -quick -nosetup";
 
         if (OperatingSystem.IsLinux())
@@ -488,7 +495,7 @@ public sealed class BloodCmdArgumentsTests
 
         NotBlood notblood = new();
 
-        var args = notblood.GetStartGameArgs(_bloodGame, _bloodCamp, mods, true, true, 2);
+        var args = notblood.GetStartGameArgs(_bloodGame, _bloodCamp, mods, [], true, true, 2);
         var expected = @$" -g ""enabled_mod.zip"" -mh ""ENABLED1.DEF"" -mh ""ENABLED2.DEF"" -g ""mod_incompatible_with_addon.zip"" -g ""incompatible_mod_with_compatible_version.zip"" -g ""dependent_mod.zip"" -g ""dependent_mod_with_compatible_version.zip"" -g ""feature_mod.zip"" -j ""{Directory.GetCurrentDirectory()}\Data\Addons\Blood\Mods"" -usecwd -j ""D:\Games\Blood"" -h ""a"" -s 2 -quick -nosetup";
 
         if (OperatingSystem.IsLinux())
@@ -520,7 +527,7 @@ public sealed class BloodCmdArgumentsTests
 
         NotBlood notblood = new();
 
-        var args = notblood.GetStartGameArgs(_bloodGame, _bloodCpCamp, mods, true, true, 2);
+        var args = notblood.GetStartGameArgs(_bloodGame, _bloodCpCamp, mods, [], true, true, 2);
         var expected = @$" -g ""enabled_mod.zip"" -mh ""ENABLED1.DEF"" -mh ""ENABLED2.DEF"" -g ""mod_requires_addon.zip"" -g ""incompatible_mod_with_compatible_version.zip"" -g ""dependent_mod.zip"" -g ""dependent_mod_with_compatible_version.zip"" -g ""feature_mod.zip"" -j ""{Directory.GetCurrentDirectory()}\Data\Addons\Blood\Mods"" -usecwd -j ""D:\Games\Blood"" -h ""a"" -ini ""CRYPTIC.INI"" -s 2 -quick -nosetup";
 
         if (OperatingSystem.IsLinux())
@@ -537,7 +544,7 @@ public sealed class BloodCmdArgumentsTests
     {
         NotBlood notblood = new();
 
-        var args = notblood.GetStartGameArgs(_bloodGame, _bloodTc, [], true, true, 2);
+        var args = notblood.GetStartGameArgs(_bloodGame, _bloodTc, [], [], true, true, 2);
         var expected = @" -usecwd -j ""D:\Games\Blood"" -h ""a"" -ini ""TC.INI"" -g ""D:\Games\Blood\blood_tc.zip"" -rff ""TC.RFF"" -snd ""TC.SND"" -s 2 -quick -nosetup";
 
         if (OperatingSystem.IsLinux())
@@ -554,7 +561,7 @@ public sealed class BloodCmdArgumentsTests
     {
         NotBlood notblood = new();
 
-        var args = notblood.GetStartGameArgs(_bloodGame, _bloodTcFolder, [], true, true, 2);
+        var args = notblood.GetStartGameArgs(_bloodGame, _bloodTcFolder, [], [], true, true, 2);
         var expected = @" -usecwd -j ""D:\Games\Blood"" -h ""a"" -ini ""TC.INI"" -game_dir ""D:\Games\Blood\blood_tc_folder"" -rff ""TC.RFF"" -snd ""TC.SND"" -s 2 -quick -nosetup";
 
         if (OperatingSystem.IsLinux())
@@ -571,7 +578,7 @@ public sealed class BloodCmdArgumentsTests
     {
         NotBlood notblood = new();
 
-        var args = notblood.GetStartGameArgs(_bloodGame, _bloodTcExeOverride, [], true, true, 2);
+        var args = notblood.GetStartGameArgs(_bloodGame, _bloodTcExeOverride, [], [], true, true, 2);
         var expected = @" -usecwd -j ""D:\Games\Blood"" -h ""a"" -ini ""TC.INI"" -rff ""TC.RFF"" -snd ""TC.SND"" -s 2 -quick -nosetup";
 
         if (OperatingSystem.IsLinux())
@@ -593,7 +600,7 @@ public sealed class BloodCmdArgumentsTests
 
         NotBlood notblood = new();
 
-        var args = notblood.GetStartGameArgs(_bloodGame, _bloodTcIncompatibleWithEnabledMod, mods, true, true, 2);
+        var args = notblood.GetStartGameArgs(_bloodGame, _bloodTcIncompatibleWithEnabledMod, mods, [], true, true, 2);
         var expected = @$" -g ""mod_incompatible_with_addon.zip"" -j ""{Directory.GetCurrentDirectory()}\Data\Addons\Blood\Mods"" -usecwd -j ""D:\Games\Blood"" -h ""a"" -ini ""TC.INI"" -game_dir ""D:\Games\Blood\blood_tc_folder"" -rff ""TC.RFF"" -snd ""TC.SND"" -s 2 -quick -nosetup";
 
         if (OperatingSystem.IsLinux())
@@ -625,7 +632,7 @@ public sealed class BloodCmdArgumentsTests
 
         NotBlood notblood = new();
 
-        var args = notblood.GetStartGameArgs(_bloodGame, _bloodTcIncompatibleWithEverything, mods, true, true, 2);
+        var args = notblood.GetStartGameArgs(_bloodGame, _bloodTcIncompatibleWithEverything, mods, [], true, true, 2);
         var expected = @$" -usecwd -j ""D:\Games\Blood"" -h ""a"" -ini ""TC.INI"" -game_dir ""D:\Games\Blood\blood_tc_folder"" -rff ""TC.RFF"" -snd ""TC.SND"" -s 2 -quick -nosetup";
 
         if (OperatingSystem.IsLinux())

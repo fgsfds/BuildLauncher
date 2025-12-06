@@ -41,7 +41,8 @@ public sealed class SlaveCmdArgumentsTests
             AdditionalDefs = null,
             StartMap = null,
             IsUnpacked = false,
-            Executables = null
+            Executables = null,
+            Options = null
         };
     }
 
@@ -56,7 +57,7 @@ public sealed class SlaveCmdArgumentsTests
         Raze raze = new();
 
         raze.BeforeStart(_slaveGame, _slaveCamp);
-        var args = raze.GetStartGameArgs(_slaveGame, _slaveCamp, mods, true, true);
+        var args = raze.GetStartGameArgs(_slaveGame, _slaveCamp, mods, [], true, true);
         var expected = $"" +
             $" -file \"enabled_mod.zip\"" +
             $" -adddef \"ENABLED1.DEF\"" +
@@ -98,7 +99,7 @@ public sealed class SlaveCmdArgumentsTests
 
         PCExhumed pcExhumed = new();
 
-        var args = pcExhumed.GetStartGameArgs(_slaveGame, _slaveCamp, mods, true, true);
+        var args = pcExhumed.GetStartGameArgs(_slaveGame, _slaveCamp, mods, [], true, true);
         var expected = $"" +
             $" -g \"enabled_mod.zip\"" +
             $" -mh \"ENABLED1.DEF\"" +

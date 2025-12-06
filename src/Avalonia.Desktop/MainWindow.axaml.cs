@@ -14,6 +14,14 @@ public sealed partial class MainWindow : Window, IDisposable
     private readonly IConfigProvider _config;
     private readonly Bitmap? _overlayBitmap;
 
+    public MainWindow()
+    {
+        _installedGamesProvider = null!;
+        _config = null!;
+
+        InitializeComponent();
+    }
+
     public MainWindow(
         InstalledGamesProvider installedGamesProvider,
         IConfigProvider config
@@ -46,6 +54,11 @@ public sealed partial class MainWindow : Window, IDisposable
 
     private void OnWindowOpened(object? sender, EventArgs e)
     {
+        if (Design.IsDesignMode)
+        {
+            return;
+        }
+
         if (!_config.IsConsented)
         {
             ConsentWindow.IsVisible = true;

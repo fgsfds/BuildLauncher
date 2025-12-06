@@ -44,6 +44,7 @@ public sealed class WangLooseMapsCmdArgumentsTests
             IsUnpacked = false,
             Executables = null,
             BloodIni = null,
+            Options = null
         };
     }
 
@@ -66,7 +67,7 @@ public sealed class WangLooseMapsCmdArgumentsTests
         Raze raze = new();
 
         raze.BeforeStart(_wangGame, _looseMap);
-        var args = raze.GetStartGameArgs(_wangGame, _looseMap, mods, true, true);
+        var args = raze.GetStartGameArgs(_wangGame, _looseMap, mods, [], true, true);
         var expected = $"" +
             $" -file \"enabled_mod.zip\"" +
             $" -adddef \"ENABLED1.DEF\"" +
@@ -121,7 +122,7 @@ public sealed class WangLooseMapsCmdArgumentsTests
 
         VoidSW voidSw = new();
 
-        var args = voidSw.GetStartGameArgs(_wangGame, _looseMap, mods, true, true, 3);
+        var args = voidSw.GetStartGameArgs(_wangGame, _looseMap, mods, [], true, true, 3);
         var expected = $"" +
             $" -g\"enabled_mod.zip\"" +
             $" -mh\"ENABLED1.DEF\"" +

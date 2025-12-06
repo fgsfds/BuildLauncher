@@ -46,7 +46,8 @@ public sealed class WW2GICmdArgumentsTests
             StartMap = null,
             PreviewImageHash = null,
             IsUnpacked = false,
-            Executables = null
+            Executables = null,
+            Options = null
         };
 
         _platoonCamp = new()
@@ -70,7 +71,8 @@ public sealed class WW2GICmdArgumentsTests
             StartMap = null,
             PreviewImageHash = null,
             IsUnpacked = false,
-            Executables = null
+            Executables = null,
+            Options = null
         };
     }
 
@@ -85,7 +87,7 @@ public sealed class WW2GICmdArgumentsTests
         Raze raze = new();
 
         raze.BeforeStart(_ww2Game, _ww2Camp);
-        var args = raze.GetStartGameArgs(_ww2Game, _ww2Camp, mods, true, true);
+        var args = raze.GetStartGameArgs(_ww2Game, _ww2Camp, mods, [], true, true);
         var expected = $"" +
             $" -savedir \"{Directory.GetCurrentDirectory()}\\Data\\Saves\\Raze\\WW2GI\\ww2gi\"" +
             $" -def \"a\" -ww2gi" +
@@ -127,7 +129,7 @@ public sealed class WW2GICmdArgumentsTests
         Raze raze = new();
 
         raze.BeforeStart(_ww2Game, _platoonCamp);
-        var args = raze.GetStartGameArgs(_ww2Game, _platoonCamp, mods, true, true);
+        var args = raze.GetStartGameArgs(_ww2Game, _platoonCamp, mods, [], true, true);
         var expected = $"" +
             $" -savedir \"{Directory.GetCurrentDirectory()}\\Data\\Saves\\Raze\\WW2GI\\platoon\"" +
             $" -def \"a\"" +
@@ -170,7 +172,7 @@ public sealed class WW2GICmdArgumentsTests
 
         EDuke32 eDuke = new();
 
-        var args = eDuke.GetStartGameArgs(_ww2Game, _ww2Camp, mods, true, true);
+        var args = eDuke.GetStartGameArgs(_ww2Game, _ww2Camp, mods, [], true, true);
         var expected = "" +
             " -usecwd" +
             " -cachesize 262144" +
@@ -202,7 +204,7 @@ public sealed class WW2GICmdArgumentsTests
 
         EDuke32 eDuke = new();
 
-        var args = eDuke.GetStartGameArgs(_ww2Game, _platoonCamp, mods, true, true);
+        var args = eDuke.GetStartGameArgs(_ww2Game, _platoonCamp, mods, [], true, true);
         var expected = "" +
             " -usecwd" +
             " -cachesize 262144" +

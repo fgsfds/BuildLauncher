@@ -44,6 +44,7 @@ public sealed class BloodLooseMapCmdArgumentsTests
             IsUnpacked = false,
             Executables = null,
             BloodIni = null,
+            Options = null
         };
     }
 
@@ -68,7 +69,7 @@ public sealed class BloodLooseMapCmdArgumentsTests
         Raze raze = new();
 
         raze.BeforeStart(_bloodGame, _looseMap);
-        var args = raze.GetStartGameArgs(_bloodGame, _looseMap, mods, true, true);
+        var args = raze.GetStartGameArgs(_bloodGame, _looseMap, mods, [], true, true);
         var expected = @$" -file ""enabled_mod.zip"" -adddef ""ENABLED1.DEF"" -adddef ""ENABLED2.DEF"" -file ""mod_incompatible_with_addon.zip"" -file ""incompatible_mod_with_compatible_version.zip"" -file ""dependent_mod.zip"" -file ""dependent_mod_with_compatible_version.zip"" -savedir ""{Directory.GetCurrentDirectory()}\Data\Saves\Raze\Blood\loose-map"" -def ""a"" -ini ""BLOOD.INI"" -file ""{Directory.GetCurrentDirectory()}\Data\Addons\Blood\Maps"" -map ""LOOSE.MAP"" -quick -nosetup";
 
         if (OperatingSystem.IsLinux())
@@ -112,7 +113,7 @@ public sealed class BloodLooseMapCmdArgumentsTests
 
         NBlood nblood = new();
 
-        var args = nblood.GetStartGameArgs(_bloodGame, _looseMap, mods, true, true, 2);
+        var args = nblood.GetStartGameArgs(_bloodGame, _looseMap, mods, [], true, true, 2);
         var expected = @$" -g ""enabled_mod.zip"" -mh ""ENABLED1.DEF"" -mh ""ENABLED2.DEF"" -g ""mod_incompatible_with_addon.zip"" -g ""incompatible_mod_with_compatible_version.zip"" -g ""dependent_mod.zip"" -g ""dependent_mod_with_compatible_version.zip"" -g ""feature_mod.zip"" -j ""{Directory.GetCurrentDirectory()}\Data\Addons\Blood\Mods"" -usecwd -j ""D:\Games\Blood"" -h ""a"" -ini ""BLOOD.INI"" -j ""{Directory.GetCurrentDirectory()}\Data\Addons\Blood\Maps"" -map ""LOOSE.MAP"" -s 2 -quick -nosetup";
 
         if (OperatingSystem.IsLinux())
@@ -144,7 +145,7 @@ public sealed class BloodLooseMapCmdArgumentsTests
 
         NotBlood notblood = new();
 
-        var args = notblood.GetStartGameArgs(_bloodGame, _looseMap, mods, true, true, 2);
+        var args = notblood.GetStartGameArgs(_bloodGame, _looseMap, mods, [], true, true, 2);
         var expected = @$" -g ""enabled_mod.zip"" -mh ""ENABLED1.DEF"" -mh ""ENABLED2.DEF"" -g ""mod_incompatible_with_addon.zip"" -g ""incompatible_mod_with_compatible_version.zip"" -g ""dependent_mod.zip"" -g ""dependent_mod_with_compatible_version.zip"" -g ""feature_mod.zip"" -j ""{Directory.GetCurrentDirectory()}\Data\Addons\Blood\Mods"" -usecwd -j ""D:\Games\Blood"" -h ""a"" -ini ""BLOOD.INI"" -j ""{Directory.GetCurrentDirectory()}\Data\Addons\Blood\Maps"" -map ""LOOSE.MAP"" -s 2 -quick -nosetup";
 
         if (OperatingSystem.IsLinux())

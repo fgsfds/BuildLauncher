@@ -47,6 +47,7 @@ public sealed class DukeLooseMapCmdArgumentsTests
             IsUnpacked = false,
             Executables = null,
             BloodIni = null,
+            Options = null
         };
     }
 
@@ -71,7 +72,7 @@ public sealed class DukeLooseMapCmdArgumentsTests
         Raze raze = new();
 
         raze.BeforeStart(_dukeGame, _dukeLooseMap);
-        var args = raze.GetStartGameArgs(_dukeGame, _dukeLooseMap, mods, true, true);
+        var args = raze.GetStartGameArgs(_dukeGame, _dukeLooseMap, mods, [], true, true);
         var expected = $"" +
             $" -file \"enabled_mod.zip\"" +
             $" -adddef \"ENABLED1.DEF\"" +
@@ -131,7 +132,7 @@ public sealed class DukeLooseMapCmdArgumentsTests
 
         EDuke32 eduke32 = new();
 
-        var args = eduke32.GetStartGameArgs(_dukeGame, _dukeLooseMap, mods, true, true, 3);
+        var args = eduke32.GetStartGameArgs(_dukeGame, _dukeLooseMap, mods, [], true, true, 3);
         var expected = $"" +
             $" -g \"enabled_mod.zip\"" +
             $" -mh \"ENABLED1.DEF\"" +
@@ -184,7 +185,7 @@ public sealed class DukeLooseMapCmdArgumentsTests
 
         RedNukem redNukem = new();
 
-        var args = redNukem.GetStartGameArgs(_dukeGame, _dukeLooseMap, mods, true, true);
+        var args = redNukem.GetStartGameArgs(_dukeGame, _dukeLooseMap, mods, [], true, true);
         var expected = $"" +
             $" -g \"enabled_mod.zip\"" +
             $" -mh \"ENABLED1.DEF\"" +

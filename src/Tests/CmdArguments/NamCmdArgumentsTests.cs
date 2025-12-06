@@ -44,7 +44,8 @@ public sealed class NamCmdArgumentsTests
             StartMap = null,
             PreviewImageHash = null,
             IsUnpacked = false,
-            Executables = null
+            Executables = null,
+            Options = null
         };
     }
 
@@ -59,7 +60,7 @@ public sealed class NamCmdArgumentsTests
         Raze raze = new();
 
         raze.BeforeStart(_namGame, _namCamp);
-        var args = raze.GetStartGameArgs(_namGame, _namCamp, mods, true, true);
+        var args = raze.GetStartGameArgs(_namGame, _namCamp, mods, [], true, true);
         var expected = $"" +
             $" -file \"enabled_mod.zip\"" +
             $" -adddef \"ENABLED1.DEF\"" +
@@ -104,7 +105,7 @@ public sealed class NamCmdArgumentsTests
 
         EDuke32 eduke32 = new();
 
-        var args = eduke32.GetStartGameArgs(_namGame, _namCamp, mods, true, true);
+        var args = eduke32.GetStartGameArgs(_namGame, _namCamp, mods, [], true, true);
         var expected = $"" +
             $" -g \"enabled_mod.zip\"" +
             $" -mh \"ENABLED1.DEF\"" +
@@ -140,7 +141,7 @@ public sealed class NamCmdArgumentsTests
 
         RedNukem redNukem = new();
 
-        var args = redNukem.GetStartGameArgs(_namGame, _namCamp, mods, true, true);
+        var args = redNukem.GetStartGameArgs(_namGame, _namCamp, mods, [], true, true);
         var expected = $"" +
             $" -g \"enabled_mod.zip\"" +
             $" -mh \"ENABLED1.DEF\"" +

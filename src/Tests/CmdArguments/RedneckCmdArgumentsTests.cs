@@ -46,7 +46,8 @@ public sealed class RedneckCmdArgumentsTests
             StartMap = null,
             PreviewImageHash = null,
             IsUnpacked = false,
-            Executables = null
+            Executables = null,
+            Options = null
         };
 
         _againCamp = new()
@@ -70,7 +71,8 @@ public sealed class RedneckCmdArgumentsTests
             StartMap = null,
             PreviewImageHash = null,
             IsUnpacked = false,
-            Executables = null
+            Executables = null,
+            Options = null
         };
     }
 
@@ -85,7 +87,7 @@ public sealed class RedneckCmdArgumentsTests
         Raze raze = new();
 
         raze.BeforeStart(_redneckGame, _redneckCamp);
-        var args = raze.GetStartGameArgs(_redneckGame, _redneckCamp, mods, true, true);
+        var args = raze.GetStartGameArgs(_redneckGame, _redneckCamp, mods, [], true, true);
         var expected = $"" +
             $" -file \"enabled_mod.zip\"" +
             $" -adddef \"ENABLED1.DEF\"" +
@@ -128,7 +130,7 @@ public sealed class RedneckCmdArgumentsTests
         Raze raze = new();
 
         raze.BeforeStart(_redneckGame, _againCamp);
-        var args = raze.GetStartGameArgs(_redneckGame, _againCamp, mods, true, true);
+        var args = raze.GetStartGameArgs(_redneckGame, _againCamp, mods, [], true, true);
         var expected = $"" +
             $" -file \"enabled_mod.zip\"" +
             $" -adddef \"ENABLED1.DEF\"" +
@@ -170,7 +172,7 @@ public sealed class RedneckCmdArgumentsTests
 
         RedNukem redNukem = new();
 
-        var args = redNukem.GetStartGameArgs(_redneckGame, _redneckCamp, mods, true, true);
+        var args = redNukem.GetStartGameArgs(_redneckGame, _redneckCamp, mods, [], true, true);
         var expected = $"" +
             $" -g \"enabled_mod.zip\"" +
             $" -mh \"ENABLED1.DEF\"" +
@@ -203,7 +205,7 @@ public sealed class RedneckCmdArgumentsTests
 
         RedNukem redNukem = new();
 
-        var args = redNukem.GetStartGameArgs(_redneckGame, _againCamp, mods, true, true);
+        var args = redNukem.GetStartGameArgs(_redneckGame, _againCamp, mods, [], true, true);
         var expected = $"" +
             $" -g \"enabled_mod.zip\"" +
             $" -mh \"ENABLED1.DEF\"" +

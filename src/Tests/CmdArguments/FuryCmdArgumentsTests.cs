@@ -44,7 +44,8 @@ public sealed class FuryCmdArgumentsTests
             StartMap = null,
             PreviewImageHash = null,
             IsUnpacked = false,
-            Executables = null
+            Executables = null,
+            Options = null
         };
     }
 
@@ -68,7 +69,7 @@ public sealed class FuryCmdArgumentsTests
 
         Fury fury = new(new ConfigProviderFake());
 
-        var args = fury.GetStartGameArgs(_dukeGame, _dukeCamp, mods, true, true, 3);
+        var args = fury.GetStartGameArgs(_dukeGame, _dukeCamp, mods, [], true, true, 3);
         var expected = $"" +
             $" -g \"enabled_mod.zip\"" +
             $" -mh \"ENABLED1.DEF\"" +
