@@ -96,6 +96,13 @@ public sealed class GamesPathsProvider
 
 
             //BLOOD
+            //RS
+            pathToGame = Path.Combine(lib, "Blood - Refreshed Supply", "DOS", "BLOOD121");
+            if (Directory.Exists(pathToGame))
+            {
+                _bloodPath ??= pathToGame;
+            }
+
             //FS
             pathToGame = Path.Combine(lib, "Blood", "DOS", "C", "BLOOD");
             if (Directory.Exists(pathToGame))
