@@ -2460,14 +2460,14 @@
       "Id": "blood-what-lies-beneath",
       "AddonType": "TC",
       "Game": "Blood",
-      "DownloadUrl": "http://176.222.52.233:9000/buildlauncher/Blood/Campaigns/blood-what-lies-beneath_v1_5.zip",
+      "DownloadUrl": "http://176.222.52.233:9000/buildlauncher/Blood/Campaigns/blood-what-lies-beneath_v1_5_16.zip",
       "Title": "What Lies Beneath",
-      "Version": "1.5",
-      "FileSize": 383600798,
-      "Description": "https://www.moddb.com/mods/blood-what-lies-beneath\r\n\r\nFollow Caleb who is lost at sea to a mysterious island. What will he discover beneath the surface, in the bowels of the island? A dark cult has taken over a mansion, its surroundings and the secrets beneath the reef.\r\n\r\nThis is a non-linear addon for Blood. Fight the way you want, choose your own path through the island and find places otherwise kept a secret. Find clues to progress with tomes around the island.\r\n\r\nComes with its own executable due to technical reasons.",
+      "Version": "1.5.16",
+      "FileSize": 309262243,
+      "Description": "https://www.moddb.com/mods/blood-what-lies-beneath\r\n\r\nFollow Caleb who is lost at sea to a mysterious island. What will he discover beneath the surface, in the bowels of the island? A dark cult has taken over a mansion, its surroundings and the secrets beneath the reef.\r\n\r\nThis is a non-linear addon for Blood. Fight the way you want, choose your own path through the island and find places otherwise kept a secret. Find clues to progress with tomes around the island.",
       "Author": "BloodyTom",
-      "UpdateDate": "2025-11-14T08:49:21.6277812Z",
-      "MD5": "60F95180A60AE69DD4103A3769D04330"
+      "UpdateDate": "2025-12-06T18:56:22.8999393Z",
+      "MD5": "6B237C423AB388D3F7C49F7464F7A8EE"
     }
   ],
   "Wang": [
