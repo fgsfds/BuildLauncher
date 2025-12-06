@@ -606,10 +606,6 @@ public sealed class InstalledAddonsProvider
 
         if (pathToFile.EndsWith(".json"))
         {
-            AddonCarcass carcass = new();
-
-            carcass.IsUnpacked = true;
-
             var jsonText = File.ReadAllText(pathToFile);
 
             var manifest = JsonSerializer.Deserialize(
@@ -623,104 +619,30 @@ public sealed class InstalledAddonsProvider
             }
 
             var addonDir = Path.GetDirectoryName(pathToFile)!;
-
             var gridFile = Directory.GetFiles(addonDir, "grid.*");
             var previewFile = Directory.GetFiles(addonDir, "preview.*");
+
+            long? gridImageHash = null;
 
             if (gridFile.Length > 0)
             {
                 var crc = Crc32Helper.GetCrc32(gridFile[0]);
                 await using var stream = File.OpenRead(gridFile[0]);
                 _ = _bitmapsCache.TryAddGridToCache(crc, stream);
-                carcass.GridImageHash = crc;
+                gridImageHash = crc;
             }
-            else
-            {
-                carcass.GridImageHash = null;
-            }
+
+            long? previewImageHash = null;
 
             if (previewFile.Length > 0)
             {
                 var crc = Crc32Helper.GetCrc32(previewFile[0]);
                 await using var stream = File.OpenRead(previewFile[0]);
                 _ = _bitmapsCache.TryAddPreviewToCache(crc, stream);
-                carcass.PreviewImageHash = crc;
-            }
-            else
-            {
-                carcass.PreviewImageHash = null;
+                previewImageHash = crc;
             }
 
-            carcass.Type = manifest.AddonType;
-            carcass.Id = manifest.Id;
-            carcass.Title = manifest.Title;
-            carcass.Author = manifest.Author;
-            carcass.GridImageHash ??= carcass.PreviewImageHash;
-            carcass.Version = manifest.Version;
-            carcass.Description = manifest.Description;
-            carcass.SupportedGame = manifest.SupportedGame.Game;
-            carcass.GameVersion = manifest.SupportedGame.Version;
-            carcass.GameCrc = manifest.SupportedGame.Crc;
-
-            carcass.Rts = manifest.Rts;
-            carcass.Ini = manifest.Ini;
-            carcass.Rff = manifest.MainRff;
-            carcass.Snd = manifest.SoundRff;
-
-            carcass.StartMap = manifest.StartMap;
-
-            carcass.RequiredFeatures = manifest.Dependencies?.RequiredFeatures?.Select(static x => x).ToImmutableArray();
-
-            carcass.MainCon = manifest.MainCon;
-            carcass.AddCons = manifest.AdditionalCons?.ToImmutableArray();
-
-            carcass.MainDef = manifest.MainDef;
-            carcass.AddDefs = manifest.AdditionalDefs?.ToImmutableArray();
-
-            carcass.Dependencies = manifest.Dependencies?.Addons?.ToDictionary(static x => x.Id, static x => x.Version, StringComparer.OrdinalIgnoreCase);
-            carcass.Incompatibles = manifest.Incompatibles?.Addons?.ToDictionary(static x => x.Id, static x => x.Version, StringComparer.OrdinalIgnoreCase);
-
-            if (manifest.Executables is not null)
-            {
-                carcass.Executables = [];
-
-                foreach (var osPortsPair in manifest.Executables)
-                {
-                    carcass.Executables.Add(osPortsPair.Key, []);
-
-                    foreach (var x in osPortsPair.Value)
-                    {
-                        carcass.Executables[osPortsPair.Key].Add(x.Key, Path.Combine(Path.GetDirectoryName(pathToFile)!, x.Value));
-                    }
-                }
-            }
-            else
-            {
-                carcass.Executables = null;
-            }
-
-            if (manifest.Options is not null)
-            {
-                carcass.Options = [];
-
-                foreach (var option in manifest.Options)
-                {
-                    carcass.Options.Add(option.OptionName, []);
-
-                    if (option.Parameters is not null)
-                    {
-                        foreach (var param in option.Parameters)
-                        {
-                            carcass.Options[option.OptionName].Add(param.Key, param.Value);
-                        }
-                    }
-                }
-            }
-            else
-            {
-                carcass.Options = null;
-            }
-
+            var carcass = GetCarcass(manifest, pathToFile, true, gridImageHash, previewImageHash);
             carcasses.Add(carcass);
         }
         else if (pathToFile.EndsWith(".map", StringComparison.OrdinalIgnoreCase))
@@ -757,14 +679,14 @@ public sealed class InstalledAddonsProvider
         }
         else if (ArchiveFactory.IsArchive(pathToFile, out _))
         {
-            var unpackedTo = UnpackIfNeededAndGetAddonDto(pathToFile, out var manifests);
+            var unpackedTo = UnpackIfNeededAndGetAddonManifests(pathToFile, out var manifests);
 
             if (manifests is null or [])
             {
                 return null;
             }
 
-            bool isUnpacked = false;
+            bool isUnpacked;
             long? gridImageHash;
             long? previewImageHash;
 
@@ -824,81 +746,7 @@ public sealed class InstalledAddonsProvider
 
             foreach (var manifest in manifests)
             {
-                AddonCarcass carcass = new();
-
-                carcass.IsUnpacked = isUnpacked;
-                carcass.GridImageHash = gridImageHash ?? previewImageHash;
-                carcass.PreviewImageHash = previewImageHash;
-
-                carcass.Type = manifest.AddonType;
-                carcass.Id = manifest.Id;
-                carcass.Title = manifest.Title;
-                carcass.Author = manifest.Author;
-                carcass.Version = manifest.Version;
-                carcass.Description = manifest.Description;
-                carcass.SupportedGame = manifest.SupportedGame.Game;
-                carcass.GameVersion = manifest.SupportedGame.Version;
-                carcass.GameCrc = manifest.SupportedGame.Crc;
-
-                carcass.Rts = manifest.Rts;
-                carcass.Ini = manifest.Ini;
-                carcass.Rff = manifest.MainRff;
-                carcass.Snd = manifest.SoundRff;
-
-                carcass.StartMap = manifest.StartMap;
-
-                carcass.RequiredFeatures = manifest.Dependencies?.RequiredFeatures?.Select(static x => x).ToImmutableArray();
-
-                carcass.MainCon = manifest.MainCon;
-                carcass.AddCons = manifest.AdditionalCons?.ToImmutableArray();
-
-                carcass.MainDef = manifest.MainDef;
-                carcass.AddDefs = manifest.AdditionalDefs?.ToImmutableArray();
-
-                carcass.Dependencies = manifest.Dependencies?.Addons?.ToDictionary(static x => x.Id, static x => x.Version, StringComparer.OrdinalIgnoreCase);
-                carcass.Incompatibles = manifest.Incompatibles?.Addons?.ToDictionary(static x => x.Id, static x => x.Version, StringComparer.OrdinalIgnoreCase);
-
-                if (manifest.Executables is not null)
-                {
-                    carcass.Executables = [];
-
-                    foreach (var osPortsPair in manifest.Executables)
-                    {
-                        carcass.Executables.Add(osPortsPair.Key, []);
-
-                        foreach (var x in osPortsPair.Value)
-                        {
-                            carcass.Executables[osPortsPair.Key].Add(x.Key, Path.Combine(Path.GetDirectoryName(pathToFile)!, x.Value));
-                        }
-                    }
-                }
-                else
-                {
-                    carcass.Executables = null;
-                }
-
-                if (manifest.Options is not null)
-                {
-                    carcass.Options = [];
-
-                    foreach (var option in manifest.Options)
-                    {
-                        carcass.Options.Add(option.OptionName, []);
-
-                        if (option.Parameters is not null)
-                        {
-                            foreach (var param in option.Parameters)
-                            {
-                                carcass.Options[option.OptionName].Add(param.Key, param.Value);
-                            }
-                        }
-                    }
-                }
-                else
-                {
-                    carcass.Options = null;
-                }
-
+                var carcass = GetCarcass(manifest, pathToFile, isUnpacked, gridImageHash, previewImageHash);
                 carcasses.Add(carcass);
             }
         }
@@ -1115,8 +963,9 @@ public sealed class InstalledAddonsProvider
     /// Unpack archive if needed and return path to folder
     /// </summary>
     /// <param name="pathToFile">Path to archive</param>
-    /// <param name="addonDtos">AddonDto</param>
-    private string? UnpackIfNeededAndGetAddonDto(string pathToFile, out List<AddonJsonModel>? addonDtos)
+    /// <param name="manifests">Addon manifests</param>
+    /// <returns>Path to unpacked folder or <see langword="null"/> if not unpacked.</returns>
+    private string? UnpackIfNeededAndGetAddonManifests(string pathToFile, out List<AddonJsonModel>? manifests)
     {
         try
         {
@@ -1128,7 +977,7 @@ public sealed class InstalledAddonsProvider
             {
                 //need to unpack archive with grpinfo
                 unpackedTo = Unpack(pathToFile, archive);
-                addonDtos = null;
+                manifests = null;
                 archive?.Dispose();
                 File.Delete(pathToFile);
 
@@ -1139,7 +988,7 @@ public sealed class InstalledAddonsProvider
 
             if (addonJsonsInsideArchive?.Any() is not true)
             {
-                addonDtos = null;
+                manifests = null;
                 return null;
             }
 
@@ -1197,14 +1046,14 @@ public sealed class InstalledAddonsProvider
                 }
             }
 
-            addonDtos = result.Count > 0 ? result : null;
+            manifests = result.Count > 0 ? result : null;
             return unpackedTo;
         }
         catch (Exception ex)
         {
             _logger.LogCritical(ex, "=== Error while unpacking archive ===");
 
-            addonDtos = null;
+            manifests = null;
             return null;
         }
     }
@@ -1214,6 +1063,7 @@ public sealed class InstalledAddonsProvider
     /// </summary>
     /// <param name="pathToFile">Path to archive</param>
     /// <param name="archive">Archive</param>
+    /// <returns>Path to unpacked folder.</returns>
     private string Unpack(string pathToFile, IArchive archive)
     {
         var fileFolder = Path.GetDirectoryName(pathToFile)!;
@@ -1227,6 +1077,91 @@ public sealed class InstalledAddonsProvider
         archive.ExtractToDirectory(unpackTo);
 
         return unpackTo;
+    }
+
+    private AddonCarcass GetCarcass(
+        AddonJsonModel manifest,
+        string pathToFile,
+        bool isUnpacked,
+        long? gridImageHash,
+        long? previewImageHash)
+    {
+        AddonCarcass carcass = new();
+
+        carcass.IsUnpacked = isUnpacked;
+        carcass.GridImageHash = gridImageHash ?? previewImageHash;
+        carcass.PreviewImageHash = previewImageHash;
+
+        carcass.Type = manifest.AddonType;
+        carcass.Id = manifest.Id;
+        carcass.Title = manifest.Title;
+        carcass.Author = manifest.Author;
+        carcass.Version = manifest.Version;
+        carcass.Description = manifest.Description;
+        carcass.SupportedGame = manifest.SupportedGame.Game;
+        carcass.GameVersion = manifest.SupportedGame.Version;
+        carcass.GameCrc = manifest.SupportedGame.Crc;
+
+        carcass.Rts = manifest.Rts;
+        carcass.Ini = manifest.Ini;
+        carcass.Rff = manifest.MainRff;
+        carcass.Snd = manifest.SoundRff;
+
+        carcass.StartMap = manifest.StartMap;
+
+        carcass.RequiredFeatures = manifest.Dependencies?.RequiredFeatures?.Select(static x => x).ToImmutableArray();
+
+        carcass.MainCon = manifest.MainCon;
+        carcass.AddCons = manifest.AdditionalCons?.ToImmutableArray();
+
+        carcass.MainDef = manifest.MainDef;
+        carcass.AddDefs = manifest.AdditionalDefs?.ToImmutableArray();
+
+        carcass.Dependencies = manifest.Dependencies?.Addons?.ToDictionary(static x => x.Id, static x => x.Version, StringComparer.OrdinalIgnoreCase);
+        carcass.Incompatibles = manifest.Incompatibles?.Addons?.ToDictionary(static x => x.Id, static x => x.Version, StringComparer.OrdinalIgnoreCase);
+
+        if (manifest.Executables is not null)
+        {
+            carcass.Executables = [];
+
+            foreach (var osPortsPair in manifest.Executables)
+            {
+                carcass.Executables.Add(osPortsPair.Key, []);
+
+                foreach (var x in osPortsPair.Value)
+                {
+                    carcass.Executables[osPortsPair.Key].Add(x.Key, Path.Combine(Path.GetDirectoryName(pathToFile)!, x.Value));
+                }
+            }
+        }
+        else
+        {
+            carcass.Executables = null;
+        }
+
+        if (manifest.Options is not null)
+        {
+            carcass.Options = [];
+
+            foreach (var option in manifest.Options)
+            {
+                carcass.Options.Add(option.OptionName, []);
+
+                if (option.Parameters is not null)
+                {
+                    foreach (var param in option.Parameters)
+                    {
+                        carcass.Options[option.OptionName].Add(param.Key, param.Value);
+                    }
+                }
+            }
+        }
+        else
+        {
+            carcass.Options = null;
+        }
+
+        return carcass;
     }
 }
 
