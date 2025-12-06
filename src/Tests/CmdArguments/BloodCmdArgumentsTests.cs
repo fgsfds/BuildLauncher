@@ -662,7 +662,7 @@ public sealed class BloodCmdArgumentsTests
         NotBlood notblood = new();
 
         var args = notblood.GetStartGameArgs(_bloodGame, _bloodTcIncompatibleWithEverything, mods, [], true, true, 2);
-        var expected = @$" -usecwd -j ""D:\Games\Blood"" -h ""a"" -ini ""TC.INI"" -game_dir ""D:\Games\Blood\blood_tc_folder"" -rff ""TC.RFF"" -snd ""TC.SND"" -s 2 -quick -nosetup";
+        var expected = @" -usecwd -j ""D:\Games\Blood"" -h ""a"" -ini ""TC.INI"" -game_dir ""D:\Games\Blood\blood_tc_folder"" -rff ""TC.RFF"" -snd ""TC.SND"" -s 2 -quick -nosetup";
 
         if (OperatingSystem.IsLinux())
         {
@@ -679,7 +679,7 @@ public sealed class BloodCmdArgumentsTests
         NBlood nblood = new();
 
         var args = nblood.GetStartGameArgs(_bloodGame, _bloodCampWithOptions, [], ["option 2"], true, true, 2);
-        var expected = @$" -usecwd -j ""D:\Games\Blood"" -h ""a"" -mh ""OPT2.DEF"" -mh ""OPT2_2.DEF"" -s 2 -quick -nosetup";
+        var expected = @" -usecwd -j ""D:\Games\Blood"" -h ""a"" -mh ""OPT2.DEF"" -mh ""OPT2_2.DEF"" -s 2 -quick -nosetup";
 
         if (OperatingSystem.IsLinux())
         {

@@ -201,7 +201,6 @@ public abstract class BasePort
     /// </summary>
     /// <param name="subFolder">Subfolder under port's saves folder</param>
     /// <param name="addonId">Addon Id</param>
-    /// <returns></returns>
     public string GetPathToAddonSavedGamesFolder(string subFolder, string addonId)
     {
         var folderName = addonId;
@@ -211,21 +210,20 @@ public abstract class BasePort
             folderName = folderName.Replace(ch, '_');
         }
 
-        var result = Path.Combine(PortSavedGamesFolderPath, subFolder, folderName);
-
-        return result;
+        return Path.Combine(PortSavedGamesFolderPath, subFolder, folderName);
     }
 
 
     /// <summary>
     /// Get command line parameters to start the game with selected campaign and autoload mods
     /// </summary>
-    /// <param name="game"></param>
-    /// <param name="addon"></param>
-    /// <param name="mods"></param>
-    /// <param name="skipIntro"></param>
-    /// <param name="skipStartup"></param>
-    /// <param name="skill"></param>
+    /// <param name="game">Game to start</param>
+    /// <param name="addon">Addon to start</param>
+    /// <param name="mods">Autoload mods</param>
+    /// <param name="enabledOptions">List of enabled options</param>
+    /// <param name="skipIntro">Skip intro</param>
+    /// <param name="skipStartup">Skip startup window</param>
+    /// <param name="skill">Skill level</param>
     public string GetStartGameArgs(
         BaseGame game,
         BaseAddon addon,
@@ -278,7 +276,7 @@ public abstract class BasePort
         {
             if (!addon.Options.TryGetValue(optionName, out var options))
             {
-                throw new KeyNotFoundException();
+                throw new KeyNotFoundException(nameof(optionName));
             }
 
             foreach (var option in options)
@@ -289,7 +287,7 @@ public abstract class BasePort
                 }
                 else
                 {
-                    throw new ArgumentOutOfRangeException();
+                    throw new ArgumentOutOfRangeException(nameof(option.Value));
                 }
             }
         }

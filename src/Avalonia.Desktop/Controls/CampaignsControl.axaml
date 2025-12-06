@@ -9,8 +9,8 @@
              xmlns:ctrl="clr-namespace:Avalonia.Desktop.Controls"
              xmlns:in="clr-namespace:Addons.Addons;assembly=BuildLauncher.Addons"
              x:DataType="vm:CampaignsViewModel"
-             AttachedToVisualTree="OnControlAttachedToVisualTree"
-             x:Class="Avalonia.Desktop.Controls.CampaignsControl">
+             x:Class="Avalonia.Desktop.Controls.CampaignsControl"
+             AttachedToVisualTree="OnControlAttachedToVisualTree">
 
     <UserControl.Resources>
         <helpers:StringToWrappedConverter x:Key="StringToWrappedConverter"/>
@@ -28,162 +28,162 @@
             <Grid Width="{x:Static helpers:DesktopConsts.GridImageWidth}"
                   Height="{x:Static helpers:DesktopConsts.GridImageHeight}">
 
-                <Grid IsVisible="{Binding GridImageHash, Converter={x:Static ObjectConverters.IsNotNull}}>">
+                <Grid IsVisible="{Binding GridImageHash, Converter={x:Static ObjectConverters.IsNotNull}}">
 
-                        <Image Source="{Binding GridImageHash, Converter={StaticResource CachedHashToBitmapConverter}}"
-                               VerticalAlignment="Center"
-                               HorizontalAlignment="Center"/>
-
-                        <TextBlock Text="{Binding Title}"
-                                   Margin="0 0 0 -2"
-                                   Padding="5"
-                                   Background="{Binding Path=Background, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}"
-                                   HorizontalAlignment="Stretch"
-                                   Opacity="0.6"
-                                   TextAlignment="Center"
-                                   VerticalAlignment="Bottom"
-                                   TextWrapping="Wrap"/>
-
-                        <TextBlock Text="{Binding Title}"
-                                   Margin="0 0 0 -2"
-                                   Padding="5"
-                                   HorizontalAlignment="Stretch"
-                                   TextAlignment="Center"
-                                   VerticalAlignment="Bottom"
-                                   TextWrapping="WrapWithOverflow"/>
-                    </Grid>
-
-                    <Grid IsVisible="{Binding GridImageHash, Converter={x:Static ObjectConverters.IsNull}}">
-
-                        <Border Background="Black"/>
-
-                        <Viewbox>
-                            <TextBlock Foreground="{DynamicResource SystemAccentColor}"
-                                       Margin="20"
-                                       FontSize="500"
-                                       FontWeight="Bold"
-                                       TextAlignment="Center"
-                                       Text="{Binding Title, Converter={StaticResource StringToWrappedConverter}}"/>
-                        </Viewbox >
-                    </Grid>
-
-                    <Image x:Name="HightlightOverlay"
-                           Source="{StaticResource HighlightOverlayBitmap}"
+                    <Image Source="{Binding GridImageHash, Converter={StaticResource CachedHashToBitmapConverter}}"
                            VerticalAlignment="Center"
                            HorizontalAlignment="Center"/>
 
-                    <i:Icon Value="fa-star"
-                            Margin="5"
-                            FontSize="15"
-                            IsVisible="{Binding IsFavorite}"
-                            HorizontalAlignment="Right"
-                            VerticalAlignment="Top"
-                            Foreground="Yellow"/>
+                    <TextBlock Text="{Binding Title}"
+                               Margin="0 0 0 -2"
+                               Padding="5"
+                               Background="{Binding Path=Background, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}"
+                               HorizontalAlignment="Stretch"
+                               Opacity="0.6"
+                               TextAlignment="Center"
+                               VerticalAlignment="Bottom"
+                               TextWrapping="Wrap"/>
 
+                    <TextBlock Text="{Binding Title}"
+                               Margin="0 0 0 -2"
+                               Padding="5"
+                               HorizontalAlignment="Stretch"
+                               TextAlignment="Center"
+                               VerticalAlignment="Bottom"
+                               TextWrapping="WrapWithOverflow"/>
                 </Grid>
 
-            </DataTemplate>
-        </UserControl.DataTemplates>
+                <Grid IsVisible="{Binding GridImageHash, Converter={x:Static ObjectConverters.IsNull}}">
 
-        <Grid RowDefinitions="auto,*,auto" ColumnDefinitions="2*,*">
+                    <Border Background="Black"/>
 
-            <Grid ColumnDefinitions="auto,*,auto"
-                  Grid.Row="0" Grid.Column="0"
-                  Margin="0,0,0,5">
+                    <Viewbox>
+                        <TextBlock Foreground="{DynamicResource SystemAccentColor}"
+                                   Margin="20"
+                                   FontSize="500"
+                                   FontWeight="Bold"
+                                   TextAlignment="Center"
+                                   Text="{Binding Title, Converter={StaticResource StringToWrappedConverter}}"/>
+                    </Viewbox >
+                </Grid>
 
-                <TextBox Name="SearchBox"
-                         Grid.Column="1"
-                         Watermark="Search"
-                         Text="{Binding SearchBoxText}"/>
+                <Image x:Name="HightlightOverlay"
+                       Source="{StaticResource HighlightOverlayBitmap}"
+                       VerticalAlignment="Center"
+                       HorizontalAlignment="Center"/>
 
-                <Button Grid.Column="2"
-                        Margin="5,0,0,0"
-                        Command="{Binding ClearSearchBoxCommand}"
-                        ToolTip.Tip="Clear search"
-                        Height="{Binding Bounds.Height, ElementName=SearchBox}">
-                    <i:Icon Value="fa-xmark"/>
-                </Button>
+                <i:Icon Value="fa-star"
+                        Margin="5"
+                        FontSize="15"
+                        IsVisible="{Binding IsFavorite}"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Top"
+                        Foreground="Yellow"/>
 
             </Grid>
 
-            <ListBox Name="CampaignsList"
-                     IsEnabled="{Binding !IsInProgress}"
-                     SelectionChanged="OnCampaignsListSelectionChanged"
-                     Grid.Row="1" Grid.Column="0"
-                     ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                     Padding="2"
-                     ItemsSource="{Binding CampaignsList}"
-                     SelectedItem="{Binding SelectedAddon}"
-                     PointerPressed="OnCampaignsListEmptySpaceClicked"
-                     ContainerPrepared="OnListBoxContainerPrepared"
-                     DragDrop.AllowDrop="True"
-                     DragDrop.Drop="OnDrop">
+        </DataTemplate>
+    </UserControl.DataTemplates>
 
-                <ListBox.Styles>
+    <Grid RowDefinitions="auto,*,auto" ColumnDefinitions="2*,*">
 
-                    <Style Selector="ListBoxItem">
-                        <Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter">
-                            <Setter Property="Background" Value=""/>
-                            <Setter Property="RenderTransform" Value="scale(0.92)"/>
-                            <Setter Property="Transitions">
-                                <Setter.Value>
-                                    <Transitions>
-                                        <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.1"/>
-                                    </Transitions>
-                                </Setter.Value>
-                            </Setter>
-                        </Style>
+        <Grid ColumnDefinitions="auto,*,auto"
+              Grid.Row="0" Grid.Column="0"
+              Margin="0,0,0,5">
 
-                        <Style Selector="^ Image#HightlightOverlay">
-                            <Setter Property="Opacity" Value="0.00"/>
-                            <Setter Property="Transitions">
-                                <Setter.Value>
-                                    <Transitions>
-                                        <DoubleTransition Property="Opacity" Duration="0:0:0.5"/>
-                                    </Transitions>
-                                </Setter.Value>
-                            </Setter>
-                        </Style>
+            <TextBox Name="SearchBox"
+                     Grid.Column="1"
+                     Watermark="Search"
+                     Text="{Binding SearchBoxText}"/>
 
-                        <Style Selector="^:pointerover">
-                            <Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter">
-                                <Setter Property="Background" Value=""/>
-                                <Setter Property="RenderTransform" Value="scale(0.96)"/>
-                            </Style>
-
-                            <Style Selector="^ Image#HightlightOverlay">
-                                <Setter Property="Opacity" Value="0.2"/>
-                            </Style>
-                        </Style>
-
-                        <Style Selector="^:selected">
-                            <Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter">
-                                <Setter Property="Background" Value=""/>
-                                <Setter Property="RenderTransform" Value="scale(1.0)"/>
-                            </Style>
-
-                            <Style Selector="^ Image#HightlightOverlay">
-                                <Setter Property="Opacity" Value="0.25"/>
-                            </Style>
-                        </Style>
-
-                    </Style>
-                </ListBox.Styles>
-
-
-                <ListBox.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <WrapPanel Orientation="Horizontal" ItemSpacing="3" LineSpacing="0"/>
-                    </ItemsPanelTemplate>
-                </ListBox.ItemsPanel>
-
-
-            </ListBox>
-
-            <ctrl:PortsButtonsControl Name="BottomPanel" Grid.Row="2" Grid.Column="0"/>
-
-            <ctrl:RightPanelControl Name="RightPanel" Grid.Row="1" Grid.Column="1"/>
+            <Button Grid.Column="2"
+                    Margin="5,0,0,0"
+                    Command="{Binding ClearSearchBoxCommand}"
+                    ToolTip.Tip="Clear search"
+                    Height="{Binding Bounds.Height, ElementName=SearchBox}">
+                <i:Icon Value="fa-xmark"/>
+            </Button>
 
         </Grid>
 
-    </UserControl>
+        <ListBox Name="CampaignsList"
+                 IsEnabled="{Binding !IsInProgress}"
+                 SelectionChanged="OnCampaignsListSelectionChanged"
+                 Grid.Row="1" Grid.Column="0"
+                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                 Padding="2"
+                 ItemsSource="{Binding CampaignsList}"
+                 SelectedItem="{Binding SelectedAddon}"
+                 PointerPressed="OnCampaignsListEmptySpaceClicked"
+                 ContainerPrepared="OnListBoxContainerPrepared"
+                 DragDrop.AllowDrop="True"
+                 DragDrop.Drop="OnDrop">
+
+            <ListBox.Styles>
+
+                <Style Selector="ListBoxItem">
+                    <Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter">
+                        <Setter Property="Background" Value="Transparent"/>
+                        <Setter Property="RenderTransform" Value="scale(0.92)"/>
+                        <Setter Property="Transitions">
+                            <Setter.Value>
+                                <Transitions>
+                                    <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.1"/>
+                                </Transitions>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+
+                    <Style Selector="^ Image#HightlightOverlay">
+                        <Setter Property="Opacity" Value="0.00"/>
+                        <Setter Property="Transitions">
+                            <Setter.Value>
+                                <Transitions>
+                                    <DoubleTransition Property="Opacity" Duration="0:0:0.5"/>
+                                </Transitions>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+
+                    <Style Selector="^:pointerover">
+                        <Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter">
+                            <Setter Property="Background" Value="Transparent"/>
+                            <Setter Property="RenderTransform" Value="scale(0.96)"/>
+                        </Style>
+
+                        <Style Selector="^ Image#HightlightOverlay">
+                            <Setter Property="Opacity" Value="0.2"/>
+                        </Style>
+                    </Style>
+
+                    <Style Selector="^:selected">
+                        <Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter">
+                            <Setter Property="Background" Value="Transparent"/>
+                            <Setter Property="RenderTransform" Value="scale(1.0)"/>
+                        </Style>
+
+                        <Style Selector="^ Image#HightlightOverlay">
+                            <Setter Property="Opacity" Value="0.25"/>
+                        </Style>
+                    </Style>
+
+                </Style>
+            </ListBox.Styles>
+
+
+            <ListBox.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel Orientation="Horizontal" ItemSpacing="3" LineSpacing="0"/>
+                </ItemsPanelTemplate>
+            </ListBox.ItemsPanel>
+
+
+        </ListBox>
+
+        <ctrl:PortsButtonsControl Name="BottomPanel" Grid.Row="2" Grid.Column="0"/>
+
+        <ctrl:RightPanelControl Name="RightPanel" Grid.Row="1" Grid.Column="1"/>
+
+    </Grid>
+
+</UserControl>

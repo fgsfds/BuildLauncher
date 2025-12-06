@@ -339,7 +339,7 @@ public sealed class InstalledAddonsProvider
     /// <summary>
     /// Enable addon
     /// </summary>
-    /// <param name="id">Addon id</param>
+    /// <param name="addon">Addon id</param>
     public void EnableAddon(AddonId addon)
     {
         var existing = _modsCache.FirstOrDefault(x => x.Key.Equals(addon));
@@ -390,7 +390,7 @@ public sealed class InstalledAddonsProvider
     /// <summary>
     /// Disable addon
     /// </summary>
-    /// <param name="id">Addon id</param>
+    /// <param name="addon">Addon id</param>
     public void DisableAddon(AddonId addon)
     {
         var existing = _modsCache.FirstOrDefault(x => x.Key.Equals(addon));
@@ -898,7 +898,7 @@ public sealed class InstalledAddonsProvider
                 {
                     carcass.Options = null;
                 }
-                
+
                 carcasses.Add(carcass);
             }
         }

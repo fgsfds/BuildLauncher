@@ -32,6 +32,7 @@ public sealed class PortStarter
     /// <param name="port">Port</param>
     /// <param name="game">Game to start</param>
     /// <param name="addon">Addon to start</param>
+    /// <param name="enabledOptions">List of enabled options</param>
     /// <param name="skill">Skill level</param>
     /// <param name="skipIntro">Skip intro</param>
     /// <param name="skipStartup">Skip startup window</param>
@@ -62,7 +63,7 @@ public sealed class PortStarter
         _logger.LogInformation($"Startup args:{args}");
         _logger.LogInformation($"Startup args length: {args.Length}");
 
-        await StartPortAsync(port, addon, args, pathToExe).ConfigureAwait(false);
+        await StartPortAsync(port, args, pathToExe).ConfigureAwait(false);
 
         sw.Stop();
         var time = sw.Elapsed;
@@ -77,10 +78,9 @@ public sealed class PortStarter
     /// Start port with command line args
     /// </summary>
     /// <param name="port">Port</param>
-    /// <param name="addon">Campaign</param>
     /// <param name="args">Command line arguments</param>
     /// <param name="pathToExe">Path to custom port's exe</param>
-    private async Task StartPortAsync(BasePort port, BaseAddon addon, string args, string? pathToExe = null)
+    private async Task StartPortAsync(BasePort port, string args, string? pathToExe = null)
     {
         string exe;
 

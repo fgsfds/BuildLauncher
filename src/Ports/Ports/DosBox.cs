@@ -215,6 +215,9 @@ public sealed class DosBox : BasePort
 
     protected override void GetBloodArgs(StringBuilder sb, BloodGame game, BaseAddon addon)
     {
+        Guard.IsNotNull(game.GameInstallFolder);
+        Guard.IsNotNull(addon.PathToFile);
+
         if (addon.AddonId.Id.Equals(nameof(BloodAddonEnum.BloodCP), StringComparison.OrdinalIgnoreCase))
         {
             _ = sb.Append(@$" -c ""mount c \""{game.GameInstallFolder}"""" -c ""c:""");
@@ -247,7 +250,7 @@ public sealed class DosBox : BasePort
 
             if (addon.IsUnpacked)
             {
-                foreach (var filePath in Directory.GetFiles(Path.GetDirectoryName(addon.PathToFile)))
+                foreach (var filePath in Directory.GetFiles(Path.GetDirectoryName(addon.PathToFile)!))
                 {
                     string fileName = Path.GetFileName(filePath);
                     string destFile = Path.Combine(ClientProperties.TempFolderPath, fileName);
@@ -272,7 +275,7 @@ public sealed class DosBox : BasePort
                         }
                     }
 
-                    file.WriteToFile(Path.Combine(ClientProperties.TempFolderPath, file.Key.Replace('\\', Path.DirectorySeparatorChar)), new() { Overwrite = true });
+                    file.WriteToFile(Path.Combine(ClientProperties.TempFolderPath, file.Key!.Replace('\\', Path.DirectorySeparatorChar)), new() { Overwrite = true });
                 }
             }
 

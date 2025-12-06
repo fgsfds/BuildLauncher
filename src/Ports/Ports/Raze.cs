@@ -109,80 +109,6 @@ public sealed class Raze : BasePort
         FeatureEnum.TileFromTexture
         ];
 
-
-    public Raze() : base()
-    {
-        try
-        {
-            MoveOldSavesFolder();
-        }
-        catch
-        {
-            Directory.Delete(Path.Combine(PortInstallFolderPath, "Save"));
-        }
-    }
-
-
-    [Obsolete]
-    private void MoveOldSavesFolder()
-    {
-        var oldSavesFolder = Path.Combine(PortInstallFolderPath, "Save");
-
-        if (Directory.Exists(oldSavesFolder))
-        {
-            foreach (var entry in Directory.GetDirectories(oldSavesFolder))
-            {
-                var folderName = Path.GetFileName(entry);
-
-                string gameFolder;
-
-                if (folderName.StartsWith("blood", StringComparison.OrdinalIgnoreCase))
-                {
-                    gameFolder = "Blood";
-                }
-                else if (folderName.StartsWith("duke", StringComparison.OrdinalIgnoreCase))
-                {
-                    gameFolder = "Duke3D";
-                }
-                else if (folderName.StartsWith("slave", StringComparison.OrdinalIgnoreCase))
-                {
-                    gameFolder = "Slave";
-                }
-                else if (folderName.StartsWith("fury", StringComparison.OrdinalIgnoreCase))
-                {
-                    gameFolder = "Fury";
-                }
-                else if (folderName.StartsWith("wang", StringComparison.OrdinalIgnoreCase))
-                {
-                    gameFolder = "Wang";
-                }
-                else if (folderName.StartsWith("redneck", StringComparison.OrdinalIgnoreCase))
-                {
-                    gameFolder = "Redneck";
-                }
-                else if (folderName.StartsWith("ridesagain", StringComparison.OrdinalIgnoreCase))
-                {
-                    gameFolder = "Redneck";
-                }
-                else
-                {
-                    continue;
-                }
-
-                var gameSavesDir = Path.Combine(PortSavedGamesFolderPath, gameFolder);
-
-                if (!Directory.Exists(gameSavesDir))
-                {
-                    _ = Directory.CreateDirectory(gameSavesDir);
-                }
-
-                Directory.Move(entry, Path.Combine(gameSavesDir, folderName));
-            }
-
-            Directory.Delete(oldSavesFolder, true);
-        }
-    }
-
     /// <inheritdoc/>
     protected override void GetSkipIntroParameter(StringBuilder sb) => sb.Append(" -quick");
 
@@ -303,8 +229,7 @@ public sealed class Raze : BasePort
             return;
         }
 
-
-        Guard2.ThrowIfNotType<DukeCampaignEntity>(addon, out var dCamp);
+        addon.ThrowIfNotType<DukeCampaignEntity>(out var dCamp);
 
         if (dCamp.SupportedGame.GameVersion is not null &&
             dCamp.SupportedGame.GameVersion.Equals(nameof(DukeVersionEnum.Duke3D_WT), StringComparison.OrdinalIgnoreCase))
@@ -383,8 +308,7 @@ public sealed class Raze : BasePort
             return;
         }
 
-
-        Guard2.ThrowIfNotType<GenericCampaignEntity>(addon, out var wCamp);
+        addon.ThrowIfNotType<GenericCampaignEntity>(out var wCamp);
 
         //TODO downloaded addons support
         if (wCamp.DependentAddons is not null &&
@@ -428,8 +352,7 @@ public sealed class Raze : BasePort
             return;
         }
 
-
-        Guard2.ThrowIfNotType<DukeCampaignEntity>(addon, out var rCamp);
+        addon.ThrowIfNotType<DukeCampaignEntity>(out var rCamp);
 
         if (rCamp.DependentAddons is not null &&
             rCamp.DependentAddons.ContainsKey(nameof(RedneckAddonEnum.Route66)))
