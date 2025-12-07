@@ -100,7 +100,7 @@ public partial class RightPanelViewModel : ObservableObject
         }
     }
 
-    public bool HasOptions => SelectedAddon?.Options is not null;
+    public bool HasOptions => SelectedAddon?.Options?.Count > 0;
 
     public ObservableCollection<AddonOption> AddonOptions { get; } = new();
 
@@ -138,6 +138,7 @@ public partial class RightPanelViewModel : ObservableObject
 
         if (SelectedAddon?.Options is null)
         {
+            OnPropertyChanged(nameof(HasOptions));
             return;
         }
 
