@@ -156,19 +156,6 @@
       "MD5": "3AB646EA29C06714F6C80F8521670789"
     },
     {
-      "Id": "duke3d-dnf2013",
-      "AddonType": "TC",
-      "Game": "Duke3D",
-      "DownloadUrl": "http://176.222.52.233:9000/buildlauncher/Duke3D/Campaigns/duke3d-dnf2013_v1_02.zip",
-      "Title": "Duke Nukem Forever 2013",
-      "Version": "1.02",
-      "FileSize": 44381102,
-      "Description": "https://msdn.duke4.net/dnf2013.php\n\nDuke Nukem Forever 2013 is a 5-level mod for Duke Nukem 3D. It\u0027s essentially what Duke Nukem Forever, the game, might have been if it had been released as an expansion for Duke Nukem 3D. The assets and the levels have been greatly influenced and inspired by the 2001 Duke Nukem Forever E3 trailer, the very trailer that seemed to promise the imminent arrival of the best video game ever. Other trailers and preview screenshots were also used as sources.\n\nAlso includes 3-map DLC.",
-      "Author": "Gambini, Mikko Sandt, DavoX, Micky C",
-      "UpdateDate": "2024-05-24T00:00:00Z",
-      "MD5": "B98B1007AB97C13A37AEB03BF041A750"
-    },
-    {
       "Id": "duke3d-new-invasion",
       "AddonType": "TC",
       "Game": "Duke3D",
@@ -285,18 +272,6 @@
       "Author": "Kid MarsCat",
       "UpdateDate": "2024-11-27T07:22:39.4335728Z",
       "MD5": "AFA0D8EEEE865675ADDF1A93B4E96382"
-    },
-    {
-      "Id": "duke3d-dick-suckem",
-      "AddonType": "TC",
-      "Game": "Duke3D",
-      "DownloadUrl": "http://176.222.52.233:9000/buildlauncher/Duke3D/Campaigns/duke3d-dick-suckem_v1_0.zip",
-      "Title": "Dick Suckem",
-      "Version": "1.0",
-      "FileSize": 58118969,
-      "Description": "https://www.moddb.com/games/duke-nukem-3d/addons/ms-paint-duke-nukem-dick-suckem\r\n\r\nDuke Nukem 3D but all sprites and graphics are redrawn using MSPAINT. Nothing serious. Just a joke mod made for fun and also to test my patience.",
-      "UpdateDate": "2025-01-19T16:53:48.9240204Z",
-      "MD5": "03881C7239DDDCF1EF7352D878171377"
     },
     {
       "Id": "duke3d-legacy-edition",
@@ -1607,19 +1582,6 @@
       "MD5": "94C7EB5359EA5586F502F9AE24A0D8C7"
     },
     {
-      "Id": "duke3d-horror-castle",
-      "AddonType": "TC",
-      "Game": "Duke3D",
-      "DownloadUrl": "http://176.222.52.233:9000/buildlauncher/Duke3D/Campaigns/duke3d-horror-castle_v6_3.zip",
-      "Title": "Horror Castle",
-      "Version": "6.3",
-      "FileSize": 74485163,
-      "Description": "https://www.moddb.com/mods/duke-nukem-horror-castle/\r\n\r\nHorror theme, new enemies new art new weapons. Awesome Castles.",
-      "Author": "William Gee",
-      "UpdateDate": "2025-10-19T11:31:50.4746464Z",
-      "MD5": "0CA982E835FBEEA74E5B6D98A0E4945B"
-    },
-    {
       "Id": "duke3d-murder-the-edf-conspiracy",
       "AddonType": "TC",
       "Game": "Duke3D",
@@ -1958,6 +1920,148 @@
       "Author": "Robert \u0027underTaker\u0027 Wypi\u00F3r",
       "UpdateDate": "2025-11-03T16:48:41.3572287Z",
       "MD5": "684C212B8969B673280BAEE4C6CCBFC0"
+    },
+    {
+      "Id": "duke3d-cheello-voxels",
+      "AddonType": "Mod",
+      "Game": "Duke3D",
+      "DownloadUrl": "http://176.222.52.233:9000/buildlauncher/Duke3D/Mods/duke3d-cheello-voxels_v1_0.zip",
+      "Title": "Cheello Voxels",
+      "Version": "1.0",
+      "FileSize": 19164063,
+      "Description": "https://www.moddb.com/mods/voxel-duke-nukem-3d/addons/voxel-duke-3d\r\n\r\nGet ready for Voxel Duke Nukem 3D! All monsters, babes, props and more have been fully converted to 3d voxel models. Blast your way through the first 3 original episodes with voxelized assets, creating a modernized feel to Duke like never before. Hail to the King, Baby!",
+      "Author": "Daniel Peterson aka \u0022Cheello\u0022",
+      "UpdateDate": "2025-12-11T10:22:52.114112Z",
+      "MD5": "01FF457EB3EE151F312C32D93C707C08"
+    },
+    {
+      "Id": "duke3d-horror-castle",
+      "AddonType": "TC",
+      "Game": "Duke3D",
+      "DownloadUrl": "http://176.222.52.233:9000/buildlauncher/Duke3D/Campaigns/duke3d-horror-castle_v6_4.zip",
+      "Title": "Horror Castle",
+      "Version": "6.4",
+      "FileSize": 91708206,
+      "Description": "https://www.moddb.com/mods/duke-nukem-horror-castle/\r\n\r\nHorror theme, new enemies new art new weapons. Awesome Castles.",
+      "Author": "William Gee",
+      "UpdateDate": "2025-12-11T10:55:37.1036842Z",
+      "MD5": "9EC2674D9C8731D645FC9279C599F830"
+    },
+    {
+      "Id": "duke3d-dick-suckem",
+      "AddonType": "TC",
+      "Game": "Duke3D",
+      "DownloadUrl": "http://176.222.52.233:9000/buildlauncher/Duke3D/Campaigns/duke3d-dick-suckem_v1_1.zip",
+      "Title": "Dick Suckem",
+      "Version": "1.1",
+      "FileSize": 56379086,
+      "Description": "https://www.moddb.com/games/duke-nukem-3d/addons/ms-paint-duke-nukem-dick-suckem\r\n\r\nDuke Nukem 3D but all sprites and graphics are redrawn using MSPAINT. Nothing serious. Just a joke mod made for fun and also to test my patience.",
+      "UpdateDate": "2025-12-11T11:04:05.6065652Z",
+      "MD5": "EEA2062D67295F90656E0C11840CBF21"
+    },
+    {
+      "Id": "duke3d-dnf2013",
+      "AddonType": "TC",
+      "Game": "Duke3D",
+      "DownloadUrl": "http://176.222.52.233:9000/buildlauncher/Duke3D/Campaigns/duke3d-dnf2013_v1_03.zip",
+      "Title": "Duke Nukem Forever 2013",
+      "Version": "1.03",
+      "FileSize": 44955765,
+      "Description": "https://msdn.duke4.net/dnf2013.php\n\nDuke Nukem Forever 2013 is a 5-level mod for Duke Nukem 3D. It\u0027s essentially what Duke Nukem Forever, the game, might have been if it had been released as an expansion for Duke Nukem 3D. The assets and the levels have been greatly influenced and inspired by the 2001 Duke Nukem Forever E3 trailer, the very trailer that seemed to promise the imminent arrival of the best video game ever. Other trailers and preview screenshots were also used as sources.\n\nAlso includes 3-map DLC.",
+      "Author": "Gambini, Mikko Sandt, DavoX, Micky C",
+      "UpdateDate": "2025-12-11T11:09:58.719053Z",
+      "MD5": "C8FBF0872578027CE4CC294254903476"
+    },
+    {
+      "Id": "duke3d-airport-west",
+      "AddonType": "Map",
+      "Game": "Duke3D",
+      "DownloadUrl": "http://176.222.52.233:9000/buildlauncher/Duke3D/Maps/duke3d-airport-west_v1_0.zip",
+      "Title": "Airport West",
+      "Version": "1.0",
+      "FileSize": 193868,
+      "Description": "Duke sits on his sleazy motel bed, the cable tv he is watching stops for an important newsflash. The local airport \u0027Airport West\u0027 has been taken over by those alien bastards (will the action ever stop!!?). The aliens are hijacking planes and transporting their force around the world. \r\nTwo small airbuses have already touched down in Airport West and another Airbus300 full of alien scum is expected shortly.\r\nDukes pager beeps, \u0022Duke, get to the control tower, disable the airport radar... FORCEFULLY! Do it now!\u0022 \u0022I think this is one plane Airbus can afford to lose!\u0022 Duke says with a grin, he grabs his pistol, and on que a space creep kicks open the door...",
+      "Author": "Rob McCall",
+      "UpdateDate": "2025-12-12T17:02:56.3012134Z",
+      "MD5": "2285FAFD46D9000655800ECBF4B6C7DD"
+    },
+    {
+      "Id": "duke3d-duke-craft",
+      "AddonType": "Map",
+      "Game": "Duke3D",
+      "DownloadUrl": "http://176.222.52.233:9000/buildlauncher/Duke3D/Maps/duke3d-duke-craft_v1_0.zip",
+      "Title": "Duke Craft",
+      "Version": "1.0",
+      "FileSize": 4794473,
+      "Description": "http://eddyprojects.blogspot.com\r\n\r\nDuke Craft is a combination of DN3D mechanics and Minecraft-like level design. The story is simple - aliens stole Duke\u0027s hard earned diamonds and he has to get them back.\r\n\r\nThe map includes some features taken from Minecraft, like crafting or using of torches to light the areas. No additional code used, only new textures",
+      "Author": "Zykov Eddy",
+      "UpdateDate": "2025-12-12T17:02:56.4816086Z",
+      "MD5": "5C242589A87893B306685C2F39F8BA93"
+    },
+    {
+      "Id": "duke3d-redrock",
+      "AddonType": "Map",
+      "Game": "Duke3D",
+      "DownloadUrl": "http://176.222.52.233:9000/buildlauncher/Duke3D/Maps/duke3d-redrock_v1_0.zip",
+      "Title": "RedRock",
+      "Version": "1.0",
+      "FileSize": 216796,
+      "Description": "https://dnr.duke4.net/maps/Redrock.html\r\nThis level looks best with the classic rendering, because the OpenGL or the Direct3D rendering smudge the colors (the red rocks look atrociously). And I want you to expect the unexpected, because you will be surprised!",
+      "Author": "Markus Schopf (Suppressor)",
+      "UpdateDate": "2025-12-12T17:02:56.6420041Z",
+      "MD5": "67325910A94653D6479AA89B668213B7"
+    },
+    {
+      "Id": "duke3d-sewer",
+      "AddonType": "Map",
+      "Game": "Duke3D",
+      "DownloadUrl": "http://176.222.52.233:9000/buildlauncher/Duke3D/Maps/duke3d-sewer_v1_0.zip",
+      "Title": "Sewer",
+      "Version": "1.0",
+      "FileSize": 64434,
+      "Description": "https://dnr.duke4.net/maps/Sewer.html\r\nA map released by the \u0027Levelord\u0027, Sewer is an urban-themed map which resembles the quality of the original Duke levels.",
+      "Author": "Richard Bailey Gray (The Levelord)",
+      "UpdateDate": "2025-12-12T17:02:56.8115675Z",
+      "MD5": "5FBD43CC796BB87490FBAF4FC7B33C38"
+    },
+    {
+      "Id": "duke3d-sweeny",
+      "AddonType": "Map",
+      "Game": "Duke3D",
+      "DownloadUrl": "http://176.222.52.233:9000/buildlauncher/Duke3D/Maps/duke3d-sweeny_v1_0.zip",
+      "Title": "Sweeny",
+      "Version": "1.0",
+      "FileSize": 40532,
+      "Description": "https://dnr.duke4.net/maps/Sweeney.html\r\nAnother map released by the Levelord, Sweeney follows a similar vein to Sewer - green stuff which hurts you, lots of dark places, plenty of level ripping explosions and octabrains roaming the joint.",
+      "Author": "Richard Bailey Gray (The Levelord)",
+      "UpdateDate": "2025-12-12T17:02:56.9817011Z",
+      "MD5": "F0E896CBFBE6E13F74379FF18422063B"
+    },
+    {
+      "Id": "duke3d-urea-51-pc-version",
+      "AddonType": "Map",
+      "Game": "Duke3D",
+      "DownloadUrl": "http://176.222.52.233:9000/buildlauncher/Duke3D/Maps/duke3d-urea-51-pc-version_v1_0.zip",
+      "Title": "Urea 51 (PC version)",
+      "Version": "1.0",
+      "FileSize": 4495840,
+      "Description": "https://forums.duke4.net/topic/7744-urea-51-pc-version/\r\nUrea 51 is one of the most obscure Duke 3D levels, coming straight from the Sega Saturn version of Duke Nukem 3D, originally made by Lobotomy Software. So, when I finally got my own Saturn and played the game, I couldn\u0027t resist not to make a PC version of the level. I ported the level without using any converting tools and it\u0027s slightly different from the original version (the layout is the same, though). I also used some tricks to emulate the features of the SlaveDriver engine. Have fun!\r\nP.S - the original version is hard as hell, because of the instant deathtraps, and it took me many tries to complete. God I hate the Saturn Port, it\u0027s so unfair at times.",
+      "Author": "Zykov Eddy",
+      "UpdateDate": "2025-12-12T17:02:57.1735351Z",
+      "MD5": "95C1725FA2BCB0185475A3ACEE11FA76"
+    },
+    {
+      "Id": "duke3d-3d-skyboxes",
+      "AddonType": "Mod",
+      "Game": "Duke3D",
+      "DownloadUrl": "http://176.222.52.233:9000/buildlauncher/Duke3D/Mods/duke3d-3d-skyboxes_v1_0.zip",
+      "Title": "3D Skyboxes",
+      "Version": "1.0",
+      "FileSize": 9905499,
+      "Description": "https://forums.duke4.net/topic/8940-3d-classic-skyboxes-pack/\r\n\r\n3D classic skyboxes pack.",
+      "Author": "Fox",
+      "UpdateDate": "2025-12-12T17:28:39.1445104Z",
+      "MD5": "4CD188977DA1A3820F3985690B0EA10D"
     }
   ],
   "Blood": [
@@ -2468,6 +2572,45 @@
       "Author": "BloodyTom",
       "UpdateDate": "2025-12-06T18:56:22.8999393Z",
       "MD5": "6B237C423AB388D3F7C49F7464F7A8EE"
+    },
+    {
+      "Id": "blood-somewhere-under-the-sea",
+      "AddonType": "TC",
+      "Game": "Blood",
+      "DownloadUrl": "http://176.222.52.233:9000/buildlauncher/Blood/Campaigns/blood-somewhere-under-the-sea_v1_0.zip",
+      "Title": "Somewhere Under the Sea",
+      "Version": "1.0",
+      "FileSize": 332653,
+      "Description": "This is a 3 level episode created around my Rapture map. All maps are coop, bbath, and teams compatible. The episode is fairly difficult.",
+      "Author": "SpillSomeBlood",
+      "UpdateDate": "2025-12-11T10:46:55.3576692Z",
+      "MD5": "4F891F5727BBF9412F9B8B7677DFF791"
+    },
+    {
+      "Id": "blood-its-a-war-out-there-duology",
+      "AddonType": "TC",
+      "Game": "Blood",
+      "DownloadUrl": "http://176.222.52.233:9000/buildlauncher/Blood/Campaigns/blood-its-a-war-out-there-duology_v1_0.zip",
+      "Title": "It\u0027s a War Out There Duology",
+      "Version": "1.0",
+      "FileSize": 13570431,
+      "Description": "One beautiful cloudy day you were sitting in your shack very, very, bored. You wished to go outside and look for something to do, but being as it is a war out there, there is a bunch of mean evil nasty things outside that wish to harm you. \r\n\r\nAfter a while of thinking about this situation, you come to the conclusion that the mean evil nasty things outside could be the very solution to your boredom. Sure they wish to harm you, but could you not harm them as well?\r\n\r\nAn evil smile streches  across your face as you grab your shotgun and rush out the door.",
+      "Author": "TOT COMICS",
+      "UpdateDate": "2025-12-12T16:57:56.9024339Z",
+      "MD5": "038082D04AF097FD51F69939C3738D8D"
+    },
+    {
+      "Id": "blood-crypts-of-the-cruel",
+      "AddonType": "TC",
+      "Game": "Blood",
+      "DownloadUrl": "http://176.222.52.233:9000/buildlauncher/Blood/Campaigns/blood-crypts-of-the-cruel_v1_0.zip",
+      "Title": "Crypts of the Cruel",
+      "Version": "1.0",
+      "FileSize": 436032,
+      "Description": "https://www.moddb.com/mods/bloodlines-out-of-the-grave-edition/downloads/crypts-of-the-cruel-trilogy-a-bloodlines-prequel-refreshed-supply-exclusive\r\n\r\nCrypts of the Cruel is a trilogy of maps, each designed to play individually or as a whole.\r\n\r\nThey follow Caleb through the beginnings of an encounter with a dark force known as the Cruel. The Cruel has been unleashed on the world through the cracks of reality as something far more powerful is coming... The Beginning of the End is about to be written....\r\n\r\nIt is filled with cheesy movie references, jokes, and blasting hundreds of Cabal and creatures... Aka classic Bloody fun.",
+      "Author": "daMann",
+      "UpdateDate": "2025-12-12T17:57:43.3802547Z",
+      "MD5": "D7A249EBBFD2B1FF1A09C34AA6C8EEEE"
     }
   ],
   "Wang": [
