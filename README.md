@@ -69,23 +69,6 @@ Another goal of this project is to create a unification standard for Build Engin
 
 <tr>
 <td align="center" valign="middle">
-<b>What's planned</b>
-</td>
-</tr>
-
-<tr>
-<td valign="center">
-<img align="right" src="img/img4.png">
-
-- DosBox support
-- More downloadable maps, campaigns and mods
-- Linux/Deck support
-
-</td>
-</tr>
-
-<tr>
-<td align="center" valign="middle">
 <b>How to use</b>
 </td>
 </tr>
@@ -96,6 +79,22 @@ Another goal of this project is to create a unification standard for Build Engin
 Download latest release for your platform from <a href="https://github.com/fgsfds/BuildLauncher/releases">release page</a>
 
 Unpack zip archive anywhere and run <b>BuildLauncher.exe</b>
+
+</td>
+</tr>
+
+<tr>
+<td align="center" valign="middle">
+<b>More</b>
+</td>
+</tr>
+
+<tr>
+<td valign="center">
+
+Want to create and submit your own addons? Learn about addons specifications? Care about security and privacy?
+
+Check [WIKI](https://github.com/fgsfds/BuildLauncher/wiki) for more information.
 
 </td>
 </tr>
