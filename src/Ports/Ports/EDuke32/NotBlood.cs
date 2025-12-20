@@ -41,5 +41,7 @@ public sealed class NotBlood : NBlood
     public override void BeforeStart(BaseGame game, BaseAddon campaign)
     {
         MoveSaveFilesFromGameFolder(game, campaign);
+
+        FixConfig();
     }
 }

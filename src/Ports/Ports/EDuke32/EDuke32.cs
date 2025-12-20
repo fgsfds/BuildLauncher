@@ -160,7 +160,7 @@ public class EDuke32 : BasePort
     {
         MoveSaveFilesFromGameFolder(game, campaign);
 
-        FixGrpInConfig();
+        FixConfig();
 
         FixWtFiles(game, campaign);
     }
@@ -345,9 +345,9 @@ public class EDuke32 : BasePort
 
 
     /// <summary>
-    /// Remove GRP files from the config
+    /// Remove leftovers from the config
     /// </summary>
-    protected void FixGrpInConfig()
+    protected void FixConfig()
     {
         var config = Path.Combine(PortInstallFolderPath, ConfigFile);
 
@@ -360,10 +360,20 @@ public class EDuke32 : BasePort
 
         for (var i = 0; i < contents.Length; i++)
         {
-            if (contents[i].StartsWith("SelectedGRP"))
+            if (contents[i].StartsWith("SelectedGRP", StringComparison.OrdinalIgnoreCase))
             {
                 contents[i] = @"SelectedGRP = """"";
-                break;
+                continue;
+            }
+            else if (contents[i].StartsWith("LastINI", StringComparison.OrdinalIgnoreCase))
+            {
+                contents[i] = string.Empty;
+                continue;
+            }
+            else if (contents[i].StartsWith("ModDir", StringComparison.OrdinalIgnoreCase))
+            {
+                contents[i] = string.Empty;
+                continue;
             }
         }
 

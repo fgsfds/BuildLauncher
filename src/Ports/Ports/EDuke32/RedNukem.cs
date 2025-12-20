@@ -67,7 +67,7 @@ public sealed class RedNukem : EDuke32
 
         MoveSaveFilesFromGameFolder(game, campaign);
 
-        FixGrpInConfig();
+        FixConfig();
 
         FixRoute66Files(game, campaign);
 

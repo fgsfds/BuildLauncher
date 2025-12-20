@@ -70,7 +70,7 @@ public sealed class VoidSW : EDuke32
     {
         MoveSaveFilesFromGameFolder(game, campaign);
 
-        FixGrpInConfig();
+        FixConfig();
     }
 
 

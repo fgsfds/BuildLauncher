@@ -37,6 +37,8 @@ public sealed class PCExhumed : EDuke32
     public override void BeforeStart(BaseGame game, BaseAddon campaign)
     {
         MoveSaveFilesFromGameFolder(game, campaign);
+
+        FixConfig();
     }
 
 
