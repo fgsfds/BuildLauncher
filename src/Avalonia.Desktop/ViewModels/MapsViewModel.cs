@@ -126,8 +126,8 @@ public sealed partial class MapsViewModel : RightPanelViewModel, IPortsButtonCon
         _gamesProvider = gamesProvider;
         _config = config;
         _playtimeProvider = playtimeProvider;
-        _installedAddonsProvider = installedAddonsProviderFactory.GetSingleton(game);
-        _downloadableAddonsProvider = _downloadableAddonsProviderFactory.GetSingleton(game);
+        _installedAddonsProvider = installedAddonsProviderFactory.Get(game);
+        _downloadableAddonsProvider = _downloadableAddonsProviderFactory.Get(game);
         _portStarter = portStarter;
         _logger = logger;
 

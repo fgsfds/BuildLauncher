@@ -11,14 +11,14 @@ namespace Avalonia.Desktop.Misc;
 
 public sealed class ViewLocator : IDataTemplate
 {
-    private readonly InstalledPortsProvider _installedPortsProvider;
+    private readonly PortsProvider _installedPortsProvider;
     private readonly InstalledAddonsProviderFactory _installedAddonsProviderFactory;
     private readonly BitmapsCache _bitmapsCache;
 
     private readonly Dictionary<object, UserControl> _controlsCache = [];
 
     public ViewLocator(
-        InstalledPortsProvider installedPortsProvider,
+        PortsProvider installedPortsProvider,
         InstalledAddonsProviderFactory installedAddonsProviderFactory,
         BitmapsCache bitmapsCache
         )
@@ -37,9 +37,9 @@ public sealed class ViewLocator : IDataTemplate
 
         var newControl = data switch
         {
-            CampaignsViewModel campsVm => new CampaignsControl(campsVm, _installedPortsProvider, _installedAddonsProviderFactory.GetSingleton(campsVm.Game), _bitmapsCache),
-            MapsViewModel mapsVm => new MapsControl(mapsVm, _installedPortsProvider, _installedAddonsProviderFactory.GetSingleton(mapsVm.Game), _bitmapsCache),
-            ModsViewModel modsVM => new ModsControl(_installedAddonsProviderFactory.GetSingleton(modsVM.Game)),
+            CampaignsViewModel campsVm => new CampaignsControl(campsVm, _installedPortsProvider, _installedAddonsProviderFactory.Get(campsVm.Game), _bitmapsCache),
+            MapsViewModel mapsVm => new MapsControl(mapsVm, _installedPortsProvider, _installedAddonsProviderFactory.Get(mapsVm.Game), _bitmapsCache),
+            ModsViewModel modsVM => new ModsControl(_installedAddonsProviderFactory.Get(modsVM.Game)),
             DownloadsViewModel => new DownloadsControl(),
             _ => ThrowHelper.ThrowNotSupportedException<UserControl>($"Can't find control for {data} ViewModel.")
         };

@@ -21,10 +21,10 @@ public sealed class ViewModelsFactory
 {
     private readonly InstalledGamesProvider _gamesProvider;
     private readonly IConfigProvider _config;
-    private readonly PortsInstallerFactory _portsInstallerFactory;
-    private readonly ToolsInstallerFactory _toolsInstallerFactory;
-    private readonly InstalledPortsProvider _portsProvider;
-    private readonly InstalledToolsProvider _toolsProvider;
+    private readonly PortInstallerFactory _portsInstallerFactory;
+    private readonly ToolInstallerFactory _toolsInstallerFactory;
+    private readonly PortsProvider _portsProvider;
+    private readonly ToolsProvider _toolsProvider;
     private readonly PlaytimeProvider _playtimeProvider;
     private readonly IApiInterface _apiInterface;
     private readonly RatingProvider _ratingProvider;
@@ -42,10 +42,10 @@ public sealed class ViewModelsFactory
     public ViewModelsFactory(
         InstalledGamesProvider gamesProvider,
         IConfigProvider IConfigProvider,
-        PortsInstallerFactory portsInstallerFactory,
-        ToolsInstallerFactory toolsInstallerFactory,
-        InstalledPortsProvider portsProvider,
-        InstalledToolsProvider toolsProvider,
+        PortInstallerFactory portsInstallerFactory,
+        ToolInstallerFactory toolsInstallerFactory,
+        PortsProvider portsProvider,
+        ToolsProvider toolsProvider,
         PlaytimeProvider playtimeProvider,
         IApiInterface apiInterface,
         RatingProvider ratingProvider,

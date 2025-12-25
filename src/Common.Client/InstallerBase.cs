@@ -1,10 +1,12 @@
 ﻿using System.Security.Cryptography;
 using Common.All.Serializable.Downloadable;
-using Ports.Ports;
+using Common.Client.Interfaces;
+using Common.Client.Tools;
 
-namespace Common.Client.Tools;
+namespace Common.Client;
 
-public abstract class InstallerBase<T> where T : IInstallable
+public abstract class InstallerBase<T>
+    where T : IInstallable
 {
     protected readonly T _instance;
     private readonly FilesDownloader _filesDownloader;
@@ -118,8 +120,5 @@ public abstract class InstallerBase<T> where T : IInstallable
         }
     }
 
-    protected void OnProgressChanged(object? _, float e)
-    {
-        ((IProgress<float>)Progress).Report(e);
-    }
+    protected void OnProgressChanged(object? _, float e) => ((IProgress<float>)Progress).Report(e);
 }

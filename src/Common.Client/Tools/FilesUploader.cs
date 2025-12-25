@@ -1,6 +1,5 @@
 ﻿using System.Security.Cryptography;
 using System.Text.Json;
-using System.Threading;
 using Common.All.Enums;
 using Common.All.Helpers;
 using Common.All.Serializable.Addon;
@@ -8,7 +7,6 @@ using Common.All.Serializable.Downloadable;
 using Common.Client.Interfaces;
 using CommunityToolkit.Diagnostics;
 using SharpCompress.Archives.Zip;
-using SharpCompress.Common;
 
 namespace Common.Client.Tools;
 

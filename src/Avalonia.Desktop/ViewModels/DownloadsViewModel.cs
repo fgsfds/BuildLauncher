@@ -145,8 +145,8 @@ public sealed partial class DownloadsViewModel : ObservableObject
     {
         Game = game;
 
-        _installedAddonsProvider = installedAddonsProviderFactory.GetSingleton(game);
-        _downloadableAddonsProvider = downloadableAddonsProviderFactory.GetSingleton(game);
+        _installedAddonsProvider = installedAddonsProviderFactory.Get(game);
+        _downloadableAddonsProvider = downloadableAddonsProviderFactory.Get(game);
         _logger = logger;
 
         _installedAddonsProvider.AddonsChangedEvent += OnAddonChanged;

@@ -11,8 +11,8 @@ public static class ProvidersBindings
 {
     public static void Load(ServiceCollection container)
     {
-        _ = container.AddSingleton<PortsInstallerFactory>();
-        _ = container.AddSingleton<InstalledPortsProvider>();
+        _ = container.AddSingleton<PortInstallerFactory>();
+        _ = container.AddSingleton<PortsProvider>();
         _ = container.AddSingleton<PortStarter>();
         _ = container.AddSingleton<IReleaseProvider<PortEnum>, PortsReleasesProvider>();
     }

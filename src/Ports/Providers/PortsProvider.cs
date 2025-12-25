@@ -12,7 +12,7 @@ namespace Ports.Providers;
 /// <summary>
 /// Class that provides singleton instances of port types
 /// </summary>
-public sealed class InstalledPortsProvider
+public sealed class PortsProvider
 {
     private readonly IDbContextFactory<DatabaseContext> _dbContextFactory;
 
@@ -21,7 +21,7 @@ public sealed class InstalledPortsProvider
 
     public event EventHandler? CustomPortChangedEvent;
 
-    public InstalledPortsProvider(
+    public PortsProvider(
         IDbContextFactory<DatabaseContext> dbContextFactory,
         IEnumerable<BasePort> ports
         )

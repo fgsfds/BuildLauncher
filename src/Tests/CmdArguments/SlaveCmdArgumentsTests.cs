@@ -10,7 +10,7 @@ namespace Tests.CmdArguments;
 public sealed class SlaveCmdArgumentsTests
 {
     private readonly SlaveGame _slaveGame;
-    private readonly GenericCampaignEntity _slaveCamp;
+    private readonly GenericCampaign _slaveCamp;
 
     private readonly AutoloadModsProvider _modsProvider;
 
@@ -49,7 +49,7 @@ public sealed class SlaveCmdArgumentsTests
     [Fact]
     public void RazeTest()
     {
-        var mods = new List<AutoloadModEntity>() {
+        var mods = new List<AutoloadMod>() {
             _modsProvider.EnabledMod,
             _modsProvider.IncompatibleMod,
         }.ToDictionary(x => x.AddonId, x => (BaseAddon)x);
@@ -92,7 +92,7 @@ public sealed class SlaveCmdArgumentsTests
     [Fact]
     public void PCExhumedTest()
     {
-        var mods = new List<AutoloadModEntity>() {
+        var mods = new List<AutoloadMod>() {
             _modsProvider.EnabledMod,
             _modsProvider.IncompatibleMod,
         }.ToDictionary(x => x.AddonId, x => (BaseAddon)x);

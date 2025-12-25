@@ -18,7 +18,7 @@ public sealed partial class PortViewModel : ObservableObject
 {
     public BasePort Port { get; init; }
 
-    private readonly PortsInstallerFactory _installerFactory;
+    private readonly PortInstallerFactory _installerFactory;
     private readonly IApiInterface _apiInterface;
     private GeneralReleaseJsonModel? _release;
     private readonly ILogger _logger;
@@ -29,7 +29,7 @@ public sealed partial class PortViewModel : ObservableObject
 
     [Obsolete($"Don't create directly. Use {nameof(ViewModelsFactory)}.")]
     public PortViewModel(
-        PortsInstallerFactory installerFactory,
+        PortInstallerFactory installerFactory,
         IApiInterface apiInterface,
         BasePort port,
         ILogger logger
@@ -241,7 +241,7 @@ public sealed partial class PortViewModel : ObservableObject
     [RelayCommand]
     private async Task InstallAsync()
     {
-        PortsInstaller? installer = null;
+        PortInstaller? installer = null;
 
         try
         {

@@ -29,10 +29,10 @@ public sealed class InstalledAddonsProviderFactory
     }
 
     /// <summary>
-    /// Get or create singleton instance of the provider
+    /// Get or create singleton instance of the provider.
     /// </summary>
-    /// <param name="game">Game</param>
-    public InstalledAddonsProvider GetSingleton(BaseGame game)
+    /// <param name="game">Game.</param>
+    public InstalledAddonsProvider Get(BaseGame game)
     {
         if (_list.TryGetValue(game.GameEnum, out var value))
         {

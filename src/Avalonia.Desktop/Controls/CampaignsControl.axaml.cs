@@ -23,7 +23,7 @@ public sealed partial class CampaignsControl : DroppableControl
 
     private readonly IEnumerable<BasePort> _supportedPorts;
     private readonly CampaignsViewModel _viewModel;
-    private readonly InstalledPortsProvider _portsProvider;
+    private readonly PortsProvider _portsProvider;
     private readonly BitmapsCache _bitmapsCache;
 
     private ImplicitAnimationCollection? _implicitAnimations;
@@ -40,7 +40,7 @@ public sealed partial class CampaignsControl : DroppableControl
 
     public CampaignsControl(
         CampaignsViewModel viewModel,
-        InstalledPortsProvider portsProvider,
+        PortsProvider portsProvider,
         InstalledAddonsProvider installedAddonsProvider,
         BitmapsCache bitmapsCache
         ) : base(installedAddonsProvider)

@@ -51,7 +51,7 @@ public sealed class PortStarter
 
         port.BeforeStart(game, addon);
 
-        var installedAddonsProvider = _installedAddonsProviderFactory.GetSingleton(game);
+        var installedAddonsProvider = _installedAddonsProviderFactory.Get(game);
         var mods = installedAddonsProvider.GetInstalledAddonsByType(AddonTypeEnum.Mod);
 
         var args = port.GetStartGameArgs(game, addon, mods, enabledOptions, skipIntro, skipStartup, skill);

@@ -17,7 +17,7 @@ public sealed partial class ToolViewModel : ObservableObject
 {
     public BaseTool Tool { get; init; }
 
-    private readonly ToolsInstallerFactory _installerFactory;
+    private readonly ToolInstallerFactory _installerFactory;
     private readonly IApiInterface _apiInterface;
     private GeneralReleaseJsonModel? _release;
     private readonly ILogger _logger;
@@ -28,7 +28,7 @@ public sealed partial class ToolViewModel : ObservableObject
 
     [Obsolete($"Don't create directly. Use {nameof(ViewModelsFactory)}.")]
     public ToolViewModel(
-        ToolsInstallerFactory installerFactory,
+        ToolInstallerFactory installerFactory,
         IApiInterface apiInterface,
         BaseTool tool,
         ILogger logger
@@ -197,7 +197,7 @@ public sealed partial class ToolViewModel : ObservableObject
     [RelayCommand]
     private async Task InstallAsync()
     {
-        ToolsInstaller? installer = null;
+        ToolInstaller? installer = null;
 
         try
         {

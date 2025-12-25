@@ -217,7 +217,7 @@ public sealed class InstalledAddonsProvider
             //enabling/disabling addons
             foreach (var mod in _modsCache)
             {
-                if (mod.Value is not AutoloadModEntity autoloadMod)
+                if (mod.Value is not AutoloadMod autoloadMod)
                 {
                     _logger.LogError($"=== Error while enabling/disabling addon {mod.Key.Id}");
                     continue;
@@ -310,7 +310,7 @@ public sealed class InstalledAddonsProvider
             File.Delete(addon.PathToFile);
         }
 
-        if (addon is LooseMapEntity lMap)
+        if (addon is LooseMap lMap)
         {
             var files = Directory.GetFiles(Path.GetDirectoryName(addon.PathToFile)!, $"{Path.GetFileNameWithoutExtension(lMap.FileName)!}.*");
 
@@ -344,7 +344,7 @@ public sealed class InstalledAddonsProvider
     {
         var existing = _modsCache.FirstOrDefault(x => x.Key.Equals(addon));
 
-        if (existing.Value is not AutoloadModEntity autoloadMod)
+        if (existing.Value is not AutoloadMod autoloadMod)
         {
             return;
         }
@@ -395,7 +395,7 @@ public sealed class InstalledAddonsProvider
     {
         var existing = _modsCache.FirstOrDefault(x => x.Key.Equals(addon));
 
-        if (existing.Value is not AutoloadModEntity autoloadMod)
+        if (existing.Value is not AutoloadMod autoloadMod)
         {
             return;
         }
@@ -518,7 +518,7 @@ public sealed class InstalledAddonsProvider
                 {
                     try
                     {
-                        if (newAddon is AutoloadModEntity &&
+                        if (newAddon is AutoloadMod &&
                             addedAddons.TryGetValue(newAddon.AddonId, out var existingMod))
                         {
                             if (existingMod.AddonId.Version is null &&
@@ -651,7 +651,7 @@ public sealed class InstalledAddonsProvider
             var iniExists = File.Exists(bloodIni);
             AddonId id = new(Path.GetFileName(pathToFile), null);
 
-            var addon = new LooseMapEntity()
+            var addon = new LooseMap()
             {
                 AddonId = id,
                 Type = AddonTypeEnum.Map,
@@ -774,7 +774,7 @@ public sealed class InstalledAddonsProvider
 
                 AddonId id = new(carcass.Id, carcass.Version);
 
-                var addon = new AutoloadModEntity()
+                var addon = new AutoloadMod()
                 {
                     AddonId = id,
                     Type = AddonTypeEnum.Mod,
@@ -810,7 +810,7 @@ public sealed class InstalledAddonsProvider
                     or GameEnum.NAM
                     or GameEnum.WW2GI)
                 {
-                    var addon = new DukeCampaignEntity()
+                    var addon = new DukeCampaign()
                     {
                         AddonId = new(carcass.Id, carcass.Version),
                         Type = carcass.Type,
@@ -840,7 +840,7 @@ public sealed class InstalledAddonsProvider
                 }
                 else if (_game.GameEnum is GameEnum.Wang)
                 {
-                    var addon = new GenericCampaignEntity()
+                    var addon = new GenericCampaign()
                     {
                         AddonId = new(carcass.Id, carcass.Version),
                         Type = carcass.Type,
@@ -867,7 +867,7 @@ public sealed class InstalledAddonsProvider
                 }
                 else if (_game.GameEnum is GameEnum.Blood)
                 {
-                    var addon = new BloodCampaignEntity()
+                    var addon = new BloodCampaign()
                     {
                         AddonId = new(carcass.Id, carcass.Version),
                         Type = carcass.Type,
@@ -897,7 +897,7 @@ public sealed class InstalledAddonsProvider
                 }
                 else if (_game.GameEnum is GameEnum.Slave)
                 {
-                    var addon = new GenericCampaignEntity()
+                    var addon = new GenericCampaign()
                     {
                         AddonId = new(carcass.Id, carcass.Version),
                         Type = carcass.Type,
@@ -924,7 +924,7 @@ public sealed class InstalledAddonsProvider
                 }
                 else if (_game.GameEnum is GameEnum.Standalone)
                 {
-                    var addon = new StandaloneEntity()
+                    var addon = new Addons.StandaloneGame()
                     {
                         AddonId = new(carcass.Id, carcass.Version),
                         Type = carcass.Type,

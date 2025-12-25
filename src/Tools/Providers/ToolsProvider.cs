@@ -7,11 +7,11 @@ namespace Tools.Providers;
 /// <summary>
 /// Class that provides singleton instances of tool types
 /// </summary>
-public sealed class InstalledToolsProvider
+public sealed class ToolsProvider
 {
     private readonly Dictionary<ToolEnum, BaseTool> _tools = [];
 
-    public InstalledToolsProvider(IEnumerable<BaseTool> tools)
+    public ToolsProvider(IEnumerable<BaseTool> tools)
     {
         if (!Directory.Exists(ClientProperties.ToolsFolderPath))
         {

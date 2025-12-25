@@ -29,7 +29,7 @@ public sealed partial class MapsControl : DroppableControl
 
     public MapsControl(
         MapsViewModel viewModel,
-        InstalledPortsProvider portsProvider,
+        PortsProvider portsProvider,
         InstalledAddonsProvider installedAddonsProvider,
         BitmapsCache bitmapsCache
         ) : base(installedAddonsProvider)

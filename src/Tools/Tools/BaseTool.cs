@@ -1,8 +1,8 @@
 ﻿using Common.All.Enums;
 using Common.All.Helpers;
 using Common.Client.Helpers;
+using Common.Client.Interfaces;
 using CommunityToolkit.Diagnostics;
-using Ports.Ports;
 
 namespace Tools.Tools;
 
@@ -47,19 +47,13 @@ public abstract class BaseTool : IInstallable
     /// </summary>
     public abstract string Name { get; }
 
-    /// <summary>
-    /// Is tool installed
-    /// </summary>
+    /// <inheritdoc/>
     public bool IsInstalled => InstalledVersion is not null;
 
-    /// <summary>
-    /// Path to tool install folder
-    /// </summary>
+    /// <inheritdoc/>
     public virtual string InstallFolderPath => Path.Combine(ClientProperties.ToolsFolderPath, Name);
 
-    /// <summary>
-    /// Currently installed version
-    /// </summary>
+    /// <inheritdoc/>
     public virtual string? InstalledVersion
     {
         get

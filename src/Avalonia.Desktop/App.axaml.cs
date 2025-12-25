@@ -85,7 +85,7 @@ public sealed class App : Application
         logger.LogInformation($"Operating system: {Environment.OSVersion}");
         logger.LogInformation($"Working folder is {ClientProperties.WorkingFolder}");
 
-        var portsProvider = BindingsManager.Provider.GetRequiredService<InstalledPortsProvider>();
+        var portsProvider = BindingsManager.Provider.GetRequiredService<PortsProvider>();
         RenameSaveFolder(portsProvider);
 
         try
@@ -113,7 +113,7 @@ public sealed class App : Application
 
 
     [Obsolete("Remove some time later")]
-    private static void RenameSaveFolder(InstalledPortsProvider portsProvider)
+    private static void RenameSaveFolder(PortsProvider portsProvider)
     {
         IEnumerable<string> paths =
             [

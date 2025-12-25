@@ -63,7 +63,7 @@ public sealed class OriginalCampaignsProvider
             var dukeWtId = nameof(DukeVersionEnum.Duke3D_WT).ToLower();
             AddonId version = new(dukeWtId, null);
 
-            campaigns.Add(version, new DukeCampaignEntity()
+            campaigns.Add(version, new DukeCampaign()
             {
                 AddonId = version,
                 Type = AddonTypeEnum.Official,
@@ -103,7 +103,7 @@ public sealed class OriginalCampaignsProvider
                 var dukeId = nameof(GameEnum.Duke3D).ToLower();
                 AddonId version = new(dukeId, null);
 
-                campaigns.Add(version, new DukeCampaignEntity()
+                campaigns.Add(version, new DukeCampaign()
                 {
                     AddonId = version,
                     Type = AddonTypeEnum.Official,
@@ -141,7 +141,7 @@ public sealed class OriginalCampaignsProvider
                 var dukeVacaId = nameof(DukeAddonEnum.DukeVaca).ToLower();
                 AddonId version = new(dukeVacaId, null);
 
-                campaigns.Add(version, new DukeCampaignEntity()
+                campaigns.Add(version, new DukeCampaign()
                 {
                     AddonId = version,
                     Type = AddonTypeEnum.Official,
@@ -179,7 +179,7 @@ public sealed class OriginalCampaignsProvider
                 var dukeNwId = nameof(DukeAddonEnum.DukeNW).ToLower();
                 AddonId version = new(dukeNwId, null);
 
-                campaigns.Add(version, new DukeCampaignEntity()
+                campaigns.Add(version, new DukeCampaign()
                 {
                     AddonId = version,
                     Type = AddonTypeEnum.Official,
@@ -216,7 +216,7 @@ public sealed class OriginalCampaignsProvider
                 var dukeDcId = nameof(DukeAddonEnum.DukeDC).ToLower();
                 AddonId version = new(dukeDcId, null);
 
-                campaigns.Add(version, new DukeCampaignEntity()
+                campaigns.Add(version, new DukeCampaign()
                 {
                     AddonId = version,
                     Type = AddonTypeEnum.Official,
@@ -256,7 +256,7 @@ public sealed class OriginalCampaignsProvider
             var duke64Id = nameof(GameEnum.Duke64).ToLower();
             AddonId version = new(duke64Id, null);
 
-            campaigns.Add(version, new DukeCampaignEntity()
+            campaigns.Add(version, new DukeCampaign()
             {
                 AddonId = version,
                 Type = AddonTypeEnum.Official,
@@ -303,7 +303,7 @@ public sealed class OriginalCampaignsProvider
             var bloodId = nameof(GameEnum.Blood).ToLower();
             AddonId version = new(bloodId, null);
 
-            campaigns.Add(version, new BloodCampaignEntity()
+            campaigns.Add(version, new BloodCampaign()
             {
                 AddonId = version,
                 Type = AddonTypeEnum.Official,
@@ -346,7 +346,7 @@ public sealed class OriginalCampaignsProvider
             var bloodCpId = nameof(BloodAddonEnum.BloodCP).ToLower();
             AddonId version = new(bloodCpId, null);
 
-            campaigns.Add(version, new BloodCampaignEntity()
+            campaigns.Add(version, new BloodCampaign()
             {
                 AddonId = version,
                 Type = AddonTypeEnum.Official,
@@ -398,7 +398,7 @@ public sealed class OriginalCampaignsProvider
             var wangId = nameof(GameEnum.Wang).ToLower();
             AddonId version = new(wangId, null);
 
-            campaigns.Add(version, new GenericCampaignEntity()
+            campaigns.Add(version, new GenericCampaign()
             {
                 AddonId = version,
                 Type = AddonTypeEnum.Official,
@@ -444,7 +444,7 @@ public sealed class OriginalCampaignsProvider
             var furyId = nameof(GameEnum.Fury).ToLower();
             AddonId version = new(furyId, null);
 
-            campaigns.Add(version, new DukeCampaignEntity()
+            campaigns.Add(version, new DukeCampaign()
             {
                 AddonId = version,
                 Type = AddonTypeEnum.Official,
@@ -516,7 +516,7 @@ public sealed class OriginalCampaignsProvider
                 var redneckId = nameof(GameEnum.Redneck).ToLower();
                 AddonId version = new(redneckId, null);
 
-                campaigns.Add(version, new DukeCampaignEntity()
+                campaigns.Add(version, new DukeCampaign()
                 {
                     AddonId = version,
                     Type = AddonTypeEnum.Official,
@@ -556,7 +556,7 @@ public sealed class OriginalCampaignsProvider
                 var redneckR66Id = nameof(RedneckAddonEnum.Route66).ToLower();
                 AddonId version = new(redneckR66Id, null);
 
-                campaigns.Add(version, new DukeCampaignEntity()
+                campaigns.Add(version, new DukeCampaign()
                 {
                     AddonId = version,
                     Type = AddonTypeEnum.Official,
@@ -592,7 +592,7 @@ public sealed class OriginalCampaignsProvider
             var redneckRaId = nameof(GameEnum.RidesAgain).ToLower();
             AddonId version = new(redneckRaId, null);
 
-            campaigns.Add(version, new DukeCampaignEntity()
+            campaigns.Add(version, new DukeCampaign()
             {
                 AddonId = version,
                 Type = AddonTypeEnum.Official,
@@ -640,7 +640,7 @@ public sealed class OriginalCampaignsProvider
             var namId = nameof(GameEnum.NAM).ToLower();
             AddonId version = new(namId, null);
 
-            campaigns.Add(version, new DukeCampaignEntity()
+            campaigns.Add(version, new DukeCampaign()
             {
                 AddonId = version,
                 Type = AddonTypeEnum.Official,
@@ -693,7 +693,7 @@ public sealed class OriginalCampaignsProvider
             var ww2id = nameof(GameEnum.WW2GI).ToLower();
             AddonId version = new(ww2id, null);
 
-            campaigns.Add(version, new DukeCampaignEntity()
+            campaigns.Add(version, new DukeCampaign()
             {
                 AddonId = version,
                 Type = AddonTypeEnum.Official,
@@ -731,7 +731,7 @@ public sealed class OriginalCampaignsProvider
             var platoon = nameof(WW2GIAddonEnum.Platoon).ToLower();
             AddonId version = new(platoon, null);
 
-            campaigns.Add(version, new DukeCampaignEntity()
+            campaigns.Add(version, new DukeCampaign()
             {
                 AddonId = version,
                 Type = AddonTypeEnum.Official,
@@ -778,7 +778,7 @@ public sealed class OriginalCampaignsProvider
             var tekwarId = nameof(GameEnum.TekWar).ToLower();
             AddonId version = new(tekwarId, null);
 
-            campaigns.Add(version, new DukeCampaignEntity()
+            campaigns.Add(version, new DukeCampaign()
             {
                 AddonId = version,
                 Type = AddonTypeEnum.Official,
@@ -825,7 +825,7 @@ public sealed class OriginalCampaignsProvider
             var slaveId = nameof(GameEnum.Slave).ToLower();
             AddonId version = new(slaveId, null);
 
-            campaigns.Add(version, new GenericCampaignEntity()
+            campaigns.Add(version, new GenericCampaign()
             {
                 AddonId = version,
                 Type = AddonTypeEnum.Official,
@@ -875,7 +875,7 @@ public sealed class OriginalCampaignsProvider
             var whId = nameof(GameEnum.Witchaven).ToLower();
             AddonId version = new(whId, null);
 
-            campaigns.Add(version, new GenericCampaignEntity()
+            campaigns.Add(version, new GenericCampaign()
             {
                 AddonId = version,
                 Type = AddonTypeEnum.Official,
@@ -910,7 +910,7 @@ public sealed class OriginalCampaignsProvider
             var wh2Id = nameof(GameEnum.Witchaven2).ToLower();
             AddonId version = new(wh2Id, null);
 
-            campaigns.Add(version, new GenericCampaignEntity()
+            campaigns.Add(version, new GenericCampaign()
             {
                 AddonId = version,
                 Type = AddonTypeEnum.Official,

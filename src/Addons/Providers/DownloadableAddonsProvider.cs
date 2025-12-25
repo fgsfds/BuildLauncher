@@ -53,7 +53,7 @@ public sealed class DownloadableAddonsProvider
         _apiInterface = apiInterface;
         _logger = logger;
 
-        _installedAddonsProvider = installedAddonsProviderFactory.GetSingleton(_game);
+        _installedAddonsProvider = installedAddonsProviderFactory.Get(_game);
     }
 
     /// <summary>

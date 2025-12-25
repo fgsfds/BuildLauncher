@@ -297,14 +297,14 @@ public class EDuke32 : BasePort
             return;
         }
 
-        if (addon is LooseMapEntity)
+        if (addon is LooseMap)
         {
             GetLooseMapArgs(sb, game, addon);
             return;
         }
 
 
-        addon.ThrowIfNotType(out DukeCampaignEntity dCamp);
+        addon.ThrowIfNotType(out DukeCampaign dCamp);
 
 
         if (dCamp.MainCon is not null)

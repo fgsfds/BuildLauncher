@@ -113,14 +113,14 @@ public sealed class VoidSW : EDuke32
 
     private void GetWangArgs(StringBuilder sb, WangGame game, BaseAddon addon)
     {
-        if (addon is LooseMapEntity)
+        if (addon is LooseMap)
         {
             GetLooseMapArgs(sb, game, addon);
             return;
         }
 
 
-        addon.ThrowIfNotType<GenericCampaignEntity>(out var wCamp);
+        addon.ThrowIfNotType<GenericCampaign>(out var wCamp);
 
         if (wCamp.DependentAddons?.ContainsKey(nameof(WangAddonEnum.Wanton)) == true)
         {

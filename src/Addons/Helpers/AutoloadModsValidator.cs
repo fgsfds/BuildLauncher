@@ -14,7 +14,7 @@ public static class AutoloadModsValidator
     /// <param name="campaign">Campaign</param>
     /// <param name="mods">Autoload mods</param>
     /// <param name="features">Features supported by the port</param>
-    public static bool ValidateAutoloadMod(AutoloadModEntity autoloadMod, BaseAddon campaign, IEnumerable<KeyValuePair<AddonId, BaseAddon>> mods, List<FeatureEnum> features)
+    public static bool ValidateAutoloadMod(AutoloadMod autoloadMod, BaseAddon campaign, IEnumerable<KeyValuePair<AddonId, BaseAddon>> mods, List<FeatureEnum> features)
     {
         if (!autoloadMod.IsEnabled)
         {
@@ -82,7 +82,7 @@ public static class AutoloadModsValidator
     /// Check if addon has all required dependencies
     /// </summary>
     private static bool CheckDependencies(
-        AutoloadModEntity autoloadMod,
+        AutoloadMod autoloadMod,
         BaseAddon campaign,
         IEnumerable<KeyValuePair<AddonId, BaseAddon>> mods)
     {
@@ -136,14 +136,14 @@ public static class AutoloadModsValidator
     /// Checks if mod is incompatible with other enabled addons or campaign
     /// </summary>
     private static bool CheckIncompatibles(
-        AutoloadModEntity autoloadMod,
+        AutoloadMod autoloadMod,
         BaseAddon campaign,
         IEnumerable<KeyValuePair<AddonId, BaseAddon>> mods
         )
     {
         var campaignIncompatibles = campaign.IncompatibleAddons?.ToDictionary() ?? [];
         campaignIncompatibles.Add(campaign.AddonId.Id, campaign.AddonId.Version);
-        campaignIncompatibles.AddRange(mods.Where(x => x.Value is AutoloadModEntity { IsEnabled: true }).ToDictionary(x => x.Key.Id, x => x.Key.Version));
+        campaignIncompatibles.AddRange(mods.Where(x => x.Value is AutoloadMod { IsEnabled: true }).ToDictionary(x => x.Key.Id, x => x.Key.Version));
 
         if (autoloadMod.IncompatibleAddons is not null)
         {

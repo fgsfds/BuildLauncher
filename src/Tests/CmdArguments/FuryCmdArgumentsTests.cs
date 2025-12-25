@@ -10,7 +10,7 @@ namespace Tests.CmdArguments;
 public sealed class FuryCmdArgumentsTests
 {
     private readonly FuryGame _dukeGame;
-    private readonly DukeCampaignEntity _dukeCamp;
+    private readonly DukeCampaign _dukeCamp;
 
     private readonly AutoloadModsProvider _modsProvider;
 
@@ -52,7 +52,7 @@ public sealed class FuryCmdArgumentsTests
     [Fact]
     public void FuryTest()
     {
-        var mods = new List<AutoloadModEntity>() {
+        var mods = new List<AutoloadMod>() {
             _modsProvider.EnabledModWithCons,
             _modsProvider.DisabledMod,
             _modsProvider.ModThatRequiresOfficialAddon,

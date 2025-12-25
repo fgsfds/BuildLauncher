@@ -11,6 +11,11 @@
     <PackageReference Include="Downloader" />
     <PackageReference Include="IDisposableAnalyzers" PrivateAssets="all" />
     <PackageReference Include="Roslynator.Analyzers" PrivateAssets="all" />
+    <PackageReference Include="System.IO.Hashing" />
+    <PackageReference Include="CommunityToolkit.Mvvm" />
+    <PackageReference Include="SharpCompress" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Debug" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" />
   </ItemGroup>
 
   <ItemGroup>

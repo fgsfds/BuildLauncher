@@ -7,6 +7,7 @@ using Common.All.Enums.Addons;
 using Common.All.Helpers;
 using Common.All.Serializable.Addon;
 using Common.Client.Helpers;
+using Common.Client.Interfaces;
 using CommunityToolkit.Diagnostics;
 using Games.Games;
 using Microsoft.EntityFrameworkCore;
@@ -70,25 +71,19 @@ public abstract class BasePort : IInstallable
     /// </summary>
     public abstract List<FeatureEnum> SupportedFeatures { get; }
 
-    /// <summary>
-    /// Currently installed version
-    /// </summary>
+    /// <inheritdoc/>
     public abstract string? InstalledVersion { get; }
 
-    /// <summary>
-    /// Path to port install folder
-    /// </summary>
+    /// <inheritdoc/>
     public virtual string InstallFolderPath => Path.Combine(ClientProperties.PortsFolderPath, ShortName);
+
+    /// <inheritdoc/>
+    public virtual bool IsInstalled => InstalledVersion is not null;
 
     /// <summary>
     /// Path to port saved games folder
     /// </summary>
     public virtual string PortSavedGamesFolderPath => Path.Combine(ClientProperties.SavedGamesFolderPath, Name);
-
-    /// <summary>
-    /// Is port installed
-    /// </summary>
-    public virtual bool IsInstalled => InstalledVersion is not null;
 
     /// <summary>
     /// Games versions supported by the port
@@ -325,7 +320,7 @@ public abstract class BasePort : IInstallable
 
     protected virtual void GetBloodArgs(StringBuilder sb, BloodGame game, BaseAddon addon)
     {
-        if (addon is LooseMapEntity lMap)
+        if (addon is LooseMap lMap)
         {
             if (lMap.BloodIni is null)
             {
@@ -341,7 +336,7 @@ public abstract class BasePort : IInstallable
         }
 
 
-        addon.ThrowIfNotType<BloodCampaignEntity>(out var bCamp);
+        addon.ThrowIfNotType<BloodCampaign>(out var bCamp);
 
         if (bCamp.INI is not null)
         {
@@ -399,14 +394,14 @@ public abstract class BasePort : IInstallable
 
     protected virtual void GetSlaveArgs(StringBuilder sb, SlaveGame game, BaseAddon addon)
     {
-        if (addon is LooseMapEntity)
+        if (addon is LooseMap)
         {
             GetLooseMapArgs(sb, game, addon);
             return;
         }
 
 
-        addon.ThrowIfNotType<GenericCampaignEntity>(out var sCamp);
+        addon.ThrowIfNotType<GenericCampaign>(out var sCamp);
 
         if (sCamp.FileName is null)
         {
@@ -444,14 +439,14 @@ public abstract class BasePort : IInstallable
         }
 
 
-        if (addon is LooseMapEntity)
+        if (addon is LooseMap)
         {
             GetLooseMapArgs(sb, game, addon);
             return;
         }
 
 
-        addon.ThrowIfNotType<DukeCampaignEntity>(out var dCamp);
+        addon.ThrowIfNotType<DukeCampaign>(out var dCamp);
 
         if (addon.AddonId.Id.Equals(nameof(WW2GIAddonEnum.Platoon), StringComparison.OrdinalIgnoreCase))
         {
@@ -517,7 +512,7 @@ public abstract class BasePort : IInstallable
 
         foreach (var mod in mods)
         {
-            if (mod.Value is not AutoloadModEntity aMod)
+            if (mod.Value is not AutoloadMod aMod)
             {
                 continue;
             }

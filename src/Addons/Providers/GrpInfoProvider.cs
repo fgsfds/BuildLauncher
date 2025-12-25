@@ -49,7 +49,7 @@ public static class GrpInfoProvider
 
                 AddonId version = new(addon.Name.ToLower().Replace(" ", "_"), null);
 
-                DukeCampaignEntity camp = new()
+                DukeCampaign camp = new()
                 {
                     AddonId = version,
                     Type = AddonTypeEnum.TC,

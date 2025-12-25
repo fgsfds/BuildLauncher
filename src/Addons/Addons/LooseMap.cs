@@ -1,6 +1,6 @@
 ﻿namespace Addons.Addons;
 
-public sealed class LooseMapEntity : BaseAddon
+public sealed class LooseMap : BaseAddon
 {
     public required string? BloodIni { get; init; }
 }

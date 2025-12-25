@@ -133,8 +133,8 @@ public sealed partial class CampaignsViewModel : RightPanelViewModel, IPortsButt
 
         _gamesProvider = gamesProvider;
         _config = config;
-        _installedAddonsProvider = installedAddonsProviderFactory.GetSingleton(game);
-        _downloadableAddonsProvider = downloadableAddonsProviderFactory.GetSingleton(game);
+        _installedAddonsProvider = installedAddonsProviderFactory.Get(game);
+        _downloadableAddonsProvider = downloadableAddonsProviderFactory.Get(game);
         _portStarter = portStarter;
         _logger = logger;
 

@@ -10,8 +10,8 @@ namespace Tests.CmdArguments;
 public sealed class RedneckCmdArgumentsTests
 {
     private readonly RedneckGame _redneckGame;
-    private readonly DukeCampaignEntity _redneckCamp;
-    private readonly DukeCampaignEntity _againCamp;
+    private readonly DukeCampaign _redneckCamp;
+    private readonly DukeCampaign _againCamp;
 
     private readonly AutoloadModsProvider _modsProvider;
 
@@ -79,7 +79,7 @@ public sealed class RedneckCmdArgumentsTests
     [Fact]
     public void RazeTest()
     {
-        var mods = new List<AutoloadModEntity>() {
+        var mods = new List<AutoloadMod>() {
             _modsProvider.EnabledMod,
             _modsProvider.IncompatibleMod,
         }.ToDictionary(x => x.AddonId, x => (BaseAddon)x);
@@ -122,7 +122,7 @@ public sealed class RedneckCmdArgumentsTests
     [Fact]
     public void RazeAgainTest()
     {
-        var mods = new List<AutoloadModEntity>() {
+        var mods = new List<AutoloadMod>() {
             _modsProvider.EnabledMod,
             _modsProvider.IncompatibleMod,
         }.ToDictionary(x => x.AddonId, x => (BaseAddon)x);
@@ -165,7 +165,7 @@ public sealed class RedneckCmdArgumentsTests
     [Fact]
     public void RedNukemTest()
     {
-        var mods = new List<AutoloadModEntity>() {
+        var mods = new List<AutoloadMod>() {
             _modsProvider.EnabledMod,
             _modsProvider.IncompatibleMod,
         }.ToDictionary(x => x.AddonId, x => (BaseAddon)x);
@@ -198,7 +198,7 @@ public sealed class RedneckCmdArgumentsTests
     [Fact]
     public void RedNukemAgainTest()
     {
-        var mods = new List<AutoloadModEntity>() {
+        var mods = new List<AutoloadMod>() {
             _modsProvider.EnabledMod,
             _modsProvider.IncompatibleMod,
         }.ToDictionary(x => x.AddonId, x => (BaseAddon)x);

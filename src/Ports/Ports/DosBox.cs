@@ -177,7 +177,7 @@ public sealed class DosBox : BasePort
             _ = sb.Append($@" -c ""mount d \""{pathToAddonFolder}""""");
             _ = sb.Append(@" -c ""DUKE3D.EXE /gd:\\NWINTER.GRP /xd:\\NWINTER.CON");
         }
-        else if (addon is LooseMapEntity map)
+        else if (addon is LooseMap map)
         {
             _ = sb.Append($@" -c ""mount d \""{game.MapsFolderPath}""""");
             _ = sb.Append($@" -c ""DUKE3D.EXE -map d:\\{map.FileName}");
@@ -226,7 +226,7 @@ public sealed class DosBox : BasePort
             return;
         }
 
-        if (addon is BloodCampaignEntity bCamp && bCamp.Type is AddonTypeEnum.TC)
+        if (addon is BloodCampaign bCamp && bCamp.Type is AddonTypeEnum.TC)
         {
             if (Directory.Exists(ClientProperties.TempFolderPath))
             {
@@ -285,7 +285,7 @@ public sealed class DosBox : BasePort
             return;
         }
 
-        if (addon is LooseMapEntity map)
+        if (addon is LooseMap map)
         {
             _ = sb.Append(@$" -c ""mount c \""{game.GameInstallFolder}"""" -c ""c:""");
             _ = sb.Append(@$" -c ""mount d \""{game.MapsFolderPath}""""");

@@ -53,7 +53,7 @@ public static class PortsHelper
                 return false;
             }
 
-            if (addon is LooseMapEntity)
+            if (addon is LooseMap)
             {
                 return false;
             }
@@ -76,7 +76,7 @@ public static class PortsHelper
                 return false;
             }
 
-            if (addon is LooseMapEntity)
+            if (addon is LooseMap)
             {
                 return false;
             }

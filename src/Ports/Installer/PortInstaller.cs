@@ -1,4 +1,6 @@
-﻿using Common.All.Serializable.Downloadable;
+﻿using Common.All.Enums;
+using Common.All.Serializable.Downloadable;
+using Common.Client;
 using Common.Client.Interfaces;
 using Common.Client.Tools;
 using Microsoft.Extensions.Logging;
@@ -6,30 +8,17 @@ using Ports.Ports;
 
 namespace Ports.Installer;
 
-public sealed class PortsInstallerFactory(
-    IApiInterface apiInterface,
-    FilesDownloader filesDownloader,
-    ArchiveTools archiveTools,
-    ILogger logger
-    ) : IInstallerFactory<BasePort, PortsInstaller>
-{
-    /// <summary>
-    /// Create <see cref="PortsInstaller"/> instance
-    /// </summary>
-    public PortsInstaller Create(BasePort portEnum) => new(portEnum, apiInterface, filesDownloader, archiveTools, logger);
-}
-
-public sealed class PortsInstaller : InstallerBase<BasePort>
+public sealed class PortInstaller : InstallerBase<BasePort>
 {
     private readonly IApiInterface _apiInterface;
 
-    public PortsInstaller(
-        BasePort portEnum,
+    public PortInstaller(
+        BasePort port,
         IApiInterface apiInterface,
         FilesDownloader filesDownloader,
         ArchiveTools archiveTools,
         ILogger logger
-        ) : base(portEnum, filesDownloader, archiveTools)
+        ) : base(port, filesDownloader, archiveTools)
     {
         _apiInterface = apiInterface;
     }
@@ -39,7 +28,7 @@ public sealed class PortsInstaller : InstallerBase<BasePort>
     /// </summary>
     protected override void InstallInternal()
     {
-        if (_instance is DosBox)
+        if (_instance.PortEnum is PortEnum.DosBox)
         {
             File.WriteAllText(Path.Combine(_instance.InstallFolderPath, "dosbox-staging.conf"),
                 """
@@ -50,10 +39,7 @@ public sealed class PortsInstaller : InstallerBase<BasePort>
         }
     }
 
-    public override void Uninstall()
-    {
-        Directory.Delete(_instance.InstallFolderPath, true);
-    }
+    public override void Uninstall() => Directory.Delete(_instance.InstallFolderPath, true);
 
     public override Task<GeneralReleaseJsonModel?> GetRelease() => _apiInterface.GetLatestPortReleaseAsync(_instance.PortEnum);
 }

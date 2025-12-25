@@ -57,7 +57,7 @@ internal sealed class AutoloadModsProvider
         };
     }
 
-    public AutoloadModEntity EnabledModWithCons => new()
+    public AutoloadMod EnabledModWithCons => new()
     {
         AddonId = new("enabledMod", "1.5"),
         Type = AddonTypeEnum.Mod,
@@ -81,7 +81,7 @@ internal sealed class AutoloadModsProvider
         Options = null
     };
 
-    public AutoloadModEntity EnabledMod => new()
+    public AutoloadMod EnabledMod => new()
     {
         AddonId = new("enabledMod", "1.5"),
         Type = AddonTypeEnum.Mod,
@@ -105,7 +105,7 @@ internal sealed class AutoloadModsProvider
         Options = null
     };
 
-    public AutoloadModEntity ModThatRequiresOfficialAddon => new()
+    public AutoloadMod ModThatRequiresOfficialAddon => new()
     {
         AddonId = new("modThatRequiresOfficialAddon", "1.5"),
         Type = AddonTypeEnum.Mod,
@@ -129,7 +129,7 @@ internal sealed class AutoloadModsProvider
         Options = null
     };
 
-    public AutoloadModEntity ModThatIncompatibleWithAddon => new()
+    public AutoloadMod ModThatIncompatibleWithAddon => new()
     {
         AddonId = new("modThatIncompatibleWithVaca", "1.5"),
         Type = AddonTypeEnum.Mod,
@@ -153,7 +153,7 @@ internal sealed class AutoloadModsProvider
         Options = null
     };
 
-    public AutoloadModEntity IncompatibleMod => new()
+    public AutoloadMod IncompatibleMod => new()
     {
         AddonId = new("incompatibleMod", "1.0"),
         Type = AddonTypeEnum.Mod,
@@ -177,7 +177,7 @@ internal sealed class AutoloadModsProvider
         Options = null
     };
 
-    public AutoloadModEntity IncompatibleModWithCompatibleVersion => new()
+    public AutoloadMod IncompatibleModWithCompatibleVersion => new()
     {
         AddonId = new("incompatibleModWithCompatibleVersion", "1.0"),
         Type = AddonTypeEnum.Mod,
@@ -201,7 +201,7 @@ internal sealed class AutoloadModsProvider
         Options = null
     };
 
-    public AutoloadModEntity IncompatibleModWithIncompatibleVersion => new()
+    public AutoloadMod IncompatibleModWithIncompatibleVersion => new()
     {
         AddonId = new("incompatibleModWithIncompatibleVersion", "1.0"),
         Type = AddonTypeEnum.Mod,
@@ -225,7 +225,7 @@ internal sealed class AutoloadModsProvider
         Options = null
     };
 
-    public AutoloadModEntity DependentMod => new()
+    public AutoloadMod DependentMod => new()
     {
         AddonId = new("dependentMod", "1.0"),
         Type = AddonTypeEnum.Mod,
@@ -250,7 +250,7 @@ internal sealed class AutoloadModsProvider
     };
 
 
-    public AutoloadModEntity MultipleDependenciesMod => new()
+    public AutoloadMod MultipleDependenciesMod => new()
     {
         AddonId = new("multipleDependenciesMod", "1.0"),
         Type = AddonTypeEnum.Mod,
@@ -274,7 +274,7 @@ internal sealed class AutoloadModsProvider
         Options = null
     };
 
-    public AutoloadModEntity DependentModWithIncompatibleVersion => new()
+    public AutoloadMod DependentModWithIncompatibleVersion => new()
     {
         AddonId = new("dependentModWithIncompatibleVersion", "1.0"),
         Type = AddonTypeEnum.Mod,
@@ -298,7 +298,7 @@ internal sealed class AutoloadModsProvider
         Options = null
     };
 
-    public AutoloadModEntity DependentModWithCompatibleVersion => new()
+    public AutoloadMod DependentModWithCompatibleVersion => new()
     {
         AddonId = new("dependentModWithCompatibleVersion", "1.0"),
         Type = AddonTypeEnum.Mod,
@@ -322,7 +322,7 @@ internal sealed class AutoloadModsProvider
         Options = null
     };
 
-    public AutoloadModEntity DisabledMod => new()
+    public AutoloadMod DisabledMod => new()
     {
         AddonId = new("disabledMod", "1.0"),
         Type = AddonTypeEnum.Mod,
@@ -346,7 +346,7 @@ internal sealed class AutoloadModsProvider
         Options = null
     };
 
-    public AutoloadModEntity ModThatRequiresFeature => new()
+    public AutoloadMod ModThatRequiresFeature => new()
     {
         AddonId = new("eduke32mod", "1.0"),
         Type = AddonTypeEnum.Mod,
@@ -370,7 +370,7 @@ internal sealed class AutoloadModsProvider
         Options = null
     };
 
-    public AutoloadModEntity ModForAnotherGame => new()
+    public AutoloadMod ModForAnotherGame => new()
     {
         AddonId = new("somegame-mod", "1.0"),
         Type = AddonTypeEnum.Mod,

@@ -1,5 +1,6 @@
 ﻿using Common.All.Enums;
 using Common.All.Serializable.Downloadable;
+using Common.Client;
 using Common.Client.Interfaces;
 using Common.Client.Tools;
 using Games.Providers;
@@ -8,33 +9,19 @@ using Tools.Tools;
 
 namespace Tools.Installer;
 
-public sealed class ToolsInstallerFactory(
-    IApiInterface apiInterface,
-    InstalledGamesProvider gamesProvider,
-    FilesDownloader filesDownloader,
-    ArchiveTools archiveTools,
-    ILogger logger
-    ) : IInstallerFactory<BaseTool, ToolsInstaller>
-{
-    /// <summary>
-    /// Create <see cref="ToolsInstaller"/> instance
-    /// </summary>
-    public ToolsInstaller Create(BaseTool toolEnum) => new(toolEnum, apiInterface, gamesProvider, filesDownloader, archiveTools, logger);
-}
-
-public sealed class ToolsInstaller : InstallerBase<BaseTool>
+public sealed class ToolInstaller : InstallerBase<BaseTool>
 {
     private readonly InstalledGamesProvider _gamesProvider;
     private readonly IApiInterface _apiInterface;
 
-    public ToolsInstaller(
-        BaseTool toolEnum,
+    public ToolInstaller(
+        BaseTool tool,
         IApiInterface apiInterface,
         InstalledGamesProvider gamesProvider,
         FilesDownloader filesDownloader,
         ArchiveTools archiveTools,
         ILogger logger
-        ) : base(toolEnum, filesDownloader, archiveTools)
+        ) : base(tool, filesDownloader, archiveTools)
     {
         _gamesProvider = gamesProvider;
         _apiInterface = apiInterface;

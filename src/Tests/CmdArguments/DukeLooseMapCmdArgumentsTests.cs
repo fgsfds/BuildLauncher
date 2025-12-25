@@ -12,7 +12,7 @@ namespace Tests.CmdArguments;
 public sealed class DukeLooseMapCmdArgumentsTests
 {
     private readonly DukeGame _dukeGame;
-    private readonly LooseMapEntity _dukeLooseMap;
+    private readonly LooseMap _dukeLooseMap;
 
     private readonly AutoloadModsProvider _modsProvider;
 
@@ -54,7 +54,7 @@ public sealed class DukeLooseMapCmdArgumentsTests
     [Fact]
     public void RazeTest()
     {
-        var mods = new List<AutoloadModEntity>() {
+        var mods = new List<AutoloadMod>() {
             _modsProvider.EnabledModWithCons,
             _modsProvider.DisabledMod,
             _modsProvider.ModThatRequiresOfficialAddon,
@@ -115,7 +115,7 @@ public sealed class DukeLooseMapCmdArgumentsTests
     [Fact]
     public void EDuke32Test()
     {
-        var mods = new List<AutoloadModEntity>() {
+        var mods = new List<AutoloadMod>() {
             _modsProvider.EnabledModWithCons,
             _modsProvider.DisabledMod,
             _modsProvider.ModThatRequiresOfficialAddon,
@@ -168,7 +168,7 @@ public sealed class DukeLooseMapCmdArgumentsTests
     [Fact]
     public void RedNukemTest()
     {
-        var mods = new List<AutoloadModEntity>() {
+        var mods = new List<AutoloadMod>() {
             _modsProvider.EnabledModWithCons,
             _modsProvider.DisabledMod,
             _modsProvider.ModThatRequiresOfficialAddon,
