@@ -94,11 +94,45 @@ Unpack zip archive anywhere and run <b>BuildLauncher.exe</b>
 
 Want to create and submit your own addons? Learn about addons specifications? Care about security and privacy?
 
-Check [WIKI](https://github.com/fgsfds/BuildLauncher/wiki) for more information.
+**Check [WIKI](https://github.com/fgsfds/BuildLauncher/wiki) for more information.**
+
+</td>
+</tr>
+
+<tr>
+<td align="center" valign="middle">
+<b>Disclaimer</b>
+</td>
+</tr>
+
+<tr>
+<td valign="center">
+
+**BuildLauncher** is a community-driven utility designed to help users manage and launch third-party source ports, mods, custom campaigns, and maps for their licensed Build Engine games.
+
+This Software is not affiliated with or endorsed by the original game rights holders or any associated entities.
+
+Use this Software and the associated content at your own discretion. Please be aware that using third-party modifications may occasionally lead to game instability or technical conflicts. While we aim for a seamless experience, we cannot guarantee the performance or compatibility of external content.
+
+**The developers of this Software are not responsible for any technical issues or data loss that may arise from using community-made fixes.**
+
+<tr>
+<td align="center" valign="middle">
+<b>Links</b>
+</td>
+</tr>
+
+<tr>
+<td>
+
+<div style="display: flex; align-items: center;">
+	<img align="left" width="48" src="https://assets-global.website-files.com/6257adef93867e50d84d30e2/636e0a6a49cf127bf92de1e2_icon_clyde_blurple_RGB.png"> <a href="https://discord.gg/mWvKyxR4et"><b>Discord</b> server</a>
+</div>
+
+</td>
+</tr>
 
 </td>
 </tr>
 
 </table>
-
-<img align="left" height="32" src="https://assets-global.website-files.com/6257adef93867e50d84d30e2/636e0a6a49cf127bf92de1e2_icon_clyde_blurple_RGB.png"> <a href="https://discord.gg/mWvKyxR4et">Join my Discord server</a>
