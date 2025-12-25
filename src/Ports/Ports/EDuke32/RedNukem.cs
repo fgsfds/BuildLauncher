@@ -142,11 +142,11 @@ public sealed class RedNukem : EDuke32
     {
         IEnumerable<string> files =
             [
-                Path.Combine(PortInstallFolderPath, "LOGO.ANM"),
-                Path.Combine(PortInstallFolderPath, "XATLOGO.ANM"),
-                Path.Combine(PortInstallFolderPath, "REDNECK.ANM"),
-                Path.Combine(PortInstallFolderPath, "RR_INTRO.ANM"),
-                Path.Combine(PortInstallFolderPath, "REDINT.MVE"),
+                Path.Combine(InstallFolderPath, "LOGO.ANM"),
+                Path.Combine(InstallFolderPath, "XATLOGO.ANM"),
+                Path.Combine(InstallFolderPath, "REDNECK.ANM"),
+                Path.Combine(InstallFolderPath, "RR_INTRO.ANM"),
+                Path.Combine(InstallFolderPath, "REDINT.MVE"),
             ];
 
         foreach (var file in files)
@@ -304,7 +304,7 @@ public sealed class RedNukem : EDuke32
 
     private void CreateBlankDemo()
     {
-        var blankDemo = Path.Combine(PortInstallFolderPath, "blank.edm");
+        var blankDemo = Path.Combine(InstallFolderPath, "blank.edm");
 
         if (!File.Exists(blankDemo))
         {

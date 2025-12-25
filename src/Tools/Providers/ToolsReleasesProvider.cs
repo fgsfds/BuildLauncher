@@ -77,7 +77,8 @@ public sealed class ToolsReleasesProvider : IReleaseProvider<ToolEnum>
                             SupportedOS = OSEnum.Windows,
                             Description = release.Description,
                             Version = GetVersion(toolEnum, release, winAss),
-                            DownloadUrl = winAss is null ? null : new(winAss.DownloadUrl),
+                            DownloadUrl = new(winAss.DownloadUrl),
+                            Hash = winAss.Digest
                         };
 
                         result ??= [];
@@ -103,7 +104,8 @@ public sealed class ToolsReleasesProvider : IReleaseProvider<ToolEnum>
                             SupportedOS = OSEnum.Linux,
                             Description = release.Description,
                             Version = GetVersion(toolEnum, release, linAss),
-                            DownloadUrl = linAss is null ? null : new(linAss.DownloadUrl),
+                            DownloadUrl = new(linAss.DownloadUrl),
+                            Hash = linAss.Digest
                         };
 
                         result ??= [];

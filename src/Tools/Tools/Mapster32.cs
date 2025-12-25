@@ -22,7 +22,7 @@ public sealed class Mapster32 : BaseTool
     public override ToolEnum ToolEnum => ToolEnum.Mapster32;
 
     /// <inheritdoc/>
-    public override string ToolInstallFolderPath => Path.Combine(ClientProperties.PortsFolderPath, "EDuke32");
+    public override string InstallFolderPath => Path.Combine(ClientProperties.PortsFolderPath, "EDuke32");
 
     /// <inheritdoc/>
     public override bool CanBeInstalled => false;

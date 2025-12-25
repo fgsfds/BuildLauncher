@@ -2,13 +2,14 @@
 using Common.All.Helpers;
 using Common.Client.Helpers;
 using CommunityToolkit.Diagnostics;
+using Ports.Ports;
 
 namespace Tools.Tools;
 
 /// <summary>
 /// Base class for tools
 /// </summary>
-public abstract class BaseTool
+public abstract class BaseTool : IInstallable
 {
     /// <summary>
     /// Tool enum
@@ -54,7 +55,7 @@ public abstract class BaseTool
     /// <summary>
     /// Path to tool install folder
     /// </summary>
-    public virtual string ToolInstallFolderPath => Path.Combine(ClientProperties.ToolsFolderPath, Name);
+    public virtual string InstallFolderPath => Path.Combine(ClientProperties.ToolsFolderPath, Name);
 
     /// <summary>
     /// Currently installed version
@@ -63,7 +64,7 @@ public abstract class BaseTool
     {
         get
         {
-            var versionFile = Path.Combine(ToolInstallFolderPath, "version");
+            var versionFile = Path.Combine(InstallFolderPath, "version");
 
             if (!File.Exists(versionFile))
             {
@@ -89,7 +90,7 @@ public abstract class BaseTool
     /// <summary>
     /// Path to tool exe
     /// </summary>
-    public string ToolExeFilePath => Path.Combine(ToolInstallFolderPath, Exe);
+    public string ToolExeFilePath => Path.Combine(InstallFolderPath, Exe);
 
     /// <summary>
     /// Tool's icon

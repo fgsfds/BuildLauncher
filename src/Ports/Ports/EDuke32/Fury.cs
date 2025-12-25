@@ -31,7 +31,7 @@ public sealed class Fury : EDuke32
     public override List<GameEnum> SupportedGames => [GameEnum.Fury];
 
     /// <inheritdoc/>
-    public override string PortInstallFolderPath => _config.PathFury ?? string.Empty;
+    public override string InstallFolderPath => _config.PathFury ?? string.Empty;
 
     /// <inheritdoc/>
     public override bool IsInstalled => File.Exists(PortExeFilePath);

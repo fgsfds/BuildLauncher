@@ -16,7 +16,7 @@ namespace Ports.Ports;
 /// <summary>
 /// Base class for ports
 /// </summary>
-public abstract class BasePort
+public abstract class BasePort : IInstallable
 {
     /// <summary>
     /// Port enum
@@ -78,7 +78,7 @@ public abstract class BasePort
     /// <summary>
     /// Path to port install folder
     /// </summary>
-    public virtual string PortInstallFolderPath => Path.Combine(ClientProperties.PortsFolderPath, ShortName);
+    public virtual string InstallFolderPath => Path.Combine(ClientProperties.PortsFolderPath, ShortName);
 
     /// <summary>
     /// Path to port saved games folder
@@ -98,7 +98,7 @@ public abstract class BasePort
     /// <summary>
     /// Path to port exe
     /// </summary>
-    public string PortExeFilePath => Path.Combine(PortInstallFolderPath, Exe);
+    public string PortExeFilePath => Path.Combine(InstallFolderPath, Exe);
 
 
     /// <summary>

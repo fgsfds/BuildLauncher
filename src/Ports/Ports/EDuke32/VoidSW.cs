@@ -30,7 +30,7 @@ public sealed class VoidSW : EDuke32
     public override List<GameEnum> SupportedGames => [GameEnum.Wang];
 
     /// <inheritdoc/>
-    public override string PortInstallFolderPath => Path.Combine(ClientProperties.PortsFolderPath, "EDuke32");
+    public override string InstallFolderPath => Path.Combine(ClientProperties.PortsFolderPath, "EDuke32");
 
     /// <inheritdoc/>
     public override List<FeatureEnum> SupportedFeatures =>

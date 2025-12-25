@@ -21,7 +21,7 @@ public sealed class DOSBlood : BaseTool
     public override ToolEnum ToolEnum => ToolEnum.DOSBlood;
 
     /// <inheritdoc/>
-    public override string ToolInstallFolderPath => _gamesProvider.GetGame(GameEnum.Blood).GameInstallFolder ?? string.Empty;
+    public override string InstallFolderPath => _gamesProvider.GetGame(GameEnum.Blood).GameInstallFolder ?? string.Empty;
 
     /// <inheritdoc/>
     public override bool CanBeInstalled => _gamesProvider.GetGame(GameEnum.Blood).IsBaseGameInstalled;
@@ -38,12 +38,12 @@ public sealed class DOSBlood : BaseTool
     {
         get
         {
-            if (string.IsNullOrWhiteSpace(ToolInstallFolderPath))
+            if (string.IsNullOrWhiteSpace(InstallFolderPath))
             {
                 return null;
             }
 
-            var bloodExe = Path.Combine(ToolInstallFolderPath, "BLOOD.EXE");
+            var bloodExe = Path.Combine(InstallFolderPath, "BLOOD.EXE");
 
             if (!File.Exists(bloodExe))
             {
@@ -57,7 +57,7 @@ public sealed class DOSBlood : BaseTool
                 return null;
             }
 
-            var versionFile = Path.Combine(ToolInstallFolderPath, "version");
+            var versionFile = Path.Combine(InstallFolderPath, "version");
 
             if (!File.Exists(versionFile))
             {

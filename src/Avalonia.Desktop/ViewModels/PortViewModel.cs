@@ -247,12 +247,12 @@ public sealed partial class PortViewModel : ObservableObject
         {
             IsInProgress = true;
 
-            installer = _installerFactory.Create(Port.PortEnum);
+            installer = _installerFactory.Create(Port);
 
             installer.Progress.ProgressChanged += OnProgressChanged;
             ProgressBarValue = 0;
 
-            await installer.InstallAsync().ConfigureAwait(true);
+            var isInstalled = await installer.InstallAsync().ConfigureAwait(true);
         }
         catch (Exception ex)
         {
@@ -288,7 +288,7 @@ public sealed partial class PortViewModel : ObservableObject
         {
             IsInProgress = true;
 
-            var installer = _installerFactory.Create(Port.PortEnum);
+            var installer = _installerFactory.Create(Port);
             installer.Uninstall();
         }
         catch (Exception ex)
@@ -321,7 +321,7 @@ public sealed partial class PortViewModel : ObservableObject
     {
         using var process = Process.Start(new ProcessStartInfo
         {
-            FileName = Port.PortInstallFolderPath,
+            FileName = Port.InstallFolderPath,
             UseShellExecute = true,
         });
     }

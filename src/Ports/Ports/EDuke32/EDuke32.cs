@@ -103,7 +103,7 @@ public class EDuke32 : BasePort
     {
         get
         {
-            var versionFile = Path.Combine(PortInstallFolderPath, "version");
+            var versionFile = Path.Combine(InstallFolderPath, "version");
 
             if (!File.Exists(versionFile))
             {
@@ -131,7 +131,7 @@ public class EDuke32 : BasePort
             return;
         }
 
-        var stopgapFolder = Path.Combine(PortInstallFolderPath, ClientConsts.WTStopgap);
+        var stopgapFolder = Path.Combine(InstallFolderPath, ClientConsts.WTStopgap);
 
         if (Directory.Exists(stopgapFolder))
         {
@@ -235,7 +235,7 @@ public class EDuke32 : BasePort
 
         if (addon.SupportedGame.GameVersion?.Equals(nameof(DukeVersionEnum.Duke3D_WT), StringComparison.OrdinalIgnoreCase) == true)
         {
-            _ = sb.Append($@" {AddDirectoryParam}""{game.DukeWTInstallPath}"" -addon {(byte)DukeAddonEnum.Base} {AddDirectoryParam}""{Path.Combine(PortInstallFolderPath, ClientConsts.WTStopgap)}"" {MainGrpParam}e32wt.grp {AddDefParam}e32wt.def");
+            _ = sb.Append($@" {AddDirectoryParam}""{game.DukeWTInstallPath}"" -addon {(byte)DukeAddonEnum.Base} {AddDirectoryParam}""{Path.Combine(InstallFolderPath, ClientConsts.WTStopgap)}"" {MainGrpParam}e32wt.grp {AddDefParam}e32wt.def");
         }
         else
         {
@@ -349,7 +349,7 @@ public class EDuke32 : BasePort
     /// </summary>
     protected void FixConfig()
     {
-        var config = Path.Combine(PortInstallFolderPath, ConfigFile);
+        var config = Path.Combine(InstallFolderPath, ConfigFile);
 
         if (!File.Exists(config))
         {
@@ -446,7 +446,7 @@ public class EDuke32 : BasePort
         }
         else
         {
-            path = PortInstallFolderPath;
+            path = InstallFolderPath;
         }
 
         var files = from file in Directory.GetFiles(path)
@@ -477,7 +477,7 @@ public class EDuke32 : BasePort
 
         var saves = Directory.GetFiles(saveFolder);
 
-        string firstPart = campaign.IsUnpacked ? Path.GetDirectoryName(campaign.PathToFile)! : PortInstallFolderPath;
+        string firstPart = campaign.IsUnpacked ? Path.GetDirectoryName(campaign.PathToFile)! : InstallFolderPath;
 
         foreach (var save in saves)
         {

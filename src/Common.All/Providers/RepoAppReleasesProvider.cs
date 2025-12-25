@@ -76,7 +76,8 @@ public sealed class RepoAppReleasesProvider
                     SupportedOS = OSEnum.Windows,
                     Version = release.TagName,
                     Description = release.Description,
-                    DownloadUrl = new Uri(windowsAsset.DownloadUrl)
+                    DownloadUrl = new Uri(windowsAsset.DownloadUrl),
+                    Hash = windowsAsset.Digest
                 };
 
                 _appRelease.AddOrReplace(OSEnum.Windows, winRelease);
@@ -91,7 +92,8 @@ public sealed class RepoAppReleasesProvider
                     SupportedOS = OSEnum.Linux,
                     Version = release.TagName,
                     Description = release.Description,
-                    DownloadUrl = new Uri(linuxAsset.DownloadUrl)
+                    DownloadUrl = new Uri(linuxAsset.DownloadUrl),
+                    Hash = linuxAsset.Digest
                 };
 
                 _appRelease.Add(OSEnum.Linux, linRelease);

@@ -203,13 +203,13 @@ public sealed partial class ToolViewModel : ObservableObject
         {
             IsInProgress = true;
 
-            installer = _installerFactory.Create(Tool.ToolEnum);
+            installer = _installerFactory.Create(Tool);
 
             installer.Progress.ProgressChanged += OnProgressChanged;
             ProgressBarValue = 0;
             OnPropertyChanged(nameof(ProgressBarValue));
 
-            await installer.InstallAsync().ConfigureAwait(true);
+            var isInstalled = await installer.InstallAsync().ConfigureAwait(true);
         }
         catch (Exception ex)
         {
@@ -247,7 +247,7 @@ public sealed partial class ToolViewModel : ObservableObject
         {
             IsInProgress = true;
 
-            var installer = _installerFactory.Create(Tool.ToolEnum);
+            var installer = _installerFactory.Create(Tool);
             installer.Uninstall();
         }
         catch (Exception ex)
@@ -304,7 +304,7 @@ public sealed partial class ToolViewModel : ObservableObject
     {
         using var process = Process.Start(new ProcessStartInfo
         {
-            FileName = Tool.ToolInstallFolderPath,
+            FileName = Tool.InstallFolderPath,
             UseShellExecute = true,
         });
     }

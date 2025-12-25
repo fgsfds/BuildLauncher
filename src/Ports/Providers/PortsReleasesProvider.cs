@@ -83,7 +83,8 @@ public sealed partial class PortsReleasesProvider : IReleaseProvider<PortEnum>
                             SupportedOS = OSEnum.Windows,
                             Description = release.Description,
                             Version = GetVersion(portEnum, release, winAss),
-                            DownloadUrl = winAss is null ? null : new(winAss.DownloadUrl),
+                            DownloadUrl = new(winAss.DownloadUrl),
+                            Hash = winAss.Digest
                         };
 
                         result ??= [];
@@ -109,7 +110,8 @@ public sealed partial class PortsReleasesProvider : IReleaseProvider<PortEnum>
                             SupportedOS = OSEnum.Linux,
                             Description = release.Description,
                             Version = GetVersion(portEnum, release, linAss),
-                            DownloadUrl = linAss is null ? null : new(linAss.DownloadUrl),
+                            DownloadUrl = new(linAss.DownloadUrl),
+                            Hash = linAss.Digest
                         };
 
                         result ??= [];
@@ -182,7 +184,8 @@ public sealed partial class PortsReleasesProvider : IReleaseProvider<PortEnum>
             SupportedOS = OSEnum.Windows,
             Description = string.Empty,
             Version = "r" + version,
-            DownloadUrl = new($"https://dukeworld.com/eduke32/synthesis/latest/{fileName}")
+            DownloadUrl = new($"https://dukeworld.com/eduke32/synthesis/latest/{fileName}"),
+            Hash = null
         };
 
         _logger.LogInformation($"Latest Windows release for {nameof(PortEnum.EDuke32)}: {release.Version}");

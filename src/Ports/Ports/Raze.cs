@@ -119,7 +119,7 @@ public sealed class Raze : BasePort
     /// <inheritdoc/>
     public override void BeforeStart(BaseGame game, BaseAddon campaign)
     {
-        var config = Path.Combine(PortInstallFolderPath, ConfigFile);
+        var config = Path.Combine(InstallFolderPath, ConfigFile);
 
         if (!File.Exists(config))
         {
@@ -234,7 +234,7 @@ public sealed class Raze : BasePort
         if (dCamp.SupportedGame.GameVersion is not null &&
             dCamp.SupportedGame.GameVersion.Equals(nameof(DukeVersionEnum.Duke3D_WT), StringComparison.OrdinalIgnoreCase))
         {
-            var config = Path.Combine(PortInstallFolderPath, ConfigFile);
+            var config = Path.Combine(InstallFolderPath, ConfigFile);
 
             AddGamePathsToConfig(game, addon, game.DukeWTInstallPath!, config);
 
@@ -363,7 +363,7 @@ public sealed class Raze : BasePort
 
         if (rCamp.SupportedGame.GameEnum is GameEnum.RidesAgain)
         {
-            var pathToConfig = Path.Combine(PortInstallFolderPath, ConfigFile);
+            var pathToConfig = Path.Combine(InstallFolderPath, ConfigFile);
             AddGamePathsToConfig(game, addon, game.AgainInstallPath!, pathToConfig);
         }
 

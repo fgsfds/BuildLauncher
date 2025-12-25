@@ -21,6 +21,11 @@ public sealed class GeneralReleaseJsonModel
     /// Download URL
     /// </summary>
     public required Uri? DownloadUrl { get; init; }
+
+    /// <summary>
+    /// File hash
+    /// </summary>
+    public required string? Hash { get; init; }
 }
 
 

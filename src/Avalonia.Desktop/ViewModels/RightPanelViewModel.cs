@@ -4,7 +4,6 @@ using Addons.Addons;
 using Avalonia.Desktop.Misc;
 using Avalonia.Media.Imaging;
 using Common.All.Helpers;
-using Common.Client.Config;
 using Common.Client.Interfaces;
 using Common.Client.Providers;
 using CommunityToolkit.Diagnostics;

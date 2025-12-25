@@ -53,7 +53,7 @@ public sealed class BuildGDX : BasePort
     {
         get
         {
-            var versionFile = Path.Combine(PortInstallFolderPath, "version");
+            var versionFile = Path.Combine(InstallFolderPath, "version");
 
             if (!File.Exists(versionFile))
             {
