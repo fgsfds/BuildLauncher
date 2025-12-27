@@ -122,15 +122,19 @@ public sealed class AddonsDatabaseTests
         Assert.NotNull(access);
         Assert.NotNull(secret);
 
+        var split = Consts.FilesRepo.Split("/");
+        var endpoint = split[^2];
+        var bucket = split[^1];
+
         using var minioClient = new MinioClient();
         using var iMinioClient = minioClient
-            .WithEndpoint(Consts.S3Endpoint.Split("//").Last())
+            .WithEndpoint(endpoint)
             .WithCredentials(access, secret)
             .WithSSL(false)
             .Build();
 
         var args = new ListObjectsArgs()
-            .WithBucket("buildlauncher")
+            .WithBucket(bucket)
             .WithRecursive(true);
 
         var filesInBucket = new List<string>();

@@ -3,6 +3,7 @@ using Common.All.Enums;
 using Common.All.Helpers;
 using Common.All.Interfaces;
 using Common.All.Providers;
+using Common.All.Serializable;
 using Common.All.Serializable.Downloadable;
 using Common.Client.Helpers;
 using Common.Client.Interfaces;
@@ -20,7 +21,8 @@ public sealed class GitHubApiInterface : IApiInterface
     private readonly ILogger _logger;
     private readonly SemaphoreSlim _semaphore = new(1);
 
-    private Dictionary<GameEnum, List<DownloadableAddonJsonModel>>? _addonsJson = null;
+    private Dictionary<GameEnum, List<DownloadableAddonJsonModel>>? _addonsJson;
+    private Dictionary<string, string>? _data;
 
 
     public GitHubApiInterface(
@@ -196,6 +198,57 @@ public sealed class GitHubApiInterface : IApiInterface
         File.WriteAllText(ClientProperties.PathToLocalAddonsJson, newAddonsJson);
 
         return Task.FromResult(true);
+    }
+
+    public async Task<string?> GetUploadFolder()
+    {
+        await _semaphore.WaitAsync().ConfigureAwait(false);
+
+        try
+        {
+            if (_data is null)
+            {
+                await InitData().ConfigureAwait(false);
+            }
+
+            return _data!.TryGetValue(DataJson.UploadFolder, out var uploadFolder) ? uploadFolder : null;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogCritical(ex, "=== Error while getting upload folder from GitHub ===");
+            return null;
+        }
+        finally
+        {
+            _ = _semaphore.Release();
+        }
+    }
+
+
+    private async Task InitData()
+    {
+        string? data;
+
+        if (ClientProperties.IsOfflineMode)
+        {
+            if (ClientProperties.PathToLocalDataJson is null)
+            {
+                ThrowHelper.ThrowArgumentNullException();
+            }
+
+            data = File.ReadAllText(ClientProperties.PathToLocalDataJson);
+        }
+        else
+        {
+            data = await _httpClient.GetStringAsync(Consts.DataJsonUrl).ConfigureAwait(false);
+        }
+
+        _data = JsonSerializer.Deserialize(data, DataJsonModelContext.Default.DictionaryStringString);
+
+        if (_data is null)
+        {
+            ThrowHelper.ThrowArgumentNullException();
+        }
     }
 
 

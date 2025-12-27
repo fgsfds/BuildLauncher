@@ -97,6 +97,7 @@ public sealed class ViewModelsFactory
             _gamesPathsProvider,
             _ports,
             _tools,
+            _apiInterface,
             _logger
             );
 

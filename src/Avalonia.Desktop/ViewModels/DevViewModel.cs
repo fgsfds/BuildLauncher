@@ -6,7 +6,6 @@ using Avalonia.Media;
 using Avalonia.Platform.Storage;
 using Common.All.Enums;
 using Common.All.Enums.Versions;
-using Common.All.Helpers;
 using Common.All.Interfaces;
 using Common.All.Serializable.Addon;
 using Common.Client.Helpers;
@@ -28,6 +27,7 @@ public sealed partial class DevViewModel : ObservableObject
     private readonly IConfigProvider _config;
     private readonly FilesUploader _filesUploader;
     private readonly InstalledGamesProvider _gamesProvider;
+    private readonly IApiInterface _apiInterface;
     private readonly ILogger _logger;
 
     private readonly HashSet<string> _forbiddenNames =
@@ -70,12 +70,14 @@ public sealed partial class DevViewModel : ObservableObject
         IConfigProvider config,
         FilesUploader filesUploader,
         InstalledGamesProvider gamesProvider,
+        IApiInterface apiInterface,
         ILogger logger
         )
     {
         _config = config;
         _filesUploader = filesUploader;
         _gamesProvider = gamesProvider;
+        _apiInterface = apiInterface;
         _logger = logger;
 
         ApiPasswordTextBox = _config.ApiPassword;
@@ -462,8 +464,8 @@ public sealed partial class DevViewModel : ObservableObject
             SetResultMessage("Uploading file. Please wait.", false);
             IsInProgress = true;
 
-            var fileName = Path.GetFileName(pathToArchive);
-            var uploadUrl = Consts.UploadsFolder + "/" + Guid.NewGuid() + "/" + fileName;
+            var uploadFolder = await _apiInterface.GetUploadFolder().ConfigureAwait(true);
+            var uploadUrl = uploadFolder + "/" + Guid.NewGuid() + "/" + Path.GetFileName(pathToArchive);
 
             await using var fileStream = File.OpenRead(pathToArchive);
             using StreamContent content = new(fileStream);

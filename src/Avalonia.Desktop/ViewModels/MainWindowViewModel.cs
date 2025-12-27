@@ -28,13 +28,14 @@ public sealed class MainWindowViewModel : ObservableObject
         GamesPathsProvider gamesPathsProvider,
         IEnumerable<BasePort> ports,
         IEnumerable<BaseTool> tools,
+        IApiInterface apiInterface,
         ILogger logger
         )
     {
         _gamesProvider = gamesProvider;
         _gamesProvider.GameChangedEvent += OnGameChanged;
 
-        DevPageViewModel = new DevViewModel(configProvider, filesUploader, gamesProvider, logger);
+        DevPageViewModel = new DevViewModel(configProvider, filesUploader, gamesProvider, apiInterface, logger);
         AboutPageViewModel = new AboutViewModel(appUpdateInstaller);
         PortsPageViewModel = new PortsViewModel(viewModelsFactory, portsProvider, ports, logger);
         ToolsPageViewModel = new ToolsViewModel(viewModelsFactory, tools);

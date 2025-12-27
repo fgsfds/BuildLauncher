@@ -2,17 +2,10 @@
 
 public static class Consts
 {
-    public const string S3Endpoint = "http://176.222.52.233:9000";
-
     /// <summary>
     /// Path to the files repository
     /// </summary>
-    public const string FilesRepo = $"{S3Endpoint}/buildlauncher";
-
-    /// <summary>
-    /// Path to the uploads folder
-    /// </summary>
-    public const string UploadsFolder = $"{S3Endpoint}/uploads/buildlauncher";
+    public const string FilesRepo = $"http://176.222.52.233:9000/buildlauncher";
 
     /// <summary>
     /// GirtHub releases Url
@@ -25,12 +18,7 @@ public static class Consts
     public const string AddonsJsonUrl = "https://raw.githubusercontent.com/fgsfds/BuildLauncher/refs/heads/master/db/addons.json";
 
     /// <summary>
-    /// Addon manifest file
+    /// Link to addons.json file
     /// </summary>
-    public const string AddonManifest = "addon.json";
-
-    /// <summary>
-    /// S3 bucket address
-    /// </summary>
-    public const string Bucket = "";
+    public const string DataJsonUrl = "https://raw.githubusercontent.com/fgsfds/BuildLauncher/refs/heads/master/db/data.json";
 }

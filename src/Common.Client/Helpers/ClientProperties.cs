@@ -100,5 +100,30 @@ public static class ClientProperties
         }
     }
 
+    /// <summary>
+    /// Path to local data.json
+    /// </summary>
+    public static string? PathToLocalDataJson
+    {
+        get
+        {
+            var path1 = Path.Combine(WorkingFolder, @"..\..\..\..\db\data.json");
+
+            if (File.Exists(path1))
+            {
+                return path1;
+            }
+
+            var path2 = Path.Combine(WorkingFolder, @"db\data.json");
+
+            if (File.Exists(path2))
+            {
+                return path2;
+            }
+
+            return null;
+        }
+    }
+
     public static string PathToLogFile => Path.Combine(WorkingFolder, "BuildLauncher.log");
 }
