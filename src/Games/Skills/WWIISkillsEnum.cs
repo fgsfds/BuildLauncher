@@ -5,14 +5,14 @@ namespace Games.Skills;
 public enum WWIISkillsEnum : byte
 {
     [Description("Draftee")]
-    Draftee = 0,
+    Draftee = 1,
 
     [Description("GI")]
-    GI = 1,
+    GI = 2,
 
     [Description("Paratrooper")]
-    Paratrooper = 2,
+    Paratrooper = 3,
 
     [Description("Veteran")]
-    Veteran = 3
+    Veteran = 4
 }

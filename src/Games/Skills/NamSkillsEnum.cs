@@ -4,15 +4,15 @@ namespace Games.Skills;
 
 public enum NamSkillsEnum : byte
 {
-    [Description("Root")]
-    Root = 0,
+    [Description("Boot")]
+    Boot = 1,
 
     [Description("Grunt")]
-    Grunt = 1,
+    Grunt = 2,
 
     [Description("Salty")]
-    Salty = 2,
+    Salty = 3,
 
     [Description("Locked On")]
-    LockedOn = 3
+    LockedOn = 4
 }

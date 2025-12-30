@@ -5,17 +5,18 @@ namespace Games.Skills;
 public enum RedneckSkillsEnum : byte
 {
     [Description("Wuss")]
-    Wuss = 0,
+    Wuss = 1,
 
     [Description("Meejum")]
-    Meejum = 1,
+    Meejum = 2,
 
     [Description("Hard Ass")]
-    HardAss = 2,
+    HardAss = 3,
 
     [Description("Killbilly")]
-    KillBilly = 3,
+    KillBilly = 4,
 
-    [Description("Psychobilly")]
-    Psychobilly = 4
+    //Can't be started from the command line
+    //[Description("Psychobilly")]
+    //Psychobilly = 5
 }

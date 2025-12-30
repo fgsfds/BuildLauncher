@@ -5,17 +5,17 @@ namespace Games.Skills;
 public enum FurySkillsEnum : byte
 {
     [Description("First Blood")]
-    FirstBlood = 0,
+    FirstBlood = 1,
 
     [Description("Wanton Carnage")]
-    WantonCarnage = 1,
+    WantonCarnage = 2,
 
     [Description("Ultra Viscera")]
-    UltraViscera = 2,
+    UltraViscera = 3,
 
     [Description("Maximum Fury")]
-    MaximumFury = 3,
+    MaximumFury = 4,
 
     [Description("Angel of Death")]
-    AngelOfDeath = 4
+    AngelOfDeath = 5
 }

@@ -5,14 +5,14 @@ namespace Games.Skills;
 public enum Duke3DSkillsEnum : byte
 {
     [Description("Piece of Cake")]
-    PieceOfCake = 0,
+    PieceOfCake = 1,
 
     [Description("Let's Rock")]
-    LetsRock = 1,
+    LetsRock = 2,
 
     [Description("Come Get Some")]
-    ComeGetSome = 2,
+    ComeGetSome = 3,
 
     [Description("Damn I'm Good")]
-    DamnImGood = 3
+    DamnImGood = 4
 }
