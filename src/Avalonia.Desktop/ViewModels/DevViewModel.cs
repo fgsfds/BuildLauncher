@@ -150,15 +150,28 @@ public sealed partial class DevViewModel : ObservableObject
     private string? _mapFileName;
 
     [ObservableProperty]
-    private string? _windowsNBloodExe;
+    private string? _windowsEDukeExe;
     [ObservableProperty]
-    private string? _linuxNBloodExe;
+    private string? _windowsNBloodExe;
     [ObservableProperty]
     private string? _windowsNotBloodExe;
     [ObservableProperty]
-    private string? _linuxNotBloodExe;
+    private string? _windowsRedNukemExe;
     [ObservableProperty]
-    private string? _windowsEDukeExe;
+    private string? _windowsRazeExe;
+    [ObservableProperty]
+    private string? _windowsPCExhumedExe;
+
+    [ObservableProperty]
+    private string? _linuxNBloodExe;
+    [ObservableProperty]
+    private string? _linuxRedNukemExe;
+    [ObservableProperty]
+    private string? _linuxRazeExe;
+    [ObservableProperty]
+    private string? _linuxPCExhumedExe;
+    [ObservableProperty]
+    private string? _linuxNotBloodExe;
     [ObservableProperty]
     private string? _linuxEDukeExe;
 
@@ -577,9 +590,15 @@ public sealed partial class DevViewModel : ObservableObject
             WindowsNBloodExe is null &&
             WindowsNotBloodExe is null &&
             WindowsEDukeExe is null &&
+            WindowsRedNukemExe is null &&
+            WindowsRazeExe is null &&
+            WindowsPCExhumedExe is null &&
             LinuxNBloodExe is null &&
             LinuxNotBloodExe is null &&
             LinuxEDukeExe is null &&
+            LinuxRedNukemExe is null &&
+            LinuxRazeExe is null &&
+            LinuxPCExhumedExe is null &&
             MainRff is null &&
             SoundRff is null)
         {
@@ -738,6 +757,22 @@ public sealed partial class DevViewModel : ObservableObject
             _ = executables.TryAdd(OSEnum.Windows, []);
             executables[OSEnum.Windows].Add(PortEnum.EDuke32, WindowsEDukeExe);
         }
+        if (!string.IsNullOrWhiteSpace(WindowsRedNukemExe))
+        {
+            _ = executables.TryAdd(OSEnum.Windows, []);
+            executables[OSEnum.Windows].Add(PortEnum.RedNukem, WindowsRedNukemExe);
+        }
+        if (!string.IsNullOrWhiteSpace(WindowsRazeExe))
+        {
+            _ = executables.TryAdd(OSEnum.Windows, []);
+            executables[OSEnum.Windows].Add(PortEnum.Raze, WindowsRazeExe);
+        }
+        if (!string.IsNullOrWhiteSpace(WindowsPCExhumedExe))
+        {
+            _ = executables.TryAdd(OSEnum.Windows, []);
+            executables[OSEnum.Windows].Add(PortEnum.PCExhumed, WindowsPCExhumedExe);
+        }
+
         if (!string.IsNullOrWhiteSpace(LinuxNBloodExe))
         {
             _ = executables.TryAdd(OSEnum.Linux, []);
@@ -752,6 +787,21 @@ public sealed partial class DevViewModel : ObservableObject
         {
             _ = executables.TryAdd(OSEnum.Linux, []);
             executables[OSEnum.Linux].Add(PortEnum.EDuke32, LinuxEDukeExe);
+        }
+        if (!string.IsNullOrWhiteSpace(LinuxRedNukemExe))
+        {
+            _ = executables.TryAdd(OSEnum.Linux, []);
+            executables[OSEnum.Linux].Add(PortEnum.RedNukem, LinuxRedNukemExe);
+        }
+        if (!string.IsNullOrWhiteSpace(LinuxRazeExe))
+        {
+            _ = executables.TryAdd(OSEnum.Linux, []);
+            executables[OSEnum.Linux].Add(PortEnum.Raze, LinuxRazeExe);
+        }
+        if (!string.IsNullOrWhiteSpace(LinuxPCExhumedExe))
+        {
+            _ = executables.TryAdd(OSEnum.Linux, []);
+            executables[OSEnum.Linux].Add(PortEnum.PCExhumed, LinuxPCExhumedExe);
         }
 
         AddonJsonModel addon = new()
