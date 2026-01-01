@@ -113,7 +113,7 @@ public sealed class BitmapsCache : ICacheAdder<Stream>, ICacheGetter<Bitmap>, ID
 
 
         using var fury = ImageHelper.FileNameToStream("Fury.fury.jpg", addonsAss);
-        _ = TryAddGridToCache(DukeAddonEnum.DukeNW.GetUniqueHash(), fury);
+        _ = TryAddGridToCache(GameEnum.Fury.GetUniqueHash(), fury);
 
         using var ashock = ImageHelper.FileNameToStream("Fury.aftershock.jpg", addonsAss);
         _ = TryAddGridToCache("Aftershock".GetHashCode(), ashock);
