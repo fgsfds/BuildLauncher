@@ -4,6 +4,7 @@ using Common.All.Providers;
 using Common.All.Serializable.Addon;
 using Common.All.Serializable.Downloadable;
 using Database.Server;
+using Mediator;
 using Web.Blazor.Helpers;
 using Web.Blazor.Providers;
 using Web.Blazor.Tasks;
@@ -16,11 +17,10 @@ internal sealed class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
-        // Add services to the container.
         _ = builder.Services.AddRazorPages();
         _ = builder.Services.AddServerSideBlazor();
 
-        _ = builder.Services.AddControllers().AddJsonOptions((Action<Microsoft.AspNetCore.Mvc.JsonOptions>)(jsonOptions =>
+        _ = builder.Services.AddControllers().AddJsonOptions((jsonOptions =>
         {
             jsonOptions.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
             jsonOptions.JsonSerializerOptions.PropertyNamingPolicy = null;
@@ -44,7 +44,7 @@ internal sealed class Program
             _ = builder.Services.AddHostedService<FileCheckTask>();
             _ = builder.Services.AddHostedService<PortsReleasesTask>();
             _ = builder.Services.AddHostedService<AppReleasesTask>();
-            //_ = builder.Services.AddHostedService<ToolsReleasesTask>();
+            _ = builder.Services.AddHostedService<ToolsReleasesTask>();
         }
 
         if (builder.Environment.IsDevelopment())
@@ -62,24 +62,27 @@ internal sealed class Program
 
         _ = builder.Services.AddSingleton<DatabaseContextFactory>(_ => new(builder.Environment.IsDevelopment()));
 
-        _ = builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<Program>());
+        _ = builder.Services.AddMediator((MediatorOptions options) =>
+        {
+            options.Namespace = "SimpleConsole.Mediator";
+            options.ServiceLifetime = ServiceLifetime.Singleton;
+            options.GenerateTypesAsInternal = true;
+            options.NotificationPublisherType = typeof(ForeachAwaitPublisher);
+            options.Assemblies = [typeof(Program)];
+        });
 
         var app = builder.Build();
-
 
         // Creating database
         var dbContext = app.Services.GetService<DatabaseContextFactory>()!.Get();
         dbContext.Dispose();
 
-
         // Configure the HTTP request pipeline.
         if (!app.Environment.IsDevelopment())
         {
             _ = app.UseExceptionHandler("/Error");
-            // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
             _ = app.UseHsts();
         }
-
 
         _ = app.MapControllers();
         _ = app.UseHttpsRedirection();
@@ -87,7 +90,6 @@ internal sealed class Program
         _ = app.UseRouting();
         _ = app.MapBlazorHub();
         _ = app.MapFallbackToPage("/_Host");
-
 
         app.Run();
     }

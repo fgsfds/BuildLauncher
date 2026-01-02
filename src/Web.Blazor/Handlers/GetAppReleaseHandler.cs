@@ -1,7 +1,7 @@
 ﻿using Api.Common.Requests;
 using Api.Common.Responses;
 using Common.All.Providers;
-using MediatR;
+using Mediator;
 
 namespace Web.Blazor.Handlers;
 
@@ -14,7 +14,7 @@ internal sealed class GetAppReleaseHandler : IRequestHandler<GetAppReleaseReques
         _appReleasesProvider = appReleasesProvider;
     }
 
-    public async Task<GetAppReleaseResponse?> Handle(GetAppReleaseRequest request, CancellationToken cancellationToken)
+    public async ValueTask<GetAppReleaseResponse?> Handle(GetAppReleaseRequest request, CancellationToken cancellationToken)
     {
         var releases = await _appReleasesProvider.GetLatestReleaseAsync(false).ConfigureAwait(false);
 

@@ -1,6 +1,6 @@
 ﻿using Api.Common.Responses;
 using Common.All.Enums;
-using MediatR;
+using Mediator;
 
 namespace Api.Common.Requests;
 

@@ -1,6 +1,6 @@
 ﻿using Api.Common.Requests;
 using Api.Common.Responses;
-using MediatR;
+using Mediator;
 using Web.Blazor.Providers;
 
 namespace Web.Blazor.Handlers;
@@ -14,7 +14,7 @@ internal sealed class GetRatingsHandler : IRequestHandler<GetRatingsRequest, Get
         _addonsProvider = addonsProvider;
     }
 
-    public Task<GetRatingsResponse> Handle(GetRatingsRequest request, CancellationToken cancellationToken)
+    public ValueTask<GetRatingsResponse> Handle(GetRatingsRequest request, CancellationToken cancellationToken)
     {
         var ratings = _addonsProvider.GetRating();
 
@@ -23,6 +23,6 @@ internal sealed class GetRatingsHandler : IRequestHandler<GetRatingsRequest, Get
             Ratings = ratings
         };
 
-        return Task.FromResult(response);
+        return ValueTask.FromResult(response);
     }
 }
