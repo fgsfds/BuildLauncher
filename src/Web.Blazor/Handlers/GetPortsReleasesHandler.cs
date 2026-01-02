@@ -3,7 +3,7 @@ using Api.Common.Responses;
 using Common.All.Enums;
 using Common.All.Interfaces;
 using Common.All.Serializable.Downloadable;
-using MediatR;
+using Mediator;
 
 namespace Web.Blazor.Handlers;
 
@@ -16,7 +16,7 @@ public sealed class GetPortsReleasesHandler : IRequestHandler<GetPortsReleasesRe
         _portsReleasesRetriever = portsReleasesProvider;
     }
 
-    public Task<GetPortsReleasesResponse?> Handle(GetPortsReleasesRequest request, CancellationToken cancellationToken)
+    public ValueTask<GetPortsReleasesResponse?> Handle(GetPortsReleasesRequest request, CancellationToken cancellationToken)
     {
         Dictionary<PortEnum, GeneralReleaseJsonModel>? releases = [];
 
@@ -31,7 +31,7 @@ public sealed class GetPortsReleasesHandler : IRequestHandler<GetPortsReleasesRe
 
         if (releases is null)
         {
-            return Task.FromResult<GetPortsReleasesResponse?>(null);
+            return ValueTask.FromResult<GetPortsReleasesResponse?>(null);
         }
 
         GetPortsReleasesResponse response = new()
@@ -39,6 +39,6 @@ public sealed class GetPortsReleasesHandler : IRequestHandler<GetPortsReleasesRe
             PortsReleases = releases
         };
 
-        return Task.FromResult<GetPortsReleasesResponse?>(response);
+        return ValueTask.FromResult<GetPortsReleasesResponse?>(response);
     }
 }

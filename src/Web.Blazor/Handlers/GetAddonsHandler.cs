@@ -1,6 +1,6 @@
 ﻿using Api.Common.Requests;
 using Api.Common.Responses;
-using MediatR;
+using Mediator;
 using Web.Blazor.Providers;
 
 namespace Web.Blazor.Handlers;
@@ -14,7 +14,7 @@ public sealed class GetAddonsHandler : IRequestHandler<GetAddonsRequest, GetAddo
         _addonsProvider = addonsProvider;
     }
 
-    public Task<GetAddonsResponse> Handle(GetAddonsRequest request, CancellationToken cancellationToken)
+    public ValueTask<GetAddonsResponse> Handle(GetAddonsRequest request, CancellationToken cancellationToken)
     {
         var addons = _addonsProvider.GetAddons(request.GameEnum);
 
@@ -23,6 +23,6 @@ public sealed class GetAddonsHandler : IRequestHandler<GetAddonsRequest, GetAddo
             AddonsList = addons
         };
 
-        return Task.FromResult(response);
+        return ValueTask.FromResult(response);
     }
 }

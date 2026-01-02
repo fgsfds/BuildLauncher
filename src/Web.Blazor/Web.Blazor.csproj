@@ -10,7 +10,8 @@
     <PackageReference Include="CommunityToolkit.Diagnostics" />
     <PackageReference Include="IDisposableAnalyzers" PrivateAssets="all" />
     <PackageReference Include="Markdig" />
-    <PackageReference Include="MediatR" />
+    <PackageReference Include="Mediator.Abstractions" />
+    <PackageReference Include="Mediator.SourceGenerator" PrivateAssets="all" />
     <PackageReference Include="Roslynator.Analyzers" PrivateAssets="all" />
   </ItemGroup>
 
@@ -18,15 +19,6 @@
     <ProjectReference Include="..\Api.Common\Api.Common.csproj" />
     <ProjectReference Include="..\Common.Server\Common.Server.csproj" />
     <ProjectReference Include="..\Database.Server\Database.Server.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Update="Pages\Blood.razor">
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-    </Content>
-    <Content Update="Pages\Wang.razor">
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-    </Content>
   </ItemGroup>
 
 </Project>

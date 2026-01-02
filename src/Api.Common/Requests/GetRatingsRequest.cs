@@ -1,5 +1,5 @@
 ﻿using Api.Common.Responses;
-using MediatR;
+using Mediator;
 
 namespace Api.Common.Requests;
 
