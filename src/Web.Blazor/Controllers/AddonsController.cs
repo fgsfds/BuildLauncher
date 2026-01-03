@@ -1,6 +1,6 @@
 using Api.Common.Requests;
 using Api.Common.Responses;
-using MediatR;
+using Mediator;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Web.Blazor.Controllers;
@@ -16,7 +16,7 @@ internal sealed class ReleasesController : ControllerBase
         _mediator = mediator;
     }
 
-    [HttpGet()]
+    [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<ActionResult<GetAddonsResponse>> GetAddons(GetAddonsRequest request)
@@ -25,7 +25,7 @@ internal sealed class ReleasesController : ControllerBase
 
         if (response is null)
         {
-            return StatusCode(500);
+            return StatusCode(StatusCodes.Status500InternalServerError);
         }
 
         return Ok(response);
@@ -40,7 +40,7 @@ internal sealed class ReleasesController : ControllerBase
 
         if (response is null)
         {
-            return StatusCode(500);
+            return StatusCode(StatusCodes.Status500InternalServerError);
         }
 
         return Ok(response);

@@ -1,8 +1,8 @@
-﻿using Common.All.Serializable.Downloadable;
+﻿using Common.All;
 
 namespace Api.Common.Responses;
 
 public sealed class GetAppReleaseResponse
 {
-    public required GeneralReleaseJsonModel? AppRelease { get; set; }
+    public required GeneralRelease? AppRelease { get; set; }
 }

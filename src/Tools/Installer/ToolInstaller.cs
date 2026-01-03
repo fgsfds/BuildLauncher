@@ -1,5 +1,5 @@
-﻿using Common.All.Enums;
-using Common.All.Serializable.Downloadable;
+﻿using Common.All;
+using Common.All.Enums;
 using Common.Client;
 using Common.Client.Interfaces;
 using Common.Client.Tools;
@@ -91,5 +91,5 @@ public sealed class ToolInstaller : InstallerBase<BaseTool>
         }
     }
 
-    public override Task<GeneralReleaseJsonModel?> GetRelease() => _apiInterface.GetLatestToolReleaseAsync(_instance.ToolEnum);
+    public override Task<GeneralRelease?> GetRelease() => _apiInterface.GetLatestToolReleaseAsync(_instance.ToolEnum);
 }

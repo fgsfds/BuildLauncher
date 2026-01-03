@@ -8,13 +8,13 @@ namespace Common.All.Providers;
 
 public sealed class RepoAppReleasesProvider
 {
-    private readonly ILogger _logger;
+    private readonly ILogger<RepoAppReleasesProvider> _logger;
     private readonly IHttpClientFactory _httpClientFactory;
 
-    private Dictionary<OSEnum, GeneralReleaseJsonModel>? _appRelease = null;
+    private Dictionary<OSEnum, GeneralRelease>? _appRelease = null;
 
     public RepoAppReleasesProvider(
-        ILogger logger,
+        ILogger<RepoAppReleasesProvider> logger,
         IHttpClientFactory httpClientFactory
         )
     {
@@ -25,7 +25,7 @@ public sealed class RepoAppReleasesProvider
     /// <summary>
     /// Return the latest new release or null if there's no newer releases
     /// </summary>
-    public async Task<Dictionary<OSEnum, GeneralReleaseJsonModel>?> GetLatestReleaseAsync(bool includePreReleases)
+    public async Task<Dictionary<OSEnum, GeneralRelease>?> GetLatestReleaseAsync(bool includePreReleases)
     {
         try
         {
@@ -66,7 +66,7 @@ public sealed class RepoAppReleasesProvider
             {
                 _logger.LogInformation($"Found Windows release {release.TagName}");
 
-                GeneralReleaseJsonModel winRelease = new()
+                GeneralRelease winRelease = new()
                 {
                     SupportedOS = OSEnum.Windows,
                     Version = release.TagName,
@@ -82,7 +82,7 @@ public sealed class RepoAppReleasesProvider
             {
                 _logger.LogInformation($"Found Linux release {release.TagName}");
 
-                GeneralReleaseJsonModel linRelease = new()
+                GeneralRelease linRelease = new()
                 {
                     SupportedOS = OSEnum.Linux,
                     Version = release.TagName,

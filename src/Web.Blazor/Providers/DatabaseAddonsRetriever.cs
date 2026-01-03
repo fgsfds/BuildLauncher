@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using Common.All;
 using Common.All.Enums;
 using Common.All.Serializable.Addon;
 using Common.All.Serializable.Downloadable;
@@ -13,7 +14,7 @@ internal sealed class DatabaseAddonsRetriever
     private readonly ILogger<DatabaseAddonsRetriever> _logger;
     private readonly DatabaseContextFactory _dbContextFactory;
 
-    public GeneralReleaseJsonModel? AppRelease { get; }
+    public GeneralRelease? AppRelease { get; }
 
     public DatabaseAddonsRetriever(
         ILogger<DatabaseAddonsRetriever> logger,
@@ -81,7 +82,6 @@ internal sealed class DatabaseAddonsRetriever
                 Title = addon.Title,
                 Version = version.Value.Version,
                 FileSize = version.Value.FileSize,
-                IsDisabled = version.Value.IsDisabled,
                 Description = version.Value.Description,
                 Author = version.Value.Author,
                 Dependencies = depsResult,

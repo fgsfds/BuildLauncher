@@ -1,4 +1,5 @@
 ﻿using System.Text.Json;
+using Common.All;
 using Common.All.Enums;
 using Common.All.Helpers;
 using Common.All.Interfaces;
@@ -91,7 +92,7 @@ public sealed class GitHubApiInterface : IApiInterface
         }
     }
 
-    public async Task<GeneralReleaseJsonModel?> GetLatestAppReleaseAsync()
+    public async Task<GeneralRelease?> GetLatestAppReleaseAsync()
     {
         var result = await _appReleasesProvider.GetLatestReleaseAsync(ClientProperties.IsDeveloperMode).ConfigureAwait(false);
 
@@ -103,7 +104,7 @@ public sealed class GitHubApiInterface : IApiInterface
         return null;
     }
 
-    public async Task<GeneralReleaseJsonModel?> GetLatestPortReleaseAsync(PortEnum portEnum)
+    public async Task<GeneralRelease?> GetLatestPortReleaseAsync(PortEnum portEnum)
     {
         var result = await _portsReleasesProvider.GetLatestReleaseAsync(portEnum).ConfigureAwait(false);
 
@@ -115,7 +116,7 @@ public sealed class GitHubApiInterface : IApiInterface
         return null;
     }
 
-    public async Task<GeneralReleaseJsonModel?> GetLatestToolReleaseAsync(ToolEnum toolEnum)
+    public async Task<GeneralRelease?> GetLatestToolReleaseAsync(ToolEnum toolEnum)
     {
         var result = await _toolsReleasesProvider.GetLatestReleaseAsync(toolEnum).ConfigureAwait(false);
 

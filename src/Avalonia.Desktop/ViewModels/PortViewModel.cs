@@ -2,9 +2,9 @@ using System.Diagnostics;
 using System.Globalization;
 using Avalonia.Controls.Notifications;
 using Avalonia.Desktop.Misc;
+using Common.All;
 using Common.All.Enums;
 using Common.All.Helpers;
-using Common.All.Serializable.Downloadable;
 using Common.Client.Interfaces;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -20,7 +20,7 @@ public sealed partial class PortViewModel : ObservableObject
 
     private readonly PortInstallerFactory _installerFactory;
     private readonly IApiInterface _apiInterface;
-    private GeneralReleaseJsonModel? _release;
+    private GeneralRelease? _release;
     private readonly ILogger _logger;
 
     public delegate void PortChanged(PortEnum portEnum);

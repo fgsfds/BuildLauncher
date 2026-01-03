@@ -1,16 +1,17 @@
 ﻿using System.Net.Http.Json;
 using Api.Common.Requests;
 using Api.Common.Responses;
+using Common.All;
 using Common.All.Enums;
 using Common.All.Helpers;
-using Common.All.Serializable.Downloadable;
 using Common.Client.Helpers;
+using Common.Client.Interfaces;
 
 namespace Common.Client.Api;
 
-public sealed partial class ServerApiInterface
+public sealed partial class ServerApiInterface : IApiInterface
 {
-    public async Task<GeneralReleaseJsonModel?> GetLatestAppReleaseAsync()
+    public async Task<GeneralRelease?> GetLatestAppReleaseAsync()
     {
         try
         {
@@ -42,7 +43,7 @@ public sealed partial class ServerApiInterface
         }
     }
 
-    public Task<GeneralReleaseJsonModel?> GetLatestPortReleaseAsync(PortEnum portEnum) => Task.FromResult<GeneralReleaseJsonModel?>(null);
+    public Task<GeneralRelease?> GetLatestPortReleaseAsync(PortEnum portEnum) => Task.FromResult<GeneralRelease?>(null);
 
-    public Task<GeneralReleaseJsonModel?> GetLatestToolReleaseAsync(ToolEnum toolEnum) => Task.FromResult<GeneralReleaseJsonModel?>(null);
+    public Task<GeneralRelease?> GetLatestToolReleaseAsync(ToolEnum toolEnum) => Task.FromResult<GeneralRelease?>(null);
 }

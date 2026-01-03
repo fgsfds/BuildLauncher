@@ -1,6 +1,6 @@
 ﻿using System.IO.Compression;
 using System.Runtime.InteropServices;
-using Common.All.Serializable.Downloadable;
+using Common.All;
 using Common.Client.Helpers;
 using Common.Client.Interfaces;
 using Common.Client.Tools;
@@ -14,7 +14,7 @@ public sealed class AppUpdateInstaller
     private readonly IApiInterface _apiInterface;
     private readonly ILogger _logger;
 
-    private GeneralReleaseJsonModel? _update;
+    private GeneralRelease? _update;
 
     public AppUpdateInstaller(
         FilesDownloader filesDownloader,
