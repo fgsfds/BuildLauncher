@@ -1,5 +1,6 @@
 ﻿using System.Collections.Concurrent;
 using System.Text.Json;
+using Common.All;
 using Common.All.Enums;
 using Common.All.Interfaces;
 using Common.All.Serializable.Downloadable;
@@ -10,15 +11,15 @@ namespace Tools.Providers;
 
 public sealed class ToolsReleasesProvider : IReleaseProvider<ToolEnum>
 {
-    private readonly ConcurrentDictionary<ToolEnum, Dictionary<OSEnum, GeneralReleaseJsonModel>?> _releases = [];
+    private readonly ConcurrentDictionary<ToolEnum, Dictionary<OSEnum, GeneralRelease>?> _releases = [];
 
     private static readonly SemaphoreSlim _semaphore = new(1);
 
-    private readonly ILogger _logger;
+    private readonly ILogger<ToolsReleasesProvider> _logger;
     private readonly HttpClient _httpClient;
 
     public ToolsReleasesProvider(
-        ILogger logger,
+        ILogger<ToolsReleasesProvider> logger,
         HttpClient httpClient
         )
     {
@@ -30,7 +31,7 @@ public sealed class ToolsReleasesProvider : IReleaseProvider<ToolEnum>
     /// Get the latest release of the selected tool
     /// </summary>
     /// <param name="toolEnum">Tool</param>
-    public async Task<Dictionary<OSEnum, GeneralReleaseJsonModel>?> GetLatestReleaseAsync(ToolEnum toolEnum)
+    public async Task<Dictionary<OSEnum, GeneralRelease>?> GetLatestReleaseAsync(ToolEnum toolEnum)
     {
         try
         {
@@ -62,7 +63,7 @@ public sealed class ToolsReleasesProvider : IReleaseProvider<ToolEnum>
                 return null;
             }
 
-            Dictionary<OSEnum, GeneralReleaseJsonModel>? result = null;
+            Dictionary<OSEnum, GeneralRelease>? result = null;
 
             if (repo.WindowsReleasePredicate is not null)
             {
@@ -72,7 +73,7 @@ public sealed class ToolsReleasesProvider : IReleaseProvider<ToolEnum>
 
                     if (winAss is not null)
                     {
-                        GeneralReleaseJsonModel toolRelease = new()
+                        GeneralRelease toolRelease = new()
                         {
                             SupportedOS = OSEnum.Windows,
                             Description = release.Description,
@@ -99,7 +100,7 @@ public sealed class ToolsReleasesProvider : IReleaseProvider<ToolEnum>
 
                     if (linAss is not null)
                     {
-                        GeneralReleaseJsonModel toolRelease = new()
+                        GeneralRelease toolRelease = new()
                         {
                             SupportedOS = OSEnum.Linux,
                             Description = release.Description,

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Concurrent;
 using System.Text.Json;
 using System.Text.RegularExpressions;
+using Common.All;
 using Common.All.Enums;
 using Common.All.Interfaces;
 using Common.All.Serializable.Downloadable;
@@ -11,14 +12,14 @@ namespace Ports.Providers;
 
 public sealed partial class PortsReleasesProvider : IReleaseProvider<PortEnum>
 {
-    private readonly ConcurrentDictionary<PortEnum, Dictionary<OSEnum, GeneralReleaseJsonModel>?> _releases = [];
+    private readonly ConcurrentDictionary<PortEnum, Dictionary<OSEnum, GeneralRelease>?> _releases = [];
 
     private static readonly SemaphoreSlim _semaphore = new(1);
-    private readonly ILogger _logger;
+    private readonly ILogger<PortsReleasesProvider> _logger;
     private readonly HttpClient _httpClient;
 
     public PortsReleasesProvider(
-        ILogger logger,
+        ILogger<PortsReleasesProvider> logger,
         HttpClient httpClient
         )
     {
@@ -30,7 +31,7 @@ public sealed partial class PortsReleasesProvider : IReleaseProvider<PortEnum>
     /// Get the latest release of the selected port
     /// </summary>
     /// <param name="portEnum">Port</param>
-    public async Task<Dictionary<OSEnum, GeneralReleaseJsonModel>?> GetLatestReleaseAsync(PortEnum portEnum)
+    public async Task<Dictionary<OSEnum, GeneralRelease>?> GetLatestReleaseAsync(PortEnum portEnum)
     {
         try
         {
@@ -68,7 +69,7 @@ public sealed partial class PortsReleasesProvider : IReleaseProvider<PortEnum>
                 return null;
             }
 
-            Dictionary<OSEnum, GeneralReleaseJsonModel>? result = null;
+            Dictionary<OSEnum, GeneralRelease>? result = null;
 
             if (repo.WindowsReleasePredicate is not null)
             {
@@ -78,7 +79,7 @@ public sealed partial class PortsReleasesProvider : IReleaseProvider<PortEnum>
 
                     if (winAss is not null)
                     {
-                        GeneralReleaseJsonModel portRelease = new()
+                        GeneralRelease portRelease = new()
                         {
                             SupportedOS = OSEnum.Windows,
                             Description = release.Description,
@@ -105,7 +106,7 @@ public sealed partial class PortsReleasesProvider : IReleaseProvider<PortEnum>
 
                     if (linAss is not null)
                     {
-                        GeneralReleaseJsonModel portRelease = new()
+                        GeneralRelease portRelease = new()
                         {
                             SupportedOS = OSEnum.Linux,
                             Description = release.Description,
@@ -161,7 +162,7 @@ public sealed partial class PortsReleasesProvider : IReleaseProvider<PortEnum>
     /// Hack to get EDuke32 release since dukeworld doesn't have API
     /// </summary>
     /// <param name="response">Json response</param>
-    private GeneralReleaseJsonModel? EDuke32Hack(string response)
+    private GeneralRelease? EDuke32Hack(string response)
     {
         var regex = EDuke32WindowsReleaseRegex();
         var fileName = regex.Matches(response).FirstOrDefault();
@@ -179,7 +180,7 @@ public sealed partial class PortsReleasesProvider : IReleaseProvider<PortEnum>
             return null;
         }
 
-        GeneralReleaseJsonModel release = new()
+        GeneralRelease release = new()
         {
             SupportedOS = OSEnum.Windows,
             Description = string.Empty,

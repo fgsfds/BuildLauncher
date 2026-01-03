@@ -1,5 +1,5 @@
 ﻿using System.Security.Cryptography;
-using Common.All.Serializable.Downloadable;
+using Common.All;
 using Common.Client.Interfaces;
 using Common.Client.Tools;
 
@@ -66,7 +66,7 @@ public abstract class InstallerBase<T>
 
     public abstract void Uninstall();
 
-    public abstract Task<GeneralReleaseJsonModel?> GetRelease();
+    public abstract Task<GeneralRelease?> GetRelease();
 
     public async Task<bool> InstallAsync()
     {

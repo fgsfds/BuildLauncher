@@ -1,8 +1,8 @@
 ﻿using Api.Common.Requests;
 using Api.Common.Responses;
+using Common.All;
 using Common.All.Enums;
 using Common.All.Interfaces;
-using Common.All.Serializable.Downloadable;
 using Mediator;
 
 namespace Web.Blazor.Handlers;
@@ -18,7 +18,7 @@ public sealed class GetPortsReleasesHandler : IRequestHandler<GetPortsReleasesRe
 
     public ValueTask<GetPortsReleasesResponse?> Handle(GetPortsReleasesRequest request, CancellationToken cancellationToken)
     {
-        Dictionary<PortEnum, GeneralReleaseJsonModel>? releases = [];
+        Dictionary<PortEnum, GeneralRelease>? releases = [];
 
         if (request.OSEnum is OSEnum.Windows)
         {

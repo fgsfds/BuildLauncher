@@ -1,9 +1,8 @@
-﻿using System.Text.Json.Serialization;
-using Common.All.Enums;
+﻿using Common.All.Enums;
 
-namespace Common.All.Serializable.Downloadable;
+namespace Common.All;
 
-public sealed class GeneralReleaseJsonModel
+public sealed class GeneralRelease
 {
     public required OSEnum SupportedOS { get; init; }
 
@@ -27,10 +26,3 @@ public sealed class GeneralReleaseJsonModel
     /// </summary>
     public required string? Hash { get; init; }
 }
-
-
-[JsonSourceGenerationOptions(
-    Converters = [typeof(JsonStringEnumConverter<OSEnum>)]
-    )]
-[JsonSerializable(typeof(List<GeneralReleaseJsonModel>))]
-public sealed partial class GeneralReleaseJsonModelContext : JsonSerializerContext;
