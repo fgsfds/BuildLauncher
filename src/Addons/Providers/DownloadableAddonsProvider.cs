@@ -85,9 +85,11 @@ public sealed class DownloadableAddonsProvider
 
             _cache = [];
 
-            addons = [.. addons.Where(a => !a.IsDisabled)
-            .OrderBy(a => a.Title)
-            .ThenBy(a => a.Version)];
+            addons = [..
+                addons
+                .OrderBy(a => a.Title)
+                .ThenBy(a => a.Version)
+                ];
 
             foreach (var addon in addons)
             {

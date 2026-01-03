@@ -29,10 +29,6 @@ public sealed class DownloadableAddonJsonModel
     [JsonPropertyName("FileSize")]
     public required long FileSize { get; set; }
 
-    [JsonIgnore]
-    [JsonPropertyName("IsDisabled")]
-    public bool IsDisabled { get; set; }
-
     [JsonPropertyName("Dependencies")]
     public List<string>? Dependencies { get; set; }
 
@@ -163,14 +159,13 @@ public sealed class DownloadableAddonJsonModel
 
 
 [JsonSourceGenerationOptions(
+    Converters = [
+        typeof(GameEnumJsonConverter)
+        ],
     WriteIndented = true,
     DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
     RespectNullableAnnotations = true,
-    Converters = [
-        //typeof(JsonStringEnumConverter<GameEnum>),
-        typeof(GameEnumJsonConverter),
-        typeof(JsonStringEnumConverter<AddonTypeEnum>)
-        ]
+    UseStringEnumConverter = true
 )]
 [JsonSerializable(typeof(Dictionary<GameEnum, List<DownloadableAddonJsonModel>>))]
 public sealed partial class DownloadableAddonJsonModelDictionaryContext : JsonSerializerContext;
