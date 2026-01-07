@@ -16,11 +16,11 @@
                 <UserControl Content="{Binding Campaigns}"/>
             </TabItem>
 
-            <TabItem Header="Maps" Margin="5" IsVisible="{Binding Maps, Converter={x:Static ObjectConverters.IsNotNull}, FallbackValue=False}}">
+            <TabItem Header="Maps" Margin="5" IsVisible="{Binding Maps, Converter={x:Static ObjectConverters.IsNotNull}, FallbackValue=False}">
                 <UserControl Content="{Binding Maps}"/>
             </TabItem>
 
-            <TabItem Header="Mods" Margin="5" IsVisible="{Binding Maps, Converter={x:Static ObjectConverters.IsNotNull}, FallbackValue=False}}">
+            <TabItem Header="Mods" Margin="5" IsVisible="{Binding Maps, Converter={x:Static ObjectConverters.IsNotNull}, FallbackValue=False}">
                 <UserControl Content="{Binding Mods}"/>
             </TabItem>
 

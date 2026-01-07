@@ -1,4 +1,5 @@
-﻿using Api.Common.Responses;
+﻿using System.ComponentModel.DataAnnotations;
+using Api.Common.Responses;
 using Common.All.Enums;
 using Mediator;
 

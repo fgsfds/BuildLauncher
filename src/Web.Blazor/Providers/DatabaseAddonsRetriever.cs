@@ -13,13 +13,13 @@ namespace Web.Blazor.Providers;
 public sealed class DatabaseAddonsRetriever
 {
     private readonly ILogger<DatabaseAddonsRetriever> _logger;
-    private readonly DatabaseContextFactory _dbContextFactory;
+    private readonly IDbContextFactory<DatabaseContext> _dbContextFactory;
 
     public GeneralRelease? AppRelease { get; }
 
     public DatabaseAddonsRetriever(
         ILogger<DatabaseAddonsRetriever> logger,
-        DatabaseContextFactory dbContextFactory)
+        IDbContextFactory<DatabaseContext> dbContextFactory)
     {
         _logger = logger;
         _dbContextFactory = dbContextFactory;
@@ -32,7 +32,7 @@ public sealed class DatabaseAddonsRetriever
     /// <param name="dontLog">Don't log statistics</param>
     internal List<DownloadableAddonJsonModel> GetAddons(GameEnum gameEnum, bool dontLog = false)
     {
-        using var dbContext = _dbContextFactory.Get();
+        using var dbContext = _dbContextFactory.CreateDbContext();
 
         Stopwatch sw = new();
         sw.Start();
@@ -106,7 +106,7 @@ public sealed class DatabaseAddonsRetriever
 
     internal int IncreaseNumberOfInstalls(string addonId)
     {
-        using var dbContext = _dbContextFactory.Get();
+        using var dbContext = _dbContextFactory.CreateDbContext();
         var fix = dbContext.Installs.Find(addonId);
 
         int newInstalls;
@@ -134,7 +134,7 @@ public sealed class DatabaseAddonsRetriever
 
     internal decimal ChangeRating(string addonId, sbyte rating, bool isNew)
     {
-        using var dbContext = _dbContextFactory.Get();
+        using var dbContext = _dbContextFactory.CreateDbContext();
         var existingRating = dbContext.Rating.Find(addonId) ?? ThrowHelper.ThrowExternalException<RatingsDbEntity>($"Rating for {addonId} is not found");
 
         existingRating.RatingSum += rating;
@@ -151,7 +151,7 @@ public sealed class DatabaseAddonsRetriever
 
     internal void AddReport(string addonId, string text)
     {
-        using var dbContext = _dbContextFactory.Get();
+        using var dbContext = _dbContextFactory.CreateDbContext();
 
         ReportsDbEntity entity = new()
         {
@@ -165,13 +165,13 @@ public sealed class DatabaseAddonsRetriever
 
     internal Dictionary<string, decimal> GetRating()
     {
-        using var dbContext = _dbContextFactory.Get();
+        using var dbContext = _dbContextFactory.CreateDbContext();
         return dbContext.Rating.ToDictionary(static x => x.AddonId, static y => y.Rating);
     }
 
     internal bool AddAddonToDatabase(AddonJsonModel addon)
     {
-        using var dbContext = _dbContextFactory.Get();
+        using var dbContext = _dbContextFactory.CreateDbContext();
 
         using (var transaction = dbContext.Database.BeginTransaction())
         {

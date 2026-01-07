@@ -12,13 +12,6 @@ public sealed class DependencyJsonModel
     public List<FeatureEnum>? RequiredFeatures { get; set; }
 }
 
-[JsonSourceGenerationOptions(
-    Converters = [typeof(JsonStringEnumConverter<FeatureEnum>)],
-    RespectNullableAnnotations = true
-    )]
-[JsonSerializable(typeof(DependencyJsonModel))]
-public sealed partial class DependencyDtoContext : JsonSerializerContext;
-
 
 public sealed class DependantAddonJsonModel
 {
@@ -28,7 +21,3 @@ public sealed class DependantAddonJsonModel
     [JsonPropertyName("version")]
     public string? Version { get; set; }
 }
-
-[JsonSourceGenerationOptions(RespectNullableAnnotations = true)]
-[JsonSerializable(typeof(DependantAddonJsonModel))]
-public sealed partial class DependantAddonJsonModelContext : JsonSerializerContext;
