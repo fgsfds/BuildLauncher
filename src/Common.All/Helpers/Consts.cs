@@ -5,7 +5,7 @@ public static class Consts
     /// <summary>
     /// Path to the files repository
     /// </summary>
-    public const string FilesRepo = $"http://176.222.52.233:9000/buildlauncher";
+    public const string FilesRepo = $"https://s3.firstvds.ru/buildlauncher";
 
     /// <summary>
     /// GirtHub releases Url
