@@ -39,7 +39,7 @@ public sealed class GitHubReleaseAsset
     public DateTime UpdatedDate { get; set; }
 
     [JsonPropertyName("digest")]
-    public string Digest { get; set; }
+    public string? Digest { get; set; }
 }
 
 
