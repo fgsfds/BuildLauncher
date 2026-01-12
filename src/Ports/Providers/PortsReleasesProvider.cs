@@ -2,6 +2,7 @@
 using System.Text.Json;
 using System.Text.RegularExpressions;
 using Common.All.Enums;
+using Common.All.Helpers;
 using Common.All.Interfaces;
 using Common.All.Serializable.Downloadable;
 using CommunityToolkit.Diagnostics;
@@ -13,17 +14,19 @@ public sealed partial class PortsReleasesProvider : IReleaseProvider<PortEnum>
 {
     private readonly ConcurrentDictionary<PortEnum, Dictionary<OSEnum, GeneralReleaseJsonModel>?> _releases = [];
 
-    private static readonly SemaphoreSlim _semaphore = new(1);
+    private static readonly Lock _lock = new();
     private readonly ILogger _logger;
-    private readonly HttpClient _httpClient;
+    private readonly IHttpClientFactory _httpClientFactory;
+
+    private volatile string? _nBloodCache;
 
     public PortsReleasesProvider(
         ILogger logger,
-        HttpClient httpClient
+        IHttpClientFactory httpClientFactory
         )
     {
         _logger = logger;
-        _httpClient = httpClient;
+        _httpClientFactory = httpClientFactory;
     }
 
     /// <summary>
@@ -43,22 +46,46 @@ public sealed partial class PortsReleasesProvider : IReleaseProvider<PortEnum>
                 return null;
             }
 
-            await _semaphore.WaitAsync().ConfigureAwait(false);
-
             if (_releases.TryGetValue(portEnum, out var existingRelease))
             {
                 return existingRelease;
             }
 
-            var response = await _httpClient.GetStringAsync(repo.RepoUrl).ConfigureAwait(false);
+            string? data;
 
             if (portEnum is PortEnum.EDuke32)
             {
-                var edukeRelease = EDuke32Hack(response);
+                using var httpClient = _httpClientFactory.CreateClient();
+                data = await httpClient.GetStringAsync(repo.RepoUrl).ConfigureAwait(false);
+                var edukeRelease = EDuke32Hack(data);
                 return edukeRelease is null ? null : new() { { OSEnum.Windows, edukeRelease } };
             }
 
-            var allReleases = JsonSerializer.Deserialize(response, GitHubReleaseEntityContext.Default.ListGitHubReleaseJsonModel)
+            if (portEnum is PortEnum.NBlood or PortEnum.PCExhumed or PortEnum.RedNukem
+                && _nBloodCache is not null)
+            {
+                using (_lock.EnterScope())
+                {
+                    data = _nBloodCache;
+                }
+            }
+            else
+            {
+                using var httpClient = _httpClientFactory.CreateClient(HttpClientEnum.GitHub.GetDescription());
+                using var response = await httpClient.GetAsync(repo.RepoUrl, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false);
+                _ = response.EnsureSuccessStatusCode();
+                data = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+
+                if (portEnum is PortEnum.NBlood or PortEnum.PCExhumed or PortEnum.RedNukem)
+                {
+                    using (_lock.EnterScope())
+                    {
+                        _nBloodCache = data;
+                    }
+                }
+            }
+
+            var allReleases = JsonSerializer.Deserialize(data, GitHubReleaseEntityContext.Default.ListGitHubReleaseJsonModel)
                 ?? ThrowHelper.ThrowFormatException<List<GitHubReleaseJsonModel>>("Error while deserializing GitHub releases");
 
             var releases = allReleases.Where(static x => !x.IsDraft && !x.IsPrerelease);
@@ -126,21 +153,12 @@ public sealed partial class PortsReleasesProvider : IReleaseProvider<PortEnum>
 
             _ = _releases.TryAdd(portEnum, result);
 
-            await Task.Delay(TimeSpan.FromSeconds(1)).ConfigureAwait(false);
-
             return result;
         }
         catch (Exception ex)
         {
             _logger.LogCritical(ex, $"Error while getting latest release for {portEnum}.");
             return null;
-        }
-        finally
-        {
-            if (_semaphore.CurrentCount == 0)
-            {
-                _ = _semaphore.Release();
-            }
         }
     }
 

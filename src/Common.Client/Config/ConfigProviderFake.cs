@@ -24,6 +24,7 @@ public sealed class ConfigProviderFake : IConfigProvider
     public string? PathWitchaven { get; set; } = null;
     public string? PathWitchaven2 { get; set; } = null;
     public string? PathTekWar { get; set; } = null;
+    public string? GitHubToken { get; set; } = null;
     public Dictionary<string, byte> Rating { get; set; } = [];
 
     public Dictionary<string, TimeSpan> Playtimes => [];
@@ -37,6 +38,7 @@ public sealed class ConfigProviderFake : IConfigProvider
     public bool UseLocalApi { get; set; } = true;
 
     public HashSet<AddonId> FavoriteAddons => [];
+
 
     public event ParameterChanged? ParameterChangedEvent;
 

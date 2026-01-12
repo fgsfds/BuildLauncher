@@ -111,7 +111,7 @@ public sealed partial class ToolViewModel : ObservableObject
         {
             if (_release?.Version is null)
             {
-                return "Not available";
+                return "Error";
             }
 
             if (Tool.ToolEnum is ToolEnum.XMapEdit or ToolEnum.DOSBlood)
@@ -119,7 +119,7 @@ public sealed partial class ToolViewModel : ObservableObject
                 return DateTime.Parse(_release.Version).ToString("dd.MM.yyyy");
             }
 
-            return _release?.Version ?? "Not available";
+            return _release?.Version ?? "Error";
         }
     }
 

@@ -5,10 +5,10 @@ namespace Common.Client.Interfaces;
 
 public interface IConfigProvider
 {
-    string ApiPassword { get; set; }
     HashSet<string> DisabledAutoloadMods { get; }
     HashSet<AddonId> FavoriteAddons { get; }
     bool IsConsented { get; set; }
+    bool UseLocalApi { get; set; }
     string? PathBlood { get; set; }
     string? PathDuke3D { get; set; }
     string? PathDuke64 { get; set; }
@@ -23,12 +23,13 @@ public interface IConfigProvider
     string? PathWitchaven { get; set; }
     string? PathWitchaven2 { get; set; }
     string? PathTekWar { get; set; }
+    string? ApiPassword { get; set; }
+    string? GitHubToken { get; set; }
     Dictionary<string, TimeSpan> Playtimes { get; }
     Dictionary<string, byte> Rating { get; }
     bool SkipIntro { get; set; }
     bool SkipStartup { get; set; }
     ThemeEnum Theme { get; set; }
-    bool UseLocalApi { get; set; }
 
     delegate void ParameterChanged(string? parameterName);
     event ParameterChanged ParameterChangedEvent;

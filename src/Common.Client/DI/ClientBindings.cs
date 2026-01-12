@@ -1,4 +1,7 @@
 ﻿using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using Common.All.Enums;
 using Common.All.Helpers;
 using Common.All.Providers;
 using Common.Client.Api;
@@ -23,9 +26,7 @@ public static class ClientBindings
 
         _ = container.AddSingleton<AppUpdateInstaller>();
         _ = container.AddSingleton<PlaytimeProvider>();
-        _ = container.AddSingleton<IApiInterface, GitHubApiInterface>();
         _ = container.AddSingleton<RatingProvider>();
-        _ = container.AddSingleton<HttpClient>(CreateHttpClient);
         _ = container.AddSingleton<FilesUploader>();
         _ = container.AddSingleton<RepoAppReleasesProvider>();
         _ = container.AddSingleton<DownloadService>(CreateDownloadService);
@@ -53,24 +54,43 @@ public static class ClientBindings
                     );
         }
 
+        if (ClientProperties.IsOfflineMode)
+        {
+            _ = container.AddSingleton<IApiInterface, OfflineApiInterface>();
+
+            _ = container.AddHttpClient<HttpClient>(HttpClientEnum.GitHub.GetDescription(), _ => { })
+                .ConfigurePrimaryHttpMessageHandler(() => new FakeHttpMessageHandler());
+            _ = container.AddHttpClient<HttpClient>(string.Empty, _ => { })
+                .ConfigurePrimaryHttpMessageHandler(() => new FakeHttpMessageHandler());
+        }
+        else
+        {
+            _ = container.AddSingleton<IApiInterface, GitHubApiInterface>();
+
+            _ = container.AddHttpClient(HttpClientEnum.GitHub.GetDescription())
+                .ConfigureHttpClient((serviceProvider, client) =>
+                {
+                    var config = serviceProvider.GetRequiredService<IConfigProvider>();
+                    client.DefaultRequestHeaders.Add("User-Agent", "BuildLauncher");
+                    client.Timeout = TimeSpan.FromSeconds(30);
+                    if (!string.IsNullOrWhiteSpace(config.GitHubToken))
+                    {
+                        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", config.GitHubToken);
+                    }
+                });
+
+            _ = container.AddHttpClient(string.Empty, client =>
+            {
+                client.DefaultRequestHeaders.Add("User-Agent", "BuildLauncher");
+                client.Timeout = TimeSpan.FromSeconds(30);
+            });
+        }
+
         _ = container.AddSingleton<ILogger>(sp =>
         {
             var factory = sp.GetRequiredService<ILoggerFactory>();
             return factory.CreateLogger("Default");
         });
-    }
-
-    private static HttpClient CreateHttpClient(IServiceProvider service)
-    {
-        if (ClientProperties.IsOfflineMode)
-        {
-            return new HttpClient(new FakeHttpMessageHandler());
-        }
-
-        HttpClient httpClient = new();
-        httpClient.DefaultRequestHeaders.Add("User-Agent", "BuildLauncher");
-        httpClient.Timeout = TimeSpan.FromSeconds(30);
-        return httpClient;
     }
 
     private static DownloadService CreateDownloadService(IServiceProvider provider)
@@ -103,7 +123,7 @@ public static class ClientBindings
         protected override Task<HttpResponseMessage> SendAsync(
             HttpRequestMessage request, CancellationToken cancellationToken)
         {
-            var response = new HttpResponseMessage(HttpStatusCode.OK)
+            var response = new HttpResponseMessage(HttpStatusCode.Forbidden)
             {
                 Content = new StringContent("Fake response")
             };

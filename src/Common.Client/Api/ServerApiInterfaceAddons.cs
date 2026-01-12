@@ -11,18 +11,18 @@ namespace Common.Client.Api;
 
 public sealed partial class ServerApiInterface : IApiInterface
 {
-    private readonly HttpClient _httpClient;
+    private readonly IHttpClientFactory _httpClientFactory;
     private readonly IConfigProvider _config;
 
     private string ApiUrl => _config.UseLocalApi ? "https://localhost:7126/api" : "https://buildlauncher.fgsfds.link/api";
 
     public ServerApiInterface(
         IConfigProvider config,
-        HttpClient httpClient
+        IHttpClientFactory httpClientFactory
         )
     {
         _config = config;
-        _httpClient = httpClient;
+        _httpClientFactory = httpClientFactory;
     }
 
     public async Task<List<DownloadableAddonJsonModel>?> GetAddonsAsync(GameEnum gameEnum)
@@ -38,12 +38,9 @@ public sealed partial class ServerApiInterface : IApiInterface
             using HttpRequestMessage requestMessage = new(HttpMethod.Get, $"{ApiUrl}/addons");
             requestMessage.Content = JsonContent.Create(message);
 
-            using HttpResponseMessage? response = await _httpClient.SendAsync(requestMessage).ConfigureAwait(false);
-
-            if (response?.IsSuccessStatusCode is not true)
-            {
-                return null;
-            }
+            using var httpClient = _httpClientFactory.CreateClient();
+            using var response = await httpClient.SendAsync(requestMessage).ConfigureAwait(false);
+            _ = response.EnsureSuccessStatusCode();
 
             var addons = await response.Content.ReadFromJsonAsync<GetAddonsResponse>().ConfigureAwait(false);
 
@@ -72,7 +69,8 @@ public sealed partial class ServerApiInterface : IApiInterface
             using HttpRequestMessage requestMessage = new(HttpMethod.Get, $"{ApiUrl}/addons/ratings");
             requestMessage.Content = JsonContent.Create(message);
 
-            using var response = await _httpClient.SendAsync(requestMessage).ConfigureAwait(false);
+            using var httpClient = _httpClientFactory.CreateClient();
+            using var response = await httpClient.SendAsync(requestMessage).ConfigureAwait(false);
 
             if (response?.IsSuccessStatusCode is not true)
             {
@@ -98,13 +96,12 @@ public sealed partial class ServerApiInterface : IApiInterface
     {
         try
         {
-            using var response = await _httpClient.PutAsJsonAsync($"{ApiUrl}/addons/rating/change", new Tuple<string, sbyte, bool>(addonId, score, isNew)).ConfigureAwait(false);
+            using var httpClient = _httpClientFactory.CreateClient();
+            using var response = await httpClient.PutAsJsonAsync($"{ApiUrl}/addons/rating/change", new Tuple<string, sbyte, bool>(addonId, score, isNew)).ConfigureAwait(false);
+            _ = response.EnsureSuccessStatusCode();
+            
             var responseStr = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 
-            if (string.IsNullOrWhiteSpace(responseStr))
-            {
-                return null;
-            }
 
             var newScore = decimal.TryParse(responseStr, out var newScoreInt);
 
@@ -120,7 +117,8 @@ public sealed partial class ServerApiInterface : IApiInterface
     {
         try
         {
-            using var response = await _httpClient.PutAsJsonAsync($"{ApiUrl}/addons/installs/add", addonId).ConfigureAwait(false);
+            using var httpClient = _httpClientFactory.CreateClient();
+            using var response = await httpClient.PutAsJsonAsync($"{ApiUrl}/addons/installs/add", addonId).ConfigureAwait(false);
 
             return response.IsSuccessStatusCode;
         }
@@ -136,7 +134,8 @@ public sealed partial class ServerApiInterface : IApiInterface
         {
             var apiPassword = _config.ApiPassword;
 
-            using var response = await _httpClient.PostAsJsonAsync($"{ApiUrl}/addons/add", new Tuple<DownloadableAddonJsonModel, string>(addon, apiPassword)).ConfigureAwait(false);
+            using var httpClient = _httpClientFactory.CreateClient();
+            using var response = await httpClient.PostAsJsonAsync($"{ApiUrl}/addons/add", new Tuple<DownloadableAddonJsonModel, string>(addon, apiPassword)).ConfigureAwait(false);
 
             return response.IsSuccessStatusCode;
         }
@@ -152,7 +151,8 @@ public sealed partial class ServerApiInterface : IApiInterface
         {
             var encodedPath = HttpUtility.UrlEncode(path);
 
-            var signedUrl = await _httpClient.GetStringAsync($"{ApiUrl}/storage/url/{encodedPath}").ConfigureAwait(false);
+            using var httpClient = _httpClientFactory.CreateClient();
+            var signedUrl = await httpClient.GetStringAsync($"{ApiUrl}/storage/url/{encodedPath}").ConfigureAwait(false);
 
             return signedUrl;
         }

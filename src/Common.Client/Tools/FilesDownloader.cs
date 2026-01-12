@@ -1,5 +1,4 @@
-﻿using CommunityToolkit.Diagnostics;
-using Downloader;
+﻿using Downloader;
 using Microsoft.Extensions.Logging;
 
 namespace Common.Client.Tools;
@@ -7,7 +6,7 @@ namespace Common.Client.Tools;
 public sealed class FilesDownloader
 {
     private readonly DownloadService _downloadService;
-    private readonly HttpClient _httpClient;
+    private readonly IHttpClientFactory _httpClientFactory;
     private readonly ILogger _logger;
 
     /// <summary>
@@ -17,12 +16,12 @@ public sealed class FilesDownloader
 
     public FilesDownloader(
         DownloadService downloadService,
-        HttpClient httpClient,
+        IHttpClientFactory httpClientFactory,
         ILogger logger
         )
     {
         _downloadService = downloadService;
-        _httpClient = httpClient;
+        _httpClientFactory = httpClientFactory;
         _logger = logger;
     }
 
@@ -48,12 +47,9 @@ public sealed class FilesDownloader
             File.Delete(tempFile);
         }
 
-        using var response = await _httpClient.GetAsync(url, HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-
-        if (!response.IsSuccessStatusCode)
-        {
-            ThrowHelper.ThrowExternalException($"Error while downloading {url}, error: {response.StatusCode}");
-        }
+        using var httpClient = _httpClientFactory.CreateClient();
+        using var response = await httpClient.GetAsync(url, HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+        _ = response.EnsureSuccessStatusCode();
 
         await using var source = await response.Content.ReadAsStreamAsync(cancellationToken).ConfigureAwait(false);
         var contentLength = response.Content.Headers.ContentLength;

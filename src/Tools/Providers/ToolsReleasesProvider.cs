@@ -1,6 +1,7 @@
 ﻿using System.Collections.Concurrent;
 using System.Text.Json;
 using Common.All.Enums;
+using Common.All.Helpers;
 using Common.All.Interfaces;
 using Common.All.Serializable.Downloadable;
 using CommunityToolkit.Diagnostics;
@@ -11,19 +12,16 @@ namespace Tools.Providers;
 public sealed class ToolsReleasesProvider : IReleaseProvider<ToolEnum>
 {
     private readonly ConcurrentDictionary<ToolEnum, Dictionary<OSEnum, GeneralReleaseJsonModel>?> _releases = [];
-
-    private static readonly SemaphoreSlim _semaphore = new(1);
-
     private readonly ILogger _logger;
-    private readonly HttpClient _httpClient;
+    private readonly IHttpClientFactory _httpClientFactory;
 
     public ToolsReleasesProvider(
         ILogger logger,
-        HttpClient httpClient
+        IHttpClientFactory httpClientFactory
         )
     {
         _logger = logger;
-        _httpClient = httpClient;
+        _httpClientFactory = httpClientFactory;
     }
 
     /// <summary>
@@ -43,16 +41,17 @@ public sealed class ToolsReleasesProvider : IReleaseProvider<ToolEnum>
                 return null;
             }
 
-            await _semaphore.WaitAsync().ConfigureAwait(false);
-
             if (_releases.TryGetValue(toolEnum, out var existingRelease))
             {
                 return existingRelease;
             }
 
-            var response = await _httpClient.GetStringAsync(repo.RepoUrl).ConfigureAwait(false);
+            using var httpClient = _httpClientFactory.CreateClient(HttpClientEnum.GitHub.GetDescription());
+            using var response = await httpClient.GetAsync(repo.RepoUrl, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false);
+            _ = response.EnsureSuccessStatusCode();
+            var data = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 
-            var allReleases = JsonSerializer.Deserialize(response, GitHubReleaseEntityContext.Default.ListGitHubReleaseJsonModel)
+            var allReleases = JsonSerializer.Deserialize(data, GitHubReleaseEntityContext.Default.ListGitHubReleaseJsonModel)
                 ?? ThrowHelper.ThrowFormatException<List<GitHubReleaseJsonModel>>("Error while deserializing GitHub releases");
 
             var releases = allReleases.Where(static x => !x.IsDraft && !x.IsPrerelease);
@@ -128,13 +127,6 @@ public sealed class ToolsReleasesProvider : IReleaseProvider<ToolEnum>
         {
             _logger.LogCritical(ex, $"Error while getting latest release for {toolEnum}.");
             return null;
-        }
-        finally
-        {
-            if (_semaphore.CurrentCount == 0)
-            {
-                _ = _semaphore.Release();
-            }
         }
     }
 

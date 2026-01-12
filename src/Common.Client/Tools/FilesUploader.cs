@@ -13,16 +13,16 @@ namespace Common.Client.Tools;
 public sealed class FilesUploader
 {
     private readonly IApiInterface _apiInterface;
-    private readonly HttpClient _httpClient;
+    private readonly IHttpClientFactory _httpClientFactory;
 
 
     public FilesUploader(
         IApiInterface apiInterface,
-        HttpClient httpClient
+        IHttpClientFactory httpClientFactory
         )
     {
         _apiInterface = apiInterface;
-        _httpClient = httpClient;
+        _httpClientFactory = httpClientFactory;
     }
 
 
@@ -95,7 +95,8 @@ public sealed class FilesUploader
 
         var downloadUrl = $"{Consts.FilesRepo}/{gameName}/{folderName}/{Path.GetFileName(pathToFile)}";
 
-        using var response = await _httpClient.GetAsync(downloadUrl, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false);
+        using var httpClient = _httpClientFactory.CreateClient();
+        using var response = await httpClient.GetAsync(downloadUrl, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false);
 
         if (!response.IsSuccessStatusCode)
         {

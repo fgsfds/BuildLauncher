@@ -1,4 +1,6 @@
 ﻿using System.Runtime.CompilerServices;
+using System.Security.Cryptography;
+using System.Text;
 using Common.All;
 using Common.Client.Enums;
 using Common.Client.Interfaces;
@@ -46,7 +48,7 @@ public sealed class ConfigProvider : IConfigProvider
         set => SetSettingsValue(value.ToString());
     }
 
-    public string ApiPassword
+    public string? ApiPassword
     {
         get
         {
@@ -54,7 +56,7 @@ public sealed class ConfigProvider : IConfigProvider
             return dbContext.Settings.Find(nameof(ApiPassword))?.Value ?? string.Empty;
         }
 
-        set => SetSettingsValue(value);
+        set => SetSettingsValue(value ?? string.Empty);
     }
 
     public bool IsConsented
@@ -147,6 +149,33 @@ public sealed class ConfigProvider : IConfigProvider
     {
         get => GetGamePath(nameof(PathTekWar));
         set => SetGamePathValue(value);
+    }
+
+    public string? GitHubToken
+    {
+        get
+        {
+            var str = GetStringValue(nameof(GitHubToken));
+
+            if (string.IsNullOrWhiteSpace(str))
+            {
+                return null;
+            }
+
+            return Unprotect(str);
+        }
+
+        set
+        {
+            if (value is null)
+            {
+                SetSettingsValue(string.Empty);
+                return;
+            }
+
+            var pro = Protect(value);
+            SetSettingsValue(pro);
+        }
     }
 
     public Dictionary<string, byte> Rating
@@ -341,6 +370,12 @@ public sealed class ConfigProvider : IConfigProvider
         return bool.TryParse(dbContext.Settings.Find(propertyName)?.Value, out var result) && result;
     }
 
+    private string GetStringValue(string propertyName)
+    {
+        using var dbContext = _dbContextFactory.CreateDbContext();
+        return dbContext.Settings.Find(propertyName)?.Value ?? string.Empty;
+    }
+
     private void SetSettingsValue(string value, [CallerMemberName] string caller = "")
     {
         using var dbContext = _dbContextFactory.CreateDbContext();
@@ -384,5 +419,37 @@ public sealed class ConfigProvider : IConfigProvider
 
         _ = dbContext.SaveChanges();
         ParameterChangedEvent?.Invoke(caller);
+    }
+
+
+    private static string Protect(string plainText)
+    {
+        if (!OperatingSystem.IsWindows())
+        {
+            throw new InvalidOperationException();
+        }
+
+        var data = Encoding.UTF8.GetBytes(plainText);
+        var pro = ProtectedData.Protect(data, DataProtectionScope.CurrentUser);
+        return Convert.ToBase64String(pro);
+    }
+
+    private static string? Unprotect(string cipherText)
+    {
+        if (!OperatingSystem.IsWindows())
+        {
+            throw new InvalidOperationException();
+        }
+
+        try
+        {
+            var bytes = Convert.FromBase64String(cipherText);
+            var data = ProtectedData.Unprotect(bytes, DataProtectionScope.CurrentUser);
+            return Encoding.UTF8.GetString(data);
+        }
+        catch
+        {
+            return null;
+        }
     }
 }

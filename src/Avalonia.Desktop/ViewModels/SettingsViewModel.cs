@@ -123,6 +123,12 @@ public sealed partial class SettingsViewModel : ObservableObject
         set => _config.PathTekWar = value;
     }
 
+    public string? GitHubToken
+    {
+        get => _config.GitHubToken;
+        set => _config.GitHubToken = value;
+    }
+
     /// <summary>
     /// Skip intro parameter
     /// </summary>

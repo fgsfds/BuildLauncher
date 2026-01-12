@@ -10,17 +10,17 @@ namespace Common.All.Providers;
 public sealed class RepoAppReleasesProvider
 {
     private readonly ILogger _logger;
-    private readonly HttpClient _httpClient;
+    private readonly IHttpClientFactory _httpClientFactory;
 
     private Dictionary<OSEnum, GeneralReleaseJsonModel>? _appRelease = null;
 
     public RepoAppReleasesProvider(
         ILogger logger,
-        HttpClient httpClient
+        IHttpClientFactory httpClientFactory
         )
     {
         _logger = logger;
-        _httpClient = httpClient;
+        _httpClientFactory = httpClientFactory;
     }
 
     /// <summary>
@@ -37,13 +37,9 @@ public sealed class RepoAppReleasesProvider
 
             _logger.LogInformation("Looking for new app release");
 
-            using var response = await _httpClient.GetAsync(Consts.GitHubReleases, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false);
-
-            if (!response.IsSuccessStatusCode)
-            {
-                _logger.LogError("Error while getting releases" + Environment.NewLine + response.StatusCode);
-                return null;
-            }
+            using var client = _httpClientFactory.CreateClient(HttpClientEnum.GitHub.GetDescription());
+            using var response = await client.GetAsync(Consts.GitHubReleases, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false);
+            _ = response.EnsureSuccessStatusCode();
 
             var releasesJson = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 

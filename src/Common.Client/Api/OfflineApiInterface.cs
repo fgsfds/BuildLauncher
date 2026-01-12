@@ -1,9 +1,5 @@
 ﻿using System.Text.Json;
 using Common.All.Enums;
-using Common.All.Helpers;
-using Common.All.Interfaces;
-using Common.All.Providers;
-using Common.All.Serializable;
 using Common.All.Serializable.Downloadable;
 using Common.Client.Helpers;
 using Common.Client.Interfaces;
@@ -12,34 +8,19 @@ using Microsoft.Extensions.Logging;
 
 namespace Common.Client.Api;
 
-public sealed class GitHubApiInterface : IApiInterface
+public sealed class OfflineApiInterface : IApiInterface
 {
-    private readonly IReleaseProvider<PortEnum> _portsReleasesProvider;
-    private readonly IReleaseProvider<ToolEnum> _toolsReleasesProvider;
-    private readonly RepoAppReleasesProvider _appReleasesProvider;
-    private readonly IHttpClientFactory _httpClientFactory;
     private readonly ILogger _logger;
     private readonly SemaphoreSlim _semaphore = new(1);
 
     private Dictionary<GameEnum, List<DownloadableAddonJsonModel>>? _addonsJson;
-    private Dictionary<string, string>? _data;
 
-
-    public GitHubApiInterface(
-        IReleaseProvider<PortEnum> portsReleasesProvider,
-        IReleaseProvider<ToolEnum> toolsReleasesRetriever,
-        RepoAppReleasesProvider appReleasesProvider,
-        IHttpClientFactory httpClientFactory,
+    public OfflineApiInterface(
         ILogger logger
         )
     {
-        _portsReleasesProvider = portsReleasesProvider;
-        _toolsReleasesProvider = toolsReleasesRetriever;
-        _appReleasesProvider = appReleasesProvider;
-        _httpClientFactory = httpClientFactory;
         _logger = logger;
     }
-
 
     public async Task<List<DownloadableAddonJsonModel>?> GetAddonsAsync(GameEnum gameEnum)
     {
@@ -49,11 +30,12 @@ public sealed class GitHubApiInterface : IApiInterface
         {
             if (_addonsJson is null)
             {
-                using var httpClient = _httpClientFactory.CreateClient(HttpClientEnum.GitHub.GetDescription());
-                using var response = await httpClient.GetAsync(Consts.AddonsJsonUrl, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false);
-                _ = response.EnsureSuccessStatusCode();
+                if (ClientProperties.PathToLocalAddonsJson is null)
+                {
+                    return null;
+                }
 
-                var addons = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+                var addons = File.ReadAllText(ClientProperties.PathToLocalAddonsJson);
 
                 _addonsJson = JsonSerializer.Deserialize(addons, DownloadableAddonJsonModelDictionaryContext.Default.DictionaryGameEnumListDownloadableAddonJsonModel);
 
@@ -92,41 +74,11 @@ public sealed class GitHubApiInterface : IApiInterface
         }
     }
 
-    public async Task<GeneralReleaseJsonModel?> GetLatestAppReleaseAsync()
-    {
-        var result = await _appReleasesProvider.GetLatestReleaseAsync(ClientProperties.IsDeveloperMode).ConfigureAwait(false);
+    public Task<GeneralReleaseJsonModel?> GetLatestAppReleaseAsync() => Task.FromResult<GeneralReleaseJsonModel?>(null);
 
-        if (result?.TryGetValue(CommonProperties.OSEnum, out var release) is true)
-        {
-            return release;
-        }
+    public Task<GeneralReleaseJsonModel?> GetLatestPortReleaseAsync(PortEnum portEnum) => Task.FromResult<GeneralReleaseJsonModel?>(null);
 
-        return null;
-    }
-
-    public async Task<GeneralReleaseJsonModel?> GetLatestPortReleaseAsync(PortEnum portEnum)
-    {
-        var result = await _portsReleasesProvider.GetLatestReleaseAsync(portEnum).ConfigureAwait(false);
-
-        if (result?.TryGetValue(CommonProperties.OSEnum, out var release) is true)
-        {
-            return release;
-        }
-
-        return null;
-    }
-
-    public async Task<GeneralReleaseJsonModel?> GetLatestToolReleaseAsync(ToolEnum toolEnum)
-    {
-        var result = await _toolsReleasesProvider.GetLatestReleaseAsync(toolEnum).ConfigureAwait(false);
-
-        if (result?.TryGetValue(CommonProperties.OSEnum, out var release) is true)
-        {
-            return release;
-        }
-
-        return null;
-    }
+    public Task<GeneralReleaseJsonModel?> GetLatestToolReleaseAsync(ToolEnum toolEnum) => Task.FromResult<GeneralReleaseJsonModel?>(null);
 
     public Task<bool> AddAddonToDatabaseAsync(DownloadableAddonJsonModel addon)
     {
@@ -175,46 +127,7 @@ public sealed class GitHubApiInterface : IApiInterface
         return Task.FromResult(true);
     }
 
-    public async Task<string?> GetUploadFolder()
-    {
-        await _semaphore.WaitAsync().ConfigureAwait(false);
-
-        try
-        {
-            if (_data is null)
-            {
-                await InitData().ConfigureAwait(false);
-            }
-
-            return _data!.TryGetValue(DataJson.UploadFolder, out var uploadFolder) ? uploadFolder : null;
-        }
-        catch (Exception ex)
-        {
-            _logger.LogCritical(ex, "=== Error while getting upload folder from GitHub ===");
-            return null;
-        }
-        finally
-        {
-            _ = _semaphore.Release();
-        }
-    }
-
-
-    private async Task InitData()
-    {
-        using var httpClient = _httpClientFactory.CreateClient(HttpClientEnum.GitHub.GetDescription());
-        using var response = await httpClient.GetAsync(Consts.DataJsonUrl, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false);
-        _ = response.EnsureSuccessStatusCode();
-
-        var data = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-
-        _data = JsonSerializer.Deserialize(data, DataJsonModelContext.Default.DictionaryStringString);
-
-        if (_data is null)
-        {
-            ThrowHelper.ThrowArgumentNullException();
-        }
-    }
+    public Task<string?> GetUploadFolder() => Task.FromResult<string?>(null);
 
 
     #region Not Implemented

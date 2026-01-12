@@ -3,9 +3,10 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:i="https://github.com/projektanker/icons.avalonia"
+             xmlns:md="https://github.com/whistyun/Markdown.Avalonia.Tight"
              mc:Ignorable="d"
              d:DesignWidth="800"
-             d:DesignHeight="600"
+             d:DesignHeight="700"
              xmlns:vm="clr-namespace:Avalonia.Desktop.ViewModels"
              x:DataType="vm:SettingsViewModel"
              x:Class="Avalonia.Desktop.Pages.SettingsPage">
@@ -49,7 +50,7 @@
 
             </Grid>
 
-            <Grid ColumnDefinitions="auto,*,auto,auto,auto" RowDefinitions="auto,auto,auto,auto,auto,auto,auto,auto,auto,auto,auto,auto,auto,auto">
+            <Grid ColumnDefinitions="auto,*,auto,auto,auto" RowDefinitions="auto,auto,auto,auto,auto,auto,auto,auto,auto,auto,auto,auto,auto,auto,auto,auto,auto,auto,auto,auto">
 
                 <!--Path to Duke 3D-->
                 <TextBlock Grid.Row="0" Grid.Column="0"
@@ -438,25 +439,50 @@
                     ...
                 </Button>
 
+
+                <StackPanel Orientation="Horizontal"
+                            Grid.Row="14"  Grid.Column="0" Grid.ColumnSpan="2">
+
+                    <CheckBox IsChecked="{Binding SkipIntroCheckbox}"
+                              VerticalAlignment="Center"
+                              Margin="10,5">
+                        Skip intro
+                    </CheckBox>
+
+                    <CheckBox IsChecked="{Binding SkipStartupCheckbox}"
+                              VerticalAlignment="Center"
+                              Margin="10,0">
+                        Skip startup window
+                    </CheckBox>
+
+                </StackPanel>
+
+
+                <!--GitHub token-->
+                <TextBlock Grid.Row="16" Grid.Column="0"
+                           VerticalAlignment="Center"
+                           Margin="10,5">GitHub token:</TextBlock>
+
+                <TextBox Grid.Row="16"  Grid.Column="1" Grid.ColumnSpan="3"
+                         Text="{Binding GitHubToken}"
+                         Margin="0,3,10,3"/>
+
+                <md:MarkdownScrollViewer Grid.Row="17" Grid.ColumnSpan="4"
+                                         Margin="10,0,10,5"
+                                         Markdown="*GitHub token is optional and helps to avoid rate limit exceeded error.*
+                                         *Open* [https://github.com/settings/tokens](https://github.com/settings/tokens) *to create new **classic** token.*
+                                         *Token is encrypted and can only be decrypted by the current user.*
+                                         "/>
+
+
+                <Button Grid.Row="18"  Grid.Column="0"
+                        VerticalAlignment="Center"
+                        Command="{Binding OpenLogCommand}"
+                        Margin="10">
+                    Open log...
+                </Button>
+
             </Grid>
-
-            <CheckBox IsChecked="{Binding SkipIntroCheckbox}"
-                      VerticalAlignment="Center"
-                      Margin="10,5">
-                Skip intro
-            </CheckBox>
-
-            <CheckBox IsChecked="{Binding SkipStartupCheckbox}"
-                      VerticalAlignment="Center"
-                      Margin="10,0">
-                Skip startup window
-            </CheckBox>
-
-            <Button VerticalAlignment="Center"
-                    Command="{Binding OpenLogCommand}"
-                    Margin="10">
-                Open log...
-            </Button>
 
         </StackPanel>
 

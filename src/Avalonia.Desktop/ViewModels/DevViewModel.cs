@@ -80,7 +80,7 @@ public sealed partial class DevViewModel : ObservableObject
         _apiInterface = apiInterface;
         _logger = logger;
 
-        ApiPasswordTextBox = _config.ApiPassword;
+        ApiPasswordTextBox = _config.ApiPassword ?? string.Empty;
     }
 
 

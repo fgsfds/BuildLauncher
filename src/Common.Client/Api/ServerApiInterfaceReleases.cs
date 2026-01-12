@@ -23,12 +23,9 @@ public sealed partial class ServerApiInterface
             using HttpRequestMessage requestMessage = new(HttpMethod.Get, $"{ApiUrl}/releases/app");
             requestMessage.Content = JsonContent.Create(message);
 
-            using var response = await _httpClient.SendAsync(requestMessage).ConfigureAwait(false);
-
-            if (response?.IsSuccessStatusCode is not true)
-            {
-                return null;
-            }
+            using var httpClient = _httpClientFactory.CreateClient();
+            using var response = await httpClient.SendAsync(requestMessage).ConfigureAwait(false);
+            _ = response.EnsureSuccessStatusCode();
 
             var update = await response.Content.ReadFromJsonAsync<GetAppReleaseResponse>().ConfigureAwait(false);
 

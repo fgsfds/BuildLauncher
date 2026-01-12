@@ -117,7 +117,7 @@ public sealed partial class PortViewModel : ObservableObject
 
             if (_release?.Version is null)
             {
-                return "Not available";
+                return "Error";
             }
 
             if (Port.PortEnum is PortEnum.NotBlood)
@@ -125,7 +125,7 @@ public sealed partial class PortViewModel : ObservableObject
                 return DateTime.Parse(_release.Version).ToString("dd.MM.yyyy");
             }
 
-            return _release?.Version ?? "Not available";
+            return _release?.Version ?? "Error";
         }
     }
 
