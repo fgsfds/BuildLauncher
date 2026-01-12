@@ -116,8 +116,8 @@ public sealed class AddonsDatabaseTests
             }
         }
 
-        var access = Environment.GetEnvironmentVariable("MINIO_ACCESS_KEY");
-        var secret = Environment.GetEnvironmentVariable("MINIO_SECRET_KEY");
+        var access = Environment.GetEnvironmentVariable("S3_ACCESS_KEY");
+        var secret = Environment.GetEnvironmentVariable("S3_SECRET_KEY");
 
         Assert.NotNull(access);
         Assert.NotNull(secret);
