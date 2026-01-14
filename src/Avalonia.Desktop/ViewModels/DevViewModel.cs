@@ -204,6 +204,8 @@ public sealed partial class DevViewModel : ObservableObject
     [ObservableProperty]
     private bool _isSndInfoSelected;
     [ObservableProperty]
+    private bool _isTilefromtextureSelected;
+    [ObservableProperty]
     private bool _isInProgress;
     [ObservableProperty]
     private int _progressBarValue = 0;
@@ -704,6 +706,10 @@ public sealed partial class DevViewModel : ObservableObject
         {
             features.Add(FeatureEnum.SndInfo);
         }
+        if (IsTilefromtextureSelected)
+        {
+            features.Add(FeatureEnum.TileFromTexture);
+        }
 
         IStartMap? startMap = null;
 
@@ -884,6 +890,7 @@ public sealed partial class DevViewModel : ObservableObject
         IsCstatSelected = result.Dependencies?.RequiredFeatures is not null && result.Dependencies.RequiredFeatures.Contains(FeatureEnum.Wall_Rotate_Cstat);
         IsLightingSelected = result.Dependencies?.RequiredFeatures is not null && result.Dependencies.RequiredFeatures.Contains(FeatureEnum.Dynamic_Lighting);
         IsSndInfoSelected = result.Dependencies?.RequiredFeatures is not null && result.Dependencies.RequiredFeatures.Contains(FeatureEnum.SndInfo);
+        IsTilefromtextureSelected = result.Dependencies?.RequiredFeatures is not null && result.Dependencies.RequiredFeatures.Contains(FeatureEnum.TileFromTexture);
 
         DependenciesList = result.Dependencies?.Addons is null ? null : [.. result.Dependencies.Addons];
         IncompatibilitiesList = result.Incompatibles?.Addons is null ? null : [.. result.Incompatibles.Addons];
