@@ -54,7 +54,9 @@ public sealed class ToolsReleasesProvider : IReleaseProvider<ToolEnum>
             var allReleases = JsonSerializer.Deserialize(data, GitHubReleaseEntityContext.Default.ListGitHubReleaseJsonModel)
                 ?? ThrowHelper.ThrowFormatException<List<GitHubReleaseJsonModel>>("Error while deserializing GitHub releases");
 
-            var releases = allReleases.Where(static x => !x.IsDraft && !x.IsPrerelease);
+            var releases = allReleases
+                .Where(static x => !x.IsDraft && !x.IsPrerelease)
+                .ToList();
 
             if (releases is null)
             {

@@ -14,7 +14,7 @@ public static class AutoloadModsValidator
     /// <param name="campaign">Campaign</param>
     /// <param name="mods">Autoload mods</param>
     /// <param name="features">Features supported by the port</param>
-    public static bool ValidateAutoloadMod(AutoloadMod autoloadMod, BaseAddon campaign, IEnumerable<KeyValuePair<AddonId, BaseAddon>> mods, List<FeatureEnum> features)
+    public static bool ValidateAutoloadMod(AutoloadMod autoloadMod, BaseAddon campaign, IReadOnlyDictionary<AddonId, BaseAddon> mods, List<FeatureEnum> features)
     {
         if (!autoloadMod.IsEnabled)
         {
@@ -84,7 +84,7 @@ public static class AutoloadModsValidator
     private static bool CheckDependencies(
         AutoloadMod autoloadMod,
         BaseAddon campaign,
-        IEnumerable<KeyValuePair<AddonId, BaseAddon>> mods)
+        IReadOnlyDictionary<AddonId, BaseAddon> mods)
     {
         if (autoloadMod.DependentAddons is not null)
         {
@@ -138,7 +138,7 @@ public static class AutoloadModsValidator
     private static bool CheckIncompatibles(
         AutoloadMod autoloadMod,
         BaseAddon campaign,
-        IEnumerable<KeyValuePair<AddonId, BaseAddon>> mods
+        IReadOnlyDictionary<AddonId, BaseAddon> mods
         )
     {
         var campaignIncompatibles = campaign.IncompatibleAddons?.ToDictionary() ?? [];

@@ -41,8 +41,7 @@ public sealed class AppUpdateInstaller
             return null;
         }
 
-        if (release is not null &&
-            new Version(release.Version) > currentVersion)
+        if (new Version(release.Version) > currentVersion)
         {
             _update = release;
             _logger.LogInformation($"Found new version {_update.Version}");

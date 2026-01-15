@@ -35,8 +35,8 @@ public sealed class ViewModelsFactory
     private readonly AppUpdateInstaller _appUpdateInstaller;
     private readonly GamesPathsProvider _gamesPathsProvider;
     private readonly BitmapsCache _bitmapsCache;
-    private readonly IEnumerable<BasePort> _ports;
-    private readonly IEnumerable<BaseTool> _tools;
+    private readonly IReadOnlyList<BasePort> _ports;
+    private readonly IReadOnlyList<BaseTool> _tools;
     private readonly ILogger _logger;
 
     public ViewModelsFactory(
@@ -77,8 +77,8 @@ public sealed class ViewModelsFactory
         _appUpdateInstaller = appUpdateInstaller;
         _gamesPathsProvider = gamesPathsProvider;
         _bitmapsCache = bitmapsCache;
-        _ports = ports;
-        _tools = tools;
+        _ports = [.. ports];
+        _tools = [.. tools];
         _logger = logger;
     }
 

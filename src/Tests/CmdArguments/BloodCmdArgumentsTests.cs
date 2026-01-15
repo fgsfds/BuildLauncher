@@ -1,4 +1,5 @@
 using Addons.Addons;
+using Common.All;
 using Common.All.Enums;
 using Common.All.Enums.Addons;
 using Games.Games;
@@ -333,7 +334,7 @@ public sealed class BloodCmdArgumentsTests
         Raze raze = new();
 
         raze.BeforeStart(_bloodGame, _bloodTc);
-        var args = raze.GetStartGameArgs(_bloodGame, _bloodTc, [], [], true, true);
+        var args = raze.GetStartGameArgs(_bloodGame, _bloodTc, new Dictionary<AddonId, BaseAddon>(), [], true, true);
         var expected = @$" -savedir ""{Directory.GetCurrentDirectory()}\Data\Saves\Raze\Blood\blood-tc"" -def ""a"" -ini ""TC.INI"" -file ""D:\Games\Blood\blood_tc.zip"" -file ""TC.RFF"" -file ""TC.SND"" -quick -nosetup";
 
         if (OperatingSystem.IsLinux())
@@ -363,7 +364,7 @@ public sealed class BloodCmdArgumentsTests
         Raze raze = new();
 
         raze.BeforeStart(_bloodGame, _bloodTcFolder);
-        var args = raze.GetStartGameArgs(_bloodGame, _bloodTcFolder, [], [], true, true);
+        var args = raze.GetStartGameArgs(_bloodGame, _bloodTcFolder, new Dictionary<AddonId, BaseAddon>(), [], true, true);
         var expected = @$" -savedir ""{Directory.GetCurrentDirectory()}\Data\Saves\Raze\Blood\blood-tc-folder"" -def ""a"" -ini ""TC.INI"" -file ""D:\Games\Blood\blood_tc_folder"" -file ""TC.RFF"" -file ""TC.SND"" -quick -nosetup";
 
         if (OperatingSystem.IsLinux())
@@ -458,7 +459,7 @@ public sealed class BloodCmdArgumentsTests
     {
         NBlood nblood = new();
 
-        var args = nblood.GetStartGameArgs(_bloodGame, _bloodTc, [], [], true, true, 2);
+        var args = nblood.GetStartGameArgs(_bloodGame, _bloodTc, new Dictionary<AddonId, BaseAddon>(), [], true, true, 2);
         var expected = @" -usecwd -j ""D:\Games\Blood"" -h ""a"" -ini ""TC.INI"" -g ""D:\Games\Blood\blood_tc.zip"" -rff ""TC.RFF"" -snd ""TC.SND"" -s 2 -quick -nosetup";
 
         if (OperatingSystem.IsLinux())
@@ -475,7 +476,7 @@ public sealed class BloodCmdArgumentsTests
     {
         NBlood nblood = new();
 
-        var args = nblood.GetStartGameArgs(_bloodGame, _bloodTcFolder, [], [], true, true, 2);
+        var args = nblood.GetStartGameArgs(_bloodGame, _bloodTcFolder, new Dictionary<AddonId, BaseAddon>(), [], true, true, 2);
         var expected = @" -usecwd -j ""D:\Games\Blood"" -h ""a"" -ini ""TC.INI"" -game_dir ""D:\Games\Blood\blood_tc_folder"" -rff ""TC.RFF"" -snd ""TC.SND"" -s 2 -quick -nosetup";
 
         if (OperatingSystem.IsLinux())
@@ -492,7 +493,7 @@ public sealed class BloodCmdArgumentsTests
     {
         NBlood nblood = new();
 
-        var args = nblood.GetStartGameArgs(_bloodGame, _bloodTcExeOverride, [], [], true, true, 2);
+        var args = nblood.GetStartGameArgs(_bloodGame, _bloodTcExeOverride, new Dictionary<AddonId, BaseAddon>(), [], true, true, 2);
         var expected = @" -usecwd -j ""D:\Games\Blood"" -h ""a"" -ini ""TC.INI"" -rff ""TC.RFF"" -snd ""TC.SND"" -s 2 -quick -nosetup";
 
         if (OperatingSystem.IsLinux())
@@ -573,7 +574,7 @@ public sealed class BloodCmdArgumentsTests
     {
         NotBlood notblood = new();
 
-        var args = notblood.GetStartGameArgs(_bloodGame, _bloodTc, [], [], true, true, 2);
+        var args = notblood.GetStartGameArgs(_bloodGame, _bloodTc, new Dictionary<AddonId, BaseAddon>(), [], true, true, 2);
         var expected = @" -usecwd -j ""D:\Games\Blood"" -h ""a"" -ini ""TC.INI"" -g ""D:\Games\Blood\blood_tc.zip"" -rff ""TC.RFF"" -snd ""TC.SND"" -s 2 -quick -nosetup";
 
         if (OperatingSystem.IsLinux())
@@ -590,7 +591,7 @@ public sealed class BloodCmdArgumentsTests
     {
         NotBlood notblood = new();
 
-        var args = notblood.GetStartGameArgs(_bloodGame, _bloodTcFolder, [], [], true, true, 2);
+        var args = notblood.GetStartGameArgs(_bloodGame, _bloodTcFolder, new Dictionary<AddonId, BaseAddon>(), [], true, true, 2);
         var expected = @" -usecwd -j ""D:\Games\Blood"" -h ""a"" -ini ""TC.INI"" -game_dir ""D:\Games\Blood\blood_tc_folder"" -rff ""TC.RFF"" -snd ""TC.SND"" -s 2 -quick -nosetup";
 
         if (OperatingSystem.IsLinux())
@@ -607,7 +608,7 @@ public sealed class BloodCmdArgumentsTests
     {
         NotBlood notblood = new();
 
-        var args = notblood.GetStartGameArgs(_bloodGame, _bloodTcExeOverride, [], [], true, true, 2);
+        var args = notblood.GetStartGameArgs(_bloodGame, _bloodTcExeOverride, new Dictionary<AddonId, BaseAddon>(), [], true, true, 2);
         var expected = @" -usecwd -j ""D:\Games\Blood"" -h ""a"" -ini ""TC.INI"" -rff ""TC.RFF"" -snd ""TC.SND"" -s 2 -quick -nosetup";
 
         if (OperatingSystem.IsLinux())
@@ -678,7 +679,7 @@ public sealed class BloodCmdArgumentsTests
     {
         NBlood nblood = new();
 
-        var args = nblood.GetStartGameArgs(_bloodGame, _bloodCampWithOptions, [], ["option 2"], true, true, 2);
+        var args = nblood.GetStartGameArgs(_bloodGame, _bloodCampWithOptions, new Dictionary<AddonId, BaseAddon>(), ["option 2"], true, true, 2);
         var expected = @" -usecwd -j ""D:\Games\Blood"" -h ""a"" -mh ""OPT2.DEF"" -mh ""OPT2_2.DEF"" -s 2 -quick -nosetup";
 
         if (OperatingSystem.IsLinux())

@@ -10,4 +10,4 @@ public sealed class DataJson
 
 [JsonSourceGenerationOptions(AllowTrailingCommas = true)]
 [JsonSerializable(typeof(Dictionary<string, string>))]
-public partial class DataJsonModelContext : JsonSerializerContext;
+public sealed partial class DataJsonModelContext : JsonSerializerContext;

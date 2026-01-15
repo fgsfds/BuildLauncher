@@ -21,7 +21,7 @@ public sealed partial class CampaignsControl : DroppableControl
     private const string BuiltInPortStr = "Built-in port";
     private const string CustomPortStr = "Custom port";
 
-    private readonly IEnumerable<BasePort> _supportedPorts;
+    private readonly IReadOnlyList<BasePort> _supportedPorts;
     private readonly CampaignsViewModel _viewModel;
     private readonly PortsProvider _portsProvider;
     private readonly BitmapsCache _bitmapsCache;
@@ -370,17 +370,11 @@ public sealed partial class CampaignsControl : DroppableControl
     {
         await Task.Delay(500).ConfigureAwait(true);
 
-        for (int i = 0; i < 5; i++)
+        var visual = ElementComposition.GetElementVisual(control);
+
+        if (visual != null)
         {
-            var visual = ElementComposition.GetElementVisual(control);
-
-            if (visual != null)
-            {
-                visual.ImplicitAnimations = _implicitAnimations;
-                return;
-            }
-
-            await Task.Delay(50).ConfigureAwait(true);
+            visual.ImplicitAnimations = _implicitAnimations;
         }
     }
 }

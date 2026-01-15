@@ -125,7 +125,7 @@ public sealed partial class PortViewModel : ObservableObject
                 return DateTime.Parse(_release.Version).ToString("dd.MM.yyyy");
             }
 
-            return _release?.Version ?? "Error";
+            return _release.Version;
         }
     }
 
@@ -167,7 +167,7 @@ public sealed partial class PortViewModel : ObservableObject
                 }
 
                 var r2 = DateTime.TryParse(
-                    _release?.Version,
+                    _release.Version,
                     CultureInfo.InvariantCulture,
                     DateTimeStyles.AssumeUniversal,
                     out var newVersion
@@ -181,7 +181,7 @@ public sealed partial class PortViewModel : ObservableObject
                 return false;
             }
 
-            return VersionComparer.Compare(Port.InstalledVersion, _release?.Version, "<");
+            return VersionComparer.Compare(Port.InstalledVersion, _release.Version, "<");
         }
     }
 

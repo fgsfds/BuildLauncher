@@ -41,7 +41,7 @@ public sealed class PortStarter
         BasePort port,
         BaseGame game,
         BaseAddon addon,
-        IEnumerable<string> enabledOptions,
+        IReadOnlyList<string> enabledOptions,
         byte? skill,
         bool skipIntro,
         bool skipStartup,

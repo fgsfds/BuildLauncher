@@ -586,7 +586,9 @@ public sealed partial class DevViewModel : ObservableObject
             ThrowHelper.ThrowMissingFieldException("Choose addon folder");
         }
 
-        var files = Directory.GetFiles(PathToAddonFolder, "*", SearchOption.TopDirectoryOnly).Select(static x => Path.GetFileName(x).ToLower());
+        var files = Directory.GetFiles(PathToAddonFolder, "*", SearchOption.TopDirectoryOnly)
+            .Select(static x => Path.GetFileName(x).ToLower())
+            .ToList();
 
         if (SelectedGame is not GameEnum.Standalone &&
             WindowsNBloodExe is null &&
@@ -1045,8 +1047,8 @@ public sealed partial class DevViewModel : ObservableObject
             {
                 using (archive.PauseEntryRebuilding())
                 {
-                    var files = Directory.EnumerateFiles(PathToAddonFolder, "*.*", SearchOption.AllDirectories);
-                    var filesCount = files.Count();
+                    var files = Directory.EnumerateFiles(PathToAddonFolder, "*.*", SearchOption.AllDirectories).ToList();
+                    var filesCount = files.Count;
                     var currentFile = 0;
 
                     foreach (var path in files)

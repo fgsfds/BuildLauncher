@@ -24,7 +24,6 @@ public sealed partial class MapsViewModel : RightPanelViewModel, IPortsButtonCon
 
     private readonly InstalledGamesProvider _gamesProvider;
     private readonly IConfigProvider _config;
-    private readonly PlaytimeProvider _playtimeProvider;
     private readonly InstalledAddonsProvider _installedAddonsProvider;
     private readonly DownloadableAddonsProvider _downloadableAddonsProvider;
     private readonly PortStarter _portStarter;
@@ -115,7 +114,7 @@ public sealed partial class MapsViewModel : RightPanelViewModel, IPortsButtonCon
         PlaytimeProvider playtimeProvider,
         RatingProvider ratingProvider,
         InstalledAddonsProviderFactory installedAddonsProviderFactory,
-        DownloadableAddonsProviderFactory _downloadableAddonsProviderFactory,
+        DownloadableAddonsProviderFactory downloadableAddonsProviderFactory,
         PortStarter portStarter,
         BitmapsCache bitmapsCache,
         ILogger logger
@@ -125,9 +124,8 @@ public sealed partial class MapsViewModel : RightPanelViewModel, IPortsButtonCon
 
         _gamesProvider = gamesProvider;
         _config = config;
-        _playtimeProvider = playtimeProvider;
         _installedAddonsProvider = installedAddonsProviderFactory.Get(game);
-        _downloadableAddonsProvider = _downloadableAddonsProviderFactory.Get(game);
+        _downloadableAddonsProvider = downloadableAddonsProviderFactory.Get(game);
         _portStarter = portStarter;
         _logger = logger;
 

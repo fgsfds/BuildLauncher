@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Collections.Immutable;
+using System.Text;
 using Addons.Addons;
 using Addons.Helpers;
 using Common.All;
@@ -164,7 +165,7 @@ public abstract class BasePort : IInstallable
     /// <summary>
     /// Extension of the save game file
     /// </summary>
-    protected IEnumerable<string> SaveFileExtensions => [".sav", ".esv"];
+    protected ImmutableArray<string> SaveFileExtensions => [".sav", ".esv"];
 
     /// <summary>
     /// Port's icon
@@ -222,8 +223,8 @@ public abstract class BasePort : IInstallable
     public string GetStartGameArgs(
         BaseGame game,
         BaseAddon addon,
-        IEnumerable<KeyValuePair<AddonId, BaseAddon>> mods,
-        IEnumerable<string> enabledOptions,
+        IReadOnlyDictionary<AddonId, BaseAddon> mods,
+        IReadOnlyList<string> enabledOptions,
         bool skipIntro,
         bool skipStartup,
         byte? skill = null
@@ -262,7 +263,7 @@ public abstract class BasePort : IInstallable
         StringBuilder sb,
         BaseGame game,
         BaseAddon addon,
-        IEnumerable<string> enabledOptions
+        IReadOnlyList<string> enabledOptions
         )
     {
         ArgumentNullException.ThrowIfNull(addon.Options);
@@ -500,9 +501,9 @@ public abstract class BasePort : IInstallable
     /// <param name="game">Game</param>
     /// <param name="addon">Campaign\map</param>
     /// <param name="mods">Autoload mods</param>
-    protected virtual void GetAutoloadModsArgs(StringBuilder sb, BaseGame game, BaseAddon addon, IEnumerable<KeyValuePair<AddonId, BaseAddon>> mods)
+    protected virtual void GetAutoloadModsArgs(StringBuilder sb, BaseGame game, BaseAddon addon, IReadOnlyDictionary<AddonId, BaseAddon> mods)
     {
-        if (!mods.Any())
+        if (mods.Count == 0)
         {
             return;
         }

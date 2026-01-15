@@ -15,8 +15,7 @@ namespace Ports.Providers;
 public sealed class PortsProvider
 {
     private readonly IDbContextFactory<DatabaseContext> _dbContextFactory;
-
-    public Dictionary<PortEnum, BasePort> _ports = [];
+    private readonly Dictionary<PortEnum, BasePort> _ports = [];
     private readonly List<CustomPort> _customPorts = [];
 
     public event EventHandler? CustomPortChangedEvent;
@@ -45,7 +44,7 @@ public sealed class PortsProvider
     /// Get list of ports that support selected game
     /// </summary>
     /// <param name="game">Game enum</param>
-    public IEnumerable<BasePort> GetPortsThatSupportGame(GameEnum game) => _ports.Values.Where(x => x.SupportedGames.Contains(game));
+    public IReadOnlyList<BasePort> GetPortsThatSupportGame(GameEnum game) => [.. _ports.Values.Where(x => x.SupportedGames.Contains(game))];
 
     /// <summary>
     /// Get port by enum

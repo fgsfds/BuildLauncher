@@ -16,7 +16,7 @@ namespace Avalonia.Desktop.Controls;
 
 public sealed partial class MapsControl : DroppableControl
 {
-    private readonly IEnumerable<BasePort> _supportedPorts = [];
+    private readonly IReadOnlyList<BasePort> _supportedPorts = [];
     private readonly MapsViewModel _viewModel = null!;
     private readonly BitmapsCache _bitmapsCache = null!;
 

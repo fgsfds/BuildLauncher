@@ -16,16 +16,16 @@ namespace Avalonia.Desktop.Misc;
 public sealed class BitmapsCache : ICacheAdder<Stream>, ICacheGetter<Bitmap>, IDisposable
 {
     private readonly ConcurrentDictionary<long, Bitmap> _cache = [];
-    private readonly IEnumerable<BasePort> _ports;
-    private readonly IEnumerable<BaseTool> _tools;
+    private readonly IReadOnlyList<BasePort> _ports;
+    private readonly IReadOnlyList<BaseTool> _tools;
 
     public BitmapsCache(
         IEnumerable<BasePort> ports,
         IEnumerable<BaseTool> tools
         )
     {
-        _ports = ports;
-        _tools = tools;
+        _ports = [.. ports];
+        _tools = [.. tools];
     }
 
     public void InitializeCache()

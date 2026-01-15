@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Collections.Immutable;
+using System.Text;
 using Addons.Addons;
 using Common.All.Enums;
 using Common.All.Enums.Addons;
@@ -140,7 +141,7 @@ public sealed class RedNukem : EDuke32
     /// <param name="isDelete">Delete file.</param>
     private void CreateOrDeleteBlankAnm(bool isDelete)
     {
-        IEnumerable<string> files =
+        ImmutableArray<string> files =
             [
                 Path.Combine(InstallFolderPath, "LOGO.ANM"),
                 Path.Combine(InstallFolderPath, "XATLOGO.ANM"),

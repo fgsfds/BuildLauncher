@@ -181,4 +181,7 @@ dotnet_diagnostic.CA2254.severity = none
 dotnet_diagnostic.RCS1036.severity = none
 dotnet_analyzer_diagnostic.category-IDISP.severity = warning
 
+dotnet_diagnostic.CA1851.severity = warning
+dotnet_diagnostic.CA1508.severity = warning
+
 

@@ -129,11 +129,14 @@ public sealed class DownloadableAddonsProvider
 
         foreach (var downloadableAddon in addonTypeCache)
         {
-            var existingAddons = installedAddons.Where(x => x.Key.Id == downloadableAddon.Key.Id).Select(x => x.Key);
+            var existingAddons = installedAddons
+                .Where(x => x.Key.Id == downloadableAddon.Key.Id)
+                .Select(x => x.Key)
+                .ToList();
 
             downloadableAddon.Value.IsInstalled = true;
 
-            if (!existingAddons.Any())
+            if (existingAddons.Count == 0)
             {
                 downloadableAddon.Value.IsInstalled = false;
                 continue;

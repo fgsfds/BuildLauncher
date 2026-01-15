@@ -119,7 +119,7 @@ public sealed partial class ToolViewModel : ObservableObject
                 return DateTime.Parse(_release.Version).ToString("dd.MM.yyyy");
             }
 
-            return _release?.Version ?? "Error";
+            return _release.Version;
         }
     }
 
@@ -140,7 +140,7 @@ public sealed partial class ToolViewModel : ObservableObject
                 return false;
             }
 
-            return VersionComparer.Compare(Tool.InstalledVersion, _release?.Version, "<");
+            return VersionComparer.Compare(Tool.InstalledVersion, _release.Version, "<");
         }
     }
 

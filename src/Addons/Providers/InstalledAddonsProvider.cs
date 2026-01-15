@@ -498,7 +498,7 @@ public sealed class InstalledAddonsProvider
     /// Get addons from list of files
     /// </summary>
     /// <param name="files">Paths to addon files</param>
-    private async Task<Dictionary<AddonId, BaseAddon>> GetAddonsFromFilesAsync(IEnumerable<string> files)
+    private async Task<IReadOnlyDictionary<AddonId, BaseAddon>> GetAddonsFromFilesAsync(IEnumerable<string> files)
     {
         Dictionary<AddonId, BaseAddon> addedAddons = [];
 
@@ -984,15 +984,17 @@ public sealed class InstalledAddonsProvider
                 return unpackedTo;
             }
 
-            var addonJsonsInsideArchive = archive.Entries.Where(static x => x.Key!.StartsWith("addon") && x.Key!.EndsWith(".json"));
+            var addonJsonsInsideArchive = archive.Entries
+                .Where(static x => x.Key!.StartsWith("addon") && x.Key!.EndsWith(".json"))
+                .ToList();
 
-            if (addonJsonsInsideArchive?.Any() is not true)
+            if (addonJsonsInsideArchive.Count == 0)
             {
                 manifests = null;
                 return null;
             }
 
-            using var addonJsonStream = addonJsonsInsideArchive.First().OpenEntryStream();
+            using var addonJsonStream = addonJsonsInsideArchive[0].OpenEntryStream();
 
             var addonDto = JsonSerializer.Deserialize(
                 addonJsonStream,

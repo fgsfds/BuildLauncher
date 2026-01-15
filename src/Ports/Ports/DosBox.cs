@@ -299,7 +299,7 @@ public sealed class DosBox : BasePort
     }
 
     /// <inheritdoc/>
-    protected override void GetAutoloadModsArgs(StringBuilder sb, BaseGame _, BaseAddon addon, IEnumerable<KeyValuePair<AddonId, BaseAddon>> mods) { }
+    protected override void GetAutoloadModsArgs(StringBuilder sb, BaseGame _, BaseAddon addon, IReadOnlyDictionary<AddonId, BaseAddon> mods) { }
 
     /// <inheritdoc/>
     protected override void GetSkipIntroParameter(StringBuilder sb) { }

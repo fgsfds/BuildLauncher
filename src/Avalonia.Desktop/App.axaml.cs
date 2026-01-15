@@ -1,4 +1,5 @@
-﻿using Avalonia.Controls;
+﻿using System.Collections.Immutable;
+using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Desktop.DI;
 using Avalonia.Desktop.Helpers;
@@ -115,7 +116,7 @@ public sealed class App : Application
     [Obsolete("Remove some time later")]
     private static void RenameSaveFolder(PortsProvider portsProvider)
     {
-        IEnumerable<string> paths =
+        ImmutableArray<string> paths =
             [
                 portsProvider.GetPort(PortEnum.BuildGDX).PortSavedGamesFolderPath,
                 portsProvider.GetPort(PortEnum.VoidSW).PortSavedGamesFolderPath,

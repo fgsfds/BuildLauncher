@@ -28,7 +28,7 @@ public sealed class ToolsProvider
     /// <summary>
     /// Get list of all tools
     /// </summary>
-    public IEnumerable<BaseTool> GetAllTools() => _tools.Values;
+    public IReadOnlyList<BaseTool> GetAllTools() => [.. _tools.Values];
 
     /// <summary>
     /// Get tool by enum

@@ -181,7 +181,7 @@ public sealed partial class CampaignsViewModel : RightPanelViewModel, IPortsButt
                     port,
                     Game,
                     SelectedAddon,
-                    enabledOptions,
+                    [.. enabledOptions],
                     null,
                     _config.SkipIntro,
                     _config.SkipStartup
@@ -193,7 +193,7 @@ public sealed partial class CampaignsViewModel : RightPanelViewModel, IPortsButt
                     customPort.BasePort,
                     Game,
                     SelectedAddon,
-                    enabledOptions,
+                    [.. enabledOptions],
                     null,
                     _config.SkipIntro,
                     _config.SkipStartup,

@@ -1,4 +1,5 @@
 using Addons.Addons;
+using Common.All;
 using Common.All.Enums;
 using Common.All.Enums.Addons;
 using Common.All.Enums.Versions;
@@ -226,7 +227,7 @@ public sealed class DukeCmdArgumentsTests
     {
         Raze raze = new();
 
-        var args = raze.GetStartGameArgs(_dukeGame, _dukeWtCamp, [], [], true, true);
+        var args = raze.GetStartGameArgs(_dukeGame, _dukeWtCamp, new Dictionary<AddonId, BaseAddon>(), [], true, true);
         var expected = $"" +
             $" -savedir \"{Directory.GetCurrentDirectory()}\\Data\\Saves\\Raze\\Duke3D\\duke3d_wt\"" +
             $" -def \"a\"" +
@@ -310,7 +311,7 @@ public sealed class DukeCmdArgumentsTests
     {
         Raze raze = new();
 
-        var args = raze.GetStartGameArgs(_dukeGame, _dukeTcForVaca, [], [], true, true);
+        var args = raze.GetStartGameArgs(_dukeGame, _dukeTcForVaca, new Dictionary<AddonId, BaseAddon>(), [], true, true);
         var expected = $"" +
             $" -savedir \"{Directory.GetCurrentDirectory()}\\Data\\Saves\\Raze\\Duke3D\\duke-tc\"" +
             $" -def \"TC.DEF\"" +
@@ -391,7 +392,7 @@ public sealed class DukeCmdArgumentsTests
     {
         EDuke32 eduke32 = new();
 
-        var args = eduke32.GetStartGameArgs(_dukeGame, _dukeWtCamp, [], [], true, true);
+        var args = eduke32.GetStartGameArgs(_dukeGame, _dukeWtCamp, new Dictionary<AddonId, BaseAddon>(), [], true, true);
         var expected = $"" +
             $" -usecwd" +
             $" -cachesize 262144" +
@@ -458,7 +459,7 @@ public sealed class DukeCmdArgumentsTests
     {
         EDuke32 eduke32 = new();
 
-        var args = eduke32.GetStartGameArgs(_dukeGame, _dukeTcForVaca, [], [], true, true);
+        var args = eduke32.GetStartGameArgs(_dukeGame, _dukeTcForVaca, new Dictionary<AddonId, BaseAddon>(), [], true, true);
         var expected = $"" +
             $" -usecwd" +
             $" -cachesize 262144" +
@@ -490,7 +491,7 @@ public sealed class DukeCmdArgumentsTests
     {
         RedNukem redNukem = new();
 
-        var args = redNukem.GetStartGameArgs(_dukeGame, _duke64Camp, [], [], true, true);
+        var args = redNukem.GetStartGameArgs(_dukeGame, _duke64Camp, new Dictionary<AddonId, BaseAddon>(), [], true, true);
         var expected = "" +
             " -usecwd" +
             " -d blank.edm" +
@@ -604,7 +605,7 @@ public sealed class DukeCmdArgumentsTests
     {
         RedNukem eduke32 = new();
 
-        var args = eduke32.GetStartGameArgs(_dukeGame, _dukeTcForVaca, [], [], true, true);
+        var args = eduke32.GetStartGameArgs(_dukeGame, _dukeTcForVaca, new Dictionary<AddonId, BaseAddon>(), [], true, true);
         var expected = $"" +
             $" -usecwd" +
             " -d blank.edm" +
