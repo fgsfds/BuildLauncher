@@ -1,5 +1,5 @@
-﻿using System.Net;
-using System.Net.Http;
+﻿using System;
+using System.Net;
 using System.Net.Http.Headers;
 using Common.All.Enums;
 using Common.All.Helpers;
@@ -11,7 +11,6 @@ using Common.Client.Interfaces;
 using Common.Client.Providers;
 using Common.Client.Tools;
 using Database.Client;
-using Downloader;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
@@ -29,7 +28,6 @@ public static class ClientBindings
         _ = container.AddSingleton<RatingProvider>();
         _ = container.AddSingleton<FilesUploader>();
         _ = container.AddSingleton<RepoAppReleasesProvider>();
-        _ = container.AddSingleton<DownloadService>(CreateDownloadService);
 
         if (isDesigner)
         {
@@ -77,13 +75,17 @@ public static class ClientBindings
                     {
                         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", config.GitHubToken);
                     }
-                });
+                })
+                .RemoveAllLoggers();
 
-            _ = container.AddHttpClient(string.Empty, client =>
-            {
-                client.DefaultRequestHeaders.Add("User-Agent", "BuildLauncher");
-                client.Timeout = TimeSpan.FromSeconds(30);
-            });
+            _ = container.AddHttpClient(string.Empty)
+                .ConfigureHttpClient((serviceProvider, client) =>
+                {
+                    var config = serviceProvider.GetRequiredService<IConfigProvider>();
+                    client.DefaultRequestHeaders.Add("User-Agent", "BuildLauncher");
+                    client.Timeout = TimeSpan.FromSeconds(30);
+                })
+                .RemoveAllLoggers();
         }
 
         _ = container.AddSingleton<ILogger>(sp =>
@@ -91,31 +93,6 @@ public static class ClientBindings
             var factory = sp.GetRequiredService<ILoggerFactory>();
             return factory.CreateLogger("Default");
         });
-    }
-
-    private static DownloadService CreateDownloadService(IServiceProvider provider)
-    {
-        var conf = new DownloadConfiguration()
-        {
-            MaximumMemoryBufferBytes = 1024 * 1024 * 64,
-            ParallelDownload = true,
-            ChunkCount = 4,
-            ParallelCount = 4,
-            MaximumBytesPerSecond = 0,
-            MaxTryAgainOnFailure = 5,
-            Timeout = 10000,
-            RangeDownload = false,
-            ClearPackageOnCompletionWithFailure = true,
-            CheckDiskSizeBeforeDownload = true,
-            EnableLiveStreaming = false,
-            RequestConfiguration =
-            {
-                KeepAlive = true,
-                UserAgent = "BuildLauncher"
-            }
-        };
-
-        return new DownloadService(conf);
     }
 
     public sealed class FakeHttpMessageHandler : HttpMessageHandler
