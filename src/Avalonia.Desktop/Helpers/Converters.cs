@@ -4,7 +4,6 @@ using Avalonia.Data.Converters;
 using Avalonia.Desktop.Misc;
 using Common.All.Enums;
 using Common.All.Helpers;
-using CommunityToolkit.Diagnostics;
 
 namespace Avalonia.Desktop.Helpers;
 
@@ -55,7 +54,7 @@ public sealed class GameStringToEnumConverter : IValueConverter
 
         if (!EnumHelper.TryParse<GameEnum>(parameter, out var gameEnum))
         {
-            ThrowHelper.ThrowNotSupportedException();
+            throw new NotSupportedException();
             return null;
         }
 
@@ -76,7 +75,7 @@ public sealed class GameStringToEnumConverter : IValueConverter
 
         if (!EnumHelper.TryParse<GameEnum>(parameter, out var gameEnum))
         {
-            ThrowHelper.ThrowNotSupportedException();
+            throw new NotSupportedException();
             return null;
         }
 
@@ -101,6 +100,6 @@ public sealed class StringToWrappedConverter : IValueConverter
 
     public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
-        return ThrowHelper.ThrowNotSupportedException<object>();
+        throw new NotSupportedException();
     }
 }

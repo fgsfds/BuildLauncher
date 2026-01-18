@@ -6,7 +6,6 @@ using Avalonia.Media.Imaging;
 using Common.All.Helpers;
 using Common.Client.Interfaces;
 using Common.Client.Providers;
-using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
@@ -114,7 +113,7 @@ public partial class RightPanelViewModel : ObservableObject
     [RelayCommand]
     private async Task ChangeRatingAsync(string score)
     {
-        Guard.IsNotNull(SelectedAddon);
+        ArgumentNullException.ThrowIfNull(SelectedAddon);
 
         var rating = byte.Parse(score);
 

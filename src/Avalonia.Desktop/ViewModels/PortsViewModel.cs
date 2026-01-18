@@ -4,7 +4,6 @@ using Avalonia.Desktop.Helpers;
 using Avalonia.Desktop.Misc;
 using Avalonia.Platform.Storage;
 using Common.All.Enums;
-using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.Logging;
@@ -98,7 +97,7 @@ public sealed partial class PortsViewModel : ObservableObject
     [RelayCommand(CanExecute = nameof(EditCustomPortCanExecute))]
     private async Task EditCustomPortAsync()
     {
-        Guard.IsNotNull(SelectedCustomPort);
+        ArgumentNullException.ThrowIfNull(SelectedCustomPort);
 
         try
         {
@@ -128,7 +127,7 @@ public sealed partial class PortsViewModel : ObservableObject
     [RelayCommand(CanExecute = nameof(DeleteCustomPortCanExecute))]
     private void DeleteCustomPort()
     {
-        Guard.IsNotNull(SelectedCustomPort);
+        ArgumentNullException.ThrowIfNull(SelectedCustomPort);
 
         try
         {

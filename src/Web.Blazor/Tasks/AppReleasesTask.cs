@@ -2,7 +2,7 @@
 
 namespace Web.Blazor.Tasks;
 
-public sealed class AppReleasesTask : IHostedService, IDisposable
+internal sealed class AppReleasesTask : IHostedService, IDisposable
 {
     private readonly RepoAppReleasesProvider _appReleasesProvider;
 
@@ -13,7 +13,7 @@ public sealed class AppReleasesTask : IHostedService, IDisposable
         _appReleasesProvider = appReleasesProvider;
     }
 
-    public Task StartAsync(CancellationToken stoppingToken)
+    public Task StartAsync(CancellationToken cancellationToken)
     {
         _timer = new Timer(
             DoWork,
@@ -30,7 +30,7 @@ public sealed class AppReleasesTask : IHostedService, IDisposable
         //_ = _appReleasesProvider.GetLatestVersionAsync(false);
     }
 
-    public Task StopAsync(CancellationToken stoppingToken)
+    public Task StopAsync(CancellationToken cancellationToken)
     {
         _ = _timer?.Change(Timeout.Infinite, 0);
 

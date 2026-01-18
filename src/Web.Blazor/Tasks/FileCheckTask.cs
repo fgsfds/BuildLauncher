@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Web.Blazor.Tasks;
 
-public sealed class FileCheckTask : IHostedService, IDisposable
+internal sealed class FileCheckTask : IHostedService, IDisposable
 {
     private readonly ILogger<FileCheckTask> _logger;
     private readonly DatabaseContextFactory _dbContextFactory;
@@ -22,7 +22,7 @@ public sealed class FileCheckTask : IHostedService, IDisposable
         _httpClient = httpClient;
     }
 
-    public Task StartAsync(CancellationToken stoppingToken)
+    public Task StartAsync(CancellationToken cancellationToken)
     {
         _timer = new Timer(
             DoWork,
@@ -69,7 +69,7 @@ public sealed class FileCheckTask : IHostedService, IDisposable
         _logger.LogInformation("File check ended");
     }
 
-    public Task StopAsync(CancellationToken stoppingToken)
+    public Task StopAsync(CancellationToken cancellationToken)
     {
         _ = _timer?.Change(Timeout.Infinite, 0);
 

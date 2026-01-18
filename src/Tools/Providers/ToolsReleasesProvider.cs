@@ -4,7 +4,6 @@ using Common.All.Enums;
 using Common.All.Helpers;
 using Common.All.Interfaces;
 using Common.All.Serializable.Downloadable;
-using CommunityToolkit.Diagnostics;
 using Microsoft.Extensions.Logging;
 
 namespace Tools.Providers;
@@ -52,7 +51,7 @@ public sealed class ToolsReleasesProvider : IReleaseProvider<ToolEnum>
             var data = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 
             var allReleases = JsonSerializer.Deserialize(data, GitHubReleaseEntityContext.Default.ListGitHubReleaseJsonModel)
-                ?? ThrowHelper.ThrowFormatException<List<GitHubReleaseJsonModel>>("Error while deserializing GitHub releases");
+                ?? throw new FormatException("Error while deserializing GitHub releases");
 
             var releases = allReleases
                 .Where(static x => !x.IsDraft && !x.IsPrerelease)

@@ -8,7 +8,6 @@ using Games.Providers;
 using Microsoft.Extensions.Logging;
 using Ports.Ports;
 using Ports.Providers;
-using Tools.Providers;
 using Tools.Tools;
 
 namespace Avalonia.Desktop.ViewModels;
@@ -22,7 +21,6 @@ public sealed class MainWindowViewModel : ObservableObject
         FilesUploader filesUploader,
         InstalledGamesProvider gamesProvider,
         PortsProvider portsProvider,
-        ToolsProvider toolsProvider,
         AppUpdateInstaller appUpdateInstaller,
         ViewModelsFactory viewModelsFactory,
         GamesPathsProvider gamesPathsProvider,

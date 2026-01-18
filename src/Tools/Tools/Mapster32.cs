@@ -1,6 +1,5 @@
 ﻿using Common.All.Enums;
 using Common.Client.Helpers;
-using CommunityToolkit.Diagnostics;
 using Games.Providers;
 
 namespace Tools.Tools;
@@ -13,7 +12,7 @@ public sealed class Mapster32 : BaseTool
     protected override string WinExe => "mapster32.exe";
 
     /// <inheritdoc/>
-    protected override string LinExe => ThrowHelper.ThrowNotSupportedException<string>();
+    protected override string LinExe => throw new NotSupportedException();
 
     /// <inheritdoc/>
     public override string Name => "Mapster32";
@@ -44,7 +43,7 @@ public sealed class Mapster32 : BaseTool
 
         if (!game.IsBaseGameInstalled)
         {
-            ThrowHelper.ThrowNotSupportedException();
+            throw new NotSupportedException();
         }
 
         return $@"-game_dir ""{game.GameInstallFolder}""";

@@ -1,5 +1,4 @@
 ﻿using Common.All.Enums;
-using CommunityToolkit.Diagnostics;
 using Games.Providers;
 
 namespace Tools.Tools;
@@ -12,7 +11,7 @@ public sealed class XMapEdit : BaseTool
     protected override string WinExe => "xmapedit.exe";
 
     /// <inheritdoc/>
-    protected override string LinExe => ThrowHelper.ThrowNotSupportedException<string>();
+    protected override string LinExe => throw new NotSupportedException();
 
     /// <inheritdoc/>
     public override string Name => "XMAPEDIT";

@@ -4,8 +4,6 @@ using Addons.Addons;
 using Common.All.Enums;
 using Common.All.Enums.Addons;
 using Common.All.Enums.Versions;
-using Common.All.Helpers;
-using CommunityToolkit.Diagnostics;
 using Games.Games;
 
 namespace Ports.Ports.EDuke32;
@@ -22,7 +20,7 @@ public sealed class RedNukem : EDuke32
     protected override string WinExe => "rednukem.exe";
 
     /// <inheritdoc/>
-    protected override string LinExe => ThrowHelper.ThrowNotSupportedException<string>();
+    protected override string LinExe => throw new NotSupportedException();
 
     /// <inheritdoc/>
     public override string Name => "RedNukem";
@@ -124,7 +122,7 @@ public sealed class RedNukem : EDuke32
         }
         else
         {
-            ThrowHelper.ThrowNotSupportedException($"Mod type {addon.Type} for game {game} is not supported");
+            throw new NotSupportedException($"Mod type {addon.Type} for game {game} is not supported");
         }
     }
 
@@ -216,8 +214,10 @@ public sealed class RedNukem : EDuke32
             return;
         }
 
-
-        addon.ThrowIfNotType<DukeCampaign>(out var rCamp);
+        if (addon is not DukeCampaign rCamp)
+        {
+            throw new InvalidCastException();
+        }
 
         if (rCamp.MainCon is not null)
         {
@@ -250,8 +250,7 @@ public sealed class RedNukem : EDuke32
         }
         else
         {
-            ThrowHelper.ThrowNotSupportedException($"Mod type {rCamp.Type} is not supported");
-            return;
+            throw new NotSupportedException($"Mod type {rCamp.Type} is not supported");
         }
     }
 
@@ -267,7 +266,7 @@ public sealed class RedNukem : EDuke32
             return;
         }
 
-        Guard.IsNotNull(game.GameInstallFolder);
+        ArgumentNullException.ThrowIfNull(game.GameInstallFolder);
 
         var tilesA1 = Path.Combine(game.GameInstallFolder, "TILESA66.ART");
         var tilesA2 = Path.Combine(game.GameInstallFolder, "TILES024.ART");

@@ -2,7 +2,6 @@
 using Common.All.Enums;
 using Common.All.Helpers;
 using Common.All.Serializable.Downloadable;
-using CommunityToolkit.Diagnostics;
 using Microsoft.Extensions.Logging;
 
 namespace Common.All.Providers;
@@ -45,7 +44,7 @@ public sealed class RepoAppReleasesProvider
 
             var releases =
                 JsonSerializer.Deserialize(releasesJson, GitHubReleaseEntityContext.Default.ListGitHubReleaseJsonModel)
-                ?? ThrowHelper.ThrowFormatException<List<GitHubReleaseJsonModel>>("Error while deserializing GitHub releases");
+                ?? throw new FormatException("Error while deserializing GitHub releases");
 
             if (includePreReleases)
             {

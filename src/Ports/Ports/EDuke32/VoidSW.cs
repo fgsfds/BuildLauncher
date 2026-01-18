@@ -2,9 +2,7 @@
 using Addons.Addons;
 using Common.All.Enums;
 using Common.All.Enums.Addons;
-using Common.All.Helpers;
 using Common.Client.Helpers;
-using CommunityToolkit.Diagnostics;
 using Games.Games;
 
 namespace Ports.Ports.EDuke32;
@@ -21,7 +19,7 @@ public sealed class VoidSW : EDuke32
     protected override string WinExe => "voidsw.exe";
 
     /// <inheritdoc/>
-    protected override string LinExe => ThrowHelper.ThrowNotSupportedException<string>();
+    protected override string LinExe => throw new NotSupportedException();
 
     /// <inheritdoc/>
     public override string Name => "VoidSW";
@@ -56,10 +54,10 @@ public sealed class VoidSW : EDuke32
     protected override string AddDefParam => "-mh";
 
     /// <inheritdoc/>
-    protected override string AddConParam => ThrowHelper.ThrowNotSupportedException<string>();
+    protected override string AddConParam => throw new NotSupportedException();
 
     /// <inheritdoc/>
-    protected override string MainConParam => ThrowHelper.ThrowNotSupportedException<string>();
+    protected override string MainConParam => throw new NotSupportedException();
 
     /// <inheritdoc/>
     public override bool IsDownloadable => false;
@@ -106,7 +104,7 @@ public sealed class VoidSW : EDuke32
         }
         else
         {
-            ThrowHelper.ThrowNotSupportedException($"Mod type {addon.Type} for game {game} is not supported");
+            throw new NotSupportedException($"Mod type {addon.Type} for game {game} is not supported");
         }
     }
 
@@ -119,8 +117,10 @@ public sealed class VoidSW : EDuke32
             return;
         }
 
-
-        addon.ThrowIfNotType<GenericCampaign>(out var wCamp);
+        if (addon is not GenericCampaign wCamp)
+        {
+            throw new InvalidCastException();
+        }
 
         if (wCamp.DependentAddons?.ContainsKey(nameof(WangAddonEnum.Wanton)) == true)
         {
@@ -155,7 +155,7 @@ public sealed class VoidSW : EDuke32
         }
         else
         {
-            ThrowHelper.ThrowNotSupportedException($"Mod type {wCamp.Type} is not supported");
+            throw new NotSupportedException($"Mod type {wCamp.Type} is not supported");
             return;
         }
     }

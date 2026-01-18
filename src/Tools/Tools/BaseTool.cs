@@ -2,7 +2,6 @@
 using Common.All.Helpers;
 using Common.Client.Helpers;
 using Common.Client.Interfaces;
-using CommunityToolkit.Diagnostics;
 
 namespace Tools.Tools;
 
@@ -27,7 +26,7 @@ public abstract class BaseTool : IInstallable
             {
                 OSEnum.Windows => WinExe,
                 OSEnum.Linux => LinExe,
-                _ => ThrowHelper.ThrowArgumentOutOfRangeException<string>(CommonProperties.OSEnum.ToString())
+                _ => throw new ArgumentOutOfRangeException(CommonProperties.OSEnum.ToString())
             };
         }
     }

@@ -7,7 +7,6 @@ using Avalonia.Desktop.Misc;
 using Avalonia.Desktop.ViewModels;
 using Common.All.Enums;
 using Common.All.Helpers;
-using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.Input;
 using Ports.Ports;
 using Ports.Providers;
@@ -212,14 +211,14 @@ public sealed partial class MapsControl : DroppableControl
     {
         if (_flyout?.Target is not null)
         {
-            return ((Button)_flyout.Target!).CommandParameter as BasePort ?? ThrowHelper.ThrowFormatException<BasePort>();
+            return ((Button)_flyout.Target!).CommandParameter as BasePort ?? throw new FormatException();
         }
         else if (port is not null)
         {
             return port;
         }
 
-        return ThrowHelper.ThrowArgumentOutOfRangeException<BasePort>(nameof(port));
+        throw new ArgumentOutOfRangeException(nameof(port));
     }
 
     /// <summary>
@@ -260,8 +259,15 @@ public sealed partial class MapsControl : DroppableControl
 
     private void OnPortButtonClicked(object? sender, Interactivity.RoutedEventArgs e)
     {
-        sender.ThrowIfNotType(out Button button);
-        button.CommandParameter.ThrowIfNotType<BasePort>(out var port);
+        if (sender is not Button button)
+        {
+            throw new InvalidCastException();
+        }
+
+        if (button.CommandParameter is not BasePort port)
+        {
+            throw new InvalidCastException();
+        }
 
         if (IsSkillFlyoutAvailable(port))
         {

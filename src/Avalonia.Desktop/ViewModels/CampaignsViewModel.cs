@@ -6,10 +6,8 @@ using Avalonia.Controls.Notifications;
 using Avalonia.Desktop.Helpers;
 using Avalonia.Desktop.Misc;
 using Common.All.Enums;
-using Common.All.Helpers;
 using Common.Client.Interfaces;
 using Common.Client.Providers;
-using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Games.Games;
@@ -21,7 +19,7 @@ namespace Avalonia.Desktop.ViewModels;
 
 public sealed partial class CampaignsViewModel : RightPanelViewModel, IPortsButtonControl
 {
-    public readonly BaseGame Game;
+    public BaseGame Game { get; }
 
     private readonly InstalledGamesProvider _gamesProvider;
     private readonly IConfigProvider _config;
@@ -171,7 +169,7 @@ public sealed partial class CampaignsViewModel : RightPanelViewModel, IPortsButt
     {
         try
         {
-            Guard.IsNotNull(SelectedAddon);
+            ArgumentNullException.ThrowIfNull(SelectedAddon);
 
             var enabledOptions = AddonOptions.Where(x => x.IsEnabled).Select(x => x.Name);
 
@@ -202,7 +200,7 @@ public sealed partial class CampaignsViewModel : RightPanelViewModel, IPortsButt
             }
             else
             {
-                ThrowHelper.ThrowArgumentOutOfRangeException(nameof(command));
+                throw new ArgumentOutOfRangeException(nameof(command));
             }
 
             OnPropertyChanged(nameof(SelectedAddonPlaytime));
@@ -246,7 +244,7 @@ public sealed partial class CampaignsViewModel : RightPanelViewModel, IPortsButt
     [RelayCommand]
     private void DeleteCampaign()
     {
-        Guard.IsNotNull(SelectedAddon);
+        ArgumentNullException.ThrowIfNull(SelectedAddon);
 
         _installedAddonsProvider.DeleteAddon(SelectedAddon);
     }
@@ -266,7 +264,10 @@ public sealed partial class CampaignsViewModel : RightPanelViewModel, IPortsButt
     [RelayCommand]
     private void AddToFavorite(object? value)
     {
-        value.ThrowIfNotType<BaseAddon>(out var addon);
+        if (value is not BaseAddon addon)
+        {
+            throw new InvalidCastException();
+        }
 
         _config.ChangeFavoriteState(addon.AddonId, true);
         addon.IsFavorite = true;
@@ -281,7 +282,10 @@ public sealed partial class CampaignsViewModel : RightPanelViewModel, IPortsButt
     [RelayCommand]
     private void RemoveFromFavorite(object? value)
     {
-        value.ThrowIfNotType<BaseAddon>(out var addon);
+        if (value is not BaseAddon addon)
+        {
+            throw new InvalidCastException();
+        }
 
         _config.ChangeFavoriteState(addon.AddonId, false);
         addon.IsFavorite = false;

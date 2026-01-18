@@ -1,7 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Reflection;
 using System.Runtime.InteropServices;
-using CommunityToolkit.Diagnostics;
 
 namespace Common.Client.Helpers;
 
@@ -50,8 +49,7 @@ public static class ClientProperties
     /// <summary>
     /// Current app version
     /// </summary>
-    public static Version CurrentVersion => Assembly.GetEntryAssembly()?.GetName().Version ?? ThrowHelper.ThrowArgumentNullException<Version>();
-
+    public static Version CurrentVersion => Assembly.GetEntryAssembly()?.GetName().Version ?? throw new ArgumentNullException();
     /// <summary>
     /// Name of the executable file
     /// </summary>
@@ -69,8 +67,7 @@ public static class ClientProperties
             }
             else
             {
-                ThrowHelper.ThrowPlatformNotSupportedException();
-                return string.Empty;
+                throw new PlatformNotSupportedException();
             }
         }
     }

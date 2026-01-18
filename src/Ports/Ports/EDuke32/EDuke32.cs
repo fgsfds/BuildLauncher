@@ -6,7 +6,6 @@ using Common.All.Enums.Addons;
 using Common.All.Enums.Versions;
 using Common.All.Helpers;
 using Common.Client.Helpers;
-using CommunityToolkit.Diagnostics;
 using Games.Games;
 using SharpCompress.Archives;
 using SharpCompress.Archives.Zip;
@@ -25,7 +24,7 @@ public class EDuke32 : BasePort
     protected override string WinExe => "eduke32.exe";
 
     /// <inheritdoc/>
-    protected override string LinExe => ThrowHelper.ThrowNotSupportedException<string>();
+    protected override string LinExe => throw new NotSupportedException();
 
     /// <inheritdoc/>
     public override string Name => "EDuke32";
@@ -64,10 +63,10 @@ public class EDuke32 : BasePort
     protected override string AddGameDirParam => "-game_dir ";
 
     /// <inheritdoc/>
-    protected override string AddRffParam => ThrowHelper.ThrowNotSupportedException<string>();
+    protected override string AddRffParam => throw new NotSupportedException();
 
     /// <inheritdoc/>
-    protected override string AddSndParam => ThrowHelper.ThrowNotSupportedException<string>();
+    protected override string AddSndParam => throw new NotSupportedException();
 
     /// <inheritdoc/>
     public override List<GameEnum> SupportedGames =>
@@ -140,7 +139,7 @@ public class EDuke32 : BasePort
 
         using var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("Ports.Assets.WTStopgap.zip");
 
-        Guard.IsNotNull(stream);
+        ArgumentNullException.ThrowIfNull(stream);
 
         using var archive = ZipArchive.Open(stream);
 
@@ -214,7 +213,7 @@ public class EDuke32 : BasePort
         }
         else
         {
-            ThrowHelper.ThrowNotSupportedException($"Mod type {addon.Type} for game {game} is not supported");
+            throw new NotSupportedException($"Mod type {addon.Type} for game {game} is not supported");
         }
     }
 
@@ -303,9 +302,10 @@ public class EDuke32 : BasePort
             return;
         }
 
-
-        addon.ThrowIfNotType(out DukeCampaign dCamp);
-
+        if (addon is not DukeCampaign dCamp)
+        {
+            throw new InvalidCastException();
+        }
 
         if (dCamp.MainCon is not null)
         {
@@ -338,8 +338,7 @@ public class EDuke32 : BasePort
         }
         else
         {
-            ThrowHelper.ThrowNotSupportedException($"Mod type {dCamp.Type} is not supported");
-            return;
+            throw new NotSupportedException($"Mod type {dCamp.Type} is not supported");
         }
     }
 
@@ -390,7 +389,7 @@ public class EDuke32 : BasePort
             return;
         }
 
-        Guard.IsNotNull(game.GameInstallFolder);
+        ArgumentNullException.ThrowIfNull(game.GameInstallFolder);
 
         var art1 = Path.Combine(game.GameInstallFolder, "TILES009.ART");
         var art1r = Path.Combine(game.GameInstallFolder, "TILES009._ART");

@@ -5,13 +5,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AddSealed" PrivateAssets="all" />
-    <PackageReference Include="CommunityToolkit.Diagnostics" />
-    <PackageReference Include="ConfigureAwaitAnalyzer" PrivateAssets="all" />
     <PackageReference Include="Downloader" />
     <PackageReference Include="IDisposableAnalyzers" PrivateAssets="all" />
     <PackageReference Include="Microsoft.Extensions.Http" />
-    <PackageReference Include="Roslynator.Analyzers" PrivateAssets="all" />
     <PackageReference Include="System.IO.Hashing" />
     <PackageReference Include="CommunityToolkit.Mvvm" />
     <PackageReference Include="SharpCompress" />

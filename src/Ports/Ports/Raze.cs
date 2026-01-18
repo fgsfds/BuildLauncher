@@ -4,8 +4,6 @@ using Addons.Addons;
 using Common.All.Enums;
 using Common.All.Enums.Addons;
 using Common.All.Enums.Versions;
-using Common.All.Helpers;
-using CommunityToolkit.Diagnostics;
 using Games.Games;
 
 namespace Ports.Ports;
@@ -95,7 +93,7 @@ public sealed class Raze : BasePort
     protected override string AddGrpParam => AddFileParam;
 
     /// <inheritdoc/>
-    protected override string SkillParam => ThrowHelper.ThrowNotSupportedException<string>();
+    protected override string SkillParam => throw new NotSupportedException();
 
     /// <inheritdoc/>
     public override List<FeatureEnum> SupportedFeatures =>
@@ -217,7 +215,7 @@ public sealed class Raze : BasePort
         }
         else
         {
-            ThrowHelper.ThrowNotSupportedException($"Mod type {addon} for game {game} is not supported");
+            throw new NotSupportedException($"Mod type {addon} for game {game} is not supported");
         }
     }
 
@@ -229,7 +227,10 @@ public sealed class Raze : BasePort
             return;
         }
 
-        addon.ThrowIfNotType<DukeCampaign>(out var dCamp);
+        if (addon is not DukeCampaign dCamp)
+        {
+            throw new InvalidCastException();
+        }
 
         if (dCamp.SupportedGame.GameVersion is not null &&
             dCamp.SupportedGame.GameVersion.Equals(nameof(DukeVersionEnum.Duke3D_WT), StringComparison.OrdinalIgnoreCase))
@@ -295,7 +296,7 @@ public sealed class Raze : BasePort
         }
         else
         {
-            ThrowHelper.ThrowNotSupportedException($"Mod type {dCamp.Type} is not supported");
+            throw new NotSupportedException($"Mod type {dCamp.Type} is not supported");
             return;
         }
     }
@@ -308,7 +309,10 @@ public sealed class Raze : BasePort
             return;
         }
 
-        addon.ThrowIfNotType<GenericCampaign>(out var wCamp);
+        if (addon is not GenericCampaign wCamp)
+        {
+            throw new InvalidCastException();
+        }
 
         //TODO downloaded addons support
         if (wCamp.DependentAddons is not null &&
@@ -339,7 +343,7 @@ public sealed class Raze : BasePort
         }
         else
         {
-            ThrowHelper.ThrowNotSupportedException($"Mod type {wCamp.Type} is not supported");
+            throw new NotSupportedException($"Mod type {wCamp.Type} is not supported");
             return;
         }
     }
@@ -352,7 +356,10 @@ public sealed class Raze : BasePort
             return;
         }
 
-        addon.ThrowIfNotType<DukeCampaign>(out var rCamp);
+        if (addon is not DukeCampaign rCamp)
+        {
+            throw new InvalidCastException();
+        }
 
         if (rCamp.DependentAddons is not null &&
             rCamp.DependentAddons.ContainsKey(nameof(RedneckAddonEnum.Route66)))
@@ -398,7 +405,7 @@ public sealed class Raze : BasePort
         }
         else
         {
-            ThrowHelper.ThrowNotSupportedException($"Mod type {rCamp.Type} is not supported");
+            throw new NotSupportedException($"Mod type {rCamp.Type} is not supported");
         }
     }
 

@@ -9,7 +9,6 @@ using Avalonia.Rendering.Composition;
 using Avalonia.Rendering.Composition.Animations;
 using Common.All.Enums;
 using Common.All.Helpers;
-using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.Input;
 using Ports.Ports;
 using Ports.Providers;
@@ -351,7 +350,7 @@ public sealed partial class CampaignsControl : DroppableControl
         {
             var compositor = ElementComposition.GetElementVisual(this)?.Compositor;
 
-            Guard.IsNotNull(compositor);
+            ArgumentNullException.ThrowIfNull(compositor);
 
             var offsetAnimation = compositor.CreateVector3KeyFrameAnimation();
             offsetAnimation.Target = "Offset";

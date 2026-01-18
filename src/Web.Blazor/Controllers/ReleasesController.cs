@@ -7,7 +7,7 @@ namespace Web.Blazor.Controllers;
 
 [ApiController]
 [Route("api/releases")]
-public sealed class AddonsController : ControllerBase
+internal sealed class AddonsController : ControllerBase
 {
     private readonly IMediator _mediator;
 

@@ -1,6 +1,6 @@
 ﻿namespace Web.Blazor.Tasks;
 
-public sealed class ToolsReleasesTask : IHostedService, IDisposable
+internal sealed class ToolsReleasesTask : IHostedService, IDisposable
 {
     //private readonly ToolsReleasesRepoRetriever _toolsReleasesProvider;
 
@@ -13,7 +13,7 @@ public sealed class ToolsReleasesTask : IHostedService, IDisposable
         //_toolsReleasesProvider = toolsReleasesProvider;
     }
 
-    public Task StartAsync(CancellationToken stoppingToken)
+    public Task StartAsync(CancellationToken cancellationToken)
     {
         _timer = new Timer(
             DoWork,
@@ -30,7 +30,7 @@ public sealed class ToolsReleasesTask : IHostedService, IDisposable
         //_ = _toolsReleasesProvider.GetLatestReleasesAsync();
     }
 
-    public Task StopAsync(CancellationToken stoppingToken)
+    public Task StopAsync(CancellationToken cancellationToken)
     {
         _ = _timer?.Change(Timeout.Infinite, 0);
 

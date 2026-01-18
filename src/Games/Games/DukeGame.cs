@@ -1,7 +1,6 @@
 ﻿using Common.All.Enums;
 using Common.All.Enums.Addons;
 using Common.All.Helpers;
-using CommunityToolkit.Diagnostics;
 using Games.Skills;
 
 namespace Games.Games;
@@ -80,8 +79,8 @@ public sealed class DukeGame : BaseGame
             DukeAddonEnum.DukeDC => "DUKEDC.GRP",
             DukeAddonEnum.DukeNW => "NWINTER.GRP",
             DukeAddonEnum.DukeVaca => "VACATION.GRP",
-            DukeAddonEnum.Base => ThrowHelper.ThrowArgumentOutOfRangeException<string>(),
-            _ => ThrowHelper.ThrowArgumentOutOfRangeException<string>(),
+            DukeAddonEnum.Base => throw new ArgumentOutOfRangeException(),
+            _ => throw new ArgumentOutOfRangeException(),
         };
 
         //root

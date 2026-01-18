@@ -2,14 +2,13 @@
 using Common.All.Enums;
 using Common.All.Serializable.Addon;
 using Common.All.Serializable.Downloadable;
-using CommunityToolkit.Diagnostics;
 using Database.Server;
 using Database.Server.DbEntities;
 using Microsoft.EntityFrameworkCore;
 
 namespace Web.Blazor.Providers;
 
-public sealed class DatabaseAddonsRetriever
+internal sealed class DatabaseAddonsRetriever
 {
     private readonly ILogger<DatabaseAddonsRetriever> _logger;
     private readonly DatabaseContextFactory _dbContextFactory;
@@ -135,7 +134,7 @@ public sealed class DatabaseAddonsRetriever
     internal decimal ChangeRating(string addonId, sbyte rating, bool isNew)
     {
         using var dbContext = _dbContextFactory.Get();
-        var existingRating = dbContext.Rating.Find(addonId) ?? ThrowHelper.ThrowExternalException<RatingsDbEntity>($"Rating for {addonId} is not found");
+        var existingRating = dbContext.Rating.Find(addonId) ?? throw new Exception($"Rating for {addonId} is not found");
 
         existingRating.RatingSum += rating;
 
@@ -221,11 +220,11 @@ public sealed class DatabaseAddonsRetriever
             _ = dbContext.SaveChanges();
 
 
-            if (addon.Dependencies is not null)
+            if (addon.Dependencies?.Addons is not null)
             {
                 existingVersion = dbContext.Versions.SingleOrDefault(x => x.AddonId == addon.Id && x.Version == addon.Version);
 
-                Guard.IsNotNull(existingVersion);
+                ArgumentNullException.ThrowIfNull(existingVersion);
 
                 foreach (var dep in addon.Dependencies.Addons)
                 {

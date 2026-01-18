@@ -5,7 +5,7 @@ using Web.Blazor.Providers;
 
 namespace Web.Blazor.Handlers;
 
-public sealed class GetRatingsHandler : IRequestHandler<GetRatingsRequest, GetRatingsResponse>
+internal sealed class GetRatingsHandler : IRequestHandler<GetRatingsRequest, GetRatingsResponse>
 {
     private readonly DatabaseAddonsRetriever _addonsProvider;
 

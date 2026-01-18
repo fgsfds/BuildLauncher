@@ -1,6 +1,5 @@
 ﻿using Common.All.Enums;
 using Common.All.Serializable.Downloadable;
-using CommunityToolkit.Diagnostics;
 
 namespace Tools.Providers;
 
@@ -37,7 +36,7 @@ internal static class ToolsRepositoriesProvider
         }
         else
         {
-            return ThrowHelper.ThrowNotSupportedException<RepositoryEntity>(toolEnum.ToString());
+            throw new NotSupportedException(toolEnum.ToString());
         }
     }
 }

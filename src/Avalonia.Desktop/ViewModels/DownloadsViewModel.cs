@@ -6,7 +6,6 @@ using Avalonia.Desktop.Misc;
 using Common.All.Enums;
 using Common.All.Helpers;
 using Common.All.Serializable.Downloadable;
-using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Games.Games;
@@ -16,7 +15,7 @@ namespace Avalonia.Desktop.ViewModels;
 
 public sealed partial class DownloadsViewModel : ObservableObject
 {
-    public readonly BaseGame Game;
+    public BaseGame Game { get; }
 
     private readonly InstalledAddonsProvider _installedAddonsProvider;
     private readonly DownloadableAddonsProvider _downloadableAddonsProvider;
@@ -59,8 +58,7 @@ public sealed partial class DownloadsViewModel : ObservableObject
             }
             else
             {
-                ThrowHelper.ThrowArgumentOutOfRangeException(nameof(FilterSelectedItem));
-                return null;
+                throw new ArgumentOutOfRangeException(nameof(FilterSelectedItem));
             }
 
             if (!string.IsNullOrWhiteSpace(SearchBoxText))
@@ -235,7 +233,7 @@ public sealed partial class DownloadsViewModel : ObservableObject
 
                 if (_cancellationTokenSource.IsCancellationRequested)
                 {
-                    ThrowHelper.ThrowOperationCanceledException();
+                    throw new OperationCanceledException();
                 }
 
                 ProgressMessage = $"Downloading {item.Title}. File {downloadCount} of {filesToDownload.Count}.";

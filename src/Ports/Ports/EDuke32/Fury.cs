@@ -1,9 +1,7 @@
 ﻿using System.Text;
 using Addons.Addons;
 using Common.All.Enums;
-using Common.All.Helpers;
 using Common.Client.Interfaces;
-using CommunityToolkit.Diagnostics;
 using Games.Games;
 
 namespace Ports.Ports.EDuke32;
@@ -22,7 +20,7 @@ public sealed class Fury : EDuke32
     protected override string WinExe => "fury.exe";
 
     /// <inheritdoc/>
-    protected override string LinExe => ThrowHelper.ThrowNotSupportedException<string>();
+    protected override string LinExe => throw new NotSupportedException();
 
     /// <inheritdoc/>
     public override string Name => "Fury";
@@ -95,7 +93,7 @@ public sealed class Fury : EDuke32
         }
         else
         {
-            ThrowHelper.ThrowNotSupportedException($"Mod type {addon.Type} for game {game} is not supported");
+            throw new NotSupportedException($"Mod type {addon.Type} for game {game} is not supported");
         }
     }
 
@@ -112,8 +110,10 @@ public sealed class Fury : EDuke32
             return;
         }
 
-
-        Guard2.ThrowIfNotType<DukeCampaign>(addon, out var fCamp);
+        if (addon is not DukeCampaign fCamp)
+        {
+            throw new InvalidCastException();
+        }
 
         if (fCamp.MainCon is not null)
         {
@@ -139,7 +139,7 @@ public sealed class Fury : EDuke32
         }
         else
         {
-            ThrowHelper.ThrowNotSupportedException($"Mod type {fCamp.Type} is not supported");
+            throw new NotSupportedException($"Mod type {fCamp.Type} is not supported");
             return;
         }
     }

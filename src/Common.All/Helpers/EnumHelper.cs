@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
-using CommunityToolkit.Diagnostics;
 
 namespace Common.All.Helpers;
 
@@ -40,7 +39,7 @@ public static class EnumHelper
 
         if (field is null)
         {
-            return ThrowHelper.ThrowInvalidDataException<string>();
+            throw new InvalidDataException();
         }
 
         var attr = field
@@ -50,7 +49,7 @@ public static class EnumHelper
 
         if (attr is null)
         {
-            return ThrowHelper.ThrowInvalidDataException<string>();
+            throw new InvalidDataException();
         }
 
         return attr.Description;

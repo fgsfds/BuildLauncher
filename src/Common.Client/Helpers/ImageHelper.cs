@@ -1,5 +1,4 @@
 ﻿using System.Reflection;
-using CommunityToolkit.Diagnostics;
 using SharpCompress.Archives;
 
 namespace Common.Client.Helpers;
@@ -17,7 +16,7 @@ public static class ImageHelper
 
         var resource = callingAss.GetManifestResourceStream($"{assName}.Assets.{fileName}");
 
-        Guard.IsNotNull(resource);
+        ArgumentNullException.ThrowIfNull(resource);
 
         return resource;
     }

@@ -4,7 +4,6 @@ using System.Text;
 using Common.All;
 using Common.Client.Enums;
 using Common.Client.Interfaces;
-using CommunityToolkit.Diagnostics;
 using Database.Client;
 using Microsoft.EntityFrameworkCore;
 using static Common.Client.Interfaces.IConfigProvider;
@@ -304,19 +303,19 @@ public sealed class ConfigProvider : IConfigProvider
         ParameterChangedEvent?.Invoke(nameof(DisabledAutoloadMods));
     }
 
-    public void ChangeFavoriteState(AddonId addonVersion, bool isEnabled)
+    public void ChangeFavoriteState(AddonId addonId, bool isEnabled)
     {
         using var dbContext = _dbContextFactory.CreateDbContext();
 
         if (isEnabled)
         {
-            _ = dbContext.Favorites.Add(new() { AddonId = addonVersion.Id, Version = addonVersion.Version ?? string.Empty });
+            _ = dbContext.Favorites.Add(new() { AddonId = addonId.Id, Version = addonId.Version ?? string.Empty });
         }
         else
         {
-            var existing = dbContext.Favorites.Find(addonVersion.Id, addonVersion.Version ?? string.Empty);
+            var existing = dbContext.Favorites.Find(addonId.Id, addonId.Version ?? string.Empty);
 
-            Guard.IsNotNull(existing);
+            ArgumentNullException.ThrowIfNull(existing);
 
             _ = dbContext.Favorites.Remove(existing);
         }
@@ -346,7 +345,7 @@ public sealed class ConfigProvider : IConfigProvider
         }
         else
         {
-            Guard.IsNotNull(existing);
+            ArgumentNullException.ThrowIfNull(existing);
 
             var enabled = existing.EnabledOptions.Split(';').ToList();
             _ = enabled.Remove(option);

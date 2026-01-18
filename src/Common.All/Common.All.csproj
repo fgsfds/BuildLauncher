@@ -5,13 +5,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AddSealed" PrivateAssets="all" />
-    <PackageReference Include="CommunityToolkit.Diagnostics" />
-    <PackageReference Include="ConfigureAwaitAnalyzer" PrivateAssets="all" />
     <PackageReference Include="IDisposableAnalyzers" PrivateAssets="all" />
     <PackageReference Include="Microsoft.Extensions.Http" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" />
-    <PackageReference Include="Roslynator.Analyzers" PrivateAssets="all" />
   </ItemGroup>
 
 </Project>

@@ -5,7 +5,6 @@ using Common.All.Helpers;
 using Common.All.Serializable.Addon;
 using Common.All.Serializable.Downloadable;
 using Common.Client.Interfaces;
-using CommunityToolkit.Diagnostics;
 using SharpCompress.Archives.Zip;
 
 namespace Common.Client.Tools;
@@ -71,7 +70,7 @@ public sealed class FilesUploader
             AddonTypeEnum.TC => "Campaigns",
             AddonTypeEnum.Map => "Maps",
             AddonTypeEnum.Mod => "Mods",
-            _ => ThrowHelper.ThrowNotSupportedException<string>(),
+            _ => throw new NotSupportedException(),
         };
 
         var gameName = manifest.SupportedGame.Game switch
@@ -90,7 +89,7 @@ public sealed class FilesUploader
             GameEnum.Witchaven => "WH",
             GameEnum.Witchaven2 => "WH2",
             GameEnum.Standalone => "Standalone",
-            _ => ThrowHelper.ThrowNotSupportedException<string>(),
+            _ => throw new NotSupportedException(),
         };
 
         var downloadUrl = $"{Consts.FilesRepo}/{gameName}/{folderName}/{Path.GetFileName(pathToFile)}";

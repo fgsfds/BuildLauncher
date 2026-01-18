@@ -8,7 +8,6 @@ using Common.All.Helpers;
 using Common.Client.Enums;
 using Common.Client.Helpers;
 using Common.Client.Interfaces;
-using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Games.Providers;
@@ -163,11 +162,11 @@ public sealed partial class SettingsViewModel : ObservableObject
     [RelayCommand]
     private void SetTheme(object? param)
     {
-        Guard.IsNotNull(Application.Current);
+        ArgumentNullException.ThrowIfNull(Application.Current);
 
         if (!EnumHelper.TryParse<ThemeEnum>(param, out var themeEnum))
         {
-            ThrowHelper.ThrowInvalidOperationException();
+            throw new InvalidOperationException();
         }
 
         Application.Current.RequestedThemeVariant = themeEnum.Value switch
@@ -175,7 +174,7 @@ public sealed partial class SettingsViewModel : ObservableObject
             ThemeEnum.System => ThemeVariant.Default,
             ThemeEnum.Light => ThemeVariant.Light,
             ThemeEnum.Dark => ThemeVariant.Dark,
-            _ => ThrowHelper.ThrowArgumentOutOfRangeException<ThemeVariant>(),
+            _ => throw new ArgumentOutOfRangeException(),
         };
 
         _config.Theme = themeEnum.Value;

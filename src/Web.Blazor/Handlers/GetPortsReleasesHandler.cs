@@ -7,7 +7,7 @@ using MediatR;
 
 namespace Web.Blazor.Handlers;
 
-public sealed class GetPortsReleasesHandler : IRequestHandler<GetPortsReleasesRequest, GetPortsReleasesResponse?>
+internal sealed class GetPortsReleasesHandler : IRequestHandler<GetPortsReleasesRequest, GetPortsReleasesResponse?>
 {
     private readonly IReleaseProvider<PortEnum> _portsReleasesRetriever;
 

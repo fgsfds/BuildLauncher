@@ -1,5 +1,4 @@
 ﻿using Common.Client.Interfaces;
-using CommunityToolkit.Diagnostics;
 
 namespace Common.Client.Providers;
 
@@ -48,7 +47,7 @@ public sealed class RatingProvider
 
     public async Task ChangeScoreAsync(string addonId, byte rating)
     {
-        Guard.IsNotNull(_cache);
+        ArgumentNullException.ThrowIfNull(_cache);
 
         var ratingExists = _config.Rating.TryGetValue(addonId, out var existingRating);
 

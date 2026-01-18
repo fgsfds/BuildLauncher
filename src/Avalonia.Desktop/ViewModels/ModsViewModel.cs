@@ -4,20 +4,19 @@ using Addons.Addons;
 using Addons.Providers;
 using Avalonia.Desktop.Misc;
 using Common.All.Enums;
-using Common.All.Helpers;
 using Common.Client.Interfaces;
 using Common.Client.Providers;
-using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Games.Games;
 using Games.Providers;
+using SharpCompress.Common;
 
 namespace Avalonia.Desktop.ViewModels;
 
 public sealed partial class ModsViewModel : RightPanelViewModel, IPortsButtonControl
 {
-    public readonly BaseGame Game;
+    public BaseGame Game { get; }
 
     private readonly InstalledGamesProvider _gamesProvider;
     private readonly InstalledAddonsProvider _installedAddonsProvider;
@@ -129,7 +128,7 @@ public sealed partial class ModsViewModel : RightPanelViewModel, IPortsButtonCon
     [RelayCommand]
     private void DeleteMod()
     {
-        Guard.IsNotNull(SelectedAddon);
+        ArgumentNullException.ThrowIfNull(SelectedAddon);
 
         _installedAddonsProvider.DeleteAddon(SelectedAddon);
     }
@@ -141,7 +140,10 @@ public sealed partial class ModsViewModel : RightPanelViewModel, IPortsButtonCon
     [RelayCommand]
     private void ModCheckboxPressed(object? obj)
     {
-        obj.ThrowIfNotType<AutoloadMod>(out var mod);
+        if (obj is not AutoloadMod mod)
+        {
+            throw new InvalidCastException();
+        }
 
         //disabling
         if (mod.IsEnabled)

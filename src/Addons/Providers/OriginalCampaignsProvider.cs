@@ -6,7 +6,6 @@ using Common.All.Enums.Versions;
 using Common.All.Helpers;
 using Common.Client.Helpers;
 using Common.Client.Interfaces;
-using CommunityToolkit.Diagnostics;
 using Games.Games;
 
 namespace Addons.Providers;
@@ -44,17 +43,20 @@ public sealed class OriginalCampaignsProvider
 
             GameEnum.Standalone => [],
 
-            GameEnum.Duke64 => ThrowHelper.ThrowNotSupportedException<Dictionary<AddonId, BaseAddon>>(),
-            GameEnum.RidesAgain => ThrowHelper.ThrowNotSupportedException<Dictionary<AddonId, BaseAddon>>(),
-            GameEnum.Witchaven2 => ThrowHelper.ThrowNotSupportedException<Dictionary<AddonId, BaseAddon>>(),
+            GameEnum.Duke64 => throw new NotSupportedException(),
+            GameEnum.RidesAgain => throw new NotSupportedException(),
+            GameEnum.Witchaven2 => throw new NotSupportedException(),
 
-            _ => ThrowHelper.ThrowArgumentOutOfRangeException<Dictionary<AddonId, BaseAddon>>()
+            _ => throw new ArgumentOutOfRangeException()
         };
     }
 
     private Dictionary<AddonId, BaseAddon> GetDuke3DCampaigns(BaseGame game)
     {
-        game.ThrowIfNotType(out DukeGame dGame);
+        if (game is not DukeGame dGame)
+        {
+            throw new InvalidCastException();
+        }
 
         Dictionary<AddonId, BaseAddon> campaigns = new(6);
 
@@ -295,7 +297,10 @@ public sealed class OriginalCampaignsProvider
     /// <inheritdoc/>
     private Dictionary<AddonId, BaseAddon> GetBloodCampaigns(BaseGame game)
     {
-        game.ThrowIfNotType(out BloodGame bGame);
+        if (game is not BloodGame bGame)
+        {
+            throw new InvalidCastException();
+        }
 
         Dictionary<AddonId, BaseAddon> campaigns = new(2);
 
@@ -389,7 +394,10 @@ public sealed class OriginalCampaignsProvider
     /// </summary>
     private Dictionary<AddonId, BaseAddon> GetWangCampaigns(BaseGame game)
     {
-        game.ThrowIfNotType(out WangGame wGame);
+        if (game is not WangGame wGame)
+        {
+            throw new InvalidCastException();
+        }
 
         Dictionary<AddonId, BaseAddon> campaigns = new(1);
 
@@ -435,7 +443,10 @@ public sealed class OriginalCampaignsProvider
     /// <inheritdoc/>
     private Dictionary<AddonId, BaseAddon> GetFuryCampaigns(BaseGame game)
     {
-        game.ThrowIfNotType(out FuryGame fGame);
+        if (game is not FuryGame fGame)
+        {
+            throw new InvalidCastException();
+        }
 
         Dictionary<AddonId, BaseAddon> campaigns = new(1);
 
@@ -506,7 +517,10 @@ public sealed class OriginalCampaignsProvider
     /// <inheritdoc/>
     private Dictionary<AddonId, BaseAddon> GetRedneckCampaigns(BaseGame game)
     {
-        game.ThrowIfNotType(out RedneckGame rGame);
+        if (game is not RedneckGame rGame)
+        {
+            throw new InvalidCastException();
+        }
 
         Dictionary<AddonId, BaseAddon> campaigns = new(3);
 
@@ -631,7 +645,10 @@ public sealed class OriginalCampaignsProvider
     /// <inheritdoc/>
     private Dictionary<AddonId, BaseAddon> GetNamCampaigns(BaseGame game)
     {
-        game.ThrowIfNotType(out NamGame nGame);
+        if (game is not NamGame nGame)
+        {
+            throw new InvalidCastException();
+        }
 
         Dictionary<AddonId, BaseAddon> campaigns = new(1);
 
@@ -684,7 +701,10 @@ public sealed class OriginalCampaignsProvider
     /// <inheritdoc/>
     private Dictionary<AddonId, BaseAddon> GetWw2Campaigns(BaseGame game)
     {
-        game.ThrowIfNotType(out WW2GIGame wGame);
+        if (game is not WW2GIGame wGame)
+        {
+            throw new InvalidCastException();
+        }
 
         Dictionary<AddonId, BaseAddon> campaigns = new(1);
 
@@ -769,7 +789,10 @@ public sealed class OriginalCampaignsProvider
     /// <inheritdoc/>
     private Dictionary<AddonId, BaseAddon> GetTekWarCampaigns(BaseGame game)
     {
-        game.ThrowIfNotType(out TekWarGame tGame);
+        if (game is not TekWarGame tGame)
+        {
+            throw new InvalidCastException();
+        }
 
         Dictionary<AddonId, BaseAddon> campaigns = new(1);
 
@@ -816,7 +839,10 @@ public sealed class OriginalCampaignsProvider
     /// <inheritdoc/>
     private Dictionary<AddonId, BaseAddon> GetSlaveCampaigns(BaseGame game)
     {
-        game.ThrowIfNotType(out SlaveGame sGame);
+        if (game is not SlaveGame sGame)
+        {
+            throw new InvalidCastException();
+        }
 
         Dictionary<AddonId, BaseAddon> campaigns = new(1);
 
@@ -866,7 +892,10 @@ public sealed class OriginalCampaignsProvider
     /// <inheritdoc/>
     private Dictionary<AddonId, BaseAddon> GetWitchavenCampaigns(BaseGame game)
     {
-        game.ThrowIfNotType(out WitchavenGame wGame);
+        if (game is not WitchavenGame wGame)
+        {
+            throw new InvalidCastException();
+        }
 
         Dictionary<AddonId, BaseAddon> campaigns = new(1);
 

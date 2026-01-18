@@ -7,7 +7,6 @@ using Common.All.Serializable;
 using Common.All.Serializable.Downloadable;
 using Common.Client.Helpers;
 using Common.Client.Interfaces;
-using CommunityToolkit.Diagnostics;
 using Microsoft.Extensions.Logging;
 
 namespace Common.Client.Api;
@@ -59,7 +58,7 @@ public sealed class GitHubApiInterface : IApiInterface
 
                 if (_addonsJson is null)
                 {
-                    ThrowHelper.ThrowArgumentNullException();
+                    throw new ArgumentNullException();
                 }
             }
 
@@ -132,8 +131,7 @@ public sealed class GitHubApiInterface : IApiInterface
     {
         if (ClientProperties.PathToLocalAddonsJson is null)
         {
-            ThrowHelper.ThrowFormatException("Can't find local addons.json");
-            return Task.FromResult(false);
+            throw new FormatException("Can't find local addons.json");
         }
 
         var addonsJson = File.ReadAllText(ClientProperties.PathToLocalAddonsJson);
@@ -141,8 +139,7 @@ public sealed class GitHubApiInterface : IApiInterface
 
         if (addons is null)
         {
-            ThrowHelper.ThrowFormatException("Error while deserializing addons.json");
-            return Task.FromResult(false);
+            throw new FormatException("Error while deserializing addons.json");
         }
 
         if (!addons.TryGetValue(addon.Game, out _))
@@ -212,7 +209,7 @@ public sealed class GitHubApiInterface : IApiInterface
 
         if (_data is null)
         {
-            ThrowHelper.ThrowArgumentNullException();
+            throw new ArgumentNullException();
         }
     }
 

@@ -7,7 +7,6 @@ using Common.All.Serializable.Downloadable;
 using Common.Client.Helpers;
 using Common.Client.Interfaces;
 using Common.Client.Tools;
-using CommunityToolkit.Diagnostics;
 using Games.Games;
 using Microsoft.Extensions.Logging;
 
@@ -200,7 +199,7 @@ public sealed class DownloadableAddonsProvider
             }
             else
             {
-                ThrowHelper.ThrowNotSupportedException(addon.AddonType.ToString());
+                throw new NotSupportedException(addon.AddonType.ToString());
                 return false;
             }
 

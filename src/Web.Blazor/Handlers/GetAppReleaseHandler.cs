@@ -5,7 +5,7 @@ using MediatR;
 
 namespace Web.Blazor.Handlers;
 
-public sealed class GetAppReleaseHandler : IRequestHandler<GetAppReleaseRequest, GetAppReleaseResponse?>
+internal sealed class GetAppReleaseHandler : IRequestHandler<GetAppReleaseRequest, GetAppReleaseResponse?>
 {
     private readonly RepoAppReleasesProvider _appReleasesProvider;
 

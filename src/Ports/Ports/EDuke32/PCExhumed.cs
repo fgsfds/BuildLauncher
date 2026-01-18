@@ -1,7 +1,6 @@
 ﻿using System.Text;
 using Addons.Addons;
 using Common.All.Enums;
-using CommunityToolkit.Diagnostics;
 using Games.Games;
 
 namespace Ports.Ports.EDuke32;
@@ -18,7 +17,7 @@ public sealed class PCExhumed : EDuke32
     protected override string WinExe => "pcexhumed.exe";
 
     /// <inheritdoc/>
-    protected override string LinExe => ThrowHelper.ThrowNotSupportedException<string>();
+    protected override string LinExe => throw new NotSupportedException();
 
     /// <inheritdoc/>
     public override string Name => "PCExhumed";
@@ -75,7 +74,7 @@ public sealed class PCExhumed : EDuke32
         }
         else
         {
-            ThrowHelper.ThrowNotSupportedException($"Mod type {addon.Type} for game {game} is not supported");
+            throw new NotSupportedException($"Mod type {addon.Type} for game {game} is not supported");
         }
     }
 }

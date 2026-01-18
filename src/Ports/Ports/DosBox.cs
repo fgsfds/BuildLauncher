@@ -5,7 +5,6 @@ using Common.All.Enums;
 using Common.All.Enums.Addons;
 using Common.All.Enums.Versions;
 using Common.Client.Helpers;
-using CommunityToolkit.Diagnostics;
 using Games.Games;
 using SharpCompress.Archives;
 
@@ -23,7 +22,7 @@ public sealed class DosBox : BasePort
     protected override string WinExe => "dosbox.exe";
 
     /// <inheritdoc/>
-    protected override string LinExe => ThrowHelper.ThrowNotSupportedException<string>();
+    protected override string LinExe => throw new NotSupportedException();
 
     /// <inheritdoc/>
     public override string Name => "DosBox Staging";
@@ -80,40 +79,40 @@ public sealed class DosBox : BasePort
     protected override string ConfigFile => string.Empty;
 
     /// <inheritdoc/>
-    protected override string AddDirectoryParam => ThrowHelper.ThrowNotSupportedException<string>();
+    protected override string AddDirectoryParam => throw new NotSupportedException();
 
     /// <inheritdoc/>
-    protected override string AddFileParam => ThrowHelper.ThrowNotSupportedException<string>();
+    protected override string AddFileParam => throw new NotSupportedException();
 
     /// <inheritdoc/>
-    protected override string AddDefParam => ThrowHelper.ThrowNotSupportedException<string>();
+    protected override string AddDefParam => throw new NotSupportedException();
 
     /// <inheritdoc/>
-    protected override string AddConParam => ThrowHelper.ThrowNotSupportedException<string>();
+    protected override string AddConParam => throw new NotSupportedException();
 
     /// <inheritdoc/>
-    protected override string MainDefParam => ThrowHelper.ThrowNotSupportedException<string>();
+    protected override string MainDefParam => throw new NotSupportedException();
 
     /// <inheritdoc/>
-    protected override string MainConParam => ThrowHelper.ThrowNotSupportedException<string>();
+    protected override string MainConParam => throw new NotSupportedException();
 
     /// <inheritdoc/>
-    protected override string MainGrpParam => ThrowHelper.ThrowNotSupportedException<string>();
+    protected override string MainGrpParam => throw new NotSupportedException();
 
     /// <inheritdoc/>
-    protected override string AddGrpParam => ThrowHelper.ThrowNotSupportedException<string>();
+    protected override string AddGrpParam => throw new NotSupportedException();
 
     /// <inheritdoc/>
-    protected override string SkillParam => ThrowHelper.ThrowNotSupportedException<string>();
+    protected override string SkillParam => throw new NotSupportedException();
 
     /// <inheritdoc/>
-    protected override string AddGameDirParam => ThrowHelper.ThrowNotSupportedException<string>();
+    protected override string AddGameDirParam => throw new NotSupportedException();
 
     /// <inheritdoc/>
-    protected override string AddRffParam => ThrowHelper.ThrowNotSupportedException<string>();
+    protected override string AddRffParam => throw new NotSupportedException();
 
     /// <inheritdoc/>
-    protected override string AddSndParam => ThrowHelper.ThrowNotSupportedException<string>();
+    protected override string AddSndParam => throw new NotSupportedException();
 
 
     /// <inheritdoc/>
@@ -215,8 +214,8 @@ public sealed class DosBox : BasePort
 
     protected override void GetBloodArgs(StringBuilder sb, BloodGame game, BaseAddon addon)
     {
-        Guard.IsNotNull(game.GameInstallFolder);
-        Guard.IsNotNull(addon.PathToFile);
+        ArgumentNullException.ThrowIfNull(game.GameInstallFolder);
+        ArgumentNullException.ThrowIfNull(addon.PathToFile);
 
         if (addon.AddonId.Id.Equals(nameof(BloodAddonEnum.BloodCP), StringComparison.OrdinalIgnoreCase))
         {

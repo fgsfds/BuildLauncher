@@ -1,5 +1,4 @@
 ﻿using Common.All.Enums;
-using CommunityToolkit.Diagnostics;
 using Games.Providers;
 
 namespace Tools.Tools;
@@ -12,7 +11,7 @@ public sealed class DOSBlood : BaseTool
     protected override string WinExe => "BLOOD.EXE";
 
     /// <inheritdoc/>
-    protected override string LinExe => ThrowHelper.ThrowNotSupportedException<string>();
+    protected override string LinExe => throw new NotSupportedException();
 
     /// <inheritdoc/>
     public override string Name => "DOSBlood";
@@ -74,5 +73,5 @@ public sealed class DOSBlood : BaseTool
     }
 
     /// <inheritdoc/>
-    public override string GetStartToolArgs() => ThrowHelper.ThrowNotSupportedException<string>();
+    public override string GetStartToolArgs() => throw new NotSupportedException();
 }

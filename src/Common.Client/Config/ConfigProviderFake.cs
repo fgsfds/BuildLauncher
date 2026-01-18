@@ -1,14 +1,13 @@
 ﻿using Common.All;
 using Common.Client.Enums;
 using Common.Client.Interfaces;
-using CommunityToolkit.Diagnostics;
 using static Common.Client.Interfaces.IConfigProvider;
 
 namespace Common.Client.Config;
 
 public sealed class ConfigProviderFake : IConfigProvider
 {
-    public string ApiPassword { get; set; } = string.Empty;
+    public string? ApiPassword { get; set; } = null;
     public bool IsConsented { get; set; } = true;
     public string? PathBlood { get; set; } = null;
     public string? PathDuke3D { get; set; } = null;
@@ -42,13 +41,13 @@ public sealed class ConfigProviderFake : IConfigProvider
 
     public event ParameterChanged? ParameterChangedEvent;
 
-    public void AddPlaytime(string addonId, TimeSpan playTime) => ThrowHelper.ThrowNotSupportedException();
+    public void AddPlaytime(string addonId, TimeSpan playTime) => throw new NotSupportedException();
 
-    public void AddScore(string addonId, byte rating) => ThrowHelper.ThrowNotSupportedException();
+    public void AddScore(string addonId, byte rating) => throw new NotSupportedException();
 
-    public void ChangeAddonOptionState(string addonId, string option, bool isEnabled) => ThrowHelper.ThrowNotSupportedException();
+    public void ChangeAddonOptionState(string addonId, string option, bool isEnabled) => throw new NotSupportedException();
 
-    public void ChangeFavoriteState(AddonId addonVersion, bool isEnabled) => ThrowHelper.ThrowNotSupportedException();
+    public void ChangeFavoriteState(AddonId addonId, bool isEnabled) => throw new NotSupportedException();
 
-    public void ChangeModState(AddonId addonId, bool isEnabled) => ThrowHelper.ThrowNotSupportedException();
+    public void ChangeModState(AddonId addonId, bool isEnabled) => throw new NotSupportedException();
 }

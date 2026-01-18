@@ -1,6 +1,5 @@
 ﻿using Common.All.Enums;
 using Common.Client.Interfaces;
-using CommunityToolkit.Diagnostics;
 using Games.Games;
 
 namespace Games.Providers;
@@ -124,7 +123,7 @@ public sealed class InstalledGamesProvider
             GameEnum.TekWar => _tekwar,
             GameEnum.Witchaven => _witch,
             GameEnum.Witchaven2 => _witch,
-            _ => ThrowHelper.ThrowArgumentOutOfRangeException<BaseGame>()
+            _ => throw new ArgumentOutOfRangeException()
         };
     }
 

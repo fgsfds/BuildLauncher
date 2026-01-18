@@ -9,7 +9,6 @@ using Common.All.Helpers;
 using Common.All.Serializable.Addon;
 using Common.Client.Helpers;
 using Common.Client.Interfaces;
-using CommunityToolkit.Diagnostics;
 using Games.Games;
 using Microsoft.EntityFrameworkCore;
 
@@ -36,7 +35,7 @@ public abstract class BasePort : IInstallable
             {
                 OSEnum.Windows => WinExe,
                 OSEnum.Linux => LinExe,
-                _ => ThrowHelper.ThrowArgumentOutOfRangeException<string>(CommonProperties.OSEnum.ToString())
+                _ => throw new ArgumentOutOfRangeException(CommonProperties.OSEnum.ToString())
             };
         }
     }
@@ -303,7 +302,7 @@ public abstract class BasePort : IInstallable
         }
         else
         {
-            ThrowHelper.ThrowNotSupportedException();
+            throw new NotSupportedException();
         }
     }
 
@@ -313,7 +312,10 @@ public abstract class BasePort : IInstallable
     /// </summary>
     protected virtual void GetLooseMapArgs(StringBuilder sb, BaseGame game, BaseAddon camp)
     {
-        camp.StartMap.ThrowIfNotType<MapFileJsonModel>(out var mapFile);
+        if (camp.StartMap is not MapFileJsonModel mapFile)
+        {
+            throw new InvalidCastException();
+        }
 
         _ = sb.Append($@" {AddDirectoryParam}""{game.MapsFolderPath}""");
         _ = sb.Append($@" -map ""{mapFile.File}""");
@@ -336,8 +338,10 @@ public abstract class BasePort : IInstallable
             return;
         }
 
-
-        addon.ThrowIfNotType<BloodCampaign>(out var bCamp);
+        if (addon is not BloodCampaign bCamp)
+        {
+            throw new InvalidCastException();
+        }
 
         if (bCamp.INI is not null)
         {
@@ -376,8 +380,7 @@ public abstract class BasePort : IInstallable
         }
         else
         {
-            ThrowHelper.ThrowNotSupportedException($"Mod type {bCamp.Type} is not supported");
-            return;
+            throw new NotSupportedException($"Mod type {bCamp.Type} is not supported");
         }
 
 
@@ -401,8 +404,10 @@ public abstract class BasePort : IInstallable
             return;
         }
 
-
-        addon.ThrowIfNotType<GenericCampaign>(out var sCamp);
+        if (addon is not GenericCampaign sCamp)
+        {
+            throw new InvalidCastException();
+        }
 
         if (sCamp.FileName is null)
         {
@@ -419,8 +424,7 @@ public abstract class BasePort : IInstallable
         }
         else
         {
-            ThrowHelper.ThrowNotSupportedException($"Mod type {sCamp.Type} is not supported");
-            return;
+            throw new NotSupportedException($"Mod type {sCamp.Type} is not supported");
         }
     }
 
@@ -436,7 +440,7 @@ public abstract class BasePort : IInstallable
         }
         else
         {
-            ThrowHelper.ThrowNotSupportedException();
+            throw new NotSupportedException();
         }
 
 
@@ -446,8 +450,10 @@ public abstract class BasePort : IInstallable
             return;
         }
 
-
-        addon.ThrowIfNotType<DukeCampaign>(out var dCamp);
+        if (addon is not DukeCampaign dCamp)
+        {
+            throw new InvalidCastException();
+        }
 
         if (addon.AddonId.Id.Equals(nameof(WW2GIAddonEnum.Platoon), StringComparison.OrdinalIgnoreCase))
         {
@@ -489,8 +495,7 @@ public abstract class BasePort : IInstallable
         }
         else
         {
-            ThrowHelper.ThrowNotSupportedException($"Mod type {dCamp.Type} is not supported");
-            return;
+            throw new NotSupportedException($"Mod type {dCamp.Type} is not supported");
         }
     }
 
@@ -603,7 +608,7 @@ public abstract class BasePort : IInstallable
             return;
         }
 
-        Guard.IsNotNull(game.GameInstallFolder);
+        ArgumentNullException.ThrowIfNull(game.GameInstallFolder);
 
         var tilesA2 = Path.Combine(game.GameInstallFolder, "TILES024.ART");
         var tilesB2 = Path.Combine(game.GameInstallFolder, "TILES025.ART");
@@ -653,7 +658,7 @@ public abstract class BasePort : IInstallable
             return;
         }
 
-        Guard.IsNotNull(game.GameInstallFolder);
+        ArgumentNullException.ThrowIfNull(game.GameInstallFolder);
 
         var art1 = Path.Combine(game.GameInstallFolder, "TILES009.ART");
         var art1r = Path.Combine(game.GameInstallFolder, "TILES009._ART");
@@ -747,7 +752,7 @@ public abstract class BasePort : IInstallable
         //copying saved games into separate folder
         var saveFolder = GetPathToAddonSavedGamesFolder(game.ShortName, campaign.AddonId.Id);
 
-        string path = game.GameInstallFolder ?? ThrowHelper.ThrowArgumentNullException<string>();
+        string path = game.GameInstallFolder ?? throw new NullReferenceException(nameof(game.GameInstallFolder));
 
         var files = from file in Directory.GetFiles(path)
                     from ext in SaveFileExtensions

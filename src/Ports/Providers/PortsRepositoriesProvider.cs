@@ -1,6 +1,5 @@
 ﻿using Common.All.Enums;
 using Common.All.Serializable.Downloadable;
-using CommunityToolkit.Diagnostics;
 
 namespace Ports.Providers;
 
@@ -100,7 +99,7 @@ internal static class PortsRepositoriesProvider
         }
         else
         {
-            return ThrowHelper.ThrowNotSupportedException<RepositoryEntity>(portEnum.ToString());
+            throw new NotSupportedException(portEnum.ToString());
         }
     }
 }

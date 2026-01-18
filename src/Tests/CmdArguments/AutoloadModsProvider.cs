@@ -3,7 +3,6 @@ using Common.All;
 using Common.All.Enums;
 using Common.All.Enums.Addons;
 using Common.All.Enums.Versions;
-using CommunityToolkit.Diagnostics;
 
 namespace Tests.CmdArguments;
 
@@ -26,7 +25,7 @@ internal sealed class AutoloadModsProvider
             GameEnum.RidesAgain => new(GameEnum.RidesAgain),
             GameEnum.Fury => new(GameEnum.Fury),
             GameEnum.NAM => new(GameEnum.NAM),
-            _ => ThrowHelper.ThrowNotSupportedException<GameStruct>()
+            _ => throw new NotSupportedException()
         };
 
         _addon = gameEnum switch
@@ -39,7 +38,7 @@ internal sealed class AutoloadModsProvider
             GameEnum.Duke64 => "",
             GameEnum.Slave => "",
             GameEnum.NAM => "",
-            _ => ThrowHelper.ThrowNotSupportedException<string>()
+            _ => throw new NotSupportedException()
         };
 
         _feature = gameEnum switch
@@ -53,7 +52,7 @@ internal sealed class AutoloadModsProvider
             GameEnum.RidesAgain => FeatureEnum.Models,
             GameEnum.Fury => FeatureEnum.EDuke32_CON,
             GameEnum.NAM => FeatureEnum.Models,
-            _ => ThrowHelper.ThrowNotSupportedException<FeatureEnum>()
+            _ => throw new NotSupportedException()
         };
     }
 

@@ -10,7 +10,7 @@ using Web.Blazor.Tasks;
 
 namespace Web.Blazor;
 
-public sealed class Program
+internal sealed class Program
 {
     public static void Main(string[] args)
     {

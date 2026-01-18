@@ -5,7 +5,7 @@ using Web.Blazor.Providers;
 
 namespace Web.Blazor.Handlers;
 
-public sealed class GetAddonsHandler : IRequestHandler<GetAddonsRequest, GetAddonsResponse>
+internal sealed class GetAddonsHandler : IRequestHandler<GetAddonsRequest, GetAddonsResponse>
 {
     private readonly DatabaseAddonsRetriever _addonsProvider;
 

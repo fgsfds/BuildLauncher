@@ -24,7 +24,6 @@ public sealed class ViewModelsFactory
     private readonly PortInstallerFactory _portsInstallerFactory;
     private readonly ToolInstallerFactory _toolsInstallerFactory;
     private readonly PortsProvider _portsProvider;
-    private readonly ToolsProvider _toolsProvider;
     private readonly PlaytimeProvider _playtimeProvider;
     private readonly IApiInterface _apiInterface;
     private readonly RatingProvider _ratingProvider;
@@ -45,7 +44,6 @@ public sealed class ViewModelsFactory
         PortInstallerFactory portsInstallerFactory,
         ToolInstallerFactory toolsInstallerFactory,
         PortsProvider portsProvider,
-        ToolsProvider toolsProvider,
         PlaytimeProvider playtimeProvider,
         IApiInterface apiInterface,
         RatingProvider ratingProvider,
@@ -66,7 +64,6 @@ public sealed class ViewModelsFactory
         _portsInstallerFactory = portsInstallerFactory;
         _toolsInstallerFactory = toolsInstallerFactory;
         _portsProvider = portsProvider;
-        _toolsProvider = toolsProvider;
         _playtimeProvider = playtimeProvider;
         _apiInterface = apiInterface;
         _ratingProvider = ratingProvider;
@@ -91,7 +88,6 @@ public sealed class ViewModelsFactory
             _filesUploader,
             _gamesProvider,
             _portsProvider,
-            _toolsProvider,
             _appUpdateInstaller,
             this,
             _gamesPathsProvider,

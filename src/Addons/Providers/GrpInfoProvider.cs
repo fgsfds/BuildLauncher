@@ -2,7 +2,6 @@
 using Common.All;
 using Common.All.Enums;
 using Common.All.Enums.Versions;
-using CommunityToolkit.Diagnostics;
 
 namespace Addons.Providers;
 
@@ -24,7 +23,7 @@ public static class GrpInfoProvider
 
         foreach (var grpInfo in grpInfos)
         {
-            var grpInfoFolder = Path.GetDirectoryName(grpInfo) ?? ThrowHelper.ThrowInvalidOperationException<string>();
+            var grpInfoFolder = Path.GetDirectoryName(grpInfo) ?? throw new InvalidOperationException();
 
             var grps = Directory.GetFiles(grpInfoFolder, "*.grp", SearchOption.TopDirectoryOnly);
 

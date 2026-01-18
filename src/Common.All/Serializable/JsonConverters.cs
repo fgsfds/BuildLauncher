@@ -3,7 +3,6 @@ using System.Text.Json.Serialization;
 using Common.All.Enums;
 using Common.All.Interfaces;
 using Common.All.Serializable.Addon;
-using CommunityToolkit.Diagnostics;
 
 namespace Common.All.Serializable;
 
@@ -21,7 +20,7 @@ public sealed class SupportedGameDtoConverter : JsonConverter<SupportedGameJsonM
 
             if (str is null)
             {
-                ThrowHelper.ThrowArgumentNullException(nameof(str));
+                throw new ArgumentNullException(nameof(str));
             }
 
             var gameEnum = Enum.Parse<GameEnum>(str, true);
@@ -34,12 +33,12 @@ public sealed class SupportedGameDtoConverter : JsonConverter<SupportedGameJsonM
             return dto;
         }
 
-        return ThrowHelper.ThrowNotSupportedException<SupportedGameJsonModel?>();
+        throw new NotSupportedException();
     }
 
     public override void Write(Utf8JsonWriter writer, SupportedGameJsonModel? value, JsonSerializerOptions options)
     {
-        ThrowHelper.ThrowNotSupportedException();
+        throw new NotSupportedException();
     }
 }
 
@@ -63,7 +62,7 @@ public sealed class IStartMapConverter : JsonConverter<IStartMap?>
             catch { }
         }
 
-        return ThrowHelper.ThrowNotSupportedException<IStartMap?>();
+        throw new NotSupportedException();
     }
 
     public override void Write(Utf8JsonWriter writer, IStartMap? value, JsonSerializerOptions options)
@@ -84,7 +83,7 @@ public sealed class IStartMapConverter : JsonConverter<IStartMap?>
         }
         else
         {
-            ThrowHelper.ThrowNotSupportedException();
+            throw new NotSupportedException();
         }
 
         writer.WriteEndObject();
@@ -155,7 +154,7 @@ public sealed class ExecutablesConverter : JsonConverter<Dictionary<OSEnum, Dict
             catch { }
         }
 
-        return ThrowHelper.ThrowNotSupportedException<Dictionary<OSEnum, Dictionary<PortEnum, string>>?>();
+        throw new NotSupportedException();
     }
 
     public override void Write(Utf8JsonWriter writer, Dictionary<OSEnum, Dictionary<PortEnum, string>>? value, JsonSerializerOptions options)
@@ -240,7 +239,7 @@ public sealed class ExecutablesConverter : JsonConverter<Dictionary<OSEnum, Dict
 //        }
 //        else
 //        {
-//            ThrowHelper.ThrowNotSupportedException();
+//            throw new NotSupportedException();
 //        }
 //    }
 
@@ -284,7 +283,7 @@ public sealed class ExecutablesConverter : JsonConverter<Dictionary<OSEnum, Dict
 //        }
 //        else
 //        {
-//            ThrowHelper.ThrowNotSupportedException();
+//            throw new NotSupportedException();
 //        }
 
 //        return default;
@@ -296,7 +295,7 @@ public sealed class GameEnumJsonConverter : JsonConverter<GameEnum>
     public override GameEnum Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
         var value = reader.GetString();
-        Guard.IsNotNullOrWhiteSpace(value);
+        ArgumentException.ThrowIfNullOrWhiteSpace(value);
 
         if (Enum.TryParse<GameEnum>(value, true, out var gameEnum))
         {
@@ -313,7 +312,7 @@ public sealed class GameEnumJsonConverter : JsonConverter<GameEnum>
         }
         else
         {
-            return ThrowHelper.ThrowArgumentOutOfRangeException<GameEnum>(value);
+            throw new NotSupportedException(value);
         }
     }
 

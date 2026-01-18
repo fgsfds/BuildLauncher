@@ -12,7 +12,6 @@ using Common.Client.DI;
 using Common.Client.Enums;
 using Common.Client.Helpers;
 using Common.Client.Interfaces;
-using CommunityToolkit.Diagnostics;
 using Database.Client;
 using Games.Providers;
 using Microsoft.EntityFrameworkCore;
@@ -175,7 +174,7 @@ public sealed class App : Application
             ThemeEnum.System => ThemeVariant.Default,
             ThemeEnum.Light => ThemeVariant.Light,
             ThemeEnum.Dark => ThemeVariant.Dark,
-            _ => ThrowHelper.ThrowArgumentOutOfRangeException<ThemeVariant>(theme.ToString())
+            _ => throw new ArgumentOutOfRangeException(theme.ToString())
         };
 
         _app.RequestedThemeVariant = themeEnum;

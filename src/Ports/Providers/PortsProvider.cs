@@ -1,7 +1,6 @@
 ﻿using System.Collections.Immutable;
 using Common.All.Enums;
 using Common.Client.Helpers;
-using CommunityToolkit.Diagnostics;
 using Database.Client;
 using Database.Client.DbEntities;
 using Microsoft.EntityFrameworkCore;
@@ -111,7 +110,7 @@ public sealed class PortsProvider
 
         var portToDelete = dbContext.CustomPorts.Find(portName);
 
-        Guard.IsNotNull(portToDelete);
+        ArgumentNullException.ThrowIfNull(portToDelete);
 
         _ = dbContext.CustomPorts.Remove(portToDelete);
         _ = dbContext.SaveChanges();

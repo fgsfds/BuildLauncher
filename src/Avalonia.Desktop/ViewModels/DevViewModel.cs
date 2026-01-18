@@ -11,7 +11,6 @@ using Common.All.Serializable.Addon;
 using Common.Client.Helpers;
 using Common.Client.Interfaces;
 using Common.Client.Tools;
-using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Games.Providers;
@@ -416,7 +415,7 @@ public sealed partial class DevViewModel : ObservableObject
     [RelayCommand]
     private void RemoveDependency(DependantAddonJsonModel dependency)
     {
-        Guard.IsNotNull(DependenciesList);
+        ArgumentNullException.ThrowIfNull(DependenciesList);
 
         DependenciesList = DependenciesList.Remove(dependency);
     }
@@ -436,7 +435,7 @@ public sealed partial class DevViewModel : ObservableObject
     [RelayCommand]
     private void RemoveIncompatibility(DependantAddonJsonModel dependency)
     {
-        Guard.IsNotNull(IncompatibilitiesList);
+        ArgumentNullException.ThrowIfNull(IncompatibilitiesList);
 
         IncompatibilitiesList = IncompatibilitiesList.Remove(dependency);
     }
@@ -583,7 +582,7 @@ public sealed partial class DevViewModel : ObservableObject
     {
         if (PathToAddonFolder is null)
         {
-            ThrowHelper.ThrowMissingFieldException("Choose addon folder");
+            throw new MissingFieldException("Choose addon folder");
         }
 
         var files = Directory.GetFiles(PathToAddonFolder, "*", SearchOption.TopDirectoryOnly)
@@ -610,7 +609,7 @@ public sealed partial class DevViewModel : ObservableObject
 
             if (forbidden.Any())
             {
-                ThrowHelper.ThrowMissingFieldException($"Common file names can't be used. Rename these files: {string.Join(", ", forbidden)}");
+                throw new MissingFieldException($"Common file names can't be used. Rename these files: {string.Join(", ", forbidden)}");
             }
 
             if (SelectedGame is GameEnum.Blood)
@@ -619,21 +618,21 @@ public sealed partial class DevViewModel : ObservableObject
                 {
                     if (files.Any(static x => x.EndsWith(".ART", StringComparison.OrdinalIgnoreCase)))
                     {
-                        ThrowHelper.ThrowMissingFieldException("Don't use ART files. Convert them to DEF.");
+                        throw new MissingFieldException("Don't use ART files. Convert them to DEF.");
                     }
                     if (files.Any(static x => x.EndsWith(".DAT", StringComparison.OrdinalIgnoreCase)))
                     {
-                        ThrowHelper.ThrowMissingFieldException("Don't use DAT files. Convert them to DEF.");
+                        throw new MissingFieldException("Don't use DAT files. Convert them to DEF.");
                     }
                     if (files.Any(static x => x.EndsWith(".RFS", StringComparison.OrdinalIgnoreCase)))
                     {
-                        ThrowHelper.ThrowMissingFieldException("Addons with RFS files are not supported");
+                        throw new MissingFieldException("Addons with RFS files are not supported");
                     }
                 }
 
                 if (files.Intersect(_forbiddenOggs).Any())
                 {
-                    ThrowHelper.ThrowMissingFieldException("blood00.ogg - blood09.ogg can't be used, start with blood10.ogg");
+                    throw new MissingFieldException("blood00.ogg - blood09.ogg can't be used, start with blood10.ogg");
                 }
             }
         }
@@ -644,9 +643,9 @@ public sealed partial class DevViewModel : ObservableObject
               IsTcSelected ? AddonTypeEnum.TC
             : IsMapSelected ? AddonTypeEnum.Map
             : IsModSelected ? AddonTypeEnum.Mod
-            : ThrowHelper.ThrowArgumentOutOfRangeException<AddonTypeEnum>("Select addon type");
+            : throw new ArgumentOutOfRangeException("Select addon type");
 
-        var gameEnum = SelectedGame ?? ThrowHelper.ThrowArgumentOutOfRangeException<GameEnum>("Select game");
+        var gameEnum = SelectedGame ?? throw new ArgumentOutOfRangeException("Select game");
 
         DukeVersionEnum? dukeVersion =
               SelectedGame is not GameEnum.Duke3D ? null
@@ -657,15 +656,15 @@ public sealed partial class DevViewModel : ObservableObject
 
         if (string.IsNullOrWhiteSpace(AddonTitle))
         {
-            ThrowHelper.ThrowMissingFieldException("Select addon title");
+            throw new MissingFieldException("Select addon title");
         }
         if (string.IsNullOrWhiteSpace(AddonId))
         {
-            ThrowHelper.ThrowMissingFieldException("Select addon id");
+            throw new MissingFieldException("Select addon id");
         }
         if (string.IsNullOrWhiteSpace(AddonVersion))
         {
-            ThrowHelper.ThrowMissingFieldException("Select addon version");
+            throw new MissingFieldException("Select addon version");
         }
 
         List<FeatureEnum> features = [];
@@ -719,19 +718,19 @@ public sealed partial class DevViewModel : ObservableObject
         {
             if (!IsElMapTypeSelected && !IsFileMapTypeSelected)
             {
-                ThrowHelper.ThrowMissingFieldException("Select start map");
+                throw new MissingFieldException("Select start map");
             }
 
             if (IsElMapTypeSelected)
             {
                 if (MapEpisode is null)
                 {
-                    ThrowHelper.ThrowMissingFieldException("Select start map episode");
+                    throw new MissingFieldException("Select start map episode");
                 }
 
                 if (MapLevel is null)
                 {
-                    ThrowHelper.ThrowMissingFieldException("Select start map level");
+                    throw new MissingFieldException("Select start map level");
                 }
 
                 startMap = new MapSlotJsonModel() { Episode = MapEpisode.Value, Level = MapLevel.Value };
@@ -741,7 +740,7 @@ public sealed partial class DevViewModel : ObservableObject
             {
                 if (string.IsNullOrWhiteSpace(MapFileName))
                 {
-                    ThrowHelper.ThrowMissingFieldException("Select start map file name");
+                    throw new MissingFieldException("Select start map file name");
                 }
 
                 startMap = new MapFileJsonModel() { File = MapFileName };
@@ -950,7 +949,7 @@ public sealed partial class DevViewModel : ObservableObject
     /// <param name="addon">Addon</param>
     private void RenameAddonFolder(AddonJsonModel addon)
     {
-        Guard.IsNotNull(PathToAddonFolder);
+        ArgumentNullException.ThrowIfNull(PathToAddonFolder);
 
         var fullName = GetAddonFullName(addon);
         var newFolderPath = Path.Combine(Path.GetDirectoryName(PathToAddonFolder)!, fullName);
@@ -1032,7 +1031,7 @@ public sealed partial class DevViewModel : ObservableObject
             }
             else
             {
-                ThrowHelper.ThrowArgumentOutOfRangeException(nameof(addon.AddonType));
+                throw new ArgumentOutOfRangeException(nameof(addon.AddonType));
                 return null;
             }
 

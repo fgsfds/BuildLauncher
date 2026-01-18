@@ -23,16 +23,16 @@ public sealed class FileLogger : ILogger
 
     public IDisposable? BeginScope<TState>(TState state) where TState : notnull => null;
 
-    public bool IsEnabled(LogLevel level) => true;
+    public bool IsEnabled(LogLevel logLevel) => true;
 
     public void Log<TState>(
-        LogLevel level,
+        LogLevel logLevel,
         EventId eventId,
         TState state,
         Exception? exception,
         Func<TState, Exception?, string> formatter)
     {
-        if (!IsEnabled(level))
+        if (!IsEnabled(logLevel))
         {
             return;
         }
@@ -40,7 +40,7 @@ public sealed class FileLogger : ILogger
         try
         {
             var msg = formatter(state, exception);
-            var line = $"[{level + "]",-12}  [{DateTime.Now:dd.MM.yy HH:mm:ss}]  {msg}{Environment.NewLine}";
+            var line = $"[{logLevel + "]",-12}  [{DateTime.Now:dd.MM.yy HH:mm:ss}]  {msg}{Environment.NewLine}";
 
             File.AppendAllText(_path, line);
 

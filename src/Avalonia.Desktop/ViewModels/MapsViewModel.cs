@@ -5,10 +5,8 @@ using Addons.Providers;
 using Avalonia.Controls.Notifications;
 using Avalonia.Desktop.Misc;
 using Common.All.Enums;
-using Common.All.Helpers;
 using Common.Client.Interfaces;
 using Common.Client.Providers;
-using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Games.Games;
@@ -20,7 +18,7 @@ namespace Avalonia.Desktop.ViewModels;
 
 public sealed partial class MapsViewModel : RightPanelViewModel, IPortsButtonControl
 {
-    public readonly BaseGame Game;
+    public BaseGame Game { get; }
 
     private readonly InstalledGamesProvider _gamesProvider;
     private readonly IConfigProvider _config;
@@ -146,8 +144,12 @@ public sealed partial class MapsViewModel : RightPanelViewModel, IPortsButtonCon
     {
         try
         {
-            command.ThrowIfNotType<Tuple<BasePort, byte?>>(out var parameter);
-            Guard.IsNotNull(SelectedAddon);
+            if (command is not Tuple<BasePort, byte?> parameter)
+            {
+                throw new InvalidCastException();
+            }
+
+            ArgumentNullException.ThrowIfNull(SelectedAddon);
 
             await _portStarter.StartAsync(
                 parameter.Item1,
@@ -202,7 +204,7 @@ public sealed partial class MapsViewModel : RightPanelViewModel, IPortsButtonCon
     [RelayCommand]
     private void DeleteMap()
     {
-        Guard.IsNotNull(SelectedAddon);
+        ArgumentNullException.ThrowIfNull(SelectedAddon);
 
         _installedAddonsProvider.DeleteAddon(SelectedAddon);
     }

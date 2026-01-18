@@ -10,7 +10,6 @@ using Common.All.Serializable.Addon;
 using Common.Client.Cache;
 using Common.Client.Helpers;
 using Common.Client.Interfaces;
-using CommunityToolkit.Diagnostics;
 using Games.Games;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -130,7 +129,7 @@ public sealed class InstalledAddonsProvider
             AddonTypeEnum.TC => _campaignsCache,
             AddonTypeEnum.Map => _mapsCache,
             AddonTypeEnum.Mod => _modsCache,
-            _ => ThrowHelper.ThrowNotSupportedException<Dictionary<AddonId, BaseAddon>>(),
+            _ => throw new NotSupportedException(),
         };
 
         if (createNew)
@@ -241,9 +240,9 @@ public sealed class InstalledAddonsProvider
         {
             _isCacheUpdating = false;
             _ = _semaphore.Release();
-            Guard.IsNotNull(_campaignsCache);
-            Guard.IsNotNull(_mapsCache);
-            Guard.IsNotNull(_modsCache);
+            ArgumentNullException.ThrowIfNull(_campaignsCache);
+            ArgumentNullException.ThrowIfNull(_mapsCache);
+            ArgumentNullException.ThrowIfNull(_modsCache);
 
             AddonsChangedEvent?.Invoke(_game.GameEnum, addonType);
         }
@@ -255,9 +254,9 @@ public sealed class InstalledAddonsProvider
     /// <param name="pathToFile">Path to addon file</param>
     public async Task AddAddonAsync(string pathToFile)
     {
-        Guard.IsNotNull(_campaignsCache);
-        Guard.IsNotNull(_mapsCache);
-        Guard.IsNotNull(_modsCache);
+        ArgumentNullException.ThrowIfNull(_campaignsCache);
+        ArgumentNullException.ThrowIfNull(_mapsCache);
+        ArgumentNullException.ThrowIfNull(_modsCache);
 
         var addons = await GetAddonFromFileAsync(pathToFile).ConfigureAwait(false);
 
@@ -273,7 +272,7 @@ public sealed class InstalledAddonsProvider
                 AddonTypeEnum.TC => _campaignsCache,
                 AddonTypeEnum.Map => _mapsCache,
                 AddonTypeEnum.Mod => _modsCache,
-                _ => ThrowHelper.ThrowNotSupportedException<Dictionary<AddonId, BaseAddon>>(),
+                _ => throw new NotSupportedException(),
             };
 
 
@@ -296,10 +295,10 @@ public sealed class InstalledAddonsProvider
     /// <param name="addon">Addon</param>
     public void DeleteAddon(BaseAddon addon)
     {
-        Guard.IsNotNull(_campaignsCache);
-        Guard.IsNotNull(_mapsCache);
-        Guard.IsNotNull(_modsCache);
-        Guard.IsNotNull(addon.PathToFile);
+        ArgumentNullException.ThrowIfNull(_campaignsCache);
+        ArgumentNullException.ThrowIfNull(_mapsCache);
+        ArgumentNullException.ThrowIfNull(_modsCache);
+        ArgumentNullException.ThrowIfNull(addon.PathToFile);
 
         if (addon.IsUnpacked)
         {
@@ -428,7 +427,7 @@ public sealed class InstalledAddonsProvider
             AddonTypeEnum.TC => GetInstalledCampaigns(),
             AddonTypeEnum.Map => GetInstalledMaps(),
             AddonTypeEnum.Mod => GetInstalledMods(),
-            _ => ThrowHelper.ThrowNotSupportedException<Dictionary<AddonId, BaseAddon>>()
+            _ => throw new NotSupportedException()
         };
     }
 
@@ -441,7 +440,7 @@ public sealed class InstalledAddonsProvider
             return campaigns;
         }
 
-        Guard.IsNotNull(_campaignsCache);
+        ArgumentNullException.ThrowIfNull(_campaignsCache);
 
         if (_campaignsCache.Count == 0)
         {
@@ -477,7 +476,7 @@ public sealed class InstalledAddonsProvider
             return new Dictionary<AddonId, BaseAddon>();
         }
 
-        Guard.IsNotNull(_mapsCache);
+        ArgumentNullException.ThrowIfNull(_mapsCache);
 
         return _mapsCache;
     }
@@ -489,7 +488,7 @@ public sealed class InstalledAddonsProvider
             return new Dictionary<AddonId, BaseAddon>();
         }
 
-        Guard.IsNotNull(_modsCache);
+        ArgumentNullException.ThrowIfNull(_modsCache);
 
         return _modsCache;
     }
@@ -769,7 +768,7 @@ public sealed class InstalledAddonsProvider
 
                 if (carcass.MainDef is not null)
                 {
-                    ThrowHelper.ThrowArgumentException("Autoload mod can't have Main DEF");
+                    throw new ArgumentException("Autoload mod can't have Main DEF");
                 }
 
                 AddonId id = new(carcass.Id, carcass.Version);
@@ -951,7 +950,7 @@ public sealed class InstalledAddonsProvider
                 }
                 else
                 {
-                    ThrowHelper.ThrowNotSupportedException();
+                    throw new NotSupportedException();
                 }
             }
         }

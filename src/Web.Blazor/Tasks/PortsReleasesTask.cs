@@ -3,7 +3,7 @@ using Common.All.Interfaces;
 
 namespace Web.Blazor.Tasks;
 
-public sealed class PortsReleasesTask : IHostedService, IDisposable
+internal sealed class PortsReleasesTask : IHostedService, IDisposable
 {
     private readonly IReleaseProvider<PortEnum> _portsReleasesProvider;
 
@@ -14,7 +14,7 @@ public sealed class PortsReleasesTask : IHostedService, IDisposable
         _portsReleasesProvider = portsReleasesProvider;
     }
 
-    public Task StartAsync(CancellationToken stoppingToken)
+    public Task StartAsync(CancellationToken cancellationToken)
     {
         _timer = new Timer(
             DoWork,
@@ -31,7 +31,7 @@ public sealed class PortsReleasesTask : IHostedService, IDisposable
         //_ = _portsReleasesProvider.RetrieveAsync();
     }
 
-    public Task StopAsync(CancellationToken stoppingToken)
+    public Task StopAsync(CancellationToken cancellationToken)
     {
         _ = _timer?.Change(Timeout.Infinite, 0);
 

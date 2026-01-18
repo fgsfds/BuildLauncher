@@ -1,5 +1,4 @@
 ﻿using Common.All.Enums;
-using CommunityToolkit.Diagnostics;
 
 namespace Common.All.Helpers;
 
@@ -19,7 +18,7 @@ public static class CommonProperties
             }
             else
             {
-                return ThrowHelper.ThrowArgumentOutOfRangeException<OSEnum>("Unsupported OS");
+                throw new ArgumentOutOfRangeException("Unsupported OS");
             }
         }
     }

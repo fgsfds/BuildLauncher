@@ -4,7 +4,6 @@ using Common.All.Serializable.Downloadable;
 using Common.Client.Helpers;
 using Common.Client.Interfaces;
 using Common.Client.Tools;
-using CommunityToolkit.Diagnostics;
 using Microsoft.Extensions.Logging;
 
 namespace Common.Client;
@@ -57,7 +56,7 @@ public sealed class AppUpdateInstaller
     /// </summary>
     public async Task DownloadAndUnpackLatestRelease()
     {
-        Guard.IsNotNull(_update?.DownloadUrl);
+        ArgumentNullException.ThrowIfNull(_update?.DownloadUrl);
 
         var updateUrl = _update.DownloadUrl;
 
