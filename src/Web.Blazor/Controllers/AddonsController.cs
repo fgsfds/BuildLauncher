@@ -1,48 +1,45 @@
 using Api.Common.Requests;
 using Api.Common.Responses;
 using Mediator;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Web.Blazor.Controllers;
 
 [ApiController]
 [Route("api/addons")]
-internal sealed class ReleasesController : ControllerBase
+internal sealed class AddonsController : ControllerBase
 {
     private readonly IMediator _mediator;
 
-    public ReleasesController(IMediator mediator)
+    public AddonsController(IMediator mediator)
     {
         _mediator = mediator;
     }
 
     [HttpGet]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult<GetAddonsResponse>> GetAddons(GetAddonsRequest request)
+    public async Task<Results<Ok<GetAddonsResponse>, InternalServerError>> GetAddons(GetAddonsRequest request)
     {
         var response = await _mediator.Send(request);
 
         if (response is null)
         {
-            return StatusCode(StatusCodes.Status500InternalServerError);
+            return TypedResults.InternalServerError();
         }
 
-        return Ok(response);
+        return TypedResults.Ok(response);
     }
 
     [HttpGet("ratings")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult<GetRatingsResponse>> GetRating(GetRatingsRequest request)
+    public async Task<Results<Ok<GetRatingsResponse>, InternalServerError>> GetRatings(GetRatingsRequest request)
     {
         var response = await _mediator.Send(request);
 
         if (response is null)
         {
-            return StatusCode(StatusCodes.Status500InternalServerError);
+            return TypedResults.InternalServerError();
         }
 
-        return Ok(response);
+        return TypedResults.Ok(response);
     }
 }

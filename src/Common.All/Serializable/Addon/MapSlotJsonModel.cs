@@ -13,6 +13,5 @@ public sealed class MapSlotJsonModel : IStartMap
 }
 
 
-[JsonSourceGenerationOptions(RespectNullableAnnotations = true)]
 [JsonSerializable(typeof(MapSlotJsonModel))]
 public sealed partial class MapSlotJsonModelContext : JsonSerializerContext;

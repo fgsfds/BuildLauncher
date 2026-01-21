@@ -10,6 +10,5 @@ public sealed class MapFileJsonModel : IStartMap
 }
 
 
-[JsonSourceGenerationOptions(RespectNullableAnnotations = true)]
 [JsonSerializable(typeof(MapFileJsonModel))]
 public sealed partial class MapFileJsonModelContext : JsonSerializerContext;

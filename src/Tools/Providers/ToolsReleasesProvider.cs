@@ -11,7 +11,7 @@ namespace Tools.Providers;
 
 public sealed class ToolsReleasesProvider : IReleaseProvider<ToolEnum>
 {
-    private readonly ConcurrentDictionary<ToolEnum, Dictionary<OSEnum, GeneralReleaseJsonModel>?> _releases = [];
+    private readonly ConcurrentDictionary<ToolEnum, Dictionary<OSEnum, GeneralRelease>?> _releases = [];
     private readonly ILogger<ToolsReleasesProvider> _logger;
     private readonly IHttpClientFactory _httpClientFactory;
 

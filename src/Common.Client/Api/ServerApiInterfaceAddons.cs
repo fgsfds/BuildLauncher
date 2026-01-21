@@ -32,7 +32,7 @@ public sealed partial class ServerApiInterface : IApiInterface
             GetAddonsRequest message = new()
             {
                 GameEnum = gameEnum,
-                //ClientVersion = ClientProperties.CurrentVersion
+                ClientVersion = ClientProperties.CurrentVersion
             };
 
             using HttpRequestMessage requestMessage = new(HttpMethod.Get, $"{ApiUrl}/addons");

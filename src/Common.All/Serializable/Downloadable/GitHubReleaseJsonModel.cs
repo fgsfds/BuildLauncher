@@ -21,12 +21,6 @@ public sealed class GitHubReleaseJsonModel
     public string Description { get; set; }
 }
 
-
-[JsonSourceGenerationOptions(RespectNullableAnnotations = true)]
-[JsonSerializable(typeof(List<GitHubReleaseJsonModel>))]
-public sealed partial class GitHubReleaseEntityContext : JsonSerializerContext;
-
-
 public sealed class GitHubReleaseAsset
 {
     [JsonPropertyName("name")]
@@ -44,5 +38,5 @@ public sealed class GitHubReleaseAsset
 
 
 [JsonSourceGenerationOptions(RespectNullableAnnotations = true)]
-[JsonSerializable(typeof(List<GitHubReleaseAsset>))]
-public sealed partial class GitHubReleaseAssetContext : JsonSerializerContext;
+[JsonSerializable(typeof(List<GitHubReleaseJsonModel>))]
+public sealed partial class GitHubReleaseEntityContext : JsonSerializerContext;

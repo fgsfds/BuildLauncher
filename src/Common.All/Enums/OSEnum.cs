@@ -2,6 +2,6 @@
 
 public enum OSEnum
 {
-    Windows,
-    Linux
+    Windows = 1,
+    Linux = 2
 }

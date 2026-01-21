@@ -1,10 +1,14 @@
 using Common.All.Enums;
 using Common.All.Interfaces;
 using Common.All.Providers;
+using Common.All.Serializable;
 using Common.All.Serializable.Addon;
 using Common.All.Serializable.Downloadable;
 using Database.Server;
 using Mediator;
+using Microsoft.EntityFrameworkCore;
+using Ports.Providers;
+using Tools.Providers;
 using Web.Blazor.Helpers;
 using Web.Blazor.Providers;
 using Web.Blazor.Tasks;
@@ -13,56 +17,31 @@ namespace Web.Blazor;
 
 internal sealed class Program
 {
+    private const string OpenApiJsonPath = "/openapi/v1.json";
+    private static IConfiguration _config = null!;
+    private static bool _isDevMode;
+
     public static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
+        _config = builder.Configuration;
+        _isDevMode = builder.Environment.IsDevelopment();
 
-        _ = builder.Services.AddRazorPages();
-        _ = builder.Services.AddServerSideBlazor();
+        var services = builder.Services;
+        var controllers = services.AddControllers();
 
-        _ = builder.Services.AddControllers().AddJsonOptions((jsonOptions =>
-        {
-            jsonOptions.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
-            jsonOptions.JsonSerializerOptions.PropertyNamingPolicy = null;
+        _ = builder.Logging.AddConsole();
+        _ = builder.Configuration.AddEnvironmentVariables();
 
-            jsonOptions.JsonSerializerOptions.TypeInfoResolverChain.Add(AddonManifestContext.Default);
-            jsonOptions.JsonSerializerOptions.TypeInfoResolverChain.Add(DownloadableAddonJsonModelDictionaryContext.Default);
-            jsonOptions.JsonSerializerOptions.TypeInfoResolverChain.Add(GeneralReleaseJsonModelContext.Default);
-            jsonOptions.JsonSerializerOptions.TypeInfoResolverChain.Add(AddonManifestContext.Default);
-            jsonOptions.JsonSerializerOptions.TypeInfoResolverChain.Add(DependencyDtoContext.Default);
-            jsonOptions.JsonSerializerOptions.TypeInfoResolverChain.Add(DependantAddonJsonModelContext.Default);
-            jsonOptions.JsonSerializerOptions.TypeInfoResolverChain.Add(MapFileJsonModelContext.Default);
-            jsonOptions.JsonSerializerOptions.TypeInfoResolverChain.Add(MapSlotJsonModelContext.Default);
-            jsonOptions.JsonSerializerOptions.TypeInfoResolverChain.Add(SupportedGameJsonModelContext.Default);
-            jsonOptions.JsonSerializerOptions.TypeInfoResolverChain.Add(GitHubReleaseEntityContext.Default);
-            jsonOptions.JsonSerializerOptions.TypeInfoResolverChain.Add(GitHubReleaseAssetContext.Default);
-        }));
+        _ = services.AddRazorPages();
+        _ = services.AddHttpClient();
+        _ = services.AddMiddlewareAnalysis();
+        _ = services.AddPooledDbContextFactory<DatabaseContext>(GetConnectionString);
+        _ = services.AddEndpointsApiExplorer();
+        _ = services.AddOpenApi();
+        _ = services.AddProblemDetails();
 
-        // Don't run tasks in dev mode
-        if (!builder.Environment.IsDevelopment())
-        {
-            _ = builder.Services.AddHostedService<FileCheckTask>();
-            _ = builder.Services.AddHostedService<PortsReleasesTask>();
-            _ = builder.Services.AddHostedService<AppReleasesTask>();
-            _ = builder.Services.AddHostedService<ToolsReleasesTask>();
-        }
-
-        if (builder.Environment.IsDevelopment())
-        {
-            ServerProperties.IsDeveloperMode = true;
-        }
-
-        _ = builder.Services.AddSingleton<RepoAppReleasesProvider>();
-        _ = builder.Services.AddSingleton<DatabaseAddonsRetriever>();
-        _ = builder.Services.AddSingleton<IReleaseProvider<PortEnum>>();
-        _ = builder.Services.AddSingleton<IReleaseProvider<ToolEnum>>();
-
-        _ = builder.Services.AddSingleton(CreateHttpClient);
-        _ = builder.Services.AddSingleton<S3Client>();
-
-        _ = builder.Services.AddSingleton<DatabaseContextFactory>(_ => new(builder.Environment.IsDevelopment()));
-
-        _ = builder.Services.AddMediator((MediatorOptions options) =>
+        _ = services.AddMediator(options =>
         {
             options.Namespace = "SimpleConsole.Mediator";
             options.ServiceLifetime = ServiceLifetime.Singleton;
@@ -71,33 +50,77 @@ internal sealed class Program
             options.Assemblies = [typeof(Program)];
         });
 
+        _ = controllers.AddJsonOptions(options =>
+        {
+            options.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
+            options.JsonSerializerOptions.PropertyNamingPolicy = null;
+
+            options.JsonSerializerOptions.TypeInfoResolverChain.Add(AddonManifestContext.Default);
+            options.JsonSerializerOptions.TypeInfoResolverChain.Add(MapFileJsonModelContext.Default);
+            options.JsonSerializerOptions.TypeInfoResolverChain.Add(MapSlotJsonModelContext.Default);
+            options.JsonSerializerOptions.TypeInfoResolverChain.Add(SupportedGameJsonModelContext.Default);
+            options.JsonSerializerOptions.TypeInfoResolverChain.Add(DataJsonModelContext.Default);
+            options.JsonSerializerOptions.TypeInfoResolverChain.Add(DownloadableAddonJsonModelDictionaryContext.Default);
+            options.JsonSerializerOptions.TypeInfoResolverChain.Add(GitHubReleaseEntityContext.Default);
+        });
+
+        if (!_isDevMode)
+        {
+            _ = services.AddHostedService<FileCheckTask>();
+            _ = services.AddHostedService<PortsReleasesTask>();
+            _ = services.AddHostedService<AppReleasesTask>();
+            _ = services.AddHostedService<ToolsReleasesTask>();
+        }
+
+        _ = services.AddSingleton<RepoAppReleasesProvider>();
+        _ = services.AddSingleton<DatabaseAddonsRetriever>();
+        _ = services.AddSingleton<IReleaseProvider<PortEnum>, PortsReleasesProvider>();
+        _ = services.AddSingleton<IReleaseProvider<ToolEnum>, ToolsReleasesProvider>();
+        _ = services.AddSingleton<S3Client>();
+
+
         var app = builder.Build();
 
-        // Creating database
-        var dbContext = app.Services.GetService<DatabaseContextFactory>()!.Get();
-        dbContext.Dispose();
+        using (var dbContext = app.Services.GetRequiredService<IDbContextFactory<DatabaseContext>>().CreateDbContext())
+        {
+            dbContext.Database.Migrate();
+        }
 
-        // Configure the HTTP request pipeline.
-        if (!app.Environment.IsDevelopment())
+        if (!_isDevMode)
         {
             _ = app.UseExceptionHandler("/Error");
             _ = app.UseHsts();
         }
 
+        if (_isDevMode)
+        {
+            _ = app.MapOpenApi(OpenApiJsonPath);
+            _ = app.UseSwaggerUI(x => x.SwaggerEndpoint(OpenApiJsonPath, "main"));
+        }
+
         _ = app.MapControllers();
-        _ = app.UseHttpsRedirection();
-        _ = app.UseStaticFiles();
-        _ = app.UseRouting();
-        _ = app.MapBlazorHub();
         _ = app.MapFallbackToPage("/_Host");
+
+        _ = app.UseStaticFiles();
+        _ = app.UseStatusCodePages();
 
         app.Run();
     }
 
-    private static HttpClient CreateHttpClient(IServiceProvider provider)
+    private static void GetConnectionString(DbContextOptionsBuilder builder)
     {
-        HttpClient httpClient = new();
-        httpClient.DefaultRequestHeaders.Add("User-Agent", "BuildLauncher");
-        return httpClient;
+        if (_isDevMode)
+        {
+            _ = builder.UseNpgsql("Host=localhost;Port=5432;Database=buildlauncher;Username=postgres;Password=123;Include Error Detail=True");
+            return;
+        }
+
+        var dbIp = _config.GetValue<string>("DbIp") ?? throw new NullReferenceException("dbIp");
+        var dbPort = _config.GetValue<string>("DbPort") ?? throw new NullReferenceException("dbPort");
+        var dbUser = _config.GetValue<string>("DbUser") ?? throw new NullReferenceException("dbUser");
+        var dbPass = _config.GetValue<string>("DbPass") ?? throw new NullReferenceException("dbPass");
+        var dbName = _config.GetValue<string>("DbName") ?? throw new NullReferenceException("dbName");
+
+        _ = builder.UseNpgsql($"Host={dbIp};Port={dbPort};Database={dbName};Username={dbUser};Password={dbPass}");
     }
 }

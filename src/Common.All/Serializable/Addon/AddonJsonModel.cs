@@ -6,23 +6,18 @@ namespace Common.All.Serializable.Addon;
 
 public sealed class AddonJsonModel
 {
-    [JsonRequired]
     [JsonPropertyName("id")]
     public required string Id { get; set; }
 
-    [JsonRequired]
     [JsonPropertyName("type")]
     public required AddonTypeEnum AddonType { get; set; }
 
-    [JsonRequired]
     [JsonPropertyName("game")]
     public required SupportedGameJsonModel SupportedGame { get; set; }
 
-    [JsonRequired]
     [JsonPropertyName("title")]
     public required string Title { get; set; }
 
-    [JsonRequired]
     [JsonPropertyName("version")]
     public required string Version { get; set; }
 
@@ -77,19 +72,15 @@ public sealed class AddonJsonModel
     public Dictionary<OSEnum, string>? ExecutablesOld { get; } = null;
 }
 
+
 [JsonSourceGenerationOptions(
-    Converters = [
-        typeof(JsonStringEnumConverter<AddonTypeEnum>),
-        typeof(JsonStringEnumConverter<OSEnum>),
-        typeof(JsonStringEnumConverter<PortEnum>),
-        typeof(JsonStringEnumConverter<FeatureEnum>),
-        typeof(JsonStringEnumConverter<OptionalParameterTypeEnum>)
-        ],
     UnmappedMemberHandling = JsonUnmappedMemberHandling.Disallow,
     AllowTrailingCommas = true,
     WriteIndented = true,
     DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
-    RespectNullableAnnotations = true
+    RespectNullableAnnotations = true,
+    RespectRequiredConstructorParameters = true,
+    UseStringEnumConverter = true
     )]
 [JsonSerializable(typeof(AddonJsonModel))]
 public sealed partial class AddonManifestContext : JsonSerializerContext;

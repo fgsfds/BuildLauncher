@@ -23,11 +23,9 @@ internal sealed class GetAppReleaseHandler : IRequestHandler<GetAppReleaseReques
             return null;
         }
 
-        GetAppReleaseResponse response = new()
+        return new()
         {
             AppRelease = release
         };
-
-        return response;
     }
 }

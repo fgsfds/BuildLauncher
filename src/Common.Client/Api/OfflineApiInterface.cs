@@ -1,4 +1,5 @@
 ﻿using System.Text.Json;
+using Common.All;
 using Common.All.Enums;
 using Common.All.Serializable.Downloadable;
 using Common.Client.Helpers;
@@ -73,11 +74,11 @@ public sealed class OfflineApiInterface : IApiInterface
         }
     }
 
-    public Task<GeneralReleaseJsonModel?> GetLatestAppReleaseAsync() => Task.FromResult<GeneralReleaseJsonModel?>(null);
+    public Task<GeneralRelease?> GetLatestAppReleaseAsync() => Task.FromResult<GeneralRelease?>(null);
 
-    public Task<GeneralReleaseJsonModel?> GetLatestPortReleaseAsync(PortEnum portEnum) => Task.FromResult<GeneralReleaseJsonModel?>(null);
+    public Task<GeneralRelease?> GetLatestPortReleaseAsync(PortEnum portEnum) => Task.FromResult<GeneralRelease?>(null);
 
-    public Task<GeneralReleaseJsonModel?> GetLatestToolReleaseAsync(ToolEnum toolEnum) => Task.FromResult<GeneralReleaseJsonModel?>(null);
+    public Task<GeneralRelease?> GetLatestToolReleaseAsync(ToolEnum toolEnum) => Task.FromResult<GeneralRelease?>(null);
 
     public Task<bool> AddAddonToDatabaseAsync(DownloadableAddonJsonModel addon)
     {

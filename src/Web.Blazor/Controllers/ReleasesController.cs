@@ -1,48 +1,51 @@
 using Api.Common.Requests;
 using Api.Common.Responses;
-using MediatR;
+using Mediator;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Web.Blazor.Controllers;
 
 [ApiController]
 [Route("api/releases")]
-internal sealed class AddonsController : ControllerBase
+internal sealed class ReleasesController : ControllerBase
 {
     private readonly IMediator _mediator;
 
-    public AddonsController(IMediator mediator)
+    public ReleasesController(IMediator mediator)
     {
         _mediator = mediator;
     }
 
+    /// <summary>
+    /// Returns a list of ports and their latest releases.
+    /// </summary>
     [HttpGet("ports")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult<GetPortsReleasesResponse>> GetPortsReleasesMediator(GetPortsReleasesRequest request)
+    public async Task<Results<Ok<GetPortsReleasesResponse>, InternalServerError>> GetPortsReleases(GetPortsReleasesRequest request)
     {
         var response = await _mediator.Send(request);
 
         if (response is null)
         {
-            return StatusCode(500);
+            return TypedResults.InternalServerError();
         }
 
-        return Ok(response);
+        return TypedResults.Ok(response);
     }
 
+    /// <summary>
+    /// Returns the latest BuildLauncher release.
+    /// </summary>
     [HttpGet("app")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult<GetAppReleaseResponse>> GetAppReleaseMediator(GetAppReleaseRequest request)
+    public async Task<Results<Ok<GetAppReleaseResponse>, InternalServerError>> GetLatestAppRelease(GetAppReleaseRequest request)
     {
         var response = await _mediator.Send(request);
 
         if (response is null)
         {
-            return StatusCode(500);
+            return TypedResults.InternalServerError();
         }
 
-        return Ok(response);
+        return TypedResults.Ok(response);
     }
 }
