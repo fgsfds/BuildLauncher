@@ -1935,19 +1935,6 @@
       "MD5": "01FF457EB3EE151F312C32D93C707C08"
     },
     {
-      "Id": "duke3d-horror-castle",
-      "AddonType": "TC",
-      "Game": "Duke3D",
-      "DownloadUrl": "https://s3.firstvds.ru/buildlauncher/Duke3D/Campaigns/duke3d-horror-castle_v6_4.zip",
-      "Title": "Horror Castle",
-      "Version": "6.4",
-      "FileSize": 91708206,
-      "Description": "https://www.moddb.com/mods/duke-nukem-horror-castle/\r\n\r\nHorror theme, new enemies new art new weapons. Awesome Castles.",
-      "Author": "William Gee",
-      "UpdateDate": "2025-12-11T10:55:37.1036842Z",
-      "MD5": "9EC2674D9C8731D645FC9279C599F830"
-    },
-    {
       "Id": "duke3d-dick-suckem",
       "AddonType": "TC",
       "Game": "Duke3D",
@@ -2062,6 +2049,19 @@
       "Author": "Fox",
       "UpdateDate": "2025-12-12T17:28:39.1445104Z",
       "MD5": "4CD188977DA1A3820F3985690B0EA10D"
+    },
+    {
+      "Id": "duke3d-zombie-nukem",
+      "AddonType": "TC",
+      "Game": "Duke3D",
+      "DownloadUrl": "https://s3.firstvds.ru/buildlauncher/Duke3D/Campaigns/duke3d-zombie-nukem_v3_1.zip",
+      "Title": "Zombie Nukem",
+      "Version": "3.1",
+      "FileSize": 96139891,
+      "Description": "https://www.moddb.com/mods/duke-nukem-horror-castle/\r\n\r\nHorror theme, new enemies new art new weapons. Awesome Castles.",
+      "Author": "William Gee",
+      "UpdateDate": "2026-01-22T17:24:46.1709946Z",
+      "MD5": "BC469A1E6C009EBD9AF84552803EA188"
     }
   ],
   "Blood": [
