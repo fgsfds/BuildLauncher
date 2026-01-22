@@ -373,7 +373,7 @@ public sealed class InstalledAddonsProvider
 
         var otherVersions = _modsCache
              .Where(x =>
-                 x.Key.Id == addon.Id &&
+                 x.Key.Id.Equals(addon.Id, StringComparison.OrdinalIgnoreCase) &&
                  !VersionComparer.Compare(x.Key.Version, addon.Version, "==") &&
                  !x.Value.FileName!.Equals(autoloadMod.FileName)
                  );

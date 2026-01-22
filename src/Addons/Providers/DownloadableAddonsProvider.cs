@@ -129,7 +129,7 @@ public sealed class DownloadableAddonsProvider
         foreach (var downloadableAddon in addonTypeCache)
         {
             var existingAddons = installedAddons
-                .Where(x => x.Key.Id == downloadableAddon.Key.Id)
+                .Where(x => x.Key.Id.Equals(downloadableAddon.Key.Id, StringComparison.OrdinalIgnoreCase))
                 .Select(x => x.Key)
                 .ToList();
 

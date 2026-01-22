@@ -51,7 +51,7 @@ public static class AutoloadModsValidator
                     return false;
                 }
 
-                if (incompatibleAddon.Key != autoloadMod.AddonId.Id)
+                if (!incompatibleAddon.Key.Equals(autoloadMod.AddonId.Id, StringComparison.OrdinalIgnoreCase))
                 {
                     continue;
                 }
@@ -151,7 +151,7 @@ public static class AutoloadModsValidator
             {
                 foreach (var b in autoloadMod.IncompatibleAddons)
                 {
-                    if (a.Key != b.Key)
+                    if (!a.Key.Equals(b.Key, StringComparison.OrdinalIgnoreCase))
                     {
                         continue;
                     }

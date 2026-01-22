@@ -55,7 +55,6 @@ public sealed class GameStringToEnumConverter : IValueConverter
         if (!EnumHelper.TryParse<GameEnum>(parameter, out var gameEnum))
         {
             throw new NotSupportedException();
-            return null;
         }
 
         return valueEnum == gameEnum;
@@ -76,7 +75,6 @@ public sealed class GameStringToEnumConverter : IValueConverter
         if (!EnumHelper.TryParse<GameEnum>(parameter, out var gameEnum))
         {
             throw new NotSupportedException();
-            return null;
         }
 
         return gameEnum;

@@ -43,7 +43,7 @@ public sealed class FilesUploader
     private async Task<DownloadableAddonJsonModel?> GetDownloadableAddonDtoAsync(string pathToFile)
     {
         using var archive = ZipArchive.Open(pathToFile);
-        var addonJson = archive.Entries.FirstOrDefault(static x => x.Key == "addon.json");
+        var addonJson = archive.Entries.FirstOrDefault(static x => x.Key.Equals("addon.json", StringComparison.OrdinalIgnoreCase));
 
         if (addonJson is null)
         {
