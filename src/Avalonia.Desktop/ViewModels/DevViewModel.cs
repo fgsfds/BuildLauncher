@@ -1032,7 +1032,6 @@ public sealed partial class DevViewModel : ObservableObject
             else
             {
                 throw new ArgumentOutOfRangeException(nameof(addon.AddonType));
-                return null;
             }
 
             var fullName = GetAddonFullName(addon);

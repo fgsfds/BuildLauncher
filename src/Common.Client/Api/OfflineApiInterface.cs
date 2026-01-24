@@ -84,7 +84,6 @@ public sealed class OfflineApiInterface : IApiInterface
         if (ClientProperties.PathToLocalAddonsJson is null)
         {
             throw new FormatException("Can't find local addons.json");
-            return Task.FromResult(false);
         }
 
         var addonsJson = File.ReadAllText(ClientProperties.PathToLocalAddonsJson);
@@ -93,7 +92,6 @@ public sealed class OfflineApiInterface : IApiInterface
         if (addons is null)
         {
             throw new FormatException("Error while deserializing addons.json");
-            return Task.FromResult(false);
         }
 
         if (!addons.TryGetValue(addon.Game, out _))

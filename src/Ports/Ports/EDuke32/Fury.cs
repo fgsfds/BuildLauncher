@@ -140,7 +140,6 @@ public sealed class Fury : EDuke32
         else
         {
             throw new NotSupportedException($"Mod type {fCamp.Type} is not supported");
-            return;
         }
     }
 }

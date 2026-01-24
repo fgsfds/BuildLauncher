@@ -200,7 +200,6 @@ public sealed class DownloadableAddonsProvider
             else
             {
                 throw new NotSupportedException(addon.AddonType.ToString());
-                return false;
             }
 
             var pathToFile = Path.Combine(path, file);

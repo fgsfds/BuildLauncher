@@ -156,7 +156,6 @@ public sealed class VoidSW : EDuke32
         else
         {
             throw new NotSupportedException($"Mod type {wCamp.Type} is not supported");
-            return;
         }
     }
 

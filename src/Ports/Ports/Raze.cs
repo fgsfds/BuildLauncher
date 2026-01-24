@@ -297,7 +297,6 @@ public sealed class Raze : BasePort
         else
         {
             throw new NotSupportedException($"Mod type {dCamp.Type} is not supported");
-            return;
         }
     }
 
@@ -344,7 +343,6 @@ public sealed class Raze : BasePort
         else
         {
             throw new NotSupportedException($"Mod type {wCamp.Type} is not supported");
-            return;
         }
     }
 
