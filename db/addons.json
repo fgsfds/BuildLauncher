@@ -2185,19 +2185,6 @@
       "MD5": "A3621EE483966F3BC43C1DEB307F0B19"
     },
     {
-      "Id": "blood-marrow",
-      "AddonType": "TC",
-      "Game": "Blood",
-      "DownloadUrl": "https://s3.firstvds.ru/buildlauncher/Blood/Campaigns/blood-marrow_v1_3.zip",
-      "Title": "Marrow",
-      "Version": "1.3",
-      "FileSize": 69539929,
-      "Description": "https://playmarrow.com/\r\n\r\nTchernobog lays dead, his form fading away from the world as Caleb turns his back to the smoldering corpse. Vengeance sated, he leaves the Hall of the Epiphany behind. Feeling no less disdain for the world than he did with Ophelia, and experiencing none of the joy she brought, he returns to the grave to die once more. A hopefully final resting place.\r\n\r\nThe Cabal had been scattered far and wide by the gunman\u0027s path of revenge, but in his absence they regathered, regrouped, motivated out of their own sense of vengeance. Caleb was their general, the chosen one of their dark god and he had betrayed them all twice over.\r\n\r\nHe must burn for rejecting the honor of being sacrificed, for striking at Tchernobog. This suffering is best repaid by the tongues of Cerberus. Gathering his remains, the diaspora cinders of his pit, they enacted plans to resurrect him, and sought out Caleb\u0027s newfound grave, and bring him face to face with a fiery end.\r\n\r\n- A complete brand new episode.\r\n\r\n- Control Caleb as he carves a swath of carnage through the Cabal.\r\n\r\n- Experience ten brand new levels!\r\n\r\n- Using only assets from the original game, crafting a dark and horrific journey for Caleb.",
-      "Author": "Nick Palsmeier",
-      "UpdateDate": "2024-05-24T00:00:00Z",
-      "MD5": "CAB2BDF81584AD94F81F9346B5C723FB"
-    },
-    {
       "Id": "blood-death-wish",
       "AddonType": "TC",
       "Game": "Blood",
@@ -2378,19 +2365,6 @@
       "Author": "Thomas \u0022BloodyTom\u0022 Ziehl",
       "UpdateDate": "2024-09-22T15:35:03.001523Z",
       "MD5": "CD08482CEF8563E16F88E7A68AFF5829"
-    },
-    {
-      "Id": "blood-willard",
-      "AddonType": "TC",
-      "Game": "Blood",
-      "DownloadUrl": "https://s3.firstvds.ru/buildlauncher/Blood/Campaigns/blood-willard_v1_12.zip",
-      "Title": "Willard",
-      "Version": "1.12",
-      "FileSize": 72547885,
-      "Description": "https://www.moddb.com/downloads/willard\r\n\r\nThis is the full version of Willard, consisting of 5 levels. It takes place a few decades after the original game, in and around a remote ghost town far out in the woods. Strange things have been reported from the area and Caleb goes to investigate... The story is told from messages, make sure you read any square or rectangular shaped books you find (not the voxel books). While it certainly has action in places, it\u2019s more about atmosphere.",
-      "Author": "Bloodskar",
-      "UpdateDate": "2024-11-22T14:13:00Z",
-      "MD5": "9717C9FD4C5B518B83A3E51885B90E88"
     },
     {
       "Id": "blood-no-hope-in-sight",
@@ -2611,6 +2585,32 @@
       "Author": "daMann",
       "UpdateDate": "2025-12-12T17:57:43.3802547Z",
       "MD5": "D7A249EBBFD2B1FF1A09C34AA6C8EEEE"
+    },
+    {
+      "Id": "blood-marrow",
+      "AddonType": "TC",
+      "Game": "Blood",
+      "DownloadUrl": "https://s3.firstvds.ru/buildlauncher/Blood/Campaigns/blood-marrow_v2_0.zip",
+      "Title": "Marrow",
+      "Version": "2.0",
+      "FileSize": 221297463,
+      "Description": "https://playmarrow.com/\r\n\r\nTchernobog lays dead, his form fading away from the world as Caleb turns his back to the smoldering corpse. Vengeance sated, he leaves the Hall of the Epiphany behind. Feeling no less disdain for the world than he did with Ophelia, and experiencing none of the joy she brought, he returns to the grave to die once more. A hopefully final resting place.\r\n\r\nThe Cabal had been scattered far and wide by the gunman\u0027s path of revenge, but in his absence they regathered, regrouped, motivated out of their own sense of vengeance. Caleb was their general, the chosen one of their dark god and he had betrayed them all twice over.\r\n\r\nHe must burn for rejecting the honor of being sacrificed, for striking at Tchernobog. This suffering is best repaid by the tongues of Cerberus. Gathering his remains, the diaspora cinders of his pit, they enacted plans to resurrect him, and sought out Caleb\u0027s newfound grave, and bring him face to face with a fiery end.\r\n\r\n- A complete brand new episode.\r\n\r\n- Control Caleb as he carves a swath of carnage through the Cabal.\r\n\r\n- Experience ten brand new levels!\r\n\r\n- Using only assets from the original game, crafting a dark and horrific journey for Caleb.",
+      "Author": "Nick Palsmeier",
+      "UpdateDate": "2026-01-24T05:45:22.1649975Z",
+      "MD5": "AC71A097454109A577CBC0D1B8574085"
+    },
+    {
+      "Id": "blood-willard",
+      "AddonType": "TC",
+      "Game": "Blood",
+      "DownloadUrl": "https://s3.firstvds.ru/buildlauncher/Blood/Campaigns/blood-willard_v1_5.zip",
+      "Title": "Willard",
+      "Version": "1.5",
+      "FileSize": 72766221,
+      "Description": "https://www.moddb.com/downloads/willard\r\n\r\nThis is the full version of Willard, consisting of 5 levels. It takes place a few decades after the original game, in and around a remote ghost town far out in the woods. Strange things have been reported from the area and Caleb goes to investigate... The story is told from messages, make sure you read any square or rectangular shaped books you find (not the voxel books). While it certainly has action in places, it\u2019s more about atmosphere.",
+      "Author": "Bloodskar",
+      "UpdateDate": "2026-01-24T06:51:26.2742349Z",
+      "MD5": "1F417A398F521091955CBAD74A8A6115"
     }
   ],
   "Wang": [
