@@ -2611,6 +2611,19 @@
       "Author": "Bloodskar",
       "UpdateDate": "2026-01-24T06:51:26.2742349Z",
       "MD5": "1F417A398F521091955CBAD74A8A6115"
+    },
+    {
+      "Id": "blood-nightmares",
+      "AddonType": "TC",
+      "Game": "Blood",
+      "DownloadUrl": "https://s3.firstvds.ru/buildlauncher/Blood/Campaigns/blood-nightmares_v0_2.zip",
+      "Title": "Nightmares Beta",
+      "Version": "0.2",
+      "FileSize": 2649105,
+      "Description": "https://www.moddb.com/mods/nightmares1",
+      "Author": "Bloodskar",
+      "UpdateDate": "2026-02-02T16:11:02.2715066Z",
+      "MD5": "2398EA71BE9BE948ADD8BAB2DC162842"
     }
   ],
   "Wang": [
