@@ -118,6 +118,22 @@ Use this Software and the associated content at your own discretion. Please be a
 
 <tr>
 <td align="center" valign="middle">
+<b>Sponsors</b>
+</td>
+</tr>
+
+<tr>
+<td>
+
+<div style="display: flex; align-items: center;">
+	<img align="left" width="48" src="https://avatars.githubusercontent.com/u/34448643?s=200&v=4">Free code signing provided by <a href="https://about.signpath.io/"><b>SignPath.io</b></a>, certificate by <a href="https://signpath.org/"><b>SignPath Foundation</b></a>
+</div>
+
+</td>
+</tr>
+
+<tr>
+<td align="center" valign="middle">
 <b>Links</b>
 </td>
 </tr>
