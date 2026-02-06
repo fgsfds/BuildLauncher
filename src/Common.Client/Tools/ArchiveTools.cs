@@ -22,11 +22,9 @@ public sealed class ArchiveTools
     /// </summary>
     /// <param name="pathToArchive">Absolute path to archive file</param>
     /// <param name="unpackTo">Directory to unpack archive to</param>
-    /// <param name="isSubfolder">Unpack content from a subfolder inside the archive</param>
     public async Task UnpackArchiveAsync(
         string pathToArchive,
-        string unpackTo,
-        bool isSubfolder = false
+        string unpackTo
         )
     {
         var entryNumber = 1f;
@@ -37,11 +35,6 @@ public sealed class ArchiveTools
         foreach (var entry in archive.Entries)
         {
             var fileName = entry.Key!;
-
-            if (isSubfolder)
-            {
-                fileName = fileName[(fileName.IndexOf('/') + 1)..];
-            }
 
             if (string.IsNullOrWhiteSpace(fileName))
             {

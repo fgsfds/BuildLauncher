@@ -90,7 +90,7 @@ public sealed partial class MapsControl : DroppableControl
                         _viewModel.StartMapCommand.Execute(new Tuple<BasePort, byte?>(port, null));
                     }
                 },
-                () => PortsHelper.CheckPortRequirements(MapsList.SelectedItem, _viewModel.Game.GameEnum, port)),
+                () => PortsHelper.CheckPortRequirements(MapsList.SelectedItem, _viewModel.Game, port)),
                 Margin = new(5),
                 Padding = new(5),
             };
@@ -117,7 +117,7 @@ public sealed partial class MapsControl : DroppableControl
 
         foreach (var port in _supportedPorts)
         {
-            if (!PortsHelper.CheckPortRequirements(MapsList.SelectedItem, _viewModel.Game.GameEnum, port))
+            if (!PortsHelper.CheckPortRequirements(MapsList.SelectedItem, _viewModel.Game, port))
             {
                 continue;
             }

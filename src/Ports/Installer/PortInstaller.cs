@@ -23,23 +23,36 @@ public sealed class PortInstaller : InstallerBase<BasePort>
         _apiInterface = apiInterface;
     }
 
-    /// <summary>
-    /// Install port
-    /// </summary>
-    protected override void InstallInternal()
+    /// <inheritdoc/>
+    protected override void InstallInternal(string filePath)
     {
         if (_instance.PortEnum is PortEnum.DosBox)
         {
-            File.WriteAllText(Path.Combine(_instance.InstallFolderPath, "dosbox-staging.conf"),
-                """
-                [dosbox]
-                memsize = 64
-                
-                """);
+            var subFolder = Directory.GetDirectories(_instance.InstallFolderPath).FirstOrDefault(x => x.Contains("dosbox-staging"));
+
+            if (string.IsNullOrWhiteSpace(subFolder))
+            {
+                throw new NullReferenceException(nameof(subFolder));
+            }
+
+            var files = Directory.EnumerateFiles(subFolder, "*.*", SearchOption.AllDirectories);
+
+            foreach (string file in files)
+            {
+                string fileName = Path.GetRelativePath(subFolder, file);
+                string destFile = Path.Combine(_instance.InstallFolderPath, fileName);
+
+                var destFolder = Path.GetDirectoryName(destFile)!;
+                Directory.CreateDirectory(destFolder);
+
+                File.Move(file, destFile, true);
+            }
         }
     }
 
+    /// <inheritdoc/>
     public override void Uninstall() => Directory.Delete(_instance.InstallFolderPath, true);
 
+    /// <inheritdoc/>
     public override Task<GeneralReleaseJsonModel?> GetRelease() => _apiInterface.GetLatestPortReleaseAsync(_instance.PortEnum);
 }

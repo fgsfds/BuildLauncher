@@ -27,10 +27,8 @@ public sealed class ToolInstaller : InstallerBase<BaseTool>
         _apiInterface = apiInterface;
     }
 
-    /// <summary>
-    /// Install tool
-    /// </summary>
-    protected override void InstallInternal()
+    /// <inheritdoc/>
+    protected override void InstallInternal(string filePath)
     {
         if (_instance.ToolEnum is ToolEnum.Mapster32)
         {
@@ -67,6 +65,7 @@ public sealed class ToolInstaller : InstallerBase<BaseTool>
         }
     }
 
+    /// <inheritdoc/>
     public override void Uninstall()
     {
         if (_instance.ToolEnum is ToolEnum.Mapster32)
@@ -91,5 +90,6 @@ public sealed class ToolInstaller : InstallerBase<BaseTool>
         }
     }
 
+    /// <inheritdoc/>
     public override Task<GeneralReleaseJsonModel?> GetRelease() => _apiInterface.GetLatestToolReleaseAsync(_instance.ToolEnum);
 }

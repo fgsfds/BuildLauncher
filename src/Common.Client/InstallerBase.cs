@@ -62,7 +62,8 @@ public abstract class InstallerBase<T>
     /// <summary>
     /// Install tool
     /// </summary>
-    protected abstract void InstallInternal();
+    /// <param name="filePath">Path to downloaded file.</param>
+    protected abstract void InstallInternal(string filePath);
 
     public abstract void Uninstall();
 
@@ -103,15 +104,20 @@ public abstract class InstallerBase<T>
                 return false;
             }
 
-            InstallInternal();
-
             await _archiveTools.UnpackArchiveAsync(filePath, _instance.InstallFolderPath).ConfigureAwait(false);
 
             File.Delete(filePath);
 
             File.WriteAllText(Path.Combine(_instance.InstallFolderPath, "version"), release.Version);
 
+            InstallInternal(filePath);
+
             return true;
+        }
+        catch
+        {
+            Uninstall();
+            throw;
         }
         finally
         {

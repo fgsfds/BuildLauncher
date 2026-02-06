@@ -121,6 +121,38 @@ public sealed class DosBox : BasePort
         MoveSaveFilesToGameFolder(game, campaign);
 
         RestoreRoute66Files(game);
+
+        try
+        {
+            var config = Path.Combine(InstallFolderPath, "dosbox-staging.conf");
+            if (File.Exists(config))
+            {
+                var file = File.ReadAllLines(config);
+
+                for (var i = 0; i < file.Length; i++)
+                {
+                    if (file[i].StartsWith("memsize", StringComparison.OrdinalIgnoreCase) &&
+                        !file[i].Trim().EndsWith("64"))
+                    {
+                        file[i] = "memsize = 64";
+                        File.WriteAllLines(config, file);
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                File.WriteAllText(config,
+                    """
+                    [dosbox]
+                    memsize = 64
+                
+                    """);
+            }
+        }
+        catch
+        {
+        }
     }
 
     /// <inheritdoc/>
@@ -162,24 +194,24 @@ public sealed class DosBox : BasePort
         {
             var pathToAddonFolder = game.AddonsPaths[DukeAddonEnum.DukeVaca];
             _ = sb.Append($@" -c ""mount d \""{pathToAddonFolder}""""");
-            _ = sb.Append(@" -c ""VACATION.EXE /gd:\\VACATION.GRP /xd:\\VACATION.CON");
+            _ = sb.Append(@" -c ""VACATION.EXE /gd:\\VACATION.GRP /xd:\\VACATION.CON""");
         }
         else if (addon.AddonId.Id.Equals(nameof(DukeAddonEnum.DukeDC), StringComparison.OrdinalIgnoreCase))
         {
             var pathToAddonFolder = game.AddonsPaths[DukeAddonEnum.DukeDC];
             _ = sb.Append($@" -c ""mount d \""{pathToAddonFolder}""""");
-            _ = sb.Append(@" -c ""DUKE3D.EXE /gd:\\DUKEDC.GRP /xd:\\DUKEDC.CON");
+            _ = sb.Append(@" -c ""DUKE3D.EXE /gd:\\DUKEDC.GRP /xd:\\DUKEDC.CON""");
         }
         else if (addon.AddonId.Id.Equals(nameof(DukeAddonEnum.DukeNW), StringComparison.OrdinalIgnoreCase))
         {
             var pathToAddonFolder = game.AddonsPaths[DukeAddonEnum.DukeNW];
             _ = sb.Append($@" -c ""mount d \""{pathToAddonFolder}""""");
-            _ = sb.Append(@" -c ""DUKE3D.EXE /gd:\\NWINTER.GRP /xd:\\NWINTER.CON");
+            _ = sb.Append(@" -c ""DUKE3D.EXE /gd:\\NWINTER.GRP /xd:\\NWINTER.CON""");
         }
         else if (addon is LooseMap map)
         {
             _ = sb.Append($@" -c ""mount d \""{game.MapsFolderPath}""""");
-            _ = sb.Append($@" -c ""DUKE3D.EXE -map d:\\{map.FileName}");
+            _ = sb.Append($@" -c ""DUKE3D.EXE -map d:\\{map.FileName}""");
         }
         else
         {
@@ -215,7 +247,6 @@ public sealed class DosBox : BasePort
     protected override void GetBloodArgs(StringBuilder sb, BloodGame game, BaseAddon addon)
     {
         ArgumentNullException.ThrowIfNull(game.GameInstallFolder);
-        ArgumentNullException.ThrowIfNull(addon.PathToFile);
 
         if (addon.AddonId.Id.Equals(nameof(BloodAddonEnum.BloodCP), StringComparison.OrdinalIgnoreCase))
         {

@@ -93,7 +93,7 @@ public sealed partial class CampaignsControl : DroppableControl
                 Content = sp,
                 Command = new RelayCommand(() =>
                     _viewModel.StartCampaignCommand.Execute(port),
-                    () => PortsHelper.CheckPortRequirements(CampaignsList.SelectedItem, _viewModel.Game.GameEnum, port)),
+                    () => PortsHelper.CheckPortRequirements(CampaignsList.SelectedItem, _viewModel.Game, port)),
                 Margin = new(5),
                 Padding = new(5),
             };
@@ -220,7 +220,7 @@ public sealed partial class CampaignsControl : DroppableControl
 
         foreach (var port in _supportedPorts)
         {
-            if (!PortsHelper.CheckPortRequirements(CampaignsList.SelectedItem, _viewModel.Game.GameEnum, port))
+            if (!PortsHelper.CheckPortRequirements(CampaignsList.SelectedItem, _viewModel.Game, port))
             {
                 continue;
             }

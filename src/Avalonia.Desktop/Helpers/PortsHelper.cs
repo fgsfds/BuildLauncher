@@ -1,6 +1,8 @@
 ﻿using Addons.Addons;
 using Common.All;
 using Common.All.Enums;
+using Common.All.Enums.Addons;
+using Games.Games;
 using Ports.Ports;
 
 namespace Avalonia.Desktop.Helpers;
@@ -13,7 +15,7 @@ public static class PortsHelper
     /// <param name="obj">Addon/</param>
     /// <param name="game">Game enum.</param>
     /// <param name="port">Port.</param>
-    public static bool CheckPortRequirements(object? obj, GameEnum game, BasePort port)
+    public static bool CheckPortRequirements(object? obj, BaseGame game, BasePort port)
     {
         if (obj is not BaseAddon addon)
         {
@@ -66,12 +68,17 @@ public static class PortsHelper
                 return false;
             }
 
-            if (game is GameEnum.Duke3D && addon.Type is not AddonTypeEnum.Official)
+            if (game.GameEnum is GameEnum.Duke3D && addon.Type is not AddonTypeEnum.Official)
             {
                 return false;
             }
 
-            if (game is GameEnum.Wang && addon.AddonId != new AddonId(nameof(GameEnum.Wang)))
+            if (game.GameEnum is GameEnum.Duke3D && addon.AddonId.Id.Equals(nameof(DukeAddonEnum.DukeVaca), StringComparison.OrdinalIgnoreCase))
+            {
+                return File.Exists(Path.Combine(game.GameInstallFolder!, "VACATION.EXE"));
+            }
+
+            if (game.GameEnum is GameEnum.Wang && addon.AddonId != new AddonId(nameof(GameEnum.Wang)))
             {
                 return false;
             }
