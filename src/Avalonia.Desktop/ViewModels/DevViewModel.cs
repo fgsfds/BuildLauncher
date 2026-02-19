@@ -480,49 +480,22 @@ public sealed partial class DevViewModel : ObservableObject
             SetResultMessage("Uploading file. Please wait.", false);
             IsInProgress = true;
 
-            //var uploadFolder = await _apiInterface.GetUploadFolderAsync().ConfigureAwait(true);
-            //var uploadUrl = uploadFolder + "/" + Guid.NewGuid() + "/" + Path.GetFileName(pathToArchive);
+            StrongBox<int> progress = new(ProgressBarValue);
 
-            //await using var fileStream = File.OpenRead(pathToArchive);
-            //using StreamContent content = new(fileStream);
-
-            //new Task(() =>
-            //{
-            //    while (fileStream.CanSeek)
-            //    {
-            //        ProgressBarValue = (int)(fileStream.Position / (double)fileStream.Length * 100);
-
-            //        Thread.Sleep(50);
-            //    }
-            //}).Start();
-
-            //using HttpClient httpClient = new() { Timeout = Timeout.InfiniteTimeSpan };
-
-            //using var response = await httpClient.PutAsync(uploadUrl, content, CancellationToken.None).ConfigureAwait(true);
-
-            //if (!response.IsSuccessStatusCode)
-            //{
-            //    var errorMessage = await response.Content.ReadAsStringAsync().ConfigureAwait(true);
-            //    SetResultMessage(errorMessage, true);
-            //    return;
-            //}
+            _ = Task.Run(async () =>
+            {
+                while (IsInProgress)
+                {
+                    ProgressBarValue = progress.Value;
+                    await Task.Delay(50).ConfigureAwait(false);
+                }
+            });
 
             var result = await _filesUploader.UploadFilesAsync(
                 Guid.NewGuid().ToString(),
                 [pathToArchive],
-                new(ProgressBarValue),
+                progress,
                 CancellationToken.None).ConfigureAwait(false);
-
-            //using var check = await httpClient.GetAsync(uploadUrl, HttpCompletionOption.ResponseHeadersRead, CancellationToken.None).ConfigureAwait(true);
-
-            //FileInfo fileSize = new(pathToArchive);
-
-            //if (!check.IsSuccessStatusCode ||
-            //    check.Content.Headers.ContentLength != fileSize.Length)
-            //{
-            //    SetResultMessage("Error while uploading file", true);
-            //    return;
-            //}
 
             if (!result.IsSuccess)
             {

@@ -69,11 +69,11 @@ public sealed class FilesUploader
             foreach (var file in files)
             {
                 var fileName = remoteFileName ?? Path.GetFileName(file);
-                var result = await _apiInterface.GetSignedUrlAsync(Path.Combine(folder, fileName)).ConfigureAwait(false);
+                var signedUrl = await _apiInterface.GetSignedUrlAsync(Path.Combine(folder, fileName)).ConfigureAwait(false);
 
-                if (!result.IsSuccess)
+                if (!signedUrl.IsSuccess)
                 {
-                    return new(result.ResultEnum, result.Message);
+                    return new(signedUrl.ResultEnum, signedUrl.Message);
                 }
 
                 await using var fileStream = File.OpenRead(file);
@@ -83,12 +83,22 @@ public sealed class FilesUploader
 
                 using var httpClient = _httpClientFactory.CreateClient(HttpClientEnum.Upload.GetDescription());
 
-                using var response = await httpClient.PutAsync(result.ResultObject, content, cancellationToken).ConfigureAwait(false);
+                using var response = await httpClient.PutAsync(signedUrl.ResultObject, content, cancellationToken).ConfigureAwait(false);
 
                 if (!response.IsSuccessStatusCode)
                 {
                     var errorMessage = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
                     return new(ResultEnum.Error, errorMessage);
+                }
+
+                using var check = await httpClient.GetAsync(signedUrl.ResultObject, HttpCompletionOption.ResponseHeadersRead, CancellationToken.None).ConfigureAwait(false);
+
+                FileInfo fileSize = new(file);
+
+                if (!check.IsSuccessStatusCode ||
+                    check.Content.Headers.ContentLength != fileSize.Length)
+                {
+                    return new(ResultEnum.Error, "Error while uploading file.");
                 }
             }
         }
@@ -103,23 +113,18 @@ public sealed class FilesUploader
             return new(ResultEnum.Error, ex.Message);
         }
 
-        return new(ResultEnum.Success, string.Empty);
-    }
+        return new(ResultEnum.Success, string.Empty); 
+        
 
-
-    /// <summary>
-    /// Report operation progress
-    /// </summary>
-    /// <param name="streamToTrack">Stream</param>
-    /// <param name="progress">Progress</param>
-    private static void TrackProgress(FileStream streamToTrack, StrongBox<int> progress)
-    {
-        while (streamToTrack.CanSeek)
+        static void TrackProgress(FileStream streamToTrack, StrongBox<int> progress)
         {
-            var pos = streamToTrack.Position / (float)streamToTrack.Length * 100;
-            progress.Value = (int)pos;
+            while (streamToTrack.CanSeek)
+            {
+                var pos = streamToTrack.Position / (float)streamToTrack.Length * 100;
+                progress.Value = (int)pos;
 
-            Thread.Sleep(50);
+                Thread.Sleep(50);
+            }
         }
     }
 
