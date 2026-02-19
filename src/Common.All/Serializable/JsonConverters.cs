@@ -126,6 +126,14 @@ public sealed class ExecutablesConverter : JsonConverter<Dictionary<OSEnum, Dict
                         {
                             result[OSEnum.Windows].Add(PortEnum.EDuke32, winPort);
                         }
+                        else if (winPort.StartsWith("raze"))
+                        {
+                            result[OSEnum.Windows].Add(PortEnum.Raze, winPort);
+                        }
+                        else
+                        {
+                            result[OSEnum.Windows].Add(PortEnum.Stub, winPort);
+                        }
                     }
 
                     if (old.TryGetValue(OSEnum.Linux, out var linPort))

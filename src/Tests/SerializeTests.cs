@@ -109,17 +109,18 @@ public sealed class SerializerTests
     private const string StandaloneJsonOld =
 """
     {
-      "id": "game-id",
+      "id": "amc-squad",
       "type": "TC",
       "game": {
         "name": "Standalone"
       },
-      "title": "Standalone Game",
-      "version": "1.0",
-      "author": "Author",
+      "title": "AMC Squad",
+      "version": "4.5.2",
+      "author": "AMCSquad",
+      "description": "---",
       "executables": {
-        "Windows": "eduke32.exe",
-        "Linux": "eduke32"
+        "Windows": "amcsquad.exe",
+        "Linux": "amcsquad"
       }
     }
 """;
@@ -233,9 +234,9 @@ public sealed class SerializerTests
 
         Assert.Equal(AddonTypeEnum.TC, result.AddonType);
         Assert.Equal(GameEnum.Standalone, result.SupportedGame.Game);
-        Assert.Equal("Standalone Game", result.Title);
-        Assert.Equal("eduke32.exe", result.Executables?[OSEnum.Windows]?[PortEnum.EDuke32]);
-        Assert.Equal("eduke32", result.Executables?[OSEnum.Linux]?[PortEnum.EDuke32]);
+        Assert.Equal("AMC Squad", result.Title);
+        Assert.Equal("amcsquad.exe", result.Executables?[OSEnum.Windows]?[PortEnum.Stub]);
+        Assert.Equal("amcsquad", result.Executables?[OSEnum.Linux]?[PortEnum.Stub]);
     }
 
     [Fact]
