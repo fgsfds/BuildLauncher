@@ -1,5 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using SharpCompress.Archives;
+using SharpCompress.Common;
+using SharpCompress.Readers;
 
 namespace Common.Client.Tools;
 
@@ -27,42 +29,20 @@ public sealed class ArchiveTools
         string unpackTo
         )
     {
-        var entryNumber = 1f;
-
-        using var archive = ArchiveFactory.Open(pathToArchive);
-        var count = archive.Entries.Count();
-
-        foreach (var entry in archive.Entries)
+        var progress = new Progress<ProgressReport>(report =>
         {
-            var fileName = entry.Key!;
-
-            if (string.IsNullOrWhiteSpace(fileName))
+            if (report.PercentComplete is not null)
             {
-                continue;
+                ProgressChanged?.Invoke(this, (float)report.PercentComplete.Value);
             }
+        });
 
-            var fullName = Path.Combine(unpackTo, fileName);
+        using var archive = ArchiveFactory.OpenArchive(
+            pathToArchive,
+            ReaderOptions.ForOwnedFile
+            .WithProgress(progress)
+            );
 
-            if (entry.IsDirectory)
-            {
-                _ = Directory.CreateDirectory(fullName);
-            }
-            else
-            {
-                var directory = Path.GetDirectoryName(fullName);
-
-                if (directory is not null &&
-                    !Directory.Exists(directory))
-                {
-                    _ = Directory.CreateDirectory(directory);
-                }
-
-                await entry.WriteToFileAsync(fullName).ConfigureAwait(false);
-            }
-
-            ProgressChanged?.Invoke(this, entryNumber / count * 100);
-
-            entryNumber++;
-        }
+        archive.WriteToDirectory(unpackTo);
     }
 }

@@ -562,7 +562,7 @@ public sealed class InstalledAddonsProvider
     {
         if (ArchiveFactory.IsArchive(pathToFile, out _))
         {
-            using var archive = ArchiveFactory.Open(pathToFile);
+            using var archive = ArchiveFactory.OpenArchive(pathToFile);
             var manifestFile = archive.Entries.FirstOrDefault(static x => x.Key!.Equals("addon.json", StringComparison.OrdinalIgnoreCase));
 
             if (manifestFile is null)
@@ -724,7 +724,7 @@ public sealed class InstalledAddonsProvider
             else
             {
                 isUnpacked = false;
-                using var archive = ArchiveFactory.Open(pathToFile);
+                using var archive = ArchiveFactory.OpenArchive(pathToFile);
 
                 (gridImageHash, Stream? gridImageStream) = ImageHelper.GetCoverFromArchive(archive);
                 (previewImageHash, Stream? previewImageStream) = ImageHelper.GetPreviewFromArchive(archive);
@@ -968,7 +968,7 @@ public sealed class InstalledAddonsProvider
     {
         try
         {
-            using var archive = ArchiveFactory.Open(pathToFile);
+            using var archive = ArchiveFactory.OpenArchive(pathToFile);
 
             string? unpackedTo = null;
 
@@ -1075,7 +1075,7 @@ public sealed class InstalledAddonsProvider
             Directory.Delete(unpackTo, true);
         }
 
-        archive.ExtractToDirectory(unpackTo);
+        archive.WriteToDirectory(unpackTo);
 
         return unpackTo;
     }

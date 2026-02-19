@@ -28,7 +28,6 @@ public sealed partial class DevViewModel : ObservableObject
     private readonly IConfigProvider _config;
     private readonly FilesUploader _filesUploader;
     private readonly InstalledGamesProvider _gamesProvider;
-    private readonly IApiInterface _apiInterface;
     private readonly ILogger _logger;
 
     private readonly HashSet<string> _forbiddenNames =
@@ -71,14 +70,12 @@ public sealed partial class DevViewModel : ObservableObject
         IConfigProvider config,
         FilesUploader filesUploader,
         InstalledGamesProvider gamesProvider,
-        IApiInterface apiInterface,
         ILogger logger
         )
     {
         _config = config;
         _filesUploader = filesUploader;
         _gamesProvider = gamesProvider;
-        _apiInterface = apiInterface;
         _logger = logger;
 
         ApiPasswordTextBox = _config.ApiPassword ?? string.Empty;
@@ -1032,7 +1029,7 @@ public sealed partial class DevViewModel : ObservableObject
 
             List<FileStream> fileStreams = new();
 
-            using (var archive = ZipArchive.Create())
+            using (var archive = ZipArchive.CreateArchive())
             {
                 using (archive.PauseEntryRebuilding())
                 {
@@ -1059,9 +1056,7 @@ public sealed partial class DevViewModel : ObservableObject
                     }
                 }
 
-                var task = new Task(() => archive.SaveTo(pathToArchive, CompressionType.Deflate));
-                task.Start();
-                await task.WaitAsync(CancellationToken.None).ConfigureAwait(true);
+                await Task.Run(() => archive.SaveTo(pathToArchive, CompressionType.None)).ConfigureAwait(false);
 
                 fileStreams.ForEach(x => x.Dispose());
             }

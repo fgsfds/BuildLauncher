@@ -4,7 +4,6 @@ using Addons.Addons;
 using Common.All.Enums;
 using Common.All.Enums.Addons;
 using Common.All.Enums.Versions;
-using Common.All.Helpers;
 using Common.Client.Helpers;
 using Games.Games;
 using SharpCompress.Archives;
@@ -141,9 +140,8 @@ public class EDuke32 : BasePort
 
         ArgumentNullException.ThrowIfNull(stream);
 
-        using var archive = ZipArchive.Open(stream);
-
-        archive.ExtractToDirectory(stopgapFolder);
+        using var archive = ZipArchive.OpenArchive(stream);
+        archive.WriteToDirectory(stopgapFolder);
     }
 
 

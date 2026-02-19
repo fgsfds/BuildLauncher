@@ -33,7 +33,7 @@ public sealed class MainWindowViewModel : ObservableObject
         _gamesProvider = gamesProvider;
         _gamesProvider.GameChangedEvent += OnGameChanged;
 
-        DevPageViewModel = new DevViewModel(configProvider, filesUploader, gamesProvider, apiInterface, logger);
+        DevPageViewModel = new DevViewModel(configProvider, filesUploader, gamesProvider, logger);
         AboutPageViewModel = new AboutViewModel(appUpdateInstaller);
         PortsPageViewModel = new PortsViewModel(viewModelsFactory, portsProvider, ports, logger);
         ToolsPageViewModel = new ToolsViewModel(viewModelsFactory, tools);

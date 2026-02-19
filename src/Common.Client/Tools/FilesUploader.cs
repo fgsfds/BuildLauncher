@@ -113,8 +113,8 @@ public sealed class FilesUploader
             return new(ResultEnum.Error, ex.Message);
         }
 
-        return new(ResultEnum.Success, string.Empty); 
-        
+        return new(ResultEnum.Success, string.Empty);
+
 
         static void TrackProgress(FileStream streamToTrack, StrongBox<int> progress)
         {
@@ -131,7 +131,7 @@ public sealed class FilesUploader
 
     private async Task<DownloadableAddonJsonModel?> GetDownloadableAddonDtoAsync(string pathToFile)
     {
-        using var archive = ZipArchive.Open(pathToFile);
+        using var archive = ZipArchive.OpenArchive(pathToFile);
         var addonJson = archive.Entries.FirstOrDefault(static x => x.Key.Equals("addon.json", StringComparison.OrdinalIgnoreCase));
 
         if (addonJson is null)

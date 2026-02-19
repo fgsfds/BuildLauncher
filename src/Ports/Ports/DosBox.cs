@@ -289,24 +289,8 @@ public sealed class DosBox : BasePort
             }
             else
             {
-                using var archive = ArchiveFactory.Open(addon.PathToFile);
-
-                foreach (var file in archive.Entries)
-                {
-                    var dir = Path.GetDirectoryName(file.Key);
-
-                    if (!string.IsNullOrWhiteSpace(dir))
-                    {
-                        dir = Path.Combine(ClientProperties.TempFolderPath, dir);
-
-                        if (!Directory.Exists(dir))
-                        {
-                            _ = Directory.CreateDirectory(dir);
-                        }
-                    }
-
-                    file.WriteToFile(Path.Combine(ClientProperties.TempFolderPath, file.Key!.Replace('\\', Path.DirectorySeparatorChar)), new() { Overwrite = true });
-                }
+                using var archive = ArchiveFactory.OpenArchive(addon.PathToFile);
+                archive.WriteToDirectory(ClientProperties.TempFolderPath);
             }
 
             _ = sb.Append(@$" -c ""mount c \""{ClientProperties.TempFolderPath}"""" -c ""c:""");

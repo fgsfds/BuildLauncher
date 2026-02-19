@@ -10,7 +10,6 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Games.Games;
 using Games.Providers;
-using SharpCompress.Common;
 
 namespace Avalonia.Desktop.ViewModels;
 
