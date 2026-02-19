@@ -289,6 +289,11 @@ public sealed class DosBox : BasePort
             }
             else
             {
+                if (!Directory.Exists(ClientProperties.TempFolderPath))
+                {
+                    Directory.CreateDirectory(ClientProperties.TempFolderPath);
+                }
+
                 using var archive = ArchiveFactory.OpenArchive(addon.PathToFile);
                 archive.WriteToDirectory(ClientProperties.TempFolderPath);
             }

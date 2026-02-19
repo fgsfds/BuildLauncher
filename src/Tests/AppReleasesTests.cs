@@ -6,7 +6,7 @@ using ILogger = Microsoft.Extensions.Logging.ILogger;
 
 namespace Tests;
 
-public sealed class AppReleasesTest
+public sealed class AppReleasesTests
 {
     [Fact]
     public async Task DeserializeAddonJsonAsync()

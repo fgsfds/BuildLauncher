@@ -2,6 +2,7 @@
 using Common.All.Serializable.Downloadable;
 using Common.Client.Interfaces;
 using Common.Client.Tools;
+using Microsoft.Extensions.Logging;
 
 namespace Common.Client;
 
@@ -11,6 +12,7 @@ public abstract class InstallerBase<T>
     protected readonly T _instance;
     private readonly FilesDownloader _filesDownloader;
     private readonly ArchiveTools _archiveTools;
+    private readonly ILogger _logger;
 
     /// <summary>
     /// Installation progress
@@ -20,12 +22,14 @@ public abstract class InstallerBase<T>
     protected InstallerBase(
         T instance,
         FilesDownloader filesDownloader,
-         ArchiveTools archiveTools
+        ArchiveTools archiveTools,
+        ILogger logger
         )
     {
         _instance = instance;
         _filesDownloader = filesDownloader;
         _archiveTools = archiveTools;
+        _logger = logger;
     }
 
     /// <summary>
@@ -114,8 +118,9 @@ public abstract class InstallerBase<T>
 
             return true;
         }
-        catch
+        catch (Exception ex)
         {
+            _logger.LogError(ex, $"Error while installing {_instance.ToString}.");
             Uninstall();
             throw;
         }

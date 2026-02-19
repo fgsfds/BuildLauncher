@@ -21,7 +21,7 @@ public sealed class ToolInstaller : InstallerBase<BaseTool>
         FilesDownloader filesDownloader,
         ArchiveTools archiveTools,
         ILogger logger
-        ) : base(tool, filesDownloader, archiveTools)
+        ) : base(tool, filesDownloader, archiveTools, logger)
     {
         _gamesProvider = gamesProvider;
         _apiInterface = apiInterface;

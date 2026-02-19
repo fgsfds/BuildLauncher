@@ -140,6 +140,11 @@ public class EDuke32 : BasePort
 
         ArgumentNullException.ThrowIfNull(stream);
 
+        if (!Directory.Exists(stopgapFolder))
+        {
+            Directory.CreateDirectory(stopgapFolder);
+        }
+
         using var archive = ZipArchive.OpenArchive(stream);
         archive.WriteToDirectory(stopgapFolder);
     }

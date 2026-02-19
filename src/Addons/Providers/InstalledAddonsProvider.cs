@@ -1075,6 +1075,11 @@ public sealed class InstalledAddonsProvider
             Directory.Delete(unpackTo, true);
         }
 
+        if (!Directory.Exists(unpackTo))
+        {
+            Directory.CreateDirectory(unpackTo);
+        }
+
         archive.WriteToDirectory(unpackTo);
 
         return unpackTo;

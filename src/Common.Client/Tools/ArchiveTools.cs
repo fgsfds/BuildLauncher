@@ -37,6 +37,11 @@ public sealed class ArchiveTools
             }
         });
 
+        if (!Directory.Exists(unpackTo))
+        {
+            Directory.CreateDirectory(unpackTo);
+        }
+
         using var archive = ArchiveFactory.OpenArchive(
             pathToArchive,
             ReaderOptions.ForOwnedFile

@@ -18,7 +18,7 @@ public sealed class PortInstaller : InstallerBase<BasePort>
         FilesDownloader filesDownloader,
         ArchiveTools archiveTools,
         ILogger logger
-        ) : base(port, filesDownloader, archiveTools)
+        ) : base(port, filesDownloader, archiveTools, logger)
     {
         _apiInterface = apiInterface;
     }
