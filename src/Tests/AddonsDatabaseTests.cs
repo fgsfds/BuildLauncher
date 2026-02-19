@@ -10,7 +10,6 @@ using Microsoft.Extensions.Logging;
 using Minio;
 using Minio.DataModel.Args;
 using Moq;
-using Xunit.Abstractions;
 
 namespace Tests;
 
