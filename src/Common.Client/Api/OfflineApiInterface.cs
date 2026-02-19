@@ -1,5 +1,7 @@
 ﻿using System.Text.Json;
+using Common.All;
 using Common.All.Enums;
+using Common.All.Serializable;
 using Common.All.Serializable.Downloadable;
 using Common.Client.Helpers;
 using Common.Client.Interfaces;
@@ -124,12 +126,32 @@ public sealed class OfflineApiInterface : IApiInterface
         return Task.FromResult(true);
     }
 
-    public Task<string?> GetUploadFolder() => Task.FromResult<string?>(null);
+    public async Task<string?> GetUploadFolderAsync()
+    {
+        var dataJson = await File.ReadAllTextAsync(Path.Combine("..", "..", "..", "..", "db", "data.json")).ConfigureAwait(false);
+        var data = JsonSerializer.Deserialize(dataJson, DataJsonModelContext.Default.DictionaryStringString);
+
+        _ = data!.TryGetValue(DataJson.UploadFolder, out var uploadFolder) ? uploadFolder : null;
+
+        return uploadFolder;
+    }
+
+    public async Task<Result<string?>> GetSignedUrlAsync(string path)
+    {
+        var uploadFolder = await GetUploadFolderAsync().ConfigureAwait(false);
+
+        if (string.IsNullOrWhiteSpace(uploadFolder))
+        {
+            return new(ResultEnum.Error, null, "Error while getting signed url.");
+        }
+
+        var url = Path.Combine(uploadFolder, path);
+
+        return new(ResultEnum.Success, url, string.Empty);
+    }
 
 
     #region Not Implemented
-
-    public Task<string?> GetSignedUrlAsync(string path) => Task.FromResult<string?>(null);
 
     public Task<decimal?> ChangeScoreAsync(string addonId, sbyte score, bool isNew) => Task.FromResult<decimal?>(null);
 

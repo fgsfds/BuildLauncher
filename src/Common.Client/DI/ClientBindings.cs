@@ -78,6 +78,14 @@ public static class ClientBindings
                 })
                 .RemoveAllLoggers();
 
+            _ = container.AddHttpClient(HttpClientEnum.Upload.GetDescription())
+                .ConfigureHttpClient((serviceProvider, client) =>
+                {
+                    client.DefaultRequestHeaders.Add("User-Agent", "BuildLauncher");
+                    client.Timeout = Timeout.InfiniteTimeSpan;
+                })
+                .RemoveAllLoggers();
+
             _ = container.AddHttpClient(string.Empty)
                 .ConfigureHttpClient((serviceProvider, client) =>
                 {

@@ -1,9 +1,11 @@
 using System.Collections.Immutable;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.Json;
 using Avalonia.Desktop.Helpers;
 using Avalonia.Media;
 using Avalonia.Platform.Storage;
+using Avalonia.Threading;
 using Common.All.Enums;
 using Common.All.Enums.Versions;
 using Common.All.Interfaces;
@@ -478,45 +480,31 @@ public sealed partial class DevViewModel : ObservableObject
             SetResultMessage("Uploading file. Please wait.", false);
             IsInProgress = true;
 
-            var uploadFolder = await _apiInterface.GetUploadFolder().ConfigureAwait(true);
-            var uploadUrl = uploadFolder + "/" + Guid.NewGuid() + "/" + Path.GetFileName(pathToArchive);
+            StrongBox<int> progress = new(ProgressBarValue);
 
-            await using var fileStream = File.OpenRead(pathToArchive);
-            using StreamContent content = new(fileStream);
-
-            new Task(() =>
+            _ = Task.Run(async () =>
             {
-                while (fileStream.CanSeek)
+                while (IsInProgress)
                 {
-                    ProgressBarValue = (int)(fileStream.Position / (double)fileStream.Length * 100);
-
-                    Thread.Sleep(50);
+                    ProgressBarValue = progress.Value;
+                    await Task.Delay(50).ConfigureAwait(false);
                 }
-            }).Start();
+            });
 
-            using HttpClient httpClient = new() { Timeout = Timeout.InfiniteTimeSpan };
+            var result = await _filesUploader.UploadFilesAsync(
+                Guid.NewGuid().ToString(),
+                [pathToArchive],
+                progress,
+                CancellationToken.None).ConfigureAwait(false);
 
-            using var response = await httpClient.PutAsync(uploadUrl, content, CancellationToken.None).ConfigureAwait(true);
-
-            if (!response.IsSuccessStatusCode)
+            if (!result.IsSuccess)
             {
-                var errorMessage = await response.Content.ReadAsStringAsync().ConfigureAwait(true);
-                SetResultMessage(errorMessage, true);
-                return;
+                SetResultMessage(result.Message, true);
             }
-
-            using var check = await httpClient.GetAsync(uploadUrl, HttpCompletionOption.ResponseHeadersRead, CancellationToken.None).ConfigureAwait(true);
-
-            FileInfo fileSize = new(pathToArchive);
-
-            if (!check.IsSuccessStatusCode ||
-                check.Content.Headers.ContentLength != fileSize.Length)
+            else
             {
-                SetResultMessage("Error while uploading file", true);
-                return;
+                SetResultMessage("Uploaded successfully", false);
             }
-
-            SetResultMessage("Uploaded successfully", false);
         }
         catch (TaskCanceledException)
         {
@@ -988,8 +976,11 @@ public sealed partial class DevViewModel : ObservableObject
     /// <param name="isError">Is error.</param>
     private void SetResultMessage(string message, bool isError)
     {
-        ErrorTextColor = isError ? SolidColorBrush.Parse("Red") : SolidColorBrush.Parse("Green");
-        ErrorText = message;
+        Dispatcher.UIThread.Post(() =>
+        {
+            ErrorTextColor = isError ? SolidColorBrush.Parse("Red") : SolidColorBrush.Parse("Green");
+            ErrorText = message;
+        });
     }
 
     /// <summary>

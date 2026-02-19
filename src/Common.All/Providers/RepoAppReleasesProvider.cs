@@ -37,7 +37,7 @@ public sealed class RepoAppReleasesProvider
             _logger.LogInformation("Looking for new app release");
 
             using var client = _httpClientFactory.CreateClient(HttpClientEnum.GitHub.GetDescription());
-            using var response = await client.GetAsync(Consts.GitHubReleases, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false);
+            using var response = await client.GetAsync(CommonConstants.GitHubReleases, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false);
             _ = response.EnsureSuccessStatusCode();
 
             var releasesJson = await response.Content.ReadAsStringAsync().ConfigureAwait(false);

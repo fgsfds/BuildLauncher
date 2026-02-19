@@ -1,4 +1,5 @@
 ﻿using System.Text.Json;
+using Common.All;
 using Common.All.Enums;
 using Common.All.Helpers;
 using Common.All.Interfaces;
@@ -49,7 +50,7 @@ public sealed class GitHubApiInterface : IApiInterface
             if (_addonsJson is null)
             {
                 using var httpClient = _httpClientFactory.CreateClient(HttpClientEnum.GitHub.GetDescription());
-                using var response = await httpClient.GetAsync(Consts.AddonsJsonUrl, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false);
+                using var response = await httpClient.GetAsync(CommonConstants.AddonsJsonUrl, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false);
                 _ = response.EnsureSuccessStatusCode();
 
                 var addons = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
@@ -172,7 +173,7 @@ public sealed class GitHubApiInterface : IApiInterface
         return Task.FromResult(true);
     }
 
-    public async Task<string?> GetUploadFolder()
+    public async Task<string?> GetUploadFolderAsync()
     {
         await _semaphore.WaitAsync().ConfigureAwait(false);
 
@@ -180,7 +181,7 @@ public sealed class GitHubApiInterface : IApiInterface
         {
             if (_data is null)
             {
-                await InitData().ConfigureAwait(false);
+                await InitDataAsync().ConfigureAwait(false);
             }
 
             return _data!.TryGetValue(DataJson.UploadFolder, out var uploadFolder) ? uploadFolder : null;
@@ -197,10 +198,10 @@ public sealed class GitHubApiInterface : IApiInterface
     }
 
 
-    private async Task InitData()
+    private async Task InitDataAsync()
     {
         using var httpClient = _httpClientFactory.CreateClient(HttpClientEnum.GitHub.GetDescription());
-        using var response = await httpClient.GetAsync(Consts.DataJsonUrl, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false);
+        using var response = await httpClient.GetAsync(CommonConstants.DataJsonUrl, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false);
         _ = response.EnsureSuccessStatusCode();
 
         var data = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
@@ -213,10 +214,36 @@ public sealed class GitHubApiInterface : IApiInterface
         }
     }
 
+    public async Task<Result<string?>> GetSignedUrlAsync(string path)
+    {
+        await _semaphore.WaitAsync().ConfigureAwait(false);
+
+        try
+        {
+            if (_data is null)
+            {
+                await InitDataAsync().ConfigureAwait(false);
+            }
+
+            _ = _data!.TryGetValue(DataJson.UploadFolder, out var uploadFolder) ? uploadFolder : null;
+
+            var url = Path.Combine(uploadFolder, path);
+
+            return new(ResultEnum.Success, url, string.Empty);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogCritical(ex, "=== Error while getting upload folder from GitHub ===");
+            return new(ResultEnum.Error, null, "Error while getting upload folder from GitHub");
+        }
+        finally
+        {
+            _ = _semaphore.Release();
+        }
+    }
+
 
     #region Not Implemented
-
-    public Task<string?> GetSignedUrlAsync(string path) => Task.FromResult<string?>(null);
 
     public Task<decimal?> ChangeScoreAsync(string addonId, sbyte score, bool isNew) => Task.FromResult<decimal?>(null);
 
