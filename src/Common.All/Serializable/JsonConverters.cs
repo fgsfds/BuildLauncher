@@ -152,6 +152,14 @@ public sealed class ExecutablesConverter : JsonConverter<Dictionary<OSEnum, Dict
                         {
                             result[OSEnum.Linux].Add(PortEnum.EDuke32, linPort);
                         }
+                        else if (linPort.StartsWith("raze"))
+                        {
+                            result[OSEnum.Linux].Add(PortEnum.Raze, linPort);
+                        }
+                        else
+                        {
+                            result[OSEnum.Linux].Add(PortEnum.Stub, linPort);
+                        }
                     }
 
                     return result;
