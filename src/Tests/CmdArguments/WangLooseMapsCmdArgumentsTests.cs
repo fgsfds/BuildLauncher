@@ -31,6 +31,7 @@ public sealed class WangLooseMapsCmdArgumentsTests
             Title = "Loose map",
             GridImageHash = null,
             Author = null,
+            ReleaseDate = null,
             Description = null,
             SupportedGame = new(GameEnum.Wang),
             RequiredFeatures = null,

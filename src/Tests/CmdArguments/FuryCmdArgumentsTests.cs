@@ -30,6 +30,7 @@ public sealed class FuryCmdArgumentsTests
             Title = "Ion Fury",
             GridImageHash = null,
             Author = null,
+            ReleaseDate = null,
             Description = null,
             SupportedGame = new(GameEnum.Fury),
             RequiredFeatures = null,

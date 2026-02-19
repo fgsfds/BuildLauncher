@@ -58,6 +58,7 @@ public static class GrpInfoProvider
                     PreviewImageHash = null,
                     Description = null,
                     Author = null,
+                    ReleaseDate = null,
                     PathToFile = grp,
                     DependentAddons = null,
                     IncompatibleAddons = null,

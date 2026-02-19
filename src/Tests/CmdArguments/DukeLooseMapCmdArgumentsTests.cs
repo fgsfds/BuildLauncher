@@ -34,6 +34,7 @@ public sealed class DukeLooseMapCmdArgumentsTests
             Title = "Loose map",
             GridImageHash = null,
             Author = null,
+            ReleaseDate = null,
             Description = null,
             SupportedGame = new(GameEnum.Duke3D, DukeVersionEnum.Duke3D_Atomic),
             RequiredFeatures = null,
