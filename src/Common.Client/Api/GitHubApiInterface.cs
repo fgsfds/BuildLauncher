@@ -1,4 +1,5 @@
 ﻿using System.Text.Json;
+using Common.All;
 using Common.All.Enums;
 using Common.All.Helpers;
 using Common.All.Interfaces;
@@ -213,10 +214,36 @@ public sealed class GitHubApiInterface : IApiInterface
         }
     }
 
+    public async Task<Result<string?>> GetSignedUrlAsync(string path)
+    {
+        await _semaphore.WaitAsync().ConfigureAwait(false);
+
+        try
+        {
+            if (_data is null)
+            {
+                await InitDataAsync().ConfigureAwait(false);
+            }
+
+            _ = _data!.TryGetValue(DataJson.UploadFolder, out var uploadFolder) ? uploadFolder : null;
+
+            var url = Path.Combine(uploadFolder, path);
+
+            return new(ResultEnum.Success, url, string.Empty);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogCritical(ex, "=== Error while getting upload folder from GitHub ===");
+            return new(ResultEnum.Error, null, "Error while getting upload folder from GitHub");
+        }
+        finally
+        {
+            _ = _semaphore.Release();
+        }
+    }
+
 
     #region Not Implemented
-
-    public Task<string?> GetSignedUrlAsync(string path) => Task.FromResult<string?>(null);
 
     public Task<decimal?> ChangeScoreAsync(string addonId, sbyte score, bool isNew) => Task.FromResult<decimal?>(null);
 

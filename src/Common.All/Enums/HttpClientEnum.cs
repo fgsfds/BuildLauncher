@@ -5,5 +5,8 @@ namespace Common.All.Enums;
 public enum HttpClientEnum
 {
     [Description("GitHub")]
-    GitHub
+    GitHub,
+
+    [Description("Upload")]
+    Upload,
 }

@@ -1,10 +1,13 @@
-﻿using System.Security.Cryptography;
+﻿using System.Runtime.CompilerServices;
+using System.Security.Cryptography;
 using System.Text.Json;
+using Common.All;
 using Common.All.Enums;
 using Common.All.Helpers;
 using Common.All.Serializable.Addon;
 using Common.All.Serializable.Downloadable;
 using Common.Client.Interfaces;
+using Microsoft.Extensions.Logging;
 using SharpCompress.Archives.Zip;
 
 namespace Common.Client.Tools;
@@ -13,15 +16,18 @@ public sealed class FilesUploader
 {
     private readonly IApiInterface _apiInterface;
     private readonly IHttpClientFactory _httpClientFactory;
+    private readonly ILogger _logger;
 
 
     public FilesUploader(
         IApiInterface apiInterface,
-        IHttpClientFactory httpClientFactory
+        IHttpClientFactory httpClientFactory,
+        ILogger logger
         )
     {
         _apiInterface = apiInterface;
         _httpClientFactory = httpClientFactory;
+        _logger = logger;
     }
 
 
@@ -37,6 +43,84 @@ public sealed class FilesUploader
         var result = await _apiInterface.AddAddonToDatabaseAsync(downloadAddonEntity).ConfigureAwait(false);
 
         return result;
+    }
+
+
+    /// <summary>
+    /// Upload multiple files to S3
+    /// </summary>
+    /// <param name="folder">Destination folder in the bucket</param>
+    /// <param name="files">List of paths to files</param>
+    /// <param name="cancellationToken">Cancellation token</param>
+    /// <param name="remoteFileName">File name on the s3 server</param>
+    /// <returns>True if successfully uploaded</returns>
+    public async Task<Result> UploadFilesAsync(
+        string folder,
+        List<string> files,
+        StrongBox<int> progress,
+        CancellationToken cancellationToken,
+        string? remoteFileName = null
+        )
+    {
+        _logger.LogInformation($"Uploading {files.Count} file(s)");
+
+        try
+        {
+            foreach (var file in files)
+            {
+                var fileName = remoteFileName ?? Path.GetFileName(file);
+                var result = await _apiInterface.GetSignedUrlAsync(Path.Combine(folder, fileName)).ConfigureAwait(false);
+
+                if (!result.IsSuccess)
+                {
+                    return new(result.ResultEnum, result.Message);
+                }
+
+                await using var fileStream = File.OpenRead(file);
+                using StreamContent content = new(fileStream);
+
+                _ = Task.Run(() => { TrackProgress(fileStream, progress); });
+
+                using var httpClient = _httpClientFactory.CreateClient(HttpClientEnum.Upload.GetDescription());
+
+                using var response = await httpClient.PutAsync(result.ResultObject, content, cancellationToken).ConfigureAwait(false);
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    var errorMessage = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+                    return new(ResultEnum.Error, errorMessage);
+                }
+            }
+        }
+        catch (TaskCanceledException)
+        {
+            _logger.LogInformation("Uploading cancelled");
+            return new(ResultEnum.Error, "Uploading cancelled");
+        }
+        catch (Exception ex)
+        {
+            _logger.LogCritical(ex, "Error while uploading fix");
+            return new(ResultEnum.Error, ex.Message);
+        }
+
+        return new(ResultEnum.Success, string.Empty);
+    }
+
+
+    /// <summary>
+    /// Report operation progress
+    /// </summary>
+    /// <param name="streamToTrack">Stream</param>
+    /// <param name="progress">Progress</param>
+    private static void TrackProgress(FileStream streamToTrack, StrongBox<int> progress)
+    {
+        while (streamToTrack.CanSeek)
+        {
+            var pos = streamToTrack.Position / (float)streamToTrack.Length * 100;
+            progress.Value = (int)pos;
+
+            Thread.Sleep(50);
+        }
     }
 
 

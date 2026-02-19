@@ -2,6 +2,7 @@
 using System.Web;
 using Api.Common.Requests;
 using Api.Common.Responses;
+using Common.All;
 using Common.All.Enums;
 using Common.All.Serializable.Downloadable;
 using Common.Client.Helpers;
@@ -99,7 +100,7 @@ public sealed partial class ServerApiInterface : IApiInterface
             using var httpClient = _httpClientFactory.CreateClient();
             using var response = await httpClient.PutAsJsonAsync($"{ApiUrl}/addons/rating/change", new Tuple<string, sbyte, bool>(addonId, score, isNew)).ConfigureAwait(false);
             _ = response.EnsureSuccessStatusCode();
-            
+
             var responseStr = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 
 
@@ -145,7 +146,7 @@ public sealed partial class ServerApiInterface : IApiInterface
         }
     }
 
-    public async Task<string?> GetSignedUrlAsync(string path)
+    public async Task<Result<string?>> GetSignedUrlAsync(string path)
     {
         try
         {
@@ -154,11 +155,11 @@ public sealed partial class ServerApiInterface : IApiInterface
             using var httpClient = _httpClientFactory.CreateClient();
             var signedUrl = await httpClient.GetStringAsync($"{ApiUrl}/storage/url/{encodedPath}").ConfigureAwait(false);
 
-            return signedUrl;
+            return new(ResultEnum.Success, null, string.Empty);
         }
-        catch (Exception)
+        catch (Exception ex)
         {
-            return null;
+            return new(ResultEnum.Error, null, ex.ToString());
         }
     }
 

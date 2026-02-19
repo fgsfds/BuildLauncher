@@ -1,10 +1,15 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
+using Common.All.Enums;
 using Common.All.Helpers;
 using Common.All.Serializable.Downloadable;
+using Common.Client.Api;
+using Common.Client.Tools;
+using Microsoft.Extensions.Logging;
 using Minio;
 using Minio.DataModel.Args;
+using Moq;
 using Xunit.Abstractions;
 
 namespace Tests;
@@ -21,8 +26,6 @@ public sealed class AddonsDatabaseTests
     [Fact]
     public async Task DatabaseFilesIntegrityTest()
     {
-        return;
-
         if (!OperatingSystem.IsWindows())
         {
             return;
@@ -205,33 +208,40 @@ public sealed class AddonsDatabaseTests
     }
 
 
-    [Fact, Trait("Category", "Database")]
+    [Fact]
     public async Task UploadFixTest()
     {
-        //if (!OperatingSystem.IsWindows())
-        //{
-        //    return;
-        //}
+        if (!OperatingSystem.IsWindows())
+        {
+            return;
+        }
 
-        //ClientProperties.IsOfflineMode = true;
+        Mock<IHttpClientFactory> httpFactory = new();
+        httpFactory.Setup(x => x.CreateClient(HttpClientEnum.Upload.GetDescription())).Returns(GetHttpClient());
 
-        //using HttpClient httpClient = new();
-        //var logger = new Mock<ILogger>().Object;
-        //var httpClientFactory = new Mock<IHttpClientFactory>();
-        //httpClientFactory.Setup(x => x.CreateClient()).Returns(httpClient);
-        //ProgressReport progressReport = new();
-        //OfflineApiInterface api = new(logger);
-        //FilesUploader uploader = new(api, httpClientFactory.Object);
+        Mock<ILogger> logger = new();
+        OfflineApiInterface api = new(logger.Object);
+        FilesUploader uploader = new(api, httpFactory.Object, logger.Object);
 
-        //await uploader.UploadFilesAsync("test", [Path.Combine("resources", "test_fix.zip")], CancellationToken.None);
+        await uploader.UploadFilesAsync("test", [Path.Combine("Files", "TEST.MAP")], new(), CancellationToken.None);
 
-        //var url = $"{CommonConstants.S3Endpoint}/{CommonConstants.S3Bucket}/uploads/{CommonConstants.S3Folder}/test/test_fix.zip";
+        var url = $"{CommonConstants.S3Endpoint}/{CommonConstants.S3Bucket}/uploads/{CommonConstants.S3SubFolder}/test/TEST.MAP";
 
-        //using var resp = await httpClient.GetAsync(url, HttpCompletionOption.ResponseHeadersRead);
+        using var httpClient = GetHttpClient();
+        using var resp = await httpClient.GetAsync(url, HttpCompletionOption.ResponseHeadersRead);
 
-        //Assert.True(resp.IsSuccessStatusCode);
+        Assert.True(resp.IsSuccessStatusCode);
 
-        //var timespan = DateTime.Now - resp.Content.Headers.LastModified;
-        //Assert.True(timespan < TimeSpan.FromSeconds(5));
+        var timespan = DateTime.Now - resp.Content.Headers.LastModified;
+        Assert.True(timespan < TimeSpan.FromSeconds(5));
+
+
+        static HttpClient GetHttpClient()
+        {
+            HttpClient httpClient = new();
+            httpClient.DefaultRequestHeaders.Add("User-Agent", "BuildLauncher");
+            httpClient.Timeout = Timeout.InfiniteTimeSpan;
+            return httpClient;
+        }
     }
 }
