@@ -31,6 +31,7 @@ public sealed class SlaveCmdArgumentsTests
             GridImageHash = null,
             PreviewImageHash = null,
             Author = null,
+            ReleaseDate = null,
             Description = null,
             SupportedGame = new(GameEnum.Slave),
             RequiredFeatures = null,

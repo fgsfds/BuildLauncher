@@ -125,6 +125,8 @@ public sealed partial class DevViewModel : ObservableObject
     [ObservableProperty]
     private string _addonVersion = string.Empty;
     [ObservableProperty]
+    private DateTimeOffset? _releaseDate;
+    [ObservableProperty]
     private string? _addonAuthor;
     [ObservableProperty]
     private string? _addonDescription;
@@ -808,6 +810,7 @@ public sealed partial class DevViewModel : ObservableObject
             },
             Title = AddonTitle,
             Version = AddonVersion,
+            ReleaseDate = ReleaseDate.HasValue ? DateOnly.FromDateTime(ReleaseDate.Value.DateTime) : null,
             Author = string.IsNullOrWhiteSpace(AddonAuthor) ? null : AddonAuthor,
             Description = string.IsNullOrWhiteSpace(AddonDescription) ? null : AddonDescription,
             MainDef = string.IsNullOrWhiteSpace(MainDef) || IsModSelected ? null : MainDef,
@@ -857,6 +860,7 @@ public sealed partial class DevViewModel : ObservableObject
         AddonTitle = result.Title;
         AddonId = string.IsNullOrEmpty(AddonIdPrefix) ? result.Id : result.Id.Replace(AddonIdPrefix, "");
         AddonVersion = result.Version;
+        ReleaseDate = result.ReleaseDate.HasValue ? result.ReleaseDate.Value.ToDateTime(TimeOnly.MinValue) : null;
         AddonAuthor = result.Author;
         MainDef = result.MainDef;
         AdditionalDefs = result.AdditionalDefs is null ? null : string.Join(',', result.AdditionalDefs);

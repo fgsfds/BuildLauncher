@@ -267,6 +267,23 @@
 
                         </Grid>
 
+                        <!--Release date-->
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto" SharedSizeGroup="MySizeGroup" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Grid.Column="0"
+                                       VerticalAlignment="Center"
+                                       Margin="5"
+                                       Text="Release date:"
+                                       ToolTip.Tip="Original release date of the addon."/>
+
+                            <DatePicker Grid.Column="1" Margin="5" SelectedDate="{Binding ReleaseDate}" />
+
+                        </Grid>
+
                         <!--Author-->
                         <Grid>
                             <Grid.ColumnDefinitions>

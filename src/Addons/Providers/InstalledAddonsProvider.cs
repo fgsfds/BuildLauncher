@@ -662,6 +662,7 @@ public sealed class InstalledAddonsProvider
                 GridImageHash = null,
                 Description = null,
                 Author = null,
+                ReleaseDate = null,
                 MainDef = null,
                 AdditionalDefs = null,
                 DependentAddons = null,
@@ -782,6 +783,7 @@ public sealed class InstalledAddonsProvider
                     PreviewImageHash = carcass.PreviewImageHash,
                     Description = carcass.Description,
                     Author = carcass.Author,
+                    ReleaseDate = carcass.ReleaseDate,
                     IsEnabled = isEnabled,
                     PathToFile = pathToFile,
                     MainDef = null,
@@ -819,6 +821,7 @@ public sealed class InstalledAddonsProvider
                         PreviewImageHash = carcass.PreviewImageHash,
                         Description = carcass.Description,
                         Author = carcass.Author,
+                        ReleaseDate = carcass.ReleaseDate,
                         PathToFile = pathToFile,
                         DependentAddons = carcass.Dependencies,
                         IncompatibleAddons = carcass.Incompatibles,
@@ -849,6 +852,7 @@ public sealed class InstalledAddonsProvider
                         PreviewImageHash = carcass.PreviewImageHash,
                         Description = carcass.Description,
                         Author = carcass.Author,
+                        ReleaseDate = carcass.ReleaseDate,
                         PathToFile = pathToFile,
                         DependentAddons = carcass.Dependencies,
                         IncompatibleAddons = carcass.Incompatibles,
@@ -876,6 +880,7 @@ public sealed class InstalledAddonsProvider
                         PreviewImageHash = carcass.PreviewImageHash,
                         Description = carcass.Description,
                         Author = carcass.Author,
+                        ReleaseDate = carcass.ReleaseDate,
                         PathToFile = pathToFile,
                         DependentAddons = carcass.Dependencies,
                         IncompatibleAddons = carcass.Incompatibles,
@@ -906,6 +911,7 @@ public sealed class InstalledAddonsProvider
                         PreviewImageHash = carcass.PreviewImageHash,
                         Description = carcass.Description,
                         Author = carcass.Author,
+                        ReleaseDate = carcass.ReleaseDate,
                         PathToFile = pathToFile,
                         DependentAddons = carcass.Dependencies,
                         IncompatibleAddons = carcass.Incompatibles,
@@ -933,6 +939,7 @@ public sealed class InstalledAddonsProvider
                         PreviewImageHash = carcass.PreviewImageHash,
                         Description = carcass.Description,
                         Author = carcass.Author,
+                        ReleaseDate = carcass.ReleaseDate,
                         PathToFile = pathToFile,
                         DependentAddons = carcass.Dependencies,
                         IncompatibleAddons = carcass.Incompatibles,
@@ -1102,6 +1109,7 @@ public sealed class InstalledAddonsProvider
         carcass.Id = manifest.Id;
         carcass.Title = manifest.Title;
         carcass.Author = manifest.Author;
+        carcass.ReleaseDate = manifest.ReleaseDate;
         carcass.Version = manifest.Version;
         carcass.Description = manifest.Description;
         carcass.SupportedGame = manifest.SupportedGame.Game;
@@ -1180,6 +1188,7 @@ internal struct AddonCarcass
     public string Version { get; set; }
     public bool IsUnpacked { get; set; }
     public string? Author { get; set; }
+    public DateOnly? ReleaseDate { get; set; }
     public string? Description { get; set; }
     public long? GridImageHash { get; set; }
     public long? PreviewImageHash { get; set; }

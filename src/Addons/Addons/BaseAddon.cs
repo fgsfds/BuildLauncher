@@ -37,6 +37,11 @@ public abstract class BaseAddon
     public required string? Author { get; init; }
 
     /// <summary>
+    /// Original release date
+    /// </summary>
+    public required DateOnly? ReleaseDate { get; init; }
+
+    /// <summary>
     /// Addon description
     /// </summary>
     public required string? Description { get; init; }
@@ -124,6 +129,11 @@ public abstract class BaseAddon
         if (AddonId.Version is not null)
         {
             _ = description.Append($"{Environment.NewLine}{Environment.NewLine}#### v{AddonId.Version}");
+        }
+
+        if (ReleaseDate is not null)
+        {
+            _ = description.Append($"{Environment.NewLine}{Environment.NewLine}*Released on:* {ReleaseDate.Value.ToString("dd.MM.yyyy")}");
         }
 
         if (Author is not null)

@@ -19,6 +19,7 @@ public sealed class SerializerTests
       },
       "title": "Addon Title",
       "author": "Author",
+      "release_date": "1991-06-10",
       "version": "1.0",
       "con_main": "MAIN.CON",
       "con_modules": [ "MODULE.CON", "MODULE2.CON" ],
@@ -194,6 +195,8 @@ public sealed class SerializerTests
         Assert.Equal("TEST.MAP", ((MapFileJsonModel)result.StartMap!).File);
 
         Assert.Equal("Addon description", result.Description);
+
+        Assert.Equal(DateOnly.Parse("1991-06-10"), result.ReleaseDate);
     }
 
     [Fact]

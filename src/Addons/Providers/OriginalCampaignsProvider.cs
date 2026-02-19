@@ -73,6 +73,7 @@ public sealed class OriginalCampaignsProvider
                 GridImageHash = DukeVersionEnum.Duke3D_WT.GetUniqueHash(),
                 PreviewImageHash = null,
                 Author = "Nerve Software, Gearbox Software",
+                ReleaseDate = new(2016, 10, 11),
                 Description = """
                     **Duke Nukem 3D: 20th Anniversary World Tour** is a 2016 special edition of Duke Nukem 3D.
                     This edition includes all content from Duke Nukem 3D: Atomic Edition, but it adds new levels, enemies, a weapon, and several special features.
@@ -113,6 +114,7 @@ public sealed class OriginalCampaignsProvider
                     GridImageHash = GameEnum.Duke3D.GetUniqueHash(),
                     PreviewImageHash = null,
                     Author = "3D Realms",
+                    ReleaseDate = new(1996, 01, 29),
                     Description = """
                     Duke Nukem 3D is a first-person shooter developed and published by **3D Realms**.
                     Released on April 19, 1996, Duke Nukem 3D is the third game in the Duke Nukem series and a sequel to Duke Nukem II.
@@ -151,6 +153,7 @@ public sealed class OriginalCampaignsProvider
                     GridImageHash = DukeAddonEnum.DukeVaca.GetUniqueHash(),
                     PreviewImageHash = null,
                     Author = "Sunstorm Interactive",
+                    ReleaseDate = new(1997, 12, 31),
                     Description = """
                         **Life's A Beach** is an expansion pack for the highly acclaimed first-person shooter Duke Nukem 3D. It was released on December 31, 1997 by **Sunstorm Interactive**.
 
@@ -188,6 +191,7 @@ public sealed class OriginalCampaignsProvider
                     Title = "Nuclear Winter",
                     GridImageHash = DukeAddonEnum.DukeNW.GetUniqueHash(),
                     Author = "Simply Silly Software",
+                    ReleaseDate = new(1997, 12, 30),
                     Description = """
                         **Nuclear Winter**, is a Christmas-themed expansion pack for Duke Nukem 3D. It was developed by **Simply Silly Software** and published by **WizardWorks** on December 30, 1997.
 
@@ -225,6 +229,7 @@ public sealed class OriginalCampaignsProvider
                     Title = "Duke it Out in DC",
                     GridImageHash = DukeAddonEnum.DukeDC.GetUniqueHash(),
                     Author = "WizardWorks",
+                    ReleaseDate = new(1997, 03, 17),
                     Description = """
                         **Duke It Out In D.C.** is a Duke Nukem 3D expansion pack developed by Sunstorm Interactive and published by **WizardWorks** on March 17, 1997.
                         The add-on does not introduce any new enemies, weapons, or sprites, but it features an all-new episode comprised of ten original levels,
@@ -265,6 +270,7 @@ public sealed class OriginalCampaignsProvider
                 Title = "Duke Nukem 64",
                 GridImageHash = GameEnum.Duke64.GetUniqueHash(),
                 Author = "3D Realms, Eurocom",
+                ReleaseDate = new(1997, 10, 31),
                 Description = """
                     **Duke Nukem 64** is the Nintendo 64 port of the first-person shooter MS-DOS/PC game Duke Nukem 3D.
                     The Nintendo 64 port features significant changes from the PC version, including modified and expanded levels and a different set of weapons.
@@ -315,18 +321,19 @@ public sealed class OriginalCampaignsProvider
                 Title = "Blood",
                 GridImageHash = GameEnum.Blood.GetUniqueHash(),
                 Author = "Monolith Productions",
+                ReleaseDate = new(1997, 05, 31),
                 Description = """
-                **Blood** is a PC game released for MS-DOS on May 31, 1997. It was developed by **Monolith Productions** and published by **GT Interactive**.
+                    **Blood** is a PC game developed by **Monolith Productions** and published by **GT Interactive**.
 
-                The game became well-known for its copious amounts of violence and numerous stylistic and cultural references to literary and cinematic horror works.
-                It was also the first **Build engine** game to feature voxels and simulated room-over-room, which were both also seen in **Shadow Warrior** a few months later.
+                    The game became well-known for its copious amounts of violence and numerous stylistic and cultural references to literary and cinematic horror works.
+                    It was also the first **Build engine** game to feature voxels and simulated room-over-room, which were both also seen in **Shadow Warrior** a few months later.
 
-                The game's hero (or anti-hero) is a man named Caleb (voiced by Stephan Weyte), a merciless gunfighter born in Texas who serves a cult called "The Cabal" that worships the dark god Tchernobog
-                (voiced by Monolith CEO Jason Hall, who was credited simply as "The Voice"). Caleb joined the cult after meeting Ophelia Price, a woman whose homestead was burned down by the Cabal,
-                killing her husband and baby son. She blamed her spouse for their deaths, because he wanted to rescind his membership.
-                Half-crazy and rambling, Caleb nursed her back to health. It is implied that she later became Caleb's lover, and introduced him to the cult.
-                Together they rose to the highest ranks and became "The Chosen", the four most esteemed generals of Tchernobog's army (the other two being Ishmael and Gabriel).
-                """,
+                    The game's hero (or anti-hero) is a man named Caleb (voiced by Stephan Weyte), a merciless gunfighter born in Texas who serves a cult called "The Cabal" that worships the dark god Tchernobog
+                    (voiced by Monolith CEO Jason Hall, who was credited simply as "The Voice"). Caleb joined the cult after meeting Ophelia Price, a woman whose homestead was burned down by the Cabal,
+                    killing her husband and baby son. She blamed her spouse for their deaths, because he wanted to rescind his membership.
+                    Half-crazy and rambling, Caleb nursed her back to health. It is implied that she later became Caleb's lover, and introduced him to the cult.
+                    Together they rose to the highest ranks and became "The Chosen", the four most esteemed generals of Tchernobog's army (the other two being Ishmael and Gabriel).
+                    """,
                 SupportedGame = new(GameEnum.Blood),
                 RequiredFeatures = null,
                 PathToFile = null,
@@ -358,6 +365,7 @@ public sealed class OriginalCampaignsProvider
                 Title = "Cryptic Passage",
                 GridImageHash = BloodAddonEnum.BloodCP.GetUniqueHash(),
                 Author = "Sunstorm Interactive",
+                ReleaseDate = new(1997, 07, 7),
                 Description = """
                     **Cryptic Passage** (originally titled Passage to Transylvania) is the first of two expansion packs for Blood.
                     It contain a new episode with ten single-player maps, and four new BloodBath maps.
@@ -413,6 +421,7 @@ public sealed class OriginalCampaignsProvider
                 Title = "Shadow Warrior",
                 GridImageHash = GameEnum.Wang.GetUniqueHash(),
                 Author = "3D Realms",
+                ReleaseDate = new(1997, 09, 16),
                 Description = """
                     **Shadow Warrior** is a first-person shooter developed by **3D Realms** and released on May 13, 1997 by **GT Interactive**.
                     
@@ -462,13 +471,14 @@ public sealed class OriginalCampaignsProvider
                 Title = IsAftershock(fGame) ? "Ion Fury: Aftershock" : "Ion Fury",
                 GridImageHash = IsAftershock(fGame) ? "Aftershock".GetHashCode() : GameEnum.Fury.GetUniqueHash(),
                 Author = "Voidpoint, LLC",
+                ReleaseDate = new(2019, 08, 15),
                 Description = """
-                **Ion Fury** (originally titled Ion Maiden) is a 2019 cyberpunk first-person shooter developed by **Voidpoint** and published by **3D Realms**.
+                    **Ion Fury** (originally titled Ion Maiden) is a 2019 cyberpunk first-person shooter developed by **Voidpoint** and published by **3D Realms**.
 
-                It is a prequel to the 2016 video game Bombshell. Ion Fury runs on a modified version of Ken Silverman's Build engine and is the first original commercial game to utilize the engine in 20 years, the previous being World War II GI.
+                    It is a prequel to the 2016 video game Bombshell. Ion Fury runs on a modified version of Ken Silverman's Build engine and is the first original commercial game to utilize the engine in 20 years, the previous being World War II GI.
 
-                You assume the role of Shelly "Bombshell" Harrison, a bomb disposal expert aligned to the Global Defense Force. Dr. Jadus Heskel, a transhumanist cult leader, unleashes an army of cybernetically-enhanced soldiers on the futuristic dystopian city of Neo D.C., which Shelly is tasked with fighting through.
-                """,
+                    You assume the role of Shelly "Bombshell" Harrison, a bomb disposal expert aligned to the Global Defense Force. Dr. Jadus Heskel, a transhumanist cult leader, unleashes an army of cybernetically-enhanced soldiers on the futuristic dystopian city of Neo D.C., which Shelly is tasked with fighting through.
+                    """,
                 SupportedGame = new(GameEnum.Fury),
                 RequiredFeatures = null,
                 PathToFile = null,
@@ -526,9 +536,8 @@ public sealed class OriginalCampaignsProvider
 
         if (rGame.IsBaseGameInstalled)
         {
-            {
-                var redneckId = nameof(GameEnum.Redneck).ToLower();
-                AddonId version = new(redneckId, null);
+            {var redneckId = nameof(GameEnum.Redneck).ToLower();
+            AddonId version = new(redneckId, null);
 
                 campaigns.Add(version, new DukeCampaign()
                 {
@@ -537,15 +546,16 @@ public sealed class OriginalCampaignsProvider
                     Title = "Redneck Rampage",
                     GridImageHash = GameEnum.Redneck.GetUniqueHash(),
                     Author = "Xatrix Entertainment",
+                    ReleaseDate = new(1997, 04, 30),
                     Description = """
-                    **Redneck Rampage** is a 1997 first-person shooter game developed by **Xatrix Entertainment** and published by **Interplay**.
-                    The game is a first-person shooter with a variety of weapons and levels, and has a hillbilly theme, primarily taking place in a fictional Arkansas town.
-                    Many of the weapons and power-ups border on the nonsensical, and in some ways the game is a parody of both first-person shooter games and rural American life.
+                        **Redneck Rampage** is a 1997 first-person shooter game developed by **Xatrix Entertainment** and published by **Interplay**.
+                        The game is a first-person shooter with a variety of weapons and levels, and has a hillbilly theme, primarily taking place in a fictional Arkansas town.
+                        Many of the weapons and power-ups border on the nonsensical, and in some ways the game is a parody of both first-person shooter games and rural American life.
 
-                    The game's plot revolves around two brothers, Leonard and Bubba, fighting through the fictional town of Hickston, Arkansas to rescue their prized pig Bessie and thwart an alien invasion.
-                    The brothers battle through such locales as a meat packing plant and a trailer park, and battle evil clones of their neighbors. There are also male and female alien enemies.
-                    The bosses are the Assface and the leader of the alien invasion, the Queen Vixen.
-                    """,
+                        The game's plot revolves around two brothers, Leonard and Bubba, fighting through the fictional town of Hickston, Arkansas to rescue their prized pig Bessie and thwart an alien invasion.
+                        The brothers battle through such locales as a meat packing plant and a trailer park, and battle evil clones of their neighbors. There are also male and female alien enemies.
+                        The bosses are the Assface and the leader of the alien invasion, the Queen Vixen.
+                        """,
                     SupportedGame = new(GameEnum.Redneck),
                     RequiredFeatures = null,
                     PathToFile = null,
@@ -577,6 +587,7 @@ public sealed class OriginalCampaignsProvider
                     Title = "Route 66",
                     GridImageHash = RedneckAddonEnum.Route66.GetUniqueHash(),
                     Author = "Sunstorm Interactive",
+                    ReleaseDate = new(1998, 03, 13),
                     Description = """
                         **Redneck Rampage: Suckin' Grits on Route 66** is a 12-level expansion pack for Redneck Rampage. It was developed by Sunstorm Interactive and released on December 19, 1997.
                         The add-on contains several new locations and textures, as well as a new ending.
@@ -613,6 +624,7 @@ public sealed class OriginalCampaignsProvider
                 Title = "Rides Again",
                 GridImageHash = GameEnum.RidesAgain.GetUniqueHash(),
                 Author = "Xatrix Entertainment",
+                ReleaseDate = new(1998, 05, 15),
                 Description = """
                     **Redneck Rampage Rides Again** is a sequel to Redneck Rampage developed by **Xatrix Entertainment** and published by **Interplay Entertainment** for MS-DOS in 1998.
 
@@ -664,6 +676,7 @@ public sealed class OriginalCampaignsProvider
                 Title = "NAM",
                 GridImageHash = GameEnum.NAM.GetUniqueHash(),
                 Author = "TNT Team",
+                ReleaseDate = new(1998, 07, 31),
                 Description = """
                     You are Alan 'The Bear' Westmoreland, Marine Corps sergeant. The trouble starts on a deadly Viet Cong raid. Here the jungle is your battleground.
 
@@ -720,6 +733,7 @@ public sealed class OriginalCampaignsProvider
                 Title = "World War II GI",
                 GridImageHash = GameEnum.WW2GI.GetUniqueHash(),
                 Author = "TNT Team",
+                ReleaseDate = new(1999, 03, 15),
                 Description = """
                     **WWII GI** is the invasion of Normandy. The paranoia. The fear. the intensity that was D-Day. You will experience it first hand.
 
@@ -758,6 +772,7 @@ public sealed class OriginalCampaignsProvider
                 Title = "Platoon Leader",
                 GridImageHash = WW2GIAddonEnum.Platoon.GetUniqueHash(),
                 Author = "TNT Team",
+                ReleaseDate = null,
                 Description = """
                     **Platoon Leader** is an add-on for GT Interactive game WWII GI.
 
@@ -808,6 +823,7 @@ public sealed class OriginalCampaignsProvider
                 Title = "TekWar",
                 GridImageHash = GameEnum.TekWar.GetUniqueHash(),
                 Author = "Capstone Software",
+                ReleaseDate = new(1995, 10, 16),
                 Description = """
                     You're an ex-cop who was sentenced to cryo sleep. When you awake you are recruited by the Cosmos Detective Agency as a hitman. Why? Cause there's a dangerous new drug on the streets of New LA: Tek!
                     
@@ -858,6 +874,7 @@ public sealed class OriginalCampaignsProvider
                 Title = "Powerslave",
                 GridImageHash = GameEnum.Slave.GetUniqueHash(),
                 Author = "Lobotomy Software",
+                ReleaseDate = new(1996, 09, 19),
                 Description = """
                     **PowerSlave**, known as **Exhumed** in Europe and **1999 AD: Resurrection of the Pharaoh** in Japan, is a first-person shooter video game developed by **Lobotomy Software**
                     and published by **Playmates Interactive Entertainment** in North America, and **BMG Interactive** in Europe and Japan.
@@ -911,6 +928,7 @@ public sealed class OriginalCampaignsProvider
                 Title = "Witchaven",
                 GridImageHash = GameEnum.Witchaven.GetUniqueHash(),
                 Author = "Capstone Software",
+                ReleaseDate = new(1995, 09, 30),
                 Description = """
                     Descend into a dark and gruesome nightmare!
                     
@@ -946,6 +964,7 @@ public sealed class OriginalCampaignsProvider
                 Title = "Witchaven II",
                 GridImageHash = GameEnum.Witchaven2.GetUniqueHash(),
                 Author = "Capstone Software",
+                ReleaseDate = new(1996, 05, 6),
                 Description = """
                     The witches have been destroyed in their lair on the Island of Char!
                     

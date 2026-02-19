@@ -30,6 +30,7 @@ public sealed class NamCmdArgumentsTests
             Title = "NAM",
             GridImageHash = null,
             Author = null,
+            ReleaseDate = null,
             Description = null,
             SupportedGame = new(GameEnum.NAM),
             RequiredFeatures = null,
