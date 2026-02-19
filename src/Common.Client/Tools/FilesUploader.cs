@@ -92,7 +92,7 @@ public sealed class FilesUploader
             _ => throw new NotSupportedException(),
         };
 
-        var downloadUrl = $"{Consts.FilesRepo}/{gameName}/{folderName}/{Path.GetFileName(pathToFile)}";
+        var downloadUrl = $"{CommonConstants.S3Endpoint}/{CommonConstants.S3Bucket}/{CommonConstants.S3SubFolder}/{gameName}/{folderName}/{Path.GetFileName(pathToFile)}";
 
         using var httpClient = _httpClientFactory.CreateClient();
         using var response = await httpClient.GetAsync(downloadUrl, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false);
@@ -102,9 +102,8 @@ public sealed class FilesUploader
             return null;
         }
 
-        using var md5 = MD5.Create();
         await using var fileStream = File.OpenRead(pathToFile);
-        var hash = await md5.ComputeHashAsync(fileStream, CancellationToken.None).ConfigureAwait(false);
+        var hash = await SHA256.HashDataAsync(fileStream, CancellationToken.None).ConfigureAwait(false);
         var hashStr = Convert.ToHexString(hash);
 
         DownloadableAddonJsonModel downloadableAddon = new()
@@ -120,7 +119,8 @@ public sealed class FilesUploader
             FileSize = fileSize,
             Dependencies = manifest.Dependencies?.Addons?.Select(d => d.Id)?.ToList(),
             UpdateDate = DateTime.UtcNow,
-            MD5 = hashStr
+            MD5 = string.Empty,
+            Sha256 = hashStr
         };
 
         return downloadableAddon;

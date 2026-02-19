@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Security.Cryptography;
+using System.Text;
 using System.Text.Json;
 using Common.All.Helpers;
 using Common.All.Serializable.Downloadable;
@@ -44,7 +45,26 @@ public sealed class AddonsDatabaseTests
             {
                 var url = addon.DownloadUrl;
                 var size = addon.FileSize;
-                var md5 = addon.MD5;
+                var hash = addon.Sha256;
+
+                bool needToSkip = false;
+
+                if (string.IsNullOrWhiteSpace(hash))
+                {
+                    _ = sbFails.AppendLine($"[Error] File {url} doesn't have hash in the database.");
+                    needToSkip = true;
+                }
+
+                if (size < 1)
+                {
+                    _ = sbFails.AppendLine($"[Error] File {url} doesn't have size in the database.");
+                    needToSkip = true;
+                }
+
+                if (needToSkip)
+                {
+                    continue;
+                }
 
                 using var header = await httpClient.GetAsync(url, HttpCompletionOption.ResponseHeadersRead);
 
@@ -54,35 +74,53 @@ public sealed class AddonsDatabaseTests
                     continue;
                 }
 
-                if (header.Content.Headers.ContentLength != size)
+                if (header.Content.Headers.ContentLength is null)
                 {
-                    _ = sbFails.AppendLine($"[Error] File {url} size doesn't match. Expected {size} got {header.Content.Headers.ContentLength}");
+                    _ = sbFails.AppendLine($"[Error] File {url} doesn't have size in the header.");
+                }
+                else if (size != header.Content.Headers.ContentLength)
+                {
+                    _ = sbFails.AppendLine($"[Error] File {url} size doesn't match. Expected {size} got {header.Content.Headers.ContentLength}.");
                 }
 
-                if (md5 is null)
+                //hash of files from my storage
+                if (url.ToString().StartsWith(CommonConstants.S3Endpoint))
                 {
-                    _ = sbFails.AppendLine($"[Error] File {url} doesn't have MD5 in the database.");
-                }
+                    var actualHash = header.Headers
+                        .FirstOrDefault(x => x.Key.Equals("x-amz-meta-checksum-sha256"))
+                        .Value
+                        ?.FirstOrDefault();
 
-                if (header.Headers.ETag?.Tag is null)
-                {
-                    _ = sbFails.AppendLine($"[Error] File {url} doesn't have ETag.");
-                }
-                else
-                {
-                    var md5e = header.Headers.ETag.Tag.Replace("\"", "");
-
-                    if (md5e.Contains('-'))
+                    if (actualHash is null)
                     {
-                        _ = sbFails.AppendLine($"[Error] File {url} has incorrect ETag.");
-                    }
-                    else if (!md5e.Equals(md5, StringComparison.OrdinalIgnoreCase))
-                    {
-                        _ = sbFails.AppendLine($"[Error] File {url} has wrong MD5.");
+                        _ = sbFails.AppendLine($"[Error] File {url} doesn't have Hash.");
                     }
                     else
                     {
-                        _ = sbSuccesses.AppendLine($"[Info] File's {url} MD5 matches: {md5}.");
+                        if (!actualHash.Equals(hash, StringComparison.OrdinalIgnoreCase))
+                        {
+                            _ = sbFails.AppendLine($"[Error] File {url} has wrong Hash.");
+                        }
+                        else
+                        {
+                            _ = sbSuccesses.AppendLine($"[Info] File's {url} Hash matches: {hash}.");
+                        }
+                    }
+                }
+                else
+                {
+                    await using var stream = await httpClient.GetStreamAsync(url).ConfigureAwait(false);
+
+                    var actualHash = await SHA256.HashDataAsync(stream);
+                    var actualHashStr = Convert.ToHexString(actualHash);
+
+                    if (!actualHashStr.Equals(hash, StringComparison.OrdinalIgnoreCase))
+                    {
+                        _ = sbFails.AppendLine($"[Error] File {url} has wrong Sha256.");
+                    }
+                    else
+                    {
+                        _ = sbSuccesses.AppendLine($"[Info] File's {url} Sha256 matches: {hash}.");
                     }
                 }
             }
@@ -122,19 +160,16 @@ public sealed class AddonsDatabaseTests
         Assert.NotNull(access);
         Assert.NotNull(secret);
 
-        var split = Consts.FilesRepo.Split("/");
-        var endpoint = split[^2];
-        var bucket = split[^1];
-
         using var minioClient = new MinioClient();
         using var iMinioClient = minioClient
-            .WithEndpoint(endpoint)
+            .WithEndpoint(CommonConstants.S3Endpoint)
             .WithCredentials(access, secret)
             .WithSSL(false)
             .Build();
 
         var args = new ListObjectsArgs()
-            .WithBucket(bucket)
+            .WithBucket(CommonConstants.S3Bucket)
+            .WithPrefix(CommonConstants.S3SubFolder + '/')
             .WithRecursive(true);
 
         var filesInBucket = new List<string>();
@@ -146,12 +181,12 @@ public sealed class AddonsDatabaseTests
                 continue;
             }
 
-            if (item.Key.EndsWith("s3browser-sync-metadata", StringComparison.OrdinalIgnoreCase))
+            if (item.Key.Contains("metadata", StringComparison.OrdinalIgnoreCase))
             {
                 continue;
             }
 
-            filesInBucket.Add(Consts.FilesRepo + "/" + item.Key);
+            filesInBucket.Add($"{CommonConstants.S3Endpoint}/{CommonConstants.S3Bucket}/{item.Key}");
         }
 
         var loose = filesInBucket.Except(addonsUrls);
@@ -165,5 +200,36 @@ public sealed class AddonsDatabaseTests
 
         _output.WriteLine(sb.ToString());
         Assert.True(sb.Length < 1);
+    }
+
+
+    [Fact, Trait("Category", "Database")]
+    public async Task UploadFixTest()
+    {
+        //if (!OperatingSystem.IsWindows())
+        //{
+        //    return;
+        //}
+
+        //ClientProperties.IsOfflineMode = true;
+
+        //using HttpClient httpClient = new();
+        //var logger = new Mock<ILogger>().Object;
+        //var httpClientFactory = new Mock<IHttpClientFactory>();
+        //httpClientFactory.Setup(x => x.CreateClient()).Returns(httpClient);
+        //ProgressReport progressReport = new();
+        //OfflineApiInterface api = new(logger);
+        //FilesUploader uploader = new(api, httpClientFactory.Object);
+
+        //await uploader.UploadFilesAsync("test", [Path.Combine("resources", "test_fix.zip")], CancellationToken.None);
+
+        //var url = $"{CommonConstants.S3Endpoint}/{CommonConstants.S3Bucket}/uploads/{CommonConstants.S3Folder}/test/test_fix.zip";
+
+        //using var resp = await httpClient.GetAsync(url, HttpCompletionOption.ResponseHeadersRead);
+
+        //Assert.True(resp.IsSuccessStatusCode);
+
+        //var timespan = DateTime.Now - resp.Content.Headers.LastModified;
+        //Assert.True(timespan < TimeSpan.FromSeconds(5));
     }
 }

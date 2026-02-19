@@ -212,9 +212,9 @@ public sealed class DownloadableAddonsProvider
                 return false;
             }
 
-            var doesMd5Match = await CheckFileMD5Async(pathToFile, addon.MD5, cancellationToken).ConfigureAwait(false);
+            var doesHashMatch = await CheckFileHashAsync(pathToFile, addon.Sha256, cancellationToken).ConfigureAwait(false);
 
-            if (!doesMd5Match)
+            if (!doesHashMatch)
             {
                 if (File.Exists(pathToFile))
                 {
@@ -250,26 +250,23 @@ public sealed class DownloadableAddonsProvider
 
 
     /// <summary>
-    /// Check MD5 of the local file
+    /// Check hash of the local file
     /// </summary>
     /// <param name="filePath">Full path to the file</param>
-    /// <param name="fixMD5">MD5 that the file's hash will be compared to</param>
+    /// <param name="expectedHash">Hash that the file's hash will be compared to</param>
     /// <param name="cancellationToken">Cancellation token</param>
     /// <returns>true if check is passed</returns>
-    private static async Task<bool> CheckFileMD5Async(
+    private static async Task<bool> CheckFileHashAsync(
         string filePath,
-        string fixMD5,
+        string expectedHash,
         CancellationToken cancellationToken
         )
     {
-        using var md5 = MD5.Create();
-
         await using var stream = File.OpenRead(filePath);
+        var actualHash = await SHA256.HashDataAsync(stream, cancellationToken);
+        var actualHashStr = Convert.ToHexString(actualHash);
 
-        var hash = await md5.ComputeHashAsync(stream, cancellationToken).ConfigureAwait(false);
-        var hashStr = Convert.ToHexString(hash);
-
-        return fixMD5.Equals(hashStr, StringComparison.OrdinalIgnoreCase);
+        return expectedHash.Equals(actualHashStr, StringComparison.OrdinalIgnoreCase);
     }
 
     private void OnProgressChanged(object? sender, float e)

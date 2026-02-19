@@ -1,9 +1,12 @@
 ﻿using System.Text.Json;
+using System.Xml.Linq;
 using Common.All.Enums;
+using Common.All.Serializable;
 using Common.All.Serializable.Downloadable;
 using Common.Client.Helpers;
 using Common.Client.Interfaces;
 using Microsoft.Extensions.Logging;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Common.Client.Api;
 
@@ -124,7 +127,15 @@ public sealed class OfflineApiInterface : IApiInterface
         return Task.FromResult(true);
     }
 
-    public Task<string?> GetUploadFolder() => Task.FromResult<string?>(null);
+    public async Task<string?> GetUploadFolderAsync()
+    {
+        var dataJson = await File.ReadAllTextAsync(Path.Combine("..", "..", "..", "..", "db", "data.json"));
+        var data = JsonSerializer.Deserialize(dataJson, DataJsonModelContext.Default.DictionaryStringString);
+
+        _ = data!.TryGetValue(DataJson.UploadFolder, out var uploadFolder) ? uploadFolder : null;
+
+        return uploadFolder;
+    }
 
 
     #region Not Implemented

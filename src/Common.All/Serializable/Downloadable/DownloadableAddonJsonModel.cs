@@ -52,7 +52,11 @@ public sealed class DownloadableAddonJsonModel
     public DateTime UpdateDate { get; set; }
 
     [JsonPropertyName("MD5")]
+    [Obsolete]
     public string MD5 { get; set; } = string.Empty;
+
+    [JsonPropertyName("Sha256")]
+    public string Sha256 { get; set; } = string.Empty;
 
 
     [JsonIgnore]

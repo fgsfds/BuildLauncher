@@ -478,7 +478,7 @@ public sealed partial class DevViewModel : ObservableObject
             SetResultMessage("Uploading file. Please wait.", false);
             IsInProgress = true;
 
-            var uploadFolder = await _apiInterface.GetUploadFolder().ConfigureAwait(true);
+            var uploadFolder = await _apiInterface.GetUploadFolderAsync().ConfigureAwait(true);
             var uploadUrl = uploadFolder + "/" + Guid.NewGuid() + "/" + Path.GetFileName(pathToArchive);
 
             await using var fileStream = File.OpenRead(pathToArchive);

@@ -49,7 +49,7 @@ public sealed class GitHubApiInterface : IApiInterface
             if (_addonsJson is null)
             {
                 using var httpClient = _httpClientFactory.CreateClient(HttpClientEnum.GitHub.GetDescription());
-                using var response = await httpClient.GetAsync(Consts.AddonsJsonUrl, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false);
+                using var response = await httpClient.GetAsync(CommonConstants.AddonsJsonUrl, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false);
                 _ = response.EnsureSuccessStatusCode();
 
                 var addons = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
@@ -172,7 +172,7 @@ public sealed class GitHubApiInterface : IApiInterface
         return Task.FromResult(true);
     }
 
-    public async Task<string?> GetUploadFolder()
+    public async Task<string?> GetUploadFolderAsync()
     {
         await _semaphore.WaitAsync().ConfigureAwait(false);
 
@@ -180,7 +180,7 @@ public sealed class GitHubApiInterface : IApiInterface
         {
             if (_data is null)
             {
-                await InitData().ConfigureAwait(false);
+                await InitDataAsync().ConfigureAwait(false);
             }
 
             return _data!.TryGetValue(DataJson.UploadFolder, out var uploadFolder) ? uploadFolder : null;
@@ -197,10 +197,10 @@ public sealed class GitHubApiInterface : IApiInterface
     }
 
 
-    private async Task InitData()
+    private async Task InitDataAsync()
     {
         using var httpClient = _httpClientFactory.CreateClient(HttpClientEnum.GitHub.GetDescription());
-        using var response = await httpClient.GetAsync(Consts.DataJsonUrl, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false);
+        using var response = await httpClient.GetAsync(CommonConstants.DataJsonUrl, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false);
         _ = response.EnsureSuccessStatusCode();
 
         var data = await response.Content.ReadAsStringAsync().ConfigureAwait(false);

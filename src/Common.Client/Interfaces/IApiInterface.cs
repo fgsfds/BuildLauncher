@@ -13,6 +13,6 @@ public interface IApiInterface
     Task<GeneralReleaseJsonModel?> GetLatestToolReleaseAsync(ToolEnum toolEnum);
     Task<Dictionary<string, decimal>?> GetRatingsAsync();
     Task<string?> GetSignedUrlAsync(string path);
-    Task<string?> GetUploadFolder();
+    Task<string?> GetUploadFolderAsync();
     Task<bool> IncreaseNumberOfInstallsAsync(string addonId);
 }

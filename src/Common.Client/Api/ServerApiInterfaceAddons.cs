@@ -162,5 +162,5 @@ public sealed partial class ServerApiInterface : IApiInterface
         }
     }
 
-    public Task<string?> GetUploadFolder() => throw new NotImplementedException();
+    public Task<string?> GetUploadFolderAsync() => throw new NotImplementedException();
 }

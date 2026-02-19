@@ -1,11 +1,12 @@
 ﻿namespace Common.All.Helpers;
 
-public static class Consts
+public static class CommonConstants
 {
-    /// <summary>
-    /// Path to the files repository
-    /// </summary>
-    public const string FilesRepo = $"https://s3.firstvds.ru/buildlauncher";
+    public const string S3Endpoint = "https://s3-nl.hostkey.com";
+
+    public const string S3Bucket = "b8743306-fgsfds";
+
+    public const string S3SubFolder = "buildlauncher";
 
     /// <summary>
     /// GirtHub releases Url
