@@ -384,9 +384,9 @@ public sealed partial class DevViewModel : ObservableObject
         {
             var result = await _filesUploader.AddAddonToDatabaseAsync(file.Path.LocalPath).ConfigureAwait(true);
 
-            if (!result)
+            if (!result.IsSuccess)
             {
-                _ = errors.AppendLine($"Error while adding {file}");
+                _ = errors.AppendLine($"Error while adding {file.Path.AbsolutePath}: {result.Message}");
             }
         }
 

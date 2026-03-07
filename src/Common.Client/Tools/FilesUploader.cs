@@ -31,18 +31,18 @@ public sealed class FilesUploader
     }
 
 
-    public async Task<bool> AddAddonToDatabaseAsync(string pathToFile)
+    public async Task<Result<bool>> AddAddonToDatabaseAsync(string pathToFile)
     {
         var downloadAddonEntity = await GetDownloadableAddonDtoAsync(pathToFile).ConfigureAwait(false);
 
-        if (downloadAddonEntity is null)
+        if (!downloadAddonEntity.IsSuccess)
         {
-            return false;
+            return new(downloadAddonEntity.ResultEnum, false, downloadAddonEntity.Message);
         }
 
-        var result = await _apiInterface.AddAddonToDatabaseAsync(downloadAddonEntity).ConfigureAwait(false);
+        var result = await _apiInterface.AddAddonToDatabaseAsync(downloadAddonEntity.ResultObject).ConfigureAwait(false);
 
-        return result;
+        return new(downloadAddonEntity.ResultEnum, true, downloadAddonEntity.Message);
     }
 
 
@@ -129,14 +129,14 @@ public sealed class FilesUploader
     }
 
 
-    private async Task<DownloadableAddonJsonModel?> GetDownloadableAddonDtoAsync(string pathToFile)
+    private async Task<Result<DownloadableAddonJsonModel?>> GetDownloadableAddonDtoAsync(string pathToFile)
     {
         using var archive = ZipArchive.OpenArchive(pathToFile);
         var addonJson = archive.Entries.FirstOrDefault(static x => x.Key.Equals("addon.json", StringComparison.OrdinalIgnoreCase));
 
         if (addonJson is null)
         {
-            return null;
+            return new(ResultEnum.NotFound, null, "Can't find addon info in the provided archive.");
         }
 
         await using var stream = addonJson.OpenEntryStream();
@@ -146,13 +146,13 @@ public sealed class FilesUploader
             AddonManifestContext.Default.AddonJsonModel
             );
 
-        FileInfo fileInfo = new(pathToFile);
-        var fileSize = fileInfo.Length;
-
         if (manifest is null)
         {
-            return null;
+            return new(ResultEnum.Error, null, "Error while deserializing addon.json.");
         }
+
+        FileInfo fileInfo = new(pathToFile);
+        var fileSize = fileInfo.Length;
 
         var folderName = manifest.AddonType switch
         {
@@ -188,7 +188,7 @@ public sealed class FilesUploader
 
         if (!response.IsSuccessStatusCode)
         {
-            return null;
+            return new(ResultEnum.Error, null, $"File {downloadUrl} doesn't exist.");
         }
 
         await using var fileStream = File.OpenRead(pathToFile);
@@ -212,6 +212,6 @@ public sealed class FilesUploader
             Sha256 = hashStr
         };
 
-        return downloadableAddon;
+        return new(ResultEnum.Success, downloadableAddon, string.Empty);
     }
 }
