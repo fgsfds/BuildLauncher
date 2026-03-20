@@ -2825,6 +2825,20 @@
       "UpdateDate": "2026-02-02T16:11:02.2715066Z",
       "MD5": "2398EA71BE9BE948ADD8BAB2DC162842",
       "Sha256": "91D99C8693C1A7223FB9785CD263336E334FDFEEC2F6F71CA34D1067BEA5364D"
+    },
+    {
+      "Id": "blood-death-wish",
+      "AddonType": "TC",
+      "Game": "Blood",
+      "DownloadUrl": "https://s3-nl.hostkey.com/b8743306-fgsfds/buildlauncher/Blood/Campaigns/blood-death-wish_v2_0.zip",
+      "Title": "Death Wish",
+      "Version": "2.0",
+      "FileSize": 316072603,
+      "Description": "https://www.moddb.com/mods/death-wish-for-blood\r\n\r\nCaleb will need to muster all his strength to take down the mighty Tchernobog, who has managed to free himself from the grip of death.\r\n\r\nDeath Wish is a campaign for Blood with over 30 new levels, cut scenes, and more. All levels have been adapted so that Co-op play is not only possible, but enhanced with a helpful checkpoint system. The campaign includes several secret levels which all connect back to their episodes through special transitional missions.\r\n\r\nThe entire mod was developed by a single mapper, Bloatoid, who has been editing with the Build engine for many years. The original Death Wish was created between January 2010 and October 2011. Updates have been made over the years based on feedback from players and observing online streamers, as well as the addition of several extra secret levels.\r\n\r\nLet the festival of Blood continue!",
+      "Author": "Bloatoid",
+      "UpdateDate": "2026-03-20T10:07:24.6041423Z",
+      "MD5": "050EB91D7B63D79197BCACBBDE00CD83",
+      "Sha256": "02E5B4FF46D011C7516607CB28F6270B19659DBFF27BE9EF0FA06AF0E8BE7436"
     }
   ],
   "Wang": [
