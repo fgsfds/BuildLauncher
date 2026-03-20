@@ -269,11 +269,6 @@ public sealed partial class PortsViewModel : ObservableObject
 
     private void OnPortChanged(PortEnum portEnum)
     {
-        var isUpdateAvailable = PortsList.Find(x => x.Port.PortEnum == portEnum)?.IsUpdateAvailable ?? false;
-
-        if (!HasUpdates && isUpdateAvailable)
-        {
-            HasUpdates = true;
-        }
+        HasUpdates = PortsList.Any(static x => x.IsUpdateAvailable);
     }
 }
