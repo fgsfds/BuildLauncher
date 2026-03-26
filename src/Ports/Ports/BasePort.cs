@@ -280,6 +280,11 @@ public abstract class BasePort : IInstallable
                 {
                     _ = sb.Append($@" {AddDefParam}""{option.Key}""");
                 }
+                if (option.Value is OptionalParameterTypeEnum.INI
+                    && game is BloodGame blood)
+                {
+                    _ = sb.Append($@" -ini ""{option.Key}""");
+                }
                 else
                 {
                     throw new ArgumentOutOfRangeException(nameof(option.Value));

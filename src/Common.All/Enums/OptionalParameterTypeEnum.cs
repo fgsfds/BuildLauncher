@@ -2,5 +2,6 @@
 
 public enum OptionalParameterTypeEnum
 {
-    DEF
+    DEF,
+    INI
 }
