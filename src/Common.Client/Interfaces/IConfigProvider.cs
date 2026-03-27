@@ -25,6 +25,7 @@ public interface IConfigProvider
     string? PathTekWar { get; set; }
     string? ApiPassword { get; set; }
     string? GitHubToken { get; set; }
+    string? S3SecretKey { get; set; }
     Dictionary<string, TimeSpan> Playtimes { get; }
     Dictionary<string, byte> Rating { get; }
     bool SkipIntro { get; set; }

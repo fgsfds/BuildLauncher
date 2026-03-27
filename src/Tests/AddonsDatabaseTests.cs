@@ -222,7 +222,7 @@ public sealed class AddonsDatabaseTests
         OfflineApiInterface api = new(logger.Object);
         FilesUploader uploader = new(api, httpFactory.Object, logger.Object);
 
-        await uploader.UploadFilesAsync("test", [Path.Combine("Files", "TEST.MAP")], new(), CancellationToken.None);
+        await uploader.UploadFileToUploadsFolderAsync("test", Path.Combine("Files", "TEST.MAP"), new(), CancellationToken.None);
 
         var url = $"{CommonConstants.S3Endpoint}/{CommonConstants.S3Bucket}/uploads/{CommonConstants.S3SubFolder}/test/TEST.MAP";
 

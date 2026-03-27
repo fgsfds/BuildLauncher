@@ -37,6 +37,8 @@ public sealed partial class SettingsViewModel : ObservableObject
 
     public bool IsDarkTheme => _config.Theme is ThemeEnum.Dark;
 
+    public bool IsDeveloperMode => ClientProperties.IsDeveloperMode;
+
 
     public string? PathToBlood
     {
@@ -126,6 +128,12 @@ public sealed partial class SettingsViewModel : ObservableObject
     {
         get => _config.GitHubToken;
         set => _config.GitHubToken = value;
+    }
+
+    public string? S3SecretKey
+    {
+        get => _config.S3SecretKey;
+        set => _config.S3SecretKey = value;
     }
 
     /// <summary>

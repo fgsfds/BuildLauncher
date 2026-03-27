@@ -9,4 +9,7 @@ public enum HttpClientEnum
 
     [Description("Upload")]
     Upload,
+
+    [Description("AuthUpload")]
+    AuthUpload,
 }

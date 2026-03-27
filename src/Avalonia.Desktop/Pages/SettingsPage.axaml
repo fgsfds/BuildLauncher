@@ -50,7 +50,7 @@
 
             </Grid>
 
-            <Grid ColumnDefinitions="auto,*,auto,auto,auto" RowDefinitions="auto,auto,auto,auto,auto,auto,auto,auto,auto,auto,auto,auto,auto,auto,auto,auto,auto,auto,auto,auto">
+            <Grid ColumnDefinitions="auto,*,auto,auto,auto" RowDefinitions="auto,auto,auto,auto,auto,auto,auto,auto,auto,auto,auto,auto,auto,auto,auto,auto,auto,auto,auto,auto,auto,auto">
 
                 <!--Path to Duke 3D-->
                 <TextBlock Grid.Row="0" Grid.Column="0"
@@ -475,7 +475,20 @@
                                          "/>
 
 
-                <Button Grid.Row="18"  Grid.Column="0"
+                <!--GitHub token-->
+                <TextBlock Grid.Row="18" Grid.Column="0"
+                           Text="S3 Secret key:"
+                           IsVisible="{Binding IsDeveloperMode}"
+                           VerticalAlignment="Center"
+                           Margin="10,5"/>
+
+                <TextBox Grid.Row="18"  Grid.Column="1" Grid.ColumnSpan="3"
+                         IsVisible="{Binding IsDeveloperMode}"
+                         Text="{Binding S3SecretKey}"
+                         Margin="0,3,10,3"/>
+
+
+                <Button Grid.Row="20"  Grid.Column="0"
                         VerticalAlignment="Center"
                         Command="{Binding OpenLogCommand}"
                         Margin="10">

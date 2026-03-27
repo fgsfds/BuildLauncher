@@ -1,4 +1,5 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System.Net;
+using System.Runtime.CompilerServices;
 using System.Security.Cryptography;
 using System.Text.Json;
 using Common.All;
@@ -31,9 +32,29 @@ public sealed class FilesUploader
     }
 
 
-    public async Task<Result<bool>> AddAddonToDatabaseAsync(string pathToFile)
+    /// <summary>
+    /// Uploads addon to a corresponding folder and adds it to the database.
+    /// </summary>
+    /// <param name="pathToFile">Path to file</param>
+    /// <param name="progress">Uploading progress</param>
+    /// <param name="cancellationToken">Cancellation token</param>
+    public async Task<Result<bool>> UploadAddonAndAddToDbAsync(
+        string pathToFile,
+        StrongBox<int> progress,
+        CancellationToken cancellationToken
+        )
     {
-        var downloadAddonEntity = await GetDownloadableAddonDtoAsync(pathToFile).ConfigureAwait(false);
+        var manifest = await GetManifest(pathToFile);
+        var path = GetUrl(manifest.ResultObject, pathToFile);
+
+        var uploadResult = await UploadAddonAsync(path, pathToFile, progress, cancellationToken).ConfigureAwait(false);
+
+        if (!uploadResult.IsSuccess)
+        {
+            return new(uploadResult.ResultEnum, false, uploadResult.Message);
+        }
+
+        var downloadAddonEntity = await GetDownloadableAddonDtoAsync(path, pathToFile, manifest.ResultObject).ConfigureAwait(false);
 
         if (!downloadAddonEntity.IsSuccess)
         {
@@ -42,64 +63,61 @@ public sealed class FilesUploader
 
         var result = await _apiInterface.AddAddonToDatabaseAsync(downloadAddonEntity.ResultObject).ConfigureAwait(false);
 
-        return new(downloadAddonEntity.ResultEnum, true, downloadAddonEntity.Message);
+        return new(result ? ResultEnum.Success : ResultEnum.Error, true, "Error while adding addon to the database.");
     }
 
 
     /// <summary>
-    /// Upload multiple files to S3
+    /// Uploads file to the Upload folder.
     /// </summary>
-    /// <param name="folder">Destination folder in the bucket</param>
-    /// <param name="files">List of paths to files</param>
+    /// <param name="subfolderName">Destination folder in the bucket</param>
+    /// <param name="pathToFile">Path to file</param>
+    /// <param name="progress">Uploading progress</param>
     /// <param name="cancellationToken">Cancellation token</param>
-    /// <param name="remoteFileName">File name on the s3 server</param>
-    /// <returns>True if successfully uploaded</returns>
-    public async Task<Result> UploadFilesAsync(
-        string folder,
-        List<string> files,
+    public async Task<Result> UploadFileToUploadsFolderAsync(
+        string subfolderName,
+        string pathToFile,
         StrongBox<int> progress,
-        CancellationToken cancellationToken,
-        string? remoteFileName = null
+        CancellationToken cancellationToken
         )
     {
-        _logger.LogInformation($"Uploading {files.Count} file(s)");
+        _logger.LogInformation($"Uploading file");
 
         try
         {
-            foreach (var file in files)
+            var signedUrl = await _apiInterface.GetSignedUrlAsync(Path.Combine(subfolderName, pathToFile)).ConfigureAwait(false);
+
+            if (!signedUrl.IsSuccess)
             {
-                var fileName = remoteFileName ?? Path.GetFileName(file);
-                var signedUrl = await _apiInterface.GetSignedUrlAsync(Path.Combine(folder, fileName)).ConfigureAwait(false);
+                return new(signedUrl.ResultEnum, signedUrl.Message);
+            }
 
-                if (!signedUrl.IsSuccess)
-                {
-                    return new(signedUrl.ResultEnum, signedUrl.Message);
-                }
+            await using var fileStream = File.OpenRead(pathToFile);
+            using StreamContent content = new(fileStream);
 
-                await using var fileStream = File.OpenRead(file);
-                using StreamContent content = new(fileStream);
+            _ = Task.Run(() => { TrackProgress(fileStream, progress); }, cancellationToken);
 
-                _ = Task.Run(() => { TrackProgress(fileStream, progress); });
+            using var httpClient = _httpClientFactory.CreateClient(HttpClientEnum.Upload.GetDescription());
+            using var response = await httpClient.PutAsync(signedUrl.ResultObject, content, cancellationToken).ConfigureAwait(false);
 
-                using var httpClient = _httpClientFactory.CreateClient(HttpClientEnum.Upload.GetDescription());
+            if (response.StatusCode is System.Net.HttpStatusCode.PreconditionFailed)
+            {
+                return new(ResultEnum.Error, "Wrong secret key.");
+            }
+            if (!response.IsSuccessStatusCode)
+            {
+                var errorMessage = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
+                return new(ResultEnum.Error, errorMessage);
+            }
 
-                using var response = await httpClient.PutAsync(signedUrl.ResultObject, content, cancellationToken).ConfigureAwait(false);
+            using var check = await httpClient.GetAsync(signedUrl.ResultObject, HttpCompletionOption.ResponseHeadersRead, CancellationToken.None).ConfigureAwait(false);
 
-                if (!response.IsSuccessStatusCode)
-                {
-                    var errorMessage = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                    return new(ResultEnum.Error, errorMessage);
-                }
+            FileInfo fileSize = new(pathToFile);
 
-                using var check = await httpClient.GetAsync(signedUrl.ResultObject, HttpCompletionOption.ResponseHeadersRead, CancellationToken.None).ConfigureAwait(false);
-
-                FileInfo fileSize = new(file);
-
-                if (!check.IsSuccessStatusCode ||
-                    check.Content.Headers.ContentLength != fileSize.Length)
-                {
-                    return new(ResultEnum.Error, "Error while uploading file.");
-                }
+            if (!check.IsSuccessStatusCode ||
+                check.Content.Headers.ContentLength != fileSize.Length)
+            {
+                return new(ResultEnum.Error, "Error while uploading file.");
             }
         }
         catch (TaskCanceledException)
@@ -114,22 +132,66 @@ public sealed class FilesUploader
         }
 
         return new(ResultEnum.Success, string.Empty);
-
-
-        static void TrackProgress(FileStream streamToTrack, StrongBox<int> progress)
-        {
-            while (streamToTrack.CanSeek)
-            {
-                var pos = streamToTrack.Position / (float)streamToTrack.Length * 100;
-                progress.Value = (int)pos;
-
-                Thread.Sleep(50);
-            }
-        }
     }
 
 
-    private async Task<Result<DownloadableAddonJsonModel?>> GetDownloadableAddonDtoAsync(string pathToFile)
+    /// <summary>
+    /// Upload multiple files to S3
+    /// </summary>
+    /// <param name="folder">Destination folder in the bucket</param>
+    /// <param name="file">List of paths to files</param>
+    /// <param name="progress">Uploading progress</param>
+    /// <param name="cancellationToken">Cancellation token</param>
+    /// <returns>True if successfully uploaded</returns>
+    private async Task<Result> UploadAddonAsync(
+        string folder,
+        string file,
+        StrongBox<int> progress,
+        CancellationToken cancellationToken
+        )
+    {
+        _logger.LogInformation($"Uploading file");
+
+        try
+        {
+            await using var fileStream = File.OpenRead(file);
+            using StreamContent content = new(fileStream);
+
+            _ = Task.Run(() => { TrackProgress(fileStream, progress); }, cancellationToken);
+
+            using var httpClient = _httpClientFactory.CreateClient(HttpClientEnum.AuthUpload.GetDescription());
+            using var response = await httpClient.PutAsync(folder, content, cancellationToken).ConfigureAwait(false);
+
+            if (response.StatusCode is HttpStatusCode.PreconditionFailed)
+            {
+                return new(ResultEnum.Error, "File already exists.");
+            }
+            else if (response.StatusCode is HttpStatusCode.Forbidden)
+            {
+                return new(ResultEnum.Error, "Wrong secret key.");
+            }
+            else if (!response.IsSuccessStatusCode)
+            {
+                var errorMessage = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
+                return new(ResultEnum.Error, errorMessage);
+            }
+        }
+        catch (TaskCanceledException)
+        {
+            _logger.LogInformation("Uploading cancelled");
+            return new(ResultEnum.Error, "Uploading cancelled");
+        }
+        catch (Exception ex)
+        {
+            _logger.LogCritical(ex, "Error while uploading fix");
+            return new(ResultEnum.Error, ex.Message);
+        }
+
+        return new(ResultEnum.Success, string.Empty);
+    }
+
+
+    private async Task<Result<AddonJsonModel?>> GetManifest(string pathToFile)
     {
         using var archive = ZipArchive.OpenArchive(pathToFile);
         var addonJson = archive.Entries.FirstOrDefault(static x => x.Key.Equals("addon.json", StringComparison.OrdinalIgnoreCase));
@@ -151,9 +213,12 @@ public sealed class FilesUploader
             return new(ResultEnum.Error, null, "Error while deserializing addon.json.");
         }
 
-        FileInfo fileInfo = new(pathToFile);
-        var fileSize = fileInfo.Length;
+        return new(ResultEnum.Success, manifest, string.Empty);
+    }
 
+
+    private string GetUrl(AddonJsonModel manifest, string pathToFile)
+    {
         var folderName = manifest.AddonType switch
         {
             AddonTypeEnum.TC => "Campaigns",
@@ -182,7 +247,15 @@ public sealed class FilesUploader
         };
 
         var downloadUrl = $"{CommonConstants.S3Endpoint}/{CommonConstants.S3Bucket}/{CommonConstants.S3SubFolder}/{gameName}/{folderName}/{Path.GetFileName(pathToFile)}";
+        return downloadUrl;
+    }
 
+
+    private async Task<Result<DownloadableAddonJsonModel?>> GetDownloadableAddonDtoAsync(string downloadUrl, string pathToFile, AddonJsonModel manifest)
+    {       
+        FileInfo fileInfo = new(pathToFile);
+        var fileSize = fileInfo.Length;
+        
         using var httpClient = _httpClientFactory.CreateClient();
         using var response = await httpClient.GetAsync(downloadUrl, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false);
 
@@ -213,5 +286,17 @@ public sealed class FilesUploader
         };
 
         return new(ResultEnum.Success, downloadableAddon, string.Empty);
+    }
+
+
+    private static void TrackProgress(FileStream streamToTrack, StrongBox<int> progress)
+    {
+        while (streamToTrack.CanSeek)
+        {
+            var pos = streamToTrack.Position / (float)streamToTrack.Length * 100;
+            progress.Value = (int)pos;
+
+            Thread.Sleep(50);
+        }
     }
 }

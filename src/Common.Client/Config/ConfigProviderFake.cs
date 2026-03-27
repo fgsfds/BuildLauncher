@@ -24,6 +24,7 @@ public sealed class ConfigProviderFake : IConfigProvider
     public string? PathWitchaven2 { get; set; } = null;
     public string? PathTekWar { get; set; } = null;
     public string? GitHubToken { get; set; } = null;
+    public string? S3SecretKey { get; set; } = null;
     public Dictionary<string, byte> Rating { get; set; } = [];
 
     public Dictionary<string, TimeSpan> Playtimes => [];

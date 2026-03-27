@@ -69,6 +69,7 @@ public static class ClientBindings
                 .ConfigureHttpClient((serviceProvider, client) =>
                 {
                     var config = serviceProvider.GetRequiredService<IConfigProvider>();
+
                     client.DefaultRequestHeaders.Add("User-Agent", "BuildLauncher");
                     client.Timeout = TimeSpan.FromSeconds(30);
                     if (!string.IsNullOrWhiteSpace(config.GitHubToken))
@@ -82,6 +83,18 @@ public static class ClientBindings
                 .ConfigureHttpClient((serviceProvider, client) =>
                 {
                     client.DefaultRequestHeaders.Add("User-Agent", "BuildLauncher");
+                    client.Timeout = Timeout.InfiniteTimeSpan;
+                })
+                .RemoveAllLoggers();
+
+            _ = container.AddHttpClient(HttpClientEnum.AuthUpload.GetDescription())
+                .ConfigureHttpClient((serviceProvider, client) =>
+                {
+                    var config = serviceProvider.GetRequiredService<IConfigProvider>();
+
+                    client.DefaultRequestHeaders.Add("User-Agent", "BuildLauncher");
+                    client.DefaultRequestHeaders.IfNoneMatch.Add(EntityTagHeaderValue.Any);
+                    client.DefaultRequestHeaders.Referrer = new(config.S3SecretKey, UriKind.RelativeOrAbsolute);
                     client.Timeout = Timeout.InfiniteTimeSpan;
                 })
                 .RemoveAllLoggers();

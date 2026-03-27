@@ -380,25 +380,47 @@ public sealed partial class DevViewModel : ObservableObject
 
         StringBuilder errors = new();
 
-        foreach (var file in files)
+        try
         {
-            var result = await _filesUploader.AddAddonToDatabaseAsync(file.Path.LocalPath).ConfigureAwait(true);
+            SetResultMessage("Uploading file. Please wait.", false);
+            IsInProgress = true;
 
-            if (!result.IsSuccess)
+            StrongBox<int> progress = new(ProgressBarValue);
+
+            _ = Task.Run(async () =>
             {
-                _ = errors.AppendLine($"Error while adding {file.Path.AbsolutePath}: {result.Message}");
+                while (IsInProgress)
+                {
+                    ProgressBarValue = progress.Value;
+                    await Task.Delay(50).ConfigureAwait(false);
+                }
+            });
+
+            foreach (var file in files)
+            {
+
+                var result = await _filesUploader.UploadAddonAndAddToDbAsync(file.Path.LocalPath, progress, CancellationToken.None).ConfigureAwait(true);
+
+                if (!result.IsSuccess)
+                {
+                    _ = errors.AppendLine($"Error while adding {file.Path.AbsolutePath}: {result.Message}");
+                }
+            }
+
+            if (errors.Length > 0)
+            {
+                SetResultMessage(errors.ToString(), true);
+            }
+            else
+            {
+                SetResultMessage("Success", false);
             }
         }
-
-        if (errors.Length > 0)
+        finally
         {
-            SetResultMessage(errors.ToString(), true);
+            IsInProgress = false;
+            ProgressBarValue = 0;
         }
-        else
-        {
-            SetResultMessage("Success", false);
-        }
-
     }
 
 
@@ -490,11 +512,12 @@ public sealed partial class DevViewModel : ObservableObject
                 }
             });
 
-            var result = await _filesUploader.UploadFilesAsync(
+            var result = await _filesUploader.UploadFileToUploadsFolderAsync(
                 Guid.NewGuid().ToString(),
-                [pathToArchive],
+                pathToArchive,
                 progress,
-                CancellationToken.None).ConfigureAwait(false);
+                CancellationToken.None
+                ).ConfigureAwait(false);
 
             if (!result.IsSuccess)
             {

@@ -177,6 +177,33 @@ public sealed class ConfigProvider : IConfigProvider
         }
     }
 
+    public string? S3SecretKey
+    {
+        get
+        {
+            var str = GetStringValue(nameof(S3SecretKey));
+
+            if (string.IsNullOrWhiteSpace(str))
+            {
+                return null;
+            }
+
+            return Unprotect(str);
+        }
+
+        set
+        {
+            if (value is null)
+            {
+                SetSettingsValue(string.Empty);
+                return;
+            }
+
+            var pro = Protect(value);
+            SetSettingsValue(pro);
+        }
+    }
+
     public Dictionary<string, byte> Rating
     {
         get
