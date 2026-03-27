@@ -44,7 +44,7 @@ public sealed class ArchiveTools
 
         using var archive = ArchiveFactory.OpenArchive(
             pathToArchive,
-            ReaderOptions.ForOwnedFile
+            ReaderOptions.ForFilePath
             .WithProgress(progress)
             );
 
