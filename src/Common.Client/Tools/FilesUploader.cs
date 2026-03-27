@@ -85,7 +85,7 @@ public sealed class FilesUploader
 
         try
         {
-            var signedUrl = await _apiInterface.GetSignedUrlAsync(Path.Combine(subfolderName, pathToFile)).ConfigureAwait(false);
+            var signedUrl = await _apiInterface.GetSignedUrlAsync(Path.Combine(subfolderName, Path.GetFileName(pathToFile))).ConfigureAwait(false);
 
             if (!signedUrl.IsSuccess)
             {
