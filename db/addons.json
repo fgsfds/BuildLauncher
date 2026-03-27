@@ -2220,6 +2220,20 @@
       "UpdateDate": "2026-01-22T17:24:46.1709946Z",
       "MD5": "BC469A1E6C009EBD9AF84552803EA188",
       "Sha256": "852A6EE452E7A3DBC40BFF32B174176557B1A942ECDF210E58A62DBE3618ADC2"
+    },
+    {
+      "Id": "duke3d-canadian-carnage",
+      "AddonType": "TC",
+      "Game": "Duke3D",
+      "DownloadUrl": "https://s3-nl.hostkey.com/b8743306-fgsfds/buildlauncher/Duke3D/Campaigns/duke3d-canadian-carnage_v1_0.zip",
+      "Title": "Canadian Carnage",
+      "Version": "1.0",
+      "FileSize": 4200996,
+      "Description": "Duke lands in Canada for a vacation only to find out aliens are invading! What better way to go sight seeing than stopping an invasion?\r\nThis is an unfinished TC originally released in beta with 9 levels, only four of which were completed. For this upload, only the finished maps will be in the \u0027Canadian Carnage\u0027 episode to make for a complete experience. The remaining have been seperated into the \u0027Unfinished Levels\u0027 episode to explore what was originally planned.\r\nEnjoy your adventure in Canada! Be on the look out for secrets, some key cards might be there...",
+      "Author": "ChaotecH ProductionS",
+      "UpdateDate": "2026-03-27T19:39:38.974086Z",
+      "MD5": "",
+      "Sha256": "735DA91C900760F6E9375ACD5453E1E671CBE151F4A4AD543EDDB549BBE248FD"
     }
   ],
   "Blood": [
