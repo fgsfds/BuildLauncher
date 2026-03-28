@@ -265,8 +265,10 @@ public sealed class FilesUploader
         }
 
         await using var fileStream = File.OpenRead(pathToFile);
-        var hash = await SHA256.HashDataAsync(fileStream, CancellationToken.None).ConfigureAwait(false);
-        var hashStr = Convert.ToHexString(hash);
+        var sha = await SHA256.HashDataAsync(fileStream, CancellationToken.None).ConfigureAwait(false);
+        var shaStr = Convert.ToHexString(sha);
+        var md5 = await MD5.HashDataAsync(fileStream, CancellationToken.None).ConfigureAwait(false);
+        var md5Str = Convert.ToHexString(md5);
 
         DownloadableAddonJsonModel downloadableAddon = new()
         {
@@ -281,8 +283,8 @@ public sealed class FilesUploader
             FileSize = fileSize,
             Dependencies = manifest.Dependencies?.Addons?.Select(d => d.Id)?.ToList(),
             UpdateDate = DateTime.UtcNow,
-            MD5 = string.Empty,
-            Sha256 = hashStr
+            MD5 = md5Str,
+            Sha256 = shaStr
         };
 
         return new(ResultEnum.Success, downloadableAddon, string.Empty);
