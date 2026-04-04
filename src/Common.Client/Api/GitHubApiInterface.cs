@@ -5,6 +5,7 @@ using Common.All.Helpers;
 using Common.All.Interfaces;
 using Common.All.Providers;
 using Common.All.Serializable;
+using Common.All.Serializable.Addon;
 using Common.All.Serializable.Downloadable;
 using Common.Client.Helpers;
 using Common.Client.Interfaces;
@@ -194,6 +195,29 @@ public sealed class GitHubApiInterface : IApiInterface
         finally
         {
             _ = _semaphore.Release();
+        }
+    }
+
+    public async Task<List<AddonJsonModel>?> GetMetadataAsync()
+    {
+        try
+        {
+            using var httpClient = _httpClientFactory.CreateClient();
+            var result = await httpClient.GetStringAsync(CommonConstants.ManifestsJsonUrl).ConfigureAwait(false);
+
+            if (result is null)
+            {
+                return null;
+            }
+
+            var data = JsonSerializer.Deserialize(result, ManifestsJsonModelContext.Default.ListAddonJsonModel);
+
+            return data;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogCritical(ex, "=== Error while getting upload folder from GitHub ===");
+            return null;
         }
     }
 

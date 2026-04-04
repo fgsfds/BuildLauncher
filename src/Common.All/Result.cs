@@ -160,7 +160,6 @@ public enum ResultEnum : byte
     /// <summary>
     /// General error
     /// </summary>
-    Error,
-    OutOfDate
+    Error
 }
 

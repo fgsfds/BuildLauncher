@@ -218,6 +218,19 @@ public sealed partial class CampaignsControl : DroppableControl
         _ = CampaignsList.ContextMenu.Items.Add(favoriteButton);
         _ = CampaignsList.ContextMenu.Items.Add(new Separator());
 
+        if (addon.IsMetadataUpdateAvailable)
+        {
+            var updateMetadataButton = new MenuItem()
+            {
+                Header = "Update metadata",
+                Padding = new(5),
+                Command = new AsyncRelayCommand(async () => await _viewModel.UpdateMetadataAsync(addon).ConfigureAwait(true))
+            };
+
+            _ = CampaignsList.ContextMenu.Items.Add(updateMetadataButton);
+            _ = CampaignsList.ContextMenu.Items.Add(new Separator());
+        }
+
         foreach (var port in _supportedPorts)
         {
             if (!PortsHelper.CheckPortRequirements(CampaignsList.SelectedItem, _viewModel.Game, port))

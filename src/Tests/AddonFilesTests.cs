@@ -3,8 +3,10 @@ using Addons.Addons;
 using Addons.Providers;
 using Common.All;
 using Common.All.Enums;
+using Common.Client.Api;
 using Common.Client.Cache;
 using Common.Client.Interfaces;
+using Common.Client.Providers;
 using Games.Games;
 using Microsoft.Extensions.Logging;
 using Moq;
@@ -30,14 +32,23 @@ public sealed class AddonFilesTests : IDisposable
 
         var bmCache = new Mock<ICacheAdder<Stream>>();
         var logger = new Mock<ILogger>();
+        MetadataProvider metadataProvider = new(new OfflineApiInterface(logger.Object));
         OriginalCampaignsProvider originalCampaignsProvider = new(config.Object);
 
-        _installedAddonsProvider = new(game.Object, config.Object, logger.Object, bmCache.Object, originalCampaignsProvider);
+        _installedAddonsProvider = new(
+            game.Object,
+            config.Object,
+            logger.Object,
+            bmCache.Object,
+            originalCampaignsProvider,
+            metadataProvider
+            );
         _getAddonsFromFilesAsync = typeof(InstalledAddonsProvider).GetMethod("GetAddonsFromFilesAsync", BindingFlags.NonPublic | BindingFlags.Instance)!;
     }
 
     public void Dispose()
     {
+        _installedAddonsProvider.Dispose();
         Directory.Delete("FilesTemp", true);
     }
 

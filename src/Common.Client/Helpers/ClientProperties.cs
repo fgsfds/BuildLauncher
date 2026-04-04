@@ -122,5 +122,30 @@ public static class ClientProperties
         }
     }
 
+    /// <summary>
+    /// Path to local manifests.json
+    /// </summary>
+    public static string? PathToLocalManifestsJson
+    {
+        get
+        {
+            var path1 = Path.Combine(WorkingFolder, @"..\..\..\..\db\manifests.json");
+
+            if (File.Exists(path1))
+            {
+                return path1;
+            }
+
+            var path2 = Path.Combine(WorkingFolder, @"db\manifests.json");
+
+            if (File.Exists(path2))
+            {
+                return path2;
+            }
+
+            return null;
+        }
+    }
+
     public static string PathToLogFile => Path.Combine(WorkingFolder, "BuildLauncher.log");
 }

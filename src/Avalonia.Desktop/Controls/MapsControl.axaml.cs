@@ -45,7 +45,7 @@ public sealed partial class MapsControl : DroppableControl
         }
 
         AddPortsButtons();
-        AddContextMenuButtons();
+        //AddContextMenuButtons();
     }
 
     /// <summary>
@@ -114,6 +114,19 @@ public sealed partial class MapsControl : DroppableControl
         }
 
         MapsList.ContextMenu.Items.Clear();
+
+        if (addon.IsMetadataUpdateAvailable)
+        {
+            var updateMetadataButton = new MenuItem()
+            {
+                Header = "Update metadata",
+                Padding = new(5),
+                Command = new AsyncRelayCommand(async () => await _viewModel.UpdateMetadataAsync(addon).ConfigureAwait(true))
+            };
+
+            _ = MapsList.ContextMenu.Items.Add(updateMetadataButton);
+            _ = MapsList.ContextMenu.Items.Add(new Separator());
+        }
 
         foreach (var port in _supportedPorts)
         {

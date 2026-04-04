@@ -585,6 +585,59 @@ public sealed partial class DevViewModel : ObservableObject
         }
     }
 
+
+    [RelayCommand]
+    private async Task UpdateManifestsAsync()
+    {
+        if (ClientProperties.PathToLocalManifestsJson is null)
+        {
+            throw new NullReferenceException(nameof(ClientProperties.PathToLocalManifestsJson));
+        }
+
+        var folders = await AvaloniaProperties.TopLevel.StorageProvider.OpenFolderPickerAsync(
+            new FolderPickerOpenOptions
+            {
+                Title = "Choose addons folder",
+                AllowMultiple = false
+            }).ConfigureAwait(true);
+
+        if (folders.Count == 0)
+        {
+            return;
+        }
+
+        var files = Directory.EnumerateFiles(folders[0].Path.AbsolutePath, "*.zip", SearchOption.AllDirectories).ToList();
+
+        if (files is null or [])
+        {
+            return;
+        }
+
+        List<AddonJsonModel> result = new(files.Count);
+
+        foreach (var file in files)
+        {
+            using var archive = ArchiveFactory.OpenArchive(file);
+            var jsons = archive.Entries.Where(x => x.Key!.StartsWith("addon", StringComparison.OrdinalIgnoreCase) && x.Key.EndsWith(".json", StringComparison.OrdinalIgnoreCase));
+
+            foreach (var json in jsons)
+            {
+                using var jsonStream = await json.OpenEntryStreamAsync().ConfigureAwait(false);
+                var jsonStr = await JsonSerializer.DeserializeAsync(jsonStream, AddonManifestContext.Default.AddonJsonModel).ConfigureAwait(false);
+                
+                if (jsonStr is null)
+                {
+                    continue;
+                }
+                
+                result.Add(jsonStr);
+            }
+        }
+
+        var list = JsonSerializer.Serialize(result, ManifestsJsonModelContext.Default.ListAddonJsonModel);
+        await File.WriteAllTextAsync(ClientProperties.PathToLocalManifestsJson, list).ConfigureAwait(false);
+    }
+
     #endregion
 
 

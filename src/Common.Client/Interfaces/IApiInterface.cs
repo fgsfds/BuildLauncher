@@ -1,5 +1,6 @@
 ﻿using Common.All;
 using Common.All.Enums;
+using Common.All.Serializable.Addon;
 using Common.All.Serializable.Downloadable;
 
 namespace Common.Client.Interfaces;
@@ -15,5 +16,6 @@ public interface IApiInterface
     Task<Dictionary<string, decimal>?> GetRatingsAsync();
     Task<Result<string?>> GetSignedUrlAsync(string path);
     Task<string?> GetUploadFolderAsync();
+    Task<List<AddonJsonModel>?> GetMetadataAsync();
     Task<bool> IncreaseNumberOfInstallsAsync(string addonId);
 }

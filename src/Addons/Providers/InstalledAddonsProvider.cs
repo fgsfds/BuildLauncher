@@ -10,6 +10,7 @@ using Common.All.Serializable.Addon;
 using Common.Client.Cache;
 using Common.Client.Helpers;
 using Common.Client.Interfaces;
+using Common.Client.Providers;
 using Games.Games;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -20,21 +21,20 @@ namespace Addons.Providers;
 /// <summary>
 /// Class that provides lists of installed mods
 /// </summary>
-public sealed class InstalledAddonsProvider
+public sealed class InstalledAddonsProvider : IDisposable
 {
     private readonly BaseGame _game;
     private readonly IConfigProvider _config;
     private readonly ILogger _logger;
     private readonly ICacheAdder<Stream> _bitmapsCache;
     private readonly OriginalCampaignsProvider _originalCampaignsProvider;
+    private readonly MetadataProvider _metadataProvider;
 
     private readonly Dictionary<AddonId, BaseAddon> _campaignsCache = [];
     private readonly Dictionary<AddonId, BaseAddon> _mapsCache = [];
     private readonly Dictionary<AddonId, BaseAddon> _modsCache = [];
 
     private readonly SemaphoreSlim _semaphore = new(1);
-
-    private volatile bool _isCacheUpdating;
 
     public event AddonChanged? AddonsChangedEvent;
 
@@ -44,7 +44,8 @@ public sealed class InstalledAddonsProvider
         IConfigProvider config,
         ILogger logger,
         [FromKeyedServices("Bitmaps")] ICacheAdder<Stream> bitmapsCache,
-        OriginalCampaignsProvider originalCampaignsProvider
+        OriginalCampaignsProvider originalCampaignsProvider,
+        MetadataProvider metadataProvider
         )
     {
         _game = game;
@@ -52,6 +53,9 @@ public sealed class InstalledAddonsProvider
         _logger = logger;
         _bitmapsCache = bitmapsCache;
         _originalCampaignsProvider = originalCampaignsProvider;
+        _metadataProvider = metadataProvider;
+
+        _metadataProvider.MetadataUpdatedEvent += OnMetadataUpdatedAsync;
     }
 
 
@@ -112,7 +116,6 @@ public sealed class InstalledAddonsProvider
         return true;
     }
 
-
     /// <summary>
     /// Create cache of installed addons.
     /// </summary>
@@ -121,8 +124,6 @@ public sealed class InstalledAddonsProvider
     public async Task CreateCache(bool createNew, AddonTypeEnum addonType)
     {
         await _semaphore.WaitAsync().ConfigureAwait(false);
-
-        _isCacheUpdating = true;
 
         var cache = addonType switch
         {
@@ -238,7 +239,6 @@ public sealed class InstalledAddonsProvider
         }
         finally
         {
-            _isCacheUpdating = false;
             _ = _semaphore.Release();
             ArgumentNullException.ThrowIfNull(_campaignsCache);
             ArgumentNullException.ThrowIfNull(_mapsCache);
@@ -431,66 +431,88 @@ public sealed class InstalledAddonsProvider
         };
     }
 
+
     private IReadOnlyDictionary<AddonId, BaseAddon> GetInstalledCampaigns()
     {
         var campaigns = _originalCampaignsProvider.GetOriginalCampaigns(_game);
 
-        if (_isCacheUpdating)
+        if (!_semaphore.Wait(1))
         {
             return campaigns;
         }
 
-        ArgumentNullException.ThrowIfNull(_campaignsCache);
-
-        if (_campaignsCache.Count == 0)
+        try
         {
+            ArgumentNullException.ThrowIfNull(_campaignsCache);
+
+            if (_campaignsCache.Count == 0)
+            {
+                return campaigns;
+            }
+
+            if (_game.GameEnum is GameEnum.Wang)
+            {
+                //hack to make SW addons appear at the top of the list
+                foreach (var customCamp in _campaignsCache
+                    .OrderByDescending(static x => x.Key.Id.Equals(nameof(WangAddonEnum.TwinDragon), StringComparison.OrdinalIgnoreCase))
+                    .ThenByDescending(static x => x.Key.Id.Equals(nameof(WangAddonEnum.Wanton), StringComparison.OrdinalIgnoreCase))
+                    .ThenBy(static x => x.Value.Title))
+                {
+                    campaigns.Add(customCamp.Key, customCamp.Value);
+                }
+            }
+            else
+            {
+                foreach (var customCamp in _campaignsCache.OrderBy(static x => x.Value.Title))
+                {
+                    campaigns.Add(customCamp.Key, customCamp.Value);
+                }
+            }
+
             return campaigns;
         }
-
-        if (_game.GameEnum is GameEnum.Wang)
+        finally
         {
-            //hack to make SW addons appear at the top of the list
-            foreach (var customCamp in _campaignsCache
-                .OrderByDescending(static x => x.Key.Id.Equals(nameof(WangAddonEnum.TwinDragon), StringComparison.OrdinalIgnoreCase))
-                .ThenByDescending(static x => x.Key.Id.Equals(nameof(WangAddonEnum.Wanton), StringComparison.OrdinalIgnoreCase))
-                .ThenBy(static x => x.Value.Title))
-            {
-                campaigns.Add(customCamp.Key, customCamp.Value);
-            }
+            _semaphore.Release();
         }
-        else
-        {
-            foreach (var customCamp in _campaignsCache.OrderBy(static x => x.Value.Title))
-            {
-                campaigns.Add(customCamp.Key, customCamp.Value);
-            }
-        }
-
-        return campaigns;
     }
 
     private IReadOnlyDictionary<AddonId, BaseAddon> GetInstalledMaps()
     {
-        if (_isCacheUpdating)
+        if (!_semaphore.Wait(1))
         {
             return new Dictionary<AddonId, BaseAddon>();
         }
 
-        ArgumentNullException.ThrowIfNull(_mapsCache);
+        try
+        {
+            ArgumentNullException.ThrowIfNull(_mapsCache);
 
-        return _mapsCache;
+            return _mapsCache;
+        }
+        finally
+        {
+            _semaphore.Release();
+        }
     }
 
     private IReadOnlyDictionary<AddonId, BaseAddon> GetInstalledMods()
     {
-        if (_isCacheUpdating)
+        if (!_semaphore.Wait(1))
         {
             return new Dictionary<AddonId, BaseAddon>();
         }
 
-        ArgumentNullException.ThrowIfNull(_modsCache);
+        try
+        {
+            ArgumentNullException.ThrowIfNull(_modsCache);
 
-        return _modsCache;
+            return _modsCache;
+        }
+        finally
+        {
+            _semaphore.Release();
+        }
     }
 
     /// <summary>
@@ -672,7 +694,8 @@ public sealed class InstalledAddonsProvider
                 IsUnpacked = false,
                 Executables = null,
                 Options = null,
-                IsFavorite = _config.FavoriteAddons.Contains(id)
+                IsFavorite = _config.FavoriteAddons.Contains(id),
+                IsMetadataUpdateAvailable = _metadataProvider.IsMetadataUpdateAvailable(pathToFile),
             };
 
             return [addon];
@@ -797,7 +820,8 @@ public sealed class InstalledAddonsProvider
                     IsUnpacked = carcass.IsUnpacked,
                     Executables = null,
                     Options = null,
-                    IsFavorite = _config.FavoriteAddons.Contains(id)
+                    IsFavorite = _config.FavoriteAddons.Contains(id),
+                    IsMetadataUpdateAvailable = _metadataProvider.IsMetadataUpdateAvailable(pathToFile),
                 };
 
                 addons.Add(addon);
@@ -835,7 +859,8 @@ public sealed class InstalledAddonsProvider
                         IsUnpacked = carcass.IsUnpacked,
                         Executables = carcass.Executables,
                         Options = carcass.Options,
-                        IsFavorite = _config.FavoriteAddons.Contains(new(carcass.Id, carcass.Version))
+                        IsFavorite = _config.FavoriteAddons.Contains(new(carcass.Id, carcass.Version)),
+                        IsMetadataUpdateAvailable = _metadataProvider.IsMetadataUpdateAvailable(pathToFile),
                     };
 
                     addons.Add(addon);
@@ -863,7 +888,8 @@ public sealed class InstalledAddonsProvider
                         IsUnpacked = carcass.IsUnpacked,
                         Executables = carcass.Executables,
                         Options = carcass.Options,
-                        IsFavorite = _config.FavoriteAddons.Contains(new(carcass.Id, carcass.Version))
+                        IsFavorite = _config.FavoriteAddons.Contains(new(carcass.Id, carcass.Version)),
+                        IsMetadataUpdateAvailable = _metadataProvider.IsMetadataUpdateAvailable(pathToFile),
                     };
 
                     addons.Add(addon);
@@ -894,7 +920,8 @@ public sealed class InstalledAddonsProvider
                         IsUnpacked = carcass.IsUnpacked,
                         Executables = carcass.Executables,
                         Options = carcass.Options,
-                        IsFavorite = _config.FavoriteAddons.Contains(new(carcass.Id, carcass.Version))
+                        IsFavorite = _config.FavoriteAddons.Contains(new(carcass.Id, carcass.Version)),
+                        IsMetadataUpdateAvailable = _metadataProvider.IsMetadataUpdateAvailable(pathToFile),
                     };
 
                     addons.Add(addon);
@@ -922,7 +949,8 @@ public sealed class InstalledAddonsProvider
                         IsUnpacked = carcass.IsUnpacked,
                         Executables = carcass.Executables,
                         Options = carcass.Options,
-                        IsFavorite = _config.FavoriteAddons.Contains(new(carcass.Id, carcass.Version))
+                        IsFavorite = _config.FavoriteAddons.Contains(new(carcass.Id, carcass.Version)),
+                        IsMetadataUpdateAvailable = _metadataProvider.IsMetadataUpdateAvailable(pathToFile),
                     };
 
                     addons.Add(addon);
@@ -950,7 +978,8 @@ public sealed class InstalledAddonsProvider
                         IsUnpacked = carcass.IsUnpacked,
                         Executables = carcass.Executables,
                         Options = carcass.Options,
-                        IsFavorite = _config.FavoriteAddons.Contains(new(carcass.Id, carcass.Version))
+                        IsFavorite = _config.FavoriteAddons.Contains(new(carcass.Id, carcass.Version)),
+                        IsMetadataUpdateAvailable = _metadataProvider.IsMetadataUpdateAvailable(pathToFile),
                     };
 
                     addons.Add(addon);
@@ -1176,6 +1205,57 @@ public sealed class InstalledAddonsProvider
         }
 
         return carcass;
+    }
+
+
+    private async void OnMetadataUpdatedAsync(object? sender, ValueTuple<GameEnum, AddonTypeEnum, string>? e)
+    {
+        if (e is not null
+            && _game.GameEnum != e.Value.Item1)
+        {
+            return;
+        }
+
+        IEnumerable<BaseAddon> allAddons = [.. _campaignsCache.Values, .. _mapsCache.Values, .. _modsCache.Values];
+
+        foreach (var camp in allAddons)
+        {
+            if (camp.PathToFile is null)
+            {
+                continue;
+            }
+
+            if (e is null)
+            {
+                camp.IsMetadataUpdateAvailable = _metadataProvider.IsMetadataUpdateAvailable(camp.PathToFile);
+            }
+            else if (camp.PathToFile.Equals(e.Value.Item3)
+                     && camp.IsMetadataUpdateAvailable
+                     && !_metadataProvider.IsMetadataUpdateAvailable(camp.PathToFile))
+            {
+                _campaignsCache.Remove(camp.AddonId);
+                await AddAddonAsync(e.Value.Item3).ConfigureAwait(false);
+
+                AddonsChangedEvent?.Invoke(_game.GameEnum, camp.Type);
+            }
+        }
+
+        if (e is null)
+        {
+            AddonsChangedEvent?.Invoke(_game.GameEnum, AddonTypeEnum.TC);
+            AddonsChangedEvent?.Invoke(_game.GameEnum, AddonTypeEnum.Map);
+            AddonsChangedEvent?.Invoke(_game.GameEnum, AddonTypeEnum.Mod);
+        }
+        else
+        {
+            AddonsChangedEvent?.Invoke(_game.GameEnum, e.Value.Item2);
+        }
+    }
+
+
+    public void Dispose()
+    {
+        _metadataProvider.MetadataUpdatedEvent -= OnMetadataUpdatedAsync;
     }
 }
 

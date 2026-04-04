@@ -2,6 +2,7 @@ using System.Collections.Immutable;
 using System.Diagnostics;
 using Addons.Addons;
 using Addons.Providers;
+using Avalonia.Controls.Notifications;
 using Avalonia.Desktop.Misc;
 using Common.All.Enums;
 using Common.Client.Interfaces;
@@ -10,6 +11,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Games.Games;
 using Games.Providers;
+using Microsoft.Extensions.Logging;
 
 namespace Avalonia.Desktop.ViewModels;
 
@@ -20,6 +22,8 @@ public sealed partial class ModsViewModel : RightPanelViewModel, IPortsButtonCon
     private readonly InstalledGamesProvider _gamesProvider;
     private readonly InstalledAddonsProvider _installedAddonsProvider;
     private readonly DownloadableAddonsProvider _downloadableAddonsProvider;
+    private readonly MetadataProvider _metadataProvider;
+    private readonly ILogger _logger;
 
 
     [Obsolete($"Don't create directly. Use {nameof(ViewModelsFactory)}.")]
@@ -28,21 +32,24 @@ public sealed partial class ModsViewModel : RightPanelViewModel, IPortsButtonCon
         InstalledGamesProvider gamesProvider,
         PlaytimeProvider playtimeProvider,
         RatingProvider ratingProvider,
+        MetadataProvider metadataProvider,
         InstalledAddonsProviderFactory installedAddonsProviderFactory,
         DownloadableAddonsProviderFactory downloadableAddonsProviderFactory,
         BitmapsCache bitmapsCache,
-        IConfigProvider config
-        ) : base(playtimeProvider, ratingProvider, bitmapsCache, config)
+        IConfigProvider config,
+        ILogger logger
+        ) : base(playtimeProvider, ratingProvider, metadataProvider, bitmapsCache, config)
     {
         Game = game;
 
         _gamesProvider = gamesProvider;
         _installedAddonsProvider = installedAddonsProviderFactory.Get(game);
         _downloadableAddonsProvider = downloadableAddonsProviderFactory.Get(game);
+        _metadataProvider = metadataProvider;
 
         _gamesProvider.GameChangedEvent += OnGameChanged;
         _installedAddonsProvider.AddonsChangedEvent += OnAddonChanged;
-        _downloadableAddonsProvider.AddonDownloadedEvent += OnAddonChanged;
+        _downloadableAddonsProvider.AddonsChangedEvent += OnAddonChanged;
     }
 
 
@@ -84,6 +91,7 @@ public sealed partial class ModsViewModel : RightPanelViewModel, IPortsButtonCon
             OnPropertyChanged(nameof(SelectedAddonPreview));
             OnPropertyChanged(nameof(IsPreviewVisible));
             OnPropertyChanged(nameof(SelectedAddonRating));
+            OnPropertyChanged(nameof(IsMetadataUpdateAvailable));
         }
     }
 
@@ -158,6 +166,48 @@ public sealed partial class ModsViewModel : RightPanelViewModel, IPortsButtonCon
         OnPropertyChanged(nameof(ModsList));
     }
 
+
+    /// <summary>
+    /// Updates metadata for selected mod.
+    /// </summary>
+    public override async Task UpdateMetadataAsync(object? value)
+    {
+        if (value is not null
+            && value is BaseAddon addon)
+        {
+        }
+        else if (value is null
+            && SelectedAddon is not null)
+        {
+            addon = SelectedAddon;
+        }
+        else
+        {
+            throw new InvalidOperationException(value?.GetType().Name);
+        }
+
+        IsInProgress = true;
+
+        var result = await _metadataProvider.UpdateMetadataAsync(addon.PathToFile).ConfigureAwait(true);
+
+        IsInProgress = false;
+
+        if (result.IsSuccess)
+        {
+            NotificationsHelper.Show(
+                "Metadata updated.",
+                NotificationType.Success
+                );
+        }
+        else
+        {
+            NotificationsHelper.Show(
+                "Error while updating metadata.",
+                NotificationType.Error
+                );
+        }
+    }
+
     #endregion
 
 
@@ -169,9 +219,9 @@ public sealed partial class ModsViewModel : RightPanelViewModel, IPortsButtonCon
         }
     }
 
-    private void OnAddonChanged(GameEnum game, AddonTypeEnum addonType)
+    private void OnAddonChanged(GameEnum gameEnum, AddonTypeEnum? addonType)
     {
-        if (game == Game.GameEnum && (addonType is AddonTypeEnum.Mod))
+        if (gameEnum == Game.GameEnum && (addonType is AddonTypeEnum.Mod))
         {
             OnPropertyChanged(nameof(ModsList));
         }

@@ -25,6 +25,7 @@ public sealed partial class MapsViewModel : RightPanelViewModel, IPortsButtonCon
     private readonly InstalledAddonsProvider _installedAddonsProvider;
     private readonly DownloadableAddonsProvider _downloadableAddonsProvider;
     private readonly PortStarter _portStarter;
+    private readonly MetadataProvider _metadataProvider;
     private readonly ILogger _logger;
 
 
@@ -77,6 +78,7 @@ public sealed partial class MapsViewModel : RightPanelViewModel, IPortsButtonCon
 
             OnPropertyChanged(nameof(SelectedAddonDescription));
             OnPropertyChanged(nameof(SelectedAddonRating));
+            OnPropertyChanged(nameof(IsMetadataUpdateAvailable));
             OnPropertyChanged(nameof(SelectedAddonPlaytime));
             OnPropertyChanged(nameof(SelectedAddonPreview));
             OnPropertyChanged(nameof(IsPreviewVisible));
@@ -111,12 +113,13 @@ public sealed partial class MapsViewModel : RightPanelViewModel, IPortsButtonCon
         IConfigProvider config,
         PlaytimeProvider playtimeProvider,
         RatingProvider ratingProvider,
+        MetadataProvider metadataProvider,
         InstalledAddonsProviderFactory installedAddonsProviderFactory,
         DownloadableAddonsProviderFactory downloadableAddonsProviderFactory,
         PortStarter portStarter,
         BitmapsCache bitmapsCache,
         ILogger logger
-        ) : base(playtimeProvider, ratingProvider, bitmapsCache, config)
+        ) : base(playtimeProvider, ratingProvider, metadataProvider, bitmapsCache, config)
     {
         Game = game;
 
@@ -125,11 +128,12 @@ public sealed partial class MapsViewModel : RightPanelViewModel, IPortsButtonCon
         _installedAddonsProvider = installedAddonsProviderFactory.Get(game);
         _downloadableAddonsProvider = downloadableAddonsProviderFactory.Get(game);
         _portStarter = portStarter;
+        _metadataProvider = metadataProvider;
         _logger = logger;
 
         _gamesProvider.GameChangedEvent += OnGameChanged;
         _installedAddonsProvider.AddonsChangedEvent += OnAddonChanged;
-        _downloadableAddonsProvider.AddonDownloadedEvent += OnAddonChanged;
+        _downloadableAddonsProvider.AddonsChangedEvent += OnAddonChanged;
     }
 
 
@@ -217,6 +221,48 @@ public sealed partial class MapsViewModel : RightPanelViewModel, IPortsButtonCon
     private void ClearSearchBox() => SearchBoxText = string.Empty;
     private bool ClearSearchBoxCanExecute() => !string.IsNullOrEmpty(SearchBoxText);
 
+
+    /// <summary>
+    /// Updates metadata for selected map.
+    /// </summary>
+    public override async Task UpdateMetadataAsync(object? value)
+    {
+        if (value is not null
+            && value is BaseAddon addon)
+        {
+        }
+        else if (value is null
+            && SelectedAddon is not null)
+        {
+            addon = SelectedAddon;
+        }
+        else
+        {
+            throw new InvalidOperationException(value?.GetType().Name);
+        }
+
+        IsInProgress = true;
+
+        var result = await _metadataProvider.UpdateMetadataAsync(addon.PathToFile).ConfigureAwait(true);
+
+        IsInProgress = false;
+
+        if (result.IsSuccess)
+        {
+            NotificationsHelper.Show(
+                "Metadata updated.",
+                NotificationType.Success
+                );
+        }
+        else
+        {
+            NotificationsHelper.Show(
+                "Error while updating metadata.",
+                NotificationType.Error
+                );
+        }
+    }
+
     #endregion
 
 
@@ -228,9 +274,9 @@ public sealed partial class MapsViewModel : RightPanelViewModel, IPortsButtonCon
         }
     }
 
-    private void OnAddonChanged(GameEnum game, AddonTypeEnum addonType)
+    private void OnAddonChanged(GameEnum gameEnum, AddonTypeEnum? addonType)
     {
-        if (game == Game.GameEnum && (addonType is AddonTypeEnum.Map))
+        if (gameEnum == Game.GameEnum && (addonType is AddonTypeEnum.Map))
         {
             OnPropertyChanged(nameof(MapsList));
         }

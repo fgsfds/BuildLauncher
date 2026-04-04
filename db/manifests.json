@@ -1,0 +1,3717 @@
+[
+  {
+    "id": "blood-500mil",
+    "type": "TC",
+    "game": {
+      "name": "Blood"
+    },
+    "title": "500 Milliliters of /vr/",
+    "version": "5.1.1",
+    "author": "4chan",
+    "def_modules": [
+      "500ml.def"
+    ],
+    "ini": "500ml.ini",
+    "description": "500 Milliliters of /vr/ is a community add-on by members of the /vr/ board on 4chan released on February 1, 2021. It features six levels created by three authors, and features numerous replaced assets. Four levels are available for Bloodbath. It is named as a play on the 200 Minutes of /vr/ and related community projects for Doom."
+  },
+  {
+    "id": "blood-bloodbasket",
+    "type": "TC",
+    "game": {
+      "name": "Blood"
+    },
+    "title": "Bloodbasket",
+    "version": "1.1",
+    "author": "daMann, Damien Azreal, BloodyTom, Matthan",
+    "ini": "BASKET.INI",
+    "description": "The first community Map Jam by The Blood Discord Channel. Bloodbasket includes four distinctive and varied maps full of blood, dread and secrets! Caleb will have to fight his way through office cubicles, haunting forests, lava caves and come face to face with a big ass spider!"
+  },
+  {
+    "id": "blood-bloodlines",
+    "type": "TC",
+    "game": {
+      "name": "Blood"
+    },
+    "title": "Bloodlines: Out of the Grave Edition",
+    "version": "1.5",
+    "author": "Necrosoft",
+    "ini": "BLBETA15.ini",
+    "rff_main": "BLMAIN.RFF",
+    "rff_sound": "BLSND.RFF",
+    "description": "https://www.moddb.com/mods/bloodlines-out-of-the-grave-edition\r\n\r\nBloodLines was to be the most ambitious total conversion ever created for Blood. It still is, but it\u0027s far from what was intended. We have admitted that BloodLines will never be fully completed and have decided to release the TC \u0022as is\u0022 with some retouching to make incomplete maps actually playable. I hope you\u0027ll enjoy playing it as much as we have enjoyed making it. Be aware though, that not all maps are what you would expect from a Blood level, it\u0027s not all bloody mayhem. Don\u0027t be disappointed if the TC doesn\u0027t fit your ideas about how a 3d-shooter should be, much of it is about atmosphere rather than action, you will benefit from approaching BloodLines with an open mind. This is the beta version of the first three episodes, including 13 maps, two new enemies and loads of new art and sound"
+  },
+  {
+    "id": "blood-bloody-pulp-fiction",
+    "type": "TC",
+    "game": {
+      "name": "Blood"
+    },
+    "title": "Bloody Pulp Fiction",
+    "version": "1.3.1",
+    "author": "BPF Team",
+    "ini": "BPF.INI",
+    "rff_sound": "BPFSND.RFF",
+    "description": "https://bpf.deathmask.net/\r\n\r\nDeadland awaits Caleb as he is thrust into action once again by the determined Cabal who are stopping at nothing to kill, enslave, pillage, ravage, and bring forth unholy darkness in it\u0027s wake.\r\nCaleb, now in the present, wants nothing more than to avoid the Cabal and forget any ties to Tchernobog, but the world is Decaying as the Remnants of the Cabal spread through out the globe like a Cancer.\r\n\r\nExperience up to 18 levels of fast paced, adrenaline-soaked, bloodthirsty action in some of the most detailed and frantic maps ever made for Blood. Experience snowy cities, malls, dockside ports, graveyards, haunting forests, gigantic sea-faring ships, old forgotten towns along Route66, torture chambers, a dilapidated carnival site, Cabal strongholds, and much more."
+  },
+  {
+    "id": "blood-carnage-continues",
+    "type": "TC",
+    "game": {
+      "name": "Blood"
+    },
+    "title": "The Carnage Continues",
+    "version": "1.1",
+    "author": "B Harry",
+    "ini": "GORE.INI",
+    "rff_sound": "CARNAGE.RFF"
+  },
+  {
+    "id": "blood-crypts-of-the-cruel",
+    "type": "TC",
+    "game": {
+      "name": "Blood"
+    },
+    "title": "Crypts of the Cruel",
+    "version": "1.0",
+    "author": "daMann",
+    "def_modules": [
+      "cruel.def"
+    ],
+    "ini": "cruel.ini",
+    "description": "https://www.moddb.com/mods/bloodlines-out-of-the-grave-edition/downloads/crypts-of-the-cruel-trilogy-a-bloodlines-prequel-refreshed-supply-exclusive\r\n\r\nCrypts of the Cruel is a trilogy of maps, each designed to play individually or as a whole.\r\n\r\nThey follow Caleb through the beginnings of an encounter with a dark force known as the Cruel. The Cruel has been unleashed on the world through the cracks of reality as something far more powerful is coming... The Beginning of the End is about to be written....\r\n\r\nIt is filled with cheesy movie references, jokes, and blasting hundreds of Cabal and creatures... Aka classic Bloody fun."
+  },
+  {
+    "id": "blood-cwhhrot",
+    "type": "TC",
+    "game": {
+      "name": "Blood"
+    },
+    "title": "Caleb Will Have His Revenge On Toronto",
+    "version": "1.3.2",
+    "author": "Frances Rampage",
+    "def_modules": [
+      "CWHHROT.DEF"
+    ],
+    "ini": "CWHHROT.INI",
+    "description": "https://www.bloodgame.ru/forum/topic.php?forum=2\u0026topic=105\r\n\r\nPart of the saga of the cheerful Caleb - Scum Of Dallas, who by the will of fate turned out to be deceived by a vile Canadian hockey player. Betting is a risky business, especially when there is a corrupt rat lurking in your favorite team. That\u0027s what happened to our hero: Canadian hockey player Adam Ace received a tempting offer to drain the final match of the World Cup in exchange for eternal life and sold his incorruptible soul to the well-known Cabal sect. What does sports have to do with it, you ask? The thing is that tired of immortality and endless wanderings, Caleb found an outlet in sports betting and put all his fortune accumulated over a long time spent under the wing of fortune and a unique flair for victory on the above-mentioned unfortunate national team. This leads to another question: what about the Bondage of this? The answer is immediately revealed - knowing that Caleb will not forgive Ace for such a setup of the maple leaf country (and in fact the loss of money), the goal of the distraught fanatics who lost their great and powerful, to track down, find and destroy our dead man, so to speak, for bait."
+  },
+  {
+    "id": "blood-death-wish-ost",
+    "type": "TC",
+    "game": {
+      "name": "Blood"
+    },
+    "title": "Death Wish with OST",
+    "version": "1.7.9",
+    "author": "Bloatoid",
+    "ini": "dwmus.ini",
+    "description": "https://www.moddb.com/mods/death-wish-for-blood\r\n\r\nCaleb will need to muster all his strength to take down the mighty Tchernobog, who has managed to free himself from the grip of death.\r\n\r\nDeath Wish is a campaign for Blood with over 30 new levels, cut scenes, and more. All levels have been adapted so that Co-op play is not only possible, but enhanced with a helpful checkpoint system. The campaign includes several secret levels which all connect back to their episodes through special transitional missions.\r\n\r\nThe entire mod was developed by a single mapper, Bloatoid, who has been editing with the Build engine for many years. The original Death Wish was created between January 2010 and October 2011. Updates have been made over the years based on feedback from players and observing online streamers, as well as the addition of several extra secret levels. A 4th episode is in development.\r\n\r\nLet the festival of Blood continue!\r\n\r\nIncludes Soundtrack Addon by Speedy\r\n\r\nhttps://www.moddb.com/mods/death-wish-for-blood/downloads/dw-soundtrack-addon-by-speedy"
+  },
+  {
+    "id": "blood-death-wish",
+    "type": "TC",
+    "game": {
+      "name": "Blood"
+    },
+    "title": "Death Wish",
+    "version": "1.3",
+    "author": "Bloatoid",
+    "ini": "dw.ini",
+    "description": "https://www.moddb.com/mods/death-wish-for-blood\r\n\r\nCaleb will need to muster all his strength to take down the mighty Tchernobog, who has managed to free himself from the grip of death.\r\n\r\nDeath Wish is a campaign for Blood with over 30 new levels, cut scenes, and more. All levels have been adapted so that Co-op play is not only possible, but enhanced with a helpful checkpoint system. The campaign includes several secret levels which all connect back to their episodes through special transitional missions.\r\n\r\nThe entire mod was developed by a single mapper, Bloatoid, who has been editing with the Build engine for many years. The original Death Wish was created between January 2010 and October 2011. Updates have been made over the years based on feedback from players and observing online streamers, as well as the addition of several extra secret levels. A 4th episode is in development.\r\n\r\nLet the festival of Blood continue!"
+  },
+  {
+    "id": "blood-death-wish",
+    "type": "TC",
+    "game": {
+      "name": "Blood"
+    },
+    "title": "Death Wish",
+    "version": "1.4.19",
+    "author": "Bloatoid",
+    "ini": "dw.ini",
+    "description": "https://www.moddb.com/mods/death-wish-for-blood\r\n\r\nCaleb will need to muster all his strength to take down the mighty Tchernobog, who has managed to free himself from the grip of death.\r\n\r\nDeath Wish is a campaign for Blood with over 30 new levels, cut scenes, and more. All levels have been adapted so that Co-op play is not only possible, but enhanced with a helpful checkpoint system. The campaign includes several secret levels which all connect back to their episodes through special transitional missions.\r\n\r\nThe entire mod was developed by a single mapper, Bloatoid, who has been editing with the Build engine for many years. The original Death Wish was created between January 2010 and October 2011. Updates have been made over the years based on feedback from players and observing online streamers, as well as the addition of several extra secret levels. A 4th episode is in development.\r\n\r\nLet the festival of Blood continue!"
+  },
+  {
+    "id": "blood-death-wish",
+    "type": "TC",
+    "game": {
+      "name": "Blood"
+    },
+    "title": "Death Wish",
+    "version": "1.5.13",
+    "author": "Bloatoid",
+    "ini": "dw.ini",
+    "description": "https://www.moddb.com/mods/death-wish-for-blood\r\n\r\nCaleb will need to muster all his strength to take down the mighty Tchernobog, who has managed to free himself from the grip of death.\r\n\r\nDeath Wish is a campaign for Blood with over 30 new levels, cut scenes, and more. All levels have been adapted so that Co-op play is not only possible, but enhanced with a helpful checkpoint system. The campaign includes several secret levels which all connect back to their episodes through special transitional missions.\r\n\r\nThe entire mod was developed by a single mapper, Bloatoid, who has been editing with the Build engine for many years. The original Death Wish was created between January 2010 and October 2011. Updates have been made over the years based on feedback from players and observing online streamers, as well as the addition of several extra secret levels. A 4th episode is in development.\r\n\r\nLet the festival of Blood continue!"
+  },
+  {
+    "id": "blood-death-wish",
+    "type": "TC",
+    "game": {
+      "name": "Blood"
+    },
+    "title": "Death Wish",
+    "version": "1.6.7",
+    "author": "Bloatoid",
+    "ini": "dw.ini",
+    "description": "https://www.moddb.com/mods/death-wish-for-blood\r\n\r\nCaleb will need to muster all his strength to take down the mighty Tchernobog, who has managed to free himself from the grip of death.\r\n\r\nDeath Wish is a campaign for Blood with over 30 new levels, cut scenes, and more. All levels have been adapted so that Co-op play is not only possible, but enhanced with a helpful checkpoint system. The campaign includes several secret levels which all connect back to their episodes through special transitional missions.\r\n\r\nThe entire mod was developed by a single mapper, Bloatoid, who has been editing with the Build engine for many years. The original Death Wish was created between January 2010 and October 2011. Updates have been made over the years based on feedback from players and observing online streamers, as well as the addition of several extra secret levels. A 4th episode is in development.\r\n\r\nLet the festival of Blood continue!"
+  },
+  {
+    "id": "blood-death-wish",
+    "type": "TC",
+    "game": {
+      "name": "Blood"
+    },
+    "title": "Death Wish",
+    "version": "1.7.9",
+    "author": "Bloatoid",
+    "ini": "dw.ini",
+    "description": "https://www.moddb.com/mods/death-wish-for-blood\r\n\r\nCaleb will need to muster all his strength to take down the mighty Tchernobog, who has managed to free himself from the grip of death.\r\n\r\nDeath Wish is a campaign for Blood with over 30 new levels, cut scenes, and more. All levels have been adapted so that Co-op play is not only possible, but enhanced with a helpful checkpoint system. The campaign includes several secret levels which all connect back to their episodes through special transitional missions.\r\n\r\nThe entire mod was developed by a single mapper, Bloatoid, who has been editing with the Build engine for many years. The original Death Wish was created between January 2010 and October 2011. Updates have been made over the years based on feedback from players and observing online streamers, as well as the addition of several extra secret levels. A 4th episode is in development.\r\n\r\nLet the festival of Blood continue!"
+  },
+  {
+    "id": "blood-death-wish",
+    "type": "TC",
+    "game": {
+      "name": "Blood"
+    },
+    "title": "Death Wish",
+    "version": "2.0",
+    "author": "Bloatoid",
+    "release_date": "2026-03-20",
+    "def_modules": [
+      "dw.def"
+    ],
+    "ini": "dw.ini",
+    "description": "https://www.moddb.com/mods/death-wish-for-blood\r\n\r\nCaleb will need to muster all his strength to take down the mighty Tchernobog, who has managed to free himself from the grip of death.\r\n\r\nDeath Wish is a campaign for Blood with over 30 new levels, cut scenes, and more. All levels have been adapted so that Co-op play is not only possible, but enhanced with a helpful checkpoint system. The campaign includes several secret levels which all connect back to their episodes through special transitional missions.\r\n\r\nThe entire mod was developed by a single mapper, Bloatoid, who has been editing with the Build engine for many years. The original Death Wish was created between January 2010 and October 2011. Updates have been made over the years based on feedback from players and observing online streamers, as well as the addition of several extra secret levels.\r\n\r\nLet the festival of Blood continue!"
+  },
+  {
+    "id": "blood-eviction",
+    "type": "TC",
+    "game": {
+      "name": "Blood"
+    },
+    "title": "Eviction",
+    "version": "1.5.1",
+    "author": "Austin \u0022SpillSomeBlood\u0022 Adams",
+    "ini": "EVICTION.ini",
+    "rff_main": "EVIC.RFF",
+    "rff_sound": "EVICSND.RFF",
+    "dependencies": {
+      "features": [
+        "Modern_Types"
+      ]
+    },
+    "description": "https://www.moddb.com/mods/eviction-addon-for-blood\r\n\r\nEviction is an add-on I have been working on over the past 3-4 years. At this release, it contains 5 highly detailed levels that surpass the original limits of the vanilla game. 4 of which are campaign levels with an additional multiplayer level. It contains five new enemies! Over 35\u002B secrets to be found and dozens of side areas to explore! Randomized keycodes and clues for secrets. Meaning each time you play the code and clue will be unique! Modern effects like patrolling enemies and low gravity!",
+    "executables": {
+      "Windows": {
+        "NBlood": "nblood.exe"
+      }
+    }
+  },
+  {
+    "id": "blood-faitd",
+    "type": "TC",
+    "game": {
+      "name": "Blood"
+    },
+    "title": "Final Alone in the Dark",
+    "version": "1.3",
+    "author": "NoOne",
+    "ini": "FAITD.INI",
+    "rff_main": "FAITD.RFF",
+    "rff_sound": "FAITD.RFF",
+    "description": "https://www.moddb.com/mods/final-alone-in-the-dark\r\n\r\nAfter one and a half years of work we are ready to officially introduce you this addon. For a long time we\u0027ve been thinking of how to preserve the atmosphere of this game loved by all of us, but at the same time to extend the existing limits, bring up new gameplay and experience. This time we\u0027ve gone far beyond simple fan map-making and are going to prove to you that Blood is not this hopeless even without source code. From the beginning BAITD was aimed at expanding gameplay, it can\u0027t be limited by common gameplay borders, so here you\u0027re going to see a lot of new features."
+  },
+  {
+    "id": "blood-fleshed-out",
+    "type": "TC",
+    "game": {
+      "name": "Blood"
+    },
+    "title": "Fleshed Out",
+    "version": "1.7.14",
+    "author": "Skobbejak Games",
+    "ini": "FO.INI",
+    "description": "https://www.moddb.com/mods/blood-fleshed-out\r\n\r\nAfter the death of Tchernobog, the surviving members of the Cabal openend up alternate spirit worlds to grow their army again. They are planning to create a new God and rule the world once and for all. So get the guns ready, Caleb is about make a bloody mess again.."
+  },
+  {
+    "id": "blood-fotd",
+    "type": "TC",
+    "game": {
+      "name": "Blood"
+    },
+    "title": "Fate of the Damned",
+    "version": "1.1.2",
+    "author": "Daedalus",
+    "def_modules": [
+      "FATE.def"
+    ],
+    "ini": "FATE.ini",
+    "description": "https://www.moddb.com/mods/fate-of-the-damned\r\n\r\nFate of the Damned is a meticulously crafted custom campaign for BLOOD which aims to speculate and explore another shadowed path that Caleb might\u0027ve undertaken. While taking care to never stray far from the gameplay formula that made BLOOD so gripping, the campaign will see Caleb journey through new environments that he has not seen before. Gruesome new discoveries await as Caleb tears through hordes of the undead, and nothing is left unscathed in his quest for vengeance.The version 1.1 release contains the following features:\r\n\r\n- 2 episodes consisting of 18 maps total, which fully support Single Player, Co-operative, BloodBath and Capture the Flag across all difficulty settings.\r\n\r\n- A series of exhilarating, all new, low resolution cutscenes which tell the campaign\u0027s story.\r\n\r\n- Lots of new, chilling music as an optional extra.\r\n\r\n- A splash of custom art that is used sparingly.\r\n\r\n- A large amount of fiendish secrets waiting to be discovered.\r\n\r\n- Challenging and occasionally downright unfair encounters with BLOOD\u0027s monsters, unsuitable for those whose faith is weak.\r\n\r\n- Support for the NBlood and BloodGDX ports - to a point."
+  },
+  {
+    "id": "blood-frmeat2",
+    "type": "TC",
+    "game": {
+      "name": "Blood"
+    },
+    "title": "French Meat 2",
+    "version": "2.3.1",
+    "author": "TEDD",
+    "def_modules": [
+      "FRENCHM2.def"
+    ],
+    "ini": "FRENCHM2.ini",
+    "description": "https://www.moddb.com/mods/french-meat-2\r\n\r\nAfter the French Meat episode for BLOOD, the second with 8 new maps including new tiles and soundtracks for an adventure with a unique atmosphere immersed in the heart of paradise island colonized by the pirates of Cabal! kill them all, make a maximum of death, blow them up, slaughter them wherever they are.\r\n\r\nINCLUDING :\r\n\r\n- French Meat episode 1 updated : 9 maps\r\n\r\n- French Meat episode 2 : 8 maps \u002B new tiles"
+  },
+  {
+    "id": "blood-hostile-takeover",
+    "type": "TC",
+    "game": {
+      "name": "Blood"
+    },
+    "title": "Hostile Takeover",
+    "version": "1.1",
+    "author": "Bloatoid",
+    "ini": "Hostile.ini",
+    "description": "Hostile Takeover is a 2001 fan add-on for Blood by Dustin \u0022Bloatoid\u0022 Twilley, previous creator of Inherit the Earth (1999) and much later Death Wish (2011, 2017-2020). It features a ghost town, underwater base, carnival and island level, among others."
+  },
+  {
+    "id": "blood-inherit",
+    "type": "TC",
+    "game": {
+      "name": "Blood"
+    },
+    "title": "Inherit the Earth",
+    "version": "1.0",
+    "author": "Bloatoid",
+    "ini": "Earth.ini",
+    "description": "When Tchernobog was defeated in the Hall of Epiphany, He was forced to return to His own realm. The power and rage released by Caleb while fighting the Dreaming god was partly absorbed, and had allowed Tchernobog to lay dormant gathering energy to follow on with His plan to open the Gateway- the connection between the realms of the living and the damned. Would Caleb be able to stop the revived Daemon Tchernobog? Contains a total of 3 episodes."
+  },
+  {
+    "id": "blood-its-a-war-out-there-duology",
+    "type": "TC",
+    "game": {
+      "name": "Blood"
+    },
+    "title": "It\u0027s a War Out There Duology",
+    "version": "1.0",
+    "author": "TOT COMICS",
+    "ini": "AWAR.ini",
+    "description": "One beautiful cloudy day you were sitting in your shack very, very, bored. You wished to go outside and look for something to do, but being as it is a war out there, there is a bunch of mean evil nasty things outside that wish to harm you. \r\n\r\nAfter a while of thinking about this situation, you come to the conclusion that the mean evil nasty things outside could be the very solution to your boredom. Sure they wish to harm you, but could you not harm them as well?\r\n\r\nAn evil smile streches  across your face as you grab your shotgun and rush out the door."
+  },
+  {
+    "id": "blood-lost-episode",
+    "type": "TC",
+    "game": {
+      "name": "Blood"
+    },
+    "title": "The Lost Episode",
+    "version": "1.0",
+    "author": "Maz",
+    "ini": "LOST.INI",
+    "description": "https://www.moddb.com/games/blood/addons/the-lost-episode\r\n\r\nThis Episode is made up of eight maps taken straight from the leaked alpha. There are minor changes in aesthetics in a few of the maps however teh author made sure to keep all maps as close to the original author\u0027s intentions and art direction as possible."
+  },
+  {
+    "id": "blood-marrow",
+    "type": "TC",
+    "game": {
+      "name": "Blood"
+    },
+    "title": "Marrow",
+    "version": "2.0",
+    "author": "Nick Palsmeier",
+    "ini": "MARROW.ini",
+    "description": "https://playmarrow.com/\r\n\r\nTchernobog lays dead, his form fading away from the world as Caleb turns his back to the smoldering corpse. Vengeance sated, he leaves the Hall of the Epiphany behind. Feeling no less disdain for the world than he did with Ophelia, and experiencing none of the joy she brought, he returns to the grave to die once more. A hopefully final resting place.\r\n\r\nThe Cabal had been scattered far and wide by the gunman\u0027s path of revenge, but in his absence they regathered, regrouped, motivated out of their own sense of vengeance. Caleb was their general, the chosen one of their dark god and he had betrayed them all twice over.\r\n\r\nHe must burn for rejecting the honor of being sacrificed, for striking at Tchernobog. This suffering is best repaid by the tongues of Cerberus. Gathering his remains, the diaspora cinders of his pit, they enacted plans to resurrect him, and sought out Caleb\u0027s newfound grave, and bring him face to face with a fiery end.\r\n\r\n- A complete brand new episode.\r\n\r\n- Control Caleb as he carves a swath of carnage through the Cabal.\r\n\r\n- Experience ten brand new levels!\r\n\r\n- Using only assets from the original game, crafting a dark and horrific journey for Caleb."
+  },
+  {
+    "id": "blood-nightmares",
+    "type": "TC",
+    "game": {
+      "name": "Blood"
+    },
+    "title": "Nightmares Beta",
+    "version": "0.2",
+    "author": "Bloodskar",
+    "def_modules": [
+      "Night.DEF"
+    ],
+    "ini": "Night.ini",
+    "dependencies": {
+      "features": [
+        "TileFromTexture"
+      ]
+    },
+    "description": "https://www.moddb.com/mods/nightmares1"
+  },
+  {
+    "id": "blood-no-hope-in-sight",
+    "type": "TC",
+    "game": {
+      "name": "Blood"
+    },
+    "title": "No Hope In Sight",
+    "version": "0.2",
+    "author": "NoOne",
+    "ini": "NHIS.INI",
+    "rff_main": "NHIS.RFF",
+    "rff_sound": "NHISSND.RFF",
+    "dependencies": {
+      "features": [
+        "Modern_Types"
+      ]
+    },
+    "description": "http://cruo.bloodgame.ru/nhis/\r\n\r\n This is the demo map of the new episode. The project makes use of modern features for mappers that extends Blood\u0027s trigger system a lot."
+  },
+  {
+    "id": "blood-out-for-blood",
+    "type": "TC",
+    "game": {
+      "name": "Blood"
+    },
+    "title": "Out for Blood",
+    "version": "1.1",
+    "author": "BloodyTom",
+    "def_modules": [
+      "tiles.def"
+    ],
+    "ini": "OFB.ini",
+    "description": "Out for Blood is a six large level fan add-on (with one secret level) for Blood by Thomas \u0022BloodyTom\u0022 Ziehl, later author of Trauma Therapy, released on August 3, 2019."
+  },
+  {
+    "id": "blood-polished-cp",
+    "type": "TC",
+    "game": {
+      "name": "Blood"
+    },
+    "title": "Polished Cryptic Passage",
+    "version": "1.3",
+    "author": "Sir Seizhak",
+    "def_modules": [
+      "POLCP.DEF"
+    ],
+    "ini": "POLCP.INI",
+    "description": "http://bloodhispano.ucoz.es/\r\n\r\nA polished (or patched) version of Cryptic Passage, the official expansion pack for Blood.\r\n\r\nBasically, PCP keeps the original level design and gameplay but improves texturing, fixes mapping errors and lighting (very, very slightly touches in this regard). You can say this is a curated version of CP.\r\n\r\nIf you want to play an improved version of Cryptic Passage, say no more: get this patch!"
+  },
+  {
+    "id": "blood-somewhere-under-the-sea",
+    "type": "TC",
+    "game": {
+      "name": "Blood"
+    },
+    "title": "Somewhere Under the Sea",
+    "version": "1.0",
+    "author": "SpillSomeBlood",
+    "ini": "Rapture.ini",
+    "description": "This is a 3 level episode created around my Rapture map. All maps are coop, bbath, and teams compatible. The episode is fairly difficult."
+  },
+  {
+    "id": "blood-the-cult",
+    "type": "TC",
+    "game": {
+      "name": "Blood"
+    },
+    "title": "The Cult",
+    "version": "1.1",
+    "author": "bifurcator_x",
+    "ini": "cult.ini",
+    "description": "https://www.moddb.com/mods/blood-the-cult\r\n\r\nBLOOD: the Cult is a new episode that contains 5 single player maps for original Blood."
+  },
+  {
+    "id": "blood-trauma-therapy",
+    "type": "TC",
+    "game": {
+      "name": "Blood"
+    },
+    "title": "Trauma Therapy",
+    "version": "2.5",
+    "author": "Thomas \u0022BloodyTom\u0022 Ziehl",
+    "ini": "TT.INI",
+    "rff_main": "TT.RFF",
+    "rff_sound": "TTSND.RFF",
+    "description": "https://www.moddb.com/mods/blood-trauma-therapy\r\n\r\nCaleb has won over the Cabal and destroyed the evil god Tchernobog. A short time has passed but Caleb can not find any rest. He is tormented by horrid dreams and visions that are haunting him and he has trouble distinguishing reality from dream. Awaking one day in hospital having no idea how he got there he sees only one solution to his agony. He has to find the three vessels of Tchernobog\u0027s Aura to resurrect him and kill him for the last time in hope of finding peace and rest."
+  },
+  {
+    "id": "blood-way-of-ira",
+    "type": "TC",
+    "game": {
+      "name": "Blood"
+    },
+    "title": "The Way of Ira",
+    "version": "1.1.3",
+    "author": "Frances Rampage",
+    "ini": "ira.ini",
+    "rff_main": "IRA.RFF",
+    "rff_sound": "IRASND.RFF",
+    "description": "https://www.moddb.com/mods/the-way-of-ira\r\n\r\nYears after dealing with the Cabal, Caleb lives on the outskirts of a small village.\r\n\r\nAfter having been almost fully erradicated, the last Cabal infiltrated the highest ranks of most religions and governments. Years passed by, more Cabal got recruited and step by step the people got mentally prepared to obey what was coming, one religion, one government, ruled by the Cabal."
+  },
+  {
+    "id": "blood-what-lies-beneath",
+    "type": "TC",
+    "game": {
+      "name": "Blood"
+    },
+    "title": "What Lies Beneath",
+    "version": "1.5.16",
+    "author": "BloodyTom",
+    "def_modules": [
+      "WLB.DEF"
+    ],
+    "ini": "WLB.INI",
+    "rff_main": "WLB.RFF",
+    "rff_sound": "WLBSND.RFF",
+    "dependencies": {
+      "features": [
+        "Modern_Types"
+      ]
+    },
+    "incompatibles": {
+      "addons": [
+        {
+          "id": "blood-smooth"
+        },
+        {
+          "id": "blood-cultists-with-guns"
+        }
+      ]
+    },
+    "description": "https://www.moddb.com/mods/blood-what-lies-beneath\r\n\r\nFollow Caleb who is lost at sea to a mysterious island. What will he discover beneath the surface, in the bowels of the island? A dark cult has taken over a mansion, its surroundings and the secrets beneath the reef.\r\n\r\nThis is a non-linear addon for Blood. Fight the way you want, choose your own path through the island and find places otherwise kept a secret. Find clues to progress with tomes around the island.",
+    "executables": {
+      "Windows": {
+        "NBlood": "nblood.exe",
+        "NotBlood": "notblood.exe"
+      },
+      "Linux": {
+        "NotBlood": "notblood"
+      }
+    },
+    "options": [
+      {
+        "name": "SmoothBlood",
+        "parameters": {
+          "SB.DEF": "DEF"
+        }
+      },
+      {
+        "name": "Cultists with guns",
+        "parameters": {
+          "CW.DEF": "DEF"
+        }
+      },
+      {
+        "name": "Additional voxels",
+        "parameters": {
+          "KVX2.DEF": "DEF"
+        }
+      },
+      {
+        "name": "Voxel trees",
+        "parameters": {
+          "KVX3.DEF": "DEF"
+        }
+      }
+    ]
+  },
+  {
+    "id": "blood-willard",
+    "type": "TC",
+    "game": {
+      "name": "Blood"
+    },
+    "title": "Willard",
+    "version": "1.5",
+    "author": "Bloodskar",
+    "def_modules": [
+      "WILLARD.DEF"
+    ],
+    "ini": "WILLARD.INI",
+    "dependencies": {
+      "features": [
+        "Modern_Types"
+      ]
+    },
+    "description": "https://www.moddb.com/downloads/willard\r\n\r\nThis is the full version of Willard, consisting of 5 levels. It takes place a few decades after the original game, in and around a remote ghost town far out in the woods. Strange things have been reported from the area and Caleb goes to investigate... The story is told from messages, make sure you read any square or rectangular shaped books you find (not the voxel books). While it certainly has action in places, it\u2019s more about atmosphere."
+  },
+  {
+    "id": "blood-gothic-library",
+    "type": "Map",
+    "game": {
+      "name": "Blood"
+    },
+    "title": "Gothic Library DX",
+    "version": "1.1",
+    "author": "MetHy",
+    "dependencies": {
+      "addons": [
+        {
+          "id": "bloodcp"
+        }
+      ]
+    },
+    "startmap": {
+      "file": "CP03DX.MAP"
+    },
+    "description": "https://www.moddb.com/games/blood/addons/gothic-library-dx\r\n\r\nGothic Library DX aims at merging the final version of the map with the rooms and layout of the beta version, while also filling in the empty rooms in the process. The goal is to stick as close as possible to the original intent and to the style of the two original authors. Thus, giving the map the few extra minutes of gameplay I feel it should have had."
+  },
+  {
+    "id": "blood-black-phantasm",
+    "type": "Mod",
+    "game": {
+      "name": "Blood"
+    },
+    "title": "Black Phantasm",
+    "version": "1.0",
+    "author": "Dzierzan",
+    "def_modules": [
+      "phantasm.def"
+    ],
+    "description": "https://www.moddb.com/games/blood/addons/black-phantasm\r\n\r\nThis pack replaces Phantasm sprites with the black variant"
+  },
+  {
+    "id": "blood-coagulated",
+    "type": "Mod",
+    "game": {
+      "name": "Blood"
+    },
+    "title": "Blood Coagulated",
+    "version": "1.1",
+    "author": "Cheello",
+    "def_modules": [
+      "chillo_blood.def"
+    ],
+    "incompatibles": {
+      "addons": [
+        {
+          "id": "blood-voxel-pack"
+        }
+      ]
+    },
+    "description": "https://www.moddb.com/mods/blood-coagulated/addons/blood-coagulated-11\r\n\r\nThis project is meant to replace the 2d sprites in Blood with 3d voxel models."
+  },
+  {
+    "id": "blood-cultists-no-melting",
+    "type": "Mod",
+    "game": {
+      "name": "Blood"
+    },
+    "title": "Cultists - No Melting",
+    "version": "1.0",
+    "author": "Dzierzan",
+    "def_modules": [
+      "cultists_no_melting.def"
+    ],
+    "description": "https://www.moddb.com/games/blood/addons/cultists-no-melting\r\n\r\nThis addon removes melting animation of cultist\u0027s dead body."
+  },
+  {
+    "id": "blood-cultists-with-guns",
+    "type": "Mod",
+    "game": {
+      "name": "Blood"
+    },
+    "title": "Cultists With Correct Guns",
+    "version": "3.0",
+    "author": "Dzierzan",
+    "def_modules": [
+      "cultists_with_guns.def"
+    ],
+    "description": "https://www.moddb.com/games/blood/addons/cultists-with-correct-guns\r\n\r\nThis mod gives every cultist his correct weapon. So that means you\u0027ll see Ackolyte with actual TNT, Cultist with a shotgun, Fanatic with a tommy gun and finally Zealot with tesla gun.\r\n\r\nAlso included:\r\n\r\n- Different sprites for Cultist\u0027s electrocution\r\n\r\n- Blood Alpha Cultist\u0027s beast transformation animation"
+  },
+  {
+    "id": "blood-gargoyle-blue-eyes",
+    "type": "Mod",
+    "game": {
+      "name": "Blood"
+    },
+    "title": "Stone Gargoyle - Blue Muzzle Flash",
+    "version": "1.0",
+    "author": "Dzierzan",
+    "def_modules": [
+      "stone_gargoyle_blue.def"
+    ],
+    "description": "https://www.moddb.com/games/blood/addons/stone-gargoyle-blue-muzzle-flash\r\n\r\nThis addon disables grey palette applied to shooting sprites of Stone Gargoyle, revealing intended blue muzzle flash.\r\n\r\nWhen you browse through Blood game sprites, you may notice that Stone Gargoyle has shooting sprites with blue muzzle flash, but in game it\u0027s grey-ish. It\u0027s because the shooting animation still has grey palette applied to it. In my opinion it is an oversight from the developers.\r\n\r\nThis addon restores that by simply disabling grey palette for shooting animation only."
+  },
+  {
+    "id": "blood-hq-sounds",
+    "type": "Mod",
+    "game": {
+      "name": "Blood"
+    },
+    "title": "High Quality Sound Effects",
+    "version": "1.3",
+    "author": "Dzierzan",
+    "dependencies": {
+      "features": [
+        "SndInfo"
+      ]
+    },
+    "description": "https://www.moddb.com/mods/blood-high-quality-sound-effects\r\n\r\nThis mod replaces original sounds with high quality ones based on actual sources. If a specifc source was not found, then a sound was upscaled."
+  },
+  {
+    "id": "blood-innocent-gibbing",
+    "type": "Mod",
+    "game": {
+      "name": "Blood"
+    },
+    "title": "Innocent - Gibbing",
+    "version": "1.0",
+    "author": "Dzierzan",
+    "def_modules": [
+      "innocent_gibs.def"
+    ],
+    "description": "https://www.moddb.com/games/blood/addons/innocent-gibbing\r\n\r\nThis addon adds gibbing animation for Innocents."
+  },
+  {
+    "id": "blood-smooth",
+    "type": "Mod",
+    "game": {
+      "name": "Blood"
+    },
+    "title": "SmoothBlood",
+    "version": "1.1",
+    "author": "Dzierzan, Phredreeke",
+    "def_modules": [
+      "smooth_blood.def"
+    ],
+    "incompatibles": {
+      "addons": [
+        {
+          "id": "blood-smooth-hand"
+        },
+        {
+          "id": "blood-smooth-alpha"
+        },
+        {
+          "id": "blood-what-lies-beneath"
+        }
+      ]
+    },
+    "description": "https://www.moddb.com/mods/smoothblood\r\n\r\nThis is a modification for Blood which allows playing the game with smoother weapon animations."
+  },
+  {
+    "id": "blood-smooth-alpha",
+    "type": "Mod",
+    "game": {
+      "name": "Blood"
+    },
+    "title": "SmoothBlood with alpha sprites",
+    "version": "1.1",
+    "author": "Dzierzan, Phredreeke",
+    "def_modules": [
+      "smooth_blood_alpha.def"
+    ],
+    "incompatibles": {
+      "addons": [
+        {
+          "id": "blood-smooth"
+        },
+        {
+          "id": "blood-smooth-hand"
+        },
+        {
+          "id": "blood-what-lies-beneath"
+        }
+      ]
+    },
+    "description": "https://www.moddb.com/mods/smoothblood\r\n\r\nThis is a modification for Blood which allows playing the game with smoother weapon animations.\r\n\r\nThis version also replaces weapons sprites with versions from Alpha build."
+  },
+  {
+    "id": "blood-smooth-hand",
+    "type": "Mod",
+    "game": {
+      "name": "Blood"
+    },
+    "title": "SmoothBlood with hand",
+    "version": "1.1",
+    "author": "Dzierzan, Phredreeke",
+    "def_modules": [
+      "smooth_blood_hand.def"
+    ],
+    "incompatibles": {
+      "addons": [
+        {
+          "id": "blood-smooth"
+        },
+        {
+          "id": "blood-smooth-alpha"
+        },
+        {
+          "id": "blood-what-lies-beneath"
+        }
+      ]
+    },
+    "description": "https://www.moddb.com/mods/smoothblood\r\n\r\nThis is a modification for Blood which allows playing the game with smoother weapon animations.\r\n\r\nThis verions adds hands to the sawed-off."
+  },
+  {
+    "id": "blood-voxel-pack",
+    "type": "Mod",
+    "game": {
+      "name": "Blood"
+    },
+    "title": "Voxel Pack",
+    "version": "0.97",
+    "def_modules": [
+      "blood_voxels.def"
+    ],
+    "incompatibles": {
+      "addons": [
+        {
+          "id": "blood-coagulated"
+        }
+      ]
+    },
+    "description": "https://github.com/fgsfds/Blood-Voxel-Pack/\r\n\r\nVoxel replacements for sprites in Blood"
+  },
+  {
+    "id": "blood-voxel-pack-extra",
+    "type": "Mod",
+    "game": {
+      "name": "Blood"
+    },
+    "title": "Voxel Pack Extras",
+    "version": "0.97",
+    "def_modules": [
+      "blood_voxels_extra.def"
+    ],
+    "dependencies": {
+      "addons": [
+        {
+          "id": "blood-voxel-pack"
+        }
+      ]
+    },
+    "incompatibles": {
+      "addons": [
+        {
+          "id": "blood-coagulated"
+        },
+        {
+          "id": "blood-willard"
+        },
+        {
+          "id": "blood-frmeat2"
+        }
+      ]
+    },
+    "description": "https://github.com/fgsfds/Blood-Voxel-Pack/\r\n\r\nAdditional voxel replacements for sprites in Blood for high-performant PCs"
+  },
+  {
+    "id": "duke3d-1999-2000tc",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "1999/2000 TC",
+    "version": "1.0",
+    "author": "Curtis Tuckfield \u0026 Scott Tuckfield",
+    "con_main": "scripts/2000tc.con",
+    "description": "Duke was going to see Primus in concert, but first he had to save the world. Get to the concert or you suck! Has alot of pop culture references, movies, tv serials and other video games.. new textures, music.\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
+  },
+  {
+    "id": "duke3d-25th_century",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "25th Century Duke",
+    "version": "1.0",
+    "author": "Kaotik Industries",
+    "con_main": "scripts/25th_century.con",
+    "description": "25th Century Duke is an add-on episode set in the 25th Century, a time where the global population is exceeding the 300 billion mark. The environment has been depleeted so much so that the creation of oxygen now rests in the hands of big industries. The cities of the world reach higher and higher for the clouds. Scenarios not dis-similar to those found in the cult movies BladeRunner and The Fifth Element.\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
+  },
+  {
+    "id": "duke3d-adg-episode",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "ADG Episode",
+    "version": "1.0",
+    "author": "Alejandro Glavic",
+    "con_main": "scripts/adg_episode.con",
+    "description": "Duke was working for the EDF and received a call because the aliens are planning to build a HUGE weapon on earth and use it to destroy other planets and then, possibly the Earth. So there is no time to sleep, duke runs out to find them and stop these f*cking aliens!\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
+  },
+  {
+    "id": "duke3d-adream-trilogy",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "A.Dream Trilogy",
+    "version": "1.0",
+    "author": "Zykov Eddy",
+    "con_main": "scripts/dreamtrilogy.con",
+    "dependencies": {
+      "features": [
+        "EDuke32_CON"
+      ]
+    },
+    "description": "https://forums.duke4.net/topic/3420-adream-trilogy/\r\n\r\nA.dream is a mini mod which includes three horror maps. First map is an improved and edited version of A.dream 1, second is a complete remade version of A.dream 2. The third map is made from scratch.\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
+  },
+  {
+    "id": "duke3d-ageofevil",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "Age of Evil",
+    "version": "1.0",
+    "author": "Benjamin Richard \u0027Yahtzee\u0027 Croshaw",
+    "con_main": "scripts/ageofevil.con",
+    "def_main": "scripts/ageofevil.def",
+    "description": "Christopher Quinn, novelist, British citizen, eldest son of Lord and Lady Quinn of Rotchestershire, England, was rather surprised when he came home from a booksigning tour one day to find that both his parents were dead. He was even more surprised when he dropped to his knees and burst out laughing.\r\n\r\nIndeed, this worried him when he had recovered, so as soon as the funeral was over he toddled on down to this local psychiatric hospital for a checkup. He was found to possess a borderline psychopathic personality, and it was recommended that he stay at the institute for further evaluation.\r\n\r\nOne night, Chris is awoken by a terrible scream. At first he thinks another serious inmate is being given a cold shower, but then he notices a rather eerie silence hanging over the place. He could hear unearthly moans and grisly noises in the distance. A security guard burst in, a knife buried in his spine, and collapsed upon the floor, dead. Even with slight psychosis Chris can tell something is very, very wrong. He dresses swiftly in his civilian clothes and trenchcoat, and arms himself with the deceased guard\u0027s gun.\r\n\r\nAs he prepares to face whatever is waiting for him outside the door, a thin and baffling smile crosses his face.\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
+  },
+  {
+    "id": "duke3d-alfs-resort",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "ALF\u0027s Resort",
+    "version": "1.0",
+    "author": "ALF",
+    "con_main": "scripts/alfsresort.con",
+    "def_main": "scripts/alfsresort.def",
+    "dependencies": {
+      "addons": [
+        {
+          "id": "dukevaca"
+        }
+      ]
+    },
+    "description": "A big resort for Duke Nukem 3D, using the add-on \u0027Duke Caribbean, Life\u0027s a Beach\u0027!\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
+  },
+  {
+    "id": "duke3d-alien-armageddon",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "Alien Armageddon",
+    "version": "5.66",
+    "author": "DukeBoss",
+    "con_main": "scripts/AAGAME.CON",
+    "def_main": "AA.DEF",
+    "dependencies": {
+      "features": [
+        "EDuke32_CON"
+      ]
+    },
+    "description": "https://www.moddb.com/mods/duke-nukem-alien-armageddon\r\n\r\nAlien Armageddon is a mod for Duke Nukem 3D which adds many new high quality enemies, sexy NPCs, and a second playable character, all featured in epic new adventures. Some of the community\u0027s best talent have come together to make this amazing free expansion to the Duke 3D universe."
+  },
+  {
+    "id": "duke3d-alien-extermination-new-edition",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "Alien Extermination: New Edition",
+    "version": "1.0",
+    "author": "Widowmaker, Zykov Eddy et al.",
+    "con_main": "scripts/alienz.con",
+    "def_main": "alienz.def",
+    "dependencies": {
+      "features": [
+        "EDuke32_CON"
+      ]
+    },
+    "description": "https://forums.duke4.net/topic/9932-alien-extermination-tc-new-edition/\r\n\r\nFor a long time I\u0027ve been a huge fan of Alien movies. Being so popular, this franchise have spawned countless fan works, such as mods \u0026 maps for various games, including Duke 3D. Sadly, most of the projects are either have very few levels (AVD, Alien), or simply aren\u0027t polished enough, such as the case with ifamous Alien Extermination (AKA Alienz TC), released in 2000.\r\n\r\nAlienz TC was one of the first Duke 3D mods I\u0027ve ever played, and it always confused the hell out of me. It has tons of levels, some of which are quite good, but it also has tons of bugs, questionable artwork, no original music (plays standard Duke 3D tracks) \u0026 lots of unused content. Even the gameplay is extremely unbalanced. It bugs me that such huge TC is so underdeveloped and unpolished, unlike other mods, such as the classic Aliens TC for DOOM, for example. This is why I decided to make Alienz TC: New Edition. I honestly think Alien Extermination has a lot of potential, and after updating it and fixing numorous errors, I found myself enjoying it quite a bit. If you\u0027re a fan of Aliens and you never played the original Alienz TC, this is a good opportunity to try it out!\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
+  },
+  {
+    "id": "duke3d-alien-invasion",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "Alien Invasion",
+    "version": "1.0",
+    "author": "Fred Hero",
+    "con_main": "scripts/alieninvasion.con",
+    "description": "24 levels, alot of levels borrow elements from Blood and Hexen, and classic gameplay with all new environments.\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
+  },
+  {
+    "id": "duke3d-alien-vs-predator",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "Alien vs Predator",
+    "version": "1.0",
+    "author": "Slawomir \u0027LAW\u0027 Lawrynowicz",
+    "con_main": "scripts/alienpredator.con",
+    "def_main": "scripts/alienpredator.def",
+    "description": "\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
+  },
+  {
+    "id": "duke3d-american-assault",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "American Assault",
+    "version": "1.0",
+    "author": "Wardie Entertainment",
+    "con_main": "scripts/american.con",
+    "description": "Three episodes with 25 levels (1 secret). Duke visits famous places in the US such as the Sunset Boulevard or San Francisco. Several new weapons are available, e.g. the double-barreled shotgun from Doom II (which is fun), a gatling gun (hybrid of Duke3D and Shadow Warrior chainguns), nuclear pipebombs, the Super Devastator (from \u0022Duke Xtreme\u0022) and more.\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
+  },
+  {
+    "id": "duke3d-aqua-trilogy",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "Aqua Trilogy",
+    "version": "1.0",
+    "author": "Ben Roffelsen",
+    "con_main": "scripts/aqua.con",
+    "description": "3 levels with lots of underwater action. Was supposed to become an episode with at least 6 maps, but remained half-finished. Steal a mini sub (Aqua) to steal an experimental battle sub (Aqua2) which you use to enter the Aqua prison island (Aqua3). The episode was supposed to continue on the Jupiter moon Io, but it never happened.\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
+  },
+  {
+    "id": "duke3d-back-in-business",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "Back in Business",
+    "version": "1.0",
+    "author": "Alex \u0027Aleks\u0027 Pistol",
+    "con_main": "scripts/business.con",
+    "description": "https://forums.duke4.net/topic/11506-release-back-in-business-episode/\r\n\r\nAfter fighting off the alien invasions one after another for a couple of years, Duke finally decided to settle down a bit and concentrate on his own business. As a successful entrepreneur, he founded a chain network of fast food restaurants, strip clubs, bars and casinos. Today marks the opening of his newest casino in Los Angeles, \u201CThe Lady Killer Casino\u201D. With everything ready and in place, Duke watched some porn on his laptop, took a sip of Martini with vodka (shaken, not stirred!), decided it tastes like shit after years of abusing Jack Daniels and fat-ass Cuban cigars, and poured the contents of his glass into the plant. \u201CCheers\u201D, sneered Duke, as the ground beneath the plant greedily drained every last drip of the alcohol. Duke looked at his watch and noticed it\u2019s quarter to 8 \u2013 that means 15 more minutes until the casino opens. Should be enough time for a quicky with the new croupier chick, Millie Perkins, who\u2019s been eyeballing him all the time during the opening preparations (while ostentatiously licking or sucking on her fingers whenever their eyes met). Before leaving his office, he made sure the pistol is safely stored in a hideout behind a painting \u2013 just in case if anything goes wrong\u2026\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
+  },
+  {
+    "id": "duke3d-bad-weekend",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "Bad Weekend",
+    "version": "1.0",
+    "author": "Mister Sinister",
+    "con_main": "scripts/badweekend.con",
+    "def_main": "scripts/badweekend.def",
+    "description": "City-themed episode with 9 very difficult levels (2 secret). You can play the same episode with even higher difficulty (called \u0022Very Bad Weekend\u0022), featuring the first five maps with higher monster count.\r\n\r\nAlso with one new weapon (dual miniguns as chaingun replacement), new sounds and a new boss. The first five maps are rather conventional city slaughter while the final two levels take you to another dimension where things look and feel quite twisted.\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
+  },
+  {
+    "id": "duke3d-battlefield-3",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "Battlefield 3",
+    "version": "1.0",
+    "author": "Cedric \u0027Sang\u0027 Haegeman",
+    "con_main": "scripts/battlefield3.con",
+    "description": "https://dnr.duke4.net/maps/Battlefield_3.html\r\n\r\nThree huge, monster-filled levels with rich architecture and great detail. Challenging, but fun!\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
+  },
+  {
+    "id": "duke3d-blast-radius",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "Blast Radius",
+    "version": "5.0.6",
+    "author": "Aymeric \u0027ck3d\u0027 Nocus",
+    "con_main": "BRGAME.CON",
+    "dependencies": {
+      "features": [
+        "EDuke32_CON"
+      ]
+    },
+    "description": "https://www.moddb.com/mods/duke-nukem-3d-blast-radius\r\n\r\nFour years in the making (2019 2023), Blast Radius is a fan add-on for the Apogee/3D Realms classic 1996 FPS Duke Nukem 3D by ck3d. Originally a new main episode of 15 maps (estimated blind playthrough length: 20\u002B hours) introducing 40\u002B new types of alien scum, as of v. 5.0.0, it has spread to include a six-level demo for its continuation: Zero Zone, as well as reinterpretations of the original \u0022L.A. Meltdown\u0022, \u0022Lunar Apocalypse\u0022 \u0026 \u0022Shrapnel City\u0022 Duke 3D episodes each into one big level."
+  },
+  {
+    "id": "duke3d-bobsp-series",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "BobSP Series",
+    "version": "1.0",
+    "author": "Bob Averill",
+    "con_main": "scripts/bobsp.con",
+    "description": "Collection of 5 maps. BOBSP1-3 are about Duke being trapped on an island with a nuclear reactor that needs to be prevented from a meltdown. BOBSP4 is some kinda sequel, taking place completely underwater. BOBSPX is rather a standalone level which deals with a hive full of Protector Drones you have to destroy. \r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
+  },
+  {
+    "id": "duke3d-borg-nukem",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "Borg Nukem",
+    "version": "1.0",
+    "author": "Kevin \u0027Kef_Nukem\u0027 Cools/Borg Team",
+    "con_main": "scripts/borgnukem.con",
+    "def_main": "scripts/borgnukem.def",
+    "description": "Total Conversion with 14 SP (including intro) \u002B 8 DM maps, especially fun for Star Trek fans. \r\n\r\nYou start on board of the USS Voyager when being attacked by the Borg. With an all-new arsenal, you must find a way to get over to the Borg vessel and save your ship! Escape from an attacked starbase, fight for survival on an alien planet and face a nasty Borg Queen!\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
+  },
+  {
+    "id": "duke3d-burnt",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "Burnt",
+    "version": "1.0",
+    "author": "Petrovics Griffiths",
+    "con_modules": [
+      "scripts/burnt.con"
+    ],
+    "description": "Episode with 7 levels, action-packed and powered by an awesome MIDI soundtrack.\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
+  },
+  {
+    "id": "duke3d-canadian-carnage",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "Canadian Carnage",
+    "version": "1.0",
+    "author": "ChaotecH ProductionS",
+    "release_date": "1999-01-01",
+    "con_main": "CANGAME.CON",
+    "description": "Duke lands in Canada for a vacation only to find out aliens are invading! What better way to go sight seeing than stopping an invasion?\r\nThis is an unfinished TC originally released in beta with 9 levels, only four of which were completed. For this upload, only the finished maps will be in the \u0027Canadian Carnage\u0027 episode to make for a complete experience. The remaining have been seperated into the \u0027Unfinished Levels\u0027 episode to explore what was originally planned.\r\nEnjoy your adventure in Canada! Be on the look out for secrets, some key cards might be there..."
+  },
+  {
+    "id": "duke3d-castle-dukenstein",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "Castle Dukenstein",
+    "version": "1.0",
+    "author": "Myles Edmonds (Deadeye)",
+    "con_modules": [
+      "scripts/dukenstein.con"
+    ],
+    "dependencies": {
+      "features": [
+        "EDuke32_CON"
+      ]
+    },
+    "description": "I was getting sick of fighting monsters from the id, or aliens. I wanted to fight a real enemy... One you could really hate! I yerned for the good old days of blowing away nazis in Castle Wolfenstein, but with a more modern game engine. This is the result. This started out as a straight conversion of the 2 DoomII Wolfenstein levels into Duke maps. It is now a TC (Total Conversion) including graphics, sound, music, and 20 reworked Wolfenstein levels. \r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
+  },
+  {
+    "id": "duke3d-castlequest",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "Castle Quest",
+    "version": "1.0",
+    "author": "Bobadoo",
+    "con_main": "scripts/castlequest.con",
+    "description": "https://forums.duke4.net/topic/6752-release-castle-quest-7-map-pack\r\n\r\nDid you know that Duke Nukem\u0027s lineage dates back to the Middle Ages? The full name of the Duke Nukem you all know and love is actually Duke Igthorn Nukem the 21st.\r\n\r\nThis is a story about Duke Nukem the 1st. One day when his wife and little boy went out shopping, he awoke in a haze and said to himself \u0022what is that crap on the ground, and what is this in my hand\u0022. The next thing you know aliens are attacking him from all sides. After killing them all with his newfangled weapon, he decided to get on with life and see if he could use it to chop some wood. Nope, \u0022It\u0027s those bloody damn things again!\u0022 he says, and then something twinged in his brain, he\u0027d had enough.\r\n\r\n\u0022I\u0027m going to kill every damn one of those bastards!\u0022.\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
+  },
+  {
+    "id": "duke3d-command-conquer-map-pack",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "Command \u0026 Conquer Map Pack",
+    "version": "1.0",
+    "author": "Geoffrey \u0027Fakir\u0027 van Dijk",
+    "con_main": "scripts/cnc_pack.con",
+    "description": "What was once intended to turn into a C\u0026C Total Conversion for Duke3D fell miserably short and  is probably now best labelled as an episode, albeit with only four single player levels. \r\n\r\nEven though continuity between these four finished SP levels is virtually non-existent, they are among the best maps you may ever play, each with unique design, stunning gameplay and challenging encounters.\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
+  },
+  {
+    "id": "duke3d-community-build-project",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "Community Build Project",
+    "version": "1.0",
+    "author": "Duke Nukem 3D Community",
+    "con_main": "scripts/community.con",
+    "description": "Collection of 8 community maps (BJSHRINE, CBP2-8) which can be played back-to-back. Each of these    levels consists of parts contributed by several mappers, resulting in a lot of variety and surprises.\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
+  },
+  {
+    "id": "duke3d-complex",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "Complex",
+    "version": "1.0",
+    "author": "Jeremy \u0027Forklift\u0027 Wilson (Forklift Productions)",
+    "con_main": "scripts/complex.con",
+    "description": "Another alien attack on Earth... this time the aliens took over a small moon base and are sending troops via tele-porters to Los Angeles. The teleporters are being run from a U.S. military establishment on a small, rocky island in the Pacific. Duke is sent there alone (his preference), to find the teleporters and get to the moon base. The trouble is, the moon base is probably locked up. The commander of the base has the only key card - he was murdered in his Embassy Suites hotel room in L.A.. Duke will probably have to reteieve it. If and when he reaches the self destruct center at the base, he will have only a few moments to escape. There is an escape route already defined (leading to the docking bay). It will be opened after the base\u0027s self destruct mode has been initiated. Good luck...\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
+  },
+  {
+    "id": "duke3d-countdown-to-christmas",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "Countdown to Christmas",
+    "version": "1.0",
+    "author": "Sanek",
+    "con_main": "scripts/countdown.con",
+    "dependencies": {
+      "features": [
+        "EDuke32_CON"
+      ]
+    },
+    "description": "3 rather short maps with Christmas theme, using \u0022Nuclear Winter\u0022 assets and connected through a small story being told with ingame text messages.\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
+  },
+  {
+    "id": "duke3d-critical-mass",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "Critical Mass",
+    "version": "1.0",
+    "author": "Vitor \u0027Bocao\u0027 de Paulo",
+    "con_main": "scripts/criticalmass.con",
+    "def_main": "scripts/criticalmass.def",
+    "description": "Critical Mass is a 3 level episode with 4 new weapons and new (or modified) enemies, including boss.\r\nA secret nuclear research facility is under control of the aliens. The only way in is by a special teleport located at a EDF weaponry research building. After killing the aliens the only way out is by a escape turboplane at the hangar. \r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
+  },
+  {
+    "id": "duke3d-crucial-conflict",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "Crucial Conflict",
+    "version": "1.0",
+    "author": "Maarten Pinxten",
+    "con_main": "scripts/crucialconflict.con",
+    "description": "Maarten\u0027s Crucial Conflict is a trilogy aboutan alien attack on Europe. But there\u0027s more to the story than just shooting baddies! Explore detailed bases, solve puzzles kick butt in this mini three-map episode!\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
+  },
+  {
+    "id": "duke3d-daikarin",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "DaikariN",
+    "version": "1.0",
+    "author": "Gabriele R. \u0027saarek\u0027 Giaminardi",
+    "con_main": "scripts/daikarin.con",
+    "description": "Earth Defence Forces leader has been killed just when a strange artifact has been uncovered. Therefore Duke goes to investigate this at the EDF center. In the meantime, experiments on the artifact reveals its ability to teleport in space and time.\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
+  },
+  {
+    "id": "duke3d-dark-place-series",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "Dark Place Series",
+    "version": "1.0",
+    "author": "Taivo Maripuu",
+    "con_main": "scripts/darkplace.con",
+    "description": "Collection of all 5 maps of the \u0022Dark Place\u0022 series by Taivo Maripuu, grouped into an episode.\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
+  },
+  {
+    "id": "duke3d-death-drive",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "Death Drive",
+    "version": "1.0",
+    "author": "Mister Sinister",
+    "con_main": "scripts/deathdrive.con",
+    "description": "DEATH DRIVE is a 5-level action packed episode taking a lot of inspiration from classic L.A. Meltdown levels and a more recent release Metropolitan Mayhem yet with a twist of my own style and challenging fights of my own map \u0022Slaughterfest\u0022.\r\nBasically it\u0027s a huge battle from the very beginning till the very end if played on the intended difficulty setting. What makes it a bit different from the rest is the fact that every single map of this episode was made less then in 20 hours each.\r\nI tried my very best to make them visually good and fun to play. It\u0027s up for you to judge whether I\u0027ve accomplished my goal or not. \r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
+  },
+  {
+    "id": "duke3d-decay",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "Decay",
+    "version": "1.0",
+    "author": "Thought Process",
+    "con_main": "decay.con",
+    "def_main": "decay.def",
+    "dependencies": {
+      "features": [
+        "EDuke32_CON",
+        "Models",
+        "Hightile",
+        "Dynamic_Lighting"
+      ]
+    },
+    "incompatibles": {
+      "addons": [
+        {
+          "id": "*"
+        }
+      ]
+    },
+    "description": "https://www.moddb.com/mods/decay2\r\n\r\nDECAY is a game based on Duke Nukem 3D powered by EDuke32. It\u0027s a horror first person shooter surrounding the events of a zombie apocalypse and aftermath.",
+    "executables": {
+      "Windows": {
+        "EDuke32": "eduke32.exe"
+      },
+      "Linux": {
+        "EDuke32": "eduke32"
+      }
+    }
+  },
+  {
+    "id": "duke3d-dick-suckem",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "Dick Suckem",
+    "version": "1.1",
+    "con_main": "DSGAME.CON",
+    "dependencies": {
+      "features": [
+        "EDuke32_CON"
+      ]
+    },
+    "description": "https://www.moddb.com/games/duke-nukem-3d/addons/ms-paint-duke-nukem-dick-suckem\r\n\r\nDuke Nukem 3D but all sprites and graphics are redrawn using MSPAINT. Nothing serious. Just a joke mod made for fun and also to test my patience."
+  },
+  {
+    "id": "duke3d-dn64-revisited",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "DN64 Revisited",
+    "version": "1.0",
+    "author": "Duke64Nukem",
+    "con_main": "scripts/dn64revisited.con",
+    "def_main": "scripts/dn64revisited.def",
+    "dependencies": {
+      "features": [
+        "EDuke32_CON"
+      ]
+    },
+    "description": "This is a mini episode where you go back to some of the Duke Nukem 64 DM only maps except this time Duke is in for a little surprise!\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
+  },
+  {
+    "id": "duke3d-dnf2013",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "Duke Nukem Forever 2013",
+    "version": "1.03",
+    "author": "Gambini, Mikko Sandt, DavoX, Micky C",
+    "con_main": "DLCGAME.CON",
+    "def_modules": [
+      "DNF.DEF"
+    ],
+    "dependencies": {
+      "features": [
+        "EDuke32_CON"
+      ]
+    },
+    "description": "https://msdn.duke4.net/dnf2013.php\n\nDuke Nukem Forever 2013 is a 5-level mod for Duke Nukem 3D. It\u0027s essentially what Duke Nukem Forever, the game, might have been if it had been released as an expansion for Duke Nukem 3D. The assets and the levels have been greatly influenced and inspired by the 2001 Duke Nukem Forever E3 trailer, the very trailer that seemed to promise the imminent arrival of the best video game ever. Other trailers and preview screenshots were also used as sources.\n\nAlso includes 3-map DLC.",
+    "options": [
+      {
+        "name": "DLC Shotgun",
+        "parameters": {
+          "dlcshotgun.def": "DEF"
+        }
+      }
+    ]
+  },
+  {
+    "id": "duke3d-dookie",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "Dookie Nukem 3D",
+    "version": "1.0",
+    "author": "brownfarted",
+    "con_main": "DOOKIE.CON",
+    "def_modules": [
+      "dookie.def"
+    ],
+    "dependencies": {
+      "features": [
+        "EDuke32_CON"
+      ]
+    },
+    "description": "https://www.moddb.com/mods/dookie-nukem-3d\r\n\r\nThis Mod adds Dookie to Duke Nukem 3D : new Weapons, new Monsters, new Episode, new Skill, new Art, new Sounds, many Renames, Bullshit Time (Bullet Time), and Much Dookie! Powered by EDookie32 (EDuke32)."
+  },
+  {
+    "id": "duke3d-downtown-journey",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "Downtown Journey",
+    "version": "1.1",
+    "author": "Preto Murara",
+    "con_main": "scripts/downtown.con",
+    "description": "https://www.moddb.com/mods/pretomurara\r\n\r\nAn entire new episode for Duke Nukem 3D Atomic made in a Pentium MMX. There\u0027s no history yet. The idea was just to create a sequence of connected levels exploring urban places and daily situations, like take a metro or visit an abandoned asylum ;)\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
+  },
+  {
+    "id": "duke3d-duke-city",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "Duke City",
+    "version": "5.4",
+    "author": "Yves Bresson",
+    "con_modules": [
+      "DCityPak.con"
+    ],
+    "dependencies": {
+      "features": [
+        "EDuke32_CON"
+      ]
+    },
+    "description": "DukeCity is a set of FIVE maps, taking place in a realistic-looking city. Each of the five parts will make you travel through really many locations.\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
+  },
+  {
+    "id": "duke3d-duke-forces",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D",
+      "version": "Duke3D_Atomic"
+    },
+    "title": "Duke Forces",
+    "version": "2.10",
+    "author": "DeeperThought",
+    "con_main": "DFGAME.CON",
+    "def_main": "DUKEFORCES.def",
+    "dependencies": {
+      "features": [
+        "EDuke32_CON",
+        "Models"
+      ]
+    },
+    "description": "https://www.moddb.com/mods/duke-forces\r\n\r\nDuke Forces is a modification of Duke Nukem 3D, inspired by the Star Wars Dark Forces series. It works with all Duke Nukem 3D levels and automatically converts weapons, enemies, textures, sprites, music...pretty much everything into Star Wars content.",
+    "executables": {
+      "Windows": {
+        "EDuke32": "eduke32.exe"
+      }
+    }
+  },
+  {
+    "id": "duke3d-duke-is-007",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "Duke is 007",
+    "version": "1.0",
+    "author": "Jason Bredhauer",
+    "con_main": "scripts/duke007.con",
+    "description": "While intended to become a James Bond TC, this project was never finished. However, 6 really nice maps remained. You will visit interesting locations like a flying plane, an underwater base or a Russian missile silo.\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
+  },
+  {
+    "id": "duke3d-duke-is-ten",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "Duke Is Ten",
+    "version": "1.0",
+    "author": "Geoffrey van Dijk, Maarten van Oostrum, Iggy, William Gee et al.",
+    "con_main": "scripts/duke_ten.con",
+    "description": "The challenge: give a group of premier mappers from the community just three days to create a set of maps centered on the theme \u0022ten\u0022 to celebrate DukeNukem3D\u0027s 10 year release anniversary. Given the short amount of time to create the maps you shouldn\u2019t expect to be wowed by phenomenal architecture, incredible detailing, or flawless design. What you should expect is a test of your game playing skills. Are you up to it?\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
+  },
+  {
+    "id": "duke3d-duke-los-angeles",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "Duke Los Angeles",
+    "version": "1.0",
+    "author": "Daniel Mitchell",
+    "con_main": "scripts/duke_la.con",
+    "def_main": "scripts/duke_la.def",
+    "description": "After blasting through D.C., Duke is engaging the enemy in good old L.A. once more. Having a few new weapons in his arsenal, 10 SP levels (1 secret) are awaiting exploration.\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
+  },
+  {
+    "id": "duke3d-duke-nukem-advance-tc",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "Duke Nukem Advance TC",
+    "version": ".8",
+    "author": "branung",
+    "con_main": "DNAGAME.CON",
+    "dependencies": {
+      "features": [
+        "EDuke32_CON"
+      ]
+    },
+    "description": "https://www.moddb.com/mods/duke-nukem-advance-tc\r\nThe GBA game brought to Build! This mod for Duke 3D includes the entire campaign from Duke Nukem Advance by Torus Games, complete with all of its exclusive enemies, assets, and even in-level cutscenes!\r\n\r\nSince the GBA game runs on the Doom engine, this isn\u0027t a one-to-one port of the original. Instead, this is an attempt to bring the experience over to the more familiar game feel of the Build engine while staying faithful to the original\u0027s design. There\u0027s also optional enhancements such as voice clips in cutscenes and the ability to switch between the two completely different scripts the game has, which can be found in the mod\u0027s custom menu in-game.\r\n\r\nSpecial thanks to:\r\nGianni Matragrano for providing Duke lines for the cutscenes as one of the mod\u0027s options.\r\nVoxelvoid for sharing the work they\u0027ve done on their DNA4PC project on GitHub, which is how this got started."
+  },
+  {
+    "id": "duke3d-duke-tournament",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "Duke Tournament",
+    "version": "1.0",
+    "author": "Mikko Sandt and Duke Tournament Team",
+    "con_main": "scripts/tournament.con",
+    "def_main": "scripts/tournament.def",
+    "description": "Two episodes, one for SP (\u0022Annihilation\u0022, 5 maps) and one for MP (\u0022Duke Tournament\u0022, 8 maps).\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
+  },
+  {
+    "id": "duke3d-duke-xtreme-reloaded",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "Duke Xtreme Reloaded",
+    "version": "1.0",
+    "author": "Nukemdave",
+    "con_main": "DKEXGAME.CON",
+    "description": "https://forums.duke4.net/topic/7846-duke-xtreme-megaton-edition/\r\n\r\nOptimized Campaign Maps from the authorized expansion pack Duke Xtreme. \r\n\r\nThis is something I\u0027ve been working on for the past few nights. I went through all of the Duke Xtreme single player maps and set them up for multiplayer for Megaton Edition. I made some other, small fixes and improvements on the side, too. \r\n\r\nThe original expansion was released by WizardWorks in 1997, and is a combination of maps developed by Sunstorm Interactive and user maps downloaded from the Internet. The original release included a frontend for managing several packed in .CON hacks as well toggling on new weapons and enemies. This upload uses a modified .CON file which includes some of these alterations. "
+  },
+  {
+    "id": "duke3d-dukehard",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "Duke Hard",
+    "version": "1.2.2",
+    "author": "Duke4",
+    "con_modules": [
+      "HARD.CON"
+    ],
+    "def_modules": [
+      "dukehard.def"
+    ],
+    "description": "https://www.moddb.com/mods/duke-hard\r\n\r\nInspired by the movie Die Hard, the episode consists of 17 levels by 15 different map designers and progresses from the lobby to the rooftop of a skyscraper. Each level is confined to its own floor of the building, and although each floor features a different theme, various design constraints ensure a certain degree of consistency throughout the episode."
+  },
+  {
+    "id": "duke3d-dukeland",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "Dukeland",
+    "version": "1.0",
+    "author": "Parasite Productions",
+    "con_main": "scripts/dukeland.con",
+    "description": "Those aliens bastards have stolen the happiest place on earth-- Disneyland. The aliens tried to physically remove Disneyland and it broke into pieces. Your mission: take back New Orleans Square \u0026 Tomorrowland. \r\nNo one steals Disneyland ...and Lives!!!\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
+  },
+  {
+    "id": "duke3d-dukevr",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "DukeVR",
+    "version": "1.0",
+    "author": "Geoffrey \u0027Fakir\u0027 van Dijk",
+    "con_main": "scripts/duke_vr.con",
+    "description": "Training map set with 3 episodes and 18 maps. Each episode is harder than the previous one (blue = easy, green = medium, red = hard). Focus is completely shifting from visual to pure puzzle solving which you will notice right away after loading the first map: Besides a basic matrix-style texture, the levels look very bland and unfinished. The challenge is to complete the maps without dying and as fast as possible - usually requiring a certain strategy that you need to figure out first.\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
+  },
+  {
+    "id": "duke3d-dukezone2",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "Duke!Zone II",
+    "version": "2.21",
+    "author": "Simply Silly Software, WizardWorks, NightFright",
+    "con_modules": [
+      "DZ2USER.CON"
+    ],
+    "description": "https://forums.duke4.net/topic/7655-dukezone-ii-playability-edit/\n\nDuke!ZONE II is an expanded 1997 re-release of Duke!ZONE and an authorized expansion pack for Duke Nukem 3D.\n\nThis release removes a few problems you may encounter while playing the Duke!Zone II addon while also providing minor polishing."
+  },
+  {
+    "id": "duke3d-epic",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "Epic",
+    "version": "1.0",
+    "author": "Fermion",
+    "con_main": "scripts/epic.con",
+    "description": "Mini episode with 2 levels, featuring custom textures (Egyptian style). You start on a space station before being teleported to Egypt and finally ending up in a modern city with a huge movie theater where the finale takes place. The new textures are what makes this mod particularly interesting.\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
+  },
+  {
+    "id": "duke3d-escape-from-san-angelos",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "Escape from San Angelos",
+    "version": "1.0",
+    "author": "Gregory Douglas \u0027Chaos\u0027 Lemieux",
+    "con_main": "scripts/escape.con",
+    "description": "Episode with 5 city levels. Initially planned as a six-part episode, the author stopped  after four maps and released a fifth one (\u0022Paranoid\u0022) later. Your mission is to escape San Angelos, find the transporter to the alien home world, liberate a research facility and deal with the source of the alien scum in New York.\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
+  },
+  {
+    "id": "duke3d-eye-of-cul-episode",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "Eye of Cul Episode",
+    "version": "1.0",
+    "author": "Eye del Cul",
+    "con_main": "scripts/eyeofcul.con",
+    "description": "8 maps (1 secret) with mostly urban/industrial setting. Don\u0027t judge the episode too soon by its first two maps which are rather average. Design gets better and also darker later on as you fight through burning cities overrun by a satanic alien cult. The last two levels are heavily inspired by \u0022Blood\u0022, leading you through a cemetery until you reach the church of the cult where you have to eliminate all resistance.\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
+  },
+  {
+    "id": "duke3d-fbsp-trilogy",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "FbSp Trilogy",
+    "version": "1.0",
+    "author": "Geoffrey \u0027Fakir\u0027 van Dijk",
+    "con_main": "scripts/fbsp.con",
+    "def_main": "scripts/fbsp.def",
+    "description": "3 SP maps by Geoffrey \u0027Fakir\u0027 van Dijk, grouped to a one three-level episode.\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
+  },
+  {
+    "id": "duke3d-fm7x",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "FM7X",
+    "version": "1.0",
+    "author": "Fernando M\u00E1rquez",
+    "con_main": "FM7XGAME.CON",
+    "description": "https://forums.duke4.net/topic/12447-release-fm7x-the-complete-fernando-marquez-7-episode-full-steel-balled-pack\r\n\r\n\u0022It\u0027s time to abort your whole freakin\u0027 species\u0022 \u2013 Duke swore in this final speech to the alien queen as she was blown up into many liquid pulps of blood and splatter in her aquatic hideout.\r\nA year has passed since that miraculous event. Duke Nukem, a hero in his own right, is well known and highly respected - the tough macho man the world needed to be safe from any threats the earth might face. Nowadays, the man himself has been resting without a single worry. Nothing could be more perfect than a good old tasty wine, a few cigarettes scattered on the living room table, and even some R\u0026R, which he never grows tired of.\r\nFast forward a few days later \u2013 a huge spectrum of colors sparks through the sky of the United States and a massive spaceship sweeps down to earth as fast as a flashlight, ripping apart a huge chunk of earth and trembling down the whole damn country.\r\n\u0022Really? They are back! But, how is that possible?\u0022, Duke shrugs while glancing at the wrecked streets near his place. It seems they will attempt another try to conquer our planet. But unlike the prior attempt, they account for Duke\u2019s interference, and they are well prepared this time (or at least they think so\u2026)\r\nSuddenly, but completely expected, Duke\u0027s telephone rings uncontrollably... \u0022Well, I guess it\u2019s time to do another favor to the world...\u0022, he mutters as he answers the phone, greets the Colonel and awaits new instructions."
+  },
+  {
+    "id": "duke3d-fusion-redux-2018",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "Fusion Redux 2018",
+    "version": "1.0",
+    "author": "Roberto Diaz, James \u0027Jblade\u0027 Stanfield \u0026 Mere_Duke",
+    "con_main": "scripts/fusion.con",
+    "def_main": "scripts/fusionredux.def",
+    "dependencies": {
+      "features": [
+        "EDuke32_CON"
+      ]
+    },
+    "description": "Fusion is a Duke Nukem 3D TC that mixes weapons, enemies, art and level concepts from diverse FPS games, including Half-Life, Unreal, Quake I and II, and Blood.\r\nThe original release included three six-level episodes. A new version, called Fusion Redux, was released by James \u0022JBlade\u0022 Stanfield. This improved version adds support for EDuke32, adding some Polymer lighting to the original maps and replacing some sprites with their original model counterparts.\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
+  },
+  {
+    "id": "duke3d-genetic",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "Genetic",
+    "version": "1.0",
+    "author": "George-William Bernard",
+    "con_main": "GENETIC.CON",
+    "description": "https://www.moddb.com/mods/duke-nukem-3d-genetic-updated-2007-version\r\n\r\nThis mod was created by George-William \u0022Jaco\u0022 Bernard and originally released on February 23, 1999. At the time, it only included the Last Reaction and Water Bases episodes. Jaco released the final episode, Chimera, as a separate download on February 5, 2001. However, Jaco noted that he had lost his motivation to complete the episode, so he released Chimera in an incomplete form. Big City Nights, the last level of the Chimera episode, had a non-functioning Nuke Button, and it was missing a hidden area with a planned \u0022stargate\u0022 that would lead to a secret level. Four more levels were also planned: Deeper and Deeper, The Nest, The Hunt, and Another World. The final level was planned to feature a yellow alien boss that resembled the new enemy seen on the title screen. Mikko Sandt, an experienced level designer and owner of a Duke Nukem fan site, was able to connect with Jaco several years after the release of Chimera and offered to finish the episode on his behalf. Jaco agreed and provided Sandt with all the unused materials he had planned to use to finish the episode. However, there were not many unused materials. Using what little he was given, Sandt repurposed the scrapped materials to create Hidden Zone, a new final level for the mod. According to Sandt, Hidden Zone primarily consisted of two map files that he had merely stitched together. The new level was released on February 27, 2007 as a separate download. \r\n\r\n**For the first time ever, all of these separate releases have been merged into a single, cohesive mod for your convenience. Enjoy!**"
+  },
+  {
+    "id": "duke3d-god-of-war",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "God of War",
+    "version": "1.0",
+    "author": "Ben \u0027Existence\u0027 Bradley",
+    "con_main": "scripts/godofwar.con",
+    "def_main": "scripts/godofwar.def",
+    "description": "https://www.benbradley.com/mods.html\r\n\r\nGod of War is a free mod for Duke Nukem 3D version 1.5. This means that all you need play it is Duke 3D with either the Plutonium Pak, or the Atomic Edition. The mod is designed and built in a traditional \u0027addon pack\u0027 style. It contains three groups of levels.\r\n\r\nThe first is a new single-player episode containing seven maps. This takes Duke on a new journey; starting in town near L.A, then travelling through canyons to an EDF earth base, a moon base, an alien mothership, and finally to his destination: Mars.\r\n\r\nThe second group of levels are designed exclusively for multiplayer. There are five Dukematch maps, set in a variety of locations, including the alien homeworld, Mars, and umm... something called \u0027Kwake\u0027.\r\n\r\nThe last episode contains maps for a new multiplayer game: \u0027Arena\u0027. In an Arena game, two players fight to the death in a map no bigger than a few rooms. All maps are different, but each map also features one specific weapon. As soon as a player spawns they are given that weapon with infinite ammunition.\r\nThe single-player episode features three new enemies and a new boss. In Duke\u0027s favour there are also two new weapons; the \u0027Fire-Thrower\u0027, which spits out flames and can be used to rapidly set fire to large areas. There is also a prototype weapon, the \u0027Forcegun\u0027. This is basically a force-field in a gun - as well as damaging enemies it also propels them away. Naturally, these weapons are also available in Dukematch and Arena games.\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
+  },
+  {
+    "id": "duke3d-grins-of-divinity",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "Grins of Divinity",
+    "version": "1.0",
+    "author": "BIG Productions",
+    "con_main": "scripts/grinsdivinity.con",
+    "def_main": "scripts/grinsdivinity.def",
+    "dependencies": {
+      "features": [
+        "EDuke32_CON"
+      ]
+    },
+    "description": "As with all things in the universe, good has a cyclical nature. A young upstart scientist named Epala was studying trans-dimension shifting enhancements when accidentally discovering how to alter time and space. His invention could now allow the Shoven to travel back in time. Evalist caught news of this development from an scientist friend. Evalist desperately wanted to question Epala alone before proceeding with a full Council meeting. It was too late. Epala built a network of military staff contacts and had already met with the Military Division Council Member who after questioning him called for an emergency Council Meeting. Evalist was both angered and frustrated by the new invention. It could unravel all the work he risked his very life to accomplish. Evalist realized more than most that he was charting the future of the Shoven species. Someone else had realized this as well. And that person or persons probably have another direction in mind with this new technology and new Bakpri army. Imagine combining time travel, plasma weaponry and legions of battle-hardened warriors.\r\n\r\nA disaster was brewing.\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
+  },
+  {
+    "id": "duke3d-haunted-nukem",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "Haunted Nukem",
+    "version": "1.0",
+    "author": "Duke64Nukem \u0026 Team",
+    "con_main": "scripts/haunted.con",
+    "def_main": "scripts/haunted.def",
+    "dependencies": {
+      "features": [
+        "EDuke32_CON"
+      ]
+    },
+    "description": "https://www.moddb.com/mods/haunted-nukem\r\n\r\nDuke is having a nightmare, what he does not realize is how much blood lies ahead. Duke has to take the (blood) elevators to the core of the horror and stop the beast. The aliens that Duke has killed in the past have somehow brought Duke into a realm that doesn\u0027t exist. Its a dark place with almost no escape. If Duke can\u0027t make it through he will never awaken this deep sleep. There is most likely some updates coming. hope you enjoy!\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
+  },
+  {
+    "id": "duke3d-high-treason-series",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "High Treason Series",
+    "version": "1.0",
+    "author": "High Treason",
+    "con_main": "scripts/high_treason.con",
+    "description": "*This uses a modified .grp from the EDuke32 Addon Compilation by NightFright*"
+  },
+  {
+    "id": "duke3d-hunt-series",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "Hunt Series",
+    "version": "1.0",
+    "author": "Michael Hunt",
+    "con_main": "scripts/hunt.con",
+    "description": "A collection of five maps made by Michael Hunt that have been previously released in the Steam Workshop. They are telling a continuous story, so they basically form an episode.\r\n\r\nThe first three levels have an urban setting, starting by breaking into a bank, then reaching a penthouse through a subway system and then fighting through an offshore research facility. Afterwards you are supposed to reach the Tiberius Station and take the Luna One reactor offline by any means necessary.\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
+  },
+  {
+    "id": "duke3d-incubation-alien-apocalypse",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "Incubation: Alien Apocalypse",
+    "version": "1.0",
+    "author": "James Hollidge",
+    "con_main": "scripts/incubation.con",
+    "description": "After the killing of the alien queen in \u0022The Birth\u0022 Duke rents an apartment in LA so that he can get some rest before he falls apart. However he didn\u0027t kill all the aliens in the first campaign and now those remaining have started to regroup. Find the remaining stronghold of the aliens and kick their asses off the planet; for good.\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
+  },
+  {
+    "id": "duke3d-industrial-complex",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "Industrial Complex",
+    "version": "1.0",
+    "author": "Stephano Lessa",
+    "con_main": "scripts/industrial.con",
+    "description": "Episode with 6 levels (1 briefing w/o monsters, 1 secret) featuring new textures, sounds and a new shotgun. You will visit industrial areas with basic key/button hunting.\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
+  },
+  {
+    "id": "duke3d-indy-tour",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "Indy Tour",
+    "version": "1.0",
+    "author": "Laurent Juillard",
+    "con_main": "scripts/indytour.con",
+    "description": "These six maps are build from the most famous scenes of the Ind. Jones Trilogy. In these levels you will find hard traps, secret rooms, chase in speedboat, chase in mine wagons, earthquakes, submarines, special effects, water, fire and ice! Indiana Jones adventures are basically describe for a one character. It\u0027s for this reason these levels are NOT made for Dukematch. But the Coop-play is possible. Finally, it\u0027s impossible for the player to stay jamed in these levels. You finish or you die! (but if it happen type DNCLIP!)\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
+  },
+  {
+    "id": "duke3d-infestation-in-time",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "Infestation in Time",
+    "version": "1.0",
+    "author": "Zykov Eddy",
+    "con_main": "scripts/infestation.con",
+    "def_main": "scripts/infestation.def",
+    "dependencies": {
+      "features": [
+        "EDuke32_CON"
+      ]
+    },
+    "description": "https://www.moddb.com/mods/zykov-eddy\r\n\r\n5 years have passed since the last invasion of aliens. Duke Nukem has already become the senior agent of EDF and lives now on a quiet street, in his house.\r\nOne morning he heard gunshots and a police siren. When he looked out the window, he raised his eyebrows - the whole street was filled with aliens. Again! To get more information, Duke switched on his computer and checked his email:\r\n============\r\nFrom: EDF\r\nTo: Duke Nukem\r\nDuke, we have problems, as you are discovered already. At this time the aliens came from the future. In order to our realm they used an time machine. Here is your orders: go to the subway station at a secret base EDF, then move in time and destroy alien time machine.\r\nGood luck!\r\n============\r\nAfter reading email, Duke Nukem took his gun and said:\r\n\u0022How many times i have to kick Alien arses to calm them down?...\u0022 \r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
+  },
+  {
+    "id": "duke3d-its-zerohour",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "Duke, it\u0027s ZeroHour",
+    "version": "1.4",
+    "author": "ZeroHour Software",
+    "con_main": "ZGAME.CON",
+    "description": "Duke It\u0027s Zero Hour is a total conversion for Duke Nukem 3D. \r\nThe project was developed by ZeroHour Software and released on November 1, 1997.\r\nIt features new levels, weapons, enemies, music, sound effects, and even an original boss.\r\n\r\nNot to be confused with Duke Nukem: Zero Hour."
+  },
+  {
+    "id": "duke3d-jj-duke-nukem-3d",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "JJ Duke Nukem 3D",
+    "version": "1.0",
+    "author": "Jonathon Fowler and Jason Bredhauer",
+    "con_main": "scripts/jjduke.con",
+    "def_main": "scripts/jjduke_xxx.def",
+    "description": "The same old story. Duke crashes down in a stolen alien cruiser but this time he is a little closer to home. Look for the new features. There\u0027s a special powerup called the SuperDukePak and a new actors amongst other things.\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
+  },
+  {
+    "id": "duke3d-jungle-tour-trilogy",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "Jungle Tour Trilogy",
+    "version": "1.0",
+    "author": "Stephano Lessa",
+    "con_main": "scripts/jungletour.con",
+    "description": "Three maps focussing on the survival aspect instead of solving puzzles, especially in the second and third level (which even lack keycards). While the first two entries have a jungle setting, the last one takes place in a snowy area with plateaus, rocky outcroppings and caves. Expect challenging fights in arena-style environments.\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
+  },
+  {
+    "id": "duke3d-kaiser-land-trilogy",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "KaiseR Land Trilogy",
+    "version": "1.0",
+    "author": "Samuel \u0027KaiseR\u0027 Villarreal",
+    "con_main": "scripts/kaiserland.con",
+    "def_main": "scripts/kaiserland.def",
+    "description": "3 excellent levels made by KaiseR. The first two maps have an underwater base theme while the last one features a medieval setting with new custom art. \r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
+  },
+  {
+    "id": "duke3d-last-reaction-water-bases",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "Last Reaction \u0026 Water Bases",
+    "version": "1.0",
+    "author": "George-William Bernard",
+    "con_main": "scripts/lastreaction.con",
+    "def_main": "scripts/lastreaction.def",
+    "description": "Many Duke3D fans consider this 22 level-pack being like a semi-official expansion for the game. Map quality, atmosphere and enjoyable gameplay provide hours of fun.\r\n\r\nMany levels are quite dark and ammo might be rare sometimes, making the game harder somewhat. The second episode is more original than the first, with an underwater setting and some new enemies like the Ice Octabrain (shoots Freezer crystals) or small hunter drones.\r\n\r\nA must-play!\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
+  },
+  {
+    "id": "duke3d-layre",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "Layre",
+    "version": "1.0",
+    "author": "Scott McCabe",
+    "con_main": "scripts/layre.con",
+    "def_main": "scripts/layre.def",
+    "description": "Scott McCabe released these 2 levels in 1996 to apply at 3D Realms (successfully). Unfortunately, he never completed the episode which he meant to create. One new enemy, new textures with a certain Quake feeling and quite nasty teleporter tricks will keep you busy for an hour or so.\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
+  },
+  {
+    "id": "duke3d-legacy-edition",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "Legacy Edition",
+    "version": "2.0.8.1",
+    "author": "ItsMarcolino123",
+    "dependencies": {
+      "features": [
+        "EDuke32_CON"
+      ]
+    },
+    "description": "https://www.moddb.com/mods/duke-nukem-3d-legacy-edition/\r\n\r\nDuke Nukem 3D is back, rebalanced, remixed and HARDER. A mix between the old and the new, play with new (legacy) weapons, against new (legacy) enemies. Legacy Edition will make you sweat, be strategic, jump, run, dodge and blow everything away. Play the original 4 episodes with beta/alpha elements remixed into the game.\r\n\r\nHail to the King, Baby!",
+    "executables": {
+      "Windows": {
+        "EDuke32": "eduke32.exe"
+      }
+    }
+  },
+  {
+    "id": "duke3d-liquidator",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "Liquidator 3D",
+    "version": "1.5",
+    "author": "fgsfds, A.B.T., Partizan Software",
+    "con_main": "LIQUID.CON",
+    "def_modules": [
+      "liquid.def"
+    ],
+    "description": "https://github.com/fgsfds/Liquidator-3D\r\n\r\nLiquidator is an obscure Russian game illegally made using Build Engine and published in 1998 by Akella Company, who later made an infamous Postal 3.\r\n\r\nThe game includes all-new graphics, sounds, and 3 campaigns with total of 6 maps."
+  },
+  {
+    "id": "duke3d-lorch-trilogy",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "LORCH Trilogy",
+    "version": "1.0",
+    "author": "Sanek \u0026 Merlijn van Oostrum",
+    "con_main": "scripts/lorch.con",
+    "description": "3 city levels which are heavily inspired by the famous Roch series. \u0022LORCH\u0022 is short for \u0022Lots Of Roaring Chewing Hams\u0022 and gives you the task to search for the abducted Duke3D mapping artist Alejandro.\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
+  },
+  {
+    "id": "duke3d-lost-highway",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "Lost Highway",
+    "version": "1.0",
+    "author": "Petr \u0027Artec\u0027 Ku\u010Dera and Luk\u00E1\u0161 Cerovsky",
+    "con_main": "scripts/losthighway.con",
+    "description": "7 levels (1 secret) with well-designed highway passages, vast canyons, a huge dam and even a cable car (if you find the secret exit).\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
+  },
+  {
+    "id": "duke3d-math-pak",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "MatH Pak",
+    "version": "1.0",
+    "author": "Matjaz \u0027MatH\u0027 M.",
+    "con_main": "scripts/mathpak.con",
+    "description": "This pack has some very atmospheric maps. You start in a common city area before entering a desolated factory. The last regular level is set in war-torn Bosnia with great ambient sounds, some traps and destroyed buildings. Finding the secret exit pays off, you will be in for some space action with very original, uncommon design. There is no boss fight at the end, you just get to a map with some credits.\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
+  },
+  {
+    "id": "duke3d-merc-2",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "Merc 2",
+    "version": "1.0",
+    "author": "Ryan \u0027Heyyo\u0027 Conner et al.",
+    "con_main": "scripts/merc2.con",
+    "def_main": "scripts/merc2.def",
+    "dependencies": {
+      "features": [
+        "EDuke32_CON"
+      ]
+    },
+    "description": "Released one year after its predecessor, the sequel to \u0022Merc\u0022 offers another 12 levels in two episodes (plus a Dukematch episode with 5 maps). New enemies and weapons make this sequel worthwhile. Now civilians are walking around, too - try not to harm them or you will suffer (minor) consequences!\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
+  },
+  {
+    "id": "duke3d-merc-fatal-reality",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "Merc: Fatal Reality",
+    "version": "1.0",
+    "author": "Ryan \u0027Heyyo\u0027 Conner et al.",
+    "con_main": "scripts/merc.con",
+    "def_main": "scripts/merc.def",
+    "description": "You are part of the CIA\u0027s U.S. Protection Agency. Your the guy who saves the U.S. government from those hostile terroist groups. The CIA section your assigned to, MERC \u0022Major Endagerment Restraining Crew\u0022, is always ready for a good fight. Last week you shut down business at the local militia training camp, which housed several anti-government leaders. But this week you just feel like relaxing, and maybe making a trip to the beach.\r\n\r\nThis morning you wake up to the sound of a door shutting. You quickly get up and load your gun, but whoever it was is already gone. \u0022What\u0027s this?\u0022, you ask yourself as you stare at your TV stand. \u0022It looks like one of those CIA message disks.\u0022\r\n\r\n\u0022Great they just had to ruin your vacation, didn\u0027t they.\u0022\r\n\u0022Well I guess I better see what this is all about.\u0022, you mumble as you get up and slip the disk into your computer.\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
+  },
+  {
+    "id": "duke3d-metropolitan-mayhem",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "Metropolitan Mayhem",
+    "version": "1.0",
+    "author": "MetHy, MRCK, Mikko Sandt \u0026 Merlijn van Oostrum",
+    "con_main": "scripts/metromayhem.con",
+    "description": "https://www.moddb.com/mods/metropolitan-mayhem\r\n\r\nMetropolitan Mayhem is a 15-map mod for Duke Nukem 3D (Atomic Edition).\r\n\r\nIt\u0027s themetically very close to the original first and third episodes (LA Meltdown \u0026 Shrapnel City) of Duke Nukem 3D, concentrating almost exclusively on classic urban-themed maps. The original plan was to spend at most 24 hours working on each map so map sizes vary from small to medium. In total the mod should provide an hour\u0027s worth of oldskool entertainment. If you liked Duke3D, particularly its city maps, you cannot miss Metropolitan Mayhem. \r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
+  },
+  {
+    "id": "duke3d-mic-episode",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "Mic Episode",
+    "version": "1.0",
+    "author": "Michel Dorange",
+    "con_main": "scripts/mic_episode.con",
+    "description": "3 levels, increasing in difficulty and complexity. First, you go through a prison complex before entering an \u0022Anti-Duke\u0022 training center where the aliens learn how to fight against Duke. In the finale, you have to find the power plant to shut down the whole installation.\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
+  },
+  {
+    "id": "duke3d-mill-town-rampage",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "Mill Town Rampage",
+    "version": "1.0",
+    "author": "Geraldino \u0027David B.\u0027 Myloo",
+    "con_main": "scripts/milltown.con",
+    "description": "Mini-episode with 2 levels. Very atmospheric journey through a town and the nearby docks, supported by an excellent ingame soundtrack. Balanced gameplay with carefully placed health/ammo and enemies. \r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
+  },
+  {
+    "id": "duke3d-moonbase-accident",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "Moonbase Accident",
+    "version": "1.0",
+    "author": "Zykov Eddy",
+    "con_main": "scripts/moonbase.con",
+    "def_main": "scripts/moonbase.def",
+    "description": "Space episode with 7 levels, sometimes hard, but architecture makes up for it.\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
+  },
+  {
+    "id": "duke3d-mrck-duology",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "MRCK Duology",
+    "version": "1.0",
+    "author": "MRCK",
+    "con_main": "scripts/mrck.con",
+    "description": "Collection of two maps made by Aymeric \u0027MRCK\u0027 Nocus in 2023, arranged as an episode.\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
+  },
+  {
+    "id": "duke3d-mssp-episode",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "MSSP Episode",
+    "version": "1.0",
+    "con_main": "scripts/mssp.con",
+    "description": "After thousands of alien invasions a group of top scientists tried to find out the source of all alien force. Where\u0027s the planet of these creatures? Some of the alien craft were noticed in the direction of Orion star system. Scientists came in the conclusion that the aliens came from Orion\u0027s star (which seems to be a planet) called Betelgeuse. EDF tryed to nuke the whole planet away but aliens\u0027 defence system was better. As a revenge of this pathetic try to kill all alienkind they decided to strike back. Remains of the alien forces attacked to earth once again. This time with new units like clone Emperors and clone Overlords. Suddenly all people started to die all over the world. It was an alien-made plague which killed about 60% of the earth\u0027s population. Those who were left started their plans against the alien army. Duke was sent to find out if there are any fellows left in the EDF\u0027s main facility. He was also given a mission from the top: Kill all enemy forces by defeating the new Emperor. This can be done only by going through the bases, cities and died human bodies to reach the moon station where\u0027s the current base of operation of the new alien emperor.\r\n-Fate of mankind is in your hands.\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
+  },
+  {
+    "id": "duke3d-munasta-trilogy",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "Munasta Trilogy",
+    "version": "1.0",
+    "author": "Phoenix",
+    "con_main": "scripts/munasta.con",
+    "description": "Short series of 3 space maps, playable as a continuous episode. The third level falls a bit short since you can reach the nukebutton in less than a minute (if you know where it is), but it\u0027s still well worth your time.\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
+  },
+  {
+    "id": "duke3d-murder-the-edf-conspiracy",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "Murder: The EDF Conspiracy",
+    "version": "1.0",
+    "author": "Gabriel \u0027Wolf\u0027 Crown",
+    "con_main": "scripts/murder.con",
+    "def_main": "scripts/murder.def",
+    "description": "The aliens try to frame Duke for murdering an EDF general. He needs to fight against the EDF through advanced weapon research bases to find the true masterminds behind this crime and prove his innocence.\r\n\r\nEpisode with 9 SP (\u002B4 DM) levels, featuring new weapons, enemies and textures. Considering this conversion was made in 1998, level design is quite good, with most of the maps usually taking around 5-10 minutes to complete.\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
+  },
+  {
+    "id": "duke3d-new-invasion",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "New Invasion",
+    "version": "1.0R",
+    "author": "High Treason",
+    "con_main": "NIGAME.CON",
+    "description": "https://forums.duke4.net/topic/12489-release-new-invasion-episode-1-ms-dos/\r\n\r\nEnjoying semi-retirement, living out his days in a top floor penthouse, Duke is startled by a series of missiles raining on the city. Hearing his old EDF communicator chattering in his pocket, he sets out to destroy the alien menace one more time. Duke must make his way across town to the old church, board a train, take a ride on a plane and confront whoever is responsible for this attack. You know the drill, rip \u0027em a new one."
+  },
+  {
+    "id": "duke3d-nuclear-pack",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "Nuclear Pack",
+    "version": "1.0",
+    "author": "Michael Clark, Matt Harris et al.",
+    "con_main": "scripts/nuclear.con",
+    "description": "9 SP (1 secret) \u002B 12 DM maps. Only first episode (\u0022Nuclear Neurosis\u0022) is for SP.\r\n\r\nExpect an average playtime of maybe 10-15 minutes per map, so they are not too huge.  It\u0027s definitely more about the action than level design, even though locations are nice. I especially liked \u0022Demolition Delapidation\u0022 where you can blow up pretty much everything, or \u0022Multi-Story Massacer\u0022 which lets you explore several levels of a skyscraper. However, sometimes there are apparently shortcuts which enable you to finish some maps rather quickly, often without even having to find/use all keycards.\r\n\r\nThere is one new weapon, the Gravity Gun, which makes enemies float indoors, sometimes dropping weapons, or die outdoors when flying too high after a hit. One new opponent has been added, a robot which is throwing grenades at you and can even harm you after you finished it off and get too close. Some guns have new sounds.\r\n\r\nSome new ideas are an electric fence that can damage you, malfunctioning pipebomb/nightvision pickups, Coke health, fake Atomic Health with only a \u002B5 bonus or mines which explode when you step on them.\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
+  },
+  {
+    "id": "duke3d-operation-blitzkrieg",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "Operation Blitzkrieg",
+    "version": "1.0",
+    "author": "David Billing",
+    "con_main": "scripts/blitzkrieg.con",
+    "def_main": "scripts/blitzkrieg.def",
+    "description": "https://forums.duke4.net/topic/3815-releaseoperation-blitzkrieg-a-5-map-episode/\r\n\r\n5 levels in an urban setting with rather small-sized maps that won\u0027t take you longer than 10-15min to finish each. Design is quite nice and feels \u0022classic\u0022.\r\n\r\nThis release includes the Polymer Edition with enhanced lighting and HRP skyboxes, but maps for the Classic renderer are also included.\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
+  },
+  {
+    "id": "duke3d-operation-xenocide",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "Operation Xenocide",
+    "version": "1.0",
+    "author": "Brian Marchman",
+    "con_main": "scripts/xenocide.con",
+    "description": "2-level mini episode in space with about 30 minutes of playtime. Second level is more sophisticated than the first, featuring more eye candy and better design. Pay attention to switches on the opposite side of switch panels and remember that you will need to use the jetpack, especially in the second level (to get the keycards).\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
+  },
+  {
+    "id": "duke3d-outpost-x",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "Outpost X",
+    "version": "1.0",
+    "author": "Cedric \u0027Sang\u0027 Haegeman",
+    "con_main": "scripts/outpostx.con",
+    "def_main": "scripts/outpostx.def",
+    "description": "Briefing: At the end of the previous map (Space Map Number DUNNO) you boarded a teleporter that has now taken you down to the planet below. You have teleported to a valley near a small city where you should find answers and discover your goal. In the way however is Outpost X, a hi-tech base employed by the aliens. Nobody is sure what exactly is being done there but it is not your mission to find out: You must enter Outpost X through the valley and exit it at the other side.\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
+  },
+  {
+    "id": "duke3d-platoon-tc",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "Platoon TC",
+    "version": "1.0",
+    "author": "The TNT Team",
+    "con_main": "scripts/platoon.con",
+    "def_main": "scripts/platoon.def",
+    "description": "Platoon is a total conversion (TC) add-on for Duke Nukem 3D v1.3D. The TC takes place in the Vietnam War. You are the lieutenant of the 2nd Platoon, Company B. Your tour of duty takes you from the fierce firefights in the jungle to the dark and booby-trapped underground tunnel systems.\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
+  },
+  {
+    "id": "duke3d-pray-your-prayers-2000",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "Pray Your Prayers 2000",
+    "version": "1.0",
+    "author": "Daniel \u0027Shambler\u0027 Ewald et al.",
+    "con_main": "scripts/prayers.con",
+    "def_main": "scripts/prayers.def",
+    "dependencies": {
+      "features": [
+        "EDuke32_CON"
+      ]
+    },
+    "description": "A couple of years after saving Earth from aliens, Duke Nukem joined the Earth Defense Forces as a trainer, maintaining his typical routine of gyms and nightclubs.\n\nMeanwhile, alien survivors from the last invasion have been secretly rebuilding their strength and numbers underground, swearing revenge on Earth and, specifically, on Duke. They established bases in abandoned military facilities worldwide and developed new, powerful weaponry.\n\nTwo weeks ago, the EDF noticed activity at these facilities and lost contact with dispatched agents. Suspecting a new invasion, the EDF contacted Duke, who, furious, accepted the mission on the sole condition that \u0022no aliens would be left alive.\u0022\r\n\r\n\u0022This is the last time,\u0022 said Duke, \u0022the friggin\u0027 last time those aliens are gonna piss me off.\u0022\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
+  },
+  {
+    "id": "duke3d-quest-for-alqaeda",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "Quest for Al-Qa\u0027eda",
+    "version": "1.0",
+    "author": "Jesse Petrilla, Geoffrey \u0027Fakir\u0027 van Dijk \u0026 Devastator",
+    "con_main": "scripts/quest1.con",
+    "def_main": "scripts/quest1.def",
+    "rts": "resources/quest1.rts",
+    "description": "A TC that was released as a standalone \u0022exploitation\u0022 game after 9/11. It only consists of three small levels in an Arabian setting with low details and two different types of enemies, but it\u0027s still kinda fun for as long as it lasts (no longer than 10-15 mins, though). Weapons are \u0022borrowed\u0022 from other TCs, mostly \u0022Platoon\u0022. The Arab enemies won\u0027t talk much - their stupid mumblings are funny at first, but they may get on your nerves quickly. BTW: Don\u0027t expect to kill Osama...\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
+  },
+  {
+    "id": "duke3d-quest-for-hussein",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "Quest for Hussein",
+    "version": "1.0",
+    "author": "J. Petrilla, G. \u0027Fakir\u0027 van Dijk \u0026 K. \u0027Kef_Nukem\u0027 Cools",
+    "con_main": "scripts/quest2.con",
+    "def_main": "scripts/quest2.def",
+    "rts": "resources/quest2.rts",
+    "description": "Inevitable sequel to \u0022Quest for Al-Qa\u0027eda\u0022. Another standalone TC which lets you fight hordes of stereotype Arab enemies in 6 short levels that won\u0027t take you longer than 3-5min each. This time with a boss fight (Hussein, obviously), though. It\u0027s something!\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
+  },
+  {
+    "id": "duke3d-red-series",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "Red Series",
+    "version": "1.0",
+    "author": "Merlijn van Oostrum",
+    "con_main": "scripts/red.con",
+    "description": "Starting in the desert, Duke must enter a liner, sink it and stop an alien army from invading Earth en masse. Very atmospheric, especially \u0022Red3\u0022 which is kind of spooky and tries to keep you on the edge with darkness and creepy Protector Drone sounds.\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
+  },
+  {
+    "id": "duke3d-redrum-the-shining-ii",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "Redrum: The Shining II",
+    "version": "1.0",
+    "author": "Bryant Arnett",
+    "con_main": "scripts/redrum.con",
+    "description": "https://theshining2.com/\r\n\r\nA highly detailed 3-D recreation of the Overlook Hotel. You play the part of Duke Nukem, U.S. Marines Special Operative, sent in to take care of the \u0022Caretaker.\u0022\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
+  },
+  {
+    "id": "duke3d-rendezvous",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "Rendezvous",
+    "version": "1.0",
+    "author": "Henri \u0027RazorZ\u0027 K",
+    "con_main": "scripts/rendezvous.con",
+    "description": "Unfinished episode with 3 quite complex and long levels (20-40min playtime each). It starts out with some caverns and underground bases, then it continues into some canyons before you end up in a huge city. You\u0027ll be amazed by the impressive amount of details, strong shading and elaborate sector work the author used here. The last map also uses some custom art which improves visuals even more.\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
+  },
+  {
+    "id": "duke3d-roch-series",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "Roch Series",
+    "version": "1.0",
+    "author": "Pascal Rouaud",
+    "con_main": "scripts/roch.con",
+    "description": "http://dukeroch.net/\r\n\r\nLegendary map set by Pascal Rouaud, being considered to feature some of the best city maps ever created for Duke3D. Most of them are also quite large and will last over an hour.\r\n\r\nContains Roch1-8 including the secret level, \u0022Roch_SC1\u0022 (following \u0022Roch3\u0022 due to its creation date). \u0022Roch9\u0022 has never been made, even though the end of \u0022Roch8\u0022 is referring to it.\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
+  },
+  {
+    "id": "duke3d-savior-of-alien-era",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "Savior of Alien Era",
+    "version": "1.0",
+    "author": "Robert \u0027underTaker\u0027 Wypi\u00F3r",
+    "con_main": "scripts/savior.con",
+    "description": "6 maps by Robert \u0027underTaker\u0027 Wypi\u00F3r which are sequels to each other, released in episodic form.\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
+  },
+  {
+    "id": "duke3d-secrets-of-the-acropolis",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "Secrets of the Acropolis",
+    "version": "1.0",
+    "author": "Level Infinity",
+    "con_main": "scripts/acropolis.con",
+    "description": "Something quite different. 7 levels (1 secret) set in ancient Greece where Duke must stop aliens messing with time travel. This is an original setting with very interesting locations.\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
+  },
+  {
+    "id": "duke3d-shaky-grounds",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "Shaky Grounds",
+    "version": "1.0",
+    "author": "Merlijn van Oostrum",
+    "con_main": "scripts/shakygrounds.con",
+    "description": "https://www.moddb.com/mods/shaky-grounds\r\n\r\nExplore and conquer 5 massively epic maps. Filled with intense battles, destructive earthquakes, plenty of secrets and easter eggs, a post-apocalyptic atmosphere and a story that actually progresses from map to map. Also contains a custom soundtrack especially written and recorded for this episode by myself (mixed by my brother Maarten).\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
+  },
+  {
+    "id": "duke3d-sharks-cove",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "Shark\u0027s Cove",
+    "version": "1.0",
+    "author": "N. E. \u0027HangNail\u0027 Voigt",
+    "con_main": "scripts/sharkscove.con",
+    "def_main": "scripts/sharkscove.def",
+    "dependencies": {
+      "addons": [
+        {
+          "id": "dukevaca"
+        }
+      ]
+    },
+    "description": "One year before HangNail started to work on \u0022Vacation Cove\u0022, he made these two Caribbean-style maps which were supposed to be the beginning of a full episode that never got finished. Don\u0027t be too surprised if the levels look very similar to \u0022Vacation Cove\u0022 since it appears this work was used as a base for that episode.\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
+  },
+  {
+    "id": "duke3d-space-mission",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "Space Mission",
+    "version": "1.0",
+    "author": "Paul \u0027High Treason\u0027 Monteray",
+    "con_main": "scripts/spacemission.con",
+    "def_main": "scripts/spacemission.def",
+    "dependencies": {
+      "features": [
+        "EDuke32_CON"
+      ]
+    },
+    "description": "2 space maps with low gravity effects and a functional space suit. The story: Aliens have taken over a space station and use its communication relays. It\u0027s up to Duke to liberate the station and chase the invaders to a mining facility where generators need to be destroyed before escaping with a shuttle. The whole pack should take you about 30 mins to complete.\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
+  },
+  {
+    "id": "duke3d-starship-troopers",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "Starship Troopers",
+    "version": "1.0",
+    "author": "Bgame Productions",
+    "con_main": "ssttc.con",
+    "def_main": "loadhud.def",
+    "dependencies": {
+      "features": [
+        "EDuke32_CON"
+      ]
+    },
+    "description": "Starship Troopers TC is a total conversion for Duke Nukem 3D . It was created by Bgame Productions. It features new levels, new weapons, new sprites for the player (MI trooper) and enemies, new graphics, new items, and new music. The mod was well-known for the high level of quality on Dukeworld."
+  },
+  {
+    "id": "duke3d-steve-long-episodes",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "Steve Long Episodes",
+    "version": "1.0",
+    "author": "Steve W. Long",
+    "con_main": "scripts/stevelong.con",
+    "description": "This 32 level-pack shows the evolution of the author\u0027s mapping skills. Therefore, the first few maps are very basic and disappointing. You will also notice some copy/paste work throughout the episodes. However, don\u0027t give up. Especially episodes 2 and 3 have some nice ideas.\r\n\r\nIncludes map fixes for episode 1 by Tom \u0027Tehom\u0027 Breton (1999/2004). \r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
+  },
+  {
+    "id": "duke3d-sun-burn",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "Sun Burn",
+    "version": "1.0",
+    "author": "Rob \u0027HighWire\u0027 Wijkstra",
+    "con_main": "scripts/sunburn.con",
+    "dependencies": {
+      "addons": [
+        {
+          "id": "dukevaca"
+        }
+      ]
+    },
+    "description": "2-level mini episode, consisting of HighWire\u0027s \u0022Wet Dream\u0022 and \u0022Tropical Alien Massacre\u0022. Great design with Caribbean setting, featuring fitting custom art and challenging gameplay. \r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
+  },
+  {
+    "id": "duke3d-super-nukem-bros",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "Super Nukem Bros.",
+    "version": "1.0",
+    "author": "NukemDave",
+    "con_main": "scripts/supernukem.con",
+    "def_main": "scripts/supernukem.def",
+    "dependencies": {
+      "features": [
+        "EDuke32_CON"
+      ]
+    },
+    "description": "Based on Super Mario Bros. for NES, Super Nukem Bros. is an opportunity to blast alien maggots as Duke in the Mushroom Kingdom! Somehow, Duke crash lands in the Mushroom Kingdom and is greeted with even more pesky aliens. Is Duke dreaming all of this? Is he tripping on magic mushrooms? Who knows! \r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
+  },
+  {
+    "id": "duke3d-taking-boise",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "Taking Boise",
+    "version": "1.0",
+    "author": "Alan A. \u0027opusvideo\u0027 Nick",
+    "con_main": "scripts/boise.con",
+    "description": "https://www.moddb.com/mods/duke-nukem-taking-boise\r\n\r\nWhile in the middle of a road trip, Duke stops by in Boise, ID for the night only to discover it has been taken over by those hipsters ... I mean those alien bastards once again. Looks like he has to pull over and wipe them out once more.\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
+  },
+  {
+    "id": "duke3d-tamduke",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "TamDuke",
+    "version": "1.0",
+    "author": "pmw",
+    "con_main": "scripts/tamduke.con",
+    "def_main": "scripts/tamduke.def",
+    "dependencies": {
+      "features": [
+        "EDuke32_CON"
+      ]
+    },
+    "description": "Nine levels based on real locations - A hilarious secret level - Three different difficulty levels - Tons of secret places kuva History and trivia TamDuke has been under development for over 10 years. During this period, we have jumped from the original Build level editor to the newer Mapster and EDuke engine features. Over the years, we faced many problems related to the level editors, map geometry as well as engine limitations. Several of the maps in the episode are just as big as the EDuke engine allows. \r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
+  },
+  {
+    "id": "duke3d-the-army-of-death",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "The Army of Death",
+    "version": "1.0",
+    "author": "Geoffrey \u0027Fakir\u0027 van Dijk \u0026 James \u0027JBlade\u0027 Stanfield",
+    "con_main": "scripts/armydeath.con",
+    "description": "3 levels with medieval setting. The first two levels are quite short while the third is longer, also due to tons of skeletons (faster but weak) and skeletal Dukes (slow but stronger).\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
+  },
+  {
+    "id": "duke3d-the-asteroid",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "The Asteroid",
+    "version": "1.0",
+    "author": "Ray Tracer",
+    "con_main": "scripts/asteroid.con",
+    "def_main": "scripts/asteroid.def",
+    "description": "Mini episode in space with 4 levels. Many hate this one because of its switch puzzle at the end of level 3 and the collapsing rooms in the final level. However, the maps are well designed in general and you fight against a Cyber Battlelord in the finale with tons of hitpoints. Be sure to save often (and at the right time)!\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
+  },
+  {
+    "id": "duke3d-the-brave-new-world",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "The Brave New World",
+    "version": "1.0",
+    "author": "Mikko Sandt",
+    "con_main": "scripts/braveworld.con",
+    "def_main": "scripts/braveworld.def",
+    "description": "Fight against the evil Mikko Sandt in a dark future through 5 levels. Two new weapons are at your disposal to save the world in this post-9/11 scenario.\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
+  },
+  {
+    "id": "duke3d-the-christmas-project",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "The Christmas Project",
+    "version": "1.0",
+    "author": "Rusty Nails \u0026 Mblackwell",
+    "con_main": "scripts/xmasproject.con",
+    "def_main": "scripts/xmasproject.def",
+    "dependencies": {
+      "features": [
+        "EDuke32_CON"
+      ]
+    },
+    "description": "This addon is inspired by \u0022Half Life\u0022, especially by a mod called \u0022Point of View\u0022 in which you play as one of the aliens you fought against in the original game. Here it\u0027s quite similar - your task is to escape your imprisonment on Earth and return to your home planet Xen. \r\n\r\nJust two levels, but quite fun.\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
+  },
+  {
+    "id": "duke3d-the-chronic",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "The Chronic",
+    "version": "1.0",
+    "author": "Sanek \u0026 Zykov Eddy",
+    "con_main": "scripts/chronic.con",
+    "description": "5 levels in an urban environment with a mix of combat in open and confined space.  The first two maps are longer with 15-20 mins of gameplay while the rest is a lot  shorter (5 mins each).\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
+  },
+  {
+    "id": "duke3d-the-day-after",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "The Day After",
+    "version": "1.0",
+    "author": "Pipeline",
+    "con_main": "scripts/dayafter.con",
+    "description": "Pipeline intended to create an episode which he wanted to name \u0022The Day After\u0022. Unfortunately, only maps 1, 3, 6 and 7 were released. This presentation groups the maps together in proper order to form a mini episode. 3 Dukematch levels by the same author are included as bonus.\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
+  },
+  {
+    "id": "duke3d-the-final-confrontation",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "The Final Confrontation",
+    "version": "1.0",
+    "author": "3D Visions",
+    "con_main": "scripts/finalconfront.con",
+    "def_main": "scripts/finalconfront.def",
+    "description": "One of the first episodes (7 SP levels, 1 DM) for Duke3D and still among the best.  Especially famous for its train map \u0022Moving Death\u0022.\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
+  },
+  {
+    "id": "duke3d-the-final-fight",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "The Final Fight",
+    "version": "1.0",
+    "author": "The Freebrief Team",
+    "con_main": "scripts/finalfight.con",
+    "description": "City episode with 4 levels. It starts in a building complex with many interconnecting tunnels, continues through a sewer area, then on to a subway system until it ends with another building cleanup mission.\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
+  },
+  {
+    "id": "duke3d-the-gate",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "The Gate",
+    "version": "1.0",
+    "author": "BDP Team",
+    "con_main": "scripts/thegate.con",
+    "def_main": "scripts/thegate.def",
+    "description": "A true masterpiece. Providing 4 episodes with 24 levels, it is named by many as *THE* classic total conversion for Duke3D. While there is only one new weapon (CD Thrower as Freezer replacement) and one new, difficult (!) enemy (cloaking Predators which can wield any weapon and move really fast), there is lots of new art, an awesome custom soundtrack and level design which is really remarkable. \r\n\r\nThe first map is a bit confusing due to its size and difficult keycard search, but keep playing. You will visit awesome locations like the Mars bar from \u0022Total Recall\u0022 (including a finale just like in the movie), a trip to the top of Mt. Everest, abandoned spaceports and a lot more.\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
+  },
+  {
+    "id": "duke3d-the-lost-duke-episodes",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "The Lost Duke Episodes",
+    "version": "1.0",
+    "author": "Mark Hadley",
+    "con_main": "scripts/lostduke.con",
+    "description": "4 episodes covering 39 SP levels (7 secret) \u002B 1 DM map. It sounds like much, but most of them you can finish in 5-10min. max, often even less. There is only minimal detail or coherence, but playing this is still a lot of fun. The pack has a nice custom soundtrack and some creative ideas, especially in the last episode where things get weird (time travel, upside-down areas etc). The ep.3 \u0022zero-g\u0022 maps (including the boss fight) are also remarkable. A few enemies have been modified, e.g. blue shotgun turrets or deadly fire/ice-projectile Enforcers with increased HP.\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
+  },
+  {
+    "id": "duke3d-the-prequel-to-time",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "The Prequel to Time",
+    "version": "1.0",
+    "author": "Jeremy \u0027Forklift\u0027 Wilson (Forklift Productions)",
+    "con_main": "scripts/prequeltime.con",
+    "description": "4 maps which are more focussed on design and combat. Like in its predecessor \u0022Time\u0022, you still have certain things to do, but it\u0027s much less like a real mission. Level design is a lot nicer. You will see a nice beach hotel, a convincing city area and a huge subway station. The last level feels like a joke, however: Finding a chopper which can be done in about 3 minutes.\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
+  },
+  {
+    "id": "duke3d-the-real-bad-ass",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "The Real Bad Ass",
+    "version": "1.0",
+    "author": "Ray Tracer",
+    "con_main": "scripts/badass.con",
+    "description": "Episode with 7 maps (\u002B1 secret), starting in space and then changing to urban scenarios. Level design is rather blocky/square-based, but after the first three (quite short) maps, it gets better and more complex.\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
+  },
+  {
+    "id": "duke3d-time",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "Time",
+    "version": "1.0",
+    "author": "Jeremy \u0027Forklift\u0027 Wilson (Forklift Productions)",
+    "con_main": "scripts/time.con",
+    "def_main": "scripts/time.def",
+    "description": "3 objective-based levels (a fourth is unfinished and without any action). What makes \u0022Time\u0022 special is its emphasis on objective-based missions. If you fail to  complete an objective before finishing the level, you are sent back in time so you can  try again. In general, it is more about evading traps and blowing things up than pure action.\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
+  },
+  {
+    "id": "duke3d-total-apocalypse",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "Total Apocalypse",
+    "version": "1.0",
+    "author": "Juan Daniel \u0027Papamonos\u0027 Alcobre",
+    "con_main": "scripts/apocalypse.con",
+    "description": "11 levels which are sometimes a bit repetitive due to many buildings/rooms that need to be checked and rather basic (\u0022square\u0022) map layout, but locations are interesting: Among other places, you visit a fun fair, a graveyard, a huge mansion and (right before the end) even an alien-infested temple inspired by id\u0027s all-time classic Doom. \r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
+  },
+  {
+    "id": "duke3d-total-duke",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "Total Duke",
+    "version": "1.0",
+    "author": "Juha \u0027Turpuli\u0027 Laaksonen",
+    "con_main": "scripts/totalduke.con",
+    "description": "Nice city episode with 11 levels (2 of them are secret) featuring casino, bank, movie theater, bars, skyscrapers, office buildings and more to explore before facing a Cycloid Emperor in the finale. \r\n\r\nEven though the levels still lack some detail from a modern point of view, they are designed well and finding secrets is rewarding.\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
+  },
+  {
+    "id": "duke3d-total-infiltration",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "Total Infiltration",
+    "version": "1.0",
+    "author": "Devastator",
+    "con_main": "scripts/infiltration.con",
+    "description": "Quite a different approach for a space episode comes from Devastator. The pack features 7 levels (one being an intro) with complex design, non-linear ingame progress and some situations which even require your brain. \r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
+  },
+  {
+    "id": "duke3d-total-meltdown",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "Total Meltdown TC",
+    "version": "1.1.1",
+    "con_main": "cons/load.con",
+    "def_modules": [
+      "defs/load.def"
+    ],
+    "dependencies": {
+      "features": [
+        "EDuke32_CON"
+      ]
+    },
+    "description": "https://forums.duke4.net/topic/9918-release-duke-nukem-total-meltdown-tc-v10\n\nThis total conversion intends to bring the PlayStation experience from 1997 to your PC. Created by Daedolon, Fox, Hendricks266, Nukey, oasiz and TerminX. Special thanks to Joshua and MusicallyInspired. Music mastering by Mark \u2018TDK\u2019 Knight."
+  },
+  {
+    "id": "duke3d-turok-nukem",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "Turok Nukem",
+    "version": "1.0",
+    "author": "Duke64Nukem",
+    "con_main": "scripts/turoknukem.con",
+    "def_main": "scripts/turoknukem.def",
+    "description": "https://www.moddb.com/mods/turok-nukem\r\n\r\nDuke Nukem enters Turok\u0027s realm because of a distress signal that involves the aliens taking over once again. This time they are trying to take over \u0022The Lost Land\u0022 if they are successful they could acquire some of the most powerful magic ever and combine that with the technology of the aliens and it could be the end of the world. Locating the Lost Land was the hardest part now Duke just has to clean it up. Oh and escape if he doesn\u0027t make it out he will be stuck in The Lost Land.\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
+  },
+  {
+    "id": "duke3d-v-series",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "V Series",
+    "version": "1.0",
+    "con_main": "scripts/v_series.con",
+    "description": "4 maps (3x space, 1x city/secret) which were supposed to be part of a full episode with at least 6 levels. Unfortunately, the project was never completed. \r\n\r\nV3 has a rather cramped layout with some trickier puzzles. V4 is a space station with easier progression. V5 is the highlight of the series with lots of explosions and other great effects.\r\n\r\nBe sure to find the secret level since it contains the only city map of the series, featuring a visit to a hospital.\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
+  },
+  {
+    "id": "duke3d-vacation-cove",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "Vacation Cove",
+    "version": "1.0",
+    "author": "N. E. \u0027HangNail\u0027 Voigt",
+    "con_main": "scripts/vacationcove.con",
+    "dependencies": {
+      "addons": [
+        {
+          "id": "dukevaca"
+        }
+      ]
+    },
+    "description": "For fans of the \u0022Duke Vacation\u0022 addon, this is a true festival: 8 new Caribbean levels (1 secret)!\r\n\r\nPowered by an awesome soundtrack contributing a lot to the \u0022vacation feeling\u0022, you will pay a visit to lagoons, a Mayan temple, a fun park and many more places where shotguns are needed instead of sunglasses! Even features a mini hub to which you return to for about 50% of the episode. Great stuff!\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
+  },
+  {
+    "id": "duke3d-vermin-clearance",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "Vermin Clearance",
+    "version": "1.0",
+    "author": "Frode \u0027Puritan\u0027 Waksvik",
+    "con_main": "scripts/verminclear.con",
+    "description": "10 levels (\u002B 1 secret). Being basically a compilation of Puritan\u0027s older maps, you can expect good design and seamless transition between levels. It\u0027s lacking regarding gameplay however, with vast areas that often require very thorough exploration. If you have a lot of time with a certain resistance against frustration, it may pay off to give this a try.\r\n\r\nYou lose all your weapons after entering a new level. This is normal and intended. Be prepared for keycards being hidden in secret areas, hard-to-find switches, handdryers used as essential switches and other uncommon ways to progress through a map (semi-transparent switches on green boxes, opening compartments behind/above you with more vital switches inside etc). It can  get frustrating at times, also with the hordes of enemies which are preferrably spawning in your back.\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
+  },
+  {
+    "id": "duke3d-wg-mega-pack",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "WG Mega Pack",
+    "version": "7.7",
+    "author": "William Gee",
+    "con_main": "WGGAME.CON",
+    "def_main": "WG.def",
+    "description": "https://www.moddb.com/mods/wg-mega-pack\r\n\r\nCollection of several of William Gee\u0027s previous releases with 26 singleplayer maps in total.\r\n\r\nWG The Abyss: 4 levels (1 intro/3 regular/1 boss map) using the TROR feature, meant to be some sort of continuation/enhancement of the classic \u0022The Abyss\u0022 map. Expect intense Octrabrains/Protozoid Slimer encounters.  Polymost renderer is recommended, even though it should also work with Classic and Polymer.\r\n\r\nWG Space: 9 space maps (2 secret) with a lot of remarkable architecture. There are only a few space episodes out there, and even less which are done well, but this is one of them. Tons of details, very balanced gameplay and gloomy space action. What else do you need?\r\n\r\nWG Realms: 6 levels (1 intro/3 regular/1 secret/1 boss map) which almost completely revamp the original game with a lot of new textures and custom sounds. Exotic places like a medieval castle, a huge hi-tech  area, enormous caves or the Egyptian showdown location make this trip into a weird parallel dimension highly enjoyable and worth playing. If you liked Epic\u0027s \u0022Unreal\u0022, then this is something you have to check out for sure!\r\n\r\nWG Pandora: City episode that added for v4.0 of this collection, featuring 7 maps. Please note that several maps are using TROR heavily and therefore require at least  Polymost to function properly."
+  },
+  {
+    "id": "duke3d-when-scum-returns",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "When Scum Returns",
+    "version": "1.0",
+    "author": "Ryan \u0027X1997XII\u0027 Sickler, Derek \u0027AiC\u0027 Braun et al.",
+    "con_main": "scripts/scum.con",
+    "def_main": "scripts/scum.def",
+    "dependencies": {
+      "features": [
+        "EDuke32_CON"
+      ]
+    },
+    "description": "Two episodes with 11 SP levels and a separate DM episode with 4 maps. New weapons are at your disposal, giving you some chance to live another day while facing old and new enemies.\r\n\r\nThis addon is hard in more than one way: Enemies are strong and numerous. On top of that, there are some nasty traps which will be frustrating if you did not save before. To make it even worse, keycards are often hidden too well (e.g. inside of tampon/snack machines or in hidden apartments) and access panels disguised inside of computer towers.\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
+  },
+  {
+    "id": "duke3d-wolf-pack",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "Wolf Pack",
+    "version": "1.0",
+    "author": "Gabriel \u0027Wolf\u0027 Crown",
+    "con_main": "scripts/wolfpack.con",
+    "description": "6 SP (1 secret) and 2 Dukematch levels. Features a new weapon (Assault Rifle replacing chaingun) and edited CON code to alter enemy strengths, ammo amount and weapon power.\r\n\r\nThe maps are quite nice for their age, leading you from an EDF facility to a secret installation and a prison until you reach a starport. From there you enter a spaceship where the showdown with an Overlord takes place. In the secret level, you travel to an arctic region via submarine.\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
+  },
+  {
+    "id": "duke3d-xartech-invasion",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "XarTech Invasion",
+    "version": "1.0",
+    "author": "Ben Smit",
+    "con_main": "scripts/xartech.con",
+    "description": "6 maps. Duke must infiltrate a facility overrun by aliens and destroy the new prototype Riot tanks, followed by a close encounter with an Alien Queen. Level design is not exactly sophisticated, but it\u0027s still fun since there are more than enough enemies to fight.\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
+  },
+  {
+    "id": "duke3d-xmas-1997",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "XMas 1997",
+    "version": "1.0",
+    "author": "X-Team",
+    "con_main": "scripts/xmas97.con",
+    "def_main": "scripts/xmas97.def",
+    "description": "8 maps with Christmas theme (first map is an intro map without gameplay), featuring new art, music and three new sounds.\r\n\r\nExpect rather challenging gameplay with large amounts of enemy spawns. Opening presents can help you gearing up, but may also unleash unpleasant surprises.\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
+  },
+  {
+    "id": "duke3d-zombie-crisis",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "Zombie Crisis",
+    "version": "1.0",
+    "author": "Andrew \u0027Hudson\u0027 Childs \u0026 Geoffrey \u0027Fakir\u0027 van Dijk",
+    "con_main": "scripts/zombiecrisis.con",
+    "def_main": "scripts/zombiecrisis.def",
+    "description": "https://www.moddb.com/games/zombie-crisis\r\n\r\nArcade-style episode with 6 maps. You hunt zombies through simple levels with a chainsaw and a pistol which has infinite ammo and no reload. Don\u0027t expect to take longer than 20-30 minutes for the whole thing. Let the left mousebutton glow!\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
+  },
+  {
+    "id": "duke3d-zombie-nukem",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "Zombie Nukem",
+    "version": "3.1",
+    "author": "William Gee",
+    "con_main": "ZNGAME.CON",
+    "def_modules": [
+      "ZN.def"
+    ],
+    "dependencies": {
+      "features": [
+        "EDuke32_CON"
+      ]
+    },
+    "description": "https://www.moddb.com/mods/duke-nukem-horror-castle/\r\n\r\nHorror theme, new enemies new art new weapons. Awesome Castles."
+  },
+  {
+    "id": "duke3d-airport-west",
+    "type": "Map",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "Airport West",
+    "version": "1.0",
+    "author": "Rob McCall",
+    "startmap": {
+      "file": "AIRPWEST.map"
+    },
+    "description": "Duke sits on his sleazy motel bed, the cable tv he is watching stops for an important newsflash. The local airport \u0027Airport West\u0027 has been taken over by those alien bastards (will the action ever stop!!?). The aliens are hijacking planes and transporting their force around the world. \r\nTwo small airbuses have already touched down in Airport West and another Airbus300 full of alien scum is expected shortly.\r\nDukes pager beeps, \u0022Duke, get to the control tower, disable the airport radar... FORCEFULLY! Do it now!\u0022 \u0022I think this is one plane Airbus can afford to lose!\u0022 Duke says with a grin, he grabs his pistol, and on que a space creep kicks open the door..."
+  },
+  {
+    "id": "duke3d-duke-craft",
+    "type": "Map",
+    "game": {
+      "name": "Duke3D",
+      "version": "Duke3D_Atomic"
+    },
+    "title": "Duke Craft",
+    "version": "1.0",
+    "author": "Zykov Eddy",
+    "def_main": "dukecraft.def",
+    "dependencies": {
+      "features": [
+        "Hightile"
+      ]
+    },
+    "startmap": {
+      "file": "DUKECRFT.MAP"
+    },
+    "description": "http://eddyprojects.blogspot.com\r\n\r\nDuke Craft is a combination of DN3D mechanics and Minecraft-like level design. The story is simple - aliens stole Duke\u0027s hard earned diamonds and he has to get them back.\r\n\r\nThe map includes some features taken from Minecraft, like crafting or using of torches to light the areas. No additional code used, only new textures"
+  },
+  {
+    "id": "duke3d-fear-of-the-dark",
+    "type": "Map",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "Fear of the Dark",
+    "version": "1.0",
+    "author": "DannyFromNewOrleans",
+    "startmap": {
+      "file": "FearOfTheDark.map"
+    },
+    "description": "It is a dark and cold winter night when Duke enters an abandoned space research facility. Something horrible, awakened by the scientists, lurks deep inside the darkness - hidden beyond the stars..."
+  },
+  {
+    "id": "duke3d-it-lives",
+    "type": "Map",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "It Lives",
+    "version": "1.05",
+    "author": "Luciano Gallo a.k.a. Gambini",
+    "startmap": {
+      "file": "It_Lives_1.05.map"
+    },
+    "description": "http://gambinidesign.blogspot.com\r\n\r\nThis is where i should write a story, but the map has story elements inside, so pay attention to the texts and screens."
+  },
+  {
+    "id": "duke3d-memories",
+    "type": "Map",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "Memories",
+    "version": "1.0",
+    "author": "Zykov Eddy",
+    "con_main": "MEMOGAME.CON",
+    "dependencies": {
+      "features": [
+        "EDuke32_CON"
+      ]
+    },
+    "startmap": {
+      "file": "MEMORIES.MAP"
+    },
+    "description": "http://eddyprojects.blogspot.com\r\n\r\nThis level takes inspiration from the classic Duke 3D maps. I was feeling very nostalgic lately, and this level is very much inspired by that distant feeling! It features some cool places, such as Irish Pub and Pharmacy, which are done in low-fi, oldscool 90\u0027s style. I think, this style of mapping is very innocent and pure in its nature. Some of the areas are sampled from original Duke 3D maps.\r\n\r\nTo make it more interesting, I added some new graphics and gameplay items, which spice up the action somewhat. Level is pretty short, but I hope you\u0027ll get a kick from some of these gimmicks. Especially the new Bonus Backpack, which gives you random items that you might need to finish the map!"
+  },
+  {
+    "id": "duke3d-penthouse",
+    "type": "Map",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "Penthouse Paradise",
+    "version": "1.0",
+    "author": "Intersphere Communications, Ltd. and Tyler Matthews",
+    "con_main": "phplay.con",
+    "startmap": {
+      "file": "PARADISE.MAP"
+    },
+    "description": "The Duke Nukem 3D Penthouse Paradise level chronicles the little talked about R\u0026R period for Duke Nukem between the original Duke Nukem 3D Game and the Duke Nukem 3D: Plutonium Pak, the expansion addition.\n\nInquiring minds and the tabloids have been dying (and not by Duke\u0027s hands) to find out what happened to our intergalactic hero when he went for ...a little R\u0026R.\n\nFinally, this shocking level reveals all! While Duke was trying to establish a little beach-head, the Aliens have dropped in to break up his fun in the sun and spoil a couple of Penthouse photo shoots to boot. It\u0027s up to our man, Duke Nukem, to save the day - again.\n\nWith no time to play with his favorite Pets or work on his tan, Duke Nukem says, Somebody\u0027s gonna friggin\u0027 pay for screwin\u0027 up my vacation!\n\nWill Duke save the day, the shoots, and finally get that babe, a stogie and a bottle of Jack?\n\nIt\u0027s up to you to find out!"
+  },
+  {
+    "id": "duke3d-redrock",
+    "type": "Map",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "RedRock",
+    "version": "1.0",
+    "author": "Markus Schopf (Suppressor)",
+    "startmap": {
+      "file": "RedRock.map"
+    },
+    "description": "https://dnr.duke4.net/maps/Redrock.html\r\nThis level looks best with the classic rendering, because the OpenGL or the Direct3D rendering smudge the colors (the red rocks look atrociously). And I want you to expect the unexpected, because you will be surprised!"
+  },
+  {
+    "id": "duke3d-sewer",
+    "type": "Map",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "Sewer",
+    "version": "1.0",
+    "author": "Richard Bailey Gray (The Levelord)",
+    "startmap": {
+      "file": "sewer.map"
+    },
+    "description": "https://dnr.duke4.net/maps/Sewer.html\r\nA map released by the \u0027Levelord\u0027, Sewer is an urban-themed map which resembles the quality of the original Duke levels."
+  },
+  {
+    "id": "duke3d-simpler-times",
+    "type": "Map",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "Simpler Times",
+    "version": "1.0",
+    "author": "Alex Pistol",
+    "con_main": "STGAME.CON",
+    "dependencies": {
+      "features": [
+        "EDuke32_CON",
+        "Sloped_Sprites"
+      ]
+    },
+    "startmap": {
+      "file": "ALEXCITY2.MAP"
+    },
+    "description": "https://www.moddb.com/mods/simpler-times/downloads/simpler-times\r\n\r\nEpic new level for Duke Nukem 3D by Alex Pistol/Ledsbourne, author of \u0022Back in Business\u0022, \u0022Submachine\u0022, \u0022The Conundrum\u0022 and \u0022Der Zorn Gottes\u0022. A large, action-packed, sandbox-styled city map, where Duke Nukem is set to regain his good name after years of being an Internet meme. A true adventure for the most dedicated fans of The King!"
+  },
+  {
+    "id": "duke3d-sweeny",
+    "type": "Map",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "Sweeny",
+    "version": "1.0",
+    "author": "Richard Bailey Gray (The Levelord)",
+    "startmap": {
+      "file": "sweeney.map"
+    },
+    "description": "https://dnr.duke4.net/maps/Sweeney.html\r\nAnother map released by the Levelord, Sweeney follows a similar vein to Sewer - green stuff which hurts you, lots of dark places, plenty of level ripping explosions and octabrains roaming the joint."
+  },
+  {
+    "id": "duke3d-urea-51-pc-version",
+    "type": "Map",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "Urea 51 (PC version)",
+    "version": "1.0",
+    "author": "Zykov Eddy",
+    "startmap": {
+      "file": "Urea51.map"
+    },
+    "description": "https://forums.duke4.net/topic/7744-urea-51-pc-version/\r\nUrea 51 is one of the most obscure Duke 3D levels, coming straight from the Sega Saturn version of Duke Nukem 3D, originally made by Lobotomy Software. So, when I finally got my own Saturn and played the game, I couldn\u0027t resist not to make a PC version of the level. I ported the level without using any converting tools and it\u0027s slightly different from the original version (the layout is the same, though). I also used some tricks to emulate the features of the SlaveDriver engine. Have fun!\r\nP.S - the original version is hard as hell, because of the instant deathtraps, and it took me many tries to complete. God I hate the Saturn Port, it\u0027s so unfair at times."
+  },
+  {
+    "id": "duke3d-3d-skyboxes",
+    "type": "Mod",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "3D Skyboxes",
+    "version": "1.0",
+    "author": "Fox",
+    "def_modules": [
+      "skyboxes_duke.def"
+    ],
+    "incompatibles": {
+      "addons": [
+        {
+          "id": "dukevaca"
+        },
+        {
+          "id": "dukedc"
+        }
+      ]
+    },
+    "description": "https://forums.duke4.net/topic/8940-3d-classic-skyboxes-pack/\r\n\r\n3D classic skyboxes pack."
+  },
+  {
+    "id": "duke3d-3d-skyboxes-dc",
+    "type": "Mod",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "3D Skyboxes for DC",
+    "version": "1.0",
+    "author": "Fox",
+    "def_modules": [
+      "skyboxes_dc.def"
+    ],
+    "dependencies": {
+      "addons": [
+        {
+          "id": "dukedc"
+        }
+      ]
+    },
+    "description": "https://forums.duke4.net/topic/8940-3d-classic-skyboxes-pack/\r\n\r\n3D classic skyboxes pack."
+  },
+  {
+    "id": "duke3d-3d-skyboxes-vaca",
+    "type": "Mod",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "3D Skyboxes for Caribbean",
+    "version": "1.0",
+    "author": "Fox",
+    "def_modules": [
+      "skyboxes_vaca.def"
+    ],
+    "dependencies": {
+      "addons": [
+        {
+          "id": "dukevaca"
+        }
+      ]
+    },
+    "description": "https://forums.duke4.net/topic/8940-3d-classic-skyboxes-pack/\r\n\r\n3D classic skyboxes pack."
+  },
+  {
+    "id": "duke3d-cheello-voxels",
+    "type": "Mod",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "Cheello Voxels",
+    "version": "1.0",
+    "author": "Daniel Peterson aka \u0022Cheello\u0022",
+    "def_modules": [
+      "cheello_voxels.def"
+    ],
+    "description": "https://www.moddb.com/mods/voxel-duke-nukem-3d/addons/voxel-duke-3d\r\n\r\nGet ready for Voxel Duke Nukem 3D! All monsters, babes, props and more have been fully converted to 3d voxel models. Blast your way through the first 3 original episodes with voxelized assets, creating a modernized feel to Duke like never before. Hail to the King, Baby!"
+  },
+  {
+    "id": "duke3d-dukedc-midi-pack",
+    "type": "Mod",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "Duke It Out In D.C. MIDI Pack",
+    "version": "2.0",
+    "author": "James \u0022Jimmy\u0022 Paddock",
+    "def_modules": [
+      "dukedc_midi.def"
+    ],
+    "dependencies": {
+      "addons": [
+        {
+          "id": "dukedc"
+        }
+      ]
+    },
+    "description": "https://www.doomworld.com/forum/topic/93927-duke-it-out-in-dc-midi-pack/\r\n\r\nBrand new soundtrack for Duke It Out In D.C. addon."
+  },
+  {
+    "id": "duke3d-hq-sounds",
+    "type": "Mod",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "High Quality Sound Effects",
+    "version": "1.0",
+    "author": "Dzierzan",
+    "def_modules": [
+      "hq-sounds-main.def"
+    ],
+    "description": "https://www.moddb.com/mods/duke-nukem-3d-high-quality-sound-effects\r\n\r\nThe purpose of this mod is to replace vanilla sound effects of Duke Nukem 3D with high quality ones."
+  },
+  {
+    "id": "duke3d-hq-sounds-nw",
+    "type": "Mod",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "High Quality Sound Effects for Nuclear Winter",
+    "version": "1.0",
+    "def_modules": [
+      "hq-sounds-nwinter.def"
+    ],
+    "dependencies": {
+      "addons": [
+        {
+          "id": "dukenw"
+        },
+        {
+          "id": "duke3d-hq-sounds"
+        }
+      ]
+    },
+    "description": "https://www.moddb.com/mods/duke-nukem-3d-high-quality-sound-effects\r\n\r\nThe purpose of this mod is to replace vanilla sound effects of Duke Nukem 3D with high quality ones."
+  },
+  {
+    "id": "duke3d-hq-sounds-vaca",
+    "type": "Mod",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "High Quality Sound Effects for Caribbean",
+    "version": "1.0",
+    "def_modules": [
+      "hq-sounds-vaca.def"
+    ],
+    "dependencies": {
+      "addons": [
+        {
+          "id": "dukevaca"
+        },
+        {
+          "id": "duke3d-hq-sounds"
+        }
+      ]
+    },
+    "description": "https://www.moddb.com/mods/duke-nukem-3d-high-quality-sound-effects\r\n\r\nThe purpose of this mod is to replace vanilla sound effects of Duke Nukem 3D with high quality ones."
+  },
+  {
+    "id": "duke3d-nude-patch",
+    "type": "Mod",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "Nude Patch",
+    "version": "0.91",
+    "author": "fgsfds",
+    "def_modules": [
+      "dukexxx.def"
+    ],
+    "description": "This mod provides art replacement that partially or fully removes clothes from female NPCs and posters in OG Duke 3D and its addons"
+  },
+  {
+    "id": "duke3d-save-the-babes",
+    "type": "Mod",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "Save the Babes",
+    "version": "1.0",
+    "author": "Kid MarsCat",
+    "con_modules": [
+      "babes.con"
+    ],
+    "def_modules": [
+      "duke3d_babes.def"
+    ],
+    "dependencies": {
+      "features": [
+        "EDuke32_CON"
+      ]
+    },
+    "incompatibles": {
+      "addons": [
+        {
+          "id": "DukeVaca"
+        }
+      ]
+    },
+    "description": "https://kidmarscat.itch.io/savebabes\r\n\r\nSave the Babes for Duke Nukem 3D is a mod that gives the player the ability to save the babes found in the game! To save a babe, simply press the [Use] button in front of any babe featured in the game, and she will be rescued out, giving the player a \u002B20 health bonus for each babe saved!\r\n\r\n**Warning:** This mod will remove the ability to tip the babes or have them speak back to Duke. This mod will NOT remove the ability to kill any babes, accidentally or otherwise, so be careful!"
+  },
+  {
+    "id": "duke3d-sprite-fixes",
+    "type": "Mod",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "Sprite Fixes",
+    "version": "1.0",
+    "def_modules": [
+      "duke_sprite_fixes.def"
+    ],
+    "description": "This pack contains widescrren fixes and minor graphical fixes for sprites in Duke 3D and its official addons"
+  },
+  {
+    "id": "duke3d-voxel-pack",
+    "type": "Mod",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "Voxel Pack",
+    "version": "2.0-rc2",
+    "def_modules": [
+      "duke3d_voxels.def",
+      "duke3d_maphacks.def"
+    ],
+    "description": "https://github.com/NightFright2k19/duke3d_voxelpack\r\n\r\nVoxel replacements for sprites in Duke Nukem 3D"
+  },
+  {
+    "id": "duke3d-voxel-pack-nw",
+    "type": "Mod",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "Voxel Pack for Nuclear Winter",
+    "version": "2.0-rc2",
+    "def_modules": [
+      "voxels/nwinter.def"
+    ],
+    "dependencies": {
+      "addons": [
+        {
+          "id": "dukenw"
+        },
+        {
+          "id": "duke3d-voxel-pack"
+        }
+      ]
+    },
+    "description": "https://github.com/NightFright2k19/duke3d_voxelpack\r\n\r\nVoxel replacements for sprites in Duke Nukem 3D Nuclear Winter"
+  },
+  {
+    "id": "duke3d-voxel-pack-vaca",
+    "type": "Mod",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "Voxel Pack for Caribbean",
+    "version": "2.0-rc2",
+    "def_modules": [
+      "voxels/vacation.def"
+    ],
+    "dependencies": {
+      "addons": [
+        {
+          "id": "dukevaca"
+        },
+        {
+          "id": "duke3d-voxel-pack"
+        }
+      ]
+    },
+    "description": "https://github.com/NightFright2k19/duke3d_voxelpack\r\n\r\nVoxel replacements for sprites in Duke Nukem 3D Caribbean"
+  },
+  {
+    "id": "duke3d-wt-red-crosses",
+    "type": "Mod",
+    "game": {
+      "name": "Duke3D",
+      "version": "Duke3D_WT"
+    },
+    "title": "World Tour Red Crosses",
+    "version": "1.0",
+    "def_modules": [
+      "wt_uncensor.def"
+    ],
+    "description": "This mod brings back red crosses of the medkits in World Tour edition of the game"
+  },
+  {
+    "id": "fury-spymaps1",
+    "type": "Map",
+    "game": {
+      "name": "Fury"
+    },
+    "title": "SPYmaps 1",
+    "version": "1.0",
+    "author": "SPYmaps",
+    "startmap": {
+      "file": "SPYmapsIONFURY.MAP"
+    },
+    "description": "https://www.moddb.com/mods/spymaps-ion-fury"
+  },
+  {
+    "id": "fury-spymaps2",
+    "type": "Map",
+    "game": {
+      "name": "Fury"
+    },
+    "title": "SPYmaps 2",
+    "version": "3.0",
+    "author": "SPYmaps",
+    "startmap": {
+      "file": "SPYmaps_Ion_Fury_2.MAP"
+    },
+    "description": "https://www.moddb.com/mods/spymaps-ion-fury"
+  },
+  {
+    "id": "fury-spymaps3",
+    "type": "Map",
+    "game": {
+      "name": "Fury"
+    },
+    "title": "SPYmaps 3",
+    "version": "1.0",
+    "author": "SPYmaps",
+    "startmap": {
+      "file": "SPYmapsIonFury3.MAP"
+    },
+    "description": "https://www.moddb.com/mods/spymaps-ion-fury"
+  },
+  {
+    "id": "fury-voxel-pack",
+    "type": "Mod",
+    "game": {
+      "name": "Fury"
+    },
+    "title": "Voxel Pack",
+    "version": "0.4",
+    "def_modules": [
+      "fury_voxels.def"
+    ],
+    "description": "https://github.com/Dzierzan/IonFury-Voxel-Pack\r\n\r\nVoxel replacements for sprites in Ion Fury"
+  },
+  {
+    "id": "nam-gi-joe-tc",
+    "type": "TC",
+    "game": {
+      "name": "NAM"
+    },
+    "title": "GI Joe TC",
+    "version": "1.0",
+    "author": "Nathaniel Miller",
+    "con_main": "GI_GAME.CON",
+    "description": "http://nippersite.50megs.com/index.html"
+  },
+  {
+    "id": "nam-tangerine-edition",
+    "type": "TC",
+    "game": {
+      "name": "NAM"
+    },
+    "title": "Tangerine Edition",
+    "version": "1.1",
+    "author": "ZikShadow",
+    "con_main": "NAMT.CON",
+    "def_modules": [
+      "namt.def"
+    ],
+    "description": "https://forum.zdoom.org/viewtopic.php?f=354\u0026t=76086"
+  },
+  {
+    "id": "nam-tour-of-duty-34",
+    "type": "TC",
+    "game": {
+      "name": "NAM"
+    },
+    "title": "Tour of Duty 3\u00264",
+    "version": "1.0",
+    "author": "Ford Prefect",
+    "con_main": "GAMET4.CON",
+    "description": "A New NAM Adventure "
+  },
+  {
+    "id": "redneck-rampage-revision",
+    "type": "TC",
+    "game": {
+      "name": "Redneck"
+    },
+    "title": "Redneck Rampage Revision",
+    "version": "3.7",
+    "author": " shellcracker",
+    "con_main": "GAME.CON",
+    "description": "https://www.moddb.com/mods/redneck-rampage-revision/downloads\r\n\r\nA standalone mod that attempts to correct the shortcomings of Redneck Rampage and its sequel.",
+    "executables": {
+      "Windows": {
+        "Stub": "rednukem.exe"
+      }
+    }
+  },
+  {
+    "id": "redneck-rampage-route66-revision",
+    "type": "TC",
+    "game": {
+      "name": "Redneck"
+    },
+    "title": "Redneck Rampage Route 66 Revision",
+    "version": "3.7",
+    "author": "shellcracker",
+    "con_main": "GAME66.CON",
+    "dependencies": {
+      "features": [
+        "EDuke32_CON"
+      ]
+    },
+    "description": "https://www.moddb.com/mods/redneck-rampage-revision/downloads\r\n\r\nA standalone mod that attempts to correct the shortcomings of Redneck Rampage and its sequel.",
+    "executables": {
+      "Windows": {
+        "Stub": "rednukem.exe"
+      }
+    }
+  },
+  {
+    "id": "ridesagain-redneck-redneck-rampage-rides-revision",
+    "type": "TC",
+    "game": {
+      "name": "RidesAgain"
+    },
+    "title": "Redneck Rampage Rides Again Revision",
+    "version": "3.7",
+    "author": " shellcracker",
+    "con_main": "GAME.CON",
+    "description": "https://www.moddb.com/mods/redneck-rampage-revision/downloads\r\n\r\nA standalone mod that attempts to correct the shortcomings of Redneck Rampage and its sequel.",
+    "executables": {
+      "Windows": {
+        "Stub": "rednukem.exe"
+      }
+    }
+  },
+  {
+    "id": "redneck-music",
+    "type": "Mod",
+    "game": {
+      "name": "Redneck"
+    },
+    "title": "Redneck Rampage Soundtrack",
+    "version": "1.0",
+    "description": "Original soundtrack for Redneck Rampage and Route 66"
+  },
+  {
+    "id": "ridesagain-music",
+    "type": "Mod",
+    "game": {
+      "name": "RidesAgain"
+    },
+    "title": "Rides Again Soundtrack",
+    "version": "1.0",
+    "description": "Original soundtrack for Redneck Rampage Rides Again"
+  },
+  {
+    "id": "slave-ruins",
+    "type": "TC",
+    "game": {
+      "name": "Slave"
+    },
+    "title": "Return to Ruins",
+    "version": "1.0",
+    "author": "Oasiz, MetHy, Daedolon",
+    "description": "https://www.moddb.com/mods/return-to-ruins\r\n\r\nThis is a 3 maps episode for the PC DOS version of Exhumed / Powerslave.\r\n\r\nNew maps for a game with no official modding support. 20 years after its release.The maps were built with an episodic format in mind, but unlike in the original game, they were also designed so that each can be played separetely with a fresh start."
+  },
+  {
+    "id": "slave-elgizah",
+    "type": "Map",
+    "game": {
+      "name": "Slave"
+    },
+    "title": "El-Gizah",
+    "version": "1.0",
+    "author": "Slawomir LAW Lawrynowicz",
+    "startmap": {
+      "file": "elgizah.map"
+    },
+    "description": "https://www.moddb.com/games/powerslave/addons/el-gizah\r\n\r\nMedium sized map for a Exhumed/Powerslave game. Level features a marsh, desert, pyramid, temple and of course the mighty Sphinx."
+  },
+  {
+    "id": "slave-forgo",
+    "type": "Map",
+    "game": {
+      "name": "Slave"
+    },
+    "title": "Forgotten Sanctuary",
+    "version": "1.0",
+    "author": "Korbac",
+    "startmap": {
+      "file": "FORGO.MAP"
+    },
+    "description": "https://www.moddb.com/games/powerslave/addons/forgotten-sanctuary"
+  },
+  {
+    "id": "slave-totfatw",
+    "type": "Map",
+    "game": {
+      "name": "Slave"
+    },
+    "title": "Temple of the Fire and the Water",
+    "version": "1.0",
+    "author": "pagb666",
+    "startmap": {
+      "file": "totfatw.map"
+    },
+    "description": "https://www.moddb.com/games/powerslave/addons/temple-of-the-fire-and-the-water\r\n\r\nThe Kilmaat plans were thwarted, however the remaining troops are up to no good. You must venture into the Temple of the Fire and the Water and retrieve the ashes of Anubis before they use them for their evil deeds.\r\n\r\nThis level can be completed in two different ways. The advised way is clockwise, as it features a more natural progression. I can perfectly be finished counter-clockwise, but it\u0027ll be more quirky, because of the quirky weapons ;)"
+  },
+  {
+    "id": "slave-hq-sounds",
+    "type": "Mod",
+    "game": {
+      "name": "Slave"
+    },
+    "title": "High Quality Sound Effects",
+    "version": "1.0",
+    "author": "Dzierzan",
+    "description": "https://www.moddb.com/mods/powerslave-exhumed-high-quality-sound-effects\r\n\r\nThe purpose of this mod is to replace vanilla sound effects of Powerslave (Exhumed) with high quality ones."
+  },
+  {
+    "id": "slave-m60",
+    "type": "Mod",
+    "game": {
+      "name": "Slave"
+    },
+    "title": "Alternative M60",
+    "version": "1.0",
+    "def_modules": [
+      "alt_m60.def"
+    ],
+    "description": "https://www.moddb.com/games/powerslave/addons/psm60\r\n\r\nA simple addon which replaces M60 weapon with alternative one."
+  },
+  {
+    "id": "slave-voxel-pack",
+    "type": "Mod",
+    "game": {
+      "name": "Slave"
+    },
+    "title": "Voxel Pack",
+    "version": "0.16",
+    "def_modules": [
+      "slave_voxels.def"
+    ],
+    "description": "https://github.com/fgsfds/Powerslave-Voxel-Pack\r\n\r\nThis pack provides voxel replacements for sprites in Powerslave/Exhumed"
+  },
+  {
+    "id": "amc-squad",
+    "type": "TC",
+    "game": {
+      "name": "Standalone"
+    },
+    "title": "AMC Squad",
+    "version": "4.5.2",
+    "author": "AMCSquad",
+    "description": "https://www.moddb.com/games/the-amc-tc\r\n\r\nThe AMC Squad is an epic story-driven FPS running on the Build Engine. It offers a blend of fast-paced and tactical heroic action, complete with a story-driven narrative that spans over several episodes.\r\n\r\nEach episode is a full-length campaign featuring multiple varied locations to explore and many hidden secrets and collectibles to discover. Experience an overarching story that is loosely based on the worlds and settings of other classic Build Engine games. Pick from more than 8 different character classes, each with a unique loadout of items, weapons and abilities, and fight a large selection of different enemy factions that threaten the safety of the world.\r\n\r\nThe game currently contains 4 fully playable episodes, with 6 episodes planned total.",
+    "executables": {
+      "Windows": {
+        "Stub": "amcsquad.exe"
+      }
+    }
+  },
+  {
+    "id": "electric-highways",
+    "type": "TC",
+    "game": {
+      "name": "Standalone"
+    },
+    "title": "Electric Highways",
+    "version": "1.2",
+    "author": "Zykov Eddy",
+    "description": "https://eddyprojects.blogspot.com\r\n\r\nThe year is 2072. Virtual reality has become a worldwide phenomenon, allowing people to sink into the virtual web, while experiencing isolation in real life. A VR engineer has finished his virtual reality project, but before uploading it on the web, he decides to  visit it for the last time, plunging deeper into his own surreal world.",
+    "executables": {
+      "Windows": {
+        "Stub": "ElectricHighways.exe"
+      }
+    }
+  },
+  {
+    "id": "wgrealms-demon-throne",
+    "type": "TC",
+    "game": {
+      "name": "Standalone"
+    },
+    "title": "WGRealms Demon Throne",
+    "version": "3.01",
+    "description": "https://www.moddb.com/games/wgrealms-2\r\n\r\nDEMON THRONE has a huge game world spanning more than 25 large levels with more than 20 different monsters and over 10 bosses. Most of those monsters have several different versions. Upgrades for weapons and abilities can be purchased throughout the campaign.\r\n\r\nYou can play as 2 different Characters, Duke Nukem or Jedrik.\r\n\r\nYou have been sent to kill the hordes of monsters invading the many Realms of TITAN. Set in 3 different lands, KHUL, ALANISA and THE OLD WORLD. You must end the onslaught and save the realm. The Wizard AXON has summoned you and will share with you his magical powers that can only be increased by killing the demons.\r\n\r\nThe Siege has been lead by the Archonitron and his many lieutenants whom you must defeat to end the war. Only by acquiring enough strength and power will you ever be able to defeat them all.\r\n\r\nFight with kick ass weapons, use magical powers, ally yourself with Immortal beings from far of lands, complete quests, and kill monsters to collect gold and gems.\r\n\r\nWilliam Gee and Dan Gaskill are the minds behind the game, with new and improved art by sebabdukeboss20, Level design by William Gee and Code by Dan Gaskill.",
+    "executables": {
+      "Windows": {
+        "Stub": "wgrealms.exe"
+      }
+    }
+  },
+  {
+    "id": "wang-intime",
+    "type": "TC",
+    "game": {
+      "name": "Wang"
+    },
+    "title": "Lo Wang in Time",
+    "version": "1.1",
+    "def_modules": [
+      "INTIME.DEF"
+    ],
+    "description": "Lo Wang goes back in time to stop Zilla from destroying his ancestry. He travels between time periods defeating evil monsters and eventually Zilla himself.\r\n\r\nLo Wang in time is an eleven level Partial Conversion for shadow warrior, seven for single player levels and another four for multi player"
+  },
+  {
+    "id": "wang-lastwarrior",
+    "type": "TC",
+    "game": {
+      "name": "Wang"
+    },
+    "title": "The Last Warrior",
+    "version": "1.1",
+    "author": "Michael Clark",
+    "def_modules": [
+      "LASTWAR.DEF"
+    ],
+    "description": "A TC that features vast amount of new art/weapon"
+  },
+  {
+    "id": "wang-park",
+    "type": "TC",
+    "game": {
+      "name": "Wang"
+    },
+    "title": "Park",
+    "version": "1.6",
+    "author": "Yves Bresson",
+    "def_modules": [
+      "PARK.DEF"
+    ],
+    "description": "Your master (Master Leep) and his grand-daughters (Su-Shi, Je-Shi, Bla-Ye, Vi-Suh \u0026 Ri-Suh) went to visit the famous PARK but something went wrong, it looks like the beasts in the park escaped from their enclosures. It is believed that the beasts were helped by a group of evil ninjas who managed to warp into this dimension through a big time-vortex-hole. You (Lo Wang) now have to rescue Master Leep and the girls...\r\n\r\n... welcome to PARK"
+  },
+  {
+    "id": "wang-swc-20th",
+    "type": "TC",
+    "game": {
+      "name": "Wang"
+    },
+    "title": "Shadow Warrior Central 20th",
+    "version": "1.0",
+    "author": "Robman",
+    "description": "https://swcentral.weebly.com/swc20.html\r\n\r\nLo Wang is once again called to action to defeat Zilla and his minions!"
+  },
+  {
+    "id": "wang-the-red-dragon-clan",
+    "type": "TC",
+    "game": {
+      "name": "Wang"
+    },
+    "title": "The Red Dragon Clan",
+    "version": "1.4",
+    "author": "MarkKaminari00",
+    "description": "https://www.moddb.com/mods/the-red-dragon-clan/downloads/the-red-dragon-clan\r\n\r\nLo wang is in Los angeles to teach his knowledge of Master Leep to his students,\r\nBut at some point a mysterious cult called The Red Dragon Clan is terrorizing the city of L.A."
+  },
+  {
+    "id": "wang-tonight",
+    "type": "TC",
+    "game": {
+      "name": "Wang"
+    },
+    "title": "Tonight Never Ends",
+    "version": "1.2",
+    "author": "Lights Out",
+    "def_modules": [
+      "TNE.DEF"
+    ],
+    "description": "Tonight Never Ends, from Lights Out, is a whole new episode for Shadow Warrior. Lights Out team was originally formed by Jonathan C. Wu in March in order to gather some of the best builders around the globe to build one of the most fun-filled episodes for Shadow Warrior. This episode consists of five main missions (many including more than one level), one secret mission, four WangBang levels, and a few other in-between levels. The Lights Out team poured their hearts and souls into this episode, and we wish that you will have as much fun playing it as we had making it."
+  },
+  {
+    "id": "twindragon",
+    "type": "TC",
+    "game": {
+      "name": "Wang"
+    },
+    "title": "Twin Dragon",
+    "version": "2.0",
+    "author": "Wylde Productions, Level Infinity",
+    "description": "Twin Dragon is an official expansion to the Shadow Warrior that was released as a free download on July 4, 1998.\r\n\r\nThe game reveals that Lo Wang has a twin brother, Hung Lo, with whom he was separated in early childhood. Hung Lo becomes a dark person whose goal is to destroy the world. Similar to Master Zilla, he uses the creatures from the dark side, criminal underworld and Zilla\u0027s remnants to further his goals. Lo Wang has to journey through his dark minions, reach his palace and defeat the evil Twin Dragon Hung Lo once and for all. When he reaches the palace, Lo Wang defeats his brother by shooting a Nuke at him, which kills Hung Lo in the process.\r\n\r\nThe game features 13 new levels, new sounds, artwork and a new final boss, Hung Lo, who replaced Zilla."
+  },
+  {
+    "id": "wanton",
+    "type": "TC",
+    "game": {
+      "name": "Wang"
+    },
+    "title": "Wanton Destruction",
+    "version": "2.0",
+    "author": "Sunstorm Interactive",
+    "description": "Wanton Destruction is an official expansion that was created by Sunstorm Interactive and tested by 3D Realms, but was not released by the distributor. It was found on September 5, 2005 and was released for free.\r\n\r\nThe add-on chronicles Lo Wang\u0027s adventures after the original game. He visits his relatives in USA, but is forced to fight off Zilla\u0027s forces again. The game culminates with a battle against Master Zilla above the streets of Tokyo, which ends with Master Zilla\u0027s death.\r\n\r\nThe game features 12 new levels, new artwork and a few new enemy replacements, such as human enemies; though they still act like their original counterparts."
+  },
+  {
+    "id": "wang-wiwy",
+    "type": "TC",
+    "game": {
+      "name": "Wang"
+    },
+    "title": "When I Was Young",
+    "version": "1.1",
+    "author": "Yves Bresson",
+    "def_modules": [
+      "WIWY.DEF"
+    ],
+    "description": "This story takes places some years before the game does; Lo Wang is a bad boy and he is working for local mafia. Two sections of the local chinese mafia battle to gain control of the city. One clan is led by Mr Takagy, the other one by Mr Fu Kung. You are member of Mr Takagy\u0027s clan, and got to do the dirty jobs for him... (you might also have to deal with the police)\n\n- 11 single player levels \u002B 1 secret level (technically 2 secret levels, but same twice) \u002B 6 in-between levels \u002B 2 \u0027bonus\u0027 levels\n\n- coop \u0026 wangbang capabilities in all 11 main levels\n\n- 2 new weapons (unfinished, thus looking really ugly but I kept it for fun)\n\n- new arts\n\n- a little new intro animation\n\n- a story :-)\n\n- new talk\n\n- weather effects"
+  },
+  {
+    "id": "wang-beta-weapons",
+    "type": "Mod",
+    "game": {
+      "name": "Wang"
+    },
+    "title": "Beta Weapons",
+    "version": "1.0",
+    "author": "Dzierzan",
+    "def_modules": [
+      "beta_weapons.def"
+    ],
+    "description": "https://www.moddb.com/games/shadow-warrior/addons/beta-weapons1\r\n\r\nThis is a very simple addon for Shadow Warrior game which replaces vanilla weapons sprites with beta ones (at least the ones from the latest betas)."
+  },
+  {
+    "id": "wang-hq-sounds-td",
+    "type": "Mod",
+    "game": {
+      "name": "Wang"
+    },
+    "title": "High Quality Sound Effects for Twin Dragon",
+    "version": "1.0",
+    "author": "Dzierzan",
+    "dependencies": {
+      "addons": [
+        {
+          "id": "twindragon"
+        },
+        {
+          "id": "wang-hq-sounds"
+        }
+      ]
+    },
+    "description": "https://www.moddb.com/mods/shadow-warrior-high-quality-sound-effects\n\nThis mod replaces original sounds with high quality ones based on actual sources. If a specifc source was not found, then a sound was upscaled."
+  },
+  {
+    "id": "wang-hq-sounds-wd",
+    "type": "Mod",
+    "game": {
+      "name": "Wang"
+    },
+    "title": "High Quality Sound Effects for Wanton Destruction",
+    "version": "1.0",
+    "author": "Dzierzan",
+    "dependencies": {
+      "addons": [
+        {
+          "id": "wanton"
+        },
+        {
+          "id": "wang-hq-sounds"
+        }
+      ]
+    },
+    "description": "https://www.moddb.com/mods/shadow-warrior-high-quality-sound-effects\n\nThis mod replaces original sounds with high quality ones based on actual sources. If a specifc source was not found, then a sound was upscaled."
+  },
+  {
+    "id": "wang-hq-sounds",
+    "type": "Mod",
+    "game": {
+      "name": "Wang"
+    },
+    "title": "High Quality Sound Effects",
+    "version": "1.0",
+    "author": "Dzierzan",
+    "description": "https://www.moddb.com/mods/shadow-warrior-high-quality-sound-effects\n\nThis mod replaces original sounds with high quality ones based on actual sources. If a specifc source was not found, then a sound was upscaled."
+  },
+  {
+    "id": "wang-voxel-pack",
+    "type": "Mod",
+    "game": {
+      "name": "Wang"
+    },
+    "title": "Voxel Pack",
+    "version": "0.1",
+    "def_modules": [
+      "wang_voxels.def"
+    ],
+    "description": "https://github.com/fgsfds/Shadow-Warrior-Voxel-Pack\n\nAdditional voxel models for Shadow Warrior 1997 video game"
+  },
+  {
+    "id": "wang-widescreen",
+    "type": "Mod",
+    "game": {
+      "name": "Wang"
+    },
+    "title": "Widescreen Fixes",
+    "version": "1.0",
+    "def_modules": [
+      "sw-widescreen.def"
+    ],
+    "description": "This file provides widescreen graphics for Shadow Warrior weapons"
+  }
+]

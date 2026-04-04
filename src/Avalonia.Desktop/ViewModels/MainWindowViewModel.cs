@@ -1,7 +1,9 @@
-﻿using Common.All.Enums;
+﻿using Addons.Providers;
+using Common.All.Enums;
 using Common.Client;
 using Common.Client.Helpers;
 using Common.Client.Interfaces;
+using Common.Client.Providers;
 using Common.Client.Tools;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Games.Providers;
@@ -26,7 +28,8 @@ public sealed class MainWindowViewModel : ObservableObject
         GamesPathsProvider gamesPathsProvider,
         IReadOnlyList<BasePort> ports,
         IReadOnlyList<BaseTool> tools,
-        IApiInterface apiInterface,
+        MetadataProvider metadataProvider,
+        DownloadableAddonsProviderFactory downloadablesProviderFactory,
         ILogger logger
         )
     {
@@ -40,80 +43,113 @@ public sealed class MainWindowViewModel : ObservableObject
         SettingsPageViewModel = new SettingsViewModel(configProvider, gamesPathsProvider);
 
         DukeViewModel = new(
+            GameEnum.Duke3D,
             viewModelsFactory.GetCampaignsViewModel(GameEnum.Duke3D),
             viewModelsFactory.GetMapsViewModel(GameEnum.Duke3D),
             viewModelsFactory.GetModsViewModel(GameEnum.Duke3D),
-            viewModelsFactory.GetDownloadsViewModel(GameEnum.Duke3D)
+            viewModelsFactory.GetDownloadsViewModel(GameEnum.Duke3D),
+            metadataProvider,
+            downloadablesProviderFactory.Get(_gamesProvider.GetGame(GameEnum.Duke3D))
             );
 
         BloodViewModel = new(
+            GameEnum.Blood,
             viewModelsFactory.GetCampaignsViewModel(GameEnum.Blood),
             viewModelsFactory.GetMapsViewModel(GameEnum.Blood),
             viewModelsFactory.GetModsViewModel(GameEnum.Blood),
-            viewModelsFactory.GetDownloadsViewModel(GameEnum.Blood)
+            viewModelsFactory.GetDownloadsViewModel(GameEnum.Blood),
+            metadataProvider,
+            downloadablesProviderFactory.Get(_gamesProvider.GetGame(GameEnum.Blood))
             );
 
         WangViewModel = new(
+            GameEnum.Wang,
             viewModelsFactory.GetCampaignsViewModel(GameEnum.Wang),
             viewModelsFactory.GetMapsViewModel(GameEnum.Wang),
             viewModelsFactory.GetModsViewModel(GameEnum.Wang),
-            viewModelsFactory.GetDownloadsViewModel(GameEnum.Wang)
+            viewModelsFactory.GetDownloadsViewModel(GameEnum.Wang),
+            metadataProvider,
+            downloadablesProviderFactory.Get(_gamesProvider.GetGame(GameEnum.Wang))
             );
 
         FuryViewModel = new(
+            GameEnum.Fury,
             viewModelsFactory.GetCampaignsViewModel(GameEnum.Fury),
             viewModelsFactory.GetMapsViewModel(GameEnum.Fury),
             viewModelsFactory.GetModsViewModel(GameEnum.Fury),
-            viewModelsFactory.GetDownloadsViewModel(GameEnum.Fury)
+            viewModelsFactory.GetDownloadsViewModel(GameEnum.Fury),
+            metadataProvider,
+            downloadablesProviderFactory.Get(_gamesProvider.GetGame(GameEnum.Fury))
             );
 
         RedneckViewModel = new(
+            GameEnum.Redneck,
             viewModelsFactory.GetCampaignsViewModel(GameEnum.Redneck),
             viewModelsFactory.GetMapsViewModel(GameEnum.Redneck),
             viewModelsFactory.GetModsViewModel(GameEnum.Redneck),
-            viewModelsFactory.GetDownloadsViewModel(GameEnum.Redneck)
+            viewModelsFactory.GetDownloadsViewModel(GameEnum.Redneck),
+            metadataProvider,
+            downloadablesProviderFactory.Get(_gamesProvider.GetGame(GameEnum.Redneck))
             );
 
         SlaveViewModel = new(
+            GameEnum.Slave,
             viewModelsFactory.GetCampaignsViewModel(GameEnum.Slave),
             viewModelsFactory.GetMapsViewModel(GameEnum.Slave),
             viewModelsFactory.GetModsViewModel(GameEnum.Slave),
-            viewModelsFactory.GetDownloadsViewModel(GameEnum.Slave)
+            viewModelsFactory.GetDownloadsViewModel(GameEnum.Slave),
+            metadataProvider,
+            downloadablesProviderFactory.Get(_gamesProvider.GetGame(GameEnum.Slave))
             );
 
         NamViewModel = new(
+            GameEnum.NAM,
             viewModelsFactory.GetCampaignsViewModel(GameEnum.NAM),
             viewModelsFactory.GetMapsViewModel(GameEnum.NAM),
             viewModelsFactory.GetModsViewModel(GameEnum.NAM),
-            viewModelsFactory.GetDownloadsViewModel(GameEnum.NAM)
+            viewModelsFactory.GetDownloadsViewModel(GameEnum.NAM),
+            metadataProvider,
+            downloadablesProviderFactory.Get(_gamesProvider.GetGame(GameEnum.NAM))
             );
 
         WWIIViewModel = new(
+            GameEnum.WW2GI,
             viewModelsFactory.GetCampaignsViewModel(GameEnum.WW2GI),
             viewModelsFactory.GetMapsViewModel(GameEnum.WW2GI),
             viewModelsFactory.GetModsViewModel(GameEnum.WW2GI),
-            viewModelsFactory.GetDownloadsViewModel(GameEnum.WW2GI)
+            viewModelsFactory.GetDownloadsViewModel(GameEnum.WW2GI),
+            metadataProvider,
+            downloadablesProviderFactory.Get(_gamesProvider.GetGame(GameEnum.WW2GI))
             );
 
         WitchavenViewModel = new(
+            GameEnum.Witchaven,
             viewModelsFactory.GetCampaignsViewModel(GameEnum.Witchaven),
             viewModelsFactory.GetMapsViewModel(GameEnum.Witchaven),
             viewModelsFactory.GetModsViewModel(GameEnum.Witchaven),
-            viewModelsFactory.GetDownloadsViewModel(GameEnum.Witchaven)
+            viewModelsFactory.GetDownloadsViewModel(GameEnum.Witchaven),
+            metadataProvider,
+            downloadablesProviderFactory.Get(_gamesProvider.GetGame(GameEnum.Witchaven))
             );
 
         TekWarViewModel = new(
+            GameEnum.TekWar,
             viewModelsFactory.GetCampaignsViewModel(GameEnum.TekWar),
             viewModelsFactory.GetMapsViewModel(GameEnum.TekWar),
             viewModelsFactory.GetModsViewModel(GameEnum.TekWar),
-            viewModelsFactory.GetDownloadsViewModel(GameEnum.TekWar)
+            viewModelsFactory.GetDownloadsViewModel(GameEnum.TekWar),
+            metadataProvider,
+            downloadablesProviderFactory.Get(_gamesProvider.GetGame(GameEnum.TekWar))
             );
 
         StandaloneViewModel = new(
+            GameEnum.Standalone,
             viewModelsFactory.GetCampaignsViewModel(GameEnum.Standalone),
             null,
             null,
-            viewModelsFactory.GetDownloadsViewModel(GameEnum.Standalone)
+            viewModelsFactory.GetDownloadsViewModel(GameEnum.Standalone),
+            metadataProvider,
+            downloadablesProviderFactory.Get(_gamesProvider.GetGame(GameEnum.Standalone))
             );
     }
 

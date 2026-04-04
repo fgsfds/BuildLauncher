@@ -12,15 +12,52 @@
     <Grid RowDefinitions="*">
 
         <TabControl>
-            <TabItem Header="Campaigns" Margin="5">
+            <TabItem Margin="5">
+
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock>Campaigns</TextBlock>
+
+                        <i:Icon Value="fa-circle-exclamation"
+                                Margin="5,0,0,0"
+                                IsVisible="{Binding IsCampaignsAlarmShown}"
+                                Foreground="Crimson"
+                                BorderBrush="Black" />
+                    </StackPanel>
+                </TabItem.Header>
+
                 <UserControl Content="{Binding Campaigns}"/>
             </TabItem>
 
-            <TabItem Header="Maps" Margin="5" IsVisible="{Binding Maps, Converter={x:Static ObjectConverters.IsNotNull}, FallbackValue=False}}">
+            <TabItem Margin="5" IsVisible="{Binding Maps, Converter={x:Static ObjectConverters.IsNotNull}, FallbackValue=False}}">
+
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock>Maps</TextBlock>
+
+                        <i:Icon Value="fa-circle-exclamation"
+                                Margin="5,0,0,0"
+                                IsVisible="{Binding IsMapsAlarmShown}"
+                                Foreground="Crimson" />
+                    </StackPanel>
+                </TabItem.Header>
+
                 <UserControl Content="{Binding Maps}"/>
             </TabItem>
 
-            <TabItem Header="Mods" Margin="5" IsVisible="{Binding Maps, Converter={x:Static ObjectConverters.IsNotNull}, FallbackValue=False}}">
+            <TabItem Margin="5" IsVisible="{Binding Maps, Converter={x:Static ObjectConverters.IsNotNull}, FallbackValue=False}}">
+
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock>Mods</TextBlock>
+
+                        <i:Icon Value="fa-circle-exclamation"
+                                Margin="5,0,0,0"
+                                IsVisible="{Binding IsModsAlarmShown}"
+                                Foreground="Crimson" />
+                    </StackPanel>
+                </TabItem.Header>
+
                 <UserControl Content="{Binding Mods}"/>
             </TabItem>
 
@@ -29,7 +66,11 @@
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="Downloads"/>
-                        <i:Icon Foreground="Crimson" ToolTip.Tip="Updates available" IsVisible="{Binding ElementName=DownControl, Path=((vm:DownloadsViewModel)DataContext).HasUpdates, FallbackValue=False}" Margin="5,0,0,0" Value="fa-circle-exclamation" />
+                        <i:Icon Value="fa-circle-exclamation"
+                                Foreground="Crimson"
+                                ToolTip.Tip="Updates available"
+                                IsVisible="{Binding IsDownloadsAlarmShown}"
+                                Margin="5,0,0,0" />
                     </StackPanel>
                 </TabItem.Header>
 
