@@ -51,15 +51,28 @@
             <ListBox.ItemTemplate>
                 <DataTemplate>
 
-                    <Grid RowDefinitions="auto">
+                    <Grid ColumnDefinitions="auto,*">
 
                         <TextBlock Text="{Binding Title}"
+                                   Grid.Column="0"
                                    Margin="10"
                                    Padding="5"
                                    HorizontalAlignment="Left"
                                    TextAlignment="Left"
                                    VerticalAlignment="Center"
                                    TextWrapping="NoWrap"/>
+
+                        <i:Icon Value="fa-circle-exclamation"
+                                Grid.Column="1"
+                                Margin="5"
+                                FontSize="20"
+                                IsVisible="{Binding IsMetadataUpdateAvailable}"
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Center"
+                                Foreground="Crimson"
+                                BorderBrush="Black"
+                                BorderThickness="1"
+                                ToolTip.Tip="Metadata update available"/>
 
                     </Grid>
 

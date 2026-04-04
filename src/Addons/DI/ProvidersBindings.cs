@@ -1,4 +1,5 @@
 ﻿using Addons.Providers;
+using Common.Client.Providers;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Addons.DI;
@@ -10,5 +11,6 @@ public static class ProvidersBindings
         _ = container.AddSingleton<InstalledAddonsProviderFactory>();
         _ = container.AddSingleton<DownloadableAddonsProviderFactory>();
         _ = container.AddSingleton<OriginalCampaignsProvider>();
+        _ = container.AddSingleton<MetadataProvider>();
     }
 }

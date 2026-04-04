@@ -28,7 +28,7 @@ public sealed class DownloadableAddonsProvider
 
     private static readonly SemaphoreSlim _semaphore = new(1);
 
-    public event AddonChanged? AddonDownloadedEvent;
+    public event AddonChanged? AddonsChangedEvent;
 
     /// <summary>
     /// Download progress
@@ -105,6 +105,7 @@ public sealed class DownloadableAddonsProvider
         finally
         {
             _ = _semaphore.Release();
+            AddonsChangedEvent?.Invoke(_game.GameEnum, null);
         }
     }
 
@@ -237,7 +238,7 @@ public sealed class DownloadableAddonsProvider
                 }
             }
 
-            AddonDownloadedEvent?.Invoke(_game.GameEnum, addon.AddonType);
+            AddonsChangedEvent?.Invoke(_game.GameEnum, addon.AddonType);
 
             return true;
         }

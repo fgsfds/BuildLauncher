@@ -12,6 +12,7 @@ using Common.Client.DI;
 using Common.Client.Enums;
 using Common.Client.Helpers;
 using Common.Client.Interfaces;
+using Common.Client.Providers;
 using Database.Client;
 using Games.Providers;
 using Microsoft.EntityFrameworkCore;
@@ -87,6 +88,9 @@ public sealed class App : Application
 
         var portsProvider = BindingsManager.Provider.GetRequiredService<PortsProvider>();
         RenameSaveFolder(portsProvider);
+
+        var metadataProvider = BindingsManager.Provider.GetRequiredService<MetadataProvider>();
+        _ = metadataProvider.InitializeAsync();
 
         try
         {

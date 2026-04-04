@@ -2,4 +2,4 @@
 
 namespace Common.All.Helpers;
 
-public delegate void AddonChanged(GameEnum game, AddonTypeEnum addonType);
+public delegate void AddonChanged(GameEnum gameEnum, AddonTypeEnum? addonType);

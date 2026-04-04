@@ -1,5 +1,6 @@
 using System.Collections.Immutable;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using Addons.Providers;
 using Avalonia.Controls.Notifications;
 using Avalonia.Desktop.Misc;
@@ -25,6 +26,8 @@ public sealed partial class DownloadsViewModel : ObservableObject
 
 
     #region Binding Properties
+
+    public bool HasUpdates => DownloadableList.Any(x => x.HasNewerVersion);
 
     /// <summary>
     /// List of downloadable addons
@@ -66,8 +69,6 @@ public sealed partial class DownloadsViewModel : ObservableObject
                 result = result.Where(x => x.Title.Contains(SearchBoxText, StringComparison.OrdinalIgnoreCase));
             }
 
-            HasUpdates = result.Any(x => x.HasNewerVersion);
-
             return [.. result];
         }
     }
@@ -105,9 +106,6 @@ public sealed partial class DownloadsViewModel : ObservableObject
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(CancelDownloadCommand))]
     private bool _isInProgress;
-
-    [ObservableProperty]
-    private bool _hasUpdates;
 
     /// <summary>
     /// Currently selected downloadable campaigns, maps or mods
@@ -148,7 +146,7 @@ public sealed partial class DownloadsViewModel : ObservableObject
         _logger = logger;
 
         _installedAddonsProvider.AddonsChangedEvent += OnAddonChanged;
-        _downloadableAddonsProvider.AddonDownloadedEvent += OnAddonChanged;
+        _downloadableAddonsProvider.AddonsChangedEvent += OnAddonChanged;
         SelectedDownloads.CollectionChanged += OnSelectedDownloadsChanged;
     }
 
@@ -211,7 +209,6 @@ public sealed partial class DownloadsViewModel : ObservableObject
 
         try
         {
-
             if (SelectedDownloads is null or [])
             {
                 return;
@@ -303,9 +300,9 @@ public sealed partial class DownloadsViewModel : ObservableObject
         OnPropertyChanged(nameof(ProgressBarValue));
     }
 
-    private void OnAddonChanged(GameEnum game, AddonTypeEnum addonType)
+    private void OnAddonChanged(GameEnum gameEnum, AddonTypeEnum? addonType)
     {
-        if (game != Game.GameEnum)
+        if (gameEnum != Game.GameEnum)
         {
             return;
         }
@@ -313,7 +310,7 @@ public sealed partial class DownloadsViewModel : ObservableObject
         OnPropertyChanged(nameof(DownloadableList));
     }
 
-    private void OnSelectedDownloadsChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+    private void OnSelectedDownloadsChanged(object? sender, NotifyCollectionChangedEventArgs e)
     {
         OnPropertyChanged(nameof(SelectedDownloadableDescription));
         OnPropertyChanged(nameof(DownloadButtonText));

@@ -38,7 +38,7 @@ public sealed class ViewLocator : IDataTemplate
         {
             CampaignsViewModel campsVm => new CampaignsControl(campsVm, _installedPortsProvider, _installedAddonsProviderFactory.Get(campsVm.Game), _bitmapsCache),
             MapsViewModel mapsVm => new MapsControl(mapsVm, _installedPortsProvider, _installedAddonsProviderFactory.Get(mapsVm.Game), _bitmapsCache),
-            ModsViewModel modsVM => new ModsControl(_installedAddonsProviderFactory.Get(modsVM.Game)),
+            ModsViewModel modsVM => new ModsControl(modsVM, _installedAddonsProviderFactory.Get(modsVM.Game)),
             DownloadsViewModel => new DownloadsControl(),
             _ => throw new NotSupportedException($"Can't find control for {data} ViewModel.")
         };

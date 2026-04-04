@@ -837,16 +837,26 @@
 
                     </StackPanel>
 
+                    <StackPanel Orientation="Horizontal">
+
+                        <Button Command="{Binding AddAddonCommand}"
+                                Margin="5" Padding="10"
+                                MinWidth="150"
+                                IsVisible="{Binding IsDeveloperMode}"
+                                Content="Add addons to the database..."/>
+
+                        <Button Command="{Binding UpdateManifestsCommand}"
+                                Margin="5" Padding="10"
+                                MinWidth="150"
+                                IsVisible="{Binding IsDeveloperMode}"
+                                Content="Update manifests.json..."/>
+
+                    </StackPanel>
+
                     <ProgressBar IsVisible="{Binding IsInProgress}"
                                  Margin="5"
                                  Height="20"
                                  Value="{Binding ProgressBarValue}"/>
-
-                    <Button Command="{Binding AddAddonCommand}"
-                            Margin="5" Padding="10"
-                            MinWidth="150"
-                            IsVisible="{Binding IsDeveloperMode}"
-                            Content="Add addons to the database..."/>
 
                     <md:MarkdownScrollViewer
                         Margin="5,0"

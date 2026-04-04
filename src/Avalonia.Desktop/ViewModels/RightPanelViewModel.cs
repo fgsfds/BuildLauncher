@@ -11,12 +11,13 @@ using CommunityToolkit.Mvvm.Input;
 
 namespace Avalonia.Desktop.ViewModels;
 
-public partial class RightPanelViewModel : ObservableObject
+public abstract partial class RightPanelViewModel : ObservableObject
 {
     public virtual BaseAddon? SelectedAddon { get; set; }
 
     private readonly PlaytimeProvider _playtimeProvider;
     private readonly RatingProvider _ratingProvider;
+    private readonly MetadataProvider _metadatUpdater;
     private readonly BitmapsCache _bitmapsCache;
     private readonly IConfigProvider _config;
 
@@ -24,12 +25,14 @@ public partial class RightPanelViewModel : ObservableObject
     public RightPanelViewModel(
         PlaytimeProvider playtimeProvider,
         RatingProvider ratingProvider,
+        MetadataProvider metadatUpdater,
         BitmapsCache bitmapsCache,
         IConfigProvider config
         )
     {
         _playtimeProvider = playtimeProvider;
         _ratingProvider = ratingProvider;
+        _metadatUpdater = metadatUpdater;
         _bitmapsCache = bitmapsCache;
         _config = config;
     }
@@ -51,6 +54,8 @@ public partial class RightPanelViewModel : ObservableObject
     /// Is preview image in the description visible
     /// </summary>
     public bool IsPreviewVisible => SelectedAddonPreview is not null;
+
+    public bool IsMetadataUpdateAvailable => SelectedAddon?.PathToFile is null ? false : _metadatUpdater.IsMetadataUpdateAvailable(SelectedAddon.PathToFile);
 
     public string? SelectedAddonRating
     {
@@ -121,6 +126,8 @@ public partial class RightPanelViewModel : ObservableObject
 
         OnPropertyChanged(nameof(SelectedAddonRating));
     }
+
+    public abstract Task UpdateMetadataAsync(object? value);
 
     #endregion      
 

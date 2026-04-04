@@ -536,8 +536,9 @@ public sealed class OriginalCampaignsProvider
 
         if (rGame.IsBaseGameInstalled)
         {
-            {var redneckId = nameof(GameEnum.Redneck).ToLower();
-            AddonId version = new(redneckId, null);
+            {
+                var redneckId = nameof(GameEnum.Redneck).ToLower();
+                AddonId version = new(redneckId, null);
 
                 campaigns.Add(version, new DukeCampaign()
                 {

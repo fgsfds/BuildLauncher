@@ -9,7 +9,7 @@
              xmlns:c="clr-namespace:Avalonia.Desktop.Controls"
              x:DataType="vm:RightPanelViewModel">
 
-    <Grid RowDefinitions="*,auto,auto,auto,auto">
+    <Grid RowDefinitions="*,auto,auto,auto,auto,auto">
 
         <ScrollViewer Grid.Row="0">
 
@@ -66,6 +66,27 @@
                    HorizontalAlignment="Center"
                    Foreground="{DynamicResource SystemAccentColor}"
                    Text="{Binding SelectedAddonPlaytime}"/>
+
+        <StackPanel Grid.Row="3" Orientation="Horizontal"
+                    IsVisible="{Binding IsMetadataUpdateAvailable}">
+
+            <TextBlock
+                Margin="10,5"
+                FontWeight="Bold"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Foreground="{DynamicResource SystemAccentColor}"
+                Text="Metadata update availble"/>
+
+            <Button Margin="10,5"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Background="Transparent"
+                    BorderBrush="Gray"
+                    Content="Update"
+                    Command="{Binding UpdateMetadataAsync}"/>
+
+        </StackPanel>
 
     </Grid>
 

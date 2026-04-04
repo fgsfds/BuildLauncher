@@ -102,6 +102,11 @@ public abstract class BaseAddon
     public bool IsFavorite { get; set; }
 
     /// <summary>
+    /// Is update for metadata available.
+    /// </summary>
+    public bool IsMetadataUpdateAvailable { get; set; }
+
+    /// <summary>
     /// List of built-in executables.
     /// </summary>
     public required Dictionary<OSEnum, Dictionary<PortEnum, string>>? Executables { get; init; }

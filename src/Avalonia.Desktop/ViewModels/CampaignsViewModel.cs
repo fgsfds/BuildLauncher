@@ -26,6 +26,7 @@ public sealed partial class CampaignsViewModel : RightPanelViewModel, IPortsButt
     private readonly InstalledAddonsProvider _installedAddonsProvider;
     private readonly DownloadableAddonsProvider _downloadableAddonsProvider;
     private readonly PortStarter _portStarter;
+    private readonly MetadataProvider _metadataProvider;
     private readonly ILogger _logger;
 
     private readonly SeparatorItem _separator = new();
@@ -85,6 +86,7 @@ public sealed partial class CampaignsViewModel : RightPanelViewModel, IPortsButt
             OnPropertyChanged(nameof(SelectedAddonDescription));
             OnPropertyChanged(nameof(SelectedAddonPreview));
             OnPropertyChanged(nameof(SelectedAddonRating));
+            OnPropertyChanged(nameof(IsMetadataUpdateAvailable));
             OnPropertyChanged(nameof(SelectedAddonPlaytime));
             OnPropertyChanged(nameof(IsPreviewVisible));
 
@@ -120,12 +122,13 @@ public sealed partial class CampaignsViewModel : RightPanelViewModel, IPortsButt
         IConfigProvider config,
         PlaytimeProvider playtimeProvider,
         RatingProvider ratingProvider,
+        MetadataProvider metadataProvider,
         InstalledAddonsProviderFactory installedAddonsProviderFactory,
         DownloadableAddonsProviderFactory downloadableAddonsProviderFactory,
         PortStarter portStarter,
         BitmapsCache bitmapsCache,
         ILogger logger
-        ) : base(playtimeProvider, ratingProvider, bitmapsCache, config)
+        ) : base(playtimeProvider, ratingProvider, metadataProvider, bitmapsCache, config)
     {
         Game = game;
 
@@ -134,11 +137,12 @@ public sealed partial class CampaignsViewModel : RightPanelViewModel, IPortsButt
         _installedAddonsProvider = installedAddonsProviderFactory.Get(game);
         _downloadableAddonsProvider = downloadableAddonsProviderFactory.Get(game);
         _portStarter = portStarter;
+        _metadataProvider = metadataProvider;
         _logger = logger;
 
         _gamesProvider.GameChangedEvent += OnGameChanged;
         _installedAddonsProvider.AddonsChangedEvent += OnAddonChanged;
-        _downloadableAddonsProvider.AddonDownloadedEvent += OnAddonChanged;
+        _downloadableAddonsProvider.AddonsChangedEvent += OnAddonChanged;
     }
 
 
@@ -293,6 +297,46 @@ public sealed partial class CampaignsViewModel : RightPanelViewModel, IPortsButt
         OnPropertyChanged(nameof(CampaignsList));
     }
 
+
+    /// <summary>
+    /// Updates metadata for selected campaign.
+    /// </summary>
+    public override async Task UpdateMetadataAsync(object? value)
+    {
+        if (value is BaseAddon addon)
+        {
+        }
+        else if (value is null && SelectedAddon is not null)
+        {
+            addon = SelectedAddon;
+        }
+        else
+        {
+            throw new InvalidOperationException(value?.GetType().Name);
+        }
+
+        IsInProgress = true;
+
+        var result = await _metadataProvider.UpdateMetadataAsync(addon.PathToFile!).ConfigureAwait(true);
+
+        IsInProgress = false;
+
+        if (result.IsSuccess)
+        {
+            NotificationsHelper.Show(
+                "Metadata updated.",
+                NotificationType.Success
+                );
+        }
+        else
+        {
+            NotificationsHelper.Show(
+                "Error while updating metadata.",
+                NotificationType.Error
+                );
+        }
+    }
+
     #endregion
 
 
@@ -304,9 +348,9 @@ public sealed partial class CampaignsViewModel : RightPanelViewModel, IPortsButt
         }
     }
 
-    private void OnAddonChanged(GameEnum game, AddonTypeEnum addonType)
+    private void OnAddonChanged(GameEnum gameEnum, AddonTypeEnum? addonType)
     {
-        if (game == Game.GameEnum && (addonType is AddonTypeEnum.TC))
+        if (gameEnum == Game.GameEnum && (addonType is AddonTypeEnum.TC))
         {
             OnPropertyChanged(nameof(CampaignsList));
         }

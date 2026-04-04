@@ -12,7 +12,6 @@ using Ports.Installer;
 using Ports.Ports;
 using Ports.Providers;
 using Tools.Installer;
-using Tools.Providers;
 using Tools.Tools;
 
 namespace Avalonia.Desktop.ViewModels;
@@ -25,6 +24,7 @@ public sealed class ViewModelsFactory
     private readonly ToolInstallerFactory _toolsInstallerFactory;
     private readonly PortsProvider _portsProvider;
     private readonly PlaytimeProvider _playtimeProvider;
+    private readonly MetadataProvider _metadataProvider;
     private readonly IApiInterface _apiInterface;
     private readonly RatingProvider _ratingProvider;
     private readonly InstalledAddonsProviderFactory _installedAddonsProviderFactory;
@@ -56,6 +56,7 @@ public sealed class ViewModelsFactory
         BitmapsCache bitmapsCache,
         IEnumerable<BasePort> ports,
         IEnumerable<BaseTool> tools,
+        MetadataProvider metadataProvider,
         ILogger logger
         )
     {
@@ -76,6 +77,7 @@ public sealed class ViewModelsFactory
         _bitmapsCache = bitmapsCache;
         _ports = [.. ports];
         _tools = [.. tools];
+        _metadataProvider = metadataProvider;
         _logger = logger;
     }
 
@@ -93,7 +95,8 @@ public sealed class ViewModelsFactory
             _gamesPathsProvider,
             _ports,
             _tools,
-            _apiInterface,
+            _metadataProvider,
+            _downloadableAddonsProviderFactory,
             _logger
             );
 
@@ -112,6 +115,7 @@ public sealed class ViewModelsFactory
             _config,
             _playtimeProvider,
             _ratingProvider,
+            _metadataProvider,
             _installedAddonsProviderFactory,
             _downloadableAddonsProviderFactory,
             _portStarter,
@@ -136,6 +140,7 @@ public sealed class ViewModelsFactory
             _config,
             _playtimeProvider,
             _ratingProvider,
+            _metadataProvider,
             _installedAddonsProviderFactory,
             _downloadableAddonsProviderFactory,
             _portStarter,
@@ -158,10 +163,12 @@ public sealed class ViewModelsFactory
             _gamesProvider,
             _playtimeProvider,
             _ratingProvider,
+            _metadataProvider,
             _installedAddonsProviderFactory,
             _downloadableAddonsProviderFactory,
             _bitmapsCache,
-            _config
+            _config,
+            _logger
             );
 
         _ = Dispatcher.UIThread.Invoke(vm.InitializeAsync);

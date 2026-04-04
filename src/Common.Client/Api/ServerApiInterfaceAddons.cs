@@ -4,6 +4,7 @@ using Api.Common.Requests;
 using Api.Common.Responses;
 using Common.All;
 using Common.All.Enums;
+using Common.All.Serializable.Addon;
 using Common.All.Serializable.Downloadable;
 using Common.Client.Helpers;
 using Common.Client.Interfaces;
@@ -164,4 +165,6 @@ public sealed partial class ServerApiInterface : IApiInterface
     }
 
     public Task<string?> GetUploadFolderAsync() => throw new NotImplementedException();
+
+    public Task<List<AddonJsonModel>?> GetMetadataAsync() => throw new NotImplementedException();
 }

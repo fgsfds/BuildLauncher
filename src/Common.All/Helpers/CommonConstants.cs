@@ -22,4 +22,9 @@ public static class CommonConstants
     /// Link to addons.json file
     /// </summary>
     public const string DataJsonUrl = "https://raw.githubusercontent.com/fgsfds/BuildLauncher/refs/heads/master/db/data.json";
+
+    /// <summary>
+    /// Link to manifests.json file
+    /// </summary>
+    public const string ManifestsJsonUrl = "https://raw.githubusercontent.com/fgsfds/BuildLauncher/refs/heads/master/db/manifests.json";
 }

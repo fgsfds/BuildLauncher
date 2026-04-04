@@ -72,13 +72,31 @@
                        VerticalAlignment="Center"
                        HorizontalAlignment="Center"/>
 
-                <i:Icon Value="fa-star"
-                        Margin="5"
-                        FontSize="15"
-                        IsVisible="{Binding IsFavorite}"
-                        HorizontalAlignment="Right"
-                        VerticalAlignment="Top"
-                        Foreground="Yellow"/>
+                <StackPanel Orientation="Horizontal"
+                            HorizontalAlignment="Right">
+
+                    <i:Icon Value="fa-star"
+                            Margin="5"
+                            FontSize="20"
+                            IsVisible="{Binding IsFavorite}"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Top"
+                            Foreground="Yellow"
+                            BorderBrush="Black"
+                            BorderThickness="1"/>
+
+                    <i:Icon Value="fa-circle-exclamation"
+                            Margin="5"
+                            FontSize="20"
+                            IsVisible="{Binding IsMetadataUpdateAvailable}"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Top"
+                            Foreground="Crimson"
+                            BorderBrush="Black"
+                            BorderThickness="1"
+                            ToolTip.Tip="Metadata update available"/>
+
+                </StackPanel>
 
             </Grid>
 

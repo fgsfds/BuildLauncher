@@ -252,10 +252,10 @@ public sealed class FilesUploader
 
 
     private async Task<Result<DownloadableAddonJsonModel?>> GetDownloadableAddonDtoAsync(string downloadUrl, string pathToFile, AddonJsonModel manifest)
-    {       
+    {
         FileInfo fileInfo = new(pathToFile);
         var fileSize = fileInfo.Length;
-        
+
         using var httpClient = _httpClientFactory.CreateClient();
         using var response = await httpClient.GetAsync(downloadUrl, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false);
 
