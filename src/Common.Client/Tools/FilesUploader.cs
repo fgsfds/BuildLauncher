@@ -159,8 +159,18 @@ public sealed class FilesUploader
 
             _ = Task.Run(() => { TrackProgress(fileStream, progress); }, cancellationToken);
 
+            var sha = await SHA256.HashDataAsync(fileStream, cancellationToken).ConfigureAwait(false);
+            var shaStr = Convert.ToHexString(sha);
+            fileStream.Position = 0;
+
+            using HttpRequestMessage request = new();
+            request.Method = HttpMethod.Put;
+            request.Content = content;
+            request.Headers.Add("x-amz-meta-checksum-sha256", shaStr);
+            request.RequestUri = new(folder);
+
             using var httpClient = _httpClientFactory.CreateClient(HttpClientEnum.AuthUpload.GetDescription());
-            using var response = await httpClient.PutAsync(folder, content, cancellationToken).ConfigureAwait(false);
+            using var response = await httpClient.SendAsync(request, cancellationToken).ConfigureAwait(false);
 
             if (response.StatusCode is HttpStatusCode.PreconditionFailed)
             {
