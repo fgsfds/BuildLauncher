@@ -17,9 +17,7 @@ public sealed class OfflineApiInterface : IApiInterface
 
     private Dictionary<GameEnum, List<DownloadableAddonJsonModel>>? _addonsJson;
 
-    public OfflineApiInterface(
-        ILogger logger
-        )
+    public OfflineApiInterface(ILogger logger)
     {
         _logger = logger;
     }
@@ -82,50 +80,7 @@ public sealed class OfflineApiInterface : IApiInterface
 
     public Task<GeneralReleaseJsonModel?> GetLatestToolReleaseAsync(ToolEnum toolEnum) => Task.FromResult<GeneralReleaseJsonModel?>(null);
 
-    public Task<bool> AddAddonToDatabaseAsync(DownloadableAddonJsonModel addon)
-    {
-        if (ClientProperties.PathToLocalAddonsJson is null)
-        {
-            throw new FormatException("Can't find local addons.json");
-        }
-
-        var addonsJson = File.ReadAllText(ClientProperties.PathToLocalAddonsJson);
-        var addons = JsonSerializer.Deserialize(addonsJson, DownloadableAddonJsonModelDictionaryContext.Default.DictionaryGameEnumListDownloadableAddonJsonModel);
-
-        if (addons is null)
-        {
-            throw new FormatException("Error while deserializing addons.json");
-        }
-
-        if (!addons.TryGetValue(addon.Game, out _))
-        {
-            addons[addon.Game] = [];
-        }
-
-        var existingAddon = addons[addon.Game].FirstOrDefault(x => x.Id.Equals(addon.Id));
-
-        if (existingAddon is not null)
-        {
-            _ = addons[addon.Game].Remove(existingAddon);
-        }
-
-        for (var i = 0; i < addon.Dependencies?.Count; i++)
-        {
-            var readableName = addons[addon.Game].FirstOrDefault(x => x.Id.Equals(addon.Dependencies[i]));
-
-            if (readableName is not null)
-            {
-                addon.Dependencies[i] = readableName.Title;
-            }
-        }
-
-        addons[addon.Game].Add(addon);
-
-        var newAddonsJson = JsonSerializer.Serialize(addons, DownloadableAddonJsonModelDictionaryContext.Default.DictionaryGameEnumListDownloadableAddonJsonModel);
-        File.WriteAllText(ClientProperties.PathToLocalAddonsJson, newAddonsJson);
-
-        return Task.FromResult(true);
-    }
+    public Task<bool> AddAddonToDatabaseAsync(AddonJsonModel addonJson, DownloadableAddonJsonModel downloadableAddonJson) => Task.FromResult(false);
 
     public async Task<string?> GetUploadFolderAsync()
     {

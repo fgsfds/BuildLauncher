@@ -130,14 +130,14 @@ public sealed partial class ServerApiInterface : IApiInterface
         }
     }
 
-    public async Task<bool> AddAddonToDatabaseAsync(DownloadableAddonJsonModel addon)
+    public async Task<bool> AddAddonToDatabaseAsync(AddonJsonModel addonJson, DownloadableAddonJsonModel downloadableAddonJson)
     {
         try
         {
             var apiPassword = _config.ApiPassword;
 
             using var httpClient = _httpClientFactory.CreateClient();
-            using var response = await httpClient.PostAsJsonAsync($"{ApiUrl}/addons/add", new Tuple<DownloadableAddonJsonModel, string>(addon, apiPassword)).ConfigureAwait(false);
+            using var response = await httpClient.PostAsJsonAsync($"{ApiUrl}/addons/add", new Tuple<DownloadableAddonJsonModel, string>(downloadableAddonJson, apiPassword)).ConfigureAwait(false);
 
             return response.IsSuccessStatusCode;
         }

@@ -38,32 +38,38 @@ public sealed class FilesUploader
     /// <param name="pathToFile">Path to file</param>
     /// <param name="progress">Uploading progress</param>
     /// <param name="cancellationToken">Cancellation token</param>
-    public async Task<Result<bool>> UploadAddonAndAddToDbAsync(
+    public async Task<Result> UploadAddonAndAddToDbAsync(
         string pathToFile,
         StrongBox<int> progress,
         CancellationToken cancellationToken
         )
     {
-        var manifest = await GetManifest(pathToFile);
+        var manifest = await GetMainManifest(pathToFile).ConfigureAwait(false);
+
+        if (!manifest.IsSuccess)
+        {
+            return new(manifest.ResultEnum, manifest.Message);
+        }
+
         var path = GetUrl(manifest.ResultObject, pathToFile);
 
         var uploadResult = await UploadAddonAsync(path, pathToFile, progress, cancellationToken).ConfigureAwait(false);
 
         if (!uploadResult.IsSuccess)
         {
-            return new(uploadResult.ResultEnum, false, uploadResult.Message);
+            return new(uploadResult.ResultEnum, uploadResult.Message);
         }
 
         var downloadAddonEntity = await GetDownloadableAddonDtoAsync(path, pathToFile, manifest.ResultObject).ConfigureAwait(false);
 
         if (!downloadAddonEntity.IsSuccess)
         {
-            return new(downloadAddonEntity.ResultEnum, false, downloadAddonEntity.Message);
+            return new(downloadAddonEntity.ResultEnum, downloadAddonEntity.Message);
         }
 
-        var result = await _apiInterface.AddAddonToDatabaseAsync(downloadAddonEntity.ResultObject).ConfigureAwait(false);
+        var result = await _apiInterface.AddAddonToDatabaseAsync(manifest.ResultObject, downloadAddonEntity.ResultObject).ConfigureAwait(false);
 
-        return new(result ? ResultEnum.Success : ResultEnum.Error, true, "Error while adding addon to the database.");
+        return new(result ? ResultEnum.Success : ResultEnum.Error, "Error while adding addon to the database.");
     }
 
 
@@ -201,7 +207,11 @@ public sealed class FilesUploader
     }
 
 
-    private async Task<Result<AddonJsonModel?>> GetManifest(string pathToFile)
+    /// <summary>
+    /// Returns manifest from addon.json if exists.
+    /// </summary>
+    /// <param name="pathToFile">Path to file.</param>
+    private async Task<Result<AddonJsonModel?>> GetMainManifest(string pathToFile)
     {
         using var archive = ZipArchive.OpenArchive(pathToFile);
         var addonJson = archive.Entries.FirstOrDefault(static x => x.Key.Equals("addon.json", StringComparison.OrdinalIgnoreCase));
@@ -211,12 +221,12 @@ public sealed class FilesUploader
             return new(ResultEnum.NotFound, null, "Can't find addon info in the provided archive.");
         }
 
-        await using var stream = addonJson.OpenEntryStream();
+        await using var stream = await addonJson.OpenEntryStreamAsync().ConfigureAwait(false);
 
-        var manifest = JsonSerializer.Deserialize(
+        var manifest = await JsonSerializer.DeserializeAsync(
             stream,
             AddonManifestContext.Default.AddonJsonModel
-            );
+            ).ConfigureAwait(false);
 
         if (manifest is null)
         {

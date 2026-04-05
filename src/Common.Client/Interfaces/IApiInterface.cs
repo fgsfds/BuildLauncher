@@ -7,7 +7,7 @@ namespace Common.Client.Interfaces;
 
 public interface IApiInterface
 {
-    Task<bool> AddAddonToDatabaseAsync(DownloadableAddonJsonModel addon);
+    Task<bool> AddAddonToDatabaseAsync(AddonJsonModel addonJson, DownloadableAddonJsonModel downloadableAddonJson);
     Task<decimal?> ChangeScoreAsync(string addonId, sbyte score, bool isNew);
     Task<List<DownloadableAddonJsonModel>?> GetAddonsAsync(GameEnum gameEnum);
     Task<GeneralReleaseJsonModel?> GetLatestAppReleaseAsync();

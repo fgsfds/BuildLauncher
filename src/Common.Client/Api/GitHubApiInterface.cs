@@ -129,49 +129,73 @@ public sealed class GitHubApiInterface : IApiInterface
         return null;
     }
 
-    public Task<bool> AddAddonToDatabaseAsync(DownloadableAddonJsonModel addon)
+    public async Task<bool> AddAddonToDatabaseAsync(AddonJsonModel addonJson, DownloadableAddonJsonModel downloadableAddonJson)
     {
         if (ClientProperties.PathToLocalAddonsJson is null)
         {
-            throw new FormatException("Can't find local addons.json");
+            _logger.LogError("Can't find local addons.json");
+            return false;
         }
 
-        var addonsJson = File.ReadAllText(ClientProperties.PathToLocalAddonsJson);
+        if (ClientProperties.PathToLocalManifestsJson is null)
+        {
+            _logger.LogError("Can't find local manifests.json");
+            return false;
+        }
+
+        var addonsJson = await File.ReadAllTextAsync(ClientProperties.PathToLocalAddonsJson).ConfigureAwait(false);
         var addons = JsonSerializer.Deserialize(addonsJson, DownloadableAddonJsonModelDictionaryContext.Default.DictionaryGameEnumListDownloadableAddonJsonModel);
 
         if (addons is null)
         {
-            throw new FormatException("Error while deserializing addons.json");
+            _logger.LogError("Error while deserializing addons.json");
+            return false;
         }
 
-        if (!addons.TryGetValue(addon.Game, out _))
+        if (!addons.TryGetValue(downloadableAddonJson.Game, out _))
         {
-            addons[addon.Game] = [];
+            addons[downloadableAddonJson.Game] = [];
         }
 
-        var existingAddon = addons[addon.Game].FirstOrDefault(x => x.Id.Equals(addon.Id));
+        var existingAddon = addons[downloadableAddonJson.Game].FirstOrDefault(x => x.Id.Equals(downloadableAddonJson.Id));
 
         if (existingAddon is not null)
         {
-            _ = addons[addon.Game].Remove(existingAddon);
+            _ = addons[downloadableAddonJson.Game].Remove(existingAddon);
         }
 
-        for (var i = 0; i < addon.Dependencies?.Count; i++)
+        for (var i = 0; i < downloadableAddonJson.Dependencies?.Count; i++)
         {
-            var readableName = addons[addon.Game].FirstOrDefault(x => x.Id.Equals(addon.Dependencies[i]));
+            var readableName = addons[downloadableAddonJson.Game].FirstOrDefault(x => x.Id.Equals(downloadableAddonJson.Dependencies[i]));
 
             if (readableName is not null)
             {
-                addon.Dependencies[i] = readableName.Title;
+                downloadableAddonJson.Dependencies[i] = readableName.Title;
             }
         }
 
-        addons[addon.Game].Add(addon);
+        addons[downloadableAddonJson.Game].Add(downloadableAddonJson);
 
         var newAddonsJson = JsonSerializer.Serialize(addons, DownloadableAddonJsonModelDictionaryContext.Default.DictionaryGameEnumListDownloadableAddonJsonModel);
-        File.WriteAllText(ClientProperties.PathToLocalAddonsJson, newAddonsJson);
+        await File.WriteAllTextAsync(ClientProperties.PathToLocalAddonsJson, newAddonsJson).ConfigureAwait(false);
 
-        return Task.FromResult(true);
+
+        var manifestsJson = await File.ReadAllTextAsync(ClientProperties.PathToLocalManifestsJson).ConfigureAwait(false);
+        var manifests = JsonSerializer.Deserialize(manifestsJson, ManifestsJsonModelContext.Default.ListAddonJsonModel);
+
+        if (manifests is null)
+        {
+            _logger.LogError("Error while deserializing manifests.json");
+            return false;
+        }
+
+        manifests.RemoveAll(x => x.Id.Equals(addonJson.Id));
+        manifests.Add(addonJson);
+
+        var newManifestsJson = JsonSerializer.Serialize(manifests, ManifestsJsonModelContext.Default.ListAddonJsonModel);
+        await File.WriteAllTextAsync(ClientProperties.PathToLocalManifestsJson, newManifestsJson).ConfigureAwait(false);
+
+        return true;
     }
 
     public async Task<string?> GetUploadFolderAsync()
