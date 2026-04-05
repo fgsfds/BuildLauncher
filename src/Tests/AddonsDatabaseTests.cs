@@ -3,8 +3,10 @@ using System.Text;
 using System.Text.Json;
 using Common.All.Enums;
 using Common.All.Helpers;
+using Common.All.Serializable.Addon;
 using Common.All.Serializable.Downloadable;
 using Common.Client.Api;
+using Common.Client.Helpers;
 using Common.Client.Tools;
 using Microsoft.Extensions.Logging;
 using Minio;
@@ -35,7 +37,7 @@ public sealed class AddonsDatabaseTests
         httpClient.DefaultRequestHeaders.Add("User-Agent", "UnitTest");
         httpClient.Timeout = TimeSpan.FromSeconds(30);
 
-        var addonsJsonString = File.ReadAllText("../../../../db/addons.json");
+        var addonsJsonString = File.ReadAllText(ClientProperties.PathToLocalAddonsJson);
         var addonsJson = JsonSerializer.Deserialize(addonsJsonString, DownloadableAddonJsonModelDictionaryContext.Default.DictionaryGameEnumListDownloadableAddonJsonModel);
 
         Assert.NotNull(addonsJson);
@@ -142,7 +144,7 @@ public sealed class AddonsDatabaseTests
             return;
         }
 
-        var addonsJsonString = File.ReadAllText("../../../../db/addons.json");
+        var addonsJsonString = File.ReadAllText(ClientProperties.PathToLocalAddonsJson);
         var addonsJson = JsonSerializer.Deserialize(addonsJsonString, DownloadableAddonJsonModelDictionaryContext.Default.DictionaryGameEnumListDownloadableAddonJsonModel);
 
         Assert.NotNull(addonsJson);
@@ -242,5 +244,24 @@ public sealed class AddonsDatabaseTests
             httpClient.Timeout = Timeout.InfiniteTimeSpan;
             return httpClient;
         }
+    }
+
+    [Fact]
+    public async Task ManifestsJsonTest()
+    {
+        if (!OperatingSystem.IsWindows())
+        {
+            return;
+        }
+
+        using HttpClient httpClient = new();
+
+        httpClient.DefaultRequestHeaders.Add("User-Agent", "UnitTest");
+        httpClient.Timeout = TimeSpan.FromSeconds(30);
+
+        var manifestsJsonString = await File.ReadAllTextAsync(ClientProperties.PathToLocalManifestsJson).ConfigureAwait(false);
+        var manifests = JsonSerializer.Deserialize(manifestsJsonString, ManifestsJsonModelContext.Default.ListAddonJsonModel);
+
+        Assert.NotNull(manifests);
     }
 }
