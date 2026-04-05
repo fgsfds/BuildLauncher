@@ -3,12 +3,12 @@
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
   </PropertyGroup>
   <ItemGroup>
-    <PackageVersion Include="Avalonia" Version="11.3.12" />
-    <PackageVersion Include="Avalonia.Controls.DataGrid" Version="11.3.12" />
-    <PackageVersion Include="Avalonia.Desktop" Version="11.3.12" />
-    <PackageVersion Include="Avalonia.Themes.Fluent" Version="11.3.12" />
-    <PackageVersion Include="Avalonia.Diagnostics" Version="11.3.12" />
-    <PackageVersion Include="Avalonia.Fonts.Inter" Version="11.3.12" />
+    <PackageVersion Include="Avalonia" Version="11.3.13" />
+    <PackageVersion Include="Avalonia.Controls.DataGrid" Version="11.3.13" />
+    <PackageVersion Include="Avalonia.Desktop" Version="11.3.13" />
+    <PackageVersion Include="Avalonia.Themes.Fluent" Version="11.3.13" />
+    <PackageVersion Include="Avalonia.Diagnostics" Version="11.3.13" />
+    <PackageVersion Include="Avalonia.Fonts.Inter" Version="11.3.13" />
     <PackageVersion Include="ClassIsland.Markdown.Avalonia.Tight" Version="11.0.3.4" />
     <PackageVersion Include="CommunityToolkit.Mvvm" Version="8.4.2" />
     <PackageVersion Include="IDisposableAnalyzers" Version="4.0.8" />
@@ -29,7 +29,7 @@
     <PackageVersion Include="Minio" Version="7.0.0" />
     <PackageVersion Include="Moq" Version="4.20.72" />
     <PackageVersion Include="Projektanker.Icons.Avalonia.FontAwesome" Version="9.6.2" />
-    <PackageVersion Include="SharpCompress" Version="0.47.3" />
+    <PackageVersion Include="SharpCompress" Version="0.47.4" />
     <PackageVersion Include="coverlet.collector" Version="8.0.1" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.3.0" />
     <PackageVersion Include="System.IO.Hashing" Version="10.0.5" />
