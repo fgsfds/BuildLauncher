@@ -1,5 +1,4 @@
-﻿using System.ComponentModel;
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 using Common.All.Enums;
 using Common.All.Interfaces;
 
@@ -31,7 +30,6 @@ public sealed class AddonJsonModel
     public string? Author { get; set; }
 
     [JsonPropertyName("release_date")]
-    [JsonConverter(typeof(DateOnlyConverter))]
     public DateOnly? ReleaseDate { get; set; }
 
     [JsonPropertyName("con_main")]
