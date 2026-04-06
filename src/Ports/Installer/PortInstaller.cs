@@ -24,7 +24,10 @@ public sealed class PortInstaller : InstallerBase<BasePort>
     }
 
     /// <inheritdoc/>
-    protected override void InstallInternal(string filePath)
+    protected override void Backup() { }
+
+    /// <inheritdoc/>
+    protected override void PostInstall(string filePath)
     {
         if (_instance.PortEnum is PortEnum.DosBox)
         {

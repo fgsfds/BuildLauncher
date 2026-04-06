@@ -64,15 +64,29 @@ public abstract class InstallerBase<T>
     }
 
     /// <summary>
-    /// Install tool
+    /// Performs post install actions.
     /// </summary>
-    /// <param name="filePath">Path to downloaded file.</param>
-    protected abstract void InstallInternal(string filePath);
+    /// <param name="filePath">Path to the downloaded file.</param>
+    protected abstract void PostInstall(string filePath);
 
+    /// <summary>
+    /// Backups required files.
+    /// </summary>
+    protected abstract void Backup();
+
+    /// <summary>
+    /// Uninstalls port/tool.
+    /// </summary>
     public abstract void Uninstall();
 
+    /// <summary>
+    /// Returns latest release.
+    /// </summary>
     public abstract Task<GeneralReleaseJsonModel?> GetRelease();
 
+    /// <summary>
+    /// Installs port/tool.
+    /// </summary>
     public async Task<bool> InstallAsync()
     {
         try
@@ -108,13 +122,15 @@ public abstract class InstallerBase<T>
                 return false;
             }
 
+            Backup();
+
             await _archiveTools.UnpackArchiveAsync(filePath, _instance.InstallFolderPath).ConfigureAwait(false);
 
             File.Delete(filePath);
 
-            File.WriteAllText(Path.Combine(_instance.InstallFolderPath, "version"), release.Version);
+            await File.WriteAllTextAsync(Path.Combine(_instance.InstallFolderPath, "version"), release.Version).ConfigureAwait(false);
 
-            InstallInternal(filePath);
+            PostInstall(filePath);
 
             return true;
         }

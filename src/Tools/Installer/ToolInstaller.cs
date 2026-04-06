@@ -28,7 +28,7 @@ public sealed class ToolInstaller : InstallerBase<BaseTool>
     }
 
     /// <inheritdoc/>
-    protected override void InstallInternal(string filePath)
+    protected override void PostInstall(string filePath)
     {
         if (_instance.ToolEnum is ToolEnum.Mapster32)
         {
@@ -36,25 +36,34 @@ public sealed class ToolInstaller : InstallerBase<BaseTool>
         }
         else if (_instance.ToolEnum is ToolEnum.XMapEdit)
         {
-            var pathToBlood = _gamesProvider.GetGame(GameEnum.Blood).GameInstallFolder ?? throw new Exception();
+            var pathToBlood = _gamesProvider.GetGame(GameEnum.Blood).GameInstallFolder ?? throw new Exception("Can't find Blood install path.");
 
             _ = Directory.CreateDirectory(_instance.InstallFolderPath);
 
             var files = Directory.GetFiles(pathToBlood);
             foreach (var file in files)
             {
-                if (!file.EndsWith(".exe", StringComparison.CurrentCultureIgnoreCase)
-                    && !file.EndsWith(".ogg", StringComparison.CurrentCultureIgnoreCase)
-                    && !file.EndsWith(".txt", StringComparison.CurrentCultureIgnoreCase))
+                if (file.EndsWith(".exe", StringComparison.InvariantCultureIgnoreCase)
+                    || file.EndsWith(".ogg", StringComparison.InvariantCultureIgnoreCase)
+                    || file.EndsWith(".txt", StringComparison.InvariantCultureIgnoreCase)
+                    || file.EndsWith("version", StringComparison.InvariantCultureIgnoreCase)
+                    )
                 {
-                    string fileName = Path.GetFileName(file);
-                    File.Copy(file, Path.Combine(_instance.InstallFolderPath, fileName), true);
+                    continue;
                 }
+
+                string fileName = Path.GetFileName(file);
+                File.Copy(file, Path.Combine(_instance.InstallFolderPath, fileName), true);
             }
         }
-        else if (_instance.ToolEnum is ToolEnum.DOSBlood)
+    }
+
+    /// <inheritdoc/>
+    protected override void Backup()
+    {
+        if (_instance.ToolEnum is ToolEnum.DOSBlood)
         {
-            var pathToBlood = _gamesProvider.GetGame(GameEnum.Blood).GameInstallFolder ?? throw new Exception();
+            var pathToBlood = _gamesProvider.GetGame(GameEnum.Blood).GameInstallFolder ?? throw new Exception("Can't find Blood install path.");
             var bloodExe = Path.Combine(pathToBlood, "BLOOD.EXE");
             var bloodExeBak = bloodExe + ".BAK";
 
@@ -77,11 +86,14 @@ public sealed class ToolInstaller : InstallerBase<BaseTool>
             var game = _gamesProvider.GetGame(GameEnum.Blood);
             if (game.GameInstallFolder is null)
             {
-                throw new Exception();
+                throw new Exception("Can't find Blood install path.");
             }
+
             var bloodExe = Path.Combine(game.GameInstallFolder, "BLOOD.EXE");
+            var versionFile = Path.Combine(game.GameInstallFolder, "version");
 
             File.Delete(bloodExe);
+            File.Delete(versionFile);
             File.Move(bloodExe + ".BAK", bloodExe);
         }
         else
