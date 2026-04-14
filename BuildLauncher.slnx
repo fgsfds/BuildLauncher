@@ -1,7 +1,11 @@
 <Solution>
   <Folder Name="/.start/">
     <Project Path="src/Avalonia.Desktop/Avalonia.Desktop.csproj" />
-    <Project Path="src/Web.Blazor/Web.Blazor.csproj" />
+    <Project Path="src/Web.API/Web.API.csproj" Id="cfbc3df7-4115-4749-aa6c-86b7ffcf3767" />
+    <Project Path="src/Web.React/web.react.esproj">
+      <Build />
+      <Deploy />
+    </Project>
   </Folder>
   <Folder Name="/Api/">
     <Project Path="src/Api.Common/Api.Common.csproj" />
