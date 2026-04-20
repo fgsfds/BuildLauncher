@@ -71,7 +71,7 @@
                     HorizontalContentAlignment="Center"
                     IsEnabled="{Binding IsInstalled}"
                     ToolTip.Tip="Open port folder...">
-                <i:Icon Value="fa-folder-open" />
+                <i:Icon Value="fa7-folder-open" />
             </Button>
 
             <Button Height="{Binding #OpenFolderButton.Bounds.Height}"
@@ -85,7 +85,7 @@
                     IsEnabled="{Binding IsInstalled}"
                     IsVisible="{Binding Tool.CanBeInstalled}"
                     ToolTip.Tip="Uninstall">
-                <i:Icon Value="fa-trash" />
+                <i:Icon Value="fa7-trash" />
             </Button>
 
             <Button Height="{Binding #OpenFolderButton.Bounds.Height}"
@@ -97,7 +97,7 @@
                     VerticalContentAlignment="Center"
                     IsVisible="{Binding Tool.CanBeLaunched}">
                 <StackPanel Orientation="Horizontal">
-                    <i:Icon Value="fa-play" Margin="0,0,10,0" />
+                    <i:Icon Value="fa7-play" Margin="0,0,10,0" />
                     <TextBlock>Launch...</TextBlock>
                 </StackPanel>
             </Button>

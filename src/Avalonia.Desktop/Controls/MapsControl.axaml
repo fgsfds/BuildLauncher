@@ -17,7 +17,7 @@
 
             <TextBox Name="SearchBox"
                      Grid.Column="1"
-                     Watermark="Search"
+                     PlaceholderText="Search"
                      Text="{Binding SearchBoxText}"/>
 
             <Button Grid.Column="2"
@@ -25,7 +25,7 @@
                     Command="{Binding ClearSearchBoxCommand}"
                     ToolTip.Tip="Clear search"
                     Height="{Binding Bounds.Height, ElementName=SearchBox}">
-                <i:Icon Value="fa-xmark" />
+                <i:Icon Value="fa7-xmark" />
             </Button>
 
         </Grid>
@@ -62,7 +62,7 @@
                                    VerticalAlignment="Center"
                                    TextWrapping="NoWrap"/>
 
-                        <i:Icon Value="fa-circle-exclamation"
+                        <i:Icon Value="fa7-circle-exclamation"
                                 Grid.Column="1"
                                 Margin="5"
                                 FontSize="20"

@@ -45,7 +45,7 @@
                     Click="PatreonClick">
                 <StackPanel Orientation="Horizontal">
 
-                    <i:Icon Value="fa-patreon" FontSize="48" />
+                    <i:Icon Value="fa7-patreon" FontSize="48" />
 
                     <StackPanel Orientation="Vertical" VerticalAlignment="Center">
                         <TextBlock VerticalAlignment="Center" Margin="10,0" FontSize="18">Patreon</TextBlock>
@@ -61,7 +61,7 @@
                     Click="DiscordClick">
                 <StackPanel Orientation="Horizontal">
 
-                    <i:Icon Value="fa-discord" FontSize="48" />
+                    <i:Icon Value="fa7-discord" FontSize="48" />
 
                     <StackPanel Orientation="Vertical" VerticalAlignment="Center">
                         <TextBlock VerticalAlignment="Center" Margin="10,0" FontSize="18">Discord server</TextBlock>
@@ -77,7 +77,7 @@
                     Click="GitHubClick">
                 <StackPanel Orientation="Horizontal">
 
-                    <i:Icon Value="fa-github" FontSize="48" />
+                    <i:Icon Value="fa7-github" FontSize="48" />
 
                     <StackPanel Orientation="Vertical" VerticalAlignment="Center">
                         <TextBlock VerticalAlignment="Center" Margin="10,0" FontSize="18">GitHub repository</TextBlock>
@@ -94,7 +94,7 @@
 
                 <StackPanel Orientation="Horizontal">
 
-                    <i:Icon Value="fa-bug" FontSize="48" />
+                    <i:Icon Value="fa7-bug" FontSize="48" />
 
                     <StackPanel Orientation="Vertical" VerticalAlignment="Center">
                         <TextBlock VerticalAlignment="Center" Margin="10,0" FontSize="18">Report a problem</TextBlock>

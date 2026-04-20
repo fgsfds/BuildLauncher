@@ -1,8 +1,8 @@
 ﻿using System.Runtime.InteropServices;
 using Common.Client;
 using Common.Client.Helpers;
-using Projektanker.Icons.Avalonia;
-using Projektanker.Icons.Avalonia.FontAwesome;
+using Optris.Icons.Avalonia;
+using Optris.Icons.Avalonia.FontAwesome7;
 
 namespace Avalonia.Desktop;
 
@@ -60,7 +60,7 @@ public sealed partial class Program
     private static AppBuilder BuildAvaloniaApp()
     {
         _ = IconProvider.Current
-            .Register<FontAwesomeIconProvider>()
+            .Register<FontAwesome7IconProvider>()
             ;
 
         return AppBuilder.Configure<App>()

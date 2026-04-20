@@ -17,9 +17,9 @@ public class DroppableControl : UserControl
 
     protected async void OnDrop(object sender, DragEventArgs e)
     {
-        var files = e.Data.GetFiles();
+        var files = e.DataTransfer.TryGetFiles();
 
-        if (files?.Any() is true)
+        if (files?.Length > 0 is true)
         {
             var filePaths = files.Select(f => f.Path.LocalPath);
 

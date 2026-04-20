@@ -33,10 +33,6 @@ public sealed partial class MainWindow : Window, IDisposable
         _installedGamesProvider = installedGamesProvider;
         _config = config;
 
-#if DEBUG
-        this.AttachDevTools();
-#endif
-
         RenderOptions.SetBitmapInterpolationMode(this, BitmapInterpolationMode.HighQuality);
 
         InitializeComponent();

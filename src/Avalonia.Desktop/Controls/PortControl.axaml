@@ -68,7 +68,7 @@
                     VerticalContentAlignment="Center"
                     IsEnabled="{Binding IsInstalled}"
                     ToolTip.Tip="Open port folder...">
-                <i:Icon Value="fa-folder-open" />
+                <i:Icon Value="fa7-folder-open" />
             </Button>
 
             <Button Height="{Binding #OpenFolderButton.Bounds.Height}"
@@ -81,7 +81,7 @@
                     IsEnabled="{Binding IsInstalled}"
                     Background="Crimson"
                     ToolTip.Tip="Uninstall">
-                <i:Icon Value="fa-trash" />
+                <i:Icon Value="fa7-trash" />
             </Button>
 
         </Grid>

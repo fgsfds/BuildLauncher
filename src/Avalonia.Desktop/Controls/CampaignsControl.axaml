@@ -75,7 +75,7 @@
                 <StackPanel Orientation="Horizontal"
                             HorizontalAlignment="Right">
 
-                    <i:Icon Value="fa-star"
+                    <i:Icon Value="fa7-star"
                             Margin="5"
                             FontSize="20"
                             IsVisible="{Binding IsFavorite}"
@@ -85,7 +85,7 @@
                             BorderBrush="Black"
                             BorderThickness="1"/>
 
-                    <i:Icon Value="fa-circle-exclamation"
+                    <i:Icon Value="fa7-circle-exclamation"
                             Margin="5"
                             FontSize="20"
                             IsVisible="{Binding IsMetadataUpdateAvailable}"
@@ -111,7 +111,7 @@
 
             <TextBox Name="SearchBox"
                      Grid.Column="1"
-                     Watermark="Search"
+                     PlaceholderText="Search"
                      Text="{Binding SearchBoxText}"/>
 
             <Button Grid.Column="2"
@@ -119,7 +119,7 @@
                     Command="{Binding ClearSearchBoxCommand}"
                     ToolTip.Tip="Clear search"
                     Height="{Binding Bounds.Height, ElementName=SearchBox}">
-                <i:Icon Value="fa-xmark"/>
+                <i:Icon Value="fa7-xmark"/>
             </Button>
 
         </Grid>

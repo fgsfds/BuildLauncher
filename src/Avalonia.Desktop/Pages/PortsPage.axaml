@@ -77,10 +77,10 @@
 
                     <Grid RowDefinitions="auto,auto,auto,auto,auto">
 
-                        <TextBox Watermark="Name" Padding="5" Grid.Row="0" Margin="5" Text="{Binding SelectedCustomPortName}" />
+                        <TextBox PlaceholderText="Name" Padding="5" Grid.Row="0" Margin="5" Text="{Binding SelectedCustomPortName}" />
 
                         <Grid ColumnDefinitions="*,auto" Grid.Row="1" HorizontalAlignment="Stretch">
-                            <TextBox Watermark="Path" Padding="5" Margin="5" HorizontalAlignment="Stretch" Text="{Binding SelectedCustomPortPath}" />
+                            <TextBox PlaceholderText="Path" Padding="5" Margin="5" HorizontalAlignment="Stretch" Text="{Binding SelectedCustomPortPath}" />
                             <Button Content="..." Margin="5" Padding="5" Grid.Column="1" Command="{Binding SelectPortExeCommand}"/>
                         </Grid>
 

@@ -37,7 +37,7 @@
                               IsVisible="False"
                               />
 
-                    <TextBox Watermark="API Password"
+                    <TextBox PlaceholderText="API Password"
                              PasswordChar="*"
                              Text="{Binding ApiPasswordTextBox}"
                              MinWidth="200"
@@ -331,7 +331,7 @@
                                        Text="Additional DEFs:"
                                        ToolTip.Tip="(optional) Comma separated list of additional DEF files to be loaded together."/>
 
-                            <TextBox Grid.Column="1" Margin="5" Text="{Binding AdditionalDefs}" Watermark="Comma separated list"></TextBox>
+                            <TextBox Grid.Column="1" Margin="5" Text="{Binding AdditionalDefs}" PlaceholderText="Comma separated list"></TextBox>
 
                         </Grid>
 
@@ -365,7 +365,7 @@
                                        Text="Additional CONs:"
                                        ToolTip.Tip="(optional) Comma separated list of additional CON scripts to be loaded together."/>
 
-                            <TextBox Grid.Column="1" Margin="5" Text="{Binding AdditionalCons}" Watermark="Comma separated list"></TextBox>
+                            <TextBox Grid.Column="1" Margin="5" Text="{Binding AdditionalCons}" PlaceholderText="Comma separated list"></TextBox>
 
                         </Grid>
 

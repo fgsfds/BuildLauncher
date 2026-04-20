@@ -43,7 +43,7 @@
                                        VerticalAlignment="Center"
                                        Margin="10"/>
 
-                            <i:Icon Value="fa-circle-exclamation"
+                            <i:Icon Value="fa7-circle-exclamation"
                                     Grid.Column="1"
                                     Margin="5"
                                     FontSize="20"

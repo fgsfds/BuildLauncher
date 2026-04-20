@@ -18,7 +18,7 @@
                     <StackPanel Orientation="Horizontal">
                         <TextBlock>Campaigns</TextBlock>
 
-                        <i:Icon Value="fa-circle-exclamation"
+                        <i:Icon Value="fa7-circle-exclamation"
                                 Margin="5,0,0,0"
                                 IsVisible="{Binding IsCampaignsAlarmShown}"
                                 Foreground="Crimson"
@@ -35,7 +35,7 @@
                     <StackPanel Orientation="Horizontal">
                         <TextBlock>Maps</TextBlock>
 
-                        <i:Icon Value="fa-circle-exclamation"
+                        <i:Icon Value="fa7-circle-exclamation"
                                 Margin="5,0,0,0"
                                 IsVisible="{Binding IsMapsAlarmShown}"
                                 Foreground="Crimson" />
@@ -51,7 +51,7 @@
                     <StackPanel Orientation="Horizontal">
                         <TextBlock>Mods</TextBlock>
 
-                        <i:Icon Value="fa-circle-exclamation"
+                        <i:Icon Value="fa7-circle-exclamation"
                                 Margin="5,0,0,0"
                                 IsVisible="{Binding IsModsAlarmShown}"
                                 Foreground="Crimson" />
@@ -66,7 +66,7 @@
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="Downloads"/>
-                        <i:Icon Value="fa-circle-exclamation"
+                        <i:Icon Value="fa7-circle-exclamation"
                                 Foreground="Crimson"
                                 ToolTip.Tip="Updates available"
                                 IsVisible="{Binding IsDownloadsAlarmShown}"
