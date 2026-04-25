@@ -5,15 +5,11 @@
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <DockerfileContext>..\..</DockerfileContext>
     <JsonSerializerIsReflectionEnabledByDefault>true</JsonSerializerIsReflectionEnabledByDefault>
-    <SpaRoot>..\web.react</SpaRoot>
-    <SpaProxyLaunchCommand>npm run dev</SpaProxyLaunchCommand>
-    <SpaProxyServerUrl>https://localhost:57755</SpaProxyServerUrl>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" />
     <PackageReference Include="MediatR" />
-    <PackageReference Include="Microsoft.AspNetCore.SpaProxy" />
   </ItemGroup>
 
   <ItemGroup>
@@ -23,9 +19,6 @@
       <ProjectReference Include="..\Database.Server\Database.Server.csproj" />
       <ProjectReference Include="..\Ports\Ports.csproj" />
       <ProjectReference Include="..\Tools\Tools.csproj" />
-      <ProjectReference Include="..\Web.React\web.react.esproj">
-          <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-      </ProjectReference>
   </ItemGroup>
 
 </Project>
