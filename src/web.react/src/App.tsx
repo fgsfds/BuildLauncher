@@ -1,125 +1,127 @@
 import './App.css'
-import {useState} from "react";
+import './index.css'
+import {useEffect, useMemo, useState} from "react";
 
-function FilterableProductTable({products}) {
-    const [filterText, setFilterText] = useState('');
-    const [inStockOnly, setInStockOnly] = useState(false);
+export default function App() {
+    const [data, setData] = useState<AddonsDatabase | null>(null);
+    const [currentList, setCurrentList] = useState<AddonEntry[]>([]);
+
+    const url = "https://raw.githubusercontent.com/fgsfds/BuildLauncher/refs/heads/master/db/addons.json";
+
+    function onButtonPressed(a: string) {
+        setCurrentList(data![a].sort((x, y) => x.Title.localeCompare(y.Title)));
+    }
+
+    useEffect(() => {
+        fetch(url)
+            .then((res) => res.json())
+            .then((json: AddonsDatabase) => {
+                setData(json);
+            });
+        console.log("GOT JSON");
+    }, []);
+
+    if (!data) {
+        return (
+            <div>Loading...</div>
+        );
+    } else {
+        return (
+            <>
+                {<Header onButtonPressed={onButtonPressed}/>}
+                {<AddonsList addons={currentList}/>}
+            </>
+        );
+    }
+}
+
+
+function Header({onButtonPressed}: { onButtonPressed: (a: string) => void }) {
+    return (
+        <>
+            <div style={{display: "flex", flexDirection: "row", gap: "30px", margin: "30px"}}>
+                <button onClick={() => onButtonPressed("Duke3D")}>Duke 3D</button>
+                <button onClick={() => onButtonPressed("Blood")}>Blood</button>
+                <button onClick={() => onButtonPressed("Wang")}>Shadow Warrior</button>
+                <button onClick={() => onButtonPressed("Fury")}>Ion Fury</button>
+            </div>
+        </>
+    )
+}
+
+function AddonsList({addons}: { addons: AddonEntry[] }) {
+    const tcs: AddonEntry[] = [];
+    const maps: AddonEntry[] = [];
+    const mods: AddonEntry[] = [];
+
+    addons.forEach((addon) => {
+        if (addon.AddonType === "TC") {
+            tcs.push(addon);
+        } else if (addon.AddonType === "Map") {
+            maps.push(addon);
+        } else if (addon.AddonType === "Mod") {
+            mods.push(addon);
+        }
+    });
 
     return (
-        <div>
-            <SearchBar
-                filterText={filterText}
-                inStockOnly={inStockOnly}
-                onFilterTextChange={setFilterText}
-                onInStockOnlyChange={setInStockOnly}/>
-            <ProductTable
-                products={products}
-                filterText={filterText}
-                inStockOnly={inStockOnly}/>
+        <div style={{display: 'flex', gap: '20px'}}>
+            <div>{tcs.length > 0 && <GetList header={"TCs"} list={tcs}/>}</div>
+            <div>{maps.length > 0 && <GetList header={"Maps"} list={maps}/>}</div>
+            <div>{mods.length > 0 && <GetList header={"Mods"} list={mods}/>}</div>
         </div>
     );
 }
 
-function ProductCategoryRow({category}) {
+
+function GetList({header, list}: { header: string, list: AddonEntry[] }) {
     return (
-        <tr>
-            <th colSpan="2">
-                {category}
-            </th>
-        </tr>
+        <section style={{padding: "0 20px"}}>
+            <h3 style={{textAlign: 'left', marginBottom: '40px'}}>{header}</h3>
+            <ul style={{listStyleType: 'none', textAlign: 'left', padding: 0, margin: 0}}>
+                {list.map((addon, index) => (
+                    <AddonItem key={addon.Id || `${addon.Title}-${index}`} addon={addon}/>
+                ))}
+            </ul>
+        </section>
     );
 }
 
-function ProductRow({product}) {
-    const name = product.stocked ? product.name :
-        <span style={{color: 'red'}}>
-      {product.name}
-    </span>;
+function AddonItem({addon}: { addon: AddonEntry }) {
+    const formattedDate = useMemo(() => {
+        const dateObj = new Date(addon.UpdateDate);
+        return new Intl.DateTimeFormat('en-GB', {
+            day: '2-digit',
+            month: '2-digit',
+            year: '2-digit',
+        }).format(dateObj).replace(/\//g, '.');
+    }, [addon.UpdateDate]);
 
     return (
-        <tr>
-            <td>{name}</td>
-            <td>{product.price}</td>
-        </tr>
+        <li style={{marginBottom: '20px'}}>
+            <div style={{fontWeight: 'bold'}}>{addon.Title}</div>
+            <div style={{fontSize: '0.9em', color: '#8f8f8f'}}>
+                v{addon.Version} • {formattedDate}
+            </div>
+            <div>
+                <a href={addon.DownloadUrl} target="_blank" rel="noopener">
+                    Download
+                </a>
+            </div>
+        </li>
     );
 }
 
-function ProductTable({products, filterText, inStockOnly}) {
-    const rows = [];
-    let lastCategory = null;
 
-    products.forEach((product) => {
-        if (
-            product.name.toLowerCase().indexOf(
-                filterText.toLowerCase()
-            ) === -1
-        ) {
-            return;
-        }
-        if (inStockOnly && !product.stocked) {
-            return;
-        }
-        if (product.category !== lastCategory) {
-            rows.push(
-                <ProductCategoryRow
-                    category={product.category}
-                    key={product.category}/>
-            );
-        }
-        rows.push(
-            <ProductRow
-                product={product}
-                key={product.name}/>
-        );
-        lastCategory = product.category;
-    });
-
-    return (
-        <table>
-            <thead>
-            <tr>
-                <th>Name</th>
-                <th>Price</th>
-            </tr>
-            </thead>
-            <tbody>{rows}</tbody>
-        </table>
-    );
+interface AddonEntry {
+    Id: string;
+    AddonType: "TC" | "Mod" | "Map";
+    Title: string;
+    Version: string;
+    DownloadUrl: string;
+    Description: string;
+    UpdateDate: Date;
+    Author: string;
 }
 
-function SearchBar({
-                       filterText,
-                       inStockOnly,
-                       onFilterTextChange,
-                       onInStockOnlyChange
-                   }) {
-    return (
-        <form>
-            <input
-                type="text"
-                value={filterText} placeholder="Search..."
-                onChange={(e) => onFilterTextChange(e.target.value)}/>
-            <label>
-                <input
-                    type="checkbox"
-                    checked={inStockOnly}
-                    onChange={(e) => onInStockOnlyChange(e.target.checked)}/>
-                {' '}
-                Only show products in stock
-            </label>
-        </form>
-    );
-}
-
-const PRODUCTS = [
-    {category: "Fruits", price: "$1", stocked: true, name: "Apple"},
-    {category: "Fruits", price: "$1", stocked: true, name: "Dragonfruit"},
-    {category: "Fruits", price: "$2", stocked: false, name: "Passionfruit"},
-    {category: "Vegetables", price: "$2", stocked: true, name: "Spinach"},
-    {category: "Vegetables", price: "$4", stocked: false, name: "Pumpkin"},
-    {category: "Vegetables", price: "$1", stocked: true, name: "Peas"}
-];
-
-export default function App() {
-    return <FilterableProductTable products={PRODUCTS}/>;
-}
+type AddonsDatabase = Record<string, AddonEntry[]>;
