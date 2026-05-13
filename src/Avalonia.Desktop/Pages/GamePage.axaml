@@ -29,7 +29,7 @@
                 <UserControl Content="{Binding Campaigns}"/>
             </TabItem>
 
-            <TabItem Margin="5" IsVisible="{Binding Maps, Converter={x:Static ObjectConverters.IsNotNull}, FallbackValue=False}}">
+            <TabItem Margin="5" IsVisible="{Binding Maps, Converter={x:Static ObjectConverters.IsNotNull}, FallbackValue=False}">
 
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal">
@@ -45,7 +45,7 @@
                 <UserControl Content="{Binding Maps}"/>
             </TabItem>
 
-            <TabItem Margin="5" IsVisible="{Binding Maps, Converter={x:Static ObjectConverters.IsNotNull}, FallbackValue=False}}">
+            <TabItem Margin="5" IsVisible="{Binding Mods, Converter={x:Static ObjectConverters.IsNotNull}, FallbackValue=False}">
 
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal">
