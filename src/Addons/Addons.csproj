@@ -12,6 +12,7 @@
     <EmbeddedResource Include="Assets\Duke3D\duke64.jpg" />
     <EmbeddedResource Include="Assets\Duke3D\dukedc.jpg" />
     <EmbeddedResource Include="Assets\Duke3D\dukewt.jpg" />
+    <EmbeddedResource Include="Assets\Duke3D\dukezh.jpg" />
     <EmbeddedResource Include="Assets\Duke3D\nwinter.jpg" />
     <EmbeddedResource Include="Assets\Fury\aftershock.jpg" />
     <EmbeddedResource Include="Assets\Fury\fury.jpg" />

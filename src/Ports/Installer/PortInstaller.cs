@@ -51,6 +51,11 @@ public sealed class PortInstaller : InstallerBase<BasePort>
                 File.Move(file, destFile, true);
             }
         }
+        else if (_instance.PortEnum is PortEnum.ZeroRecomp)
+        {
+            var portable = Path.Combine(_instance.InstallFolderPath, "portable.txt");
+            File.WriteAllText(portable, string.Empty);
+        }
     }
 
     /// <inheritdoc/>

@@ -84,6 +84,12 @@ public sealed class ConfigProvider : IConfigProvider
         set => SetGamePathValue(value);
     }
 
+    public string? PathDukeZH
+    {
+        get => GetGamePath(nameof(PathDukeZH));
+        set => SetGamePathValue(value);
+    }
+
     public string? PathWang
     {
         get => GetGamePath(nameof(PathWang));

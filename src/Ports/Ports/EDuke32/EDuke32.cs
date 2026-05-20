@@ -112,6 +112,9 @@ public class EDuke32 : BasePort
         }
     }
 
+    /// <inheritdoc/>
+    public override bool IsSkillSelectionAvailable => true;
+
 
     public EDuke32()
     {

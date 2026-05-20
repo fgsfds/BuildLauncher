@@ -22,6 +22,11 @@ public sealed class DukeGame : BaseGame
     public required string? Duke64RomPath { get; set; }
 
     /// <summary>
+    /// Path to Duke Zero Hour rom file
+    /// </summary>
+    public required string? DukeZHRomPath { get; set; }
+
+    /// <summary>
     /// Path to World Tour folder
     /// </summary>
     public required string? DukeWTInstallPath { get; set; }
@@ -53,6 +58,11 @@ public sealed class DukeGame : BaseGame
     /// Is Duke 64 installed
     /// </summary>
     public bool IsDuke64Installed => File.Exists(Duke64RomPath);
+
+    /// <summary>
+    /// Is Duke ZH installed
+    /// </summary>
+    public bool IsDukeZHInstalled => File.Exists(DukeZHRomPath);
 
     /// <summary>
     /// List of paths to Duke's addons folders

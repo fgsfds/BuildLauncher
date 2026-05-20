@@ -24,6 +24,7 @@ public sealed class DukeLooseMapCmdArgumentsTests
         {
             GameInstallFolder = Path.Combine("D:", "Games", "Duke3D"),
             Duke64RomPath = null,
+            DukeZHRomPath = null,
             DukeWTInstallPath = null,
         };
 

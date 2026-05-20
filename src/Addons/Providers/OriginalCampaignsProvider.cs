@@ -274,10 +274,48 @@ public sealed class OriginalCampaignsProvider
                 Description = """
                     **Duke Nukem 64** is the Nintendo 64 port of the first-person shooter MS-DOS/PC game Duke Nukem 3D.
                     The Nintendo 64 port features significant changes from the PC version, including modified and expanded levels and a different set of weapons.
-                    The port also includes a four-player deathmatch mode and a two-player co-op mode via split-screen.
                     The game's mature themes have been minimized to satisfy Nintendo's adult content standards.
                     """,
                 SupportedGame = new(GameEnum.Duke64),
+                RequiredFeatures = null,
+                PathToFile = null,
+                DependentAddons = null,
+                IncompatibleAddons = null,
+                MainCon = null,
+                AdditionalCons = null,
+                MainDef = null,
+                AdditionalDefs = null,
+                RTS = null,
+                StartMap = null,
+                PreviewImageHash = null,
+                IsUnpacked = false,
+                Executables = null,
+                IsFavorite = _config.FavoriteAddons.Contains(version),
+                Options = null
+            });
+        }
+
+        if (dGame.IsDukeZHInstalled)
+        {
+            var duke64Id = nameof(GameEnum.DukeZeroHour).ToLower();
+            AddonId version = new(duke64Id, null);
+
+            campaigns.Add(version, new DukeCampaign()
+            {
+                AddonId = version,
+                Type = AddonTypeEnum.Official,
+                Title = "Duke Nukem Zero Hour",
+                GridImageHash = GameEnum.DukeZeroHour.GetUniqueHash(),
+                Author = "Eurocom",
+                ReleaseDate = new(1999, 08, 31),
+                Description = """
+                    **Duke Nukem: Zero Hour** is a 1999 third-person shooter game in the Duke Nukem series,
+                    developed by Eurocom and published by GT Interactive for the Nintendo 64.
+
+                    The plot revolves around time traveling aliens attempting to alter the course of history
+                    by eliminating Duke's ancestors.
+                    """,
+                SupportedGame = new(GameEnum.DukeZeroHour),
                 RequiredFeatures = null,
                 PathToFile = null,
                 DependentAddons = null,

@@ -102,6 +102,9 @@ public sealed class BitmapsCache : ICacheAdder<Stream>, ICacheGetter<Bitmap>, ID
         using var duke64 = ImageHelper.FileNameToStream("Duke3D.duke64.jpg", addonsAss);
         _ = TryAddGridToCache(GameEnum.Duke64.GetUniqueHash(), duke64);
 
+        using var dukeZH = ImageHelper.FileNameToStream("Duke3D.dukezh.jpg", addonsAss);
+        _ = TryAddGridToCache(GameEnum.DukeZeroHour.GetUniqueHash(), dukeZH);
+
         using var dukeDc = ImageHelper.FileNameToStream("Duke3D.dukedc.jpg", addonsAss);
         _ = TryAddGridToCache(DukeAddonEnum.DukeDC.GetUniqueHash(), dukeDc);
 
