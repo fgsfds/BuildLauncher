@@ -12,6 +12,7 @@ using Common.Client.Tools;
 using Database.Client;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using NReco.Logging.File;
 
 namespace Common.Client.DI;
 
@@ -46,7 +47,16 @@ public static class ClientBindings
             _ = container
                 .AddLogging(x => x
                     .ClearProviders()
-                    .AddFile(ClientProperties.PathToLogFile)
+                    .AddFile(
+                        ClientProperties.PathToLogFile,
+                        opt =>
+                        {
+                            opt.Append = false;
+                            opt.FormatLogFileName = (fileName) => { return string.Format(fileName, DateTime.UtcNow); };
+                            opt.FormatLogEntry = (message) => { return $"[{DateTime.Now.ToLocalTime() + "]",-25} {message.LogLevel,-15} {message.Message}"; };
+                        })
+                    .AddFilter("System.Net.Http.HttpClient", LogLevel.None)
+                    .AddFilter("Microsoft.EntityFrameworkCore", LogLevel.None)
                     .AddDebug()
                     );
         }
