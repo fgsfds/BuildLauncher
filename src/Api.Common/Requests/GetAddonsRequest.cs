@@ -1,10 +1,8 @@
-﻿using Api.Common.Responses;
-using Common.All.Enums;
-using MediatR;
+﻿using Common.All.Enums;
 
 namespace Api.Common.Requests;
 
-public sealed class GetAddonsRequest : /*BaseRequest,*/ IRequest<GetAddonsResponse>
+public sealed class GetAddonsRequest : BaseRequest
 {
     public required GameEnum GameEnum { get; set; }
 }

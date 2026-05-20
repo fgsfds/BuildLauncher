@@ -8,11 +8,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.OpenApi" />
-    <PackageReference Include="MediatR" />
-  </ItemGroup>
-
-  <ItemGroup>
       <ProjectReference Include="..\Api.Common\Api.Common.csproj" />
       <ProjectReference Include="..\Common.All\Common.All.csproj" />
       <ProjectReference Include="..\Common.Server\Common.Server.csproj" />

@@ -6,7 +6,6 @@
 
     <ItemGroup>
         <PackageReference Include="IDisposableAnalyzers" PrivateAssets="all" />
-        <PackageReference Include="MediatR" />
     </ItemGroup>
 
     <ItemGroup>
