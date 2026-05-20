@@ -1,8 +1,8 @@
 ﻿using System.Collections.Immutable;
 using System.Text;
-using Common.All;
-using Common.All.Enums;
-using Common.All.Interfaces;
+using Core.All;
+using Core.All.Enums;
+using Core.All.Interfaces;
 
 namespace Addons.Addons;
 

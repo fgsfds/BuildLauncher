@@ -1,5 +1,5 @@
 using System.Collections.Immutable;
-using Common.All.Enums;
+using Core.All.Enums;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Tools.Tools;
 

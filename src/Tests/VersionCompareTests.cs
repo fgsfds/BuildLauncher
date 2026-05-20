@@ -1,4 +1,4 @@
-﻿using Common.All.Helpers;
+﻿using Core.All.Helpers;
 
 namespace Tests;
 

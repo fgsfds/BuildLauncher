@@ -1,9 +1,9 @@
 ﻿using System.Diagnostics;
 using System.Text;
 using Addons.Addons;
-using Common.All.Enums;
-using Common.All.Enums.Addons;
-using Common.All.Enums.Versions;
+using Core.All.Enums;
+using Core.All.Enums.Addons;
+using Core.All.Enums.Versions;
 using Games.Games;
 
 namespace Ports.Ports;

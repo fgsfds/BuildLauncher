@@ -1,12 +1,12 @@
 ﻿using System.Collections.Immutable;
 using System.Security.Cryptography;
-using Common.All;
-using Common.All.Enums;
-using Common.All.Helpers;
-using Common.All.Serializable.Downloadable;
-using Common.Client.Helpers;
-using Common.Client.Interfaces;
-using Common.Client.Tools;
+using Core.All;
+using Core.All.Enums;
+using Core.All.Helpers;
+using Core.All.Serializable.Downloadable;
+using Core.Client.Helpers;
+using Core.Client.Interfaces;
+using Core.Client.Tools;
 using Games.Games;
 using Microsoft.Extensions.Logging;
 

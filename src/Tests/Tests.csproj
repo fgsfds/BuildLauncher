@@ -26,8 +26,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Addons\Addons.csproj" />
-    <ProjectReference Include="..\Common.All\Common.All.csproj" />
-    <ProjectReference Include="..\Common.Client\Common.Client.csproj" />
+    <ProjectReference Include="..\Core.All\Core.All.csproj" />
+    <ProjectReference Include="..\Core.Client\Core.Client.csproj" />
     <ProjectReference Include="..\Games\Games.csproj" />
     <ProjectReference Include="..\Ports\Ports.csproj" />
     <ProjectReference Include="..\Tools\Tools.csproj" />

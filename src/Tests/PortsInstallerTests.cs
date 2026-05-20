@@ -1,8 +1,8 @@
-﻿using Common.All.Enums;
-using Common.All.Helpers;
-using Common.All.Providers;
-using Common.Client.Api;
-using Common.Client.Tools;
+﻿using Core.All.Enums;
+using Core.All.Helpers;
+using Core.All.Providers;
+using Core.Client.Api;
+using Core.Client.Tools;
 using Microsoft.Extensions.Logging;
 using Moq;
 using Ports.Installer;

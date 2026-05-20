@@ -1,10 +1,10 @@
 ﻿using Addons.Providers;
-using Common.All.Enums;
-using Common.Client;
-using Common.Client.Helpers;
-using Common.Client.Interfaces;
-using Common.Client.Providers;
-using Common.Client.Tools;
+using Core.All.Enums;
+using Core.Client;
+using Core.Client.Helpers;
+using Core.Client.Interfaces;
+using Core.Client.Providers;
+using Core.Client.Tools;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Games.Providers;
 using Microsoft.Extensions.Logging;

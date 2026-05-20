@@ -2,7 +2,7 @@
 using Avalonia.Desktop.Misc;
 using Avalonia.Desktop.ViewModels;
 using Avalonia.Media.Imaging;
-using Common.Client.Cache;
+using Core.Client.Cache;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Avalonia.Desktop.DI;

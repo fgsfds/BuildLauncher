@@ -1,5 +1,5 @@
 using Addons.Addons;
-using Common.All.Enums;
+using Core.All.Enums;
 using Games.Games;
 using Ports.Ports;
 using Ports.Ports.EDuke32;

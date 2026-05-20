@@ -1,7 +1,7 @@
 ﻿using System.Text.RegularExpressions;
-using Common.All.Enums;
-using Common.All.Providers;
-using Common.All.Serializable.Downloadable;
+using Core.All.Enums;
+using Core.All.Providers;
+using Core.All.Serializable.Downloadable;
 using Microsoft.Extensions.Logging;
 
 namespace Ports.Providers;

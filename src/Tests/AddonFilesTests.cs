@@ -1,9 +1,9 @@
 ﻿using Addons.Providers;
-using Common.All.Enums;
-using Common.Client.Api;
-using Common.Client.Cache;
-using Common.Client.Interfaces;
-using Common.Client.Providers;
+using Core.All.Enums;
+using Core.Client.Api;
+using Core.Client.Cache;
+using Core.Client.Interfaces;
+using Core.Client.Providers;
 using Games.Games;
 using Microsoft.Extensions.Logging;
 using Moq;

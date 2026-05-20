@@ -1,10 +1,10 @@
 using System.Diagnostics;
 using Avalonia.Controls.Notifications;
 using Avalonia.Desktop.Misc;
-using Common.All.Enums;
-using Common.All.Helpers;
-using Common.All.Serializable.Downloadable;
-using Common.Client.Interfaces;
+using Core.All.Enums;
+using Core.All.Helpers;
+using Core.All.Serializable.Downloadable;
+using Core.Client.Interfaces;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.Logging;

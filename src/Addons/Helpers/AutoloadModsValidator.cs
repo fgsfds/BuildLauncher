@@ -1,7 +1,7 @@
 ﻿using Addons.Addons;
-using Common.All;
-using Common.All.Enums;
-using Common.All.Helpers;
+using Core.All;
+using Core.All.Enums;
+using Core.All.Helpers;
 
 namespace Addons.Helpers;
 

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Immutable;
-using Common.All.Enums;
-using Common.Client.Helpers;
+using Core.All.Enums;
+using Core.Client.Helpers;
 using Database.Client;
 using Database.Client.DbEntities;
 using Microsoft.EntityFrameworkCore;

@@ -3,7 +3,7 @@ using Avalonia.Interactivity;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
-using Common.Client.Interfaces;
+using Core.Client.Interfaces;
 using Games.Providers;
 
 namespace Avalonia.Desktop;

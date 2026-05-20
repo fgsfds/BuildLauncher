@@ -1,6 +1,6 @@
 ﻿using System.Text;
 using Addons.Addons;
-using Common.All.Enums;
+using Core.All.Enums;
 using Games.Games;
 
 namespace Ports.Ports.EDuke32;

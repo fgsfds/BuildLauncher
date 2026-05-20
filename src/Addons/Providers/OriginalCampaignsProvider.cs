@@ -1,11 +1,11 @@
 ﻿using Addons.Addons;
-using Common.All;
-using Common.All.Enums;
-using Common.All.Enums.Addons;
-using Common.All.Enums.Versions;
-using Common.All.Helpers;
-using Common.Client.Helpers;
-using Common.Client.Interfaces;
+using Core.All;
+using Core.All.Enums;
+using Core.All.Enums.Addons;
+using Core.All.Enums.Versions;
+using Core.All.Helpers;
+using Core.Client.Helpers;
+using Core.Client.Interfaces;
 using Games.Games;
 
 namespace Addons.Providers;

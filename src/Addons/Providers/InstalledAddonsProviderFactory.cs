@@ -1,7 +1,7 @@
-﻿using Common.All.Enums;
-using Common.Client.Cache;
-using Common.Client.Interfaces;
-using Common.Client.Providers;
+﻿using Core.All.Enums;
+using Core.Client.Cache;
+using Core.Client.Interfaces;
+using Core.Client.Providers;
 using Games.Games;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;

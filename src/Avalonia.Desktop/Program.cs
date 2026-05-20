@@ -1,6 +1,6 @@
 ﻿using System.Runtime.InteropServices;
-using Common.Client;
-using Common.Client.Helpers;
+using Core.Client;
+using Core.Client.Helpers;
 using Optris.Icons.Avalonia;
 using Optris.Icons.Avalonia.FontAwesome7;
 

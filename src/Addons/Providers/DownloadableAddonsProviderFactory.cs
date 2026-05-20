@@ -1,6 +1,6 @@
-﻿using Common.All.Enums;
-using Common.Client.Interfaces;
-using Common.Client.Tools;
+﻿using Core.All.Enums;
+using Core.Client.Interfaces;
+using Core.Client.Tools;
 using Games.Games;
 using Microsoft.Extensions.Logging;
 

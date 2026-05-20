@@ -1,10 +1,10 @@
 ﻿using System.Text;
 using Addons.Addons;
-using Common.All;
-using Common.All.Enums;
-using Common.All.Enums.Addons;
-using Common.All.Enums.Versions;
-using Common.Client.Helpers;
+using Core.All;
+using Core.All.Enums;
+using Core.All.Enums.Addons;
+using Core.All.Enums.Versions;
+using Core.Client.Helpers;
 using Games.Games;
 using SharpCompress.Archives;
 

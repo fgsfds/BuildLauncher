@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Common.All.Enums;
+using Core.All.Enums;
 
 namespace Database.Client.DbEntities;
 

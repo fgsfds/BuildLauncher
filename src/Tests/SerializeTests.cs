@@ -1,6 +1,6 @@
 ﻿using System.Text.Json;
-using Common.All.Enums;
-using Common.All.Serializable.Addon;
+using Core.All.Enums;
+using Core.All.Serializable.Addon;
 
 namespace Tests;
 

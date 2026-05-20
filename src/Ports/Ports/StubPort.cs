@@ -1,7 +1,7 @@
 ﻿using System.Text;
 using Addons.Addons;
-using Common.All;
-using Common.All.Enums;
+using Core.All;
+using Core.All.Enums;
 using Games.Games;
 
 namespace Ports.Ports;

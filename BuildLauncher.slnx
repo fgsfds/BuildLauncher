@@ -2,9 +2,9 @@
   <Folder Name="/.start/">
     <Project Path="src/Avalonia.Desktop/Avalonia.Desktop.csproj" />
   </Folder>
-  <Folder Name="/Common/">
-    <Project Path="src/Common.All/Common.All.csproj" />
-    <Project Path="src/Common.Client/Common.Client.csproj" />
+  <Folder Name="/Core/">
+    <Project Path="src/Core.All/Core.All.csproj" />
+    <Project Path="src/Core.Client/Core.Client.csproj" />
   </Folder>
   <Folder Name="/Database/">
     <Project Path="src/Database.Client/Database.Client.csproj" />

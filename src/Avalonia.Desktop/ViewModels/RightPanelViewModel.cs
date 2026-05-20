@@ -3,9 +3,9 @@ using System.ComponentModel;
 using Addons.Addons;
 using Avalonia.Desktop.Misc;
 using Avalonia.Media.Imaging;
-using Common.All.Helpers;
-using Common.Client.Interfaces;
-using Common.Client.Providers;
+using Core.All.Helpers;
+using Core.Client.Interfaces;
+using Core.Client.Providers;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 

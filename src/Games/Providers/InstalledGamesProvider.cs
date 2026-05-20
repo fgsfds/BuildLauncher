@@ -1,5 +1,5 @@
-﻿using Common.All.Enums;
-using Common.Client.Interfaces;
+﻿using Core.All.Enums;
+using Core.Client.Interfaces;
 using Games.Games;
 
 namespace Games.Providers;

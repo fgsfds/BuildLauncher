@@ -1,5 +1,5 @@
 ﻿using Addons.Providers;
-using Common.All.Enums.Versions;
+using Core.All.Enums.Versions;
 
 namespace Tests;
 

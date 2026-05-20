@@ -1,6 +1,6 @@
 ﻿using Addons.Providers;
 using BenchmarkDotNet.Attributes;
-using Common.Client.Helpers;
+using Core.Client.Helpers;
 
 namespace Benchmarks;
 

@@ -1,6 +1,6 @@
-﻿using Common.All.Enums;
-using Common.All.Enums.Addons;
-using Common.All.Helpers;
+﻿using Core.All.Enums;
+using Core.All.Enums.Addons;
+using Core.All.Helpers;
 using Games.Skills;
 
 namespace Games.Games;

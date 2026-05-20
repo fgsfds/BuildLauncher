@@ -3,7 +3,7 @@ using Addons.Providers;
 using Avalonia.Controls;
 using Avalonia.Desktop.Controls.Bases;
 using Avalonia.Desktop.ViewModels;
-using Common.All.Enums;
+using Core.All.Enums;
 using CommunityToolkit.Mvvm.Input;
 
 namespace Avalonia.Desktop.Controls;

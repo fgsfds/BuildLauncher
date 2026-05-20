@@ -24,7 +24,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Addons\Addons.csproj" />
-    <ProjectReference Include="..\Common.Client\Common.Client.csproj" />
+    <ProjectReference Include="..\Core.Client\Core.Client.csproj" />
   </ItemGroup>
     
 </Project>

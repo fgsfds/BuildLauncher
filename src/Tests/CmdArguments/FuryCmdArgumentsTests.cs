@@ -1,6 +1,6 @@
 using Addons.Addons;
-using Common.All.Enums;
-using Common.Client.Config;
+using Core.All.Enums;
+using Core.Client.Config;
 using Games.Games;
 using Ports.Ports.EDuke32;
 

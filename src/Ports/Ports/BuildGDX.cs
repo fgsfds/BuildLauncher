@@ -1,8 +1,8 @@
 ﻿using System.Text;
 using Addons.Addons;
-using Common.All;
-using Common.All.Enums;
-using Common.All.Enums.Versions;
+using Core.All;
+using Core.All.Enums;
+using Core.All.Enums.Versions;
 using Games.Games;
 
 namespace Ports.Ports;

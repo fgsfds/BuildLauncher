@@ -2,13 +2,13 @@
 using System.Text;
 using Addons.Addons;
 using Addons.Helpers;
-using Common.All;
-using Common.All.Enums;
-using Common.All.Enums.Addons;
-using Common.All.Helpers;
-using Common.All.Serializable.Addon;
-using Common.Client.Helpers;
-using Common.Client.Interfaces;
+using Core.All;
+using Core.All.Enums;
+using Core.All.Enums.Addons;
+using Core.All.Helpers;
+using Core.All.Serializable.Addon;
+using Core.Client.Helpers;
+using Core.Client.Interfaces;
 using Games.Games;
 
 namespace Ports.Ports;

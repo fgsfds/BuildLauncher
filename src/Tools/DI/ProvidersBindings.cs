@@ -1,5 +1,5 @@
-﻿using Common.All.Enums;
-using Common.All.Providers;
+﻿using Core.All.Enums;
+using Core.All.Providers;
 using Microsoft.Extensions.DependencyInjection;
 using Tools.Installer;
 using Tools.Providers;

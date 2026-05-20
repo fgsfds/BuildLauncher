@@ -1,5 +1,5 @@
-﻿using Common.All;
-using Common.All.Enums;
+﻿using Core.All;
+using Core.All.Enums;
 
 namespace Tools.Providers;
 

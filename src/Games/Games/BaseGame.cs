@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using Common.All.Enums;
-using Common.Client.Helpers;
+using Core.All.Enums;
+using Core.Client.Helpers;
 
 namespace Games.Games;
 

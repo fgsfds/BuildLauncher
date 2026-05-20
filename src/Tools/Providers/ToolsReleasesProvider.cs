@@ -1,8 +1,8 @@
 ﻿using System.Text.Json;
-using Common.All.Enums;
-using Common.All.Helpers;
-using Common.All.Providers;
-using Common.All.Serializable.Downloadable;
+using Core.All.Enums;
+using Core.All.Helpers;
+using Core.All.Providers;
+using Core.All.Serializable.Downloadable;
 using Microsoft.Extensions.Logging;
 
 namespace Tools.Providers;

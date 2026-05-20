@@ -1,5 +1,5 @@
 ﻿using Addons.Providers;
-using Common.Client.Providers;
+using Core.Client.Providers;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Addons.DI;

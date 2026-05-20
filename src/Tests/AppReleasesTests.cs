@@ -1,6 +1,6 @@
-﻿using Common.All.Enums;
-using Common.All.Helpers;
-using Common.All.Providers;
+﻿using Core.All.Enums;
+using Core.All.Helpers;
+using Core.All.Providers;
 using Moq;
 using ILogger = Microsoft.Extensions.Logging.ILogger;
 
@@ -25,12 +25,3 @@ public sealed class AppReleasesTests
         Assert.NotEmpty(lastestRelease);
     }
 }
-
-
-
-
-
-
-
-
-

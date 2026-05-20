@@ -1,5 +1,5 @@
-using Common.Client;
-using Common.Client.Helpers;
+using Core.Client;
+using Core.Client.Helpers;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 

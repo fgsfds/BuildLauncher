@@ -1,8 +1,8 @@
 ﻿using System.Text;
 using Addons.Addons;
-using Common.All.Enums;
-using Common.All.Enums.Addons;
-using Common.Client.Helpers;
+using Core.All.Enums;
+using Core.All.Enums.Addons;
+using Core.Client.Helpers;
 using Games.Games;
 
 namespace Ports.Ports.EDuke32;
