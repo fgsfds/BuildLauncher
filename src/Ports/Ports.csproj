@@ -5,11 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Assets\DosBox.png" />
-    <None Remove="Assets\DosBox.svg" />
-  </ItemGroup>
-
-  <ItemGroup>
     <EmbeddedResource Include="Assets\BuildGDX.png" />
     <EmbeddedResource Include="Assets\DosBox.png" />
     <EmbeddedResource Include="Assets\EDuke32.png" />
@@ -21,6 +16,7 @@
     <EmbeddedResource Include="Assets\RedNukem.png" />
     <EmbeddedResource Include="Assets\VoidSW.png" />
     <EmbeddedResource Include="Assets\WTStopgap.zip" />
+    <EmbeddedResource Include="Assets\ZHRecomp.png" />
   </ItemGroup>
 
   <ItemGroup>

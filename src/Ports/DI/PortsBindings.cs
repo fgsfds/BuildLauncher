@@ -18,5 +18,6 @@ public static class PortsBindings
         _ = container.AddSingleton<BasePort, Raze>();
         _ = container.AddSingleton<BasePort, BuildGDX>();
         _ = container.AddSingleton<BasePort, DosBox>();
+        _ = container.AddSingleton<BasePort, ZHRecomp>();
     }
 }

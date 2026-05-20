@@ -3,7 +3,9 @@ using Common.All;
 using Common.All.Enums;
 using Common.All.Enums.Addons;
 using Common.All.Enums.Versions;
+using Common.Client.Interfaces;
 using Games.Games;
+using Moq;
 using Ports.Ports;
 using Ports.Ports.EDuke32;
 
@@ -18,6 +20,7 @@ public sealed class DukeCmdArgumentsTests
     private readonly DukeCampaign _dukeTcForVaca;
     private readonly DukeCampaign _dukeWtCamp;
     private readonly DukeCampaign _duke64Camp;
+    private readonly DukeCampaign _dukeZhCamp;
 
     private readonly AutoloadModsProvider _modsProvider;
 
@@ -28,6 +31,7 @@ public sealed class DukeCmdArgumentsTests
         _dukeGame = new()
         {
             Duke64RomPath = Path.Combine("D:", "Games", "Duke64", "rom.z64"),
+            DukeZHRomPath = Path.Combine("D:", "Games", "DukeZH", "rom.z64"),
             DukeWTInstallPath = Path.Combine("D:", "Games", "DukeWT"),
             GameInstallFolder = Path.Combine("D:", "Games", "Duke3D"),
             AddonsPaths = new() { { DukeAddonEnum.DukeVaca, Path.Combine("D:", "Games", "Duke3D", "Vaca") } }
@@ -95,6 +99,32 @@ public sealed class DukeCmdArgumentsTests
             ReleaseDate = null,
             Description = null,
             SupportedGame = new(GameEnum.Duke64),
+            RequiredFeatures = null,
+            PathToFile = null,
+            DependentAddons = null,
+            IncompatibleAddons = null,
+            MainCon = null,
+            AdditionalCons = null,
+            MainDef = null,
+            AdditionalDefs = null,
+            RTS = null,
+            StartMap = null,
+            PreviewImageHash = null,
+            IsUnpacked = false,
+            Executables = null,
+            Options = null
+        };
+
+        _dukeZhCamp = new()
+        {
+            AddonId = new(nameof(GameEnum.DukeZeroHour).ToLower(), null),
+            Type = AddonTypeEnum.Official,
+            Title = "Duke Nukem ZeroHour",
+            GridImageHash = null,
+            Author = null,
+            ReleaseDate = null,
+            Description = null,
+            SupportedGame = new(GameEnum.DukeZeroHour),
             RequiredFeatures = null,
             PathToFile = null,
             DependentAddons = null,
@@ -635,5 +665,16 @@ public sealed class DukeCmdArgumentsTests
         }
 
         Assert.Equal(expected, args);
+    }
+
+    [Fact]
+    public void ZeroHourTest()
+    {
+        Mock<IConfigProvider> _config = new();
+        ZHRecomp redNukem = new(_config.Object);
+
+        var args = redNukem.GetStartGameArgs(_dukeGame, _dukeZhCamp, new Dictionary<AddonId, BaseAddon>(), [], true, true);
+
+        Assert.Equal(string.Empty, args);
     }
 }

@@ -97,6 +97,15 @@ internal static class PortsRepositoriesProvider
                 LinuxReleasePredicate = null,
             };
         }
+        else if (portEnum is PortEnum.ZeroRecomp)
+        {
+            return new()
+            {
+                RepoUrl = new("https://api.github.com/repos/sonicdcer/DNZHRecomp/releases"),
+                WindowsReleasePredicate = static x => x.FileName.Contains("-Windows-", StringComparison.OrdinalIgnoreCase) && x.FileName.EndsWith("zip", StringComparison.OrdinalIgnoreCase),
+                LinuxReleasePredicate = static x => x.FileName.Contains("-Linux-X64", StringComparison.OrdinalIgnoreCase) && x.FileName.EndsWith("zip", StringComparison.OrdinalIgnoreCase),
+            };
+        }
         else
         {
             throw new NotSupportedException(portEnum.ToString());

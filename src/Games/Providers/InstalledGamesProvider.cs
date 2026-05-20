@@ -51,6 +51,7 @@ public sealed class InstalledGamesProvider
         {
             GameInstallFolder = _config.PathDuke3D,
             Duke64RomPath = _config.PathDuke64,
+            DukeZHRomPath = _config.PathDukeZH,
             DukeWTInstallPath = _config.PathDukeWT
         };
 
@@ -152,6 +153,11 @@ public sealed class InstalledGamesProvider
         else if (parameterName.Equals(nameof(_config.PathDuke64)))
         {
             _duke3d.Duke64RomPath = _config.PathDuke64;
+            GameChangedEvent?.Invoke(_duke3d.GameEnum);
+        }
+        else if (parameterName.Equals(nameof(_config.PathDukeZH)))
+        {
+            _duke3d.DukeZHRomPath = _config.PathDukeZH;
             GameChangedEvent?.Invoke(_duke3d.GameEnum);
         }
         else if (parameterName.Equals(nameof(_config.PathDukeWT)))

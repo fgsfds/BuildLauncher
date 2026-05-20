@@ -178,7 +178,7 @@ public abstract class BasePort : IInstallable
     /// <summary>
     /// Is it possible to select skill level from command line.
     /// </summary>
-    public virtual bool IsSkillSelectionAvailable => true;
+    public abstract bool IsSkillSelectionAvailable { get; }
 
 
     protected BasePort()

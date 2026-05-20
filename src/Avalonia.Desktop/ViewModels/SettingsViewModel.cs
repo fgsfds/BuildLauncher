@@ -64,6 +64,12 @@ public sealed partial class SettingsViewModel : ObservableObject
         set => _config.PathDuke64 = value;
     }
 
+    public string? PathToDukeZH
+    {
+        get => _config.PathDukeZH;
+        set => _config.PathDukeZH = value;
+    }
+
     public string? PathToWang
     {
         get => _config.PathWang;

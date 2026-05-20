@@ -12,6 +12,7 @@ public interface IConfigProvider
     string? PathBlood { get; set; }
     string? PathDuke3D { get; set; }
     string? PathDuke64 { get; set; }
+    string? PathDukeZH { get; set; }
     string? PathDukeWT { get; set; }
     string? PathFury { get; set; }
     string? PathRedneck { get; set; }

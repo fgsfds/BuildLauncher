@@ -12,5 +12,6 @@ public enum PortEnum : byte
     BuildGDX = 8,
     Fury = 9,
     Stub = 10,
-    DosBox = 11
+    DosBox = 11,
+    ZeroRecomp = 12,
 }

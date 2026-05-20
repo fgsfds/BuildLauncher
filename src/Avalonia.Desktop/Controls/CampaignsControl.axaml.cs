@@ -47,6 +47,13 @@ public sealed partial class CampaignsControl : DroppableControl
         InitializeComponent();
 
         _supportedPorts = portsProvider.GetPortsThatSupportGame(viewModel.Game.GameEnum);
+
+        if (viewModel.Game.GameEnum is GameEnum.Duke3D)
+        {
+            var zhPorts = portsProvider.GetPortsThatSupportGame(GameEnum.DukeZeroHour);
+            _supportedPorts = [.. _supportedPorts, .. zhPorts];
+        }
+
         _portsProvider = portsProvider;
         _viewModel = viewModel;
         _bitmapsCache = bitmapsCache;
