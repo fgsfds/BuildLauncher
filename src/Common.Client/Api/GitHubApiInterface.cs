@@ -2,7 +2,6 @@
 using Common.All;
 using Common.All.Enums;
 using Common.All.Helpers;
-using Common.All.Interfaces;
 using Common.All.Providers;
 using Common.All.Serializable;
 using Common.All.Serializable.Addon;
@@ -15,8 +14,8 @@ namespace Common.Client.Api;
 
 public sealed class GitHubApiInterface : IApiInterface
 {
-    private readonly IReleaseProvider<PortEnum> _portsReleasesProvider;
-    private readonly IReleaseProvider<ToolEnum> _toolsReleasesProvider;
+    private readonly ReleaseProvider<PortEnum> _portsReleasesProvider;
+    private readonly ReleaseProvider<ToolEnum> _toolsReleasesProvider;
     private readonly RepoAppReleasesProvider _appReleasesProvider;
     private readonly IHttpClientFactory _httpClientFactory;
     private readonly ILogger _logger;
@@ -27,8 +26,8 @@ public sealed class GitHubApiInterface : IApiInterface
 
 
     public GitHubApiInterface(
-        IReleaseProvider<PortEnum> portsReleasesProvider,
-        IReleaseProvider<ToolEnum> toolsReleasesRetriever,
+        ReleaseProvider<PortEnum> portsReleasesProvider,
+        ReleaseProvider<ToolEnum> toolsReleasesRetriever,
         RepoAppReleasesProvider appReleasesProvider,
         IHttpClientFactory httpClientFactory,
         ILogger logger
@@ -51,17 +50,18 @@ public sealed class GitHubApiInterface : IApiInterface
             if (_addonsJson is null)
             {
                 using var httpClient = _httpClientFactory.CreateClient(HttpClientEnum.GitHub.GetDescription());
-                using var response = await httpClient.GetAsync(CommonConstants.AddonsJsonUrl, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false);
-                _ = response.EnsureSuccessStatusCode();
+                using var response = await httpClient.GetStreamAsync(CommonConstants.AddonsJsonUrl).ConfigureAwait(false);
 
-                var addons = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-
-                _addonsJson = JsonSerializer.Deserialize(addons, DownloadableAddonJsonModelDictionaryContext.Default.DictionaryGameEnumListDownloadableAddonJsonModel);
+                _addonsJson = await JsonSerializer.DeserializeAsync(
+                    response,
+                    DownloadableAddonJsonModelDictionaryContext.Default.DictionaryGameEnumListDownloadableAddonJsonModel
+                    ).ConfigureAwait(false);
 
                 if (_addonsJson is null)
                 {
-                    throw new ArgumentNullException();
+                    throw new FormatException("Error while deserializing addons.json");
                 }
+
             }
 
             if (gameEnum is GameEnum.Redneck)
@@ -143,8 +143,11 @@ public sealed class GitHubApiInterface : IApiInterface
             return false;
         }
 
-        var addonsJson = await File.ReadAllTextAsync(ClientProperties.PathToLocalAddonsJson).ConfigureAwait(false);
-        var addons = JsonSerializer.Deserialize(addonsJson, DownloadableAddonJsonModelDictionaryContext.Default.DictionaryGameEnumListDownloadableAddonJsonModel);
+        using var addonsJson = File.OpenRead(ClientProperties.PathToLocalAddonsJson);
+        var addons = await JsonSerializer.DeserializeAsync(
+            addonsJson,
+            DownloadableAddonJsonModelDictionaryContext.Default.DictionaryGameEnumListDownloadableAddonJsonModel
+            ).ConfigureAwait(false);
 
         if (addons is null)
         {
@@ -180,8 +183,11 @@ public sealed class GitHubApiInterface : IApiInterface
         await File.WriteAllTextAsync(ClientProperties.PathToLocalAddonsJson, newAddonsJson).ConfigureAwait(false);
 
 
-        var manifestsJson = await File.ReadAllTextAsync(ClientProperties.PathToLocalManifestsJson).ConfigureAwait(false);
-        var manifests = JsonSerializer.Deserialize(manifestsJson, ManifestsJsonModelContext.Default.ListAddonJsonModel);
+        using var manifestsJson = File.OpenRead(ClientProperties.PathToLocalManifestsJson);
+        var manifests = await JsonSerializer.DeserializeAsync(
+            manifestsJson,
+            ManifestsJsonModelContext.Default.ListAddonJsonModel
+            ).ConfigureAwait(false);
 
         if (manifests is null)
         {
@@ -227,16 +233,15 @@ public sealed class GitHubApiInterface : IApiInterface
         try
         {
             using var httpClient = _httpClientFactory.CreateClient();
-            var result = await httpClient.GetStringAsync(CommonConstants.ManifestsJsonUrl).ConfigureAwait(false);
+            using var jsonStream = await httpClient.GetStreamAsync(CommonConstants.ManifestsJsonUrl).ConfigureAwait(false)
+             ?? throw new FormatException("Error while deserializing manifests.json");
 
-            if (result is null)
-            {
-                return null;
-            }
+            var meta = await JsonSerializer.DeserializeAsync(
+                jsonStream,
+                ManifestsJsonModelContext.Default.ListAddonJsonModel
+                ).ConfigureAwait(false);
 
-            var data = JsonSerializer.Deserialize(result, ManifestsJsonModelContext.Default.ListAddonJsonModel);
-
-            return data;
+            return meta;
         }
         catch (Exception ex)
         {
@@ -249,20 +254,13 @@ public sealed class GitHubApiInterface : IApiInterface
     private async Task InitDataAsync()
     {
         using var httpClient = _httpClientFactory.CreateClient(HttpClientEnum.GitHub.GetDescription());
-        using var response = await httpClient.GetAsync(CommonConstants.DataJsonUrl, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false);
-        _ = response.EnsureSuccessStatusCode();
+        using var response = await httpClient.GetStreamAsync(CommonConstants.DataJsonUrl).ConfigureAwait(false);
 
-        var data = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-
-        _data = JsonSerializer.Deserialize(data, DataJsonModelContext.Default.DictionaryStringString);
-
-        if (_data is null)
-        {
-            throw new ArgumentNullException();
-        }
+        _data = await JsonSerializer.DeserializeAsync(response, DataJsonModelContext.Default.DictionaryStringString).ConfigureAwait(false)
+             ?? throw new FormatException("Error while deserializing meta.json");
     }
 
-    public async Task<Result<string?>> GetSignedUrlAsync(string path)
+    public async Task<Result<Uri?>> GetSignedUrlAsync(string path)
     {
         await _semaphore.WaitAsync().ConfigureAwait(false);
 
@@ -277,7 +275,7 @@ public sealed class GitHubApiInterface : IApiInterface
 
             var url = Path.Combine(uploadFolder, path);
 
-            return new(ResultEnum.Success, url, string.Empty);
+            return new(ResultEnum.Success, new(url), string.Empty);
         }
         catch (Exception ex)
         {

@@ -519,7 +519,7 @@ public sealed class InstalledAddonsProvider : IDisposable
     /// Get addons from list of files
     /// </summary>
     /// <param name="files">Paths to addon files</param>
-    private async Task<IReadOnlyDictionary<AddonId, BaseAddon>> GetAddonsFromFilesAsync(IEnumerable<string> files)
+    internal async Task<IReadOnlyDictionary<AddonId, BaseAddon>> GetAddonsFromFilesAsync(IEnumerable<string> files)
     {
         Dictionary<AddonId, BaseAddon> addedAddons = [];
 
@@ -627,12 +627,12 @@ public sealed class InstalledAddonsProvider : IDisposable
 
         if (pathToFile.EndsWith(".json"))
         {
-            var jsonText = File.ReadAllText(pathToFile);
+            using var jsonStream = File.OpenRead(pathToFile);
 
-            var manifest = JsonSerializer.Deserialize(
-                jsonText,
+            var manifest = await JsonSerializer.DeserializeAsync(
+                jsonStream,
                 AddonManifestContext.Default.AddonJsonModel
-                );
+                ).ConfigureAwait(false);
 
             if (manifest is null)
             {
@@ -750,19 +750,20 @@ public sealed class InstalledAddonsProvider : IDisposable
                 isUnpacked = false;
                 using var archive = ArchiveFactory.OpenArchive(pathToFile);
 
-                (gridImageHash, Stream? gridImageStream) = ImageHelper.GetCoverFromArchive(archive);
-                (previewImageHash, Stream? previewImageStream) = ImageHelper.GetPreviewFromArchive(archive);
+                await using var cover = ImageHelper.GetCoverFromArchive(archive);
+                await using var preview = ImageHelper.GetPreviewFromArchive(archive);
 
-                if (gridImageHash is not null && gridImageStream is not null)
+                gridImageHash = cover.HasValue ? cover.Value.Crc : null;
+                previewImageHash = preview.HasValue ? preview.Value.Crc : null;
+
+                if (cover.HasValue)
                 {
-                    _ = _bitmapsCache.TryAddGridToCache(gridImageHash.Value, gridImageStream);
-                    gridImageStream.Dispose();
+                    _ = _bitmapsCache.TryAddGridToCache(cover.Value.Crc, cover.Value.Stream);
                 }
 
-                if (previewImageHash is not null && previewImageStream is not null)
+                if (preview.HasValue)
                 {
-                    _ = _bitmapsCache.TryAddPreviewToCache(previewImageHash.Value, previewImageStream);
-                    previewImageStream.Dispose();
+                    _ = _bitmapsCache.TryAddPreviewToCache(preview.Value.Crc, preview.Value.Stream);
                 }
 
             }
@@ -1058,7 +1059,7 @@ public sealed class InstalledAddonsProvider : IDisposable
 
                 foreach (var addonJson in unpackedAddonJsons)
                 {
-                    var text = File.ReadAllText(addonJson);
+                    using var text = File.OpenRead(addonJson);
 
                     var addonDto2 = JsonSerializer.Deserialize(
                         text,

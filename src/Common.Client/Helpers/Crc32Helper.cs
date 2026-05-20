@@ -1,4 +1,6 @@
-﻿using System.IO.Hashing;
+﻿using System.Buffers;
+using System.Buffers.Binary;
+using System.IO.Hashing;
 
 namespace Common.Client.Helpers;
 
@@ -6,22 +8,29 @@ public static class Crc32Helper
 {
     public static long GetCrc32(string path)
     {
-        using var fs = File.OpenRead(path);
-        var hasher = new Crc32();
-        var buffer = new byte[1 << 20];
-        int bytesRead;
+        var buffer = ArrayPool<byte>.Shared.Rent(64 * 1024);
 
-        while ((bytesRead = fs.Read(buffer, 0, buffer.Length)) > 0)
+        try
         {
-            hasher.Append(new ReadOnlySpan<byte>(buffer, 0, bytesRead));
+            using var fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read, 0, FileOptions.SequentialScan);
+            var hasher = new Crc32();
+
+            int bytesRead;
+            while ((bytesRead = fs.Read(buffer, 0, buffer.Length)) > 0)
+            {
+                hasher.Append(buffer.AsSpan(0, bytesRead));
+            }
+
+            Span<byte> hashBytes = stackalloc byte[4];
+            hasher.GetCurrentHash(hashBytes);
+
+            return BinaryPrimitives.ReadUInt32LittleEndian(hashBytes);
         }
-
-        var hash = hasher.GetCurrentHash();
-        var crc = BitConverter.ToUInt32(hash, 0);
-
-        return crc;
+        finally
+        {
+            ArrayPool<byte>.Shared.Return(buffer);
+        }
     }
-
 
     public static string GetCrc32Hex(string path) => $"0x{GetCrc32(path):X8}";
 }

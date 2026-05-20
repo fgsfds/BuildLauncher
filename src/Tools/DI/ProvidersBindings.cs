@@ -1,5 +1,5 @@
 ﻿using Common.All.Enums;
-using Common.All.Interfaces;
+using Common.All.Providers;
 using Microsoft.Extensions.DependencyInjection;
 using Tools.Installer;
 using Tools.Providers;
@@ -11,6 +11,6 @@ public static class ProvidersBindings
     public static void Load(ServiceCollection container)
     {
         _ = container.AddSingleton<ToolInstallerFactory>();
-        _ = container.AddSingleton<IReleaseProvider<ToolEnum>, ToolsReleasesProvider>();
+        _ = container.AddSingleton<ReleaseProvider<ToolEnum>, ToolsReleasesProvider>();
     }
 }

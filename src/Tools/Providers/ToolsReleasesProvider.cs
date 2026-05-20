@@ -1,33 +1,26 @@
-﻿using System.Collections.Concurrent;
-using System.Text.Json;
+﻿using System.Text.Json;
 using Common.All.Enums;
 using Common.All.Helpers;
-using Common.All.Interfaces;
+using Common.All.Providers;
 using Common.All.Serializable.Downloadable;
 using Microsoft.Extensions.Logging;
 
 namespace Tools.Providers;
 
-public sealed class ToolsReleasesProvider : IReleaseProvider<ToolEnum>
+public sealed class ToolsReleasesProvider : ReleaseProvider<ToolEnum>
 {
-    private readonly ConcurrentDictionary<ToolEnum, Dictionary<OSEnum, GeneralReleaseJsonModel>?> _releases = [];
-    private readonly ILogger _logger;
-    private readonly IHttpClientFactory _httpClientFactory;
-
     public ToolsReleasesProvider(
         ILogger logger,
         IHttpClientFactory httpClientFactory
-        )
+        ) : base(logger, httpClientFactory)
     {
-        _logger = logger;
-        _httpClientFactory = httpClientFactory;
     }
 
     /// <summary>
     /// Get the latest release of the selected tool
     /// </summary>
     /// <param name="toolEnum">Tool</param>
-    public async Task<Dictionary<OSEnum, GeneralReleaseJsonModel>?> GetLatestReleaseAsync(ToolEnum toolEnum)
+    public override async Task<Dictionary<OSEnum, GeneralReleaseJsonModel>?> GetLatestReleaseAsync(ToolEnum toolEnum)
     {
         try
         {
@@ -46,11 +39,9 @@ public sealed class ToolsReleasesProvider : IReleaseProvider<ToolEnum>
             }
 
             using var httpClient = _httpClientFactory.CreateClient(HttpClientEnum.GitHub.GetDescription());
-            using var response = await httpClient.GetAsync(repo.RepoUrl, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false);
-            _ = response.EnsureSuccessStatusCode();
-            var data = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+            using var response = await httpClient.GetStreamAsync(repo.RepoUrl).ConfigureAwait(false);
 
-            var allReleases = JsonSerializer.Deserialize(data, GitHubReleaseEntityContext.Default.ListGitHubReleaseJsonModel)
+            var allReleases = await JsonSerializer.DeserializeAsync(response, GitHubReleaseEntityContext.Default.ListGitHubReleaseJsonModel).ConfigureAwait(false)
                 ?? throw new FormatException("Error while deserializing GitHub releases");
 
             var releases = allReleases
@@ -134,7 +125,7 @@ public sealed class ToolsReleasesProvider : IReleaseProvider<ToolEnum>
     /// <summary>
     /// Get tool version
     /// </summary>
-    private string GetVersion(ToolEnum toolEnum, GitHubReleaseJsonModel release, GitHubReleaseAsset asset)
+    protected override string GetVersion(ToolEnum toolEnum, GitHubReleaseJsonModel release, GitHubReleaseAsset asset)
     {
         if (toolEnum is ToolEnum.XMapEdit or ToolEnum.DOSBlood)
         {

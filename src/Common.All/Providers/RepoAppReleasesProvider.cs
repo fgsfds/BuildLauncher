@@ -37,14 +37,17 @@ public sealed class RepoAppReleasesProvider
             _logger.LogInformation("Looking for new app release");
 
             using var client = _httpClientFactory.CreateClient(HttpClientEnum.GitHub.GetDescription());
-            using var response = await client.GetAsync(CommonConstants.GitHubReleases, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false);
-            _ = response.EnsureSuccessStatusCode();
+            using var response = await client.GetStreamAsync(CommonConstants.GitHubReleases).ConfigureAwait(false);
+            
+            var releases = await JsonSerializer.DeserializeAsync(
+                response,
+                GitHubReleaseEntityContext.Default.ListGitHubReleaseJsonModel
+                ).ConfigureAwait(false);
 
-            var releasesJson = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-
-            var releases =
-                JsonSerializer.Deserialize(releasesJson, GitHubReleaseEntityContext.Default.ListGitHubReleaseJsonModel)
-                ?? throw new FormatException("Error while deserializing GitHub releases");
+            if (releases is null)
+            {
+                throw new FormatException("Error while deserializing GitHub releases");
+            }
 
             if (includePreReleases)
             {

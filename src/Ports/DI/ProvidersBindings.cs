@@ -1,5 +1,5 @@
 ﻿using Common.All.Enums;
-using Common.All.Interfaces;
+using Common.All.Providers;
 using Microsoft.Extensions.DependencyInjection;
 using Ports.Installer;
 using Ports.Ports;
@@ -14,6 +14,6 @@ public static class ProvidersBindings
         _ = container.AddSingleton<PortInstallerFactory>();
         _ = container.AddSingleton<PortsProvider>();
         _ = container.AddSingleton<PortStarter>();
-        _ = container.AddSingleton<IReleaseProvider<PortEnum>, PortsReleasesProvider>();
+        _ = container.AddSingleton<ReleaseProvider<PortEnum>, PortsReleasesProvider>();
     }
 }

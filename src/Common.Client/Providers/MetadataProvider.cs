@@ -48,7 +48,10 @@ public sealed class MetadataProvider
                 foreach (var manifest in manifests)
                 {
                     using var stream = await manifest.OpenEntryStreamAsync().ConfigureAwait(false);
-                    var originalManifest = await JsonSerializer.DeserializeAsync(stream, AddonManifestContext.Default.AddonJsonModel).ConfigureAwait(false);
+                    var originalManifest = await JsonSerializer.DeserializeAsync(
+                        stream,
+                        AddonManifestContext.Default.AddonJsonModel
+                        ).ConfigureAwait(false);
 
                     if (originalManifest is null)
                     {
@@ -60,8 +63,11 @@ public sealed class MetadataProvider
             }
             else if (file.EndsWith(".json", StringComparison.OrdinalIgnoreCase))
             {
-                var originalManifestStr = await File.ReadAllTextAsync(file).ConfigureAwait(false);
-                var originalManifest = JsonSerializer.Deserialize(originalManifestStr, AddonManifestContext.Default.AddonJsonModel);
+                using var originalManifestStr = File.OpenRead(file);
+                var originalManifest = await JsonSerializer.DeserializeAsync(
+                    originalManifestStr,
+                    AddonManifestContext.Default.AddonJsonModel
+                    ).ConfigureAwait(false);
 
                 if (originalManifest is null)
                 {
@@ -93,7 +99,7 @@ public sealed class MetadataProvider
             {
                 using (var archive = ZipArchive.OpenArchive(path))
                 {
-                    List<MemoryStream> streams = [];
+                    List<MemoryStream> streams = new(updates.Count);
 
                     foreach (var update in updates)
                     {
@@ -121,7 +127,7 @@ public sealed class MetadataProvider
                 _updatesCache.Remove(path);
 
                 MetadataUpdatedEvent?.Invoke(this, new(
-                    updates.First().Value.SupportedGame.Game, 
+                    updates.First().Value.SupportedGame.Game,
                     updates.First().Value.AddonType,
                     path
                     ));

@@ -1,5 +1,5 @@
-﻿using Common.All.Enums;
-using Common.All.Serializable.Downloadable;
+﻿using Common.All;
+using Common.All.Enums;
 
 namespace Tools.Providers;
 
@@ -39,11 +39,4 @@ internal static class ToolsRepositoriesProvider
             throw new NotSupportedException(toolEnum.ToString());
         }
     }
-}
-
-internal readonly struct RepositoryEntity
-{
-    public required Uri? RepoUrl { get; init; }
-    public required Func<GitHubReleaseAsset, bool>? WindowsReleasePredicate { get; init; }
-    public required Func<GitHubReleaseAsset, bool>? LinuxReleasePredicate { get; init; }
 }

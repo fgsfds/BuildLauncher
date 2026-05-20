@@ -1,5 +1,5 @@
-﻿using Common.All.Enums;
-using Common.All.Serializable.Downloadable;
+﻿using Common.All;
+using Common.All.Enums;
 
 namespace Ports.Providers;
 
@@ -102,11 +102,4 @@ internal static class PortsRepositoriesProvider
             throw new NotSupportedException(portEnum.ToString());
         }
     }
-}
-
-internal readonly struct RepositoryEntity
-{
-    public required Uri? RepoUrl { get; init; }
-    public required Func<GitHubReleaseAsset, bool>? WindowsReleasePredicate { get; init; }
-    public required Func<GitHubReleaseAsset, bool>? LinuxReleasePredicate { get; init; }
 }

@@ -98,7 +98,7 @@ public sealed class FilesUploader
                 return new(signedUrl.ResultEnum, signedUrl.Message);
             }
 
-            await using var fileStream = File.OpenRead(pathToFile);
+            using var fileStream = File.OpenRead(pathToFile);
             using StreamContent content = new(fileStream);
 
             _ = Task.Run(() => { TrackProgress(fileStream, progress); }, cancellationToken);
@@ -160,7 +160,7 @@ public sealed class FilesUploader
 
         try
         {
-            await using var fileStream = File.OpenRead(file);
+            using var fileStream = File.OpenRead(file);
             using StreamContent content = new(fileStream);
 
             _ = Task.Run(() => { TrackProgress(fileStream, progress); }, cancellationToken);
@@ -221,7 +221,7 @@ public sealed class FilesUploader
             return new(ResultEnum.NotFound, null, "Can't find addon info in the provided archive.");
         }
 
-        await using var stream = await addonJson.OpenEntryStreamAsync().ConfigureAwait(false);
+        using var stream = await addonJson.OpenEntryStreamAsync().ConfigureAwait(false);
 
         var manifest = await JsonSerializer.DeserializeAsync(
             stream,
@@ -284,7 +284,7 @@ public sealed class FilesUploader
             return new(ResultEnum.Error, null, $"File {downloadUrl} doesn't exist.");
         }
 
-        await using var fileStream = File.OpenRead(pathToFile);
+        using var fileStream = File.OpenRead(pathToFile);
         var sha = await SHA256.HashDataAsync(fileStream, CancellationToken.None).ConfigureAwait(false);
         var shaStr = Convert.ToHexString(sha);
         var md5 = await MD5.HashDataAsync(fileStream, CancellationToken.None).ConfigureAwait(false);

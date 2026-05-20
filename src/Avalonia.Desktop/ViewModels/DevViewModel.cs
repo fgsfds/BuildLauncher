@@ -623,13 +623,17 @@ public sealed partial class DevViewModel : ObservableObject
             foreach (var json in jsons)
             {
                 using var jsonStream = await json.OpenEntryStreamAsync().ConfigureAwait(false);
-                var jsonStr = await JsonSerializer.DeserializeAsync(jsonStream, AddonManifestContext.Default.AddonJsonModel).ConfigureAwait(false);
-                
+
+                var jsonStr = await JsonSerializer.DeserializeAsync(
+                    jsonStream,
+                    AddonManifestContext.Default.AddonJsonModel
+                    ).ConfigureAwait(false);
+
                 if (jsonStr is null)
                 {
                     continue;
                 }
-                
+
                 result.Add(jsonStr);
             }
         }
@@ -911,73 +915,76 @@ public sealed partial class DevViewModel : ObservableObject
 
     private void LoadJson(string pathToFile)
     {
-        var jsonStr = File.ReadAllText(pathToFile);
+        using var jsonStream = File.OpenRead(pathToFile);
 
-        var result = JsonSerializer.Deserialize(jsonStr, AddonManifestContext.Default.AddonJsonModel);
+        var addon = JsonSerializer.Deserialize(
+            jsonStream,
+            AddonManifestContext.Default.AddonJsonModel
+            );
 
-        if (result is null)
+        if (addon is null)
         {
             return;
         }
 
-        IsTcSelected = result.AddonType is AddonTypeEnum.TC;
-        IsMapSelected = result.AddonType is AddonTypeEnum.Map;
-        IsModSelected = result.AddonType is AddonTypeEnum.Mod;
+        IsTcSelected = addon.AddonType is AddonTypeEnum.TC;
+        IsMapSelected = addon.AddonType is AddonTypeEnum.Map;
+        IsModSelected = addon.AddonType is AddonTypeEnum.Mod;
 
-        SelectedGame = result.SupportedGame.Game;
+        SelectedGame = addon.SupportedGame.Game;
 
-        var isDukeVersion = Enum.TryParse<DukeVersionEnum>(result.SupportedGame.Version, true, out var dukeVersion);
+        var isDukeVersion = Enum.TryParse<DukeVersionEnum>(addon.SupportedGame.Version, true, out var dukeVersion);
         IsDuke13DSelected = isDukeVersion && dukeVersion is DukeVersionEnum.Duke3D_13D;
         IsDukeAtomicSelected = isDukeVersion && dukeVersion is DukeVersionEnum.Duke3D_Atomic;
         IsDukeWTSelected = isDukeVersion && dukeVersion is DukeVersionEnum.Duke3D_WT;
 
-        GameCrc = result.SupportedGame.Crc;
+        GameCrc = addon.SupportedGame.Crc;
 
-        AddonTitle = result.Title;
-        AddonId = string.IsNullOrEmpty(AddonIdPrefix) ? result.Id : result.Id.Replace(AddonIdPrefix, "");
-        AddonVersion = result.Version;
-        ReleaseDate = result.ReleaseDate.HasValue ? result.ReleaseDate.Value.ToDateTime(TimeOnly.MinValue) : null;
-        AddonAuthor = result.Author;
-        MainDef = result.MainDef;
-        AdditionalDefs = result.AdditionalDefs is null ? null : string.Join(',', result.AdditionalDefs);
-        MainCon = result.MainCon;
-        AdditionalCons = result.AdditionalCons is null ? null : string.Join(',', result.AdditionalCons);
-        Rts = result.Rts;
-        Ini = result.Ini;
-        MainRff = result.MainRff;
-        SoundRff = result.SoundRff;
+        AddonTitle = addon.Title;
+        AddonId = string.IsNullOrEmpty(AddonIdPrefix) ? addon.Id : addon.Id.Replace(AddonIdPrefix, "");
+        AddonVersion = addon.Version;
+        ReleaseDate = addon.ReleaseDate.HasValue ? addon.ReleaseDate.Value.ToDateTime(TimeOnly.MinValue) : null;
+        AddonAuthor = addon.Author;
+        MainDef = addon.MainDef;
+        AdditionalDefs = addon.AdditionalDefs is null ? null : string.Join(',', addon.AdditionalDefs);
+        MainCon = addon.MainCon;
+        AdditionalCons = addon.AdditionalCons is null ? null : string.Join(',', addon.AdditionalCons);
+        Rts = addon.Rts;
+        Ini = addon.Ini;
+        MainRff = addon.MainRff;
+        SoundRff = addon.SoundRff;
 
-        IsEdukeConsSelected = result.Dependencies?.RequiredFeatures is not null && result.Dependencies.RequiredFeatures.Contains(FeatureEnum.EDuke32_CON);
-        IsModernTypesSelected = result.Dependencies?.RequiredFeatures is not null && result.Dependencies.RequiredFeatures.Contains(FeatureEnum.Modern_Types);
-        IsModelsSelected = result.Dependencies?.RequiredFeatures is not null && result.Dependencies.RequiredFeatures.Contains(FeatureEnum.Models);
-        IsHightileSelected = result.Dependencies?.RequiredFeatures is not null && result.Dependencies.RequiredFeatures.Contains(FeatureEnum.Hightile);
-        IsSlopedSelected = result.Dependencies?.RequiredFeatures is not null && result.Dependencies.RequiredFeatures.Contains(FeatureEnum.Sloped_Sprites);
-        IsTrorSelected = result.Dependencies?.RequiredFeatures is not null && result.Dependencies.RequiredFeatures.Contains(FeatureEnum.TROR);
-        IsCstatSelected = result.Dependencies?.RequiredFeatures is not null && result.Dependencies.RequiredFeatures.Contains(FeatureEnum.Wall_Rotate_Cstat);
-        IsLightingSelected = result.Dependencies?.RequiredFeatures is not null && result.Dependencies.RequiredFeatures.Contains(FeatureEnum.Dynamic_Lighting);
-        IsSndInfoSelected = result.Dependencies?.RequiredFeatures is not null && result.Dependencies.RequiredFeatures.Contains(FeatureEnum.SndInfo);
-        IsTilefromtextureSelected = result.Dependencies?.RequiredFeatures is not null && result.Dependencies.RequiredFeatures.Contains(FeatureEnum.TileFromTexture);
+        IsEdukeConsSelected = addon.Dependencies?.RequiredFeatures is not null && addon.Dependencies.RequiredFeatures.Contains(FeatureEnum.EDuke32_CON);
+        IsModernTypesSelected = addon.Dependencies?.RequiredFeatures is not null && addon.Dependencies.RequiredFeatures.Contains(FeatureEnum.Modern_Types);
+        IsModelsSelected = addon.Dependencies?.RequiredFeatures is not null && addon.Dependencies.RequiredFeatures.Contains(FeatureEnum.Models);
+        IsHightileSelected = addon.Dependencies?.RequiredFeatures is not null && addon.Dependencies.RequiredFeatures.Contains(FeatureEnum.Hightile);
+        IsSlopedSelected = addon.Dependencies?.RequiredFeatures is not null && addon.Dependencies.RequiredFeatures.Contains(FeatureEnum.Sloped_Sprites);
+        IsTrorSelected = addon.Dependencies?.RequiredFeatures is not null && addon.Dependencies.RequiredFeatures.Contains(FeatureEnum.TROR);
+        IsCstatSelected = addon.Dependencies?.RequiredFeatures is not null && addon.Dependencies.RequiredFeatures.Contains(FeatureEnum.Wall_Rotate_Cstat);
+        IsLightingSelected = addon.Dependencies?.RequiredFeatures is not null && addon.Dependencies.RequiredFeatures.Contains(FeatureEnum.Dynamic_Lighting);
+        IsSndInfoSelected = addon.Dependencies?.RequiredFeatures is not null && addon.Dependencies.RequiredFeatures.Contains(FeatureEnum.SndInfo);
+        IsTilefromtextureSelected = addon.Dependencies?.RequiredFeatures is not null && addon.Dependencies.RequiredFeatures.Contains(FeatureEnum.TileFromTexture);
 
-        DependenciesList = result.Dependencies?.Addons is null ? null : [.. result.Dependencies.Addons];
-        IncompatibilitiesList = result.Incompatibles?.Addons is null ? null : [.. result.Incompatibles.Addons];
+        DependenciesList = addon.Dependencies?.Addons is null ? null : [.. addon.Dependencies.Addons];
+        IncompatibilitiesList = addon.Incompatibles?.Addons is null ? null : [.. addon.Incompatibles.Addons];
 
-        if (result.StartMap is MapFileJsonModel mapFile)
+        if (addon.StartMap is MapFileJsonModel mapFile)
         {
             IsFileMapTypeSelected = true;
             MapFileName = mapFile.File;
         }
-        else if (result.StartMap is MapSlotJsonModel slotFile)
+        else if (addon.StartMap is MapSlotJsonModel slotFile)
         {
             IsElMapTypeSelected = true;
             MapEpisode = slotFile.Episode;
             MapLevel = slotFile.Level;
         }
 
-        AddonDescription = result.Description;
+        AddonDescription = addon.Description;
 
-        if (result.Executables is not null)
+        if (addon.Executables is not null)
         {
-            if (result.Executables.TryGetValue(OSEnum.Windows, out var windowsExes))
+            if (addon.Executables.TryGetValue(OSEnum.Windows, out var windowsExes))
             {
                 _ = windowsExes.TryGetValue(PortEnum.EDuke32, out var exe1);
                 WindowsEDukeExe = exe1;
@@ -987,7 +994,7 @@ public sealed partial class DevViewModel : ObservableObject
                 WindowsNotBloodExe = exe3;
             }
 
-            if (result.Executables.TryGetValue(OSEnum.Linux, out var linuxExes))
+            if (addon.Executables.TryGetValue(OSEnum.Linux, out var linuxExes))
             {
                 _ = linuxExes.TryGetValue(PortEnum.EDuke32, out var exe1);
                 LinuxEDukeExe = exe1;

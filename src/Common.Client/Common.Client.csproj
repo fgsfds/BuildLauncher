@@ -21,4 +21,9 @@
     <ProjectReference Include="..\Database.Client\Database.Client.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+      <InternalsVisibleTo Include="Benchmarks" />
+      <InternalsVisibleTo Include="Tests" />
+  </ItemGroup>
+
 </Project>

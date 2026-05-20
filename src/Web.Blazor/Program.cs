@@ -1,5 +1,4 @@
 using Common.All.Enums;
-using Common.All.Interfaces;
 using Common.All.Providers;
 using Common.All.Serializable.Addon;
 using Common.All.Serializable.Downloadable;
@@ -54,8 +53,8 @@ internal sealed class Program
 
         _ = builder.Services.AddSingleton<RepoAppReleasesProvider>();
         _ = builder.Services.AddSingleton<DatabaseAddonsRetriever>();
-        _ = builder.Services.AddSingleton<IReleaseProvider<PortEnum>>();
-        _ = builder.Services.AddSingleton<IReleaseProvider<ToolEnum>>();
+        _ = builder.Services.AddSingleton<ReleaseProvider<PortEnum>>();
+        _ = builder.Services.AddSingleton<ReleaseProvider<ToolEnum>>();
 
         _ = builder.Services.AddSingleton(CreateHttpClient);
         _ = builder.Services.AddSingleton<S3Client>();

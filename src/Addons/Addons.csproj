@@ -41,4 +41,9 @@
     <ProjectReference Include="..\Games\Games.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+      <InternalsVisibleTo Include="Benchmarks" />
+      <InternalsVisibleTo Include="Tests" />
+  </ItemGroup>
+
 </Project>

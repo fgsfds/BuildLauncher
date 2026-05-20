@@ -1,7 +1,7 @@
 ﻿using Api.Common.Requests;
 using Api.Common.Responses;
 using Common.All.Enums;
-using Common.All.Interfaces;
+using Common.All.Providers;
 using Common.All.Serializable.Downloadable;
 using MediatR;
 
@@ -9,9 +9,9 @@ namespace Web.Blazor.Handlers;
 
 internal sealed class GetPortsReleasesHandler : IRequestHandler<GetPortsReleasesRequest, GetPortsReleasesResponse?>
 {
-    private readonly IReleaseProvider<PortEnum> _portsReleasesRetriever;
+    private readonly ReleaseProvider<PortEnum> _portsReleasesRetriever;
 
-    public GetPortsReleasesHandler(IReleaseProvider<PortEnum> portsReleasesProvider)
+    public GetPortsReleasesHandler(ReleaseProvider<PortEnum> portsReleasesProvider)
     {
         _portsReleasesRetriever = portsReleasesProvider;
     }

@@ -1,0 +1,1457 @@
+// EDUKE32 ADDON COMPILATION v4.0 (by NightFright)
+// ATOMIC EDITION
+
+grpinfo
+{
+    name       "1999/2000 TC"
+    scriptname "scripts/2000tc.con"
+    size       17147390
+    crc        0x23F56C4E
+    flags      16
+    dependency DUKE15_CRC
+}
+
+grpinfo
+{
+    name       "25th Century Duke"
+    scriptname "scripts/25th_century.con" 
+    size       1385747
+    crc        0x42836014
+    flags      16
+    dependency DUKE15_CRC
+}
+
+grpinfo
+{
+    name       "A.Dream Trilogy"
+    scriptname "scripts/dreamtrilogy.con"
+    size       28245809
+    crc        0x01987700
+    flags      16
+    dependency DUKE15_CRC
+}
+
+grpinfo
+{
+    name       "ADG Episode"
+    scriptname "scripts/adg_episode.con"
+    size       396757
+    crc        0x8D74E393
+    flags      16
+    dependency DUKE15_CRC
+}
+
+grpinfo
+{
+    name       "Age of Evil"
+    scriptname "scripts/ageofevil.con"
+    defname    "scripts/ageofevil.def"
+    size       7151163
+    crc        0x134B9634
+    flags      16
+    dependency DUKE15_CRC
+}
+
+grpinfo
+{
+    name       "ALF's Resort"
+    scriptname "scripts/alfsresort.con"
+    defname    "scripts/alfsresort.def"
+    size       3211171
+    crc        0xC6522CA9
+    flags      16
+    dependency DUKE15_CRC
+}
+
+grpinfo
+{
+    name       "Alien Extermination: New Edition"
+    scriptname "scripts/alienz.con"
+    defname    "scripts/alienz.def"
+    size       10895178
+    crc        0x348DC481
+    flags      16
+    dependency DUKE15_CRC
+}
+
+grpinfo
+{
+    name       "Alien Invasion"
+    scriptname "scripts/alieninvasion.con"
+    size       3022775
+    crc        0x5ECDE5C8
+    flags      16
+    dependency DUKE15_CRC
+}
+
+grpinfo
+{
+    name       "Alien vs Predator"
+    scriptname "scripts/alienpredator.con"
+    defname    "scripts/alienpredator.def"
+    size       10033494
+    crc        0x1894840A
+    flags      16
+    dependency DUKE15_CRC
+}
+
+grpinfo
+{
+    name       "American Assault"
+    scriptname "scripts/american.con"
+    size       2605605
+    crc        0x21284B8B
+    flags      16
+    dependency DUKE15_CRC
+}
+
+grpinfo
+{
+    name       "Aqua Trilogy"
+    scriptname "scripts/aqua.con"   // aqua.con: Persistent inventory | reset.con: Inventory reset on map change
+    size       152462
+    crc        0x54BD33ED
+    flags      16
+    dependency DUKE15_CRC
+}
+
+grpinfo
+{
+    name       "Back in Business"
+    scriptname "scripts/business.con"
+    size       24120160
+    crc        0x1C532034
+    flags      16
+    dependency DUKE15_CRC
+}
+
+grpinfo
+{
+    name       "Bad Weekend"
+    scriptname "scripts/badweekend.con"
+    defname    "scripts/badweekend.def"
+    size       28649604
+    crc        0x3DC7E9E2
+    flags      16
+    dependency DUKE15_CRC
+}
+
+grpinfo
+{
+    name       "Battlefield 3"
+    scriptname "scripts/battlefield3.con"
+    size       695378
+    crc        0xEC7C28AC
+    flags      16
+    dependency DUKE15_CRC
+}
+
+grpinfo
+{
+    name       "BobSP Series"
+    scriptname "scripts/bobsp.con"   // bobsp.con: Persistent inventory | reset.con: Inventory reset on map change
+    size       743651
+    crc        0x79F39D64
+    flags      16
+    dependency DUKE15_CRC
+}
+
+grpinfo
+{
+    name       "Bolduc Pack"
+    scriptname "scripts/bolduc.con"
+    size       8204017
+    crc        0xDBB812F0
+    flags      16
+    dependency DUKE15_CRC
+}
+
+grpinfo
+{
+    name       "Borg Nukem"
+    scriptname "scripts/borgnukem.con"
+    defname    "scripts/borgnukem.def"
+    size       13507094
+    crc        0x69DE10BD
+    flags      16
+    dependency DUKE15_CRC
+}
+
+grpinfo
+{
+    name       "Burnt"
+    scriptname "scripts/burnt.con"
+    size       407893
+    crc        0xFEBC7EA7
+    flags      16
+    dependency DUKE15_CRC
+}
+
+grpinfo
+{
+    name       "C3PO Pack"
+    scriptname "scripts/c3po.con"
+    size       319994
+    crc        0x8D95D3B7
+    flags      16
+    dependency DUKE15_CRC
+}
+
+grpinfo
+{
+    name       "Castle Dukenstein"
+    scriptname "scripts/dukenstein.con"
+    size       1844144
+    crc        0x0E43F763
+    flags      16
+    dependency DUKE15_CRC
+}
+
+grpinfo
+{
+    name       "Castle Quest"
+    scriptname "scripts/castlequest.con"
+    size       381427
+    crc        0xE4B1FFD6
+    flags      16
+    dependency DUKE15_CRC
+}
+
+grpinfo
+{
+    name       "Cerovsky Pack"
+    scriptname "scripts/cerovsky.con"
+    size       412137
+    crc        0xC4F353BF
+    flags      16
+    dependency DUKE15_CRC
+}
+
+grpinfo
+{
+    name       "Chimera"
+    scriptname "scripts/chimera.con"
+    size       6297909
+    crc        0xE70611DC
+    flags      16
+    dependency DUKE15_CRC
+}
+
+grpinfo
+{
+    name       "Command & Conquer Map Pack"
+    scriptname "scripts/cnc_pack.con"   // cnc_pack.con: Persistent inventory | reset.con: Inventory reset on map change
+    size       827258
+    crc        0xD20D3917
+    flags      16
+    dependency DUKE15_CRC
+}
+
+grpinfo
+{
+    name       "Community Build Project"
+    scriptname "scripts/reset.con"   // community.con: Persistent inventory | reset.con: Inventory reset on map change
+    size       4241192
+    crc        0xCBE4BE5D
+    flags      16
+    dependency DUKE15_CRC
+}
+
+grpinfo
+{
+    name       "Complex"
+    scriptname "scripts/complex.con"
+    size       263732
+    crc        0x4E39418A
+    flags      16
+    dependency DUKE15_CRC
+}
+
+grpinfo
+{
+    name       "Countdown to Christmas"
+    scriptname "scripts/countdown.con"
+    size       1611445
+    crc        0x032103F0
+    flags      16
+    dependency DUKE15_CRC
+}
+
+grpinfo
+{
+    name       "Critical Mass"
+    scriptname "scripts/criticalmass.con"
+    defname    "scripts/criticalmass.def"
+    size       1936898
+    crc        0x32A29B5D
+    flags      16
+    dependency DUKE15_CRC
+}
+
+grpinfo
+{
+    name       "Crucial Conflict"
+    scriptname "scripts/crucialconflict.con"
+    size       462839
+    crc        0x0DD1780F
+    flags      16
+    dependency DUKE15_CRC
+}
+
+grpinfo
+{
+    name       "DaikariN"
+    scriptname "scripts/daikarin.con"
+    size       1142809
+    crc        0x57276A33
+    flags      16
+    dependency DUKE15_CRC
+}
+
+grpinfo
+{
+    name       "Dark Place Series"
+    scriptname "scripts/darkplace.con"   // darkplace.con: Persistent inventory | reset.con: Inventory reset on map change
+    size       566467
+    crc        0x8BE7F7B4
+    flags      16
+    dependency DUKE15_CRC
+}
+
+grpinfo
+{
+    name       "Death Drive"
+    scriptname "scripts/deathdrive.con"
+    size       803487
+    crc        0x0E4595AE
+    flags      16
+    dependency DUKE15_CRC
+}
+
+grpinfo
+{
+    name       "DN64 Revisited"
+    scriptname "scripts/dn64revisited.con"
+    defname    "scripts/dn64revisited.def"
+    size       16927672
+    crc        0x6C8C4BB3
+    flags      16
+    dependency DUKE15_CRC
+}
+
+grpinfo
+{
+    name       "Downtown Journey"
+    scriptname "scripts/downtown.con"
+    size       418125
+    crc        0x22287E86
+    flags      16
+    dependency DUKE15_CRC
+}
+
+grpinfo
+{
+    name       "Duke Hard"
+    scriptname "scripts/dukehard.con" // RN support: dukehard_rn.con
+    defname    "scripts/dukehard.def" // RN support: dukehard_rn.def
+    size       44104264
+    crc        0xD03CF5CC
+    flags      16
+    dependency DUKE15_CRC
+}
+
+grpinfo
+{
+    name       "Duke Is 007"
+    scriptname "scripts/duke007.con"   // duke007.con: Persistent inventory | reset.con: Inventory reset on map change
+    size       476022
+    crc        0x25F73FA2
+    flags      16
+    dependency DUKE15_CRC
+}
+
+grpinfo
+{
+    name       "Duke Is Ten"
+    scriptname "scripts/duke_ten.con"
+    size       686810
+    crc        0xDE5770E1
+    flags      16
+    dependency DUKE15_CRC
+}
+
+grpinfo
+{
+    name       "Duke Los Angeles"
+    scriptname "scripts/duke_la.con"   // duke_la.con: modded blast radius values | dukela_alt.con: default (lower) values
+    defname    "scripts/duke_la.def"
+    size       6937098
+    crc        0x11F06229
+    flags      16
+    dependency DUKE15_CRC
+}
+
+grpinfo
+{
+    name       "Duke Tournament"
+    scriptname "scripts/tournament.con"
+    defname    "scripts/tournament.def"
+    size       3115104
+    crc        0x3CDFFF3E
+    flags      16
+    dependency DUKE15_CRC
+}
+
+grpinfo
+{
+    name       "Duke, It's ZeroHour"
+    scriptname "scripts/zerohour.con"
+    defname    "scripts/zerohour.def"
+    size       6042844
+    crc        0x6F1F265E
+    flags      16
+    dependency DUKE15_CRC
+}
+
+grpinfo
+{
+    name       "Dukeland"
+    scriptname "scripts/dukeland.con"
+    size       9462704
+    crc        0x9AD369F1
+    flags      16
+    dependency DUKE15_CRC
+}
+
+grpinfo
+{
+    name       "DukeVR"
+    scriptname "scripts/duke_vr.con"
+    size       78417
+    crc        0x934B3EF7
+    flags      16
+    dependency DUKE15_CRC
+}
+
+grpinfo
+{
+    name       "Epic"
+    scriptname "scripts/epic.con"
+    size       1888705
+    crc        0xD8843A0E
+    flags      16
+    dependency DUKE15_CRC
+}
+
+grpinfo
+{
+    name       "Escape from San Angelos"
+    scriptname "scripts/escape.con"
+    size       387887
+    crc        0x92404672
+    flags      16
+    dependency DUKE15_CRC
+}
+
+grpinfo
+{
+    name       "Eye of Cul Episode"
+    scriptname "scripts/eyeofcul.con"
+    size       678701
+    crc        0x499E3A9D
+    flags      16
+    dependency DUKE15_CRC
+}
+
+grpinfo
+{
+    name       "FbSp Trilogy"
+    scriptname "scripts/reset.con"   // fbsp.con: Persistent inventory | reset.con: Inventory reset on map change
+    defname    "scripts/fbsp.def"
+    size       473378
+    crc        0xAA72A0DF
+    flags      16
+    dependency DUKE15_CRC
+}
+
+grpinfo
+{
+    name       "FM7X"
+    scriptname "scripts/fm7x.con"
+    size       5320244
+    crc        0x79248986
+    flags      16
+    dependency DUKE15_CRC
+}
+
+grpinfo
+{
+    name       "Fusion Redux 2018"
+    scriptname "scripts/fusion.con"
+    defname    "scripts/fusionredux.def"   // fusionredux.def: Fusion Redux | duke3d.def: Fusion
+    size       106237584
+    crc        0xEC8901D7
+    flags      16
+    dependency DUKE15_CRC
+}
+
+grpinfo
+{
+    name       "Glavic Pack"
+    scriptname "scripts/glavic.con"
+    size       1647681
+    crc        0xC2F65318
+    flags      16
+    dependency DUKE15_CRC
+}
+
+grpinfo
+{
+    name       "God of War"
+    scriptname "scripts/godofwar.con"
+    defname    "scripts/godofwar.def"
+    size       1200939
+    crc        0xB549D6D4
+    flags      16
+    dependency DUKE15_CRC
+}
+
+grpinfo
+{
+    name       "Grins of Divinity"
+    scriptname "scripts/grinsdivinity.con"
+    defname    "scripts/grinsdivinity.def"
+    size       10833576
+    crc        0x4A5B3C4E
+    flags      16
+    dependency DUKE15_CRC
+}
+
+grpinfo
+{
+    name       "Haunted Nukem"
+    scriptname "scripts/haunted.con"
+    defname    "scripts/haunted.def"
+    size       75538955
+    crc        0xBDE30D7E
+    flags      16
+    dependency DUKE15_CRC
+}
+
+grpinfo
+{
+    name       "High Treason Series"
+    scriptname "scripts/high_treason.con"   // high_treason.con: Persistent inventory | reset.con: Inventory reset on map
+    size       23951416
+    crc        0x9EFA6757
+    flags      16
+    dependency DUKE15_CRC
+}
+
+grpinfo
+{
+    name       "Verses Series"
+    scriptname "scripts/verses.con"   // verses.con: Persistent inventory | reset.con: Inventory reset on map
+    size       1011610
+    crc        0x6DE0889D
+    flags      16
+    dependency DUKE15_CRC
+}
+
+grpinfo
+{
+    name       "Hunt Series"
+    scriptname "scripts/hunt.con"   // hunt.con: Persistent inventory | reset.con: Inventory reset on map change
+    size       708851
+    crc        0xC3737C6C
+    flags      16
+    dependency DUKE15_CRC
+}
+
+grpinfo
+{
+    name       "Incubation: Alien Apocalypse"
+    scriptname "scripts/incubation.con"
+    size       1181841
+    crc        0xBF67C99D
+    flags      16
+    dependency DUKE15_CRC
+}
+
+grpinfo
+{
+    name       "Industrial Complex"
+    scriptname "scripts/industrial.con"
+    size       1904031
+    crc        0x8FC46E20
+    flags      16
+    dependency DUKE15_CRC
+}
+
+grpinfo
+{
+    name       "Indy Tour"
+    scriptname "scripts/indytour.con"
+    size       104797
+    crc        0x37684191
+    flags      16
+    dependency DUKE15_CRC
+}
+
+grpinfo
+{
+    name       "Infestation in Time"
+    scriptname "scripts/infestation.con"
+    defname    "scripts/infestation.def"
+    size       24169587
+    crc        0x888EAED4
+    flags      16
+    dependency DUKE15_CRC
+}
+
+grpinfo
+{
+    name       "JJ Duke Nukem 3D"
+    scriptname "scripts/jjduke.con"
+    defname    "scripts/jjduke_xxx.def" // Comment out for non-XXX version
+    size       3802594
+    crc        0x8D6BE467
+    flags      16
+    dependency DUKE15_CRC
+}
+
+grpinfo
+{
+    name       "Jungle Tour Trilogy"
+    scriptname "scripts/reset.con"   // jungletour.con: Persistent inventory | reset.con: Inventory reset on map change
+    size       1596945
+    crc        0x1E1BFE16
+    flags      16
+    dependency DUKE15_CRC
+}
+
+grpinfo
+{
+    name       "KaiseR Land Trilogy"
+    scriptname "scripts/kaiserland.con"   // kaiserland.con: Persistent inventory | reset.con: Inventory reset on map change
+    defname    "scripts/kaiserland.def"
+    size       5079308
+    crc        0x200D617A
+    flags      16
+    dependency DUKE15_CRC
+}
+
+grpinfo
+{
+    name       "Kucera Pack"
+    scriptname "scripts/kucera.con"
+    size       1858498
+    crc        0x65977335
+    flags      16
+    dependency DUKE15_CRC
+}
+
+grpinfo
+{
+    name       "Last Reaction & Water Bases"
+    scriptname "scripts/lastreaction.con"
+    defname    "scripts/lastreaction.def"
+    size       7238166
+    crc        0xDC086FF2
+    flags      16
+    dependency DUKE15_CRC
+}
+
+grpinfo
+{
+    name       "Layre"
+    scriptname "scripts/layre.con"
+    defname    "scripts/layre.def"
+    size       3839991
+    crc        0x76F3200D
+    flags      16
+    dependency DUKE15_CRC
+}
+
+grpinfo
+{
+    name       "LORCH Trilogy"
+    scriptname "scripts/lorch.con"   // lorch.con: Persistent inventory | reset.con: Inventory reset on map change
+    size       276046
+    crc        0xF769EF7B
+    flags      16
+    dependency DUKE15_CRC
+}
+
+grpinfo
+{
+    name       "Lost Highway"
+    scriptname "scripts/losthighway.con"
+    size       459802
+    crc        0x67BC3AC9
+    flags      16
+    dependency DUKE15_CRC
+}
+
+grpinfo
+{
+    name       "MatH Pak"
+    scriptname "scripts/mathpak.con"
+    size       1193940
+    crc        0xF7B1B418
+    flags      16
+    dependency DUKE15_CRC
+}
+
+grpinfo
+{
+    name       "Merc 2"
+    scriptname "scripts/merc2.con"
+    defname    "scripts/merc2.def"
+    size       14743811
+    crc        0x946A5469
+    flags      16
+    dependency DUKE15_CRC
+}
+
+grpinfo
+{
+    name       "Merc: Fatal Reality"
+    scriptname "scripts/merc.con"
+    defname    "scripts/merc.def"
+    size       3508754
+    crc        0xB08304C6
+    flags      16
+    dependency DUKE15_CRC
+}
+
+grpinfo
+{
+    name       "Metropolitan Mayhem"
+    scriptname "scripts/metromayhem.con"
+    size       572000
+    crc        0x2EFB48A7
+    flags      16
+    dependency DUKE15_CRC
+}
+
+grpinfo
+{
+    name       "Mic Episode"
+    scriptname "scripts/mic_episode.con"
+    size       212149
+    crc        0x470CABB2
+    flags      16
+    dependency DUKE15_CRC
+}
+
+grpinfo
+{
+    name       "Mill Town Rampage"
+    scriptname "scripts/milltown.con"
+    size       31412021
+    crc        0xA5F6F02A
+    flags      16
+    dependency DUKE15_CRC
+}
+
+grpinfo
+{
+    name       "Moonbase Accident"
+    scriptname "scripts/moonbase.con"
+    defname    "scripts/moonbase.def"
+    size       5898149
+    crc        0x24FF3AC2
+    flags      16
+    dependency DUKE15_CRC
+}
+
+grpinfo
+{
+    name       "MRCK Duology"
+    scriptname "scripts/mrck.con"   // mrck.con: Persistent inventory | reset.con: Inventory reset on map
+    size       254425
+    crc        0x52E055F4
+    flags      16
+    dependency DUKE15_CRC
+}
+
+grpinfo
+{
+    name       "MSSP Episode"
+    scriptname "scripts/mssp.con"
+    size       1146092
+    crc        0x91DF9B8F
+    flags      16
+    dependency DUKE15_CRC
+}
+
+grpinfo
+{
+    name       "Munasta Trilogy"
+    scriptname "scripts/munasta.con"   // munasta.con: Persistent inventory | reset.con: Inventory reset on map change
+    size       261280
+    crc        0x3DC351CE
+    flags      16
+    dependency DUKE15_CRC
+}
+
+grpinfo
+{
+    name       "Murder: The EDF Conspiracy"
+    scriptname "scripts/murder.con"
+    defname    "scripts/murder.def"
+    size       3918416
+    crc        0xA01DB549
+    flags      16
+    dependency DUKE15_CRC
+}
+
+grpinfo
+{
+    name       "Nuclear Pack"
+    scriptname "scripts/nuclear.con"
+    size       2522608
+    crc        0x13AAAD1C
+    flags      16
+    dependency DUKE15_CRC
+}
+
+grpinfo
+{
+    name       "Oblivion"
+    scriptname "scripts/oblivion.con"
+    defname    "scripts/oblivion.def"
+    rtsname    "resources/oblivion.rts"
+    size       73631812
+    crc        0x146DC796
+    flags      16
+    dependency DUKE15_CRC
+}
+
+grpinfo
+{
+    name       "Operation Blitzkrieg"
+    scriptname "scripts/blitzkrieg.con"
+    defname    "scripts/blitzkrieg.def"
+    size       1692193
+    crc        0xFC419143
+    flags      16
+    dependency DUKE15_CRC
+}
+
+grpinfo
+{
+    name       "Operation Xenocide"
+    scriptname "scripts/xenocide.con"
+    size       108811
+    crc        0x83D6B753
+    flags      16
+    dependency DUKE15_CRC
+}
+
+grpinfo
+{
+    name       "Outpost X"
+    scriptname "scripts/outpostx.con"
+    defname    "scripts/outpostx.def"
+    size       5519971
+    crc        0xA93CC875
+    flags      16
+    dependency DUKE15_CRC
+}
+
+grpinfo
+{
+    name       "Penthouse Paradise"
+    scriptname "scripts/penthouse.con"
+    size       1763027
+    crc        0x76C19541
+    flags      16
+    dependency DUKE15_CRC
+}
+
+grpinfo
+{
+    name       "Pinxten Pack"
+    scriptname "scripts/pinxten.con"
+    size       490635
+    crc        0xFDDCBB0B
+    flags      16
+    dependency DUKE15_CRC
+}
+
+grpinfo
+{
+    name       "Platoon TC"
+    scriptname "scripts/reset.con"   // platoon.con: Persistent inventory | reset.con: Inventory reset on map change ("Bonus Missions" only)
+    defname    "scripts/platoon.def"
+    size       4322427
+    crc        0x178C0AF7
+    flags      16
+    dependency DUKE15_CRC
+}
+
+grpinfo
+{
+    name       "Pray Your Prayers 2000"
+    scriptname "scripts/prayers.con"
+    defname    "scripts/prayers.def"
+    size       3927023
+    crc        0x9038EF4C
+    flags      16
+    dependency DUKE15_CRC
+}
+
+grpinfo
+{
+    name       "Quakis Pack"
+    scriptname "scripts/quakis.con"
+    defname    "scripts/quakis.def"
+    size       8016829
+    crc        0x72F57150
+    flags      16
+    dependency DUKE15_CRC
+}
+
+grpinfo
+{
+    name       "Quest for Al-Qa'eda"
+    scriptname "scripts/reset.con"   // quest1.con: Persistent inventory in ep.5 | reset.con: Inventory reset in ep.5
+    defname    "scripts/quest1.def"
+    rtsname    "resources/quest1.rts"
+    size       6996062
+    crc        0x939DC7CF
+    flags      16
+    dependency DUKE15_CRC
+}
+
+grpinfo
+{
+    name       "Quest for Hussein"
+    scriptname "scripts/quest2.con"
+    defname    "scripts/quest2.def"
+    rtsname    "resources/quest2.rts"
+    size       6547434
+    crc        0xBA493E01
+    flags      16
+    dependency DUKE15_CRC
+}
+
+grpinfo
+{
+    name       "Red Series"
+    scriptname "scripts/red.con"
+    size       5968576
+    crc        0xB4C744FB
+    flags      16
+    dependency DUKE15_CRC
+}
+
+grpinfo
+{
+    name       "Redrum: The Shining II"
+    scriptname "scripts/redrum.con"
+    size       4033159
+    crc        0x10DF52BB
+    flags      16
+    dependency DUKE15_CRC
+}
+
+grpinfo
+{
+    name       "Rendezvous"
+    scriptname "scripts/rendezvous.con"
+    size       563880
+    crc        0x37CF81B6
+    flags      16
+    dependency DUKE15_CRC
+}
+
+grpinfo
+{
+    name       "Roch Series"
+    scriptname "scripts/roch.con"
+    size       1025853
+    crc        0x49B752F6
+    flags      16
+    dependency DUKE15_CRC
+}
+
+grpinfo
+{
+    name       "Ruohonen Pack"
+    scriptname "scripts/ruohonen.con"
+    size       6908456
+    crc        0xEDA76B25
+    flags      16
+    dependency DUKE15_CRC
+}
+
+grpinfo
+{
+    name       "Savior of Alien Era"
+    scriptname "scripts/savior.con"   // savior.con: Persistent inventory | reset.con: Inventory reset on map change
+    size       1148715
+    crc        0x8E2A3B66
+    flags      16
+    dependency DUKE15_CRC
+}
+
+grpinfo
+{
+    name       "Secrets of the Acropolis"
+    scriptname "scripts/acropolis.con"
+    size       2179200
+    crc        0x92B3FC10
+    flags      16
+    dependency DUKE15_CRC
+}
+
+grpinfo
+{
+    name       "Shaky Grounds"
+    scriptname "scripts/shakygrounds.con"
+    size       15879680
+    crc        0xC57EEEEF
+    flags      16
+    dependency DUKE15_CRC
+}
+
+grpinfo
+{
+    name       "Shark's Cove"
+    scriptname "scripts/sharkscove.con"
+    defname    "scripts/sharkscove.def"
+    size       126705
+    crc        0x43B1B565
+    flags      16
+    dependency DUKE15_CRC
+}
+
+grpinfo
+{
+    name       "Space Map Pack"
+    scriptname "scripts/space.con"
+    defname    "scripts/space.def"
+    size       37748328
+    crc        0x108DCCF2
+    flags      16
+    dependency DUKE15_CRC
+}
+
+grpinfo
+{
+    name       "Space Mission"
+    scriptname "scripts/spacemission.con"
+    defname    "scripts/spacemission.def"
+    size       10717431
+    crc        0xC3FA9FB3
+    flags      16
+    dependency DUKE15_CRC
+}
+
+grpinfo
+{
+    name       "Spiegul Contest"
+    scriptname "scripts/spiegul.con"
+    defname    "scripts/spiegul.def"
+    size       542796
+    crc        0x1EA2C196
+    flags      16
+    dependency DUKE15_CRC
+}
+
+grpinfo
+{
+    name       "Starship Troopers TC"
+    scriptname "scripts/starship.con"   // starship.con: SP/DM maps | starship_boot.con: tutorial | starship_ctf.con: CTF levels
+    defname    "scripts/starship.def"
+    size       27147916
+    crc        0xC7F01B61
+    flags      16
+    dependency DUKE15_CRC
+}
+
+grpinfo
+{
+    name       "Steve Long Episodes"
+    scriptname "scripts/stevelong.con"
+    size       2240443
+    crc        0x1EF752EA
+    flags      16
+    dependency DUKE15_CRC
+}
+
+grpinfo
+{
+    name       "Stranger Pack"
+    scriptname "scripts/stranger.con"
+    size       402201
+    crc        0x14F56A84
+    flags      16
+    dependency DUKE15_CRC
+}
+
+grpinfo
+{
+    name       "Sun Burn"
+    scriptname "scripts/sunburn.con"
+    size       1180968
+    crc        0x14D76CE8
+    flags      16
+    dependency DUKE15_CRC
+}
+
+grpinfo
+{
+    name       "Super Nukem Bros."
+    scriptname "scripts/supernukem.con"
+    defname    "scripts/supernukem.def"
+    size       17257108
+    crc        0x950C3454
+    flags      16
+    dependency DUKE15_CRC
+}
+
+grpinfo
+{
+    name       "Taivo Pack"
+    scriptname "scripts/taivo.con"
+    size       1035177
+    crc        0x2BC4F64A
+    flags      16
+    dependency DUKE15_CRC
+}
+
+grpinfo
+{
+    name       "Taking Boise"
+    scriptname "scripts/boise.con"
+    size       36526988
+    crc        0x6E9E6C44
+    flags      16
+    dependency DUKE15_CRC
+}
+
+grpinfo
+{
+    name       "TamDuke"
+    scriptname "scripts/tamduke.con"
+    defname    "scripts/tamduke.def"
+    size       1909908
+    crc        0x0F7E6C96
+    flags      16
+    dependency DUKE15_CRC
+}
+
+grpinfo
+{
+    name       "The Army of Death"
+    scriptname "scripts/armydeath.con"
+    size       2690949
+    crc        0xD2AC3107
+    flags      16
+    dependency DUKE15_CRC
+}
+
+grpinfo
+{
+    name       "The Asteroid"
+    scriptname "scripts/asteroid.con"
+    defname    "scripts/asteroid.def"
+    size       266743
+    crc        0x5250987E
+    flags      16
+    dependency DUKE15_CRC
+}
+
+grpinfo
+{
+    name       "The Brave New World"
+    scriptname "scripts/braveworld.con"
+    defname    "scripts/braveworld.def"
+    size       1665550
+    crc        0x5DB6A921
+    flags      16
+    dependency DUKE15_CRC
+}
+
+grpinfo
+{
+    name       "The Christmas Project"
+    scriptname "scripts/xmasproject.con"
+    defname    "scripts/xmasproject.def"
+    size       7188253
+    crc        0x42B9476A
+    flags      16
+    dependency DUKE15_CRC
+}
+
+grpinfo
+{
+    name       "The Chronic"
+    scriptname "scripts/chronic.con"
+    size       4938387
+    crc        0x08C53A4D
+    flags      16
+    dependency DUKE15_CRC
+}
+
+grpinfo
+{
+    name       "The Day After"
+    scriptname "scripts/dayafter.con"   // dayafter.con: Persistent inventory | reset.con: Inventory reset on map change
+    size       553793
+    crc        0x062A3602
+    flags      16
+    dependency DUKE15_CRC
+}
+
+grpinfo
+{
+    name       "The Final Confrontation"
+    scriptname "scripts/finalconfront.con"
+    defname    "scripts/finalconfront.def"
+    size       551222
+    crc        0x29CF319D
+    flags      16
+    dependency DUKE15_CRC
+}
+
+grpinfo
+{
+    name       "The Final Fight"
+    scriptname "scripts/finalfight.con"
+    size       147159
+    crc        0xA90DCD1D
+    flags      16
+    dependency DUKE15_CRC
+}
+
+grpinfo
+{
+    name       "The Gate"
+    scriptname "scripts/thegate.con"
+    defname    "scripts/thegate.def"
+    size       13622550
+    crc        0x3940BD05
+    flags      16
+    dependency DUKE15_CRC
+}
+
+grpinfo
+{
+    name       "The Lost Duke Episodes"
+    scriptname "scripts/lostduke.con"
+    size       404269
+    crc        0x81A824C7
+    flags      16
+    dependency DUKE15_CRC
+}
+
+grpinfo
+{
+    name       "The Prequel to Time"
+    scriptname "scripts/prequeltime.con"
+    size       260841
+    crc        0xFCCAC4DC
+    flags      16
+    dependency DUKE15_CRC
+}
+
+grpinfo
+{
+    name       "The Real Bad Ass"
+    scriptname "scripts/badass.con"
+    size       195740
+    crc        0x0BEDC8BD
+    flags      16
+    dependency DUKE15_CRC
+}
+
+grpinfo
+{
+    name       "Time"
+    scriptname "scripts/time.con"
+    defname    "scripts/time.def"
+    size       2351782
+    crc        0xE521612C
+    flags      16
+    dependency DUKE15_CRC
+}
+
+grpinfo
+{
+    name       "Total Apocalypse"
+    scriptname "scripts/apocalypse.con"
+    size       2053428
+    crc        0x4C52DB24
+    flags      16
+    dependency DUKE15_CRC
+}
+
+grpinfo
+{
+    name       "Total Duke"
+    scriptname "scripts/totalduke.con"
+    size       1570086
+    crc        0x183D24FB
+    flags      16
+    dependency DUKE15_CRC
+}
+
+grpinfo
+{
+    name       "Total Infiltration"
+    scriptname "scripts/infiltration.con"
+    size       2321049
+    crc        0x623E5574
+    flags      16
+    dependency DUKE15_CRC
+}
+
+grpinfo
+{
+    name       "Total Meltdown Remake"
+    scriptname "scripts/meltdown.con"
+    size       55585534
+    crc        0x5DD61FCE
+    flags      16
+    dependency DUKE15_CRC
+}
+
+grpinfo
+{
+    name       "Turok Nukem"
+    scriptname "scripts/turoknukem.con"   // turoknukem.con: Persistent inventory | reset.con: Inventory reset on map change
+    defname    "scripts/turoknukem.def"
+    size       31761553
+    crc        0xD1C36926
+    flags      16
+    dependency DUKE15_CRC
+}
+
+grpinfo
+{
+    name       "Urban Map Pack"
+    scriptname "scripts/urban.con"
+    size       36518649
+    crc        0x5984F4D3
+    flags      16
+    dependency DUKE15_CRC
+}
+
+grpinfo
+{
+    name       "V Series"
+    scriptname "scripts/v_series.con"   // v_series.con: Persistent inventory | reset.con: Inventory reset on map change
+    size       259050
+    crc        0xA7C1F33D
+    flags      16
+    dependency DUKE15_CRC
+}
+
+grpinfo
+{
+    name       "Vacation Cove"
+    scriptname "scripts/vacationcove.con"
+    size       4212004
+    crc        0x1D324A69
+    flags      16
+    dependency DUKE15_CRC
+}
+
+grpinfo
+{
+    name       "Vermin Clearance"
+    scriptname "scripts/verminclear.con"
+    size       2369002
+    crc        0x9537C14D
+    flags      16
+    dependency DUKE15_CRC
+}
+
+grpinfo
+{
+    name       "WG Mega Pack"
+    scriptname "scripts/wgmega.con"
+    defname    "scripts/wgmega.def"
+    size       49115935
+    crc        0xF68F71FF
+    flags      16
+    dependency DUKE15_CRC
+}
+
+grpinfo
+{
+    name       "WGRealms 2: Demon Throne"
+    scriptname "scripts/wgr2game.con"
+    size       228232471
+    crc        0x48D6F764
+    flags      1
+    dependency 0
+}
+
+grpinfo
+{
+    name       "WGRealms 2: Knee Deep"
+    scriptname "scripts/kneedeep.con"
+    size       47853167
+    crc        0xB2B49D8C
+    flags      16
+    dependency DUKE15_CRC
+}
+
+grpinfo
+{
+    name       "When Scum Returns"
+    scriptname "scripts/scum.con"
+    defname    "scripts/scum.def"
+    size       5122658
+    crc        0xD15B30E1
+    flags      16
+    dependency DUKE15_CRC
+}
+
+grpinfo
+{
+    name       "Wolf Pack"
+    scriptname "scripts/wolfpack.con"
+    size       862002
+    crc        0x5CF6653D
+    flags      16
+    dependency DUKE15_CRC
+}
+
+grpinfo
+{
+    name       "XarTech Invasion"
+    scriptname "scripts/xartech.con"
+    size       156786
+    crc        0xEA4286EC
+    flags      16
+    dependency DUKE15_CRC
+}
+
+grpinfo
+{
+    name       "XMas 1997"
+    scriptname "scripts/xmas97.con"
+    defname    "scripts/xmas97.def"
+    size       3929181
+    crc        0x279C1AAC
+    flags      16
+    dependency DUKE15_CRC
+}
+
+grpinfo
+{
+    name       "Zombie Crisis"
+    scriptname "scripts/zombiecrisis.con"
+    defname    "scripts/zombiecrisis.def"
+    size       2614772
+    crc        0xA86C47D5
+    flags      1
+    dependency 0
+}

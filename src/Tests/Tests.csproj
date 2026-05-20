@@ -3,7 +3,7 @@
   <PropertyGroup>
     <IsPackable>false</IsPackable>
     <IsTestProject>true</IsTestProject>
-    <AssemblyName>BuildLauncher.$(MSBuildProjectName)</AssemblyName>
+    <AssemblyName>$(MSBuildProjectName)</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
@@ -25,7 +25,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Addons\Addons.csproj" />
     <ProjectReference Include="..\Common.All\Common.All.csproj" />
+    <ProjectReference Include="..\Common.Client\Common.Client.csproj" />
+    <ProjectReference Include="..\Games\Games.csproj" />
     <ProjectReference Include="..\Ports\Ports.csproj" />
     <ProjectReference Include="..\Tools\Tools.csproj" />
   </ItemGroup>

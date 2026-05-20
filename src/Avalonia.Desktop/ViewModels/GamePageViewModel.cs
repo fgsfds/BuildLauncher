@@ -55,7 +55,7 @@ public sealed partial class GamePageViewModel : ObservableObject
 
     private void OnAddonsChanged(GameEnum gameEnum, AddonTypeEnum? addonType)
     {
-        if  (gameEnum != _gameEnum)
+        if (gameEnum != _gameEnum)
         {
             return;
         }

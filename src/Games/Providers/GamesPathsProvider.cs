@@ -1,6 +1,6 @@
-﻿using System.Runtime.InteropServices;
-using Common.All.Enums;
+﻿using Common.All.Enums;
 using Common.All.Enums.Versions;
+using Common.Client.Helpers;
 using Common.Client.Interfaces;
 using Microsoft.Win32;
 
@@ -41,7 +41,7 @@ public sealed class GamesPathsProvider
             }
         }
 
-        var libs = GetSteamLibraries();
+        var libs = SteamHelper.GetSteamLibraries();
 
         foreach (var lib in libs)
         {
@@ -229,93 +229,5 @@ public sealed class GamesPathsProvider
         _config.PathWitchaven ??= GetPath(GameEnum.Witchaven);
         _config.PathWitchaven2 ??= GetPath(GameEnum.Witchaven2);
         _config.PathTekWar ??= GetPath(GameEnum.TekWar);
-    }
-
-
-    /// <summary>
-    /// Get list of Steam libraries
-    /// </summary>
-    /// <returns>List of paths to Steam libraries</returns>
-    private List<string> GetSteamLibraries()
-    {
-        var steamInstallPath = GetSteamInstallPath();
-
-        if (steamInstallPath is null)
-        {
-            return [];
-        }
-
-        var libraryfolders = Path.Combine(steamInstallPath, "steamapps", "libraryfolders.vdf");
-
-        if (!File.Exists(libraryfolders))
-        {
-            return [];
-        }
-
-        List<string> result = [];
-
-        var lines = File.ReadAllLines(libraryfolders);
-
-        foreach (var line in lines)
-        {
-            if (!line.Contains("\"path\""))
-            {
-                continue;
-            }
-
-            var dirLine = line.Split('"');
-
-            var dir = dirLine[^2].Trim();
-
-            if (Directory.Exists(dir))
-            {
-                var path = Path.Combine(dir.Replace("\\\\", "\\"), "steamapps", "common");
-                result.Add(path);
-            }
-        }
-
-        return result;
-    }
-
-    /// <summary>
-    /// Get Steam install path
-    /// </summary>
-    /// <returns></returns>
-    private string? GetSteamInstallPath()
-    {
-        string? result;
-
-        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-        {
-            var path = (string?)Registry
-            .GetValue(@"HKEY_CURRENT_USER\SOFTWARE\Valve\Steam", "SteamPath", null);
-
-            if (path is null)
-            {
-                //Logger.Error("Can't find Steam install folder");
-                return null;
-            }
-
-            result = path.Replace('/', Path.DirectorySeparatorChar);
-        }
-        else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
-        {
-            var home = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
-
-            result = Path.Combine(home, ".local/share/Steam");
-        }
-        else
-        {
-            throw new PlatformNotSupportedException("Can't identify platform");
-        }
-
-        if (!Directory.Exists(result))
-        {
-            //Logger.Error($"Steam install folder {result} doesn't exist");
-            return null;
-        }
-
-        //Logger.Info($"Steam install folder is {result}");
-        return result;
     }
 }

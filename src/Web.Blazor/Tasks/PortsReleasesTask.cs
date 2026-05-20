@@ -1,15 +1,15 @@
 ﻿using Common.All.Enums;
-using Common.All.Interfaces;
+using Common.All.Providers;
 
 namespace Web.Blazor.Tasks;
 
 internal sealed class PortsReleasesTask : IHostedService, IDisposable
 {
-    private readonly IReleaseProvider<PortEnum> _portsReleasesProvider;
+    private readonly ReleaseProvider<PortEnum> _portsReleasesProvider;
 
     private Timer? _timer;
 
-    public PortsReleasesTask(IReleaseProvider<PortEnum> portsReleasesProvider)
+    public PortsReleasesTask(ReleaseProvider<PortEnum> portsReleasesProvider)
     {
         _portsReleasesProvider = portsReleasesProvider;
     }

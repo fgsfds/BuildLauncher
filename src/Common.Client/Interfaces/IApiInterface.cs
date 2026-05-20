@@ -14,7 +14,7 @@ public interface IApiInterface
     Task<GeneralReleaseJsonModel?> GetLatestPortReleaseAsync(PortEnum portEnum);
     Task<GeneralReleaseJsonModel?> GetLatestToolReleaseAsync(ToolEnum toolEnum);
     Task<Dictionary<string, decimal>?> GetRatingsAsync();
-    Task<Result<string?>> GetSignedUrlAsync(string path);
+    Task<Result<Uri?>> GetSignedUrlAsync(string path);
     Task<string?> GetUploadFolderAsync();
     Task<List<AddonJsonModel>?> GetMetadataAsync();
     Task<bool> IncreaseNumberOfInstallsAsync(string addonId);

@@ -147,7 +147,7 @@ public sealed partial class ServerApiInterface : IApiInterface
         }
     }
 
-    public async Task<Result<string?>> GetSignedUrlAsync(string path)
+    public async Task<Result<Uri?>> GetSignedUrlAsync(string path)
     {
         try
         {
@@ -156,7 +156,7 @@ public sealed partial class ServerApiInterface : IApiInterface
             using var httpClient = _httpClientFactory.CreateClient();
             var signedUrl = await httpClient.GetStringAsync($"{ApiUrl}/storage/url/{encodedPath}").ConfigureAwait(false);
 
-            return new(ResultEnum.Success, null, string.Empty);
+            return new(ResultEnum.Success, new(signedUrl), string.Empty);
         }
         catch (Exception ex)
         {

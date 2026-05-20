@@ -1,7 +1,4 @@
-﻿using System.Reflection;
-using Addons.Addons;
-using Addons.Providers;
-using Common.All;
+﻿using Addons.Providers;
 using Common.All.Enums;
 using Common.Client.Api;
 using Common.Client.Cache;
@@ -17,7 +14,6 @@ namespace Tests;
 public sealed class AddonFilesTests : IDisposable
 {
     private readonly InstalledAddonsProvider _installedAddonsProvider;
-    private readonly MethodInfo _getAddonsFromFilesAsync;
 
     public AddonFilesTests()
     {
@@ -43,7 +39,6 @@ public sealed class AddonFilesTests : IDisposable
             originalCampaignsProvider,
             metadataProvider
             );
-        _getAddonsFromFilesAsync = typeof(InstalledAddonsProvider).GetMethod("GetAddonsFromFilesAsync", BindingFlags.NonPublic | BindingFlags.Instance)!;
     }
 
     public void Dispose()
@@ -61,7 +56,7 @@ public sealed class AddonFilesTests : IDisposable
 
         var pathToFile = Path.Combine(Directory.GetCurrentDirectory(), "FilesTemp", "ZippedAddon.zip");
 
-        var result = await (Task<IReadOnlyDictionary<AddonId, BaseAddon>>)_getAddonsFromFilesAsync.Invoke(_installedAddonsProvider, [(object)new List<string>() { pathToFile }])!;
+        var result = await _installedAddonsProvider.GetAddonsFromFilesAsync([pathToFile]);
 
         Assert.Equal(2, result.Count);
 
@@ -88,7 +83,7 @@ public sealed class AddonFilesTests : IDisposable
 
         var pathToFile = Path.Combine(Directory.GetCurrentDirectory(), "FilesTemp", "UnpackedAddon.zip");
 
-        var result = await (Task<IReadOnlyDictionary<AddonId, BaseAddon>>)_getAddonsFromFilesAsync.Invoke(_installedAddonsProvider, [new List<string>() { pathToFile }])!;
+        var result = await _installedAddonsProvider.GetAddonsFromFilesAsync([pathToFile]);
 
         Assert.Equal(2, result.Count);
 
@@ -115,7 +110,7 @@ public sealed class AddonFilesTests : IDisposable
 
         var pathToFile = Path.Combine(Directory.GetCurrentDirectory(), "FilesTemp", "TEST.MAP");
 
-        var result = await (Task<IReadOnlyDictionary<AddonId, BaseAddon>>)_getAddonsFromFilesAsync.Invoke(_installedAddonsProvider, [(object)new List<string>() { pathToFile }])!;
+        var result = await _installedAddonsProvider.GetAddonsFromFilesAsync([pathToFile]);
 
         var map = Assert.Single(result);
 
@@ -134,7 +129,7 @@ public sealed class AddonFilesTests : IDisposable
 
         var pathToFile = Path.Combine(Directory.GetCurrentDirectory(), "FilesTemp", "GrpInfoAddon.zip");
 
-        var result = await (Task<IReadOnlyDictionary<AddonId, BaseAddon>>)_getAddonsFromFilesAsync.Invoke(_installedAddonsProvider, [(object)new List<string>() { pathToFile }])!;
+        var result = await _installedAddonsProvider.GetAddonsFromFilesAsync([pathToFile]);
 
         Assert.Empty(result);
 
@@ -151,7 +146,7 @@ public sealed class AddonFilesTests : IDisposable
 
         var pathToFile = Path.Combine(Directory.GetCurrentDirectory(), "FilesTemp", "WhatLiesBeneathAddon.zip");
 
-        var result = await (Task<IReadOnlyDictionary<AddonId, BaseAddon>>)_getAddonsFromFilesAsync.Invoke(_installedAddonsProvider, [(object)new List<string>() { pathToFile }])!;
+        var result = await _installedAddonsProvider.GetAddonsFromFilesAsync([pathToFile]);
 
         _ = Assert.Single(result);
 

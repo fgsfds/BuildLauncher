@@ -1,45 +1,34 @@
-﻿using System.Collections.Concurrent;
-using System.Text.Json;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 using Common.All.Enums;
-using Common.All.Helpers;
-using Common.All.Interfaces;
+using Common.All.Providers;
 using Common.All.Serializable.Downloadable;
 using Microsoft.Extensions.Logging;
 
 namespace Ports.Providers;
 
-public sealed partial class PortsReleasesProvider : IReleaseProvider<PortEnum>
+public sealed partial class PortsReleasesProvider : ReleaseProvider<PortEnum>
 {
-    private readonly ConcurrentDictionary<PortEnum, Dictionary<OSEnum, GeneralReleaseJsonModel>?> _releases = [];
-
-    private static readonly Lock _lock = new();
-    private readonly ILogger _logger;
-    private readonly IHttpClientFactory _httpClientFactory;
-
-    private volatile string? _nBloodCache;
+    private static readonly SemaphoreSlim _semaphore = new(1);
+    private static volatile List<GitHubReleaseJsonModel>? _cachedNBloodReleases;
 
     public PortsReleasesProvider(
         ILogger logger,
         IHttpClientFactory httpClientFactory
-        )
+        ) : base(logger, httpClientFactory)
     {
-        _logger = logger;
-        _httpClientFactory = httpClientFactory;
     }
 
     /// <summary>
     /// Get the latest release of the selected port
     /// </summary>
     /// <param name="portEnum">Port</param>
-    public async Task<Dictionary<OSEnum, GeneralReleaseJsonModel>?> GetLatestReleaseAsync(PortEnum portEnum)
+    public override async Task<Dictionary<OSEnum, GeneralReleaseJsonModel>?> GetLatestReleaseAsync(PortEnum portEnum)
     {
         try
         {
-            _logger.LogInformation($"Looking for new {portEnum} release.");
+            _logger.LogInformation($"Looking for new {portEnum} release.", portEnum);
 
             var repo = PortsRepositoriesProvider.GetPortRepo(portEnum);
-
             if (repo.RepoUrl is null)
             {
                 return null;
@@ -50,111 +39,44 @@ public sealed partial class PortsReleasesProvider : IReleaseProvider<PortEnum>
                 return existingRelease;
             }
 
-            string? data;
-
             if (portEnum is PortEnum.EDuke32)
             {
                 using var httpClient = _httpClientFactory.CreateClient();
-                data = await httpClient.GetStringAsync(repo.RepoUrl).ConfigureAwait(false);
-                var edukeRelease = EDuke32Hack(data);
+                using var dataStream = await httpClient.GetStreamAsync(repo.RepoUrl).ConfigureAwait(false);
+                var edukeRelease = EDuke32Hack(dataStream);
+
                 return edukeRelease is null ? null : new() { { OSEnum.Windows, edukeRelease } };
             }
 
-            if (portEnum is PortEnum.NBlood or PortEnum.PCExhumed or PortEnum.RedNukem
-                && _nBloodCache is not null)
-            {
-                using (_lock.EnterScope())
-                {
-                    data = _nBloodCache;
-                }
-            }
-            else
-            {
-                using var httpClient = _httpClientFactory.CreateClient(HttpClientEnum.GitHub.GetDescription());
-                using var response = await httpClient.GetAsync(repo.RepoUrl, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false);
-                _ = response.EnsureSuccessStatusCode();
-                data = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+            var isSharedNBloodCache = portEnum is PortEnum.NBlood or PortEnum.PCExhumed or PortEnum.RedNukem;
 
-                if (portEnum is PortEnum.NBlood or PortEnum.PCExhumed or PortEnum.RedNukem)
+            if (isSharedNBloodCache)
+            {
+                await _semaphore.WaitAsync().ConfigureAwait(false);
+
+                try
                 {
-                    using (_lock.EnterScope())
+                    if (_cachedNBloodReleases is null)
                     {
-                        _nBloodCache = data;
-                    }
-                }
-            }
-
-            var allReleases = JsonSerializer.Deserialize(data, GitHubReleaseEntityContext.Default.ListGitHubReleaseJsonModel)
-                ?? throw new FormatException("Error while deserializing GitHub releases");
-
-            var releases = allReleases
-                .Where(static x => !x.IsDraft && !x.IsPrerelease)
-                .ToList();
-
-            if (releases is null)
-            {
-                return null;
-            }
-
-            Dictionary<OSEnum, GeneralReleaseJsonModel>? result = null;
-
-            if (repo.WindowsReleasePredicate is not null)
-            {
-                foreach (var release in releases)
-                {
-                    var winAss = release.Assets.FirstOrDefault(x => repo.WindowsReleasePredicate(x));
-
-                    if (winAss is not null)
-                    {
-                        GeneralReleaseJsonModel portRelease = new()
+                        var fetchedReleases = await GetReleasesAsync(repo.RepoUrl).ConfigureAwait(false);
+                        if (fetchedReleases is null)
                         {
-                            SupportedOS = OSEnum.Windows,
-                            Description = release.Description,
-                            Version = GetVersion(portEnum, release, winAss),
-                            DownloadUrl = new(winAss.DownloadUrl),
-                            Hash = winAss.Digest
-                        };
+                            return null;
+                        }
 
-                        result ??= [];
-                        result.Add(OSEnum.Windows, portRelease);
-
-                        _logger.LogInformation($"Latest Windows release for {portEnum}: {portRelease.Version}.");
-
-                        break;
+                        _cachedNBloodReleases = fetchedReleases;
                     }
-                }
-            }
 
-            if (repo.LinuxReleasePredicate is not null)
-            {
-                foreach (var release in releases)
+                    return GetAndAddReleases(portEnum, repo, _cachedNBloodReleases);
+                }
+                finally
                 {
-                    var linAss = release.Assets.FirstOrDefault(x => repo.LinuxReleasePredicate(x));
-
-                    if (linAss is not null)
-                    {
-                        GeneralReleaseJsonModel portRelease = new()
-                        {
-                            SupportedOS = OSEnum.Linux,
-                            Description = release.Description,
-                            Version = GetVersion(portEnum, release, linAss),
-                            DownloadUrl = new(linAss.DownloadUrl),
-                            Hash = linAss.Digest
-                        };
-
-                        result ??= [];
-                        result.Add(OSEnum.Linux, portRelease);
-
-                        _logger.LogInformation($"Latest Linux release for {portEnum}: {portRelease.Version}.");
-
-                        break;
-                    }
+                    _semaphore.Release();
                 }
             }
 
-            _ = _releases.TryAdd(portEnum, result);
-
-            return result;
+            var releases = await GetReleasesAsync(repo.RepoUrl).ConfigureAwait(false);
+            return releases is null ? null : GetAndAddReleases(portEnum, repo, releases);
         }
         catch (Exception ex)
         {
@@ -166,7 +88,7 @@ public sealed partial class PortsReleasesProvider : IReleaseProvider<PortEnum>
     /// <summary>
     /// Get port version
     /// </summary>
-    private string GetVersion(PortEnum portEnum, GitHubReleaseJsonModel release, GitHubReleaseAsset asset)
+    protected override string GetVersion(PortEnum portEnum, GitHubReleaseJsonModel release, GitHubReleaseAsset asset)
     {
         if (portEnum is PortEnum.NotBlood)
         {
@@ -179,21 +101,46 @@ public sealed partial class PortsReleasesProvider : IReleaseProvider<PortEnum>
     /// <summary>
     /// Hack to get EDuke32 release since dukeworld doesn't have API
     /// </summary>
-    /// <param name="response">Json response</param>
-    private GeneralReleaseJsonModel? EDuke32Hack(string response)
+    /// <param name="responseStream">Json stream.</param>
+    private GeneralReleaseJsonModel? EDuke32Hack(Stream responseStream)
     {
-        var regex = EDuke32WindowsReleaseRegex();
-        var fileName = regex.Matches(response).FirstOrDefault();
+        var windowsRegex = EDuke32WindowsReleaseRegex();
+        string? matchedFileName = null;
 
-        if (fileName is null)
+        using (var reader = new StreamReader(responseStream))
+        {
+            string? line;
+            while ((line = reader.ReadLine()) != null)
+            {
+                if (!line.Contains("win64"))
+                {
+                    continue;
+                }
+
+                var match = windowsRegex.Match(line);
+                if (match.Success)
+                {
+                    matchedFileName = match.Value;
+                    break;
+                }
+            }
+        }
+
+        if (matchedFileName is null)
         {
             return null;
         }
 
-        var regexVersion = EDuke32VersionRegex();
-        var version = regexVersion.Matches(fileName.ToString()).FirstOrDefault();
+        if (matchedFileName.Contains('/'))
+        {
+            matchedFileName = matchedFileName.Substring(matchedFileName.LastIndexOf('/') + 1);
+        }
+        matchedFileName = matchedFileName.Trim('"').Trim('\'');
 
-        if (version is null)
+        var regexVersion = EDuke32VersionRegex();
+        var versionMatch = regexVersion.Match(matchedFileName);
+
+        if (!versionMatch.Success)
         {
             return null;
         }
@@ -202,8 +149,8 @@ public sealed partial class PortsReleasesProvider : IReleaseProvider<PortEnum>
         {
             SupportedOS = OSEnum.Windows,
             Description = string.Empty,
-            Version = "r" + version,
-            DownloadUrl = new($"https://dukeworld.com/eduke32/synthesis/latest/{fileName}"),
+            Version = "r" + versionMatch.Value,
+            DownloadUrl = new($"https://dukeworld.com/eduke32/synthesis/latest/{matchedFileName}"),
             Hash = null
         };
 

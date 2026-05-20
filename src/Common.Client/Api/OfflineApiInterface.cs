@@ -35,9 +35,12 @@ public sealed class OfflineApiInterface : IApiInterface
                     return null;
                 }
 
-                var addons = File.ReadAllText(ClientProperties.PathToLocalAddonsJson);
+                using var addonsJson = File.OpenRead(ClientProperties.PathToLocalAddonsJson);
 
-                _addonsJson = JsonSerializer.Deserialize(addons, DownloadableAddonJsonModelDictionaryContext.Default.DictionaryGameEnumListDownloadableAddonJsonModel);
+                _addonsJson = await JsonSerializer.DeserializeAsync(
+                    addonsJson,
+                    DownloadableAddonJsonModelDictionaryContext.Default.DictionaryGameEnumListDownloadableAddonJsonModel
+                    ).ConfigureAwait(false);
 
                 if (_addonsJson is null)
                 {
@@ -65,7 +68,7 @@ public sealed class OfflineApiInterface : IApiInterface
         }
         catch (Exception ex)
         {
-            _logger.LogCritical(ex, "=== Error while getting addons from GitHub ===");
+            _logger.LogCritical(ex, "=== Error while getting addonsJson from GitHub ===");
             return null;
         }
         finally
@@ -84,8 +87,11 @@ public sealed class OfflineApiInterface : IApiInterface
 
     public async Task<string?> GetUploadFolderAsync()
     {
-        var dataJson = await File.ReadAllTextAsync(ClientProperties.PathToLocalDataJson).ConfigureAwait(false);
-        var data = JsonSerializer.Deserialize(dataJson, DataJsonModelContext.Default.DictionaryStringString);
+        using var dataJson = File.OpenRead(ClientProperties.PathToLocalDataJson);
+        var data = await JsonSerializer.DeserializeAsync(
+            dataJson,
+            DataJsonModelContext.Default.DictionaryStringString
+            ).ConfigureAwait(false);
 
         _ = data!.TryGetValue(DataJson.UploadFolder, out var uploadFolder) ? uploadFolder : null;
 
@@ -94,13 +100,16 @@ public sealed class OfflineApiInterface : IApiInterface
 
     public async Task<List<AddonJsonModel>?> GetMetadataAsync()
     {
-        var dataJson = await File.ReadAllTextAsync(ClientProperties.PathToLocalManifestsJson).ConfigureAwait(false);
-        var data = JsonSerializer.Deserialize(dataJson, ManifestsJsonModelContext.Default.ListAddonJsonModel);
+        using var dataJson = File.OpenRead(ClientProperties.PathToLocalManifestsJson);
+        var data = await JsonSerializer.DeserializeAsync(
+            dataJson,
+            ManifestsJsonModelContext.Default.ListAddonJsonModel
+            ).ConfigureAwait(false);
 
         return data;
     }
 
-    public async Task<Result<string?>> GetSignedUrlAsync(string path)
+    public async Task<Result<Uri?>> GetSignedUrlAsync(string path)
     {
         var uploadFolder = await GetUploadFolderAsync().ConfigureAwait(false);
 
@@ -111,7 +120,7 @@ public sealed class OfflineApiInterface : IApiInterface
 
         var url = Path.Combine(uploadFolder, path);
 
-        return new(ResultEnum.Success, url, string.Empty);
+        return new(ResultEnum.Success, new(url), string.Empty);
     }
 
 

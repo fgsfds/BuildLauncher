@@ -1,4 +1,5 @@
-﻿using Addons.Addons;
+﻿using System.Diagnostics.CodeAnalysis;
+using Addons.Addons;
 using Common.All;
 using Common.All.Enums;
 using Common.All.Enums.Versions;
@@ -8,13 +9,13 @@ namespace Addons.Providers;
 public static class GrpInfoProvider
 {
     /// <summary>
-    /// Get list of addons from grpinfo file
+    /// Get list of addons from grpinfo files located in the folder and its subfolders.
     /// </summary>
-    public static List<BaseAddon>? GetAddonsFromGrpInfo(string campaignsFolder)
+    public static List<BaseAddon>? GetAddonsFromGrpInfo(string pathToFolder)
     {
         List<BaseAddon> newAddons = [];
 
-        var grpInfos = Directory.GetFiles(campaignsFolder, "*.grpinfo", SearchOption.AllDirectories);
+        var grpInfos = Directory.GetFiles(pathToFolder, "*.grpinfo", SearchOption.AllDirectories);
 
         if (grpInfos.Length == 0)
         {
@@ -23,175 +24,176 @@ public static class GrpInfoProvider
 
         foreach (var grpInfo in grpInfos)
         {
-            var grpInfoFolder = Path.GetDirectoryName(grpInfo) ?? throw new InvalidOperationException();
-
-            var grps = Directory.GetFiles(grpInfoFolder, "*.grp", SearchOption.TopDirectoryOnly);
-
-            if (grps.Length == 0)
+            if (TryGetAddonsFromGrpInfo(grpInfo, out var foundAddons))
             {
-                continue;
-            }
-
-            var fileContent = File.ReadAllLines(grpInfo);
-            var addons = Parse(fileContent, grps.Length);
-
-            foreach (var grp in grps)
-            {
-                var fileSize = new FileInfo(grp).Length;
-
-                var addon = addons.FirstOrDefault(x => x.Size == fileSize);
-
-                if (addon.Equals(default(GrpInfo)) || addon.Name is null)
-                {
-                    continue;
-                }
-
-                AddonId version = new(addon.Name.ToLower().Replace(" ", "_"), null);
-
-                DukeCampaign camp = new()
-                {
-                    AddonId = version,
-                    Type = AddonTypeEnum.TC,
-                    SupportedGame = new(GameEnum.Duke3D, addon.DukeVersion),
-                    Title = addon.Name,
-                    GridImageHash = null,
-                    PreviewImageHash = null,
-                    Description = null,
-                    Author = null,
-                    ReleaseDate = null,
-                    PathToFile = grp,
-                    DependentAddons = null,
-                    IncompatibleAddons = null,
-                    StartMap = null,
-                    MainCon = addon.MainCon,
-                    AdditionalCons = null,
-                    MainDef = null,
-                    AdditionalDefs = addon.AddDef is null ? null : [addon.AddDef],
-                    RTS = null,
-                    RequiredFeatures = [FeatureEnum.EDuke32_CON],
-                    IsUnpacked = false,
-                    Executables = null,
-                    IsFavorite = false,
-                    Options = null
-                };
-
-                newAddons.Add(camp);
+                newAddons.AddRange(foundAddons);
             }
         }
 
         return newAddons;
     }
 
-    /// <summary>
-    /// Parse grpinfo file
-    /// </summary>
-    /// <param name="fileContent">Content of the grpinfo file</param>
-    /// <param name="grpsCount">Number of found grps</param>
-    private static List<GrpInfo> Parse(string[] fileContent, int grpsCount)
+    private static bool TryGetAddonsFromGrpInfo(string pathToGrpInfo, [NotNullWhen(true)] out List<BaseAddon>? newAddons)
     {
-        List<GrpInfo> addons = new(grpsCount);
+        var grpInfoFolder = Path.GetDirectoryName(pathToGrpInfo) ?? throw new InvalidOperationException();
 
-        for (var i = 0; i < fileContent.Length; i++)
+        var grps = Directory.GetFiles(grpInfoFolder, "*.grp", SearchOption.TopDirectoryOnly);
+
+        if (grps.Length == 0)
         {
-            if (!fileContent[i].Trim().StartsWith("grpinfo"))
+            newAddons = null;
+            return false;
+        }
+
+        var grpInfos = Parse(pathToGrpInfo, grps.Length);
+        newAddons = new(grps.Length);
+
+        foreach (var grp in grps)
+        {
+            var fileSize = new FileInfo(grp).Length;
+
+            var grpInfo = grpInfos.FirstOrDefault(x => x.Size == fileSize);
+
+            if (grpInfo.Equals(default(GrpInfoEntry)) || grpInfo.Name is null)
             {
                 continue;
             }
 
-            i++;
-            var started = true;
+            AddonId version = new(grpInfo.Name.ToLower().Replace(" ", "_"), null);
 
-            string name = null!;
-            string mainCon = null!;
-            string def = null!;
-            var size = 0;
-            DukeVersionEnum? dukeVersion = null;
-
-            while (started)
+            DukeCampaign camp = new()
             {
-                try
-                {
-                    var str = fileContent[i];
+                AddonId = version,
+                Type = AddonTypeEnum.TC,
+                SupportedGame = new(GameEnum.Duke3D),
+                Title = grpInfo.Name,
+                GridImageHash = null,
+                PreviewImageHash = null,
+                Description = null,
+                Author = null,
+                ReleaseDate = null,
+                PathToFile = grp,
+                DependentAddons = null,
+                IncompatibleAddons = null,
+                StartMap = null,
+                MainCon = grpInfo.MainCon,
+                AdditionalCons = null,
+                MainDef = null,
+                AdditionalDefs = grpInfo.AddDef is null ? null : [grpInfo.AddDef],
+                RTS = null,
+                RequiredFeatures = [FeatureEnum.EDuke32_CON],
+                IsUnpacked = false,
+                Executables = null,
+                IsFavorite = false,
+                Options = null
+            };
 
-                    if (str.Trim().StartsWith('}'))
-                    {
-                        started = false;
-                        continue;
-                    }
-                    else if (str.Trim().StartsWith("name"))
-                    {
-                        var pFrom = str.IndexOf('"') + 1;
-                        var pTo = str.LastIndexOf('"');
+            newAddons.Add(camp);
+        }
 
-                        name = str[pFrom..pTo];
-                    }
-                    else if (str.Trim().StartsWith("scriptname"))
-                    {
-                        var pFrom = str.IndexOf('"') + 1;
-                        var pTo = str.LastIndexOf('"');
+        return true;
+    }
 
-                        mainCon = str[pFrom..pTo];
-                    }
-                    else if (str.Trim().StartsWith("defname"))
-                    {
-                        var pFrom = str.IndexOf('"') + 1;
-                        var pTo = str.LastIndexOf('"');
+    /// <summary>
+    /// Parse grpinfo file
+    /// </summary>
+    /// <param name="pathToFile">Path to the grpinfo file</param>
+    /// <param name="expectedGrpsCount">Number of expected grps</param>
+    internal static List<GrpInfoEntry> Parse(string pathToFile, int expectedGrpsCount = 10)
+    {
+        var lines = File.ReadLines(pathToFile);
 
-                        def = str[pFrom..pTo];
-                    }
-                    else if (str.Trim().StartsWith("size"))
-                    {
-                        var result = str.Replace("size", "");
+        List<GrpInfoEntry> addons = new(expectedGrpsCount);
 
-                        size = int.Parse(result);
-                    }
-                    else if (str.Trim().StartsWith("dependency"))
-                    {
-                        var result = str.Replace("dependency", "").Trim();
+        string? name = null;
+        string? mainCon = null;
+        string? def = null;
+        var size = 0;
 
-                        if (result.Equals("DUKE15_CRC"))
-                        {
-                            dukeVersion = DukeVersionEnum.Duke3D_Atomic;
-                        }
-                        else
-                        {
-                            dukeVersion = null;
-                        }
-                    }
+        var isInsideGrpinfoBlock = false;
 
-                    i++;
-                }
-                catch
-                {
-                    continue;
-                }
+        foreach (var line in lines)
+        {
+            var trimmed = line.AsSpan().Trim();
+
+            if (trimmed.IsEmpty)
+            {
+                continue;
             }
 
-            if (name is not null)
+            if (trimmed.StartsWith('{'))
             {
-                GrpInfo addon = new()
-                {
-                    Name = name,
-                    MainCon = mainCon,
-                    AddDef = def,
-                    Size = size,
-                    DukeVersion = dukeVersion
-                };
+                name = null;
+                mainCon = null;
+                def = null;
+                size = 0;
 
-                addons.Add(addon);
+                isInsideGrpinfoBlock = true;
+                continue;
+            }
+
+            if (!isInsideGrpinfoBlock)
+            {
+                continue;
+            }
+
+            if (trimmed.StartsWith("name"))
+            {
+                name = ExtractQuotedValue(trimmed);
+            }
+            else if (trimmed.StartsWith("scriptname"))
+            {
+                mainCon = ExtractQuotedValue(trimmed);
+            }
+            else if (trimmed.StartsWith("defname"))
+            {
+                def = ExtractQuotedValue(trimmed);
+            }
+            else if (trimmed.StartsWith("size"))
+            {
+                var sizePart = trimmed["size".Length..].Trim();
+                size = int.Parse(sizePart);
+            }
+            else if (trimmed.StartsWith('}'))
+            {
+                if (!string.IsNullOrWhiteSpace(name) && size > 0)
+                {
+                    GrpInfoEntry addon = new()
+                    {
+                        Name = name,
+                        MainCon = mainCon,
+                        AddDef = def,
+                        Size = size,
+                    };
+
+                    addons.Add(addon);
+                }
+
+                isInsideGrpinfoBlock = false;
             }
         }
 
         return addons;
     }
+
+    private static string ExtractQuotedValue(ReadOnlySpan<char> span)
+    {
+        var pFrom = span.IndexOf('"') + 1;
+        var pTo = span.LastIndexOf('"');
+
+        if (pFrom > 0 && pTo > pFrom)
+        {
+            return span[pFrom..pTo].ToString();
+        }
+
+        return null!;
+    }
 }
 
-public readonly struct GrpInfo
+public readonly struct GrpInfoEntry
 {
     public readonly string Name { get; init; }
-    public readonly string MainCon { get; init; }
+    public readonly string? MainCon { get; init; }
     public readonly string? AddDef { get; init; }
     public readonly int Size { get; init; }
-    //public readonly int Crc { get; init; }
-    public readonly DukeVersionEnum? DukeVersion { get; init; }
 }
