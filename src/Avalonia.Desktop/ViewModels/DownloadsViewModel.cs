@@ -27,7 +27,7 @@ public sealed partial class DownloadsViewModel : ObservableObject
 
     #region Binding Properties
 
-    public bool HasUpdates => DownloadableList.Any(x => x.HasNewerVersion);
+    public bool HasUpdates => DownloadableList.Any(x => x.IsUpdateAvailable);
 
     /// <summary>
     /// List of downloadable addons
@@ -62,6 +62,11 @@ public sealed partial class DownloadsViewModel : ObservableObject
             else
             {
                 throw new ArgumentOutOfRangeException(nameof(FilterSelectedItem));
+            }
+
+            if (IsHideInstalledChecked)
+            {
+                result = result.Where(x => !x.IsInstalled || x.IsUpdateAvailable);
             }
 
             if (!string.IsNullOrWhiteSpace(SearchBoxText))
@@ -127,6 +132,13 @@ public sealed partial class DownloadsViewModel : ObservableObject
     [NotifyPropertyChangedFor(nameof(DownloadableList))]
     [NotifyCanExecuteChangedFor(nameof(ClearSearchBoxCommand))]
     private string _searchBoxText = string.Empty;
+
+    /// <summary>
+    /// State of the Hide installed checkbox.
+    /// </summary>
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(DownloadableList))]
+    private bool _isHideInstalledChecked = false;
 
     #endregion
 

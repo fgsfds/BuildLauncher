@@ -153,11 +153,11 @@ public sealed class DownloadableAddonsProvider
             {
                 foreach (var existingVersion in existingAddons.Select(static x => x.Version).Where(static x => x is not null))
                 {
-                    downloadableAddon.Value.HasNewerVersion = true;
+                    downloadableAddon.Value.IsUpdateAvailable = true;
 
                     if (VersionComparer.Compare(downloadableAddon.Value.Version, existingVersion, "<="))
                     {
-                        downloadableAddon.Value.HasNewerVersion = false;
+                        downloadableAddon.Value.IsUpdateAvailable = false;
                         break;
                     }
                 }

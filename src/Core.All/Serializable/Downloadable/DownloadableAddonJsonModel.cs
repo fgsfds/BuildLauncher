@@ -63,7 +63,7 @@ public sealed class DownloadableAddonJsonModel
     public bool IsInstalled { get; set; }
 
     [JsonIgnore]
-    public bool HasNewerVersion { get; set; }
+    public bool IsUpdateAvailable { get; set; }
 
     [JsonIgnore]
     public string RatingStr
@@ -89,7 +89,7 @@ public sealed class DownloadableAddonJsonModel
     {
         get
         {
-            if (HasNewerVersion)
+            if (IsUpdateAvailable)
             {
                 return "Update available";
             }
