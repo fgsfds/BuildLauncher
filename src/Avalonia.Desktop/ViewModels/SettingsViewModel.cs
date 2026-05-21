@@ -2,14 +2,14 @@ using System.Diagnostics;
 using Avalonia.Desktop.Helpers;
 using Avalonia.Platform.Storage;
 using Avalonia.Styling;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using Core.All.Enums;
 using Core.All.Enums.Versions;
 using Core.All.Helpers;
 using Core.Client.Enums;
 using Core.Client.Helpers;
 using Core.Client.Interfaces;
-using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
 using Games.Providers;
 
 namespace Avalonia.Desktop.ViewModels;
@@ -450,7 +450,7 @@ public sealed partial class SettingsViewModel : ObservableObject
     /// Open file picker
     /// </summary>
     [RelayCommand]
-    private async Task OpenFilePickerAsync()
+    private async Task OpenFilePickerAsync(string param)
     {
         FilePickerFileType z64 = new("N64 ROM")
         {
@@ -460,7 +460,7 @@ public sealed partial class SettingsViewModel : ObservableObject
         var files = await AvaloniaProperties.TopLevel.StorageProvider.OpenFilePickerAsync(
             new FilePickerOpenOptions
             {
-                Title = "Choose game folder",
+                Title = "Choose game ROM",
                 AllowMultiple = false,
                 FileTypeFilter = [z64]
             }).ConfigureAwait(true);
@@ -470,9 +470,16 @@ public sealed partial class SettingsViewModel : ObservableObject
             return;
         }
 
-        PathToDuke64 = files[0].Path.LocalPath;
-
-        OnPropertyChanged(nameof(PathToDuke64));
+        if (param.Equals(nameof(GameEnum.Duke64)))
+        {
+            PathToDuke64 = files[0].Path.LocalPath;
+            OnPropertyChanged(nameof(PathToDuke64));
+        }
+        else if (param.Equals(nameof(GameEnum.DukeZeroHour)))
+        {
+            PathToDukeZH = files[0].Path.LocalPath;
+            OnPropertyChanged(nameof(PathToDukeZH));
+        }
     }
 
 
