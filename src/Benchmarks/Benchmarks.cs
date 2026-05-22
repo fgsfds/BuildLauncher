@@ -5,7 +5,7 @@ using Core.Client.Helpers;
 namespace Benchmarks;
 
 [MemoryDiagnoser]
-public sealed class Benchmarks
+public class Benchmarks
 {
     private static string _pathToAddonsGrpinfo;
     private static string _pathToLibraryFolders;
