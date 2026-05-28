@@ -8,6 +8,7 @@
         x:DataType="vm:MainWindowViewModel"
         mc:Ignorable="d" d:DesignWidth="1300" d:DesignHeight="600"
         xmlns:pages="clr-namespace:Avalonia.Desktop.Pages"
+        xmlns:conv="clr-namespace:Avalonia.Controls.Converters;assembly=Avalonia.Controls"
         Icon="/Assets/icon.ico"
         Title="BuildLauncher"
         WindowStartupLocation="CenterScreen"
@@ -32,6 +33,7 @@
 
     <Window.Resources>
         <ResourceDictionary>
+            <conv:EnumToBoolConverter x:Key="EnumToBoolConverter" />
             <ResourceDictionary.MergedDictionaries>
                 <ResourceInclude Source='/Styles/ThemedResources.axaml'/>
             </ResourceDictionary.MergedDictionaries>
@@ -293,7 +295,7 @@
                     <TabItem.Header>
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="About"/>
-                            <i:Icon Foreground="Crimson" ToolTip.Tip="App update available" DataContext="{Binding AboutPageViewModel}" IsVisible="{Binding IsUpdateAvailable}" Margin="5,0,0,0" Value="fa7-circle-exclamation" />
+                            <i:Icon Foreground="Crimson" ToolTip.Tip="App update available" DataContext="{Binding AboutPageViewModel}" IsVisible="{Binding CurrentUpdateState, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static vm:UpdateState.UpdateAvailable}}" Margin="5,0,0,0" Value="fa7-circle-exclamation" />
                         </StackPanel>
                     </TabItem.Header>
 

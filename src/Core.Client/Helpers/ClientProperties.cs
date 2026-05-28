@@ -49,7 +49,7 @@ public static class ClientProperties
     /// <summary>
     /// Current app version
     /// </summary>
-    public static Version CurrentVersion => Assembly.GetEntryAssembly()?.GetName().Version ?? throw new ArgumentNullException();
+    public static Version CurrentVersion => new(1, 0, 0, 0);
     /// <summary>
     /// Name of the executable file
     /// </summary>

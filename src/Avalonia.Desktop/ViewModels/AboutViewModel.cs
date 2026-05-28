@@ -5,6 +5,17 @@ using CommunityToolkit.Mvvm.Input;
 
 namespace Avalonia.Desktop.ViewModels;
 
+/// <summary>
+/// Represents the state of the update process.
+/// </summary>
+public enum UpdateState
+{
+    InProgress,
+    UpdateFailed,
+    UpToDate,
+    UpdateAvailable
+}
+
 public sealed partial class AboutViewModel : ObservableObject
 {
     private readonly AppUpdateInstaller _updateInstaller;
@@ -17,15 +28,8 @@ public sealed partial class AboutViewModel : ObservableObject
     public Version CurrentVersion => ClientProperties.CurrentVersion;
 
     [ObservableProperty]
-    private string _checkForUpdatesButtonText = string.Empty;
-
-    [ObservableProperty]
-    private bool _isUpdateAvailable;
-
-    [ObservableProperty]
-    [NotifyCanExecuteChangedFor(nameof(CheckForUpdatesCommand))]
-    [NotifyCanExecuteChangedFor(nameof(DownloadAndInstallCommand))]
-    private bool _isInProgress;
+    [NotifyCanExecuteChangedFor(nameof(CheckOrInstallUpdateCommand))]
+    public partial UpdateState CurrentUpdateState { get; set; }
 
     #endregion Binding Properties
 
@@ -40,25 +44,23 @@ public sealed partial class AboutViewModel : ObservableObject
     #region Relay Commands
 
     /// <summary>
-    /// Check for SSH updates
+    /// Check for BuildLauncher updates
     /// </summary>
-    [RelayCommand(CanExecute = nameof(CheckForUpdatesCanExecute))]
-    private Task CheckForUpdatesAsync() => CheckForUpdateAsync();
-    private bool CheckForUpdatesCanExecute() => !IsInProgress;
-
-    /// <summary>
-    /// Download and install SSH update
-    /// </summary>
-    [RelayCommand(CanExecute = nameof(DownloadAndInstallCanExecute))]
-    private async Task DownloadAndInstallAsync()
+    [RelayCommand(CanExecute = nameof(CheckOrInstallUpdateCanExecute))]
+    private async Task CheckOrInstallUpdateAsync()
     {
-        IsInProgress = true;
-
-        await _updateInstaller.DownloadAndUnpackLatestRelease().ConfigureAwait(false);
-
-        AppUpdateInstaller.InstallUpdate();
+        if (CurrentUpdateState is UpdateState.UpdateAvailable)
+        {
+            CurrentUpdateState = UpdateState.InProgress;
+            await _updateInstaller.DownloadAndUnpackLatestRelease().ConfigureAwait(true);
+            AppUpdateInstaller.InstallUpdate();
+        }
+        else
+        {
+            await CheckForUpdateAsync().ConfigureAwait(true);
+        }
     }
-    private bool DownloadAndInstallCanExecute() => IsUpdateAvailable;
+    private bool CheckOrInstallUpdateCanExecute() => CurrentUpdateState is not UpdateState.InProgress;
 
     #endregion Relay Commands
 
@@ -68,35 +70,27 @@ public sealed partial class AboutViewModel : ObservableObject
     /// </summary>
     private async Task CheckForUpdateAsync()
     {
-        IsInProgress = true;
-
-        bool? updates;
-
         try
         {
-            CheckForUpdatesButtonText = "Checking...";
-            updates = await _updateInstaller.CheckForUpdates(CurrentVersion).ConfigureAwait(true);
+            CurrentUpdateState = UpdateState.InProgress;
+            var updates = await _updateInstaller.CheckForUpdates(CurrentVersion).ConfigureAwait(true);
+
+            if (updates is null)
+            {
+                CurrentUpdateState = UpdateState.UpdateFailed;
+            }
+            else if (updates.Value)
+            {
+                CurrentUpdateState = UpdateState.UpdateAvailable;
+            }
+            else
+            {
+                CurrentUpdateState = UpdateState.UpToDate;
+            }
         }
         catch
         {
-            CheckForUpdatesButtonText = "Error while getting updates";
-            IsInProgress = false;
-            return;
+            CurrentUpdateState = UpdateState.UpdateFailed;
         }
-
-        if (updates is null)
-        {
-            CheckForUpdatesButtonText = "Error while getting updates";
-        }
-        else if (updates.Value)
-        {
-            IsUpdateAvailable = true;
-        }
-        else
-        {
-            CheckForUpdatesButtonText = "Already up-to-date";
-        }
-
-        IsInProgress = false;
     }
 }

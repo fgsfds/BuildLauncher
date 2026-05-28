@@ -1,111 +1,190 @@
-<UserControl xmlns="https://github.com/avaloniaui"
+<UserControl x:Class="Avalonia.Desktop.Pages.AboutPage"
+             xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:conv="clr-namespace:Avalonia.Controls.Converters;assembly=Avalonia.Controls"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:i="https://github.com/projektanker/icons.avalonia"
-             mc:Ignorable="d"
-             d:DesignWidth="800"
-             d:DesignHeight="450"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="clr-namespace:Avalonia.Desktop.ViewModels"
+             d:DesignHeight="450"
+             d:DesignWidth="800"
              x:DataType="vm:AboutViewModel"
-             x:Class="Avalonia.Desktop.Pages.AboutPage">
+             mc:Ignorable="d">
+
+    <UserControl.Resources>
+        <conv:EnumToBoolConverter x:Key="EnumToBoolConverter" />
+    </UserControl.Resources>
 
     <Grid ColumnDefinitions="*">
 
-        <StackPanel Orientation="Vertical"
+        <StackPanel Grid.Row="0"
                     HorizontalAlignment="Stretch"
-                    Grid.Row="0">
+                    Orientation="Vertical">
 
-            <!--Version-->
-            <Border Padding="10"
-                    Margin="10"
-                    CornerRadius="3"
+            <!--  Version  -->
+            <Border Margin="10"
+                    Padding="10"
                     HorizontalAlignment="Stretch"
-                    Background="{DynamicResource ButtonBackground}">
+                    Background="{DynamicResource ButtonBackground}"
+                    CornerRadius="3">
 
                 <Grid ColumnDefinitions="auto,*, auto, auto">
                     <StackPanel Grid.Column="0" Orientation="Horizontal">
-                        <Image Source="/Assets/logo.png" Width="48" RenderOptions.BitmapInterpolationMode="None" />
-                        <StackPanel Orientation="Vertical" VerticalAlignment="Center">
-                            <TextBlock VerticalAlignment="Center" Margin="10,0" FontSize="18">BuildLauncher</TextBlock>
-                            <TextBlock VerticalAlignment="Center" Margin="10,0" FontSize="14" Text="{Binding CurrentVersion}"/>
+                        <Image Width="48"
+                               RenderOptions.BitmapInterpolationMode="None"
+                               Source="/Assets/logo.png" />
+                        <StackPanel VerticalAlignment="Center" Orientation="Vertical">
+                            <TextBlock Margin="10,0"
+                                       VerticalAlignment="Center"
+                                       FontSize="18">
+                                BuildLauncher
+                            </TextBlock>
+                            <TextBlock Margin="10,0"
+                                       VerticalAlignment="Center"
+                                       FontSize="14"
+                                       Text="{Binding CurrentVersion}" />
                         </StackPanel>
                     </StackPanel>
-                    <ProgressBar Grid.Column="1" IsIndeterminate="True" IsVisible="{Binding IsInProgress}" Margin="30,0"/>
-                    <Button Content="{Binding CheckForUpdatesButtonText, FallbackValue=Check for updates}" Padding="10" Margin="10,0" IsVisible="{Binding !IsUpdateAvailable}" Grid.Column="2" HorizontalAlignment="Right" Command="{Binding CheckForUpdatesCommand}"/>
-                    <Button Padding="10" Margin="10,0" IsVisible="{Binding IsUpdateAvailable}" Grid.Column="2" HorizontalAlignment="Right" Command="{Binding DownloadAndInstallCommand}" Background="{DynamicResource SystemAccentColor}">Download and install</Button>
-                    <Button Padding="10" Margin="0,0,10,0" IsVisible="{Binding IsUpdateAvailable}" Grid.Column="3" HorizontalAlignment="Right" Click="ShowChangelogClick">Changelog...</Button>
+
+                    <ProgressBar Grid.Column="1"
+                                 Margin="30,0"
+                                 IsIndeterminate="True"
+                                 IsVisible="{Binding CurrentUpdateState, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static vm:UpdateState.InProgress}}" />
+
+                    <Button Grid.Column="2"
+                            Margin="10,0"
+                            Padding="10"
+                            HorizontalAlignment="Right"
+                            Classes.IsInProgress="{Binding CurrentUpdateState, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static vm:UpdateState.InProgress}}"
+                            Classes.IsUpToDate="{Binding CurrentUpdateState, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static vm:UpdateState.UpToDate}}"
+                            Classes.IsUpdateAvailable="{Binding CurrentUpdateState, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static vm:UpdateState.UpdateAvailable}}"
+                            Classes.IsUpdateFailed="{Binding CurrentUpdateState, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static vm:UpdateState.UpdateFailed}}"
+                            Command="{Binding CheckOrInstallUpdateCommand}">
+
+                        <Button.Styles>
+                            <Style Selector="Button.IsInProgress">
+                                <Setter Property="Content" Value="Checking..." />
+                            </Style>
+                            <Style Selector="Button.IsUpdateFailed">
+                                <Setter Property="Content" Value="Error while getting updates" />
+                            </Style>
+                            <Style Selector="Button.IsUpToDate">
+                                <Setter Property="Content" Value="Already up-to-date" />
+                            </Style>
+                            <Style Selector="Button.IsUpdateAvailable">
+                                <Setter Property="Content" Value="Download and install" />
+                            </Style>
+                        </Button.Styles>
+
+                    </Button>
+                    <Button Grid.Column="3"
+                            Margin="0,0,10,0"
+                            Padding="10"
+                            HorizontalAlignment="Right"
+                            Click="ShowChangelogClick"
+                            IsVisible="{Binding CurrentUpdateState, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static vm:UpdateState.UpdateAvailable}}">
+                        Changelog...
+                    </Button>
                 </Grid>
             </Border>
 
-            <!--Patreon-->
-            <Button Padding="10"
-                    Margin="10"
+            <!--  Patreon  -->
+            <Button Margin="10"
+                    Padding="10"
                     HorizontalAlignment="Stretch"
                     Click="PatreonClick">
                 <StackPanel Orientation="Horizontal">
 
-                    <i:Icon Value="fa7-patreon" FontSize="48" />
+                    <i:Icon FontSize="48" Value="fa7-patreon" />
 
-                    <StackPanel Orientation="Vertical" VerticalAlignment="Center">
-                        <TextBlock VerticalAlignment="Center" Margin="10,0" FontSize="18">Patreon</TextBlock>
-                        <TextBlock VerticalAlignment="Center" Margin="10,0" FontSize="14">Support me on Patreon</TextBlock>
+                    <StackPanel VerticalAlignment="Center" Orientation="Vertical">
+                        <TextBlock Margin="10,0"
+                                   VerticalAlignment="Center"
+                                   FontSize="18">
+                            Patreon
+                        </TextBlock>
+                        <TextBlock Margin="10,0"
+                                   VerticalAlignment="Center"
+                                   FontSize="14">
+                            Support me on Patreon
+                        </TextBlock>
                     </StackPanel>
                 </StackPanel>
             </Button>
 
-            <!--Discord-->
-            <Button Padding="10"
-                    Margin="10"
+            <!--  Discord  -->
+            <Button Margin="10"
+                    Padding="10"
                     HorizontalAlignment="Stretch"
                     Click="DiscordClick">
                 <StackPanel Orientation="Horizontal">
 
-                    <i:Icon Value="fa7-discord" FontSize="48" />
+                    <i:Icon FontSize="48" Value="fa7-discord" />
 
-                    <StackPanel Orientation="Vertical" VerticalAlignment="Center">
-                        <TextBlock VerticalAlignment="Center" Margin="10,0" FontSize="18">Discord server</TextBlock>
-                        <TextBlock VerticalAlignment="Center" Margin="10,0" FontSize="14">Join discussion on Discord</TextBlock>
+                    <StackPanel VerticalAlignment="Center" Orientation="Vertical">
+                        <TextBlock Margin="10,0"
+                                   VerticalAlignment="Center"
+                                   FontSize="18">
+                            Discord server
+                        </TextBlock>
+                        <TextBlock Margin="10,0"
+                                   VerticalAlignment="Center"
+                                   FontSize="14">
+                            Join discussion on Discord
+                        </TextBlock>
                     </StackPanel>
                 </StackPanel>
             </Button>
 
-            <!--Github-->
-            <Button Padding="10"
-                    Margin="10"
+            <!--  Github  -->
+            <Button Margin="10"
+                    Padding="10"
                     HorizontalAlignment="Stretch"
                     Click="GitHubClick">
                 <StackPanel Orientation="Horizontal">
 
-                    <i:Icon Value="fa7-github" FontSize="48" />
+                    <i:Icon FontSize="48" Value="fa7-github" />
 
-                    <StackPanel Orientation="Vertical" VerticalAlignment="Center">
-                        <TextBlock VerticalAlignment="Center" Margin="10,0" FontSize="18">GitHub repository</TextBlock>
-                        <TextBlock VerticalAlignment="Center" Margin="10,0" FontSize="14">BuildLauncher is free and open source</TextBlock>
+                    <StackPanel VerticalAlignment="Center" Orientation="Vertical">
+                        <TextBlock Margin="10,0"
+                                   VerticalAlignment="Center"
+                                   FontSize="18">
+                            GitHub repository
+                        </TextBlock>
+                        <TextBlock Margin="10,0"
+                                   VerticalAlignment="Center"
+                                   FontSize="14">
+                            BuildLauncher is free and open source
+                        </TextBlock>
                     </StackPanel>
                 </StackPanel>
             </Button>
 
-            <!--Issues-->
-            <Button Padding="10"
-                    Margin="10"
+            <!--  Issues  -->
+            <Button Margin="10"
+                    Padding="10"
                     HorizontalAlignment="Stretch"
                     Click="GitHubIssuesClick">
 
                 <StackPanel Orientation="Horizontal">
 
-                    <i:Icon Value="fa7-bug" FontSize="48" />
+                    <i:Icon FontSize="48" Value="fa7-bug" />
 
-                    <StackPanel Orientation="Vertical" VerticalAlignment="Center">
-                        <TextBlock VerticalAlignment="Center" Margin="10,0" FontSize="18">Report a problem</TextBlock>
-                        <TextBlock VerticalAlignment="Center" Margin="10,0" FontSize="14">Create issue on GitHub</TextBlock>
+                    <StackPanel VerticalAlignment="Center" Orientation="Vertical">
+                        <TextBlock Margin="10,0"
+                                   VerticalAlignment="Center"
+                                   FontSize="18">
+                            Report a problem
+                        </TextBlock>
+                        <TextBlock Margin="10,0"
+                                   VerticalAlignment="Center"
+                                   FontSize="14">
+                            Create issue on GitHub
+                        </TextBlock>
                     </StackPanel>
                 </StackPanel>
-
             </Button>
 
         </StackPanel>
-
     </Grid>
-
 </UserControl>
