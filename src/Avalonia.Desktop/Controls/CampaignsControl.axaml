@@ -39,7 +39,7 @@
                                Padding="5"
                                HorizontalAlignment="Stretch"
                                VerticalAlignment="Bottom"
-                               Background="{Binding Path=Background, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}"
+                               Background="{DynamicResource Background}"
                                Opacity="0.6"
                                Text="{Binding Title}"
                                TextAlignment="Center"
