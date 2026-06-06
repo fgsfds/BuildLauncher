@@ -1,100 +1,100 @@
-<UserControl xmlns="https://github.com/avaloniaui"
+<UserControl x:Class="Avalonia.Desktop.Controls.CampaignsControl"
+             xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:i="https://github.com/projektanker/icons.avalonia"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             xmlns:helpers="clr-namespace:Avalonia.Desktop.Helpers"
-             xmlns:vm="clr-namespace:Avalonia.Desktop.ViewModels"
+             xmlns:behaviors="clr-namespace:Avalonia.Desktop.Behaviors"
              xmlns:ctrl="clr-namespace:Avalonia.Desktop.Controls"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:helpers="clr-namespace:Avalonia.Desktop.Helpers"
+             xmlns:i="https://github.com/projektanker/icons.avalonia"
              xmlns:in="clr-namespace:Addons.Addons;assembly=BuildLauncher.Addons"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="clr-namespace:Avalonia.Desktop.ViewModels"
+             d:DesignHeight="450"
+             d:DesignWidth="800"
              x:DataType="vm:CampaignsViewModel"
-             x:Class="Avalonia.Desktop.Controls.CampaignsControl"
-             AttachedToVisualTree="OnControlAttachedToVisualTree">
+             mc:Ignorable="d">
 
     <UserControl.Resources>
-        <helpers:StringToWrappedConverter x:Key="StringToWrappedConverter"/>
+        <helpers:StringToWrappedConverter x:Key="StringToWrappedConverter" />
     </UserControl.Resources>
 
 
     <UserControl.DataTemplates>
 
         <DataTemplate x:DataType="helpers:SeparatorItem">
-            <TextBlock Height="50" Width="{Binding #CampaignsList.Bounds.Width}"/>
+            <TextBlock Width="{Binding #CampaignsList.Bounds.Width}" Height="50" />
         </DataTemplate>
 
         <DataTemplate x:DataType="in:BaseAddon">
 
-            <Grid Width="{x:Static helpers:DesktopConsts.GridImageWidth}"
-                  Height="{x:Static helpers:DesktopConsts.GridImageHeight}">
+            <Grid Width="{x:Static helpers:DesktopConsts.GridImageWidth}" Height="{x:Static helpers:DesktopConsts.GridImageHeight}">
 
                 <Grid IsVisible="{Binding GridImageHash, Converter={x:Static ObjectConverters.IsNotNull}}">
 
-                    <Image Source="{Binding GridImageHash, Converter={StaticResource CachedHashToBitmapConverter}}"
+                    <Image HorizontalAlignment="Center"
                            VerticalAlignment="Center"
-                           HorizontalAlignment="Center"/>
+                           Source="{Binding GridImageHash, Converter={StaticResource CachedHashToBitmapConverter}}" />
 
-                    <TextBlock Text="{Binding Title}"
-                               Margin="0 0 0 -2"
+                    <TextBlock Margin="0,0,0,-2"
                                Padding="5"
+                               HorizontalAlignment="Stretch"
+                               VerticalAlignment="Bottom"
                                Background="{Binding Path=Background, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}"
-                               HorizontalAlignment="Stretch"
                                Opacity="0.6"
+                               Text="{Binding Title}"
                                TextAlignment="Center"
-                               VerticalAlignment="Bottom"
-                               TextWrapping="Wrap"/>
+                               TextWrapping="Wrap" />
 
-                    <TextBlock Text="{Binding Title}"
-                               Margin="0 0 0 -2"
+                    <TextBlock Margin="0,0,0,-2"
                                Padding="5"
                                HorizontalAlignment="Stretch"
-                               TextAlignment="Center"
                                VerticalAlignment="Bottom"
-                               TextWrapping="WrapWithOverflow"/>
+                               Text="{Binding Title}"
+                               TextAlignment="Center"
+                               TextWrapping="WrapWithOverflow" />
                 </Grid>
 
                 <Grid IsVisible="{Binding GridImageHash, Converter={x:Static ObjectConverters.IsNull}}">
 
-                    <Border Background="Black"/>
+                    <Border Background="Black" />
 
                     <Viewbox>
-                        <TextBlock Foreground="{DynamicResource SystemAccentColor}"
-                                   Margin="20"
+                        <TextBlock Margin="20"
                                    FontSize="500"
                                    FontWeight="Bold"
-                                   TextAlignment="Center"
-                                   Text="{Binding Title, Converter={StaticResource StringToWrappedConverter}}"/>
-                    </Viewbox >
+                                   Foreground="{DynamicResource SystemAccentColor}"
+                                   Text="{Binding Title, Converter={StaticResource StringToWrappedConverter}}"
+                                   TextAlignment="Center" />
+                    </Viewbox>
                 </Grid>
 
-                <Image x:Name="HightlightOverlay"
-                       Source="{StaticResource HighlightOverlayBitmap}"
+                <Image x:Name="HighlightOverlay"
+                       HorizontalAlignment="Center"
                        VerticalAlignment="Center"
-                       HorizontalAlignment="Center"/>
+                       Source="{StaticResource HighlightOverlayBitmap}" />
 
-                <StackPanel Orientation="Horizontal"
-                            HorizontalAlignment="Right">
+                <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
 
-                    <i:Icon Value="fa7-star"
-                            Margin="5"
-                            FontSize="20"
-                            IsVisible="{Binding IsFavorite}"
+                    <i:Icon Margin="5"
                             HorizontalAlignment="Right"
                             VerticalAlignment="Top"
-                            Foreground="Yellow"
-                            BorderBrush="Black"
-                            BorderThickness="1"/>
-
-                    <i:Icon Value="fa7-circle-exclamation"
-                            Margin="5"
-                            FontSize="20"
-                            IsVisible="{Binding IsMetadataUpdateAvailable}"
-                            HorizontalAlignment="Right"
-                            VerticalAlignment="Top"
-                            Foreground="Crimson"
                             BorderBrush="Black"
                             BorderThickness="1"
-                            ToolTip.Tip="Metadata update available"/>
+                            FontSize="20"
+                            Foreground="Yellow"
+                            IsVisible="{Binding IsFavorite}"
+                            Value="fa7-star" />
+
+                    <i:Icon Margin="5"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Top"
+                            BorderBrush="Black"
+                            BorderThickness="1"
+                            FontSize="20"
+                            Foreground="Crimson"
+                            IsVisible="{Binding IsMetadataUpdateAvailable}"
+                            ToolTip.Tip="Metadata update available"
+                            Value="fa7-circle-exclamation" />
 
                 </StackPanel>
 
@@ -103,61 +103,65 @@
         </DataTemplate>
     </UserControl.DataTemplates>
 
-    <Grid RowDefinitions="auto,*,auto" ColumnDefinitions="2*,*">
+    <Grid ColumnDefinitions="2*,*" RowDefinitions="auto,*,auto">
 
-        <Grid ColumnDefinitions="auto,*,auto"
-              Grid.Row="0" Grid.Column="0"
-              Margin="0,0,0,5">
+        <Grid Grid.Row="0"
+              Grid.Column="0"
+              Margin="0,0,0,5"
+              ColumnDefinitions="auto,*,auto">
 
-            <TextBox Name="SearchBox"
+            <TextBox x:Name="SearchBox"
                      Grid.Column="1"
                      PlaceholderText="Search"
-                     Text="{Binding SearchBoxText}"/>
+                     Text="{Binding SearchBoxText}" />
 
             <Button Grid.Column="2"
+                    Height="{Binding Bounds.Height, ElementName=SearchBox}"
                     Margin="5,0,0,0"
                     Command="{Binding ClearSearchBoxCommand}"
-                    ToolTip.Tip="Clear search"
-                    Height="{Binding Bounds.Height, ElementName=SearchBox}">
-                <i:Icon Value="fa7-xmark"/>
+                    ToolTip.Tip="Clear search">
+                <i:Icon Value="fa7-xmark" />
             </Button>
 
         </Grid>
 
-        <ListBox Name="CampaignsList"
-                 IsEnabled="{Binding !IsInProgress}"
-                 SelectionChanged="OnCampaignsListSelectionChanged"
-                 Grid.Row="1" Grid.Column="0"
-                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+        <ListBox x:Name="CampaignsList"
+                 Grid.Row="1"
+                 Grid.Column="0"
                  Padding="2"
-                 ItemsSource="{Binding CampaignsList}"
-                 SelectedItem="{Binding SelectedAddon}"
-                 PointerPressed="OnCampaignsListEmptySpaceClicked"
-                 ContainerPrepared="OnListBoxContainerPrepared"
                  DragDrop.AllowDrop="True"
-                 DragDrop.Drop="OnDrop">
+                 DragDrop.Drop="OnDrop"
+                 IsEnabled="{Binding !IsInProgress}"
+                 ItemsSource="{Binding CampaignsList}"
+                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                 SelectedItem="{Binding SelectedAddon}"
+                 SelectionChanged="OnCampaignsListSelectionChanged">
+
+            <Interaction.Behaviors>
+                <behaviors:ClearSelectionOnEmptySpaceBehavior />
+                <behaviors:AddImplicitAnimationsBehavior />
+            </Interaction.Behaviors>
 
             <ListBox.Styles>
-
                 <Style Selector="ListBoxItem">
                     <Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter">
-                        <Setter Property="Background" Value="Transparent"/>
-                        <Setter Property="RenderTransform" Value="scale(0.92)"/>
+                        <Setter Property="Background" Value="Transparent" />
+                        <Setter Property="RenderTransform" Value="scale(0.92)" />
                         <Setter Property="Transitions">
                             <Setter.Value>
                                 <Transitions>
-                                    <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.1"/>
+                                    <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.1" />
                                 </Transitions>
                             </Setter.Value>
                         </Setter>
                     </Style>
 
-                    <Style Selector="^ Image#HightlightOverlay">
-                        <Setter Property="Opacity" Value="0.00"/>
+                    <Style Selector="^ Image#HighlightOverlay">
+                        <Setter Property="Opacity" Value="0.00" />
                         <Setter Property="Transitions">
                             <Setter.Value>
                                 <Transitions>
-                                    <DoubleTransition Property="Opacity" Duration="0:0:0.5"/>
+                                    <DoubleTransition Property="Opacity" Duration="0:0:0.5" />
                                 </Transitions>
                             </Setter.Value>
                         </Setter>
@@ -165,42 +169,47 @@
 
                     <Style Selector="^:pointerover">
                         <Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter">
-                            <Setter Property="Background" Value="Transparent"/>
-                            <Setter Property="RenderTransform" Value="scale(0.96)"/>
+                            <Setter Property="Background" Value="Transparent" />
+                            <Setter Property="RenderTransform" Value="scale(0.96)" />
                         </Style>
 
-                        <Style Selector="^ Image#HightlightOverlay">
-                            <Setter Property="Opacity" Value="0.2"/>
+                        <Style Selector="^ Image#HighlightOverlay">
+                            <Setter Property="Opacity" Value="0.2" />
                         </Style>
                     </Style>
 
                     <Style Selector="^:selected">
                         <Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter">
-                            <Setter Property="Background" Value="Transparent"/>
-                            <Setter Property="RenderTransform" Value="scale(1.0)"/>
+                            <Setter Property="Background" Value="Transparent" />
+                            <Setter Property="RenderTransform" Value="scale(1.0)" />
                         </Style>
 
-                        <Style Selector="^ Image#HightlightOverlay">
-                            <Setter Property="Opacity" Value="0.25"/>
+                        <Style Selector="^ Image#HighlightOverlay">
+                            <Setter Property="Opacity" Value="0.25" />
                         </Style>
                     </Style>
-
                 </Style>
             </ListBox.Styles>
 
 
             <ListBox.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <WrapPanel Orientation="Horizontal" ItemSpacing="3" LineSpacing="0"/>
+                    <WrapPanel ItemSpacing="3"
+                               LineSpacing="0"
+                               Orientation="Horizontal" />
                 </ItemsPanelTemplate>
             </ListBox.ItemsPanel>
 
 
         </ListBox>
 
-        <ctrl:PortsButtonsControl Name="BottomPanel" Grid.Row="2" Grid.Column="0"/>
+        <ctrl:RightPanelControl x:Name="RightPanel"
+                                Grid.Row="1"
+                                Grid.Column="1" />
 
-        <ctrl:RightPanelControl Name="RightPanel" Grid.Row="1" Grid.Column="1"/>
+        <ctrl:PortsButtonsControl x:Name="BottomPanel"
+                                  Grid.Row="2"
+                                  Grid.Column="0" />
 
     </Grid>
 

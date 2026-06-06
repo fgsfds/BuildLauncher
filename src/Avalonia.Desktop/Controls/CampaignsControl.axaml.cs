@@ -5,11 +5,9 @@ using Avalonia.Desktop.Controls.Bases;
 using Avalonia.Desktop.Helpers;
 using Avalonia.Desktop.Misc;
 using Avalonia.Desktop.ViewModels;
-using Avalonia.Rendering.Composition;
-using Avalonia.Rendering.Composition.Animations;
+using CommunityToolkit.Mvvm.Input;
 using Core.All.Enums;
 using Core.All.Helpers;
-using CommunityToolkit.Mvvm.Input;
 using Ports.Ports;
 using Ports.Providers;
 
@@ -24,8 +22,6 @@ public sealed partial class CampaignsControl : DroppableControl
     private readonly CampaignsViewModel _viewModel;
     private readonly PortsProvider _portsProvider;
     private readonly BitmapsCache _bitmapsCache;
-
-    private ImplicitAnimationCollection? _implicitAnimations;
 
     public CampaignsControl() : base(null!)
     {
@@ -151,8 +147,10 @@ public sealed partial class CampaignsControl : DroppableControl
             _ = BottomPanel.PortsButtonsPanel.Children.Remove(existing);
         }
 
-        MenuFlyout flyout = new();
-        flyout.Placement = PlacementMode.Top;
+        MenuFlyout flyout = new()
+        {
+            Placement = PlacementMode.Top
+        };
 
         var customPorts = _portsProvider.GetCustomPorts(_viewModel.Game.GameEnum);
 
@@ -332,68 +330,5 @@ public sealed partial class CampaignsControl : DroppableControl
     {
         AddContextMenuButtons();
         AddCustomPortsButton();
-    }
-
-    /// <summary>
-    /// Reset selected item when empty space is clicked
-    /// </summary>
-    private void OnCampaignsListEmptySpaceClicked(object? sender, Input.PointerPressedEventArgs e)
-    {
-        CampaignsList.SelectedItem = null;
-        CampaignsList.Focusable = true;
-        _ = CampaignsList.Focus();
-        CampaignsList.Focusable = false;
-    }
-
-    private void OnListBoxContainerPrepared(object? sender, ContainerPreparedEventArgs e)
-    {
-        if (e.Container is ListBoxItem item)
-        {
-            if (item.Content is SeparatorItem)
-            {
-                item.IsHitTestVisible = false;
-                item.Focusable = false;
-            }
-            else
-            {
-                if (_implicitAnimations != null)
-                {
-                    EnsureImplicitAnimationsAsync(item);
-                }
-            }
-        }
-    }
-
-    private void OnControlAttachedToVisualTree(object? sender, VisualTreeAttachmentEventArgs e)
-    {
-        if (_implicitAnimations == null)
-        {
-            var compositor = ElementComposition.GetElementVisual(this)?.Compositor;
-
-            ArgumentNullException.ThrowIfNull(compositor);
-
-            var offsetAnimation = compositor.CreateVector3KeyFrameAnimation();
-            offsetAnimation.Target = "Offset";
-            offsetAnimation.InsertExpressionKeyFrame(1.0f, "this.FinalValue");
-            offsetAnimation.Duration = TimeSpan.FromMilliseconds(400);
-
-            var animationGroup = compositor.CreateAnimationGroup();
-            animationGroup.Add(offsetAnimation);
-
-            _implicitAnimations = compositor.CreateImplicitAnimationCollection();
-            _implicitAnimations["Offset"] = animationGroup;
-        }
-    }
-
-    private async void EnsureImplicitAnimationsAsync(Control control)
-    {
-        await Task.Delay(500).ConfigureAwait(true);
-
-        var visual = ElementComposition.GetElementVisual(control);
-
-        if (visual != null)
-        {
-            visual.ImplicitAnimations = _implicitAnimations;
-        }
     }
 }

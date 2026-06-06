@@ -39,6 +39,7 @@
     <PackageReference Include="CommunityToolkit.Mvvm" />
     <PackageReference Include="IDisposableAnalyzers" PrivateAssets="all" />
     <PackageReference Include="Optris.Icons.Avalonia.FontAwesome7" />
+    <PackageReference Include="Xaml.Behaviors.Avalonia" />
   </ItemGroup>
 
   <ItemGroup>

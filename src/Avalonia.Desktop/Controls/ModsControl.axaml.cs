@@ -75,16 +75,4 @@ public sealed partial class ModsControl : DroppableControl
     {
         AddContextMenuButtons();
     }
-
-
-    /// <summary>
-    /// Reset selected item when empty space is clicked
-    /// </summary>
-    private void OnListBoxEmptySpaceClicked(object? sender, Input.PointerPressedEventArgs e)
-    {
-        ModsList.SelectedItem = null;
-        ModsList.Focusable = true;
-        _ = ModsList.Focus();
-        ModsList.Focusable = false;
-    }
 }

@@ -1,46 +1,54 @@
-<UserControl xmlns="https://github.com/avaloniaui"
+<UserControl x:Class="Avalonia.Desktop.Controls.MapsControl"
+             xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:i="https://github.com/projektanker/icons.avalonia"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             xmlns:vm="clr-namespace:Avalonia.Desktop.ViewModels"
+             xmlns:behaviors="clr-namespace:Avalonia.Desktop.Behaviors"
              xmlns:ctrl="clr-namespace:Avalonia.Desktop.Controls"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:i="https://github.com/projektanker/icons.avalonia"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="clr-namespace:Avalonia.Desktop.ViewModels"
+             d:DesignHeight="450"
+             d:DesignWidth="800"
              x:DataType="vm:MapsViewModel"
-             x:Class="Avalonia.Desktop.Controls.MapsControl">
+             mc:Ignorable="d">
 
-    <Grid RowDefinitions="auto,*,auto" ColumnDefinitions="2*,*">
+    <Grid ColumnDefinitions="2*,*" RowDefinitions="auto,*,auto">
 
-        <Grid ColumnDefinitions="auto,*,auto"
-              Grid.Row="0" Grid.Column="0"
-              Margin="0,0,0,5">
+        <Grid Grid.Row="0"
+              Grid.Column="0"
+              Margin="0,0,0,5"
+              ColumnDefinitions="auto,*,auto">
 
-            <TextBox Name="SearchBox"
+            <TextBox x:Name="SearchBox"
                      Grid.Column="1"
                      PlaceholderText="Search"
-                     Text="{Binding SearchBoxText}"/>
+                     Text="{Binding SearchBoxText}" />
 
             <Button Grid.Column="2"
+                    Height="{Binding Bounds.Height, ElementName=SearchBox}"
                     Margin="5,0,0,0"
                     Command="{Binding ClearSearchBoxCommand}"
-                    ToolTip.Tip="Clear search"
-                    Height="{Binding Bounds.Height, ElementName=SearchBox}">
+                    ToolTip.Tip="Clear search">
                 <i:Icon Value="fa7-xmark" />
             </Button>
 
         </Grid>
 
-        <ListBox Name="MapsList"
-                 Grid.Row="1" Grid.Column="0"
-                 ScrollViewer.VerticalScrollBarVisibility="Disabled"
-                 ScrollViewer.HorizontalScrollBarVisibility="Auto"
+        <ListBox x:Name="MapsList"
+                 Grid.Row="1"
+                 Grid.Column="0"
                  Padding="2"
-                 ItemsSource="{Binding MapsList}"
-                 SelectedItem="{Binding SelectedAddon}"
-                 PointerPressed="OnListBoxEmptySpaceClicked"
-                 SelectionChanged="OnMapsListSelectionChanged"
                  DragDrop.AllowDrop="True"
-                 DragDrop.Drop="OnDrop">
+                 DragDrop.Drop="OnDrop"
+                 ItemsSource="{Binding MapsList}"
+                 ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                 ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                 SelectedItem="{Binding SelectedAddon}"
+                 SelectionChanged="OnMapsListSelectionChanged">
+
+            <Interaction.Behaviors>
+                <behaviors:ClearSelectionOnEmptySpaceBehavior />
+            </Interaction.Behaviors>
 
             <ListBox.ItemsPanel>
                 <ItemsPanelTemplate>
@@ -53,26 +61,26 @@
 
                     <Grid ColumnDefinitions="auto,*">
 
-                        <TextBlock Text="{Binding Title}"
-                                   Grid.Column="0"
+                        <TextBlock Grid.Column="0"
                                    Margin="10"
                                    Padding="5"
                                    HorizontalAlignment="Left"
-                                   TextAlignment="Left"
                                    VerticalAlignment="Center"
-                                   TextWrapping="NoWrap"/>
+                                   Text="{Binding Title}"
+                                   TextAlignment="Left"
+                                   TextWrapping="NoWrap" />
 
-                        <i:Icon Value="fa7-circle-exclamation"
-                                Grid.Column="1"
+                        <i:Icon Grid.Column="1"
                                 Margin="5"
-                                FontSize="20"
-                                IsVisible="{Binding IsMetadataUpdateAvailable}"
                                 HorizontalAlignment="Right"
                                 VerticalAlignment="Center"
-                                Foreground="Crimson"
                                 BorderBrush="Black"
                                 BorderThickness="1"
-                                ToolTip.Tip="Metadata update available"/>
+                                FontSize="20"
+                                Foreground="Crimson"
+                                IsVisible="{Binding IsMetadataUpdateAvailable}"
+                                ToolTip.Tip="Metadata update available"
+                                Value="fa7-circle-exclamation" />
 
                     </Grid>
 
@@ -81,9 +89,13 @@
 
         </ListBox>
 
-        <ctrl:PortsButtonsControl Name="BottomPanel" Grid.Row="2" Grid.Column="0"/>
+        <ctrl:RightPanelControl x:Name="RightPanel"
+                                Grid.Row="1"
+                                Grid.Column="1" />
 
-        <ctrl:RightPanelControl Name="RightPanel" Grid.Row="1" Grid.Column="1"/>
+        <ctrl:PortsButtonsControl x:Name="BottomPanel"
+                                  Grid.Row="2"
+                                  Grid.Column="0" />
 
     </Grid>
 

@@ -259,17 +259,6 @@ public sealed partial class MapsControl : DroppableControl
         AddContextMenuButtons();
     }
 
-    /// <summary>
-    /// Reset selected item when empty space is clicked
-    /// </summary>
-    private void OnListBoxEmptySpaceClicked(object? sender, Input.PointerPressedEventArgs e)
-    {
-        MapsList.SelectedItem = null;
-        MapsList.Focusable = true;
-        _ = MapsList.Focus();
-        MapsList.Focusable = false;
-    }
-
     private void OnPortButtonClicked(object? sender, Interactivity.RoutedEventArgs e)
     {
         if (sender is not Button button)

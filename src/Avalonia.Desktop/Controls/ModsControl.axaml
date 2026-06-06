@@ -1,26 +1,33 @@
-<UserControl xmlns="https://github.com/avaloniaui"
+<UserControl x:Class="Avalonia.Desktop.Controls.ModsControl"
+             xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:i="https://github.com/projektanker/icons.avalonia"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             xmlns:vm="clr-namespace:Avalonia.Desktop.ViewModels"
+             xmlns:behaviors="clr-namespace:Avalonia.Desktop.Behaviors"
              xmlns:ctrl="clr-namespace:Avalonia.Desktop.Controls"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:i="https://github.com/projektanker/icons.avalonia"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="clr-namespace:Avalonia.Desktop.ViewModels"
+             d:DesignHeight="450"
+             d:DesignWidth="800"
              x:DataType="vm:ModsViewModel"
-             x:Class="Avalonia.Desktop.Controls.ModsControl">
+             mc:Ignorable="d">
 
-    <Grid RowDefinitions="*,auto" ColumnDefinitions="2*,*">
+    <Grid ColumnDefinitions="2*,*" RowDefinitions="*,auto">
 
-        <ListBox Name="ModsList"
+        <ListBox x:Name="ModsList"
                  Grid.Row="0"
-                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                 Grid.Column="0"
                  Padding="2"
-                 ItemsSource="{Binding ModsList}"
-                 SelectedItem="{Binding SelectedAddon}"
-                 SelectionChanged="OnModsListSelectionChanged"
-                 PointerPressed="OnListBoxEmptySpaceClicked"
                  DragDrop.AllowDrop="True"
-                 DragDrop.Drop="OnDrop">
+                 DragDrop.Drop="OnDrop"
+                 ItemsSource="{Binding ModsList}"
+                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                 SelectedItem="{Binding SelectedAddon}"
+                 SelectionChanged="OnModsListSelectionChanged">
+
+            <Interaction.Behaviors>
+                <behaviors:ClearSelectionOnEmptySpaceBehavior />
+            </Interaction.Behaviors>
 
             <ListBox.ItemsPanel>
                 <ItemsPanelTemplate>
@@ -34,26 +41,25 @@
 
                         <StackPanel Orientation="Horizontal">
 
-                            <CheckBox IsChecked="{Binding IsEnabled, Mode=OneWay}"
-                                      Margin="5,0,0,0"
+                            <CheckBox Margin="5,0,0,0"
                                       Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=((vm:ModsViewModel)DataContext).ModCheckboxPressedCommand}"
-                                      CommandParameter="{Binding $parent[ListBoxItem].Content}"/>
+                                      CommandParameter="{Binding $parent[ListBoxItem].Content}"
+                                      IsChecked="{Binding IsEnabled, Mode=OneWay}" />
 
-                            <TextBlock Text="{Binding Title}"
+                            <TextBlock Margin="10"
                                        VerticalAlignment="Center"
-                                       Margin="10"/>
+                                       Text="{Binding Title}" />
 
-                            <i:Icon Value="fa7-circle-exclamation"
-                                    Grid.Column="1"
-                                    Margin="5"
-                                    FontSize="20"
-                                    IsVisible="{Binding IsMetadataUpdateAvailable}"
+                            <i:Icon Margin="5"
                                     HorizontalAlignment="Right"
                                     VerticalAlignment="Center"
-                                    Foreground="Crimson"
                                     BorderBrush="Black"
                                     BorderThickness="1"
-                                    ToolTip.Tip="Metadata update available"/>
+                                    FontSize="20"
+                                    Foreground="Crimson"
+                                    IsVisible="{Binding IsMetadataUpdateAvailable}"
+                                    ToolTip.Tip="Metadata update available"
+                                    Value="fa7-circle-exclamation" />
 
                         </StackPanel>
 
@@ -62,9 +68,13 @@
             </ListBox.ItemTemplate>
         </ListBox>
 
-        <ctrl:PortsButtonsControl Name="BottomPanel" Grid.Row="1" Grid.Column="0"/>
+        <ctrl:RightPanelControl x:Name="RightPanel"
+                                Grid.Row="0"
+                                Grid.Column="1" />
 
-        <ctrl:RightPanelControl Name="RightPanel" Grid.Row="0" Grid.Column="1"/>
+        <ctrl:PortsButtonsControl x:Name="BottomPanel"
+                                  Grid.Row="1"
+                                  Grid.Column="0" />
 
     </Grid>
 
