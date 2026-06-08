@@ -32,7 +32,11 @@ public static class BindingsManager
             {
                 using (_lock.EnterScope())
                 {
-                    _provider = Instance.BuildServiceProvider();
+                    _provider = Instance.BuildServiceProvider(new ServiceProviderOptions
+                    {
+                        ValidateOnBuild = true,
+                        ValidateScopes = true
+                    });
                 }
             }
 

@@ -53,7 +53,7 @@ public sealed partial class PortsViewModel : ObservableObject
     public PortsViewModel(
         ViewModelsFactory viewModelsFactory,
         PortsProvider installedPortsProvider,
-        IReadOnlyList<BasePort> ports,
+        IEnumerable<BasePort> ports,
         ILogger logger
         )
     {
@@ -252,9 +252,9 @@ public sealed partial class PortsViewModel : ObservableObject
     /// <summary>
     /// Initialize VM
     /// </summary>
-    private void Initialize(IReadOnlyList<BasePort> ports)
+    private void Initialize(IEnumerable<BasePort> ports)
     {
-        List<PortViewModel> viewModels = new(ports.Count);
+        List<PortViewModel> viewModels = [];
 
         foreach (var port in ports.Where(x => x.IsDownloadable))
         {

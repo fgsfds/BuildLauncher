@@ -26,8 +26,8 @@ public sealed class MainWindowViewModel : ObservableObject
         AppUpdateInstaller appUpdateInstaller,
         ViewModelsFactory viewModelsFactory,
         GamesPathsProvider gamesPathsProvider,
-        IReadOnlyList<BasePort> ports,
-        IReadOnlyList<BaseTool> tools,
+        IEnumerable<BasePort> ports,
+        IEnumerable<BaseTool> tools,
         MetadataProvider metadataProvider,
         DownloadableAddonsProviderFactory downloadablesProviderFactory,
         ILogger logger

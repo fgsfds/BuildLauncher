@@ -16,7 +16,7 @@ public sealed partial class ToolsViewModel : ObservableObject
 
     public ToolsViewModel(
         ViewModelsFactory viewModelsFactory,
-        IReadOnlyList<BaseTool> tools
+        IEnumerable<BaseTool> tools
         )
     {
         _viewModelsFactory = viewModelsFactory;
@@ -27,9 +27,9 @@ public sealed partial class ToolsViewModel : ObservableObject
     /// <summary>
     /// Initialize VM
     /// </summary>
-    private void Initialize(IReadOnlyList<BaseTool> tools)
+    private void Initialize(IEnumerable<BaseTool> tools)
     {
-        List<ToolViewModel> viewModels = new(tools.Count);
+        List<ToolViewModel> viewModels = [];
 
         foreach (var tool in tools)
         {
