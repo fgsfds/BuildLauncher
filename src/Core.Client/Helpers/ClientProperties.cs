@@ -37,6 +37,11 @@ public static class ClientProperties
     public static readonly string SavedGamesFolderPath = Path.Combine(DataFolderPath, "Saves");
 
     /// <summary>
+    /// Path to the addons folder
+    /// </summary>
+    public static readonly string AddonsFolderPath = Path.Combine(DataFolderPath, "Addons");
+
+    /// <summary>
     /// Is app running in the developer mode
     /// </summary>
     public static bool IsDeveloperMode { get; set; } = false;

@@ -4,6 +4,7 @@ using Core.All.Enums;
 using Core.All.Serializable.Addon;
 using Core.Client.Helpers;
 using Core.Client.Interfaces;
+using Microsoft.Extensions.Logging;
 using SharpCompress.Archives;
 using SharpCompress.Archives.Zip;
 using SharpCompress.Common;
@@ -15,14 +16,17 @@ public sealed class MetadataProvider
     public event EventHandler<ValueTuple<GameEnum, AddonTypeEnum, string>?>? MetadataUpdatedEvent;
 
     private readonly IApiInterface _apiInterface;
+    private readonly ILogger<MetadataProvider> _logger;
 
     private readonly Dictionary<string, Dictionary<string, AddonJsonModel>> _updatesCache = [];
 
     public MetadataProvider(
-        IApiInterface apiInterface
+        IApiInterface apiInterface,
+        ILogger<MetadataProvider> logger
         )
     {
         _apiInterface = apiInterface;
+        _logger = logger;
     }
 
     public async Task InitializeAsync()
@@ -36,20 +40,38 @@ public sealed class MetadataProvider
 
         var metaDict = metadata.ToDictionary(x => new AddonId(x.Id, x.Version));
 
-        var files = Directory.EnumerateFiles(ClientProperties.DataFolderPath, "*", SearchOption.AllDirectories);
+        var files = Directory.EnumerateFiles(ClientProperties.AddonsFolderPath, "*", SearchOption.AllDirectories);
 
         foreach (var file in files)
         {
-            if (file.EndsWith(".zip", StringComparison.OrdinalIgnoreCase))
+            try
             {
-                using var archive = ArchiveFactory.OpenArchive(file);
-                var manifests = archive.Entries.Where(x => x.Key!.Contains("addon", StringComparison.OrdinalIgnoreCase) && x.Key.EndsWith(".json", StringComparison.OrdinalIgnoreCase));
-
-                foreach (var manifest in manifests)
+                if (file.EndsWith(".zip", StringComparison.OrdinalIgnoreCase))
                 {
-                    using var stream = await manifest.OpenEntryStreamAsync().ConfigureAwait(false);
+                    using var archive = ArchiveFactory.OpenArchive(file);
+                    var manifests = archive.Entries.Where(x => x.Key!.Contains("addon", StringComparison.OrdinalIgnoreCase) && x.Key.EndsWith(".json", StringComparison.OrdinalIgnoreCase));
+
+                    foreach (var manifest in manifests)
+                    {
+                        using var stream = await manifest.OpenEntryStreamAsync().ConfigureAwait(false);
+                        var originalManifest = await JsonSerializer.DeserializeAsync(
+                            stream,
+                            AddonManifestContext.Default.AddonJsonModel
+                            ).ConfigureAwait(false);
+
+                        if (originalManifest is null)
+                        {
+                            continue;
+                        }
+
+                        AddToCacheIfNewer(metaDict, file, originalManifest, manifest.Key);
+                    }
+                }
+                else if (file.EndsWith(".json", StringComparison.OrdinalIgnoreCase))
+                {
+                    using var originalManifestStr = File.OpenRead(file);
                     var originalManifest = await JsonSerializer.DeserializeAsync(
-                        stream,
+                        originalManifestStr,
                         AddonManifestContext.Default.AddonJsonModel
                         ).ConfigureAwait(false);
 
@@ -58,23 +80,13 @@ public sealed class MetadataProvider
                         continue;
                     }
 
-                    AddToCacheIfNewer(metaDict, file, originalManifest, manifest.Key);
+                    AddToCacheIfNewer(metaDict, file, originalManifest, file);
                 }
             }
-            else if (file.EndsWith(".json", StringComparison.OrdinalIgnoreCase))
+            catch (Exception ex)
             {
-                using var originalManifestStr = File.OpenRead(file);
-                var originalManifest = await JsonSerializer.DeserializeAsync(
-                    originalManifestStr,
-                    AddonManifestContext.Default.AddonJsonModel
-                    ).ConfigureAwait(false);
-
-                if (originalManifest is null)
-                {
-                    continue;
-                }
-
-                AddToCacheIfNewer(metaDict, file, originalManifest, file);
+                _logger.LogError(ex, "Error while getting metadata from {FileName}.", file);
+                continue;
             }
         }
 
