@@ -1,10 +1,9 @@
 using Addons.Addons;
-using Addons.Providers;
 using Avalonia.Controls;
-using Avalonia.Desktop.Controls.Bases;
 using Avalonia.Desktop.Helpers;
 using Avalonia.Desktop.Misc;
 using Avalonia.Desktop.ViewModels;
+using Avalonia.Interactivity;
 using CommunityToolkit.Mvvm.Input;
 using Core.All.Enums;
 using Core.All.Helpers;
@@ -13,7 +12,7 @@ using Ports.Providers;
 
 namespace Avalonia.Desktop.Controls;
 
-public sealed partial class CampaignsControl : DroppableControl
+public sealed partial class CampaignsControl : UserControl
 {
     private const string BuiltInPortStr = "Built-in port";
     private const string CustomPortStr = "Custom port";
@@ -23,7 +22,7 @@ public sealed partial class CampaignsControl : DroppableControl
     private readonly PortsProvider _portsProvider;
     private readonly BitmapsCache _bitmapsCache;
 
-    public CampaignsControl() : base(null!)
+    public CampaignsControl()
     {
         InitializeComponent();
 
@@ -36,9 +35,8 @@ public sealed partial class CampaignsControl : DroppableControl
     public CampaignsControl(
         CampaignsViewModel viewModel,
         PortsProvider portsProvider,
-        InstalledAddonsProvider installedAddonsProvider,
         BitmapsCache bitmapsCache
-        ) : base(installedAddonsProvider)
+        )
     {
         InitializeComponent();
 
@@ -186,11 +184,37 @@ public sealed partial class CampaignsControl : DroppableControl
     }
 
     /// <summary>
-    /// Add button to the right click menu
+    /// Invoked on selected campaign changed
     /// </summary>
-    private void AddContextMenuButtons()
+    private void OnCampaignsListSelectionChanged(object? sender, SelectionChangedEventArgs e)
     {
-        CampaignsList.ContextMenu = new();
+        foreach (var control in BottomPanel.PortsButtonsPanel.Children)
+        {
+            if (control is Button button &&
+                button.Command is IRelayCommand relayCommand)
+            {
+                relayCommand.NotifyCanExecuteChanged();
+            }
+        }
+
+        var customPortButton = BottomPanel.PortsButtonsPanel.Children.FirstOrDefault(
+            x => x is Button button && button.Content is TextBlock text && text.Text?.Equals(CustomPortStr) is true
+            ) as Button;
+
+        if (customPortButton is not null)
+        {
+            customPortButton.IsEnabled = CampaignsList.SelectedItem is not null;
+        }
+    }
+
+    private void OnCustomPortChanged(object? sender, EventArgs e)
+    {
+        AddCustomPortsButton();
+    }
+
+    private void ContextMenuOpened(object? sender, RoutedEventArgs e)
+    {
+        CampaignsList.ContextMenu!.Items.Clear();
 
         if (CampaignsList.SelectedItem is not BaseAddon addon)
         {
@@ -300,35 +324,8 @@ public sealed partial class CampaignsControl : DroppableControl
         _ = CampaignsList.ContextMenu.Items.Add(deleteButton);
     }
 
-    /// <summary>
-    /// Invoked on selected campaign changed
-    /// </summary>
-    private void OnCampaignsListSelectionChanged(object? sender, SelectionChangedEventArgs e)
+    private void ContextMenuClosed(object? sender, RoutedEventArgs e)
     {
-        foreach (var control in BottomPanel.PortsButtonsPanel.Children)
-        {
-            if (control is Button button &&
-                button.Command is IRelayCommand relayCommand)
-            {
-                relayCommand.NotifyCanExecuteChanged();
-            }
-        }
-
-        var customPortButton = BottomPanel.PortsButtonsPanel.Children.FirstOrDefault(
-            x => x is Button button && button.Content is TextBlock text && text.Text?.Equals(CustomPortStr) is true
-            ) as Button;
-
-        if (customPortButton is not null)
-        {
-            customPortButton.IsEnabled = CampaignsList.SelectedItem is not null;
-        }
-
-        AddContextMenuButtons();
-    }
-
-    private void OnCustomPortChanged(object? sender, EventArgs e)
-    {
-        AddContextMenuButtons();
-        AddCustomPortsButton();
+        CampaignsList.ContextMenu!.Items.Clear();
     }
 }

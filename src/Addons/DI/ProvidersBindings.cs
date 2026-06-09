@@ -12,5 +12,7 @@ public static class ProvidersBindings
         _ = container.AddSingleton<DownloadableAddonsProviderFactory>();
         _ = container.AddSingleton<OriginalCampaignsProvider>();
         _ = container.AddSingleton<MetadataProvider>();
+
+        _ = container.AddTransient<IAddonDropHelper, AddonDropHelper>();
     }
 }

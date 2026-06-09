@@ -1,45 +1,36 @@
 using Addons.Addons;
-using Addons.Providers;
 using Avalonia.Controls;
-using Avalonia.Desktop.Controls.Bases;
 using Avalonia.Desktop.ViewModels;
-using Core.All.Enums;
+using Avalonia.Interactivity;
 using CommunityToolkit.Mvvm.Input;
+using Core.All.Enums;
 
 namespace Avalonia.Desktop.Controls;
 
-public sealed partial class ModsControl : DroppableControl
+public sealed partial class ModsControl : UserControl
 {
     private readonly ModsViewModel _viewModel = null!;
 
-    public ModsControl() : base(null!)
+    public ModsControl()
     {
         InitializeComponent();
     }
 
-    public ModsControl(
-        ModsViewModel viewModel,
-        InstalledAddonsProvider installedAddonsProvider
-        ) : base(installedAddonsProvider)
+    public ModsControl(ModsViewModel viewModel)
     {
         _viewModel = viewModel;
-
         InitializeComponent();
     }
 
-    /// <summary>
-    /// Add button to the right click menu
-    /// </summary>
-    private void AddContextMenuButtons()
+    private void ContextMenuOpened(object? sender, RoutedEventArgs e)
     {
-        ModsList.ContextMenu = new();
-
         if (ModsList.SelectedItem is not BaseAddon addon)
         {
+            e.Handled = true;
             return;
         }
 
-        ModsList.ContextMenu.Items.Clear();
+        ModsList.ContextMenu!.Items.Clear();
 
         if (addon.IsMetadataUpdateAvailable)
         {
@@ -67,12 +58,8 @@ public sealed partial class ModsControl : DroppableControl
         _ = ModsList.ContextMenu.Items.Add(deleteButton);
     }
 
-
-    /// <summary>
-    /// Update CanExecute for ports buttons and context menu buttons when selected campaign changed
-    /// </summary>
-    private void OnModsListSelectionChanged(object? sender, SelectionChangedEventArgs e)
+    private void ContextMenuClosed(object? sender, RoutedEventArgs e)
     {
-        AddContextMenuButtons();
+        ModsList.ContextMenu!.Items.Clear();
     }
 }

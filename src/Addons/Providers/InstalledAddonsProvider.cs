@@ -58,64 +58,6 @@ public sealed class InstalledAddonsProvider : IDisposable
         _metadataProvider.MetadataUpdatedEvent += OnMetadataUpdatedAsync;
     }
 
-
-    /// <summary>
-    /// Try to parse and copy addon into suitable folder
-    /// </summary>
-    /// <param name="pathToFile">Path to addon file</param>
-    /// <returns>Copied successfully</returns>
-    public async Task<bool> CopyAddonIntoFolder(string pathToFile)
-    {
-        if (!pathToFile.EndsWith(".zip", StringComparison.OrdinalIgnoreCase) &&
-            !pathToFile.EndsWith(".map", StringComparison.OrdinalIgnoreCase))
-        {
-            _logger.LogError("File is not .zip or .map.");
-            return false;
-        }
-
-        var addon = GetGameAndTypeFromFile(pathToFile);
-
-        if (addon is null)
-        {
-            _logger.LogError("Can't get addon from the file.");
-            return false;
-        }
-
-        if (addon.Item1 != _game.GameEnum)
-        {
-            _logger.LogError($"Addon is for the wrong game: {addon.Item1}.");
-            return false;
-        }
-
-        string folderToPutFile;
-
-        if (addon.Item2 is AddonTypeEnum.TC)
-        {
-            folderToPutFile = _game.CampaignsFolderPath;
-        }
-        else if (addon.Item2 is AddonTypeEnum.Map)
-        {
-            folderToPutFile = _game.MapsFolderPath;
-        }
-        else if (addon.Item2 is AddonTypeEnum.Mod)
-        {
-            folderToPutFile = _game.ModsFolderPath;
-        }
-        else
-        {
-            _logger.LogError($"Unknown addon type: {addon.Item2}.");
-            return false;
-        }
-
-        var newPathToFile = Path.Combine(folderToPutFile, Path.GetFileName(pathToFile));
-
-        File.Copy(pathToFile, newPathToFile, true);
-
-        await AddAddonAsync(newPathToFile).ConfigureAwait(false);
-
-        return true;
-    }
-
     /// <summary>
     /// Create cache of installed addons.
     /// </summary>
@@ -577,47 +519,6 @@ public sealed class InstalledAddonsProvider : IDisposable
     }
 
     /// <summary>
-    /// Get game enum and addon type enum from a file
-    /// </summary>
-    /// <param name="pathToFile">Path to file</param>
-    private Tuple<GameEnum, AddonTypeEnum>? GetGameAndTypeFromFile(string pathToFile)
-    {
-        if (ArchiveFactory.IsArchive(pathToFile, out _))
-        {
-            using var archive = ArchiveFactory.OpenArchive(pathToFile);
-            var manifestFile = archive.Entries.FirstOrDefault(static x => x.Key!.Equals("addon.json", StringComparison.OrdinalIgnoreCase));
-
-            if (manifestFile is null)
-            {
-                return null;
-            }
-
-            using var stream = manifestFile.OpenEntryStream();
-
-            var manifest = JsonSerializer.Deserialize(
-                stream,
-                AddonManifestContext.Default.AddonJsonModel
-                );
-
-            if (manifest is null)
-            {
-                return null;
-            }
-
-            var supportedGame = manifest.SupportedGame.Game;
-            var type = manifest.AddonType;
-
-            return new(supportedGame, type);
-        }
-        else if (pathToFile.EndsWith(".map", StringComparison.OrdinalIgnoreCase))
-        {
-            return new(_game.GameEnum, AddonTypeEnum.Map);
-        }
-
-        return null;
-    }
-
-    /// <summary>
     /// Get addon from a file
     /// </summary>
     /// <param name="pathToFile">Path to addon file</param>
@@ -753,8 +654,8 @@ public sealed class InstalledAddonsProvider : IDisposable
                 await using var cover = ImageHelper.GetCoverFromArchive(archive);
                 await using var preview = ImageHelper.GetPreviewFromArchive(archive);
 
-                gridImageHash = cover.HasValue ? cover.Value.Crc : null;
-                previewImageHash = preview.HasValue ? preview.Value.Crc : null;
+                gridImageHash = cover?.Crc;
+                previewImageHash = preview?.Crc;
 
                 if (cover.HasValue)
                 {
@@ -1129,40 +1030,34 @@ public sealed class InstalledAddonsProvider : IDisposable
         long? gridImageHash,
         long? previewImageHash)
     {
-        AddonCarcass carcass = new();
-
-        carcass.IsUnpacked = isUnpacked;
-        carcass.GridImageHash = gridImageHash ?? previewImageHash;
-        carcass.PreviewImageHash = previewImageHash;
-
-        carcass.Type = manifest.AddonType;
-        carcass.Id = manifest.Id;
-        carcass.Title = manifest.Title;
-        carcass.Author = manifest.Author;
-        carcass.ReleaseDate = manifest.ReleaseDate;
-        carcass.Version = manifest.Version;
-        carcass.Description = manifest.Description;
-        carcass.SupportedGame = manifest.SupportedGame.Game;
-        carcass.GameVersion = manifest.SupportedGame.Version;
-        carcass.GameCrc = manifest.SupportedGame.Crc;
-
-        carcass.Rts = manifest.Rts;
-        carcass.Ini = manifest.Ini;
-        carcass.Rff = manifest.MainRff;
-        carcass.Snd = manifest.SoundRff;
-
-        carcass.StartMap = manifest.StartMap;
-
-        carcass.RequiredFeatures = manifest.Dependencies?.RequiredFeatures?.Select(static x => x).ToImmutableArray();
-
-        carcass.MainCon = manifest.MainCon;
-        carcass.AddCons = manifest.AdditionalCons?.ToImmutableArray();
-
-        carcass.MainDef = manifest.MainDef;
-        carcass.AddDefs = manifest.AdditionalDefs?.ToImmutableArray();
-
-        carcass.Dependencies = manifest.Dependencies?.Addons?.ToDictionary(static x => x.Id, static x => x.Version, StringComparer.OrdinalIgnoreCase);
-        carcass.Incompatibles = manifest.Incompatibles?.Addons?.ToDictionary(static x => x.Id, static x => x.Version, StringComparer.OrdinalIgnoreCase);
+        AddonCarcass carcass = new()
+        {
+            IsUnpacked = isUnpacked,
+            GridImageHash = gridImageHash ?? previewImageHash,
+            PreviewImageHash = previewImageHash,
+            Type = manifest.AddonType,
+            Id = manifest.Id,
+            Title = manifest.Title,
+            Author = manifest.Author,
+            ReleaseDate = manifest.ReleaseDate,
+            Version = manifest.Version,
+            Description = manifest.Description,
+            SupportedGame = manifest.SupportedGame.Game,
+            GameVersion = manifest.SupportedGame.Version,
+            GameCrc = manifest.SupportedGame.Crc,
+            Rts = manifest.Rts,
+            Ini = manifest.Ini,
+            Rff = manifest.MainRff,
+            Snd = manifest.SoundRff,
+            StartMap = manifest.StartMap,
+            RequiredFeatures = manifest.Dependencies?.RequiredFeatures?.Select(static x => x)?.ToImmutableArray(),
+            MainCon = manifest.MainCon,
+            AddCons = manifest.AdditionalCons?.ToImmutableArray(),
+            MainDef = manifest.MainDef,
+            AddDefs = manifest.AdditionalDefs?.ToImmutableArray(),
+            Dependencies = manifest.Dependencies?.Addons?.ToDictionary(static x => x.Id, static x => x.Version, StringComparer.OrdinalIgnoreCase),
+            Incompatibles = manifest.Incompatibles?.Addons?.ToDictionary(static x => x.Id, static x => x.Version, StringComparer.OrdinalIgnoreCase)
+        };
 
         if (manifest.Executables is not null)
         {
@@ -1262,31 +1157,32 @@ public sealed class InstalledAddonsProvider : IDisposable
 
 internal struct AddonCarcass
 {
-    public GameEnum SupportedGame { get; set; }
-    public string Id { get; set; }
-    public string Title { get; set; }
-    public AddonTypeEnum Type { get; set; }
-    public string Version { get; set; }
-    public bool IsUnpacked { get; set; }
-    public string? Author { get; set; }
-    public DateOnly? ReleaseDate { get; set; }
-    public string? Description { get; set; }
-    public long? GridImageHash { get; set; }
-    public long? PreviewImageHash { get; set; }
-    public string? GameVersion { get; set; }
-    public string? GameCrc { get; set; }
-    public ImmutableArray<FeatureEnum>? RequiredFeatures { get; set; }
-    public string? MainCon { get; set; }
-    public ImmutableArray<string>? AddCons { get; set; }
-    public string? MainDef { get; set; }
-    public ImmutableArray<string>? AddDefs { get; set; }
-    public string? Rts { get; set; }
-    public string? Ini { get; set; }
-    public string? Rff { get; set; }
-    public string? Snd { get; set; }
-    public Dictionary<string, string?>? Dependencies { get; set; }
-    public Dictionary<string, string?>? Incompatibles { get; set; }
-    public IStartMap? StartMap { get; set; }
+    public GameEnum SupportedGame { get; init; }
+    public string Id { get; init; }
+    public string Title { get; init; }
+    public AddonTypeEnum Type { get; init; }
+    public string Version { get; init; }
+    public bool IsUnpacked { get; init; }
+    public string? Author { get; init; }
+    public DateOnly? ReleaseDate { get; init; }
+    public string? Description { get; init; }
+    public long? GridImageHash { get; init; }
+    public long? PreviewImageHash { get; init; }
+    public string? GameVersion { get; init; }
+    public string? GameCrc { get; init; }
+    public ImmutableArray<FeatureEnum>? RequiredFeatures { get; init; }
+    public string? MainCon { get; init; }
+    public ImmutableArray<string>? AddCons { get; init; }
+    public string? MainDef { get; init; }
+    public ImmutableArray<string>? AddDefs { get; init; }
+    public string? Rts { get; init; }
+    public string? Ini { get; init; }
+    public string? Rff { get; init; }
+    public string? Snd { get; init; }
+    public Dictionary<string, string?>? Dependencies { get; init; }
+    public Dictionary<string, string?>? Incompatibles { get; init; }
+    public IStartMap? StartMap { get; init; }
+
     public Dictionary<OSEnum, Dictionary<PortEnum, string>>? Executables { get; set; }
     public Dictionary<string, Dictionary<string, OptionalParameterTypeEnum>>? Options { get; set; }
 }

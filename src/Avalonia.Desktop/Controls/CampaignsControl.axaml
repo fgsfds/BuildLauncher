@@ -18,7 +18,6 @@
         <helpers:StringToWrappedConverter x:Key="StringToWrappedConverter" />
     </UserControl.Resources>
 
-
     <UserControl.DataTemplates>
 
         <DataTemplate x:DataType="helpers:SeparatorItem">
@@ -129,17 +128,20 @@
                  Grid.Row="1"
                  Grid.Column="0"
                  Padding="2"
-                 DragDrop.AllowDrop="True"
-                 DragDrop.Drop="OnDrop"
                  IsEnabled="{Binding !IsInProgress}"
                  ItemsSource="{Binding CampaignsList}"
                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                  SelectedItem="{Binding SelectedAddon}"
                  SelectionChanged="OnCampaignsListSelectionChanged">
 
+            <ListBox.ContextMenu>
+                <ContextMenu Closed="ContextMenuClosed" Opened="ContextMenuOpened" />
+            </ListBox.ContextMenu>
+
             <Interaction.Behaviors>
                 <behaviors:ClearSelectionOnEmptySpaceBehavior />
                 <behaviors:AddImplicitAnimationsBehavior />
+                <behaviors:FileDropBehavior Command="{Binding ProcessDroppedFilesCommand}" />
             </Interaction.Behaviors>
 
             <ListBox.Styles>

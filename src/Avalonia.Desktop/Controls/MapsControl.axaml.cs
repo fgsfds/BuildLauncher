@@ -1,19 +1,19 @@
 using Addons.Addons;
 using Addons.Providers;
 using Avalonia.Controls;
-using Avalonia.Desktop.Controls.Bases;
 using Avalonia.Desktop.Helpers;
 using Avalonia.Desktop.Misc;
 using Avalonia.Desktop.ViewModels;
+using Avalonia.Interactivity;
+using CommunityToolkit.Mvvm.Input;
 using Core.All.Enums;
 using Core.All.Helpers;
-using CommunityToolkit.Mvvm.Input;
 using Ports.Ports;
 using Ports.Providers;
 
 namespace Avalonia.Desktop.Controls;
 
-public sealed partial class MapsControl : DroppableControl
+public sealed partial class MapsControl : UserControl
 {
     private readonly IReadOnlyList<BasePort> _supportedPorts = [];
     private readonly MapsViewModel _viewModel = null!;
@@ -21,7 +21,7 @@ public sealed partial class MapsControl : DroppableControl
 
     private MenuFlyout? _flyout;
 
-    public MapsControl() : base(null!)
+    public MapsControl()
     {
         InitializeComponent();
     }
@@ -29,9 +29,8 @@ public sealed partial class MapsControl : DroppableControl
     public MapsControl(
         MapsViewModel viewModel,
         PortsProvider portsProvider,
-        InstalledAddonsProvider installedAddonsProvider,
         BitmapsCache bitmapsCache
-        ) : base(installedAddonsProvider)
+        )
     {
         InitializeComponent();
 
@@ -45,7 +44,6 @@ public sealed partial class MapsControl : DroppableControl
         }
 
         AddPortsButtons();
-        //AddContextMenuButtons();
     }
 
     /// <summary>
@@ -101,12 +99,100 @@ public sealed partial class MapsControl : DroppableControl
         }
     }
 
+
     /// <summary>
-    /// Add button to the right click menu
+    /// Get list of skill menu items
     /// </summary>
-    private void AddContextMenuButtons()
+    private List<MenuItem> GetSkillMenusItems(BasePort? port = null)
     {
-        MapsList.ContextMenu = new();
+        ArgumentNullException.ThrowIfNull(_viewModel.Game.Skills);
+
+        List<MenuItem> items = new(5);
+
+        var enums = Enum.GetValues(_viewModel.Game.Skills.GetType())
+            .Cast<Enum>()
+            .ToDictionary(
+            Convert.ToByte,
+            e => e.GetDescription()
+            );
+
+        foreach (var e in enums)
+        {
+            items.Add(
+                new MenuItem()
+                {
+                    Header = e.Value,
+                    Padding = new(5),
+                    Command = new RelayCommand(() => _viewModel.StartMapCommand.Execute(new Tuple<BasePort, byte?>(GetPort(port), e.Key)
+                    ))
+                });
+        }
+
+        return items;
+    }
+
+    /// <summary>
+    /// Get port that should be run
+    /// </summary>
+    /// <param name="port">Port</param>
+    private BasePort GetPort(BasePort? port)
+    {
+        if (_flyout?.Target is not null)
+        {
+            return ((Button)_flyout.Target!).CommandParameter as BasePort ?? throw new FormatException();
+        }
+        else if (port is not null)
+        {
+            return port;
+        }
+
+        throw new ArgumentOutOfRangeException(nameof(port));
+    }
+
+    /// <summary>
+    /// Is skill flyout menu availably
+    /// </summary>
+    /// <param name="port">Port</param>
+    private bool IsSkillFlyoutAvailable(BasePort port) =>
+        _flyout is not null && port.IsSkillSelectionAvailable && _viewModel.Game.AreSkillsAvailble;
+
+
+    /// <summary>
+    /// Update CanExecute for ports buttons and context menu buttons when selected campaign changed
+    /// </summary>
+    private void OnMapsListSelectionChanged(object? sender, SelectionChangedEventArgs e)
+    {
+        foreach (var control in BottomPanel.PortsButtonsPanel.Children)
+        {
+            if (control is Button button &&
+                button.Command is IRelayCommand relayCommand)
+            {
+                relayCommand.NotifyCanExecuteChanged();
+            }
+        }
+    }
+
+    private void OnPortButtonClicked(object? sender, Interactivity.RoutedEventArgs e)
+    {
+        if (sender is not Button button)
+        {
+            throw new InvalidCastException();
+        }
+
+        if (button.CommandParameter is not BasePort port)
+        {
+            throw new InvalidCastException();
+        }
+
+        if (IsSkillFlyoutAvailable(port))
+        {
+            _flyout!.ShowAt(button);
+        }
+    }
+
+    private void ContextMenuOpened(object? sender, RoutedEventArgs e)
+    {
+        MapsList.ContextMenu!.Items.Clear();
 
         if (MapsList.SelectedItem is not BaseAddon addon)
         {
@@ -184,96 +270,8 @@ public sealed partial class MapsControl : DroppableControl
         _ = MapsList.ContextMenu.Items.Add(deleteButton);
     }
 
-
-    /// <summary>
-    /// Get list of skill menu items
-    /// </summary>
-    private List<MenuItem> GetSkillMenusItems(BasePort? port = null)
+    private void ContextMenuClosed(object? sender, RoutedEventArgs e)
     {
-        ArgumentNullException.ThrowIfNull(_viewModel.Game.Skills);
-
-        List<MenuItem> items = new(5);
-
-        var enums = Enum.GetValues(_viewModel.Game.Skills.GetType())
-            .Cast<Enum>()
-            .ToDictionary(
-            Convert.ToByte,
-            e => e.GetDescription()
-            );
-
-        foreach (var e in enums)
-        {
-            items.Add(
-                new MenuItem()
-                {
-                    Header = e.Value,
-                    Padding = new(5),
-                    Command = new RelayCommand(() => _viewModel.StartMapCommand.Execute(new Tuple<BasePort, byte?>(GetPort(port), e.Key)
-                    ))
-                });
-        }
-
-        return items;
-    }
-
-    /// <summary>
-    /// Get port that should be run
-    /// </summary>
-    /// <param name="port">Port</param>
-    private BasePort GetPort(BasePort? port)
-    {
-        if (_flyout?.Target is not null)
-        {
-            return ((Button)_flyout.Target!).CommandParameter as BasePort ?? throw new FormatException();
-        }
-        else if (port is not null)
-        {
-            return port;
-        }
-
-        throw new ArgumentOutOfRangeException(nameof(port));
-    }
-
-    /// <summary>
-    /// Is skill flyout menu availably
-    /// </summary>
-    /// <param name="port">Port</param>
-    private bool IsSkillFlyoutAvailable(BasePort port) =>
-        _flyout is not null && port.IsSkillSelectionAvailable && _viewModel.Game.AreSkillsAvailble;
-
-
-    /// <summary>
-    /// Update CanExecute for ports buttons and context menu buttons when selected campaign changed
-    /// </summary>
-    private void OnMapsListSelectionChanged(object? sender, SelectionChangedEventArgs e)
-    {
-        foreach (var control in BottomPanel.PortsButtonsPanel.Children)
-        {
-            if (control is Button button &&
-                button.Command is IRelayCommand relayCommand)
-            {
-                relayCommand.NotifyCanExecuteChanged();
-            }
-        }
-
-        AddContextMenuButtons();
-    }
-
-    private void OnPortButtonClicked(object? sender, Interactivity.RoutedEventArgs e)
-    {
-        if (sender is not Button button)
-        {
-            throw new InvalidCastException();
-        }
-
-        if (button.CommandParameter is not BasePort port)
-        {
-            throw new InvalidCastException();
-        }
-
-        if (IsSkillFlyoutAvailable(port))
-        {
-            _flyout!.ShowAt(button);
-        }
+        MapsList.ContextMenu!.Items.Clear();
     }
 }

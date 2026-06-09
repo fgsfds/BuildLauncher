@@ -11,19 +11,16 @@ namespace Avalonia.Desktop.Misc;
 public sealed class ViewLocator : IDataTemplate
 {
     private readonly PortsProvider _installedPortsProvider;
-    private readonly InstalledAddonsProviderFactory _installedAddonsProviderFactory;
     private readonly BitmapsCache _bitmapsCache;
 
     private readonly Dictionary<object, UserControl> _controlsCache = [];
 
     public ViewLocator(
         PortsProvider installedPortsProvider,
-        InstalledAddonsProviderFactory installedAddonsProviderFactory,
         BitmapsCache bitmapsCache
         )
     {
         _installedPortsProvider = installedPortsProvider;
-        _installedAddonsProviderFactory = installedAddonsProviderFactory;
         _bitmapsCache = bitmapsCache;
     }
 
@@ -36,9 +33,9 @@ public sealed class ViewLocator : IDataTemplate
 
         UserControl newControl = data switch
         {
-            CampaignsViewModel campsVm => new CampaignsControl(campsVm, _installedPortsProvider, _installedAddonsProviderFactory.Get(campsVm.Game), _bitmapsCache),
-            MapsViewModel mapsVm => new MapsControl(mapsVm, _installedPortsProvider, _installedAddonsProviderFactory.Get(mapsVm.Game), _bitmapsCache),
-            ModsViewModel modsVM => new ModsControl(modsVM, _installedAddonsProviderFactory.Get(modsVM.Game)),
+            CampaignsViewModel campsVm => new CampaignsControl(campsVm, _installedPortsProvider, _bitmapsCache),
+            MapsViewModel mapsVm => new MapsControl(mapsVm, _installedPortsProvider, _bitmapsCache),
+            ModsViewModel modsVM => new ModsControl(modsVM),
             DownloadsViewModel => new DownloadsControl(),
             _ => throw new NotSupportedException($"Can't find control for {data} ViewModel.")
         };

@@ -18,15 +18,17 @@
                  Grid.Row="0"
                  Grid.Column="0"
                  Padding="2"
-                 DragDrop.AllowDrop="True"
-                 DragDrop.Drop="OnDrop"
                  ItemsSource="{Binding ModsList}"
                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                 SelectedItem="{Binding SelectedAddon}"
-                 SelectionChanged="OnModsListSelectionChanged">
+                 SelectedItem="{Binding SelectedAddon}">
+
+            <ListBox.ContextMenu>
+                <ContextMenu Closed="ContextMenuClosed" Opened="ContextMenuOpened" />
+            </ListBox.ContextMenu>
 
             <Interaction.Behaviors>
                 <behaviors:ClearSelectionOnEmptySpaceBehavior />
+                <behaviors:FileDropBehavior Command="{Binding ProcessDroppedFilesCommand}" />
             </Interaction.Behaviors>
 
             <ListBox.ItemsPanel>

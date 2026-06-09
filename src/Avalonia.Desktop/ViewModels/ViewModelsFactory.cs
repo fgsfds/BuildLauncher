@@ -36,6 +36,7 @@ public sealed class ViewModelsFactory
     private readonly BitmapsCache _bitmapsCache;
     private readonly IReadOnlyList<BasePort> _ports;
     private readonly IReadOnlyList<BaseTool> _tools;
+    private readonly IAddonDropHelper _addonInstaller;
     private readonly ILogger _logger;
 
     public ViewModelsFactory(
@@ -57,6 +58,7 @@ public sealed class ViewModelsFactory
         IEnumerable<BasePort> ports,
         IEnumerable<BaseTool> tools,
         MetadataProvider metadataProvider,
+        IAddonDropHelper addonInstaller,
         ILogger logger
         )
     {
@@ -78,6 +80,7 @@ public sealed class ViewModelsFactory
         _ports = [.. ports];
         _tools = [.. tools];
         _metadataProvider = metadataProvider;
+        _addonInstaller = addonInstaller;
         _logger = logger;
     }
 
@@ -120,6 +123,7 @@ public sealed class ViewModelsFactory
             _downloadableAddonsProviderFactory,
             _portStarter,
             _bitmapsCache,
+            _addonInstaller,
             _logger
             );
 
@@ -145,6 +149,7 @@ public sealed class ViewModelsFactory
             _downloadableAddonsProviderFactory,
             _portStarter,
             _bitmapsCache,
+            _addonInstaller,
             _logger
             );
 
@@ -168,6 +173,7 @@ public sealed class ViewModelsFactory
             _downloadableAddonsProviderFactory,
             _bitmapsCache,
             _config,
+            _addonInstaller,
             _logger
             );
 

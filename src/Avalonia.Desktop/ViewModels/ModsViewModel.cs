@@ -4,11 +4,11 @@ using Addons.Addons;
 using Addons.Providers;
 using Avalonia.Controls.Notifications;
 using Avalonia.Desktop.Misc;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using Core.All.Enums;
 using Core.Client.Interfaces;
 using Core.Client.Providers;
-using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
 using Games.Games;
 using Games.Providers;
 using Microsoft.Extensions.Logging;
@@ -21,6 +21,7 @@ public sealed partial class ModsViewModel : RightPanelViewModel, IPortsButtonCon
 
     private readonly InstalledGamesProvider _gamesProvider;
     private readonly InstalledAddonsProvider _installedAddonsProvider;
+    private readonly IAddonDropHelper _addonInstaller;
     private readonly DownloadableAddonsProvider _downloadableAddonsProvider;
     private readonly MetadataProvider _metadataProvider;
     private readonly ILogger _logger;
@@ -37,6 +38,7 @@ public sealed partial class ModsViewModel : RightPanelViewModel, IPortsButtonCon
         DownloadableAddonsProviderFactory downloadableAddonsProviderFactory,
         BitmapsCache bitmapsCache,
         IConfigProvider config,
+        IAddonDropHelper addonInstaller,
         ILogger logger
         ) : base(playtimeProvider, ratingProvider, metadataProvider, bitmapsCache, config)
     {
@@ -46,6 +48,7 @@ public sealed partial class ModsViewModel : RightPanelViewModel, IPortsButtonCon
         _installedAddonsProvider = installedAddonsProviderFactory.Get(game);
         _downloadableAddonsProvider = downloadableAddonsProviderFactory.Get(game);
         _metadataProvider = metadataProvider;
+        _addonInstaller = addonInstaller;
 
         _gamesProvider.GameChangedEvent += OnGameChanged;
         _installedAddonsProvider.AddonsChangedEvent += OnAddonChanged;
@@ -165,6 +168,13 @@ public sealed partial class ModsViewModel : RightPanelViewModel, IPortsButtonCon
 
         OnPropertyChanged(nameof(ModsList));
     }
+
+
+    /// <summary>
+    /// Install dropped addon
+    /// </summary>
+    [RelayCommand]
+    private Task ProcessDroppedFilesAsync(List<string> filePaths) => _addonInstaller.AddAddonsAsync(filePaths, Game);
 
 
     /// <summary>

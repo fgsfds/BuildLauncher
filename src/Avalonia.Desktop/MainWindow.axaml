@@ -1,28 +1,30 @@
-<Window xmlns="https://github.com/avaloniaui"
+<Window x:Class="Avalonia.Desktop.MainWindow"
+        xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:i="https://github.com/projektanker/icons.avalonia"
-        xmlns:vm="using:Avalonia.Desktop.ViewModels"
-        x:Class="Avalonia.Desktop.MainWindow"
-        x:DataType="vm:MainWindowViewModel"
-        mc:Ignorable="d" d:DesignWidth="1300" d:DesignHeight="600"
-        xmlns:pages="clr-namespace:Avalonia.Desktop.Pages"
         xmlns:conv="clr-namespace:Avalonia.Controls.Converters;assembly=Avalonia.Controls"
-        Icon="/Assets/icon.ico"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:i="https://github.com/projektanker/icons.avalonia"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:pages="clr-namespace:Avalonia.Desktop.Pages"
+        xmlns:vm="using:Avalonia.Desktop.ViewModels"
         Title="BuildLauncher"
-        WindowStartupLocation="CenterScreen"
-        CanResize="True"
-        WindowState="Maximized"
         MinWidth="1300"
-        MinHeight="700"
-        ExtendClientAreaToDecorationsHint="True"
+        MinHeight="800"
+        d:DesignHeight="800"
+        d:DesignWidth="1300"
+        x:DataType="vm:MainWindowViewModel"
         Background="{DynamicResource Background}"
+        CanResize="True"
         ClipToBounds="True"
-        Opened="OnWindowOpened">
+        ExtendClientAreaToDecorationsHint="True"
+        Icon="/Assets/icon.ico"
+        Opened="OnWindowOpened"
+        WindowStartupLocation="CenterScreen"
+        WindowState="Maximized"
+        mc:Ignorable="d">
 
     <Window.Styles>
-        <Style Selector="WindowDrawnDecorations /template/ Panel#PART_TitleTextPanel > TextBlock">
+        <Style Selector="WindowDrawnDecorations /template/ Panel#PART_TitleTextPanel &gt; TextBlock">
             <Setter Property="IsVisible" Value="False" />
         </Style>
         <Style Selector="WindowDrawnDecorations /template/ Button#PART_FullScreenButton">
@@ -35,60 +37,60 @@
         <ResourceDictionary>
             <conv:EnumToBoolConverter x:Key="EnumToBoolConverter" />
             <ResourceDictionary.MergedDictionaries>
-                <ResourceInclude Source='/Styles/ThemedResources.axaml'/>
+                <ResourceInclude Source="/Styles/ThemedResources.axaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
 
-    <Border BorderThickness="1"
-            BorderBrush="{DynamicResource WindowBorder}"
+    <Border BorderBrush="{DynamicResource WindowBorder}"
+            BorderThickness="1"
             IsHitTestVisible="True">
 
         <Grid RowDefinitions="25,*">
 
             <Grid x:Name="ConsentWindow"
-                  RowDefinitions="*,auto,*"
-                  ColumnDefinitions="*,auto,*"
+                  Grid.Row="0"
                   Grid.RowSpan="2"
+                  ColumnDefinitions="*,auto,*"
                   IsVisible="False"
+                  RowDefinitions="*,auto,*"
                   ZIndex="999">
 
-                <Canvas Grid.RowSpan="3" Grid.ColumnSpan="3"
-                        IsHitTestVisible="True"
+                <Canvas Grid.Row="0"
+                        Grid.RowSpan="3"
+                        Grid.Column="0"
+                        Grid.ColumnSpan="3"
                         Background="Black"
-                        Opacity="0.5"/>
+                        IsHitTestVisible="True"
+                        Opacity="0.5" />
 
-                <Border Grid.Column="1" Grid.Row="1"
-                        BorderThickness="1"
-                        BorderBrush="{DynamicResource SystemAccentColor}"
+                <Border Grid.Row="1"
+                        Grid.Column="1"
+                        MaxWidth="800"
                         Background="{DynamicResource Background}"
-                        MaxWidth="800">
+                        BorderBrush="{DynamicResource SystemAccentColor}"
+                        BorderThickness="1">
 
                     <StackPanel Orientation="Vertical">
 
-                        <TextBlock Grid.Column="1" Grid.Row="1"
-                                   Margin="50"
-                                   TextWrapping="Wrap"
+                        <TextBlock Margin="50"
                                    HorizontalAlignment="Center"
-                                   VerticalAlignment="Center">
-                            BuildLauncher is a community-driven utility designed to help users manage and launch third-party source ports, mods, custom campaigns, and maps for their licensed Build Engine games.
-                            <LineBreak/>
-                            <LineBreak/>
-                            This Software is not affiliated with or endorsed by the original game rights holders or any associated entities.
-                            <LineBreak/>
-                            <LineBreak/>
-                            Use this Software and the associated content at your own discretion. Please be aware that using third-party modifications may occasionally lead to game instability or technical conflicts.
-                            <LineBreak/>
-                            <LineBreak/>
-                            While we aim for a seamless experience, we cannot guarantee the performance or compatibility of external content. The developers of this Software are not responsible for any technical issues or data loss that may arise from using community-made fixes.
-                        </TextBlock>
+                                   VerticalAlignment="Center"
+                                   TextWrapping="Wrap">
+                            BuildLauncher is a community-driven utility designed to help users manage and launch third-party source ports, mods, custom campaigns, and maps for their licensed Build Engine games.<LineBreak />
+                            <LineBreak />
+                            This Software is not affiliated with or endorsed by the original game rights holders or any associated entities.<LineBreak />
+                            <LineBreak />
+                            Use this Software and the associated content at your own discretion. Please be aware that using third-party modifications may occasionally lead to game instability or technical conflicts.<LineBreak />
+                            <LineBreak />
+                            While we aim for a seamless experience, we cannot guarantee the performance or compatibility of external content. The developers of this Software are not responsible for any technical issues or data loss that may arise from using community-made fixes.</TextBlock>
 
-                        <Button HorizontalAlignment="Center"
-                                VerticalAlignment="Center"
-                                Margin="10,0,10,30"
+                        <Button Margin="10,0,10,30"
                                 Padding="50,10"
-                                Content="OK"
-                                Click="OnConsentButtonClick"/>
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Click="OnConsentButtonClick"
+                                Content="OK" />
 
                     </StackPanel>
 
@@ -96,210 +98,232 @@
 
             </Grid>
 
-            <TabControl Grid.Row="1" Margin="5" TabStripPlacement="Left">
+            <TabControl Grid.Row="1"
+                        Margin="5"
+                        TabStripPlacement="Left">
 
-                <!--Duke 3D-->
-                <TabItem x:Name="DukeTab" IsEnabled="{Binding IsDukeTabEnabled}" >
+                <!--  Duke 3D  -->
+                <TabItem x:Name="DukeTab" IsEnabled="{Binding IsDukeTabEnabled}">
 
                     <TabItem.Header>
                         <StackPanel Orientation="Horizontal">
-                            <Image Source="/Assets/duke3d.png" Width="24" />
-                            <TextBlock Text="Duke Nukem 3D" Margin="5" />
+                            <Image Width="24" Source="/Assets/duke3d.png" />
+                            <TextBlock Margin="5" Text="Duke Nukem 3D" />
                         </StackPanel>
                     </TabItem.Header>
 
-                    <pages:GamePage DataContext="{Binding DukeViewModel}"/>
+                    <pages:GamePage DataContext="{Binding DukeViewModel}" />
 
                 </TabItem>
 
-                <!--Blood-->
+                <!--  Blood  -->
                 <TabItem x:Name="BloodTab" IsEnabled="{Binding IsBloodTabEnabled}">
 
                     <TabItem.Header>
                         <StackPanel Orientation="Horizontal">
-                            <Image Source="/Assets/blood.png" Width="24" />
-                            <TextBlock Text="Blood" Margin="5" />
+                            <Image Width="24" Source="/Assets/blood.png" />
+                            <TextBlock Margin="5" Text="Blood" />
                         </StackPanel>
                     </TabItem.Header>
 
-                    <pages:GamePage DataContext="{Binding BloodViewModel}"/>
+                    <pages:GamePage DataContext="{Binding BloodViewModel}" />
 
                 </TabItem>
 
-                <!--Wang-->
+                <!--  Wang  -->
                 <TabItem x:Name="WangTab" IsEnabled="{Binding IsWangTabEnabled}">
 
                     <TabItem.Header>
                         <StackPanel Orientation="Horizontal">
-                            <Image Source="/Assets/sw.png" Width="24" />
-                            <TextBlock Text="Shadow Warrior" Margin="5" />
+                            <Image Width="24" Source="/Assets/sw.png" />
+                            <TextBlock Margin="5" Text="Shadow Warrior" />
                         </StackPanel>
                     </TabItem.Header>
 
-                    <pages:GamePage DataContext="{Binding WangViewModel}"/>
+                    <pages:GamePage DataContext="{Binding WangViewModel}" />
 
                 </TabItem>
 
-                <!--Fury-->
+                <!--  Fury  -->
                 <TabItem x:Name="FuryTab" IsEnabled="{Binding IsFuryTabEnabled}">
 
                     <TabItem.Header>
                         <StackPanel Orientation="Horizontal">
-                            <Image Source="/Assets/fury.png" Width="24" />
-                            <TextBlock Text="Ion Fury" Margin="5" />
+                            <Image Width="24" Source="/Assets/fury.png" />
+                            <TextBlock Margin="5" Text="Ion Fury" />
                         </StackPanel>
                     </TabItem.Header>
 
-                    <pages:GamePage DataContext="{Binding FuryViewModel}"/>
+                    <pages:GamePage DataContext="{Binding FuryViewModel}" />
 
                 </TabItem>
 
-                <!--RR-->
+                <!--  RR  -->
                 <TabItem x:Name="RedneckTab" IsEnabled="{Binding IsRedneckTabEnabled}">
 
                     <TabItem.Header>
                         <StackPanel Orientation="Horizontal">
-                            <Image Source="/Assets/redneck.png" Width="24" />
-                            <TextBlock Text="Redneck Rampage" Margin="5" />
+                            <Image Width="24" Source="/Assets/redneck.png" />
+                            <TextBlock Margin="5" Text="Redneck Rampage" />
                         </StackPanel>
                     </TabItem.Header>
 
-                    <pages:GamePage DataContext="{Binding RedneckViewModel}"/>
+                    <pages:GamePage DataContext="{Binding RedneckViewModel}" />
 
                 </TabItem>
 
-                <!--PS-->
+                <!--  PS  -->
                 <TabItem x:Name="SlaveTab" IsEnabled="{Binding IsSlaveTabEnabled}">
 
                     <TabItem.Header>
                         <StackPanel Orientation="Horizontal">
-                            <Image Source="/Assets/slave.png" Width="24" />
-                            <TextBlock Text="Powerslave" Margin="5" />
+                            <Image Width="24" Source="/Assets/slave.png" />
+                            <TextBlock Margin="5" Text="Powerslave" />
                         </StackPanel>
                     </TabItem.Header>
 
-                    <pages:GamePage DataContext="{Binding SlaveViewModel}"/>
+                    <pages:GamePage DataContext="{Binding SlaveViewModel}" />
 
                 </TabItem>
 
-                <!--NAM-->
+                <!--  NAM  -->
                 <TabItem x:Name="NamTab" IsEnabled="{Binding IsNamTabEnabled}">
 
                     <TabItem.Header>
                         <StackPanel Orientation="Horizontal">
-                            <Image Source="/Assets/nam.png" Width="24" />
-                            <TextBlock Text="NAM" Margin="5" />
+                            <Image Width="24" Source="/Assets/nam.png" />
+                            <TextBlock Margin="5" Text="NAM" />
                         </StackPanel>
                     </TabItem.Header>
 
-                    <pages:GamePage DataContext="{Binding NamViewModel}"/>
+                    <pages:GamePage DataContext="{Binding NamViewModel}" />
 
                 </TabItem>
 
-                <!--WW2-->
+                <!--  WW2  -->
                 <TabItem x:Name="WW2GITab" IsEnabled="{Binding IsWW2GITabEnabled}">
 
                     <TabItem.Header>
                         <StackPanel Orientation="Horizontal">
-                            <Image Source="/Assets/ww2gi.png" Width="24" />
-                            <TextBlock Text="WWII GI" Margin="5" />
+                            <Image Width="24" Source="/Assets/ww2gi.png" />
+                            <TextBlock Margin="5" Text="WWII GI" />
                         </StackPanel>
                     </TabItem.Header>
 
-                    <pages:GamePage DataContext="{Binding WWIIViewModel}"/>
+                    <pages:GamePage DataContext="{Binding WWIIViewModel}" />
 
                 </TabItem>
 
-                <!--Witchaven-->
+                <!--  Witchaven  -->
                 <TabItem x:Name="WitchavenTab" IsEnabled="{Binding IsWitchavenTabEnabled}">
 
                     <TabItem.Header>
                         <StackPanel Orientation="Horizontal">
-                            <Image Source="/Assets/wh.png" Width="24" />
-                            <TextBlock Text="Witchaven" Margin="5" />
+                            <Image Width="24" Source="/Assets/wh.png" />
+                            <TextBlock Margin="5" Text="Witchaven" />
                         </StackPanel>
                     </TabItem.Header>
 
-                    <pages:GamePage DataContext="{Binding WitchavenViewModel}"/>
+                    <pages:GamePage DataContext="{Binding WitchavenViewModel}" />
 
                 </TabItem>
 
-                <!--TekWar-->
+                <!--  TekWar  -->
                 <TabItem x:Name="TekWarTab" IsEnabled="{Binding IsTekWarTabEnabled}">
 
                     <TabItem.Header>
                         <StackPanel Orientation="Horizontal">
-                            <Image Source="/Assets/tw.png" Width="24" />
-                            <TextBlock Text="TekWar" Margin="5" />
+                            <Image Width="24" Source="/Assets/tw.png" />
+                            <TextBlock Margin="5" Text="TekWar" />
                         </StackPanel>
                     </TabItem.Header>
 
-                    <pages:GamePage DataContext="{Binding TekWarViewModel}"/>
+                    <pages:GamePage DataContext="{Binding TekWarViewModel}" />
 
                 </TabItem>
 
-                <!--Standalone-->
+                <!--  Standalone  -->
                 <TabItem x:Name="StandaloneTab" IsEnabled="True">
 
                     <TabItem.Header>
-                        <TextBlock Text="Standalone" Margin="5" />
+                        <TextBlock Margin="5" Text="Standalone" />
                     </TabItem.Header>
 
-                    <pages:GamePage DataContext="{Binding StandaloneViewModel}"/>
+                    <pages:GamePage DataContext="{Binding StandaloneViewModel}" />
 
                 </TabItem>
 
-                <TabItem IsEnabled="False" Header=""/>
+                <TabItem Header="" IsEnabled="False" />
 
-                <!--Ports-->
+                <!--  Ports  -->
                 <TabItem x:Name="PortsTab" Margin="5">
 
                     <TabItem.Header>
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="Ports"/>
-                            <i:Icon Foreground="Crimson" ToolTip.Tip="Updates available" DataContext="{Binding PortsPageViewModel}" IsVisible="{Binding HasUpdates}" Margin="5,0,0,0" Value="fa7-circle-exclamation" />
+                            <TextBlock Text="Ports" />
+                            <i:Icon Margin="5,0,0,0"
+                                    DataContext="{Binding PortsPageViewModel}"
+                                    Foreground="Crimson"
+                                    IsVisible="{Binding HasUpdates}"
+                                    ToolTip.Tip="Updates available"
+                                    Value="fa7-circle-exclamation" />
                         </StackPanel>
                     </TabItem.Header>
 
-                    <pages:PortsPage DataContext="{Binding PortsPageViewModel}"/>
+                    <pages:PortsPage DataContext="{Binding PortsPageViewModel}" />
                 </TabItem>
 
-                <!--Tools-->
+                <!--  Tools  -->
                 <TabItem x:Name="ToolsTab" Margin="5">
 
                     <TabItem.Header>
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="Tools"/>
-                            <i:Icon Foreground="Crimson" ToolTip.Tip="Updates available" DataContext="{Binding ToolsPageViewModel}" IsVisible="{Binding HasUpdates}" Margin="5,0,0,0" Value="fa7-circle-exclamation" />
+                            <TextBlock Text="Tools" />
+                            <i:Icon Margin="5,0,0,0"
+                                    DataContext="{Binding ToolsPageViewModel}"
+                                    Foreground="Crimson"
+                                    IsVisible="{Binding HasUpdates}"
+                                    ToolTip.Tip="Updates available"
+                                    Value="fa7-circle-exclamation" />
                         </StackPanel>
                     </TabItem.Header>
 
-                    <pages:ToolsPage DataContext="{Binding ToolsPageViewModel}"/>
+                    <pages:ToolsPage DataContext="{Binding ToolsPageViewModel}" />
                 </TabItem>
 
-                <!--Dev-->
-                <TabItem x:Name="DevTab" Header="Dev" Margin="5" >
-                    <pages:DevPage DataContext="{Binding DevPageViewModel}"/>
+                <!--  Dev  -->
+                <TabItem x:Name="DevTab"
+                         Margin="5"
+                         Header="Dev">
+                    <pages:DevPage DataContext="{Binding DevPageViewModel}" />
                 </TabItem>
 
-                <TabItem IsEnabled="False" Header=""/>
+                <TabItem Header="" IsEnabled="False" />
 
-                <!--Settings-->
-                <TabItem x:Name="SettingsTab" IsSelected="True" Header="Settings" Margin="5" >
-                    <pages:SettingsPage DataContext="{Binding SettingsPageViewModel}"/>
+                <!--  Settings  -->
+                <TabItem x:Name="SettingsTab"
+                         Margin="5"
+                         Header="Settings"
+                         IsSelected="True">
+                    <pages:SettingsPage DataContext="{Binding SettingsPageViewModel}" />
                 </TabItem>
 
-                <!--About-->
+                <!--  About  -->
                 <TabItem x:Name="AboutTab" Margin="5">
 
                     <TabItem.Header>
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="About"/>
-                            <i:Icon Foreground="Crimson" ToolTip.Tip="App update available" DataContext="{Binding AboutPageViewModel}" IsVisible="{Binding CurrentUpdateState, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static vm:UpdateState.UpdateAvailable}}" Margin="5,0,0,0" Value="fa7-circle-exclamation" />
+                            <TextBlock Text="About" />
+                            <i:Icon Margin="5,0,0,0"
+                                    DataContext="{Binding AboutPageViewModel}"
+                                    Foreground="Crimson"
+                                    IsVisible="{Binding CurrentUpdateState, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static vm:UpdateState.UpdateAvailable}}"
+                                    ToolTip.Tip="App update available"
+                                    Value="fa7-circle-exclamation" />
                         </StackPanel>
                     </TabItem.Header>
 
-                    <pages:AboutPage DataContext="{Binding AboutPageViewModel}"/>
+                    <pages:AboutPage DataContext="{Binding AboutPageViewModel}" />
                 </TabItem>
 
             </TabControl>

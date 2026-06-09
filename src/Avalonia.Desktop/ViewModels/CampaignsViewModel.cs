@@ -5,11 +5,11 @@ using Addons.Providers;
 using Avalonia.Controls.Notifications;
 using Avalonia.Desktop.Helpers;
 using Avalonia.Desktop.Misc;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using Core.All.Enums;
 using Core.Client.Interfaces;
 using Core.Client.Providers;
-using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
 using Games.Games;
 using Games.Providers;
 using Microsoft.Extensions.Logging;
@@ -24,6 +24,7 @@ public sealed partial class CampaignsViewModel : RightPanelViewModel, IPortsButt
     private readonly InstalledGamesProvider _gamesProvider;
     private readonly IConfigProvider _config;
     private readonly InstalledAddonsProvider _installedAddonsProvider;
+    private readonly IAddonDropHelper _addonInstaller;
     private readonly DownloadableAddonsProvider _downloadableAddonsProvider;
     private readonly PortStarter _portStarter;
     private readonly MetadataProvider _metadataProvider;
@@ -127,6 +128,7 @@ public sealed partial class CampaignsViewModel : RightPanelViewModel, IPortsButt
         DownloadableAddonsProviderFactory downloadableAddonsProviderFactory,
         PortStarter portStarter,
         BitmapsCache bitmapsCache,
+        IAddonDropHelper addonInstaller,
         ILogger logger
         ) : base(playtimeProvider, ratingProvider, metadataProvider, bitmapsCache, config)
     {
@@ -138,6 +140,7 @@ public sealed partial class CampaignsViewModel : RightPanelViewModel, IPortsButt
         _downloadableAddonsProvider = downloadableAddonsProviderFactory.Get(game);
         _portStarter = portStarter;
         _metadataProvider = metadataProvider;
+        _addonInstaller = addonInstaller;
         _logger = logger;
 
         _gamesProvider.GameChangedEvent += OnGameChanged;
@@ -260,6 +263,13 @@ public sealed partial class CampaignsViewModel : RightPanelViewModel, IPortsButt
     [RelayCommand(CanExecute = nameof(ClearSearchBoxCanExecute))]
     private void ClearSearchBox() => SearchBoxText = string.Empty;
     private bool ClearSearchBoxCanExecute() => !string.IsNullOrEmpty(SearchBoxText);
+
+
+    /// <summary>
+    /// Install dropped addon
+    /// </summary>
+    [RelayCommand]
+    private Task ProcessDroppedFilesAsync(List<string> filePaths) => _addonInstaller.AddAddonsAsync(filePaths, Game);
 
 
     /// <summary>
