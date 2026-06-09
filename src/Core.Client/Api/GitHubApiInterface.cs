@@ -143,11 +143,15 @@ public sealed class GitHubApiInterface : IApiInterface
             return false;
         }
 
-        using var addonsJson = File.OpenRead(ClientProperties.PathToLocalAddonsJson);
-        var addons = await JsonSerializer.DeserializeAsync(
-            addonsJson,
-            DownloadableAddonJsonModelDictionaryContext.Default.DictionaryGameEnumListDownloadableAddonJsonModel
+        Dictionary<GameEnum, List<DownloadableAddonJsonModel>>? addons;
+
+        using (var addonsJson = File.OpenRead(ClientProperties.PathToLocalAddonsJson))
+        {
+            addons = await JsonSerializer.DeserializeAsync(
+                addonsJson,
+                DownloadableAddonJsonModelDictionaryContext.Default.DictionaryGameEnumListDownloadableAddonJsonModel
             ).ConfigureAwait(false);
+        }
 
         if (addons is null)
         {
@@ -182,12 +186,15 @@ public sealed class GitHubApiInterface : IApiInterface
         var newAddonsJson = JsonSerializer.Serialize(addons, DownloadableAddonJsonModelDictionaryContext.Default.DictionaryGameEnumListDownloadableAddonJsonModel);
         await File.WriteAllTextAsync(ClientProperties.PathToLocalAddonsJson, newAddonsJson).ConfigureAwait(false);
 
+        List<AddonJsonModel>? manifests;
 
-        using var manifestsJson = File.OpenRead(ClientProperties.PathToLocalManifestsJson);
-        var manifests = await JsonSerializer.DeserializeAsync(
-            manifestsJson,
-            ManifestsJsonModelContext.Default.ListAddonJsonModel
+        using (var manifestsJson = File.OpenRead(ClientProperties.PathToLocalManifestsJson))
+        {
+            manifests = await JsonSerializer.DeserializeAsync(
+                manifestsJson,
+                ManifestsJsonModelContext.Default.ListAddonJsonModel
             ).ConfigureAwait(false);
+        }
 
         if (manifests is null)
         {
