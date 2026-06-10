@@ -1,4 +1,5 @@
 ﻿using System.Globalization;
+using System.Text;
 using Avalonia.Data;
 using Avalonia.Data.Converters;
 using Avalonia.Desktop.Misc;
@@ -99,5 +100,54 @@ public sealed class StringToWrappedConverter : IValueConverter
     public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
         throw new NotSupportedException();
+    }
+}
+
+/// <summary>
+/// Converts option parameters to a semicolon-separated list.
+/// </summary>
+public sealed class OptionParamsToStringConverter : IValueConverter
+{
+    public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
+    {
+        if (value is not Dictionary<string, OptionalParameterTypeEnum> valueStr)
+        {
+            return string.Empty;
+        }
+
+        StringBuilder sb = new();
+
+        foreach (var param in valueStr)
+        {
+            sb.Append(param.Key + ":" + param.Value.ToString() + "; ");
+        }
+
+        return sb.ToString();
+    }
+
+    public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
+    {
+        if (value is not string valueStr)
+        {
+            return new Dictionary<string, OptionalParameterTypeEnum>();
+        }
+
+        Dictionary<string, OptionalParameterTypeEnum> result = [];
+
+        var nameTypePair = valueStr.Split(';', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+
+        foreach (var colonSeparatedPair in nameTypePair)
+        {
+            var fileNameExtensionPair = colonSeparatedPair.Split(':', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+
+            if (!Enum.TryParse<OptionalParameterTypeEnum>(fileNameExtensionPair[1], true, out var res))
+            {
+                throw new InvalidCastException();
+            }
+
+            result.Add(fileNameExtensionPair[0], res);
+        }
+
+        return result;
     }
 }

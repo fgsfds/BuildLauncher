@@ -6,6 +6,8 @@ using Avalonia.Desktop.Helpers;
 using Avalonia.Media;
 using Avalonia.Platform.Storage;
 using Avalonia.Threading;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using Core.All.Enums;
 using Core.All.Enums.Versions;
 using Core.All.Interfaces;
@@ -13,8 +15,6 @@ using Core.All.Serializable.Addon;
 using Core.Client.Helpers;
 using Core.Client.Interfaces;
 using Core.Client.Tools;
-using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
 using Games.Providers;
 using Microsoft.Extensions.Logging;
 using SharpCompress.Archives;
@@ -333,6 +333,9 @@ public sealed partial class DevViewModel : ObservableObject
     [ObservableProperty]
     private ImmutableList<DependantAddonJsonModel>? _incompatibilitiesList;
 
+    [ObservableProperty]
+    public partial ImmutableList<OptionJsonModel>? OptionsList { get; set; }
+
     #endregion
 
 
@@ -461,6 +464,26 @@ public sealed partial class DevViewModel : ObservableObject
         ArgumentNullException.ThrowIfNull(IncompatibilitiesList);
 
         IncompatibilitiesList = IncompatibilitiesList.Remove(dependency);
+    }
+
+
+    [RelayCommand]
+    private void AddOption()
+    {
+        OptionJsonModel newOption = new() { OptionName = "", Parameters = [] };
+
+        OptionsList ??= [];
+
+        OptionsList = OptionsList.Add(newOption);
+    }
+
+
+    [RelayCommand]
+    private void RemoveOption(OptionJsonModel option)
+    {
+        ArgumentNullException.ThrowIfNull(OptionsList);
+
+        OptionsList = OptionsList.Remove(option);
     }
 
 
@@ -902,7 +925,8 @@ public sealed partial class DevViewModel : ObservableObject
             MainRff = string.IsNullOrWhiteSpace(MainRff) ? null : MainRff,
             SoundRff = string.IsNullOrWhiteSpace(SoundRff) ? null : SoundRff,
             Dependencies = (DependenciesList is null || DependenciesList.Count == 0) && features.Count == 0 ? null : new() { Addons = DependenciesList is null || DependenciesList.Count == 0 ? null : [.. DependenciesList], RequiredFeatures = features.Count == 0 ? null : features },
-            Incompatibles = (IncompatibilitiesList is null || IncompatibilitiesList.Count == 0) ? null : new() { Addons = IncompatibilitiesList is null || IncompatibilitiesList.Count == 0 ? null : [.. IncompatibilitiesList] },
+            Incompatibles = (IncompatibilitiesList is null || IncompatibilitiesList.Count == 0) ? null : new() { Addons = [.. IncompatibilitiesList] },
+            Options = (OptionsList is null || OptionsList.Count == 0) ? null : [.. OptionsList],
             StartMap = startMap,
             Executables = executables.Count == 0 ? null : executables
         };
@@ -967,6 +991,7 @@ public sealed partial class DevViewModel : ObservableObject
 
         DependenciesList = addon.Dependencies?.Addons is null ? null : [.. addon.Dependencies.Addons];
         IncompatibilitiesList = addon.Incompatibles?.Addons is null ? null : [.. addon.Incompatibles.Addons];
+        OptionsList = addon.Options is null ? null : [.. addon.Options];
 
         if (addon.StartMap is MapFileJsonModel mapFile)
         {
