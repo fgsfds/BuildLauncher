@@ -15,18 +15,6 @@
     "description": "500 Milliliters of /vr/ is a community add-on by members of the /vr/ board on 4chan released on February 1, 2021. It features six levels created by three authors, and features numerous replaced assets. Four levels are available for Bloodbath. It is named as a play on the 200 Minutes of /vr/ and related community projects for Doom."
   },
   {
-    "id": "blood-bloodbasket",
-    "type": "TC",
-    "game": {
-      "name": "Blood"
-    },
-    "title": "Bloodbasket",
-    "version": "1.1",
-    "author": "daMann, Damien Azreal, BloodyTom, Matthan",
-    "ini": "BASKET.INI",
-    "description": "The first community Map Jam by The Blood Discord Channel. Bloodbasket includes four distinctive and varied maps full of blood, dread and secrets! Caleb will have to fight his way through office cubicles, haunting forests, lava caves and come face to face with a big ass spider!"
-  },
-  {
     "id": "blood-bloodlines",
     "type": "TC",
     "game": {
@@ -312,18 +300,6 @@
     "description": "https://www.moddb.com/games/blood/addons/the-lost-episode\r\n\r\nThis Episode is made up of eight maps taken straight from the leaked alpha. There are minor changes in aesthetics in a few of the maps however teh author made sure to keep all maps as close to the original author\u0027s intentions and art direction as possible."
   },
   {
-    "id": "blood-marrow",
-    "type": "TC",
-    "game": {
-      "name": "Blood"
-    },
-    "title": "Marrow",
-    "version": "2.0",
-    "author": "Nick Palsmeier",
-    "ini": "MARROW.ini",
-    "description": "https://playmarrow.com/\r\n\r\nTchernobog lays dead, his form fading away from the world as Caleb turns his back to the smoldering corpse. Vengeance sated, he leaves the Hall of the Epiphany behind. Feeling no less disdain for the world than he did with Ophelia, and experiencing none of the joy she brought, he returns to the grave to die once more. A hopefully final resting place.\r\n\r\nThe Cabal had been scattered far and wide by the gunman\u0027s path of revenge, but in his absence they regathered, regrouped, motivated out of their own sense of vengeance. Caleb was their general, the chosen one of their dark god and he had betrayed them all twice over.\r\n\r\nHe must burn for rejecting the honor of being sacrificed, for striking at Tchernobog. This suffering is best repaid by the tongues of Cerberus. Gathering his remains, the diaspora cinders of his pit, they enacted plans to resurrect him, and sought out Caleb\u0027s newfound grave, and bring him face to face with a fiery end.\r\n\r\n- A complete brand new episode.\r\n\r\n- Control Caleb as he carves a swath of carnage through the Cabal.\r\n\r\n- Experience ten brand new levels!\r\n\r\n- Using only assets from the original game, crafting a dark and horrific journey for Caleb."
-  },
-  {
     "id": "blood-nightmares",
     "type": "TC",
     "game": {
@@ -443,73 +419,6 @@
     "rff_main": "IRA.RFF",
     "rff_sound": "IRASND.RFF",
     "description": "https://www.moddb.com/mods/the-way-of-ira\r\n\r\nYears after dealing with the Cabal, Caleb lives on the outskirts of a small village.\r\n\r\nAfter having been almost fully erradicated, the last Cabal infiltrated the highest ranks of most religions and governments. Years passed by, more Cabal got recruited and step by step the people got mentally prepared to obey what was coming, one religion, one government, ruled by the Cabal."
-  },
-  {
-    "id": "blood-what-lies-beneath",
-    "type": "TC",
-    "game": {
-      "name": "Blood"
-    },
-    "title": "What Lies Beneath",
-    "version": "1.5.16",
-    "author": "BloodyTom",
-    "def_modules": [
-      "WLB.DEF"
-    ],
-    "ini": "WLB.INI",
-    "rff_main": "WLB.RFF",
-    "rff_sound": "WLBSND.RFF",
-    "dependencies": {
-      "features": [
-        "Modern_Types"
-      ]
-    },
-    "incompatibles": {
-      "addons": [
-        {
-          "id": "blood-smooth"
-        },
-        {
-          "id": "blood-cultists-with-guns"
-        }
-      ]
-    },
-    "description": "https://www.moddb.com/mods/blood-what-lies-beneath\r\n\r\nFollow Caleb who is lost at sea to a mysterious island. What will he discover beneath the surface, in the bowels of the island? A dark cult has taken over a mansion, its surroundings and the secrets beneath the reef.\r\n\r\nThis is a non-linear addon for Blood. Fight the way you want, choose your own path through the island and find places otherwise kept a secret. Find clues to progress with tomes around the island.",
-    "executables": {
-      "Windows": {
-        "NBlood": "nblood.exe",
-        "NotBlood": "notblood.exe"
-      },
-      "Linux": {
-        "NotBlood": "notblood"
-      }
-    },
-    "options": [
-      {
-        "name": "SmoothBlood",
-        "parameters": {
-          "SB.DEF": "DEF"
-        }
-      },
-      {
-        "name": "Cultists with guns",
-        "parameters": {
-          "CW.DEF": "DEF"
-        }
-      },
-      {
-        "name": "Additional voxels",
-        "parameters": {
-          "KVX2.DEF": "DEF"
-        }
-      },
-      {
-        "name": "Voxel trees",
-        "parameters": {
-          "KVX3.DEF": "DEF"
-        }
-      }
-    ]
   },
   {
     "id": "blood-willard",
@@ -3713,5 +3622,108 @@
       "sw-widescreen.def"
     ],
     "description": "This file provides widescreen graphics for Shadow Warrior weapons"
+  },
+  {
+    "id": "blood-bloodbasket",
+    "type": "TC",
+    "game": {
+      "name": "Blood"
+    },
+    "title": "Bloodbasket",
+    "version": "1.1",
+    "author": "daMann, Damien Azreal, BloodyTom, Matthan",
+    "ini": "BASKET.INI",
+    "description": "https://www.moddb.com/mods/bloodbasket\r\n\r\nThe first community Map Jam by The Blood Discord Channel. Bloodbasket includes four distinctive and varied maps full of blood, dread and secrets! Caleb will have to fight his way through office cubicles, haunting forests, lava caves and come face to face with a big ass spider!"
+  },
+  {
+    "id": "blood-what-lies-beneath",
+    "type": "TC",
+    "game": {
+      "name": "Blood"
+    },
+    "title": "What Lies Beneath",
+    "version": "1.6.8",
+    "author": "BloodyTom",
+    "release_date": "2026-05-25",
+    "def_modules": [
+      "WLB.DEF"
+    ],
+    "ini": "WLB.INI",
+    "rff_main": "WLB.RFF",
+    "rff_sound": "WLBSND.RFF",
+    "dependencies": {
+      "features": [
+        "Modern_Types"
+      ]
+    },
+    "incompatibles": {
+      "addons": [
+        {
+          "id": "blood-smooth"
+        },
+        {
+          "id": "blood-cultists-with-guns"
+        }
+      ]
+    },
+    "description": "https://www.moddb.com/mods/blood-what-lies-beneath\r\n\r\nFollow Caleb who is lost at sea to a mysterious island. What will he discover beneath the surface, in the bowels of the island? A dark cult has taken over a mansion, its surroundings and the secrets beneath the reef.\r\n\r\nThis is a non-linear addon for Blood. Fight the way you want, choose your own path through the island and find places otherwise kept a secret. Find clues to progress with tomes around the island.",
+    "options": [
+      {
+        "name": "SmoothBlood",
+        "parameters": {
+          "SB.DEF": "DEF"
+        }
+      },
+      {
+        "name": "Cultists with guns",
+        "parameters": {
+          "CW.DEF": "DEF"
+        }
+      },
+      {
+        "name": "Additional voxels",
+        "parameters": {
+          "KVX2.DEF": "DEF"
+        }
+      },
+      {
+        "name": "Voxel trees",
+        "parameters": {
+          "KVX3.DEF": "DEF"
+        }
+      },
+      {
+        "name": "Alpha shotgun",
+        "parameters": {
+          "AS.DEF": "DEF"
+        }
+      }
+    ]
+  },
+  {
+    "id": "blood-bloodstream",
+    "type": "TC",
+    "game": {
+      "name": "Blood"
+    },
+    "title": "Bloodstream Map Jam",
+    "version": "1.0",
+    "author": "daMann, Doomaniac, Seizhak, Matthan, BlooyTom",
+    "release_date": "2026-06-10",
+    "ini": "BSTREAM.ini",
+    "description": "https://www.moddb.com/mods/bloodbasket/downloads/bloodstream-map-jam\r\n\r\nThe second Blood map jam brought to you by the Blood Discord Channel."
+  },
+  {
+    "id": "blood-marrow",
+    "type": "TC",
+    "game": {
+      "name": "Blood"
+    },
+    "title": "Marrow",
+    "version": "2.1.2",
+    "author": "Nick Palsmeier",
+    "release_date": "2026-03-26",
+    "ini": "MARROW.ini",
+    "description": "https://playmarrow.com/\r\n\r\nTchernobog lays dead, his form fading away from the world as Caleb turns his back to the smoldering corpse. Vengeance sated, he leaves the Hall of the Epiphany behind. Feeling no less disdain for the world than he did with Ophelia, and experiencing none of the joy she brought, he returns to the grave to die once more. A hopefully final resting place.\r\n\r\nThe Cabal had been scattered far and wide by the gunman\u0027s path of revenge, but in his absence they regathered, regrouped, motivated out of their own sense of vengeance. Caleb was their general, the chosen one of their dark god and he had betrayed them all twice over.\r\n\r\nHe must burn for rejecting the honor of being sacrificed, for striking at Tchernobog. This suffering is best repaid by the tongues of Cerberus. Gathering his remains, the diaspora cinders of his pit, they enacted plans to resurrect him, and sought out Caleb\u0027s newfound grave, and bring him face to face with a fiery end.\r\n\r\n- A complete brand new episode.\r\n\r\n- Control Caleb as he carves a swath of carnage through the Cabal.\r\n\r\n- Experience ten brand new levels!\r\n\r\n- Using only assets from the original game, crafting a dark and horrific journey for Caleb."
   }
 ]

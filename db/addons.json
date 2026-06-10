@@ -2813,20 +2813,6 @@
       "Sha256": "52D2C2904ABC6E10383A41141A6896F232963246813B6DD600B5F48DA6396368"
     },
     {
-      "Id": "blood-bloodbasket",
-      "AddonType": "TC",
-      "Game": "Blood",
-      "DownloadUrl": "https://s3-nl.hostkey.com/b8743306-fgsfds/buildlauncher/Blood/Campaigns/blood-bloodbasket_v1_1.zip",
-      "Title": "Bloodbasket",
-      "Version": "1.1",
-      "FileSize": 6486277,
-      "Description": "The first community Map Jam by The Blood Discord Channel. Bloodbasket includes four distinctive and varied maps full of blood, dread and secrets! Caleb will have to fight his way through office cubicles, haunting forests, lava caves and come face to face with a big ass spider!",
-      "Author": "daMann, Damien Azreal, BloodyTom, Matthan",
-      "UpdateDate": "2025-05-13T04:30:46.5863362Z",
-      "MD5": "D123720D9E7975536B5BE686F757135B",
-      "Sha256": "0A554C846136AE2059BD50E1BA3DD18512F693173284B4CC7D84F681A18D2ED6"
-    },
-    {
       "Id": "blood-bloody-pulp-fiction",
       "AddonType": "TC",
       "Game": "Blood",
@@ -2883,20 +2869,6 @@
       "Sha256": "2F488A86BEDF1944E20F15770EC272B36EE15847381F1D022B5770059E46C353"
     },
     {
-      "Id": "blood-what-lies-beneath",
-      "AddonType": "TC",
-      "Game": "Blood",
-      "DownloadUrl": "https://s3-nl.hostkey.com/b8743306-fgsfds/buildlauncher/Blood/Campaigns/blood-what-lies-beneath_v1_5_16.zip",
-      "Title": "What Lies Beneath",
-      "Version": "1.5.16",
-      "FileSize": 309262243,
-      "Description": "https://www.moddb.com/mods/blood-what-lies-beneath\r\n\r\nFollow Caleb who is lost at sea to a mysterious island. What will he discover beneath the surface, in the bowels of the island? A dark cult has taken over a mansion, its surroundings and the secrets beneath the reef.\r\n\r\nThis is a non-linear addon for Blood. Fight the way you want, choose your own path through the island and find places otherwise kept a secret. Find clues to progress with tomes around the island.",
-      "Author": "BloodyTom",
-      "UpdateDate": "2025-12-06T18:56:22.8999393Z",
-      "MD5": "6B237C423AB388D3F7C49F7464F7A8EE",
-      "Sha256": "2E2BA12A4FEC88A5246A2FEEF24C6B8D04E5F68EE735AEAD38C5F44EB6E5AC3E"
-    },
-    {
       "Id": "blood-somewhere-under-the-sea",
       "AddonType": "TC",
       "Game": "Blood",
@@ -2939,20 +2911,6 @@
       "Sha256": "EC25A302A086C5CB89638D48D161C47F3A359C7226BB2587EE0B6D1E159ECB8A"
     },
     {
-      "Id": "blood-marrow",
-      "AddonType": "TC",
-      "Game": "Blood",
-      "DownloadUrl": "https://s3-nl.hostkey.com/b8743306-fgsfds/buildlauncher/Blood/Campaigns/blood-marrow_v2_0.zip",
-      "Title": "Marrow",
-      "Version": "2.0",
-      "FileSize": 221297463,
-      "Description": "https://playmarrow.com/\r\n\r\nTchernobog lays dead, his form fading away from the world as Caleb turns his back to the smoldering corpse. Vengeance sated, he leaves the Hall of the Epiphany behind. Feeling no less disdain for the world than he did with Ophelia, and experiencing none of the joy she brought, he returns to the grave to die once more. A hopefully final resting place.\r\n\r\nThe Cabal had been scattered far and wide by the gunman\u0027s path of revenge, but in his absence they regathered, regrouped, motivated out of their own sense of vengeance. Caleb was their general, the chosen one of their dark god and he had betrayed them all twice over.\r\n\r\nHe must burn for rejecting the honor of being sacrificed, for striking at Tchernobog. This suffering is best repaid by the tongues of Cerberus. Gathering his remains, the diaspora cinders of his pit, they enacted plans to resurrect him, and sought out Caleb\u0027s newfound grave, and bring him face to face with a fiery end.\r\n\r\n- A complete brand new episode.\r\n\r\n- Control Caleb as he carves a swath of carnage through the Cabal.\r\n\r\n- Experience ten brand new levels!\r\n\r\n- Using only assets from the original game, crafting a dark and horrific journey for Caleb.",
-      "Author": "Nick Palsmeier",
-      "UpdateDate": "2026-01-24T05:45:22.1649975Z",
-      "MD5": "AC71A097454109A577CBC0D1B8574085",
-      "Sha256": "73B52AC77F64441857BD07ACFDD7295F4D751FC318167C02B32AB719AF281C93"
-    },
-    {
       "Id": "blood-willard",
       "AddonType": "TC",
       "Game": "Blood",
@@ -2993,6 +2951,62 @@
       "UpdateDate": "2026-03-20T10:07:24.6041423Z",
       "MD5": "050EB91D7B63D79197BCACBBDE00CD83",
       "Sha256": "02E5B4FF46D011C7516607CB28F6270B19659DBFF27BE9EF0FA06AF0E8BE7436"
+    },
+    {
+      "Id": "blood-bloodbasket",
+      "AddonType": "TC",
+      "Game": "Blood",
+      "DownloadUrl": "https://s3-nl.hostkey.com/b8743306-fgsfds/buildlauncher/Blood/Campaigns/blood-bloodbasket_v1_1.zip",
+      "Title": "Bloodbasket",
+      "Version": "1.1",
+      "FileSize": 7823725,
+      "Description": "https://www.moddb.com/mods/bloodbasket\r\n\r\nThe first community Map Jam by The Blood Discord Channel. Bloodbasket includes four distinctive and varied maps full of blood, dread and secrets! Caleb will have to fight his way through office cubicles, haunting forests, lava caves and come face to face with a big ass spider!",
+      "Author": "daMann, Damien Azreal, BloodyTom, Matthan",
+      "UpdateDate": "2026-06-09T16:47:40.623378Z",
+      "MD5": "D41D8CD98F00B204E9800998ECF8427E",
+      "Sha256": "BAE7DC708BC55AFFE832515358995873D1125FA5F0D2985D23188CEF8604294B"
+    },
+    {
+      "Id": "blood-what-lies-beneath",
+      "AddonType": "TC",
+      "Game": "Blood",
+      "DownloadUrl": "https://s3-nl.hostkey.com/b8743306-fgsfds/buildlauncher/Blood/Campaigns/blood-what-lies-beneath_v1_6_8.zip",
+      "Title": "What Lies Beneath",
+      "Version": "1.6.8",
+      "FileSize": 725890343,
+      "Description": "https://www.moddb.com/mods/blood-what-lies-beneath\r\n\r\nFollow Caleb who is lost at sea to a mysterious island. What will he discover beneath the surface, in the bowels of the island? A dark cult has taken over a mansion, its surroundings and the secrets beneath the reef.\r\n\r\nThis is a non-linear addon for Blood. Fight the way you want, choose your own path through the island and find places otherwise kept a secret. Find clues to progress with tomes around the island.",
+      "Author": "BloodyTom",
+      "UpdateDate": "2026-06-10T20:08:33.2011857Z",
+      "MD5": "D41D8CD98F00B204E9800998ECF8427E",
+      "Sha256": "C9D023AD07C5B968EE27980BF95C4BD4B38B782567191D3197D96A19D9414CA1"
+    },
+    {
+      "Id": "blood-bloodstream",
+      "AddonType": "TC",
+      "Game": "Blood",
+      "DownloadUrl": "https://s3-nl.hostkey.com/b8743306-fgsfds/buildlauncher/Blood/Campaigns/blood-bloodstream_v1_0.zip",
+      "Title": "Bloodstream Map Jam",
+      "Version": "1.0",
+      "FileSize": 2291851,
+      "Description": "https://www.moddb.com/mods/bloodbasket/downloads/bloodstream-map-jam\r\n\r\nThe second Blood map jam brought to you by the Blood Discord Channel.",
+      "Author": "daMann, Doomaniac, Seizhak, Matthan, BlooyTom",
+      "UpdateDate": "2026-06-10T20:24:04.3814908Z",
+      "MD5": "D41D8CD98F00B204E9800998ECF8427E",
+      "Sha256": "BC45FDF43AE4E6F56D54039E99C3D72A742C499CF379A3AA8E2C70AEA6F3632D"
+    },
+    {
+      "Id": "blood-marrow",
+      "AddonType": "TC",
+      "Game": "Blood",
+      "DownloadUrl": "https://s3-nl.hostkey.com/b8743306-fgsfds/buildlauncher/Blood/Campaigns/blood-marrow_v2_1_2.zip",
+      "Title": "Marrow",
+      "Version": "2.1.2",
+      "FileSize": 231837543,
+      "Description": "https://playmarrow.com/\r\n\r\nTchernobog lays dead, his form fading away from the world as Caleb turns his back to the smoldering corpse. Vengeance sated, he leaves the Hall of the Epiphany behind. Feeling no less disdain for the world than he did with Ophelia, and experiencing none of the joy she brought, he returns to the grave to die once more. A hopefully final resting place.\r\n\r\nThe Cabal had been scattered far and wide by the gunman\u0027s path of revenge, but in his absence they regathered, regrouped, motivated out of their own sense of vengeance. Caleb was their general, the chosen one of their dark god and he had betrayed them all twice over.\r\n\r\nHe must burn for rejecting the honor of being sacrificed, for striking at Tchernobog. This suffering is best repaid by the tongues of Cerberus. Gathering his remains, the diaspora cinders of his pit, they enacted plans to resurrect him, and sought out Caleb\u0027s newfound grave, and bring him face to face with a fiery end.\r\n\r\n- A complete brand new episode.\r\n\r\n- Control Caleb as he carves a swath of carnage through the Cabal.\r\n\r\n- Experience ten brand new levels!\r\n\r\n- Using only assets from the original game, crafting a dark and horrific journey for Caleb.",
+      "Author": "Nick Palsmeier",
+      "UpdateDate": "2026-06-10T20:27:16.4780786Z",
+      "MD5": "D41D8CD98F00B204E9800998ECF8427E",
+      "Sha256": "EF38411118B1505A16673ED39B34213942E8DC582654E94D4246FE6DB6DFEE9E"
     }
   ],
   "Wang": [
