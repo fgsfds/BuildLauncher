@@ -28,7 +28,8 @@ public sealed class AddonFilesTests : IDisposable
 
         var bmCache = new Mock<ICacheAdder<Stream>>();
         var logger = new Mock<ILogger>();
-        MetadataProvider metadataProvider = new(new OfflineApiInterface(logger.Object));
+        var logger2 = new Mock<ILogger<MetadataProvider>>();
+        MetadataProvider metadataProvider = new(new OfflineApiInterface(logger.Object), logger2.Object);
         OriginalCampaignsProvider originalCampaignsProvider = new(config.Object);
 
         _installedAddonsProvider = new(
