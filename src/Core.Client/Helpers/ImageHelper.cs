@@ -47,7 +47,7 @@ public static class ImageHelper
             return null;
         }
 
-        int capacity = image.Size > 0 && image.Size <= int.MaxValue ? (int)image.Size : 81920;
+        var capacity = image.Size > 0 && image.Size <= int.MaxValue ? (int)image.Size : 81920;
         var memStream = new MemoryStream(capacity);
 
         using (var defStream = image.OpenEntryStream())

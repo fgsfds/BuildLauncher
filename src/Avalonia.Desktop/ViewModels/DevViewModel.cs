@@ -27,6 +27,7 @@ public sealed partial class DevViewModel : ObservableObject
 {
     private readonly IConfigProvider _config;
     private readonly FilesUploader _filesUploader;
+    private readonly AddonsDatabaseManager _addonsDatabaseManager;
     private readonly InstalledGamesProvider _gamesProvider;
     private readonly ILogger _logger;
 
@@ -69,12 +70,14 @@ public sealed partial class DevViewModel : ObservableObject
     public DevViewModel(
         IConfigProvider config,
         FilesUploader filesUploader,
+        AddonsDatabaseManager addonsDatabaseManager,
         InstalledGamesProvider gamesProvider,
         ILogger logger
         )
     {
         _config = config;
         _filesUploader = filesUploader;
+        _addonsDatabaseManager = addonsDatabaseManager;
         _gamesProvider = gamesProvider;
         _logger = logger;
 
@@ -401,12 +404,32 @@ public sealed partial class DevViewModel : ObservableObject
 
             foreach (var file in files)
             {
+                var pathToFile = file.Path.LocalPath;
+                var manifestResult = await ManifestHelper.GetMainManifestAsync(pathToFile).ConfigureAwait(false);
 
-                var result = await _filesUploader.UploadAddonAndAddToDbAsync(file.Path.LocalPath, progress, CancellationToken.None).ConfigureAwait(true);
-
-                if (!result.IsSuccess)
+                if (!manifestResult.IsSuccess)
                 {
-                    _ = errors.AppendLine($"Error while adding {file.Path.AbsolutePath}: {result.Message}");
+                    _ = errors.AppendLine($"Error while adding {file.Path.AbsolutePath}: {manifestResult.Message}");
+                    continue;
+                }
+
+                var fileS3Key = S3Helper.GetFileS3Key(manifestResult.ResultObject, pathToFile);
+                var fileFullS3Path = S3Helper.GetFileFullS3Path(fileS3Key);
+
+                var uploadResult = await _filesUploader.UploadFileAsync(pathToFile, fileS3Key, progress, CancellationToken.None).ConfigureAwait(true);
+
+                if (!uploadResult.IsSuccess)
+                {
+                    _ = errors.AppendLine($"Error while adding {file.Path.AbsolutePath}: {uploadResult.Message}");
+                    continue;
+                }
+
+                var addingResult = await _addonsDatabaseManager.AddToDatabaseAsync(pathToFile, fileFullS3Path, manifestResult.ResultObject).ConfigureAwait(false);
+
+                if (!addingResult.IsSuccess)
+                {
+                    _ = errors.AppendLine($"Error while adding {file.Path.AbsolutePath}: {addingResult.Message}");
+                    continue;
                 }
             }
 
@@ -418,6 +441,11 @@ public sealed partial class DevViewModel : ObservableObject
             {
                 SetResultMessage("Success", false);
             }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogCritical(ex, "Error while uploading addon");
+            SetResultMessage(ex.ToString(), true);
         }
         finally
         {
@@ -535,16 +563,16 @@ public sealed partial class DevViewModel : ObservableObject
                 }
             });
 
-            var result = await _filesUploader.UploadFileToUploadsFolderAsync(
-                Guid.NewGuid().ToString(),
+            var uploadResult = await _filesUploader.UploadFileAsync(
                 pathToArchive,
+                $"uploads/{Guid.NewGuid()}/{Path.GetFileName(pathToArchive)}",
                 progress,
                 CancellationToken.None
                 ).ConfigureAwait(false);
 
-            if (!result.IsSuccess)
+            if (!uploadResult.IsSuccess)
             {
-                SetResultMessage(result.Message, true);
+                SetResultMessage(uploadResult.Message, true);
             }
             else
             {
@@ -557,7 +585,7 @@ public sealed partial class DevViewModel : ObservableObject
         }
         catch (Exception ex)
         {
-            _logger.LogCritical(ex, "Error while uploading fix");
+            _logger.LogCritical(ex, "Error while uploading file");
             SetResultMessage(ex.ToString(), true);
         }
         finally

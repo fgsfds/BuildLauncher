@@ -31,6 +31,7 @@ public sealed class ViewModelsFactory
     private readonly DownloadableAddonsProviderFactory _downloadableAddonsProviderFactory;
     private readonly PortStarter _portStarter;
     private readonly FilesUploader _filesUploader;
+    private readonly AddonsDatabaseManager _addonsDatabaseManager;
     private readonly AppUpdateInstaller _appUpdateInstaller;
     private readonly GamesPathsProvider _gamesPathsProvider;
     private readonly BitmapsCache _bitmapsCache;
@@ -52,6 +53,7 @@ public sealed class ViewModelsFactory
         DownloadableAddonsProviderFactory downloadableAddonsProviderFactory,
         PortStarter portStarter,
         FilesUploader filesUploader,
+        AddonsDatabaseManager addonsDatabaseManager,
         AppUpdateInstaller appUpdateInstaller,
         GamesPathsProvider gamesPathsProvider,
         BitmapsCache bitmapsCache,
@@ -74,6 +76,7 @@ public sealed class ViewModelsFactory
         _downloadableAddonsProviderFactory = downloadableAddonsProviderFactory;
         _portStarter = portStarter;
         _filesUploader = filesUploader;
+        _addonsDatabaseManager = addonsDatabaseManager;
         _appUpdateInstaller = appUpdateInstaller;
         _gamesPathsProvider = gamesPathsProvider;
         _bitmapsCache = bitmapsCache;
@@ -91,6 +94,7 @@ public sealed class ViewModelsFactory
         MainWindowViewModel vm = new(
             _config,
             _filesUploader,
+            _addonsDatabaseManager,
             _gamesProvider,
             _portsProvider,
             _appUpdateInstaller,

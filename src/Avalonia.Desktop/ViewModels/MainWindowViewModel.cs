@@ -21,6 +21,7 @@ public sealed class MainWindowViewModel : ObservableObject
     public MainWindowViewModel(
         IConfigProvider configProvider,
         FilesUploader filesUploader,
+        AddonsDatabaseManager addonsDatabaseManager,
         InstalledGamesProvider gamesProvider,
         PortsProvider portsProvider,
         AppUpdateInstaller appUpdateInstaller,
@@ -36,7 +37,7 @@ public sealed class MainWindowViewModel : ObservableObject
         _gamesProvider = gamesProvider;
         _gamesProvider.GameChangedEvent += OnGameChanged;
 
-        DevPageViewModel = new DevViewModel(configProvider, filesUploader, gamesProvider, logger);
+        DevPageViewModel = new DevViewModel(configProvider, filesUploader, addonsDatabaseManager, gamesProvider, logger);
         AboutPageViewModel = new AboutViewModel(appUpdateInstaller);
         PortsPageViewModel = new PortsViewModel(viewModelsFactory, portsProvider, ports, logger);
         ToolsPageViewModel = new ToolsViewModel(viewModelsFactory, tools);

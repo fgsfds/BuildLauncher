@@ -6,7 +6,6 @@ using Core.Client.Enums;
 using Core.Client.Interfaces;
 using Database.Client;
 using Microsoft.EntityFrameworkCore;
-using static Core.Client.Interfaces.IConfigProvider;
 
 namespace Core.Client.Config;
 

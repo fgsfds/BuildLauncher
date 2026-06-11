@@ -7,7 +7,8 @@ using Core.All.Serializable.Addon;
 using Core.All.Serializable.Downloadable;
 using Core.Client.Api;
 using Core.Client.Helpers;
-using Core.Client.Tools;
+using Core.Client.Interfaces;
+using Core.Client.S3;
 using Microsoft.Extensions.Logging;
 using Minio;
 using Minio.DataModel.Args;
@@ -210,40 +211,29 @@ public sealed class AddonsDatabaseTests
 
 
     [Fact]
-    public async Task UploadFixTest()
+    public async Task UploadAddonTest()
     {
         if (!OperatingSystem.IsWindows())
         {
             return;
         }
 
-        Mock<IHttpClientFactory> httpFactory = new();
-        httpFactory.Setup(x => x.CreateClient(HttpClientEnum.Upload.GetDescription())).Returns(GetHttpClient());
+        const string fileS3Key = $"uploads/{CommonConstants.S3SubFolder}/test/TEST.MAP";
 
-        Mock<ILogger> logger = new();
-        OfflineApiInterface api = new(logger.Object);
-        FilesUploader uploader = new(api, httpFactory.Object, logger.Object);
+        Mock<IConfigProvider> config = new();
+        S3UtilitiesFactory transferUtilityFactory = new(config.Object);
 
-        await uploader.UploadFileToUploadsFolderAsync("test", Path.Combine("Files", "TEST.MAP"), new(), CancellationToken.None);
+        using var fileStream = File.OpenRead(Path.Combine("Files", "TEST.MAP"));
 
-        var url = $"{CommonConstants.S3Endpoint}/{CommonConstants.S3Bucket}/uploads/{CommonConstants.S3SubFolder}/test/TEST.MAP";
+        var transferUtility = transferUtilityFactory.CreateTransferUtility();
+        _ = await transferUtility.UploadAsync(fileStream, fileS3Key, null, CancellationToken.None);
 
-        using var httpClient = GetHttpClient();
-        using var resp = await httpClient.GetAsync(url, HttpCompletionOption.ResponseHeadersRead);
+        var metadataProvider = transferUtilityFactory.CreateMetadataProvider();
+        var metadata = await metadataProvider.GetMetadata(fileS3Key);
 
-        Assert.True(resp.IsSuccessStatusCode);
-
-        var timespan = DateTime.Now - resp.Content.Headers.LastModified;
+        var timespan = DateTime.UtcNow - metadata.LastModified;
         Assert.True(timespan < TimeSpan.FromSeconds(5));
-
-
-        static HttpClient GetHttpClient()
-        {
-            HttpClient httpClient = new();
-            httpClient.DefaultRequestHeaders.Add("User-Agent", "BuildLauncher");
-            httpClient.Timeout = Timeout.InfiniteTimeSpan;
-            return httpClient;
-        }
+        Assert.Equal(213378, metadata.ContentLength);
     }
 
     [Fact]
