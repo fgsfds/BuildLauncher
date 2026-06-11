@@ -229,7 +229,7 @@ public sealed class AddonsDatabaseTests
 
         var timespan = DateTime.UtcNow - metadata.LastModified;
         Assert.True(timespan < TimeSpan.FromSeconds(5));
-        Assert.Equal(213378, metadata.ContentLength);
+        Assert.Equal(213378, metadata.Size);
     }
 
     [Fact]
