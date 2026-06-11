@@ -8,7 +8,6 @@ using Core.Client.Config;
 using Core.Client.Helpers;
 using Core.Client.Interfaces;
 using Core.Client.Providers;
-using Core.Client.S3;
 using Core.Client.Tools;
 using Database.Client;
 using Microsoft.Extensions.DependencyInjection;
@@ -27,10 +26,8 @@ public static class ClientBindings
         _ = container.AddSingleton<AppUpdateInstaller>();
         _ = container.AddSingleton<PlaytimeProvider>();
         _ = container.AddSingleton<RatingProvider>();
-        _ = container.AddSingleton<FilesUploader>();
         _ = container.AddSingleton<AddonsDatabaseManager>();
         _ = container.AddSingleton<RepoAppReleasesProvider>();
-        _ = container.AddSingleton<S3UtilitiesFactory>();
 
         if (isDesigner)
         {

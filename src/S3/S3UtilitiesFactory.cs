@@ -1,9 +1,8 @@
 ﻿using Amazon.Runtime;
 using Amazon.S3;
-using Core.All.Helpers;
 using Core.Client.Interfaces;
 
-namespace Core.Client.S3;
+namespace S3;
 
 public sealed class S3UtilitiesFactory
 {
@@ -11,7 +10,7 @@ public sealed class S3UtilitiesFactory
 
     private static readonly AmazonS3Config _s3config = new()
     {
-        ServiceURL = CommonConstants.S3Endpoint,
+        ServiceURL = S3Constants.S3Endpoint,
         ForcePathStyle = true,
         RequestChecksumCalculation = RequestChecksumCalculation.WHEN_REQUIRED
     };
@@ -23,11 +22,11 @@ public sealed class S3UtilitiesFactory
 
     public S3TransferUtilityWrapper CreateTransferUtility()
     {
-        return new(_s3config, CommonConstants.S3Bucket, _config.S3SecretKey);
+        return new(_s3config, S3Constants.S3Bucket, _config.S3SecretKey);
     }
 
     public S3MetadataProvider CreateMetadataProvider()
     {
-        return new(_s3config, CommonConstants.S3Bucket);
+        return new(_s3config, S3Constants.S3Bucket);
     }
 }

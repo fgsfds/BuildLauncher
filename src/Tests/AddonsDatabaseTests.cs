@@ -1,18 +1,14 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
-using Core.All.Enums;
-using Core.All.Helpers;
 using Core.All.Serializable.Addon;
 using Core.All.Serializable.Downloadable;
-using Core.Client.Api;
 using Core.Client.Helpers;
 using Core.Client.Interfaces;
-using Core.Client.S3;
-using Microsoft.Extensions.Logging;
 using Minio;
 using Minio.DataModel.Args;
 using Moq;
+using S3;
 
 namespace Tests;
 
@@ -54,7 +50,7 @@ public sealed class AddonsDatabaseTests
                 var size = addon.FileSize;
                 var hash = addon.Sha256;
 
-                bool needToSkip = false;
+                var needToSkip = false;
 
                 if (string.IsNullOrWhiteSpace(hash))
                 {
@@ -91,7 +87,7 @@ public sealed class AddonsDatabaseTests
                 }
 
                 //hash of files from my storage
-                if (url.ToString().StartsWith(CommonConstants.S3Endpoint))
+                if (url.ToString().StartsWith(S3Constants.S3Endpoint))
                 {
                     var actualHash = header.Headers
                         .FirstOrDefault(x => x.Key.Equals("x-amz-meta-checksum-sha256"))
@@ -169,14 +165,14 @@ public sealed class AddonsDatabaseTests
 
         using var minioClient = new MinioClient();
         using var iMinioClient = minioClient
-            .WithEndpoint(CommonConstants.S3Endpoint.Split("//").Last())
+            .WithEndpoint(S3Constants.S3Endpoint.Split("//").Last())
             .WithCredentials(access, secret)
             .WithSSL(false)
             .Build();
 
         var args = new ListObjectsArgs()
-            .WithBucket(CommonConstants.S3Bucket)
-            .WithPrefix(CommonConstants.S3SubFolder + '/')
+            .WithBucket(S3Constants.S3Bucket)
+            .WithPrefix(S3Constants.S3SubFolder + '/')
             .WithRecursive(true);
 
         var filesInBucket = new List<string>();
@@ -193,7 +189,7 @@ public sealed class AddonsDatabaseTests
                 continue;
             }
 
-            filesInBucket.Add($"{CommonConstants.S3Endpoint}/{CommonConstants.S3Bucket}/{item.Key}");
+            filesInBucket.Add($"{S3Constants.S3Endpoint}/{S3Constants.S3Bucket}/{item.Key}");
         }
 
         var loose = filesInBucket.Except(addonsUrls);
@@ -218,7 +214,7 @@ public sealed class AddonsDatabaseTests
             return;
         }
 
-        const string fileS3Key = $"uploads/{CommonConstants.S3SubFolder}/test/TEST.MAP";
+        const string fileS3Key = $"uploads/{S3Constants.S3SubFolder}/test/TEST.MAP";
 
         Mock<IConfigProvider> config = new();
         S3UtilitiesFactory transferUtilityFactory = new(config.Object);

@@ -2,7 +2,7 @@
 using Amazon.S3;
 using Amazon.S3.Model;
 
-namespace Core.Client.S3;
+namespace S3;
 
 public sealed class S3MetadataProvider
 {
@@ -16,7 +16,7 @@ public sealed class S3MetadataProvider
         _client = new(new AnonymousAWSCredentials(), config);
     }
 
-    public async Task<GetObjectMetadataResponse> GetMetadata(string objectKey)
+    public async Task<S3ObjectMetadata> GetMetadata(string objectKey)
     {
         var request = new GetObjectMetadataRequest
         {
@@ -26,9 +26,16 @@ public sealed class S3MetadataProvider
 
         var response = await _client.GetObjectMetadataAsync(request).ConfigureAwait(false);
 
-        return response;
-
-        var sizeInBytes = response.ContentLength;
-        var lastModified = response.LastModified;
+        return new()
+        {
+            Size = response.ContentLength,
+            LastModified = response.LastModified
+        };
     }
+}
+
+public readonly struct S3ObjectMetadata
+{
+    public readonly long Size { get; init; }
+    public readonly DateTime? LastModified { get; init; }
 }

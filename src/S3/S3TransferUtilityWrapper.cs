@@ -2,7 +2,7 @@
 using Amazon.S3;
 using Amazon.S3.Transfer;
 
-namespace Core.Client.S3;
+namespace S3;
 
 public sealed class S3TransferUtilityWrapper : IDisposable
 {

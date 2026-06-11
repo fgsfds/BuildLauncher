@@ -1,11 +1,11 @@
 ﻿using Addons.Providers;
+using CommunityToolkit.Mvvm.ComponentModel;
 using Core.All.Enums;
 using Core.Client;
 using Core.Client.Helpers;
 using Core.Client.Interfaces;
 using Core.Client.Providers;
 using Core.Client.Tools;
-using CommunityToolkit.Mvvm.ComponentModel;
 using Games.Providers;
 using Microsoft.Extensions.Logging;
 using Ports.Ports;
@@ -20,7 +20,7 @@ public sealed class MainWindowViewModel : ObservableObject
 
     public MainWindowViewModel(
         IConfigProvider configProvider,
-        FilesUploader filesUploader,
+        IFilesUploader filesUploader,
         AddonsDatabaseManager addonsDatabaseManager,
         InstalledGamesProvider gamesProvider,
         PortsProvider portsProvider,

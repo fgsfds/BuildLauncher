@@ -26,7 +26,7 @@ namespace Avalonia.Desktop.ViewModels;
 public sealed partial class DevViewModel : ObservableObject
 {
     private readonly IConfigProvider _config;
-    private readonly FilesUploader _filesUploader;
+    private readonly IFilesUploader _filesUploader;
     private readonly AddonsDatabaseManager _addonsDatabaseManager;
     private readonly InstalledGamesProvider _gamesProvider;
     private readonly ILogger _logger;
@@ -69,7 +69,7 @@ public sealed partial class DevViewModel : ObservableObject
 
     public DevViewModel(
         IConfigProvider config,
-        FilesUploader filesUploader,
+        IFilesUploader filesUploader,
         AddonsDatabaseManager addonsDatabaseManager,
         InstalledGamesProvider gamesProvider,
         ILogger logger
@@ -413,8 +413,7 @@ public sealed partial class DevViewModel : ObservableObject
                     continue;
                 }
 
-                var fileS3Key = S3Helper.GetFileS3Key(manifestResult.ResultObject, pathToFile);
-                var fileFullS3Path = S3Helper.GetFileFullS3Path(fileS3Key);
+                var fileS3Key = UriHelper.GetRelativeFilePath(manifestResult.ResultObject, pathToFile);
 
                 var uploadResult = await _filesUploader.UploadFileAsync(pathToFile, fileS3Key, progress, CancellationToken.None).ConfigureAwait(true);
 
@@ -424,7 +423,7 @@ public sealed partial class DevViewModel : ObservableObject
                     continue;
                 }
 
-                var addingResult = await _addonsDatabaseManager.AddToDatabaseAsync(pathToFile, fileFullS3Path, manifestResult.ResultObject).ConfigureAwait(false);
+                var addingResult = await _addonsDatabaseManager.AddToDatabaseAsync(pathToFile, uploadResult.ResultObject, manifestResult.ResultObject).ConfigureAwait(false);
 
                 if (!addingResult.IsSuccess)
                 {

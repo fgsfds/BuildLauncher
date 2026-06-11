@@ -30,7 +30,7 @@ public sealed class ViewModelsFactory
     private readonly InstalledAddonsProviderFactory _installedAddonsProviderFactory;
     private readonly DownloadableAddonsProviderFactory _downloadableAddonsProviderFactory;
     private readonly PortStarter _portStarter;
-    private readonly FilesUploader _filesUploader;
+    private readonly IFilesUploader _filesUploader;
     private readonly AddonsDatabaseManager _addonsDatabaseManager;
     private readonly AppUpdateInstaller _appUpdateInstaller;
     private readonly GamesPathsProvider _gamesPathsProvider;
@@ -52,7 +52,7 @@ public sealed class ViewModelsFactory
         InstalledAddonsProviderFactory installedAddonsProviderFactory,
         DownloadableAddonsProviderFactory downloadableAddonsProviderFactory,
         PortStarter portStarter,
-        FilesUploader filesUploader,
+        IFilesUploader filesUploader,
         AddonsDatabaseManager addonsDatabaseManager,
         AppUpdateInstaller appUpdateInstaller,
         GamesPathsProvider gamesPathsProvider,

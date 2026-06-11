@@ -19,6 +19,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Ports.Providers;
+using S3;
 
 namespace Avalonia.Desktop;
 
@@ -161,6 +162,7 @@ public sealed class App : Application
 
         ClientBindings.Load(container, Design.IsDesignMode);
         GuiBindings.Load(container);
+        container.WithS3FilesUploader();
 
         Games.DI.ProvidersBindings.Load(container);
 

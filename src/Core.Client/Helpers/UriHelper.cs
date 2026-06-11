@@ -1,12 +1,11 @@
 ﻿using Core.All.Enums;
-using Core.All.Helpers;
 using Core.All.Serializable.Addon;
 
 namespace Core.Client.Helpers;
 
-public static class S3Helper
+public static class UriHelper
 {
-    public static string GetFileS3Key(AddonJsonModel manifest, string pathToFile)
+    public static string GetRelativeFilePath(AddonJsonModel manifest, string pathToFile)
     {
         var folderName = manifest.AddonType switch
         {
@@ -34,8 +33,6 @@ public static class S3Helper
             _ => throw new NotSupportedException(),
         };
 
-        return $"{CommonConstants.S3SubFolder}/{gameName}/{folderName}/{Path.GetFileName(pathToFile)}";
+        return $"{gameName}/{folderName}/{Path.GetFileName(pathToFile)}";
     }
-
-    public static Uri GetFileFullS3Path(string fileS3Key) => new($"{CommonConstants.S3Endpoint}/{CommonConstants.S3Bucket}/{fileS3Key}");
 }
