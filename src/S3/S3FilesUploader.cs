@@ -7,44 +7,52 @@ using Microsoft.Extensions.Logging;
 
 namespace S3;
 
+/// <summary>
+/// Provides functionality to upload files to S3.
+/// </summary>
 public sealed class S3FilesUploader : IFilesUploader
 {
     private readonly S3UtilitiesFactory _s3Factory;
-    private readonly IHttpClientFactory _httpClientFactory;
     private readonly ILogger<S3FilesUploader> _logger;
 
-    public S3FilesUploader(S3UtilitiesFactory s3Factory, IHttpClientFactory httpClientFactory, ILogger<S3FilesUploader> logger)
+    public S3FilesUploader(S3UtilitiesFactory s3Factory, ILogger<S3FilesUploader> logger)
     {
         _s3Factory = s3Factory;
-        _httpClientFactory = httpClientFactory;
         _logger = logger;
     }
 
-    public async Task<Result<Uri?>> UploadFileAsync(string pathToFile, string s3FileKey, StrongBox<int> progress, CancellationToken cancellationToken)
+    /// <inheritdoc/>
+    public async Task<Result<Uri?>> UploadFileAsync(
+        string pathToLocalFile,
+        string relativePathToRemoteFile,
+        StrongBox<int> progress,
+        CancellationToken cancellationToken
+        )
     {
         _logger.LogInformation("Uploading file to S3.");
 
         try
         {
-            using var fileStream = File.OpenRead(pathToFile);
+            using var fileStream = File.OpenRead(pathToLocalFile);
             _ = Task.Run(() => TrackProgress(fileStream, progress), cancellationToken);
 
             var sha = await SHA256.HashDataAsync(fileStream, cancellationToken).ConfigureAwait(false);
             var shaStr = Convert.ToHexString(sha);
             fileStream.Position = 0;
 
-            var fileKey = S3Constants.S3SubFolder + "/" + s3FileKey;
+            var fileKey = S3Constants.S3SubFolder + "/" + relativePathToRemoteFile;
             using var transferUtility = _s3Factory.CreateTransferUtility();
             _ = await transferUtility.UploadAsync(fileStream, fileKey, shaStr, cancellationToken).ConfigureAwait(false);
 
-            Uri fullPath = new($"{S3Constants.S3Endpoint}/{S3Constants.S3Bucket}/{fileKey}");
-            var fileAvailability = await CheckFileAvailabilityAsync(fullPath).ConfigureAwait(false);
+            var metadataProvider = _s3Factory.CreateMetadataProvider();
+            var fileAvailability = await metadataProvider.GetMetadata(fileKey).ConfigureAwait(false);
 
-            if (!fileAvailability.IsSuccess)
+            if (fileAvailability.Size < 1)
             {
                 return new(ResultEnum.Error, null, string.Empty);
             }
 
+            Uri fullPath = new($"{S3Constants.S3Endpoint}/{S3Constants.S3Bucket}/{fileKey}");
             return new(ResultEnum.Success, fullPath, string.Empty);
         }
         catch (TaskCanceledException)
@@ -62,16 +70,6 @@ public sealed class S3FilesUploader : IFilesUploader
             _logger.LogCritical(ex, "Error while uploading file.");
             return new(ResultEnum.Error, null, ex.Message);
         }
-    }
-
-    private async Task<Result> CheckFileAvailabilityAsync(Uri downloadUrl)
-    {
-        using var httpClient = _httpClientFactory.CreateClient();
-        using var response = await httpClient.GetAsync(downloadUrl, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false);
-
-        return response.IsSuccessStatusCode
-            ? new(ResultEnum.Success, string.Empty)
-            : new(ResultEnum.Error, $"File {downloadUrl} doesn't exist.");
     }
 
     private static void TrackProgress(FileStream streamToTrack, StrongBox<int> progress)

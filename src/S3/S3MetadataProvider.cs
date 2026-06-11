@@ -4,6 +4,9 @@ using Amazon.S3.Model;
 
 namespace S3;
 
+/// <summary>
+/// S3 object metadata provider.
+/// </summary>
 public sealed class S3MetadataProvider
 {
     private readonly AmazonS3Client _client;
@@ -16,6 +19,11 @@ public sealed class S3MetadataProvider
         _client = new(new AnonymousAWSCredentials(), config);
     }
 
+    /// <summary>
+    /// Returns remote file metadata.
+    /// </summary>
+    /// <param name="objectKey">Object key.</param>
+    /// <returns>Metadata.</returns>
     public async Task<S3ObjectMetadata> GetMetadata(string objectKey)
     {
         var request = new GetObjectMetadataRequest
@@ -36,6 +44,13 @@ public sealed class S3MetadataProvider
 
 public readonly struct S3ObjectMetadata
 {
+    /// <summary>
+    /// File size.
+    /// </summary>
     public readonly long Size { get; init; }
+
+    /// <summary>
+    /// File modified date.
+    /// </summary>
     public readonly DateTime? LastModified { get; init; }
 }

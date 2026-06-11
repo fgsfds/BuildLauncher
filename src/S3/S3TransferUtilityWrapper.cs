@@ -4,6 +4,9 @@ using Amazon.S3.Transfer;
 
 namespace S3;
 
+/// <summary>
+/// <see cref="TransferUtility"/> wrapper that injects Referer header.
+/// </summary>
 public sealed class S3TransferUtilityWrapper : IDisposable
 {
     private readonly AmazonS3Client _client;
@@ -26,16 +29,16 @@ public sealed class S3TransferUtilityWrapper : IDisposable
     /// Uploads file.
     /// </summary>
     /// <param name="stream">Stream.</param>
-    /// <param name="key">Object key.</param>
+    /// <param name="fileKey">Object key.</param>
     /// <param name="sha">File SHA256.</param>
     /// <param name="cancellationToken">Cancellation token.</param>
-    public Task<TransferUtilityUploadResponse> UploadAsync(Stream stream, string key, string? sha, CancellationToken cancellationToken)
+    public Task<TransferUtilityUploadResponse> UploadAsync(Stream stream, string fileKey, string? sha, CancellationToken cancellationToken)
     {
         var uploadRequest = new TransferUtilityUploadRequest
         {
             BucketName = _bucket,
             InputStream = stream,
-            Key = key,
+            Key = fileKey,
 
             PartSize = 90 * 1024 * 1024,
             DisablePayloadSigning = false
@@ -60,6 +63,7 @@ public sealed class S3TransferUtilityWrapper : IDisposable
         }
     }
 
+    /// <inheritdoc/>
     public void Dispose()
     {
         _transferUtility.Dispose();
