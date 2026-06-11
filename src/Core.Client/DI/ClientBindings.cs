@@ -26,7 +26,7 @@ public static class ClientBindings
         _ = container.AddSingleton<AppUpdateInstaller>();
         _ = container.AddSingleton<PlaytimeProvider>();
         _ = container.AddSingleton<RatingProvider>();
-        _ = container.AddSingleton<FilesUploader>();
+        _ = container.AddSingleton<AddonsDatabaseManager>();
         _ = container.AddSingleton<RepoAppReleasesProvider>();
 
         if (isDesigner)
@@ -85,26 +85,6 @@ public static class ClientBindings
                     {
                         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", config.GitHubToken);
                     }
-                })
-                .RemoveAllLoggers();
-
-            _ = container.AddHttpClient(HttpClientEnum.Upload.GetDescription())
-                .ConfigureHttpClient((serviceProvider, client) =>
-                {
-                    client.DefaultRequestHeaders.Add("User-Agent", "BuildLauncher");
-                    client.Timeout = Timeout.InfiniteTimeSpan;
-                })
-                .RemoveAllLoggers();
-
-            _ = container.AddHttpClient(HttpClientEnum.AuthUpload.GetDescription())
-                .ConfigureHttpClient((serviceProvider, client) =>
-                {
-                    var config = serviceProvider.GetRequiredService<IConfigProvider>();
-
-                    client.DefaultRequestHeaders.Add("User-Agent", "BuildLauncher");
-                    client.DefaultRequestHeaders.IfNoneMatch.Add(EntityTagHeaderValue.Any);
-                    client.DefaultRequestHeaders.Referrer = new(config.S3SecretKey, UriKind.RelativeOrAbsolute);
-                    client.Timeout = Timeout.InfiniteTimeSpan;
                 })
                 .RemoveAllLoggers();
 

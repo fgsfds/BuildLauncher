@@ -1,17 +1,15 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
-using Core.All.Enums;
-using Core.All.Helpers;
 using Core.All.Serializable.Addon;
 using Core.All.Serializable.Downloadable;
-using Core.Client.Api;
 using Core.Client.Helpers;
-using Core.Client.Tools;
+using Core.Client.Interfaces;
 using Microsoft.Extensions.Logging;
 using Minio;
 using Minio.DataModel.Args;
 using Moq;
+using S3;
 
 namespace Tests;
 
@@ -53,7 +51,7 @@ public sealed class AddonsDatabaseTests
                 var size = addon.FileSize;
                 var hash = addon.Sha256;
 
-                bool needToSkip = false;
+                var needToSkip = false;
 
                 if (string.IsNullOrWhiteSpace(hash))
                 {
@@ -90,7 +88,7 @@ public sealed class AddonsDatabaseTests
                 }
 
                 //hash of files from my storage
-                if (url.ToString().StartsWith(CommonConstants.S3Endpoint))
+                if (url.ToString().StartsWith(S3Constants.S3Endpoint))
                 {
                     var actualHash = header.Headers
                         .FirstOrDefault(x => x.Key.Equals("x-amz-meta-checksum-sha256"))
@@ -168,14 +166,14 @@ public sealed class AddonsDatabaseTests
 
         using var minioClient = new MinioClient();
         using var iMinioClient = minioClient
-            .WithEndpoint(CommonConstants.S3Endpoint.Split("//").Last())
+            .WithEndpoint(S3Constants.S3Endpoint.Split("//").Last())
             .WithCredentials(access, secret)
             .WithSSL(false)
             .Build();
 
         var args = new ListObjectsArgs()
-            .WithBucket(CommonConstants.S3Bucket)
-            .WithPrefix(CommonConstants.S3SubFolder + '/')
+            .WithBucket(S3Constants.S3Bucket)
+            .WithPrefix(S3Constants.S3SubFolder + '/')
             .WithRecursive(true);
 
         var filesInBucket = new List<string>();
@@ -192,7 +190,7 @@ public sealed class AddonsDatabaseTests
                 continue;
             }
 
-            filesInBucket.Add($"{CommonConstants.S3Endpoint}/{CommonConstants.S3Bucket}/{item.Key}");
+            filesInBucket.Add($"{S3Constants.S3Endpoint}/{S3Constants.S3Bucket}/{item.Key}");
         }
 
         var loose = filesInBucket.Except(addonsUrls);
@@ -210,40 +208,26 @@ public sealed class AddonsDatabaseTests
 
 
     [Fact]
-    public async Task UploadFixTest()
+    public async Task UploadAddonTest()
     {
         if (!OperatingSystem.IsWindows())
         {
             return;
         }
 
-        Mock<IHttpClientFactory> httpFactory = new();
-        httpFactory.Setup(x => x.CreateClient(HttpClientEnum.Upload.GetDescription())).Returns(GetHttpClient());
+        Mock<IConfigProvider> config = new();
+        Mock<ILogger<S3FilesUploader>> logger = new();
+        S3UtilitiesFactory s3factory = new(config.Object);
+        S3FilesUploader filesUploader = new(s3factory, logger.Object);
 
-        Mock<ILogger> logger = new();
-        OfflineApiInterface api = new(logger.Object);
-        FilesUploader uploader = new(api, httpFactory.Object, logger.Object);
+        var uploadResult = await filesUploader.UploadFileToPublicAsync(Path.Combine("Files", "TEST.MAP"), "test/TEST.MAP", new(), CancellationToken.None);
 
-        await uploader.UploadFileToUploadsFolderAsync("test", Path.Combine("Files", "TEST.MAP"), new(), CancellationToken.None);
+        Assert.True(uploadResult.IsSuccess);
 
-        var url = $"{CommonConstants.S3Endpoint}/{CommonConstants.S3Bucket}/uploads/{CommonConstants.S3SubFolder}/test/TEST.MAP";
-
-        using var httpClient = GetHttpClient();
-        using var resp = await httpClient.GetAsync(url, HttpCompletionOption.ResponseHeadersRead);
-
-        Assert.True(resp.IsSuccessStatusCode);
-
-        var timespan = DateTime.Now - resp.Content.Headers.LastModified;
+        var timespan = DateTime.UtcNow - uploadResult.ResultObject.Value.LastModified;
         Assert.True(timespan < TimeSpan.FromSeconds(5));
-
-
-        static HttpClient GetHttpClient()
-        {
-            HttpClient httpClient = new();
-            httpClient.DefaultRequestHeaders.Add("User-Agent", "BuildLauncher");
-            httpClient.Timeout = Timeout.InfiniteTimeSpan;
-            return httpClient;
-        }
+        Assert.Equal(213378, uploadResult.ResultObject.Value.Size);
+        Assert.Equal("https://s3-nl.hostkey.com/b8743306-fgsfds/uploads/buildlauncher/test/TEST.MAP", uploadResult.ResultObject.Value.Url.ToString());
     }
 
     [Fact]

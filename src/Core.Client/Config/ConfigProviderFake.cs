@@ -1,7 +1,6 @@
 ﻿using Core.All;
 using Core.Client.Enums;
 using Core.Client.Interfaces;
-using static Core.Client.Interfaces.IConfigProvider;
 
 namespace Core.Client.Config;
 

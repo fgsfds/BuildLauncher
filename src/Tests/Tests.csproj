@@ -30,6 +30,7 @@
     <ProjectReference Include="..\Core.Client\Core.Client.csproj" />
     <ProjectReference Include="..\Games\Games.csproj" />
     <ProjectReference Include="..\Ports\Ports.csproj" />
+    <ProjectReference Include="..\S3\S3.csproj" />
     <ProjectReference Include="..\Tools\Tools.csproj" />
   </ItemGroup>
 

@@ -1,11 +1,11 @@
 ﻿using Addons.Providers;
+using CommunityToolkit.Mvvm.ComponentModel;
 using Core.All.Enums;
 using Core.Client;
 using Core.Client.Helpers;
 using Core.Client.Interfaces;
 using Core.Client.Providers;
 using Core.Client.Tools;
-using CommunityToolkit.Mvvm.ComponentModel;
 using Games.Providers;
 using Microsoft.Extensions.Logging;
 using Ports.Ports;
@@ -20,7 +20,8 @@ public sealed class MainWindowViewModel : ObservableObject
 
     public MainWindowViewModel(
         IConfigProvider configProvider,
-        FilesUploader filesUploader,
+        IFilesUploader filesUploader,
+        AddonsDatabaseManager addonsDatabaseManager,
         InstalledGamesProvider gamesProvider,
         PortsProvider portsProvider,
         AppUpdateInstaller appUpdateInstaller,
@@ -36,7 +37,7 @@ public sealed class MainWindowViewModel : ObservableObject
         _gamesProvider = gamesProvider;
         _gamesProvider.GameChangedEvent += OnGameChanged;
 
-        DevPageViewModel = new DevViewModel(configProvider, filesUploader, gamesProvider, logger);
+        DevPageViewModel = new DevViewModel(configProvider, filesUploader, addonsDatabaseManager, gamesProvider, logger);
         AboutPageViewModel = new AboutViewModel(appUpdateInstaller);
         PortsPageViewModel = new PortsViewModel(viewModelsFactory, portsProvider, ports, logger);
         ToolsPageViewModel = new ToolsViewModel(viewModelsFactory, tools);

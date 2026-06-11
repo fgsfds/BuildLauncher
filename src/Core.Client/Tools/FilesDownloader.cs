@@ -1,4 +1,5 @@
 ﻿using System.Net.Http.Headers;
+using Core.Client.Interfaces;
 using Microsoft.Extensions.Logging;
 
 namespace Core.Client.Tools;

@@ -1,7 +1,6 @@
-﻿using System.Text.Json;
-using Addons.Providers;
+﻿using Addons.Providers;
 using Core.All.Enums;
-using Core.All.Serializable.Addon;
+using Core.Client.Helpers;
 using Games.Games;
 using Microsoft.Extensions.Logging;
 using SharpCompress.Archives;
@@ -72,7 +71,7 @@ public sealed class AddonDropHelper : IAddonDropHelper
             return false;
         }
 
-        var addon = GetGameAndTypeFromFile(pathToFile, game);
+        var addon = await GetGameAndTypeFromFileAsync(pathToFile, game).ConfigureAwait(false);
 
         if (addon is null)
         {
@@ -120,32 +119,19 @@ public sealed class AddonDropHelper : IAddonDropHelper
     /// Get game enum and addon type enum from a file.
     /// </summary>
     /// <param name="pathToFile">Path to file.</param>
-    private Tuple<GameEnum, AddonTypeEnum>? GetGameAndTypeFromFile(string pathToFile, BaseGame game)
+    private async Task<Tuple<GameEnum, AddonTypeEnum>?> GetGameAndTypeFromFileAsync(string pathToFile, BaseGame game)
     {
         if (ArchiveFactory.IsArchive(pathToFile, out _))
         {
-            using var archive = ArchiveFactory.OpenArchive(pathToFile);
-            var manifestFile = archive.Entries.FirstOrDefault(static x => x.Key!.Equals("addon.json", StringComparison.OrdinalIgnoreCase));
+            var manifest = await ManifestHelper.GetMainManifestAsync(pathToFile).ConfigureAwait(false);
 
-            if (manifestFile is null)
+            if (!manifest.IsSuccess)
             {
                 return null;
             }
 
-            using var stream = manifestFile.OpenEntryStream();
-
-            var manifest = JsonSerializer.Deserialize(
-                stream,
-                AddonManifestContext.Default.AddonJsonModel
-                );
-
-            if (manifest is null)
-            {
-                return null;
-            }
-
-            var supportedGame = manifest.SupportedGame.Game;
-            var type = manifest.AddonType;
+            var supportedGame = manifest.ResultObject.SupportedGame.Game;
+            var type = manifest.ResultObject.AddonType;
 
             return new(supportedGame, type);
         }
