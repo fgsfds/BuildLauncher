@@ -18,7 +18,7 @@ public sealed class GitHubApiInterface : IApiInterface
     private readonly ReleaseProvider<ToolEnum> _toolsReleasesProvider;
     private readonly RepoAppReleasesProvider _appReleasesProvider;
     private readonly IHttpClientFactory _httpClientFactory;
-    private readonly ILogger _logger;
+    private readonly ILogger<GitHubApiInterface> _logger;
     private readonly SemaphoreSlim _semaphore = new(1);
 
     private Dictionary<GameEnum, List<DownloadableAddonJsonModel>>? _addonsJson;
@@ -30,7 +30,7 @@ public sealed class GitHubApiInterface : IApiInterface
         ReleaseProvider<ToolEnum> toolsReleasesRetriever,
         RepoAppReleasesProvider appReleasesProvider,
         IHttpClientFactory httpClientFactory,
-        ILogger logger
+        ILogger<GitHubApiInterface> logger
         )
     {
         _portsReleasesProvider = portsReleasesProvider;

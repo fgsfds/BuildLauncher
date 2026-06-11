@@ -31,15 +31,15 @@ public sealed class MainWindowViewModel : ObservableObject
         IEnumerable<BaseTool> tools,
         MetadataProvider metadataProvider,
         DownloadableAddonsProviderFactory downloadablesProviderFactory,
-        ILogger logger
+        ILoggerFactory loggerFactory
         )
     {
         _gamesProvider = gamesProvider;
         _gamesProvider.GameChangedEvent += OnGameChanged;
 
-        DevPageViewModel = new DevViewModel(configProvider, filesUploader, addonsDatabaseManager, gamesProvider, logger);
+        DevPageViewModel = new DevViewModel(configProvider, filesUploader, addonsDatabaseManager, gamesProvider, loggerFactory.CreateLogger<DevViewModel>());
         AboutPageViewModel = new AboutViewModel(appUpdateInstaller);
-        PortsPageViewModel = new PortsViewModel(viewModelsFactory, portsProvider, ports, logger);
+        PortsPageViewModel = new PortsViewModel(viewModelsFactory, portsProvider, ports, loggerFactory.CreateLogger<PortsViewModel>());
         ToolsPageViewModel = new ToolsViewModel(viewModelsFactory, tools);
         SettingsPageViewModel = new SettingsViewModel(configProvider, gamesPathsProvider);
 

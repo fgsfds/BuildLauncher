@@ -22,7 +22,7 @@ public sealed partial class DownloadsViewModel : ObservableObject
     private readonly DownloadableAddonsProvider _downloadableAddonsProvider;
 
     private CancellationTokenSource? _cancellationTokenSource;
-    private readonly ILogger _logger;
+    private readonly ILogger<DownloadsViewModel> _logger;
 
 
     #region Binding Properties
@@ -148,7 +148,7 @@ public sealed partial class DownloadsViewModel : ObservableObject
         BaseGame game,
         InstalledAddonsProviderFactory installedAddonsProviderFactory,
         DownloadableAddonsProviderFactory downloadableAddonsProviderFactory,
-        ILogger logger
+        ILogger<DownloadsViewModel> logger
         )
     {
         Game = game;

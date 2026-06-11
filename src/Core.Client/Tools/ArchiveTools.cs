@@ -7,14 +7,14 @@ namespace Core.Client.Tools;
 
 public sealed class ArchiveTools
 {
-    private readonly ILogger _logger;
+    private readonly ILogger<ArchiveTools> _logger;
 
     /// <summary>
     /// Operation progress
     /// </summary>
     public event EventHandler<float>? ProgressChanged;
 
-    public ArchiveTools(ILogger logger)
+    public ArchiveTools(ILogger<ArchiveTools> logger)
     {
         _logger = logger;
     }

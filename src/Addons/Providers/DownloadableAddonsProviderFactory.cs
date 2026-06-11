@@ -14,21 +14,21 @@ public sealed class DownloadableAddonsProviderFactory
     private readonly FilesDownloader _filesDownloader;
     private readonly IApiInterface _apiInterface;
     private readonly InstalledAddonsProviderFactory _installedAddonsProviderFactory;
-    private readonly ILogger _logger;
+    private readonly ILoggerFactory _loggerFactory;
 
     public DownloadableAddonsProviderFactory(
         ArchiveTools archiveTools,
         FilesDownloader filesDownloader,
         IApiInterface apiInterface,
         InstalledAddonsProviderFactory installedAddonsProviderFactory,
-        ILogger logger
+        ILoggerFactory loggerFactory
         )
     {
         _archiveTools = archiveTools;
         _filesDownloader = filesDownloader;
         _apiInterface = apiInterface;
         _installedAddonsProviderFactory = installedAddonsProviderFactory;
-        _logger = logger;
+        _loggerFactory = loggerFactory;
     }
 
     /// <summary>
@@ -49,7 +49,7 @@ public sealed class DownloadableAddonsProviderFactory
             _filesDownloader,
             _apiInterface,
             _installedAddonsProviderFactory,
-            _logger
+            _loggerFactory.CreateLogger<DownloadableAddonsProvider>()
             );
 #pragma warning restore CS0618 // Type or member is obsolete
 

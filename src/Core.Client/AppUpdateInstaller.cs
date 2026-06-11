@@ -12,14 +12,14 @@ public sealed class AppUpdateInstaller
 {
     private readonly FilesDownloader _filesDownloader;
     private readonly IApiInterface _apiInterface;
-    private readonly ILogger _logger;
+    private readonly ILogger<AppUpdateInstaller> _logger;
 
     private GeneralReleaseJsonModel? _update;
 
     public AppUpdateInstaller(
         FilesDownloader filesDownloader,
         IApiInterface apiInterface,
-        ILogger logger
+        ILogger<AppUpdateInstaller> logger
         )
     {
         _filesDownloader = filesDownloader;

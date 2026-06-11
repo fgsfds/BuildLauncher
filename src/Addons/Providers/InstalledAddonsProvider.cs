@@ -25,7 +25,7 @@ public sealed class InstalledAddonsProvider : IDisposable
 {
     private readonly BaseGame _game;
     private readonly IConfigProvider _config;
-    private readonly ILogger _logger;
+    private readonly ILogger<InstalledAddonsProvider> _logger;
     private readonly ICacheAdder<Stream> _bitmapsCache;
     private readonly OriginalCampaignsProvider _originalCampaignsProvider;
     private readonly MetadataProvider _metadataProvider;
@@ -42,10 +42,10 @@ public sealed class InstalledAddonsProvider : IDisposable
     public InstalledAddonsProvider(
         BaseGame game,
         IConfigProvider config,
-        ILogger logger,
         [FromKeyedServices("Bitmaps")] ICacheAdder<Stream> bitmapsCache,
         OriginalCampaignsProvider originalCampaignsProvider,
-        MetadataProvider metadataProvider
+        MetadataProvider metadataProvider,
+        ILogger<InstalledAddonsProvider> logger
         )
     {
         _game = game;

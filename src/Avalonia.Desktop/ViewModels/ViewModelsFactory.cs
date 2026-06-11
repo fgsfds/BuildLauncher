@@ -38,7 +38,7 @@ public sealed class ViewModelsFactory
     private readonly IReadOnlyList<BasePort> _ports;
     private readonly IReadOnlyList<BaseTool> _tools;
     private readonly IAddonDropHelper _addonInstaller;
-    private readonly ILogger _logger;
+    private readonly ILoggerFactory _loggerFactory;
 
     public ViewModelsFactory(
         InstalledGamesProvider gamesProvider,
@@ -61,7 +61,7 @@ public sealed class ViewModelsFactory
         IEnumerable<BaseTool> tools,
         MetadataProvider metadataProvider,
         IAddonDropHelper addonInstaller,
-        ILogger logger
+        ILoggerFactory loggerFactory
         )
     {
         _gamesProvider = gamesProvider;
@@ -84,7 +84,7 @@ public sealed class ViewModelsFactory
         _tools = [.. tools];
         _metadataProvider = metadataProvider;
         _addonInstaller = addonInstaller;
-        _logger = logger;
+        _loggerFactory = loggerFactory;
     }
 
 #pragma warning disable CS0618 // Type or member is obsolete
@@ -104,7 +104,7 @@ public sealed class ViewModelsFactory
             _tools,
             _metadataProvider,
             _downloadableAddonsProviderFactory,
-            _logger
+            _loggerFactory
             );
 
         return vm;
@@ -128,7 +128,7 @@ public sealed class ViewModelsFactory
             _portStarter,
             _bitmapsCache,
             _addonInstaller,
-            _logger
+            _loggerFactory.CreateLogger<CampaignsViewModel>()
             );
 
         _ = Dispatcher.UIThread.Invoke(vm.InitializeAsync);
@@ -154,7 +154,7 @@ public sealed class ViewModelsFactory
             _portStarter,
             _bitmapsCache,
             _addonInstaller,
-            _logger
+            _loggerFactory.CreateLogger<MapsViewModel>()
             );
 
         _ = Dispatcher.UIThread.Invoke(vm.InitializeAsync);
@@ -178,7 +178,7 @@ public sealed class ViewModelsFactory
             _bitmapsCache,
             _config,
             _addonInstaller,
-            _logger
+            _loggerFactory.CreateLogger<ModsViewModel>()
             );
 
         _ = Dispatcher.UIThread.Invoke(vm.InitializeAsync);
@@ -195,7 +195,7 @@ public sealed class ViewModelsFactory
             _gamesProvider.GetGame(gameEnum),
             _installedAddonsProviderFactory,
             _downloadableAddonsProviderFactory,
-            _logger
+            _loggerFactory.CreateLogger<DownloadsViewModel>()
             );
 
         _ = Dispatcher.UIThread.Invoke(vm.InitializeAsync);
@@ -213,7 +213,7 @@ public sealed class ViewModelsFactory
             _portsInstallerFactory,
             _apiInterface,
             port,
-            _logger
+            _loggerFactory.CreateLogger<PortViewModel>()
             );
 
         _ = Dispatcher.UIThread.Invoke(vm.InitializeAsync);
@@ -231,7 +231,7 @@ public sealed class ViewModelsFactory
             _toolsInstallerFactory,
             _apiInterface,
             tool,
-            _logger
+            _loggerFactory.CreateLogger<ToolViewModel>()
             );
 
         _ = Dispatcher.UIThread.Invoke(vm.InitializeAsync);

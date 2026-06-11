@@ -22,7 +22,7 @@ public sealed class DownloadableAddonsProvider
     private readonly FilesDownloader _filesDownloader;
     private readonly IApiInterface _apiInterface;
     private readonly InstalledAddonsProvider _installedAddonsProvider;
-    private readonly ILogger _logger;
+    private readonly ILogger<DownloadableAddonsProvider> _logger;
 
     private Dictionary<AddonTypeEnum, Dictionary<AddonId, DownloadableAddonJsonModel>>? _cache;
 
@@ -43,7 +43,7 @@ public sealed class DownloadableAddonsProvider
         FilesDownloader filesDownloader,
         IApiInterface apiInterface,
         InstalledAddonsProviderFactory installedAddonsProviderFactory,
-        ILogger logger
+        ILogger<DownloadableAddonsProvider> logger
         )
     {
         _game = game;

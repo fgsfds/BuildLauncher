@@ -27,7 +27,7 @@ public sealed partial class MapsViewModel : RightPanelViewModel, IPortsButtonCon
     private readonly DownloadableAddonsProvider _downloadableAddonsProvider;
     private readonly PortStarter _portStarter;
     private readonly MetadataProvider _metadataProvider;
-    private readonly ILogger _logger;
+    private readonly ILogger<MapsViewModel> _logger;
 
 
     /// <summary>
@@ -120,7 +120,7 @@ public sealed partial class MapsViewModel : RightPanelViewModel, IPortsButtonCon
         PortStarter portStarter,
         BitmapsCache bitmapsCache,
         IAddonDropHelper addonInstaller,
-        ILogger logger
+        ILogger<MapsViewModel> logger
         ) : base(playtimeProvider, ratingProvider, metadataProvider, bitmapsCache, config)
     {
         Game = game;

@@ -10,7 +10,7 @@ namespace Tools.Providers;
 public sealed class ToolsReleasesProvider : ReleaseProvider<ToolEnum>
 {
     public ToolsReleasesProvider(
-        ILogger logger,
+        ILogger<ToolsReleasesProvider> logger,
         IHttpClientFactory httpClientFactory
         ) : base(logger, httpClientFactory)
     {

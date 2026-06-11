@@ -20,7 +20,7 @@ public sealed partial class ToolViewModel : ObservableObject
     private readonly ToolInstallerFactory _installerFactory;
     private readonly IApiInterface _apiInterface;
     private GeneralReleaseJsonModel? _release;
-    private readonly ILogger _logger;
+    private readonly ILogger<ToolViewModel> _logger;
 
     public delegate void ToolChanged(ToolEnum toolEnum);
     public event ToolChanged? ToolChangedEvent;
@@ -31,7 +31,7 @@ public sealed partial class ToolViewModel : ObservableObject
         ToolInstallerFactory installerFactory,
         IApiInterface apiInterface,
         BaseTool tool,
-        ILogger logger
+        ILogger<ToolViewModel> logger
         )
     {
         _installerFactory = installerFactory;

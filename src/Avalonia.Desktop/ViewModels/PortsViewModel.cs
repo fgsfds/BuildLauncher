@@ -17,7 +17,7 @@ public sealed partial class PortsViewModel : ObservableObject
     private readonly ViewModelsFactory _viewModelsFactory;
     private readonly PortsProvider _installedPortsProvider;
     private readonly SemaphoreSlim _semaphore = new(1);
-    private readonly ILogger _logger;
+    private readonly ILogger<PortsViewModel> _logger;
 
     private bool _isNewPort;
 
@@ -54,7 +54,7 @@ public sealed partial class PortsViewModel : ObservableObject
         ViewModelsFactory viewModelsFactory,
         PortsProvider installedPortsProvider,
         IEnumerable<BasePort> ports,
-        ILogger logger
+        ILogger<PortsViewModel> logger
         )
     {
         _viewModelsFactory = viewModelsFactory;

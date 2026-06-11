@@ -1,8 +1,8 @@
 ﻿using Core.All.Enums;
 using Core.All.Helpers;
 using Core.All.Providers;
+using Microsoft.Extensions.Logging;
 using Moq;
-using ILogger = Microsoft.Extensions.Logging.ILogger;
 
 namespace Tests;
 
@@ -13,11 +13,11 @@ public sealed class AppReleasesTests
     {
         using HttpClient httpClient = new();
         httpClient.DefaultRequestHeaders.Add("User-Agent", "BuildLauncher");
-        var logger = new Mock<ILogger>().Object;
+        var logger = new Mock<ILogger<RepoAppReleasesProvider>>();
         Mock<IHttpClientFactory> httpFactory = new();
         httpFactory.Setup(x => x.CreateClient(HttpClientEnum.GitHub.GetDescription())).Returns(httpClient);
 
-        RepoAppReleasesProvider releasesProvider = new(logger, httpFactory.Object);
+        RepoAppReleasesProvider releasesProvider = new(logger.Object, httpFactory.Object);
 
         var lastestRelease = await releasesProvider.GetLatestReleaseAsync(false);
 

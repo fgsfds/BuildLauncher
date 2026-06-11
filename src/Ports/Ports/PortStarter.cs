@@ -12,12 +12,12 @@ public sealed class PortStarter
 {
     private readonly PlaytimeProvider _playtimeProvider;
     private readonly InstalledAddonsProviderFactory _installedAddonsProviderFactory;
-    private readonly ILogger _logger;
+    private readonly ILogger<PortStarter> _logger;
 
     public PortStarter(
         PlaytimeProvider playtimeProvider,
         InstalledAddonsProviderFactory installedAddonsProviderFactory,
-        ILogger logger
+        ILogger<PortStarter> logger
         )
     {
         _playtimeProvider = playtimeProvider;

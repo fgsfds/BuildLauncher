@@ -59,7 +59,7 @@ public sealed class App : Application
         var config = BindingsManager.Provider.GetRequiredService<IConfigProvider>();
         var viewLocator = BindingsManager.Provider.GetRequiredService<ViewLocator>();
         var vmFactory = BindingsManager.Provider.GetRequiredService<ViewModelsFactory>();
-        var logger = BindingsManager.Provider.GetRequiredService<ILogger>();
+        var logger = BindingsManager.Provider.GetRequiredService<ILoggerFactory>().CreateLogger<App>();
         var installedGamesProvider = BindingsManager.Provider.GetRequiredService<InstalledGamesProvider>();
 
         SetTheme(config.Theme);

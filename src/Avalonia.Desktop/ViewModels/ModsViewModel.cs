@@ -24,7 +24,7 @@ public sealed partial class ModsViewModel : RightPanelViewModel, IPortsButtonCon
     private readonly IAddonDropHelper _addonInstaller;
     private readonly DownloadableAddonsProvider _downloadableAddonsProvider;
     private readonly MetadataProvider _metadataProvider;
-    private readonly ILogger _logger;
+    private readonly ILogger<ModsViewModel> _logger;
 
 
     [Obsolete($"Don't create directly. Use {nameof(ViewModelsFactory)}.")]
@@ -39,7 +39,7 @@ public sealed partial class ModsViewModel : RightPanelViewModel, IPortsButtonCon
         BitmapsCache bitmapsCache,
         IConfigProvider config,
         IAddonDropHelper addonInstaller,
-        ILogger logger
+        ILogger<ModsViewModel> logger
         ) : base(playtimeProvider, ratingProvider, metadataProvider, bitmapsCache, config)
     {
         Game = game;

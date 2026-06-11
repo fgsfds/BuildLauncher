@@ -28,7 +28,7 @@ public sealed partial class CampaignsViewModel : RightPanelViewModel, IPortsButt
     private readonly DownloadableAddonsProvider _downloadableAddonsProvider;
     private readonly PortStarter _portStarter;
     private readonly MetadataProvider _metadataProvider;
-    private readonly ILogger _logger;
+    private readonly ILogger<CampaignsViewModel> _logger;
 
     private readonly SeparatorItem _separator = new();
 
@@ -129,7 +129,7 @@ public sealed partial class CampaignsViewModel : RightPanelViewModel, IPortsButt
         PortStarter portStarter,
         BitmapsCache bitmapsCache,
         IAddonDropHelper addonInstaller,
-        ILogger logger
+        ILogger<CampaignsViewModel> logger
         ) : base(playtimeProvider, ratingProvider, metadataProvider, bitmapsCache, config)
     {
         Game = game;

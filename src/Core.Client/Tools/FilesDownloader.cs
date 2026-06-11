@@ -7,7 +7,7 @@ namespace Core.Client.Tools;
 public sealed class FilesDownloader
 {
     private readonly IHttpClientFactory _httpClientFactory;
-    private readonly ILogger _logger;
+    private readonly ILogger<FilesDownloader> _logger;
 
     /// <summary>
     /// Operation progress
@@ -16,7 +16,7 @@ public sealed class FilesDownloader
 
     public FilesDownloader(
         IHttpClientFactory httpClientFactory,
-        ILogger logger
+        ILogger<FilesDownloader> logger
         )
     {
         _httpClientFactory = httpClientFactory;

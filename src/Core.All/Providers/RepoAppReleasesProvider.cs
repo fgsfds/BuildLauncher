@@ -8,13 +8,13 @@ namespace Core.All.Providers;
 
 public sealed class RepoAppReleasesProvider
 {
-    private readonly ILogger _logger;
+    private readonly ILogger<RepoAppReleasesProvider> _logger;
     private readonly IHttpClientFactory _httpClientFactory;
 
     private Dictionary<OSEnum, GeneralReleaseJsonModel>? _appRelease = null;
 
     public RepoAppReleasesProvider(
-        ILogger logger,
+        ILogger<RepoAppReleasesProvider> logger,
         IHttpClientFactory httpClientFactory
         )
     {

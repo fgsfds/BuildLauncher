@@ -12,7 +12,7 @@ public sealed partial class PortsReleasesProvider : ReleaseProvider<PortEnum>
     private static volatile List<GitHubReleaseJsonModel>? _cachedNBloodReleases;
 
     public PortsReleasesProvider(
-        ILogger logger,
+        ILogger<PortsReleasesProvider> logger,
         IHttpClientFactory httpClientFactory
         ) : base(logger, httpClientFactory)
     {

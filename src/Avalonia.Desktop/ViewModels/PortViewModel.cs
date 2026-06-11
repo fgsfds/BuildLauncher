@@ -21,7 +21,7 @@ public sealed partial class PortViewModel : ObservableObject
     private readonly PortInstallerFactory _installerFactory;
     private readonly IApiInterface _apiInterface;
     private GeneralReleaseJsonModel? _release;
-    private readonly ILogger _logger;
+    private readonly ILogger<PortViewModel> _logger;
 
     public delegate void PortChanged(PortEnum portEnum);
     public event PortChanged? PortChangedEvent;
@@ -32,7 +32,7 @@ public sealed partial class PortViewModel : ObservableObject
         PortInstallerFactory installerFactory,
         IApiInterface apiInterface,
         BasePort port,
-        ILogger logger
+        ILogger<PortViewModel> logger
         )
     {
         _installerFactory = installerFactory;

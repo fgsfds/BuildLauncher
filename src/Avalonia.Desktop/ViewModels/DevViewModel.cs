@@ -29,7 +29,7 @@ public sealed partial class DevViewModel : ObservableObject
     private readonly IFilesUploader _filesUploader;
     private readonly AddonsDatabaseManager _addonsDatabaseManager;
     private readonly InstalledGamesProvider _gamesProvider;
-    private readonly ILogger _logger;
+    private readonly ILogger<DevViewModel> _logger;
 
     private readonly HashSet<string> _forbiddenNames =
         [
@@ -72,7 +72,7 @@ public sealed partial class DevViewModel : ObservableObject
         IFilesUploader filesUploader,
         AddonsDatabaseManager addonsDatabaseManager,
         InstalledGamesProvider gamesProvider,
-        ILogger logger
+        ILogger<DevViewModel> logger
         )
     {
         _config = config;

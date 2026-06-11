@@ -20,7 +20,7 @@ public sealed class ToolInstaller : InstallerBase<BaseTool>
         InstalledGamesProvider gamesProvider,
         FilesDownloader filesDownloader,
         ArchiveTools archiveTools,
-        ILogger logger
+        ILogger<ToolInstaller> logger
         ) : base(tool, filesDownloader, archiveTools, logger)
     {
         _gamesProvider = gamesProvider;

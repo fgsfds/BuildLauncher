@@ -12,12 +12,12 @@ namespace Core.Client.Api;
 
 public sealed class OfflineApiInterface : IApiInterface
 {
-    private readonly ILogger _logger;
+    private readonly ILogger<OfflineApiInterface> _logger;
     private readonly SemaphoreSlim _semaphore = new(1);
 
     private Dictionary<GameEnum, List<DownloadableAddonJsonModel>>? _addonsJson;
 
-    public OfflineApiInterface(ILogger logger)
+    public OfflineApiInterface(ILogger<OfflineApiInterface> logger)
     {
         _logger = logger;
     }

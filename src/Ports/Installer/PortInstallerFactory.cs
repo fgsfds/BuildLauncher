@@ -9,11 +9,17 @@ public sealed class PortInstallerFactory(
     IApiInterface apiInterface,
     FilesDownloader filesDownloader,
     ArchiveTools archiveTools,
-    ILogger logger
+    ILoggerFactory loggerFactory
     ) : IInstallerFactory<BasePort, PortInstaller>
 {
     /// <summary>
     /// Create <see cref="PortInstaller"/> instance
     /// </summary>
-    public PortInstaller Create(BasePort port) => new(port, apiInterface, filesDownloader, archiveTools, logger);
+    public PortInstaller Create(BasePort port) => new(
+        port,
+        apiInterface,
+        filesDownloader,
+        archiveTools,
+        loggerFactory.CreateLogger<PortInstaller>()
+        );
 }

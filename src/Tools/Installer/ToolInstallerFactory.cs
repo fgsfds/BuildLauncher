@@ -11,11 +11,18 @@ public sealed class ToolInstallerFactory(
     InstalledGamesProvider gamesProvider,
     FilesDownloader filesDownloader,
     ArchiveTools archiveTools,
-    ILogger logger
+    ILoggerFactory loggerFactory
     ) : IInstallerFactory<BaseTool, ToolInstaller>
 {
     /// <summary>
     /// Create <see cref="ToolInstaller"/> instance
     /// </summary>
-    public ToolInstaller Create(BaseTool tool) => new(tool, apiInterface, gamesProvider, filesDownloader, archiveTools, logger);
+    public ToolInstaller Create(BaseTool tool) => new(
+        tool,
+        apiInterface,
+        gamesProvider,
+        filesDownloader,
+        archiveTools,
+        loggerFactory.CreateLogger<ToolInstaller>()
+        );
 }
