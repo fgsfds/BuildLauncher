@@ -2,17 +2,20 @@
 using Core.Client.Providers;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Addons.DI;
+namespace Addons.Helpers;
 
-public static class ProvidersBindings
+public static class DiHelper
 {
-    public static void Load(ServiceCollection container)
+    /// <summary>
+    /// Adds dependencies to work with addons.
+    /// </summary>
+    public static IServiceCollection WithAddons(this IServiceCollection container)
     {
         _ = container.AddSingleton<InstalledAddonsProviderFactory>();
         _ = container.AddSingleton<DownloadableAddonsProviderFactory>();
         _ = container.AddSingleton<OriginalCampaignsProvider>();
         _ = container.AddSingleton<MetadataProvider>();
 
-        _ = container.AddTransient<IAddonDropHelper, AddonDropHelper>();
+        return container.AddTransient<IAddonDropHelper, AddonDropHelper>();
     }
 }

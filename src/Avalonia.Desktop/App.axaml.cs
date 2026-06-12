@@ -1,31 +1,34 @@
 ﻿using System.Collections.Immutable;
+using Addons.Helpers;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
-using Avalonia.Desktop.DI;
 using Avalonia.Desktop.Helpers;
 using Avalonia.Desktop.Misc;
 using Avalonia.Desktop.ViewModels;
 using Avalonia.Markup.Xaml;
 using Avalonia.Styling;
 using Core.All.Enums;
-using Core.Client.DI;
 using Core.Client.Enums;
 using Core.Client.Helpers;
 using Core.Client.Interfaces;
 using Core.Client.Providers;
 using Database.Client;
+using Games;
 using Games.Providers;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Ports;
 using Ports.Providers;
 using S3;
+using Tools;
 
 namespace Avalonia.Desktop;
 
 public sealed class App : Application
 {
     private static App _app = null!;
+    private static ServiceProvider _services;
 
     public override void Initialize()
     {
@@ -53,18 +56,18 @@ public sealed class App : Application
 
         FixDatabase();
 
-        using var dbContext = BindingsManager.Provider.GetRequiredService<IDbContextFactory<DatabaseContext>>().CreateDbContext();
+        using var dbContext = _services.GetRequiredService<IDbContextFactory<DatabaseContext>>().CreateDbContext();
         dbContext.Database.Migrate();
 
-        var config = BindingsManager.Provider.GetRequiredService<IConfigProvider>();
-        var viewLocator = BindingsManager.Provider.GetRequiredService<ViewLocator>();
-        var vmFactory = BindingsManager.Provider.GetRequiredService<ViewModelsFactory>();
-        var logger = BindingsManager.Provider.GetRequiredService<ILoggerFactory>().CreateLogger<App>();
-        var installedGamesProvider = BindingsManager.Provider.GetRequiredService<InstalledGamesProvider>();
+        var config = _services.GetRequiredService<IConfigProvider>();
+        var viewLocator = _services.GetRequiredService<ViewLocator>();
+        var vmFactory = _services.GetRequiredService<ViewModelsFactory>();
+        var logger = _services.GetRequiredService<ILoggerFactory>().CreateLogger<App>();
+        var installedGamesProvider = _services.GetRequiredService<InstalledGamesProvider>();
 
         SetTheme(config.Theme);
 
-        var bitmapsCache = BindingsManager.Provider.GetRequiredService<BitmapsCache>();
+        var bitmapsCache = _services.GetRequiredService<BitmapsCache>();
         bitmapsCache.InitializeCache();
 
         _app.DataTemplates.Add(viewLocator);
@@ -92,10 +95,10 @@ public sealed class App : Application
         logger.LogInformation($"Operating system: {Environment.OSVersion}");
         logger.LogInformation($"Working folder is {ClientProperties.WorkingFolder}");
 
-        var portsProvider = BindingsManager.Provider.GetRequiredService<PortsProvider>();
+        var portsProvider = _services.GetRequiredService<PortsProvider>();
         RenameSaveFolder(portsProvider);
 
-        var metadataProvider = BindingsManager.Provider.GetRequiredService<MetadataProvider>();
+        var metadataProvider = _services.GetRequiredService<MetadataProvider>();
         _ = metadataProvider.InitializeAsync();
 
         try
@@ -158,21 +161,48 @@ public sealed class App : Application
     /// </summary>
     private static void LoadBindings()
     {
-        var container = BindingsManager.Instance;
+        ServiceCollection services = new();
 
-        ClientBindings.Load(container, Design.IsDesignMode);
-        GuiBindings.Load(container);
-        container.WithS3FilesUploader();
+        _ = services.WithDebugLogging();
 
-        Games.DI.ProvidersBindings.Load(container);
+        if (Design.IsDesignMode)
+        {
+            _ = services.WithFakeConfig();
+        }
+        else
+        {
+            _ = services.WithConfig();
+            _ = services.WithFileLogging();
+            _ = services.WithDatabase();
+        }
 
-        Ports.DI.ProvidersBindings.Load(container);
-        Ports.DI.PortsBindings.Load(container);
+        if (ClientProperties.IsOfflineMode)
+        {
+            _ = services.WithOfflineApi();
+            _ = services.WithFakeHttpClients();
+        }
+        else
+        {
+            _ = services.WithGitHubApi();
+            _ = services.WithHttpClients();
+        }
 
-        Tools.DI.ProvidersBindings.Load(container);
-        Tools.DI.ToolsBindings.Load(container);
+        _ = services.WithClient();
+        _ = services.WithMVVM();
+        _ = services.WithBitmapsCache();
+        _ = services.WithS3FilesUploader();
 
-        Addons.DI.ProvidersBindings.Load(container);
+        _ = services.WithGames();
+        _ = services.WithPorts();
+        _ = services.WithTools();
+        _ = services.WithAddons();
+
+        _services?.Dispose();
+        _services = services.BuildServiceProvider(new ServiceProviderOptions
+        {
+            ValidateOnBuild = true,
+            ValidateScopes = true
+        });
     }
 
     /// <summary>

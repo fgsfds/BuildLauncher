@@ -5,7 +5,7 @@ using Core.Client.Cache;
 using Core.Client.Interfaces;
 using Core.Client.Providers;
 using Games.Games;
-using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
 
 namespace Tests;
@@ -27,18 +27,16 @@ public sealed class AddonFilesTests : IDisposable
         _ = config.Setup(x => x.FavoriteAddons).Returns([]);
 
         var bmCache = new Mock<ICacheAdder<Stream>>();
-        var logger = new Mock<ILogger>();
-        var logger2 = new Mock<ILogger<MetadataProvider>>();
-        MetadataProvider metadataProvider = new(new OfflineApiInterface(logger.Object), logger2.Object);
+        MetadataProvider metadataProvider = new(new OfflineApiInterface(NullLogger<OfflineApiInterface>.Instance), NullLogger<MetadataProvider>.Instance);
         OriginalCampaignsProvider originalCampaignsProvider = new(config.Object);
 
         _installedAddonsProvider = new(
             game.Object,
             config.Object,
-            logger.Object,
             bmCache.Object,
             originalCampaignsProvider,
-            metadataProvider
+            metadataProvider,
+            NullLogger<InstalledAddonsProvider>.Instance
             );
     }
 

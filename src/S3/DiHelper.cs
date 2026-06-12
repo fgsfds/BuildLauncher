@@ -8,9 +8,9 @@ public static class DiHelper
     /// <summary>
     /// Adds dependencies to work with S3.
     /// </summary>
-    public static void WithS3FilesUploader(this ServiceCollection container)
+    public static IServiceCollection WithS3FilesUploader(this IServiceCollection container)
     {
         _ = container.AddSingleton<IFilesUploader, S3FilesUploader>();
-        _ = container.AddSingleton<S3UtilitiesFactory>();
+        return container.AddSingleton<S3UtilitiesFactory>();
     }
 }

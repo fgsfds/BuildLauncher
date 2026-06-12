@@ -3,7 +3,7 @@ using Core.All.Helpers;
 using Core.All.Providers;
 using Core.Client.Api;
 using Core.Client.Tools;
-using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
 using Ports.Installer;
 using Ports.Ports;
@@ -33,31 +33,30 @@ public sealed class PortsInstallerTests
             return;
         }
 
-        Mock<ILogger> logger = new();
         Mock<IHttpClientFactory> httpFactory = new();
         httpFactory.Setup(x => x.CreateClient(string.Empty)).Returns(() => GetHttpClient());
         httpFactory.Setup(x => x.CreateClient(HttpClientEnum.GitHub.GetDescription())).Returns(() => GetHttpClient());
 
-        PortsReleasesProvider portsReleasesProvider = new(logger.Object, httpFactory.Object);
-        ToolsReleasesProvider toolsReleasesProvider = new(logger.Object, httpFactory.Object);
-        RepoAppReleasesProvider repoAppReleasesProvider = new(logger.Object, httpFactory.Object);
+        PortsReleasesProvider portsReleasesProvider = new(NullLogger<PortsReleasesProvider>.Instance, httpFactory.Object);
+        ToolsReleasesProvider toolsReleasesProvider = new(NullLogger<ToolsReleasesProvider>.Instance, httpFactory.Object);
+        RepoAppReleasesProvider repoAppReleasesProvider = new(NullLogger<RepoAppReleasesProvider>.Instance, httpFactory.Object);
 
-        FilesDownloader filesDownloader = new(httpFactory.Object, logger.Object);
-        ArchiveTools archiveTools = new(logger.Object);
+        FilesDownloader filesDownloader = new(httpFactory.Object, NullLogger<FilesDownloader>.Instance);
+        ArchiveTools archiveTools = new(NullLogger<ArchiveTools>.Instance);
 
         GitHubApiInterface gitHubApiInterface = new(
             portsReleasesProvider,
             toolsReleasesProvider,
             repoAppReleasesProvider,
             httpFactory.Object,
-            logger.Object
+            NullLogger<GitHubApiInterface>.Instance
             );
 
         PortInstallerFactory portInstallerFactory = new(
             gitHubApiInterface,
             filesDownloader,
             archiveTools,
-            logger.Object
+            NullLoggerFactory.Instance
             );
 
         //Raze port = new();

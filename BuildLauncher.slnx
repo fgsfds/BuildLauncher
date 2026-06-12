@@ -16,8 +16,6 @@
     <Project Path="src/Tools/Tools.csproj" />
   </Folder>
   <Project Path="src/Benchmarks/Benchmarks.csproj" Id="8645d9f4-dce1-455b-b334-d988acd75e72" />
-  <Project Path="src/S3/S3.csproj" Id="ffd7ae94-0acd-45bf-a31c-4cbeb2d15f9c">
-    <Build Solution="Debug|*" Project="false" />
-  </Project>
+  <Project Path="src/S3/S3.csproj" />
   <Project Path="src/Tests/Tests.csproj" />
 </Solution>
