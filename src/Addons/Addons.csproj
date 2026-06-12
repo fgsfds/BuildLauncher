@@ -44,7 +44,7 @@
 
   <ItemGroup>
       <InternalsVisibleTo Include="Benchmarks" />
-      <InternalsVisibleTo Include="Tests" />
+      <InternalsVisibleTo Include="Tests.Unit" />
   </ItemGroup>
 
 </Project>

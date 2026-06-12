@@ -1,6 +1,6 @@
 ﻿using Core.All.Helpers;
 
-namespace Tests;
+namespace Tests.Unit;
 
 public sealed class VersionCompareTests
 {

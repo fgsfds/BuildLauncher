@@ -1,51 +1,34 @@
 name: Build and test
-
 on:
   push:
 
 jobs:
-
   build-and-test-windows:
-
     runs-on: windows-latest
-
     steps:
-    - uses: actions/checkout@v3
-    
+    - uses: actions/checkout@v4
     - name: Setup .NET
-      uses: actions/setup-dotnet@v3
+      uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 10.0.x
-        
     - name: Restore dependencies
       run: dotnet restore
-      
     - name: Build
       run: dotnet build --no-restore
-      
-    - name: Test
-      env:
-        MINIO_ACCESS_KEY: ${{ secrets.MINIO_ACCESS_KEY }}
-        MINIO_SECRET_KEY: ${{ secrets.MINIO_SECRET_KEY }}
-      run: dotnet test --no-build --verbosity normal
+    - name: Test Unit
+      run: dotnet test ./src/Tests.Unit/Tests.Unit.csproj --no-build --verbosity normal
       
   build-and-test-linux:
-
     runs-on: ubuntu-latest
-
     steps:
-    - uses: actions/checkout@v3
-    
+    - uses: actions/checkout@v4
     - name: Setup .NET
-      uses: actions/setup-dotnet@v3
+      uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 10.0.x
-        
     - name: Restore dependencies
       run: dotnet restore
-      
     - name: Build
       run: dotnet build --no-restore
-      
-    - name: Test
-      run: dotnet test --no-build --verbosity normal --filter "FullyQualifiedName!=Tests.AddonsDatabaseTests"
+    - name: Test Unit
+      run: dotnet test ./src/Tests.Unit/Tests.Unit.csproj --no-build --verbosity normal

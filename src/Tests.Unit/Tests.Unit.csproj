@@ -8,7 +8,6 @@
 
   <ItemGroup>
     <None Remove="Files\GrpInfoAddon.zip" />
-    <None Remove="Files\TEST.MAP" />
     <None Remove="Files\UnpackedAddon.zip" />
     <None Remove="Files\WhatLiesBeneathAddon.zip" />
     <None Remove="Files\ZippedAddon.zip" />

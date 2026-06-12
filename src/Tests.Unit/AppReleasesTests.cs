@@ -4,12 +4,12 @@ using Core.All.Providers;
 using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
 
-namespace Tests;
+namespace Tests.Unit;
 
 public sealed class AppReleasesTests
 {
     [Fact]
-    public async Task DeserializeAddonJsonAsync()
+    public async Task GetLatestAppReleaseTest()
     {
         using HttpClient httpClient = new();
         httpClient.DefaultRequestHeaders.Add("User-Agent", "BuildLauncher");

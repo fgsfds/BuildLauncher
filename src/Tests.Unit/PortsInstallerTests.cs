@@ -11,7 +11,7 @@ using Ports.Ports.EDuke32;
 using Ports.Providers;
 using Tools.Providers;
 
-namespace Tests;
+namespace Tests.Unit;
 
 public sealed class PortsInstallerTests
 {

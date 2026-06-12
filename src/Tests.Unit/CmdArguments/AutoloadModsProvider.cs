@@ -4,7 +4,7 @@ using Core.All.Enums;
 using Core.All.Enums.Addons;
 using Core.All.Enums.Versions;
 
-namespace Tests.CmdArguments;
+namespace Tests.Unit.CmdArguments;
 
 internal sealed class AutoloadModsProvider
 {

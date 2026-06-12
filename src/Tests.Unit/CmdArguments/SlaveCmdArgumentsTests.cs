@@ -4,7 +4,7 @@ using Games.Games;
 using Ports.Ports;
 using Ports.Ports.EDuke32;
 
-namespace Tests.CmdArguments;
+namespace Tests.Unit.CmdArguments;
 
 [Collection("Sync")]
 public sealed class SlaveCmdArgumentsTests

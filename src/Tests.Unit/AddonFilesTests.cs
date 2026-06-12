@@ -8,7 +8,7 @@ using Games.Games;
 using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
 
-namespace Tests;
+namespace Tests.Unit;
 
 [Collection("Sync")]
 public sealed class AddonFilesTests : IDisposable

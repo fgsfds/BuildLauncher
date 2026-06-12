@@ -1,7 +1,7 @@
 ﻿using Addons.Providers;
 using Core.All.Enums.Versions;
 
-namespace Tests;
+namespace Tests.Unit;
 
 public sealed class GrpInfoParsingTests
 {

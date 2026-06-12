@@ -2,7 +2,7 @@
 using Core.All.Enums;
 using Core.All.Serializable.Addon;
 
-namespace Tests;
+namespace Tests.Unit;
 
 public sealed class SerializerTests
 {
