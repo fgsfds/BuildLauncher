@@ -38,7 +38,7 @@ public abstract class InstallerBase<T>
     /// <param name="filePath">Full path to the file</param>
     /// <param name="hashStr">Hash that the file's hash will be compared to</param>
     /// <returns>true if check is passed</returns>
-    protected static async Task<bool> CheckFileHashAsync(
+    private static async Task<bool> CheckFileHashAsync(
         string filePath,
         string? hashStr
         )
@@ -58,9 +58,9 @@ public abstract class InstallerBase<T>
         using var sha256 = SHA256.Create();
 
         var hashBytes = sha256.ComputeHash(fileStream);
-        var sha = Convert.ToHexString(hashBytes);
+        var localFileHash = Convert.ToHexString(hashBytes);
 
-        return hashStr.Equals(hashStr, StringComparison.OrdinalIgnoreCase);
+        return hashStr.Equals(localFileHash, StringComparison.OrdinalIgnoreCase);
     }
 
     /// <summary>
