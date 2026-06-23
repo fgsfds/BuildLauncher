@@ -18,7 +18,7 @@ public sealed class MetadataProvider
     private readonly IApiInterface _apiInterface;
     private readonly ILogger<MetadataProvider> _logger;
 
-    private readonly Dictionary<string, Dictionary<string, AddonJsonModel>> _updatesCache = [];
+    private readonly Dictionary<string, Dictionary<string, AddonManifestJsonModel>> _updatesCache = [];
 
     public MetadataProvider(
         IApiInterface apiInterface,
@@ -56,7 +56,7 @@ public sealed class MetadataProvider
                         using var stream = await manifest.OpenEntryStreamAsync().ConfigureAwait(false);
                         var originalManifest = await JsonSerializer.DeserializeAsync(
                             stream,
-                            AddonManifestContext.Default.AddonJsonModel
+                            AddonManifestJsonContext.Default.AddonManifestJsonModel
                             ).ConfigureAwait(false);
 
                         if (originalManifest is null)
@@ -72,7 +72,7 @@ public sealed class MetadataProvider
                     using var originalManifestStr = File.OpenRead(file);
                     var originalManifest = await JsonSerializer.DeserializeAsync(
                         originalManifestStr,
-                        AddonManifestContext.Default.AddonJsonModel
+                        AddonManifestJsonContext.Default.AddonManifestJsonModel
                         ).ConfigureAwait(false);
 
                     if (originalManifest is null)
@@ -124,7 +124,7 @@ public sealed class MetadataProvider
 
                         var ms = new MemoryStream();
                         streams.Add(ms);
-                        await JsonSerializer.SerializeAsync(ms, update.Value, AddonManifestContext.Default.AddonJsonModel).ConfigureAwait(false);
+                        await JsonSerializer.SerializeAsync(ms, update.Value, AddonManifestJsonContext.Default.AddonManifestJsonModel).ConfigureAwait(false);
 
                         archive.AddEntry(update.Key, ms);
                     }
@@ -147,7 +147,7 @@ public sealed class MetadataProvider
             else if (path.EndsWith(".json", StringComparison.OrdinalIgnoreCase))
             {
                 File.Delete(path);
-                var addonJson = JsonSerializer.Serialize(updates.First().Value, AddonManifestContext.Default.AddonJsonModel);
+                var addonJson = JsonSerializer.Serialize(updates.First().Value, AddonManifestJsonContext.Default.AddonManifestJsonModel);
                 await File.WriteAllTextAsync(path, addonJson).ConfigureAwait(false);
 
                 MetadataUpdatedEvent?.Invoke(this, new(
@@ -165,15 +165,15 @@ public sealed class MetadataProvider
         return new(ResultEnum.Success, false, string.Empty);
     }
 
-    private void AddToCacheIfNewer(Dictionary<AddonId, AddonJsonModel> metaDict, string file, AddonJsonModel originalManifest, string jsonName)
+    private void AddToCacheIfNewer(Dictionary<AddonId, AddonManifestJsonModel> metaDict, string file, AddonManifestJsonModel originalManifest, string jsonName)
     {
         if (!metaDict.TryGetValue(new(originalManifest.Id, originalManifest.Version), out var actualVersion))
         {
             return;
         }
 
-        var newManifestStr = JsonSerializer.Serialize(actualVersion, AddonManifestContext.Default.AddonJsonModel);
-        var originalManifestStr = JsonSerializer.Serialize(originalManifest, AddonManifestContext.Default.AddonJsonModel);
+        var newManifestStr = JsonSerializer.Serialize(actualVersion, AddonManifestJsonContext.Default.AddonManifestJsonModel);
+        var originalManifestStr = JsonSerializer.Serialize(originalManifest, AddonManifestJsonContext.Default.AddonManifestJsonModel);
 
         if (!originalManifestStr.Equals(newManifestStr))
         {

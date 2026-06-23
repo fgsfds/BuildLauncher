@@ -83,7 +83,7 @@ public sealed class OfflineApiInterface : IApiInterface
 
     public Task<GeneralReleaseJsonModel?> GetLatestToolReleaseAsync(ToolEnum toolEnum) => Task.FromResult<GeneralReleaseJsonModel?>(null);
 
-    public Task<bool> AddAddonToDatabaseAsync(AddonJsonModel addonJson, DownloadableAddonJsonModel downloadableAddonJson) => Task.FromResult(false);
+    public Task<bool> AddAddonToDatabaseAsync(AddonManifestJsonModel addonJson, DownloadableAddonJsonModel downloadableAddonJson) => Task.FromResult(false);
 
     public async Task<string?> GetUploadFolderAsync()
     {
@@ -98,12 +98,12 @@ public sealed class OfflineApiInterface : IApiInterface
         return uploadFolder;
     }
 
-    public async Task<List<AddonJsonModel>?> GetMetadataAsync()
+    public async Task<List<AddonManifestJsonModel>?> GetMetadataAsync()
     {
         using var dataJson = File.OpenRead(ClientProperties.PathToLocalManifestsJson);
         var data = await JsonSerializer.DeserializeAsync(
             dataJson,
-            ManifestsJsonModelContext.Default.ListAddonJsonModel
+            AddonManifestJsonContext.Default.ListAddonManifestJsonModel
             ).ConfigureAwait(false);
 
         return data;

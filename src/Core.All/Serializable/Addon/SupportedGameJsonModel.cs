@@ -3,7 +3,7 @@ using Core.All.Enums;
 
 namespace Core.All.Serializable.Addon;
 
-public sealed class SupportedGameJsonModel
+public sealed record SupportedGameJsonModel
 {
     [JsonPropertyName("name")]
     [JsonConverter(typeof(GameEnumJsonConverter))]
@@ -24,4 +24,4 @@ public sealed class SupportedGameJsonModel
         ]
     )]
 [JsonSerializable(typeof(SupportedGameJsonModel))]
-public sealed partial class SupportedGameJsonModelContext : JsonSerializerContext;
+public sealed partial class SupportedGameJsonContext : JsonSerializerContext;

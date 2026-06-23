@@ -7,7 +7,7 @@ namespace Core.Client.Helpers;
 
 public static class ManifestHelper
 {
-    public static async Task<Result<AddonJsonModel?>> GetMainManifestAsync(string pathToFile)
+    public static async Task<Result<AddonManifestJsonModel?>> GetMainManifestAsync(string pathToFile)
     {
         using var archive = ZipArchive.OpenArchive(pathToFile);
         var addonJson = archive.Entries.FirstOrDefault(static x => x.Key!.Equals("addon.json", StringComparison.OrdinalIgnoreCase));
@@ -18,7 +18,7 @@ public static class ManifestHelper
         }
 
         using var stream = await addonJson.OpenEntryStreamAsync().ConfigureAwait(false);
-        var manifest = await JsonSerializer.DeserializeAsync(stream, AddonManifestContext.Default.AddonJsonModel).ConfigureAwait(false);
+        var manifest = await JsonSerializer.DeserializeAsync(stream, AddonManifestJsonContext.Default.AddonManifestJsonModel).ConfigureAwait(false);
 
         return manifest is null
             ? new(ResultEnum.Error, null, "Error while deserializing addon.json.")

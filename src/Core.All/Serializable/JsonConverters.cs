@@ -12,9 +12,10 @@ public sealed class SupportedGameDtoConverter : JsonConverter<SupportedGameJsonM
     {
         if (reader.TokenType is JsonTokenType.StartObject)
         {
-            return JsonSerializer.Deserialize(ref reader, SupportedGameJsonModelContext.Default.SupportedGameJsonModel);
+            return JsonSerializer.Deserialize(ref reader, SupportedGameJsonContext.Default.SupportedGameJsonModel);
         }
-        else if (reader.TokenType is JsonTokenType.String)
+
+        if (reader.TokenType is JsonTokenType.String)
         {
             var str = reader.GetString();
 
@@ -51,13 +52,13 @@ public sealed class IStartMapConverter : JsonConverter<IStartMap?>
         {
             try
             {
-                return JsonSerializer.Deserialize(ref reader, MapFileJsonModelContext.Default.MapFileJsonModel);
+                return JsonSerializer.Deserialize(ref reader, MapFileJsonContext.Default.MapFileJsonModel);
             }
             catch { }
 
             try
             {
-                return JsonSerializer.Deserialize(ref reader, MapSlotJsonModelContext.Default.MapSlotJsonModel);
+                return JsonSerializer.Deserialize(ref reader, MapSlotJsonContext.Default.MapSlotJsonModel);
             }
             catch { }
         }
@@ -98,13 +99,13 @@ public sealed class ExecutablesConverter : JsonConverter<Dictionary<OSEnum, Dict
         {
             try
             {
-                return JsonSerializer.Deserialize(ref reader, AddonManifestContext.Default.DictionaryOSEnumDictionaryPortEnumString);
+                return JsonSerializer.Deserialize(ref reader, AddonManifestJsonContext.Default.DictionaryOSEnumDictionaryPortEnumString);
             }
             catch { }
 
             try
             {
-                var old = JsonSerializer.Deserialize(ref reader, AddonManifestContext.Default.DictionaryOSEnumString);
+                var old = JsonSerializer.Deserialize(ref reader, AddonManifestJsonContext.Default.DictionaryOSEnumString);
 
                 if (old is not null)
                 {
@@ -322,14 +323,12 @@ public sealed class GameEnumJsonConverter : JsonConverter<GameEnum>
         {
             return GameEnum.Wang;
         }
-        else if (value.Equals("Exhumed", StringComparison.OrdinalIgnoreCase))
+        if (value.Equals("Exhumed", StringComparison.OrdinalIgnoreCase))
         {
             return GameEnum.Slave;
         }
-        else
-        {
-            throw new NotSupportedException(value);
-        }
+
+        throw new NotSupportedException(value);
     }
 
     public override void Write(Utf8JsonWriter writer, GameEnum value, JsonSerializerOptions options)

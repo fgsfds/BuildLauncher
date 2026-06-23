@@ -153,7 +153,7 @@ public sealed class AddonsDatabaseTests
     public async Task ManifestsJsonTest()
     {
         var manifestsJsonString = await File.ReadAllTextAsync(ClientProperties.PathToLocalManifestsJson);
-        var manifests = JsonSerializer.Deserialize(manifestsJsonString, ManifestsJsonModelContext.Default.ListAddonJsonModel);
+        var manifests = JsonSerializer.Deserialize(manifestsJsonString, AddonManifestJsonContext.Default.ListAddonManifestJsonModel);
 
         Assert.NotNull(manifests);
     }

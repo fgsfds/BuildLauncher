@@ -5,7 +5,7 @@ namespace Core.Client.Helpers;
 
 public static class UriHelper
 {
-    public static string GetRelativeFilePath(AddonJsonModel manifest, string pathToFile)
+    public static string GetRelativeFilePath(AddonManifestJsonModel manifest, string pathToFile)
     {
         var folderName = manifest.AddonType switch
         {

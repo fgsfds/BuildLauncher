@@ -4,7 +4,7 @@ using Core.All.Interfaces;
 
 namespace Core.All.Serializable.Addon;
 
-public sealed class AddonJsonModel
+public sealed record AddonManifestJsonModel
 {
     [JsonRequired]
     [JsonPropertyName("id")]
@@ -77,7 +77,10 @@ public sealed class AddonJsonModel
     public List<OptionJsonModel>? Options { get; set; }
 
     [Obsolete]
-    public Dictionary<OSEnum, string>? ExecutablesOld { get; } = null;
+    public Dictionary<OSEnum, string>? ExecutablesOld { get; }
+
+    [JsonIgnore]
+    public AddonId AddonId => new(Id, Version);
 }
 
 [JsonSourceGenerationOptions(
@@ -94,5 +97,6 @@ public sealed class AddonJsonModel
     DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
     RespectNullableAnnotations = true
     )]
-[JsonSerializable(typeof(AddonJsonModel))]
-public sealed partial class AddonManifestContext : JsonSerializerContext;
+[JsonSerializable(typeof(AddonManifestJsonModel))]
+[JsonSerializable(typeof(List<AddonManifestJsonModel>))]
+public sealed partial class AddonManifestJsonContext : JsonSerializerContext;

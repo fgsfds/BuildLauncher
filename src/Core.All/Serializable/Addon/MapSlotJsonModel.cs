@@ -3,7 +3,7 @@ using Core.All.Interfaces;
 
 namespace Core.All.Serializable.Addon;
 
-public sealed class MapSlotJsonModel : IStartMap
+public sealed record MapSlotJsonModel : IStartMap
 {
     [JsonPropertyName("volume")]
     public required int Episode { get; set; }
@@ -15,4 +15,4 @@ public sealed class MapSlotJsonModel : IStartMap
 
 [JsonSourceGenerationOptions(RespectNullableAnnotations = true)]
 [JsonSerializable(typeof(MapSlotJsonModel))]
-public sealed partial class MapSlotJsonModelContext : JsonSerializerContext;
+public sealed partial class MapSlotJsonContext : JsonSerializerContext;

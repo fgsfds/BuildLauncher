@@ -3,7 +3,7 @@ using Core.All.Interfaces;
 
 namespace Core.All.Serializable.Addon;
 
-public sealed class MapFileJsonModel : IStartMap
+public sealed record MapFileJsonModel : IStartMap
 {
     [JsonPropertyName("file")]
     public required string File { get; set; }
@@ -12,4 +12,4 @@ public sealed class MapFileJsonModel : IStartMap
 
 [JsonSourceGenerationOptions(RespectNullableAnnotations = true)]
 [JsonSerializable(typeof(MapFileJsonModel))]
-public sealed partial class MapFileJsonModelContext : JsonSerializerContext;
+public sealed partial class MapFileJsonContext : JsonSerializerContext;

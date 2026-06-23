@@ -3,7 +3,7 @@ using Core.All.Enums;
 
 namespace Core.All.Serializable.Addon;
 
-public sealed class DependencyJsonModel
+public sealed record DependencyJsonModel
 {
     [JsonPropertyName("addons")]
     public List<DependantAddonJsonModel>? Addons { get; set; }
@@ -12,15 +12,8 @@ public sealed class DependencyJsonModel
     public List<FeatureEnum>? RequiredFeatures { get; set; }
 }
 
-[JsonSourceGenerationOptions(
-    Converters = [typeof(JsonStringEnumConverter<FeatureEnum>)],
-    RespectNullableAnnotations = true
-    )]
-[JsonSerializable(typeof(DependencyJsonModel))]
-public sealed partial class DependencyDtoContext : JsonSerializerContext;
 
-
-public sealed class DependantAddonJsonModel
+public sealed record DependantAddonJsonModel
 {
     [JsonPropertyName("id")]
     public required string Id { get; set; }
@@ -28,7 +21,3 @@ public sealed class DependantAddonJsonModel
     [JsonPropertyName("version")]
     public string? Version { get; set; }
 }
-
-[JsonSourceGenerationOptions(RespectNullableAnnotations = true)]
-[JsonSerializable(typeof(DependantAddonJsonModel))]
-public sealed partial class DependantAddonJsonModelContext : JsonSerializerContext;

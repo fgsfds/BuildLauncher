@@ -129,7 +129,7 @@ public sealed class GitHubApiInterface : IApiInterface
         return null;
     }
 
-    public async Task<bool> AddAddonToDatabaseAsync(AddonJsonModel addonJson, DownloadableAddonJsonModel downloadableAddonJson)
+    public async Task<bool> AddAddonToDatabaseAsync(AddonManifestJsonModel addonJson, DownloadableAddonJsonModel downloadableAddonJson)
     {
         if (ClientProperties.PathToLocalAddonsJson is null)
         {
@@ -186,13 +186,13 @@ public sealed class GitHubApiInterface : IApiInterface
         var newAddonsJson = JsonSerializer.Serialize(addons, DownloadableAddonJsonModelDictionaryContext.Default.DictionaryGameEnumListDownloadableAddonJsonModel);
         await File.WriteAllTextAsync(ClientProperties.PathToLocalAddonsJson, newAddonsJson).ConfigureAwait(false);
 
-        List<AddonJsonModel>? manifests;
+        List<AddonManifestJsonModel>? manifests;
 
         using (var manifestsJson = File.OpenRead(ClientProperties.PathToLocalManifestsJson))
         {
             manifests = await JsonSerializer.DeserializeAsync(
                 manifestsJson,
-                ManifestsJsonModelContext.Default.ListAddonJsonModel
+                AddonManifestJsonContext.Default.ListAddonManifestJsonModel
             ).ConfigureAwait(false);
         }
 
@@ -205,7 +205,7 @@ public sealed class GitHubApiInterface : IApiInterface
         manifests.RemoveAll(x => x.Id.Equals(addonJson.Id));
         manifests.Add(addonJson);
 
-        var newManifestsJson = JsonSerializer.Serialize(manifests, ManifestsJsonModelContext.Default.ListAddonJsonModel);
+        var newManifestsJson = JsonSerializer.Serialize(manifests, AddonManifestJsonContext.Default.ListAddonManifestJsonModel);
         await File.WriteAllTextAsync(ClientProperties.PathToLocalManifestsJson, newManifestsJson).ConfigureAwait(false);
 
         return true;
@@ -235,7 +235,7 @@ public sealed class GitHubApiInterface : IApiInterface
         }
     }
 
-    public async Task<List<AddonJsonModel>?> GetMetadataAsync()
+    public async Task<List<AddonManifestJsonModel>?> GetMetadataAsync()
     {
         try
         {
@@ -245,7 +245,7 @@ public sealed class GitHubApiInterface : IApiInterface
 
             var meta = await JsonSerializer.DeserializeAsync(
                 jsonStream,
-                ManifestsJsonModelContext.Default.ListAddonJsonModel
+                AddonManifestJsonContext.Default.ListAddonManifestJsonModel
                 ).ConfigureAwait(false);
 
             return meta;

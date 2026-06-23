@@ -18,7 +18,7 @@ public sealed class AddonsDatabaseManager
         _logger = logger;
     }
 
-    public async Task<Result> AddToDatabaseAsync(string pathToFile, Uri downloadUrl, AddonJsonModel manifest)
+    public async Task<Result> AddToDatabaseAsync(string pathToFile, Uri downloadUrl, AddonManifestJsonModel manifest)
     {
         var downloadAddonEntity = await GetDownloadableAddonDtoAsync(pathToFile, downloadUrl, manifest).ConfigureAwait(false);
         var dbResult = await _apiInterface.AddAddonToDatabaseAsync(manifest!, downloadAddonEntity).ConfigureAwait(false);
@@ -26,7 +26,7 @@ public sealed class AddonsDatabaseManager
         return new(dbResult ? ResultEnum.Success : ResultEnum.Error, dbResult ? string.Empty : "Error while adding addon to the database.");
     }
 
-    private static async Task<DownloadableAddonJsonModel> GetDownloadableAddonDtoAsync(string pathToFile, Uri downloadUrl, AddonJsonModel manifest)
+    private static async Task<DownloadableAddonJsonModel> GetDownloadableAddonDtoAsync(string pathToFile, Uri downloadUrl, AddonManifestJsonModel manifest)
     {
         FileInfo fileInfo = new(pathToFile);
         using var fileStream = File.OpenRead(pathToFile);
