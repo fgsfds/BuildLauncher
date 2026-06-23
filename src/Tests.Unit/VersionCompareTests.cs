@@ -24,6 +24,7 @@ public sealed class VersionCompareTests
     [InlineData(null, "<1")]
     [InlineData(null, "<=1")]
     [InlineData("1", null)]
+    [InlineData("1", "1")]
     public void Compare_ShouldReturnTrue(string? v1, string? v2)
     {
         var result = VersionComparer.Compare(v1, v2);
@@ -42,6 +43,7 @@ public sealed class VersionCompareTests
     [InlineData("1.10", "<=1.9")]
     [InlineData("1.9", ">=1.10")]
     [InlineData("p2", "<p1")]
+    [InlineData("1", "2")]
     public void Compare_ShouldReturnFalse(string? v1, string? v2)
     {
         var result = VersionComparer.Compare(v1, v2);
