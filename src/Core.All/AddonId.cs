@@ -39,7 +39,7 @@ public sealed class AddonId
             return false;
         }
 
-        return VersionComparer.Compare(Version, addon.Version, "==");
+        return VersionComparer.Compare(Version, addon.Version, ComparisonOperatorEnum.Equals);
     }
 
     public static bool operator ==(AddonId left, AddonId right)

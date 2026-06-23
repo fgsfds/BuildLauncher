@@ -181,7 +181,7 @@ public sealed partial class PortViewModel : ObservableObject
                 return false;
             }
 
-            return VersionComparer.Compare(Port.InstalledVersion, _release.Version, "<");
+            return VersionComparer.Compare(Port.InstalledVersion, _release.Version, ComparisonOperatorEnum.LessThan);
         }
     }
 

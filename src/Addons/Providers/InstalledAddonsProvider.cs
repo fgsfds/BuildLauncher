@@ -316,7 +316,7 @@ public sealed class InstalledAddonsProvider : IDisposable
         var otherVersions = _modsCache
              .Where(x =>
                  x.Key.Id.Equals(addon.Id, StringComparison.OrdinalIgnoreCase) &&
-                 !VersionComparer.Compare(x.Key.Version, addon.Version, "==") &&
+                 !VersionComparer.Compare(x.Key.Version, addon.Version, ComparisonOperatorEnum.Equals) &&
                  !x.Value.FileName!.Equals(autoloadMod.FileName)
                  );
 
@@ -492,9 +492,9 @@ public sealed class InstalledAddonsProvider : IDisposable
                             }
                             else if (existingMod.AddonId.Version is not null &&
                                      newAddon.AddonId.Version is not null &&
-                                     VersionComparer.Compare(newAddon.AddonId.Version, existingMod.AddonId.Version, ">"))
+                                     VersionComparer.Compare(newAddon.AddonId.Version, existingMod.AddonId.Version, ComparisonOperatorEnum.GreaterThan))
                             {
-                                //replacing with addon that have higher version
+                                //replacing with addon that has higher version
                                 addedAddons[newAddon.AddonId] = newAddon;
                             }
                         }

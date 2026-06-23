@@ -155,7 +155,7 @@ public sealed class DownloadableAddonsProvider
                 {
                     downloadableAddon.Value.IsUpdateAvailable = true;
 
-                    if (VersionComparer.Compare(downloadableAddon.Value.Version, existingVersion, "<="))
+                    if (VersionComparer.Compare(downloadableAddon.Value.Version, existingVersion, ComparisonOperatorEnum.LessThan))
                     {
                         downloadableAddon.Value.IsUpdateAvailable = false;
                         break;
