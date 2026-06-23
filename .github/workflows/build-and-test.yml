@@ -17,6 +17,8 @@ jobs:
       run: dotnet build --no-restore
     - name: Test Unit
       run: dotnet test ./src/Tests.Unit/Tests.Unit.csproj --no-build --verbosity normal
+    - name: Test External
+      run: dotnet test ./src/Tests.External/Tests.External.csproj --no-build --verbosity normal
       
   build-and-test-linux:
     runs-on: ubuntu-latest
@@ -32,3 +34,5 @@ jobs:
       run: dotnet build --no-restore
     - name: Test Unit
       run: dotnet test ./src/Tests.Unit/Tests.Unit.csproj --no-build --verbosity normal
+    - name: Test External
+      run: dotnet test ./src/Tests.External/Tests.External.csproj --no-build --verbosity normal
