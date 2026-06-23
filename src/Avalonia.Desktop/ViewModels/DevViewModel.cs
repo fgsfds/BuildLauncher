@@ -663,7 +663,7 @@ public sealed partial class DevViewModel : ObservableObject
             return;
         }
 
-        List<AddonJsonModel> result = new(files.Count);
+        List<AddonManifestJsonModel> result = new(files.Count);
 
         foreach (var file in files)
         {
@@ -676,7 +676,7 @@ public sealed partial class DevViewModel : ObservableObject
 
                 var jsonStr = await JsonSerializer.DeserializeAsync(
                     jsonStream,
-                    AddonManifestContext.Default.AddonJsonModel
+                    AddonManifestJsonContext.Default.AddonManifestJsonModel
                     ).ConfigureAwait(false);
 
                 if (jsonStr is null)
@@ -688,14 +688,14 @@ public sealed partial class DevViewModel : ObservableObject
             }
         }
 
-        var list = JsonSerializer.Serialize(result, ManifestsJsonModelContext.Default.ListAddonJsonModel);
+        var list = JsonSerializer.Serialize(result, AddonManifestJsonContext.Default.ListAddonManifestJsonModel);
         await File.WriteAllTextAsync(ClientProperties.PathToLocalManifestsJson, list).ConfigureAwait(false);
     }
 
     #endregion
 
 
-    private AddonJsonModel GetAddonJson(out string jsonString)
+    private AddonManifestJsonModel GetAddonJson(out string jsonString)
     {
         if (PathToAddonFolder is null)
         {
@@ -928,7 +928,7 @@ public sealed partial class DevViewModel : ObservableObject
             executables[OSEnum.Linux].Add(PortEnum.PCExhumed, LinuxPCExhumedExe);
         }
 
-        AddonJsonModel addon = new()
+        AddonManifestJsonModel addon = new()
         {
             AddonType = addonType,
             Id = AddonIdPrefix + AddonId,
@@ -958,7 +958,7 @@ public sealed partial class DevViewModel : ObservableObject
             Executables = executables.Count == 0 ? null : executables
         };
 
-        jsonString = JsonSerializer.Serialize(addon, AddonManifestContext.Default.AddonJsonModel);
+        jsonString = JsonSerializer.Serialize(addon, AddonManifestJsonContext.Default.AddonManifestJsonModel);
         JsonText = jsonString;
 
         return addon;
@@ -970,7 +970,7 @@ public sealed partial class DevViewModel : ObservableObject
 
         var addon = JsonSerializer.Deserialize(
             jsonStream,
-            AddonManifestContext.Default.AddonJsonModel
+            AddonManifestJsonContext.Default.AddonManifestJsonModel
             );
 
         if (addon is null)
@@ -1071,7 +1071,7 @@ public sealed partial class DevViewModel : ObservableObject
     /// Rename addon folder to {addon_id}_v{addon_version}
     /// </summary>
     /// <param name="addon">Addon</param>
-    private void RenameAddonFolder(AddonJsonModel addon)
+    private void RenameAddonFolder(AddonManifestJsonModel addon)
     {
         ArgumentNullException.ThrowIfNull(PathToAddonFolder);
 
@@ -1085,7 +1085,7 @@ public sealed partial class DevViewModel : ObservableObject
         }
     }
 
-    private static string GetAddonFullName(AddonJsonModel addon)
+    private static string GetAddonFullName(AddonManifestJsonModel addon)
     {
         StringBuilder version = new();
 

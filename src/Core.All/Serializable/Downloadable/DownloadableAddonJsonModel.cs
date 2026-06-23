@@ -1,7 +1,7 @@
 ﻿using System.Text;
 using System.Text.Json.Serialization;
-using Core.All.Helpers;
 using Core.All.Enums;
+using Core.All.Helpers;
 
 namespace Core.All.Serializable.Downloadable;
 
@@ -113,18 +113,12 @@ public sealed class DownloadableAddonJsonModel
             var now = DateTime.UtcNow;
             var span = now - UpdateDate;
 
-            if (span.TotalDays < 1)
+            return span.TotalDays switch
             {
-                return "Today";
-            }
-            else if (span.TotalDays < 2)
-            {
-                return "Yesterday";
-            }
-            else
-            {
-                return $"{(int)span.TotalDays} days ago";
-            }
+                < 1 => "Today",
+                < 2 => "Yesterday",
+                _ => $"{(int)span.TotalDays} days ago"
+            };
         }
     }
 

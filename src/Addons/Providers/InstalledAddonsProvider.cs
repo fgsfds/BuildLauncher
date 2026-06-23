@@ -532,7 +532,7 @@ public sealed class InstalledAddonsProvider : IDisposable
 
             var manifest = await JsonSerializer.DeserializeAsync(
                 jsonStream,
-                AddonManifestContext.Default.AddonJsonModel
+                AddonManifestJsonContext.Default.AddonManifestJsonModel
                 ).ConfigureAwait(false);
 
             if (manifest is null)
@@ -902,7 +902,7 @@ public sealed class InstalledAddonsProvider : IDisposable
     /// <param name="pathToFile">Path to archive</param>
     /// <param name="manifests">Addon manifests</param>
     /// <returns>Path to unpacked folder or <see langword="null"/> if not unpacked.</returns>
-    private string? UnpackIfNeededAndGetAddonManifests(string pathToFile, out List<AddonJsonModel>? manifests)
+    private string? UnpackIfNeededAndGetAddonManifests(string pathToFile, out List<AddonManifestJsonModel>? manifests)
     {
         try
         {
@@ -935,7 +935,7 @@ public sealed class InstalledAddonsProvider : IDisposable
 
             var addonDto = JsonSerializer.Deserialize(
                 addonJsonStream,
-                AddonManifestContext.Default.AddonJsonModel
+                AddonManifestJsonContext.Default.AddonManifestJsonModel
                 )!;
 
             if (addonDto.MainRff is not null || addonDto.SoundRff is not null)
@@ -949,7 +949,7 @@ public sealed class InstalledAddonsProvider : IDisposable
                 unpackedTo = Unpack(pathToFile, archive);
             }
 
-            List<AddonJsonModel> result = [];
+            List<AddonManifestJsonModel> result = [];
 
             if (unpackedTo is not null)
             {
@@ -964,7 +964,7 @@ public sealed class InstalledAddonsProvider : IDisposable
 
                     var addonDto2 = JsonSerializer.Deserialize(
                         text,
-                        AddonManifestContext.Default.AddonJsonModel
+                        AddonManifestJsonContext.Default.AddonManifestJsonModel
                         )!;
 
                     result.Add(addonDto2);
@@ -978,7 +978,7 @@ public sealed class InstalledAddonsProvider : IDisposable
 
                     var addonDto2 = JsonSerializer.Deserialize(
                         addonJsonStream2,
-                        AddonManifestContext.Default.AddonJsonModel
+                        AddonManifestJsonContext.Default.AddonManifestJsonModel
                         )!;
 
                     result.Add(addonDto2);
@@ -1024,7 +1024,7 @@ public sealed class InstalledAddonsProvider : IDisposable
     }
 
     private AddonCarcass GetCarcass(
-        AddonJsonModel manifest,
+        AddonManifestJsonModel manifest,
         string pathToFile,
         bool isUnpacked,
         long? gridImageHash,

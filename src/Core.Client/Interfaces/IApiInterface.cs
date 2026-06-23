@@ -7,7 +7,7 @@ namespace Core.Client.Interfaces;
 
 public interface IApiInterface
 {
-    Task<bool> AddAddonToDatabaseAsync(AddonJsonModel addonJson, DownloadableAddonJsonModel downloadableAddonJson);
+    Task<bool> AddAddonToDatabaseAsync(AddonManifestJsonModel addonJson, DownloadableAddonJsonModel downloadableAddonJson);
     Task<decimal?> ChangeScoreAsync(string addonId, sbyte score, bool isNew);
     Task<List<DownloadableAddonJsonModel>?> GetAddonsAsync(GameEnum gameEnum);
     Task<GeneralReleaseJsonModel?> GetLatestAppReleaseAsync();
@@ -16,6 +16,6 @@ public interface IApiInterface
     Task<Dictionary<string, decimal>?> GetRatingsAsync();
     Task<Result<Uri?>> GetSignedUrlAsync(string path);
     Task<string?> GetUploadFolderAsync();
-    Task<List<AddonJsonModel>?> GetMetadataAsync();
+    Task<List<AddonManifestJsonModel>?> GetMetadataAsync();
     Task<bool> IncreaseNumberOfInstallsAsync(string addonId);
 }
