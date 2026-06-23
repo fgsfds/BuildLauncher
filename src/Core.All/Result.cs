@@ -10,7 +10,7 @@ public readonly struct Result
     /// <summary>
     /// Operation result enum
     /// </summary>
-    public readonly ResultEnum ResultEnum;
+    private readonly ResultEnum _resultEnum;
 
     /// <summary>
     /// Operation result message
@@ -20,7 +20,7 @@ public readonly struct Result
     /// <summary>
     /// Is operation successful
     /// </summary>
-    public bool IsSuccess => ResultEnum is ResultEnum.Success;
+    public bool IsSuccess => _resultEnum is ResultEnum.Success;
 
 
     public Result(
@@ -28,36 +28,8 @@ public readonly struct Result
         string message
         )
     {
-        ResultEnum = resultEnum;
+        _resultEnum = resultEnum;
         Message = message;
-    }
-
-    public override bool Equals(object? obj)
-    {
-        switch (obj)
-        {
-            case Result result:
-                return ResultEnum == result.ResultEnum;
-            case ResultEnum resultE:
-                return ResultEnum == resultE;
-            default:
-                throw new ArgumentOutOfRangeException($"Can't compare Result to {obj?.GetType()}");
-        }
-    }
-
-    public static bool operator ==(Result obj1, ResultEnum obj2)
-    {
-        return obj1.ResultEnum == obj2;
-    }
-
-    public static bool operator !=(Result obj1, ResultEnum obj2)
-    {
-        return obj1.ResultEnum != obj2;
-    }
-
-    public override int GetHashCode()
-    {
-        throw new NotSupportedException(string.Empty);
     }
 }
 
@@ -70,23 +42,23 @@ public readonly struct Result<T>
     /// <summary>
     /// Operation result enum
     /// </summary>
-    public readonly ResultEnum ResultEnum { get; init; }
+    private ResultEnum _resultEnum { get; }
 
     /// <summary>
     /// Operation result message
     /// </summary>
-    public readonly string Message { get; init; }
+    public string Message { get; }
 
     /// <summary>
     /// Operation result object
     /// </summary>
-    public readonly T? ResultObject { get; init; }
+    public T? ResultObject { get; }
 
     /// <summary>
     /// Is operation successful
     /// </summary>
     [MemberNotNullWhen(returnValue: true, nameof(ResultObject))]
-    public bool IsSuccess => ResultEnum is ResultEnum.Success;
+    public bool IsSuccess => _resultEnum is ResultEnum.Success;
 
 
     public Result(
@@ -95,38 +67,9 @@ public readonly struct Result<T>
         string message
         )
     {
-        ResultEnum = resultEnum;
+        _resultEnum = resultEnum;
         Message = message;
         ResultObject = resultObj;
-    }
-
-
-    public override bool Equals(object? obj)
-    {
-        switch (obj)
-        {
-            case Result<T> result:
-                return ResultEnum == result.ResultEnum;
-            case ResultEnum resultE:
-                return ResultEnum == resultE;
-            default:
-                throw new ArgumentOutOfRangeException($"Can't compare Result to {obj?.GetType()}");
-        }
-    }
-
-    public static bool operator ==(Result<T> obj1, ResultEnum obj2)
-    {
-        return obj1.ResultEnum == obj2;
-    }
-
-    public static bool operator !=(Result<T> obj1, ResultEnum obj2)
-    {
-        return obj1.ResultEnum != obj2;
-    }
-
-    public override int GetHashCode()
-    {
-        throw new NotSupportedException(string.Empty);
     }
 }
 
@@ -154,7 +97,7 @@ public enum ResultEnum : byte
     /// </summary>
     FileAccessError,
     /// <summary>
-    /// Task cancelled
+    /// Task canceled
     /// </summary>
     Cancelled,
     /// <summary>
