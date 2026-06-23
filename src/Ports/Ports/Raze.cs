@@ -392,7 +392,6 @@ public sealed class Raze : BasePort
             }
         }
 
-
         if (rCamp.Type is AddonTypeEnum.TC)
         {
             _ = sb.Append($@" {AddFileParam}""{rCamp.PathToFile}""");
@@ -443,11 +442,10 @@ public sealed class Raze : BasePort
                     }
                 }
 
-                do
+                while (i < contents.Length && !string.IsNullOrWhiteSpace(contents[i]))
                 {
                     i++;
                 }
-                while (!string.IsNullOrWhiteSpace(contents[i]));
 
                 _ = sb.AppendLine();
                 continue;
@@ -469,11 +467,10 @@ public sealed class Raze : BasePort
                     _ = sb.Append("Path=").AppendLine(path);
                 }
 
-                do
+                while (i < contents.Length && !string.IsNullOrWhiteSpace(contents[i]))
                 {
                     i++;
                 }
-                while (!string.IsNullOrWhiteSpace(contents[i]));
 
                 _ = sb.AppendLine();
                 continue;
