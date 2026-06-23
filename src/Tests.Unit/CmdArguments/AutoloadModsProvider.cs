@@ -8,7 +8,7 @@ namespace Tests.Unit.CmdArguments;
 
 internal sealed class AutoloadModsProvider
 {
-    private readonly GameStruct _game;
+    private readonly GameInfo _game;
     private readonly string _addon;
     private readonly FeatureEnum _feature;
 
