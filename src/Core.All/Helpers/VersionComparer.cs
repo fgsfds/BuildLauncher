@@ -48,7 +48,7 @@ public static class VersionComparer
         }
         else
         {
-            throw new InvalidOperationException();
+            comparisonOperator = ComparisonOperatorEnum.Equals;
         }
 
         return InternalCompare(v1.AsSpan(), s2, comparisonOperator);
