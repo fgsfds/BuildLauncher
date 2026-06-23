@@ -447,7 +447,7 @@ public sealed class Raze : BasePort
                 {
                     i++;
                 }
-                while (!string.IsNullOrWhiteSpace(contents[i]));
+                while (i < contents.Length && !string.IsNullOrWhiteSpace(contents[i]));
 
                 _ = sb.AppendLine();
                 continue;
