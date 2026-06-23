@@ -4,7 +4,7 @@ using Core.All.Providers;
 using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
 
-namespace Tests.Unit;
+namespace Tests.External;
 
 public sealed class AppReleasesTests
 {

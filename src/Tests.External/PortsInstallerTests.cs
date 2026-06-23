@@ -11,7 +11,7 @@ using Ports.Ports.EDuke32;
 using Ports.Providers;
 using Tools.Providers;
 
-namespace Tests.Unit;
+namespace Tests.External;
 
 public sealed class PortsInstallerTests
 {
@@ -74,7 +74,7 @@ public sealed class PortsInstallerTests
     }
 
 
-    HttpClient GetHttpClient()
+    private static HttpClient GetHttpClient()
     {
         HttpClient httpClient = new();
         httpClient.DefaultRequestHeaders.Add("User-Agent", "BuildLauncher");

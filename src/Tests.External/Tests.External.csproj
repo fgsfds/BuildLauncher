@@ -1,0 +1,40 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+    <AssemblyName>$(MSBuildProjectName)</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Files\GrpInfoAddon.zip" />
+    <None Remove="Files\UnpackedAddon.zip" />
+    <None Remove="Files\WhatLiesBeneathAddon.zip" />
+    <None Remove="Files\ZippedAddon.zip" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="coverlet.collector" />
+    <PackageReference Include="IDisposableAnalyzers" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="Minio" />
+    <PackageReference Include="Moq" />
+    <PackageReference Include="xunit.runner.visualstudio" PrivateAssets="all" />
+    <PackageReference Include="xunit.v3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Addons\Addons.csproj" />
+    <ProjectReference Include="..\Core.All\Core.All.csproj" />
+    <ProjectReference Include="..\Core.Client\Core.Client.csproj" />
+    <ProjectReference Include="..\Games\Games.csproj" />
+    <ProjectReference Include="..\Ports\Ports.csproj" />
+    <ProjectReference Include="..\S3\S3.csproj" />
+    <ProjectReference Include="..\Tools\Tools.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="Xunit" />
+  </ItemGroup>
+
+</Project>
