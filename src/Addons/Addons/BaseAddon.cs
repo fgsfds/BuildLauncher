@@ -24,7 +24,7 @@ public abstract class BaseAddon
     /// <summary>
     /// List of supported games
     /// </summary>
-    public required GameStruct SupportedGame { get; init; }
+    public required GameInfo SupportedGame { get; init; }
 
     /// <summary>
     /// Name of the addon

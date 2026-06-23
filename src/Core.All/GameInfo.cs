@@ -3,14 +3,14 @@ using Core.All.Enums;
 
 namespace Core.All;
 
-public readonly struct GameStruct
+public readonly struct GameInfo
 {
-    public GameEnum GameEnum { get; }
-    public string? GameVersion { get; }
-    public string? GameCrc { get; }
+    public required GameEnum GameEnum { get; init; }
+    public required string? GameVersion { get; init; }
+    public required string? GameCrc { get; init; }
 
     [SetsRequiredMembers]
-    public GameStruct(GameEnum gameEnum)
+    public GameInfo(GameEnum gameEnum)
     {
         GameEnum = gameEnum;
         GameVersion = null;
@@ -18,15 +18,15 @@ public readonly struct GameStruct
     }
 
     [SetsRequiredMembers]
-    public GameStruct(GameEnum gameEnum, Enum? gameVersion)
+    public GameInfo(GameEnum gameEnum, Enum gameVersion)
     {
         GameEnum = gameEnum;
-        GameVersion = gameVersion?.ToString();
+        GameVersion = gameVersion.ToString();
         GameCrc = null;
     }
 
     [SetsRequiredMembers]
-    public GameStruct(GameEnum gameEnum, string? gameVersion, string? gameCrc)
+    public GameInfo(GameEnum gameEnum, string? gameVersion, string? gameCrc)
     {
         GameEnum = gameEnum;
         GameVersion = gameVersion;
