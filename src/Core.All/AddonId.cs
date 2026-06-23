@@ -3,58 +3,67 @@ using Core.All.Helpers;
 
 namespace Core.All;
 
-public sealed class AddonId
+public sealed class AddonId : IEquatable<AddonId>
 {
     public string Id { get; }
     public string? Version { get; }
 
-    [SetsRequiredMembers]
-    public AddonId(
-        string title,
-        string? version
-        )
+    public AddonId(string title, string? version)
     {
         Id = title;
         Version = version;
     }
 
-    [SetsRequiredMembers]
-    public AddonId(
-        string title
-        )
+    public AddonId(string title)
     {
         Id = title;
         Version = null;
     }
 
+    /// <inheritdoc />
     public override bool Equals([NotNullWhen(true)] object? obj)
     {
-        if (obj is not AddonId addon)
-        {
-            throw new ArgumentNullException(nameof(obj));
-        }
+        return obj is AddonId other && Equals(other);
+    }
 
-        if (!Id.Equals(addon.Id, StringComparison.OrdinalIgnoreCase))
+    /// <inheritdoc />
+    public bool Equals(AddonId? other)
+    {
+        if (other is null)
         {
             return false;
         }
 
-        return VersionComparer.Compare(Version, addon.Version, ComparisonOperatorEnum.Equals);
+        return Id.Equals(other.Id, StringComparison.OrdinalIgnoreCase) &&
+               VersionComparer.Compare(Version, other.Version, ComparisonOperatorEnum.Equals);
     }
 
-    public static bool operator ==(AddonId left, AddonId right)
+    public static bool operator ==(AddonId? left, AddonId? right)
     {
+        if (left is null && right is null)
+        {
+            return true;
+        }
+
+        if (left is null || right is null)
+        {
+            return false;
+        }
+
         return left.Equals(right);
     }
 
-    public static bool operator !=(AddonId left, AddonId right)
+    public static bool operator !=(AddonId? left, AddonId? right)
     {
         return !(left == right);
     }
 
+    /// <inheritdoc />
     public override int GetHashCode()
     {
-        var str = Id + Version;
-        return str.GetHashCode();
+        return HashCode.Combine(
+            Id.GetHashCode(StringComparison.OrdinalIgnoreCase),
+            Version
+            );
     }
 }
