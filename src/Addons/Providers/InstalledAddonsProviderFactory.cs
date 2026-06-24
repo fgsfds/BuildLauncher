@@ -1,5 +1,6 @@
 ﻿using Core.All.Enums;
 using Core.Client.Cache;
+using Core.Client.Enums;
 using Core.Client.Interfaces;
 using Core.Client.Providers;
 using Games.Games;
@@ -19,7 +20,7 @@ public sealed class InstalledAddonsProviderFactory
 
     public InstalledAddonsProviderFactory(
         IConfigProvider config,
-        [FromKeyedServices("Bitmaps")] ICacheAdder<Stream> bitmapsCache,
+        [FromKeyedServices(KeyedServicesEnum.Bitmaps)] ICacheAdder<Stream> bitmapsCache,
         OriginalCampaignsProvider originalCampaignsProvider,
         MetadataProvider metadataProvider,
         ILoggerFactory loggerFactory

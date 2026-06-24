@@ -2,6 +2,7 @@
 using Avalonia.Desktop.ViewModels;
 using Avalonia.Media.Imaging;
 using Core.Client.Cache;
+using Core.Client.Enums;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Avalonia.Desktop.Helpers;
@@ -24,7 +25,7 @@ public static class DiHelper
     public static IServiceCollection WithBitmapsCache(this IServiceCollection container)
     {
         _ = container.AddSingleton<BitmapsCache>();
-        _ = container.AddKeyedSingleton<ICacheGetter<Bitmap>>("Bitmaps", (x, _) => x.GetRequiredService<BitmapsCache>());
-        return container.AddKeyedSingleton<ICacheAdder<Stream>>("Bitmaps", (x, _) => x.GetRequiredService<BitmapsCache>());
+        _ = container.AddKeyedSingleton<ICacheGetter<Bitmap>>(KeyedServicesEnum.Bitmaps, (x, _) => x.GetRequiredService<BitmapsCache>());
+        return container.AddKeyedSingleton<ICacheAdder<Stream>>(KeyedServicesEnum.Bitmaps, (x, _) => x.GetRequiredService<BitmapsCache>());
     }
 }

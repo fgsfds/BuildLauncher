@@ -8,6 +8,7 @@ using Core.All.Helpers;
 using Core.All.Interfaces;
 using Core.All.Serializable.Addon;
 using Core.Client.Cache;
+using Core.Client.Enums;
 using Core.Client.Helpers;
 using Core.Client.Interfaces;
 using Core.Client.Providers;
@@ -42,7 +43,7 @@ public sealed class InstalledAddonsProvider : IDisposable
     public InstalledAddonsProvider(
         BaseGame game,
         IConfigProvider config,
-        [FromKeyedServices("Bitmaps")] ICacheAdder<Stream> bitmapsCache,
+        [FromKeyedServices(KeyedServicesEnum.Bitmaps)] ICacheAdder<Stream> bitmapsCache,
         OriginalCampaignsProvider originalCampaignsProvider,
         MetadataProvider metadataProvider,
         ILogger<InstalledAddonsProvider> logger
