@@ -3,6 +3,7 @@ using System.Text;
 using Core.All;
 using Core.All.Enums;
 using Core.All.Interfaces;
+using Core.Client.Helpers;
 
 namespace Addons.Addons;
 
@@ -17,12 +18,17 @@ public abstract class BaseAddon
     public required AddonId AddonId { get; init; }
 
     /// <summary>
+    /// Addon file information.
+    /// </summary>
+    public required AddonFilePathWrapper? FileInfo { get; init; }
+
+    /// <summary>
     /// Type of the addon
     /// </summary>
     public required AddonTypeEnum Type { get; init; }
 
     /// <summary>
-    /// List of supported games
+    /// Supported game
     /// </summary>
     public required GameInfo SupportedGame { get; init; }
 
@@ -62,11 +68,6 @@ public abstract class BaseAddon
     public required IReadOnlyDictionary<string, string?>? IncompatibleAddons { get; init; }
 
     /// <summary>
-    /// Path to addon file
-    /// </summary>
-    public required string? PathToFile { get; init; }
-
-    /// <summary>
     /// Cover image hash
     /// </summary>
     public required long? GridImageHash { get; init; }
@@ -92,11 +93,6 @@ public abstract class BaseAddon
     public required IStartMap? StartMap { get; init; }
 
     /// <summary>
-    /// Is addon unpacked to a folder
-    /// </summary>
-    public required bool IsUnpacked { get; init; }
-
-    /// <summary>
     /// Is the item marked as a favorite.
     /// </summary>
     public bool IsFavorite { get; set; }
@@ -115,11 +111,6 @@ public abstract class BaseAddon
     /// List of optional settings.
     /// </summary>
     public required Dictionary<string, Dictionary<string, OptionalParameterTypeEnum>>? Options { get; init; }
-
-    /// <summary>
-    /// Name of the addon file
-    /// </summary>
-    public string? FileName => PathToFile is null ? null : Path.GetFileName(PathToFile);
 
     /// <inheritdoc/>
     public override string ToString() => Title;

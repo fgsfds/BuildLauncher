@@ -7,7 +7,7 @@ namespace Games.Providers;
 /// <summary>
 /// Class that provides singleton instances of game types
 /// </summary>
-public sealed class InstalledGamesProvider
+public class InstalledGamesProvider
 {
     public delegate void GameChanged(GameEnum game);
     public event GameChanged? GameChangedEvent;
@@ -37,6 +37,9 @@ public sealed class InstalledGamesProvider
     public bool IsWitchavenInstalled => _witch.IsBaseGameInstalled || _witch.IsWitchaven2Installed;
     public bool IsTekWarInstalled => _tekwar.IsBaseGameInstalled;
 
+    public InstalledGamesProvider()
+    {
+    }
 
     public InstalledGamesProvider(IConfigProvider config)
     {
@@ -126,6 +129,27 @@ public sealed class InstalledGamesProvider
             GameEnum.Witchaven2 => _witch,
             _ => throw new ArgumentOutOfRangeException()
         };
+    }
+
+    /// <summary>
+    /// Gets a list of all game instances.
+    /// </summary>
+    public virtual IReadOnlyList<BaseGame> GetGames()
+    {
+        return
+        [
+            _blood,
+            _duke3d,
+            _wang,
+            _fury,
+            _slave,
+            _redneck,
+            _nam,
+            _ww2gi,
+            _standalone,
+            _tekwar,
+            _witch,
+        ];
     }
 
 

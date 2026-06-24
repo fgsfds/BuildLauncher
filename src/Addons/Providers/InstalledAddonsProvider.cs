@@ -1,5 +1,6 @@
 ﻿using System.Collections.Immutable;
 using System.Text.Json;
+using System.Threading.Channels;
 using Addons.Addons;
 using Core.All;
 using Core.All.Enums;
@@ -7,35 +8,35 @@ using Core.All.Enums.Addons;
 using Core.All.Helpers;
 using Core.All.Interfaces;
 using Core.All.Serializable.Addon;
-using Core.Client.Cache;
-using Core.Client.Enums;
 using Core.Client.Helpers;
 using Core.Client.Interfaces;
-using Core.Client.Providers;
 using Games.Games;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using SharpCompress.Archives;
+using StandaloneGame = Addons.Addons.StandaloneGame;
 
 namespace Addons.Providers;
 
 /// <summary>
-/// Class that provides lists of installed mods
+/// Provides cached lists of installed campaigns, maps, and mods for a specific game.
 /// </summary>
 public sealed class InstalledAddonsProvider : IDisposable
 {
     private readonly BaseGame _game;
     private readonly IConfigProvider _config;
     private readonly ILogger<InstalledAddonsProvider> _logger;
-    private readonly ICacheAdder<Stream> _bitmapsCache;
     private readonly OriginalCampaignsProvider _originalCampaignsProvider;
     private readonly MetadataProvider _metadataProvider;
+    private readonly LocalFilesProvider _localFilesProvider;
 
-    private readonly Dictionary<AddonId, BaseAddon> _campaignsCache = [];
-    private readonly Dictionary<AddonId, BaseAddon> _mapsCache = [];
-    private readonly Dictionary<AddonId, BaseAddon> _modsCache = [];
+    private readonly List<BaseAddon> _campaignsCache = [];
+    private readonly List<BaseAddon> _mapsCache = [];
+    private readonly List<BaseAddon> _modsCache = [];
 
-    private readonly SemaphoreSlim _semaphore = new(1);
+    private readonly IChannelSubscriber<DiHelper.LocalFileEvent> _channelPublisher;
+    private readonly ChannelReader<DiHelper.LocalFileEvent> _channelReader;
+    private readonly CancellationTokenSource _channelCancellation = new();
+    private readonly SemaphoreSlim _cacheUpdateSemaphore = new(1);
 
     public event AddonChanged? AddonsChangedEvent;
 
@@ -43,136 +44,130 @@ public sealed class InstalledAddonsProvider : IDisposable
     public InstalledAddonsProvider(
         BaseGame game,
         IConfigProvider config,
-        [FromKeyedServices(KeyedServicesEnum.Bitmaps)] ICacheAdder<Stream> bitmapsCache,
         OriginalCampaignsProvider originalCampaignsProvider,
         MetadataProvider metadataProvider,
+        LocalFilesProvider localFilesProvider,
+        IChannelSubscriber<DiHelper.LocalFileEvent> channelPublisher,
         ILogger<InstalledAddonsProvider> logger
         )
     {
         _game = game;
         _config = config;
         _logger = logger;
-        _bitmapsCache = bitmapsCache;
         _originalCampaignsProvider = originalCampaignsProvider;
         _metadataProvider = metadataProvider;
+        _channelPublisher = channelPublisher;
+        _localFilesProvider = localFilesProvider;
 
-        _metadataProvider.MetadataUpdatedEvent += OnMetadataUpdatedAsync;
-    }
+        _metadataProvider.MetadataUpdatedEvent += OnMetadataUpdated;
+        _metadataProvider.MetadataInitializedEvent += OnMetadataInitialized;
 
-    /// <summary>
-    /// Create cache of installed addons.
-    /// </summary>
-    /// <param name="createNew">Clear current cache and create new.</param>
-    /// <param name="addonType">Addon type.</param>
-    public async Task CreateCache(bool createNew, AddonTypeEnum addonType)
-    {
-        await _semaphore.WaitAsync().ConfigureAwait(false);
+        _channelReader = channelPublisher.Subscribe();
 
-        var cache = addonType switch
+        Task.Run(async () =>
         {
-            AddonTypeEnum.TC => _campaignsCache,
-            AddonTypeEnum.Map => _mapsCache,
-            AddonTypeEnum.Mod => _modsCache,
-            _ => throw new NotSupportedException(),
-        };
-
-        if (createNew)
-        {
-            cache.Clear();
-        }
-
-        try
-        {
-            if (_campaignsCache.Count == 0)
+            try
             {
-                //campaigns
-                List<string> filesTcs = [.. Directory.GetFiles(_game.CampaignsFolderPath, "*.zip")];
-
-                var dirs = Directory.GetDirectories(_game.CampaignsFolderPath, "*", SearchOption.TopDirectoryOnly);
-
-                foreach (var dir in dirs)
+                await foreach (var e in _channelReader.ReadAllAsync(_channelCancellation.Token))
                 {
-                    var addonJsons = Directory.GetFiles(dir, "addon*.json");
-
-                    if (addonJsons.Length > 0)
+                    foreach (var parsedFile in e.Files)
                     {
-                        filesTcs.AddRange(addonJsons);
-                    }
-                }
+                        await _cacheUpdateSemaphore.WaitAsync(_channelCancellation.Token);
 
-                var tcs = await GetAddonsFromFilesAsync(filesTcs).ConfigureAwait(false);
-
-                foreach (var wrongFile in tcs.Where(x => x.Value.Type is not AddonTypeEnum.TC))
-                {
-                    _logger.LogError($"File {wrongFile.Value.FileName} of type {wrongFile.Value.Type} is in the Campaigns folder");
-                }
-
-                _campaignsCache.AddRange(tcs);
-
-                //grpinfo
-                var grpInfoAddons = GrpInfoProvider.GetAddonsFromGrpInfo(_game.CampaignsFolderPath);
-
-                if (grpInfoAddons?.Count > 0)
-                {
-                    foreach (var addon in grpInfoAddons)
-                    {
-                        var result = _campaignsCache.TryAdd(new(addon.AddonId.Id, null), addon);
-
-                        if (!result)
+                        try
                         {
-                            _logger.LogError($"Failed to add {addon.FileName} to the campaigns list.");
+                            if (parsedFile.SupportedGame != _game.GameEnum)
+                            {
+                                continue;
+                            }
+
+                            if (e.IsAdded)
+                            {
+                                var isUnpacked = await UnpackAndUpdateIfNeededAsync(parsedFile);
+
+                                if (isUnpacked)
+                                {
+                                    break;
+                                }
+
+                                AddAddon(parsedFile);
+                            }
+                            else
+                            {
+                                DeleteAddon(parsedFile);
+                            }
+                        }
+                        finally
+                        {
+                            _cacheUpdateSemaphore.Release();
                         }
                     }
                 }
             }
-
-
-            if (_mapsCache.Count == 0)
+            catch (OperationCanceledException e)
             {
-                //maps
-                var filesMaps = Directory.GetFiles(_game.MapsFolderPath).Where(static x => x.EndsWith(".zip", StringComparison.OrdinalIgnoreCase) || x.EndsWith(".map", StringComparison.OrdinalIgnoreCase));
-                var maps = await GetAddonsFromFilesAsync(filesMaps).ConfigureAwait(false);
+                //nothing to do
+            }
+        });
+    }
 
-                foreach (var wrongFile in maps.Where(x => x.Value.Type is not AddonTypeEnum.Map))
-                {
-                    _logger.LogError($"File {wrongFile.Value.FileName} of type {wrongFile.Value.Type} is in the Maps folder");
-                }
+    /// <summary>
+    /// Build or refresh the internal caches for all addon types.
+    /// </summary>
+    /// <param name="createNew">If true, clear the cache for <paramref name="addonType"/> before rebuilding.</param>
+    /// <param name="addonType">Addon type whose cache to optionally clear.</param>
+    public async Task CreateCacheAsync(bool createNew, AddonTypeEnum addonType)
+    {
+        await _cacheUpdateSemaphore.WaitAsync().ConfigureAwait(false);
 
-                _mapsCache.AddRange(maps);
+        try
+        {
+            var cache = GetCacheByAddonType(addonType);
+
+            if (createNew)
+            {
+                cache.Clear();
             }
 
+            var files = await _localFilesProvider.GetCachedAddonFilesAsync().ConfigureAwait(false);
 
-            if (_modsCache.Count == 0)
+            switch (addonType)
             {
-                //mods
-                var filesMods = Directory.GetFiles(_game.ModsFolderPath, "*.zip");
-                var mods = await GetAddonsFromFilesAsync(filesMods).ConfigureAwait(false);
-
-                foreach (var wrongFile in mods.Where(x => x.Value.Type is not AddonTypeEnum.Mod))
-                {
-                    _logger.LogError($"File {wrongFile.Value.FileName} of type {wrongFile.Value.Type} is in the Mods folder");
-                }
-
-                _modsCache.AddRange(mods);
+                case AddonTypeEnum.TC when cache.Count == 0:
+                    _campaignsCache.Clear();
+                    await FillCacheAsync(files, AddonTypeEnum.TC);
+                    break;
+                case AddonTypeEnum.Map when cache.Count == 0:
+                    _mapsCache.Clear();
+                    await FillCacheAsync(files, AddonTypeEnum.Map);
+                    break;
+                case AddonTypeEnum.Mod when cache.Count == 0:
+                    _modsCache.Clear();
+                    await FillCacheAsync(files, AddonTypeEnum.Mod);
+                    break;
+                case AddonTypeEnum.Official:
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(addonType), addonType, null);
             }
 
-
-            //enabling/disabling addons
-            foreach (var mod in _modsCache)
+            if (addonType is AddonTypeEnum.Mod)
             {
-                if (mod.Value is not AutoloadMod autoloadMod)
+                foreach (var mod in _modsCache)
                 {
-                    _logger.LogError($"=== Error while enabling/disabling addon {mod.Key.Id}");
-                    continue;
-                }
+                    if (mod is not AutoloadMod autoloadMod)
+                    {
+                        _logger.LogError($"=== Error while enabling/disabling addon {mod.AddonId.Id}");
+                        continue;
+                    }
 
-                if (autoloadMod.IsEnabled)
-                {
-                    EnableAddon(mod.Key);
-                }
-                else if (!autoloadMod.IsEnabled)
-                {
-                    DisableAddon(mod.Key);
+                    if (autoloadMod.IsEnabled)
+                    {
+                        EnableAddon(mod.AddonId);
+                    }
+                    else if (!autoloadMod.IsEnabled)
+                    {
+                        DisableAddon(mod.AddonId);
+                    }
                 }
             }
         }
@@ -182,7 +177,7 @@ public sealed class InstalledAddonsProvider : IDisposable
         }
         finally
         {
-            _ = _semaphore.Release();
+            _ = _cacheUpdateSemaphore.Release();
             ArgumentNullException.ThrowIfNull(_campaignsCache);
             ArgumentNullException.ThrowIfNull(_mapsCache);
             ArgumentNullException.ThrowIfNull(_modsCache);
@@ -191,102 +186,254 @@ public sealed class InstalledAddonsProvider : IDisposable
         }
     }
 
+    private List<BaseAddon> GetCacheByAddonType(AddonTypeEnum addonType)
+    {
+        var cache = addonType switch
+        {
+            AddonTypeEnum.TC => _campaignsCache,
+            AddonTypeEnum.Map => _mapsCache,
+            AddonTypeEnum.Mod => _modsCache,
+            _ => throw new NotSupportedException(),
+        };
+
+        return cache;
+    }
+
     /// <summary>
-    /// Add addon to cache
+    /// Scan parsed addon files and populate the cache for <paramref name="addonType"/>.
     /// </summary>
-    /// <param name="pathToFile">Path to addon file</param>
-    public async Task AddAddonAsync(string pathToFile)
+    private async Task FillCacheAsync(IReadOnlyList<ParsedAddonFile> parsedAddonFiles, AddonTypeEnum addonType)
+    {
+        foreach (var parsedAddonFile in parsedAddonFiles)
+        {
+            if (parsedAddonFile.Manifest is not null && parsedAddonFile.Manifest.SupportedGame.Game != _game.GameEnum)
+            {
+                continue;
+            }
+
+            var isUnpacked = await UnpackAndUpdateIfNeededAsync(parsedAddonFile);
+
+            if (isUnpacked)
+            {
+                return;
+            }
+
+            var cache = GetCacheByAddonType(addonType);
+
+            if (parsedAddonFile.FileInfo.IsGrpInfo)
+            {
+                if (addonType != AddonTypeEnum.TC)
+                {
+                    continue;
+                }
+
+                var addons = GrpInfoProvider.GetAddonsFromGrpInfo(parsedAddonFile.FileInfo.PathToFile);
+
+                if (addons is null or [])
+                {
+                    continue;
+                }
+
+                cache.AddRange(addons);
+            }
+            else if (parsedAddonFile.FileInfo.IsMap)
+            {
+                var addon = GetLooseMapFromFile(parsedAddonFile);
+
+                if (addon is null)
+                {
+                    continue;
+                }
+
+                cache.Add(addon);
+            }
+            else
+            {
+                var addon = GetAddonFromFile(parsedAddonFile);
+
+                if (addon is null || addon.Type != addonType)
+                {
+                    continue;
+                }
+
+                cache.Add(addon);
+            }
+        }
+    }
+
+    private BaseAddon? GetLooseMapFromFile(ParsedAddonFile parsedAddonFile)
+    {
+        if (!parsedAddonFile.FileInfo.IsMap)
+        {
+            return null;
+        }
+
+        var bloodIniName = parsedAddonFile.FileInfo.FileName.Replace(".map", ".ini", StringComparison.InvariantCultureIgnoreCase);
+        var actualIni = Path.GetFileName(Directory.EnumerateFiles(parsedAddonFile.FileInfo.PathToFolder).FirstOrDefault(f => Path.GetFileName(f).Equals(bloodIniName, StringComparison.OrdinalIgnoreCase)));
+
+        AddonId id = new(parsedAddonFile.FileInfo.FileName);
+
+        return new LooseMap
+        {
+            AddonId = id,
+            Type = AddonTypeEnum.Map,
+            FileInfo = parsedAddonFile.FileInfo,
+            Title = parsedAddonFile.FileInfo.FileName,
+            SupportedGame = new(_game.GameEnum, null, null),
+            StartMap = new MapFileJsonModel { File = parsedAddonFile.FileInfo.FileName },
+            BloodIni = actualIni,
+            GridImageHash = null,
+            Description = null,
+            Author = null,
+            ReleaseDate = null,
+            MainDef = null,
+            AdditionalDefs = null,
+            DependentAddons = null,
+            IncompatibleAddons = null,
+            RequiredFeatures = null,
+            PreviewImageHash = null,
+            Executables = null,
+            Options = null,
+            IsFavorite = _config.FavoriteAddons.Contains(id),
+            IsMetadataUpdateAvailable = _metadataProvider.IsMetadataUpdateAvailable(id, parsedAddonFile.FileInfo),
+        };
+    }
+
+    /// <summary>
+    /// Add a single addon from its parsed file into the appropriate cache.
+    /// </summary>
+    /// <param name="parsedAddonFile">Parsed addon file to add.</param>
+    public void AddAddon(ParsedAddonFile parsedAddonFile)
     {
         ArgumentNullException.ThrowIfNull(_campaignsCache);
         ArgumentNullException.ThrowIfNull(_mapsCache);
         ArgumentNullException.ThrowIfNull(_modsCache);
 
-        var addons = await GetAddonFromFileAsync(pathToFile).ConfigureAwait(false);
+        BaseAddon? addon;
 
-        if (addons is null or [])
+        if (parsedAddonFile.FileInfo.IsGrpInfo)
+        {
+            var addons = GrpInfoProvider.GetAddonsFromGrpInfo(parsedAddonFile.FileInfo.PathToFile);
+            if (addons is not null)
+            {
+                _campaignsCache.AddRange(addons);
+            }
+
+            return;
+        }
+
+        if (parsedAddonFile.FileInfo.IsMap)
+        {
+            addon = GetLooseMapFromFile(parsedAddonFile);
+        }
+        else
+        {
+            addon = GetAddonFromFile(parsedAddonFile);
+        }
+
+        if (addon is null)
         {
             return;
         }
 
-        foreach (var addon in addons)
+        var cache = addon.Type switch
         {
-            var cache = addon.Type switch
-            {
-                AddonTypeEnum.TC => _campaignsCache,
-                AddonTypeEnum.Map => _mapsCache,
-                AddonTypeEnum.Mod => _modsCache,
-                _ => throw new NotSupportedException(),
-            };
+            AddonTypeEnum.TC => _campaignsCache,
+            AddonTypeEnum.Map => _mapsCache,
+            AddonTypeEnum.Mod => _modsCache,
+            AddonTypeEnum.Official => throw new NotSupportedException(),
+            _ => throw new NotSupportedException(),
+        };
 
-
-            if (cache.TryGetValue(addon.AddonId, out _))
-            {
-                cache[addon.AddonId] = addon;
-            }
-            else
-            {
-                cache.Add(addon.AddonId, addon);
-            }
-
-            AddonsChangedEvent?.Invoke(_game.GameEnum, addon.Type);
-        }
-    }
-
-    /// <summary>
-    /// Delete addon from cache and disk
-    /// </summary>
-    /// <param name="addon">Addon</param>
-    public void DeleteAddon(BaseAddon addon)
-    {
-        ArgumentNullException.ThrowIfNull(_campaignsCache);
-        ArgumentNullException.ThrowIfNull(_mapsCache);
-        ArgumentNullException.ThrowIfNull(_modsCache);
-        ArgumentNullException.ThrowIfNull(addon.PathToFile);
-
-        if (addon.IsUnpacked)
+        var existing = cache.FindIndex(x => x.AddonId == addon.AddonId);
+        if (existing >= 0)
         {
-            Directory.Delete(Path.GetDirectoryName(addon.PathToFile)!, true);
+            cache[existing] = addon;
         }
         else
         {
-            File.Delete(addon.PathToFile);
-        }
-
-        if (addon is LooseMap lMap)
-        {
-            var files = Directory.GetFiles(Path.GetDirectoryName(addon.PathToFile)!, $"{Path.GetFileNameWithoutExtension(lMap.FileName)!}.*");
-
-            foreach (var file in files)
-            {
-                File.Delete(file);
-            }
-        }
-
-        if (addon.Type is AddonTypeEnum.TC)
-        {
-            _ = _campaignsCache.Remove(addon.AddonId);
-        }
-        else if (addon.Type is AddonTypeEnum.Map)
-        {
-            _ = _mapsCache.Remove(addon.AddonId);
-        }
-        else if (addon.Type is AddonTypeEnum.Mod)
-        {
-            _ = _modsCache.Remove(addon.AddonId);
+            cache.Add(addon);
         }
 
         AddonsChangedEvent?.Invoke(_game.GameEnum, addon.Type);
     }
 
     /// <summary>
-    /// Enable addon
+    /// Delete addon from disk and remove it from the cache.
     /// </summary>
-    /// <param name="addon">Addon id</param>
+    /// <param name="parsedAddonFile">Addon to delete.</param>
+    public void DeleteAddon(ParsedAddonFile parsedAddonFile)
+    {
+        if (parsedAddonFile.Manifest is null)
+        {
+            throw new InvalidOperationException();
+        }
+
+        var cache = GetCacheByAddonType(parsedAddonFile.Manifest.AddonType);
+        var addonToDelete = cache.FirstOrDefault(x => x.FileInfo is not null && x.FileInfo.Equals(parsedAddonFile.FileInfo));
+
+        if (addonToDelete is not null)
+        {
+            DeleteAddon(addonToDelete);
+        }
+    }
+
+    /// <summary>
+    /// Delete addon from disk and remove it from the cache.
+    /// </summary>
+    /// <param name="addon">Addon to delete.</param>
+    public void DeleteAddon(BaseAddon addon)
+    {
+        ArgumentNullException.ThrowIfNull(_campaignsCache);
+        ArgumentNullException.ThrowIfNull(_mapsCache);
+        ArgumentNullException.ThrowIfNull(_modsCache);
+        ArgumentNullException.ThrowIfNull(addon.FileInfo);
+
+        if (addon is LooseMap map)
+        {
+            File.Delete(map.FileInfo.PathToFile);
+
+            var bloodIni = Path.Combine(addon.FileInfo.PathToFolder, map.BloodIni ?? string.Empty);
+            if (map.BloodIni is not null &&
+                File.Exists(bloodIni))
+            {
+                File.Delete(bloodIni);
+            }
+        }
+        else if (addon.FileInfo.IsFolder)
+        {
+            Directory.Delete(addon.FileInfo.PathToFolder, true);
+        }
+        else
+        {
+            File.Delete(addon.FileInfo.PathToFile);
+        }
+
+        if (addon.Type is AddonTypeEnum.TC)
+        {
+            _ = _campaignsCache.Remove(addon);
+        }
+        else if (addon.Type is AddonTypeEnum.Map)
+        {
+            _ = _mapsCache.Remove(addon);
+        }
+        else if (addon.Type is AddonTypeEnum.Mod)
+        {
+            _ = _modsCache.Remove(addon);
+        }
+
+        AddonsChangedEvent?.Invoke(_game.GameEnum, addon.Type);
+    }
+
+    /// <summary>
+    /// Enable an autoload mod by id, cascading to dependencies and disabling incompatible mods.
+    /// </summary>
+    /// <param name="addon">Addon id to enable.</param>
     public void EnableAddon(AddonId addon)
     {
-        var existing = _modsCache.FirstOrDefault(x => x.Key.Equals(addon));
+        var existing = _modsCache.FirstOrDefault(x => x.AddonId.Equals(addon));
 
-        if (existing.Value is not AutoloadMod autoloadMod)
+        if (existing is not AutoloadMod autoloadMod)
         {
             return;
         }
@@ -316,28 +463,28 @@ public sealed class InstalledAddonsProvider : IDisposable
 
         var otherVersions = _modsCache
              .Where(x =>
-                 x.Key.Id.Equals(addon.Id, StringComparison.OrdinalIgnoreCase) &&
-                 !VersionComparer.Compare(x.Key.Version, addon.Version, ComparisonOperatorEnum.Equals) &&
-                 !x.Value.FileName!.Equals(autoloadMod.FileName)
+                 x.AddonId.Id.Equals(addon.Id, StringComparison.OrdinalIgnoreCase) &&
+                 !VersionComparer.Compare(x.AddonId.Version, addon.Version, ComparisonOperatorEnum.Equals) &&
+                 (x.FileInfo is null || !x.FileInfo.Equals(autoloadMod.FileInfo))
                  );
 
         foreach (var version in otherVersions)
         {
-            DisableAddon(version.Key);
+            DisableAddon(version.AddonId);
         }
 
         _config.ChangeModState(addon, true);
     }
 
     /// <summary>
-    /// Disable addon
+    /// Disable an autoload mod by id, cascading to dependant mods.
     /// </summary>
-    /// <param name="addon">Addon id</param>
+    /// <param name="addon">Addon id to disable.</param>
     public void DisableAddon(AddonId addon)
     {
-        var existing = _modsCache.FirstOrDefault(x => x.Key.Equals(addon));
+        var existing = _modsCache.FirstOrDefault(x => x.AddonId.Equals(addon));
 
-        if (existing.Value is not AutoloadMod autoloadMod)
+        if (existing is not AutoloadMod autoloadMod)
         {
             return;
         }
@@ -349,21 +496,21 @@ public sealed class InstalledAddonsProvider : IDisposable
 
         autoloadMod.IsEnabled = false;
 
-        var deps = _modsCache.Where(x => x.Value.DependentAddons?.ContainsKey(autoloadMod.AddonId.Id) ?? false);
+        var deps = _modsCache.Where(x => x.DependentAddons?.ContainsKey(autoloadMod.AddonId.Id) ?? false);
 
         foreach (var dep in deps)
         {
-            DisableAddon(dep.Key);
+            DisableAddon(dep.AddonId);
         }
 
         _config.ChangeModState(addon, false);
     }
 
     /// <summary>
-    /// Get list od installed addons of a type
+    /// Get list of installed addons of a given type.
     /// </summary>
     /// <param name="addonType">Addon type</param>
-    public IReadOnlyDictionary<AddonId, BaseAddon> GetInstalledAddonsByType(AddonTypeEnum addonType)
+    public IReadOnlyList<BaseAddon> GetInstalledAddonsByType(AddonTypeEnum addonType)
     {
         return addonType switch
         {
@@ -375,13 +522,13 @@ public sealed class InstalledAddonsProvider : IDisposable
     }
 
 
-    private IReadOnlyDictionary<AddonId, BaseAddon> GetInstalledCampaigns()
+    private IReadOnlyList<BaseAddon> GetInstalledCampaigns()
     {
         var campaigns = _originalCampaignsProvider.GetOriginalCampaigns(_game);
 
-        if (!_semaphore.Wait(1))
+        if (!_cacheUpdateSemaphore.Wait(1))
         {
-            return campaigns;
+            return [.. campaigns.Values];
         }
 
         try
@@ -390,534 +537,111 @@ public sealed class InstalledAddonsProvider : IDisposable
 
             if (_campaignsCache.Count == 0)
             {
-                return campaigns;
+                return [.. campaigns.Values];
             }
 
             if (_game.GameEnum is GameEnum.Wang)
             {
                 //hack to make SW addons appear at the top of the list
                 foreach (var customCamp in _campaignsCache
-                    .OrderByDescending(static x => x.Key.Id.Equals(nameof(WangAddonEnum.TwinDragon), StringComparison.OrdinalIgnoreCase))
-                    .ThenByDescending(static x => x.Key.Id.Equals(nameof(WangAddonEnum.Wanton), StringComparison.OrdinalIgnoreCase))
-                    .ThenBy(static x => x.Value.Title))
+                    .OrderByDescending(static x => x.AddonId.Id.Equals(nameof(WangAddonEnum.TwinDragon), StringComparison.OrdinalIgnoreCase))
+                    .ThenByDescending(static x => x.AddonId.Id.Equals(nameof(WangAddonEnum.Wanton), StringComparison.OrdinalIgnoreCase))
+                    .ThenBy(static x => x.Title))
                 {
-                    campaigns.Add(customCamp.Key, customCamp.Value);
+                    campaigns[customCamp.AddonId] = customCamp;
                 }
             }
             else
             {
-                foreach (var customCamp in _campaignsCache.OrderBy(static x => x.Value.Title))
+                foreach (var customCamp in _campaignsCache.OrderBy(static x => x.Title))
                 {
-                    campaigns.Add(customCamp.Key, customCamp.Value);
+                    campaigns[customCamp.AddonId] = customCamp;
                 }
             }
 
-            return campaigns;
+            return [.. campaigns.Values];
         }
         finally
         {
-            _semaphore.Release();
+            _cacheUpdateSemaphore.Release();
         }
     }
 
-    private IReadOnlyDictionary<AddonId, BaseAddon> GetInstalledMaps()
+    private IReadOnlyList<BaseAddon> GetInstalledMaps()
     {
-        if (!_semaphore.Wait(1))
+        if (!_cacheUpdateSemaphore.Wait(1))
         {
-            return new Dictionary<AddonId, BaseAddon>();
+            return [];
         }
 
         try
         {
             ArgumentNullException.ThrowIfNull(_mapsCache);
 
-            return _mapsCache;
+            return [.. _mapsCache];
         }
         finally
         {
-            _semaphore.Release();
+            _cacheUpdateSemaphore.Release();
         }
     }
 
-    private IReadOnlyDictionary<AddonId, BaseAddon> GetInstalledMods()
+    private IReadOnlyList<BaseAddon> GetInstalledMods()
     {
-        if (!_semaphore.Wait(1))
+        if (!_cacheUpdateSemaphore.Wait(1))
         {
-            return new Dictionary<AddonId, BaseAddon>();
+            return [];
         }
 
         try
         {
             ArgumentNullException.ThrowIfNull(_modsCache);
 
-            return _modsCache;
+            return [.. _modsCache];
         }
         finally
         {
-            _semaphore.Release();
+            _cacheUpdateSemaphore.Release();
         }
     }
 
-    /// <summary>
-    /// Get addons from list of files
-    /// </summary>
-    /// <param name="files">Paths to addon files</param>
-    internal async Task<IReadOnlyDictionary<AddonId, BaseAddon>> GetAddonsFromFilesAsync(IEnumerable<string> files)
+    private async Task<bool> UnpackAndUpdateIfNeededAsync(ParsedAddonFile parsedAddonFile)
     {
-        Dictionary<AddonId, BaseAddon> addedAddons = [];
-
-        foreach (var file in files)
+        if (!parsedAddonFile.FileInfo.IsZip)
         {
-            try
-            {
-                var newAddons = await GetAddonFromFileAsync(file).ConfigureAwait(false);
-
-                if (newAddons is null or [])
-                {
-                    _logger.LogInformation($"Can't get addon from file {file}");
-                    continue;
-                }
-
-                foreach (var newAddon in newAddons)
-                {
-                    try
-                    {
-                        if (newAddon is AutoloadMod &&
-                            addedAddons.TryGetValue(newAddon.AddonId, out var existingMod))
-                        {
-                            if (existingMod.AddonId.Version is null &&
-                                newAddon.AddonId.Version is not null)
-                            {
-                                //replacing with addon that have version
-                                addedAddons[newAddon.AddonId] = newAddon;
-                            }
-                            else if (existingMod.AddonId.Version is not null &&
-                                     newAddon.AddonId.Version is not null &&
-                                     VersionComparer.Compare(newAddon.AddonId.Version, existingMod.AddonId.Version, ComparisonOperatorEnum.GreaterThan))
-                            {
-                                //replacing with addon that has higher version
-                                addedAddons[newAddon.AddonId] = newAddon;
-                            }
-                        }
-                        else
-                        {
-                            _ = addedAddons.TryAdd(newAddon.AddonId, newAddon);
-                        }
-                    }
-                    catch (Exception)
-                    {
-                        continue;
-                    }
-                }
-            }
-            catch (Exception)
-            {
-                continue;
-            }
+            return false;
         }
 
-        return addedAddons;
+        var unpackedTo = UnpackIfNeeded(parsedAddonFile.FileInfo);
+
+        if (unpackedTo is not null)
+        {
+            await _localFilesProvider.ReplacePathAsync(parsedAddonFile.FileInfo.PathToFile, unpackedTo);
+            return true;
+        }
+
+        return false;
     }
 
     /// <summary>
-    /// Get addon from a file
+    /// Unpack an archive if it contains addon manifests or GRP info files.
     /// </summary>
-    /// <param name="pathToFile">Path to addon file</param>
-    private async Task<List<BaseAddon>?> GetAddonFromFileAsync(string pathToFile)
-    {
-        List<AddonCarcass> carcasses = [];
-
-        if (pathToFile.EndsWith(".json"))
-        {
-            using var jsonStream = File.OpenRead(pathToFile);
-
-            var manifest = await JsonSerializer.DeserializeAsync(
-                jsonStream,
-                AddonManifestJsonContext.Default.AddonManifestJsonModel
-                ).ConfigureAwait(false);
-
-            if (manifest is null)
-            {
-                return null;
-            }
-
-            var addonDir = Path.GetDirectoryName(pathToFile)!;
-            var gridFile = Directory.GetFiles(addonDir, "grid.*");
-            var previewFile = Directory.GetFiles(addonDir, "preview.*");
-
-            long? gridImageHash = null;
-
-            if (gridFile.Length > 0)
-            {
-                var crc = Crc32Helper.GetCrc32(gridFile[0]);
-                await using var stream = File.OpenRead(gridFile[0]);
-                _ = _bitmapsCache.TryAddGridToCache(crc, stream);
-                gridImageHash = crc;
-            }
-
-            long? previewImageHash = null;
-
-            if (previewFile.Length > 0)
-            {
-                var crc = Crc32Helper.GetCrc32(previewFile[0]);
-                await using var stream = File.OpenRead(previewFile[0]);
-                _ = _bitmapsCache.TryAddPreviewToCache(crc, stream);
-                previewImageHash = crc;
-            }
-
-            var carcass = GetCarcass(manifest, pathToFile, true, gridImageHash, previewImageHash);
-            carcasses.Add(carcass);
-        }
-        else if (pathToFile.EndsWith(".map", StringComparison.OrdinalIgnoreCase))
-        {
-            var bloodIni = pathToFile.Replace(".map", ".ini", StringComparison.OrdinalIgnoreCase);
-            var iniExists = File.Exists(bloodIni);
-            AddonId id = new(Path.GetFileName(pathToFile), null);
-
-            var addon = new LooseMap()
-            {
-                AddonId = id,
-                Type = AddonTypeEnum.Map,
-                Title = Path.GetFileName(pathToFile),
-                SupportedGame = new(_game.GameEnum, null, null),
-                PathToFile = pathToFile,
-                StartMap = new MapFileJsonModel() { File = Path.GetFileName(pathToFile) },
-                BloodIni = iniExists ? bloodIni : null,
-                GridImageHash = null,
-                Description = null,
-                Author = null,
-                ReleaseDate = null,
-                MainDef = null,
-                AdditionalDefs = null,
-                DependentAddons = null,
-                IncompatibleAddons = null,
-                RequiredFeatures = null,
-                PreviewImageHash = null,
-                IsUnpacked = false,
-                Executables = null,
-                Options = null,
-                IsFavorite = _config.FavoriteAddons.Contains(id),
-                IsMetadataUpdateAvailable = _metadataProvider.IsMetadataUpdateAvailable(pathToFile),
-            };
-
-            return [addon];
-        }
-        else if (ArchiveFactory.IsArchive(pathToFile, out _))
-        {
-            var unpackedTo = UnpackIfNeededAndGetAddonManifests(pathToFile, out var manifests);
-
-            if (manifests is null or [])
-            {
-                return null;
-            }
-
-            bool isUnpacked;
-            long? gridImageHash;
-            long? previewImageHash;
-
-            if (unpackedTo is not null)
-            {
-                pathToFile = Path.Combine(unpackedTo, "addon.json");
-                isUnpacked = true;
-
-                var addonDir = Path.GetDirectoryName(pathToFile)!;
-
-                var gridFile = Directory.GetFiles(addonDir, "grid.*");
-                var previewFile = Directory.GetFiles(addonDir, "preview.*");
-
-                if (gridFile.Length > 0)
-                {
-                    gridImageHash = Crc32Helper.GetCrc32(gridFile[0]);
-                    await using var stream = File.OpenRead(gridFile[0]);
-                    _ = _bitmapsCache.TryAddGridToCache(gridImageHash.Value, stream);
-                }
-                else
-                {
-                    gridImageHash = null;
-                }
-
-                if (previewFile.Length > 0)
-                {
-                    previewImageHash = Crc32Helper.GetCrc32(previewFile[0]);
-                    await using var stream = File.OpenRead(previewFile[0]);
-                    _ = _bitmapsCache.TryAddPreviewToCache(previewImageHash.Value, stream);
-                }
-                else
-                {
-                    previewImageHash = null;
-                }
-            }
-            else
-            {
-                isUnpacked = false;
-                using var archive = ArchiveFactory.OpenArchive(pathToFile);
-
-                await using var cover = ImageHelper.GetCoverFromArchive(archive);
-                await using var preview = ImageHelper.GetPreviewFromArchive(archive);
-
-                gridImageHash = cover?.Crc;
-                previewImageHash = preview?.Crc;
-
-                if (cover.HasValue)
-                {
-                    _ = _bitmapsCache.TryAddGridToCache(cover.Value.Crc, cover.Value.Stream);
-                }
-
-                if (preview.HasValue)
-                {
-                    _ = _bitmapsCache.TryAddPreviewToCache(preview.Value.Crc, preview.Value.Stream);
-                }
-
-            }
-
-            foreach (var manifest in manifests)
-            {
-                var carcass = GetCarcass(manifest, pathToFile, isUnpacked, gridImageHash, previewImageHash);
-                carcasses.Add(carcass);
-            }
-        }
-        else if (pathToFile.EndsWith(".grp", StringComparison.OrdinalIgnoreCase))
-        {
-            return null;
-        }
-        else
-        {
-            return null;
-        }
-
-        List<BaseAddon> addons = [];
-
-        foreach (var carcass in carcasses)
-        {
-            if (carcass.Type is AddonTypeEnum.Mod)
-            {
-                var isEnabled = !_config.DisabledAutoloadMods.Contains(carcass.Id);
-
-                if (carcass.MainDef is not null)
-                {
-                    throw new ArgumentException("Autoload mod can't have Main DEF");
-                }
-
-                AddonId id = new(carcass.Id, carcass.Version);
-
-                var addon = new AutoloadMod()
-                {
-                    AddonId = id,
-                    Type = AddonTypeEnum.Mod,
-                    Title = carcass.Title,
-                    GridImageHash = carcass.GridImageHash,
-                    PreviewImageHash = carcass.PreviewImageHash,
-                    Description = carcass.Description,
-                    Author = carcass.Author,
-                    ReleaseDate = carcass.ReleaseDate,
-                    IsEnabled = isEnabled,
-                    PathToFile = pathToFile,
-                    MainDef = null,
-                    AdditionalDefs = carcass.AddDefs,
-                    AdditionalCons = carcass.AddCons,
-                    SupportedGame = new(carcass.SupportedGame, carcass.GameVersion, carcass.GameCrc),
-                    DependentAddons = carcass.Dependencies,
-                    IncompatibleAddons = carcass.Incompatibles,
-                    StartMap = carcass.StartMap,
-                    RequiredFeatures = carcass.RequiredFeatures,
-                    IsUnpacked = carcass.IsUnpacked,
-                    Executables = null,
-                    Options = null,
-                    IsFavorite = _config.FavoriteAddons.Contains(id),
-                    IsMetadataUpdateAvailable = _metadataProvider.IsMetadataUpdateAvailable(pathToFile),
-                };
-
-                addons.Add(addon);
-            }
-            else
-            {
-                if (_game.GameEnum
-                    is GameEnum.Duke3D
-                    or GameEnum.Fury
-                    or GameEnum.Redneck
-                    or GameEnum.NAM
-                    or GameEnum.WW2GI)
-                {
-                    var addon = new DukeCampaign()
-                    {
-                        AddonId = new(carcass.Id, carcass.Version),
-                        Type = carcass.Type,
-                        SupportedGame = new(carcass.SupportedGame, carcass.GameVersion, carcass.GameCrc),
-                        Title = carcass.Title,
-                        GridImageHash = carcass.GridImageHash,
-                        PreviewImageHash = carcass.PreviewImageHash,
-                        Description = carcass.Description,
-                        Author = carcass.Author,
-                        ReleaseDate = carcass.ReleaseDate,
-                        PathToFile = pathToFile,
-                        DependentAddons = carcass.Dependencies,
-                        IncompatibleAddons = carcass.Incompatibles,
-                        StartMap = carcass.StartMap,
-                        MainCon = carcass.MainCon,
-                        AdditionalCons = carcass.AddCons,
-                        MainDef = carcass.MainDef,
-                        AdditionalDefs = carcass.AddDefs,
-                        RTS = carcass.Rts,
-                        RequiredFeatures = carcass.RequiredFeatures,
-                        IsUnpacked = carcass.IsUnpacked,
-                        Executables = carcass.Executables,
-                        Options = carcass.Options,
-                        IsFavorite = _config.FavoriteAddons.Contains(new(carcass.Id, carcass.Version)),
-                        IsMetadataUpdateAvailable = _metadataProvider.IsMetadataUpdateAvailable(pathToFile),
-                    };
-
-                    addons.Add(addon);
-                }
-                else if (_game.GameEnum is GameEnum.Wang)
-                {
-                    var addon = new GenericCampaign()
-                    {
-                        AddonId = new(carcass.Id, carcass.Version),
-                        Type = carcass.Type,
-                        SupportedGame = new(carcass.SupportedGame, carcass.GameVersion, carcass.GameCrc),
-                        Title = carcass.Title,
-                        GridImageHash = carcass.GridImageHash,
-                        PreviewImageHash = carcass.PreviewImageHash,
-                        Description = carcass.Description,
-                        Author = carcass.Author,
-                        ReleaseDate = carcass.ReleaseDate,
-                        PathToFile = pathToFile,
-                        DependentAddons = carcass.Dependencies,
-                        IncompatibleAddons = carcass.Incompatibles,
-                        StartMap = carcass.StartMap,
-                        MainDef = carcass.MainDef,
-                        AdditionalDefs = carcass.AddDefs,
-                        RequiredFeatures = carcass.RequiredFeatures,
-                        IsUnpacked = carcass.IsUnpacked,
-                        Executables = carcass.Executables,
-                        Options = carcass.Options,
-                        IsFavorite = _config.FavoriteAddons.Contains(new(carcass.Id, carcass.Version)),
-                        IsMetadataUpdateAvailable = _metadataProvider.IsMetadataUpdateAvailable(pathToFile),
-                    };
-
-                    addons.Add(addon);
-                }
-                else if (_game.GameEnum is GameEnum.Blood)
-                {
-                    var addon = new BloodCampaign()
-                    {
-                        AddonId = new(carcass.Id, carcass.Version),
-                        Type = carcass.Type,
-                        SupportedGame = new(carcass.SupportedGame, carcass.GameVersion, carcass.GameCrc),
-                        Title = carcass.Title,
-                        GridImageHash = carcass.GridImageHash,
-                        PreviewImageHash = carcass.PreviewImageHash,
-                        Description = carcass.Description,
-                        Author = carcass.Author,
-                        ReleaseDate = carcass.ReleaseDate,
-                        PathToFile = pathToFile,
-                        DependentAddons = carcass.Dependencies,
-                        IncompatibleAddons = carcass.Incompatibles,
-                        StartMap = carcass.StartMap,
-                        MainDef = carcass.MainDef,
-                        AdditionalDefs = carcass.AddDefs,
-                        INI = carcass.Ini,
-                        RFF = carcass.Rff,
-                        SND = carcass.Snd,
-                        RequiredFeatures = carcass.RequiredFeatures,
-                        IsUnpacked = carcass.IsUnpacked,
-                        Executables = carcass.Executables,
-                        Options = carcass.Options,
-                        IsFavorite = _config.FavoriteAddons.Contains(new(carcass.Id, carcass.Version)),
-                        IsMetadataUpdateAvailable = _metadataProvider.IsMetadataUpdateAvailable(pathToFile),
-                    };
-
-                    addons.Add(addon);
-                }
-                else if (_game.GameEnum is GameEnum.Slave)
-                {
-                    var addon = new GenericCampaign()
-                    {
-                        AddonId = new(carcass.Id, carcass.Version),
-                        Type = carcass.Type,
-                        SupportedGame = new(carcass.SupportedGame, carcass.GameVersion, carcass.GameCrc),
-                        Title = carcass.Title,
-                        GridImageHash = carcass.GridImageHash,
-                        PreviewImageHash = carcass.PreviewImageHash,
-                        Description = carcass.Description,
-                        Author = carcass.Author,
-                        ReleaseDate = carcass.ReleaseDate,
-                        PathToFile = pathToFile,
-                        DependentAddons = carcass.Dependencies,
-                        IncompatibleAddons = carcass.Incompatibles,
-                        StartMap = carcass.StartMap,
-                        MainDef = carcass.MainDef,
-                        AdditionalDefs = carcass.AddDefs,
-                        RequiredFeatures = carcass.RequiredFeatures,
-                        IsUnpacked = carcass.IsUnpacked,
-                        Executables = carcass.Executables,
-                        Options = carcass.Options,
-                        IsFavorite = _config.FavoriteAddons.Contains(new(carcass.Id, carcass.Version)),
-                        IsMetadataUpdateAvailable = _metadataProvider.IsMetadataUpdateAvailable(pathToFile),
-                    };
-
-                    addons.Add(addon);
-                }
-                else if (_game.GameEnum is GameEnum.Standalone)
-                {
-                    var addon = new Addons.StandaloneGame()
-                    {
-                        AddonId = new(carcass.Id, carcass.Version),
-                        Type = carcass.Type,
-                        SupportedGame = new(carcass.SupportedGame, carcass.GameVersion, carcass.GameCrc),
-                        Title = carcass.Title,
-                        GridImageHash = carcass.GridImageHash,
-                        PreviewImageHash = carcass.PreviewImageHash,
-                        Description = carcass.Description,
-                        Author = carcass.Author,
-                        ReleaseDate = carcass.ReleaseDate,
-                        PathToFile = pathToFile,
-                        DependentAddons = carcass.Dependencies,
-                        IncompatibleAddons = carcass.Incompatibles,
-                        StartMap = carcass.StartMap,
-                        MainDef = carcass.MainDef,
-                        AdditionalDefs = carcass.AddDefs,
-                        RequiredFeatures = carcass.RequiredFeatures,
-                        IsUnpacked = carcass.IsUnpacked,
-                        Executables = carcass.Executables,
-                        Options = carcass.Options,
-                        IsFavorite = _config.FavoriteAddons.Contains(new(carcass.Id, carcass.Version)),
-                        IsMetadataUpdateAvailable = _metadataProvider.IsMetadataUpdateAvailable(pathToFile),
-                    };
-
-                    addons.Add(addon);
-                }
-                else
-                {
-                    throw new NotSupportedException();
-                }
-            }
-        }
-
-        return addons;
-    }
-
-    /// <summary>
-    /// Unpack archive if needed and return path to folder
-    /// </summary>
-    /// <param name="pathToFile">Path to archive</param>
-    /// <param name="manifests">Addon manifests</param>
-    /// <returns>Path to unpacked folder or <see langword="null"/> if not unpacked.</returns>
-    private string? UnpackIfNeededAndGetAddonManifests(string pathToFile, out List<AddonManifestJsonModel>? manifests)
+    /// <param name="pathToFile">Path to archive.</param>
+    /// <returns>Path to unpacked folder, or <see langword="null"/> if the archive was not unpacked.</returns>
+    private string? UnpackIfNeeded(AddonFilePathWrapper pathToFile)
     {
         try
         {
-            using var archive = ArchiveFactory.OpenArchive(pathToFile);
+            using var archive = ArchiveFactory.OpenArchive(pathToFile.PathToFile);
 
             string? unpackedTo = null;
 
             if (archive.Entries.Any(static x => x.Key!.Equals("addons.grpinfo", StringComparison.OrdinalIgnoreCase)))
             {
                 //need to unpack archive with grpinfo
-                unpackedTo = Unpack(pathToFile, archive);
-                manifests = null;
-                archive?.Dispose();
-                File.Delete(pathToFile);
+                unpackedTo = Unpack(pathToFile.PathToFile, archive);
+                archive.Dispose();
+                File.Delete(pathToFile.PathToFile);
 
                 return unpackedTo;
             }
@@ -928,7 +652,6 @@ public sealed class InstalledAddonsProvider : IDisposable
 
             if (addonJsonsInsideArchive.Count == 0)
             {
-                manifests = null;
                 return null;
             }
 
@@ -937,25 +660,30 @@ public sealed class InstalledAddonsProvider : IDisposable
             var addonDto = JsonSerializer.Deserialize(
                 addonJsonStream,
                 AddonManifestJsonContext.Default.AddonManifestJsonModel
-                )!;
+                );
+
+            if (addonDto is null)
+            {
+                return null;
+            }
 
             if (addonDto.MainRff is not null || addonDto.SoundRff is not null)
             {
                 //need to unpack addons that contain custom RFF files
-                unpackedTo = Unpack(pathToFile, archive);
+                unpackedTo = Unpack(pathToFile.PathToFile, archive);
             }
             else if (addonDto.Executables is not null)
             {
                 //need to unpack addons with custom executables
-                unpackedTo = Unpack(pathToFile, archive);
+                unpackedTo = Unpack(pathToFile.PathToFile, archive);
             }
 
             List<AddonManifestJsonModel> result = [];
 
             if (unpackedTo is not null)
             {
-                archive?.Dispose();
-                File.Delete(pathToFile);
+                archive.Dispose();
+                File.Delete(pathToFile.PathToFile);
 
                 var unpackedAddonJsons = Directory.GetFiles(unpackedTo, "addon*.json");
 
@@ -986,25 +714,22 @@ public sealed class InstalledAddonsProvider : IDisposable
                 }
             }
 
-            manifests = result.Count > 0 ? result : null;
             return unpackedTo;
         }
         catch (Exception ex)
         {
             _logger.LogCritical(ex, "=== Error while unpacking archive ===");
-
-            manifests = null;
             return null;
         }
     }
 
     /// <summary>
-    /// Unpack archive and return path to folder
+    /// Extract archive contents to a subfolder named after the archive.
     /// </summary>
-    /// <param name="pathToFile">Path to archive</param>
-    /// <param name="archive">Archive</param>
-    /// <returns>Path to unpacked folder.</returns>
-    private string Unpack(string pathToFile, IArchive archive)
+    /// <param name="pathToFile">Path to archive.</param>
+    /// <param name="archive">Archive to extract.</param>
+    /// <returns>Path to the unpacked folder.</returns>
+    private static string Unpack(string pathToFile, IArchive archive)
     {
         var fileFolder = Path.GetDirectoryName(pathToFile)!;
         var unpackTo = Path.Combine(fileFolder, Path.GetFileNameWithoutExtension(pathToFile));
@@ -1024,16 +749,208 @@ public sealed class InstalledAddonsProvider : IDisposable
         return unpackTo;
     }
 
-    private AddonCarcass GetCarcass(
+    /// <summary>
+    /// Convert a parsed addon file into a domain addon object
+    /// </summary>
+    /// <param name="parsedAddonFile">Parsed addon file to convert.</param>
+    internal BaseAddon? GetAddonFromFile(ParsedAddonFile parsedAddonFile)
+    {
+        if (parsedAddonFile.Manifest is null)
+        {
+            throw new InvalidOperationException($"{nameof(GetAddonFromFile)} requires a non-null manifest. File: {parsedAddonFile.FileInfo.PathToFile}");
+        }
+
+        AddonCarcass? carcass;
+        BaseAddon? addon;
+
+        if (parsedAddonFile.FileInfo.IsJson || parsedAddonFile.FileInfo.IsZip || parsedAddonFile.FileInfo.IsFolder)
+        {
+            carcass = GetCarcass(parsedAddonFile.Manifest, parsedAddonFile.FileInfo, parsedAddonFile.GridHash, parsedAddonFile.PreviewHash);
+        }
+        else if (parsedAddonFile.FileInfo.IsGrpInfo || parsedAddonFile.FileInfo.IsMap)
+        {
+            throw new NotSupportedException();
+        }
+        else
+        {
+            return null;
+        }
+
+        var carcassValue = carcass.Value;
+        if (carcassValue.Type is AddonTypeEnum.Mod)
+        {
+            var isEnabled = !_config.DisabledAutoloadMods.Contains(carcassValue.Id);
+
+            if (carcassValue.MainDef is not null)
+            {
+                throw new ArgumentException("Autoload mod can't have Main DEF");
+            }
+
+            AddonId id = new(carcassValue.Id, carcassValue.Version);
+            addon = new AutoloadMod
+            {
+                AddonId = id,
+                Type = AddonTypeEnum.Mod,
+                Title = carcassValue.Title,
+                GridImageHash = carcassValue.GridImageHash,
+                PreviewImageHash = carcassValue.PreviewImageHash,
+                Description = carcassValue.Description,
+                Author = carcassValue.Author,
+                ReleaseDate = carcassValue.ReleaseDate,
+                IsEnabled = isEnabled,
+                FileInfo = parsedAddonFile.FileInfo,
+                MainDef = null,
+                AdditionalDefs = carcassValue.AddDefs,
+                AdditionalCons = carcassValue.AddCons,
+                SupportedGame = new(carcassValue.SupportedGame, carcassValue.GameVersion, carcassValue.GameCrc),
+                DependentAddons = carcassValue.Dependencies,
+                IncompatibleAddons = carcassValue.Incompatibles,
+                StartMap = carcassValue.StartMap,
+                RequiredFeatures = carcassValue.RequiredFeatures,
+                Executables = null,
+                Options = null,
+                IsFavorite = _config.FavoriteAddons.Contains(id),
+                IsMetadataUpdateAvailable = _metadataProvider.IsMetadataUpdateAvailable(id, parsedAddonFile.FileInfo),
+            };
+        }
+        else
+        {
+            addon = CreateCampaignAddon(carcassValue, parsedAddonFile.FileInfo);
+        }
+
+        return addon;
+    }
+
+    private BaseAddon CreateCampaignAddon(AddonCarcass carcass, AddonFilePathWrapper fileInfo)
+    {
+        AddonId id = new(carcass.Id, carcass.Version);
+        var game = new GameInfo(carcass.SupportedGame, carcass.GameVersion, carcass.GameCrc);
+        var isFavorite = _config.FavoriteAddons.Contains(id);
+        var isUpdate = _metadataProvider.IsMetadataUpdateAvailable(id, fileInfo);
+
+        return _game.GameEnum switch
+        {
+            GameEnum.Duke3D
+                or GameEnum.Fury
+                or GameEnum.Redneck
+                or GameEnum.NAM
+                or GameEnum.WW2GI =>
+                new DukeCampaign
+                {
+                    AddonId = id,
+                    Type = carcass.Type,
+                    Title = carcass.Title,
+                    GridImageHash = carcass.GridImageHash,
+                    PreviewImageHash = carcass.PreviewImageHash,
+                    Description = carcass.Description,
+                    Author = carcass.Author,
+                    ReleaseDate = carcass.ReleaseDate,
+                    FileInfo = fileInfo,
+                    DependentAddons = carcass.Dependencies,
+                    IncompatibleAddons = carcass.Incompatibles,
+                    StartMap = carcass.StartMap,
+                    MainCon = carcass.MainCon,
+                    AdditionalCons = carcass.AddCons,
+                    MainDef = carcass.MainDef,
+                    AdditionalDefs = carcass.AddDefs,
+                    RTS = carcass.Rts,
+                    RequiredFeatures = carcass.RequiredFeatures,
+                    Executables = carcass.Executables,
+                    Options = carcass.Options,
+                    SupportedGame = game,
+                    IsFavorite = isFavorite,
+                    IsMetadataUpdateAvailable = isUpdate,
+                },
+            GameEnum.Wang or GameEnum.Slave =>
+                new GenericCampaign
+                {
+                    AddonId = id,
+                    Type = carcass.Type,
+                    Title = carcass.Title,
+                    GridImageHash = carcass.GridImageHash,
+                    PreviewImageHash = carcass.PreviewImageHash,
+                    Description = carcass.Description,
+                    Author = carcass.Author,
+                    ReleaseDate = carcass.ReleaseDate,
+                    FileInfo = fileInfo,
+                    DependentAddons = carcass.Dependencies,
+                    IncompatibleAddons = carcass.Incompatibles,
+                    StartMap = carcass.StartMap,
+                    MainDef = carcass.MainDef,
+                    AdditionalDefs = carcass.AddDefs,
+                    RequiredFeatures = carcass.RequiredFeatures,
+                    Executables = carcass.Executables,
+                    Options = carcass.Options,
+                    SupportedGame = game,
+                    IsFavorite = isFavorite,
+                    IsMetadataUpdateAvailable = isUpdate,
+                },
+            GameEnum.Blood =>
+                new BloodCampaign
+                {
+                    AddonId = id,
+                    Type = carcass.Type,
+                    Title = carcass.Title,
+                    GridImageHash = carcass.GridImageHash,
+                    PreviewImageHash = carcass.PreviewImageHash,
+                    Description = carcass.Description,
+                    Author = carcass.Author,
+                    ReleaseDate = carcass.ReleaseDate,
+                    FileInfo = fileInfo,
+                    DependentAddons = carcass.Dependencies,
+                    IncompatibleAddons = carcass.Incompatibles,
+                    StartMap = carcass.StartMap,
+                    MainDef = carcass.MainDef,
+                    AdditionalDefs = carcass.AddDefs,
+                    INI = carcass.Ini,
+                    RFF = carcass.Rff,
+                    SND = carcass.Snd,
+                    RequiredFeatures = carcass.RequiredFeatures,
+                    Executables = carcass.Executables,
+                    Options = carcass.Options,
+                    SupportedGame = game,
+                    IsFavorite = isFavorite,
+                    IsMetadataUpdateAvailable = isUpdate,
+                },
+            GameEnum.Standalone =>
+                new StandaloneGame
+                {
+                    AddonId = id,
+                    Type = carcass.Type,
+                    Title = carcass.Title,
+                    GridImageHash = carcass.GridImageHash,
+                    PreviewImageHash = carcass.PreviewImageHash,
+                    Description = carcass.Description,
+                    Author = carcass.Author,
+                    ReleaseDate = carcass.ReleaseDate,
+                    FileInfo = fileInfo,
+                    DependentAddons = carcass.Dependencies,
+                    IncompatibleAddons = carcass.Incompatibles,
+                    StartMap = carcass.StartMap,
+                    MainDef = carcass.MainDef,
+                    AdditionalDefs = carcass.AddDefs,
+                    RequiredFeatures = carcass.RequiredFeatures,
+                    Executables = carcass.Executables,
+                    Options = carcass.Options,
+                    SupportedGame = game,
+                    IsFavorite = isFavorite,
+                    IsMetadataUpdateAvailable = isUpdate,
+                },
+            _ => throw new NotSupportedException(),
+        };
+    }
+
+    /// <summary>
+    /// Build an <see cref="AddonCarcass"/> from a manifest and file metadata.
+    /// </summary>
+    private static AddonCarcass GetCarcass(
         AddonManifestJsonModel manifest,
-        string pathToFile,
-        bool isUnpacked,
+        AddonFilePathWrapper fileInfo,
         long? gridImageHash,
         long? previewImageHash)
     {
         AddonCarcass carcass = new()
         {
-            IsUnpacked = isUnpacked,
             GridImageHash = gridImageHash ?? previewImageHash,
             PreviewImageHash = previewImageHash,
             Type = manifest.AddonType,
@@ -1051,7 +968,7 @@ public sealed class InstalledAddonsProvider : IDisposable
             Rff = manifest.MainRff,
             Snd = manifest.SoundRff,
             StartMap = manifest.StartMap,
-            RequiredFeatures = manifest.Dependencies?.RequiredFeatures?.Select(static x => x)?.ToImmutableArray(),
+            RequiredFeatures = manifest.Dependencies?.RequiredFeatures?.ToImmutableArray(),
             MainCon = manifest.MainCon,
             AddCons = manifest.AdditionalCons?.ToImmutableArray(),
             MainDef = manifest.MainDef,
@@ -1070,7 +987,7 @@ public sealed class InstalledAddonsProvider : IDisposable
 
                 foreach (var x in osPortsPair.Value)
                 {
-                    carcass.Executables[osPortsPair.Key].Add(x.Key, Path.Combine(Path.GetDirectoryName(pathToFile)!, x.Value));
+                    carcass.Executables[osPortsPair.Key].Add(x.Key, Path.Combine(fileInfo.PathToFolder, x.Value));
                 }
             }
         }
@@ -1105,57 +1022,69 @@ public sealed class InstalledAddonsProvider : IDisposable
     }
 
 
-    private async void OnMetadataUpdatedAsync(object? sender, ValueTuple<GameEnum, AddonTypeEnum, string>? e)
+    private void OnMetadataInitialized(object? sender, EventArgs e)
     {
-        if (e is not null
-            && _game.GameEnum != e.Value.Item1)
-        {
-            return;
-        }
-
-        IEnumerable<BaseAddon> allAddons = [.. _campaignsCache.Values, .. _mapsCache.Values, .. _modsCache.Values];
+        IEnumerable<BaseAddon> allAddons = [.. _campaignsCache, .. _mapsCache, .. _modsCache];
 
         foreach (var camp in allAddons)
         {
-            if (camp.PathToFile is null)
+            if (camp.FileInfo is null)
             {
                 continue;
             }
 
-            if (e is null)
-            {
-                camp.IsMetadataUpdateAvailable = _metadataProvider.IsMetadataUpdateAvailable(camp.PathToFile);
-            }
-            else if (camp.PathToFile.Equals(e.Value.Item3)
-                     && camp.IsMetadataUpdateAvailable
-                     && !_metadataProvider.IsMetadataUpdateAvailable(camp.PathToFile))
-            {
-                _campaignsCache.Remove(camp.AddonId);
-                await AddAddonAsync(e.Value.Item3).ConfigureAwait(false);
-
-                AddonsChangedEvent?.Invoke(_game.GameEnum, camp.Type);
-            }
+            camp.IsMetadataUpdateAvailable = _metadataProvider.IsMetadataUpdateAvailable(camp.AddonId, camp.FileInfo);
         }
+    }
 
-        if (e is null)
+    private void OnMetadataUpdated(object? sender, ParsedAddonFile e)
+    {
+        try
         {
-            AddonsChangedEvent?.Invoke(_game.GameEnum, AddonTypeEnum.TC);
-            AddonsChangedEvent?.Invoke(_game.GameEnum, AddonTypeEnum.Map);
-            AddonsChangedEvent?.Invoke(_game.GameEnum, AddonTypeEnum.Mod);
+            if (_game.GameEnum != e.Manifest.SupportedGame.Game)
+            {
+                return;
+            }
+
+            var cache = GetCacheByAddonType(e.Manifest.AddonType);
+
+            var oldVersion = cache.FirstOrDefault(x => x.AddonId == e.Manifest.AddonId);
+
+            if (oldVersion is null)
+            {
+                throw new InvalidOperationException($"Metadata update target not found in cache: {e.Manifest.AddonId}");
+            }
+
+            cache.Remove(oldVersion);
+            AddAddon(e);
+
+            AddonsChangedEvent?.Invoke(_game.GameEnum, e.Manifest.AddonType);
         }
-        else
+        catch (Exception ex)
         {
-            AddonsChangedEvent?.Invoke(_game.GameEnum, e.Value.Item2);
+            _logger.LogCritical(ex, "Error while updating metadata.");
         }
     }
 
 
+    /// <summary>
+    /// Unsubscribe from events and release resources.
+    /// </summary>
     public void Dispose()
     {
-        _metadataProvider.MetadataUpdatedEvent -= OnMetadataUpdatedAsync;
+        _metadataProvider.MetadataUpdatedEvent -= OnMetadataUpdated;
+        _metadataProvider.MetadataInitializedEvent -= OnMetadataInitialized;
+
+        _channelCancellation.Cancel();
+        _channelCancellation.Dispose();
+        _cacheUpdateSemaphore.Dispose();
+        _channelPublisher.Unsubscribe(_channelReader);
     }
 }
 
+/// <summary>
+/// Intermediate representation built from an addon manifest before converting to a domain <see cref="BaseAddon"/>.
+/// </summary>
 internal struct AddonCarcass
 {
     public GameEnum SupportedGame { get; init; }
@@ -1163,7 +1092,6 @@ internal struct AddonCarcass
     public string Title { get; init; }
     public AddonTypeEnum Type { get; init; }
     public string Version { get; init; }
-    public bool IsUnpacked { get; init; }
     public string? Author { get; init; }
     public DateOnly? ReleaseDate { get; init; }
     public string? Description { get; init; }

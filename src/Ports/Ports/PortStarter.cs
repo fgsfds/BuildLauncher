@@ -45,7 +45,8 @@ public sealed class PortStarter
         byte? skill,
         bool skipIntro,
         bool skipStartup,
-        string? pathToExe = null)
+        string? pathToExe = null
+        )
     {
         var sw = Stopwatch.StartNew();
 
@@ -56,7 +57,10 @@ public sealed class PortStarter
 
         var args = port.GetStartGameArgs(game, addon, mods, enabledOptions, skipIntro, skipStartup, skill);
 
-        _ = addon.Executables?[OSEnum.Windows].TryGetValue(port.PortEnum, out pathToExe);
+        if (addon.Executables?.TryGetValue(OSEnum.Windows, out var winDict) is true)
+        {
+            winDict.TryGetValue(port.PortEnum, out pathToExe);
+        }
 
         _logger.LogInformation($"=== Starting addon {addon.AddonId.Id} for {game.FullName} ===");
         _logger.LogInformation($"Path to port exe {pathToExe}");
@@ -82,23 +86,22 @@ public sealed class PortStarter
     /// <param name="pathToExe">Path to custom port's exe</param>
     private async Task StartPortAsync(BasePort port, string args, string? pathToExe = null)
     {
-        string exe;
+        var exe = pathToExe ?? port.PortExeFilePath;
 
-        if (pathToExe is not null)
-        {
-            exe = pathToExe;
-        }
-        else
-        {
-            exe = port.PortExeFilePath;
-        }
-
-        await Process.Start(new ProcessStartInfo
+        using var process = Process.Start(new ProcessStartInfo
         {
             FileName = Path.GetFileName(exe),
             UseShellExecute = true,
             Arguments = args,
             WorkingDirectory = Path.GetDirectoryName(exe)
-        })!.WaitForExitAsync().ConfigureAwait(false);
+        });
+
+        if (process is null)
+        {
+            _logger.LogError("Failed to start process: {Exe}", exe);
+            return;
+        }
+
+        await process.WaitForExitAsync().ConfigureAwait(false);
     }
 }

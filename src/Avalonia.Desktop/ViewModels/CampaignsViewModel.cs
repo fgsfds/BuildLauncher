@@ -1,6 +1,7 @@
 using System.Collections.Immutable;
 using System.Diagnostics;
 using Addons.Addons;
+using Addons.Helpers;
 using Addons.Providers;
 using Avalonia.Controls.Notifications;
 using Avalonia.Desktop.Helpers;
@@ -50,18 +51,18 @@ public sealed partial class CampaignsViewModel : RightPanelViewModel, IPortsButt
 
             foreach (var addon in addons)
             {
-                if (!isSearchEmpty && !addon.Value.Title.Contains(SearchBoxText, StringComparison.OrdinalIgnoreCase))
+                if (!isSearchEmpty && !addon.Title.Contains(SearchBoxText, StringComparison.OrdinalIgnoreCase))
                 {
                     continue;
                 }
 
-                if (addon.Value.IsFavorite)
+                if (addon.IsFavorite)
                 {
-                    favorites.Add(addon.Value);
+                    favorites.Add(addon);
                     continue;
                 }
 
-                list.Add(addon.Value);
+                list.Add(addon);
             }
 
             if (favorites.Count > 0)
@@ -145,7 +146,7 @@ public sealed partial class CampaignsViewModel : RightPanelViewModel, IPortsButt
 
         _gamesProvider.GameChangedEvent += OnGameChanged;
         _installedAddonsProvider.AddonsChangedEvent += OnAddonChanged;
-        _downloadableAddonsProvider.AddonsChangedEvent += OnAddonChanged;
+        //_downloadableAddonsProvider.AddonsChangedEvent += OnAddonChanged;
     }
 
 
@@ -160,7 +161,7 @@ public sealed partial class CampaignsViewModel : RightPanelViewModel, IPortsButt
     private async Task UpdateAsync(bool createNew)
     {
         IsInProgress = true;
-        await _installedAddonsProvider.CreateCache(createNew, AddonTypeEnum.TC).ConfigureAwait(true);
+        await _installedAddonsProvider.CreateCacheAsync(createNew, AddonTypeEnum.TC).ConfigureAwait(true);
         IsInProgress = false;
     }
 
@@ -273,7 +274,7 @@ public sealed partial class CampaignsViewModel : RightPanelViewModel, IPortsButt
 
 
     /// <summary>
-    /// Delete selected campaign
+    /// Add selected campaign to favorites
     /// </summary>
     [RelayCommand]
     private void AddToFavorite(object? value)
@@ -291,7 +292,7 @@ public sealed partial class CampaignsViewModel : RightPanelViewModel, IPortsButt
 
 
     /// <summary>
-    /// Delete selected campaign
+    /// Remove selected campaign from favorites
     /// </summary>
     [RelayCommand]
     private void RemoveFromFavorite(object? value)
@@ -327,7 +328,12 @@ public sealed partial class CampaignsViewModel : RightPanelViewModel, IPortsButt
 
         IsInProgress = true;
 
-        var result = await _metadataProvider.UpdateMetadataAsync(addon.PathToFile!).ConfigureAwait(true);
+        if (addon.FileInfo is null)
+        {
+            throw new InvalidOperationException();
+        }
+
+        var result = await _metadataProvider.UpdateMetadataAsync(addon.FileInfo).ConfigureAwait(true);
 
         IsInProgress = false;
 

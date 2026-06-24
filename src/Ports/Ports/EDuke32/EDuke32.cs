@@ -163,17 +163,15 @@ public class EDuke32 : BasePort
     /// <inheritdoc/>
     public override void BeforeStart(BaseGame game, BaseAddon campaign)
     {
-        MoveSaveFilesFromGameFolder(game, campaign);
-
+        MoveSaveFilesFromStorage(game, campaign);
         FixConfig();
-
         FixWtFiles(game, campaign);
     }
 
     /// <inheritdoc/>
     public override void AfterEnd(BaseGame game, BaseAddon campaign)
     {
-        MoveSaveFilesToGameFolder(game, campaign);
+        MoveSaveFilesToStorage(game, campaign);
     }
 
     /// <inheritdoc/>
@@ -297,7 +295,7 @@ public class EDuke32 : BasePort
             }
         }
 
-        if (addon.FileName is null)
+        if (addon.FileInfo is null)
         {
             return;
         }
@@ -335,7 +333,7 @@ public class EDuke32 : BasePort
             }
             else
             {
-                _ = sb.Append($@" {AddFileParam}""{dCamp.PathToFile}""");
+                _ = sb.Append($@" {AddFileParam}""{dCamp.FileInfo.PathToFile}""");
             }
         }
         else if (dCamp.Type is AddonTypeEnum.Map)
@@ -368,17 +366,14 @@ public class EDuke32 : BasePort
             if (contents[i].StartsWith("SelectedGRP", StringComparison.OrdinalIgnoreCase))
             {
                 contents[i] = @"SelectedGRP = """"";
-                continue;
             }
             else if (contents[i].StartsWith("LastINI", StringComparison.OrdinalIgnoreCase))
             {
                 contents[i] = string.Empty;
-                continue;
             }
             else if (contents[i].StartsWith("ModDir", StringComparison.OrdinalIgnoreCase))
             {
                 contents[i] = string.Empty;
-                continue;
             }
         }
 
@@ -438,16 +433,38 @@ public class EDuke32 : BasePort
         }
     }
 
-    protected override void MoveSaveFilesToGameFolder(BaseGame game, BaseAddon campaign)
+    /// <inheritdoc />
+    protected override void MoveSaveFilesFromStorage(BaseGame game, BaseAddon campaign)
+    {
+        var saveFolder = GetPathToAddonSavedGamesFolder(game.ShortName, campaign.AddonId.Id);
+
+        if (!Directory.Exists(saveFolder))
+        {
+            return;
+        }
+
+        var saves = Directory.GetFiles(saveFolder);
+
+        var firstPart = campaign.FileInfo is not null && campaign.FileInfo.IsFolder ? campaign.FileInfo.PathToFolder : InstallFolderPath;
+
+        foreach (var save in saves)
+        {
+            var destFileName = Path.Combine(firstPart, Path.GetFileName(save)!);
+            File.Move(save, destFileName, true);
+        }
+    }
+
+    /// <inheritdoc />
+    protected override void MoveSaveFilesToStorage(BaseGame game, BaseAddon campaign)
     {
         //copying saved games into separate folder
         var saveFolder = GetPathToAddonSavedGamesFolder(game.ShortName, campaign.AddonId.Id);
 
         string path;
 
-        if (campaign.IsUnpacked)
+        if (campaign.FileInfo is not null && campaign.FileInfo.IsFolder)
         {
-            path = Path.GetDirectoryName(campaign.PathToFile)!;
+            path = campaign.FileInfo.PathToFolder;
         }
         else
         {
@@ -468,26 +485,6 @@ public class EDuke32 : BasePort
         {
             var destFileName = Path.Combine(saveFolder, Path.GetFileName(file)!);
             File.Move(file, destFileName, true);
-        }
-    }
-
-    protected override void MoveSaveFilesFromGameFolder(BaseGame game, BaseAddon campaign)
-    {
-        var saveFolder = GetPathToAddonSavedGamesFolder(game.ShortName, campaign.AddonId.Id);
-
-        if (!Directory.Exists(saveFolder))
-        {
-            return;
-        }
-
-        var saves = Directory.GetFiles(saveFolder);
-
-        string firstPart = campaign.IsUnpacked ? Path.GetDirectoryName(campaign.PathToFile)! : InstallFolderPath;
-
-        foreach (var save in saves)
-        {
-            var destFileName = Path.Combine(firstPart, Path.GetFileName(save)!);
-            File.Move(save, destFileName, true);
         }
     }
 }

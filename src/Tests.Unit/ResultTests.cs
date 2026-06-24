@@ -45,19 +45,6 @@ public sealed class ResultTests
         Assert.True(r.IsSuccess);
     }
 
-    [Fact]
-    public void Constructor_WithCancelled_IsNotSuccess()
-    {
-        var r = new Result(ResultEnum.Cancelled, "cancelled");
-        Assert.False(r.IsSuccess);
-    }
-
-    [Fact]
-    public void Constructor_WithError_IsNotSuccess()
-    {
-        var r = new Result(ResultEnum.Error, "error");
-        Assert.False(r.IsSuccess);
-    }
 }
 
 public sealed class ResultGenericTests

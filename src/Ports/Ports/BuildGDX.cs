@@ -1,6 +1,5 @@
 ﻿using System.Text;
 using Addons.Addons;
-using Core.All;
 using Core.All.Enums;
 using Core.All.Enums.Versions;
 using Games.Games;
@@ -119,17 +118,15 @@ public sealed class BuildGDX : BasePort
     /// <inheritdoc/>
     public override void BeforeStart(BaseGame game, BaseAddon campaign)
     {
-        MoveSaveFilesToGameFolder(game, campaign);
-
+        MoveSaveFilesFromStorage(game, campaign);
         RestoreRoute66Files(game);
-
         RestoreWtFiles(game);
     }
 
     /// <inheritdoc/>
     public override void AfterEnd(BaseGame game, BaseAddon campaign)
     {
-        MoveSaveFilesFromGameFolder(game, campaign);
+        MoveSaveFilesToStorage(game, campaign);
     }
 
     /// <inheritdoc/>
@@ -176,7 +173,7 @@ public sealed class BuildGDX : BasePort
     }
 
     /// <inheritdoc/>
-    protected override void GetAutoloadModsArgs(StringBuilder sb, BaseGame _, BaseAddon addon, IReadOnlyDictionary<AddonId, BaseAddon> mods) { }
+    protected override void GetAutoloadModsArgs(StringBuilder sb, BaseGame _, BaseAddon addon, IReadOnlyList<BaseAddon> mods) { }
 
     /// <inheritdoc/>
     protected override void GetSkipIntroParameter(StringBuilder sb) { }

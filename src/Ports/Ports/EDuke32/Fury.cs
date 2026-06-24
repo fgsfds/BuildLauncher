@@ -63,8 +63,7 @@ public sealed class Fury : EDuke32
     /// <inheritdoc/>
     public override void BeforeStart(BaseGame game, BaseAddon campaign)
     {
-        MoveSaveFilesFromGameFolder(game, campaign);
-
+        MoveSaveFilesFromStorage(game, campaign);
         FixConfig();
     }
 
@@ -99,7 +98,7 @@ public sealed class Fury : EDuke32
 
     private void GetFuryArgs(StringBuilder sb, FuryGame game, BaseAddon addon)
     {
-        if (addon.FileName is null)
+        if (addon.FileInfo is null)
         {
             return;
         }
@@ -131,7 +130,7 @@ public sealed class Fury : EDuke32
 
         if (fCamp.Type is AddonTypeEnum.TC)
         {
-            _ = sb.Append($@" {AddFileParam}""{fCamp.PathToFile}""");
+            _ = sb.Append($@" {AddFileParam}""{fCamp.FileInfo.PathToFile}""");
         }
         else if (fCamp.Type is AddonTypeEnum.Map)
         {

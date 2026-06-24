@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Reflection;
 using System.Runtime.InteropServices;
 
 namespace Core.Client.Helpers;
@@ -53,7 +54,8 @@ public static class ClientProperties
     /// <summary>
     /// Current app version
     /// </summary>
-    public static Version CurrentVersion => new(1, 0, 0, 0);
+    public static Version CurrentVersion => Assembly.GetEntryAssembly()?.GetName().Version ?? throw new ArgumentNullException();
+
     /// <summary>
     /// Name of the executable file
     /// </summary>

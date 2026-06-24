@@ -1,10 +1,12 @@
 ﻿using System.Net;
 using System.Net.Http.Headers;
+using Core.All;
 using Core.All.Enums;
 using Core.All.Helpers;
 using Core.All.Providers;
 using Core.Client.Api;
 using Core.Client.Config;
+using Core.Client.Enums;
 using Core.Client.Interfaces;
 using Core.Client.Providers;
 using Core.Client.Tools;
@@ -96,7 +98,7 @@ public static class DiHelper
                     {
                         opt.Append = false;
                         opt.FormatLogFileName = (fileName) => { return string.Format(fileName, DateTime.UtcNow); };
-                        opt.FormatLogEntry = (message) => { return $"[{DateTime.Now.ToLocalTime() + "]",-25} {message.LogLevel,-15} {message.Message}"; };
+                        opt.FormatLogEntry = (message) => { return $"[{DateTime.Now.ToLocalTime() + "]",-25} {message.LogLevel,-15} {message.Message} {message.Exception}"; };
                     })
                 .AddFilter("System.Net.Http.HttpClient", LogLevel.None)
                 .AddFilter("Microsoft.EntityFrameworkCore", LogLevel.None)
@@ -111,11 +113,35 @@ public static class DiHelper
         _ = container.AddSingleton<PlaytimeProvider>();
         _ = container.AddSingleton<RatingProvider>();
         _ = container.AddSingleton<AddonsDatabaseManager>();
-        return container.AddSingleton<RepoAppReleasesProvider>();
+        _ = container.AddSingleton<RepoAppReleasesProvider>();
+
+        return container;
+    }
+
+    public static IServiceCollection WithChannels(this IServiceCollection container)
+    {
+        _ = container.AddSingleton<ChannelBroadcaster<LocalFileEvent>>();
+
+        _ = container.AddKeyedSingleton<IChannelSubscriber<LocalFileEvent>>(
+            KeyedServicesEnum.LocalFilesChannel,
+            (sp, _) => sp.GetRequiredService<ChannelBroadcaster<LocalFileEvent>>());
+
+        _ = container.AddKeyedSingleton<IChannelPublisher<LocalFileEvent>>(
+            KeyedServicesEnum.LocalFilesChannel,
+            (sp, _) => sp.GetRequiredService<ChannelBroadcaster<LocalFileEvent>>());
+
+        return container;
     }
 
 
-    public sealed class FakeHttpMessageHandler : HttpMessageHandler
+    public sealed record LocalFileEvent
+    {
+        public IReadOnlyCollection<ParsedAddonFile> Files { get; init; }
+        public bool IsAdded { get; init; }
+    }
+
+
+    private sealed class FakeHttpMessageHandler : HttpMessageHandler
     {
         protected override Task<HttpResponseMessage> SendAsync(
             HttpRequestMessage request, CancellationToken cancellationToken)

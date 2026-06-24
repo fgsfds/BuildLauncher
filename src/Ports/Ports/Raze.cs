@@ -265,12 +265,10 @@ public sealed class Raze : BasePort
             _ = sb.Append($" -addon {dukeAddon}");
         }
 
-
-        if (dCamp.FileName is null)
+        if (dCamp.FileInfo is null)
         {
             return;
         }
-
 
         if (dCamp.MainCon is not null)
         {
@@ -288,7 +286,7 @@ public sealed class Raze : BasePort
 
         if (dCamp.Type is AddonTypeEnum.TC)
         {
-            _ = sb.Append($@" {AddFileParam}""{dCamp.PathToFile}""");
+            _ = sb.Append($@" {AddFileParam}""{dCamp.FileInfo.PathToFile}""");
         }
         else if (dCamp.Type is AddonTypeEnum.Map)
         {
@@ -325,16 +323,14 @@ public sealed class Raze : BasePort
             _ = sb.Append($" {AddFileParam}TD.GRP");
         }
 
-
-        if (wCamp.FileName is null)
+        if (wCamp.FileInfo is null)
         {
             return;
         }
 
-
         if (wCamp.Type is AddonTypeEnum.TC)
         {
-            _ = sb.Append($@" {AddFileParam}""{wCamp.PathToFile}""");
+            _ = sb.Append($@" {AddFileParam}""{wCamp.FileInfo.PathToFile}""");
         }
         else if (wCamp.Type is AddonTypeEnum.Map)
         {
@@ -372,12 +368,10 @@ public sealed class Raze : BasePort
             AddGamePathsToConfig(game, addon, game.AgainInstallPath!, pathToConfig);
         }
 
-
-        if (rCamp.FileName is null)
+        if (rCamp.FileInfo is null)
         {
             return;
         }
-
 
         if (rCamp.MainCon is not null)
         {
@@ -395,7 +389,7 @@ public sealed class Raze : BasePort
 
         if (rCamp.Type is AddonTypeEnum.TC)
         {
-            _ = sb.Append($@" {AddFileParam}""{rCamp.PathToFile}""");
+            _ = sb.Append($@" {AddFileParam}""{rCamp.FileInfo.PathToFile}""");
         }
         else if (rCamp.Type is AddonTypeEnum.Map)
         {
@@ -463,9 +457,10 @@ public sealed class Raze : BasePort
 
                 //blood unpacked addons
                 if (campaign is BloodCampaign bCamp &&
-                    bCamp.IsUnpacked)
+                    bCamp.FileInfo is not null &&
+                    bCamp.FileInfo.IsFolder)
                 {
-                    path = Path.GetDirectoryName(bCamp.PathToFile)!.Replace('\\', '/');
+                    path = bCamp.FileInfo.PathToFolder.Replace('\\', '/');
                     _ = sb.Append("Path=").AppendLine(path);
                 }
 
@@ -473,7 +468,7 @@ public sealed class Raze : BasePort
                 {
                     i++;
                 }
-                while (!string.IsNullOrWhiteSpace(contents[i]));
+                while (i < contents.Length && !string.IsNullOrWhiteSpace(contents[i]));
 
                 _ = sb.AppendLine();
                 continue;

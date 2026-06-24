@@ -2,7 +2,6 @@
 using System.Text;
 using Addons.Addons;
 using Addons.Helpers;
-using Core.All;
 using Core.All.Enums;
 using Core.All.Enums.Addons;
 using Core.All.Helpers;
@@ -94,7 +93,6 @@ public abstract class BasePort : IInstallable
     /// </summary>
     public string PortExeFilePath => Path.Combine(InstallFolderPath, Exe);
 
-
     /// <summary>
     /// Name of the config file
     /// </summary>
@@ -180,7 +178,6 @@ public abstract class BasePort : IInstallable
     /// </summary>
     public abstract bool IsSkillSelectionAvailable { get; }
 
-
     protected BasePort()
     {
         if (!Directory.Exists(PortSavedGamesFolderPath))
@@ -189,13 +186,12 @@ public abstract class BasePort : IInstallable
         }
     }
 
-
     /// <summary>
     /// Get path to addon's saved games folder
     /// </summary>
     /// <param name="subFolder">Subfolder under port's saves folder</param>
     /// <param name="addonId">Addon Id</param>
-    public string GetPathToAddonSavedGamesFolder(string subFolder, string addonId)
+    protected string GetPathToAddonSavedGamesFolder(string subFolder, string addonId)
     {
         var folderName = addonId;
 
@@ -206,7 +202,6 @@ public abstract class BasePort : IInstallable
 
         return Path.Combine(PortSavedGamesFolderPath, subFolder, folderName);
     }
-
 
     /// <summary>
     /// Get command line parameters to start the game with selected campaign and autoload mods
@@ -221,7 +216,7 @@ public abstract class BasePort : IInstallable
     public string GetStartGameArgs(
         BaseGame game,
         BaseAddon addon,
-        IReadOnlyDictionary<AddonId, BaseAddon> mods,
+        IReadOnlyList<BaseAddon> mods,
         IReadOnlyList<string> enabledOptions,
         bool skipIntro,
         bool skipStartup,
@@ -257,7 +252,7 @@ public abstract class BasePort : IInstallable
         return sb.ToString();
     }
 
-    protected virtual void GetOptionsArgs(
+    protected void GetOptionsArgs(
         StringBuilder sb,
         BaseGame game,
         BaseAddon addon,
@@ -279,8 +274,8 @@ public abstract class BasePort : IInstallable
                 {
                     _ = sb.Append($@" {AddDefParam}""{option.Key}""");
                 }
-                else if (option.Value is OptionalParameterTypeEnum.INI
-                    && game is BloodGame blood)
+                else if (option.Value is OptionalParameterTypeEnum.INI &&
+                         game is BloodGame)
                 {
                     _ = sb.Append($@" -ini ""{option.Key}""");
                 }
@@ -292,16 +287,20 @@ public abstract class BasePort : IInstallable
         }
     }
 
-
     /// <summary>
     /// Get startup args for manifested maps
     /// </summary>
-    protected virtual void GetMapArgs(StringBuilder sb, BaseAddon camp)
+    protected void GetMapArgs(StringBuilder sb, BaseAddon camp)
     {
+        if (camp.FileInfo is null)
+        {
+            throw new InvalidOperationException();
+        }
+
         //TODO e#m#
         if (camp.StartMap is MapFileJsonModel mapFile)
         {
-            _ = sb.Append($@" {AddFileParam}""{camp.PathToFile}""");
+            _ = sb.Append($@" {AddFileParam}""{camp.FileInfo.PathToFile}""");
             _ = sb.Append($@" -map ""{mapFile.File}""");
         }
         else
@@ -309,7 +308,6 @@ public abstract class BasePort : IInstallable
             throw new NotSupportedException();
         }
     }
-
 
     /// <summary>
     /// Get startup args for loose maps
@@ -356,12 +354,10 @@ public abstract class BasePort : IInstallable
             _ = sb.Append($@" -ini ""{ClientConsts.CrypticIni}""");
         }
 
-
-        if (bCamp.FileName is null)
+        if (bCamp.FileInfo is null)
         {
             return;
         }
-
 
         if (bCamp.Type is AddonTypeEnum.TC)
         {
@@ -369,13 +365,13 @@ public abstract class BasePort : IInstallable
             {
                 //don't add addon dir if the port is overridden
             }
-            else if (bCamp.FileName.Equals("addon.json"))
+            else if (bCamp.FileInfo.IsFolder)
             {
-                _ = sb.Append($@" {AddGameDirParam}""{Path.GetDirectoryName(bCamp.PathToFile)}""");
+                _ = sb.Append($@" {AddGameDirParam}""{bCamp.FileInfo.PathToFolder}""");
             }
             else
             {
-                _ = sb.Append($@" {AddFileParam}""{bCamp.PathToFile}""");
+                _ = sb.Append($@" {AddFileParam}""{bCamp.FileInfo.PathToFile}""");
             }
         }
         else if (bCamp.Type is AddonTypeEnum.Map)
@@ -387,12 +383,10 @@ public abstract class BasePort : IInstallable
             throw new NotSupportedException($"Mod type {bCamp.Type} is not supported");
         }
 
-
         if (bCamp.RFF is not null)
         {
             _ = sb.Append($@" {AddRffParam}""{bCamp.RFF}""");
         }
-
 
         if (bCamp.SND is not null)
         {
@@ -400,7 +394,7 @@ public abstract class BasePort : IInstallable
         }
     }
 
-    protected virtual void GetSlaveArgs(StringBuilder sb, SlaveGame game, BaseAddon addon)
+    protected void GetSlaveArgs(StringBuilder sb, SlaveGame game, BaseAddon addon)
     {
         if (addon is LooseMap)
         {
@@ -413,14 +407,14 @@ public abstract class BasePort : IInstallable
             throw new InvalidCastException();
         }
 
-        if (sCamp.FileName is null)
+        if (sCamp.FileInfo is null)
         {
             return;
         }
 
         if (sCamp.Type is AddonTypeEnum.TC)
         {
-            _ = sb.Append($@" {AddFileParam}""{sCamp.PathToFile}""");
+            _ = sb.Append($@" {AddFileParam}""{sCamp.FileInfo.PathToFile}""");
         }
         else if (sCamp.Type is AddonTypeEnum.Map)
         {
@@ -447,7 +441,6 @@ public abstract class BasePort : IInstallable
             throw new NotSupportedException();
         }
 
-
         if (addon is LooseMap)
         {
             GetLooseMapArgs(sb, game, addon);
@@ -468,12 +461,10 @@ public abstract class BasePort : IInstallable
             _ = sb.Append($" {MainConParam}GAME.CON");
         }
 
-
-        if (dCamp.FileName is null)
+        if (dCamp.FileInfo is null)
         {
             return;
         }
-
 
         if (dCamp.MainCon is not null)
         {
@@ -488,10 +479,9 @@ public abstract class BasePort : IInstallable
             }
         }
 
-
         if (dCamp.Type is AddonTypeEnum.TC)
         {
-            _ = sb.Append($@" {AddFileParam}""{dCamp.PathToFile}""");
+            _ = sb.Append($@" {AddFileParam}""{dCamp.FileInfo.PathToFile}""");
         }
         else if (dCamp.Type is AddonTypeEnum.Map)
         {
@@ -510,7 +500,7 @@ public abstract class BasePort : IInstallable
     /// <param name="game">Game</param>
     /// <param name="addon">Campaign\map</param>
     /// <param name="mods">Autoload mods</param>
-    protected virtual void GetAutoloadModsArgs(StringBuilder sb, BaseGame game, BaseAddon addon, IReadOnlyDictionary<AddonId, BaseAddon> mods)
+    protected virtual void GetAutoloadModsArgs(StringBuilder sb, BaseGame game, BaseAddon addon, IReadOnlyList<BaseAddon> mods)
     {
         if (mods.Count == 0)
         {
@@ -518,11 +508,10 @@ public abstract class BasePort : IInstallable
         }
 
         var enabledModsCount = 0;
-        HashSet<string> addedModsFiles = [];
 
         foreach (var mod in mods)
         {
-            if (mod.Value is not AutoloadMod aMod)
+            if (mod is not AutoloadMod aMod)
             {
                 continue;
             }
@@ -532,11 +521,17 @@ public abstract class BasePort : IInstallable
                 continue;
             }
 
-            if (!addedModsFiles.TryGetValue(mod.Value.FileName!, out _))
+            if (aMod.FileInfo is null)
             {
-                _ = addedModsFiles.Add(mod.Value.FileName!);
-                _ = sb.Append($@" {AddFileParam}""{aMod.FileName}""");
+                continue;
             }
+
+            if (aMod.FileInfo.IsFolder)
+            {
+                throw new InvalidOperationException();
+            }
+
+            _ = sb.Append($@" {AddFileParam}""{aMod.FileInfo.FileName}""");
 
             if (aMod.AdditionalDefs is not null)
             {
@@ -564,7 +559,6 @@ public abstract class BasePort : IInstallable
             _ = sb.Append($@" {AddDirectoryParam}""{game.ModsFolderPath}""");
         }
     }
-
 
     /// <summary>
     /// Method to perform after port is finished
@@ -599,8 +593,6 @@ public abstract class BasePort : IInstallable
     /// </summary>
     /// <param name="sb">String builder for parameters</param>
     protected abstract void GetSkipStartupParameter(StringBuilder sb);
-
-
 
     /// <summary>
     /// Remove route 66 art files overrides used for RedNukem
@@ -676,7 +668,6 @@ public abstract class BasePort : IInstallable
         var art4 = Path.Combine(game.GameInstallFolder, "TILES022.ART");
         var art4r = Path.Combine(game.GameInstallFolder, "TILES022._ART");
 
-
         if (File.Exists(art1r))
         {
             File.Move(art1r, art1, true);
@@ -733,7 +724,12 @@ public abstract class BasePort : IInstallable
         }
     }
 
-    protected virtual void MoveSaveFilesToGameFolder(BaseGame game, BaseAddon campaign)
+    /// <summary>
+    /// Moves save files from the addon's saved games storage folder to the game's install folder.
+    /// </summary>
+    /// <param name="game">The game instance containing the target install folder.</param>
+    /// <param name="campaign">The addon campaign whose saves are to be moved.</param>
+    protected virtual void MoveSaveFilesFromStorage(BaseGame game, BaseAddon campaign)
     {
         var saveFolder = GetPathToAddonSavedGamesFolder(game.ShortName, campaign.AddonId.Id);
 
@@ -746,17 +742,22 @@ public abstract class BasePort : IInstallable
 
         foreach (var save in saves)
         {
-            string destFileName = Path.Combine(game.GameInstallFolder!, Path.GetFileName(save)!);
+            var destFileName = Path.Combine(game.GameInstallFolder!, Path.GetFileName(save)!);
             File.Move(save, destFileName, true);
         }
     }
 
-    protected virtual void MoveSaveFilesFromGameFolder(BaseGame game, BaseAddon campaign)
+    /// <summary>
+    /// Moves save files from the game installation folder to the addon's saved games folder.
+    /// </summary>
+    /// <param name="game">The game whose save files are to be moved.</param>
+    /// <param name="campaign">The addon or campaign whose save folder is the destination.</param>
+    protected virtual void MoveSaveFilesToStorage(BaseGame game, BaseAddon campaign)
     {
-        //copying saved games into separate folder
         var saveFolder = GetPathToAddonSavedGamesFolder(game.ShortName, campaign.AddonId.Id);
 
-        string path = game.GameInstallFolder ?? throw new NullReferenceException(nameof(game.GameInstallFolder));
+        ArgumentNullException.ThrowIfNull(game.GameInstallFolder);
+        var path = game.GameInstallFolder;
 
         var files = from file in Directory.GetFiles(path)
                     from ext in SaveFileExtensions

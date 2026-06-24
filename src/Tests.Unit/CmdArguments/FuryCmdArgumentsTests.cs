@@ -1,76 +1,30 @@
 using Addons.Addons;
-using Core.All.Enums;
 using Core.Client.Config;
 using Games.Games;
 using Ports.Ports.EDuke32;
+using Tests.Unit.Helpers;
 
 namespace Tests.Unit.CmdArguments;
 
-[Collection("Sync")]
 public sealed class FuryCmdArgumentsTests
 {
-    private readonly FuryGame _dukeGame;
-    private readonly DukeCampaign _dukeCamp;
-
-    private readonly AutoloadModsProvider _modsProvider;
+    private readonly FuryGame _game;
+    private readonly DukeCampaign _camp;
+    private readonly AutoloadModsTestSetups _mods;
 
     public FuryCmdArgumentsTests()
     {
-        _modsProvider = new(GameEnum.Fury);
-
-        _dukeGame = new()
-        {
-            GameInstallFolder = Path.Combine("D:", "Games", "Fury")
-        };
-
-        _dukeCamp = new()
-        {
-            AddonId = new(nameof(GameEnum.Fury).ToLower(), null),
-            Type = AddonTypeEnum.Official,
-            Title = "Ion Fury",
-            GridImageHash = null,
-            Author = null,
-            ReleaseDate = null,
-            Description = null,
-            SupportedGame = new(GameEnum.Fury),
-            RequiredFeatures = null,
-            PathToFile = null,
-            DependentAddons = null,
-            IncompatibleAddons = null,
-            MainCon = null,
-            AdditionalCons = null,
-            MainDef = null,
-            RTS = null,
-            AdditionalDefs = null,
-            StartMap = null,
-            PreviewImageHash = null,
-            IsUnpacked = false,
-            Executables = null,
-            Options = null
-        };
+        (_game, _camp, _mods) = PortTestSetups.Fury();
     }
 
     [Fact]
     public void FuryTest()
     {
-        var mods = new List<AutoloadMod>() {
-            _modsProvider.EnabledModWithCons,
-            _modsProvider.DisabledMod,
-            _modsProvider.ModThatRequiresOfficialAddon,
-            _modsProvider.ModThatIncompatibleWithAddon,
-            _modsProvider.IncompatibleMod,
-            _modsProvider.IncompatibleModWithIncompatibleVersion,
-            _modsProvider.IncompatibleModWithCompatibleVersion,
-            _modsProvider.DependentMod,
-            _modsProvider.DependentModWithCompatibleVersion,
-            _modsProvider.DependentModWithIncompatibleVersion,
-            _modsProvider.ModForAnotherGame,
-            _modsProvider.ModThatRequiresFeature
-        }.ToDictionary(x => x.AddonId, x => (BaseAddon)x);
+        var mods = _mods.StandardModsWithCons;
 
         Fury fury = new(new ConfigProviderFake());
 
-        var args = fury.GetStartGameArgs(_dukeGame, _dukeCamp, mods, [], true, true, 3);
+        var args = fury.GetStartGameArgs(_game, _camp, mods, [], true, true, 3);
         var expected = $"" +
             $" -g \"enabled_mod.zip\"" +
             $" -mh \"ENABLED1.DEF\"" +
@@ -88,11 +42,7 @@ public sealed class FuryCmdArgumentsTests
             $" -nosetup" +
             $"";
 
-        if (OperatingSystem.IsLinux())
-        {
-            args = args.Replace('\\', Path.DirectorySeparatorChar);
-            expected = expected.Replace('\\', Path.DirectorySeparatorChar);
-        }
+        NormalizerHelper.NormalizeExpectedArgs(ref args, ref expected);
 
         Assert.Equal(expected, args);
     }

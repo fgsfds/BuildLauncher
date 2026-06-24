@@ -1,6 +1,7 @@
 using System.Collections.Immutable;
 using System.Diagnostics;
 using Addons.Addons;
+using Addons.Helpers;
 using Addons.Providers;
 using Avalonia.Controls.Notifications;
 using Avalonia.Desktop.Misc;
@@ -41,7 +42,7 @@ public sealed partial class MapsViewModel : RightPanelViewModel, IPortsButtonCon
     private async Task UpdateAsync(bool createNew)
     {
         IsInProgress = true;
-        await _installedAddonsProvider.CreateCache(createNew, AddonTypeEnum.Map).ConfigureAwait(true);
+        await _installedAddonsProvider.CreateCacheAsync(createNew, AddonTypeEnum.Map).ConfigureAwait(true);
         IsInProgress = false;
     }
 
@@ -55,7 +56,7 @@ public sealed partial class MapsViewModel : RightPanelViewModel, IPortsButtonCon
     {
         get
         {
-            var result = _installedAddonsProvider.GetInstalledAddonsByType(AddonTypeEnum.Map).Select(static x => x.Value).OrderBy(static x => x.Title);
+            var result = _installedAddonsProvider.GetInstalledAddonsByType(AddonTypeEnum.Map).OrderBy(static x => x.Title);
 
             if (string.IsNullOrWhiteSpace(SearchBoxText))
             {
@@ -136,7 +137,7 @@ public sealed partial class MapsViewModel : RightPanelViewModel, IPortsButtonCon
 
         _gamesProvider.GameChangedEvent += OnGameChanged;
         _installedAddonsProvider.AddonsChangedEvent += OnAddonChanged;
-        _downloadableAddonsProvider.AddonsChangedEvent += OnAddonChanged;
+        //_downloadableAddonsProvider.AddonsChangedEvent += OnAddonChanged;
     }
 
 
@@ -251,9 +252,14 @@ public sealed partial class MapsViewModel : RightPanelViewModel, IPortsButtonCon
             throw new InvalidOperationException(value?.GetType().Name);
         }
 
+        if (addon.FileInfo is null)
+        {
+            throw new InvalidOperationException();
+        }
+
         IsInProgress = true;
 
-        var result = await _metadataProvider.UpdateMetadataAsync(addon.PathToFile).ConfigureAwait(true);
+        var result = await _metadataProvider.UpdateMetadataAsync(addon.FileInfo).ConfigureAwait(true);
 
         IsInProgress = false;
 

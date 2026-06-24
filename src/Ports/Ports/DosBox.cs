@@ -1,6 +1,5 @@
 ﻿using System.Text;
 using Addons.Addons;
-using Core.All;
 using Core.All.Enums;
 using Core.All.Enums.Addons;
 using Core.All.Enums.Versions;
@@ -118,8 +117,7 @@ public sealed class DosBox : BasePort
     /// <inheritdoc/>
     public override void BeforeStart(BaseGame game, BaseAddon campaign)
     {
-        MoveSaveFilesToGameFolder(game, campaign);
-
+        MoveSaveFilesFromStorage(game, campaign);
         RestoreRoute66Files(game);
 
         try
@@ -158,7 +156,7 @@ public sealed class DosBox : BasePort
     /// <inheritdoc/>
     public override void AfterEnd(BaseGame game, BaseAddon campaign)
     {
-        MoveSaveFilesFromGameFolder(game, campaign);
+        MoveSaveFilesToStorage(game, campaign);
     }
 
     /// <inheritdoc/>
@@ -210,8 +208,13 @@ public sealed class DosBox : BasePort
         }
         else if (addon is LooseMap map)
         {
+            if (map.FileInfo is null)
+            {
+                throw new InvalidOperationException();
+            }
+
             _ = sb.Append($@" -c ""mount d \""{game.MapsFolderPath}""""");
-            _ = sb.Append($@" -c ""DUKE3D.EXE -map d:\\{map.FileName}""");
+            _ = sb.Append($@" -c ""DUKE3D.EXE -map d:\\{map.FileInfo.FileName}""");
         }
         else
         {
@@ -256,8 +259,11 @@ public sealed class DosBox : BasePort
             return;
         }
 
-        if (addon is BloodCampaign bCamp && bCamp.Type is AddonTypeEnum.TC)
+        if (addon is BloodCampaign bCamp &&
+            bCamp.Type is AddonTypeEnum.TC &&
+            addon.FileInfo is not null)
         {
+
             if (Directory.Exists(ClientProperties.TempFolderPath))
             {
                 Directory.Delete(ClientProperties.TempFolderPath, true);
@@ -267,23 +273,23 @@ public sealed class DosBox : BasePort
 
             foreach (var filePath in Directory.GetFiles(game.GameInstallFolder))
             {
-                string fileName = Path.GetFileName(filePath);
+                var fileName = Path.GetFileName(filePath);
 
                 if (fileName.EndsWith(".DEM", StringComparison.OrdinalIgnoreCase))
                 {
                     continue;
                 }
 
-                string destFile = Path.Combine(ClientProperties.TempFolderPath, fileName);
+                var destFile = Path.Combine(ClientProperties.TempFolderPath, fileName);
                 File.Copy(filePath, destFile, overwrite: true);
             }
 
-            if (addon.IsUnpacked)
+            if (addon.FileInfo.IsFolder)
             {
-                foreach (var filePath in Directory.GetFiles(Path.GetDirectoryName(addon.PathToFile)!))
+                foreach (var filePath in Directory.GetFiles(addon.FileInfo.PathToFolder))
                 {
-                    string fileName = Path.GetFileName(filePath);
-                    string destFile = Path.Combine(ClientProperties.TempFolderPath, fileName);
+                    var fileName = Path.GetFileName(filePath);
+                    var destFile = Path.Combine(ClientProperties.TempFolderPath, fileName);
                     File.Copy(filePath, destFile, overwrite: true);
                 }
             }
@@ -294,7 +300,7 @@ public sealed class DosBox : BasePort
                     Directory.CreateDirectory(ClientProperties.TempFolderPath);
                 }
 
-                using var archive = ArchiveFactory.OpenArchive(addon.PathToFile);
+                using var archive = ArchiveFactory.OpenArchive(addon.FileInfo.PathToFile);
                 archive.WriteToDirectory(ClientProperties.TempFolderPath);
             }
 
@@ -304,11 +310,11 @@ public sealed class DosBox : BasePort
             return;
         }
 
-        if (addon is LooseMap map)
+        if (addon is LooseMap map && map.FileInfo is not null)
         {
             _ = sb.Append(@$" -c ""mount c \""{game.GameInstallFolder}"""" -c ""c:""");
             _ = sb.Append(@$" -c ""mount d \""{game.MapsFolderPath}""""");
-            _ = sb.Append(@$" -c ""BLOOD.EXE -map d:\\{map.FileName}""");
+            _ = sb.Append(@$" -c ""BLOOD.EXE -map d:\\{map.FileInfo.FileName}""");
 
             return;
         }
@@ -318,7 +324,7 @@ public sealed class DosBox : BasePort
     }
 
     /// <inheritdoc/>
-    protected override void GetAutoloadModsArgs(StringBuilder sb, BaseGame _, BaseAddon addon, IReadOnlyDictionary<AddonId, BaseAddon> mods) { }
+    protected override void GetAutoloadModsArgs(StringBuilder sb, BaseGame _, BaseAddon addon, IReadOnlyList<BaseAddon> mods) { }
 
     /// <inheritdoc/>
     protected override void GetSkipIntroParameter(StringBuilder sb) { }

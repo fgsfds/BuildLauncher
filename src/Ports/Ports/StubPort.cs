@@ -1,6 +1,5 @@
 ﻿using System.Text;
 using Addons.Addons;
-using Core.All;
 using Core.All.Enums;
 using Games.Games;
 
@@ -58,7 +57,7 @@ public sealed class StubPort : BasePort
     {
     }
 
-    protected override void GetAutoloadModsArgs(StringBuilder sb, BaseGame game, BaseAddon addon, IReadOnlyDictionary<AddonId, BaseAddon> mods)
+    protected override void GetAutoloadModsArgs(StringBuilder sb, BaseGame game, BaseAddon addon, IReadOnlyList<BaseAddon> mods)
     {
     }
 

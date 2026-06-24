@@ -61,15 +61,10 @@ public sealed class RedNukem : EDuke32
     public override void BeforeStart(BaseGame game, BaseAddon campaign)
     {
         CreateBlankDemo();
-
         CreateOrDeleteBlankAnm(true);
-
-        MoveSaveFilesFromGameFolder(game, campaign);
-
+        MoveSaveFilesFromStorage(game, campaign);
         FixConfig();
-
         FixRoute66Files(game, campaign);
-
         FixWtFiles(game, campaign);
     }
 
@@ -202,8 +197,7 @@ public sealed class RedNukem : EDuke32
             _ = sb.Append($@" {AddDirectoryParam}""{game.GameInstallFolder}""");
         }
 
-
-        if (addon.FileName is null)
+        if (addon.FileInfo is null)
         {
             return;
         }
@@ -241,7 +235,7 @@ public sealed class RedNukem : EDuke32
             }
             else
             {
-                _ = sb.Append($@" {AddFileParam}""{rCamp.PathToFile}""");
+                _ = sb.Append($@" {AddFileParam}""{rCamp.FileInfo.PathToFile}""");
             }
         }
         else if (rCamp.Type is AddonTypeEnum.Map)

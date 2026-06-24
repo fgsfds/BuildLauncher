@@ -1,5 +1,6 @@
 ﻿using System.Collections.Immutable;
 using Addons.Helpers;
+using Addons.Providers;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Desktop.Helpers;
@@ -196,6 +197,7 @@ public sealed class App : Application
         _ = services.WithPorts();
         _ = services.WithTools();
         _ = services.WithAddons();
+        _ = services.WithChannels();
 
         _services?.Dispose();
         _services = services.BuildServiceProvider(new ServiceProviderOptions

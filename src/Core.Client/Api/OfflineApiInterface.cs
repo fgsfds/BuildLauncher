@@ -93,7 +93,12 @@ public sealed class OfflineApiInterface : IApiInterface
             DataJsonModelContext.Default.DictionaryStringString
             ).ConfigureAwait(false);
 
-        _ = data!.TryGetValue(DataJson.UploadFolder, out var uploadFolder) ? uploadFolder : null;
+        if (data is null)
+        {
+            return null;
+        }
+
+        _ = data.TryGetValue(DataJson.UploadFolder, out var uploadFolder) ? uploadFolder : null;
 
         return uploadFolder;
     }
