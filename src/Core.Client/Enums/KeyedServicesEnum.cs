@@ -2,5 +2,6 @@
 
 public enum KeyedServicesEnum
 {
-    Bitmaps
+    Bitmaps,
+    LocalFilesChannel
 }

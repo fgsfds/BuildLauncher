@@ -1,5 +1,4 @@
 ﻿using Addons.Providers;
-using Core.Client.Providers;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Addons.Helpers;
@@ -15,6 +14,7 @@ public static class DiHelper
         _ = container.AddSingleton<DownloadableAddonsProviderFactory>();
         _ = container.AddSingleton<OriginalCampaignsProvider>();
         _ = container.AddSingleton<MetadataProvider>();
+        _ = container.AddSingleton<LocalFilesProvider>();
 
         return container.AddTransient<IAddonDropHelper, AddonDropHelper>();
     }

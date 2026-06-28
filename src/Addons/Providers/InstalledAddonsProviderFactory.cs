@@ -1,8 +1,8 @@
-﻿using Core.All.Enums;
-using Core.Client.Cache;
+﻿using Core.All;
+using Core.All.Enums;
 using Core.Client.Enums;
+using Core.Client.Helpers;
 using Core.Client.Interfaces;
-using Core.Client.Providers;
 using Games.Games;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -13,23 +13,26 @@ public sealed class InstalledAddonsProviderFactory
 {
     private readonly Dictionary<GameEnum, InstalledAddonsProvider> _list = [];
     private readonly IConfigProvider _config;
-    private readonly ICacheAdder<Stream> _bitmapsCache;
     private readonly OriginalCampaignsProvider _originalCampaignsProvider;
     private readonly MetadataProvider _metadataProvider;
+    private readonly LocalFilesProvider _localFilesProvider;
+    private readonly IChannelSubscriber<DiHelper.LocalFileEvent> _channelPublisher;
     private readonly ILoggerFactory _loggerFactory;
 
     public InstalledAddonsProviderFactory(
         IConfigProvider config,
-        [FromKeyedServices(KeyedServicesEnum.Bitmaps)] ICacheAdder<Stream> bitmapsCache,
         OriginalCampaignsProvider originalCampaignsProvider,
         MetadataProvider metadataProvider,
+        LocalFilesProvider localFilesProvider,
+        [FromKeyedServices(KeyedServicesEnum.LocalFilesChannel)] IChannelSubscriber<DiHelper.LocalFileEvent> channelPublisher,
         ILoggerFactory loggerFactory
         )
     {
         _config = config;
-        _bitmapsCache = bitmapsCache;
         _originalCampaignsProvider = originalCampaignsProvider;
         _metadataProvider = metadataProvider;
+        _localFilesProvider = localFilesProvider;
+        _channelPublisher = channelPublisher;
         _loggerFactory = loggerFactory;
     }
 
@@ -48,10 +51,10 @@ public sealed class InstalledAddonsProviderFactory
         InstalledAddonsProvider newProvider = new(
             game,
             _config,
-            _bitmapsCache,
             _originalCampaignsProvider,
-            _metadataProvider
-,
+            _metadataProvider,
+            _localFilesProvider,
+            _channelPublisher,
             _loggerFactory.CreateLogger<InstalledAddonsProvider>());
 #pragma warning restore CS0618 // Type or member is obsolete
         _list.Add(game.GameEnum, newProvider);

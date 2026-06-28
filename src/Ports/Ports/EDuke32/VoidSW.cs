@@ -66,8 +66,7 @@ public sealed class VoidSW : EDuke32
     /// <inheritdoc/>
     public override void BeforeStart(BaseGame game, BaseAddon campaign)
     {
-        MoveSaveFilesFromGameFolder(game, campaign);
-
+        MoveSaveFilesFromStorage(game, campaign);
         FixConfig();
     }
 
@@ -138,16 +137,14 @@ public sealed class VoidSW : EDuke32
 
         AddWangMusicFolder(sb, game);
 
-
-        if (wCamp.FileName is null)
+        if (wCamp.FileInfo is null)
         {
             return;
         }
 
-
         if (wCamp.Type is AddonTypeEnum.TC)
         {
-            _ = sb.Append($@" {AddDirectoryParam}""{game.CampaignsFolderPath}"" {AddFileParam}""{wCamp.FileName}""");
+            _ = sb.Append($@" {AddDirectoryParam}""{game.CampaignsFolderPath}"" {AddFileParam}""{wCamp.FileInfo.FileName}""");
         }
         else if (wCamp.Type is AddonTypeEnum.Map)
         {
@@ -181,7 +178,6 @@ public sealed class VoidSW : EDuke32
         if (Directory.Exists(folder))
         {
             _ = sb.Append(@$" -j""{folder}""");
-            return;
         }
     }
 }

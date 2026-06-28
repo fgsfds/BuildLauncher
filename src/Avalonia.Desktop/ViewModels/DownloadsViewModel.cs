@@ -158,7 +158,7 @@ public sealed partial class DownloadsViewModel : ObservableObject
         _logger = logger;
 
         _installedAddonsProvider.AddonsChangedEvent += OnAddonChanged;
-        _downloadableAddonsProvider.AddonsChangedEvent += OnAddonChanged;
+        //_downloadableAddonsProvider.AddonsChangedEvent += OnAddonChanged;
         SelectedDownloads.CollectionChanged += OnSelectedDownloadsChanged;
     }
 

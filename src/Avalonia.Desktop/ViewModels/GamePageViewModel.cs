@@ -1,7 +1,7 @@
 ﻿using Addons.Providers;
-using Core.All.Enums;
-using Core.Client.Providers;
 using CommunityToolkit.Mvvm.ComponentModel;
+using Core.All.Enums;
+using Core.Client.Helpers;
 
 namespace Avalonia.Desktop.ViewModels;
 
@@ -50,7 +50,8 @@ public sealed partial class GamePageViewModel : ObservableObject
         Downloads = downloads;
 
         metadataProvider.MetadataUpdatedEvent += OnMetadataUpdated;
-        downloadablesProvider.AddonsChangedEvent += OnAddonsChanged;
+        metadataProvider.MetadataInitializedEvent += OnMetadataInitialized;
+        //downloadablesProvider.AddonsChangedEvent += OnAddonsChanged;
     }
 
     private void OnAddonsChanged(GameEnum gameEnum, AddonTypeEnum? addonType)
@@ -63,7 +64,14 @@ public sealed partial class GamePageViewModel : ObservableObject
         IsDownloadsAlarmShown = Downloads.HasUpdates;
     }
 
-    private void OnMetadataUpdated(object? sender, ValueTuple<GameEnum, AddonTypeEnum, string>? e)
+    private void OnMetadataUpdated(object? sender, ParsedAddonFile e)
+    {
+        IsCampaignsAlarmShown = Campaigns.CampaignsList.Any(x => x.IsMetadataUpdateAvailable);
+        IsMapsAlarmShown = Maps?.MapsList.Any(x => x.IsMetadataUpdateAvailable) ?? false;
+        IsModsAlarmShown = Mods?.ModsList.Any(x => x.IsMetadataUpdateAvailable) ?? false;
+    }
+
+    private void OnMetadataInitialized(object? sender, EventArgs e)
     {
         IsCampaignsAlarmShown = Campaigns.CampaignsList.Any(x => x.IsMetadataUpdateAvailable);
         IsMapsAlarmShown = Maps?.MapsList.Any(x => x.IsMetadataUpdateAvailable) ?? false;

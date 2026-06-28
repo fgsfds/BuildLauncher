@@ -20,15 +20,16 @@ public sealed class DownloadableAddonsProvider
     private readonly BaseGame _game;
     private readonly ArchiveTools _archiveTools;
     private readonly FilesDownloader _filesDownloader;
+    private readonly LocalFilesProvider _filesProvider;
     private readonly IApiInterface _apiInterface;
     private readonly InstalledAddonsProvider _installedAddonsProvider;
     private readonly ILogger<DownloadableAddonsProvider> _logger;
 
     private Dictionary<AddonTypeEnum, Dictionary<AddonId, DownloadableAddonJsonModel>>? _cache;
 
-    private static readonly SemaphoreSlim _semaphore = new(1);
+    private static readonly SemaphoreSlim _globalCacheSemaphore = new(1);
 
-    public event AddonChanged? AddonsChangedEvent;
+    //public event AddonChanged? AddonsChangedEvent;
 
     /// <summary>
     /// Download progress
@@ -41,6 +42,7 @@ public sealed class DownloadableAddonsProvider
         BaseGame game,
         ArchiveTools archiveTools,
         FilesDownloader filesDownloader,
+        LocalFilesProvider filesProvider,
         IApiInterface apiInterface,
         InstalledAddonsProviderFactory installedAddonsProviderFactory,
         ILogger<DownloadableAddonsProvider> logger
@@ -49,6 +51,7 @@ public sealed class DownloadableAddonsProvider
         _game = game;
         _archiveTools = archiveTools;
         _filesDownloader = filesDownloader;
+        _filesProvider = filesProvider;
         _apiInterface = apiInterface;
         _logger = logger;
 
@@ -64,7 +67,7 @@ public sealed class DownloadableAddonsProvider
     {
         try
         {
-            await _semaphore.WaitAsync().ConfigureAwait(false);
+            await _globalCacheSemaphore.WaitAsync().ConfigureAwait(false);
 
             if (_cache is not null && !createNew)
             {
@@ -104,8 +107,7 @@ public sealed class DownloadableAddonsProvider
         }
         finally
         {
-            _ = _semaphore.Release();
-            AddonsChangedEvent?.Invoke(_game.GameEnum, null);
+            _ = _globalCacheSemaphore.Release();
         }
     }
 
@@ -130,8 +132,8 @@ public sealed class DownloadableAddonsProvider
         foreach (var downloadableAddon in addonTypeCache)
         {
             var existingAddons = installedAddons
-                .Where(x => x.Key.Id.Equals(downloadableAddon.Key.Id, StringComparison.OrdinalIgnoreCase))
-                .Select(x => x.Key)
+                .Where(x => x.AddonId.Id.Equals(downloadableAddon.Key.Id, StringComparison.OrdinalIgnoreCase))
+                .Select(x => x.AddonId)
                 .ToList();
 
             downloadableAddon.Value.IsInstalled = true;
@@ -145,7 +147,7 @@ public sealed class DownloadableAddonsProvider
             //Death Wish hack
             if (addonType is AddonTypeEnum.TC &&
                 downloadableAddon.Key.Id.Contains("death-wish", StringComparison.OrdinalIgnoreCase) &&
-                downloadableAddon.Key.Version!.StartsWith('1'))
+                downloadableAddon.Key.Version?.StartsWith('1') is true)
             {
                 downloadableAddon.Value.IsInstalled = existingAddons.Contains(downloadableAddon.Key);
             }
@@ -155,7 +157,7 @@ public sealed class DownloadableAddonsProvider
                 {
                     downloadableAddon.Value.IsUpdateAvailable = true;
 
-                    if (VersionComparer.Compare(downloadableAddon.Value.Version, existingVersion, ComparisonOperatorEnum.LessThan))
+                    if (!VersionComparer.Compare(downloadableAddon.Value.Version, existingVersion, ComparisonOperatorEnum.GreaterThan))
                     {
                         downloadableAddon.Value.IsUpdateAvailable = false;
                         break;
@@ -226,7 +228,7 @@ public sealed class DownloadableAddonsProvider
                 return false;
             }
 
-            await _installedAddonsProvider.AddAddonAsync(pathToFile).ConfigureAwait(false);
+            _ = await _filesProvider.TryAddFileToCacheAsync(pathToFile, _game.GameEnum).ConfigureAwait(false);
 
             if (!ClientProperties.IsDeveloperMode)
             {
@@ -238,7 +240,7 @@ public sealed class DownloadableAddonsProvider
                 }
             }
 
-            AddonsChangedEvent?.Invoke(_game.GameEnum, addon.AddonType);
+            //AddonsChangedEvent?.Invoke(_game.GameEnum, addon.AddonType);
 
             return true;
         }

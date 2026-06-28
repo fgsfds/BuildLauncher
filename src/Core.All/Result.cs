@@ -42,7 +42,7 @@ public readonly struct Result<T>
     /// <summary>
     /// Operation result enum
     /// </summary>
-    private ResultEnum _resultEnum { get; }
+    private readonly ResultEnum _resultEnum;
 
     /// <summary>
     /// Operation result message

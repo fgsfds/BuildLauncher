@@ -21,4 +21,6 @@ public static class CommonConstants
     /// Link to manifests.json file
     /// </summary>
     public static Uri ManifestsJsonUrl => new("https://raw.githubusercontent.com/fgsfds/BuildLauncher/refs/heads/master/db/manifests.json");
+
+    public const string AddonManifestName = "addon.json";
 }

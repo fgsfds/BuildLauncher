@@ -132,7 +132,13 @@ public sealed class PortsProvider
 
         foreach (var port in dbContext.CustomPorts.OrderBy(static x => x.Name))
         {
-            _customPorts.Add(new() { Name = port.Name, Path = port.PathToExe, BasePort = _ports.Values.First(x => x.PortEnum == port.PortEnum) });
+            var basePort = _ports.Values.FirstOrDefault(x => x.PortEnum == port.PortEnum);
+            if (basePort is null)
+            {
+                continue;
+            }
+
+            _customPorts.Add(new() { Name = port.Name, Path = port.PathToExe, BasePort = basePort });
         }
     }
 }

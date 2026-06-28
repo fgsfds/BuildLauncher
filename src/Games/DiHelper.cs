@@ -11,6 +11,8 @@ public static class DiHelper
     public static IServiceCollection WithGames(this IServiceCollection container)
     {
         _ = container.AddSingleton<InstalledGamesProvider>();
-        return container.AddSingleton<GamesPathsProvider>();
+        _ = container.AddSingleton<GamesPathsProvider>();
+
+        return container;
     }
 }

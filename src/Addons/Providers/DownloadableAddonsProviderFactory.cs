@@ -12,6 +12,7 @@ public sealed class DownloadableAddonsProviderFactory
 
     private readonly ArchiveTools _archiveTools;
     private readonly FilesDownloader _filesDownloader;
+    private readonly LocalFilesProvider _filesProvider;
     private readonly IApiInterface _apiInterface;
     private readonly InstalledAddonsProviderFactory _installedAddonsProviderFactory;
     private readonly ILoggerFactory _loggerFactory;
@@ -19,6 +20,7 @@ public sealed class DownloadableAddonsProviderFactory
     public DownloadableAddonsProviderFactory(
         ArchiveTools archiveTools,
         FilesDownloader filesDownloader,
+        LocalFilesProvider filesProvider,
         IApiInterface apiInterface,
         InstalledAddonsProviderFactory installedAddonsProviderFactory,
         ILoggerFactory loggerFactory
@@ -26,6 +28,7 @@ public sealed class DownloadableAddonsProviderFactory
     {
         _archiveTools = archiveTools;
         _filesDownloader = filesDownloader;
+        _filesProvider = filesProvider;
         _apiInterface = apiInterface;
         _installedAddonsProviderFactory = installedAddonsProviderFactory;
         _loggerFactory = loggerFactory;
@@ -47,6 +50,7 @@ public sealed class DownloadableAddonsProviderFactory
             game,
             _archiveTools,
             _filesDownloader,
+            _filesProvider,
             _apiInterface,
             _installedAddonsProviderFactory,
             _loggerFactory.CreateLogger<DownloadableAddonsProvider>()

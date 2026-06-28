@@ -1,6 +1,7 @@
 using System.Collections.Immutable;
 using System.Diagnostics;
 using Addons.Addons;
+using Addons.Helpers;
 using Addons.Providers;
 using Avalonia.Controls.Notifications;
 using Avalonia.Desktop.Misc;
@@ -52,7 +53,7 @@ public sealed partial class ModsViewModel : RightPanelViewModel, IPortsButtonCon
 
         _gamesProvider.GameChangedEvent += OnGameChanged;
         _installedAddonsProvider.AddonsChangedEvent += OnAddonChanged;
-        _downloadableAddonsProvider.AddonsChangedEvent += OnAddonChanged;
+        //_downloadableAddonsProvider.AddonsChangedEvent += OnAddonChanged;
     }
 
 
@@ -67,7 +68,7 @@ public sealed partial class ModsViewModel : RightPanelViewModel, IPortsButtonCon
     private async Task UpdateAsync(bool createNew)
     {
         IsInProgress = true;
-        await _installedAddonsProvider.CreateCache(createNew, AddonTypeEnum.Mod).ConfigureAwait(true);
+        await _installedAddonsProvider.CreateCacheAsync(createNew, AddonTypeEnum.Mod).ConfigureAwait(true);
         IsInProgress = false;
     }
 
@@ -77,7 +78,7 @@ public sealed partial class ModsViewModel : RightPanelViewModel, IPortsButtonCon
     /// <summary>
     /// List of installed autoload mods
     /// </summary>
-    public ImmutableList<AutoloadMod> ModsList => [.. _installedAddonsProvider.GetInstalledAddonsByType(AddonTypeEnum.Mod).Select(x => (AutoloadMod)x.Value).OrderBy(static x => x.Title)];
+    public ImmutableList<AutoloadMod> ModsList => [.. _installedAddonsProvider.GetInstalledAddonsByType(AddonTypeEnum.Mod).OfType<AutoloadMod>().OrderBy(static x => x.Title)];
 
     private BaseAddon? _selectedAddon;
     /// <summary>
@@ -126,7 +127,7 @@ public sealed partial class ModsViewModel : RightPanelViewModel, IPortsButtonCon
 
 
     /// <summary>
-    /// Refresh campaigns list
+    /// Refresh mods list
     /// </summary>
     [RelayCommand]
     private Task RefreshListAsync() => UpdateAsync(true);
@@ -196,9 +197,14 @@ public sealed partial class ModsViewModel : RightPanelViewModel, IPortsButtonCon
             throw new InvalidOperationException(value?.GetType().Name);
         }
 
+        if (addon.FileInfo is null)
+        {
+            throw new InvalidOperationException();
+        }
+
         IsInProgress = true;
 
-        var result = await _metadataProvider.UpdateMetadataAsync(addon.PathToFile).ConfigureAwait(true);
+        var result = await _metadataProvider.UpdateMetadataAsync(addon.FileInfo).ConfigureAwait(true);
 
         IsInProgress = false;
 

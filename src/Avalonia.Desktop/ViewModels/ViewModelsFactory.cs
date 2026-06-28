@@ -1,4 +1,5 @@
-﻿using Addons.Providers;
+﻿using Addons.Helpers;
+using Addons.Providers;
 using Avalonia.Desktop.Misc;
 using Avalonia.Threading;
 using Core.All.Enums;

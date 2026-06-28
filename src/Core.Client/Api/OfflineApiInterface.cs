@@ -24,10 +24,10 @@ public sealed class OfflineApiInterface : IApiInterface
 
     public async Task<List<DownloadableAddonJsonModel>?> GetAddonsAsync(GameEnum gameEnum)
     {
-        await _semaphore.WaitAsync().ConfigureAwait(false);
-
         try
         {
+            await _semaphore.WaitAsync().ConfigureAwait(false);
+            
             if (_addonsJson is null)
             {
                 if (ClientProperties.PathToLocalAddonsJson is null)
@@ -93,7 +93,12 @@ public sealed class OfflineApiInterface : IApiInterface
             DataJsonModelContext.Default.DictionaryStringString
             ).ConfigureAwait(false);
 
-        _ = data!.TryGetValue(DataJson.UploadFolder, out var uploadFolder) ? uploadFolder : null;
+        if (data is null)
+        {
+            return null;
+        }
+
+        _ = data.TryGetValue(DataJson.UploadFolder, out var uploadFolder) ? uploadFolder : null;
 
         return uploadFolder;
     }

@@ -1,13 +1,14 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using Addons.Addons;
+using Addons.Providers;
 using Avalonia.Desktop.Misc;
 using Avalonia.Media.Imaging;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using Core.All.Helpers;
 using Core.Client.Interfaces;
 using Core.Client.Providers;
-using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
 
 namespace Avalonia.Desktop.ViewModels;
 
@@ -55,7 +56,7 @@ public abstract partial class RightPanelViewModel : ObservableObject
     /// </summary>
     public bool IsPreviewVisible => SelectedAddonPreview is not null;
 
-    public bool IsMetadataUpdateAvailable => SelectedAddon?.PathToFile is null ? false : _metadatUpdater.IsMetadataUpdateAvailable(SelectedAddon.PathToFile);
+    public bool IsMetadataUpdateAvailable => SelectedAddon?.FileInfo is not null && _metadatUpdater.IsMetadataUpdateAvailable(SelectedAddon.AddonId, SelectedAddon.FileInfo);
 
     public string? SelectedAddonRating
     {
