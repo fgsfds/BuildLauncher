@@ -19,12 +19,7 @@ public sealed class TekWarGame : BaseGame
         get
         {
             List<string> result = ["SONGS", "SOUNDS"];
-
-            for (var i = 0; i < 16; i++)
-            {
-                result.Add($"TILES{i:000}.ART");
-            }
-
+            result.AddRange(GenerateNumberedFiles("TILES", "ART", 0, 16));
             return result;
         }
     }

@@ -19,17 +19,8 @@ public sealed class WitchavenGame : BaseGame
         get
         {
             List<string> result = ["JOESND", "SONGS"];
-
-            for (var i = 0; i < 11; i++)
-            {
-                result.Add($"TILES{i:000}.ART");
-            }
-
-            for (var i = 1; i < 26; i++)
-            {
-                result.Add($"LEVEL{i}.MAP");
-            }
-
+            result.AddRange(GenerateNumberedFiles("TILES", "ART", 0, 11));
+            result.AddRange(GenerateNumberedFiles("LEVEL", "MAP", 1, 26));
             return result;
         }
     }
@@ -42,17 +33,8 @@ public sealed class WitchavenGame : BaseGame
         get
         {
             List<string> result = ["JOESND", "W_SONGS"];
-
-            for (var i = 0; i < 16; i++)
-            {
-                result.Add($"TILES{i:000}.ART");
-            }
-
-            for (var i = 1; i < 16; i++)
-            {
-                result.Add($"LEVEL{i}.MAP");
-            }
-
+            result.AddRange(GenerateNumberedFiles("TILES", "ART", 0, 16));
+            result.AddRange(GenerateNumberedFiles("LEVEL", "MAP", 1, 16));
             return result;
         }
     }

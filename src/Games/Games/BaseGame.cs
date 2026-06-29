@@ -111,4 +111,21 @@ public abstract class BaseGame
 
         return true;
     }
+
+    /// <summary>
+    /// Generates a list of zero-padded numbered filenames.
+    /// </summary>
+    /// <param name="baseName">Base name prefix (e.g. "TILES").</param>
+    /// <param name="extension">File extension without dot (e.g. "ART").</param>
+    /// <param name="start">Inclusive start index.</param>
+    /// <param name="endExclusive">Exclusive end index.</param>
+    protected static List<string> GenerateNumberedFiles(string baseName, string extension, int start, int endExclusive)
+    {
+        List<string> result = new(endExclusive - start);
+        for (var i = start; i < endExclusive; i++)
+        {
+            result.Add($"{baseName}{i:000}.{extension}");
+        }
+        return result;
+    }
 }
