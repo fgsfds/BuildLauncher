@@ -2,33 +2,37 @@
 
 namespace Games.Games;
 
+/// <summary>
+///     Represents the game TekWar and its associated metadata.
+/// </summary>
 public sealed class TekWarGame : BaseGame
 {
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override GameEnum GameEnum => GameEnum.TekWar;
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override string FullName => "TekWar";
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override string ShortName => FullName;
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override List<string> RequiredFiles
     {
         get
         {
-            List<string> result = ["SONGS", "SOUNDS"];
+            List<string> result =
+            [
+                "SONGS",
+                "SOUNDS"
+            ];
 
-            for (var i = 0; i < 16; i++)
-            {
-                result.Add($"TILES{i:000}.ART");
-            }
+            result.AddRange(GenerateNumberedFiles("TILES", "ART", 0, 16, 3));
 
             return result;
         }
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override Enum? Skills => null;
 }

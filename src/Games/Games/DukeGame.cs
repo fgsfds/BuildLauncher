@@ -1,12 +1,14 @@
 ﻿using Core.All.Enums;
 using Core.All.Enums.Addons;
-using Core.All.Helpers;
+using Games.Helpers;
 using Games.Skills;
 
 namespace Games.Games;
 
 public sealed class DukeGame : BaseGame
 {
+    private readonly DukeAddonDetector _addonDetector = new();
+
     /// <inheritdoc/>
     public override GameEnum GameEnum => GameEnum.Duke3D;
 
@@ -37,17 +39,17 @@ public sealed class DukeGame : BaseGame
     /// <summary>
     /// Is Duke it Out in DC installed
     /// </summary>
-    public bool IsDukeDCInstalled => GetDukeAddon(DukeAddonEnum.DukeDC);
+    public bool IsDukeDCInstalled => _addonDetector.TryFindAddon(DukeAddonEnum.DukeDC, GameInstallFolder);
 
     /// <summary>
     /// Is Nuclear Winter installed
     /// </summary>
-    public bool IsNuclearWinterInstalled => GetDukeAddon(DukeAddonEnum.DukeNW);
+    public bool IsNuclearWinterInstalled => _addonDetector.TryFindAddon(DukeAddonEnum.DukeNW, GameInstallFolder);
 
     /// <summary>
     /// Is Caribbean installed
     /// </summary>
-    public bool IsCaribbeanInstalled => GetDukeAddon(DukeAddonEnum.DukeVaca);
+    public bool IsCaribbeanInstalled => _addonDetector.TryFindAddon(DukeAddonEnum.DukeVaca, GameInstallFolder);
 
     /// <summary>
     /// Is World Tour installed
@@ -67,73 +69,19 @@ public sealed class DukeGame : BaseGame
     /// <summary>
     /// List of paths to Duke's addons folders
     /// </summary>
-    public Dictionary<DukeAddonEnum, string> AddonsPaths { get; set; } = [];
+    public Dictionary<DukeAddonEnum, string> AddonsPaths
+    {
+        get => _addonDetector.AddonsPaths;
+        init
+        {
+            _addonDetector.AddonsPaths.Clear();
+            foreach (var kvp in value)
+            {
+                _addonDetector.AddonsPaths[kvp.Key] = kvp.Value;
+            }
+        }
+    }
 
     /// <inheritdoc/>
     public override Enum Skills => new Duke3DSkillsEnum();
-
-
-    /// <summary>
-    /// Find Duke's addon files
-    /// </summary>
-    /// <param name="addon">Duke addon</param>
-    private bool GetDukeAddon(DukeAddonEnum addon)
-    {
-        if (GameInstallFolder is null)
-        {
-            return false;
-        }
-
-        var file = addon switch
-        {
-            DukeAddonEnum.DukeDC => "DUKEDC.GRP",
-            DukeAddonEnum.DukeNW => "NWINTER.GRP",
-            DukeAddonEnum.DukeVaca => "VACATION.GRP",
-            DukeAddonEnum.Base => throw new ArgumentOutOfRangeException(),
-            _ => throw new ArgumentOutOfRangeException(),
-        };
-
-        //root
-        var path = Path.Combine(GameInstallFolder, file);
-        if (File.Exists(path))
-        {
-            AddonsPaths!.AddOrReplace(addon, Path.GetDirectoryName(path));
-            return true;
-        }
-
-        //zoom
-        path = Path.Combine(GameInstallFolder, "AddOns", file);
-        if (File.Exists(path))
-        {
-            AddonsPaths!.AddOrReplace(addon, Path.GetDirectoryName(path));
-            return true;
-        }
-
-        //megaton
-        path = Path.Combine(GameInstallFolder, "addons", "dc", file);
-        if (File.Exists(path))
-        {
-            AddonsPaths!.AddOrReplace(addon, Path.GetDirectoryName(path));
-            return true;
-        }
-
-        //megaton
-        path = Path.Combine(GameInstallFolder, "addons", "nw", file);
-        if (File.Exists(path))
-        {
-            AddonsPaths!.AddOrReplace(addon, Path.GetDirectoryName(path));
-            return true;
-        }
-
-        //megaton
-        path = Path.Combine(GameInstallFolder, "addons", "vacation", file);
-        if (File.Exists(path))
-        {
-            AddonsPaths!.AddOrReplace(addon, Path.GetDirectoryName(path));
-            return true;
-        }
-
-        _ = AddonsPaths.Remove(addon);
-        return false;
-    }
 }
