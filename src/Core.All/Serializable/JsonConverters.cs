@@ -54,13 +54,19 @@ public sealed class IStartMapConverter : JsonConverter<IStartMap?>
             {
                 return JsonSerializer.Deserialize(ref reader, MapFileJsonContext.Default.MapFileJsonModel);
             }
-            catch { }
+            catch
+            {
+                // Fall through — try MapSlot format next
+            }
 
             try
             {
                 return JsonSerializer.Deserialize(ref reader, MapSlotJsonContext.Default.MapSlotJsonModel);
             }
-            catch { }
+            catch
+            {
+                // Both formats failed; will throw NotSupportedException below
+            }
         }
 
         throw new NotSupportedException();
@@ -101,7 +107,10 @@ public sealed class ExecutablesConverter : JsonConverter<Dictionary<OSEnum, Dict
             {
                 return JsonSerializer.Deserialize(ref reader, AddonManifestJsonContext.Default.DictionaryOSEnumDictionaryPortEnumString);
             }
-            catch { }
+            catch
+            {
+                // Fall through — try legacy format next
+            }
 
             try
             {
@@ -168,7 +177,10 @@ public sealed class ExecutablesConverter : JsonConverter<Dictionary<OSEnum, Dict
 
                 return null;
             }
-            catch { }
+            catch
+            {
+                // Both formats failed; will throw NotSupportedException below
+            }
         }
 
         throw new NotSupportedException();

@@ -347,7 +347,7 @@ public sealed class InstalledAddonsProvider : IDisposable
     {
         if (parsedAddonFile.Manifest is null)
         {
-            throw new InvalidOperationException();
+            throw new InvalidOperationException("Cannot delete addon without a manifest");
         }
 
         var cache = GetCacheByAddonType(parsedAddonFile.Manifest.AddonType);

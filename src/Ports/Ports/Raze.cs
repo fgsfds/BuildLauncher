@@ -141,15 +141,17 @@ public sealed class Raze : BasePort
                 snd_extendedlookup=true
                 """;
 
-            if (!Directory.Exists(Path.GetDirectoryName(config)))
+            var configDir = Path.GetDirectoryName(config);
+            if (configDir is not null && !Directory.Exists(configDir))
             {
-                _ = Directory.CreateDirectory(Path.GetDirectoryName(config)!);
+                _ = Directory.CreateDirectory(configDir);
             }
 
             File.WriteAllText(config, DefaultConfig);
         }
 
-        AddGamePathsToConfig(game, campaign, game.GameInstallFolder!, config);
+        ArgumentNullException.ThrowIfNull(game.GameInstallFolder);
+        AddGamePathsToConfig(game, campaign, game.GameInstallFolder, config);
 
         RestoreRoute66Files(game);
 
@@ -237,7 +239,8 @@ public sealed class Raze : BasePort
         {
             var config = Path.Combine(InstallFolderPath, ConfigFile);
 
-            AddGamePathsToConfig(game, addon, game.DukeWTInstallPath!, config);
+            ArgumentNullException.ThrowIfNull(game.DukeWTInstallPath);
+            AddGamePathsToConfig(game, addon, game.DukeWTInstallPath, config);
 
             _ = sb.Append($" -addon {(byte)DukeAddonEnum.Base}");
         }
@@ -365,7 +368,8 @@ public sealed class Raze : BasePort
         if (rCamp.SupportedGame.GameEnum is GameEnum.RidesAgain)
         {
             var pathToConfig = Path.Combine(InstallFolderPath, ConfigFile);
-            AddGamePathsToConfig(game, addon, game.AgainInstallPath!, pathToConfig);
+            ArgumentNullException.ThrowIfNull(game.AgainInstallPath);
+            AddGamePathsToConfig(game, addon, game.AgainInstallPath, pathToConfig);
         }
 
         if (rCamp.FileInfo is null)

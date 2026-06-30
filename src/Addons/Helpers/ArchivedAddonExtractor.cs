@@ -38,26 +38,22 @@ internal sealed class ArchivedAddonExtractor
             return false;
         }
 
-        string? unpackedTo;
+        string? unpackedTo = null;
 
         try
         {
             using var archive = ArchiveFactory.OpenArchive(parsedAddonFile.FileInfo.PathToFile);
 
-            string? unpackedTo1 = null;
-
-            if (archive.Entries.Any(static x => x.Key!.Equals("addons.grpinfo", StringComparison.OrdinalIgnoreCase)))
+            if (archive.Entries.Any(static x => x.Key?.Equals("addons.grpinfo", StringComparison.OrdinalIgnoreCase) == true))
             {
-                unpackedTo1 = Unpack(parsedAddonFile.FileInfo.PathToFile, archive);
+                unpackedTo = Unpack(parsedAddonFile.FileInfo.PathToFile, archive);
                 archive.Dispose();
                 File.Delete(parsedAddonFile.FileInfo.PathToFile);
-
-                unpackedTo = unpackedTo1;
             }
             else
             {
                 var addonJsonsInsideArchive = archive.Entries
-                    .Where(static x => x.Key!.StartsWith("addon") && x.Key!.EndsWith(".json"))
+                    .Where(static x => x.Key?.StartsWith("addon") == true && x.Key.EndsWith(".json"))
                     .ToList();
 
                 if (addonJsonsInsideArchive.Count == 0)
@@ -81,50 +77,12 @@ internal sealed class ArchivedAddonExtractor
                     {
                         if (addonDto.MainRff is not null || addonDto.SoundRff is not null)
                         {
-                            unpackedTo1 = Unpack(parsedAddonFile.FileInfo.PathToFile, archive);
+                            unpackedTo = Unpack(parsedAddonFile.FileInfo.PathToFile, archive);
                         }
                         else if (addonDto.Executables is not null)
                         {
-                            unpackedTo1 = Unpack(parsedAddonFile.FileInfo.PathToFile, archive);
+                            unpackedTo = Unpack(parsedAddonFile.FileInfo.PathToFile, archive);
                         }
-
-                        List<AddonManifestJsonModel> result = [];
-
-                        if (unpackedTo1 is not null)
-                        {
-                            archive.Dispose();
-                            File.Delete(parsedAddonFile.FileInfo.PathToFile);
-
-                            var unpackedAddonJsons = Directory.GetFiles(unpackedTo1, "addon*.json");
-
-                            foreach (var addonJson in unpackedAddonJsons)
-                            {
-                                using var text = File.OpenRead(addonJson);
-
-                                var addonDto2 = JsonSerializer.Deserialize(
-                                    text,
-                                    AddonManifestJsonContext.Default.AddonManifestJsonModel
-                                    )!;
-
-                                result.Add(addonDto2);
-                            }
-                        }
-                        else
-                        {
-                            foreach (var addonJson in addonJsonsInsideArchive)
-                            {
-                                using var addonJsonStream2 = addonJson.OpenEntryStream();
-
-                                var addonDto2 = JsonSerializer.Deserialize(
-                                    addonJsonStream2,
-                                    AddonManifestJsonContext.Default.AddonManifestJsonModel
-                                    )!;
-
-                                result.Add(addonDto2);
-                            }
-                        }
-
-                        unpackedTo = unpackedTo1;
                     }
                 }
             }
@@ -146,7 +104,7 @@ internal sealed class ArchivedAddonExtractor
 
     private static string Unpack(string pathToFile, IArchive archive)
     {
-        var fileFolder = Path.GetDirectoryName(pathToFile)!;
+        var fileFolder = Path.GetDirectoryName(pathToFile) ?? throw new InvalidOperationException($"Could not determine directory for {pathToFile}");
         var unpackTo = Path.Combine(fileFolder, Path.GetFileNameWithoutExtension(pathToFile));
 
         if (Directory.Exists(unpackTo))

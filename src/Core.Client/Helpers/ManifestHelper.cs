@@ -10,7 +10,7 @@ public static class ManifestHelper
     public static async Task<Result<AddonManifestJsonModel?>> GetMainManifestAsync(string pathToFile)
     {
         using var archive = ZipArchive.OpenArchive(pathToFile);
-        var addonJson = archive.Entries.FirstOrDefault(static x => x.Key!.Equals("addon.json", StringComparison.OrdinalIgnoreCase));
+        var addonJson = archive.Entries.FirstOrDefault(static x => x.Key?.Equals("addon.json", StringComparison.OrdinalIgnoreCase) == true);
 
         if (addonJson is null)
         {

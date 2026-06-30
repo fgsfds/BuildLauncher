@@ -32,11 +32,11 @@ public sealed class ToolInstaller : InstallerBase<BaseTool>
     {
         if (_instance.ToolEnum is ToolEnum.Mapster32)
         {
-            throw new Exception($"{nameof(ToolEnum.Mapster32)} can't be installed separately.");
+            throw new InvalidOperationException($"{nameof(ToolEnum.Mapster32)} can't be installed separately.");
         }
         else if (_instance.ToolEnum is ToolEnum.XMapEdit)
         {
-            var pathToBlood = _gamesProvider.GetGame(GameEnum.Blood).GameInstallFolder ?? throw new Exception("Can't find Blood install path.");
+            var pathToBlood = _gamesProvider.GetGame(GameEnum.Blood).GameInstallFolder ?? throw new InvalidOperationException("Can't find Blood install path.");
 
             _ = Directory.CreateDirectory(_instance.InstallFolderPath);
 
@@ -63,7 +63,7 @@ public sealed class ToolInstaller : InstallerBase<BaseTool>
     {
         if (_instance.ToolEnum is ToolEnum.DOSBlood)
         {
-            var pathToBlood = _gamesProvider.GetGame(GameEnum.Blood).GameInstallFolder ?? throw new Exception("Can't find Blood install path.");
+            var pathToBlood = _gamesProvider.GetGame(GameEnum.Blood).GameInstallFolder ?? throw new InvalidOperationException("Can't find Blood install path.");
             var bloodExe = Path.Combine(pathToBlood, "BLOOD.EXE");
             var bloodExeBak = bloodExe + ".BAK";
 
@@ -79,14 +79,14 @@ public sealed class ToolInstaller : InstallerBase<BaseTool>
     {
         if (_instance.ToolEnum is ToolEnum.Mapster32)
         {
-            throw new Exception($"{nameof(ToolEnum.Mapster32)} can't be uninstalled separately.");
+            throw new InvalidOperationException($"{nameof(ToolEnum.Mapster32)} can't be uninstalled separately.");
         }
         else if (_instance.ToolEnum is ToolEnum.DOSBlood)
         {
             var game = _gamesProvider.GetGame(GameEnum.Blood);
             if (game.GameInstallFolder is null)
             {
-                throw new Exception("Can't find Blood install path.");
+                throw new InvalidOperationException("Can't find Blood install path.");
             }
 
             var bloodExe = Path.Combine(game.GameInstallFolder, "BLOOD.EXE");

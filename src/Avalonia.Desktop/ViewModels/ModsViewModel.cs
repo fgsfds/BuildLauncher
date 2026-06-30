@@ -199,7 +199,7 @@ public sealed partial class ModsViewModel : RightPanelViewModel, IPortsButtonCon
 
         if (addon.FileInfo is null)
         {
-            throw new InvalidOperationException();
+            throw new InvalidOperationException("Mod file info is required for metadata update");
         }
 
         IsInProgress = true;

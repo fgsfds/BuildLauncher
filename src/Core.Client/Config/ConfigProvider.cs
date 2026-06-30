@@ -457,7 +457,7 @@ public sealed class ConfigProvider : IConfigProvider
     {
         if (!OperatingSystem.IsWindows())
         {
-            throw new InvalidOperationException();
+            throw new InvalidOperationException("Data protection is only supported on Windows");
         }
 
         var data = Encoding.UTF8.GetBytes(plainText);
@@ -469,7 +469,7 @@ public sealed class ConfigProvider : IConfigProvider
     {
         if (!OperatingSystem.IsWindows())
         {
-            throw new InvalidOperationException();
+            throw new InvalidOperationException("Data protection is only supported on Windows");
         }
 
         try

@@ -48,7 +48,13 @@ public sealed class DukeAddonDetector
         {
             if (File.Exists(path))
             {
-                AddonsPaths!.AddOrReplace(addon, Path.GetDirectoryName(path)!);
+                var dirName = Path.GetDirectoryName(path);
+                if (dirName is null)
+                {
+                    return false;
+                }
+
+                AddonsPaths.AddOrReplace(addon, dirName);
                 return true;
             }
         }

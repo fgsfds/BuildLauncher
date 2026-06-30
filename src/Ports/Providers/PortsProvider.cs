@@ -50,7 +50,7 @@ public sealed class PortsProvider
     /// </summary>
     /// <param name="portEnum">Port enum</param>
     public BasePort GetPort(PortEnum portEnum) =>
-        _ports.TryGetValue(portEnum, out var port) ? port : throw new ArgumentException();
+        _ports.TryGetValue(portEnum, out var port) ? port : throw new ArgumentException($"Port {portEnum} is not registered", nameof(portEnum));
 
     /// <summary>
     /// Get list of custom ports

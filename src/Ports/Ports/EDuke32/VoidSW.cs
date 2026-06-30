@@ -162,19 +162,24 @@ public sealed class VoidSW : EDuke32
     /// </summary>
     private static void AddWangMusicFolder(StringBuilder sb, WangGame game)
     {
-        if (File.Exists(Path.Combine(game.GameInstallFolder!, "track02.ogg")))
+        if (game.GameInstallFolder is null)
         {
             return;
         }
 
-        var folder = Path.Combine(game.GameInstallFolder!, "MUSIC");
+        if (File.Exists(Path.Combine(game.GameInstallFolder, "track02.ogg")))
+        {
+            return;
+        }
+
+        var folder = Path.Combine(game.GameInstallFolder, "MUSIC");
         if (Directory.Exists(folder))
         {
             _ = sb.Append(@$" -j""{folder}""");
             return;
         }
 
-        folder = Path.Combine(game.GameInstallFolder!, "classic", "MUSIC");
+        folder = Path.Combine(game.GameInstallFolder, "classic", "MUSIC");
         if (Directory.Exists(folder))
         {
             _ = sb.Append(@$" -j""{folder}""");

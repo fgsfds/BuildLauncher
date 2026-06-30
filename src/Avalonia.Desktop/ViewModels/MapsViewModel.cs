@@ -254,7 +254,7 @@ public sealed partial class MapsViewModel : RightPanelViewModel, IPortsButtonCon
 
         if (addon.FileInfo is null)
         {
-            throw new InvalidOperationException();
+            throw new InvalidOperationException("Map file info is required for metadata update");
         }
 
         IsInProgress = true;

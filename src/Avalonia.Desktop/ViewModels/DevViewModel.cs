@@ -623,7 +623,8 @@ public sealed partial class DevViewModel : ObservableObject
 
             var addon = GetAddonJson(out var jsonString);
 
-            File.WriteAllText(Path.Combine(PathToAddonFolder!, "addon.json"), jsonString);
+            ArgumentNullException.ThrowIfNull(PathToAddonFolder);
+            File.WriteAllText(Path.Combine(PathToAddonFolder, "addon.json"), jsonString);
 
             RenameAddonFolder(addon);
 
@@ -641,7 +642,7 @@ public sealed partial class DevViewModel : ObservableObject
     {
         if (ClientProperties.PathToLocalManifestsJson is null)
         {
-            throw new NullReferenceException(nameof(ClientProperties.PathToLocalManifestsJson));
+            throw new InvalidOperationException($"{nameof(ClientProperties.PathToLocalManifestsJson)} is null");
         }
 
         var folders = await AvaloniaProperties.TopLevel.StorageProvider.OpenFolderPickerAsync(
@@ -668,7 +669,7 @@ public sealed partial class DevViewModel : ObservableObject
         foreach (var file in files)
         {
             using var archive = ArchiveFactory.OpenArchive(file);
-            var jsons = archive.Entries.Where(x => x.Key!.StartsWith("addon", StringComparison.OrdinalIgnoreCase) && x.Key.EndsWith(".json", StringComparison.OrdinalIgnoreCase));
+            var jsons = archive.Entries.Where(x => x.Key?.StartsWith("addon", StringComparison.OrdinalIgnoreCase) == true && x.Key.EndsWith(".json", StringComparison.OrdinalIgnoreCase));
 
             foreach (var json in jsons)
             {
@@ -1076,7 +1077,8 @@ public sealed partial class DevViewModel : ObservableObject
         ArgumentNullException.ThrowIfNull(PathToAddonFolder);
 
         var fullName = GetAddonFullName(addon);
-        var newFolderPath = Path.Combine(Path.GetDirectoryName(PathToAddonFolder)!, fullName);
+        var parentDir = Path.GetDirectoryName(PathToAddonFolder) ?? throw new InvalidOperationException("Could not determine parent directory for addon folder");
+        var newFolderPath = Path.Combine(parentDir, fullName);
 
         if (!PathToAddonFolder.Equals(newFolderPath))
         {
@@ -1139,7 +1141,8 @@ public sealed partial class DevViewModel : ObservableObject
 
             var addon = GetAddonJson(out var jsonString);
 
-            File.WriteAllText(Path.Combine(PathToAddonFolder!, "addon.json"), jsonString);
+            ArgumentNullException.ThrowIfNull(PathToAddonFolder);
+            File.WriteAllText(Path.Combine(PathToAddonFolder, "addon.json"), jsonString);
 
             string archiveSaveFolder;
             var game = _gamesProvider.GetGame(addon.SupportedGame.Game);

@@ -5,6 +5,7 @@ using Core.All.Enums;
 using Core.All.Enums.Addons;
 using Core.All.Enums.Versions;
 using Games.Games;
+using Microsoft.Extensions.Logging;
 
 namespace Ports.Ports.EDuke32;
 
@@ -13,6 +14,15 @@ namespace Ports.Ports.EDuke32;
 /// </summary>
 public sealed class RedNukem : EDuke32
 {
+    private readonly ILogger<RedNukem> _logger = null!;
+
+    public RedNukem() { }
+
+    public RedNukem(ILogger<RedNukem> logger)
+    {
+        _logger = logger;
+    }
+
     /// <inheritdoc/>
     public override PortEnum PortEnum => PortEnum.RedNukem;
 
@@ -153,9 +163,12 @@ public sealed class RedNukem : EDuke32
                     {
                         File.Delete(file);
                     }
-                    catch
+                    catch (Exception ex)
                     {
-                        //do nothing
+                        if (_logger is not null)
+                        {
+                            _logger.LogWarning(ex, "Failed to delete {File}", file);
+                        }
                     }
                 }
             }
@@ -167,9 +180,12 @@ public sealed class RedNukem : EDuke32
                     {
                         using var _ = File.CreateText(file);
                     }
-                    catch
+                    catch (Exception ex)
                     {
-                        //do nothing
+                        if (_logger is not null)
+                        {
+                            _logger.LogWarning(ex, "Failed to create blank file {File}", file);
+                        }
                     }
                 }
             }
@@ -306,9 +322,12 @@ public sealed class RedNukem : EDuke32
             {
                 using var _ = File.CreateText(blankDemo);
             }
-            catch
+            catch (Exception ex)
             {
-                //do nothing
+                if (_logger is not null)
+                {
+                    _logger.LogWarning(ex, "Failed to create blank demo file {File}", blankDemo);
+                }
             }
         }
     }

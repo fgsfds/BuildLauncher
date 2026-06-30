@@ -1,10 +1,10 @@
 using Addons.Addons;
-using Addons.Providers;
 using Avalonia.Controls;
 using Avalonia.Desktop.Helpers;
 using Avalonia.Desktop.Misc;
 using Avalonia.Desktop.ViewModels;
 using Avalonia.Interactivity;
+using Avalonia.Layout;
 using CommunityToolkit.Mvvm.Input;
 using Core.All.Enums;
 using Core.All.Helpers;
@@ -73,7 +73,7 @@ public sealed partial class MapsControl : UserControl
         {
             var portIcon = _bitmapsCache.GetFromCache(port.PortEnum.GetUniqueHash());
 
-            StackPanel sp = new() { Orientation = Layout.Orientation.Horizontal };
+            StackPanel sp = new() { Orientation = Orientation.Horizontal };
             sp.Children.Add(new Image() { Margin = new(0, 0, 5, 0), Height = 16, Source = portIcon });
             sp.Children.Add(new TextBlock() { Text = port.ShortName });
 
@@ -137,9 +137,9 @@ public sealed partial class MapsControl : UserControl
     /// <param name="port">Port</param>
     private BasePort GetPort(BasePort? port)
     {
-        if (_flyout?.Target is not null)
+        if (_flyout?.Target is { } target)
         {
-            return ((Button)_flyout.Target!).CommandParameter as BasePort ?? throw new FormatException();
+            return ((Button)target).CommandParameter as BasePort ?? throw new InvalidOperationException("CommandParameter is not BasePort");
         }
         else if (port is not null)
         {
@@ -172,7 +172,7 @@ public sealed partial class MapsControl : UserControl
         }
     }
 
-    private void OnPortButtonClicked(object? sender, Interactivity.RoutedEventArgs e)
+    private void OnPortButtonClicked(object? sender, RoutedEventArgs e)
     {
         if (sender is not Button button)
         {
@@ -186,20 +186,29 @@ public sealed partial class MapsControl : UserControl
 
         if (IsSkillFlyoutAvailable(port))
         {
-            _flyout!.ShowAt(button);
+            if (_flyout is not null)
+            {
+                _flyout.ShowAt(button);
+            }
         }
     }
 
     private void ContextMenuOpened(object? sender, RoutedEventArgs e)
     {
-        MapsList.ContextMenu!.Items.Clear();
+        if (MapsList.ContextMenu is not null)
+        {
+            MapsList.ContextMenu.Items.Clear();
+        }
 
         if (MapsList.SelectedItem is not BaseAddon addon)
         {
             return;
         }
 
-        MapsList.ContextMenu.Items.Clear();
+        if (MapsList.ContextMenu is not null)
+        {
+            MapsList.ContextMenu.Items.Clear();
+        }
 
         if (addon.IsMetadataUpdateAvailable)
         {
@@ -272,6 +281,9 @@ public sealed partial class MapsControl : UserControl
 
     private void ContextMenuClosed(object? sender, RoutedEventArgs e)
     {
-        MapsList.ContextMenu!.Items.Clear();
+        if (MapsList.ContextMenu is not null)
+        {
+            MapsList.ContextMenu.Items.Clear();
+        }
     }
 }

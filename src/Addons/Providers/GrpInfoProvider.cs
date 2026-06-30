@@ -15,7 +15,7 @@ public static class GrpInfoProvider
     /// <returns>true if addons were successfully retrieved; false if no .grp files were found.</returns>
     public static bool TryGetAddonsFromGrpInfo(string pathToGrpInfo, [NotNullWhen(true)] out List<BaseAddon>? newAddons)
     {
-        var grpInfoFolder = Path.GetDirectoryName(pathToGrpInfo) ?? throw new InvalidOperationException();
+        var grpInfoFolder = Path.GetDirectoryName(pathToGrpInfo) ?? throw new InvalidOperationException($"Could not determine directory for {pathToGrpInfo}");
 
         var grps = Directory.GetFiles(grpInfoFolder, "*.grp", SearchOption.TopDirectoryOnly);
 
@@ -155,7 +155,7 @@ public static class GrpInfoProvider
         return addons;
     }
 
-    private static string ExtractQuotedValue(ReadOnlySpan<char> span)
+    private static string? ExtractQuotedValue(ReadOnlySpan<char> span)
     {
         var pFrom = span.IndexOf('"') + 1;
         var pTo = span.LastIndexOf('"');
@@ -165,7 +165,7 @@ public static class GrpInfoProvider
             return span[pFrom..pTo].ToString();
         }
 
-        return null!;
+        return null;
     }
 }
 

@@ -180,7 +180,7 @@ public sealed partial class SettingsViewModel : ObservableObject
 
         if (!EnumHelper.TryParse<ThemeEnum>(param, out var themeEnum))
         {
-            throw new InvalidOperationException();
+            throw new InvalidOperationException($"Invalid theme parameter: {param}");
         }
 
         Application.Current.RequestedThemeVariant = themeEnum.Value switch

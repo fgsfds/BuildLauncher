@@ -1,5 +1,5 @@
-﻿using System.Net.Http.Headers;
-using Core.Client.Interfaces;
+﻿using System.Net;
+using System.Net.Http.Headers;
 using Microsoft.Extensions.Logging;
 
 namespace Core.Client.Tools;
@@ -50,7 +50,7 @@ public sealed class FilesDownloader
 
         if (!response.IsSuccessStatusCode)
         {
-            throw new Exception($"Error while downloading {url}, error: {response.StatusCode}");
+            throw new HttpRequestException($"Error while downloading {url}, error: {response.StatusCode}");
         }
 
         await using var source = await response.Content.ReadAsStreamAsync(cancellationToken).ConfigureAwait(false);
@@ -82,7 +82,7 @@ public sealed class FilesDownloader
         }
         catch (HttpIOException)
         {
-            await ContinueDownload(url, contentLength, fileStream!, cancellationToken).ConfigureAwait(false);
+            await ContinueDownload(url, contentLength, fileStream, cancellationToken).ConfigureAwait(false);
         }
         catch (OperationCanceledException)
         {
@@ -138,7 +138,7 @@ public sealed class FilesDownloader
             using var httpClient = _httpClientFactory.CreateClient();
             using var response = await httpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
 
-            if (response.StatusCode is not System.Net.HttpStatusCode.PartialContent)
+            if (response.StatusCode is not HttpStatusCode.PartialContent)
             {
                 throw new InvalidOperationException("Error while downloading a file: " + response.StatusCode);
             }

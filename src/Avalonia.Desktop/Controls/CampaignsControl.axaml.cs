@@ -4,6 +4,7 @@ using Avalonia.Desktop.Helpers;
 using Avalonia.Desktop.Misc;
 using Avalonia.Desktop.ViewModels;
 using Avalonia.Interactivity;
+using Avalonia.Layout;
 using CommunityToolkit.Mvvm.Input;
 using Core.All.Enums;
 using Core.All.Helpers;
@@ -85,7 +86,7 @@ public sealed partial class CampaignsControl : UserControl
         {
             var portIcon = _bitmapsCache.GetFromCache(port.PortEnum.GetUniqueHash());
 
-            StackPanel sp = new() { Orientation = Layout.Orientation.Horizontal };
+            StackPanel sp = new() { Orientation = Orientation.Horizontal };
             sp.Children.Add(new Image() { Margin = new(0, 0, 5, 0), Height = 16, Source = portIcon });
             sp.Children.Add(new TextBlock() { Text = port.ShortName });
 
@@ -214,14 +215,20 @@ public sealed partial class CampaignsControl : UserControl
 
     private void ContextMenuOpened(object? sender, RoutedEventArgs e)
     {
-        CampaignsList.ContextMenu!.Items.Clear();
+        if (CampaignsList.ContextMenu is not null)
+        {
+            CampaignsList.ContextMenu.Items.Clear();
+        }
 
         if (CampaignsList.SelectedItem is not BaseAddon addon)
         {
             return;
         }
 
-        CampaignsList.ContextMenu.Items.Clear();
+        if (CampaignsList.ContextMenu is not null)
+        {
+            CampaignsList.ContextMenu.Items.Clear();
+        }
 
         MenuItem favoriteButton;
 
@@ -326,6 +333,9 @@ public sealed partial class CampaignsControl : UserControl
 
     private void ContextMenuClosed(object? sender, RoutedEventArgs e)
     {
-        CampaignsList.ContextMenu!.Items.Clear();
+        if (CampaignsList.ContextMenu is not null)
+        {
+            CampaignsList.ContextMenu.Items.Clear();
+        }
     }
 }

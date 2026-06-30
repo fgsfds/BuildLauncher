@@ -326,7 +326,7 @@ public sealed class LocalFilesProvider
         }
         else if (pathToFile.EndsWith(".map", StringComparison.OrdinalIgnoreCase))
         {
-            return [CreateSimpleEntry(pathToFile, gameEnum ?? throw new InvalidOperationException())];
+            return [CreateSimpleEntry(pathToFile, gameEnum ?? throw new InvalidOperationException("Game enum must be provided for .map files"))];
         }
 
         return null;
@@ -417,12 +417,12 @@ public sealed class LocalFilesProvider
         }
 
         var manifests = archive.Entries.Where(x =>
-            x.Key!.Contains(Path.GetFileNameWithoutExtension(CommonConstants.AddonManifestName), StringComparison.OrdinalIgnoreCase)
+            x.Key?.Contains(Path.GetFileNameWithoutExtension(CommonConstants.AddonManifestName), StringComparison.OrdinalIgnoreCase) == true
             && x.Key.EndsWith(Path.GetExtension(CommonConstants.AddonManifestName))
         );
 
         var grpInfos = archive.Entries.Where(x =>
-            x.Key!.EndsWith(".grpinfo")
+            x.Key?.EndsWith(".grpinfo") == true
         );
 
         foreach (var manifestEntry in manifests)
@@ -439,7 +439,7 @@ public sealed class LocalFilesProvider
 
             results.Add(new ParsedAddonFile
             {
-                FileInfo = new(file, manifestEntry.Key!),
+                FileInfo = new(file, manifestEntry.Key),
                 SupportedGame = manifest.SupportedGame.Game,
                 Manifest = manifest,
                 GridHash = gridHash,
@@ -453,7 +453,7 @@ public sealed class LocalFilesProvider
 
             results.Add(new ParsedAddonFile
             {
-                FileInfo = new(file, grpInfo.Key!),
+                FileInfo = new(file, grpInfo.Key),
                 SupportedGame = GameEnum.Duke3D,
                 Manifest = null,
                 GridHash = null,

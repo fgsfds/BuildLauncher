@@ -21,7 +21,7 @@ public sealed class AddonsDatabaseManager
     public async Task<Result> AddToDatabaseAsync(string pathToFile, Uri downloadUrl, AddonManifestJsonModel manifest)
     {
         var downloadAddonEntity = await GetDownloadableAddonDtoAsync(pathToFile, downloadUrl, manifest).ConfigureAwait(false);
-        var dbResult = await _apiInterface.AddAddonToDatabaseAsync(manifest!, downloadAddonEntity).ConfigureAwait(false);
+        var dbResult = await _apiInterface.AddAddonToDatabaseAsync(manifest, downloadAddonEntity).ConfigureAwait(false);
 
         return new(dbResult ? ResultEnum.Success : ResultEnum.Error, dbResult ? string.Empty : "Error while adding addon to the database.");
     }

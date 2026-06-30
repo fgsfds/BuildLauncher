@@ -5,6 +5,7 @@ using Core.All.Enums.Addons;
 using Core.All.Enums.Versions;
 using Core.Client.Helpers;
 using Games.Games;
+using Microsoft.Extensions.Logging;
 using SharpCompress.Archives;
 
 namespace Ports.Ports;
@@ -14,6 +15,15 @@ namespace Ports.Ports;
 /// </summary>
 public sealed class DosBox : BasePort
 {
+    private readonly ILogger<DosBox> _logger = null!;
+
+    public DosBox() { }
+
+    public DosBox(ILogger<DosBox> logger)
+    {
+        _logger = logger;
+    }
+
     /// <inheritdoc/>
     public override PortEnum PortEnum => PortEnum.DosBox;
 
@@ -148,8 +158,12 @@ public sealed class DosBox : BasePort
                     """);
             }
         }
-        catch
+        catch (Exception ex)
         {
+            if (_logger is not null)
+            {
+                _logger.LogWarning(ex, "Failed to write dosbox config");
+            }
         }
     }
 
@@ -210,7 +224,7 @@ public sealed class DosBox : BasePort
         {
             if (map.FileInfo is null)
             {
-                throw new InvalidOperationException();
+                throw new InvalidOperationException("Map file info is required for DosBox loose map args");
             }
 
             _ = sb.Append($@" -c ""mount d \""{game.MapsFolderPath}""""");

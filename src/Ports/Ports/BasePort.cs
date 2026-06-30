@@ -294,7 +294,7 @@ public abstract class BasePort : IInstallable
     {
         if (camp.FileInfo is null)
         {
-            throw new InvalidOperationException();
+            throw new InvalidOperationException("Campaign file info is required for map args");
         }
 
         //TODO e#m#
@@ -528,7 +528,7 @@ public abstract class BasePort : IInstallable
 
             if (aMod.FileInfo.IsFolder)
             {
-                throw new InvalidOperationException();
+                throw new InvalidOperationException("Folder mods are not supported in autoload");
             }
 
             _ = sb.Append($@" {AddFileParam}""{aMod.FileInfo.FileName}""");
@@ -740,9 +740,14 @@ public abstract class BasePort : IInstallable
 
         var saves = Directory.GetFiles(saveFolder);
 
+        if (game.GameInstallFolder is null)
+        {
+            return;
+        }
+
         foreach (var save in saves)
         {
-            var destFileName = Path.Combine(game.GameInstallFolder!, Path.GetFileName(save)!);
+            var destFileName = Path.Combine(game.GameInstallFolder, Path.GetFileName(save));
             File.Move(save, destFileName, true);
         }
     }
@@ -771,7 +776,7 @@ public abstract class BasePort : IInstallable
 
         foreach (var file in files)
         {
-            var destFileName = Path.Combine(saveFolder, Path.GetFileName(file)!);
+            var destFileName = Path.Combine(saveFolder, Path.GetFileName(file));
             File.Move(file, destFileName, true);
         }
     }

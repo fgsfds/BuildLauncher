@@ -1,4 +1,5 @@
-﻿using Avalonia.Controls;
+﻿using System.Diagnostics;
+using Avalonia.Controls;
 using Avalonia.Desktop.Helpers;
 using Avalonia.Rendering.Composition;
 using Avalonia.VisualTree;
@@ -100,35 +101,42 @@ public class AddImplicitAnimationsBehavior : Behavior<ListBox>
 
     private async void SetupImplicitAnimations(ListBoxItem item)
     {
-        // wait for layout to finish before applying animations, 
-        // preventing items from flying in from 0,0 on tab switches.
-        await Task.Delay(500).ConfigureAwait(true);
-
-        // abort if the tab was switched again during the delay
-        if (!item.IsAttachedToVisualTree())
+        try
         {
-            return;
+            // wait for layout to finish before applying animations, 
+            // preventing items from flying in from 0,0 on tab switches.
+            await Task.Delay(500).ConfigureAwait(true);
+
+            // abort if the tab was switched again during the delay
+            if (!item.IsAttachedToVisualTree())
+            {
+                return;
+            }
+
+            var visual = ElementComposition.GetElementVisual(item);
+            var compositor = visual?.Compositor;
+
+            if (visual is null || compositor is null)
+            {
+                return;
+            }
+
+            var offsetAnimation = compositor.CreateVector3KeyFrameAnimation();
+            offsetAnimation.Target = "Offset";
+            offsetAnimation.InsertExpressionKeyFrame(1.0f, "this.FinalValue");
+            offsetAnimation.Duration = TimeSpan.FromMilliseconds(400);
+
+            var animationGroup = compositor.CreateAnimationGroup();
+            animationGroup.Add(offsetAnimation);
+
+            var implicitAnimations = compositor.CreateImplicitAnimationCollection();
+            implicitAnimations["Offset"] = animationGroup;
+
+            visual.ImplicitAnimations = implicitAnimations;
         }
-
-        var visual = ElementComposition.GetElementVisual(item);
-        var compositor = visual?.Compositor;
-
-        if (visual is null || compositor is null)
+        catch (Exception ex)
         {
-            return;
+            Debug.WriteLine($"Error in SetupImplicitAnimations: {ex.Message}");
         }
-
-        var offsetAnimation = compositor.CreateVector3KeyFrameAnimation();
-        offsetAnimation.Target = "Offset";
-        offsetAnimation.InsertExpressionKeyFrame(1.0f, "this.FinalValue");
-        offsetAnimation.Duration = TimeSpan.FromMilliseconds(400);
-
-        var animationGroup = compositor.CreateAnimationGroup();
-        animationGroup.Add(offsetAnimation);
-
-        var implicitAnimations = compositor.CreateImplicitAnimationCollection();
-        implicitAnimations["Offset"] = animationGroup;
-
-        visual.ImplicitAnimations = implicitAnimations;
     }
 }

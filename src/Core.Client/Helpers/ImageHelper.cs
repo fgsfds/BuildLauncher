@@ -12,7 +12,7 @@ public static class ImageHelper
     /// <param name="callingAss">Calling assembly</param>
     public static Stream FileNameToStream(string fileName, Assembly callingAss)
     {
-        var assName = callingAss.GetName().Name!.Replace("BuildLauncher.", "");
+        var assName = (callingAss.GetName().Name ?? string.Empty).Replace("BuildLauncher.", "");
 
         var resource = callingAss.GetManifestResourceStream($"{assName}.Assets.{fileName}");
 

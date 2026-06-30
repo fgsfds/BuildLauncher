@@ -330,7 +330,7 @@ public sealed partial class CampaignsViewModel : RightPanelViewModel, IPortsButt
 
         if (addon.FileInfo is null)
         {
-            throw new InvalidOperationException();
+            throw new InvalidOperationException("Campaign file info is required for metadata update");
         }
 
         var result = await _metadataProvider.UpdateMetadataAsync(addon.FileInfo).ConfigureAwait(true);

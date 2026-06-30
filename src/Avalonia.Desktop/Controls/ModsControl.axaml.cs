@@ -30,7 +30,10 @@ public sealed partial class ModsControl : UserControl
             return;
         }
 
-        ModsList.ContextMenu!.Items.Clear();
+        if (ModsList.ContextMenu is not null)
+        {
+            ModsList.ContextMenu.Items.Clear();
+        }
 
         if (addon.IsMetadataUpdateAvailable)
         {
@@ -60,6 +63,9 @@ public sealed partial class ModsControl : UserControl
 
     private void ContextMenuClosed(object? sender, RoutedEventArgs e)
     {
-        ModsList.ContextMenu!.Items.Clear();
+        if (ModsList.ContextMenu is not null)
+        {
+            ModsList.ContextMenu.Items.Clear();
+        }
     }
 }

@@ -75,7 +75,7 @@ public static class PortsHelper
 
             if (game.GameEnum is GameEnum.Duke3D && addon.AddonId.Id.Equals(nameof(DukeAddonEnum.DukeVaca), StringComparison.OrdinalIgnoreCase))
             {
-                return File.Exists(Path.Combine(game.GameInstallFolder!, "VACATION.EXE"));
+                return game.GameInstallFolder is not null && File.Exists(Path.Combine(game.GameInstallFolder, "VACATION.EXE"));
             }
 
             if (game.GameEnum is GameEnum.Wang && addon.AddonId != new AddonId(nameof(GameEnum.Wang)))

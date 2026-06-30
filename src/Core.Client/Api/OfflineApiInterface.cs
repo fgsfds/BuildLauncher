@@ -42,10 +42,7 @@ public sealed class OfflineApiInterface : IApiInterface
                     DownloadableAddonJsonModelDictionaryContext.Default.DictionaryGameEnumListDownloadableAddonJsonModel
                     ).ConfigureAwait(false);
 
-                if (_addonsJson is null)
-                {
-                    throw new ArgumentNullException();
-                }
+                ArgumentNullException.ThrowIfNull(_addonsJson);
             }
 
             if (gameEnum is GameEnum.Redneck)

@@ -449,7 +449,7 @@ public class EDuke32 : BasePort
 
         foreach (var save in saves)
         {
-            var destFileName = Path.Combine(firstPart, Path.GetFileName(save)!);
+            var destFileName = Path.Combine(firstPart, Path.GetFileName(save));
             File.Move(save, destFileName, true);
         }
     }
@@ -483,7 +483,7 @@ public class EDuke32 : BasePort
 
         foreach (var file in files)
         {
-            var destFileName = Path.Combine(saveFolder, Path.GetFileName(file)!);
+            var destFileName = Path.Combine(saveFolder, Path.GetFileName(file));
             File.Move(file, destFileName, true);
         }
     }

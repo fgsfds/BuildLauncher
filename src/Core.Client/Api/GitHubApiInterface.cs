@@ -233,7 +233,7 @@ public sealed class GitHubApiInterface : IApiInterface
                 await InitDataAsync().ConfigureAwait(false);
             }
 
-            return _data!.TryGetValue(DataJson.UploadFolder, out var uploadFolder) ? uploadFolder : null;
+            return _data?.TryGetValue(DataJson.UploadFolder, out var uploadFolder) == true ? uploadFolder : null;
         }
         catch (Exception ex)
         {
@@ -289,7 +289,10 @@ public sealed class GitHubApiInterface : IApiInterface
                 await InitDataAsync().ConfigureAwait(false);
             }
 
-            _ = _data!.TryGetValue(DataJson.UploadFolder, out var uploadFolder) ? uploadFolder : null;
+            if (_data is null || !_data.TryGetValue(DataJson.UploadFolder, out var uploadFolder))
+            {
+                return new(ResultEnum.Error, null, "Upload folder not found");
+            }
 
             var url = Path.Combine(uploadFolder, path);
 

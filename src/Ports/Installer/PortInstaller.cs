@@ -62,7 +62,7 @@ public sealed class PortInstaller : InstallerBase<BasePort>
     {
         if (string.IsNullOrWhiteSpace(subFolder))
         {
-            throw new NullReferenceException("Subfolder not found after unpacking.");
+            throw new InvalidOperationException("Subfolder not found after unpacking.");
         }
 
         var files = Directory.EnumerateFiles(subFolder, "*.*", SearchOption.AllDirectories);
@@ -72,7 +72,7 @@ public sealed class PortInstaller : InstallerBase<BasePort>
             string fileName = Path.GetRelativePath(subFolder, file);
             string destFile = Path.Combine(installFolderPath, fileName);
 
-            var destFolder = Path.GetDirectoryName(destFile)!;
+            var destFolder = Path.GetDirectoryName(destFile) ?? throw new InvalidOperationException($"Could not determine directory for {destFile}");
             Directory.CreateDirectory(destFolder);
 
             File.Move(file, destFile, true);
