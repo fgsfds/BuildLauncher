@@ -2,7 +2,7 @@
 using Core.All;
 using Core.All.Enums;
 using Core.All.Helpers;
-using Core.All.Providers;
+using Core.All.Releases;
 using Core.All.Serializable;
 using Core.All.Serializable.Addon;
 using Core.All.Serializable.Downloadable;
@@ -12,11 +12,14 @@ using Microsoft.Extensions.Logging;
 
 namespace Core.Client.Api;
 
+/// <summary>
+/// Provides GitHub-backed implementation of the API interface for releases, addons, and metadata.
+/// </summary>
 public sealed class GitHubApiInterface : IApiInterface
 {
-    private readonly ReleaseProvider<PortEnum> _portsReleasesProvider;
-    private readonly ReleaseProvider<ToolEnum> _toolsReleasesProvider;
-    private readonly RepoAppReleasesProvider _appReleasesProvider;
+    private readonly ReleaseProviderBase<PortEnum> _portsReleasesProviderBase;
+    private readonly ReleaseProviderBase<ToolEnum> _toolsReleasesProviderBase;
+    private readonly ReleaseProviderBase<AppReleaseEnum> _appRepoReleasesProvider;
     private readonly IHttpClientFactory _httpClientFactory;
     private readonly ILogger<GitHubApiInterface> _logger;
     private readonly SemaphoreSlim _semaphore = new(1);
@@ -25,17 +28,25 @@ public sealed class GitHubApiInterface : IApiInterface
     private Dictionary<string, string>? _data;
 
 
+    /// <summary>
+    /// Initializes a new instance of <see cref="GitHubApiInterface"/>.
+    /// </summary>
+    /// <param name="portsReleasesProviderBase">Provider for port releases.</param>
+    /// <param name="toolsReleasesRetriever">Provider for tool releases.</param>
+    /// <param name="appRepoReleasesProvider">Provider for app self-update releases.</param>
+    /// <param name="httpClientFactory">Factory for creating HTTP clients.</param>
+    /// <param name="logger">Logger instance.</param>
     public GitHubApiInterface(
-        ReleaseProvider<PortEnum> portsReleasesProvider,
-        ReleaseProvider<ToolEnum> toolsReleasesRetriever,
-        RepoAppReleasesProvider appReleasesProvider,
+        ReleaseProviderBase<PortEnum> portsReleasesProviderBase,
+        ReleaseProviderBase<ToolEnum> toolsReleasesRetriever,
+        ReleaseProviderBase<AppReleaseEnum> appRepoReleasesProvider,
         IHttpClientFactory httpClientFactory,
         ILogger<GitHubApiInterface> logger
         )
     {
-        _portsReleasesProvider = portsReleasesProvider;
-        _toolsReleasesProvider = toolsReleasesRetriever;
-        _appReleasesProvider = appReleasesProvider;
+        _portsReleasesProviderBase = portsReleasesProviderBase;
+        _toolsReleasesProviderBase = toolsReleasesRetriever;
+        _appRepoReleasesProvider = appRepoReleasesProvider;
         _httpClientFactory = httpClientFactory;
         _logger = logger;
     }
@@ -95,7 +106,7 @@ public sealed class GitHubApiInterface : IApiInterface
 
     public async Task<GeneralReleaseJsonModel?> GetLatestAppReleaseAsync()
     {
-        var result = await _appReleasesProvider.GetLatestReleaseAsync(ClientProperties.IsDeveloperMode).ConfigureAwait(false);
+        var result = await _appRepoReleasesProvider.GetLatestReleaseAsync(AppReleaseEnum.MainApp, ClientProperties.IsDeveloperMode).ConfigureAwait(false);
 
         if (result?.TryGetValue(CommonProperties.OSEnum, out var release) is true)
         {
@@ -107,7 +118,7 @@ public sealed class GitHubApiInterface : IApiInterface
 
     public async Task<GeneralReleaseJsonModel?> GetLatestPortReleaseAsync(PortEnum portEnum)
     {
-        var result = await _portsReleasesProvider.GetLatestReleaseAsync(portEnum).ConfigureAwait(false);
+        var result = await _portsReleasesProviderBase.GetLatestReleaseAsync(portEnum, false).ConfigureAwait(false);
 
         if (result?.TryGetValue(CommonProperties.OSEnum, out var release) is true)
         {
@@ -119,7 +130,7 @@ public sealed class GitHubApiInterface : IApiInterface
 
     public async Task<GeneralReleaseJsonModel?> GetLatestToolReleaseAsync(ToolEnum toolEnum)
     {
-        var result = await _toolsReleasesProvider.GetLatestReleaseAsync(toolEnum).ConfigureAwait(false);
+        var result = await _toolsReleasesProviderBase.GetLatestReleaseAsync(toolEnum, false).ConfigureAwait(false);
 
         if (result?.TryGetValue(CommonProperties.OSEnum, out var release) is true)
         {

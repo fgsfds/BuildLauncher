@@ -1,6 +1,6 @@
 ﻿using Core.All.Enums;
 using Core.All.Helpers;
-using Core.All.Providers;
+using Core.Client.Releases;
 using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
 
@@ -16,9 +16,9 @@ public sealed class AppReleasesTests
         Mock<IHttpClientFactory> httpFactory = new();
         httpFactory.Setup(x => x.CreateClient(HttpClientEnum.GitHub.GetDescription())).Returns(httpClient);
 
-        RepoAppReleasesProvider releasesProvider = new(NullLogger<RepoAppReleasesProvider>.Instance, httpFactory.Object);
+        AppRepoReleasesProvider repoReleasesProvider = new(NullLogger<AppRepoReleasesProvider>.Instance, httpFactory.Object);
 
-        var lastestRelease = await releasesProvider.GetLatestReleaseAsync(false);
+        var lastestRelease = await repoReleasesProvider.GetLatestReleaseAsync(AppReleaseEnum.MainApp, false);
 
         Assert.NotNull(lastestRelease);
         Assert.NotEmpty(lastestRelease);

@@ -80,7 +80,7 @@ public static class VersionComparer
         };
     }
 
-    private static int CompareVersions(ReadOnlySpan<char> v1, ReadOnlySpan<char> v2)
+    public static int CompareVersions(ReadOnlySpan<char> v1, ReadOnlySpan<char> v2)
     {
         var dash1 = v1.IndexOf('-');
         var dash2 = v2.IndexOf('-');

@@ -3,12 +3,13 @@ using System.Net.Http.Headers;
 using Core.All;
 using Core.All.Enums;
 using Core.All.Helpers;
-using Core.All.Providers;
+using Core.All.Releases;
 using Core.Client.Api;
 using Core.Client.Config;
 using Core.Client.Enums;
 using Core.Client.Interfaces;
 using Core.Client.Providers;
+using Core.Client.Releases;
 using Core.Client.Tools;
 using Database.Client;
 using Microsoft.Extensions.DependencyInjection;
@@ -113,7 +114,7 @@ public static class DiHelper
         _ = container.AddSingleton<PlaytimeProvider>();
         _ = container.AddSingleton<RatingProvider>();
         _ = container.AddSingleton<AddonsDatabaseManager>();
-        _ = container.AddSingleton<RepoAppReleasesProvider>();
+        _ = container.AddSingleton<ReleaseProviderBase<AppReleaseEnum>, AppRepoReleasesProvider>();
 
         return container;
     }

@@ -25,7 +25,7 @@ public sealed class ZHRecomp : BasePort
     protected override string LinExe => "DNZHRecompiled";
 
     /// <inheritdoc/>
-    public override string Name => "Zero Hour Recompiled";
+    public override string Name => "Zero Hour Overclocked";
 
     public override string ShortName => "ZHRecomp";
 
