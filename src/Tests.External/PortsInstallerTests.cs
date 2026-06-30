@@ -81,6 +81,7 @@ public sealed class PortsInstallerTests
         HttpClient httpClient = new();
         httpClient.DefaultRequestHeaders.Add("User-Agent", "BuildLauncher");
         httpClient.Timeout = TimeSpan.FromSeconds(39);
+
         return httpClient;
     }
 }

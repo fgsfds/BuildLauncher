@@ -11,8 +11,8 @@ namespace Tests.Unit.Sync;
 [Collection("Sync")]
 public sealed class AddonFilesTests : IDisposable
 {
-    private readonly BloodGame _game = new();
     private readonly string _addonsFolder = ClientProperties.AddonsFolderPath;
+    private readonly BloodGame _game = new();
     private readonly InstalledAddonsProvider _installedAddonsProvider;
     private readonly LocalFilesProvider _localFilesProvider;
 
@@ -28,6 +28,7 @@ public sealed class AddonFilesTests : IDisposable
     public void Dispose()
     {
         _installedAddonsProvider.Dispose();
+
         if (Directory.Exists(_addonsFolder))
         {
             Directory.Delete(_addonsFolder, true);
@@ -117,7 +118,7 @@ public sealed class AddonFilesTests : IDisposable
     [Fact]
     public async Task AddFile_GetAddonFromFile_UnpackedAddon_ReturnsParsedAddons()
     {
-        _  = await InitializeDependencies(null, AddonTypeEnum.Mod);
+        _ = await InitializeDependencies(null, AddonTypeEnum.Mod);
 
         var pathToFile = Path.Combine(_game.ModsFolderPath, "UnpackedAddon.zip");
         Directory.CreateDirectory(_game.ModsFolderPath);

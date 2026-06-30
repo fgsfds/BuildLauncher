@@ -18,14 +18,13 @@ namespace Avalonia.Desktop.ViewModels;
 
 public sealed partial class ModsViewModel : RightPanelViewModel, IPortsButtonControl
 {
-    public BaseGame Game { get; }
+    private readonly IAddonDropHelper _addonInstaller;
+    private readonly DownloadableAddonsProvider _downloadableAddonsProvider;
 
     private readonly InstalledGamesProvider _gamesProvider;
     private readonly InstalledAddonsProvider _installedAddonsProvider;
-    private readonly IAddonDropHelper _addonInstaller;
-    private readonly DownloadableAddonsProvider _downloadableAddonsProvider;
-    private readonly MetadataProvider _metadataProvider;
     private readonly ILogger<ModsViewModel> _logger;
+    private readonly MetadataProvider _metadataProvider;
 
 
     [Obsolete($"Don't create directly. Use {nameof(ViewModelsFactory)}.")]
@@ -56,14 +55,16 @@ public sealed partial class ModsViewModel : RightPanelViewModel, IPortsButtonCon
         //_downloadableAddonsProvider.AddonsChangedEvent += OnAddonChanged;
     }
 
+    public BaseGame Game { get; }
+
 
     /// <summary>
-    /// VM initialization
+    ///     VM initialization
     /// </summary>
     public Task InitializeAsync() => UpdateAsync(false);
 
     /// <summary>
-    /// Update mods list
+    ///     Update mods list
     /// </summary>
     private async Task UpdateAsync(bool createNew)
     {
@@ -73,16 +74,34 @@ public sealed partial class ModsViewModel : RightPanelViewModel, IPortsButtonCon
     }
 
 
+    private void OnGameChanged(GameEnum parameterName)
+    {
+        if (parameterName == Game.GameEnum)
+        {
+            OnPropertyChanged(nameof(ModsList));
+        }
+    }
+
+    private void OnAddonChanged(GameEnum gameEnum, AddonTypeEnum? addonType)
+    {
+        if (gameEnum == Game.GameEnum && (addonType is AddonTypeEnum.Mod))
+        {
+            OnPropertyChanged(nameof(ModsList));
+        }
+    }
+
+
     #region Binding Properties
 
     /// <summary>
-    /// List of installed autoload mods
+    ///     List of installed autoload mods
     /// </summary>
     public ImmutableList<AutoloadMod> ModsList => [.. _installedAddonsProvider.GetInstalledAddonsByType(AddonTypeEnum.Mod).OfType<AutoloadMod>().OrderBy(static x => x.Title)];
 
     private BaseAddon? _selectedAddon;
+
     /// <summary>
-    /// Currently selected autoload mod
+    ///     Currently selected autoload mod
     /// </summary>
     public override BaseAddon? SelectedAddon
     {
@@ -100,7 +119,7 @@ public sealed partial class ModsViewModel : RightPanelViewModel, IPortsButtonCon
     }
 
     /// <summary>
-    /// Is form in progress
+    ///     Is form in progress
     /// </summary>
     [ObservableProperty]
     private bool _isInProgress;
@@ -113,7 +132,7 @@ public sealed partial class ModsViewModel : RightPanelViewModel, IPortsButtonCon
     #region Relay Commands
 
     /// <summary>
-    /// Open mods folder
+    ///     Open mods folder
     /// </summary>
     [RelayCommand]
     private void OpenFolder()
@@ -121,20 +140,20 @@ public sealed partial class ModsViewModel : RightPanelViewModel, IPortsButtonCon
         using var process = Process.Start(new ProcessStartInfo
         {
             FileName = Game.ModsFolderPath,
-            UseShellExecute = true,
+            UseShellExecute = true
         });
     }
 
 
     /// <summary>
-    /// Refresh mods list
+    ///     Refresh mods list
     /// </summary>
     [RelayCommand]
     private Task RefreshListAsync() => UpdateAsync(true);
 
 
     /// <summary>
-    /// Delete selected mod
+    ///     Delete selected mod
     /// </summary>
     [RelayCommand]
     private void DeleteMod()
@@ -146,7 +165,7 @@ public sealed partial class ModsViewModel : RightPanelViewModel, IPortsButtonCon
 
 
     /// <summary>
-    /// Enable/disable mod
+    ///     Enable/disable mod
     /// </summary>
     [RelayCommand]
     private void ModCheckboxPressed(object? obj)
@@ -172,23 +191,21 @@ public sealed partial class ModsViewModel : RightPanelViewModel, IPortsButtonCon
 
 
     /// <summary>
-    /// Install dropped addon
+    ///     Install dropped addon
     /// </summary>
     [RelayCommand]
     private Task ProcessDroppedFilesAsync(List<string> filePaths) => _addonInstaller.AddAddonsAsync(filePaths, Game);
 
 
     /// <summary>
-    /// Updates metadata for selected mod.
+    ///     Updates metadata for selected mod.
     /// </summary>
     public override async Task UpdateMetadataAsync(object? value)
     {
         if (value is not null
-            && value is BaseAddon addon)
-        {
-        }
+         && value is BaseAddon addon) { }
         else if (value is null
-            && SelectedAddon is not null)
+              && SelectedAddon is not null)
         {
             addon = SelectedAddon;
         }
@@ -225,21 +242,4 @@ public sealed partial class ModsViewModel : RightPanelViewModel, IPortsButtonCon
     }
 
     #endregion
-
-
-    private void OnGameChanged(GameEnum parameterName)
-    {
-        if (parameterName == Game.GameEnum)
-        {
-            OnPropertyChanged(nameof(ModsList));
-        }
-    }
-
-    private void OnAddonChanged(GameEnum gameEnum, AddonTypeEnum? addonType)
-    {
-        if (gameEnum == Game.GameEnum && (addonType is AddonTypeEnum.Mod))
-        {
-            OnPropertyChanged(nameof(ModsList));
-        }
-    }
 }

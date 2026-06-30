@@ -9,18 +9,18 @@ public sealed class ArchiveTools
 {
     private readonly ILogger<ArchiveTools> _logger;
 
-    /// <summary>
-    /// Operation progress
-    /// </summary>
-    public event EventHandler<float>? ProgressChanged;
-
     public ArchiveTools(ILogger<ArchiveTools> logger)
     {
         _logger = logger;
     }
 
     /// <summary>
-    /// Unpack archive
+    ///     Operation progress
+    /// </summary>
+    public event EventHandler<float>? ProgressChanged;
+
+    /// <summary>
+    ///     Unpack archive
     /// </summary>
     /// <param name="pathToArchive">Absolute path to archive file</param>
     /// <param name="unpackTo">Directory to unpack archive to</param>
@@ -45,7 +45,7 @@ public sealed class ArchiveTools
         using var archive = ArchiveFactory.OpenArchive(
             pathToArchive,
             ReaderOptions.ForFilePath
-            .WithProgress(progress)
+                         .WithProgress(progress)
             );
 
         archive.WriteToDirectory(unpackTo);

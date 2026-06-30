@@ -2,12 +2,12 @@ using System.Diagnostics;
 using System.Globalization;
 using Avalonia.Controls.Notifications;
 using Avalonia.Desktop.Misc;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using Core.All.Enums;
 using Core.All.Helpers;
 using Core.All.Serializable.Downloadable;
 using Core.Client.Interfaces;
-using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.Logging;
 using Ports.Installer;
 using Ports.Ports;
@@ -16,15 +16,12 @@ namespace Avalonia.Desktop.ViewModels;
 
 public sealed partial class PortViewModel : ObservableObject
 {
-    public BasePort Port { get; init; }
+    public delegate void PortChanged(PortEnum portEnum);
+    private readonly IApiInterface _apiInterface;
 
     private readonly PortInstallerFactory _installerFactory;
-    private readonly IApiInterface _apiInterface;
-    private GeneralReleaseJsonModel? _release;
     private readonly ILogger<PortViewModel> _logger;
-
-    public delegate void PortChanged(PortEnum portEnum);
-    public event PortChanged? PortChangedEvent;
+    private GeneralReleaseJsonModel? _release;
 
 
     [Obsolete($"Don't create directly. Use {nameof(ViewModelsFactory)}.")]
@@ -41,11 +38,20 @@ public sealed partial class PortViewModel : ObservableObject
         Port = port;
     }
 
+    public BasePort Port { get; init; }
+    public event PortChanged? PortChangedEvent;
+
+
+    private void OnProgressChanged(object? sender, float e)
+    {
+        ProgressBarValue = e;
+    }
+
 
     #region Binding Properties
 
     /// <summary>
-    /// Text of the install button
+    ///     Text of the install button
     /// </summary>
     public string InstallButtonText
     {
@@ -68,17 +74,17 @@ public sealed partial class PortViewModel : ObservableObject
     }
 
     /// <summary>
-    /// Name of the port
+    ///     Name of the port
     /// </summary>
     public string Name => Port.Name;
 
     /// <summary>
-    /// Port's icon
+    ///     Port's icon
     /// </summary>
     public long IconId => Port.IconId;
 
     /// <summary>
-    /// Currently installed version
+    ///     Currently installed version
     /// </summary>
     public string Version
     {
@@ -99,12 +105,12 @@ public sealed partial class PortViewModel : ObservableObject
     }
 
     /// <summary>
-    /// Is port installed
+    ///     Is port installed
     /// </summary>
     public bool IsInstalled => Port.IsInstalled;
 
     /// <summary>
-    /// Latest available version
+    ///     Latest available version
     /// </summary>
     public string LatestVersion
     {
@@ -130,7 +136,7 @@ public sealed partial class PortViewModel : ObservableObject
     }
 
     /// <summary>
-    /// Is new version of the port available
+    ///     Is new version of the port available
     /// </summary>
     public bool IsUpdateAvailable
     {
@@ -186,12 +192,12 @@ public sealed partial class PortViewModel : ObservableObject
     }
 
     /// <summary>
-    /// Can port be installed
+    ///     Can port be installed
     /// </summary>
     public bool CanBeInstalled => !IsInProgress && !IsCheckingForUpdates && _release is not null;
 
     /// <summary>
-    /// Download/install progress
+    ///     Download/install progress
     /// </summary>
     [ObservableProperty]
     private float _progressBarValue;
@@ -210,7 +216,7 @@ public sealed partial class PortViewModel : ObservableObject
     #region Relay Commands
 
     /// <summary>
-    /// Initialize VM
+    ///     Initialize VM
     /// </summary>
     public async Task InitializeAsync()
     {
@@ -236,7 +242,7 @@ public sealed partial class PortViewModel : ObservableObject
 
 
     /// <summary>
-    /// Download and install port
+    ///     Download and install port
     /// </summary>
     [RelayCommand]
     private async Task InstallAsync()
@@ -279,7 +285,7 @@ public sealed partial class PortViewModel : ObservableObject
 
 
     /// <summary>
-    /// Force check for updates
+    ///     Force check for updates
     /// </summary>
     [RelayCommand]
     private void Uninstall()
@@ -314,7 +320,7 @@ public sealed partial class PortViewModel : ObservableObject
 
 
     /// <summary>
-    /// Open port folder
+    ///     Open port folder
     /// </summary>
     [RelayCommand]
     private void OpenFolder()
@@ -322,16 +328,9 @@ public sealed partial class PortViewModel : ObservableObject
         using var process = Process.Start(new ProcessStartInfo
         {
             FileName = Port.InstallFolderPath,
-            UseShellExecute = true,
+            UseShellExecute = true
         });
     }
 
-
     #endregion
-
-
-    private void OnProgressChanged(object? sender, float e)
-    {
-        ProgressBarValue = e;
-    }
 }

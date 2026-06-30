@@ -1,7 +1,6 @@
 using System.Text;
 using Addons.Addons;
 using Core.All.Enums;
-using Core.All.Enums.Addons;
 using Core.Client.Helpers;
 using Games.Games;
 
@@ -10,8 +9,8 @@ namespace Tests.Unit.Sync;
 [Collection("Sync")]
 public sealed class SaveFilesTests : IDisposable
 {
-    private readonly DukeGame _game;
     private readonly DukeCampaign _camp;
+    private readonly DukeGame _game;
     private readonly string _gameDir;
     private readonly List<string> _tempDirs = [];
 
@@ -26,7 +25,7 @@ public sealed class SaveFilesTests : IDisposable
             DukeZHRomPath = null,
             DukeWTInstallPath = null,
             GameInstallFolder = _gameDir,
-            AddonsPaths = [],
+            AddonsPaths = []
         };
 
         _camp = new DukeCampaign
@@ -51,7 +50,7 @@ public sealed class SaveFilesTests : IDisposable
             IncompatibleAddons = null,
             RequiredFeatures = null,
             Executables = null,
-            Options = null,
+            Options = null
         };
     }
 
@@ -66,7 +65,8 @@ public sealed class SaveFilesTests : IDisposable
         {
             if (Directory.Exists(dir))
             {
-                try { Directory.Delete(dir, true); } catch { }
+                try { Directory.Delete(dir, true); }
+                catch { }
             }
         }
     }
@@ -213,7 +213,7 @@ public sealed class SaveFilesTests : IDisposable
             IncompatibleAddons = null,
             RequiredFeatures = null,
             Executables = null,
-            Options = null,
+            Options = null
         };
 
         var port = new EDuke32TestProxy();
@@ -260,7 +260,7 @@ public sealed class SaveFilesTests : IDisposable
             IncompatibleAddons = null,
             RequiredFeatures = null,
             Executables = null,
-            Options = null,
+            Options = null
         };
 
         var port = new EDuke32TestProxy();
@@ -282,13 +282,14 @@ public sealed class SaveFilesTests : IDisposable
     {
         var port = new BasePortTestProxy();
         var sb = new StringBuilder();
+
         var camp = new DukeCampaign
         {
             AddonId = new("null-camp", null),
             Type = AddonTypeEnum.TC,
             Title = "Null Camp",
             SupportedGame = new(GameEnum.Duke3D, null, null),
-            FileInfo = null,  // Explicitly null
+            FileInfo = null, // Explicitly null
             GridImageHash = null,
             PreviewImageHash = null,
             Description = null,
@@ -304,7 +305,7 @@ public sealed class SaveFilesTests : IDisposable
             IncompatibleAddons = null,
             RequiredFeatures = null,
             Executables = null,
-            Options = null,
+            Options = null
         };
 
         Assert.Throws<InvalidOperationException>(() => port.CallGetMapArgs(sb, camp));
@@ -315,13 +316,15 @@ public sealed class SaveFilesTests : IDisposable
     {
         var port = new BasePortTestProxy();
         var sb = new StringBuilder();
+
         var game = new DukeGame
         {
             Duke64RomPath = null,
             DukeZHRomPath = null,
             DukeWTInstallPath = null,
-            GameInstallFolder = Path.GetTempPath(),
+            GameInstallFolder = Path.GetTempPath()
         };
+
         var addon = new DukeCampaign
         {
             AddonId = new("opt-test", null),
@@ -346,13 +349,17 @@ public sealed class SaveFilesTests : IDisposable
             Executables = null,
             Options = new Dictionary<string, Dictionary<string, OptionalParameterTypeEnum>>
             {
-                { "opt1", new Dictionary<string, OptionalParameterTypeEnum>
+                {
+                    "opt1", new Dictionary<string, OptionalParameterTypeEnum>
                     {
-                        { "test.def", OptionalParameterTypeEnum.DEF }
+                        {
+                            "test.def", OptionalParameterTypeEnum.DEF
+                        }
                     }
                 }
-            },
+            }
         };
+
         var enabledOptions = new List<string>
         {
             "opt1"
@@ -367,6 +374,7 @@ public sealed class SaveFilesTests : IDisposable
     private void CleanupParentDirs(string path)
     {
         var dir = Path.GetDirectoryName(path);
+
         while (dir is not null && Directory.Exists(dir))
         {
             try
@@ -375,6 +383,7 @@ public sealed class SaveFilesTests : IDisposable
                 {
                     break;
                 }
+
                 Directory.Delete(dir);
                 dir = Path.GetDirectoryName(dir);
             }

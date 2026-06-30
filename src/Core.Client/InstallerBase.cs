@@ -9,15 +9,10 @@ namespace Core.Client;
 public abstract class InstallerBase<T>
     where T : IInstallable
 {
-    protected readonly T _instance;
-    private readonly FilesDownloader _filesDownloader;
     private readonly ArchiveTools _archiveTools;
+    private readonly FilesDownloader _filesDownloader;
+    protected readonly T _instance;
     private readonly ILogger _logger;
-
-    /// <summary>
-    /// Installation progress
-    /// </summary>
-    public Progress<float> Progress { get; init; } = new();
 
     protected InstallerBase(
         T instance,
@@ -33,7 +28,12 @@ public abstract class InstallerBase<T>
     }
 
     /// <summary>
-    /// Check hash of the local file
+    ///     Installation progress
+    /// </summary>
+    public Progress<float> Progress { get; init; } = new();
+
+    /// <summary>
+    ///     Check hash of the local file
     /// </summary>
     /// <param name="filePath">Full path to the file</param>
     /// <param name="hashStr">Hash that the file's hash will be compared to</param>
@@ -49,6 +49,7 @@ public abstract class InstallerBase<T>
         }
 
         const string Sha = "sha256:";
+
         if (hashStr.StartsWith(Sha))
         {
             hashStr = hashStr[Sha.Length..];
@@ -64,28 +65,28 @@ public abstract class InstallerBase<T>
     }
 
     /// <summary>
-    /// Performs post install actions.
+    ///     Performs post install actions.
     /// </summary>
     /// <param name="filePath">Path to the downloaded file.</param>
     protected abstract void PostInstall(string filePath);
 
     /// <summary>
-    /// Backups required files.
+    ///     Backups required files.
     /// </summary>
     protected abstract void Backup();
 
     /// <summary>
-    /// Uninstalls port/tool.
+    ///     Uninstalls port/tool.
     /// </summary>
     public abstract void Uninstall();
 
     /// <summary>
-    /// Returns latest release.
+    ///     Returns latest release.
     /// </summary>
     public abstract Task<GeneralReleaseJsonModel?> GetRelease();
 
     /// <summary>
-    /// Installs port/tool.
+    ///     Installs port/tool.
     /// </summary>
     public async Task<bool> InstallAsync()
     {
@@ -138,6 +139,7 @@ public abstract class InstallerBase<T>
         {
             _logger.LogError(ex, $"Error while installing {_instance.ToString}.");
             Uninstall();
+
             throw;
         }
         finally

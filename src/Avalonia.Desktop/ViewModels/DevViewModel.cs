@@ -25,14 +25,12 @@ namespace Avalonia.Desktop.ViewModels;
 
 public sealed partial class DevViewModel : ObservableObject
 {
+    private readonly AddonsDatabaseManager _addonsDatabaseManager;
     private readonly IConfigProvider _config;
     private readonly IFilesUploader _filesUploader;
-    private readonly AddonsDatabaseManager _addonsDatabaseManager;
-    private readonly InstalledGamesProvider _gamesProvider;
-    private readonly ILogger<DevViewModel> _logger;
 
     private readonly HashSet<string> _forbiddenNames =
-        [
+    [
         "duke3d.def",
         "rr.def",
         "rrra.def",
@@ -50,10 +48,10 @@ public sealed partial class DevViewModel : ObservableObject
         "ww2gi.con",
         "blood.ini",
         "cryptic.ini"
-        ];
+    ];
 
     private readonly HashSet<string> _forbiddenOggs =
-        [
+    [
         "blood00.ogg",
         "blood01.ogg",
         "blood02.ogg",
@@ -64,7 +62,9 @@ public sealed partial class DevViewModel : ObservableObject
         "blood07.ogg",
         "blood08.ogg",
         "blood09.ogg"
-        ];
+    ];
+    private readonly InstalledGamesProvider _gamesProvider;
+    private readonly ILogger<DevViewModel> _logger;
 
 
     public DevViewModel(
@@ -85,10 +85,576 @@ public sealed partial class DevViewModel : ObservableObject
     }
 
 
+    private AddonManifestJsonModel GetAddonJson(out string jsonString)
+    {
+        if (PathToAddonFolder is null)
+        {
+            throw new MissingFieldException("Choose addon folder");
+        }
+
+        var files = Directory.GetFiles(PathToAddonFolder, "*", SearchOption.TopDirectoryOnly)
+                             .Select(static x => Path.GetFileName(x).ToLower())
+                             .ToList();
+
+        if (SelectedGame is not GameEnum.Standalone &&
+            WindowsNBloodExe is null &&
+            WindowsNotBloodExe is null &&
+            WindowsEDukeExe is null &&
+            WindowsRedNukemExe is null &&
+            WindowsRazeExe is null &&
+            WindowsPCExhumedExe is null &&
+            LinuxNBloodExe is null &&
+            LinuxNotBloodExe is null &&
+            LinuxEDukeExe is null &&
+            LinuxRedNukemExe is null &&
+            LinuxRazeExe is null &&
+            LinuxPCExhumedExe is null &&
+            MainRff is null &&
+            SoundRff is null)
+        {
+            var forbidden = files.Intersect(_forbiddenNames);
+
+            if (forbidden.Any())
+            {
+                throw new MissingFieldException($"Common file names can't be used. Rename these files: {string.Join(", ", forbidden)}");
+            }
+
+            if (SelectedGame is GameEnum.Blood)
+            {
+                if (string.IsNullOrWhiteSpace(MainRff) && string.IsNullOrWhiteSpace(SoundRff))
+                {
+                    if (files.Any(static x => x.EndsWith(".ART", StringComparison.OrdinalIgnoreCase)))
+                    {
+                        throw new MissingFieldException("Don't use ART files. Convert them to DEF.");
+                    }
+
+                    if (files.Any(static x => x.EndsWith(".DAT", StringComparison.OrdinalIgnoreCase)))
+                    {
+                        throw new MissingFieldException("Don't use DAT files. Convert them to DEF.");
+                    }
+
+                    if (files.Any(static x => x.EndsWith(".RFS", StringComparison.OrdinalIgnoreCase)))
+                    {
+                        throw new MissingFieldException("Addons with RFS files are not supported");
+                    }
+                }
+
+                if (files.Intersect(_forbiddenOggs).Any())
+                {
+                    throw new MissingFieldException("blood00.ogg - blood09.ogg can't be used, start with blood10.ogg");
+                }
+            }
+        }
+
+        ErrorText = null;
+
+        var addonType =
+            IsTcSelected ? AddonTypeEnum.TC
+            : IsMapSelected ? AddonTypeEnum.Map
+            : IsModSelected ? AddonTypeEnum.Mod
+            : throw new ArgumentOutOfRangeException("Select addon type");
+
+        var gameEnum = SelectedGame ?? throw new ArgumentOutOfRangeException("Select game");
+
+        DukeVersionEnum? dukeVersion =
+            SelectedGame is not GameEnum.Duke3D ? null
+            : IsDukeAtomicSelected ? DukeVersionEnum.Duke3D_Atomic
+            : IsDuke13DSelected ? DukeVersionEnum.Duke3D_13D
+            : IsDukeWTSelected ? DukeVersionEnum.Duke3D_WT
+            : null;
+
+        if (string.IsNullOrWhiteSpace(AddonTitle))
+        {
+            throw new MissingFieldException("Select addon title");
+        }
+
+        if (string.IsNullOrWhiteSpace(AddonId))
+        {
+            throw new MissingFieldException("Select addon id");
+        }
+
+        if (string.IsNullOrWhiteSpace(AddonVersion))
+        {
+            throw new MissingFieldException("Select addon version");
+        }
+
+        List<FeatureEnum> features = [];
+
+        if (IsEdukeConsSelected &&
+            AreDukePropertiesAvailable)
+        {
+            features.Add(FeatureEnum.EDuke32_CON);
+        }
+
+        if (IsModernTypesSelected &&
+            SelectedGame is GameEnum.Blood)
+        {
+            features.Add(FeatureEnum.Modern_Types);
+        }
+
+        if (IsModelsSelected)
+        {
+            features.Add(FeatureEnum.Models);
+        }
+
+        if (IsHightileSelected)
+        {
+            features.Add(FeatureEnum.Hightile);
+        }
+
+        if (IsSlopedSelected)
+        {
+            features.Add(FeatureEnum.Sloped_Sprites);
+        }
+
+        if (IsTrorSelected)
+        {
+            features.Add(FeatureEnum.TROR);
+        }
+
+        if (IsCstatSelected)
+        {
+            features.Add(FeatureEnum.Wall_Rotate_Cstat);
+        }
+
+        if (IsLightingSelected)
+        {
+            features.Add(FeatureEnum.Dynamic_Lighting);
+        }
+
+        if (IsSndInfoSelected)
+        {
+            features.Add(FeatureEnum.SndInfo);
+        }
+
+        if (IsTilefromtextureSelected)
+        {
+            features.Add(FeatureEnum.TileFromTexture);
+        }
+
+        IStartMap? startMap = null;
+
+        if (IsMapSelected)
+        {
+            if (!IsElMapTypeSelected && !IsFileMapTypeSelected)
+            {
+                throw new MissingFieldException("Select start map");
+            }
+
+            if (IsElMapTypeSelected)
+            {
+                if (MapEpisode is null)
+                {
+                    throw new MissingFieldException("Select start map episode");
+                }
+
+                if (MapLevel is null)
+                {
+                    throw new MissingFieldException("Select start map level");
+                }
+
+                startMap = new MapSlotJsonModel()
+                {
+                    Episode = MapEpisode.Value,
+                    Level = MapLevel.Value
+                };
+            }
+
+            if (IsFileMapTypeSelected)
+            {
+                if (string.IsNullOrWhiteSpace(MapFileName))
+                {
+                    throw new MissingFieldException("Select start map file name");
+                }
+
+                startMap = new MapFileJsonModel()
+                {
+                    File = MapFileName
+                };
+            }
+        }
+
+        Dictionary<OSEnum, Dictionary<PortEnum, string>>? executables = [];
+
+        if (!string.IsNullOrWhiteSpace(WindowsNBloodExe))
+        {
+            _ = executables.TryAdd(OSEnum.Windows, []);
+            executables[OSEnum.Windows].Add(PortEnum.NBlood, WindowsNBloodExe);
+        }
+
+        if (!string.IsNullOrWhiteSpace(WindowsNotBloodExe))
+        {
+            _ = executables.TryAdd(OSEnum.Windows, []);
+            executables[OSEnum.Windows].Add(PortEnum.NotBlood, WindowsNotBloodExe);
+        }
+
+        if (!string.IsNullOrWhiteSpace(WindowsEDukeExe))
+        {
+            _ = executables.TryAdd(OSEnum.Windows, []);
+            executables[OSEnum.Windows].Add(PortEnum.EDuke32, WindowsEDukeExe);
+        }
+
+        if (!string.IsNullOrWhiteSpace(WindowsRedNukemExe))
+        {
+            _ = executables.TryAdd(OSEnum.Windows, []);
+            executables[OSEnum.Windows].Add(PortEnum.RedNukem, WindowsRedNukemExe);
+        }
+
+        if (!string.IsNullOrWhiteSpace(WindowsRazeExe))
+        {
+            _ = executables.TryAdd(OSEnum.Windows, []);
+            executables[OSEnum.Windows].Add(PortEnum.Raze, WindowsRazeExe);
+        }
+
+        if (!string.IsNullOrWhiteSpace(WindowsPCExhumedExe))
+        {
+            _ = executables.TryAdd(OSEnum.Windows, []);
+            executables[OSEnum.Windows].Add(PortEnum.PCExhumed, WindowsPCExhumedExe);
+        }
+
+        if (!string.IsNullOrWhiteSpace(LinuxNBloodExe))
+        {
+            _ = executables.TryAdd(OSEnum.Linux, []);
+            executables[OSEnum.Linux].Add(PortEnum.NBlood, LinuxNBloodExe);
+        }
+
+        if (!string.IsNullOrWhiteSpace(LinuxNotBloodExe))
+        {
+            _ = executables.TryAdd(OSEnum.Linux, []);
+            executables[OSEnum.Linux].Add(PortEnum.NotBlood, LinuxNotBloodExe);
+        }
+
+        if (!string.IsNullOrWhiteSpace(LinuxEDukeExe))
+        {
+            _ = executables.TryAdd(OSEnum.Linux, []);
+            executables[OSEnum.Linux].Add(PortEnum.EDuke32, LinuxEDukeExe);
+        }
+
+        if (!string.IsNullOrWhiteSpace(LinuxRedNukemExe))
+        {
+            _ = executables.TryAdd(OSEnum.Linux, []);
+            executables[OSEnum.Linux].Add(PortEnum.RedNukem, LinuxRedNukemExe);
+        }
+
+        if (!string.IsNullOrWhiteSpace(LinuxRazeExe))
+        {
+            _ = executables.TryAdd(OSEnum.Linux, []);
+            executables[OSEnum.Linux].Add(PortEnum.Raze, LinuxRazeExe);
+        }
+
+        if (!string.IsNullOrWhiteSpace(LinuxPCExhumedExe))
+        {
+            _ = executables.TryAdd(OSEnum.Linux, []);
+            executables[OSEnum.Linux].Add(PortEnum.PCExhumed, LinuxPCExhumedExe);
+        }
+
+        AddonManifestJsonModel addon = new()
+        {
+            AddonType = addonType,
+            Id = AddonIdPrefix + AddonId,
+            SupportedGame = new()
+            {
+                Game = gameEnum,
+                Version = dukeVersion?.ToString(),
+                Crc = string.IsNullOrWhiteSpace(GameCrc) ? null : GameCrc
+            },
+            Title = AddonTitle,
+            Version = AddonVersion,
+            ReleaseDate = ReleaseDate.HasValue ? DateOnly.FromDateTime(ReleaseDate.Value.DateTime) : null,
+            Author = string.IsNullOrWhiteSpace(AddonAuthor) ? null : AddonAuthor,
+            Description = string.IsNullOrWhiteSpace(AddonDescription) ? null : AddonDescription,
+            MainDef = string.IsNullOrWhiteSpace(MainDef) || IsModSelected ? null : MainDef,
+            AdditionalDefs = string.IsNullOrWhiteSpace(AdditionalDefs) ? null : [.. AdditionalDefs.Split(',')],
+            MainCon = string.IsNullOrWhiteSpace(MainCon) || !IsMainConAvailable ? null : MainCon,
+            AdditionalCons = string.IsNullOrWhiteSpace(AdditionalCons) || !AreDukePropertiesAvailable ? null : [.. AdditionalCons.Split(',')],
+            Rts = string.IsNullOrWhiteSpace(Rts) ? null : Rts,
+            Ini = string.IsNullOrWhiteSpace(Ini) ? null : Ini,
+            MainRff = string.IsNullOrWhiteSpace(MainRff) ? null : MainRff,
+            SoundRff = string.IsNullOrWhiteSpace(SoundRff) ? null : SoundRff,
+            Dependencies = (DependenciesList is null || DependenciesList.Count == 0) && features.Count == 0
+                ? null
+                : new()
+                {
+                    Addons = DependenciesList is null || DependenciesList.Count == 0 ? null : [.. DependenciesList],
+                    RequiredFeatures = features.Count == 0 ? null : features
+                },
+            Incompatibles = (IncompatibilitiesList is null || IncompatibilitiesList.Count == 0)
+                ? null
+                : new()
+                {
+                    Addons = [.. IncompatibilitiesList]
+                },
+            Options = (OptionsList is null || OptionsList.Count == 0) ? null : [.. OptionsList],
+            StartMap = startMap,
+            Executables = executables.Count == 0 ? null : executables
+        };
+
+        jsonString = JsonSerializer.Serialize(addon, AddonManifestJsonContext.Default.AddonManifestJsonModel);
+        JsonText = jsonString;
+
+        return addon;
+    }
+
+    private void LoadJson(string pathToFile)
+    {
+        using var jsonStream = File.OpenRead(pathToFile);
+
+        var addon = JsonSerializer.Deserialize(
+            jsonStream,
+            AddonManifestJsonContext.Default.AddonManifestJsonModel
+            );
+
+        if (addon is null)
+        {
+            return;
+        }
+
+        IsTcSelected = addon.AddonType is AddonTypeEnum.TC;
+        IsMapSelected = addon.AddonType is AddonTypeEnum.Map;
+        IsModSelected = addon.AddonType is AddonTypeEnum.Mod;
+
+        SelectedGame = addon.SupportedGame.Game;
+
+        var isDukeVersion = Enum.TryParse<DukeVersionEnum>(addon.SupportedGame.Version, true, out var dukeVersion);
+        IsDuke13DSelected = isDukeVersion && dukeVersion is DukeVersionEnum.Duke3D_13D;
+        IsDukeAtomicSelected = isDukeVersion && dukeVersion is DukeVersionEnum.Duke3D_Atomic;
+        IsDukeWTSelected = isDukeVersion && dukeVersion is DukeVersionEnum.Duke3D_WT;
+
+        GameCrc = addon.SupportedGame.Crc;
+
+        AddonTitle = addon.Title;
+        AddonId = string.IsNullOrEmpty(AddonIdPrefix) ? addon.Id : addon.Id.Replace(AddonIdPrefix, "");
+        AddonVersion = addon.Version;
+        ReleaseDate = addon.ReleaseDate.HasValue ? addon.ReleaseDate.Value.ToDateTime(TimeOnly.MinValue) : null;
+        AddonAuthor = addon.Author;
+        MainDef = addon.MainDef;
+        AdditionalDefs = addon.AdditionalDefs is null ? null : string.Join(',', addon.AdditionalDefs);
+        MainCon = addon.MainCon;
+        AdditionalCons = addon.AdditionalCons is null ? null : string.Join(',', addon.AdditionalCons);
+        Rts = addon.Rts;
+        Ini = addon.Ini;
+        MainRff = addon.MainRff;
+        SoundRff = addon.SoundRff;
+
+        IsEdukeConsSelected = addon.Dependencies?.RequiredFeatures is not null && addon.Dependencies.RequiredFeatures.Contains(FeatureEnum.EDuke32_CON);
+        IsModernTypesSelected = addon.Dependencies?.RequiredFeatures is not null && addon.Dependencies.RequiredFeatures.Contains(FeatureEnum.Modern_Types);
+        IsModelsSelected = addon.Dependencies?.RequiredFeatures is not null && addon.Dependencies.RequiredFeatures.Contains(FeatureEnum.Models);
+        IsHightileSelected = addon.Dependencies?.RequiredFeatures is not null && addon.Dependencies.RequiredFeatures.Contains(FeatureEnum.Hightile);
+        IsSlopedSelected = addon.Dependencies?.RequiredFeatures is not null && addon.Dependencies.RequiredFeatures.Contains(FeatureEnum.Sloped_Sprites);
+        IsTrorSelected = addon.Dependencies?.RequiredFeatures is not null && addon.Dependencies.RequiredFeatures.Contains(FeatureEnum.TROR);
+        IsCstatSelected = addon.Dependencies?.RequiredFeatures is not null && addon.Dependencies.RequiredFeatures.Contains(FeatureEnum.Wall_Rotate_Cstat);
+        IsLightingSelected = addon.Dependencies?.RequiredFeatures is not null && addon.Dependencies.RequiredFeatures.Contains(FeatureEnum.Dynamic_Lighting);
+        IsSndInfoSelected = addon.Dependencies?.RequiredFeatures is not null && addon.Dependencies.RequiredFeatures.Contains(FeatureEnum.SndInfo);
+        IsTilefromtextureSelected = addon.Dependencies?.RequiredFeatures is not null && addon.Dependencies.RequiredFeatures.Contains(FeatureEnum.TileFromTexture);
+
+        DependenciesList = addon.Dependencies?.Addons is null ? null : [.. addon.Dependencies.Addons];
+        IncompatibilitiesList = addon.Incompatibles?.Addons is null ? null : [.. addon.Incompatibles.Addons];
+        OptionsList = addon.Options is null ? null : [.. addon.Options];
+
+        if (addon.StartMap is MapFileJsonModel mapFile)
+        {
+            IsFileMapTypeSelected = true;
+            MapFileName = mapFile.File;
+        }
+        else if (addon.StartMap is MapSlotJsonModel slotFile)
+        {
+            IsElMapTypeSelected = true;
+            MapEpisode = slotFile.Episode;
+            MapLevel = slotFile.Level;
+        }
+
+        AddonDescription = addon.Description;
+
+        if (addon.Executables is not null)
+        {
+            if (addon.Executables.TryGetValue(OSEnum.Windows, out var windowsExes))
+            {
+                _ = windowsExes.TryGetValue(PortEnum.EDuke32, out var exe1);
+                WindowsEDukeExe = exe1;
+                _ = windowsExes.TryGetValue(PortEnum.NBlood, out var exe2);
+                WindowsNBloodExe = exe2;
+                _ = windowsExes.TryGetValue(PortEnum.NotBlood, out var exe3);
+                WindowsNotBloodExe = exe3;
+            }
+
+            if (addon.Executables.TryGetValue(OSEnum.Linux, out var linuxExes))
+            {
+                _ = linuxExes.TryGetValue(PortEnum.EDuke32, out var exe1);
+                LinuxEDukeExe = exe1;
+                _ = linuxExes.TryGetValue(PortEnum.NBlood, out var exe2);
+                LinuxNBloodExe = exe2;
+                _ = linuxExes.TryGetValue(PortEnum.NotBlood, out var exe3);
+                LinuxNotBloodExe = exe3;
+            }
+        }
+        else
+        {
+            WindowsEDukeExe = null;
+            WindowsNBloodExe = null;
+            WindowsNotBloodExe = null;
+            LinuxEDukeExe = null;
+            LinuxNBloodExe = null;
+            LinuxNotBloodExe = null;
+        }
+    }
+
+    /// <summary>
+    ///     Rename addon folder to {addon_id}_v{addon_version}
+    /// </summary>
+    /// <param name="addon">Addon</param>
+    private void RenameAddonFolder(AddonManifestJsonModel addon)
+    {
+        ArgumentNullException.ThrowIfNull(PathToAddonFolder);
+
+        var fullName = GetAddonFullName(addon);
+        var parentDir = Path.GetDirectoryName(PathToAddonFolder) ?? throw new InvalidOperationException("Could not determine parent directory for addon folder");
+        var newFolderPath = Path.Combine(parentDir, fullName);
+
+        if (!PathToAddonFolder.Equals(newFolderPath))
+        {
+            Directory.Move(PathToAddonFolder, newFolderPath);
+            PathToAddonFolder = newFolderPath;
+        }
+    }
+
+    private static string GetAddonFullName(AddonManifestJsonModel addon)
+    {
+        StringBuilder version = new();
+
+        foreach (var ch in addon.Version)
+        {
+            if (Path.GetInvalidPathChars().Contains(ch) ||
+                ch == '.')
+            {
+                _ = version.Append('_');
+            }
+            else
+            {
+                _ = version.Append(ch);
+            }
+        }
+
+        return $"{addon.Id}_v{version}";
+    }
+
+    /// <summary>
+    ///     Set result message.
+    /// </summary>
+    /// <param name="message">Message.</param>
+    /// <param name="isError">Is error.</param>
+    private void SetResultMessage(string message, bool isError)
+    {
+        Dispatcher.UIThread.Post(() =>
+        {
+            ErrorTextColor = isError ? SolidColorBrush.Parse("Red") : SolidColorBrush.Parse("Green");
+            ErrorText = message;
+        });
+    }
+
+    /// <summary>
+    ///     Create zip archive with addon files.
+    /// </summary>
+    private async Task<string?> CreateZipInternalAsync()
+    {
+        try
+        {
+            IsInProgress = true;
+
+            if (string.IsNullOrWhiteSpace(PathToAddonFolder) &&
+                !Directory.Exists(PathToAddonFolder))
+            {
+                SetResultMessage("Choose addon folder", true);
+
+                return null;
+            }
+
+            SaveJson();
+
+            var addon = GetAddonJson(out var jsonString);
+
+            ArgumentNullException.ThrowIfNull(PathToAddonFolder);
+            File.WriteAllText(Path.Combine(PathToAddonFolder, "addon.json"), jsonString);
+
+            string archiveSaveFolder;
+            var game = _gamesProvider.GetGame(addon.SupportedGame.Game);
+
+            if (addon.AddonType is AddonTypeEnum.TC)
+            {
+                archiveSaveFolder = game.CampaignsFolderPath;
+            }
+            else if (addon.AddonType is AddonTypeEnum.Mod)
+            {
+                archiveSaveFolder = game.ModsFolderPath;
+            }
+            else if (addon.AddonType is AddonTypeEnum.Map)
+            {
+                archiveSaveFolder = game.MapsFolderPath;
+            }
+            else
+            {
+                throw new ArgumentOutOfRangeException(nameof(addon.AddonType));
+            }
+
+            var fullName = GetAddonFullName(addon);
+            var pathToArchive = Path.Combine(archiveSaveFolder, fullName + ".zip");
+
+            SetResultMessage("Making zip. Please wait.", false);
+
+            List<FileStream> fileStreams = new();
+
+            using (var archive = ZipArchive.CreateArchive())
+            {
+                using (archive.PauseEntryRebuilding())
+                {
+                    var files = Directory.EnumerateFiles(PathToAddonFolder, "*.*", SearchOption.AllDirectories).ToList();
+                    var filesCount = files.Count;
+                    var currentFile = 0;
+
+                    foreach (var path in files)
+                    {
+                        var fileInfo = new FileInfo(path);
+                        var fileStream = fileInfo.OpenRead();
+                        fileStreams.Add(fileStream);
+
+                        _ = archive.AddEntry(
+                            path[PathToAddonFolder.Length..],
+                            fileStream,
+                            true,
+                            fileInfo.Length,
+                            fileInfo.LastWriteTime
+                            );
+
+                        currentFile++;
+                        ProgressBarValue = (int)(currentFile / (double)filesCount * 100);
+                    }
+                }
+
+                await Task.Run(() => archive.SaveTo(pathToArchive, CompressionType.None)).ConfigureAwait(false);
+
+                fileStreams.ForEach(x => x.Dispose());
+            }
+
+            SetResultMessage("Zip created successfully. Go to the game page and press Refresh.", false);
+
+            return pathToArchive;
+        }
+        catch (Exception ex)
+        {
+            SetResultMessage(ex.Message, true);
+
+            return null;
+        }
+        finally
+        {
+            IsInProgress = false;
+        }
+    }
+
+
     #region Binding Properties
 
     /// <summary>
-    /// Use local API parameter
+    ///     Use local API parameter
     /// </summary>
     public bool LocalApiCheckbox
     {
@@ -215,6 +781,7 @@ public sealed partial class DevViewModel : ObservableObject
 
     [ObservableProperty]
     private string _addonTitle = string.Empty;
+
     partial void OnAddonTitleChanged(string value)
     {
         StringBuilder sb = new(value.Length);
@@ -280,6 +847,7 @@ public sealed partial class DevViewModel : ObservableObject
 
     [ObservableProperty]
     private string? _pathToAddonFolder;
+
     partial void OnPathToAddonFolderChanged(string? value)
     {
         if (value is null)
@@ -290,6 +858,7 @@ public sealed partial class DevViewModel : ObservableObject
         if (!Directory.Exists(value))
         {
             SetResultMessage("Folder doesn't exist", true);
+
             return;
         }
 
@@ -316,6 +885,7 @@ public sealed partial class DevViewModel : ObservableObject
 
     [ObservableProperty]
     private string _apiPasswordTextBox;
+
     partial void OnApiPasswordTextBoxChanged(string value)
     {
         var configValue = _config.ApiPassword;
@@ -410,6 +980,7 @@ public sealed partial class DevViewModel : ObservableObject
                 if (!manifestResult.IsSuccess)
                 {
                     _ = errors.AppendLine($"Error while adding {file.Path.AbsolutePath}: {manifestResult.Message}");
+
                     continue;
                 }
 
@@ -420,6 +991,7 @@ public sealed partial class DevViewModel : ObservableObject
                 if (!uploadResult.IsSuccess)
                 {
                     _ = errors.AppendLine($"Error while adding {file.Path.AbsolutePath}: {uploadResult.Message}");
+
                     continue;
                 }
 
@@ -428,6 +1000,7 @@ public sealed partial class DevViewModel : ObservableObject
                 if (!addingResult.IsSuccess)
                 {
                     _ = errors.AppendLine($"Error while adding {file.Path.AbsolutePath}: {addingResult.Message}");
+
                     continue;
                 }
             }
@@ -457,7 +1030,11 @@ public sealed partial class DevViewModel : ObservableObject
     [RelayCommand]
     private void AddDependency()
     {
-        DependantAddonJsonModel newAddon = new() { Id = "", Version = null };
+        DependantAddonJsonModel newAddon = new()
+        {
+            Id = "",
+            Version = null
+        };
 
         DependenciesList ??= [];
 
@@ -477,7 +1054,11 @@ public sealed partial class DevViewModel : ObservableObject
     [RelayCommand]
     private void AddIncompatibility()
     {
-        DependantAddonJsonModel newAddon = new() { Id = "", Version = null };
+        DependantAddonJsonModel newAddon = new()
+        {
+            Id = "",
+            Version = null
+        };
 
         IncompatibilitiesList ??= [];
 
@@ -497,7 +1078,11 @@ public sealed partial class DevViewModel : ObservableObject
     [RelayCommand]
     private void AddOption()
     {
-        OptionJsonModel newOption = new() { OptionName = "", Parameters = [] };
+        OptionJsonModel newOption = new()
+        {
+            OptionName = "",
+            Parameters = []
+        };
 
         OptionsList ??= [];
 
@@ -618,6 +1203,7 @@ public sealed partial class DevViewModel : ObservableObject
                 !Directory.Exists(PathToAddonFolder))
             {
                 SetResultMessage("Choose addon folder", true);
+
                 return;
             }
 
@@ -694,526 +1280,4 @@ public sealed partial class DevViewModel : ObservableObject
     }
 
     #endregion
-
-
-    private AddonManifestJsonModel GetAddonJson(out string jsonString)
-    {
-        if (PathToAddonFolder is null)
-        {
-            throw new MissingFieldException("Choose addon folder");
-        }
-
-        var files = Directory.GetFiles(PathToAddonFolder, "*", SearchOption.TopDirectoryOnly)
-            .Select(static x => Path.GetFileName(x).ToLower())
-            .ToList();
-
-        if (SelectedGame is not GameEnum.Standalone &&
-            WindowsNBloodExe is null &&
-            WindowsNotBloodExe is null &&
-            WindowsEDukeExe is null &&
-            WindowsRedNukemExe is null &&
-            WindowsRazeExe is null &&
-            WindowsPCExhumedExe is null &&
-            LinuxNBloodExe is null &&
-            LinuxNotBloodExe is null &&
-            LinuxEDukeExe is null &&
-            LinuxRedNukemExe is null &&
-            LinuxRazeExe is null &&
-            LinuxPCExhumedExe is null &&
-            MainRff is null &&
-            SoundRff is null)
-        {
-            var forbidden = files.Intersect(_forbiddenNames);
-
-            if (forbidden.Any())
-            {
-                throw new MissingFieldException($"Common file names can't be used. Rename these files: {string.Join(", ", forbidden)}");
-            }
-
-            if (SelectedGame is GameEnum.Blood)
-            {
-                if (string.IsNullOrWhiteSpace(MainRff) && string.IsNullOrWhiteSpace(SoundRff))
-                {
-                    if (files.Any(static x => x.EndsWith(".ART", StringComparison.OrdinalIgnoreCase)))
-                    {
-                        throw new MissingFieldException("Don't use ART files. Convert them to DEF.");
-                    }
-                    if (files.Any(static x => x.EndsWith(".DAT", StringComparison.OrdinalIgnoreCase)))
-                    {
-                        throw new MissingFieldException("Don't use DAT files. Convert them to DEF.");
-                    }
-                    if (files.Any(static x => x.EndsWith(".RFS", StringComparison.OrdinalIgnoreCase)))
-                    {
-                        throw new MissingFieldException("Addons with RFS files are not supported");
-                    }
-                }
-
-                if (files.Intersect(_forbiddenOggs).Any())
-                {
-                    throw new MissingFieldException("blood00.ogg - blood09.ogg can't be used, start with blood10.ogg");
-                }
-            }
-        }
-
-        ErrorText = null;
-
-        var addonType =
-              IsTcSelected ? AddonTypeEnum.TC
-            : IsMapSelected ? AddonTypeEnum.Map
-            : IsModSelected ? AddonTypeEnum.Mod
-            : throw new ArgumentOutOfRangeException("Select addon type");
-
-        var gameEnum = SelectedGame ?? throw new ArgumentOutOfRangeException("Select game");
-
-        DukeVersionEnum? dukeVersion =
-              SelectedGame is not GameEnum.Duke3D ? null
-              : IsDukeAtomicSelected ? DukeVersionEnum.Duke3D_Atomic
-              : IsDuke13DSelected ? DukeVersionEnum.Duke3D_13D
-              : IsDukeWTSelected ? DukeVersionEnum.Duke3D_WT
-              : null;
-
-        if (string.IsNullOrWhiteSpace(AddonTitle))
-        {
-            throw new MissingFieldException("Select addon title");
-        }
-        if (string.IsNullOrWhiteSpace(AddonId))
-        {
-            throw new MissingFieldException("Select addon id");
-        }
-        if (string.IsNullOrWhiteSpace(AddonVersion))
-        {
-            throw new MissingFieldException("Select addon version");
-        }
-
-        List<FeatureEnum> features = [];
-
-        if (IsEdukeConsSelected &&
-            AreDukePropertiesAvailable)
-        {
-            features.Add(FeatureEnum.EDuke32_CON);
-        }
-        if (IsModernTypesSelected &&
-            SelectedGame is GameEnum.Blood)
-        {
-            features.Add(FeatureEnum.Modern_Types);
-        }
-        if (IsModelsSelected)
-        {
-            features.Add(FeatureEnum.Models);
-        }
-        if (IsHightileSelected)
-        {
-            features.Add(FeatureEnum.Hightile);
-        }
-        if (IsSlopedSelected)
-        {
-            features.Add(FeatureEnum.Sloped_Sprites);
-        }
-        if (IsTrorSelected)
-        {
-            features.Add(FeatureEnum.TROR);
-        }
-        if (IsCstatSelected)
-        {
-            features.Add(FeatureEnum.Wall_Rotate_Cstat);
-        }
-        if (IsLightingSelected)
-        {
-            features.Add(FeatureEnum.Dynamic_Lighting);
-        }
-        if (IsSndInfoSelected)
-        {
-            features.Add(FeatureEnum.SndInfo);
-        }
-        if (IsTilefromtextureSelected)
-        {
-            features.Add(FeatureEnum.TileFromTexture);
-        }
-
-        IStartMap? startMap = null;
-
-        if (IsMapSelected)
-        {
-            if (!IsElMapTypeSelected && !IsFileMapTypeSelected)
-            {
-                throw new MissingFieldException("Select start map");
-            }
-
-            if (IsElMapTypeSelected)
-            {
-                if (MapEpisode is null)
-                {
-                    throw new MissingFieldException("Select start map episode");
-                }
-
-                if (MapLevel is null)
-                {
-                    throw new MissingFieldException("Select start map level");
-                }
-
-                startMap = new MapSlotJsonModel() { Episode = MapEpisode.Value, Level = MapLevel.Value };
-            }
-
-            if (IsFileMapTypeSelected)
-            {
-                if (string.IsNullOrWhiteSpace(MapFileName))
-                {
-                    throw new MissingFieldException("Select start map file name");
-                }
-
-                startMap = new MapFileJsonModel() { File = MapFileName };
-            }
-        }
-
-        Dictionary<OSEnum, Dictionary<PortEnum, string>>? executables = [];
-
-        if (!string.IsNullOrWhiteSpace(WindowsNBloodExe))
-        {
-            _ = executables.TryAdd(OSEnum.Windows, []);
-            executables[OSEnum.Windows].Add(PortEnum.NBlood, WindowsNBloodExe);
-        }
-        if (!string.IsNullOrWhiteSpace(WindowsNotBloodExe))
-        {
-            _ = executables.TryAdd(OSEnum.Windows, []);
-            executables[OSEnum.Windows].Add(PortEnum.NotBlood, WindowsNotBloodExe);
-        }
-        if (!string.IsNullOrWhiteSpace(WindowsEDukeExe))
-        {
-            _ = executables.TryAdd(OSEnum.Windows, []);
-            executables[OSEnum.Windows].Add(PortEnum.EDuke32, WindowsEDukeExe);
-        }
-        if (!string.IsNullOrWhiteSpace(WindowsRedNukemExe))
-        {
-            _ = executables.TryAdd(OSEnum.Windows, []);
-            executables[OSEnum.Windows].Add(PortEnum.RedNukem, WindowsRedNukemExe);
-        }
-        if (!string.IsNullOrWhiteSpace(WindowsRazeExe))
-        {
-            _ = executables.TryAdd(OSEnum.Windows, []);
-            executables[OSEnum.Windows].Add(PortEnum.Raze, WindowsRazeExe);
-        }
-        if (!string.IsNullOrWhiteSpace(WindowsPCExhumedExe))
-        {
-            _ = executables.TryAdd(OSEnum.Windows, []);
-            executables[OSEnum.Windows].Add(PortEnum.PCExhumed, WindowsPCExhumedExe);
-        }
-
-        if (!string.IsNullOrWhiteSpace(LinuxNBloodExe))
-        {
-            _ = executables.TryAdd(OSEnum.Linux, []);
-            executables[OSEnum.Linux].Add(PortEnum.NBlood, LinuxNBloodExe);
-        }
-        if (!string.IsNullOrWhiteSpace(LinuxNotBloodExe))
-        {
-            _ = executables.TryAdd(OSEnum.Linux, []);
-            executables[OSEnum.Linux].Add(PortEnum.NotBlood, LinuxNotBloodExe);
-        }
-        if (!string.IsNullOrWhiteSpace(LinuxEDukeExe))
-        {
-            _ = executables.TryAdd(OSEnum.Linux, []);
-            executables[OSEnum.Linux].Add(PortEnum.EDuke32, LinuxEDukeExe);
-        }
-        if (!string.IsNullOrWhiteSpace(LinuxRedNukemExe))
-        {
-            _ = executables.TryAdd(OSEnum.Linux, []);
-            executables[OSEnum.Linux].Add(PortEnum.RedNukem, LinuxRedNukemExe);
-        }
-        if (!string.IsNullOrWhiteSpace(LinuxRazeExe))
-        {
-            _ = executables.TryAdd(OSEnum.Linux, []);
-            executables[OSEnum.Linux].Add(PortEnum.Raze, LinuxRazeExe);
-        }
-        if (!string.IsNullOrWhiteSpace(LinuxPCExhumedExe))
-        {
-            _ = executables.TryAdd(OSEnum.Linux, []);
-            executables[OSEnum.Linux].Add(PortEnum.PCExhumed, LinuxPCExhumedExe);
-        }
-
-        AddonManifestJsonModel addon = new()
-        {
-            AddonType = addonType,
-            Id = AddonIdPrefix + AddonId,
-            SupportedGame = new()
-            {
-                Game = gameEnum,
-                Version = dukeVersion?.ToString(),
-                Crc = string.IsNullOrWhiteSpace(GameCrc) ? null : GameCrc
-            },
-            Title = AddonTitle,
-            Version = AddonVersion,
-            ReleaseDate = ReleaseDate.HasValue ? DateOnly.FromDateTime(ReleaseDate.Value.DateTime) : null,
-            Author = string.IsNullOrWhiteSpace(AddonAuthor) ? null : AddonAuthor,
-            Description = string.IsNullOrWhiteSpace(AddonDescription) ? null : AddonDescription,
-            MainDef = string.IsNullOrWhiteSpace(MainDef) || IsModSelected ? null : MainDef,
-            AdditionalDefs = string.IsNullOrWhiteSpace(AdditionalDefs) ? null : [.. AdditionalDefs.Split(',')],
-            MainCon = string.IsNullOrWhiteSpace(MainCon) || !IsMainConAvailable ? null : MainCon,
-            AdditionalCons = string.IsNullOrWhiteSpace(AdditionalCons) || !AreDukePropertiesAvailable ? null : [.. AdditionalCons.Split(',')],
-            Rts = string.IsNullOrWhiteSpace(Rts) ? null : Rts,
-            Ini = string.IsNullOrWhiteSpace(Ini) ? null : Ini,
-            MainRff = string.IsNullOrWhiteSpace(MainRff) ? null : MainRff,
-            SoundRff = string.IsNullOrWhiteSpace(SoundRff) ? null : SoundRff,
-            Dependencies = (DependenciesList is null || DependenciesList.Count == 0) && features.Count == 0 ? null : new() { Addons = DependenciesList is null || DependenciesList.Count == 0 ? null : [.. DependenciesList], RequiredFeatures = features.Count == 0 ? null : features },
-            Incompatibles = (IncompatibilitiesList is null || IncompatibilitiesList.Count == 0) ? null : new() { Addons = [.. IncompatibilitiesList] },
-            Options = (OptionsList is null || OptionsList.Count == 0) ? null : [.. OptionsList],
-            StartMap = startMap,
-            Executables = executables.Count == 0 ? null : executables
-        };
-
-        jsonString = JsonSerializer.Serialize(addon, AddonManifestJsonContext.Default.AddonManifestJsonModel);
-        JsonText = jsonString;
-
-        return addon;
-    }
-
-    private void LoadJson(string pathToFile)
-    {
-        using var jsonStream = File.OpenRead(pathToFile);
-
-        var addon = JsonSerializer.Deserialize(
-            jsonStream,
-            AddonManifestJsonContext.Default.AddonManifestJsonModel
-            );
-
-        if (addon is null)
-        {
-            return;
-        }
-
-        IsTcSelected = addon.AddonType is AddonTypeEnum.TC;
-        IsMapSelected = addon.AddonType is AddonTypeEnum.Map;
-        IsModSelected = addon.AddonType is AddonTypeEnum.Mod;
-
-        SelectedGame = addon.SupportedGame.Game;
-
-        var isDukeVersion = Enum.TryParse<DukeVersionEnum>(addon.SupportedGame.Version, true, out var dukeVersion);
-        IsDuke13DSelected = isDukeVersion && dukeVersion is DukeVersionEnum.Duke3D_13D;
-        IsDukeAtomicSelected = isDukeVersion && dukeVersion is DukeVersionEnum.Duke3D_Atomic;
-        IsDukeWTSelected = isDukeVersion && dukeVersion is DukeVersionEnum.Duke3D_WT;
-
-        GameCrc = addon.SupportedGame.Crc;
-
-        AddonTitle = addon.Title;
-        AddonId = string.IsNullOrEmpty(AddonIdPrefix) ? addon.Id : addon.Id.Replace(AddonIdPrefix, "");
-        AddonVersion = addon.Version;
-        ReleaseDate = addon.ReleaseDate.HasValue ? addon.ReleaseDate.Value.ToDateTime(TimeOnly.MinValue) : null;
-        AddonAuthor = addon.Author;
-        MainDef = addon.MainDef;
-        AdditionalDefs = addon.AdditionalDefs is null ? null : string.Join(',', addon.AdditionalDefs);
-        MainCon = addon.MainCon;
-        AdditionalCons = addon.AdditionalCons is null ? null : string.Join(',', addon.AdditionalCons);
-        Rts = addon.Rts;
-        Ini = addon.Ini;
-        MainRff = addon.MainRff;
-        SoundRff = addon.SoundRff;
-
-        IsEdukeConsSelected = addon.Dependencies?.RequiredFeatures is not null && addon.Dependencies.RequiredFeatures.Contains(FeatureEnum.EDuke32_CON);
-        IsModernTypesSelected = addon.Dependencies?.RequiredFeatures is not null && addon.Dependencies.RequiredFeatures.Contains(FeatureEnum.Modern_Types);
-        IsModelsSelected = addon.Dependencies?.RequiredFeatures is not null && addon.Dependencies.RequiredFeatures.Contains(FeatureEnum.Models);
-        IsHightileSelected = addon.Dependencies?.RequiredFeatures is not null && addon.Dependencies.RequiredFeatures.Contains(FeatureEnum.Hightile);
-        IsSlopedSelected = addon.Dependencies?.RequiredFeatures is not null && addon.Dependencies.RequiredFeatures.Contains(FeatureEnum.Sloped_Sprites);
-        IsTrorSelected = addon.Dependencies?.RequiredFeatures is not null && addon.Dependencies.RequiredFeatures.Contains(FeatureEnum.TROR);
-        IsCstatSelected = addon.Dependencies?.RequiredFeatures is not null && addon.Dependencies.RequiredFeatures.Contains(FeatureEnum.Wall_Rotate_Cstat);
-        IsLightingSelected = addon.Dependencies?.RequiredFeatures is not null && addon.Dependencies.RequiredFeatures.Contains(FeatureEnum.Dynamic_Lighting);
-        IsSndInfoSelected = addon.Dependencies?.RequiredFeatures is not null && addon.Dependencies.RequiredFeatures.Contains(FeatureEnum.SndInfo);
-        IsTilefromtextureSelected = addon.Dependencies?.RequiredFeatures is not null && addon.Dependencies.RequiredFeatures.Contains(FeatureEnum.TileFromTexture);
-
-        DependenciesList = addon.Dependencies?.Addons is null ? null : [.. addon.Dependencies.Addons];
-        IncompatibilitiesList = addon.Incompatibles?.Addons is null ? null : [.. addon.Incompatibles.Addons];
-        OptionsList = addon.Options is null ? null : [.. addon.Options];
-
-        if (addon.StartMap is MapFileJsonModel mapFile)
-        {
-            IsFileMapTypeSelected = true;
-            MapFileName = mapFile.File;
-        }
-        else if (addon.StartMap is MapSlotJsonModel slotFile)
-        {
-            IsElMapTypeSelected = true;
-            MapEpisode = slotFile.Episode;
-            MapLevel = slotFile.Level;
-        }
-
-        AddonDescription = addon.Description;
-
-        if (addon.Executables is not null)
-        {
-            if (addon.Executables.TryGetValue(OSEnum.Windows, out var windowsExes))
-            {
-                _ = windowsExes.TryGetValue(PortEnum.EDuke32, out var exe1);
-                WindowsEDukeExe = exe1;
-                _ = windowsExes.TryGetValue(PortEnum.NBlood, out var exe2);
-                WindowsNBloodExe = exe2;
-                _ = windowsExes.TryGetValue(PortEnum.NotBlood, out var exe3);
-                WindowsNotBloodExe = exe3;
-            }
-
-            if (addon.Executables.TryGetValue(OSEnum.Linux, out var linuxExes))
-            {
-                _ = linuxExes.TryGetValue(PortEnum.EDuke32, out var exe1);
-                LinuxEDukeExe = exe1;
-                _ = linuxExes.TryGetValue(PortEnum.NBlood, out var exe2);
-                LinuxNBloodExe = exe2;
-                _ = linuxExes.TryGetValue(PortEnum.NotBlood, out var exe3);
-                LinuxNotBloodExe = exe3;
-            }
-        }
-        else
-        {
-            WindowsEDukeExe = null;
-            WindowsNBloodExe = null;
-            WindowsNotBloodExe = null;
-            LinuxEDukeExe = null;
-            LinuxNBloodExe = null;
-            LinuxNotBloodExe = null;
-        }
-    }
-
-    /// <summary>
-    /// Rename addon folder to {addon_id}_v{addon_version}
-    /// </summary>
-    /// <param name="addon">Addon</param>
-    private void RenameAddonFolder(AddonManifestJsonModel addon)
-    {
-        ArgumentNullException.ThrowIfNull(PathToAddonFolder);
-
-        var fullName = GetAddonFullName(addon);
-        var parentDir = Path.GetDirectoryName(PathToAddonFolder) ?? throw new InvalidOperationException("Could not determine parent directory for addon folder");
-        var newFolderPath = Path.Combine(parentDir, fullName);
-
-        if (!PathToAddonFolder.Equals(newFolderPath))
-        {
-            Directory.Move(PathToAddonFolder, newFolderPath);
-            PathToAddonFolder = newFolderPath;
-        }
-    }
-
-    private static string GetAddonFullName(AddonManifestJsonModel addon)
-    {
-        StringBuilder version = new();
-
-        foreach (var ch in addon.Version)
-        {
-            if (Path.GetInvalidPathChars().Contains(ch) ||
-                ch == '.')
-            {
-                _ = version.Append('_');
-            }
-            else
-            {
-                _ = version.Append(ch);
-            }
-        }
-
-        return $"{addon.Id}_v{version}";
-    }
-
-    /// <summary>
-    /// Set result message.
-    /// </summary>
-    /// <param name="message">Message.</param>
-    /// <param name="isError">Is error.</param>
-    private void SetResultMessage(string message, bool isError)
-    {
-        Dispatcher.UIThread.Post(() =>
-        {
-            ErrorTextColor = isError ? SolidColorBrush.Parse("Red") : SolidColorBrush.Parse("Green");
-            ErrorText = message;
-        });
-    }
-
-    /// <summary>
-    /// Create zip archive with addon files.
-    /// </summary>
-    private async Task<string?> CreateZipInternalAsync()
-    {
-        try
-        {
-            IsInProgress = true;
-
-            if (string.IsNullOrWhiteSpace(PathToAddonFolder) &&
-                !Directory.Exists(PathToAddonFolder))
-            {
-                SetResultMessage("Choose addon folder", true);
-                return null;
-            }
-
-            SaveJson();
-
-            var addon = GetAddonJson(out var jsonString);
-
-            ArgumentNullException.ThrowIfNull(PathToAddonFolder);
-            File.WriteAllText(Path.Combine(PathToAddonFolder, "addon.json"), jsonString);
-
-            string archiveSaveFolder;
-            var game = _gamesProvider.GetGame(addon.SupportedGame.Game);
-
-            if (addon.AddonType is AddonTypeEnum.TC)
-            {
-                archiveSaveFolder = game.CampaignsFolderPath;
-            }
-            else if (addon.AddonType is AddonTypeEnum.Mod)
-            {
-                archiveSaveFolder = game.ModsFolderPath;
-            }
-            else if (addon.AddonType is AddonTypeEnum.Map)
-            {
-                archiveSaveFolder = game.MapsFolderPath;
-            }
-            else
-            {
-                throw new ArgumentOutOfRangeException(nameof(addon.AddonType));
-            }
-
-            var fullName = GetAddonFullName(addon);
-            var pathToArchive = Path.Combine(archiveSaveFolder, fullName + ".zip");
-
-            SetResultMessage("Making zip. Please wait.", false);
-
-            List<FileStream> fileStreams = new();
-
-            using (var archive = ZipArchive.CreateArchive())
-            {
-                using (archive.PauseEntryRebuilding())
-                {
-                    var files = Directory.EnumerateFiles(PathToAddonFolder, "*.*", SearchOption.AllDirectories).ToList();
-                    var filesCount = files.Count;
-                    var currentFile = 0;
-
-                    foreach (var path in files)
-                    {
-                        var fileInfo = new FileInfo(path);
-                        var fileStream = fileInfo.OpenRead();
-                        fileStreams.Add(fileStream);
-
-                        _ = archive.AddEntry(
-                            path[PathToAddonFolder.Length..],
-                            fileStream,
-                            true,
-                            fileInfo.Length,
-                            fileInfo.LastWriteTime
-                        );
-
-                        currentFile++;
-                        ProgressBarValue = (int)(currentFile / (double)filesCount * 100);
-                    }
-                }
-
-                await Task.Run(() => archive.SaveTo(pathToArchive, CompressionType.None)).ConfigureAwait(false);
-
-                fileStreams.ForEach(x => x.Dispose());
-            }
-
-            SetResultMessage("Zip created successfully. Go to the game page and press Refresh.", false);
-            return pathToArchive;
-        }
-        catch (Exception ex)
-        {
-            SetResultMessage(ex.Message, true);
-            return null;
-        }
-        finally
-        {
-            IsInProgress = false;
-        }
-    }
 }

@@ -44,8 +44,8 @@ public sealed class ResultTests
         Result r = default;
         Assert.True(r.IsSuccess);
     }
-
 }
+
 
 public sealed class ResultGenericTests
 {

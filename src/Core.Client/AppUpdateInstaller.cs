@@ -1,4 +1,5 @@
-﻿using System.IO.Compression;
+﻿using System.Diagnostics;
+using System.IO.Compression;
 using System.Runtime.InteropServices;
 using Core.All.Serializable.Downloadable;
 using Core.Client.Helpers;
@@ -10,8 +11,8 @@ namespace Core.Client;
 
 public sealed class AppUpdateInstaller
 {
-    private readonly FilesDownloader _filesDownloader;
     private readonly IApiInterface _apiInterface;
+    private readonly FilesDownloader _filesDownloader;
     private readonly ILogger<AppUpdateInstaller> _logger;
 
     private GeneralReleaseJsonModel? _update;
@@ -28,7 +29,7 @@ public sealed class AppUpdateInstaller
     }
 
     /// <summary>
-    /// Check GitHub for releases with version higher than current
+    ///     Check GitHub for releases with version higher than current
     /// </summary>
     /// <param name="currentVersion">Current SFD version</param>
     public async Task<bool?> CheckForUpdates(Version currentVersion)
@@ -52,7 +53,7 @@ public sealed class AppUpdateInstaller
     }
 
     /// <summary>
-    /// Download latest release from GitHub and create update lock file
+    ///     Download latest release from GitHub and create update lock file
     /// </summary>
     public async Task DownloadAndUnpackLatestRelease()
     {
@@ -77,7 +78,7 @@ public sealed class AppUpdateInstaller
     }
 
     /// <summary>
-    /// Install update
+    ///     Install update
     /// </summary>
     public static void InstallUpdate()
     {
@@ -97,10 +98,10 @@ public sealed class AppUpdateInstaller
 
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
         {
-#pragma warning disable IDISP004 // Don't ignore created IDisposable
+            #pragma warning disable IDISP004 // Don't ignore created IDisposable
             //starting new version of the app
-            _ = System.Diagnostics.Process.Start(oldExe);
-#pragma warning restore IDISP004 // Don't ignore created IDisposable
+            _ = Process.Start(oldExe);
+            #pragma warning restore IDISP004 // Don't ignore created IDisposable
         }
         else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
         {

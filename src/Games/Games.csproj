@@ -1,16 +1,16 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <AssemblyName>BuildLauncher.$(MSBuildProjectName)</AssemblyName>
-  </PropertyGroup>
+    <PropertyGroup>
+        <AssemblyName>BuildLauncher.$(MSBuildProjectName)</AssemblyName>
+    </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="IDisposableAnalyzers" PrivateAssets="all" />
-  </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="IDisposableAnalyzers" PrivateAssets="all"/>
+    </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Core.All\Core.All.csproj" />
-    <ProjectReference Include="..\Core.Client\Core.Client.csproj" />
-  </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\Core.All\Core.All.csproj"/>
+        <ProjectReference Include="..\Core.Client\Core.Client.csproj"/>
+    </ItemGroup>
 
 </Project>

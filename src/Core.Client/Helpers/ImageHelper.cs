@@ -6,7 +6,7 @@ namespace Core.Client.Helpers;
 public static class ImageHelper
 {
     /// <summary>
-    /// Get Stream from file name
+    ///     Get Stream from file name
     /// </summary>
     /// <param name="fileName">File name</param>
     /// <param name="callingAss">Calling assembly</param>
@@ -22,19 +22,19 @@ public static class ImageHelper
     }
 
     /// <summary>
-    /// Get grid cover from the archive
+    ///     Get grid cover from the archive
     /// </summary>
     /// <param name="archive">Archive</param>
     public static StreamedImage? GetCoverFromArchive(IArchive archive) => GetImageFromArchive(archive, "grid.");
 
     /// <summary>
-    /// Get grid cover from the archive
+    ///     Get grid cover from the archive
     /// </summary>
     /// <param name="archive">Archive</param>
     public static StreamedImage? GetPreviewFromArchive(IArchive archive) => GetImageFromArchive(archive, "preview.");
 
     /// <summary>
-    /// Get grid cover from the archive
+    ///     Get grid cover from the archive
     /// </summary>
     /// <param name="archive">Archive</param>
     /// <param name="imageName">Name of the image</param>
@@ -57,9 +57,14 @@ public static class ImageHelper
 
         memStream.Position = 0;
 
-        return new() { Crc = image.Crc, Stream = memStream };
+        return new()
+        {
+            Crc = image.Crc,
+            Stream = memStream
+        };
     }
 }
+
 
 public readonly struct StreamedImage : IAsyncDisposable
 {

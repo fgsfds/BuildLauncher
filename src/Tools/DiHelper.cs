@@ -10,7 +10,7 @@ namespace Tools;
 public static class DiHelper
 {
     /// <summary>
-    /// Adds dependencies to work with tools.
+    ///     Adds dependencies to work with tools.
     /// </summary>
     public static IServiceCollection WithTools(this IServiceCollection container)
     {

@@ -10,36 +10,35 @@ using Microsoft.Extensions.Logging;
 namespace Core.All.Releases;
 
 /// <summary>
-/// Base class for providers that fetch release info from GitHub or other sources.
+///     Base class for providers that fetch release info from GitHub or other sources.
 /// </summary>
 /// <typeparam name="T">Enum type identifying the entity (port, tool, app) being queried.</typeparam>
 public abstract class ReleaseProviderBase<T> where T : Enum
 {
-    private readonly IRepositoriesProvider<T> _repositoriesProvider;
-
     /// <summary>
-    /// Cache of fetched releases keyed by the entity enum value.
-    /// </summary>
-    private readonly ConcurrentDictionary<T, Dictionary<OSEnum, GeneralReleaseJsonModel>?> _releases = [];
-
-    /// <summary>
-    /// Cache of raw GitHub release lists shared across entities that use the same repository (e.g., NBlood/PCExhumed/RedNukem).
-    /// Keyed by <see cref="RepositoryEntity.SharedCacheKey"/>.
-    /// </summary>
-    private readonly ConcurrentDictionary<string, Lazy<Task<List<GitHubReleaseJsonModel>?>>> _sharedRepoReleases = [];
-
-    /// <summary>
-    /// Logger instance.
-    /// </summary>
-    private readonly ILogger _logger;
-
-    /// <summary>
-    /// Factory for creating HTTP clients.
+    ///     Factory for creating HTTP clients.
     /// </summary>
     private readonly IHttpClientFactory _httpClientFactory;
 
     /// <summary>
-    /// Initializes a new instance of <see cref="ReleaseProviderBase{T}"/>.
+    ///     Logger instance.
+    /// </summary>
+    private readonly ILogger _logger;
+
+    /// <summary>
+    ///     Cache of fetched releases keyed by the entity enum value.
+    /// </summary>
+    private readonly ConcurrentDictionary<T, Dictionary<OSEnum, GeneralReleaseJsonModel>?> _releases = [];
+    private readonly IRepositoriesProvider<T> _repositoriesProvider;
+
+    /// <summary>
+    ///     Cache of raw GitHub release lists shared across entities that use the same repository (e.g., NBlood/PCExhumed/RedNukem).
+    ///     Keyed by <see cref="RepositoryEntity.SharedCacheKey" />.
+    /// </summary>
+    private readonly ConcurrentDictionary<string, Lazy<Task<List<GitHubReleaseJsonModel>?>>> _sharedRepoReleases = [];
+
+    /// <summary>
+    ///     Initializes a new instance of <see cref="ReleaseProviderBase{T}" />.
     /// </summary>
     /// <param name="repositoriesProvider">Provider that maps enum values to repository configurations.</param>
     /// <param name="logger">Logger instance.</param>
@@ -56,7 +55,7 @@ public abstract class ReleaseProviderBase<T> where T : Enum
     }
 
     /// <summary>
-    /// Returns the latest releases for the given entity, or <c>null</c> if none are available.
+    ///     Returns the latest releases for the given entity, or <c>null</c> if none are available.
     /// </summary>
     /// <param name="e">Entity enum value identifying the release to fetch.</param>
     /// <param name="includePreReleases">If <c>true</c>, pre-release and draft entries are considered.</param>
@@ -68,6 +67,7 @@ public abstract class ReleaseProviderBase<T> where T : Enum
             _logger.LogInformation($"Looking for new {e} release.");
 
             var repo = _repositoriesProvider.GetRepo(e);
+
             if (repo.RepoUrl is null)
             {
                 return null;
@@ -78,13 +78,14 @@ public abstract class ReleaseProviderBase<T> where T : Enum
         catch (Exception ex)
         {
             _logger.LogCritical(ex, $"Error while getting latest release for {e}.");
+
             return null;
         }
     }
 
     /// <summary>
-    /// Iterates the release list, matches Windows/Linux assets using the repo predicates,
-    /// builds <see cref="GeneralReleaseJsonModel"/> instances, caches the result, and returns it.
+    ///     Iterates the release list, matches Windows/Linux assets using the repo predicates,
+    ///     builds <see cref="GeneralReleaseJsonModel" /> instances, caches the result, and returns it.
     /// </summary>
     /// <param name="key">Entity enum value used as the cache key.</param>
     /// <param name="repo">Repository descriptor with asset-matching predicates.</param>
@@ -92,8 +93,8 @@ public abstract class ReleaseProviderBase<T> where T : Enum
     private Dictionary<OSEnum, GeneralReleaseJsonModel>? GetAndAddReleases(T key, RepositoryEntity repo, List<GitHubReleaseJsonModel> releases)
     {
         Dictionary<OSEnum, GeneralReleaseJsonModel>? result = null;
-        bool foundWindows = repo.WindowsReleasePredicate is null;
-        bool foundLinux = repo.LinuxReleasePredicate is null;
+        var foundWindows = repo.WindowsReleasePredicate is null;
+        var foundLinux = repo.LinuxReleasePredicate is null;
 
         foreach (var release in releases)
         {
@@ -155,7 +156,7 @@ public abstract class ReleaseProviderBase<T> where T : Enum
     }
 
     /// <summary>
-    /// Fetches releases from the given GitHub API URL, optionally including pre-releases and drafts.
+    ///     Fetches releases from the given GitHub API URL, optionally including pre-releases and drafts.
     /// </summary>
     /// <param name="url">GitHub releases API URL.</param>
     /// <param name="includePreReleases">If <c>true</c>, draft and pre-release entries are included.</param>
@@ -183,15 +184,16 @@ public abstract class ReleaseProviderBase<T> where T : Enum
         }
 
         var result = filtered.ToList();
+
         result.Sort(static (a, b) =>
-            -VersionComparer.CompareVersions(a.TagName.AsSpan(), b.TagName.AsSpan()));
+                        -VersionComparer.CompareVersions(a.TagName.AsSpan(), b.TagName.AsSpan()));
 
         return result;
     }
 
     /// <summary>
-    /// Orchestrates the full fetch-and-cache pipeline: checks the local cache, handles custom parsers,
-    /// shared-cache repos, and standard GitHub fetches, then matches assets and caches the result.
+    ///     Orchestrates the full fetch-and-cache pipeline: checks the local cache, handles custom parsers,
+    ///     shared-cache repos, and standard GitHub fetches, then matches assets and caches the result.
     /// </summary>
     /// <param name="key">Entity enum value for caching.</param>
     /// <param name="repo">Repository descriptor with URL, predicates, and optional custom parser / shared-cache key.</param>
@@ -212,16 +214,23 @@ public abstract class ReleaseProviderBase<T> where T : Enum
             var release = repo.CustomReleaseParser(dataStream);
 
             _logger.LogInformation(release is not null
-                ? $"Latest release for {key}: {release.Version} (custom source)"
-                : $"No release found for {key} (custom source)");
+                                       ? $"Latest release for {key}: {release.Version} (custom source)"
+                                       : $"No release found for {key} (custom source)");
 
             Dictionary<OSEnum, GeneralReleaseJsonModel>? result = null;
+
             if (release is not null)
             {
-                result = new() { { release.SupportedOS, release } };
+                result = new()
+                {
+                    {
+                        release.SupportedOS, release
+                    }
+                };
             }
 
             _ = _releases.TryAdd(key, result);
+
             return result;
         }
 
@@ -244,9 +253,9 @@ public abstract class ReleaseProviderBase<T> where T : Enum
     }
 
     /// <summary>
-    /// Extracts the version string from a release and its matched asset using the repo's version selector, or falls back to the tag name.
+    ///     Extracts the version string from a release and its matched asset using the repo's version selector, or falls back to the tag name.
     /// </summary>
-    /// <param name="repo">Repository descriptor with optional <see cref="RepositoryEntity.VersionSelector"/>.</param>
+    /// <param name="repo">Repository descriptor with optional <see cref="RepositoryEntity.VersionSelector" />.</param>
     /// <param name="release">The release containing the tag name fallback.</param>
     /// <param name="asset">The matched asset passed to the version selector.</param>
     private static string GetVersion(RepositoryEntity repo, GitHubReleaseJsonModel release, GitHubReleaseAsset asset)

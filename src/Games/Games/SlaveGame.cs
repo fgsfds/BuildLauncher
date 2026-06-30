@@ -4,18 +4,18 @@ namespace Games.Games;
 
 public sealed class SlaveGame : BaseGame
 {
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override GameEnum GameEnum => GameEnum.Slave;
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override string FullName => "Powerslave";
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override string ShortName => "Slave";
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override List<string> RequiredFiles => ["STUFF.DAT"];
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override Enum? Skills => null;
 }

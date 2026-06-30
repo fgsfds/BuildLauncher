@@ -4,11 +4,11 @@ using System.Collections.Specialized;
 using Addons.Providers;
 using Avalonia.Controls.Notifications;
 using Avalonia.Desktop.Misc;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using Core.All.Enums;
 using Core.All.Helpers;
 using Core.All.Serializable.Downloadable;
-using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
 using Games.Games;
 using Microsoft.Extensions.Logging;
 
@@ -16,13 +16,67 @@ namespace Avalonia.Desktop.ViewModels;
 
 public sealed partial class DownloadsViewModel : ObservableObject
 {
-    public BaseGame Game { get; }
+    public enum FilterItemEnum
+    {
+        All,
+        TCs,
+        Maps,
+        Mods
+    }
 
-    private readonly InstalledAddonsProvider _installedAddonsProvider;
+
     private readonly DownloadableAddonsProvider _downloadableAddonsProvider;
 
-    private CancellationTokenSource? _cancellationTokenSource;
+    private readonly InstalledAddonsProvider _installedAddonsProvider;
     private readonly ILogger<DownloadsViewModel> _logger;
+
+    private CancellationTokenSource? _cancellationTokenSource;
+
+
+    [Obsolete($"Don't create directly. Use {nameof(ViewModelsFactory)}.")]
+    public DownloadsViewModel(
+        BaseGame game,
+        InstalledAddonsProviderFactory installedAddonsProviderFactory,
+        DownloadableAddonsProviderFactory downloadableAddonsProviderFactory,
+        ILogger<DownloadsViewModel> logger
+        )
+    {
+        Game = game;
+
+        _installedAddonsProvider = installedAddonsProviderFactory.Get(game);
+        _downloadableAddonsProvider = downloadableAddonsProviderFactory.Get(game);
+        _logger = logger;
+
+        _installedAddonsProvider.AddonsChangedEvent += OnAddonChanged;
+        //_downloadableAddonsProvider.AddonsChangedEvent += OnAddonChanged;
+        SelectedDownloads.CollectionChanged += OnSelectedDownloadsChanged;
+    }
+
+    public BaseGame Game { get; }
+
+
+    private void OnProgressChanged(object? sender, float e)
+    {
+        ProgressBarValue = e;
+        OnPropertyChanged(nameof(ProgressBarValue));
+    }
+
+    private void OnAddonChanged(GameEnum gameEnum, AddonTypeEnum? addonType)
+    {
+        if (gameEnum != Game.GameEnum)
+        {
+            return;
+        }
+
+        OnPropertyChanged(nameof(DownloadableList));
+    }
+
+    private void OnSelectedDownloadsChanged(object? sender, NotifyCollectionChangedEventArgs e)
+    {
+        OnPropertyChanged(nameof(SelectedDownloadableDescription));
+        OnPropertyChanged(nameof(DownloadButtonText));
+        DownloadAddonCommand.NotifyCanExecuteChanged();
+    }
 
 
     #region Binding Properties
@@ -30,7 +84,7 @@ public sealed partial class DownloadsViewModel : ObservableObject
     public bool HasUpdates => DownloadableList.Any(x => x.IsUpdateAvailable);
 
     /// <summary>
-    /// List of downloadable addons
+    ///     List of downloadable addons
     /// </summary>
     public ImmutableList<DownloadableAddonJsonModel> DownloadableList
     {
@@ -42,8 +96,8 @@ public sealed partial class DownloadsViewModel : ObservableObject
             {
                 var unsorted =
                     _downloadableAddonsProvider.GetDownloadableAddons(AddonTypeEnum.TC)
-                    .Concat(_downloadableAddonsProvider.GetDownloadableAddons(AddonTypeEnum.Map))
-                    .Concat(_downloadableAddonsProvider.GetDownloadableAddons(AddonTypeEnum.Mod));
+                                               .Concat(_downloadableAddonsProvider.GetDownloadableAddons(AddonTypeEnum.Map))
+                                               .Concat(_downloadableAddonsProvider.GetDownloadableAddons(AddonTypeEnum.Mod));
 
                 result = unsorted.OrderBy(static x => x.Title);
             }
@@ -79,17 +133,17 @@ public sealed partial class DownloadsViewModel : ObservableObject
     }
 
     /// <summary>
-    /// Download/install progress
+    ///     Download/install progress
     /// </summary>
     public float ProgressBarValue { get; set; }
 
     /// <summary>
-    /// Description of the selected addon
+    ///     Description of the selected addon
     /// </summary>
     public string SelectedDownloadableDescription => SelectedDownloads.FirstOrDefault()?.ToMarkdownString() ?? string.Empty;
 
     /// <summary>
-    /// Text of the download button
+    ///     Text of the download button
     /// </summary>
     public string DownloadButtonText
     {
@@ -113,7 +167,7 @@ public sealed partial class DownloadsViewModel : ObservableObject
     private bool _isInProgress;
 
     /// <summary>
-    /// Currently selected downloadable campaigns, maps or mods
+    ///     Currently selected downloadable campaigns, maps or mods
     /// </summary>
     [ObservableProperty]
     private ObservableCollection<DownloadableAddonJsonModel> _selectedDownloads = [];
@@ -126,7 +180,7 @@ public sealed partial class DownloadsViewModel : ObservableObject
     private FilterItemEnum _filterSelectedItem;
 
     /// <summary>
-    /// Search box text
+    ///     Search box text
     /// </summary>
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(DownloadableList))]
@@ -134,7 +188,7 @@ public sealed partial class DownloadsViewModel : ObservableObject
     private string _searchBoxText = string.Empty;
 
     /// <summary>
-    /// State of the Hide installed checkbox.
+    ///     State of the Hide installed checkbox.
     /// </summary>
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(DownloadableList))]
@@ -143,30 +197,10 @@ public sealed partial class DownloadsViewModel : ObservableObject
     #endregion
 
 
-    [Obsolete($"Don't create directly. Use {nameof(ViewModelsFactory)}.")]
-    public DownloadsViewModel(
-        BaseGame game,
-        InstalledAddonsProviderFactory installedAddonsProviderFactory,
-        DownloadableAddonsProviderFactory downloadableAddonsProviderFactory,
-        ILogger<DownloadsViewModel> logger
-        )
-    {
-        Game = game;
-
-        _installedAddonsProvider = installedAddonsProviderFactory.Get(game);
-        _downloadableAddonsProvider = downloadableAddonsProviderFactory.Get(game);
-        _logger = logger;
-
-        _installedAddonsProvider.AddonsChangedEvent += OnAddonChanged;
-        //_downloadableAddonsProvider.AddonsChangedEvent += OnAddonChanged;
-        SelectedDownloads.CollectionChanged += OnSelectedDownloadsChanged;
-    }
-
-
     #region Relay Commands
 
     /// <summary>
-    /// VM initialization
+    ///     VM initialization
     /// </summary>
     public async Task InitializeAsync()
     {
@@ -176,7 +210,7 @@ public sealed partial class DownloadsViewModel : ObservableObject
 
 
     /// <summary>
-    /// Update downloadable list
+    ///     Update downloadable list
     /// </summary>
     [RelayCommand]
     private async Task UpdateAsync(bool? createNew)
@@ -212,7 +246,7 @@ public sealed partial class DownloadsViewModel : ObservableObject
 
 
     /// <summary>
-    /// Download selected addon
+    ///     Download selected addon
     /// </summary>
     [RelayCommand(CanExecute = nameof(DownloadSelectedAddonCanExecute))]
     private async Task DownloadAddon()
@@ -282,58 +316,29 @@ public sealed partial class DownloadsViewModel : ObservableObject
             ProgressMessage = string.Empty;
         }
     }
+
     private bool DownloadSelectedAddonCanExecute => true; /*SelectedDownloadable is not null;*/
 
 
     /// <summary>
-    /// Cancel addon download
+    ///     Cancel addon download
     /// </summary>
     [RelayCommand(CanExecute = nameof(CancelDownloadCanExecute))]
     private void CancelDownload()
     {
         _cancellationTokenSource?.Cancel();
     }
+
     private bool CancelDownloadCanExecute => IsInProgress;
 
 
     /// <summary>
-    /// Clear search bar
+    ///     Clear search bar
     /// </summary>
     [RelayCommand(CanExecute = nameof(ClearSearchBoxCanExecute))]
     private void ClearSearchBox() => SearchBoxText = string.Empty;
+
     private bool ClearSearchBoxCanExecute() => !string.IsNullOrEmpty(SearchBoxText);
 
     #endregion
-
-
-    private void OnProgressChanged(object? sender, float e)
-    {
-        ProgressBarValue = e;
-        OnPropertyChanged(nameof(ProgressBarValue));
-    }
-
-    private void OnAddonChanged(GameEnum gameEnum, AddonTypeEnum? addonType)
-    {
-        if (gameEnum != Game.GameEnum)
-        {
-            return;
-        }
-
-        OnPropertyChanged(nameof(DownloadableList));
-    }
-
-    private void OnSelectedDownloadsChanged(object? sender, NotifyCollectionChangedEventArgs e)
-    {
-        OnPropertyChanged(nameof(SelectedDownloadableDescription));
-        OnPropertyChanged(nameof(DownloadButtonText));
-        DownloadAddonCommand.NotifyCanExecuteChanged();
-    }
-
-    public enum FilterItemEnum
-    {
-        All,
-        TCs,
-        Maps,
-        Mods
-    }
 }

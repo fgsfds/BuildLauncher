@@ -7,23 +7,23 @@ namespace Tests.Unit.CmdArguments;
 
 public sealed class BuildGDXCmdArgumentsTests
 {
-    private readonly DukeGame _dukeGame;
-    private readonly DukeCampaign _dukeCamp;
-    private readonly BloodGame _bloodGame;
     private readonly BloodCampaign _bloodCamp;
-    private readonly WangGame _wangGame;
-    private readonly GenericCampaign _wangCamp;
-    private readonly SlaveGame _slaveGame;
-    private readonly GenericCampaign _slaveCamp;
-    private readonly RedneckGame _redneckGame;
-    private readonly DukeCampaign _redneckCamp;
-    private readonly DukeCampaign _ridesAgainCamp;
-    private readonly NamGame _namGame;
+    private readonly BloodGame _bloodGame;
+    private readonly DukeCampaign _dukeCamp;
+    private readonly DukeGame _dukeGame;
     private readonly DukeCampaign _namCamp;
-    private readonly WitchavenGame _witchavenGame;
-    private readonly GenericCampaign _witchavenCamp;
-    private readonly TekWarGame _tekWarGame;
+    private readonly NamGame _namGame;
+    private readonly DukeCampaign _redneckCamp;
+    private readonly RedneckGame _redneckGame;
+    private readonly DukeCampaign _ridesAgainCamp;
+    private readonly GenericCampaign _slaveCamp;
+    private readonly SlaveGame _slaveGame;
     private readonly GenericCampaign _tekWarCamp;
+    private readonly TekWarGame _tekWarGame;
+    private readonly GenericCampaign _wangCamp;
+    private readonly WangGame _wangGame;
+    private readonly GenericCampaign _witchavenCamp;
+    private readonly WitchavenGame _witchavenGame;
 
     public BuildGDXCmdArgumentsTests()
     {

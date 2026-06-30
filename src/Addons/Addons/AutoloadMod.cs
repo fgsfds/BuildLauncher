@@ -5,12 +5,12 @@ namespace Addons.Addons;
 public sealed class AutoloadMod : BaseAddon
 {
     /// <summary>
-    /// Is mod enabled
+    ///     Is mod enabled
     /// </summary>
     public required bool IsEnabled { get; set; }
 
     /// <summary>
-    /// List of additional cons
+    ///     List of additional cons
     /// </summary>
     public required ImmutableArray<string>? AdditionalCons { get; set; }
 }

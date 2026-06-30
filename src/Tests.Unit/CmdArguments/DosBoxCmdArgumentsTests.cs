@@ -10,25 +10,25 @@ namespace Tests.Unit.CmdArguments;
 
 public sealed class DosBoxCmdArgumentsTests
 {
-    private readonly DukeGame _dukeGame;
-    private readonly DukeCampaign _dukeCamp;
-    private readonly DukeCampaign _dukeVaca;
-    private readonly DukeCampaign _dukeDc;
-    private readonly DukeCampaign _dukeNw;
-    private readonly LooseMap _dukeLooseMap;
-
-    private readonly BloodGame _bloodGame;
     private readonly BloodCampaign _bloodCamp;
     private readonly BloodCampaign _bloodCpCamp;
+
+    private readonly BloodGame _bloodGame;
     private readonly LooseMap _bloodLooseMap;
+    private readonly DukeCampaign _dukeCamp;
+    private readonly DukeCampaign _dukeDc;
+    private readonly DukeGame _dukeGame;
+    private readonly LooseMap _dukeLooseMap;
+    private readonly DukeCampaign _dukeNw;
+    private readonly DukeCampaign _dukeVaca;
+    private readonly DukeCampaign _redneckCamp;
 
     private readonly RedneckGame _redneckGame;
-    private readonly DukeCampaign _redneckCamp;
     private readonly DukeCampaign _ridesAgainCamp;
     private readonly DukeCampaign _route66Camp;
+    private readonly GenericCampaign _wangCamp;
 
     private readonly WangGame _wangGame;
-    private readonly GenericCampaign _wangCamp;
 
     public DosBoxCmdArgumentsTests()
     {
@@ -43,11 +43,12 @@ public sealed class DosBoxCmdArgumentsTests
     {
         DosBox dosBox = new();
         var args = dosBox.GetStartGameArgs(_dukeGame, _dukeCamp, [], [], true, true);
+
         var expected = $"" +
-            $" --noconsole -c \"cycles max\" -c \"core dynamic\"" +
-            $" -c \"mount c \\\"{_dukeGame.GameInstallFolder}\"\" -c \"c:\"" +
-            $" -c DUKE3D.EXE" +
-            $" -c \"exit\"";
+                       $" --noconsole -c \"cycles max\" -c \"core dynamic\"" +
+                       $" -c \"mount c \\\"{_dukeGame.GameInstallFolder}\"\" -c \"c:\"" +
+                       $" -c DUKE3D.EXE" +
+                       $" -c \"exit\"";
 
         NormalizerHelper.NormalizeExpectedArgs(ref args, ref expected);
         Assert.Equal(expected, args);
@@ -59,12 +60,13 @@ public sealed class DosBoxCmdArgumentsTests
         DosBox dosBox = new();
         var args = dosBox.GetStartGameArgs(_dukeGame, _dukeVaca, [], [], true, true);
         var vacaPath = _dukeGame.AddonsPaths[DukeAddonEnum.DukeVaca];
+
         var expected = $"" +
-            $" --noconsole -c \"cycles max\" -c \"core dynamic\"" +
-            $" -c \"mount c \\\"{_dukeGame.GameInstallFolder}\"\" -c \"c:\"" +
-            $" -c \"mount d \\\"{vacaPath}\"\"" +
-            $" -c \"VACATION.EXE /gd:\\\\VACATION.GRP /xd:\\\\VACATION.CON\"" +
-            $" -c \"exit\"";
+                       $" --noconsole -c \"cycles max\" -c \"core dynamic\"" +
+                       $" -c \"mount c \\\"{_dukeGame.GameInstallFolder}\"\" -c \"c:\"" +
+                       $" -c \"mount d \\\"{vacaPath}\"\"" +
+                       $" -c \"VACATION.EXE /gd:\\\\VACATION.GRP /xd:\\\\VACATION.CON\"" +
+                       $" -c \"exit\"";
 
         NormalizerHelper.NormalizeExpectedArgs(ref args, ref expected);
         Assert.Equal(expected, args);
@@ -76,12 +78,13 @@ public sealed class DosBoxCmdArgumentsTests
         DosBox dosBox = new();
         var args = dosBox.GetStartGameArgs(_dukeGame, _dukeDc, [], [], true, true);
         var dcPath = _dukeGame.AddonsPaths[DukeAddonEnum.DukeDC];
+
         var expected = $"" +
-            $" --noconsole -c \"cycles max\" -c \"core dynamic\"" +
-            $" -c \"mount c \\\"{_dukeGame.GameInstallFolder}\"\" -c \"c:\"" +
-            $" -c \"mount d \\\"{dcPath}\"\"" +
-            $" -c \"DUKE3D.EXE /gd:\\\\DUKEDC.GRP /xd:\\\\DUKEDC.CON\"" +
-            $" -c \"exit\"";
+                       $" --noconsole -c \"cycles max\" -c \"core dynamic\"" +
+                       $" -c \"mount c \\\"{_dukeGame.GameInstallFolder}\"\" -c \"c:\"" +
+                       $" -c \"mount d \\\"{dcPath}\"\"" +
+                       $" -c \"DUKE3D.EXE /gd:\\\\DUKEDC.GRP /xd:\\\\DUKEDC.CON\"" +
+                       $" -c \"exit\"";
 
         NormalizerHelper.NormalizeExpectedArgs(ref args, ref expected);
         Assert.Equal(expected, args);
@@ -93,12 +96,13 @@ public sealed class DosBoxCmdArgumentsTests
         DosBox dosBox = new();
         var args = dosBox.GetStartGameArgs(_dukeGame, _dukeNw, [], [], true, true);
         var nwPath = _dukeGame.AddonsPaths[DukeAddonEnum.DukeNW];
+
         var expected = $"" +
-            $" --noconsole -c \"cycles max\" -c \"core dynamic\"" +
-            $" -c \"mount c \\\"{_dukeGame.GameInstallFolder}\"\" -c \"c:\"" +
-            $" -c \"mount d \\\"{nwPath}\"\"" +
-            $" -c \"DUKE3D.EXE /gd:\\\\NWINTER.GRP /xd:\\\\NWINTER.CON\"" +
-            $" -c \"exit\"";
+                       $" --noconsole -c \"cycles max\" -c \"core dynamic\"" +
+                       $" -c \"mount c \\\"{_dukeGame.GameInstallFolder}\"\" -c \"c:\"" +
+                       $" -c \"mount d \\\"{nwPath}\"\"" +
+                       $" -c \"DUKE3D.EXE /gd:\\\\NWINTER.GRP /xd:\\\\NWINTER.CON\"" +
+                       $" -c \"exit\"";
 
         NormalizerHelper.NormalizeExpectedArgs(ref args, ref expected);
         Assert.Equal(expected, args);
@@ -109,12 +113,13 @@ public sealed class DosBoxCmdArgumentsTests
     {
         DosBox dosBox = new();
         var args = dosBox.GetStartGameArgs(_dukeGame, _dukeLooseMap, [], [], true, true);
+
         var expected = $"" +
-            $" --noconsole -c \"cycles max\" -c \"core dynamic\"" +
-            $" -c \"mount c \\\"{_dukeGame.GameInstallFolder}\"\" -c \"c:\"" +
-            $" -c \"mount d \\\"{_dukeGame.MapsFolderPath}\"\"" +
-            $" -c \"DUKE3D.EXE -map d:\\\\LOOSE.MAP\"" +
-            $" -c \"exit\"";
+                       $" --noconsole -c \"cycles max\" -c \"core dynamic\"" +
+                       $" -c \"mount c \\\"{_dukeGame.GameInstallFolder}\"\" -c \"c:\"" +
+                       $" -c \"mount d \\\"{_dukeGame.MapsFolderPath}\"\"" +
+                       $" -c \"DUKE3D.EXE -map d:\\\\LOOSE.MAP\"" +
+                       $" -c \"exit\"";
 
         NormalizerHelper.NormalizeExpectedArgs(ref args, ref expected);
         Assert.Equal(expected, args);
@@ -125,11 +130,12 @@ public sealed class DosBoxCmdArgumentsTests
     {
         DosBox dosBox = new();
         var args = dosBox.GetStartGameArgs(_bloodGame, _bloodCamp, [], [], true, true);
+
         var expected = $"" +
-            $" --noconsole -c \"cycles max\" -c \"core dynamic\"" +
-            $" -c \"mount c \\\"{_bloodGame.GameInstallFolder}\"\" -c \"c:\"" +
-            $" -c BLOOD.EXE" +
-            $" -c \"exit\"";
+                       $" --noconsole -c \"cycles max\" -c \"core dynamic\"" +
+                       $" -c \"mount c \\\"{_bloodGame.GameInstallFolder}\"\" -c \"c:\"" +
+                       $" -c BLOOD.EXE" +
+                       $" -c \"exit\"";
 
         NormalizerHelper.NormalizeExpectedArgs(ref args, ref expected);
         Assert.Equal(expected, args);
@@ -140,11 +146,12 @@ public sealed class DosBoxCmdArgumentsTests
     {
         DosBox dosBox = new();
         var args = dosBox.GetStartGameArgs(_bloodGame, _bloodCpCamp, [], [], true, true);
+
         var expected = $"" +
-            $" --noconsole -c \"cycles max\" -c \"core dynamic\"" +
-            $" -c \"mount c \\\"{_bloodGame.GameInstallFolder}\"\" -c \"c:\"" +
-            $" -c CRYPTIC.EXE" +
-            $" -c \"exit\"";
+                       $" --noconsole -c \"cycles max\" -c \"core dynamic\"" +
+                       $" -c \"mount c \\\"{_bloodGame.GameInstallFolder}\"\" -c \"c:\"" +
+                       $" -c CRYPTIC.EXE" +
+                       $" -c \"exit\"";
 
         NormalizerHelper.NormalizeExpectedArgs(ref args, ref expected);
         Assert.Equal(expected, args);
@@ -171,7 +178,11 @@ public sealed class DosBoxCmdArgumentsTests
 
         try
         {
-            var bloodGame = new BloodGame { GameInstallFolder = gameDir };
+            var bloodGame = new BloodGame
+            {
+                GameInstallFolder = gameDir
+            };
+
             var bloodTcFolder = new BloodCampaign
             {
                 AddonId = new("blood-tc-folder", "1.0"),
@@ -194,16 +205,17 @@ public sealed class DosBoxCmdArgumentsTests
                 IncompatibleAddons = null,
                 RequiredFeatures = null,
                 Executables = null,
-                Options = null,
+                Options = null
             };
 
             DosBox dosBox = new();
             var args = dosBox.GetStartGameArgs(bloodGame, bloodTcFolder, [], [], true, true);
+
             var expected = $"" +
-                $" --noconsole -c \"cycles max\" -c \"core dynamic\"" +
-                $" -c \"mount c \\\"{ClientProperties.TempFolderPath}\"\" -c \"c:\"" +
-                $" -c \"BLOOD.EXE -ini BLOODTC.INI -RFF BLOODTC.RFF -snd BLOODTC.SND\"" +
-                $" -c \"exit\"";
+                           $" --noconsole -c \"cycles max\" -c \"core dynamic\"" +
+                           $" -c \"mount c \\\"{ClientProperties.TempFolderPath}\"\" -c \"c:\"" +
+                           $" -c \"BLOOD.EXE -ini BLOODTC.INI -RFF BLOODTC.RFF -snd BLOODTC.SND\"" +
+                           $" -c \"exit\"";
 
             NormalizerHelper.NormalizeExpectedArgs(ref args, ref expected);
             Assert.Equal(expected, args);
@@ -232,12 +244,13 @@ public sealed class DosBoxCmdArgumentsTests
     {
         DosBox dosBox = new();
         var args = dosBox.GetStartGameArgs(_bloodGame, _bloodLooseMap, [], [], true, true);
+
         var expected = $"" +
-            $" --noconsole -c \"cycles max\" -c \"core dynamic\"" +
-            $" -c \"mount c \\\"{_bloodGame.GameInstallFolder}\"\" -c \"c:\"" +
-            $" -c \"mount d \\\"{_bloodGame.MapsFolderPath}\"\"" +
-            $" -c \"BLOOD.EXE -map d:\\\\LOOSE.MAP\"" +
-            $" -c \"exit\"";
+                       $" --noconsole -c \"cycles max\" -c \"core dynamic\"" +
+                       $" -c \"mount c \\\"{_bloodGame.GameInstallFolder}\"\" -c \"c:\"" +
+                       $" -c \"mount d \\\"{_bloodGame.MapsFolderPath}\"\"" +
+                       $" -c \"BLOOD.EXE -map d:\\\\LOOSE.MAP\"" +
+                       $" -c \"exit\"";
 
         NormalizerHelper.NormalizeExpectedArgs(ref args, ref expected);
         Assert.Equal(expected, args);
@@ -248,11 +261,12 @@ public sealed class DosBoxCmdArgumentsTests
     {
         DosBox dosBox = new();
         var args = dosBox.GetStartGameArgs(_redneckGame, _redneckCamp, [], [], true, true);
+
         var expected = $"" +
-            $" --noconsole -c \"cycles max\" -c \"core dynamic\"" +
-            $" -c \"mount c \\\"{_redneckGame.GameInstallFolder}\"\" -c \"c:\"" +
-            $" -c RR.EXE" +
-            $" -c \"exit\"";
+                       $" --noconsole -c \"cycles max\" -c \"core dynamic\"" +
+                       $" -c \"mount c \\\"{_redneckGame.GameInstallFolder}\"\" -c \"c:\"" +
+                       $" -c RR.EXE" +
+                       $" -c \"exit\"";
 
         NormalizerHelper.NormalizeExpectedArgs(ref args, ref expected);
         Assert.Equal(expected, args);
@@ -263,11 +277,12 @@ public sealed class DosBoxCmdArgumentsTests
     {
         DosBox dosBox = new();
         var args = dosBox.GetStartGameArgs(_redneckGame, _ridesAgainCamp, [], [], true, true);
+
         var expected = $"" +
-            $" --noconsole -c \"cycles max\" -c \"core dynamic\"" +
-            $" -c \"mount c \\\"{_redneckGame.AgainInstallPath}\"\" -c \"c:\"" +
-            $" -c RA.EXE" +
-            $" -c \"exit\"";
+                       $" --noconsole -c \"cycles max\" -c \"core dynamic\"" +
+                       $" -c \"mount c \\\"{_redneckGame.AgainInstallPath}\"\" -c \"c:\"" +
+                       $" -c RA.EXE" +
+                       $" -c \"exit\"";
 
         NormalizerHelper.NormalizeExpectedArgs(ref args, ref expected);
         Assert.Equal(expected, args);
@@ -278,11 +293,12 @@ public sealed class DosBoxCmdArgumentsTests
     {
         DosBox dosBox = new();
         var args = dosBox.GetStartGameArgs(_redneckGame, _route66Camp, [], [], true, true);
+
         var expected = $"" +
-            $" --noconsole -c \"cycles max\" -c \"core dynamic\"" +
-            $" -c \"mount c \\\"{_redneckGame.GameInstallFolder}\"\" -c \"c:\"" +
-            $" -c ROUTE66.EXE" +
-            $" -c \"exit\"";
+                       $" --noconsole -c \"cycles max\" -c \"core dynamic\"" +
+                       $" -c \"mount c \\\"{_redneckGame.GameInstallFolder}\"\" -c \"c:\"" +
+                       $" -c ROUTE66.EXE" +
+                       $" -c \"exit\"";
 
         NormalizerHelper.NormalizeExpectedArgs(ref args, ref expected);
         Assert.Equal(expected, args);
@@ -293,11 +309,12 @@ public sealed class DosBoxCmdArgumentsTests
     {
         DosBox dosBox = new();
         var args = dosBox.GetStartGameArgs(_wangGame, _wangCamp, [], [], true, true);
+
         var expected = $"" +
-            $" --noconsole -c \"cycles max\" -c \"core dynamic\"" +
-            $" -c \"mount c \\\"{_wangGame.GameInstallFolder}\"\" -c \"c:\"" +
-            $" -c Sw.EXE" +
-            $" -c \"exit\"";
+                       $" --noconsole -c \"cycles max\" -c \"core dynamic\"" +
+                       $" -c \"mount c \\\"{_wangGame.GameInstallFolder}\"\" -c \"c:\"" +
+                       $" -c Sw.EXE" +
+                       $" -c \"exit\"";
 
         NormalizerHelper.NormalizeExpectedArgs(ref args, ref expected);
         Assert.Equal(expected, args);
@@ -328,17 +345,18 @@ public sealed class DosBoxCmdArgumentsTests
             IncompatibleAddons = null,
             RequiredFeatures = null,
             Executables = null,
-            Options = null,
+            Options = null
         };
 
         DosBox dosBox = new();
         var args = dosBox.GetStartGameArgs(_bloodGame, bloodTcNull, [], [], true, true);
+
         // Should fall through to base Blood game args instead of NRE
         var expected = $"" +
-            $" --noconsole -c \"cycles max\" -c \"core dynamic\"" +
-            $" -c \"mount c \\\"{_bloodGame.GameInstallFolder}\"\" -c \"c:\"" +
-            $" -c BLOOD.EXE" +
-            $" -c \"exit\"";
+                       $" --noconsole -c \"cycles max\" -c \"core dynamic\"" +
+                       $" -c \"mount c \\\"{_bloodGame.GameInstallFolder}\"\" -c \"c:\"" +
+                       $" -c BLOOD.EXE" +
+                       $" -c \"exit\"";
 
         NormalizerHelper.NormalizeExpectedArgs(ref args, ref expected);
         Assert.Equal(expected, args);

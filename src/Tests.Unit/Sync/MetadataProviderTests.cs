@@ -9,7 +9,6 @@ using Games.Providers;
 using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
 using SharpCompress.Archives;
-using Tests.Unit.Helpers;
 
 namespace Tests.Unit.Sync;
 
@@ -24,6 +23,7 @@ public sealed class MetadataProviderTests : IDisposable
         _cacheMock = new Mock<ICacheAdder<Stream>>();
 
         Directory.CreateDirectory(ClientProperties.AddonsFolderPath);
+
         File.Copy(
             Path.Combine("Files", "ZippedAddon.zip"),
             Path.Combine(ClientProperties.AddonsFolderPath, "ZippedAddon.zip"),
@@ -65,9 +65,21 @@ public sealed class MetadataProviderTests : IDisposable
             AddonType = AddonTypeEnum.TC,
             Id = "blood-voxel-pack",
             Version = "p292",
-            SupportedGame = new() { Game = GameEnum.Blood },
+            SupportedGame = new()
+            {
+                Game = GameEnum.Blood
+            },
             Title = "blood-voxel-pack",
-            Incompatibles = new() { Addons = [new() { Id = "blood-coagulated" }] },
+            Incompatibles = new()
+            {
+                Addons =
+                [
+                    new()
+                    {
+                        Id = "blood-coagulated"
+                    }
+                ]
+            },
             Description = "New description"
         };
     }
@@ -79,9 +91,21 @@ public sealed class MetadataProviderTests : IDisposable
             AddonType = AddonTypeEnum.TC,
             Id = "blood-voxel-pack-2",
             Version = "p292-2",
-            SupportedGame = new() { Game = GameEnum.Blood },
+            SupportedGame = new()
+            {
+                Game = GameEnum.Blood
+            },
             Title = "blood-voxel-pack",
-            Incompatibles = new() { Addons = [new() { Id = "blood-coagulated" }] },
+            Incompatibles = new()
+            {
+                Addons =
+                [
+                    new()
+                    {
+                        Id = "blood-coagulated"
+                    }
+                ]
+            },
             Description = "Voxel Pack 2",
             MainRff = "MAIN.RFF"
         };
@@ -94,10 +118,22 @@ public sealed class MetadataProviderTests : IDisposable
             AddonType = AddonTypeEnum.Mod,
             Id = "blood-voxel-pack",
             Version = "p292",
-            SupportedGame = new() { Game = GameEnum.Blood },
+            SupportedGame = new()
+            {
+                Game = GameEnum.Blood
+            },
             Title = "Voxel Pack",
             AdditionalDefs = ["blood_voxels.def"],
-            Incompatibles = new() { Addons = [new() { Id = "blood-coagulated" }] },
+            Incompatibles = new()
+            {
+                Addons =
+                [
+                    new()
+                    {
+                        Id = "blood-coagulated"
+                    }
+                ]
+            },
             Description = "https://github.com/fgsfds/Blood-Voxel-Pack/\r\n\r\nVoxel replacements for sprites in Blood"
         };
     }
@@ -123,7 +159,11 @@ public sealed class MetadataProviderTests : IDisposable
     [Fact]
     public async Task UpdateAvailable_ZippedAddonWithDifferentManifest_ReturnsTrue()
     {
-        var (provider, _) = await CreateProviderAsync(new List<AddonManifestJsonModel> { CreateRemoteManifest1(), CreateRemoteManifest2() });
+        var (provider, _) = await CreateProviderAsync(new List<AddonManifestJsonModel>
+        {
+            CreateRemoteManifest1(),
+            CreateRemoteManifest2()
+        });
 
         var result = provider.IsMetadataUpdateAvailable(
             new("blood-voxel-pack", "p292"),
@@ -135,7 +175,11 @@ public sealed class MetadataProviderTests : IDisposable
     [Fact]
     public async Task UpdateAvailable_UnpackedAddonWithDifferentManifest_ReturnsTrue()
     {
-        var (provider, _) = await CreateProviderAsync(new List<AddonManifestJsonModel> { CreateRemoteManifest1(), CreateRemoteManifest2() });
+        var (provider, _) = await CreateProviderAsync(new List<AddonManifestJsonModel>
+        {
+            CreateRemoteManifest1(),
+            CreateRemoteManifest2()
+        });
 
         var result = provider.IsMetadataUpdateAvailable(
             new("blood-voxel-pack-2", "p292-2"),
@@ -148,7 +192,11 @@ public sealed class MetadataProviderTests : IDisposable
     public async Task IsMetadataUpdateAvailable_RemoteManifestMatchesLocal_ReturnsFalse()
     {
         var matchingManifest = CreateMatchingLocalManifest1();
-        var (provider, _) = await CreateProviderAsync(new List<AddonManifestJsonModel> { matchingManifest });
+
+        var (provider, _) = await CreateProviderAsync(new List<AddonManifestJsonModel>
+        {
+            matchingManifest
+        });
 
         var result = provider.IsMetadataUpdateAvailable(
             new("blood-voxel-pack", "p292"),
@@ -160,7 +208,10 @@ public sealed class MetadataProviderTests : IDisposable
     [Fact]
     public async Task AddonNotInMetadata_ReturnsFalse()
     {
-        var (provider, _) = await CreateProviderAsync(new List<AddonManifestJsonModel> { CreateRemoteManifest1() });
+        var (provider, _) = await CreateProviderAsync(new List<AddonManifestJsonModel>
+        {
+            CreateRemoteManifest1()
+        });
 
         var result = provider.IsMetadataUpdateAvailable(
             new("unknown-addon", "v1.0"),
@@ -172,7 +223,11 @@ public sealed class MetadataProviderTests : IDisposable
     [Fact]
     public async Task AlreadyCachedUpdate_ReturnsTrue()
     {
-        var (provider, _) = await CreateProviderAsync(new List<AddonManifestJsonModel> { CreateRemoteManifest1(), CreateRemoteManifest2() });
+        var (provider, _) = await CreateProviderAsync(new List<AddonManifestJsonModel>
+        {
+            CreateRemoteManifest1(),
+            CreateRemoteManifest2()
+        });
 
         _ = provider.IsMetadataUpdateAvailable(
             new("blood-voxel-pack", "p292"),
@@ -189,6 +244,7 @@ public sealed class MetadataProviderTests : IDisposable
     public async Task NotInitialized_ReturnsFalse()
     {
         Mock<IApiInterface> api = new();
+
         MetadataProvider provider = new(
             _scanner,
             api.Object,
@@ -220,6 +276,7 @@ public sealed class MetadataProviderTests : IDisposable
     public void IsInitialized_FalseBeforeInit()
     {
         Mock<IApiInterface> api = new();
+
         MetadataProvider provider = new(
             _scanner,
             api.Object,
@@ -285,7 +342,11 @@ public sealed class MetadataProviderTests : IDisposable
     [Fact]
     public async Task MetadataUpdatedEvent_FiresOnFolderUpdate()
     {
-        var (provider, _) = await CreateProviderAsync(new List<AddonManifestJsonModel> { CreateRemoteManifest1(), CreateRemoteManifest2() });
+        var (provider, _) = await CreateProviderAsync(new List<AddonManifestJsonModel>
+        {
+            CreateRemoteManifest1(),
+            CreateRemoteManifest2()
+        });
 
         _ = provider.IsMetadataUpdateAvailable(
             new("blood-voxel-pack-2", "p292-2"),
@@ -304,7 +365,11 @@ public sealed class MetadataProviderTests : IDisposable
     [Fact]
     public async Task UpdateMetadataAsync_ForFolder_Success()
     {
-        var (provider, _) = await CreateProviderAsync(new List<AddonManifestJsonModel> { CreateRemoteManifest1(), CreateRemoteManifest2() });
+        var (provider, _) = await CreateProviderAsync(new List<AddonManifestJsonModel>
+        {
+            CreateRemoteManifest1(),
+            CreateRemoteManifest2()
+        });
 
         _ = provider.IsMetadataUpdateAvailable(
             new("blood-voxel-pack-2", "p292-2"),
@@ -319,7 +384,11 @@ public sealed class MetadataProviderTests : IDisposable
     [Fact]
     public async Task UpdateMetadataAsync_WhenNotCached_ReturnsError()
     {
-        var (provider, _) = await CreateProviderAsync(new List<AddonManifestJsonModel> { CreateRemoteManifest1(), CreateRemoteManifest2() });
+        var (provider, _) = await CreateProviderAsync(new List<AddonManifestJsonModel>
+        {
+            CreateRemoteManifest1(),
+            CreateRemoteManifest2()
+        });
 
         var result = await provider.UpdateMetadataAsync(
             new(Path.Combine(ClientProperties.AddonsFolderPath, "ZippedAddon.zip"), "addon.json"));
@@ -330,7 +399,10 @@ public sealed class MetadataProviderTests : IDisposable
     [Fact]
     public async Task IsMetadataUpdateAvailable_WhenScannerMissingFile_ReturnsFalse()
     {
-        var (provider, _) = await CreateProviderAsync(new List<AddonManifestJsonModel> { CreateRemoteManifest1() });
+        var (provider, _) = await CreateProviderAsync(new List<AddonManifestJsonModel>
+        {
+            CreateRemoteManifest1()
+        });
 
         var result = provider.IsMetadataUpdateAvailable(
             new("blood-voxel-pack", "p292"),
@@ -366,7 +438,11 @@ public sealed class MetadataProviderTests : IDisposable
     [Fact]
     public async Task UpdateMetadataAsync_ForZip_SuccessAndFiresEvent()
     {
-        var (provider, _) = await CreateProviderAsync(new List<AddonManifestJsonModel> { CreateRemoteManifest1(), CreateRemoteManifest2() });
+        var (provider, _) = await CreateProviderAsync(new List<AddonManifestJsonModel>
+        {
+            CreateRemoteManifest1(),
+            CreateRemoteManifest2()
+        });
 
         var zipWrapper = new AddonFilePathWrapper(Path.Combine(ClientProperties.AddonsFolderPath, "ZippedAddon.zip"), "addon.json");
 
@@ -376,7 +452,12 @@ public sealed class MetadataProviderTests : IDisposable
 
         var eventFired = false;
         ParsedAddonFile? received = null;
-        provider.MetadataUpdatedEvent += (_, e) => { eventFired = true; received = e; };
+
+        provider.MetadataUpdatedEvent += (_, e) =>
+        {
+            eventFired = true;
+            received = e;
+        };
 
         var result = await provider.UpdateMetadataAsync(zipWrapper);
 
@@ -390,7 +471,10 @@ public sealed class MetadataProviderTests : IDisposable
     [Fact]
     public async Task UpdateMetadataAsync_WhenFileDoesNotExist_ReturnsError()
     {
-        var (provider, _) = await CreateProviderAsync(new List<AddonManifestJsonModel> { CreateRemoteManifest1() });
+        var (provider, _) = await CreateProviderAsync(new List<AddonManifestJsonModel>
+        {
+            CreateRemoteManifest1()
+        });
 
         var result = await provider.UpdateMetadataAsync(
             new AddonFilePathWrapper(Path.Combine(ClientProperties.AddonsFolderPath, "NonExistent.zip"), "addon.json"));
@@ -401,7 +485,10 @@ public sealed class MetadataProviderTests : IDisposable
     [Fact]
     public async Task IsMetadataUpdateAvailable_AddonNotInLocalFilesCache_ReturnsFalse()
     {
-        var (provider, _) = await CreateProviderAsync(new List<AddonManifestJsonModel> { CreateRemoteManifest1() });
+        var (provider, _) = await CreateProviderAsync(new List<AddonManifestJsonModel>
+        {
+            CreateRemoteManifest1()
+        });
 
         var wrapper = new AddonFilePathWrapper(Path.Combine(ClientProperties.AddonsFolderPath, "ZippedAddon.zip"), "doesnotexist.json");
 
@@ -411,6 +498,4 @@ public sealed class MetadataProviderTests : IDisposable
 
         Assert.False(result);
     }
-
-
 }

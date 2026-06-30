@@ -43,6 +43,7 @@ public sealed class BitmapsCache : ICacheAdder<Stream>, ICacheGetter<Bitmap>, ID
         }
 
         Bitmap bitmap = new(item);
+
         return _cache.TryAdd(id, bitmap);
     }
 
@@ -53,7 +54,8 @@ public sealed class BitmapsCache : ICacheAdder<Stream>, ICacheGetter<Bitmap>, ID
             return false;
         }
 
-        Bitmap bitmap = Bitmap.DecodeToWidth(item, (int)DesktopConsts.GridImageWidth);
+        var bitmap = Bitmap.DecodeToWidth(item, (int)DesktopConsts.GridImageWidth);
+
         return _cache.TryAdd(id, bitmap);
     }
 
@@ -64,7 +66,8 @@ public sealed class BitmapsCache : ICacheAdder<Stream>, ICacheGetter<Bitmap>, ID
             return false;
         }
 
-        Bitmap bitmap = Bitmap.DecodeToWidth(item, 320);
+        var bitmap = Bitmap.DecodeToWidth(item, 320);
+
         return _cache.TryAdd(id, bitmap);
     }
 
@@ -73,6 +76,7 @@ public sealed class BitmapsCache : ICacheAdder<Stream>, ICacheGetter<Bitmap>, ID
         if (_cache.Remove(id, out var bitmap))
         {
             bitmap.Dispose();
+
             return true;
         }
 
@@ -80,6 +84,15 @@ public sealed class BitmapsCache : ICacheAdder<Stream>, ICacheGetter<Bitmap>, ID
     }
 
     public Bitmap? GetFromCache(long id) => _cache.TryGetValue(id, out var bitmap) ? bitmap : null;
+
+
+    public void Dispose()
+    {
+        foreach (var bitmap in _cache.Values)
+        {
+            bitmap.Dispose();
+        }
+    }
 
 
     private void InitOfficialCampaignsCache()
@@ -187,15 +200,6 @@ public sealed class BitmapsCache : ICacheAdder<Stream>, ICacheGetter<Bitmap>, ID
         {
             using var png = ImageHelper.FileNameToStream($"{port.Name}.png", toolsAss);
             _ = TryAddToCache(port.ToolEnum.GetUniqueHash(), png);
-        }
-    }
-
-
-    public void Dispose()
-    {
-        foreach (var bitmap in _cache.Values)
-        {
-            bitmap.Dispose();
         }
     }
 }

@@ -11,8 +11,8 @@ namespace Tools.Installer;
 
 public sealed class ToolInstaller : InstallerBase<BaseTool>
 {
-    private readonly InstalledGamesProvider _gamesProvider;
     private readonly IApiInterface _apiInterface;
+    private readonly InstalledGamesProvider _gamesProvider;
 
     public ToolInstaller(
         BaseTool tool,
@@ -27,7 +27,7 @@ public sealed class ToolInstaller : InstallerBase<BaseTool>
         _apiInterface = apiInterface;
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override void PostInstall(string filePath)
     {
         if (_instance.ToolEnum is ToolEnum.Mapster32)
@@ -41,24 +41,25 @@ public sealed class ToolInstaller : InstallerBase<BaseTool>
             _ = Directory.CreateDirectory(_instance.InstallFolderPath);
 
             var files = Directory.GetFiles(pathToBlood);
+
             foreach (var file in files)
             {
                 if (file.EndsWith(".exe", StringComparison.InvariantCultureIgnoreCase)
-                    || file.EndsWith(".ogg", StringComparison.InvariantCultureIgnoreCase)
-                    || file.EndsWith(".txt", StringComparison.InvariantCultureIgnoreCase)
-                    || file.EndsWith("version", StringComparison.InvariantCultureIgnoreCase)
-                    )
+                 || file.EndsWith(".ogg", StringComparison.InvariantCultureIgnoreCase)
+                 || file.EndsWith(".txt", StringComparison.InvariantCultureIgnoreCase)
+                 || file.EndsWith("version", StringComparison.InvariantCultureIgnoreCase)
+                   )
                 {
                     continue;
                 }
 
-                string fileName = Path.GetFileName(file);
+                var fileName = Path.GetFileName(file);
                 File.Copy(file, Path.Combine(_instance.InstallFolderPath, fileName), true);
             }
         }
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override void Backup()
     {
         if (_instance.ToolEnum is ToolEnum.DOSBlood)
@@ -74,7 +75,7 @@ public sealed class ToolInstaller : InstallerBase<BaseTool>
         }
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override void Uninstall()
     {
         if (_instance.ToolEnum is ToolEnum.Mapster32)
@@ -84,6 +85,7 @@ public sealed class ToolInstaller : InstallerBase<BaseTool>
         else if (_instance.ToolEnum is ToolEnum.DOSBlood)
         {
             var game = _gamesProvider.GetGame(GameEnum.Blood);
+
             if (game.GameInstallFolder is null)
             {
                 throw new InvalidOperationException("Can't find Blood install path.");
@@ -102,6 +104,6 @@ public sealed class ToolInstaller : InstallerBase<BaseTool>
         }
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override Task<GeneralReleaseJsonModel?> GetRelease() => _apiInterface.GetLatestToolReleaseAsync(_instance.ToolEnum);
 }

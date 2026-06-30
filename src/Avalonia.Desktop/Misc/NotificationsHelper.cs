@@ -4,12 +4,10 @@ using Avalonia.Desktop.Helpers;
 namespace Avalonia.Desktop.Misc;
 
 /// <summary>
-/// Helper that fixes crash when multiple notifications with the same text are shown.
+///     Helper that fixes crash when multiple notifications with the same text are shown.
 /// </summary>
 public static class NotificationsHelper
 {
-    public static WindowNotificationManager NotificationManager { get; }
-
     static NotificationsHelper()
     {
         NotificationManager = new(AvaloniaProperties.TopLevel)
@@ -19,6 +17,8 @@ public static class NotificationsHelper
             Margin = new(0, 50, 10, 0)
         };
     }
+
+    public static WindowNotificationManager NotificationManager { get; }
 
     public static void Show(
         object content,

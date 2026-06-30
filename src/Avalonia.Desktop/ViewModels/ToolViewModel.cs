@@ -1,12 +1,12 @@
 using System.Diagnostics;
 using Avalonia.Controls.Notifications;
 using Avalonia.Desktop.Misc;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using Core.All.Enums;
 using Core.All.Helpers;
 using Core.All.Serializable.Downloadable;
 using Core.Client.Interfaces;
-using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.Logging;
 using Tools.Installer;
 using Tools.Tools;
@@ -15,15 +15,12 @@ namespace Avalonia.Desktop.ViewModels;
 
 public sealed partial class ToolViewModel : ObservableObject
 {
-    public BaseTool Tool { get; init; }
+    public delegate void ToolChanged(ToolEnum toolEnum);
+    private readonly IApiInterface _apiInterface;
 
     private readonly ToolInstallerFactory _installerFactory;
-    private readonly IApiInterface _apiInterface;
-    private GeneralReleaseJsonModel? _release;
     private readonly ILogger<ToolViewModel> _logger;
-
-    public delegate void ToolChanged(ToolEnum toolEnum);
-    public event ToolChanged? ToolChangedEvent;
+    private GeneralReleaseJsonModel? _release;
 
 
     [Obsolete($"Don't create directly. Use {nameof(ViewModelsFactory)}.")]
@@ -40,11 +37,21 @@ public sealed partial class ToolViewModel : ObservableObject
         Tool = tool;
     }
 
+    public BaseTool Tool { get; init; }
+    public event ToolChanged? ToolChangedEvent;
+
+
+    private void OnProgressChanged(object? sender, float e)
+    {
+        ProgressBarValue = e;
+        OnPropertyChanged(nameof(ProgressBarValue));
+    }
+
 
     #region Binding Properties
 
     /// <summary>
-    /// Text of the install button
+    ///     Text of the install button
     /// </summary>
     public string InstallButtonText
     {
@@ -67,17 +74,17 @@ public sealed partial class ToolViewModel : ObservableObject
     }
 
     /// <summary>
-    /// Name of the tool
+    ///     Name of the tool
     /// </summary>
     public string Name => Tool.Name;
 
     /// <summary>
-    /// Tool's icon
+    ///     Tool's icon
     /// </summary>
     public long IconId => Tool.IconId;
 
     /// <summary>
-    /// Currently installed version
+    ///     Currently installed version
     /// </summary>
     public string Version
     {
@@ -98,12 +105,12 @@ public sealed partial class ToolViewModel : ObservableObject
     }
 
     /// <summary>
-    /// Is tool installed
+    ///     Is tool installed
     /// </summary>
     public bool IsInstalled => Tool.IsInstalled;
 
     /// <summary>
-    /// Latest available version
+    ///     Latest available version
     /// </summary>
     public string LatestVersion
     {
@@ -124,7 +131,7 @@ public sealed partial class ToolViewModel : ObservableObject
     }
 
     /// <summary>
-    /// Is new version of the tool available
+    ///     Is new version of the tool available
     /// </summary>
     public bool IsUpdateAvailable
     {
@@ -145,12 +152,12 @@ public sealed partial class ToolViewModel : ObservableObject
     }
 
     /// <summary>
-    /// Can tool be installed
+    ///     Can tool be installed
     /// </summary>
     public bool CanBeInstalled => !IsInProgress && !IsCheckingForUpdates && Tool.CanBeInstalled && _release is not null;
 
     /// <summary>
-    /// Download/install progress
+    ///     Download/install progress
     /// </summary>
     public float ProgressBarValue { get; set; }
 
@@ -166,7 +173,7 @@ public sealed partial class ToolViewModel : ObservableObject
     #region Relay Commands
 
     /// <summary>
-    /// Initialize VM
+    ///     Initialize VM
     /// </summary>
     public async Task InitializeAsync()
     {
@@ -192,7 +199,7 @@ public sealed partial class ToolViewModel : ObservableObject
 
 
     /// <summary>
-    /// Download and install tool
+    ///     Download and install tool
     /// </summary>
     [RelayCommand]
     private async Task InstallAsync()
@@ -238,7 +245,7 @@ public sealed partial class ToolViewModel : ObservableObject
 
 
     /// <summary>
-    /// Delete tool
+    ///     Delete tool
     /// </summary>
     [RelayCommand]
     private void Uninstall()
@@ -273,7 +280,7 @@ public sealed partial class ToolViewModel : ObservableObject
 
 
     /// <summary>
-    /// Force check for updates
+    ///     Force check for updates
     /// </summary>
     [RelayCommand]
     private void Launch()
@@ -297,7 +304,7 @@ public sealed partial class ToolViewModel : ObservableObject
 
 
     /// <summary>
-    /// Open tool folder
+    ///     Open tool folder
     /// </summary>
     [RelayCommand]
     private void OpenFolder()
@@ -305,17 +312,9 @@ public sealed partial class ToolViewModel : ObservableObject
         using var process = Process.Start(new ProcessStartInfo
         {
             FileName = Tool.InstallFolderPath,
-            UseShellExecute = true,
+            UseShellExecute = true
         });
     }
 
-
     #endregion
-
-
-    private void OnProgressChanged(object? sender, float e)
-    {
-        ProgressBarValue = e;
-        OnPropertyChanged(nameof(ProgressBarValue));
-    }
 }

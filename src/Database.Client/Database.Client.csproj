@@ -5,17 +5,17 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="IDisposableAnalyzers" PrivateAssets="all" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" PrivateAssets="all" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" />
+        <PackageReference Include="IDisposableAnalyzers" PrivateAssets="all"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" PrivateAssets="all"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite"/>
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Core.All\Core.All.csproj" />
+        <ProjectReference Include="..\Core.All\Core.All.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Migrations\" />
+        <Folder Include="Migrations\"/>
     </ItemGroup>
 
 </Project>

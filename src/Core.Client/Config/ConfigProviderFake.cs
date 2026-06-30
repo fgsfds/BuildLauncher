@@ -6,6 +6,7 @@ namespace Core.Client.Config;
 
 public sealed class ConfigProviderFake : IConfigProvider
 {
+    public Dictionary<string, bool> Scores => [];
     public string? ApiPassword { get; set; } = null;
     public bool IsConsented { get; set; } = true;
     public string? PathBlood { get; set; } = null;
@@ -28,7 +29,6 @@ public sealed class ConfigProviderFake : IConfigProvider
     public Dictionary<string, byte> Rating { get; set; } = [];
 
     public Dictionary<string, TimeSpan> Playtimes => [];
-    public Dictionary<string, bool> Scores => [];
     public HashSet<string> DisabledAutoloadMods => [];
     public HashSet<string> GetEnabledOptions(string addonId) => [];
 

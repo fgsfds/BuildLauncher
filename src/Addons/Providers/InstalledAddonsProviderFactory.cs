@@ -11,13 +11,13 @@ namespace Addons.Providers;
 
 public sealed class InstalledAddonsProviderFactory
 {
-    private readonly Dictionary<GameEnum, InstalledAddonsProvider> _list = [];
-    private readonly IConfigProvider _config;
-    private readonly OriginalCampaignsProvider _originalCampaignsProvider;
-    private readonly MetadataProvider _metadataProvider;
-    private readonly LocalFilesProvider _localFilesProvider;
     private readonly IChannelSubscriber<DiHelper.LocalFileEvent> _channelPublisher;
+    private readonly IConfigProvider _config;
+    private readonly Dictionary<GameEnum, InstalledAddonsProvider> _list = [];
+    private readonly LocalFilesProvider _localFilesProvider;
     private readonly ILoggerFactory _loggerFactory;
+    private readonly MetadataProvider _metadataProvider;
+    private readonly OriginalCampaignsProvider _originalCampaignsProvider;
 
     public InstalledAddonsProviderFactory(
         IConfigProvider config,
@@ -37,7 +37,7 @@ public sealed class InstalledAddonsProviderFactory
     }
 
     /// <summary>
-    /// Get or create singleton instance of the provider.
+    ///     Get or create singleton instance of the provider.
     /// </summary>
     /// <param name="game">Game.</param>
     public InstalledAddonsProvider Get(BaseGame game)
@@ -47,7 +47,7 @@ public sealed class InstalledAddonsProviderFactory
             return value;
         }
 
-#pragma warning disable CS0618 // Type or member is obsolete
+        #pragma warning disable CS0618 // Type or member is obsolete
         InstalledAddonsProvider newProvider = new(
             game,
             _config,
@@ -56,7 +56,7 @@ public sealed class InstalledAddonsProviderFactory
             _localFilesProvider,
             _channelPublisher,
             _loggerFactory.CreateLogger<InstalledAddonsProvider>());
-#pragma warning restore CS0618 // Type or member is obsolete
+        #pragma warning restore CS0618 // Type or member is obsolete
         _list.Add(game.GameEnum, newProvider);
 
         return newProvider;

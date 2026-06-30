@@ -13,23 +13,23 @@ using Microsoft.Extensions.Logging;
 namespace Core.Client.Api;
 
 /// <summary>
-/// Provides GitHub-backed implementation of the API interface for releases, addons, and metadata.
+///     Provides GitHub-backed implementation of the API interface for releases, addons, and metadata.
 /// </summary>
 public sealed class GitHubApiInterface : IApiInterface
 {
-    private readonly ReleaseProviderBase<PortEnum> _portsReleasesProviderBase;
-    private readonly ReleaseProviderBase<ToolEnum> _toolsReleasesProviderBase;
     private readonly ReleaseProviderBase<AppReleaseEnum> _appRepoReleasesProvider;
     private readonly IHttpClientFactory _httpClientFactory;
     private readonly ILogger<GitHubApiInterface> _logger;
+    private readonly ReleaseProviderBase<PortEnum> _portsReleasesProviderBase;
     private readonly SemaphoreSlim _semaphore = new(1);
+    private readonly ReleaseProviderBase<ToolEnum> _toolsReleasesProviderBase;
 
     private Dictionary<GameEnum, List<DownloadableAddonJsonModel>>? _addonsJson;
     private Dictionary<string, string>? _data;
 
 
     /// <summary>
-    /// Initializes a new instance of <see cref="GitHubApiInterface"/>.
+    ///     Initializes a new instance of <see cref="GitHubApiInterface" />.
     /// </summary>
     /// <param name="portsReleasesProviderBase">Provider for port releases.</param>
     /// <param name="toolsReleasesRetriever">Provider for tool releases.</param>
@@ -72,7 +72,6 @@ public sealed class GitHubApiInterface : IApiInterface
                 {
                     throw new FormatException("Error while deserializing addons.json");
                 }
-
             }
 
             if (gameEnum is GameEnum.Redneck)
@@ -96,6 +95,7 @@ public sealed class GitHubApiInterface : IApiInterface
         catch (Exception ex)
         {
             _logger.LogCritical(ex, "=== Error while getting addons from GitHub ===");
+
             return null;
         }
         finally
@@ -145,12 +145,14 @@ public sealed class GitHubApiInterface : IApiInterface
         if (ClientProperties.PathToLocalAddonsJson is null)
         {
             _logger.LogError("Can't find local addons.json");
+
             return false;
         }
 
         if (ClientProperties.PathToLocalManifestsJson is null)
         {
             _logger.LogError("Can't find local manifests.json");
+
             return false;
         }
 
@@ -161,12 +163,13 @@ public sealed class GitHubApiInterface : IApiInterface
             addons = await JsonSerializer.DeserializeAsync(
                 addonsJson,
                 DownloadableAddonJsonModelDictionaryContext.Default.DictionaryGameEnumListDownloadableAddonJsonModel
-            ).ConfigureAwait(false);
+                ).ConfigureAwait(false);
         }
 
         if (addons is null)
         {
             _logger.LogError("Error while deserializing addons.json");
+
             return false;
         }
 
@@ -204,12 +207,13 @@ public sealed class GitHubApiInterface : IApiInterface
             manifests = await JsonSerializer.DeserializeAsync(
                 manifestsJson,
                 AddonManifestJsonContext.Default.ListAddonManifestJsonModel
-            ).ConfigureAwait(false);
+                ).ConfigureAwait(false);
         }
 
         if (manifests is null)
         {
             _logger.LogError("Error while deserializing manifests.json");
+
             return false;
         }
 
@@ -238,6 +242,7 @@ public sealed class GitHubApiInterface : IApiInterface
         catch (Exception ex)
         {
             _logger.LogCritical(ex, "=== Error while getting upload folder from GitHub ===");
+
             return null;
         }
         finally
@@ -251,8 +256,9 @@ public sealed class GitHubApiInterface : IApiInterface
         try
         {
             using var httpClient = _httpClientFactory.CreateClient();
+
             using var jsonStream = await httpClient.GetStreamAsync(CommonConstants.ManifestsJsonUrl).ConfigureAwait(false)
-             ?? throw new FormatException("Error while deserializing manifests.json");
+                                ?? throw new FormatException("Error while deserializing manifests.json");
 
             var meta = await JsonSerializer.DeserializeAsync(
                 jsonStream,
@@ -264,18 +270,9 @@ public sealed class GitHubApiInterface : IApiInterface
         catch (Exception ex)
         {
             _logger.LogCritical(ex, "=== Error while getting upload folder from GitHub ===");
+
             return null;
         }
-    }
-
-
-    private async Task InitDataAsync()
-    {
-        using var httpClient = _httpClientFactory.CreateClient(HttpClientEnum.GitHub.GetDescription());
-        using var response = await httpClient.GetStreamAsync(CommonConstants.DataJsonUrl).ConfigureAwait(false);
-
-        _data = await JsonSerializer.DeserializeAsync(response, DataJsonModelContext.Default.DictionaryStringString).ConfigureAwait(false)
-             ?? throw new FormatException("Error while deserializing meta.json");
     }
 
     public async Task<Result<Uri?>> GetSignedUrlAsync(string path)
@@ -301,12 +298,23 @@ public sealed class GitHubApiInterface : IApiInterface
         catch (Exception ex)
         {
             _logger.LogCritical(ex, "=== Error while getting upload folder from GitHub ===");
+
             return new(ResultEnum.Error, null, "Error while getting upload folder from GitHub");
         }
         finally
         {
             _ = _semaphore.Release();
         }
+    }
+
+
+    private async Task InitDataAsync()
+    {
+        using var httpClient = _httpClientFactory.CreateClient(HttpClientEnum.GitHub.GetDescription());
+        using var response = await httpClient.GetStreamAsync(CommonConstants.DataJsonUrl).ConfigureAwait(false);
+
+        _data = await JsonSerializer.DeserializeAsync(response, DataJsonModelContext.Default.DictionaryStringString).ConfigureAwait(false)
+             ?? throw new FormatException("Error while deserializing meta.json");
     }
 
 

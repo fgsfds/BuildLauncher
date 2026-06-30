@@ -5,6 +5,7 @@ namespace Core.Client.Interfaces;
 
 public interface IConfigProvider
 {
+    delegate void ParameterChanged(string? parameterName);
     HashSet<string> DisabledAutoloadMods { get; }
     HashSet<AddonId> FavoriteAddons { get; }
     bool IsConsented { get; set; }
@@ -32,8 +33,6 @@ public interface IConfigProvider
     bool SkipIntro { get; set; }
     bool SkipStartup { get; set; }
     ThemeEnum Theme { get; set; }
-
-    delegate void ParameterChanged(string? parameterName);
     event ParameterChanged ParameterChangedEvent;
 
     void AddPlaytime(string addonId, TimeSpan playTime);

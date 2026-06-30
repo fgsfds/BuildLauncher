@@ -7,7 +7,7 @@ namespace Tests.Unit.Helpers;
 public static class ParsedAddonFileHelper
 {
     /// <summary>
-    /// Creates a <see cref="ParsedAddonFile"/> with the given identity and a dummy file path.
+    ///     Creates a <see cref="ParsedAddonFile" /> with the given identity and a dummy file path.
     /// </summary>
     public static ParsedAddonFile CreateParsedAddonFile(
         string id,
@@ -27,14 +27,18 @@ public static class ParsedAddonFileHelper
                 Title = title,
                 Version = version,
                 AddonType = addonType,
-                SupportedGame = new SupportedGameJsonModel { Game = game },
+                SupportedGame = new SupportedGameJsonModel
+                {
+                    Game = game
+                }
             },
             GridHash = null,
-            PreviewHash = null,
+            PreviewHash = null
         };
     }
+
     /// <summary>
-    /// Creates a <see cref="ParsedAddonFile"/> with a Mod type, optional dependencies, and incompatibles.
+    ///     Creates a <see cref="ParsedAddonFile" /> with a Mod type, optional dependencies, and incompatibles.
     /// </summary>
     public static ParsedAddonFile CreateParsedModFile(
         string id,
@@ -56,22 +60,33 @@ public static class ParsedAddonFileHelper
                 AddonType = AddonTypeEnum.Mod,
                 Author = "test author",
                 Description = "test description",
-                SupportedGame = new SupportedGameJsonModel { Game = game },
+                SupportedGame = new SupportedGameJsonModel
+                {
+                    Game = game
+                },
                 Dependencies = deps is not null
                     ? new DependencyJsonModel
                     {
-                        Addons = deps.Select(d => new DependantAddonJsonModel { Id = d.Key, Version = d.Value }).ToList()
+                        Addons = deps.Select(d => new DependantAddonJsonModel
+                        {
+                            Id = d.Key,
+                            Version = d.Value
+                        }).ToList()
                     }
                     : null,
                 Incompatibles = incompatibles is not null
                     ? new DependencyJsonModel
                     {
-                        Addons = incompatibles.Select(d => new DependantAddonJsonModel { Id = d.Key, Version = d.Value }).ToList()
+                        Addons = incompatibles.Select(d => new DependantAddonJsonModel
+                        {
+                            Id = d.Key,
+                            Version = d.Value
+                        }).ToList()
                     }
-                    : null,
+                    : null
             },
             GridHash = null,
-            PreviewHash = null,
+            PreviewHash = null
         };
     }
 }

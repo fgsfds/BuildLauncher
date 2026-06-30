@@ -4,16 +4,16 @@ namespace Games.Games;
 
 public sealed class WitchavenGame : BaseGame
 {
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override GameEnum GameEnum => GameEnum.Witchaven;
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override string FullName => "Witchaven";
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override string ShortName => FullName;
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override List<string> RequiredFiles
     {
         get
@@ -21,12 +21,13 @@ public sealed class WitchavenGame : BaseGame
             List<string> result = ["JOESND", "SONGS"];
             result.AddRange(GenerateNumberedFiles("TILES", "ART", 0, 11));
             result.AddRange(GenerateNumberedFiles("LEVEL", "MAP", 1, 26));
+
             return result;
         }
     }
 
     /// <summary>
-    /// Files required for Witchaven 2
+    ///     Files required for Witchaven 2
     /// </summary>
     public List<string> Witchaven2RequiredFiles
     {
@@ -35,20 +36,21 @@ public sealed class WitchavenGame : BaseGame
             List<string> result = ["JOESND", "W_SONGS"];
             result.AddRange(GenerateNumberedFiles("TILES", "ART", 0, 16));
             result.AddRange(GenerateNumberedFiles("LEVEL", "MAP", 1, 16));
+
             return result;
         }
     }
 
     /// <summary>
-    /// Path to Witchaven 2 install folder
+    ///     Path to Witchaven 2 install folder
     /// </summary>
     public string? Witchaven2InstallPath { get; set; }
 
     /// <summary>
-    /// Is Witchaven 2 installed
+    ///     Is Witchaven 2 installed
     /// </summary>
     public bool IsWitchaven2Installed => IsInstalled(Witchaven2RequiredFiles, Witchaven2InstallPath);
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override Enum? Skills => null;
 }

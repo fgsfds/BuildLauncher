@@ -6,7 +6,7 @@ namespace Games;
 public static class DiHelper
 {
     /// <summary>
-    /// Adds dependencies to work with games.
+    ///     Adds dependencies to work with games.
     /// </summary>
     public static IServiceCollection WithGames(this IServiceCollection container)
     {

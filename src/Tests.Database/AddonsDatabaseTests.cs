@@ -1,5 +1,4 @@
 ﻿using System.Security.Cryptography;
-using System.Text;
 using System.Text.Json;
 using Core.All.Serializable.Addon;
 using Core.All.Serializable.Downloadable;
@@ -57,8 +56,8 @@ public sealed class AddonsDatabaseTests
         if (url.ToString().StartsWith(S3Constants.S3Endpoint))
         {
             var actualHashStr = header.Headers
-                .FirstOrDefault(x => x.Key.Equals("x-amz-meta-checksum-sha256")).Value
-                ?.FirstOrDefault();
+                                      .FirstOrDefault(x => x.Key.Equals("x-amz-meta-checksum-sha256")).Value
+                                     ?.FirstOrDefault();
 
             Assert.NotNull(actualHashStr);
             Assert.Equal(hash, actualHashStr, true);
@@ -100,16 +99,17 @@ public sealed class AddonsDatabaseTests
         Assert.NotNull(secret);
 
         using var minioClient = new MinioClient();
+
         using var iMinioClient = minioClient
-            .WithEndpoint(S3Constants.S3Endpoint.Split("//").Last())
-            .WithCredentials(access, secret)
-            .WithSSL(false)
-            .Build();
+                                .WithEndpoint(S3Constants.S3Endpoint.Split("//").Last())
+                                .WithCredentials(access, secret)
+                                .WithSSL(false)
+                                .Build();
 
         var args = new ListObjectsArgs()
-            .WithBucket(S3Constants.S3Bucket)
-            .WithPrefix(S3Constants.S3SubFolder + '/')
-            .WithRecursive(true);
+                  .WithBucket(S3Constants.S3Bucket)
+                  .WithPrefix(S3Constants.S3SubFolder + '/')
+                  .WithRecursive(true);
 
         var filesInBucket = new List<string>();
 

@@ -19,27 +19,27 @@ namespace Avalonia.Desktop.ViewModels;
 
 public sealed class ViewModelsFactory
 {
-    private readonly InstalledGamesProvider _gamesProvider;
-    private readonly IConfigProvider _config;
-    private readonly PortInstallerFactory _portsInstallerFactory;
-    private readonly ToolInstallerFactory _toolsInstallerFactory;
-    private readonly PortsProvider _portsProvider;
-    private readonly PlaytimeProvider _playtimeProvider;
-    private readonly MetadataProvider _metadataProvider;
-    private readonly IApiInterface _apiInterface;
-    private readonly RatingProvider _ratingProvider;
-    private readonly InstalledAddonsProviderFactory _installedAddonsProviderFactory;
-    private readonly DownloadableAddonsProviderFactory _downloadableAddonsProviderFactory;
-    private readonly PortStarter _portStarter;
-    private readonly IFilesUploader _filesUploader;
-    private readonly AddonsDatabaseManager _addonsDatabaseManager;
-    private readonly AppUpdateInstaller _appUpdateInstaller;
-    private readonly GamesPathsProvider _gamesPathsProvider;
-    private readonly BitmapsCache _bitmapsCache;
-    private readonly IReadOnlyList<BasePort> _ports;
-    private readonly IReadOnlyList<BaseTool> _tools;
     private readonly IAddonDropHelper _addonInstaller;
+    private readonly AddonsDatabaseManager _addonsDatabaseManager;
+    private readonly IApiInterface _apiInterface;
+    private readonly AppUpdateInstaller _appUpdateInstaller;
+    private readonly BitmapsCache _bitmapsCache;
+    private readonly IConfigProvider _config;
+    private readonly DownloadableAddonsProviderFactory _downloadableAddonsProviderFactory;
+    private readonly IFilesUploader _filesUploader;
+    private readonly GamesPathsProvider _gamesPathsProvider;
+    private readonly InstalledGamesProvider _gamesProvider;
+    private readonly InstalledAddonsProviderFactory _installedAddonsProviderFactory;
     private readonly ILoggerFactory _loggerFactory;
+    private readonly MetadataProvider _metadataProvider;
+    private readonly PlaytimeProvider _playtimeProvider;
+    private readonly IReadOnlyList<BasePort> _ports;
+    private readonly PortInstallerFactory _portsInstallerFactory;
+    private readonly PortsProvider _portsProvider;
+    private readonly PortStarter _portStarter;
+    private readonly RatingProvider _ratingProvider;
+    private readonly IReadOnlyList<BaseTool> _tools;
+    private readonly ToolInstallerFactory _toolsInstallerFactory;
 
     public ViewModelsFactory(
         InstalledGamesProvider gamesProvider,
@@ -88,7 +88,7 @@ public sealed class ViewModelsFactory
         _loggerFactory = loggerFactory;
     }
 
-#pragma warning disable CS0618 // Type or member is obsolete
+    #pragma warning disable CS0618 // Type or member is obsolete
 
     public MainWindowViewModel GetMainWindowViewModel()
     {
@@ -112,7 +112,7 @@ public sealed class ViewModelsFactory
     }
 
     /// <summary>
-    /// Create <see cref="CampaignsViewModel"/>
+    ///     Create <see cref="CampaignsViewModel" />
     /// </summary>
     /// <param name="gameEnum">Game enum</param>
     public CampaignsViewModel GetCampaignsViewModel(GameEnum gameEnum)
@@ -133,12 +133,13 @@ public sealed class ViewModelsFactory
             );
 
         _ = Dispatcher.UIThread.Invoke(vm.InitializeAsync);
+
         return vm;
     }
 
 
     /// <summary>
-    /// Create <see cref="CampaignsViewModel"/>
+    ///     Create <see cref="CampaignsViewModel" />
     /// </summary>
     /// <param name="gameEnum">Game enum</param>
     public MapsViewModel GetMapsViewModel(GameEnum gameEnum)
@@ -159,11 +160,12 @@ public sealed class ViewModelsFactory
             );
 
         _ = Dispatcher.UIThread.Invoke(vm.InitializeAsync);
+
         return vm;
     }
 
     /// <summary>
-    /// Create <see cref="CampaignsViewModel"/>
+    ///     Create <see cref="CampaignsViewModel" />
     /// </summary>
     /// <param name="gameEnum">Game enum</param>
     public ModsViewModel GetModsViewModel(GameEnum gameEnum)
@@ -183,11 +185,12 @@ public sealed class ViewModelsFactory
             );
 
         _ = Dispatcher.UIThread.Invoke(vm.InitializeAsync);
+
         return vm;
     }
 
     /// <summary>
-    /// Create <see cref="CampaignsViewModel"/>
+    ///     Create <see cref="CampaignsViewModel" />
     /// </summary>
     /// <param name="gameEnum">Game enum</param>
     public DownloadsViewModel GetDownloadsViewModel(GameEnum gameEnum)
@@ -200,12 +203,13 @@ public sealed class ViewModelsFactory
             );
 
         _ = Dispatcher.UIThread.Invoke(vm.InitializeAsync);
+
         return vm;
     }
 
 
     /// <summary>
-    /// Create <see cref="PortViewModel"/>
+    ///     Create <see cref="PortViewModel" />
     /// </summary>
     /// <param name="port">Port enum</param>
     public PortViewModel GetPortViewModel(BasePort port)
@@ -218,12 +222,13 @@ public sealed class ViewModelsFactory
             );
 
         _ = Dispatcher.UIThread.Invoke(vm.InitializeAsync);
+
         return vm;
     }
 
 
     /// <summary>
-    /// Create <see cref="PortViewModel"/>
+    ///     Create <see cref="PortViewModel" />
     /// </summary>
     /// <param name="tool">Port enum</param>
     public ToolViewModel GetToolViewModel(BaseTool tool)
@@ -236,8 +241,9 @@ public sealed class ViewModelsFactory
             );
 
         _ = Dispatcher.UIThread.Invoke(vm.InitializeAsync);
+
         return vm;
     }
 
-#pragma warning restore CS0618 // Type or member is obsolete
+    #pragma warning restore CS0618 // Type or member is obsolete
 }

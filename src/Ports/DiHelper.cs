@@ -12,7 +12,7 @@ namespace Ports;
 public static class DiHelper
 {
     /// <summary>
-    /// Adds dependencies to work with ports.
+    ///     Adds dependencies to work with ports.
     /// </summary>
     public static IServiceCollection WithPorts(this IServiceCollection container)
     {

@@ -83,14 +83,16 @@ public sealed record AddonManifestJsonModel
     public AddonId AddonId => new(Id, Version);
 }
 
+
 [JsonSourceGenerationOptions(
-    Converters = [
+    Converters =
+    [
         typeof(JsonStringEnumConverter<AddonTypeEnum>),
         typeof(JsonStringEnumConverter<OSEnum>),
         typeof(JsonStringEnumConverter<PortEnum>),
         typeof(JsonStringEnumConverter<FeatureEnum>),
         typeof(JsonStringEnumConverter<OptionalParameterTypeEnum>)
-        ],
+    ],
     UnmappedMemberHandling = JsonUnmappedMemberHandling.Disallow,
     AllowTrailingCommas = true,
     WriteIndented = true,

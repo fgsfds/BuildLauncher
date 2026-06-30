@@ -143,7 +143,7 @@ public sealed partial class SettingsViewModel : ObservableObject
     }
 
     /// <summary>
-    /// Skip intro parameter
+    ///     Skip intro parameter
     /// </summary>
     public bool SkipIntroCheckbox
     {
@@ -156,7 +156,7 @@ public sealed partial class SettingsViewModel : ObservableObject
     }
 
     /// <summary>
-    /// Skip startup window parameter
+    ///     Skip startup window parameter
     /// </summary>
     public bool SkipStartupCheckbox
     {
@@ -188,7 +188,7 @@ public sealed partial class SettingsViewModel : ObservableObject
             ThemeEnum.System => ThemeVariant.Default,
             ThemeEnum.Light => ThemeVariant.Light,
             ThemeEnum.Dark => ThemeVariant.Dark,
-            _ => throw new ArgumentOutOfRangeException(),
+            _ => throw new ArgumentOutOfRangeException()
         };
 
         _config.Theme = themeEnum.Value;
@@ -196,7 +196,7 @@ public sealed partial class SettingsViewModel : ObservableObject
 
 
     /// <summary>
-    /// Open folder picker
+    ///     Open folder picker
     /// </summary>
     [RelayCommand]
     private async Task OpenFolderPickerAsync(string param)
@@ -295,7 +295,7 @@ public sealed partial class SettingsViewModel : ObservableObject
 
 
     /// <summary>
-    /// Replace path to game with auto detected one
+    ///     Replace path to game with auto detected one
     /// </summary>
     [RelayCommand]
     private void Autodetect(string param)
@@ -447,7 +447,7 @@ public sealed partial class SettingsViewModel : ObservableObject
 
 
     /// <summary>
-    /// Open file picker
+    ///     Open file picker
     /// </summary>
     [RelayCommand]
     private async Task OpenFilePickerAsync(string param)
@@ -484,7 +484,7 @@ public sealed partial class SettingsViewModel : ObservableObject
 
 
     /// <summary>
-    /// Open log file
+    ///     Open log file
     /// </summary>
     [RelayCommand]
     private void OpenLog()

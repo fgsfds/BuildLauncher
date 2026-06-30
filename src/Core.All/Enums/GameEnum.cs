@@ -16,5 +16,5 @@ public enum GameEnum : byte
     Witchaven = 12,
     Witchaven2 = 13,
     Standalone = 14,
-    DukeZeroHour = 15,
+    DukeZeroHour = 15
 }

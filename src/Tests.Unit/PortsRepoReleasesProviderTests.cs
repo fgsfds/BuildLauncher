@@ -205,8 +205,9 @@ public sealed class PortsRepoReleasesProviderTests
     public async Task GetLatestReleaseAsync_HttpError_ReturnsNull()
     {
         var httpFactoryMock = new Mock<IHttpClientFactory>();
+
         httpFactoryMock.Setup(x => x.CreateClient(It.IsAny<string>()))
-            .Throws<HttpRequestException>();
+                       .Throws<HttpRequestException>();
 
         var provider = new PortsRepoReleasesProvider(
             NullLogger<PortsRepoReleasesProvider>.Instance,
@@ -290,6 +291,7 @@ public sealed class PortsRepoReleasesProviderTests
         httpFactoryMock.Verify(x => x.CreateClient(It.IsAny<string>()), Times.Once);
     }
 
+
     private sealed class FakeHttpMessageHandler : HttpMessageHandler
     {
         protected override Task<HttpResponseMessage> SendAsync(
@@ -303,6 +305,7 @@ public sealed class PortsRepoReleasesProviderTests
             return Task.FromResult(response);
         }
     }
+
 
     private sealed class FakeRazeHttpMessageHandler : HttpMessageHandler
     {

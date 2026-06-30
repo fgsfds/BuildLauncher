@@ -5,18 +5,18 @@ namespace Games.Games;
 
 public sealed class WangGame : BaseGame
 {
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override GameEnum GameEnum => GameEnum.Wang;
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override string FullName => "Shadow Warrior";
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override string ShortName => "Wang";
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override List<string> RequiredFiles => ["SW.GRP"];
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override Enum Skills => new WangSkillsEnum();
 }

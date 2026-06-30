@@ -1,22 +1,22 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <AssemblyName>BuildLauncher.$(MSBuildProjectName)</AssemblyName>
-  </PropertyGroup>
+    <PropertyGroup>
+        <AssemblyName>BuildLauncher.$(MSBuildProjectName)</AssemblyName>
+    </PropertyGroup>
 
-  <ItemGroup>
-    <EmbeddedResource Include="Assets\DOSBlood.png" />
-    <EmbeddedResource Include="Assets\Mapster32.png" />
-    <EmbeddedResource Include="Assets\XMAPEDIT.png" />
-  </ItemGroup>
+    <ItemGroup>
+        <EmbeddedResource Include="Assets\DOSBlood.png"/>
+        <EmbeddedResource Include="Assets\Mapster32.png"/>
+        <EmbeddedResource Include="Assets\XMAPEDIT.png"/>
+    </ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="IDisposableAnalyzers" PrivateAssets="all" />
-  </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="IDisposableAnalyzers" PrivateAssets="all"/>
+    </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Core.All\Core.All.csproj" />
-    <ProjectReference Include="..\Games\Games.csproj" />
-  </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\Core.All\Core.All.csproj"/>
+        <ProjectReference Include="..\Games\Games.csproj"/>
+    </ItemGroup>
 
 </Project>

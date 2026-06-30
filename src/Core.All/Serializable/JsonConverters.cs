@@ -97,6 +97,7 @@ public sealed class IStartMapConverter : JsonConverter<IStartMap?>
     }
 }
 
+
 public sealed class ExecutablesConverter : JsonConverter<Dictionary<OSEnum, Dictionary<PortEnum, string>>?>
 {
     public override Dictionary<OSEnum, Dictionary<PortEnum, string>>? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
@@ -191,6 +192,7 @@ public sealed class ExecutablesConverter : JsonConverter<Dictionary<OSEnum, Dict
         if (value is null)
         {
             writer.WriteNullValue();
+
             return;
         }
 
@@ -319,6 +321,7 @@ public sealed class ExecutablesConverter : JsonConverter<Dictionary<OSEnum, Dict
 //    }
 //}
 
+
 public sealed class GameEnumJsonConverter : JsonConverter<GameEnum>
 {
     public override GameEnum Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
@@ -335,6 +338,7 @@ public sealed class GameEnumJsonConverter : JsonConverter<GameEnum>
         {
             return GameEnum.Wang;
         }
+
         if (value.Equals("Exhumed", StringComparison.OrdinalIgnoreCase))
         {
             return GameEnum.Slave;

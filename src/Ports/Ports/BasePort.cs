@@ -13,17 +13,25 @@ using Games.Games;
 namespace Ports.Ports;
 
 /// <summary>
-/// Base class for ports
+///     Base class for ports
 /// </summary>
 public abstract class BasePort : IInstallable
 {
+    protected BasePort()
+    {
+        if (!Directory.Exists(PortSavedGamesFolderPath))
+        {
+            _ = Directory.CreateDirectory(PortSavedGamesFolderPath);
+        }
+    }
+
     /// <summary>
-    /// Port enum
+    ///     Port enum
     /// </summary>
     public abstract PortEnum PortEnum { get; }
 
     /// <summary>
-    /// Main executable
+    ///     Main executable
     /// </summary>
     public string Exe
     {
@@ -39,155 +47,147 @@ public abstract class BasePort : IInstallable
     }
 
     /// <summary>
-    /// Windows executable
+    ///     Windows executable
     /// </summary>
     protected abstract string WinExe { get; }
 
     /// <summary>
-    /// Linux executable
+    ///     Linux executable
     /// </summary>
     protected abstract string LinExe { get; }
 
     /// <summary>
-    /// Name of the port
+    ///     Name of the port
     /// </summary>
     public abstract string Name { get; }
 
     /// <summary>
-    /// Name of the folder that contains the port files
-    /// By default is the same as <see cref="Name"/>
+    ///     Name of the folder that contains the port files
+    ///     By default is the same as <see cref="Name" />
     /// </summary>
     public virtual string ShortName => Name;
 
     /// <summary>
-    /// Games supported by the port
+    ///     Games supported by the port
     /// </summary>
     public abstract List<GameEnum> SupportedGames { get; }
 
     /// <summary>
-    /// Features supported by the port
+    ///     Features supported by the port
     /// </summary>
     public abstract List<FeatureEnum> SupportedFeatures { get; }
 
-    /// <inheritdoc/>
-    public abstract string? InstalledVersion { get; }
-
-    /// <inheritdoc/>
-    public virtual string InstallFolderPath => Path.Combine(ClientProperties.PortsFolderPath, ShortName);
-
-    /// <inheritdoc/>
-    public virtual bool IsInstalled => InstalledVersion is not null;
-
     /// <summary>
-    /// Path to port saved games folder
+    ///     Path to port saved games folder
     /// </summary>
     public virtual string PortSavedGamesFolderPath => Path.Combine(ClientProperties.SavedGamesFolderPath, Name);
 
     /// <summary>
-    /// Games versions supported by the port
+    ///     Games versions supported by the port
     /// </summary>
     public virtual List<string> SupportedGamesVersions => [];
 
     /// <summary>
-    /// Path to port exe
+    ///     Path to port exe
     /// </summary>
     public string PortExeFilePath => Path.Combine(InstallFolderPath, Exe);
 
     /// <summary>
-    /// Name of the config file
+    ///     Name of the config file
     /// </summary>
     protected abstract string ConfigFile { get; }
 
     /// <summary>
-    /// Cmd parameter to add folder to search path
+    ///     Cmd parameter to add folder to search path
     /// </summary>
     protected abstract string AddDirectoryParam { get; }
 
     /// <summary>
-    /// Cmd parameter to load main GRP file
+    ///     Cmd parameter to load main GRP file
     /// </summary>
     protected abstract string MainGrpParam { get; }
 
     /// <summary>
-    /// Cmd parameter to load additional GRP file
+    ///     Cmd parameter to load additional GRP file
     /// </summary>
     protected abstract string AddGrpParam { get; }
 
     /// <summary>
-    /// Cmd parameter to load additional file
+    ///     Cmd parameter to load additional file
     /// </summary>
     protected abstract string AddFileParam { get; }
 
     /// <summary>
-    /// Cmd parameter to load additional Def file
+    ///     Cmd parameter to load additional Def file
     /// </summary>
     protected abstract string AddDefParam { get; }
 
     /// <summary>
-    /// Cmd parameter to load additional Con file
+    ///     Cmd parameter to load additional Con file
     /// </summary>
     protected abstract string AddConParam { get; }
 
     /// <summary>
-    /// Cmd parameter to load main Def file
+    ///     Cmd parameter to load main Def file
     /// </summary>
     protected abstract string MainDefParam { get; }
 
     /// <summary>
-    /// Cmd parameter to load main Con file
+    ///     Cmd parameter to load main Con file
     /// </summary>
     protected abstract string MainConParam { get; }
 
     /// <summary>
-    /// Cmd parameter for skill selection
+    ///     Cmd parameter for skill selection
     /// </summary>
     protected abstract string SkillParam { get; }
 
     /// <summary>
-    /// Cmd parameter for setting game directory
+    ///     Cmd parameter for setting game directory
     /// </summary>
     protected abstract string AddGameDirParam { get; }
 
     /// <summary>
-    /// Cmd parameter for adding main rff file
+    ///     Cmd parameter for adding main rff file
     /// </summary>
     protected abstract string AddRffParam { get; }
 
     /// <summary>
-    /// Cmd parameter for adding sound rff file
+    ///     Cmd parameter for adding sound rff file
     /// </summary>
     protected abstract string AddSndParam { get; }
 
     /// <summary>
-    /// Extension of the save game file
+    ///     Extension of the save game file
     /// </summary>
     protected ImmutableArray<string> SaveFileExtensions => [".sav", ".esv"];
 
     /// <summary>
-    /// Port's icon
+    ///     Port's icon
     /// </summary>
     public long IconId => PortEnum.GetUniqueHash();
 
     /// <summary>
-    /// Can this port be downloaded.
+    ///     Can this port be downloaded.
     /// </summary>
     public virtual bool IsDownloadable => true;
 
     /// <summary>
-    /// Is it possible to select skill level from command line.
+    ///     Is it possible to select skill level from command line.
     /// </summary>
     public abstract bool IsSkillSelectionAvailable { get; }
 
-    protected BasePort()
-    {
-        if (!Directory.Exists(PortSavedGamesFolderPath))
-        {
-            _ = Directory.CreateDirectory(PortSavedGamesFolderPath);
-        }
-    }
+    /// <inheritdoc />
+    public abstract string? InstalledVersion { get; }
+
+    /// <inheritdoc />
+    public virtual string InstallFolderPath => Path.Combine(ClientProperties.PortsFolderPath, ShortName);
+
+    /// <inheritdoc />
+    public virtual bool IsInstalled => InstalledVersion is not null;
 
     /// <summary>
-    /// Get path to addon's saved games folder
+    ///     Get path to addon's saved games folder
     /// </summary>
     /// <param name="subFolder">Subfolder under port's saves folder</param>
     /// <param name="addonId">Addon Id</param>
@@ -204,7 +204,7 @@ public abstract class BasePort : IInstallable
     }
 
     /// <summary>
-    /// Get command line parameters to start the game with selected campaign and autoload mods
+    ///     Get command line parameters to start the game with selected campaign and autoload mods
     /// </summary>
     /// <param name="game">Game to start</param>
     /// <param name="addon">Addon to start</param>
@@ -288,7 +288,7 @@ public abstract class BasePort : IInstallable
     }
 
     /// <summary>
-    /// Get startup args for manifested maps
+    ///     Get startup args for manifested maps
     /// </summary>
     protected void GetMapArgs(StringBuilder sb, BaseAddon camp)
     {
@@ -310,7 +310,7 @@ public abstract class BasePort : IInstallable
     }
 
     /// <summary>
-    /// Get startup args for loose maps
+    ///     Get startup args for loose maps
     /// </summary>
     protected virtual void GetLooseMapArgs(StringBuilder sb, BaseGame game, BaseAddon camp)
     {
@@ -337,6 +337,7 @@ public abstract class BasePort : IInstallable
             }
 
             GetLooseMapArgs(sb, game, addon);
+
             return;
         }
 
@@ -399,6 +400,7 @@ public abstract class BasePort : IInstallable
         if (addon is LooseMap)
         {
             GetLooseMapArgs(sb, game, addon);
+
             return;
         }
 
@@ -444,6 +446,7 @@ public abstract class BasePort : IInstallable
         if (addon is LooseMap)
         {
             GetLooseMapArgs(sb, game, addon);
+
             return;
         }
 
@@ -494,7 +497,7 @@ public abstract class BasePort : IInstallable
     }
 
     /// <summary>
-    /// Get command line arguments to load mods
+    ///     Get command line arguments to load mods
     /// </summary>
     /// <param name="sb">String builder for parameters</param>
     /// <param name="game">Game</param>
@@ -561,21 +564,21 @@ public abstract class BasePort : IInstallable
     }
 
     /// <summary>
-    /// Method to perform after port is finished
+    ///     Method to perform after port is finished
     /// </summary>
     /// <param name="game">Game</param>
     /// <param name="campaign">Campaign</param>
     public abstract void AfterEnd(BaseGame game, BaseAddon campaign);
 
     /// <summary>
-    /// Method to perform before starting the port
+    ///     Method to perform before starting the port
     /// </summary>
     /// <param name="game">Game</param>
     /// <param name="campaign">Campaign</param>
     public abstract void BeforeStart(BaseGame game, BaseAddon campaign);
 
     /// <summary>
-    /// Get command line arguments to start custom map or campaign
+    ///     Get command line arguments to start custom map or campaign
     /// </summary>
     /// <param name="sb">String builder for parameters</param>
     /// <param name="game">Game</param>
@@ -583,19 +586,19 @@ public abstract class BasePort : IInstallable
     protected abstract void GetStartCampaignArgs(StringBuilder sb, BaseGame game, BaseAddon addon);
 
     /// <summary>
-    /// Return command line parameter to skip intro
+    ///     Return command line parameter to skip intro
     /// </summary>
     /// <param name="sb">String builder for parameters</param>
     protected abstract void GetSkipIntroParameter(StringBuilder sb);
 
     /// <summary>
-    /// Return command line parameter to skip startup window
+    ///     Return command line parameter to skip startup window
     /// </summary>
     /// <param name="sb">String builder for parameters</param>
     protected abstract void GetSkipStartupParameter(StringBuilder sb);
 
     /// <summary>
-    /// Remove route 66 art files overrides used for RedNukem
+    ///     Remove route 66 art files overrides used for RedNukem
     /// </summary>
     protected void RestoreRoute66Files(BaseGame game)
     {
@@ -645,7 +648,7 @@ public abstract class BasePort : IInstallable
     }
 
     /// <summary>
-    /// Restore WT's ART files
+    ///     Restore WT's ART files
     /// </summary>
     protected void RestoreWtFiles(BaseGame game)
     {
@@ -725,7 +728,7 @@ public abstract class BasePort : IInstallable
     }
 
     /// <summary>
-    /// Moves save files from the addon's saved games storage folder to the game's install folder.
+    ///     Moves save files from the addon's saved games storage folder to the game's install folder.
     /// </summary>
     /// <param name="game">The game instance containing the target install folder.</param>
     /// <param name="campaign">The addon campaign whose saves are to be moved.</param>
@@ -753,7 +756,7 @@ public abstract class BasePort : IInstallable
     }
 
     /// <summary>
-    /// Moves save files from the game installation folder to the addon's saved games folder.
+    ///     Moves save files from the game installation folder to the addon's saved games folder.
     /// </summary>
     /// <param name="game">The game whose save files are to be moved.</param>
     /// <param name="campaign">The addon or campaign whose save folder is the destination.</param>

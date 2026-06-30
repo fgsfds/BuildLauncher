@@ -14,7 +14,7 @@ public enum RedneckSkillsEnum : byte
     HardAss = 3,
 
     [Description("Killbilly")]
-    KillBilly = 4,
+    KillBilly = 4
 
     //Can't be started from the command line
     //[Description("Psychobilly")]

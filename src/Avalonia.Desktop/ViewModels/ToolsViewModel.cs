@@ -1,6 +1,6 @@
 using System.Collections.Immutable;
-using Core.All.Enums;
 using CommunityToolkit.Mvvm.ComponentModel;
+using Core.All.Enums;
 using Tools.Tools;
 
 namespace Avalonia.Desktop.ViewModels;
@@ -12,8 +12,6 @@ public sealed partial class ToolsViewModel : ObservableObject
     [ObservableProperty]
     private bool _hasUpdates = false;
 
-    public ImmutableList<ToolViewModel> ToolsList { get; set; } = [];
-
     public ToolsViewModel(
         ViewModelsFactory viewModelsFactory,
         IEnumerable<BaseTool> tools
@@ -24,8 +22,10 @@ public sealed partial class ToolsViewModel : ObservableObject
         Initialize(tools);
     }
 
+    public ImmutableList<ToolViewModel> ToolsList { get; set; } = [];
+
     /// <summary>
-    /// Initialize VM
+    ///     Initialize VM
     /// </summary>
     private void Initialize(IEnumerable<BaseTool> tools)
     {

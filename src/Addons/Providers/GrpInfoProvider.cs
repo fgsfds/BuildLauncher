@@ -8,7 +8,7 @@ namespace Addons.Providers;
 public static class GrpInfoProvider
 {
     /// <summary>
-    /// Attempts to retrieve addons from a GRP info file by parsing the associated .grp files.
+    ///     Attempts to retrieve addons from a GRP info file by parsing the associated .grp files.
     /// </summary>
     /// <param name="pathToGrpInfo">Path to the GRP info file containing metadata about game groups.</param>
     /// <param name="newAddons">When this method returns true, contains a list of BaseAddon instances created from the parsed .grp files; otherwise null.</param>
@@ -22,6 +22,7 @@ public static class GrpInfoProvider
         if (grps.Length == 0)
         {
             newAddons = null;
+
             return false;
         }
 
@@ -74,7 +75,7 @@ public static class GrpInfoProvider
     }
 
     /// <summary>
-    /// Parse grpinfo file
+    ///     Parse grpinfo file
     /// </summary>
     /// <param name="pathToFile">Path to the grpinfo file</param>
     /// <param name="expectedGrpsCount">Number of expected grps</param>
@@ -108,6 +109,7 @@ public static class GrpInfoProvider
                 size = 0;
 
                 isInsideGrpInfoBlock = true;
+
                 continue;
             }
 
@@ -142,7 +144,7 @@ public static class GrpInfoProvider
                         Name = name,
                         MainCon = mainCon,
                         AddDef = def,
-                        Size = size,
+                        Size = size
                     };
 
                     addons.Add(addon);
@@ -168,6 +170,7 @@ public static class GrpInfoProvider
         return null;
     }
 }
+
 
 public readonly struct GrpInfoEntry
 {

@@ -12,16 +12,21 @@ public sealed class ParsedAddonFileTests
         {
             FileInfo = new AddonFilePathWrapper(path, fileName),
             SupportedGame = GameEnum.Duke3D,
-            Manifest = manifestId is not null ? new AddonManifestJsonModel
-            {
-                Id = manifestId,
-                Title = manifestId,
-                Version = "1.0",
-                AddonType = AddonTypeEnum.TC,
-                SupportedGame = new SupportedGameJsonModel { Game = GameEnum.Duke3D },
-            } : null,
+            Manifest = manifestId is not null
+                ? new AddonManifestJsonModel
+                {
+                    Id = manifestId,
+                    Title = manifestId,
+                    Version = "1.0",
+                    AddonType = AddonTypeEnum.TC,
+                    SupportedGame = new SupportedGameJsonModel
+                    {
+                        Game = GameEnum.Duke3D
+                    }
+                }
+                : null,
             GridHash = 12345,
-            PreviewHash = 67890,
+            PreviewHash = 67890
         };
     }
 
@@ -57,7 +62,11 @@ public sealed class ParsedAddonFileTests
     public void RecordEquality_DifferentGridHash_AreNotEqual()
     {
         var a = Create(@"C:\addons\a", "addon.json", "test");
-        var b = a with { GridHash = 99999 };
+
+        var b = a with
+        {
+            GridHash = 99999
+        };
 
         Assert.NotEqual(a, b);
     }
@@ -66,7 +75,11 @@ public sealed class ParsedAddonFileTests
     public void RecordEquality_DifferentPreviewHash_AreNotEqual()
     {
         var a = Create(@"C:\addons\a", "addon.json", "test");
-        var b = a with { PreviewHash = 11111 };
+
+        var b = a with
+        {
+            PreviewHash = 11111
+        };
 
         Assert.NotEqual(a, b);
     }
@@ -75,7 +88,11 @@ public sealed class ParsedAddonFileTests
     public void RecordEquality_DifferentSupportedGame_AreNotEqual()
     {
         var a = Create(@"C:\addons\a", "addon.json", "test");
-        var b = a with { SupportedGame = GameEnum.Blood };
+
+        var b = a with
+        {
+            SupportedGame = GameEnum.Blood
+        };
 
         Assert.NotEqual(a, b);
     }
@@ -84,7 +101,11 @@ public sealed class ParsedAddonFileTests
     public void WithExpression_ChangesPropertyAndKeepsOthers()
     {
         var original = Create(@"C:\addons\a", "addon.json", "test");
-        var modified = original with { GridHash = 42 };
+
+        var modified = original with
+        {
+            GridHash = 42
+        };
 
         Assert.Equal(42, modified.GridHash);
         Assert.Equal(original.PreviewHash, modified.PreviewHash);

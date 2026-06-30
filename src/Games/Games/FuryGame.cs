@@ -5,18 +5,18 @@ namespace Games.Games;
 
 public sealed class FuryGame : BaseGame
 {
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override GameEnum GameEnum => GameEnum.Fury;
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override string FullName => "Ion Fury";
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override string ShortName => "Fury";
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override List<string> RequiredFiles => ["fury.grp"];
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override Enum Skills => new FurySkillsEnum();
 }

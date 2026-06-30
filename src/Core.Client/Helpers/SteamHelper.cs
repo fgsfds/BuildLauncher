@@ -4,12 +4,12 @@ using Microsoft.Win32;
 namespace Core.Client.Helpers;
 
 /// <summary>
-/// Provides utility methods to locate the local Steam installation and retrieve active game library folders.
+///     Provides utility methods to locate the local Steam installation and retrieve active game library folders.
 /// </summary>
 public static class SteamHelper
 {
     /// <summary>
-    /// Retrieves a list of all absolute paths to the Steam libraries on the system.
+    ///     Retrieves a list of all absolute paths to the Steam libraries on the system.
     /// </summary>
     public static List<string> GetSteamLibraries()
     {
@@ -31,7 +31,7 @@ public static class SteamHelper
     }
 
     /// <summary>
-    /// Parses vdf file to extract paths to Steam libraries.
+    ///     Parses vdf file to extract paths to Steam libraries.
     /// </summary>
     /// <param name="pathToVdf">Path to the libraryfolders.vdf file.</param>
     internal static List<string> GetLibratiesFromVdf(string pathToVdf)
@@ -48,12 +48,14 @@ public static class SteamHelper
             }
 
             var lastQuote = span.LastIndexOf('"');
+
             if (lastQuote <= 0)
             {
                 continue;
             }
 
             var secondToLastQuote = span[..lastQuote].LastIndexOf('"');
+
             if (secondToLastQuote < 0 || secondToLastQuote >= lastQuote - 1)
             {
                 continue;
@@ -62,6 +64,7 @@ public static class SteamHelper
             var dirSpan = span[(secondToLastQuote + 1)..lastQuote].Trim();
 
             var dir = dirSpan.ToString().Replace("\\\\", "\\");
+
             if (Directory.Exists(dir))
             {
                 var path = Path.Combine(dir, "steamapps", "common");
@@ -73,7 +76,7 @@ public static class SteamHelper
     }
 
     /// <summary>
-    /// Locates the root Steam installation directory.
+    ///     Locates the root Steam installation directory.
     /// </summary>
     private static string? GetSteamInstallPath()
     {
@@ -82,7 +85,7 @@ public static class SteamHelper
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
         {
             var path = (string?)Registry
-            .GetValue(@"HKEY_CURRENT_USER\SOFTWARE\Valve\Steam", "SteamPath", null);
+               .GetValue(@"HKEY_CURRENT_USER\SOFTWARE\Valve\Steam", "SteamPath", null);
 
             if (path is null)
             {

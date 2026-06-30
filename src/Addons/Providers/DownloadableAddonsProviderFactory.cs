@@ -8,13 +8,13 @@ namespace Addons.Providers;
 
 public sealed class DownloadableAddonsProviderFactory
 {
-    private readonly Dictionary<GameEnum, DownloadableAddonsProvider> _list = [];
+    private readonly IApiInterface _apiInterface;
 
     private readonly ArchiveTools _archiveTools;
     private readonly FilesDownloader _filesDownloader;
     private readonly LocalFilesProvider _filesProvider;
-    private readonly IApiInterface _apiInterface;
     private readonly InstalledAddonsProviderFactory _installedAddonsProviderFactory;
+    private readonly Dictionary<GameEnum, DownloadableAddonsProvider> _list = [];
     private readonly ILoggerFactory _loggerFactory;
 
     public DownloadableAddonsProviderFactory(
@@ -35,7 +35,7 @@ public sealed class DownloadableAddonsProviderFactory
     }
 
     /// <summary>
-    /// Get or create singleton instance of the provider.
+    ///     Get or create singleton instance of the provider.
     /// </summary>
     /// <param name="game">Game.</param>
     public DownloadableAddonsProvider Get(BaseGame game)
@@ -45,7 +45,7 @@ public sealed class DownloadableAddonsProviderFactory
             return value;
         }
 
-#pragma warning disable CS0618 // Type or member is obsolete
+        #pragma warning disable CS0618 // Type or member is obsolete
         DownloadableAddonsProvider newProvider = new(
             game,
             _archiveTools,
@@ -55,7 +55,7 @@ public sealed class DownloadableAddonsProviderFactory
             _installedAddonsProviderFactory,
             _loggerFactory.CreateLogger<DownloadableAddonsProvider>()
             );
-#pragma warning restore CS0618 // Type or member is obsolete
+        #pragma warning restore CS0618 // Type or member is obsolete
 
         _list.Add(game.GameEnum, newProvider);
 

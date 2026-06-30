@@ -9,65 +9,65 @@ public sealed class DukeGame : BaseGame
 {
     private readonly DukeAddonDetector _addonDetector = new();
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override GameEnum GameEnum => GameEnum.Duke3D;
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override string FullName => "Duke Nukem 3D";
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override string ShortName => "Duke3D";
 
     /// <summary>
-    /// Path to Duke64 rom file
+    ///     Path to Duke64 rom file
     /// </summary>
     public required string? Duke64RomPath { get; set; }
 
     /// <summary>
-    /// Path to Duke Zero Hour rom file
+    ///     Path to Duke Zero Hour rom file
     /// </summary>
     public required string? DukeZHRomPath { get; set; }
 
     /// <summary>
-    /// Path to World Tour folder
+    ///     Path to World Tour folder
     /// </summary>
     public required string? DukeWTInstallPath { get; set; }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override List<string> RequiredFiles => ["DUKE3D.GRP"];
 
     /// <summary>
-    /// Is Duke it Out in DC installed
+    ///     Is Duke it Out in DC installed
     /// </summary>
     public bool IsDukeDCInstalled => _addonDetector.TryFindAddon(DukeAddonEnum.DukeDC, GameInstallFolder);
 
     /// <summary>
-    /// Is Nuclear Winter installed
+    ///     Is Nuclear Winter installed
     /// </summary>
     public bool IsNuclearWinterInstalled => _addonDetector.TryFindAddon(DukeAddonEnum.DukeNW, GameInstallFolder);
 
     /// <summary>
-    /// Is Caribbean installed
+    ///     Is Caribbean installed
     /// </summary>
     public bool IsCaribbeanInstalled => _addonDetector.TryFindAddon(DukeAddonEnum.DukeVaca, GameInstallFolder);
 
     /// <summary>
-    /// Is World Tour installed
+    ///     Is World Tour installed
     /// </summary>
     public bool IsWorldTourInstalled => IsInstalled(["EPISODE5BOSS.CON", "FIREFLYTROOPER.CON", "FLAMETHROWER.CON"], DukeWTInstallPath);
 
     /// <summary>
-    /// Is Duke 64 installed
+    ///     Is Duke 64 installed
     /// </summary>
     public bool IsDuke64Installed => File.Exists(Duke64RomPath);
 
     /// <summary>
-    /// Is Duke ZH installed
+    ///     Is Duke ZH installed
     /// </summary>
     public bool IsDukeZHInstalled => File.Exists(DukeZHRomPath);
 
     /// <summary>
-    /// List of paths to Duke's addons folders
+    ///     List of paths to Duke's addons folders
     /// </summary>
     public Dictionary<DukeAddonEnum, string> AddonsPaths
     {
@@ -75,6 +75,7 @@ public sealed class DukeGame : BaseGame
         init
         {
             _addonDetector.AddonsPaths.Clear();
+
             foreach (var kvp in value)
             {
                 _addonDetector.AddonsPaths[kvp.Key] = kvp.Value;
@@ -82,6 +83,6 @@ public sealed class DukeGame : BaseGame
         }
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override Enum Skills => new Duke3DSkillsEnum();
 }

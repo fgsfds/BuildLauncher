@@ -8,22 +8,22 @@ namespace Tests.Unit.CmdArguments;
 
 public sealed class EDuke32CmdArgumentsTests
 {
-    private readonly DukeGame _dukeGame;
     private readonly DukeCampaign _dukeCamp;
-    private readonly DukeCampaign _dukeVaca;
-    private readonly DukeCampaign _dukeTcForVaca;
-    private readonly DukeCampaign _dukeWtCamp;
+    private readonly DukeGame _dukeGame;
     private readonly LooseMap _dukeLooseMap;
     private readonly AutoloadModsTestSetups _dukeMods;
+    private readonly DukeCampaign _dukeTcForVaca;
+    private readonly DukeCampaign _dukeVaca;
+    private readonly DukeCampaign _dukeWtCamp;
+    private readonly DukeCampaign _namCamp;
 
     private readonly NamGame _namGame;
-    private readonly DukeCampaign _namCamp;
     private readonly AutoloadModsTestSetups _namMods;
+    private readonly DukeCampaign _ww2Camp;
 
     private readonly WW2GIGame _ww2Game;
-    private readonly DukeCampaign _ww2Camp;
-    private readonly DukeCampaign _ww2PlatoonCamp;
     private readonly AutoloadModsTestSetups _ww2Mods;
+    private readonly DukeCampaign _ww2PlatoonCamp;
 
     public EDuke32CmdArgumentsTests()
     {
@@ -40,26 +40,27 @@ public sealed class EDuke32CmdArgumentsTests
         EDuke32 eduke32 = new();
 
         var args = eduke32.GetStartGameArgs(_dukeGame, _dukeCamp, mods, [], true, true, 3);
+
         var expected = "" +
-            " -g \"enabled_mod.zip\"" +
-            " -mh \"ENABLED1.DEF\"" +
-            " -mh \"ENABLED2.DEF\"" +
-            " -mx \"ENABLED1.CON\"" +
-            " -mx \"ENABLED2.CON\"" +
-            " -g \"mod_incompatible_with_addon.zip\"" +
-            " -g \"incompatible_mod_with_compatible_version.zip\"" +
-            " -g \"dependent_mod.zip\"" +
-            " -g \"dependent_mod_with_compatible_version.zip\"" +
-            " -g \"feature_mod.zip\"" +
-            $" -j \"{Directory.GetCurrentDirectory()}\\Data\\Addons\\Duke3D\\Mods\"" +
-            " -usecwd" +
-            " -cachesize 262144" +
-            " -h \"a\"" +
-            " -j \"D:\\Games\\Duke3D\"" +
-            " -s3" +
-            " -quick" +
-            " -nosetup" +
-            "";
+                       " -g \"enabled_mod.zip\"" +
+                       " -mh \"ENABLED1.DEF\"" +
+                       " -mh \"ENABLED2.DEF\"" +
+                       " -mx \"ENABLED1.CON\"" +
+                       " -mx \"ENABLED2.CON\"" +
+                       " -g \"mod_incompatible_with_addon.zip\"" +
+                       " -g \"incompatible_mod_with_compatible_version.zip\"" +
+                       " -g \"dependent_mod.zip\"" +
+                       " -g \"dependent_mod_with_compatible_version.zip\"" +
+                       " -g \"feature_mod.zip\"" +
+                       $" -j \"{Directory.GetCurrentDirectory()}\\Data\\Addons\\Duke3D\\Mods\"" +
+                       " -usecwd" +
+                       " -cachesize 262144" +
+                       " -h \"a\"" +
+                       " -j \"D:\\Games\\Duke3D\"" +
+                       " -s3" +
+                       " -quick" +
+                       " -nosetup" +
+                       "";
 
         NormalizerHelper.NormalizeExpectedArgs(ref args, ref expected);
 
@@ -72,18 +73,19 @@ public sealed class EDuke32CmdArgumentsTests
         EDuke32 eduke32 = new();
 
         var args = eduke32.GetStartGameArgs(_dukeGame, _dukeWtCamp, [], [], true, true);
+
         var expected = $"" +
-            $" -usecwd" +
-            $" -cachesize 262144" +
-            $" -h \"a\"" +
-            $" -j \"D:\\Games\\DukeWT\"" +
-            $" -addon 0" +
-            $" -j \"{Directory.GetCurrentDirectory()}\\Data\\Ports\\EDuke32\\WTStopgap\"" +
-            $" -gamegrp e32wt.grp" +
-            $" -mh e32wt.def" +
-            $" -quick" +
-            $" -nosetup" +
-            $"";
+                       $" -usecwd" +
+                       $" -cachesize 262144" +
+                       $" -h \"a\"" +
+                       $" -j \"D:\\Games\\DukeWT\"" +
+                       $" -addon 0" +
+                       $" -j \"{Directory.GetCurrentDirectory()}\\Data\\Ports\\EDuke32\\WTStopgap\"" +
+                       $" -gamegrp e32wt.grp" +
+                       $" -mh e32wt.def" +
+                       $" -quick" +
+                       $" -nosetup" +
+                       $"";
 
         NormalizerHelper.NormalizeExpectedArgs(ref args, ref expected);
 
@@ -98,23 +100,24 @@ public sealed class EDuke32CmdArgumentsTests
         EDuke32 eduke32 = new();
 
         var args = eduke32.GetStartGameArgs(_dukeGame, _dukeVaca, mods, [], true, true);
+
         var expected = $"" +
-            $" -g \"enabled_mod.zip\"" +
-            $" -mh \"ENABLED1.DEF\"" +
-            $" -mh \"ENABLED2.DEF\"" +
-            $" -mx \"ENABLED1.CON\"" +
-            $" -mx \"ENABLED2.CON\"" +
-            $" -g \"mod_requires_addon.zip\"" +
-            $" -j \"{Directory.GetCurrentDirectory()}\\Data\\Addons\\Duke3D\\Mods\"" +
-            $" -usecwd" +
-            $" -cachesize 262144" +
-            $" -h \"a\"" +
-            $" -j \"D:\\Games\\Duke3D\"" +
-            $" -j \"D:\\Games\\Duke3D\\Vaca\"" +
-            $" -grp VACATION.GRP" +
-            $" -quick" +
-            $" -nosetup" +
-            $"";
+                       $" -g \"enabled_mod.zip\"" +
+                       $" -mh \"ENABLED1.DEF\"" +
+                       $" -mh \"ENABLED2.DEF\"" +
+                       $" -mx \"ENABLED1.CON\"" +
+                       $" -mx \"ENABLED2.CON\"" +
+                       $" -g \"mod_requires_addon.zip\"" +
+                       $" -j \"{Directory.GetCurrentDirectory()}\\Data\\Addons\\Duke3D\\Mods\"" +
+                       $" -usecwd" +
+                       $" -cachesize 262144" +
+                       $" -h \"a\"" +
+                       $" -j \"D:\\Games\\Duke3D\"" +
+                       $" -j \"D:\\Games\\Duke3D\\Vaca\"" +
+                       $" -grp VACATION.GRP" +
+                       $" -quick" +
+                       $" -nosetup" +
+                       $"";
 
         NormalizerHelper.NormalizeExpectedArgs(ref args, ref expected);
 
@@ -127,22 +130,23 @@ public sealed class EDuke32CmdArgumentsTests
         EDuke32 eduke32 = new();
 
         var args = eduke32.GetStartGameArgs(_dukeGame, _dukeTcForVaca, [], [], true, true);
+
         var expected = $"" +
-            $" -usecwd" +
-            $" -cachesize 262144" +
-            $" -h \"TC.DEF\"" +
-            $" -mh \"TC1.DEF\"" +
-            $" -mh \"TC2.DEF\"" +
-            $" -j \"D:\\Games\\Duke3D\"" +
-            $" -j \"D:\\Games\\Duke3D\\Vaca\"" +
-            $" -grp VACATION.GRP" +
-            $" -x \"TC.CON\"" +
-            $" -mx \"TC1.CON\"" +
-            $" -mx \"TC2.CON\"" +
-            $" -g \"{Path.Combine(Directory.GetCurrentDirectory(), "Data", "Duke3D", "Campaigns", "duke_tc.zip")}\"" +
-            $" -quick" +
-            $" -nosetup" +
-            $"";
+                       $" -usecwd" +
+                       $" -cachesize 262144" +
+                       $" -h \"TC.DEF\"" +
+                       $" -mh \"TC1.DEF\"" +
+                       $" -mh \"TC2.DEF\"" +
+                       $" -j \"D:\\Games\\Duke3D\"" +
+                       $" -j \"D:\\Games\\Duke3D\\Vaca\"" +
+                       $" -grp VACATION.GRP" +
+                       $" -x \"TC.CON\"" +
+                       $" -mx \"TC1.CON\"" +
+                       $" -mx \"TC2.CON\"" +
+                       $" -g \"{Path.Combine(Directory.GetCurrentDirectory(), "Data", "Duke3D", "Campaigns", "duke_tc.zip")}\"" +
+                       $" -quick" +
+                       $" -nosetup" +
+                       $"";
 
         NormalizerHelper.NormalizeExpectedArgs(ref args, ref expected);
 
@@ -158,15 +162,16 @@ public sealed class EDuke32CmdArgumentsTests
         var zipFilePath = packedCamp.FileInfo!.PathToFile;
 
         var args = eduke32.GetStartGameArgs(_dukeGame, packedCamp, [], [], true, true);
+
         var expected = "" +
-            " -usecwd" +
-            " -cachesize 262144" +
-            " -h \"a\"" +
-            $" -j \"{_dukeGame.GameInstallFolder}\"" +
-            $" -g \"{zipFilePath}\"" +
-            " -quick" +
-            " -nosetup" +
-            "";
+                       " -usecwd" +
+                       " -cachesize 262144" +
+                       " -h \"a\"" +
+                       $" -j \"{_dukeGame.GameInstallFolder}\"" +
+                       $" -g \"{zipFilePath}\"" +
+                       " -quick" +
+                       " -nosetup" +
+                       "";
 
         NormalizerHelper.NormalizeExpectedArgs(ref args, ref expected);
 
@@ -181,27 +186,28 @@ public sealed class EDuke32CmdArgumentsTests
         EDuke32 eduke32 = new();
 
         var args = eduke32.GetStartGameArgs(_dukeGame, _dukeLooseMap, mods, [], true, true, 3);
+
         var expected = $"" +
-            $" -g \"enabled_mod.zip\"" +
-            $" -mh \"ENABLED1.DEF\"" +
-            $" -mh \"ENABLED2.DEF\"" +
-            $" -mx \"ENABLED1.CON\"" +
-            $" -mx \"ENABLED2.CON\"" +
-            $" -g \"mod_incompatible_with_addon.zip\"" +
-            $" -g \"incompatible_mod_with_compatible_version.zip\"" +
-            $" -g \"dependent_mod.zip\"" +
-            $" -g \"dependent_mod_with_compatible_version.zip\"" +
-            $" -g \"feature_mod.zip\"" +
-            $" -j \"{Directory.GetCurrentDirectory()}\\Data\\Addons\\Duke3D\\Mods\"" +
-            $" -usecwd" +
-            $" -cachesize 262144" +
-            $" -h \"a\"" +
-            $" -j \"D:\\Games\\Duke3D\"" +
-            $" -j \"{Directory.GetCurrentDirectory()}\\Data\\Addons\\Duke3D\\Maps\"" +
-            $" -map \"LOOSE.MAP\"" +
-            $" -s3" +
-            $" -quick" +
-            $" -nosetup"
+                       $" -g \"enabled_mod.zip\"" +
+                       $" -mh \"ENABLED1.DEF\"" +
+                       $" -mh \"ENABLED2.DEF\"" +
+                       $" -mx \"ENABLED1.CON\"" +
+                       $" -mx \"ENABLED2.CON\"" +
+                       $" -g \"mod_incompatible_with_addon.zip\"" +
+                       $" -g \"incompatible_mod_with_compatible_version.zip\"" +
+                       $" -g \"dependent_mod.zip\"" +
+                       $" -g \"dependent_mod_with_compatible_version.zip\"" +
+                       $" -g \"feature_mod.zip\"" +
+                       $" -j \"{Directory.GetCurrentDirectory()}\\Data\\Addons\\Duke3D\\Mods\"" +
+                       $" -usecwd" +
+                       $" -cachesize 262144" +
+                       $" -h \"a\"" +
+                       $" -j \"D:\\Games\\Duke3D\"" +
+                       $" -j \"{Directory.GetCurrentDirectory()}\\Data\\Addons\\Duke3D\\Maps\"" +
+                       $" -map \"LOOSE.MAP\"" +
+                       $" -s3" +
+                       $" -quick" +
+                       $" -nosetup"
             ;
 
         NormalizerHelper.NormalizeExpectedArgs(ref args, ref expected);
@@ -217,21 +223,22 @@ public sealed class EDuke32CmdArgumentsTests
         EDuke32 eduke32 = new();
 
         var args = eduke32.GetStartGameArgs(_namGame, _namCamp, mods, [], true, true);
+
         var expected = $"" +
-            $" -g \"enabled_mod.zip\"" +
-            $" -mh \"ENABLED1.DEF\"" +
-            $" -mh \"ENABLED2.DEF\"" +
-            $" -j \"{Directory.GetCurrentDirectory()}\\Data\\Addons\\NAM\\Mods\"" +
-            $" -usecwd" +
-            " -cachesize 262144" +
-            " -h \"a\"" +
-            " -j \"D:\\Games\\NAM\"" +
-            " -nam" +
-            " -gamegrp NAM.GRP" +
-            " -x GAME.CON" +
-            " -quick" +
-            " -nosetup" +
-            "";
+                       $" -g \"enabled_mod.zip\"" +
+                       $" -mh \"ENABLED1.DEF\"" +
+                       $" -mh \"ENABLED2.DEF\"" +
+                       $" -j \"{Directory.GetCurrentDirectory()}\\Data\\Addons\\NAM\\Mods\"" +
+                       $" -usecwd" +
+                       " -cachesize 262144" +
+                       " -h \"a\"" +
+                       " -j \"D:\\Games\\NAM\"" +
+                       " -nam" +
+                       " -gamegrp NAM.GRP" +
+                       " -x GAME.CON" +
+                       " -quick" +
+                       " -nosetup" +
+                       "";
 
         NormalizerHelper.NormalizeExpectedArgs(ref args, ref expected);
 
@@ -246,21 +253,22 @@ public sealed class EDuke32CmdArgumentsTests
         EDuke32 eDuke = new();
 
         var args = eDuke.GetStartGameArgs(_ww2Game, _ww2Camp, mods, [], true, true);
+
         var expected = "" +
-            " -g \"enabled_mod.zip\"" +
-            " -mh \"ENABLED1.DEF\"" +
-            " -mh \"ENABLED2.DEF\"" +
-            $" -j \"{Directory.GetCurrentDirectory()}\\Data\\Addons\\WW2GI\\Mods\"" +
-            " -usecwd" +
-            " -cachesize 262144" +
-            " -h \"a\"" +
-            " -j \"D:\\Games\\WW2GI\"" +
-            " -ww2gi" +
-            " -gamegrp WW2GI.GRP" +
-            " -x GAME.CON" +
-            " -quick" +
-            " -nosetup" +
-            "";
+                       " -g \"enabled_mod.zip\"" +
+                       " -mh \"ENABLED1.DEF\"" +
+                       " -mh \"ENABLED2.DEF\"" +
+                       $" -j \"{Directory.GetCurrentDirectory()}\\Data\\Addons\\WW2GI\\Mods\"" +
+                       " -usecwd" +
+                       " -cachesize 262144" +
+                       " -h \"a\"" +
+                       " -j \"D:\\Games\\WW2GI\"" +
+                       " -ww2gi" +
+                       " -gamegrp WW2GI.GRP" +
+                       " -x GAME.CON" +
+                       " -quick" +
+                       " -nosetup" +
+                       "";
 
         NormalizerHelper.NormalizeExpectedArgs(ref args, ref expected);
 
@@ -275,21 +283,22 @@ public sealed class EDuke32CmdArgumentsTests
         EDuke32 eDuke = new();
 
         var args = eDuke.GetStartGameArgs(_ww2Game, _ww2PlatoonCamp, mods, [], true, true);
+
         var expected = "" +
-            " -g \"enabled_mod.zip\"" +
-            " -mh \"ENABLED1.DEF\"" +
-            " -mh \"ENABLED2.DEF\"" +
-            $" -j \"{Directory.GetCurrentDirectory()}\\Data\\Addons\\WW2GI\\Mods\"" +
-            " -usecwd" +
-            " -cachesize 262144" +
-            " -h \"a\"" +
-            " -j \"D:\\Games\\WW2GI\"" +
-            " -ww2gi -gamegrp WW2GI.GRP" +
-            " -grp PLATOONL.DAT" +
-            " -x PLATOONL.DEF" +
-            " -quick" +
-            " -nosetup" +
-            "";
+                       " -g \"enabled_mod.zip\"" +
+                       " -mh \"ENABLED1.DEF\"" +
+                       " -mh \"ENABLED2.DEF\"" +
+                       $" -j \"{Directory.GetCurrentDirectory()}\\Data\\Addons\\WW2GI\\Mods\"" +
+                       " -usecwd" +
+                       " -cachesize 262144" +
+                       " -h \"a\"" +
+                       " -j \"D:\\Games\\WW2GI\"" +
+                       " -ww2gi -gamegrp WW2GI.GRP" +
+                       " -grp PLATOONL.DAT" +
+                       " -x PLATOONL.DEF" +
+                       " -quick" +
+                       " -nosetup" +
+                       "";
 
         NormalizerHelper.NormalizeExpectedArgs(ref args, ref expected);
 
@@ -310,7 +319,7 @@ public sealed class EDuke32CmdArgumentsTests
                 DukeZHRomPath = null,
                 DukeWTInstallPath = null,
                 GameInstallFolder = tempDir,
-                AddonsPaths = [],
+                AddonsPaths = []
             };
 
             var camp = new DukeCampaign
@@ -335,7 +344,7 @@ public sealed class EDuke32CmdArgumentsTests
                 IncompatibleAddons = null,
                 RequiredFeatures = null,
                 Executables = null,
-                Options = null,
+                Options = null
             };
 
             EDuke32 eduke32 = new();

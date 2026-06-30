@@ -1,5 +1,4 @@
-﻿using Addons.Providers;
-using Avalonia.Controls;
+﻿using Avalonia.Controls;
 using Avalonia.Controls.Templates;
 using Avalonia.Desktop.Controls;
 using Avalonia.Desktop.ViewModels;
@@ -10,10 +9,10 @@ namespace Avalonia.Desktop.Misc;
 
 public sealed class ViewLocator : IDataTemplate
 {
-    private readonly PortsProvider _installedPortsProvider;
     private readonly BitmapsCache _bitmapsCache;
 
     private readonly Dictionary<object, UserControl> _controlsCache = [];
+    private readonly PortsProvider _installedPortsProvider;
 
     public ViewLocator(
         PortsProvider installedPortsProvider,
@@ -41,6 +40,7 @@ public sealed class ViewLocator : IDataTemplate
         };
 
         _controlsCache.Add(data, newControl);
+
         return newControl;
     }
 

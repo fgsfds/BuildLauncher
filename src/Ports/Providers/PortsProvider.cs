@@ -9,15 +9,13 @@ using Ports.Ports;
 namespace Ports.Providers;
 
 /// <summary>
-/// Class that provides singleton instances of port types
+///     Class that provides singleton instances of port types
 /// </summary>
 public sealed class PortsProvider
 {
+    private readonly List<CustomPort> _customPorts = [];
     private readonly IDbContextFactory<DatabaseContext> _dbContextFactory;
     private readonly Dictionary<PortEnum, BasePort> _ports = [];
-    private readonly List<CustomPort> _customPorts = [];
-
-    public event EventHandler? CustomPortChangedEvent;
 
     public PortsProvider(
         IDbContextFactory<DatabaseContext> dbContextFactory,
@@ -39,31 +37,33 @@ public sealed class PortsProvider
         UpdateCustomPortsList();
     }
 
+    public event EventHandler? CustomPortChangedEvent;
+
     /// <summary>
-    /// Get list of ports that support selected game
+    ///     Get list of ports that support selected game
     /// </summary>
     /// <param name="game">Game enum</param>
     public IReadOnlyList<BasePort> GetPortsThatSupportGame(GameEnum game) => [.. _ports.Values.Where(x => x.SupportedGames.Contains(game))];
 
     /// <summary>
-    /// Get port by enum
+    ///     Get port by enum
     /// </summary>
     /// <param name="portEnum">Port enum</param>
     public BasePort GetPort(PortEnum portEnum) =>
         _ports.TryGetValue(portEnum, out var port) ? port : throw new ArgumentException($"Port {portEnum} is not registered", nameof(portEnum));
 
     /// <summary>
-    /// Get list of custom ports
+    ///     Get list of custom ports
     /// </summary>
     public ImmutableList<CustomPort> GetCustomPorts() => [.. _customPorts];
 
     /// <summary>
-    /// Get list of custom ports
+    ///     Get list of custom ports
     /// </summary>
     public ImmutableList<CustomPort> GetCustomPorts(GameEnum gameEnum) => [.. _customPorts.Where(x => x.BasePort.SupportedGames.Contains(gameEnum))];
 
     /// <summary>
-    /// Add or change custom port
+    ///     Add or change custom port
     /// </summary>
     /// <param name="oldName">Old name of the port. Null if new port is being added.</param>
     /// <param name="newName">New name of the port</param>
@@ -101,7 +101,7 @@ public sealed class PortsProvider
     }
 
     /// <summary>
-    /// Delete custom port
+    ///     Delete custom port
     /// </summary>
     /// <param name="portName">Name of the port</param>
     public void DeleteCustomPort(string portName)
@@ -122,7 +122,7 @@ public sealed class PortsProvider
 
 
     /// <summary>
-    /// Update list of custom ports
+    ///     Update list of custom ports
     /// </summary>
     private void UpdateCustomPortsList()
     {
@@ -133,12 +133,18 @@ public sealed class PortsProvider
         foreach (var port in dbContext.CustomPorts.OrderBy(static x => x.Name))
         {
             var basePort = _ports.Values.FirstOrDefault(x => x.PortEnum == port.PortEnum);
+
             if (basePort is null)
             {
                 continue;
             }
 
-            _customPorts.Add(new() { Name = port.Name, Path = port.PathToExe, BasePort = basePort });
+            _customPorts.Add(new()
+            {
+                Name = port.Name,
+                Path = port.PathToExe,
+                BasePort = basePort
+            });
         }
     }
 }

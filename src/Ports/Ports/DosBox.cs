@@ -11,7 +11,7 @@ using SharpCompress.Archives;
 namespace Ports.Ports;
 
 /// <summary>
-/// DosBox
+///     DosBox
 /// </summary>
 public sealed class DosBox : BasePort
 {
@@ -24,44 +24,44 @@ public sealed class DosBox : BasePort
         _logger = logger;
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override PortEnum PortEnum => PortEnum.DosBox;
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string WinExe => "dosbox.exe";
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string LinExe => throw new NotSupportedException();
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override string Name => "DosBox Staging";
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override string ShortName => "DosBox";
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override List<GameEnum> SupportedGames =>
-        [
+    [
         GameEnum.Blood,
         GameEnum.Duke3D,
         GameEnum.Wang,
         //GameEnum.Slave,
         GameEnum.Redneck,
-        GameEnum.RidesAgain,
+        GameEnum.RidesAgain
         //GameEnum.NAM,
         //GameEnum.Witchaven,
         //GameEnum.Witchaven2,
         //GameEnum.TekWar
-        ];
+    ];
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override List<string> SupportedGamesVersions =>
-        [
+    [
         nameof(DukeVersionEnum.Duke3D_13D),
         nameof(DukeVersionEnum.Duke3D_Atomic)
-        ];
+    ];
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override string? InstalledVersion
     {
         get
@@ -77,54 +77,54 @@ public sealed class DosBox : BasePort
         }
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override List<FeatureEnum> SupportedFeatures => [];
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override bool IsSkillSelectionAvailable => false;
 
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string ConfigFile => string.Empty;
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string AddDirectoryParam => throw new NotSupportedException();
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string AddFileParam => throw new NotSupportedException();
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string AddDefParam => throw new NotSupportedException();
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string AddConParam => throw new NotSupportedException();
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string MainDefParam => throw new NotSupportedException();
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string MainConParam => throw new NotSupportedException();
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string MainGrpParam => throw new NotSupportedException();
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string AddGrpParam => throw new NotSupportedException();
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string SkillParam => throw new NotSupportedException();
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string AddGameDirParam => throw new NotSupportedException();
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string AddRffParam => throw new NotSupportedException();
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string AddSndParam => throw new NotSupportedException();
 
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override void BeforeStart(BaseGame game, BaseAddon campaign)
     {
         MoveSaveFilesFromStorage(game, campaign);
@@ -133,6 +133,7 @@ public sealed class DosBox : BasePort
         try
         {
             var config = Path.Combine(InstallFolderPath, "dosbox-staging.conf");
+
             if (File.Exists(config))
             {
                 var file = File.ReadAllLines(config);
@@ -144,6 +145,7 @@ public sealed class DosBox : BasePort
                     {
                         file[i] = "memsize = 64";
                         File.WriteAllLines(config, file);
+
                         break;
                     }
                 }
@@ -151,11 +153,11 @@ public sealed class DosBox : BasePort
             else
             {
                 File.WriteAllText(config,
-                    """
-                    [dosbox]
-                    memsize = 64
-                
-                    """);
+                                  """
+                                  [dosbox]
+                                  memsize = 64
+
+                                  """);
             }
         }
         catch (Exception ex)
@@ -167,13 +169,13 @@ public sealed class DosBox : BasePort
         }
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override void AfterEnd(BaseGame game, BaseAddon campaign)
     {
         MoveSaveFilesToStorage(game, campaign);
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override void GetStartCampaignArgs(StringBuilder sb, BaseGame game, BaseAddon addon)
     {
         _ = sb.Append(@" --noconsole -c ""cycles max"" -c ""core dynamic""");
@@ -277,7 +279,6 @@ public sealed class DosBox : BasePort
             bCamp.Type is AddonTypeEnum.TC &&
             addon.FileInfo is not null)
         {
-
             if (Directory.Exists(ClientProperties.TempFolderPath))
             {
                 Directory.Delete(ClientProperties.TempFolderPath, true);
@@ -337,12 +338,12 @@ public sealed class DosBox : BasePort
         _ = sb.Append(" -c BLOOD.EXE");
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override void GetAutoloadModsArgs(StringBuilder sb, BaseGame _, BaseAddon addon, IReadOnlyList<BaseAddon> mods) { }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override void GetSkipIntroParameter(StringBuilder sb) { }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override void GetSkipStartupParameter(StringBuilder sb) { }
 }

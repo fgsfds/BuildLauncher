@@ -10,9 +10,9 @@ namespace Ports.Ports;
 
 public sealed class PortStarter
 {
-    private readonly PlaytimeProvider _playtimeProvider;
     private readonly InstalledAddonsProviderFactory _installedAddonsProviderFactory;
     private readonly ILogger<PortStarter> _logger;
+    private readonly PlaytimeProvider _playtimeProvider;
 
     public PortStarter(
         PlaytimeProvider playtimeProvider,
@@ -23,11 +23,10 @@ public sealed class PortStarter
         _playtimeProvider = playtimeProvider;
         _installedAddonsProviderFactory = installedAddonsProviderFactory;
         _logger = logger;
-
     }
 
     /// <summary>
-    /// Start port
+    ///     Start port
     /// </summary>
     /// <param name="port">Port</param>
     /// <param name="game">Game to start</param>
@@ -79,7 +78,7 @@ public sealed class PortStarter
 
 
     /// <summary>
-    /// Start port with command line args
+    ///     Start port with command line args
     /// </summary>
     /// <param name="port">Port</param>
     /// <param name="args">Command line arguments</param>
@@ -99,6 +98,7 @@ public sealed class PortStarter
         if (process is null)
         {
             _logger.LogError("Failed to start process: {Exe}", exe);
+
             return;
         }
 

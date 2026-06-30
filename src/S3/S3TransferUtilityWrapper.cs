@@ -5,14 +5,14 @@ using Amazon.S3.Transfer;
 namespace S3;
 
 /// <summary>
-/// <see cref="TransferUtility"/> wrapper that injects Referer header.
+///     <see cref="TransferUtility" /> wrapper that injects Referer header.
 /// </summary>
 public sealed class S3TransferUtilityWrapper : IDisposable
 {
-    private readonly AmazonS3Client _client;
-    private readonly TransferUtility _transferUtility;
     private readonly string _bucket;
+    private readonly AmazonS3Client _client;
     private readonly string? _secretKey;
+    private readonly TransferUtility _transferUtility;
 
     public S3TransferUtilityWrapper(AmazonS3Config config, string bucket, string? secretKey)
     {
@@ -25,8 +25,16 @@ public sealed class S3TransferUtilityWrapper : IDisposable
         _transferUtility = new(_client);
     }
 
+    /// <inheritdoc />
+    public void Dispose()
+    {
+        _transferUtility.Dispose();
+        _client.BeforeRequestEvent -= Client_BeforeRequestEvent;
+        _client.Dispose();
+    }
+
     /// <summary>
-    /// Uploads file.
+    ///     Uploads file.
     /// </summary>
     /// <param name="stream">Stream.</param>
     /// <param name="fileKey">Object key.</param>
@@ -61,13 +69,5 @@ public sealed class S3TransferUtilityWrapper : IDisposable
                 args.Headers["Referer"] = _secretKey;
             }
         }
-    }
-
-    /// <inheritdoc/>
-    public void Dispose()
-    {
-        _transferUtility.Dispose();
-        _client.BeforeRequestEvent -= Client_BeforeRequestEvent;
-        _client.Dispose();
     }
 }

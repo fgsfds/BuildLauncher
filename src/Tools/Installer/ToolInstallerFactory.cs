@@ -15,7 +15,7 @@ public sealed class ToolInstallerFactory(
     ) : IInstallerFactory<BaseTool, ToolInstaller>
 {
     /// <summary>
-    /// Create <see cref="ToolInstaller"/> instance
+    ///     Create <see cref="ToolInstaller" /> instance
     /// </summary>
     public ToolInstaller Create(BaseTool tool) => new(
         tool,

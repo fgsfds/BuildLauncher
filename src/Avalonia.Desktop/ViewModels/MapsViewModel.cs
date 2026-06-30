@@ -19,93 +19,15 @@ namespace Avalonia.Desktop.ViewModels;
 
 public sealed partial class MapsViewModel : RightPanelViewModel, IPortsButtonControl
 {
-    public BaseGame Game { get; }
+    private readonly IAddonDropHelper _addonInstaller;
+    private readonly IConfigProvider _config;
+    private readonly DownloadableAddonsProvider _downloadableAddonsProvider;
 
     private readonly InstalledGamesProvider _gamesProvider;
-    private readonly IConfigProvider _config;
     private readonly InstalledAddonsProvider _installedAddonsProvider;
-    private readonly IAddonDropHelper _addonInstaller;
-    private readonly DownloadableAddonsProvider _downloadableAddonsProvider;
-    private readonly PortStarter _portStarter;
-    private readonly MetadataProvider _metadataProvider;
     private readonly ILogger<MapsViewModel> _logger;
-
-
-    /// <summary>
-    /// VM initialization
-    /// </summary>
-    public Task InitializeAsync() => UpdateAsync(false);
-
-    /// <summary>
-    /// Update maps list
-    /// </summary>
-    private async Task UpdateAsync(bool createNew)
-    {
-        IsInProgress = true;
-        await _installedAddonsProvider.CreateCacheAsync(createNew, AddonTypeEnum.Map).ConfigureAwait(true);
-        IsInProgress = false;
-    }
-
-
-    #region Binding Properties
-
-    /// <summary>
-    /// List of installed maps
-    /// </summary>
-    public ImmutableList<BaseAddon> MapsList
-    {
-        get
-        {
-            var result = _installedAddonsProvider.GetInstalledAddonsByType(AddonTypeEnum.Map).OrderBy(static x => x.Title);
-
-            if (string.IsNullOrWhiteSpace(SearchBoxText))
-            {
-                return [.. result];
-            }
-
-            return [.. result.Where(x => x.Title.Contains(SearchBoxText, StringComparison.CurrentCultureIgnoreCase))];
-        }
-    }
-
-    private BaseAddon? _selectedAddon;
-    /// <summary>
-    /// Currently selected map
-    /// </summary>
-    public override BaseAddon? SelectedAddon
-    {
-        get => _selectedAddon;
-        set
-        {
-            _selectedAddon = value;
-
-            OnPropertyChanged(nameof(SelectedAddonDescription));
-            OnPropertyChanged(nameof(SelectedAddonRating));
-            OnPropertyChanged(nameof(IsMetadataUpdateAvailable));
-            OnPropertyChanged(nameof(SelectedAddonPlaytime));
-            OnPropertyChanged(nameof(SelectedAddonPreview));
-            OnPropertyChanged(nameof(IsPreviewVisible));
-
-            StartMapCommand.NotifyCanExecuteChanged();
-        }
-    }
-
-    /// <summary>
-    /// Search box text
-    /// </summary>
-    [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(MapsList))]
-    [NotifyCanExecuteChangedFor(nameof(ClearSearchBoxCommand))]
-    private string _searchBoxText = string.Empty;
-
-    /// <summary>
-    /// Is form in progress
-    /// </summary>
-    [ObservableProperty]
-    private bool _isInProgress;
-
-    public bool IsPortsButtonsVisible => true;
-
-    #endregion
+    private readonly MetadataProvider _metadataProvider;
+    private readonly PortStarter _portStarter;
 
 
     [Obsolete($"Don't create directly. Use {nameof(ViewModelsFactory)}.")]
@@ -140,11 +62,108 @@ public sealed partial class MapsViewModel : RightPanelViewModel, IPortsButtonCon
         //_downloadableAddonsProvider.AddonsChangedEvent += OnAddonChanged;
     }
 
+    public BaseGame Game { get; }
+
+
+    /// <summary>
+    ///     VM initialization
+    /// </summary>
+    public Task InitializeAsync() => UpdateAsync(false);
+
+    /// <summary>
+    ///     Update maps list
+    /// </summary>
+    private async Task UpdateAsync(bool createNew)
+    {
+        IsInProgress = true;
+        await _installedAddonsProvider.CreateCacheAsync(createNew, AddonTypeEnum.Map).ConfigureAwait(true);
+        IsInProgress = false;
+    }
+
+
+    private void OnGameChanged(GameEnum parameterName)
+    {
+        if (parameterName == Game.GameEnum)
+        {
+            OnPropertyChanged(nameof(MapsList));
+        }
+    }
+
+    private void OnAddonChanged(GameEnum gameEnum, AddonTypeEnum? addonType)
+    {
+        if (gameEnum == Game.GameEnum && (addonType is AddonTypeEnum.Map))
+        {
+            OnPropertyChanged(nameof(MapsList));
+        }
+    }
+
+
+    #region Binding Properties
+
+    /// <summary>
+    ///     List of installed maps
+    /// </summary>
+    public ImmutableList<BaseAddon> MapsList
+    {
+        get
+        {
+            var result = _installedAddonsProvider.GetInstalledAddonsByType(AddonTypeEnum.Map).OrderBy(static x => x.Title);
+
+            if (string.IsNullOrWhiteSpace(SearchBoxText))
+            {
+                return [.. result];
+            }
+
+            return [.. result.Where(x => x.Title.Contains(SearchBoxText, StringComparison.CurrentCultureIgnoreCase))];
+        }
+    }
+
+    private BaseAddon? _selectedAddon;
+
+    /// <summary>
+    ///     Currently selected map
+    /// </summary>
+    public override BaseAddon? SelectedAddon
+    {
+        get => _selectedAddon;
+        set
+        {
+            _selectedAddon = value;
+
+            OnPropertyChanged(nameof(SelectedAddonDescription));
+            OnPropertyChanged(nameof(SelectedAddonRating));
+            OnPropertyChanged(nameof(IsMetadataUpdateAvailable));
+            OnPropertyChanged(nameof(SelectedAddonPlaytime));
+            OnPropertyChanged(nameof(SelectedAddonPreview));
+            OnPropertyChanged(nameof(IsPreviewVisible));
+
+            StartMapCommand.NotifyCanExecuteChanged();
+        }
+    }
+
+    /// <summary>
+    ///     Search box text
+    /// </summary>
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(MapsList))]
+    [NotifyCanExecuteChangedFor(nameof(ClearSearchBoxCommand))]
+    private string _searchBoxText = string.Empty;
+
+    /// <summary>
+    ///     Is form in progress
+    /// </summary>
+    [ObservableProperty]
+    private bool _isInProgress;
+
+    public bool IsPortsButtonsVisible => true;
+
+    #endregion
+
 
     #region Relay Commands
 
     /// <summary>
-    /// Start selected map
+    ///     Start selected map
     /// </summary>
     /// <param name="command">Port to start map with</param>
     [RelayCommand]
@@ -183,7 +202,7 @@ public sealed partial class MapsViewModel : RightPanelViewModel, IPortsButtonCon
 
 
     /// <summary>
-    /// Open maps folder
+    ///     Open maps folder
     /// </summary>
     [RelayCommand]
     private void OpenFolder()
@@ -191,13 +210,13 @@ public sealed partial class MapsViewModel : RightPanelViewModel, IPortsButtonCon
         using var process = Process.Start(new ProcessStartInfo
         {
             FileName = Game.MapsFolderPath,
-            UseShellExecute = true,
+            UseShellExecute = true
         });
     }
 
 
     /// <summary>
-    /// Refresh maps list
+    ///     Refresh maps list
     /// </summary>
     [RelayCommand]
     private async Task RefreshListAsync()
@@ -207,7 +226,7 @@ public sealed partial class MapsViewModel : RightPanelViewModel, IPortsButtonCon
 
 
     /// <summary>
-    /// Delete selected map
+    ///     Delete selected map
     /// </summary>
     [RelayCommand]
     private void DeleteMap()
@@ -219,31 +238,30 @@ public sealed partial class MapsViewModel : RightPanelViewModel, IPortsButtonCon
 
 
     /// <summary>
-    /// Clear search bar
+    ///     Clear search bar
     /// </summary>
     [RelayCommand(CanExecute = nameof(ClearSearchBoxCanExecute))]
     private void ClearSearchBox() => SearchBoxText = string.Empty;
+
     private bool ClearSearchBoxCanExecute() => !string.IsNullOrEmpty(SearchBoxText);
 
 
     /// <summary>
-    /// Install dropped addon
+    ///     Install dropped addon
     /// </summary>
     [RelayCommand]
     private Task ProcessDroppedFilesAsync(List<string> filePaths) => _addonInstaller.AddAddonsAsync(filePaths, Game);
 
 
     /// <summary>
-    /// Updates metadata for selected map.
+    ///     Updates metadata for selected map.
     /// </summary>
     public override async Task UpdateMetadataAsync(object? value)
     {
         if (value is not null
-            && value is BaseAddon addon)
-        {
-        }
+         && value is BaseAddon addon) { }
         else if (value is null
-            && SelectedAddon is not null)
+              && SelectedAddon is not null)
         {
             addon = SelectedAddon;
         }
@@ -280,21 +298,4 @@ public sealed partial class MapsViewModel : RightPanelViewModel, IPortsButtonCon
     }
 
     #endregion
-
-
-    private void OnGameChanged(GameEnum parameterName)
-    {
-        if (parameterName == Game.GameEnum)
-        {
-            OnPropertyChanged(nameof(MapsList));
-        }
-    }
-
-    private void OnAddonChanged(GameEnum gameEnum, AddonTypeEnum? addonType)
-    {
-        if (gameEnum == Game.GameEnum && (addonType is AddonTypeEnum.Map))
-        {
-            OnPropertyChanged(nameof(MapsList));
-        }
-    }
 }

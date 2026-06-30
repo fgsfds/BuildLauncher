@@ -8,9 +8,9 @@ namespace Tests.Unit.Helpers;
 
 internal sealed class AutoloadModsTestSetups
 {
-    private readonly GameInfo _game;
     private readonly string _addon;
     private readonly FeatureEnum _feature;
+    private readonly GameInfo _game;
     private readonly FeatureEnum _unsupportedFeature;
 
     public AutoloadModsTestSetups(GameEnum gameEnum)
@@ -136,7 +136,12 @@ internal sealed class AutoloadModsTestSetups
         IncompatibleAddons = null,
         RequiredFeatures = null,
         FileInfo = new(Path.Combine("D:", "Mods", "mod_requires_addon.zip"), "addon.json"),
-        DependentAddons = new Dictionary<string, string?> { { _addon, null } },
+        DependentAddons = new Dictionary<string, string?>
+        {
+            {
+                _addon, null
+            }
+        },
         AdditionalCons = null,
         MainDef = null,
         AdditionalDefs = null,
@@ -157,7 +162,12 @@ internal sealed class AutoloadModsTestSetups
         ReleaseDate = null,
         Description = null,
         SupportedGame = _game,
-        IncompatibleAddons = new Dictionary<string, string?> { { _addon, null } },
+        IncompatibleAddons = new Dictionary<string, string?>
+        {
+            {
+                _addon, null
+            }
+        },
         DependentAddons = null,
         RequiredFeatures = null,
         FileInfo = new(Path.Combine("D:", "Mods", "mod_incompatible_with_addon.zip"), "addon.json"),
@@ -184,7 +194,12 @@ internal sealed class AutoloadModsTestSetups
         RequiredFeatures = null,
         FileInfo = new(Path.Combine("D:", "Mods", "!!!!!!!!!!NOPE!!!!!!!!!!"), "!!!!!!!!!!NOPE!!!!!!!!!!"),
         DependentAddons = null,
-        IncompatibleAddons = new Dictionary<string, string?> { { "EnAbLeDmOd", null } },
+        IncompatibleAddons = new Dictionary<string, string?>
+        {
+            {
+                "EnAbLeDmOd", null
+            }
+        },
         AdditionalCons = null,
         MainDef = null,
         AdditionalDefs = null,
@@ -207,8 +222,18 @@ internal sealed class AutoloadModsTestSetups
         SupportedGame = _game,
         RequiredFeatures = null,
         FileInfo = new(Path.Combine("D:", "Mods", "incompatible_mod_with_compatible_version.zip"), "addon.json"),
-        DependentAddons = new Dictionary<string, string?> { { "enabledMod", null } },
-        IncompatibleAddons = new Dictionary<string, string?> { { "enabledMod", "<=1.0" } },
+        DependentAddons = new Dictionary<string, string?>
+        {
+            {
+                "enabledMod", null
+            }
+        },
+        IncompatibleAddons = new Dictionary<string, string?>
+        {
+            {
+                "enabledMod", "<=1.0"
+            }
+        },
         AdditionalCons = null,
         MainDef = null,
         AdditionalDefs = null,
@@ -231,8 +256,18 @@ internal sealed class AutoloadModsTestSetups
         SupportedGame = _game,
         RequiredFeatures = null,
         FileInfo = new(Path.Combine("D:", "Mods", "!!!!!!!!!!NOPE!!!!!!!!!!"), "!!!!!!!!!!NOPE!!!!!!!!!!"),
-        DependentAddons = new Dictionary<string, string?> { { "enabledMod", null } },
-        IncompatibleAddons = new Dictionary<string, string?> { { "enabledMod", ">1.1" } },
+        DependentAddons = new Dictionary<string, string?>
+        {
+            {
+                "enabledMod", null
+            }
+        },
+        IncompatibleAddons = new Dictionary<string, string?>
+        {
+            {
+                "enabledMod", ">1.1"
+            }
+        },
         AdditionalCons = null,
         MainDef = null,
         AdditionalDefs = null,
@@ -255,7 +290,12 @@ internal sealed class AutoloadModsTestSetups
         SupportedGame = _game,
         RequiredFeatures = null,
         FileInfo = new(Path.Combine("D:", "Mods", "dependent_mod.zip"), "addon.json"),
-        DependentAddons = new Dictionary<string, string?> { { "enabledMod", null } },
+        DependentAddons = new Dictionary<string, string?>
+        {
+            {
+                "enabledMod", null
+            }
+        },
         IncompatibleAddons = null,
         AdditionalCons = null,
         MainDef = null,
@@ -280,7 +320,15 @@ internal sealed class AutoloadModsTestSetups
         SupportedGame = _game,
         RequiredFeatures = null,
         FileInfo = new(Path.Combine("D:", "Mods", "!!!!!!!!!!NOPE!!!!!!!!!!"), "!!!!!!!!!!NOPE!!!!!!!!!!"),
-        DependentAddons = new Dictionary<string, string?> { { "enabledMod", null }, { "someMod", null } },
+        DependentAddons = new Dictionary<string, string?>
+        {
+            {
+                "enabledMod", null
+            },
+            {
+                "someMod", null
+            }
+        },
         IncompatibleAddons = null,
         AdditionalCons = null,
         MainDef = null,
@@ -304,7 +352,12 @@ internal sealed class AutoloadModsTestSetups
         SupportedGame = _game,
         RequiredFeatures = null,
         FileInfo = new(Path.Combine("D:", "Mods", "!!!!!!!!!!NOPE!!!!!!!!!!"), "!!!!!!!!!!NOPE!!!!!!!!!!"),
-        DependentAddons = new Dictionary<string, string?> { { "enabledMod", "<=1.0" } },
+        DependentAddons = new Dictionary<string, string?>
+        {
+            {
+                "enabledMod", "<=1.0"
+            }
+        },
         IncompatibleAddons = null,
         AdditionalCons = null,
         MainDef = null,
@@ -328,7 +381,12 @@ internal sealed class AutoloadModsTestSetups
         SupportedGame = _game,
         RequiredFeatures = null,
         FileInfo = new(Path.Combine("D:", "Mods", "dependent_mod_with_compatible_version.zip"), "addon.json"),
-        DependentAddons = new Dictionary<string, string?> { { "enabledMod", ">1.1" } },
+        DependentAddons = new Dictionary<string, string?>
+        {
+            {
+                "enabledMod", ">1.1"
+            }
+        },
         IncompatibleAddons = null,
         AdditionalCons = null,
         MainDef = null,

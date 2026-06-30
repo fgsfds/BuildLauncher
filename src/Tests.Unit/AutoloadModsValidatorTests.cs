@@ -164,7 +164,11 @@ public sealed class AutoloadModsValidatorTests
     {
         var mod = CreateMod("featureMod", "1.0", DukeGame, requiredFeatures: [FeatureEnum.Models, FeatureEnum.Hightile]);
         var campaign = CreateCampaign("campaign", "1.0", DukeGame);
-        var features = new List<FeatureEnum> { FeatureEnum.EDuke32_CON };
+
+        var features = new List<FeatureEnum>
+        {
+            FeatureEnum.EDuke32_CON
+        };
 
         var result = AutoloadModsValidator.ValidateAutoloadMod(mod, campaign, [], features);
 
@@ -176,7 +180,13 @@ public sealed class AutoloadModsValidatorTests
     {
         var mod = CreateMod("featureMod", "1.0", DukeGame, requiredFeatures: [FeatureEnum.Models, FeatureEnum.Hightile]);
         var campaign = CreateCampaign("campaign", "1.0", DukeGame);
-        var features = new List<FeatureEnum> { FeatureEnum.Models, FeatureEnum.Hightile, FeatureEnum.EDuke32_CON };
+
+        var features = new List<FeatureEnum>
+        {
+            FeatureEnum.Models,
+            FeatureEnum.Hightile,
+            FeatureEnum.EDuke32_CON
+        };
 
         var result = AutoloadModsValidator.ValidateAutoloadMod(mod, campaign, [], features);
 
@@ -198,7 +208,13 @@ public sealed class AutoloadModsValidatorTests
     public void ValidateAutoloadMod_CampaignIncompatibleWildcard_ReturnsFalse()
     {
         var mod = CreateMod("anyMod", "1.0", DukeGame);
-        var campaign = CreateCampaign("campaign", "1.0", DukeGame, incompatibleAddons: new Dictionary<string, string?> { { "*", null } });
+
+        var campaign = CreateCampaign("campaign", "1.0", DukeGame, incompatibleAddons: new Dictionary<string, string?>
+        {
+            {
+                "*", null
+            }
+        });
 
         var result = AutoloadModsValidator.ValidateAutoloadMod(mod, campaign, [], []);
 
@@ -209,7 +225,13 @@ public sealed class AutoloadModsValidatorTests
     public void ValidateAutoloadMod_CampaignIncompatibleWithModId_ReturnsFalse()
     {
         var mod = CreateMod("specificMod", "1.0", DukeGame);
-        var campaign = CreateCampaign("campaign", "1.0", DukeGame, incompatibleAddons: new Dictionary<string, string?> { { "specificMod", null } });
+
+        var campaign = CreateCampaign("campaign", "1.0", DukeGame, incompatibleAddons: new Dictionary<string, string?>
+        {
+            {
+                "specificMod", null
+            }
+        });
 
         var result = AutoloadModsValidator.ValidateAutoloadMod(mod, campaign, [], []);
 
@@ -220,7 +242,13 @@ public sealed class AutoloadModsValidatorTests
     public void ValidateAutoloadMod_CampaignIncompatibleWithDifferentModId_ReturnTrue()
     {
         var mod = CreateMod("myMod", "1.0", DukeGame);
-        var campaign = CreateCampaign("campaign", "1.0", DukeGame, incompatibleAddons: new Dictionary<string, string?> { { "otherMod", null } });
+
+        var campaign = CreateCampaign("campaign", "1.0", DukeGame, incompatibleAddons: new Dictionary<string, string?>
+        {
+            {
+                "otherMod", null
+            }
+        });
 
         var result = AutoloadModsValidator.ValidateAutoloadMod(mod, campaign, [], []);
 
@@ -231,7 +259,13 @@ public sealed class AutoloadModsValidatorTests
     public void ValidateAutoloadMod_CampaignIncompatibleWithMatchingVersion_ReturnsFalse()
     {
         var mod = CreateMod("versionedMod", "1.5", DukeGame);
-        var campaign = CreateCampaign("campaign", "1.0", DukeGame, incompatibleAddons: new Dictionary<string, string?> { { "versionedMod", "1.5" } });
+
+        var campaign = CreateCampaign("campaign", "1.0", DukeGame, incompatibleAddons: new Dictionary<string, string?>
+        {
+            {
+                "versionedMod", "1.5"
+            }
+        });
 
         var result = AutoloadModsValidator.ValidateAutoloadMod(mod, campaign, [], []);
 
@@ -242,7 +276,13 @@ public sealed class AutoloadModsValidatorTests
     public void ValidateAutoloadMod_CampaignIncompatibleWithNonMatchingVersion_ReturnTrue()
     {
         var mod = CreateMod("versionedMod", "1.5", DukeGame);
-        var campaign = CreateCampaign("campaign", "1.0", DukeGame, incompatibleAddons: new Dictionary<string, string?> { { "versionedMod", "1.0" } });
+
+        var campaign = CreateCampaign("campaign", "1.0", DukeGame, incompatibleAddons: new Dictionary<string, string?>
+        {
+            {
+                "versionedMod", "1.0"
+            }
+        });
 
         var result = AutoloadModsValidator.ValidateAutoloadMod(mod, campaign, [], []);
 
@@ -252,7 +292,13 @@ public sealed class AutoloadModsValidatorTests
     [Fact]
     public void ValidateAutoloadMod_DependencyOnCampaignItself_ReturnTrue()
     {
-        var mod = CreateMod("dependentMod", "1.0", DukeGame, dependentAddons: new Dictionary<string, string?> { { "campaign", null } });
+        var mod = CreateMod("dependentMod", "1.0", DukeGame, dependentAddons: new Dictionary<string, string?>
+        {
+            {
+                "campaign", null
+            }
+        });
+
         var campaign = CreateCampaign("campaign", "1.0", DukeGame);
 
         var result = AutoloadModsValidator.ValidateAutoloadMod(mod, campaign, [], []);
@@ -263,8 +309,19 @@ public sealed class AutoloadModsValidatorTests
     [Fact]
     public void ValidateAutoloadMod_DependencyOnCampaignDependentAddon_ReturnTrue()
     {
-        var mod = CreateMod("dependentMod", "1.0", DukeGame, dependentAddons: new Dictionary<string, string?> { { "someAddon", null } });
-        var campaign = CreateCampaign("campaign", "1.0", DukeGame, dependentAddons: new Dictionary<string, string?> { { "someAddon", "1.0" } });
+        var mod = CreateMod("dependentMod", "1.0", DukeGame, dependentAddons: new Dictionary<string, string?>
+        {
+            {
+                "someAddon", null
+            }
+        });
+
+        var campaign = CreateCampaign("campaign", "1.0", DukeGame, dependentAddons: new Dictionary<string, string?>
+        {
+            {
+                "someAddon", "1.0"
+            }
+        });
 
         var result = AutoloadModsValidator.ValidateAutoloadMod(mod, campaign, [], []);
 
@@ -274,7 +331,13 @@ public sealed class AutoloadModsValidatorTests
     [Fact]
     public void ValidateAutoloadMod_DependencyOnOtherMod_ReturnTrue()
     {
-        var mod = CreateMod("dependentMod", "1.0", DukeGame, dependentAddons: new Dictionary<string, string?> { { "helperMod", null } });
+        var mod = CreateMod("dependentMod", "1.0", DukeGame, dependentAddons: new Dictionary<string, string?>
+        {
+            {
+                "helperMod", null
+            }
+        });
+
         var campaign = CreateCampaign("campaign", "1.0", DukeGame);
         var helperMod = CreateMod("helperMod", "2.0", DukeGame);
 
@@ -286,7 +349,13 @@ public sealed class AutoloadModsValidatorTests
     [Fact]
     public void ValidateAutoloadMod_DependencyUnsatisfied_ReturnsFalse()
     {
-        var mod = CreateMod("needyMod", "1.0", DukeGame, dependentAddons: new Dictionary<string, string?> { { "missingMod", null } });
+        var mod = CreateMod("needyMod", "1.0", DukeGame, dependentAddons: new Dictionary<string, string?>
+        {
+            {
+                "missingMod", null
+            }
+        });
+
         var campaign = CreateCampaign("campaign", "1.0", DukeGame);
 
         var result = AutoloadModsValidator.ValidateAutoloadMod(mod, campaign, [], []);
@@ -297,7 +366,13 @@ public sealed class AutoloadModsValidatorTests
     [Fact]
     public void ValidateAutoloadMod_DependencyVersionConstraintSatisfied_ReturnTrue()
     {
-        var mod = CreateMod("dependentMod", "1.0", DukeGame, dependentAddons: new Dictionary<string, string?> { { "helperMod", ">1.0" } });
+        var mod = CreateMod("dependentMod", "1.0", DukeGame, dependentAddons: new Dictionary<string, string?>
+        {
+            {
+                "helperMod", ">1.0"
+            }
+        });
+
         var campaign = CreateCampaign("campaign", "1.0", DukeGame);
         var helperMod = CreateMod("helperMod", "2.0", DukeGame);
 
@@ -309,7 +384,13 @@ public sealed class AutoloadModsValidatorTests
     [Fact]
     public void ValidateAutoloadMod_DependencyVersionConstraintUnsatisfied_ReturnsFalse()
     {
-        var mod = CreateMod("dependentMod", "1.0", DukeGame, dependentAddons: new Dictionary<string, string?> { { "helperMod", "<=1.0" } });
+        var mod = CreateMod("dependentMod", "1.0", DukeGame, dependentAddons: new Dictionary<string, string?>
+        {
+            {
+                "helperMod", "<=1.0"
+            }
+        });
+
         var campaign = CreateCampaign("campaign", "1.0", DukeGame);
         var helperMod = CreateMod("helperMod", "2.0", DukeGame);
 
@@ -332,7 +413,13 @@ public sealed class AutoloadModsValidatorTests
     [Fact]
     public void ValidateAutoloadMod_IncompatibleWithCampaign_ReturnsFalse()
     {
-        var mod = CreateMod("conflictingMod", "1.0", DukeGame, incompatibleAddons: new Dictionary<string, string?> { { "campaign", null } });
+        var mod = CreateMod("conflictingMod", "1.0", DukeGame, incompatibleAddons: new Dictionary<string, string?>
+        {
+            {
+                "campaign", null
+            }
+        });
+
         var campaign = CreateCampaign("campaign", "1.0", DukeGame);
 
         var result = AutoloadModsValidator.ValidateAutoloadMod(mod, campaign, [], []);
@@ -343,7 +430,13 @@ public sealed class AutoloadModsValidatorTests
     [Fact]
     public void ValidateAutoloadMod_IncompatibleWithEnabledMod_ReturnsFalse()
     {
-        var mod = CreateMod("conflictingMod", "1.0", DukeGame, incompatibleAddons: new Dictionary<string, string?> { { "otherMod", null } });
+        var mod = CreateMod("conflictingMod", "1.0", DukeGame, incompatibleAddons: new Dictionary<string, string?>
+        {
+            {
+                "otherMod", null
+            }
+        });
+
         var campaign = CreateCampaign("campaign", "1.0", DukeGame);
         var otherMod = CreateMod("otherMod", "1.0", DukeGame);
 
@@ -355,7 +448,13 @@ public sealed class AutoloadModsValidatorTests
     [Fact]
     public void ValidateAutoloadMod_IncompatibleWithDisabledMod_ReturnTrue()
     {
-        var mod = CreateMod("conflictingMod", "1.0", DukeGame, incompatibleAddons: new Dictionary<string, string?> { { "disabledMod", null } });
+        var mod = CreateMod("conflictingMod", "1.0", DukeGame, incompatibleAddons: new Dictionary<string, string?>
+        {
+            {
+                "disabledMod", null
+            }
+        });
+
         var campaign = CreateCampaign("campaign", "1.0", DukeGame);
         var disabledMod = CreateMod("disabledMod", "1.0", DukeGame, enabled: false);
 
@@ -367,7 +466,13 @@ public sealed class AutoloadModsValidatorTests
     [Fact]
     public void ValidateAutoloadMod_IncompatibleWithNonMatchingAddon_ReturnTrue()
     {
-        var mod = CreateMod("conflictingMod", "1.0", DukeGame, incompatibleAddons: new Dictionary<string, string?> { { "unrelatedMod", null } });
+        var mod = CreateMod("conflictingMod", "1.0", DukeGame, incompatibleAddons: new Dictionary<string, string?>
+        {
+            {
+                "unrelatedMod", null
+            }
+        });
+
         var campaign = CreateCampaign("campaign", "1.0", DukeGame);
         var otherMod = CreateMod("otherMod", "1.0", DukeGame);
 
@@ -379,7 +484,13 @@ public sealed class AutoloadModsValidatorTests
     [Fact]
     public void ValidateAutoloadMod_IncompatibleWithCampaignUsingOperatorPrefix_ReturnsFalse()
     {
-        var mod = CreateMod("conflictingMod", "1.0", DukeGame, incompatibleAddons: new Dictionary<string, string?> { { "campaign", "==1.0" } });
+        var mod = CreateMod("conflictingMod", "1.0", DukeGame, incompatibleAddons: new Dictionary<string, string?>
+        {
+            {
+                "campaign", "==1.0"
+            }
+        });
+
         var campaign = CreateCampaign("campaign", "1.0", DukeGame);
 
         var result = AutoloadModsValidator.ValidateAutoloadMod(mod, campaign, [], []);
@@ -390,7 +501,13 @@ public sealed class AutoloadModsValidatorTests
     [Fact]
     public void ValidateAutoloadMod_IncompatibleVersionDoesNotMatch_ReturnTrue()
     {
-        var mod = CreateMod("conflictingMod", "1.0", DukeGame, incompatibleAddons: new Dictionary<string, string?> { { "campaign", "==2.0" } });
+        var mod = CreateMod("conflictingMod", "1.0", DukeGame, incompatibleAddons: new Dictionary<string, string?>
+        {
+            {
+                "campaign", "==2.0"
+            }
+        });
+
         var campaign = CreateCampaign("campaign", "1.0", DukeGame);
 
         var result = AutoloadModsValidator.ValidateAutoloadMod(mod, campaign, [], []);
@@ -423,7 +540,13 @@ public sealed class AutoloadModsValidatorTests
     [Fact]
     public void ValidateAutoloadMod_DependencyOnDisabledMod_ReturnTrue()
     {
-        var mod = CreateMod("dependentMod", "1.0", DukeGame, dependentAddons: new Dictionary<string, string?> { { "disabledSatisfier", null } });
+        var mod = CreateMod("dependentMod", "1.0", DukeGame, dependentAddons: new Dictionary<string, string?>
+        {
+            {
+                "disabledSatisfier", null
+            }
+        });
+
         var campaign = CreateCampaign("campaign", "1.0", DukeGame);
         var disabledMod = CreateMod("disabledSatisfier", "2.0", DukeGame, enabled: false);
 
@@ -437,9 +560,14 @@ public sealed class AutoloadModsValidatorTests
     {
         var mod = CreateMod("needyMod", "1.0", DukeGame, dependentAddons: new Dictionary<string, string?>
         {
-            { "presentMod", null },
-            { "missingMod", null }
+            {
+                "presentMod", null
+            },
+            {
+                "missingMod", null
+            }
         });
+
         var campaign = CreateCampaign("campaign", "1.0", DukeGame);
         var presentMod = CreateMod("presentMod", "1.0", DukeGame);
 
@@ -451,7 +579,13 @@ public sealed class AutoloadModsValidatorTests
     [Fact]
     public void ValidateAutoloadMod_IncompatibleWithEnabledModByVersion_ReturnsFalse()
     {
-        var mod = CreateMod("conflictingMod", "1.0", DukeGame, incompatibleAddons: new Dictionary<string, string?> { { "versionedMod", "==2.0" } });
+        var mod = CreateMod("conflictingMod", "1.0", DukeGame, incompatibleAddons: new Dictionary<string, string?>
+        {
+            {
+                "versionedMod", "==2.0"
+            }
+        });
+
         var campaign = CreateCampaign("campaign", "1.0", DukeGame);
         var versionedMod = CreateMod("versionedMod", "2.0", DukeGame);
 
@@ -463,7 +597,13 @@ public sealed class AutoloadModsValidatorTests
     [Fact]
     public void ValidateAutoloadMod_IncompatibleWithEnabledModByDifferentVersion_ReturnTrue()
     {
-        var mod = CreateMod("conflictingMod", "1.0", DukeGame, incompatibleAddons: new Dictionary<string, string?> { { "versionedMod", "==2.0" } });
+        var mod = CreateMod("conflictingMod", "1.0", DukeGame, incompatibleAddons: new Dictionary<string, string?>
+        {
+            {
+                "versionedMod", "==2.0"
+            }
+        });
+
         var campaign = CreateCampaign("campaign", "1.0", DukeGame);
         var versionedMod = CreateMod("versionedMod", "3.0", DukeGame);
 

@@ -1,53 +1,53 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-      <AssemblyName>BuildLauncher</AssemblyName>
-      <OutputType>WinExe</OutputType>
-      <RuntimeIdentifier>win-x64</RuntimeIdentifier>
-      <SelfContained>true</SelfContained>
-      <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
-      <ApplicationManifest>app.manifest</ApplicationManifest>
-      <Configurations>Debug;Release</Configurations>
-      <StartupObject>Avalonia.Desktop.Program</StartupObject>
-      <ApplicationIcon>icon.ico</ApplicationIcon>
-      <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-  </PropertyGroup>
-    
-  <ItemGroup>
-    <AvaloniaResource Include="Assets\blood.png" />
-    <AvaloniaResource Include="Assets\duke3d.png" />
-    <AvaloniaResource Include="Assets\fury.png" />
-    <AvaloniaResource Include="Assets\icon.ico" />
-    <AvaloniaResource Include="Assets\logo.png" />
-    <AvaloniaResource Include="Assets\nam.png" />
-    <AvaloniaResource Include="Assets\overlay.png" />
-    <AvaloniaResource Include="Assets\redneck.png" />
-    <AvaloniaResource Include="Assets\slave.png" />
-    <AvaloniaResource Include="Assets\sw.png" />
-    <AvaloniaResource Include="Assets\ww2gi.png" />
-    <AvaloniaResource Include="Assets\tw.png" />
-    <AvaloniaResource Include="Assets\wh.png" />
-  </ItemGroup>
+    <PropertyGroup>
+        <AssemblyName>BuildLauncher</AssemblyName>
+        <OutputType>WinExe</OutputType>
+        <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+        <SelfContained>true</SelfContained>
+        <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
+        <ApplicationManifest>app.manifest</ApplicationManifest>
+        <Configurations>Debug;Release</Configurations>
+        <StartupObject>Avalonia.Desktop.Program</StartupObject>
+        <ApplicationIcon>icon.ico</ApplicationIcon>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Avalonia.Desktop" />
-    <PackageReference Include="Avalonia.Fonts.Inter" />
-    <PackageReference Include="AvaloniaUI.DiagnosticsSupport" />
-    <PackageReference Include="Markdown.Avalonia.Tight" />
-    <PackageReference Include="Avalonia" TreatAsUsed="true" />
-    <PackageReference Include="Avalonia.Controls.DataGrid" />
-    <PackageReference Include="Avalonia.Themes.Fluent" />
-    <PackageReference Include="CommunityToolkit.Mvvm" />
-    <PackageReference Include="IDisposableAnalyzers" PrivateAssets="all" />
-    <PackageReference Include="Optris.Icons.Avalonia.FontAwesome7" />
-    <PackageReference Include="Xaml.Behaviors.Avalonia" />
-  </ItemGroup>
+    <ItemGroup>
+        <AvaloniaResource Include="Assets\blood.png"/>
+        <AvaloniaResource Include="Assets\duke3d.png"/>
+        <AvaloniaResource Include="Assets\fury.png"/>
+        <AvaloniaResource Include="Assets\icon.ico"/>
+        <AvaloniaResource Include="Assets\logo.png"/>
+        <AvaloniaResource Include="Assets\nam.png"/>
+        <AvaloniaResource Include="Assets\overlay.png"/>
+        <AvaloniaResource Include="Assets\redneck.png"/>
+        <AvaloniaResource Include="Assets\slave.png"/>
+        <AvaloniaResource Include="Assets\sw.png"/>
+        <AvaloniaResource Include="Assets\ww2gi.png"/>
+        <AvaloniaResource Include="Assets\tw.png"/>
+        <AvaloniaResource Include="Assets\wh.png"/>
+    </ItemGroup>
 
-  <ItemGroup>
-      <ProjectReference Include="..\Core.All\Core.All.csproj" />
-      <ProjectReference Include="..\Games\Games.csproj" />
-      <ProjectReference Include="..\Ports\Ports.csproj" />
-      <ProjectReference Include="..\S3\S3.csproj" />
-      <ProjectReference Include="..\Tools\Tools.csproj" />
-  </ItemGroup>
-    
+    <ItemGroup>
+        <PackageReference Include="Avalonia.Desktop"/>
+        <PackageReference Include="Avalonia.Fonts.Inter"/>
+        <PackageReference Include="AvaloniaUI.DiagnosticsSupport"/>
+        <PackageReference Include="Markdown.Avalonia.Tight"/>
+        <PackageReference Include="Avalonia" TreatAsUsed="true"/>
+        <PackageReference Include="Avalonia.Controls.DataGrid"/>
+        <PackageReference Include="Avalonia.Themes.Fluent"/>
+        <PackageReference Include="CommunityToolkit.Mvvm"/>
+        <PackageReference Include="IDisposableAnalyzers" PrivateAssets="all"/>
+        <PackageReference Include="Optris.Icons.Avalonia.FontAwesome7"/>
+        <PackageReference Include="Xaml.Behaviors.Avalonia"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Core.All\Core.All.csproj"/>
+        <ProjectReference Include="..\Games\Games.csproj"/>
+        <ProjectReference Include="..\Ports\Ports.csproj"/>
+        <ProjectReference Include="..\S3\S3.csproj"/>
+        <ProjectReference Include="..\Tools\Tools.csproj"/>
+    </ItemGroup>
+
 </Project>

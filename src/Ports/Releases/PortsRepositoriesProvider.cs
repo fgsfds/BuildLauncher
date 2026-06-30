@@ -7,17 +7,17 @@ using Core.All.Serializable.Downloadable;
 namespace Ports.Releases;
 
 /// <summary>
-/// Maps each <see cref="PortEnum"/> to its <see cref="RepositoryEntity"/> describing where and how to fetch releases.
-/// Contains the EDuke32 HTML-scraping parser as a custom release source.
+///     Maps each <see cref="PortEnum" /> to its <see cref="RepositoryEntity" /> describing where and how to fetch releases.
+///     Contains the EDuke32 HTML-scraping parser as a custom release source.
 /// </summary>
 public sealed partial class PortsRepositoriesProvider : IRepositoriesProvider<PortEnum>
 {
     /// <summary>
-    /// Returns the repository configuration for the specified port.
+    ///     Returns the repository configuration for the specified port.
     /// </summary>
     /// <param name="releaseEnum">Target port.</param>
-    /// <returns>A <see cref="RepositoryEntity"/> describing the release source and matching rules.</returns>
-    /// <exception cref="NotSupportedException">Thrown when <paramref name="releaseEnum"/> has no associated repository.</exception>
+    /// <returns>A <see cref="RepositoryEntity" /> describing the release source and matching rules.</returns>
+    /// <exception cref="NotSupportedException">Thrown when <paramref name="releaseEnum" /> has no associated repository.</exception>
     public RepositoryEntity GetRepo(PortEnum releaseEnum)
     {
         if (releaseEnum is PortEnum.BuildGDX)
@@ -26,7 +26,7 @@ public sealed partial class PortsRepositoriesProvider : IRepositoriesProvider<Po
             {
                 RepoUrl = new("https://api.github.com/repos/fgsfds/BuildGDX-Releases/releases"),
                 WindowsReleasePredicate = static x => x.FileName.EndsWith("windows.zip", StringComparison.OrdinalIgnoreCase),
-                LinuxReleasePredicate = null,
+                LinuxReleasePredicate = null
             };
         }
 
@@ -47,7 +47,7 @@ public sealed partial class PortsRepositoriesProvider : IRepositoriesProvider<Po
                 RepoUrl = new("https://dukeworld.com/eduke32/synthesis/latest/"),
                 WindowsReleasePredicate = null,
                 LinuxReleasePredicate = null,
-                CustomReleaseParser = ParseEDuke32Release,
+                CustomReleaseParser = ParseEDuke32Release
             };
         }
 
@@ -57,7 +57,7 @@ public sealed partial class PortsRepositoriesProvider : IRepositoriesProvider<Po
             {
                 RepoUrl = null,
                 WindowsReleasePredicate = null,
-                LinuxReleasePredicate = null,
+                LinuxReleasePredicate = null
             };
         }
 
@@ -68,7 +68,7 @@ public sealed partial class PortsRepositoriesProvider : IRepositoriesProvider<Po
                 RepoUrl = new("https://api.github.com/repos/nukeykt/NBlood/releases"),
                 WindowsReleasePredicate = static x => x.FileName.StartsWith("nblood_win64", StringComparison.OrdinalIgnoreCase),
                 LinuxReleasePredicate = null,
-                SharedCacheKey = "nukeykt/NBlood",
+                SharedCacheKey = "nukeykt/NBlood"
             };
         }
 
@@ -79,7 +79,7 @@ public sealed partial class PortsRepositoriesProvider : IRepositoriesProvider<Po
                 RepoUrl = new("https://api.github.com/repos/clipmove/NotBlood/releases"),
                 WindowsReleasePredicate = static x => x.FileName.EndsWith("win64.zip", StringComparison.OrdinalIgnoreCase),
                 LinuxReleasePredicate = static x => x.FileName.EndsWith("linux-clang.zip", StringComparison.OrdinalIgnoreCase),
-                VersionSelector = static (_, asset) => asset.UpdatedDate.ToUniversalTime().ToString(),
+                VersionSelector = static (_, asset) => asset.UpdatedDate.ToUniversalTime().ToString()
             };
         }
 
@@ -90,7 +90,7 @@ public sealed partial class PortsRepositoriesProvider : IRepositoriesProvider<Po
                 RepoUrl = new("https://api.github.com/repos/nukeykt/NBlood/releases"),
                 WindowsReleasePredicate = static x => x.FileName.StartsWith("pcexhumed_win64", StringComparison.OrdinalIgnoreCase),
                 LinuxReleasePredicate = null,
-                SharedCacheKey = "nukeykt/NBlood",
+                SharedCacheKey = "nukeykt/NBlood"
             };
         }
 
@@ -101,7 +101,7 @@ public sealed partial class PortsRepositoriesProvider : IRepositoriesProvider<Po
                 RepoUrl = new("https://api.github.com/repos/nukeykt/NBlood/releases"),
                 WindowsReleasePredicate = static x => x.FileName.StartsWith("rednukem_win64", StringComparison.OrdinalIgnoreCase),
                 LinuxReleasePredicate = null,
-                SharedCacheKey = "nukeykt/NBlood",
+                SharedCacheKey = "nukeykt/NBlood"
             };
         }
 
@@ -111,7 +111,7 @@ public sealed partial class PortsRepositoriesProvider : IRepositoriesProvider<Po
             {
                 RepoUrl = null,
                 WindowsReleasePredicate = null,
-                LinuxReleasePredicate = null,
+                LinuxReleasePredicate = null
             };
         }
 
@@ -121,7 +121,7 @@ public sealed partial class PortsRepositoriesProvider : IRepositoriesProvider<Po
             {
                 RepoUrl = new("https://api.github.com/repos/dosbox-staging/dosbox-staging/releases"),
                 WindowsReleasePredicate = static x => x.FileName.StartsWith("dosbox-staging-windows-x64", StringComparison.OrdinalIgnoreCase) && x.FileName.EndsWith("zip", StringComparison.OrdinalIgnoreCase),
-                LinuxReleasePredicate = null,
+                LinuxReleasePredicate = null
             };
         }
 
@@ -132,7 +132,7 @@ public sealed partial class PortsRepositoriesProvider : IRepositoriesProvider<Po
                 RepoUrl = new("https://dnzh-overclocked.com/"),
                 WindowsReleasePredicate = null,
                 LinuxReleasePredicate = null,
-                CustomReleaseParser = ParseZeroHourRelease,
+                CustomReleaseParser = ParseZeroHourRelease
             };
         }
 
@@ -148,9 +148,9 @@ public sealed partial class PortsRepositoriesProvider : IRepositoriesProvider<Po
         ParseHtmlRelease(responseStream, ZeroHourWindowsReleaseRegex(), "windows-x64-full", ZeroHourVersionRegex(), null, "https://dnzh-overclocked.com/");
 
     /// <summary>
-    /// Generic HTML parser that scans lines for a file name matching <paramref name="fileNameRegex"/>,
-    /// skips lines not containing <paramref name="lineFilter"/>, then extracts a version with
-    /// <paramref name="versionRegex"/> and constructs a <see cref="GeneralReleaseJsonModel"/>.
+    ///     Generic HTML parser that scans lines for a file name matching <paramref name="fileNameRegex" />,
+    ///     skips lines not containing <paramref name="lineFilter" />, then extracts a version with
+    ///     <paramref name="versionRegex" /> and constructs a <see cref="GeneralReleaseJsonModel" />.
     /// </summary>
     private static GeneralReleaseJsonModel? ParseHtmlRelease(
         Stream responseStream, Regex fileNameRegex, string lineFilter,
@@ -163,23 +163,32 @@ public sealed partial class PortsRepositoriesProvider : IRepositoriesProvider<Po
             while (reader.ReadLine() is { } line)
             {
                 if (!line.Contains(lineFilter))
+                {
                     continue;
+                }
 
                 var match = fileNameRegex.Match(line);
+
                 if (match.Success)
                 {
                     matchedFileName = match.Value;
+
                     break;
                 }
             }
         }
 
         if (matchedFileName is null)
+        {
             return null;
+        }
 
         var versionMatch = versionRegex.Match(matchedFileName);
+
         if (!versionMatch.Success)
+        {
             return null;
+        }
 
         return new()
         {

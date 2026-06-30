@@ -9,6 +9,7 @@ public enum ComparisonOperatorEnum
     LessOrEquals
 }
 
+
 public static class VersionComparer
 {
     public static bool Compare(string? v1, string? v2)
@@ -105,13 +106,18 @@ public static class VersionComparer
             if (n1.HasValue && n2.HasValue)
             {
                 if (n1.Value != n2.Value)
+                {
                     return n1.Value.CompareTo(n2.Value);
+                }
             }
             else
             {
                 var result = seg1.SequenceCompareTo(seg2);
+
                 if (result != 0)
+                {
                     return result;
+                }
             }
 
             num1 = dot1 >= 0 ? num1[(dot1 + 1)..] : [];

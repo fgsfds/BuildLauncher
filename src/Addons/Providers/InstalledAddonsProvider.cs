@@ -14,35 +14,30 @@ using DiHelper = Core.Client.Helpers.DiHelper;
 namespace Addons.Providers;
 
 /// <summary>
-/// Provides cached lists of installed campaigns, maps, and mods for a specific game.
+///     Provides cached lists of installed campaigns, maps, and mods for a specific game.
 /// </summary>
 public sealed class InstalledAddonsProvider : IDisposable
 {
-    private readonly BaseGame _game;
-    private readonly ILogger<InstalledAddonsProvider> _logger;
-    private readonly OriginalCampaignsProvider _originalCampaignsProvider;
-    private readonly MetadataProvider _metadataProvider;
-    private readonly LocalFilesProvider _localFilesProvider;
+    private readonly AddonActivator _addonActivator;
     private readonly AddonFactory _addonFactory;
     private readonly ArchivedAddonExtractor _archivedAddonExtractor;
-    private readonly AddonActivator _addonActivator;
+    private readonly SemaphoreSlim _cacheUpdateSemaphore = new(1);
 
     private readonly List<BaseAddon> _campaignsCache = [];
-    private readonly List<BaseAddon> _mapsCache = [];
-    private readonly List<BaseAddon> _modsCache = [];
+    private readonly CancellationTokenSource _channelCancellation = new();
 
     private readonly IChannelSubscriber<DiHelper.LocalFileEvent> _channelPublisher;
     private readonly ChannelReader<DiHelper.LocalFileEvent> _channelReader;
-    private readonly CancellationTokenSource _channelCancellation = new();
-    private readonly SemaphoreSlim _cacheUpdateSemaphore = new(1);
+    private readonly BaseGame _game;
+    private readonly LocalFilesProvider _localFilesProvider;
+    private readonly ILogger<InstalledAddonsProvider> _logger;
+    private readonly List<BaseAddon> _mapsCache = [];
+    private readonly MetadataProvider _metadataProvider;
+    private readonly List<BaseAddon> _modsCache = [];
+    private readonly OriginalCampaignsProvider _originalCampaignsProvider;
 
     /// <summary>
-    /// Raised when one or more addons are added, removed, or their cache is rebuilt.
-    /// </summary>
-    public event AddonChanged? AddonsChangedEvent;
-
-    /// <summary>
-    /// Initializes a new instance of the <see cref="InstalledAddonsProvider"/> class.
+    ///     Initializes a new instance of the <see cref="InstalledAddonsProvider" /> class.
     /// </summary>
     /// <param name="game">The game this provider manages addons for.</param>
     /// <param name="config">Configuration provider for addon state (favourites, disabled mods).</param>
@@ -125,17 +120,37 @@ public sealed class InstalledAddonsProvider : IDisposable
         });
     }
 
+
     /// <summary>
-    /// Build or refresh the internal caches for all addon types.
+    ///     Unsubscribe from events and release resources.
     /// </summary>
-    /// <param name="createNew">If true, clear the cache for <paramref name="addonType"/> before rebuilding.</param>
+    public void Dispose()
+    {
+        _metadataProvider.MetadataUpdatedEvent -= OnMetadataUpdated;
+        _metadataProvider.MetadataInitializedEvent -= OnMetadataInitialized;
+
+        _channelCancellation.Cancel();
+        _channelCancellation.Dispose();
+        _cacheUpdateSemaphore.Dispose();
+        _channelPublisher.Unsubscribe(_channelReader);
+    }
+
+    /// <summary>
+    ///     Raised when one or more addons are added, removed, or their cache is rebuilt.
+    /// </summary>
+    public event AddonChanged? AddonsChangedEvent;
+
+    /// <summary>
+    ///     Build or refresh the internal caches for all addon types.
+    /// </summary>
+    /// <param name="createNew">If true, clear the cache for <paramref name="addonType" /> before rebuilding.</param>
     /// <param name="addonType">Addon type whose cache to optionally clear.</param>
     public async Task CreateCacheAsync(bool createNew, AddonTypeEnum addonType)
     {
         try
         {
             await _cacheUpdateSemaphore.WaitAsync().ConfigureAwait(false);
-            
+
             var cache = GetCacheByAddonType(addonType);
 
             if (createNew)
@@ -150,14 +165,17 @@ public sealed class InstalledAddonsProvider : IDisposable
                 case AddonTypeEnum.TC when cache.Count == 0:
                     _campaignsCache.Clear();
                     await FillCacheAsync(files, AddonTypeEnum.TC);
+
                     break;
                 case AddonTypeEnum.Map when cache.Count == 0:
                     _mapsCache.Clear();
                     await FillCacheAsync(files, AddonTypeEnum.Map);
+
                     break;
                 case AddonTypeEnum.Mod when cache.Count == 0:
                     _modsCache.Clear();
                     await FillCacheAsync(files, AddonTypeEnum.Mod);
+
                     break;
                 case AddonTypeEnum.Official:
                 default:
@@ -171,6 +189,7 @@ public sealed class InstalledAddonsProvider : IDisposable
                     if (mod is not AutoloadMod autoloadMod)
                     {
                         _logger.LogError($"=== Error while enabling/disabling addon {mod.AddonId.Id}");
+
                         continue;
                     }
 
@@ -201,7 +220,7 @@ public sealed class InstalledAddonsProvider : IDisposable
     }
 
     /// <summary>
-    /// Returns the internal cache list for the specified addon type.
+    ///     Returns the internal cache list for the specified addon type.
     /// </summary>
     private List<BaseAddon> GetCacheByAddonType(AddonTypeEnum addonType)
     {
@@ -210,14 +229,14 @@ public sealed class InstalledAddonsProvider : IDisposable
             AddonTypeEnum.TC => _campaignsCache,
             AddonTypeEnum.Map => _mapsCache,
             AddonTypeEnum.Mod => _modsCache,
-            _ => throw new NotSupportedException(),
+            _ => throw new NotSupportedException()
         };
 
         return cache;
     }
 
     /// <summary>
-    /// Scan parsed addon files and populate the cache for <paramref name="addonType"/>.
+    ///     Scan parsed addon files and populate the cache for <paramref name="addonType" />.
     /// </summary>
     private async Task FillCacheAsync(IReadOnlyList<ParsedAddonFile> parsedAddonFiles, AddonTypeEnum addonType)
     {
@@ -244,7 +263,7 @@ public sealed class InstalledAddonsProvider : IDisposable
                     continue;
                 }
 
-                if (!GrpInfoProvider.TryGetAddonsFromGrpInfo(parsedAddonFile.FileInfo.PathToFile,  out var addons))
+                if (!GrpInfoProvider.TryGetAddonsFromGrpInfo(parsedAddonFile.FileInfo.PathToFile, out var addons))
                 {
                     continue;
                 }
@@ -282,7 +301,7 @@ public sealed class InstalledAddonsProvider : IDisposable
     }
 
     /// <summary>
-    /// Add a single addon from its parsed file into the appropriate cache.
+    ///     Add a single addon from its parsed file into the appropriate cache.
     /// </summary>
     /// <param name="parsedAddonFile">Parsed addon file to add.</param>
     public void AddAddon(ParsedAddonFile parsedAddonFile)
@@ -323,10 +342,11 @@ public sealed class InstalledAddonsProvider : IDisposable
             AddonTypeEnum.Map => _mapsCache,
             AddonTypeEnum.Mod => _modsCache,
             AddonTypeEnum.Official => throw new NotSupportedException(),
-            _ => throw new NotSupportedException(),
+            _ => throw new NotSupportedException()
         };
 
         var existing = cache.FindIndex(x => x.AddonId == addon.AddonId);
+
         if (existing >= 0)
         {
             cache[existing] = addon;
@@ -340,7 +360,7 @@ public sealed class InstalledAddonsProvider : IDisposable
     }
 
     /// <summary>
-    /// Delete addon from disk and remove it from the cache.
+    ///     Delete addon from disk and remove it from the cache.
     /// </summary>
     /// <param name="parsedAddonFile">Addon to delete.</param>
     public void DeleteAddon(ParsedAddonFile parsedAddonFile)
@@ -360,7 +380,7 @@ public sealed class InstalledAddonsProvider : IDisposable
     }
 
     /// <summary>
-    /// Delete addon from disk and remove it from the cache.
+    ///     Delete addon from disk and remove it from the cache.
     /// </summary>
     /// <param name="addon">Addon to delete.</param>
     public void DeleteAddon(BaseAddon addon)
@@ -375,6 +395,7 @@ public sealed class InstalledAddonsProvider : IDisposable
             File.Delete(map.FileInfo.PathToFile);
 
             var bloodIni = Path.Combine(addon.FileInfo.PathToFolder, map.BloodIni ?? string.Empty);
+
             if (map.BloodIni is not null &&
                 File.Exists(bloodIni))
             {
@@ -407,7 +428,7 @@ public sealed class InstalledAddonsProvider : IDisposable
     }
 
     /// <summary>
-    /// Enable an autoload mod by id, cascading to dependencies and disabling incompatible mods.
+    ///     Enable an autoload mod by id, cascading to dependencies and disabling incompatible mods.
     /// </summary>
     /// <param name="addon">Addon id to enable.</param>
     public void EnableAddon(AddonId addon)
@@ -416,7 +437,7 @@ public sealed class InstalledAddonsProvider : IDisposable
     }
 
     /// <summary>
-    /// Disable an autoload mod by id, cascading to dependant mods.
+    ///     Disable an autoload mod by id, cascading to dependant mods.
     /// </summary>
     /// <param name="addon">Addon id to disable.</param>
     public void DisableAddon(AddonId addon)
@@ -425,7 +446,7 @@ public sealed class InstalledAddonsProvider : IDisposable
     }
 
     /// <summary>
-    /// Get list of installed addons of a given type.
+    ///     Get list of installed addons of a given type.
     /// </summary>
     /// <param name="addonType">Addon type</param>
     public IReadOnlyList<BaseAddon> GetInstalledAddonsByType(AddonTypeEnum addonType)
@@ -441,7 +462,7 @@ public sealed class InstalledAddonsProvider : IDisposable
 
 
     /// <summary>
-    /// Returns original campaigns merged with custom installed campaigns, ordered appropriately per game.
+    ///     Returns original campaigns merged with custom installed campaigns, ordered appropriately per game.
     /// </summary>
     private IReadOnlyList<BaseAddon> GetInstalledCampaigns()
     {
@@ -465,9 +486,9 @@ public sealed class InstalledAddonsProvider : IDisposable
             {
                 //hack to make SW addons appear at the top of the list
                 foreach (var customCamp in _campaignsCache
-                    .OrderByDescending(static x => x.AddonId.Id.Equals(nameof(WangAddonEnum.TwinDragon), StringComparison.OrdinalIgnoreCase))
-                    .ThenByDescending(static x => x.AddonId.Id.Equals(nameof(WangAddonEnum.Wanton), StringComparison.OrdinalIgnoreCase))
-                    .ThenBy(static x => x.Title))
+                                          .OrderByDescending(static x => x.AddonId.Id.Equals(nameof(WangAddonEnum.TwinDragon), StringComparison.OrdinalIgnoreCase))
+                                          .ThenByDescending(static x => x.AddonId.Id.Equals(nameof(WangAddonEnum.Wanton), StringComparison.OrdinalIgnoreCase))
+                                          .ThenBy(static x => x.Title))
                 {
                     campaigns[customCamp.AddonId] = customCamp;
                 }
@@ -489,7 +510,7 @@ public sealed class InstalledAddonsProvider : IDisposable
     }
 
     /// <summary>
-    /// Returns the list of installed loose maps.
+    ///     Returns the list of installed loose maps.
     /// </summary>
     private IReadOnlyList<BaseAddon> GetInstalledMaps()
     {
@@ -511,7 +532,7 @@ public sealed class InstalledAddonsProvider : IDisposable
     }
 
     /// <summary>
-    /// Returns the list of installed autoload mods.
+    ///     Returns the list of installed autoload mods.
     /// </summary>
     private IReadOnlyList<BaseAddon> GetInstalledMods()
     {
@@ -533,7 +554,7 @@ public sealed class InstalledAddonsProvider : IDisposable
     }
 
     /// <summary>
-    /// Convert a parsed addon file into a domain addon object
+    ///     Convert a parsed addon file into a domain addon object
     /// </summary>
     /// <param name="parsedAddonFile">Parsed addon file to convert.</param>
     internal BaseAddon? GetAddonFromFile(ParsedAddonFile parsedAddonFile)
@@ -542,7 +563,7 @@ public sealed class InstalledAddonsProvider : IDisposable
     }
 
     /// <summary>
-    /// Called when metadata is initialised; refreshes the update-available flag on all cached addons.
+    ///     Called when metadata is initialised; refreshes the update-available flag on all cached addons.
     /// </summary>
     private void OnMetadataInitialized(object? sender, EventArgs e)
     {
@@ -560,7 +581,7 @@ public sealed class InstalledAddonsProvider : IDisposable
     }
 
     /// <summary>
-    /// Called when metadata is updated for an addon; replaces the cached entry with the updated version.
+    ///     Called when metadata is updated for an addon; replaces the cached entry with the updated version.
     /// </summary>
     private void OnMetadataUpdated(object? sender, ParsedAddonFile e)
     {
@@ -589,20 +610,5 @@ public sealed class InstalledAddonsProvider : IDisposable
         {
             _logger.LogCritical(ex, "Error while updating metadata.");
         }
-    }
-
-
-    /// <summary>
-    /// Unsubscribe from events and release resources.
-    /// </summary>
-    public void Dispose()
-    {
-        _metadataProvider.MetadataUpdatedEvent -= OnMetadataUpdated;
-        _metadataProvider.MetadataInitializedEvent -= OnMetadataInitialized;
-
-        _channelCancellation.Cancel();
-        _channelCancellation.Dispose();
-        _cacheUpdateSemaphore.Dispose();
-        _channelPublisher.Unsubscribe(_channelReader);
     }
 }

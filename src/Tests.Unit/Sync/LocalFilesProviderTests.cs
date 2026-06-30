@@ -7,7 +7,6 @@ using Games.Providers;
 using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
 using SharpCompress.Archives;
-using Tests.Unit.Helpers;
 
 namespace Tests.Unit.Sync;
 
@@ -20,11 +19,12 @@ public sealed class LocalFilesProviderTests : IDisposable
     {
         _addonsFolder = ClientProperties.AddonsFolderPath;
         Directory.CreateDirectory(_addonsFolder);
+
         File.Copy(
             Path.Combine("Files", "ZippedAddon.zip"),
             Path.Combine(_addonsFolder, "ZippedAddon.zip"),
             true
-        );
+            );
 
         var unpackToFolder = Path.Combine(_addonsFolder, "UnpackedAddon");
         Directory.CreateDirectory(unpackToFolder);
@@ -46,6 +46,7 @@ public sealed class LocalFilesProviderTests : IDisposable
         Mock<IChannelPublisher<DiHelper.LocalFileEvent>> channelPubMock = new();
         Mock<InstalledGamesProvider> gamesProvider = new();
         gamesProvider.Setup(x => x.GetGames()).Returns([]);
+
         return new(gamesProvider.Object, cache.Object, channelPubMock.Object, NullLogger<LocalFilesProvider>.Instance);
     }
 
@@ -68,6 +69,7 @@ public sealed class LocalFilesProviderTests : IDisposable
         {
             File.Delete(file);
         }
+
         foreach (var dir in Directory.EnumerateDirectories(_addonsFolder))
         {
             Directory.Delete(dir, true);
@@ -254,15 +256,16 @@ public sealed class LocalFilesProviderTests : IDisposable
         var folder = Path.Combine(_addonsFolder, "JsonAddon");
         Directory.CreateDirectory(folder);
         var jsonPath = Path.Combine(folder, "addon.json");
+
         await File.WriteAllTextAsync(jsonPath, """
-            {
-                "id": "json-addon",
-                "type": "Mod",
-                "game": { "name": "Duke3D" },
-                "title": "Json Addon",
-                "version": "1.0"
-            }
-            """);
+                                     {
+                                         "id": "json-addon",
+                                         "type": "Mod",
+                                         "game": { "name": "Duke3D" },
+                                         "title": "Json Addon",
+                                         "version": "1.0"
+                                     }
+                                     """);
 
         var result = await scanner.TryAddFileToCacheAsync(jsonPath, null);
 
@@ -361,8 +364,8 @@ public sealed class LocalFilesProviderTests : IDisposable
         await scanner.TryRemoveFileFromCacheAsync(zipPath);
 
         channelPubMock.Verify(x => x.PublishAsync(It.Is<DiHelper.LocalFileEvent>(
-            e => !e.IsAdded && e.Files.Count == 2
-        )), Times.Once);
+                                                      e => !e.IsAdded && e.Files.Count == 2
+                                                      )), Times.Once);
     }
 
     [Fact]
@@ -486,11 +489,12 @@ public sealed class LocalFilesProviderTests : IDisposable
         var scanner = CreateScanner();
 
         var grpInfoZip = Path.Combine(_addonsFolder, "GrpInfoAddon.zip");
+
         File.Copy(
             Path.Combine("Files", "GrpInfoAddon.zip"),
             grpInfoZip,
             true
-        );
+            );
 
         await scanner.InitializeAsync();
 

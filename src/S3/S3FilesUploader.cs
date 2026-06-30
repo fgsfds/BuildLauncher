@@ -9,12 +9,12 @@ using Microsoft.Extensions.Logging;
 namespace S3;
 
 /// <summary>
-/// Provides functionality to upload files to S3.
+///     Provides functionality to upload files to S3.
 /// </summary>
 public sealed class S3FilesUploader : IFilesUploader
 {
-    private readonly S3UtilitiesFactory _s3Factory;
     private readonly ILogger<S3FilesUploader> _logger;
+    private readonly S3UtilitiesFactory _s3Factory;
 
     public S3FilesUploader(S3UtilitiesFactory s3Factory, ILogger<S3FilesUploader> logger)
     {
@@ -22,7 +22,7 @@ public sealed class S3FilesUploader : IFilesUploader
         _logger = logger;
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public Task<Result<RemoteFileMetadata?>> UploadFileAsync(
         string pathToLocalFile,
         string relativePathToRemoteFile,
@@ -31,6 +31,7 @@ public sealed class S3FilesUploader : IFilesUploader
         )
     {
         var fileKey = S3Constants.S3SubFolder + "/" + relativePathToRemoteFile;
+
         return InternalUploadAsync(pathToLocalFile, fileKey, progress, cancellationToken);
     }
 
@@ -41,6 +42,7 @@ public sealed class S3FilesUploader : IFilesUploader
         CancellationToken cancellationToken)
     {
         var fileKey = "uploads/" + S3Constants.S3SubFolder + "/" + relativePathToRemoteFile;
+
         return InternalUploadAsync(pathToLocalFile, fileKey, progress, cancellationToken);
     }
 
@@ -78,16 +80,19 @@ public sealed class S3FilesUploader : IFilesUploader
         catch (TaskCanceledException)
         {
             _logger.LogInformation("Uploading cancelled.");
+
             return new(ResultEnum.Error, null, "Uploading cancelled.");
         }
         catch (AmazonS3Exception ex)
         {
             _logger.LogError(ex, "S3 access error while uploading file.");
+
             return new(ResultEnum.Error, null, "Wrong secret key.");
         }
         catch (Exception ex)
         {
             _logger.LogCritical(ex, "Error while uploading file.");
+
             return new(ResultEnum.Error, null, ex.Message);
         }
     }

@@ -1,6 +1,5 @@
 ﻿using Addons.Addons;
 using Addons.Providers;
-using Core.All;
 using Core.All.Enums;
 
 namespace Tests.Unit;
@@ -111,11 +110,12 @@ public sealed class GrpInfoProviderTests : IDisposable
     public void Parse_OnlyCommentsAndWhitespace_ReturnsEmptyList()
     {
         var path = Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid()}.grpinfo");
-        File.WriteAllText(path, """
-            // just a comment
 
-            // another comment
-            """);
+        File.WriteAllText(path, """
+                          // just a comment
+
+                          // another comment
+                          """);
 
         try
         {
@@ -133,24 +133,25 @@ public sealed class GrpInfoProviderTests : IDisposable
     public void Parse_EntriesMissingNameOrSize_Skipped()
     {
         var path = Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid()}.grpinfo");
+
         File.WriteAllText(path, """
-            grpinfo
-            {
-                name       "Valid Entry"
-                size       100
-            }
+                          grpinfo
+                          {
+                              name       "Valid Entry"
+                              size       100
+                          }
 
-            grpinfo
-            {
-                // no name and no size
-            }
+                          grpinfo
+                          {
+                              // no name and no size
+                          }
 
-            grpinfo
-            {
-                name       "No Size Entry"
-                // size missing
-            }
-            """);
+                          grpinfo
+                          {
+                              name       "No Size Entry"
+                              // size missing
+                          }
+                          """);
 
         try
         {
@@ -170,17 +171,18 @@ public sealed class GrpInfoProviderTests : IDisposable
     public void Parse_SingleEntry_ReturnsOneEntry()
     {
         var path = Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid()}.grpinfo");
+
         File.WriteAllText(path, """
-            grpinfo
-            {
-                name       "Single Addon"
-                scriptname "scripts/main.con"
-                defname    "add.def"
-                size       5000
-                crc        0x12345678
-                flags      16
-            }
-            """);
+                          grpinfo
+                          {
+                              name       "Single Addon"
+                              scriptname "scripts/main.con"
+                              defname    "add.def"
+                              size       5000
+                              crc        0x12345678
+                              flags      16
+                          }
+                          """);
 
         try
         {
@@ -202,21 +204,22 @@ public sealed class GrpInfoProviderTests : IDisposable
     public void TryGetAddonsFromGrpInfo_GrpsMatchGrpInfo_ReturnsTrueWithDukeCampaigns()
     {
         var grpInfoPath = Path.Combine(_tempFolder, "test.grpinfo");
-        File.WriteAllText(grpInfoPath, """
-            grpinfo
-            {
-                name       "Test Campaign"
-                scriptname "scripts/test.con"
-                defname    "test.def"
-                size       1000
-            }
 
-            grpinfo
-            {
-                name       "Second Campaign"
-                size       2000
-            }
-            """);
+        File.WriteAllText(grpInfoPath, """
+                          grpinfo
+                          {
+                              name       "Test Campaign"
+                              scriptname "scripts/test.con"
+                              defname    "test.def"
+                              size       1000
+                          }
+
+                          grpinfo
+                          {
+                              name       "Second Campaign"
+                              size       2000
+                          }
+                          """);
 
         var grp1 = Path.Combine(_tempFolder, "test.grp");
         var grp2 = Path.Combine(_tempFolder, "second.grp");
@@ -249,13 +252,14 @@ public sealed class GrpInfoProviderTests : IDisposable
     public void TryGetAddonsFromGrpInfo_NoGrpFiles_ReturnsFalse()
     {
         var grpInfoPath = Path.Combine(_tempFolder, "empty.grpinfo");
+
         File.WriteAllText(grpInfoPath, """
-            grpinfo
-            {
-                name       "Test"
-                size       1000
-            }
-            """);
+                          grpinfo
+                          {
+                              name       "Test"
+                              size       1000
+                          }
+                          """);
 
         var result = GrpInfoProvider.TryGetAddonsFromGrpInfo(grpInfoPath, out var addons);
 
@@ -267,13 +271,14 @@ public sealed class GrpInfoProviderTests : IDisposable
     public void TryGetAddonsFromGrpInfo_GrpSizeNotInGrpInfo_Skipped()
     {
         var grpInfoPath = Path.Combine(_tempFolder, "partial.grpinfo");
+
         File.WriteAllText(grpInfoPath, """
-            grpinfo
-            {
-                name       "Matched"
-                size       500
-            }
-            """);
+                          grpinfo
+                          {
+                              name       "Matched"
+                              size       500
+                          }
+                          """);
 
         var matchedGrp = Path.Combine(_tempFolder, "matched.grp");
         var unmatchedGrp = Path.Combine(_tempFolder, "unmatched.grp");
@@ -292,19 +297,20 @@ public sealed class GrpInfoProviderTests : IDisposable
     public void TryGetAddonsFromGrpInfo_EntryMissingName_Skipped()
     {
         var grpInfoPath = Path.Combine(_tempFolder, "noname.grpinfo");
-        File.WriteAllText(grpInfoPath, """
-            grpinfo
-            {
-                // no name
-                size       100
-            }
 
-            grpinfo
-            {
-                name       "Has Name"
-                size       200
-            }
-            """);
+        File.WriteAllText(grpInfoPath, """
+                          grpinfo
+                          {
+                              // no name
+                              size       100
+                          }
+
+                          grpinfo
+                          {
+                              name       "Has Name"
+                              size       200
+                          }
+                          """);
 
         File.WriteAllBytes(Path.Combine(_tempFolder, "a.grp"), new byte[100]);
         File.WriteAllBytes(Path.Combine(_tempFolder, "b.grp"), new byte[200]);

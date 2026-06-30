@@ -20,101 +20,17 @@ namespace Avalonia.Desktop.ViewModels;
 
 public sealed partial class CampaignsViewModel : RightPanelViewModel, IPortsButtonControl
 {
-    public BaseGame Game { get; }
+    private readonly IAddonDropHelper _addonInstaller;
+    private readonly IConfigProvider _config;
+    private readonly DownloadableAddonsProvider _downloadableAddonsProvider;
 
     private readonly InstalledGamesProvider _gamesProvider;
-    private readonly IConfigProvider _config;
     private readonly InstalledAddonsProvider _installedAddonsProvider;
-    private readonly IAddonDropHelper _addonInstaller;
-    private readonly DownloadableAddonsProvider _downloadableAddonsProvider;
-    private readonly PortStarter _portStarter;
-    private readonly MetadataProvider _metadataProvider;
     private readonly ILogger<CampaignsViewModel> _logger;
+    private readonly MetadataProvider _metadataProvider;
+    private readonly PortStarter _portStarter;
 
     private readonly SeparatorItem _separator = new();
-
-
-    #region Binding Properties
-
-    /// <summary>
-    /// List of installed campaigns and maps
-    /// </summary>
-    public ImmutableList<BaseAddon> CampaignsList
-    {
-        get
-        {
-            var addons = _installedAddonsProvider.GetInstalledAddonsByType(AddonTypeEnum.TC);
-
-            var isSearchEmpty = string.IsNullOrWhiteSpace(SearchBoxText);
-            List<BaseAddon> favorites = [];
-            List<BaseAddon> list = new(addons.Count);
-
-            foreach (var addon in addons)
-            {
-                if (!isSearchEmpty && !addon.Title.Contains(SearchBoxText, StringComparison.OrdinalIgnoreCase))
-                {
-                    continue;
-                }
-
-                if (addon.IsFavorite)
-                {
-                    favorites.Add(addon);
-                    continue;
-                }
-
-                list.Add(addon);
-            }
-
-            if (favorites.Count > 0)
-            {
-                return [.. favorites, _separator, .. list];
-            }
-
-            return [.. list];
-        }
-    }
-
-    private BaseAddon? _selectedAddon;
-    /// <summary>
-    /// Currently selected campaign
-    /// </summary>
-    public override BaseAddon? SelectedAddon
-    {
-        get => _selectedAddon;
-        set
-        {
-            _selectedAddon = value;
-
-            OnPropertyChanged(nameof(SelectedAddonDescription));
-            OnPropertyChanged(nameof(SelectedAddonPreview));
-            OnPropertyChanged(nameof(SelectedAddonRating));
-            OnPropertyChanged(nameof(IsMetadataUpdateAvailable));
-            OnPropertyChanged(nameof(SelectedAddonPlaytime));
-            OnPropertyChanged(nameof(IsPreviewVisible));
-
-            UpdateAddonOptions();
-
-            StartCampaignCommand.NotifyCanExecuteChanged();
-        }
-    }
-
-    /// <summary>
-    /// Search box text
-    /// </summary>
-    [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(CampaignsList))]
-    [NotifyCanExecuteChangedFor(nameof(ClearSearchBoxCommand))]
-    private string _searchBoxText = string.Empty;
-
-    /// <summary>
-    /// Is form in progress
-    /// </summary>
-    [ObservableProperty]
-    private bool _isInProgress;
-
-    public bool IsPortsButtonsVisible => true;
-
-    #endregion
 
 
     [Obsolete($"Don't create directly. Use {nameof(ViewModelsFactory)}.")]
@@ -149,14 +65,16 @@ public sealed partial class CampaignsViewModel : RightPanelViewModel, IPortsButt
         //_downloadableAddonsProvider.AddonsChangedEvent += OnAddonChanged;
     }
 
+    public BaseGame Game { get; }
+
 
     /// <summary>
-    /// VM initialization
+    ///     VM initialization
     /// </summary>
     public Task InitializeAsync() => UpdateAsync(false);
 
     /// <summary>
-    /// Update campaigns list
+    ///     Update campaigns list
     /// </summary>
     private async Task UpdateAsync(bool createNew)
     {
@@ -166,10 +84,112 @@ public sealed partial class CampaignsViewModel : RightPanelViewModel, IPortsButt
     }
 
 
+    private void OnGameChanged(GameEnum parameterName)
+    {
+        if (parameterName == Game.GameEnum)
+        {
+            OnPropertyChanged(nameof(CampaignsList));
+        }
+    }
+
+    private void OnAddonChanged(GameEnum gameEnum, AddonTypeEnum? addonType)
+    {
+        if (gameEnum == Game.GameEnum && (addonType is AddonTypeEnum.TC))
+        {
+            OnPropertyChanged(nameof(CampaignsList));
+        }
+    }
+
+
+    #region Binding Properties
+
+    /// <summary>
+    ///     List of installed campaigns and maps
+    /// </summary>
+    public ImmutableList<BaseAddon> CampaignsList
+    {
+        get
+        {
+            var addons = _installedAddonsProvider.GetInstalledAddonsByType(AddonTypeEnum.TC);
+
+            var isSearchEmpty = string.IsNullOrWhiteSpace(SearchBoxText);
+            List<BaseAddon> favorites = [];
+            List<BaseAddon> list = new(addons.Count);
+
+            foreach (var addon in addons)
+            {
+                if (!isSearchEmpty && !addon.Title.Contains(SearchBoxText, StringComparison.OrdinalIgnoreCase))
+                {
+                    continue;
+                }
+
+                if (addon.IsFavorite)
+                {
+                    favorites.Add(addon);
+
+                    continue;
+                }
+
+                list.Add(addon);
+            }
+
+            if (favorites.Count > 0)
+            {
+                return [.. favorites, _separator, .. list];
+            }
+
+            return [.. list];
+        }
+    }
+
+    private BaseAddon? _selectedAddon;
+
+    /// <summary>
+    ///     Currently selected campaign
+    /// </summary>
+    public override BaseAddon? SelectedAddon
+    {
+        get => _selectedAddon;
+        set
+        {
+            _selectedAddon = value;
+
+            OnPropertyChanged(nameof(SelectedAddonDescription));
+            OnPropertyChanged(nameof(SelectedAddonPreview));
+            OnPropertyChanged(nameof(SelectedAddonRating));
+            OnPropertyChanged(nameof(IsMetadataUpdateAvailable));
+            OnPropertyChanged(nameof(SelectedAddonPlaytime));
+            OnPropertyChanged(nameof(IsPreviewVisible));
+
+            UpdateAddonOptions();
+
+            StartCampaignCommand.NotifyCanExecuteChanged();
+        }
+    }
+
+    /// <summary>
+    ///     Search box text
+    /// </summary>
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(CampaignsList))]
+    [NotifyCanExecuteChangedFor(nameof(ClearSearchBoxCommand))]
+    private string _searchBoxText = string.Empty;
+
+    /// <summary>
+    ///     Is form in progress
+    /// </summary>
+    [ObservableProperty]
+    private bool _isInProgress;
+
+    public bool IsPortsButtonsVisible => true;
+
+    #endregion
+
+
     #region Relay Commands
 
     /// <summary>
-    /// Start selected campaign
+    ///     Start selected campaign
     /// </summary>
     /// <param name="command">Port to start campaign with</param>
     [RelayCommand]
@@ -226,7 +246,7 @@ public sealed partial class CampaignsViewModel : RightPanelViewModel, IPortsButt
 
 
     /// <summary>
-    /// Open campaigns folder
+    ///     Open campaigns folder
     /// </summary>
     [RelayCommand]
     private void OpenFolder()
@@ -234,20 +254,20 @@ public sealed partial class CampaignsViewModel : RightPanelViewModel, IPortsButt
         using var process = Process.Start(new ProcessStartInfo
         {
             FileName = Game.CampaignsFolderPath,
-            UseShellExecute = true,
+            UseShellExecute = true
         });
     }
 
 
     /// <summary>
-    /// Refresh campaigns list
+    ///     Refresh campaigns list
     /// </summary>
     [RelayCommand]
     private Task RefreshListAsync() => UpdateAsync(true);
 
 
     /// <summary>
-    /// Delete selected campaign
+    ///     Delete selected campaign
     /// </summary>
     [RelayCommand]
     private void DeleteCampaign()
@@ -259,22 +279,23 @@ public sealed partial class CampaignsViewModel : RightPanelViewModel, IPortsButt
 
 
     /// <summary>
-    /// Clear search bar
+    ///     Clear search bar
     /// </summary>
     [RelayCommand(CanExecute = nameof(ClearSearchBoxCanExecute))]
     private void ClearSearchBox() => SearchBoxText = string.Empty;
+
     private bool ClearSearchBoxCanExecute() => !string.IsNullOrEmpty(SearchBoxText);
 
 
     /// <summary>
-    /// Install dropped addon
+    ///     Install dropped addon
     /// </summary>
     [RelayCommand]
     private Task ProcessDroppedFilesAsync(List<string> filePaths) => _addonInstaller.AddAddonsAsync(filePaths, Game);
 
 
     /// <summary>
-    /// Add selected campaign to favorites
+    ///     Add selected campaign to favorites
     /// </summary>
     [RelayCommand]
     private void AddToFavorite(object? value)
@@ -292,7 +313,7 @@ public sealed partial class CampaignsViewModel : RightPanelViewModel, IPortsButt
 
 
     /// <summary>
-    /// Remove selected campaign from favorites
+    ///     Remove selected campaign from favorites
     /// </summary>
     [RelayCommand]
     private void RemoveFromFavorite(object? value)
@@ -310,13 +331,11 @@ public sealed partial class CampaignsViewModel : RightPanelViewModel, IPortsButt
 
 
     /// <summary>
-    /// Updates metadata for selected campaign.
+    ///     Updates metadata for selected campaign.
     /// </summary>
     public override async Task UpdateMetadataAsync(object? value)
     {
-        if (value is BaseAddon addon)
-        {
-        }
+        if (value is BaseAddon addon) { }
         else if (value is null && SelectedAddon is not null)
         {
             addon = SelectedAddon;
@@ -354,21 +373,4 @@ public sealed partial class CampaignsViewModel : RightPanelViewModel, IPortsButt
     }
 
     #endregion
-
-
-    private void OnGameChanged(GameEnum parameterName)
-    {
-        if (parameterName == Game.GameEnum)
-        {
-            OnPropertyChanged(nameof(CampaignsList));
-        }
-    }
-
-    private void OnAddonChanged(GameEnum gameEnum, AddonTypeEnum? addonType)
-    {
-        if (gameEnum == Game.GameEnum && (addonType is AddonTypeEnum.TC))
-        {
-            OnPropertyChanged(nameof(CampaignsList));
-        }
-    }
 }

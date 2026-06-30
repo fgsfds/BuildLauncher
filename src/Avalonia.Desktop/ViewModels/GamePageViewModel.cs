@@ -9,26 +9,6 @@ public sealed partial class GamePageViewModel : ObservableObject
 {
     private readonly GameEnum _gameEnum;
 
-    public CampaignsViewModel Campaigns { get; set; }
-
-    public MapsViewModel? Maps { get; set; }
-
-    public ModsViewModel? Mods { get; set; }
-
-    public DownloadsViewModel Downloads { get; set; }
-
-    [ObservableProperty]
-    public partial bool IsCampaignsAlarmShown { get; set; }
-
-    [ObservableProperty]
-    public partial bool IsMapsAlarmShown { get; set; }
-
-    [ObservableProperty]
-    public partial bool IsModsAlarmShown { get; set; }
-
-    [ObservableProperty]
-    public partial bool IsDownloadsAlarmShown { get; set; }
-
     public GamePageViewModel(
         GameEnum gameEnum,
         CampaignsViewModel campaigns,
@@ -53,6 +33,26 @@ public sealed partial class GamePageViewModel : ObservableObject
         metadataProvider.MetadataInitializedEvent += OnMetadataInitialized;
         //downloadablesProvider.AddonsChangedEvent += OnAddonsChanged;
     }
+
+    public CampaignsViewModel Campaigns { get; set; }
+
+    public MapsViewModel? Maps { get; set; }
+
+    public ModsViewModel? Mods { get; set; }
+
+    public DownloadsViewModel Downloads { get; set; }
+
+    [ObservableProperty]
+    public partial bool IsCampaignsAlarmShown { get; set; }
+
+    [ObservableProperty]
+    public partial bool IsMapsAlarmShown { get; set; }
+
+    [ObservableProperty]
+    public partial bool IsModsAlarmShown { get; set; }
+
+    [ObservableProperty]
+    public partial bool IsDownloadsAlarmShown { get; set; }
 
     private void OnAddonsChanged(GameEnum gameEnum, AddonTypeEnum? addonType)
     {

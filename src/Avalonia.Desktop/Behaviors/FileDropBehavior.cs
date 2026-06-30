@@ -16,7 +16,7 @@ public class FileDropBehavior : Behavior<Interactive>
         set => SetValue(CommandProperty, value);
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override void OnAttached()
     {
         base.OnAttached();
@@ -28,7 +28,7 @@ public class FileDropBehavior : Behavior<Interactive>
         }
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override void OnDetaching()
     {
         base.OnDetaching();
@@ -46,9 +46,9 @@ public class FileDropBehavior : Behavior<Interactive>
         }
 
         var filePaths = files
-            .Select(f => f.TryGetLocalPath())
-            .Where(path => path is not null)
-            .ToList();
+                       .Select(f => f.TryGetLocalPath())
+                       .Where(path => path is not null)
+                       .ToList();
 
         if (filePaths.Count != 0 && Command is not null && Command.CanExecute(filePaths))
         {

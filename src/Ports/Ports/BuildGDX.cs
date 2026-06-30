@@ -7,25 +7,25 @@ using Games.Games;
 namespace Ports.Ports;
 
 /// <summary>
-/// BuildGDX port
+///     BuildGDX port
 /// </summary>
 public sealed class BuildGDX : BasePort
 {
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override PortEnum PortEnum => PortEnum.BuildGDX;
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string WinExe => Path.Combine("jre", "bin", "javaw.exe");
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string LinExe => throw new NotSupportedException();
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override string Name => "BuildGDX";
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override List<GameEnum> SupportedGames =>
-        [
+    [
         GameEnum.Blood,
         GameEnum.Duke3D,
         GameEnum.Wang,
@@ -36,17 +36,17 @@ public sealed class BuildGDX : BasePort
         GameEnum.Witchaven,
         GameEnum.Witchaven2,
         GameEnum.TekWar
-        ];
+    ];
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override List<string> SupportedGamesVersions =>
-        [
+    [
         nameof(DukeVersionEnum.Duke3D_13D),
         nameof(DukeVersionEnum.Duke3D_Atomic),
         nameof(DukeVersionEnum.Duke3D_WT)
-        ];
+    ];
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override string? InstalledVersion
     {
         get
@@ -62,60 +62,60 @@ public sealed class BuildGDX : BasePort
         }
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override List<FeatureEnum> SupportedFeatures =>
-            [
-            FeatureEnum.TROR,
-            FeatureEnum.Hightile,
-            FeatureEnum.Models,
-            FeatureEnum.TileFromTexture
-            ];
+    [
+        FeatureEnum.TROR,
+        FeatureEnum.Hightile,
+        FeatureEnum.Models,
+        FeatureEnum.TileFromTexture
+    ];
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override bool IsSkillSelectionAvailable => false;
 
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string ConfigFile => string.Empty;
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string AddDirectoryParam => throw new NotSupportedException();
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string AddFileParam => throw new NotSupportedException();
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string AddDefParam => throw new NotSupportedException();
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string AddConParam => throw new NotSupportedException();
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string MainDefParam => throw new NotSupportedException();
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string MainConParam => throw new NotSupportedException();
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string MainGrpParam => throw new NotSupportedException();
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string AddGrpParam => throw new NotSupportedException();
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string SkillParam => throw new NotSupportedException();
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string AddGameDirParam => throw new NotSupportedException();
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string AddRffParam => throw new NotSupportedException();
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string AddSndParam => throw new NotSupportedException();
 
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override void BeforeStart(BaseGame game, BaseAddon campaign)
     {
         MoveSaveFilesFromStorage(game, campaign);
@@ -123,13 +123,13 @@ public sealed class BuildGDX : BasePort
         RestoreWtFiles(game);
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override void AfterEnd(BaseGame game, BaseAddon campaign)
     {
         MoveSaveFilesToStorage(game, campaign);
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override void GetStartCampaignArgs(StringBuilder sb, BaseGame game, BaseAddon addon)
     {
         _ = sb.Append(@" -jar ..\..\BuildGDX.jar");
@@ -172,13 +172,13 @@ public sealed class BuildGDX : BasePort
         }
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override void GetAutoloadModsArgs(StringBuilder sb, BaseGame _, BaseAddon addon, IReadOnlyList<BaseAddon> mods) { }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override void GetSkipIntroParameter(StringBuilder sb) { }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override void GetSkipStartupParameter(StringBuilder sb) { }
 
 

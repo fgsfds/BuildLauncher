@@ -8,7 +8,7 @@ using SharpCompress.Archives;
 namespace Addons.Helpers;
 
 /// <summary>
-/// Inspects and conditionally extracts addon archives when they contain GRP info, RFF files, or custom executables.
+///     Inspects and conditionally extracts addon archives when they contain GRP info, RFF files, or custom executables.
 /// </summary>
 internal sealed class ArchivedAddonExtractor
 {
@@ -16,7 +16,7 @@ internal sealed class ArchivedAddonExtractor
     private readonly ILogger _logger;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="ArchivedAddonExtractor"/> class.
+    ///     Initializes a new instance of the <see cref="ArchivedAddonExtractor" /> class.
     /// </summary>
     /// <param name="localFilesProvider">Provider used to replace file paths after extraction.</param>
     /// <param name="logger">Logger for extraction errors.</param>
@@ -27,10 +27,10 @@ internal sealed class ArchivedAddonExtractor
     }
 
     /// <summary>
-    /// If the parsed addon file is a ZIP archive, unpack it when necessary and update the local files provider.
+    ///     If the parsed addon file is a ZIP archive, unpack it when necessary and update the local files provider.
     /// </summary>
     /// <param name="parsedAddonFile">Parsed addon file to check and optionally unpack.</param>
-    /// <returns><see langword="true"/> if the file was unpacked and the path was updated; otherwise <see langword="false"/>.</returns>
+    /// <returns><see langword="true" /> if the file was unpacked and the path was updated; otherwise <see langword="false" />.</returns>
     public async Task<bool> UnpackAndUpdateIfNeededAsync(ParsedAddonFile parsedAddonFile)
     {
         if (!parsedAddonFile.FileInfo.IsZip)
@@ -53,8 +53,8 @@ internal sealed class ArchivedAddonExtractor
             else
             {
                 var addonJsonsInsideArchive = archive.Entries
-                    .Where(static x => x.Key?.StartsWith("addon") == true && x.Key.EndsWith(".json"))
-                    .ToList();
+                                                     .Where(static x => x.Key?.StartsWith("addon") == true && x.Key.EndsWith(".json"))
+                                                     .ToList();
 
                 if (addonJsonsInsideArchive.Count == 0)
                 {
@@ -96,6 +96,7 @@ internal sealed class ArchivedAddonExtractor
         if (unpackedTo is not null)
         {
             await _localFilesProvider.ReplacePathAsync(parsedAddonFile.FileInfo.PathToFile, unpackedTo);
+
             return true;
         }
 

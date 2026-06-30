@@ -7,14 +7,14 @@ namespace Avalonia.Desktop.Behaviors;
 
 public class ClearSelectionOnEmptySpaceBehavior : Behavior<ListBox>
 {
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override void OnAttached()
     {
         base.OnAttached();
         AssociatedObject?.PointerPressed += OnPointerPressed;
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override void OnDetaching()
     {
         base.OnDetaching();

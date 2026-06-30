@@ -5,5 +5,5 @@ namespace Core.All.Enums;
 public enum HttpClientEnum
 {
     [Description("GitHub")]
-    GitHub,
+    GitHub
 }

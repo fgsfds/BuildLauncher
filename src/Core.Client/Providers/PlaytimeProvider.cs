@@ -4,8 +4,8 @@ namespace Core.Client.Providers;
 
 public sealed class PlaytimeProvider
 {
-    private readonly Dictionary<string, TimeSpan> _times;
     private readonly IConfigProvider _config;
+    private readonly Dictionary<string, TimeSpan> _times;
 
     public PlaytimeProvider(IConfigProvider config)
     {

@@ -9,25 +9,25 @@ using Games.Games;
 namespace Ports.Ports;
 
 /// <summary>
-/// Raze port
+///     Raze port
 /// </summary>
 public sealed class Raze : BasePort
 {
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override PortEnum PortEnum => PortEnum.Raze;
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string WinExe => "raze.exe";
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string LinExe => "raze";
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override string Name => "Raze";
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override List<GameEnum> SupportedGames =>
-        [
+    [
         GameEnum.Blood,
         GameEnum.Duke3D,
         GameEnum.Wang,
@@ -36,68 +36,68 @@ public sealed class Raze : BasePort
         GameEnum.RidesAgain,
         GameEnum.NAM,
         GameEnum.WW2GI
-        ];
+    ];
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override List<string> SupportedGamesVersions =>
-        [
+    [
         nameof(DukeVersionEnum.Duke3D_13D),
         nameof(DukeVersionEnum.Duke3D_Atomic),
         nameof(DukeVersionEnum.Duke3D_WT)
-        ];
+    ];
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override string? InstalledVersion =>
         File.Exists(PortExeFilePath)
-        ? FileVersionInfo.GetVersionInfo(PortExeFilePath).FileVersion
-        : null;
+            ? FileVersionInfo.GetVersionInfo(PortExeFilePath).FileVersion
+            : null;
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override bool IsSkillSelectionAvailable => false;
 
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string ConfigFile => "raze_portable.ini";
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string AddFileParam => "-file ";
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string AddDefParam => "-adddef ";
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string AddConParam => "-addcon ";
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string MainDefParam => "-def ";
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string MainConParam => "-con ";
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string AddDirectoryParam => AddFileParam;
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string AddGameDirParam => AddFileParam;
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string AddRffParam => AddFileParam;
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string AddSndParam => AddFileParam;
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string MainGrpParam => AddFileParam;
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string AddGrpParam => AddFileParam;
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string SkillParam => throw new NotSupportedException();
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override List<FeatureEnum> SupportedFeatures =>
-        [
+    [
         FeatureEnum.TROR,
         FeatureEnum.Hightile,
         FeatureEnum.Models,
@@ -105,16 +105,16 @@ public sealed class Raze : BasePort
         FeatureEnum.Wall_Rotate_Cstat,
         FeatureEnum.SndInfo,
         FeatureEnum.TileFromTexture
-        ];
+    ];
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override void GetSkipIntroParameter(StringBuilder sb) => sb.Append(" -quick");
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override void GetSkipStartupParameter(StringBuilder sb) => sb.Append(" -nosetup");
 
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override void BeforeStart(BaseGame game, BaseAddon campaign)
     {
         var config = Path.Combine(InstallFolderPath, ConfigFile);
@@ -142,6 +142,7 @@ public sealed class Raze : BasePort
                 """;
 
             var configDir = Path.GetDirectoryName(config);
+
             if (configDir is not null && !Directory.Exists(configDir))
             {
                 _ = Directory.CreateDirectory(configDir);
@@ -158,13 +159,13 @@ public sealed class Raze : BasePort
         RestoreWtFiles(game);
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override void AfterEnd(BaseGame game, BaseAddon campaign)
     {
         //nothing to do
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override void GetStartCampaignArgs(StringBuilder sb, BaseGame game, BaseAddon addon)
     {
         _ = sb.Append($@" -savedir ""{GetPathToAddonSavedGamesFolder(game.ShortName, addon.AddonId.Id)}""");
@@ -226,6 +227,7 @@ public sealed class Raze : BasePort
         if (addon is LooseMap)
         {
             GetLooseMapArgs(sb, game, addon);
+
             return;
         }
 
@@ -306,6 +308,7 @@ public sealed class Raze : BasePort
         if (addon is LooseMap)
         {
             GetLooseMapArgs(sb, game, addon);
+
             return;
         }
 
@@ -321,7 +324,7 @@ public sealed class Raze : BasePort
             _ = sb.Append($" {AddFileParam}WT.GRP");
         }
         else if (wCamp.DependentAddons is not null &&
-            wCamp.DependentAddons.ContainsKey(nameof(WangAddonEnum.TwinDragon)))
+                 wCamp.DependentAddons.ContainsKey(nameof(WangAddonEnum.TwinDragon)))
         {
             _ = sb.Append($" {AddFileParam}TD.GRP");
         }
@@ -350,6 +353,7 @@ public sealed class Raze : BasePort
         if (addon is LooseMap)
         {
             GetLooseMapArgs(sb, game, addon);
+
             return;
         }
 
@@ -362,6 +366,7 @@ public sealed class Raze : BasePort
             rCamp.DependentAddons.ContainsKey(nameof(RedneckAddonEnum.Route66)))
         {
             _ = sb.Append(" -route66");
+
             return;
         }
 
@@ -406,7 +411,7 @@ public sealed class Raze : BasePort
     }
 
     /// <summary>
-    /// Add paths to game and mods folder to the config
+    ///     Add paths to game and mods folder to the config
     /// </summary>
     private static void AddGamePathsToConfig(BaseGame game, BaseAddon campaign, string gameInstallFolder, string config)
     {
@@ -447,6 +452,7 @@ public sealed class Raze : BasePort
                 }
 
                 _ = sb.AppendLine();
+
                 continue;
             }
 
@@ -473,6 +479,7 @@ public sealed class Raze : BasePort
                 }
 
                 _ = sb.AppendLine();
+
                 continue;
             }
 

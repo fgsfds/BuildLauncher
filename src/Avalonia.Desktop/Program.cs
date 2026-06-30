@@ -19,6 +19,7 @@ public sealed partial class Program
         if (File.Exists(Path.Combine(ClientProperties.WorkingFolder, ClientConsts.UpdateFile)))
         {
             AppUpdateInstaller.InstallUpdate();
+
             return 0;
         }
 
@@ -26,6 +27,7 @@ public sealed partial class Program
         {
             ClientProperties.IsDeveloperMode = true;
         }
+
         if (args.Contains("--offline"))
         {
             ClientProperties.IsOfflineMode = true;
@@ -60,14 +62,15 @@ public sealed partial class Program
     private static AppBuilder BuildAvaloniaApp()
     {
         _ = IconProvider.Current
-            .Register<FontAwesome7IconProvider>()
+                        .Register<FontAwesome7IconProvider>()
             ;
 
         return AppBuilder.Configure<App>()
-                .UsePlatformDetect()
-                .WithInterFont()
-                .LogToTrace();
+                         .UsePlatformDetect()
+                         .WithInterFont()
+                         .LogToTrace();
     }
+
 
     private static partial class WinMsgBox
     {

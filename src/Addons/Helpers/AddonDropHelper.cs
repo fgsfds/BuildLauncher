@@ -10,13 +10,14 @@ namespace Addons.Helpers;
 public interface IAddonDropHelper
 {
     /// <summary>
-    /// Attempts to add multiple addons to the specified game.
+    ///     Attempts to add multiple addons to the specified game.
     /// </summary>
     /// <param name="filePaths">A list of file paths representing the addons to be added.</param>
     /// <param name="game">The target game to which the addons should be added.</param>
     /// <returns>A list of file paths for addons that failed to install or null if all installations were successful.</returns>
     Task<List<string>?> AddAddonsAsync(List<string> filePaths, BaseGame game);
 }
+
 
 public sealed class AddonDropHelper : IAddonDropHelper
 {
@@ -26,7 +27,7 @@ public sealed class AddonDropHelper : IAddonDropHelper
     public AddonDropHelper(
         LocalFilesProvider addonScanner,
         ILogger<AddonDropHelper> logger
-    )
+        )
     {
         _addonScanner = addonScanner;
         _logger = logger;
@@ -60,7 +61,7 @@ public sealed class AddonDropHelper : IAddonDropHelper
 
 
     /// <summary>
-    /// Attempts to add an addon to the specified game.
+    ///     Attempts to add an addon to the specified game.
     /// </summary>
     /// <param name="pathToFile">The path to the addon file.</param>
     /// <param name="game">The target game to which the addon should be added.</param>
@@ -71,6 +72,7 @@ public sealed class AddonDropHelper : IAddonDropHelper
             !pathToFile.EndsWith(".map", StringComparison.OrdinalIgnoreCase))
         {
             _logger.LogError("File is not .zip or .map.");
+
             return false;
         }
 
@@ -79,12 +81,14 @@ public sealed class AddonDropHelper : IAddonDropHelper
         if (addon is null)
         {
             _logger.LogError("Can't get addon from the file.");
+
             return false;
         }
 
         if (addon.Value.Game != game.GameEnum)
         {
             _logger.LogError($"Addon is for the wrong game: {addon.Value.Game}.");
+
             return false;
         }
 
@@ -105,6 +109,7 @@ public sealed class AddonDropHelper : IAddonDropHelper
         else
         {
             _logger.LogError($"Unknown addon type: {addon.Value.AddonType}.");
+
             return false;
         }
 
@@ -123,7 +128,7 @@ public sealed class AddonDropHelper : IAddonDropHelper
     }
 
     /// <summary>
-    /// Get game enum and addon type enum from a file.
+    ///     Get game enum and addon type enum from a file.
     /// </summary>
     /// <param name="pathToFile">Path to file.</param>
     /// <param name="gameEnum">The game to associate with standalone .map files.</param>

@@ -13,6 +13,11 @@ public sealed class ConfigProvider : IConfigProvider
 {
     private readonly IDbContextFactory<DatabaseContext> _dbContextFactory;
 
+    public ConfigProvider(IDbContextFactory<DatabaseContext> dbContextFactory)
+    {
+        _dbContextFactory = dbContextFactory;
+    }
+
     public event IConfigProvider.ParameterChanged? ParameterChangedEvent;
 
 
@@ -22,6 +27,7 @@ public sealed class ConfigProvider : IConfigProvider
         get
         {
             using var dbContext = _dbContextFactory.CreateDbContext();
+
             return Enum.TryParse<ThemeEnum>(dbContext.Settings.Find(nameof(Theme))?.Value, out var result) ? result : ThemeEnum.System;
         }
 
@@ -51,6 +57,7 @@ public sealed class ConfigProvider : IConfigProvider
         get
         {
             using var dbContext = _dbContextFactory.CreateDbContext();
+
             return dbContext.Settings.Find(nameof(ApiPassword))?.Value ?? string.Empty;
         }
 
@@ -174,6 +181,7 @@ public sealed class ConfigProvider : IConfigProvider
             if (value is null)
             {
                 SetSettingsValue(string.Empty);
+
                 return;
             }
 
@@ -201,6 +209,7 @@ public sealed class ConfigProvider : IConfigProvider
             if (value is null)
             {
                 SetSettingsValue(string.Empty);
+
                 return;
             }
 
@@ -214,6 +223,7 @@ public sealed class ConfigProvider : IConfigProvider
         get
         {
             using var dbContext = _dbContextFactory.CreateDbContext();
+
             return dbContext.Rating.ToDictionary(x => x.AddonId, x => x.Rating);
         }
     }
@@ -223,6 +233,7 @@ public sealed class ConfigProvider : IConfigProvider
         get
         {
             using var dbContext = _dbContextFactory.CreateDbContext();
+
             return dbContext.Playtimes.ToDictionary(x => x.AddonId, x => x.Playtime);
         }
     }
@@ -232,6 +243,7 @@ public sealed class ConfigProvider : IConfigProvider
         get
         {
             using var dbContext = _dbContextFactory.CreateDbContext();
+
             return [.. dbContext.DisabledAddons.Select(x => x.AddonId)];
         }
     }
@@ -241,6 +253,7 @@ public sealed class ConfigProvider : IConfigProvider
         get
         {
             using var dbContext = _dbContextFactory.CreateDbContext();
+
             return [.. dbContext.Favorites.Select(x => new AddonId(x.AddonId, x.Version.Equals(string.Empty) ? null : x.Version))];
         }
     }
@@ -258,11 +271,6 @@ public sealed class ConfigProvider : IConfigProvider
         return [.. existing.EnabledOptions.Split(';')];
     }
 
-    public ConfigProvider(IDbContextFactory<DatabaseContext> dbContextFactory)
-    {
-        _dbContextFactory = dbContextFactory;
-    }
-
 
     public void AddScore(string addonId, byte rating)
     {
@@ -272,7 +280,11 @@ public sealed class ConfigProvider : IConfigProvider
 
         if (existing is null)
         {
-            _ = dbContext.Rating.Add(new() { AddonId = addonId, Rating = rating });
+            _ = dbContext.Rating.Add(new()
+            {
+                AddonId = addonId,
+                Rating = rating
+            });
         }
         else
         {
@@ -291,7 +303,11 @@ public sealed class ConfigProvider : IConfigProvider
 
         if (existing is null)
         {
-            _ = dbContext.Playtimes.Add(new() { AddonId = addonId, Playtime = playTime });
+            _ = dbContext.Playtimes.Add(new()
+            {
+                AddonId = addonId,
+                Playtime = playTime
+            });
         }
         else
         {
@@ -316,7 +332,10 @@ public sealed class ConfigProvider : IConfigProvider
             }
             else
             {
-                _ = dbContext.DisabledAddons.Add(new() { AddonId = addonId.Id });
+                _ = dbContext.DisabledAddons.Add(new()
+                {
+                    AddonId = addonId.Id
+                });
             }
         }
         else
@@ -341,7 +360,11 @@ public sealed class ConfigProvider : IConfigProvider
 
         if (isEnabled)
         {
-            _ = dbContext.Favorites.Add(new() { AddonId = addonId.Id, Version = addonId.Version ?? string.Empty });
+            _ = dbContext.Favorites.Add(new()
+            {
+                AddonId = addonId.Id,
+                Version = addonId.Version ?? string.Empty
+            });
         }
         else
         {
@@ -372,7 +395,11 @@ public sealed class ConfigProvider : IConfigProvider
             }
             else
             {
-                _ = dbContext.Options.Add(new() { AddonId = addonId, EnabledOptions = option });
+                _ = dbContext.Options.Add(new()
+                {
+                    AddonId = addonId,
+                    EnabledOptions = option
+                });
             }
         }
         else
@@ -392,18 +419,21 @@ public sealed class ConfigProvider : IConfigProvider
     private string? GetGamePath(string propertyName)
     {
         using var dbContext = _dbContextFactory.CreateDbContext();
+
         return dbContext.GamePaths.Find(propertyName)?.Path?.TrimEnd(Path.DirectorySeparatorChar);
     }
 
     private bool GetBoolValue(string propertyName)
     {
         using var dbContext = _dbContextFactory.CreateDbContext();
+
         return bool.TryParse(dbContext.Settings.Find(propertyName)?.Value, out var result) && result;
     }
 
     private string GetStringValue(string propertyName)
     {
         using var dbContext = _dbContextFactory.CreateDbContext();
+
         return dbContext.Settings.Find(propertyName)?.Value ?? string.Empty;
     }
 
@@ -415,7 +445,11 @@ public sealed class ConfigProvider : IConfigProvider
 
         if (setting is null)
         {
-            _ = dbContext.Settings.Add(new() { Name = caller, Value = value });
+            _ = dbContext.Settings.Add(new()
+            {
+                Name = caller,
+                Value = value
+            });
         }
         else
         {
@@ -441,7 +475,11 @@ public sealed class ConfigProvider : IConfigProvider
 
         if (setting is null)
         {
-            _ = dbContext.GamePaths.Add(new() { Game = caller, Path = value });
+            _ = dbContext.GamePaths.Add(new()
+            {
+                Game = caller,
+                Path = value
+            });
         }
         else
         {
@@ -462,6 +500,7 @@ public sealed class ConfigProvider : IConfigProvider
 
         var data = Encoding.UTF8.GetBytes(plainText);
         var pro = ProtectedData.Protect(data, DataProtectionScope.CurrentUser);
+
         return Convert.ToBase64String(pro);
     }
 
@@ -476,6 +515,7 @@ public sealed class ConfigProvider : IConfigProvider
         {
             var bytes = Convert.FromBase64String(cipherText);
             var data = ProtectedData.Unprotect(bytes, DataProtectionScope.CurrentUser);
+
             return Encoding.UTF8.GetString(data);
         }
         catch

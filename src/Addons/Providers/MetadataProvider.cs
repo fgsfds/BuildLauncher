@@ -12,26 +12,18 @@ using SharpCompress.Common;
 namespace Addons.Providers;
 
 /// <summary>
-/// Checks for and applies remote metadata updates to locally installed addons.
+///     Checks for and applies remote metadata updates to locally installed addons.
 /// </summary>
 public sealed class MetadataProvider
 {
-    /// <summary>Raised when metadata has been loaded from the API and the lookup dictionary is ready.</summary>
-    public event EventHandler? MetadataInitializedEvent;
-
-    /// <summary>Raised when a metadata update has been applied to an addon file.</summary>
-    public event EventHandler<ParsedAddonFile>? MetadataUpdatedEvent;
+    private readonly IApiInterface _apiInterface;
+    private readonly SemaphoreSlim _initSemaphore = new(1, 1);
 
     private readonly LocalFilesProvider _localFilesProvider;
-    private readonly IApiInterface _apiInterface;
     private readonly ILogger<MetadataProvider> _logger;
-    private readonly SemaphoreSlim _initSemaphore = new(1, 1);
 
     private readonly Dictionary<AddonFilePathWrapper, ParsedAddonFile> _updatesCache = [];
     private Dictionary<AddonId, AddonManifestJsonModel>? _metaDict;
-
-    [MemberNotNullWhen(true, nameof(_metaDict))]
-    public bool IsInitialized => _metaDict is not null;
 
     public MetadataProvider(
         LocalFilesProvider localFilesProvider,
@@ -44,8 +36,16 @@ public sealed class MetadataProvider
         _logger = logger;
     }
 
+    [MemberNotNullWhen(true, nameof(_metaDict))]
+    public bool IsInitialized => _metaDict is not null;
+    /// <summary>Raised when metadata has been loaded from the API and the lookup dictionary is ready.</summary>
+    public event EventHandler? MetadataInitializedEvent;
+
+    /// <summary>Raised when a metadata update has been applied to an addon file.</summary>
+    public event EventHandler<ParsedAddonFile>? MetadataUpdatedEvent;
+
     /// <summary>
-    /// Load metadata from the API and build an internal lookup dictionary.
+    ///     Load metadata from the API and build an internal lookup dictionary.
     /// </summary>
     public async Task<bool> InitializeAsync()
     {
@@ -79,6 +79,7 @@ public sealed class MetadataProvider
         catch (Exception ex)
         {
             _logger.LogCritical(ex, "Failed to initialize metadata cache");
+
             return false;
         }
         finally
@@ -88,7 +89,7 @@ public sealed class MetadataProvider
     }
 
     /// <summary>
-    /// Return true if a newer version of the manifest is available for <paramref name="addonId"/>.
+    ///     Return true if a newer version of the manifest is available for <paramref name="addonId" />.
     /// </summary>
     public bool IsMetadataUpdateAvailable(AddonId addonId, AddonFilePathWrapper fileInfo)
     {
@@ -115,7 +116,11 @@ public sealed class MetadataProvider
             return false;
         }
 
-        var newManifest = originalManifest with { Manifest = actualVersion };
+        var newManifest = originalManifest with
+        {
+            Manifest = actualVersion
+        };
+
         if (!_updatesCache.TryAdd(newManifest.FileInfo, newManifest))
         {
             _updatesCache[newManifest.FileInfo] = newManifest;
@@ -125,7 +130,7 @@ public sealed class MetadataProvider
     }
 
     /// <summary>
-    /// Apply a pending manifest update by rewriting the addon file on disk.
+    ///     Apply a pending manifest update by rewriting the addon file on disk.
     /// </summary>
     public async Task<Result<bool>> UpdateMetadataAsync(AddonFilePathWrapper fileInfo)
     {

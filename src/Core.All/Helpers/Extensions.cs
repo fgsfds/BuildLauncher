@@ -5,7 +5,7 @@ namespace Core.All.Helpers;
 public static class Extensions
 {
     /// <summary>
-    /// Convert long to readable size string
+    ///     Convert long to readable size string
     /// </summary>
     /// <param name="size">File size</param>
     public static string ToSizeString(this long size)
@@ -27,7 +27,7 @@ public static class Extensions
     }
 
     /// <summary>
-    /// Convert timespan to readable string
+    ///     Convert timespan to readable string
     /// </summary>
     /// <param name="time">Timespan</param>
     public static string ToTimeString(this TimeSpan time)
@@ -76,7 +76,7 @@ public static class Extensions
     }
 
     /// <summary>
-    /// Add new element or replace value of and existing element
+    ///     Add new element or replace value of and existing element
     /// </summary>
     /// <param name="dict">Dictionary</param>
     /// <param name="key">Key</param>
@@ -96,12 +96,16 @@ public static class Extensions
     public static void AddRange<TKey, TValue>(this Dictionary<TKey, TValue> target, IDictionary<TKey, TValue> source)
     {
         foreach (var kv in source)
+        {
             target[kv.Key] = kv.Value; // Overwrites existing keys
+        }
     }
 
     public static void AddRange<TKey, TValue>(this Dictionary<TKey, TValue> target, IEnumerable<KeyValuePair<TKey, TValue>> source)
     {
         foreach (var kv in source)
+        {
             target[kv.Key] = kv.Value; // Overwrites existing keys
+        }
     }
 }

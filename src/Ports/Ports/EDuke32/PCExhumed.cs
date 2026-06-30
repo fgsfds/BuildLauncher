@@ -6,33 +6,33 @@ using Games.Games;
 namespace Ports.Ports.EDuke32;
 
 /// <summary>
-/// PCExhumed port
+///     PCExhumed port
 /// </summary>
 public sealed class PCExhumed : EDuke32
 {
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override PortEnum PortEnum => PortEnum.PCExhumed;
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string WinExe => "pcexhumed.exe";
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string LinExe => throw new NotSupportedException();
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override string Name => "PCExhumed";
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override List<GameEnum> SupportedGames => [GameEnum.Slave];
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override List<FeatureEnum> SupportedFeatures => [FeatureEnum.TileFromTexture];
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string ConfigFile => "pcexhumed.cfg";
 
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override void BeforeStart(BaseGame game, BaseAddon campaign)
     {
         MoveSaveFilesFromStorage(game, campaign);
@@ -40,7 +40,7 @@ public sealed class PCExhumed : EDuke32
     }
 
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override void GetStartCampaignArgs(StringBuilder sb, BaseGame game, BaseAddon addon)
     {
         //don't search for steam/gog installs

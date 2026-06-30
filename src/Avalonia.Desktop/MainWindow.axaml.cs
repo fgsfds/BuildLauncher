@@ -10,8 +10,8 @@ namespace Avalonia.Desktop;
 
 public sealed partial class MainWindow : Window, IDisposable
 {
-    private readonly InstalledGamesProvider _installedGamesProvider;
     private readonly IConfigProvider _config;
+    private readonly InstalledGamesProvider _installedGamesProvider;
     private readonly Bitmap? _overlayBitmap;
 
     public MainWindow()
@@ -38,7 +38,7 @@ public sealed partial class MainWindow : Window, IDisposable
         InitializeComponent();
 
         var uri = new Uri("avares://BuildLauncher/Assets/overlay.png");
-        using Stream? overlayStream = AssetLoader.Open(uri);
+        using var overlayStream = AssetLoader.Open(uri);
         _overlayBitmap = new Bitmap(overlayStream);
         Resources["HighlightOverlayBitmap"] = _overlayBitmap;
     }

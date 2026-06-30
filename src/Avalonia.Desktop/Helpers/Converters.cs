@@ -9,7 +9,7 @@ using Core.All.Helpers;
 namespace Avalonia.Desktop.Helpers;
 
 /// <summary>
-/// Converts Stream to Bitmap
+///     Converts Stream to Bitmap
 /// </summary>
 public sealed class CachedHashToBitmapConverter : IValueConverter
 {
@@ -35,7 +35,6 @@ public sealed class CachedHashToBitmapConverter : IValueConverter
         var bitmap = _bitmapsCache.GetFromCache(valueStr);
 
         return bitmap;
-
     }
 
     public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
@@ -43,6 +42,7 @@ public sealed class CachedHashToBitmapConverter : IValueConverter
         return new BindingNotification(new NotImplementedException($"ConvertBack method for {nameof(CachedHashToBitmapConverter)} is not implemented."));
     }
 }
+
 
 public sealed class GameStringToEnumConverter : IValueConverter
 {
@@ -82,8 +82,9 @@ public sealed class GameStringToEnumConverter : IValueConverter
     }
 }
 
+
 /// <summary>
-/// Converts a string by replacing spaces with newline characters.
+///     Converts a string by replacing spaces with newline characters.
 /// </summary>
 public sealed class StringToWrappedConverter : IValueConverter
 {
@@ -103,8 +104,9 @@ public sealed class StringToWrappedConverter : IValueConverter
     }
 }
 
+
 /// <summary>
-/// Converts option parameters to a semicolon-separated list.
+///     Converts option parameters to a semicolon-separated list.
 /// </summary>
 public sealed class OptionParamsToStringConverter : IValueConverter
 {

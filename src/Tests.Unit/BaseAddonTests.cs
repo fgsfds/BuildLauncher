@@ -38,7 +38,7 @@ public sealed class BaseAddonTests
             Options = null,
             MainCon = null,
             AdditionalCons = null,
-            RTS = null,
+            RTS = null
         };
     }
 
@@ -111,7 +111,15 @@ public sealed class BaseAddonTests
     {
         var addon = CreateAddon(
             type: AddonTypeEnum.TC,
-            dependentAddons: new Dictionary<string, string?> { { "dep-one", null }, { "dep-two", "1.5" } });
+            dependentAddons: new Dictionary<string, string?>
+            {
+                {
+                    "dep-one", null
+                },
+                {
+                    "dep-two", "1.5"
+                }
+            });
 
         var result = addon.ToMarkdownString();
 
@@ -125,7 +133,12 @@ public sealed class BaseAddonTests
     {
         var addon = CreateAddon(
             type: AddonTypeEnum.Official,
-            dependentAddons: new Dictionary<string, string?> { { "some-dep", null } });
+            dependentAddons: new Dictionary<string, string?>
+            {
+                {
+                    "some-dep", null
+                }
+            });
 
         var result = addon.ToMarkdownString();
 
@@ -136,7 +149,15 @@ public sealed class BaseAddonTests
     public void ToMarkdownString_WithIncompatibleAddons_IncludesIncompatibleSection()
     {
         var addon = CreateAddon(
-            incompatibleAddons: new Dictionary<string, string?> { { "bad-mod", null }, { "old-mod", "<=1.0" } });
+            incompatibleAddons: new Dictionary<string, string?>
+            {
+                {
+                    "bad-mod", null
+                },
+                {
+                    "old-mod", "<=1.0"
+                }
+            });
 
         var result = addon.ToMarkdownString();
 
@@ -153,8 +174,18 @@ public sealed class BaseAddonTests
             author: "Creator", releaseDate: new(2023, 12, 1),
             description: "First line\nhttps://example.com\nLast line",
             type: AddonTypeEnum.TC,
-            dependentAddons: new Dictionary<string, string?> { { "required-dep", null } },
-            incompatibleAddons: new Dictionary<string, string?> { { "conflict-mod", null } });
+            dependentAddons: new Dictionary<string, string?>
+            {
+                {
+                    "required-dep", null
+                }
+            },
+            incompatibleAddons: new Dictionary<string, string?>
+            {
+                {
+                    "conflict-mod", null
+                }
+            });
 
         var result = addon.ToMarkdownString();
 

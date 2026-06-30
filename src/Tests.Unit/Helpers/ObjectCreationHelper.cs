@@ -14,9 +14,9 @@ namespace Tests.Unit.Helpers;
 public static class ObjectCreationHelper
 {
     /// <summary>
-    /// Creates an <see cref="InstalledAddonsProvider"/> wired up with a fresh <see cref="LocalFilesProvider"/>,
-    /// <see cref="MetadataProvider"/>, and <see cref="OriginalCampaignsProvider"/> for the given game.
-    /// The caller must dispose the result.
+    ///     Creates an <see cref="InstalledAddonsProvider" /> wired up with a fresh <see cref="LocalFilesProvider" />,
+    ///     <see cref="MetadataProvider" />, and <see cref="OriginalCampaignsProvider" /> for the given game.
+    ///     The caller must dispose the result.
     /// </summary>
     internal static (InstalledAddonsProvider installedAddonsProvider, LocalFilesProvider localFilesProvider) CreateInstalledAddonsProvider(BaseGame game, IConfigProvider config)
     {
@@ -35,7 +35,7 @@ public static class ObjectCreationHelper
 
         var originalCampaignsProvider = new OriginalCampaignsProvider(config);
 
-        InstalledAddonsProvider installedAddonsProvider = new InstalledAddonsProvider(
+        var installedAddonsProvider = new InstalledAddonsProvider(
             game,
             config,
             originalCampaignsProvider,

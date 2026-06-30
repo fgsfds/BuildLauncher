@@ -27,6 +27,7 @@ public sealed partial class ModsControl : UserControl
         if (ModsList.SelectedItem is not BaseAddon addon)
         {
             e.Handled = true;
+
             return;
         }
 

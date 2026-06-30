@@ -1,13 +1,12 @@
-<UserControl xmlns="https://github.com/avaloniaui"
+<UserControl x:Class="Avalonia.Desktop.Pages.GamePage"
+             xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:i="https://github.com/projektanker/icons.avalonia"
-             d:DesignWidth="800"
-             d:DesignHeight="450"
-             xmlns:ctrl="clr-namespace:Avalonia.Desktop.Controls"
              xmlns:vm="clr-namespace:Avalonia.Desktop.ViewModels"
-             x:DataType="vm:GamePageViewModel"
-             x:Class="Avalonia.Desktop.Pages.GamePage">
+             d:DesignHeight="450"
+             d:DesignWidth="800"
+             x:DataType="vm:GamePageViewModel">
 
     <Grid RowDefinitions="*">
 
@@ -18,15 +17,15 @@
                     <StackPanel Orientation="Horizontal">
                         <TextBlock>Campaigns</TextBlock>
 
-                        <i:Icon Value="fa7-circle-exclamation"
-                                Margin="5,0,0,0"
-                                IsVisible="{Binding IsCampaignsAlarmShown}"
+                        <i:Icon Margin="5,0,0,0"
+                                BorderBrush="Black"
                                 Foreground="Crimson"
-                                BorderBrush="Black" />
+                                IsVisible="{Binding IsCampaignsAlarmShown}"
+                                Value="fa7-circle-exclamation" />
                     </StackPanel>
                 </TabItem.Header>
 
-                <UserControl Content="{Binding Campaigns}"/>
+                <UserControl Content="{Binding Campaigns}" />
             </TabItem>
 
             <TabItem Margin="5" IsVisible="{Binding Maps, Converter={x:Static ObjectConverters.IsNotNull}, FallbackValue=False}">
@@ -35,14 +34,14 @@
                     <StackPanel Orientation="Horizontal">
                         <TextBlock>Maps</TextBlock>
 
-                        <i:Icon Value="fa7-circle-exclamation"
-                                Margin="5,0,0,0"
+                        <i:Icon Margin="5,0,0,0"
+                                Foreground="Crimson"
                                 IsVisible="{Binding IsMapsAlarmShown}"
-                                Foreground="Crimson" />
+                                Value="fa7-circle-exclamation" />
                     </StackPanel>
                 </TabItem.Header>
 
-                <UserControl Content="{Binding Maps}"/>
+                <UserControl Content="{Binding Maps}" />
             </TabItem>
 
             <TabItem Margin="5" IsVisible="{Binding Mods, Converter={x:Static ObjectConverters.IsNotNull}, FallbackValue=False}">
@@ -51,30 +50,30 @@
                     <StackPanel Orientation="Horizontal">
                         <TextBlock>Mods</TextBlock>
 
-                        <i:Icon Value="fa7-circle-exclamation"
-                                Margin="5,0,0,0"
+                        <i:Icon Margin="5,0,0,0"
+                                Foreground="Crimson"
                                 IsVisible="{Binding IsModsAlarmShown}"
-                                Foreground="Crimson" />
+                                Value="fa7-circle-exclamation" />
                     </StackPanel>
                 </TabItem.Header>
 
-                <UserControl Content="{Binding Mods}"/>
+                <UserControl Content="{Binding Mods}" />
             </TabItem>
 
             <TabItem Margin="5">
 
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="Downloads"/>
-                        <i:Icon Value="fa7-circle-exclamation"
+                        <TextBlock Text="Downloads" />
+                        <i:Icon Margin="5,0,0,0"
                                 Foreground="Crimson"
-                                ToolTip.Tip="Updates available"
                                 IsVisible="{Binding IsDownloadsAlarmShown}"
-                                Margin="5,0,0,0" />
+                                ToolTip.Tip="Updates available"
+                                Value="fa7-circle-exclamation" />
                     </StackPanel>
                 </TabItem.Header>
 
-                <UserControl x:Name="DownControl" Content="{Binding Downloads}"/>
+                <UserControl x:Name="DownControl" Content="{Binding Downloads}" />
             </TabItem>
 
         </TabControl>

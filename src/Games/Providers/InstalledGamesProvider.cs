@@ -5,41 +5,27 @@ using Games.Games;
 namespace Games.Providers;
 
 /// <summary>
-/// Class that provides singleton instances of game types
+///     Class that provides singleton instances of game types
 /// </summary>
 public class InstalledGamesProvider
 {
     public delegate void GameChanged(GameEnum game);
-    public event GameChanged? GameChangedEvent;
-
-    private readonly IConfigProvider _config;
 
     private readonly BloodGame _blood;
+
+    private readonly IConfigProvider _config;
     private readonly DukeGame _duke3d;
-    private readonly WangGame _wang;
-    private readonly RedneckGame _redneck;
     private readonly FuryGame _fury;
-    private readonly SlaveGame _slave;
     private readonly NamGame _nam;
-    private readonly WW2GIGame _ww2gi;
-    private readonly WitchavenGame _witch;
-    private readonly TekWarGame _tekwar;
+    private readonly RedneckGame _redneck;
+    private readonly SlaveGame _slave;
     private readonly StandaloneGame _standalone;
+    private readonly TekWarGame _tekwar;
+    private readonly WangGame _wang;
+    private readonly WitchavenGame _witch;
+    private readonly WW2GIGame _ww2gi;
 
-    public bool IsBloodInstalled => _blood.IsBaseGameInstalled;
-    public bool IsDukeInstalled => _duke3d.IsBaseGameInstalled || _duke3d.IsWorldTourInstalled || _duke3d.IsDuke64Installed;
-    public bool IsWangInstalled => _wang.IsBaseGameInstalled;
-    public bool IsFuryInstalled => _fury.IsBaseGameInstalled;
-    public bool IsRedneckInstalled => _redneck.IsBaseGameInstalled || _redneck.IsAgainInstalled;
-    public bool IsSlaveInstalled => _slave.IsBaseGameInstalled;
-    public bool IsNamInstalled => _nam.IsBaseGameInstalled;
-    public bool IsWW2GIInstalled => _ww2gi.IsBaseGameInstalled;
-    public bool IsWitchavenInstalled => _witch.IsBaseGameInstalled || _witch.IsWitchaven2Installed;
-    public bool IsTekWarInstalled => _tekwar.IsBaseGameInstalled;
-
-    public InstalledGamesProvider()
-    {
-    }
+    public InstalledGamesProvider() { }
 
     public InstalledGamesProvider(IConfigProvider config)
     {
@@ -105,9 +91,21 @@ public class InstalledGamesProvider
         _config.ParameterChangedEvent += OnParameterChanged;
     }
 
+    public bool IsBloodInstalled => _blood.IsBaseGameInstalled;
+    public bool IsDukeInstalled => _duke3d.IsBaseGameInstalled || _duke3d.IsWorldTourInstalled || _duke3d.IsDuke64Installed;
+    public bool IsWangInstalled => _wang.IsBaseGameInstalled;
+    public bool IsFuryInstalled => _fury.IsBaseGameInstalled;
+    public bool IsRedneckInstalled => _redneck.IsBaseGameInstalled || _redneck.IsAgainInstalled;
+    public bool IsSlaveInstalled => _slave.IsBaseGameInstalled;
+    public bool IsNamInstalled => _nam.IsBaseGameInstalled;
+    public bool IsWW2GIInstalled => _ww2gi.IsBaseGameInstalled;
+    public bool IsWitchavenInstalled => _witch.IsBaseGameInstalled || _witch.IsWitchaven2Installed;
+    public bool IsTekWarInstalled => _tekwar.IsBaseGameInstalled;
+    public event GameChanged? GameChangedEvent;
+
 
     /// <summary>
-    /// Get game by enum
+    ///     Get game by enum
     /// </summary>
     /// <param name="gameEnum">Game enum</param>
     public BaseGame GetGame(GameEnum gameEnum)
@@ -132,7 +130,7 @@ public class InstalledGamesProvider
     }
 
     /// <summary>
-    /// Gets a list of all game instances.
+    ///     Gets a list of all game instances.
     /// </summary>
     public virtual IReadOnlyList<BaseGame> GetGames()
     {
@@ -148,13 +146,13 @@ public class InstalledGamesProvider
             _ww2gi,
             _standalone,
             _tekwar,
-            _witch,
+            _witch
         ];
     }
 
 
     /// <summary>
-    /// Update game instance when path to the game changes in the config
+    ///     Update game instance when path to the game changes in the config
     /// </summary>
     /// <param name="parameterName">Config parameter</param>
     private void OnParameterChanged(string? parameterName)

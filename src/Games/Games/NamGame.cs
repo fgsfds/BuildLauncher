@@ -5,18 +5,18 @@ namespace Games.Games;
 
 public sealed class NamGame : BaseGame
 {
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override GameEnum GameEnum => GameEnum.NAM;
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override string FullName => "NAM";
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override string ShortName => "NAM";
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override List<string> RequiredFiles => ["NAM.GRP"];
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override Enum Skills => new NamSkillsEnum();
 }

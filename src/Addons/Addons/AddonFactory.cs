@@ -10,16 +10,16 @@ using Games.Games;
 namespace Addons.Addons;
 
 /// <summary>
-/// Builds <see cref="BaseAddon"/> objects from parsed addon files and manifests.
+///     Builds <see cref="BaseAddon" /> objects from parsed addon files and manifests.
 /// </summary>
 internal sealed class AddonFactory
 {
-    private readonly GameEnum _gameEnum;
     private readonly IConfigProvider _config;
+    private readonly GameEnum _gameEnum;
     private readonly MetadataProvider _metadataProvider;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="AddonFactory"/> class.
+    ///     Initializes a new instance of the <see cref="AddonFactory" /> class.
     /// </summary>
     /// <param name="game">The game to scope addon construction to.</param>
     /// <param name="config">Configuration provider.</param>
@@ -32,11 +32,11 @@ internal sealed class AddonFactory
     }
 
     /// <summary>
-    /// Convert a parsed addon file with a manifest into <see cref="BaseAddon"/>.
+    ///     Convert a parsed addon file with a manifest into <see cref="BaseAddon" />.
     /// </summary>
     /// <param name="parsedAddonFile">Parsed addon file with a non-null manifest.</param>
-    /// <returns>Addon, or <see langword="null"/> if the file type is not supported.</returns>
-    /// <exception cref="InvalidOperationException"><paramref name="parsedAddonFile"/> has a null manifest.</exception>
+    /// <returns>Addon, or <see langword="null" /> if the file type is not supported.</returns>
+    /// <exception cref="InvalidOperationException"><paramref name="parsedAddonFile" /> has a null manifest.</exception>
     /// <exception cref="ArgumentException">An autoload mod manifest contains a MainDef value.</exception>
     internal BaseAddon? GetAddonFromFile(ParsedAddonFile parsedAddonFile)
     {
@@ -62,6 +62,7 @@ internal sealed class AddonFactory
         }
 
         var carcassValue = carcass.Value;
+
         if (carcassValue.Type is AddonTypeEnum.Mod)
         {
             var isEnabled = !_config.DisabledAutoloadMods.Contains(carcassValue.Id);
@@ -72,6 +73,7 @@ internal sealed class AddonFactory
             }
 
             AddonId id = new(carcassValue.Id, carcassValue.Version);
+
             addon = new AutoloadMod
             {
                 AddonId = id,
@@ -95,7 +97,7 @@ internal sealed class AddonFactory
                 Executables = null,
                 Options = null,
                 IsFavorite = _config.FavoriteAddons.Contains(id),
-                IsMetadataUpdateAvailable = _metadataProvider.IsMetadataUpdateAvailable(id, parsedAddonFile.FileInfo),
+                IsMetadataUpdateAvailable = _metadataProvider.IsMetadataUpdateAvailable(id, parsedAddonFile.FileInfo)
             };
         }
         else
@@ -107,7 +109,7 @@ internal sealed class AddonFactory
     }
 
     /// <summary>
-    /// Create a <see cref="LooseMap"/> from a parsed .map file, looking up a matching .ini in the same folder.
+    ///     Create a <see cref="LooseMap" /> from a parsed .map file, looking up a matching .ini in the same folder.
     /// </summary>
     /// <param name="parsedAddonFile">Parsed addon file for a loose map.</param>
     public BaseAddon? GetLooseMapFromFile(ParsedAddonFile parsedAddonFile)
@@ -129,7 +131,10 @@ internal sealed class AddonFactory
             FileInfo = parsedAddonFile.FileInfo,
             Title = parsedAddonFile.FileInfo.FileName,
             SupportedGame = new(_gameEnum, null, null),
-            StartMap = new MapFileJsonModel { File = parsedAddonFile.FileInfo.FileName },
+            StartMap = new MapFileJsonModel
+            {
+                File = parsedAddonFile.FileInfo.FileName
+            },
             BloodIni = actualIni,
             GridImageHash = null,
             Description = null,
@@ -144,7 +149,7 @@ internal sealed class AddonFactory
             Executables = null,
             Options = null,
             IsFavorite = _config.FavoriteAddons.Contains(id),
-            IsMetadataUpdateAvailable = _metadataProvider.IsMetadataUpdateAvailable(id, parsedAddonFile.FileInfo),
+            IsMetadataUpdateAvailable = _metadataProvider.IsMetadataUpdateAvailable(id, parsedAddonFile.FileInfo)
         };
     }
 
@@ -158,10 +163,10 @@ internal sealed class AddonFactory
         return _gameEnum switch
         {
             GameEnum.Duke3D
-                or GameEnum.Fury
-                or GameEnum.Redneck
-                or GameEnum.NAM
-                or GameEnum.WW2GI =>
+             or GameEnum.Fury
+             or GameEnum.Redneck
+             or GameEnum.NAM
+             or GameEnum.WW2GI =>
                 new DukeCampaign
                 {
                     AddonId = id,
@@ -186,7 +191,7 @@ internal sealed class AddonFactory
                     Options = carcass.Options,
                     SupportedGame = game,
                     IsFavorite = isFavorite,
-                    IsMetadataUpdateAvailable = isUpdate,
+                    IsMetadataUpdateAvailable = isUpdate
                 },
             GameEnum.Wang or GameEnum.Slave =>
                 new GenericCampaign
@@ -210,7 +215,7 @@ internal sealed class AddonFactory
                     Options = carcass.Options,
                     SupportedGame = game,
                     IsFavorite = isFavorite,
-                    IsMetadataUpdateAvailable = isUpdate,
+                    IsMetadataUpdateAvailable = isUpdate
                 },
             GameEnum.Blood =>
                 new BloodCampaign
@@ -237,7 +242,7 @@ internal sealed class AddonFactory
                     Options = carcass.Options,
                     SupportedGame = game,
                     IsFavorite = isFavorite,
-                    IsMetadataUpdateAvailable = isUpdate,
+                    IsMetadataUpdateAvailable = isUpdate
                 },
             GameEnum.Standalone =>
                 new StandaloneGame
@@ -261,9 +266,9 @@ internal sealed class AddonFactory
                     Options = carcass.Options,
                     SupportedGame = game,
                     IsFavorite = isFavorite,
-                    IsMetadataUpdateAvailable = isUpdate,
+                    IsMetadataUpdateAvailable = isUpdate
                 },
-            _ => throw new NotSupportedException(),
+            _ => throw new NotSupportedException()
         };
     }
 

@@ -8,62 +8,62 @@ using Games.Games;
 namespace Ports.Ports.EDuke32;
 
 /// <summary>
-/// VoidSW port
+///     VoidSW port
 /// </summary>
 public sealed class VoidSW : EDuke32
 {
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override PortEnum PortEnum => PortEnum.VoidSW;
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string WinExe => "voidsw.exe";
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string LinExe => throw new NotSupportedException();
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override string Name => "VoidSW";
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override List<GameEnum> SupportedGames => [GameEnum.Wang];
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override string InstallFolderPath => Path.Combine(ClientProperties.PortsFolderPath, "EDuke32");
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override List<FeatureEnum> SupportedFeatures =>
-        [
+    [
         FeatureEnum.Hightile,
         FeatureEnum.Models,
         FeatureEnum.TileFromTexture
-        ];
+    ];
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string ConfigFile => "voidsw.cfg";
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string AddDirectoryParam => "-j";
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string AddFileParam => "-g";
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string MainDefParam => "-h";
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string AddDefParam => "-mh";
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string AddConParam => throw new NotSupportedException();
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string MainConParam => throw new NotSupportedException();
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override bool IsDownloadable => false;
 
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override void BeforeStart(BaseGame game, BaseAddon campaign)
     {
         MoveSaveFilesFromStorage(game, campaign);
@@ -71,7 +71,7 @@ public sealed class VoidSW : EDuke32
     }
 
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override void GetStartCampaignArgs(StringBuilder sb, BaseGame game, BaseAddon addon)
     {
         //don't search for steam/gog installs
@@ -96,7 +96,6 @@ public sealed class VoidSW : EDuke32
         }
 
 
-
         if (game is WangGame wGame)
         {
             GetWangArgs(sb, wGame, addon);
@@ -113,6 +112,7 @@ public sealed class VoidSW : EDuke32
         if (addon is LooseMap)
         {
             GetLooseMapArgs(sb, game, addon);
+
             return;
         }
 
@@ -158,7 +158,7 @@ public sealed class VoidSW : EDuke32
 
 
     /// <summary>
-    /// Add music folders to the search list if music files don't exist in the game directory
+    ///     Add music folders to the search list if music files don't exist in the game directory
     /// </summary>
     private static void AddWangMusicFolder(StringBuilder sb, WangGame game)
     {
@@ -173,13 +173,16 @@ public sealed class VoidSW : EDuke32
         }
 
         var folder = Path.Combine(game.GameInstallFolder, "MUSIC");
+
         if (Directory.Exists(folder))
         {
             _ = sb.Append(@$" -j""{folder}""");
+
             return;
         }
 
         folder = Path.Combine(game.GameInstallFolder, "classic", "MUSIC");
+
         if (Directory.Exists(folder))
         {
             _ = sb.Append(@$" -j""{folder}""");

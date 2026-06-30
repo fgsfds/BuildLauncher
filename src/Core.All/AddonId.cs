@@ -5,9 +5,6 @@ namespace Core.All;
 
 public sealed class AddonId : IEquatable<AddonId>
 {
-    public string Id { get; }
-    public string? Version { get; }
-
     public AddonId(string title, string? version)
     {
         Id = title;
@@ -20,11 +17,8 @@ public sealed class AddonId : IEquatable<AddonId>
         Version = null;
     }
 
-    /// <inheritdoc />
-    public override bool Equals([NotNullWhen(true)] object? obj)
-    {
-        return obj is AddonId other && Equals(other);
-    }
+    public string Id { get; }
+    public string? Version { get; }
 
     /// <inheritdoc />
     public bool Equals(AddonId? other)
@@ -36,6 +30,12 @@ public sealed class AddonId : IEquatable<AddonId>
 
         return Id.Equals(other.Id, StringComparison.OrdinalIgnoreCase) &&
                VersionComparer.Compare(Version, other.Version, ComparisonOperatorEnum.Equals);
+    }
+
+    /// <inheritdoc />
+    public override bool Equals([NotNullWhen(true)] object? obj)
+    {
+        return obj is AddonId other && Equals(other);
     }
 
     public static bool operator ==(AddonId? left, AddonId? right)

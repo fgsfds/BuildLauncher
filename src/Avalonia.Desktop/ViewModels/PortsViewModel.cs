@@ -3,9 +3,9 @@ using Avalonia.Controls.Notifications;
 using Avalonia.Desktop.Helpers;
 using Avalonia.Desktop.Misc;
 using Avalonia.Platform.Storage;
-using Core.All.Enums;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Core.All.Enums;
 using Microsoft.Extensions.Logging;
 using Ports.Ports;
 using Ports.Providers;
@@ -14,21 +14,21 @@ namespace Avalonia.Desktop.ViewModels;
 
 public sealed partial class PortsViewModel : ObservableObject
 {
-    private readonly ViewModelsFactory _viewModelsFactory;
     private readonly PortsProvider _installedPortsProvider;
-    private readonly SemaphoreSlim _semaphore = new(1);
     private readonly ILogger<PortsViewModel> _logger;
+    private readonly SemaphoreSlim _semaphore = new(1);
+    private readonly ViewModelsFactory _viewModelsFactory;
 
-    private bool _isNewPort;
-
-    public ImmutableList<CustomPort> CustomPorts => _installedPortsProvider.GetCustomPorts();
-
-    public ImmutableList<PortViewModel> PortsList { get; set; } = [];
-
-    public ImmutableList<PortEnum> PortsTypes { get; }
+    [ObservableProperty]
+    private string _errorMessage = string.Empty;
 
     [ObservableProperty]
     private bool _hasUpdates = false;
+
+    [ObservableProperty]
+    private bool _isEditorVisible;
+
+    private bool _isNewPort;
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(EditCustomPortCommand))]
@@ -43,12 +43,6 @@ public sealed partial class PortsViewModel : ObservableObject
 
     [ObservableProperty]
     private PortEnum? _selectedCustomPortType;
-
-    [ObservableProperty]
-    private bool _isEditorVisible;
-
-    [ObservableProperty]
-    private string _errorMessage = string.Empty;
 
     public PortsViewModel(
         ViewModelsFactory viewModelsFactory,
@@ -65,6 +59,14 @@ public sealed partial class PortsViewModel : ObservableObject
 
         Initialize(ports);
     }
+
+    public ImmutableList<CustomPort> CustomPorts => _installedPortsProvider.GetCustomPorts();
+
+    public ImmutableList<PortViewModel> PortsList { get; set; } = [];
+
+    public ImmutableList<PortEnum> PortsTypes { get; }
+    private bool EditCustomPortCanExecute => SelectedCustomPort is not null;
+    private bool DeleteCustomPortCanExecute => SelectedCustomPort is not null;
 
     [RelayCommand]
     private async Task AddCustomPortAsync()
@@ -121,7 +123,6 @@ public sealed partial class PortsViewModel : ObservableObject
             _logger.LogCritical(ex, "=== Error while editing custom port ===");
         }
     }
-    private bool EditCustomPortCanExecute => SelectedCustomPort is not null;
 
 
     [RelayCommand(CanExecute = nameof(DeleteCustomPortCanExecute))]
@@ -145,7 +146,6 @@ public sealed partial class PortsViewModel : ObservableObject
             _logger.LogCritical(ex, "=== Error while deleting custom port ===");
         }
     }
-    private bool DeleteCustomPortCanExecute => SelectedCustomPort is not null;
 
 
     [RelayCommand]
@@ -156,26 +156,35 @@ public sealed partial class PortsViewModel : ObservableObject
         if (string.IsNullOrWhiteSpace(SelectedCustomPortName))
         {
             ErrorMessage = "Name is required";
+
             return;
         }
+
         if (string.IsNullOrWhiteSpace(SelectedCustomPortPath))
         {
             ErrorMessage = "Path to exe is required";
+
             return;
         }
+
         if (SelectedCustomPortType is null)
         {
             ErrorMessage = "Port type is required";
+
             return;
         }
+
         if (CustomPorts.Any(x => x.Name.Equals(SelectedCustomPortName, StringComparison.OrdinalIgnoreCase)) && _isNewPort)
         {
             ErrorMessage = "Port with the same name already exists";
+
             return;
         }
+
         if (!File.Exists(SelectedCustomPortPath))
         {
             ErrorMessage = "Executable doesn't exist";
+
             return;
         }
 
@@ -189,7 +198,6 @@ public sealed partial class PortsViewModel : ObservableObject
                 );
 
             OnPropertyChanged(nameof(CustomPorts));
-
         }
         catch (Exception ex)
         {
@@ -250,7 +258,7 @@ public sealed partial class PortsViewModel : ObservableObject
 
 
     /// <summary>
-    /// Initialize VM
+    ///     Initialize VM
     /// </summary>
     private void Initialize(IEnumerable<BasePort> ports)
     {

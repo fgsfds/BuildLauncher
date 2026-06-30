@@ -93,6 +93,7 @@ public sealed class DownloadableAddonJsonModel
             {
                 return "Update available";
             }
+
             if (IsInstalled)
             {
                 return "Installed";
@@ -164,11 +165,12 @@ public sealed class DownloadableAddonJsonModel
     WriteIndented = true,
     DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
     RespectNullableAnnotations = true,
-    Converters = [
+    Converters =
+    [
         //typeof(JsonStringEnumConverter<GameEnum>),
         typeof(GameEnumJsonConverter),
         typeof(JsonStringEnumConverter<AddonTypeEnum>)
-        ]
-)]
+    ]
+    )]
 [JsonSerializable(typeof(Dictionary<GameEnum, List<DownloadableAddonJsonModel>>))]
 public sealed partial class DownloadableAddonJsonModelDictionaryContext : JsonSerializerContext;

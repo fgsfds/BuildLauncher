@@ -11,10 +11,6 @@ public sealed class DataGridSelectedItemsProperty
             "SelectedItems",
             defaultBindingMode: BindingMode.TwoWay);
 
-    public static IList? GetSelectedItems(AvaloniaObject obj) => obj.GetValue(SelectedItemsProperty);
-
-    public static void SetSelectedItems(AvaloniaObject obj, IList? value) => obj.SetValue(SelectedItemsProperty, value);
-
     static DataGridSelectedItemsProperty()
     {
         var process = SelectedItemsProperty.Changed.AddClassHandler<DataGrid>((grid, e) =>
@@ -34,6 +30,10 @@ public sealed class DataGridSelectedItemsProperty
             }
         });
     }
+
+    public static IList? GetSelectedItems(AvaloniaObject obj) => obj.GetValue(SelectedItemsProperty);
+
+    public static void SetSelectedItems(AvaloniaObject obj, IList? value) => obj.SetValue(SelectedItemsProperty, value);
 
     private static void OnSelectionChanged(object? sender, SelectionChangedEventArgs e)
     {

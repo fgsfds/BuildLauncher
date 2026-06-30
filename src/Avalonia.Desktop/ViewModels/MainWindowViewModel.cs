@@ -4,7 +4,6 @@ using Core.All.Enums;
 using Core.Client;
 using Core.Client.Helpers;
 using Core.Client.Interfaces;
-using Core.Client.Providers;
 using Core.Client.Tools;
 using Games.Providers;
 using Microsoft.Extensions.Logging;
@@ -155,6 +154,24 @@ public sealed class MainWindowViewModel : ObservableObject
     }
 
 
+    /// <summary>
+    ///     Update VM with path to the game changes in the config
+    /// </summary>
+    private void OnGameChanged(GameEnum _)
+    {
+        OnPropertyChanged(nameof(IsBloodTabEnabled));
+        OnPropertyChanged(nameof(IsDukeTabEnabled));
+        OnPropertyChanged(nameof(IsWangTabEnabled));
+        OnPropertyChanged(nameof(IsFuryTabEnabled));
+        OnPropertyChanged(nameof(IsRedneckTabEnabled));
+        OnPropertyChanged(nameof(IsSlaveTabEnabled));
+        OnPropertyChanged(nameof(IsNamTabEnabled));
+        OnPropertyChanged(nameof(IsWW2GITabEnabled));
+        OnPropertyChanged(nameof(IsWitchavenTabEnabled));
+        OnPropertyChanged(nameof(IsTekWarTabEnabled));
+    }
+
+
     #region Binding Properties
 
     public DevViewModel DevPageViewModel { get; init; }
@@ -190,79 +207,60 @@ public sealed class MainWindowViewModel : ObservableObject
     public GamePageViewModel StandaloneViewModel { get; init; }
 
 
-
     /// <summary>
-    /// Is Blood tab enabled
+    ///     Is Blood tab enabled
     /// </summary>
     public bool IsBloodTabEnabled => _gamesProvider.IsBloodInstalled;
 
     /// <summary>
-    /// Is Duke Nukem 3D tab enabled
+    ///     Is Duke Nukem 3D tab enabled
     /// </summary>
     public bool IsDukeTabEnabled => _gamesProvider.IsDukeInstalled;
 
     /// <summary>
-    /// Is Shadow Warrior tab enabled
+    ///     Is Shadow Warrior tab enabled
     /// </summary>
     public bool IsWangTabEnabled => _gamesProvider.IsWangInstalled;
 
     /// <summary>
-    /// Is Ion Fury tab enabled
+    ///     Is Ion Fury tab enabled
     /// </summary>
     public bool IsFuryTabEnabled => _gamesProvider.IsFuryInstalled;
 
     /// <summary>
-    /// Is Redneck Rampage tab enabled
+    ///     Is Redneck Rampage tab enabled
     /// </summary>
     public bool IsRedneckTabEnabled => _gamesProvider.IsRedneckInstalled;
 
     /// <summary>
-    /// Is Powerslave tab enabled
+    ///     Is Powerslave tab enabled
     /// </summary>
     public bool IsSlaveTabEnabled => _gamesProvider.IsSlaveInstalled;
 
     /// <summary>
-    /// Is NAM tab enabled
+    ///     Is NAM tab enabled
     /// </summary>
     public bool IsNamTabEnabled => _gamesProvider.IsNamInstalled;
 
     /// <summary>
-    /// Is WW2I tab enabled
+    ///     Is WW2I tab enabled
     /// </summary>
     public bool IsWW2GITabEnabled => _gamesProvider.IsWW2GIInstalled;
 
     /// <summary>
-    /// Is WW2I tab enabled
+    ///     Is WW2I tab enabled
     /// </summary>
     public bool IsWitchavenTabEnabled => _gamesProvider.IsWitchavenInstalled;
 
     /// <summary>
-    /// Is WW2I tab enabled
+    ///     Is WW2I tab enabled
     /// </summary>
     public bool IsTekWarTabEnabled => _gamesProvider.IsTekWarInstalled;
 
     /// <summary>
-    /// Is app running in the developer mode
+    ///     Is app running in the developer mode
     /// </summary>
     public bool IsDeveloperMode => ClientProperties.IsDeveloperMode;
 
     #endregion
-
-
-    /// <summary>
-    /// Update VM with path to the game changes in the config
-    /// </summary>
-    private void OnGameChanged(GameEnum _)
-    {
-        OnPropertyChanged(nameof(IsBloodTabEnabled));
-        OnPropertyChanged(nameof(IsDukeTabEnabled));
-        OnPropertyChanged(nameof(IsWangTabEnabled));
-        OnPropertyChanged(nameof(IsFuryTabEnabled));
-        OnPropertyChanged(nameof(IsRedneckTabEnabled));
-        OnPropertyChanged(nameof(IsSlaveTabEnabled));
-        OnPropertyChanged(nameof(IsNamTabEnabled));
-        OnPropertyChanged(nameof(IsWW2GITabEnabled));
-        OnPropertyChanged(nameof(IsWitchavenTabEnabled));
-        OnPropertyChanged(nameof(IsTekWarTabEnabled));
-    }
 }

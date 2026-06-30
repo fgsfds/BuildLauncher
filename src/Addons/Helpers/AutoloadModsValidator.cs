@@ -7,7 +7,7 @@ namespace Addons.Helpers;
 public static class AutoloadModsValidator
 {
     /// <summary>
-    /// Check if autoload mod works with current port and addons
+    ///     Check if autoload mod works with current port and addons
     /// </summary>
     /// <param name="autoloadMod">Autoload mod</param>
     /// <param name="campaign">Campaign</param>
@@ -78,7 +78,7 @@ public static class AutoloadModsValidator
 
 
     /// <summary>
-    /// Check if addon has all required dependencies
+    ///     Check if addon has all required dependencies
     /// </summary>
     private static bool CheckDependencies(
         AutoloadMod autoloadMod,
@@ -99,6 +99,7 @@ public static class AutoloadModsValidator
                 (dependentAddon.Value is null || VersionComparer.Compare(campaign.AddonId.Version, dependentAddon.Value)))
             {
                 passedDependenciesCount++;
+
                 continue;
             }
 
@@ -107,6 +108,7 @@ public static class AutoloadModsValidator
                 (dependentAddon.Value is null || VersionComparer.Compare(dependentAddonVersion, dependentAddon.Value)))
             {
                 passedDependenciesCount++;
+
                 continue;
             }
 
@@ -125,11 +127,10 @@ public static class AutoloadModsValidator
         }
 
         return autoloadMod.DependentAddons.Count == passedDependenciesCount;
-
     }
 
     /// <summary>
-    /// Checks if mod is incompatible with other enabled addons or campaign
+    ///     Checks if mod is incompatible with other enabled addons or campaign
     /// </summary>
     private static bool CheckIncompatibles(
         AutoloadMod autoloadMod,
@@ -144,6 +145,7 @@ public static class AutoloadModsValidator
 
         var campaignIncompatibles = campaign.IncompatibleAddons?.ToDictionary() ?? [];
         campaignIncompatibles.TryAdd(campaign.AddonId.Id, campaign.AddonId.Version);
+
         foreach (var addon in mods.Where(x => x is AutoloadMod { IsEnabled: true }))
         {
             campaignIncompatibles.TryAdd(addon.AddonId.Id, addon.AddonId.Version);

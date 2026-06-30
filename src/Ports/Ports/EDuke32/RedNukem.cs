@@ -10,7 +10,7 @@ using Microsoft.Extensions.Logging;
 namespace Ports.Ports.EDuke32;
 
 /// <summary>
-/// RedNukem port
+///     RedNukem port
 /// </summary>
 public sealed class RedNukem : EDuke32
 {
@@ -23,51 +23,51 @@ public sealed class RedNukem : EDuke32
         _logger = logger;
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override PortEnum PortEnum => PortEnum.RedNukem;
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string WinExe => "rednukem.exe";
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string LinExe => throw new NotSupportedException();
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override string Name => "RedNukem";
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string AddGrpParam => "-g ";
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override List<GameEnum> SupportedGames =>
-        [
+    [
         GameEnum.Duke3D,
         GameEnum.Redneck,
         GameEnum.RidesAgain,
         GameEnum.NAM,
         GameEnum.WW2GI,
         GameEnum.Duke64
-        ];
+    ];
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override List<string> SupportedGamesVersions =>
-        [
+    [
         nameof(DukeVersionEnum.Duke3D_Atomic)
-        ];
+    ];
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override List<FeatureEnum> SupportedFeatures =>
-        [
+    [
         FeatureEnum.Hightile,
         FeatureEnum.Models,
         FeatureEnum.TileFromTexture
-        ];
+    ];
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string ConfigFile => "rednukem.cfg";
 
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override void BeforeStart(BaseGame game, BaseAddon campaign)
     {
         CreateBlankDemo();
@@ -79,7 +79,7 @@ public sealed class RedNukem : EDuke32
     }
 
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override void GetStartCampaignArgs(StringBuilder sb, BaseGame game, BaseAddon addon)
     {
         //don't search for steam/gog installs
@@ -131,7 +131,7 @@ public sealed class RedNukem : EDuke32
         }
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override void GetSkipIntroParameter(StringBuilder sb)
     {
         _ = sb.Append(" -quick");
@@ -139,19 +139,19 @@ public sealed class RedNukem : EDuke32
     }
 
     /// <summary>
-    /// Create or delete blank anm file.
+    ///     Create or delete blank anm file.
     /// </summary>
     /// <param name="isDelete">Delete file.</param>
     private void CreateOrDeleteBlankAnm(bool isDelete)
     {
         ImmutableArray<string> files =
-            [
-                Path.Combine(InstallFolderPath, "LOGO.ANM"),
-                Path.Combine(InstallFolderPath, "XATLOGO.ANM"),
-                Path.Combine(InstallFolderPath, "REDNECK.ANM"),
-                Path.Combine(InstallFolderPath, "RR_INTRO.ANM"),
-                Path.Combine(InstallFolderPath, "REDINT.MVE"),
-            ];
+        [
+            Path.Combine(InstallFolderPath, "LOGO.ANM"),
+            Path.Combine(InstallFolderPath, "XATLOGO.ANM"),
+            Path.Combine(InstallFolderPath, "REDNECK.ANM"),
+            Path.Combine(InstallFolderPath, "RR_INTRO.ANM"),
+            Path.Combine(InstallFolderPath, "REDINT.MVE")
+        ];
 
         foreach (var file in files)
         {
@@ -193,7 +193,7 @@ public sealed class RedNukem : EDuke32
     }
 
     /// <summary>
-    /// Get startup agrs for Redneck Rampage
+    ///     Get startup agrs for Redneck Rampage
     /// </summary>
     /// <param name="sb">StringBuilder</param>
     /// <param name="game">RedneckGame</param>
@@ -221,6 +221,7 @@ public sealed class RedNukem : EDuke32
         if (addon is LooseMap)
         {
             GetLooseMapArgs(sb, game, addon);
+
             return;
         }
 
@@ -266,7 +267,7 @@ public sealed class RedNukem : EDuke32
 
 
     /// <summary>
-    /// Override original art files with route 66's ones or remove overrides
+    ///     Override original art files with route 66's ones or remove overrides
     /// </summary>
     [Obsolete("Remove if RedNukem can ever properly launch R66")]
     private void FixRoute66Files(BaseGame game, BaseAddon campaign)

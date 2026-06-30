@@ -21,11 +21,13 @@ public sealed class OriginalCampaignsProvider
 
 
     /// <summary>
-    /// Retrieves the original campaigns associated with the specified game.
+    ///     Retrieves the original campaigns associated with the specified game.
     /// </summary>
     /// <param name="game">The game for which to retrieve the original campaigns.</param>
-    /// <returns>A dictionary where the keys are <see cref="AddonId"/> values representing the unique identifiers of the
-    /// campaigns,  and the values are <see cref="BaseAddon"/> instances representing the campaign details.</returns>
+    /// <returns>
+    ///     A dictionary where the keys are <see cref="AddonId" /> values representing the unique identifiers of the
+    ///     campaigns,  and the values are <see cref="BaseAddon" /> instances representing the campaign details.
+    /// </returns>
     public Dictionary<AddonId, BaseAddon> GetOriginalCampaigns(BaseGame game)
     {
         return game.GameEnum switch
@@ -331,7 +333,7 @@ public sealed class OriginalCampaignsProvider
     }
 
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     private Dictionary<AddonId, BaseAddon> GetBloodCampaigns(BaseGame game)
     {
         if (game is not BloodGame bGame)
@@ -427,7 +429,7 @@ public sealed class OriginalCampaignsProvider
 
 
     /// <summary>
-    /// Get list of original campaigns
+    ///     Get list of original campaigns
     /// </summary>
     private Dictionary<AddonId, BaseAddon> GetWangCampaigns(BaseGame game)
     {
@@ -453,7 +455,7 @@ public sealed class OriginalCampaignsProvider
                 ReleaseDate = new(1997, 09, 16),
                 Description = """
                     **Shadow Warrior** is a first-person shooter developed by **3D Realms** and released on May 13, 1997 by **GT Interactive**.
-                    
+
                     The premise of Shadow Warrior is that the protagonist, Chinese-Japanese, Lo Wang, worked as a bodyguard for Zilla Enterprises, a conglomerate that had power over every major industry in Japan.
                     However, this led to corruption, and Master Zilla - the president - planned to conquer Japan using creatures from the "dark side".
                     In discovery of this, Lo Wang quit his job as a bodyguard. Master Zilla realized that not having a warrior as powerful as Lo Wang would be dangerous, and sent his creatures to battle Lo Wang.
@@ -477,7 +479,7 @@ public sealed class OriginalCampaignsProvider
     }
 
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     private Dictionary<AddonId, BaseAddon> GetFuryCampaigns(BaseGame game)
     {
         if (game is not FuryGame fGame)
@@ -529,7 +531,7 @@ public sealed class OriginalCampaignsProvider
     }
 
     /// <summary>
-    /// Is Aftershock addon installed
+    ///     Is Aftershock addon installed
     /// </summary>
     private bool IsAftershock(FuryGame fGame)
     {
@@ -551,7 +553,7 @@ public sealed class OriginalCampaignsProvider
     }
 
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     private Dictionary<AddonId, BaseAddon> GetRedneckCampaigns(BaseGame game)
     {
         if (game is not RedneckGame rGame)
@@ -679,7 +681,7 @@ public sealed class OriginalCampaignsProvider
     }
 
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     private Dictionary<AddonId, BaseAddon> GetNamCampaigns(BaseGame game)
     {
         if (game is not NamGame nGame)
@@ -735,7 +737,7 @@ public sealed class OriginalCampaignsProvider
     }
 
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     private Dictionary<AddonId, BaseAddon> GetWw2Campaigns(BaseGame game)
     {
         if (game is not WW2GIGame wGame)
@@ -823,7 +825,7 @@ public sealed class OriginalCampaignsProvider
     }
 
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     private Dictionary<AddonId, BaseAddon> GetTekWarCampaigns(BaseGame game)
     {
         if (game is not TekWarGame tGame)
@@ -848,7 +850,7 @@ public sealed class OriginalCampaignsProvider
                 ReleaseDate = new(1995, 10, 16),
                 Description = """
                     You're an ex-cop who was sentenced to cryo sleep. When you awake you are recruited by the Cosmos Detective Agency as a hitman. Why? Cause there's a dangerous new drug on the streets of New LA: Tek!
-                    
+
                     Take out the seven Tek Lords and their minions in 7 missions, but spare those innocent civilians.
                     """,
                 SupportedGame = new(GameEnum.TekWar),
@@ -873,7 +875,7 @@ public sealed class OriginalCampaignsProvider
     }
 
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     private Dictionary<AddonId, BaseAddon> GetSlaveCampaigns(BaseGame game)
     {
         if (game is not SlaveGame sGame)
@@ -926,7 +928,7 @@ public sealed class OriginalCampaignsProvider
     }
 
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     private Dictionary<AddonId, BaseAddon> GetWitchavenCampaigns(BaseGame game)
     {
         if (game is not WitchavenGame wGame)
@@ -951,9 +953,9 @@ public sealed class OriginalCampaignsProvider
                 ReleaseDate = new(1995, 09, 30),
                 Description = """
                     Descend into a dark and gruesome nightmare!
-                    
+
                     You alone must face the evil within the volcanic pit of the Island of Char, toward the mystical lair of Witchaven. Confront witches that have cast a shadow of evil spells shrouding you in the never-ending darkness. Make use of your magic, might, and mind as you engage in bloody warfare with vile demons and monsters. Use medieval weapons to destroy these creatures of the night and cease the chaos.
-                    
+
                     Dare to enter this 3D Hell... Dare to enter Witchaven!
                     """,
                 SupportedGame = new(GameEnum.Witchaven),
@@ -986,11 +988,11 @@ public sealed class OriginalCampaignsProvider
                 ReleaseDate = new(1996, 05, 6),
                 Description = """
                     The witches have been destroyed in their lair on the Island of Char!
-                    
+
                     Returning to your homeland, you are greeted with newborn hope, pride, and great celebration. After the revelry, you awaken to a dawn filled with an eerie silence that looms in the still air. Your countrymen are gone!
 
                     The great witch, Circa-Argoth has taken them to avenge the death of her sister. You have only yourself and your foolish meddling to blame. But, you are not meant to die... yet!
-                    
+
                     Alone in the land that you have fought so fiercely to protect, you must gather your strength and use your anger to fight for Blood Vengeance.
                     """,
                 SupportedGame = new(GameEnum.Witchaven2),

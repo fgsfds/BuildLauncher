@@ -9,11 +9,6 @@ public sealed class FilesDownloader
     private readonly IHttpClientFactory _httpClientFactory;
     private readonly ILogger<FilesDownloader> _logger;
 
-    /// <summary>
-    /// Operation progress
-    /// </summary>
-    public event EventHandler<float>? ProgressChanged;
-
     public FilesDownloader(
         IHttpClientFactory httpClientFactory,
         ILogger<FilesDownloader> logger
@@ -24,7 +19,12 @@ public sealed class FilesDownloader
     }
 
     /// <summary>
-    /// Download archive
+    ///     Operation progress
+    /// </summary>
+    public event EventHandler<float>? ProgressChanged;
+
+    /// <summary>
+    ///     Download archive
     /// </summary>
     /// <param name="url">Link to file download</param>
     /// <param name="filePath">Absolute path to destination file</param>
@@ -105,12 +105,13 @@ public sealed class FilesDownloader
 
         _logger.LogInformation("Downloading finished, renaming temp file");
         File.Move(tempFile, filePath, true);
+
         return true;
     }
 
 
     /// <summary>
-    /// Continue download after network error
+    ///     Continue download after network error
     /// </summary>
     /// <param name="url">Url to the file</param>
     /// <param name="contentLength">Total content length</param>

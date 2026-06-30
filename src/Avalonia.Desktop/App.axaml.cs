@@ -12,7 +12,6 @@ using Core.All.Enums;
 using Core.Client.Enums;
 using Core.Client.Helpers;
 using Core.Client.Interfaces;
-using Core.Client.Providers;
 using Database.Client;
 using Games;
 using Games.Providers;
@@ -35,9 +34,9 @@ public sealed class App : Application
     {
         AvaloniaXamlLoader.Load(this);
 
-#if DEBUG
+        #if DEBUG
         this.AttachDeveloperTools();
-#endif
+        #endif
 
         _app = this;
     }
@@ -48,7 +47,7 @@ public sealed class App : Application
 
         using ClassicDesktopStyleApplicationLifetime lifetime = new()
         {
-            ShutdownMode = ShutdownMode.OnMainWindowClose,
+            ShutdownMode = ShutdownMode.OnMainWindowClose
         };
 
         _ = builder.SetupWithLifetime(lifetime);
@@ -130,12 +129,12 @@ public sealed class App : Application
     private static void RenameSaveFolder(PortsProvider portsProvider)
     {
         ImmutableArray<string> paths =
-            [
-                portsProvider.GetPort(PortEnum.BuildGDX).PortSavedGamesFolderPath,
-                portsProvider.GetPort(PortEnum.VoidSW).PortSavedGamesFolderPath,
-                portsProvider.GetPort(PortEnum.PCExhumed).PortSavedGamesFolderPath,
-                portsProvider.GetPort(PortEnum.Raze).PortSavedGamesFolderPath
-            ];
+        [
+            portsProvider.GetPort(PortEnum.BuildGDX).PortSavedGamesFolderPath,
+            portsProvider.GetPort(PortEnum.VoidSW).PortSavedGamesFolderPath,
+            portsProvider.GetPort(PortEnum.PCExhumed).PortSavedGamesFolderPath,
+            portsProvider.GetPort(PortEnum.Raze).PortSavedGamesFolderPath
+        ];
 
         foreach (var path in paths)
         {
@@ -158,7 +157,7 @@ public sealed class App : Application
     }
 
     /// <summary>
-    /// Load DI bindings
+    ///     Load DI bindings
     /// </summary>
     private static void LoadBindings()
     {
@@ -200,6 +199,7 @@ public sealed class App : Application
         _ = services.WithChannels();
 
         _services?.Dispose();
+
         _services = services.BuildServiceProvider(new ServiceProviderOptions
         {
             ValidateOnBuild = true,
@@ -208,7 +208,7 @@ public sealed class App : Application
     }
 
     /// <summary>
-    /// Set theme from the config
+    ///     Set theme from the config
     /// </summary>
     private static void SetTheme(ThemeEnum theme)
     {
@@ -224,7 +224,7 @@ public sealed class App : Application
     }
 
     /// <summary>
-    /// Remove database logs leftovers.
+    ///     Remove database logs leftovers.
     /// </summary>
     private static void FixDatabase()
     {
@@ -238,7 +238,7 @@ public sealed class App : Application
         foreach (var file in files)
         {
             if (file.EndsWith(".db-wal", StringComparison.OrdinalIgnoreCase)
-                || file.EndsWith(".db-shm", StringComparison.OrdinalIgnoreCase))
+             || file.EndsWith(".db-shm", StringComparison.OrdinalIgnoreCase))
             {
                 File.Delete(file);
             }

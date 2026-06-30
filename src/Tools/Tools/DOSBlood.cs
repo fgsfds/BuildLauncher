@@ -7,31 +7,36 @@ public sealed class DOSBlood : BaseTool
 {
     private readonly InstalledGamesProvider _gamesProvider;
 
-    /// <inheritdoc/>
+    public DOSBlood(InstalledGamesProvider gamesProvider)
+    {
+        _gamesProvider = gamesProvider;
+    }
+
+    /// <inheritdoc />
     protected override string WinExe => "BLOOD.EXE";
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string LinExe => throw new NotSupportedException();
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override string Name => "DOSBlood";
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override ToolEnum ToolEnum => ToolEnum.DOSBlood;
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override string InstallFolderPath => _gamesProvider.GetGame(GameEnum.Blood).GameInstallFolder ?? string.Empty;
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override bool CanBeInstalled => _gamesProvider.GetGame(GameEnum.Blood).IsBaseGameInstalled;
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override bool CanBeLaunched => false;
 
     public override string InstallText => string.Empty;
 
     /// <summary>
-    /// Currently installed version
+    ///     Currently installed version
     /// </summary>
     public override string? InstalledVersion
     {
@@ -67,11 +72,6 @@ public sealed class DOSBlood : BaseTool
         }
     }
 
-    public DOSBlood(InstalledGamesProvider gamesProvider)
-    {
-        _gamesProvider = gamesProvider;
-    }
-
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override string GetStartToolArgs() => throw new NotSupportedException();
 }

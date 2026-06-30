@@ -6,7 +6,7 @@ using Core.All.Providers;
 namespace Core.Client.Releases;
 
 /// <summary>
-/// Maps each <see cref="AppReleaseEnum"/> to its <see cref="RepositoryEntity"/> describing where and how to fetch releases.
+///     Maps each <see cref="AppReleaseEnum" /> to its <see cref="RepositoryEntity" /> describing where and how to fetch releases.
 /// </summary>
 public sealed class AppRepositoriesProvider : IRepositoriesProvider<AppReleaseEnum>
 {
@@ -19,7 +19,7 @@ public sealed class AppRepositoriesProvider : IRepositoriesProvider<AppReleaseEn
             {
                 RepoUrl = CommonConstants.GitHubReleases,
                 WindowsReleasePredicate = static asset => asset.FileName.EndsWith("win-x64.zip"),
-                LinuxReleasePredicate = static asset => asset.FileName.EndsWith("linux-x64.zip"),
+                LinuxReleasePredicate = static asset => asset.FileName.EndsWith("linux-x64.zip")
             };
         }
 

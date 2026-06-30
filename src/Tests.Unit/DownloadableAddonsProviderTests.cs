@@ -4,9 +4,11 @@ using Addons.Providers;
 using Core.All;
 using Core.All.Enums;
 using Core.All.Serializable.Downloadable;
+using Core.Client.Cache;
 using Core.Client.Helpers;
 using Core.Client.Interfaces;
 using Games.Games;
+using Games.Providers;
 using Microsoft.Extensions.Logging;
 using Moq;
 
@@ -18,6 +20,7 @@ public sealed class DownloadableAddonsProviderTests
     {
         var field = typeof(DownloadableAddonsProvider).GetField("_cache", BindingFlags.NonPublic | BindingFlags.Instance);
         Assert.NotNull(field);
+
         return field;
     }
 
@@ -47,7 +50,7 @@ public sealed class DownloadableAddonsProviderTests
             IsFavorite = false,
             IsMetadataUpdateAvailable = false,
             Executables = null,
-            Options = null,
+            Options = null
         };
     }
 
@@ -76,7 +79,7 @@ public sealed class DownloadableAddonsProviderTests
             IsFavorite = false,
             IsMetadataUpdateAvailable = false,
             Executables = null,
-            Options = null,
+            Options = null
         };
     }
 
@@ -266,7 +269,7 @@ public sealed class DownloadableAddonsProviderTests
             Duke64RomPath = null,
             DukeZHRomPath = null,
             DukeWTInstallPath = null,
-            GameInstallFolder = null,
+            GameInstallFolder = null
         };
 
         Mock<IApiInterface> api = new();
@@ -275,9 +278,9 @@ public sealed class DownloadableAddonsProviderTests
         config.Setup(x => x.FavoriteAddons).Returns([]);
 
         var filesProvider = new LocalFilesProvider(
-            new Mock<Games.Providers.InstalledGamesProvider>().Object,
-            new Mock<Core.Client.Cache.ICacheAdder<Stream>>().Object,
-            new Mock<Core.All.IChannelPublisher<Core.Client.Helpers.DiHelper.LocalFileEvent>>().Object,
+            new Mock<InstalledGamesProvider>().Object,
+            new Mock<ICacheAdder<Stream>>().Object,
+            new Mock<IChannelPublisher<DiHelper.LocalFileEvent>>().Object,
             new Mock<ILogger<LocalFilesProvider>>().Object);
 
         var metadataProvider = new MetadataProvider(
@@ -292,20 +295,20 @@ public sealed class DownloadableAddonsProviderTests
             originalCampaignsProvider,
             metadataProvider,
             filesProvider,
-            new Mock<Core.All.IChannelSubscriber<Core.Client.Helpers.DiHelper.LocalFileEvent>>().Object,
+            new Mock<IChannelSubscriber<DiHelper.LocalFileEvent>>().Object,
             new Mock<ILoggerFactory>().Object);
 
         var logger = new Mock<ILogger<DownloadableAddonsProvider>>().Object;
 
         var provider = new DownloadableAddonsProvider(
             game,
-            null!,  // ArchiveTools - not used in GetDownloadableAddons
-            null!,  // FilesDownloader - not used in GetDownloadableAddons
+            null!, // ArchiveTools - not used in GetDownloadableAddons
+            null!, // FilesDownloader - not used in GetDownloadableAddons
             filesProvider,
             api.Object,
             factory,
             logger
-        );
+            );
 
         return provider;
     }
@@ -325,7 +328,7 @@ public sealed class DownloadableAddonsProviderTests
                     Game = GameEnum.Duke3D,
                     FileSize = 1000,
                     DownloadUrl = new Uri("https://example.com/file.zip"),
-                    IsDisabled = false,
+                    IsDisabled = false
                 })
         };
 
@@ -345,7 +348,7 @@ public sealed class DownloadableAddonsProviderTests
             AddonTypeEnum.TC => "_campaignsCache",
             AddonTypeEnum.Map => "_mapsCache",
             AddonTypeEnum.Mod => "_modsCache",
-            _ => throw new ArgumentOutOfRangeException(nameof(addonType)),
+            _ => throw new ArgumentOutOfRangeException(nameof(addonType))
         };
 
         var cacheField = typeof(InstalledAddonsProvider).GetField(cacheFieldName, BindingFlags.NonPublic | BindingFlags.Instance);

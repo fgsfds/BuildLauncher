@@ -7,8 +7,8 @@ namespace Tests.Unit.CmdArguments;
 
 public sealed class PCExhumedCmdArgumentsTests
 {
-    private readonly SlaveGame _slaveGame;
     private readonly GenericCampaign _slaveCamp;
+    private readonly SlaveGame _slaveGame;
     private readonly AutoloadModsTestSetups _slaveMods;
 
     public PCExhumedCmdArgumentsTests()
@@ -24,17 +24,18 @@ public sealed class PCExhumedCmdArgumentsTests
         PCExhumed pcExhumed = new();
 
         var args = pcExhumed.GetStartGameArgs(_slaveGame, _slaveCamp, mods, [], true, true);
+
         var expected = $"" +
-            $" -g \"enabled_mod.zip\"" +
-            $" -mh \"ENABLED1.DEF\"" +
-            $" -mh \"ENABLED2.DEF\"" +
-            $" -j \"{Directory.GetCurrentDirectory()}\\Data\\Addons\\Slave\\Mods\"" +
-            $" -usecwd" +
-            $" -j \"D:\\Games\\Slave\"" +
-            $" -h \"a\"" +
-            $" -quick" +
-            $" -nosetup" +
-            $"";
+                       $" -g \"enabled_mod.zip\"" +
+                       $" -mh \"ENABLED1.DEF\"" +
+                       $" -mh \"ENABLED2.DEF\"" +
+                       $" -j \"{Directory.GetCurrentDirectory()}\\Data\\Addons\\Slave\\Mods\"" +
+                       $" -usecwd" +
+                       $" -j \"D:\\Games\\Slave\"" +
+                       $" -h \"a\"" +
+                       $" -quick" +
+                       $" -nosetup" +
+                       $"";
 
         NormalizerHelper.NormalizeExpectedArgs(ref args, ref expected);
 

@@ -1,19 +1,19 @@
 <Project>
-  <PropertyGroup>
-    <Version>1.15.1</Version>
-    <TargetFramework>net10.0</TargetFramework>
-    <Nullable>enable</Nullable>
-    <LangVersion>latest</LangVersion>
-    <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
-    <ImplicitUsings>true</ImplicitUsings>
-    <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
-    <UseArtifactsOutput>true</UseArtifactsOutput>
-    <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
-    <InvariantGlobalization>true</InvariantGlobalization>
-    <MvvmToolkitEnableINotifyPropertyChangingSupport>false</MvvmToolkitEnableINotifyPropertyChangingSupport>
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <IncludeOpenAPIAnalyzers>true</IncludeOpenAPIAnalyzers>
-    <JsonSerializerIsReflectionEnabledByDefault>false</JsonSerializerIsReflectionEnabledByDefault>
-    <AnalysisMode>All</AnalysisMode>
-  </PropertyGroup>
+    <PropertyGroup>
+        <Version>1.15.1</Version>
+        <TargetFramework>net10.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <LangVersion>latest</LangVersion>
+        <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
+        <ImplicitUsings>true</ImplicitUsings>
+        <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
+        <UseArtifactsOutput>true</UseArtifactsOutput>
+        <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
+        <InvariantGlobalization>true</InvariantGlobalization>
+        <MvvmToolkitEnableINotifyPropertyChangingSupport>false</MvvmToolkitEnableINotifyPropertyChangingSupport>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <IncludeOpenAPIAnalyzers>true</IncludeOpenAPIAnalyzers>
+        <JsonSerializerIsReflectionEnabledByDefault>false</JsonSerializerIsReflectionEnabledByDefault>
+        <AnalysisMode>All</AnalysisMode>
+    </PropertyGroup>
 </Project>

@@ -9,7 +9,7 @@ namespace Avalonia.Desktop.Behaviors;
 
 public class AddImplicitAnimationsBehavior : Behavior<ListBox>
 {
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override void OnAttached()
     {
         base.OnAttached();
@@ -31,7 +31,7 @@ public class AddImplicitAnimationsBehavior : Behavior<ListBox>
         }
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override void OnDetaching()
     {
         if (AssociatedObject is not null)
@@ -73,6 +73,7 @@ public class AddImplicitAnimationsBehavior : Behavior<ListBox>
         {
             item.IsHitTestVisible = false;
             item.Focusable = false;
+
             return;
         }
 

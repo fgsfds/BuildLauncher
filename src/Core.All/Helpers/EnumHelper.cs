@@ -20,6 +20,7 @@ public static class EnumHelper
         }
 
         result = parseResult;
+
         return true;
     }
 
@@ -43,9 +44,9 @@ public static class EnumHelper
         }
 
         var attr = field
-            .GetCustomAttributes(typeof(DescriptionAttribute), false)
-            .Cast<DescriptionAttribute>()
-            .FirstOrDefault();
+                  .GetCustomAttributes(typeof(DescriptionAttribute), false)
+                  .Cast<DescriptionAttribute>()
+                  .FirstOrDefault();
 
         if (attr is null)
         {

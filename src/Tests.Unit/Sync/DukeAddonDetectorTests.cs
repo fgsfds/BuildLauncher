@@ -1,5 +1,4 @@
 using Core.All.Enums.Addons;
-using Games.Games;
 using Games.Helpers;
 
 namespace Tests.Unit.Sync;
@@ -7,8 +6,8 @@ namespace Tests.Unit.Sync;
 [Collection("Sync")]
 public sealed class DukeAddonDetectorTests : IDisposable
 {
-    private readonly string _tempDir;
     private readonly DukeAddonDetector _detector;
+    private readonly string _tempDir;
 
     public DukeAddonDetectorTests()
     {
@@ -22,7 +21,10 @@ public sealed class DukeAddonDetectorTests : IDisposable
         if (Directory.Exists(_tempDir))
         {
             try { Directory.Delete(_tempDir, true); }
-            catch { /* best effort */ }
+            catch
+            {
+                /* best effort */
+            }
         }
     }
 
@@ -31,6 +33,7 @@ public sealed class DukeAddonDetectorTests : IDisposable
         var fullPath = Path.Combine(_tempDir, relativePath);
         Directory.CreateDirectory(Path.GetDirectoryName(fullPath)!);
         File.WriteAllText(fullPath, "mock grp");
+
         return Path.GetDirectoryName(fullPath)!;
     }
 

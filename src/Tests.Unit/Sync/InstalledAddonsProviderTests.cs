@@ -15,12 +15,12 @@ namespace Tests.Unit.Sync;
 [Collection("Sync")]
 public sealed class InstalledAddonsProviderTests : IDisposable
 {
-    private readonly DukeGame _game;
     private readonly Mock<IConfigProvider> _configMock;
-    private readonly InstalledAddonsProvider _installedAddonsProvider;
-    private readonly LocalFilesProvider _localFilesProvider;
     private readonly HashSet<string> _disabledMods;
     private readonly HashSet<AddonId> _favorites;
+    private readonly DukeGame _game;
+    private readonly InstalledAddonsProvider _installedAddonsProvider;
+    private readonly LocalFilesProvider _localFilesProvider;
 
     public InstalledAddonsProviderTests()
     {
@@ -119,7 +119,12 @@ public sealed class InstalledAddonsProviderTests : IDisposable
         var parsed = ParsedAddonFileHelper.CreateParsedAddonFile("test", "Test", "1.0", AddonTypeEnum.TC);
         GameEnum? firedGame = null;
         AddonTypeEnum? firedType = null;
-        _installedAddonsProvider.AddonsChangedEvent += (g, t) => { firedGame = g; firedType = t; };
+
+        _installedAddonsProvider.AddonsChangedEvent += (g, t) =>
+        {
+            firedGame = g;
+            firedType = t;
+        };
 
         _installedAddonsProvider.AddAddon(parsed);
 
@@ -145,7 +150,7 @@ public sealed class InstalledAddonsProviderTests : IDisposable
     public void GetInstalledAddonsByType_UnknownType_Throws()
     {
         Assert.Throws<NotSupportedException>(() =>
-            _installedAddonsProvider.GetInstalledAddonsByType((AddonTypeEnum)99));
+                                                 _installedAddonsProvider.GetInstalledAddonsByType((AddonTypeEnum)99));
     }
 
     [Fact]
@@ -166,6 +171,7 @@ public sealed class InstalledAddonsProviderTests : IDisposable
         _installedAddonsProvider.AddAddon(ParsedAddonFileHelper.CreateParsedAddonFile("camp-a", "A Camp", "1.0", AddonTypeEnum.TC));
 
         var campaigns = _installedAddonsProvider.GetInstalledAddonsByType(AddonTypeEnum.TC);
+
         var titles = campaigns.Where(c => c.AddonId.Id is "camp-a" or "camp-b")
                               .Select(c => c.Title)
                               .ToList();
@@ -242,8 +248,13 @@ public sealed class InstalledAddonsProviderTests : IDisposable
     {
         _disabledMods.Add("dep-mod");
         _disabledMods.Add("main-mod");
+
         _installedAddonsProvider.AddAddon(ParsedAddonFileHelper.CreateParsedModFile("main-mod", "Main", "1.0",
-            deps: new Dictionary<string, string?> { ["dep-mod"] = null }));
+                                                                                    deps: new Dictionary<string, string?>
+                                                                                    {
+                                                                                        ["dep-mod"] = null
+                                                                                    }));
+
         _installedAddonsProvider.AddAddon(ParsedAddonFileHelper.CreateParsedModFile("dep-mod", "Dep", "1.0"));
 
         _installedAddonsProvider.EnableAddon(new AddonId("main-mod", "1.0"));
@@ -256,8 +267,13 @@ public sealed class InstalledAddonsProviderTests : IDisposable
     public void EnableAddon_DisablesIncompatibleMods()
     {
         _disabledMods.Add("main-mod");
+
         _installedAddonsProvider.AddAddon(ParsedAddonFileHelper.CreateParsedModFile("main-mod", "Main", "1.0",
-            incompatibles: new Dictionary<string, string?> { ["incompat-mod"] = null }));
+                                                                                    incompatibles: new Dictionary<string, string?>
+                                                                                    {
+                                                                                        ["incompat-mod"] = null
+                                                                                    }));
+
         _installedAddonsProvider.AddAddon(ParsedAddonFileHelper.CreateParsedModFile("incompat-mod", "Incompat", "1.0"));
 
         _installedAddonsProvider.EnableAddon(new AddonId("main-mod", "1.0"));
@@ -272,7 +288,11 @@ public sealed class InstalledAddonsProviderTests : IDisposable
     public void DisableAddon_CascadesToDependants()
     {
         _installedAddonsProvider.AddAddon(ParsedAddonFileHelper.CreateParsedModFile("dep-mod", "Dep", "1.0",
-            deps: new Dictionary<string, string?> { ["main-mod"] = null }));
+                                                                                    deps: new Dictionary<string, string?>
+                                                                                    {
+                                                                                        ["main-mod"] = null
+                                                                                    }));
+
         _installedAddonsProvider.AddAddon(ParsedAddonFileHelper.CreateParsedModFile("main-mod", "Main", "1.0"));
 
         _installedAddonsProvider.DisableAddon(new AddonId("main-mod", "1.0"));
@@ -408,22 +428,32 @@ public sealed class InstalledAddonsProviderTests : IDisposable
     public void FileRemovedEvent_FiresAddonsChangedEvent()
     {
         var fileInfo = FileCreationHelper.CreateFileInTempDir();
-        var parsed = ParsedAddonFileHelper.CreateParsedAddonFile("del-camp", "Del", "1.0", AddonTypeEnum.TC) with { FileInfo = fileInfo };
+
+        var parsed = ParsedAddonFileHelper.CreateParsedAddonFile("del-camp", "Del", "1.0", AddonTypeEnum.TC) with
+        {
+            FileInfo = fileInfo
+        };
 
         var jsonPath = Path.Combine(fileInfo.PathToFolder, "addon.json");
+
         File.WriteAllText(jsonPath, """
-            {
-                "id": "del-camp",
-                "type": "TC",
-                "game": { "name": "Duke3D" },
-                "title": "Del",
-                "version": "1.0"
-            }
-            """);
+                          {
+                              "id": "del-camp",
+                              "type": "TC",
+                              "game": { "name": "Duke3D" },
+                              "title": "Del",
+                              "version": "1.0"
+                          }
+                          """);
 
         GameEnum? firedGame = null;
         AddonTypeEnum? firedType = null;
-        _installedAddonsProvider.AddonsChangedEvent += (g, t) => { firedGame = g; firedType = t; };
+
+        _installedAddonsProvider.AddonsChangedEvent += (g, t) =>
+        {
+            firedGame = g;
+            firedType = t;
+        };
 
         _installedAddonsProvider.AddAddon(parsed);
         _installedAddonsProvider.DeleteAddon(parsed);
@@ -450,8 +480,16 @@ public sealed class InstalledAddonsProviderTests : IDisposable
     [Fact]
     public void GetAddonFromFile_JsonManifestWithDependencies_AddsThem()
     {
-        var deps = new Dictionary<string, string?> { ["dep-addon"] = "1.0" };
-        var incomps = new Dictionary<string, string?> { ["bad-addon"] = "2.0" };
+        var deps = new Dictionary<string, string?>
+        {
+            ["dep-addon"] = "1.0"
+        };
+
+        var incomps = new Dictionary<string, string?>
+        {
+            ["bad-addon"] = "2.0"
+        };
+
         var parsed = ParsedAddonFileHelper.CreateParsedModFile("test-mod", "Test Mod", "1.0", deps: deps, incompatibles: incomps);
 
         var addon = _installedAddonsProvider.GetAddonFromFile(parsed);
@@ -467,6 +505,7 @@ public sealed class InstalledAddonsProviderTests : IDisposable
     public void GetAddonFromFile_JsonManifestWithExecutables_AddsThem()
     {
         var folder = PathHelper.GetFakePath();
+
         var parsed = new ParsedAddonFile
         {
             FileInfo = new AddonFilePathWrapper(folder, "addon.json"),
@@ -477,7 +516,10 @@ public sealed class InstalledAddonsProviderTests : IDisposable
                 Title = "Executable Addon",
                 Version = "1.0",
                 AddonType = AddonTypeEnum.TC,
-                SupportedGame = new SupportedGameJsonModel { Game = GameEnum.Duke3D },
+                SupportedGame = new SupportedGameJsonModel
+                {
+                    Game = GameEnum.Duke3D
+                },
                 Executables = new Dictionary<OSEnum, Dictionary<PortEnum, string>>
                 {
                     [OSEnum.Windows] = new()
@@ -487,7 +529,7 @@ public sealed class InstalledAddonsProviderTests : IDisposable
                 }
             },
             GridHash = null,
-            PreviewHash = null,
+            PreviewHash = null
         };
 
         var addon = _installedAddonsProvider.GetAddonFromFile(parsed);
@@ -512,7 +554,10 @@ public sealed class InstalledAddonsProviderTests : IDisposable
                 Title = "Options Addon",
                 Version = "1.0",
                 AddonType = AddonTypeEnum.TC,
-                SupportedGame = new SupportedGameJsonModel { Game = GameEnum.Duke3D },
+                SupportedGame = new SupportedGameJsonModel
+                {
+                    Game = GameEnum.Duke3D
+                },
                 Options = new List<OptionJsonModel>
                 {
                     new()
@@ -526,7 +571,7 @@ public sealed class InstalledAddonsProviderTests : IDisposable
                 }
             },
             GridHash = null,
-            PreviewHash = null,
+            PreviewHash = null
         };
 
         var addon = _installedAddonsProvider.GetAddonFromFile(parsed);
@@ -551,11 +596,14 @@ public sealed class InstalledAddonsProviderTests : IDisposable
                 Title = "Con Addon",
                 Version = "1.0",
                 AddonType = AddonTypeEnum.TC,
-                SupportedGame = new SupportedGameJsonModel { Game = GameEnum.Duke3D },
-                AdditionalCons = ["extra.con", "more.con"],
+                SupportedGame = new SupportedGameJsonModel
+                {
+                    Game = GameEnum.Duke3D
+                },
+                AdditionalCons = ["extra.con", "more.con"]
             },
             GridHash = null,
-            PreviewHash = null,
+            PreviewHash = null
         };
 
         var addon = _installedAddonsProvider.GetAddonFromFile(parsed);
@@ -580,10 +628,13 @@ public sealed class InstalledAddonsProviderTests : IDisposable
                 Title = "Preview Addon",
                 Version = "1.0",
                 AddonType = AddonTypeEnum.TC,
-                SupportedGame = new SupportedGameJsonModel { Game = GameEnum.Duke3D },
+                SupportedGame = new SupportedGameJsonModel
+                {
+                    Game = GameEnum.Duke3D
+                }
             },
             GridHash = null,
-            PreviewHash = 67890,
+            PreviewHash = 67890
         };
 
         var addon = _installedAddonsProvider.GetAddonFromFile(parsed);
@@ -606,10 +657,13 @@ public sealed class InstalledAddonsProviderTests : IDisposable
                 Title = "Bad",
                 Version = "1.0",
                 AddonType = AddonTypeEnum.TC,
-                SupportedGame = new SupportedGameJsonModel { Game = GameEnum.Duke3D },
+                SupportedGame = new SupportedGameJsonModel
+                {
+                    Game = GameEnum.Duke3D
+                }
             },
             GridHash = null,
-            PreviewHash = null,
+            PreviewHash = null
         };
 
         var addon = _installedAddonsProvider.GetAddonFromFile(parsed);
@@ -621,15 +675,15 @@ public sealed class InstalledAddonsProviderTests : IDisposable
     public void GetInstalledCampaigns_WangCustomOrder_TwinDragonFirst()
     {
         WangGame wangGame = new();
-        var (wangProvider, _)  = ObjectCreationHelper.CreateInstalledAddonsProvider(wangGame, _configMock.Object);
+        var (wangProvider, _) = ObjectCreationHelper.CreateInstalledAddonsProvider(wangGame, _configMock.Object);
 
         wangProvider.AddAddon(ParsedAddonFileHelper.CreateParsedAddonFile("Wanton", "Wanton", "1.0", AddonTypeEnum.TC, GameEnum.Wang));
         wangProvider.AddAddon(ParsedAddonFileHelper.CreateParsedAddonFile("TwinDragon", "TwinDragon", "1.0", AddonTypeEnum.TC, GameEnum.Wang));
         wangProvider.AddAddon(ParsedAddonFileHelper.CreateParsedAddonFile("Other", "Aaa Other", "1.0", AddonTypeEnum.TC, GameEnum.Wang));
 
         var wangCampaigns = wangProvider.GetInstalledAddonsByType(AddonTypeEnum.TC)
-            .Where(c => c.SupportedGame.GameEnum == GameEnum.Wang)
-            .ToList();
+                                        .Where(c => c.SupportedGame.GameEnum == GameEnum.Wang)
+                                        .ToList();
 
         var tdIndex = wangCampaigns.FindIndex(c => c.AddonId.Id == "TwinDragon");
         var wantonIndex = wangCampaigns.FindIndex(c => c.AddonId.Id == "Wanton");
@@ -657,7 +711,7 @@ public sealed class InstalledAddonsProviderTests : IDisposable
             SupportedGame = _game.GameEnum,
             Manifest = null,
             GridHash = null,
-            PreviewHash = null,
+            PreviewHash = null
         };
 
         Assert.Throws<InvalidOperationException>(() => _installedAddonsProvider.GetAddonFromFile(parsed));
@@ -712,8 +766,12 @@ public sealed class InstalledAddonsProviderTests : IDisposable
     public void EnableAddon_WithMissingDependency_DoesNotThrow()
     {
         _disabledMods.Add("main-mod");
+
         _installedAddonsProvider.AddAddon(ParsedAddonFileHelper.CreateParsedModFile("main-mod", "Main", "1.0",
-            deps: new Dictionary<string, string?> { ["missing-dep"] = null }));
+                                                                                    deps: new Dictionary<string, string?>
+                                                                                    {
+                                                                                        ["missing-dep"] = null
+                                                                                    }));
 
         _installedAddonsProvider.EnableAddon(new AddonId("main-mod", "1.0"));
 
@@ -724,9 +782,17 @@ public sealed class InstalledAddonsProviderTests : IDisposable
     public void DisableAddon_TransitiveCascade_DisablesGrandchild()
     {
         _installedAddonsProvider.AddAddon(ParsedAddonFileHelper.CreateParsedModFile("leaf-mod", "Leaf", "1.0",
-            deps: new Dictionary<string, string?> { ["mid-mod"] = null }));
+                                                                                    deps: new Dictionary<string, string?>
+                                                                                    {
+                                                                                        ["mid-mod"] = null
+                                                                                    }));
+
         _installedAddonsProvider.AddAddon(ParsedAddonFileHelper.CreateParsedModFile("mid-mod", "Mid", "1.0",
-            deps: new Dictionary<string, string?> { ["root-mod"] = null }));
+                                                                                    deps: new Dictionary<string, string?>
+                                                                                    {
+                                                                                        ["root-mod"] = null
+                                                                                    }));
+
         _installedAddonsProvider.AddAddon(ParsedAddonFileHelper.CreateParsedModFile("root-mod", "Root", "1.0"));
 
         _installedAddonsProvider.DisableAddon(new AddonId("root-mod", "1.0"));
@@ -751,13 +817,14 @@ public sealed class InstalledAddonsProviderTests : IDisposable
             File.WriteAllText(iniFile, "");
 
             var fileInfo = new AddonFilePathWrapper(mapsDir, "TEST.MAP");
+
             var parsed = new ParsedAddonFile
             {
                 FileInfo = fileInfo,
                 SupportedGame = GameEnum.Duke3D,
                 Manifest = null,
                 GridHash = null,
-                PreviewHash = null,
+                PreviewHash = null
             };
 
             _installedAddonsProvider.AddAddon(parsed);
@@ -788,13 +855,14 @@ public sealed class InstalledAddonsProviderTests : IDisposable
             File.WriteAllText(mapFile, "");
 
             var fileInfo = new AddonFilePathWrapper(mapsDir, "TEST2.MAP");
+
             var parsed = new ParsedAddonFile
             {
                 FileInfo = fileInfo,
                 SupportedGame = GameEnum.Duke3D,
                 Manifest = null,
                 GridHash = null,
-                PreviewHash = null,
+                PreviewHash = null
             };
 
             _installedAddonsProvider.AddAddon(parsed);
@@ -876,7 +944,10 @@ public sealed class InstalledAddonsProviderTests : IDisposable
                 Title = "Test Map",
                 SupportedGame = new(GameEnum.Duke3D),
                 FileInfo = new AddonFilePathWrapper(mapDir, "test.map"),
-                StartMap = new Core.All.Serializable.Addon.MapFileJsonModel { File = "test.map" },
+                StartMap = new MapFileJsonModel
+                {
+                    File = "test.map"
+                },
                 BloodIni = "test.ini",
                 GridImageHash = null,
                 Author = null,
@@ -889,7 +960,7 @@ public sealed class InstalledAddonsProviderTests : IDisposable
                 IncompatibleAddons = null,
                 RequiredFeatures = null,
                 Executables = null,
-                Options = null,
+                Options = null
             };
 
             _installedAddonsProvider.AddAddon(new ParsedAddonFile
@@ -898,7 +969,7 @@ public sealed class InstalledAddonsProviderTests : IDisposable
                 SupportedGame = GameEnum.Duke3D,
                 Manifest = null,
                 GridHash = null,
-                PreviewHash = null,
+                PreviewHash = null
             });
 
             _installedAddonsProvider.DeleteAddon(looseMap);
@@ -945,7 +1016,7 @@ public sealed class InstalledAddonsProviderTests : IDisposable
                 IncompatibleAddons = null,
                 RequiredFeatures = null,
                 Executables = null,
-                Options = null,
+                Options = null
             };
 
             _installedAddonsProvider.DeleteAddon(addon);
@@ -992,7 +1063,7 @@ public sealed class InstalledAddonsProviderTests : IDisposable
                 IncompatibleAddons = null,
                 RequiredFeatures = null,
                 Executables = null,
-                Options = null,
+                Options = null
             };
 
             _installedAddonsProvider.DeleteAddon(addon);
@@ -1017,7 +1088,7 @@ public sealed class InstalledAddonsProviderTests : IDisposable
             SupportedGame = _game.GameEnum,
             Manifest = null,
             GridHash = null,
-            PreviewHash = null,
+            PreviewHash = null
         };
 
         Assert.Throws<InvalidOperationException>(() => _installedAddonsProvider.DeleteAddon(parsed));
@@ -1047,14 +1118,15 @@ public sealed class InstalledAddonsProviderTests : IDisposable
         try
         {
             var grpInfoPath = Path.Combine(grpInfoDir, "addons.grpinfo");
+
             File.WriteAllText(grpInfoPath, """
-                grpinfo
-                {
-                    name       "Grp Campaign"
-                    scriptname "scripts/test.con"
-                    size       1234
-                }
-                """);
+                              grpinfo
+                              {
+                                  name       "Grp Campaign"
+                                  scriptname "scripts/test.con"
+                                  size       1234
+                              }
+                              """);
 
             var grpPath = Path.Combine(grpInfoDir, "test.grp");
             File.WriteAllBytes(grpPath, new byte[1234]);
@@ -1065,7 +1137,7 @@ public sealed class InstalledAddonsProviderTests : IDisposable
                 SupportedGame = GameEnum.Duke3D,
                 Manifest = null,
                 GridHash = null,
-                PreviewHash = null,
+                PreviewHash = null
             };
 
             _installedAddonsProvider.AddAddon(parsed);
@@ -1094,7 +1166,7 @@ public sealed class InstalledAddonsProviderTests : IDisposable
         {
             Duke64RomPath = null,
             DukeZHRomPath = null,
-            DukeWTInstallPath = null,
+            DukeWTInstallPath = null
         }, config.Object);
 
         var ex = Record.Exception(() => newProvider.Dispose());

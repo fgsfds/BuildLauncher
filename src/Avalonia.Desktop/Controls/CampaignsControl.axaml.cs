@@ -17,11 +17,11 @@ public sealed partial class CampaignsControl : UserControl
 {
     private const string BuiltInPortStr = "Built-in port";
     private const string CustomPortStr = "Custom port";
+    private readonly BitmapsCache _bitmapsCache;
+    private readonly PortsProvider _portsProvider;
 
     private readonly IReadOnlyList<BasePort> _supportedPorts;
     private readonly CampaignsViewModel _viewModel;
-    private readonly PortsProvider _portsProvider;
-    private readonly BitmapsCache _bitmapsCache;
 
     public CampaignsControl()
     {
@@ -59,22 +59,25 @@ public sealed partial class CampaignsControl : UserControl
     }
 
     /// <summary>
-    /// Add "Start with..." buttons to the ports button panel
+    ///     Add "Start with..." buttons to the ports button panel
     /// </summary>
     private void AddPortsButtons()
     {
         if (_viewModel.Game.GameEnum is GameEnum.Standalone)
         {
-            TextBlock textBlock = new() { Text = BuiltInPortStr };
+            TextBlock textBlock = new()
+            {
+                Text = BuiltInPortStr
+            };
 
             Button button = new()
             {
                 Content = textBlock,
                 Command = new RelayCommand(() =>
-                    _viewModel.StartCampaignCommand.Execute(new StubPort()),
-                    () => CampaignsList?.SelectedItem is BaseAddon selectedCampaign),
+                                               _viewModel.StartCampaignCommand.Execute(new StubPort()),
+                                           () => CampaignsList?.SelectedItem is BaseAddon selectedCampaign),
                 Margin = new(5),
-                Padding = new(5),
+                Padding = new(5)
             };
 
             BottomPanel.PortsButtonsPanel.Children.Add(button);
@@ -86,18 +89,31 @@ public sealed partial class CampaignsControl : UserControl
         {
             var portIcon = _bitmapsCache.GetFromCache(port.PortEnum.GetUniqueHash());
 
-            StackPanel sp = new() { Orientation = Orientation.Horizontal };
-            sp.Children.Add(new Image() { Margin = new(0, 0, 5, 0), Height = 16, Source = portIcon });
-            sp.Children.Add(new TextBlock() { Text = port.ShortName });
+            StackPanel sp = new()
+            {
+                Orientation = Orientation.Horizontal
+            };
+
+            sp.Children.Add(new Image()
+            {
+                Margin = new(0, 0, 5, 0),
+                Height = 16,
+                Source = portIcon
+            });
+
+            sp.Children.Add(new TextBlock()
+            {
+                Text = port.ShortName
+            });
 
             Button portButton = new()
             {
                 Content = sp,
                 Command = new RelayCommand(() =>
-                    _viewModel.StartCampaignCommand.Execute(port),
-                    () => PortsHelper.CheckPortRequirements(CampaignsList.SelectedItem, _viewModel.Game, port)),
+                                               _viewModel.StartCampaignCommand.Execute(port),
+                                           () => PortsHelper.CheckPortRequirements(CampaignsList.SelectedItem, _viewModel.Game, port)),
                 Margin = new(5),
-                Padding = new(5),
+                Padding = new(5)
             };
 
             BottomPanel.PortsButtonsPanel.Children.Add(portButton);
@@ -105,23 +121,26 @@ public sealed partial class CampaignsControl : UserControl
 
         Button customPortButton = new()
         {
-            Content = new TextBlock() { Text = BuiltInPortStr },
+            Content = new TextBlock()
+            {
+                Text = BuiltInPortStr
+            },
             Command = new RelayCommand(() =>
-                _viewModel.StartCampaignCommand.Execute(null),
-                    () =>
-                    {
-                        if (CampaignsList?.SelectedItem is not BaseAddon selectedCampaign)
-                        {
-                            return false;
-                        }
+                                           _viewModel.StartCampaignCommand.Execute(null),
+                                       () =>
+                                       {
+                                           if (CampaignsList?.SelectedItem is not BaseAddon selectedCampaign)
+                                           {
+                                               return false;
+                                           }
 
-                        if (selectedCampaign.Executables is null)
-                        {
-                            return false;
-                        }
+                                           if (selectedCampaign.Executables is null)
+                                           {
+                                               return false;
+                                           }
 
-                        return true;
-                    }),
+                                           return true;
+                                       }),
             Margin = new(5),
             Padding = new(5),
             IsVisible = false
@@ -133,7 +152,7 @@ public sealed partial class CampaignsControl : UserControl
     }
 
     /// <summary>
-    /// Add button with custom ports
+    ///     Add button with custom ports
     /// </summary>
     private void AddCustomPortsButton()
     {
@@ -172,7 +191,10 @@ public sealed partial class CampaignsControl : UserControl
 
         Button customPortButton = new()
         {
-            Content = new TextBlock() { Text = CustomPortStr },
+            Content = new TextBlock()
+            {
+                Text = CustomPortStr
+            },
             Margin = new(5),
             Padding = new(5),
             IsEnabled = false,
@@ -185,7 +207,7 @@ public sealed partial class CampaignsControl : UserControl
     }
 
     /// <summary>
-    /// Invoked on selected campaign changed
+    ///     Invoked on selected campaign changed
     /// </summary>
     private void OnCampaignsListSelectionChanged(object? sender, SelectionChangedEventArgs e)
     {

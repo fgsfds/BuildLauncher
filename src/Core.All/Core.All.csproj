@@ -1,13 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-      <AssemblyName>BuildLauncher.$(MSBuildProjectName)</AssemblyName>
-  </PropertyGroup>
+    <PropertyGroup>
+        <AssemblyName>BuildLauncher.$(MSBuildProjectName)</AssemblyName>
+    </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="IDisposableAnalyzers" PrivateAssets="all" />
-    <PackageReference Include="Microsoft.Extensions.Http" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" />
-  </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="IDisposableAnalyzers" PrivateAssets="all"/>
+        <PackageReference Include="Microsoft.Extensions.Http"/>
+        <PackageReference Include="Microsoft.Extensions.Logging.Abstractions"/>
+    </ItemGroup>
 
 </Project>

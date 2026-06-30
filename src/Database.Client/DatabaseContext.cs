@@ -19,7 +19,7 @@ public sealed class DatabaseContext : DbContext
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         _ = optionsBuilder.ConfigureWarnings(x =>
-            x.Ignore(RelationalEventId.PendingModelChangesWarning));
+                                                 x.Ignore(RelationalEventId.PendingModelChangesWarning));
 
         _ = optionsBuilder.UseSqlite("Data Source=BuildLauncher.db");
     }

@@ -27,7 +27,7 @@ public sealed class OfflineApiInterface : IApiInterface
         try
         {
             await _semaphore.WaitAsync().ConfigureAwait(false);
-            
+
             if (_addonsJson is null)
             {
                 if (ClientProperties.PathToLocalAddonsJson is null)
@@ -66,6 +66,7 @@ public sealed class OfflineApiInterface : IApiInterface
         catch (Exception ex)
         {
             _logger.LogCritical(ex, "=== Error while getting addonsJson from GitHub ===");
+
             return null;
         }
         finally
@@ -85,6 +86,7 @@ public sealed class OfflineApiInterface : IApiInterface
     public async Task<string?> GetUploadFolderAsync()
     {
         using var dataJson = File.OpenRead(ClientProperties.PathToLocalDataJson);
+
         var data = await JsonSerializer.DeserializeAsync(
             dataJson,
             DataJsonModelContext.Default.DictionaryStringString
@@ -103,6 +105,7 @@ public sealed class OfflineApiInterface : IApiInterface
     public async Task<List<AddonManifestJsonModel>?> GetMetadataAsync()
     {
         using var dataJson = File.OpenRead(ClientProperties.PathToLocalManifestsJson);
+
         var data = await JsonSerializer.DeserializeAsync(
             dataJson,
             AddonManifestJsonContext.Default.ListAddonManifestJsonModel

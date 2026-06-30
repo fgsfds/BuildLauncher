@@ -15,20 +15,12 @@ using SharpCompress.Archives;
 namespace Addons.Providers;
 
 /// <summary>
-/// Scans the addons folder for manifests, caches parsed results, and loads grid/preview images.
+///     Scans the addons folder for manifests, caches parsed results, and loads grid/preview images.
 /// </summary>
 public sealed class LocalFilesProvider
 {
-    private static readonly string _manifestNameBase = Path.GetFileNameWithoutExtension(CommonConstants.AddonManifestName);
-    private static readonly string _manifestNameExt = Path.GetExtension(CommonConstants.AddonManifestName);
-
-    private readonly InstalledGamesProvider _gamesProvider;
-    private readonly ICacheAdder<Stream> _bitmapsCache;
-    private readonly IChannelPublisher<DiHelper.LocalFileEvent> _channelPublisher;
-    private readonly ILogger<LocalFilesProvider> _logger;
-    private readonly SemaphoreSlim _cacheUpdateSemaphore = new(1, 1);
-
-    private List<ParsedAddonFile>? _cachedDataDict;
+    private static readonly string ManifestNameBase = Path.GetFileNameWithoutExtension(CommonConstants.AddonManifestName);
+    private static readonly string ManifestNameExt = Path.GetExtension(CommonConstants.AddonManifestName);
 
     private static readonly EnumerationOptions RecursiveOptions = new()
     {
@@ -42,8 +34,14 @@ public sealed class LocalFilesProvider
         RecurseSubdirectories = false
     };
 
-    [MemberNotNullWhen(true, nameof(_cachedDataDict))]
-    public bool IsInitialized => _cachedDataDict is not null;
+    private readonly ICacheAdder<Stream> _bitmapsCache;
+    private readonly SemaphoreSlim _cacheUpdateSemaphore = new(1, 1);
+    private readonly IChannelPublisher<DiHelper.LocalFileEvent> _channelPublisher;
+
+    private readonly InstalledGamesProvider _gamesProvider;
+    private readonly ILogger<LocalFilesProvider> _logger;
+
+    private List<ParsedAddonFile>? _cachedDataDict;
 
     public LocalFilesProvider(
         InstalledGamesProvider gamesProvider,
@@ -58,8 +56,11 @@ public sealed class LocalFilesProvider
         _logger = logger;
     }
 
+    [MemberNotNullWhen(true, nameof(_cachedDataDict))]
+    public bool IsInitialized => _cachedDataDict is not null;
+
     /// <summary>
-    /// Scan all zip and manifest files in the addons folder and populate the cache.
+    ///     Scan all zip and manifest files in the addons folder and populate the cache.
     /// </summary>
     public async Task<bool> InitializeAsync()
     {
@@ -80,6 +81,7 @@ public sealed class LocalFilesProvider
             if (!Directory.Exists(ClientProperties.AddonsFolderPath))
             {
                 _cachedDataDict = [];
+
                 return true;
             }
 
@@ -88,16 +90,19 @@ public sealed class LocalFilesProvider
             foreach (var zip in Directory.EnumerateFiles(ClientProperties.AddonsFolderPath, "*.zip", RecursiveOptions))
             {
                 var result = await ProcessArchiveAsync(zip);
+
                 if (result is not null)
                 {
                     results.AddRange(result);
                 }
             }
 
-            var manifestPattern = $"{_manifestNameBase}*{_manifestNameExt}";
+            var manifestPattern = $"{ManifestNameBase}*{ManifestNameExt}";
+
             foreach (var manifest in Directory.EnumerateFiles(ClientProperties.AddonsFolderPath, manifestPattern, RecursiveOptions))
             {
                 var result = await ProcessManifestFileAsync(manifest);
+
                 if (result is not null)
                 {
                     results.Add(result);
@@ -123,11 +128,13 @@ public sealed class LocalFilesProvider
             }
 
             _cachedDataDict = results;
+
             return true;
         }
         catch (Exception ex)
         {
             _logger.LogCritical(ex, "Failed to initialize addon cache");
+
             return false;
         }
         finally
@@ -137,26 +144,29 @@ public sealed class LocalFilesProvider
     }
 
     /// <summary>
-    /// Try to retrieve a previously cached parsed addon file by its file descriptor.
+    ///     Try to retrieve a previously cached parsed addon file by its file descriptor.
     /// </summary>
     public bool TryGetCachedAddonFile(AddonFilePathWrapper fileInfo, [NotNullWhen(true)] out ParsedAddonFile? file)
     {
         if (_cachedDataDict is null)
         {
             file = null;
+
             return false;
         }
 
         file = _cachedDataDict.FirstOrDefault(x => x.FileInfo.Equals(fileInfo));
+
         return file is not null;
     }
 
     /// <summary>
-    /// Updates all cached entries whose file path matches <paramref name="oldPathToFile"/> to point to <paramref name="newFolderPath"/>.
+    ///     Updates all cached entries whose file path matches <paramref name="oldPathToFile" /> to point to
+    ///     <paramref name="newFolderPath" />.
     /// </summary>
     /// <param name="oldPathToFile">The old file path to replace (typically a zip path).</param>
     /// <param name="newFolderPath">The new folder path.</param>
-    /// <returns>The list of updated <see cref="AddonFilePathWrapper"/> entries.</returns>
+    /// <returns>The list of updated <see cref="AddonFilePathWrapper" /> entries.</returns>
     public async Task<IReadOnlyList<ParsedAddonFile>> ReplacePathAsync(string oldPathToFile, string newFolderPath)
     {
         if (!IsInitialized)
@@ -169,15 +179,16 @@ public sealed class LocalFilesProvider
             await _cacheUpdateSemaphore.WaitAsync();
 
             var existingFiles = _cachedDataDict.Where(x =>
-                    x.FileInfo.PathToFile.Equals(oldPathToFile, StringComparison.InvariantCultureIgnoreCase) ||
-                    x.FileInfo.PathToFolder.Equals(oldPathToFile, StringComparison.InvariantCultureIgnoreCase))
-                .ToList();
+                                                          x.FileInfo.PathToFile.Equals(oldPathToFile, StringComparison.InvariantCultureIgnoreCase) ||
+                                                          x.FileInfo.PathToFolder.Equals(oldPathToFile, StringComparison.InvariantCultureIgnoreCase))
+                                               .ToList();
 
             var updatedPaths = new List<ParsedAddonFile>(existingFiles.Count);
 
             foreach (var file in existingFiles)
             {
                 var newFileInfo = file.FileInfo.WithChangedFolder(newFolderPath);
+
                 var newFile = file with
                 {
                     FileInfo = newFileInfo
@@ -189,8 +200,17 @@ public sealed class LocalFilesProvider
                 updatedPaths.Add(newFile);
             }
 
-            await _channelPublisher.PublishAsync(new() { Files = [.. existingFiles], IsAdded = false});
-            await _channelPublisher.PublishAsync(new() { Files = [.. updatedPaths], IsAdded = true});
+            await _channelPublisher.PublishAsync(new()
+            {
+                Files = [.. existingFiles],
+                IsAdded = false
+            });
+
+            await _channelPublisher.PublishAsync(new()
+            {
+                Files = [.. updatedPaths],
+                IsAdded = true
+            });
 
             return updatedPaths;
         }
@@ -201,7 +221,7 @@ public sealed class LocalFilesProvider
     }
 
     /// <summary>
-    /// Return cached list of parsed addon files, initializing the scanner first if needed.
+    ///     Return cached list of parsed addon files, initializing the scanner first if needed.
     /// </summary>
     public async Task<IReadOnlyList<ParsedAddonFile>> GetCachedAddonFilesAsync()
     {
@@ -219,7 +239,7 @@ public sealed class LocalFilesProvider
     }
 
     /// <summary>
-    /// Add a single file to the cache by parsing it as a zip archive or manifest.
+    ///     Add a single file to the cache by parsing it as a zip archive or manifest.
     /// </summary>
     public async Task<List<ParsedAddonFile>?> TryAddFileToCacheAsync(string pathToFile, GameEnum? gameEnum)
     {
@@ -232,6 +252,7 @@ public sealed class LocalFilesProvider
             if (results is not null && _cachedDataDict is not null)
             {
                 _cachedDataDict.AddRange(results);
+
                 await _channelPublisher.PublishAsync(new()
                 {
                     Files = [.. results],
@@ -248,8 +269,8 @@ public sealed class LocalFilesProvider
     }
 
     /// <summary>
-    /// Remove all cached entries whose physical file matches <paramref name="pathToFile"/>.
-    /// Handles zips (multiple entries), folders (manifests), .map files and .grpinfo files.
+    ///     Remove all cached entries whose physical file matches <paramref name="pathToFile" />.
+    ///     Handles zips (multiple entries), folders (manifests), .map files and .grpinfo files.
     /// </summary>
     public async Task<bool> TryRemoveFileFromCacheAsync(string pathToFile)
     {
@@ -263,10 +284,10 @@ public sealed class LocalFilesProvider
             await _cacheUpdateSemaphore.WaitAsync();
 
             var toRemove = _cachedDataDict
-                .Where(x =>
-                    x.FileInfo.PathToFile.Equals(pathToFile, StringComparison.InvariantCultureIgnoreCase) ||
-                    x.FileInfo.PathToFolder.Equals(pathToFile, StringComparison.InvariantCultureIgnoreCase))
-                .ToList();
+                          .Where(x =>
+                                     x.FileInfo.PathToFile.Equals(pathToFile, StringComparison.InvariantCultureIgnoreCase) ||
+                                     x.FileInfo.PathToFolder.Equals(pathToFile, StringComparison.InvariantCultureIgnoreCase))
+                          .ToList();
 
             if (toRemove.Count == 0)
             {
@@ -278,7 +299,12 @@ public sealed class LocalFilesProvider
                 _cachedDataDict.Remove(file);
             }
 
-            await _channelPublisher.PublishAsync(new() { Files = [.. toRemove], IsAdded = false});
+            await _channelPublisher.PublishAsync(new()
+            {
+                Files = [.. toRemove],
+                IsAdded = false
+            });
+
             return true;
         }
         finally
@@ -310,8 +336,8 @@ public sealed class LocalFilesProvider
                 return [..result];
             }
         }
-        else if (pathToFile.EndsWith(_manifestNameExt, StringComparison.OrdinalIgnoreCase) &&
-            Path.GetFileName(pathToFile).StartsWith(_manifestNameBase, StringComparison.OrdinalIgnoreCase))
+        else if (pathToFile.EndsWith(ManifestNameExt, StringComparison.OrdinalIgnoreCase) &&
+                 Path.GetFileName(pathToFile).StartsWith(ManifestNameBase, StringComparison.OrdinalIgnoreCase))
         {
             var result = await ProcessManifestFileAsync(pathToFile);
 
@@ -333,11 +359,12 @@ public sealed class LocalFilesProvider
     }
 
     /// <summary>
-    /// Parse a single JSON manifest file and load its grid/preview images.
+    ///     Parse a single JSON manifest file and load its grid/preview images.
     /// </summary>
     private async Task<ParsedAddonFile?> ProcessManifestFileAsync(string file)
     {
         var folderPath = Path.GetDirectoryName(file);
+
         if (folderPath is null)
         {
             return null;
@@ -348,16 +375,24 @@ public sealed class LocalFilesProvider
 
         string? gridFile = null;
         string? previewFile = null;
+
         foreach (var f in Directory.EnumerateFiles(folderPath))
         {
             var name = Path.GetFileNameWithoutExtension(f.AsSpan());
+
             if (name.Equals("grid", StringComparison.OrdinalIgnoreCase))
+            {
                 gridFile = f;
+            }
             else if (name.Equals("preview", StringComparison.OrdinalIgnoreCase))
+            {
                 previewFile = f;
+            }
 
             if (gridFile is not null && previewFile is not null)
+            {
                 break;
+            }
         }
 
         long? gridHash = null;
@@ -393,7 +428,7 @@ public sealed class LocalFilesProvider
     }
 
     /// <summary>
-    /// Parse manifests inside a zip archive and load any embedded grid/preview images.
+    ///     Parse manifests inside a zip archive and load any embedded grid/preview images.
     /// </summary>
     private async Task<List<ParsedAddonFile>?> ProcessArchiveAsync(string file)
     {
@@ -417,13 +452,13 @@ public sealed class LocalFilesProvider
         }
 
         var manifests = archive.Entries.Where(x =>
-            x.Key?.Contains(Path.GetFileNameWithoutExtension(CommonConstants.AddonManifestName), StringComparison.OrdinalIgnoreCase) == true
-            && x.Key.EndsWith(Path.GetExtension(CommonConstants.AddonManifestName))
-        );
+                                                  x.Key?.Contains(Path.GetFileNameWithoutExtension(CommonConstants.AddonManifestName), StringComparison.OrdinalIgnoreCase) == true
+                                               && x.Key.EndsWith(Path.GetExtension(CommonConstants.AddonManifestName))
+            );
 
         var grpInfos = archive.Entries.Where(x =>
-            x.Key?.EndsWith(".grpinfo") == true
-        );
+                                                 x.Key?.EndsWith(".grpinfo") == true
+            );
 
         foreach (var manifestEntry in manifests)
         {

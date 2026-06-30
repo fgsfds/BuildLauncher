@@ -16,7 +16,7 @@ internal static class PortTestSetups
 
         var game = new BloodGame
         {
-            GameInstallFolder = Path.Combine("D:", "Games", "Blood"),
+            GameInstallFolder = Path.Combine("D:", "Games", "Blood")
         };
 
         var baseCamp = new BloodCampaign
@@ -66,9 +66,27 @@ internal static class PortTestSetups
             RFF = null,
             SND = null,
             Executables = null,
-            Options = new() {
-                { "option 1", new() { { "OPT.DEF", OptionalParameterTypeEnum.DEF } } },
-                { "option 2", new() { { "OPT2.DEF", OptionalParameterTypeEnum.DEF }, { "OPT2_2.DEF", OptionalParameterTypeEnum.DEF } } },
+            Options = new()
+            {
+                {
+                    "option 1", new()
+                    {
+                        {
+                            "OPT.DEF", OptionalParameterTypeEnum.DEF
+                        }
+                    }
+                },
+                {
+                    "option 2", new()
+                    {
+                        {
+                            "OPT2.DEF", OptionalParameterTypeEnum.DEF
+                        },
+                        {
+                            "OPT2_2.DEF", OptionalParameterTypeEnum.DEF
+                        }
+                    }
+                }
             }
         };
 
@@ -84,7 +102,12 @@ internal static class PortTestSetups
             SupportedGame = new(GameEnum.Blood),
             RequiredFeatures = null,
             FileInfo = null,
-            DependentAddons = new Dictionary<string, string?> { { nameof(BloodAddonEnum.BloodCP), null } },
+            DependentAddons = new Dictionary<string, string?>
+            {
+                {
+                    nameof(BloodAddonEnum.BloodCP), null
+                }
+            },
             IncompatibleAddons = null,
             MainDef = null,
             AdditionalDefs = null,
@@ -168,7 +191,17 @@ internal static class PortTestSetups
             INI = "TC.INI",
             RFF = "TC.RFF",
             SND = "TC.SND",
-            Executables = new Dictionary<OSEnum, Dictionary<PortEnum, string>> { { OSEnum.Windows, new Dictionary<PortEnum, string> { { PortEnum.NBlood, "nblood.exe" } } } },
+            Executables = new Dictionary<OSEnum, Dictionary<PortEnum, string>>
+            {
+                {
+                    OSEnum.Windows, new Dictionary<PortEnum, string>
+                    {
+                        {
+                            PortEnum.NBlood, "nblood.exe"
+                        }
+                    }
+                }
+            },
             Options = null
         };
 
@@ -185,7 +218,12 @@ internal static class PortTestSetups
             RequiredFeatures = null,
             FileInfo = new(Path.Combine("D:", "Games", "Blood", "blood_tc_folder"), "addon.json"),
             DependentAddons = null,
-            IncompatibleAddons = new Dictionary<string, string?> { { "enabledMod", null } },
+            IncompatibleAddons = new Dictionary<string, string?>
+            {
+                {
+                    "enabledMod", null
+                }
+            },
             MainDef = null,
             AdditionalDefs = null,
             StartMap = null,
@@ -210,7 +248,12 @@ internal static class PortTestSetups
             RequiredFeatures = null,
             FileInfo = new(Path.Combine("D:", "Games", "Blood", "blood_tc_folder"), "addon.json"),
             DependentAddons = null,
-            IncompatibleAddons = new Dictionary<string, string?> { { "*", null } },
+            IncompatibleAddons = new Dictionary<string, string?>
+            {
+                {
+                    "*", null
+                }
+            },
             MainDef = null,
             AdditionalDefs = null,
             StartMap = null,
@@ -238,7 +281,10 @@ internal static class PortTestSetups
             IncompatibleAddons = null,
             MainDef = null,
             AdditionalDefs = null,
-            StartMap = new MapFileJsonModel { File = "LOOSE.MAP" },
+            StartMap = new MapFileJsonModel
+            {
+                File = "LOOSE.MAP"
+            },
             PreviewImageHash = null,
             Executables = null,
             BloodIni = null,
@@ -260,9 +306,15 @@ internal static class PortTestSetups
             GameInstallFolder = Path.Combine("D:", "Games", "Duke3D"),
             AddonsPaths = new()
             {
-                { DukeAddonEnum.DukeVaca, Path.Combine("D:", "Games", "Duke3D", "Vaca") },
-                { DukeAddonEnum.DukeDC, Path.Combine("D:", "Games", "Duke3D", "DC") },
-                { DukeAddonEnum.DukeNW, Path.Combine("D:", "Games", "Duke3D", "NW") }
+                {
+                    DukeAddonEnum.DukeVaca, Path.Combine("D:", "Games", "Duke3D", "Vaca")
+                },
+                {
+                    DukeAddonEnum.DukeDC, Path.Combine("D:", "Games", "Duke3D", "DC")
+                },
+                {
+                    DukeAddonEnum.DukeNW, Path.Combine("D:", "Games", "Duke3D", "NW")
+                }
             }
         };
 
@@ -378,7 +430,12 @@ internal static class PortTestSetups
             SupportedGame = new(GameEnum.Duke3D, DukeVersionEnum.Duke3D_Atomic),
             RequiredFeatures = null,
             FileInfo = null,
-            DependentAddons = new Dictionary<string, string?> { { nameof(DukeAddonEnum.DukeDC), null } },
+            DependentAddons = new Dictionary<string, string?>
+            {
+                {
+                    nameof(DukeAddonEnum.DukeDC), null
+                }
+            },
             IncompatibleAddons = null,
             MainCon = null,
             AdditionalCons = null,
@@ -403,7 +460,12 @@ internal static class PortTestSetups
             SupportedGame = new(GameEnum.Duke3D, DukeVersionEnum.Duke3D_Atomic),
             RequiredFeatures = null,
             FileInfo = null,
-            DependentAddons = new Dictionary<string, string?> { { nameof(DukeAddonEnum.DukeNW), null } },
+            DependentAddons = new Dictionary<string, string?>
+            {
+                {
+                    nameof(DukeAddonEnum.DukeNW), null
+                }
+            },
             IncompatibleAddons = null,
             MainCon = null,
             AdditionalCons = null,
@@ -428,7 +490,12 @@ internal static class PortTestSetups
             SupportedGame = new(GameEnum.Duke3D, DukeVersionEnum.Duke3D_Atomic),
             RequiredFeatures = null,
             FileInfo = null,
-            DependentAddons = new Dictionary<string, string?> { { nameof(DukeAddonEnum.DukeVaca), null } },
+            DependentAddons = new Dictionary<string, string?>
+            {
+                {
+                    nameof(DukeAddonEnum.DukeVaca), null
+                }
+            },
             IncompatibleAddons = null,
             MainCon = null,
             AdditionalCons = null,
@@ -453,7 +520,12 @@ internal static class PortTestSetups
             SupportedGame = new(GameEnum.Duke3D, DukeVersionEnum.Duke3D_Atomic),
             RequiredFeatures = null,
             FileInfo = new(Path.Combine(Directory.GetCurrentDirectory(), "Data", "Duke3D", "Campaigns"), "duke_tc.zip"),
-            DependentAddons = new Dictionary<string, string?> { { nameof(DukeAddonEnum.DukeVaca), null } },
+            DependentAddons = new Dictionary<string, string?>
+            {
+                {
+                    nameof(DukeAddonEnum.DukeVaca), null
+                }
+            },
             IncompatibleAddons = null,
             MainCon = "TC.CON",
             AdditionalCons = ["TC1.CON", "TC2.CON"],
@@ -482,7 +554,10 @@ internal static class PortTestSetups
             IncompatibleAddons = null,
             MainDef = null,
             AdditionalDefs = null,
-            StartMap = new MapFileJsonModel { File = "LOOSE.MAP" },
+            StartMap = new MapFileJsonModel
+            {
+                File = "LOOSE.MAP"
+            },
             PreviewImageHash = null,
             Executables = null,
             BloodIni = null,
@@ -536,7 +611,7 @@ internal static class PortTestSetups
         var game = new RedneckGame
         {
             GameInstallFolder = Path.Combine("D:", "Games", "Redneck"),
-            AgainInstallPath = Path.Combine("D:", "Games", "Again"),
+            AgainInstallPath = Path.Combine("D:", "Games", "Again")
         };
 
         var redneckCamp = new DukeCampaign
@@ -623,7 +698,7 @@ internal static class PortTestSetups
 
         var game = new SlaveGame
         {
-            GameInstallFolder = Path.Combine("D:", "Games", "Slave"),
+            GameInstallFolder = Path.Combine("D:", "Games", "Slave")
         };
 
         var camp = new GenericCampaign
@@ -657,7 +732,7 @@ internal static class PortTestSetups
 
         var game = new WangGame
         {
-            GameInstallFolder = Path.Combine("D:", "Games", "Wang"),
+            GameInstallFolder = Path.Combine("D:", "Games", "Wang")
         };
 
         var wangCamp = new GenericCampaign
@@ -720,7 +795,10 @@ internal static class PortTestSetups
             IncompatibleAddons = null,
             MainDef = null,
             AdditionalDefs = null,
-            StartMap = new MapFileJsonModel { File = "LOOSE.MAP" },
+            StartMap = new MapFileJsonModel
+            {
+                File = "LOOSE.MAP"
+            },
             PreviewImageHash = null,
             Executables = null,
             BloodIni = null,
@@ -834,7 +912,7 @@ internal static class PortTestSetups
         var game = new WitchavenGame
         {
             GameInstallFolder = Path.Combine("D:", "Games", "Witchaven"),
-            Witchaven2InstallPath = Path.Combine("D:", "Games", "Witchaven", "WH2"),
+            Witchaven2InstallPath = Path.Combine("D:", "Games", "Witchaven", "WH2")
         };
 
         var camp = new GenericCampaign
@@ -866,7 +944,7 @@ internal static class PortTestSetups
     {
         var game = new TekWarGame
         {
-            GameInstallFolder = Path.Combine("D:", "Games", "TekWar"),
+            GameInstallFolder = Path.Combine("D:", "Games", "TekWar")
         };
 
         var camp = new GenericCampaign
@@ -920,7 +998,7 @@ internal static class PortTestSetups
             StartMap = null,
             RequiredFeatures = null,
             Executables = null,
-            Options = null,
+            Options = null
         };
     }
 }

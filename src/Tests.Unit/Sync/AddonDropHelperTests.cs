@@ -10,18 +10,18 @@ using Games.Games;
 using Games.Providers;
 using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
-using Tests.Unit.Helpers;
+using DiHelper = Core.Client.Helpers.DiHelper;
 
 namespace Tests.Unit.Sync;
 
 [Collection("Sync")]
 public sealed class AddonDropHelperTests : IDisposable
 {
-    private readonly BloodGame _game;
     private readonly string _addonsFolder;
+    private readonly BloodGame _game;
+    private readonly AddonDropHelper _helper;
     private readonly string _mapsFolder;
     private readonly string _modsFolder;
-    private readonly AddonDropHelper _helper;
 
     public AddonDropHelperTests()
     {
@@ -35,7 +35,7 @@ public sealed class AddonDropHelperTests : IDisposable
         Directory.CreateDirectory(_modsFolder);
 
         Mock<ICacheAdder<Stream>> cache = new();
-        ChannelBroadcaster<Core.Client.Helpers.DiHelper.LocalFileEvent> channelPubMock = new();
+        ChannelBroadcaster<DiHelper.LocalFileEvent> channelPubMock = new();
         Mock<InstalledGamesProvider> gamesProvider = new();
         gamesProvider.Setup(x => x.GetGames()).Returns([]);
         LocalFilesProvider scanner = new(gamesProvider.Object, cache.Object, channelPubMock, NullLogger<LocalFilesProvider>.Instance);
@@ -50,9 +50,10 @@ public sealed class AddonDropHelperTests : IDisposable
             scanner,
             new OfflineApiInterface(NullLogger<OfflineApiInterface>.Instance),
             NullLogger<MetadataProvider>.Instance
-        );
+            );
 
-        Mock<IChannelSubscriber<Core.Client.Helpers.DiHelper.LocalFileEvent>> channelSubMock = new();
+        Mock<IChannelSubscriber<DiHelper.LocalFileEvent>> channelSubMock = new();
+
         var providerFactory = new InstalledAddonsProviderFactory(
             config.Object,
             originalCampaignsProvider,
@@ -65,7 +66,7 @@ public sealed class AddonDropHelperTests : IDisposable
         _helper = new AddonDropHelper(
             scanner,
             NullLogger<AddonDropHelper>.Instance
-        );
+            );
     }
 
     public void Dispose()
@@ -80,6 +81,7 @@ public sealed class AddonDropHelperTests : IDisposable
     {
         using var fileStream = new FileStream(path, FileMode.Create);
         using var archive = new ZipArchive(fileStream, ZipArchiveMode.Create);
+
         if (addonJsonContent is not null)
         {
             var entry = archive.CreateEntry("addon.json", CompressionLevel.NoCompression);
@@ -189,15 +191,16 @@ public sealed class AddonDropHelperTests : IDisposable
     public async Task AddAddonsAsync_WrongGameAddon_ReturnsFailedName()
     {
         var wrongGameZip = Path.Combine(_addonsFolder, "wrong_game.zip");
+
         CreateZipArchive(wrongGameZip, """
-            {
-                "id": "duke-mod",
-                "type": "Mod",
-                "game": { "name": "Duke3D" },
-                "title": "Duke Mod",
-                "version": "1.0"
-            }
-            """);
+                         {
+                             "id": "duke-mod",
+                             "type": "Mod",
+                             "game": { "name": "Duke3D" },
+                             "title": "Duke Mod",
+                             "version": "1.0"
+                         }
+                         """);
 
         var result = await _helper.AddAddonsAsync([wrongGameZip], _game);
 

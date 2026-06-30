@@ -15,9 +15,9 @@ namespace Avalonia.Desktop.Controls;
 
 public sealed partial class MapsControl : UserControl
 {
+    private readonly BitmapsCache _bitmapsCache = null!;
     private readonly IReadOnlyList<BasePort> _supportedPorts = [];
     private readonly MapsViewModel _viewModel = null!;
-    private readonly BitmapsCache _bitmapsCache = null!;
 
     private MenuFlyout? _flyout;
 
@@ -47,7 +47,7 @@ public sealed partial class MapsControl : UserControl
     }
 
     /// <summary>
-    /// Create skill flyout menu for a game
+    ///     Create skill flyout menu for a game
     /// </summary>
     private void CreateSkillsFlyout()
     {
@@ -65,7 +65,7 @@ public sealed partial class MapsControl : UserControl
     }
 
     /// <summary>
-    /// Add "Start with..." buttons to the ports button panel
+    ///     Add "Start with..." buttons to the ports button panel
     /// </summary>
     private void AddPortsButtons()
     {
@@ -73,24 +73,37 @@ public sealed partial class MapsControl : UserControl
         {
             var portIcon = _bitmapsCache.GetFromCache(port.PortEnum.GetUniqueHash());
 
-            StackPanel sp = new() { Orientation = Orientation.Horizontal };
-            sp.Children.Add(new Image() { Margin = new(0, 0, 5, 0), Height = 16, Source = portIcon });
-            sp.Children.Add(new TextBlock() { Text = port.ShortName });
+            StackPanel sp = new()
+            {
+                Orientation = Orientation.Horizontal
+            };
+
+            sp.Children.Add(new Image()
+            {
+                Margin = new(0, 0, 5, 0),
+                Height = 16,
+                Source = portIcon
+            });
+
+            sp.Children.Add(new TextBlock()
+            {
+                Text = port.ShortName
+            });
 
             Button button = new()
             {
                 Content = sp,
                 CommandParameter = port,
                 Command = new RelayCommand(() =>
-                {
-                    if (!IsSkillFlyoutAvailable(port))
-                    {
-                        _viewModel.StartMapCommand.Execute(new Tuple<BasePort, byte?>(port, null));
-                    }
-                },
-                () => PortsHelper.CheckPortRequirements(MapsList.SelectedItem, _viewModel.Game, port)),
+                                           {
+                                               if (!IsSkillFlyoutAvailable(port))
+                                               {
+                                                   _viewModel.StartMapCommand.Execute(new Tuple<BasePort, byte?>(port, null));
+                                               }
+                                           },
+                                           () => PortsHelper.CheckPortRequirements(MapsList.SelectedItem, _viewModel.Game, port)),
                 Margin = new(5),
-                Padding = new(5),
+                Padding = new(5)
             };
 
             button.Click += OnPortButtonClicked;
@@ -101,7 +114,7 @@ public sealed partial class MapsControl : UserControl
 
 
     /// <summary>
-    /// Get list of skill menu items
+    ///     Get list of skill menu items
     /// </summary>
     private List<MenuItem> GetSkillMenusItems(BasePort? port = null)
     {
@@ -110,11 +123,11 @@ public sealed partial class MapsControl : UserControl
         List<MenuItem> items = new(5);
 
         var enums = Enum.GetValues(_viewModel.Game.Skills.GetType())
-            .Cast<Enum>()
-            .ToDictionary(
-            Convert.ToByte,
-            e => e.GetDescription()
-            );
+                        .Cast<Enum>()
+                        .ToDictionary(
+                             Convert.ToByte,
+                             e => e.GetDescription()
+                             );
 
         foreach (var e in enums)
         {
@@ -124,7 +137,7 @@ public sealed partial class MapsControl : UserControl
                     Header = e.Value,
                     Padding = new(5),
                     Command = new RelayCommand(() => _viewModel.StartMapCommand.Execute(new Tuple<BasePort, byte?>(GetPort(port), e.Key)
-                    ))
+                                                   ))
                 });
         }
 
@@ -132,7 +145,7 @@ public sealed partial class MapsControl : UserControl
     }
 
     /// <summary>
-    /// Get port that should be run
+    ///     Get port that should be run
     /// </summary>
     /// <param name="port">Port</param>
     private BasePort GetPort(BasePort? port)
@@ -150,7 +163,7 @@ public sealed partial class MapsControl : UserControl
     }
 
     /// <summary>
-    /// Is skill flyout menu availably
+    ///     Is skill flyout menu availably
     /// </summary>
     /// <param name="port">Port</param>
     private bool IsSkillFlyoutAvailable(BasePort port) =>
@@ -158,7 +171,7 @@ public sealed partial class MapsControl : UserControl
 
 
     /// <summary>
-    /// Update CanExecute for ports buttons and context menu buttons when selected campaign changed
+    ///     Update CanExecute for ports buttons and context menu buttons when selected campaign changed
     /// </summary>
     private void OnMapsListSelectionChanged(object? sender, SelectionChangedEventArgs e)
     {

@@ -7,15 +7,15 @@ namespace Tests.Unit.CmdArguments;
 
 public sealed class NBloodCmdArgumentsTests
 {
-    private readonly BloodGame _bloodGame;
     private readonly BloodCampaign _bloodCamp;
     private readonly BloodCampaign _bloodCampWithOptions;
     private readonly BloodCampaign _bloodCpCamp;
-    private readonly BloodCampaign _bloodTc;
-    private readonly BloodCampaign _bloodTcFolder;
-    private readonly BloodCampaign _bloodTcExeOverride;
+    private readonly BloodGame _bloodGame;
     private readonly LooseMap _bloodLooseMap;
     private readonly AutoloadModsTestSetups _bloodMods;
+    private readonly BloodCampaign _bloodTc;
+    private readonly BloodCampaign _bloodTcExeOverride;
+    private readonly BloodCampaign _bloodTcFolder;
 
     public NBloodCmdArgumentsTests()
     {

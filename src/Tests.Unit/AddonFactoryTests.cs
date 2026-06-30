@@ -20,11 +20,11 @@ namespace Tests.Unit;
 [Collection("Sync")]
 public sealed class AddonFactoryTests
 {
-    private readonly DukeGame _game;
     private readonly Mock<IConfigProvider> _configMock;
-    private readonly HashSet<AddonId> _favorites;
     private readonly HashSet<string> _disabledMods;
     private readonly AddonFactory _factory;
+    private readonly HashSet<AddonId> _favorites;
+    private readonly DukeGame _game;
 
     public AddonFactoryTests()
     {
@@ -33,7 +33,7 @@ public sealed class AddonFactoryTests
             Duke64RomPath = null,
             DukeZHRomPath = null,
             DukeWTInstallPath = null,
-            GameInstallFolder = null,
+            GameInstallFolder = null
         };
 
         _favorites = [];
@@ -52,13 +52,13 @@ public sealed class AddonFactoryTests
             cacheMock.Object,
             channel,
             NullLogger<LocalFilesProvider>.Instance
-        );
+            );
 
         var metadataProvider = new MetadataProvider(
             localFilesProvider,
             new OfflineApiInterface(NullLogger<OfflineApiInterface>.Instance),
             NullLogger<MetadataProvider>.Instance
-        );
+            );
 
         _factory = new AddonFactory(_game, _configMock.Object, metadataProvider);
     }
@@ -81,8 +81,16 @@ public sealed class AddonFactoryTests
     [Fact]
     public void GetAddonFromFile_JsonManifestWithDependencies_AddsThem()
     {
-        var deps = new Dictionary<string, string?> { ["dep-addon"] = "1.0" };
-        var incomps = new Dictionary<string, string?> { ["bad-addon"] = "2.0" };
+        var deps = new Dictionary<string, string?>
+        {
+            ["dep-addon"] = "1.0"
+        };
+
+        var incomps = new Dictionary<string, string?>
+        {
+            ["bad-addon"] = "2.0"
+        };
+
         var parsed = ParsedAddonFileHelper.CreateParsedModFile("test-mod", "Test Mod", "1.0", deps: deps, incompatibles: incomps);
 
         var addon = _factory.GetAddonFromFile(parsed);
@@ -98,6 +106,7 @@ public sealed class AddonFactoryTests
     public void GetAddonFromFile_JsonManifestWithExecutables_AddsThem()
     {
         var folder = PathHelper.GetFakePath();
+
         var parsed = new ParsedAddonFile
         {
             FileInfo = new AddonFilePathWrapper(folder, "addon.json"),
@@ -108,7 +117,10 @@ public sealed class AddonFactoryTests
                 Title = "Executable Addon",
                 Version = "1.0",
                 AddonType = AddonTypeEnum.TC,
-                SupportedGame = new SupportedGameJsonModel { Game = GameEnum.Duke3D },
+                SupportedGame = new SupportedGameJsonModel
+                {
+                    Game = GameEnum.Duke3D
+                },
                 Executables = new Dictionary<OSEnum, Dictionary<PortEnum, string>>
                 {
                     [OSEnum.Windows] = new()
@@ -118,7 +130,7 @@ public sealed class AddonFactoryTests
                 }
             },
             GridHash = null,
-            PreviewHash = null,
+            PreviewHash = null
         };
 
         var addon = _factory.GetAddonFromFile(parsed);
@@ -143,7 +155,10 @@ public sealed class AddonFactoryTests
                 Title = "Options Addon",
                 Version = "1.0",
                 AddonType = AddonTypeEnum.TC,
-                SupportedGame = new SupportedGameJsonModel { Game = GameEnum.Duke3D },
+                SupportedGame = new SupportedGameJsonModel
+                {
+                    Game = GameEnum.Duke3D
+                },
                 Options = new List<OptionJsonModel>
                 {
                     new()
@@ -157,7 +172,7 @@ public sealed class AddonFactoryTests
                 }
             },
             GridHash = null,
-            PreviewHash = null,
+            PreviewHash = null
         };
 
         var addon = _factory.GetAddonFromFile(parsed);
@@ -182,11 +197,14 @@ public sealed class AddonFactoryTests
                 Title = "Con Addon",
                 Version = "1.0",
                 AddonType = AddonTypeEnum.TC,
-                SupportedGame = new SupportedGameJsonModel { Game = GameEnum.Duke3D },
-                AdditionalCons = ["extra.con", "more.con"],
+                SupportedGame = new SupportedGameJsonModel
+                {
+                    Game = GameEnum.Duke3D
+                },
+                AdditionalCons = ["extra.con", "more.con"]
             },
             GridHash = null,
-            PreviewHash = null,
+            PreviewHash = null
         };
 
         var addon = _factory.GetAddonFromFile(parsed);
@@ -211,10 +229,13 @@ public sealed class AddonFactoryTests
                 Title = "Preview Addon",
                 Version = "1.0",
                 AddonType = AddonTypeEnum.TC,
-                SupportedGame = new SupportedGameJsonModel { Game = GameEnum.Duke3D },
+                SupportedGame = new SupportedGameJsonModel
+                {
+                    Game = GameEnum.Duke3D
+                }
             },
             GridHash = null,
-            PreviewHash = 67890,
+            PreviewHash = 67890
         };
 
         var addon = _factory.GetAddonFromFile(parsed);
@@ -237,10 +258,13 @@ public sealed class AddonFactoryTests
                 Title = "Bad",
                 Version = "1.0",
                 AddonType = AddonTypeEnum.TC,
-                SupportedGame = new SupportedGameJsonModel { Game = GameEnum.Duke3D },
+                SupportedGame = new SupportedGameJsonModel
+                {
+                    Game = GameEnum.Duke3D
+                }
             },
             GridHash = null,
-            PreviewHash = null,
+            PreviewHash = null
         };
 
         var addon = _factory.GetAddonFromFile(parsed);
@@ -257,7 +281,7 @@ public sealed class AddonFactoryTests
             SupportedGame = GameEnum.Duke3D,
             Manifest = null,
             GridHash = null,
-            PreviewHash = null,
+            PreviewHash = null
         };
 
         Assert.Throws<InvalidOperationException>(() => _factory.GetAddonFromFile(parsed));
@@ -333,10 +357,13 @@ public sealed class AddonFactoryTests
                 Version = "1.0",
                 AddonType = AddonTypeEnum.Mod,
                 MainDef = "test.def",
-                SupportedGame = new SupportedGameJsonModel { Game = GameEnum.Duke3D },
+                SupportedGame = new SupportedGameJsonModel
+                {
+                    Game = GameEnum.Duke3D
+                }
             },
             GridHash = null,
-            PreviewHash = null,
+            PreviewHash = null
         };
 
         Assert.Throws<ArgumentException>(() => _factory.GetAddonFromFile(parsed));
@@ -360,13 +387,14 @@ public sealed class AddonFactoryTests
     {
         var mapFolder = PathHelper.GetFakePath();
         Directory.CreateDirectory(mapFolder);
+
         var parsed = new ParsedAddonFile
         {
             FileInfo = new AddonFilePathWrapper(mapFolder, "test.map"),
             SupportedGame = GameEnum.Duke3D,
             Manifest = null,
             GridHash = null,
-            PreviewHash = null,
+            PreviewHash = null
         };
 
         var addon = _factory.GetLooseMapFromFile(parsed);
@@ -388,7 +416,7 @@ public sealed class AddonFactoryTests
             SupportedGame = GameEnum.Duke3D,
             Manifest = null,
             GridHash = null,
-            PreviewHash = null,
+            PreviewHash = null
         };
 
         var addon = _factory.GetLooseMapFromFile(parsed);

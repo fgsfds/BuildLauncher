@@ -6,7 +6,7 @@ namespace Addons.Helpers;
 public static class DiHelper
 {
     /// <summary>
-    /// Adds dependencies to work with addons.
+    ///     Adds dependencies to work with addons.
     /// </summary>
     public static IServiceCollection WithAddons(this IServiceCollection container)
     {

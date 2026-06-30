@@ -4,26 +4,27 @@ namespace Games.Games;
 
 public sealed class TekWarGame : BaseGame
 {
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override GameEnum GameEnum => GameEnum.TekWar;
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override string FullName => "TekWar";
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override string ShortName => FullName;
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override List<string> RequiredFiles
     {
         get
         {
             List<string> result = ["SONGS", "SOUNDS"];
             result.AddRange(GenerateNumberedFiles("TILES", "ART", 0, 16));
+
             return result;
         }
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override Enum? Skills => null;
 }

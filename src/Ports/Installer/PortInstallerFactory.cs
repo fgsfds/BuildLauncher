@@ -13,7 +13,7 @@ public sealed class PortInstallerFactory(
     ) : IInstallerFactory<BasePort, PortInstaller>
 {
     /// <summary>
-    /// Create <see cref="PortInstaller"/> instance
+    ///     Create <see cref="PortInstaller" /> instance
     /// </summary>
     public PortInstaller Create(BasePort port) => new(
         port,

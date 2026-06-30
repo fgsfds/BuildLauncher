@@ -8,21 +8,21 @@ namespace Games.Providers;
 
 public sealed class GamesPathsProvider
 {
+    private readonly string? _againPath = null;
+    private readonly string? _bloodPath = null;
     private readonly IConfigProvider _config;
 
     private readonly string? _dukePath = null;
     private readonly string? _dukeWtPath = null;
-    private readonly string? _wangPath = null;
-    private readonly string? _bloodPath = null;
     private readonly string? _furyPath = null;
-    private readonly string? _redneckPath = null;
-    private readonly string? _againPath = null;
-    private readonly string? _slavePath = null;
     private readonly string? _namPath = null;
-    private readonly string? _ww2giPath = null;
+    private readonly string? _redneckPath = null;
+    private readonly string? _slavePath = null;
+    private readonly string? _twPath = null;
+    private readonly string? _wangPath = null;
     private readonly string? _witch1Path = null;
     private readonly string? _witch2Path = null;
-    private readonly string? _twPath = null;
+    private readonly string? _ww2giPath = null;
 
     public GamesPathsProvider(IConfigProvider config)
     {
@@ -48,6 +48,7 @@ public sealed class GamesPathsProvider
             //DUKE
             //3D Realms Anthology
             var pathToGame = Path.Combine(lib, "Duke Nukem 3D", "Duke Nukem 3D");
+
             if (Directory.Exists(pathToGame))
             {
                 _dukePath ??= pathToGame;
@@ -55,6 +56,7 @@ public sealed class GamesPathsProvider
 
             //Megaton
             pathToGame = Path.Combine(lib, "Duke Nukem 3D", "gameroot");
+
             if (Directory.Exists(pathToGame))
             {
                 _dukePath ??= pathToGame;
@@ -63,6 +65,7 @@ public sealed class GamesPathsProvider
 
             //WORLD TOUR
             pathToGame = Path.Combine(lib, "Duke Nukem 3D Twentieth Anniversary World Tour");
+
             if (Directory.Exists(pathToGame))
             {
                 //Using WT as a base game as a last resort
@@ -74,6 +77,7 @@ public sealed class GamesPathsProvider
             //WANG
             //Classic
             pathToGame = Path.Combine(lib, "Shadow Warrior DOS", "Shadow Warrior");
+
             if (Directory.Exists(pathToGame))
             {
                 _wangPath ??= pathToGame;
@@ -81,6 +85,7 @@ public sealed class GamesPathsProvider
 
             //Free
             pathToGame = Path.Combine(lib, "Shadow Warrior Original", "gameroot");
+
             if (Directory.Exists(pathToGame))
             {
                 _wangPath ??= pathToGame;
@@ -88,6 +93,7 @@ public sealed class GamesPathsProvider
 
             //Redux
             pathToGame = Path.Combine(lib, "Shadow Warrior Classic", "gameroot");
+
             if (Directory.Exists(pathToGame))
             {
                 _wangPath ??= pathToGame;
@@ -97,6 +103,7 @@ public sealed class GamesPathsProvider
             //BLOOD
             //RS
             pathToGame = Path.Combine(lib, "Blood - Refreshed Supply", "DOS", "BLOOD121");
+
             if (Directory.Exists(pathToGame))
             {
                 _bloodPath ??= pathToGame;
@@ -104,6 +111,7 @@ public sealed class GamesPathsProvider
 
             //FS
             pathToGame = Path.Combine(lib, "Blood", "DOS", "C", "BLOOD");
+
             if (Directory.Exists(pathToGame))
             {
                 _bloodPath ??= pathToGame;
@@ -111,6 +119,7 @@ public sealed class GamesPathsProvider
 
             //OUWB
             pathToGame = Path.Combine(lib, "One Unit Whole Blood");
+
             if (Directory.Exists(pathToGame))
             {
                 _bloodPath ??= pathToGame;
@@ -119,6 +128,7 @@ public sealed class GamesPathsProvider
 
             //FURY
             pathToGame = Path.Combine(lib, "Ion Fury");
+
             if (Directory.Exists(pathToGame))
             {
                 _furyPath ??= pathToGame;
@@ -127,6 +137,7 @@ public sealed class GamesPathsProvider
 
             //SLAVE
             pathToGame = Path.Combine(lib, "PowerslaveCE", "PWRSLAVE");
+
             if (Directory.Exists(pathToGame))
             {
                 _slavePath ??= pathToGame;
@@ -135,6 +146,7 @@ public sealed class GamesPathsProvider
 
             //REDNECK
             pathToGame = Path.Combine(lib, "Redneck Rampage", "Redneck");
+
             if (Directory.Exists(pathToGame))
             {
                 _redneckPath ??= pathToGame;
@@ -143,6 +155,7 @@ public sealed class GamesPathsProvider
 
             //RIDES AGAIN
             pathToGame = Path.Combine(lib, "Redneck Rampage Rides Again", "AGAIN");
+
             if (Directory.Exists(pathToGame))
             {
                 _againPath ??= pathToGame;
@@ -151,6 +164,7 @@ public sealed class GamesPathsProvider
 
             //NAM
             pathToGame = Path.Combine(lib, "Nam", "NAM");
+
             if (Directory.Exists(pathToGame))
             {
                 _namPath ??= pathToGame;
@@ -159,6 +173,7 @@ public sealed class GamesPathsProvider
 
             //WWII GI
             pathToGame = Path.Combine(lib, "World War II GI", "WW2GI");
+
             if (Directory.Exists(pathToGame))
             {
                 _ww2giPath ??= pathToGame;
@@ -167,6 +182,7 @@ public sealed class GamesPathsProvider
 
             //WITCHAVEN
             pathToGame = Path.Combine(lib, "Witchaven", "Original", "GAME", "WHAVEN");
+
             if (Directory.Exists(pathToGame))
             {
                 _witch1Path ??= pathToGame;
@@ -174,6 +190,7 @@ public sealed class GamesPathsProvider
 
             //WITCHAVEN II
             pathToGame = Path.Combine(lib, "Witchaven II Blood Vengeance", "Original", "GAME", "WHAVEN2");
+
             if (Directory.Exists(pathToGame))
             {
                 _witch2Path ??= pathToGame;

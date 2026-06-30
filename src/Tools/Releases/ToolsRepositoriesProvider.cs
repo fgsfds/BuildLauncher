@@ -5,16 +5,16 @@ using Core.All.Providers;
 namespace Tools.Releases;
 
 /// <summary>
-/// Maps each <see cref="ToolEnum"/> to its <see cref="RepositoryEntity"/> describing where and how to fetch releases.
+///     Maps each <see cref="ToolEnum" /> to its <see cref="RepositoryEntity" /> describing where and how to fetch releases.
 /// </summary>
 public sealed class ToolsRepositoriesProvider : IRepositoriesProvider<ToolEnum>
 {
     /// <summary>
-    /// Returns the repository configuration for the specified tool.
+    ///     Returns the repository configuration for the specified tool.
     /// </summary>
     /// <param name="releaseEnum">Target tool.</param>
-    /// <returns>A <see cref="RepositoryEntity"/> describing the release source and matching rules.</returns>
-    /// <exception cref="NotSupportedException">Thrown when <paramref name="releaseEnum"/> has no associated repository.</exception>
+    /// <returns>A <see cref="RepositoryEntity" /> describing the release source and matching rules.</returns>
+    /// <exception cref="NotSupportedException">Thrown when <paramref name="releaseEnum" /> has no associated repository.</exception>
     public RepositoryEntity GetRepo(ToolEnum releaseEnum)
     {
         if (releaseEnum is ToolEnum.XMapEdit)
@@ -24,7 +24,7 @@ public sealed class ToolsRepositoriesProvider : IRepositoriesProvider<ToolEnum>
                 RepoUrl = new("https://api.github.com/repos/NoOneBlood/xmapedit/releases"),
                 WindowsReleasePredicate = static x => x.FileName.EndsWith("x64.zip", StringComparison.OrdinalIgnoreCase),
                 LinuxReleasePredicate = null,
-                VersionSelector = static (_, asset) => asset.UpdatedDate.ToUniversalTime().ToString(),
+                VersionSelector = static (_, asset) => asset.UpdatedDate.ToUniversalTime().ToString()
             };
         }
 
@@ -45,7 +45,7 @@ public sealed class ToolsRepositoriesProvider : IRepositoriesProvider<ToolEnum>
                 RepoUrl = new("https://api.github.com/repos/clipmove/DOSBlood/releases"),
                 WindowsReleasePredicate = static x => x.FileName.EndsWith(".zip", StringComparison.OrdinalIgnoreCase),
                 LinuxReleasePredicate = null,
-                VersionSelector = static (_, asset) => asset.UpdatedDate.ToUniversalTime().ToString(),
+                VersionSelector = static (_, asset) => asset.UpdatedDate.ToUniversalTime().ToString()
             };
         }
 

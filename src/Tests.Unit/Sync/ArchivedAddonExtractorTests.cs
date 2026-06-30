@@ -1,9 +1,10 @@
+using System.IO.Compression;
+using System.Text;
 using System.Text.Json;
 using Addons.Helpers;
 using Addons.Providers;
 using Core.All;
 using Core.All.Enums;
-using Core.All.Enums.Addons;
 using Core.All.Serializable.Addon;
 using Core.Client.Cache;
 using Core.Client.Helpers;
@@ -17,9 +18,9 @@ namespace Tests.Unit.Sync;
 [Collection("Sync")]
 public sealed class ArchivedAddonExtractorTests : IDisposable
 {
-    private readonly string _tempDir;
-    private readonly LocalFilesProvider _localFilesProvider;
     private readonly ArchivedAddonExtractor _extractor;
+    private readonly LocalFilesProvider _localFilesProvider;
+    private readonly string _tempDir;
 
     public ArchivedAddonExtractorTests()
     {
@@ -36,7 +37,7 @@ public sealed class ArchivedAddonExtractorTests : IDisposable
             cacheMock.Object,
             channel,
             NullLogger<LocalFilesProvider>.Instance
-        );
+            );
 
         _extractor = new ArchivedAddonExtractor(_localFilesProvider, NullLogger<ArchivedAddonExtractor>.Instance);
 
@@ -48,7 +49,10 @@ public sealed class ArchivedAddonExtractorTests : IDisposable
         if (Directory.Exists(_tempDir))
         {
             try { Directory.Delete(_tempDir, true); }
-            catch { /* best effort */ }
+            catch
+            {
+                /* best effort */
+            }
         }
     }
 
@@ -64,7 +68,7 @@ public sealed class ArchivedAddonExtractorTests : IDisposable
             SupportedGame = GameEnum.Duke3D,
             Manifest = null,
             GridHash = null,
-            PreviewHash = null,
+            PreviewHash = null
         };
 
         var result = await _extractor.UnpackAndUpdateIfNeededAsync(parsed);
@@ -85,7 +89,7 @@ public sealed class ArchivedAddonExtractorTests : IDisposable
             SupportedGame = GameEnum.Duke3D,
             Manifest = null,
             GridHash = null,
-            PreviewHash = null,
+            PreviewHash = null
         };
 
         var result = await _extractor.UnpackAndUpdateIfNeededAsync(parsed);
@@ -106,18 +110,23 @@ public sealed class ArchivedAddonExtractorTests : IDisposable
             Title = "RFF Addon",
             Version = "1.0",
             AddonType = AddonTypeEnum.TC,
-            SupportedGame = new SupportedGameJsonModel { Game = GameEnum.Blood },
-            MainRff = "custom.rff",
+            SupportedGame = new SupportedGameJsonModel
+            {
+                Game = GameEnum.Blood
+            },
+            MainRff = "custom.rff"
         };
+
         var json = JsonSerializer.Serialize(manifest, AddonManifestJsonContext.Default.AddonManifestJsonModel);
-        var manifestBytes = System.Text.Encoding.UTF8.GetBytes(json);
+        var manifestBytes = Encoding.UTF8.GetBytes(json);
 
         var zipPath = Path.Combine(_tempDir, "rff-addon.zip");
+
         using (var stream = File.Create(zipPath))
-        using (var archive = new System.IO.Compression.ZipArchive(stream, System.IO.Compression.ZipArchiveMode.Create))
+        using (var archive = new ZipArchive(stream, ZipArchiveMode.Create))
         {
             var entry = archive.CreateEntry("addon.json");
-            using var writer = new System.IO.StreamWriter(entry.Open());
+            using var writer = new StreamWriter(entry.Open());
             writer.Write(json);
         }
 
@@ -127,7 +136,7 @@ public sealed class ArchivedAddonExtractorTests : IDisposable
             SupportedGame = GameEnum.Blood,
             Manifest = null,
             GridHash = null,
-            PreviewHash = null,
+            PreviewHash = null
         };
 
         var result = await _extractor.UnpackAndUpdateIfNeededAsync(parsed);
@@ -148,20 +157,28 @@ public sealed class ArchivedAddonExtractorTests : IDisposable
             Title = "Exe Addon",
             Version = "1.0",
             AddonType = AddonTypeEnum.TC,
-            SupportedGame = new SupportedGameJsonModel { Game = GameEnum.Duke3D },
+            SupportedGame = new SupportedGameJsonModel
+            {
+                Game = GameEnum.Duke3D
+            },
             Executables = new Dictionary<OSEnum, Dictionary<PortEnum, string>>
             {
-                [OSEnum.Windows] = new() { [PortEnum.EDuke32] = "custom.exe" }
-            },
+                [OSEnum.Windows] = new()
+                {
+                    [PortEnum.EDuke32] = "custom.exe"
+                }
+            }
         };
+
         var json = JsonSerializer.Serialize(manifest, AddonManifestJsonContext.Default.AddonManifestJsonModel);
 
         var zipPath = Path.Combine(_tempDir, "exe-addon.zip");
+
         using (var stream = File.Create(zipPath))
-        using (var archive = new System.IO.Compression.ZipArchive(stream, System.IO.Compression.ZipArchiveMode.Create))
+        using (var archive = new ZipArchive(stream, ZipArchiveMode.Create))
         {
             var entry = archive.CreateEntry("addon.json");
-            using var writer = new System.IO.StreamWriter(entry.Open());
+            using var writer = new StreamWriter(entry.Open());
             writer.Write(json);
         }
 
@@ -171,7 +188,7 @@ public sealed class ArchivedAddonExtractorTests : IDisposable
             SupportedGame = GameEnum.Duke3D,
             Manifest = null,
             GridHash = null,
-            PreviewHash = null,
+            PreviewHash = null
         };
 
         var result = await _extractor.UnpackAndUpdateIfNeededAsync(parsed);
@@ -190,16 +207,21 @@ public sealed class ArchivedAddonExtractorTests : IDisposable
             Title = "Simple",
             Version = "1.0",
             AddonType = AddonTypeEnum.TC,
-            SupportedGame = new SupportedGameJsonModel { Game = GameEnum.Duke3D },
+            SupportedGame = new SupportedGameJsonModel
+            {
+                Game = GameEnum.Duke3D
+            }
         };
+
         var json = JsonSerializer.Serialize(manifest, AddonManifestJsonContext.Default.AddonManifestJsonModel);
 
         var zipPath = Path.Combine(_tempDir, "simple.zip");
+
         using (var stream = File.Create(zipPath))
-        using (var archive = new System.IO.Compression.ZipArchive(stream, System.IO.Compression.ZipArchiveMode.Create))
+        using (var archive = new ZipArchive(stream, ZipArchiveMode.Create))
         {
             var entry = archive.CreateEntry("addon.json");
-            using var writer = new System.IO.StreamWriter(entry.Open());
+            using var writer = new StreamWriter(entry.Open());
             writer.Write(json);
         }
 
@@ -209,7 +231,7 @@ public sealed class ArchivedAddonExtractorTests : IDisposable
             SupportedGame = GameEnum.Duke3D,
             Manifest = null,
             GridHash = null,
-            PreviewHash = null,
+            PreviewHash = null
         };
 
         var result = await _extractor.UnpackAndUpdateIfNeededAsync(parsed);
@@ -222,10 +244,9 @@ public sealed class ArchivedAddonExtractorTests : IDisposable
     public async Task UnpackAndUpdateIfNeededAsync_EmptyZip_ReturnsFalse()
     {
         var zipPath = Path.Combine(_tempDir, "empty.zip");
+
         using (var stream = File.Create(zipPath))
-        using (var archive = new System.IO.Compression.ZipArchive(stream, System.IO.Compression.ZipArchiveMode.Create))
-        {
-        }
+        using (var archive = new ZipArchive(stream, ZipArchiveMode.Create)) { }
 
         var parsed = new ParsedAddonFile
         {
@@ -233,7 +254,7 @@ public sealed class ArchivedAddonExtractorTests : IDisposable
             SupportedGame = GameEnum.Duke3D,
             Manifest = null,
             GridHash = null,
-            PreviewHash = null,
+            PreviewHash = null
         };
 
         var result = await _extractor.UnpackAndUpdateIfNeededAsync(parsed);

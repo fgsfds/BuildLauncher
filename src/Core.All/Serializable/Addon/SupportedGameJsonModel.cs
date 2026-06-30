@@ -19,9 +19,10 @@ public sealed record SupportedGameJsonModel
 
 [JsonSourceGenerationOptions(
     RespectNullableAnnotations = true,
-    Converters = [
+    Converters =
+    [
         typeof(GameEnumJsonConverter)
-        ]
+    ]
     )]
 [JsonSerializable(typeof(SupportedGameJsonModel))]
 public sealed partial class SupportedGameJsonContext : JsonSerializerContext;

@@ -7,36 +7,42 @@ using Games.Games;
 namespace Ports.Ports.EDuke32;
 
 /// <summary>
-/// RedNukem port
+///     RedNukem port
 /// </summary>
 public sealed class Fury : EDuke32
 {
     private readonly IConfigProvider _config;
 
-    /// <inheritdoc/>
+
+    public Fury(IConfigProvider config)
+    {
+        _config = config;
+    }
+
+    /// <inheritdoc />
     public override PortEnum PortEnum => PortEnum.Fury;
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string WinExe => "fury.exe";
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string LinExe => throw new NotSupportedException();
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override string Name => "Fury";
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override List<GameEnum> SupportedGames => [GameEnum.Fury];
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override string InstallFolderPath => _config.PathFury ?? string.Empty;
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override bool IsInstalled => File.Exists(PortExeFilePath);
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override List<FeatureEnum> SupportedFeatures =>
-        [
+    [
         FeatureEnum.EDuke32_CON,
         FeatureEnum.Dynamic_Lighting,
         FeatureEnum.Hightile,
@@ -45,22 +51,16 @@ public sealed class Fury : EDuke32
         FeatureEnum.TROR,
         FeatureEnum.Wall_Rotate_Cstat,
         FeatureEnum.TileFromTexture
-        ];
+    ];
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string ConfigFile => "fury.cfg";
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override bool IsDownloadable => false;
 
 
-    public Fury(IConfigProvider config)
-    {
-        _config = config;
-    }
-
-
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override void BeforeStart(BaseGame game, BaseAddon campaign)
     {
         MoveSaveFilesFromStorage(game, campaign);
@@ -68,7 +68,7 @@ public sealed class Fury : EDuke32
     }
 
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override void GetStartCampaignArgs(StringBuilder sb, BaseGame game, BaseAddon addon)
     {
         if (addon.MainDef is not null)
@@ -106,6 +106,7 @@ public sealed class Fury : EDuke32
         if (addon is LooseMap)
         {
             GetLooseMapArgs(sb, game, addon);
+
             return;
         }
 

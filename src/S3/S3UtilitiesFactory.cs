@@ -5,18 +5,17 @@ using Core.Client.Interfaces;
 namespace S3;
 
 /// <summary>
-/// Factory for creating S3-related utilities.
+///     Factory for creating S3-related utilities.
 /// </summary>
 public sealed class S3UtilitiesFactory
 {
-    private readonly IConfigProvider _config;
-
     private static readonly AmazonS3Config _s3config = new()
     {
         ServiceURL = S3Constants.S3Endpoint,
         ForcePathStyle = true,
         RequestChecksumCalculation = RequestChecksumCalculation.WHEN_REQUIRED
     };
+    private readonly IConfigProvider _config;
 
     public S3UtilitiesFactory(IConfigProvider config)
     {
@@ -24,7 +23,7 @@ public sealed class S3UtilitiesFactory
     }
 
     /// <summary>
-    /// Creates an instance of S3TransferUtilityWrapper.
+    ///     Creates an instance of S3TransferUtilityWrapper.
     /// </summary>
     /// <returns></returns>
     public S3TransferUtilityWrapper CreateTransferUtility()
@@ -33,7 +32,7 @@ public sealed class S3UtilitiesFactory
     }
 
     /// <summary>
-    /// Creates an instance of S3MetadataProvider.
+    ///     Creates an instance of S3MetadataProvider.
     /// </summary>
     public S3MetadataProvider CreateMetadataProvider()
     {

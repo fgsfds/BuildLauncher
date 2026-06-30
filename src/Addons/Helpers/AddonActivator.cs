@@ -6,14 +6,14 @@ using Core.Client.Interfaces;
 namespace Addons.Helpers;
 
 /// <summary>
-/// Activates and deactivates autoload mods, cascading to dependencies and incompatible mods.
+///     Activates and deactivates autoload mods, cascading to dependencies and incompatible mods.
 /// </summary>
 internal sealed class AddonActivator
 {
     private readonly IConfigProvider _config;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="AddonActivator"/> class.
+    ///     Initializes a new instance of the <see cref="AddonActivator" /> class.
     /// </summary>
     /// <param name="config">Configuration provider used to persist mod enabled/disabled state.</param>
     public AddonActivator(IConfigProvider config)
@@ -22,8 +22,8 @@ internal sealed class AddonActivator
     }
 
     /// <summary>
-    /// Enable an autoload mod, recursively enabling its dependencies and disabling incompatible mods.
-    /// Disables other versions of the same mod id.
+    ///     Enable an autoload mod, recursively enabling its dependencies and disabling incompatible mods.
+    ///     Disables other versions of the same mod id.
     /// </summary>
     /// <param name="addon">Addon id to enable.</param>
     /// <param name="modsCache">The current list of installed mods to search within.</param>
@@ -60,11 +60,11 @@ internal sealed class AddonActivator
         }
 
         var otherVersions = modsCache
-             .Where(x =>
-                 x.AddonId.Id.Equals(addon.Id, StringComparison.OrdinalIgnoreCase) &&
-                 !VersionComparer.Compare(x.AddonId.Version, addon.Version, ComparisonOperatorEnum.Equals) &&
-                 (x.FileInfo is null || !x.FileInfo.Equals(autoloadMod.FileInfo))
-                 );
+           .Where(x =>
+                      x.AddonId.Id.Equals(addon.Id, StringComparison.OrdinalIgnoreCase) &&
+                      !VersionComparer.Compare(x.AddonId.Version, addon.Version, ComparisonOperatorEnum.Equals) &&
+                      (x.FileInfo is null || !x.FileInfo.Equals(autoloadMod.FileInfo))
+                );
 
         foreach (var version in otherVersions)
         {
@@ -75,7 +75,7 @@ internal sealed class AddonActivator
     }
 
     /// <summary>
-    /// Disable an autoload mod, recursively disabling any mods that depend on it.
+    ///     Disable an autoload mod, recursively disabling any mods that depend on it.
     /// </summary>
     /// <param name="addon">Addon id to disable.</param>
     /// <param name="modsCache">The current list of installed mods to search within.</param>

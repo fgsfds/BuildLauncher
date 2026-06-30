@@ -12,80 +12,85 @@ using SharpCompress.Archives.Zip;
 namespace Ports.Ports.EDuke32;
 
 /// <summary>
-/// EDuke32 port
+///     EDuke32 port
 /// </summary>
 public class EDuke32 : BasePort
 {
-    /// <inheritdoc/>
+    public EDuke32()
+    {
+        CreateWTStopgapFolder();
+    }
+
+    /// <inheritdoc />
     public override PortEnum PortEnum => PortEnum.EDuke32;
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string WinExe => "eduke32.exe";
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string LinExe => throw new NotSupportedException();
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override string Name => "EDuke32";
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string ConfigFile => "eduke32.cfg";
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string MainGrpParam => "-gamegrp ";
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string AddGrpParam => "-grp ";
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string AddDirectoryParam => "-j ";
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string AddFileParam => "-g ";
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string AddDefParam => "-mh ";
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string AddConParam => "-mx ";
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string MainDefParam => "-h ";
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string MainConParam => "-x ";
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string SkillParam => "-s";
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string AddGameDirParam => "-game_dir ";
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string AddRffParam => throw new NotSupportedException();
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string AddSndParam => throw new NotSupportedException();
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override List<GameEnum> SupportedGames =>
-        [
+    [
         GameEnum.Duke3D,
         GameEnum.NAM,
         GameEnum.WW2GI
-        ];
+    ];
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override List<string> SupportedGamesVersions =>
-        [
+    [
         nameof(DukeVersionEnum.Duke3D_13D),
         nameof(DukeVersionEnum.Duke3D_Atomic),
         nameof(DukeVersionEnum.Duke3D_WT)
-        ];
+    ];
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override List<FeatureEnum> SupportedFeatures =>
-        [
+    [
         FeatureEnum.EDuke32_CON,
         FeatureEnum.Dynamic_Lighting,
         FeatureEnum.Hightile,
@@ -94,9 +99,9 @@ public class EDuke32 : BasePort
         FeatureEnum.TROR,
         FeatureEnum.Wall_Rotate_Cstat,
         FeatureEnum.TileFromTexture
-        ];
+    ];
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override string? InstalledVersion
     {
         get
@@ -112,18 +117,12 @@ public class EDuke32 : BasePort
         }
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override bool IsSkillSelectionAvailable => true;
 
 
-    public EDuke32()
-    {
-        CreateWTStopgapFolder();
-    }
-
-
     /// <summary>
-    /// Create folder with files required for World Tour to work with EDuke32
+    ///     Create folder with files required for World Tour to work with EDuke32
     /// </summary>
     private void CreateWTStopgapFolder()
     {
@@ -153,14 +152,14 @@ public class EDuke32 : BasePort
     }
 
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override void GetSkipIntroParameter(StringBuilder sb) => sb.Append(" -quick");
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override void GetSkipStartupParameter(StringBuilder sb) => sb.Append(" -nosetup");
 
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override void BeforeStart(BaseGame game, BaseAddon campaign)
     {
         MoveSaveFilesFromStorage(game, campaign);
@@ -168,13 +167,13 @@ public class EDuke32 : BasePort
         FixWtFiles(game, campaign);
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override void AfterEnd(BaseGame game, BaseAddon campaign)
     {
         MoveSaveFilesToStorage(game, campaign);
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override void GetStartCampaignArgs(StringBuilder sb, BaseGame game, BaseAddon addon)
     {
         _ = sb.Append(" -usecwd"); //don't search for steam/gog installs
@@ -223,7 +222,7 @@ public class EDuke32 : BasePort
 
 
     /// <summary>
-    /// Get startup agrs for Duke
+    ///     Get startup agrs for Duke
     /// </summary>
     /// <param name="sb">StringBuilder</param>
     /// <param name="game">DukeGame</param>
@@ -233,6 +232,7 @@ public class EDuke32 : BasePort
         if (addon.SupportedGame.GameEnum is GameEnum.Duke64)
         {
             _ = sb.Append(@$" {AddDirectoryParam}""{Path.GetDirectoryName(game.Duke64RomPath)}"" {MainGrpParam}""{Path.GetFileName(game.Duke64RomPath)}""");
+
             return;
         }
 
@@ -303,6 +303,7 @@ public class EDuke32 : BasePort
         if (addon is LooseMap)
         {
             GetLooseMapArgs(sb, game, addon);
+
             return;
         }
 
@@ -348,7 +349,7 @@ public class EDuke32 : BasePort
 
 
     /// <summary>
-    /// Remove leftovers from the config
+    ///     Remove leftovers from the config
     /// </summary>
     protected void FixConfig()
     {
@@ -381,7 +382,7 @@ public class EDuke32 : BasePort
     }
 
     /// <summary>
-    /// Rename WT's ART files if custom campaign is launched
+    ///     Rename WT's ART files if custom campaign is launched
     /// </summary>
     protected void FixWtFiles(BaseGame game, BaseAddon campaign)
     {

@@ -16,6 +16,7 @@ public static class Crc32Helper
             var hasher = new Crc32();
 
             int bytesRead;
+
             while ((bytesRead = fs.Read(buffer, 0, buffer.Length)) > 0)
             {
                 hasher.Append(buffer.AsSpan(0, bytesRead));

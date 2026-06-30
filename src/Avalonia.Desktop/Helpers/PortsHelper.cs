@@ -10,7 +10,7 @@ namespace Avalonia.Desktop.Helpers;
 public static class PortsHelper
 {
     /// <summary>
-    /// Checks if addon can be run with the selected port.
+    ///     Checks if addon can be run with the selected port.
     /// </summary>
     /// <param name="obj">Addon/</param>
     /// <param name="game">Game enum.</param>

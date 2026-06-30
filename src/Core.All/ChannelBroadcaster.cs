@@ -1,5 +1,4 @@
-﻿using System.Collections.Concurrent;
-using System.Threading.Channels;
+﻿using System.Threading.Channels;
 
 namespace Core.All;
 
@@ -18,8 +17,23 @@ public interface IChannelPublisher<T>
 
 public class ChannelBroadcaster<T> : IChannelSubscriber<T>, IChannelPublisher<T>
 {
-    private readonly Dictionary<ChannelReader<T>, ChannelWriter<T>> _readerChannelDict = [];
     private readonly Lock _locker = new();
+    private readonly Dictionary<ChannelReader<T>, ChannelWriter<T>> _readerChannelDict = [];
+
+    public async ValueTask PublishAsync(T message)
+    {
+        List<ChannelWriter<T>> targets;
+
+        using (_locker.EnterScope())
+        {
+            targets = _readerChannelDict.Values.ToList();
+        }
+
+        foreach (var writer in targets)
+        {
+            await writer.WriteAsync(message);
+        }
+    }
 
     public ChannelReader<T> Subscribe()
     {
@@ -35,6 +49,7 @@ public class ChannelBroadcaster<T> : IChannelSubscriber<T>, IChannelPublisher<T>
             return channel.Reader;
         }
     }
+
     /// <inheritdoc />
     public void Unsubscribe(ChannelReader<T> reader)
     {
@@ -44,21 +59,6 @@ public class ChannelBroadcaster<T> : IChannelSubscriber<T>, IChannelPublisher<T>
             {
                 writer.Complete();
             }
-        }
-    }
-
-    public async ValueTask PublishAsync(T message)
-    {
-        List<ChannelWriter<T>> targets;
-
-        using (_locker.EnterScope())
-        {
-            targets = _readerChannelDict.Values.ToList();
-        }
-
-        foreach (var writer in targets)
-        {
-            await writer.WriteAsync(message);
         }
     }
 }

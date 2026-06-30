@@ -13,5 +13,5 @@ public enum PortEnum : byte
     Fury = 9,
     Stub = 10,
     DosBox = 11,
-    ZeroRecomp = 12,
+    ZeroRecomp = 12
 }

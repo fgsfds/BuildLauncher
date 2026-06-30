@@ -49,27 +49,15 @@ public sealed class StubPort : BasePort
 
     protected override string AddSndParam => string.Empty;
 
-    public override void AfterEnd(BaseGame game, BaseAddon campaign)
-    {
-    }
+    public override void AfterEnd(BaseGame game, BaseAddon campaign) { }
 
-    public override void BeforeStart(BaseGame game, BaseAddon campaign)
-    {
-    }
+    public override void BeforeStart(BaseGame game, BaseAddon campaign) { }
 
-    protected override void GetAutoloadModsArgs(StringBuilder sb, BaseGame game, BaseAddon addon, IReadOnlyList<BaseAddon> mods)
-    {
-    }
+    protected override void GetAutoloadModsArgs(StringBuilder sb, BaseGame game, BaseAddon addon, IReadOnlyList<BaseAddon> mods) { }
 
-    protected override void GetSkipIntroParameter(StringBuilder sb)
-    {
-    }
+    protected override void GetSkipIntroParameter(StringBuilder sb) { }
 
-    protected override void GetSkipStartupParameter(StringBuilder sb)
-    {
-    }
+    protected override void GetSkipStartupParameter(StringBuilder sb) { }
 
-    protected override void GetStartCampaignArgs(StringBuilder sb, BaseGame game, BaseAddon addon)
-    {
-    }
+    protected override void GetStartCampaignArgs(StringBuilder sb, BaseGame game, BaseAddon addon) { }
 }

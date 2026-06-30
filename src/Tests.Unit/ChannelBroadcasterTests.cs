@@ -60,6 +60,7 @@ public sealed class ChannelBroadcasterTests
 
         var cts = new CancellationTokenSource(TimeSpan.FromSeconds(1));
         var items = new List<string>();
+
         await foreach (var item in reader.ReadAllAsync(cts.Token))
         {
             items.Add(item);
