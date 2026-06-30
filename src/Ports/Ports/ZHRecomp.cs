@@ -15,6 +15,11 @@ public sealed class ZHRecomp : BasePort
 
     private readonly IConfigProvider _config;
 
+    public ZHRecomp(IConfigProvider config)
+    {
+        _config = config;
+    }
+
     /// <inheritdoc/>
     public override PortEnum PortEnum => PortEnum.ZeroRecomp;
 
@@ -25,15 +30,12 @@ public sealed class ZHRecomp : BasePort
     protected override string LinExe => "DNZHRecompiled";
 
     /// <inheritdoc/>
-    public override string Name => "Zero Hour Recompiled";
+    public override string Name => "Zero Hour Overclocked";
 
     public override string ShortName => "ZHRecomp";
 
     /// <inheritdoc/>
-    public override List<GameEnum> SupportedGames =>
-        [
-        GameEnum.DukeZeroHour
-        ];
+    public override List<GameEnum> SupportedGames => [GameEnum.DukeZeroHour];
 
     /// <inheritdoc/>
     public override string? InstalledVersion
@@ -95,11 +97,6 @@ public sealed class ZHRecomp : BasePort
 
     /// <inheritdoc/>
     protected override string AddSndParam => throw new NotImplementedException();
-
-    public ZHRecomp(IConfigProvider config)
-    {
-        _config = config;
-    }
 
     /// <inheritdoc/>
     protected override void GetStartCampaignArgs(StringBuilder sb, BaseGame game, BaseAddon addon) { }

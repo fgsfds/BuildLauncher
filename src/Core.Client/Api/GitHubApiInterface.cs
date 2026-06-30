@@ -2,7 +2,7 @@
 using Core.All;
 using Core.All.Enums;
 using Core.All.Helpers;
-using Core.All.Providers;
+using Core.All.Releases;
 using Core.All.Serializable;
 using Core.All.Serializable.Addon;
 using Core.All.Serializable.Downloadable;
@@ -12,30 +12,51 @@ using Microsoft.Extensions.Logging;
 
 namespace Core.Client.Api;
 
+/// <summary>
+///     Provides GitHub-backed implementation of the API interface for releases, addons, and metadata.
+/// </summary>
 public sealed class GitHubApiInterface : IApiInterface
 {
-    private readonly ReleaseProvider<PortEnum> _portsReleasesProvider;
-    private readonly ReleaseProvider<ToolEnum> _toolsReleasesProvider;
-    private readonly RepoAppReleasesProvider _appReleasesProvider;
+    private readonly ReleaseProviderBase<AppReleaseEnum> _appRepoReleasesProvider;
     private readonly IHttpClientFactory _httpClientFactory;
     private readonly ILogger<GitHubApiInterface> _logger;
+    private readonly ReleaseProviderBase<PortEnum> _portsReleasesProviderBase;
     private readonly SemaphoreSlim _semaphore = new(1);
+    private readonly ReleaseProviderBase<ToolEnum> _toolsReleasesProviderBase;
 
     private Dictionary<GameEnum, List<DownloadableAddonJsonModel>>? _addonsJson;
     private Dictionary<string, string>? _data;
 
 
+    /// <summary>
+    ///     Initializes a new instance of <see cref="GitHubApiInterface" />.
+    /// </summary>
+    /// <param name="portsReleasesProviderBase">
+    ///     Provider for port releases.
+    /// </param>
+    /// <param name="toolsReleasesRetriever">
+    ///     Provider for tool releases.
+    /// </param>
+    /// <param name="appRepoReleasesProvider">
+    ///     Provider for app self-update releases.
+    /// </param>
+    /// <param name="httpClientFactory">
+    ///     Factory for creating HTTP clients.
+    /// </param>
+    /// <param name="logger">
+    ///     Logger instance.
+    /// </param>
     public GitHubApiInterface(
-        ReleaseProvider<PortEnum> portsReleasesProvider,
-        ReleaseProvider<ToolEnum> toolsReleasesRetriever,
-        RepoAppReleasesProvider appReleasesProvider,
+        ReleaseProviderBase<PortEnum> portsReleasesProviderBase,
+        ReleaseProviderBase<ToolEnum> toolsReleasesRetriever,
+        ReleaseProviderBase<AppReleaseEnum> appRepoReleasesProvider,
         IHttpClientFactory httpClientFactory,
         ILogger<GitHubApiInterface> logger
         )
     {
-        _portsReleasesProvider = portsReleasesProvider;
-        _toolsReleasesProvider = toolsReleasesRetriever;
-        _appReleasesProvider = appReleasesProvider;
+        _portsReleasesProviderBase = portsReleasesProviderBase;
+        _toolsReleasesProviderBase = toolsReleasesRetriever;
+        _appRepoReleasesProvider = appRepoReleasesProvider;
         _httpClientFactory = httpClientFactory;
         _logger = logger;
     }
@@ -61,7 +82,6 @@ public sealed class GitHubApiInterface : IApiInterface
                 {
                     throw new FormatException("Error while deserializing addons.json");
                 }
-
             }
 
             if (gameEnum is GameEnum.Redneck)
@@ -69,7 +89,11 @@ public sealed class GitHubApiInterface : IApiInterface
                 _ = _addonsJson.TryGetValue(GameEnum.Redneck, out var rrAddons);
                 _ = _addonsJson.TryGetValue(GameEnum.RidesAgain, out var againAddons);
 
-                return [.. rrAddons ?? [], .. againAddons ?? []];
+                return
+                [
+                    .. rrAddons ?? [],
+                    .. againAddons ?? []
+                ];
             }
 
             if (gameEnum is GameEnum.Witchaven)
@@ -77,7 +101,11 @@ public sealed class GitHubApiInterface : IApiInterface
                 _ = _addonsJson.TryGetValue(GameEnum.Witchaven, out var w1Addons);
                 _ = _addonsJson.TryGetValue(GameEnum.Witchaven2, out var w2Addons);
 
-                return [.. w1Addons ?? [], .. w2Addons ?? []];
+                return
+                [
+                    .. w1Addons ?? [],
+                    .. w2Addons ?? []
+                ];
             }
 
             return _addonsJson.TryGetValue(gameEnum, out var result) ? result : [];
@@ -85,6 +113,7 @@ public sealed class GitHubApiInterface : IApiInterface
         catch (Exception ex)
         {
             _logger.LogCritical(ex, "=== Error while getting addons from GitHub ===");
+
             return null;
         }
         finally
@@ -95,7 +124,7 @@ public sealed class GitHubApiInterface : IApiInterface
 
     public async Task<GeneralReleaseJsonModel?> GetLatestAppReleaseAsync()
     {
-        var result = await _appReleasesProvider.GetLatestReleaseAsync(ClientProperties.IsDeveloperMode).ConfigureAwait(false);
+        var result = await _appRepoReleasesProvider.GetLatestReleaseAsync(AppReleaseEnum.MainApp, ClientProperties.IsDeveloperMode).ConfigureAwait(false);
 
         if (result?.TryGetValue(CommonProperties.OSEnum, out var release) is true)
         {
@@ -107,7 +136,7 @@ public sealed class GitHubApiInterface : IApiInterface
 
     public async Task<GeneralReleaseJsonModel?> GetLatestPortReleaseAsync(PortEnum portEnum)
     {
-        var result = await _portsReleasesProvider.GetLatestReleaseAsync(portEnum).ConfigureAwait(false);
+        var result = await _portsReleasesProviderBase.GetLatestReleaseAsync(portEnum, false).ConfigureAwait(false);
 
         if (result?.TryGetValue(CommonProperties.OSEnum, out var release) is true)
         {
@@ -119,7 +148,7 @@ public sealed class GitHubApiInterface : IApiInterface
 
     public async Task<GeneralReleaseJsonModel?> GetLatestToolReleaseAsync(ToolEnum toolEnum)
     {
-        var result = await _toolsReleasesProvider.GetLatestReleaseAsync(toolEnum).ConfigureAwait(false);
+        var result = await _toolsReleasesProviderBase.GetLatestReleaseAsync(toolEnum, false).ConfigureAwait(false);
 
         if (result?.TryGetValue(CommonProperties.OSEnum, out var release) is true)
         {
@@ -134,12 +163,14 @@ public sealed class GitHubApiInterface : IApiInterface
         if (ClientProperties.PathToLocalAddonsJson is null)
         {
             _logger.LogError("Can't find local addons.json");
+
             return false;
         }
 
         if (ClientProperties.PathToLocalManifestsJson is null)
         {
             _logger.LogError("Can't find local manifests.json");
+
             return false;
         }
 
@@ -150,12 +181,13 @@ public sealed class GitHubApiInterface : IApiInterface
             addons = await JsonSerializer.DeserializeAsync(
                 addonsJson,
                 DownloadableAddonJsonModelDictionaryContext.Default.DictionaryGameEnumListDownloadableAddonJsonModel
-            ).ConfigureAwait(false);
+                ).ConfigureAwait(false);
         }
 
         if (addons is null)
         {
             _logger.LogError("Error while deserializing addons.json");
+
             return false;
         }
 
@@ -193,12 +225,13 @@ public sealed class GitHubApiInterface : IApiInterface
             manifests = await JsonSerializer.DeserializeAsync(
                 manifestsJson,
                 AddonManifestJsonContext.Default.ListAddonManifestJsonModel
-            ).ConfigureAwait(false);
+                ).ConfigureAwait(false);
         }
 
         if (manifests is null)
         {
             _logger.LogError("Error while deserializing manifests.json");
+
             return false;
         }
 
@@ -227,6 +260,7 @@ public sealed class GitHubApiInterface : IApiInterface
         catch (Exception ex)
         {
             _logger.LogCritical(ex, "=== Error while getting upload folder from GitHub ===");
+
             return null;
         }
         finally
@@ -240,8 +274,9 @@ public sealed class GitHubApiInterface : IApiInterface
         try
         {
             using var httpClient = _httpClientFactory.CreateClient();
+
             using var jsonStream = await httpClient.GetStreamAsync(CommonConstants.ManifestsJsonUrl).ConfigureAwait(false)
-             ?? throw new FormatException("Error while deserializing manifests.json");
+                                ?? throw new FormatException("Error while deserializing manifests.json");
 
             var meta = await JsonSerializer.DeserializeAsync(
                 jsonStream,
@@ -253,18 +288,9 @@ public sealed class GitHubApiInterface : IApiInterface
         catch (Exception ex)
         {
             _logger.LogCritical(ex, "=== Error while getting upload folder from GitHub ===");
+
             return null;
         }
-    }
-
-
-    private async Task InitDataAsync()
-    {
-        using var httpClient = _httpClientFactory.CreateClient(HttpClientEnum.GitHub.GetDescription());
-        using var response = await httpClient.GetStreamAsync(CommonConstants.DataJsonUrl).ConfigureAwait(false);
-
-        _data = await JsonSerializer.DeserializeAsync(response, DataJsonModelContext.Default.DictionaryStringString).ConfigureAwait(false)
-             ?? throw new FormatException("Error while deserializing meta.json");
     }
 
     public async Task<Result<Uri?>> GetSignedUrlAsync(string path)
@@ -287,12 +313,23 @@ public sealed class GitHubApiInterface : IApiInterface
         catch (Exception ex)
         {
             _logger.LogCritical(ex, "=== Error while getting upload folder from GitHub ===");
+
             return new(ResultEnum.Error, null, "Error while getting upload folder from GitHub");
         }
         finally
         {
             _ = _semaphore.Release();
         }
+    }
+
+
+    private async Task InitDataAsync()
+    {
+        using var httpClient = _httpClientFactory.CreateClient(HttpClientEnum.GitHub.GetDescription());
+        using var response = await httpClient.GetStreamAsync(CommonConstants.DataJsonUrl).ConfigureAwait(false);
+
+        _data = await JsonSerializer.DeserializeAsync(response, DataJsonModelContext.Default.DictionaryStringString).ConfigureAwait(false)
+             ?? throw new FormatException("Error while deserializing meta.json");
     }
 
 

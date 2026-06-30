@@ -2,11 +2,12 @@
 using System.Net.Http.Headers;
 using Core.All.Enums;
 using Core.All.Helpers;
-using Core.All.Providers;
+using Core.All.Releases;
 using Core.Client.Api;
 using Core.Client.Config;
 using Core.Client.Interfaces;
 using Core.Client.Providers;
+using Core.Client.Releases;
 using Core.Client.Tools;
 using Database.Client;
 using Microsoft.Extensions.DependencyInjection;
@@ -40,10 +41,10 @@ public static class DiHelper
     public static IServiceCollection WithFakeHttpClients(this IServiceCollection container)
     {
         _ = container.AddHttpClient(HttpClientEnum.GitHub.GetDescription())
-            .ConfigurePrimaryHttpMessageHandler(() => new FakeHttpMessageHandler());
+                     .ConfigurePrimaryHttpMessageHandler(() => new FakeHttpMessageHandler());
 
         _ = container.AddHttpClient(string.Empty)
-            .ConfigurePrimaryHttpMessageHandler(() => new FakeHttpMessageHandler());
+                     .ConfigurePrimaryHttpMessageHandler(() => new FakeHttpMessageHandler());
 
         return container;
     }
@@ -51,27 +52,30 @@ public static class DiHelper
     public static IServiceCollection WithHttpClients(this IServiceCollection container)
     {
         _ = container.AddHttpClient(HttpClientEnum.GitHub.GetDescription())
-            .ConfigureHttpClient((serviceProvider, client) =>
-            {
-                var config = serviceProvider.GetRequiredService<IConfigProvider>();
+                     .ConfigureHttpClient((serviceProvider, client) =>
+                          {
+                              var config = serviceProvider.GetRequiredService<IConfigProvider>();
 
-                client.DefaultRequestHeaders.Add("User-Agent", "BuildLauncher");
-                client.Timeout = TimeSpan.FromSeconds(30);
-                if (!string.IsNullOrWhiteSpace(config.GitHubToken))
-                {
-                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", config.GitHubToken);
-                }
-            })
-            .RemoveAllLoggers();
+                              client.DefaultRequestHeaders.Add("User-Agent", "BuildLauncher");
+                              client.Timeout = TimeSpan.FromSeconds(30);
+
+                              if (!string.IsNullOrWhiteSpace(config.GitHubToken))
+                              {
+                                  client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", config.GitHubToken);
+                              }
+                          }
+                          )
+                     .RemoveAllLoggers();
 
         _ = container.AddHttpClient(string.Empty)
-            .ConfigureHttpClient((serviceProvider, client) =>
-            {
-                var config = serviceProvider.GetRequiredService<IConfigProvider>();
-                client.DefaultRequestHeaders.Add("User-Agent", "BuildLauncher");
-                client.Timeout = TimeSpan.FromSeconds(30);
-            })
-            .RemoveAllLoggers();
+                     .ConfigureHttpClient((serviceProvider, client) =>
+                          {
+                              var config = serviceProvider.GetRequiredService<IConfigProvider>();
+                              client.DefaultRequestHeaders.Add("User-Agent", "BuildLauncher");
+                              client.Timeout = TimeSpan.FromSeconds(30);
+                          }
+                          )
+                     .RemoveAllLoggers();
 
         return container;
     }
@@ -89,17 +93,26 @@ public static class DiHelper
     public static IServiceCollection WithFileLogging(this IServiceCollection container)
     {
         return container
-            .AddLogging(x => x
-                .AddFile(
-                    ClientProperties.PathToLogFile,
-                    opt =>
-                    {
-                        opt.Append = false;
-                        opt.FormatLogFileName = (fileName) => { return string.Format(fileName, DateTime.UtcNow); };
-                        opt.FormatLogEntry = (message) => { return $"[{DateTime.Now.ToLocalTime() + "]",-25} {message.LogLevel,-15} {message.Message}"; };
-                    })
-                .AddFilter("System.Net.Http.HttpClient", LogLevel.None)
-                .AddFilter("Microsoft.EntityFrameworkCore", LogLevel.None)
+           .AddLogging(x => x
+                           .AddFile(
+                                ClientProperties.PathToLogFile,
+                                opt =>
+                                {
+                                    opt.Append = false;
+
+                                    opt.FormatLogFileName = (fileName) =>
+                                    {
+                                        return string.Format(fileName, DateTime.UtcNow);
+                                    };
+
+                                    opt.FormatLogEntry = (message) =>
+                                    {
+                                        return $"[{DateTime.Now.ToLocalTime() + "]",-25} {message.LogLevel,-15} {message.Message} {message.Exception}";
+                                    };
+                                }
+                                )
+                           .AddFilter("System.Net.Http.HttpClient", LogLevel.None)
+                           .AddFilter("Microsoft.EntityFrameworkCore", LogLevel.None)
                 );
     }
 
@@ -111,11 +124,13 @@ public static class DiHelper
         _ = container.AddSingleton<PlaytimeProvider>();
         _ = container.AddSingleton<RatingProvider>();
         _ = container.AddSingleton<AddonsDatabaseManager>();
-        return container.AddSingleton<RepoAppReleasesProvider>();
+        _ = container.AddSingleton<ReleaseProviderBase<AppReleaseEnum>, AppRepoReleasesProvider>();
+
+        return container;
     }
 
 
-    public sealed class FakeHttpMessageHandler : HttpMessageHandler
+    private sealed class FakeHttpMessageHandler : HttpMessageHandler
     {
         protected override Task<HttpResponseMessage> SendAsync(
             HttpRequestMessage request, CancellationToken cancellationToken)

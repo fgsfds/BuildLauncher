@@ -1,10 +1,11 @@
 ﻿using Core.All.Enums;
-using Core.All.Providers;
+using Core.All.Releases;
 using Microsoft.Extensions.DependencyInjection;
 using Ports.Installer;
 using Ports.Ports;
 using Ports.Ports.EDuke32;
 using Ports.Providers;
+using Ports.Releases;
 
 namespace Ports;
 
@@ -18,7 +19,7 @@ public static class DiHelper
         _ = container.AddSingleton<PortInstallerFactory>();
         _ = container.AddSingleton<PortsProvider>();
         _ = container.AddSingleton<PortStarter>();
-        _ = container.AddSingleton<ReleaseProvider<PortEnum>, PortsReleasesProvider>();
+        _ = container.AddSingleton<ReleaseProviderBase<PortEnum>, PortsRepoReleasesProvider>();
 
         _ = container.AddSingleton<BasePort, EDuke32>();
         _ = container.AddSingleton<BasePort, NBlood>();
@@ -30,6 +31,8 @@ public static class DiHelper
         _ = container.AddSingleton<BasePort, Raze>();
         _ = container.AddSingleton<BasePort, BuildGDX>();
         _ = container.AddSingleton<BasePort, DosBox>();
-        return container.AddSingleton<BasePort, ZHRecomp>();
+        _ = container.AddSingleton<BasePort, ZHRecomp>();
+
+        return container;
     }
 }

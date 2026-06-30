@@ -9,6 +9,7 @@ public enum ComparisonOperatorEnum
     LessOrEquals
 }
 
+
 public static class VersionComparer
 {
     public static bool Compare(string? v1, string? v2)
@@ -80,7 +81,7 @@ public static class VersionComparer
         };
     }
 
-    private static int CompareVersions(ReadOnlySpan<char> v1, ReadOnlySpan<char> v2)
+    public static int CompareVersions(ReadOnlySpan<char> v1, ReadOnlySpan<char> v2)
     {
         var dash1 = v1.IndexOf('-');
         var dash2 = v2.IndexOf('-');
@@ -96,8 +97,7 @@ public static class VersionComparer
             var seg1 = dot1 >= 0 ? num1[..dot1] : num1;
             var seg2 = dot2 >= 0 ? num2[..dot2] : num2;
 
-            int? ToInt(ReadOnlySpan<char> s) =>
-                s.Length == 0 ? 0 : (int.TryParse(s, out var v) ? v : null);
+            int? ToInt(ReadOnlySpan<char> s) => s.Length == 0 ? 0 : (int.TryParse(s, out var v) ? v : null);
 
             var n1 = ToInt(seg1);
             var n2 = ToInt(seg2);
@@ -110,6 +110,7 @@ public static class VersionComparer
             else
             {
                 var result = seg1.SequenceCompareTo(seg2);
+
                 if (result != 0)
                     return result;
             }
