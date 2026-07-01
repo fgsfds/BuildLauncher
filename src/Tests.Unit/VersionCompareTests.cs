@@ -31,6 +31,7 @@ public sealed class VersionCompareTests
     [InlineData(null, "<=1")]
     [InlineData("1", null)]
     [InlineData("1", "1")]
+    [InlineData("", "")]
     public void Compare_ShouldReturnTrue(string? v1, string? v2)
     {
         var result = VersionComparer.Compare(v1, v2);
@@ -97,6 +98,7 @@ public sealed class VersionCompareTests
     [InlineData("1", null, ComparisonOperatorEnum.LessOrEquals)]
     [InlineData(null, null, ComparisonOperatorEnum.GreaterThan)]
     [InlineData(null, null, ComparisonOperatorEnum.LessThan)]
+    [InlineData("", "", ComparisonOperatorEnum.Equals)]
     public void Compare_WithOperator_ShouldReturnTrue(string? v1, string? v2, ComparisonOperatorEnum op)
     {
         var result = VersionComparer.Compare(v1, v2, op);
@@ -123,6 +125,7 @@ public sealed class VersionCompareTests
     [InlineData("1.9", "1.10", ComparisonOperatorEnum.GreaterOrEquals)]
     [InlineData("p1", "p1", ComparisonOperatorEnum.GreaterThan)]
     [InlineData("p1", "p1", ComparisonOperatorEnum.LessThan)]
+    [InlineData("", "", ComparisonOperatorEnum.GreaterThan)]
     public void Compare_WithOperator_ShouldReturnFalse(string? v1, string? v2, ComparisonOperatorEnum op)
     {
         var result = VersionComparer.Compare(v1, v2, op);

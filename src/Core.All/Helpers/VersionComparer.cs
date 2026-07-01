@@ -44,7 +44,7 @@ public static class VersionComparer
     /// <param name="v2">Second version string, optionally prefixed with an operator (==, &gt;=, &lt;=, &gt;, &lt;).</param>
     public static bool Compare(string? v1, string? v2)
     {
-        if (v1 is null || v2 is null)
+        if (string.IsNullOrWhiteSpace(v1) || string.IsNullOrWhiteSpace(v2))
         {
             return true;
         }
