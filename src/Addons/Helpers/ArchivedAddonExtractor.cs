@@ -78,10 +78,14 @@ internal sealed class ArchivedAddonExtractor
                         if (addonDto.MainRff is not null || addonDto.SoundRff is not null)
                         {
                             unpackedTo = Unpack(parsedAddonFile.FileInfo.PathToFile, archive);
+                            archive.Dispose();
+                            File.Delete(parsedAddonFile.FileInfo.PathToFile);
                         }
                         else if (addonDto.Executables is not null)
                         {
                             unpackedTo = Unpack(parsedAddonFile.FileInfo.PathToFile, archive);
+                            archive.Dispose();
+                            File.Delete(parsedAddonFile.FileInfo.PathToFile);
                         }
                     }
                 }
