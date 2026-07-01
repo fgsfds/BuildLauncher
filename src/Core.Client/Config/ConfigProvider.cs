@@ -398,8 +398,16 @@ public sealed class ConfigProvider : IConfigProvider
     {
         using var dbContext = _dbContextFactory.CreateDbContext();
 
+        var existing = dbContext.Favorites.Find(addonId.Id, addonId.Version ?? string.Empty);
+
         if (isEnabled)
         {
+            if (existing is not null)
+            {
+                // already added
+                return;
+            }
+
             _ = dbContext.Favorites.Add(new()
             {
                 AddonId = addonId.Id,
@@ -408,9 +416,11 @@ public sealed class ConfigProvider : IConfigProvider
         }
         else
         {
-            var existing = dbContext.Favorites.Find(addonId.Id, addonId.Version ?? string.Empty);
-
-            ArgumentNullException.ThrowIfNull(existing);
+            if (existing is null)
+            {
+                // already doesn't exist
+                return;
+            }
 
             _ = dbContext.Favorites.Remove(existing);
         }
@@ -429,9 +439,8 @@ public sealed class ConfigProvider : IConfigProvider
         {
             if (existing is not null)
             {
-                var enabled = existing.EnabledOptions.Split(';').ToList();
+                var enabled = existing.EnabledOptions.Split(';').ToHashSet();
                 enabled.Add(option);
-
                 existing.EnabledOptions = string.Join(';', enabled);
             }
             else
@@ -445,7 +454,11 @@ public sealed class ConfigProvider : IConfigProvider
         }
         else
         {
-            ArgumentNullException.ThrowIfNull(existing);
+            if (existing is null)
+            {
+                // already disabled
+                return;
+            }
 
             var enabled = existing.EnabledOptions.Split(';').ToList();
             _ = enabled.Remove(option);

@@ -11,6 +11,17 @@ namespace Database.Client;
 public sealed class DatabaseContext : DbContext
 {
     /// <summary>
+    ///     Initializes a new instance of the <see cref="DatabaseContext" /> class.
+    /// </summary>
+    public DatabaseContext() { }
+
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="DatabaseContext" /> class with options.
+    /// </summary>
+    /// <param name="options">The database context options.</param>
+    public DatabaseContext(DbContextOptions<DatabaseContext> options) : base(options) { }
+
+    /// <summary>
     ///     Gets or sets the disabled addons.
     /// </summary>
     public DbSet<DisabledDbEntity> DisabledAddons { get; set; }
@@ -53,9 +64,12 @@ public sealed class DatabaseContext : DbContext
     /// <inheritdoc />
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        _ = optionsBuilder.ConfigureWarnings(x =>
-                                                 x.Ignore(RelationalEventId.PendingModelChangesWarning));
+        if (!optionsBuilder.IsConfigured)
+        {
+            _ = optionsBuilder.ConfigureWarnings(x =>
+                                                     x.Ignore(RelationalEventId.PendingModelChangesWarning));
 
-        _ = optionsBuilder.UseSqlite("Data Source=BuildLauncher.db");
+            _ = optionsBuilder.UseSqlite("Data Source=BuildLauncher.db");
+        }
     }
 }
