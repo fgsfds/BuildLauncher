@@ -8,12 +8,23 @@ using Games.Providers;
 
 namespace Avalonia.Desktop;
 
+/// <summary>
+///     Represents the main application window.
+/// </summary>
 public sealed partial class MainWindow : Window, IDisposable
 {
     private readonly IConfigProvider _config;
+
     private readonly InstalledGamesProvider _installedGamesProvider;
+
+    /// <summary>
+    ///     The overlay bitmap displayed on highlighted items.
+    /// </summary>
     private readonly Bitmap? _overlayBitmap;
 
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="MainWindow" /> class.
+    /// </summary>
     public MainWindow()
     {
         _installedGamesProvider = null!;
@@ -22,6 +33,11 @@ public sealed partial class MainWindow : Window, IDisposable
         InitializeComponent();
     }
 
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="MainWindow" /> class.
+    /// </summary>
+    /// <param name="installedGamesProvider">The installed games provider.</param>
+    /// <param name="config">The configuration provider.</param>
     public MainWindow(
         InstalledGamesProvider installedGamesProvider,
         IConfigProvider config
@@ -43,11 +59,15 @@ public sealed partial class MainWindow : Window, IDisposable
         Resources["HighlightOverlayBitmap"] = _overlayBitmap;
     }
 
+    /// <inheritdoc />
     public void Dispose()
     {
         _overlayBitmap?.Dispose();
     }
 
+    /// <summary>
+    ///     Handles the window opened event.
+    /// </summary>
     private void OnWindowOpened(object? sender, EventArgs e)
     {
         if (Design.IsDesignMode)
@@ -102,6 +122,9 @@ public sealed partial class MainWindow : Window, IDisposable
         }
     }
 
+    /// <summary>
+    ///     Handles the consent button click event.
+    /// </summary>
     private void OnConsentButtonClick(object? sender, RoutedEventArgs e)
     {
         ConsentWindow.IsVisible = false;

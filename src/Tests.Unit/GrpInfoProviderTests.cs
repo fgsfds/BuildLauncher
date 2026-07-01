@@ -4,6 +4,9 @@ using Core.All.Enums;
 
 namespace Tests.Unit;
 
+/// <summary>
+///     Tests for the <see cref="GrpInfoProvider" /> class.
+/// </summary>
 public sealed class GrpInfoProviderTests : IDisposable
 {
     private const string GrpInfo = """
@@ -39,9 +42,19 @@ public sealed class GrpInfoProviderTests : IDisposable
         }
         """;
 
+    /// <summary>
+    ///     Path to the temporary grpinfo file.
+    /// </summary>
     private readonly string _grpInfoFilePath;
+
+    /// <summary>
+    ///     Path to the temporary folder.
+    /// </summary>
     private readonly string _tempFolder;
 
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="GrpInfoProviderTests" /> class.
+    /// </summary>
     public GrpInfoProviderTests()
     {
         _grpInfoFilePath = Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid()}.grpinfo");
@@ -65,6 +78,9 @@ public sealed class GrpInfoProviderTests : IDisposable
         }
     }
 
+    /// <summary>
+    ///     Tests that parsing a valid grpinfo file returns the expected entries.
+    /// </summary>
     [Fact]
     public void Parse_ReturnTrue()
     {
@@ -88,6 +104,9 @@ public sealed class GrpInfoProviderTests : IDisposable
         Assert.Equal(28245809, entry3.Size);
     }
 
+    /// <summary>
+    ///     Tests that parsing an empty grpinfo file returns an empty list.
+    /// </summary>
     [Fact]
     public void Parse_EmptyFile_ReturnsEmptyList()
     {
@@ -106,6 +125,9 @@ public sealed class GrpInfoProviderTests : IDisposable
         }
     }
 
+    /// <summary>
+    ///     Tests that parsing a grpinfo file with only comments and whitespace returns an empty list.
+    /// </summary>
     [Fact]
     public void Parse_OnlyCommentsAndWhitespace_ReturnsEmptyList()
     {
@@ -129,6 +151,9 @@ public sealed class GrpInfoProviderTests : IDisposable
         }
     }
 
+    /// <summary>
+    ///     Tests that entries missing name or size are skipped during parsing.
+    /// </summary>
     [Fact]
     public void Parse_EntriesMissingNameOrSize_Skipped()
     {
@@ -167,6 +192,9 @@ public sealed class GrpInfoProviderTests : IDisposable
         }
     }
 
+    /// <summary>
+    ///     Tests that parsing a grpinfo file with a single entry returns one entry.
+    /// </summary>
     [Fact]
     public void Parse_SingleEntry_ReturnsOneEntry()
     {
@@ -200,6 +228,9 @@ public sealed class GrpInfoProviderTests : IDisposable
         }
     }
 
+    /// <summary>
+    ///     Tests that GRP files matching grpinfo entries return the expected Duke campaigns.
+    /// </summary>
     [Fact]
     public void TryGetAddonsFromGrpInfo_GrpsMatchGrpInfo_ReturnsTrueWithDukeCampaigns()
     {
@@ -248,6 +279,9 @@ public sealed class GrpInfoProviderTests : IDisposable
         Assert.Null(((DukeCampaign)second).AdditionalDefs);
     }
 
+    /// <summary>
+    ///     Tests that no GRP files matching grpinfo entries returns false.
+    /// </summary>
     [Fact]
     public void TryGetAddonsFromGrpInfo_NoGrpFiles_ReturnsFalse()
     {
@@ -267,6 +301,9 @@ public sealed class GrpInfoProviderTests : IDisposable
         Assert.Null(addons);
     }
 
+    /// <summary>
+    ///     Tests that GRP files with sizes not matching any grpinfo entry are skipped.
+    /// </summary>
     [Fact]
     public void TryGetAddonsFromGrpInfo_GrpSizeNotInGrpInfo_Skipped()
     {
@@ -293,6 +330,9 @@ public sealed class GrpInfoProviderTests : IDisposable
         Assert.Equal("Matched", addons[0].Title);
     }
 
+    /// <summary>
+    ///     Tests that grpinfo entries missing a name are skipped.
+    /// </summary>
     [Fact]
     public void TryGetAddonsFromGrpInfo_EntryMissingName_Skipped()
     {

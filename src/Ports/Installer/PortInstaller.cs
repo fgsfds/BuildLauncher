@@ -8,6 +8,9 @@ using Ports.Ports;
 
 namespace Ports.Installer;
 
+/// <summary>
+///     Installs a port by downloading, extracting, and performing post-install setup.
+/// </summary>
 public sealed class PortInstaller : InstallerBase<BasePort>
 {
     private readonly IApiInterface _apiInterface;
@@ -53,11 +56,10 @@ public sealed class PortInstaller : InstallerBase<BasePort>
     }
 
     /// <summary>
-    ///     Moves all files from a nested subfolder into the install folder, then removes the subfolder.
+    ///     Moves all files from a nested subfolder up to the install folder and removes the subfolder.
     /// </summary>
-    /// <param name="installFolderPath">Target installation folder.</param>
-    /// <param name="subFolder">The nested subfolder to flatten. If <c>null</c> or empty, a <see cref="NullReferenceException" /> is thrown.</param>
-    /// <exception cref="NullReferenceException">Thrown when <paramref name="subFolder" /> is <c>null</c> or empty.</exception>
+    /// <param name="installFolderPath">Target install folder path.</param>
+    /// <param name="subFolder">Path to the nested subfolder to flatten.</param>
     private static void FlattenSubfolder(string installFolderPath, string? subFolder)
     {
         if (string.IsNullOrWhiteSpace(subFolder))

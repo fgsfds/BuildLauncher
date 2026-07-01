@@ -8,6 +8,9 @@ using Core.Client.Helpers;
 
 namespace Tests.Unit;
 
+/// <summary>
+///     Tests for the <see cref="AutoloadModsValidator" /> class.
+/// </summary>
 public sealed class AutoloadModsValidatorTests
 {
     private static readonly GameInfo DukeGame = new(GameEnum.Duke3D, DukeVersionEnum.Duke3D_Atomic);
@@ -50,6 +53,9 @@ public sealed class AutoloadModsValidatorTests
         };
     }
 
+    /// <summary>
+    ///     Creates a test campaign <see cref="AutoloadMod" /> with the specified parameters.
+    /// </summary>
     private static AutoloadMod CreateCampaign(
         string id,
         string? version,
@@ -82,6 +88,9 @@ public sealed class AutoloadModsValidatorTests
         };
     }
 
+    /// <summary>
+    ///     Tests that a disabled mod fails validation.
+    /// </summary>
     [Fact]
     public void ValidateAutoloadMod_DisabledMod_ReturnsFalse()
     {
@@ -93,6 +102,9 @@ public sealed class AutoloadModsValidatorTests
         Assert.False(result);
     }
 
+    /// <summary>
+    ///     Tests that a mod for a different game fails validation.
+    /// </summary>
     [Fact]
     public void ValidateAutoloadMod_DifferentGame_ReturnsFalse()
     {
@@ -104,6 +116,9 @@ public sealed class AutoloadModsValidatorTests
         Assert.False(result);
     }
 
+    /// <summary>
+    ///     Tests that a mod for the same game passes validation.
+    /// </summary>
     [Fact]
     public void ValidateAutoloadMod_SameGame_ReturnTrue()
     {
@@ -115,6 +130,9 @@ public sealed class AutoloadModsValidatorTests
         Assert.True(result);
     }
 
+    /// <summary>
+    ///     Tests that a Redneck mod with a Rides Again campaign passes validation.
+    /// </summary>
     [Fact]
     public void ValidateAutoloadMod_RedneckModWithRidesAgainCampaign_ReturnsTrue()
     {
@@ -126,6 +144,9 @@ public sealed class AutoloadModsValidatorTests
         Assert.True(result);
     }
 
+    /// <summary>
+    ///     Tests that a Rides Again mod with a Redneck campaign fails validation.
+    /// </summary>
     [Fact]
     public void ValidateAutoloadMod_RidesAgainModWithRedneckCampaign_ReturnsFalse()
     {
@@ -137,6 +158,9 @@ public sealed class AutoloadModsValidatorTests
         Assert.False(result);
     }
 
+    /// <summary>
+    ///     Tests that a mod with a different game version fails validation.
+    /// </summary>
     [Fact]
     public void ValidateAutoloadMod_DifferentGameVersion_ReturnsFalse()
     {
@@ -148,6 +172,9 @@ public sealed class AutoloadModsValidatorTests
         Assert.False(result);
     }
 
+    /// <summary>
+    ///     Tests that a mod with a null game version passes validation.
+    /// </summary>
     [Fact]
     public void ValidateAutoloadMod_NullGameVersion_ReturnTrue()
     {
@@ -159,6 +186,9 @@ public sealed class AutoloadModsValidatorTests
         Assert.True(result);
     }
 
+    /// <summary>
+    ///     Tests that a mod requiring unsupported features fails validation.
+    /// </summary>
     [Fact]
     public void ValidateAutoloadMod_RequiredFeaturesNotSupported_ReturnsFalse()
     {
@@ -175,6 +205,9 @@ public sealed class AutoloadModsValidatorTests
         Assert.False(result);
     }
 
+    /// <summary>
+    ///     Tests that a mod with supported features passes validation.
+    /// </summary>
     [Fact]
     public void ValidateAutoloadMod_RequiredFeaturesSupported_ReturnTrue()
     {
@@ -193,6 +226,9 @@ public sealed class AutoloadModsValidatorTests
         Assert.True(result);
     }
 
+    /// <summary>
+    ///     Tests that a mod with null required features passes validation.
+    /// </summary>
     [Fact]
     public void ValidateAutoloadMod_NullRequiredFeatures_ReturnTrue()
     {
@@ -204,6 +240,9 @@ public sealed class AutoloadModsValidatorTests
         Assert.True(result);
     }
 
+    /// <summary>
+    ///     Tests that a mod fails validation when the campaign has a wildcard incompatibility.
+    /// </summary>
     [Fact]
     public void ValidateAutoloadMod_CampaignIncompatibleWildcard_ReturnsFalse()
     {
@@ -221,6 +260,9 @@ public sealed class AutoloadModsValidatorTests
         Assert.False(result);
     }
 
+    /// <summary>
+    ///     Tests that a mod fails validation when the campaign is incompatible with the mod id.
+    /// </summary>
     [Fact]
     public void ValidateAutoloadMod_CampaignIncompatibleWithModId_ReturnsFalse()
     {
@@ -238,6 +280,9 @@ public sealed class AutoloadModsValidatorTests
         Assert.False(result);
     }
 
+    /// <summary>
+    ///     Tests that a mod passes validation when the campaign is incompatible with a different mod id.
+    /// </summary>
     [Fact]
     public void ValidateAutoloadMod_CampaignIncompatibleWithDifferentModId_ReturnTrue()
     {
@@ -255,6 +300,9 @@ public sealed class AutoloadModsValidatorTests
         Assert.True(result);
     }
 
+    /// <summary>
+    ///     Tests that a mod fails validation when the campaign is incompatible with the matching version.
+    /// </summary>
     [Fact]
     public void ValidateAutoloadMod_CampaignIncompatibleWithMatchingVersion_ReturnsFalse()
     {
@@ -272,6 +320,9 @@ public sealed class AutoloadModsValidatorTests
         Assert.False(result);
     }
 
+    /// <summary>
+    ///     Tests that a mod passes validation when the campaign is incompatible with a non-matching version.
+    /// </summary>
     [Fact]
     public void ValidateAutoloadMod_CampaignIncompatibleWithNonMatchingVersion_ReturnTrue()
     {
@@ -289,6 +340,9 @@ public sealed class AutoloadModsValidatorTests
         Assert.True(result);
     }
 
+    /// <summary>
+    ///     Tests that a mod with a dependency on the campaign itself passes validation.
+    /// </summary>
     [Fact]
     public void ValidateAutoloadMod_DependencyOnCampaignItself_ReturnTrue()
     {
@@ -306,6 +360,9 @@ public sealed class AutoloadModsValidatorTests
         Assert.True(result);
     }
 
+    /// <summary>
+    ///     Tests that a mod with a dependency matching the campaign's dependency passes validation.
+    /// </summary>
     [Fact]
     public void ValidateAutoloadMod_DependencyOnCampaignDependentAddon_ReturnTrue()
     {
@@ -328,6 +385,9 @@ public sealed class AutoloadModsValidatorTests
         Assert.True(result);
     }
 
+    /// <summary>
+    ///     Tests that a mod with a dependency on another enabled mod passes validation.
+    /// </summary>
     [Fact]
     public void ValidateAutoloadMod_DependencyOnOtherMod_ReturnTrue()
     {
@@ -346,6 +406,9 @@ public sealed class AutoloadModsValidatorTests
         Assert.True(result);
     }
 
+    /// <summary>
+    ///     Tests that a mod with an unsatisfied dependency fails validation.
+    /// </summary>
     [Fact]
     public void ValidateAutoloadMod_DependencyUnsatisfied_ReturnsFalse()
     {
@@ -363,6 +426,9 @@ public sealed class AutoloadModsValidatorTests
         Assert.False(result);
     }
 
+    /// <summary>
+    ///     Tests that a mod with a satisfied version constraint dependency passes validation.
+    /// </summary>
     [Fact]
     public void ValidateAutoloadMod_DependencyVersionConstraintSatisfied_ReturnTrue()
     {
@@ -381,6 +447,9 @@ public sealed class AutoloadModsValidatorTests
         Assert.True(result);
     }
 
+    /// <summary>
+    ///     Tests that a mod with an unsatisfied version constraint dependency fails validation.
+    /// </summary>
     [Fact]
     public void ValidateAutoloadMod_DependencyVersionConstraintUnsatisfied_ReturnsFalse()
     {
@@ -399,6 +468,9 @@ public sealed class AutoloadModsValidatorTests
         Assert.False(result);
     }
 
+    /// <summary>
+    ///     Tests that a mod with null dependent addons passes validation.
+    /// </summary>
     [Fact]
     public void ValidateAutoloadMod_NullDependentAddons_ReturnTrue()
     {
@@ -410,6 +482,9 @@ public sealed class AutoloadModsValidatorTests
         Assert.True(result);
     }
 
+    /// <summary>
+    ///     Tests that a mod incompatible with the campaign fails validation.
+    /// </summary>
     [Fact]
     public void ValidateAutoloadMod_IncompatibleWithCampaign_ReturnsFalse()
     {
@@ -427,6 +502,9 @@ public sealed class AutoloadModsValidatorTests
         Assert.False(result);
     }
 
+    /// <summary>
+    ///     Tests that a mod incompatible with an enabled mod fails validation.
+    /// </summary>
     [Fact]
     public void ValidateAutoloadMod_IncompatibleWithEnabledMod_ReturnsFalse()
     {
@@ -445,6 +523,9 @@ public sealed class AutoloadModsValidatorTests
         Assert.False(result);
     }
 
+    /// <summary>
+    ///     Tests that a mod incompatible only with a disabled mod passes validation.
+    /// </summary>
     [Fact]
     public void ValidateAutoloadMod_IncompatibleWithDisabledMod_ReturnTrue()
     {
@@ -463,6 +544,9 @@ public sealed class AutoloadModsValidatorTests
         Assert.True(result);
     }
 
+    /// <summary>
+    ///     Tests that a mod incompatible with a non-matching addon passes validation.
+    /// </summary>
     [Fact]
     public void ValidateAutoloadMod_IncompatibleWithNonMatchingAddon_ReturnTrue()
     {
@@ -481,6 +565,9 @@ public sealed class AutoloadModsValidatorTests
         Assert.True(result);
     }
 
+    /// <summary>
+    ///     Tests that a mod using an operator prefix for campaign incompatibility fails validation.
+    /// </summary>
     [Fact]
     public void ValidateAutoloadMod_IncompatibleWithCampaignUsingOperatorPrefix_ReturnsFalse()
     {
@@ -498,6 +585,9 @@ public sealed class AutoloadModsValidatorTests
         Assert.False(result);
     }
 
+    /// <summary>
+    ///     Tests that a mod with a non-matching incompatible version passes validation.
+    /// </summary>
     [Fact]
     public void ValidateAutoloadMod_IncompatibleVersionDoesNotMatch_ReturnTrue()
     {
@@ -515,6 +605,9 @@ public sealed class AutoloadModsValidatorTests
         Assert.True(result);
     }
 
+    /// <summary>
+    ///     Tests that a mod with null incompatible addons passes validation.
+    /// </summary>
     [Fact]
     public void ValidateAutoloadMod_NullIncompatibleAddons_ReturnTrue()
     {
@@ -526,6 +619,9 @@ public sealed class AutoloadModsValidatorTests
         Assert.True(result);
     }
 
+    /// <summary>
+    ///     Tests that a mod passes validation when all checks pass.
+    /// </summary>
     [Fact]
     public void ValidateAutoloadMod_AllChecksPass_ReturnsTrue()
     {
@@ -537,6 +633,9 @@ public sealed class AutoloadModsValidatorTests
         Assert.True(result);
     }
 
+    /// <summary>
+    ///     Tests that a mod with a dependency satisfied by a disabled mod passes validation.
+    /// </summary>
     [Fact]
     public void ValidateAutoloadMod_DependencyOnDisabledMod_ReturnTrue()
     {
@@ -555,6 +654,9 @@ public sealed class AutoloadModsValidatorTests
         Assert.True(result);
     }
 
+    /// <summary>
+    ///     Tests that a mod with partially unsatisfied dependencies fails validation.
+    /// </summary>
     [Fact]
     public void ValidateAutoloadMod_PartialDependenciesUnsatisfied_ReturnsFalse()
     {
@@ -576,6 +678,9 @@ public sealed class AutoloadModsValidatorTests
         Assert.False(result);
     }
 
+    /// <summary>
+    ///     Tests that a mod incompatible with an enabled mod by version fails validation.
+    /// </summary>
     [Fact]
     public void ValidateAutoloadMod_IncompatibleWithEnabledModByVersion_ReturnsFalse()
     {
@@ -594,6 +699,9 @@ public sealed class AutoloadModsValidatorTests
         Assert.False(result);
     }
 
+    /// <summary>
+    ///     Tests that a mod incompatible with a different version of an enabled mod passes validation.
+    /// </summary>
     [Fact]
     public void ValidateAutoloadMod_IncompatibleWithEnabledModByDifferentVersion_ReturnTrue()
     {

@@ -6,8 +6,12 @@ using Core.All.Serializable.Addon;
 
 namespace Core.All.Serializable;
 
+/// <summary>
+///     Custom JSON converter for <see cref="SupportedGameJsonModel" /> that supports deserializing from a string or an object.
+/// </summary>
 public sealed class SupportedGameDtoConverter : JsonConverter<SupportedGameJsonModel?>
 {
+    /// <inheritdoc />
     public override SupportedGameJsonModel? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
         if (reader.TokenType is JsonTokenType.StartObject)
@@ -37,6 +41,7 @@ public sealed class SupportedGameDtoConverter : JsonConverter<SupportedGameJsonM
         throw new NotSupportedException();
     }
 
+    /// <inheritdoc />
     public override void Write(Utf8JsonWriter writer, SupportedGameJsonModel? value, JsonSerializerOptions options)
     {
         throw new NotSupportedException();
@@ -44,8 +49,12 @@ public sealed class SupportedGameDtoConverter : JsonConverter<SupportedGameJsonM
 }
 
 
+/// <summary>
+///     Custom JSON converter for <see cref="IStartMap" /> that supports deserializing from <see cref="MapFileJsonModel" /> or <see cref="MapSlotJsonModel" />.
+/// </summary>
 public sealed class IStartMapConverter : JsonConverter<IStartMap?>
 {
+    /// <inheritdoc />
     public override IStartMap? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
         if (reader.TokenType is JsonTokenType.StartObject)
@@ -72,6 +81,7 @@ public sealed class IStartMapConverter : JsonConverter<IStartMap?>
         throw new NotSupportedException();
     }
 
+    /// <inheritdoc />
     public override void Write(Utf8JsonWriter writer, IStartMap? value, JsonSerializerOptions options)
     {
         writer.WriteStartObject();
@@ -98,8 +108,12 @@ public sealed class IStartMapConverter : JsonConverter<IStartMap?>
 }
 
 
+/// <summary>
+///     Custom JSON converter for executables dictionaries that supports both legacy (single-port) and new (multi-port) formats.
+/// </summary>
 public sealed class ExecutablesConverter : JsonConverter<Dictionary<OSEnum, Dictionary<PortEnum, string>>?>
 {
+    /// <inheritdoc />
     public override Dictionary<OSEnum, Dictionary<PortEnum, string>>? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
         if (reader.TokenType is JsonTokenType.StartObject)
@@ -187,6 +201,7 @@ public sealed class ExecutablesConverter : JsonConverter<Dictionary<OSEnum, Dict
         throw new NotSupportedException();
     }
 
+    /// <inheritdoc />
     public override void Write(Utf8JsonWriter writer, Dictionary<OSEnum, Dictionary<PortEnum, string>>? value, JsonSerializerOptions options)
     {
         if (value is null)
@@ -322,8 +337,12 @@ public sealed class ExecutablesConverter : JsonConverter<Dictionary<OSEnum, Dict
 //}
 
 
+/// <summary>
+///     Custom JSON converter for <see cref="GameEnum" /> that supports legacy name mappings.
+/// </summary>
 public sealed class GameEnumJsonConverter : JsonConverter<GameEnum>
 {
+    /// <inheritdoc />
     public override GameEnum Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
         var value = reader.GetString();
@@ -347,14 +366,17 @@ public sealed class GameEnumJsonConverter : JsonConverter<GameEnum>
         throw new NotSupportedException(value);
     }
 
+    /// <inheritdoc />
     public override void Write(Utf8JsonWriter writer, GameEnum value, JsonSerializerOptions options)
     {
         writer.WriteStringValue(value.ToString());
     }
 
+    /// <inheritdoc />
     public override GameEnum ReadAsPropertyName(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         => Read(ref reader, typeToConvert, options);
 
+    /// <inheritdoc />
     public override void WriteAsPropertyName(Utf8JsonWriter writer, GameEnum value, JsonSerializerOptions options)
     {
         writer.WritePropertyName(value.ToString());

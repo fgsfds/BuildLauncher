@@ -14,8 +14,12 @@ namespace S3;
 public sealed class S3FilesUploader : IFilesUploader
 {
     private readonly ILogger<S3FilesUploader> _logger;
+
     private readonly S3UtilitiesFactory _s3Factory;
 
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="S3FilesUploader" /> class.
+    /// </summary>
     public S3FilesUploader(S3UtilitiesFactory s3Factory, ILogger<S3FilesUploader> logger)
     {
         _s3Factory = s3Factory;
@@ -35,6 +39,14 @@ public sealed class S3FilesUploader : IFilesUploader
         return InternalUploadAsync(pathToLocalFile, fileKey, progress, cancellationToken);
     }
 
+    /// <summary>
+    ///     Uploads a file to the public uploads folder on S3.
+    /// </summary>
+    /// <param name="pathToLocalFile">Path to the local file.</param>
+    /// <param name="relativePathToRemoteFile">Relative path in the remote storage.</param>
+    /// <param name="progress">Progress indicator.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>The upload result with remote file metadata.</returns>
     public Task<Result<RemoteFileMetadata?>> UploadFileToPublicAsync(
         string pathToLocalFile,
         string relativePathToRemoteFile,
@@ -46,6 +58,14 @@ public sealed class S3FilesUploader : IFilesUploader
         return InternalUploadAsync(pathToLocalFile, fileKey, progress, cancellationToken);
     }
 
+    /// <summary>
+    ///     Performs the internal file upload to S3.
+    /// </summary>
+    /// <param name="pathToLocalFile">Path to the local file.</param>
+    /// <param name="fileKey">S3 object key.</param>
+    /// <param name="progress">Progress indicator.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>The upload result with remote file metadata.</returns>
     private async Task<Result<RemoteFileMetadata?>> InternalUploadAsync(
         string pathToLocalFile,
         string fileKey,
@@ -97,6 +117,11 @@ public sealed class S3FilesUploader : IFilesUploader
         }
     }
 
+    /// <summary>
+    ///     Tracks the upload progress by reading the stream position.
+    /// </summary>
+    /// <param name="streamToTrack">The file stream to track.</param>
+    /// <param name="progress">Progress indicator to update.</param>
     private static void TrackProgress(FileStream streamToTrack, StrongBox<int> progress)
     {
         while (streamToTrack.CanSeek)

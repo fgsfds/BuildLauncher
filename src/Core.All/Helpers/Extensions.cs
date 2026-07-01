@@ -2,12 +2,15 @@
 
 namespace Core.All.Helpers;
 
+/// <summary>
+///     Provides extension methods for common types.
+/// </summary>
 public static class Extensions
 {
     /// <summary>
-    ///     Convert long to readable size string
+    ///     Converts a file size in bytes to a human-readable string.
     /// </summary>
-    /// <param name="size">File size</param>
+    /// <param name="size">File size in bytes.</param>
     public static string ToSizeString(this long size)
     {
         if (size < 1000)
@@ -27,9 +30,9 @@ public static class Extensions
     }
 
     /// <summary>
-    ///     Convert timespan to readable string
+    ///     Converts a time span to a human-readable string.
     /// </summary>
-    /// <param name="time">Timespan</param>
+    /// <param name="time">Time span.</param>
     public static string ToTimeString(this TimeSpan time)
     {
         if (time.TotalSeconds < 1)
@@ -76,11 +79,11 @@ public static class Extensions
     }
 
     /// <summary>
-    ///     Add new element or replace value of and existing element
+    ///     Adds a new element or replaces the value of an existing element in the dictionary.
     /// </summary>
-    /// <param name="dict">Dictionary</param>
-    /// <param name="key">Key</param>
-    /// <param name="value">Value</param>
+    /// <param name="dict">Dictionary.</param>
+    /// <param name="key">Key.</param>
+    /// <param name="value">Value.</param>
     public static void AddOrReplace<TKey, TValue>(this IDictionary<TKey, TValue> dict, TKey key, TValue value) where TKey : notnull
     {
         if (dict.ContainsKey(key))
@@ -93,6 +96,13 @@ public static class Extensions
         }
     }
 
+    /// <summary>
+    ///     Adds all elements from the source dictionary to the target, overwriting existing keys.
+    /// </summary>
+    /// <param name="target">Target dictionary.</param>
+    /// <param name="source">Source dictionary.</param>
+    /// <typeparam name="TKey">Key type.</typeparam>
+    /// <typeparam name="TValue">Value type.</typeparam>
     public static void AddRange<TKey, TValue>(this Dictionary<TKey, TValue> target, IDictionary<TKey, TValue> source)
     {
         foreach (var kv in source)
@@ -101,6 +111,13 @@ public static class Extensions
         }
     }
 
+    /// <summary>
+    ///     Adds all key-value pairs from the source to the target, overwriting existing keys.
+    /// </summary>
+    /// <param name="target">Target dictionary.</param>
+    /// <param name="source">Source key-value pairs.</param>
+    /// <typeparam name="TKey">Key type.</typeparam>
+    /// <typeparam name="TValue">Value type.</typeparam>
     public static void AddRange<TKey, TValue>(this Dictionary<TKey, TValue> target, IEnumerable<KeyValuePair<TKey, TValue>> source)
     {
         foreach (var kv in source)

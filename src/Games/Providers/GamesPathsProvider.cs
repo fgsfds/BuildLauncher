@@ -6,24 +6,82 @@ using Microsoft.Win32;
 
 namespace Games.Providers;
 
+/// <summary>
+///     Provides game install paths detected from Steam libraries and registry.
+/// </summary>
 public sealed class GamesPathsProvider
 {
+    /// <summary>
+    ///     Path to Rides Again installation.
+    /// </summary>
     private readonly string? _againPath = null;
+
+    /// <summary>
+    ///     Path to Blood installation.
+    /// </summary>
     private readonly string? _bloodPath = null;
+
     private readonly IConfigProvider _config;
 
+    /// <summary>
+    ///     Path to Duke Nukem 3D installation.
+    /// </summary>
     private readonly string? _dukePath = null;
+
+    /// <summary>
+    ///     Path to Duke Nukem 3D World Tour installation.
+    /// </summary>
     private readonly string? _dukeWtPath = null;
+
+    /// <summary>
+    ///     Path to Ion Fury installation.
+    /// </summary>
     private readonly string? _furyPath = null;
+
+    /// <summary>
+    ///     Path to NAM installation.
+    /// </summary>
     private readonly string? _namPath = null;
+
+    /// <summary>
+    ///     Path to Redneck Rampage installation.
+    /// </summary>
     private readonly string? _redneckPath = null;
+
+    /// <summary>
+    ///     Path to Powerslave installation.
+    /// </summary>
     private readonly string? _slavePath = null;
+
+    /// <summary>
+    ///     Path to TekWar installation.
+    /// </summary>
     private readonly string? _twPath = null;
+
+    /// <summary>
+    ///     Path to Shadow Warrior installation.
+    /// </summary>
     private readonly string? _wangPath = null;
+
+    /// <summary>
+    ///     Path to Witchaven installation.
+    /// </summary>
     private readonly string? _witch1Path = null;
+
+    /// <summary>
+    ///     Path to Witchaven 2 installation.
+    /// </summary>
     private readonly string? _witch2Path = null;
+
+    /// <summary>
+    ///     Path to World War II GI installation.
+    /// </summary>
     private readonly string? _ww2giPath = null;
 
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="GamesPathsProvider" /> class.
+    /// </summary>
+    /// <param name="config">Configuration provider.</param>
     public GamesPathsProvider(IConfigProvider config)
     {
         _config = config;
@@ -200,6 +258,11 @@ public sealed class GamesPathsProvider
         FillConfig();
     }
 
+    /// <summary>
+    ///     Gets the install path for the specified game.
+    /// </summary>
+    /// <param name="game">The game enum.</param>
+    /// <returns>The install path, or <see langword="null" /> if not found.</returns>
     public string? GetPath(GameEnum game)
     {
         return game switch
@@ -220,6 +283,11 @@ public sealed class GamesPathsProvider
         };
     }
 
+    /// <summary>
+    ///     Gets the install path for the specified Duke Nukem 3D version.
+    /// </summary>
+    /// <param name="game">The Duke version enum.</param>
+    /// <returns>The install path, or <see langword="null" /> if not found.</returns>
     public string? GetPath(DukeVersionEnum game)
     {
         return game switch
@@ -231,6 +299,9 @@ public sealed class GamesPathsProvider
         };
     }
 
+    /// <summary>
+    ///     Fills missing configuration paths with detected game install paths.
+    /// </summary>
     private void FillConfig()
     {
         _config.PathDuke3D ??= GetPath(GameEnum.Duke3D);

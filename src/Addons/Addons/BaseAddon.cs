@@ -8,12 +8,12 @@ using Core.Client.Helpers;
 namespace Addons.Addons;
 
 /// <summary>
-///     Base class for campaigns and maps
+///     Base class for campaigns, maps, and mods.
 /// </summary>
 public abstract class BaseAddon
 {
     /// <summary>
-    ///     Addon ID
+    ///     Addon ID.
     /// </summary>
     public required AddonId AddonId { get; init; }
 
@@ -23,72 +23,72 @@ public abstract class BaseAddon
     public required AddonFilePathWrapper? FileInfo { get; init; }
 
     /// <summary>
-    ///     Type of the addon
+    ///     Type of the addon.
     /// </summary>
     public required AddonTypeEnum Type { get; init; }
 
     /// <summary>
-    ///     Supported game
+    ///     Supported game.
     /// </summary>
     public required GameInfo SupportedGame { get; init; }
 
     /// <summary>
-    ///     Name of the addon
+    ///     Name of the addon.
     /// </summary>
     public required string Title { get; init; }
 
     /// <summary>
-    ///     Addon author
+    ///     Addon author.
     /// </summary>
     public required string? Author { get; init; }
 
     /// <summary>
-    ///     Original release date
+    ///     Original release date.
     /// </summary>
     public required DateOnly? ReleaseDate { get; init; }
 
     /// <summary>
-    ///     Addon description
+    ///     Addon description.
     /// </summary>
     public required string? Description { get; init; }
 
     /// <summary>
-    ///     Features required to run addon
+    ///     Features required to run the addon.
     /// </summary>
     public required ImmutableArray<FeatureEnum>? RequiredFeatures { get; init; }
 
     /// <summary>
-    ///     List of addons that the current addon requires to work
+    ///     List of addons that the current addon requires to work.
     /// </summary>
     public required IReadOnlyDictionary<string, string?>? DependentAddons { get; init; }
 
     /// <summary>
-    ///     List of addons that the current addon is incompatible with
+    ///     List of addons that the current addon is incompatible with.
     /// </summary>
     public required IReadOnlyDictionary<string, string?>? IncompatibleAddons { get; init; }
 
     /// <summary>
-    ///     Cover image hash
+    ///     Cover image hash.
     /// </summary>
     public required long? GridImageHash { get; init; }
 
     /// <summary>
-    ///     Preview image hash
+    ///     Preview image hash.
     /// </summary>
     public required long? PreviewImageHash { get; init; }
 
     /// <summary>
-    ///     Main def file
+    ///     Main DEF file.
     /// </summary>
     public required string? MainDef { get; init; }
 
     /// <summary>
-    ///     Additional def files
+    ///     Additional DEF files.
     /// </summary>
     public required ImmutableArray<string>? AdditionalDefs { get; init; }
 
     /// <summary>
-    ///     Map that will be started when the addon is loaded
+    ///     Map that will be started when the addon is loaded.
     /// </summary>
     public required IStartMap? StartMap { get; init; }
 
@@ -116,7 +116,7 @@ public abstract class BaseAddon
     public override string ToString() => Title;
 
     /// <summary>
-    ///     Create markdown description of the addon
+    ///     Create Markdown description of the addon.
     /// </summary>
     public string ToMarkdownString()
     {

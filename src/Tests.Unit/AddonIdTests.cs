@@ -2,8 +2,14 @@
 
 namespace Tests.Unit;
 
+/// <summary>
+///     Tests for the <see cref="AddonId" /> record.
+/// </summary>
 public sealed class AddonIdTests
 {
+    /// <summary>
+    ///     Tests that the constructor sets the Id property.
+    /// </summary>
     [Fact]
     public void Constructor_SetsId()
     {
@@ -11,6 +17,9 @@ public sealed class AddonIdTests
         Assert.Equal("foo", id.Id);
     }
 
+    /// <summary>
+    ///     Tests that the constructor sets Version to null when no version is provided.
+    /// </summary>
     [Fact]
     public void Constructor_WithoutVersion_SetsVersionToNull()
     {
@@ -18,6 +27,9 @@ public sealed class AddonIdTests
         Assert.Null(id.Version);
     }
 
+    /// <summary>
+    ///     Tests that the constructor sets the version when provided.
+    /// </summary>
     [Fact]
     public void Constructor_WithVersion_SetsVersion()
     {
@@ -25,6 +37,9 @@ public sealed class AddonIdTests
         Assert.Equal("1.0", id.Version);
     }
 
+    /// <summary>
+    ///     Tests that the constructor sets Version to null when null is passed.
+    /// </summary>
     [Fact]
     public void Constructor_WithNullVersion_SetsVersionToNull()
     {
@@ -32,6 +47,9 @@ public sealed class AddonIdTests
         Assert.Null(id.Version);
     }
 
+    /// <summary>
+    ///     Tests that <see cref="AddonId.Equals(AddonId)" /> returns true for equal identifiers.
+    /// </summary>
     [Theory]
     [InlineData("foo", "1.0", "foo", "1.0")]
     [InlineData("foo", null, "foo", null)]
@@ -50,6 +68,9 @@ public sealed class AddonIdTests
         Assert.False(a != b);
     }
 
+    /// <summary>
+    ///     Tests that <see cref="AddonId.Equals(AddonId)" /> returns false for different identifiers.
+    /// </summary>
     [Theory]
     [InlineData("foo", "1.0", "bar", "1.0")]
     [InlineData("foo", "1.0", "foo", "1.1")]
@@ -67,6 +88,9 @@ public sealed class AddonIdTests
         Assert.True(a != b);
     }
 
+    /// <summary>
+    ///     Tests that <see cref="AddonId.Equals(AddonId)" /> returns true for the same reference.
+    /// </summary>
     [Fact]
     public void Equals_SameReference_ReturnsTrue()
     {
@@ -77,6 +101,9 @@ public sealed class AddonIdTests
         Assert.True(a == b);
     }
 
+    /// <summary>
+    ///     Tests that <see cref="AddonId.GetHashCode" /> returns the same hash for equal objects.
+    /// </summary>
     [Fact]
     public void GetHashCode_EqualObjects_ReturnsSameHash()
     {
@@ -86,6 +113,9 @@ public sealed class AddonIdTests
         Assert.Equal(a.GetHashCode(), b.GetHashCode());
     }
 
+    /// <summary>
+    ///     Tests that <see cref="AddonId.GetHashCode" /> is case-insensitive for the Id.
+    /// </summary>
     [Fact]
     public void GetHashCode_CaseInsensitiveId_ReturnsSameHash()
     {
@@ -95,6 +125,9 @@ public sealed class AddonIdTests
         Assert.Equal(a.GetHashCode(), b.GetHashCode());
     }
 
+    /// <summary>
+    ///     Tests that <see cref="AddonId.GetHashCode" /> is consistent with null versions.
+    /// </summary>
     [Fact]
     public void GetHashCode_NullVersion_IsConsistent()
     {
@@ -104,6 +137,9 @@ public sealed class AddonIdTests
         Assert.Equal(a.GetHashCode(), b.GetHashCode());
     }
 
+    /// <summary>
+    ///     Tests that <see cref="AddonId.GetHashCode" /> returns different hashes for different Ids.
+    /// </summary>
     [Fact]
     public void GetHashCode_DifferentValues_ReturnsDifferentHash()
     {
@@ -113,6 +149,9 @@ public sealed class AddonIdTests
         Assert.NotEqual(a.GetHashCode(), b.GetHashCode());
     }
 
+    /// <summary>
+    ///     Tests that <see cref="AddonId.GetHashCode" /> returns different hashes for different versions.
+    /// </summary>
     [Fact]
     public void GetHashCode_DifferentVersions_ReturnsDifferentHash()
     {

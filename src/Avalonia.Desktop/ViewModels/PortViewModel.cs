@@ -16,14 +16,32 @@ namespace Avalonia.Desktop.ViewModels;
 
 public sealed partial class PortViewModel : ObservableObject
 {
+    /// <summary>
+    ///     Represents the method that handles port change events.
+    /// </summary>
+    /// <param name="portEnum">The port enum.</param>
     public delegate void PortChanged(PortEnum portEnum);
+
+
     private readonly IApiInterface _apiInterface;
 
     private readonly PortInstallerFactory _installerFactory;
+
     private readonly ILogger<PortViewModel> _logger;
+
+    /// <summary>
+    ///     The latest release information.
+    /// </summary>
     private GeneralReleaseJsonModel? _release;
 
 
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="PortViewModel" /> class.
+    /// </summary>
+    /// <param name="installerFactory">The port installer factory.</param>
+    /// <param name="apiInterface">The API interface.</param>
+    /// <param name="port">The port.</param>
+    /// <param name="logger">The logger.</param>
     [Obsolete($"Don't create directly. Use {nameof(ViewModelsFactory)}.")]
     public PortViewModel(
         PortInstallerFactory installerFactory,
@@ -38,10 +56,20 @@ public sealed partial class PortViewModel : ObservableObject
         Port = port;
     }
 
+    /// <summary>
+    ///     Gets the port.
+    /// </summary>
     public BasePort Port { get; init; }
+
+    /// <summary>
+    ///     Occurs when the port state changes.
+    /// </summary>
     public event PortChanged? PortChangedEvent;
 
 
+    /// <summary>
+    ///     Handles the progress changed event.
+    /// </summary>
     private void OnProgressChanged(object? sender, float e)
     {
         ProgressBarValue = e;
@@ -74,17 +102,17 @@ public sealed partial class PortViewModel : ObservableObject
     }
 
     /// <summary>
-    ///     Name of the port
+    ///     Gets the name of the port.
     /// </summary>
     public string Name => Port.Name;
 
     /// <summary>
-    ///     Port's icon
+    ///     Gets the port's icon identifier.
     /// </summary>
     public long IconId => Port.IconId;
 
     /// <summary>
-    ///     Currently installed version
+    ///     Gets the currently installed version.
     /// </summary>
     public string Version
     {
@@ -105,12 +133,12 @@ public sealed partial class PortViewModel : ObservableObject
     }
 
     /// <summary>
-    ///     Is port installed
+    ///     Gets whether the port is installed.
     /// </summary>
     public bool IsInstalled => Port.IsInstalled;
 
     /// <summary>
-    ///     Latest available version
+    ///     Gets the latest available version.
     /// </summary>
     public string LatestVersion
     {
@@ -136,7 +164,7 @@ public sealed partial class PortViewModel : ObservableObject
     }
 
     /// <summary>
-    ///     Is new version of the port available
+    ///     Gets whether a new version of the port is available.
     /// </summary>
     public bool IsUpdateAvailable
     {
@@ -192,20 +220,29 @@ public sealed partial class PortViewModel : ObservableObject
     }
 
     /// <summary>
-    ///     Can port be installed
+    ///     Gets whether the port can be installed.
     /// </summary>
     public bool CanBeInstalled => !IsInProgress && !IsCheckingForUpdates && _release is not null;
 
     /// <summary>
-    ///     Download/install progress
+    ///     Gets or sets the download/install progress.
+    /// </summary>
+    /// <summary>
+    ///     Gets or sets the download/install progress value.
     /// </summary>
     [ObservableProperty]
     private float _progressBarValue;
 
+    /// <summary>
+    ///     Gets or sets whether an install operation is in progress.
+    /// </summary>
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(CanBeInstalled))]
     private bool _isInProgress;
 
+    /// <summary>
+    ///     Gets or sets whether the view model is checking for updates.
+    /// </summary>
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(CanBeInstalled))]
     private bool _isCheckingForUpdates;

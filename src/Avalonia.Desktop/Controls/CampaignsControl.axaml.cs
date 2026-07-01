@@ -13,16 +13,35 @@ using Ports.Providers;
 
 namespace Avalonia.Desktop.Controls;
 
+/// <summary>
+///     Displays and manages campaign addons for a selected game.
+/// </summary>
 public sealed partial class CampaignsControl : UserControl
 {
+    /// <summary>
+    ///     Text for the built-in port button.
+    /// </summary>
     private const string BuiltInPortStr = "Built-in port";
+
+    /// <summary>
+    ///     Text for the custom port button.
+    /// </summary>
     private const string CustomPortStr = "Custom port";
+
     private readonly BitmapsCache _bitmapsCache;
+
     private readonly PortsProvider _portsProvider;
 
+    /// <summary>
+    ///     The list of ports that support this game.
+    /// </summary>
     private readonly IReadOnlyList<BasePort> _supportedPorts;
+
     private readonly CampaignsViewModel _viewModel;
 
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="CampaignsControl" /> class.
+    /// </summary>
     public CampaignsControl()
     {
         InitializeComponent();
@@ -33,6 +52,12 @@ public sealed partial class CampaignsControl : UserControl
         _bitmapsCache = null!;
     }
 
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="CampaignsControl" /> class.
+    /// </summary>
+    /// <param name="viewModel">The campaigns view model.</param>
+    /// <param name="portsProvider">The ports provider.</param>
+    /// <param name="bitmapsCache">The bitmaps cache.</param>
     public CampaignsControl(
         CampaignsViewModel viewModel,
         PortsProvider portsProvider,
@@ -59,7 +84,7 @@ public sealed partial class CampaignsControl : UserControl
     }
 
     /// <summary>
-    ///     Add "Start with..." buttons to the ports button panel
+    ///     Adds port buttons to the bottom panel.
     /// </summary>
     private void AddPortsButtons()
     {
@@ -152,7 +177,7 @@ public sealed partial class CampaignsControl : UserControl
     }
 
     /// <summary>
-    ///     Add button with custom ports
+    ///     Adds the custom ports flyout button to the bottom panel.
     /// </summary>
     private void AddCustomPortsButton()
     {
@@ -207,7 +232,7 @@ public sealed partial class CampaignsControl : UserControl
     }
 
     /// <summary>
-    ///     Invoked on selected campaign changed
+    ///     Handles the selection changed event on the campaigns list.
     /// </summary>
     private void OnCampaignsListSelectionChanged(object? sender, SelectionChangedEventArgs e)
     {
@@ -230,11 +255,17 @@ public sealed partial class CampaignsControl : UserControl
         }
     }
 
+    /// <summary>
+    ///     Handles the custom port changed event.
+    /// </summary>
     private void OnCustomPortChanged(object? sender, EventArgs e)
     {
         AddCustomPortsButton();
     }
 
+    /// <summary>
+    ///     Handles the context menu opening event.
+    /// </summary>
     private void ContextMenuOpened(object? sender, RoutedEventArgs e)
     {
         if (CampaignsList.ContextMenu is not null)
@@ -353,6 +384,9 @@ public sealed partial class CampaignsControl : UserControl
         _ = CampaignsList.ContextMenu.Items.Add(deleteButton);
     }
 
+    /// <summary>
+    ///     Handles the context menu closing event.
+    /// </summary>
     private void ContextMenuClosed(object? sender, RoutedEventArgs e)
     {
         if (CampaignsList.ContextMenu is not null)

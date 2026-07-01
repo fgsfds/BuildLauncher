@@ -2,8 +2,14 @@
 
 namespace Tests.Unit;
 
+/// <summary>
+///     Tests for the <see cref="VersionComparer" /> class.
+/// </summary>
 public sealed class VersionCompareTests
 {
+    /// <summary>
+    ///     Tests that <see cref="VersionComparer.Compare(string?, string?)" /> returns true for matching comparisons.
+    /// </summary>
     [Theory]
     [InlineData("1.1", "==1.1")]
     [InlineData("1.1", ">=1.1")]
@@ -32,6 +38,9 @@ public sealed class VersionCompareTests
         Assert.True(result);
     }
 
+    /// <summary>
+    ///     Tests that <see cref="VersionComparer.Compare(string?, string?)" /> returns false for non-matching comparisons.
+    /// </summary>
     [Theory]
     [InlineData("1.1", "==1.2")]
     [InlineData("1.1", ">=1.2")]
@@ -51,6 +60,9 @@ public sealed class VersionCompareTests
         Assert.False(result);
     }
 
+    /// <summary>
+    ///     Tests that <see cref="VersionComparer.Compare(string?, string?, ComparisonOperatorEnum)" /> returns true for matching comparisons.
+    /// </summary>
     [Theory]
     [InlineData("1.1-a1", "1.1-a1", ComparisonOperatorEnum.Equals)]
     [InlineData("1.1-a1", "1.1-a1", ComparisonOperatorEnum.GreaterOrEquals)]
@@ -92,6 +104,9 @@ public sealed class VersionCompareTests
         Assert.True(result);
     }
 
+    /// <summary>
+    ///     Tests that <see cref="VersionComparer.Compare(string?, string?, ComparisonOperatorEnum)" /> returns false for non-matching comparisons.
+    /// </summary>
     [Theory]
     [InlineData("1.1", "1.2", ComparisonOperatorEnum.Equals)]
     [InlineData("1.10", "1.9", ComparisonOperatorEnum.Equals)]

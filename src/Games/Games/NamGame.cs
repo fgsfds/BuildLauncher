@@ -3,6 +3,9 @@ using Games.Skills;
 
 namespace Games.Games;
 
+/// <summary>
+///     Represents the game NAM and its associated metadata.
+/// </summary>
 public sealed class NamGame : BaseGame
 {
     /// <inheritdoc />

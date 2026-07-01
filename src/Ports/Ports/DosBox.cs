@@ -11,14 +11,21 @@ using SharpCompress.Archives;
 namespace Ports.Ports;
 
 /// <summary>
-///     DosBox
+///     DosBox Staging port.
 /// </summary>
 public sealed class DosBox : BasePort
 {
     private readonly ILogger<DosBox> _logger = null!;
 
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="DosBox" /> class.
+    /// </summary>
     public DosBox() { }
 
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="DosBox" /> class.
+    /// </summary>
+    /// <param name="logger">Logger instance.</param>
     public DosBox(ILogger<DosBox> logger)
     {
         _logger = logger;
@@ -200,6 +207,12 @@ public sealed class DosBox : BasePort
         _ = sb.Append(" -c \"exit\"");
     }
 
+    /// <summary>
+    ///     Appends command-line arguments for Duke Nukem 3D games in DosBox.
+    /// </summary>
+    /// <param name="sb">String builder for parameters.</param>
+    /// <param name="game">Duke game instance.</param>
+    /// <param name="addon">Campaign or addon.</param>
     private static void GetDukeArgs(StringBuilder sb, DukeGame game, BaseAddon addon)
     {
         _ = sb.Append($@" -c ""mount c \""{game.GameInstallFolder}"""" -c ""c:""");
@@ -238,12 +251,23 @@ public sealed class DosBox : BasePort
         }
     }
 
+    /// <summary>
+    ///     Appends command-line arguments for Shadow Warrior games in DosBox.
+    /// </summary>
+    /// <param name="sb">String builder for parameters.</param>
+    /// <param name="game">Wang game instance.</param>
     private static void GetWangArgs(StringBuilder sb, WangGame game)
     {
         _ = sb.Append($@" -c ""mount c \""{game.GameInstallFolder}"""" -c ""c:""");
         _ = sb.Append(" -c Sw.EXE");
     }
 
+    /// <summary>
+    ///     Appends command-line arguments for Redneck Rampage games in DosBox.
+    /// </summary>
+    /// <param name="sb">String builder for parameters.</param>
+    /// <param name="game">Redneck game instance.</param>
+    /// <param name="addon">Campaign or addon.</param>
     private static void GetRedneckArgs(StringBuilder sb, RedneckGame game, BaseAddon addon)
     {
         if (addon.AddonId.Id.Equals(nameof(GameEnum.Redneck), StringComparison.OrdinalIgnoreCase))
@@ -263,6 +287,7 @@ public sealed class DosBox : BasePort
         }
     }
 
+    /// <inheritdoc />
     protected override void GetBloodArgs(StringBuilder sb, BloodGame game, BaseAddon addon)
     {
         ArgumentNullException.ThrowIfNull(game.GameInstallFolder);

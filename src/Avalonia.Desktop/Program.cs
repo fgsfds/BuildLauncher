@@ -6,11 +6,16 @@ using Optris.Icons.Avalonia.FontAwesome7;
 
 namespace Avalonia.Desktop;
 
+/// <summary>
+///     Application entry point.
+/// </summary>
 public sealed partial class Program
 {
-    // Initialization code. Don't use any Avalonia, third-party APIs or any
-    // SynchronizationContext-reliant code before AppMain is called: things aren't initialized
-    // yet and stuff might break.
+    /// <summary>
+    ///     Application entry point.
+    /// </summary>
+    /// <param name="args">Command-line arguments.</param>
+    /// <returns>The application exit code.</returns>
     [STAThread]
     public static int Main(string[] args)
     {
@@ -58,7 +63,10 @@ public sealed partial class Program
         }
     }
 
-    // Avalonia configuration, don't remove; also used by visual designer.
+    /// <summary>
+    ///     Builds the Avalonia application configuration.
+    /// </summary>
+    /// <returns>The configured AppBuilder.</returns>
     private static AppBuilder BuildAvaloniaApp()
     {
         _ = IconProvider.Current
@@ -72,11 +80,22 @@ public sealed partial class Program
     }
 
 
+    /// <summary>
+    ///     Provides a simple Windows message box for critical error display.
+    /// </summary>
     private static partial class WinMsgBox
     {
+        /// <summary>
+        ///     Displays a Windows message box.
+        /// </summary>
         [LibraryImport("user32.dll", EntryPoint = "MessageBoxW", StringMarshalling = StringMarshalling.Utf16)]
         private static partial int MessageBox(IntPtr hWnd, string? text, string? caption, int type);
 
+        /// <summary>
+        ///     Shows a message box with the specified title and text.
+        /// </summary>
+        /// <param name="title">The message box title.</param>
+        /// <param name="text">The message box text.</param>
         public static void Show(string? title, string? text)
         {
             _ = MessageBox(IntPtr.Zero, text, title, 0);

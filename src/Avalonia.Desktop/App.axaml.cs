@@ -25,11 +25,22 @@ using Tools;
 
 namespace Avalonia.Desktop;
 
+/// <summary>
+///     Application entry point and service configuration.
+/// </summary>
 public sealed class App : Application
 {
+    /// <summary>
+    ///     The singleton application instance.
+    /// </summary>
     private static App _app = null!;
+
+    /// <summary>
+    ///     The application service provider.
+    /// </summary>
     private static ServiceProvider _services;
 
+    /// <inheritdoc />
     public override void Initialize()
     {
         AvaloniaXamlLoader.Load(this);
@@ -41,6 +52,11 @@ public sealed class App : Application
         _app = this;
     }
 
+    /// <summary>
+    ///     Runs the application with the specified AppBuilder.
+    /// </summary>
+    /// <param name="builder">The application builder.</param>
+    /// <returns>The application exit code.</returns>
     public static int Run(AppBuilder builder)
     {
         int code;
@@ -125,6 +141,10 @@ public sealed class App : Application
     }
 
 
+    /// <summary>
+    ///     Renames legacy save folders to their correct names.
+    /// </summary>
+    /// <param name="portsProvider">The ports provider.</param>
     [Obsolete("Remove some time later")]
     private static void RenameSaveFolder(PortsProvider portsProvider)
     {
@@ -157,7 +177,7 @@ public sealed class App : Application
     }
 
     /// <summary>
-    ///     Load DI bindings
+    ///     Loads and configures all dependency injection bindings.
     /// </summary>
     private static void LoadBindings()
     {
@@ -208,8 +228,9 @@ public sealed class App : Application
     }
 
     /// <summary>
-    ///     Set theme from the config
+    ///     Sets the application theme.
     /// </summary>
+    /// <param name="theme">The theme to apply.</param>
     private static void SetTheme(ThemeEnum theme)
     {
         var themeEnum = theme switch
@@ -224,7 +245,7 @@ public sealed class App : Application
     }
 
     /// <summary>
-    ///     Remove database logs leftovers.
+    ///     Cleans up stale database WAL and SHM files.
     /// </summary>
     private static void FixDatabase()
     {

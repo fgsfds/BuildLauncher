@@ -21,18 +21,48 @@ namespace Avalonia.Desktop.ViewModels;
 public sealed partial class CampaignsViewModel : RightPanelViewModel, IPortsButtonControl
 {
     private readonly IAddonDropHelper _addonInstaller;
+
     private readonly IConfigProvider _config;
+
+    /// <summary>
+    ///     The downloadable addons provider.
+    /// </summary>
     private readonly DownloadableAddonsProvider _downloadableAddonsProvider;
 
     private readonly InstalledGamesProvider _gamesProvider;
+
+    /// <summary>
+    ///     The installed addons provider.
+    /// </summary>
     private readonly InstalledAddonsProvider _installedAddonsProvider;
+
     private readonly ILogger<CampaignsViewModel> _logger;
+
     private readonly MetadataProvider _metadataProvider;
+
     private readonly PortStarter _portStarter;
 
+    /// <summary>
+    ///     The separator item used between favorites and regular items.
+    /// </summary>
     private readonly SeparatorItem _separator = new();
 
 
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="CampaignsViewModel" /> class.
+    /// </summary>
+    /// <param name="game">The game.</param>
+    /// <param name="gamesProvider">The installed games provider.</param>
+    /// <param name="config">The configuration provider.</param>
+    /// <param name="playtimeProvider">The playtime provider.</param>
+    /// <param name="ratingProvider">The rating provider.</param>
+    /// <param name="metadataProvider">The metadata provider.</param>
+    /// <param name="installedAddonsProviderFactory">The installed addons provider factory.</param>
+    /// <param name="downloadableAddonsProviderFactory">The downloadable addons provider factory.</param>
+    /// <param name="portStarter">The port starter.</param>
+    /// <param name="bitmapsCache">The bitmaps cache.</param>
+    /// <param name="addonInstaller">The addon drop helper.</param>
+    /// <param name="logger">The logger.</param>
     [Obsolete($"Don't create directly. Use {nameof(ViewModelsFactory)}.")]
     public CampaignsViewModel(
         BaseGame game,
@@ -65,6 +95,9 @@ public sealed partial class CampaignsViewModel : RightPanelViewModel, IPortsButt
         //_downloadableAddonsProvider.AddonsChangedEvent += OnAddonChanged;
     }
 
+    /// <summary>
+    ///     Gets the game associated with this view model.
+    /// </summary>
     public BaseGame Game { get; }
 
 
@@ -74,8 +107,10 @@ public sealed partial class CampaignsViewModel : RightPanelViewModel, IPortsButt
     public Task InitializeAsync() => UpdateAsync(false);
 
     /// <summary>
-    ///     Update campaigns list
+    ///     Updates the campaign list asynchronously.
     /// </summary>
+    /// <param name="createNew">Whether to create a new cache.</param>
+    /// <returns>A task representing the asynchronous operation.</returns>
     private async Task UpdateAsync(bool createNew)
     {
         IsInProgress = true;
@@ -84,6 +119,9 @@ public sealed partial class CampaignsViewModel : RightPanelViewModel, IPortsButt
     }
 
 
+    /// <summary>
+    ///     Handles the game changed event.
+    /// </summary>
     private void OnGameChanged(GameEnum parameterName)
     {
         if (parameterName == Game.GameEnum)
@@ -92,6 +130,9 @@ public sealed partial class CampaignsViewModel : RightPanelViewModel, IPortsButt
         }
     }
 
+    /// <summary>
+    ///     Handles the addon changed event.
+    /// </summary>
     private void OnAddonChanged(GameEnum gameEnum, AddonTypeEnum? addonType)
     {
         if (gameEnum == Game.GameEnum && (addonType is AddonTypeEnum.TC))
@@ -142,6 +183,9 @@ public sealed partial class CampaignsViewModel : RightPanelViewModel, IPortsButt
         }
     }
 
+    /// <summary>
+    ///     The currently selected addon.
+    /// </summary>
     private BaseAddon? _selectedAddon;
 
     /// <summary>
@@ -171,16 +215,22 @@ public sealed partial class CampaignsViewModel : RightPanelViewModel, IPortsButt
     ///     Search box text
     /// </summary>
     [ObservableProperty]
+    /// <summary>
+    ///     Search box text.
+    /// </summary>
     [NotifyPropertyChangedFor(nameof(CampaignsList))]
     [NotifyCanExecuteChangedFor(nameof(ClearSearchBoxCommand))]
     private string _searchBoxText = string.Empty;
 
     /// <summary>
-    ///     Is form in progress
+    ///     Is the form in progress.
     /// </summary>
     [ObservableProperty]
     private bool _isInProgress;
 
+    /// <summary>
+    ///     Gets whether the ports buttons panel is visible.
+    /// </summary>
     public bool IsPortsButtonsVisible => true;
 
     #endregion
@@ -284,6 +334,10 @@ public sealed partial class CampaignsViewModel : RightPanelViewModel, IPortsButt
     [RelayCommand(CanExecute = nameof(ClearSearchBoxCanExecute))]
     private void ClearSearchBox() => SearchBoxText = string.Empty;
 
+    /// <summary>
+    ///     Determines whether the clear search box command can execute.
+    /// </summary>
+    /// <returns>True if the search box text is not empty.</returns>
     private bool ClearSearchBoxCanExecute() => !string.IsNullOrEmpty(SearchBoxText);
 
 

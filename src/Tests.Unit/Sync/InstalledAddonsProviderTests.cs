@@ -12,16 +12,45 @@ using StandaloneGame = Games.Games.StandaloneGame;
 
 namespace Tests.Unit.Sync;
 
+/// <summary>
+///     Tests for the <see cref="InstalledAddonsProvider" /> class.
+/// </summary>
 [Collection("Sync")]
 public sealed class InstalledAddonsProviderTests : IDisposable
 {
+    /// <summary>
+    ///     Mock configuration provider.
+    /// </summary>
     private readonly Mock<IConfigProvider> _configMock;
+
+    /// <summary>
+    ///     Set of disabled mod identifiers.
+    /// </summary>
     private readonly HashSet<string> _disabledMods;
+
+    /// <summary>
+    ///     Set of favorite addon identifiers.
+    /// </summary>
     private readonly HashSet<AddonId> _favorites;
+
+    /// <summary>
+    ///     Duke Nukem 3D game instance.
+    /// </summary>
     private readonly DukeGame _game;
+
+    /// <summary>
+    ///     Installed addons provider under test.
+    /// </summary>
     private readonly InstalledAddonsProvider _installedAddonsProvider;
+
+    /// <summary>
+    ///     Local files provider for scanning addon files.
+    /// </summary>
     private readonly LocalFilesProvider _localFilesProvider;
 
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="InstalledAddonsProviderTests" /> class.
+    /// </summary>
     public InstalledAddonsProviderTests()
     {
         _game = new DukeGame
@@ -41,11 +70,15 @@ public sealed class InstalledAddonsProviderTests : IDisposable
         (_installedAddonsProvider, _localFilesProvider) = ObjectCreationHelper.CreateInstalledAddonsProvider(_game, _configMock.Object);
     }
 
+    /// <inheritdoc />
     public void Dispose()
     {
         _installedAddonsProvider.Dispose();
     }
 
+    /// <summary>
+    ///     Tests that adding a campaign addon adds it to the campaigns cache.
+    /// </summary>
     [Fact]
     public void AddAddon_Campaign_AddsToCampaignsCache()
     {
@@ -57,6 +90,9 @@ public sealed class InstalledAddonsProviderTests : IDisposable
         Assert.Contains(campaigns, c => c.AddonId.Id == "test-camp");
     }
 
+    /// <summary>
+    ///     Tests that adding a map addon adds it to the maps cache.
+    /// </summary>
     [Fact]
     public void AddAddon_Map_AddsToMapsCache()
     {
@@ -68,6 +104,9 @@ public sealed class InstalledAddonsProviderTests : IDisposable
         Assert.Contains(maps, m => m.AddonId.Id == "test-map");
     }
 
+    /// <summary>
+    ///     Tests that adding a mod addon adds it to the mods cache.
+    /// </summary>
     [Fact]
     public void AddAddon_Mod_AddsToModsCache()
     {
@@ -79,6 +118,9 @@ public sealed class InstalledAddonsProviderTests : IDisposable
         Assert.Contains(mods, m => m.AddonId.Id == "test-mod");
     }
 
+    /// <summary>
+    ///     Tests that a mod is enabled by default when not in the disabled list.
+    /// </summary>
     [Fact]
     public void AddAddon_ModIsEnabledByDefault_WhenNotInDisabledList()
     {
@@ -91,6 +133,9 @@ public sealed class InstalledAddonsProviderTests : IDisposable
         Assert.True(mod.IsEnabled);
     }
 
+    /// <summary>
+    ///     Tests that a mod is disabled when it is in the disabled list.
+    /// </summary>
     [Fact]
     public void AddAddon_ModIsDisabled_WhenInDisabledList()
     {
@@ -104,6 +149,9 @@ public sealed class InstalledAddonsProviderTests : IDisposable
         Assert.False(mod.IsEnabled);
     }
 
+    /// <summary>
+    ///     Tests that adding a mod with a MainDef set throws an exception.
+    /// </summary>
     [Fact]
     public void AddAddon_ModWithMainDef_Throws()
     {
@@ -113,6 +161,9 @@ public sealed class InstalledAddonsProviderTests : IDisposable
         Assert.Throws<ArgumentException>(() => _installedAddonsProvider.AddAddon(parsed));
     }
 
+    /// <summary>
+    ///     Tests that adding an addon fires the AddonsChanged event.
+    /// </summary>
     [Fact]
     public void AddAddon_FiresAddonsChangedEvent()
     {
@@ -132,6 +183,9 @@ public sealed class InstalledAddonsProviderTests : IDisposable
         Assert.Equal(AddonTypeEnum.TC, firedType);
     }
 
+    /// <summary>
+    ///     Tests that an addon in the favorites list is marked as favorite.
+    /// </summary>
     [Fact]
     public void AddAddon_AddsFavorite_WhenInFavoritesList()
     {
@@ -146,6 +200,9 @@ public sealed class InstalledAddonsProviderTests : IDisposable
         Assert.True(camp.IsFavorite);
     }
 
+    /// <summary>
+    ///     Tests that querying an unknown addon type throws a NotSupportedException.
+    /// </summary>
     [Fact]
     public void GetInstalledAddonsByType_UnknownType_Throws()
     {
@@ -153,6 +210,9 @@ public sealed class InstalledAddonsProviderTests : IDisposable
                                                  _installedAddonsProvider.GetInstalledAddonsByType((AddonTypeEnum)99));
     }
 
+    /// <summary>
+    ///     Tests that custom campaigns are included in the installed campaigns list.
+    /// </summary>
     [Fact]
     public void GetInstalledCampaigns_IncludesCustomCampaigns()
     {
@@ -164,6 +224,9 @@ public sealed class InstalledAddonsProviderTests : IDisposable
         Assert.Contains(campaigns, c => c.AddonId.Id == "custom");
     }
 
+    /// <summary>
+    ///     Tests that custom campaigns are sorted by title.
+    /// </summary>
     [Fact]
     public void GetInstalledCampaigns_CustomCampaignsAreSortedByTitle()
     {
@@ -179,6 +242,9 @@ public sealed class InstalledAddonsProviderTests : IDisposable
         Assert.Equal(["A Camp", "B Camp"], titles);
     }
 
+    /// <summary>
+    ///     Tests that enabling a non-existent mod does nothing.
+    /// </summary>
     [Fact]
     public void EnableAddon_NonExistentMod_DoesNothing()
     {
@@ -187,6 +253,9 @@ public sealed class InstalledAddonsProviderTests : IDisposable
         _configMock.Verify(x => x.ChangeModState(It.IsAny<AddonId>(), It.IsAny<bool>()), Times.Never);
     }
 
+    /// <summary>
+    ///     Tests that enabling an already enabled mod does nothing.
+    /// </summary>
     [Fact]
     public void EnableAddon_AlreadyEnabled_DoesNothing()
     {
@@ -197,6 +266,9 @@ public sealed class InstalledAddonsProviderTests : IDisposable
         _configMock.Verify(x => x.ChangeModState(It.IsAny<AddonId>(), It.IsAny<bool>()), Times.Never);
     }
 
+    /// <summary>
+    ///     Tests that enabling a disabled mod enables it and updates the config.
+    /// </summary>
     [Fact]
     public void EnableAddon_DisabledMod_EnablesIt()
     {
@@ -211,6 +283,9 @@ public sealed class InstalledAddonsProviderTests : IDisposable
         Assert.True(mod.IsEnabled);
     }
 
+    /// <summary>
+    ///     Tests that disabling a non-existent mod does nothing.
+    /// </summary>
     [Fact]
     public void DisableAddon_NonExistentMod_DoesNothing()
     {
@@ -219,6 +294,9 @@ public sealed class InstalledAddonsProviderTests : IDisposable
         _configMock.Verify(x => x.ChangeModState(It.IsAny<AddonId>(), It.IsAny<bool>()), Times.Never);
     }
 
+    /// <summary>
+    ///     Tests that disabling an already disabled mod does nothing.
+    /// </summary>
     [Fact]
     public void DisableAddon_AlreadyDisabled_DoesNothing()
     {
@@ -230,6 +308,9 @@ public sealed class InstalledAddonsProviderTests : IDisposable
         _configMock.Verify(x => x.ChangeModState(It.IsAny<AddonId>(), It.IsAny<bool>()), Times.Never);
     }
 
+    /// <summary>
+    ///     Tests that disabling an enabled mod disables it and updates the config.
+    /// </summary>
     [Fact]
     public void DisableAddon_EnabledMod_DisablesIt()
     {
@@ -243,6 +324,9 @@ public sealed class InstalledAddonsProviderTests : IDisposable
         Assert.False(mod.IsEnabled);
     }
 
+    /// <summary>
+    ///     Tests that enabling a mod cascades to its dependencies.
+    /// </summary>
     [Fact]
     public void EnableAddon_CascadesToDependencies()
     {
@@ -263,6 +347,9 @@ public sealed class InstalledAddonsProviderTests : IDisposable
         _configMock.Verify(x => x.ChangeModState(new AddonId("dep-mod", "1.0"), true), Times.Once);
     }
 
+    /// <summary>
+    ///     Tests that enabling a mod disables its incompatible mods.
+    /// </summary>
     [Fact]
     public void EnableAddon_DisablesIncompatibleMods()
     {
@@ -284,6 +371,9 @@ public sealed class InstalledAddonsProviderTests : IDisposable
         Assert.False(incompMod.IsEnabled);
     }
 
+    /// <summary>
+    ///     Tests that disabling a mod cascades to its dependants.
+    /// </summary>
     [Fact]
     public void DisableAddon_CascadesToDependants()
     {
@@ -303,6 +393,9 @@ public sealed class InstalledAddonsProviderTests : IDisposable
         Assert.False(depMod.IsEnabled);
     }
 
+    /// <summary>
+    ///     Tests that enabling a mod disables other versions of the same mod.
+    /// </summary>
     [Fact]
     public void EnableAddon_DisablesOtherVersionsOfSameMod()
     {
@@ -319,6 +412,9 @@ public sealed class InstalledAddonsProviderTests : IDisposable
         Assert.False(v2.IsEnabled);
     }
 
+    /// <summary>
+    ///     Tests that querying maps when none are installed returns an empty list.
+    /// </summary>
     [Fact]
     public void GetInstalledAddonsByType_Maps_ReturnsEmptyList_WhenNoMaps()
     {
@@ -327,6 +423,9 @@ public sealed class InstalledAddonsProviderTests : IDisposable
         Assert.Empty(maps);
     }
 
+    /// <summary>
+    ///     Tests that querying mods when none are installed returns an empty list.
+    /// </summary>
     [Fact]
     public void GetInstalledAddonsByType_Mods_ReturnsEmptyList_WhenNoMods()
     {
@@ -335,6 +434,9 @@ public sealed class InstalledAddonsProviderTests : IDisposable
         Assert.Empty(mods);
     }
 
+    /// <summary>
+    ///     Tests that the mods list does not contain loose maps.
+    /// </summary>
     [Fact]
     public async Task GetInstalledAddonsByType_Mods_DoesNotContainLooseMaps()
     {
@@ -361,6 +463,9 @@ public sealed class InstalledAddonsProviderTests : IDisposable
         }
     }
 
+    /// <summary>
+    ///     Tests that removing a campaign addon's file removes it from the cache.
+    /// </summary>
     [Fact]
     public async Task FileRemovedEvent_CampaignAddon_RemovesFromCache()
     {
@@ -382,6 +487,9 @@ public sealed class InstalledAddonsProviderTests : IDisposable
         Assert.DoesNotContain(after, c => c.AddonId.Id == "del-camp");
     }
 
+    /// <summary>
+    ///     Tests that removing a mod addon's file removes it from the cache.
+    /// </summary>
     [Fact]
     public async Task FileRemovedEvent_ModAddon_RemovesFromCache()
     {
@@ -403,6 +511,9 @@ public sealed class InstalledAddonsProviderTests : IDisposable
         Assert.DoesNotContain(after, m => m.AddonId.Id == "del-mod");
     }
 
+    /// <summary>
+    ///     Tests that removing a map addon's file removes it from the cache.
+    /// </summary>
     [Fact]
     public async Task FileRemovedEvent_Map_RemovesFromCache()
     {
@@ -424,6 +535,9 @@ public sealed class InstalledAddonsProviderTests : IDisposable
         Assert.DoesNotContain(after, m => m.AddonId.Id == "del-map");
     }
 
+    /// <summary>
+    ///     Tests that the AddonsChanged event fires when a file is removed.
+    /// </summary>
     [Fact]
     public void FileRemovedEvent_FiresAddonsChangedEvent()
     {
@@ -462,6 +576,9 @@ public sealed class InstalledAddonsProviderTests : IDisposable
         Assert.Equal(AddonTypeEnum.TC, firedType);
     }
 
+    /// <summary>
+    ///     Tests that a JSON manifest returns a DukeCampaign.
+    /// </summary>
     [Fact]
     public void GetAddonFromFile_JsonManifest_ReturnsDukeCampaign()
     {
@@ -477,6 +594,9 @@ public sealed class InstalledAddonsProviderTests : IDisposable
         Assert.Equal(AddonTypeEnum.TC, addon.Type);
     }
 
+    /// <summary>
+    ///     Tests that dependencies from a JSON manifest are correctly added.
+    /// </summary>
     [Fact]
     public void GetAddonFromFile_JsonManifestWithDependencies_AddsThem()
     {
@@ -501,6 +621,9 @@ public sealed class InstalledAddonsProviderTests : IDisposable
         Assert.True(addon.IncompatibleAddons.ContainsKey("bad-addon"));
     }
 
+    /// <summary>
+    ///     Tests that executables from a JSON manifest are correctly added.
+    /// </summary>
     [Fact]
     public void GetAddonFromFile_JsonManifestWithExecutables_AddsThem()
     {
@@ -541,6 +664,9 @@ public sealed class InstalledAddonsProviderTests : IDisposable
         Assert.EndsWith("custom.exe", addon.Executables[OSEnum.Windows][PortEnum.EDuke32]);
     }
 
+    /// <summary>
+    ///     Tests that options from a JSON manifest are correctly added.
+    /// </summary>
     [Fact]
     public void GetAddonFromFile_JsonManifestWithOptions_AddsThem()
     {
@@ -583,6 +709,9 @@ public sealed class InstalledAddonsProviderTests : IDisposable
         Assert.Equal(OptionalParameterTypeEnum.DEF, addon.Options["opt1"]["test.def"]);
     }
 
+    /// <summary>
+    ///     Tests that additional CON files from a JSON manifest are correctly added.
+    /// </summary>
     [Fact]
     public void GetAddonFromFile_JsonManifestWithAddCons_AddsThem()
     {
@@ -615,6 +744,9 @@ public sealed class InstalledAddonsProviderTests : IDisposable
         Assert.Contains("more.con", duke.AdditionalCons);
     }
 
+    /// <summary>
+    ///     Tests that the preview hash is used as a fallback for the grid image hash.
+    /// </summary>
     [Fact]
     public void GetAddonFromFile_JsonManifest_FallsBackToPreviewForGrid()
     {
@@ -644,6 +776,9 @@ public sealed class InstalledAddonsProviderTests : IDisposable
         Assert.Equal(67890, addon.PreviewImageHash);
     }
 
+    /// <summary>
+    ///     Tests that unsupported file types return null.
+    /// </summary>
     [Fact]
     public void GetAddonFromFile_NotJsonNotMapNotZip_ReturnsNull()
     {
@@ -671,6 +806,9 @@ public sealed class InstalledAddonsProviderTests : IDisposable
         Assert.Null(addon);
     }
 
+    /// <summary>
+    ///     Tests that TwinDragon and Wanton appear before other campaigns in the custom Wang order.
+    /// </summary>
     [Fact]
     public void GetInstalledCampaigns_WangCustomOrder_TwinDragonFirst()
     {
@@ -694,6 +832,9 @@ public sealed class InstalledAddonsProviderTests : IDisposable
         Assert.True(wantonIndex < otherIndex, "Wanton should appear before other campaigns");
     }
 
+    /// <summary>
+    ///     Tests that adding an official type addon throws a NotSupportedException.
+    /// </summary>
     [Fact]
     public void AddAddon_OfficialType_Throws()
     {
@@ -702,6 +843,9 @@ public sealed class InstalledAddonsProviderTests : IDisposable
         Assert.Throws<NotSupportedException>(() => _installedAddonsProvider.AddAddon(parsed));
     }
 
+    /// <summary>
+    ///     Tests that a null manifest throws an InvalidOperationException.
+    /// </summary>
     [Fact]
     public void GetAddonFromFile_NullManifest_Throws()
     {
@@ -717,6 +861,9 @@ public sealed class InstalledAddonsProviderTests : IDisposable
         Assert.Throws<InvalidOperationException>(() => _installedAddonsProvider.GetAddonFromFile(parsed));
     }
 
+    /// <summary>
+    ///     Tests that a Blood game addon returns a BloodCampaign.
+    /// </summary>
     [Fact]
     public void GetAddonFromFile_BloodGame_ReturnsBloodCampaign()
     {
@@ -732,6 +879,9 @@ public sealed class InstalledAddonsProviderTests : IDisposable
         Assert.IsType<BloodCampaign>(addon);
     }
 
+    /// <summary>
+    ///     Tests that a standalone game addon returns a StandaloneGame instance.
+    /// </summary>
     [Fact]
     public void GetAddonFromFile_StandaloneGame_ReturnsStandaloneGame()
     {
@@ -747,6 +897,9 @@ public sealed class InstalledAddonsProviderTests : IDisposable
         Assert.IsType<Addons.Addons.StandaloneGame>(addon);
     }
 
+    /// <summary>
+    ///     Tests that a Slave game addon returns a GenericCampaign.
+    /// </summary>
     [Fact]
     public void GetAddonFromFile_SlaveGame_ReturnsGenericCampaign()
     {
@@ -762,6 +915,9 @@ public sealed class InstalledAddonsProviderTests : IDisposable
         Assert.IsType<GenericCampaign>(addon);
     }
 
+    /// <summary>
+    ///     Tests that enabling a mod with a missing dependency does not throw.
+    /// </summary>
     [Fact]
     public void EnableAddon_WithMissingDependency_DoesNotThrow()
     {
@@ -778,6 +934,9 @@ public sealed class InstalledAddonsProviderTests : IDisposable
         _configMock.Verify(x => x.ChangeModState(new AddonId("main-mod", "1.0"), true), Times.Once);
     }
 
+    /// <summary>
+    ///     Tests that disabling a mod transitively cascades to disable grandchild mods.
+    /// </summary>
     [Fact]
     public void DisableAddon_TransitiveCascade_DisablesGrandchild()
     {
@@ -803,6 +962,9 @@ public sealed class InstalledAddonsProviderTests : IDisposable
         Assert.False(mods.OfType<AutoloadMod>().First(m => m.AddonId.Id == "leaf-mod").IsEnabled);
     }
 
+    /// <summary>
+    ///     Tests that a loose map with a matching INI file detects it.
+    /// </summary>
     [Fact]
     public void AddAddon_LooseMapWithBloodIni_DetectsIniFile()
     {
@@ -843,6 +1005,9 @@ public sealed class InstalledAddonsProviderTests : IDisposable
         }
     }
 
+    /// <summary>
+    ///     Tests that a loose map without a matching INI file does not set BloodIni.
+    /// </summary>
     [Fact]
     public void AddAddon_LooseMapWithoutBloodIni_DoesNotSetIni()
     {
@@ -881,6 +1046,9 @@ public sealed class InstalledAddonsProviderTests : IDisposable
         }
     }
 
+    /// <summary>
+    ///     Tests that enabling a mod with null FileInfo does not throw.
+    /// </summary>
     [Fact]
     public void EnableAddon_ModWithNullFileInfo_DoesNotThrow()
     {
@@ -891,6 +1059,9 @@ public sealed class InstalledAddonsProviderTests : IDisposable
         _installedAddonsProvider.EnableAddon(new AddonId("null-file-mod", "1.0"));
     }
 
+    /// <summary>
+    ///     Tests that adding the same campaign twice replaces the original entry.
+    /// </summary>
     [Fact]
     public void AddAddon_SameCampaignTwice_ReplacesEntry()
     {
@@ -905,6 +1076,9 @@ public sealed class InstalledAddonsProviderTests : IDisposable
         Assert.Equal("Updated", campaigns.First(c => c.AddonId.Id == "dup-camp").Title);
     }
 
+    /// <summary>
+    ///     Tests that removing a non-existent file does not throw.
+    /// </summary>
     [Fact]
     public async Task FileRemovedEvent_NonExistentFile_DoesNotThrow()
     {
@@ -924,6 +1098,9 @@ public sealed class InstalledAddonsProviderTests : IDisposable
         Assert.DoesNotContain(after, c => c.AddonId.Id == "ghost");
     }
 
+    /// <summary>
+    ///     Tests that deleting a loose map also deletes its associated INI file.
+    /// </summary>
     [Fact]
     public void DeleteAddon_BaseAddon_LooseMapWithBloodIni_DeletesMapAndIni()
     {
@@ -986,6 +1163,9 @@ public sealed class InstalledAddonsProviderTests : IDisposable
         }
     }
 
+    /// <summary>
+    ///     Tests that deleting a zip addon deletes the zip file.
+    /// </summary>
     [Fact]
     public void DeleteAddon_BaseAddon_ZipAddon_DeletesFile()
     {
@@ -1032,6 +1212,9 @@ public sealed class InstalledAddonsProviderTests : IDisposable
         }
     }
 
+    /// <summary>
+    ///     Tests that deleting a folder addon deletes the directory.
+    /// </summary>
     [Fact]
     public void DeleteAddon_BaseAddon_FolderAddon_DeletesDirectory()
     {
@@ -1079,6 +1262,9 @@ public sealed class InstalledAddonsProviderTests : IDisposable
         }
     }
 
+    /// <summary>
+    ///     Tests that deleting a parsed addon file with a null manifest throws.
+    /// </summary>
     [Fact]
     public void DeleteAddon_ParsedAddonFile_NullManifest_Throws()
     {
@@ -1094,6 +1280,9 @@ public sealed class InstalledAddonsProviderTests : IDisposable
         Assert.Throws<InvalidOperationException>(() => _installedAddonsProvider.DeleteAddon(parsed));
     }
 
+    /// <summary>
+    ///     Tests that creating a cache with CreateNew set to false does not clear existing entries.
+    /// </summary>
     [Fact]
     public async Task CreateCacheAsync_CreateNewFalse_DoesNotClearCache()
     {
@@ -1109,6 +1298,9 @@ public sealed class InstalledAddonsProviderTests : IDisposable
         Assert.NotEmpty(after);
     }
 
+    /// <summary>
+    ///     Tests that adding a grpinfo file adds the associated campaigns.
+    /// </summary>
     [Fact]
     public void AddAddon_GrpInfoFile_AddsCampaigns()
     {
@@ -1155,6 +1347,9 @@ public sealed class InstalledAddonsProviderTests : IDisposable
         }
     }
 
+    /// <summary>
+    ///     Tests that disposing the provider does not throw.
+    /// </summary>
     [Fact]
     public void Dispose_DoesNotThrow()
     {

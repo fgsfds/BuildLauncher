@@ -107,6 +107,12 @@ public sealed class VoidSW : EDuke32
     }
 
 
+    /// <summary>
+    ///     Appends command-line arguments for Shadow Warrior games in VoidSW.
+    /// </summary>
+    /// <param name="sb">String builder for parameters.</param>
+    /// <param name="game">Wang game instance.</param>
+    /// <param name="addon">Campaign or addon.</param>
     private void GetWangArgs(StringBuilder sb, WangGame game, BaseAddon addon)
     {
         if (addon is LooseMap)
@@ -158,8 +164,10 @@ public sealed class VoidSW : EDuke32
 
 
     /// <summary>
-    ///     Add music folders to the search list if music files don't exist in the game directory
+    ///     Adds the music folder to the command-line arguments if the game uses MIDI music.
     /// </summary>
+    /// <param name="sb">String builder for parameters.</param>
+    /// <param name="game">Wang game instance.</param>
     private static void AddWangMusicFolder(StringBuilder sb, WangGame game)
     {
         if (game.GameInstallFolder is null)

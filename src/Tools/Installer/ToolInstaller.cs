@@ -9,11 +9,18 @@ using Tools.Tools;
 
 namespace Tools.Installer;
 
+/// <summary>
+///     Handles installation and uninstallation of tools.
+/// </summary>
 public sealed class ToolInstaller : InstallerBase<BaseTool>
 {
     private readonly IApiInterface _apiInterface;
+
     private readonly InstalledGamesProvider _gamesProvider;
 
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="ToolInstaller" /> class.
+    /// </summary>
     public ToolInstaller(
         BaseTool tool,
         IApiInterface apiInterface,

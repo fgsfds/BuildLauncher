@@ -17,15 +17,40 @@ using DiHelper = Core.Client.Helpers.DiHelper;
 
 namespace Tests.Unit;
 
+/// <summary>
+///     Tests for the <see cref="AddonFactory" /> class.
+/// </summary>
 [Collection("Sync")]
 public sealed class AddonFactoryTests
 {
+    /// <summary>
+    ///     Mock configuration provider.
+    /// </summary>
     private readonly Mock<IConfigProvider> _configMock;
+
+    /// <summary>
+    ///     Set of disabled mod identifiers.
+    /// </summary>
     private readonly HashSet<string> _disabledMods;
+
+    /// <summary>
+    ///     Addon factory under test.
+    /// </summary>
     private readonly AddonFactory _factory;
+
+    /// <summary>
+    ///     Set of favorite addon identifiers.
+    /// </summary>
     private readonly HashSet<AddonId> _favorites;
+
+    /// <summary>
+    ///     Duke Nukem 3D game instance for testing.
+    /// </summary>
     private readonly DukeGame _game;
 
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="AddonFactoryTests" /> class.
+    /// </summary>
     public AddonFactoryTests()
     {
         _game = new DukeGame
@@ -63,6 +88,9 @@ public sealed class AddonFactoryTests
         _factory = new AddonFactory(_game, _configMock.Object, metadataProvider);
     }
 
+    /// <summary>
+    ///     Tests that <see cref="AddonFactory.GetAddonFromFile" /> returns a <see cref="DukeCampaign" /> for a TC addon.
+    /// </summary>
     [Fact]
     public void GetAddonFromFile_JsonManifest_ReturnsDukeCampaign()
     {
@@ -78,6 +106,9 @@ public sealed class AddonFactoryTests
         Assert.Equal(AddonTypeEnum.TC, addon.Type);
     }
 
+    /// <summary>
+    ///     Tests that <see cref="AddonFactory.GetAddonFromFile" /> correctly adds dependencies and incompatibles.
+    /// </summary>
     [Fact]
     public void GetAddonFromFile_JsonManifestWithDependencies_AddsThem()
     {
@@ -102,6 +133,9 @@ public sealed class AddonFactoryTests
         Assert.True(addon.IncompatibleAddons.ContainsKey("bad-addon"));
     }
 
+    /// <summary>
+    ///     Tests that <see cref="AddonFactory.GetAddonFromFile" /> correctly adds executables from the manifest.
+    /// </summary>
     [Fact]
     public void GetAddonFromFile_JsonManifestWithExecutables_AddsThem()
     {
@@ -142,6 +176,9 @@ public sealed class AddonFactoryTests
         Assert.EndsWith("custom.exe", addon.Executables[OSEnum.Windows][PortEnum.EDuke32]);
     }
 
+    /// <summary>
+    ///     Tests that <see cref="AddonFactory.GetAddonFromFile" /> correctly adds options from the manifest.
+    /// </summary>
     [Fact]
     public void GetAddonFromFile_JsonManifestWithOptions_AddsThem()
     {
@@ -184,6 +221,9 @@ public sealed class AddonFactoryTests
         Assert.Equal(OptionalParameterTypeEnum.DEF, addon.Options["opt1"]["test.def"]);
     }
 
+    /// <summary>
+    ///     Tests that <see cref="AddonFactory.GetAddonFromFile" /> correctly adds additional CON files from the manifest.
+    /// </summary>
     [Fact]
     public void GetAddonFromFile_JsonManifestWithAddCons_AddsThem()
     {
@@ -216,6 +256,9 @@ public sealed class AddonFactoryTests
         Assert.Contains("more.con", duke.AdditionalCons);
     }
 
+    /// <summary>
+    ///     Tests that <see cref="AddonFactory.GetAddonFromFile" /> falls back to the preview hash when no grid hash is set.
+    /// </summary>
     [Fact]
     public void GetAddonFromFile_JsonManifest_FallsBackToPreviewForGrid()
     {
@@ -245,6 +288,9 @@ public sealed class AddonFactoryTests
         Assert.Equal(67890, addon.PreviewImageHash);
     }
 
+    /// <summary>
+    ///     Tests that <see cref="AddonFactory.GetAddonFromFile" /> returns null for unsupported file extensions.
+    /// </summary>
     [Fact]
     public void GetAddonFromFile_NotJsonNotMapNotZip_ReturnsNull()
     {
@@ -272,6 +318,9 @@ public sealed class AddonFactoryTests
         Assert.Null(addon);
     }
 
+    /// <summary>
+    ///     Tests that <see cref="AddonFactory.GetAddonFromFile" /> throws when the manifest is null.
+    /// </summary>
     [Fact]
     public void GetAddonFromFile_NullManifest_Throws()
     {
@@ -287,6 +336,9 @@ public sealed class AddonFactoryTests
         Assert.Throws<InvalidOperationException>(() => _factory.GetAddonFromFile(parsed));
     }
 
+    /// <summary>
+    ///     Tests that <see cref="AddonFactory.GetAddonFromFile" /> returns a <see cref="BloodCampaign" /> for Blood addons.
+    /// </summary>
     [Fact]
     public void GetAddonFromFile_BloodGame_ReturnsBloodCampaign()
     {
@@ -301,6 +353,9 @@ public sealed class AddonFactoryTests
         Assert.IsType<BloodCampaign>(addon);
     }
 
+    /// <summary>
+    ///     Tests that <see cref="AddonFactory.GetAddonFromFile" /> returns a standalone game for standalone addons.
+    /// </summary>
     [Fact]
     public void GetAddonFromFile_StandaloneGame_ReturnsStandaloneGame()
     {
@@ -315,6 +370,9 @@ public sealed class AddonFactoryTests
         Assert.IsType<Addons.Addons.StandaloneGame>(addon);
     }
 
+    /// <summary>
+    ///     Tests that <see cref="AddonFactory.GetAddonFromFile" /> returns a <see cref="GenericCampaign" /> for Slave games.
+    /// </summary>
     [Fact]
     public void GetAddonFromFile_SlaveGame_ReturnsGenericCampaign()
     {
@@ -329,6 +387,9 @@ public sealed class AddonFactoryTests
         Assert.IsType<GenericCampaign>(addon);
     }
 
+    /// <summary>
+    ///     Tests that <see cref="AddonFactory.GetAddonFromFile" /> returns an <see cref="AutoloadMod" /> for Mod addons.
+    /// </summary>
     [Fact]
     public void GetAddonFromFile_Mod_ReturnsAutoloadMod()
     {
@@ -343,6 +404,9 @@ public sealed class AddonFactoryTests
         Assert.Null(addon.MainDef);
     }
 
+    /// <summary>
+    ///     Tests that <see cref="AddonFactory.GetAddonFromFile" /> throws when a Mod has a MainDef set.
+    /// </summary>
     [Fact]
     public void GetAddonFromFile_ModWithMainDef_Throws()
     {
@@ -369,6 +433,9 @@ public sealed class AddonFactoryTests
         Assert.Throws<ArgumentException>(() => _factory.GetAddonFromFile(parsed));
     }
 
+    /// <summary>
+    ///     Tests that a disabled mod is created with <see cref="AutoloadMod.IsEnabled" /> set to false.
+    /// </summary>
     [Fact]
     public void GetAddonFromFile_DisabledMod_SetsIsEnabledFalse()
     {
@@ -382,6 +449,9 @@ public sealed class AddonFactoryTests
         Assert.False(autoloadMod.IsEnabled);
     }
 
+    /// <summary>
+    ///     Tests that <see cref="AddonFactory.GetLooseMapFromFile" /> returns a <see cref="LooseMap" /> for a valid map file.
+    /// </summary>
     [Fact]
     public void GetLooseMapFromFile_ValidMap_ReturnsLooseMap()
     {
@@ -407,6 +477,9 @@ public sealed class AddonFactoryTests
         Assert.Null(looseMap.BloodIni);
     }
 
+    /// <summary>
+    ///     Tests that <see cref="AddonFactory.GetLooseMapFromFile" /> returns null for non-map files.
+    /// </summary>
     [Fact]
     public void GetLooseMapFromFile_NonMap_ReturnsNull()
     {

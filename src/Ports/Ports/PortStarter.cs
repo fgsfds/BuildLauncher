@@ -8,12 +8,23 @@ using Microsoft.Extensions.Logging;
 
 namespace Ports.Ports;
 
+/// <summary>
+///     Starts a game port with the appropriate command-line arguments.
+/// </summary>
 public sealed class PortStarter
 {
     private readonly InstalledAddonsProviderFactory _installedAddonsProviderFactory;
+
     private readonly ILogger<PortStarter> _logger;
+
     private readonly PlaytimeProvider _playtimeProvider;
 
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="PortStarter" /> class.
+    /// </summary>
+    /// <param name="playtimeProvider">Playtime tracking provider.</param>
+    /// <param name="installedAddonsProviderFactory">Factory for installed addons providers.</param>
+    /// <param name="logger">Logger instance.</param>
     public PortStarter(
         PlaytimeProvider playtimeProvider,
         InstalledAddonsProviderFactory installedAddonsProviderFactory,
@@ -26,7 +37,7 @@ public sealed class PortStarter
     }
 
     /// <summary>
-    ///     Start port
+    ///     Starts the specified port for a given game and addon.
     /// </summary>
     /// <param name="port">Port</param>
     /// <param name="game">Game to start</param>
@@ -78,11 +89,11 @@ public sealed class PortStarter
 
 
     /// <summary>
-    ///     Start port with command line args
+    ///     Starts the port executable asynchronously.
     /// </summary>
-    /// <param name="port">Port</param>
-    /// <param name="args">Command line arguments</param>
-    /// <param name="pathToExe">Path to custom port's exe</param>
+    /// <param name="port">The port to start.</param>
+    /// <param name="args">Command-line arguments.</param>
+    /// <param name="pathToExe">Optional custom path to the executable.</param>
     private async Task StartPortAsync(BasePort port, string args, string? pathToExe = null)
     {
         var exe = pathToExe ?? port.PortExeFilePath;

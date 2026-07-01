@@ -3,8 +3,14 @@ using Core.All.Enums;
 
 namespace Tests.Unit;
 
+/// <summary>
+///     Tests for the <see cref="BaseAddon" /> class.
+/// </summary>
 public sealed class BaseAddonTests
 {
+    /// <summary>
+    ///     Creates a test <see cref="DukeCampaign" /> with the specified parameters.
+    /// </summary>
     private static DukeCampaign CreateAddon(
         string? id = null,
         string? version = null,
@@ -42,6 +48,9 @@ public sealed class BaseAddonTests
         };
     }
 
+    /// <summary>
+    ///     Tests that <see cref="BaseAddon.ToMarkdownString" /> returns only the title for a minimal addon.
+    /// </summary>
     [Fact]
     public void ToMarkdownString_Minimal_ReturnsOnlyTitle()
     {
@@ -52,6 +61,9 @@ public sealed class BaseAddonTests
         Assert.Equal("## Minimal", result);
     }
 
+    /// <summary>
+    ///     Tests that <see cref="BaseAddon.ToMarkdownString" /> includes the version when set.
+    /// </summary>
     [Fact]
     public void ToMarkdownString_WithVersion_IncludesVersion()
     {
@@ -62,6 +74,9 @@ public sealed class BaseAddonTests
         Assert.Equal($"## Test Addon{Environment.NewLine}{Environment.NewLine}#### v2.1", result);
     }
 
+    /// <summary>
+    ///     Tests that <see cref="BaseAddon.ToMarkdownString" /> includes author and date when set.
+    /// </summary>
     [Fact]
     public void ToMarkdownString_WithAuthorAndDate_IncludesBoth()
     {
@@ -73,6 +88,9 @@ public sealed class BaseAddonTests
         Assert.Equal($"## My Addon{nl}{nl}#### v1.0{nl}{nl}*Released on:* 15.03.2024{nl}{nl}*by Tester*", result);
     }
 
+    /// <summary>
+    ///     Tests that <see cref="BaseAddon.ToMarkdownString" /> joins description lines without URLs.
+    /// </summary>
     [Fact]
     public void ToMarkdownString_WithDescriptionWithoutUrls_JoinsLines()
     {
@@ -84,6 +102,9 @@ public sealed class BaseAddonTests
         Assert.Equal($"## Desc{nl}{nl}#### v1.0{nl}{nl}Line one{nl}{nl}Line two{nl}{nl}Line three", result);
     }
 
+    /// <summary>
+    ///     Tests that <see cref="BaseAddon.ToMarkdownString" /> converts URL lines to markdown links.
+    /// </summary>
     [Fact]
     public void ToMarkdownString_WithUrlLineInDescription_ConvertsToMarkdownLink()
     {
@@ -95,6 +116,9 @@ public sealed class BaseAddonTests
         Assert.Equal($"## Url{nl}{nl}#### v1.0{nl}{nl}[https://example.com](https://example.com)", result);
     }
 
+    /// <summary>
+    ///     Tests that <see cref="BaseAddon.ToMarkdownString" /> converts only URL lines in a mixed description.
+    /// </summary>
     [Fact]
     public void ToMarkdownString_WithUrlAmongLines_ConvertsOnlyUrlLines()
     {
@@ -106,6 +130,9 @@ public sealed class BaseAddonTests
         Assert.Equal($"## Mix{nl}{nl}#### v1.0{nl}{nl}Normal text{nl}{nl}[https://example.com](https://example.com){nl}{nl}More text", result);
     }
 
+    /// <summary>
+    ///     Tests that <see cref="BaseAddon.ToMarkdownString" /> includes the Requires section for addons with dependencies.
+    /// </summary>
     [Fact]
     public void ToMarkdownString_WithDependencies_IncludesRequiresSection()
     {
@@ -128,6 +155,9 @@ public sealed class BaseAddonTests
         Assert.Contains("dep-two", result);
     }
 
+    /// <summary>
+    ///     Tests that <see cref="BaseAddon.ToMarkdownString" /> omits the Requires section for official addons.
+    /// </summary>
     [Fact]
     public void ToMarkdownString_WithDependencies_OfficialType_OmitsRequiresSection()
     {
@@ -145,6 +175,9 @@ public sealed class BaseAddonTests
         Assert.DoesNotContain("#### Requires:", result);
     }
 
+    /// <summary>
+    ///     Tests that <see cref="BaseAddon.ToMarkdownString" /> includes the Incompatible section for addons with incompatibles.
+    /// </summary>
     [Fact]
     public void ToMarkdownString_WithIncompatibleAddons_IncludesIncompatibleSection()
     {
@@ -166,6 +199,9 @@ public sealed class BaseAddonTests
         Assert.Contains("old-mod", result);
     }
 
+    /// <summary>
+    ///     Tests that <see cref="BaseAddon.ToMarkdownString" /> returns complete markdown when all fields are set.
+    /// </summary>
     [Fact]
     public void ToMarkdownString_AllFields_ReturnsCompleteMarkdown()
     {

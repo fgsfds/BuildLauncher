@@ -7,17 +7,33 @@ using Microsoft.Extensions.Logging;
 
 namespace Core.Client.Tools;
 
+/// <summary>
+///     Manages the addition of addon files to the local or remote addon database.
+/// </summary>
 public sealed class AddonsDatabaseManager
 {
     private readonly IApiInterface _apiInterface;
+
     private readonly ILogger<AddonsDatabaseManager> _logger;
 
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="AddonsDatabaseManager" /> class.
+    /// </summary>
+    /// <param name="apiInterface">The API interface for database operations.</param>
+    /// <param name="logger">Logger instance.</param>
     public AddonsDatabaseManager(IApiInterface apiInterface, ILogger<AddonsDatabaseManager> logger)
     {
         _apiInterface = apiInterface;
         _logger = logger;
     }
 
+    /// <summary>
+    ///     Adds an addon file to the database by computing its hashes and uploading metadata.
+    /// </summary>
+    /// <param name="pathToFile">Absolute path to the addon file.</param>
+    /// <param name="downloadUrl">The download URL for the addon.</param>
+    /// <param name="manifest">The addon manifest.</param>
+    /// <returns>A result indicating success or failure.</returns>
     public async Task<Result> AddToDatabaseAsync(string pathToFile, Uri downloadUrl, AddonManifestJsonModel manifest)
     {
         var downloadAddonEntity = await GetDownloadableAddonDtoAsync(pathToFile, downloadUrl, manifest).ConfigureAwait(false);
@@ -26,6 +42,13 @@ public sealed class AddonsDatabaseManager
         return new(dbResult ? ResultEnum.Success : ResultEnum.Error, dbResult ? string.Empty : "Error while adding addon to the database.");
     }
 
+    /// <summary>
+    ///     Creates a <see cref="DownloadableAddonJsonModel" /> DTO by computing file hashes.
+    /// </summary>
+    /// <param name="pathToFile">Absolute path to the addon file.</param>
+    /// <param name="downloadUrl">The download URL for the addon.</param>
+    /// <param name="manifest">The addon manifest.</param>
+    /// <returns>A populated <see cref="DownloadableAddonJsonModel" /> instance.</returns>
     private static async Task<DownloadableAddonJsonModel> GetDownloadableAddonDtoAsync(string pathToFile, Uri downloadUrl, AddonManifestJsonModel manifest)
     {
         FileInfo fileInfo = new(pathToFile);

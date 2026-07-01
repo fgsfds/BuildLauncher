@@ -4,6 +4,9 @@ using Core.Client.Helpers;
 
 namespace Tests.Unit;
 
+/// <summary>
+///     Tests for the <see cref="ParsedAddonFile" /> record.
+/// </summary>
 public sealed class ParsedAddonFileTests
 {
     private static ParsedAddonFile Create(string path, string fileName, string? manifestId = null)
@@ -30,6 +33,9 @@ public sealed class ParsedAddonFileTests
         };
     }
 
+    /// <summary>
+    ///     Tests that records with the same values are equal.
+    /// </summary>
     [Fact]
     public void RecordEquality_SameValues_AreEqual()
     {
@@ -40,6 +46,9 @@ public sealed class ParsedAddonFileTests
         Assert.Equal(a.GetHashCode(), b.GetHashCode());
     }
 
+    /// <summary>
+    ///     Tests that records with different file info are not equal.
+    /// </summary>
     [Fact]
     public void RecordEquality_DifferentFileInfo_AreNotEqual()
     {
@@ -49,6 +58,9 @@ public sealed class ParsedAddonFileTests
         Assert.NotEqual(a, b);
     }
 
+    /// <summary>
+    ///     Tests that records with different manifests are not equal.
+    /// </summary>
     [Fact]
     public void RecordEquality_DifferentManifest_AreNotEqual()
     {
@@ -58,6 +70,9 @@ public sealed class ParsedAddonFileTests
         Assert.NotEqual(a, b);
     }
 
+    /// <summary>
+    ///     Tests that records with different grid hashes are not equal.
+    /// </summary>
     [Fact]
     public void RecordEquality_DifferentGridHash_AreNotEqual()
     {
@@ -71,6 +86,9 @@ public sealed class ParsedAddonFileTests
         Assert.NotEqual(a, b);
     }
 
+    /// <summary>
+    ///     Tests that records with different preview hashes are not equal.
+    /// </summary>
     [Fact]
     public void RecordEquality_DifferentPreviewHash_AreNotEqual()
     {
@@ -84,6 +102,9 @@ public sealed class ParsedAddonFileTests
         Assert.NotEqual(a, b);
     }
 
+    /// <summary>
+    ///     Tests that records with different supported games are not equal.
+    /// </summary>
     [Fact]
     public void RecordEquality_DifferentSupportedGame_AreNotEqual()
     {
@@ -97,6 +118,9 @@ public sealed class ParsedAddonFileTests
         Assert.NotEqual(a, b);
     }
 
+    /// <summary>
+    ///     Tests that the <c>with</c> expression changes a property while keeping others.
+    /// </summary>
     [Fact]
     public void WithExpression_ChangesPropertyAndKeepsOthers()
     {

@@ -11,8 +11,15 @@ namespace S3;
 public sealed class S3MetadataProvider
 {
     private readonly string _bucket;
+
+    /// <summary>
+    ///     Amazon S3 client instance.
+    /// </summary>
     private readonly AmazonS3Client _client;
 
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="S3MetadataProvider" /> class.
+    /// </summary>
     public S3MetadataProvider(AmazonS3Config config, string bucket)
     {
         _bucket = bucket;

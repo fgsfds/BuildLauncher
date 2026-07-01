@@ -19,15 +19,28 @@ namespace Addons.Providers;
 /// </summary>
 public sealed class LocalFilesProvider
 {
+    /// <summary>
+    ///     Base file name of the addon manifest (without extension).
+    /// </summary>
     private static readonly string ManifestNameBase = Path.GetFileNameWithoutExtension(CommonConstants.AddonManifestName);
+
+    /// <summary>
+    ///     Extension of the addon manifest file.
+    /// </summary>
     private static readonly string ManifestNameExt = Path.GetExtension(CommonConstants.AddonManifestName);
 
+    /// <summary>
+    ///     Enumeration options for recursive directory searches.
+    /// </summary>
     private static readonly EnumerationOptions RecursiveOptions = new()
     {
         MatchCasing = MatchCasing.CaseInsensitive,
         RecurseSubdirectories = true
     };
 
+    /// <summary>
+    ///     Enumeration options for non-recursive directory searches.
+    /// </summary>
     private static readonly EnumerationOptions NonRecursiveOptions = new()
     {
         MatchCasing = MatchCasing.CaseInsensitive,
@@ -35,14 +48,30 @@ public sealed class LocalFilesProvider
     };
 
     private readonly ICacheAdder<Stream> _bitmapsCache;
+
+    /// <summary>
+    ///     Semaphore to synchronize cache update operations.
+    /// </summary>
     private readonly SemaphoreSlim _cacheUpdateSemaphore = new(1, 1);
+
     private readonly IChannelPublisher<DiHelper.LocalFileEvent> _channelPublisher;
 
     private readonly InstalledGamesProvider _gamesProvider;
+
     private readonly ILogger<LocalFilesProvider> _logger;
 
+    /// <summary>
+    ///     Internal cache of parsed addon files.
+    /// </summary>
     private List<ParsedAddonFile>? _cachedDataDict;
 
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="LocalFilesProvider" /> class.
+    /// </summary>
+    /// <param name="gamesProvider">Provider for installed games.</param>
+    /// <param name="bitmapsCache">Cache for bitmap images (grid/preview).</param>
+    /// <param name="channelPublisher">Channel publisher for local file change events.</param>
+    /// <param name="logger">Logger for diagnostic messages.</param>
     public LocalFilesProvider(
         InstalledGamesProvider gamesProvider,
         [FromKeyedServices(KeyedServicesEnum.Bitmaps)] ICacheAdder<Stream> bitmapsCache,
@@ -56,6 +85,9 @@ public sealed class LocalFilesProvider
         _logger = logger;
     }
 
+    /// <summary>
+    ///     Gets whether the cache has been initialized.
+    /// </summary>
     [MemberNotNullWhen(true, nameof(_cachedDataDict))]
     public bool IsInitialized => _cachedDataDict is not null;
 
@@ -313,6 +345,11 @@ public sealed class LocalFilesProvider
         }
     }
 
+    /// <summary>
+    ///     Creates a simple parsed addon file entry for a file path without a manifest.
+    /// </summary>
+    /// <param name="path">Path to the file.</param>
+    /// <param name="gameEnum">Associated game enum.</param>
     private static ParsedAddonFile CreateSimpleEntry(string path, GameEnum gameEnum)
     {
         return new ParsedAddonFile
@@ -325,6 +362,11 @@ public sealed class LocalFilesProvider
         };
     }
 
+    /// <summary>
+    ///     Routes a file to the appropriate parsing method based on its extension.
+    /// </summary>
+    /// <param name="pathToFile">Path to the file to process.</param>
+    /// <param name="gameEnum">Associated game enum for .map files.</param>
     private async Task<List<ParsedAddonFile>?> ProcessFileAsync(string pathToFile, GameEnum? gameEnum)
     {
         if (pathToFile.EndsWith(".zip", StringComparison.OrdinalIgnoreCase))
@@ -359,8 +401,9 @@ public sealed class LocalFilesProvider
     }
 
     /// <summary>
-    ///     Parse a single JSON manifest file and load its grid/preview images.
+    ///     Reads and parses a manifest JSON file from disk, caches associated grid and preview images, and returns a parsed addon file entry.
     /// </summary>
+    /// <param name="file">Path to the manifest file.</param>
     private async Task<ParsedAddonFile?> ProcessManifestFileAsync(string file)
     {
         var folderPath = Path.GetDirectoryName(file);
@@ -428,8 +471,9 @@ public sealed class LocalFilesProvider
     }
 
     /// <summary>
-    ///     Parse manifests inside a zip archive and load any embedded grid/preview images.
+    ///     Opens a zip archive, extracts manifests and GRP info entries, caches grid and preview images, and returns the list of parsed addon files.
     /// </summary>
+    /// <param name="file">Path to the archive file.</param>
     private async Task<List<ParsedAddonFile>?> ProcessArchiveAsync(string file)
     {
         List<ParsedAddonFile>? results = null;

@@ -4,6 +4,9 @@ using Core.All.Helpers;
 
 namespace Addons.Helpers;
 
+/// <summary>
+///     Validates whether autoload mods are compatible with the current campaign, port, and other mods.
+/// </summary>
 public static class AutoloadModsValidator
 {
     /// <summary>
@@ -78,7 +81,7 @@ public static class AutoloadModsValidator
 
 
     /// <summary>
-    ///     Check if addon has all required dependencies
+    ///     Checks whether the dependent addons of the autoload mod are satisfied by the campaign or other enabled mods.
     /// </summary>
     private static bool CheckDependencies(
         AutoloadMod autoloadMod,
@@ -130,7 +133,7 @@ public static class AutoloadModsValidator
     }
 
     /// <summary>
-    ///     Checks if mod is incompatible with other enabled addons or campaign
+    ///     Checks whether the autoload mod is incompatible with the campaign or any other enabled mods.
     /// </summary>
     private static bool CheckIncompatibles(
         AutoloadMod autoloadMod,

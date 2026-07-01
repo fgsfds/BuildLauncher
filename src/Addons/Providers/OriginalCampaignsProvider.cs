@@ -10,10 +10,17 @@ using Games.Games;
 
 namespace Addons.Providers;
 
+/// <summary>
+///     Provides the original/official campaigns for each supported game.
+/// </summary>
 public sealed class OriginalCampaignsProvider
 {
     private readonly IConfigProvider _config;
 
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="OriginalCampaignsProvider" /> class.
+    /// </summary>
+    /// <param name="config">Configuration provider used to check favorite addon state.</param>
     public OriginalCampaignsProvider(IConfigProvider config)
     {
         _config = config;
@@ -53,6 +60,9 @@ public sealed class OriginalCampaignsProvider
         };
     }
 
+    /// <summary>
+    ///     Retrieves the original Duke Nukem 3D campaigns including World Tour, base game, Caribbean, Nuclear Winter, Duke it Out in DC, Duke 64, and Zero Hour.
+    /// </summary>
     private Dictionary<AddonId, BaseAddon> GetDuke3DCampaigns(BaseGame game)
     {
         if (game is not DukeGame dGame)
@@ -333,7 +343,9 @@ public sealed class OriginalCampaignsProvider
     }
 
 
-    /// <inheritdoc />
+    /// <summary>
+    ///     Retrieves the original Blood campaigns including the base game and Cryptic Passage.
+    /// </summary>
     private Dictionary<AddonId, BaseAddon> GetBloodCampaigns(BaseGame game)
     {
         if (game is not BloodGame bGame)
@@ -429,7 +441,7 @@ public sealed class OriginalCampaignsProvider
 
 
     /// <summary>
-    ///     Get list of original campaigns
+    ///     Retrieves the original Shadow Warrior campaign.
     /// </summary>
     private Dictionary<AddonId, BaseAddon> GetWangCampaigns(BaseGame game)
     {
@@ -479,7 +491,9 @@ public sealed class OriginalCampaignsProvider
     }
 
 
-    /// <inheritdoc />
+    /// <summary>
+    ///     Retrieves the original Ion Fury campaign, including Aftershock if detected.
+    /// </summary>
     private Dictionary<AddonId, BaseAddon> GetFuryCampaigns(BaseGame game)
     {
         if (game is not FuryGame fGame)
@@ -531,7 +545,7 @@ public sealed class OriginalCampaignsProvider
     }
 
     /// <summary>
-    ///     Is Aftershock addon installed
+    ///     Determines whether the installed Fury game is the Aftershock expansion by checking the grpinfo file content.
     /// </summary>
     private bool IsAftershock(FuryGame fGame)
     {
@@ -553,7 +567,9 @@ public sealed class OriginalCampaignsProvider
     }
 
 
-    /// <inheritdoc />
+    /// <summary>
+    ///     Retrieves the original Redneck Rampage campaigns including the base game, Route 66, and Rides Again.
+    /// </summary>
     private Dictionary<AddonId, BaseAddon> GetRedneckCampaigns(BaseGame game)
     {
         if (game is not RedneckGame rGame)
@@ -681,7 +697,9 @@ public sealed class OriginalCampaignsProvider
     }
 
 
-    /// <inheritdoc />
+    /// <summary>
+    ///     Retrieves the original NAM campaign.
+    /// </summary>
     private Dictionary<AddonId, BaseAddon> GetNamCampaigns(BaseGame game)
     {
         if (game is not NamGame nGame)
@@ -737,7 +755,9 @@ public sealed class OriginalCampaignsProvider
     }
 
 
-    /// <inheritdoc />
+    /// <summary>
+    ///     Retrieves the original World War II GI campaign including the Platoon Leader add-on.
+    /// </summary>
     private Dictionary<AddonId, BaseAddon> GetWw2Campaigns(BaseGame game)
     {
         if (game is not WW2GIGame wGame)
@@ -825,7 +845,9 @@ public sealed class OriginalCampaignsProvider
     }
 
 
-    /// <inheritdoc />
+    /// <summary>
+    ///     Retrieves the original TekWar campaign.
+    /// </summary>
     private Dictionary<AddonId, BaseAddon> GetTekWarCampaigns(BaseGame game)
     {
         if (game is not TekWarGame tGame)
@@ -875,7 +897,9 @@ public sealed class OriginalCampaignsProvider
     }
 
 
-    /// <inheritdoc />
+    /// <summary>
+    ///     Retrieves the original Powerslave campaign.
+    /// </summary>
     private Dictionary<AddonId, BaseAddon> GetSlaveCampaigns(BaseGame game)
     {
         if (game is not SlaveGame sGame)
@@ -928,7 +952,9 @@ public sealed class OriginalCampaignsProvider
     }
 
 
-    /// <inheritdoc />
+    /// <summary>
+    ///     Retrieves the original Witchaven campaigns including the base game and Witchaven II.
+    /// </summary>
     private Dictionary<AddonId, BaseAddon> GetWitchavenCampaigns(BaseGame game)
     {
         if (game is not WitchavenGame wGame)

@@ -14,15 +14,40 @@ using DiHelper = Core.Client.Helpers.DiHelper;
 
 namespace Tests.Unit.Sync;
 
+/// <summary>
+///     Tests for the <see cref="AddonDropHelper" /> class.
+/// </summary>
 [Collection("Sync")]
 public sealed class AddonDropHelperTests : IDisposable
 {
+    /// <summary>
+    ///     Path to the addons folder.
+    /// </summary>
     private readonly string _addonsFolder;
+
+    /// <summary>
+    ///     Blood game instance.
+    /// </summary>
     private readonly BloodGame _game;
+
+    /// <summary>
+    ///     Addon drop helper under test.
+    /// </summary>
     private readonly AddonDropHelper _helper;
+
+    /// <summary>
+    ///     Path to the maps folder.
+    /// </summary>
     private readonly string _mapsFolder;
+
+    /// <summary>
+    ///     Path to the mods folder.
+    /// </summary>
     private readonly string _modsFolder;
 
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="AddonDropHelperTests" /> class.
+    /// </summary>
     public AddonDropHelperTests()
     {
         _game = new BloodGame();
@@ -69,6 +94,7 @@ public sealed class AddonDropHelperTests : IDisposable
             );
     }
 
+    /// <inheritdoc />
     public void Dispose()
     {
         if (Directory.Exists(_addonsFolder))
@@ -77,6 +103,9 @@ public sealed class AddonDropHelperTests : IDisposable
         }
     }
 
+    /// <summary>
+    ///     Creates a zip archive at the specified path with optional addon.json content.
+    /// </summary>
     private static void CreateZipArchive(string path, string? addonJsonContent = null)
     {
         using var fileStream = new FileStream(path, FileMode.Create);
@@ -90,6 +119,9 @@ public sealed class AddonDropHelperTests : IDisposable
         }
     }
 
+    /// <summary>
+    ///     Tests that adding an empty list returns null.
+    /// </summary>
     [Fact]
     public async Task AddAddonsAsync_EmptyList_ReturnsNull()
     {
@@ -98,6 +130,9 @@ public sealed class AddonDropHelperTests : IDisposable
         Assert.Null(result);
     }
 
+    /// <summary>
+    ///     Tests that an unsupported extension returns the failed filename.
+    /// </summary>
     [Fact]
     public async Task AddAddonsAsync_UnsupportedExtension_ReturnsFailedName()
     {
@@ -110,6 +145,9 @@ public sealed class AddonDropHelperTests : IDisposable
         Assert.Contains("readme.txt", result);
     }
 
+    /// <summary>
+    ///     Tests that a valid zip file installs successfully and returns null.
+    /// </summary>
     [Fact]
     public async Task AddAddonsAsync_ZipFileInstallsSuccessfully_ReturnsNull()
     {
@@ -121,6 +159,9 @@ public sealed class AddonDropHelperTests : IDisposable
         Assert.True(File.Exists(Path.Combine(_modsFolder, "ZippedAddon.zip")));
     }
 
+    /// <summary>
+    ///     Tests that multiple files with failures return only the failed names.
+    /// </summary>
     [Fact]
     public async Task AddAddonsAsync_MultipleFilesWithFailures_ReturnsOnlyFailedNames()
     {
@@ -143,6 +184,9 @@ public sealed class AddonDropHelperTests : IDisposable
         Assert.False(File.Exists(Path.Combine(_modsFolder, "notes.txt")));
     }
 
+    /// <summary>
+    ///     Tests that when all files fail, all names are returned.
+    /// </summary>
     [Fact]
     public async Task AddAddonsAsync_AllFail_ReturnsAllNames()
     {
@@ -163,6 +207,9 @@ public sealed class AddonDropHelperTests : IDisposable
         Assert.False(File.Exists(Path.Combine(_modsFolder, "notes.txt")));
     }
 
+    /// <summary>
+    ///     Tests that a map file is copied to the maps folder and returns null.
+    /// </summary>
     [Fact]
     public async Task AddAddonsAsync_MapFileCopiedToMapsFolder_ReturnsNull()
     {
@@ -175,6 +222,9 @@ public sealed class AddonDropHelperTests : IDisposable
         Assert.True(File.Exists(Path.Combine(_mapsFolder, "TEST.MAP")));
     }
 
+    /// <summary>
+    ///     Tests that an archive with no manifest returns the failed name.
+    /// </summary>
     [Fact]
     public async Task AddAddonsAsync_ArchiveWithNoManifest_ReturnsFailedName()
     {
@@ -187,6 +237,9 @@ public sealed class AddonDropHelperTests : IDisposable
         Assert.Contains("empty.zip", result);
     }
 
+    /// <summary>
+    ///     Tests that an addon for a wrong game returns the failed name.
+    /// </summary>
     [Fact]
     public async Task AddAddonsAsync_WrongGameAddon_ReturnsFailedName()
     {
@@ -208,6 +261,9 @@ public sealed class AddonDropHelperTests : IDisposable
         Assert.Contains("wrong_game.zip", result);
     }
 
+    /// <summary>
+    ///     Tests that a duplicate file overwrites and succeeds.
+    /// </summary>
     [Fact]
     public async Task AddAddonsAsync_DuplicateFile_OverwritesAndSucceeds()
     {

@@ -9,7 +9,7 @@ using Games.Games;
 namespace Ports.Ports;
 
 /// <summary>
-///     Raze port
+///     Raze port.
 /// </summary>
 public sealed class Raze : BasePort
 {
@@ -222,6 +222,12 @@ public sealed class Raze : BasePort
         }
     }
 
+    /// <summary>
+    ///     Appends command-line arguments for Duke Nukem 3D games in Raze.
+    /// </summary>
+    /// <param name="sb">String builder for parameters.</param>
+    /// <param name="game">Duke game instance.</param>
+    /// <param name="addon">Campaign or addon.</param>
     private void GetDukeArgs(StringBuilder sb, DukeGame game, BaseAddon addon)
     {
         if (addon is LooseMap)
@@ -303,6 +309,12 @@ public sealed class Raze : BasePort
         }
     }
 
+    /// <summary>
+    ///     Appends command-line arguments for Shadow Warrior games in Raze.
+    /// </summary>
+    /// <param name="sb">String builder for parameters.</param>
+    /// <param name="game">Wang game instance.</param>
+    /// <param name="addon">Campaign or addon.</param>
     private void GetWangArgs(StringBuilder sb, WangGame game, BaseAddon addon)
     {
         if (addon is LooseMap)
@@ -348,6 +360,12 @@ public sealed class Raze : BasePort
         }
     }
 
+    /// <summary>
+    ///     Appends command-line arguments for Redneck Rampage games in Raze.
+    /// </summary>
+    /// <param name="sb">String builder for parameters.</param>
+    /// <param name="game">Redneck game instance.</param>
+    /// <param name="addon">Campaign or addon.</param>
     private void GetRedneckArgs(StringBuilder sb, RedneckGame game, BaseAddon addon)
     {
         if (addon is LooseMap)
@@ -411,8 +429,12 @@ public sealed class Raze : BasePort
     }
 
     /// <summary>
-    ///     Add paths to game and mods folder to the config
+    ///     Adds game and file search directory paths to the Raze config file.
     /// </summary>
+    /// <param name="game">Game instance.</param>
+    /// <param name="campaign">Campaign or addon.</param>
+    /// <param name="gameInstallFolder">Path to the game install folder.</param>
+    /// <param name="config">Path to the config file.</param>
     private static void AddGamePathsToConfig(BaseGame game, BaseAddon campaign, string gameInstallFolder, string config)
     {
         var contents = File.ReadAllLines(config);

@@ -3,8 +3,14 @@ using Tests.Unit.Helpers;
 
 namespace Tests.Unit;
 
+/// <summary>
+///     Tests for the <see cref="AddonFilePathWrapper" /> record.
+/// </summary>
 public sealed class AddonFilePathWrapperTests
 {
+    /// <summary>
+    ///     Tests that the constructor correctly sets folder path, file name, and combined path.
+    /// </summary>
     [Fact]
     public void Constructor_SetsProperties()
     {
@@ -15,6 +21,9 @@ public sealed class AddonFilePathWrapperTests
         Assert.Equal(@"C:\addons\myaddon\manifest.json", NormalizerHelper.NormalizePath(wrapper.PathToFile));
     }
 
+    /// <summary>
+    ///     Tests that when a zip path is provided, the folder resolves to the parent directory.
+    /// </summary>
     [Fact]
     public void Constructor_ZipPath_SetsFolderToParent()
     {
@@ -25,6 +34,9 @@ public sealed class AddonFilePathWrapperTests
         Assert.Equal(@"C:\addons\pack.zip", NormalizerHelper.NormalizePath(wrapper.PathToFile));
     }
 
+    /// <summary>
+    ///     Tests that <see cref="AddonFilePathWrapper.IsFolder" /> returns the expected value for various paths.
+    /// </summary>
     [Theory]
     [InlineData(@"C:\addons\myaddon", true)]
     [InlineData(@"C:\addons\myaddon.zip", false)]
@@ -37,6 +49,9 @@ public sealed class AddonFilePathWrapperTests
         Assert.Equal(expected, wrapper.IsFolder);
     }
 
+    /// <summary>
+    ///     Tests that <see cref="AddonFilePathWrapper.IsJson" /> returns the expected value for various file names.
+    /// </summary>
     [Theory]
     [InlineData(@"C:\addons\myaddon", "info.json", true)]
     [InlineData(@"C:\addons\myaddon", "info.JSON", true)]
@@ -50,6 +65,9 @@ public sealed class AddonFilePathWrapperTests
         Assert.Equal(expected, wrapper.IsJson);
     }
 
+    /// <summary>
+    ///     Tests that <see cref="AddonFilePathWrapper.IsJson" /> returns false when the path is not a folder.
+    /// </summary>
     [Fact]
     public void IsJson_ReturnsFalse_WhenPathIsNotFolder()
     {
@@ -58,6 +76,9 @@ public sealed class AddonFilePathWrapperTests
         Assert.False(wrapper.IsJson);
     }
 
+    /// <summary>
+    ///     Tests that <see cref="AddonFilePathWrapper.IsZip" /> returns the expected value for various paths.
+    /// </summary>
     [Theory]
     [InlineData(@"C:\addons\myaddon.zip", true)]
     [InlineData(@"C:\addons\myaddon.ZIP", true)]
@@ -72,6 +93,9 @@ public sealed class AddonFilePathWrapperTests
         Assert.Equal(expected, wrapper.IsZip);
     }
 
+    /// <summary>
+    ///     Tests that <see cref="AddonFilePathWrapper.IsMap" /> returns the expected value for various file names.
+    /// </summary>
     [Theory]
     [InlineData(@"C:\addons\myaddon", "level.map", true)]
     [InlineData(@"C:\addons\myaddon", "level.MAP", true)]
@@ -85,6 +109,9 @@ public sealed class AddonFilePathWrapperTests
         Assert.Equal(expected, wrapper.IsMap);
     }
 
+    /// <summary>
+    ///     Tests that <see cref="AddonFilePathWrapper.IsMap" /> returns false when the path is not a folder.
+    /// </summary>
     [Fact]
     public void IsMap_ReturnsFalse_WhenPathIsNotFolder()
     {
@@ -93,6 +120,9 @@ public sealed class AddonFilePathWrapperTests
         Assert.False(wrapper.IsMap);
     }
 
+    /// <summary>
+    ///     Tests that <see cref="AddonFilePathWrapper.IsGrpInfo" /> returns the expected value for various file names.
+    /// </summary>
     [Theory]
     [InlineData(@"C:\addons\myaddon", "info.grpinfo", true)]
     [InlineData(@"C:\addons\myaddon", "info.GRPINFO", true)]
@@ -106,6 +136,9 @@ public sealed class AddonFilePathWrapperTests
         Assert.Equal(expected, wrapper.IsGrpInfo);
     }
 
+    /// <summary>
+    ///     Tests that <see cref="AddonFilePathWrapper.IsGrpInfo" /> returns false when the path is not a folder.
+    /// </summary>
     [Fact]
     public void IsGrpInfo_ReturnsFalse_WhenPathIsNotFolder()
     {
@@ -114,6 +147,9 @@ public sealed class AddonFilePathWrapperTests
         Assert.False(wrapper.IsGrpInfo);
     }
 
+    /// <summary>
+    ///     Tests that <see cref="AddonFilePathWrapper.PathToFile" /> returns the combined path for a folder.
+    /// </summary>
     [Theory]
     [InlineData(@"C:\addons\myaddon", "manifest.json", @"C:\addons\myaddon\manifest.json")]
     [InlineData(@"C:\addons\folder", "file.map", @"C:\addons\folder\file.map")]
@@ -124,6 +160,9 @@ public sealed class AddonFilePathWrapperTests
         Assert.Equal(expected, NormalizerHelper.NormalizePath(wrapper.PathToFile));
     }
 
+    /// <summary>
+    ///     Tests that <see cref="AddonFilePathWrapper.PathToFile" /> returns the zip path directly for a zip file.
+    /// </summary>
     [Fact]
     public void PathToFile_ForZip_ReturnsZipPath()
     {
@@ -132,6 +171,9 @@ public sealed class AddonFilePathWrapperTests
         Assert.Equal(@"C:\addons\pack.zip", NormalizerHelper.NormalizePath(wrapper.PathToFile));
     }
 
+    /// <summary>
+    ///     Tests that <see cref="AddonFilePathWrapper.PathToFolder" /> returns the same path for a folder.
+    /// </summary>
     [Theory]
     [InlineData(@"C:\addons\myaddon")]
     [InlineData(@"C:\addons\folder")]
@@ -142,6 +184,9 @@ public sealed class AddonFilePathWrapperTests
         Assert.Equal(path, NormalizerHelper.NormalizePath(wrapper.PathToFolder));
     }
 
+    /// <summary>
+    ///     Tests that <see cref="AddonFilePathWrapper.PathToFolder" /> returns the parent directory for a zip file.
+    /// </summary>
     [Fact]
     public void PathToFolder_ForZip_ReturnsParentDirectory()
     {
@@ -150,6 +195,9 @@ public sealed class AddonFilePathWrapperTests
         Assert.Equal(@"C:\addons", NormalizerHelper.NormalizePath(wrapper.PathToFolder));
     }
 
+    /// <summary>
+    ///     Tests that <see cref="AddonFilePathWrapper.FileName" /> returns the manifest name for a folder.
+    /// </summary>
     [Fact]
     public void FileName_ForFolder_ReturnsManifestName()
     {
@@ -158,6 +206,9 @@ public sealed class AddonFilePathWrapperTests
         Assert.Equal("manifest.json", NormalizerHelper.NormalizePath(wrapper.FileName));
     }
 
+    /// <summary>
+    ///     Tests that <see cref="AddonFilePathWrapper.FileName" /> returns the zip name for a zip path.
+    /// </summary>
     [Fact]
     public void FileName_ForZip_ReturnsZipName()
     {
@@ -166,6 +217,9 @@ public sealed class AddonFilePathWrapperTests
         Assert.Equal("pack.zip", NormalizerHelper.NormalizePath(wrapper.FileName));
     }
 
+    /// <summary>
+    ///     Tests that <see cref="AddonFilePathWrapper.WithChangedFolder" /> returns a new wrapper with an updated folder path.
+    /// </summary>
     [Fact]
     public void WithChangedFolder_FolderPath_ReturnsNewWrapperWithUpdatedPath()
     {
@@ -178,6 +232,9 @@ public sealed class AddonFilePathWrapperTests
         Assert.True(updated.IsFolder);
     }
 
+    /// <summary>
+    ///     Tests that <see cref="AddonFilePathWrapper.WithChangedFolder" /> returns a new wrapper when the original is a zip.
+    /// </summary>
     [Fact]
     public void WithChangedFolder_ZipPath_ReturnsNewWrapperWithUpdatedPath()
     {
@@ -190,6 +247,9 @@ public sealed class AddonFilePathWrapperTests
         Assert.True(updated.IsZip);
     }
 
+    /// <summary>
+    ///     Tests that <see cref="AddonFilePathWrapper.WithChangedFolder" /> correctly transitions from folder to zip.
+    /// </summary>
     [Fact]
     public void WithChangedFolder_FromFolderToZip_UpdatesTypeFlags()
     {
@@ -202,6 +262,9 @@ public sealed class AddonFilePathWrapperTests
         Assert.Equal(@"C:\addons", NormalizerHelper.NormalizePath(zipped.PathToFolder));
     }
 
+    /// <summary>
+    ///     Tests that <see cref="AddonFilePathWrapper.WithChangedFolder" /> does not mutate the original wrapper.
+    /// </summary>
     [Fact]
     public void WithChangedFolder_OriginalWrapperIsUnchanged()
     {
@@ -212,6 +275,9 @@ public sealed class AddonFilePathWrapperTests
         Assert.Equal("manifest.json", NormalizerHelper.NormalizePath(original.FileName));
     }
 
+    /// <summary>
+    ///     Tests that the record implements value-based equality correctly.
+    /// </summary>
     [Fact]
     public void RecordEquality_ByValue()
     {
@@ -224,6 +290,9 @@ public sealed class AddonFilePathWrapperTests
         Assert.NotEqual(a, c);
     }
 
+    /// <summary>
+    ///     Tests that the constructor normalizes forward slashes to native separators.
+    /// </summary>
     [Fact]
     public void Constructor_NormalizesForwardSlashes()
     {
@@ -232,6 +301,9 @@ public sealed class AddonFilePathWrapperTests
         Assert.Equal("C:" + Path.DirectorySeparatorChar + "addons" + Path.DirectorySeparatorChar + "myaddon", wrapper.PathToFolder);
     }
 
+    /// <summary>
+    ///     Tests that the constructor normalizes mixed forward and backslashes.
+    /// </summary>
     [Fact]
     public void Constructor_NormalizesMixedSlashes()
     {
@@ -241,6 +313,9 @@ public sealed class AddonFilePathWrapperTests
         Assert.Equal(expected, wrapper.PathToFolder);
     }
 
+    /// <summary>
+    ///     Tests that wrappers with the same logical path but different separator styles are equal.
+    /// </summary>
     [Fact]
     public void DifferentSeparatorForms_SameLogicalPath_AreEqual()
     {
@@ -251,6 +326,9 @@ public sealed class AddonFilePathWrapperTests
         Assert.Equal(a.GetHashCode(), b.GetHashCode());
     }
 
+    /// <summary>
+    ///     Tests that wrappers with different separator styles resolve to the same dictionary key.
+    /// </summary>
     [Fact]
     public void DifferentSeparatorForms_SameLogicalPath_SameDictionaryKey()
     {

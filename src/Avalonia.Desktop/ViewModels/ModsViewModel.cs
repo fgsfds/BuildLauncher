@@ -18,15 +18,51 @@ namespace Avalonia.Desktop.ViewModels;
 
 public sealed partial class ModsViewModel : RightPanelViewModel, IPortsButtonControl
 {
+    /// <summary>
+    ///     The addon drop helper for installing dropped files.
+    /// </summary>
     private readonly IAddonDropHelper _addonInstaller;
+
+    /// <summary>
+    ///     The downloadable addons provider.
+    /// </summary>
     private readonly DownloadableAddonsProvider _downloadableAddonsProvider;
 
+    /// <summary>
+    ///     The installed games provider.
+    /// </summary>
     private readonly InstalledGamesProvider _gamesProvider;
+
+    /// <summary>
+    ///     The installed addons provider.
+    /// </summary>
     private readonly InstalledAddonsProvider _installedAddonsProvider;
+
+    /// <summary>
+    ///     The logger.
+    /// </summary>
     private readonly ILogger<ModsViewModel> _logger;
+
+    /// <summary>
+    ///     The metadata provider.
+    /// </summary>
     private readonly MetadataProvider _metadataProvider;
 
 
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="ModsViewModel" /> class.
+    /// </summary>
+    /// <param name="game">The game.</param>
+    /// <param name="gamesProvider">The installed games provider.</param>
+    /// <param name="playtimeProvider">The playtime provider.</param>
+    /// <param name="ratingProvider">The rating provider.</param>
+    /// <param name="metadataProvider">The metadata provider.</param>
+    /// <param name="installedAddonsProviderFactory">The installed addons provider factory.</param>
+    /// <param name="downloadableAddonsProviderFactory">The downloadable addons provider factory.</param>
+    /// <param name="bitmapsCache">The bitmaps cache.</param>
+    /// <param name="config">The configuration provider.</param>
+    /// <param name="addonInstaller">The addon drop helper.</param>
+    /// <param name="logger">The logger.</param>
     [Obsolete($"Don't create directly. Use {nameof(ViewModelsFactory)}.")]
     public ModsViewModel(
         BaseGame game,
@@ -55,17 +91,22 @@ public sealed partial class ModsViewModel : RightPanelViewModel, IPortsButtonCon
         //_downloadableAddonsProvider.AddonsChangedEvent += OnAddonChanged;
     }
 
+    /// <summary>
+    ///     Gets the game associated with this view model.
+    /// </summary>
     public BaseGame Game { get; }
 
 
     /// <summary>
-    ///     VM initialization
+    ///     VM initialization.
     /// </summary>
     public Task InitializeAsync() => UpdateAsync(false);
 
     /// <summary>
-    ///     Update mods list
+    ///     Updates the mods list asynchronously.
     /// </summary>
+    /// <param name="createNew">Whether to create a new cache.</param>
+    /// <returns>A task representing the asynchronous operation.</returns>
     private async Task UpdateAsync(bool createNew)
     {
         IsInProgress = true;
@@ -73,7 +114,9 @@ public sealed partial class ModsViewModel : RightPanelViewModel, IPortsButtonCon
         IsInProgress = false;
     }
 
-
+    /// <summary>
+    ///     Handles the game changed event.
+    /// </summary>
     private void OnGameChanged(GameEnum parameterName)
     {
         if (parameterName == Game.GameEnum)
@@ -82,6 +125,9 @@ public sealed partial class ModsViewModel : RightPanelViewModel, IPortsButtonCon
         }
     }
 
+    /// <summary>
+    ///     Handles the addon changed event.
+    /// </summary>
     private void OnAddonChanged(GameEnum gameEnum, AddonTypeEnum? addonType)
     {
         if (gameEnum == Game.GameEnum && (addonType is AddonTypeEnum.Mod))
@@ -98,6 +144,9 @@ public sealed partial class ModsViewModel : RightPanelViewModel, IPortsButtonCon
     /// </summary>
     public ImmutableList<AutoloadMod> ModsList => [.. _installedAddonsProvider.GetInstalledAddonsByType(AddonTypeEnum.Mod).OfType<AutoloadMod>().OrderBy(static x => x.Title)];
 
+    /// <summary>
+    ///     The currently selected addon.
+    /// </summary>
     private BaseAddon? _selectedAddon;
 
     /// <summary>
@@ -124,6 +173,9 @@ public sealed partial class ModsViewModel : RightPanelViewModel, IPortsButtonCon
     [ObservableProperty]
     private bool _isInProgress;
 
+    /// <summary>
+    ///     Gets whether the ports buttons panel is visible.
+    /// </summary>
     public bool IsPortsButtonsVisible => false;
 
     #endregion

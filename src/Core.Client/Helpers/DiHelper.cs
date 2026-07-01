@@ -18,28 +18,56 @@ using NReco.Logging.File;
 
 namespace Core.Client.Helpers;
 
+/// <summary>
+///     Provides extension methods for registering client services with the dependency injection container.
+/// </summary>
 public static class DiHelper
 {
+    /// <summary>
+    ///     Registers a fake configuration provider for testing purposes.
+    /// </summary>
+    /// <param name="container">The service collection.</param>
+    /// <returns>The updated service collection.</returns>
     public static IServiceCollection WithFakeConfig(this IServiceCollection container)
     {
         return container.AddSingleton<IConfigProvider, ConfigProviderFake>();
     }
 
+    /// <summary>
+    ///     Registers the real configuration provider backed by the database.
+    /// </summary>
+    /// <param name="container">The service collection.</param>
+    /// <returns>The updated service collection.</returns>
     public static IServiceCollection WithConfig(this IServiceCollection container)
     {
         return container.AddSingleton<IConfigProvider, ConfigProvider>();
     }
 
+    /// <summary>
+    ///     Registers the database context factory.
+    /// </summary>
+    /// <param name="container">The service collection.</param>
+    /// <returns>The updated service collection.</returns>
     public static IServiceCollection WithDatabase(this IServiceCollection container)
     {
         return container.AddDbContextFactory<DatabaseContext>();
     }
 
+    /// <summary>
+    ///     Registers debug output logging.
+    /// </summary>
+    /// <param name="container">The service collection.</param>
+    /// <returns>The updated service collection.</returns>
     public static IServiceCollection WithDebugLogging(this IServiceCollection container)
     {
         return container.AddLogging(x => x.AddDebug());
     }
 
+    /// <summary>
+    ///     Registers HTTP clients that return fake responses for testing.
+    /// </summary>
+    /// <param name="container">The service collection.</param>
+    /// <returns>The updated service collection.</returns>
     public static IServiceCollection WithFakeHttpClients(this IServiceCollection container)
     {
         _ = container.AddHttpClient(HttpClientEnum.GitHub.GetDescription())
@@ -51,6 +79,11 @@ public static class DiHelper
         return container;
     }
 
+    /// <summary>
+    ///     Registers HTTP clients with authentication and timeout configuration for production use.
+    /// </summary>
+    /// <param name="container">The service collection.</param>
+    /// <returns>The updated service collection.</returns>
     public static IServiceCollection WithHttpClients(this IServiceCollection container)
     {
         _ = container.AddHttpClient(HttpClientEnum.GitHub.GetDescription())
@@ -80,16 +113,31 @@ public static class DiHelper
         return container;
     }
 
+    /// <summary>
+    ///     Registers the offline API interface for local-only operation.
+    /// </summary>
+    /// <param name="container">The service collection.</param>
+    /// <returns>The updated service collection.</returns>
     public static IServiceCollection WithOfflineApi(this IServiceCollection container)
     {
         return container.AddSingleton<IApiInterface, OfflineApiInterface>();
     }
 
+    /// <summary>
+    ///     Registers the GitHub-backed API interface for online operation.
+    /// </summary>
+    /// <param name="container">The service collection.</param>
+    /// <returns>The updated service collection.</returns>
     public static IServiceCollection WithGitHubApi(this IServiceCollection container)
     {
         return container.AddSingleton<IApiInterface, GitHubApiInterface>();
     }
 
+    /// <summary>
+    ///     Registers file-based logging to the application log path.
+    /// </summary>
+    /// <param name="container">The service collection.</param>
+    /// <returns>The updated service collection.</returns>
     public static IServiceCollection WithFileLogging(this IServiceCollection container)
     {
         return container
@@ -107,6 +155,11 @@ public static class DiHelper
                 );
     }
 
+    /// <summary>
+    ///     Registers core client services including archive tools, downloader, and providers.
+    /// </summary>
+    /// <param name="container">The service collection.</param>
+    /// <returns>The updated service collection.</returns>
     public static IServiceCollection WithClient(this IServiceCollection container)
     {
         _ = container.AddTransient<ArchiveTools>();
@@ -120,6 +173,11 @@ public static class DiHelper
         return container;
     }
 
+    /// <summary>
+    ///     Registers channel-based event broadcasting services.
+    /// </summary>
+    /// <param name="container">The service collection.</param>
+    /// <returns>The updated service collection.</returns>
     public static IServiceCollection WithChannels(this IServiceCollection container)
     {
         _ = container.AddSingleton<ChannelBroadcaster<LocalFileEvent>>();
@@ -136,15 +194,29 @@ public static class DiHelper
     }
 
 
+    /// <summary>
+    ///     Represents a local file event notification containing parsed addon file information.
+    /// </summary>
     public sealed record LocalFileEvent
     {
+        /// <summary>
+        ///     The collection of parsed addon files associated with the event.
+        /// </summary>
         public IReadOnlyCollection<ParsedAddonFile> Files { get; init; }
+
+        /// <summary>
+        ///     Whether the files were added (true) or removed (false).
+        /// </summary>
         public bool IsAdded { get; init; }
     }
 
 
+    /// <summary>
+    ///     An HTTP message handler that returns a forbidden fake response for testing.
+    /// </summary>
     private sealed class FakeHttpMessageHandler : HttpMessageHandler
     {
+        /// <inheritdoc />
         protected override Task<HttpResponseMessage> SendAsync(
             HttpRequestMessage request, CancellationToken cancellationToken)
         {

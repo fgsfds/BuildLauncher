@@ -6,11 +6,30 @@ using Core.All.Enums.Versions;
 
 namespace Tests.Unit.Helpers;
 
+/// <summary>
+///     Provides pre-configured test setups for autoload mods across different games.
+/// </summary>
 internal sealed class AutoloadModsTestSetups
 {
+    /// <summary>
+    ///     Name of the official addon for the game.
+    /// </summary>
     private readonly string _addon;
+    /// <summary>
+    ///     A feature that is supported by the game.
+    /// </summary>
+    /// <summary>
+    ///     A feature that is supported by the game.
+    /// </summary>
     private readonly FeatureEnum _feature;
+
+    /// <summary>
+    ///     Game info for the test setup.
+    /// </summary>
     private readonly GameInfo _game;
+    /// <summary>
+    ///     A feature that is unsupported by the game.
+    /// </summary>
     private readonly FeatureEnum _unsupportedFeature;
 
     public AutoloadModsTestSetups(GameEnum gameEnum)
@@ -499,14 +518,33 @@ internal sealed class AutoloadModsTestSetups
     private List<AutoloadMod> _addonMods => [ModThatRequiresOfficialAddon, ModThatIncompatibleWithAddon];
 
 
+    /// <summary>
+    ///     Gets a list containing only the enabled mod.
+    /// </summary>
     public List<AutoloadMod> Enabled => [EnabledMod];
+
+    /// <summary>
+    ///     Gets a list of standard mods including enabled mod, addon mods, and standard mods.
+    /// </summary>
     public List<AutoloadMod> StandardMods => [EnabledMod, .._addonMods, .._standardMods];
 
+    /// <summary>
+    ///     Gets a list of standard mods with CON files, addon mods, and standard mods.
+    /// </summary>
     public List<AutoloadMod> StandardModsWithCons => [EnabledModWithCons, .._addonMods, .._standardMods];
 
+    /// <summary>
+    ///     Gets a minimal list containing the enabled mod and an incompatible mod.
+    /// </summary>
     public List<AutoloadMod> MinimalMods => [EnabledMod, IncompatibleWithEnabledMod];
 
+    /// <summary>
+    ///     Gets a list of addon mods including the enabled mod.
+    /// </summary>
     public List<AutoloadMod> AddonMods => [EnabledMod, .._addonMods];
 
+    /// <summary>
+    ///     Gets a list of addon mods with CON files including the enabled mod.
+    /// </summary>
     public List<AutoloadMod> AddonModsWithCons => [EnabledModWithCons, .._addonMods];
 }

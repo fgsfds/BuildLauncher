@@ -8,14 +8,35 @@ using Tests.Unit.Helpers;
 
 namespace Tests.Unit.Sync;
 
+/// <summary>
+///     Tests for addon file processing.
+/// </summary>
 [Collection("Sync")]
 public sealed class AddonFilesTests : IDisposable
 {
+    /// <summary>
+    ///     Path to the addons folder.
+    /// </summary>
     private readonly string _addonsFolder = ClientProperties.AddonsFolderPath;
+
+    /// <summary>
+    ///     Blood game instance.
+    /// </summary>
     private readonly BloodGame _game = new();
+
+    /// <summary>
+    ///     Installed addons provider under test.
+    /// </summary>
     private readonly InstalledAddonsProvider _installedAddonsProvider;
+
+    /// <summary>
+    ///     Local files provider for scanning addon files.
+    /// </summary>
     private readonly LocalFilesProvider _localFilesProvider;
 
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="AddonFilesTests" /> class.
+    /// </summary>
     public AddonFilesTests()
     {
         Mock<IConfigProvider> configMock = new();
@@ -25,6 +46,7 @@ public sealed class AddonFilesTests : IDisposable
         (_installedAddonsProvider, _localFilesProvider) = ObjectCreationHelper.CreateInstalledAddonsProvider(_game, configMock.Object);
     }
 
+    /// <inheritdoc />
     public void Dispose()
     {
         _installedAddonsProvider.Dispose();
@@ -35,6 +57,9 @@ public sealed class AddonFilesTests : IDisposable
         }
     }
 
+    /// <summary>
+    ///     Initializes test dependencies by copying a file and creating the provider cache.
+    /// </summary>
     private async Task<string?> InitializeDependencies(string? fileName, AddonTypeEnum addonType)
     {
         string? pathToFile = null;
@@ -62,6 +87,9 @@ public sealed class AddonFilesTests : IDisposable
         return pathToFile;
     }
 
+    /// <summary>
+    ///     Tests that a zipped addon returns parsed addons.
+    /// </summary>
     [Fact]
     public async Task GetAddonFromFile_ZippedAddon_ReturnsParsedAddons()
     {
@@ -87,6 +115,9 @@ public sealed class AddonFilesTests : IDisposable
         Assert.False(Directory.Exists(pathToFile.Replace(".zip", "")));
     }
 
+    /// <summary>
+    ///     Tests that an unpacked addon found during init returns parsed addons.
+    /// </summary>
     [Fact]
     public async Task Init_GetAddonFromFile_UnpackedAddon_ReturnsParsedAddons()
     {
@@ -115,6 +146,9 @@ public sealed class AddonFilesTests : IDisposable
         Assert.Equal(GameEnum.Blood, voxel2.SupportedGame.GameEnum);
     }
 
+    /// <summary>
+    ///     Tests that adding an unpacked addon file returns parsed addons.
+    /// </summary>
     [Fact]
     public async Task AddFile_GetAddonFromFile_UnpackedAddon_ReturnsParsedAddons()
     {
@@ -150,6 +184,9 @@ public sealed class AddonFilesTests : IDisposable
         Assert.Equal(GameEnum.Blood, voxel2.SupportedGame.GameEnum);
     }
 
+    /// <summary>
+    ///     Tests that a loose map returns a single map addon.
+    /// </summary>
     [Fact]
     public async Task GetInstalledAddonsByType_LooseMap_ReturnsSingleMap()
     {
@@ -170,6 +207,9 @@ public sealed class AddonFilesTests : IDisposable
         Assert.True(File.Exists(pathToFile));
     }
 
+    /// <summary>
+    ///     Tests that a grpinfo addon is extracted from cache.
+    /// </summary>
     [Fact]
     public async Task GetCachedAddonFilesAsync_GrpInfoAddon_Extracts()
     {
@@ -183,6 +223,9 @@ public sealed class AddonFilesTests : IDisposable
         Assert.True(File.Exists(Path.Combine(pathToFile.Replace(".zip", ""), "addons.grpinfo")));
     }
 
+    /// <summary>
+    ///     Tests that creating cache multiple times does not duplicate mods.
+    /// </summary>
     [Fact]
     public async Task CreateCacheAsync_Idempotent_DoesNotDuplicateMods()
     {

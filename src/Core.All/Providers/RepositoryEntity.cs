@@ -28,7 +28,8 @@ public readonly struct RepositoryEntity
     public Func<Stream, GeneralReleaseJsonModel?>? CustomReleaseParser { get; init; }
 
     /// <summary>
-    ///     Custom function to extract the version string from a release and its matched asset. Falls back to <c>release.TagName</c> when <c>null</c>.
+    ///     Custom function to extract the version string from a release and its matched asset.
+    ///     Falls back to <c>release.TagName</c> when <c>null</c>.
     /// </summary>
     public Func<GitHubReleaseJsonModel, GitHubReleaseAsset, string>? VersionSelector { get; init; }
 

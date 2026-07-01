@@ -17,18 +17,44 @@ namespace Addons.Providers;
 /// </summary>
 public sealed class DownloadableAddonsProvider
 {
+    /// <summary>
+    ///     Global semaphore to synchronize cache creation across instances.
+    /// </summary>
     private static readonly SemaphoreSlim _globalCacheSemaphore = new(1);
+
     private readonly IApiInterface _apiInterface;
+
     private readonly ArchiveTools _archiveTools;
+
     private readonly FilesDownloader _filesDownloader;
+
     private readonly LocalFilesProvider _filesProvider;
+
     private readonly BaseGame _game;
+
+    /// <summary>
+    ///     Provider for installed addons used to determine installation and update status.
+    /// </summary>
     private readonly InstalledAddonsProvider _installedAddonsProvider;
+
     private readonly ILogger<DownloadableAddonsProvider> _logger;
 
+    /// <summary>
+    ///     Internal cache of downloadable addons grouped by addon type.
+    /// </summary>
     private Dictionary<AddonTypeEnum, Dictionary<AddonId, DownloadableAddonJsonModel>>? _cache;
 
 
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="DownloadableAddonsProvider" /> class.
+    /// </summary>
+    /// <param name="game">The game to scope downloadable addons to.</param>
+    /// <param name="archiveTools">Archive tools for extraction.</param>
+    /// <param name="filesDownloader">File downloader service.</param>
+    /// <param name="filesProvider">Local files provider for scanning installed addons.</param>
+    /// <param name="apiInterface">API interface for fetching addon metadata.</param>
+    /// <param name="installedAddonsProviderFactory">Factory for creating installed addons providers.</param>
+    /// <param name="logger">Logger for diagnostic messages.</param>
     [Obsolete($"Don't create directly. Use {nameof(DownloadableAddonsProviderFactory)}.")]
     public DownloadableAddonsProvider(
         BaseGame game,
@@ -260,12 +286,12 @@ public sealed class DownloadableAddonsProvider
 
 
     /// <summary>
-    ///     Check hash of the local file
+    ///     Computes the SHA256 hash of a downloaded file and compares it to the expected hash.
     /// </summary>
-    /// <param name="filePath">Full path to the file</param>
-    /// <param name="expectedHash">Hash that the file's hash will be compared to</param>
-    /// <param name="cancellationToken">Cancellation token</param>
-    /// <returns>true if check is passed</returns>
+    /// <param name="filePath">Path to the downloaded file.</param>
+    /// <param name="expectedHash">Expected SHA256 hash string.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>True if the hash matches; false otherwise.</returns>
     private static async Task<bool> CheckFileHashAsync(
         string filePath,
         string expectedHash,
@@ -279,6 +305,9 @@ public sealed class DownloadableAddonsProvider
         return expectedHash.Equals(actualHashStr, StringComparison.OrdinalIgnoreCase);
     }
 
+    /// <summary>
+    ///     Handles progress change events from the file downloader and archive tools by forwarding them to the public Progress property.
+    /// </summary>
     private void OnProgressChanged(object? sender, float e)
     {
         ((IProgress<float>)Progress).Report(e);

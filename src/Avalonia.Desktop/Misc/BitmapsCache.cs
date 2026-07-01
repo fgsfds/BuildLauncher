@@ -13,12 +13,25 @@ using Tools.Tools;
 
 namespace Avalonia.Desktop.Misc;
 
+/// <summary>
+///     Cache for bitmap images used throughout the application.
+/// </summary>
 public sealed class BitmapsCache : ICacheAdder<Stream>, ICacheGetter<Bitmap>, IDisposable
 {
+    /// <summary>
+    ///     The internal cache of bitmap images keyed by hash.
+    /// </summary>
     private readonly ConcurrentDictionary<long, Bitmap> _cache = [];
+
     private readonly IReadOnlyList<BasePort> _ports;
+
     private readonly IReadOnlyList<BaseTool> _tools;
 
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="BitmapsCache" /> class.
+    /// </summary>
+    /// <param name="ports">The available ports.</param>
+    /// <param name="tools">The available tools.</param>
     public BitmapsCache(
         IEnumerable<BasePort> ports,
         IEnumerable<BaseTool> tools
@@ -28,6 +41,9 @@ public sealed class BitmapsCache : ICacheAdder<Stream>, ICacheGetter<Bitmap>, ID
         _tools = [.. tools];
     }
 
+    /// <summary>
+    ///     Initializes the cache with all known images.
+    /// </summary>
     public void InitializeCache()
     {
         InitOfficialCampaignsCache();
@@ -35,6 +51,12 @@ public sealed class BitmapsCache : ICacheAdder<Stream>, ICacheGetter<Bitmap>, ID
         InitToolsCache();
     }
 
+    /// <summary>
+    ///     Tries to add a stream to the cache.
+    /// </summary>
+    /// <param name="id">The unique identifier.</param>
+    /// <param name="item">The stream to add.</param>
+    /// <returns>True if the item was added; false if it already exists.</returns>
     public bool TryAddToCache(long id, Stream item)
     {
         if (_cache.TryGetValue(id, out _))
@@ -47,6 +69,12 @@ public sealed class BitmapsCache : ICacheAdder<Stream>, ICacheGetter<Bitmap>, ID
         return _cache.TryAdd(id, bitmap);
     }
 
+    /// <summary>
+    ///     Tries to add a grid-sized image to the cache.
+    /// </summary>
+    /// <param name="id">The unique identifier.</param>
+    /// <param name="item">The stream to add.</param>
+    /// <returns>True if the item was added; false if it already exists.</returns>
     public bool TryAddGridToCache(long id, Stream item)
     {
         if (_cache.TryGetValue(id, out _))
@@ -59,6 +87,12 @@ public sealed class BitmapsCache : ICacheAdder<Stream>, ICacheGetter<Bitmap>, ID
         return _cache.TryAdd(id, bitmap);
     }
 
+    /// <summary>
+    ///     Tries to add a preview-sized image to the cache.
+    /// </summary>
+    /// <param name="id">The unique identifier.</param>
+    /// <param name="item">The stream to add.</param>
+    /// <returns>True if the item was added; false if it already exists.</returns>
     public bool TryAddPreviewToCache(long id, Stream item)
     {
         if (_cache.TryGetValue(id, out _))
@@ -71,6 +105,11 @@ public sealed class BitmapsCache : ICacheAdder<Stream>, ICacheGetter<Bitmap>, ID
         return _cache.TryAdd(id, bitmap);
     }
 
+    /// <summary>
+    ///     Tries to remove an item from the cache.
+    /// </summary>
+    /// <param name="id">The unique identifier.</param>
+    /// <returns>True if the item was removed; false otherwise.</returns>
     public bool TryRemoveFromCache(long id)
     {
         if (_cache.Remove(id, out var bitmap))
@@ -83,9 +122,15 @@ public sealed class BitmapsCache : ICacheAdder<Stream>, ICacheGetter<Bitmap>, ID
         return false;
     }
 
+    /// <summary>
+    ///     Gets a bitmap from the cache by its identifier.
+    /// </summary>
+    /// <param name="id">The unique identifier.</param>
+    /// <returns>The bitmap if found; otherwise null.</returns>
     public Bitmap? GetFromCache(long id) => _cache.TryGetValue(id, out var bitmap) ? bitmap : null;
 
 
+    /// <inheritdoc />
     public void Dispose()
     {
         foreach (var bitmap in _cache.Values)
@@ -95,6 +140,9 @@ public sealed class BitmapsCache : ICacheAdder<Stream>, ICacheGetter<Bitmap>, ID
     }
 
 
+    /// <summary>
+    ///     Initializes the cache with official campaign images.
+    /// </summary>
     private void InitOfficialCampaignsCache()
     {
         var addonsAss = typeof(BaseAddon).Assembly;
@@ -181,6 +229,9 @@ public sealed class BitmapsCache : ICacheAdder<Stream>, ICacheGetter<Bitmap>, ID
         _ = TryAddGridToCache(GameEnum.WW2GI.GetUniqueHash(), ww2);
     }
 
+    /// <summary>
+    ///     Initializes the cache with port icon images.
+    /// </summary>
     private void InitPortsCache()
     {
         var portsAss = typeof(BasePort).Assembly;
@@ -192,6 +243,9 @@ public sealed class BitmapsCache : ICacheAdder<Stream>, ICacheGetter<Bitmap>, ID
         }
     }
 
+    /// <summary>
+    ///     Initializes the cache with tool icon images.
+    /// </summary>
     private void InitToolsCache()
     {
         var toolsAss = typeof(BaseTool).Assembly;

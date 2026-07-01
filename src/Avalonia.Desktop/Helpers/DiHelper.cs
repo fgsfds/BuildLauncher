@@ -7,6 +7,9 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Avalonia.Desktop.Helpers;
 
+/// <summary>
+///     Configures dependency injection services for the desktop project.
+/// </summary>
 public static class DiHelper
 {
     /// <summary>

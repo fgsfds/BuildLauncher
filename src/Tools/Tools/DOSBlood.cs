@@ -3,10 +3,16 @@ using Games.Providers;
 
 namespace Tools.Tools;
 
+/// <summary>
+///     DOSBlood tool implementation.
+/// </summary>
 public sealed class DOSBlood : BaseTool
 {
     private readonly InstalledGamesProvider _gamesProvider;
 
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="DOSBlood" /> class.
+    /// </summary>
     public DOSBlood(InstalledGamesProvider gamesProvider)
     {
         _gamesProvider = gamesProvider;
@@ -33,11 +39,10 @@ public sealed class DOSBlood : BaseTool
     /// <inheritdoc />
     public override bool CanBeLaunched => false;
 
+    /// <inheritdoc />
     public override string InstallText => string.Empty;
 
-    /// <summary>
-    ///     Currently installed version
-    /// </summary>
+    /// <inheritdoc />
     public override string? InstalledVersion
     {
         get

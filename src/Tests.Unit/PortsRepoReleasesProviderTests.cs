@@ -6,6 +6,9 @@ using Ports.Releases;
 
 namespace Tests.Unit;
 
+/// <summary>
+///     Tests for the <see cref="PortsRepoReleasesProvider" /> class.
+/// </summary>
 public sealed class PortsRepoReleasesProviderTests
 {
     private const string JsonResponse = """
@@ -128,6 +131,9 @@ public sealed class PortsRepoReleasesProviderTests
         ]
         """;
 
+    /// <summary>
+    ///     Tests that the shared cache key causes GetReleasesAsync to be called only once.
+    /// </summary>
     [Fact]
     public async Task GetLatestReleaseAsync_SharedCacheKey_CallsGetReleasesAsyncOnlyOnce()
     {
@@ -149,6 +155,9 @@ public sealed class PortsRepoReleasesProviderTests
             );
     }
 
+    /// <summary>
+    ///     Tests that getting the latest stable release returns the correct version.
+    /// </summary>
     [Fact]
     public async Task GetLatestReleaseAsync_StableOnly_ReturnsLatestRelease()
     {
@@ -167,6 +176,9 @@ public sealed class PortsRepoReleasesProviderTests
         Assert.Equal("v1.2.0", nBlood.Value.Version);
     }
 
+    /// <summary>
+    ///     Tests that getting the latest release with pre-releases enabled returns the pre-release version.
+    /// </summary>
     [Fact]
     public async Task GetLatestReleaseAsync_PreReleasesEnabled_ReturnsLatestPreRelease()
     {
@@ -185,6 +197,9 @@ public sealed class PortsRepoReleasesProviderTests
         Assert.Equal("v1.4.0", nBlood.Value.Version);
     }
 
+    /// <summary>
+    ///     Tests that when the repo URL is null, null is returned.
+    /// </summary>
     [Fact]
     public async Task GetLatestReleaseAsync_RepoUrlIsNull_ReturnsNull()
     {
@@ -201,6 +216,9 @@ public sealed class PortsRepoReleasesProviderTests
         Assert.Null(result);
     }
 
+    /// <summary>
+    ///     Tests that when an HTTP error occurs, null is returned.
+    /// </summary>
     [Fact]
     public async Task GetLatestReleaseAsync_HttpError_ReturnsNull()
     {
@@ -218,6 +236,9 @@ public sealed class PortsRepoReleasesProviderTests
         Assert.Null(result);
     }
 
+    /// <summary>
+    ///     Tests that an unsupported port enum returns null.
+    /// </summary>
     [Fact]
     public async Task GetLatestReleaseAsync_UnsupportedPortEnum_ReturnsNull()
     {
@@ -234,6 +255,9 @@ public sealed class PortsRepoReleasesProviderTests
         Assert.Null(result);
     }
 
+    /// <summary>
+    ///     Tests that both Linux and Windows assets are returned when available.
+    /// </summary>
     [Fact]
     public async Task GetLatestReleaseAsync_LinuxAndWindowsAssets_ReturnsBoth()
     {
@@ -255,6 +279,9 @@ public sealed class PortsRepoReleasesProviderTests
         Assert.Equal("v1.0.0", releases[OSEnum.Linux].Version);
     }
 
+    /// <summary>
+    ///     Tests that the version selector returns a custom version.
+    /// </summary>
     [Fact]
     public async Task GetLatestReleaseAsync_VersionSelector_ReturnsCustomVersion()
     {
@@ -274,6 +301,9 @@ public sealed class PortsRepoReleasesProviderTests
         Assert.Contains("2025", release.Value.Version);
     }
 
+    /// <summary>
+    ///     Tests that a cached result returns the same instance without an HTTP call.
+    /// </summary>
     [Fact]
     public async Task GetLatestReleaseAsync_CachedResult_ReturnsSameInstance_WithoutHttpCall()
     {
@@ -292,8 +322,12 @@ public sealed class PortsRepoReleasesProviderTests
     }
 
 
+    /// <summary>
+    ///     Fake HTTP message handler for testing with predefined JSON responses.
+    /// </summary>
     private sealed class FakeHttpMessageHandler : HttpMessageHandler
     {
+        /// <inheritdoc />
         protected override Task<HttpResponseMessage> SendAsync(
             HttpRequestMessage request, CancellationToken cancellationToken)
         {
@@ -307,8 +341,12 @@ public sealed class PortsRepoReleasesProviderTests
     }
 
 
+    /// <summary>
+    ///     Fake HTTP message handler for testing Raze-specific JSON responses.
+    /// </summary>
     private sealed class FakeRazeHttpMessageHandler : HttpMessageHandler
     {
+        /// <inheritdoc />
         protected override Task<HttpResponseMessage> SendAsync(
             HttpRequestMessage request, CancellationToken cancellationToken)
         {

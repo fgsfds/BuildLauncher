@@ -26,9 +26,14 @@ namespace Avalonia.Desktop.ViewModels;
 public sealed partial class DevViewModel : ObservableObject
 {
     private readonly AddonsDatabaseManager _addonsDatabaseManager;
+
     private readonly IConfigProvider _config;
+
     private readonly IFilesUploader _filesUploader;
 
+    /// <summary>
+    ///     Set of forbidden file names that cannot be used in addons.
+    /// </summary>
     private readonly HashSet<string> _forbiddenNames =
     [
         "duke3d.def",
@@ -50,6 +55,9 @@ public sealed partial class DevViewModel : ObservableObject
         "cryptic.ini"
     ];
 
+    /// <summary>
+    ///     Set of forbidden OGG file names for Blood addons.
+    /// </summary>
     private readonly HashSet<string> _forbiddenOggs =
     [
         "blood00.ogg",
@@ -63,10 +71,20 @@ public sealed partial class DevViewModel : ObservableObject
         "blood08.ogg",
         "blood09.ogg"
     ];
+
     private readonly InstalledGamesProvider _gamesProvider;
+
     private readonly ILogger<DevViewModel> _logger;
 
 
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="DevViewModel" /> class.
+    /// </summary>
+    /// <param name="config">The configuration provider.</param>
+    /// <param name="filesUploader">The files uploader.</param>
+    /// <param name="addonsDatabaseManager">The addons database manager.</param>
+    /// <param name="gamesProvider">The installed games provider.</param>
+    /// <param name="logger">The logger.</param>
     public DevViewModel(
         IConfigProvider config,
         IFilesUploader filesUploader,
@@ -85,6 +103,11 @@ public sealed partial class DevViewModel : ObservableObject
     }
 
 
+    /// <summary>
+    ///     Gets the addon manifest JSON model from the current form state.
+    /// </summary>
+    /// <param name="jsonString">The serialized JSON string.</param>
+    /// <returns>The addon manifest.</returns>
     private AddonManifestJsonModel GetAddonJson(out string jsonString)
     {
         if (PathToAddonFolder is null)
@@ -395,6 +418,10 @@ public sealed partial class DevViewModel : ObservableObject
         return addon;
     }
 
+    /// <summary>
+    ///     Loads an addon manifest from a JSON file.
+    /// </summary>
+    /// <param name="pathToFile">The path to the JSON file.</param>
     private void LoadJson(string pathToFile)
     {
         using var jsonStream = File.OpenRead(pathToFile);
@@ -499,9 +526,9 @@ public sealed partial class DevViewModel : ObservableObject
     }
 
     /// <summary>
-    ///     Rename addon folder to {addon_id}_v{addon_version}
+    ///     Renames the addon folder to match the addon's full name.
     /// </summary>
-    /// <param name="addon">Addon</param>
+    /// <param name="addon">The addon manifest.</param>
     private void RenameAddonFolder(AddonManifestJsonModel addon)
     {
         ArgumentNullException.ThrowIfNull(PathToAddonFolder);
@@ -517,6 +544,11 @@ public sealed partial class DevViewModel : ObservableObject
         }
     }
 
+    /// <summary>
+    ///     Gets the full folder name for an addon based on its ID and version.
+    /// </summary>
+    /// <param name="addon">The addon manifest.</param>
+    /// <returns>The full folder name.</returns>
     private static string GetAddonFullName(AddonManifestJsonModel addon)
     {
         StringBuilder version = new();
@@ -538,10 +570,10 @@ public sealed partial class DevViewModel : ObservableObject
     }
 
     /// <summary>
-    ///     Set result message.
+    ///     Sets the result message on the UI thread.
     /// </summary>
-    /// <param name="message">Message.</param>
-    /// <param name="isError">Is error.</param>
+    /// <param name="message">The message text.</param>
+    /// <param name="isError">Whether this is an error message.</param>
     private void SetResultMessage(string message, bool isError)
     {
         Dispatcher.UIThread.Post(() =>
@@ -666,6 +698,9 @@ public sealed partial class DevViewModel : ObservableObject
         }
     }
 
+    /// <summary>
+    ///     Gets the addon ID prefix for the selected game.
+    /// </summary>
     public string AddonIdPrefix => SelectedGame switch
     {
         GameEnum.Duke3D => "duke3d-",
@@ -682,106 +717,302 @@ public sealed partial class DevViewModel : ObservableObject
         _ => string.Empty
     };
 
+    /// <summary>
+    ///     Gets whether the app is running in developer mode.
+    /// </summary>
     public bool IsDeveloperMode => ClientProperties.IsDeveloperMode;
+
+    /// <summary>
+    ///     Gets whether step 2 (addon type selection) is visible.
+    /// </summary>
     public bool IsStep2Visible => IsMapSelected || IsModSelected || IsTcSelected;
+
+    /// <summary>
+    ///     Gets whether step 3 (game selection) is visible.
+    /// </summary>
     public bool IsStep3Visible => SelectedGame is not null;
+
+    /// <summary>
+    ///     Gets whether Duke-specific properties are available.
+    /// </summary>
     public bool AreDukePropertiesAvailable => SelectedGame is GameEnum.Duke3D or GameEnum.Fury or GameEnum.Redneck or GameEnum.RidesAgain or GameEnum.NAM or GameEnum.WW2GI;
+
+    /// <summary>
+    ///     Gets whether the main CON field is available.
+    /// </summary>
     public bool IsMainConAvailable => AreDukePropertiesAvailable && !IsModSelected;
+
+    /// <summary>
+    ///     Gets whether Blood-specific properties are available.
+    /// </summary>
     public bool AreBloodPropertiesAvailable => SelectedGame is GameEnum.Blood;
 
+    /// <summary>
+    ///     Gets or sets the addon ID.
+    /// </summary>
     [ObservableProperty]
     private string _addonId = string.Empty;
+
+    /// <summary>
+    ///     Gets or sets the addon version.
+    /// </summary>
     [ObservableProperty]
     private string _addonVersion = string.Empty;
+
+    /// <summary>
+    ///     Gets or sets the release date.
+    /// </summary>
     [ObservableProperty]
     private DateTimeOffset? _releaseDate;
+
+    /// <summary>
+    ///     Gets or sets the addon author.
+    /// </summary>
     [ObservableProperty]
     private string? _addonAuthor;
+
+    /// <summary>
+    ///     Gets or sets the addon description.
+    /// </summary>
     [ObservableProperty]
     private string? _addonDescription;
+
+    /// <summary>
+    ///     Gets or sets the main DEF file.
+    /// </summary>
     [ObservableProperty]
     private string? _mainDef;
+
+    /// <summary>
+    ///     Gets or sets the additional DEF files.
+    /// </summary>
     [ObservableProperty]
     private string? _additionalDefs;
+
+    /// <summary>
+    ///     Gets or sets the main CON file.
+    /// </summary>
     [ObservableProperty]
     private string? _mainCon;
+
+    /// <summary>
+    ///     Gets or sets the additional CON files.
+    /// </summary>
     [ObservableProperty]
     private string? _additionalCons;
+
+    /// <summary>
+    ///     Gets or sets the RTS file.
+    /// </summary>
     [ObservableProperty]
     private string? _rts;
+
+    /// <summary>
+    ///     Gets or sets the INI file.
+    /// </summary>
     [ObservableProperty]
     private string? _ini;
+
+    /// <summary>
+    ///     Gets or sets the main RFF file.
+    /// </summary>
     [ObservableProperty]
     private string? _mainRff;
+
+    /// <summary>
+    ///     Gets or sets the sound RFF file.
+    /// </summary>
     [ObservableProperty]
     private string? _soundRff;
+
+    /// <summary>
+    ///     Gets or sets the map file name.
+    /// </summary>
     [ObservableProperty]
     private string? _mapFileName;
 
+    /// <summary>
+    ///     Gets or sets the Windows EDuke32 executable path.
+    /// </summary>
     [ObservableProperty]
     private string? _windowsEDukeExe;
+
+    /// <summary>
+    ///     Gets or sets the Windows NBlood executable path.
+    /// </summary>
     [ObservableProperty]
     private string? _windowsNBloodExe;
+
+    /// <summary>
+    ///     Gets or sets the Windows NotBlood executable path.
+    /// </summary>
     [ObservableProperty]
     private string? _windowsNotBloodExe;
+
+    /// <summary>
+    ///     Gets or sets the Windows RedNukem executable path.
+    /// </summary>
     [ObservableProperty]
     private string? _windowsRedNukemExe;
+
+    /// <summary>
+    ///     Gets or sets the Windows Raze executable path.
+    /// </summary>
     [ObservableProperty]
     private string? _windowsRazeExe;
+
+    /// <summary>
+    ///     Gets or sets the Windows PCExhumed executable path.
+    /// </summary>
     [ObservableProperty]
     private string? _windowsPCExhumedExe;
 
+    /// <summary>
+    ///     Gets or sets the Linux NBlood executable path.
+    /// </summary>
     [ObservableProperty]
     private string? _linuxNBloodExe;
+
+    /// <summary>
+    ///     Gets or sets the Linux RedNukem executable path.
+    /// </summary>
     [ObservableProperty]
     private string? _linuxRedNukemExe;
+
+    /// <summary>
+    ///     Gets or sets the Linux Raze executable path.
+    /// </summary>
     [ObservableProperty]
     private string? _linuxRazeExe;
+
+    /// <summary>
+    ///     Gets or sets the Linux PCExhumed executable path.
+    /// </summary>
     [ObservableProperty]
     private string? _linuxPCExhumedExe;
+
+    /// <summary>
+    ///     Gets or sets the Linux NotBlood executable path.
+    /// </summary>
     [ObservableProperty]
     private string? _linuxNotBloodExe;
+
+    /// <summary>
+    ///     Gets or sets the Linux EDuke32 executable path.
+    /// </summary>
     [ObservableProperty]
     private string? _linuxEDukeExe;
 
+    /// <summary>
+    ///     Gets or sets the map episode number.
+    /// </summary>
     [ObservableProperty]
     private int? _mapEpisode;
+
+    /// <summary>
+    ///     Gets or sets the map level number.
+    /// </summary>
     [ObservableProperty]
     private int? _mapLevel;
+    /// <summary>
+    ///     Gets or sets whether the Duke Atomic version is selected.
+    /// </summary>
     [ObservableProperty]
     private bool _isDukeAtomicSelected;
+
+    /// <summary>
+    ///     Gets or sets whether the Duke 1.3D version is selected.
+    /// </summary>
     [ObservableProperty]
     private bool _isDuke13DSelected;
+
+    /// <summary>
+    ///     Gets or sets whether the Duke Widescreen version is selected.
+    /// </summary>
     [ObservableProperty]
     private bool _isDukeWTSelected;
+
+    /// <summary>
+    ///     Gets or sets whether EDuke32 CON features are selected.
+    /// </summary>
     [ObservableProperty]
     private bool _isEdukeConsSelected;
+
+    /// <summary>
+    ///     Gets or sets whether modern types are selected.
+    /// </summary>
     [ObservableProperty]
     private bool _isModernTypesSelected;
+
+    /// <summary>
+    ///     Gets or sets whether models are selected.
+    /// </summary>
     [ObservableProperty]
     private bool _isModelsSelected;
+
+    /// <summary>
+    ///     Gets or sets whether hightile textures are selected.
+    /// </summary>
     [ObservableProperty]
     private bool _isHightileSelected;
+
+    /// <summary>
+    ///     Gets or sets whether sloped sprites are selected.
+    /// </summary>
     [ObservableProperty]
     private bool _isSlopedSelected;
+
+    /// <summary>
+    ///     Gets or sets whether TROR is selected.
+    /// </summary>
     [ObservableProperty]
     private bool _isTrorSelected;
+
+    /// <summary>
+    ///     Gets or sets whether wall rotate cstat is selected.
+    /// </summary>
     [ObservableProperty]
     private bool _isCstatSelected;
+
+    /// <summary>
+    ///     Gets or sets whether dynamic lighting is selected.
+    /// </summary>
     [ObservableProperty]
     private bool _isLightingSelected;
+
+    /// <summary>
+    ///     Gets or sets whether SndInfo is selected.
+    /// </summary>
     [ObservableProperty]
     private bool _isSndInfoSelected;
+
+    /// <summary>
+    ///     Gets or sets whether tile from texture is selected.
+    /// </summary>
     [ObservableProperty]
     private bool _isTilefromtextureSelected;
+
+    /// <summary>
+    ///     Gets or sets whether an operation is in progress.
+    /// </summary>
     [ObservableProperty]
     private bool _isInProgress;
+
+    /// <summary>
+    ///     Gets or sets the progress bar value.
+    /// </summary>
     [ObservableProperty]
     private int _progressBarValue = 0;
 
+    /// <summary>
+    ///     Gets or sets the addon title.
+    /// </summary>
     [ObservableProperty]
     private string _addonTitle = string.Empty;
 
+    /// <summary>
+    ///     Called when the addon title changes; auto-generates the addon ID.
+    /// </summary>
     partial void OnAddonTitleChanged(string value)
     {
         StringBuilder sb = new(value.Length);
@@ -814,40 +1045,73 @@ public sealed partial class DevViewModel : ObservableObject
     [NotifyPropertyChangedFor(nameof(LinuxNBloodExe))]
     [NotifyPropertyChangedFor(nameof(LinuxNotBloodExe))]
     [NotifyPropertyChangedFor(nameof(LinuxEDukeExe))]
+    /// <summary>
+    ///     Gets or sets the selected game.
+    /// </summary>
     [ObservableProperty]
     private GameEnum? _selectedGame;
 
+    /// <summary>
+    ///     Gets or sets whether the map addon type is selected.
+    /// </summary>
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(IsStep2Visible))]
     private bool _isMapSelected;
 
+    /// <summary>
+    ///     Gets or sets whether the TC addon type is selected.
+    /// </summary>
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(IsStep2Visible))]
     private bool _isTcSelected;
 
+    /// <summary>
+    ///     Gets or sets whether the mod addon type is selected.
+    /// </summary>
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(IsMainConAvailable))]
     [NotifyPropertyChangedFor(nameof(IsStep2Visible))]
     private bool _isModSelected;
 
+    /// <summary>
+    ///     Gets or sets whether the EL map type is selected.
+    /// </summary>
     [ObservableProperty]
     private bool _isElMapTypeSelected;
 
+    /// <summary>
+    ///     Gets or sets whether the file map type is selected.
+    /// </summary>
     [ObservableProperty]
     private bool _isFileMapTypeSelected;
 
+    /// <summary>
+    ///     Gets or sets the uploading status message.
+    /// </summary>
     [ObservableProperty]
     private string? _uploadingStatusMessage;
 
+    /// <summary>
+    ///     Gets or sets the error text.
+    /// </summary>
     [ObservableProperty]
     private string? _errorText;
 
+    /// <summary>
+    ///     Gets or sets the error text color.
+    /// </summary>
     [ObservableProperty]
     private SolidColorBrush _errorTextColor = SolidColorBrush.Parse("Red");
 
+    /// <summary>
+    ///     Gets or sets the path to the addon folder.
+    /// </summary>
     [ObservableProperty]
     private string? _pathToAddonFolder;
 
+    /// <summary>
+    ///     Called when the addon folder path changes; loads addon.json if it exists.
+    /// </summary>
     partial void OnPathToAddonFolderChanged(string? value)
     {
         if (value is null)
@@ -874,18 +1138,33 @@ public sealed partial class DevViewModel : ObservableObject
         OnPropertyChanged(nameof(SelectedGame));
     }
 
+    /// <summary>
+    ///     Gets or sets the game CRC.
+    /// </summary>
     [ObservableProperty]
     private string? _gameCrc;
 
+    /// <summary>
+    ///     Gets or sets the JSON text.
+    /// </summary>
     [ObservableProperty]
     private string? _jsonText;
 
+    /// <summary>
+    ///     Gets or sets the upload status.
+    /// </summary>
     [ObservableProperty]
     private string? _uploadStatus;
 
+    /// <summary>
+    ///     Gets or sets the API password text box value.
+    /// </summary>
     [ObservableProperty]
     private string _apiPasswordTextBox;
 
+    /// <summary>
+    ///     Called when the API password changes; updates the configuration.
+    /// </summary>
     partial void OnApiPasswordTextBoxChanged(string value)
     {
         var configValue = _config.ApiPassword;
@@ -900,12 +1179,21 @@ public sealed partial class DevViewModel : ObservableObject
         }
     }
 
+    /// <summary>
+    ///     Gets or sets the list of dependencies.
+    /// </summary>
     [ObservableProperty]
     private ImmutableList<DependantAddonJsonModel>? _dependenciesList;
 
+    /// <summary>
+    ///     Gets or sets the list of incompatibilities.
+    /// </summary>
     [ObservableProperty]
     private ImmutableList<DependantAddonJsonModel>? _incompatibilitiesList;
 
+    /// <summary>
+    ///     Gets or sets the list of options.
+    /// </summary>
     [ObservableProperty]
     public partial ImmutableList<OptionJsonModel>? OptionsList { get; set; }
 
@@ -914,6 +1202,9 @@ public sealed partial class DevViewModel : ObservableObject
 
     #region Relay Commands
 
+    /// <summary>
+    ///     Opens a folder picker to select the addon folder.
+    /// </summary>
     [RelayCommand]
     private async Task SelectAddonFolder()
     {
@@ -933,6 +1224,9 @@ public sealed partial class DevViewModel : ObservableObject
     }
 
 
+    /// <summary>
+    ///     Uploads and adds an addon to the database.
+    /// </summary>
     [RelayCommand]
     private async Task AddAddonAsync()
     {
@@ -1027,6 +1321,9 @@ public sealed partial class DevViewModel : ObservableObject
     }
 
 
+    /// <summary>
+    ///     Adds a new dependency entry.
+    /// </summary>
     [RelayCommand]
     private void AddDependency()
     {
@@ -1041,7 +1338,9 @@ public sealed partial class DevViewModel : ObservableObject
         DependenciesList = DependenciesList.Add(newAddon);
     }
 
-
+    /// <summary>
+    ///     Removes a dependency entry.
+    /// </summary>
     [RelayCommand]
     private void RemoveDependency(DependantAddonJsonModel dependency)
     {
@@ -1051,6 +1350,9 @@ public sealed partial class DevViewModel : ObservableObject
     }
 
 
+    /// <summary>
+    ///     Adds a new incompatibility entry.
+    /// </summary>
     [RelayCommand]
     private void AddIncompatibility()
     {
@@ -1066,6 +1368,9 @@ public sealed partial class DevViewModel : ObservableObject
     }
 
 
+    /// <summary>
+    ///     Removes an incompatibility entry.
+    /// </summary>
     [RelayCommand]
     private void RemoveIncompatibility(DependantAddonJsonModel dependency)
     {
@@ -1075,6 +1380,9 @@ public sealed partial class DevViewModel : ObservableObject
     }
 
 
+    /// <summary>
+    ///     Adds a new option entry.
+    /// </summary>
     [RelayCommand]
     private void AddOption()
     {
@@ -1089,7 +1397,9 @@ public sealed partial class DevViewModel : ObservableObject
         OptionsList = OptionsList.Add(newOption);
     }
 
-
+    /// <summary>
+    ///     Removes an option entry.
+    /// </summary>
     [RelayCommand]
     private void RemoveOption(OptionJsonModel option)
     {
@@ -1099,6 +1409,9 @@ public sealed partial class DevViewModel : ObservableObject
     }
 
 
+    /// <summary>
+    ///     Opens a file picker to select a file for CRC calculation.
+    /// </summary>
     [RelayCommand]
     private async Task SelectFileForCrcAsync()
     {
@@ -1117,10 +1430,16 @@ public sealed partial class DevViewModel : ObservableObject
         GameCrc = Crc32Helper.GetCrc32Hex(files[0].Path.LocalPath);
     }
 
+    /// <summary>
+    ///     Creates a zip archive of the addon.
+    /// </summary>
     [RelayCommand]
     private Task<string?> CreateZipAsync() => CreateZipInternalAsync();
 
 
+    /// <summary>
+    ///     Submits the addon for upload.
+    /// </summary>
     [RelayCommand]
     private async Task SubmitAddonAsync()
     {
@@ -1180,6 +1499,9 @@ public sealed partial class DevViewModel : ObservableObject
     }
 
 
+    /// <summary>
+    ///     Previews the generated JSON for the addon.
+    /// </summary>
     [RelayCommand]
     private void PreviewJson()
     {
@@ -1193,7 +1515,9 @@ public sealed partial class DevViewModel : ObservableObject
         }
     }
 
-
+    /// <summary>
+    ///     Saves the JSON manifest to the addon folder.
+    /// </summary>
     [RelayCommand]
     private void SaveJson()
     {
@@ -1222,7 +1546,9 @@ public sealed partial class DevViewModel : ObservableObject
         }
     }
 
-
+    /// <summary>
+    ///     Updates all addon manifests from the selected folder.
+    /// </summary>
     [RelayCommand]
     private async Task UpdateManifestsAsync()
     {

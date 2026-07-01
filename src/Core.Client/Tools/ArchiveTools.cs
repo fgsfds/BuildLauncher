@@ -5,10 +5,17 @@ using SharpCompress.Readers;
 
 namespace Core.Client.Tools;
 
+/// <summary>
+///     Provides archive extraction functionality with progress reporting.
+/// </summary>
 public sealed class ArchiveTools
 {
     private readonly ILogger<ArchiveTools> _logger;
 
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="ArchiveTools" /> class.
+    /// </summary>
+    /// <param name="logger">Logger instance.</param>
     public ArchiveTools(ILogger<ArchiveTools> logger)
     {
         _logger = logger;

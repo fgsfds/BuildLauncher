@@ -7,13 +7,16 @@ using Games.Games;
 namespace Ports.Ports.EDuke32;
 
 /// <summary>
-///     RedNukem port
+///     Fury port.
 /// </summary>
 public sealed class Fury : EDuke32
 {
     private readonly IConfigProvider _config;
 
-
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="Fury" /> class.
+    /// </summary>
+    /// <param name="config">Configuration provider.</param>
     public Fury(IConfigProvider config)
     {
         _config = config;
@@ -96,6 +99,12 @@ public sealed class Fury : EDuke32
         }
     }
 
+    /// <summary>
+    ///     Appends command-line arguments for Ion Fury games.
+    /// </summary>
+    /// <param name="sb">String builder for parameters.</param>
+    /// <param name="game">Fury game instance.</param>
+    /// <param name="addon">Campaign or addon.</param>
     private void GetFuryArgs(StringBuilder sb, FuryGame game, BaseAddon addon)
     {
         if (addon.FileInfo is null)

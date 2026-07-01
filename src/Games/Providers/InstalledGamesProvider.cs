@@ -5,28 +5,83 @@ using Games.Games;
 namespace Games.Providers;
 
 /// <summary>
-///     Class that provides singleton instances of game types
+///     Class that provides singleton instances of game types.
 /// </summary>
 public class InstalledGamesProvider
 {
+    /// <summary>
+    ///     Represents the method that handles game change events.
+    /// </summary>
+    /// <param name="game">The game that changed.</param>
     public delegate void GameChanged(GameEnum game);
 
+
+    /// <summary>
+    ///     Blood game instance.
+    /// </summary>
     private readonly BloodGame _blood;
 
     private readonly IConfigProvider _config;
+
+    /// <summary>
+    ///     Duke Nukem 3D game instance.
+    /// </summary>
     private readonly DukeGame _duke3d;
+
+    /// <summary>
+    ///     Ion Fury game instance.
+    /// </summary>
     private readonly FuryGame _fury;
+
+    /// <summary>
+    ///     NAM game instance.
+    /// </summary>
     private readonly NamGame _nam;
+
+    /// <summary>
+    ///     Redneck Rampage game instance.
+    /// </summary>
     private readonly RedneckGame _redneck;
+
+    /// <summary>
+    ///     Powerslave game instance.
+    /// </summary>
     private readonly SlaveGame _slave;
+
+    /// <summary>
+    ///     Standalone game instance.
+    /// </summary>
     private readonly StandaloneGame _standalone;
+
+    /// <summary>
+    ///     TekWar game instance.
+    /// </summary>
     private readonly TekWarGame _tekwar;
+
+    /// <summary>
+    ///     Shadow Warrior game instance.
+    /// </summary>
     private readonly WangGame _wang;
+
+    /// <summary>
+    ///     Witchaven game instance.
+    /// </summary>
     private readonly WitchavenGame _witch;
+
+    /// <summary>
+    ///     World War II GI game instance.
+    /// </summary>
     private readonly WW2GIGame _ww2gi;
 
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="InstalledGamesProvider" /> class.
+    /// </summary>
     public InstalledGamesProvider() { }
 
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="InstalledGamesProvider" /> class.
+    /// </summary>
+    /// <param name="config">Configuration provider.</param>
     public InstalledGamesProvider(IConfigProvider config)
     {
         _config = config;
@@ -91,23 +146,56 @@ public class InstalledGamesProvider
         _config.ParameterChangedEvent += OnParameterChanged;
     }
 
+    /// <summary>
+    ///     Is Blood installed.
+    /// </summary>
     public bool IsBloodInstalled => _blood.IsBaseGameInstalled;
+    /// <summary>
+    ///     Is Duke Nukem 3D installed.
+    /// </summary>
     public bool IsDukeInstalled => _duke3d.IsBaseGameInstalled || _duke3d.IsWorldTourInstalled || _duke3d.IsDuke64Installed;
+    /// <summary>
+    ///     Is Shadow Warrior installed.
+    /// </summary>
     public bool IsWangInstalled => _wang.IsBaseGameInstalled;
+    /// <summary>
+    ///     Is Ion Fury installed.
+    /// </summary>
     public bool IsFuryInstalled => _fury.IsBaseGameInstalled;
+    /// <summary>
+    ///     Is Redneck Rampage installed.
+    /// </summary>
     public bool IsRedneckInstalled => _redneck.IsBaseGameInstalled || _redneck.IsAgainInstalled;
+    /// <summary>
+    ///     Is Powerslave installed.
+    /// </summary>
     public bool IsSlaveInstalled => _slave.IsBaseGameInstalled;
+    /// <summary>
+    ///     Is NAM installed.
+    /// </summary>
     public bool IsNamInstalled => _nam.IsBaseGameInstalled;
+    /// <summary>
+    ///     Is World War II GI installed.
+    /// </summary>
     public bool IsWW2GIInstalled => _ww2gi.IsBaseGameInstalled;
+    /// <summary>
+    ///     Is Witchaven installed.
+    /// </summary>
     public bool IsWitchavenInstalled => _witch.IsBaseGameInstalled || _witch.IsWitchaven2Installed;
+    /// <summary>
+    ///     Is TekWar installed.
+    /// </summary>
     public bool IsTekWarInstalled => _tekwar.IsBaseGameInstalled;
+    /// <summary>
+    ///     Occurs when a game's install path changes.
+    /// </summary>
     public event GameChanged? GameChangedEvent;
 
 
     /// <summary>
-    ///     Get game by enum
+    ///     Get game by enum.
     /// </summary>
-    /// <param name="gameEnum">Game enum</param>
+    /// <param name="gameEnum">Game enum.</param>
     public BaseGame GetGame(GameEnum gameEnum)
     {
         return gameEnum switch
@@ -152,9 +240,9 @@ public class InstalledGamesProvider
 
 
     /// <summary>
-    ///     Update game instance when path to the game changes in the config
+    ///     Handles configuration parameter changes to update game install paths.
     /// </summary>
-    /// <param name="parameterName">Config parameter</param>
+    /// <param name="parameterName">Name of the changed parameter.</param>
     private void OnParameterChanged(string? parameterName)
     {
         if (parameterName is null)

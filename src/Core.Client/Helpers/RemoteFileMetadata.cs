@@ -1,5 +1,8 @@
 ﻿namespace Core.Client.Helpers;
 
+/// <summary>
+///     Contains metadata about a remote file including size, last modified date, and URL.
+/// </summary>
 public readonly struct RemoteFileMetadata
 {
     /// <summary>

@@ -4,8 +4,16 @@ using System.IO.Hashing;
 
 namespace Core.Client.Helpers;
 
+/// <summary>
+///     Provides utility methods for computing CRC-32 hashes of files.
+/// </summary>
 public static class Crc32Helper
 {
+    /// <summary>
+    ///     Computes the CRC-32 hash of a file.
+    /// </summary>
+    /// <param name="path">Absolute path to the file.</param>
+    /// <returns>The CRC-32 hash as a signed 64-bit integer.</returns>
     public static long GetCrc32(string path)
     {
         var buffer = ArrayPool<byte>.Shared.Rent(64 * 1024);
@@ -33,5 +41,10 @@ public static class Crc32Helper
         }
     }
 
+    /// <summary>
+    ///     Computes the CRC-32 hash of a file and returns it as a hexadecimal string.
+    /// </summary>
+    /// <param name="path">Absolute path to the file.</param>
+    /// <returns>The CRC-32 hash as a hexadecimal string prefixed with "0x".</returns>
     public static string GetCrc32Hex(string path) => $"0x{GetCrc32(path):X8}";
 }

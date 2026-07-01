@@ -15,35 +15,72 @@ namespace Avalonia.Desktop.ViewModels;
 public sealed partial class PortsViewModel : ObservableObject
 {
     private readonly PortsProvider _installedPortsProvider;
+
     private readonly ILogger<PortsViewModel> _logger;
+
+    /// <summary>
+    ///     The semaphore for thread-safe editor operations.
+    /// </summary>
     private readonly SemaphoreSlim _semaphore = new(1);
+
     private readonly ViewModelsFactory _viewModelsFactory;
 
+    /// <summary>
+    ///     Gets or sets the error message.
+    /// </summary>
     [ObservableProperty]
     private string _errorMessage = string.Empty;
 
+    /// <summary>
+    ///     Gets or sets whether there are port updates available.
+    /// </summary>
     [ObservableProperty]
     private bool _hasUpdates = false;
 
+    /// <summary>
+    ///     Gets or sets whether the custom port editor is visible.
+    /// </summary>
     [ObservableProperty]
     private bool _isEditorVisible;
 
+    /// <summary>
+    ///     Whether a new custom port is being added (as opposed to editing an existing one).
+    /// </summary>
     private bool _isNewPort;
 
+    /// <summary>
+    ///     Gets or sets the selected custom port.
+    /// </summary>
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(EditCustomPortCommand))]
     [NotifyCanExecuteChangedFor(nameof(DeleteCustomPortCommand))]
     private CustomPort? _selectedCustomPort;
 
+    /// <summary>
+    ///     Gets or sets the selected custom port name.
+    /// </summary>
     [ObservableProperty]
     private string? _selectedCustomPortName;
 
+    /// <summary>
+    ///     Gets or sets the selected custom port path.
+    /// </summary>
     [ObservableProperty]
     private string? _selectedCustomPortPath;
 
+    /// <summary>
+    ///     Gets or sets the selected custom port type.
+    /// </summary>
     [ObservableProperty]
     private PortEnum? _selectedCustomPortType;
 
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="PortsViewModel" /> class.
+    /// </summary>
+    /// <param name="viewModelsFactory">The view models factory.</param>
+    /// <param name="installedPortsProvider">The installed ports provider.</param>
+    /// <param name="ports">The available ports.</param>
+    /// <param name="logger">The logger.</param>
     public PortsViewModel(
         ViewModelsFactory viewModelsFactory,
         PortsProvider installedPortsProvider,
@@ -60,14 +97,33 @@ public sealed partial class PortsViewModel : ObservableObject
         Initialize(ports);
     }
 
+    /// <summary>
+    ///     Gets the list of custom ports.
+    /// </summary>
     public ImmutableList<CustomPort> CustomPorts => _installedPortsProvider.GetCustomPorts();
 
+    /// <summary>
+    ///     Gets or sets the list of port view models.
+    /// </summary>
     public ImmutableList<PortViewModel> PortsList { get; set; } = [];
 
+    /// <summary>
+    ///     Gets the list of available port types.
+    /// </summary>
     public ImmutableList<PortEnum> PortsTypes { get; }
+    /// <summary>
+    ///     Determines whether the edit custom port command can execute.
+    /// </summary>
     private bool EditCustomPortCanExecute => SelectedCustomPort is not null;
+
+    /// <summary>
+    ///     Determines whether the delete custom port command can execute.
+    /// </summary>
     private bool DeleteCustomPortCanExecute => SelectedCustomPort is not null;
 
+    /// <summary>
+    ///     Opens the editor to add a new custom port.
+    /// </summary>
     [RelayCommand]
     private async Task AddCustomPortAsync()
     {
@@ -96,6 +152,9 @@ public sealed partial class PortsViewModel : ObservableObject
     }
 
 
+    /// <summary>
+    ///     Opens the editor to modify the selected custom port.
+    /// </summary>
     [RelayCommand(CanExecute = nameof(EditCustomPortCanExecute))]
     private async Task EditCustomPortAsync()
     {
@@ -125,6 +184,9 @@ public sealed partial class PortsViewModel : ObservableObject
     }
 
 
+    /// <summary>
+    ///     Deletes the selected custom port.
+    /// </summary>
     [RelayCommand(CanExecute = nameof(DeleteCustomPortCanExecute))]
     private void DeleteCustomPort()
     {
@@ -148,6 +210,9 @@ public sealed partial class PortsViewModel : ObservableObject
     }
 
 
+    /// <summary>
+    ///     Saves the custom port configuration.
+    /// </summary>
     [RelayCommand]
     private void SaveCustomPort()
     {
@@ -218,6 +283,9 @@ public sealed partial class PortsViewModel : ObservableObject
     }
 
 
+    /// <summary>
+    ///     Cancels the custom port editor.
+    /// </summary>
     [RelayCommand]
     private void Cancel()
     {
@@ -226,7 +294,9 @@ public sealed partial class PortsViewModel : ObservableObject
         _ = _semaphore.Release();
     }
 
-
+    /// <summary>
+    ///     Opens a file picker to select a port executable.
+    /// </summary>
     [RelayCommand]
     private async Task SelectPortExeAsync()
     {
@@ -260,6 +330,10 @@ public sealed partial class PortsViewModel : ObservableObject
     /// <summary>
     ///     Initialize VM
     /// </summary>
+    /// <summary>
+    ///     Initializes the port view models.
+    /// </summary>
+    /// <param name="ports">The available ports.</param>
     private void Initialize(IEnumerable<BasePort> ports)
     {
         List<PortViewModel> viewModels = [];
@@ -275,6 +349,9 @@ public sealed partial class PortsViewModel : ObservableObject
         OnPropertyChanged(nameof(PortsList));
     }
 
+    /// <summary>
+    ///     Handles the port changed event.
+    /// </summary>
     private void OnPortChanged(PortEnum portEnum)
     {
         HasUpdates = PortsList.Any(static x => x.IsUpdateAvailable);

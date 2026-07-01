@@ -2,8 +2,14 @@
 
 namespace Core.All.Helpers;
 
+/// <summary>
+///     Provides common runtime properties.
+/// </summary>
 public static class CommonProperties
 {
+    /// <summary>
+    ///     Gets the current operating system.
+    /// </summary>
     public static OSEnum OSEnum
     {
         get

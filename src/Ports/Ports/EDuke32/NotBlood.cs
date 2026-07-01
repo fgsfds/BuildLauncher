@@ -5,7 +5,7 @@ using Games.Games;
 namespace Ports.Ports.EDuke32;
 
 /// <summary>
-///     NotBlood port
+///     NotBlood port.
 /// </summary>
 public sealed class NotBlood : NBlood
 {

@@ -6,8 +6,14 @@ using Moq;
 
 namespace Tests.External;
 
+/// <summary>
+///     Tests for <see cref="AppRepoReleasesProvider" />.
+/// </summary>
 public sealed class AppReleasesTests
 {
+    /// <summary>
+    ///     Tests that the latest app release can be fetched from the repository.
+    /// </summary>
     [Fact]
     public async Task GetLatestAppReleaseTest()
     {

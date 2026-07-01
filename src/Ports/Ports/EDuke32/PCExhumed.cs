@@ -6,7 +6,7 @@ using Games.Games;
 namespace Ports.Ports.EDuke32;
 
 /// <summary>
-///     PCExhumed port
+///     PCExhumed port.
 /// </summary>
 public sealed class PCExhumed : EDuke32
 {

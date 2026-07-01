@@ -10,11 +10,20 @@ using SharpCompress.Archives;
 
 namespace Tests.Unit.Sync;
 
+/// <summary>
+///     Tests for the <see cref="LocalFilesProvider" /> class.
+/// </summary>
 [Collection("Sync")]
 public sealed class LocalFilesProviderTests : IDisposable
 {
+    /// <summary>
+    ///     Path to the addons folder.
+    /// </summary>
     private readonly string _addonsFolder;
 
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="LocalFilesProviderTests" /> class.
+    /// </summary>
     public LocalFilesProviderTests()
     {
         _addonsFolder = ClientProperties.AddonsFolderPath;
@@ -32,6 +41,7 @@ public sealed class LocalFilesProviderTests : IDisposable
         archive.WriteToDirectory(unpackToFolder);
     }
 
+    /// <inheritdoc />
     public void Dispose()
     {
         if (Directory.Exists(_addonsFolder))
@@ -40,6 +50,9 @@ public sealed class LocalFilesProviderTests : IDisposable
         }
     }
 
+    /// <summary>
+    ///     Creates a test <see cref="LocalFilesProvider" /> instance.
+    /// </summary>
     private static LocalFilesProvider CreateScanner()
     {
         Mock<ICacheAdder<Stream>> cache = new();
@@ -50,6 +63,9 @@ public sealed class LocalFilesProviderTests : IDisposable
         return new(gamesProvider.Object, cache.Object, channelPubMock.Object, NullLogger<LocalFilesProvider>.Instance);
     }
 
+    /// <summary>
+    ///     Tests that initializing when already initialized returns true.
+    /// </summary>
     [Fact]
     public async Task InitializeAsync_WhenAlreadyInitialized_ReturnsTrue()
     {
@@ -62,6 +78,9 @@ public sealed class LocalFilesProviderTests : IDisposable
         Assert.Equal(4, addons.Count);
     }
 
+    /// <summary>
+    ///     Tests that initializing with an empty addons folder returns true.
+    /// </summary>
     [Fact]
     public async Task InitializeAsync_WithEmptyAddonsFolder_ReturnsTrue()
     {
@@ -84,6 +103,9 @@ public sealed class LocalFilesProviderTests : IDisposable
         Assert.Empty(addons);
     }
 
+    /// <summary>
+    ///     Tests that IsInitialized is false before initialization.
+    /// </summary>
     [Fact]
     public void IsInitialized_FalseBeforeInit()
     {
@@ -92,6 +114,9 @@ public sealed class LocalFilesProviderTests : IDisposable
         Assert.False(scanner.IsInitialized);
     }
 
+    /// <summary>
+    ///     Tests that IsInitialized is true after initialization.
+    /// </summary>
     [Fact]
     public async Task IsInitialized_TrueAfterInit()
     {
@@ -101,6 +126,9 @@ public sealed class LocalFilesProviderTests : IDisposable
         Assert.True(scanner.IsInitialized);
     }
 
+    /// <summary>
+    ///     Tests that getting cached addon files auto-initializes the provider.
+    /// </summary>
     [Fact]
     public async Task GetCachedAddonFilesAsync_AutoInitializes()
     {
@@ -112,6 +140,9 @@ public sealed class LocalFilesProviderTests : IDisposable
         Assert.True(scanner.IsInitialized);
     }
 
+    /// <summary>
+    ///     Tests that getting cached addon files returns all parsed addon files.
+    /// </summary>
     [Fact]
     public async Task GetCachedAddonFilesAsync_ReturnsAllParsedAddonFiles()
     {
@@ -129,6 +160,9 @@ public sealed class LocalFilesProviderTests : IDisposable
         });
     }
 
+    /// <summary>
+    ///     Tests that TryGetCachedAddonFile returns true and the file when it exists.
+    /// </summary>
     [Fact]
     public async Task TryGetCachedAddonFile_WhenExists_ReturnsTrueAndFile()
     {
@@ -146,6 +180,9 @@ public sealed class LocalFilesProviderTests : IDisposable
         Assert.Equal(target.Manifest.Title, retrieved.Manifest.Title);
     }
 
+    /// <summary>
+    ///     Tests that TryGetCachedAddonFile returns false when the file does not exist.
+    /// </summary>
     [Fact]
     public async Task TryGetCachedAddonFile_WhenNotExists_ReturnsFalse()
     {
@@ -158,6 +195,9 @@ public sealed class LocalFilesProviderTests : IDisposable
         Assert.Null(file);
     }
 
+    /// <summary>
+    ///     Tests that TryGetCachedAddonFile returns false when not initialized.
+    /// </summary>
     [Fact]
     public void TryGetCachedAddonFile_WhenNotInitialized_ReturnsFalse()
     {
@@ -169,6 +209,9 @@ public sealed class LocalFilesProviderTests : IDisposable
         Assert.Null(file);
     }
 
+    /// <summary>
+    ///     Tests that ReplacePath replaces paths when a match exists.
+    /// </summary>
     [Fact]
     public async Task ReplacePath_WhenMatchExists_ReplacesPaths()
     {
@@ -186,6 +229,9 @@ public sealed class LocalFilesProviderTests : IDisposable
         Assert.All(updated, x => Assert.Equal(newPath, x.FileInfo.PathToFolder));
     }
 
+    /// <summary>
+    ///     Tests that ReplacePath returns empty when no match exists.
+    /// </summary>
     [Fact]
     public async Task ReplacePath_WhenNoMatch_ReturnsEmpty()
     {
@@ -197,6 +243,9 @@ public sealed class LocalFilesProviderTests : IDisposable
         Assert.Empty(updated);
     }
 
+    /// <summary>
+    ///     Tests that adding a zip file adds it to the cache.
+    /// </summary>
     [Fact]
     public async Task TryAddFileToCache_WithZip_AddsToCache()
     {
@@ -215,6 +264,9 @@ public sealed class LocalFilesProviderTests : IDisposable
         Assert.Equal(6, addons.Count);
     }
 
+    /// <summary>
+    ///     Tests that adding a file with an unsupported extension returns null.
+    /// </summary>
     [Fact]
     public async Task TryAddFileToCache_WithUnsupportedExtension_ReturnsNull()
     {
@@ -229,6 +281,9 @@ public sealed class LocalFilesProviderTests : IDisposable
         Assert.Null(result);
     }
 
+    /// <summary>
+    ///     Tests that concurrent initialization does not deadlock.
+    /// </summary>
     [Fact]
     public async Task Concurrency_DoesNotDeadlock()
     {
@@ -247,6 +302,9 @@ public sealed class LocalFilesProviderTests : IDisposable
         Assert.Equal(4, addons.Count);
     }
 
+    /// <summary>
+    ///     Tests that adding a JSON file adds it to the cache.
+    /// </summary>
     [Fact]
     public async Task TryAddFileToCache_JsonFile_AddsToCache()
     {
@@ -274,6 +332,9 @@ public sealed class LocalFilesProviderTests : IDisposable
         Assert.Equal("json-addon", parsed.Manifest!.Id);
     }
 
+    /// <summary>
+    ///     Tests that ReplacePath throws when not initialized.
+    /// </summary>
     [Fact]
     public async Task ReplacePath_WhenNotInitialized_Throws()
     {
@@ -284,6 +345,9 @@ public sealed class LocalFilesProviderTests : IDisposable
         Assert.Contains("Cache is not initialized", ex.Message);
     }
 
+    /// <summary>
+    ///     Tests that TryRemoveFileFromCache returns false when not initialized.
+    /// </summary>
     [Fact]
     public async Task TryRemoveFileFromCache_WhenNotInitialized_ReturnsFalse()
     {
@@ -292,6 +356,9 @@ public sealed class LocalFilesProviderTests : IDisposable
         Assert.False(await scanner.TryRemoveFileFromCacheAsync(@"C:\anything.zip"));
     }
 
+    /// <summary>
+    ///     Tests that TryRemoveFileFromCache returns false when no match is found.
+    /// </summary>
     [Fact]
     public async Task TryRemoveFileFromCache_WhenNoMatch_ReturnsFalse()
     {
@@ -301,6 +368,9 @@ public sealed class LocalFilesProviderTests : IDisposable
         Assert.False(await scanner.TryRemoveFileFromCacheAsync(@"C:\nonexistent\file.zip"));
     }
 
+    /// <summary>
+    ///     Tests that TryRemoveFileFromCache with a zip path removes all zip entries.
+    /// </summary>
     [Fact]
     public async Task TryRemoveFileFromCache_WithZipPath_RemovesAllZipEntries()
     {
@@ -318,6 +388,9 @@ public sealed class LocalFilesProviderTests : IDisposable
         Assert.DoesNotContain(addons, x => x.FileInfo.PathToFile.Equals(zipPath, StringComparison.InvariantCultureIgnoreCase));
     }
 
+    /// <summary>
+    ///     Tests that TryRemoveFileFromCache with a folder path removes folder entries.
+    /// </summary>
     [Fact]
     public async Task TryRemoveFileFromCache_WithFolderPath_RemovesFolderEntries()
     {
@@ -335,6 +408,9 @@ public sealed class LocalFilesProviderTests : IDisposable
         Assert.DoesNotContain(addons, x => x.FileInfo.PathToFolder.Equals(folderPath, StringComparison.InvariantCultureIgnoreCase));
     }
 
+    /// <summary>
+    ///     Tests that after removal, the entry is no longer found in the cache.
+    /// </summary>
     [Fact]
     public async Task TryRemoveFileFromCache_AfterRemoval_EntryNoLongerFound()
     {
@@ -349,6 +425,9 @@ public sealed class LocalFilesProviderTests : IDisposable
         Assert.False(scanner.TryGetCachedAddonFile(target.FileInfo, out _));
     }
 
+    /// <summary>
+    ///     Tests that removing a file from cache fires the FileRemoved event.
+    /// </summary>
     [Fact]
     public async Task TryRemoveFileFromCache_FiresFileRemovedEvent()
     {
@@ -368,6 +447,9 @@ public sealed class LocalFilesProviderTests : IDisposable
                                                       )), Times.Once);
     }
 
+    /// <summary>
+    ///     Tests that ReplacePath fires both remove and add events.
+    /// </summary>
     [Fact]
     public async Task ReplacePath_FiresBothRemoveAndAddEvents()
     {
@@ -389,6 +471,9 @@ public sealed class LocalFilesProviderTests : IDisposable
         channelPubMock.Verify(x => x.PublishAsync(It.Is<DiHelper.LocalFileEvent>(e => e.IsAdded)), Times.Once);
     }
 
+    /// <summary>
+    ///     Tests that adding a grpinfo file adds it to the cache.
+    /// </summary>
     [Fact]
     public async Task TryAddFileToCache_GrpInfoFile_AddsToCache()
     {
@@ -407,6 +492,9 @@ public sealed class LocalFilesProviderTests : IDisposable
         Assert.Null(parsed.Manifest);
     }
 
+    /// <summary>
+    ///     Tests that adding a map file adds it to the cache with the correct game.
+    /// </summary>
     [Fact]
     public async Task TryAddFileToCache_MapFile_AddsToCacheWithCorrectGame()
     {
@@ -424,6 +512,9 @@ public sealed class LocalFilesProviderTests : IDisposable
         Assert.Equal(GameEnum.Blood, parsed.SupportedGame);
     }
 
+    /// <summary>
+    ///     Tests that adding a map file with a null game enum throws.
+    /// </summary>
     [Fact]
     public async Task TryAddFileToCache_MapFileWithNullGameEnum_Throws()
     {
@@ -436,6 +527,9 @@ public sealed class LocalFilesProviderTests : IDisposable
         await Assert.ThrowsAsync<InvalidOperationException>(() => scanner.TryAddFileToCacheAsync(mapFile, null));
     }
 
+    /// <summary>
+    ///     Tests that adding a file with an unsupported extension returns null.
+    /// </summary>
     [Fact]
     public async Task TryAddFileToCache_UnsupportedExtension_ReturnsNull()
     {
@@ -450,6 +544,9 @@ public sealed class LocalFilesProviderTests : IDisposable
         Assert.Null(result);
     }
 
+    /// <summary>
+    ///     Tests that concurrent add and remove operations do not deadlock.
+    /// </summary>
     [Fact]
     public async Task Concurrency_TryAddAndRemove_DoesNotDeadlock()
     {
@@ -471,6 +568,9 @@ public sealed class LocalFilesProviderTests : IDisposable
         Assert.NotNull(t2.Result);
     }
 
+    /// <summary>
+    ///     Tests that GetCachedAddonFilesAsync auto-initializes when not initialized.
+    /// </summary>
     [Fact]
     public async Task GetCachedAddonFilesAsync_AutoInitializesWhenNotInitialized()
     {
@@ -483,6 +583,9 @@ public sealed class LocalFilesProviderTests : IDisposable
         Assert.NotEmpty(addons);
     }
 
+    /// <summary>
+    ///     Tests that processing an archive with grpinfo entries inside adds them to the cache.
+    /// </summary>
     [Fact]
     public async Task ProcessArchive_WithGrpInfoEntriesInside_AddsThem()
     {

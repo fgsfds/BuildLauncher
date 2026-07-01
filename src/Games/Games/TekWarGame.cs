@@ -2,6 +2,9 @@
 
 namespace Games.Games;
 
+/// <summary>
+///     Represents the game TekWar and its associated metadata.
+/// </summary>
 public sealed class TekWarGame : BaseGame
 {
     /// <inheritdoc />

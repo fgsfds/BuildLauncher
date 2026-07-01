@@ -8,8 +8,14 @@ using Games.Games;
 
 namespace Tests.Unit.Helpers;
 
+/// <summary>
+///     Provides pre-configured test setups for port testing across different games.
+/// </summary>
 internal static class PortTestSetups
 {
+    /// <summary>
+    ///     Creates test setups for Blood game.
+    /// </summary>
     internal static (BloodGame game, BloodCampaign baseCamp, BloodCampaign baseCampWithOptions, BloodCampaign cpCamp, BloodCampaign tcCamp, BloodCampaign tcFolderCamp, BloodCampaign tcExeOverride, BloodCampaign tcIncompatibleWithEnabled, BloodCampaign tcIncompatibleWithAll, LooseMap looseMap, AutoloadModsTestSetups mods) Blood()
     {
         var modsProvider = new AutoloadModsTestSetups(GameEnum.Blood);
@@ -294,6 +300,9 @@ internal static class PortTestSetups
         return (game, baseCamp, baseCampWithOptions, cpCamp, tcCamp, tcFolderCamp, tcExeOverride, tcIncompatibleWithEnabled, tcIncompatibleWithAll, looseMap, modsProvider);
     }
 
+    /// <summary>
+    ///     Creates test setups for Duke Nukem 3D game.
+    /// </summary>
     internal static (DukeGame game, DukeCampaign baseCamp, DukeCampaign vacaCamp, DukeCampaign tcCamp, DukeCampaign wtCamp, DukeCampaign duke64Camp, DukeCampaign zhCamp, DukeCampaign dcCamp, DukeCampaign nwCamp, LooseMap looseMap, AutoloadModsTestSetups mods) Duke3D()
     {
         var modsProvider = new AutoloadModsTestSetups(GameEnum.Duke3D);
@@ -567,6 +576,9 @@ internal static class PortTestSetups
         return (game, baseCamp, vacaCamp, tcCamp, wtCamp, duke64Camp, zhCamp, dcCamp, nwCamp, looseMap, modsProvider);
     }
 
+    /// <summary>
+    ///     Creates test setups for NAM game.
+    /// </summary>
     internal static (NamGame game, DukeCampaign camp, AutoloadModsTestSetups mods) Nam()
     {
         var modsProvider = new AutoloadModsTestSetups(GameEnum.NAM);
@@ -604,6 +616,9 @@ internal static class PortTestSetups
         return (game, camp, modsProvider);
     }
 
+    /// <summary>
+    ///     Creates test setups for Redneck Rampage game.
+    /// </summary>
     internal static (RedneckGame game, DukeCampaign redneckCamp, DukeCampaign againCamp, DukeCampaign route66Camp, AutoloadModsTestSetups mods) Redneck()
     {
         var modsProvider = new AutoloadModsTestSetups(GameEnum.Redneck);
@@ -692,6 +707,9 @@ internal static class PortTestSetups
         return (game, redneckCamp, againCamp, route66Camp, modsProvider);
     }
 
+    /// <summary>
+    ///     Creates test setups for Slave (Exhumed/Powerslave) game.
+    /// </summary>
     internal static (SlaveGame game, GenericCampaign camp, AutoloadModsTestSetups mods) Slave()
     {
         var modsProvider = new AutoloadModsTestSetups(GameEnum.Slave);
@@ -726,6 +744,9 @@ internal static class PortTestSetups
         return (game, camp, modsProvider);
     }
 
+    /// <summary>
+    ///     Creates test setups for Shadow Warrior game.
+    /// </summary>
     internal static (WangGame game, GenericCampaign wangCamp, GenericCampaign tdCamp, LooseMap looseMap, AutoloadModsTestSetups mods) Wang()
     {
         var modsProvider = new AutoloadModsTestSetups(GameEnum.Wang);
@@ -808,6 +829,9 @@ internal static class PortTestSetups
         return (game, wangCamp, tdCamp, looseMap, modsProvider);
     }
 
+    /// <summary>
+    ///     Creates test setups for World War II GI game.
+    /// </summary>
     internal static (WW2GIGame game, DukeCampaign ww2Camp, DukeCampaign platoonCamp, AutoloadModsTestSetups mods) WW2GI()
     {
         var modsProvider = new AutoloadModsTestSetups(GameEnum.WW2GI);
@@ -870,6 +894,9 @@ internal static class PortTestSetups
         return (game, ww2Camp, platoonCamp, modsProvider);
     }
 
+    /// <summary>
+    ///     Creates test setups for Ion Fury game.
+    /// </summary>
     internal static (FuryGame game, DukeCampaign camp, AutoloadModsTestSetups mods) Fury()
     {
         var modsProvider = new AutoloadModsTestSetups(GameEnum.Fury);
@@ -907,6 +934,9 @@ internal static class PortTestSetups
         return (game, camp, modsProvider);
     }
 
+    /// <summary>
+    ///     Creates test setups for Witchaven game.
+    /// </summary>
     internal static (WitchavenGame game, GenericCampaign camp) Witchaven()
     {
         var game = new WitchavenGame
@@ -940,6 +970,9 @@ internal static class PortTestSetups
         return (game, camp);
     }
 
+    /// <summary>
+    ///     Creates test setups for TekWar game.
+    /// </summary>
     internal static (TekWarGame game, GenericCampaign camp) TekWar()
     {
         var game = new TekWarGame
@@ -972,6 +1005,9 @@ internal static class PortTestSetups
         return (game, camp);
     }
 
+    /// <summary>
+    ///     Creates a Duke campaign with a packed zip addon.
+    /// </summary>
     internal static DukeCampaign PackedDukeAddonCampaign()
     {
         var zipFilePath = Path.Combine(Directory.GetCurrentDirectory(), "Data", "Duke3D", "Campaigns", "packed_campaign.zip");

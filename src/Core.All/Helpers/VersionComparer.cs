@@ -1,17 +1,47 @@
 ﻿namespace Core.All.Helpers;
 
+/// <summary>
+///     Defines version comparison operators.
+/// </summary>
 public enum ComparisonOperatorEnum
 {
+    /// <summary>
+    ///     Equality comparison.
+    /// </summary>
     Equals,
+
+    /// <summary>
+    ///     Greater than comparison.
+    /// </summary>
     GreaterThan,
+
+    /// <summary>
+    ///     Greater than or equal comparison.
+    /// </summary>
     GreaterOrEquals,
+
+    /// <summary>
+    ///     Less than comparison.
+    /// </summary>
     LessThan,
+
+    /// <summary>
+    ///     Less than or equal comparison.
+    /// </summary>
     LessOrEquals
 }
 
 
+/// <summary>
+///     Provides methods for comparing version strings with support for comparison operators.
+/// </summary>
 public static class VersionComparer
 {
+    /// <summary>
+    ///     Compares two version strings, parsing the comparison operator from the second string.
+    /// </summary>
+    /// <param name="v1">First version string.</param>
+    /// <param name="v2">Second version string, optionally prefixed with an operator (==, &gt;=, &lt;=, &gt;, &lt;).</param>
     public static bool Compare(string? v1, string? v2)
     {
         if (v1 is null || v2 is null)
@@ -55,6 +85,12 @@ public static class VersionComparer
         return InternalCompare(v1.AsSpan(), s2, comparisonOperator);
     }
 
+    /// <summary>
+    ///     Compares two version strings using the specified comparison operator.
+    /// </summary>
+    /// <param name="v1">First version string.</param>
+    /// <param name="v2">Second version string.</param>
+    /// <param name="op">Comparison operator.</param>
     public static bool Compare(string? v1, string? v2, ComparisonOperatorEnum op)
     {
         if (v1 is null || v2 is null)
@@ -66,6 +102,12 @@ public static class VersionComparer
     }
 
 
+    /// <summary>
+    ///     Compares two version spans using the specified comparison operator.
+    /// </summary>
+    /// <param name="v1">First version span.</param>
+    /// <param name="v2">Second version span.</param>
+    /// <param name="op">Comparison operator.</param>
     private static bool InternalCompare(ReadOnlySpan<char> v1, ReadOnlySpan<char> v2, ComparisonOperatorEnum op)
     {
         var result = CompareVersions(v1, v2);
@@ -81,6 +123,11 @@ public static class VersionComparer
         };
     }
 
+    /// <summary>
+    ///     Compares two version strings numerically, returning a value indicating their relative order.
+    /// </summary>
+    /// <param name="v1">First version span.</param>
+    /// <param name="v2">Second version span.</param>
     public static int CompareVersions(ReadOnlySpan<char> v1, ReadOnlySpan<char> v2)
     {
         var dash1 = v1.IndexOf('-');

@@ -27,14 +27,14 @@ public static class SteamHelper
             return [];
         }
 
-        return GetLibratiesFromVdf(libraryfolders);
+        return GetLibrariesFromVdf(libraryfolders);
     }
 
     /// <summary>
     ///     Parses vdf file to extract paths to Steam libraries.
     /// </summary>
     /// <param name="pathToVdf">Path to the libraryfolders.vdf file.</param>
-    internal static List<string> GetLibratiesFromVdf(string pathToVdf)
+    internal static List<string> GetLibrariesFromVdf(string pathToVdf)
     {
         List<string> result = new(4);
 
@@ -76,8 +76,9 @@ public static class SteamHelper
     }
 
     /// <summary>
-    ///     Locates the root Steam installation directory.
+    ///     Retrieves the Steam installation folder path from the registry or default Linux location.
     /// </summary>
+    /// <returns>The Steam install path, or null if not found.</returns>
     private static string? GetSteamInstallPath()
     {
         string? result;

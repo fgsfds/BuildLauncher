@@ -4,10 +4,16 @@ using Games.Providers;
 
 namespace Tools.Tools;
 
+/// <summary>
+///     Mapster32 tool implementation.
+/// </summary>
 public sealed class Mapster32 : BaseTool
 {
     private readonly InstalledGamesProvider _gamesProvider;
 
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="Mapster32" /> class.
+    /// </summary>
     public Mapster32(InstalledGamesProvider gamesProvider)
     {
         _gamesProvider = gamesProvider;
@@ -34,6 +40,7 @@ public sealed class Mapster32 : BaseTool
     /// <inheritdoc />
     public override bool CanBeLaunched => _gamesProvider.GetGame(GameEnum.Duke3D).IsBaseGameInstalled;
 
+    /// <inheritdoc />
     public override string InstallText => IsInstalled ? " " : "Install EDuke32 from Ports tab";
 
     /// <inheritdoc />

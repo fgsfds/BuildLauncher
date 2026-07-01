@@ -3,6 +3,9 @@ using Games.Skills;
 
 namespace Games.Games;
 
+/// <summary>
+///     Represents the game Shadow Warrior and its associated metadata.
+/// </summary>
 public sealed class WangGame : BaseGame
 {
     /// <inheritdoc />

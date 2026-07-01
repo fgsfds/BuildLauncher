@@ -17,14 +17,32 @@ namespace Addons.Providers;
 public sealed class MetadataProvider
 {
     private readonly IApiInterface _apiInterface;
+
+    /// <summary>
+    ///     Semaphore to synchronize initialization.
+    /// </summary>
     private readonly SemaphoreSlim _initSemaphore = new(1, 1);
 
     private readonly LocalFilesProvider _localFilesProvider;
+
     private readonly ILogger<MetadataProvider> _logger;
 
+    /// <summary>
+    ///     Cache of pending manifest updates keyed by file info.
+    /// </summary>
     private readonly Dictionary<AddonFilePathWrapper, ParsedAddonFile> _updatesCache = [];
+
+    /// <summary>
+    ///     Lookup dictionary of metadata indexed by addon ID.
+    /// </summary>
     private Dictionary<AddonId, AddonManifestJsonModel>? _metaDict;
 
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="MetadataProvider" /> class.
+    /// </summary>
+    /// <param name="localFilesProvider">Provider for local addon files.</param>
+    /// <param name="apiInterface">API interface for fetching metadata.</param>
+    /// <param name="logger">Logger for diagnostic messages.</param>
     public MetadataProvider(
         LocalFilesProvider localFilesProvider,
         IApiInterface apiInterface,
@@ -36,8 +54,12 @@ public sealed class MetadataProvider
         _logger = logger;
     }
 
+    /// <summary>
+    ///     Gets whether the metadata dictionary has been loaded.
+    /// </summary>
     [MemberNotNullWhen(true, nameof(_metaDict))]
     public bool IsInitialized => _metaDict is not null;
+
     /// <summary>Raised when metadata has been loaded from the API and the lookup dictionary is ready.</summary>
     public event EventHandler? MetadataInitializedEvent;
 

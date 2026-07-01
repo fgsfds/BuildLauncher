@@ -2,6 +2,9 @@
 
 namespace Games.Games;
 
+/// <summary>
+///     Represents the game Witchaven and its associated addon detection.
+/// </summary>
 public sealed class WitchavenGame : BaseGame
 {
     /// <inheritdoc />
@@ -27,7 +30,7 @@ public sealed class WitchavenGame : BaseGame
     }
 
     /// <summary>
-    ///     Files required for Witchaven 2
+    ///     Files required for Witchaven 2.
     /// </summary>
     public List<string> Witchaven2RequiredFiles
     {
@@ -42,12 +45,12 @@ public sealed class WitchavenGame : BaseGame
     }
 
     /// <summary>
-    ///     Path to Witchaven 2 install folder
+    ///     Path to Witchaven 2 install folder.
     /// </summary>
     public string? Witchaven2InstallPath { get; set; }
 
     /// <summary>
-    ///     Is Witchaven 2 installed
+    ///     Is Witchaven 2 installed.
     /// </summary>
     public bool IsWitchaven2Installed => IsInstalled(Witchaven2RequiredFiles, Witchaven2InstallPath);
 

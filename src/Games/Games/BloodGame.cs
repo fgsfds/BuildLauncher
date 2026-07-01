@@ -4,10 +4,13 @@ using Games.Skills;
 
 namespace Games.Games;
 
+/// <summary>
+///     Represents the game Blood and its associated metadata.
+/// </summary>
 public sealed class BloodGame : BaseGame
 {
     /// <summary>
-    ///     List of files required for Cryptic Passage
+    ///     Files required for Cryptic Passage addon.
     /// </summary>
     private readonly List<string> RequiredCPFiles = [ClientConsts.CrypticIni, "CP01.MAP", "CPART07.AR_", "CPART15.AR_", "CRYPTIC.SMK", "CRYPTIC.WAV"];
     /// <inheritdoc />
@@ -23,7 +26,7 @@ public sealed class BloodGame : BaseGame
     public override List<string> RequiredFiles => [ClientConsts.BloodIni, ClientConsts.BloodRff, ClientConsts.BloodSnd, "GUI.RFF", "SURFACE.DAT", "TILES000.ART", "VOXEL.DAT"];
 
     /// <summary>
-    ///     Is Cryptic Passage instaleld
+    ///     Is Cryptic Passage installed.
     /// </summary>
     public bool IsCrypticPassageInstalled => IsInstalled(RequiredCPFiles);
 

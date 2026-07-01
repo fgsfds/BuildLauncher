@@ -3,6 +3,9 @@ using SharpCompress.Archives;
 
 namespace Core.Client.Helpers;
 
+/// <summary>
+///     Provides utility methods for loading images from embedded resources and archives.
+/// </summary>
 public static class ImageHelper
 {
     /// <summary>
@@ -34,10 +37,10 @@ public static class ImageHelper
     public static StreamedImage? GetPreviewFromArchive(IArchive archive) => GetImageFromArchive(archive, "preview.");
 
     /// <summary>
-    ///     Get grid cover from the archive
+    ///     Extracts an image entry from the archive by matching the image name prefix.
     /// </summary>
-    /// <param name="archive">Archive</param>
-    /// <param name="imageName">Name of the image</param>
+    /// <param name="archive">The archive to search.</param>
+    /// <param name="imageName">The image name prefix to match.</param>
     private static StreamedImage? GetImageFromArchive(IArchive archive, string imageName)
     {
         var image = archive.Entries.FirstOrDefault(x => x.Key != null && x.Key.StartsWith(imageName, StringComparison.OrdinalIgnoreCase));
@@ -66,10 +69,21 @@ public static class ImageHelper
 }
 
 
+/// <summary>
+///     Represents a streamed image with CRC hash and an associated memory stream.
+/// </summary>
 public readonly struct StreamedImage : IAsyncDisposable
 {
+    /// <summary>
+    ///     CRC hash of the image data.
+    /// </summary>
     public required readonly long Crc { get; init; }
+
+    /// <summary>
+    ///     Memory stream containing the image data.
+    /// </summary>
     public required readonly MemoryStream Stream { get; init; }
 
+    /// <inheritdoc />
     public ValueTask DisposeAsync() => Stream.DisposeAsync();
 }

@@ -3,6 +3,9 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Games;
 
+/// <summary>
+///     Registers game-related services with the dependency injection container.
+/// </summary>
 public static class DiHelper
 {
     /// <summary>

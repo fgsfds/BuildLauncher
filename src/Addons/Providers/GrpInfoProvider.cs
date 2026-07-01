@@ -5,6 +5,9 @@ using Core.All.Enums;
 
 namespace Addons.Providers;
 
+/// <summary>
+///     Provides methods for parsing GRP info files and creating addon entries from the associated .grp files.
+/// </summary>
 public static class GrpInfoProvider
 {
     /// <summary>
@@ -157,6 +160,11 @@ public static class GrpInfoProvider
         return addons;
     }
 
+    /// <summary>
+    ///     Extracts the value between the first and last quote characters from the given span.
+    /// </summary>
+    /// <param name="span">The span to extract the quoted value from.</param>
+    /// <returns>The extracted value, or null if no quoted value is found.</returns>
     private static string? ExtractQuotedValue(ReadOnlySpan<char> span)
     {
         var pFrom = span.IndexOf('"') + 1;
@@ -172,10 +180,28 @@ public static class GrpInfoProvider
 }
 
 
+/// <summary>
+///     Represents a single entry parsed from a GRP info file.
+/// </summary>
 public readonly struct GrpInfoEntry
 {
+    /// <summary>
+    ///     Name of the addon.
+    /// </summary>
     public readonly string Name { get; init; }
+
+    /// <summary>
+    ///     Main CON script file name, if any.
+    /// </summary>
     public readonly string? MainCon { get; init; }
+
+    /// <summary>
+    ///     Additional DEF file name, if any.
+    /// </summary>
     public readonly string? AddDef { get; init; }
+
+    /// <summary>
+    ///     Size of the matching .grp file in bytes.
+    /// </summary>
     public readonly int Size { get; init; }
 }

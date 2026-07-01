@@ -16,23 +16,58 @@ namespace Avalonia.Desktop.ViewModels;
 
 public sealed partial class DownloadsViewModel : ObservableObject
 {
+    /// <summary>
+    ///     Filter options for the downloadable addons list.
+    /// </summary>
     public enum FilterItemEnum
     {
+        /// <summary>
+        ///     Show all addons.
+        /// </summary>
         All,
+
+        /// <summary>
+        ///     Show only total conversions.
+        /// </summary>
         TCs,
+
+        /// <summary>
+        ///     Show only maps.
+        /// </summary>
         Maps,
+
+        /// <summary>
+        ///     Show only mods.
+        /// </summary>
         Mods
     }
 
 
+    /// <summary>
+    ///     The downloadable addons provider.
+    /// </summary>
     private readonly DownloadableAddonsProvider _downloadableAddonsProvider;
 
+    /// <summary>
+    ///     The installed addons provider.
+    /// </summary>
     private readonly InstalledAddonsProvider _installedAddonsProvider;
+
     private readonly ILogger<DownloadsViewModel> _logger;
 
+    /// <summary>
+    ///     The cancellation token source for download operations.
+    /// </summary>
     private CancellationTokenSource? _cancellationTokenSource;
 
 
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="DownloadsViewModel" /> class.
+    /// </summary>
+    /// <param name="game">The game.</param>
+    /// <param name="installedAddonsProviderFactory">The installed addons provider factory.</param>
+    /// <param name="downloadableAddonsProviderFactory">The downloadable addons provider factory.</param>
+    /// <param name="logger">The logger.</param>
     [Obsolete($"Don't create directly. Use {nameof(ViewModelsFactory)}.")]
     public DownloadsViewModel(
         BaseGame game,
@@ -52,15 +87,24 @@ public sealed partial class DownloadsViewModel : ObservableObject
         SelectedDownloads.CollectionChanged += OnSelectedDownloadsChanged;
     }
 
+    /// <summary>
+    ///     Gets the game associated with this view model.
+    /// </summary>
     public BaseGame Game { get; }
 
 
+    /// <summary>
+    ///     Handles the progress changed event.
+    /// </summary>
     private void OnProgressChanged(object? sender, float e)
     {
         ProgressBarValue = e;
         OnPropertyChanged(nameof(ProgressBarValue));
     }
 
+    /// <summary>
+    ///     Handles the addon changed event.
+    /// </summary>
     private void OnAddonChanged(GameEnum gameEnum, AddonTypeEnum? addonType)
     {
         if (gameEnum != Game.GameEnum)
@@ -71,6 +115,9 @@ public sealed partial class DownloadsViewModel : ObservableObject
         OnPropertyChanged(nameof(DownloadableList));
     }
 
+    /// <summary>
+    ///     Handles the selected downloads collection changed event.
+    /// </summary>
     private void OnSelectedDownloadsChanged(object? sender, NotifyCollectionChangedEventArgs e)
     {
         OnPropertyChanged(nameof(SelectedDownloadableDescription));
@@ -81,6 +128,9 @@ public sealed partial class DownloadsViewModel : ObservableObject
 
     #region Binding Properties
 
+    /// <summary>
+    ///     Gets whether any downloadable addon has an update available.
+    /// </summary>
     public bool HasUpdates => DownloadableList.Any(x => x.IsUpdateAvailable);
 
     /// <summary>
@@ -160,8 +210,14 @@ public sealed partial class DownloadsViewModel : ObservableObject
         }
     }
 
+    /// <summary>
+    ///     Gets the list of available filter items.
+    /// </summary>
     public List<FilterItemEnum> FilterItems => [.. Enum.GetValues<FilterItemEnum>()];
 
+    /// <summary>
+    ///     Gets or sets whether a download is in progress.
+    /// </summary>
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(CancelDownloadCommand))]
     private bool _isInProgress;
@@ -169,18 +225,30 @@ public sealed partial class DownloadsViewModel : ObservableObject
     /// <summary>
     ///     Currently selected downloadable campaigns, maps or mods
     /// </summary>
+    /// <summary>
+    ///     Gets or sets the selected downloadable addons.
+    /// </summary>
     [ObservableProperty]
     private ObservableCollection<DownloadableAddonJsonModel> _selectedDownloads = [];
 
+    /// <summary>
+    ///     Gets or sets the progress message.
+    /// </summary>
     [ObservableProperty]
     private string _progressMessage = string.Empty;
 
+    /// <summary>
+    ///     Gets or sets the selected filter item.
+    /// </summary>
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(DownloadableList))]
     private FilterItemEnum _filterSelectedItem;
 
     /// <summary>
     ///     Search box text
+    /// </summary>
+    /// <summary>
+    ///     Gets or sets the search box text.
     /// </summary>
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(DownloadableList))]
@@ -189,6 +257,9 @@ public sealed partial class DownloadsViewModel : ObservableObject
 
     /// <summary>
     ///     State of the Hide installed checkbox.
+    /// </summary>
+    /// <summary>
+    ///     Gets or sets whether to hide installed addons.
     /// </summary>
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(DownloadableList))]
@@ -317,6 +388,9 @@ public sealed partial class DownloadsViewModel : ObservableObject
         }
     }
 
+    /// <summary>
+    ///     Determines whether the download command can execute.
+    /// </summary>
     private bool DownloadSelectedAddonCanExecute => true; /*SelectedDownloadable is not null;*/
 
 
@@ -329,6 +403,9 @@ public sealed partial class DownloadsViewModel : ObservableObject
         _cancellationTokenSource?.Cancel();
     }
 
+    /// <summary>
+    ///     Determines whether the cancel download command can execute.
+    /// </summary>
     private bool CancelDownloadCanExecute => IsInProgress;
 
 
@@ -338,6 +415,10 @@ public sealed partial class DownloadsViewModel : ObservableObject
     [RelayCommand(CanExecute = nameof(ClearSearchBoxCanExecute))]
     private void ClearSearchBox() => SearchBoxText = string.Empty;
 
+    /// <summary>
+    ///     Determines whether the clear search box command can execute.
+    /// </summary>
+    /// <returns>True if the search box text is not empty.</returns>
     private bool ClearSearchBoxCanExecute() => !string.IsNullOrEmpty(SearchBoxText);
 
     #endregion

@@ -7,13 +7,25 @@ using Ports.Providers;
 
 namespace Avalonia.Desktop.Misc;
 
+/// <summary>
+///     Locates and creates views for view models.
+/// </summary>
 public sealed class ViewLocator : IDataTemplate
 {
     private readonly BitmapsCache _bitmapsCache;
 
+    /// <summary>
+    ///     Cache of created controls keyed by their data context.
+    /// </summary>
     private readonly Dictionary<object, UserControl> _controlsCache = [];
+
     private readonly PortsProvider _installedPortsProvider;
 
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="ViewLocator" /> class.
+    /// </summary>
+    /// <param name="installedPortsProvider">The ports provider.</param>
+    /// <param name="bitmapsCache">The bitmaps cache.</param>
     public ViewLocator(
         PortsProvider installedPortsProvider,
         BitmapsCache bitmapsCache
@@ -23,6 +35,7 @@ public sealed class ViewLocator : IDataTemplate
         _bitmapsCache = bitmapsCache;
     }
 
+    /// <inheritdoc />
     public Control Build(object? data)
     {
         if (data is not null && _controlsCache.TryGetValue(data, out var control))
@@ -44,6 +57,7 @@ public sealed class ViewLocator : IDataTemplate
         return newControl;
     }
 
+    /// <inheritdoc />
     public bool Match(object? data)
     {
         return data is ObservableObject;

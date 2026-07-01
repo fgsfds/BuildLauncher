@@ -14,8 +14,15 @@ using Moq;
 
 namespace Tests.Unit;
 
+/// <summary>
+///     Tests for the <see cref="DownloadableAddonsProvider" /> class.
+/// </summary>
 public sealed class DownloadableAddonsProviderTests
 {
+    /// <summary>
+    ///     Gets the private _cache field from <see cref="DownloadableAddonsProvider" />.
+    /// </summary>
+    /// <returns>The cache field info.</returns>
     private static FieldInfo GetCacheField()
     {
         var field = typeof(DownloadableAddonsProvider).GetField("_cache", BindingFlags.NonPublic | BindingFlags.Instance);
@@ -24,6 +31,9 @@ public sealed class DownloadableAddonsProviderTests
         return field;
     }
 
+    /// <summary>
+    ///     Creates a test campaign with the specified id and version.
+    /// </summary>
     private static DukeCampaign CreateCampaign(string id, string? version)
     {
         return new DukeCampaign
@@ -54,6 +64,9 @@ public sealed class DownloadableAddonsProviderTests
         };
     }
 
+    /// <summary>
+    ///     Creates a test mod with the specified id and version.
+    /// </summary>
     private static AutoloadMod CreateMod(string id, string? version)
     {
         return new AutoloadMod
@@ -85,6 +98,9 @@ public sealed class DownloadableAddonsProviderTests
 
     // ---- Mod type tests ----
 
+    /// <summary>
+    ///     Tests that a single installed mod older than the downloadable version shows an update.
+    /// </summary>
     [Fact]
     public void GetDownloadableAddons_SingleInstalledVersionOlderThanDownloadable_SetsIsUpdateAvailableTrue()
     {
@@ -98,6 +114,9 @@ public sealed class DownloadableAddonsProviderTests
         Assert.True(item.IsUpdateAvailable);
     }
 
+    /// <summary>
+    ///     Tests that a single installed mod newer than the downloadable version does not show an update.
+    /// </summary>
     [Fact]
     public void GetDownloadableAddons_SingleInstalledVersionNewerThanDownloadable_SetsIsUpdateAvailableFalse()
     {
@@ -111,6 +130,9 @@ public sealed class DownloadableAddonsProviderTests
         Assert.False(item.IsUpdateAvailable);
     }
 
+    /// <summary>
+    ///     Tests that a downloadable version between installed versions does not show as an update.
+    /// </summary>
     [Fact]
     public void GetDownloadableAddons_MultipleInstalledVersions_DownloadableBetweenThem_ShouldNotShowUpdate()
     {
@@ -124,6 +146,9 @@ public sealed class DownloadableAddonsProviderTests
         Assert.False(item.IsUpdateAvailable, "Downloadable 2.0 should not be an update when installed 3.0 exists");
     }
 
+    /// <summary>
+    ///     Tests that a downloadable version newer than all installed versions shows as an update.
+    /// </summary>
     [Fact]
     public void GetDownloadableAddons_MultipleInstalledVersions_DownloadableNewerThanAll_ShouldShowUpdate()
     {
@@ -137,6 +162,9 @@ public sealed class DownloadableAddonsProviderTests
         Assert.True(item.IsUpdateAvailable, "Downloadable 5.0 should be an update over installed 1.0 and 3.0");
     }
 
+    /// <summary>
+    ///     Tests that a mod with no installed version has IsInstalled set to false.
+    /// </summary>
     [Fact]
     public void GetDownloadableAddons_NoInstalledVersion_SetsIsInstalledFalse()
     {
@@ -151,6 +179,9 @@ public sealed class DownloadableAddonsProviderTests
         Assert.False(item.IsUpdateAvailable);
     }
 
+    /// <summary>
+    ///     Tests that a null cache returns an empty result.
+    /// </summary>
     [Fact]
     public void GetDownloadableAddons_NullCache_ReturnsEmpty()
     {
@@ -161,6 +192,9 @@ public sealed class DownloadableAddonsProviderTests
         Assert.Empty(result);
     }
 
+    /// <summary>
+    ///     Tests that an unknown addon type returns an empty result.
+    /// </summary>
     [Fact]
     public void GetDownloadableAddons_UnknownAddonType_ReturnsEmpty()
     {
@@ -174,6 +208,9 @@ public sealed class DownloadableAddonsProviderTests
 
     // ---- TC type tests ----
 
+    /// <summary>
+    ///     Tests that a TC with a single installed version older than the downloadable shows an update.
+    /// </summary>
     [Fact]
     public void GetDownloadableAddons_TC_SingleInstalledVersionOlder_ShowsUpdate()
     {
@@ -187,6 +224,9 @@ public sealed class DownloadableAddonsProviderTests
         Assert.True(item.IsUpdateAvailable);
     }
 
+    /// <summary>
+    ///     Tests that a TC with a single installed version newer than the downloadable does not show an update.
+    /// </summary>
     [Fact]
     public void GetDownloadableAddons_TC_SingleInstalledVersionNewer_DoesNotShowUpdate()
     {
@@ -202,6 +242,9 @@ public sealed class DownloadableAddonsProviderTests
 
     // ---- Death Wish hack tests ----
 
+    /// <summary>
+    ///     Tests that Death Wish v1 with the exact version installed shows as installed.
+    /// </summary>
     [Fact]
     public void GetDownloadableAddons_DeathWishV1_ExactVersionInstalled_SetsIsInstalledTrue()
     {
@@ -216,6 +259,9 @@ public sealed class DownloadableAddonsProviderTests
         Assert.True(item.IsInstalled, "Death Wish v1 should be installed when exact version matches");
     }
 
+    /// <summary>
+    ///     Tests that Death Wish v1 with a different version installed shows as not installed.
+    /// </summary>
     [Fact]
     public void GetDownloadableAddons_DeathWishV1_DifferentVersionInstalled_SetsIsInstalledFalse()
     {
@@ -230,6 +276,9 @@ public sealed class DownloadableAddonsProviderTests
         Assert.False(item.IsInstalled, "Death Wish v1 should not be installed when only v2 exists");
     }
 
+    /// <summary>
+    ///     Tests that Death Wish v2 falls through to normal version comparison.
+    /// </summary>
     [Fact]
     public void GetDownloadableAddons_DeathWishV2_FallsThroughToNormalComparison()
     {
@@ -245,6 +294,9 @@ public sealed class DownloadableAddonsProviderTests
         Assert.True(item.IsUpdateAvailable);
     }
 
+    /// <summary>
+    ///     Tests that Death Wish non-TC does not trigger the death wish hack.
+    /// </summary>
     [Fact]
     public void GetDownloadableAddons_DeathWishNotTC_DoesNotTriggerHack()
     {
@@ -262,6 +314,9 @@ public sealed class DownloadableAddonsProviderTests
 
     // ---- Infrastructure ----
 
+    /// <summary>
+    ///     Creates a test <see cref="DownloadableAddonsProvider" /> instance.
+    /// </summary>
     private static DownloadableAddonsProvider CreateProvider()
     {
         var game = new DukeGame
@@ -313,6 +368,9 @@ public sealed class DownloadableAddonsProviderTests
         return provider;
     }
 
+    /// <summary>
+    ///     Populates the provider cache with test data.
+    /// </summary>
     private static void PopulateCache(DownloadableAddonsProvider provider, AddonTypeEnum addonType, List<(string Id, string Version, string Title)> items)
     {
         var cache = new Dictionary<AddonTypeEnum, Dictionary<AddonId, DownloadableAddonJsonModel>>
@@ -336,6 +394,9 @@ public sealed class DownloadableAddonsProviderTests
         field.SetValue(provider, cache);
     }
 
+    /// <summary>
+    ///     Mocks the installed addons for the provider by injecting them via reflection.
+    /// </summary>
     private static void MockInstalledAddons(DownloadableAddonsProvider provider, AddonTypeEnum addonType, List<BaseAddon> installed)
     {
         var factoryField = typeof(DownloadableAddonsProvider).GetField("_installedAddonsProvider", BindingFlags.NonPublic | BindingFlags.Instance);

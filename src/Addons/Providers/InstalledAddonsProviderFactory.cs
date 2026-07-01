@@ -9,16 +9,37 @@ using Microsoft.Extensions.Logging;
 
 namespace Addons.Providers;
 
+/// <summary>
+///     Factory for creating and caching <see cref="InstalledAddonsProvider" /> instances per game.
+/// </summary>
 public sealed class InstalledAddonsProviderFactory
 {
     private readonly IChannelSubscriber<DiHelper.LocalFileEvent> _channelPublisher;
+
     private readonly IConfigProvider _config;
+
+    /// <summary>
+    ///     Cached provider instances keyed by game enum.
+    /// </summary>
     private readonly Dictionary<GameEnum, InstalledAddonsProvider> _list = [];
+
     private readonly LocalFilesProvider _localFilesProvider;
+
     private readonly ILoggerFactory _loggerFactory;
+
     private readonly MetadataProvider _metadataProvider;
+
     private readonly OriginalCampaignsProvider _originalCampaignsProvider;
 
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="InstalledAddonsProviderFactory" /> class.
+    /// </summary>
+    /// <param name="config">Configuration provider for addon state.</param>
+    /// <param name="originalCampaignsProvider">Provides original campaigns.</param>
+    /// <param name="metadataProvider">Provides remote metadata update checks.</param>
+    /// <param name="localFilesProvider">Scans and caches parsed addon files on disk.</param>
+    /// <param name="channelPublisher">Channel that publishes local file events.</param>
+    /// <param name="loggerFactory">Factory for creating loggers.</param>
     public InstalledAddonsProviderFactory(
         IConfigProvider config,
         OriginalCampaignsProvider originalCampaignsProvider,

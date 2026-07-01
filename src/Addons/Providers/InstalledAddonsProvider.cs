@@ -18,22 +18,61 @@ namespace Addons.Providers;
 /// </summary>
 public sealed class InstalledAddonsProvider : IDisposable
 {
+    /// <summary>
+    ///     Handles addon activation and deactivation logic.
+    /// </summary>
     private readonly AddonActivator _addonActivator;
+
+    /// <summary>
+    ///     Factory for creating addon domain objects from parsed files.
+    /// </summary>
     private readonly AddonFactory _addonFactory;
+
+    /// <summary>
+    ///     Extracts archived addons when needed.
+    /// </summary>
     private readonly ArchivedAddonExtractor _archivedAddonExtractor;
+
+    /// <summary>
+    ///     Semaphore to synchronize cache update operations.
+    /// </summary>
     private readonly SemaphoreSlim _cacheUpdateSemaphore = new(1);
 
+    /// <summary>
+    ///     Cache of installed campaigns.
+    /// </summary>
     private readonly List<BaseAddon> _campaignsCache = [];
+
+    /// <summary>
+    ///     Cancellation source for the background channel reader loop.
+    /// </summary>
     private readonly CancellationTokenSource _channelCancellation = new();
 
     private readonly IChannelSubscriber<DiHelper.LocalFileEvent> _channelPublisher;
+
+    /// <summary>
+    ///     Reader for the local file event channel.
+    /// </summary>
     private readonly ChannelReader<DiHelper.LocalFileEvent> _channelReader;
+
     private readonly BaseGame _game;
+
     private readonly LocalFilesProvider _localFilesProvider;
+
     private readonly ILogger<InstalledAddonsProvider> _logger;
+
+    /// <summary>
+    ///     Cache of installed maps.
+    /// </summary>
     private readonly List<BaseAddon> _mapsCache = [];
+
     private readonly MetadataProvider _metadataProvider;
+
+    /// <summary>
+    ///     Cache of installed mods.
+    /// </summary>
     private readonly List<BaseAddon> _modsCache = [];
+
     private readonly OriginalCampaignsProvider _originalCampaignsProvider;
 
     /// <summary>
@@ -222,6 +261,8 @@ public sealed class InstalledAddonsProvider : IDisposable
     /// <summary>
     ///     Returns the internal cache list for the specified addon type.
     /// </summary>
+    /// <param name="addonType">Addon type to look up.</param>
+    /// <returns>The cache list corresponding to the addon type.</returns>
     private List<BaseAddon> GetCacheByAddonType(AddonTypeEnum addonType)
     {
         var cache = addonType switch
@@ -236,8 +277,10 @@ public sealed class InstalledAddonsProvider : IDisposable
     }
 
     /// <summary>
-    ///     Scan parsed addon files and populate the cache for <paramref name="addonType" />.
+    ///     Fills the cache for the specified addon type by processing all parsed addon files.
     /// </summary>
+    /// <param name="parsedAddonFiles">Parsed addon files to process.</param>
+    /// <param name="addonType">Addon type to cache.</param>
     private async Task FillCacheAsync(IReadOnlyList<ParsedAddonFile> parsedAddonFiles, AddonTypeEnum addonType)
     {
         foreach (var parsedAddonFile in parsedAddonFiles)
@@ -462,7 +505,7 @@ public sealed class InstalledAddonsProvider : IDisposable
 
 
     /// <summary>
-    ///     Returns original campaigns merged with custom installed campaigns, ordered appropriately per game.
+    ///     Returns the list of installed campaigns, including original campaigns and custom campaigns from the cache.
     /// </summary>
     private IReadOnlyList<BaseAddon> GetInstalledCampaigns()
     {
@@ -510,7 +553,7 @@ public sealed class InstalledAddonsProvider : IDisposable
     }
 
     /// <summary>
-    ///     Returns the list of installed loose maps.
+    ///     Returns the list of installed loose map files from the cache.
     /// </summary>
     private IReadOnlyList<BaseAddon> GetInstalledMaps()
     {
@@ -532,7 +575,7 @@ public sealed class InstalledAddonsProvider : IDisposable
     }
 
     /// <summary>
-    ///     Returns the list of installed autoload mods.
+    ///     Returns the list of installed mods from the cache.
     /// </summary>
     private IReadOnlyList<BaseAddon> GetInstalledMods()
     {
@@ -557,13 +600,17 @@ public sealed class InstalledAddonsProvider : IDisposable
     ///     Convert a parsed addon file into a domain addon object
     /// </summary>
     /// <param name="parsedAddonFile">Parsed addon file to convert.</param>
+    /// <summary>
+    ///     Convert a parsed addon file into a domain addon object.
+    /// </summary>
+    /// <param name="parsedAddonFile">Parsed addon file to convert.</param>
     internal BaseAddon? GetAddonFromFile(ParsedAddonFile parsedAddonFile)
     {
         return _addonFactory.GetAddonFromFile(parsedAddonFile);
     }
 
     /// <summary>
-    ///     Called when metadata is initialised; refreshes the update-available flag on all cached addons.
+    ///     Handles the MetadataInitialized event by checking each cached addon for available metadata updates.
     /// </summary>
     private void OnMetadataInitialized(object? sender, EventArgs e)
     {
@@ -581,7 +628,7 @@ public sealed class InstalledAddonsProvider : IDisposable
     }
 
     /// <summary>
-    ///     Called when metadata is updated for an addon; replaces the cached entry with the updated version.
+    ///     Handles the MetadataUpdated event by replacing the old cached addon with the updated version.
     /// </summary>
     private void OnMetadataUpdated(object? sender, ParsedAddonFile e)
     {

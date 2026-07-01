@@ -11,6 +11,9 @@ using Moq;
 
 namespace Tests.Unit.Helpers;
 
+/// <summary>
+///     Helper for creating test provider instances.
+/// </summary>
 public static class ObjectCreationHelper
 {
     /// <summary>

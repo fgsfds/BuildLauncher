@@ -12,12 +12,25 @@ using SharpCompress.Archives;
 
 namespace Tests.Unit.Sync;
 
+/// <summary>
+///     Tests for the <see cref="MetadataProvider" /> class.
+/// </summary>
 [Collection("Sync")]
 public sealed class MetadataProviderTests : IDisposable
 {
+    /// <summary>
+    ///     Mock cache adder for testing.
+    /// </summary>
     private readonly Mock<ICacheAdder<Stream>> _cacheMock;
+
+    /// <summary>
+    ///     Local files provider for scanning addon files.
+    /// </summary>
     private readonly LocalFilesProvider _scanner;
 
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="MetadataProviderTests" /> class.
+    /// </summary>
     public MetadataProviderTests()
     {
         _cacheMock = new Mock<ICacheAdder<Stream>>();
@@ -41,6 +54,7 @@ public sealed class MetadataProviderTests : IDisposable
         _scanner = new(gamesProvider.Object, _cacheMock.Object, channelPubMock.Object, NullLogger<LocalFilesProvider>.Instance);
     }
 
+    /// <inheritdoc />
     public void Dispose()
     {
         if (!Directory.Exists(ClientProperties.AddonsFolderPath))
@@ -156,6 +170,9 @@ public sealed class MetadataProviderTests : IDisposable
         return (provider, api);
     }
 
+    /// <summary>
+    ///     Tests that a zipped addon with a different manifest has an update available.
+    /// </summary>
     [Fact]
     public async Task UpdateAvailable_ZippedAddonWithDifferentManifest_ReturnsTrue()
     {
@@ -172,6 +189,9 @@ public sealed class MetadataProviderTests : IDisposable
         Assert.True(result);
     }
 
+    /// <summary>
+    ///     Tests that an unpacked addon with a different manifest has an update available.
+    /// </summary>
     [Fact]
     public async Task UpdateAvailable_UnpackedAddonWithDifferentManifest_ReturnsTrue()
     {
@@ -188,6 +208,9 @@ public sealed class MetadataProviderTests : IDisposable
         Assert.True(result);
     }
 
+    /// <summary>
+    ///     Tests that when remote manifest matches local, no update is available.
+    /// </summary>
     [Fact]
     public async Task IsMetadataUpdateAvailable_RemoteManifestMatchesLocal_ReturnsFalse()
     {
@@ -205,6 +228,9 @@ public sealed class MetadataProviderTests : IDisposable
         Assert.False(result);
     }
 
+    /// <summary>
+    ///     Tests that an addon not in metadata returns false.
+    /// </summary>
     [Fact]
     public async Task AddonNotInMetadata_ReturnsFalse()
     {
@@ -220,6 +246,9 @@ public sealed class MetadataProviderTests : IDisposable
         Assert.False(result);
     }
 
+    /// <summary>
+    ///     Tests that an already cached update returns true.
+    /// </summary>
     [Fact]
     public async Task AlreadyCachedUpdate_ReturnsTrue()
     {
@@ -240,6 +269,9 @@ public sealed class MetadataProviderTests : IDisposable
         Assert.True(result);
     }
 
+    /// <summary>
+    ///     Tests that when provider is not initialized, no update is available.
+    /// </summary>
     [Fact]
     public async Task NotInitialized_ReturnsFalse()
     {
@@ -260,6 +292,9 @@ public sealed class MetadataProviderTests : IDisposable
         Assert.False(result);
     }
 
+    /// <summary>
+    ///     Tests that when metadata is null, no update is available.
+    /// </summary>
     [Fact]
     public async Task MetadataIsNull_ReturnsFalse()
     {
@@ -272,6 +307,9 @@ public sealed class MetadataProviderTests : IDisposable
         Assert.False(result);
     }
 
+    /// <summary>
+    ///     Tests that IsInitialized is false before initialization.
+    /// </summary>
     [Fact]
     public void IsInitialized_FalseBeforeInit()
     {
@@ -286,6 +324,9 @@ public sealed class MetadataProviderTests : IDisposable
         Assert.False(provider.IsInitialized);
     }
 
+    /// <summary>
+    ///     Tests that InitializeAsync sets IsInitialized to true.
+    /// </summary>
     [Fact]
     public async Task InitializeAsync_SetsIsInitialized()
     {
@@ -303,6 +344,9 @@ public sealed class MetadataProviderTests : IDisposable
         Assert.True(provider.IsInitialized);
     }
 
+    /// <summary>
+    ///     Tests that initializing twice returns true.
+    /// </summary>
     [Fact]
     public async Task InitializeAsync_Twice_ReturnsTrue()
     {
@@ -319,6 +363,9 @@ public sealed class MetadataProviderTests : IDisposable
         Assert.True(await provider.InitializeAsync());
     }
 
+    /// <summary>
+    ///     Tests that the MetadataInitialized event fires on initialization.
+    /// </summary>
     [Fact]
     public async Task MetadataInitializedEvent_FiresOnInit()
     {
@@ -339,6 +386,9 @@ public sealed class MetadataProviderTests : IDisposable
         Assert.True(eventFired);
     }
 
+    /// <summary>
+    ///     Tests that the MetadataUpdated event fires on folder update.
+    /// </summary>
     [Fact]
     public async Task MetadataUpdatedEvent_FiresOnFolderUpdate()
     {
@@ -362,6 +412,9 @@ public sealed class MetadataProviderTests : IDisposable
         Assert.True(eventFired);
     }
 
+    /// <summary>
+    ///     Tests that updating metadata for a folder succeeds.
+    /// </summary>
     [Fact]
     public async Task UpdateMetadataAsync_ForFolder_Success()
     {
@@ -381,6 +434,9 @@ public sealed class MetadataProviderTests : IDisposable
         Assert.True(result.IsSuccess);
     }
 
+    /// <summary>
+    ///     Tests that updating metadata when not cached returns an error.
+    /// </summary>
     [Fact]
     public async Task UpdateMetadataAsync_WhenNotCached_ReturnsError()
     {
@@ -396,6 +452,9 @@ public sealed class MetadataProviderTests : IDisposable
         Assert.False(result.IsSuccess);
     }
 
+    /// <summary>
+    ///     Tests that when the scanner is missing a file, no update is available.
+    /// </summary>
     [Fact]
     public async Task IsMetadataUpdateAvailable_WhenScannerMissingFile_ReturnsFalse()
     {
@@ -411,6 +470,9 @@ public sealed class MetadataProviderTests : IDisposable
         Assert.False(result);
     }
 
+    /// <summary>
+    ///     Tests that concurrent calls to InitializeAsync only initialize once.
+    /// </summary>
     [Fact]
     public async Task InitializeAsync_ConcurrentCalls_OnlyInitializesOnce()
     {
@@ -435,6 +497,9 @@ public sealed class MetadataProviderTests : IDisposable
         api.Verify(x => x.GetMetadataAsync(), Times.Once);
     }
 
+    /// <summary>
+    ///     Tests that updating metadata for a zip succeeds and fires the event.
+    /// </summary>
     [Fact]
     public async Task UpdateMetadataAsync_ForZip_SuccessAndFiresEvent()
     {
@@ -468,6 +533,9 @@ public sealed class MetadataProviderTests : IDisposable
         Assert.Equal("p292", received.Manifest.Version);
     }
 
+    /// <summary>
+    ///     Tests that updating metadata when the file does not exist returns an error.
+    /// </summary>
     [Fact]
     public async Task UpdateMetadataAsync_WhenFileDoesNotExist_ReturnsError()
     {
@@ -482,6 +550,9 @@ public sealed class MetadataProviderTests : IDisposable
         Assert.False(result.IsSuccess);
     }
 
+    /// <summary>
+    ///     Tests that when an addon is not in the local files cache, no update is available.
+    /// </summary>
     [Fact]
     public async Task IsMetadataUpdateAvailable_AddonNotInLocalFilesCache_ReturnsFalse()
     {

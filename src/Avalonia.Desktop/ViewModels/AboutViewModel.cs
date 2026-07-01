@@ -10,9 +10,24 @@ namespace Avalonia.Desktop.ViewModels;
 /// </summary>
 public enum UpdateState
 {
+    /// <summary>
+    ///     Update is in progress.
+    /// </summary>
     InProgress,
+
+    /// <summary>
+    ///     Update has failed.
+    /// </summary>
     UpdateFailed,
+
+    /// <summary>
+    ///     Application is up to date.
+    /// </summary>
     UpToDate,
+
+    /// <summary>
+    ///     An update is available.
+    /// </summary>
     UpdateAvailable
 }
 
@@ -22,6 +37,10 @@ public sealed partial class AboutViewModel : ObservableObject
     private readonly AppUpdateInstaller _updateInstaller;
 
 
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="AboutViewModel" /> class.
+    /// </summary>
+    /// <param name="updateInstaller">The app update installer.</param>
     public AboutViewModel(AppUpdateInstaller updateInstaller)
     {
         _updateInstaller = updateInstaller;
@@ -30,8 +49,9 @@ public sealed partial class AboutViewModel : ObservableObject
 
 
     /// <summary>
-    ///     Check for app update
+    ///     Checks for application updates asynchronously.
     /// </summary>
+    /// <returns>A task representing the asynchronous operation.</returns>
     private async Task CheckForUpdateAsync()
     {
         try
@@ -76,8 +96,9 @@ public sealed partial class AboutViewModel : ObservableObject
     #region Relay Commands
 
     /// <summary>
-    ///     Check for BuildLauncher updates
+    ///     Checks for or installs an update.
     /// </summary>
+    /// <returns>A task representing the asynchronous operation.</returns>
     [RelayCommand(CanExecute = nameof(CheckOrInstallUpdateCanExecute))]
     private async Task CheckOrInstallUpdateAsync()
     {
@@ -93,6 +114,10 @@ public sealed partial class AboutViewModel : ObservableObject
         }
     }
 
+    /// <summary>
+    ///     Determines whether the check or install update command can execute.
+    /// </summary>
+    /// <returns>True if an update is not already in progress.</returns>
     private bool CheckOrInstallUpdateCanExecute() => CurrentUpdateState is not UpdateState.InProgress;
 
     #endregion Relay Commands

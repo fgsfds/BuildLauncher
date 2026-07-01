@@ -9,6 +9,9 @@ using Ports.Releases;
 
 namespace Ports;
 
+/// <summary>
+///     Helper for registering port-related dependencies.
+/// </summary>
 public static class DiHelper
 {
     /// <summary>

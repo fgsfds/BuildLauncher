@@ -4,6 +4,9 @@ using Core.Client.Helpers;
 
 namespace Tests.Unit.Helpers;
 
+/// <summary>
+///     Helper for creating test <see cref="ParsedAddonFile" /> instances.
+/// </summary>
 public static class ParsedAddonFileHelper
 {
     /// <summary>

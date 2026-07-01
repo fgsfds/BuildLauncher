@@ -8,6 +8,9 @@ namespace Avalonia.Desktop.Misc;
 /// </summary>
 public static class NotificationsHelper
 {
+    /// <summary>
+    ///     Initializes static members of the <see cref="NotificationsHelper" /> class.
+    /// </summary>
     static NotificationsHelper()
     {
         NotificationManager = new(AvaloniaProperties.TopLevel)
@@ -18,8 +21,20 @@ public static class NotificationsHelper
         };
     }
 
+    /// <summary>
+    ///     Gets the notification manager instance.
+    /// </summary>
     public static WindowNotificationManager NotificationManager { get; }
 
+    /// <summary>
+    ///     Shows a notification.
+    /// </summary>
+    /// <param name="content">The notification content.</param>
+    /// <param name="type">The notification type.</param>
+    /// <param name="expiration">Optional expiration time.</param>
+    /// <param name="onClick">Optional click callback.</param>
+    /// <param name="onClose">Optional close callback.</param>
+    /// <param name="classes">Optional CSS classes.</param>
     public static void Show(
         object content,
         NotificationType type,

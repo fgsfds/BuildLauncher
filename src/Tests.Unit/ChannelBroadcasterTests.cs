@@ -4,8 +4,14 @@ using Core.All;
 
 namespace Tests.Unit;
 
+/// <summary>
+///     Tests for the <see cref="ChannelBroadcaster{T}" /> class.
+/// </summary>
 public sealed class ChannelBroadcasterTests
 {
+    /// <summary>
+    ///     Tests that a subscriber can read a published message.
+    /// </summary>
     [Fact]
     public async Task Subscribe_ReturnsReader_ThatCanReadPublishedMessage()
     {
@@ -19,6 +25,9 @@ public sealed class ChannelBroadcasterTests
         Assert.Equal("hello", msg);
     }
 
+    /// <summary>
+    ///     Tests that publishing delivers to multiple subscribers.
+    /// </summary>
     [Fact]
     public async Task PublishAsync_DeliversToMultipleSubscribers()
     {
@@ -37,6 +46,9 @@ public sealed class ChannelBroadcasterTests
         Assert.Equal(42, m3);
     }
 
+    /// <summary>
+    ///     Tests that unsubscribing prevents delivery to that subscriber.
+    /// </summary>
     [Fact]
     public async Task Unsubscribe_RemovesSubscriber_PublishDoesNotDeliver()
     {
@@ -50,6 +62,9 @@ public sealed class ChannelBroadcasterTests
         Assert.False(await reader.WaitToReadAsync().AsTask().WaitAsync(TimeSpan.FromMilliseconds(100)));
     }
 
+    /// <summary>
+    ///     Tests that unsubscribing completes the channel.
+    /// </summary>
     [Fact]
     public async Task Unsubscribe_CompletesChannel_ReadAllAsyncExits()
     {
@@ -69,6 +84,9 @@ public sealed class ChannelBroadcasterTests
         Assert.Empty(items);
     }
 
+    /// <summary>
+    ///     Tests that subscribers receive messages in FIFO order.
+    /// </summary>
     [Fact]
     public async Task SubscriberReceivesMessages_InOrder()
     {
@@ -87,6 +105,9 @@ public sealed class ChannelBroadcasterTests
         Assert.Equal(3, c);
     }
 
+    /// <summary>
+    ///     Tests that subscribing is thread-safe.
+    /// </summary>
     [Fact]
     public void Subscribe_IsThreadSafe()
     {
@@ -110,6 +131,9 @@ public sealed class ChannelBroadcasterTests
         Assert.Equal(100, readers.Count);
     }
 
+    /// <summary>
+    ///     Tests that publishing with no subscribers does not throw.
+    /// </summary>
     [Fact]
     public async Task PublishAsync_EmptySubscriberList_DoesNotThrow()
     {
@@ -118,6 +142,9 @@ public sealed class ChannelBroadcasterTests
         await bc.PublishAsync("no one listening");
     }
 
+    /// <summary>
+    ///     Tests that unsubscribing removes only the specified subscriber.
+    /// </summary>
     [Fact]
     public async Task Unsubscribe_RemovesOnlySpecifiedSubscriber()
     {

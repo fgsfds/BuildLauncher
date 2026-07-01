@@ -3,10 +3,16 @@ using Games.Providers;
 
 namespace Tools.Tools;
 
+/// <summary>
+///     XMapEdit tool implementation.
+/// </summary>
 public sealed class XMapEdit : BaseTool
 {
     private readonly InstalledGamesProvider _gamesProvider;
 
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="XMapEdit" /> class.
+    /// </summary>
     public XMapEdit(InstalledGamesProvider gamesProvider)
     {
         _gamesProvider = gamesProvider;

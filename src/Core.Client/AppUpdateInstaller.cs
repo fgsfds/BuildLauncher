@@ -9,14 +9,28 @@ using Microsoft.Extensions.Logging;
 
 namespace Core.Client;
 
+/// <summary>
+///     Handles the application self-update process including downloading releases and installing updates.
+/// </summary>
 public sealed class AppUpdateInstaller
 {
     private readonly IApiInterface _apiInterface;
+
     private readonly FilesDownloader _filesDownloader;
+
     private readonly ILogger<AppUpdateInstaller> _logger;
 
+    /// <summary>
+    ///     Latest update release info.
+    /// </summary>
     private GeneralReleaseJsonModel? _update;
 
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="AppUpdateInstaller" /> class.
+    /// </summary>
+    /// <param name="filesDownloader">The file downloader service.</param>
+    /// <param name="apiInterface">The API interface for fetching release metadata.</param>
+    /// <param name="logger">Logger instance.</param>
     public AppUpdateInstaller(
         FilesDownloader filesDownloader,
         IApiInterface apiInterface,
@@ -29,7 +43,7 @@ public sealed class AppUpdateInstaller
     }
 
     /// <summary>
-    ///     Check GitHub for releases with version higher than current
+    ///     Check GitHub for releases with version higher than current.
     /// </summary>
     /// <param name="currentVersion">Current SFD version</param>
     public async Task<bool?> CheckForUpdates(Version currentVersion)
@@ -53,7 +67,7 @@ public sealed class AppUpdateInstaller
     }
 
     /// <summary>
-    ///     Download latest release from GitHub and create update lock file
+    ///     Download latest release from GitHub and create update lock file.
     /// </summary>
     public async Task DownloadAndUnpackLatestRelease()
     {
@@ -78,7 +92,7 @@ public sealed class AppUpdateInstaller
     }
 
     /// <summary>
-    ///     Install update
+    ///     Install update.
     /// </summary>
     public static void InstallUpdate()
     {

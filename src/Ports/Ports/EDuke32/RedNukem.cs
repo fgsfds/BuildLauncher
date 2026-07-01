@@ -10,14 +10,21 @@ using Microsoft.Extensions.Logging;
 namespace Ports.Ports.EDuke32;
 
 /// <summary>
-///     RedNukem port
+///     RedNukem port.
 /// </summary>
 public sealed class RedNukem : EDuke32
 {
     private readonly ILogger<RedNukem> _logger = null!;
 
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="RedNukem" /> class.
+    /// </summary>
     public RedNukem() { }
 
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="RedNukem" /> class.
+    /// </summary>
+    /// <param name="logger">Logger instance.</param>
     public RedNukem(ILogger<RedNukem> logger)
     {
         _logger = logger;
@@ -139,9 +146,9 @@ public sealed class RedNukem : EDuke32
     }
 
     /// <summary>
-    ///     Create or delete blank anm file.
+    ///     Creates or deletes blank animation files to skip or restore intros.
     /// </summary>
-    /// <param name="isDelete">Delete file.</param>
+    /// <param name="isDelete"><see langword="true" /> to delete the files; <see langword="false" /> to create them.</param>
     private void CreateOrDeleteBlankAnm(bool isDelete)
     {
         ImmutableArray<string> files =
@@ -193,11 +200,11 @@ public sealed class RedNukem : EDuke32
     }
 
     /// <summary>
-    ///     Get startup agrs for Redneck Rampage
+    ///     Appends command-line arguments for Redneck Rampage games in RedNukem.
     /// </summary>
-    /// <param name="sb">StringBuilder</param>
-    /// <param name="game">RedneckGame</param>
-    /// <param name="addon">DukeCampaign</param>
+    /// <param name="sb">String builder for parameters.</param>
+    /// <param name="game">Redneck game instance.</param>
+    /// <param name="addon">Campaign or addon.</param>
     private void GetRedneckArgs(StringBuilder sb, RedneckGame game, BaseAddon addon)
     {
         if (addon.SupportedGame.GameEnum is GameEnum.RidesAgain)
@@ -267,8 +274,10 @@ public sealed class RedNukem : EDuke32
 
 
     /// <summary>
-    ///     Override original art files with route 66's ones or remove overrides
+    ///     Copies or restores Route 66 art and video files for RedNukem.
     /// </summary>
+    /// <param name="game">Game instance.</param>
+    /// <param name="campaign">Campaign or addon.</param>
     [Obsolete("Remove if RedNukem can ever properly launch R66")]
     private void FixRoute66Files(BaseGame game, BaseAddon campaign)
     {
@@ -313,6 +322,9 @@ public sealed class RedNukem : EDuke32
         }
     }
 
+    /// <summary>
+    ///     Creates a blank demo file to prevent demo playback on startup.
+    /// </summary>
     private void CreateBlankDemo()
     {
         var blankDemo = Path.Combine(InstallFolderPath, "blank.edm");

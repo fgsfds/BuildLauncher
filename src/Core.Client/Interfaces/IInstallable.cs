@@ -1,5 +1,8 @@
 ﻿namespace Core.Client.Interfaces;
 
+/// <summary>
+///     Defines the contract for an installable port or tool.
+/// </summary>
 public interface IInstallable
 {
     /// <summary>

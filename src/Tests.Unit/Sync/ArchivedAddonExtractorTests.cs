@@ -15,13 +15,30 @@ using DiHelper = Core.Client.Helpers.DiHelper;
 
 namespace Tests.Unit.Sync;
 
+/// <summary>
+///     Tests for the <see cref="ArchivedAddonExtractor" /> class.
+/// </summary>
 [Collection("Sync")]
 public sealed class ArchivedAddonExtractorTests : IDisposable
 {
+    /// <summary>
+    ///     Archived addon extractor under test.
+    /// </summary>
     private readonly ArchivedAddonExtractor _extractor;
+
+    /// <summary>
+    ///     Local files provider for scanning addon files.
+    /// </summary>
     private readonly LocalFilesProvider _localFilesProvider;
+
+    /// <summary>
+    ///     Temporary directory for test files.
+    /// </summary>
     private readonly string _tempDir;
 
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="ArchivedAddonExtractorTests" /> class.
+    /// </summary>
     public ArchivedAddonExtractorTests()
     {
         _tempDir = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
@@ -44,6 +61,7 @@ public sealed class ArchivedAddonExtractorTests : IDisposable
         _localFilesProvider.InitializeAsync().GetAwaiter().GetResult();
     }
 
+    /// <inheritdoc />
     public void Dispose()
     {
         if (Directory.Exists(_tempDir))
@@ -56,6 +74,9 @@ public sealed class ArchivedAddonExtractorTests : IDisposable
         }
     }
 
+    /// <summary>
+    ///     Tests that a non-zip file returns false and is not unpacked.
+    /// </summary>
     [Fact]
     public async Task UnpackAndUpdateIfNeededAsync_NonZip_ReturnsFalse()
     {
@@ -76,6 +97,9 @@ public sealed class ArchivedAddonExtractorTests : IDisposable
         Assert.False(result);
     }
 
+    /// <summary>
+    ///     Tests that a zip with grpinfo content is unpacked and the zip is deleted.
+    /// </summary>
     [Fact]
     public async Task UnpackAndUpdateIfNeededAsync_ZipWithGrpInfo_UnpacksAndDeletesZip()
     {
@@ -101,6 +125,9 @@ public sealed class ArchivedAddonExtractorTests : IDisposable
         Assert.True(File.Exists(Path.Combine(extractDir, "addons.grpinfo")));
     }
 
+    /// <summary>
+    ///     Tests that a zip with an RFF manifest is unpacked.
+    /// </summary>
     [Fact]
     public async Task UnpackAndUpdateIfNeededAsync_ZipWithRffManifest_Unpacks()
     {
@@ -148,6 +175,9 @@ public sealed class ArchivedAddonExtractorTests : IDisposable
         Assert.True(File.Exists(Path.Combine(extractDir, "addon.json")));
     }
 
+    /// <summary>
+    ///     Tests that a zip with an executables manifest is unpacked.
+    /// </summary>
     [Fact]
     public async Task UnpackAndUpdateIfNeededAsync_ZipWithExecutablesManifest_Unpacks()
     {
@@ -198,6 +228,9 @@ public sealed class ArchivedAddonExtractorTests : IDisposable
         Assert.True(Directory.Exists(Path.Combine(_tempDir, "exe-addon")));
     }
 
+    /// <summary>
+    ///     Tests that a zip with a simple manifest is not unpacked.
+    /// </summary>
     [Fact]
     public async Task UnpackAndUpdateIfNeededAsync_ZipWithSimpleManifest_DoesNotUnpack()
     {
@@ -240,6 +273,9 @@ public sealed class ArchivedAddonExtractorTests : IDisposable
         Assert.True(File.Exists(zipPath));
     }
 
+    /// <summary>
+    ///     Tests that an empty zip returns false.
+    /// </summary>
     [Fact]
     public async Task UnpackAndUpdateIfNeededAsync_EmptyZip_ReturnsFalse()
     {

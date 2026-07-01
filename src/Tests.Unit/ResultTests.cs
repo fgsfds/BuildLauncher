@@ -2,8 +2,14 @@
 
 namespace Tests.Unit;
 
+/// <summary>
+///     Tests for the <see cref="Result" /> struct.
+/// </summary>
 public sealed class ResultTests
 {
+    /// <summary>
+    ///     Tests that the constructor sets the Message property.
+    /// </summary>
     [Fact]
     public void Constructor_SetsMessage()
     {
@@ -11,6 +17,9 @@ public sealed class ResultTests
         Assert.Equal("something went wrong", r.Message);
     }
 
+    /// <summary>
+    ///     Tests that a Success result has IsSuccess equal to true.
+    /// </summary>
     [Fact]
     public void Constructor_WithSuccess_IsSuccessReturnsTrue()
     {
@@ -18,6 +27,9 @@ public sealed class ResultTests
         Assert.True(r.IsSuccess);
     }
 
+    /// <summary>
+    ///     Tests that non-success results have IsSuccess equal to false.
+    /// </summary>
     [Theory]
     [InlineData(ResultEnum.HashError)]
     [InlineData(ResultEnum.NotFound)]
@@ -31,6 +43,9 @@ public sealed class ResultTests
         Assert.False(r.IsSuccess);
     }
 
+    /// <summary>
+    ///     Tests that the default Result has a null message.
+    /// </summary>
     [Fact]
     public void Default_HasDefaultMessage()
     {
@@ -38,6 +53,9 @@ public sealed class ResultTests
         Assert.Null(r.Message);
     }
 
+    /// <summary>
+    ///     Tests that the default Result has IsSuccess equal to true.
+    /// </summary>
     [Fact]
     public void Default_IsSuccessIsTrue()
     {
@@ -47,8 +65,14 @@ public sealed class ResultTests
 }
 
 
+/// <summary>
+///     Tests for the <see cref="Result{T}" /> struct.
+/// </summary>
 public sealed class ResultGenericTests
 {
+    /// <summary>
+    ///     Tests that the constructor sets the Message property.
+    /// </summary>
     [Fact]
     public void Constructor_SetsMessage()
     {
@@ -56,6 +80,9 @@ public sealed class ResultGenericTests
         Assert.Equal("fail", r.Message);
     }
 
+    /// <summary>
+    ///     Tests that the constructor sets the ResultObject property.
+    /// </summary>
     [Fact]
     public void Constructor_SetsResultObject()
     {
@@ -63,6 +90,9 @@ public sealed class ResultGenericTests
         Assert.Equal("data", r.ResultObject);
     }
 
+    /// <summary>
+    ///     Tests that the constructor sets ResultObject to null when null is passed.
+    /// </summary>
     [Fact]
     public void Constructor_WithNullResultObject_SetsToNull()
     {
@@ -70,6 +100,9 @@ public sealed class ResultGenericTests
         Assert.Null(r.ResultObject);
     }
 
+    /// <summary>
+    ///     Tests that the constructor works with value type result objects.
+    /// </summary>
     [Fact]
     public void Constructor_WithValueTypeResultObject()
     {
@@ -77,6 +110,9 @@ public sealed class ResultGenericTests
         Assert.Equal(42, r.ResultObject);
     }
 
+    /// <summary>
+    ///     Tests that a Success result has IsSuccess equal to true.
+    /// </summary>
     [Fact]
     public void Constructor_WithSuccess_IsSuccessReturnsTrue()
     {
@@ -84,6 +120,9 @@ public sealed class ResultGenericTests
         Assert.True(r.IsSuccess);
     }
 
+    /// <summary>
+    ///     Tests that non-success results have IsSuccess equal to false.
+    /// </summary>
     [Theory]
     [InlineData(ResultEnum.HashError)]
     [InlineData(ResultEnum.NotFound)]
@@ -97,6 +136,9 @@ public sealed class ResultGenericTests
         Assert.False(r.IsSuccess);
     }
 
+    /// <summary>
+    ///     Tests that the default Result has a null ResultObject.
+    /// </summary>
     [Fact]
     public void Default_HasNullResultObject()
     {
@@ -104,6 +146,9 @@ public sealed class ResultGenericTests
         Assert.Null(r.ResultObject);
     }
 
+    /// <summary>
+    ///     Tests that the default Result has a null message.
+    /// </summary>
     [Fact]
     public void Default_MessageIsNull()
     {
@@ -111,6 +156,9 @@ public sealed class ResultGenericTests
         Assert.Null(r.Message);
     }
 
+    /// <summary>
+    ///     Tests that the default Result has IsSuccess equal to true.
+    /// </summary>
     [Fact]
     public void Default_IsSuccessIsTrue()
     {
@@ -118,6 +166,9 @@ public sealed class ResultGenericTests
         Assert.True(r.IsSuccess);
     }
 
+    /// <summary>
+    ///     Tests that ResultObject is not null after a successful result with data.
+    /// </summary>
     [Fact]
     public void MemberNotNullWhen_NonNullResultObject_AfterSuccessCheck()
     {

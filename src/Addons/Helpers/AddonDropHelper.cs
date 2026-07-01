@@ -7,6 +7,9 @@ using SharpCompress.Archives;
 
 namespace Addons.Helpers;
 
+/// <summary>
+///     Provides functionality for adding addons to a game.
+/// </summary>
 public interface IAddonDropHelper
 {
     /// <summary>
@@ -19,11 +22,19 @@ public interface IAddonDropHelper
 }
 
 
+/// <summary>
+///     Handles dropping addon files into the appropriate game folder.
+/// </summary>
 public sealed class AddonDropHelper : IAddonDropHelper
 {
     private readonly LocalFilesProvider _addonScanner;
     private readonly ILogger<AddonDropHelper> _logger;
 
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="AddonDropHelper" /> class.
+    /// </summary>
+    /// <param name="addonScanner">Provider used to scan and cache parsed addon files.</param>
+    /// <param name="logger">Logger for diagnostic messages.</param>
     public AddonDropHelper(
         LocalFilesProvider addonScanner,
         ILogger<AddonDropHelper> logger

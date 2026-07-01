@@ -7,14 +7,21 @@ using Games.Games;
 namespace Ports.Ports;
 
 /// <summary>
-///     Raze port
+///     Zero Hour Overclocked recompilation port.
 /// </summary>
 public sealed class ZHRecomp : BasePort
 {
+    /// <summary>
+    ///     Name of the Duke Nukem Zero Hour ROM file.
+    /// </summary>
     private const string RomName = "dnzh.us.z64";
 
     private readonly IConfigProvider _config;
 
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="ZHRecomp" /> class.
+    /// </summary>
+    /// <param name="config">Configuration provider.</param>
     public ZHRecomp(IConfigProvider config)
     {
         _config = config;
@@ -32,6 +39,7 @@ public sealed class ZHRecomp : BasePort
     /// <inheritdoc />
     public override string Name => "Zero Hour Overclocked";
 
+    /// <inheritdoc />
     public override string ShortName => "ZHRecomp";
 
     /// <inheritdoc />

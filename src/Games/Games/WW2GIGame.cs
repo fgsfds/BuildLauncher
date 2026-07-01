@@ -3,6 +3,9 @@ using Games.Skills;
 
 namespace Games.Games;
 
+/// <summary>
+///     Represents the game World War II GI and its associated addon detection.
+/// </summary>
 public sealed class WW2GIGame : BaseGame
 {
     /// <inheritdoc />
@@ -17,7 +20,9 @@ public sealed class WW2GIGame : BaseGame
     /// <inheritdoc />
     public override List<string> RequiredFiles => ["WW2GI.GRP"];
 
-    /// <inheritdoc />
+    /// <summary>
+    ///     Files required for Platoon addon.
+    /// </summary>
     private List<string> PlatoonFiles => ["PLATOONL.DAT", "PLATOONL.DEF"];
 
     /// <summary>

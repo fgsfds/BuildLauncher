@@ -9,14 +9,27 @@ using Ports.Ports;
 namespace Ports.Providers;
 
 /// <summary>
-///     Class that provides singleton instances of port types
+///     Provides singleton instances of port types and manages custom ports.
 /// </summary>
 public sealed class PortsProvider
 {
+    /// <summary>
+    ///     List of custom ports loaded from the database.
+    /// </summary>
     private readonly List<CustomPort> _customPorts = [];
+
     private readonly IDbContextFactory<DatabaseContext> _dbContextFactory;
+
+    /// <summary>
+    ///     Dictionary of registered port instances by port enum.
+    /// </summary>
     private readonly Dictionary<PortEnum, BasePort> _ports = [];
 
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="PortsProvider" /> class.
+    /// </summary>
+    /// <param name="dbContextFactory">Database context factory.</param>
+    /// <param name="ports">Collection of port instances.</param>
     public PortsProvider(
         IDbContextFactory<DatabaseContext> dbContextFactory,
         IEnumerable<BasePort> ports
@@ -37,38 +50,41 @@ public sealed class PortsProvider
         UpdateCustomPortsList();
     }
 
+    /// <summary>
+    ///     Raised when a custom port is added, changed, or deleted.
+    /// </summary>
     public event EventHandler? CustomPortChangedEvent;
 
     /// <summary>
-    ///     Get list of ports that support selected game
+    ///     Gets the list of ports that support the specified game.
     /// </summary>
-    /// <param name="game">Game enum</param>
+    /// <param name="game">Game enum.</param>
     public IReadOnlyList<BasePort> GetPortsThatSupportGame(GameEnum game) => [.. _ports.Values.Where(x => x.SupportedGames.Contains(game))];
 
     /// <summary>
-    ///     Get port by enum
+    ///     Gets a port by its enum value.
     /// </summary>
-    /// <param name="portEnum">Port enum</param>
+    /// <param name="portEnum">Port enum.</param>
     public BasePort GetPort(PortEnum portEnum) =>
         _ports.TryGetValue(portEnum, out var port) ? port : throw new ArgumentException($"Port {portEnum} is not registered", nameof(portEnum));
 
     /// <summary>
-    ///     Get list of custom ports
+    ///     Gets the list of all custom ports.
     /// </summary>
     public ImmutableList<CustomPort> GetCustomPorts() => [.. _customPorts];
 
     /// <summary>
-    ///     Get list of custom ports
+    ///     Gets the list of custom ports that support the specified game.
     /// </summary>
     public ImmutableList<CustomPort> GetCustomPorts(GameEnum gameEnum) => [.. _customPorts.Where(x => x.BasePort.SupportedGames.Contains(gameEnum))];
 
     /// <summary>
-    ///     Add or change custom port
+    ///     Adds or changes a custom port.
     /// </summary>
-    /// <param name="oldName">Old name of the port. Null if new port is being added.</param>
-    /// <param name="newName">New name of the port</param>
-    /// <param name="newPath">Path to port's exe</param>
-    /// <param name="newType">Type of port</param>
+    /// <param name="oldName">Old name of the port. <c>null</c> if a new port is being added.</param>
+    /// <param name="newName">New name of the port.</param>
+    /// <param name="newPath">Path to the port executable.</param>
+    /// <param name="newType">Type of port.</param>
     public void AddOrChangeCustomPort(
         string? oldName,
         string newName,
@@ -101,9 +117,9 @@ public sealed class PortsProvider
     }
 
     /// <summary>
-    ///     Delete custom port
+    ///     Deletes a custom port.
     /// </summary>
-    /// <param name="portName">Name of the port</param>
+    /// <param name="portName">Name of the port.</param>
     public void DeleteCustomPort(string portName)
     {
         using var dbContext = _dbContextFactory.CreateDbContext();
@@ -122,7 +138,7 @@ public sealed class PortsProvider
 
 
     /// <summary>
-    ///     Update list of custom ports
+    ///     Reloads the custom ports list from the database.
     /// </summary>
     private void UpdateCustomPortsList()
     {

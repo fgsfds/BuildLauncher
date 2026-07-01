@@ -2,6 +2,9 @@
 
 namespace Tests.Unit.Helpers;
 
+/// <summary>
+///     Helper for normalizing paths and arguments in test assertions.
+/// </summary>
 public static class NormalizerHelper
 {
     /// <summary>

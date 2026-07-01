@@ -2,6 +2,9 @@
 
 namespace Games.Games;
 
+/// <summary>
+///     Represents the game Powerslave and its associated metadata.
+/// </summary>
 public sealed class SlaveGame : BaseGame
 {
     /// <inheritdoc />

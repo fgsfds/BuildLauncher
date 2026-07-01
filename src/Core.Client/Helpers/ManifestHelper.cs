@@ -5,8 +5,16 @@ using SharpCompress.Archives.Zip;
 
 namespace Core.Client.Helpers;
 
+/// <summary>
+///     Provides helper methods for reading and parsing addon manifests from archives.
+/// </summary>
 public static class ManifestHelper
 {
+    /// <summary>
+    ///     Reads and deserializes the addon manifest from a zip archive.
+    /// </summary>
+    /// <param name="pathToFile">Absolute path to the zip archive.</param>
+    /// <returns>A result containing the deserialized manifest, or an error if not found.</returns>
     public static async Task<Result<AddonManifestJsonModel?>> GetMainManifestAsync(string pathToFile)
     {
         using var archive = ZipArchive.OpenArchive(pathToFile);

@@ -2,6 +2,9 @@
 
 namespace Games.Games;
 
+/// <summary>
+///     Represents a standalone game configuration with no required files.
+/// </summary>
 public sealed class StandaloneGame : BaseGame
 {
     /// <inheritdoc />

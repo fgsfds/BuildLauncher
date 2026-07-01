@@ -6,7 +6,7 @@ using Games.Games;
 namespace Ports.Ports.EDuke32;
 
 /// <summary>
-///     NBlood port
+///     NBlood port.
 /// </summary>
 public class NBlood : EDuke32
 {

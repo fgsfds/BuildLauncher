@@ -4,6 +4,9 @@ using Core.All.Serializable.Addon;
 
 namespace Tests.Unit;
 
+/// <summary>
+///     Tests for JSON serialization and deserialization of addon manifests.
+/// </summary>
 public sealed class SerializerTests
 {
     private const string AddonJson =
@@ -245,6 +248,9 @@ public sealed class SerializerTests
             }
         """;
 
+    /// <summary>
+    ///     Tests that a full addon JSON is correctly deserialized.
+    /// </summary>
     [Fact]
     public void DeserializeAddonJson()
     {
@@ -296,6 +302,9 @@ public sealed class SerializerTests
         Assert.Equal(DateOnly.Parse("1991-06-10"), result.ReleaseDate);
     }
 
+    /// <summary>
+    ///     Tests that a minimal addon JSON is correctly deserialized.
+    /// </summary>
     [Fact]
     public void DeserializeMinimalAddon()
     {
@@ -326,6 +335,9 @@ public sealed class SerializerTests
         Assert.Null(result.Options);
     }
 
+    /// <summary>
+    ///     Tests that an official addon JSON is correctly deserialized.
+    /// </summary>
     [Fact]
     public void DeserializeOfficialAddon()
     {
@@ -344,6 +356,9 @@ public sealed class SerializerTests
         Assert.Null(result.AdditionalCons);
     }
 
+    /// <summary>
+    ///     Tests that an Exhumed game JSON is correctly deserialized.
+    /// </summary>
     [Fact]
     public void DeserializeExhumedGame()
     {
@@ -353,6 +368,9 @@ public sealed class SerializerTests
         Assert.Equal(GameEnum.Slave, result.SupportedGame.Game);
     }
 
+    /// <summary>
+    ///     Tests that deserializing broken JSON throws a JsonException.
+    /// </summary>
     [Fact]
     public void DeserializeBrokenAddonJson_Throws()
     {
@@ -362,6 +380,9 @@ public sealed class SerializerTests
         Assert.Contains("unknown_token", ex.Message);
     }
 
+    /// <summary>
+    ///     Tests that a slot map JSON is correctly deserialized.
+    /// </summary>
     [Fact]
     public void DeserializeSlotMapJson()
     {
@@ -375,6 +396,9 @@ public sealed class SerializerTests
         Assert.Equal(2, ((MapSlotJsonModel)result.StartMap).Level);
     }
 
+    /// <summary>
+    ///     Tests that an addon JSON without a startmap is correctly deserialized.
+    /// </summary>
     [Fact]
     public void DeserializeAddonWithoutStartmap()
     {
@@ -387,6 +411,9 @@ public sealed class SerializerTests
         Assert.Null(result.StartMap);
     }
 
+    /// <summary>
+    ///     Tests that an addon JSON with INI options is correctly deserialized.
+    /// </summary>
     [Fact]
     public void DeserializeAddonWithIniOptions()
     {
@@ -400,6 +427,9 @@ public sealed class SerializerTests
         Assert.Equal(OptionalParameterTypeEnum.INI, Assert.Single(option.Parameters.Values));
     }
 
+    /// <summary>
+    ///     Tests that an addon JSON with all features is correctly deserialized.
+    /// </summary>
     [Fact]
     public void DeserializeAddonWithAllFeatures()
     {
@@ -422,6 +452,9 @@ public sealed class SerializerTests
         Assert.Contains(FeatureEnum.TileFromTexture, result.Dependencies.RequiredFeatures);
     }
 
+    /// <summary>
+    ///     Tests that an addon JSON with empty lists is correctly deserialized.
+    /// </summary>
     [Fact]
     public void DeserializeEmptyLists()
     {
@@ -432,6 +465,9 @@ public sealed class SerializerTests
         Assert.Empty(result.AdditionalDefs!);
     }
 
+    /// <summary>
+    ///     Tests that the old standalone JSON format is correctly deserialized.
+    /// </summary>
     [Fact]
     public void DeserializeStandaloneJsonOld()
     {
@@ -446,6 +482,9 @@ public sealed class SerializerTests
         Assert.Equal("amcsquad", result.Executables?[OSEnum.Linux]?[PortEnum.Stub]);
     }
 
+    /// <summary>
+    ///     Tests that the new standalone JSON format is correctly deserialized.
+    /// </summary>
     [Fact]
     public void DeserializeStandaloneJson()
     {
@@ -460,6 +499,9 @@ public sealed class SerializerTests
         Assert.Equal("eduke32", result.Executables?[OSEnum.Linux]?[PortEnum.EDuke32]);
     }
 
+    /// <summary>
+    ///     Tests that serializing then deserializing a full addon round-trips correctly.
+    /// </summary>
     [Fact]
     public void SerializeThenDeserialize_RoundTrips()
     {
@@ -487,6 +529,9 @@ public sealed class SerializerTests
         Assert.Equal(original.ReleaseDate, deserialized.ReleaseDate);
     }
 
+    /// <summary>
+    ///     Tests that serializing then deserializing a minimal addon round-trips correctly.
+    /// </summary>
     [Fact]
     public void SerializeMinimalAddon_RoundTrips()
     {
@@ -505,6 +550,9 @@ public sealed class SerializerTests
         Assert.Equal(original.SupportedGame.Game, deserialized.SupportedGame.Game);
     }
 
+    /// <summary>
+    ///     Tests that all addon type strings are correctly deserialized.
+    /// </summary>
     [Fact]
     public void DeserializeAllAddonTypes()
     {
@@ -532,6 +580,9 @@ public sealed class SerializerTests
         }
     }
 
+    /// <summary>
+    ///     Tests that all game name strings are correctly deserialized.
+    /// </summary>
     [Fact]
     public void DeserializeAllGameTypes()
     {

@@ -2,6 +2,9 @@
 
 namespace Tests.Unit.Helpers;
 
+/// <summary>
+///     Helper for creating test files and folders.
+/// </summary>
 public static class FileCreationHelper
 {
     /// <summary>

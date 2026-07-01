@@ -4,11 +4,20 @@ using Microsoft.Extensions.Logging;
 
 namespace Core.Client.Tools;
 
+/// <summary>
+///     Provides file downloading functionality with resume support and progress reporting.
+/// </summary>
 public sealed class FilesDownloader
 {
     private readonly IHttpClientFactory _httpClientFactory;
+
     private readonly ILogger<FilesDownloader> _logger;
 
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="FilesDownloader" /> class.
+    /// </summary>
+    /// <param name="httpClientFactory">The HTTP client factory.</param>
+    /// <param name="logger">Logger instance.</param>
     public FilesDownloader(
         IHttpClientFactory httpClientFactory,
         ILogger<FilesDownloader> logger
@@ -111,12 +120,12 @@ public sealed class FilesDownloader
 
 
     /// <summary>
-    ///     Continue download after network error
+    ///     Continues a failed download by issuing a ranged HTTP request.
     /// </summary>
-    /// <param name="url">Url to the file</param>
-    /// <param name="contentLength">Total content length</param>
-    /// <param name="fileStream">File stream to write to</param>
-    /// <param name="cancellationToken">Cancellation token</param>
+    /// <param name="url">The file download URL.</param>
+    /// <param name="contentLength">The total content length of the file.</param>
+    /// <param name="fileStream">The file stream to append data to.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
     private async Task ContinueDownload(
         Uri url,
         long? contentLength,

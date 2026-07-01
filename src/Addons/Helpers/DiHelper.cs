@@ -3,6 +3,9 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Addons.Helpers;
 
+/// <summary>
+///     Registers addon-related services with the dependency injection container.
+/// </summary>
 public static class DiHelper
 {
     /// <summary>

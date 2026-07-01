@@ -6,14 +6,35 @@ using Games.Games;
 
 namespace Tests.Unit.Sync;
 
+/// <summary>
+///     Tests for save file operations.
+/// </summary>
 [Collection("Sync")]
 public sealed class SaveFilesTests : IDisposable
 {
+    /// <summary>
+    ///     Test campaign instance.
+    /// </summary>
     private readonly DukeCampaign _camp;
+
+    /// <summary>
+    ///     Duke Nukem 3D game instance.
+    /// </summary>
     private readonly DukeGame _game;
+
+    /// <summary>
+    ///     Temporary game directory path.
+    /// </summary>
     private readonly string _gameDir;
+
+    /// <summary>
+    ///     List of temporary directories to clean up.
+    /// </summary>
     private readonly List<string> _tempDirs = [];
 
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="SaveFilesTests" /> class.
+    /// </summary>
     public SaveFilesTests()
     {
         _gameDir = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
@@ -54,6 +75,7 @@ public sealed class SaveFilesTests : IDisposable
         };
     }
 
+    /// <inheritdoc />
     public void Dispose()
     {
         if (Directory.Exists(_gameDir))
@@ -76,6 +98,9 @@ public sealed class SaveFilesTests : IDisposable
         _tempDirs.Add(path);
     }
 
+    /// <summary>
+    ///     Tests that moving save files to storage with no saves does not throw.
+    /// </summary>
     [Fact]
     public void Base_MoveSaveFilesToStorage_NoSaves_DoesNotThrow()
     {
@@ -83,6 +108,9 @@ public sealed class SaveFilesTests : IDisposable
         port.CallMoveSaveFilesToStorage(_game, _camp);
     }
 
+    /// <summary>
+    ///     Tests that moving save files from storage with no folder does not throw.
+    /// </summary>
     [Fact]
     public void Base_MoveSaveFilesFromStorage_NoFolder_DoesNotThrow()
     {
@@ -90,6 +118,9 @@ public sealed class SaveFilesTests : IDisposable
         port.CallMoveSaveFilesFromStorage(_game, _camp);
     }
 
+    /// <summary>
+    ///     Tests that moving save files to storage correctly moves saves.
+    /// </summary>
     [Fact]
     public void Base_MoveSaveFilesToStorage_MovesSaves()
     {
@@ -117,6 +148,9 @@ public sealed class SaveFilesTests : IDisposable
         Assert.Contains(savedFiles, f => f.EndsWith("quick.esv"));
     }
 
+    /// <summary>
+    ///     Tests that moving save files from storage restores saves.
+    /// </summary>
     [Fact]
     public void Base_MoveSaveFilesFromStorage_RestoresSaves()
     {
@@ -137,6 +171,9 @@ public sealed class SaveFilesTests : IDisposable
         Assert.Equal("save data", File.ReadAllText(saveFile));
     }
 
+    /// <summary>
+    ///     Tests that EDuke32 moving saves from storage with null FileInfo uses the install folder.
+    /// </summary>
     [Fact]
     public void EDuke32_MoveSaveFilesFromStorage_NullFileInfo_UsesInstallFolder()
     {
@@ -161,6 +198,9 @@ public sealed class SaveFilesTests : IDisposable
         Assert.False(File.Exists(saveFile), "Save should be removed from save folder");
     }
 
+    /// <summary>
+    ///     Tests that EDuke32 moving saves to storage with null FileInfo uses the install folder.
+    /// </summary>
     [Fact]
     public void EDuke32_MoveSaveFilesToStorage_NullFileInfo_UsesInstallFolder()
     {
@@ -184,6 +224,9 @@ public sealed class SaveFilesTests : IDisposable
         Assert.False(File.Exists(saveFile), "Save should be removed from install dir");
     }
 
+    /// <summary>
+    ///     Tests that EDuke32 moving saves from storage with folder FileInfo restores to the addon folder.
+    /// </summary>
     [Fact]
     public void EDuke32_MoveSaveFilesFromStorage_FolderFileInfo_RestoresToAddonFolder()
     {
@@ -231,6 +274,9 @@ public sealed class SaveFilesTests : IDisposable
         Assert.False(File.Exists(saveFile), "Save should be removed from save folder");
     }
 
+    /// <summary>
+    ///     Tests that EDuke32 moving saves to storage with folder FileInfo backs up from the addon folder.
+    /// </summary>
     [Fact]
     public void EDuke32_MoveSaveFilesToStorage_FolderFileInfo_BacksUpFromAddonFolder()
     {
@@ -277,6 +323,9 @@ public sealed class SaveFilesTests : IDisposable
         Assert.False(File.Exists(saveFile), "Save should be removed from addon folder");
     }
 
+    /// <summary>
+    ///     Tests that getting map args with null FileInfo throws an InvalidOperationException.
+    /// </summary>
     [Fact]
     public void GetMapArgs_NullFileInfo_ThrowsInvalidOperationException()
     {
@@ -311,6 +360,9 @@ public sealed class SaveFilesTests : IDisposable
         Assert.Throws<InvalidOperationException>(() => port.CallGetMapArgs(sb, camp));
     }
 
+    /// <summary>
+    ///     Tests that getting options args with a DEF option appends the AddDef parameter.
+    /// </summary>
     [Fact]
     public void GetOptionsArgs_DefOption_AppendsAddDefParam()
     {

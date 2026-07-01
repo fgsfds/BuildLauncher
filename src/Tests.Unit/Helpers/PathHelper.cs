@@ -1,5 +1,8 @@
 ﻿namespace Tests.Unit.Helpers;
 
+/// <summary>
+///     Helper for creating test file paths.
+/// </summary>
 public static class PathHelper
 {
     /// <summary>

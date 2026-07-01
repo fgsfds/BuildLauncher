@@ -7,6 +7,9 @@ using Avalonia.Xaml.Interactivity;
 
 namespace Avalonia.Desktop.Behaviors;
 
+/// <summary>
+///     Adds implicit offset animations to <see cref="ListBox" /> items when they appear.
+/// </summary>
 public class AddImplicitAnimationsBehavior : Behavior<ListBox>
 {
     /// <inheritdoc />
@@ -51,6 +54,9 @@ public class AddImplicitAnimationsBehavior : Behavior<ListBox>
         base.OnDetaching();
     }
 
+    /// <summary>
+    ///     Handles the container prepared event to attach implicit animations to new items.
+    /// </summary>
     private void OnContainerPrepared(object? sender, ContainerPreparedEventArgs e)
     {
         if (e.Container is ListBoxItem item)
@@ -59,6 +65,9 @@ public class AddImplicitAnimationsBehavior : Behavior<ListBox>
         }
     }
 
+    /// <summary>
+    ///     Handles the container clearing event to detach implicit animations from items.
+    /// </summary>
     private void OnContainerClearing(object? sender, ContainerClearingEventArgs e)
     {
         if (e.Container is ListBoxItem item)
@@ -67,6 +76,9 @@ public class AddImplicitAnimationsBehavior : Behavior<ListBox>
         }
     }
 
+    /// <summary>
+    ///     Attaches implicit animations to the specified list box item.
+    /// </summary>
     private void AttachToItem(ListBoxItem item)
     {
         if (item.Content is SeparatorItem)
@@ -87,11 +99,17 @@ public class AddImplicitAnimationsBehavior : Behavior<ListBox>
         }
     }
 
+    /// <summary>
+    ///     Detaches implicit animations from the specified list box item.
+    /// </summary>
     private void DetachFromItem(ListBoxItem item)
     {
         item.AttachedToVisualTree -= OnItemAttachedToVisualTree;
     }
 
+    /// <summary>
+    ///     Handles the visual tree attachment event to set up implicit animations.
+    /// </summary>
     private void OnItemAttachedToVisualTree(object? sender, VisualTreeAttachmentEventArgs e)
     {
         if (sender is ListBoxItem item)
@@ -100,6 +118,9 @@ public class AddImplicitAnimationsBehavior : Behavior<ListBox>
         }
     }
 
+    /// <summary>
+    ///     Sets up implicit offset animations for the specified list box item.
+    /// </summary>
     private async void SetupImplicitAnimations(ListBoxItem item)
     {
         try

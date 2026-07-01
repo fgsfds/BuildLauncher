@@ -12,10 +12,13 @@ using SharpCompress.Archives.Zip;
 namespace Ports.Ports.EDuke32;
 
 /// <summary>
-///     EDuke32 port
+///     EDuke32 port.
 /// </summary>
 public class EDuke32 : BasePort
 {
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="EDuke32" /> class.
+    /// </summary>
     public EDuke32()
     {
         CreateWTStopgapFolder();
@@ -122,7 +125,7 @@ public class EDuke32 : BasePort
 
 
     /// <summary>
-    ///     Create folder with files required for World Tour to work with EDuke32
+    ///     Creates the World Tour stopgap folder with required files if it does not exist.
     /// </summary>
     private void CreateWTStopgapFolder()
     {
@@ -222,7 +225,7 @@ public class EDuke32 : BasePort
 
 
     /// <summary>
-    ///     Get startup agrs for Duke
+    ///     Gets startup arguments for Duke Nukem 3D campaigns.
     /// </summary>
     /// <param name="sb">StringBuilder</param>
     /// <param name="game">DukeGame</param>
@@ -349,7 +352,7 @@ public class EDuke32 : BasePort
 
 
     /// <summary>
-    ///     Remove leftovers from the config
+    ///     Removes leftover entries from the config file.
     /// </summary>
     protected void FixConfig()
     {
@@ -382,7 +385,7 @@ public class EDuke32 : BasePort
     }
 
     /// <summary>
-    ///     Rename WT's ART files if custom campaign is launched
+    ///     Renames or restores Duke WT's ART files depending on the campaign.
     /// </summary>
     protected void FixWtFiles(BaseGame game, BaseAddon campaign)
     {

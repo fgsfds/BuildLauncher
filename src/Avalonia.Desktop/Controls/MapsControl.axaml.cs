@@ -13,19 +13,39 @@ using Ports.Providers;
 
 namespace Avalonia.Desktop.Controls;
 
+/// <summary>
+///     Displays and manages user-created maps for a selected game.
+/// </summary>
 public sealed partial class MapsControl : UserControl
 {
     private readonly BitmapsCache _bitmapsCache = null!;
+
+    /// <summary>
+    ///     The list of ports that support this game.
+    /// </summary>
     private readonly IReadOnlyList<BasePort> _supportedPorts = [];
+
     private readonly MapsViewModel _viewModel = null!;
 
+    /// <summary>
+    ///     The skills selection flyout.
+    /// </summary>
     private MenuFlyout? _flyout;
 
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="MapsControl" /> class.
+    /// </summary>
     public MapsControl()
     {
         InitializeComponent();
     }
 
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="MapsControl" /> class.
+    /// </summary>
+    /// <param name="viewModel">The maps view model.</param>
+    /// <param name="portsProvider">The ports provider.</param>
+    /// <param name="bitmapsCache">The bitmaps cache.</param>
     public MapsControl(
         MapsViewModel viewModel,
         PortsProvider portsProvider,
@@ -47,7 +67,7 @@ public sealed partial class MapsControl : UserControl
     }
 
     /// <summary>
-    ///     Create skill flyout menu for a game
+    ///     Creates the skills selection flyout menu.
     /// </summary>
     private void CreateSkillsFlyout()
     {
@@ -65,7 +85,7 @@ public sealed partial class MapsControl : UserControl
     }
 
     /// <summary>
-    ///     Add "Start with..." buttons to the ports button panel
+    ///     Adds port buttons to the bottom panel.
     /// </summary>
     private void AddPortsButtons()
     {
@@ -114,8 +134,10 @@ public sealed partial class MapsControl : UserControl
 
 
     /// <summary>
-    ///     Get list of skill menu items
+    ///     Gets the list of skill menu items for the specified port.
     /// </summary>
+    /// <param name="port">The optional port.</param>
+    /// <returns>A list of menu items.</returns>
     private List<MenuItem> GetSkillMenusItems(BasePort? port = null)
     {
         ArgumentNullException.ThrowIfNull(_viewModel.Game.Skills);
@@ -145,9 +167,10 @@ public sealed partial class MapsControl : UserControl
     }
 
     /// <summary>
-    ///     Get port that should be run
+    ///     Gets the port from the flyout target or the provided value.
     /// </summary>
-    /// <param name="port">Port</param>
+    /// <param name="port">The optional port fallback.</param>
+    /// <returns>The resolved port.</returns>
     private BasePort GetPort(BasePort? port)
     {
         if (_flyout?.Target is { } target)
@@ -163,15 +186,16 @@ public sealed partial class MapsControl : UserControl
     }
 
     /// <summary>
-    ///     Is skill flyout menu availably
+    ///     Determines whether the skills flyout is available for the specified port.
     /// </summary>
-    /// <param name="port">Port</param>
+    /// <param name="port">The port to check.</param>
+    /// <returns>True if the skills flyout is available; otherwise false.</returns>
     private bool IsSkillFlyoutAvailable(BasePort port) =>
         _flyout is not null && port.IsSkillSelectionAvailable && _viewModel.Game.AreSkillsAvailble;
 
 
     /// <summary>
-    ///     Update CanExecute for ports buttons and context menu buttons when selected campaign changed
+    ///     Handles the selection changed event on the maps list.
     /// </summary>
     private void OnMapsListSelectionChanged(object? sender, SelectionChangedEventArgs e)
     {
@@ -185,6 +209,9 @@ public sealed partial class MapsControl : UserControl
         }
     }
 
+    /// <summary>
+    ///     Handles the port button click event.
+    /// </summary>
     private void OnPortButtonClicked(object? sender, RoutedEventArgs e)
     {
         if (sender is not Button button)
@@ -206,6 +233,9 @@ public sealed partial class MapsControl : UserControl
         }
     }
 
+    /// <summary>
+    ///     Handles the context menu opening event.
+    /// </summary>
     private void ContextMenuOpened(object? sender, RoutedEventArgs e)
     {
         if (MapsList.ContextMenu is not null)
@@ -292,6 +322,9 @@ public sealed partial class MapsControl : UserControl
         _ = MapsList.ContextMenu.Items.Add(deleteButton);
     }
 
+    /// <summary>
+    ///     Handles the context menu closing event.
+    /// </summary>
     private void ContextMenuClosed(object? sender, RoutedEventArgs e)
     {
         if (MapsList.ContextMenu is not null)
