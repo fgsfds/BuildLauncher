@@ -4,7 +4,6 @@ using Addons.Helpers;
 using Core.All;
 using Core.All.Enums;
 using Core.All.Enums.Addons;
-using Core.All.Helpers;
 using Core.Client.Helpers;
 using Core.Client.Interfaces;
 using Games.Games;
@@ -18,6 +17,14 @@ namespace Addons.Providers;
 /// </summary>
 public sealed class InstalledAddonsProvider : IDisposable
 {
+    /// <summary>
+    ///     Represents the method that handles addon change events.
+    /// </summary>
+    /// <param name="gameEnum">The game that was changed.</param>
+    /// <param name="addonType">Optional addon type that was changed.</param>
+    public delegate void AddonChanged(GameEnum gameEnum, AddonTypeEnum? addonType);
+
+
     /// <summary>
     ///     Handles addon activation and deactivation logic.
     /// </summary>

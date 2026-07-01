@@ -211,8 +211,8 @@ public sealed class LocalFilesProvider
             await _cacheUpdateSemaphore.WaitAsync();
 
             var existingFiles = _cachedDataDict.Where(x =>
-                                                          x.FileInfo.PathToFile.Equals(oldPathToFile, StringComparison.InvariantCultureIgnoreCase) ||
-                                                          x.FileInfo.PathToFolder.Equals(oldPathToFile, StringComparison.InvariantCultureIgnoreCase))
+                                                          x.FileInfo.PathToFile.Equals(oldPathToFile, StringComparison.OrdinalIgnoreCase) ||
+                                                          x.FileInfo.PathToFolder.Equals(oldPathToFile, StringComparison.OrdinalIgnoreCase))
                                                .ToList();
 
             var updatedPaths = new List<ParsedAddonFile>(existingFiles.Count);
@@ -317,8 +317,8 @@ public sealed class LocalFilesProvider
 
             var toRemove = _cachedDataDict
                           .Where(x =>
-                                     x.FileInfo.PathToFile.Equals(pathToFile, StringComparison.InvariantCultureIgnoreCase) ||
-                                     x.FileInfo.PathToFolder.Equals(pathToFile, StringComparison.InvariantCultureIgnoreCase))
+                                     x.FileInfo.PathToFile.Equals(pathToFile, StringComparison.OrdinalIgnoreCase) ||
+                                     x.FileInfo.PathToFolder.Equals(pathToFile, StringComparison.OrdinalIgnoreCase))
                           .ToList();
 
             if (toRemove.Count == 0)
@@ -497,7 +497,7 @@ public sealed class LocalFilesProvider
 
         var manifests = archive.Entries.Where(x =>
                                                   x.Key?.Contains(Path.GetFileNameWithoutExtension(CommonConstants.AddonManifestName), StringComparison.OrdinalIgnoreCase) == true
-                                               && x.Key.EndsWith(Path.GetExtension(CommonConstants.AddonManifestName))
+                                               && x.Key.EndsWith(Path.GetExtension(CommonConstants.AddonManifestName), StringComparison.OrdinalIgnoreCase)
             );
 
         var grpInfos = archive.Entries.Where(x =>
