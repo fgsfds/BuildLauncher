@@ -413,7 +413,7 @@ public sealed class Raze : BasePort
     {
         var contents = File.ReadAllLines(config);
 
-        StringBuilder sb = new(contents.Length);
+        StringBuilder sb = new((int)(contents.Sum(x => x.Length) * 1.2));
 
         for (var i = 0; i < contents.Length; i++)
         {
