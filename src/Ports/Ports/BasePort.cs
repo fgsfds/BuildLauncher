@@ -232,7 +232,7 @@ public abstract class BasePort : IInstallable
 
         GetStartCampaignArgs(sb, game, addon);
 
-        if (enabledOptions.Any())
+        if (addon.Options is not null && enabledOptions.Any())
         {
             GetOptionsArgs(sb, game, addon, enabledOptions);
         }
