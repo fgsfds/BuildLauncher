@@ -77,8 +77,10 @@ public sealed class S3FilesUploader : IFilesUploader
 
         try
         {
-            using var fileStream = File.OpenRead(pathToLocalFile);
-            _ = Task.Run(() => TrackProgress(fileStream, progress), cancellationToken);
+            CancellationTokenSource cts = new();
+
+            await using var fileStream = File.OpenRead(pathToLocalFile);
+            _ = Task.Run(() => TrackProgress(fileStream, progress, cts.Token), cancellationToken);
 
             var sha = await SHA256.HashDataAsync(fileStream, cancellationToken).ConfigureAwait(false);
             var shaStr = Convert.ToHexString(sha);
@@ -86,6 +88,8 @@ public sealed class S3FilesUploader : IFilesUploader
 
             using var transferUtility = _s3Factory.CreateTransferUtility();
             _ = await transferUtility.UploadAsync(fileStream, fileKey, shaStr, cancellationToken).ConfigureAwait(false);
+
+            await cts.CancelAsync();
 
             var metadataProvider = _s3Factory.CreateMetadataProvider();
             var fileMetadata = await metadataProvider.GetMetadata(fileKey).ConfigureAwait(false);
@@ -122,13 +126,27 @@ public sealed class S3FilesUploader : IFilesUploader
     /// </summary>
     /// <param name="streamToTrack">The file stream to track.</param>
     /// <param name="progress">Progress indicator to update.</param>
-    private static void TrackProgress(FileStream streamToTrack, StrongBox<int> progress)
+    /// <param name="cancellationToken">Cancellation token,</param>
+    private static void TrackProgress(
+        FileStream streamToTrack,
+        StrongBox<int> progress,
+        CancellationToken cancellationToken
+        )
     {
-        while (streamToTrack.CanSeek)
+        if (!streamToTrack.CanSeek)
+        {
+            return;
+        }
+
+        while (!cancellationToken.IsCancellationRequested)
         {
             var pos = streamToTrack.Position / (float)streamToTrack.Length * 100;
             progress.Value = (int)pos;
-            Thread.Sleep(50);
+
+            if (cancellationToken.WaitHandle.WaitOne(50))
+            {
+                break;
+            }
         }
     }
 }
