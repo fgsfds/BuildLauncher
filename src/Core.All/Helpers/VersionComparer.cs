@@ -14,7 +14,7 @@ public static class VersionComparer
 {
     public static bool Compare(string? v1, string? v2)
     {
-        if (v1 is null || v2 is null)
+        if (string.IsNullOrWhiteSpace(v1) || string.IsNullOrWhiteSpace(v2))
         {
             return true;
         }
