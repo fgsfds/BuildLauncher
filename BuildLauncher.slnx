@@ -1,25 +1,38 @@
 <Solution>
-  <Folder Name="/.start/">
-    <Project Path="src/Avalonia.Desktop/Avalonia.Desktop.csproj" />
-  </Folder>
-  <Folder Name="/Core/">
-    <Project Path="src/Core.All/Core.All.csproj" />
-    <Project Path="src/Core.Client/Core.Client.csproj" />
-  </Folder>
-  <Folder Name="/Database/">
-    <Project Path="src/Database.Client/Database.Client.csproj" />
-  </Folder>
-  <Folder Name="/Systems/">
-    <Project Path="src/Addons/Addons.csproj" />
-    <Project Path="src/Games/Games.csproj" />
-    <Project Path="src/Ports/Ports.csproj" />
-    <Project Path="src/Tools/Tools.csproj" />
-  </Folder>
-  <Folder Name="/Tests/">
-    <Project Path="src/Tests.Database/Tests.Database.csproj" />
-    <Project Path="src/Tests.External/Tests.External.csproj" />
-    <Project Path="src/Tests.Unit/Tests.Unit.csproj" />
-  </Folder>
-  <Project Path="src/Benchmarks/Benchmarks.csproj" Id="8645d9f4-dce1-455b-b334-d988acd75e72" />
-  <Project Path="src/S3/S3.csproj" />
+    <Folder Name="/.files/">
+        <File Path=".gitignore"/>
+        <File Path="Directory.Build.props"/>
+        <File Path="Directory.Packages.props"/>
+        <File Path="LICENSE.txt"/>
+        <File Path="publish.ps1"/>
+        <File Path="README.md"/>
+    </Folder>
+    <Folder Name="/.files/GitHub/">
+        <File Path=".github/workflows/addons-db-tests.yml"/>
+        <File Path=".github/workflows/build-and-test.yml"/>
+        <File Path=".github/workflows/release.yml"/>
+    </Folder>
+    <Folder Name="/.start/">
+        <Project Path="src/Avalonia.Desktop/Avalonia.Desktop.csproj"/>
+    </Folder>
+    <Folder Name="/Core/">
+        <Project Path="src/Core.All/Core.All.csproj"/>
+        <Project Path="src/Core.Client/Core.Client.csproj"/>
+    </Folder>
+    <Folder Name="/Database/">
+        <Project Path="src/Database.Client/Database.Client.csproj"/>
+    </Folder>
+    <Folder Name="/Systems/">
+        <Project Path="src/Addons/Addons.csproj"/>
+        <Project Path="src/Games/Games.csproj"/>
+        <Project Path="src/Ports/Ports.csproj"/>
+        <Project Path="src/Tools/Tools.csproj"/>
+    </Folder>
+    <Folder Name="/Tests/">
+        <Project Path="src/Tests.Database/Tests.Database.csproj"/>
+        <Project Path="src/Tests.External/Tests.External.csproj"/>
+        <Project Path="src/Tests.Unit/Tests.Unit.csproj"/>
+    </Folder>
+    <Project Path="src/Benchmarks/Benchmarks.csproj" Id="8645d9f4-dce1-455b-b334-d988acd75e72"/>
+    <Project Path="src/S3/S3.csproj"/>
 </Solution>
