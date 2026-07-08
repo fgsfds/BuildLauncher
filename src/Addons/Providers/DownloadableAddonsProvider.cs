@@ -17,23 +17,15 @@ namespace Addons.Providers;
 /// </summary>
 public sealed class DownloadableAddonsProvider
 {
-    private readonly BaseGame _game;
+    private static readonly SemaphoreSlim _semaphore = new(1);
+    private readonly IApiInterface _apiInterface;
     private readonly ArchiveTools _archiveTools;
     private readonly FilesDownloader _filesDownloader;
-    private readonly IApiInterface _apiInterface;
+    private readonly BaseGame _game;
     private readonly InstalledAddonsProvider _installedAddonsProvider;
     private readonly ILogger<DownloadableAddonsProvider> _logger;
 
     private Dictionary<AddonTypeEnum, Dictionary<AddonId, DownloadableAddonJsonModel>>? _cache;
-
-    private static readonly SemaphoreSlim _semaphore = new(1);
-
-    public event AddonChanged? AddonsChangedEvent;
-
-    /// <summary>
-    /// Download progress
-    /// </summary>
-    public Progress<float> Progress { get; } = new();
 
 
     [Obsolete($"Don't create directly. Use {nameof(DownloadableAddonsProviderFactory)}.")]
@@ -54,6 +46,13 @@ public sealed class DownloadableAddonsProvider
 
         _installedAddonsProvider = installedAddonsProviderFactory.Get(_game);
     }
+
+    /// <summary>
+    ///     Download progress
+    /// </summary>
+    public Progress<float> Progress { get; } = new();
+
+    public event AddonChanged? AddonsChangedEvent;
 
     /// <summary>
     /// Create downloadable addons cache
@@ -85,9 +84,12 @@ public sealed class DownloadableAddonsProvider
 
             _cache = [];
 
-            addons = [.. addons.Where(a => !a.IsDisabled)
-            .OrderBy(a => a.Title)
-            .ThenBy(a => a.Version)];
+            addons =
+            [
+                .. addons.Where(a => !a.IsDisabled)
+                         .OrderBy(a => a.Title)
+                         .ThenBy(a => a.Version)
+            ];
 
             foreach (var addon in addons)
             {
@@ -100,6 +102,7 @@ public sealed class DownloadableAddonsProvider
         catch (Exception ex)
         {
             _logger.LogCritical(ex, $"=== Error while creating downloadable cache for {_game.GameEnum} ===");
+
             return false;
         }
         finally
@@ -130,15 +133,16 @@ public sealed class DownloadableAddonsProvider
         foreach (var downloadableAddon in addonTypeCache)
         {
             var existingAddons = installedAddons
-                .Where(x => x.Key.Id.Equals(downloadableAddon.Key.Id, StringComparison.OrdinalIgnoreCase))
-                .Select(x => x.Key)
-                .ToList();
+                                .Where(x => x.Key.Id.Equals(downloadableAddon.Key.Id, StringComparison.OrdinalIgnoreCase))
+                                .Select(x => x.Key)
+                                .ToList();
 
             downloadableAddon.Value.IsInstalled = true;
 
             if (existingAddons.Count == 0)
             {
                 downloadableAddon.Value.IsInstalled = false;
+
                 continue;
             }
 
@@ -153,11 +157,12 @@ public sealed class DownloadableAddonsProvider
             {
                 foreach (var existingVersion in existingAddons.Select(static x => x.Version).Where(static x => x is not null))
                 {
-                    downloadableAddon.Value.IsUpdateAvailable = true;
+                    downloadableAddon.Value.IsUpdateAvailable = false;
 
-                    if (VersionComparer.Compare(downloadableAddon.Value.Version, existingVersion, ComparisonOperatorEnum.LessThan))
+                    if (VersionComparer.Compare(downloadableAddon.Value.Version, existingVersion, ComparisonOperatorEnum.GreaterThan))
                     {
-                        downloadableAddon.Value.IsUpdateAvailable = false;
+                        downloadableAddon.Value.IsUpdateAvailable = true;
+
                         break;
                     }
                 }
@@ -210,6 +215,7 @@ public sealed class DownloadableAddonsProvider
             if (!isDownloaded)
             {
                 _logger.LogError($"Error while downloading {addon.Title}.");
+
                 return false;
             }
 
@@ -223,6 +229,7 @@ public sealed class DownloadableAddonsProvider
                 }
 
                 _logger.LogError($"File hash for {addon.Title} doesn't match.");
+
                 return false;
             }
 
