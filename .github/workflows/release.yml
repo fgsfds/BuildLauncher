@@ -15,19 +15,19 @@ jobs:
   build-windows:
     name: Build Windows
     runs-on: windows-latest
-    outputs:
-      version_nodots: ${{ steps.get_version.outputs.version_nodots }}
-      version_dotted: ${{ steps.get_version.outputs.version_dotted }}
     if: >
       github.event_name == 'workflow_dispatch' || 
       (github.event.workflow_run.conclusion == 'success' && contains(github.event.workflow_run.head_commit.message, '[release]'))
+    outputs:
+      version_nodots: ${{ steps.get_version.outputs.version_nodots }}
+      version_dotted: ${{ steps.get_version.outputs.version_dotted }}
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Setup .NET
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v5
         with:
           dotnet-version: 10.0.x
 
@@ -49,12 +49,12 @@ jobs:
 
       - name: Upload unsigned Windows artifact
         id: upload-unsigned-artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with: 
           path: publish/BuildLauncher.exe
 
       - name: Signing
-        uses: signpath/github-action-submit-signing-request@v1
+        uses: signpath/github-action-submit-signing-request@v2
         with:
           api-token: '${{ secrets.SIGNPATH_API_TOKEN }}'
           organization-id: '645943cb-48f7-4758-a33d-7aad2a18e1a9'
@@ -76,7 +76,7 @@ jobs:
           Write-Host "Created $dest"
 
       - name: Upload signed Windows artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: buildlauncher-win
           path: publish/signed/buildlauncher_${{ steps.get_version.outputs.version_nodots }}_win-x64.zip
@@ -88,7 +88,7 @@ jobs:
       - build-windows
     steps:
       - name: Download Windows artifact
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: buildlauncher-win
           path: publish/signed
