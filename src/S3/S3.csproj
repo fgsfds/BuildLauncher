@@ -5,18 +5,18 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="AWSSDK.S3" />
-        <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" />
+        <PackageReference Include="AWSSDK.S3"/>
+        <PackageReference Include="Microsoft.Extensions.Logging.Abstractions"/>
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Core.Client\Core.Client.csproj" />
+        <ProjectReference Include="..\Core.Client\Core.Client.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
-        <InternalsVisibleTo Include="Benchmarks" />
-        <InternalsVisibleTo Include="Tests.Unit" />
-        <InternalsVisibleTo Include="Tests.Database" />
+        <InternalsVisibleTo Include="Benchmarks"/>
+        <InternalsVisibleTo Include="Tests.Unit"/>
+        <InternalsVisibleTo Include="Tests.Database"/>
     </ItemGroup>
 
 </Project>

@@ -1,32 +1,32 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <AssemblyName>BuildLauncher.$(MSBuildProjectName)</AssemblyName>
-  </PropertyGroup>
+    <PropertyGroup>
+        <AssemblyName>BuildLauncher.$(MSBuildProjectName)</AssemblyName>
+    </PropertyGroup>
 
-  <ItemGroup>
-    <EmbeddedResource Include="Assets\BuildGDX.png" />
-    <EmbeddedResource Include="Assets\DosBox.png" />
-    <EmbeddedResource Include="Assets\EDuke32.png" />
-    <EmbeddedResource Include="Assets\Fury.png" />
-    <EmbeddedResource Include="Assets\NotBlood.png" />
-    <EmbeddedResource Include="Assets\PCExhumed.png" />
-    <EmbeddedResource Include="Assets\Raze.png" />
-    <EmbeddedResource Include="Assets\NBlood.png" />
-    <EmbeddedResource Include="Assets\RedNukem.png" />
-    <EmbeddedResource Include="Assets\VoidSW.png" />
-    <EmbeddedResource Include="Assets\WTStopgap.zip" />
-    <EmbeddedResource Include="Assets\ZHRecomp.png" />
-  </ItemGroup>
+    <ItemGroup>
+        <EmbeddedResource Include="Assets\BuildGDX.png"/>
+        <EmbeddedResource Include="Assets\DosBox.png"/>
+        <EmbeddedResource Include="Assets\EDuke32.png"/>
+        <EmbeddedResource Include="Assets\Fury.png"/>
+        <EmbeddedResource Include="Assets\NotBlood.png"/>
+        <EmbeddedResource Include="Assets\PCExhumed.png"/>
+        <EmbeddedResource Include="Assets\Raze.png"/>
+        <EmbeddedResource Include="Assets\NBlood.png"/>
+        <EmbeddedResource Include="Assets\RedNukem.png"/>
+        <EmbeddedResource Include="Assets\VoidSW.png"/>
+        <EmbeddedResource Include="Assets\WTStopgap.zip"/>
+        <EmbeddedResource Include="Assets\ZHRecomp.png"/>
+    </ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="IDisposableAnalyzers" PrivateAssets="all" />
-  </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="IDisposableAnalyzers" PrivateAssets="all"/>
+    </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Addons\Addons.csproj" />
-    <ProjectReference Include="..\Core.All\Core.All.csproj" />
-    <ProjectReference Include="..\Games\Games.csproj" />
-  </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\Addons\Addons.csproj"/>
+        <ProjectReference Include="..\Core.All\Core.All.csproj"/>
+        <ProjectReference Include="..\Games\Games.csproj"/>
+    </ItemGroup>
 
 </Project>
