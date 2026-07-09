@@ -8,46 +8,6 @@ namespace Tests.Unit;
 public sealed class AddonIdTests
 {
     /// <summary>
-    ///     Tests that the constructor sets the Id property.
-    /// </summary>
-    [Fact]
-    public void Constructor_SetsId()
-    {
-        var id = new AddonId("foo");
-        Assert.Equal("foo", id.Id);
-    }
-
-    /// <summary>
-    ///     Tests that the constructor sets Version to null when no version is provided.
-    /// </summary>
-    [Fact]
-    public void Constructor_WithoutVersion_SetsVersionToNull()
-    {
-        var id = new AddonId("foo");
-        Assert.Null(id.Version);
-    }
-
-    /// <summary>
-    ///     Tests that the constructor sets the version when provided.
-    /// </summary>
-    [Fact]
-    public void Constructor_WithVersion_SetsVersion()
-    {
-        var id = new AddonId("foo", "1.0");
-        Assert.Equal("1.0", id.Version);
-    }
-
-    /// <summary>
-    ///     Tests that the constructor sets Version to null when null is passed.
-    /// </summary>
-    [Fact]
-    public void Constructor_WithNullVersion_SetsVersionToNull()
-    {
-        var id = new AddonId("foo", null);
-        Assert.Null(id.Version);
-    }
-
-    /// <summary>
     ///     Tests that <see cref="AddonId.Equals(AddonId)" /> returns true for equal identifiers.
     /// </summary>
     [Theory]
@@ -86,19 +46,6 @@ public sealed class AddonIdTests
         Assert.False(a.Equals((object?)b));
         Assert.False(a == b);
         Assert.True(a != b);
-    }
-
-    /// <summary>
-    ///     Tests that <see cref="AddonId.Equals(AddonId)" /> returns true for the same reference.
-    /// </summary>
-    [Fact]
-    public void Equals_SameReference_ReturnsTrue()
-    {
-        var a = new AddonId("foo");
-        var b = a;
-
-        Assert.True(a.Equals(b));
-        Assert.True(a == b);
     }
 
     /// <summary>

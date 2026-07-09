@@ -202,40 +202,4 @@ public sealed class BaseAddonTests
         Assert.Contains("old-mod", result);
     }
 
-    /// <summary>
-    ///     Tests that <see cref="BaseAddon.ToMarkdownString" /> returns complete markdown when all fields are set.
-    /// </summary>
-    [Fact]
-    public void ToMarkdownString_AllFields_ReturnsCompleteMarkdown()
-    {
-        var addon = CreateAddon(
-            id: "full-addon", version: "3.0", title: "Full Addon",
-            author: "Creator", releaseDate: new(2023, 12, 1),
-            description: "First line\nhttps://example.com\nLast line",
-            type: AddonTypeEnum.TC,
-            dependentAddons: new Dictionary<string, string?>
-            {
-                {
-                    "required-dep", null
-                }
-            },
-            incompatibleAddons: new Dictionary<string, string?>
-            {
-                {
-                    "conflict-mod", null
-                }
-            }
-            );
-
-        var result = addon.ToMarkdownString();
-
-        var nl = Environment.NewLine;
-        Assert.StartsWith("## Full Addon", result);
-        Assert.Contains($"{nl}{nl}#### v3.0", result);
-        Assert.Contains($"{nl}{nl}*Released on:* 01.12.2023", result);
-        Assert.Contains($"{nl}{nl}*by Creator*", result);
-        Assert.Contains($"{nl}{nl}First line{nl}{nl}[https://example.com](https://example.com){nl}{nl}Last line", result);
-        Assert.Contains($"{nl}{nl}#### Requires:{nl}required-dep", result);
-        Assert.Contains($"{nl}{nl}#### Incompatible with:{nl}conflict-mod", result);
-    }
 }

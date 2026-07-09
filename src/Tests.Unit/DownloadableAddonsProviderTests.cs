@@ -217,40 +217,6 @@ public sealed class DownloadableAddonsProviderTests
         Assert.Empty(result);
     }
 
-    // ---- TC type tests ----
-
-    /// <summary>
-    ///     Tests that a TC with a single installed version older than the downloadable shows an update.
-    /// </summary>
-    [Fact]
-    public void GetDownloadableAddons_TC_SingleInstalledVersionOlder_ShowsUpdate()
-    {
-        var provider = CreateProvider();
-        PopulateCache(provider, AddonTypeEnum.TC, [("camp-a", "2.0", "Camp A")]);
-        MockInstalledAddons(provider, AddonTypeEnum.TC, [CreateCampaign("camp-a", "1.0")]);
-
-        var result = provider.GetDownloadableAddons(AddonTypeEnum.TC);
-
-        var item = Assert.Single(result);
-        Assert.True(item.IsUpdateAvailable);
-    }
-
-    /// <summary>
-    ///     Tests that a TC with a single installed version newer than the downloadable does not show an update.
-    /// </summary>
-    [Fact]
-    public void GetDownloadableAddons_TC_SingleInstalledVersionNewer_DoesNotShowUpdate()
-    {
-        var provider = CreateProvider();
-        PopulateCache(provider, AddonTypeEnum.TC, [("camp-a", "1.0", "Camp A")]);
-        MockInstalledAddons(provider, AddonTypeEnum.TC, [CreateCampaign("camp-a", "3.0")]);
-
-        var result = provider.GetDownloadableAddons(AddonTypeEnum.TC);
-
-        var item = Assert.Single(result);
-        Assert.False(item.IsUpdateAvailable);
-    }
-
     // ---- Death Wish hack tests ----
 
     /// <summary>

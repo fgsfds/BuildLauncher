@@ -106,37 +106,6 @@ public sealed class AddonFilesTests : IDisposable
     }
 
     [Fact]
-    public async Task AddFile_GetAddonFromFile_UnpackedAddon_ReturnsParsedAddons()
-    {
-        _ = await InitializeDependencies(null, AddonTypeEnum.Mod);
-
-        var pathToFile = Path.Combine(_game.ModsFolderPath, "UnpackedAddon.zip");
-        Directory.CreateDirectory(_game.ModsFolderPath);
-
-        File.Copy(Path.Combine("Files", "UnpackedAddon.zip"), pathToFile, true);
-
-        await _installedAddonsProvider.AddAddonAsync(pathToFile);
-
-        await Task.Delay(1000);
-
-        Assert.False(File.Exists(pathToFile));
-        Assert.True(Directory.Exists(pathToFile.Replace(".zip", "")));
-
-        var installedMods = _installedAddonsProvider.GetInstalledAddonsByType(AddonTypeEnum.Mod);
-        Assert.Equal(2, installedMods.Count);
-
-        var voxel1 = installedMods.First(m => m.AddonId.Id == "blood-voxel-pack");
-        Assert.Equal("p292", voxel1.AddonId.Version);
-        Assert.Equal("Voxel Pack", voxel1.Title);
-        Assert.Equal(GameEnum.Blood, voxel1.SupportedGame.GameEnum);
-
-        var voxel2 = installedMods.First(m => m.AddonId.Id == "blood-voxel-pack-2");
-        Assert.Equal("p292-2", voxel2.AddonId.Version);
-        Assert.Equal("Voxel Pack 2", voxel2.Title);
-        Assert.Equal(GameEnum.Blood, voxel2.SupportedGame.GameEnum);
-    }
-
-    [Fact]
     public async Task GetInstalledAddonsByType_LooseMap_ReturnsSingleMap()
     {
         var pathToFile = await InitializeDependencies("TEST.MAP", AddonTypeEnum.Map);

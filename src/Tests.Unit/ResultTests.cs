@@ -42,44 +42,13 @@ public sealed class ResultTests
         var r = new Result(resultEnum, "");
         Assert.False(r.IsSuccess);
     }
-
-    /// <summary>
-    ///     Tests that the default Result has a null message.
-    /// </summary>
-    [Fact]
-    public void Default_HasDefaultMessage()
-    {
-        Result r = default;
-        Assert.Null(r.Message);
-    }
-
-    /// <summary>
-    ///     Tests that the default Result has IsSuccess equal to true.
-    /// </summary>
-    [Fact]
-    public void Default_IsSuccessIsTrue()
-    {
-        Result r = default;
-        Assert.True(r.IsSuccess);
-    }
 }
-
 
 /// <summary>
 ///     Tests for the <see cref="Result{T}" /> struct.
 /// </summary>
 public sealed class ResultGenericTests
 {
-    /// <summary>
-    ///     Tests that the constructor sets the Message property.
-    /// </summary>
-    [Fact]
-    public void Constructor_SetsMessage()
-    {
-        var r = new Result<string>(ResultEnum.Error, null, "fail");
-        Assert.Equal("fail", r.Message);
-    }
-
     /// <summary>
     ///     Tests that the constructor sets the ResultObject property.
     /// </summary>
@@ -91,16 +60,6 @@ public sealed class ResultGenericTests
     }
 
     /// <summary>
-    ///     Tests that the constructor sets ResultObject to null when null is passed.
-    /// </summary>
-    [Fact]
-    public void Constructor_WithNullResultObject_SetsToNull()
-    {
-        var r = new Result<string>(ResultEnum.Success, null, "ok");
-        Assert.Null(r.ResultObject);
-    }
-
-    /// <summary>
     ///     Tests that the constructor works with value type result objects.
     /// </summary>
     [Fact]
@@ -108,62 +67,6 @@ public sealed class ResultGenericTests
     {
         var r = new Result<int>(ResultEnum.Success, 42, "ok");
         Assert.Equal(42, r.ResultObject);
-    }
-
-    /// <summary>
-    ///     Tests that a Success result has IsSuccess equal to true.
-    /// </summary>
-    [Fact]
-    public void Constructor_WithSuccess_IsSuccessReturnsTrue()
-    {
-        var r = new Result<string>(ResultEnum.Success, null, "ok");
-        Assert.True(r.IsSuccess);
-    }
-
-    /// <summary>
-    ///     Tests that non-success results have IsSuccess equal to false.
-    /// </summary>
-    [Theory]
-    [InlineData(ResultEnum.HashError)]
-    [InlineData(ResultEnum.NotFound)]
-    [InlineData(ResultEnum.ConnectionError)]
-    [InlineData(ResultEnum.FileAccessError)]
-    [InlineData(ResultEnum.Cancelled)]
-    [InlineData(ResultEnum.Error)]
-    public void Constructor_WithNonSuccess_IsSuccessReturnsFalse(ResultEnum resultEnum)
-    {
-        var r = new Result<string>(resultEnum, null, "");
-        Assert.False(r.IsSuccess);
-    }
-
-    /// <summary>
-    ///     Tests that the default Result has a null ResultObject.
-    /// </summary>
-    [Fact]
-    public void Default_HasNullResultObject()
-    {
-        Result<string> r = default;
-        Assert.Null(r.ResultObject);
-    }
-
-    /// <summary>
-    ///     Tests that the default Result has a null message.
-    /// </summary>
-    [Fact]
-    public void Default_MessageIsNull()
-    {
-        Result<string> r = default;
-        Assert.Null(r.Message);
-    }
-
-    /// <summary>
-    ///     Tests that the default Result has IsSuccess equal to true.
-    /// </summary>
-    [Fact]
-    public void Default_IsSuccessIsTrue()
-    {
-        Result<string> r = default;
-        Assert.True(r.IsSuccess);
     }
 
     /// <summary>

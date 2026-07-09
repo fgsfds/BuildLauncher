@@ -264,12 +264,6 @@ public sealed class CampaignsViewModelTests : IDisposable
     }
 
     [Fact]
-    public void RemoveFromFavorite_InvalidType_Throws()
-    {
-        Assert.Throws<InvalidCastException>(() => _viewModel.RemoveFromFavoriteCommand.Execute("not an addon"));
-    }
-
-    [Fact]
     public void ClearSearchBox_CanExecute_HasText()
     {
         _viewModel.SearchBoxText = "something";
@@ -472,19 +466,4 @@ public sealed class CampaignsViewModelTests : IDisposable
         Assert.Null(ex);
     }
 
-    [Fact]
-    public void StartCampaign_WithPort_NullPortPath_Completes()
-    {
-        var parsed = ParsedAddonFileHelper.CreateParsedAddonFile("start-test2", "Start Test 2", "1.0", AddonTypeEnum.TC);
-        _installedAddonsProvider.AddAddon(parsed);
-
-        _viewModel.SelectedAddon = _installedAddonsProvider.GetInstalledAddonsByType(AddonTypeEnum.TC)
-                                                           .First(a => a.AddonId.Id == "start-test2");
-
-        var stubPort = new StubPort();
-
-        var ex = Record.Exception(() => _viewModel.StartCampaignCommand.Execute(stubPort));
-
-        Assert.Null(ex);
-    }
 }

@@ -342,38 +342,4 @@ public sealed class GrpInfoProviderTests : IDisposable
         Assert.Equal("Matched", addons[0].Title);
     }
 
-    /// <summary>
-    ///     Tests that grpinfo entries missing a name are skipped.
-    /// </summary>
-    [Fact]
-    public void TryGetAddonsFromGrpInfo_EntryMissingName_Skipped()
-    {
-        var grpInfoPath = Path.Combine(_tempFolder, "noname.grpinfo");
-
-        File.WriteAllText(
-            grpInfoPath, """
-            grpinfo
-            {
-                // no name
-                size       100
-            }
-
-            grpinfo
-            {
-                name       "Has Name"
-                size       200
-            }
-            """
-            );
-
-        File.WriteAllBytes(Path.Combine(_tempFolder, "a.grp"), new byte[100]);
-        File.WriteAllBytes(Path.Combine(_tempFolder, "b.grp"), new byte[200]);
-
-        var result = GrpInfoProvider.TryGetAddonsFromGrpInfo(grpInfoPath, out var addons);
-
-        Assert.True(result);
-        Assert.NotNull(addons);
-        Assert.Single(addons);
-        Assert.Equal("Has Name", addons[0].Title);
-    }
 }

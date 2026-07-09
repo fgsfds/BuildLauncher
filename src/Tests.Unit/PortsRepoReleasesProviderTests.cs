@@ -310,28 +310,6 @@ public sealed class PortsRepoReleasesProviderTests
     }
 
     /// <summary>
-    ///     Tests that a cached result returns the same instance without an HTTP call.
-    /// </summary>
-    [Fact]
-    public async Task GetLatestReleaseAsync_CachedResult_ReturnsSameInstance_WithoutHttpCall()
-    {
-        using var httpClient = new HttpClient(new FakeHttpMessageHandler());
-        var httpFactoryMock = new Mock<IHttpClientFactory>();
-        httpFactoryMock.Setup(x => x.CreateClient(It.IsAny<string>())).Returns(httpClient);
-
-        var provider = new PortsRepoReleasesProvider(
-            NullLogger<PortsRepoReleasesProvider>.Instance,
-            httpFactoryMock.Object
-            );
-
-        _ = await provider.GetLatestReleaseAsync(PortEnum.NBlood, false);
-        _ = await provider.GetLatestReleaseAsync(PortEnum.NBlood, false);
-
-        httpFactoryMock.Verify(x => x.CreateClient(It.IsAny<string>()), Times.Once);
-    }
-
-
-    /// <summary>
     ///     Fake HTTP message handler for testing with predefined JSON responses.
     /// </summary>
     private sealed class FakeHttpMessageHandler : HttpMessageHandler

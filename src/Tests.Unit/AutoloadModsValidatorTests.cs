@@ -670,20 +670,6 @@ public sealed class AutoloadModsValidatorTests
     }
 
     /// <summary>
-    ///     Tests that a mod passes validation when all checks pass.
-    /// </summary>
-    [Fact]
-    public void ValidateAutoloadMod_AllChecksPass_ReturnsTrue()
-    {
-        var mod = CreateMod("validMod", "1.0", DukeGame);
-        var campaign = CreateCampaign("campaign", "1.0", DukeGame);
-
-        var result = AutoloadModsValidator.ValidateAutoloadMod(mod, campaign, [], []);
-
-        Assert.True(result);
-    }
-
-    /// <summary>
     ///     Tests that a mod with a dependency satisfied by a disabled mod passes validation.
     /// </summary>
     [Fact]

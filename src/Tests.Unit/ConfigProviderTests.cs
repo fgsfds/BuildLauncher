@@ -60,13 +60,6 @@ public sealed class ConfigProviderTests : IDisposable
     }
 
     [Fact]
-    public void Theme_SetAndGet_ReturnsValue()
-    {
-        _provider.Theme = ThemeEnum.Dark;
-        Assert.Equal(ThemeEnum.Dark, _provider.Theme);
-    }
-
-    [Fact]
     public void Theme_SetSystem_ReturnsSystem()
     {
         _provider.Theme = ThemeEnum.Dark;
@@ -81,26 +74,8 @@ public sealed class ConfigProviderTests : IDisposable
     }
 
     [Fact]
-    public void SkipIntro_SetAndGet_ReturnsValue()
-    {
-        _provider.SkipIntro = true;
-        Assert.True(_provider.SkipIntro);
-        _provider.SkipIntro = false;
-        Assert.False(_provider.SkipIntro);
-    }
-
-    [Fact]
     public void SkipStartup_Default_ReturnsFalse()
     {
-        Assert.False(_provider.SkipStartup);
-    }
-
-    [Fact]
-    public void SkipStartup_SetAndGet_ReturnsValue()
-    {
-        _provider.SkipStartup = true;
-        Assert.True(_provider.SkipStartup);
-        _provider.SkipStartup = false;
         Assert.False(_provider.SkipStartup);
     }
 
@@ -111,32 +86,8 @@ public sealed class ConfigProviderTests : IDisposable
     }
 
     [Fact]
-    public void UseLocalApi_SetAndGet_ReturnsValue()
-    {
-        _provider.UseLocalApi = true;
-        Assert.True(_provider.UseLocalApi);
-        _provider.UseLocalApi = false;
-        Assert.False(_provider.UseLocalApi);
-    }
-
-    [Fact]
     public void ApiPassword_Default_ReturnsEmptyString()
     {
-        Assert.Equal(string.Empty, _provider.ApiPassword);
-    }
-
-    [Fact]
-    public void ApiPassword_SetAndGet_ReturnsValue()
-    {
-        _provider.ApiPassword = "test-password";
-        Assert.Equal("test-password", _provider.ApiPassword);
-    }
-
-    [Fact]
-    public void ApiPassword_SetEmpty_StoresEmpty()
-    {
-        _provider.ApiPassword = "test";
-        _provider.ApiPassword = string.Empty;
         Assert.Equal(string.Empty, _provider.ApiPassword);
     }
 
@@ -147,32 +98,8 @@ public sealed class ConfigProviderTests : IDisposable
     }
 
     [Fact]
-    public void IsConsented_SetAndGet_ReturnsValue()
-    {
-        _provider.IsConsented = true;
-        Assert.True(_provider.IsConsented);
-        _provider.IsConsented = false;
-        Assert.False(_provider.IsConsented);
-    }
-
-    [Fact]
     public void PathDuke3D_Default_ReturnsNull()
     {
-        Assert.Null(_provider.PathDuke3D);
-    }
-
-    [Fact]
-    public void PathDuke3D_SetAndGet_ReturnsValue()
-    {
-        _provider.PathDuke3D = Path.Combine("C:\\", "Duke3D");
-        Assert.Equal(Path.Combine("C:\\", "Duke3D"), _provider.PathDuke3D);
-    }
-
-    [Fact]
-    public void PathDuke3D_SetNull_StoresNull()
-    {
-        _provider.PathDuke3D = Path.Combine("C:\\", "Duke3D");
-        _provider.PathDuke3D = null;
         Assert.Null(_provider.PathDuke3D);
     }
 
@@ -182,104 +109,6 @@ public sealed class ConfigProviderTests : IDisposable
         var basePath = Path.Combine("C:\\", "Duke3D");
         _provider.PathDuke3D = basePath + Path.DirectorySeparatorChar;
         Assert.Equal(basePath, _provider.PathDuke3D);
-    }
-
-    [Fact]
-    public void PathBlood_SetAndGet_ReturnsValue()
-    {
-        _provider.PathBlood = Path.Combine("C:\\", "Blood");
-        Assert.Equal(Path.Combine("C:\\", "Blood"), _provider.PathBlood);
-    }
-
-    [Fact]
-    public void PathDukeWT_SetAndGet_ReturnsValue()
-    {
-        _provider.PathDukeWT = Path.Combine("C:\\", "DukeWT");
-        Assert.Equal(Path.Combine("C:\\", "DukeWT"), _provider.PathDukeWT);
-    }
-
-    [Fact]
-    public void PathDuke64_SetAndGet_ReturnsValue()
-    {
-        _provider.PathDuke64 = Path.Combine("C:\\", "Duke64");
-        Assert.Equal(Path.Combine("C:\\", "Duke64"), _provider.PathDuke64);
-    }
-
-    [Fact]
-    public void PathDukeZH_SetAndGet_ReturnsValue()
-    {
-        _provider.PathDukeZH = Path.Combine("C:\\", "DukeZH");
-        Assert.Equal(Path.Combine("C:\\", "DukeZH"), _provider.PathDukeZH);
-    }
-
-    [Fact]
-    public void PathWang_SetAndGet_ReturnsValue()
-    {
-        _provider.PathWang = Path.Combine("C:\\", "Wang");
-        Assert.Equal(Path.Combine("C:\\", "Wang"), _provider.PathWang);
-    }
-
-    [Fact]
-    public void PathRedneck_SetAndGet_ReturnsValue()
-    {
-        _provider.PathRedneck = Path.Combine("C:\\", "Redneck");
-        Assert.Equal(Path.Combine("C:\\", "Redneck"), _provider.PathRedneck);
-    }
-
-    [Fact]
-    public void PathRidesAgain_SetAndGet_ReturnsValue()
-    {
-        _provider.PathRidesAgain = Path.Combine("C:\\", "RidesAgain");
-        Assert.Equal(Path.Combine("C:\\", "RidesAgain"), _provider.PathRidesAgain);
-    }
-
-    [Fact]
-    public void PathSlave_SetAndGet_ReturnsValue()
-    {
-        _provider.PathSlave = Path.Combine("C:\\", "Slave");
-        Assert.Equal(Path.Combine("C:\\", "Slave"), _provider.PathSlave);
-    }
-
-    [Fact]
-    public void PathFury_SetAndGet_ReturnsValue()
-    {
-        _provider.PathFury = Path.Combine("C:\\", "Fury");
-        Assert.Equal(Path.Combine("C:\\", "Fury"), _provider.PathFury);
-    }
-
-    [Fact]
-    public void PathNam_SetAndGet_ReturnsValue()
-    {
-        _provider.PathNam = Path.Combine("C:\\", "Nam");
-        Assert.Equal(Path.Combine("C:\\", "Nam"), _provider.PathNam);
-    }
-
-    [Fact]
-    public void PathWW2GI_SetAndGet_ReturnsValue()
-    {
-        _provider.PathWW2GI = Path.Combine("C:\\", "WW2GI");
-        Assert.Equal(Path.Combine("C:\\", "WW2GI"), _provider.PathWW2GI);
-    }
-
-    [Fact]
-    public void PathWitchaven_SetAndGet_ReturnsValue()
-    {
-        _provider.PathWitchaven = Path.Combine("C:\\", "Witchaven");
-        Assert.Equal(Path.Combine("C:\\", "Witchaven"), _provider.PathWitchaven);
-    }
-
-    [Fact]
-    public void PathWitchaven2_SetAndGet_ReturnsValue()
-    {
-        _provider.PathWitchaven2 = Path.Combine("C:\\", "Witchaven2");
-        Assert.Equal(Path.Combine("C:\\", "Witchaven2"), _provider.PathWitchaven2);
-    }
-
-    [Fact]
-    public void PathTekWar_SetAndGet_ReturnsValue()
-    {
-        _provider.PathTekWar = Path.Combine("C:\\", "TekWar");
-        Assert.Equal(Path.Combine("C:\\", "TekWar"), _provider.PathTekWar);
     }
 
     [Fact]

@@ -10,11 +10,11 @@ namespace Tests.Unit;
 public sealed class BasePortTests
 {
     /// <summary>
-    ///     Tests that GetStartGameArgs doesn't throw when enabledOptions is not empty
+    ///     Tests that GetStartGameArgs returns non-null when enabledOptions is not empty
     ///     but the addon has no options defined.
     /// </summary>
     [Fact]
-    public void GetStartGameArgs_NullOptionsWithEnabledOptions_ThrowsArgumentNullException()
+    public void GetStartGameArgs_NullOptionsWithEnabledOptions_ReturnsArgs()
     {
         var port = new BasePortTestProxy();
 
