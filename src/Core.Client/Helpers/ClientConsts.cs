@@ -6,11 +6,6 @@
 public static class ClientConsts
 {
     /// <summary>
-    ///     Config file.
-    /// </summary>
-    public const string ConfigFile = "config.json";
-
-    /// <summary>
     ///     World Tour Stopgap folder.
     /// </summary>
     public const string WTStopgap = "WTStopgap";

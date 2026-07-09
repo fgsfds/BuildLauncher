@@ -59,7 +59,7 @@ public abstract class BaseGame
     ///     Does this game have skill levels.
     /// </summary>
     [MemberNotNullWhen(true, nameof(Skills))]
-    public bool AreSkillsAvailble => Skills is not null;
+    public bool AreSkillsAvailable => Skills is not null;
 
 
     /// <summary>

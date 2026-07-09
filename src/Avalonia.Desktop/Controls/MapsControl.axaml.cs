@@ -58,7 +58,7 @@ public sealed partial class MapsControl : UserControl
         _supportedPorts = portsProvider.GetPortsThatSupportGame(viewModel.Game.GameEnum);
         _bitmapsCache = bitmapsCache;
 
-        if (_viewModel.Game.AreSkillsAvailble)
+        if (_viewModel.Game.AreSkillsAvailable)
         {
             CreateSkillsFlyout();
         }
@@ -197,7 +197,7 @@ public sealed partial class MapsControl : UserControl
     /// </summary>
     /// <param name="port">The port to check.</param>
     /// <returns>True if the skills flyout is available; otherwise false.</returns>
-    private bool IsSkillFlyoutAvailable(BasePort port) => _flyout is not null && port.IsSkillSelectionAvailable && _viewModel.Game.AreSkillsAvailble;
+    private bool IsSkillFlyoutAvailable(BasePort port) => _flyout is not null && port.IsSkillSelectionAvailable && _viewModel.Game.AreSkillsAvailable;
 
 
     /// <summary>
