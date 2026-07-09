@@ -14,13 +14,13 @@ public sealed class StubPort : BasePort
     public override PortEnum PortEnum => PortEnum.Stub;
 
     /// <inheritdoc />
-    protected override string WinExe => string.Empty;
+    protected override string WinExe => "stub.exe";
 
     /// <inheritdoc />
     protected override string LinExe => string.Empty;
 
     /// <inheritdoc />
-    public override string Name => string.Empty;
+    public override string Name => "Stub";
 
     /// <inheritdoc />
     public override List<GameEnum> SupportedGames => [];
