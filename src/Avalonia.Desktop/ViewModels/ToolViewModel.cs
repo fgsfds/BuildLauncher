@@ -1,12 +1,12 @@
 using System.Diagnostics;
 using Avalonia.Controls.Notifications;
 using Avalonia.Desktop.Misc;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using Core.All.Enums;
 using Core.All.Helpers;
 using Core.All.Serializable.Downloadable;
 using Core.Client.Interfaces;
-using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.Logging;
 using Tools.Installer;
 using Tools.Tools;
@@ -15,17 +15,32 @@ namespace Avalonia.Desktop.ViewModels;
 
 public sealed partial class ToolViewModel : ObservableObject
 {
-    public BaseTool Tool { get; init; }
+    /// <summary>
+    ///     Represents the method that handles tool change events.
+    /// </summary>
+    /// <param name="toolEnum">The tool enum.</param>
+    public delegate void ToolChanged(ToolEnum toolEnum);
+
+
+    private readonly IApiInterface _apiInterface;
 
     private readonly ToolInstallerFactory _installerFactory;
-    private readonly IApiInterface _apiInterface;
-    private GeneralReleaseJsonModel? _release;
+
     private readonly ILogger<ToolViewModel> _logger;
 
-    public delegate void ToolChanged(ToolEnum toolEnum);
-    public event ToolChanged? ToolChangedEvent;
+    /// <summary>
+    ///     The latest release information.
+    /// </summary>
+    private GeneralReleaseJsonModel? _release;
 
 
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="ToolViewModel" /> class.
+    /// </summary>
+    /// <param name="installerFactory">The tool installer factory.</param>
+    /// <param name="apiInterface">The API interface.</param>
+    /// <param name="tool">The tool.</param>
+    /// <param name="logger">The logger.</param>
     [Obsolete($"Don't create directly. Use {nameof(ViewModelsFactory)}.")]
     public ToolViewModel(
         ToolInstallerFactory installerFactory,
@@ -40,11 +55,31 @@ public sealed partial class ToolViewModel : ObservableObject
         Tool = tool;
     }
 
+    /// <summary>
+    ///     Gets the tool.
+    /// </summary>
+    public BaseTool Tool { get; init; }
+
+    /// <summary>
+    ///     Occurs when the tool state changes.
+    /// </summary>
+    public event ToolChanged? ToolChangedEvent;
+
+
+    /// <summary>
+    ///     Handles the progress changed event.
+    /// </summary>
+    private void OnProgressChanged(object? sender, float e)
+    {
+        ProgressBarValue = e;
+        OnPropertyChanged(nameof(ProgressBarValue));
+    }
+
 
     #region Binding Properties
 
     /// <summary>
-    /// Text of the install button
+    ///     Text of the install button
     /// </summary>
     public string InstallButtonText
     {
@@ -67,17 +102,17 @@ public sealed partial class ToolViewModel : ObservableObject
     }
 
     /// <summary>
-    /// Name of the tool
+    ///     Gets the name of the tool.
     /// </summary>
     public string Name => Tool.Name;
 
     /// <summary>
-    /// Tool's icon
+    ///     Gets the tool's icon identifier.
     /// </summary>
     public long IconId => Tool.IconId;
 
     /// <summary>
-    /// Currently installed version
+    ///     Gets the currently installed version.
     /// </summary>
     public string Version
     {
@@ -98,12 +133,12 @@ public sealed partial class ToolViewModel : ObservableObject
     }
 
     /// <summary>
-    /// Is tool installed
+    ///     Gets whether the tool is installed.
     /// </summary>
     public bool IsInstalled => Tool.IsInstalled;
 
     /// <summary>
-    /// Latest available version
+    ///     Gets the latest available version.
     /// </summary>
     public string LatestVersion
     {
@@ -124,7 +159,7 @@ public sealed partial class ToolViewModel : ObservableObject
     }
 
     /// <summary>
-    /// Is new version of the tool available
+    ///     Gets whether a new version of the tool is available.
     /// </summary>
     public bool IsUpdateAvailable
     {
@@ -145,18 +180,24 @@ public sealed partial class ToolViewModel : ObservableObject
     }
 
     /// <summary>
-    /// Can tool be installed
+    ///     Gets whether the tool can be installed.
     /// </summary>
     public bool CanBeInstalled => !IsInProgress && !IsCheckingForUpdates && Tool.CanBeInstalled && _release is not null;
 
     /// <summary>
-    /// Download/install progress
+    ///     Gets or sets the download/install progress.
     /// </summary>
     public float ProgressBarValue { get; set; }
 
+    /// <summary>
+    ///     Gets or sets whether an install operation is in progress.
+    /// </summary>
     [ObservableProperty]
     private bool _isInProgress;
 
+    /// <summary>
+    ///     Gets or sets whether the view model is checking for updates.
+    /// </summary>
     [ObservableProperty]
     private bool _isCheckingForUpdates;
 
@@ -166,7 +207,7 @@ public sealed partial class ToolViewModel : ObservableObject
     #region Relay Commands
 
     /// <summary>
-    /// Initialize VM
+    ///     Initialize VM
     /// </summary>
     public async Task InitializeAsync()
     {
@@ -192,7 +233,7 @@ public sealed partial class ToolViewModel : ObservableObject
 
 
     /// <summary>
-    /// Download and install tool
+    ///     Download and install tool
     /// </summary>
     [RelayCommand]
     private async Task InstallAsync()
@@ -238,7 +279,7 @@ public sealed partial class ToolViewModel : ObservableObject
 
 
     /// <summary>
-    /// Delete tool
+    ///     Delete tool
     /// </summary>
     [RelayCommand]
     private void Uninstall()
@@ -273,7 +314,7 @@ public sealed partial class ToolViewModel : ObservableObject
 
 
     /// <summary>
-    /// Force check for updates
+    ///     Force check for updates
     /// </summary>
     [RelayCommand]
     private void Launch()
@@ -297,25 +338,26 @@ public sealed partial class ToolViewModel : ObservableObject
 
 
     /// <summary>
-    /// Open tool folder
+    ///     Open tool folder
     /// </summary>
     [RelayCommand]
     private void OpenFolder()
     {
-        using var process = Process.Start(new ProcessStartInfo
+        try
         {
-            FileName = Tool.InstallFolderPath,
-            UseShellExecute = true,
-        });
+            using var process = Process.Start(
+                new ProcessStartInfo
+                {
+                    FileName = Tool.InstallFolderPath,
+                    UseShellExecute = true
+                }
+                );
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning(ex, "Failed to open tool folder: {Path}", Tool.InstallFolderPath);
+        }
     }
-
 
     #endregion
-
-
-    private void OnProgressChanged(object? sender, float e)
-    {
-        ProgressBarValue = e;
-        OnPropertyChanged(nameof(ProgressBarValue));
-    }
 }

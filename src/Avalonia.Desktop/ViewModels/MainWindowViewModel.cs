@@ -4,7 +4,6 @@ using Core.All.Enums;
 using Core.Client;
 using Core.Client.Helpers;
 using Core.Client.Interfaces;
-using Core.Client.Providers;
 using Core.Client.Tools;
 using Games.Providers;
 using Microsoft.Extensions.Logging;
@@ -14,10 +13,29 @@ using Tools.Tools;
 
 namespace Avalonia.Desktop.ViewModels;
 
+/// <summary>
+///     Provides view model data and commands for the main window.
+/// </summary>
 public sealed class MainWindowViewModel : ObservableObject
 {
     private readonly InstalledGamesProvider _gamesProvider;
 
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="MainWindowViewModel" /> class.
+    /// </summary>
+    /// <param name="configProvider">The configuration provider.</param>
+    /// <param name="filesUploader">The files uploader.</param>
+    /// <param name="addonsDatabaseManager">The addons database manager.</param>
+    /// <param name="gamesProvider">The installed games provider.</param>
+    /// <param name="portsProvider">The ports provider.</param>
+    /// <param name="appUpdateInstaller">The app update installer.</param>
+    /// <param name="viewModelsFactory">The view models factory.</param>
+    /// <param name="gamesPathsProvider">The games paths provider.</param>
+    /// <param name="ports">The available ports.</param>
+    /// <param name="tools">The available tools.</param>
+    /// <param name="metadataProvider">The metadata provider.</param>
+    /// <param name="downloadablesProviderFactory">The downloadable addons provider factory.</param>
+    /// <param name="loggerFactory">The logger factory.</param>
     public MainWindowViewModel(
         IConfigProvider configProvider,
         IFilesUploader filesUploader,
@@ -155,102 +173,8 @@ public sealed class MainWindowViewModel : ObservableObject
     }
 
 
-    #region Binding Properties
-
-    public DevViewModel DevPageViewModel { get; init; }
-
-    public AboutViewModel AboutPageViewModel { get; init; }
-
-    public PortsViewModel PortsPageViewModel { get; init; }
-
-    public ToolsViewModel ToolsPageViewModel { get; init; }
-
-    public SettingsViewModel SettingsPageViewModel { get; init; }
-
-    public GamePageViewModel DukeViewModel { get; init; }
-
-    public GamePageViewModel BloodViewModel { get; init; }
-
-    public GamePageViewModel WangViewModel { get; init; }
-
-    public GamePageViewModel FuryViewModel { get; init; }
-
-    public GamePageViewModel RedneckViewModel { get; init; }
-
-    public GamePageViewModel SlaveViewModel { get; init; }
-
-    public GamePageViewModel NamViewModel { get; init; }
-
-    public GamePageViewModel WWIIViewModel { get; init; }
-
-    public GamePageViewModel WitchavenViewModel { get; init; }
-
-    public GamePageViewModel TekWarViewModel { get; init; }
-
-    public GamePageViewModel StandaloneViewModel { get; init; }
-
-
-
     /// <summary>
-    /// Is Blood tab enabled
-    /// </summary>
-    public bool IsBloodTabEnabled => _gamesProvider.IsBloodInstalled;
-
-    /// <summary>
-    /// Is Duke Nukem 3D tab enabled
-    /// </summary>
-    public bool IsDukeTabEnabled => _gamesProvider.IsDukeInstalled;
-
-    /// <summary>
-    /// Is Shadow Warrior tab enabled
-    /// </summary>
-    public bool IsWangTabEnabled => _gamesProvider.IsWangInstalled;
-
-    /// <summary>
-    /// Is Ion Fury tab enabled
-    /// </summary>
-    public bool IsFuryTabEnabled => _gamesProvider.IsFuryInstalled;
-
-    /// <summary>
-    /// Is Redneck Rampage tab enabled
-    /// </summary>
-    public bool IsRedneckTabEnabled => _gamesProvider.IsRedneckInstalled;
-
-    /// <summary>
-    /// Is Powerslave tab enabled
-    /// </summary>
-    public bool IsSlaveTabEnabled => _gamesProvider.IsSlaveInstalled;
-
-    /// <summary>
-    /// Is NAM tab enabled
-    /// </summary>
-    public bool IsNamTabEnabled => _gamesProvider.IsNamInstalled;
-
-    /// <summary>
-    /// Is WW2I tab enabled
-    /// </summary>
-    public bool IsWW2GITabEnabled => _gamesProvider.IsWW2GIInstalled;
-
-    /// <summary>
-    /// Is WW2I tab enabled
-    /// </summary>
-    public bool IsWitchavenTabEnabled => _gamesProvider.IsWitchavenInstalled;
-
-    /// <summary>
-    /// Is WW2I tab enabled
-    /// </summary>
-    public bool IsTekWarTabEnabled => _gamesProvider.IsTekWarInstalled;
-
-    /// <summary>
-    /// Is app running in the developer mode
-    /// </summary>
-    public bool IsDeveloperMode => ClientProperties.IsDeveloperMode;
-
-    #endregion
-
-
-    /// <summary>
-    /// Update VM with path to the game changes in the config
+    ///     Update VM with path to the game changes in the config
     /// </summary>
     private void OnGameChanged(GameEnum _)
     {
@@ -265,4 +189,145 @@ public sealed class MainWindowViewModel : ObservableObject
         OnPropertyChanged(nameof(IsWitchavenTabEnabled));
         OnPropertyChanged(nameof(IsTekWarTabEnabled));
     }
+
+
+    #region Binding Properties
+
+    /// <summary>
+    ///     Gets the developer page view model.
+    /// </summary>
+    public DevViewModel DevPageViewModel { get; init; }
+
+    /// <summary>
+    ///     Gets the about page view model.
+    /// </summary>
+    public AboutViewModel AboutPageViewModel { get; init; }
+
+    /// <summary>
+    ///     Gets the ports page view model.
+    /// </summary>
+    public PortsViewModel PortsPageViewModel { get; init; }
+
+    /// <summary>
+    ///     Gets the tools page view model.
+    /// </summary>
+    public ToolsViewModel ToolsPageViewModel { get; init; }
+
+    /// <summary>
+    ///     Gets the settings page view model.
+    /// </summary>
+    public SettingsViewModel SettingsPageViewModel { get; init; }
+
+    /// <summary>
+    ///     Gets the Duke Nukem 3D game page view model.
+    /// </summary>
+    public GamePageViewModel DukeViewModel { get; init; }
+
+    /// <summary>
+    ///     Gets the Blood game page view model.
+    /// </summary>
+    public GamePageViewModel BloodViewModel { get; init; }
+
+    /// <summary>
+    ///     Gets the Shadow Warrior game page view model.
+    /// </summary>
+    public GamePageViewModel WangViewModel { get; init; }
+
+    /// <summary>
+    ///     Gets the Ion Fury game page view model.
+    /// </summary>
+    public GamePageViewModel FuryViewModel { get; init; }
+
+    /// <summary>
+    ///     Gets the Redneck Rampage game page view model.
+    /// </summary>
+    public GamePageViewModel RedneckViewModel { get; init; }
+
+    /// <summary>
+    ///     Gets the Powerslave game page view model.
+    /// </summary>
+    public GamePageViewModel SlaveViewModel { get; init; }
+
+    /// <summary>
+    ///     Gets the NAM game page view model.
+    /// </summary>
+    public GamePageViewModel NamViewModel { get; init; }
+
+    /// <summary>
+    ///     Gets the WW2GI game page view model.
+    /// </summary>
+    public GamePageViewModel WWIIViewModel { get; init; }
+
+    /// <summary>
+    ///     Gets the Witchaven game page view model.
+    /// </summary>
+    public GamePageViewModel WitchavenViewModel { get; init; }
+
+    /// <summary>
+    ///     Gets the TekWar game page view model.
+    /// </summary>
+    public GamePageViewModel TekWarViewModel { get; init; }
+
+    /// <summary>
+    ///     Gets the Standalone game page view model.
+    /// </summary>
+    public GamePageViewModel StandaloneViewModel { get; init; }
+
+
+    /// <summary>
+    ///     Is Blood tab enabled
+    /// </summary>
+    public bool IsBloodTabEnabled => _gamesProvider.IsBloodInstalled;
+
+    /// <summary>
+    ///     Is Duke Nukem 3D tab enabled
+    /// </summary>
+    public bool IsDukeTabEnabled => _gamesProvider.IsDukeInstalled;
+
+    /// <summary>
+    ///     Is Shadow Warrior tab enabled
+    /// </summary>
+    public bool IsWangTabEnabled => _gamesProvider.IsWangInstalled;
+
+    /// <summary>
+    ///     Is Ion Fury tab enabled
+    /// </summary>
+    public bool IsFuryTabEnabled => _gamesProvider.IsFuryInstalled;
+
+    /// <summary>
+    ///     Is Redneck Rampage tab enabled
+    /// </summary>
+    public bool IsRedneckTabEnabled => _gamesProvider.IsRedneckInstalled;
+
+    /// <summary>
+    ///     Is Powerslave tab enabled
+    /// </summary>
+    public bool IsSlaveTabEnabled => _gamesProvider.IsSlaveInstalled;
+
+    /// <summary>
+    ///     Is NAM tab enabled
+    /// </summary>
+    public bool IsNamTabEnabled => _gamesProvider.IsNamInstalled;
+
+    /// <summary>
+    ///     Is WW2I tab enabled
+    /// </summary>
+    public bool IsWW2GITabEnabled => _gamesProvider.IsWW2GIInstalled;
+
+    /// <summary>
+    ///     Is Witchaven tab enabled.
+    /// </summary>
+    public bool IsWitchavenTabEnabled => _gamesProvider.IsWitchavenInstalled;
+
+    /// <summary>
+    ///     Is TekWar tab enabled.
+    /// </summary>
+    public bool IsTekWarTabEnabled => _gamesProvider.IsTekWarInstalled;
+
+    /// <summary>
+    ///     Is app running in the developer mode.
+    /// </summary>
+    public bool IsDeveloperMode => ClientProperties.IsDeveloperMode;
+
+    #endregion
 }

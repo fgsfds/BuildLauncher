@@ -6,9 +6,12 @@ using Avalonia.Xaml.Interactivity;
 
 namespace Avalonia.Desktop.Behaviors;
 
+/// <summary>
+///     Adds implicit offset animations to <see cref="ListBox" /> items when they appear.
+/// </summary>
 public class AddImplicitAnimationsBehavior : Behavior<ListBox>
 {
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override void OnAttached()
     {
         base.OnAttached();
@@ -30,7 +33,7 @@ public class AddImplicitAnimationsBehavior : Behavior<ListBox>
         }
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override void OnDetaching()
     {
         if (AssociatedObject is not null)
@@ -50,6 +53,9 @@ public class AddImplicitAnimationsBehavior : Behavior<ListBox>
         base.OnDetaching();
     }
 
+    /// <summary>
+    ///     Handles the container prepared event to attach implicit animations to new items.
+    /// </summary>
     private void OnContainerPrepared(object? sender, ContainerPreparedEventArgs e)
     {
         if (e.Container is ListBoxItem item)
@@ -58,6 +64,9 @@ public class AddImplicitAnimationsBehavior : Behavior<ListBox>
         }
     }
 
+    /// <summary>
+    ///     Handles the container clearing event to detach implicit animations from items.
+    /// </summary>
     private void OnContainerClearing(object? sender, ContainerClearingEventArgs e)
     {
         if (e.Container is ListBoxItem item)
@@ -66,12 +75,16 @@ public class AddImplicitAnimationsBehavior : Behavior<ListBox>
         }
     }
 
+    /// <summary>
+    ///     Attaches implicit animations to the specified list box item.
+    /// </summary>
     private void AttachToItem(ListBoxItem item)
     {
         if (item.Content is SeparatorItem)
         {
             item.IsHitTestVisible = false;
             item.Focusable = false;
+
             return;
         }
 
@@ -81,24 +94,42 @@ public class AddImplicitAnimationsBehavior : Behavior<ListBox>
 
         if (item.IsAttachedToVisualTree())
         {
-            SetupImplicitAnimations(item);
+            OnItemAttachedToVisualTree(item, null!);
         }
     }
 
+    /// <summary>
+    ///     Detaches implicit animations from the specified list box item.
+    /// </summary>
     private void DetachFromItem(ListBoxItem item)
     {
         item.AttachedToVisualTree -= OnItemAttachedToVisualTree;
     }
 
-    private void OnItemAttachedToVisualTree(object? sender, VisualTreeAttachmentEventArgs e)
+    /// <summary>
+    ///     Handles the visual tree attachment event to set up implicit animations.
+    /// </summary>
+    private async void OnItemAttachedToVisualTree(object? sender, VisualTreeAttachmentEventArgs e)
     {
-        if (sender is ListBoxItem item)
+        try
         {
-            SetupImplicitAnimations(item);
+            if (sender is not ListBoxItem item)
+            {
+                return;
+            }
+
+            await SetupImplicitAnimationsAsync(item).ConfigureAwait(true);
+        }
+        catch
+        {
+            // ignore — animation setup is best-effort
         }
     }
 
-    private async void SetupImplicitAnimations(ListBoxItem item)
+    /// <summary>
+    ///     Sets up implicit offset animations for the specified list box item.
+    /// </summary>
+    private async Task SetupImplicitAnimationsAsync(ListBoxItem item)
     {
         // wait for layout to finish before applying animations, 
         // preventing items from flying in from 0,0 on tab switches.

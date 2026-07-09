@@ -1,5 +1,6 @@
 ﻿using System.Collections.Immutable;
 using Addons.Helpers;
+using Addons.Providers;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Desktop.Helpers;
@@ -11,7 +12,6 @@ using Core.All.Enums;
 using Core.Client.Enums;
 using Core.Client.Helpers;
 using Core.Client.Interfaces;
-using Core.Client.Providers;
 using Database.Client;
 using Games;
 using Games.Providers;
@@ -25,29 +25,45 @@ using Tools;
 
 namespace Avalonia.Desktop;
 
+/// <summary>
+///     Application entry point and service configuration.
+/// </summary>
 public sealed class App : Application
 {
+    /// <summary>
+    ///     The singleton application instance.
+    /// </summary>
     private static App _app = null!;
+
+    /// <summary>
+    ///     The application service provider.
+    /// </summary>
     private static ServiceProvider _services;
 
+    /// <inheritdoc />
     public override void Initialize()
     {
         AvaloniaXamlLoader.Load(this);
 
-#if DEBUG
+        #if DEBUG
         this.AttachDeveloperTools();
-#endif
+        #endif
 
         _app = this;
     }
 
+    /// <summary>
+    ///     Runs the application with the specified AppBuilder.
+    /// </summary>
+    /// <param name="builder">The application builder.</param>
+    /// <returns>The application exit code.</returns>
     public static int Run(AppBuilder builder)
     {
         int code;
 
         using ClassicDesktopStyleApplicationLifetime lifetime = new()
         {
-            ShutdownMode = ShutdownMode.OnMainWindowClose,
+            ShutdownMode = ShutdownMode.OnMainWindowClose
         };
 
         _ = builder.SetupWithLifetime(lifetime);
@@ -125,16 +141,20 @@ public sealed class App : Application
     }
 
 
+    /// <summary>
+    ///     Renames legacy save folders to their correct names.
+    /// </summary>
+    /// <param name="portsProvider">The ports provider.</param>
     [Obsolete("Remove some time later")]
     private static void RenameSaveFolder(PortsProvider portsProvider)
     {
         ImmutableArray<string> paths =
-            [
-                portsProvider.GetPort(PortEnum.BuildGDX).PortSavedGamesFolderPath,
-                portsProvider.GetPort(PortEnum.VoidSW).PortSavedGamesFolderPath,
-                portsProvider.GetPort(PortEnum.PCExhumed).PortSavedGamesFolderPath,
-                portsProvider.GetPort(PortEnum.Raze).PortSavedGamesFolderPath
-            ];
+        [
+            portsProvider.GetPort(PortEnum.BuildGDX).PortSavedGamesFolderPath,
+            portsProvider.GetPort(PortEnum.VoidSW).PortSavedGamesFolderPath,
+            portsProvider.GetPort(PortEnum.PCExhumed).PortSavedGamesFolderPath,
+            portsProvider.GetPort(PortEnum.Raze).PortSavedGamesFolderPath
+        ];
 
         foreach (var path in paths)
         {
@@ -157,7 +177,7 @@ public sealed class App : Application
     }
 
     /// <summary>
-    /// Load DI bindings
+    ///     Loads and configures all dependency injection bindings.
     /// </summary>
     private static void LoadBindings()
     {
@@ -198,16 +218,20 @@ public sealed class App : Application
         _ = services.WithAddons();
 
         _services?.Dispose();
-        _services = services.BuildServiceProvider(new ServiceProviderOptions
-        {
-            ValidateOnBuild = true,
-            ValidateScopes = true
-        });
+
+        _services = services.BuildServiceProvider(
+            new ServiceProviderOptions
+            {
+                ValidateOnBuild = true,
+                ValidateScopes = true
+            }
+            );
     }
 
     /// <summary>
-    /// Set theme from the config
+    ///     Sets the application theme.
     /// </summary>
+    /// <param name="theme">The theme to apply.</param>
     private static void SetTheme(ThemeEnum theme)
     {
         var themeEnum = theme switch
@@ -222,7 +246,7 @@ public sealed class App : Application
     }
 
     /// <summary>
-    /// Remove database logs leftovers.
+    ///     Cleans up stale database WAL and SHM files.
     /// </summary>
     private static void FixDatabase()
     {
@@ -236,7 +260,7 @@ public sealed class App : Application
         foreach (var file in files)
         {
             if (file.EndsWith(".db-wal", StringComparison.OrdinalIgnoreCase)
-                || file.EndsWith(".db-shm", StringComparison.OrdinalIgnoreCase))
+             || file.EndsWith(".db-shm", StringComparison.OrdinalIgnoreCase))
             {
                 File.Delete(file);
             }

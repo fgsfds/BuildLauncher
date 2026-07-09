@@ -6,17 +6,26 @@ using Avalonia.Xaml.Interactivity;
 
 namespace Avalonia.Desktop.Behaviors;
 
+/// <summary>
+///     Handles file drop events on interactive controls.
+/// </summary>
 public class FileDropBehavior : Behavior<Interactive>
 {
+    /// <summary>
+    ///     Defines the <see cref="Command" /> property.
+    /// </summary>
     public static readonly StyledProperty<ICommand?> CommandProperty = AvaloniaProperty.Register<FileDropBehavior, ICommand?>(nameof(Command));
 
+    /// <summary>
+    ///     Gets or sets the command to execute with the dropped file paths.
+    /// </summary>
     public ICommand? Command
     {
         get => GetValue(CommandProperty);
         set => SetValue(CommandProperty, value);
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override void OnAttached()
     {
         base.OnAttached();
@@ -28,7 +37,7 @@ public class FileDropBehavior : Behavior<Interactive>
         }
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override void OnDetaching()
     {
         base.OnDetaching();
@@ -36,6 +45,9 @@ public class FileDropBehavior : Behavior<Interactive>
         AssociatedObject?.RemoveHandler(DragDrop.DropEvent, OnDrop);
     }
 
+    /// <summary>
+    ///     Handles the drop event and executes the command with the dropped file paths.
+    /// </summary>
     private void OnDrop(object? sender, DragEventArgs e)
     {
         var files = e.DataTransfer.TryGetFiles();
@@ -46,9 +58,9 @@ public class FileDropBehavior : Behavior<Interactive>
         }
 
         var filePaths = files
-            .Select(f => f.TryGetLocalPath())
-            .Where(path => path is not null)
-            .ToList();
+                       .Select(f => f.TryGetLocalPath())
+                       .Where(path => path is not null)
+                       .ToList();
 
         if (filePaths.Count != 0 && Command is not null && Command.CanExecute(filePaths))
         {

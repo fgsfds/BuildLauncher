@@ -9,17 +9,22 @@ using Core.All.Helpers;
 namespace Avalonia.Desktop.Helpers;
 
 /// <summary>
-/// Converts Stream to Bitmap
+///     Converts Stream to Bitmap
 /// </summary>
 public sealed class CachedHashToBitmapConverter : IValueConverter
 {
     private readonly BitmapsCache _bitmapsCache;
 
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="CachedHashToBitmapConverter" /> class.
+    /// </summary>
+    /// <param name="bitmapsCache">The bitmaps cache.</param>
     public CachedHashToBitmapConverter(BitmapsCache bitmapsCache)
     {
         _bitmapsCache = bitmapsCache;
     }
 
+    /// <inheritdoc />
     public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
         if (value is null)
@@ -35,17 +40,22 @@ public sealed class CachedHashToBitmapConverter : IValueConverter
         var bitmap = _bitmapsCache.GetFromCache(valueStr);
 
         return bitmap;
-
     }
 
+    /// <inheritdoc />
     public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
         return new BindingNotification(new NotImplementedException($"ConvertBack method for {nameof(CachedHashToBitmapConverter)} is not implemented."));
     }
 }
 
+
+/// <summary>
+///     Converts a game enum to a boolean indicating whether it matches the parameter.
+/// </summary>
 public sealed class GameStringToEnumConverter : IValueConverter
 {
+    /// <inheritdoc />
     public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
         if (value is not GameEnum valueEnum)
@@ -61,6 +71,7 @@ public sealed class GameStringToEnumConverter : IValueConverter
         return valueEnum == gameEnum;
     }
 
+    /// <inheritdoc />
     public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
         if (value is not bool valueBool)
@@ -82,11 +93,13 @@ public sealed class GameStringToEnumConverter : IValueConverter
     }
 }
 
+
 /// <summary>
-/// Converts a string by replacing spaces with newline characters.
+///     Converts a string by replacing spaces with newline characters.
 /// </summary>
 public sealed class StringToWrappedConverter : IValueConverter
 {
+    /// <inheritdoc />
     public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
         if (value is not string valueStr)
@@ -97,17 +110,20 @@ public sealed class StringToWrappedConverter : IValueConverter
         return valueStr.Replace(" ", Environment.NewLine);
     }
 
+    /// <inheritdoc />
     public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
         throw new NotSupportedException();
     }
 }
 
+
 /// <summary>
-/// Converts option parameters to a semicolon-separated list.
+///     Converts option parameters to a semicolon-separated list.
 /// </summary>
 public sealed class OptionParamsToStringConverter : IValueConverter
 {
+    /// <inheritdoc />
     public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
         if (value is not Dictionary<string, OptionalParameterTypeEnum> valueStr)
@@ -125,6 +141,7 @@ public sealed class OptionParamsToStringConverter : IValueConverter
         return sb.ToString();
     }
 
+    /// <inheritdoc />
     public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
         if (value is not string valueStr)

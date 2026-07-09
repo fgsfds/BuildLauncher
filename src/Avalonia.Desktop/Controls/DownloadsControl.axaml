@@ -1,152 +1,200 @@
-<UserControl xmlns="https://github.com/avaloniaui"
+<UserControl x:Class="Avalonia.Desktop.Controls.DownloadsControl"
+             xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:i="https://github.com/projektanker/icons.avalonia"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:md="https://github.com/whistyun/Markdown.Avalonia.Tight"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             xmlns:vm="clr-namespace:Avalonia.Desktop.ViewModels"
-             xmlns:helpers="clr-namespace:Avalonia.Desktop.Helpers"
              xmlns:misc="clr-namespace:Avalonia.Desktop.Misc"
+             xmlns:vm="clr-namespace:Avalonia.Desktop.ViewModels"
+             d:DesignHeight="450"
+             d:DesignWidth="800"
              x:DataType="vm:DownloadsViewModel"
-             x:Class="Avalonia.Desktop.Controls.DownloadsControl">
+             mc:Ignorable="d">
 
-    <Grid RowDefinitions="auto,*,auto,auto" ColumnDefinitions="2*,*">
+    <Grid ColumnDefinitions="2*,*" RowDefinitions="auto,*,auto,auto">
 
-        <Grid ColumnDefinitions="auto,*,auto"
-              RowDefinitions="auto,auto"
-              Grid.Row="0" Grid.Column="0"
-              Margin="0,0,0,5">
+        <Grid Grid.Row="0"
+              Grid.Column="0"
+              Margin="0,0,0,5"
+              ColumnDefinitions="auto,*,auto"
+              RowDefinitions="auto,auto">
 
             <ComboBox Grid.Column="0"
+                      Height="{Binding Bounds.Height, ElementName=SearchBox}"
                       MinWidth="150"
                       Margin="0,0,5,0"
                       ItemsSource="{Binding FilterItems}"
-                      SelectedItem="{Binding FilterSelectedItem}"
-                      Height="{Binding Bounds.Height, ElementName=SearchBox}"/>
+                      SelectedItem="{Binding FilterSelectedItem}" />
 
             <TextBox Name="SearchBox"
                      Grid.Column="1"
                      PlaceholderText="Search"
-                     Text="{Binding SearchBoxText}"/>
+                     Text="{Binding SearchBoxText}" />
 
             <Button Grid.Column="2"
+                    Height="{Binding Bounds.Height, ElementName=SearchBox}"
                     Margin="5,0,0,0"
                     Command="{Binding ClearSearchBoxCommand}"
-                    ToolTip.Tip="Clear search"
-                    Height="{Binding Bounds.Height, ElementName=SearchBox}">
+                    ToolTip.Tip="Clear search">
                 <i:Icon Value="fa7-xmark" />
             </Button>
 
-            <CheckBox Grid.Row="1" Grid.Column="0"
-                      Margin="0,5"
+            <CheckBox Grid.Row="1"
+                      Grid.Column="0"
                       Height="{Binding Bounds.Height, ElementName=SearchBox}"
+                      Margin="0,5"
                       IsChecked="{Binding IsHideInstalledChecked}">
                 Hide installed
             </CheckBox>
 
         </Grid>
 
-        <DataGrid Grid.Row="1" Grid.Column="0"
-                  Margin="0" Padding="2"
-                  ItemsSource="{Binding DownloadableList}"
-                  SelectionMode="Extended"
+        <DataGrid Grid.Row="1"
+                  Grid.Column="0"
+                  Margin="0"
+                  Padding="2"
                   misc:DataGridSelectedItemsProperty.SelectedItems="{Binding SelectedDownloads}"
+                  BorderBrush="Gray"
+                  BorderThickness="1"
+                  CanUserReorderColumns="False"
+                  CanUserResizeColumns="False"
+                  CornerRadius="4"
                   GridLinesVisibility="Horizontal"
                   IsReadOnly="True"
-                  CornerRadius="4"
-                  BorderThickness="1"
-                  BorderBrush="Gray"
-                  CanUserReorderColumns="False"
-                  CanUserResizeColumns="False">
+                  ItemsSource="{Binding DownloadableList}"
+                  SelectionMode="Extended">
 
             <DataGrid.Styles>
                 <Style Selector="DataGridCell:selected:current /template/ Rectangle">
-                    <Setter Property="Stroke" Value="Transparent"/>
+                    <Setter Property="Stroke" Value="Transparent" />
                 </Style>
             </DataGrid.Styles>
 
             <DataGrid.ContextMenu>
                 <ContextMenu>
-                    <MenuItem Header="Download"
-                              Padding="5"
-                              Command="{Binding DownloadAddonCommand}"/>
+                    <MenuItem Padding="5"
+                              Command="{Binding DownloadAddonCommand}"
+                              Header="Download" />
                 </ContextMenu>
             </DataGrid.ContextMenu>
 
 
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Title" Binding="{Binding Title}" FontSize="12" Width="3*" CanUserSort="True" SortMemberPath="Title" />
-                <DataGridTextColumn Header="Type" Binding="{Binding AddonType}" FontSize="12" FontWeight="Bold" Width="*" CanUserSort="False" />
-                <DataGridTextColumn Header="Version" Binding="{Binding Version}" FontSize="12" Width="*" CanUserSort="False" />
-                <DataGridTextColumn Header="Size" Binding="{Binding FileSizeString}" FontSize="12" Width="*" CanUserSort="True" SortMemberPath="FileSize" />
-                <DataGridTextColumn IsVisible="False" Header="Rating" Binding="{Binding RatingStr}" FontSize="12" Width="*" />
-                <DataGridTextColumn IsVisible="False" Header="Downloads" Binding="{Binding Installs}" FontSize="12" Width="*" />
-                <DataGridTextColumn Header="Updated" Binding="{Binding UpdateDateString}" FontSize="12" Width="*" CanUserSort="True" SortMemberPath="UpdateDate" />
-                <DataGridTextColumn Header="Status" Binding="{Binding Status}" FontSize="12" FontWeight="Bold" Width="*" CanUserSort="True" SortMemberPath="Status" />
+                <DataGridTextColumn Width="3*"
+                                    Binding="{Binding Title}"
+                                    CanUserSort="True"
+                                    FontSize="12"
+                                    Header="Title"
+                                    SortMemberPath="Title" />
+                <DataGridTextColumn Width="*"
+                                    Binding="{Binding AddonType}"
+                                    CanUserSort="False"
+                                    FontSize="12"
+                                    FontWeight="Bold"
+                                    Header="Type" />
+                <DataGridTextColumn Width="*"
+                                    Binding="{Binding Version}"
+                                    CanUserSort="False"
+                                    FontSize="12"
+                                    Header="Version" />
+                <DataGridTextColumn Width="*"
+                                    Binding="{Binding FileSizeString}"
+                                    CanUserSort="True"
+                                    FontSize="12"
+                                    Header="Size"
+                                    SortMemberPath="FileSize" />
+                <DataGridTextColumn Width="*"
+                                    Binding="{Binding RatingStr}"
+                                    FontSize="12"
+                                    Header="Rating"
+                                    IsVisible="False" />
+                <DataGridTextColumn Width="*"
+                                    Binding="{Binding Installs}"
+                                    FontSize="12"
+                                    Header="Downloads"
+                                    IsVisible="False" />
+                <DataGridTextColumn Width="*"
+                                    Binding="{Binding UpdateDateString}"
+                                    CanUserSort="True"
+                                    FontSize="12"
+                                    Header="Updated"
+                                    SortMemberPath="UpdateDate" />
+                <DataGridTextColumn Width="*"
+                                    Binding="{Binding Status}"
+                                    CanUserSort="True"
+                                    FontSize="12"
+                                    FontWeight="Bold"
+                                    Header="Status"
+                                    SortMemberPath="Status" />
             </DataGrid.Columns>
         </DataGrid>
 
-        <md:MarkdownScrollViewer Grid.Row="1" Grid.Column="1"
+        <md:MarkdownScrollViewer Grid.Row="1"
                                  Grid.RowSpan="2"
+                                 Grid.Column="1"
                                  Margin="10,5"
                                  Markdown="{Binding SelectedDownloadableDescription}">
 
             <md:MarkdownScrollViewer.Styles>
-                <StyleInclude Source="/Styles/MarkdownStyle.axaml"/>
+                <StyleInclude Source="/Styles/MarkdownStyle.axaml" />
             </md:MarkdownScrollViewer.Styles>
 
         </md:MarkdownScrollViewer>
 
-        <TextBlock Grid.Row="2" Margin="0,3,0,0" Text="Hold Ctrl or Shift to select multiple files"/>
+        <TextBlock Grid.Row="2"
+                   Margin="0,3,0,0"
+                   Text="Hold Ctrl or Shift to select multiple files" />
 
-        <!--Buttons and progress bar-->
-        <Grid ColumnDefinitions="auto,*,auto"
-              Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="1"
-              Margin="0,12">
+        <!--  Buttons and progress bar  -->
+        <Grid Grid.Row="3"
+              Grid.Column="0"
+              Grid.ColumnSpan="1"
+              Margin="0,12"
+              ColumnDefinitions="auto,*,auto">
 
             <Button Name="DownloadButton"
-                    Command="{Binding DownloadAddonCommand}"
                     Grid.Column="0"
                     Margin="0,5,5,5"
                     Padding="5"
-                    Content="{Binding DownloadButtonText, FallbackValue= Download}"
-                    IsVisible="{Binding !IsInProgress}"/>
+                    Command="{Binding DownloadAddonCommand}"
+                    Content="{Binding DownloadButtonText, FallbackValue=Download}"
+                    IsVisible="{Binding !IsInProgress}" />
 
             <Button Name="CancelButton"
-                    Command="{Binding CancelDownloadCommand}"
                     Grid.Column="0"
                     Margin="0,5,5,5"
                     Padding="5"
+                    Command="{Binding CancelDownloadCommand}"
                     Content="Cancel"
-                    IsVisible="{Binding IsInProgress}"/>
+                    IsVisible="{Binding IsInProgress}" />
 
-            <ProgressBar Value="{Binding ProgressBarValue}"
+            <ProgressBar Grid.Column="1"
                          Height="{Binding #DownloadButton.Bounds.Height}"
                          HorizontalAlignment="Stretch"
-                         Grid.Column="1"/>
+                         Value="{Binding ProgressBarValue}" />
 
             <TextBlock Grid.Column="1"
                        HorizontalAlignment="Center"
                        VerticalAlignment="Center"
-                       Text="{Binding ProgressMessage}"/>
+                       Text="{Binding ProgressMessage}" />
 
             <Button Grid.Column="2"
-                    IsVisible="{Binding !IsInProgress}"
-                    HorizontalAlignment="Right"
-                    ToolTip.Tip="Refresh"
-                    Padding="8"
                     Margin="10,0,0,0"
-                    Command="{Binding UpdateCommand}">
+                    Padding="8"
+                    HorizontalAlignment="Right"
+                    Command="{Binding UpdateCommand}"
+                    IsVisible="{Binding !IsInProgress}"
+                    ToolTip.Tip="Refresh">
                 <i:Icon Value="fa7-rotate" />
             </Button>
 
             <Button Grid.Column="2"
-                    IsVisible="{Binding IsInProgress}"
-                    HorizontalAlignment="Right"
+                    Margin="10,0,0,0"
                     Padding="8"
-                    Margin="10,0,0,0">
-                <i:Icon Value="fa7-rotate" Animation="Spin" />
+                    HorizontalAlignment="Right"
+                    IsVisible="{Binding IsInProgress}">
+                <i:Icon Animation="Spin" Value="fa7-rotate" />
             </Button>
 
         </Grid>

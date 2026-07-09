@@ -5,22 +5,28 @@ using Avalonia.Xaml.Interactivity;
 
 namespace Avalonia.Desktop.Behaviors;
 
+/// <summary>
+///     Clears <see cref="ListBox" /> selection when clicking on empty space within the list.
+/// </summary>
 public class ClearSelectionOnEmptySpaceBehavior : Behavior<ListBox>
 {
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override void OnAttached()
     {
         base.OnAttached();
         AssociatedObject?.PointerPressed += OnPointerPressed;
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override void OnDetaching()
     {
         base.OnDetaching();
         AssociatedObject?.PointerPressed -= OnPointerPressed;
     }
 
+    /// <summary>
+    ///     Handles the pointer pressed event to clear selection when clicking on empty space.
+    /// </summary>
     private void OnPointerPressed(object? sender, PointerPressedEventArgs e)
     {
         if (AssociatedObject is null)

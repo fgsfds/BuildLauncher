@@ -1,39 +1,44 @@
-<UserControl xmlns="https://github.com/avaloniaui"
+<UserControl x:Class="Avalonia.Desktop.Controls.PortsButtonsControl"
+             xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:i="https://github.com/projektanker/icons.avalonia"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="Avalonia.Desktop.Controls.PortsButtonsControl"
              xmlns:in="clr-namespace:Core.Client.Interfaces;assembly=BuildLauncher.Core.Client"
-             x:DataType="in:IPortsButtonControl">
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             d:DesignHeight="450"
+             d:DesignWidth="800"
+             x:DataType="in:IPortsButtonControl"
+             mc:Ignorable="d">
 
-    <Grid ColumnDefinitions="*, auto, auto" MinHeight="42" VerticalAlignment="Center" Margin="0,10">
+    <Grid MinHeight="42"
+          Margin="0,10"
+          VerticalAlignment="Center"
+          ColumnDefinitions="*, auto, auto">
 
         <StackPanel Name="PortsButtonsPanel"
                     Grid.Column="0"
-                    Orientation="Horizontal"
-                    IsVisible="{Binding IsPortsButtonsVisible}">
+                    IsVisible="{Binding IsPortsButtonsVisible}"
+                    Orientation="Horizontal">
 
-            <TextBlock VerticalAlignment="Center">Start with: </TextBlock>
+            <TextBlock VerticalAlignment="Center">Start with:</TextBlock>
 
         </StackPanel>
 
-        <Button Grid.Column="1"
-                HorizontalAlignment="Right"
-                ToolTip.Tip="Refresh"
-                Padding="8"
-                Margin="10,0"
-                Command="{Binding RefreshListCommand}"
-                IsEnabled="{Binding !IsInProgress}">
-            <i:Icon Value="fa7-rotate" />
-        </Button>
+        <!--  <Button Grid.Column="1"  -->
+        <!--  HorizontalAlignment="Right"  -->
+        <!--  ToolTip.Tip="Refresh"  -->
+        <!--  Padding="8"  -->
+        <!--  Margin="10,0"  -->
+        <!--  Command="{Binding RefreshListCommand}"  -->
+        <!--  IsEnabled="{Binding !IsInProgress}">  -->
+        <!--     <i:Icon Value="fa7-rotate" /> -->
+        <!-- </Button> -->
 
         <Button Grid.Column="2"
-                HorizontalAlignment="Right"
-                ToolTip.Tip="Open folder..."
                 Padding="8"
-                Command="{Binding OpenFolderCommand}">
+                HorizontalAlignment="Right"
+                Command="{Binding OpenFolderCommand}"
+                ToolTip.Tip="Open folder...">
             <i:Icon Value="fa7-folder-open" />
         </Button>
 

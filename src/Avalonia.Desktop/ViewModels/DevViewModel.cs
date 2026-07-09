@@ -25,14 +25,19 @@ namespace Avalonia.Desktop.ViewModels;
 
 public sealed partial class DevViewModel : ObservableObject
 {
-    private readonly IConfigProvider _config;
-    private readonly IFilesUploader _filesUploader;
+    private static readonly SolidColorBrush ErrorBrush = SolidColorBrush.Parse("Red");
+    private static readonly SolidColorBrush SuccessBrush = SolidColorBrush.Parse("Green");
     private readonly AddonsDatabaseManager _addonsDatabaseManager;
-    private readonly InstalledGamesProvider _gamesProvider;
-    private readonly ILogger<DevViewModel> _logger;
 
+    private readonly IConfigProvider _config;
+
+    private readonly IFilesUploader _filesUploader;
+
+    /// <summary>
+    ///     Set of forbidden file names that cannot be used in addons.
+    /// </summary>
     private readonly HashSet<string> _forbiddenNames =
-        [
+    [
         "duke3d.def",
         "rr.def",
         "rrra.def",
@@ -50,10 +55,13 @@ public sealed partial class DevViewModel : ObservableObject
         "ww2gi.con",
         "blood.ini",
         "cryptic.ini"
-        ];
+    ];
 
+    /// <summary>
+    ///     Set of forbidden OGG file names for Blood addons.
+    /// </summary>
     private readonly HashSet<string> _forbiddenOggs =
-        [
+    [
         "blood00.ogg",
         "blood01.ogg",
         "blood02.ogg",
@@ -64,9 +72,21 @@ public sealed partial class DevViewModel : ObservableObject
         "blood07.ogg",
         "blood08.ogg",
         "blood09.ogg"
-        ];
+    ];
+
+    private readonly InstalledGamesProvider _gamesProvider;
+
+    private readonly ILogger<DevViewModel> _logger;
 
 
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="DevViewModel" /> class.
+    /// </summary>
+    /// <param name="config">The configuration provider.</param>
+    /// <param name="filesUploader">The files uploader.</param>
+    /// <param name="addonsDatabaseManager">The addons database manager.</param>
+    /// <param name="gamesProvider">The installed games provider.</param>
+    /// <param name="logger">The logger.</param>
     public DevViewModel(
         IConfigProvider config,
         IFilesUploader filesUploader,
@@ -85,616 +105,11 @@ public sealed partial class DevViewModel : ObservableObject
     }
 
 
-    #region Binding Properties
-
     /// <summary>
-    /// Use local API parameter
+    ///     Gets the addon manifest JSON model from the current form state.
     /// </summary>
-    public bool LocalApiCheckbox
-    {
-        get => _config.UseLocalApi;
-        set
-        {
-            _config.UseLocalApi = value;
-            OnPropertyChanged();
-        }
-    }
-
-    public string AddonIdPrefix => SelectedGame switch
-    {
-        GameEnum.Duke3D => "duke3d-",
-        GameEnum.Blood => "blood-",
-        GameEnum.Wang => "wang-",
-        GameEnum.Fury => "fury-",
-        GameEnum.Redneck => "redneck-",
-        GameEnum.RidesAgain => "ridesagain-",
-        GameEnum.Slave => "slave-",
-        GameEnum.NAM => "nam-",
-        GameEnum.WW2GI => "ww2gi-",
-        GameEnum.Witchaven => "wh1-",
-        GameEnum.Witchaven2 => "wh2-",
-        _ => string.Empty
-    };
-
-    public bool IsDeveloperMode => ClientProperties.IsDeveloperMode;
-    public bool IsStep2Visible => IsMapSelected || IsModSelected || IsTcSelected;
-    public bool IsStep3Visible => SelectedGame is not null;
-    public bool AreDukePropertiesAvailable => SelectedGame is GameEnum.Duke3D or GameEnum.Fury or GameEnum.Redneck or GameEnum.RidesAgain or GameEnum.NAM or GameEnum.WW2GI;
-    public bool IsMainConAvailable => AreDukePropertiesAvailable && !IsModSelected;
-    public bool AreBloodPropertiesAvailable => SelectedGame is GameEnum.Blood;
-
-    [ObservableProperty]
-    private string _addonId = string.Empty;
-    [ObservableProperty]
-    private string _addonVersion = string.Empty;
-    [ObservableProperty]
-    private DateTimeOffset? _releaseDate;
-    [ObservableProperty]
-    private string? _addonAuthor;
-    [ObservableProperty]
-    private string? _addonDescription;
-    [ObservableProperty]
-    private string? _mainDef;
-    [ObservableProperty]
-    private string? _additionalDefs;
-    [ObservableProperty]
-    private string? _mainCon;
-    [ObservableProperty]
-    private string? _additionalCons;
-    [ObservableProperty]
-    private string? _rts;
-    [ObservableProperty]
-    private string? _ini;
-    [ObservableProperty]
-    private string? _mainRff;
-    [ObservableProperty]
-    private string? _soundRff;
-    [ObservableProperty]
-    private string? _mapFileName;
-
-    [ObservableProperty]
-    private string? _windowsEDukeExe;
-    [ObservableProperty]
-    private string? _windowsNBloodExe;
-    [ObservableProperty]
-    private string? _windowsNotBloodExe;
-    [ObservableProperty]
-    private string? _windowsRedNukemExe;
-    [ObservableProperty]
-    private string? _windowsRazeExe;
-    [ObservableProperty]
-    private string? _windowsPCExhumedExe;
-
-    [ObservableProperty]
-    private string? _linuxNBloodExe;
-    [ObservableProperty]
-    private string? _linuxRedNukemExe;
-    [ObservableProperty]
-    private string? _linuxRazeExe;
-    [ObservableProperty]
-    private string? _linuxPCExhumedExe;
-    [ObservableProperty]
-    private string? _linuxNotBloodExe;
-    [ObservableProperty]
-    private string? _linuxEDukeExe;
-
-    [ObservableProperty]
-    private int? _mapEpisode;
-    [ObservableProperty]
-    private int? _mapLevel;
-    [ObservableProperty]
-    private bool _isDukeAtomicSelected;
-    [ObservableProperty]
-    private bool _isDuke13DSelected;
-    [ObservableProperty]
-    private bool _isDukeWTSelected;
-    [ObservableProperty]
-    private bool _isEdukeConsSelected;
-    [ObservableProperty]
-    private bool _isModernTypesSelected;
-    [ObservableProperty]
-    private bool _isModelsSelected;
-    [ObservableProperty]
-    private bool _isHightileSelected;
-    [ObservableProperty]
-    private bool _isSlopedSelected;
-    [ObservableProperty]
-    private bool _isTrorSelected;
-    [ObservableProperty]
-    private bool _isCstatSelected;
-    [ObservableProperty]
-    private bool _isLightingSelected;
-    [ObservableProperty]
-    private bool _isSndInfoSelected;
-    [ObservableProperty]
-    private bool _isTilefromtextureSelected;
-    [ObservableProperty]
-    private bool _isInProgress;
-    [ObservableProperty]
-    private int _progressBarValue = 0;
-
-    [ObservableProperty]
-    private string _addonTitle = string.Empty;
-    partial void OnAddonTitleChanged(string value)
-    {
-        StringBuilder sb = new(value.Length);
-
-        foreach (var ch in value)
-        {
-            if (char.IsLetterOrDigit(ch))
-            {
-                _ = sb.Append(char.ToLower(ch));
-            }
-            else if (char.IsWhiteSpace(ch))
-            {
-                _ = sb.Append("-");
-            }
-        }
-
-        AddonId = sb.ToString();
-        OnPropertyChanged(nameof(AddonId));
-    }
-
-
-    [NotifyPropertyChangedFor(nameof(AreDukePropertiesAvailable))]
-    [NotifyPropertyChangedFor(nameof(IsMainConAvailable))]
-    [NotifyPropertyChangedFor(nameof(AddonIdPrefix))]
-    [NotifyPropertyChangedFor(nameof(IsStep3Visible))]
-    [NotifyPropertyChangedFor(nameof(AreBloodPropertiesAvailable))]
-    [NotifyPropertyChangedFor(nameof(WindowsNBloodExe))]
-    [NotifyPropertyChangedFor(nameof(WindowsNotBloodExe))]
-    [NotifyPropertyChangedFor(nameof(WindowsEDukeExe))]
-    [NotifyPropertyChangedFor(nameof(LinuxNBloodExe))]
-    [NotifyPropertyChangedFor(nameof(LinuxNotBloodExe))]
-    [NotifyPropertyChangedFor(nameof(LinuxEDukeExe))]
-    [ObservableProperty]
-    private GameEnum? _selectedGame;
-
-    [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(IsStep2Visible))]
-    private bool _isMapSelected;
-
-    [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(IsStep2Visible))]
-    private bool _isTcSelected;
-
-    [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(IsMainConAvailable))]
-    [NotifyPropertyChangedFor(nameof(IsStep2Visible))]
-    private bool _isModSelected;
-
-    [ObservableProperty]
-    private bool _isElMapTypeSelected;
-
-    [ObservableProperty]
-    private bool _isFileMapTypeSelected;
-
-    [ObservableProperty]
-    private string? _uploadingStatusMessage;
-
-    [ObservableProperty]
-    private string? _errorText;
-
-    [ObservableProperty]
-    private SolidColorBrush _errorTextColor = SolidColorBrush.Parse("Red");
-
-    [ObservableProperty]
-    private string? _pathToAddonFolder;
-    partial void OnPathToAddonFolderChanged(string? value)
-    {
-        if (value is null)
-        {
-            return;
-        }
-
-        if (!Directory.Exists(value))
-        {
-            SetResultMessage("Folder doesn't exist", true);
-            return;
-        }
-
-        ErrorText = null;
-
-        var addonJson = Path.Combine(value, "addon.json");
-
-        if (File.Exists(addonJson))
-        {
-            LoadJson(addonJson);
-        }
-
-        OnPropertyChanged(nameof(SelectedGame));
-    }
-
-    [ObservableProperty]
-    private string? _gameCrc;
-
-    [ObservableProperty]
-    private string? _jsonText;
-
-    [ObservableProperty]
-    private string? _uploadStatus;
-
-    [ObservableProperty]
-    private string _apiPasswordTextBox;
-    partial void OnApiPasswordTextBoxChanged(string value)
-    {
-        var configValue = _config.ApiPassword;
-
-        if (value.Equals(configValue))
-        {
-            return;
-        }
-        else
-        {
-            _config.ApiPassword = value;
-        }
-    }
-
-    [ObservableProperty]
-    private ImmutableList<DependantAddonJsonModel>? _dependenciesList;
-
-    [ObservableProperty]
-    private ImmutableList<DependantAddonJsonModel>? _incompatibilitiesList;
-
-    [ObservableProperty]
-    public partial ImmutableList<OptionJsonModel>? OptionsList { get; set; }
-
-    #endregion
-
-
-    #region Relay Commands
-
-    [RelayCommand]
-    private async Task SelectAddonFolder()
-    {
-        var folders = await AvaloniaProperties.TopLevel.StorageProvider.OpenFolderPickerAsync(
-            new FolderPickerOpenOptions
-            {
-                Title = "Choose addon folder",
-                AllowMultiple = false
-            }).ConfigureAwait(true);
-
-        if (folders.Count == 0)
-        {
-            return;
-        }
-
-        PathToAddonFolder = folders[0].Path.LocalPath;
-    }
-
-
-    [RelayCommand]
-    private async Task AddAddonAsync()
-    {
-        FilePickerFileType z64 = new("Zipped addon")
-        {
-            Patterns = ["*.zip"]
-        };
-
-        var files = await AvaloniaProperties.TopLevel.StorageProvider.OpenFilePickerAsync(
-            new FilePickerOpenOptions
-            {
-                Title = "Choose addon file",
-                AllowMultiple = true,
-                FileTypeFilter = [z64]
-            }).ConfigureAwait(true);
-
-        if (files.Count == 0)
-        {
-            return;
-        }
-
-        StringBuilder errors = new();
-
-        try
-        {
-            SetResultMessage("Uploading file. Please wait.", false);
-            IsInProgress = true;
-
-            StrongBox<int> progress = new(ProgressBarValue);
-
-            _ = Task.Run(async () =>
-            {
-                while (IsInProgress)
-                {
-                    ProgressBarValue = progress.Value;
-                    await Task.Delay(50).ConfigureAwait(false);
-                }
-            });
-
-            foreach (var file in files)
-            {
-                var pathToFile = file.Path.LocalPath;
-                var manifestResult = await ManifestHelper.GetMainManifestAsync(pathToFile).ConfigureAwait(false);
-
-                if (!manifestResult.IsSuccess)
-                {
-                    _ = errors.AppendLine($"Error while adding {file.Path.AbsolutePath}: {manifestResult.Message}");
-                    continue;
-                }
-
-                var fileS3Key = UriHelper.GetRelativeFilePath(manifestResult.ResultObject, pathToFile);
-
-                var uploadResult = await _filesUploader.UploadFileAsync(pathToFile, fileS3Key, progress, CancellationToken.None).ConfigureAwait(true);
-
-                if (!uploadResult.IsSuccess)
-                {
-                    _ = errors.AppendLine($"Error while adding {file.Path.AbsolutePath}: {uploadResult.Message}");
-                    continue;
-                }
-
-                var addingResult = await _addonsDatabaseManager.AddToDatabaseAsync(pathToFile, uploadResult.ResultObject.Value.Url, manifestResult.ResultObject).ConfigureAwait(false);
-
-                if (!addingResult.IsSuccess)
-                {
-                    _ = errors.AppendLine($"Error while adding {file.Path.AbsolutePath}: {addingResult.Message}");
-                    continue;
-                }
-            }
-
-            if (errors.Length > 0)
-            {
-                SetResultMessage(errors.ToString(), true);
-            }
-            else
-            {
-                SetResultMessage("Success", false);
-            }
-        }
-        catch (Exception ex)
-        {
-            _logger.LogCritical(ex, "Error while uploading addon");
-            SetResultMessage(ex.ToString(), true);
-        }
-        finally
-        {
-            IsInProgress = false;
-            ProgressBarValue = 0;
-        }
-    }
-
-
-    [RelayCommand]
-    private void AddDependency()
-    {
-        DependantAddonJsonModel newAddon = new() { Id = "", Version = null };
-
-        DependenciesList ??= [];
-
-        DependenciesList = DependenciesList.Add(newAddon);
-    }
-
-
-    [RelayCommand]
-    private void RemoveDependency(DependantAddonJsonModel dependency)
-    {
-        ArgumentNullException.ThrowIfNull(DependenciesList);
-
-        DependenciesList = DependenciesList.Remove(dependency);
-    }
-
-
-    [RelayCommand]
-    private void AddIncompatibility()
-    {
-        DependantAddonJsonModel newAddon = new() { Id = "", Version = null };
-
-        IncompatibilitiesList ??= [];
-
-        IncompatibilitiesList = IncompatibilitiesList.Add(newAddon);
-    }
-
-
-    [RelayCommand]
-    private void RemoveIncompatibility(DependantAddonJsonModel dependency)
-    {
-        ArgumentNullException.ThrowIfNull(IncompatibilitiesList);
-
-        IncompatibilitiesList = IncompatibilitiesList.Remove(dependency);
-    }
-
-
-    [RelayCommand]
-    private void AddOption()
-    {
-        OptionJsonModel newOption = new() { OptionName = "", Parameters = [] };
-
-        OptionsList ??= [];
-
-        OptionsList = OptionsList.Add(newOption);
-    }
-
-
-    [RelayCommand]
-    private void RemoveOption(OptionJsonModel option)
-    {
-        ArgumentNullException.ThrowIfNull(OptionsList);
-
-        OptionsList = OptionsList.Remove(option);
-    }
-
-
-    [RelayCommand]
-    private async Task SelectFileForCrcAsync()
-    {
-        var files = await AvaloniaProperties.TopLevel.StorageProvider.OpenFilePickerAsync(
-            new FilePickerOpenOptions
-            {
-                Title = "Choose file",
-                AllowMultiple = false
-            }).ConfigureAwait(true);
-
-        if (files.Count == 0)
-        {
-            return;
-        }
-
-        GameCrc = Crc32Helper.GetCrc32Hex(files[0].Path.LocalPath);
-    }
-
-    [RelayCommand]
-    private Task<string?> CreateZipAsync() => CreateZipInternalAsync();
-
-
-    [RelayCommand]
-    private async Task SubmitAddonAsync()
-    {
-        var pathToArchive = await CreateZipInternalAsync().ConfigureAwait(true);
-
-        if (pathToArchive is null)
-        {
-            return;
-        }
-
-        try
-        {
-            SetResultMessage("Uploading file. Please wait.", false);
-            IsInProgress = true;
-
-            StrongBox<int> progress = new(ProgressBarValue);
-
-            _ = Task.Run(async () =>
-            {
-                while (IsInProgress)
-                {
-                    ProgressBarValue = progress.Value;
-                    await Task.Delay(50).ConfigureAwait(false);
-                }
-            });
-
-            var uploadResult = await _filesUploader.UploadFileAsync(
-                pathToArchive,
-                $"uploads/{Guid.NewGuid()}/{Path.GetFileName(pathToArchive)}",
-                progress,
-                CancellationToken.None
-                ).ConfigureAwait(false);
-
-            if (!uploadResult.IsSuccess)
-            {
-                SetResultMessage(uploadResult.Message, true);
-            }
-            else
-            {
-                SetResultMessage("Uploaded successfully", false);
-            }
-        }
-        catch (TaskCanceledException)
-        {
-            _logger.LogInformation("Uploading cancelled");
-        }
-        catch (Exception ex)
-        {
-            _logger.LogCritical(ex, "Error while uploading file");
-            SetResultMessage(ex.ToString(), true);
-        }
-        finally
-        {
-            IsInProgress = false;
-            ProgressBarValue = 0;
-        }
-    }
-
-
-    [RelayCommand]
-    private void PreviewJson()
-    {
-        try
-        {
-            _ = GetAddonJson(out _);
-        }
-        catch (Exception ex)
-        {
-            SetResultMessage(ex.Message, true);
-        }
-    }
-
-
-    [RelayCommand]
-    private void SaveJson()
-    {
-        try
-        {
-            if (string.IsNullOrWhiteSpace(PathToAddonFolder) &&
-                !Directory.Exists(PathToAddonFolder))
-            {
-                SetResultMessage("Choose addon folder", true);
-                return;
-            }
-
-            var addon = GetAddonJson(out var jsonString);
-
-            File.WriteAllText(Path.Combine(PathToAddonFolder!, "addon.json"), jsonString);
-
-            RenameAddonFolder(addon);
-
-            SetResultMessage("JSON saved", false);
-        }
-        catch (Exception ex)
-        {
-            SetResultMessage(ex.Message, true);
-        }
-    }
-
-
-    [RelayCommand]
-    private async Task UpdateManifestsAsync()
-    {
-        if (ClientProperties.PathToLocalManifestsJson is null)
-        {
-            throw new NullReferenceException(nameof(ClientProperties.PathToLocalManifestsJson));
-        }
-
-        var folders = await AvaloniaProperties.TopLevel.StorageProvider.OpenFolderPickerAsync(
-            new FolderPickerOpenOptions
-            {
-                Title = "Choose addons folder",
-                AllowMultiple = false
-            }).ConfigureAwait(true);
-
-        if (folders.Count == 0)
-        {
-            return;
-        }
-
-        var files = Directory.EnumerateFiles(folders[0].Path.AbsolutePath, "*.zip", SearchOption.AllDirectories).ToList();
-
-        if (files is null or [])
-        {
-            return;
-        }
-
-        List<AddonManifestJsonModel> result = new(files.Count);
-
-        foreach (var file in files)
-        {
-            using var archive = ArchiveFactory.OpenArchive(file);
-            var jsons = archive.Entries.Where(x => x.Key!.StartsWith("addon", StringComparison.OrdinalIgnoreCase) && x.Key.EndsWith(".json", StringComparison.OrdinalIgnoreCase));
-
-            foreach (var json in jsons)
-            {
-                using var jsonStream = await json.OpenEntryStreamAsync().ConfigureAwait(false);
-
-                var jsonStr = await JsonSerializer.DeserializeAsync(
-                    jsonStream,
-                    AddonManifestJsonContext.Default.AddonManifestJsonModel
-                    ).ConfigureAwait(false);
-
-                if (jsonStr is null)
-                {
-                    continue;
-                }
-
-                result.Add(jsonStr);
-            }
-        }
-
-        var list = JsonSerializer.Serialize(result, AddonManifestJsonContext.Default.ListAddonManifestJsonModel);
-        await File.WriteAllTextAsync(ClientProperties.PathToLocalManifestsJson, list).ConfigureAwait(false);
-    }
-
-    #endregion
-
-
+    /// <param name="jsonString">The serialized JSON string.</param>
+    /// <returns>The addon manifest.</returns>
     private AddonManifestJsonModel GetAddonJson(out string jsonString)
     {
         if (PathToAddonFolder is null)
@@ -703,8 +118,8 @@ public sealed partial class DevViewModel : ObservableObject
         }
 
         var files = Directory.GetFiles(PathToAddonFolder, "*", SearchOption.TopDirectoryOnly)
-            .Select(static x => Path.GetFileName(x).ToLower())
-            .ToList();
+                             .Select(static x => Path.GetFileName(x).ToLower())
+                             .ToList();
 
         if (SelectedGame is not GameEnum.Standalone &&
             WindowsNBloodExe is null &&
@@ -737,10 +152,12 @@ public sealed partial class DevViewModel : ObservableObject
                     {
                         throw new MissingFieldException("Don't use ART files. Convert them to DEF.");
                     }
+
                     if (files.Any(static x => x.EndsWith(".DAT", StringComparison.OrdinalIgnoreCase)))
                     {
                         throw new MissingFieldException("Don't use DAT files. Convert them to DEF.");
                     }
+
                     if (files.Any(static x => x.EndsWith(".RFS", StringComparison.OrdinalIgnoreCase)))
                     {
                         throw new MissingFieldException("Addons with RFS files are not supported");
@@ -757,7 +174,7 @@ public sealed partial class DevViewModel : ObservableObject
         ErrorText = null;
 
         var addonType =
-              IsTcSelected ? AddonTypeEnum.TC
+            IsTcSelected ? AddonTypeEnum.TC
             : IsMapSelected ? AddonTypeEnum.Map
             : IsModSelected ? AddonTypeEnum.Mod
             : throw new ArgumentOutOfRangeException("Select addon type");
@@ -765,20 +182,22 @@ public sealed partial class DevViewModel : ObservableObject
         var gameEnum = SelectedGame ?? throw new ArgumentOutOfRangeException("Select game");
 
         DukeVersionEnum? dukeVersion =
-              SelectedGame is not GameEnum.Duke3D ? null
-              : IsDukeAtomicSelected ? DukeVersionEnum.Duke3D_Atomic
-              : IsDuke13DSelected ? DukeVersionEnum.Duke3D_13D
-              : IsDukeWTSelected ? DukeVersionEnum.Duke3D_WT
-              : null;
+            SelectedGame is not GameEnum.Duke3D ? null
+            : IsDukeAtomicSelected ? DukeVersionEnum.Duke3D_Atomic
+            : IsDuke13DSelected ? DukeVersionEnum.Duke3D_13D
+            : IsDukeWTSelected ? DukeVersionEnum.Duke3D_WT
+            : null;
 
         if (string.IsNullOrWhiteSpace(AddonTitle))
         {
             throw new MissingFieldException("Select addon title");
         }
+
         if (string.IsNullOrWhiteSpace(AddonId))
         {
             throw new MissingFieldException("Select addon id");
         }
+
         if (string.IsNullOrWhiteSpace(AddonVersion))
         {
             throw new MissingFieldException("Select addon version");
@@ -791,39 +210,48 @@ public sealed partial class DevViewModel : ObservableObject
         {
             features.Add(FeatureEnum.EDuke32_CON);
         }
+
         if (IsModernTypesSelected &&
             SelectedGame is GameEnum.Blood)
         {
             features.Add(FeatureEnum.Modern_Types);
         }
+
         if (IsModelsSelected)
         {
             features.Add(FeatureEnum.Models);
         }
+
         if (IsHightileSelected)
         {
             features.Add(FeatureEnum.Hightile);
         }
+
         if (IsSlopedSelected)
         {
             features.Add(FeatureEnum.Sloped_Sprites);
         }
+
         if (IsTrorSelected)
         {
             features.Add(FeatureEnum.TROR);
         }
+
         if (IsCstatSelected)
         {
             features.Add(FeatureEnum.Wall_Rotate_Cstat);
         }
+
         if (IsLightingSelected)
         {
             features.Add(FeatureEnum.Dynamic_Lighting);
         }
+
         if (IsSndInfoSelected)
         {
             features.Add(FeatureEnum.SndInfo);
         }
+
         if (IsTilefromtextureSelected)
         {
             features.Add(FeatureEnum.TileFromTexture);
@@ -850,7 +278,11 @@ public sealed partial class DevViewModel : ObservableObject
                     throw new MissingFieldException("Select start map level");
                 }
 
-                startMap = new MapSlotJsonModel() { Episode = MapEpisode.Value, Level = MapLevel.Value };
+                startMap = new MapSlotJsonModel()
+                {
+                    Episode = MapEpisode.Value,
+                    Level = MapLevel.Value
+                };
             }
 
             if (IsFileMapTypeSelected)
@@ -860,7 +292,10 @@ public sealed partial class DevViewModel : ObservableObject
                     throw new MissingFieldException("Select start map file name");
                 }
 
-                startMap = new MapFileJsonModel() { File = MapFileName };
+                startMap = new MapFileJsonModel()
+                {
+                    File = MapFileName
+                };
             }
         }
 
@@ -871,26 +306,31 @@ public sealed partial class DevViewModel : ObservableObject
             _ = executables.TryAdd(OSEnum.Windows, []);
             executables[OSEnum.Windows].Add(PortEnum.NBlood, WindowsNBloodExe);
         }
+
         if (!string.IsNullOrWhiteSpace(WindowsNotBloodExe))
         {
             _ = executables.TryAdd(OSEnum.Windows, []);
             executables[OSEnum.Windows].Add(PortEnum.NotBlood, WindowsNotBloodExe);
         }
+
         if (!string.IsNullOrWhiteSpace(WindowsEDukeExe))
         {
             _ = executables.TryAdd(OSEnum.Windows, []);
             executables[OSEnum.Windows].Add(PortEnum.EDuke32, WindowsEDukeExe);
         }
+
         if (!string.IsNullOrWhiteSpace(WindowsRedNukemExe))
         {
             _ = executables.TryAdd(OSEnum.Windows, []);
             executables[OSEnum.Windows].Add(PortEnum.RedNukem, WindowsRedNukemExe);
         }
+
         if (!string.IsNullOrWhiteSpace(WindowsRazeExe))
         {
             _ = executables.TryAdd(OSEnum.Windows, []);
             executables[OSEnum.Windows].Add(PortEnum.Raze, WindowsRazeExe);
         }
+
         if (!string.IsNullOrWhiteSpace(WindowsPCExhumedExe))
         {
             _ = executables.TryAdd(OSEnum.Windows, []);
@@ -902,26 +342,31 @@ public sealed partial class DevViewModel : ObservableObject
             _ = executables.TryAdd(OSEnum.Linux, []);
             executables[OSEnum.Linux].Add(PortEnum.NBlood, LinuxNBloodExe);
         }
+
         if (!string.IsNullOrWhiteSpace(LinuxNotBloodExe))
         {
             _ = executables.TryAdd(OSEnum.Linux, []);
             executables[OSEnum.Linux].Add(PortEnum.NotBlood, LinuxNotBloodExe);
         }
+
         if (!string.IsNullOrWhiteSpace(LinuxEDukeExe))
         {
             _ = executables.TryAdd(OSEnum.Linux, []);
             executables[OSEnum.Linux].Add(PortEnum.EDuke32, LinuxEDukeExe);
         }
+
         if (!string.IsNullOrWhiteSpace(LinuxRedNukemExe))
         {
             _ = executables.TryAdd(OSEnum.Linux, []);
             executables[OSEnum.Linux].Add(PortEnum.RedNukem, LinuxRedNukemExe);
         }
+
         if (!string.IsNullOrWhiteSpace(LinuxRazeExe))
         {
             _ = executables.TryAdd(OSEnum.Linux, []);
             executables[OSEnum.Linux].Add(PortEnum.Raze, LinuxRazeExe);
         }
+
         if (!string.IsNullOrWhiteSpace(LinuxPCExhumedExe))
         {
             _ = executables.TryAdd(OSEnum.Linux, []);
@@ -951,8 +396,19 @@ public sealed partial class DevViewModel : ObservableObject
             Ini = string.IsNullOrWhiteSpace(Ini) ? null : Ini,
             MainRff = string.IsNullOrWhiteSpace(MainRff) ? null : MainRff,
             SoundRff = string.IsNullOrWhiteSpace(SoundRff) ? null : SoundRff,
-            Dependencies = (DependenciesList is null || DependenciesList.Count == 0) && features.Count == 0 ? null : new() { Addons = DependenciesList is null || DependenciesList.Count == 0 ? null : [.. DependenciesList], RequiredFeatures = features.Count == 0 ? null : features },
-            Incompatibles = (IncompatibilitiesList is null || IncompatibilitiesList.Count == 0) ? null : new() { Addons = [.. IncompatibilitiesList] },
+            Dependencies = (DependenciesList is null || DependenciesList.Count == 0) && features.Count == 0
+                ? null
+                : new()
+                {
+                    Addons = DependenciesList is null || DependenciesList.Count == 0 ? null : [.. DependenciesList],
+                    RequiredFeatures = features.Count == 0 ? null : features
+                },
+            Incompatibles = (IncompatibilitiesList is null || IncompatibilitiesList.Count == 0)
+                ? null
+                : new()
+                {
+                    Addons = [.. IncompatibilitiesList]
+                },
             Options = (OptionsList is null || OptionsList.Count == 0) ? null : [.. OptionsList],
             StartMap = startMap,
             Executables = executables.Count == 0 ? null : executables
@@ -964,14 +420,29 @@ public sealed partial class DevViewModel : ObservableObject
         return addon;
     }
 
+    /// <summary>
+    ///     Loads an addon manifest from a JSON file.
+    /// </summary>
+    /// <param name="pathToFile">The path to the JSON file.</param>
     private void LoadJson(string pathToFile)
     {
-        using var jsonStream = File.OpenRead(pathToFile);
+        AddonManifestJsonModel? addon;
 
-        var addon = JsonSerializer.Deserialize(
-            jsonStream,
-            AddonManifestJsonContext.Default.AddonManifestJsonModel
-            );
+        try
+        {
+            using var jsonStream = File.OpenRead(pathToFile);
+
+            addon = JsonSerializer.Deserialize(
+                jsonStream,
+                AddonManifestJsonContext.Default.AddonManifestJsonModel
+                );
+        }
+        catch (Exception ex)
+        {
+            SetResultMessage($"Failed to load addon.json: {ex.Message}", true);
+
+            return;
+        }
 
         if (addon is null)
         {
@@ -1068,15 +539,16 @@ public sealed partial class DevViewModel : ObservableObject
     }
 
     /// <summary>
-    /// Rename addon folder to {addon_id}_v{addon_version}
+    ///     Renames the addon folder to match the addon's full name.
     /// </summary>
-    /// <param name="addon">Addon</param>
+    /// <param name="addon">The addon manifest.</param>
     private void RenameAddonFolder(AddonManifestJsonModel addon)
     {
         ArgumentNullException.ThrowIfNull(PathToAddonFolder);
 
         var fullName = GetAddonFullName(addon);
-        var newFolderPath = Path.Combine(Path.GetDirectoryName(PathToAddonFolder)!, fullName);
+        var parentDir = Path.GetDirectoryName(PathToAddonFolder) ?? throw new InvalidOperationException("Could not determine parent directory for addon folder");
+        var newFolderPath = Path.Combine(parentDir, fullName);
 
         if (!PathToAddonFolder.Equals(newFolderPath))
         {
@@ -1085,6 +557,11 @@ public sealed partial class DevViewModel : ObservableObject
         }
     }
 
+    /// <summary>
+    ///     Gets the full folder name for an addon based on its ID and version.
+    /// </summary>
+    /// <param name="addon">The addon manifest.</param>
+    /// <returns>The full folder name.</returns>
     private static string GetAddonFullName(AddonManifestJsonModel addon)
     {
         StringBuilder version = new();
@@ -1106,21 +583,22 @@ public sealed partial class DevViewModel : ObservableObject
     }
 
     /// <summary>
-    /// Set result message.
+    ///     Sets the result message on the UI thread.
     /// </summary>
-    /// <param name="message">Message.</param>
-    /// <param name="isError">Is error.</param>
+    /// <param name="message">The message text.</param>
+    /// <param name="isError">Whether this is an error message.</param>
     private void SetResultMessage(string message, bool isError)
     {
         Dispatcher.UIThread.Post(() =>
-        {
-            ErrorTextColor = isError ? SolidColorBrush.Parse("Red") : SolidColorBrush.Parse("Green");
-            ErrorText = message;
-        });
+            {
+                ErrorTextColor = isError ? ErrorBrush : SuccessBrush;
+                ErrorText = message;
+            }
+            );
     }
 
     /// <summary>
-    /// Create zip archive with addon files.
+    ///     Create zip archive with addon files.
     /// </summary>
     private async Task<string?> CreateZipInternalAsync()
     {
@@ -1132,6 +610,7 @@ public sealed partial class DevViewModel : ObservableObject
                 !Directory.Exists(PathToAddonFolder))
             {
                 SetResultMessage("Choose addon folder", true);
+
                 return null;
             }
 
@@ -1139,7 +618,8 @@ public sealed partial class DevViewModel : ObservableObject
 
             var addon = GetAddonJson(out var jsonString);
 
-            File.WriteAllText(Path.Combine(PathToAddonFolder!, "addon.json"), jsonString);
+            ArgumentNullException.ThrowIfNull(PathToAddonFolder);
+            File.WriteAllText(Path.Combine(PathToAddonFolder, "addon.json"), jsonString);
 
             string archiveSaveFolder;
             var game = _gamesProvider.GetGame(addon.SupportedGame.Game);
@@ -1188,7 +668,7 @@ public sealed partial class DevViewModel : ObservableObject
                             true,
                             fileInfo.Length,
                             fileInfo.LastWriteTime
-                        );
+                            );
 
                         currentFile++;
                         ProgressBarValue = (int)(currentFile / (double)filesCount * 100);
@@ -1201,11 +681,13 @@ public sealed partial class DevViewModel : ObservableObject
             }
 
             SetResultMessage("Zip created successfully. Go to the game page and press Refresh.", false);
+
             return pathToArchive;
         }
         catch (Exception ex)
         {
             SetResultMessage(ex.Message, true);
+
             return null;
         }
         finally
@@ -1213,4 +695,949 @@ public sealed partial class DevViewModel : ObservableObject
             IsInProgress = false;
         }
     }
+
+
+    #region Binding Properties
+
+    /// <summary>
+    ///     Use local API parameter
+    /// </summary>
+    public bool LocalApiCheckbox
+    {
+        get => _config.UseLocalApi;
+        set
+        {
+            _config.UseLocalApi = value;
+            OnPropertyChanged();
+        }
+    }
+
+    /// <summary>
+    ///     Gets the addon ID prefix for the selected game.
+    /// </summary>
+    public string AddonIdPrefix => SelectedGame switch
+    {
+        GameEnum.Duke3D => "duke3d-",
+        GameEnum.Blood => "blood-",
+        GameEnum.Wang => "wang-",
+        GameEnum.Fury => "fury-",
+        GameEnum.Redneck => "redneck-",
+        GameEnum.RidesAgain => "ridesagain-",
+        GameEnum.Slave => "slave-",
+        GameEnum.NAM => "nam-",
+        GameEnum.WW2GI => "ww2gi-",
+        GameEnum.Witchaven => "wh1-",
+        GameEnum.Witchaven2 => "wh2-",
+        _ => string.Empty
+    };
+
+    /// <summary>
+    ///     Gets whether the app is running in developer mode.
+    /// </summary>
+    public bool IsDeveloperMode => ClientProperties.IsDeveloperMode;
+
+    /// <summary>
+    ///     Gets whether step 2 (addon type selection) is visible.
+    /// </summary>
+    public bool IsStep2Visible => IsMapSelected || IsModSelected || IsTcSelected;
+
+    /// <summary>
+    ///     Gets whether step 3 (game selection) is visible.
+    /// </summary>
+    public bool IsStep3Visible => SelectedGame is not null;
+
+    /// <summary>
+    ///     Gets whether Duke-specific properties are available.
+    /// </summary>
+    public bool AreDukePropertiesAvailable => SelectedGame is GameEnum.Duke3D or GameEnum.Fury or GameEnum.Redneck or GameEnum.RidesAgain or GameEnum.NAM or GameEnum.WW2GI;
+
+    /// <summary>
+    ///     Gets whether the main CON field is available.
+    /// </summary>
+    public bool IsMainConAvailable => AreDukePropertiesAvailable && !IsModSelected;
+
+    /// <summary>
+    ///     Gets whether Blood-specific properties are available.
+    /// </summary>
+    public bool AreBloodPropertiesAvailable => SelectedGame is GameEnum.Blood;
+
+    /// <summary>
+    ///     Gets or sets the addon ID.
+    /// </summary>
+    [ObservableProperty]
+    private string _addonId = string.Empty;
+
+    /// <summary>
+    ///     Gets or sets the addon version.
+    /// </summary>
+    [ObservableProperty]
+    private string _addonVersion = string.Empty;
+
+    /// <summary>
+    ///     Gets or sets the release date.
+    /// </summary>
+    [ObservableProperty]
+    private DateTimeOffset? _releaseDate;
+
+    /// <summary>
+    ///     Gets or sets the addon author.
+    /// </summary>
+    [ObservableProperty]
+    private string? _addonAuthor;
+
+    /// <summary>
+    ///     Gets or sets the addon description.
+    /// </summary>
+    [ObservableProperty]
+    private string? _addonDescription;
+
+    /// <summary>
+    ///     Gets or sets the main DEF file.
+    /// </summary>
+    [ObservableProperty]
+    private string? _mainDef;
+
+    /// <summary>
+    ///     Gets or sets the additional DEF files.
+    /// </summary>
+    [ObservableProperty]
+    private string? _additionalDefs;
+
+    /// <summary>
+    ///     Gets or sets the main CON file.
+    /// </summary>
+    [ObservableProperty]
+    private string? _mainCon;
+
+    /// <summary>
+    ///     Gets or sets the additional CON files.
+    /// </summary>
+    [ObservableProperty]
+    private string? _additionalCons;
+
+    /// <summary>
+    ///     Gets or sets the RTS file.
+    /// </summary>
+    [ObservableProperty]
+    private string? _rts;
+
+    /// <summary>
+    ///     Gets or sets the INI file.
+    /// </summary>
+    [ObservableProperty]
+    private string? _ini;
+
+    /// <summary>
+    ///     Gets or sets the main RFF file.
+    /// </summary>
+    [ObservableProperty]
+    private string? _mainRff;
+
+    /// <summary>
+    ///     Gets or sets the sound RFF file.
+    /// </summary>
+    [ObservableProperty]
+    private string? _soundRff;
+
+    /// <summary>
+    ///     Gets or sets the map file name.
+    /// </summary>
+    [ObservableProperty]
+    private string? _mapFileName;
+
+    /// <summary>
+    ///     Gets or sets the Windows EDuke32 executable path.
+    /// </summary>
+    [ObservableProperty]
+    private string? _windowsEDukeExe;
+
+    /// <summary>
+    ///     Gets or sets the Windows NBlood executable path.
+    /// </summary>
+    [ObservableProperty]
+    private string? _windowsNBloodExe;
+
+    /// <summary>
+    ///     Gets or sets the Windows NotBlood executable path.
+    /// </summary>
+    [ObservableProperty]
+    private string? _windowsNotBloodExe;
+
+    /// <summary>
+    ///     Gets or sets the Windows RedNukem executable path.
+    /// </summary>
+    [ObservableProperty]
+    private string? _windowsRedNukemExe;
+
+    /// <summary>
+    ///     Gets or sets the Windows Raze executable path.
+    /// </summary>
+    [ObservableProperty]
+    private string? _windowsRazeExe;
+
+    /// <summary>
+    ///     Gets or sets the Windows PCExhumed executable path.
+    /// </summary>
+    [ObservableProperty]
+    private string? _windowsPCExhumedExe;
+
+    /// <summary>
+    ///     Gets or sets the Linux NBlood executable path.
+    /// </summary>
+    [ObservableProperty]
+    private string? _linuxNBloodExe;
+
+    /// <summary>
+    ///     Gets or sets the Linux RedNukem executable path.
+    /// </summary>
+    [ObservableProperty]
+    private string? _linuxRedNukemExe;
+
+    /// <summary>
+    ///     Gets or sets the Linux Raze executable path.
+    /// </summary>
+    [ObservableProperty]
+    private string? _linuxRazeExe;
+
+    /// <summary>
+    ///     Gets or sets the Linux PCExhumed executable path.
+    /// </summary>
+    [ObservableProperty]
+    private string? _linuxPCExhumedExe;
+
+    /// <summary>
+    ///     Gets or sets the Linux NotBlood executable path.
+    /// </summary>
+    [ObservableProperty]
+    private string? _linuxNotBloodExe;
+
+    /// <summary>
+    ///     Gets or sets the Linux EDuke32 executable path.
+    /// </summary>
+    [ObservableProperty]
+    private string? _linuxEDukeExe;
+
+    /// <summary>
+    ///     Gets or sets the map episode number.
+    /// </summary>
+    [ObservableProperty]
+    private int? _mapEpisode;
+
+    /// <summary>
+    ///     Gets or sets the map level number.
+    /// </summary>
+    [ObservableProperty]
+    private int? _mapLevel;
+    /// <summary>
+    ///     Gets or sets whether the Duke Atomic version is selected.
+    /// </summary>
+    [ObservableProperty]
+    private bool _isDukeAtomicSelected;
+
+    /// <summary>
+    ///     Gets or sets whether the Duke 1.3D version is selected.
+    /// </summary>
+    [ObservableProperty]
+    private bool _isDuke13DSelected;
+
+    /// <summary>
+    ///     Gets or sets whether the Duke Widescreen version is selected.
+    /// </summary>
+    [ObservableProperty]
+    private bool _isDukeWTSelected;
+
+    /// <summary>
+    ///     Gets or sets whether EDuke32 CON features are selected.
+    /// </summary>
+    [ObservableProperty]
+    private bool _isEdukeConsSelected;
+
+    /// <summary>
+    ///     Gets or sets whether modern types are selected.
+    /// </summary>
+    [ObservableProperty]
+    private bool _isModernTypesSelected;
+
+    /// <summary>
+    ///     Gets or sets whether models are selected.
+    /// </summary>
+    [ObservableProperty]
+    private bool _isModelsSelected;
+
+    /// <summary>
+    ///     Gets or sets whether hightile textures are selected.
+    /// </summary>
+    [ObservableProperty]
+    private bool _isHightileSelected;
+
+    /// <summary>
+    ///     Gets or sets whether sloped sprites are selected.
+    /// </summary>
+    [ObservableProperty]
+    private bool _isSlopedSelected;
+
+    /// <summary>
+    ///     Gets or sets whether TROR is selected.
+    /// </summary>
+    [ObservableProperty]
+    private bool _isTrorSelected;
+
+    /// <summary>
+    ///     Gets or sets whether wall rotate cstat is selected.
+    /// </summary>
+    [ObservableProperty]
+    private bool _isCstatSelected;
+
+    /// <summary>
+    ///     Gets or sets whether dynamic lighting is selected.
+    /// </summary>
+    [ObservableProperty]
+    private bool _isLightingSelected;
+
+    /// <summary>
+    ///     Gets or sets whether SndInfo is selected.
+    /// </summary>
+    [ObservableProperty]
+    private bool _isSndInfoSelected;
+
+    /// <summary>
+    ///     Gets or sets whether tile from texture is selected.
+    /// </summary>
+    [ObservableProperty]
+    private bool _isTilefromtextureSelected;
+
+    /// <summary>
+    ///     Gets or sets whether an operation is in progress.
+    /// </summary>
+    [ObservableProperty]
+    private bool _isInProgress;
+
+    /// <summary>
+    ///     Gets or sets the progress bar value.
+    /// </summary>
+    [ObservableProperty]
+    private int _progressBarValue = 0;
+
+    /// <summary>
+    ///     Gets or sets the addon title.
+    /// </summary>
+    [ObservableProperty]
+    private string _addonTitle = string.Empty;
+
+    /// <summary>
+    ///     Called when the addon title changes; auto-generates the addon ID.
+    /// </summary>
+    partial void OnAddonTitleChanged(string value)
+    {
+        StringBuilder sb = new(value.Length);
+
+        foreach (var ch in value)
+        {
+            if (char.IsLetterOrDigit(ch))
+            {
+                _ = sb.Append(char.ToLower(ch));
+            }
+            else if (char.IsWhiteSpace(ch))
+            {
+                _ = sb.Append("-");
+            }
+        }
+
+        AddonId = sb.ToString();
+        OnPropertyChanged(nameof(AddonId));
+    }
+
+
+    [NotifyPropertyChangedFor(nameof(AreDukePropertiesAvailable))]
+    [NotifyPropertyChangedFor(nameof(IsMainConAvailable))]
+    [NotifyPropertyChangedFor(nameof(AddonIdPrefix))]
+    [NotifyPropertyChangedFor(nameof(IsStep3Visible))]
+    [NotifyPropertyChangedFor(nameof(AreBloodPropertiesAvailable))]
+    [NotifyPropertyChangedFor(nameof(WindowsNBloodExe))]
+    [NotifyPropertyChangedFor(nameof(WindowsNotBloodExe))]
+    [NotifyPropertyChangedFor(nameof(WindowsEDukeExe))]
+    [NotifyPropertyChangedFor(nameof(LinuxNBloodExe))]
+    [NotifyPropertyChangedFor(nameof(LinuxNotBloodExe))]
+    [NotifyPropertyChangedFor(nameof(LinuxEDukeExe))]
+    /// <summary>
+    ///     Gets or sets the selected game.
+    /// </summary>
+    [ObservableProperty]
+    private GameEnum? _selectedGame;
+
+    /// <summary>
+    ///     Gets or sets whether the map addon type is selected.
+    /// </summary>
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(IsStep2Visible))]
+    private bool _isMapSelected;
+
+    /// <summary>
+    ///     Gets or sets whether the TC addon type is selected.
+    /// </summary>
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(IsStep2Visible))]
+    private bool _isTcSelected;
+
+    /// <summary>
+    ///     Gets or sets whether the mod addon type is selected.
+    /// </summary>
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(IsMainConAvailable))]
+    [NotifyPropertyChangedFor(nameof(IsStep2Visible))]
+    private bool _isModSelected;
+
+    /// <summary>
+    ///     Gets or sets whether the EL map type is selected.
+    /// </summary>
+    [ObservableProperty]
+    private bool _isElMapTypeSelected;
+
+    /// <summary>
+    ///     Gets or sets whether the file map type is selected.
+    /// </summary>
+    [ObservableProperty]
+    private bool _isFileMapTypeSelected;
+
+    /// <summary>
+    ///     Gets or sets the uploading status message.
+    /// </summary>
+    [ObservableProperty]
+    private string? _uploadingStatusMessage;
+
+    /// <summary>
+    ///     Gets or sets the error text.
+    /// </summary>
+    [ObservableProperty]
+    private string? _errorText;
+
+    /// <summary>
+    ///     Gets or sets the error text color.
+    /// </summary>
+    [ObservableProperty]
+    private SolidColorBrush _errorTextColor = SolidColorBrush.Parse("Red");
+
+    /// <summary>
+    ///     Gets or sets the path to the addon folder.
+    /// </summary>
+    [ObservableProperty]
+    private string? _pathToAddonFolder;
+
+    /// <summary>
+    ///     Called when the addon folder path changes; loads addon.json if it exists.
+    /// </summary>
+    partial void OnPathToAddonFolderChanged(string? value)
+    {
+        if (value is null)
+        {
+            return;
+        }
+
+        if (!Directory.Exists(value))
+        {
+            SetResultMessage("Folder doesn't exist", true);
+
+            return;
+        }
+
+        ErrorText = null;
+
+        var addonJson = Path.Combine(value, "addon.json");
+
+        if (File.Exists(addonJson))
+        {
+            LoadJson(addonJson);
+        }
+
+        OnPropertyChanged(nameof(SelectedGame));
+    }
+
+    /// <summary>
+    ///     Gets or sets the game CRC.
+    /// </summary>
+    [ObservableProperty]
+    private string? _gameCrc;
+
+    /// <summary>
+    ///     Gets or sets the JSON text.
+    /// </summary>
+    [ObservableProperty]
+    private string? _jsonText;
+
+    /// <summary>
+    ///     Gets or sets the upload status.
+    /// </summary>
+    [ObservableProperty]
+    private string? _uploadStatus;
+
+    /// <summary>
+    ///     Gets or sets the API password text box value.
+    /// </summary>
+    [ObservableProperty]
+    private string _apiPasswordTextBox;
+
+    /// <summary>
+    ///     Called when the API password changes; updates the configuration.
+    /// </summary>
+    partial void OnApiPasswordTextBoxChanged(string value)
+    {
+        var configValue = _config.ApiPassword;
+
+        if (value.Equals(configValue))
+        {
+            return;
+        }
+        else
+        {
+            _config.ApiPassword = value;
+        }
+    }
+
+    /// <summary>
+    ///     Gets or sets the list of dependencies.
+    /// </summary>
+    [ObservableProperty]
+    private ImmutableList<DependantAddonJsonModel>? _dependenciesList;
+
+    /// <summary>
+    ///     Gets or sets the list of incompatibilities.
+    /// </summary>
+    [ObservableProperty]
+    private ImmutableList<DependantAddonJsonModel>? _incompatibilitiesList;
+
+    /// <summary>
+    ///     Gets or sets the list of options.
+    /// </summary>
+    [ObservableProperty]
+    public partial ImmutableList<OptionJsonModel>? OptionsList { get; set; }
+
+    #endregion
+
+
+    #region Relay Commands
+
+    /// <summary>
+    ///     Opens a folder picker to select the addon folder.
+    /// </summary>
+    [RelayCommand]
+    private async Task SelectAddonFolder()
+    {
+        var folders = await AvaloniaProperties.TopLevel.StorageProvider.OpenFolderPickerAsync(
+            new FolderPickerOpenOptions
+            {
+                Title = "Choose addon folder",
+                AllowMultiple = false
+            }
+            ).ConfigureAwait(true);
+
+        if (folders.Count == 0)
+        {
+            return;
+        }
+
+        PathToAddonFolder = folders[0].Path.LocalPath;
+    }
+
+
+    /// <summary>
+    ///     Uploads and adds an addon to the database.
+    /// </summary>
+    [RelayCommand]
+    private async Task AddAddonAsync()
+    {
+        FilePickerFileType z64 = new("Zipped addon")
+        {
+            Patterns = ["*.zip"]
+        };
+
+        var files = await AvaloniaProperties.TopLevel.StorageProvider.OpenFilePickerAsync(
+            new FilePickerOpenOptions
+            {
+                Title = "Choose addon file",
+                AllowMultiple = true,
+                FileTypeFilter = [z64]
+            }
+            ).ConfigureAwait(true);
+
+        if (files.Count == 0)
+        {
+            return;
+        }
+
+        StringBuilder errors = new();
+
+        try
+        {
+            SetResultMessage("Uploading file. Please wait.", false);
+            IsInProgress = true;
+
+            StrongBox<int> progress = new(ProgressBarValue);
+
+            _ = Task.Run(async () =>
+                {
+                    try
+                    {
+                        while (IsInProgress)
+                        {
+                            ProgressBarValue = progress.Value;
+                            await Task.Delay(50).ConfigureAwait(false);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.LogCritical(ex, "Error in progress tracking loop during AddAddon");
+                    }
+                }
+                );
+
+            foreach (var file in files)
+            {
+                var pathToFile = file.Path.LocalPath;
+                var manifestResult = await ManifestHelper.GetMainManifestAsync(pathToFile).ConfigureAwait(false);
+
+                if (!manifestResult.IsSuccess)
+                {
+                    _ = errors.AppendLine($"Error while adding {file.Path.AbsolutePath}: {manifestResult.Message}");
+
+                    continue;
+                }
+
+                var fileS3Key = UriHelper.GetRelativeFilePath(manifestResult.ResultObject, pathToFile);
+
+                var uploadResult = await _filesUploader.UploadFileAsync(pathToFile, fileS3Key, progress, CancellationToken.None).ConfigureAwait(true);
+
+                if (!uploadResult.IsSuccess)
+                {
+                    _ = errors.AppendLine($"Error while adding {file.Path.AbsolutePath}: {uploadResult.Message}");
+
+                    continue;
+                }
+
+                var addingResult = await _addonsDatabaseManager.AddToDatabaseAsync(pathToFile, uploadResult.ResultObject.Value.Url, manifestResult.ResultObject).ConfigureAwait(false);
+
+                if (!addingResult.IsSuccess)
+                {
+                    _ = errors.AppendLine($"Error while adding {file.Path.AbsolutePath}: {addingResult.Message}");
+
+                    continue;
+                }
+            }
+
+            if (errors.Length > 0)
+            {
+                SetResultMessage(errors.ToString(), true);
+            }
+            else
+            {
+                SetResultMessage("Success", false);
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogCritical(ex, "Error while uploading addon");
+            SetResultMessage(ex.ToString(), true);
+        }
+        finally
+        {
+            IsInProgress = false;
+            ProgressBarValue = 0;
+        }
+    }
+
+
+    /// <summary>
+    ///     Adds a new dependency entry.
+    /// </summary>
+    [RelayCommand]
+    private void AddDependency()
+    {
+        DependantAddonJsonModel newAddon = new()
+        {
+            Id = "",
+            Version = null
+        };
+
+        DependenciesList ??= [];
+
+        DependenciesList = DependenciesList.Add(newAddon);
+    }
+
+    /// <summary>
+    ///     Removes a dependency entry.
+    /// </summary>
+    [RelayCommand]
+    private void RemoveDependency(DependantAddonJsonModel dependency)
+    {
+        ArgumentNullException.ThrowIfNull(DependenciesList);
+
+        DependenciesList = DependenciesList.Remove(dependency);
+    }
+
+
+    /// <summary>
+    ///     Adds a new incompatibility entry.
+    /// </summary>
+    [RelayCommand]
+    private void AddIncompatibility()
+    {
+        DependantAddonJsonModel newAddon = new()
+        {
+            Id = "",
+            Version = null
+        };
+
+        IncompatibilitiesList ??= [];
+
+        IncompatibilitiesList = IncompatibilitiesList.Add(newAddon);
+    }
+
+
+    /// <summary>
+    ///     Removes an incompatibility entry.
+    /// </summary>
+    [RelayCommand]
+    private void RemoveIncompatibility(DependantAddonJsonModel dependency)
+    {
+        ArgumentNullException.ThrowIfNull(IncompatibilitiesList);
+
+        IncompatibilitiesList = IncompatibilitiesList.Remove(dependency);
+    }
+
+
+    /// <summary>
+    ///     Adds a new option entry.
+    /// </summary>
+    [RelayCommand]
+    private void AddOption()
+    {
+        OptionJsonModel newOption = new()
+        {
+            OptionName = "",
+            Parameters = []
+        };
+
+        OptionsList ??= [];
+
+        OptionsList = OptionsList.Add(newOption);
+    }
+
+    /// <summary>
+    ///     Removes an option entry.
+    /// </summary>
+    [RelayCommand]
+    private void RemoveOption(OptionJsonModel option)
+    {
+        ArgumentNullException.ThrowIfNull(OptionsList);
+
+        OptionsList = OptionsList.Remove(option);
+    }
+
+
+    /// <summary>
+    ///     Opens a file picker to select a file for CRC calculation.
+    /// </summary>
+    [RelayCommand]
+    private async Task SelectFileForCrcAsync()
+    {
+        var files = await AvaloniaProperties.TopLevel.StorageProvider.OpenFilePickerAsync(
+            new FilePickerOpenOptions
+            {
+                Title = "Choose file",
+                AllowMultiple = false
+            }
+            ).ConfigureAwait(true);
+
+        if (files.Count == 0)
+        {
+            return;
+        }
+
+        GameCrc = Crc32Helper.GetCrc32Hex(files[0].Path.LocalPath);
+    }
+
+    /// <summary>
+    ///     Creates a zip archive of the addon.
+    /// </summary>
+    [RelayCommand]
+    private Task<string?> CreateZipAsync() => CreateZipInternalAsync();
+
+
+    /// <summary>
+    ///     Submits the addon for upload.
+    /// </summary>
+    [RelayCommand]
+    private async Task SubmitAddonAsync()
+    {
+        var pathToArchive = await CreateZipInternalAsync().ConfigureAwait(true);
+
+        if (pathToArchive is null)
+        {
+            return;
+        }
+
+        try
+        {
+            SetResultMessage("Uploading file. Please wait.", false);
+            IsInProgress = true;
+
+            StrongBox<int> progress = new(ProgressBarValue);
+
+            _ = Task.Run(async () =>
+                {
+                    try
+                    {
+                        while (IsInProgress)
+                        {
+                            ProgressBarValue = progress.Value;
+                            await Task.Delay(50).ConfigureAwait(false);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.LogCritical(ex, "Error in progress tracking loop during SubmitAddon");
+                    }
+                }
+                );
+
+            var uploadResult = await _filesUploader.UploadFileAsync(
+                pathToArchive,
+                $"uploads/{Guid.NewGuid()}/{Path.GetFileName(pathToArchive)}",
+                progress,
+                CancellationToken.None
+                ).ConfigureAwait(false);
+
+            if (!uploadResult.IsSuccess)
+            {
+                SetResultMessage(uploadResult.Message, true);
+            }
+            else
+            {
+                SetResultMessage("Uploaded successfully", false);
+            }
+        }
+        catch (TaskCanceledException)
+        {
+            _logger.LogInformation("Uploading cancelled");
+        }
+        catch (Exception ex)
+        {
+            _logger.LogCritical(ex, "Error while uploading file");
+            SetResultMessage(ex.ToString(), true);
+        }
+        finally
+        {
+            IsInProgress = false;
+            ProgressBarValue = 0;
+        }
+    }
+
+
+    /// <summary>
+    ///     Previews the generated JSON for the addon.
+    /// </summary>
+    [RelayCommand]
+    private void PreviewJson()
+    {
+        try
+        {
+            _ = GetAddonJson(out _);
+        }
+        catch (Exception ex)
+        {
+            SetResultMessage(ex.Message, true);
+        }
+    }
+
+    /// <summary>
+    ///     Saves the JSON manifest to the addon folder.
+    /// </summary>
+    [RelayCommand]
+    private void SaveJson()
+    {
+        try
+        {
+            if (string.IsNullOrWhiteSpace(PathToAddonFolder) &&
+                !Directory.Exists(PathToAddonFolder))
+            {
+                SetResultMessage("Choose addon folder", true);
+
+                return;
+            }
+
+            var addon = GetAddonJson(out var jsonString);
+
+            ArgumentNullException.ThrowIfNull(PathToAddonFolder);
+            File.WriteAllText(Path.Combine(PathToAddonFolder, "addon.json"), jsonString);
+
+            RenameAddonFolder(addon);
+
+            SetResultMessage("JSON saved", false);
+        }
+        catch (Exception ex)
+        {
+            SetResultMessage(ex.Message, true);
+        }
+    }
+
+    /// <summary>
+    ///     Updates all addon manifests from the selected folder.
+    /// </summary>
+    [RelayCommand]
+    private async Task UpdateManifestsAsync()
+    {
+        if (ClientProperties.PathToLocalManifestsJson is null)
+        {
+            throw new InvalidOperationException($"{nameof(ClientProperties.PathToLocalManifestsJson)} is null");
+        }
+
+        var folders = await AvaloniaProperties.TopLevel.StorageProvider.OpenFolderPickerAsync(
+            new FolderPickerOpenOptions
+            {
+                Title = "Choose addons folder",
+                AllowMultiple = false
+            }
+            ).ConfigureAwait(true);
+
+        if (folders.Count == 0)
+        {
+            return;
+        }
+
+        var files = Directory.EnumerateFiles(folders[0].Path.AbsolutePath, "*.zip", SearchOption.AllDirectories).ToList();
+
+        if (files is null or [])
+        {
+            return;
+        }
+
+        List<AddonManifestJsonModel> result = new(files.Count);
+
+        foreach (var file in files)
+        {
+            using var archive = ArchiveFactory.OpenArchive(file);
+            var jsons = archive.Entries.Where(x => x.Key?.StartsWith("addon", StringComparison.OrdinalIgnoreCase) == true && x.Key.EndsWith(".json", StringComparison.OrdinalIgnoreCase));
+
+            foreach (var json in jsons)
+            {
+                using var jsonStream = await json.OpenEntryStreamAsync().ConfigureAwait(false);
+
+                var jsonStr = await JsonSerializer.DeserializeAsync(
+                    jsonStream,
+                    AddonManifestJsonContext.Default.AddonManifestJsonModel
+                    ).ConfigureAwait(false);
+
+                if (jsonStr is null)
+                {
+                    continue;
+                }
+
+                result.Add(jsonStr);
+            }
+        }
+
+        var list = JsonSerializer.Serialize(result, AddonManifestJsonContext.Default.ListAddonManifestJsonModel);
+        await File.WriteAllTextAsync(ClientProperties.PathToLocalManifestsJson, list).ConfigureAwait(false);
+    }
+
+    #endregion
 }

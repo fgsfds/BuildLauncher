@@ -17,8 +17,14 @@ namespace Avalonia.Desktop.ViewModels;
 public sealed partial class SettingsViewModel : ObservableObject
 {
     private readonly IConfigProvider _config;
+
     private readonly GamesPathsProvider _gamesPathsProvider;
 
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="SettingsViewModel" /> class.
+    /// </summary>
+    /// <param name="config">The configuration provider.</param>
+    /// <param name="gamesPathsProvider">The games paths provider.</param>
     public SettingsViewModel(
         IConfigProvider config,
         GamesPathsProvider gamesPathsProvider
@@ -31,111 +37,174 @@ public sealed partial class SettingsViewModel : ObservableObject
 
     #region Binding Properties
 
+    /// <summary>
+    ///     Gets whether the system default theme is selected.
+    /// </summary>
     public bool IsDefaultTheme => _config.Theme is ThemeEnum.System;
 
+    /// <summary>
+    ///     Gets whether the light theme is selected.
+    /// </summary>
     public bool IsLightTheme => _config.Theme is ThemeEnum.Light;
 
+    /// <summary>
+    ///     Gets whether the dark theme is selected.
+    /// </summary>
     public bool IsDarkTheme => _config.Theme is ThemeEnum.Dark;
 
+    /// <summary>
+    ///     Gets whether the app is running in developer mode.
+    /// </summary>
     public bool IsDeveloperMode => ClientProperties.IsDeveloperMode;
 
 
+    /// <summary>
+    ///     Gets or sets the path to Blood.
+    /// </summary>
     public string? PathToBlood
     {
         get => _config.PathBlood;
         set => _config.PathBlood = value;
     }
 
+    /// <summary>
+    ///     Gets or sets the path to Duke Nukem 3D.
+    /// </summary>
     public string? PathToDuke3D
     {
         get => _config.PathDuke3D;
         set => _config.PathDuke3D = value;
     }
 
+    /// <summary>
+    ///     Gets or sets the path to Duke Nukem 3D Widescreen.
+    /// </summary>
     public string? PathToDukeWT
     {
         get => _config.PathDukeWT;
         set => _config.PathDukeWT = value;
     }
 
+    /// <summary>
+    ///     Gets or sets the path to Duke Nukem 64.
+    /// </summary>
     public string? PathToDuke64
     {
         get => _config.PathDuke64;
         set => _config.PathDuke64 = value;
     }
 
+    /// <summary>
+    ///     Gets or sets the path to Duke Nukem: Zero Hour.
+    /// </summary>
     public string? PathToDukeZH
     {
         get => _config.PathDukeZH;
         set => _config.PathDukeZH = value;
     }
 
+    /// <summary>
+    ///     Gets or sets the path to Shadow Warrior.
+    /// </summary>
     public string? PathToWang
     {
         get => _config.PathWang;
         set => _config.PathWang = value;
     }
 
+    /// <summary>
+    ///     Gets or sets the path to Ion Fury.
+    /// </summary>
     public string? PathToFury
     {
         get => _config.PathFury;
         set => _config.PathFury = value;
     }
 
+    /// <summary>
+    ///     Gets or sets the path to Redneck Rampage.
+    /// </summary>
     public string? PathToRedneck
     {
         get => _config.PathRedneck;
         set => _config.PathRedneck = value;
     }
 
+    /// <summary>
+    ///     Gets or sets the path to Redneck Rampage Rides Again.
+    /// </summary>
     public string? PathToAgain
     {
         get => _config.PathRidesAgain;
         set => _config.PathRidesAgain = value;
     }
 
+    /// <summary>
+    ///     Gets or sets the path to Powerslave.
+    /// </summary>
     public string? PathToSlave
     {
         get => _config.PathSlave;
         set => _config.PathSlave = value;
     }
 
+    /// <summary>
+    ///     Gets or sets the path to NAM.
+    /// </summary>
     public string? PathToNam
     {
         get => _config.PathNam;
         set => _config.PathNam = value;
     }
 
+    /// <summary>
+    ///     Gets or sets the path to WW2GI.
+    /// </summary>
     public string? PathToWW2GI
     {
         get => _config.PathWW2GI;
         set => _config.PathWW2GI = value;
     }
 
+    /// <summary>
+    ///     Gets or sets the path to Witchaven.
+    /// </summary>
     public string? PathToWitchaven
     {
         get => _config.PathWitchaven;
         set => _config.PathWitchaven = value;
     }
 
+    /// <summary>
+    ///     Gets or sets the path to Witchaven 2.
+    /// </summary>
     public string? PathToWitchaven2
     {
         get => _config.PathWitchaven2;
         set => _config.PathWitchaven2 = value;
     }
 
+    /// <summary>
+    ///     Gets or sets the path to TekWar.
+    /// </summary>
     public string? PathToTekWar
     {
         get => _config.PathTekWar;
         set => _config.PathTekWar = value;
     }
 
+    /// <summary>
+    ///     Gets or sets the GitHub API token.
+    /// </summary>
     public string? GitHubToken
     {
         get => _config.GitHubToken;
         set => _config.GitHubToken = value;
     }
 
+    /// <summary>
+    ///     Gets or sets the S3 secret key.
+    /// </summary>
     public string? S3SecretKey
     {
         get => _config.S3SecretKey;
@@ -143,7 +212,7 @@ public sealed partial class SettingsViewModel : ObservableObject
     }
 
     /// <summary>
-    /// Skip intro parameter
+    ///     Skip intro parameter
     /// </summary>
     public bool SkipIntroCheckbox
     {
@@ -156,7 +225,7 @@ public sealed partial class SettingsViewModel : ObservableObject
     }
 
     /// <summary>
-    /// Skip startup window parameter
+    ///     Skip startup window parameter
     /// </summary>
     public bool SkipStartupCheckbox
     {
@@ -173,6 +242,9 @@ public sealed partial class SettingsViewModel : ObservableObject
 
     #region Relay Commands
 
+    /// <summary>
+    ///     Sets the application theme.
+    /// </summary>
     [RelayCommand]
     private void SetTheme(object? param)
     {
@@ -180,7 +252,7 @@ public sealed partial class SettingsViewModel : ObservableObject
 
         if (!EnumHelper.TryParse<ThemeEnum>(param, out var themeEnum))
         {
-            throw new InvalidOperationException();
+            throw new InvalidOperationException($"Invalid theme parameter: {param}");
         }
 
         Application.Current.RequestedThemeVariant = themeEnum.Value switch
@@ -188,7 +260,7 @@ public sealed partial class SettingsViewModel : ObservableObject
             ThemeEnum.System => ThemeVariant.Default,
             ThemeEnum.Light => ThemeVariant.Light,
             ThemeEnum.Dark => ThemeVariant.Dark,
-            _ => throw new ArgumentOutOfRangeException(),
+            _ => throw new ArgumentOutOfRangeException()
         };
 
         _config.Theme = themeEnum.Value;
@@ -196,7 +268,7 @@ public sealed partial class SettingsViewModel : ObservableObject
 
 
     /// <summary>
-    /// Open folder picker
+    ///     Open folder picker
     /// </summary>
     [RelayCommand]
     private async Task OpenFolderPickerAsync(string param)
@@ -206,7 +278,8 @@ public sealed partial class SettingsViewModel : ObservableObject
             {
                 Title = "Choose game folder",
                 AllowMultiple = false
-            }).ConfigureAwait(true);
+            }
+            ).ConfigureAwait(true);
 
         if (files.Count == 0)
         {
@@ -295,7 +368,7 @@ public sealed partial class SettingsViewModel : ObservableObject
 
 
     /// <summary>
-    /// Replace path to game with auto detected one
+    ///     Replace path to game with auto detected one
     /// </summary>
     [RelayCommand]
     private void Autodetect(string param)
@@ -447,14 +520,18 @@ public sealed partial class SettingsViewModel : ObservableObject
 
 
     /// <summary>
-    /// Open file picker
+    ///     Open file picker
     /// </summary>
     [RelayCommand]
     private async Task OpenFilePickerAsync(string param)
     {
         FilePickerFileType z64 = new("N64 ROM")
         {
-            Patterns = ["*.z64", "*.n64"]
+            Patterns =
+            [
+                "*.z64",
+                "*.n64"
+            ]
         };
 
         var files = await AvaloniaProperties.TopLevel.StorageProvider.OpenFilePickerAsync(
@@ -463,7 +540,8 @@ public sealed partial class SettingsViewModel : ObservableObject
                 Title = "Choose game ROM",
                 AllowMultiple = false,
                 FileTypeFilter = [z64]
-            }).ConfigureAwait(true);
+            }
+            ).ConfigureAwait(true);
 
         if (files.Count == 0)
         {
@@ -484,18 +562,27 @@ public sealed partial class SettingsViewModel : ObservableObject
 
 
     /// <summary>
-    /// Open log file
+    ///     Open log file
     /// </summary>
     [RelayCommand]
     private void OpenLog()
     {
         if (File.Exists(ClientProperties.PathToLogFile))
         {
-            using var _ = Process.Start(new ProcessStartInfo
+            try
             {
-                FileName = ClientProperties.PathToLogFile,
-                UseShellExecute = true
-            });
+                using var _ = Process.Start(
+                    new ProcessStartInfo
+                    {
+                        FileName = ClientProperties.PathToLogFile,
+                        UseShellExecute = true
+                    }
+                    );
+            }
+            catch (Exception ex)
+            {
+                Trace.WriteLine($"Failed to open log file: {ex.Message}");
+            }
         }
     }
 

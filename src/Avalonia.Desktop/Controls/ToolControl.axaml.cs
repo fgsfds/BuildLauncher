@@ -3,8 +3,14 @@ using Avalonia.Desktop.Helpers;
 
 namespace Avalonia.Desktop.Controls;
 
+/// <summary>
+///     Displays information and actions for a single tool.
+/// </summary>
 public sealed partial class ToolControl : UserControl
 {
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="ToolControl" /> class.
+    /// </summary>
     public ToolControl()
     {
         if (Design.IsDesignMode)

@@ -1,7 +1,7 @@
 ﻿<Styles xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:md="https://github.com/whistyun/Markdown.Avalonia.Tight"
-        xmlns:ctxt="clr-namespace:ColorTextBlock.Avalonia;assembly=ColorTextBlock.Avalonia">
+        xmlns:ctxt="clr-namespace:ColorTextBlock.Avalonia;assembly=ColorTextBlock.Avalonia"
+        xmlns:md="https://github.com/whistyun/Markdown.Avalonia.Tight">
 
     <Design.PreviewWith>
         <md:MarkdownScrollViewer>
@@ -10,18 +10,18 @@
     </Design.PreviewWith>
 
     <Style Selector="Grid.List">
-        <Setter Property="Margin" Value="10,5,5,5"/>
-        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="Margin" Value="10,5,5,5" />
+        <Setter Property="VerticalAlignment" Value="Center" />
     </Style>
 
     <Style Selector="ctxt|CTextBlock.ListMarker">
-        <Setter Property="Margin" Value="0"/>
-        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="Margin" Value="0" />
+        <Setter Property="VerticalAlignment" Value="Center" />
     </Style>
 
     <Style Selector=".List ctxt|CTextBlock">
-        <Setter Property="Margin" Value="3"/>
-        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="Margin" Value="3" />
+        <Setter Property="VerticalAlignment" Value="Center" />
     </Style>
 
 </Styles>
