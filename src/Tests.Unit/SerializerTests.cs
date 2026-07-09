@@ -4,247 +4,253 @@ using Core.All.Serializable.Addon;
 
 namespace Tests.Unit;
 
+/// <summary>
+///     Tests for JSON serialization and deserialization of addon manifests.
+/// </summary>
 public sealed class SerializerTests
 {
     private const string AddonJson =
-"""
-    {
-      "id": "addon-id",
-      "type": "mod",
-      "game":
-      {
-          "name": "shadowwarrior",
-          "version": "1.3d",
-          "crc": "0x982AFE4A"
-      },
-      "title": "Addon Title",
-      "author": "Author",
-      "release_date": "1991-06-10",
-      "version": "1.0",
-      "con_main": "MAIN.CON",
-      "con_modules": [ "MODULE.CON", "MODULE2.CON" ],
-      "def_main": "MAIN.DEF",
-      "def_modules": [ "MODULE.DEF" ],
-      "rts": "MAIN.RTS",
-      "ini": "MAIN.INI",
-      "rff_main": "MAIN.RFF",
-      "rff_sound": "SOUND.RFF",
-      "dependencies":
-      {
-          "addons":
-          [
-              { "id": "Addon1" },
-              { "id": "Addon2", "version": "1.0" }
-          ],
-          "features":
-          [
-              "eduke32_con",
-              "tror"
-          ],
-      },
-      "incompatibles":
-      {
-          "addons":
-          [
-              { "id": "IncompatibleAddon1" },
-              { "id": "IncompatibleAddon2", "version": "1.1" }
-          ]
-      },
-      "description": "Addon description",
-      "startmap": { "file": "TEST.MAP" },
-      "options":
-      [
-          { 
-              "name": "option 1",
-              "parameters": {
-                  "opt1.def": "DEF"
-              }
-          },
-          { 
-              "name": "option 2",
-              "parameters": {
-                  "opt2.def": "DEF",
-                  "opt2_2.def": "DEF"
-              }
-          },
-      ]
-    }
-""";
+        """
+            {
+              "id": "addon-id",
+              "type": "mod",
+              "game":
+              {
+                  "name": "shadowwarrior",
+                  "version": "1.3d",
+                  "crc": "0x982AFE4A"
+              },
+              "title": "Addon Title",
+              "author": "Author",
+              "release_date": "1991-06-10",
+              "version": "1.0",
+              "con_main": "MAIN.CON",
+              "con_modules": [ "MODULE.CON", "MODULE2.CON" ],
+              "def_main": "MAIN.DEF",
+              "def_modules": [ "MODULE.DEF" ],
+              "rts": "MAIN.RTS",
+              "ini": "MAIN.INI",
+              "rff_main": "MAIN.RFF",
+              "rff_sound": "SOUND.RFF",
+              "dependencies":
+              {
+                  "addons":
+                  [
+                      { "id": "Addon1" },
+                      { "id": "Addon2", "version": "1.0" }
+                  ],
+                  "features":
+                  [
+                      "eduke32_con",
+                      "tror"
+                  ],
+              },
+              "incompatibles":
+              {
+                  "addons":
+                  [
+                      { "id": "IncompatibleAddon1" },
+                      { "id": "IncompatibleAddon2", "version": "1.1" }
+                  ]
+              },
+              "description": "Addon description",
+              "startmap": { "file": "TEST.MAP" },
+              "options":
+              [
+                  { 
+                      "name": "option 1",
+                      "parameters": {
+                          "opt1.def": "DEF"
+                      }
+                  },
+                  { 
+                      "name": "option 2",
+                      "parameters": {
+                          "opt2.def": "DEF",
+                          "opt2_2.def": "DEF"
+                      }
+                  },
+              ]
+            }
+        """;
 
     private const string MinimalAddonJson =
-"""
-    {
-      "id": "minimal-id",
-      "type": "mod",
-      "game": { "name": "duke3d" },
-      "title": "Minimal Addon",
-      "version": "0.1"
-    }
-""";
+        """
+            {
+              "id": "minimal-id",
+              "type": "mod",
+              "game": { "name": "duke3d" },
+              "title": "Minimal Addon",
+              "version": "0.1"
+            }
+        """;
 
     private const string OfficialAddonJson =
-"""
-    {
-      "id": "duke1",
-      "type": "official",
-      "game": { "name": "duke3d" },
-      "title": "Duke Nukem Ep1",
-      "version": "1.0",
-      "author": "3D Realms",
-      "description": "Shareware episode"
-    }
-""";
+        """
+            {
+              "id": "duke1",
+              "type": "official",
+              "game": { "name": "duke3d" },
+              "title": "Duke Nukem Ep1",
+              "version": "1.0",
+              "author": "3D Realms",
+              "description": "Shareware episode"
+            }
+        """;
 
     private const string BrokenAddonJson =
-"""
-    {
-      "id": "addon-id",
-      "type": "mod",
-      "game":
-      {
-          "name": "shadowwarrior",
-          "version": "1.3d",
-          "crc": "0x982AFE4A",
-          "unknown_token": "123"
-      },
-      "title": "Addon Title",
-      "author": "Author",
-      "version": "1.0"
-    }
-""";
+        """
+            {
+              "id": "addon-id",
+              "type": "mod",
+              "game":
+              {
+                  "name": "shadowwarrior",
+                  "version": "1.3d",
+                  "crc": "0x982AFE4A",
+                  "unknown_token": "123"
+              },
+              "title": "Addon Title",
+              "author": "Author",
+              "version": "1.0"
+            }
+        """;
 
     private const string SlotMapJson =
-"""
-    {
-      "id": "addon-id",
-      "type": "Map",
-      "game": {
-        "name": "Duke3D"
-      },
-      "title": "Addon Title",
-      "version": "1.0",
-      "author": "Author",
-      "startmap": {
-        "volume": 1,
-        "level": 2
-      }
-    }
-""";
+        """
+            {
+              "id": "addon-id",
+              "type": "Map",
+              "game": {
+                "name": "Duke3D"
+              },
+              "title": "Addon Title",
+              "version": "1.0",
+              "author": "Author",
+              "startmap": {
+                "volume": 1,
+                "level": 2
+              }
+            }
+        """;
 
     private const string NoStartmapJson =
-"""
-    {
-      "id": "no-startmap",
-      "type": "TC",
-      "game": { "name": "Blood" },
-      "title": "No Startmap",
-      "version": "2.0",
-      "author": "Author"
-    }
-""";
+        """
+            {
+              "id": "no-startmap",
+              "type": "TC",
+              "game": { "name": "Blood" },
+              "title": "No Startmap",
+              "version": "2.0",
+              "author": "Author"
+            }
+        """;
 
     private const string ExhumedGameJson =
-"""
-    {
-      "id": "exhumed-addon",
-      "type": "mod",
-      "game": { "name": "Exhumed" },
-      "title": "Exhumed Mod",
-      "version": "1.0"
-    }
-""";
+        """
+            {
+              "id": "exhumed-addon",
+              "type": "mod",
+              "game": { "name": "Exhumed" },
+              "title": "Exhumed Mod",
+              "version": "1.0"
+            }
+        """;
 
     private const string IniOptionsJson =
-"""
-    {
-      "id": "ini-options",
-      "type": "mod",
-      "game": { "name": "duke3d" },
-      "title": "Ini Options Test",
-      "version": "1.0",
-      "options": [
-        {
-          "name": "widescreen",
-          "parameters": {
-            "widescreen.ini": "INI"
-          }
-        }
-      ]
-    }
-""";
+        """
+            {
+              "id": "ini-options",
+              "type": "mod",
+              "game": { "name": "duke3d" },
+              "title": "Ini Options Test",
+              "version": "1.0",
+              "options": [
+                {
+                  "name": "widescreen",
+                  "parameters": {
+                    "widescreen.ini": "INI"
+                  }
+                }
+              ]
+            }
+        """;
 
     private const string AllFeaturesJson =
-"""
-    {
-      "id": "all-features",
-      "type": "mod",
-      "game": { "name": "duke3d" },
-      "title": "All Features",
-      "version": "1.0",
-      "dependencies": {
-        "features": [
-          "eduke32_con", "Hightile", "Models", "Sloped_Sprites",
-          "tror", "Wall_Rotate_Cstat", "Dynamic_Lighting",
-          "Modern_Types", "SndInfo", "TileFromTexture"
-        ]
-      }
-    }
-""";
+        """
+            {
+              "id": "all-features",
+              "type": "mod",
+              "game": { "name": "duke3d" },
+              "title": "All Features",
+              "version": "1.0",
+              "dependencies": {
+                "features": [
+                  "eduke32_con", "Hightile", "Models", "Sloped_Sprites",
+                  "tror", "Wall_Rotate_Cstat", "Dynamic_Lighting",
+                  "Modern_Types", "SndInfo", "TileFromTexture"
+                ]
+              }
+            }
+        """;
 
     private const string StandaloneJsonOld =
-"""
-    {
-      "id": "amc-squad",
-      "type": "TC",
-      "game": {
-        "name": "Standalone"
-      },
-      "title": "AMC Squad",
-      "version": "4.5.2",
-      "author": "AMCSquad",
-      "description": "---",
-      "executables": {
-        "Windows": "amcsquad.exe",
-        "Linux": "amcsquad"
-      }
-    }
-""";
+        """
+            {
+              "id": "amc-squad",
+              "type": "TC",
+              "game": {
+                "name": "Standalone"
+              },
+              "title": "AMC Squad",
+              "version": "4.5.2",
+              "author": "AMCSquad",
+              "description": "---",
+              "executables": {
+                "Windows": "amcsquad.exe",
+                "Linux": "amcsquad"
+              }
+            }
+        """;
 
     private const string StandaloneJson =
-"""
-    {
-      "id": "game-id",
-      "type": "TC",
-      "game": {
-        "name": "Standalone"
-      },
-      "title": "Standalone Game",
-      "version": "1.0",
-      "author": "Author",
-      "executables": {
-        "Windows": {
-          "EDuke32": "eduke32.exe"
-        },
-        "Linux": {
-          "EDuke32": "eduke32"
-        },
-      }
-    }
-""";
+        """
+            {
+              "id": "game-id",
+              "type": "TC",
+              "game": {
+                "name": "Standalone"
+              },
+              "title": "Standalone Game",
+              "version": "1.0",
+              "author": "Author",
+              "executables": {
+                "Windows": {
+                  "EDuke32": "eduke32.exe"
+                },
+                "Linux": {
+                  "EDuke32": "eduke32"
+                },
+              }
+            }
+        """;
 
     private const string EmptyListsJson =
-"""
-    {
-      "id": "empty-lists",
-      "type": "mod",
-      "game": { "name": "duke3d" },
-      "title": "Empty Lists",
-      "version": "1.0",
-      "con_modules": [],
-      "def_modules": []
-    }
-""";
+        """
+            {
+              "id": "empty-lists",
+              "type": "mod",
+              "game": { "name": "duke3d" },
+              "title": "Empty Lists",
+              "version": "1.0",
+              "con_modules": [],
+              "def_modules": []
+            }
+        """;
 
+    /// <summary>
+    ///     Tests that a full addon JSON is correctly deserialized.
+    /// </summary>
     [Fact]
     public void DeserializeAddonJson()
     {
@@ -296,6 +302,9 @@ public sealed class SerializerTests
         Assert.Equal(DateOnly.Parse("1991-06-10"), result.ReleaseDate);
     }
 
+    /// <summary>
+    ///     Tests that a minimal addon JSON is correctly deserialized.
+    /// </summary>
     [Fact]
     public void DeserializeMinimalAddon()
     {
@@ -326,6 +335,9 @@ public sealed class SerializerTests
         Assert.Null(result.Options);
     }
 
+    /// <summary>
+    ///     Tests that an official addon JSON is correctly deserialized.
+    /// </summary>
     [Fact]
     public void DeserializeOfficialAddon()
     {
@@ -344,6 +356,9 @@ public sealed class SerializerTests
         Assert.Null(result.AdditionalCons);
     }
 
+    /// <summary>
+    ///     Tests that an Exhumed game JSON is correctly deserialized.
+    /// </summary>
     [Fact]
     public void DeserializeExhumedGame()
     {
@@ -353,15 +368,22 @@ public sealed class SerializerTests
         Assert.Equal(GameEnum.Slave, result.SupportedGame.Game);
     }
 
+    /// <summary>
+    ///     Tests that deserializing broken JSON throws a JsonException.
+    /// </summary>
     [Fact]
     public void DeserializeBrokenAddonJson_Throws()
     {
         var ex = Assert.Throws<JsonException>(() =>
-            JsonSerializer.Deserialize(BrokenAddonJson, AddonManifestJsonContext.Default.AddonManifestJsonModel));
+                                                  JsonSerializer.Deserialize(BrokenAddonJson, AddonManifestJsonContext.Default.AddonManifestJsonModel)
+            );
 
         Assert.Contains("unknown_token", ex.Message);
     }
 
+    /// <summary>
+    ///     Tests that a slot map JSON is correctly deserialized.
+    /// </summary>
     [Fact]
     public void DeserializeSlotMapJson()
     {
@@ -375,6 +397,9 @@ public sealed class SerializerTests
         Assert.Equal(2, ((MapSlotJsonModel)result.StartMap).Level);
     }
 
+    /// <summary>
+    ///     Tests that an addon JSON without a startmap is correctly deserialized.
+    /// </summary>
     [Fact]
     public void DeserializeAddonWithoutStartmap()
     {
@@ -387,6 +412,9 @@ public sealed class SerializerTests
         Assert.Null(result.StartMap);
     }
 
+    /// <summary>
+    ///     Tests that an addon JSON with INI options is correctly deserialized.
+    /// </summary>
     [Fact]
     public void DeserializeAddonWithIniOptions()
     {
@@ -400,6 +428,9 @@ public sealed class SerializerTests
         Assert.Equal(OptionalParameterTypeEnum.INI, Assert.Single(option.Parameters.Values));
     }
 
+    /// <summary>
+    ///     Tests that an addon JSON with all features is correctly deserialized.
+    /// </summary>
     [Fact]
     public void DeserializeAddonWithAllFeatures()
     {
@@ -422,6 +453,9 @@ public sealed class SerializerTests
         Assert.Contains(FeatureEnum.TileFromTexture, result.Dependencies.RequiredFeatures);
     }
 
+    /// <summary>
+    ///     Tests that an addon JSON with empty lists is correctly deserialized.
+    /// </summary>
     [Fact]
     public void DeserializeEmptyLists()
     {
@@ -432,6 +466,9 @@ public sealed class SerializerTests
         Assert.Empty(result.AdditionalDefs!);
     }
 
+    /// <summary>
+    ///     Tests that the old standalone JSON format is correctly deserialized.
+    /// </summary>
     [Fact]
     public void DeserializeStandaloneJsonOld()
     {
@@ -446,6 +483,9 @@ public sealed class SerializerTests
         Assert.Equal("amcsquad", result.Executables?[OSEnum.Linux]?[PortEnum.Stub]);
     }
 
+    /// <summary>
+    ///     Tests that the new standalone JSON format is correctly deserialized.
+    /// </summary>
     [Fact]
     public void DeserializeStandaloneJson()
     {
@@ -460,6 +500,9 @@ public sealed class SerializerTests
         Assert.Equal("eduke32", result.Executables?[OSEnum.Linux]?[PortEnum.EDuke32]);
     }
 
+    /// <summary>
+    ///     Tests that serializing then deserializing a full addon round-trips correctly.
+    /// </summary>
     [Fact]
     public void SerializeThenDeserialize_RoundTrips()
     {
@@ -487,6 +530,9 @@ public sealed class SerializerTests
         Assert.Equal(original.ReleaseDate, deserialized.ReleaseDate);
     }
 
+    /// <summary>
+    ///     Tests that serializing then deserializing a minimal addon round-trips correctly.
+    /// </summary>
     [Fact]
     public void SerializeMinimalAddon_RoundTrips()
     {
@@ -505,6 +551,9 @@ public sealed class SerializerTests
         Assert.Equal(original.SupportedGame.Game, deserialized.SupportedGame.Game);
     }
 
+    /// <summary>
+    ///     Tests that all addon type strings are correctly deserialized.
+    /// </summary>
     [Fact]
     public void DeserializeAllAddonTypes()
     {
@@ -524,12 +573,17 @@ public sealed class SerializerTests
                   "version": "1.0"
                 }
                 """;
+
             var result = JsonSerializer.Deserialize(json, AddonManifestJsonContext.Default.AddonManifestJsonModel);
             Assert.NotNull(result);
+
             return result.AddonType;
         }
     }
 
+    /// <summary>
+    ///     Tests that all game name strings are correctly deserialized.
+    /// </summary>
     [Fact]
     public void DeserializeAllGameTypes()
     {
@@ -549,7 +603,7 @@ public sealed class SerializerTests
             ["witchaven"] = GameEnum.Witchaven,
             ["witchaven2"] = GameEnum.Witchaven2,
             ["standalone"] = GameEnum.Standalone,
-            ["DukeZeroHour"] = GameEnum.DukeZeroHour,
+            ["DukeZeroHour"] = GameEnum.DukeZeroHour
         };
 
         foreach (var (name, expected) in games)
@@ -563,6 +617,7 @@ public sealed class SerializerTests
                   "version": "1.0"
                 }
                 """;
+
             var result = JsonSerializer.Deserialize(json, AddonManifestJsonContext.Default.AddonManifestJsonModel);
             Assert.NotNull(result);
             Assert.Equal(expected, result.SupportedGame.Game);

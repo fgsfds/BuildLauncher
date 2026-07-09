@@ -1,5 +1,4 @@
 ﻿using System.Security.Cryptography;
-using System.Text;
 using System.Text.Json;
 using Core.All.Serializable.Addon;
 using Core.All.Serializable.Downloadable;
@@ -13,18 +12,30 @@ using S3;
 
 namespace Tests.Database;
 
+/// <summary>
+///     Tests for the addons database integrity and operations.
+/// </summary>
 public sealed class AddonsDatabaseTests
 {
+    /// <summary>
+    ///     Shared HTTP client for testing remote file integrity.
+    /// </summary>
     private static readonly HttpClient _httpClient = new()
     {
         Timeout = TimeSpan.FromSeconds(30)
     };
 
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="AddonsDatabaseTests" /> class.
+    /// </summary>
     public AddonsDatabaseTests()
     {
         _httpClient.DefaultRequestHeaders.TryAddWithoutValidation("User-Agent", "UnitTest");
     }
 
+    /// <summary>
+    ///     Gets theory data for testing addon database file integrity.
+    /// </summary>
     public static IEnumerable<TheoryDataRow<Uri, long, string>> GetAddonTestData()
     {
         var jsonString = File.ReadAllText(ClientProperties.PathToLocalAddonsJson);
@@ -41,6 +52,9 @@ public sealed class AddonsDatabaseTests
         }
     }
 
+    /// <summary>
+    ///     Tests that database files exist and have correct sizes and hashes.
+    /// </summary>
     [Theory]
     [MemberData(nameof(GetAddonTestData))]
     public async Task DatabaseFilesIntegrityTest(Uri url, long size, string hash)
@@ -57,8 +71,8 @@ public sealed class AddonsDatabaseTests
         if (url.ToString().StartsWith(S3Constants.S3Endpoint))
         {
             var actualHashStr = header.Headers
-                .FirstOrDefault(x => x.Key.Equals("x-amz-meta-checksum-sha256")).Value
-                ?.FirstOrDefault();
+                                      .FirstOrDefault(x => x.Key.Equals("x-amz-meta-checksum-sha256")).Value
+                                     ?.FirstOrDefault();
 
             Assert.NotNull(actualHashStr);
             Assert.Equal(hash, actualHashStr, true);
@@ -75,6 +89,9 @@ public sealed class AddonsDatabaseTests
         }
     }
 
+    /// <summary>
+    ///     Tests that there are no loose files in the S3 bucket not referenced by the database.
+    /// </summary>
     [Fact]
     public async Task LooseFilesTest()
     {
@@ -100,16 +117,17 @@ public sealed class AddonsDatabaseTests
         Assert.NotNull(secret);
 
         using var minioClient = new MinioClient();
+
         using var iMinioClient = minioClient
-            .WithEndpoint(S3Constants.S3Endpoint.Split("//").Last())
-            .WithCredentials(access, secret)
-            .WithSSL(false)
-            .Build();
+                                .WithEndpoint(S3Constants.S3Endpoint.Split("//").Last())
+                                .WithCredentials(access, secret)
+                                .WithSSL(false)
+                                .Build();
 
         var args = new ListObjectsArgs()
-            .WithBucket(S3Constants.S3Bucket)
-            .WithPrefix(S3Constants.S3SubFolder + '/')
-            .WithRecursive(true);
+                  .WithBucket(S3Constants.S3Bucket)
+                  .WithPrefix(S3Constants.S3SubFolder + '/')
+                  .WithRecursive(true);
 
         var filesInBucket = new List<string>();
 
@@ -132,6 +150,9 @@ public sealed class AddonsDatabaseTests
     }
 
 
+    /// <summary>
+    ///     Tests that uploading a file to S3 succeeds and returns correct metadata.
+    /// </summary>
     [Fact]
     public async Task UploadAddonTest()
     {
@@ -149,6 +170,9 @@ public sealed class AddonsDatabaseTests
         Assert.Equal("https://s3-nl.hostkey.com/b8743306-fgsfds/uploads/buildlauncher/test/TEST.MAP", uploadResult.ResultObject.Value.Url.ToString());
     }
 
+    /// <summary>
+    ///     Tests that the manifests JSON file is valid and deserializable.
+    /// </summary>
     [Fact]
     public async Task ManifestsJsonTest()
     {

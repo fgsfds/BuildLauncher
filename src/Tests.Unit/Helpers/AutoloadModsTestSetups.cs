@@ -4,15 +4,35 @@ using Core.All.Enums;
 using Core.All.Enums.Addons;
 using Core.All.Enums.Versions;
 
-namespace Tests.Unit.CmdArguments;
+namespace Tests.Unit.Helpers;
 
-internal sealed class AutoloadModsProvider
+/// <summary>
+///     Provides pre-configured test setups for autoload mods across different games.
+/// </summary>
+internal sealed class AutoloadModsTestSetups
 {
-    private readonly GameInfo _game;
+    /// <summary>
+    ///     Name of the official addon for the game.
+    /// </summary>
     private readonly string _addon;
+    /// <summary>
+    ///     A feature that is supported by the game.
+    /// </summary>
+    /// <summary>
+    ///     A feature that is supported by the game.
+    /// </summary>
     private readonly FeatureEnum _feature;
 
-    public AutoloadModsProvider(GameEnum gameEnum)
+    /// <summary>
+    ///     Game info for the test setup.
+    /// </summary>
+    private readonly GameInfo _game;
+    /// <summary>
+    ///     A feature that is unsupported by the game.
+    /// </summary>
+    private readonly FeatureEnum _unsupportedFeature;
+
+    public AutoloadModsTestSetups(GameEnum gameEnum)
     {
         _game = gameEnum switch
         {
@@ -25,6 +45,7 @@ internal sealed class AutoloadModsProvider
             GameEnum.RidesAgain => new(GameEnum.RidesAgain),
             GameEnum.Fury => new(GameEnum.Fury),
             GameEnum.NAM => new(GameEnum.NAM),
+            GameEnum.WW2GI => new(GameEnum.WW2GI),
             _ => throw new NotSupportedException()
         };
 
@@ -38,6 +59,7 @@ internal sealed class AutoloadModsProvider
             GameEnum.Duke64 => "",
             GameEnum.Slave => "",
             GameEnum.NAM => "",
+            GameEnum.WW2GI => nameof(WW2GIAddonEnum.Platoon).ToLower(),
             _ => throw new NotSupportedException()
         };
 
@@ -52,11 +74,27 @@ internal sealed class AutoloadModsProvider
             GameEnum.RidesAgain => FeatureEnum.Models,
             GameEnum.Fury => FeatureEnum.EDuke32_CON,
             GameEnum.NAM => FeatureEnum.Models,
+            GameEnum.WW2GI => FeatureEnum.Models,
+            _ => throw new NotSupportedException()
+        };
+
+        _unsupportedFeature = gameEnum switch
+        {
+            GameEnum.Duke3D => FeatureEnum.Modern_Types,
+            GameEnum.Blood => FeatureEnum.EDuke32_CON,
+            GameEnum.Wang => FeatureEnum.Modern_Types,
+            GameEnum.Duke64 => FeatureEnum.Modern_Types,
+            GameEnum.Slave => FeatureEnum.Modern_Types,
+            GameEnum.Redneck => FeatureEnum.Modern_Types,
+            GameEnum.RidesAgain => FeatureEnum.Modern_Types,
+            GameEnum.Fury => FeatureEnum.Modern_Types,
+            GameEnum.NAM => FeatureEnum.Modern_Types,
+            GameEnum.WW2GI => FeatureEnum.Modern_Types,
             _ => throw new NotSupportedException()
         };
     }
 
-    public AutoloadMod EnabledModWithCons => new()
+    private AutoloadMod EnabledModWithCons => new()
     {
         AddonId = new("enabledMod", "1.5"),
         Type = AddonTypeEnum.Mod,
@@ -68,20 +106,27 @@ internal sealed class AutoloadModsProvider
         SupportedGame = _game,
         IncompatibleAddons = null,
         RequiredFeatures = null,
-        PathToFile = Path.Combine("D:", "Mods", "enabled_mod.zip"),
+        FileInfo = new(Path.Combine("D:", "Mods", "enabled_mod.zip"), "addon.json"),
         DependentAddons = null,
-        AdditionalCons = ["ENABLED1.CON", "ENABLED2.CON"],
+        AdditionalCons =
+        [
+            "ENABLED1.CON",
+            "ENABLED2.CON"
+        ],
         MainDef = null,
-        AdditionalDefs = ["ENABLED1.DEF", "ENABLED2.DEF"],
+        AdditionalDefs =
+        [
+            "ENABLED1.DEF",
+            "ENABLED2.DEF"
+        ],
         StartMap = null,
         PreviewImageHash = null,
         IsEnabled = true,
-        IsUnpacked = false,
         Executables = null,
         Options = null
     };
 
-    public AutoloadMod EnabledMod => new()
+    private AutoloadMod EnabledMod => new()
     {
         AddonId = new("enabledMod", "1.5"),
         Type = AddonTypeEnum.Mod,
@@ -93,20 +138,23 @@ internal sealed class AutoloadModsProvider
         SupportedGame = _game,
         IncompatibleAddons = null,
         RequiredFeatures = null,
-        PathToFile = Path.Combine("D:", "Mods", "enabled_mod.zip"),
+        FileInfo = new(Path.Combine("D:", "Mods", "enabled_mod.zip"), "addon.json"),
         DependentAddons = null,
         AdditionalCons = null,
         MainDef = null,
-        AdditionalDefs = ["ENABLED1.DEF", "ENABLED2.DEF"],
+        AdditionalDefs =
+        [
+            "ENABLED1.DEF",
+            "ENABLED2.DEF"
+        ],
         StartMap = null,
         PreviewImageHash = null,
         IsEnabled = true,
-        IsUnpacked = false,
         Executables = null,
         Options = null
     };
 
-    public AutoloadMod ModThatRequiresOfficialAddon => new()
+    private AutoloadMod ModThatRequiresOfficialAddon => new()
     {
         AddonId = new("modThatRequiresOfficialAddon", "1.5"),
         Type = AddonTypeEnum.Mod,
@@ -118,45 +166,53 @@ internal sealed class AutoloadModsProvider
         SupportedGame = _game,
         IncompatibleAddons = null,
         RequiredFeatures = null,
-        PathToFile = Path.Combine("D:", "Mods", "mod_requires_addon.zip"),
-        DependentAddons = new Dictionary<string, string?>() { { _addon, null } },
+        FileInfo = new(Path.Combine("D:", "Mods", "mod_requires_addon.zip"), "addon.json"),
+        DependentAddons = new Dictionary<string, string?>
+        {
+            {
+                _addon, null
+            }
+        },
         AdditionalCons = null,
         MainDef = null,
         AdditionalDefs = null,
         StartMap = null,
         PreviewImageHash = null,
         IsEnabled = true,
-        IsUnpacked = false,
         Executables = null,
         Options = null
     };
 
-    public AutoloadMod ModThatIncompatibleWithAddon => new()
+    private AutoloadMod ModThatIncompatibleWithAddon => new()
     {
-        AddonId = new("modThatIncompatibleWithVaca", "1.5"),
+        AddonId = new("modThatIncompatibleWithOfficialAddon", "1.5"),
         Type = AddonTypeEnum.Mod,
-        Title = "modThatIncompatibleWithVaca",
+        Title = "modThatIncompatibleWithOfficialAddon",
         GridImageHash = null,
         Author = null,
         ReleaseDate = null,
         Description = null,
         SupportedGame = _game,
-        IncompatibleAddons = new Dictionary<string, string?>() { { _addon, null } },
+        IncompatibleAddons = new Dictionary<string, string?>
+        {
+            {
+                _addon, null
+            }
+        },
         DependentAddons = null,
         RequiredFeatures = null,
-        PathToFile = Path.Combine("D:", "Mods", "mod_incompatible_with_addon.zip"),
+        FileInfo = new(Path.Combine("D:", "Mods", "mod_incompatible_with_addon.zip"), "addon.json"),
         AdditionalCons = null,
         MainDef = null,
         AdditionalDefs = null,
         StartMap = null,
         PreviewImageHash = null,
         IsEnabled = true,
-        IsUnpacked = false,
         Executables = null,
         Options = null
     };
 
-    public AutoloadMod IncompatibleMod => new()
+    private AutoloadMod IncompatibleWithEnabledMod => new()
     {
         AddonId = new("incompatibleMod", "1.0"),
         Type = AddonTypeEnum.Mod,
@@ -167,21 +223,25 @@ internal sealed class AutoloadModsProvider
         Description = null,
         SupportedGame = _game,
         RequiredFeatures = null,
-        PathToFile = Path.Combine("D:", "Mods", "!!!!!!!!!!NOPE!!!!!!!!!!"),
+        FileInfo = new(Path.Combine("D:", "Mods", "!!!!!!!!!!NOPE!!!!!!!!!!"), "!!!!!!!!!!NOPE!!!!!!!!!!"),
         DependentAddons = null,
-        IncompatibleAddons = new Dictionary<string, string?>() { { "EnAbLeDmOd", null } },
+        IncompatibleAddons = new Dictionary<string, string?>
+        {
+            {
+                "EnAbLeDmOd", null
+            }
+        },
         AdditionalCons = null,
         MainDef = null,
         AdditionalDefs = null,
         StartMap = null,
         PreviewImageHash = null,
         IsEnabled = true,
-        IsUnpacked = false,
         Executables = null,
         Options = null
     };
 
-    public AutoloadMod IncompatibleModWithCompatibleVersion => new()
+    private AutoloadMod IncompatibleModWithCompatibleVersion => new()
     {
         AddonId = new("incompatibleModWithCompatibleVersion", "1.0"),
         Type = AddonTypeEnum.Mod,
@@ -192,21 +252,30 @@ internal sealed class AutoloadModsProvider
         Description = null,
         SupportedGame = _game,
         RequiredFeatures = null,
-        PathToFile = Path.Combine("D:", "Mods", "incompatible_mod_with_compatible_version.zip"),
-        DependentAddons = new Dictionary<string, string?>() { { "enabledMod", null } },
-        IncompatibleAddons = new Dictionary<string, string?>() { { "enabledMod", "<=1.0" } },
+        FileInfo = new(Path.Combine("D:", "Mods", "incompatible_mod_with_compatible_version.zip"), "addon.json"),
+        DependentAddons = new Dictionary<string, string?>
+        {
+            {
+                "enabledMod", null
+            }
+        },
+        IncompatibleAddons = new Dictionary<string, string?>
+        {
+            {
+                "enabledMod", "<=1.0"
+            }
+        },
         AdditionalCons = null,
         MainDef = null,
         AdditionalDefs = null,
         StartMap = null,
         PreviewImageHash = null,
         IsEnabled = true,
-        IsUnpacked = false,
         Executables = null,
         Options = null
     };
 
-    public AutoloadMod IncompatibleModWithIncompatibleVersion => new()
+    private AutoloadMod IncompatibleModWithIncompatibleVersion => new()
     {
         AddonId = new("incompatibleModWithIncompatibleVersion", "1.0"),
         Type = AddonTypeEnum.Mod,
@@ -217,21 +286,30 @@ internal sealed class AutoloadModsProvider
         Description = null,
         SupportedGame = _game,
         RequiredFeatures = null,
-        PathToFile = Path.Combine("D:", "Mods", "!!!!!!!!!!NOPE!!!!!!!!!!"),
-        DependentAddons = new Dictionary<string, string?>() { { "enabledMod", null } },
-        IncompatibleAddons = new Dictionary<string, string?>() { { "enabledMod", ">1.1" } },
+        FileInfo = new(Path.Combine("D:", "Mods", "!!!!!!!!!!NOPE!!!!!!!!!!"), "!!!!!!!!!!NOPE!!!!!!!!!!"),
+        DependentAddons = new Dictionary<string, string?>
+        {
+            {
+                "enabledMod", null
+            }
+        },
+        IncompatibleAddons = new Dictionary<string, string?>
+        {
+            {
+                "enabledMod", ">1.1"
+            }
+        },
         AdditionalCons = null,
         MainDef = null,
         AdditionalDefs = null,
         StartMap = null,
         PreviewImageHash = null,
         IsEnabled = true,
-        IsUnpacked = false,
         Executables = null,
         Options = null
     };
 
-    public AutoloadMod DependentMod => new()
+    private AutoloadMod ModThatDependsOnEnabled => new()
     {
         AddonId = new("dependentMod", "1.0"),
         Type = AddonTypeEnum.Mod,
@@ -242,8 +320,13 @@ internal sealed class AutoloadModsProvider
         Description = null,
         SupportedGame = _game,
         RequiredFeatures = null,
-        PathToFile = Path.Combine("D:", "Mods", "dependent_mod.zip"),
-        DependentAddons = new Dictionary<string, string?>() { { "enabledMod", null } },
+        FileInfo = new(Path.Combine("D:", "Mods", "dependent_mod.zip"), "addon.json"),
+        DependentAddons = new Dictionary<string, string?>
+        {
+            {
+                "enabledMod", null
+            }
+        },
         IncompatibleAddons = null,
         AdditionalCons = null,
         MainDef = null,
@@ -251,13 +334,12 @@ internal sealed class AutoloadModsProvider
         StartMap = null,
         PreviewImageHash = null,
         IsEnabled = true,
-        IsUnpacked = false,
         Executables = null,
         Options = null
     };
 
 
-    public AutoloadMod MultipleDependenciesMod => new()
+    private AutoloadMod MultipleDependenciesMod => new()
     {
         AddonId = new("multipleDependenciesMod", "1.0"),
         Type = AddonTypeEnum.Mod,
@@ -268,8 +350,16 @@ internal sealed class AutoloadModsProvider
         Description = null,
         SupportedGame = _game,
         RequiredFeatures = null,
-        PathToFile = Path.Combine("D:", "Mods", "!!!!!!!!!!NOPE!!!!!!!!!!"),
-        DependentAddons = new Dictionary<string, string?>() { { "enabledMod", null }, { "someMod", null } },
+        FileInfo = new(Path.Combine("D:", "Mods", "!!!!!!!!!!NOPE!!!!!!!!!!"), "!!!!!!!!!!NOPE!!!!!!!!!!"),
+        DependentAddons = new Dictionary<string, string?>
+        {
+            {
+                "enabledMod", null
+            },
+            {
+                "someMod", null
+            }
+        },
         IncompatibleAddons = null,
         AdditionalCons = null,
         MainDef = null,
@@ -277,12 +367,11 @@ internal sealed class AutoloadModsProvider
         StartMap = null,
         PreviewImageHash = null,
         IsEnabled = true,
-        IsUnpacked = false,
         Executables = null,
         Options = null
     };
 
-    public AutoloadMod DependentModWithIncompatibleVersion => new()
+    private AutoloadMod DependentModWithIncompatibleVersion => new()
     {
         AddonId = new("dependentModWithIncompatibleVersion", "1.0"),
         Type = AddonTypeEnum.Mod,
@@ -293,8 +382,13 @@ internal sealed class AutoloadModsProvider
         Description = null,
         SupportedGame = _game,
         RequiredFeatures = null,
-        PathToFile = Path.Combine("D:", "Mods", "!!!!!!!!!!NOPE!!!!!!!!!!"),
-        DependentAddons = new Dictionary<string, string?>() { { "enabledMod", "<=1.0" } },
+        FileInfo = new(Path.Combine("D:", "Mods", "!!!!!!!!!!NOPE!!!!!!!!!!"), "!!!!!!!!!!NOPE!!!!!!!!!!"),
+        DependentAddons = new Dictionary<string, string?>
+        {
+            {
+                "enabledMod", "<=1.0"
+            }
+        },
         IncompatibleAddons = null,
         AdditionalCons = null,
         MainDef = null,
@@ -302,12 +396,11 @@ internal sealed class AutoloadModsProvider
         StartMap = null,
         PreviewImageHash = null,
         IsEnabled = true,
-        IsUnpacked = false,
         Executables = null,
         Options = null
     };
 
-    public AutoloadMod DependentModWithCompatibleVersion => new()
+    private AutoloadMod DependentModWithCompatibleVersion => new()
     {
         AddonId = new("dependentModWithCompatibleVersion", "1.0"),
         Type = AddonTypeEnum.Mod,
@@ -318,8 +411,13 @@ internal sealed class AutoloadModsProvider
         Description = null,
         SupportedGame = _game,
         RequiredFeatures = null,
-        PathToFile = Path.Combine("D:", "Mods", "dependent_mod_with_compatible_version.zip"),
-        DependentAddons = new Dictionary<string, string?>() { { "enabledMod", ">1.1" } },
+        FileInfo = new(Path.Combine("D:", "Mods", "dependent_mod_with_compatible_version.zip"), "addon.json"),
+        DependentAddons = new Dictionary<string, string?>
+        {
+            {
+                "enabledMod", ">1.1"
+            }
+        },
         IncompatibleAddons = null,
         AdditionalCons = null,
         MainDef = null,
@@ -327,12 +425,11 @@ internal sealed class AutoloadModsProvider
         StartMap = null,
         PreviewImageHash = null,
         IsEnabled = true,
-        IsUnpacked = false,
         Executables = null,
         Options = null
     };
 
-    public AutoloadMod DisabledMod => new()
+    private AutoloadMod DisabledMod => new()
     {
         AddonId = new("disabledMod", "1.0"),
         Type = AddonTypeEnum.Mod,
@@ -343,7 +440,7 @@ internal sealed class AutoloadModsProvider
         Description = null,
         SupportedGame = _game,
         RequiredFeatures = null,
-        PathToFile = Path.Combine("D:", "Mods", "!!!!!!!!!!NOPE!!!!!!!!!!"),
+        FileInfo = new(Path.Combine("D:", "Mods", "!!!!!!!!!!NOPE!!!!!!!!!!"), "!!!!!!!!!!NOPE!!!!!!!!!!"),
         DependentAddons = null,
         IncompatibleAddons = null,
         AdditionalCons = null,
@@ -352,23 +449,22 @@ internal sealed class AutoloadModsProvider
         StartMap = null,
         PreviewImageHash = null,
         IsEnabled = false,
-        IsUnpacked = false,
         Executables = null,
         Options = null
     };
 
-    public AutoloadMod ModThatRequiresFeature => new()
+    private AutoloadMod ModThatRequiresFeature => new()
     {
-        AddonId = new("eduke32mod", "1.0"),
+        AddonId = new("featureMod", "1.0"),
         Type = AddonTypeEnum.Mod,
-        Title = "eduke32mod",
+        Title = "featureMod",
         GridImageHash = null,
         Author = null,
         ReleaseDate = null,
         Description = null,
         SupportedGame = _game,
         RequiredFeatures = [_feature],
-        PathToFile = Path.Combine("D:", "Mods", "feature_mod.zip"),
+        FileInfo = new(Path.Combine("D:", "Mods", "feature_mod.zip"), "addon.json"),
         DependentAddons = null,
         IncompatibleAddons = null,
         AdditionalCons = null,
@@ -377,12 +473,35 @@ internal sealed class AutoloadModsProvider
         StartMap = null,
         PreviewImageHash = null,
         IsEnabled = true,
-        IsUnpacked = false,
         Executables = null,
         Options = null
     };
 
-    public AutoloadMod ModForAnotherGame => new()
+    private AutoloadMod ModThatRequiresUnsupportedFeature => new()
+    {
+        AddonId = new("unsupportedFeatureMod", "1.0"),
+        Type = AddonTypeEnum.Mod,
+        Title = "unsupportedFeatureMod",
+        GridImageHash = null,
+        Author = null,
+        ReleaseDate = null,
+        Description = null,
+        SupportedGame = _game,
+        RequiredFeatures = [_unsupportedFeature],
+        FileInfo = new(Path.Combine("D:", "Mods", "!!!!!!!!!!NOPE!!!!!!!!!!"), "!!!!!!!!!!NOPE!!!!!!!!!!"),
+        DependentAddons = null,
+        IncompatibleAddons = null,
+        AdditionalCons = null,
+        MainDef = null,
+        AdditionalDefs = null,
+        StartMap = null,
+        PreviewImageHash = null,
+        IsEnabled = true,
+        Executables = null,
+        Options = null
+    };
+
+    private static AutoloadMod ModForAnotherGame => new()
     {
         AddonId = new("somegame-mod", "1.0"),
         Type = AddonTypeEnum.Mod,
@@ -393,7 +512,7 @@ internal sealed class AutoloadModsProvider
         Description = null,
         SupportedGame = new(GameEnum.TekWar),
         RequiredFeatures = null,
-        PathToFile = Path.Combine("D:", "Mods", "!!!!!!!!!!NOPE!!!!!!!!!!"),
+        FileInfo = new(Path.Combine("D:", "Mods", "!!!!!!!!!!NOPE!!!!!!!!!!"), "!!!!!!!!!!NOPE!!!!!!!!!!"),
         DependentAddons = null,
         IncompatibleAddons = null,
         AdditionalCons = null,
@@ -402,8 +521,81 @@ internal sealed class AutoloadModsProvider
         StartMap = null,
         PreviewImageHash = null,
         IsEnabled = true,
-        IsUnpacked = false,
         Executables = null,
         Options = null
     };
+
+    private List<AutoloadMod> _standardMods =>
+    [
+        DisabledMod,
+        MultipleDependenciesMod,
+        IncompatibleWithEnabledMod,
+        IncompatibleModWithIncompatibleVersion,
+        IncompatibleModWithCompatibleVersion,
+        ModThatDependsOnEnabled,
+        DependentModWithCompatibleVersion,
+        DependentModWithIncompatibleVersion,
+        ModForAnotherGame,
+        ModThatRequiresFeature,
+        ModThatRequiresUnsupportedFeature
+    ];
+
+    private List<AutoloadMod> _addonMods =>
+    [
+        ModThatRequiresOfficialAddon,
+        ModThatIncompatibleWithAddon
+    ];
+
+
+    /// <summary>
+    ///     Gets a list containing only the enabled mod.
+    /// </summary>
+    public List<AutoloadMod> Enabled => [EnabledMod];
+
+    /// <summary>
+    ///     Gets a list of standard mods including enabled mod, addon mods, and standard mods.
+    /// </summary>
+    public List<AutoloadMod> StandardMods =>
+    [
+        EnabledMod,
+        .._addonMods,
+        .._standardMods
+    ];
+
+    /// <summary>
+    ///     Gets a list of standard mods with CON files, addon mods, and standard mods.
+    /// </summary>
+    public List<AutoloadMod> StandardModsWithCons =>
+    [
+        EnabledModWithCons,
+        .._addonMods,
+        .._standardMods
+    ];
+
+    /// <summary>
+    ///     Gets a minimal list containing the enabled mod and an incompatible mod.
+    /// </summary>
+    public List<AutoloadMod> MinimalMods =>
+    [
+        EnabledMod,
+        IncompatibleWithEnabledMod
+    ];
+
+    /// <summary>
+    ///     Gets a list of addon mods including the enabled mod.
+    /// </summary>
+    public List<AutoloadMod> AddonMods =>
+    [
+        EnabledMod,
+        .._addonMods
+    ];
+
+    /// <summary>
+    ///     Gets a list of addon mods with CON files including the enabled mod.
+    /// </summary>
+    public List<AutoloadMod> AddonModsWithCons =>
+    [
+        EnabledModWithCons,
+        .._addonMods
+    ];
 }

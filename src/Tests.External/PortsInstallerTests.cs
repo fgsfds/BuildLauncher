@@ -14,8 +14,14 @@ using Tools.Releases;
 
 namespace Tests.External;
 
+/// <summary>
+///     Tests for port installation.
+/// </summary>
 public sealed class PortsInstallerTests
 {
+    /// <summary>
+    ///     Gets theory data with all ports to test installation.
+    /// </summary>
     public static IEnumerable<TheoryDataRow<BasePort>> GetPorts()
     {
         yield return new EDuke32();
@@ -26,6 +32,9 @@ public sealed class PortsInstallerTests
         yield return new ZHRecomp(new ConfigProviderFake());
     }
 
+    /// <summary>
+    ///     Tests that installing and uninstalling a port works correctly.
+    /// </summary>
     [Theory]
     [MemberData(nameof(GetPorts))]
     public async Task InstallPortTest(BasePort port)
