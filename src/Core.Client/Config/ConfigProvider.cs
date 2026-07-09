@@ -19,9 +19,7 @@ public sealed class ConfigProvider : IConfigProvider
     /// <summary>
     ///     Initializes a new instance of the <see cref="ConfigProvider" /> class.
     /// </summary>
-    /// <param name="dbContextFactory">
-    ///     The database context factory.
-    /// </param>
+    /// <param name="dbContextFactory">The database context factory.</param>
     public ConfigProvider(IDbContextFactory<DatabaseContext> dbContextFactory)
     {
         _dbContextFactory = dbContextFactory;
@@ -485,12 +483,8 @@ public sealed class ConfigProvider : IConfigProvider
     /// <summary>
     ///     Retrieves a game installation path from the database.
     /// </summary>
-    /// <param name="propertyName">
-    ///     The property name identifying the game path.
-    /// </param>
-    /// <returns>
-    ///     The game path, or null if not set.
-    /// </returns>
+    /// <param name="propertyName">The property name identifying the game path.</param>
+    /// <returns>The game path, or null if not set.</returns>
     private string? GetGamePath(string propertyName)
     {
         using var dbContext = _dbContextFactory.CreateDbContext();
@@ -501,12 +495,8 @@ public sealed class ConfigProvider : IConfigProvider
     /// <summary>
     ///     Retrieves a boolean setting value from the database.
     /// </summary>
-    /// <param name="propertyName">
-    ///     The setting property name.
-    /// </param>
-    /// <returns>
-    ///     true if the value is parsed as true; otherwise, false.
-    /// </returns>
+    /// <param name="propertyName">The setting property name.</param>
+    /// <returns>true if the value is parsed as true; otherwise, false.</returns>
     private bool GetBoolValue(string propertyName)
     {
         using var dbContext = _dbContextFactory.CreateDbContext();
@@ -517,12 +507,8 @@ public sealed class ConfigProvider : IConfigProvider
     /// <summary>
     ///     Retrieves a string setting value from the database.
     /// </summary>
-    /// <param name="propertyName">
-    ///     The setting property name.
-    /// </param>
-    /// <returns>
-    ///     The setting value, or an empty string if not found.
-    /// </returns>
+    /// <param name="propertyName">The setting property name.</param>
+    /// <returns>The setting value, or an empty string if not found.</returns>
     private string GetStringValue(string propertyName)
     {
         using var dbContext = _dbContextFactory.CreateDbContext();
@@ -533,12 +519,8 @@ public sealed class ConfigProvider : IConfigProvider
     /// <summary>
     ///     Sets a setting value in the database and fires the change event.
     /// </summary>
-    /// <param name="value">
-    ///     The value to store.
-    /// </param>
-    /// <param name="caller">
-    ///     The caller member name, automatically supplied.
-    /// </param>
+    /// <param name="value">The value to store.</param>
+    /// <param name="caller">The caller member name, automatically supplied.</param>
     private void SetSettingsValue(string value, [CallerMemberName] string caller = "")
     {
         using var dbContext = _dbContextFactory.CreateDbContext();
@@ -567,12 +549,8 @@ public sealed class ConfigProvider : IConfigProvider
     /// <summary>
     ///     Sets a game path value in the database and fires the change event.
     /// </summary>
-    /// <param name="value">
-    ///     The path to store.
-    /// </param>
-    /// <param name="caller">
-    ///     The caller member name, automatically supplied.
-    /// </param>
+    /// <param name="value">The path to store.</param>
+    /// <param name="caller">The caller member name, automatically supplied.</param>
     private void SetGamePathValue(string? value, [CallerMemberName] string caller = "")
     {
         using var dbContext = _dbContextFactory.CreateDbContext();
@@ -609,12 +587,8 @@ public sealed class ConfigProvider : IConfigProvider
     /// <summary>
     ///     Protects sensitive data using Windows Data Protection API.
     /// </summary>
-    /// <param name="plainText">
-    ///     The plain text to protect.
-    /// </param>
-    /// <returns>
-    ///     The protected data as a base-64 encoded string.
-    /// </returns>
+    /// <param name="plainText">The plain text to protect.</param>
+    /// <returns>The protected data as a base-64 encoded string.</returns>
     private static string Protect(string plainText)
     {
         if (!OperatingSystem.IsWindows())
@@ -631,12 +605,8 @@ public sealed class ConfigProvider : IConfigProvider
     /// <summary>
     ///     Unprotects sensitive data using Windows Data Protection API.
     /// </summary>
-    /// <param name="cipherText">
-    ///     The base-64 encoded protected string.
-    /// </param>
-    /// <returns>
-    ///     The decrypted plain text, or null on failure.
-    /// </returns>
+    /// <param name="cipherText">The base-64 encoded protected string.</param>
+    /// <returns>The decrypted plain text, or null on failure.</returns>
     private static string? Unprotect(string cipherText)
     {
         if (!OperatingSystem.IsWindows())

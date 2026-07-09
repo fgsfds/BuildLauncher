@@ -1,4 +1,5 @@
-﻿using System.IO.Compression;
+﻿using System.Diagnostics;
+using System.IO.Compression;
 using System.Runtime.InteropServices;
 using Core.All.Serializable.Downloadable;
 using Core.Client.Helpers;
@@ -8,14 +9,28 @@ using Microsoft.Extensions.Logging;
 
 namespace Core.Client;
 
+/// <summary>
+///     Handles the application self-update process including downloading releases and installing updates.
+/// </summary>
 public sealed class AppUpdateInstaller
 {
-    private readonly FilesDownloader _filesDownloader;
     private readonly IApiInterface _apiInterface;
+
+    private readonly FilesDownloader _filesDownloader;
+
     private readonly ILogger<AppUpdateInstaller> _logger;
 
+    /// <summary>
+    ///     Latest update release info.
+    /// </summary>
     private GeneralReleaseJsonModel? _update;
 
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="AppUpdateInstaller" /> class.
+    /// </summary>
+    /// <param name="filesDownloader">The file downloader service.</param>
+    /// <param name="apiInterface">The API interface for fetching release metadata.</param>
+    /// <param name="logger">Logger instance.</param>
     public AppUpdateInstaller(
         FilesDownloader filesDownloader,
         IApiInterface apiInterface,
@@ -28,7 +43,7 @@ public sealed class AppUpdateInstaller
     }
 
     /// <summary>
-    /// Check GitHub for releases with version higher than current
+    ///     Check GitHub for releases with version higher than current.
     /// </summary>
     /// <param name="currentVersion">Current SFD version</param>
     public async Task<bool?> CheckForUpdates(Version currentVersion)
@@ -52,7 +67,7 @@ public sealed class AppUpdateInstaller
     }
 
     /// <summary>
-    /// Download latest release from GitHub and create update lock file
+    ///     Download latest release from GitHub and create update lock file.
     /// </summary>
     public async Task DownloadAndUnpackLatestRelease()
     {
@@ -77,38 +92,46 @@ public sealed class AppUpdateInstaller
     }
 
     /// <summary>
-    /// Install update
+    ///     Install update.
     /// </summary>
     public static void InstallUpdate()
     {
-        var dir = ClientProperties.WorkingFolder;
-        var updateDir = Path.Combine(dir, ClientConsts.UpdateFolder);
-        var oldExe = Path.Combine(dir, ClientProperties.ExecutableName);
-        var newExe = Path.Combine(updateDir, ClientProperties.ExecutableName);
-
-        //renaming old file
-        File.Move(oldExe, oldExe + ".old", true);
-
-        //moving new file
-        File.Move(newExe, oldExe, true);
-
-        File.Delete(Path.Combine(dir, ClientConsts.UpdateFile));
-        Directory.Delete(Path.Combine(dir, ClientConsts.UpdateFolder), true);
-
-        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+        try
         {
-#pragma warning disable IDISP004 // Don't ignore created IDisposable
-            //starting new version of the app
-            _ = System.Diagnostics.Process.Start(oldExe);
-#pragma warning restore IDISP004 // Don't ignore created IDisposable
-        }
-        else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
-        {
-            //setting execute permission for user, otherwise the app won't run from game mode
-            var attributes = File.GetUnixFileMode(oldExe);
-            File.SetUnixFileMode(oldExe, attributes | UnixFileMode.UserExecute);
-        }
+            var dir = ClientProperties.WorkingFolder;
+            var updateDir = Path.Combine(dir, ClientConsts.UpdateFolder);
+            var oldExe = Path.Combine(dir, ClientProperties.ExecutableName);
+            var newExe = Path.Combine(updateDir, ClientProperties.ExecutableName);
 
-        Environment.Exit(0);
+            //renaming old file
+            File.Move(oldExe, oldExe + ".old", true);
+
+            //moving new file
+            File.Move(newExe, oldExe, true);
+
+            File.Delete(Path.Combine(dir, ClientConsts.UpdateFile));
+            Directory.Delete(Path.Combine(dir, ClientConsts.UpdateFolder), true);
+
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                #pragma warning disable IDISP004 // Don't ignore created IDisposable
+                //starting new version of the app
+                _ = Process.Start(oldExe);
+                #pragma warning restore IDISP004 // Don't ignore created IDisposable
+            }
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            {
+                //setting execute permission for user, otherwise the app won't run from game mode
+                var attributes = File.GetUnixFileMode(oldExe);
+                File.SetUnixFileMode(oldExe, attributes | UnixFileMode.UserExecute);
+            }
+
+            Environment.Exit(0);
+        }
+        catch (Exception ex)
+        {
+            Trace.WriteLine($"=== Critical error during update installation: {ex} ===");
+            Environment.Exit(1);
+        }
     }
 }

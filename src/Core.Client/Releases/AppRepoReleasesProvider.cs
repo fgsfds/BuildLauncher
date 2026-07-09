@@ -12,12 +12,8 @@ public sealed class AppRepoReleasesProvider : ReleaseProviderBase<AppReleaseEnum
     /// <summary>
     ///     Initializes a new instance of <see cref="AppRepoReleasesProvider" />.
     /// </summary>
-    /// <param name="logger">
-    ///     Logger instance.
-    /// </param>
-    /// <param name="httpClientFactory">
-    ///     Factory for creating HTTP clients.
-    /// </param>
+    /// <param name="logger">Logger instance.</param>
+    /// <param name="httpClientFactory">Factory for creating HTTP clients.</param>
     public AppRepoReleasesProvider(
         ILogger<AppRepoReleasesProvider> logger,
         IHttpClientFactory httpClientFactory

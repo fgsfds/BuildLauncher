@@ -18,34 +18,39 @@ namespace Core.Client.Api;
 public sealed class GitHubApiInterface : IApiInterface
 {
     private readonly ReleaseProviderBase<AppReleaseEnum> _appRepoReleasesProvider;
+
     private readonly IHttpClientFactory _httpClientFactory;
+
     private readonly ILogger<GitHubApiInterface> _logger;
+
     private readonly ReleaseProviderBase<PortEnum> _portsReleasesProviderBase;
+
+    /// <summary>
+    ///     Semaphore for synchronizing access to cached data.
+    /// </summary>
     private readonly SemaphoreSlim _semaphore = new(1);
+
     private readonly ReleaseProviderBase<ToolEnum> _toolsReleasesProviderBase;
 
+    /// <summary>
+    ///     Cached addon data loaded from the remote addons.json.
+    /// </summary>
     private Dictionary<GameEnum, List<DownloadableAddonJsonModel>>? _addonsJson;
+
+    /// <summary>
+    ///     Cached data from the remote data.json.
+    /// </summary>
     private Dictionary<string, string>? _data;
 
 
     /// <summary>
     ///     Initializes a new instance of <see cref="GitHubApiInterface" />.
     /// </summary>
-    /// <param name="portsReleasesProviderBase">
-    ///     Provider for port releases.
-    /// </param>
-    /// <param name="toolsReleasesRetriever">
-    ///     Provider for tool releases.
-    /// </param>
-    /// <param name="appRepoReleasesProvider">
-    ///     Provider for app self-update releases.
-    /// </param>
-    /// <param name="httpClientFactory">
-    ///     Factory for creating HTTP clients.
-    /// </param>
-    /// <param name="logger">
-    ///     Logger instance.
-    /// </param>
+    /// <param name="portsReleasesProviderBase">Provider for port releases.</param>
+    /// <param name="toolsReleasesRetriever">Provider for tool releases.</param>
+    /// <param name="appRepoReleasesProvider">Provider for app self-update releases.</param>
+    /// <param name="httpClientFactory">Factory for creating HTTP clients.</param>
+    /// <param name="logger">Logger instance.</param>
     public GitHubApiInterface(
         ReleaseProviderBase<PortEnum> portsReleasesProviderBase,
         ReleaseProviderBase<ToolEnum> toolsReleasesRetriever,
@@ -62,6 +67,7 @@ public sealed class GitHubApiInterface : IApiInterface
     }
 
 
+    /// <inheritdoc />
     public async Task<List<DownloadableAddonJsonModel>?> GetAddonsAsync(GameEnum gameEnum)
     {
         await _semaphore.WaitAsync().ConfigureAwait(false);
@@ -122,6 +128,7 @@ public sealed class GitHubApiInterface : IApiInterface
         }
     }
 
+    /// <inheritdoc />
     public async Task<GeneralReleaseJsonModel?> GetLatestAppReleaseAsync()
     {
         var result = await _appRepoReleasesProvider.GetLatestReleaseAsync(AppReleaseEnum.MainApp, ClientProperties.IsDeveloperMode).ConfigureAwait(false);
@@ -134,6 +141,7 @@ public sealed class GitHubApiInterface : IApiInterface
         return null;
     }
 
+    /// <inheritdoc />
     public async Task<GeneralReleaseJsonModel?> GetLatestPortReleaseAsync(PortEnum portEnum)
     {
         var result = await _portsReleasesProviderBase.GetLatestReleaseAsync(portEnum, false).ConfigureAwait(false);
@@ -146,6 +154,7 @@ public sealed class GitHubApiInterface : IApiInterface
         return null;
     }
 
+    /// <inheritdoc />
     public async Task<GeneralReleaseJsonModel?> GetLatestToolReleaseAsync(ToolEnum toolEnum)
     {
         var result = await _toolsReleasesProviderBase.GetLatestReleaseAsync(toolEnum, false).ConfigureAwait(false);
@@ -158,6 +167,7 @@ public sealed class GitHubApiInterface : IApiInterface
         return null;
     }
 
+    /// <inheritdoc />
     public async Task<bool> AddAddonToDatabaseAsync(AddonManifestJsonModel addonJson, DownloadableAddonJsonModel downloadableAddonJson)
     {
         if (ClientProperties.PathToLocalAddonsJson is null)
@@ -244,6 +254,7 @@ public sealed class GitHubApiInterface : IApiInterface
         return true;
     }
 
+    /// <inheritdoc />
     public async Task<string?> GetUploadFolderAsync()
     {
         await _semaphore.WaitAsync().ConfigureAwait(false);
@@ -255,7 +266,7 @@ public sealed class GitHubApiInterface : IApiInterface
                 await InitDataAsync().ConfigureAwait(false);
             }
 
-            return _data!.TryGetValue(DataJson.UploadFolder, out var uploadFolder) ? uploadFolder : null;
+            return _data?.TryGetValue(DataJson.UploadFolder, out var uploadFolder) == true ? uploadFolder : null;
         }
         catch (Exception ex)
         {
@@ -269,6 +280,7 @@ public sealed class GitHubApiInterface : IApiInterface
         }
     }
 
+    /// <inheritdoc />
     public async Task<List<AddonManifestJsonModel>?> GetMetadataAsync()
     {
         try
@@ -293,6 +305,7 @@ public sealed class GitHubApiInterface : IApiInterface
         }
     }
 
+    /// <inheritdoc />
     public async Task<Result<Uri?>> GetSignedUrlAsync(string path)
     {
         await _semaphore.WaitAsync().ConfigureAwait(false);
@@ -304,7 +317,10 @@ public sealed class GitHubApiInterface : IApiInterface
                 await InitDataAsync().ConfigureAwait(false);
             }
 
-            _ = _data!.TryGetValue(DataJson.UploadFolder, out var uploadFolder) ? uploadFolder : null;
+            if (_data is null || !_data.TryGetValue(DataJson.UploadFolder, out var uploadFolder))
+            {
+                return new(ResultEnum.Error, null, "Upload folder not found");
+            }
 
             var url = Path.Combine(uploadFolder, path);
 
@@ -323,6 +339,9 @@ public sealed class GitHubApiInterface : IApiInterface
     }
 
 
+    /// <summary>
+    ///     Initializes the cached data dictionary by downloading data.json from GitHub.
+    /// </summary>
     private async Task InitDataAsync()
     {
         using var httpClient = _httpClientFactory.CreateClient(HttpClientEnum.GitHub.GetDescription());
@@ -335,10 +354,13 @@ public sealed class GitHubApiInterface : IApiInterface
 
     #region Not Implemented
 
+    /// <inheritdoc />
     public Task<decimal?> ChangeScoreAsync(string addonId, sbyte score, bool isNew) => Task.FromResult<decimal?>(null);
 
+    /// <inheritdoc />
     public Task<Dictionary<string, decimal>?> GetRatingsAsync() => Task.FromResult<Dictionary<string, decimal>?>(null);
 
+    /// <inheritdoc />
     public Task<bool> IncreaseNumberOfInstallsAsync(string addonId) => Task.FromResult(false);
 
     #endregion

@@ -5,15 +5,30 @@ using Amazon.S3.Transfer;
 namespace S3;
 
 /// <summary>
-/// <see cref="TransferUtility"/> wrapper that injects Referer header.
+///     <see cref="TransferUtility" /> wrapper that injects Referer header.
 /// </summary>
 public sealed class S3TransferUtilityWrapper : IDisposable
 {
-    private readonly AmazonS3Client _client;
-    private readonly TransferUtility _transferUtility;
     private readonly string _bucket;
+
+    /// <summary>
+    ///     Amazon S3 client instance.
+    /// </summary>
+    private readonly AmazonS3Client _client;
+
+    /// <summary>
+    ///     Secret key used for Referer header injection in S3 requests.
+    /// </summary>
     private readonly string? _secretKey;
 
+    /// <summary>
+    ///     Transfer utility instance for upload operations.
+    /// </summary>
+    private readonly TransferUtility _transferUtility;
+
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="S3TransferUtilityWrapper" /> class.
+    /// </summary>
     public S3TransferUtilityWrapper(AmazonS3Config config, string bucket, string? secretKey)
     {
         _bucket = bucket;
@@ -25,8 +40,16 @@ public sealed class S3TransferUtilityWrapper : IDisposable
         _transferUtility = new(_client);
     }
 
+    /// <inheritdoc />
+    public void Dispose()
+    {
+        _transferUtility.Dispose();
+        _client.BeforeRequestEvent -= Client_BeforeRequestEvent;
+        _client.Dispose();
+    }
+
     /// <summary>
-    /// Uploads file.
+    ///     Uploads file.
     /// </summary>
     /// <param name="stream">Stream.</param>
     /// <param name="fileKey">Object key.</param>
@@ -52,6 +75,11 @@ public sealed class S3TransferUtilityWrapper : IDisposable
         return _transferUtility.UploadWithResponseAsync(uploadRequest, cancellationToken);
     }
 
+    /// <summary>
+    ///     Injects the Referer header into S3 requests when a secret key is configured.
+    /// </summary>
+    /// <param name="sender">Event sender.</param>
+    /// <param name="e">Request event arguments.</param>
     private void Client_BeforeRequestEvent(object sender, RequestEventArgs e)
     {
         if (e is WebServiceRequestEventArgs args)
@@ -61,13 +89,5 @@ public sealed class S3TransferUtilityWrapper : IDisposable
                 args.Headers["Referer"] = _secretKey;
             }
         }
-    }
-
-    /// <inheritdoc/>
-    public void Dispose()
-    {
-        _transferUtility.Dispose();
-        _client.BeforeRequestEvent -= Client_BeforeRequestEvent;
-        _client.Dispose();
     }
 }

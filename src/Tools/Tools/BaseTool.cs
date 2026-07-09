@@ -6,17 +6,17 @@ using Core.Client.Interfaces;
 namespace Tools.Tools;
 
 /// <summary>
-/// Base class for tools
+///     Base class for tools.
 /// </summary>
 public abstract class BaseTool : IInstallable
 {
     /// <summary>
-    /// Tool enum
+    ///     Tool enum.
     /// </summary>
     public abstract ToolEnum ToolEnum { get; }
 
     /// <summary>
-    /// Main executable
+    ///     Main executable
     /// </summary>
     public string Exe
     {
@@ -32,27 +32,52 @@ public abstract class BaseTool : IInstallable
     }
 
     /// <summary>
-    /// Windows executable
+    ///     Windows executable.
     /// </summary>
     protected abstract string WinExe { get; }
 
     /// <summary>
-    /// Linux executable
+    ///     Linux executable.
     /// </summary>
     protected abstract string LinExe { get; }
 
     /// <summary>
-    /// Name of the tool
+    ///     Name of the tool.
     /// </summary>
     public abstract string Name { get; }
 
-    /// <inheritdoc/>
+    /// <summary>
+    ///     Gets a value indicating whether the tool can be installed.
+    /// </summary>
+    public virtual bool CanBeInstalled => true;
+
+    /// <summary>
+    ///     Gets a value indicating whether the tool can be launched.
+    /// </summary>
+    public abstract bool CanBeLaunched { get; }
+
+    /// <summary>
+    ///     Gets the install prompt text.
+    /// </summary>
+    public virtual string? InstallText => null;
+
+    /// <summary>
+    ///     Path to tool executable.
+    /// </summary>
+    public string ToolExeFilePath => Path.Combine(InstallFolderPath, Exe);
+
+    /// <summary>
+    ///     Tool's icon identifier.
+    /// </summary>
+    public long IconId => ToolEnum.GetUniqueHash();
+
+    /// <inheritdoc />
     public bool IsInstalled => InstalledVersion is not null;
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public virtual string InstallFolderPath => Path.Combine(ClientProperties.ToolsFolderPath, Name);
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public virtual string? InstalledVersion
     {
         get
@@ -64,34 +89,19 @@ public abstract class BaseTool : IInstallable
                 return null;
             }
 
-            return File.ReadAllText(versionFile);
+            try
+            {
+                return File.ReadAllText(versionFile);
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
     }
 
     /// <summary>
-    /// Can tool be installed
-    /// </summary>
-    public virtual bool CanBeInstalled => true;
-
-    /// <summary>
-    /// Can tool be launched
-    /// </summary>
-    public abstract bool CanBeLaunched { get; }
-
-    public virtual string? InstallText => null;
-
-    /// <summary>
-    /// Path to tool exe
-    /// </summary>
-    public string ToolExeFilePath => Path.Combine(InstallFolderPath, Exe);
-
-    /// <summary>
-    /// Tool's icon
-    /// </summary>
-    public long IconId => ToolEnum.GetUniqueHash();
-
-    /// <summary>
-    /// Get cmd arguments
+    ///     Gets the command-line arguments for starting the tool.
     /// </summary>
     public abstract string GetStartToolArgs();
 }

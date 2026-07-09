@@ -4,60 +4,63 @@ using System.Runtime.InteropServices;
 
 namespace Core.Client.Helpers;
 
+/// <summary>
+///     Provides static properties about the client environment, paths, and configuration.
+/// </summary>
 public static class ClientProperties
 {
     /// <summary>
-    /// Path to the folder that contains main exe
+    ///     Path to the folder that contains the main executable.
     /// </summary>
     public static readonly string WorkingFolder = Environment.CurrentDirectory;
 
     /// <summary>
-    /// Path to the data folder
+    ///     Path to the data folder.
     /// </summary>
     public static readonly string DataFolderPath = Path.Combine(WorkingFolder, "Data");
 
     /// <summary>
-    /// Path to the ports folder
+    ///     Path to the temp folder.
     /// </summary>
     public static readonly string TempFolderPath = Path.Combine(DataFolderPath, "Temp");
 
     /// <summary>
-    /// Path to the ports folder
+    ///     Path to the ports folder.
     /// </summary>
     public static readonly string PortsFolderPath = Path.Combine(DataFolderPath, "Ports");
 
     /// <summary>
-    /// Path to the tools folder
+    ///     Path to the tools folder.
     /// </summary>
     public static readonly string ToolsFolderPath = Path.Combine(DataFolderPath, "Tools");
 
     /// <summary>
-    /// Path to the saved games folder
+    ///     Path to the saved games folder.
     /// </summary>
     public static readonly string SavedGamesFolderPath = Path.Combine(DataFolderPath, "Saves");
 
     /// <summary>
-    /// Path to the addons folder
+    ///     Path to the addons folder.
     /// </summary>
     public static readonly string AddonsFolderPath = Path.Combine(DataFolderPath, "Addons");
 
     /// <summary>
-    /// Is app running in the developer mode
+    ///     Whether the app is running in developer mode.
     /// </summary>
     public static bool IsDeveloperMode { get; set; } = false;
 
     /// <summary>
-    /// Is app running in offline mode
+    ///     Whether the app is running in offline mode.
     /// </summary>
     public static bool IsOfflineMode { get; set; }
 
     /// <summary>
-    /// Current app version
+    ///     Current app version.
     /// </summary>
     public static Version CurrentVersion => Assembly.GetEntryAssembly()?.GetName().Version ?? throw new ArgumentNullException();
 
     /// <summary>
-    /// Name of the executable file
+    ///     Name of the executable file.
     /// </summary>
     public static string ExecutableName
     {
@@ -79,7 +82,7 @@ public static class ClientProperties
     }
 
     /// <summary>
-    /// Path to local addons.json
+    ///     Path to the local addons.json file.
     /// </summary>
     public static string? PathToLocalAddonsJson
     {
@@ -104,7 +107,7 @@ public static class ClientProperties
     }
 
     /// <summary>
-    /// Path to local data.json
+    ///     Path to the local data.json file.
     /// </summary>
     public static string? PathToLocalDataJson
     {
@@ -129,7 +132,7 @@ public static class ClientProperties
     }
 
     /// <summary>
-    /// Path to local manifests.json
+    ///     Path to the local manifests.json file.
     /// </summary>
     public static string? PathToLocalManifestsJson
     {
@@ -153,5 +156,8 @@ public static class ClientProperties
         }
     }
 
+    /// <summary>
+    ///     Path to the application log file.
+    /// </summary>
     public static string PathToLogFile => Path.Combine(WorkingFolder, "BuildLauncher.log");
 }

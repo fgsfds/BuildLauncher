@@ -5,6 +5,9 @@ using Ports.Ports;
 
 namespace Ports.Installer;
 
+/// <summary>
+///     Factory for creating <see cref="PortInstaller" /> instances.
+/// </summary>
 public sealed class PortInstallerFactory(
     IApiInterface apiInterface,
     FilesDownloader filesDownloader,
@@ -13,8 +16,9 @@ public sealed class PortInstallerFactory(
     ) : IInstallerFactory<BasePort, PortInstaller>
 {
     /// <summary>
-    /// Create <see cref="PortInstaller"/> instance
+    ///     Creates a <see cref="PortInstaller" /> instance for the specified port.
     /// </summary>
+    /// <param name="port">The port to install.</param>
     public PortInstaller Create(BasePort port) => new(
         port,
         apiInterface,

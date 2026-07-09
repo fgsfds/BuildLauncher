@@ -3,20 +3,23 @@ using Games.Skills;
 
 namespace Games.Games;
 
+/// <summary>
+///     Represents the game Ion Fury and its associated metadata.
+/// </summary>
 public sealed class FuryGame : BaseGame
 {
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override GameEnum GameEnum => GameEnum.Fury;
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override string FullName => "Ion Fury";
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override string ShortName => "Fury";
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override List<string> RequiredFiles => ["fury.grp"];
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override Enum Skills => new FurySkillsEnum();
 }

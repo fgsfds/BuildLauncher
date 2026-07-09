@@ -1,4 +1,5 @@
-﻿using Core.All.Enums;
+﻿using System.Diagnostics;
+using Core.All.Enums;
 using Core.All.Serializable.Downloadable;
 using Core.Client;
 using Core.Client.Interfaces;
@@ -8,6 +9,9 @@ using Ports.Ports;
 
 namespace Ports.Installer;
 
+/// <summary>
+///     Installs a port by downloading, extracting, and performing post-install setup.
+/// </summary>
 public sealed class PortInstaller : InstallerBase<BasePort>
 {
     private readonly IApiInterface _apiInterface;
@@ -15,21 +19,11 @@ public sealed class PortInstaller : InstallerBase<BasePort>
     /// <summary>
     ///     Initializes a new instance of <see cref="PortInstaller" />.
     /// </summary>
-    /// <param name="port">
-    ///     The port to install.
-    /// </param>
-    /// <param name="apiInterface">
-    ///     API interface for fetching release info.
-    /// </param>
-    /// <param name="filesDownloader">
-    ///     File downloader service.
-    /// </param>
-    /// <param name="archiveTools">
-    ///     Archive extraction service.
-    /// </param>
-    /// <param name="logger">
-    ///     Logger instance.
-    /// </param>
+    /// <param name="port">The port to install.</param>
+    /// <param name="apiInterface">API interface for fetching release info.</param>
+    /// <param name="filesDownloader">File downloader service.</param>
+    /// <param name="archiveTools">Archive extraction service.</param>
+    /// <param name="logger">Logger instance.</param>
     public PortInstaller(
         BasePort port,
         IApiInterface apiInterface,
@@ -41,10 +35,10 @@ public sealed class PortInstaller : InstallerBase<BasePort>
         _apiInterface = apiInterface;
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override void Backup() { }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override void PostInstall(string filePath)
     {
         if (_instance.PortEnum is PortEnum.DosBox)
@@ -54,8 +48,15 @@ public sealed class PortInstaller : InstallerBase<BasePort>
         }
         else if (_instance.PortEnum is PortEnum.ZeroRecomp)
         {
-            var portable = Path.Combine(_instance.InstallFolderPath, "portable.txt");
-            File.WriteAllText(portable, string.Empty);
+            try
+            {
+                var portable = Path.Combine(_instance.InstallFolderPath, "portable.txt");
+                File.WriteAllText(portable, string.Empty);
+            }
+            catch (Exception ex)
+            {
+                Trace.WriteLine($"Error creating portable.txt: {ex.Message}");
+            }
 
             var subFolder = Directory.GetDirectories(_instance.InstallFolderPath).FirstOrDefault(x => x.Contains("dnzh-", StringComparison.InvariantCultureIgnoreCase));
             FlattenSubfolder(_instance.InstallFolderPath, subFolder);
@@ -63,30 +64,15 @@ public sealed class PortInstaller : InstallerBase<BasePort>
     }
 
     /// <summary>
-    ///     Moves all files from a nested subfolder into the install folder, then removes the subfolder.
+    ///     Moves all files from a nested subfolder up to the install folder and removes the subfolder.
     /// </summary>
-    /// <param name="installFolderPath">
-    ///     Target installation folder.
-    /// </param>
-    /// <param name="subFolder">
-    ///     The nested subfolder to flatten. If
-    ///     <c>
-    ///         null
-    ///     </c>
-    ///     or empty, a <see cref="NullReferenceException" /> is thrown.
-    /// </param>
-    /// <exception cref="NullReferenceException">
-    ///     Thrown when <paramref name="subFolder" /> is
-    ///     <c>
-    ///         null
-    ///     </c>
-    ///     or empty.
-    /// </exception>
+    /// <param name="installFolderPath">Target install folder path.</param>
+    /// <param name="subFolder">Path to the nested subfolder to flatten.</param>
     private static void FlattenSubfolder(string installFolderPath, string? subFolder)
     {
         if (string.IsNullOrWhiteSpace(subFolder))
         {
-            throw new NullReferenceException("Subfolder not found after unpacking.");
+            throw new InvalidOperationException("Subfolder not found after unpacking.");
         }
 
         var files = Directory.EnumerateFiles(subFolder, "*.*", SearchOption.AllDirectories);
@@ -96,7 +82,7 @@ public sealed class PortInstaller : InstallerBase<BasePort>
             var fileName = Path.GetRelativePath(subFolder, file);
             var destFile = Path.Combine(installFolderPath, fileName);
 
-            var destFolder = Path.GetDirectoryName(destFile)!;
+            var destFolder = Path.GetDirectoryName(destFile) ?? throw new InvalidOperationException($"Could not determine directory for {destFile}");
             Directory.CreateDirectory(destFolder);
 
             File.Move(file, destFile, true);
@@ -105,9 +91,9 @@ public sealed class PortInstaller : InstallerBase<BasePort>
         Directory.Delete(subFolder, true);
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override void Uninstall() => Directory.Delete(_instance.InstallFolderPath, true);
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override Task<GeneralReleaseJsonModel?> GetRelease() => _apiInterface.GetLatestPortReleaseAsync(_instance.PortEnum);
 }

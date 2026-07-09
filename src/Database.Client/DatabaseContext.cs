@@ -18,9 +18,7 @@ public sealed class DatabaseContext : DbContext
     /// <summary>
     ///     Initializes a new instance of the <see cref="DatabaseContext" /> class with options.
     /// </summary>
-    /// <param name="options">
-    ///     The database context options.
-    /// </param>
+    /// <param name="options">The database context options.</param>
     public DatabaseContext(DbContextOptions<DatabaseContext> options) : base(options) { }
 
     /// <summary>

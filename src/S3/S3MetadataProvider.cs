@@ -6,13 +6,20 @@ using Core.Client.Helpers;
 namespace S3;
 
 /// <summary>
-/// S3 object metadata provider.
+///     S3 object metadata provider.
 /// </summary>
 public sealed class S3MetadataProvider
 {
-    private readonly AmazonS3Client _client;
     private readonly string _bucket;
 
+    /// <summary>
+    ///     Amazon S3 client instance.
+    /// </summary>
+    private readonly AmazonS3Client _client;
+
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="S3MetadataProvider" /> class.
+    /// </summary>
     public S3MetadataProvider(AmazonS3Config config, string bucket)
     {
         _bucket = bucket;
@@ -21,7 +28,7 @@ public sealed class S3MetadataProvider
     }
 
     /// <summary>
-    /// Returns remote file metadata.
+    ///     Returns remote file metadata.
     /// </summary>
     /// <param name="fileKey">Object key.</param>
     /// <returns>Metadata.</returns>
@@ -30,7 +37,7 @@ public sealed class S3MetadataProvider
         var request = new GetObjectMetadataRequest
         {
             BucketName = _bucket,
-            Key = fileKey,
+            Key = fileKey
         };
 
         var response = await _client.GetObjectMetadataAsync(request).ConfigureAwait(false);

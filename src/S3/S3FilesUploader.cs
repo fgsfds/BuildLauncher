@@ -42,21 +42,11 @@ public sealed class S3FilesUploader : IFilesUploader
     /// <summary>
     ///     Uploads a file to the public uploads folder on S3.
     /// </summary>
-    /// <param name="pathToLocalFile">
-    ///     Path to the local file.
-    /// </param>
-    /// <param name="relativePathToRemoteFile">
-    ///     Relative path in the remote storage.
-    /// </param>
-    /// <param name="progress">
-    ///     Progress indicator.
-    /// </param>
-    /// <param name="cancellationToken">
-    ///     Cancellation token.
-    /// </param>
-    /// <returns>
-    ///     The upload result with remote file metadata.
-    /// </returns>
+    /// <param name="pathToLocalFile">Path to the local file.</param>
+    /// <param name="relativePathToRemoteFile">Relative path in the remote storage.</param>
+    /// <param name="progress">Progress indicator.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>The upload result with remote file metadata.</returns>
     public Task<Result<RemoteFileMetadata?>> UploadFileToPublicAsync(
         string pathToLocalFile,
         string relativePathToRemoteFile,
@@ -71,21 +61,11 @@ public sealed class S3FilesUploader : IFilesUploader
     /// <summary>
     ///     Performs the internal file upload to S3.
     /// </summary>
-    /// <param name="pathToLocalFile">
-    ///     Path to the local file.
-    /// </param>
-    /// <param name="fileKey">
-    ///     S3 object key.
-    /// </param>
-    /// <param name="progress">
-    ///     Progress indicator.
-    /// </param>
-    /// <param name="cancellationToken">
-    ///     Cancellation token.
-    /// </param>
-    /// <returns>
-    ///     The upload result with remote file metadata.
-    /// </returns>
+    /// <param name="pathToLocalFile">Path to the local file.</param>
+    /// <param name="fileKey">S3 object key.</param>
+    /// <param name="progress">Progress indicator.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>The upload result with remote file metadata.</returns>
     private async Task<Result<RemoteFileMetadata?>> InternalUploadAsync(
         string pathToLocalFile,
         string fileKey,
@@ -144,35 +124,40 @@ public sealed class S3FilesUploader : IFilesUploader
     /// <summary>
     ///     Tracks the upload progress by reading the stream position.
     /// </summary>
-    /// <param name="streamToTrack">
-    ///     The file stream to track.
-    /// </param>
-    /// <param name="progress">
-    ///     Progress indicator to update.
-    /// </param>
-    /// <param name="cancellationToken">
-    ///     Cancellation token,
-    /// </param>
+    /// <param name="streamToTrack">The file stream to track.</param>
+    /// <param name="progress">Progress indicator to update.</param>
+    /// <param name="cancellationToken">Cancellation token,</param>
     private static void TrackProgress(
         FileStream streamToTrack,
         StrongBox<int> progress,
         CancellationToken cancellationToken
         )
     {
-        if (!streamToTrack.CanSeek)
+        try
         {
-            return;
-        }
-
-        while (!cancellationToken.IsCancellationRequested)
-        {
-            var pos = streamToTrack.Position / (float)streamToTrack.Length * 100;
-            progress.Value = (int)pos;
-
-            if (cancellationToken.WaitHandle.WaitOne(50))
+            if (!streamToTrack.CanSeek)
             {
-                break;
+                return;
             }
+
+            while (!cancellationToken.IsCancellationRequested)
+            {
+                var pos = streamToTrack.Position / (float)streamToTrack.Length * 100;
+                progress.Value = (int)pos;
+
+                if (cancellationToken.WaitHandle.WaitOne(50))
+                {
+                    break;
+                }
+            }
+        }
+        catch (ObjectDisposedException)
+        {
+            // stream was disposed — tracking is no longer needed
+        }
+        catch (NotSupportedException)
+        {
+            // stream doesn't support seeking — progress won't work
         }
     }
 }

@@ -1,19 +1,23 @@
-﻿using System.Net.Http.Headers;
-using Core.Client.Interfaces;
+﻿using System.Net;
+using System.Net.Http.Headers;
 using Microsoft.Extensions.Logging;
 
 namespace Core.Client.Tools;
 
+/// <summary>
+///     Provides file downloading functionality with resume support and progress reporting.
+/// </summary>
 public sealed class FilesDownloader
 {
     private readonly IHttpClientFactory _httpClientFactory;
+
     private readonly ILogger<FilesDownloader> _logger;
 
     /// <summary>
-    /// Operation progress
+    ///     Initializes a new instance of the <see cref="FilesDownloader" /> class.
     /// </summary>
-    public event EventHandler<float>? ProgressChanged;
-
+    /// <param name="httpClientFactory">The HTTP client factory.</param>
+    /// <param name="logger">Logger instance.</param>
     public FilesDownloader(
         IHttpClientFactory httpClientFactory,
         ILogger<FilesDownloader> logger
@@ -24,7 +28,12 @@ public sealed class FilesDownloader
     }
 
     /// <summary>
-    /// Download archive
+    ///     Operation progress
+    /// </summary>
+    public event EventHandler<float>? ProgressChanged;
+
+    /// <summary>
+    ///     Download archive
     /// </summary>
     /// <param name="url">Link to file download</param>
     /// <param name="filePath">Absolute path to destination file</param>
@@ -50,7 +59,7 @@ public sealed class FilesDownloader
 
         if (!response.IsSuccessStatusCode)
         {
-            throw new Exception($"Error while downloading {url}, error: {response.StatusCode}");
+            throw new HttpRequestException($"Error while downloading {url}, error: {response.StatusCode}");
         }
 
         await using var source = await response.Content.ReadAsStreamAsync(cancellationToken).ConfigureAwait(false);
@@ -82,7 +91,7 @@ public sealed class FilesDownloader
         }
         catch (HttpIOException)
         {
-            await ContinueDownload(url, contentLength, fileStream!, cancellationToken).ConfigureAwait(false);
+            await ContinueDownload(url, contentLength, fileStream, cancellationToken).ConfigureAwait(false);
         }
         catch (OperationCanceledException)
         {
@@ -105,25 +114,29 @@ public sealed class FilesDownloader
 
         _logger.LogInformation("Downloading finished, renaming temp file");
         File.Move(tempFile, filePath, true);
+
         return true;
     }
 
 
     /// <summary>
-    /// Continue download after network error
+    ///     Continues a failed download by issuing a ranged HTTP request.
     /// </summary>
-    /// <param name="url">Url to the file</param>
-    /// <param name="contentLength">Total content length</param>
-    /// <param name="fileStream">File stream to write to</param>
-    /// <param name="cancellationToken">Cancellation token</param>
+    /// <param name="url">The file download URL.</param>
+    /// <param name="contentLength">The total content length of the file.</param>
+    /// <param name="fileStream">The file stream to append data to.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
     private async Task ContinueDownload(
         Uri url,
         long? contentLength,
         FileStream fileStream,
-        CancellationToken cancellationToken
+        CancellationToken cancellationToken,
+        int retryCount = 0
         )
     {
-        _logger.LogInformation("Trying to continue downloading after failing");
+        const int maxRetries = 3;
+
+        _logger.LogInformation("Trying to continue downloading after failing (attempt {RetryCount}/{MaxRetries})", retryCount + 1, maxRetries);
 
         try
         {
@@ -138,7 +151,7 @@ public sealed class FilesDownloader
             using var httpClient = _httpClientFactory.CreateClient();
             using var response = await httpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
 
-            if (response.StatusCode is not System.Net.HttpStatusCode.PartialContent)
+            if (response.StatusCode is not HttpStatusCode.PartialContent)
             {
                 throw new InvalidOperationException("Error while downloading a file: " + response.StatusCode);
             }
@@ -147,9 +160,18 @@ public sealed class FilesDownloader
 
             await source.CopyToAsync(fileStream, cancellationToken).ConfigureAwait(false);
         }
+        catch (HttpIOException) when (retryCount < maxRetries)
+        {
+            var delay = TimeSpan.FromSeconds(Math.Pow(2, retryCount));
+            _logger.LogWarning("HttpIOException during download. Retrying in {Delay} seconds...", delay.TotalSeconds);
+            await Task.Delay(delay, cancellationToken).ConfigureAwait(false);
+            await ContinueDownload(url, contentLength, fileStream, cancellationToken, retryCount + 1).ConfigureAwait(false);
+        }
         catch (HttpIOException)
         {
-            await ContinueDownload(url, contentLength, fileStream, cancellationToken).ConfigureAwait(false);
+            _logger.LogError("Failed to continue download after {MaxRetries} retries.", maxRetries);
+
+            throw;
         }
     }
 }

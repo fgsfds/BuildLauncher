@@ -5,22 +5,29 @@ using SharpCompress.Readers;
 
 namespace Core.Client.Tools;
 
+/// <summary>
+///     Provides archive extraction functionality with progress reporting.
+/// </summary>
 public sealed class ArchiveTools
 {
     private readonly ILogger<ArchiveTools> _logger;
 
     /// <summary>
-    /// Operation progress
+    ///     Initializes a new instance of the <see cref="ArchiveTools" /> class.
     /// </summary>
-    public event EventHandler<float>? ProgressChanged;
-
+    /// <param name="logger">Logger instance.</param>
     public ArchiveTools(ILogger<ArchiveTools> logger)
     {
         _logger = logger;
     }
 
     /// <summary>
-    /// Unpack archive
+    ///     Operation progress
+    /// </summary>
+    public event EventHandler<float>? ProgressChanged;
+
+    /// <summary>
+    ///     Unpack archive
     /// </summary>
     /// <param name="pathToArchive">Absolute path to archive file</param>
     /// <param name="unpackTo">Directory to unpack archive to</param>
@@ -30,12 +37,13 @@ public sealed class ArchiveTools
         )
     {
         var progress = new Progress<ProgressReport>(report =>
-        {
-            if (report.PercentComplete is not null)
             {
-                ProgressChanged?.Invoke(this, (float)report.PercentComplete.Value);
+                if (report.PercentComplete is not null)
+                {
+                    ProgressChanged?.Invoke(this, (float)report.PercentComplete.Value);
+                }
             }
-        });
+            );
 
         if (!Directory.Exists(unpackTo))
         {
@@ -45,7 +53,7 @@ public sealed class ArchiveTools
         using var archive = ArchiveFactory.OpenArchive(
             pathToArchive,
             ReaderOptions.ForFilePath
-            .WithProgress(progress)
+                         .WithProgress(progress)
             );
 
         archive.WriteToDirectory(unpackTo);

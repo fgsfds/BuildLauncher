@@ -10,18 +10,33 @@ using Microsoft.Extensions.Logging;
 
 namespace Core.Client.Api;
 
+/// <summary>
+///     Provides a local file-based implementation of the API interface for offline use without network access.
+/// </summary>
 public sealed class OfflineApiInterface : IApiInterface
 {
     private readonly ILogger<OfflineApiInterface> _logger;
+
+    /// <summary>
+    ///     Semaphore for synchronizing access to cached data.
+    /// </summary>
     private readonly SemaphoreSlim _semaphore = new(1);
 
+    /// <summary>
+    ///     Cached addon data loaded from the local JSON file.
+    /// </summary>
     private Dictionary<GameEnum, List<DownloadableAddonJsonModel>>? _addonsJson;
 
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="OfflineApiInterface" /> class.
+    /// </summary>
+    /// <param name="logger">Logger instance.</param>
     public OfflineApiInterface(ILogger<OfflineApiInterface> logger)
     {
         _logger = logger;
     }
 
+    /// <inheritdoc />
     public async Task<List<DownloadableAddonJsonModel>?> GetAddonsAsync(GameEnum gameEnum)
     {
         await _semaphore.WaitAsync().ConfigureAwait(false);
@@ -42,10 +57,7 @@ public sealed class OfflineApiInterface : IApiInterface
                     DownloadableAddonJsonModelDictionaryContext.Default.DictionaryGameEnumListDownloadableAddonJsonModel
                     ).ConfigureAwait(false);
 
-                if (_addonsJson is null)
-                {
-                    throw new ArgumentNullException();
-                }
+                ArgumentNullException.ThrowIfNull(_addonsJson);
             }
 
             if (gameEnum is GameEnum.Redneck)
@@ -53,7 +65,11 @@ public sealed class OfflineApiInterface : IApiInterface
                 _ = _addonsJson.TryGetValue(GameEnum.Redneck, out var rrAddons);
                 _ = _addonsJson.TryGetValue(GameEnum.RidesAgain, out var againAddons);
 
-                return [.. rrAddons ?? [], .. againAddons ?? []];
+                return
+                [
+                    .. rrAddons ?? [],
+                    .. againAddons ?? []
+                ];
             }
 
             if (gameEnum is GameEnum.Witchaven)
@@ -61,7 +77,11 @@ public sealed class OfflineApiInterface : IApiInterface
                 _ = _addonsJson.TryGetValue(GameEnum.Witchaven, out var w1Addons);
                 _ = _addonsJson.TryGetValue(GameEnum.Witchaven2, out var w2Addons);
 
-                return [.. w1Addons ?? [], .. w2Addons ?? []];
+                return
+                [
+                    .. w1Addons ?? [],
+                    .. w2Addons ?? []
+                ];
             }
 
             return _addonsJson.TryGetValue(gameEnum, out var result) ? result : [];
@@ -69,6 +89,7 @@ public sealed class OfflineApiInterface : IApiInterface
         catch (Exception ex)
         {
             _logger.LogCritical(ex, "=== Error while getting addonsJson from GitHub ===");
+
             return null;
         }
         finally
@@ -77,30 +98,43 @@ public sealed class OfflineApiInterface : IApiInterface
         }
     }
 
+    /// <inheritdoc />
     public Task<GeneralReleaseJsonModel?> GetLatestAppReleaseAsync() => Task.FromResult<GeneralReleaseJsonModel?>(null);
 
+    /// <inheritdoc />
     public Task<GeneralReleaseJsonModel?> GetLatestPortReleaseAsync(PortEnum portEnum) => Task.FromResult<GeneralReleaseJsonModel?>(null);
 
+    /// <inheritdoc />
     public Task<GeneralReleaseJsonModel?> GetLatestToolReleaseAsync(ToolEnum toolEnum) => Task.FromResult<GeneralReleaseJsonModel?>(null);
 
+    /// <inheritdoc />
     public Task<bool> AddAddonToDatabaseAsync(AddonManifestJsonModel addonJson, DownloadableAddonJsonModel downloadableAddonJson) => Task.FromResult(false);
 
+    /// <inheritdoc />
     public async Task<string?> GetUploadFolderAsync()
     {
         using var dataJson = File.OpenRead(ClientProperties.PathToLocalDataJson);
+
         var data = await JsonSerializer.DeserializeAsync(
             dataJson,
             DataJsonModelContext.Default.DictionaryStringString
             ).ConfigureAwait(false);
 
-        _ = data!.TryGetValue(DataJson.UploadFolder, out var uploadFolder) ? uploadFolder : null;
+        if (data is null)
+        {
+            return null;
+        }
+
+        _ = data.TryGetValue(DataJson.UploadFolder, out var uploadFolder) ? uploadFolder : null;
 
         return uploadFolder;
     }
 
+    /// <inheritdoc />
     public async Task<List<AddonManifestJsonModel>?> GetMetadataAsync()
     {
         using var dataJson = File.OpenRead(ClientProperties.PathToLocalManifestsJson);
+
         var data = await JsonSerializer.DeserializeAsync(
             dataJson,
             AddonManifestJsonContext.Default.ListAddonManifestJsonModel
@@ -109,6 +143,7 @@ public sealed class OfflineApiInterface : IApiInterface
         return data;
     }
 
+    /// <inheritdoc />
     public async Task<Result<Uri?>> GetSignedUrlAsync(string path)
     {
         var uploadFolder = await GetUploadFolderAsync().ConfigureAwait(false);
@@ -126,10 +161,13 @@ public sealed class OfflineApiInterface : IApiInterface
 
     #region Not Implemented
 
+    /// <inheritdoc />
     public Task<decimal?> ChangeScoreAsync(string addonId, sbyte score, bool isNew) => Task.FromResult<decimal?>(null);
 
+    /// <inheritdoc />
     public Task<Dictionary<string, decimal>?> GetRatingsAsync() => Task.FromResult<Dictionary<string, decimal>?>(null);
 
+    /// <inheritdoc />
     public Task<bool> IncreaseNumberOfInstallsAsync(string addonId) => Task.FromResult(false);
 
     #endregion

@@ -3,8 +3,17 @@ using Core.All.Serializable.Addon;
 
 namespace Core.Client.Helpers;
 
+/// <summary>
+///     Provides helper methods for constructing file paths and URIs from addon metadata.
+/// </summary>
 public static class UriHelper
 {
+    /// <summary>
+    ///     Constructs a relative file path based on addon type and supported game.
+    /// </summary>
+    /// <param name="manifest">The addon manifest.</param>
+    /// <param name="pathToFile">Absolute path to the addon file.</param>
+    /// <returns>A relative path in the format "GameName/Type/filename".</returns>
     public static string GetRelativeFilePath(AddonManifestJsonModel manifest, string pathToFile)
     {
         var folderName = manifest.AddonType switch
@@ -12,7 +21,7 @@ public static class UriHelper
             AddonTypeEnum.TC => "Campaigns",
             AddonTypeEnum.Map => "Maps",
             AddonTypeEnum.Mod => "Mods",
-            _ => throw new NotSupportedException(),
+            _ => throw new NotSupportedException()
         };
 
         var gameName = manifest.SupportedGame.Game switch
@@ -30,7 +39,7 @@ public static class UriHelper
             GameEnum.Witchaven => "WH",
             GameEnum.Witchaven2 => "WH2",
             GameEnum.Standalone => "Standalone",
-            _ => throw new NotSupportedException(),
+            _ => throw new NotSupportedException()
         };
 
         return $"{gameName}/{folderName}/{Path.GetFileName(pathToFile)}";

@@ -2,20 +2,23 @@
 
 namespace Games.Games;
 
+/// <summary>
+///     Represents a standalone game configuration with no required files.
+/// </summary>
 public sealed class StandaloneGame : BaseGame
 {
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override GameEnum GameEnum => GameEnum.Standalone;
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override string FullName => "Standalone";
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override string ShortName => FullName;
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override List<string> RequiredFiles => [];
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override Enum? Skills => null;
 }

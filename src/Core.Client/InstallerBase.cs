@@ -6,19 +6,31 @@ using Microsoft.Extensions.Logging;
 
 namespace Core.Client;
 
+/// <summary>
+///     Provides a base implementation for installing and uninstalling ports and tools.
+/// </summary>
+/// <typeparam name="T">The type of installable item.</typeparam>
 public abstract class InstallerBase<T>
     where T : IInstallable
 {
-    protected readonly T _instance;
-    private readonly FilesDownloader _filesDownloader;
     private readonly ArchiveTools _archiveTools;
+
+    private readonly FilesDownloader _filesDownloader;
+
+    /// <summary>
+    ///     The installable instance.
+    /// </summary>
+    protected readonly T _instance;
+
     private readonly ILogger _logger;
 
     /// <summary>
-    /// Installation progress
+    ///     Initializes a new instance of the <see cref="InstallerBase{T}" /> class.
     /// </summary>
-    public Progress<float> Progress { get; init; } = new();
-
+    /// <param name="instance">The installable instance.</param>
+    /// <param name="filesDownloader">The file downloader service.</param>
+    /// <param name="archiveTools">The archive extraction utility.</param>
+    /// <param name="logger">Logger instance.</param>
     protected InstallerBase(
         T instance,
         FilesDownloader filesDownloader,
@@ -33,11 +45,16 @@ public abstract class InstallerBase<T>
     }
 
     /// <summary>
-    /// Check hash of the local file
+    ///     Installation progress.
     /// </summary>
-    /// <param name="filePath">Full path to the file</param>
-    /// <param name="hashStr">Hash that the file's hash will be compared to</param>
-    /// <returns>true if check is passed</returns>
+    public Progress<float> Progress { get; init; } = new();
+
+    /// <summary>
+    ///     Verifies the SHA-256 hash of a downloaded file against the expected value.
+    /// </summary>
+    /// <param name="filePath">Path to the downloaded file.</param>
+    /// <param name="hashStr">Expected hash string, optionally prefixed with "sha256:".</param>
+    /// <returns>true if the hash matches or hashStr is null; otherwise, false.</returns>
     private static async Task<bool> CheckFileHashAsync(
         string filePath,
         string? hashStr
@@ -49,6 +66,7 @@ public abstract class InstallerBase<T>
         }
 
         const string Sha = "sha256:";
+
         if (hashStr.StartsWith(Sha))
         {
             hashStr = hashStr[Sha.Length..];
@@ -64,28 +82,28 @@ public abstract class InstallerBase<T>
     }
 
     /// <summary>
-    /// Performs post install actions.
+    ///     Performs post install actions.
     /// </summary>
     /// <param name="filePath">Path to the downloaded file.</param>
     protected abstract void PostInstall(string filePath);
 
     /// <summary>
-    /// Backups required files.
+    ///     Backups required files.
     /// </summary>
     protected abstract void Backup();
 
     /// <summary>
-    /// Uninstalls port/tool.
+    ///     Uninstalls port/tool.
     /// </summary>
     public abstract void Uninstall();
 
     /// <summary>
-    /// Returns latest release.
+    ///     Returns latest release.
     /// </summary>
     public abstract Task<GeneralReleaseJsonModel?> GetRelease();
 
     /// <summary>
-    /// Installs port/tool.
+    ///     Installs port/tool.
     /// </summary>
     public async Task<bool> InstallAsync()
     {
@@ -138,6 +156,7 @@ public abstract class InstallerBase<T>
         {
             _logger.LogError(ex, $"Error while installing {_instance.ToString}.");
             Uninstall();
+
             throw;
         }
         finally
@@ -147,5 +166,10 @@ public abstract class InstallerBase<T>
         }
     }
 
+    /// <summary>
+    ///     Handles progress change events from the downloader and archive tools.
+    /// </summary>
+    /// <param name="_">Unused sender parameter.</param>
+    /// <param name="e">Progress value.</param>
     protected void OnProgressChanged(object? _, float e) => ((IProgress<float>)Progress).Report(e);
 }

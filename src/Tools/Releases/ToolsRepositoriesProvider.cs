@@ -12,15 +12,9 @@ public sealed class ToolsRepositoriesProvider : IRepositoriesProvider<ToolEnum>
     /// <summary>
     ///     Returns the repository configuration for the specified tool.
     /// </summary>
-    /// <param name="releaseEnum">
-    ///     Target tool.
-    /// </param>
-    /// <returns>
-    ///     A <see cref="RepositoryEntity" /> describing the release source and matching rules.
-    /// </returns>
-    /// <exception cref="NotSupportedException">
-    ///     Thrown when <paramref name="releaseEnum" /> has no associated repository.
-    /// </exception>
+    /// <param name="releaseEnum">Target tool.</param>
+    /// <returns>A <see cref="RepositoryEntity" /> describing the release source and matching rules.</returns>
+    /// <exception cref="NotSupportedException">Thrown when <paramref name="releaseEnum" /> has no associated repository.</exception>
     public RepositoryEntity GetRepo(ToolEnum releaseEnum)
     {
         if (releaseEnum is ToolEnum.XMapEdit)

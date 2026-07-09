@@ -3,36 +3,46 @@ using Games.Providers;
 
 namespace Tools.Tools;
 
+/// <summary>
+///     DOSBlood tool implementation.
+/// </summary>
 public sealed class DOSBlood : BaseTool
 {
     private readonly InstalledGamesProvider _gamesProvider;
 
-    /// <inheritdoc/>
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="DOSBlood" /> class.
+    /// </summary>
+    public DOSBlood(InstalledGamesProvider gamesProvider)
+    {
+        _gamesProvider = gamesProvider;
+    }
+
+    /// <inheritdoc />
     protected override string WinExe => "BLOOD.EXE";
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string LinExe => throw new NotSupportedException();
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override string Name => "DOSBlood";
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override ToolEnum ToolEnum => ToolEnum.DOSBlood;
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override string InstallFolderPath => _gamesProvider.GetGame(GameEnum.Blood).GameInstallFolder ?? string.Empty;
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override bool CanBeInstalled => _gamesProvider.GetGame(GameEnum.Blood).IsBaseGameInstalled;
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override bool CanBeLaunched => false;
 
+    /// <inheritdoc />
     public override string InstallText => string.Empty;
 
-    /// <summary>
-    /// Currently installed version
-    /// </summary>
+    /// <inheritdoc />
     public override string? InstalledVersion
     {
         get
@@ -63,15 +73,17 @@ public sealed class DOSBlood : BaseTool
                 return null;
             }
 
-            return File.ReadAllText(versionFile);
+            try
+            {
+                return File.ReadAllText(versionFile);
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
     }
 
-    public DOSBlood(InstalledGamesProvider gamesProvider)
-    {
-        _gamesProvider = gamesProvider;
-    }
-
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override string GetStartToolArgs() => throw new NotSupportedException();
 }

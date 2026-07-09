@@ -6,6 +6,9 @@ using Tools.Tools;
 
 namespace Tools.Installer;
 
+/// <summary>
+///     Factory for creating <see cref="ToolInstaller" /> instances.
+/// </summary>
 public sealed class ToolInstallerFactory(
     IApiInterface apiInterface,
     InstalledGamesProvider gamesProvider,
@@ -14,9 +17,7 @@ public sealed class ToolInstallerFactory(
     ILoggerFactory loggerFactory
     ) : IInstallerFactory<BaseTool, ToolInstaller>
 {
-    /// <summary>
-    /// Create <see cref="ToolInstaller"/> instance
-    /// </summary>
+    /// <inheritdoc />
     public ToolInstaller Create(BaseTool tool) => new(
         tool,
         apiInterface,

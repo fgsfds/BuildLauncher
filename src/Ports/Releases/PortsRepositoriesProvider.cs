@@ -15,15 +15,9 @@ public sealed partial class PortsRepositoriesProvider : IRepositoriesProvider<Po
     /// <summary>
     ///     Returns the repository configuration for the specified port.
     /// </summary>
-    /// <param name="releaseEnum">
-    ///     Target port.
-    /// </param>
-    /// <returns>
-    ///     A <see cref="RepositoryEntity" /> describing the release source and matching rules.
-    /// </returns>
-    /// <exception cref="NotSupportedException">
-    ///     Thrown when <paramref name="releaseEnum" /> has no associated repository.
-    /// </exception>
+    /// <param name="releaseEnum">Target port.</param>
+    /// <returns>A <see cref="RepositoryEntity" /> describing the release source and matching rules.</returns>
+    /// <exception cref="NotSupportedException">Thrown when <paramref name="releaseEnum" /> has no associated repository.</exception>
     public RepositoryEntity GetRepo(PortEnum releaseEnum)
     {
         if (releaseEnum is PortEnum.BuildGDX)
@@ -146,20 +140,26 @@ public sealed partial class PortsRepositoriesProvider : IRepositoriesProvider<Po
     }
 
     /// <summary>
-    ///     Parse the EDuke32 release info from the dukeworld synthesis page HTML.
+    ///     Parses the EDuke32 release HTML page to find the Windows release.
     /// </summary>
+    /// <param name="responseStream">HTML response stream.</param>
     private static GeneralReleaseJsonModel? ParseEDuke32Release(Stream responseStream) => ParseHtmlRelease(responseStream, EDuke32WindowsReleaseRegex(), "win64", EDuke32VersionRegex(), "r", null);
 
     /// <summary>
-    ///     Parse the Zero Hour release info from the dnzh-overclocked.com HTML.
+    ///     Parses the Zero Hour Overclocked release HTML page to find the Windows release.
     /// </summary>
+    /// <param name="responseStream">HTML response stream.</param>
     private static GeneralReleaseJsonModel? ParseZeroHourRelease(Stream responseStream) => ParseHtmlRelease(responseStream, ZeroHourWindowsReleaseRegex(), "windows-x64-full", ZeroHourVersionRegex(), null, "https://dnzh-overclocked.com/");
 
     /// <summary>
-    ///     Generic HTML parser that scans lines for a file name matching <paramref name="fileNameRegex" />,
-    ///     skips lines not containing <paramref name="lineFilter" />, then extracts a version with
-    ///     <paramref name="versionRegex" /> and constructs a <see cref="GeneralReleaseJsonModel" />.
+    ///     Parses an HTML release page to extract a download URL and version.
     /// </summary>
+    /// <param name="responseStream">HTML response stream.</param>
+    /// <param name="fileNameRegex">Regex to match the file name.</param>
+    /// <param name="lineFilter">Substring filter for HTML lines.</param>
+    /// <param name="versionRegex">Regex to extract the version from the file name.</param>
+    /// <param name="versionPrefix">Optional prefix to prepend to the version.</param>
+    /// <param name="baseUrl">Optional base URL for the download link.</param>
     private static GeneralReleaseJsonModel? ParseHtmlRelease(
         Stream responseStream, Regex fileNameRegex, string lineFilter,
         Regex versionRegex, string? versionPrefix, string? baseUrl)
@@ -209,15 +209,27 @@ public sealed partial class PortsRepositoriesProvider : IRepositoriesProvider<Po
         };
     }
 
+    /// <summary>
+    ///     Regex to match EDuke32 Windows release file names in HTML.
+    /// </summary>
     [GeneratedRegex("(?<=\")[^\"]*eduke32_win64_2[^\"]*(?=\")")]
     private static partial Regex EDuke32WindowsReleaseRegex();
 
+    /// <summary>
+    ///     Regex to match Zero Hour Overclocked Windows release file names in HTML.
+    /// </summary>
     [GeneratedRegex("(?<=\")[^\"]*windows-x64-full[^\"]*(?=\")")]
     private static partial Regex ZeroHourWindowsReleaseRegex();
 
+    /// <summary>
+    ///     Regex to extract the version number from EDuke32 release file names.
+    /// </summary>
     [GeneratedRegex(@"(?<=\-)(\d*)(?=\-)")]
     private static partial Regex EDuke32VersionRegex();
 
+    /// <summary>
+    ///     Regex to extract the version number from Zero Hour Overclocked release file names.
+    /// </summary>
     [GeneratedRegex(@"\d+\.\d+\.\d+")]
     private static partial Regex ZeroHourVersionRegex();
 }
