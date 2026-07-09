@@ -1,27 +1,38 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using Addons.Addons;
+using Addons.Providers;
 using Avalonia.Desktop.Misc;
 using Avalonia.Media.Imaging;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using Core.All.Helpers;
 using Core.Client.Interfaces;
 using Core.Client.Providers;
-using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
 
 namespace Avalonia.Desktop.ViewModels;
 
 public abstract partial class RightPanelViewModel : ObservableObject
 {
-    public virtual BaseAddon? SelectedAddon { get; set; }
-
-    private readonly PlaytimeProvider _playtimeProvider;
-    private readonly RatingProvider _ratingProvider;
-    private readonly MetadataProvider _metadatUpdater;
     private readonly BitmapsCache _bitmapsCache;
+
     private readonly IConfigProvider _config;
 
+    private readonly MetadataProvider _metadatUpdater;
 
+    private readonly PlaytimeProvider _playtimeProvider;
+
+    private readonly RatingProvider _ratingProvider;
+
+
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="RightPanelViewModel" /> class.
+    /// </summary>
+    /// <param name="playtimeProvider">The playtime provider.</param>
+    /// <param name="ratingProvider">The rating provider.</param>
+    /// <param name="metadatUpdater">The metadata provider.</param>
+    /// <param name="bitmapsCache">The bitmaps cache.</param>
+    /// <param name="config">The configuration provider.</param>
     public RightPanelViewModel(
         PlaytimeProvider playtimeProvider,
         RatingProvider ratingProvider,
@@ -37,26 +48,115 @@ public abstract partial class RightPanelViewModel : ObservableObject
         _config = config;
     }
 
+    /// <summary>
+    ///     Gets or sets the selected addon.
+    /// </summary>
+    public virtual BaseAddon? SelectedAddon { get; set; }
+
+
+    /// <summary>
+    ///     Updates the addon options from the selected addon.
+    /// </summary>
+    protected void UpdateAddonOptions()
+    {
+        foreach (var addon in AddonOptions)
+        {
+            addon.PropertyChanged -= OnPropertyChanged;
+        }
+
+        AddonOptions.Clear();
+
+        if (SelectedAddon?.Options is null)
+        {
+            OnPropertyChanged(nameof(HasOptions));
+
+            return;
+        }
+
+        var enabled = _config.GetEnabledOptions(SelectedAddon.AddonId.Id);
+
+        foreach (var option in SelectedAddon.Options)
+        {
+            AddonOptions.Add(new(option.Key, enabled.Contains(option.Key)));
+        }
+
+        foreach (var addon in AddonOptions)
+        {
+            addon.PropertyChanged += OnPropertyChanged;
+        }
+
+        OnPropertyChanged(nameof(HasOptions));
+    }
+
+    /// <summary>
+    ///     Handles the property changed event for addon options.
+    /// </summary>
+    private void OnPropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName?.Equals(nameof(AddonOption.IsEnabled)) is true &&
+            sender is AddonOption option)
+        {
+            ArgumentNullException.ThrowIfNull(SelectedAddon);
+
+            _config.ChangeAddonOptionState(SelectedAddon.AddonId.Id, option.Name, option.IsEnabled);
+        }
+    }
+
+
+    /// <summary>
+    ///     Represents a toggleable addon option.
+    /// </summary>
+    public sealed partial class AddonOption : ObservableObject
+    {
+        /// <summary>
+        ///     Gets or sets whether the option is enabled.
+        /// </summary>
+        [ObservableProperty]
+        private bool _isEnabled;
+
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="AddonOption" /> class.
+        /// </summary>
+        /// <param name="name">The option name.</param>
+        /// <param name="isEnabled">Whether the option is enabled.</param>
+        public AddonOption(string name, bool isEnabled)
+        {
+            Name = name;
+            IsEnabled = isEnabled;
+        }
+
+        /// <summary>
+        ///     Gets the option name.
+        /// </summary>
+        public string Name { get; }
+    }
+
 
     #region Binding Properties
 
     /// <summary>
-    /// Description of the selected campaign
+    ///     Description of the selected campaign
     /// </summary>
     public string SelectedAddonDescription => SelectedAddon is null ? string.Empty : SelectedAddon.ToMarkdownString();
 
     /// <summary>
-    /// Preview image of the selected campaign
+    ///     Preview image of the selected campaign
     /// </summary>
     public Bitmap? SelectedAddonPreview => SelectedAddon?.PreviewImageHash is null ? null : _bitmapsCache.GetFromCache(SelectedAddon.PreviewImageHash.Value);
 
     /// <summary>
-    /// Is preview image in the description visible
+    ///     Is preview image in the description visible
     /// </summary>
     public bool IsPreviewVisible => SelectedAddonPreview is not null;
 
-    public bool IsMetadataUpdateAvailable => SelectedAddon?.PathToFile is null ? false : _metadatUpdater.IsMetadataUpdateAvailable(SelectedAddon.PathToFile);
+    /// <summary>
+    ///     Gets whether a metadata update is available for the selected addon.
+    /// </summary>
+    public bool IsMetadataUpdateAvailable => SelectedAddon?.FileInfo is not null && _metadatUpdater.IsMetadataUpdateAvailable(SelectedAddon.AddonId, SelectedAddon.FileInfo);
 
+    /// <summary>
+    ///     Gets the rating of the selected addon.
+    /// </summary>
     public string? SelectedAddonRating
     {
         get
@@ -83,6 +183,9 @@ public abstract partial class RightPanelViewModel : ObservableObject
     }
 
 
+    /// <summary>
+    ///     Gets the playtime of the selected addon.
+    /// </summary>
     public string? SelectedAddonPlaytime
     {
         get
@@ -103,8 +206,14 @@ public abstract partial class RightPanelViewModel : ObservableObject
         }
     }
 
+    /// <summary>
+    ///     Gets whether the selected addon has configurable options.
+    /// </summary>
     public bool HasOptions => SelectedAddon?.Options?.Count > 0;
 
+    /// <summary>
+    ///     Gets the list of addon options.
+    /// </summary>
     public ObservableCollection<AddonOption> AddonOptions { get; } = new();
 
     #endregion
@@ -113,7 +222,7 @@ public abstract partial class RightPanelViewModel : ObservableObject
     #region Relay Commands
 
     /// <summary>
-    /// Upvote fix
+    ///     Upvote fix
     /// </summary>
     [RelayCommand]
     private async Task ChangeRatingAsync(string score)
@@ -127,63 +236,12 @@ public abstract partial class RightPanelViewModel : ObservableObject
         OnPropertyChanged(nameof(SelectedAddonRating));
     }
 
+    /// <summary>
+    ///     Updates metadata for the specified addon.
+    /// </summary>
+    /// <param name="value">The addon to update, or null to use the selected addon.</param>
+    /// <returns>A task representing the asynchronous operation.</returns>
     public abstract Task UpdateMetadataAsync(object? value);
 
-    #endregion      
-
-
-    protected void UpdateAddonOptions()
-    {
-        foreach (var addon in AddonOptions)
-        {
-            addon.PropertyChanged -= OnPropertyChanged;
-        }
-
-        AddonOptions.Clear();
-
-        if (SelectedAddon?.Options is null)
-        {
-            OnPropertyChanged(nameof(HasOptions));
-            return;
-        }
-
-        var enabled = _config.GetEnabledOptions(SelectedAddon.AddonId.Id);
-
-        foreach (var option in SelectedAddon.Options)
-        {
-            AddonOptions.Add(new(option.Key, enabled.Contains(option.Key)));
-        }
-
-        foreach (var addon in AddonOptions)
-        {
-            addon.PropertyChanged += OnPropertyChanged;
-        }
-
-        OnPropertyChanged(nameof(HasOptions));
-    }
-
-    private void OnPropertyChanged(object? sender, PropertyChangedEventArgs e)
-    {
-        if (e.PropertyName?.Equals(nameof(AddonOption.IsEnabled)) is true &&
-            sender is AddonOption option)
-        {
-            ArgumentNullException.ThrowIfNull(SelectedAddon);
-
-            _config.ChangeAddonOptionState(SelectedAddon.AddonId.Id, option.Name, option.IsEnabled);
-        }
-    }
-
-    public sealed partial class AddonOption : ObservableObject
-    {
-        public string Name { get; }
-
-        [ObservableProperty]
-        private bool _isEnabled;
-
-        public AddonOption(string name, bool isEnabled)
-        {
-            Name = name;
-            IsEnabled = isEnabled;
-        }
-    }
+    #endregion
 }

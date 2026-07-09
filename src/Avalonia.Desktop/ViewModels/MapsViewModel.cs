@@ -1,6 +1,7 @@
 using System.Collections.Immutable;
 using System.Diagnostics;
 using Addons.Addons;
+using Addons.Helpers;
 using Addons.Providers;
 using Avalonia.Controls.Notifications;
 using Avalonia.Desktop.Misc;
@@ -18,44 +19,113 @@ namespace Avalonia.Desktop.ViewModels;
 
 public sealed partial class MapsViewModel : RightPanelViewModel, IPortsButtonControl
 {
-    public BaseGame Game { get; }
-
-    private readonly InstalledGamesProvider _gamesProvider;
-    private readonly IConfigProvider _config;
-    private readonly InstalledAddonsProvider _installedAddonsProvider;
     private readonly IAddonDropHelper _addonInstaller;
-    private readonly DownloadableAddonsProvider _downloadableAddonsProvider;
-    private readonly PortStarter _portStarter;
-    private readonly MetadataProvider _metadataProvider;
+    private readonly IConfigProvider _config;
+    private readonly InstalledGamesProvider _gamesProvider;
+    private readonly InstalledAddonsProvider _installedAddonsProvider;
     private readonly ILogger<MapsViewModel> _logger;
-
+    private readonly MetadataProvider _metadataProvider;
+    private readonly PortStarter _portStarter;
 
     /// <summary>
-    /// VM initialization
+    ///     Initializes a new instance of the <see cref="MapsViewModel" /> class.
+    /// </summary>
+    /// <param name="game">The game.</param>
+    /// <param name="gamesProvider">The installed games provider.</param>
+    /// <param name="config">The configuration provider.</param>
+    /// <param name="playtimeProvider">The playtime provider.</param>
+    /// <param name="ratingProvider">The rating provider.</param>
+    /// <param name="metadataProvider">The metadata provider.</param>
+    /// <param name="installedAddonsProviderFactory">The installed addons provider factory.</param>
+    /// <param name="portStarter">The port starter.</param>
+    /// <param name="bitmapsCache">The bitmaps cache.</param>
+    /// <param name="addonInstaller">The addon drop helper.</param>
+    /// <param name="logger">The logger.</param>
+    [Obsolete($"Don't create directly. Use {nameof(ViewModelsFactory)}.")]
+    public MapsViewModel(
+        BaseGame game,
+        InstalledGamesProvider gamesProvider,
+        IConfigProvider config,
+        PlaytimeProvider playtimeProvider,
+        RatingProvider ratingProvider,
+        MetadataProvider metadataProvider,
+        InstalledAddonsProviderFactory installedAddonsProviderFactory,
+        PortStarter portStarter,
+        BitmapsCache bitmapsCache,
+        IAddonDropHelper addonInstaller,
+        ILogger<MapsViewModel> logger
+        ) : base(playtimeProvider, ratingProvider, metadataProvider, bitmapsCache, config)
+    {
+        Game = game;
+
+        _gamesProvider = gamesProvider;
+        _config = config;
+        _installedAddonsProvider = installedAddonsProviderFactory.Get(game);
+        _portStarter = portStarter;
+        _metadataProvider = metadataProvider;
+        _addonInstaller = addonInstaller;
+        _logger = logger;
+
+        _gamesProvider.GameChangedEvent += OnGameChanged;
+        _installedAddonsProvider.AddonsChangedEvent += OnAddonChanged;
+        //_downloadableAddonsProvider.AddonsChangedEvent += OnAddonChanged;
+    }
+
+    /// <summary>
+    ///     Gets the game associated with this view model.
+    /// </summary>
+    public BaseGame Game { get; }
+
+    /// <summary>
+    ///     VM initialization.
     /// </summary>
     public Task InitializeAsync() => UpdateAsync(false);
 
     /// <summary>
-    /// Update maps list
+    ///     Updates the maps list asynchronously.
     /// </summary>
+    /// <param name="createNew">Whether to create a new cache.</param>
+    /// <returns>A task representing the asynchronous operation.</returns>
     private async Task UpdateAsync(bool createNew)
     {
         IsInProgress = true;
-        await _installedAddonsProvider.CreateCache(createNew, AddonTypeEnum.Map).ConfigureAwait(true);
+        await _installedAddonsProvider.CreateCacheAsync(createNew, AddonTypeEnum.Map).ConfigureAwait(true);
         IsInProgress = false;
+    }
+
+    /// <summary>
+    ///     Handles the game changed event.
+    /// </summary>
+    private void OnGameChanged(GameEnum parameterName)
+    {
+        if (parameterName == Game.GameEnum)
+        {
+            OnPropertyChanged(nameof(MapsList));
+        }
+    }
+
+    /// <summary>
+    ///     Handles the addon changed event.
+    /// </summary>
+    private void OnAddonChanged(GameEnum gameEnum, AddonTypeEnum? addonType)
+    {
+        if (gameEnum == Game.GameEnum && (addonType is AddonTypeEnum.Map))
+        {
+            OnPropertyChanged(nameof(MapsList));
+        }
     }
 
 
     #region Binding Properties
 
     /// <summary>
-    /// List of installed maps
+    ///     List of installed maps
     /// </summary>
     public ImmutableList<BaseAddon> MapsList
     {
         get
         {
-            var result = _installedAddonsProvider.GetInstalledAddonsByType(AddonTypeEnum.Map).Select(static x => x.Value).OrderBy(static x => x.Title);
+            var result = _installedAddonsProvider.GetInstalledAddonsByType(AddonTypeEnum.Map).OrderBy(static x => x.Title);
 
             if (string.IsNullOrWhiteSpace(SearchBoxText))
             {
@@ -66,16 +136,15 @@ public sealed partial class MapsViewModel : RightPanelViewModel, IPortsButtonCon
         }
     }
 
-    private BaseAddon? _selectedAddon;
     /// <summary>
-    /// Currently selected map
+    ///     Currently selected map
     /// </summary>
     public override BaseAddon? SelectedAddon
     {
-        get => _selectedAddon;
+        get;
         set
         {
-            _selectedAddon = value;
+            field = value;
 
             OnPropertyChanged(nameof(SelectedAddonDescription));
             OnPropertyChanged(nameof(SelectedAddonRating));
@@ -89,61 +158,32 @@ public sealed partial class MapsViewModel : RightPanelViewModel, IPortsButtonCon
     }
 
     /// <summary>
-    /// Search box text
+    ///     Search box text.
     /// </summary>
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(MapsList))]
     [NotifyCanExecuteChangedFor(nameof(ClearSearchBoxCommand))]
-    private string _searchBoxText = string.Empty;
+    public partial string SearchBoxText { get; set; } = string.Empty;
 
     /// <summary>
-    /// Is form in progress
+    ///     Is form in progress.
     /// </summary>
     [ObservableProperty]
-    private bool _isInProgress;
+    [NotifyPropertyChangedFor(nameof(MapsList))]
+    public partial bool IsInProgress { get; set; }
 
+    /// <summary>
+    ///     Gets whether the ports buttons panel is visible.
+    /// </summary>
     public bool IsPortsButtonsVisible => true;
 
     #endregion
 
 
-    [Obsolete($"Don't create directly. Use {nameof(ViewModelsFactory)}.")]
-    public MapsViewModel(
-        BaseGame game,
-        InstalledGamesProvider gamesProvider,
-        IConfigProvider config,
-        PlaytimeProvider playtimeProvider,
-        RatingProvider ratingProvider,
-        MetadataProvider metadataProvider,
-        InstalledAddonsProviderFactory installedAddonsProviderFactory,
-        DownloadableAddonsProviderFactory downloadableAddonsProviderFactory,
-        PortStarter portStarter,
-        BitmapsCache bitmapsCache,
-        IAddonDropHelper addonInstaller,
-        ILogger<MapsViewModel> logger
-        ) : base(playtimeProvider, ratingProvider, metadataProvider, bitmapsCache, config)
-    {
-        Game = game;
-
-        _gamesProvider = gamesProvider;
-        _config = config;
-        _installedAddonsProvider = installedAddonsProviderFactory.Get(game);
-        _downloadableAddonsProvider = downloadableAddonsProviderFactory.Get(game);
-        _portStarter = portStarter;
-        _metadataProvider = metadataProvider;
-        _addonInstaller = addonInstaller;
-        _logger = logger;
-
-        _gamesProvider.GameChangedEvent += OnGameChanged;
-        _installedAddonsProvider.AddonsChangedEvent += OnAddonChanged;
-        _downloadableAddonsProvider.AddonsChangedEvent += OnAddonChanged;
-    }
-
-
     #region Relay Commands
 
     /// <summary>
-    /// Start selected map
+    ///     Start selected map
     /// </summary>
     /// <param name="command">Port to start map with</param>
     [RelayCommand]
@@ -165,7 +205,8 @@ public sealed partial class MapsViewModel : RightPanelViewModel, IPortsButtonCon
                 [],
                 parameter.Item2,
                 _config.SkipIntro,
-                _config.SkipStartup).ConfigureAwait(true);
+                _config.SkipStartup
+                ).ConfigureAwait(true);
 
             OnPropertyChanged(nameof(SelectedAddonPlaytime));
         }
@@ -182,21 +223,30 @@ public sealed partial class MapsViewModel : RightPanelViewModel, IPortsButtonCon
 
 
     /// <summary>
-    /// Open maps folder
+    ///     Open maps folder
     /// </summary>
     [RelayCommand]
     private void OpenFolder()
     {
-        using var process = Process.Start(new ProcessStartInfo
+        try
         {
-            FileName = Game.MapsFolderPath,
-            UseShellExecute = true,
-        });
+            using var process = Process.Start(
+                new ProcessStartInfo
+                {
+                    FileName = Game.MapsFolderPath,
+                    UseShellExecute = true
+                }
+                );
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning(ex, "Failed to open maps folder: {Path}", Game.MapsFolderPath);
+        }
     }
 
 
     /// <summary>
-    /// Refresh maps list
+    ///     Refresh maps list
     /// </summary>
     [RelayCommand]
     private async Task RefreshListAsync()
@@ -206,7 +256,7 @@ public sealed partial class MapsViewModel : RightPanelViewModel, IPortsButtonCon
 
 
     /// <summary>
-    /// Delete selected map
+    ///     Delete selected map
     /// </summary>
     [RelayCommand]
     private void DeleteMap()
@@ -218,31 +268,34 @@ public sealed partial class MapsViewModel : RightPanelViewModel, IPortsButtonCon
 
 
     /// <summary>
-    /// Clear search bar
+    ///     Clear search bar
     /// </summary>
     [RelayCommand(CanExecute = nameof(ClearSearchBoxCanExecute))]
     private void ClearSearchBox() => SearchBoxText = string.Empty;
+
+    /// <summary>
+    ///     Determines whether the clear search box command can execute.
+    /// </summary>
+    /// <returns>True if the search box text is not empty.</returns>
     private bool ClearSearchBoxCanExecute() => !string.IsNullOrEmpty(SearchBoxText);
 
 
     /// <summary>
-    /// Install dropped addon
+    ///     Install dropped addon
     /// </summary>
     [RelayCommand]
     private Task ProcessDroppedFilesAsync(List<string> filePaths) => _addonInstaller.AddAddonsAsync(filePaths, Game);
 
 
     /// <summary>
-    /// Updates metadata for selected map.
+    ///     Updates metadata for selected map.
     /// </summary>
     public override async Task UpdateMetadataAsync(object? value)
     {
         if (value is not null
-            && value is BaseAddon addon)
-        {
-        }
+         && value is BaseAddon addon) { }
         else if (value is null
-            && SelectedAddon is not null)
+              && SelectedAddon is not null)
         {
             addon = SelectedAddon;
         }
@@ -251,9 +304,14 @@ public sealed partial class MapsViewModel : RightPanelViewModel, IPortsButtonCon
             throw new InvalidOperationException(value?.GetType().Name);
         }
 
+        if (addon.FileInfo is null)
+        {
+            throw new InvalidOperationException("Map file info is required for metadata update");
+        }
+
         IsInProgress = true;
 
-        var result = await _metadataProvider.UpdateMetadataAsync(addon.PathToFile).ConfigureAwait(true);
+        var result = await _metadataProvider.UpdateMetadataAsync(addon.FileInfo).ConfigureAwait(true);
 
         IsInProgress = false;
 
@@ -274,21 +332,4 @@ public sealed partial class MapsViewModel : RightPanelViewModel, IPortsButtonCon
     }
 
     #endregion
-
-
-    private void OnGameChanged(GameEnum parameterName)
-    {
-        if (parameterName == Game.GameEnum)
-        {
-            OnPropertyChanged(nameof(MapsList));
-        }
-    }
-
-    private void OnAddonChanged(GameEnum gameEnum, AddonTypeEnum? addonType)
-    {
-        if (gameEnum == Game.GameEnum && (addonType is AddonTypeEnum.Map))
-        {
-            OnPropertyChanged(nameof(MapsList));
-        }
-    }
 }

@@ -1,13 +1,15 @@
 ﻿using Addons.Providers;
-using Core.Client.Providers;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Addons.Helpers;
 
+/// <summary>
+///     Registers addon-related services with the dependency injection container.
+/// </summary>
 public static class DiHelper
 {
     /// <summary>
-    /// Adds dependencies to work with addons.
+    ///     Adds dependencies to work with addons.
     /// </summary>
     public static IServiceCollection WithAddons(this IServiceCollection container)
     {

@@ -1,6 +1,7 @@
 using System.Collections.Immutable;
 using System.Diagnostics;
 using Addons.Addons;
+using Addons.Helpers;
 using Addons.Providers;
 using Avalonia.Controls.Notifications;
 using Avalonia.Desktop.Misc;
@@ -17,16 +18,25 @@ namespace Avalonia.Desktop.ViewModels;
 
 public sealed partial class ModsViewModel : RightPanelViewModel, IPortsButtonControl
 {
-    public BaseGame Game { get; }
-
+    private readonly IAddonDropHelper _addonInstaller;
     private readonly InstalledGamesProvider _gamesProvider;
     private readonly InstalledAddonsProvider _installedAddonsProvider;
-    private readonly IAddonDropHelper _addonInstaller;
-    private readonly DownloadableAddonsProvider _downloadableAddonsProvider;
-    private readonly MetadataProvider _metadataProvider;
     private readonly ILogger<ModsViewModel> _logger;
+    private readonly MetadataProvider _metadataProvider;
 
-
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="ModsViewModel" /> class.
+    /// </summary>
+    /// <param name="game">The game.</param>
+    /// <param name="gamesProvider">The installed games provider.</param>
+    /// <param name="playtimeProvider">The playtime provider.</param>
+    /// <param name="ratingProvider">The rating provider.</param>
+    /// <param name="metadataProvider">The metadata provider.</param>
+    /// <param name="installedAddonsProviderFactory">The installed addons provider factory.</param>
+    /// <param name="bitmapsCache">The bitmaps cache.</param>
+    /// <param name="config">The configuration provider.</param>
+    /// <param name="addonInstaller">The addon drop helper.</param>
+    /// <param name="logger">The logger.</param>
     [Obsolete($"Don't create directly. Use {nameof(ViewModelsFactory)}.")]
     public ModsViewModel(
         BaseGame game,
@@ -35,7 +45,6 @@ public sealed partial class ModsViewModel : RightPanelViewModel, IPortsButtonCon
         RatingProvider ratingProvider,
         MetadataProvider metadataProvider,
         InstalledAddonsProviderFactory installedAddonsProviderFactory,
-        DownloadableAddonsProviderFactory downloadableAddonsProviderFactory,
         BitmapsCache bitmapsCache,
         IConfigProvider config,
         IAddonDropHelper addonInstaller,
@@ -46,49 +55,75 @@ public sealed partial class ModsViewModel : RightPanelViewModel, IPortsButtonCon
 
         _gamesProvider = gamesProvider;
         _installedAddonsProvider = installedAddonsProviderFactory.Get(game);
-        _downloadableAddonsProvider = downloadableAddonsProviderFactory.Get(game);
         _metadataProvider = metadataProvider;
         _addonInstaller = addonInstaller;
 
         _gamesProvider.GameChangedEvent += OnGameChanged;
         _installedAddonsProvider.AddonsChangedEvent += OnAddonChanged;
-        _downloadableAddonsProvider.AddonsChangedEvent += OnAddonChanged;
+        //_downloadableAddonsProvider.AddonsChangedEvent += OnAddonChanged;
     }
 
+    /// <summary>
+    ///     Gets the game associated with this view model.
+    /// </summary>
+    public BaseGame Game { get; }
 
     /// <summary>
-    /// VM initialization
+    ///     VM initialization.
     /// </summary>
     public Task InitializeAsync() => UpdateAsync(false);
 
     /// <summary>
-    /// Update mods list
+    ///     Updates the mods list asynchronously.
     /// </summary>
+    /// <param name="createNew">Whether to create a new cache.</param>
+    /// <returns>A task representing the asynchronous operation.</returns>
     private async Task UpdateAsync(bool createNew)
     {
         IsInProgress = true;
-        await _installedAddonsProvider.CreateCache(createNew, AddonTypeEnum.Mod).ConfigureAwait(true);
+        await _installedAddonsProvider.CreateCacheAsync(createNew, AddonTypeEnum.Mod).ConfigureAwait(true);
         IsInProgress = false;
+    }
+
+    /// <summary>
+    ///     Handles the game changed event.
+    /// </summary>
+    private void OnGameChanged(GameEnum parameterName)
+    {
+        if (parameterName == Game.GameEnum)
+        {
+            OnPropertyChanged(nameof(ModsList));
+        }
+    }
+
+    /// <summary>
+    ///     Handles the addon changed event.
+    /// </summary>
+    private void OnAddonChanged(GameEnum gameEnum, AddonTypeEnum? addonType)
+    {
+        if (gameEnum == Game.GameEnum && (addonType is AddonTypeEnum.Mod))
+        {
+            OnPropertyChanged(nameof(ModsList));
+        }
     }
 
 
     #region Binding Properties
 
     /// <summary>
-    /// List of installed autoload mods
+    ///     List of installed autoload mods
     /// </summary>
-    public ImmutableList<AutoloadMod> ModsList => [.. _installedAddonsProvider.GetInstalledAddonsByType(AddonTypeEnum.Mod).Select(x => (AutoloadMod)x.Value).OrderBy(static x => x.Title)];
+    public ImmutableList<AutoloadMod> ModsList => [.. _installedAddonsProvider.GetInstalledAddonsByType(AddonTypeEnum.Mod).OfType<AutoloadMod>().OrderBy(static x => x.Title)];
 
-    private BaseAddon? _selectedAddon;
     /// <summary>
-    /// Currently selected autoload mod
+    ///     Currently selected autoload mod
     /// </summary>
     public override BaseAddon? SelectedAddon
     {
-        get => _selectedAddon;
+        get;
         set
         {
-            _selectedAddon = value;
+            field = value;
 
             OnPropertyChanged(nameof(SelectedAddonDescription));
             OnPropertyChanged(nameof(SelectedAddonPreview));
@@ -99,11 +134,15 @@ public sealed partial class ModsViewModel : RightPanelViewModel, IPortsButtonCon
     }
 
     /// <summary>
-    /// Is form in progress
+    ///     Is form in progress
     /// </summary>
     [ObservableProperty]
-    private bool _isInProgress;
+    [NotifyPropertyChangedFor(nameof(ModsList))]
+    public partial bool IsInProgress { get; set; }
 
+    /// <summary>
+    ///     Gets whether the ports buttons panel is visible.
+    /// </summary>
     public bool IsPortsButtonsVisible => false;
 
     #endregion
@@ -112,28 +151,37 @@ public sealed partial class ModsViewModel : RightPanelViewModel, IPortsButtonCon
     #region Relay Commands
 
     /// <summary>
-    /// Open mods folder
+    ///     Open mods folder
     /// </summary>
     [RelayCommand]
     private void OpenFolder()
     {
-        using var process = Process.Start(new ProcessStartInfo
+        try
         {
-            FileName = Game.ModsFolderPath,
-            UseShellExecute = true,
-        });
+            using var process = Process.Start(
+                new ProcessStartInfo
+                {
+                    FileName = Game.ModsFolderPath,
+                    UseShellExecute = true
+                }
+                );
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning(ex, "Failed to open mods folder: {Path}", Game.ModsFolderPath);
+        }
     }
 
 
     /// <summary>
-    /// Refresh campaigns list
+    ///     Refresh mods list
     /// </summary>
     [RelayCommand]
     private Task RefreshListAsync() => UpdateAsync(true);
 
 
     /// <summary>
-    /// Delete selected mod
+    ///     Delete selected mod
     /// </summary>
     [RelayCommand]
     private void DeleteMod()
@@ -145,7 +193,7 @@ public sealed partial class ModsViewModel : RightPanelViewModel, IPortsButtonCon
 
 
     /// <summary>
-    /// Enable/disable mod
+    ///     Enable/disable mod
     /// </summary>
     [RelayCommand]
     private void ModCheckboxPressed(object? obj)
@@ -171,23 +219,21 @@ public sealed partial class ModsViewModel : RightPanelViewModel, IPortsButtonCon
 
 
     /// <summary>
-    /// Install dropped addon
+    ///     Install dropped addon
     /// </summary>
     [RelayCommand]
     private Task ProcessDroppedFilesAsync(List<string> filePaths) => _addonInstaller.AddAddonsAsync(filePaths, Game);
 
 
     /// <summary>
-    /// Updates metadata for selected mod.
+    ///     Updates metadata for selected mod.
     /// </summary>
     public override async Task UpdateMetadataAsync(object? value)
     {
         if (value is not null
-            && value is BaseAddon addon)
-        {
-        }
+         && value is BaseAddon addon) { }
         else if (value is null
-            && SelectedAddon is not null)
+              && SelectedAddon is not null)
         {
             addon = SelectedAddon;
         }
@@ -196,9 +242,14 @@ public sealed partial class ModsViewModel : RightPanelViewModel, IPortsButtonCon
             throw new InvalidOperationException(value?.GetType().Name);
         }
 
+        if (addon.FileInfo is null)
+        {
+            throw new InvalidOperationException("Mod file info is required for metadata update");
+        }
+
         IsInProgress = true;
 
-        var result = await _metadataProvider.UpdateMetadataAsync(addon.PathToFile).ConfigureAwait(true);
+        var result = await _metadataProvider.UpdateMetadataAsync(addon.FileInfo).ConfigureAwait(true);
 
         IsInProgress = false;
 
@@ -219,21 +270,4 @@ public sealed partial class ModsViewModel : RightPanelViewModel, IPortsButtonCon
     }
 
     #endregion
-
-
-    private void OnGameChanged(GameEnum parameterName)
-    {
-        if (parameterName == Game.GameEnum)
-        {
-            OnPropertyChanged(nameof(ModsList));
-        }
-    }
-
-    private void OnAddonChanged(GameEnum gameEnum, AddonTypeEnum? addonType)
-    {
-        if (gameEnum == Game.GameEnum && (addonType is AddonTypeEnum.Mod))
-        {
-            OnPropertyChanged(nameof(ModsList));
-        }
-    }
 }

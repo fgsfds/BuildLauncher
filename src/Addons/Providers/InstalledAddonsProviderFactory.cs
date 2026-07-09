@@ -1,8 +1,8 @@
-﻿using Core.All.Enums;
+﻿using Addons.Helpers;
+using Core.All.Enums;
 using Core.Client.Cache;
 using Core.Client.Enums;
 using Core.Client.Interfaces;
-using Core.Client.Providers;
 using Games.Games;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -11,12 +11,12 @@ namespace Addons.Providers;
 
 public sealed class InstalledAddonsProviderFactory
 {
-    private readonly Dictionary<GameEnum, InstalledAddonsProvider> _list = [];
-    private readonly IConfigProvider _config;
     private readonly ICacheAdder<Stream> _bitmapsCache;
-    private readonly OriginalCampaignsProvider _originalCampaignsProvider;
-    private readonly MetadataProvider _metadataProvider;
+    private readonly IConfigProvider _config;
+    private readonly Dictionary<GameEnum, InstalledAddonsProvider> _list = [];
     private readonly ILoggerFactory _loggerFactory;
+    private readonly MetadataProvider _metadataProvider;
+    private readonly OriginalCampaignsProvider _originalCampaignsProvider;
 
     public InstalledAddonsProviderFactory(
         IConfigProvider config,
@@ -33,10 +33,6 @@ public sealed class InstalledAddonsProviderFactory
         _loggerFactory = loggerFactory;
     }
 
-    /// <summary>
-    /// Get or create singleton instance of the provider.
-    /// </summary>
-    /// <param name="game">Game.</param>
     public InstalledAddonsProvider Get(BaseGame game)
     {
         if (_list.TryGetValue(game.GameEnum, out var value))
@@ -44,16 +40,17 @@ public sealed class InstalledAddonsProviderFactory
             return value;
         }
 
-#pragma warning disable CS0618 // Type or member is obsolete
+        #pragma warning disable CS0618 // Type or member is obsolete
         InstalledAddonsProvider newProvider = new(
             game,
             _config,
             _bitmapsCache,
             _originalCampaignsProvider,
-            _metadataProvider
-,
-            _loggerFactory.CreateLogger<InstalledAddonsProvider>());
-#pragma warning restore CS0618 // Type or member is obsolete
+            _metadataProvider,
+            new ArchivedAddonExtractor(_loggerFactory.CreateLogger<ArchivedAddonExtractor>()),
+            _loggerFactory.CreateLogger<InstalledAddonsProvider>()
+            );
+        #pragma warning restore CS0618 // Type or member is obsolete
         _list.Add(game.GameEnum, newProvider);
 
         return newProvider;

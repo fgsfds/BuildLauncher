@@ -12,21 +12,19 @@ using Microsoft.Extensions.Logging;
 
 namespace Addons.Providers;
 
-/// <summary>
-/// Class that provides lists of addons available to download
-/// </summary>
 public sealed class DownloadableAddonsProvider
 {
-    private static readonly SemaphoreSlim _semaphore = new(1);
+    private static readonly SemaphoreSlim _globalCacheSemaphore = new(1);
+
     private readonly IApiInterface _apiInterface;
     private readonly ArchiveTools _archiveTools;
     private readonly FilesDownloader _filesDownloader;
-    private readonly BaseGame _game;
     private readonly InstalledAddonsProvider _installedAddonsProvider;
     private readonly ILogger<DownloadableAddonsProvider> _logger;
 
-    private Dictionary<AddonTypeEnum, Dictionary<AddonId, DownloadableAddonJsonModel>>? _cache;
+    private readonly BaseGame _game;
 
+    private Dictionary<AddonTypeEnum, Dictionary<AddonId, DownloadableAddonJsonModel>>? _cache;
 
     [Obsolete($"Don't create directly. Use {nameof(DownloadableAddonsProviderFactory)}.")]
     public DownloadableAddonsProvider(
@@ -47,23 +45,13 @@ public sealed class DownloadableAddonsProvider
         _installedAddonsProvider = installedAddonsProviderFactory.Get(_game);
     }
 
-    /// <summary>
-    ///     Download progress
-    /// </summary>
     public Progress<float> Progress { get; } = new();
 
-    public event AddonChanged? AddonsChangedEvent;
-
-    /// <summary>
-    /// Create downloadable addons cache
-    /// </summary>
-    /// <param name="createNew">Drop existing cache and create new</param>
-    /// <returns>Is cache created successfully</returns>
     public async Task<bool> CreateCacheAsync(bool createNew)
     {
         try
         {
-            await _semaphore.WaitAsync().ConfigureAwait(false);
+            await _globalCacheSemaphore.WaitAsync().ConfigureAwait(false);
 
             if (_cache is not null && !createNew)
             {
@@ -107,15 +95,10 @@ public sealed class DownloadableAddonsProvider
         }
         finally
         {
-            _ = _semaphore.Release();
-            AddonsChangedEvent?.Invoke(_game.GameEnum, null);
+            _ = _globalCacheSemaphore.Release();
         }
     }
 
-    /// <summary>
-    /// Get a list of downloadable addons
-    /// </summary>
-    /// <param name="addonType">Addon type</param>
     public ImmutableList<DownloadableAddonJsonModel> GetDownloadableAddons(AddonTypeEnum addonType)
     {
         if (_cache is null)
@@ -133,8 +116,8 @@ public sealed class DownloadableAddonsProvider
         foreach (var downloadableAddon in addonTypeCache)
         {
             var existingAddons = installedAddons
-                                .Where(x => x.Key.Id.Equals(downloadableAddon.Key.Id, StringComparison.OrdinalIgnoreCase))
-                                .Select(x => x.Key)
+                                .Where(x => x.AddonId.Id.Equals(downloadableAddon.Key.Id, StringComparison.OrdinalIgnoreCase))
+                                .Select(x => x.AddonId)
                                 .ToList();
 
             downloadableAddon.Value.IsInstalled = true;
@@ -146,10 +129,9 @@ public sealed class DownloadableAddonsProvider
                 continue;
             }
 
-            //Death Wish hack
             if (addonType is AddonTypeEnum.TC &&
                 downloadableAddon.Key.Id.Contains("death-wish", StringComparison.OrdinalIgnoreCase) &&
-                downloadableAddon.Key.Version!.StartsWith('1'))
+                downloadableAddon.Key.Version?.StartsWith('1') is true)
             {
                 downloadableAddon.Value.IsInstalled = existingAddons.Contains(downloadableAddon.Key);
             }
@@ -157,11 +139,11 @@ public sealed class DownloadableAddonsProvider
             {
                 foreach (var existingVersion in existingAddons.Select(static x => x.Version).Where(static x => x is not null))
                 {
-                    downloadableAddon.Value.IsUpdateAvailable = false;
+                    downloadableAddon.Value.IsUpdateAvailable = true;
 
-                    if (VersionComparer.Compare(downloadableAddon.Value.Version, existingVersion, ComparisonOperatorEnum.GreaterThan))
+                    if (!VersionComparer.Compare(downloadableAddon.Value.Version, existingVersion, ComparisonOperatorEnum.GreaterThan))
                     {
-                        downloadableAddon.Value.IsUpdateAvailable = true;
+                        downloadableAddon.Value.IsUpdateAvailable = false;
 
                         break;
                     }
@@ -172,11 +154,6 @@ public sealed class DownloadableAddonsProvider
         return [.. addonTypeCache.Values];
     }
 
-    /// <summary>
-    /// Download addon
-    /// </summary>
-    /// <param name="addon">Addon</param>
-    /// <param name="cancellationToken">Cancellation token</param>
     public async Task<bool> DownloadAddonAsync(
         DownloadableAddonJsonModel addon,
         CancellationToken cancellationToken
@@ -245,8 +222,6 @@ public sealed class DownloadableAddonsProvider
                 }
             }
 
-            AddonsChangedEvent?.Invoke(_game.GameEnum, addon.AddonType);
-
             return true;
         }
         finally
@@ -256,14 +231,6 @@ public sealed class DownloadableAddonsProvider
         }
     }
 
-
-    /// <summary>
-    /// Check hash of the local file
-    /// </summary>
-    /// <param name="filePath">Full path to the file</param>
-    /// <param name="expectedHash">Hash that the file's hash will be compared to</param>
-    /// <param name="cancellationToken">Cancellation token</param>
-    /// <returns>true if check is passed</returns>
     private static async Task<bool> CheckFileHashAsync(
         string filePath,
         string expectedHash,

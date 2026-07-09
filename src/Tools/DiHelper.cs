@@ -7,11 +7,15 @@ using Tools.Tools;
 
 namespace Tools;
 
+/// <summary>
+///     Adds dependencies to work with tools.
+/// </summary>
 public static class DiHelper
 {
     /// <summary>
-    /// Adds dependencies to work with tools.
+    ///     Adds dependencies to work with tools.
     /// </summary>
+    /// <param name="container">Service collection.</param>
     public static IServiceCollection WithTools(this IServiceCollection container)
     {
         _ = container.AddSingleton<ToolInstallerFactory>();
