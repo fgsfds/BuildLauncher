@@ -7,36 +7,45 @@ using Games.Games;
 namespace Ports.Ports.EDuke32;
 
 /// <summary>
-/// RedNukem port
+///     Fury port.
 /// </summary>
 public sealed class Fury : EDuke32
 {
     private readonly IConfigProvider _config;
 
-    /// <inheritdoc/>
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="Fury" /> class.
+    /// </summary>
+    /// <param name="config">Configuration provider.</param>
+    public Fury(IConfigProvider config)
+    {
+        _config = config;
+    }
+
+    /// <inheritdoc />
     public override PortEnum PortEnum => PortEnum.Fury;
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string WinExe => "fury.exe";
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string LinExe => throw new NotSupportedException();
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override string Name => "Fury";
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override List<GameEnum> SupportedGames => [GameEnum.Fury];
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override string InstallFolderPath => _config.PathFury ?? string.Empty;
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override bool IsInstalled => File.Exists(PortExeFilePath);
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override List<FeatureEnum> SupportedFeatures =>
-        [
+    [
         FeatureEnum.EDuke32_CON,
         FeatureEnum.Dynamic_Lighting,
         FeatureEnum.Hightile,
@@ -45,31 +54,24 @@ public sealed class Fury : EDuke32
         FeatureEnum.TROR,
         FeatureEnum.Wall_Rotate_Cstat,
         FeatureEnum.TileFromTexture
-        ];
+    ];
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string ConfigFile => "fury.cfg";
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override bool IsDownloadable => false;
 
 
-    public Fury(IConfigProvider config)
-    {
-        _config = config;
-    }
-
-
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override void BeforeStart(BaseGame game, BaseAddon campaign)
     {
-        MoveSaveFilesFromGameFolder(game, campaign);
-
+        MoveSaveFilesFromStorage(game, campaign);
         FixConfig();
     }
 
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override void GetStartCampaignArgs(StringBuilder sb, BaseGame game, BaseAddon addon)
     {
         if (addon.MainDef is not null)
@@ -97,9 +99,15 @@ public sealed class Fury : EDuke32
         }
     }
 
+    /// <summary>
+    ///     Appends command-line arguments for Ion Fury games.
+    /// </summary>
+    /// <param name="sb">String builder for parameters.</param>
+    /// <param name="game">Fury game instance.</param>
+    /// <param name="addon">Campaign or addon.</param>
     private void GetFuryArgs(StringBuilder sb, FuryGame game, BaseAddon addon)
     {
-        if (addon.FileName is null)
+        if (addon.FileInfo is null)
         {
             return;
         }
@@ -107,6 +115,7 @@ public sealed class Fury : EDuke32
         if (addon is LooseMap)
         {
             GetLooseMapArgs(sb, game, addon);
+
             return;
         }
 
@@ -131,7 +140,7 @@ public sealed class Fury : EDuke32
 
         if (fCamp.Type is AddonTypeEnum.TC)
         {
-            _ = sb.Append($@" {AddFileParam}""{fCamp.PathToFile}""");
+            _ = sb.Append($@" {AddFileParam}""{fCamp.FileInfo.PathToFile}""");
         }
         else if (fCamp.Type is AddonTypeEnum.Map)
         {

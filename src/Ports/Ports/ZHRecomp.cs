@@ -7,37 +7,45 @@ using Games.Games;
 namespace Ports.Ports;
 
 /// <summary>
-/// Raze port
+///     Zero Hour Overclocked recompilation port.
 /// </summary>
 public sealed class ZHRecomp : BasePort
 {
+    /// <summary>
+    ///     Name of the Duke Nukem Zero Hour ROM file.
+    /// </summary>
     private const string RomName = "dnzh.us.z64";
 
     private readonly IConfigProvider _config;
 
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="ZHRecomp" /> class.
+    /// </summary>
+    /// <param name="config">Configuration provider.</param>
     public ZHRecomp(IConfigProvider config)
     {
         _config = config;
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override PortEnum PortEnum => PortEnum.ZeroRecomp;
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string WinExe => "DNZHRecompiled.exe";
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string LinExe => "DNZHRecompiled";
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override string Name => "Zero Hour Overclocked";
 
+    /// <inheritdoc />
     public override string ShortName => "ZHRecomp";
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override List<GameEnum> SupportedGames => [GameEnum.DukeZeroHour];
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override string? InstalledVersion
     {
         get
@@ -49,65 +57,72 @@ public sealed class ZHRecomp : BasePort
                 return null;
             }
 
-            return File.ReadAllText(versionFile);
+            try
+            {
+                return File.ReadAllText(versionFile);
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override bool IsSkillSelectionAvailable => false;
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override List<FeatureEnum> SupportedFeatures => [];
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string ConfigFile => throw new NotImplementedException();
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string AddDirectoryParam => throw new NotImplementedException();
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string MainGrpParam => throw new NotImplementedException();
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string AddGrpParam => throw new NotImplementedException();
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string AddFileParam => throw new NotImplementedException();
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string AddDefParam => throw new NotImplementedException();
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string AddConParam => throw new NotImplementedException();
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string MainDefParam => throw new NotImplementedException();
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string MainConParam => throw new NotImplementedException();
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string SkillParam => throw new NotImplementedException();
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string AddGameDirParam => throw new NotImplementedException();
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string AddRffParam => throw new NotImplementedException();
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string AddSndParam => throw new NotImplementedException();
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override void GetStartCampaignArgs(StringBuilder sb, BaseGame game, BaseAddon addon) { }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override void GetSkipIntroParameter(StringBuilder sb) { }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override void GetSkipStartupParameter(StringBuilder sb) { }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override void BeforeStart(BaseGame game, BaseAddon campaign)
     {
         var pathToRom = Path.Combine(InstallFolderPath, RomName);
@@ -123,6 +138,6 @@ public sealed class ZHRecomp : BasePort
         }
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override void AfterEnd(BaseGame game, BaseAddon campaign) { }
 }

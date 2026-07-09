@@ -8,71 +8,70 @@ using Games.Games;
 namespace Ports.Ports.EDuke32;
 
 /// <summary>
-/// VoidSW port
+///     VoidSW port
 /// </summary>
 public sealed class VoidSW : EDuke32
 {
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override PortEnum PortEnum => PortEnum.VoidSW;
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string WinExe => "voidsw.exe";
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string LinExe => throw new NotSupportedException();
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override string Name => "VoidSW";
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override List<GameEnum> SupportedGames => [GameEnum.Wang];
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override string InstallFolderPath => Path.Combine(ClientProperties.PortsFolderPath, "EDuke32");
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override List<FeatureEnum> SupportedFeatures =>
-        [
+    [
         FeatureEnum.Hightile,
         FeatureEnum.Models,
         FeatureEnum.TileFromTexture
-        ];
+    ];
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string ConfigFile => "voidsw.cfg";
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string AddDirectoryParam => "-j";
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string AddFileParam => "-g";
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string MainDefParam => "-h";
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string AddDefParam => "-mh";
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string AddConParam => throw new NotSupportedException();
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string MainConParam => throw new NotSupportedException();
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override bool IsDownloadable => false;
 
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override void BeforeStart(BaseGame game, BaseAddon campaign)
     {
-        MoveSaveFilesFromGameFolder(game, campaign);
-
+        MoveSaveFilesFromStorage(game, campaign);
         FixConfig();
     }
 
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override void GetStartCampaignArgs(StringBuilder sb, BaseGame game, BaseAddon addon)
     {
         //don't search for steam/gog installs
@@ -97,7 +96,6 @@ public sealed class VoidSW : EDuke32
         }
 
 
-
         if (game is WangGame wGame)
         {
             GetWangArgs(sb, wGame, addon);
@@ -109,11 +107,18 @@ public sealed class VoidSW : EDuke32
     }
 
 
+    /// <summary>
+    ///     Appends command-line arguments for Shadow Warrior games in VoidSW.
+    /// </summary>
+    /// <param name="sb">String builder for parameters.</param>
+    /// <param name="game">Wang game instance.</param>
+    /// <param name="addon">Campaign or addon.</param>
     private void GetWangArgs(StringBuilder sb, WangGame game, BaseAddon addon)
     {
         if (addon is LooseMap)
         {
             GetLooseMapArgs(sb, game, addon);
+
             return;
         }
 
@@ -138,16 +143,14 @@ public sealed class VoidSW : EDuke32
 
         AddWangMusicFolder(sb, game);
 
-
-        if (wCamp.FileName is null)
+        if (wCamp.FileInfo is null)
         {
             return;
         }
 
-
         if (wCamp.Type is AddonTypeEnum.TC)
         {
-            _ = sb.Append($@" {AddDirectoryParam}""{game.CampaignsFolderPath}"" {AddFileParam}""{wCamp.FileName}""");
+            _ = sb.Append($@" {AddDirectoryParam}""{game.CampaignsFolderPath}"" {AddFileParam}""{wCamp.FileInfo.FileName}""");
         }
         else if (wCamp.Type is AddonTypeEnum.Map)
         {
@@ -161,27 +164,36 @@ public sealed class VoidSW : EDuke32
 
 
     /// <summary>
-    /// Add music folders to the search list if music files don't exist in the game directory
+    ///     Adds the music folder to the command-line arguments if the game uses MIDI music.
     /// </summary>
+    /// <param name="sb">String builder for parameters.</param>
+    /// <param name="game">Wang game instance.</param>
     private static void AddWangMusicFolder(StringBuilder sb, WangGame game)
     {
-        if (File.Exists(Path.Combine(game.GameInstallFolder!, "track02.ogg")))
+        if (game.GameInstallFolder is null)
         {
             return;
         }
 
-        var folder = Path.Combine(game.GameInstallFolder!, "MUSIC");
-        if (Directory.Exists(folder))
+        if (File.Exists(Path.Combine(game.GameInstallFolder, "track02.ogg")))
         {
-            _ = sb.Append(@$" -j""{folder}""");
             return;
         }
 
-        folder = Path.Combine(game.GameInstallFolder!, "classic", "MUSIC");
+        var folder = Path.Combine(game.GameInstallFolder, "MUSIC");
+
         if (Directory.Exists(folder))
         {
             _ = sb.Append(@$" -j""{folder}""");
+
             return;
+        }
+
+        folder = Path.Combine(game.GameInstallFolder, "classic", "MUSIC");
+
+        if (Directory.Exists(folder))
+        {
+            _ = sb.Append(@$" -j""{folder}""");
         }
     }
 }

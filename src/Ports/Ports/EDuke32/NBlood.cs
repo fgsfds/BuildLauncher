@@ -6,57 +6,56 @@ using Games.Games;
 namespace Ports.Ports.EDuke32;
 
 /// <summary>
-/// NBlood port
+///     NBlood port.
 /// </summary>
 public class NBlood : EDuke32
 {
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override PortEnum PortEnum => PortEnum.NBlood;
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string WinExe => "nblood.exe";
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string LinExe => throw new NotSupportedException();
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override string Name => "NBlood";
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override List<GameEnum> SupportedGames => [GameEnum.Blood];
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override List<FeatureEnum> SupportedFeatures =>
-        [
+    [
         FeatureEnum.Modern_Types,
         FeatureEnum.Hightile,
         FeatureEnum.Models,
         FeatureEnum.TileFromTexture
-        ];
+    ];
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string ConfigFile => "nblood.cfg";
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string SkillParam => "-s ";
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string AddRffParam => "-rff ";
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string AddSndParam => "-snd ";
 
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override void BeforeStart(BaseGame game, BaseAddon campaign)
     {
-        MoveSaveFilesFromGameFolder(game, campaign);
-
+        MoveSaveFilesFromStorage(game, campaign);
         FixConfig();
     }
 
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override void GetStartCampaignArgs(StringBuilder sb, BaseGame game, BaseAddon addon)
     {
         //don't search for steam/gog installs

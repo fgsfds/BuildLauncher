@@ -1,58 +1,74 @@
 ﻿using System.Text;
 using Addons.Addons;
-using Core.All;
 using Core.All.Enums;
 using Core.All.Enums.Addons;
 using Core.All.Enums.Versions;
 using Core.Client.Helpers;
 using Games.Games;
+using Microsoft.Extensions.Logging;
 using SharpCompress.Archives;
 
 namespace Ports.Ports;
 
 /// <summary>
-/// DosBox
+///     DosBox Staging port.
 /// </summary>
 public sealed class DosBox : BasePort
 {
-    /// <inheritdoc/>
+    private readonly ILogger<DosBox> _logger = null!;
+
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="DosBox" /> class.
+    /// </summary>
+    public DosBox() { }
+
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="DosBox" /> class.
+    /// </summary>
+    /// <param name="logger">Logger instance.</param>
+    public DosBox(ILogger<DosBox> logger)
+    {
+        _logger = logger;
+    }
+
+    /// <inheritdoc />
     public override PortEnum PortEnum => PortEnum.DosBox;
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string WinExe => "dosbox.exe";
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string LinExe => throw new NotSupportedException();
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override string Name => "DosBox Staging";
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override string ShortName => "DosBox";
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override List<GameEnum> SupportedGames =>
-        [
+    [
         GameEnum.Blood,
         GameEnum.Duke3D,
         GameEnum.Wang,
         //GameEnum.Slave,
         GameEnum.Redneck,
-        GameEnum.RidesAgain,
+        GameEnum.RidesAgain
         //GameEnum.NAM,
         //GameEnum.Witchaven,
         //GameEnum.Witchaven2,
         //GameEnum.TekWar
-        ];
+    ];
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override List<string> SupportedGamesVersions =>
-        [
+    [
         nameof(DukeVersionEnum.Duke3D_13D),
         nameof(DukeVersionEnum.Duke3D_Atomic)
-        ];
+    ];
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override string? InstalledVersion
     {
         get
@@ -64,67 +80,74 @@ public sealed class DosBox : BasePort
                 return null;
             }
 
-            return File.ReadAllText(versionFile);
+            try
+            {
+                return File.ReadAllText(versionFile);
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override List<FeatureEnum> SupportedFeatures => [];
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override bool IsSkillSelectionAvailable => false;
 
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string ConfigFile => string.Empty;
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string AddDirectoryParam => throw new NotSupportedException();
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string AddFileParam => throw new NotSupportedException();
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string AddDefParam => throw new NotSupportedException();
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string AddConParam => throw new NotSupportedException();
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string MainDefParam => throw new NotSupportedException();
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string MainConParam => throw new NotSupportedException();
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string MainGrpParam => throw new NotSupportedException();
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string AddGrpParam => throw new NotSupportedException();
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string SkillParam => throw new NotSupportedException();
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string AddGameDirParam => throw new NotSupportedException();
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string AddRffParam => throw new NotSupportedException();
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string AddSndParam => throw new NotSupportedException();
 
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override void BeforeStart(BaseGame game, BaseAddon campaign)
     {
-        MoveSaveFilesToGameFolder(game, campaign);
-
+        MoveSaveFilesFromStorage(game, campaign);
         RestoreRoute66Files(game);
 
         try
         {
             var config = Path.Combine(InstallFolderPath, "dosbox-staging.conf");
+
             if (File.Exists(config))
             {
                 var file = File.ReadAllLines(config);
@@ -136,32 +159,39 @@ public sealed class DosBox : BasePort
                     {
                         file[i] = "memsize = 64";
                         File.WriteAllLines(config, file);
+
                         break;
                     }
                 }
             }
             else
             {
-                File.WriteAllText(config,
+                File.WriteAllText(
+                    config,
                     """
                     [dosbox]
                     memsize = 64
-                
-                    """);
+
+                    """
+                    );
             }
         }
-        catch
+        catch (Exception ex)
         {
+            if (_logger is not null)
+            {
+                _logger.LogWarning(ex, "Failed to write dosbox config");
+            }
         }
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override void AfterEnd(BaseGame game, BaseAddon campaign)
     {
-        MoveSaveFilesFromGameFolder(game, campaign);
+        MoveSaveFilesToStorage(game, campaign);
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override void GetStartCampaignArgs(StringBuilder sb, BaseGame game, BaseAddon addon)
     {
         _ = sb.Append(@" --noconsole -c ""cycles max"" -c ""core dynamic""");
@@ -186,6 +216,12 @@ public sealed class DosBox : BasePort
         _ = sb.Append(" -c \"exit\"");
     }
 
+    /// <summary>
+    ///     Appends command-line arguments for Duke Nukem 3D games in DosBox.
+    /// </summary>
+    /// <param name="sb">String builder for parameters.</param>
+    /// <param name="game">Duke game instance.</param>
+    /// <param name="addon">Campaign or addon.</param>
     private static void GetDukeArgs(StringBuilder sb, DukeGame game, BaseAddon addon)
     {
         _ = sb.Append($@" -c ""mount c \""{game.GameInstallFolder}"""" -c ""c:""");
@@ -210,8 +246,13 @@ public sealed class DosBox : BasePort
         }
         else if (addon is LooseMap map)
         {
+            if (map.FileInfo is null)
+            {
+                throw new InvalidOperationException("Map file info is required for DosBox loose map args");
+            }
+
             _ = sb.Append($@" -c ""mount d \""{game.MapsFolderPath}""""");
-            _ = sb.Append($@" -c ""DUKE3D.EXE -map d:\\{map.FileName}""");
+            _ = sb.Append($@" -c ""DUKE3D.EXE -map d:\\{map.FileInfo.FileName}""");
         }
         else
         {
@@ -219,12 +260,23 @@ public sealed class DosBox : BasePort
         }
     }
 
+    /// <summary>
+    ///     Appends command-line arguments for Shadow Warrior games in DosBox.
+    /// </summary>
+    /// <param name="sb">String builder for parameters.</param>
+    /// <param name="game">Wang game instance.</param>
     private static void GetWangArgs(StringBuilder sb, WangGame game)
     {
         _ = sb.Append($@" -c ""mount c \""{game.GameInstallFolder}"""" -c ""c:""");
         _ = sb.Append(" -c Sw.EXE");
     }
 
+    /// <summary>
+    ///     Appends command-line arguments for Redneck Rampage games in DosBox.
+    /// </summary>
+    /// <param name="sb">String builder for parameters.</param>
+    /// <param name="game">Redneck game instance.</param>
+    /// <param name="addon">Campaign or addon.</param>
     private static void GetRedneckArgs(StringBuilder sb, RedneckGame game, BaseAddon addon)
     {
         if (addon.AddonId.Id.Equals(nameof(GameEnum.Redneck), StringComparison.OrdinalIgnoreCase))
@@ -244,6 +296,7 @@ public sealed class DosBox : BasePort
         }
     }
 
+    /// <inheritdoc />
     protected override void GetBloodArgs(StringBuilder sb, BloodGame game, BaseAddon addon)
     {
         ArgumentNullException.ThrowIfNull(game.GameInstallFolder);
@@ -256,7 +309,9 @@ public sealed class DosBox : BasePort
             return;
         }
 
-        if (addon is BloodCampaign bCamp && bCamp.Type is AddonTypeEnum.TC)
+        if (addon is BloodCampaign bCamp &&
+            bCamp.Type is AddonTypeEnum.TC &&
+            addon.FileInfo is not null)
         {
             if (Directory.Exists(ClientProperties.TempFolderPath))
             {
@@ -267,23 +322,23 @@ public sealed class DosBox : BasePort
 
             foreach (var filePath in Directory.GetFiles(game.GameInstallFolder))
             {
-                string fileName = Path.GetFileName(filePath);
+                var fileName = Path.GetFileName(filePath);
 
                 if (fileName.EndsWith(".DEM", StringComparison.OrdinalIgnoreCase))
                 {
                     continue;
                 }
 
-                string destFile = Path.Combine(ClientProperties.TempFolderPath, fileName);
+                var destFile = Path.Combine(ClientProperties.TempFolderPath, fileName);
                 File.Copy(filePath, destFile, overwrite: true);
             }
 
-            if (addon.IsUnpacked)
+            if (addon.FileInfo.IsFolder)
             {
-                foreach (var filePath in Directory.GetFiles(Path.GetDirectoryName(addon.PathToFile)!))
+                foreach (var filePath in Directory.GetFiles(addon.FileInfo.PathToFolder))
                 {
-                    string fileName = Path.GetFileName(filePath);
-                    string destFile = Path.Combine(ClientProperties.TempFolderPath, fileName);
+                    var fileName = Path.GetFileName(filePath);
+                    var destFile = Path.Combine(ClientProperties.TempFolderPath, fileName);
                     File.Copy(filePath, destFile, overwrite: true);
                 }
             }
@@ -294,7 +349,7 @@ public sealed class DosBox : BasePort
                     Directory.CreateDirectory(ClientProperties.TempFolderPath);
                 }
 
-                using var archive = ArchiveFactory.OpenArchive(addon.PathToFile);
+                using var archive = ArchiveFactory.OpenArchive(addon.FileInfo.PathToFile);
                 archive.WriteToDirectory(ClientProperties.TempFolderPath);
             }
 
@@ -304,11 +359,11 @@ public sealed class DosBox : BasePort
             return;
         }
 
-        if (addon is LooseMap map)
+        if (addon is LooseMap map && map.FileInfo is not null)
         {
             _ = sb.Append(@$" -c ""mount c \""{game.GameInstallFolder}"""" -c ""c:""");
             _ = sb.Append(@$" -c ""mount d \""{game.MapsFolderPath}""""");
-            _ = sb.Append(@$" -c ""BLOOD.EXE -map d:\\{map.FileName}""");
+            _ = sb.Append(@$" -c ""BLOOD.EXE -map d:\\{map.FileInfo.FileName}""");
 
             return;
         }
@@ -317,12 +372,12 @@ public sealed class DosBox : BasePort
         _ = sb.Append(" -c BLOOD.EXE");
     }
 
-    /// <inheritdoc/>
-    protected override void GetAutoloadModsArgs(StringBuilder sb, BaseGame _, BaseAddon addon, IReadOnlyDictionary<AddonId, BaseAddon> mods) { }
+    /// <inheritdoc />
+    protected override void GetAutoloadModsArgs(StringBuilder sb, BaseGame _, BaseAddon addon, IReadOnlyList<BaseAddon> mods) { }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override void GetSkipIntroParameter(StringBuilder sb) { }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override void GetSkipStartupParameter(StringBuilder sb) { }
 }

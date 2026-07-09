@@ -1,6 +1,5 @@
 ﻿using System.Text;
 using Addons.Addons;
-using Core.All;
 using Core.All.Enums;
 using Core.All.Enums.Versions;
 using Games.Games;
@@ -8,25 +7,25 @@ using Games.Games;
 namespace Ports.Ports;
 
 /// <summary>
-/// BuildGDX port
+///     BuildGDX port.
 /// </summary>
 public sealed class BuildGDX : BasePort
 {
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override PortEnum PortEnum => PortEnum.BuildGDX;
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string WinExe => Path.Combine("jre", "bin", "javaw.exe");
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string LinExe => throw new NotSupportedException();
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override string Name => "BuildGDX";
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override List<GameEnum> SupportedGames =>
-        [
+    [
         GameEnum.Blood,
         GameEnum.Duke3D,
         GameEnum.Wang,
@@ -37,17 +36,17 @@ public sealed class BuildGDX : BasePort
         GameEnum.Witchaven,
         GameEnum.Witchaven2,
         GameEnum.TekWar
-        ];
+    ];
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override List<string> SupportedGamesVersions =>
-        [
+    [
         nameof(DukeVersionEnum.Duke3D_13D),
         nameof(DukeVersionEnum.Duke3D_Atomic),
         nameof(DukeVersionEnum.Duke3D_WT)
-        ];
+    ];
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override string? InstalledVersion
     {
         get
@@ -59,80 +58,85 @@ public sealed class BuildGDX : BasePort
                 return null;
             }
 
-            return File.ReadAllText(versionFile);
+            try
+            {
+                return File.ReadAllText(versionFile);
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override List<FeatureEnum> SupportedFeatures =>
-            [
-            FeatureEnum.TROR,
-            FeatureEnum.Hightile,
-            FeatureEnum.Models,
-            FeatureEnum.TileFromTexture
-            ];
+    [
+        FeatureEnum.TROR,
+        FeatureEnum.Hightile,
+        FeatureEnum.Models,
+        FeatureEnum.TileFromTexture
+    ];
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override bool IsSkillSelectionAvailable => false;
 
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string ConfigFile => string.Empty;
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string AddDirectoryParam => throw new NotSupportedException();
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string AddFileParam => throw new NotSupportedException();
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string AddDefParam => throw new NotSupportedException();
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string AddConParam => throw new NotSupportedException();
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string MainDefParam => throw new NotSupportedException();
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string MainConParam => throw new NotSupportedException();
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string MainGrpParam => throw new NotSupportedException();
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string AddGrpParam => throw new NotSupportedException();
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string SkillParam => throw new NotSupportedException();
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string AddGameDirParam => throw new NotSupportedException();
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string AddRffParam => throw new NotSupportedException();
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string AddSndParam => throw new NotSupportedException();
 
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override void BeforeStart(BaseGame game, BaseAddon campaign)
     {
-        MoveSaveFilesToGameFolder(game, campaign);
-
+        MoveSaveFilesFromStorage(game, campaign);
         RestoreRoute66Files(game);
-
         RestoreWtFiles(game);
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override void AfterEnd(BaseGame game, BaseAddon campaign)
     {
-        MoveSaveFilesFromGameFolder(game, campaign);
+        MoveSaveFilesToStorage(game, campaign);
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override void GetStartCampaignArgs(StringBuilder sb, BaseGame game, BaseAddon addon)
     {
         _ = sb.Append(@" -jar ..\..\BuildGDX.jar");
@@ -175,16 +179,22 @@ public sealed class BuildGDX : BasePort
         }
     }
 
-    /// <inheritdoc/>
-    protected override void GetAutoloadModsArgs(StringBuilder sb, BaseGame _, BaseAddon addon, IReadOnlyDictionary<AddonId, BaseAddon> mods) { }
+    /// <inheritdoc />
+    protected override void GetAutoloadModsArgs(StringBuilder sb, BaseGame _, BaseAddon addon, IReadOnlyList<BaseAddon> mods) { }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override void GetSkipIntroParameter(StringBuilder sb) { }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override void GetSkipStartupParameter(StringBuilder sb) { }
 
 
+    /// <summary>
+    ///     Appends command-line arguments for Duke Nukem 3D games.
+    /// </summary>
+    /// <param name="sb">String builder for parameters.</param>
+    /// <param name="game">Duke game instance.</param>
+    /// <param name="camp">Campaign or addon.</param>
     private void GetDukeArgs(StringBuilder sb, DukeGame game, BaseAddon camp)
     {
         if (camp.AddonId.Id.Equals(nameof(DukeVersionEnum.Duke3D_WT), StringComparison.OrdinalIgnoreCase))
@@ -199,6 +209,12 @@ public sealed class BuildGDX : BasePort
         _ = sb.Append(" -game DUKE_NUKEM_3D");
     }
 
+    /// <summary>
+    ///     Appends command-line arguments for Blood games.
+    /// </summary>
+    /// <param name="sb">String builder for parameters.</param>
+    /// <param name="game">Blood game instance.</param>
+    /// <param name="camp">Campaign or addon.</param>
     private new void GetBloodArgs(StringBuilder sb, BloodGame game, BaseAddon camp)
     {
         _ = sb.Append($@" -path ""{game.GameInstallFolder}""");
@@ -206,6 +222,12 @@ public sealed class BuildGDX : BasePort
         _ = sb.Append(" -game BLOOD");
     }
 
+    /// <summary>
+    ///     Appends command-line arguments for Shadow Warrior games.
+    /// </summary>
+    /// <param name="sb">String builder for parameters.</param>
+    /// <param name="game">Wang game instance.</param>
+    /// <param name="camp">Campaign or addon.</param>
     private static void GetWangArgs(StringBuilder sb, WangGame game, BaseAddon camp)
     {
         _ = sb.Append($@" -path ""{game.GameInstallFolder}""");
@@ -213,6 +235,12 @@ public sealed class BuildGDX : BasePort
         _ = sb.Append(" -game SHADOW_WARRIOR");
     }
 
+    /// <summary>
+    ///     Appends command-line arguments for Redneck Rampage games.
+    /// </summary>
+    /// <param name="sb">String builder for parameters.</param>
+    /// <param name="game">Redneck game instance.</param>
+    /// <param name="camp">Campaign or addon.</param>
     private void GetRedneckArgs(StringBuilder sb, RedneckGame game, BaseAddon camp)
     {
         if (camp.AddonId.Id.Equals(nameof(GameEnum.RidesAgain), StringComparison.OrdinalIgnoreCase))
@@ -227,6 +255,12 @@ public sealed class BuildGDX : BasePort
         }
     }
 
+    /// <summary>
+    ///     Appends command-line arguments for Powerslave games.
+    /// </summary>
+    /// <param name="sb">String builder for parameters.</param>
+    /// <param name="game">Slave game instance.</param>
+    /// <param name="camp">Campaign or addon.</param>
     private new static void GetSlaveArgs(StringBuilder sb, SlaveGame game, BaseAddon camp)
     {
         _ = sb.Append($@" -path ""{game.GameInstallFolder}""");
@@ -234,6 +268,12 @@ public sealed class BuildGDX : BasePort
         _ = sb.Append(" -game POWERSLAVE");
     }
 
+    /// <summary>
+    ///     Appends command-line arguments for NAM games.
+    /// </summary>
+    /// <param name="sb">String builder for parameters.</param>
+    /// <param name="game">NAM game instance.</param>
+    /// <param name="camp">Campaign or addon.</param>
     private static void GetNamArgs(StringBuilder sb, NamGame game, BaseAddon camp)
     {
         _ = sb.Append($@" -path ""{game.GameInstallFolder}""");
@@ -241,6 +281,12 @@ public sealed class BuildGDX : BasePort
         _ = sb.Append(" -game NAM");
     }
 
+    /// <summary>
+    ///     Appends command-line arguments for Witchaven games.
+    /// </summary>
+    /// <param name="sb">String builder for parameters.</param>
+    /// <param name="game">Witchaven game instance.</param>
+    /// <param name="camp">Campaign or addon.</param>
     private static void GetWitchavenArgs(StringBuilder sb, WitchavenGame game, BaseAddon camp)
     {
         if (camp.AddonId.Id.Equals(nameof(GameEnum.Witchaven2), StringComparison.OrdinalIgnoreCase))
@@ -255,6 +301,12 @@ public sealed class BuildGDX : BasePort
         }
     }
 
+    /// <summary>
+    ///     Appends command-line arguments for TekWar games.
+    /// </summary>
+    /// <param name="sb">String builder for parameters.</param>
+    /// <param name="game">TekWar game instance.</param>
+    /// <param name="camp">Campaign or addon.</param>
     private static void GetTekWarArgs(StringBuilder sb, TekWarGame game, BaseAddon camp)
     {
         _ = sb.Append($@" -path ""{game.GameInstallFolder}""");

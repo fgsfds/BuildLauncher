@@ -2,46 +2,30 @@
 using Addons.Addons;
 using Core.All;
 using Core.All.Enums;
-using Core.All.Enums.Versions;
 
 namespace Addons.Providers;
 
+/// <summary>
+///     Provides methods for parsing GRP info files and creating addon entries from the associated .grp files.
+/// </summary>
 public static class GrpInfoProvider
 {
     /// <summary>
-    /// Get list of addons from grpinfo files located in the folder and its subfolders.
+    ///     Attempts to retrieve addons from a GRP info file by parsing the associated .grp files.
     /// </summary>
-    public static List<BaseAddon>? GetAddonsFromGrpInfo(string pathToFolder)
+    /// <param name="pathToGrpInfo">Path to the GRP info file containing metadata about game groups.</param>
+    /// <param name="newAddons">When this method returns true, contains a list of BaseAddon instances created from the parsed .grp files; otherwise null.</param>
+    /// <returns>true if addons were successfully retrieved; false if no .grp files were found.</returns>
+    public static bool TryGetAddonsFromGrpInfo(string pathToGrpInfo, [NotNullWhen(true)] out List<BaseAddon>? newAddons)
     {
-        List<BaseAddon> newAddons = [];
-
-        var grpInfos = Directory.GetFiles(pathToFolder, "*.grpinfo", SearchOption.AllDirectories);
-
-        if (grpInfos.Length == 0)
-        {
-            return null;
-        }
-
-        foreach (var grpInfo in grpInfos)
-        {
-            if (TryGetAddonsFromGrpInfo(grpInfo, out var foundAddons))
-            {
-                newAddons.AddRange(foundAddons);
-            }
-        }
-
-        return newAddons;
-    }
-
-    private static bool TryGetAddonsFromGrpInfo(string pathToGrpInfo, [NotNullWhen(true)] out List<BaseAddon>? newAddons)
-    {
-        var grpInfoFolder = Path.GetDirectoryName(pathToGrpInfo) ?? throw new InvalidOperationException();
+        var grpInfoFolder = Path.GetDirectoryName(pathToGrpInfo) ?? throw new InvalidOperationException($"Could not determine directory for {pathToGrpInfo}");
 
         var grps = Directory.GetFiles(grpInfoFolder, "*.grp", SearchOption.TopDirectoryOnly);
 
         if (grps.Length == 0)
         {
             newAddons = null;
+
             return false;
         }
 
@@ -59,11 +43,11 @@ public static class GrpInfoProvider
                 continue;
             }
 
-            AddonId version = new(grpInfo.Name.ToLower().Replace(" ", "_"), null);
+            AddonId addonId = new(grpInfo.Name.ToLower().Replace(" ", "_"), null);
 
             DukeCampaign camp = new()
             {
-                AddonId = version,
+                AddonId = addonId,
                 Type = AddonTypeEnum.TC,
                 SupportedGame = new(GameEnum.Duke3D),
                 Title = grpInfo.Name,
@@ -72,7 +56,7 @@ public static class GrpInfoProvider
                 Description = null,
                 Author = null,
                 ReleaseDate = null,
-                PathToFile = grp,
+                FileInfo = new(grpInfoFolder, Path.GetFileName(grp)),
                 DependentAddons = null,
                 IncompatibleAddons = null,
                 StartMap = null,
@@ -82,7 +66,6 @@ public static class GrpInfoProvider
                 AdditionalDefs = grpInfo.AddDef is null ? null : [grpInfo.AddDef],
                 RTS = null,
                 RequiredFeatures = [FeatureEnum.EDuke32_CON],
-                IsUnpacked = false,
                 Executables = null,
                 IsFavorite = false,
                 Options = null
@@ -95,7 +78,7 @@ public static class GrpInfoProvider
     }
 
     /// <summary>
-    /// Parse grpinfo file
+    ///     Parse grpinfo file
     /// </summary>
     /// <param name="pathToFile">Path to the grpinfo file</param>
     /// <param name="expectedGrpsCount">Number of expected grps</param>
@@ -110,7 +93,7 @@ public static class GrpInfoProvider
         string? def = null;
         var size = 0;
 
-        var isInsideGrpinfoBlock = false;
+        var isInsideGrpInfoBlock = false;
 
         foreach (var line in lines)
         {
@@ -128,11 +111,12 @@ public static class GrpInfoProvider
                 def = null;
                 size = 0;
 
-                isInsideGrpinfoBlock = true;
+                isInsideGrpInfoBlock = true;
+
                 continue;
             }
 
-            if (!isInsideGrpinfoBlock)
+            if (!isInsideGrpInfoBlock)
             {
                 continue;
             }
@@ -163,20 +147,25 @@ public static class GrpInfoProvider
                         Name = name,
                         MainCon = mainCon,
                         AddDef = def,
-                        Size = size,
+                        Size = size
                     };
 
                     addons.Add(addon);
                 }
 
-                isInsideGrpinfoBlock = false;
+                isInsideGrpInfoBlock = false;
             }
         }
 
         return addons;
     }
 
-    private static string ExtractQuotedValue(ReadOnlySpan<char> span)
+    /// <summary>
+    ///     Extracts the value between the first and last quote characters from the given span.
+    /// </summary>
+    /// <param name="span">The span to extract the quoted value from.</param>
+    /// <returns>The extracted value, or null if no quoted value is found.</returns>
+    private static string? ExtractQuotedValue(ReadOnlySpan<char> span)
     {
         var pFrom = span.IndexOf('"') + 1;
         var pTo = span.LastIndexOf('"');
@@ -186,14 +175,33 @@ public static class GrpInfoProvider
             return span[pFrom..pTo].ToString();
         }
 
-        return null!;
+        return null;
     }
 }
 
+
+/// <summary>
+///     Represents a single entry parsed from a GRP info file.
+/// </summary>
 public readonly struct GrpInfoEntry
 {
+    /// <summary>
+    ///     Name of the addon.
+    /// </summary>
     public readonly string Name { get; init; }
+
+    /// <summary>
+    ///     Main CON script file name, if any.
+    /// </summary>
     public readonly string? MainCon { get; init; }
+
+    /// <summary>
+    ///     Additional DEF file name, if any.
+    /// </summary>
     public readonly string? AddDef { get; init; }
+
+    /// <summary>
+    ///     Size of the matching .grp file in bytes.
+    /// </summary>
     public readonly int Size { get; init; }
 }

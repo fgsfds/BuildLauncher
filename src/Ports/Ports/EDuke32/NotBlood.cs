@@ -5,43 +5,42 @@ using Games.Games;
 namespace Ports.Ports.EDuke32;
 
 /// <summary>
-/// NotBlood port
+///     NotBlood port.
 /// </summary>
 public sealed class NotBlood : NBlood
 {
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override PortEnum PortEnum => PortEnum.NotBlood;
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string WinExe => "notblood.exe";
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string LinExe => "notblood";
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override string Name => "NotBlood";
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override List<GameEnum> SupportedGames => [GameEnum.Blood];
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override List<FeatureEnum> SupportedFeatures =>
-        [
+    [
         FeatureEnum.Modern_Types,
         FeatureEnum.Hightile,
         FeatureEnum.Models,
         FeatureEnum.TileFromTexture
-        ];
+    ];
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string ConfigFile => "notblood.cfg";
 
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override void BeforeStart(BaseGame game, BaseAddon campaign)
     {
-        MoveSaveFilesFromGameFolder(game, campaign);
-
+        MoveSaveFilesFromStorage(game, campaign);
         FixConfig();
     }
 }

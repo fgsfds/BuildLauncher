@@ -10,10 +10,17 @@ using Games.Games;
 
 namespace Addons.Providers;
 
+/// <summary>
+///     Provides the original/official campaigns for each supported game.
+/// </summary>
 public sealed class OriginalCampaignsProvider
 {
     private readonly IConfigProvider _config;
 
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="OriginalCampaignsProvider" /> class.
+    /// </summary>
+    /// <param name="config">Configuration provider used to check favorite addon state.</param>
     public OriginalCampaignsProvider(IConfigProvider config)
     {
         _config = config;
@@ -21,11 +28,13 @@ public sealed class OriginalCampaignsProvider
 
 
     /// <summary>
-    /// Retrieves the original campaigns associated with the specified game.
+    ///     Retrieves the original campaigns associated with the specified game.
     /// </summary>
     /// <param name="game">The game for which to retrieve the original campaigns.</param>
-    /// <returns>A dictionary where the keys are <see cref="AddonId"/> values representing the unique identifiers of the
-    /// campaigns,  and the values are <see cref="BaseAddon"/> instances representing the campaign details.</returns>
+    /// <returns>
+    ///     A dictionary where the keys are <see cref="AddonId" /> values representing the unique identifiers of the
+    ///     campaigns,  and the values are <see cref="BaseAddon" /> instances representing the campaign details.
+    /// </returns>
     public Dictionary<AddonId, BaseAddon> GetOriginalCampaigns(BaseGame game)
     {
         return game.GameEnum switch
@@ -51,6 +60,9 @@ public sealed class OriginalCampaignsProvider
         };
     }
 
+    /// <summary>
+    ///     Retrieves the original Duke Nukem 3D campaigns including World Tour, base game, Caribbean, Nuclear Winter, Duke it Out in DC, Duke 64, and Zero Hour.
+    /// </summary>
     private Dictionary<AddonId, BaseAddon> GetDuke3DCampaigns(BaseGame game)
     {
         if (game is not DukeGame dGame)
@@ -65,38 +77,39 @@ public sealed class OriginalCampaignsProvider
             var dukeWtId = nameof(DukeVersionEnum.Duke3D_WT).ToLower();
             AddonId version = new(dukeWtId, null);
 
-            campaigns.Add(version, new DukeCampaign()
-            {
-                AddonId = version,
-                Type = AddonTypeEnum.Official,
-                Title = "Duke Nukem 3D World Tour",
-                GridImageHash = DukeVersionEnum.Duke3D_WT.GetUniqueHash(),
-                PreviewImageHash = null,
-                Author = "Nerve Software, Gearbox Software",
-                ReleaseDate = new(2016, 10, 11),
-                Description = """
-                    **Duke Nukem 3D: 20th Anniversary World Tour** is a 2016 special edition of Duke Nukem 3D.
-                    This edition includes all content from Duke Nukem 3D: Atomic Edition, but it adds new levels, enemies, a weapon, and several special features.
+            campaigns.Add(
+                version, new DukeCampaign()
+                {
+                    AddonId = version,
+                    Type = AddonTypeEnum.Official,
+                    Title = "Duke Nukem 3D World Tour",
+                    GridImageHash = DukeVersionEnum.Duke3D_WT.GetUniqueHash(),
+                    PreviewImageHash = null,
+                    Author = "Nerve Software, Gearbox Software",
+                    ReleaseDate = new(2016, 10, 11),
+                    Description = """
+                        **Duke Nukem 3D: 20th Anniversary World Tour** is a 2016 special edition of Duke Nukem 3D.
+                        This edition includes all content from Duke Nukem 3D: Atomic Edition, but it adds new levels, enemies, a weapon, and several special features.
 
-                    The 20th Anniversary Edition includes a new fifth episode known as Alien World Order.
-                    The episode was designed by Allen Blum and Richard “Levelord” Gray, both of whom designed all the levels in the original Duke Nukem 3D. 
-                    """,
-                SupportedGame = new(GameEnum.Duke3D, DukeVersionEnum.Duke3D_WT),
-                RequiredFeatures = null,
-                PathToFile = null,
-                DependentAddons = null,
-                IncompatibleAddons = null,
-                MainCon = null,
-                AdditionalCons = null,
-                MainDef = null,
-                AdditionalDefs = null,
-                RTS = null,
-                StartMap = null,
-                IsUnpacked = false,
-                Executables = null,
-                IsFavorite = _config.FavoriteAddons.Contains(version),
-                Options = null
-            });
+                        The 20th Anniversary Edition includes a new fifth episode known as Alien World Order.
+                        The episode was designed by Allen Blum and Richard “Levelord” Gray, both of whom designed all the levels in the original Duke Nukem 3D. 
+                        """,
+                    SupportedGame = new(GameEnum.Duke3D, DukeVersionEnum.Duke3D_WT),
+                    RequiredFeatures = null,
+                    FileInfo = null,
+                    DependentAddons = null,
+                    IncompatibleAddons = null,
+                    MainCon = null,
+                    AdditionalCons = null,
+                    MainDef = null,
+                    AdditionalDefs = null,
+                    RTS = null,
+                    StartMap = null,
+                    Executables = null,
+                    IsFavorite = _config.FavoriteAddons.Contains(version),
+                    Options = null
+                }
+                );
         }
 
         if (dGame.IsBaseGameInstalled)
@@ -106,38 +119,39 @@ public sealed class OriginalCampaignsProvider
                 var dukeId = nameof(GameEnum.Duke3D).ToLower();
                 AddonId version = new(dukeId, null);
 
-                campaigns.Add(version, new DukeCampaign()
-                {
-                    AddonId = version,
-                    Type = AddonTypeEnum.Official,
-                    Title = "Duke Nukem 3D",
-                    GridImageHash = GameEnum.Duke3D.GetUniqueHash(),
-                    PreviewImageHash = null,
-                    Author = "3D Realms",
-                    ReleaseDate = new(1996, 01, 29),
-                    Description = """
-                    Duke Nukem 3D is a first-person shooter developed and published by **3D Realms**.
-                    Released on April 19, 1996, Duke Nukem 3D is the third game in the Duke Nukem series and a sequel to Duke Nukem II.
+                campaigns.Add(
+                    version, new DukeCampaign()
+                    {
+                        AddonId = version,
+                        Type = AddonTypeEnum.Official,
+                        Title = "Duke Nukem 3D",
+                        GridImageHash = GameEnum.Duke3D.GetUniqueHash(),
+                        PreviewImageHash = null,
+                        Author = "3D Realms",
+                        ReleaseDate = new(1996, 01, 29),
+                        Description = """
+                            Duke Nukem 3D is a first-person shooter developed and published by **3D Realms**.
+                            Released on April 19, 1996, Duke Nukem 3D is the third game in the Duke Nukem series and a sequel to Duke Nukem II.
 
-                    The player assumes the role of Duke Nukem, an imperious action hero, and fights through 48 levels spread across 5 episodes. The player encounters a host of enemies and fights them with a range of weaponry.
-                    In the end, Duke annihilates the alien overlords and celebrates by desecrating their corpses.
-                    """,
-                    SupportedGame = new(GameEnum.Duke3D, DukeVersionEnum.Duke3D_Atomic),
-                    RequiredFeatures = null,
-                    PathToFile = null,
-                    DependentAddons = null,
-                    IncompatibleAddons = null,
-                    MainCon = null,
-                    AdditionalCons = null,
-                    MainDef = null,
-                    AdditionalDefs = null,
-                    RTS = null,
-                    StartMap = null,
-                    IsUnpacked = false,
-                    Executables = null,
-                    IsFavorite = _config.FavoriteAddons.Contains(version),
-                    Options = null
-                });
+                            The player assumes the role of Duke Nukem, an imperious action hero, and fights through 48 levels spread across 5 episodes. The player encounters a host of enemies and fights them with a range of weaponry.
+                            In the end, Duke annihilates the alien overlords and celebrates by desecrating their corpses.
+                            """,
+                        SupportedGame = new(GameEnum.Duke3D, DukeVersionEnum.Duke3D_Atomic),
+                        RequiredFeatures = null,
+                        FileInfo = null,
+                        DependentAddons = null,
+                        IncompatibleAddons = null,
+                        MainCon = null,
+                        AdditionalCons = null,
+                        MainDef = null,
+                        AdditionalDefs = null,
+                        RTS = null,
+                        StartMap = null,
+                        Executables = null,
+                        IsFavorite = _config.FavoriteAddons.Contains(version),
+                        Options = null
+                    }
+                    );
             }
 
             if (dGame.IsCaribbeanInstalled)
@@ -145,38 +159,39 @@ public sealed class OriginalCampaignsProvider
                 var dukeVacaId = nameof(DukeAddonEnum.DukeVaca).ToLower();
                 AddonId version = new(dukeVacaId, null);
 
-                campaigns.Add(version, new DukeCampaign()
-                {
-                    AddonId = version,
-                    Type = AddonTypeEnum.Official,
-                    Title = "Caribbean",
-                    GridImageHash = DukeAddonEnum.DukeVaca.GetUniqueHash(),
-                    PreviewImageHash = null,
-                    Author = "Sunstorm Interactive",
-                    ReleaseDate = new(1997, 12, 31),
-                    Description = """
-                        **Life's A Beach** is an expansion pack for the highly acclaimed first-person shooter Duke Nukem 3D. It was released on December 31, 1997 by **Sunstorm Interactive**.
+                campaigns.Add(
+                    version, new DukeCampaign()
+                    {
+                        AddonId = version,
+                        Type = AddonTypeEnum.Official,
+                        Title = "Caribbean",
+                        GridImageHash = DukeAddonEnum.DukeVaca.GetUniqueHash(),
+                        PreviewImageHash = null,
+                        Author = "Sunstorm Interactive",
+                        ReleaseDate = new(1997, 12, 31),
+                        Description = """
+                            **Life's A Beach** is an expansion pack for the highly acclaimed first-person shooter Duke Nukem 3D. It was released on December 31, 1997 by **Sunstorm Interactive**.
 
-                        Narrative elements in Duke Caribbean: Life's A Beach are sparse. According to the official game manual, Duke Nukem is on vacation in the Caribbean to take a break from killing aliens.
-                        However, the aliens have decided that the Caribbean offers the perfect climate for a new breeding ground, so they begin laying eggs and terrorizing the local tourists.
-                        Angered that his rest and relaxation is being delayed, Duke Nukem sets out on a mission for retribution against the aliens who are interrupting his vacation.
-                        """,
-                    SupportedGame = new(GameEnum.Duke3D, DukeVersionEnum.Duke3D_Atomic),
-                    RequiredFeatures = null,
-                    PathToFile = null,
-                    DependentAddons = new Dictionary<string, string?>() { { nameof(DukeAddonEnum.DukeVaca), null } },
-                    IncompatibleAddons = null,
-                    MainCon = null,
-                    AdditionalCons = null,
-                    MainDef = null,
-                    AdditionalDefs = null,
-                    RTS = null,
-                    StartMap = null,
-                    IsUnpacked = false,
-                    Executables = null,
-                    IsFavorite = _config.FavoriteAddons.Contains(version),
-                    Options = null
-                });
+                            Narrative elements in Duke Caribbean: Life's A Beach are sparse. According to the official game manual, Duke Nukem is on vacation in the Caribbean to take a break from killing aliens.
+                            However, the aliens have decided that the Caribbean offers the perfect climate for a new breeding ground, so they begin laying eggs and terrorizing the local tourists.
+                            Angered that his rest and relaxation is being delayed, Duke Nukem sets out on a mission for retribution against the aliens who are interrupting his vacation.
+                            """,
+                        SupportedGame = new(GameEnum.Duke3D, DukeVersionEnum.Duke3D_Atomic),
+                        RequiredFeatures = null,
+                        FileInfo = null,
+                        DependentAddons = null,
+                        IncompatibleAddons = null,
+                        MainCon = null,
+                        AdditionalCons = null,
+                        MainDef = null,
+                        AdditionalDefs = null,
+                        RTS = null,
+                        StartMap = null,
+                        Executables = null,
+                        IsFavorite = _config.FavoriteAddons.Contains(version),
+                        Options = null
+                    }
+                    );
             }
 
             if (dGame.IsNuclearWinterInstalled)
@@ -184,37 +199,38 @@ public sealed class OriginalCampaignsProvider
                 var dukeNwId = nameof(DukeAddonEnum.DukeNW).ToLower();
                 AddonId version = new(dukeNwId, null);
 
-                campaigns.Add(version, new DukeCampaign()
-                {
-                    AddonId = version,
-                    Type = AddonTypeEnum.Official,
-                    Title = "Nuclear Winter",
-                    GridImageHash = DukeAddonEnum.DukeNW.GetUniqueHash(),
-                    Author = "Simply Silly Software",
-                    ReleaseDate = new(1997, 12, 30),
-                    Description = """
-                        **Nuclear Winter**, is a Christmas-themed expansion pack for Duke Nukem 3D. It was developed by **Simply Silly Software** and published by **WizardWorks** on December 30, 1997.
+                campaigns.Add(
+                    version, new DukeCampaign()
+                    {
+                        AddonId = version,
+                        Type = AddonTypeEnum.Official,
+                        Title = "Nuclear Winter",
+                        GridImageHash = DukeAddonEnum.DukeNW.GetUniqueHash(),
+                        Author = "Simply Silly Software",
+                        ReleaseDate = new(1997, 12, 30),
+                        Description = """
+                            **Nuclear Winter**, is a Christmas-themed expansion pack for Duke Nukem 3D. It was developed by **Simply Silly Software** and published by **WizardWorks** on December 30, 1997.
 
-                        Santa Claus has been captured and brainwashed by the aliens that Duke previously defeated. To make matters worse, the aliens are now supported by an enemy force calling themselves the Feminist Elven Militia.
-                        Duke Nukem must travel to the North Pole in order to stop the brainwashed Santa Claus and his manipulative captors.
-                        """,
-                    SupportedGame = new(GameEnum.Duke3D, DukeVersionEnum.Duke3D_Atomic),
-                    RequiredFeatures = null,
-                    PathToFile = null,
-                    DependentAddons = new Dictionary<string, string?>() { { nameof(DukeAddonEnum.DukeNW), null } },
-                    IncompatibleAddons = null,
-                    MainCon = null,
-                    AdditionalCons = null,
-                    MainDef = null,
-                    AdditionalDefs = null,
-                    RTS = null,
-                    StartMap = null,
-                    PreviewImageHash = null,
-                    IsUnpacked = false,
-                    Executables = null,
-                    IsFavorite = _config.FavoriteAddons.Contains(version),
-                    Options = null
-                });
+                            Santa Claus has been captured and brainwashed by the aliens that Duke previously defeated. To make matters worse, the aliens are now supported by an enemy force calling themselves the Feminist Elven Militia.
+                            Duke Nukem must travel to the North Pole in order to stop the brainwashed Santa Claus and his manipulative captors.
+                            """,
+                        SupportedGame = new(GameEnum.Duke3D, DukeVersionEnum.Duke3D_Atomic),
+                        RequiredFeatures = null,
+                        FileInfo = null,
+                        DependentAddons = null,
+                        IncompatibleAddons = null,
+                        MainCon = null,
+                        AdditionalCons = null,
+                        MainDef = null,
+                        AdditionalDefs = null,
+                        RTS = null,
+                        StartMap = null,
+                        PreviewImageHash = null,
+                        Executables = null,
+                        IsFavorite = _config.FavoriteAddons.Contains(version),
+                        Options = null
+                    }
+                    );
             }
 
             if (dGame.IsDukeDCInstalled)
@@ -222,39 +238,40 @@ public sealed class OriginalCampaignsProvider
                 var dukeDcId = nameof(DukeAddonEnum.DukeDC).ToLower();
                 AddonId version = new(dukeDcId, null);
 
-                campaigns.Add(version, new DukeCampaign()
-                {
-                    AddonId = version,
-                    Type = AddonTypeEnum.Official,
-                    Title = "Duke it Out in DC",
-                    GridImageHash = DukeAddonEnum.DukeDC.GetUniqueHash(),
-                    Author = "WizardWorks",
-                    ReleaseDate = new(1997, 03, 17),
-                    Description = """
-                        **Duke It Out In D.C.** is a Duke Nukem 3D expansion pack developed by Sunstorm Interactive and published by **WizardWorks** on March 17, 1997.
-                        The add-on does not introduce any new enemies, weapons, or sprites, but it features an all-new episode comprised of ten original levels,
-                        each based on a famous location in Washington, D.C. 
+                campaigns.Add(
+                    version, new DukeCampaign()
+                    {
+                        AddonId = version,
+                        Type = AddonTypeEnum.Official,
+                        Title = "Duke it Out in DC",
+                        GridImageHash = DukeAddonEnum.DukeDC.GetUniqueHash(),
+                        Author = "WizardWorks",
+                        ReleaseDate = new(1997, 03, 17),
+                        Description = """
+                            **Duke It Out In D.C.** is a Duke Nukem 3D expansion pack developed by Sunstorm Interactive and published by **WizardWorks** on March 17, 1997.
+                            The add-on does not introduce any new enemies, weapons, or sprites, but it features an all-new episode comprised of ten original levels,
+                            each based on a famous location in Washington, D.C. 
 
-                        Aliens have crash-landed into the Capitol Building and have launched a massive invasion of Washington, D.C. Duke Nukem arrives to find that the
-                        alien invaders have captured several national monuments and critical government buildings, but in the end, Duke defeats the invading army and rescues the President from the Cycloid Emperor.
-                        """,
-                    SupportedGame = new(GameEnum.Duke3D, DukeVersionEnum.Duke3D_Atomic),
-                    RequiredFeatures = null,
-                    PathToFile = null,
-                    DependentAddons = new Dictionary<string, string?>() { { nameof(DukeAddonEnum.DukeDC), null } },
-                    IncompatibleAddons = null,
-                    MainCon = null,
-                    AdditionalCons = null,
-                    MainDef = null,
-                    AdditionalDefs = null,
-                    RTS = null,
-                    StartMap = null,
-                    PreviewImageHash = null,
-                    IsUnpacked = false,
-                    Executables = null,
-                    IsFavorite = _config.FavoriteAddons.Contains(version),
-                    Options = null
-                });
+                            Aliens have crash-landed into the Capitol Building and have launched a massive invasion of Washington, D.C. Duke Nukem arrives to find that the
+                            alien invaders have captured several national monuments and critical government buildings, but in the end, Duke defeats the invading army and rescues the President from the Cycloid Emperor.
+                            """,
+                        SupportedGame = new(GameEnum.Duke3D, DukeVersionEnum.Duke3D_Atomic),
+                        RequiredFeatures = null,
+                        FileInfo = null,
+                        DependentAddons = null,
+                        IncompatibleAddons = null,
+                        MainCon = null,
+                        AdditionalCons = null,
+                        MainDef = null,
+                        AdditionalDefs = null,
+                        RTS = null,
+                        StartMap = null,
+                        PreviewImageHash = null,
+                        Executables = null,
+                        IsFavorite = _config.FavoriteAddons.Contains(version),
+                        Options = null
+                    }
+                    );
             }
         }
 
@@ -263,36 +280,37 @@ public sealed class OriginalCampaignsProvider
             var duke64Id = nameof(GameEnum.Duke64).ToLower();
             AddonId version = new(duke64Id, null);
 
-            campaigns.Add(version, new DukeCampaign()
-            {
-                AddonId = version,
-                Type = AddonTypeEnum.Official,
-                Title = "Duke Nukem 64",
-                GridImageHash = GameEnum.Duke64.GetUniqueHash(),
-                Author = "3D Realms, Eurocom",
-                ReleaseDate = new(1997, 10, 31),
-                Description = """
-                    **Duke Nukem 64** is the Nintendo 64 port of the first-person shooter MS-DOS/PC game Duke Nukem 3D.
-                    The Nintendo 64 port features significant changes from the PC version, including modified and expanded levels and a different set of weapons.
-                    The game's mature themes have been minimized to satisfy Nintendo's adult content standards.
-                    """,
-                SupportedGame = new(GameEnum.Duke64),
-                RequiredFeatures = null,
-                PathToFile = null,
-                DependentAddons = null,
-                IncompatibleAddons = null,
-                MainCon = null,
-                AdditionalCons = null,
-                MainDef = null,
-                AdditionalDefs = null,
-                RTS = null,
-                StartMap = null,
-                PreviewImageHash = null,
-                IsUnpacked = false,
-                Executables = null,
-                IsFavorite = _config.FavoriteAddons.Contains(version),
-                Options = null
-            });
+            campaigns.Add(
+                version, new DukeCampaign()
+                {
+                    AddonId = version,
+                    Type = AddonTypeEnum.Official,
+                    Title = "Duke Nukem 64",
+                    GridImageHash = GameEnum.Duke64.GetUniqueHash(),
+                    Author = "3D Realms, Eurocom",
+                    ReleaseDate = new(1997, 10, 31),
+                    Description = """
+                        **Duke Nukem 64** is the Nintendo 64 port of the first-person shooter MS-DOS/PC game Duke Nukem 3D.
+                        The Nintendo 64 port features significant changes from the PC version, including modified and expanded levels and a different set of weapons.
+                        The game's mature themes have been minimized to satisfy Nintendo's adult content standards.
+                        """,
+                    SupportedGame = new(GameEnum.Duke64),
+                    RequiredFeatures = null,
+                    FileInfo = null,
+                    DependentAddons = null,
+                    IncompatibleAddons = null,
+                    MainCon = null,
+                    AdditionalCons = null,
+                    MainDef = null,
+                    AdditionalDefs = null,
+                    RTS = null,
+                    StartMap = null,
+                    PreviewImageHash = null,
+                    Executables = null,
+                    IsFavorite = _config.FavoriteAddons.Contains(version),
+                    Options = null
+                }
+                );
         }
 
         if (dGame.IsDukeZHInstalled)
@@ -300,45 +318,48 @@ public sealed class OriginalCampaignsProvider
             var duke64Id = nameof(GameEnum.DukeZeroHour).ToLower();
             AddonId version = new(duke64Id, null);
 
-            campaigns.Add(version, new DukeCampaign()
-            {
-                AddonId = version,
-                Type = AddonTypeEnum.Official,
-                Title = "Duke Nukem Zero Hour",
-                GridImageHash = GameEnum.DukeZeroHour.GetUniqueHash(),
-                Author = "Eurocom",
-                ReleaseDate = new(1999, 08, 31),
-                Description = """
-                    **Duke Nukem: Zero Hour** is a 1999 third-person shooter game in the Duke Nukem series,
-                    developed by Eurocom and published by GT Interactive for the Nintendo 64.
+            campaigns.Add(
+                version, new DukeCampaign()
+                {
+                    AddonId = version,
+                    Type = AddonTypeEnum.Official,
+                    Title = "Duke Nukem Zero Hour",
+                    GridImageHash = GameEnum.DukeZeroHour.GetUniqueHash(),
+                    Author = "Eurocom",
+                    ReleaseDate = new(1999, 08, 31),
+                    Description = """
+                        **Duke Nukem: Zero Hour** is a 1999 third-person shooter game in the Duke Nukem series,
+                        developed by Eurocom and published by GT Interactive for the Nintendo 64.
 
-                    The plot revolves around time traveling aliens attempting to alter the course of history
-                    by eliminating Duke's ancestors.
-                    """,
-                SupportedGame = new(GameEnum.DukeZeroHour),
-                RequiredFeatures = null,
-                PathToFile = null,
-                DependentAddons = null,
-                IncompatibleAddons = null,
-                MainCon = null,
-                AdditionalCons = null,
-                MainDef = null,
-                AdditionalDefs = null,
-                RTS = null,
-                StartMap = null,
-                PreviewImageHash = null,
-                IsUnpacked = false,
-                Executables = null,
-                IsFavorite = _config.FavoriteAddons.Contains(version),
-                Options = null
-            });
+                        The plot revolves around time traveling aliens attempting to alter the course of history
+                        by eliminating Duke's ancestors.
+                        """,
+                    SupportedGame = new(GameEnum.DukeZeroHour),
+                    RequiredFeatures = null,
+                    FileInfo = null,
+                    DependentAddons = null,
+                    IncompatibleAddons = null,
+                    MainCon = null,
+                    AdditionalCons = null,
+                    MainDef = null,
+                    AdditionalDefs = null,
+                    RTS = null,
+                    StartMap = null,
+                    PreviewImageHash = null,
+                    Executables = null,
+                    IsFavorite = _config.FavoriteAddons.Contains(version),
+                    Options = null
+                }
+                );
         }
 
         return campaigns;
     }
 
 
-    /// <inheritdoc/>
+    /// <summary>
+    ///     Retrieves the original Blood campaigns including the base game and Cryptic Passage.
+    /// </summary>
     private Dictionary<AddonId, BaseAddon> GetBloodCampaigns(BaseGame game)
     {
         if (game is not BloodGame bGame)
@@ -352,43 +373,44 @@ public sealed class OriginalCampaignsProvider
             var bloodId = nameof(GameEnum.Blood).ToLower();
             AddonId version = new(bloodId, null);
 
-            campaigns.Add(version, new BloodCampaign()
-            {
-                AddonId = version,
-                Type = AddonTypeEnum.Official,
-                Title = "Blood",
-                GridImageHash = GameEnum.Blood.GetUniqueHash(),
-                Author = "Monolith Productions",
-                ReleaseDate = new(1997, 05, 31),
-                Description = """
-                    **Blood** is a PC game developed by **Monolith Productions** and published by **GT Interactive**.
+            campaigns.Add(
+                version, new BloodCampaign()
+                {
+                    AddonId = version,
+                    Type = AddonTypeEnum.Official,
+                    Title = "Blood",
+                    GridImageHash = GameEnum.Blood.GetUniqueHash(),
+                    Author = "Monolith Productions",
+                    ReleaseDate = new(1997, 05, 31),
+                    Description = """
+                        **Blood** is a PC game developed by **Monolith Productions** and published by **GT Interactive**.
 
-                    The game became well-known for its copious amounts of violence and numerous stylistic and cultural references to literary and cinematic horror works.
-                    It was also the first **Build engine** game to feature voxels and simulated room-over-room, which were both also seen in **Shadow Warrior** a few months later.
+                        The game became well-known for its copious amounts of violence and numerous stylistic and cultural references to literary and cinematic horror works.
+                        It was also the first **Build engine** game to feature voxels and simulated room-over-room, which were both also seen in **Shadow Warrior** a few months later.
 
-                    The game's hero (or anti-hero) is a man named Caleb (voiced by Stephan Weyte), a merciless gunfighter born in Texas who serves a cult called "The Cabal" that worships the dark god Tchernobog
-                    (voiced by Monolith CEO Jason Hall, who was credited simply as "The Voice"). Caleb joined the cult after meeting Ophelia Price, a woman whose homestead was burned down by the Cabal,
-                    killing her husband and baby son. She blamed her spouse for their deaths, because he wanted to rescind his membership.
-                    Half-crazy and rambling, Caleb nursed her back to health. It is implied that she later became Caleb's lover, and introduced him to the cult.
-                    Together they rose to the highest ranks and became "The Chosen", the four most esteemed generals of Tchernobog's army (the other two being Ishmael and Gabriel).
-                    """,
-                SupportedGame = new(GameEnum.Blood),
-                RequiredFeatures = null,
-                PathToFile = null,
-                DependentAddons = null,
-                IncompatibleAddons = null,
-                MainDef = null,
-                AdditionalDefs = null,
-                INI = ClientConsts.BloodIni,
-                RFF = null,
-                SND = null,
-                StartMap = null,
-                PreviewImageHash = null,
-                IsUnpacked = false,
-                Executables = null,
-                IsFavorite = _config.FavoriteAddons.Contains(version),
-                Options = null
-            });
+                        The game's hero (or anti-hero) is a man named Caleb (voiced by Stephan Weyte), a merciless gunfighter born in Texas who serves a cult called "The Cabal" that worships the dark god Tchernobog
+                        (voiced by Monolith CEO Jason Hall, who was credited simply as "The Voice"). Caleb joined the cult after meeting Ophelia Price, a woman whose homestead was burned down by the Cabal,
+                        killing her husband and baby son. She blamed her spouse for their deaths, because he wanted to rescind his membership.
+                        Half-crazy and rambling, Caleb nursed her back to health. It is implied that she later became Caleb's lover, and introduced him to the cult.
+                        Together they rose to the highest ranks and became "The Chosen", the four most esteemed generals of Tchernobog's army (the other two being Ishmael and Gabriel).
+                        """,
+                    SupportedGame = new(GameEnum.Blood),
+                    RequiredFeatures = null,
+                    FileInfo = null,
+                    DependentAddons = null,
+                    IncompatibleAddons = null,
+                    MainDef = null,
+                    AdditionalDefs = null,
+                    INI = ClientConsts.BloodIni,
+                    RFF = null,
+                    SND = null,
+                    StartMap = null,
+                    PreviewImageHash = null,
+                    Executables = null,
+                    IsFavorite = _config.FavoriteAddons.Contains(version),
+                    Options = null
+                }
+                );
         }
 
         if (bGame.IsCrypticPassageInstalled)
@@ -396,39 +418,40 @@ public sealed class OriginalCampaignsProvider
             var bloodCpId = nameof(BloodAddonEnum.BloodCP).ToLower();
             AddonId version = new(bloodCpId, null);
 
-            campaigns.Add(version, new BloodCampaign()
-            {
-                AddonId = version,
-                Type = AddonTypeEnum.Official,
-                Title = "Cryptic Passage",
-                GridImageHash = BloodAddonEnum.BloodCP.GetUniqueHash(),
-                Author = "Sunstorm Interactive",
-                ReleaseDate = new(1997, 07, 7),
-                Description = """
-                    **Cryptic Passage** (originally titled Passage to Transylvania) is the first of two expansion packs for Blood.
-                    It contain a new episode with ten single-player maps, and four new BloodBath maps.
+            campaigns.Add(
+                version, new BloodCampaign()
+                {
+                    AddonId = version,
+                    Type = AddonTypeEnum.Official,
+                    Title = "Cryptic Passage",
+                    GridImageHash = BloodAddonEnum.BloodCP.GetUniqueHash(),
+                    Author = "Sunstorm Interactive",
+                    ReleaseDate = new(1997, 07, 7),
+                    Description = """
+                        **Cryptic Passage** (originally titled Passage to Transylvania) is the first of two expansion packs for Blood.
+                        It contain a new episode with ten single-player maps, and four new BloodBath maps.
 
-                    Caleb travels to the Carpathian mountains after he hears of an ancient scroll taken from him.
-                    This scroll is said to be capable of upsetting the balance in the otherworld, but Caleb finds himself detoured by the forces of Tchernobog and the Cabal.
-                    He must find the scroll and take out everyone responsible for interrupting his journey.
-                    """,
-                SupportedGame = new(GameEnum.Blood),
-                RequiredFeatures = null,
-                PathToFile = null,
-                DependentAddons = new Dictionary<string, string?>() { { nameof(BloodAddonEnum.BloodCP), null } },
-                IncompatibleAddons = null,
-                MainDef = null,
-                AdditionalDefs = null,
-                INI = ClientConsts.CrypticIni,
-                RFF = null,
-                SND = null,
-                StartMap = null,
-                PreviewImageHash = null,
-                IsUnpacked = false,
-                Executables = null,
-                IsFavorite = _config.FavoriteAddons.Contains(version),
-                Options = null
-            });
+                        Caleb travels to the Carpathian mountains after he hears of an ancient scroll taken from him.
+                        This scroll is said to be capable of upsetting the balance in the otherworld, but Caleb finds himself detoured by the forces of Tchernobog and the Cabal.
+                        He must find the scroll and take out everyone responsible for interrupting his journey.
+                        """,
+                    SupportedGame = new(GameEnum.Blood),
+                    RequiredFeatures = null,
+                    FileInfo = null,
+                    DependentAddons = null,
+                    IncompatibleAddons = null,
+                    MainDef = null,
+                    AdditionalDefs = null,
+                    INI = ClientConsts.CrypticIni,
+                    RFF = null,
+                    SND = null,
+                    StartMap = null,
+                    PreviewImageHash = null,
+                    Executables = null,
+                    IsFavorite = _config.FavoriteAddons.Contains(version),
+                    Options = null
+                }
+                );
         }
 
         return campaigns;
@@ -436,7 +459,7 @@ public sealed class OriginalCampaignsProvider
 
 
     /// <summary>
-    /// Get list of original campaigns
+    ///     Retrieves the original Shadow Warrior campaign.
     /// </summary>
     private Dictionary<AddonId, BaseAddon> GetWangCampaigns(BaseGame game)
     {
@@ -452,42 +475,45 @@ public sealed class OriginalCampaignsProvider
             var wangId = nameof(GameEnum.Wang).ToLower();
             AddonId version = new(wangId, null);
 
-            campaigns.Add(version, new GenericCampaign()
-            {
-                AddonId = version,
-                Type = AddonTypeEnum.Official,
-                Title = "Shadow Warrior",
-                GridImageHash = GameEnum.Wang.GetUniqueHash(),
-                Author = "3D Realms",
-                ReleaseDate = new(1997, 09, 16),
-                Description = """
-                    **Shadow Warrior** is a first-person shooter developed by **3D Realms** and released on May 13, 1997 by **GT Interactive**.
-                    
-                    The premise of Shadow Warrior is that the protagonist, Chinese-Japanese, Lo Wang, worked as a bodyguard for Zilla Enterprises, a conglomerate that had power over every major industry in Japan.
-                    However, this led to corruption, and Master Zilla - the president - planned to conquer Japan using creatures from the "dark side".
-                    In discovery of this, Lo Wang quit his job as a bodyguard. Master Zilla realized that not having a warrior as powerful as Lo Wang would be dangerous, and sent his creatures to battle Lo Wang.
-                    """,
-                PathToFile = null,
-                SupportedGame = new(GameEnum.Wang),
-                RequiredFeatures = null,
-                DependentAddons = null,
-                IncompatibleAddons = null,
-                MainDef = null,
-                AdditionalDefs = null,
-                StartMap = null,
-                PreviewImageHash = null,
-                IsUnpacked = false,
-                Executables = null,
-                IsFavorite = _config.FavoriteAddons.Contains(version),
-                Options = null
-            });
+            campaigns.Add(
+                version, new GenericCampaign()
+                {
+                    AddonId = version,
+                    Type = AddonTypeEnum.Official,
+                    Title = "Shadow Warrior",
+                    GridImageHash = GameEnum.Wang.GetUniqueHash(),
+                    Author = "3D Realms",
+                    ReleaseDate = new(1997, 09, 16),
+                    Description = """
+                        **Shadow Warrior** is a first-person shooter developed by **3D Realms** and released on May 13, 1997 by **GT Interactive**.
+
+                        The premise of Shadow Warrior is that the protagonist, Chinese-Japanese, Lo Wang, worked as a bodyguard for Zilla Enterprises, a conglomerate that had power over every major industry in Japan.
+                        However, this led to corruption, and Master Zilla - the president - planned to conquer Japan using creatures from the "dark side".
+                        In discovery of this, Lo Wang quit his job as a bodyguard. Master Zilla realized that not having a warrior as powerful as Lo Wang would be dangerous, and sent his creatures to battle Lo Wang.
+                        """,
+                    FileInfo = null,
+                    SupportedGame = new(GameEnum.Wang),
+                    RequiredFeatures = null,
+                    DependentAddons = null,
+                    IncompatibleAddons = null,
+                    MainDef = null,
+                    AdditionalDefs = null,
+                    StartMap = null,
+                    PreviewImageHash = null,
+                    Executables = null,
+                    IsFavorite = _config.FavoriteAddons.Contains(version),
+                    Options = null
+                }
+                );
         }
 
         return campaigns;
     }
 
 
-    /// <inheritdoc/>
+    /// <summary>
+    ///     Retrieves the original Ion Fury campaign, including Aftershock if detected.
+    /// </summary>
     private Dictionary<AddonId, BaseAddon> GetFuryCampaigns(BaseGame game)
     {
         if (game is not FuryGame fGame)
@@ -502,45 +528,46 @@ public sealed class OriginalCampaignsProvider
             var furyId = nameof(GameEnum.Fury).ToLower();
             AddonId version = new(furyId, null);
 
-            campaigns.Add(version, new DukeCampaign()
-            {
-                AddonId = version,
-                Type = AddonTypeEnum.Official,
-                Title = IsAftershock(fGame) ? "Ion Fury: Aftershock" : "Ion Fury",
-                GridImageHash = IsAftershock(fGame) ? "Aftershock".GetHashCode() : GameEnum.Fury.GetUniqueHash(),
-                Author = "Voidpoint, LLC",
-                ReleaseDate = new(2019, 08, 15),
-                Description = """
-                    **Ion Fury** (originally titled Ion Maiden) is a 2019 cyberpunk first-person shooter developed by **Voidpoint** and published by **3D Realms**.
+            campaigns.Add(
+                version, new DukeCampaign()
+                {
+                    AddonId = version,
+                    Type = AddonTypeEnum.Official,
+                    Title = IsAftershock(fGame) ? "Ion Fury: Aftershock" : "Ion Fury",
+                    GridImageHash = IsAftershock(fGame) ? "Aftershock".GetHashCode() : GameEnum.Fury.GetUniqueHash(),
+                    Author = "Voidpoint, LLC",
+                    ReleaseDate = new(2019, 08, 15),
+                    Description = """
+                        **Ion Fury** (originally titled Ion Maiden) is a 2019 cyberpunk first-person shooter developed by **Voidpoint** and published by **3D Realms**.
 
-                    It is a prequel to the 2016 video game Bombshell. Ion Fury runs on a modified version of Ken Silverman's Build engine and is the first original commercial game to utilize the engine in 20 years, the previous being World War II GI.
+                        It is a prequel to the 2016 video game Bombshell. Ion Fury runs on a modified version of Ken Silverman's Build engine and is the first original commercial game to utilize the engine in 20 years, the previous being World War II GI.
 
-                    You assume the role of Shelly "Bombshell" Harrison, a bomb disposal expert aligned to the Global Defense Force. Dr. Jadus Heskel, a transhumanist cult leader, unleashes an army of cybernetically-enhanced soldiers on the futuristic dystopian city of Neo D.C., which Shelly is tasked with fighting through.
-                    """,
-                SupportedGame = new(GameEnum.Fury),
-                RequiredFeatures = null,
-                PathToFile = null,
-                DependentAddons = null,
-                IncompatibleAddons = null,
-                MainCon = null,
-                AdditionalCons = null,
-                MainDef = null,
-                AdditionalDefs = null,
-                RTS = null,
-                StartMap = null,
-                PreviewImageHash = null,
-                IsUnpacked = false,
-                Executables = null,
-                IsFavorite = _config.FavoriteAddons.Contains(version),
-                Options = null
-            });
+                        You assume the role of Shelly "Bombshell" Harrison, a bomb disposal expert aligned to the Global Defense Force. Dr. Jadus Heskel, a transhumanist cult leader, unleashes an army of cybernetically-enhanced soldiers on the futuristic dystopian city of Neo D.C., which Shelly is tasked with fighting through.
+                        """,
+                    SupportedGame = new(GameEnum.Fury),
+                    RequiredFeatures = null,
+                    FileInfo = null,
+                    DependentAddons = null,
+                    IncompatibleAddons = null,
+                    MainCon = null,
+                    AdditionalCons = null,
+                    MainDef = null,
+                    AdditionalDefs = null,
+                    RTS = null,
+                    StartMap = null,
+                    PreviewImageHash = null,
+                    Executables = null,
+                    IsFavorite = _config.FavoriteAddons.Contains(version),
+                    Options = null
+                }
+                );
         }
 
         return campaigns;
     }
 
     /// <summary>
-    /// Is Aftershock addon installed
+    ///     Determines whether the installed Fury game is the Aftershock expansion by checking the grpinfo file content.
     /// </summary>
     private bool IsAftershock(FuryGame fGame)
     {
@@ -562,7 +589,9 @@ public sealed class OriginalCampaignsProvider
     }
 
 
-    /// <inheritdoc/>
+    /// <summary>
+    ///     Retrieves the original Redneck Rampage campaigns including the base game, Route 66, and Rides Again.
+    /// </summary>
     private Dictionary<AddonId, BaseAddon> GetRedneckCampaigns(BaseGame game)
     {
         if (game is not RedneckGame rGame)
@@ -578,26 +607,104 @@ public sealed class OriginalCampaignsProvider
                 var redneckId = nameof(GameEnum.Redneck).ToLower();
                 AddonId version = new(redneckId, null);
 
-                campaigns.Add(version, new DukeCampaign()
+                campaigns.Add(
+                    version, new DukeCampaign()
+                    {
+                        AddonId = version,
+                        Type = AddonTypeEnum.Official,
+                        Title = "Redneck Rampage",
+                        GridImageHash = GameEnum.Redneck.GetUniqueHash(),
+                        Author = "Xatrix Entertainment",
+                        ReleaseDate = new(1997, 04, 30),
+                        Description = """
+                            **Redneck Rampage** is a 1997 first-person shooter game developed by **Xatrix Entertainment** and published by **Interplay**.
+                            The game is a first-person shooter with a variety of weapons and levels, and has a hillbilly theme, primarily taking place in a fictional Arkansas town.
+                            Many of the weapons and power-ups border on the nonsensical, and in some ways the game is a parody of both first-person shooter games and rural American life.
+
+                            The game's plot revolves around two brothers, Leonard and Bubba, fighting through the fictional town of Hickston, Arkansas to rescue their prized pig Bessie and thwart an alien invasion.
+                            The brothers battle through such locales as a meat packing plant and a trailer park, and battle evil clones of their neighbors. There are also male and female alien enemies.
+                            The bosses are the Assface and the leader of the alien invasion, the Queen Vixen.
+                            """,
+                        SupportedGame = new(GameEnum.Redneck),
+                        RequiredFeatures = null,
+                        FileInfo = null,
+                        DependentAddons = null,
+                        IncompatibleAddons = null,
+                        MainCon = null,
+                        AdditionalCons = null,
+                        MainDef = null,
+                        AdditionalDefs = null,
+                        RTS = null,
+                        StartMap = null,
+                        PreviewImageHash = null,
+                        Executables = null,
+                        IsFavorite = _config.FavoriteAddons.Contains(version),
+                        Options = null
+                    }
+                    );
+            }
+
+            if (rGame.IsRoute66Installed)
+            {
+                var redneckR66Id = nameof(RedneckAddonEnum.Route66).ToLower();
+                AddonId version = new(redneckR66Id, null);
+
+                campaigns.Add(
+                    version, new DukeCampaign()
+                    {
+                        AddonId = version,
+                        Type = AddonTypeEnum.Official,
+                        Title = "Route 66",
+                        GridImageHash = RedneckAddonEnum.Route66.GetUniqueHash(),
+                        Author = "Sunstorm Interactive",
+                        ReleaseDate = new(1998, 03, 13),
+                        Description = """
+                            **Redneck Rampage: Suckin' Grits on Route 66** is a 12-level expansion pack for Redneck Rampage. It was developed by Sunstorm Interactive and released on December 19, 1997.
+                            The add-on contains several new locations and textures, as well as a new ending.
+                            """,
+                        SupportedGame = new(GameEnum.Redneck),
+                        RequiredFeatures = null,
+                        FileInfo = null,
+                        DependentAddons = null,
+                        IncompatibleAddons = null,
+                        MainCon = null,
+                        AdditionalCons = null,
+                        MainDef = null,
+                        AdditionalDefs = null,
+                        RTS = null,
+                        StartMap = null,
+                        PreviewImageHash = null,
+                        Executables = null,
+                        IsFavorite = _config.FavoriteAddons.Contains(version),
+                        Options = null
+                    }
+                    );
+            }
+        }
+
+        if (rGame.IsAgainInstalled)
+        {
+            var redneckRaId = nameof(GameEnum.RidesAgain).ToLower();
+            AddonId version = new(redneckRaId, null);
+
+            campaigns.Add(
+                version, new DukeCampaign()
                 {
                     AddonId = version,
                     Type = AddonTypeEnum.Official,
-                    Title = "Redneck Rampage",
-                    GridImageHash = GameEnum.Redneck.GetUniqueHash(),
+                    Title = "Rides Again",
+                    GridImageHash = GameEnum.RidesAgain.GetUniqueHash(),
                     Author = "Xatrix Entertainment",
-                    ReleaseDate = new(1997, 04, 30),
+                    ReleaseDate = new(1998, 05, 15),
                     Description = """
-                        **Redneck Rampage** is a 1997 first-person shooter game developed by **Xatrix Entertainment** and published by **Interplay**.
-                        The game is a first-person shooter with a variety of weapons and levels, and has a hillbilly theme, primarily taking place in a fictional Arkansas town.
-                        Many of the weapons and power-ups border on the nonsensical, and in some ways the game is a parody of both first-person shooter games and rural American life.
+                        **Redneck Rampage Rides Again** is a sequel to Redneck Rampage developed by **Xatrix Entertainment** and published by **Interplay Entertainment** for MS-DOS in 1998.
 
-                        The game's plot revolves around two brothers, Leonard and Bubba, fighting through the fictional town of Hickston, Arkansas to rescue their prized pig Bessie and thwart an alien invasion.
-                        The brothers battle through such locales as a meat packing plant and a trailer park, and battle evil clones of their neighbors. There are also male and female alien enemies.
-                        The bosses are the Assface and the leader of the alien invasion, the Queen Vixen.
+                        After Leonard and Bubba crash-land a UFO, they find themselves in the middle of the desert.
+                        Along the way, they are hunted by aliens and must blast their way through jackalope farms, Disgraceland, a riverboat, a brothel and various other locales.
                         """,
-                    SupportedGame = new(GameEnum.Redneck),
+                    SupportedGame = new(GameEnum.RidesAgain),
                     RequiredFeatures = null,
-                    PathToFile = null,
+                    FileInfo = null,
                     DependentAddons = null,
                     IncompatibleAddons = null,
                     MainCon = null,
@@ -607,93 +714,20 @@ public sealed class OriginalCampaignsProvider
                     RTS = null,
                     StartMap = null,
                     PreviewImageHash = null,
-                    IsUnpacked = false,
                     Executables = null,
                     IsFavorite = _config.FavoriteAddons.Contains(version),
                     Options = null
-                });
-            }
-
-            if (rGame.IsRoute66Installed)
-            {
-                var redneckR66Id = nameof(RedneckAddonEnum.Route66).ToLower();
-                AddonId version = new(redneckR66Id, null);
-
-                campaigns.Add(version, new DukeCampaign()
-                {
-                    AddonId = version,
-                    Type = AddonTypeEnum.Official,
-                    Title = "Route 66",
-                    GridImageHash = RedneckAddonEnum.Route66.GetUniqueHash(),
-                    Author = "Sunstorm Interactive",
-                    ReleaseDate = new(1998, 03, 13),
-                    Description = """
-                        **Redneck Rampage: Suckin' Grits on Route 66** is a 12-level expansion pack for Redneck Rampage. It was developed by Sunstorm Interactive and released on December 19, 1997.
-                        The add-on contains several new locations and textures, as well as a new ending.
-                        """,
-                    SupportedGame = new(GameEnum.Redneck),
-                    RequiredFeatures = null,
-                    PathToFile = null,
-                    DependentAddons = new Dictionary<string, string?>() { { nameof(RedneckAddonEnum.Route66), null } },
-                    IncompatibleAddons = null,
-                    MainCon = null,
-                    AdditionalCons = null,
-                    MainDef = null,
-                    AdditionalDefs = null,
-                    RTS = null,
-                    StartMap = null,
-                    PreviewImageHash = null,
-                    IsUnpacked = false,
-                    Executables = null,
-                    IsFavorite = _config.FavoriteAddons.Contains(version),
-                    Options = null
-                });
-            }
-        }
-
-        if (rGame.IsAgainInstalled)
-        {
-            var redneckRaId = nameof(GameEnum.RidesAgain).ToLower();
-            AddonId version = new(redneckRaId, null);
-
-            campaigns.Add(version, new DukeCampaign()
-            {
-                AddonId = version,
-                Type = AddonTypeEnum.Official,
-                Title = "Rides Again",
-                GridImageHash = GameEnum.RidesAgain.GetUniqueHash(),
-                Author = "Xatrix Entertainment",
-                ReleaseDate = new(1998, 05, 15),
-                Description = """
-                    **Redneck Rampage Rides Again** is a sequel to Redneck Rampage developed by **Xatrix Entertainment** and published by **Interplay Entertainment** for MS-DOS in 1998.
-
-                    After Leonard and Bubba crash-land a UFO, they find themselves in the middle of the desert.
-                    Along the way, they are hunted by aliens and must blast their way through jackalope farms, Disgraceland, a riverboat, a brothel and various other locales.
-                    """,
-                SupportedGame = new(GameEnum.RidesAgain),
-                RequiredFeatures = null,
-                PathToFile = null,
-                DependentAddons = null,
-                IncompatibleAddons = null,
-                MainCon = null,
-                AdditionalCons = null,
-                MainDef = null,
-                AdditionalDefs = null,
-                RTS = null,
-                StartMap = null,
-                PreviewImageHash = null,
-                IsUnpacked = false,
-                Executables = null,
-                IsFavorite = _config.FavoriteAddons.Contains(version),
-                Options = null
-            });
+                }
+                );
         }
 
         return campaigns;
     }
 
 
-    /// <inheritdoc/>
+    /// <summary>
+    ///     Retrieves the original NAM campaign.
+    /// </summary>
     private Dictionary<AddonId, BaseAddon> GetNamCampaigns(BaseGame game)
     {
         if (game is not NamGame nGame)
@@ -708,49 +742,52 @@ public sealed class OriginalCampaignsProvider
             var namId = nameof(GameEnum.NAM).ToLower();
             AddonId version = new(namId, null);
 
-            campaigns.Add(version, new DukeCampaign()
-            {
-                AddonId = version,
-                Type = AddonTypeEnum.Official,
-                Title = "NAM",
-                GridImageHash = GameEnum.NAM.GetUniqueHash(),
-                Author = "TNT Team",
-                ReleaseDate = new(1998, 07, 31),
-                Description = """
-                    You are Alan 'The Bear' Westmoreland, Marine Corps sergeant. The trouble starts on a deadly Viet Cong raid. Here the jungle is your battleground.
+            campaigns.Add(
+                version, new DukeCampaign()
+                {
+                    AddonId = version,
+                    Type = AddonTypeEnum.Official,
+                    Title = "NAM",
+                    GridImageHash = GameEnum.NAM.GetUniqueHash(),
+                    Author = "TNT Team",
+                    ReleaseDate = new(1998, 07, 31),
+                    Description = """
+                        You are Alan 'The Bear' Westmoreland, Marine Corps sergeant. The trouble starts on a deadly Viet Cong raid. Here the jungle is your battleground.
 
-                    Your mission, survive.
+                        Your mission, survive.
 
-                    NAM captures all of intensity and paranoia of jungle warfare. Fire-fights, ambushes, booby-traps, snipers, air-strikes, anti-personnel mines AND MORE.
+                        NAM captures all of intensity and paranoia of jungle warfare. Fire-fights, ambushes, booby-traps, snipers, air-strikes, anti-personnel mines AND MORE.
 
-                    Feel the tropical heat and the fear of tunnel skirmishes, paddy killing fields, swamps and thick jungles.
+                        Feel the tropical heat and the fear of tunnel skirmishes, paddy killing fields, swamps and thick jungles.
 
-                    NAM is the first game of its kind. NAM IS WAR!
-                    """,
-                SupportedGame = new(GameEnum.NAM),
-                RequiredFeatures = null,
-                PathToFile = null,
-                DependentAddons = null,
-                IncompatibleAddons = null,
-                MainCon = null,
-                AdditionalCons = null,
-                RTS = null,
-                MainDef = null,
-                AdditionalDefs = null,
-                StartMap = null,
-                PreviewImageHash = null,
-                IsUnpacked = false,
-                Executables = null,
-                IsFavorite = _config.FavoriteAddons.Contains(version),
-                Options = null
-            });
+                        NAM is the first game of its kind. NAM IS WAR!
+                        """,
+                    SupportedGame = new(GameEnum.NAM),
+                    RequiredFeatures = null,
+                    FileInfo = null,
+                    DependentAddons = null,
+                    IncompatibleAddons = null,
+                    MainCon = null,
+                    AdditionalCons = null,
+                    RTS = null,
+                    MainDef = null,
+                    AdditionalDefs = null,
+                    StartMap = null,
+                    PreviewImageHash = null,
+                    Executables = null,
+                    IsFavorite = _config.FavoriteAddons.Contains(version),
+                    Options = null
+                }
+                );
         }
 
         return campaigns;
     }
 
 
-    /// <inheritdoc/>
+    /// <summary>
+    ///     Retrieves the original World War II GI campaign including the Platoon Leader add-on.
+    /// </summary>
     private Dictionary<AddonId, BaseAddon> GetWw2Campaigns(BaseGame game)
     {
         if (game is not WW2GIGame wGame)
@@ -765,38 +802,39 @@ public sealed class OriginalCampaignsProvider
             var ww2id = nameof(GameEnum.WW2GI).ToLower();
             AddonId version = new(ww2id, null);
 
-            campaigns.Add(version, new DukeCampaign()
-            {
-                AddonId = version,
-                Type = AddonTypeEnum.Official,
-                Title = "World War II GI",
-                GridImageHash = GameEnum.WW2GI.GetUniqueHash(),
-                Author = "TNT Team",
-                ReleaseDate = new(1999, 03, 15),
-                Description = """
-                    **WWII GI** is the invasion of Normandy. The paranoia. The fear. the intensity that was D-Day. You will experience it first hand.
+            campaigns.Add(
+                version, new DukeCampaign()
+                {
+                    AddonId = version,
+                    Type = AddonTypeEnum.Official,
+                    Title = "World War II GI",
+                    GridImageHash = GameEnum.WW2GI.GetUniqueHash(),
+                    Author = "TNT Team",
+                    ReleaseDate = new(1999, 03, 15),
+                    Description = """
+                        **WWII GI** is the invasion of Normandy. The paranoia. The fear. the intensity that was D-Day. You will experience it first hand.
 
-                    You're in the 101st Airborne, part of the first wave of allied forces to touch down in a no-man's land of twisted shrapnel, dead bodies and heavily armed Nazi-infested machine-gun bunkers. Now you must fight your way through hostile beaches, abandoned country roads with tall, sniper infested hedgerows, the narrow streets of devastated villages and more.
+                        You're in the 101st Airborne, part of the first wave of allied forces to touch down in a no-man's land of twisted shrapnel, dead bodies and heavily armed Nazi-infested machine-gun bunkers. Now you must fight your way through hostile beaches, abandoned country roads with tall, sniper infested hedgerows, the narrow streets of devastated villages and more.
 
-                    This is D-Day!
-                    """,
-                SupportedGame = new(GameEnum.WW2GI),
-                RequiredFeatures = null,
-                PathToFile = null,
-                DependentAddons = null,
-                IncompatibleAddons = null,
-                MainCon = null,
-                AdditionalCons = null,
-                RTS = null,
-                MainDef = null,
-                AdditionalDefs = null,
-                StartMap = null,
-                PreviewImageHash = null,
-                IsUnpacked = false,
-                Executables = null,
-                IsFavorite = _config.FavoriteAddons.Contains(version),
-                Options = null
-            });
+                        This is D-Day!
+                        """,
+                    SupportedGame = new(GameEnum.WW2GI),
+                    RequiredFeatures = null,
+                    FileInfo = null,
+                    DependentAddons = null,
+                    IncompatibleAddons = null,
+                    MainCon = null,
+                    AdditionalCons = null,
+                    RTS = null,
+                    MainDef = null,
+                    AdditionalDefs = null,
+                    StartMap = null,
+                    PreviewImageHash = null,
+                    Executables = null,
+                    IsFavorite = _config.FavoriteAddons.Contains(version),
+                    Options = null
+                }
+                );
         }
 
         if (wGame.IsPlatoonInstalled)
@@ -804,43 +842,46 @@ public sealed class OriginalCampaignsProvider
             var platoon = nameof(WW2GIAddonEnum.Platoon).ToLower();
             AddonId version = new(platoon, null);
 
-            campaigns.Add(version, new DukeCampaign()
-            {
-                AddonId = version,
-                Type = AddonTypeEnum.Official,
-                Title = "Platoon Leader",
-                GridImageHash = WW2GIAddonEnum.Platoon.GetUniqueHash(),
-                Author = "TNT Team",
-                ReleaseDate = null,
-                Description = """
-                    **Platoon Leader** is an add-on for GT Interactive game WWII GI.
+            campaigns.Add(
+                version, new DukeCampaign()
+                {
+                    AddonId = version,
+                    Type = AddonTypeEnum.Official,
+                    Title = "Platoon Leader",
+                    GridImageHash = WW2GIAddonEnum.Platoon.GetUniqueHash(),
+                    Author = "TNT Team",
+                    ReleaseDate = null,
+                    Description = """
+                        **Platoon Leader** is an add-on for GT Interactive game WWII GI.
 
-                    This add-on features three single-player-only levels: one WWII Pacific and two Vietnam War scenarios. Includes many new effects and features not seen in the game WWII GI.
-                    """,
-                SupportedGame = new(GameEnum.WW2GI),
-                RequiredFeatures = null,
-                PathToFile = null,
-                DependentAddons = null,
-                IncompatibleAddons = null,
-                MainCon = null,
-                AdditionalCons = null,
-                RTS = null,
-                MainDef = null,
-                AdditionalDefs = null,
-                StartMap = null,
-                PreviewImageHash = null,
-                IsUnpacked = false,
-                Executables = null,
-                IsFavorite = _config.FavoriteAddons.Contains(version),
-                Options = null
-            });
+                        This add-on features three single-player-only levels: one WWII Pacific and two Vietnam War scenarios. Includes many new effects and features not seen in the game WWII GI.
+                        """,
+                    SupportedGame = new(GameEnum.WW2GI),
+                    RequiredFeatures = null,
+                    FileInfo = null,
+                    DependentAddons = null,
+                    IncompatibleAddons = null,
+                    MainCon = null,
+                    AdditionalCons = null,
+                    RTS = null,
+                    MainDef = null,
+                    AdditionalDefs = null,
+                    StartMap = null,
+                    PreviewImageHash = null,
+                    Executables = null,
+                    IsFavorite = _config.FavoriteAddons.Contains(version),
+                    Options = null
+                }
+                );
         }
 
         return campaigns;
     }
 
 
-    /// <inheritdoc/>
+    /// <summary>
+    ///     Retrieves the original TekWar campaign.
+    /// </summary>
     private Dictionary<AddonId, BaseAddon> GetTekWarCampaigns(BaseGame game)
     {
         if (game is not TekWarGame tGame)
@@ -855,43 +896,46 @@ public sealed class OriginalCampaignsProvider
             var tekwarId = nameof(GameEnum.TekWar).ToLower();
             AddonId version = new(tekwarId, null);
 
-            campaigns.Add(version, new DukeCampaign()
-            {
-                AddonId = version,
-                Type = AddonTypeEnum.Official,
-                Title = "TekWar",
-                GridImageHash = GameEnum.TekWar.GetUniqueHash(),
-                Author = "Capstone Software",
-                ReleaseDate = new(1995, 10, 16),
-                Description = """
-                    You're an ex-cop who was sentenced to cryo sleep. When you awake you are recruited by the Cosmos Detective Agency as a hitman. Why? Cause there's a dangerous new drug on the streets of New LA: Tek!
-                    
-                    Take out the seven Tek Lords and their minions in 7 missions, but spare those innocent civilians.
-                    """,
-                SupportedGame = new(GameEnum.TekWar),
-                RequiredFeatures = null,
-                PathToFile = null,
-                DependentAddons = null,
-                IncompatibleAddons = null,
-                MainCon = null,
-                AdditionalCons = null,
-                RTS = null,
-                MainDef = null,
-                AdditionalDefs = null,
-                StartMap = null,
-                PreviewImageHash = null,
-                IsUnpacked = false,
-                Executables = null,
-                IsFavorite = _config.FavoriteAddons.Contains(version),
-                Options = null
-            });
+            campaigns.Add(
+                version, new DukeCampaign()
+                {
+                    AddonId = version,
+                    Type = AddonTypeEnum.Official,
+                    Title = "TekWar",
+                    GridImageHash = GameEnum.TekWar.GetUniqueHash(),
+                    Author = "Capstone Software",
+                    ReleaseDate = new(1995, 10, 16),
+                    Description = """
+                        You're an ex-cop who was sentenced to cryo sleep. When you awake you are recruited by the Cosmos Detective Agency as a hitman. Why? Cause there's a dangerous new drug on the streets of New LA: Tek!
+
+                        Take out the seven Tek Lords and their minions in 7 missions, but spare those innocent civilians.
+                        """,
+                    SupportedGame = new(GameEnum.TekWar),
+                    RequiredFeatures = null,
+                    FileInfo = null,
+                    DependentAddons = null,
+                    IncompatibleAddons = null,
+                    MainCon = null,
+                    AdditionalCons = null,
+                    RTS = null,
+                    MainDef = null,
+                    AdditionalDefs = null,
+                    StartMap = null,
+                    PreviewImageHash = null,
+                    Executables = null,
+                    IsFavorite = _config.FavoriteAddons.Contains(version),
+                    Options = null
+                }
+                );
         }
 
         return campaigns;
     }
 
 
-    /// <inheritdoc/>
+    /// <summary>
+    ///     Retrieves the original Powerslave campaign.
+    /// </summary>
     private Dictionary<AddonId, BaseAddon> GetSlaveCampaigns(BaseGame game)
     {
         if (game is not SlaveGame sGame)
@@ -906,46 +950,49 @@ public sealed class OriginalCampaignsProvider
             var slaveId = nameof(GameEnum.Slave).ToLower();
             AddonId version = new(slaveId, null);
 
-            campaigns.Add(version, new GenericCampaign()
-            {
-                AddonId = version,
-                Type = AddonTypeEnum.Official,
-                Title = "Powerslave",
-                GridImageHash = GameEnum.Slave.GetUniqueHash(),
-                Author = "Lobotomy Software",
-                ReleaseDate = new(1996, 09, 19),
-                Description = """
-                    **PowerSlave**, known as **Exhumed** in Europe and **1999 AD: Resurrection of the Pharaoh** in Japan, is a first-person shooter video game developed by **Lobotomy Software**
-                    and published by **Playmates Interactive Entertainment** in North America, and **BMG Interactive** in Europe and Japan.
-                    It was released in North America, Europe and Japan, for the Sega Saturn, PlayStation, and MS-DOS over the course of a year from late 1996 to late 1997.
+            campaigns.Add(
+                version, new GenericCampaign()
+                {
+                    AddonId = version,
+                    Type = AddonTypeEnum.Official,
+                    Title = "Powerslave",
+                    GridImageHash = GameEnum.Slave.GetUniqueHash(),
+                    Author = "Lobotomy Software",
+                    ReleaseDate = new(1996, 09, 19),
+                    Description = """
+                        **PowerSlave**, known as **Exhumed** in Europe and **1999 AD: Resurrection of the Pharaoh** in Japan, is a first-person shooter video game developed by **Lobotomy Software**
+                        and published by **Playmates Interactive Entertainment** in North America, and **BMG Interactive** in Europe and Japan.
+                        It was released in North America, Europe and Japan, for the Sega Saturn, PlayStation, and MS-DOS over the course of a year from late 1996 to late 1997.
 
-                    PowerSlave is set in and around the ancient Egyptian city of Karnak in the late 20th century. The city has been seized by unknown forces, with a special crack team of
-                    hardened soldiers sent to the valley of Karnak, to uncover the source of this trouble. However, on the journey there, the player's helicopter is shot down and the player barely escapes.
-                    The player is sent in to the valley as the hero to save Karnak and the World. The player must battle hordes of extraterrestrial insectoid beings known as the Kilmaat, as well as their
-                    various minions, which include mummies, Anubis soldiers, scorpions, and evil spirits. The player's course of action is directed by the spirit of King Ramses, whose mummy was exhumed
-                    from its tomb by the Kilmaat, who seek to resurrect him and use his powers to control the world.
-                    """,
-                SupportedGame = new(GameEnum.Slave),
-                RequiredFeatures = null,
-                PathToFile = null,
-                DependentAddons = null,
-                IncompatibleAddons = null,
-                MainDef = null,
-                AdditionalDefs = null,
-                StartMap = null,
-                PreviewImageHash = null,
-                IsUnpacked = false,
-                Executables = null,
-                IsFavorite = _config.FavoriteAddons.Contains(version),
-                Options = null
-            });
+                        PowerSlave is set in and around the ancient Egyptian city of Karnak in the late 20th century. The city has been seized by unknown forces, with a special crack team of
+                        hardened soldiers sent to the valley of Karnak, to uncover the source of this trouble. However, on the journey there, the player's helicopter is shot down and the player barely escapes.
+                        The player is sent in to the valley as the hero to save Karnak and the World. The player must battle hordes of extraterrestrial insectoid beings known as the Kilmaat, as well as their
+                        various minions, which include mummies, Anubis soldiers, scorpions, and evil spirits. The player's course of action is directed by the spirit of King Ramses, whose mummy was exhumed
+                        from its tomb by the Kilmaat, who seek to resurrect him and use his powers to control the world.
+                        """,
+                    SupportedGame = new(GameEnum.Slave),
+                    RequiredFeatures = null,
+                    FileInfo = null,
+                    DependentAddons = null,
+                    IncompatibleAddons = null,
+                    MainDef = null,
+                    AdditionalDefs = null,
+                    StartMap = null,
+                    PreviewImageHash = null,
+                    Executables = null,
+                    IsFavorite = _config.FavoriteAddons.Contains(version),
+                    Options = null
+                }
+                );
         }
 
         return campaigns;
     }
 
 
-    /// <inheritdoc/>
+    /// <summary>
+    ///     Retrieves the original Witchaven campaigns including the base game and Witchaven II.
+    /// </summary>
     private Dictionary<AddonId, BaseAddon> GetWitchavenCampaigns(BaseGame game)
     {
         if (game is not WitchavenGame wGame)
@@ -960,35 +1007,36 @@ public sealed class OriginalCampaignsProvider
             var whId = nameof(GameEnum.Witchaven).ToLower();
             AddonId version = new(whId, null);
 
-            campaigns.Add(version, new GenericCampaign()
-            {
-                AddonId = version,
-                Type = AddonTypeEnum.Official,
-                Title = "Witchaven",
-                GridImageHash = GameEnum.Witchaven.GetUniqueHash(),
-                Author = "Capstone Software",
-                ReleaseDate = new(1995, 09, 30),
-                Description = """
-                    Descend into a dark and gruesome nightmare!
-                    
-                    You alone must face the evil within the volcanic pit of the Island of Char, toward the mystical lair of Witchaven. Confront witches that have cast a shadow of evil spells shrouding you in the never-ending darkness. Make use of your magic, might, and mind as you engage in bloody warfare with vile demons and monsters. Use medieval weapons to destroy these creatures of the night and cease the chaos.
-                    
-                    Dare to enter this 3D Hell... Dare to enter Witchaven!
-                    """,
-                SupportedGame = new(GameEnum.Witchaven),
-                RequiredFeatures = null,
-                PathToFile = null,
-                DependentAddons = null,
-                IncompatibleAddons = null,
-                MainDef = null,
-                AdditionalDefs = null,
-                StartMap = null,
-                PreviewImageHash = null,
-                IsUnpacked = false,
-                Executables = null,
-                IsFavorite = _config.FavoriteAddons.Contains(version),
-                Options = null
-            });
+            campaigns.Add(
+                version, new GenericCampaign()
+                {
+                    AddonId = version,
+                    Type = AddonTypeEnum.Official,
+                    Title = "Witchaven",
+                    GridImageHash = GameEnum.Witchaven.GetUniqueHash(),
+                    Author = "Capstone Software",
+                    ReleaseDate = new(1995, 09, 30),
+                    Description = """
+                        Descend into a dark and gruesome nightmare!
+
+                        You alone must face the evil within the volcanic pit of the Island of Char, toward the mystical lair of Witchaven. Confront witches that have cast a shadow of evil spells shrouding you in the never-ending darkness. Make use of your magic, might, and mind as you engage in bloody warfare with vile demons and monsters. Use medieval weapons to destroy these creatures of the night and cease the chaos.
+
+                        Dare to enter this 3D Hell... Dare to enter Witchaven!
+                        """,
+                    SupportedGame = new(GameEnum.Witchaven),
+                    RequiredFeatures = null,
+                    FileInfo = null,
+                    DependentAddons = null,
+                    IncompatibleAddons = null,
+                    MainDef = null,
+                    AdditionalDefs = null,
+                    StartMap = null,
+                    PreviewImageHash = null,
+                    Executables = null,
+                    IsFavorite = _config.FavoriteAddons.Contains(version),
+                    Options = null
+                }
+                );
         }
 
         if (wGame.IsWitchaven2Installed)
@@ -996,37 +1044,38 @@ public sealed class OriginalCampaignsProvider
             var wh2Id = nameof(GameEnum.Witchaven2).ToLower();
             AddonId version = new(wh2Id, null);
 
-            campaigns.Add(version, new GenericCampaign()
-            {
-                AddonId = version,
-                Type = AddonTypeEnum.Official,
-                Title = "Witchaven II",
-                GridImageHash = GameEnum.Witchaven2.GetUniqueHash(),
-                Author = "Capstone Software",
-                ReleaseDate = new(1996, 05, 6),
-                Description = """
-                    The witches have been destroyed in their lair on the Island of Char!
-                    
-                    Returning to your homeland, you are greeted with newborn hope, pride, and great celebration. After the revelry, you awaken to a dawn filled with an eerie silence that looms in the still air. Your countrymen are gone!
+            campaigns.Add(
+                version, new GenericCampaign()
+                {
+                    AddonId = version,
+                    Type = AddonTypeEnum.Official,
+                    Title = "Witchaven II",
+                    GridImageHash = GameEnum.Witchaven2.GetUniqueHash(),
+                    Author = "Capstone Software",
+                    ReleaseDate = new(1996, 05, 6),
+                    Description = """
+                        The witches have been destroyed in their lair on the Island of Char!
 
-                    The great witch, Circa-Argoth has taken them to avenge the death of her sister. You have only yourself and your foolish meddling to blame. But, you are not meant to die... yet!
-                    
-                    Alone in the land that you have fought so fiercely to protect, you must gather your strength and use your anger to fight for Blood Vengeance.
-                    """,
-                SupportedGame = new(GameEnum.Witchaven2),
-                RequiredFeatures = null,
-                PathToFile = null,
-                DependentAddons = null,
-                IncompatibleAddons = null,
-                MainDef = null,
-                AdditionalDefs = null,
-                StartMap = null,
-                PreviewImageHash = null,
-                IsUnpacked = false,
-                Executables = null,
-                IsFavorite = _config.FavoriteAddons.Contains(version),
-                Options = null
-            });
+                        Returning to your homeland, you are greeted with newborn hope, pride, and great celebration. After the revelry, you awaken to a dawn filled with an eerie silence that looms in the still air. Your countrymen are gone!
+
+                        The great witch, Circa-Argoth has taken them to avenge the death of her sister. You have only yourself and your foolish meddling to blame. But, you are not meant to die... yet!
+
+                        Alone in the land that you have fought so fiercely to protect, you must gather your strength and use your anger to fight for Blood Vengeance.
+                        """,
+                    SupportedGame = new(GameEnum.Witchaven2),
+                    RequiredFeatures = null,
+                    FileInfo = null,
+                    DependentAddons = null,
+                    IncompatibleAddons = null,
+                    MainDef = null,
+                    AdditionalDefs = null,
+                    StartMap = null,
+                    PreviewImageHash = null,
+                    Executables = null,
+                    IsFavorite = _config.FavoriteAddons.Contains(version),
+                    Options = null
+                }
+                );
         }
 
         return campaigns;

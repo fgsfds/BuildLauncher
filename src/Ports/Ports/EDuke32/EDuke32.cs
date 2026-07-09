@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.Diagnostics;
+using System.Reflection;
 using System.Text;
 using Addons.Addons;
 using Core.All.Enums;
@@ -12,80 +13,88 @@ using SharpCompress.Archives.Zip;
 namespace Ports.Ports.EDuke32;
 
 /// <summary>
-/// EDuke32 port
+///     EDuke32 port.
 /// </summary>
 public class EDuke32 : BasePort
 {
-    /// <inheritdoc/>
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="EDuke32" /> class.
+    /// </summary>
+    public EDuke32()
+    {
+        CreateWTStopgapFolder();
+    }
+
+    /// <inheritdoc />
     public override PortEnum PortEnum => PortEnum.EDuke32;
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string WinExe => "eduke32.exe";
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string LinExe => throw new NotSupportedException();
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override string Name => "EDuke32";
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string ConfigFile => "eduke32.cfg";
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string MainGrpParam => "-gamegrp ";
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string AddGrpParam => "-grp ";
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string AddDirectoryParam => "-j ";
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string AddFileParam => "-g ";
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string AddDefParam => "-mh ";
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string AddConParam => "-mx ";
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string MainDefParam => "-h ";
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string MainConParam => "-x ";
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string SkillParam => "-s";
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string AddGameDirParam => "-game_dir ";
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string AddRffParam => throw new NotSupportedException();
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string AddSndParam => throw new NotSupportedException();
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override List<GameEnum> SupportedGames =>
-        [
+    [
         GameEnum.Duke3D,
         GameEnum.NAM,
         GameEnum.WW2GI
-        ];
+    ];
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override List<string> SupportedGamesVersions =>
-        [
+    [
         nameof(DukeVersionEnum.Duke3D_13D),
         nameof(DukeVersionEnum.Duke3D_Atomic),
         nameof(DukeVersionEnum.Duke3D_WT)
-        ];
+    ];
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override List<FeatureEnum> SupportedFeatures =>
-        [
+    [
         FeatureEnum.EDuke32_CON,
         FeatureEnum.Dynamic_Lighting,
         FeatureEnum.Hightile,
@@ -94,9 +103,9 @@ public class EDuke32 : BasePort
         FeatureEnum.TROR,
         FeatureEnum.Wall_Rotate_Cstat,
         FeatureEnum.TileFromTexture
-        ];
+    ];
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override string? InstalledVersion
     {
         get
@@ -108,22 +117,23 @@ public class EDuke32 : BasePort
                 return null;
             }
 
-            return File.ReadAllText(versionFile);
+            try
+            {
+                return File.ReadAllText(versionFile);
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override bool IsSkillSelectionAvailable => true;
 
 
-    public EDuke32()
-    {
-        CreateWTStopgapFolder();
-    }
-
-
     /// <summary>
-    /// Create folder with files required for World Tour to work with EDuke32
+    ///     Creates the World Tour stopgap folder with required files if it does not exist.
     /// </summary>
     private void CreateWTStopgapFolder()
     {
@@ -153,30 +163,44 @@ public class EDuke32 : BasePort
     }
 
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override void GetSkipIntroParameter(StringBuilder sb) => sb.Append(" -quick");
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override void GetSkipStartupParameter(StringBuilder sb) => sb.Append(" -nosetup");
 
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override void BeforeStart(BaseGame game, BaseAddon campaign)
     {
-        MoveSaveFilesFromGameFolder(game, campaign);
+        MoveSaveFilesFromStorage(game, campaign);
 
-        FixConfig();
+        try
+        {
+            FixConfig();
+        }
+        catch (Exception ex)
+        {
+            Trace.WriteLine($"Error in EDuke32.FixConfig: {ex.Message}");
+        }
 
-        FixWtFiles(game, campaign);
+        try
+        {
+            FixWtFiles(game, campaign);
+        }
+        catch (Exception ex)
+        {
+            Trace.WriteLine($"Error in EDuke32.FixWtFiles: {ex.Message}");
+        }
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override void AfterEnd(BaseGame game, BaseAddon campaign)
     {
-        MoveSaveFilesToGameFolder(game, campaign);
+        MoveSaveFilesToStorage(game, campaign);
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override void GetStartCampaignArgs(StringBuilder sb, BaseGame game, BaseAddon addon)
     {
         _ = sb.Append(" -usecwd"); //don't search for steam/gog installs
@@ -225,7 +249,7 @@ public class EDuke32 : BasePort
 
 
     /// <summary>
-    /// Get startup agrs for Duke
+    ///     Gets startup arguments for Duke Nukem 3D campaigns.
     /// </summary>
     /// <param name="sb">StringBuilder</param>
     /// <param name="game">DukeGame</param>
@@ -235,6 +259,7 @@ public class EDuke32 : BasePort
         if (addon.SupportedGame.GameEnum is GameEnum.Duke64)
         {
             _ = sb.Append(@$" {AddDirectoryParam}""{Path.GetDirectoryName(game.Duke64RomPath)}"" {MainGrpParam}""{Path.GetFileName(game.Duke64RomPath)}""");
+
             return;
         }
 
@@ -297,7 +322,7 @@ public class EDuke32 : BasePort
             }
         }
 
-        if (addon.FileName is null)
+        if (addon.FileInfo is null)
         {
             return;
         }
@@ -305,6 +330,7 @@ public class EDuke32 : BasePort
         if (addon is LooseMap)
         {
             GetLooseMapArgs(sb, game, addon);
+
             return;
         }
 
@@ -335,7 +361,7 @@ public class EDuke32 : BasePort
             }
             else
             {
-                _ = sb.Append($@" {AddFileParam}""{dCamp.PathToFile}""");
+                _ = sb.Append($@" {AddFileParam}""{dCamp.FileInfo.PathToFile}""");
             }
         }
         else if (dCamp.Type is AddonTypeEnum.Map)
@@ -350,7 +376,7 @@ public class EDuke32 : BasePort
 
 
     /// <summary>
-    /// Remove leftovers from the config
+    ///     Removes leftover entries from the config file.
     /// </summary>
     protected void FixConfig()
     {
@@ -361,32 +387,36 @@ public class EDuke32 : BasePort
             return;
         }
 
-        var contents = File.ReadAllLines(config);
-
-        for (var i = 0; i < contents.Length; i++)
+        try
         {
-            if (contents[i].StartsWith("SelectedGRP", StringComparison.OrdinalIgnoreCase))
-            {
-                contents[i] = @"SelectedGRP = """"";
-                continue;
-            }
-            else if (contents[i].StartsWith("LastINI", StringComparison.OrdinalIgnoreCase))
-            {
-                contents[i] = string.Empty;
-                continue;
-            }
-            else if (contents[i].StartsWith("ModDir", StringComparison.OrdinalIgnoreCase))
-            {
-                contents[i] = string.Empty;
-                continue;
-            }
-        }
+            var contents = File.ReadAllLines(config);
 
-        File.WriteAllLines(config, contents);
+            for (var i = 0; i < contents.Length; i++)
+            {
+                if (contents[i].StartsWith("SelectedGRP", StringComparison.OrdinalIgnoreCase))
+                {
+                    contents[i] = @"SelectedGRP = """"";
+                }
+                else if (contents[i].StartsWith("LastINI", StringComparison.OrdinalIgnoreCase))
+                {
+                    contents[i] = string.Empty;
+                }
+                else if (contents[i].StartsWith("ModDir", StringComparison.OrdinalIgnoreCase))
+                {
+                    contents[i] = string.Empty;
+                }
+            }
+
+            File.WriteAllLines(config, contents);
+        }
+        catch (Exception ex)
+        {
+            Trace.WriteLine($"Error fixing EDuke32 config: {ex.Message}");
+        }
     }
 
     /// <summary>
-    /// Rename WT's ART files if custom campaign is launched
+    ///     Renames or restores Duke WT's ART files depending on the campaign.
     /// </summary>
     protected void FixWtFiles(BaseGame game, BaseAddon campaign)
     {
@@ -416,38 +446,60 @@ public class EDuke32 : BasePort
         }
         else
         {
-            if (File.Exists(art1))
-            {
-                File.Move(art1, art1r, true);
-            }
-
-            if (File.Exists(art2))
-            {
-                File.Move(art2, art2r, true);
-            }
-
-            if (File.Exists(art3))
-            {
-                File.Move(art3, art3r, true);
-            }
-
-            if (File.Exists(art4))
-            {
-                File.Move(art4, art4r, true);
-            }
+            SafeMove(art1, art1r);
+            SafeMove(art2, art2r);
+            SafeMove(art3, art3r);
+            SafeMove(art4, art4r);
         }
     }
 
-    protected override void MoveSaveFilesToGameFolder(BaseGame game, BaseAddon campaign)
+    private static void SafeMove(string source, string destination)
+    {
+        try
+        {
+            if (File.Exists(source))
+            {
+                File.Move(source, destination, true);
+            }
+        }
+        catch (Exception ex)
+        {
+            Trace.WriteLine($"Error moving file '{source}' to '{destination}': {ex.Message}");
+        }
+    }
+
+    /// <inheritdoc />
+    protected override void MoveSaveFilesFromStorage(BaseGame game, BaseAddon campaign)
+    {
+        var saveFolder = GetPathToAddonSavedGamesFolder(game.ShortName, campaign.AddonId.Id);
+
+        if (!Directory.Exists(saveFolder))
+        {
+            return;
+        }
+
+        var saves = Directory.GetFiles(saveFolder);
+
+        var firstPart = campaign.FileInfo is not null && campaign.FileInfo.IsFolder ? campaign.FileInfo.PathToFolder : InstallFolderPath;
+
+        foreach (var save in saves)
+        {
+            var destFileName = Path.Combine(firstPart, Path.GetFileName(save));
+            File.Move(save, destFileName, true);
+        }
+    }
+
+    /// <inheritdoc />
+    protected override void MoveSaveFilesToStorage(BaseGame game, BaseAddon campaign)
     {
         //copying saved games into separate folder
         var saveFolder = GetPathToAddonSavedGamesFolder(game.ShortName, campaign.AddonId.Id);
 
         string path;
 
-        if (campaign.IsUnpacked)
+        if (campaign.FileInfo is not null && campaign.FileInfo.IsFolder)
         {
-            path = Path.GetDirectoryName(campaign.PathToFile)!;
+            path = campaign.FileInfo.PathToFolder;
         }
         else
         {
@@ -466,28 +518,8 @@ public class EDuke32 : BasePort
 
         foreach (var file in files)
         {
-            var destFileName = Path.Combine(saveFolder, Path.GetFileName(file)!);
+            var destFileName = Path.Combine(saveFolder, Path.GetFileName(file));
             File.Move(file, destFileName, true);
-        }
-    }
-
-    protected override void MoveSaveFilesFromGameFolder(BaseGame game, BaseAddon campaign)
-    {
-        var saveFolder = GetPathToAddonSavedGamesFolder(game.ShortName, campaign.AddonId.Id);
-
-        if (!Directory.Exists(saveFolder))
-        {
-            return;
-        }
-
-        var saves = Directory.GetFiles(saveFolder);
-
-        string firstPart = campaign.IsUnpacked ? Path.GetDirectoryName(campaign.PathToFile)! : InstallFolderPath;
-
-        foreach (var save in saves)
-        {
-            var destFileName = Path.Combine(firstPart, Path.GetFileName(save)!);
-            File.Move(save, destFileName, true);
         }
     }
 }

@@ -7,12 +7,15 @@ using Ports.Ports;
 
 namespace Avalonia.Desktop.Helpers;
 
+/// <summary>
+///     Provides helper methods for checking port compatibility with addons.
+/// </summary>
 public static class PortsHelper
 {
     /// <summary>
-    /// Checks if addon can be run with the selected port.
+    ///     Checks if addon can be run with the selected port.
     /// </summary>
-    /// <param name="obj">Addon/</param>
+    /// <param name="obj">Addon.</param>
     /// <param name="game">Game enum.</param>
     /// <param name="port">Port.</param>
     public static bool CheckPortRequirements(object? obj, BaseGame game, BasePort port)
@@ -75,7 +78,7 @@ public static class PortsHelper
 
             if (game.GameEnum is GameEnum.Duke3D && addon.AddonId.Id.Equals(nameof(DukeAddonEnum.DukeVaca), StringComparison.OrdinalIgnoreCase))
             {
-                return File.Exists(Path.Combine(game.GameInstallFolder!, "VACATION.EXE"));
+                return game.GameInstallFolder is not null && File.Exists(Path.Combine(game.GameInstallFolder, "VACATION.EXE"));
             }
 
             if (game.GameEnum is GameEnum.Wang && addon.AddonId != new AddonId(nameof(GameEnum.Wang)))

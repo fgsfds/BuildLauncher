@@ -4,6 +4,7 @@ using Avalonia.Desktop.Helpers;
 using Avalonia.Desktop.Misc;
 using Avalonia.Desktop.ViewModels;
 using Avalonia.Interactivity;
+using Avalonia.Layout;
 using CommunityToolkit.Mvvm.Input;
 using Core.All.Enums;
 using Core.All.Helpers;
@@ -12,16 +13,35 @@ using Ports.Providers;
 
 namespace Avalonia.Desktop.Controls;
 
+/// <summary>
+///     Displays and manages campaign addons for a selected game.
+/// </summary>
 public sealed partial class CampaignsControl : UserControl
 {
+    /// <summary>
+    ///     Text for the built-in port button.
+    /// </summary>
     private const string BuiltInPortStr = "Built-in port";
+
+    /// <summary>
+    ///     Text for the custom port button.
+    /// </summary>
     private const string CustomPortStr = "Custom port";
 
-    private readonly IReadOnlyList<BasePort> _supportedPorts;
-    private readonly CampaignsViewModel _viewModel;
-    private readonly PortsProvider _portsProvider;
     private readonly BitmapsCache _bitmapsCache;
 
+    private readonly PortsProvider _portsProvider;
+
+    /// <summary>
+    ///     The list of ports that support this game.
+    /// </summary>
+    private readonly IReadOnlyList<BasePort> _supportedPorts;
+
+    private readonly CampaignsViewModel _viewModel;
+
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="CampaignsControl" /> class.
+    /// </summary>
     public CampaignsControl()
     {
         InitializeComponent();
@@ -32,6 +52,12 @@ public sealed partial class CampaignsControl : UserControl
         _bitmapsCache = null!;
     }
 
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="CampaignsControl" /> class.
+    /// </summary>
+    /// <param name="viewModel">The campaigns view model.</param>
+    /// <param name="portsProvider">The ports provider.</param>
+    /// <param name="bitmapsCache">The bitmaps cache.</param>
     public CampaignsControl(
         CampaignsViewModel viewModel,
         PortsProvider portsProvider,
@@ -45,7 +71,12 @@ public sealed partial class CampaignsControl : UserControl
         if (viewModel.Game.GameEnum is GameEnum.Duke3D)
         {
             var zhPorts = portsProvider.GetPortsThatSupportGame(GameEnum.DukeZeroHour);
-            _supportedPorts = [.. _supportedPorts, .. zhPorts];
+
+            _supportedPorts =
+            [
+                .. _supportedPorts,
+                .. zhPorts
+            ];
         }
 
         _portsProvider = portsProvider;
@@ -58,22 +89,27 @@ public sealed partial class CampaignsControl : UserControl
     }
 
     /// <summary>
-    /// Add "Start with..." buttons to the ports button panel
+    ///     Adds port buttons to the bottom panel.
     /// </summary>
     private void AddPortsButtons()
     {
         if (_viewModel.Game.GameEnum is GameEnum.Standalone)
         {
-            TextBlock textBlock = new() { Text = BuiltInPortStr };
+            TextBlock textBlock = new()
+            {
+                Text = BuiltInPortStr
+            };
 
             Button button = new()
             {
                 Content = textBlock,
-                Command = new RelayCommand(() =>
-                    _viewModel.StartCampaignCommand.Execute(new StubPort()),
-                    () => CampaignsList?.SelectedItem is BaseAddon selectedCampaign),
+                Command = new RelayCommand(
+                    () =>
+                        _viewModel.StartCampaignCommand.Execute(new StubPort()),
+                    () => CampaignsList?.SelectedItem is BaseAddon selectedCampaign
+                    ),
                 Margin = new(5),
-                Padding = new(5),
+                Padding = new(5)
             };
 
             BottomPanel.PortsButtonsPanel.Children.Add(button);
@@ -85,18 +121,37 @@ public sealed partial class CampaignsControl : UserControl
         {
             var portIcon = _bitmapsCache.GetFromCache(port.PortEnum.GetUniqueHash());
 
-            StackPanel sp = new() { Orientation = Layout.Orientation.Horizontal };
-            sp.Children.Add(new Image() { Margin = new(0, 0, 5, 0), Height = 16, Source = portIcon });
-            sp.Children.Add(new TextBlock() { Text = port.ShortName });
+            StackPanel sp = new()
+            {
+                Orientation = Orientation.Horizontal
+            };
+
+            sp.Children.Add(
+                new Image()
+                {
+                    Margin = new(0, 0, 5, 0),
+                    Height = 16,
+                    Source = portIcon
+                }
+                );
+
+            sp.Children.Add(
+                new TextBlock()
+                {
+                    Text = port.ShortName
+                }
+                );
 
             Button portButton = new()
             {
                 Content = sp,
-                Command = new RelayCommand(() =>
-                    _viewModel.StartCampaignCommand.Execute(port),
-                    () => PortsHelper.CheckPortRequirements(CampaignsList.SelectedItem, _viewModel.Game, port)),
+                Command = new RelayCommand(
+                    () =>
+                        _viewModel.StartCampaignCommand.Execute(port),
+                    () => PortsHelper.CheckPortRequirements(CampaignsList.SelectedItem, _viewModel.Game, port)
+                    ),
                 Margin = new(5),
-                Padding = new(5),
+                Padding = new(5)
             };
 
             BottomPanel.PortsButtonsPanel.Children.Add(portButton);
@@ -104,23 +159,28 @@ public sealed partial class CampaignsControl : UserControl
 
         Button customPortButton = new()
         {
-            Content = new TextBlock() { Text = BuiltInPortStr },
-            Command = new RelayCommand(() =>
-                _viewModel.StartCampaignCommand.Execute(null),
-                    () =>
+            Content = new TextBlock()
+            {
+                Text = BuiltInPortStr
+            },
+            Command = new RelayCommand(
+                () =>
+                    _viewModel.StartCampaignCommand.Execute(null),
+                () =>
+                {
+                    if (CampaignsList?.SelectedItem is not BaseAddon selectedCampaign)
                     {
-                        if (CampaignsList?.SelectedItem is not BaseAddon selectedCampaign)
-                        {
-                            return false;
-                        }
+                        return false;
+                    }
 
-                        if (selectedCampaign.Executables is null)
-                        {
-                            return false;
-                        }
+                    if (selectedCampaign.Executables is null)
+                    {
+                        return false;
+                    }
 
-                        return true;
-                    }),
+                    return true;
+                }
+                ),
             Margin = new(5),
             Padding = new(5),
             IsVisible = false
@@ -132,13 +192,11 @@ public sealed partial class CampaignsControl : UserControl
     }
 
     /// <summary>
-    /// Add button with custom ports
+    ///     Adds the custom ports flyout button to the bottom panel.
     /// </summary>
     private void AddCustomPortsButton()
     {
-        var existing = BottomPanel.PortsButtonsPanel.Children.FirstOrDefault(
-            x => x is Button button && button.Content is TextBlock text && text.Text?.Equals(CustomPortStr) is true
-            );
+        var existing = BottomPanel.PortsButtonsPanel.Children.FirstOrDefault(x => x is Button button && button.Content is TextBlock text && text.Text?.Equals(CustomPortStr) is true);
 
         if (existing is not null)
         {
@@ -171,7 +229,10 @@ public sealed partial class CampaignsControl : UserControl
 
         Button customPortButton = new()
         {
-            Content = new TextBlock() { Text = CustomPortStr },
+            Content = new TextBlock()
+            {
+                Text = CustomPortStr
+            },
             Margin = new(5),
             Padding = new(5),
             IsEnabled = false,
@@ -184,7 +245,7 @@ public sealed partial class CampaignsControl : UserControl
     }
 
     /// <summary>
-    /// Invoked on selected campaign changed
+    ///     Handles the selection changed event on the campaigns list.
     /// </summary>
     private void OnCampaignsListSelectionChanged(object? sender, SelectionChangedEventArgs e)
     {
@@ -197,9 +258,7 @@ public sealed partial class CampaignsControl : UserControl
             }
         }
 
-        var customPortButton = BottomPanel.PortsButtonsPanel.Children.FirstOrDefault(
-            x => x is Button button && button.Content is TextBlock text && text.Text?.Equals(CustomPortStr) is true
-            ) as Button;
+        var customPortButton = BottomPanel.PortsButtonsPanel.Children.FirstOrDefault(x => x is Button button && button.Content is TextBlock text && text.Text?.Equals(CustomPortStr) is true) as Button;
 
         if (customPortButton is not null)
         {
@@ -207,21 +266,33 @@ public sealed partial class CampaignsControl : UserControl
         }
     }
 
+    /// <summary>
+    ///     Handles the custom port changed event.
+    /// </summary>
     private void OnCustomPortChanged(object? sender, EventArgs e)
     {
         AddCustomPortsButton();
     }
 
+    /// <summary>
+    ///     Handles the context menu opening event.
+    /// </summary>
     private void ContextMenuOpened(object? sender, RoutedEventArgs e)
     {
-        CampaignsList.ContextMenu!.Items.Clear();
+        if (CampaignsList.ContextMenu is not null)
+        {
+            CampaignsList.ContextMenu.Items.Clear();
+        }
 
         if (CampaignsList.SelectedItem is not BaseAddon addon)
         {
             return;
         }
 
-        CampaignsList.ContextMenu.Items.Clear();
+        if (CampaignsList.ContextMenu is not null)
+        {
+            CampaignsList.ContextMenu.Items.Clear();
+        }
 
         MenuItem favoriteButton;
 
@@ -324,8 +395,14 @@ public sealed partial class CampaignsControl : UserControl
         _ = CampaignsList.ContextMenu.Items.Add(deleteButton);
     }
 
+    /// <summary>
+    ///     Handles the context menu closing event.
+    /// </summary>
     private void ContextMenuClosed(object? sender, RoutedEventArgs e)
     {
-        CampaignsList.ContextMenu!.Items.Clear();
+        if (CampaignsList.ContextMenu is not null)
+        {
+            CampaignsList.ContextMenu.Items.Clear();
+        }
     }
 }

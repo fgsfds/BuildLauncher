@@ -7,30 +7,47 @@ using Core.All.Enums;
 
 namespace Avalonia.Desktop.Controls;
 
+/// <summary>
+///     Displays and manages installed mods for a selected game.
+/// </summary>
 public sealed partial class ModsControl : UserControl
 {
     private readonly ModsViewModel _viewModel = null!;
 
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="ModsControl" /> class.
+    /// </summary>
     public ModsControl()
     {
         InitializeComponent();
     }
 
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="ModsControl" /> class.
+    /// </summary>
+    /// <param name="viewModel">The mods view model.</param>
     public ModsControl(ModsViewModel viewModel)
     {
         _viewModel = viewModel;
         InitializeComponent();
     }
 
+    /// <summary>
+    ///     Handles the context menu opening event.
+    /// </summary>
     private void ContextMenuOpened(object? sender, RoutedEventArgs e)
     {
         if (ModsList.SelectedItem is not BaseAddon addon)
         {
             e.Handled = true;
+
             return;
         }
 
-        ModsList.ContextMenu!.Items.Clear();
+        if (ModsList.ContextMenu is not null)
+        {
+            ModsList.ContextMenu.Items.Clear();
+        }
 
         if (addon.IsMetadataUpdateAvailable)
         {
@@ -58,8 +75,14 @@ public sealed partial class ModsControl : UserControl
         _ = ModsList.ContextMenu.Items.Add(deleteButton);
     }
 
+    /// <summary>
+    ///     Handles the context menu closing event.
+    /// </summary>
     private void ContextMenuClosed(object? sender, RoutedEventArgs e)
     {
-        ModsList.ContextMenu!.Items.Clear();
+        if (ModsList.ContextMenu is not null)
+        {
+            ModsList.ContextMenu.Items.Clear();
+        }
     }
 }

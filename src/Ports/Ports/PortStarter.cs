@@ -8,12 +8,23 @@ using Microsoft.Extensions.Logging;
 
 namespace Ports.Ports;
 
+/// <summary>
+///     Starts a game port with the appropriate command-line arguments.
+/// </summary>
 public sealed class PortStarter
 {
-    private readonly PlaytimeProvider _playtimeProvider;
     private readonly InstalledAddonsProviderFactory _installedAddonsProviderFactory;
+
     private readonly ILogger<PortStarter> _logger;
 
+    private readonly PlaytimeProvider _playtimeProvider;
+
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="PortStarter" /> class.
+    /// </summary>
+    /// <param name="playtimeProvider">Playtime tracking provider.</param>
+    /// <param name="installedAddonsProviderFactory">Factory for installed addons providers.</param>
+    /// <param name="logger">Logger instance.</param>
     public PortStarter(
         PlaytimeProvider playtimeProvider,
         InstalledAddonsProviderFactory installedAddonsProviderFactory,
@@ -23,11 +34,10 @@ public sealed class PortStarter
         _playtimeProvider = playtimeProvider;
         _installedAddonsProviderFactory = installedAddonsProviderFactory;
         _logger = logger;
-
     }
 
     /// <summary>
-    /// Start port
+    ///     Starts the specified port for a given game and addon.
     /// </summary>
     /// <param name="port">Port</param>
     /// <param name="game">Game to start</param>
@@ -45,7 +55,8 @@ public sealed class PortStarter
         byte? skill,
         bool skipIntro,
         bool skipStartup,
-        string? pathToExe = null)
+        string? pathToExe = null
+        )
     {
         var sw = Stopwatch.StartNew();
 
@@ -56,7 +67,10 @@ public sealed class PortStarter
 
         var args = port.GetStartGameArgs(game, addon, mods, enabledOptions, skipIntro, skipStartup, skill);
 
-        _ = addon.Executables?[OSEnum.Windows].TryGetValue(port.PortEnum, out pathToExe);
+        if (addon.Executables?.TryGetValue(OSEnum.Windows, out var winDict) is true)
+        {
+            winDict.TryGetValue(port.PortEnum, out pathToExe);
+        }
 
         _logger.LogInformation($"=== Starting addon {addon.AddonId.Id} for {game.FullName} ===");
         _logger.LogInformation($"Path to port exe {pathToExe}");
@@ -75,30 +89,39 @@ public sealed class PortStarter
 
 
     /// <summary>
-    /// Start port with command line args
+    ///     Starts the port executable asynchronously.
     /// </summary>
-    /// <param name="port">Port</param>
-    /// <param name="args">Command line arguments</param>
-    /// <param name="pathToExe">Path to custom port's exe</param>
+    /// <param name="port">The port to start.</param>
+    /// <param name="args">Command-line arguments.</param>
+    /// <param name="pathToExe">Optional custom path to the executable.</param>
     private async Task StartPortAsync(BasePort port, string args, string? pathToExe = null)
     {
-        string exe;
+        var exe = pathToExe ?? port.PortExeFilePath;
 
-        if (pathToExe is not null)
+        try
         {
-            exe = pathToExe;
-        }
-        else
-        {
-            exe = port.PortExeFilePath;
-        }
+            using var process = Process.Start(
+                new ProcessStartInfo
+                {
+                    FileName = Path.GetFileName(exe),
+                    UseShellExecute = true,
+                    Arguments = args,
+                    WorkingDirectory = Path.GetDirectoryName(exe)
+                }
+                );
 
-        await Process.Start(new ProcessStartInfo
+            if (process is null)
+            {
+                _logger.LogError("Failed to start process: {Exe}", exe);
+
+                return;
+            }
+
+            await process.WaitForExitAsync().ConfigureAwait(false);
+        }
+        catch (Exception ex)
         {
-            FileName = Path.GetFileName(exe),
-            UseShellExecute = true,
-            Arguments = args,
-            WorkingDirectory = Path.GetDirectoryName(exe)
-        })!.WaitForExitAsync().ConfigureAwait(false);
+            _logger.LogCritical(ex, "Error while starting port {Port}", port.Name);
+        }
     }
 }

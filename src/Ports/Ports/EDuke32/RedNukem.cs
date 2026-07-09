@@ -5,76 +5,85 @@ using Core.All.Enums;
 using Core.All.Enums.Addons;
 using Core.All.Enums.Versions;
 using Games.Games;
+using Microsoft.Extensions.Logging;
 
 namespace Ports.Ports.EDuke32;
 
 /// <summary>
-/// RedNukem port
+///     RedNukem port.
 /// </summary>
 public sealed class RedNukem : EDuke32
 {
-    /// <inheritdoc/>
+    private readonly ILogger<RedNukem> _logger = null!;
+
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="RedNukem" /> class.
+    /// </summary>
+    public RedNukem() { }
+
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="RedNukem" /> class.
+    /// </summary>
+    /// <param name="logger">Logger instance.</param>
+    public RedNukem(ILogger<RedNukem> logger)
+    {
+        _logger = logger;
+    }
+
+    /// <inheritdoc />
     public override PortEnum PortEnum => PortEnum.RedNukem;
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string WinExe => "rednukem.exe";
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string LinExe => throw new NotSupportedException();
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override string Name => "RedNukem";
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string AddGrpParam => "-g ";
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override List<GameEnum> SupportedGames =>
-        [
+    [
         GameEnum.Duke3D,
         GameEnum.Redneck,
         GameEnum.RidesAgain,
         GameEnum.NAM,
         GameEnum.WW2GI,
         GameEnum.Duke64
-        ];
+    ];
 
-    /// <inheritdoc/>
-    public override List<string> SupportedGamesVersions =>
-        [
-        nameof(DukeVersionEnum.Duke3D_Atomic)
-        ];
+    /// <inheritdoc />
+    public override List<string> SupportedGamesVersions => [nameof(DukeVersionEnum.Duke3D_Atomic)];
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override List<FeatureEnum> SupportedFeatures =>
-        [
+    [
         FeatureEnum.Hightile,
         FeatureEnum.Models,
         FeatureEnum.TileFromTexture
-        ];
+    ];
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string ConfigFile => "rednukem.cfg";
 
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override void BeforeStart(BaseGame game, BaseAddon campaign)
     {
         CreateBlankDemo();
-
         CreateOrDeleteBlankAnm(true);
-
-        MoveSaveFilesFromGameFolder(game, campaign);
-
+        MoveSaveFilesFromStorage(game, campaign);
         FixConfig();
-
         FixRoute66Files(game, campaign);
-
         FixWtFiles(game, campaign);
     }
 
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override void GetStartCampaignArgs(StringBuilder sb, BaseGame game, BaseAddon addon)
     {
         //don't search for steam/gog installs
@@ -126,7 +135,7 @@ public sealed class RedNukem : EDuke32
         }
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override void GetSkipIntroParameter(StringBuilder sb)
     {
         _ = sb.Append(" -quick");
@@ -134,19 +143,19 @@ public sealed class RedNukem : EDuke32
     }
 
     /// <summary>
-    /// Create or delete blank anm file.
+    ///     Creates or deletes blank animation files to skip or restore intros.
     /// </summary>
-    /// <param name="isDelete">Delete file.</param>
+    /// <param name="isDelete"><see langword="true" /> to delete the files; <see langword="false" /> to create them.</param>
     private void CreateOrDeleteBlankAnm(bool isDelete)
     {
         ImmutableArray<string> files =
-            [
-                Path.Combine(InstallFolderPath, "LOGO.ANM"),
-                Path.Combine(InstallFolderPath, "XATLOGO.ANM"),
-                Path.Combine(InstallFolderPath, "REDNECK.ANM"),
-                Path.Combine(InstallFolderPath, "RR_INTRO.ANM"),
-                Path.Combine(InstallFolderPath, "REDINT.MVE"),
-            ];
+        [
+            Path.Combine(InstallFolderPath, "LOGO.ANM"),
+            Path.Combine(InstallFolderPath, "XATLOGO.ANM"),
+            Path.Combine(InstallFolderPath, "REDNECK.ANM"),
+            Path.Combine(InstallFolderPath, "RR_INTRO.ANM"),
+            Path.Combine(InstallFolderPath, "REDINT.MVE")
+        ];
 
         foreach (var file in files)
         {
@@ -158,9 +167,12 @@ public sealed class RedNukem : EDuke32
                     {
                         File.Delete(file);
                     }
-                    catch
+                    catch (Exception ex)
                     {
-                        //do nothing
+                        if (_logger is not null)
+                        {
+                            _logger.LogWarning(ex, "Failed to delete {File}", file);
+                        }
                     }
                 }
             }
@@ -172,9 +184,12 @@ public sealed class RedNukem : EDuke32
                     {
                         using var _ = File.CreateText(file);
                     }
-                    catch
+                    catch (Exception ex)
                     {
-                        //do nothing
+                        if (_logger is not null)
+                        {
+                            _logger.LogWarning(ex, "Failed to create blank file {File}", file);
+                        }
                     }
                 }
             }
@@ -182,11 +197,11 @@ public sealed class RedNukem : EDuke32
     }
 
     /// <summary>
-    /// Get startup agrs for Redneck Rampage
+    ///     Appends command-line arguments for Redneck Rampage games in RedNukem.
     /// </summary>
-    /// <param name="sb">StringBuilder</param>
-    /// <param name="game">RedneckGame</param>
-    /// <param name="addon">DukeCampaign</param>
+    /// <param name="sb">String builder for parameters.</param>
+    /// <param name="game">Redneck game instance.</param>
+    /// <param name="addon">Campaign or addon.</param>
     private void GetRedneckArgs(StringBuilder sb, RedneckGame game, BaseAddon addon)
     {
         if (addon.SupportedGame.GameEnum is GameEnum.RidesAgain)
@@ -202,8 +217,7 @@ public sealed class RedNukem : EDuke32
             _ = sb.Append($@" {AddDirectoryParam}""{game.GameInstallFolder}""");
         }
 
-
-        if (addon.FileName is null)
+        if (addon.FileInfo is null)
         {
             return;
         }
@@ -211,6 +225,7 @@ public sealed class RedNukem : EDuke32
         if (addon is LooseMap)
         {
             GetLooseMapArgs(sb, game, addon);
+
             return;
         }
 
@@ -241,7 +256,7 @@ public sealed class RedNukem : EDuke32
             }
             else
             {
-                _ = sb.Append($@" {AddFileParam}""{rCamp.PathToFile}""");
+                _ = sb.Append($@" {AddFileParam}""{rCamp.FileInfo.PathToFile}""");
             }
         }
         else if (rCamp.Type is AddonTypeEnum.Map)
@@ -256,8 +271,10 @@ public sealed class RedNukem : EDuke32
 
 
     /// <summary>
-    /// Override original art files with route 66's ones or remove overrides
+    ///     Copies or restores Route 66 art and video files for RedNukem.
     /// </summary>
+    /// <param name="game">Game instance.</param>
+    /// <param name="campaign">Campaign or addon.</param>
     [Obsolete("Remove if RedNukem can ever properly launch R66")]
     private void FixRoute66Files(BaseGame game, BaseAddon campaign)
     {
@@ -302,6 +319,9 @@ public sealed class RedNukem : EDuke32
         }
     }
 
+    /// <summary>
+    ///     Creates a blank demo file to prevent demo playback on startup.
+    /// </summary>
     private void CreateBlankDemo()
     {
         var blankDemo = Path.Combine(InstallFolderPath, "blank.edm");
@@ -312,9 +332,12 @@ public sealed class RedNukem : EDuke32
             {
                 using var _ = File.CreateText(blankDemo);
             }
-            catch
+            catch (Exception ex)
             {
-                //do nothing
+                if (_logger is not null)
+                {
+                    _logger.LogWarning(ex, "Failed to create blank demo file {File}", blankDemo);
+                }
             }
         }
     }
