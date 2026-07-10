@@ -19,6 +19,27 @@ public sealed partial class Program
     [STAThread]
     public static int Main(string[] args)
     {
+        AppDomain.CurrentDomain.UnhandledException += (_, e) =>
+        {
+            if (e.ExceptionObject is not Exception ex)
+            {
+                return;
+            }
+
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                WinMsgBox.Show("Fatal error", ex.ToString());
+            }
+
+            SaveCrashLog();
+        };
+
+        TaskScheduler.UnobservedTaskException += (_, e) =>
+        {
+            SaveCrashLog();
+            e.SetObserved();
+        };
+
         Directory.SetCurrentDirectory(AppDomain.CurrentDomain.BaseDirectory);
 
         if (File.Exists(Path.Combine(ClientProperties.WorkingFolder, ClientConsts.UpdateFile)))
@@ -54,10 +75,7 @@ public sealed partial class Program
                     );
             }
 
-            if (File.Exists(ClientProperties.PathToLogFile))
-            {
-                File.Copy(ClientProperties.PathToLogFile, Path.Combine(ClientProperties.WorkingFolder, $"{DateTime.Now:dd_MM_yy_HH_mm}.crashlog"));
-            }
+            SaveCrashLog();
 
             return -1;
         }
@@ -79,6 +97,21 @@ public sealed partial class Program
                          .LogToTrace();
     }
 
+
+    /// <summary>
+    ///     Saves a crash log file by copying the current log file if it exists.
+    /// </summary>
+    private static void SaveCrashLog()
+    {
+        if (File.Exists(ClientProperties.PathToLogFile))
+        {
+            File.Copy(
+                ClientProperties.PathToLogFile,
+                Path.Combine(ClientProperties.WorkingFolder, $"{DateTime.Now:dd_MM_yy_HH_mm}.crashlog"),
+                true
+                );
+        }
+    }
 
     /// <summary>
     ///     Provides a simple Windows message box for critical error display.

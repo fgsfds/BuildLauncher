@@ -142,12 +142,17 @@ public sealed partial class PortsViewModel : ObservableObject
         }
         catch (Exception ex)
         {
+            IsEditorVisible = false;
+            _isNewPort = false;
+
             NotificationsHelper.Show(
                 "Critical error! Exception is written to the log.",
                 NotificationType.Error
                 );
 
-            _logger.LogCritical(ex, "=== Error while adding custom prot ===");
+            _logger.LogCritical(ex, "=== Error while adding custom port ===");
+
+            _ = _semaphore.Release();
         }
     }
 
@@ -158,7 +163,10 @@ public sealed partial class PortsViewModel : ObservableObject
     [RelayCommand(CanExecute = nameof(EditCustomPortCanExecute))]
     private async Task EditCustomPortAsync()
     {
-        ArgumentNullException.ThrowIfNull(SelectedCustomPort);
+        if (SelectedCustomPort is null)
+        {
+            return;
+        }
 
         try
         {
@@ -174,12 +182,17 @@ public sealed partial class PortsViewModel : ObservableObject
         }
         catch (Exception ex)
         {
+            IsEditorVisible = false;
+            _isNewPort = false;
+
             NotificationsHelper.Show(
                 "Critical error! Exception is written to the log.",
                 NotificationType.Error
                 );
 
             _logger.LogCritical(ex, "=== Error while editing custom port ===");
+
+            _ = _semaphore.Release();
         }
     }
 

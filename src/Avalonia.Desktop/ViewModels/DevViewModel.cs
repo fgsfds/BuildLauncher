@@ -1587,7 +1587,9 @@ public sealed partial class DevViewModel : ObservableObject
     {
         if (ClientProperties.PathToLocalManifestsJson is null)
         {
-            throw new InvalidOperationException($"{nameof(ClientProperties.PathToLocalManifestsJson)} is null");
+            _logger.LogCritical("{Name} is null", nameof(ClientProperties.PathToLocalManifestsJson));
+
+            return;
         }
 
         var folders = await AvaloniaProperties.TopLevel.StorageProvider.OpenFolderPickerAsync(
@@ -1614,24 +1616,38 @@ public sealed partial class DevViewModel : ObservableObject
 
         foreach (var file in files)
         {
-            using var archive = ArchiveFactory.OpenArchive(file);
-            var jsons = archive.Entries.Where(x => x.Key?.StartsWith("addon", StringComparison.OrdinalIgnoreCase) == true && x.Key.EndsWith(".json", StringComparison.OrdinalIgnoreCase));
-
-            foreach (var json in jsons)
+            try
             {
-                using var jsonStream = await json.OpenEntryStreamAsync().ConfigureAwait(false);
+                using var archive = ArchiveFactory.OpenArchive(file);
+                var jsons = archive.Entries.Where(x => x.Key?.StartsWith("addon", StringComparison.OrdinalIgnoreCase) == true && x.Key.EndsWith(".json", StringComparison.OrdinalIgnoreCase));
 
-                var jsonStr = await JsonSerializer.DeserializeAsync(
-                    jsonStream,
-                    AddonManifestJsonContext.Default.AddonManifestJsonModel
-                    ).ConfigureAwait(false);
-
-                if (jsonStr is null)
+                foreach (var json in jsons)
                 {
-                    continue;
-                }
+                    try
+                    {
+                        await using var jsonStream = await json.OpenEntryStreamAsync().ConfigureAwait(false);
 
-                result.Add(jsonStr);
+                        var jsonStr = await JsonSerializer.DeserializeAsync(
+                            jsonStream,
+                            AddonManifestJsonContext.Default.AddonManifestJsonModel
+                            ).ConfigureAwait(false);
+
+                        if (jsonStr is null)
+                        {
+                            continue;
+                        }
+
+                        result.Add(jsonStr);
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.LogWarning(ex, "Failed to read manifest entry {Key} from {File}", json.Key, file);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWarning(ex, "Failed to open or process archive {File}", file);
             }
         }
 

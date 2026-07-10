@@ -200,21 +200,28 @@ public sealed partial class ModsViewModel : RightPanelViewModel, IPortsButtonCon
     {
         if (obj is not AutoloadMod mod)
         {
-            throw new ArgumentException($"Expected {nameof(AutoloadMod)} but received {obj?.GetType().Name}.", nameof(obj));
+            _logger.LogWarning("ModCheckboxPressed received unexpected type: {Type}", obj?.GetType().Name);
+
+            return;
         }
 
-        //disabling
-        if (mod.IsEnabled)
+        try
         {
-            _installedAddonsProvider.DisableAddon(mod.AddonId);
-        }
-        //enabling
-        else
-        {
-            _installedAddonsProvider.EnableAddon(mod.AddonId);
-        }
+            if (mod.IsEnabled)
+            {
+                _installedAddonsProvider.DisableAddon(mod.AddonId);
+            }
+            else
+            {
+                _installedAddonsProvider.EnableAddon(mod.AddonId);
+            }
 
-        OnPropertyChanged(nameof(ModsList));
+            OnPropertyChanged(nameof(ModsList));
+        }
+        catch (Exception ex)
+        {
+            _logger.LogCritical(ex, "=== Error while toggling mod {ModId} ===", mod.AddonId.Id);
+        }
     }
 
 

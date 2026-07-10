@@ -9,19 +9,16 @@ using CommunityToolkit.Mvvm.Input;
 using Core.All.Helpers;
 using Core.Client.Interfaces;
 using Core.Client.Providers;
+using Microsoft.Extensions.Logging;
 
 namespace Avalonia.Desktop.ViewModels;
 
 public abstract partial class RightPanelViewModel : ObservableObject
 {
     private readonly BitmapsCache _bitmapsCache;
-
     private readonly IConfigProvider _config;
-
-    private readonly MetadataProvider _metadatUpdater;
-
+    private readonly MetadataProvider _metadataUpdater;
     private readonly PlaytimeProvider _playtimeProvider;
-
     private readonly RatingProvider _ratingProvider;
 
 
@@ -30,20 +27,20 @@ public abstract partial class RightPanelViewModel : ObservableObject
     /// </summary>
     /// <param name="playtimeProvider">The playtime provider.</param>
     /// <param name="ratingProvider">The rating provider.</param>
-    /// <param name="metadatUpdater">The metadata provider.</param>
+    /// <param name="metadataUpdater">The metadata provider.</param>
     /// <param name="bitmapsCache">The bitmaps cache.</param>
     /// <param name="config">The configuration provider.</param>
     public RightPanelViewModel(
         PlaytimeProvider playtimeProvider,
         RatingProvider ratingProvider,
-        MetadataProvider metadatUpdater,
+        MetadataProvider metadataUpdater,
         BitmapsCache bitmapsCache,
         IConfigProvider config
         )
     {
         _playtimeProvider = playtimeProvider;
         _ratingProvider = ratingProvider;
-        _metadatUpdater = metadatUpdater;
+        _metadataUpdater = metadataUpdater;
         _bitmapsCache = bitmapsCache;
         _config = config;
     }
@@ -93,13 +90,15 @@ public abstract partial class RightPanelViewModel : ObservableObject
     /// </summary>
     private void OnPropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
-        if (e.PropertyName?.Equals(nameof(AddonOption.IsEnabled)) is true &&
-            sender is AddonOption option)
+        if (e.PropertyName?.Equals(nameof(AddonOption.IsEnabled)) is not true ||
+            sender is not AddonOption option)
         {
-            ArgumentNullException.ThrowIfNull(SelectedAddon);
-
-            _config.ChangeAddonOptionState(SelectedAddon.AddonId.Id, option.Name, option.IsEnabled);
+            return;
         }
+
+        ArgumentNullException.ThrowIfNull(SelectedAddon);
+
+        _config.ChangeAddonOptionState(SelectedAddon.AddonId.Id, option.Name, option.IsEnabled);
     }
 
 
@@ -152,7 +151,7 @@ public abstract partial class RightPanelViewModel : ObservableObject
     /// <summary>
     ///     Gets whether a metadata update is available for the selected addon.
     /// </summary>
-    public bool IsMetadataUpdateAvailable => SelectedAddon?.FileInfo is not null && _metadatUpdater.IsMetadataUpdateAvailable(SelectedAddon.AddonId, SelectedAddon.FileInfo);
+    public bool IsMetadataUpdateAvailable => SelectedAddon?.FileInfo is not null && _metadataUpdater.IsMetadataUpdateAvailable(SelectedAddon.AddonId, SelectedAddon.FileInfo);
 
     /// <summary>
     ///     Gets the rating of the selected addon.

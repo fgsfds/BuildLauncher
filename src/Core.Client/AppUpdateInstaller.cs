@@ -130,7 +130,16 @@ public sealed class AppUpdateInstaller
         }
         catch (Exception ex)
         {
-            Trace.WriteLine($"=== Critical error during update installation: {ex} ===");
+            var crashLog = Path.Combine(ClientProperties.WorkingFolder, $"{DateTime.Now:dd_MM_yy_HH_mm}.update_crashlog");
+            try
+            {
+                File.WriteAllText(crashLog, $"=== Critical error during update installation: {ex} ===");
+            }
+            catch
+            {
+                // Best-effort crash log write
+            }
+
             Environment.Exit(1);
         }
     }

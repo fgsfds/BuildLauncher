@@ -13,9 +13,8 @@ namespace S3;
 /// </summary>
 public sealed class S3FilesUploader : IFilesUploader
 {
-    private readonly ILogger<S3FilesUploader> _logger;
-
     private readonly S3UtilitiesFactory _s3Factory;
+    private readonly ILogger<S3FilesUploader> _logger;
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="S3FilesUploader" /> class.
@@ -127,7 +126,7 @@ public sealed class S3FilesUploader : IFilesUploader
     /// <param name="streamToTrack">The file stream to track.</param>
     /// <param name="progress">Progress indicator to update.</param>
     /// <param name="cancellationToken">Cancellation token,</param>
-    private static void TrackProgress(
+    private void TrackProgress(
         FileStream streamToTrack,
         StrongBox<int> progress,
         CancellationToken cancellationToken
@@ -158,6 +157,10 @@ public sealed class S3FilesUploader : IFilesUploader
         catch (NotSupportedException)
         {
             // stream doesn't support seeking — progress won't work
+        }
+        catch (Exception ex)
+        {
+            _logger.LogCritical(ex, "Error while tracking progress.");
         }
     }
 }

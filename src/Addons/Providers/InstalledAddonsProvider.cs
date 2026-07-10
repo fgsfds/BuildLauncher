@@ -136,12 +136,9 @@ public sealed class InstalledAddonsProvider : IDisposable
         finally
         {
             _ = _cacheUpdateSemaphore.Release();
-            ArgumentNullException.ThrowIfNull(_campaignsCache);
-            ArgumentNullException.ThrowIfNull(_mapsCache);
-            ArgumentNullException.ThrowIfNull(_modsCache);
-
-            AddonsChangedEvent?.Invoke(_game.GameEnum, addonType);
         }
+
+        AddonsChangedEvent?.Invoke(_game.GameEnum, addonType);
     }
 
     private async Task ScanCampaignsFolderAsync()
