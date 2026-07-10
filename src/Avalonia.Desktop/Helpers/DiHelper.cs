@@ -1,8 +1,10 @@
 ﻿using Avalonia.Desktop.Misc;
+using Avalonia.Desktop.Services;
 using Avalonia.Desktop.ViewModels;
 using Avalonia.Media.Imaging;
 using Core.Client.Cache;
 using Core.Client.Enums;
+using Core.Client.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Avalonia.Desktop.Helpers;
@@ -20,7 +22,11 @@ public static class DiHelper
         _ = container.AddSingleton<IViewModelsFactory, ViewModelsFactory>();
         _ = container.AddSingleton<MainWindowViewModel>();
 
-        return container.AddSingleton<ViewLocator>();
+        _ = container.AddSingleton<ViewLocator>();
+        _ = container.AddSingleton<IFolderOpener, FolderOpener>();
+        _ = container.AddSingleton<IUserNotifier, UserNotifier>();
+
+        return container;
     }
 
     /// <summary>

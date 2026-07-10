@@ -106,9 +106,9 @@ public sealed partial class GamePageViewModel : ObservableObject
     /// </summary>
     private void OnMetadataUpdated(object? sender, ParsedAddonFile e)
     {
-        IsCampaignsAlarmShown = Campaigns.CampaignsList.Any(x => x.IsMetadataUpdateAvailable);
-        IsMapsAlarmShown = Maps?.MapsList.Any(x => x.IsMetadataUpdateAvailable) ?? false;
-        IsModsAlarmShown = Mods?.ModsList.Any(x => x.IsMetadataUpdateAvailable) ?? false;
+        IsCampaignsAlarmShown = Campaigns.AddonsList.Any(x => x.IsMetadataUpdateAvailable);
+        IsMapsAlarmShown = Maps?.AddonsList.Any(x => x.IsMetadataUpdateAvailable) ?? false;
+        IsModsAlarmShown = Mods?.AddonsList.Any(x => x.IsMetadataUpdateAvailable) ?? false;
     }
 
     /// <summary>
@@ -116,8 +116,8 @@ public sealed partial class GamePageViewModel : ObservableObject
     /// </summary>
     private void OnMetadataInitialized(object? sender, EventArgs e)
     {
-        IsCampaignsAlarmShown = Campaigns.CampaignsList.Any(x => x.IsMetadataUpdateAvailable);
-        IsMapsAlarmShown = Maps?.MapsList.Any(x => x.IsMetadataUpdateAvailable) ?? false;
-        IsModsAlarmShown = Mods?.ModsList.Any(x => x.IsMetadataUpdateAvailable) ?? false;
+        IsCampaignsAlarmShown = Campaigns.AddonsList.Any(x => x.IsMetadataUpdateAvailable);
+        IsMapsAlarmShown = Maps?.AddonsList.Any(x => x.IsMetadataUpdateAvailable) ?? false;
+        IsModsAlarmShown = Mods?.AddonsList.Any(x => x.IsMetadataUpdateAvailable) ?? false;
     }
 }

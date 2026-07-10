@@ -4,7 +4,6 @@ using Avalonia.Desktop.Helpers;
 using Avalonia.Desktop.Misc;
 using Avalonia.Desktop.ViewModels;
 using Avalonia.Interactivity;
-using Avalonia.Layout;
 using CommunityToolkit.Mvvm.Input;
 using Core.All.Enums;
 using Core.All.Helpers;
@@ -16,7 +15,7 @@ namespace Avalonia.Desktop.Controls;
 /// <summary>
 ///     Displays and manages campaign addons for a selected game.
 /// </summary>
-public sealed partial class CampaignsControl : UserControl
+public sealed partial class CampaignsControl : AddonListControlBase
 {
     /// <summary>
     ///     Text for the built-in port button.
@@ -28,41 +27,43 @@ public sealed partial class CampaignsControl : UserControl
     /// </summary>
     private const string CustomPortStr = "Custom port";
 
-    private readonly BitmapsCache _bitmapsCache;
-
-    private readonly PortsProvider _portsProvider;
-
     /// <summary>
     ///     The list of ports that support this game.
     /// </summary>
     private readonly IReadOnlyList<BasePort> _supportedPorts;
 
-    private readonly CampaignsViewModel _viewModel;
+    private readonly BitmapsCache _bitmapsCache;
+    private readonly PortsProvider _portsProvider;
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="CampaignsControl" /> class.
     /// </summary>
-    public CampaignsControl()
+    public CampaignsControl() : base(null!)
     {
         InitializeComponent();
 
         _supportedPorts = [];
         _portsProvider = null!;
-        _viewModel = null!;
         _bitmapsCache = null!;
     }
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="CampaignsControl" /> class.
     /// </summary>
-    /// <param name="viewModel">The campaigns view model.</param>
-    /// <param name="portsProvider">The ports provider.</param>
-    /// <param name="bitmapsCache">The bitmaps cache.</param>
+    /// <param name="viewModel">
+    ///     The campaigns view model.
+    /// </param>
+    /// <param name="portsProvider">
+    ///     The ports provider.
+    /// </param>
+    /// <param name="bitmapsCache">
+    ///     The bitmaps cache.
+    /// </param>
     public CampaignsControl(
         CampaignsViewModel viewModel,
         PortsProvider portsProvider,
         BitmapsCache bitmapsCache
-        )
+        ) : base(viewModel)
     {
         InitializeComponent();
 
@@ -80,7 +81,6 @@ public sealed partial class CampaignsControl : UserControl
         }
 
         _portsProvider = portsProvider;
-        _viewModel = viewModel;
         _bitmapsCache = bitmapsCache;
 
         AddPortsButtons();
@@ -95,17 +95,15 @@ public sealed partial class CampaignsControl : UserControl
     {
         if (_viewModel.Game.GameEnum is GameEnum.Standalone)
         {
-            TextBlock textBlock = new()
-            {
-                Text = BuiltInPortStr
-            };
-
             Button button = new()
             {
-                Content = textBlock,
+                Content = new TextBlock
+                {
+                    Text = BuiltInPortStr
+                },
                 Command = new RelayCommand(
                     () =>
-                        _viewModel.StartCampaignCommand.Execute(new StubPort()),
+                        _viewModel.StartAddonCommand.Execute(new StubPort()),
                     () => CampaignsList?.SelectedItem is BaseAddon selectedCampaign
                     ),
                 Margin = new(5),
@@ -121,33 +119,12 @@ public sealed partial class CampaignsControl : UserControl
         {
             var portIcon = _bitmapsCache.GetFromCache(port.PortEnum.GetUniqueHash());
 
-            StackPanel sp = new()
-            {
-                Orientation = Orientation.Horizontal
-            };
-
-            sp.Children.Add(
-                new Image()
-                {
-                    Margin = new(0, 0, 5, 0),
-                    Height = 16,
-                    Source = portIcon
-                }
-                );
-
-            sp.Children.Add(
-                new TextBlock()
-                {
-                    Text = port.ShortName
-                }
-                );
-
             Button portButton = new()
             {
-                Content = sp,
+                Content = CreatePortButtonContent(portIcon, port.ShortName),
                 Command = new RelayCommand(
                     () =>
-                        _viewModel.StartCampaignCommand.Execute(port),
+                        _viewModel.StartAddonCommand.Execute(port),
                     () => PortsHelper.CheckPortRequirements(CampaignsList.SelectedItem, _viewModel.Game, port)
                     ),
                 Margin = new(5),
@@ -165,7 +142,7 @@ public sealed partial class CampaignsControl : UserControl
             },
             Command = new RelayCommand(
                 () =>
-                    _viewModel.StartCampaignCommand.Execute(null),
+                    _viewModel.StartAddonCommand.Execute(null),
                 () =>
                 {
                     if (CampaignsList?.SelectedItem is not BaseAddon selectedCampaign)
@@ -196,12 +173,7 @@ public sealed partial class CampaignsControl : UserControl
     /// </summary>
     private void AddCustomPortsButton()
     {
-        var existing = BottomPanel.PortsButtonsPanel.Children.FirstOrDefault(x => x is Button button && button.Content is TextBlock text && text.Text?.Equals(CustomPortStr) is true);
-
-        if (existing is not null)
-        {
-            _ = BottomPanel.PortsButtonsPanel.Children.Remove(existing);
-        }
+        RemoveButtonByText(BottomPanel.PortsButtonsPanel, CustomPortStr);
 
         MenuFlyout flyout = new()
         {
@@ -221,7 +193,7 @@ public sealed partial class CampaignsControl : UserControl
             {
                 Header = port.Name,
                 Padding = new(5),
-                Command = new RelayCommand(() => _viewModel.StartCampaignCommand.Execute(port))
+                Command = new RelayCommand(() => _viewModel.StartAddonCommand.Execute(port))
             };
 
             _ = flyout.Items.Add(item);
@@ -249,16 +221,9 @@ public sealed partial class CampaignsControl : UserControl
     /// </summary>
     private void OnCampaignsListSelectionChanged(object? sender, SelectionChangedEventArgs e)
     {
-        foreach (var control in BottomPanel.PortsButtonsPanel.Children)
-        {
-            if (control is Button button &&
-                button.Command is IRelayCommand relayCommand)
-            {
-                relayCommand.NotifyCanExecuteChanged();
-            }
-        }
+        NotifyPortButtonsCanExecuteChanged(BottomPanel.PortsButtonsPanel);
 
-        var customPortButton = BottomPanel.PortsButtonsPanel.Children.FirstOrDefault(x => x is Button button && button.Content is TextBlock text && text.Text?.Equals(CustomPortStr) is true) as Button;
+        var customPortButton = FindButtonByText(BottomPanel.PortsButtonsPanel, CustomPortStr);
 
         if (customPortButton is not null)
         {
@@ -279,19 +244,11 @@ public sealed partial class CampaignsControl : UserControl
     /// </summary>
     private void ContextMenuOpened(object? sender, RoutedEventArgs e)
     {
-        if (CampaignsList.ContextMenu is not null)
-        {
-            CampaignsList.ContextMenu.Items.Clear();
-        }
+        ClearContextMenu(CampaignsList.ContextMenu);
 
         if (CampaignsList.SelectedItem is not BaseAddon addon)
         {
             return;
-        }
-
-        if (CampaignsList.ContextMenu is not null)
-        {
-            CampaignsList.ContextMenu.Items.Clear();
         }
 
         MenuItem favoriteButton;
@@ -342,7 +299,7 @@ public sealed partial class CampaignsControl : UserControl
             {
                 Header = $"Start with {port.ShortName}",
                 Padding = new(5),
-                Command = new RelayCommand(() => _viewModel.StartCampaignCommand.Execute(port))
+                Command = new RelayCommand(() => _viewModel.StartAddonCommand.Execute(port))
             };
 
             _ = CampaignsList.ContextMenu.Items.Add(portButton);
@@ -369,7 +326,7 @@ public sealed partial class CampaignsControl : UserControl
             {
                 Header = $"Start with {port.Name}",
                 Padding = new(5),
-                Command = new RelayCommand(() => _viewModel.StartCampaignCommand.Execute(port))
+                Command = new RelayCommand(() => _viewModel.StartAddonCommand.Execute(port))
             };
 
             _ = CampaignsList.ContextMenu.Items.Add(portButton);
@@ -387,7 +344,7 @@ public sealed partial class CampaignsControl : UserControl
             Header = "Delete",
             Padding = new(5),
             Command = new RelayCommand(
-                () => _viewModel.DeleteCampaignCommand.Execute(null),
+                () => _viewModel.DeleteAddonCommand.Execute(null),
                 () => addon.Type is not AddonTypeEnum.Official
                 )
         };
@@ -398,11 +355,5 @@ public sealed partial class CampaignsControl : UserControl
     /// <summary>
     ///     Handles the context menu closing event.
     /// </summary>
-    private void ContextMenuClosed(object? sender, RoutedEventArgs e)
-    {
-        if (CampaignsList.ContextMenu is not null)
-        {
-            CampaignsList.ContextMenu.Items.Clear();
-        }
-    }
+    private void ContextMenuClosed(object? sender, RoutedEventArgs e) => ClearContextMenu(CampaignsList.ContextMenu);
 }

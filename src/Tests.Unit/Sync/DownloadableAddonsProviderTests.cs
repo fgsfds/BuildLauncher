@@ -11,11 +11,12 @@ using Games.Games;
 using Microsoft.Extensions.Logging;
 using Moq;
 
-namespace Tests.Unit;
+namespace Tests.Unit.Sync;
 
 /// <summary>
 ///     Tests for the <see cref="DownloadableAddonsProvider" /> class.
 /// </summary>
+[Collection("Sync")]
 public sealed class DownloadableAddonsProviderTests
 {
     /// <summary>

@@ -23,45 +23,27 @@ namespace Avalonia.Desktop.ViewModels;
 public sealed class ViewModelsFactory : IViewModelsFactory
 {
     private readonly IAddonDropHelper _addonInstaller;
-
+    private readonly IFolderOpener _folderOpener;
+    private readonly IUserNotifier _userNotifier;
     private readonly AddonsDatabaseManager _addonsDatabaseManager;
-
     private readonly IApiInterface _apiInterface;
-
     private readonly AppUpdateInstaller _appUpdateInstaller;
-
     private readonly BitmapsCache _bitmapsCache;
-
     private readonly IConfigProvider _config;
-
     private readonly DownloadableAddonsProviderFactory _downloadableAddonsProviderFactory;
-
     private readonly IFilesUploader _filesUploader;
-
     private readonly GamesPathsProvider _gamesPathsProvider;
-
     private readonly InstalledGamesProvider _gamesProvider;
-
     private readonly InstalledAddonsProviderFactory _installedAddonsProviderFactory;
-
     private readonly ILoggerFactory _loggerFactory;
-
     private readonly MetadataProvider _metadataProvider;
-
     private readonly PlaytimeProvider _playtimeProvider;
-
     private readonly IReadOnlyList<BasePort> _ports;
-
     private readonly PortInstallerFactory _portsInstallerFactory;
-
     private readonly PortsProvider _portsProvider;
-
     private readonly PortStarter _portStarter;
-
     private readonly RatingProvider _ratingProvider;
-
     private readonly IReadOnlyList<BaseTool> _tools;
-
     private readonly ToolInstallerFactory _toolsInstallerFactory;
 
     /// <summary>
@@ -151,6 +133,8 @@ public sealed class ViewModelsFactory : IViewModelsFactory
         IEnumerable<BaseTool> tools,
         MetadataProvider metadataProvider,
         IAddonDropHelper addonInstaller,
+        IFolderOpener folderOpener,
+        IUserNotifier userNotifier,
         ILoggerFactory loggerFactory
         )
     {
@@ -177,6 +161,8 @@ public sealed class ViewModelsFactory : IViewModelsFactory
 
         _metadataProvider = metadataProvider;
         _addonInstaller = addonInstaller;
+        _folderOpener = folderOpener;
+        _userNotifier = userNotifier;
         _loggerFactory = loggerFactory;
     }
 
@@ -228,6 +214,8 @@ public sealed class ViewModelsFactory : IViewModelsFactory
             _portStarter,
             _bitmapsCache,
             _addonInstaller,
+            _folderOpener,
+            _userNotifier,
             _loggerFactory.CreateLogger<CampaignsViewModel>()
             );
 
@@ -256,6 +244,8 @@ public sealed class ViewModelsFactory : IViewModelsFactory
             _portStarter,
             _bitmapsCache,
             _addonInstaller,
+            _folderOpener,
+            _userNotifier,
             _loggerFactory.CreateLogger<MapsViewModel>()
             );
 
@@ -282,6 +272,8 @@ public sealed class ViewModelsFactory : IViewModelsFactory
             _bitmapsCache,
             _config,
             _addonInstaller,
+            _folderOpener,
+            _userNotifier,
             _loggerFactory.CreateLogger<ModsViewModel>()
             );
 

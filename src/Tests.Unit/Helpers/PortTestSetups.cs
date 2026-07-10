@@ -1,8 +1,11 @@
 using Addons.Addons;
+using Addons.Providers;
+using Core.All;
 using Core.All.Enums;
 using Core.All.Enums.Addons;
 using Core.All.Enums.Versions;
 using Core.All.Serializable.Addon;
+using Core.Client.Config;
 using Core.Client.Helpers;
 using Games.Games;
 
@@ -13,6 +16,42 @@ namespace Tests.Unit.Helpers;
 /// </summary>
 internal static class PortTestSetups
 {
+    private static readonly OriginalCampaignsProvider _provider = new(new ConfigProviderFake());
+    private static readonly string TestDataRoot = Path.Combine(Directory.GetCurrentDirectory(), "Data", "TestSetups");
+
+    private static void CreateFiles(string dir, params string[] files)
+    {
+        foreach (var file in files)
+        {
+            var path = Path.Combine(dir, file);
+            var parent = Path.GetDirectoryName(path);
+            if (parent is not null && !Directory.Exists(parent))
+            {
+                _ = Directory.CreateDirectory(parent);
+            }
+
+            if (!File.Exists(path))
+            {
+                using (File.Create(path)) { }
+            }
+        }
+    }
+
+    private static void CreateNumberedFiles(string dir, string baseName, string extension, int start, int endExclusive, int padWidth)
+    {
+        for (var i = start; i < endExclusive; i++)
+        {
+            var fileName = padWidth > 0
+                ? $"{baseName}{i.ToString().PadLeft(padWidth, '0')}.{extension}"
+                : $"{baseName}{i}.{extension}";
+
+            var path = Path.Combine(dir, fileName);
+            if (!File.Exists(path))
+            {
+                using (File.Create(path)) { }
+            }
+        }
+    }
     /// <summary>
     ///     Creates test setups for Blood game.
     /// </summary>
@@ -25,30 +64,28 @@ internal static class PortTestSetups
             GameInstallFolder = Path.Combine("D:", "Games", "Blood")
         };
 
-        var baseCamp = new BloodCampaign
+        var testDir = Path.Combine(TestDataRoot, "Blood");
+        Directory.CreateDirectory(testDir);
+        CreateFiles(testDir,
+            ClientConsts.BloodIni, ClientConsts.BloodRff, ClientConsts.BloodSnd,
+            "GUI.RFF", "SURFACE.DAT", "TILES000.ART", "VOXEL.DAT",
+            ClientConsts.CrypticIni, "CP01.MAP", "CPART07.AR_", "CPART15.AR_",
+            "CRYPTIC.SMK", "CRYPTIC.WAV");
+
+        var originalFolder = game.GameInstallFolder;
+        game.GameInstallFolder = testDir;
+
+        Dictionary<AddonId, BaseAddon> campaigns;
+        try
         {
-            AddonId = new(nameof(GameEnum.Blood).ToLower(), null),
-            Type = AddonTypeEnum.Official,
-            Title = "Blood",
-            GridImageHash = null,
-            Author = null,
-            ReleaseDate = null,
-            Description = null,
-            SupportedGame = new(GameEnum.Blood),
-            RequiredFeatures = null,
-            FileInfo = null,
-            DependentAddons = null,
-            IncompatibleAddons = null,
-            MainDef = null,
-            AdditionalDefs = null,
-            StartMap = null,
-            PreviewImageHash = null,
-            INI = null,
-            RFF = null,
-            SND = null,
-            Executables = null,
-            Options = null
-        };
+            campaigns = _provider.GetOriginalCampaigns(game);
+        }
+        finally
+        {
+            game.GameInstallFolder = originalFolder;
+        }
+
+        var baseCamp = (BloodCampaign)campaigns[new AddonId(nameof(GameEnum.Blood).ToLower(), null)];
 
         var baseCampWithOptions = new BloodCampaign
         {
@@ -96,35 +133,7 @@ internal static class PortTestSetups
             }
         };
 
-        var cpCamp = new BloodCampaign
-        {
-            AddonId = new(nameof(BloodAddonEnum.BloodCP).ToLower(), null),
-            Type = AddonTypeEnum.Official,
-            Title = "Cryptic Passage",
-            GridImageHash = null,
-            Author = null,
-            ReleaseDate = null,
-            Description = null,
-            SupportedGame = new(GameEnum.Blood),
-            RequiredFeatures = null,
-            FileInfo = null,
-            DependentAddons = new Dictionary<string, string?>
-            {
-                {
-                    nameof(BloodAddonEnum.BloodCP), null
-                }
-            },
-            IncompatibleAddons = null,
-            MainDef = null,
-            AdditionalDefs = null,
-            StartMap = null,
-            PreviewImageHash = null,
-            INI = null,
-            RFF = null,
-            SND = null,
-            Executables = null,
-            Options = null
-        };
+        var cpCamp = (BloodCampaign)campaigns[new AddonId(nameof(BloodAddonEnum.BloodCP).ToLower(), null)];
 
         var tcCamp = new BloodCampaign
         {
@@ -327,195 +336,72 @@ internal static class PortTestSetups
             }
         };
 
-        var baseCamp = new DukeCampaign
-        {
-            AddonId = new(nameof(GameEnum.Duke3D).ToLower(), null),
-            Type = AddonTypeEnum.Official,
-            Title = "Duke Nukem 3D",
-            GridImageHash = null,
-            Author = null,
-            ReleaseDate = null,
-            Description = null,
-            SupportedGame = new(GameEnum.Duke3D, DukeVersionEnum.Duke3D_Atomic),
-            RequiredFeatures = null,
-            FileInfo = null,
-            DependentAddons = null,
-            IncompatibleAddons = null,
-            MainCon = null,
-            AdditionalCons = null,
-            MainDef = null,
-            AdditionalDefs = null,
-            RTS = null,
-            StartMap = null,
-            PreviewImageHash = null,
-            Executables = null,
-            Options = null
-        };
+        var testDir = Path.Combine(TestDataRoot, "Duke3D");
+        var wtTestDir = Path.Combine(testDir, "WorldTour");
+        var duke64TestDir = Path.Combine(testDir, "Duke64");
+        var dukeZhTestDir = Path.Combine(testDir, "DukeZH");
 
-        var wtCamp = new DukeCampaign
-        {
-            AddonId = new(nameof(DukeVersionEnum.Duke3D_WT).ToLower(), null),
-            Type = AddonTypeEnum.Official,
-            Title = "Duke Nukem 3D World Tour",
-            GridImageHash = null,
-            Author = null,
-            ReleaseDate = null,
-            Description = null,
-            SupportedGame = new(GameEnum.Duke3D, DukeVersionEnum.Duke3D_WT),
-            RequiredFeatures = null,
-            FileInfo = null,
-            DependentAddons = null,
-            IncompatibleAddons = null,
-            MainCon = null,
-            AdditionalCons = null,
-            MainDef = null,
-            AdditionalDefs = null,
-            RTS = null,
-            StartMap = null,
-            PreviewImageHash = null,
-            Executables = null,
-            Options = null
-        };
+        Directory.CreateDirectory(testDir);
+        Directory.CreateDirectory(wtTestDir);
+        Directory.CreateDirectory(duke64TestDir);
+        Directory.CreateDirectory(dukeZhTestDir);
 
-        var duke64Camp = new DukeCampaign
+        CreateFiles(testDir,
+            "DUKE3D.GRP",
+            "VACATION.GRP",
+            "DUKEDC.GRP",
+            "NWINTER.GRP");
+        CreateFiles(wtTestDir,
+            "EPISODE5BOSS.CON",
+            "FIREFLYTROOPER.CON",
+            "FLAMETHROWER.CON");
+        if (!File.Exists(Path.Combine(duke64TestDir, "rom.z64")))
         {
-            AddonId = new(nameof(GameEnum.Duke64).ToLower(), null),
-            Type = AddonTypeEnum.Official,
-            Title = "Duke Nukem 64",
-            GridImageHash = null,
-            Author = null,
-            ReleaseDate = null,
-            Description = null,
-            SupportedGame = new(GameEnum.Duke64),
-            RequiredFeatures = null,
-            FileInfo = null,
-            DependentAddons = null,
-            IncompatibleAddons = null,
-            MainCon = null,
-            AdditionalCons = null,
-            MainDef = null,
-            AdditionalDefs = null,
-            RTS = null,
-            StartMap = null,
-            PreviewImageHash = null,
-            Executables = null,
-            Options = null
-        };
+            using (File.Create(Path.Combine(duke64TestDir, "rom.z64"))) { }
+        }
 
-        var zhCamp = new DukeCampaign
+        if (!File.Exists(Path.Combine(dukeZhTestDir, "rom.z64")))
         {
-            AddonId = new(nameof(GameEnum.DukeZeroHour).ToLower(), null),
-            Type = AddonTypeEnum.Official,
-            Title = "Duke Nukem ZeroHour",
-            GridImageHash = null,
-            Author = null,
-            ReleaseDate = null,
-            Description = null,
-            SupportedGame = new(GameEnum.DukeZeroHour),
-            RequiredFeatures = null,
-            FileInfo = null,
-            DependentAddons = null,
-            IncompatibleAddons = null,
-            MainCon = null,
-            AdditionalCons = null,
-            MainDef = null,
-            AdditionalDefs = null,
-            RTS = null,
-            StartMap = null,
-            PreviewImageHash = null,
-            Executables = null,
-            Options = null
-        };
+            using (File.Create(Path.Combine(dukeZhTestDir, "rom.z64"))) { }
+        }
 
-        var dcCamp = new DukeCampaign
+        var originalFolder = game.GameInstallFolder;
+        var originalWtPath = game.DukeWTInstallPath;
+        var original64Path = game.Duke64RomPath;
+        var originalZhPath = game.DukeZHRomPath;
+        var savedAddonsPaths = new Dictionary<DukeAddonEnum, string>(game.AddonsPaths);
+
+        game.GameInstallFolder = testDir;
+        game.DukeWTInstallPath = wtTestDir;
+        game.Duke64RomPath = Path.Combine(duke64TestDir, "rom.z64");
+        game.DukeZHRomPath = Path.Combine(dukeZhTestDir, "rom.z64");
+
+        Dictionary<AddonId, BaseAddon> campaigns;
+        try
         {
-            AddonId = new(nameof(DukeAddonEnum.DukeDC).ToLower(), null),
-            Type = AddonTypeEnum.Official,
-            Title = "Duke: DC",
-            GridImageHash = null,
-            Author = null,
-            ReleaseDate = null,
-            Description = null,
-            SupportedGame = new(GameEnum.Duke3D, DukeVersionEnum.Duke3D_Atomic),
-            RequiredFeatures = null,
-            FileInfo = null,
-            DependentAddons = new Dictionary<string, string?>
+            campaigns = _provider.GetOriginalCampaigns(game);
+        }
+        finally
+        {
+            game.GameInstallFolder = originalFolder;
+            game.DukeWTInstallPath = originalWtPath;
+            game.Duke64RomPath = original64Path;
+            game.DukeZHRomPath = originalZhPath;
+
+            game.AddonsPaths.Clear();
+            foreach (var kvp in savedAddonsPaths)
             {
-                {
-                    nameof(DukeAddonEnum.DukeDC), null
-                }
-            },
-            IncompatibleAddons = null,
-            MainCon = null,
-            AdditionalCons = null,
-            MainDef = null,
-            AdditionalDefs = null,
-            RTS = null,
-            StartMap = null,
-            PreviewImageHash = null,
-            Executables = null,
-            Options = null
-        };
+                game.AddonsPaths[kvp.Key] = kvp.Value;
+            }
+        }
 
-        var nwCamp = new DukeCampaign
-        {
-            AddonId = new(nameof(DukeAddonEnum.DukeNW).ToLower(), null),
-            Type = AddonTypeEnum.Official,
-            Title = "Duke: NW",
-            GridImageHash = null,
-            Author = null,
-            ReleaseDate = null,
-            Description = null,
-            SupportedGame = new(GameEnum.Duke3D, DukeVersionEnum.Duke3D_Atomic),
-            RequiredFeatures = null,
-            FileInfo = null,
-            DependentAddons = new Dictionary<string, string?>
-            {
-                {
-                    nameof(DukeAddonEnum.DukeNW), null
-                }
-            },
-            IncompatibleAddons = null,
-            MainCon = null,
-            AdditionalCons = null,
-            MainDef = null,
-            AdditionalDefs = null,
-            RTS = null,
-            StartMap = null,
-            PreviewImageHash = null,
-            Executables = null,
-            Options = null
-        };
-
-        var vacaCamp = new DukeCampaign
-        {
-            AddonId = new("dukevaca", null),
-            Type = AddonTypeEnum.Official,
-            Title = "Duke Nukem 3D Caribbean",
-            GridImageHash = null,
-            Author = null,
-            ReleaseDate = null,
-            Description = null,
-            SupportedGame = new(GameEnum.Duke3D, DukeVersionEnum.Duke3D_Atomic),
-            RequiredFeatures = null,
-            FileInfo = null,
-            DependentAddons = new Dictionary<string, string?>
-            {
-                {
-                    nameof(DukeAddonEnum.DukeVaca), null
-                }
-            },
-            IncompatibleAddons = null,
-            MainCon = null,
-            AdditionalCons = null,
-            MainDef = null,
-            AdditionalDefs = null,
-            RTS = null,
-            StartMap = null,
-            PreviewImageHash = null,
-            Executables = null,
-            Options = null
-        };
+        var baseCamp = (DukeCampaign)campaigns[new AddonId(nameof(GameEnum.Duke3D).ToLower(), null)];
+        var vacaCamp = (DukeCampaign)campaigns[new AddonId(nameof(DukeAddonEnum.DukeVaca).ToLower(), null)];
+        var wtCamp = (DukeCampaign)campaigns[new AddonId(nameof(DukeVersionEnum.Duke3D_WT).ToLower(), null)];
+        var duke64Camp = (DukeCampaign)campaigns[new AddonId(nameof(GameEnum.Duke64).ToLower(), null)];
+        var zhCamp = (DukeCampaign)campaigns[new AddonId(nameof(GameEnum.DukeZeroHour).ToLower(), null)];
+        var dcCamp = (DukeCampaign)campaigns[new AddonId(nameof(DukeAddonEnum.DukeDC).ToLower(), null)];
+        var nwCamp = (DukeCampaign)campaigns[new AddonId(nameof(DukeAddonEnum.DukeNW).ToLower(), null)];
 
         var tcCamp = new DukeCampaign
         {
@@ -596,30 +482,24 @@ internal static class PortTestSetups
             GameInstallFolder = Path.Combine("D:", "Games", "NAM")
         };
 
-        var camp = new DukeCampaign
+        var testDir = Path.Combine(TestDataRoot, "NAM");
+        Directory.CreateDirectory(testDir);
+        CreateFiles(testDir, "NAM.GRP");
+
+        var originalFolder = game.GameInstallFolder;
+        game.GameInstallFolder = testDir;
+
+        Dictionary<AddonId, BaseAddon> campaigns;
+        try
         {
-            AddonId = new(nameof(GameEnum.NAM).ToLower(), null),
-            Type = AddonTypeEnum.Official,
-            Title = "NAM",
-            GridImageHash = null,
-            Author = null,
-            ReleaseDate = null,
-            Description = null,
-            SupportedGame = new(GameEnum.NAM),
-            RequiredFeatures = null,
-            FileInfo = null,
-            DependentAddons = null,
-            IncompatibleAddons = null,
-            MainCon = null,
-            AdditionalCons = null,
-            MainDef = null,
-            AdditionalDefs = null,
-            RTS = null,
-            StartMap = null,
-            PreviewImageHash = null,
-            Executables = null,
-            Options = null
-        };
+            campaigns = _provider.GetOriginalCampaigns(game);
+        }
+        finally
+        {
+            game.GameInstallFolder = originalFolder;
+        }
+
+        var camp = (DukeCampaign)campaigns[new AddonId(nameof(GameEnum.NAM).ToLower(), null)];
 
         return (game, camp, modsProvider);
     }
@@ -637,80 +517,35 @@ internal static class PortTestSetups
             AgainInstallPath = Path.Combine("D:", "Games", "Again")
         };
 
-        var redneckCamp = new DukeCampaign
-        {
-            AddonId = new(nameof(GameEnum.Redneck).ToLower(), null),
-            Type = AddonTypeEnum.Official,
-            Title = "Redneck Rampage",
-            GridImageHash = null,
-            Author = null,
-            ReleaseDate = null,
-            Description = null,
-            SupportedGame = new(GameEnum.Redneck),
-            RequiredFeatures = null,
-            FileInfo = null,
-            DependentAddons = null,
-            IncompatibleAddons = null,
-            MainCon = null,
-            AdditionalCons = null,
-            MainDef = null,
-            AdditionalDefs = null,
-            RTS = null,
-            StartMap = null,
-            PreviewImageHash = null,
-            Executables = null,
-            Options = null
-        };
+        var testDir = Path.Combine(TestDataRoot, "Redneck");
+        var againTestDir = Path.Combine(testDir, "Again");
+        Directory.CreateDirectory(testDir);
+        Directory.CreateDirectory(againTestDir);
+        CreateFiles(testDir, "REDNECK.GRP",
+            "TILESA66.ART", "TILESB66.ART", "TURD66.ANM", "TURD66.VOC",
+            "END66.ANM", "END66.VOC", "BUBBA66.CON", "DEFS66.CON",
+            "GATOR66.CON", "GAME66.CON", "PIG66.CON");
+        CreateFiles(againTestDir, "REDNECK.GRP", "BIKER.CON");
 
-        var againCamp = new DukeCampaign
-        {
-            AddonId = new(nameof(GameEnum.RidesAgain).ToLower(), null),
-            Type = AddonTypeEnum.Official,
-            Title = "Rides Again",
-            GridImageHash = null,
-            Author = null,
-            ReleaseDate = null,
-            Description = null,
-            SupportedGame = new(GameEnum.RidesAgain),
-            RequiredFeatures = null,
-            FileInfo = null,
-            DependentAddons = null,
-            IncompatibleAddons = null,
-            MainCon = null,
-            AdditionalCons = null,
-            MainDef = null,
-            AdditionalDefs = null,
-            RTS = null,
-            StartMap = null,
-            PreviewImageHash = null,
-            Executables = null,
-            Options = null
-        };
+        var originalFolder = game.GameInstallFolder;
+        var originalAgainPath = game.AgainInstallPath;
+        game.GameInstallFolder = testDir;
+        game.AgainInstallPath = againTestDir;
 
-        var route66Camp = new DukeCampaign
+        Dictionary<AddonId, BaseAddon> campaigns;
+        try
         {
-            AddonId = new(nameof(RedneckAddonEnum.Route66).ToLower(), null),
-            Type = AddonTypeEnum.Official,
-            Title = "Redneck Rampage Route 66",
-            GridImageHash = null,
-            Author = null,
-            ReleaseDate = null,
-            Description = null,
-            SupportedGame = new(GameEnum.Redneck),
-            RequiredFeatures = null,
-            FileInfo = null,
-            DependentAddons = null,
-            IncompatibleAddons = null,
-            MainCon = null,
-            AdditionalCons = null,
-            MainDef = null,
-            AdditionalDefs = null,
-            RTS = null,
-            StartMap = null,
-            PreviewImageHash = null,
-            Executables = null,
-            Options = null
-        };
+            campaigns = _provider.GetOriginalCampaigns(game);
+        }
+        finally
+        {
+            game.GameInstallFolder = originalFolder;
+            game.AgainInstallPath = originalAgainPath;
+        }
+
+        var redneckCamp = (DukeCampaign)campaigns[new AddonId(nameof(GameEnum.Redneck).ToLower(), null)];
+        var againCamp = (DukeCampaign)campaigns[new AddonId(nameof(GameEnum.RidesAgain).ToLower(), null)];
+        var route66Camp = (DukeCampaign)campaigns[new AddonId(nameof(RedneckAddonEnum.Route66).ToLower(), null)];
 
         return (game, redneckCamp, againCamp, route66Camp, modsProvider);
     }
@@ -727,27 +562,24 @@ internal static class PortTestSetups
             GameInstallFolder = Path.Combine("D:", "Games", "Slave")
         };
 
-        var camp = new GenericCampaign
+        var testDir = Path.Combine(TestDataRoot, "Slave");
+        Directory.CreateDirectory(testDir);
+        CreateFiles(testDir, "STUFF.DAT");
+
+        var originalFolder = game.GameInstallFolder;
+        game.GameInstallFolder = testDir;
+
+        Dictionary<AddonId, BaseAddon> campaigns;
+        try
         {
-            AddonId = new(nameof(GameEnum.Slave).ToLower(), null),
-            Type = AddonTypeEnum.Official,
-            Title = "Slave",
-            GridImageHash = null,
-            PreviewImageHash = null,
-            Author = null,
-            ReleaseDate = null,
-            Description = null,
-            SupportedGame = new(GameEnum.Slave),
-            RequiredFeatures = null,
-            FileInfo = null,
-            DependentAddons = null,
-            IncompatibleAddons = null,
-            MainDef = null,
-            AdditionalDefs = null,
-            StartMap = null,
-            Executables = null,
-            Options = null
-        };
+            campaigns = _provider.GetOriginalCampaigns(game);
+        }
+        finally
+        {
+            game.GameInstallFolder = originalFolder;
+        }
+
+        var camp = (GenericCampaign)campaigns[new AddonId(nameof(GameEnum.Slave).ToLower(), null)];
 
         return (game, camp, modsProvider);
     }
@@ -764,27 +596,24 @@ internal static class PortTestSetups
             GameInstallFolder = Path.Combine("D:", "Games", "Wang")
         };
 
-        var wangCamp = new GenericCampaign
+        var testDir = Path.Combine(TestDataRoot, "Wang");
+        Directory.CreateDirectory(testDir);
+        CreateFiles(testDir, "SW.GRP");
+
+        var originalFolder = game.GameInstallFolder;
+        game.GameInstallFolder = testDir;
+
+        Dictionary<AddonId, BaseAddon> campaigns;
+        try
         {
-            AddonId = new(nameof(GameEnum.Wang).ToLower(), null),
-            Type = AddonTypeEnum.Official,
-            Title = "Shadow Warrior",
-            GridImageHash = null,
-            PreviewImageHash = null,
-            Author = null,
-            ReleaseDate = null,
-            Description = null,
-            SupportedGame = new(GameEnum.Wang),
-            RequiredFeatures = null,
-            FileInfo = null,
-            DependentAddons = null,
-            IncompatibleAddons = null,
-            MainDef = null,
-            AdditionalDefs = null,
-            StartMap = null,
-            Executables = null,
-            Options = null
-        };
+            campaigns = _provider.GetOriginalCampaigns(game);
+        }
+        finally
+        {
+            game.GameInstallFolder = originalFolder;
+        }
+
+        var wangCamp = (GenericCampaign)campaigns[new AddonId(nameof(GameEnum.Wang).ToLower(), null)];
 
         var tdCamp = new GenericCampaign
         {
@@ -849,55 +678,25 @@ internal static class PortTestSetups
             GameInstallFolder = Path.Combine("D:", "Games", "WW2GI")
         };
 
-        var ww2Camp = new DukeCampaign
-        {
-            AddonId = new(nameof(GameEnum.WW2GI).ToLower(), null),
-            Type = AddonTypeEnum.Official,
-            Title = "World War II GI",
-            GridImageHash = null,
-            Author = null,
-            ReleaseDate = null,
-            Description = null,
-            SupportedGame = new(GameEnum.WW2GI),
-            RequiredFeatures = null,
-            FileInfo = null,
-            DependentAddons = null,
-            IncompatibleAddons = null,
-            MainCon = null,
-            AdditionalCons = null,
-            MainDef = null,
-            AdditionalDefs = null,
-            RTS = null,
-            StartMap = null,
-            PreviewImageHash = null,
-            Executables = null,
-            Options = null
-        };
+        var testDir = Path.Combine(TestDataRoot, "WW2GI");
+        Directory.CreateDirectory(testDir);
+        CreateFiles(testDir, "WW2GI.GRP", "PLATOONL.DAT", "PLATOONL.DEF");
 
-        var platoonCamp = new DukeCampaign
+        var originalFolder = game.GameInstallFolder;
+        game.GameInstallFolder = testDir;
+
+        Dictionary<AddonId, BaseAddon> campaigns;
+        try
         {
-            AddonId = new(nameof(WW2GIAddonEnum.Platoon).ToLower(), null),
-            Type = AddonTypeEnum.Official,
-            Title = "Platoon Leader",
-            GridImageHash = null,
-            Author = null,
-            ReleaseDate = null,
-            Description = null,
-            SupportedGame = new(GameEnum.WW2GI),
-            RequiredFeatures = null,
-            FileInfo = null,
-            DependentAddons = null,
-            IncompatibleAddons = null,
-            MainCon = null,
-            AdditionalCons = null,
-            MainDef = null,
-            AdditionalDefs = null,
-            RTS = null,
-            StartMap = null,
-            PreviewImageHash = null,
-            Executables = null,
-            Options = null
-        };
+            campaigns = _provider.GetOriginalCampaigns(game);
+        }
+        finally
+        {
+            game.GameInstallFolder = originalFolder;
+        }
+
+        var ww2Camp = (DukeCampaign)campaigns[new AddonId(nameof(GameEnum.WW2GI).ToLower(), null)];
+        var platoonCamp = (DukeCampaign)campaigns[new AddonId(nameof(WW2GIAddonEnum.Platoon).ToLower(), null)];
 
         return (game, ww2Camp, platoonCamp, modsProvider);
     }
@@ -914,30 +713,24 @@ internal static class PortTestSetups
             GameInstallFolder = Path.Combine("D:", "Games", "Fury")
         };
 
-        var camp = new DukeCampaign
+        var testDir = Path.Combine(TestDataRoot, "Fury");
+        Directory.CreateDirectory(testDir);
+        CreateFiles(testDir, "fury.grp");
+
+        var originalFolder = game.GameInstallFolder;
+        game.GameInstallFolder = testDir;
+
+        Dictionary<AddonId, BaseAddon> campaigns;
+        try
         {
-            AddonId = new(nameof(GameEnum.Fury).ToLower(), null),
-            Type = AddonTypeEnum.Official,
-            Title = "Ion Fury",
-            GridImageHash = null,
-            Author = null,
-            ReleaseDate = null,
-            Description = null,
-            SupportedGame = new(GameEnum.Fury),
-            RequiredFeatures = null,
-            FileInfo = null,
-            DependentAddons = null,
-            IncompatibleAddons = null,
-            MainCon = null,
-            AdditionalCons = null,
-            MainDef = null,
-            RTS = null,
-            AdditionalDefs = null,
-            StartMap = null,
-            PreviewImageHash = null,
-            Executables = null,
-            Options = null
-        };
+            campaigns = _provider.GetOriginalCampaigns(game);
+        }
+        finally
+        {
+            game.GameInstallFolder = originalFolder;
+        }
+
+        var camp = (DukeCampaign)campaigns[new AddonId(nameof(GameEnum.Fury).ToLower(), null)];
 
         return (game, camp, modsProvider);
     }
@@ -953,27 +746,26 @@ internal static class PortTestSetups
             Witchaven2InstallPath = Path.Combine("D:", "Games", "Witchaven", "WH2")
         };
 
-        var camp = new GenericCampaign
+        var testDir = Path.Combine(TestDataRoot, "Witchaven");
+        Directory.CreateDirectory(testDir);
+        CreateFiles(testDir, "JOESND", "SONGS");
+        CreateNumberedFiles(testDir, "TILES", "ART", 0, 11, 3);
+        CreateNumberedFiles(testDir, "LEVEL", "MAP", 1, 26, 0);
+
+        var originalFolder = game.GameInstallFolder;
+        game.GameInstallFolder = testDir;
+
+        Dictionary<AddonId, BaseAddon> campaigns;
+        try
         {
-            AddonId = new(nameof(GameEnum.Witchaven).ToLower(), null),
-            Type = AddonTypeEnum.Official,
-            Title = "Witchaven",
-            GridImageHash = null,
-            PreviewImageHash = null,
-            Author = null,
-            ReleaseDate = null,
-            Description = null,
-            SupportedGame = new(GameEnum.Witchaven),
-            RequiredFeatures = null,
-            FileInfo = null,
-            DependentAddons = null,
-            IncompatibleAddons = null,
-            MainDef = null,
-            AdditionalDefs = null,
-            StartMap = null,
-            Executables = null,
-            Options = null
-        };
+            campaigns = _provider.GetOriginalCampaigns(game);
+        }
+        finally
+        {
+            game.GameInstallFolder = originalFolder;
+        }
+
+        var camp = (GenericCampaign)campaigns[new AddonId(nameof(GameEnum.Witchaven).ToLower(), null)];
 
         return (game, camp);
     }
@@ -981,34 +773,32 @@ internal static class PortTestSetups
     /// <summary>
     ///     Creates test setups for TekWar game.
     /// </summary>
-    internal static (TekWarGame game, GenericCampaign camp) TekWar()
+    internal static (TekWarGame game, DukeCampaign camp) TekWar()
     {
         var game = new TekWarGame
         {
             GameInstallFolder = Path.Combine("D:", "Games", "TekWar")
         };
 
-        var camp = new GenericCampaign
+        var testDir = Path.Combine(TestDataRoot, "TekWar");
+        Directory.CreateDirectory(testDir);
+        CreateFiles(testDir, "SONGS", "SOUNDS");
+        CreateNumberedFiles(testDir, "TILES", "ART", 0, 16, 3);
+
+        var originalFolder = game.GameInstallFolder;
+        game.GameInstallFolder = testDir;
+
+        Dictionary<AddonId, BaseAddon> campaigns;
+        try
         {
-            AddonId = new(nameof(GameEnum.TekWar).ToLower(), null),
-            Type = AddonTypeEnum.Official,
-            Title = "TekWar",
-            GridImageHash = null,
-            PreviewImageHash = null,
-            Author = null,
-            ReleaseDate = null,
-            Description = null,
-            SupportedGame = new(GameEnum.TekWar),
-            RequiredFeatures = null,
-            FileInfo = null,
-            DependentAddons = null,
-            IncompatibleAddons = null,
-            MainDef = null,
-            AdditionalDefs = null,
-            StartMap = null,
-            Executables = null,
-            Options = null
-        };
+            campaigns = _provider.GetOriginalCampaigns(game);
+        }
+        finally
+        {
+            game.GameInstallFolder = originalFolder;
+        }
+
+        var camp = (DukeCampaign)campaigns[new AddonId(nameof(GameEnum.TekWar).ToLower(), null)];
 
         return (game, camp);
     }

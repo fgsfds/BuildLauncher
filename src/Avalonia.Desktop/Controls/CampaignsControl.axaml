@@ -1,24 +1,24 @@
-<UserControl x:Class="Avalonia.Desktop.Controls.CampaignsControl"
-             xmlns="https://github.com/avaloniaui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:behaviors="clr-namespace:Avalonia.Desktop.Behaviors"
-             xmlns:ctrl="clr-namespace:Avalonia.Desktop.Controls"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:helpers="clr-namespace:Avalonia.Desktop.Helpers"
-             xmlns:i="https://github.com/projektanker/icons.avalonia"
-             xmlns:in="clr-namespace:Addons.Addons;assembly=BuildLauncher.Addons"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:vm="clr-namespace:Avalonia.Desktop.ViewModels"
-             d:DesignHeight="450"
-             d:DesignWidth="800"
-             x:DataType="vm:CampaignsViewModel"
-             mc:Ignorable="d">
+<ctrl:AddonListControlBase x:Class="Avalonia.Desktop.Controls.CampaignsControl"
+                           xmlns="https://github.com/avaloniaui"
+                           xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                           xmlns:behaviors="clr-namespace:Avalonia.Desktop.Behaviors"
+                           xmlns:ctrl="clr-namespace:Avalonia.Desktop.Controls"
+                           xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                           xmlns:helpers="clr-namespace:Avalonia.Desktop.Helpers"
+                           xmlns:i="https://github.com/projektanker/icons.avalonia"
+                           xmlns:in="clr-namespace:Addons.Addons;assembly=BuildLauncher.Addons"
+                           xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                           xmlns:vm="clr-namespace:Avalonia.Desktop.ViewModels"
+                           d:DesignHeight="450"
+                           d:DesignWidth="800"
+                           x:DataType="vm:CampaignsViewModel"
+                           mc:Ignorable="d">
 
-    <UserControl.Resources>
+    <ctrl:AddonListControlBase.Resources>
         <helpers:StringToWrappedConverter x:Key="StringToWrappedConverter" />
-    </UserControl.Resources>
+    </ctrl:AddonListControlBase.Resources>
 
-    <UserControl.DataTemplates>
+    <ctrl:AddonListControlBase.DataTemplates>
 
         <DataTemplate x:DataType="helpers:SeparatorItem">
             <TextBlock Width="{Binding #CampaignsList.Bounds.Width}" Height="50" />
@@ -100,7 +100,7 @@
             </Grid>
 
         </DataTemplate>
-    </UserControl.DataTemplates>
+    </ctrl:AddonListControlBase.DataTemplates>
 
     <Grid ColumnDefinitions="2*,*" RowDefinitions="auto,*,auto">
 
@@ -129,13 +129,15 @@
                  Grid.Column="0"
                  Padding="2"
                  IsEnabled="{Binding !IsInProgress}"
-                 ItemsSource="{Binding CampaignsList}"
+                 ItemsSource="{Binding AddonsList}"
                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                  SelectedItem="{Binding SelectedAddon}"
                  SelectionChanged="OnCampaignsListSelectionChanged">
 
             <ListBox.ContextMenu>
-                <ContextMenu Closed="ContextMenuClosed" Opened="ContextMenuOpened" />
+                <ContextMenu Closed="ContextMenuClosed"
+                             Opened="ContextMenuOpened"
+                             Opening="ContextMenuOpening" />
             </ListBox.ContextMenu>
 
             <Interaction.Behaviors>
@@ -215,4 +217,4 @@
 
     </Grid>
 
-</UserControl>
+</ctrl:AddonListControlBase>

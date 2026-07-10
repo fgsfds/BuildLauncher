@@ -1,15 +1,12 @@
 ﻿using System.Collections.Immutable;
 using System.Reflection;
-using Avalonia;
-using Avalonia.Controls;
-using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Desktop.ViewModels;
-using Avalonia.Headless;
 using Core.All.Enums;
 using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
 using Ports.Ports;
 using Ports.Providers;
+using Tests.Unit.Helpers;
 
 namespace Tests.Unit;
 
@@ -19,19 +16,7 @@ public sealed class PortsViewModelTests
     private readonly Mock<IPortsProvider> _portsProviderMock;
     private readonly PortsViewModel _viewModel;
 
-    static PortsViewModelTests()
-    {
-        if (Application.Current is null)
-        {
-            var lifetime = new ClassicDesktopStyleApplicationLifetime();
-
-            _ = AppBuilder.Configure<Application>()
-                          .UseHeadless(new AvaloniaHeadlessPlatformOptions())
-                          .SetupWithLifetime(lifetime);
-
-            lifetime.MainWindow = new Window();
-        }
-    }
+    static PortsViewModelTests() => HeadlessAvaloniaApp.EnsureInitialized();
 
     public PortsViewModelTests()
     {

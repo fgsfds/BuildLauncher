@@ -1,12 +1,8 @@
 using Addons.Addons;
 using Addons.Helpers;
 using Addons.Providers;
-using Avalonia;
-using Avalonia.Controls;
-using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Desktop.Misc;
 using Avalonia.Desktop.ViewModels;
-using Avalonia.Headless;
 using Core.All;
 using Core.All.Enums;
 using Core.All.Serializable.Addon;
@@ -32,6 +28,7 @@ public sealed class CampaignsViewModelTests : IDisposable
     private readonly Mock<IConfigProvider> _configMock;
     private readonly HashSet<string> _disabledMods = [];
     private readonly HashSet<AddonId> _favorites = [];
+    private readonly Mock<IFolderOpener> _folderOpenerMock;
     private readonly DukeGame _game;
     private readonly Mock<InstalledGamesProvider> _gamesProviderMock;
     private readonly InstalledAddonsProvider _installedAddonsProvider;
@@ -40,21 +37,10 @@ public sealed class CampaignsViewModelTests : IDisposable
     private readonly PlaytimeProvider _playtimeProvider;
     private readonly PortStarter _portStarter;
     private readonly RatingProvider _ratingProvider;
+    private readonly Mock<IUserNotifier> _userNotifierMock;
     private readonly CampaignsViewModel _viewModel;
 
-    static CampaignsViewModelTests()
-    {
-        if (Application.Current is null)
-        {
-            var lifetime = new ClassicDesktopStyleApplicationLifetime();
-
-            _ = AppBuilder.Configure<Application>()
-                          .UseHeadless(new AvaloniaHeadlessPlatformOptions())
-                          .SetupWithLifetime(lifetime);
-
-            lifetime.MainWindow = new Window();
-        }
-    }
+    static CampaignsViewModelTests() => HeadlessAvaloniaApp.EnsureInitialized();
 
     public CampaignsViewModelTests()
     {
@@ -107,6 +93,8 @@ public sealed class CampaignsViewModelTests : IDisposable
             );
 
         _addonInstallerMock = new Mock<IAddonDropHelper>();
+        _folderOpenerMock = new Mock<IFolderOpener>();
+        _userNotifierMock = new Mock<IUserNotifier>();
 
         _viewModel = new CampaignsViewModel(
             _game,
@@ -119,6 +107,8 @@ public sealed class CampaignsViewModelTests : IDisposable
             _portStarter,
             _bitmapsCache,
             _addonInstallerMock.Object,
+            _folderOpenerMock.Object,
+            _userNotifierMock.Object,
             NullLogger<CampaignsViewModel>.Instance
             );
 
@@ -135,58 +125,58 @@ public sealed class CampaignsViewModelTests : IDisposable
     {
         await _viewModel.InitializeAsync();
 
-        Assert.NotNull(_viewModel.CampaignsList);
+        Assert.NotNull(_viewModel.AddonsList);
     }
 
     [Fact]
-    public void CampaignsList_Empty_ReturnsEmpty()
+    public void AddonsList_Empty_ReturnsEmpty()
     {
-        Assert.Empty(_viewModel.CampaignsList);
+        Assert.Empty(_viewModel.AddonsList);
     }
 
     [Fact]
-    public void CampaignsList_WithCampaigns_ReturnsCampaigns()
+    public void AddonsList_WithCampaigns_ReturnsCampaigns()
     {
         var parsed = ParsedAddonFileHelper.CreateParsedAddonFile("test-camp", "Test", "1.0", AddonTypeEnum.TC);
         _installedAddonsProvider.AddAddon(parsed);
 
-        var list = _viewModel.CampaignsList;
+        var list = _viewModel.AddonsList;
 
         Assert.Contains(list, a => a.AddonId.Id == "test-camp");
     }
 
     [Fact]
-    public void CampaignsList_WithSearch_FiltersResults()
+    public void AddonsList_WithSearch_FiltersResults()
     {
         _installedAddonsProvider.AddAddon(ParsedAddonFileHelper.CreateParsedAddonFile("camp-a", "Alpha Camp", "1.0", AddonTypeEnum.TC));
         _installedAddonsProvider.AddAddon(ParsedAddonFileHelper.CreateParsedAddonFile("camp-b", "Beta Camp", "1.0", AddonTypeEnum.TC));
 
         _viewModel.SearchBoxText = "Alpha";
 
-        var list = _viewModel.CampaignsList;
+        var list = _viewModel.AddonsList;
         Assert.Contains(list, a => a.AddonId.Id == "camp-a");
         Assert.DoesNotContain(list, a => a.AddonId.Id == "camp-b");
     }
 
     [Fact]
-    public void CampaignsList_WithSearchNoMatch_ReturnsEmpty()
+    public void AddonsList_WithSearchNoMatch_ReturnsEmpty()
     {
         _installedAddonsProvider.AddAddon(ParsedAddonFileHelper.CreateParsedAddonFile("camp-a", "Alpha Camp", "1.0", AddonTypeEnum.TC));
 
         _viewModel.SearchBoxText = "Zebra";
 
-        Assert.Empty(_viewModel.CampaignsList);
+        Assert.Empty(_viewModel.AddonsList);
     }
 
     [Fact]
-    public void CampaignsList_FavoritesFirst_WithSeparator()
+    public void AddonsList_FavoritesFirst_WithSeparator()
     {
         var favParsed = ParsedAddonFileHelper.CreateParsedAddonFile("camp-fav", "Fav Camp", "1.0", AddonTypeEnum.TC);
         _favorites.Add(new AddonId("camp-fav", "1.0"));
         _installedAddonsProvider.AddAddon(favParsed);
         _installedAddonsProvider.AddAddon(ParsedAddonFileHelper.CreateParsedAddonFile("camp-other", "Other Camp", "1.0", AddonTypeEnum.TC));
 
-        var list = _viewModel.CampaignsList;
+        var list = _viewModel.AddonsList;
         var baseAddons = list.Where(a => a.AddonId?.Id is not null).ToList();
         var favIndex = baseAddons.IndexOf(baseAddons.First(a => a.AddonId.Id == "camp-fav"));
         var otherIndex = baseAddons.IndexOf(baseAddons.First(a => a.AddonId.Id == "camp-other"));
@@ -217,7 +207,7 @@ public sealed class CampaignsViewModelTests : IDisposable
     [Fact]
     public void DeleteCampaign_NullSelectedAddon_Throws()
     {
-        Assert.Throws<ArgumentNullException>(() => _viewModel.DeleteCampaignCommand.Execute(null));
+        Assert.Throws<ArgumentNullException>(() => _viewModel.DeleteAddonCommand.Execute(null));
     }
 
     [Fact]
@@ -230,9 +220,9 @@ public sealed class CampaignsViewModelTests : IDisposable
 
         Directory.CreateDirectory(campaign.FileInfo!.PathToFolder);
 
-        _viewModel.DeleteCampaignCommand.Execute(null);
+        _viewModel.DeleteAddonCommand.Execute(null);
 
-        Assert.DoesNotContain(_viewModel.CampaignsList, a => a.AddonId.Id == "del-test");
+        Assert.DoesNotContain(_viewModel.AddonsList, a => a.AddonId.Id == "del-test");
     }
 
     [Fact]
@@ -434,7 +424,7 @@ public sealed class CampaignsViewModelTests : IDisposable
     [Fact]
     public void StartCampaign_NullSelectedAddon_CaughtByViewModel()
     {
-        var ex = Record.Exception(() => _viewModel.StartCampaignCommand.Execute(new object()));
+        var ex = Record.Exception(() => _viewModel.StartAddonCommand.Execute(new object()));
         Assert.Null(ex);
     }
 
@@ -446,7 +436,7 @@ public sealed class CampaignsViewModelTests : IDisposable
         _viewModel.SelectedAddon = _installedAddonsProvider.GetInstalledAddonsByType(AddonTypeEnum.TC)
                                                            .First(a => a.AddonId.Id == "test");
 
-        var ex = Record.Exception(() => _viewModel.StartCampaignCommand.Execute("not a port"));
+        var ex = Record.Exception(() => _viewModel.StartAddonCommand.Execute("not a port"));
         Assert.Null(ex);
     }
 
@@ -461,7 +451,7 @@ public sealed class CampaignsViewModelTests : IDisposable
 
         var stubPort = new StubPort();
 
-        var ex = Record.Exception(() => _viewModel.StartCampaignCommand.Execute(stubPort));
+        var ex = Record.Exception(() => _viewModel.StartAddonCommand.Execute(stubPort));
 
         Assert.Null(ex);
     }

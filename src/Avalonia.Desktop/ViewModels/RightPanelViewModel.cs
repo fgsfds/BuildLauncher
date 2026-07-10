@@ -9,7 +9,6 @@ using CommunityToolkit.Mvvm.Input;
 using Core.All.Helpers;
 using Core.Client.Interfaces;
 using Core.Client.Providers;
-using Microsoft.Extensions.Logging;
 
 namespace Avalonia.Desktop.ViewModels;
 
@@ -17,30 +16,39 @@ public abstract partial class RightPanelViewModel : ObservableObject
 {
     private readonly BitmapsCache _bitmapsCache;
     private readonly IConfigProvider _config;
-    private readonly MetadataProvider _metadataUpdater;
+    private readonly MetadataProvider _metadataProvider;
     private readonly PlaytimeProvider _playtimeProvider;
     private readonly RatingProvider _ratingProvider;
-
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="RightPanelViewModel" /> class.
     /// </summary>
-    /// <param name="playtimeProvider">The playtime provider.</param>
-    /// <param name="ratingProvider">The rating provider.</param>
-    /// <param name="metadataUpdater">The metadata provider.</param>
-    /// <param name="bitmapsCache">The bitmaps cache.</param>
-    /// <param name="config">The configuration provider.</param>
-    public RightPanelViewModel(
+    /// <param name="playtimeProvider">
+    ///     The playtime provider.
+    /// </param>
+    /// <param name="ratingProvider">
+    ///     The rating provider.
+    /// </param>
+    /// <param name="metadataProvider">
+    ///     The metadata provider.
+    /// </param>
+    /// <param name="bitmapsCache">
+    ///     The bitmaps cache.
+    /// </param>
+    /// <param name="config">
+    ///     The configuration provider.
+    /// </param>
+    protected RightPanelViewModel(
         PlaytimeProvider playtimeProvider,
         RatingProvider ratingProvider,
-        MetadataProvider metadataUpdater,
+        MetadataProvider metadataProvider,
         BitmapsCache bitmapsCache,
         IConfigProvider config
         )
     {
         _playtimeProvider = playtimeProvider;
         _ratingProvider = ratingProvider;
-        _metadataUpdater = metadataUpdater;
+        _metadataProvider = metadataProvider;
         _bitmapsCache = bitmapsCache;
         _config = config;
     }
@@ -116,8 +124,12 @@ public abstract partial class RightPanelViewModel : ObservableObject
         /// <summary>
         ///     Initializes a new instance of the <see cref="AddonOption" /> class.
         /// </summary>
-        /// <param name="name">The option name.</param>
-        /// <param name="isEnabled">Whether the option is enabled.</param>
+        /// <param name="name">
+        ///     The option name.
+        /// </param>
+        /// <param name="isEnabled">
+        ///     Whether the option is enabled.
+        /// </param>
         public AddonOption(string name, bool isEnabled)
         {
             Name = name;
@@ -151,7 +163,7 @@ public abstract partial class RightPanelViewModel : ObservableObject
     /// <summary>
     ///     Gets whether a metadata update is available for the selected addon.
     /// </summary>
-    public bool IsMetadataUpdateAvailable => SelectedAddon?.FileInfo is not null && _metadataUpdater.IsMetadataUpdateAvailable(SelectedAddon.AddonId, SelectedAddon.FileInfo);
+    public bool IsMetadataUpdateAvailable => SelectedAddon?.FileInfo is not null && _metadataProvider.IsMetadataUpdateAvailable(SelectedAddon.AddonId, SelectedAddon.FileInfo);
 
     /// <summary>
     ///     Gets the rating of the selected addon.
@@ -238,8 +250,12 @@ public abstract partial class RightPanelViewModel : ObservableObject
     /// <summary>
     ///     Updates metadata for the specified addon.
     /// </summary>
-    /// <param name="value">The addon to update, or null to use the selected addon.</param>
-    /// <returns>A task representing the asynchronous operation.</returns>
+    /// <param name="value">
+    ///     The addon to update, or null to use the selected addon.
+    /// </param>
+    /// <returns>
+    ///     A task representing the asynchronous operation.
+    /// </returns>
     public abstract Task UpdateMetadataAsync(object? value);
 
     #endregion

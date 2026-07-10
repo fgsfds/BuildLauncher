@@ -10,14 +10,12 @@ namespace Avalonia.Desktop.Controls;
 /// <summary>
 ///     Displays and manages installed mods for a selected game.
 /// </summary>
-public sealed partial class ModsControl : UserControl
+public sealed partial class ModsControl : AddonListControlBase
 {
-    private readonly ModsViewModel _viewModel = null!;
-
     /// <summary>
     ///     Initializes a new instance of the <see cref="ModsControl" /> class.
     /// </summary>
-    public ModsControl()
+    public ModsControl() : base(null!)
     {
         InitializeComponent();
     }
@@ -25,10 +23,11 @@ public sealed partial class ModsControl : UserControl
     /// <summary>
     ///     Initializes a new instance of the <see cref="ModsControl" /> class.
     /// </summary>
-    /// <param name="viewModel">The mods view model.</param>
-    public ModsControl(ModsViewModel viewModel)
+    /// <param name="viewModel">
+    ///     The mods view model.
+    /// </param>
+    public ModsControl(ModsViewModel viewModel) : base(viewModel)
     {
-        _viewModel = viewModel;
         InitializeComponent();
     }
 
@@ -44,10 +43,7 @@ public sealed partial class ModsControl : UserControl
             return;
         }
 
-        if (ModsList.ContextMenu is not null)
-        {
-            ModsList.ContextMenu.Items.Clear();
-        }
+        ClearContextMenu(ModsList.ContextMenu);
 
         if (addon.IsMetadataUpdateAvailable)
         {
@@ -67,7 +63,7 @@ public sealed partial class ModsControl : UserControl
             Header = "Delete",
             Padding = new(5),
             Command = new RelayCommand(
-                () => _viewModel.DeleteModCommand.Execute(null),
+                () => _viewModel.DeleteAddonCommand.Execute(null),
                 () => addon.Type is not AddonTypeEnum.Official
                 )
         };
@@ -78,11 +74,5 @@ public sealed partial class ModsControl : UserControl
     /// <summary>
     ///     Handles the context menu closing event.
     /// </summary>
-    private void ContextMenuClosed(object? sender, RoutedEventArgs e)
-    {
-        if (ModsList.ContextMenu is not null)
-        {
-            ModsList.ContextMenu.Items.Clear();
-        }
-    }
+    private void ContextMenuClosed(object? sender, RoutedEventArgs e) => ClearContextMenu(ModsList.ContextMenu);
 }

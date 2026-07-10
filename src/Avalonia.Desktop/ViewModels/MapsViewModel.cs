@@ -1,12 +1,8 @@
 using System.Collections.Immutable;
-using System.Diagnostics;
 using Addons.Addons;
 using Addons.Helpers;
 using Addons.Providers;
-using Avalonia.Controls.Notifications;
 using Avalonia.Desktop.Misc;
-using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
 using Core.All.Enums;
 using Core.Client.Interfaces;
 using Core.Client.Providers;
@@ -17,30 +13,14 @@ using Ports.Ports;
 
 namespace Avalonia.Desktop.ViewModels;
 
-public sealed partial class MapsViewModel : RightPanelViewModel, IPortsButtonControl
+/// <summary>
+///     ViewModel for managing and launching map addons for a selected game.
+/// </summary>
+public sealed class MapsViewModel : AddonListViewModelBase
 {
-    private readonly IAddonDropHelper _addonInstaller;
-    private readonly IConfigProvider _config;
-    private readonly InstalledGamesProvider _gamesProvider;
-    private readonly InstalledAddonsProvider _installedAddonsProvider;
-    private readonly ILogger<MapsViewModel> _logger;
-    private readonly MetadataProvider _metadataProvider;
-    private readonly PortStarter _portStarter;
-
     /// <summary>
     ///     Initializes a new instance of the <see cref="MapsViewModel" /> class.
     /// </summary>
-    /// <param name="game">The game.</param>
-    /// <param name="gamesProvider">The installed games provider.</param>
-    /// <param name="config">The configuration provider.</param>
-    /// <param name="playtimeProvider">The playtime provider.</param>
-    /// <param name="ratingProvider">The rating provider.</param>
-    /// <param name="metadataProvider">The metadata provider.</param>
-    /// <param name="installedAddonsProviderFactory">The installed addons provider factory.</param>
-    /// <param name="portStarter">The port starter.</param>
-    /// <param name="bitmapsCache">The bitmaps cache.</param>
-    /// <param name="addonInstaller">The addon drop helper.</param>
-    /// <param name="logger">The logger.</param>
     [Obsolete($"Don't create directly. Use {nameof(IViewModelsFactory)}.")]
     public MapsViewModel(
         BaseGame game,
@@ -53,75 +33,43 @@ public sealed partial class MapsViewModel : RightPanelViewModel, IPortsButtonCon
         PortStarter portStarter,
         BitmapsCache bitmapsCache,
         IAddonDropHelper addonInstaller,
+        IFolderOpener folderOpener,
+        IUserNotifier userNotifier,
         ILogger<MapsViewModel> logger
-        ) : base(playtimeProvider, ratingProvider, metadataProvider, bitmapsCache, config)
-    {
-        Game = game;
-
-        _gamesProvider = gamesProvider;
-        _config = config;
-        _installedAddonsProvider = installedAddonsProviderFactory.Get(game);
-        _portStarter = portStarter;
-        _metadataProvider = metadataProvider;
-        _addonInstaller = addonInstaller;
-        _logger = logger;
-
-        _gamesProvider.GameChangedEvent += OnGameChanged;
-        _installedAddonsProvider.AddonsChangedEvent += OnAddonChanged;
-        //_downloadableAddonsProvider.AddonsChangedEvent += OnAddonChanged;
-    }
-
-    /// <summary>
-    ///     Gets the game associated with this view model.
-    /// </summary>
-    public BaseGame Game { get; }
+        ) : base(
+        game,
+        gamesProvider,
+        playtimeProvider,
+        ratingProvider,
+        metadataProvider,
+        installedAddonsProviderFactory,
+        portStarter,
+        bitmapsCache,
+        addonInstaller,
+        folderOpener,
+        userNotifier,
+        config,
+        logger
+        ) { }
 
     /// <summary>
-    ///     VM initialization.
+    ///     Gets the type of addon managed by this ViewModel.
     /// </summary>
-    public Task InitializeAsync() => UpdateAsync(false);
+    protected override AddonTypeEnum AddonType => AddonTypeEnum.Map;
 
     /// <summary>
-    ///     Updates the maps list asynchronously.
+    ///     Gets the file system path to the maps directory.
     /// </summary>
-    /// <param name="createNew">Whether to create a new cache.</param>
-    /// <returns>A task representing the asynchronous operation.</returns>
-    private async Task UpdateAsync(bool createNew)
-    {
-        IsInProgress = true;
-        await _installedAddonsProvider.CreateCacheAsync(createNew, AddonTypeEnum.Map).ConfigureAwait(true);
-        IsInProgress = false;
-    }
+    protected override string BaseFolderPath => Game.MapsFolderPath;
+
+    /// <inheritdoc />
+    public override bool IsPortsButtonsVisible => true;
 
     /// <summary>
-    ///     Handles the game changed event.
+    ///     Gets the list of installed maps, filtered by the current
+    ///     <see cref="AddonListViewModelBase.SearchBoxText" />.
     /// </summary>
-    private void OnGameChanged(GameEnum parameterName)
-    {
-        if (parameterName == Game.GameEnum)
-        {
-            OnPropertyChanged(nameof(MapsList));
-        }
-    }
-
-    /// <summary>
-    ///     Handles the addon changed event.
-    /// </summary>
-    private void OnAddonChanged(GameEnum gameEnum, AddonTypeEnum? addonType)
-    {
-        if (gameEnum == Game.GameEnum && (addonType is AddonTypeEnum.Map))
-        {
-            OnPropertyChanged(nameof(MapsList));
-        }
-    }
-
-
-    #region Binding Properties
-
-    /// <summary>
-    ///     List of installed maps
-    /// </summary>
-    public ImmutableList<BaseAddon> MapsList
+    public override ImmutableList<BaseAddon> AddonsList
     {
         get
         {
@@ -137,199 +85,42 @@ public sealed partial class MapsViewModel : RightPanelViewModel, IPortsButtonCon
     }
 
     /// <summary>
-    ///     Currently selected map
+    ///     Called when <see cref="AddonListViewModelBase.SelectedAddon" /> changes. Updates options
+    ///     and notifies the start command of a potential CanExecute change.
     /// </summary>
-    public override BaseAddon? SelectedAddon
+    protected override void OnSelectedAddonChanged()
     {
-        get;
-        set
-        {
-            field = value;
+        UpdateAddonOptions();
 
-            OnPropertyChanged(nameof(SelectedAddonDescription));
-            OnPropertyChanged(nameof(SelectedAddonRating));
-            OnPropertyChanged(nameof(IsMetadataUpdateAvailable));
-            OnPropertyChanged(nameof(SelectedAddonPlaytime));
-            OnPropertyChanged(nameof(SelectedAddonPreview));
-            OnPropertyChanged(nameof(IsPreviewVisible));
-
-            StartMapCommand.NotifyCanExecuteChanged();
-        }
+        StartAddonCommand.NotifyCanExecuteChanged();
     }
 
     /// <summary>
-    ///     Search box text.
+    ///     Starts the selected map with the specified port.
     /// </summary>
-    [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(MapsList))]
-    [NotifyCanExecuteChangedFor(nameof(ClearSearchBoxCommand))]
-    public partial string SearchBoxText { get; set; } = string.Empty;
-
-    /// <summary>
-    ///     Is form in progress.
-    /// </summary>
-    [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(MapsList))]
-    public partial bool IsInProgress { get; set; }
-
-    /// <summary>
-    ///     Gets whether the ports buttons panel is visible.
-    /// </summary>
-    public bool IsPortsButtonsVisible => true;
-
-    #endregion
-
-
-    #region Relay Commands
-
-    /// <summary>
-    ///     Start selected map
-    /// </summary>
-    /// <param name="command">Port to start map with</param>
-    [RelayCommand]
-    private async Task StartMapAsync(object? command)
+    /// <param name="command">
+    ///     A <see cref="BasePort" /> to start with.
+    /// </param>
+    protected override async Task StartAddonCoreAsync(object? command)
     {
-        try
+        if (SelectedAddon is null)
         {
-            if (command is not Tuple<BasePort, byte?> parameter)
-            {
-                throw new ArgumentException($"Expected {nameof(Tuple<BasePort, byte?>)} but received {command?.GetType().Name}.", nameof(command));
-            }
-
-            ArgumentNullException.ThrowIfNull(SelectedAddon);
-
-            await _portStarter.StartAsync(
-                parameter.Item1,
-                Game,
-                SelectedAddon,
-                [],
-                parameter.Item2,
-                _config.SkipIntro,
-                _config.SkipStartup
-                ).ConfigureAwait(true);
-
-            OnPropertyChanged(nameof(SelectedAddonPlaytime));
+            throw new NullReferenceException(nameof(SelectedAddon));
         }
-        catch (Exception ex)
+
+        if (command is not Tuple<BasePort, byte?> parameter)
         {
-            NotificationsHelper.Show(
-                "Critical error! Exception is written to the log.",
-                NotificationType.Error
-                );
-
-            _logger.LogCritical(ex, $"=== Error while starting map {SelectedAddon?.Title} ===");
+            throw new ArgumentException($"Expected {nameof(Tuple)} but received {command?.GetType().Name}.", nameof(command));
         }
+
+        await _portStarter.StartAsync(
+            parameter.Item1,
+            Game,
+            SelectedAddon,
+            [],
+            parameter.Item2,
+            _config.SkipIntro,
+            _config.SkipStartup
+            ).ConfigureAwait(true);
     }
-
-
-    /// <summary>
-    ///     Open maps folder
-    /// </summary>
-    [RelayCommand]
-    private void OpenFolder()
-    {
-        try
-        {
-            using var process = Process.Start(
-                new ProcessStartInfo
-                {
-                    FileName = Game.MapsFolderPath,
-                    UseShellExecute = true
-                }
-                );
-        }
-        catch (Exception ex)
-        {
-            _logger.LogWarning(ex, "Failed to open maps folder: {Path}", Game.MapsFolderPath);
-        }
-    }
-
-
-    /// <summary>
-    ///     Refresh maps list
-    /// </summary>
-    [RelayCommand]
-    private async Task RefreshListAsync()
-    {
-        await UpdateAsync(true).ConfigureAwait(true);
-    }
-
-
-    /// <summary>
-    ///     Delete selected map
-    /// </summary>
-    [RelayCommand]
-    private void DeleteMap()
-    {
-        ArgumentNullException.ThrowIfNull(SelectedAddon);
-
-        _installedAddonsProvider.DeleteAddon(SelectedAddon);
-    }
-
-
-    /// <summary>
-    ///     Clear search bar
-    /// </summary>
-    [RelayCommand(CanExecute = nameof(ClearSearchBoxCanExecute))]
-    private void ClearSearchBox() => SearchBoxText = string.Empty;
-
-    /// <summary>
-    ///     Determines whether the clear search box command can execute.
-    /// </summary>
-    /// <returns>True if the search box text is not empty.</returns>
-    private bool ClearSearchBoxCanExecute() => !string.IsNullOrEmpty(SearchBoxText);
-
-
-    /// <summary>
-    ///     Install dropped addon
-    /// </summary>
-    [RelayCommand]
-    private Task ProcessDroppedFilesAsync(List<string> filePaths) => _addonInstaller.AddAddonsAsync(filePaths, Game);
-
-
-    /// <summary>
-    ///     Updates metadata for selected map.
-    /// </summary>
-    public override async Task UpdateMetadataAsync(object? value)
-    {
-        if (value is not null
-         && value is BaseAddon addon) { }
-        else if (value is null
-              && SelectedAddon is not null)
-        {
-            addon = SelectedAddon;
-        }
-        else
-        {
-            throw new ArgumentException($"Cannot update metadata. Unexpected type: {(value is null ? "null" : value.GetType().Name)}.", nameof(value));
-        }
-
-        if (addon.FileInfo is null)
-        {
-            throw new InvalidOperationException("Cannot update map metadata because file info is missing.");
-        }
-
-        IsInProgress = true;
-
-        var result = await _metadataProvider.UpdateMetadataAsync(addon.FileInfo).ConfigureAwait(true);
-
-        IsInProgress = false;
-
-        if (result.IsSuccess)
-        {
-            NotificationsHelper.Show(
-                "Metadata updated.",
-                NotificationType.Success
-                );
-        }
-        else
-        {
-            NotificationsHelper.Show(
-                "Error while updating metadata.",
-                NotificationType.Error
-                );
-        }
-    }
-
-    #endregion
 }

@@ -1,13 +1,9 @@
 using System.Collections.Immutable;
-using System.Diagnostics;
 using Addons.Addons;
 using Addons.Helpers;
 using Addons.Providers;
-using Avalonia.Controls.Notifications;
 using Avalonia.Desktop.Helpers;
 using Avalonia.Desktop.Misc;
-using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
 using Core.All.Enums;
 using Core.Client.Interfaces;
 using Core.Client.Providers;
@@ -18,57 +14,16 @@ using Ports.Ports;
 
 namespace Avalonia.Desktop.ViewModels;
 
-public sealed partial class CampaignsViewModel : RightPanelViewModel, IPortsButtonControl
+/// <summary>
+///     ViewModel for managing and launching campaign addons for a selected game.
+/// </summary>
+public sealed class CampaignsViewModel : AddonListViewModelBase
 {
-    private readonly IAddonDropHelper _addonInstaller;
-    private readonly IConfigProvider _config;
-    private readonly InstalledGamesProvider _gamesProvider;
-    private readonly InstalledAddonsProvider _installedAddonsProvider;
-    private readonly ILogger<CampaignsViewModel> _logger;
-    private readonly MetadataProvider _metadataProvider;
-    private readonly PortStarter _portStarter;
-
-    /// <summary>
-    ///     The separator item used between favorites and regular items.
-    /// </summary>
     private readonly SeparatorItem _separator = new();
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="CampaignsViewModel" /> class.
     /// </summary>
-    /// <param name="game">
-    ///     The game.
-    /// </param>
-    /// <param name="gamesProvider">
-    ///     The installed games provider.
-    /// </param>
-    /// <param name="config">
-    ///     The configuration provider.
-    /// </param>
-    /// <param name="playtimeProvider">
-    ///     The playtime provider.
-    /// </param>
-    /// <param name="ratingProvider">
-    ///     The rating provider.
-    /// </param>
-    /// <param name="metadataProvider">
-    ///     The metadata provider.
-    /// </param>
-    /// <param name="installedAddonsProviderFactory">
-    ///     The installed addons provider factory.
-    /// </param>
-    /// <param name="portStarter">
-    ///     The port starter.
-    /// </param>
-    /// <param name="bitmapsCache">
-    ///     The bitmaps cache.
-    /// </param>
-    /// <param name="addonInstaller">
-    ///     The addon drop helper.
-    /// </param>
-    /// <param name="logger">
-    ///     The logger.
-    /// </param>
     [Obsolete($"Don't create directly. Use {nameof(IViewModelsFactory)}.")]
     public CampaignsViewModel(
         BaseGame game,
@@ -81,79 +36,43 @@ public sealed partial class CampaignsViewModel : RightPanelViewModel, IPortsButt
         PortStarter portStarter,
         BitmapsCache bitmapsCache,
         IAddonDropHelper addonInstaller,
+        IFolderOpener folderOpener,
+        IUserNotifier userNotifier,
         ILogger<CampaignsViewModel> logger
-        ) : base(playtimeProvider, ratingProvider, metadataProvider, bitmapsCache, config)
-    {
-        Game = game;
-
-        _gamesProvider = gamesProvider;
-        _config = config;
-        _installedAddonsProvider = installedAddonsProviderFactory.Get(game);
-        _portStarter = portStarter;
-        _metadataProvider = metadataProvider;
-        _addonInstaller = addonInstaller;
-        _logger = logger;
-
-        _gamesProvider.GameChangedEvent += OnGameChanged;
-        _installedAddonsProvider.AddonsChangedEvent += OnAddonChanged;
-        //_downloadableAddonsProvider.AddonsChangedEvent += OnAddonChanged;
-    }
-
-    /// <summary>
-    ///     Gets the game associated with this view model.
-    /// </summary>
-    public BaseGame Game { get; }
+        ) : base(
+        game,
+        gamesProvider,
+        playtimeProvider,
+        ratingProvider,
+        metadataProvider,
+        installedAddonsProviderFactory,
+        portStarter,
+        bitmapsCache,
+        addonInstaller,
+        folderOpener,
+        userNotifier,
+        config,
+        logger
+        ) { }
 
     /// <summary>
-    ///     VM initialization
+    ///     Gets the type of addon managed by this ViewModel.
     /// </summary>
-    public Task InitializeAsync() => UpdateAsync(false);
+    protected override AddonTypeEnum AddonType => AddonTypeEnum.TC;
 
     /// <summary>
-    ///     Updates the campaign list asynchronously.
+    ///     Gets the file system path to the campaigns folder.
     /// </summary>
-    /// <param name="createNew">
-    ///     Whether to create a new cache.
-    /// </param>
-    /// <returns>
-    ///     A task representing the asynchronous operation.
-    /// </returns>
-    private async Task UpdateAsync(bool createNew)
-    {
-        IsInProgress = true;
-        await _installedAddonsProvider.CreateCacheAsync(createNew, AddonTypeEnum.TC).ConfigureAwait(true);
-        IsInProgress = false;
-    }
+    protected override string BaseFolderPath => Game.CampaignsFolderPath;
+
+    /// <inheritdoc />
+    public override bool IsPortsButtonsVisible => true;
 
     /// <summary>
-    ///     Handles the game changed event.
+    ///     Gets the list of installed campaigns, sorted with favorites first
+    ///     and filtered by the current <see cref="AddonListViewModelBase.SearchBoxText" />.
     /// </summary>
-    private void OnGameChanged(GameEnum parameterName)
-    {
-        if (parameterName == Game.GameEnum)
-        {
-            OnPropertyChanged(nameof(CampaignsList));
-        }
-    }
-
-    /// <summary>
-    ///     Handles the addon changed event.
-    /// </summary>
-    private void OnAddonChanged(GameEnum gameEnum, AddonTypeEnum? addonType)
-    {
-        if (gameEnum == Game.GameEnum && (addonType is AddonTypeEnum.TC))
-        {
-            OnPropertyChanged(nameof(CampaignsList));
-        }
-    }
-
-
-    #region Binding Properties
-
-    /// <summary>
-    ///     List of installed campaigns and maps
-    /// </summary>
-    public ImmutableList<BaseAddon> CampaignsList
+    public override ImmutableList<BaseAddon> AddonsList
     {
         get
         {
@@ -197,253 +116,61 @@ public sealed partial class CampaignsViewModel : RightPanelViewModel, IPortsButt
     }
 
     /// <summary>
-    ///     Currently selected campaign
+    ///     Called when <see cref="AddonListViewModelBase.SelectedAddon" /> changes. Updates options
+    ///     and notifies the start command of a potential CanExecute change.
     /// </summary>
-    public override BaseAddon? SelectedAddon
+    protected override void OnSelectedAddonChanged()
     {
-        get;
-        set
-        {
-            field = value;
+        OnPropertyChanged(nameof(SelectedAddonPlaytime));
 
-            OnPropertyChanged(nameof(SelectedAddonDescription));
-            OnPropertyChanged(nameof(SelectedAddonPreview));
-            OnPropertyChanged(nameof(SelectedAddonRating));
-            OnPropertyChanged(nameof(IsMetadataUpdateAvailable));
-            OnPropertyChanged(nameof(SelectedAddonPlaytime));
-            OnPropertyChanged(nameof(IsPreviewVisible));
+        UpdateAddonOptions();
 
-            UpdateAddonOptions();
-
-            StartCampaignCommand.NotifyCanExecuteChanged();
-        }
+        StartAddonCommand.NotifyCanExecuteChanged();
     }
 
     /// <summary>
-    ///     Search box text.
-    /// </summary>
-    [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(CampaignsList))]
-    [NotifyCanExecuteChangedFor(nameof(ClearSearchBoxCommand))]
-    public partial string SearchBoxText { get; set; } = string.Empty;
-
-    /// <summary>
-    ///     Is the form in progress.
-    /// </summary>
-    [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(CampaignsList))]
-    public partial bool IsInProgress { get; set; }
-
-    /// <summary>
-    ///     Gets whether the ports buttons panel is visible.
-    /// </summary>
-    public bool IsPortsButtonsVisible => true;
-
-    #endregion
-
-
-    #region Relay Commands
-
-    /// <summary>
-    ///     Start selected campaign
+    ///     Starts the selected campaign with the specified port or custom port.
     /// </summary>
     /// <param name="command">
-    ///     Port to start campaign with
+    ///     A <see cref="BasePort" /> or <see cref="CustomPort" /> to start with.
     /// </param>
-    [RelayCommand]
-    private async Task StartCampaignAsync(object? command)
+    protected override async Task StartAddonCoreAsync(object? command)
     {
-        try
+        if (SelectedAddon is null)
         {
-            ArgumentNullException.ThrowIfNull(SelectedAddon);
-
-            var enabledOptions = AddonOptions.Where(x => x.IsEnabled).Select(x => x.Name);
-
-            if (command is BasePort port)
-            {
-                await _portStarter.StartAsync(
-                    port,
-                    Game,
-                    SelectedAddon,
-                    [.. enabledOptions],
-                    null,
-                    _config.SkipIntro,
-                    _config.SkipStartup
-                    ).ConfigureAwait(true);
-            }
-            else if (command is CustomPort customPort)
-            {
-                await _portStarter.StartAsync(
-                    customPort.BasePort,
-                    Game,
-                    SelectedAddon,
-                    [.. enabledOptions],
-                    null,
-                    _config.SkipIntro,
-                    _config.SkipStartup,
-                    customPort.Path
-                    ).ConfigureAwait(true);
-            }
-            else
-            {
-                throw new ArgumentOutOfRangeException(nameof(command), command, $"Unsupported command value: {command}.");
-            }
-
-            OnPropertyChanged(nameof(SelectedAddonPlaytime));
-        }
-        catch (Exception ex)
-        {
-            NotificationsHelper.Show(
-                "Critical error! Exception is written to the log.",
-                NotificationType.Error
-                );
-
-            _logger.LogCritical(ex, $"=== Error while starting campaign {SelectedAddon?.Title} ===");
-        }
-    }
-
-
-    /// <summary>
-    ///     Open campaigns folder
-    /// </summary>
-    [RelayCommand]
-    private void OpenFolder()
-    {
-        try
-        {
-            using var process = Process.Start(
-                new ProcessStartInfo
-                {
-                    FileName = Game.CampaignsFolderPath,
-                    UseShellExecute = true
-                }
-                );
-        }
-        catch (Exception ex)
-        {
-            _logger.LogWarning(ex, "Failed to open campaigns folder: {Path}", Game.CampaignsFolderPath);
-        }
-    }
-
-
-    /// <summary>
-    ///     Refresh campaigns list
-    /// </summary>
-    [RelayCommand]
-    private Task RefreshListAsync() => UpdateAsync(true);
-
-
-    /// <summary>
-    ///     Delete selected campaign
-    /// </summary>
-    [RelayCommand]
-    private void DeleteCampaign()
-    {
-        ArgumentNullException.ThrowIfNull(SelectedAddon);
-
-        _installedAddonsProvider.DeleteAddon(SelectedAddon);
-    }
-
-
-    /// <summary>
-    ///     Clear search bar
-    /// </summary>
-    [RelayCommand(CanExecute = nameof(ClearSearchBoxCanExecute))]
-    private void ClearSearchBox() => SearchBoxText = string.Empty;
-
-    /// <summary>
-    ///     Determines whether the clear search box command can execute.
-    /// </summary>
-    /// <returns>
-    ///     True if the search box text is not empty.
-    /// </returns>
-    private bool ClearSearchBoxCanExecute() => !string.IsNullOrEmpty(SearchBoxText);
-
-
-    /// <summary>
-    ///     Install dropped addon
-    /// </summary>
-    [RelayCommand]
-    private Task ProcessDroppedFilesAsync(List<string> filePaths) => _addonInstaller.AddAddonsAsync(filePaths, Game);
-
-
-    /// <summary>
-    ///     Add selected campaign to favorites
-    /// </summary>
-    [RelayCommand]
-    private void AddToFavorite(object? value)
-    {
-        if (value is not BaseAddon addon)
-        {
-            throw new ArgumentException($"Expected {nameof(BaseAddon)} but received {value?.GetType().Name}.", nameof(value));
+            throw new NullReferenceException(nameof(SelectedAddon));
         }
 
-        _config.ChangeFavoriteState(addon.AddonId, true);
-        addon.IsFavorite = true;
+        var enabledOptions = AddonOptions.Where(x => x.IsEnabled).Select(x => x.Name);
 
-        OnPropertyChanged(nameof(CampaignsList));
-    }
-
-
-    /// <summary>
-    ///     Remove selected campaign from favorites
-    /// </summary>
-    [RelayCommand]
-    private void RemoveFromFavorite(object? value)
-    {
-        if (value is not BaseAddon addon)
+        if (command is BasePort port)
         {
-            throw new ArgumentException($"Expected {nameof(BaseAddon)} but received {value?.GetType().Name}.", nameof(value));
+            await _portStarter.StartAsync(
+                port,
+                Game,
+                SelectedAddon,
+                [.. enabledOptions],
+                null,
+                _config.SkipIntro,
+                _config.SkipStartup
+                ).ConfigureAwait(true);
         }
-
-        _config.ChangeFavoriteState(addon.AddonId, false);
-        addon.IsFavorite = false;
-
-        OnPropertyChanged(nameof(CampaignsList));
-    }
-
-
-    /// <summary>
-    ///     Updates metadata for selected campaign.
-    /// </summary>
-    public override async Task UpdateMetadataAsync(object? value)
-    {
-        if (value is BaseAddon addon) { }
-        else if (value is null && SelectedAddon is not null)
+        else if (command is CustomPort customPort)
         {
-            addon = SelectedAddon;
+            await _portStarter.StartAsync(
+                customPort.BasePort,
+                Game,
+                SelectedAddon,
+                [.. enabledOptions],
+                null,
+                _config.SkipIntro,
+                _config.SkipStartup,
+                customPort.Path
+                ).ConfigureAwait(true);
         }
         else
         {
-            throw new ArgumentException($"Cannot update metadata. Unexpected type: {(value is null ? "null" : value.GetType().Name)}.", nameof(value));
-        }
-
-        IsInProgress = true;
-
-        if (addon.FileInfo is null)
-        {
-            throw new InvalidOperationException("Cannot update campaign metadata because file info is missing.");
-        }
-
-        var result = await _metadataProvider.UpdateMetadataAsync(addon.FileInfo).ConfigureAwait(true);
-
-        IsInProgress = false;
-
-        if (result.IsSuccess)
-        {
-            NotificationsHelper.Show(
-                "Metadata updated.",
-                NotificationType.Success
-                );
-        }
-        else
-        {
-            NotificationsHelper.Show(
-                "Error while updating metadata.",
-                NotificationType.Error
-                );
+            throw new ArgumentOutOfRangeException(nameof(command), command, $"Unsupported command value: {command}.");
         }
     }
-
-    #endregion
 }
