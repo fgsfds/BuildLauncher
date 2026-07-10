@@ -286,7 +286,7 @@ public sealed partial class CampaignsViewModel : RightPanelViewModel, IPortsButt
             }
             else
             {
-                throw new ArgumentOutOfRangeException(nameof(command));
+                throw new ArgumentOutOfRangeException(nameof(command), command, $"Unsupported command value: {command}.");
             }
 
             OnPropertyChanged(nameof(SelectedAddonPlaytime));
@@ -375,7 +375,7 @@ public sealed partial class CampaignsViewModel : RightPanelViewModel, IPortsButt
     {
         if (value is not BaseAddon addon)
         {
-            throw new InvalidCastException();
+            throw new ArgumentException($"Expected {nameof(BaseAddon)} but received {value?.GetType().Name}.", nameof(value));
         }
 
         _config.ChangeFavoriteState(addon.AddonId, true);
@@ -393,7 +393,7 @@ public sealed partial class CampaignsViewModel : RightPanelViewModel, IPortsButt
     {
         if (value is not BaseAddon addon)
         {
-            throw new InvalidCastException();
+            throw new ArgumentException($"Expected {nameof(BaseAddon)} but received {value?.GetType().Name}.", nameof(value));
         }
 
         _config.ChangeFavoriteState(addon.AddonId, false);
@@ -415,14 +415,14 @@ public sealed partial class CampaignsViewModel : RightPanelViewModel, IPortsButt
         }
         else
         {
-            throw new InvalidOperationException(value?.GetType().Name);
+            throw new ArgumentException($"Cannot update metadata. Unexpected type: {(value is null ? "null" : value.GetType().Name)}.", nameof(value));
         }
 
         IsInProgress = true;
 
         if (addon.FileInfo is null)
         {
-            throw new InvalidOperationException("Campaign file info is required for metadata update");
+            throw new InvalidOperationException("Cannot update campaign metadata because file info is missing.");
         }
 
         var result = await _metadataProvider.UpdateMetadataAsync(addon.FileInfo).ConfigureAwait(true);

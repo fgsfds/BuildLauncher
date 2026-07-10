@@ -79,17 +79,17 @@ public sealed class ConfigProviderFake : IConfigProvider
     public event IConfigProvider.ParameterChanged? ParameterChangedEvent;
 
     /// <inheritdoc />
-    public void AddPlaytime(string addonId, TimeSpan playTime) => throw new NotSupportedException();
+    public void AddPlaytime(string addonId, TimeSpan playTime) => throw new NotSupportedException($"{nameof(ConfigProviderFake)} does not support {nameof(AddPlaytime)}.");
 
     /// <inheritdoc />
-    public void AddScore(string addonId, byte rating) => throw new NotSupportedException();
+    public void AddScore(string addonId, byte rating) => throw new NotSupportedException($"{nameof(ConfigProviderFake)} does not support {nameof(AddScore)}.");
 
     /// <inheritdoc />
-    public void ChangeAddonOptionState(string addonId, string option, bool isEnabled) => throw new NotSupportedException();
+    public void ChangeAddonOptionState(string addonId, string option, bool isEnabled) => throw new NotSupportedException($"{nameof(ConfigProviderFake)} does not support {nameof(ChangeAddonOptionState)}.");
 
     /// <inheritdoc />
-    public void ChangeFavoriteState(AddonId addonId, bool isEnabled) => throw new NotSupportedException();
+    public void ChangeFavoriteState(AddonId addonId, bool isEnabled) => throw new NotSupportedException($"{nameof(ConfigProviderFake)} does not support {nameof(ChangeFavoriteState)}.");
 
     /// <inheritdoc />
-    public void ChangeModState(AddonId addonId, bool isEnabled) => throw new NotSupportedException();
+    public void ChangeModState(AddonId addonId, bool isEnabled) => throw new NotSupportedException($"{nameof(ConfigProviderFake)} does not support {nameof(ChangeModState)}.");
 }

@@ -182,7 +182,7 @@ public sealed class DownloadableAddonsProvider
             }
             else
             {
-                throw new NotSupportedException(addon.AddonType.ToString());
+                throw new NotSupportedException($"Addon type '{addon.AddonType}' is not supported for download.");
             }
 
             var pathToFile = Path.Combine(path, file);

@@ -136,7 +136,7 @@ public sealed partial class PortsRepositoriesProvider : IRepositoriesProvider<Po
             };
         }
 
-        throw new NotSupportedException(releaseEnum.ToString());
+        throw new ArgumentOutOfRangeException(nameof(releaseEnum), releaseEnum, $"Unsupported release: {releaseEnum}.");
     }
 
     /// <summary>

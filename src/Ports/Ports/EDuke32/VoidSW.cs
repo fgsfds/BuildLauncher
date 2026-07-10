@@ -124,7 +124,7 @@ public sealed class VoidSW : EDuke32
 
         if (addon is not GenericCampaign wCamp)
         {
-            throw new InvalidCastException();
+            throw new ArgumentException($"Expected {nameof(GenericCampaign)} but received {addon.GetType().Name}.", nameof(addon));
         }
 
         if (wCamp.DependentAddons?.ContainsKey(nameof(WangAddonEnum.Wanton)) == true)

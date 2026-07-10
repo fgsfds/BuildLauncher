@@ -213,7 +213,7 @@ public class InstalledGamesProvider
             GameEnum.TekWar => _tekwar,
             GameEnum.Witchaven => _witch,
             GameEnum.Witchaven2 => _witch,
-            _ => throw new ArgumentOutOfRangeException()
+            _ => throw new ArgumentOutOfRangeException(nameof(gameEnum), gameEnum, $"Unsupported game enum: {gameEnum}.")
         };
     }
 

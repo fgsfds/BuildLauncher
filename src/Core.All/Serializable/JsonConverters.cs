@@ -38,13 +38,13 @@ public sealed class SupportedGameDtoConverter : JsonConverter<SupportedGameJsonM
             return dto;
         }
 
-        throw new NotSupportedException();
+        throw new NotSupportedException($"Cannot deserialize {nameof(SupportedGameJsonModel)} from token type {reader.TokenType}.");
     }
 
     /// <inheritdoc />
     public override void Write(Utf8JsonWriter writer, SupportedGameJsonModel? value, JsonSerializerOptions options)
     {
-        throw new NotSupportedException();
+        throw new NotSupportedException($"Serialization of {nameof(SupportedGameJsonModel)} is not supported.");
     }
 }
 
@@ -78,7 +78,7 @@ public sealed class IStartMapConverter : JsonConverter<IStartMap?>
             }
         }
 
-        throw new NotSupportedException();
+        throw new NotSupportedException($"Cannot deserialize {nameof(IStartMap)}: unsupported token type {reader.TokenType}.");
     }
 
     /// <inheritdoc />
@@ -100,7 +100,7 @@ public sealed class IStartMapConverter : JsonConverter<IStartMap?>
         }
         else
         {
-            throw new NotSupportedException();
+            throw new NotSupportedException($"Serialization of {nameof(IStartMap)} type '{value.GetType().Name}' is not supported.");
         }
 
         writer.WriteEndObject();
@@ -198,7 +198,7 @@ public sealed class ExecutablesConverter : JsonConverter<Dictionary<OSEnum, Dict
             }
         }
 
-        throw new NotSupportedException();
+        throw new NotSupportedException($"Cannot deserialize executables: unsupported token type {reader.TokenType}.");
     }
 
     /// <inheritdoc />
@@ -363,7 +363,7 @@ public sealed class GameEnumJsonConverter : JsonConverter<GameEnum>
             return GameEnum.Slave;
         }
 
-        throw new NotSupportedException(value);
+        throw new NotSupportedException($"Cannot deserialize {nameof(GameEnum)}: '{value}' is not a recognized game.");
     }
 
     /// <inheritdoc />

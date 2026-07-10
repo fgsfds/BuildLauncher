@@ -26,7 +26,7 @@ public abstract class BaseTool : IInstallable
             {
                 OSEnum.Windows => WinExe,
                 OSEnum.Linux => LinExe,
-                _ => throw new ArgumentOutOfRangeException(CommonProperties.OSEnum.ToString())
+                _ => throw new PlatformNotSupportedException($"Unsupported OS: {CommonProperties.OSEnum}.")
             };
         }
     }

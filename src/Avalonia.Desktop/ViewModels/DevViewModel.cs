@@ -114,7 +114,7 @@ public sealed partial class DevViewModel : ObservableObject
     {
         if (PathToAddonFolder is null)
         {
-            throw new MissingFieldException("Choose addon folder");
+            throw new InvalidOperationException("Addon folder is not selected.");
         }
 
         var files = Directory.GetFiles(PathToAddonFolder, "*", SearchOption.TopDirectoryOnly)
@@ -141,7 +141,7 @@ public sealed partial class DevViewModel : ObservableObject
 
             if (forbidden.Any())
             {
-                throw new MissingFieldException($"Common file names can't be used. Rename these files: {string.Join(", ", forbidden)}");
+                throw new InvalidOperationException($"Common file names cannot be used in addon folder. Rename these files: {string.Join(", ", forbidden)}.");
             }
 
             if (SelectedGame is GameEnum.Blood)
@@ -150,23 +150,23 @@ public sealed partial class DevViewModel : ObservableObject
                 {
                     if (files.Any(static x => x.EndsWith(".ART", StringComparison.OrdinalIgnoreCase)))
                     {
-                        throw new MissingFieldException("Don't use ART files. Convert them to DEF.");
+                        throw new InvalidOperationException("ART files are not supported in Blood addons. Convert them to DEF.");
                     }
 
                     if (files.Any(static x => x.EndsWith(".DAT", StringComparison.OrdinalIgnoreCase)))
                     {
-                        throw new MissingFieldException("Don't use DAT files. Convert them to DEF.");
+                        throw new InvalidOperationException("DAT files are not supported in Blood addons. Convert them to DEF.");
                     }
 
                     if (files.Any(static x => x.EndsWith(".RFS", StringComparison.OrdinalIgnoreCase)))
                     {
-                        throw new MissingFieldException("Addons with RFS files are not supported");
+                        throw new InvalidOperationException("Addons with RFS files are not supported.");
                     }
                 }
 
                 if (files.Intersect(_forbiddenOggs).Any())
                 {
-                    throw new MissingFieldException("blood00.ogg - blood09.ogg can't be used, start with blood10.ogg");
+                    throw new InvalidOperationException("blood00.ogg through blood09.ogg are reserved and cannot be used. Start with blood10.ogg.");
                 }
             }
         }
@@ -177,9 +177,9 @@ public sealed partial class DevViewModel : ObservableObject
             IsTcSelected ? AddonTypeEnum.TC
             : IsMapSelected ? AddonTypeEnum.Map
             : IsModSelected ? AddonTypeEnum.Mod
-            : throw new ArgumentOutOfRangeException("Select addon type");
+            : throw new InvalidOperationException("Addon type (TC, Map, or Mod) must be selected.");
 
-        var gameEnum = SelectedGame ?? throw new ArgumentOutOfRangeException("Select game");
+        var gameEnum = SelectedGame ?? throw new InvalidOperationException("Game must be selected.");
 
         DukeVersionEnum? dukeVersion =
             SelectedGame is not GameEnum.Duke3D ? null
@@ -190,17 +190,17 @@ public sealed partial class DevViewModel : ObservableObject
 
         if (string.IsNullOrWhiteSpace(AddonTitle))
         {
-            throw new MissingFieldException("Select addon title");
+            throw new InvalidOperationException("Addon title must be specified.");
         }
 
         if (string.IsNullOrWhiteSpace(AddonId))
         {
-            throw new MissingFieldException("Select addon id");
+            throw new InvalidOperationException("Addon ID must be specified.");
         }
 
         if (string.IsNullOrWhiteSpace(AddonVersion))
         {
-            throw new MissingFieldException("Select addon version");
+            throw new InvalidOperationException("Addon version must be specified.");
         }
 
         List<FeatureEnum> features = [];
@@ -263,19 +263,19 @@ public sealed partial class DevViewModel : ObservableObject
         {
             if (!IsElMapTypeSelected && !IsFileMapTypeSelected)
             {
-                throw new MissingFieldException("Select start map");
+                throw new InvalidOperationException("Start map type must be selected.");
             }
 
             if (IsElMapTypeSelected)
             {
                 if (MapEpisode is null)
                 {
-                    throw new MissingFieldException("Select start map episode");
+                    throw new InvalidOperationException("Start map episode must be selected.");
                 }
 
                 if (MapLevel is null)
                 {
-                    throw new MissingFieldException("Select start map level");
+                    throw new InvalidOperationException("Start map level must be selected.");
                 }
 
                 startMap = new MapSlotJsonModel()
@@ -289,7 +289,7 @@ public sealed partial class DevViewModel : ObservableObject
             {
                 if (string.IsNullOrWhiteSpace(MapFileName))
                 {
-                    throw new MissingFieldException("Select start map file name");
+                    throw new InvalidOperationException("Start map file name must be specified.");
                 }
 
                 startMap = new MapFileJsonModel()
@@ -638,7 +638,7 @@ public sealed partial class DevViewModel : ObservableObject
             }
             else
             {
-                throw new ArgumentOutOfRangeException(nameof(addon.AddonType));
+                throw new ArgumentOutOfRangeException(nameof(addon.AddonType), addon.AddonType, $"Unsupported addon type: {addon.AddonType}.");
             }
 
             var fullName = GetAddonFullName(addon);

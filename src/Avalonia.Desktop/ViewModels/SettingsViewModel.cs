@@ -252,7 +252,7 @@ public sealed partial class SettingsViewModel : ObservableObject
 
         if (!EnumHelper.TryParse<ThemeEnum>(param, out var themeEnum))
         {
-            throw new InvalidOperationException($"Invalid theme parameter: {param}");
+            throw new ArgumentException($"Invalid theme parameter: {param}.", nameof(param));
         }
 
         Application.Current.RequestedThemeVariant = themeEnum.Value switch
@@ -260,7 +260,7 @@ public sealed partial class SettingsViewModel : ObservableObject
             ThemeEnum.System => ThemeVariant.Default,
             ThemeEnum.Light => ThemeVariant.Light,
             ThemeEnum.Dark => ThemeVariant.Dark,
-            _ => throw new ArgumentOutOfRangeException()
+            _ => throw new ArgumentOutOfRangeException(nameof(themeEnum), themeEnum.Value, $"Unsupported theme value: {themeEnum.Value}.")
         };
 
         _config.Theme = themeEnum.Value;

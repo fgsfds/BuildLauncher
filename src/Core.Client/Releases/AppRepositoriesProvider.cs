@@ -23,6 +23,6 @@ public sealed class AppRepositoriesProvider : IRepositoriesProvider<AppReleaseEn
             };
         }
 
-        throw new NotSupportedException(releaseEnum.ToString());
+        throw new ArgumentOutOfRangeException(nameof(releaseEnum), releaseEnum, $"Unsupported release: {releaseEnum}.");
     }
 }

@@ -260,7 +260,7 @@ public sealed class CampaignsViewModelTests : IDisposable
     [Fact]
     public void AddToFavorite_InvalidType_Throws()
     {
-        Assert.Throws<InvalidCastException>(() => _viewModel.AddToFavoriteCommand.Execute("not an addon"));
+        Assert.Throws<ArgumentException>(() => _viewModel.AddToFavoriteCommand.Execute("not an addon"));
     }
 
     [Fact]
@@ -428,7 +428,7 @@ public sealed class CampaignsViewModelTests : IDisposable
     [Fact]
     public async Task UpdateMetadata_NullValueAndNullSelected_Throws()
     {
-        await Assert.ThrowsAsync<InvalidOperationException>(() => _viewModel.UpdateMetadataAsync(null));
+        await Assert.ThrowsAsync<ArgumentException>(() => _viewModel.UpdateMetadataAsync(null));
     }
 
     [Fact]

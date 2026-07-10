@@ -24,7 +24,7 @@ public static class CommonProperties
             }
             else
             {
-                throw new ArgumentOutOfRangeException("Unsupported OS");
+                throw new PlatformNotSupportedException("Only Windows and Linux are supported.");
             }
         }
     }

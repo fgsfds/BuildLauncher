@@ -239,7 +239,7 @@ public sealed class App : Application
             ThemeEnum.System => ThemeVariant.Default,
             ThemeEnum.Light => ThemeVariant.Light,
             ThemeEnum.Dark => ThemeVariant.Dark,
-            _ => throw new ArgumentOutOfRangeException(theme.ToString())
+            _ => throw new ArgumentOutOfRangeException(nameof(theme), theme, $"Unsupported theme value: {theme}.")
         };
 
         _app.RequestedThemeVariant = themeEnum;

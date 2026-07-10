@@ -50,7 +50,7 @@ public sealed class Mapster32 : BaseTool
 
         if (!game.IsBaseGameInstalled)
         {
-            throw new NotSupportedException();
+            throw new InvalidOperationException("Duke Nukem 3D must be installed to start Mapster32.");
         }
 
         return $@"-game_dir ""{game.GameInstallFolder}""";

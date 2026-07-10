@@ -336,7 +336,7 @@ public class EDuke32 : BasePort
 
         if (addon is not DukeCampaign dCamp)
         {
-            throw new InvalidCastException();
+            throw new ArgumentException($"Expected {nameof(DukeCampaign)} but received {addon.GetType().Name}.", nameof(addon));
         }
 
         if (dCamp.MainCon is not null)

@@ -65,7 +65,7 @@ public sealed class GameStringToEnumConverter : IValueConverter
 
         if (!EnumHelper.TryParse<GameEnum>(parameter, out var gameEnum))
         {
-            throw new NotSupportedException();
+            throw new NotSupportedException($"Cannot convert '{parameter}' to {nameof(GameEnum)}.");
         }
 
         return valueEnum == gameEnum;
@@ -86,7 +86,7 @@ public sealed class GameStringToEnumConverter : IValueConverter
 
         if (!EnumHelper.TryParse<GameEnum>(parameter, out var gameEnum))
         {
-            throw new NotSupportedException();
+            throw new NotSupportedException($"Cannot convert '{parameter}' to {nameof(GameEnum)}.");
         }
 
         return gameEnum;
@@ -113,7 +113,7 @@ public sealed class StringToWrappedConverter : IValueConverter
     /// <inheritdoc />
     public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
-        throw new NotSupportedException();
+        throw new NotSupportedException($"{nameof(StringToWrappedConverter)} does not support ConvertBack.");
     }
 }
 
@@ -159,7 +159,7 @@ public sealed class OptionParamsToStringConverter : IValueConverter
 
             if (!Enum.TryParse<OptionalParameterTypeEnum>(fileNameExtensionPair[1], true, out var res))
             {
-                throw new InvalidCastException();
+                throw new InvalidCastException($"Cannot convert '{fileNameExtensionPair[1]}' to {nameof(OptionalParameterTypeEnum)}.");
             }
 
             result.Add(fileNameExtensionPair[0], res);

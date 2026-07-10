@@ -593,7 +593,7 @@ public sealed class ConfigProvider : IConfigProvider
     {
         if (!OperatingSystem.IsWindows())
         {
-            throw new InvalidOperationException("Data protection is only supported on Windows");
+            throw new PlatformNotSupportedException("Windows Data Protection API (DPAPI) is only available on Windows.");
         }
 
         var data = Encoding.UTF8.GetBytes(plainText);
@@ -611,7 +611,7 @@ public sealed class ConfigProvider : IConfigProvider
     {
         if (!OperatingSystem.IsWindows())
         {
-            throw new InvalidOperationException("Data protection is only supported on Windows");
+            throw new PlatformNotSupportedException("Windows Data Protection API (DPAPI) is only available on Windows.");
         }
 
         try

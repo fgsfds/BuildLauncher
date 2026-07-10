@@ -200,7 +200,7 @@ public sealed partial class ModsViewModel : RightPanelViewModel, IPortsButtonCon
     {
         if (obj is not AutoloadMod mod)
         {
-            throw new InvalidCastException();
+            throw new ArgumentException($"Expected {nameof(AutoloadMod)} but received {obj?.GetType().Name}.", nameof(obj));
         }
 
         //disabling
@@ -239,12 +239,12 @@ public sealed partial class ModsViewModel : RightPanelViewModel, IPortsButtonCon
         }
         else
         {
-            throw new InvalidOperationException(value?.GetType().Name);
+            throw new ArgumentException($"Cannot update metadata. Unexpected type: {(value is null ? "null" : value.GetType().Name)}.", nameof(value));
         }
 
         if (addon.FileInfo is null)
         {
-            throw new InvalidOperationException("Mod file info is required for metadata update");
+            throw new InvalidOperationException("Cannot update mod metadata because file info is missing.");
         }
 
         IsInProgress = true;

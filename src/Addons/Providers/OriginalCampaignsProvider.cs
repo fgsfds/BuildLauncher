@@ -52,11 +52,11 @@ public sealed class OriginalCampaignsProvider
 
             GameEnum.Standalone => [],
 
-            GameEnum.Duke64 => throw new NotSupportedException(),
-            GameEnum.RidesAgain => throw new NotSupportedException(),
-            GameEnum.Witchaven2 => throw new NotSupportedException(),
+            GameEnum.Duke64 => throw new NotSupportedException($"Original campaigns for {nameof(GameEnum.Duke64)} are not available."),
+            GameEnum.RidesAgain => throw new NotSupportedException($"Original campaigns for {nameof(GameEnum.RidesAgain)} are not available."),
+            GameEnum.Witchaven2 => throw new NotSupportedException($"Original campaigns for {nameof(GameEnum.Witchaven2)} are not available."),
 
-            _ => throw new ArgumentOutOfRangeException()
+            _ => throw new ArgumentOutOfRangeException(nameof(game.GameEnum), $"Unsupported game enum: {game.GameEnum}.")
         };
     }
 
@@ -67,7 +67,7 @@ public sealed class OriginalCampaignsProvider
     {
         if (game is not DukeGame dGame)
         {
-            throw new InvalidCastException();
+            throw new ArgumentException($"Expected {nameof(DukeGame)} but received {game.GetType().Name}.", nameof(game));
         }
 
         Dictionary<AddonId, BaseAddon> campaigns = new(6);
@@ -364,7 +364,7 @@ public sealed class OriginalCampaignsProvider
     {
         if (game is not BloodGame bGame)
         {
-            throw new InvalidCastException();
+            throw new ArgumentException($"Expected {nameof(BloodGame)} but received {game.GetType().Name}.", nameof(game));
         }
 
         Dictionary<AddonId, BaseAddon> campaigns = new(2);
@@ -465,7 +465,7 @@ public sealed class OriginalCampaignsProvider
     {
         if (game is not WangGame wGame)
         {
-            throw new InvalidCastException();
+            throw new ArgumentException($"Expected {nameof(WangGame)} but received {game.GetType().Name}.", nameof(game));
         }
 
         Dictionary<AddonId, BaseAddon> campaigns = new(1);
@@ -518,7 +518,7 @@ public sealed class OriginalCampaignsProvider
     {
         if (game is not FuryGame fGame)
         {
-            throw new InvalidCastException();
+            throw new ArgumentException($"Expected {nameof(FuryGame)} but received {game.GetType().Name}.", nameof(game));
         }
 
         Dictionary<AddonId, BaseAddon> campaigns = new(1);
@@ -596,7 +596,7 @@ public sealed class OriginalCampaignsProvider
     {
         if (game is not RedneckGame rGame)
         {
-            throw new InvalidCastException();
+            throw new ArgumentException($"Expected {nameof(RedneckGame)} but received {game.GetType().Name}.", nameof(game));
         }
 
         Dictionary<AddonId, BaseAddon> campaigns = new(3);
@@ -732,7 +732,7 @@ public sealed class OriginalCampaignsProvider
     {
         if (game is not NamGame nGame)
         {
-            throw new InvalidCastException();
+            throw new ArgumentException($"Expected {nameof(NamGame)} but received {game.GetType().Name}.", nameof(game));
         }
 
         Dictionary<AddonId, BaseAddon> campaigns = new(1);
@@ -792,7 +792,7 @@ public sealed class OriginalCampaignsProvider
     {
         if (game is not WW2GIGame wGame)
         {
-            throw new InvalidCastException();
+            throw new ArgumentException($"Expected {nameof(WW2GIGame)} but received {game.GetType().Name}.", nameof(game));
         }
 
         Dictionary<AddonId, BaseAddon> campaigns = new(1);
@@ -886,7 +886,7 @@ public sealed class OriginalCampaignsProvider
     {
         if (game is not TekWarGame tGame)
         {
-            throw new InvalidCastException();
+            throw new ArgumentException($"Expected {nameof(TekWarGame)} but received {game.GetType().Name}.", nameof(game));
         }
 
         Dictionary<AddonId, BaseAddon> campaigns = new(1);
@@ -940,7 +940,7 @@ public sealed class OriginalCampaignsProvider
     {
         if (game is not SlaveGame sGame)
         {
-            throw new InvalidCastException();
+            throw new ArgumentException($"Expected {nameof(SlaveGame)} but received {game.GetType().Name}.", nameof(game));
         }
 
         Dictionary<AddonId, BaseAddon> campaigns = new(1);
@@ -997,7 +997,7 @@ public sealed class OriginalCampaignsProvider
     {
         if (game is not WitchavenGame wGame)
         {
-            throw new InvalidCastException();
+            throw new ArgumentException($"Expected {nameof(WitchavenGame)} but received {game.GetType().Name}.", nameof(game));
         }
 
         Dictionary<AddonId, BaseAddon> campaigns = new(1);

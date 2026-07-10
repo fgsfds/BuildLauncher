@@ -31,8 +31,8 @@ public sealed class DukeAddonDetector
             DukeAddonEnum.DukeDC => "DUKEDC.GRP",
             DukeAddonEnum.DukeNW => "NWINTER.GRP",
             DukeAddonEnum.DukeVaca => "VACATION.GRP",
-            DukeAddonEnum.Base => throw new ArgumentOutOfRangeException(nameof(addon)),
-            _ => throw new ArgumentOutOfRangeException(nameof(addon))
+            DukeAddonEnum.Base => throw new ArgumentOutOfRangeException(nameof(addon), addon, $"{nameof(DukeAddonEnum.Base)} is not a valid addon for detection."),
+            _ => throw new ArgumentOutOfRangeException(nameof(addon), addon, $"Unsupported addon value: {addon}.")
         };
 
         string[] searchPaths =

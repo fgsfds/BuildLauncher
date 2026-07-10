@@ -245,7 +245,7 @@ public sealed class Raze : BasePort
 
         if (addon is not DukeCampaign dCamp)
         {
-            throw new InvalidCastException();
+            throw new ArgumentException($"Expected {nameof(DukeCampaign)} but received {addon.GetType().Name}.", nameof(addon));
         }
 
         if (dCamp.SupportedGame.GameVersion is not null &&
@@ -332,7 +332,7 @@ public sealed class Raze : BasePort
 
         if (addon is not GenericCampaign wCamp)
         {
-            throw new InvalidCastException();
+            throw new ArgumentException($"Expected {nameof(GenericCampaign)} but received {addon.GetType().Name}.", nameof(addon));
         }
 
         //TODO downloaded addons support
@@ -383,7 +383,7 @@ public sealed class Raze : BasePort
 
         if (addon is not DukeCampaign rCamp)
         {
-            throw new InvalidCastException();
+            throw new ArgumentException($"Expected {nameof(DukeCampaign)} but received {addon.GetType().Name}.", nameof(addon));
         }
 
         if (rCamp.DependentAddons is not null &&

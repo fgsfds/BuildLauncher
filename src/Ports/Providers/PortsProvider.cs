@@ -65,7 +65,7 @@ public sealed class PortsProvider
     ///     Gets a port by its enum value.
     /// </summary>
     /// <param name="portEnum">Port enum.</param>
-    public BasePort GetPort(PortEnum portEnum) => _ports.TryGetValue(portEnum, out var port) ? port : throw new ArgumentException($"Port {portEnum} is not registered", nameof(portEnum));
+    public BasePort GetPort(PortEnum portEnum) => _ports.TryGetValue(portEnum, out var port) ? port : throw new KeyNotFoundException($"Port '{portEnum}' is not registered.");
 
     /// <summary>
     ///     Gets the list of all custom ports.

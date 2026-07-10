@@ -104,7 +104,7 @@ public sealed class InstalledAddonsProvider : IDisposable
                     break;
                 case AddonTypeEnum.Official:
                 default:
-                    throw new ArgumentOutOfRangeException(nameof(addonType), addonType, null);
+                    throw new ArgumentOutOfRangeException(nameof(addonType), addonType, $"Unsupported addon type: {addonType}.");
             }
 
             if (addonType is AddonTypeEnum.Mod)
@@ -292,8 +292,8 @@ public sealed class InstalledAddonsProvider : IDisposable
                 AddonTypeEnum.TC => _campaignsCache,
                 AddonTypeEnum.Map => _mapsCache,
                 AddonTypeEnum.Mod => _modsCache,
-                AddonTypeEnum.Official => throw new NotSupportedException(),
-                _ => throw new NotSupportedException()
+                AddonTypeEnum.Official => throw new NotSupportedException($"Official addons cannot be added to cache."),
+                _ => throw new NotSupportedException($"Unsupported addon type: {addon.Type}.")
             };
 
             var existing = cache.FindIndex(x => x.AddonId == addon.AddonId);
@@ -354,8 +354,8 @@ public sealed class InstalledAddonsProvider : IDisposable
             AddonTypeEnum.TC => _campaignsCache,
             AddonTypeEnum.Map => _mapsCache,
             AddonTypeEnum.Mod => _modsCache,
-            AddonTypeEnum.Official => throw new NotSupportedException(),
-            _ => throw new NotSupportedException()
+            AddonTypeEnum.Official => throw new NotSupportedException($"Official addons cannot be updated in cache."),
+            _ => throw new NotSupportedException($"Unsupported addon type: {addon.Type}.")
         };
 
         var existing = cache.FindIndex(x => x.AddonId == addon.AddonId);
@@ -449,7 +449,7 @@ public sealed class InstalledAddonsProvider : IDisposable
             AddonTypeEnum.TC => GetInstalledCampaigns(),
             AddonTypeEnum.Map => GetInstalledMaps(),
             AddonTypeEnum.Mod => GetInstalledMods(),
-            _ => throw new NotSupportedException()
+            _ => throw new NotSupportedException($"Unsupported addon type: {addonType}.")
         };
     }
 
@@ -465,7 +465,7 @@ public sealed class InstalledAddonsProvider : IDisposable
             AddonTypeEnum.TC => _campaignsCache,
             AddonTypeEnum.Map => _mapsCache,
             AddonTypeEnum.Mod => _modsCache,
-            _ => throw new NotSupportedException()
+            _ => throw new NotSupportedException($"Unsupported addon type: {addonType}.")
         };
 
         return cache;

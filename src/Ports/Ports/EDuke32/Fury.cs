@@ -121,7 +121,7 @@ public sealed class Fury : EDuke32
 
         if (addon is not DukeCampaign fCamp)
         {
-            throw new InvalidCastException();
+            throw new ArgumentException($"Expected {nameof(DukeCampaign)} but received {addon.GetType().Name}.", nameof(addon));
         }
 
         if (fCamp.MainCon is not null)

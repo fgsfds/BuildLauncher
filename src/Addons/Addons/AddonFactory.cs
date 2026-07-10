@@ -54,7 +54,7 @@ internal sealed class AddonFactory
         }
         else if (parsedAddonFile.FileInfo.IsGrpInfo || parsedAddonFile.FileInfo.IsMap)
         {
-            throw new NotSupportedException();
+            throw new NotSupportedException($"GRP info and loose map files are not supported for addon creation.");
         }
         else
         {
@@ -69,7 +69,7 @@ internal sealed class AddonFactory
 
             if (carcassValue.MainDef is not null)
             {
-                throw new ArgumentException("Autoload mod can't have Main DEF");
+                throw new ArgumentException($"Autoload mod cannot have a Main DEF. Carcass '{carcassValue.Id}' has MainDef '{carcassValue.MainDef}'.", nameof(carcassValue.MainDef));
             }
 
             AddonId id = new(carcassValue.Id, carcassValue.Version);
@@ -268,7 +268,7 @@ internal sealed class AddonFactory
                     IsFavorite = isFavorite,
                     IsMetadataUpdateAvailable = isUpdate
                 },
-            _ => throw new NotSupportedException()
+            _ => throw new NotSupportedException($"Unsupported game: {_gameEnum}.")
         };
     }
 

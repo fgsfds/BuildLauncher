@@ -38,7 +38,7 @@ public sealed class FilesDownloader
     /// <param name="url">Link to file download</param>
     /// <param name="filePath">Absolute path to destination file</param>
     /// <param name="cancellationToken">Cancellation Token</param>
-    /// <exception cref="Exception">Error while downloading file</exception>
+    /// <exception cref="HttpRequestException">Thrown when the server returns an unsuccessful status code or does not support range requests for resume.</exception>
     public async Task<bool> DownloadFileAsync(
         Uri url,
         string filePath,
@@ -59,7 +59,7 @@ public sealed class FilesDownloader
 
         if (!response.IsSuccessStatusCode)
         {
-            throw new HttpRequestException($"Error while downloading {url}, error: {response.StatusCode}");
+            throw new HttpRequestException($"Failed to download file from '{url}'. Server returned status code {(int)response.StatusCode} ({response.StatusCode}).", null, response.StatusCode);
         }
 
         await using var source = await response.Content.ReadAsStreamAsync(cancellationToken).ConfigureAwait(false);
@@ -153,7 +153,7 @@ public sealed class FilesDownloader
 
             if (response.StatusCode is not HttpStatusCode.PartialContent)
             {
-                throw new InvalidOperationException("Error while downloading a file: " + response.StatusCode);
+                throw new HttpRequestException($"Failed to resume download from '{url}'. Expected HTTP 206 Partial Content but received {(int)response.StatusCode} ({response.StatusCode}).", null, response.StatusCode);
             }
 
             await using var source = await response.Content.ReadAsStreamAsync(cancellationToken).ConfigureAwait(false);

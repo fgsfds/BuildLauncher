@@ -119,7 +119,7 @@ public static class VersionComparer
             ComparisonOperatorEnum.LessOrEquals => result <= 0,
             ComparisonOperatorEnum.GreaterThan => result > 0,
             ComparisonOperatorEnum.LessThan => result < 0,
-            _ => throw new NotSupportedException()
+            _ => throw new NotSupportedException($"Unsupported comparison operator: {op}.")
         };
     }
 

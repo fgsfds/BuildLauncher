@@ -49,7 +49,7 @@ public static class EnumHelper
     ///     Gets the description from a <see cref="DescriptionAttribute" /> on an enum value.
     /// </summary>
     /// <param name="value">Enum value.</param>
-    /// <exception cref="InvalidDataException">Thrown when no description attribute is found.</exception>
+    /// <exception cref="InvalidOperationException">Thrown when the enum field or its description attribute is not found.</exception>
     public static string GetDescription(this Enum value)
     {
         var type = value.GetType();
@@ -58,7 +58,7 @@ public static class EnumHelper
 
         if (field is null)
         {
-            throw new InvalidDataException();
+            throw new InvalidOperationException($"Enum field '{value}' not found on type '{type.FullName}'.");
         }
 
         var attr = field
@@ -68,7 +68,7 @@ public static class EnumHelper
 
         if (attr is null)
         {
-            throw new InvalidDataException();
+            throw new InvalidOperationException($"Enum value '{value}' on '{type.FullName}' has no [Description] attribute.");
         }
 
         return attr.Description;

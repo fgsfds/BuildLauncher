@@ -21,7 +21,7 @@ public static class UriHelper
             AddonTypeEnum.TC => "Campaigns",
             AddonTypeEnum.Map => "Maps",
             AddonTypeEnum.Mod => "Mods",
-            _ => throw new NotSupportedException()
+            _ => throw new NotSupportedException($"Unsupported addon type: {manifest.AddonType}.")
         };
 
         var gameName = manifest.SupportedGame.Game switch
@@ -39,7 +39,7 @@ public static class UriHelper
             GameEnum.Witchaven => "WH",
             GameEnum.Witchaven2 => "WH2",
             GameEnum.Standalone => "Standalone",
-            _ => throw new NotSupportedException()
+            _ => throw new NotSupportedException($"Unsupported game: {manifest.SupportedGame.Game}.")
         };
 
         return $"{gameName}/{folderName}/{Path.GetFileName(pathToFile)}";

@@ -231,7 +231,7 @@ public sealed class RedNukem : EDuke32
 
         if (addon is not DukeCampaign rCamp)
         {
-            throw new InvalidCastException();
+            throw new ArgumentException($"Expected {nameof(DukeCampaign)} but received {addon.GetType().Name}.", nameof(addon));
         }
 
         if (rCamp.MainCon is not null)

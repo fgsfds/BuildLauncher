@@ -165,7 +165,7 @@ public sealed partial class DownloadsViewModel : ObservableObject
             }
             else
             {
-                throw new ArgumentOutOfRangeException(nameof(FilterSelectedItem));
+                throw new ArgumentOutOfRangeException(nameof(FilterSelectedItem), FilterSelectedItem, $"Unsupported filter value: {FilterSelectedItem}.");
             }
 
             if (IsHideInstalledChecked)
@@ -347,7 +347,7 @@ public sealed partial class DownloadsViewModel : ObservableObject
 
                 if (_cancellationTokenSource.IsCancellationRequested)
                 {
-                    throw new OperationCanceledException();
+                    throw new OperationCanceledException(_cancellationTokenSource.Token);
                 }
 
                 ProgressMessage = $"Downloading {item.Title}. File {downloadCount} of {filesToDownload.Count}.";

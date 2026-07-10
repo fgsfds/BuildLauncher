@@ -193,7 +193,7 @@ public sealed partial class MapsViewModel : RightPanelViewModel, IPortsButtonCon
         {
             if (command is not Tuple<BasePort, byte?> parameter)
             {
-                throw new InvalidCastException();
+                throw new ArgumentException($"Expected {nameof(Tuple<BasePort, byte?>)} but received {command?.GetType().Name}.", nameof(command));
             }
 
             ArgumentNullException.ThrowIfNull(SelectedAddon);
@@ -301,12 +301,12 @@ public sealed partial class MapsViewModel : RightPanelViewModel, IPortsButtonCon
         }
         else
         {
-            throw new InvalidOperationException(value?.GetType().Name);
+            throw new ArgumentException($"Cannot update metadata. Unexpected type: {(value is null ? "null" : value.GetType().Name)}.", nameof(value));
         }
 
         if (addon.FileInfo is null)
         {
-            throw new InvalidOperationException("Map file info is required for metadata update");
+            throw new InvalidOperationException("Cannot update map metadata because file info is missing.");
         }
 
         IsInProgress = true;

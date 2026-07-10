@@ -104,7 +104,7 @@ public static class SteamHelper
         }
         else
         {
-            throw new PlatformNotSupportedException("Can't identify platform");
+            throw new PlatformNotSupportedException($"Can't identify Steam install path on platform: {RuntimeInformation.OSDescription}.");
         }
 
         if (!Directory.Exists(result))

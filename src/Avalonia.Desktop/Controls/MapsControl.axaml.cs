@@ -189,7 +189,7 @@ public sealed partial class MapsControl : UserControl
             return port;
         }
 
-        throw new ArgumentOutOfRangeException(nameof(port));
+        throw new ArgumentNullException(nameof(port), "Port is null and no flyout target is available.");
     }
 
     /// <summary>
@@ -222,12 +222,12 @@ public sealed partial class MapsControl : UserControl
     {
         if (sender is not Button button)
         {
-            throw new InvalidCastException();
+            throw new ArgumentException($"Expected {nameof(Button)} sender but received {sender?.GetType().Name}.", nameof(sender));
         }
 
         if (button.CommandParameter is not BasePort port)
         {
-            throw new InvalidCastException();
+            throw new ArgumentException($"Expected {nameof(BasePort)} as CommandParameter but received {button.CommandParameter?.GetType().Name}.", nameof(button.CommandParameter));
         }
 
         if (IsSkillFlyoutAvailable(port))

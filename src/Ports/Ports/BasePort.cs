@@ -44,7 +44,7 @@ public abstract class BasePort : IInstallable
             {
                 OSEnum.Windows => WinExe,
                 OSEnum.Linux => LinExe,
-                _ => throw new ArgumentOutOfRangeException(CommonProperties.OSEnum.ToString())
+                _ => throw new ArgumentOutOfRangeException(nameof(CommonProperties.OSEnum), CommonProperties.OSEnum, $"Unsupported OS: {CommonProperties.OSEnum}.")
             };
         }
     }
@@ -275,7 +275,7 @@ public abstract class BasePort : IInstallable
         {
             if (!addon.Options.TryGetValue(optionName, out var options))
             {
-                throw new KeyNotFoundException(nameof(optionName));
+                throw new KeyNotFoundException($"Option '{optionName}' not found in addon options.");
             }
 
             foreach (var option in options)
@@ -291,7 +291,7 @@ public abstract class BasePort : IInstallable
                 }
                 else
                 {
-                    throw new ArgumentOutOfRangeException(nameof(option.Value));
+                    throw new NotSupportedException($"Option '{option.Key}' has unsupported type '{option.Value}' for non-Blood games.");
                 }
             }
         }
@@ -315,7 +315,7 @@ public abstract class BasePort : IInstallable
         }
         else
         {
-            throw new NotSupportedException();
+            throw new NotSupportedException($"Unsupported start map type: {camp.StartMap?.GetType().Name}.");
         }
     }
 
@@ -326,7 +326,7 @@ public abstract class BasePort : IInstallable
     {
         if (camp.StartMap is not MapFileJsonModel mapFile)
         {
-            throw new InvalidCastException();
+            throw new ArgumentException($"Expected {nameof(MapFileJsonModel)} start map but received {camp.StartMap?.GetType().Name}.", nameof(camp));
         }
 
         _ = sb.Append($@" {AddDirectoryParam}""{game.MapsFolderPath}""");
@@ -356,7 +356,7 @@ public abstract class BasePort : IInstallable
 
         if (addon is not BloodCampaign bCamp)
         {
-            throw new InvalidCastException();
+            throw new ArgumentException($"Expected {nameof(BloodCampaign)} but received {addon.GetType().Name}.", nameof(addon));
         }
 
         if (bCamp.INI is not null)
@@ -422,7 +422,7 @@ public abstract class BasePort : IInstallable
 
         if (addon is not GenericCampaign sCamp)
         {
-            throw new InvalidCastException();
+            throw new ArgumentException($"Expected {nameof(GenericCampaign)} but received {addon.GetType().Name}.", nameof(addon));
         }
 
         if (sCamp.FileInfo is null)
@@ -459,7 +459,7 @@ public abstract class BasePort : IInstallable
         }
         else
         {
-            throw new NotSupportedException();
+            throw new NotSupportedException($"Unsupported game type {game.GetType().Name} for NAM/WW2GI arguments.");
         }
 
         if (addon is LooseMap)
@@ -471,7 +471,7 @@ public abstract class BasePort : IInstallable
 
         if (addon is not DukeCampaign dCamp)
         {
-            throw new InvalidCastException();
+            throw new ArgumentException($"Expected {nameof(DukeCampaign)} but received {addon.GetType().Name}.", nameof(addon));
         }
 
         if (addon.AddonId.Id.Equals(nameof(WW2GIAddonEnum.Platoon), StringComparison.OrdinalIgnoreCase))

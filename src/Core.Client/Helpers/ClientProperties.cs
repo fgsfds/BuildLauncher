@@ -57,7 +57,7 @@ public static class ClientProperties
     /// <summary>
     ///     Current app version.
     /// </summary>
-    public static Version CurrentVersion => Assembly.GetEntryAssembly()?.GetName().Version ?? throw new ArgumentNullException();
+    public static Version CurrentVersion => Assembly.GetEntryAssembly()?.GetName().Version ?? throw new InvalidOperationException("Assembly.GetEntryAssembly() returned null.");
 
     /// <summary>
     ///     Name of the executable file.
@@ -76,7 +76,7 @@ public static class ClientProperties
             }
             else
             {
-                throw new PlatformNotSupportedException();
+                throw new PlatformNotSupportedException($"Unsupported OS: {RuntimeInformation.OSDescription}.");
             }
         }
     }

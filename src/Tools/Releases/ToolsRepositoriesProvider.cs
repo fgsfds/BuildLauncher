@@ -49,6 +49,6 @@ public sealed class ToolsRepositoriesProvider : IRepositoriesProvider<ToolEnum>
             };
         }
 
-        throw new NotSupportedException(releaseEnum.ToString());
+        throw new ArgumentOutOfRangeException(nameof(releaseEnum), releaseEnum, $"Unsupported release: {releaseEnum}.");
     }
 }

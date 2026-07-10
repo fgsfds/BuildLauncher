@@ -279,7 +279,7 @@ public sealed class GamesPathsProvider
             GameEnum.Witchaven => _witch1Path,
             GameEnum.Witchaven2 => _witch2Path,
             GameEnum.TekWar => _twPath,
-            _ => throw new NotSupportedException()
+            _ => throw new NotSupportedException($"Getting install path for game '{game}' is not supported.")
         };
     }
 
@@ -295,7 +295,7 @@ public sealed class GamesPathsProvider
             DukeVersionEnum.Duke3D_13D => _dukePath,
             DukeVersionEnum.Duke3D_Atomic => _dukePath,
             DukeVersionEnum.Duke3D_WT => _dukeWtPath,
-            _ => throw new NotSupportedException()
+            _ => throw new NotSupportedException($"Getting install path for Duke version '{game}' is not supported.")
         };
     }
 
