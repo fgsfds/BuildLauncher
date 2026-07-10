@@ -20,7 +20,7 @@ namespace Avalonia.Desktop.ViewModels;
 /// <summary>
 ///     Creates and configures view model instances.
 /// </summary>
-public sealed class ViewModelsFactory
+public sealed class ViewModelsFactory : IViewModelsFactory
 {
     private readonly IAddonDropHelper _addonInstaller;
 
@@ -70,7 +70,7 @@ public sealed class ViewModelsFactory
     /// <param name="gamesProvider">
     ///     The installed games provider.
     /// </param>
-    /// <param name="IConfigProvider">
+    /// <param name="configProvider">
     ///     The configuration provider.
     /// </param>
     /// <param name="portsInstallerFactory">
@@ -132,7 +132,7 @@ public sealed class ViewModelsFactory
     /// </param>
     public ViewModelsFactory(
         InstalledGamesProvider gamesProvider,
-        IConfigProvider IConfigProvider,
+        IConfigProvider configProvider,
         PortInstallerFactory portsInstallerFactory,
         ToolInstallerFactory toolsInstallerFactory,
         PortsProvider portsProvider,
@@ -155,7 +155,7 @@ public sealed class ViewModelsFactory
         )
     {
         _gamesProvider = gamesProvider;
-        _config = IConfigProvider;
+        _config = configProvider;
         _portsInstallerFactory = portsInstallerFactory;
         _toolsInstallerFactory = toolsInstallerFactory;
         _portsProvider = portsProvider;

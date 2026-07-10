@@ -41,7 +41,7 @@ public sealed partial class MapsViewModel : RightPanelViewModel, IPortsButtonCon
     /// <param name="bitmapsCache">The bitmaps cache.</param>
     /// <param name="addonInstaller">The addon drop helper.</param>
     /// <param name="logger">The logger.</param>
-    [Obsolete($"Don't create directly. Use {nameof(ViewModelsFactory)}.")]
+    [Obsolete($"Don't create directly. Use {nameof(IViewModelsFactory)}.")]
     public MapsViewModel(
         BaseGame game,
         InstalledGamesProvider gamesProvider,

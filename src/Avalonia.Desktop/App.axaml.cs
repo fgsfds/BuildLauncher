@@ -77,7 +77,7 @@ public sealed class App : Application
 
         var config = _services.GetRequiredService<IConfigProvider>();
         var viewLocator = _services.GetRequiredService<ViewLocator>();
-        var vmFactory = _services.GetRequiredService<ViewModelsFactory>();
+        var vmFactory = _services.GetRequiredService<IViewModelsFactory>();
         var logger = _services.GetRequiredService<ILoggerFactory>().CreateLogger<App>();
         var installedGamesProvider = _services.GetRequiredService<InstalledGamesProvider>();
 

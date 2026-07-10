@@ -41,7 +41,7 @@ public sealed partial class ToolViewModel : ObservableObject
     /// <param name="apiInterface">The API interface.</param>
     /// <param name="tool">The tool.</param>
     /// <param name="logger">The logger.</param>
-    [Obsolete($"Don't create directly. Use {nameof(ViewModelsFactory)}.")]
+    [Obsolete($"Don't create directly. Use {nameof(IViewModelsFactory)}.")]
     public ToolViewModel(
         ToolInstallerFactory installerFactory,
         IApiInterface apiInterface,

@@ -43,7 +43,7 @@ public sealed class MainWindowViewModel : ObservableObject
         InstalledGamesProvider gamesProvider,
         PortsProvider portsProvider,
         AppUpdateInstaller appUpdateInstaller,
-        ViewModelsFactory viewModelsFactory,
+        IViewModelsFactory viewModelsFactory,
         GamesPathsProvider gamesPathsProvider,
         IEnumerable<BasePort> ports,
         IEnumerable<BaseTool> tools,

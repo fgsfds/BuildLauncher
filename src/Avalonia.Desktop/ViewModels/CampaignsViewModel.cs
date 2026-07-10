@@ -69,7 +69,7 @@ public sealed partial class CampaignsViewModel : RightPanelViewModel, IPortsButt
     /// <param name="logger">
     ///     The logger.
     /// </param>
-    [Obsolete($"Don't create directly. Use {nameof(ViewModelsFactory)}.")]
+    [Obsolete($"Don't create directly. Use {nameof(IViewModelsFactory)}.")]
     public CampaignsViewModel(
         BaseGame game,
         InstalledGamesProvider gamesProvider,

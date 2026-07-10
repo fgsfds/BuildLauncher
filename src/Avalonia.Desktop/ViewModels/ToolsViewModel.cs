@@ -7,7 +7,7 @@ namespace Avalonia.Desktop.ViewModels;
 
 public sealed partial class ToolsViewModel : ObservableObject
 {
-    private readonly ViewModelsFactory _viewModelsFactory;
+    private readonly IViewModelsFactory _viewModelsFactory;
 
     /// <summary>
     ///     Gets or sets whether there are tool updates available.
@@ -21,7 +21,7 @@ public sealed partial class ToolsViewModel : ObservableObject
     /// <param name="viewModelsFactory">The view models factory.</param>
     /// <param name="tools">The available tools.</param>
     public ToolsViewModel(
-        ViewModelsFactory viewModelsFactory,
+        IViewModelsFactory viewModelsFactory,
         IEnumerable<BaseTool> tools
         )
     {

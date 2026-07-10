@@ -14,7 +14,7 @@ namespace Avalonia.Desktop.ViewModels;
 
 public sealed partial class PortsViewModel : ObservableObject
 {
-    private readonly PortsProvider _installedPortsProvider;
+    private readonly IPortsProvider _installedPortsProvider;
 
     private readonly ILogger<PortsViewModel> _logger;
 
@@ -23,7 +23,7 @@ public sealed partial class PortsViewModel : ObservableObject
     /// </summary>
     private readonly SemaphoreSlim _semaphore = new(1);
 
-    private readonly ViewModelsFactory _viewModelsFactory;
+    private readonly IViewModelsFactory _viewModelsFactory;
 
     /// <summary>
     ///     Gets or sets the error message.
@@ -82,8 +82,8 @@ public sealed partial class PortsViewModel : ObservableObject
     /// <param name="ports">The available ports.</param>
     /// <param name="logger">The logger.</param>
     public PortsViewModel(
-        ViewModelsFactory viewModelsFactory,
-        PortsProvider installedPortsProvider,
+        IViewModelsFactory viewModelsFactory,
+        IPortsProvider installedPortsProvider,
         IEnumerable<BasePort> ports,
         ILogger<PortsViewModel> logger
         )

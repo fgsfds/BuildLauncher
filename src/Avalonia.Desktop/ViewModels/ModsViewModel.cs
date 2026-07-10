@@ -37,7 +37,7 @@ public sealed partial class ModsViewModel : RightPanelViewModel, IPortsButtonCon
     /// <param name="config">The configuration provider.</param>
     /// <param name="addonInstaller">The addon drop helper.</param>
     /// <param name="logger">The logger.</param>
-    [Obsolete($"Don't create directly. Use {nameof(ViewModelsFactory)}.")]
+    [Obsolete($"Don't create directly. Use {nameof(IViewModelsFactory)}.")]
     public ModsViewModel(
         BaseGame game,
         InstalledGamesProvider gamesProvider,

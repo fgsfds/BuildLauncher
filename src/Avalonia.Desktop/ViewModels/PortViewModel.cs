@@ -42,7 +42,7 @@ public sealed partial class PortViewModel : ObservableObject
     /// <param name="apiInterface">The API interface.</param>
     /// <param name="port">The port.</param>
     /// <param name="logger">The logger.</param>
-    [Obsolete($"Don't create directly. Use {nameof(ViewModelsFactory)}.")]
+    [Obsolete($"Don't create directly. Use {nameof(IViewModelsFactory)}.")]
     public PortViewModel(
         PortInstallerFactory installerFactory,
         IApiInterface apiInterface,

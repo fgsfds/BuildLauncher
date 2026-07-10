@@ -11,7 +11,7 @@ namespace Ports.Providers;
 /// <summary>
 ///     Provides singleton instances of port types and manages custom ports.
 /// </summary>
-public sealed class PortsProvider
+public sealed class PortsProvider : IPortsProvider
 {
     /// <summary>
     ///     List of custom ports loaded from the database.

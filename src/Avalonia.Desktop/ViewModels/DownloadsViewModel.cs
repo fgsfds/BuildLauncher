@@ -68,7 +68,7 @@ public sealed partial class DownloadsViewModel : ObservableObject
     /// <param name="installedAddonsProviderFactory">The installed addons provider factory.</param>
     /// <param name="downloadableAddonsProviderFactory">The downloadable addons provider factory.</param>
     /// <param name="logger">The logger.</param>
-    [Obsolete($"Don't create directly. Use {nameof(ViewModelsFactory)}.")]
+    [Obsolete($"Don't create directly. Use {nameof(IViewModelsFactory)}.")]
     public DownloadsViewModel(
         BaseGame game,
         InstalledAddonsProviderFactory installedAddonsProviderFactory,

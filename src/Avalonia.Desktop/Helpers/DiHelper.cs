@@ -17,7 +17,7 @@ public static class DiHelper
     /// </summary>
     public static IServiceCollection WithMVVM(this IServiceCollection container)
     {
-        _ = container.AddSingleton<ViewModelsFactory>();
+        _ = container.AddSingleton<IViewModelsFactory, ViewModelsFactory>();
         _ = container.AddSingleton<MainWindowViewModel>();
 
         return container.AddSingleton<ViewLocator>();
