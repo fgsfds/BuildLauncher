@@ -44,7 +44,7 @@ public static class Extensions
 
         if (time.TotalMinutes < 1)
         {
-            if (time.TotalSeconds > 2)
+            if (time.TotalSeconds >= 2)
             {
                 _ = sb.Append($" {time.Seconds} seconds");
             }
