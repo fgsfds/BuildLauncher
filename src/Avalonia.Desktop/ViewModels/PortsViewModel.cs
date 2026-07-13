@@ -367,7 +367,7 @@ public sealed partial class PortsViewModel : ObservableObject
     /// <summary>
     ///     Handles the port changed event.
     /// </summary>
-    private void OnPortChanged(PortEnum portEnum)
+    internal void OnPortChanged(PortEnum portEnum)
     {
         HasUpdates = PortsList.Any(static x => x.IsUpdateAvailable);
     }

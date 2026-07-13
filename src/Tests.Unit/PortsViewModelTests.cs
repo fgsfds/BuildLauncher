@@ -1,5 +1,4 @@
 ﻿using System.Collections.Immutable;
-using System.Reflection;
 using Avalonia.Desktop.ViewModels;
 using Core.All.Enums;
 using Microsoft.Extensions.Logging.Abstractions;
@@ -450,10 +449,7 @@ public sealed class PortsViewModelTests
     {
         _viewModel.PortsList = [];
 
-        var method = typeof(PortsViewModel).GetMethod("OnPortChanged", BindingFlags.NonPublic | BindingFlags.Instance);
-        Assert.NotNull(method);
-
-        method.Invoke(_viewModel, [PortEnum.Stub]);
+        _viewModel.OnPortChanged(PortEnum.Stub);
 
         Assert.False(_viewModel.HasUpdates);
     }
@@ -504,6 +500,21 @@ public sealed class PortsViewModelTests
         };
 
         _viewModel.IsEditorVisible = true;
+
+        Assert.True(fired);
+    }
+
+    [Fact]
+    public void SelectedCustomPortName_PropertyChanged_Fires()
+    {
+        var fired = false;
+        _viewModel.PropertyChanged += (_, e) =>
+        {
+            if (e.PropertyName == nameof(PortsViewModel.SelectedCustomPortName))
+                fired = true;
+        };
+
+        _viewModel.SelectedCustomPortName = "NewName";
 
         Assert.True(fired);
     }

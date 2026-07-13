@@ -2,14 +2,8 @@
 
 namespace Tests.Unit;
 
-/// <summary>
-///     Tests for the <see cref="Result" /> struct.
-/// </summary>
 public sealed class ResultTests
 {
-    /// <summary>
-    ///     Tests that the constructor sets the Message property.
-    /// </summary>
     [Fact]
     public void Constructor_SetsMessage()
     {
@@ -17,9 +11,6 @@ public sealed class ResultTests
         Assert.Equal("something went wrong", r.Message);
     }
 
-    /// <summary>
-    ///     Tests that a Success result has IsSuccess equal to true.
-    /// </summary>
     [Fact]
     public void Constructor_WithSuccess_IsSuccessReturnsTrue()
     {
@@ -27,9 +18,6 @@ public sealed class ResultTests
         Assert.True(r.IsSuccess);
     }
 
-    /// <summary>
-    ///     Tests that non-success results have IsSuccess equal to false.
-    /// </summary>
     [Theory]
     [InlineData(ResultEnum.HashError)]
     [InlineData(ResultEnum.NotFound)]
@@ -42,16 +30,27 @@ public sealed class ResultTests
         var r = new Result(resultEnum, "");
         Assert.False(r.IsSuccess);
     }
+
+    [Fact]
+    public void Default_ResultEnumIsSuccess_IsSuccessIsTrue()
+    {
+        var r = default(Result);
+        Assert.True(r.IsSuccess);
+        Assert.Null(r.Message);
+    }
+
+    [Fact]
+    public void Message_CanBeNull()
+    {
+        var r = new Result(ResultEnum.Success, null!);
+        Assert.Null(r.Message);
+        Assert.True(r.IsSuccess);
+    }
 }
 
-/// <summary>
-///     Tests for the <see cref="Result{T}" /> struct.
-/// </summary>
+
 public sealed class ResultGenericTests
 {
-    /// <summary>
-    ///     Tests that the constructor sets the ResultObject property.
-    /// </summary>
     [Fact]
     public void Constructor_SetsResultObject()
     {
@@ -59,9 +58,6 @@ public sealed class ResultGenericTests
         Assert.Equal("data", r.ResultObject);
     }
 
-    /// <summary>
-    ///     Tests that the constructor works with value type result objects.
-    /// </summary>
     [Fact]
     public void Constructor_WithValueTypeResultObject()
     {
@@ -69,13 +65,35 @@ public sealed class ResultGenericTests
         Assert.Equal(42, r.ResultObject);
     }
 
-    /// <summary>
-    ///     Tests that ResultObject is not null after a successful result with data.
-    /// </summary>
     [Fact]
     public void MemberNotNullWhen_NonNullResultObject_AfterSuccessCheck()
     {
         var r = new Result<string>(ResultEnum.Success, "data", "ok");
         Assert.NotNull(r.ResultObject);
+    }
+
+    [Fact]
+    public void Default_ResultEnumIsSuccess_IsSuccessIsTrue()
+    {
+        var r = default(Result<string>);
+        Assert.True(r.IsSuccess);
+        Assert.Null(r.ResultObject);
+        Assert.Null(r.Message);
+    }
+
+    [Fact]
+    public void NullResultObject_OnSuccess_IsAllowed()
+    {
+        var r = new Result<string>(ResultEnum.Success, null, "ok");
+        Assert.Null(r.ResultObject);
+        Assert.True(r.IsSuccess);
+    }
+
+    [Fact]
+    public void NonSuccess_WithNonNullResultObject_HasResultObjectButNotSuccess()
+    {
+        var r = new Result<string>(ResultEnum.NotFound, "data", "not found");
+        Assert.Equal("data", r.ResultObject);
+        Assert.False(r.IsSuccess);
     }
 }

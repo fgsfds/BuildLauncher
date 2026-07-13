@@ -50,4 +50,8 @@
         <ProjectReference Include="..\Tools\Tools.csproj"/>
     </ItemGroup>
 
+    <ItemGroup>
+        <InternalsVisibleTo Include="Tests.Unit"/>
+    </ItemGroup>
+
 </Project>

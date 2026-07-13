@@ -27,7 +27,6 @@ public sealed class FilesDownloaderTests : IDisposable
             }
             catch
             {
-                /* ignore */
             }
         }
     }
@@ -87,10 +86,39 @@ public sealed class FilesDownloaderTests : IDisposable
         var url = new Uri("http://example.com/missing.zip");
 
         var ex = await Assert.ThrowsAsync<HttpRequestException>(() =>
-                                                                    downloader.DownloadFileAsync(url, destPath, CancellationToken.None)
-            );
+            downloader.DownloadFileAsync(url, destPath, CancellationToken.None));
 
         Assert.Contains("NotFound", ex.Message);
+    }
+
+    [Fact]
+    public async Task DownloadFileAsync_ServerError_ThrowsHttpRequestException()
+    {
+        using var handler = new FakeDownloadHandler(HttpStatusCode.InternalServerError);
+        using var httpClient = new HttpClient(handler);
+        var httpFactoryMock = new Mock<IHttpClientFactory>();
+        httpFactoryMock.Setup(x => x.CreateClient(It.IsAny<string>())).Returns(httpClient);
+
+        var downloader = new FilesDownloader(httpFactoryMock.Object, NullLogger<FilesDownloader>.Instance);
+        var destPath = GetTempFilePath();
+
+        await Assert.ThrowsAsync<HttpRequestException>(() =>
+            downloader.DownloadFileAsync(new Uri("http://example.com/error.zip"), destPath, CancellationToken.None));
+    }
+
+    [Fact]
+    public async Task DownloadFileAsync_Forbidden_ThrowsHttpRequestException()
+    {
+        using var handler = new FakeDownloadHandler(HttpStatusCode.Forbidden);
+        using var httpClient = new HttpClient(handler);
+        var httpFactoryMock = new Mock<IHttpClientFactory>();
+        httpFactoryMock.Setup(x => x.CreateClient(It.IsAny<string>())).Returns(httpClient);
+
+        var downloader = new FilesDownloader(httpFactoryMock.Object, NullLogger<FilesDownloader>.Instance);
+        var destPath = GetTempFilePath();
+
+        await Assert.ThrowsAsync<HttpRequestException>(() =>
+            downloader.DownloadFileAsync(new Uri("http://example.com/forbidden.zip"), destPath, CancellationToken.None));
     }
 
     [Fact]
@@ -164,6 +192,28 @@ public sealed class FilesDownloaderTests : IDisposable
         Assert.Contains(progressValues, v => v > 0);
     }
 
+    [Fact]
+    public async Task DownloadFileAsync_OverwritesExistingFile()
+    {
+        var data = new byte[10_000];
+        new Random(42).NextBytes(data);
+        using var handler = new FakeDownloadHandler(HttpStatusCode.OK, data);
+        using var httpClient = new HttpClient(handler);
+        var httpFactoryMock = new Mock<IHttpClientFactory>();
+        httpFactoryMock.Setup(x => x.CreateClient(It.IsAny<string>())).Returns(httpClient);
+
+        var destPath = GetTempFilePath();
+        await File.WriteAllTextAsync(destPath, "old content");
+
+        var downloader = new FilesDownloader(httpFactoryMock.Object, NullLogger<FilesDownloader>.Instance);
+        var url = new Uri("http://example.com/file.zip");
+
+        var result = await downloader.DownloadFileAsync(url, destPath, CancellationToken.None);
+
+        Assert.True(result);
+        Assert.Equal(data, await File.ReadAllBytesAsync(destPath));
+    }
+
     private string GetTempFilePath() => Path.Combine(_tempDir, Guid.NewGuid().ToString());
 
 
@@ -173,18 +223,14 @@ public sealed class FilesDownloaderTests : IDisposable
         private readonly bool _hasContentLength;
         private readonly HttpStatusCode _statusCode;
 
-        public FakeDownloadHandler(
-            HttpStatusCode statusCode,
-            byte[]? data = null,
-            bool hasContentLength = true)
+        public FakeDownloadHandler(HttpStatusCode statusCode, byte[]? data = null, bool hasContentLength = true)
         {
             _statusCode = statusCode;
             _data = data ?? [];
             _hasContentLength = hasContentLength;
         }
 
-        protected override Task<HttpResponseMessage> SendAsync(
-            HttpRequestMessage request, CancellationToken cancellationToken)
+        protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
             var response = new HttpResponseMessage(_statusCode);
 
@@ -207,7 +253,6 @@ public sealed class FilesDownloaderTests : IDisposable
         protected override bool TryComputeLength(out long length)
         {
             length = 0;
-
             return false;
         }
     }

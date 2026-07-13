@@ -4,9 +4,6 @@ using Core.All.Enums;
 
 namespace Tests.Unit;
 
-/// <summary>
-///     Tests for the <see cref="GrpInfoProvider" /> class.
-/// </summary>
 public sealed class GrpInfoProviderTests : IDisposable
 {
     private const string GrpInfo = """
@@ -42,19 +39,9 @@ public sealed class GrpInfoProviderTests : IDisposable
         }
         """;
 
-    /// <summary>
-    ///     Path to the temporary grpinfo file.
-    /// </summary>
     private readonly string _grpInfoFilePath;
-
-    /// <summary>
-    ///     Path to the temporary folder.
-    /// </summary>
     private readonly string _tempFolder;
 
-    /// <summary>
-    ///     Initializes a new instance of the <see cref="GrpInfoProviderTests" /> class.
-    /// </summary>
     public GrpInfoProviderTests()
     {
         _grpInfoFilePath = Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid()}.grpinfo");
@@ -64,23 +51,31 @@ public sealed class GrpInfoProviderTests : IDisposable
         Directory.CreateDirectory(_tempFolder);
     }
 
-    /// <inheritdoc />
     public void Dispose()
     {
-        if (File.Exists(_grpInfoFilePath))
+        try
         {
-            File.Delete(_grpInfoFilePath);
+            if (File.Exists(_grpInfoFilePath))
+            {
+                File.Delete(_grpInfoFilePath);
+            }
+        }
+        catch
+        {
         }
 
-        if (Directory.Exists(_tempFolder))
+        try
         {
-            Directory.Delete(_tempFolder, true);
+            if (Directory.Exists(_tempFolder))
+            {
+                Directory.Delete(_tempFolder, true);
+            }
+        }
+        catch
+        {
         }
     }
 
-    /// <summary>
-    ///     Tests that parsing a valid grpinfo file returns the expected entries.
-    /// </summary>
     [Fact]
     public void Parse_ReturnTrue()
     {
@@ -104,9 +99,6 @@ public sealed class GrpInfoProviderTests : IDisposable
         Assert.Equal(28245809, entry3.Size);
     }
 
-    /// <summary>
-    ///     Tests that parsing an empty grpinfo file returns an empty list.
-    /// </summary>
     [Fact]
     public void Parse_EmptyFile_ReturnsEmptyList()
     {
@@ -116,7 +108,6 @@ public sealed class GrpInfoProviderTests : IDisposable
         try
         {
             var result = GrpInfoProvider.Parse(emptyPath);
-
             Assert.Empty(result);
         }
         finally
@@ -125,26 +116,19 @@ public sealed class GrpInfoProviderTests : IDisposable
         }
     }
 
-    /// <summary>
-    ///     Tests that parsing a grpinfo file with only comments and whitespace returns an empty list.
-    /// </summary>
     [Fact]
     public void Parse_OnlyCommentsAndWhitespace_ReturnsEmptyList()
     {
         var path = Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid()}.grpinfo");
-
-        File.WriteAllText(
-            path, """
+        File.WriteAllText(path, """
             // just a comment
 
             // another comment
-            """
-            );
+            """);
 
         try
         {
             var result = GrpInfoProvider.Parse(path);
-
             Assert.Empty(result);
         }
         finally
@@ -153,16 +137,11 @@ public sealed class GrpInfoProviderTests : IDisposable
         }
     }
 
-    /// <summary>
-    ///     Tests that entries missing name or size are skipped during parsing.
-    /// </summary>
     [Fact]
     public void Parse_EntriesMissingNameOrSize_Skipped()
     {
         var path = Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid()}.grpinfo");
-
-        File.WriteAllText(
-            path, """
+        File.WriteAllText(path, """
             grpinfo
             {
                 name       "Valid Entry"
@@ -179,13 +158,11 @@ public sealed class GrpInfoProviderTests : IDisposable
                 name       "No Size Entry"
                 // size missing
             }
-            """
-            );
+            """);
 
         try
         {
             var result = GrpInfoProvider.Parse(path);
-
             Assert.Single(result);
             Assert.Equal("Valid Entry", result[0].Name);
             Assert.Equal(100, result[0].Size);
@@ -196,16 +173,11 @@ public sealed class GrpInfoProviderTests : IDisposable
         }
     }
 
-    /// <summary>
-    ///     Tests that parsing a grpinfo file with a single entry returns one entry.
-    /// </summary>
     [Fact]
     public void Parse_SingleEntry_ReturnsOneEntry()
     {
         var path = Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid()}.grpinfo");
-
-        File.WriteAllText(
-            path, """
+        File.WriteAllText(path, """
             grpinfo
             {
                 name       "Single Addon"
@@ -215,13 +187,11 @@ public sealed class GrpInfoProviderTests : IDisposable
                 crc        0x12345678
                 flags      16
             }
-            """
-            );
+            """);
 
         try
         {
             var result = GrpInfoProvider.Parse(path);
-
             var entry = Assert.Single(result);
             Assert.Equal("Single Addon", entry.Name);
             Assert.Equal("scripts/main.con", entry.MainCon);
@@ -234,16 +204,60 @@ public sealed class GrpInfoProviderTests : IDisposable
         }
     }
 
-    /// <summary>
-    ///     Tests that GRP files matching grpinfo entries return the expected Duke campaigns.
-    /// </summary>
+    [Fact]
+    public void Parse_MissingClosingBrace_HandlesGracefully()
+    {
+        var path = Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid()}.grpinfo");
+        File.WriteAllText(path, """
+            grpinfo
+            {
+                name       "Unclosed"
+                size       100
+            """);
+
+        try
+        {
+            var result = GrpInfoProvider.Parse(path);
+            Assert.NotNull(result);
+        }
+        finally
+        {
+            File.Delete(path);
+        }
+    }
+
+    [Fact]
+    public void Parse_ExtraTokens_HandlesGracefully()
+    {
+        var path = Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid()}.grpinfo");
+        File.WriteAllText(path, """
+            grpinfo
+            {
+                name       "Valid"
+                size       500
+                unknown_token "some_value"
+            }
+            """);
+
+        try
+        {
+            var result = GrpInfoProvider.Parse(path);
+            Assert.NotNull(result);
+            Assert.Single(result);
+            Assert.Equal("Valid", result[0].Name);
+            Assert.Equal(500, result[0].Size);
+        }
+        finally
+        {
+            File.Delete(path);
+        }
+    }
+
     [Fact]
     public void TryGetAddonsFromGrpInfo_GrpsMatchGrpInfo_ReturnsTrueWithDukeCampaigns()
     {
         var grpInfoPath = Path.Combine(_tempFolder, "test.grpinfo");
-
-        File.WriteAllText(
-            grpInfoPath, """
+        File.WriteAllText(grpInfoPath, """
             grpinfo
             {
                 name       "Test Campaign"
@@ -257,13 +271,10 @@ public sealed class GrpInfoProviderTests : IDisposable
                 name       "Second Campaign"
                 size       2000
             }
-            """
-            );
+            """);
 
-        var grp1 = Path.Combine(_tempFolder, "test.grp");
-        var grp2 = Path.Combine(_tempFolder, "second.grp");
-        File.WriteAllBytes(grp1, new byte[1000]);
-        File.WriteAllBytes(grp2, new byte[2000]);
+        File.WriteAllBytes(Path.Combine(_tempFolder, "test.grp"), new byte[1000]);
+        File.WriteAllBytes(Path.Combine(_tempFolder, "second.grp"), new byte[2000]);
 
         var result = GrpInfoProvider.TryGetAddonsFromGrpInfo(grpInfoPath, out var addons);
 
@@ -287,23 +298,17 @@ public sealed class GrpInfoProviderTests : IDisposable
         Assert.Null(((DukeCampaign)second).AdditionalDefs);
     }
 
-    /// <summary>
-    ///     Tests that no GRP files matching grpinfo entries returns false.
-    /// </summary>
     [Fact]
     public void TryGetAddonsFromGrpInfo_NoGrpFiles_ReturnsFalse()
     {
         var grpInfoPath = Path.Combine(_tempFolder, "empty.grpinfo");
-
-        File.WriteAllText(
-            grpInfoPath, """
+        File.WriteAllText(grpInfoPath, """
             grpinfo
             {
                 name       "Test"
                 size       1000
             }
-            """
-            );
+            """);
 
         var result = GrpInfoProvider.TryGetAddonsFromGrpInfo(grpInfoPath, out var addons);
 
@@ -311,28 +316,20 @@ public sealed class GrpInfoProviderTests : IDisposable
         Assert.Null(addons);
     }
 
-    /// <summary>
-    ///     Tests that GRP files with sizes not matching any grpinfo entry are skipped.
-    /// </summary>
     [Fact]
     public void TryGetAddonsFromGrpInfo_GrpSizeNotInGrpInfo_Skipped()
     {
         var grpInfoPath = Path.Combine(_tempFolder, "partial.grpinfo");
-
-        File.WriteAllText(
-            grpInfoPath, """
+        File.WriteAllText(grpInfoPath, """
             grpinfo
             {
                 name       "Matched"
                 size       500
             }
-            """
-            );
+            """);
 
-        var matchedGrp = Path.Combine(_tempFolder, "matched.grp");
-        var unmatchedGrp = Path.Combine(_tempFolder, "unmatched.grp");
-        File.WriteAllBytes(matchedGrp, new byte[500]);
-        File.WriteAllBytes(unmatchedGrp, new byte[999]);
+        File.WriteAllBytes(Path.Combine(_tempFolder, "matched.grp"), new byte[500]);
+        File.WriteAllBytes(Path.Combine(_tempFolder, "unmatched.grp"), new byte[999]);
 
         var result = GrpInfoProvider.TryGetAddonsFromGrpInfo(grpInfoPath, out var addons);
 
@@ -342,4 +339,41 @@ public sealed class GrpInfoProviderTests : IDisposable
         Assert.Equal("Matched", addons[0].Title);
     }
 
+    [Fact]
+    public void TryGetAddonsFromGrpInfo_NoGrpInfoFile_ReturnsFalse()
+    {
+        var nonexistentPath = Path.Combine(_tempFolder, "nonexistent.grpinfo");
+        var result = GrpInfoProvider.TryGetAddonsFromGrpInfo(nonexistentPath, out var addons);
+
+        Assert.False(result);
+        Assert.Null(addons);
+    }
+
+    [Fact]
+    public void TryGetAddonsFromGrpInfo_DuplicateGrpSizes_MatchesByName()
+    {
+        var grpInfoPath = Path.Combine(_tempFolder, "dup.grpinfo");
+        File.WriteAllText(grpInfoPath, """
+            grpinfo
+            {
+                name       "Alpha Mod"
+                size       1000
+            }
+
+            grpinfo
+            {
+                name       "Beta Mod"
+                size       1000
+            }
+            """);
+
+        File.WriteAllBytes(Path.Combine(_tempFolder, "alpha.grp"), new byte[1000]);
+        File.WriteAllBytes(Path.Combine(_tempFolder, "beta.grp"), new byte[1000]);
+
+        var result = GrpInfoProvider.TryGetAddonsFromGrpInfo(grpInfoPath, out var addons);
+
+        Assert.True(result);
+        Assert.NotNull(addons);
+        Assert.Equal(2, addons.Count);
+    }
 }
