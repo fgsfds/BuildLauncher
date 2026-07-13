@@ -179,7 +179,12 @@ public sealed class OriginalCampaignsProvider
                         SupportedGame = new(GameEnum.Duke3D, DukeVersionEnum.Duke3D_Atomic),
                         RequiredFeatures = null,
                         FileInfo = null,
-                        DependentAddons = null,
+                        DependentAddons = new Dictionary<string, string?>
+                        {
+                            {
+                                nameof(DukeAddonEnum.DukeVaca), null
+                            }
+                        },
                         IncompatibleAddons = null,
                         MainCon = null,
                         AdditionalCons = null,
@@ -217,7 +222,12 @@ public sealed class OriginalCampaignsProvider
                         SupportedGame = new(GameEnum.Duke3D, DukeVersionEnum.Duke3D_Atomic),
                         RequiredFeatures = null,
                         FileInfo = null,
-                        DependentAddons = null,
+                        DependentAddons = new Dictionary<string, string?>
+                        {
+                            {
+                                nameof(DukeAddonEnum.DukeNW), null
+                            }
+                        },
                         IncompatibleAddons = null,
                         MainCon = null,
                         AdditionalCons = null,
@@ -258,7 +268,12 @@ public sealed class OriginalCampaignsProvider
                         SupportedGame = new(GameEnum.Duke3D, DukeVersionEnum.Duke3D_Atomic),
                         RequiredFeatures = null,
                         FileInfo = null,
-                        DependentAddons = null,
+                        DependentAddons = new Dictionary<string, string?>
+                        {
+                            {
+                                nameof(DukeAddonEnum.DukeDC), null
+                            }
+                        },
                         IncompatibleAddons = null,
                         MainCon = null,
                         AdditionalCons = null,

@@ -39,7 +39,7 @@ public sealed class NBloodCmdArgumentsTests
         NBlood nblood = new();
 
         var args = nblood.GetStartGameArgs(_bloodGame, _bloodCamp, mods, [], true, true, 2);
-        var expected = @$" -g ""enabled_mod.zip"" -mh ""ENABLED1.DEF"" -mh ""ENABLED2.DEF"" -g ""mod_incompatible_with_addon.zip"" -g ""incompatible_mod_with_compatible_version.zip"" -g ""dependent_mod.zip"" -g ""dependent_mod_with_compatible_version.zip"" -g ""feature_mod.zip"" -j ""{Directory.GetCurrentDirectory()}\Data\Addons\Blood\Mods"" -usecwd -j ""D:\Games\Blood"" -h ""a"" -s 2 -quick -nosetup";
+        var expected = @$" -g ""enabled_mod.zip"" -mh ""ENABLED1.DEF"" -mh ""ENABLED2.DEF"" -g ""mod_incompatible_with_addon.zip"" -g ""incompatible_mod_with_compatible_version.zip"" -g ""dependent_mod.zip"" -g ""dependent_mod_with_compatible_version.zip"" -g ""feature_mod.zip"" -j ""{Directory.GetCurrentDirectory()}\Data\Addons\Blood\Mods"" -usecwd -j ""D:\Games\Blood"" -h ""a"" -ini ""BLOOD.INI"" -s 2 -quick -nosetup";
 
         NormalizerHelper.NormalizeExpectedArgs(ref args, ref expected);
 

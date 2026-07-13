@@ -21,7 +21,7 @@ public sealed class BuildGDXCmdArgumentsTests
     private readonly DukeCampaign _ridesAgainCamp;
     private readonly GenericCampaign _slaveCamp;
     private readonly SlaveGame _slaveGame;
-    private readonly GenericCampaign _tekWarCamp;
+    private readonly DukeCampaign _tekWarCamp;
     private readonly TekWarGame _tekWarGame;
     private readonly GenericCampaign _wangCamp;
     private readonly WangGame _wangGame;

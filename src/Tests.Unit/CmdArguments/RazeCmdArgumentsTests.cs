@@ -76,7 +76,7 @@ public sealed class RazeCmdArgumentsTests
 
         raze.BeforeStart(_bloodGame, _bloodCamp);
         var args = raze.GetStartGameArgs(_bloodGame, _bloodCamp, mods, [], true, true);
-        var expected = @$" -file ""enabled_mod.zip"" -adddef ""ENABLED1.DEF"" -adddef ""ENABLED2.DEF"" -file ""mod_incompatible_with_addon.zip"" -file ""incompatible_mod_with_compatible_version.zip"" -file ""dependent_mod.zip"" -file ""dependent_mod_with_compatible_version.zip"" -savedir ""{Directory.GetCurrentDirectory()}\Data\Saves\Raze\Blood\blood"" -def ""a"" -quick -nosetup";
+        var expected = @$" -file ""enabled_mod.zip"" -adddef ""ENABLED1.DEF"" -adddef ""ENABLED2.DEF"" -file ""mod_incompatible_with_addon.zip"" -file ""incompatible_mod_with_compatible_version.zip"" -file ""dependent_mod.zip"" -file ""dependent_mod_with_compatible_version.zip"" -savedir ""{Directory.GetCurrentDirectory()}\Data\Saves\Raze\Blood\blood"" -def ""a"" -ini ""BLOOD.INI"" -quick -nosetup";
 
         NormalizerHelper.NormalizeExpectedArgs(ref args, ref expected);
 
