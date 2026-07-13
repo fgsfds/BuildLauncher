@@ -45,6 +45,7 @@
     <ItemGroup>
         <InternalsVisibleTo Include="Benchmarks"/>
         <InternalsVisibleTo Include="Tests.Unit"/>
+        <InternalsVisibleTo Include="Tests.Unit.Sequential"/>
     </ItemGroup>
 
 </Project>

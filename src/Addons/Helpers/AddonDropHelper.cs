@@ -99,6 +99,8 @@ public sealed class AddonDropHelper : IAddonDropHelper
             return false;
         }
 
+        Ensure.DirectoryExists(folderToPutFile);
+
         var newPathToFile = Path.Combine(folderToPutFile, Path.GetFileName(pathToFile));
 
         File.Copy(pathToFile, newPathToFile, true);

@@ -145,10 +145,7 @@ public sealed class InstalledAddonsProvider : IDisposable
     {
         var campaignsPath = _game.CampaignsFolderPath;
 
-        if (!Directory.Exists(campaignsPath))
-        {
-            return;
-        }
+        Ensure.DirectoryExists(campaignsPath);
 
         var files = new List<string>();
         files.AddRange(Directory.GetFiles(campaignsPath, "*.zip"));

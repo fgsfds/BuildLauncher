@@ -641,6 +641,8 @@ public sealed partial class DevViewModel : ObservableObject
                 throw new ArgumentOutOfRangeException(nameof(addon.AddonType), addon.AddonType, $"Unsupported addon type: {addon.AddonType}.");
             }
 
+            Ensure.DirectoryExists(archiveSaveFolder);
+
             var fullName = GetAddonFullName(addon);
             var pathToArchive = Path.Combine(archiveSaveFolder, fullName + ".zip");
 

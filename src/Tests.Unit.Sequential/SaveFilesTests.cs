@@ -4,12 +4,11 @@ using Core.All.Enums;
 using Core.Client.Helpers;
 using Games.Games;
 
-namespace Tests.Unit.Sync;
+namespace Tests.Unit.Sequential;
 
 /// <summary>
 ///     Tests for save file operations.
 /// </summary>
-[Collection("Sync")]
 public sealed class SaveFilesTests : IDisposable
 {
     /// <summary>

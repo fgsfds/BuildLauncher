@@ -15,11 +15,13 @@ jobs:
       run: dotnet restore
     - name: Build
       run: dotnet build --no-restore
-    - name: Test Unit
+    - name: Test Unit (Parallel)
       run: dotnet test ./src/Tests.Unit/Tests.Unit.csproj --no-build --verbosity normal
+    - name: Test Unit (Sequential)
+      run: dotnet test ./src/Tests.Unit.Sequential/Tests.Unit.Sequential.csproj --no-build --verbosity normal
     - name: Test External
       run: dotnet test ./src/Tests.External/Tests.External.csproj --no-build --verbosity normal
-      
+       
   build-and-test-linux:
     runs-on: ubuntu-latest
     steps:
@@ -32,7 +34,9 @@ jobs:
       run: dotnet restore
     - name: Build
       run: dotnet build --no-restore
-    - name: Test Unit
+    - name: Test Unit (Parallel)
       run: dotnet test ./src/Tests.Unit/Tests.Unit.csproj --no-build --verbosity normal
+    - name: Test Unit (Sequential)
+      run: dotnet test ./src/Tests.Unit.Sequential/Tests.Unit.Sequential.csproj --no-build --verbosity normal
     - name: Test External
       run: dotnet test ./src/Tests.External/Tests.External.csproj --no-build --verbosity normal

@@ -22,10 +22,6 @@ public abstract class BasePort : IInstallable
     /// </summary>
     protected BasePort()
     {
-        if (!Directory.Exists(PortSavedGamesFolderPath))
-        {
-            _ = Directory.CreateDirectory(PortSavedGamesFolderPath);
-        }
     }
 
     /// <summary>
@@ -791,10 +787,7 @@ public abstract class BasePort : IInstallable
                     where file.EndsWith(ext, StringComparison.OrdinalIgnoreCase)
                     select file;
 
-        if (!Directory.Exists(saveFolder))
-        {
-            _ = Directory.CreateDirectory(saveFolder);
-        }
+        Ensure.DirectoryExists(saveFolder);
 
         foreach (var file in files)
         {

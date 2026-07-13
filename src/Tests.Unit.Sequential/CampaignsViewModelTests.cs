@@ -18,9 +18,8 @@ using Moq;
 using Ports.Ports;
 using Tests.Unit.Helpers;
 
-namespace Tests.Unit.Sync;
+namespace Tests.Unit.Sequential;
 
-[Collection("Sync")]
 public sealed class CampaignsViewModelTests : IDisposable
 {
     private readonly Mock<IAddonDropHelper> _addonInstallerMock;

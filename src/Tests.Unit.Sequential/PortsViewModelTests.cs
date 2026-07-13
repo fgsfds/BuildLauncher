@@ -1,4 +1,4 @@
-﻿using System.Collections.Immutable;
+using System.Collections.Immutable;
 using Avalonia.Desktop.ViewModels;
 using Core.All.Enums;
 using Microsoft.Extensions.Logging.Abstractions;
@@ -9,7 +9,6 @@ using Tests.Unit.Helpers;
 
 namespace Tests.Unit;
 
-[Collection("Ports")]
 public sealed class PortsViewModelTests
 {
     private readonly Mock<IPortsProvider> _portsProviderMock;

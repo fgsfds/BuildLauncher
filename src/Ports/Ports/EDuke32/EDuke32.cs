@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics;
-using System.Reflection;
 using System.Text;
 using Addons.Addons;
 using Core.All.Enums;
@@ -17,14 +16,6 @@ namespace Ports.Ports.EDuke32;
 /// </summary>
 public class EDuke32 : BasePort
 {
-    /// <summary>
-    ///     Initializes a new instance of the <see cref="EDuke32" /> class.
-    /// </summary>
-    public EDuke32()
-    {
-        CreateWTStopgapFolder();
-    }
-
     /// <inheritdoc />
     public override PortEnum PortEnum => PortEnum.EDuke32;
 
@@ -149,14 +140,11 @@ public class EDuke32 : BasePort
             return;
         }
 
-        using var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("Ports.Assets.WTStopgap.zip");
+        using var stream = typeof(EDuke32).Assembly.GetManifestResourceStream("Ports.Assets.WTStopgap.zip");
 
         ArgumentNullException.ThrowIfNull(stream);
 
-        if (!Directory.Exists(stopgapFolder))
-        {
-            Directory.CreateDirectory(stopgapFolder);
-        }
+        Ensure.DirectoryExists(stopgapFolder);
 
         using var archive = ZipArchive.OpenArchive(stream);
         archive.WriteToDirectory(stopgapFolder);
@@ -173,6 +161,8 @@ public class EDuke32 : BasePort
     /// <inheritdoc />
     public override void BeforeStart(BaseGame game, BaseAddon campaign)
     {
+        CreateWTStopgapFolder();
+
         MoveSaveFilesFromStorage(game, campaign);
 
         try
@@ -511,10 +501,7 @@ public class EDuke32 : BasePort
                     where file.EndsWith(ext)
                     select file;
 
-        if (!Directory.Exists(saveFolder))
-        {
-            _ = Directory.CreateDirectory(saveFolder);
-        }
+        Ensure.DirectoryExists(saveFolder);
 
         foreach (var file in files)
         {

@@ -9,12 +9,11 @@ using Games.Games;
 using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
 
-namespace Tests.Unit.Sync;
+namespace Tests.Unit.Sequential;
 
 /// <summary>
 ///     Tests for the <see cref="AddonDropHelper" /> class.
 /// </summary>
-[Collection("Sync")]
 public sealed class AddonDropHelperTests : IDisposable
 {
     /// <summary>

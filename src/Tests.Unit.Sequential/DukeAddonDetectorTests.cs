@@ -1,12 +1,11 @@
 using Core.All.Enums.Addons;
 using Games.Helpers;
 
-namespace Tests.Unit.Sync;
+namespace Tests.Unit.Sequential;
 
 /// <summary>
 ///     Tests for the <see cref="DukeAddonDetector" /> class.
 /// </summary>
-[Collection("Sync")]
 public sealed class DukeAddonDetectorTests : IDisposable
 {
     /// <summary>

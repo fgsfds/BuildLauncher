@@ -344,10 +344,7 @@ public sealed class DosBox : BasePort
             }
             else
             {
-                if (!Directory.Exists(ClientProperties.TempFolderPath))
-                {
-                    Directory.CreateDirectory(ClientProperties.TempFolderPath);
-                }
+                Ensure.DirectoryExists(ClientProperties.TempFolderPath);
 
                 using var archive = ArchiveFactory.OpenArchive(addon.FileInfo.PathToFile);
                 archive.WriteToDirectory(ClientProperties.TempFolderPath);

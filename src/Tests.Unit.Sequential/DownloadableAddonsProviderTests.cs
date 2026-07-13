@@ -1,4 +1,4 @@
-﻿using System.Reflection;
+using System.Reflection;
 using Addons.Addons;
 using Addons.Providers;
 using Core.All;
@@ -11,12 +11,11 @@ using Games.Games;
 using Microsoft.Extensions.Logging;
 using Moq;
 
-namespace Tests.Unit.Sync;
+namespace Tests.Unit.Sequential;
 
 /// <summary>
 ///     Tests for the <see cref="DownloadableAddonsProvider" /> class.
 /// </summary>
-[Collection("Sync")]
 public sealed class DownloadableAddonsProviderTests
 {
     /// <summary>

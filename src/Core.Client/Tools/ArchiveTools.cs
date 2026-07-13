@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Core.Client.Helpers;
+using Microsoft.Extensions.Logging;
 using SharpCompress.Archives;
 using SharpCompress.Common;
 using SharpCompress.Readers;
@@ -45,10 +46,7 @@ public sealed class ArchiveTools
             }
             );
 
-        if (!Directory.Exists(unpackTo))
-        {
-            Directory.CreateDirectory(unpackTo);
-        }
+        Ensure.DirectoryExists(unpackTo);
 
         using var archive = ArchiveFactory.OpenArchive(
             pathToArchive,

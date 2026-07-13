@@ -5,9 +5,8 @@ using Core.All.Enums;
 using Core.All.Serializable.Addon;
 using Microsoft.Extensions.Logging.Abstractions;
 
-namespace Tests.Unit.Sync;
+namespace Tests.Unit.Sequential;
 
-[Collection("Sync")]
 public sealed class ArchivedAddonExtractorTests : IDisposable
 {
     private readonly ArchivedAddonExtractor _extractor;

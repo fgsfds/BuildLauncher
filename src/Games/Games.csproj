@@ -15,6 +15,7 @@
 
     <ItemGroup>
         <InternalsVisibleTo Include="Tests.Unit"/>
+        <InternalsVisibleTo Include="Tests.Unit.Sequential"/>
         <InternalsVisibleTo Include="Tests.External"/>
     </ItemGroup>
 

@@ -14,20 +14,6 @@ public abstract class BaseGame
     /// </summary>
     protected BaseGame()
     {
-        if (!Directory.Exists(CampaignsFolderPath))
-        {
-            _ = Directory.CreateDirectory(CampaignsFolderPath);
-        }
-
-        if (!Directory.Exists(MapsFolderPath))
-        {
-            _ = Directory.CreateDirectory(MapsFolderPath);
-        }
-
-        if (!Directory.Exists(ModsFolderPath))
-        {
-            _ = Directory.CreateDirectory(ModsFolderPath);
-        }
     }
 
     /// <summary>

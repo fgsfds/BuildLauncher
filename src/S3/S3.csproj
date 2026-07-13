@@ -16,6 +16,7 @@
     <ItemGroup>
         <InternalsVisibleTo Include="Benchmarks"/>
         <InternalsVisibleTo Include="Tests.Unit"/>
+        <InternalsVisibleTo Include="Tests.Unit.Sequential"/>
         <InternalsVisibleTo Include="Tests.Database"/>
     </ItemGroup>
 

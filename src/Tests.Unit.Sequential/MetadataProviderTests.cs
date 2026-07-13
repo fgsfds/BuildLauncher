@@ -1,4 +1,4 @@
-﻿using Addons.Providers;
+using Addons.Providers;
 using Core.All.Enums;
 using Core.All.Serializable.Addon;
 using Core.Client.Helpers;
@@ -7,9 +7,8 @@ using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
 using SharpCompress.Archives;
 
-namespace Tests.Unit.Sync;
+namespace Tests.Unit.Sequential;
 
-[Collection("Sync")]
 public sealed class MetadataProviderTests : IDisposable
 {
     public MetadataProviderTests()

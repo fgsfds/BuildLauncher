@@ -185,6 +185,8 @@ public sealed class DownloadableAddonsProvider
                 throw new NotSupportedException($"Addon type '{addon.AddonType}' is not supported for download.");
             }
 
+            Ensure.DirectoryExists(path);
+
             var pathToFile = Path.Combine(path, file);
 
             var isDownloaded = await _filesDownloader.DownloadFileAsync(url, pathToFile, cancellationToken).ConfigureAwait(false);

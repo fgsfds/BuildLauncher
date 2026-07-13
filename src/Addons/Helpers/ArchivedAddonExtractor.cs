@@ -1,5 +1,6 @@
 using System.Text.Json;
 using Core.All.Serializable.Addon;
+using Core.Client.Helpers;
 using Microsoft.Extensions.Logging;
 using SharpCompress.Archives;
 
@@ -123,10 +124,7 @@ public sealed class ArchivedAddonExtractor
             Directory.Delete(unpackTo, true);
         }
 
-        if (!Directory.Exists(unpackTo))
-        {
-            Directory.CreateDirectory(unpackTo);
-        }
+        Ensure.DirectoryExists(unpackTo);
 
         archive.WriteToDirectory(unpackTo);
 

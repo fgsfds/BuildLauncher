@@ -9,14 +9,12 @@ using Core.Client.Interfaces;
 using Games.Games;
 using Moq;
 using Tests.Unit.Helpers;
-using StandaloneGame = Games.Games.StandaloneGame;
 
-namespace Tests.Unit.Sync;
+namespace Tests.Unit.Sequential;
 
 /// <summary>
 ///     Tests for the <see cref="InstalledAddonsProvider" /> class.
 /// </summary>
-[Collection("Sync")]
 public sealed class InstalledAddonsProviderTests : IDisposable
 {
     /// <summary>

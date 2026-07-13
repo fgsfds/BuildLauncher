@@ -17,7 +17,6 @@ namespace Tests.Unit;
 /// <summary>
 ///     Tests for the <see cref="AddonFactory" /> class.
 /// </summary>
-[Collection("Sync")]
 public sealed class AddonFactoryTests
 {
     /// <summary>

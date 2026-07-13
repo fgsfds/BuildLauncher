@@ -1,5 +1,6 @@
 using Addons.Addons;
 using Core.All.Enums;
+using Core.Client.Helpers;
 using Games.Games;
 using Ports.Ports.EDuke32;
 using Tests.Unit.Helpers;
@@ -391,6 +392,71 @@ public sealed class EDuke32CmdArgumentsTests
             if (Directory.Exists(tempDir))
             {
                 Directory.Delete(tempDir, true);
+            }
+        }
+    }
+
+    /// <summary>
+    ///     Tests that <see cref="EDuke32.BeforeStart" /> lazily creates the WTStopgap folder.
+    /// </summary>
+    [Fact]
+    public void BeforeStart_CreatesWTStopgapFolder()
+    {
+        var stopgapFolder = Path.Combine(new EDuke32().InstallFolderPath, ClientConsts.WTStopgap);
+
+        if (Directory.Exists(stopgapFolder))
+        {
+            Directory.Delete(stopgapFolder, true);
+        }
+
+        try
+        {
+            Assert.False(Directory.Exists(stopgapFolder));
+
+            var game = new DukeGame
+            {
+                Duke64RomPath = null,
+                DukeZHRomPath = null,
+                DukeWTInstallPath = null,
+                GameInstallFolder = Path.GetTempPath(),
+                AddonsPaths = []
+            };
+
+            var camp = new DukeCampaign
+            {
+                AddonId = new("wt-test", null),
+                Type = AddonTypeEnum.Official,
+                Title = "WT Test",
+                SupportedGame = new(GameEnum.Duke3D, null, null),
+                FileInfo = null,
+                GridImageHash = null,
+                PreviewImageHash = null,
+                Description = null,
+                Author = null,
+                ReleaseDate = null,
+                MainDef = null,
+                AdditionalDefs = null,
+                MainCon = null,
+                AdditionalCons = null,
+                RTS = null,
+                StartMap = null,
+                DependentAddons = null,
+                IncompatibleAddons = null,
+                RequiredFeatures = null,
+                Executables = null,
+                Options = null
+            };
+
+            new EDuke32().BeforeStart(game, camp);
+
+            Assert.True(Directory.Exists(stopgapFolder));
+            Assert.True(Directory.GetFiles(stopgapFolder).Length > 0);
+        }
+        finally
+        {
+            if (Directory.Exists(stopgapFolder))
+            {
+                Directory.Delete(stopgapFolder, true);
             }
         }
     }

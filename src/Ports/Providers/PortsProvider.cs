@@ -1,6 +1,5 @@
 ﻿using System.Collections.Immutable;
 using Core.All.Enums;
-using Core.Client.Helpers;
 using Database.Client;
 using Database.Client.DbEntities;
 using Microsoft.EntityFrameworkCore;
@@ -36,11 +35,6 @@ public sealed class PortsProvider : IPortsProvider
         )
     {
         _dbContextFactory = dbContextFactory;
-
-        if (!Directory.Exists(ClientProperties.PortsFolderPath))
-        {
-            _ = Directory.CreateDirectory(ClientProperties.PortsFolderPath);
-        }
 
         foreach (var port in ports)
         {

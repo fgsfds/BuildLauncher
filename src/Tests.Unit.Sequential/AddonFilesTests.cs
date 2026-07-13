@@ -1,4 +1,4 @@
-﻿using Addons.Providers;
+using Addons.Providers;
 using Core.All.Enums;
 using Core.Client.Helpers;
 using Core.Client.Interfaces;
@@ -6,9 +6,8 @@ using Games.Games;
 using Moq;
 using Tests.Unit.Helpers;
 
-namespace Tests.Unit.Sync;
+namespace Tests.Unit.Sequential;
 
-[Collection("Sync")]
 public sealed class AddonFilesTests : IDisposable
 {
     private readonly string _addonsFolder = ClientProperties.AddonsFolderPath;
