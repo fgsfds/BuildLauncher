@@ -88,6 +88,7 @@ public sealed class CampaignsViewModelTests : IDisposable
         _portStarter = new PortStarter(
             _playtimeProvider,
             _installedAddonsProviderFactory,
+            new FakeProcessRunner(),
             NullLogger<PortStarter>.Instance
             );
 

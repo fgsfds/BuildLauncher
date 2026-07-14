@@ -1,5 +1,7 @@
 ﻿using Core.All.Enums;
 using Core.All.Releases;
+using Core.Client.Helpers;
+using Core.Client.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using Ports.Installer;
 using Ports.Ports;
@@ -19,6 +21,7 @@ public static class DiHelper
     /// </summary>
     public static IServiceCollection WithPorts(this IServiceCollection container)
     {
+        _ = container.AddSingleton<IProcessRunner, ProcessRunner>();
         _ = container.AddSingleton<PortInstallerFactory>();
         _ = container.AddSingleton<PortsProvider>();
         _ = container.AddSingleton<PortStarter>();

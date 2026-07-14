@@ -2,6 +2,7 @@
 using Addons.Addons;
 using Addons.Providers;
 using Core.All.Enums;
+using Core.Client.Interfaces;
 using Core.Client.Providers;
 using Games.Games;
 using Microsoft.Extensions.Logging;
@@ -19,20 +20,25 @@ public sealed class PortStarter
 
     private readonly PlaytimeProvider _playtimeProvider;
 
+    private readonly IProcessRunner _processRunner;
+
     /// <summary>
     ///     Initializes a new instance of the <see cref="PortStarter" /> class.
     /// </summary>
     /// <param name="playtimeProvider">Playtime tracking provider.</param>
     /// <param name="installedAddonsProviderFactory">Factory for installed addons providers.</param>
+    /// <param name="processRunner">Abstraction for starting and waiting for processes.</param>
     /// <param name="logger">Logger instance.</param>
     public PortStarter(
         PlaytimeProvider playtimeProvider,
         InstalledAddonsProviderFactory installedAddonsProviderFactory,
+        IProcessRunner processRunner,
         ILogger<PortStarter> logger
         )
     {
         _playtimeProvider = playtimeProvider;
         _installedAddonsProviderFactory = installedAddonsProviderFactory;
+        _processRunner = processRunner;
         _logger = logger;
     }
 
@@ -100,15 +106,7 @@ public sealed class PortStarter
 
         try
         {
-            using var process = Process.Start(
-                new ProcessStartInfo
-                {
-                    FileName = Path.GetFileName(exe),
-                    UseShellExecute = true,
-                    Arguments = args,
-                    WorkingDirectory = Path.GetDirectoryName(exe)
-                }
-                );
+            var process = _processRunner.Start(Path.GetFileName(exe), args, Path.GetDirectoryName(exe)!);
 
             if (process is null)
             {
@@ -117,7 +115,7 @@ public sealed class PortStarter
                 return;
             }
 
-            await process.WaitForExitAsync().ConfigureAwait(false);
+            await _processRunner.WaitForExitAsync(process).ConfigureAwait(false);
         }
         catch (Exception ex)
         {

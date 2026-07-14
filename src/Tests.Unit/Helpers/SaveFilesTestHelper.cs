@@ -3,7 +3,6 @@ using Addons.Addons;
 using Core.All.Enums;
 using Games.Games;
 using Ports.Ports;
-using Ports.Ports.EDuke32;
 
 namespace Tests.Unit;
 
@@ -71,14 +70,4 @@ internal sealed class BasePortTestProxy : BasePort
     public void CallGetMapArgs(StringBuilder sb, BaseAddon camp) => GetMapArgs(sb, camp);
 
     public void CallGetOptionsArgs(StringBuilder sb, BaseGame game, BaseAddon addon, IReadOnlyList<string> enabledOptions) => GetOptionsArgs(sb, game, addon, enabledOptions);
-}
-
-
-internal sealed class EDuke32TestProxy : EDuke32
-{
-    public void CallMoveSaveFilesFromStorage(BaseGame game, BaseAddon campaign) => MoveSaveFilesFromStorage(game, campaign);
-
-    public void CallMoveSaveFilesToStorage(BaseGame game, BaseAddon campaign) => MoveSaveFilesToStorage(game, campaign);
-
-    public string CallGetPathToAddonSavedGamesFolder(string subFolder, string addonId) => GetPathToAddonSavedGamesFolder(subFolder, addonId);
 }
