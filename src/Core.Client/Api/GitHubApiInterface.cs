@@ -225,12 +225,19 @@ public sealed class GitHubApiInterface : IApiInterface
 
         addons[downloadableAddonJson.Game].Add(downloadableAddonJson);
 
+        foreach (var add in addons)
+        {
+            List<DownloadableAddonJsonModel> sorted = [.. add.Value.OrderBy(x => x.Title)];
+            add.Value.Clear();
+            add.Value.AddRange(sorted);
+        }
+
         var newAddonsJson = JsonSerializer.Serialize(addons, DownloadableAddonJsonModelDictionaryContext.Default.DictionaryGameEnumListDownloadableAddonJsonModel);
         await File.WriteAllTextAsync(ClientProperties.PathToLocalAddonsJson, newAddonsJson).ConfigureAwait(false);
 
         List<AddonManifestJsonModel>? manifests;
 
-        using (var manifestsJson = File.OpenRead(ClientProperties.PathToLocalManifestsJson))
+        await using (var manifestsJson = File.OpenRead(ClientProperties.PathToLocalManifestsJson))
         {
             manifests = await JsonSerializer.DeserializeAsync(
                 manifestsJson,
@@ -247,6 +254,8 @@ public sealed class GitHubApiInterface : IApiInterface
 
         manifests.RemoveAll(x => x.Id.Equals(addonJson.Id));
         manifests.Add(addonJson);
+
+        manifests = [.. manifests.OrderBy(x => x.SupportedGame.Game).ThenBy(x => x.AddonType).ThenBy(x => x.Title)];
 
         var newManifestsJson = JsonSerializer.Serialize(manifests, AddonManifestJsonContext.Default.ListAddonManifestJsonModel);
         await File.WriteAllTextAsync(ClientProperties.PathToLocalManifestsJson, newManifestsJson).ConfigureAwait(false);
