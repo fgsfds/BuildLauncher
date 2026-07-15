@@ -24,15 +24,15 @@
 
         </StackPanel>
 
-        <!--  <Button Grid.Column="1"  -->
-        <!--  HorizontalAlignment="Right"  -->
-        <!--  ToolTip.Tip="Refresh"  -->
-        <!--  Padding="8"  -->
-        <!--  Margin="10,0"  -->
-        <!--  Command="{Binding RefreshListCommand}"  -->
-        <!--  IsEnabled="{Binding !IsInProgress}">  -->
-        <!--     <i:Icon Value="fa7-rotate" /> -->
-        <!-- </Button> -->
+        <Button Grid.Column="1"
+                Margin="10,0"
+                Padding="8"
+                HorizontalAlignment="Right"
+                Command="{Binding RefreshListCommand}"
+                IsEnabled="{Binding !IsInProgress}"
+                ToolTip.Tip="Refresh">
+            <i:Icon Value="fa7-rotate" />
+        </Button>
 
         <Button Grid.Column="2"
                 Padding="8"
