@@ -146,7 +146,12 @@ public sealed class AddonsDatabaseTests
             filesInBucket.Add($"{S3Constants.S3Endpoint}/{S3Constants.S3Bucket}/{item.Key}");
         }
 
-        Assert.Empty(filesInBucket.Except(addonsUrls));
+        var looseFiles = filesInBucket.Except(addonsUrls).ToList();
+
+        Assert.False(
+            looseFiles.Count != 0,
+            $"Loose files: {Environment.NewLine}{string.Join(Environment.NewLine, looseFiles)}"
+            );
     }
 
 
