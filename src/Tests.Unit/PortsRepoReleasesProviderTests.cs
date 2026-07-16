@@ -11,23 +11,23 @@ public sealed class PortsRepoReleasesProviderTests
     private const string JsonResponse = """
         [
           {
-            "tag_name": "v1.0.0",
+            "tag_name": "v1.4.0",
             "draft": false,
-            "prerelease": false,
+            "prerelease": true,
             "assets": [
               {
                 "name": "nblood_win64.zip",
-                "browser_download_url": "https://github.com/nukeykt/NBlood/releases/download/v1.0.0/nblood_win64.zip",
+                "browser_download_url": "https://github.com/nukeykt/NBlood/releases/download/v1.4.0/nblood_win64.zip",
                 "updated_at": "2025-01-01T00:00:00Z"
               },
               {
                 "name": "pcexhumed_win64.zip",
-                "browser_download_url": "https://github.com/nukeykt/NBlood/releases/download/v1.0.0/pcexhumed_win64.zip",
+                "browser_download_url": "https://github.com/nukeykt/NBlood/releases/download/v1.4.0/pcexhumed_win64.zip",
                 "updated_at": "2025-01-01T00:00:00Z"
               },
               {
                 "name": "rednukem_win64.zip",
-                "browser_download_url": "https://github.com/nukeykt/NBlood/releases/download/v1.0.0/rednukem_win64.zip",
+                "browser_download_url": "https://github.com/nukeykt/NBlood/releases/download/v1.4.0/rednukem_win64.zip",
                 "updated_at": "2025-01-01T00:00:00Z"
               }
             ],
@@ -80,23 +80,23 @@ public sealed class PortsRepoReleasesProviderTests
             "body": "Initial release"
           },
           {
-            "tag_name": "v1.4.0",
+            "tag_name": "v1.0.0",
             "draft": false,
-            "prerelease": true,
+            "prerelease": false,
             "assets": [
               {
                 "name": "nblood_win64.zip",
-                "browser_download_url": "https://github.com/nukeykt/NBlood/releases/download/v1.4.0/nblood_win64.zip",
+                "browser_download_url": "https://github.com/nukeykt/NBlood/releases/download/v1.0.0/nblood_win64.zip",
                 "updated_at": "2025-01-01T00:00:00Z"
               },
               {
                 "name": "pcexhumed_win64.zip",
-                "browser_download_url": "https://github.com/nukeykt/NBlood/releases/download/v1.4.0/pcexhumed_win64.zip",
+                "browser_download_url": "https://github.com/nukeykt/NBlood/releases/download/v1.0.0/pcexhumed_win64.zip",
                 "updated_at": "2025-01-01T00:00:00Z"
               },
               {
                 "name": "rednukem_win64.zip",
-                "browser_download_url": "https://github.com/nukeykt/NBlood/releases/download/v1.4.0/rednukem_win64.zip",
+                "browser_download_url": "https://github.com/nukeykt/NBlood/releases/download/v1.0.0/rednukem_win64.zip",
                 "updated_at": "2025-01-01T00:00:00Z"
               }
             ],

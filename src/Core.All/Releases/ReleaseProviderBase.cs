@@ -168,20 +168,14 @@ public abstract class ReleaseProviderBase<T> where T : Enum
             throw new FormatException("Error while deserializing GitHub releases");
         }
 
-        IEnumerable<GitHubReleaseJsonModel> filtered = allReleases;
+        List<GitHubReleaseJsonModel> filtered = allReleases;
 
         if (!includePreReleases)
         {
-            filtered = filtered.Where(static x => !x.IsDraft && !x.IsPrerelease);
+            filtered = filtered.Where(static x => !x.IsDraft && !x.IsPrerelease).ToList();
         }
 
-        var result = filtered.ToList();
-
-        result.Sort(static (a, b) =>
-                        -VersionComparer.CompareVersions(a.TagName.AsSpan(), b.TagName.AsSpan())
-            );
-
-        return result;
+        return filtered;
     }
 
     /// <summary>
