@@ -28,6 +28,10 @@ public sealed class EDuke32CmdArgumentsTests
     private readonly WW2GIGame _ww2Game;
     private readonly AutoloadModsTestSetups _ww2Mods;
     private readonly DukeCampaign _ww2PlatoonCamp;
+    private readonly DukeCampaign _furyCamp;
+
+    private readonly FuryGame _furyGame;
+    private readonly AutoloadModsTestSetups _furyMods;
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="EDuke32CmdArgumentsTests" /> class.
@@ -37,6 +41,7 @@ public sealed class EDuke32CmdArgumentsTests
         (_dukeGame, _dukeCamp, _dukeVaca, _dukeTcForVaca, _dukeWtCamp, _, _, _, _, _dukeLooseMap, _dukeMods) = PortTestSetups.Duke3D();
         (_namGame, _namCamp, _namMods) = PortTestSetups.Nam();
         (_ww2Game, _ww2Camp, _ww2PlatoonCamp, _ww2Mods) = PortTestSetups.WW2GI();
+        (_furyGame, _furyCamp, _furyMods) = PortTestSetups.Fury();
     }
 
     /// <summary>
@@ -330,6 +335,94 @@ public sealed class EDuke32CmdArgumentsTests
                        " -ww2gi -gamegrp WW2GI.GRP" +
                        " -grp PLATOONL.DAT" +
                        " -x PLATOONL.DEF" +
+                       " -quick" +
+                       " -nosetup" +
+                       "";
+
+        NormalizerHelper.NormalizeExpectedArgs(ref args, ref expected);
+
+        Assert.Equal(expected, args);
+    }
+
+    /// <summary>
+    ///     Tests the EDuke32 command-line arguments for Ion Fury.
+    /// </summary>
+    [Fact]
+    public void FuryTest()
+    {
+        var mods = _furyMods.StandardModsWithCons;
+
+        EDuke32 eduke32 = new();
+
+        var args = eduke32.GetStartGameArgs(_furyGame, _furyCamp, mods, [], true, true, 3);
+
+        var expected = $"" +
+                       $" -g \"enabled_mod.zip\"" +
+                       $" -mh \"ENABLED1.DEF\"" +
+                       $" -mh \"ENABLED2.DEF\"" +
+                       $" -mx \"ENABLED1.CON\"" +
+                       $" -mx \"ENABLED2.CON\"" +
+                       $" -g \"mod_incompatible_with_addon.zip\"" +
+                       $" -g \"incompatible_mod_with_compatible_version.zip\"" +
+                       $" -g \"dependent_mod.zip\"" +
+                       $" -g \"dependent_mod_with_compatible_version.zip\"" +
+                       $" -g \"feature_mod.zip\"" +
+                       $" -j \"{Directory.GetCurrentDirectory()}\\Data\\Addons\\Fury\\Mods\"" +
+                       $" -usecwd" +
+                       " -cachesize 262144" +
+                       $" -j \"D:\\Games\\Fury\"" +
+                       " -s3" +
+                       " -quick" +
+                       " -nosetup" +
+                       "";
+
+        NormalizerHelper.NormalizeExpectedArgs(ref args, ref expected);
+
+        Assert.Equal(expected, args);
+    }
+
+    /// <summary>
+    ///     Tests the EDuke32 command-line arguments for a Fury TC.
+    /// </summary>
+    [Fact]
+    public void FuryTCTest()
+    {
+        EDuke32 eduke32 = new();
+
+        var zipFilePath = Path.Combine(Directory.GetCurrentDirectory(), "Data", "Fury", "Campaigns", "fury_tc.zip");
+
+        var tcCamp = new DukeCampaign
+        {
+            AddonId = new("fury-tc", "1.0"),
+            Type = AddonTypeEnum.TC,
+            Title = "Fury TC",
+            SupportedGame = new(GameEnum.Fury),
+            FileInfo = new AddonFilePathWrapper(zipFilePath, "addon.json"),
+            DependentAddons = null,
+            IncompatibleAddons = null,
+            GridImageHash = null,
+            PreviewImageHash = null,
+            Description = null,
+            Author = null,
+            ReleaseDate = null,
+            MainCon = null,
+            AdditionalCons = null,
+            MainDef = null,
+            AdditionalDefs = null,
+            RTS = null,
+            StartMap = null,
+            RequiredFeatures = null,
+            Executables = null,
+            Options = null
+        };
+
+        var args = eduke32.GetStartGameArgs(_furyGame, tcCamp, [], [], true, true);
+
+        var expected = "" +
+                       " -usecwd" +
+                       " -cachesize 262144" +
+                       $" -j \"D:\\Games\\Fury\"" +
+                       $" -g \"{zipFilePath}\"" +
                        " -quick" +
                        " -nosetup" +
                        "";

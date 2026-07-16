@@ -72,7 +72,8 @@ public class EDuke32 : BasePort
     [
         GameEnum.Duke3D,
         GameEnum.NAM,
-        GameEnum.WW2GI
+        GameEnum.WW2GI,
+        GameEnum.Fury
     ];
 
     /// <inheritdoc />
@@ -200,6 +201,10 @@ public class EDuke32 : BasePort
         {
             _ = sb.Append($@" {MainDefParam}""{addon.MainDef}""");
         }
+        else if (game is FuryGame)
+        {
+            //nothing to do
+        }
         else
         {
             //overriding default def so gamename.def files are ignored
@@ -214,10 +219,15 @@ public class EDuke32 : BasePort
             }
         }
 
-
         if (game is DukeGame dGame)
         {
             GetDukeArgs(sb, dGame, addon);
+        }
+        else if (game is FuryGame fGame)
+        {
+            _ = sb.Append($@" {AddDirectoryParam}""{game.GameInstallFolder}""");
+
+            GetFuryArgs(sb, fGame, addon);
         }
         else if (game is NamGame nGame)
         {
@@ -241,9 +251,15 @@ public class EDuke32 : BasePort
     /// <summary>
     ///     Gets startup arguments for Duke Nukem 3D campaigns.
     /// </summary>
-    /// <param name="sb">StringBuilder</param>
-    /// <param name="game">DukeGame</param>
-    /// <param name="addon">DukeCampaign</param>
+    /// <param name="sb">
+    ///     StringBuilder
+    /// </param>
+    /// <param name="game">
+    ///     DukeGame
+    /// </param>
+    /// <param name="addon">
+    ///     DukeCampaign
+    /// </param>
     protected void GetDukeArgs(StringBuilder sb, DukeGame game, BaseAddon addon)
     {
         if (addon.SupportedGame.GameEnum is GameEnum.Duke64)
@@ -361,6 +377,65 @@ public class EDuke32 : BasePort
         else
         {
             throw new NotSupportedException($"Mod type {dCamp.Type} is not supported");
+        }
+    }
+
+    /// <summary>
+    ///     Appends command-line arguments for Ion Fury games.
+    /// </summary>
+    /// <param name="sb">
+    ///     String builder for parameters.
+    /// </param>
+    /// <param name="game">
+    ///     Fury game instance.
+    /// </param>
+    /// <param name="addon">
+    ///     Campaign or addon.
+    /// </param>
+    protected void GetFuryArgs(StringBuilder sb, FuryGame game, BaseAddon addon)
+    {
+        if (addon.FileInfo is null)
+        {
+            return;
+        }
+
+        if (addon is LooseMap)
+        {
+            GetLooseMapArgs(sb, game, addon);
+
+            return;
+        }
+
+        if (addon is not DukeCampaign fCamp)
+        {
+            throw new ArgumentException($"Expected {nameof(DukeCampaign)} but received {addon.GetType().Name}.", nameof(addon));
+        }
+
+        if (fCamp.MainCon is not null)
+        {
+            _ = sb.Append($@" {MainConParam}""{fCamp.MainCon}""");
+        }
+
+        if (fCamp.AdditionalCons?.Any() is true)
+        {
+            foreach (var con in fCamp.AdditionalCons)
+            {
+                _ = sb.Append($@" {AddConParam}""{con}""");
+            }
+        }
+
+
+        if (fCamp.Type is AddonTypeEnum.TC)
+        {
+            _ = sb.Append($@" {AddFileParam}""{fCamp.FileInfo.PathToFile}""");
+        }
+        else if (fCamp.Type is AddonTypeEnum.Map)
+        {
+            GetMapArgs(sb, fCamp);
+        }
+        else
+        {
+            throw new NotSupportedException($"Mod type {fCamp.Type} is not supported");
         }
     }
 

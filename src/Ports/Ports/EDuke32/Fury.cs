@@ -16,7 +16,9 @@ public sealed class Fury : EDuke32
     /// <summary>
     ///     Initializes a new instance of the <see cref="Fury" /> class.
     /// </summary>
-    /// <param name="config">Configuration provider.</param>
+    /// <param name="config">
+    ///     Configuration provider.
+    /// </param>
     public Fury(IConfigProvider config)
     {
         _config = config;
@@ -96,59 +98,6 @@ public sealed class Fury : EDuke32
         else
         {
             throw new NotSupportedException($"Mod type {addon.Type} for game {game} is not supported");
-        }
-    }
-
-    /// <summary>
-    ///     Appends command-line arguments for Ion Fury games.
-    /// </summary>
-    /// <param name="sb">String builder for parameters.</param>
-    /// <param name="game">Fury game instance.</param>
-    /// <param name="addon">Campaign or addon.</param>
-    private void GetFuryArgs(StringBuilder sb, FuryGame game, BaseAddon addon)
-    {
-        if (addon.FileInfo is null)
-        {
-            return;
-        }
-
-        if (addon is LooseMap)
-        {
-            GetLooseMapArgs(sb, game, addon);
-
-            return;
-        }
-
-        if (addon is not DukeCampaign fCamp)
-        {
-            throw new ArgumentException($"Expected {nameof(DukeCampaign)} but received {addon.GetType().Name}.", nameof(addon));
-        }
-
-        if (fCamp.MainCon is not null)
-        {
-            _ = sb.Append($@" {MainConParam}""{fCamp.MainCon}""");
-        }
-
-        if (fCamp.AdditionalCons?.Any() is true)
-        {
-            foreach (var con in fCamp.AdditionalCons)
-            {
-                _ = sb.Append($@" {AddConParam}""{con}""");
-            }
-        }
-
-
-        if (fCamp.Type is AddonTypeEnum.TC)
-        {
-            _ = sb.Append($@" {AddFileParam}""{fCamp.FileInfo.PathToFile}""");
-        }
-        else if (fCamp.Type is AddonTypeEnum.Map)
-        {
-            GetMapArgs(sb, fCamp);
-        }
-        else
-        {
-            throw new NotSupportedException($"Mod type {fCamp.Type} is not supported");
         }
     }
 }
