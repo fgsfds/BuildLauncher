@@ -1,708 +1,5 @@
 [
   {
-    "id": "blood-500mil",
-    "type": "TC",
-    "game": {
-      "name": "Blood"
-    },
-    "title": "500 Milliliters of /vr/",
-    "version": "5.1.1",
-    "author": "4chan",
-    "def_modules": [
-      "500ml.def"
-    ],
-    "ini": "500ml.ini",
-    "description": "500 Milliliters of /vr/ is a community add-on by members of the /vr/ board on 4chan released on February 1, 2021. It features six levels created by three authors, and features numerous replaced assets. Four levels are available for Bloodbath. It is named as a play on the 200 Minutes of /vr/ and related community projects for Doom."
-  },
-  {
-    "id": "blood-bloodlines",
-    "type": "TC",
-    "game": {
-      "name": "Blood"
-    },
-    "title": "Bloodlines: Out of the Grave Edition",
-    "version": "1.5",
-    "author": "Necrosoft",
-    "ini": "BLBETA15.ini",
-    "rff_main": "BLMAIN.RFF",
-    "rff_sound": "BLSND.RFF",
-    "description": "https://www.moddb.com/mods/bloodlines-out-of-the-grave-edition\r\n\r\nBloodLines was to be the most ambitious total conversion ever created for Blood. It still is, but it\u0027s far from what was intended. We have admitted that BloodLines will never be fully completed and have decided to release the TC \u0022as is\u0022 with some retouching to make incomplete maps actually playable. I hope you\u0027ll enjoy playing it as much as we have enjoyed making it. Be aware though, that not all maps are what you would expect from a Blood level, it\u0027s not all bloody mayhem. Don\u0027t be disappointed if the TC doesn\u0027t fit your ideas about how a 3d-shooter should be, much of it is about atmosphere rather than action, you will benefit from approaching BloodLines with an open mind. This is the beta version of the first three episodes, including 13 maps, two new enemies and loads of new art and sound"
-  },
-  {
-    "id": "blood-bloody-pulp-fiction",
-    "type": "TC",
-    "game": {
-      "name": "Blood"
-    },
-    "title": "Bloody Pulp Fiction",
-    "version": "1.3.1",
-    "author": "BPF Team",
-    "ini": "BPF.INI",
-    "rff_sound": "BPFSND.RFF",
-    "description": "https://bpf.deathmask.net/\r\n\r\nDeadland awaits Caleb as he is thrust into action once again by the determined Cabal who are stopping at nothing to kill, enslave, pillage, ravage, and bring forth unholy darkness in it\u0027s wake.\r\nCaleb, now in the present, wants nothing more than to avoid the Cabal and forget any ties to Tchernobog, but the world is Decaying as the Remnants of the Cabal spread through out the globe like a Cancer.\r\n\r\nExperience up to 18 levels of fast paced, adrenaline-soaked, bloodthirsty action in some of the most detailed and frantic maps ever made for Blood. Experience snowy cities, malls, dockside ports, graveyards, haunting forests, gigantic sea-faring ships, old forgotten towns along Route66, torture chambers, a dilapidated carnival site, Cabal strongholds, and much more."
-  },
-  {
-    "id": "blood-carnage-continues",
-    "type": "TC",
-    "game": {
-      "name": "Blood"
-    },
-    "title": "The Carnage Continues",
-    "version": "1.1",
-    "author": "B Harry",
-    "ini": "GORE.INI",
-    "rff_sound": "CARNAGE.RFF"
-  },
-  {
-    "id": "blood-crypts-of-the-cruel",
-    "type": "TC",
-    "game": {
-      "name": "Blood"
-    },
-    "title": "Crypts of the Cruel",
-    "version": "1.0",
-    "author": "daMann",
-    "def_modules": [
-      "cruel.def"
-    ],
-    "ini": "cruel.ini",
-    "description": "https://www.moddb.com/mods/bloodlines-out-of-the-grave-edition/downloads/crypts-of-the-cruel-trilogy-a-bloodlines-prequel-refreshed-supply-exclusive\r\n\r\nCrypts of the Cruel is a trilogy of maps, each designed to play individually or as a whole.\r\n\r\nThey follow Caleb through the beginnings of an encounter with a dark force known as the Cruel. The Cruel has been unleashed on the world through the cracks of reality as something far more powerful is coming... The Beginning of the End is about to be written....\r\n\r\nIt is filled with cheesy movie references, jokes, and blasting hundreds of Cabal and creatures... Aka classic Bloody fun."
-  },
-  {
-    "id": "blood-cwhhrot",
-    "type": "TC",
-    "game": {
-      "name": "Blood"
-    },
-    "title": "Caleb Will Have His Revenge On Toronto",
-    "version": "1.3.2",
-    "author": "Frances Rampage",
-    "def_modules": [
-      "CWHHROT.DEF"
-    ],
-    "ini": "CWHHROT.INI",
-    "description": "https://www.bloodgame.ru/forum/topic.php?forum=2\u0026topic=105\r\n\r\nPart of the saga of the cheerful Caleb - Scum Of Dallas, who by the will of fate turned out to be deceived by a vile Canadian hockey player. Betting is a risky business, especially when there is a corrupt rat lurking in your favorite team. That\u0027s what happened to our hero: Canadian hockey player Adam Ace received a tempting offer to drain the final match of the World Cup in exchange for eternal life and sold his incorruptible soul to the well-known Cabal sect. What does sports have to do with it, you ask? The thing is that tired of immortality and endless wanderings, Caleb found an outlet in sports betting and put all his fortune accumulated over a long time spent under the wing of fortune and a unique flair for victory on the above-mentioned unfortunate national team. This leads to another question: what about the Bondage of this? The answer is immediately revealed - knowing that Caleb will not forgive Ace for such a setup of the maple leaf country (and in fact the loss of money), the goal of the distraught fanatics who lost their great and powerful, to track down, find and destroy our dead man, so to speak, for bait."
-  },
-  {
-    "id": "blood-death-wish-ost",
-    "type": "TC",
-    "game": {
-      "name": "Blood"
-    },
-    "title": "Death Wish with OST",
-    "version": "1.7.9",
-    "author": "Bloatoid",
-    "ini": "dwmus.ini",
-    "description": "https://www.moddb.com/mods/death-wish-for-blood\r\n\r\nCaleb will need to muster all his strength to take down the mighty Tchernobog, who has managed to free himself from the grip of death.\r\n\r\nDeath Wish is a campaign for Blood with over 30 new levels, cut scenes, and more. All levels have been adapted so that Co-op play is not only possible, but enhanced with a helpful checkpoint system. The campaign includes several secret levels which all connect back to their episodes through special transitional missions.\r\n\r\nThe entire mod was developed by a single mapper, Bloatoid, who has been editing with the Build engine for many years. The original Death Wish was created between January 2010 and October 2011. Updates have been made over the years based on feedback from players and observing online streamers, as well as the addition of several extra secret levels. A 4th episode is in development.\r\n\r\nLet the festival of Blood continue!\r\n\r\nIncludes Soundtrack Addon by Speedy\r\n\r\nhttps://www.moddb.com/mods/death-wish-for-blood/downloads/dw-soundtrack-addon-by-speedy"
-  },
-  {
-    "id": "blood-death-wish",
-    "type": "TC",
-    "game": {
-      "name": "Blood"
-    },
-    "title": "Death Wish",
-    "version": "1.3",
-    "author": "Bloatoid",
-    "ini": "dw.ini",
-    "description": "https://www.moddb.com/mods/death-wish-for-blood\r\n\r\nCaleb will need to muster all his strength to take down the mighty Tchernobog, who has managed to free himself from the grip of death.\r\n\r\nDeath Wish is a campaign for Blood with over 30 new levels, cut scenes, and more. All levels have been adapted so that Co-op play is not only possible, but enhanced with a helpful checkpoint system. The campaign includes several secret levels which all connect back to their episodes through special transitional missions.\r\n\r\nThe entire mod was developed by a single mapper, Bloatoid, who has been editing with the Build engine for many years. The original Death Wish was created between January 2010 and October 2011. Updates have been made over the years based on feedback from players and observing online streamers, as well as the addition of several extra secret levels. A 4th episode is in development.\r\n\r\nLet the festival of Blood continue!"
-  },
-  {
-    "id": "blood-death-wish",
-    "type": "TC",
-    "game": {
-      "name": "Blood"
-    },
-    "title": "Death Wish",
-    "version": "1.4.19",
-    "author": "Bloatoid",
-    "ini": "dw.ini",
-    "description": "https://www.moddb.com/mods/death-wish-for-blood\r\n\r\nCaleb will need to muster all his strength to take down the mighty Tchernobog, who has managed to free himself from the grip of death.\r\n\r\nDeath Wish is a campaign for Blood with over 30 new levels, cut scenes, and more. All levels have been adapted so that Co-op play is not only possible, but enhanced with a helpful checkpoint system. The campaign includes several secret levels which all connect back to their episodes through special transitional missions.\r\n\r\nThe entire mod was developed by a single mapper, Bloatoid, who has been editing with the Build engine for many years. The original Death Wish was created between January 2010 and October 2011. Updates have been made over the years based on feedback from players and observing online streamers, as well as the addition of several extra secret levels. A 4th episode is in development.\r\n\r\nLet the festival of Blood continue!"
-  },
-  {
-    "id": "blood-death-wish",
-    "type": "TC",
-    "game": {
-      "name": "Blood"
-    },
-    "title": "Death Wish",
-    "version": "1.5.13",
-    "author": "Bloatoid",
-    "ini": "dw.ini",
-    "description": "https://www.moddb.com/mods/death-wish-for-blood\r\n\r\nCaleb will need to muster all his strength to take down the mighty Tchernobog, who has managed to free himself from the grip of death.\r\n\r\nDeath Wish is a campaign for Blood with over 30 new levels, cut scenes, and more. All levels have been adapted so that Co-op play is not only possible, but enhanced with a helpful checkpoint system. The campaign includes several secret levels which all connect back to their episodes through special transitional missions.\r\n\r\nThe entire mod was developed by a single mapper, Bloatoid, who has been editing with the Build engine for many years. The original Death Wish was created between January 2010 and October 2011. Updates have been made over the years based on feedback from players and observing online streamers, as well as the addition of several extra secret levels. A 4th episode is in development.\r\n\r\nLet the festival of Blood continue!"
-  },
-  {
-    "id": "blood-death-wish",
-    "type": "TC",
-    "game": {
-      "name": "Blood"
-    },
-    "title": "Death Wish",
-    "version": "1.6.7",
-    "author": "Bloatoid",
-    "ini": "dw.ini",
-    "description": "https://www.moddb.com/mods/death-wish-for-blood\r\n\r\nCaleb will need to muster all his strength to take down the mighty Tchernobog, who has managed to free himself from the grip of death.\r\n\r\nDeath Wish is a campaign for Blood with over 30 new levels, cut scenes, and more. All levels have been adapted so that Co-op play is not only possible, but enhanced with a helpful checkpoint system. The campaign includes several secret levels which all connect back to their episodes through special transitional missions.\r\n\r\nThe entire mod was developed by a single mapper, Bloatoid, who has been editing with the Build engine for many years. The original Death Wish was created between January 2010 and October 2011. Updates have been made over the years based on feedback from players and observing online streamers, as well as the addition of several extra secret levels. A 4th episode is in development.\r\n\r\nLet the festival of Blood continue!"
-  },
-  {
-    "id": "blood-death-wish",
-    "type": "TC",
-    "game": {
-      "name": "Blood"
-    },
-    "title": "Death Wish",
-    "version": "1.7.9",
-    "author": "Bloatoid",
-    "ini": "dw.ini",
-    "description": "https://www.moddb.com/mods/death-wish-for-blood\r\n\r\nCaleb will need to muster all his strength to take down the mighty Tchernobog, who has managed to free himself from the grip of death.\r\n\r\nDeath Wish is a campaign for Blood with over 30 new levels, cut scenes, and more. All levels have been adapted so that Co-op play is not only possible, but enhanced with a helpful checkpoint system. The campaign includes several secret levels which all connect back to their episodes through special transitional missions.\r\n\r\nThe entire mod was developed by a single mapper, Bloatoid, who has been editing with the Build engine for many years. The original Death Wish was created between January 2010 and October 2011. Updates have been made over the years based on feedback from players and observing online streamers, as well as the addition of several extra secret levels. A 4th episode is in development.\r\n\r\nLet the festival of Blood continue!"
-  },
-  {
-    "id": "blood-death-wish",
-    "type": "TC",
-    "game": {
-      "name": "Blood"
-    },
-    "title": "Death Wish",
-    "version": "2.0",
-    "author": "Bloatoid",
-    "release_date": "2026-03-20",
-    "def_modules": [
-      "dw.def"
-    ],
-    "ini": "dw.ini",
-    "description": "https://www.moddb.com/mods/death-wish-for-blood\r\n\r\nCaleb will need to muster all his strength to take down the mighty Tchernobog, who has managed to free himself from the grip of death.\r\n\r\nDeath Wish is a campaign for Blood with over 30 new levels, cut scenes, and more. All levels have been adapted so that Co-op play is not only possible, but enhanced with a helpful checkpoint system. The campaign includes several secret levels which all connect back to their episodes through special transitional missions.\r\n\r\nThe entire mod was developed by a single mapper, Bloatoid, who has been editing with the Build engine for many years. The original Death Wish was created between January 2010 and October 2011. Updates have been made over the years based on feedback from players and observing online streamers, as well as the addition of several extra secret levels.\r\n\r\nLet the festival of Blood continue!"
-  },
-  {
-    "id": "blood-eviction",
-    "type": "TC",
-    "game": {
-      "name": "Blood"
-    },
-    "title": "Eviction",
-    "version": "1.5.1",
-    "author": "Austin \u0022SpillSomeBlood\u0022 Adams",
-    "ini": "EVICTION.ini",
-    "rff_main": "EVIC.RFF",
-    "rff_sound": "EVICSND.RFF",
-    "dependencies": {
-      "features": [
-        "Modern_Types"
-      ]
-    },
-    "description": "https://www.moddb.com/mods/eviction-addon-for-blood\r\n\r\nEviction is an add-on I have been working on over the past 3-4 years. At this release, it contains 5 highly detailed levels that surpass the original limits of the vanilla game. 4 of which are campaign levels with an additional multiplayer level. It contains five new enemies! Over 35\u002B secrets to be found and dozens of side areas to explore! Randomized keycodes and clues for secrets. Meaning each time you play the code and clue will be unique! Modern effects like patrolling enemies and low gravity!",
-    "executables": {
-      "Windows": {
-        "NBlood": "nblood.exe"
-      }
-    }
-  },
-  {
-    "id": "blood-faitd",
-    "type": "TC",
-    "game": {
-      "name": "Blood"
-    },
-    "title": "Final Alone in the Dark",
-    "version": "1.3",
-    "author": "NoOne",
-    "ini": "FAITD.INI",
-    "rff_main": "FAITD.RFF",
-    "rff_sound": "FAITD.RFF",
-    "description": "https://www.moddb.com/mods/final-alone-in-the-dark\r\n\r\nAfter one and a half years of work we are ready to officially introduce you this addon. For a long time we\u0027ve been thinking of how to preserve the atmosphere of this game loved by all of us, but at the same time to extend the existing limits, bring up new gameplay and experience. This time we\u0027ve gone far beyond simple fan map-making and are going to prove to you that Blood is not this hopeless even without source code. From the beginning BAITD was aimed at expanding gameplay, it can\u0027t be limited by common gameplay borders, so here you\u0027re going to see a lot of new features."
-  },
-  {
-    "id": "blood-fleshed-out",
-    "type": "TC",
-    "game": {
-      "name": "Blood"
-    },
-    "title": "Fleshed Out",
-    "version": "1.7.14",
-    "author": "Skobbejak Games",
-    "ini": "FO.INI",
-    "description": "https://www.moddb.com/mods/blood-fleshed-out\r\n\r\nAfter the death of Tchernobog, the surviving members of the Cabal openend up alternate spirit worlds to grow their army again. They are planning to create a new God and rule the world once and for all. So get the guns ready, Caleb is about make a bloody mess again.."
-  },
-  {
-    "id": "blood-fotd",
-    "type": "TC",
-    "game": {
-      "name": "Blood"
-    },
-    "title": "Fate of the Damned",
-    "version": "1.1.2",
-    "author": "Daedalus",
-    "def_modules": [
-      "FATE.def"
-    ],
-    "ini": "FATE.ini",
-    "description": "https://www.moddb.com/mods/fate-of-the-damned\r\n\r\nFate of the Damned is a meticulously crafted custom campaign for BLOOD which aims to speculate and explore another shadowed path that Caleb might\u0027ve undertaken. While taking care to never stray far from the gameplay formula that made BLOOD so gripping, the campaign will see Caleb journey through new environments that he has not seen before. Gruesome new discoveries await as Caleb tears through hordes of the undead, and nothing is left unscathed in his quest for vengeance.The version 1.1 release contains the following features:\r\n\r\n- 2 episodes consisting of 18 maps total, which fully support Single Player, Co-operative, BloodBath and Capture the Flag across all difficulty settings.\r\n\r\n- A series of exhilarating, all new, low resolution cutscenes which tell the campaign\u0027s story.\r\n\r\n- Lots of new, chilling music as an optional extra.\r\n\r\n- A splash of custom art that is used sparingly.\r\n\r\n- A large amount of fiendish secrets waiting to be discovered.\r\n\r\n- Challenging and occasionally downright unfair encounters with BLOOD\u0027s monsters, unsuitable for those whose faith is weak.\r\n\r\n- Support for the NBlood and BloodGDX ports - to a point."
-  },
-  {
-    "id": "blood-frmeat2",
-    "type": "TC",
-    "game": {
-      "name": "Blood"
-    },
-    "title": "French Meat 2",
-    "version": "2.3.1",
-    "author": "TEDD",
-    "def_modules": [
-      "FRENCHM2.def"
-    ],
-    "ini": "FRENCHM2.ini",
-    "description": "https://www.moddb.com/mods/french-meat-2\r\n\r\nAfter the French Meat episode for BLOOD, the second with 8 new maps including new tiles and soundtracks for an adventure with a unique atmosphere immersed in the heart of paradise island colonized by the pirates of Cabal! kill them all, make a maximum of death, blow them up, slaughter them wherever they are.\r\n\r\nINCLUDING :\r\n\r\n- French Meat episode 1 updated : 9 maps\r\n\r\n- French Meat episode 2 : 8 maps \u002B new tiles"
-  },
-  {
-    "id": "blood-hostile-takeover",
-    "type": "TC",
-    "game": {
-      "name": "Blood"
-    },
-    "title": "Hostile Takeover",
-    "version": "1.1",
-    "author": "Bloatoid",
-    "ini": "Hostile.ini",
-    "description": "Hostile Takeover is a 2001 fan add-on for Blood by Dustin \u0022Bloatoid\u0022 Twilley, previous creator of Inherit the Earth (1999) and much later Death Wish (2011, 2017-2020). It features a ghost town, underwater base, carnival and island level, among others."
-  },
-  {
-    "id": "blood-inherit",
-    "type": "TC",
-    "game": {
-      "name": "Blood"
-    },
-    "title": "Inherit the Earth",
-    "version": "1.0",
-    "author": "Bloatoid",
-    "ini": "Earth.ini",
-    "description": "When Tchernobog was defeated in the Hall of Epiphany, He was forced to return to His own realm. The power and rage released by Caleb while fighting the Dreaming god was partly absorbed, and had allowed Tchernobog to lay dormant gathering energy to follow on with His plan to open the Gateway- the connection between the realms of the living and the damned. Would Caleb be able to stop the revived Daemon Tchernobog? Contains a total of 3 episodes."
-  },
-  {
-    "id": "blood-its-a-war-out-there-duology",
-    "type": "TC",
-    "game": {
-      "name": "Blood"
-    },
-    "title": "It\u0027s a War Out There Duology",
-    "version": "1.0",
-    "author": "TOT COMICS",
-    "ini": "AWAR.ini",
-    "description": "One beautiful cloudy day you were sitting in your shack very, very, bored. You wished to go outside and look for something to do, but being as it is a war out there, there is a bunch of mean evil nasty things outside that wish to harm you. \r\n\r\nAfter a while of thinking about this situation, you come to the conclusion that the mean evil nasty things outside could be the very solution to your boredom. Sure they wish to harm you, but could you not harm them as well?\r\n\r\nAn evil smile streches  across your face as you grab your shotgun and rush out the door."
-  },
-  {
-    "id": "blood-lost-episode",
-    "type": "TC",
-    "game": {
-      "name": "Blood"
-    },
-    "title": "The Lost Episode",
-    "version": "1.0",
-    "author": "Maz",
-    "ini": "LOST.INI",
-    "description": "https://www.moddb.com/games/blood/addons/the-lost-episode\r\n\r\nThis Episode is made up of eight maps taken straight from the leaked alpha. There are minor changes in aesthetics in a few of the maps however teh author made sure to keep all maps as close to the original author\u0027s intentions and art direction as possible."
-  },
-  {
-    "id": "blood-nightmares",
-    "type": "TC",
-    "game": {
-      "name": "Blood"
-    },
-    "title": "Nightmares Beta",
-    "version": "0.2",
-    "author": "Bloodskar",
-    "def_modules": [
-      "Night.DEF"
-    ],
-    "ini": "Night.ini",
-    "dependencies": {
-      "features": [
-        "TileFromTexture"
-      ]
-    },
-    "description": "https://www.moddb.com/mods/nightmares1"
-  },
-  {
-    "id": "blood-no-hope-in-sight",
-    "type": "TC",
-    "game": {
-      "name": "Blood"
-    },
-    "title": "No Hope In Sight",
-    "version": "0.2",
-    "author": "NoOne",
-    "ini": "NHIS.INI",
-    "rff_main": "NHIS.RFF",
-    "rff_sound": "NHISSND.RFF",
-    "dependencies": {
-      "features": [
-        "Modern_Types"
-      ]
-    },
-    "description": "http://cruo.bloodgame.ru/nhis/\r\n\r\n This is the demo map of the new episode. The project makes use of modern features for mappers that extends Blood\u0027s trigger system a lot."
-  },
-  {
-    "id": "blood-out-for-blood",
-    "type": "TC",
-    "game": {
-      "name": "Blood"
-    },
-    "title": "Out for Blood",
-    "version": "1.1",
-    "author": "BloodyTom",
-    "def_modules": [
-      "tiles.def"
-    ],
-    "ini": "OFB.ini",
-    "description": "Out for Blood is a six large level fan add-on (with one secret level) for Blood by Thomas \u0022BloodyTom\u0022 Ziehl, later author of Trauma Therapy, released on August 3, 2019."
-  },
-  {
-    "id": "blood-polished-cp",
-    "type": "TC",
-    "game": {
-      "name": "Blood"
-    },
-    "title": "Polished Cryptic Passage",
-    "version": "1.3",
-    "author": "Sir Seizhak",
-    "def_modules": [
-      "POLCP.DEF"
-    ],
-    "ini": "POLCP.INI",
-    "description": "http://bloodhispano.ucoz.es/\r\n\r\nA polished (or patched) version of Cryptic Passage, the official expansion pack for Blood.\r\n\r\nBasically, PCP keeps the original level design and gameplay but improves texturing, fixes mapping errors and lighting (very, very slightly touches in this regard). You can say this is a curated version of CP.\r\n\r\nIf you want to play an improved version of Cryptic Passage, say no more: get this patch!"
-  },
-  {
-    "id": "blood-somewhere-under-the-sea",
-    "type": "TC",
-    "game": {
-      "name": "Blood"
-    },
-    "title": "Somewhere Under the Sea",
-    "version": "1.0",
-    "author": "SpillSomeBlood",
-    "ini": "Rapture.ini",
-    "description": "This is a 3 level episode created around my Rapture map. All maps are coop, bbath, and teams compatible. The episode is fairly difficult."
-  },
-  {
-    "id": "blood-the-cult",
-    "type": "TC",
-    "game": {
-      "name": "Blood"
-    },
-    "title": "The Cult",
-    "version": "1.1",
-    "author": "bifurcator_x",
-    "ini": "cult.ini",
-    "description": "https://www.moddb.com/mods/blood-the-cult\r\n\r\nBLOOD: the Cult is a new episode that contains 5 single player maps for original Blood."
-  },
-  {
-    "id": "blood-trauma-therapy",
-    "type": "TC",
-    "game": {
-      "name": "Blood"
-    },
-    "title": "Trauma Therapy",
-    "version": "2.5",
-    "author": "Thomas \u0022BloodyTom\u0022 Ziehl",
-    "ini": "TT.INI",
-    "rff_main": "TT.RFF",
-    "rff_sound": "TTSND.RFF",
-    "description": "https://www.moddb.com/mods/blood-trauma-therapy\r\n\r\nCaleb has won over the Cabal and destroyed the evil god Tchernobog. A short time has passed but Caleb can not find any rest. He is tormented by horrid dreams and visions that are haunting him and he has trouble distinguishing reality from dream. Awaking one day in hospital having no idea how he got there he sees only one solution to his agony. He has to find the three vessels of Tchernobog\u0027s Aura to resurrect him and kill him for the last time in hope of finding peace and rest."
-  },
-  {
-    "id": "blood-way-of-ira",
-    "type": "TC",
-    "game": {
-      "name": "Blood"
-    },
-    "title": "The Way of Ira",
-    "version": "1.1.3",
-    "author": "Frances Rampage",
-    "ini": "ira.ini",
-    "rff_main": "IRA.RFF",
-    "rff_sound": "IRASND.RFF",
-    "description": "https://www.moddb.com/mods/the-way-of-ira\r\n\r\nYears after dealing with the Cabal, Caleb lives on the outskirts of a small village.\r\n\r\nAfter having been almost fully erradicated, the last Cabal infiltrated the highest ranks of most religions and governments. Years passed by, more Cabal got recruited and step by step the people got mentally prepared to obey what was coming, one religion, one government, ruled by the Cabal."
-  },
-  {
-    "id": "blood-willard",
-    "type": "TC",
-    "game": {
-      "name": "Blood"
-    },
-    "title": "Willard",
-    "version": "1.5",
-    "author": "Bloodskar",
-    "def_modules": [
-      "WILLARD.DEF"
-    ],
-    "ini": "WILLARD.INI",
-    "dependencies": {
-      "features": [
-        "Modern_Types"
-      ]
-    },
-    "description": "https://www.moddb.com/downloads/willard\r\n\r\nThis is the full version of Willard, consisting of 5 levels. It takes place a few decades after the original game, in and around a remote ghost town far out in the woods. Strange things have been reported from the area and Caleb goes to investigate... The story is told from messages, make sure you read any square or rectangular shaped books you find (not the voxel books). While it certainly has action in places, it\u2019s more about atmosphere."
-  },
-  {
-    "id": "blood-gothic-library",
-    "type": "Map",
-    "game": {
-      "name": "Blood"
-    },
-    "title": "Gothic Library DX",
-    "version": "1.1",
-    "author": "MetHy",
-    "dependencies": {
-      "addons": [
-        {
-          "id": "bloodcp"
-        }
-      ]
-    },
-    "startmap": {
-      "file": "CP03DX.MAP"
-    },
-    "description": "https://www.moddb.com/games/blood/addons/gothic-library-dx\r\n\r\nGothic Library DX aims at merging the final version of the map with the rooms and layout of the beta version, while also filling in the empty rooms in the process. The goal is to stick as close as possible to the original intent and to the style of the two original authors. Thus, giving the map the few extra minutes of gameplay I feel it should have had."
-  },
-  {
-    "id": "blood-black-phantasm",
-    "type": "Mod",
-    "game": {
-      "name": "Blood"
-    },
-    "title": "Black Phantasm",
-    "version": "1.0",
-    "author": "Dzierzan",
-    "def_modules": [
-      "phantasm.def"
-    ],
-    "description": "https://www.moddb.com/games/blood/addons/black-phantasm\r\n\r\nThis pack replaces Phantasm sprites with the black variant"
-  },
-  {
-    "id": "blood-coagulated",
-    "type": "Mod",
-    "game": {
-      "name": "Blood"
-    },
-    "title": "Blood Coagulated",
-    "version": "1.1",
-    "author": "Cheello",
-    "def_modules": [
-      "chillo_blood.def"
-    ],
-    "incompatibles": {
-      "addons": [
-        {
-          "id": "blood-voxel-pack"
-        }
-      ]
-    },
-    "description": "https://www.moddb.com/mods/blood-coagulated/addons/blood-coagulated-11\r\n\r\nThis project is meant to replace the 2d sprites in Blood with 3d voxel models."
-  },
-  {
-    "id": "blood-cultists-no-melting",
-    "type": "Mod",
-    "game": {
-      "name": "Blood"
-    },
-    "title": "Cultists - No Melting",
-    "version": "1.0",
-    "author": "Dzierzan",
-    "def_modules": [
-      "cultists_no_melting.def"
-    ],
-    "description": "https://www.moddb.com/games/blood/addons/cultists-no-melting\r\n\r\nThis addon removes melting animation of cultist\u0027s dead body."
-  },
-  {
-    "id": "blood-cultists-with-guns",
-    "type": "Mod",
-    "game": {
-      "name": "Blood"
-    },
-    "title": "Cultists With Correct Guns",
-    "version": "3.0",
-    "author": "Dzierzan",
-    "def_modules": [
-      "cultists_with_guns.def"
-    ],
-    "description": "https://www.moddb.com/games/blood/addons/cultists-with-correct-guns\r\n\r\nThis mod gives every cultist his correct weapon. So that means you\u0027ll see Ackolyte with actual TNT, Cultist with a shotgun, Fanatic with a tommy gun and finally Zealot with tesla gun.\r\n\r\nAlso included:\r\n\r\n- Different sprites for Cultist\u0027s electrocution\r\n\r\n- Blood Alpha Cultist\u0027s beast transformation animation"
-  },
-  {
-    "id": "blood-gargoyle-blue-eyes",
-    "type": "Mod",
-    "game": {
-      "name": "Blood"
-    },
-    "title": "Stone Gargoyle - Blue Muzzle Flash",
-    "version": "1.0",
-    "author": "Dzierzan",
-    "def_modules": [
-      "stone_gargoyle_blue.def"
-    ],
-    "description": "https://www.moddb.com/games/blood/addons/stone-gargoyle-blue-muzzle-flash\r\n\r\nThis addon disables grey palette applied to shooting sprites of Stone Gargoyle, revealing intended blue muzzle flash.\r\n\r\nWhen you browse through Blood game sprites, you may notice that Stone Gargoyle has shooting sprites with blue muzzle flash, but in game it\u0027s grey-ish. It\u0027s because the shooting animation still has grey palette applied to it. In my opinion it is an oversight from the developers.\r\n\r\nThis addon restores that by simply disabling grey palette for shooting animation only."
-  },
-  {
-    "id": "blood-hq-sounds",
-    "type": "Mod",
-    "game": {
-      "name": "Blood"
-    },
-    "title": "High Quality Sound Effects",
-    "version": "1.3",
-    "author": "Dzierzan",
-    "dependencies": {
-      "features": [
-        "SndInfo"
-      ]
-    },
-    "description": "https://www.moddb.com/mods/blood-high-quality-sound-effects\r\n\r\nThis mod replaces original sounds with high quality ones based on actual sources. If a specifc source was not found, then a sound was upscaled."
-  },
-  {
-    "id": "blood-innocent-gibbing",
-    "type": "Mod",
-    "game": {
-      "name": "Blood"
-    },
-    "title": "Innocent - Gibbing",
-    "version": "1.0",
-    "author": "Dzierzan",
-    "def_modules": [
-      "innocent_gibs.def"
-    ],
-    "description": "https://www.moddb.com/games/blood/addons/innocent-gibbing\r\n\r\nThis addon adds gibbing animation for Innocents."
-  },
-  {
-    "id": "blood-smooth",
-    "type": "Mod",
-    "game": {
-      "name": "Blood"
-    },
-    "title": "SmoothBlood",
-    "version": "1.1",
-    "author": "Dzierzan, Phredreeke",
-    "def_modules": [
-      "smooth_blood.def"
-    ],
-    "incompatibles": {
-      "addons": [
-        {
-          "id": "blood-smooth-hand"
-        },
-        {
-          "id": "blood-smooth-alpha"
-        },
-        {
-          "id": "blood-what-lies-beneath"
-        }
-      ]
-    },
-    "description": "https://www.moddb.com/mods/smoothblood\r\n\r\nThis is a modification for Blood which allows playing the game with smoother weapon animations."
-  },
-  {
-    "id": "blood-smooth-alpha",
-    "type": "Mod",
-    "game": {
-      "name": "Blood"
-    },
-    "title": "SmoothBlood with alpha sprites",
-    "version": "1.1",
-    "author": "Dzierzan, Phredreeke",
-    "def_modules": [
-      "smooth_blood_alpha.def"
-    ],
-    "incompatibles": {
-      "addons": [
-        {
-          "id": "blood-smooth"
-        },
-        {
-          "id": "blood-smooth-hand"
-        },
-        {
-          "id": "blood-what-lies-beneath"
-        }
-      ]
-    },
-    "description": "https://www.moddb.com/mods/smoothblood\r\n\r\nThis is a modification for Blood which allows playing the game with smoother weapon animations.\r\n\r\nThis version also replaces weapons sprites with versions from Alpha build."
-  },
-  {
-    "id": "blood-smooth-hand",
-    "type": "Mod",
-    "game": {
-      "name": "Blood"
-    },
-    "title": "SmoothBlood with hand",
-    "version": "1.1",
-    "author": "Dzierzan, Phredreeke",
-    "def_modules": [
-      "smooth_blood_hand.def"
-    ],
-    "incompatibles": {
-      "addons": [
-        {
-          "id": "blood-smooth"
-        },
-        {
-          "id": "blood-smooth-alpha"
-        },
-        {
-          "id": "blood-what-lies-beneath"
-        }
-      ]
-    },
-    "description": "https://www.moddb.com/mods/smoothblood\r\n\r\nThis is a modification for Blood which allows playing the game with smoother weapon animations.\r\n\r\nThis verions adds hands to the sawed-off."
-  },
-  {
-    "id": "blood-voxel-pack",
-    "type": "Mod",
-    "game": {
-      "name": "Blood"
-    },
-    "title": "Voxel Pack",
-    "version": "0.97",
-    "def_modules": [
-      "blood_voxels.def"
-    ],
-    "incompatibles": {
-      "addons": [
-        {
-          "id": "blood-coagulated"
-        }
-      ]
-    },
-    "description": "https://github.com/fgsfds/Blood-Voxel-Pack/\r\n\r\nVoxel replacements for sprites in Blood"
-  },
-  {
-    "id": "blood-voxel-pack-extra",
-    "type": "Mod",
-    "game": {
-      "name": "Blood"
-    },
-    "title": "Voxel Pack Extras",
-    "version": "0.97",
-    "def_modules": [
-      "blood_voxels_extra.def"
-    ],
-    "dependencies": {
-      "addons": [
-        {
-          "id": "blood-voxel-pack"
-        }
-      ]
-    },
-    "incompatibles": {
-      "addons": [
-        {
-          "id": "blood-coagulated"
-        },
-        {
-          "id": "blood-willard"
-        },
-        {
-          "id": "blood-frmeat2"
-        }
-      ]
-    },
-    "description": "https://github.com/fgsfds/Blood-Voxel-Pack/\r\n\r\nAdditional voxel replacements for sprites in Blood for high-performant PCs"
-  },
-  {
     "id": "duke3d-1999-2000tc",
     "type": "TC",
     "game": {
@@ -727,18 +24,6 @@
     "description": "25th Century Duke is an add-on episode set in the 25th Century, a time where the global population is exceeding the 300 billion mark. The environment has been depleeted so much so that the creation of oxygen now rests in the hands of big industries. The cities of the world reach higher and higher for the clouds. Scenarios not dis-similar to those found in the cult movies BladeRunner and The Fifth Element.\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
   },
   {
-    "id": "duke3d-adg-episode",
-    "type": "TC",
-    "game": {
-      "name": "Duke3D"
-    },
-    "title": "ADG Episode",
-    "version": "1.0",
-    "author": "Alejandro Glavic",
-    "con_main": "scripts/adg_episode.con",
-    "description": "Duke was working for the EDF and received a call because the aliens are planning to build a HUGE weapon on earth and use it to destroy other planets and then, possibly the Earth. So there is no time to sleep, duke runs out to find them and stop these f*cking aliens!\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
-  },
-  {
     "id": "duke3d-adream-trilogy",
     "type": "TC",
     "game": {
@@ -756,17 +41,16 @@
     "description": "https://forums.duke4.net/topic/3420-adream-trilogy/\r\n\r\nA.dream is a mini mod which includes three horror maps. First map is an improved and edited version of A.dream 1, second is a complete remade version of A.dream 2. The third map is made from scratch.\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
   },
   {
-    "id": "duke3d-ageofevil",
+    "id": "duke3d-adg-episode",
     "type": "TC",
     "game": {
       "name": "Duke3D"
     },
-    "title": "Age of Evil",
+    "title": "ADG Episode",
     "version": "1.0",
-    "author": "Benjamin Richard \u0027Yahtzee\u0027 Croshaw",
-    "con_main": "scripts/ageofevil.con",
-    "def_main": "scripts/ageofevil.def",
-    "description": "Christopher Quinn, novelist, British citizen, eldest son of Lord and Lady Quinn of Rotchestershire, England, was rather surprised when he came home from a booksigning tour one day to find that both his parents were dead. He was even more surprised when he dropped to his knees and burst out laughing.\r\n\r\nIndeed, this worried him when he had recovered, so as soon as the funeral was over he toddled on down to this local psychiatric hospital for a checkup. He was found to possess a borderline psychopathic personality, and it was recommended that he stay at the institute for further evaluation.\r\n\r\nOne night, Chris is awoken by a terrible scream. At first he thinks another serious inmate is being given a cold shower, but then he notices a rather eerie silence hanging over the place. He could hear unearthly moans and grisly noises in the distance. A security guard burst in, a knife buried in his spine, and collapsed upon the floor, dead. Even with slight psychosis Chris can tell something is very, very wrong. He dresses swiftly in his civilian clothes and trenchcoat, and arms himself with the deceased guard\u0027s gun.\r\n\r\nAs he prepares to face whatever is waiting for him outside the door, a thin and baffling smile crosses his face.\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
+    "author": "Alejandro Glavic",
+    "con_main": "scripts/adg_episode.con",
+    "description": "Duke was working for the EDF and received a call because the aliens are planning to build a HUGE weapon on earth and use it to destroy other planets and then, possibly the Earth. So there is no time to sleep, duke runs out to find them and stop these f*cking aliens!\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
   },
   {
     "id": "duke3d-alfs-resort",
@@ -787,6 +71,19 @@
       ]
     },
     "description": "A big resort for Duke Nukem 3D, using the add-on \u0027Duke Caribbean, Life\u0027s a Beach\u0027!\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
+  },
+  {
+    "id": "duke3d-ageofevil",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "Age of Evil",
+    "version": "1.0",
+    "author": "Benjamin Richard \u0027Yahtzee\u0027 Croshaw",
+    "con_main": "scripts/ageofevil.con",
+    "def_main": "scripts/ageofevil.def",
+    "description": "Christopher Quinn, novelist, British citizen, eldest son of Lord and Lady Quinn of Rotchestershire, England, was rather surprised when he came home from a booksigning tour one day to find that both his parents were dead. He was even more surprised when he dropped to his knees and burst out laughing.\r\n\r\nIndeed, this worried him when he had recovered, so as soon as the funeral was over he toddled on down to this local psychiatric hospital for a checkup. He was found to possess a borderline psychopathic personality, and it was recommended that he stay at the institute for further evaluation.\r\n\r\nOne night, Chris is awoken by a terrible scream. At first he thinks another serious inmate is being given a cold shower, but then he notices a rather eerie silence hanging over the place. He could hear unearthly moans and grisly noises in the distance. A security guard burst in, a knife buried in his spine, and collapsed upon the floor, dead. Even with slight psychosis Chris can tell something is very, very wrong. He dresses swiftly in his civilian clothes and trenchcoat, and arms himself with the deceased guard\u0027s gun.\r\n\r\nAs he prepares to face whatever is waiting for him outside the door, a thin and baffling smile crosses his face.\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
   },
   {
     "id": "duke3d-alien-armageddon",
@@ -1089,6 +386,24 @@
     "description": "Maarten\u0027s Crucial Conflict is a trilogy aboutan alien attack on Europe. But there\u0027s more to the story than just shooting baddies! Explore detailed bases, solve puzzles kick butt in this mini three-map episode!\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
   },
   {
+    "id": "duke3d-dn64-revisited",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "DN64 Revisited",
+    "version": "1.0",
+    "author": "Duke64Nukem",
+    "con_main": "scripts/dn64revisited.con",
+    "def_main": "scripts/dn64revisited.def",
+    "dependencies": {
+      "features": [
+        "EDuke32_CON"
+      ]
+    },
+    "description": "This is a mini episode where you go back to some of the Duke Nukem 64 DM only maps except this time Duke is in for a little surprise!\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
+  },
+  {
     "id": "duke3d-daikarin",
     "type": "TC",
     "game": {
@@ -1177,52 +492,6 @@
     "description": "https://www.moddb.com/games/duke-nukem-3d/addons/ms-paint-duke-nukem-dick-suckem\r\n\r\nDuke Nukem 3D but all sprites and graphics are redrawn using MSPAINT. Nothing serious. Just a joke mod made for fun and also to test my patience."
   },
   {
-    "id": "duke3d-dn64-revisited",
-    "type": "TC",
-    "game": {
-      "name": "Duke3D"
-    },
-    "title": "DN64 Revisited",
-    "version": "1.0",
-    "author": "Duke64Nukem",
-    "con_main": "scripts/dn64revisited.con",
-    "def_main": "scripts/dn64revisited.def",
-    "dependencies": {
-      "features": [
-        "EDuke32_CON"
-      ]
-    },
-    "description": "This is a mini episode where you go back to some of the Duke Nukem 64 DM only maps except this time Duke is in for a little surprise!\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
-  },
-  {
-    "id": "duke3d-dnf2013",
-    "type": "TC",
-    "game": {
-      "name": "Duke3D"
-    },
-    "title": "Duke Nukem Forever 2013",
-    "version": "1.03",
-    "author": "Gambini, Mikko Sandt, DavoX, Micky C",
-    "con_main": "DLCGAME.CON",
-    "def_modules": [
-      "DNF.DEF"
-    ],
-    "dependencies": {
-      "features": [
-        "EDuke32_CON"
-      ]
-    },
-    "description": "https://msdn.duke4.net/dnf2013.php\n\nDuke Nukem Forever 2013 is a 5-level mod for Duke Nukem 3D. It\u0027s essentially what Duke Nukem Forever, the game, might have been if it had been released as an expansion for Duke Nukem 3D. The assets and the levels have been greatly influenced and inspired by the 2001 Duke Nukem Forever E3 trailer, the very trailer that seemed to promise the imminent arrival of the best video game ever. Other trailers and preview screenshots were also used as sources.\n\nAlso includes 3-map DLC.",
-    "options": [
-      {
-        "name": "DLC Shotgun",
-        "parameters": {
-          "dlcshotgun.def": "DEF"
-        }
-      }
-    ]
-  },
-  {
     "id": "duke3d-dookie",
     "type": "TC",
     "game": {
@@ -1299,16 +568,21 @@
     }
   },
   {
-    "id": "duke3d-duke-is-007",
+    "id": "duke3d-dukehard",
     "type": "TC",
     "game": {
       "name": "Duke3D"
     },
-    "title": "Duke is 007",
-    "version": "1.0",
-    "author": "Jason Bredhauer",
-    "con_main": "scripts/duke007.con",
-    "description": "While intended to become a James Bond TC, this project was never finished. However, 6 really nice maps remained. You will visit interesting locations like a flying plane, an underwater base or a Russian missile silo.\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
+    "title": "Duke Hard",
+    "version": "1.2.2",
+    "author": "Duke4",
+    "con_modules": [
+      "HARD.CON"
+    ],
+    "def_modules": [
+      "dukehard.def"
+    ],
+    "description": "https://www.moddb.com/mods/duke-hard\r\n\r\nInspired by the movie Die Hard, the episode consists of 17 levels by 15 different map designers and progresses from the lobby to the rooftop of a skyscraper. Each level is confined to its own floor of the building, and although each floor features a different theme, various design constraints ensure a certain degree of consistency throughout the episode."
   },
   {
     "id": "duke3d-duke-is-ten",
@@ -1353,6 +627,34 @@
     "description": "https://www.moddb.com/mods/duke-nukem-advance-tc\r\nThe GBA game brought to Build! This mod for Duke 3D includes the entire campaign from Duke Nukem Advance by Torus Games, complete with all of its exclusive enemies, assets, and even in-level cutscenes!\r\n\r\nSince the GBA game runs on the Doom engine, this isn\u0027t a one-to-one port of the original. Instead, this is an attempt to bring the experience over to the more familiar game feel of the Build engine while staying faithful to the original\u0027s design. There\u0027s also optional enhancements such as voice clips in cutscenes and the ability to switch between the two completely different scripts the game has, which can be found in the mod\u0027s custom menu in-game.\r\n\r\nSpecial thanks to:\r\nGianni Matragrano for providing Duke lines for the cutscenes as one of the mod\u0027s options.\r\nVoxelvoid for sharing the work they\u0027ve done on their DNA4PC project on GitHub, which is how this got started."
   },
   {
+    "id": "duke3d-dnf2013",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "Duke Nukem Forever 2013",
+    "version": "1.03",
+    "author": "Gambini, Mikko Sandt, DavoX, Micky C",
+    "con_main": "DLCGAME.CON",
+    "def_modules": [
+      "DNF.DEF"
+    ],
+    "dependencies": {
+      "features": [
+        "EDuke32_CON"
+      ]
+    },
+    "description": "https://msdn.duke4.net/dnf2013.php\n\nDuke Nukem Forever 2013 is a 5-level mod for Duke Nukem 3D. It\u0027s essentially what Duke Nukem Forever, the game, might have been if it had been released as an expansion for Duke Nukem 3D. The assets and the levels have been greatly influenced and inspired by the 2001 Duke Nukem Forever E3 trailer, the very trailer that seemed to promise the imminent arrival of the best video game ever. Other trailers and preview screenshots were also used as sources.\n\nAlso includes 3-map DLC.",
+    "options": [
+      {
+        "name": "DLC Shotgun",
+        "parameters": {
+          "dlcshotgun.def": "DEF"
+        }
+      }
+    ]
+  },
+  {
     "id": "duke3d-duke-tournament",
     "type": "TC",
     "game": {
@@ -1378,45 +680,16 @@
     "description": "https://forums.duke4.net/topic/7846-duke-xtreme-megaton-edition/\r\n\r\nOptimized Campaign Maps from the authorized expansion pack Duke Xtreme. \r\n\r\nThis is something I\u0027ve been working on for the past few nights. I went through all of the Duke Xtreme single player maps and set them up for multiplayer for Megaton Edition. I made some other, small fixes and improvements on the side, too. \r\n\r\nThe original expansion was released by WizardWorks in 1997, and is a combination of maps developed by Sunstorm Interactive and user maps downloaded from the Internet. The original release included a frontend for managing several packed in .CON hacks as well toggling on new weapons and enemies. This upload uses a modified .CON file which includes some of these alterations. "
   },
   {
-    "id": "duke3d-dukehard",
+    "id": "duke3d-duke-is-007",
     "type": "TC",
     "game": {
       "name": "Duke3D"
     },
-    "title": "Duke Hard",
-    "version": "1.2.2",
-    "author": "Duke4",
-    "con_modules": [
-      "HARD.CON"
-    ],
-    "def_modules": [
-      "dukehard.def"
-    ],
-    "description": "https://www.moddb.com/mods/duke-hard\r\n\r\nInspired by the movie Die Hard, the episode consists of 17 levels by 15 different map designers and progresses from the lobby to the rooftop of a skyscraper. Each level is confined to its own floor of the building, and although each floor features a different theme, various design constraints ensure a certain degree of consistency throughout the episode."
-  },
-  {
-    "id": "duke3d-dukeland",
-    "type": "TC",
-    "game": {
-      "name": "Duke3D"
-    },
-    "title": "Dukeland",
+    "title": "Duke is 007",
     "version": "1.0",
-    "author": "Parasite Productions",
-    "con_main": "scripts/dukeland.con",
-    "description": "Those aliens bastards have stolen the happiest place on earth-- Disneyland. The aliens tried to physically remove Disneyland and it broke into pieces. Your mission: take back New Orleans Square \u0026 Tomorrowland. \r\nNo one steals Disneyland ...and Lives!!!\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
-  },
-  {
-    "id": "duke3d-dukevr",
-    "type": "TC",
-    "game": {
-      "name": "Duke3D"
-    },
-    "title": "DukeVR",
-    "version": "1.0",
-    "author": "Geoffrey \u0027Fakir\u0027 van Dijk",
-    "con_main": "scripts/duke_vr.con",
-    "description": "Training map set with 3 episodes and 18 maps. Each episode is harder than the previous one (blue = easy, green = medium, red = hard). Focus is completely shifting from visual to pure puzzle solving which you will notice right away after loading the first map: Besides a basic matrix-style texture, the levels look very bland and unfinished. The challenge is to complete the maps without dying and as fast as possible - usually requiring a certain strategy that you need to figure out first.\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
+    "author": "Jason Bredhauer",
+    "con_main": "scripts/duke007.con",
+    "description": "While intended to become a James Bond TC, this project was never finished. However, 6 really nice maps remained. You will visit interesting locations like a flying plane, an underwater base or a Russian missile silo.\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
   },
   {
     "id": "duke3d-dukezone2",
@@ -1431,6 +704,42 @@
       "DZ2USER.CON"
     ],
     "description": "https://forums.duke4.net/topic/7655-dukezone-ii-playability-edit/\n\nDuke!ZONE II is an expanded 1997 re-release of Duke!ZONE and an authorized expansion pack for Duke Nukem 3D.\n\nThis release removes a few problems you may encounter while playing the Duke!Zone II addon while also providing minor polishing."
+  },
+  {
+    "id": "duke3d-its-zerohour",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "Duke, it\u0027s ZeroHour",
+    "version": "1.4",
+    "author": "ZeroHour Software",
+    "con_main": "ZGAME.CON",
+    "description": "Duke It\u0027s Zero Hour is a total conversion for Duke Nukem 3D. \r\nThe project was developed by ZeroHour Software and released on November 1, 1997.\r\nIt features new levels, weapons, enemies, music, sound effects, and even an original boss.\r\n\r\nNot to be confused with Duke Nukem: Zero Hour."
+  },
+  {
+    "id": "duke3d-dukevr",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "DukeVR",
+    "version": "1.0",
+    "author": "Geoffrey \u0027Fakir\u0027 van Dijk",
+    "con_main": "scripts/duke_vr.con",
+    "description": "Training map set with 3 episodes and 18 maps. Each episode is harder than the previous one (blue = easy, green = medium, red = hard). Focus is completely shifting from visual to pure puzzle solving which you will notice right away after loading the first map: Besides a basic matrix-style texture, the levels look very bland and unfinished. The challenge is to complete the maps without dying and as fast as possible - usually requiring a certain strategy that you need to figure out first.\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
+  },
+  {
+    "id": "duke3d-dukeland",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "Dukeland",
+    "version": "1.0",
+    "author": "Parasite Productions",
+    "con_main": "scripts/dukeland.con",
+    "description": "Those aliens bastards have stolen the happiest place on earth-- Disneyland. The aliens tried to physically remove Disneyland and it broke into pieces. Your mission: take back New Orleans Square \u0026 Tomorrowland. \r\nNo one steals Disneyland ...and Lives!!!\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
   },
   {
     "id": "duke3d-epic",
@@ -1469,6 +778,18 @@
     "description": "8 maps (1 secret) with mostly urban/industrial setting. Don\u0027t judge the episode too soon by its first two maps which are rather average. Design gets better and also darker later on as you fight through burning cities overrun by a satanic alien cult. The last two levels are heavily inspired by \u0022Blood\u0022, leading you through a cemetery until you reach the church of the cult where you have to eliminate all resistance.\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
   },
   {
+    "id": "duke3d-fm7x",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "FM7X",
+    "version": "1.0",
+    "author": "Fernando M\u00E1rquez",
+    "con_main": "FM7XGAME.CON",
+    "description": "https://forums.duke4.net/topic/12447-release-fm7x-the-complete-fernando-marquez-7-episode-full-steel-balled-pack\r\n\r\n\u0022It\u0027s time to abort your whole freakin\u0027 species\u0022 \u2013 Duke swore in this final speech to the alien queen as she was blown up into many liquid pulps of blood and splatter in her aquatic hideout.\r\nA year has passed since that miraculous event. Duke Nukem, a hero in his own right, is well known and highly respected - the tough macho man the world needed to be safe from any threats the earth might face. Nowadays, the man himself has been resting without a single worry. Nothing could be more perfect than a good old tasty wine, a few cigarettes scattered on the living room table, and even some R\u0026R, which he never grows tired of.\r\nFast forward a few days later \u2013 a huge spectrum of colors sparks through the sky of the United States and a massive spaceship sweeps down to earth as fast as a flashlight, ripping apart a huge chunk of earth and trembling down the whole damn country.\r\n\u0022Really? They are back! But, how is that possible?\u0022, Duke shrugs while glancing at the wrecked streets near his place. It seems they will attempt another try to conquer our planet. But unlike the prior attempt, they account for Duke\u2019s interference, and they are well prepared this time (or at least they think so\u2026)\r\nSuddenly, but completely expected, Duke\u0027s telephone rings uncontrollably... \u0022Well, I guess it\u2019s time to do another favor to the world...\u0022, he mutters as he answers the phone, greets the Colonel and awaits new instructions."
+  },
+  {
     "id": "duke3d-fbsp-trilogy",
     "type": "TC",
     "game": {
@@ -1480,18 +801,6 @@
     "con_main": "scripts/fbsp.con",
     "def_main": "scripts/fbsp.def",
     "description": "3 SP maps by Geoffrey \u0027Fakir\u0027 van Dijk, grouped to a one three-level episode.\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
-  },
-  {
-    "id": "duke3d-fm7x",
-    "type": "TC",
-    "game": {
-      "name": "Duke3D"
-    },
-    "title": "FM7X",
-    "version": "1.0",
-    "author": "Fernando M\u00E1rquez",
-    "con_main": "FM7XGAME.CON",
-    "description": "https://forums.duke4.net/topic/12447-release-fm7x-the-complete-fernando-marquez-7-episode-full-steel-balled-pack\r\n\r\n\u0022It\u0027s time to abort your whole freakin\u0027 species\u0022 \u2013 Duke swore in this final speech to the alien queen as she was blown up into many liquid pulps of blood and splatter in her aquatic hideout.\r\nA year has passed since that miraculous event. Duke Nukem, a hero in his own right, is well known and highly respected - the tough macho man the world needed to be safe from any threats the earth might face. Nowadays, the man himself has been resting without a single worry. Nothing could be more perfect than a good old tasty wine, a few cigarettes scattered on the living room table, and even some R\u0026R, which he never grows tired of.\r\nFast forward a few days later \u2013 a huge spectrum of colors sparks through the sky of the United States and a massive spaceship sweeps down to earth as fast as a flashlight, ripping apart a huge chunk of earth and trembling down the whole damn country.\r\n\u0022Really? They are back! But, how is that possible?\u0022, Duke shrugs while glancing at the wrecked streets near his place. It seems they will attempt another try to conquer our planet. But unlike the prior attempt, they account for Duke\u2019s interference, and they are well prepared this time (or at least they think so\u2026)\r\nSuddenly, but completely expected, Duke\u0027s telephone rings uncontrollably... \u0022Well, I guess it\u2019s time to do another favor to the world...\u0022, he mutters as he answers the phone, greets the Colonel and awaits new instructions."
   },
   {
     "id": "duke3d-fusion-redux-2018",
@@ -1651,18 +960,6 @@
     "description": "https://www.moddb.com/mods/zykov-eddy\r\n\r\n5 years have passed since the last invasion of aliens. Duke Nukem has already become the senior agent of EDF and lives now on a quiet street, in his house.\r\nOne morning he heard gunshots and a police siren. When he looked out the window, he raised his eyebrows - the whole street was filled with aliens. Again! To get more information, Duke switched on his computer and checked his email:\r\n============\r\nFrom: EDF\r\nTo: Duke Nukem\r\nDuke, we have problems, as you are discovered already. At this time the aliens came from the future. In order to our realm they used an time machine. Here is your orders: go to the subway station at a secret base EDF, then move in time and destroy alien time machine.\r\nGood luck!\r\n============\r\nAfter reading email, Duke Nukem took his gun and said:\r\n\u0022How many times i have to kick Alien arses to calm them down?...\u0022 \r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
   },
   {
-    "id": "duke3d-its-zerohour",
-    "type": "TC",
-    "game": {
-      "name": "Duke3D"
-    },
-    "title": "Duke, it\u0027s ZeroHour",
-    "version": "1.4",
-    "author": "ZeroHour Software",
-    "con_main": "ZGAME.CON",
-    "description": "Duke It\u0027s Zero Hour is a total conversion for Duke Nukem 3D. \r\nThe project was developed by ZeroHour Software and released on November 1, 1997.\r\nIt features new levels, weapons, enemies, music, sound effects, and even an original boss.\r\n\r\nNot to be confused with Duke Nukem: Zero Hour."
-  },
-  {
     "id": "duke3d-jj-duke-nukem-3d",
     "type": "TC",
     "game": {
@@ -1699,6 +996,18 @@
     "con_main": "scripts/kaiserland.con",
     "def_main": "scripts/kaiserland.def",
     "description": "3 excellent levels made by KaiseR. The first two maps have an underwater base theme while the last one features a medieval setting with new custom art. \r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
+  },
+  {
+    "id": "duke3d-lorch-trilogy",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "LORCH Trilogy",
+    "version": "1.0",
+    "author": "Sanek \u0026 Merlijn van Oostrum",
+    "con_main": "scripts/lorch.con",
+    "description": "3 city levels which are heavily inspired by the famous Roch series. \u0022LORCH\u0022 is short for \u0022Lots Of Roaring Chewing Hams\u0022 and gives you the task to search for the abducted Duke3D mapping artist Alejandro.\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
   },
   {
     "id": "duke3d-last-reaction-water-bases",
@@ -1763,18 +1072,6 @@
     "description": "https://github.com/fgsfds/Liquidator-3D\r\n\r\nLiquidator is an obscure Russian game illegally made using Build Engine and published in 1998 by Akella Company, who later made an infamous Postal 3.\r\n\r\nThe game includes all-new graphics, sounds, and 3 campaigns with total of 6 maps."
   },
   {
-    "id": "duke3d-lorch-trilogy",
-    "type": "TC",
-    "game": {
-      "name": "Duke3D"
-    },
-    "title": "LORCH Trilogy",
-    "version": "1.0",
-    "author": "Sanek \u0026 Merlijn van Oostrum",
-    "con_main": "scripts/lorch.con",
-    "description": "3 city levels which are heavily inspired by the famous Roch series. \u0022LORCH\u0022 is short for \u0022Lots Of Roaring Chewing Hams\u0022 and gives you the task to search for the abducted Duke3D mapping artist Alejandro.\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
-  },
-  {
     "id": "duke3d-lost-highway",
     "type": "TC",
     "game": {
@@ -1785,6 +1082,29 @@
     "author": "Petr \u0027Artec\u0027 Ku\u010Dera and Luk\u00E1\u0161 Cerovsky",
     "con_main": "scripts/losthighway.con",
     "description": "7 levels (1 secret) with well-designed highway passages, vast canyons, a huge dam and even a cable car (if you find the secret exit).\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
+  },
+  {
+    "id": "duke3d-mrck-duology",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "MRCK Duology",
+    "version": "1.0",
+    "author": "MRCK",
+    "con_main": "scripts/mrck.con",
+    "description": "Collection of two maps made by Aymeric \u0027MRCK\u0027 Nocus in 2023, arranged as an episode.\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
+  },
+  {
+    "id": "duke3d-mssp-episode",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "MSSP Episode",
+    "version": "1.0",
+    "con_main": "scripts/mssp.con",
+    "description": "After thousands of alien invasions a group of top scientists tried to find out the source of all alien force. Where\u0027s the planet of these creatures? Some of the alien craft were noticed in the direction of Orion star system. Scientists came in the conclusion that the aliens came from Orion\u0027s star (which seems to be a planet) called Betelgeuse. EDF tryed to nuke the whole planet away but aliens\u0027 defence system was better. As a revenge of this pathetic try to kill all alienkind they decided to strike back. Remains of the alien forces attacked to earth once again. This time with new units like clone Emperors and clone Overlords. Suddenly all people started to die all over the world. It was an alien-made plague which killed about 60% of the earth\u0027s population. Those who were left started their plans against the alien army. Duke was sent to find out if there are any fellows left in the EDF\u0027s main facility. He was also given a mission from the top: Kill all enemy forces by defeating the new Emperor. This can be done only by going through the bases, cities and died human bodies to reach the moon station where\u0027s the current base of operation of the new alien emperor.\r\n-Fate of mankind is in your hands.\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
   },
   {
     "id": "duke3d-math-pak",
@@ -1877,29 +1197,6 @@
     "con_main": "scripts/moonbase.con",
     "def_main": "scripts/moonbase.def",
     "description": "Space episode with 7 levels, sometimes hard, but architecture makes up for it.\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
-  },
-  {
-    "id": "duke3d-mrck-duology",
-    "type": "TC",
-    "game": {
-      "name": "Duke3D"
-    },
-    "title": "MRCK Duology",
-    "version": "1.0",
-    "author": "MRCK",
-    "con_main": "scripts/mrck.con",
-    "description": "Collection of two maps made by Aymeric \u0027MRCK\u0027 Nocus in 2023, arranged as an episode.\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
-  },
-  {
-    "id": "duke3d-mssp-episode",
-    "type": "TC",
-    "game": {
-      "name": "Duke3D"
-    },
-    "title": "MSSP Episode",
-    "version": "1.0",
-    "con_main": "scripts/mssp.con",
-    "description": "After thousands of alien invasions a group of top scientists tried to find out the source of all alien force. Where\u0027s the planet of these creatures? Some of the alien craft were noticed in the direction of Orion star system. Scientists came in the conclusion that the aliens came from Orion\u0027s star (which seems to be a planet) called Betelgeuse. EDF tryed to nuke the whole planet away but aliens\u0027 defence system was better. As a revenge of this pathetic try to kill all alienkind they decided to strike back. Remains of the alien forces attacked to earth once again. This time with new units like clone Emperors and clone Overlords. Suddenly all people started to die all over the world. It was an alien-made plague which killed about 60% of the earth\u0027s population. Those who were left started their plans against the alien army. Duke was sent to find out if there are any fellows left in the EDF\u0027s main facility. He was also given a mission from the top: Kill all enemy forces by defeating the new Emperor. This can be done only by going through the bases, cities and died human bodies to reach the moon station where\u0027s the current base of operation of the new alien emperor.\r\n-Fate of mankind is in your hands.\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
   },
   {
     "id": "duke3d-munasta-trilogy",
@@ -2587,18 +1884,6 @@
     "description": "6 SP (1 secret) and 2 Dukematch levels. Features a new weapon (Assault Rifle replacing chaingun) and edited CON code to alter enemy strengths, ammo amount and weapon power.\r\n\r\nThe maps are quite nice for their age, leading you from an EDF facility to a secret installation and a prison until you reach a starport. From there you enter a spaceship where the showdown with an Overlord takes place. In the secret level, you travel to an arctic region via submarine.\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
   },
   {
-    "id": "duke3d-xartech-invasion",
-    "type": "TC",
-    "game": {
-      "name": "Duke3D"
-    },
-    "title": "XarTech Invasion",
-    "version": "1.0",
-    "author": "Ben Smit",
-    "con_main": "scripts/xartech.con",
-    "description": "6 maps. Duke must infiltrate a facility overrun by aliens and destroy the new prototype Riot tanks, followed by a close encounter with an Alien Queen. Level design is not exactly sophisticated, but it\u0027s still fun since there are more than enough enemies to fight.\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
-  },
-  {
     "id": "duke3d-xmas-1997",
     "type": "TC",
     "game": {
@@ -2610,6 +1895,18 @@
     "con_main": "scripts/xmas97.con",
     "def_main": "scripts/xmas97.def",
     "description": "8 maps with Christmas theme (first map is an intro map without gameplay), featuring new art, music and three new sounds.\r\n\r\nExpect rather challenging gameplay with large amounts of enemy spawns. Opening presents can help you gearing up, but may also unleash unpleasant surprises.\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
+  },
+  {
+    "id": "duke3d-xartech-invasion",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "XarTech Invasion",
+    "version": "1.0",
+    "author": "Ben Smit",
+    "con_main": "scripts/xartech.con",
+    "description": "6 maps. Duke must infiltrate a facility overrun by aliens and destroy the new prototype Riot tanks, followed by a close encounter with an Alien Queen. Level design is not exactly sophisticated, but it\u0027s still fun since there are more than enough enemies to fight.\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
   },
   {
     "id": "duke3d-zombie-crisis",
@@ -2844,27 +2141,6 @@
     "description": "https://forums.duke4.net/topic/8940-3d-classic-skyboxes-pack/\r\n\r\n3D classic skyboxes pack."
   },
   {
-    "id": "duke3d-3d-skyboxes-dc",
-    "type": "Mod",
-    "game": {
-      "name": "Duke3D"
-    },
-    "title": "3D Skyboxes for DC",
-    "version": "1.0",
-    "author": "Fox",
-    "def_modules": [
-      "skyboxes_dc.def"
-    ],
-    "dependencies": {
-      "addons": [
-        {
-          "id": "dukedc"
-        }
-      ]
-    },
-    "description": "https://forums.duke4.net/topic/8940-3d-classic-skyboxes-pack/\r\n\r\n3D classic skyboxes pack."
-  },
-  {
     "id": "duke3d-3d-skyboxes-vaca",
     "type": "Mod",
     "game": {
@@ -2880,6 +2156,27 @@
       "addons": [
         {
           "id": "dukevaca"
+        }
+      ]
+    },
+    "description": "https://forums.duke4.net/topic/8940-3d-classic-skyboxes-pack/\r\n\r\n3D classic skyboxes pack."
+  },
+  {
+    "id": "duke3d-3d-skyboxes-dc",
+    "type": "Mod",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "3D Skyboxes for DC",
+    "version": "1.0",
+    "author": "Fox",
+    "def_modules": [
+      "skyboxes_dc.def"
+    ],
+    "dependencies": {
+      "addons": [
+        {
+          "id": "dukedc"
         }
       ]
     },
@@ -2935,29 +2232,6 @@
     "description": "https://www.moddb.com/mods/duke-nukem-3d-high-quality-sound-effects\r\n\r\nThe purpose of this mod is to replace vanilla sound effects of Duke Nukem 3D with high quality ones."
   },
   {
-    "id": "duke3d-hq-sounds-nw",
-    "type": "Mod",
-    "game": {
-      "name": "Duke3D"
-    },
-    "title": "High Quality Sound Effects for Nuclear Winter",
-    "version": "1.0",
-    "def_modules": [
-      "hq-sounds-nwinter.def"
-    ],
-    "dependencies": {
-      "addons": [
-        {
-          "id": "dukenw"
-        },
-        {
-          "id": "duke3d-hq-sounds"
-        }
-      ]
-    },
-    "description": "https://www.moddb.com/mods/duke-nukem-3d-high-quality-sound-effects\r\n\r\nThe purpose of this mod is to replace vanilla sound effects of Duke Nukem 3D with high quality ones."
-  },
-  {
     "id": "duke3d-hq-sounds-vaca",
     "type": "Mod",
     "game": {
@@ -2972,6 +2246,29 @@
       "addons": [
         {
           "id": "dukevaca"
+        },
+        {
+          "id": "duke3d-hq-sounds"
+        }
+      ]
+    },
+    "description": "https://www.moddb.com/mods/duke-nukem-3d-high-quality-sound-effects\r\n\r\nThe purpose of this mod is to replace vanilla sound effects of Duke Nukem 3D with high quality ones."
+  },
+  {
+    "id": "duke3d-hq-sounds-nw",
+    "type": "Mod",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "High Quality Sound Effects for Nuclear Winter",
+    "version": "1.0",
+    "def_modules": [
+      "hq-sounds-nwinter.def"
+    ],
+    "dependencies": {
+      "addons": [
+        {
+          "id": "dukenw"
         },
         {
           "id": "duke3d-hq-sounds"
@@ -3051,29 +2348,6 @@
     "description": "https://github.com/NightFright2k19/duke3d_voxelpack\r\n\r\nVoxel replacements for sprites in Duke Nukem 3D"
   },
   {
-    "id": "duke3d-voxel-pack-nw",
-    "type": "Mod",
-    "game": {
-      "name": "Duke3D"
-    },
-    "title": "Voxel Pack for Nuclear Winter",
-    "version": "2.0-rc2",
-    "def_modules": [
-      "voxels/nwinter.def"
-    ],
-    "dependencies": {
-      "addons": [
-        {
-          "id": "dukenw"
-        },
-        {
-          "id": "duke3d-voxel-pack"
-        }
-      ]
-    },
-    "description": "https://github.com/NightFright2k19/duke3d_voxelpack\r\n\r\nVoxel replacements for sprites in Duke Nukem 3D Nuclear Winter"
-  },
-  {
     "id": "duke3d-voxel-pack-vaca",
     "type": "Mod",
     "game": {
@@ -3097,6 +2371,29 @@
     "description": "https://github.com/NightFright2k19/duke3d_voxelpack\r\n\r\nVoxel replacements for sprites in Duke Nukem 3D Caribbean"
   },
   {
+    "id": "duke3d-voxel-pack-nw",
+    "type": "Mod",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "Voxel Pack for Nuclear Winter",
+    "version": "2.0-rc2",
+    "def_modules": [
+      "voxels/nwinter.def"
+    ],
+    "dependencies": {
+      "addons": [
+        {
+          "id": "dukenw"
+        },
+        {
+          "id": "duke3d-voxel-pack"
+        }
+      ]
+    },
+    "description": "https://github.com/NightFright2k19/duke3d_voxelpack\r\n\r\nVoxel replacements for sprites in Duke Nukem 3D Nuclear Winter"
+  },
+  {
     "id": "duke3d-wt-red-crosses",
     "type": "Mod",
     "game": {
@@ -3109,6 +2406,1094 @@
       "wt_uncensor.def"
     ],
     "description": "This mod brings back red crosses of the medkits in World Tour edition of the game"
+  },
+  {
+    "id": "blood-500mil",
+    "type": "TC",
+    "game": {
+      "name": "Blood"
+    },
+    "title": "500 Milliliters of /vr/",
+    "version": "5.1.1",
+    "author": "4chan",
+    "def_modules": [
+      "500ml.def"
+    ],
+    "ini": "500ml.ini",
+    "description": "500 Milliliters of /vr/ is a community add-on by members of the /vr/ board on 4chan released on February 1, 2021. It features six levels created by three authors, and features numerous replaced assets. Four levels are available for Bloodbath. It is named as a play on the 200 Minutes of /vr/ and related community projects for Doom."
+  },
+  {
+    "id": "blood-bloodbasket",
+    "type": "TC",
+    "game": {
+      "name": "Blood"
+    },
+    "title": "Bloodbasket",
+    "version": "1.1",
+    "author": "daMann, Damien Azreal, BloodyTom, Matthan",
+    "ini": "BASKET.INI",
+    "description": "https://www.moddb.com/mods/bloodbasket\r\n\r\nThe first community Map Jam by The Blood Discord Channel. Bloodbasket includes four distinctive and varied maps full of blood, dread and secrets! Caleb will have to fight his way through office cubicles, haunting forests, lava caves and come face to face with a big ass spider!"
+  },
+  {
+    "id": "blood-bloodlines",
+    "type": "TC",
+    "game": {
+      "name": "Blood"
+    },
+    "title": "Bloodlines: Out of the Grave Edition",
+    "version": "1.5",
+    "author": "Necrosoft",
+    "ini": "BLBETA15.ini",
+    "rff_main": "BLMAIN.RFF",
+    "rff_sound": "BLSND.RFF",
+    "description": "https://www.moddb.com/mods/bloodlines-out-of-the-grave-edition\r\n\r\nBloodLines was to be the most ambitious total conversion ever created for Blood. It still is, but it\u0027s far from what was intended. We have admitted that BloodLines will never be fully completed and have decided to release the TC \u0022as is\u0022 with some retouching to make incomplete maps actually playable. I hope you\u0027ll enjoy playing it as much as we have enjoyed making it. Be aware though, that not all maps are what you would expect from a Blood level, it\u0027s not all bloody mayhem. Don\u0027t be disappointed if the TC doesn\u0027t fit your ideas about how a 3d-shooter should be, much of it is about atmosphere rather than action, you will benefit from approaching BloodLines with an open mind. This is the beta version of the first three episodes, including 13 maps, two new enemies and loads of new art and sound"
+  },
+  {
+    "id": "blood-bloodstream",
+    "type": "TC",
+    "game": {
+      "name": "Blood"
+    },
+    "title": "Bloodstream Map Jam",
+    "version": "1.1",
+    "author": "daMann, Doomaniac, Seizhak, Matthan, BlooyTom",
+    "release_date": "2026-07-16",
+    "ini": "BSTREAM.ini",
+    "description": "https://www.moddb.com/mods/bloodbasket/downloads/bloodstream-map-jam\r\n\r\nThe second Blood map jam brought to you by the Blood Discord Channel."
+  },
+  {
+    "id": "blood-bloody-pulp-fiction",
+    "type": "TC",
+    "game": {
+      "name": "Blood"
+    },
+    "title": "Bloody Pulp Fiction",
+    "version": "1.3.1",
+    "author": "BPF Team",
+    "ini": "BPF.INI",
+    "rff_sound": "BPFSND.RFF",
+    "description": "https://bpf.deathmask.net/\r\n\r\nDeadland awaits Caleb as he is thrust into action once again by the determined Cabal who are stopping at nothing to kill, enslave, pillage, ravage, and bring forth unholy darkness in it\u0027s wake.\r\nCaleb, now in the present, wants nothing more than to avoid the Cabal and forget any ties to Tchernobog, but the world is Decaying as the Remnants of the Cabal spread through out the globe like a Cancer.\r\n\r\nExperience up to 18 levels of fast paced, adrenaline-soaked, bloodthirsty action in some of the most detailed and frantic maps ever made for Blood. Experience snowy cities, malls, dockside ports, graveyards, haunting forests, gigantic sea-faring ships, old forgotten towns along Route66, torture chambers, a dilapidated carnival site, Cabal strongholds, and much more."
+  },
+  {
+    "id": "blood-cwhhrot",
+    "type": "TC",
+    "game": {
+      "name": "Blood"
+    },
+    "title": "Caleb Will Have His Revenge On Toronto",
+    "version": "1.3.2",
+    "author": "Frances Rampage",
+    "def_modules": [
+      "CWHHROT.DEF"
+    ],
+    "ini": "CWHHROT.INI",
+    "description": "https://www.bloodgame.ru/forum/topic.php?forum=2\u0026topic=105\r\n\r\nPart of the saga of the cheerful Caleb - Scum Of Dallas, who by the will of fate turned out to be deceived by a vile Canadian hockey player. Betting is a risky business, especially when there is a corrupt rat lurking in your favorite team. That\u0027s what happened to our hero: Canadian hockey player Adam Ace received a tempting offer to drain the final match of the World Cup in exchange for eternal life and sold his incorruptible soul to the well-known Cabal sect. What does sports have to do with it, you ask? The thing is that tired of immortality and endless wanderings, Caleb found an outlet in sports betting and put all his fortune accumulated over a long time spent under the wing of fortune and a unique flair for victory on the above-mentioned unfortunate national team. This leads to another question: what about the Bondage of this? The answer is immediately revealed - knowing that Caleb will not forgive Ace for such a setup of the maple leaf country (and in fact the loss of money), the goal of the distraught fanatics who lost their great and powerful, to track down, find and destroy our dead man, so to speak, for bait."
+  },
+  {
+    "id": "blood-crypts-of-the-cruel",
+    "type": "TC",
+    "game": {
+      "name": "Blood"
+    },
+    "title": "Crypts of the Cruel",
+    "version": "1.0",
+    "author": "daMann",
+    "def_modules": [
+      "cruel.def"
+    ],
+    "ini": "cruel.ini",
+    "description": "https://www.moddb.com/mods/bloodlines-out-of-the-grave-edition/downloads/crypts-of-the-cruel-trilogy-a-bloodlines-prequel-refreshed-supply-exclusive\r\n\r\nCrypts of the Cruel is a trilogy of maps, each designed to play individually or as a whole.\r\n\r\nThey follow Caleb through the beginnings of an encounter with a dark force known as the Cruel. The Cruel has been unleashed on the world through the cracks of reality as something far more powerful is coming... The Beginning of the End is about to be written....\r\n\r\nIt is filled with cheesy movie references, jokes, and blasting hundreds of Cabal and creatures... Aka classic Bloody fun."
+  },
+  {
+    "id": "blood-death-wish",
+    "type": "TC",
+    "game": {
+      "name": "Blood"
+    },
+    "title": "Death Wish",
+    "version": "2.0.1",
+    "author": "Bloatoid",
+    "release_date": "2026-06-23",
+    "def_modules": [
+      "dw.def"
+    ],
+    "ini": "dw.ini",
+    "description": "https://www.moddb.com/mods/death-wish-for-blood\r\n\r\nCaleb will need to muster all his strength to take down the mighty Tchernobog, who has managed to free himself from the grip of death.\r\n\r\nDeath Wish is a campaign for Blood with over 30 new levels, cut scenes, and more. All levels have been adapted so that Co-op play is not only possible, but enhanced with a helpful checkpoint system. The campaign includes several secret levels which all connect back to their episodes through special transitional missions.\r\n\r\nThe entire mod was developed by a single mapper, Bloatoid, who has been editing with the Build engine for many years. The original Death Wish was created between January 2010 and October 2011. Updates have been made over the years based on feedback from players and observing online streamers, as well as the addition of several extra secret levels.\r\n\r\nLet the festival of Blood continue!",
+    "options": [
+      {
+        "name": "Original soundtrack",
+        "parameters": {
+          "og.ini": "INI"
+        }
+      },
+      {
+        "name": "Sjellos soundtrack",
+        "parameters": {
+          "sjellos.ini": "INI"
+        }
+      },
+      {
+        "name": "Speedy soundtrack",
+        "parameters": {
+          "speedy.ini": "INI"
+        }
+      }
+    ]
+  },
+  {
+    "id": "blood-death-wish-ost",
+    "type": "TC",
+    "game": {
+      "name": "Blood"
+    },
+    "title": "Death Wish with OST",
+    "version": "1.7.9",
+    "author": "Bloatoid",
+    "ini": "dwmus.ini",
+    "description": "https://www.moddb.com/mods/death-wish-for-blood\r\n\r\nCaleb will need to muster all his strength to take down the mighty Tchernobog, who has managed to free himself from the grip of death.\r\n\r\nDeath Wish is a campaign for Blood with over 30 new levels, cut scenes, and more. All levels have been adapted so that Co-op play is not only possible, but enhanced with a helpful checkpoint system. The campaign includes several secret levels which all connect back to their episodes through special transitional missions.\r\n\r\nThe entire mod was developed by a single mapper, Bloatoid, who has been editing with the Build engine for many years. The original Death Wish was created between January 2010 and October 2011. Updates have been made over the years based on feedback from players and observing online streamers, as well as the addition of several extra secret levels. A 4th episode is in development.\r\n\r\nLet the festival of Blood continue!\r\n\r\nIncludes Soundtrack Addon by Speedy\r\n\r\nhttps://www.moddb.com/mods/death-wish-for-blood/downloads/dw-soundtrack-addon-by-speedy"
+  },
+  {
+    "id": "blood-eviction",
+    "type": "TC",
+    "game": {
+      "name": "Blood"
+    },
+    "title": "Eviction",
+    "version": "1.5.1",
+    "author": "Austin \u0022SpillSomeBlood\u0022 Adams",
+    "ini": "EVICTION.ini",
+    "rff_main": "EVIC.RFF",
+    "rff_sound": "EVICSND.RFF",
+    "dependencies": {
+      "features": [
+        "Modern_Types"
+      ]
+    },
+    "description": "https://www.moddb.com/mods/eviction-addon-for-blood\r\n\r\nEviction is an add-on I have been working on over the past 3-4 years. At this release, it contains 5 highly detailed levels that surpass the original limits of the vanilla game. 4 of which are campaign levels with an additional multiplayer level. It contains five new enemies! Over 35\u002B secrets to be found and dozens of side areas to explore! Randomized keycodes and clues for secrets. Meaning each time you play the code and clue will be unique! Modern effects like patrolling enemies and low gravity!",
+    "executables": {
+      "Windows": {
+        "NBlood": "nblood.exe"
+      }
+    }
+  },
+  {
+    "id": "blood-fotd",
+    "type": "TC",
+    "game": {
+      "name": "Blood"
+    },
+    "title": "Fate of the Damned",
+    "version": "1.1.2",
+    "author": "Daedalus",
+    "def_modules": [
+      "FATE.def"
+    ],
+    "ini": "FATE.ini",
+    "description": "https://www.moddb.com/mods/fate-of-the-damned\r\n\r\nFate of the Damned is a meticulously crafted custom campaign for BLOOD which aims to speculate and explore another shadowed path that Caleb might\u0027ve undertaken. While taking care to never stray far from the gameplay formula that made BLOOD so gripping, the campaign will see Caleb journey through new environments that he has not seen before. Gruesome new discoveries await as Caleb tears through hordes of the undead, and nothing is left unscathed in his quest for vengeance.The version 1.1 release contains the following features:\r\n\r\n- 2 episodes consisting of 18 maps total, which fully support Single Player, Co-operative, BloodBath and Capture the Flag across all difficulty settings.\r\n\r\n- A series of exhilarating, all new, low resolution cutscenes which tell the campaign\u0027s story.\r\n\r\n- Lots of new, chilling music as an optional extra.\r\n\r\n- A splash of custom art that is used sparingly.\r\n\r\n- A large amount of fiendish secrets waiting to be discovered.\r\n\r\n- Challenging and occasionally downright unfair encounters with BLOOD\u0027s monsters, unsuitable for those whose faith is weak.\r\n\r\n- Support for the NBlood and BloodGDX ports - to a point."
+  },
+  {
+    "id": "blood-faitd",
+    "type": "TC",
+    "game": {
+      "name": "Blood"
+    },
+    "title": "Final Alone in the Dark",
+    "version": "1.3",
+    "author": "NoOne",
+    "ini": "FAITD.INI",
+    "rff_main": "FAITD.RFF",
+    "rff_sound": "FAITD.RFF",
+    "description": "https://www.moddb.com/mods/final-alone-in-the-dark\r\n\r\nAfter one and a half years of work we are ready to officially introduce you this addon. For a long time we\u0027ve been thinking of how to preserve the atmosphere of this game loved by all of us, but at the same time to extend the existing limits, bring up new gameplay and experience. This time we\u0027ve gone far beyond simple fan map-making and are going to prove to you that Blood is not this hopeless even without source code. From the beginning BAITD was aimed at expanding gameplay, it can\u0027t be limited by common gameplay borders, so here you\u0027re going to see a lot of new features."
+  },
+  {
+    "id": "blood-fleshed-out",
+    "type": "TC",
+    "game": {
+      "name": "Blood"
+    },
+    "title": "Fleshed Out",
+    "version": "1.7.14",
+    "author": "Skobbejak Games",
+    "ini": "FO.INI",
+    "description": "https://www.moddb.com/mods/blood-fleshed-out\r\n\r\nAfter the death of Tchernobog, the surviving members of the Cabal openend up alternate spirit worlds to grow their army again. They are planning to create a new God and rule the world once and for all. So get the guns ready, Caleb is about make a bloody mess again.."
+  },
+  {
+    "id": "blood-frmeat2",
+    "type": "TC",
+    "game": {
+      "name": "Blood"
+    },
+    "title": "French Meat 2",
+    "version": "2.3.1",
+    "author": "TEDD",
+    "def_modules": [
+      "FRENCHM2.def"
+    ],
+    "ini": "FRENCHM2.ini",
+    "description": "https://www.moddb.com/mods/french-meat-2\r\n\r\nAfter the French Meat episode for BLOOD, the second with 8 new maps including new tiles and soundtracks for an adventure with a unique atmosphere immersed in the heart of paradise island colonized by the pirates of Cabal! kill them all, make a maximum of death, blow them up, slaughter them wherever they are.\r\n\r\nINCLUDING :\r\n\r\n- French Meat episode 1 updated : 9 maps\r\n\r\n- French Meat episode 2 : 8 maps \u002B new tiles"
+  },
+  {
+    "id": "blood-hostile-takeover",
+    "type": "TC",
+    "game": {
+      "name": "Blood"
+    },
+    "title": "Hostile Takeover",
+    "version": "1.1",
+    "author": "Bloatoid",
+    "ini": "Hostile.ini",
+    "description": "Hostile Takeover is a 2001 fan add-on for Blood by Dustin \u0022Bloatoid\u0022 Twilley, previous creator of Inherit the Earth (1999) and much later Death Wish (2011, 2017-2020). It features a ghost town, underwater base, carnival and island level, among others."
+  },
+  {
+    "id": "blood-inherit",
+    "type": "TC",
+    "game": {
+      "name": "Blood"
+    },
+    "title": "Inherit the Earth",
+    "version": "1.0",
+    "author": "Bloatoid",
+    "ini": "Earth.ini",
+    "description": "When Tchernobog was defeated in the Hall of Epiphany, He was forced to return to His own realm. The power and rage released by Caleb while fighting the Dreaming god was partly absorbed, and had allowed Tchernobog to lay dormant gathering energy to follow on with His plan to open the Gateway- the connection between the realms of the living and the damned. Would Caleb be able to stop the revived Daemon Tchernobog? Contains a total of 3 episodes."
+  },
+  {
+    "id": "blood-its-a-war-out-there-duology",
+    "type": "TC",
+    "game": {
+      "name": "Blood"
+    },
+    "title": "It\u0027s a War Out There Duology",
+    "version": "1.0",
+    "author": "TOT COMICS",
+    "ini": "AWAR.ini",
+    "description": "One beautiful cloudy day you were sitting in your shack very, very, bored. You wished to go outside and look for something to do, but being as it is a war out there, there is a bunch of mean evil nasty things outside that wish to harm you. \r\n\r\nAfter a while of thinking about this situation, you come to the conclusion that the mean evil nasty things outside could be the very solution to your boredom. Sure they wish to harm you, but could you not harm them as well?\r\n\r\nAn evil smile streches  across your face as you grab your shotgun and rush out the door."
+  },
+  {
+    "id": "blood-marrow",
+    "type": "TC",
+    "game": {
+      "name": "Blood"
+    },
+    "title": "Marrow",
+    "version": "2.2",
+    "author": "Nick Palsmeier",
+    "release_date": "2026-07-01",
+    "ini": "MARROW.ini",
+    "description": "https://playmarrow.com/\r\n\r\nTchernobog lays dead, his form fading away from the world as Caleb turns his back to the smoldering corpse. Vengeance sated, he leaves the Hall of the Epiphany behind. Feeling no less disdain for the world than he did with Ophelia, and experiencing none of the joy she brought, he returns to the grave to die once more. A hopefully final resting place.\r\n\r\nThe Cabal had been scattered far and wide by the gunman\u0027s path of revenge, but in his absence they regathered, regrouped, motivated out of their own sense of vengeance. Caleb was their general, the chosen one of their dark god and he had betrayed them all twice over.\r\n\r\nHe must burn for rejecting the honor of being sacrificed, for striking at Tchernobog. This suffering is best repaid by the tongues of Cerberus. Gathering his remains, the diaspora cinders of his pit, they enacted plans to resurrect him, and sought out Caleb\u0027s newfound grave, and bring him face to face with a fiery end.\r\n\r\n- A complete brand new episode.\r\n\r\n- Control Caleb as he carves a swath of carnage through the Cabal.\r\n\r\n- Experience ten brand new levels!\r\n\r\n- Using only assets from the original game, crafting a dark and horrific journey for Caleb."
+  },
+  {
+    "id": "blood-nightmares",
+    "type": "TC",
+    "game": {
+      "name": "Blood"
+    },
+    "title": "Nightmares",
+    "version": "0.3",
+    "author": "Bloodskar",
+    "release_date": "2026-07-13",
+    "def_modules": [
+      "Night.DEF"
+    ],
+    "ini": "Night.ini",
+    "dependencies": {
+      "features": [
+        "Modern_Types",
+        "TileFromTexture"
+      ]
+    },
+    "description": "https://www.moddb.com/mods/nightmares1"
+  },
+  {
+    "id": "blood-no-hope-in-sight",
+    "type": "TC",
+    "game": {
+      "name": "Blood"
+    },
+    "title": "No Hope In Sight",
+    "version": "0.2",
+    "author": "NoOne",
+    "ini": "NHIS.INI",
+    "rff_main": "NHIS.RFF",
+    "rff_sound": "NHISSND.RFF",
+    "dependencies": {
+      "features": [
+        "Modern_Types"
+      ]
+    },
+    "description": "http://cruo.bloodgame.ru/nhis/\r\n\r\n This is the demo map of the new episode. The project makes use of modern features for mappers that extends Blood\u0027s trigger system a lot."
+  },
+  {
+    "id": "blood-out-for-blood",
+    "type": "TC",
+    "game": {
+      "name": "Blood"
+    },
+    "title": "Out for Blood",
+    "version": "1.1",
+    "author": "BloodyTom",
+    "def_modules": [
+      "tiles.def"
+    ],
+    "ini": "OFB.ini",
+    "description": "Out for Blood is a six large level fan add-on (with one secret level) for Blood by Thomas \u0022BloodyTom\u0022 Ziehl, later author of Trauma Therapy, released on August 3, 2019."
+  },
+  {
+    "id": "blood-polished-cp",
+    "type": "TC",
+    "game": {
+      "name": "Blood"
+    },
+    "title": "Polished Cryptic Passage",
+    "version": "1.3",
+    "author": "Sir Seizhak",
+    "def_modules": [
+      "POLCP.DEF"
+    ],
+    "ini": "POLCP.INI",
+    "description": "http://bloodhispano.ucoz.es/\r\n\r\nA polished (or patched) version of Cryptic Passage, the official expansion pack for Blood.\r\n\r\nBasically, PCP keeps the original level design and gameplay but improves texturing, fixes mapping errors and lighting (very, very slightly touches in this regard). You can say this is a curated version of CP.\r\n\r\nIf you want to play an improved version of Cryptic Passage, say no more: get this patch!"
+  },
+  {
+    "id": "blood-somewhere-under-the-sea",
+    "type": "TC",
+    "game": {
+      "name": "Blood"
+    },
+    "title": "Somewhere Under the Sea",
+    "version": "1.0",
+    "author": "SpillSomeBlood",
+    "ini": "Rapture.ini",
+    "description": "This is a 3 level episode created around my Rapture map. All maps are coop, bbath, and teams compatible. The episode is fairly difficult."
+  },
+  {
+    "id": "blood-carnage-continues",
+    "type": "TC",
+    "game": {
+      "name": "Blood"
+    },
+    "title": "The Carnage Continues",
+    "version": "1.1",
+    "author": "B Harry",
+    "ini": "GORE.INI",
+    "rff_sound": "CARNAGE.RFF"
+  },
+  {
+    "id": "blood-the-cult",
+    "type": "TC",
+    "game": {
+      "name": "Blood"
+    },
+    "title": "The Cult",
+    "version": "1.1",
+    "author": "bifurcator_x",
+    "ini": "cult.ini",
+    "description": "https://www.moddb.com/mods/blood-the-cult\r\n\r\nBLOOD: the Cult is a new episode that contains 5 single player maps for original Blood."
+  },
+  {
+    "id": "blood-lost-episode",
+    "type": "TC",
+    "game": {
+      "name": "Blood"
+    },
+    "title": "The Lost Episode",
+    "version": "1.0",
+    "author": "Maz",
+    "ini": "LOST.INI",
+    "description": "https://www.moddb.com/games/blood/addons/the-lost-episode\r\n\r\nThis Episode is made up of eight maps taken straight from the leaked alpha. There are minor changes in aesthetics in a few of the maps however teh author made sure to keep all maps as close to the original author\u0027s intentions and art direction as possible."
+  },
+  {
+    "id": "blood-way-of-ira",
+    "type": "TC",
+    "game": {
+      "name": "Blood"
+    },
+    "title": "The Way of Ira",
+    "version": "1.1.3",
+    "author": "Frances Rampage",
+    "ini": "ira.ini",
+    "rff_main": "IRA.RFF",
+    "rff_sound": "IRASND.RFF",
+    "description": "https://www.moddb.com/mods/the-way-of-ira\r\n\r\nYears after dealing with the Cabal, Caleb lives on the outskirts of a small village.\r\n\r\nAfter having been almost fully erradicated, the last Cabal infiltrated the highest ranks of most religions and governments. Years passed by, more Cabal got recruited and step by step the people got mentally prepared to obey what was coming, one religion, one government, ruled by the Cabal."
+  },
+  {
+    "id": "blood-trauma-therapy",
+    "type": "TC",
+    "game": {
+      "name": "Blood"
+    },
+    "title": "Trauma Therapy",
+    "version": "2.5",
+    "author": "Thomas \u0022BloodyTom\u0022 Ziehl",
+    "ini": "TT.INI",
+    "rff_main": "TT.RFF",
+    "rff_sound": "TTSND.RFF",
+    "description": "https://www.moddb.com/mods/blood-trauma-therapy\r\n\r\nCaleb has won over the Cabal and destroyed the evil god Tchernobog. A short time has passed but Caleb can not find any rest. He is tormented by horrid dreams and visions that are haunting him and he has trouble distinguishing reality from dream. Awaking one day in hospital having no idea how he got there he sees only one solution to his agony. He has to find the three vessels of Tchernobog\u0027s Aura to resurrect him and kill him for the last time in hope of finding peace and rest."
+  },
+  {
+    "id": "blood-what-lies-beneath",
+    "type": "TC",
+    "game": {
+      "name": "Blood"
+    },
+    "title": "What Lies Beneath",
+    "version": "1.6.9",
+    "author": "BloodyTom",
+    "release_date": "2026-05-25",
+    "def_modules": [
+      "WLB.DEF"
+    ],
+    "ini": "WLB.INI",
+    "rff_main": "WLB.RFF",
+    "rff_sound": "WLBSND.RFF",
+    "dependencies": {
+      "features": [
+        "Modern_Types"
+      ]
+    },
+    "incompatibles": {
+      "addons": [
+        {
+          "id": "blood-smooth"
+        },
+        {
+          "id": "blood-cultists-with-guns"
+        }
+      ]
+    },
+    "description": "https://www.moddb.com/mods/blood-what-lies-beneath\r\n\r\nFollow Caleb who is lost at sea to a mysterious island. What will he discover beneath the surface, in the bowels of the island? A dark cult has taken over a mansion, its surroundings and the secrets beneath the reef.\r\n\r\nThis is a non-linear addon for Blood. Fight the way you want, choose your own path through the island and find places otherwise kept a secret. Find clues to progress with tomes around the island.",
+    "options": [
+      {
+        "name": "SmoothBlood",
+        "parameters": {
+          "SB.DEF": "DEF"
+        }
+      },
+      {
+        "name": "Cultists with guns",
+        "parameters": {
+          "CW.DEF": "DEF"
+        }
+      },
+      {
+        "name": "Additional voxels",
+        "parameters": {
+          "KVX2.DEF": "DEF"
+        }
+      },
+      {
+        "name": "Voxel trees",
+        "parameters": {
+          "KVX3.DEF": "DEF"
+        }
+      },
+      {
+        "name": "Alpha shotgun",
+        "parameters": {
+          "AS.DEF": "DEF"
+        }
+      }
+    ]
+  },
+  {
+    "id": "blood-willard",
+    "type": "TC",
+    "game": {
+      "name": "Blood"
+    },
+    "title": "Willard",
+    "version": "1.5",
+    "author": "Bloodskar",
+    "def_modules": [
+      "WILLARD.DEF"
+    ],
+    "ini": "WILLARD.INI",
+    "dependencies": {
+      "features": [
+        "Modern_Types"
+      ]
+    },
+    "description": "https://www.moddb.com/downloads/willard\r\n\r\nThis is the full version of Willard, consisting of 5 levels. It takes place a few decades after the original game, in and around a remote ghost town far out in the woods. Strange things have been reported from the area and Caleb goes to investigate... The story is told from messages, make sure you read any square or rectangular shaped books you find (not the voxel books). While it certainly has action in places, it\u2019s more about atmosphere."
+  },
+  {
+    "id": "blood-gothic-library",
+    "type": "Map",
+    "game": {
+      "name": "Blood"
+    },
+    "title": "Gothic Library DX",
+    "version": "1.1",
+    "author": "MetHy",
+    "dependencies": {
+      "addons": [
+        {
+          "id": "bloodcp"
+        }
+      ]
+    },
+    "startmap": {
+      "file": "CP03DX.MAP"
+    },
+    "description": "https://www.moddb.com/games/blood/addons/gothic-library-dx\r\n\r\nGothic Library DX aims at merging the final version of the map with the rooms and layout of the beta version, while also filling in the empty rooms in the process. The goal is to stick as close as possible to the original intent and to the style of the two original authors. Thus, giving the map the few extra minutes of gameplay I feel it should have had."
+  },
+  {
+    "id": "blood-church-of-the-damned",
+    "type": "Map",
+    "game": {
+      "name": "Blood"
+    },
+    "title": "The Church of the Damned",
+    "version": "1.0",
+    "author": "Tekedon",
+    "release_date": "2026-04-11",
+    "ini": "COTD.ini",
+    "startmap": {
+      "file": "COTD.map"
+    },
+    "description": "https://www.moddb.com/mods/blood-extra-crispy/addons/the-church-of-the-damned\r\n\r\nYou are exploring an old cabal infested church converted to a satanic church with newer parts built on afterwards, you need to clear the church of the unwanted pest."
+  },
+  {
+    "id": "blood-black-phantasm",
+    "type": "Mod",
+    "game": {
+      "name": "Blood"
+    },
+    "title": "Black Phantasm",
+    "version": "1.0",
+    "author": "Dzierzan",
+    "def_modules": [
+      "phantasm.def"
+    ],
+    "description": "https://www.moddb.com/games/blood/addons/black-phantasm\r\n\r\nThis pack replaces Phantasm sprites with the black variant"
+  },
+  {
+    "id": "blood-coagulated",
+    "type": "Mod",
+    "game": {
+      "name": "Blood"
+    },
+    "title": "Blood Coagulated",
+    "version": "1.1",
+    "author": "Cheello",
+    "def_modules": [
+      "chillo_blood.def"
+    ],
+    "incompatibles": {
+      "addons": [
+        {
+          "id": "blood-voxel-pack"
+        }
+      ]
+    },
+    "description": "https://www.moddb.com/mods/blood-coagulated/addons/blood-coagulated-11\r\n\r\nThis project is meant to replace the 2d sprites in Blood with 3d voxel models."
+  },
+  {
+    "id": "blood-cultists-no-melting",
+    "type": "Mod",
+    "game": {
+      "name": "Blood"
+    },
+    "title": "Cultists - No Melting",
+    "version": "1.0",
+    "author": "Dzierzan",
+    "def_modules": [
+      "cultists_no_melting.def"
+    ],
+    "description": "https://www.moddb.com/games/blood/addons/cultists-no-melting\r\n\r\nThis addon removes melting animation of cultist\u0027s dead body."
+  },
+  {
+    "id": "blood-cultists-with-guns",
+    "type": "Mod",
+    "game": {
+      "name": "Blood"
+    },
+    "title": "Cultists With Correct Guns",
+    "version": "3.0",
+    "author": "Dzierzan",
+    "def_modules": [
+      "cultists_with_guns.def"
+    ],
+    "description": "https://www.moddb.com/games/blood/addons/cultists-with-correct-guns\r\n\r\nThis mod gives every cultist his correct weapon. So that means you\u0027ll see Ackolyte with actual TNT, Cultist with a shotgun, Fanatic with a tommy gun and finally Zealot with tesla gun.\r\n\r\nAlso included:\r\n\r\n- Different sprites for Cultist\u0027s electrocution\r\n\r\n- Blood Alpha Cultist\u0027s beast transformation animation"
+  },
+  {
+    "id": "blood-hq-sounds",
+    "type": "Mod",
+    "game": {
+      "name": "Blood"
+    },
+    "title": "High Quality Sound Effects",
+    "version": "1.3",
+    "author": "Dzierzan",
+    "dependencies": {
+      "features": [
+        "SndInfo"
+      ]
+    },
+    "description": "https://www.moddb.com/mods/blood-high-quality-sound-effects\r\n\r\nThis mod replaces original sounds with high quality ones based on actual sources. If a specifc source was not found, then a sound was upscaled."
+  },
+  {
+    "id": "blood-innocent-gibbing",
+    "type": "Mod",
+    "game": {
+      "name": "Blood"
+    },
+    "title": "Innocent - Gibbing",
+    "version": "1.0",
+    "author": "Dzierzan",
+    "def_modules": [
+      "innocent_gibs.def"
+    ],
+    "description": "https://www.moddb.com/games/blood/addons/innocent-gibbing\r\n\r\nThis addon adds gibbing animation for Innocents."
+  },
+  {
+    "id": "blood-smooth",
+    "type": "Mod",
+    "game": {
+      "name": "Blood"
+    },
+    "title": "SmoothBlood",
+    "version": "1.1",
+    "author": "Dzierzan, Phredreeke",
+    "def_modules": [
+      "smooth_blood.def"
+    ],
+    "incompatibles": {
+      "addons": [
+        {
+          "id": "blood-smooth-hand"
+        },
+        {
+          "id": "blood-smooth-alpha"
+        },
+        {
+          "id": "blood-what-lies-beneath"
+        }
+      ]
+    },
+    "description": "https://www.moddb.com/mods/smoothblood\r\n\r\nThis is a modification for Blood which allows playing the game with smoother weapon animations."
+  },
+  {
+    "id": "blood-smooth-alpha",
+    "type": "Mod",
+    "game": {
+      "name": "Blood"
+    },
+    "title": "SmoothBlood with alpha sprites",
+    "version": "1.1",
+    "author": "Dzierzan, Phredreeke",
+    "def_modules": [
+      "smooth_blood_alpha.def"
+    ],
+    "incompatibles": {
+      "addons": [
+        {
+          "id": "blood-smooth"
+        },
+        {
+          "id": "blood-smooth-hand"
+        },
+        {
+          "id": "blood-what-lies-beneath"
+        }
+      ]
+    },
+    "description": "https://www.moddb.com/mods/smoothblood\r\n\r\nThis is a modification for Blood which allows playing the game with smoother weapon animations.\r\n\r\nThis version also replaces weapons sprites with versions from Alpha build."
+  },
+  {
+    "id": "blood-smooth-hand",
+    "type": "Mod",
+    "game": {
+      "name": "Blood"
+    },
+    "title": "SmoothBlood with hand",
+    "version": "1.1",
+    "author": "Dzierzan, Phredreeke",
+    "def_modules": [
+      "smooth_blood_hand.def"
+    ],
+    "incompatibles": {
+      "addons": [
+        {
+          "id": "blood-smooth"
+        },
+        {
+          "id": "blood-smooth-alpha"
+        },
+        {
+          "id": "blood-what-lies-beneath"
+        }
+      ]
+    },
+    "description": "https://www.moddb.com/mods/smoothblood\r\n\r\nThis is a modification for Blood which allows playing the game with smoother weapon animations.\r\n\r\nThis verions adds hands to the sawed-off."
+  },
+  {
+    "id": "blood-gargoyle-blue-eyes",
+    "type": "Mod",
+    "game": {
+      "name": "Blood"
+    },
+    "title": "Stone Gargoyle - Blue Muzzle Flash",
+    "version": "1.0",
+    "author": "Dzierzan",
+    "def_modules": [
+      "stone_gargoyle_blue.def"
+    ],
+    "description": "https://www.moddb.com/games/blood/addons/stone-gargoyle-blue-muzzle-flash\r\n\r\nThis addon disables grey palette applied to shooting sprites of Stone Gargoyle, revealing intended blue muzzle flash.\r\n\r\nWhen you browse through Blood game sprites, you may notice that Stone Gargoyle has shooting sprites with blue muzzle flash, but in game it\u0027s grey-ish. It\u0027s because the shooting animation still has grey palette applied to it. In my opinion it is an oversight from the developers.\r\n\r\nThis addon restores that by simply disabling grey palette for shooting animation only."
+  },
+  {
+    "id": "blood-voxel-pack",
+    "type": "Mod",
+    "game": {
+      "name": "Blood"
+    },
+    "title": "Voxel Pack",
+    "version": "0.97",
+    "def_modules": [
+      "blood_voxels.def"
+    ],
+    "incompatibles": {
+      "addons": [
+        {
+          "id": "blood-coagulated"
+        }
+      ]
+    },
+    "description": "https://github.com/fgsfds/Blood-Voxel-Pack/\r\n\r\nVoxel replacements for sprites in Blood"
+  },
+  {
+    "id": "blood-voxel-pack-extra",
+    "type": "Mod",
+    "game": {
+      "name": "Blood"
+    },
+    "title": "Voxel Pack Extras",
+    "version": "0.97",
+    "def_modules": [
+      "blood_voxels_extra.def"
+    ],
+    "dependencies": {
+      "addons": [
+        {
+          "id": "blood-voxel-pack"
+        }
+      ]
+    },
+    "incompatibles": {
+      "addons": [
+        {
+          "id": "blood-coagulated"
+        },
+        {
+          "id": "blood-willard"
+        },
+        {
+          "id": "blood-frmeat2"
+        }
+      ]
+    },
+    "description": "https://github.com/fgsfds/Blood-Voxel-Pack/\r\n\r\nAdditional voxel replacements for sprites in Blood for high-performant PCs"
+  },
+  {
+    "id": "wang-intime",
+    "type": "TC",
+    "game": {
+      "name": "Wang"
+    },
+    "title": "Lo Wang in Time",
+    "version": "1.1",
+    "def_modules": [
+      "INTIME.DEF"
+    ],
+    "description": "Lo Wang goes back in time to stop Zilla from destroying his ancestry. He travels between time periods defeating evil monsters and eventually Zilla himself.\r\n\r\nLo Wang in time is an eleven level Partial Conversion for shadow warrior, seven for single player levels and another four for multi player"
+  },
+  {
+    "id": "wang-park",
+    "type": "TC",
+    "game": {
+      "name": "Wang"
+    },
+    "title": "Park",
+    "version": "1.6",
+    "author": "Yves Bresson",
+    "def_modules": [
+      "PARK.DEF"
+    ],
+    "description": "Your master (Master Leep) and his grand-daughters (Su-Shi, Je-Shi, Bla-Ye, Vi-Suh \u0026 Ri-Suh) went to visit the famous PARK but something went wrong, it looks like the beasts in the park escaped from their enclosures. It is believed that the beasts were helped by a group of evil ninjas who managed to warp into this dimension through a big time-vortex-hole. You (Lo Wang) now have to rescue Master Leep and the girls...\r\n\r\n... welcome to PARK"
+  },
+  {
+    "id": "wang-swc-20th",
+    "type": "TC",
+    "game": {
+      "name": "Wang"
+    },
+    "title": "Shadow Warrior Central 20th",
+    "version": "1.0",
+    "author": "Robman",
+    "description": "https://swcentral.weebly.com/swc20.html\r\n\r\nLo Wang is once again called to action to defeat Zilla and his minions!"
+  },
+  {
+    "id": "wang-lastwarrior",
+    "type": "TC",
+    "game": {
+      "name": "Wang"
+    },
+    "title": "The Last Warrior",
+    "version": "1.1",
+    "author": "Michael Clark",
+    "def_modules": [
+      "LASTWAR.DEF"
+    ],
+    "description": "A TC that features vast amount of new art/weapon"
+  },
+  {
+    "id": "wang-the-red-dragon-clan",
+    "type": "TC",
+    "game": {
+      "name": "Wang"
+    },
+    "title": "The Red Dragon Clan",
+    "version": "1.4",
+    "author": "MarkKaminari00",
+    "description": "https://www.moddb.com/mods/the-red-dragon-clan/downloads/the-red-dragon-clan\r\n\r\nLo wang is in Los angeles to teach his knowledge of Master Leep to his students,\r\nBut at some point a mysterious cult called The Red Dragon Clan is terrorizing the city of L.A."
+  },
+  {
+    "id": "wang-tonight",
+    "type": "TC",
+    "game": {
+      "name": "Wang"
+    },
+    "title": "Tonight Never Ends",
+    "version": "1.2",
+    "author": "Lights Out",
+    "def_modules": [
+      "TNE.DEF"
+    ],
+    "description": "Tonight Never Ends, from Lights Out, is a whole new episode for Shadow Warrior. Lights Out team was originally formed by Jonathan C. Wu in March in order to gather some of the best builders around the globe to build one of the most fun-filled episodes for Shadow Warrior. This episode consists of five main missions (many including more than one level), one secret mission, four WangBang levels, and a few other in-between levels. The Lights Out team poured their hearts and souls into this episode, and we wish that you will have as much fun playing it as we had making it."
+  },
+  {
+    "id": "twindragon",
+    "type": "TC",
+    "game": {
+      "name": "Wang"
+    },
+    "title": "Twin Dragon",
+    "version": "2.0",
+    "author": "Wylde Productions, Level Infinity",
+    "description": "Twin Dragon is an official expansion to the Shadow Warrior that was released as a free download on July 4, 1998.\r\n\r\nThe game reveals that Lo Wang has a twin brother, Hung Lo, with whom he was separated in early childhood. Hung Lo becomes a dark person whose goal is to destroy the world. Similar to Master Zilla, he uses the creatures from the dark side, criminal underworld and Zilla\u0027s remnants to further his goals. Lo Wang has to journey through his dark minions, reach his palace and defeat the evil Twin Dragon Hung Lo once and for all. When he reaches the palace, Lo Wang defeats his brother by shooting a Nuke at him, which kills Hung Lo in the process.\r\n\r\nThe game features 13 new levels, new sounds, artwork and a new final boss, Hung Lo, who replaced Zilla."
+  },
+  {
+    "id": "wanton",
+    "type": "TC",
+    "game": {
+      "name": "Wang"
+    },
+    "title": "Wanton Destruction",
+    "version": "2.0",
+    "author": "Sunstorm Interactive",
+    "description": "Wanton Destruction is an official expansion that was created by Sunstorm Interactive and tested by 3D Realms, but was not released by the distributor. It was found on September 5, 2005 and was released for free.\r\n\r\nThe add-on chronicles Lo Wang\u0027s adventures after the original game. He visits his relatives in USA, but is forced to fight off Zilla\u0027s forces again. The game culminates with a battle against Master Zilla above the streets of Tokyo, which ends with Master Zilla\u0027s death.\r\n\r\nThe game features 12 new levels, new artwork and a few new enemy replacements, such as human enemies; though they still act like their original counterparts."
+  },
+  {
+    "id": "wang-wiwy",
+    "type": "TC",
+    "game": {
+      "name": "Wang"
+    },
+    "title": "When I Was Young",
+    "version": "1.1",
+    "author": "Yves Bresson",
+    "def_modules": [
+      "WIWY.DEF"
+    ],
+    "description": "This story takes places some years before the game does; Lo Wang is a bad boy and he is working for local mafia. Two sections of the local chinese mafia battle to gain control of the city. One clan is led by Mr Takagy, the other one by Mr Fu Kung. You are member of Mr Takagy\u0027s clan, and got to do the dirty jobs for him... (you might also have to deal with the police)\n\n- 11 single player levels \u002B 1 secret level (technically 2 secret levels, but same twice) \u002B 6 in-between levels \u002B 2 \u0027bonus\u0027 levels\n\n- coop \u0026 wangbang capabilities in all 11 main levels\n\n- 2 new weapons (unfinished, thus looking really ugly but I kept it for fun)\n\n- new arts\n\n- a little new intro animation\n\n- a story :-)\n\n- new talk\n\n- weather effects"
+  },
+  {
+    "id": "wang-beta-weapons",
+    "type": "Mod",
+    "game": {
+      "name": "Wang"
+    },
+    "title": "Beta Weapons",
+    "version": "1.0",
+    "author": "Dzierzan",
+    "def_modules": [
+      "beta_weapons.def"
+    ],
+    "description": "https://www.moddb.com/games/shadow-warrior/addons/beta-weapons1\r\n\r\nThis is a very simple addon for Shadow Warrior game which replaces vanilla weapons sprites with beta ones (at least the ones from the latest betas)."
+  },
+  {
+    "id": "wang-hq-sounds",
+    "type": "Mod",
+    "game": {
+      "name": "Wang"
+    },
+    "title": "High Quality Sound Effects",
+    "version": "1.0",
+    "author": "Dzierzan",
+    "description": "https://www.moddb.com/mods/shadow-warrior-high-quality-sound-effects\n\nThis mod replaces original sounds with high quality ones based on actual sources. If a specifc source was not found, then a sound was upscaled."
+  },
+  {
+    "id": "wang-hq-sounds-td",
+    "type": "Mod",
+    "game": {
+      "name": "Wang"
+    },
+    "title": "High Quality Sound Effects for Twin Dragon",
+    "version": "1.0",
+    "author": "Dzierzan",
+    "dependencies": {
+      "addons": [
+        {
+          "id": "twindragon"
+        },
+        {
+          "id": "wang-hq-sounds"
+        }
+      ]
+    },
+    "description": "https://www.moddb.com/mods/shadow-warrior-high-quality-sound-effects\n\nThis mod replaces original sounds with high quality ones based on actual sources. If a specifc source was not found, then a sound was upscaled."
+  },
+  {
+    "id": "wang-hq-sounds-wd",
+    "type": "Mod",
+    "game": {
+      "name": "Wang"
+    },
+    "title": "High Quality Sound Effects for Wanton Destruction",
+    "version": "1.0",
+    "author": "Dzierzan",
+    "dependencies": {
+      "addons": [
+        {
+          "id": "wanton"
+        },
+        {
+          "id": "wang-hq-sounds"
+        }
+      ]
+    },
+    "description": "https://www.moddb.com/mods/shadow-warrior-high-quality-sound-effects\n\nThis mod replaces original sounds with high quality ones based on actual sources. If a specifc source was not found, then a sound was upscaled."
+  },
+  {
+    "id": "wang-voxel-pack",
+    "type": "Mod",
+    "game": {
+      "name": "Wang"
+    },
+    "title": "Voxel Pack",
+    "version": "0.1",
+    "def_modules": [
+      "wang_voxels.def"
+    ],
+    "description": "https://github.com/fgsfds/Shadow-Warrior-Voxel-Pack\n\nAdditional voxel models for Shadow Warrior 1997 video game"
+  },
+  {
+    "id": "wang-widescreen",
+    "type": "Mod",
+    "game": {
+      "name": "Wang"
+    },
+    "title": "Widescreen Fixes",
+    "version": "1.0",
+    "def_modules": [
+      "sw-widescreen.def"
+    ],
+    "description": "This file provides widescreen graphics for Shadow Warrior weapons"
+  },
+  {
+    "id": "fury-abandoned-gdf-hangar",
+    "type": "Map",
+    "game": {
+      "name": "Fury"
+    },
+    "title": "Abandoned GDF Hangar",
+    "version": "1.0",
+    "author": "KaseNash",
+    "startmap": {
+      "file": "e1m1.map"
+    },
+    "description": "https://www.moddb.com/games/ion-fury/addons/na216667\r\n\r\nAKA Knee-Deep In The Fury; A fan recreation of the first map from the original Doom, Hangar. A near 1:1 likeness with some slight differences and extras. Short but sweet."
+  },
+  {
+    "id": "fury-gdf-space-station",
+    "type": "Map",
+    "game": {
+      "name": "Fury"
+    },
+    "title": "GDF Space Station",
+    "version": "1.0",
+    "author": "Truck Stop Santa Claus",
+    "startmap": {
+      "file": "spacestation.map"
+    },
+    "description": "https://gamebanana.com/mods/320626\r\n\r\nThis was supposed to be a rescue mission, but the good doctor\u0027s servants got here first. it\u0027s too late for them, time to find an escape pod and get out!"
+  },
+  {
+    "id": "fury-hong-kong",
+    "type": "Map",
+    "game": {
+      "name": "Fury"
+    },
+    "title": "Hong Kong",
+    "version": "1.0",
+    "author": "Olipro44",
+    "startmap": {
+      "file": "HongKong.map"
+    },
+    "description": "A Hong Kong map inspired by Deus Ex. The later releases did not include the music, this upload includes the Hong Kong Streets track from Deus Ex it originally came with."
+  },
+  {
+    "id": "fury-jungle-fury",
+    "type": "Map",
+    "game": {
+      "name": "Fury"
+    },
+    "title": "Jungle Fury",
+    "version": "1.01",
+    "author": "Truck Stop Santa Claus",
+    "startmap": {
+      "file": "junglefury.map"
+    },
+    "description": "https://gamebanana.com/mods/150876\r\n\r\nYou\u0027re not in D.C. anymore, Shelly. \r\nNo more streets, skyscrapers and cars. \r\nSay hello to treetops, cannons and rivers. \r\nOh, and lots and lots of cultists.\r\n\r\nYOU\u0027RE IN THE JUNGLE, BABY!"
+  },
+  {
+    "id": "fury-noir-fury",
+    "type": "Map",
+    "game": {
+      "name": "Fury"
+    },
+    "title": "Noir Fury",
+    "version": "1.0",
+    "author": "Truck Stop Santa Claus",
+    "startmap": {
+      "file": "noirfury.map"
+    },
+    "description": "https://gamebanana.com/mods/150877\r\n\r\nAn Ion Fury map with a black and white twist."
+  },
+  {
+    "id": "fury-overland-station",
+    "type": "Map",
+    "game": {
+      "name": "Fury"
+    },
+    "title": "Overland Station",
+    "version": "1.0",
+    "author": "kayy",
+    "startmap": {
+      "file": "overland.map"
+    },
+    "description": "https://gamebanana.com/mods/150878\r\n\r\n\u0022Hello, this is a map I created in a couple of weeks in September. Some people seemed to enjoy it, so I figured I\u0027d add it here, as well.\u0022"
+  },
+  {
+    "id": "fury-penalized",
+    "type": "Map",
+    "game": {
+      "name": "Fury"
+    },
+    "title": "Penal-ized",
+    "version": "1.0",
+    "author": "David Billing",
+    "startmap": {
+      "file": "prison.map"
+    },
+    "description": "https://www.moddb.com/mods/penal-ized\r\n\r\nShelly and a number of her fellow GDF elites get caught and find themselves locked up in Haskell\u0027s remote private penitentiary. A medium sized map."
   },
   {
     "id": "fury-spymaps1",
@@ -3153,6 +3538,34 @@
     "description": "https://www.moddb.com/mods/spymaps-ion-fury"
   },
   {
+    "id": "fury-snow-base",
+    "type": "Map",
+    "game": {
+      "name": "Fury"
+    },
+    "title": "Snow Base",
+    "version": "1.0",
+    "author": "Truck Stop Santa Claus",
+    "startmap": {
+      "file": "snowb.map"
+    },
+    "description": "https://gamebanana.com/mods/150879\r\n\r\nIt\u0027s damn cold up here, this really must be one of the worst places to work for Heskel at."
+  },
+  {
+    "id": "fury-zombie-fury",
+    "type": "Map",
+    "game": {
+      "name": "Fury"
+    },
+    "title": "Zombie Fury",
+    "version": "1.0",
+    "author": "Truck Stop Santa Claus",
+    "startmap": {
+      "file": "zombiefury.map"
+    },
+    "description": "https://gamebanana.com/mods/150881\r\n\r\nThe zombie apocalypse has begun and now you have find a way out."
+  },
+  {
     "id": "fury-voxel-pack",
     "type": "Mod",
     "game": {
@@ -3164,6 +3577,96 @@
       "fury_voxels.def"
     ],
     "description": "https://github.com/Dzierzan/IonFury-Voxel-Pack\r\n\r\nVoxel replacements for sprites in Ion Fury"
+  },
+  {
+    "id": "slave-ruins",
+    "type": "TC",
+    "game": {
+      "name": "Slave"
+    },
+    "title": "Return to Ruins",
+    "version": "1.0",
+    "author": "Oasiz, MetHy, Daedolon",
+    "description": "https://www.moddb.com/mods/return-to-ruins\r\n\r\nThis is a 3 maps episode for the PC DOS version of Exhumed / Powerslave.\r\n\r\nNew maps for a game with no official modding support. 20 years after its release.The maps were built with an episodic format in mind, but unlike in the original game, they were also designed so that each can be played separetely with a fresh start."
+  },
+  {
+    "id": "slave-elgizah",
+    "type": "Map",
+    "game": {
+      "name": "Slave"
+    },
+    "title": "El-Gizah",
+    "version": "1.0",
+    "author": "Slawomir LAW Lawrynowicz",
+    "startmap": {
+      "file": "elgizah.map"
+    },
+    "description": "https://www.moddb.com/games/powerslave/addons/el-gizah\r\n\r\nMedium sized map for a Exhumed/Powerslave game. Level features a marsh, desert, pyramid, temple and of course the mighty Sphinx."
+  },
+  {
+    "id": "slave-forgo",
+    "type": "Map",
+    "game": {
+      "name": "Slave"
+    },
+    "title": "Forgotten Sanctuary",
+    "version": "1.0",
+    "author": "Korbac",
+    "startmap": {
+      "file": "FORGO.MAP"
+    },
+    "description": "https://www.moddb.com/games/powerslave/addons/forgotten-sanctuary"
+  },
+  {
+    "id": "slave-totfatw",
+    "type": "Map",
+    "game": {
+      "name": "Slave"
+    },
+    "title": "Temple of the Fire and the Water",
+    "version": "1.0",
+    "author": "pagb666",
+    "startmap": {
+      "file": "totfatw.map"
+    },
+    "description": "https://www.moddb.com/games/powerslave/addons/temple-of-the-fire-and-the-water\r\n\r\nThe Kilmaat plans were thwarted, however the remaining troops are up to no good. You must venture into the Temple of the Fire and the Water and retrieve the ashes of Anubis before they use them for their evil deeds.\r\n\r\nThis level can be completed in two different ways. The advised way is clockwise, as it features a more natural progression. I can perfectly be finished counter-clockwise, but it\u0027ll be more quirky, because of the quirky weapons ;)"
+  },
+  {
+    "id": "slave-m60",
+    "type": "Mod",
+    "game": {
+      "name": "Slave"
+    },
+    "title": "Alternative M60",
+    "version": "1.0",
+    "def_modules": [
+      "alt_m60.def"
+    ],
+    "description": "https://www.moddb.com/games/powerslave/addons/psm60\r\n\r\nA simple addon which replaces M60 weapon with alternative one."
+  },
+  {
+    "id": "slave-hq-sounds",
+    "type": "Mod",
+    "game": {
+      "name": "Slave"
+    },
+    "title": "High Quality Sound Effects",
+    "version": "1.0",
+    "author": "Dzierzan",
+    "description": "https://www.moddb.com/mods/powerslave-exhumed-high-quality-sound-effects\r\n\r\nThe purpose of this mod is to replace vanilla sound effects of Powerslave (Exhumed) with high quality ones."
+  },
+  {
+    "id": "slave-voxel-pack",
+    "type": "Mod",
+    "game": {
+      "name": "Slave"
+    },
+    "title": "Voxel Pack",
+    "version": "0.16",
+    "def_modules": [
+      "slave_voxels.def"
+    ],
+    "description": "https://github.com/fgsfds/Powerslave-Voxel-Pack\r\n\r\nThis pack provides voxel replacements for sprites in Powerslave/Exhumed"
   },
   {
     "id": "nam-gi-joe-tc",
@@ -3244,6 +3747,16 @@
     }
   },
   {
+    "id": "redneck-music",
+    "type": "Mod",
+    "game": {
+      "name": "Redneck"
+    },
+    "title": "Redneck Rampage Soundtrack",
+    "version": "1.0",
+    "description": "Original soundtrack for Redneck Rampage and Route 66"
+  },
+  {
     "id": "ridesagain-redneck-redneck-rampage-rides-revision",
     "type": "TC",
     "game": {
@@ -3261,16 +3774,6 @@
     }
   },
   {
-    "id": "redneck-music",
-    "type": "Mod",
-    "game": {
-      "name": "Redneck"
-    },
-    "title": "Redneck Rampage Soundtrack",
-    "version": "1.0",
-    "description": "Original soundtrack for Redneck Rampage and Route 66"
-  },
-  {
     "id": "ridesagain-music",
     "type": "Mod",
     "game": {
@@ -3279,96 +3782,6 @@
     "title": "Rides Again Soundtrack",
     "version": "1.0",
     "description": "Original soundtrack for Redneck Rampage Rides Again"
-  },
-  {
-    "id": "slave-ruins",
-    "type": "TC",
-    "game": {
-      "name": "Slave"
-    },
-    "title": "Return to Ruins",
-    "version": "1.0",
-    "author": "Oasiz, MetHy, Daedolon",
-    "description": "https://www.moddb.com/mods/return-to-ruins\r\n\r\nThis is a 3 maps episode for the PC DOS version of Exhumed / Powerslave.\r\n\r\nNew maps for a game with no official modding support. 20 years after its release.The maps were built with an episodic format in mind, but unlike in the original game, they were also designed so that each can be played separetely with a fresh start."
-  },
-  {
-    "id": "slave-elgizah",
-    "type": "Map",
-    "game": {
-      "name": "Slave"
-    },
-    "title": "El-Gizah",
-    "version": "1.0",
-    "author": "Slawomir LAW Lawrynowicz",
-    "startmap": {
-      "file": "elgizah.map"
-    },
-    "description": "https://www.moddb.com/games/powerslave/addons/el-gizah\r\n\r\nMedium sized map for a Exhumed/Powerslave game. Level features a marsh, desert, pyramid, temple and of course the mighty Sphinx."
-  },
-  {
-    "id": "slave-forgo",
-    "type": "Map",
-    "game": {
-      "name": "Slave"
-    },
-    "title": "Forgotten Sanctuary",
-    "version": "1.0",
-    "author": "Korbac",
-    "startmap": {
-      "file": "FORGO.MAP"
-    },
-    "description": "https://www.moddb.com/games/powerslave/addons/forgotten-sanctuary"
-  },
-  {
-    "id": "slave-totfatw",
-    "type": "Map",
-    "game": {
-      "name": "Slave"
-    },
-    "title": "Temple of the Fire and the Water",
-    "version": "1.0",
-    "author": "pagb666",
-    "startmap": {
-      "file": "totfatw.map"
-    },
-    "description": "https://www.moddb.com/games/powerslave/addons/temple-of-the-fire-and-the-water\r\n\r\nThe Kilmaat plans were thwarted, however the remaining troops are up to no good. You must venture into the Temple of the Fire and the Water and retrieve the ashes of Anubis before they use them for their evil deeds.\r\n\r\nThis level can be completed in two different ways. The advised way is clockwise, as it features a more natural progression. I can perfectly be finished counter-clockwise, but it\u0027ll be more quirky, because of the quirky weapons ;)"
-  },
-  {
-    "id": "slave-hq-sounds",
-    "type": "Mod",
-    "game": {
-      "name": "Slave"
-    },
-    "title": "High Quality Sound Effects",
-    "version": "1.0",
-    "author": "Dzierzan",
-    "description": "https://www.moddb.com/mods/powerslave-exhumed-high-quality-sound-effects\r\n\r\nThe purpose of this mod is to replace vanilla sound effects of Powerslave (Exhumed) with high quality ones."
-  },
-  {
-    "id": "slave-m60",
-    "type": "Mod",
-    "game": {
-      "name": "Slave"
-    },
-    "title": "Alternative M60",
-    "version": "1.0",
-    "def_modules": [
-      "alt_m60.def"
-    ],
-    "description": "https://www.moddb.com/games/powerslave/addons/psm60\r\n\r\nA simple addon which replaces M60 weapon with alternative one."
-  },
-  {
-    "id": "slave-voxel-pack",
-    "type": "Mod",
-    "game": {
-      "name": "Slave"
-    },
-    "title": "Voxel Pack",
-    "version": "0.16",
-    "def_modules": [
-      "slave_voxels.def"
-    ],
-    "description": "https://github.com/fgsfds/Powerslave-Voxel-Pack\r\n\r\nThis pack provides voxel replacements for sprites in Powerslave/Exhumed"
   },
   {
     "id": "amc-squad",
@@ -3416,314 +3829,5 @@
         "Stub": "wgrealms.exe"
       }
     }
-  },
-  {
-    "id": "wang-intime",
-    "type": "TC",
-    "game": {
-      "name": "Wang"
-    },
-    "title": "Lo Wang in Time",
-    "version": "1.1",
-    "def_modules": [
-      "INTIME.DEF"
-    ],
-    "description": "Lo Wang goes back in time to stop Zilla from destroying his ancestry. He travels between time periods defeating evil monsters and eventually Zilla himself.\r\n\r\nLo Wang in time is an eleven level Partial Conversion for shadow warrior, seven for single player levels and another four for multi player"
-  },
-  {
-    "id": "wang-lastwarrior",
-    "type": "TC",
-    "game": {
-      "name": "Wang"
-    },
-    "title": "The Last Warrior",
-    "version": "1.1",
-    "author": "Michael Clark",
-    "def_modules": [
-      "LASTWAR.DEF"
-    ],
-    "description": "A TC that features vast amount of new art/weapon"
-  },
-  {
-    "id": "wang-park",
-    "type": "TC",
-    "game": {
-      "name": "Wang"
-    },
-    "title": "Park",
-    "version": "1.6",
-    "author": "Yves Bresson",
-    "def_modules": [
-      "PARK.DEF"
-    ],
-    "description": "Your master (Master Leep) and his grand-daughters (Su-Shi, Je-Shi, Bla-Ye, Vi-Suh \u0026 Ri-Suh) went to visit the famous PARK but something went wrong, it looks like the beasts in the park escaped from their enclosures. It is believed that the beasts were helped by a group of evil ninjas who managed to warp into this dimension through a big time-vortex-hole. You (Lo Wang) now have to rescue Master Leep and the girls...\r\n\r\n... welcome to PARK"
-  },
-  {
-    "id": "wang-swc-20th",
-    "type": "TC",
-    "game": {
-      "name": "Wang"
-    },
-    "title": "Shadow Warrior Central 20th",
-    "version": "1.0",
-    "author": "Robman",
-    "description": "https://swcentral.weebly.com/swc20.html\r\n\r\nLo Wang is once again called to action to defeat Zilla and his minions!"
-  },
-  {
-    "id": "wang-the-red-dragon-clan",
-    "type": "TC",
-    "game": {
-      "name": "Wang"
-    },
-    "title": "The Red Dragon Clan",
-    "version": "1.4",
-    "author": "MarkKaminari00",
-    "description": "https://www.moddb.com/mods/the-red-dragon-clan/downloads/the-red-dragon-clan\r\n\r\nLo wang is in Los angeles to teach his knowledge of Master Leep to his students,\r\nBut at some point a mysterious cult called The Red Dragon Clan is terrorizing the city of L.A."
-  },
-  {
-    "id": "wang-tonight",
-    "type": "TC",
-    "game": {
-      "name": "Wang"
-    },
-    "title": "Tonight Never Ends",
-    "version": "1.2",
-    "author": "Lights Out",
-    "def_modules": [
-      "TNE.DEF"
-    ],
-    "description": "Tonight Never Ends, from Lights Out, is a whole new episode for Shadow Warrior. Lights Out team was originally formed by Jonathan C. Wu in March in order to gather some of the best builders around the globe to build one of the most fun-filled episodes for Shadow Warrior. This episode consists of five main missions (many including more than one level), one secret mission, four WangBang levels, and a few other in-between levels. The Lights Out team poured their hearts and souls into this episode, and we wish that you will have as much fun playing it as we had making it."
-  },
-  {
-    "id": "twindragon",
-    "type": "TC",
-    "game": {
-      "name": "Wang"
-    },
-    "title": "Twin Dragon",
-    "version": "2.0",
-    "author": "Wylde Productions, Level Infinity",
-    "description": "Twin Dragon is an official expansion to the Shadow Warrior that was released as a free download on July 4, 1998.\r\n\r\nThe game reveals that Lo Wang has a twin brother, Hung Lo, with whom he was separated in early childhood. Hung Lo becomes a dark person whose goal is to destroy the world. Similar to Master Zilla, he uses the creatures from the dark side, criminal underworld and Zilla\u0027s remnants to further his goals. Lo Wang has to journey through his dark minions, reach his palace and defeat the evil Twin Dragon Hung Lo once and for all. When he reaches the palace, Lo Wang defeats his brother by shooting a Nuke at him, which kills Hung Lo in the process.\r\n\r\nThe game features 13 new levels, new sounds, artwork and a new final boss, Hung Lo, who replaced Zilla."
-  },
-  {
-    "id": "wanton",
-    "type": "TC",
-    "game": {
-      "name": "Wang"
-    },
-    "title": "Wanton Destruction",
-    "version": "2.0",
-    "author": "Sunstorm Interactive",
-    "description": "Wanton Destruction is an official expansion that was created by Sunstorm Interactive and tested by 3D Realms, but was not released by the distributor. It was found on September 5, 2005 and was released for free.\r\n\r\nThe add-on chronicles Lo Wang\u0027s adventures after the original game. He visits his relatives in USA, but is forced to fight off Zilla\u0027s forces again. The game culminates with a battle against Master Zilla above the streets of Tokyo, which ends with Master Zilla\u0027s death.\r\n\r\nThe game features 12 new levels, new artwork and a few new enemy replacements, such as human enemies; though they still act like their original counterparts."
-  },
-  {
-    "id": "wang-wiwy",
-    "type": "TC",
-    "game": {
-      "name": "Wang"
-    },
-    "title": "When I Was Young",
-    "version": "1.1",
-    "author": "Yves Bresson",
-    "def_modules": [
-      "WIWY.DEF"
-    ],
-    "description": "This story takes places some years before the game does; Lo Wang is a bad boy and he is working for local mafia. Two sections of the local chinese mafia battle to gain control of the city. One clan is led by Mr Takagy, the other one by Mr Fu Kung. You are member of Mr Takagy\u0027s clan, and got to do the dirty jobs for him... (you might also have to deal with the police)\n\n- 11 single player levels \u002B 1 secret level (technically 2 secret levels, but same twice) \u002B 6 in-between levels \u002B 2 \u0027bonus\u0027 levels\n\n- coop \u0026 wangbang capabilities in all 11 main levels\n\n- 2 new weapons (unfinished, thus looking really ugly but I kept it for fun)\n\n- new arts\n\n- a little new intro animation\n\n- a story :-)\n\n- new talk\n\n- weather effects"
-  },
-  {
-    "id": "wang-beta-weapons",
-    "type": "Mod",
-    "game": {
-      "name": "Wang"
-    },
-    "title": "Beta Weapons",
-    "version": "1.0",
-    "author": "Dzierzan",
-    "def_modules": [
-      "beta_weapons.def"
-    ],
-    "description": "https://www.moddb.com/games/shadow-warrior/addons/beta-weapons1\r\n\r\nThis is a very simple addon for Shadow Warrior game which replaces vanilla weapons sprites with beta ones (at least the ones from the latest betas)."
-  },
-  {
-    "id": "wang-hq-sounds-td",
-    "type": "Mod",
-    "game": {
-      "name": "Wang"
-    },
-    "title": "High Quality Sound Effects for Twin Dragon",
-    "version": "1.0",
-    "author": "Dzierzan",
-    "dependencies": {
-      "addons": [
-        {
-          "id": "twindragon"
-        },
-        {
-          "id": "wang-hq-sounds"
-        }
-      ]
-    },
-    "description": "https://www.moddb.com/mods/shadow-warrior-high-quality-sound-effects\n\nThis mod replaces original sounds with high quality ones based on actual sources. If a specifc source was not found, then a sound was upscaled."
-  },
-  {
-    "id": "wang-hq-sounds-wd",
-    "type": "Mod",
-    "game": {
-      "name": "Wang"
-    },
-    "title": "High Quality Sound Effects for Wanton Destruction",
-    "version": "1.0",
-    "author": "Dzierzan",
-    "dependencies": {
-      "addons": [
-        {
-          "id": "wanton"
-        },
-        {
-          "id": "wang-hq-sounds"
-        }
-      ]
-    },
-    "description": "https://www.moddb.com/mods/shadow-warrior-high-quality-sound-effects\n\nThis mod replaces original sounds with high quality ones based on actual sources. If a specifc source was not found, then a sound was upscaled."
-  },
-  {
-    "id": "wang-hq-sounds",
-    "type": "Mod",
-    "game": {
-      "name": "Wang"
-    },
-    "title": "High Quality Sound Effects",
-    "version": "1.0",
-    "author": "Dzierzan",
-    "description": "https://www.moddb.com/mods/shadow-warrior-high-quality-sound-effects\n\nThis mod replaces original sounds with high quality ones based on actual sources. If a specifc source was not found, then a sound was upscaled."
-  },
-  {
-    "id": "wang-voxel-pack",
-    "type": "Mod",
-    "game": {
-      "name": "Wang"
-    },
-    "title": "Voxel Pack",
-    "version": "0.1",
-    "def_modules": [
-      "wang_voxels.def"
-    ],
-    "description": "https://github.com/fgsfds/Shadow-Warrior-Voxel-Pack\n\nAdditional voxel models for Shadow Warrior 1997 video game"
-  },
-  {
-    "id": "wang-widescreen",
-    "type": "Mod",
-    "game": {
-      "name": "Wang"
-    },
-    "title": "Widescreen Fixes",
-    "version": "1.0",
-    "def_modules": [
-      "sw-widescreen.def"
-    ],
-    "description": "This file provides widescreen graphics for Shadow Warrior weapons"
-  },
-  {
-    "id": "blood-bloodbasket",
-    "type": "TC",
-    "game": {
-      "name": "Blood"
-    },
-    "title": "Bloodbasket",
-    "version": "1.1",
-    "author": "daMann, Damien Azreal, BloodyTom, Matthan",
-    "ini": "BASKET.INI",
-    "description": "https://www.moddb.com/mods/bloodbasket\r\n\r\nThe first community Map Jam by The Blood Discord Channel. Bloodbasket includes four distinctive and varied maps full of blood, dread and secrets! Caleb will have to fight his way through office cubicles, haunting forests, lava caves and come face to face with a big ass spider!"
-  },
-  {
-    "id": "blood-what-lies-beneath",
-    "type": "TC",
-    "game": {
-      "name": "Blood"
-    },
-    "title": "What Lies Beneath",
-    "version": "1.6.8",
-    "author": "BloodyTom",
-    "release_date": "2026-05-25",
-    "def_modules": [
-      "WLB.DEF"
-    ],
-    "ini": "WLB.INI",
-    "rff_main": "WLB.RFF",
-    "rff_sound": "WLBSND.RFF",
-    "dependencies": {
-      "features": [
-        "Modern_Types"
-      ]
-    },
-    "incompatibles": {
-      "addons": [
-        {
-          "id": "blood-smooth"
-        },
-        {
-          "id": "blood-cultists-with-guns"
-        }
-      ]
-    },
-    "description": "https://www.moddb.com/mods/blood-what-lies-beneath\r\n\r\nFollow Caleb who is lost at sea to a mysterious island. What will he discover beneath the surface, in the bowels of the island? A dark cult has taken over a mansion, its surroundings and the secrets beneath the reef.\r\n\r\nThis is a non-linear addon for Blood. Fight the way you want, choose your own path through the island and find places otherwise kept a secret. Find clues to progress with tomes around the island.",
-    "options": [
-      {
-        "name": "SmoothBlood",
-        "parameters": {
-          "SB.DEF": "DEF"
-        }
-      },
-      {
-        "name": "Cultists with guns",
-        "parameters": {
-          "CW.DEF": "DEF"
-        }
-      },
-      {
-        "name": "Additional voxels",
-        "parameters": {
-          "KVX2.DEF": "DEF"
-        }
-      },
-      {
-        "name": "Voxel trees",
-        "parameters": {
-          "KVX3.DEF": "DEF"
-        }
-      },
-      {
-        "name": "Alpha shotgun",
-        "parameters": {
-          "AS.DEF": "DEF"
-        }
-      }
-    ]
-  },
-  {
-    "id": "blood-bloodstream",
-    "type": "TC",
-    "game": {
-      "name": "Blood"
-    },
-    "title": "Bloodstream Map Jam",
-    "version": "1.0",
-    "author": "daMann, Doomaniac, Seizhak, Matthan, BlooyTom",
-    "release_date": "2026-06-10",
-    "ini": "BSTREAM.ini",
-    "description": "https://www.moddb.com/mods/bloodbasket/downloads/bloodstream-map-jam\r\n\r\nThe second Blood map jam brought to you by the Blood Discord Channel."
-  },
-  {
-    "id": "blood-marrow",
-    "type": "TC",
-    "game": {
-      "name": "Blood"
-    },
-    "title": "Marrow",
-    "version": "2.1.2",
-    "author": "Nick Palsmeier",
-    "release_date": "2026-03-26",
-    "ini": "MARROW.ini",
-    "description": "https://playmarrow.com/\r\n\r\nTchernobog lays dead, his form fading away from the world as Caleb turns his back to the smoldering corpse. Vengeance sated, he leaves the Hall of the Epiphany behind. Feeling no less disdain for the world than he did with Ophelia, and experiencing none of the joy she brought, he returns to the grave to die once more. A hopefully final resting place.\r\n\r\nThe Cabal had been scattered far and wide by the gunman\u0027s path of revenge, but in his absence they regathered, regrouped, motivated out of their own sense of vengeance. Caleb was their general, the chosen one of their dark god and he had betrayed them all twice over.\r\n\r\nHe must burn for rejecting the honor of being sacrificed, for striking at Tchernobog. This suffering is best repaid by the tongues of Cerberus. Gathering his remains, the diaspora cinders of his pit, they enacted plans to resurrect him, and sought out Caleb\u0027s newfound grave, and bring him face to face with a fiery end.\r\n\r\n- A complete brand new episode.\r\n\r\n- Control Caleb as he carves a swath of carnage through the Cabal.\r\n\r\n- Experience ten brand new levels!\r\n\r\n- Using only assets from the original game, crafting a dark and horrific journey for Caleb."
   }
 ]
