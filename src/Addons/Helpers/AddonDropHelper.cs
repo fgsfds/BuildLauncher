@@ -1,6 +1,7 @@
 ﻿using Addons.Providers;
 using Core.All.Enums;
 using Core.Client.Helpers;
+using Core.Client.Interfaces;
 using Games.Games;
 using Microsoft.Extensions.Logging;
 using SharpCompress.Archives;
@@ -16,14 +17,17 @@ public interface IAddonDropHelper
 public sealed class AddonDropHelper : IAddonDropHelper
 {
     private readonly InstalledAddonsProviderFactory _installedAddonsProvider;
+    private readonly IUserNotifier _notifier;
     private readonly ILogger<AddonDropHelper> _logger;
 
     public AddonDropHelper(
         InstalledAddonsProviderFactory installedAddonsProvider,
+        IUserNotifier notifier,
         ILogger<AddonDropHelper> logger
         )
     {
         _installedAddonsProvider = installedAddonsProvider;
+        _notifier = notifier;
         _logger = logger;
     }
 
@@ -38,10 +42,12 @@ public sealed class AddonDropHelper : IAddonDropHelper
 
         foreach (var file in filePaths)
         {
-            var isAdded = await AddAddonAsync(file, game).ConfigureAwait(false);
+            var addedAddon = await AddAddonAsync(file, game).ConfigureAwait(false);
 
-            if (isAdded)
+            if (addedAddon is not null)
             {
+                _notifier.Show($"Added {addedAddon.Value.Type} for {addedAddon.Value.Game}.", NotificationSeverity.Success);
+
                 continue;
             }
 
@@ -52,14 +58,15 @@ public sealed class AddonDropHelper : IAddonDropHelper
         return failedInstalls;
     }
 
-    private async Task<bool> AddAddonAsync(string pathToFile, BaseGame game)
+    private async Task<(GameEnum Game, AddonTypeEnum Type)?> AddAddonAsync(string pathToFile, BaseGame game)
     {
         if (!pathToFile.EndsWith(".zip", StringComparison.OrdinalIgnoreCase) &&
             !pathToFile.EndsWith(".map", StringComparison.OrdinalIgnoreCase))
         {
             _logger.LogError("File is not .zip or .map.");
+            _notifier.Show($"{pathToFile} is not .zip or .map.", NotificationSeverity.Error);
 
-            return false;
+            return null;
         }
 
         var addon = await GetGameAndTypeFromFileAsync(pathToFile, game.GameEnum).ConfigureAwait(false);
@@ -67,15 +74,17 @@ public sealed class AddonDropHelper : IAddonDropHelper
         if (addon is null)
         {
             _logger.LogError("Can't get addon from the file.");
+            _notifier.Show($"Can't get addon from {pathToFile}.", NotificationSeverity.Error);
 
-            return false;
+            return null;
         }
 
         if (addon.Value.Game != game.GameEnum)
         {
-            _logger.LogError($"Addon is for the wrong game: {addon.Value.Game}.");
+            _logger.LogError("Addon is for the wrong game: {Game}.", addon.Value.Game);
+            _notifier.Show($"Addon {pathToFile} is for the wrong game: {addon.Value.Game}.", NotificationSeverity.Error);
 
-            return false;
+            return null;
         }
 
         string folderToPutFile;
@@ -94,9 +103,10 @@ public sealed class AddonDropHelper : IAddonDropHelper
         }
         else
         {
-            _logger.LogError($"Unknown addon type: {addon.Value.AddonType}.");
+            _logger.LogError("Unknown addon type: {AddonType}.", addon.Value.AddonType);
+            _notifier.Show($"Unknown addon type: {addon.Value.AddonType}.", NotificationSeverity.Error);
 
-            return false;
+            return null;
         }
 
         Ensure.DirectoryExists(folderToPutFile);
@@ -108,7 +118,7 @@ public sealed class AddonDropHelper : IAddonDropHelper
         var provider = _installedAddonsProvider.Get(game);
         await provider.AddAddonAsync(newPathToFile).ConfigureAwait(false);
 
-        return true;
+        return addon;
     }
 
     private async Task<(GameEnum Game, AddonTypeEnum AddonType)?> GetGameAndTypeFromFileAsync(string pathToFile, GameEnum gameEnum)

@@ -42,6 +42,11 @@ public sealed class AddonDropHelperTests : IDisposable
     private readonly string _modsFolder;
 
     /// <summary>
+    ///     Path to the campaigns folder.
+    /// </summary>
+    private readonly string _campaignsFolder;
+
+    /// <summary>
     ///     Initializes a new instance of the <see cref="AddonDropHelperTests" /> class.
     /// </summary>
     public AddonDropHelperTests()
@@ -50,10 +55,12 @@ public sealed class AddonDropHelperTests : IDisposable
         _addonsFolder = ClientProperties.AddonsFolderPath;
         _mapsFolder = _game.MapsFolderPath;
         _modsFolder = _game.ModsFolderPath;
+        _campaignsFolder = _game.CampaignsFolderPath;
 
         Directory.CreateDirectory(_addonsFolder);
         Directory.CreateDirectory(_mapsFolder);
         Directory.CreateDirectory(_modsFolder);
+        Directory.CreateDirectory(_campaignsFolder);
 
         Mock<ICacheAdder<Stream>> bitmapsCache = new();
         Mock<IConfigProvider> config = new();
@@ -67,6 +74,8 @@ public sealed class AddonDropHelperTests : IDisposable
             NullLogger<MetadataProvider>.Instance
             );
 
+        Mock<IUserNotifier> notifier = new();
+
         var providerFactory = new InstalledAddonsProviderFactory(
             config.Object,
             bitmapsCache.Object,
@@ -77,6 +86,7 @@ public sealed class AddonDropHelperTests : IDisposable
 
         _helper = new AddonDropHelper(
             providerFactory,
+            notifier.Object,
             NullLogger<AddonDropHelper>.Instance
             );
     }
@@ -277,5 +287,51 @@ public sealed class AddonDropHelperTests : IDisposable
         var secondResult = await _helper.AddAddonsAsync([sourceZip], _game);
         Assert.Null(secondResult);
         Assert.True(File.Exists(destZip));
+    }
+
+    [Fact]
+    public async Task AddAddonsAsync_TCAddon_CopiesToCampaignsFolder()
+    {
+        var tcZip = Path.Combine(_addonsFolder, "TCAddon.zip");
+
+        CreateZipArchive(
+            tcZip, """
+            {
+                "id": "blood-tc",
+                "type": "TC",
+                "game": { "name": "Blood" },
+                "title": "Blood TC",
+                "version": "1.0"
+            }
+            """
+            );
+
+        var result = await _helper.AddAddonsAsync([tcZip], _game);
+
+        Assert.Null(result);
+        Assert.True(File.Exists(Path.Combine(_campaignsFolder, "TCAddon.zip")));
+    }
+
+    [Fact]
+    public async Task AddAddonsAsync_OfficialType_ReturnsFailedName()
+    {
+        var officialZip = Path.Combine(_addonsFolder, "official.zip");
+
+        CreateZipArchive(
+            officialZip, """
+            {
+                "id": "blood-official",
+                "type": "Official",
+                "game": { "name": "Blood" },
+                "title": "Blood Official",
+                "version": "1.0"
+            }
+            """
+            );
+
+        var result = await _helper.AddAddonsAsync([officialZip], _game);
+
+        Assert.NotNull(result);
+        Assert.Contains("official.zip", result);
     }
 }
