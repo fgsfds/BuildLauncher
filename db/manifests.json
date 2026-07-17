@@ -1942,6 +1942,20 @@
     "description": "https://www.moddb.com/mods/duke-nukem-horror-castle/\r\n\r\nHorror theme, new enemies new art new weapons. Awesome Castles."
   },
   {
+    "id": "duke3d-ahbspace-recreation",
+    "type": "Map",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "AHB-Space Recreation",
+    "version": "1.9",
+    "author": "Alice Mikhaylenko",
+    "startmap": {
+      "file": "AHBSPACE.MAP"
+    },
+    "description": "https://nyaa.place/projects/ahb-space-recreation/\r\n\r\nThis Duke Nukem 3D map recreates a prototype level known as AHB-Space.\r\n\r\nWe have access to a lot of prototype DN3D levels, via the publicly accessible December 30, 1994 build (aka LameDuke). However, most of the levels in there are very early drafts, so much that most of them are unrecognizable.\r\n\r\nThis level is instead from the spring of 1995. It\u0027s considerably more polished, and generally looks like something that could belong in the final game (and in particular resembles Tiberius Station and Lunar Reactor) - but is still significantly different from any of the final levels. It can be seen on many of the pre-release screenshots, a few TV show recordings, and the May 9, 1995 demo reel that was uploaded back in 2014 - the best look that we have at this level by far."
+  },
+  {
     "id": "duke3d-airport-west",
     "type": "Map",
     "game": {
@@ -1954,6 +1968,20 @@
       "file": "AIRPWEST.map"
     },
     "description": "Duke sits on his sleazy motel bed, the cable tv he is watching stops for an important newsflash. The local airport \u0027Airport West\u0027 has been taken over by those alien bastards (will the action ever stop!!?). The aliens are hijacking planes and transporting their force around the world. \r\nTwo small airbuses have already touched down in Airport West and another Airbus300 full of alien scum is expected shortly.\r\nDukes pager beeps, \u0022Duke, get to the control tower, disable the airport radar... FORCEFULLY! Do it now!\u0022 \u0022I think this is one plane Airbus can afford to lose!\u0022 Duke says with a grin, he grabs his pistol, and on que a space creep kicks open the door..."
+  },
+  {
+    "id": "duke3d-area27",
+    "type": "Map",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "Area27",
+    "version": "1.0",
+    "author": "Cody \u0022Supertanker\u0022 Jackson",
+    "startmap": {
+      "file": "area27.map"
+    },
+    "description": "A mysterious installation in the middle of the desert. Duke must wind his way through the various levels to escape just after the reactor core.  "
   },
   {
     "id": "duke3d-duke-craft",
@@ -1977,6 +2005,20 @@
     "description": "http://eddyprojects.blogspot.com\r\n\r\nDuke Craft is a combination of DN3D mechanics and Minecraft-like level design. The story is simple - aliens stole Duke\u0027s hard earned diamonds and he has to get them back.\r\n\r\nThe map includes some features taken from Minecraft, like crafting or using of torches to light the areas. No additional code used, only new textures"
   },
   {
+    "id": "duke3d-dukenukemttk",
+    "type": "Map",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "DukeNukemTTK",
+    "version": "1.0",
+    "author": "Fle$h",
+    "startmap": {
+      "file": "TTK.map"
+    },
+    "description": "https://www.moddb.com/mods/dukenukemttk\r\n\r\nA map inspired by start map from Duke Nukem: Time to Kill for the Playstation 1, particularly map version on Playstation Underground JAMPACK CD (1998)."
+  },
+  {
     "id": "duke3d-fear-of-the-dark",
     "type": "Map",
     "game": {
@@ -1989,6 +2031,20 @@
       "file": "FearOfTheDark.map"
     },
     "description": "It is a dark and cold winter night when Duke enters an abandoned space research facility. Something horrible, awakened by the scientists, lurks deep inside the darkness - hidden beyond the stars..."
+  },
+  {
+    "id": "duke3d-foul-odour",
+    "type": "Map",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "Foul Odour",
+    "version": "1.0",
+    "author": "Tommi Heikkinen (Steambull)",
+    "startmap": {
+      "file": "odour.map"
+    },
+    "description": "A water/toxic waste facility for v1.3d Duke"
   },
   {
     "id": "duke3d-it-lives",
@@ -2023,6 +2079,20 @@
       "file": "MEMORIES.MAP"
     },
     "description": "http://eddyprojects.blogspot.com\r\n\r\nThis level takes inspiration from the classic Duke 3D maps. I was feeling very nostalgic lately, and this level is very much inspired by that distant feeling! It features some cool places, such as Irish Pub and Pharmacy, which are done in low-fi, oldscool 90\u0027s style. I think, this style of mapping is very innocent and pure in its nature. Some of the areas are sampled from original Duke 3D maps.\r\n\r\nTo make it more interesting, I added some new graphics and gameplay items, which spice up the action somewhat. Level is pretty short, but I hope you\u0027ll get a kick from some of these gimmicks. Especially the new Bonus Backpack, which gives you random items that you might need to finish the map!"
+  },
+  {
+    "id": "duke3d-parkade",
+    "type": "Map",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "Parkade",
+    "version": "1.0",
+    "author": "Michael \u0022Micky C\u0022 Crisp, Paul Bolduc",
+    "startmap": {
+      "file": "parkade.map"
+    },
+    "description": "https://msdn.duke4.net/hotparkade.php\r\n\r\nThe map begins with Duke Nukem\u2019s plane being shot down by a nearby recon pig cop patrol that is circling around a parkade structure. The Aliens appear to be protecting a piece of alien technology located on the roof. Shortly after Duke loses control of his aircraft he quickly ejects himself just shy of the parkade entrance while watching his plane crash into a nearby building off in the distance. Damn! Those alien bastards are going to pay for blowing up his ride... again! The Parkade door in front of Duke is locked and your mission is to get in and find out what\u2019s going on with this alien device and why it is so heavily guarded while neutralizing any immediate threats around.\r\nGood Luck Duke!"
   },
   {
     "id": "duke3d-penthouse",

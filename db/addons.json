@@ -71,6 +71,20 @@
       "Sha256": "D93725BBF3FC81D4A81B3D7EB25375550B0BC72394DBBEDA7BF6A68B1219ABF2"
     },
     {
+      "Id": "duke3d-ahbspace-recreation",
+      "AddonType": "Map",
+      "Game": "Duke3D",
+      "DownloadUrl": "https://s3-nl.hostkey.com/b8743306-fgsfds/buildlauncher/Duke3D/Maps/duke3d-ahbspace-recreation_v1_9.zip",
+      "Title": "AHB-Space Recreation",
+      "Version": "1.9",
+      "FileSize": 2395565,
+      "Description": "https://nyaa.place/projects/ahb-space-recreation/\r\n\r\nThis Duke Nukem 3D map recreates a prototype level known as AHB-Space.\r\n\r\nWe have access to a lot of prototype DN3D levels, via the publicly accessible December 30, 1994 build (aka LameDuke). However, most of the levels in there are very early drafts, so much that most of them are unrecognizable.\r\n\r\nThis level is instead from the spring of 1995. It\u0027s considerably more polished, and generally looks like something that could belong in the final game (and in particular resembles Tiberius Station and Lunar Reactor) - but is still significantly different from any of the final levels. It can be seen on many of the pre-release screenshots, a few TV show recordings, and the May 9, 1995 demo reel that was uploaded back in 2014 - the best look that we have at this level by far.",
+      "Author": "Alice Mikhaylenko",
+      "UpdateDate": "2026-07-17T13:54:47.5981017Z",
+      "MD5": "2727E6577038B23DC96C73F782A6F588",
+      "Sha256": "11C409EADCAB4E441767F82E4419929EB925C379B3D93A7BB513A9FF9500AC1F"
+    },
+    {
       "Id": "duke3d-alfs-resort",
       "AddonType": "TC",
       "Game": "Duke3D",
@@ -198,6 +212,20 @@
       "UpdateDate": "2025-09-09T10:46:51.6631Z",
       "MD5": "C8DE38F7F6A049078B696102D84B63B6",
       "Sha256": "F5A1A6027CB9FE37D0164E6C84FA369B6D80054E53EAC69EFF1D7A9D381312E3"
+    },
+    {
+      "Id": "duke3d-area27",
+      "AddonType": "Map",
+      "Game": "Duke3D",
+      "DownloadUrl": "https://s3-nl.hostkey.com/b8743306-fgsfds/buildlauncher/Duke3D/Maps/duke3d-area27_v1_0.zip",
+      "Title": "Area27",
+      "Version": "1.0",
+      "FileSize": 681798,
+      "Description": "A mysterious installation in the middle of the desert. Duke must wind his way through the various levels to escape just after the reactor core.  ",
+      "Author": "Cody \u0022Supertanker\u0022 Jackson",
+      "UpdateDate": "2026-07-17T13:54:45.4597301Z",
+      "MD5": "87F987109D0C14BA18B1D8B8A7C4BEA9",
+      "Sha256": "892B0BC11574B1CE63CCA9BC8E7A6DAA5BC9CF517FB8A5C56E31FB214F7F8D86"
     },
     {
       "Id": "duke3d-artic-wolf",
@@ -818,6 +846,20 @@
       "Sha256": "E1048409E6A39BD2FC101830A3421199A92351EDFB2D10528C3A4CAEBA33A684"
     },
     {
+      "Id": "duke3d-dukenukemttk",
+      "AddonType": "Map",
+      "Game": "Duke3D",
+      "DownloadUrl": "https://s3-nl.hostkey.com/b8743306-fgsfds/buildlauncher/Duke3D/Maps/duke3d-dukenukemttk_v1_0.zip",
+      "Title": "DukeNukemTTK",
+      "Version": "1.0",
+      "FileSize": 140769,
+      "Description": "https://www.moddb.com/mods/dukenukemttk\r\n\r\nA map inspired by start map from Duke Nukem: Time to Kill for the Playstation 1, particularly map version on Playstation Underground JAMPACK CD (1998).",
+      "Author": "Fle$h",
+      "UpdateDate": "2026-07-17T13:54:44.191616Z",
+      "MD5": "C56888D5367509B6DC735A50C9CEC5C1",
+      "Sha256": "DF9384DCB7F90C6C25D3537943DDC104D38F79CE4EDB7E064AE96C48F42C296C"
+    },
+    {
       "Id": "duke3d-dukevr",
       "AddonType": "TC",
       "Game": "Duke3D",
@@ -956,6 +998,20 @@
       "UpdateDate": "2024-06-15T14:33:50.766237Z",
       "MD5": "1201D288C7C303ADC369F07BCC52DB26",
       "Sha256": "FD5AF0D5D4D16CFD803169E187A0CF9BF7D3FFE25BAFF3B97E7163019C463CCE"
+    },
+    {
+      "Id": "duke3d-foul-odour",
+      "AddonType": "Map",
+      "Game": "Duke3D",
+      "DownloadUrl": "https://s3-nl.hostkey.com/b8743306-fgsfds/buildlauncher/Duke3D/Maps/duke3d-foul-odour_v1_0.zip",
+      "Title": "Foul Odour",
+      "Version": "1.0",
+      "FileSize": 63551,
+      "Description": "A water/toxic waste facility for v1.3d Duke",
+      "Author": "Tommi Heikkinen (Steambull)",
+      "UpdateDate": "2026-07-17T13:55:04.6166034Z",
+      "MD5": "AB34D7A40A4D778F2EE16D37AD031E01",
+      "Sha256": "D915C74046A78B62963EBF52E0E2A8FAE3BAE39E7523B365C61B12AF9915DEFE"
     },
     {
       "Id": "duke3d-fruit-loops",
@@ -1543,6 +1599,20 @@
       "UpdateDate": "2025-10-23T12:02:07.4274771Z",
       "MD5": "C453C49254CECC400DFC4C3E39AB4143",
       "Sha256": "BF7F125E82A445E3D62D1B728DAE5181B1503C0CF84E21559B38F8A0EB57C718"
+    },
+    {
+      "Id": "duke3d-parkade",
+      "AddonType": "Map",
+      "Game": "Duke3D",
+      "DownloadUrl": "https://s3-nl.hostkey.com/b8743306-fgsfds/buildlauncher/Duke3D/Maps/duke3d-parkade_v1_0.zip",
+      "Title": "Parkade",
+      "Version": "1.0",
+      "FileSize": 1936369,
+      "Description": "https://msdn.duke4.net/hotparkade.php\r\n\r\nThe map begins with Duke Nukem\u2019s plane being shot down by a nearby recon pig cop patrol that is circling around a parkade structure. The Aliens appear to be protecting a piece of alien technology located on the roof. Shortly after Duke loses control of his aircraft he quickly ejects himself just shy of the parkade entrance while watching his plane crash into a nearby building off in the distance. Damn! Those alien bastards are going to pay for blowing up his ride... again! The Parkade door in front of Duke is locked and your mission is to get in and find out what\u2019s going on with this alien device and why it is so heavily guarded while neutralizing any immediate threats around.\r\nGood Luck Duke!",
+      "Author": "Michael \u0022Micky C\u0022 Crisp, Paul Bolduc",
+      "UpdateDate": "2026-07-17T13:55:07.5781234Z",
+      "MD5": "CE61D3519A93D88A82D9556214D5FFCB",
+      "Sha256": "FCF59474F7DFA631B9DAF5C7780D396993991B49AA12EFF136F04D8F8C882BD4"
     },
     {
       "Id": "duke3d-penthouse",
