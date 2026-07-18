@@ -76,17 +76,37 @@ public sealed class GitHubApiInterface : IApiInterface
         {
             if (_addonsJson is null)
             {
-                using var httpClient = _httpClientFactory.CreateClient(HttpClientEnum.GitHub.GetDescription());
-                using var response = await httpClient.GetStreamAsync(CommonConstants.AddonsJsonUrl).ConfigureAwait(false);
+                const int maxRetries = 3;
 
-                _addonsJson = await JsonSerializer.DeserializeAsync(
-                    response,
-                    DownloadableAddonJsonModelDictionaryContext.Default.DictionaryGameEnumListDownloadableAddonJsonModel
-                    ).ConfigureAwait(false);
+                for (var attempt = 1; attempt <= maxRetries; attempt++)
+                {
+                    try
+                    {
+                        using var httpClient = _httpClientFactory.CreateClient(HttpClientEnum.GitHub.GetDescription());
+                        await using var response = await httpClient.GetStreamAsync(CommonConstants.AddonsJsonUrl).ConfigureAwait(false);
+
+                        _addonsJson = await JsonSerializer.DeserializeAsync(
+                            response,
+                            DownloadableAddonJsonModelDictionaryContext.Default.DictionaryGameEnumListDownloadableAddonJsonModel
+                            ).ConfigureAwait(false);
+
+                        if (_addonsJson is null)
+                        {
+                            throw new FormatException("Error while deserializing addons.json");
+                        }
+
+                        break;
+                    }
+                    catch (Exception ex) when ((ex is TaskCanceledException or HttpRequestException) && attempt < maxRetries)
+                    {
+                        _logger.LogWarning(ex, "Error while getting addons from GitHub (attempt {Attempt}/{MaxRetries})", attempt, maxRetries);
+                        await Task.Delay(TimeSpan.FromSeconds(Math.Pow(2, attempt))).ConfigureAwait(false);
+                    }
+                }
 
                 if (_addonsJson is null)
                 {
-                    throw new FormatException("Error while deserializing addons.json");
+                    throw new InvalidOperationException("Failed to download addons after multiple retries");
                 }
             }
 
