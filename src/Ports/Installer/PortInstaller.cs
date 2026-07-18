@@ -92,7 +92,13 @@ public sealed class PortInstaller : InstallerBase<BasePort>
     }
 
     /// <inheritdoc />
-    public override void Uninstall() => Directory.Delete(_instance.InstallFolderPath, true);
+    public override void Uninstall()
+    {
+        if (Directory.Exists(_instance.InstallFolderPath))
+        {
+            Directory.Delete(_instance.InstallFolderPath, true);
+        }
+    }
 
     /// <inheritdoc />
     public override Task<GeneralReleaseJsonModel?> GetRelease() => _apiInterface.GetLatestPortReleaseAsync(_instance.PortEnum);

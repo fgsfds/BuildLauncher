@@ -22,13 +22,26 @@ internal static class HeadlessAvaloniaApp
 
             if (Application.Current is null)
             {
-                var lifetime = new ClassicDesktopStyleApplicationLifetime();
+                try
+                {
+                    var lifetime = new ClassicDesktopStyleApplicationLifetime();
 
-                _ = AppBuilder.Configure<Application>()
-                              .UseHeadless(new AvaloniaHeadlessPlatformOptions())
-                              .SetupWithLifetime(lifetime);
+                    _ = AppBuilder.Configure<Application>()
+                                  .UseHeadless(new AvaloniaHeadlessPlatformOptions())
+                                  .SetupWithLifetime(lifetime);
 
-                lifetime.MainWindow = new Window();
+                    lifetime.MainWindow = new Window();
+                }
+                catch (InvalidOperationException)
+                {
+                    // Avalonia's AppBuilder.Setup() uses a non-thread-safe internal flag.
+                    // When xUnit v3 triggers static constructors concurrently during
+                    // parallel discovery, a second thread can reach this point and throw.
+                    // ViewModel tests don't need the rendering pipeline, so as long
+                    // as Application.Current is set, we're fine.
+                    if (Application.Current is null)
+                        throw;
+                }
             }
 
             _initialized = true;
