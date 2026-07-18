@@ -1501,9 +1501,9 @@ public sealed partial class DevViewModel : ObservableObject
                 }
                 );
 
-            var uploadResult = await _filesUploader.UploadFileAsync(
+            var uploadResult = await _filesUploader.UploadFileToPublicAsync(
                 pathToArchive,
-                $"uploads/{Guid.NewGuid()}/{Path.GetFileName(pathToArchive)}",
+                $"{Guid.NewGuid()}/{Path.GetFileName(pathToArchive)}",
                 progress,
                 CancellationToken.None
                 ).ConfigureAwait(false);

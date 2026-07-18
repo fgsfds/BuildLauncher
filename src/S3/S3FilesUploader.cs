@@ -76,7 +76,7 @@ public sealed class S3FilesUploader : IFilesUploader
 
         try
         {
-            CancellationTokenSource cts = new();
+            using CancellationTokenSource cts = new();
 
             await using var fileStream = File.OpenRead(pathToLocalFile);
             _ = Task.Run(() => TrackProgress(fileStream, progress, cts.Token), cancellationToken);
