@@ -827,10 +827,11 @@
       "name": "Duke3D"
     },
     "title": "Genetic",
-    "version": "1.0",
-    "author": "George-William Bernard",
+    "version": "1.0.1",
+    "author": "George-William Bernard, Mikko Sandt",
+    "release_date": "2022-12-17",
     "con_main": "GENETIC.CON",
-    "description": "https://www.moddb.com/mods/duke-nukem-3d-genetic-updated-2007-version\r\n\r\nThis mod was created by George-William \u0022Jaco\u0022 Bernard and originally released on February 23, 1999. At the time, it only included the Last Reaction and Water Bases episodes. Jaco released the final episode, Chimera, as a separate download on February 5, 2001. However, Jaco noted that he had lost his motivation to complete the episode, so he released Chimera in an incomplete form. Big City Nights, the last level of the Chimera episode, had a non-functioning Nuke Button, and it was missing a hidden area with a planned \u0022stargate\u0022 that would lead to a secret level. Four more levels were also planned: Deeper and Deeper, The Nest, The Hunt, and Another World. The final level was planned to feature a yellow alien boss that resembled the new enemy seen on the title screen. Mikko Sandt, an experienced level designer and owner of a Duke Nukem fan site, was able to connect with Jaco several years after the release of Chimera and offered to finish the episode on his behalf. Jaco agreed and provided Sandt with all the unused materials he had planned to use to finish the episode. However, there were not many unused materials. Using what little he was given, Sandt repurposed the scrapped materials to create Hidden Zone, a new final level for the mod. According to Sandt, Hidden Zone primarily consisted of two map files that he had merely stitched together. The new level was released on February 27, 2007 as a separate download. \r\n\r\n**For the first time ever, all of these separate releases have been merged into a single, cohesive mod for your convenience. Enjoy!**"
+    "description": "https://www.moddb.com/mods/duke-nukem-3d-genetic-updated-2007-version\r\n\r\nOriginally released by George-William \u0022Jaco\u0022 Bernard between 1999 and 2001, this classic Duke Nukem mod was left famously unfinished\u2014complete with missing levels, a broken exit button, and an unreleased final boss. Years later, community designer Mikko Sandt stepped in to stitch together Jaco\u0027s scrapped materials and finally complete the missing pieces.\n\nNow, for the first time ever, the original episodes (Last Reaction and Water Bases), the incomplete Chimera chapter, and the elusive Hidden Zone finale have all been merged into a single, cohesive, and fully playable experience. Enjoy the definitive version of a piece of modding history!"
   },
   {
     "id": "duke3d-god-of-war",
@@ -2573,6 +2574,19 @@
     ],
     "ini": "cruel.ini",
     "description": "https://www.moddb.com/mods/bloodlines-out-of-the-grave-edition/downloads/crypts-of-the-cruel-trilogy-a-bloodlines-prequel-refreshed-supply-exclusive\r\n\r\nCrypts of the Cruel is a trilogy of maps, each designed to play individually or as a whole.\r\n\r\nThey follow Caleb through the beginnings of an encounter with a dark force known as the Cruel. The Cruel has been unleashed on the world through the cracks of reality as something far more powerful is coming... The Beginning of the End is about to be written....\r\n\r\nIt is filled with cheesy movie references, jokes, and blasting hundreds of Cabal and creatures... Aka classic Bloody fun."
+  },
+  {
+    "id": "blood-dark-times",
+    "type": "TC",
+    "game": {
+      "name": "Blood"
+    },
+    "title": "Dark Times",
+    "version": "1.0",
+    "author": "NightSmoke, Seizhak",
+    "release_date": "2025-11-16",
+    "ini": "DT.ini",
+    "description": "https://www.moddb.com/games/blood/downloads/dark-times-bhse\r\n\r\nDark Times (Blood Hispano Special Edition) is a polished version of the original add-on Dark Times.\r\n\r\nThis version fixes many issues and errors such as wrong sprite flags, incorrect gib values, wrong secrets count, texture alignment, glitches in Room Over Room, various problems with geometry, errors in special effects, and more."
   },
   {
     "id": "blood-death-wish",
