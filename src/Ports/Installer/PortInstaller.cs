@@ -39,7 +39,7 @@ public sealed class PortInstaller : InstallerBase<BasePort>
     protected override void Backup() { }
 
     /// <inheritdoc />
-    protected override void PostInstall(string filePath)
+    protected override void PostInstall()
     {
         if (_instance.PortEnum is PortEnum.DosBox)
         {

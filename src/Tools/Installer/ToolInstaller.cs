@@ -35,7 +35,7 @@ public sealed class ToolInstaller : InstallerBase<BaseTool>
     }
 
     /// <inheritdoc />
-    protected override void PostInstall(string filePath)
+    protected override void PostInstall()
     {
         if (_instance.ToolEnum is ToolEnum.Mapster32)
         {

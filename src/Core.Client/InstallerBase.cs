@@ -85,8 +85,7 @@ public abstract class InstallerBase<T>
     /// <summary>
     ///     Performs post install actions.
     /// </summary>
-    /// <param name="filePath">Path to the downloaded file.</param>
-    protected abstract void PostInstall(string filePath);
+    protected abstract void PostInstall();
 
     /// <summary>
     ///     Backups required files.
@@ -153,7 +152,7 @@ public abstract class InstallerBase<T>
 
             await File.WriteAllTextAsync(Path.Combine(_instance.InstallFolderPath, "version"), release.Version, cancellationToken).ConfigureAwait(false);
 
-            PostInstall(filePath);
+            PostInstall();
 
             return new(ResultEnum.Success, string.Empty);
         }
