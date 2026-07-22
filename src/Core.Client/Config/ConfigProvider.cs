@@ -37,7 +37,7 @@ public sealed class ConfigProvider : IConfigProvider
         {
             using var dbContext = _dbContextFactory.CreateDbContext();
 
-            return Enum.TryParse<ThemeEnum>(dbContext.Settings.Find(nameof(Theme))?.Value, out var result) ? result : ThemeEnum.System;
+            return Enum.TryParse<ThemeEnum>(dbContext.Settings.AsNoTracking().FirstOrDefault(x => x.Name == nameof(Theme))?.Value, out var result) ? result : ThemeEnum.System;
         }
 
         set => SetSettingsValue(value.ToString());
@@ -71,7 +71,7 @@ public sealed class ConfigProvider : IConfigProvider
         {
             using var dbContext = _dbContextFactory.CreateDbContext();
 
-            return dbContext.Settings.Find(nameof(ApiPassword))?.Value ?? string.Empty;
+            return dbContext.Settings.AsNoTracking().FirstOrDefault(x => x.Name == nameof(ApiPassword))?.Value ?? string.Empty;
         }
 
         set => SetSettingsValue(value ?? string.Empty);
@@ -256,7 +256,7 @@ public sealed class ConfigProvider : IConfigProvider
         {
             using var dbContext = _dbContextFactory.CreateDbContext();
 
-            return dbContext.Rating.ToDictionary(x => x.AddonId, x => x.Rating);
+            return dbContext.Rating.AsNoTracking().ToDictionary(x => x.AddonId, x => x.Rating);
         }
     }
 
@@ -267,7 +267,7 @@ public sealed class ConfigProvider : IConfigProvider
         {
             using var dbContext = _dbContextFactory.CreateDbContext();
 
-            return dbContext.Playtimes.ToDictionary(x => x.AddonId, x => x.Playtime);
+            return dbContext.Playtimes.AsNoTracking().ToDictionary(x => x.AddonId, x => x.Playtime);
         }
     }
 
@@ -278,7 +278,7 @@ public sealed class ConfigProvider : IConfigProvider
         {
             using var dbContext = _dbContextFactory.CreateDbContext();
 
-            return [.. dbContext.DisabledAddons.Select(x => x.AddonId)];
+            return [.. dbContext.DisabledAddons.AsNoTracking().Select(x => x.AddonId)];
         }
     }
 
@@ -289,7 +289,7 @@ public sealed class ConfigProvider : IConfigProvider
         {
             using var dbContext = _dbContextFactory.CreateDbContext();
 
-            return [.. dbContext.Favorites.Select(x => new AddonId(x.AddonId, x.Version.Equals(string.Empty) ? null : x.Version))];
+            return [.. dbContext.Favorites.AsNoTracking().Select(x => new AddonId(x.AddonId, x.Version.Equals(string.Empty) ? null : x.Version))];
         }
     }
 
@@ -297,7 +297,7 @@ public sealed class ConfigProvider : IConfigProvider
     public HashSet<string> GetEnabledOptions(string addonId)
     {
         using var dbContext = _dbContextFactory.CreateDbContext();
-        var existing = dbContext.Options.FirstOrDefault(x => x.AddonId.Equals(addonId));
+        var existing = dbContext.Options.AsNoTracking().FirstOrDefault(x => x.AddonId.Equals(addonId));
 
         if (existing is null)
         {
@@ -489,7 +489,7 @@ public sealed class ConfigProvider : IConfigProvider
     {
         using var dbContext = _dbContextFactory.CreateDbContext();
 
-        return dbContext.GamePaths.Find(propertyName)?.Path?.TrimEnd(Path.DirectorySeparatorChar);
+        return dbContext.GamePaths.AsNoTracking().FirstOrDefault(x => x.Game == propertyName)?.Path?.TrimEnd(Path.DirectorySeparatorChar);
     }
 
     /// <summary>
@@ -501,7 +501,7 @@ public sealed class ConfigProvider : IConfigProvider
     {
         using var dbContext = _dbContextFactory.CreateDbContext();
 
-        return bool.TryParse(dbContext.Settings.Find(propertyName)?.Value, out var result) && result;
+        return bool.TryParse(dbContext.Settings.AsNoTracking().FirstOrDefault(x => x.Name == propertyName)?.Value, out var result) && result;
     }
 
     /// <summary>
@@ -513,7 +513,7 @@ public sealed class ConfigProvider : IConfigProvider
     {
         using var dbContext = _dbContextFactory.CreateDbContext();
 
-        return dbContext.Settings.Find(propertyName)?.Value ?? string.Empty;
+        return dbContext.Settings.AsNoTracking().FirstOrDefault(x => x.Name == propertyName)?.Value ?? string.Empty;
     }
 
     /// <summary>
