@@ -40,7 +40,7 @@ public sealed class DukeGame : BaseGame
     public required string? DukeWTInstallPath { get; set; }
 
     /// <inheritdoc />
-    public override List<string> RequiredFiles => ["DUKE3D.GRP"];
+    protected override IReadOnlyList<string> RequiredFiles => ["DUKE3D.GRP"];
 
     /// <summary>
     ///     Is Duke it Out in DC installed.

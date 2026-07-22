@@ -23,7 +23,7 @@ public sealed class RedneckGame : BaseGame
     public required string? AgainInstallPath { get; set; }
 
     /// <inheritdoc />
-    public override List<string> RequiredFiles => ["REDNECK.GRP"];
+    protected override IReadOnlyList<string> RequiredFiles => ["REDNECK.GRP"];
 
     /// <summary>
     ///     Is Route 66 installed.

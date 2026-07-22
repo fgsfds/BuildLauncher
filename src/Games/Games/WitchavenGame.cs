@@ -16,43 +16,29 @@ public sealed class WitchavenGame : BaseGame
     /// <inheritdoc />
     public override string ShortName => FullName;
 
+    private static readonly List<string> _requiredFiles =
+    [
+        "JOESND",
+        "SONGS",
+        .. GenerateNumberedFiles("TILES", "ART", 0, 11, 3),
+        .. GenerateNumberedFiles("LEVEL", "MAP", 1, 26, 0)
+    ];
+
     /// <inheritdoc />
-    public override List<string> RequiredFiles
-    {
-        get
-        {
-            List<string> result =
-            [
-                "JOESND",
-                "SONGS"
-            ];
+    protected override IReadOnlyList<string> RequiredFiles => _requiredFiles;
 
-            result.AddRange(GenerateNumberedFiles("TILES", "ART", 0, 11, 3));
-            result.AddRange(GenerateNumberedFiles("LEVEL", "MAP", 1, 26, 0));
-
-            return result;
-        }
-    }
+    private static readonly List<string> _witchaven2RequiredFiles =
+    [
+        "JOESND",
+        "W_SONGS",
+        .. GenerateNumberedFiles("TILES", "ART", 0, 16, 3),
+        .. GenerateNumberedFiles("LEVEL", "MAP", 1, 16, 0)
+    ];
 
     /// <summary>
     ///     Files required for Witchaven 2.
     /// </summary>
-    public List<string> Witchaven2RequiredFiles
-    {
-        get
-        {
-            List<string> result =
-            [
-                "JOESND",
-                "W_SONGS"
-            ];
-
-            result.AddRange(GenerateNumberedFiles("TILES", "ART", 0, 16, 3));
-            result.AddRange(GenerateNumberedFiles("LEVEL", "MAP", 1, 16, 0));
-
-            return result;
-        }
-    }
+    private IReadOnlyList<string> Witchaven2RequiredFiles => _witchaven2RequiredFiles;
 
     /// <summary>
     ///     Path to Witchaven 2 install folder.

@@ -1,7 +1,5 @@
-﻿using System.Text;
-using Core.All.Enums;
+﻿using Core.All.Enums;
 using Games.Games;
-using Tests.Unit.Helpers;
 
 namespace Tests.Unit;
 
@@ -10,11 +8,11 @@ internal sealed class BaseGameTestProxy : BaseGame
     public override GameEnum GameEnum => GameEnum.Duke3D;
     public override string FullName => "Test Game";
     public override string ShortName => "Test";
-    public override List<string> RequiredFiles => ["TEST.GRP"];
+    protected override IReadOnlyList<string> RequiredFiles => ["TEST.GRP"];
     public override Enum? Skills => null;
 
-    public bool CallIsInstalled(List<string> files, string? path = null) => IsInstalled(files, path);
-    public static List<string> CallGenerateNumberedFiles(string baseName, string ext, int start, int endExclusive, int padWidth)
+    public bool CallIsInstalled(IReadOnlyList<string> files, string? path = null) => IsInstalled(files, path);
+    public static IReadOnlyList<string> CallGenerateNumberedFiles(string baseName, string ext, int start, int endExclusive, int padWidth)
         => GenerateNumberedFiles(baseName, ext, start, endExclusive, padWidth);
 }
 

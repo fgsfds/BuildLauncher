@@ -12,7 +12,7 @@ public sealed class BloodGame : BaseGame
     /// <summary>
     ///     Files required for Cryptic Passage addon.
     /// </summary>
-    private readonly List<string> RequiredCPFiles =
+    private static readonly IReadOnlyList<string> RequiredCPFiles =
     [
         ClientConsts.CrypticIni,
         "CP01.MAP",
@@ -21,6 +21,7 @@ public sealed class BloodGame : BaseGame
         "CRYPTIC.SMK",
         "CRYPTIC.WAV"
     ];
+
     /// <inheritdoc />
     public override GameEnum GameEnum => GameEnum.Blood;
 
@@ -31,7 +32,7 @@ public sealed class BloodGame : BaseGame
     public override string ShortName => FullName;
 
     /// <inheritdoc />
-    public override List<string> RequiredFiles =>
+    protected override IReadOnlyList<string> RequiredFiles =>
     [
         ClientConsts.BloodIni,
         ClientConsts.BloodRff,

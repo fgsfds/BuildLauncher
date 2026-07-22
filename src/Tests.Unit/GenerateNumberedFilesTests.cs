@@ -121,7 +121,7 @@ public sealed class GenerateNumberedFilesTests
         public override string ShortName => "Test";
 
         /// <inheritdoc />
-        public override List<string> RequiredFiles => [];
+        protected override IReadOnlyList<string> RequiredFiles => [];
 
         /// <inheritdoc />
         public override Enum? Skills => null;
@@ -129,7 +129,7 @@ public sealed class GenerateNumberedFilesTests
         /// <summary>
         ///     Exposes <see cref="BaseGame.GenerateNumberedFiles" /> for testing.
         /// </summary>
-        public static List<string> Generate(string baseName, string extension, int start, int endExclusive, int padWidth = 3)
+        public static IReadOnlyList<string> Generate(string baseName, string extension, int start, int endExclusive, int padWidth = 3)
         {
             return GenerateNumberedFiles(baseName, extension, start, endExclusive, padWidth);
         }

@@ -16,22 +16,15 @@ public sealed class TekWarGame : BaseGame
     /// <inheritdoc />
     public override string ShortName => FullName;
 
+    private static readonly List<string> _requiredFiles =
+    [
+        "SONGS",
+        "SOUNDS",
+        .. GenerateNumberedFiles("TILES", "ART", 0, 16, 3)
+    ];
+
     /// <inheritdoc />
-    public override List<string> RequiredFiles
-    {
-        get
-        {
-            List<string> result =
-            [
-                "SONGS",
-                "SOUNDS"
-            ];
-
-            result.AddRange(GenerateNumberedFiles("TILES", "ART", 0, 16, 3));
-
-            return result;
-        }
-    }
+    protected override IReadOnlyList<string> RequiredFiles => _requiredFiles;
 
     /// <inheritdoc />
     public override Enum? Skills => null;

@@ -17,7 +17,7 @@ public sealed class SlaveGame : BaseGame
     public override string ShortName => "Slave";
 
     /// <inheritdoc />
-    public override List<string> RequiredFiles => ["STUFF.DAT"];
+    protected override IReadOnlyList<string> RequiredFiles => ["STUFF.DAT"];
 
     /// <inheritdoc />
     public override Enum? Skills => null;

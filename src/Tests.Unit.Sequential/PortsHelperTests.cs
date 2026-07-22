@@ -476,7 +476,7 @@ public sealed class PortsHelperTests
 
         public override string FullName => "TestGame";
         public override string ShortName => "TestGame";
-        public override List<string> RequiredFiles => [];
+        protected override IReadOnlyList<string> RequiredFiles => [];
         public override Enum? Skills => null;
     }
 

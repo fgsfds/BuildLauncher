@@ -27,13 +27,6 @@ public sealed class GameSpecificTests
     }
 
     [Fact]
-    public void DukeGame_RequiredFiles_ReturnsDuke3dGrp()
-    {
-        var game = new DukeGame { Duke64RomPath = null, DukeZHRomPath = null, DukeWTInstallPath = null };
-        Assert.Contains("DUKE3D.GRP", game.RequiredFiles);
-    }
-
-    [Fact]
     public void DukeGame_Skills_IsNotNull()
     {
         var game = new DukeGame { Duke64RomPath = null, DukeZHRomPath = null, DukeWTInstallPath = null };
@@ -91,13 +84,6 @@ public sealed class GameSpecificTests
     }
 
     [Fact]
-    public void BloodGame_RequiredFiles_ContainsBloodIni()
-    {
-        var game = new BloodGame();
-        Assert.Contains("BLOOD.INI", game.RequiredFiles);
-    }
-
-    [Fact]
     public void BloodGame_Skills_IsNotNull()
     {
         var game = new BloodGame();
@@ -119,7 +105,6 @@ public sealed class GameSpecificTests
         Assert.Equal(GameEnum.Slave, game.GameEnum);
         Assert.NotEmpty(game.FullName);
         Assert.NotEmpty(game.ShortName);
-        Assert.NotEmpty(game.RequiredFiles);
     }
 
     [Fact]
@@ -129,7 +114,6 @@ public sealed class GameSpecificTests
         Assert.Equal(GameEnum.NAM, game.GameEnum);
         Assert.NotEmpty(game.FullName);
         Assert.NotEmpty(game.ShortName);
-        Assert.NotEmpty(game.RequiredFiles);
     }
 
     [Fact]
@@ -139,7 +123,6 @@ public sealed class GameSpecificTests
         Assert.Equal(GameEnum.Redneck, game.GameEnum);
         Assert.NotEmpty(game.FullName);
         Assert.NotEmpty(game.ShortName);
-        Assert.NotEmpty(game.RequiredFiles);
     }
 
     [Fact]
@@ -149,7 +132,6 @@ public sealed class GameSpecificTests
         Assert.Equal(GameEnum.Wang, game.GameEnum);
         Assert.NotEmpty(game.FullName);
         Assert.NotEmpty(game.ShortName);
-        Assert.NotEmpty(game.RequiredFiles);
     }
 
     [Fact]
@@ -159,7 +141,6 @@ public sealed class GameSpecificTests
         Assert.Equal(GameEnum.WW2GI, game.GameEnum);
         Assert.NotEmpty(game.FullName);
         Assert.NotEmpty(game.ShortName);
-        Assert.NotEmpty(game.RequiredFiles);
     }
 
     [Fact]
@@ -169,7 +150,6 @@ public sealed class GameSpecificTests
         Assert.Equal(GameEnum.Fury, game.GameEnum);
         Assert.NotEmpty(game.FullName);
         Assert.NotEmpty(game.ShortName);
-        Assert.NotEmpty(game.RequiredFiles);
     }
 
     [Fact]
@@ -179,7 +159,6 @@ public sealed class GameSpecificTests
         Assert.Equal(GameEnum.Witchaven, game.GameEnum);
         Assert.NotEmpty(game.FullName);
         Assert.NotEmpty(game.ShortName);
-        Assert.NotEmpty(game.RequiredFiles);
     }
 
     [Fact]
@@ -189,6 +168,47 @@ public sealed class GameSpecificTests
         Assert.Equal(GameEnum.TekWar, game.GameEnum);
         Assert.NotEmpty(game.FullName);
         Assert.NotEmpty(game.ShortName);
-        Assert.NotEmpty(game.RequiredFiles);
+    }
+
+    [Fact]
+    public void TekWarGame_Skills_IsNull()
+    {
+        var game = new TekWarGame();
+        Assert.Null(game.Skills);
+    }
+
+    [Fact]
+    public void TekWarGame_AreSkillsAvailable_ReturnsFalse()
+    {
+        var game = new TekWarGame();
+        Assert.False((bool)game.AreSkillsAvailable);
+    }
+
+    [Fact]
+    public void TekWarGame_CampaignsFolderPath_ContainsTekWar()
+    {
+        var game = new TekWarGame();
+        Assert.Contains("TekWar", game.CampaignsFolderPath);
+    }
+
+    [Fact]
+    public void TekWarGame_MapsFolderPath_ContainsTekWar()
+    {
+        var game = new TekWarGame();
+        Assert.Contains("TekWar", game.MapsFolderPath);
+    }
+
+    [Fact]
+    public void TekWarGame_ModsFolderPath_ContainsTekWar()
+    {
+        var game = new TekWarGame();
+        Assert.Contains("TekWar", game.ModsFolderPath);
+    }
+
+    [Fact]
+    public void WitchavenGame_IsWitchaven2Installed_NullPath_ReturnsFalse()
+    {
+        var game = new WitchavenGame();
+        Assert.False(game.IsWitchaven2Installed);
     }
 }
