@@ -7,252 +7,90 @@ using Microsoft.Win32;
 namespace Games.Providers;
 
 /// <summary>
-///     Provides game install paths detected from Steam libraries and registry.
+///     Scans Steam libraries and the Windows registry to discover installed game paths.
 /// </summary>
 public sealed class GamesPathsProvider
 {
-    /// <summary>
-    ///     Path to Rides Again installation.
-    /// </summary>
-    private readonly string? _againPath = null;
-
-    /// <summary>
-    ///     Path to Blood installation.
-    /// </summary>
-    private readonly string? _bloodPath = null;
-
+    private readonly Dictionary<GameEnum, string?> _paths = new();
+    private string? _dukeWtPath;
     private readonly IConfigProvider _config;
 
-    /// <summary>
-    ///     Path to Duke Nukem 3D installation.
-    /// </summary>
-    private readonly string? _dukePath = null;
+    private static readonly string[] DukeWtSteamPaths = [Path.Combine("Duke Nukem 3D Twentieth Anniversary World Tour")];
+
+    private static readonly HashSet<GameEnum> SupportedGames =
+    [
+        GameEnum.Duke3D, GameEnum.Wang, GameEnum.Blood, GameEnum.Fury,
+        GameEnum.Slave, GameEnum.Redneck, GameEnum.RidesAgain, GameEnum.NAM,
+        GameEnum.WW2GI, GameEnum.Witchaven, GameEnum.Witchaven2, GameEnum.TekWar
+    ];
+
+    private static readonly (GameEnum Game, string[] SteamSubPaths)[] SteamScans =
+    [
+        (GameEnum.Duke3D, [
+             Path.Combine("Duke Nukem 3D", "Duke Nukem 3D"),
+             Path.Combine("Duke Nukem 3D", "gameroot")
+         ]),
+        (GameEnum.Wang, [
+             Path.Combine("Shadow Warrior DOS", "Shadow Warrior"),
+             Path.Combine("Shadow Warrior Original", "gameroot"),
+             Path.Combine("Shadow Warrior Classic", "gameroot")
+         ]),
+        (GameEnum.Blood, [
+             Path.Combine("Blood - Refreshed Supply", "DOS", "BLOOD121"),
+             Path.Combine("Blood", "DOS", "C", "BLOOD"),
+             "One Unit Whole Blood"
+         ]),
+        (GameEnum.Fury, ["Ion Fury"]),
+        (GameEnum.Slave, [Path.Combine("PowerslaveCE", "PWRSLAVE")]),
+        (GameEnum.Redneck, [Path.Combine("Redneck Rampage", "Redneck")]),
+        (GameEnum.RidesAgain, [Path.Combine("Redneck Rampage Rides Again", "AGAIN")]),
+        (GameEnum.NAM, [Path.Combine("Nam", "NAM")]),
+        (GameEnum.WW2GI, [Path.Combine("World War II GI", "WW2GI")]),
+        (GameEnum.Witchaven, [Path.Combine("Witchaven", "Original", "GAME", "WHAVEN")]),
+        (GameEnum.Witchaven2, [Path.Combine("Witchaven II Blood Vengeance", "Original", "GAME", "WHAVEN2")])
+    ];
 
     /// <summary>
-    ///     Path to Duke Nukem 3D World Tour installation.
+    ///     Initializes a new instance of <see cref="GamesPathsProvider" />.
     /// </summary>
-    private readonly string? _dukeWtPath = null;
-
-    /// <summary>
-    ///     Path to Ion Fury installation.
-    /// </summary>
-    private readonly string? _furyPath = null;
-
-    /// <summary>
-    ///     Path to NAM installation.
-    /// </summary>
-    private readonly string? _namPath = null;
-
-    /// <summary>
-    ///     Path to Redneck Rampage installation.
-    /// </summary>
-    private readonly string? _redneckPath = null;
-
-    /// <summary>
-    ///     Path to Powerslave installation.
-    /// </summary>
-    private readonly string? _slavePath = null;
-
-    /// <summary>
-    ///     Path to TekWar installation.
-    /// </summary>
-    private readonly string? _twPath = null;
-
-    /// <summary>
-    ///     Path to Shadow Warrior installation.
-    /// </summary>
-    private readonly string? _wangPath = null;
-
-    /// <summary>
-    ///     Path to Witchaven installation.
-    /// </summary>
-    private readonly string? _witch1Path = null;
-
-    /// <summary>
-    ///     Path to Witchaven 2 installation.
-    /// </summary>
-    private readonly string? _witch2Path = null;
-
-    /// <summary>
-    ///     Path to World War II GI installation.
-    /// </summary>
-    private readonly string? _ww2giPath = null;
-
-    /// <summary>
-    ///     Initializes a new instance of the <see cref="GamesPathsProvider" /> class.
-    /// </summary>
-    /// <param name="config">Configuration provider.</param>
+    /// <param name="config">
+    ///     Configuration provider to populate with discovered paths.
+    /// </param>
     public GamesPathsProvider(IConfigProvider config)
     {
         _config = config;
 
         if (OperatingSystem.IsWindows())
         {
-            var zoomPath = (string?)Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\ZOOM PLATFORM\Duke Nukem 3D - Atomic Edition", "InstallPath", null);
+            var zoomPath = (string?)Registry.GetValue(
+                @"HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\ZOOM PLATFORM\Duke Nukem 3D - Atomic Edition",
+                "InstallPath", null
+                );
 
-            if (!string.IsNullOrWhiteSpace(zoomPath))
+            if (!string.IsNullOrWhiteSpace(zoomPath) && Directory.Exists(zoomPath))
             {
-                if (Directory.Exists(zoomPath))
-                {
-                    _dukePath ??= zoomPath;
-                }
+                _paths[GameEnum.Duke3D] = zoomPath;
             }
         }
 
         var libs = SteamHelper.GetSteamLibraries();
 
-        foreach (var lib in libs)
+        ScanLibraryPaths(
+            libs, DukeWtSteamPaths, path =>
+            {
+                _dukeWtPath ??= path;
+                _paths.TryAdd(GameEnum.Duke3D, path);
+            }
+            );
+
+        foreach (var (game, subPaths) in SteamScans)
         {
-            //DUKE
-            //3D Realms Anthology
-            var pathToGame = Path.Combine(lib, "Duke Nukem 3D", "Duke Nukem 3D");
-
-            if (Directory.Exists(pathToGame))
+            if (_paths.ContainsKey(game))
             {
-                _dukePath ??= pathToGame;
+                continue;
             }
 
-            //Megaton
-            pathToGame = Path.Combine(lib, "Duke Nukem 3D", "gameroot");
-
-            if (Directory.Exists(pathToGame))
-            {
-                _dukePath ??= pathToGame;
-            }
-
-
-            //WORLD TOUR
-            pathToGame = Path.Combine(lib, "Duke Nukem 3D Twentieth Anniversary World Tour");
-
-            if (Directory.Exists(pathToGame))
-            {
-                //Using WT as a base game as a last resort
-                _dukePath ??= pathToGame;
-                _dukeWtPath ??= pathToGame;
-            }
-
-
-            //WANG
-            //Classic
-            pathToGame = Path.Combine(lib, "Shadow Warrior DOS", "Shadow Warrior");
-
-            if (Directory.Exists(pathToGame))
-            {
-                _wangPath ??= pathToGame;
-            }
-
-            //Free
-            pathToGame = Path.Combine(lib, "Shadow Warrior Original", "gameroot");
-
-            if (Directory.Exists(pathToGame))
-            {
-                _wangPath ??= pathToGame;
-            }
-
-            //Redux
-            pathToGame = Path.Combine(lib, "Shadow Warrior Classic", "gameroot");
-
-            if (Directory.Exists(pathToGame))
-            {
-                _wangPath ??= pathToGame;
-            }
-
-
-            //BLOOD
-            //RS
-            pathToGame = Path.Combine(lib, "Blood - Refreshed Supply", "DOS", "BLOOD121");
-
-            if (Directory.Exists(pathToGame))
-            {
-                _bloodPath ??= pathToGame;
-            }
-
-            //FS
-            pathToGame = Path.Combine(lib, "Blood", "DOS", "C", "BLOOD");
-
-            if (Directory.Exists(pathToGame))
-            {
-                _bloodPath ??= pathToGame;
-            }
-
-            //OUWB
-            pathToGame = Path.Combine(lib, "One Unit Whole Blood");
-
-            if (Directory.Exists(pathToGame))
-            {
-                _bloodPath ??= pathToGame;
-            }
-
-
-            //FURY
-            pathToGame = Path.Combine(lib, "Ion Fury");
-
-            if (Directory.Exists(pathToGame))
-            {
-                _furyPath ??= pathToGame;
-            }
-
-
-            //SLAVE
-            pathToGame = Path.Combine(lib, "PowerslaveCE", "PWRSLAVE");
-
-            if (Directory.Exists(pathToGame))
-            {
-                _slavePath ??= pathToGame;
-            }
-
-
-            //REDNECK
-            pathToGame = Path.Combine(lib, "Redneck Rampage", "Redneck");
-
-            if (Directory.Exists(pathToGame))
-            {
-                _redneckPath ??= pathToGame;
-            }
-
-
-            //RIDES AGAIN
-            pathToGame = Path.Combine(lib, "Redneck Rampage Rides Again", "AGAIN");
-
-            if (Directory.Exists(pathToGame))
-            {
-                _againPath ??= pathToGame;
-            }
-
-
-            //NAM
-            pathToGame = Path.Combine(lib, "Nam", "NAM");
-
-            if (Directory.Exists(pathToGame))
-            {
-                _namPath ??= pathToGame;
-            }
-
-
-            //WWII GI
-            pathToGame = Path.Combine(lib, "World War II GI", "WW2GI");
-
-            if (Directory.Exists(pathToGame))
-            {
-                _ww2giPath ??= pathToGame;
-            }
-
-
-            //WITCHAVEN
-            pathToGame = Path.Combine(lib, "Witchaven", "Original", "GAME", "WHAVEN");
-
-            if (Directory.Exists(pathToGame))
-            {
-                _witch1Path ??= pathToGame;
-            }
-
-            //WITCHAVEN II
-            pathToGame = Path.Combine(lib, "Witchaven II Blood Vengeance", "Original", "GAME", "WHAVEN2");
-
-            if (Directory.Exists(pathToGame))
-            {
-                _witch2Path ??= pathToGame;
-            }
+            ScanLibraryPaths(libs, subPaths, path => _paths[game] = path);
         }
 
         FillConfig();
@@ -261,51 +99,69 @@ public sealed class GamesPathsProvider
     /// <summary>
     ///     Gets the install path for the specified game.
     /// </summary>
-    /// <param name="game">The game enum.</param>
-    /// <returns>The install path, or <see langword="null" /> if not found.</returns>
+    /// <param name="game">
+    ///     The game to look up.
+    /// </param>
+    /// <returns>
+    ///     The install path, or <see langword="null" /> if not found.
+    /// </returns>
+    /// <exception cref="NotSupportedException">
+    ///     Thrown if the game is not supported.
+    /// </exception>
     public string? GetPath(GameEnum game)
     {
-        return game switch
+        if (!SupportedGames.Contains(game))
         {
-            GameEnum.Blood => _bloodPath,
-            GameEnum.Redneck => _redneckPath,
-            GameEnum.RidesAgain => _againPath,
-            GameEnum.Duke3D => _dukePath,
-            GameEnum.Wang => _wangPath,
-            GameEnum.Fury => _furyPath,
-            GameEnum.Slave => _slavePath,
-            GameEnum.NAM => _namPath,
-            GameEnum.WW2GI => _ww2giPath,
-            GameEnum.Witchaven => _witch1Path,
-            GameEnum.Witchaven2 => _witch2Path,
-            GameEnum.TekWar => _twPath,
-            _ => throw new NotSupportedException($"Getting install path for game '{game}' is not supported.")
-        };
+            throw new NotSupportedException($"Getting install path for game '{game}' is not supported.");
+        }
+
+        return _paths.TryGetValue(game, out var path) ? path : null;
     }
 
     /// <summary>
-    ///     Gets the install path for the specified Duke Nukem 3D version.
+    ///     Gets the install path for the specified Duke Nukem version.
     /// </summary>
-    /// <param name="game">The Duke version enum.</param>
-    /// <returns>The install path, or <see langword="null" /> if not found.</returns>
+    /// <param name="game">
+    ///     The Duke version to look up.
+    /// </param>
+    /// <returns>
+    ///     The install path, or <see langword="null" /> if not found.
+    /// </returns>
+    /// <exception cref="NotSupportedException">
+    ///     Thrown if the version is not supported.
+    /// </exception>
     public string? GetPath(DukeVersionEnum game)
     {
         return game switch
         {
-            DukeVersionEnum.Duke3D_13D => _dukePath,
-            DukeVersionEnum.Duke3D_Atomic => _dukePath,
+            DukeVersionEnum.Duke3D_13D or DukeVersionEnum.Duke3D_Atomic => GetPath(GameEnum.Duke3D),
             DukeVersionEnum.Duke3D_WT => _dukeWtPath,
             _ => throw new NotSupportedException($"Getting install path for Duke version '{game}' is not supported.")
         };
     }
 
-    /// <summary>
-    ///     Fills missing configuration paths with detected game install paths.
-    /// </summary>
+    private static void ScanLibraryPaths(IEnumerable<string> libs, IEnumerable<string> subPaths, Action<string> onFound)
+    {
+        foreach (var lib in libs)
+        {
+            foreach (var parts in subPaths)
+            {
+                var fullPath = Path.Combine(lib, parts);
+
+                if (Directory.Exists(fullPath))
+                {
+                    onFound(fullPath);
+
+                    return;
+                }
+            }
+        }
+    }
+
     private void FillConfig()
     {
         _config.PathDuke3D ??= GetPath(GameEnum.Duke3D);
-        _config.PathDukeWT ??= GetPath(DukeVersionEnum.Duke3D_WT);
+        _config.PathDukeWT ??= _dukeWtPath;
         _config.PathWang ??= GetPath(GameEnum.Wang);
         _config.PathBlood ??= GetPath(GameEnum.Blood);
         _config.PathFury ??= GetPath(GameEnum.Fury);

@@ -1,4 +1,5 @@
 using Core.All.Enums;
+using Core.All.Serializable.Downloadable;
 using Core.Client.Interfaces;
 using Core.Client.Tools;
 using Games.Providers;
@@ -15,7 +16,7 @@ public sealed class ToolInstallerTests
     public void Create_Mapster32_ReturnsToolInstaller()
     {
         var apiMock = new Mock<IApiInterface>();
-        var gamesMock = new Mock<InstalledGamesProvider>();
+        var gamesMock = new Mock<InstalledGamesProvider>(Mock.Of<IConfigProvider>());
         var downloader = new FilesDownloader(new Mock<IHttpClientFactory>().Object, NullLogger<FilesDownloader>.Instance);
         var archiveTools = new ArchiveTools(NullLogger<ArchiveTools>.Instance);
 
@@ -29,7 +30,7 @@ public sealed class ToolInstallerTests
     public void Create_DOSBlood_ReturnsToolInstaller()
     {
         var apiMock = new Mock<IApiInterface>();
-        var gamesMock = new Mock<InstalledGamesProvider>();
+        var gamesMock = new Mock<InstalledGamesProvider>(Mock.Of<IConfigProvider>());
         var downloader = new FilesDownloader(new Mock<IHttpClientFactory>().Object, NullLogger<FilesDownloader>.Instance);
         var archiveTools = new ArchiveTools(NullLogger<ArchiveTools>.Instance);
 
@@ -43,7 +44,7 @@ public sealed class ToolInstallerTests
     public void Create_XMapEdit_ReturnsToolInstaller()
     {
         var apiMock = new Mock<IApiInterface>();
-        var gamesMock = new Mock<InstalledGamesProvider>();
+        var gamesMock = new Mock<InstalledGamesProvider>(Mock.Of<IConfigProvider>());
         var downloader = new FilesDownloader(new Mock<IHttpClientFactory>().Object, NullLogger<FilesDownloader>.Instance);
         var archiveTools = new ArchiveTools(NullLogger<ArchiveTools>.Instance);
 
@@ -57,9 +58,9 @@ public sealed class ToolInstallerTests
     public async Task GetRelease_DelegatesToApiInterface()
     {
         var apiMock = new Mock<IApiInterface>();
-        apiMock.Setup(x => x.GetLatestToolReleaseAsync(It.IsAny<ToolEnum>())).ReturnsAsync((Core.All.Serializable.Downloadable.GeneralReleaseJsonModel?)null);
+        apiMock.Setup(x => x.GetLatestToolReleaseAsync(It.IsAny<ToolEnum>())).ReturnsAsync((GeneralReleaseJsonModel?)null);
 
-        var gamesMock = new Mock<InstalledGamesProvider>();
+        var gamesMock = new Mock<InstalledGamesProvider>(Mock.Of<IConfigProvider>());
         var downloader = new FilesDownloader(new Mock<IHttpClientFactory>().Object, NullLogger<FilesDownloader>.Instance);
         var archiveTools = new ArchiveTools(NullLogger<ArchiveTools>.Instance);
 

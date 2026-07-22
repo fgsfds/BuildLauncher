@@ -4,326 +4,203 @@ using Games.Games;
 
 namespace Games.Providers;
 
-/// <summary>
-///     Class that provides singleton instances of game types.
-/// </summary>
 public class InstalledGamesProvider
 {
-    /// <summary>
-    ///     Represents the method that handles game change events.
-    /// </summary>
-    /// <param name="game">The game that changed.</param>
+    public event GameChanged? GameChangedEvent;
     public delegate void GameChanged(GameEnum game);
 
+    private readonly Dictionary<GameEnum, BaseGame> _games = new();
+    private readonly Dictionary<string, Action> _configMappings = new();
 
-    /// <summary>
-    ///     Blood game instance.
-    /// </summary>
-    private readonly BloodGame _blood;
+    public bool IsBloodInstalled => GetGame(GameEnum.Blood).IsBaseGameInstalled;
 
-    private readonly IConfigProvider _config;
+    public bool IsDukeInstalled
+    {
+        get
+        {
+            var duke = (DukeGame)GetGame(GameEnum.Duke3D);
 
-    /// <summary>
-    ///     Duke Nukem 3D game instance.
-    /// </summary>
-    private readonly DukeGame _duke3d;
+            return duke.IsBaseGameInstalled || duke.IsWorldTourInstalled || duke.IsDuke64Installed;
+        }
+    }
 
-    /// <summary>
-    ///     Ion Fury game instance.
-    /// </summary>
-    private readonly FuryGame _fury;
+    public bool IsWangInstalled => GetGame(GameEnum.Wang).IsBaseGameInstalled;
 
-    /// <summary>
-    ///     NAM game instance.
-    /// </summary>
-    private readonly NamGame _nam;
+    public bool IsFuryInstalled => GetGame(GameEnum.Fury).IsBaseGameInstalled;
 
-    /// <summary>
-    ///     Redneck Rampage game instance.
-    /// </summary>
-    private readonly RedneckGame _redneck;
+    public bool IsRedneckInstalled
+    {
+        get
+        {
+            var redneck = (RedneckGame)GetGame(GameEnum.Redneck);
 
-    /// <summary>
-    ///     Powerslave game instance.
-    /// </summary>
-    private readonly SlaveGame _slave;
+            return redneck.IsBaseGameInstalled || redneck.IsAgainInstalled;
+        }
+    }
 
-    /// <summary>
-    ///     Standalone game instance.
-    /// </summary>
-    private readonly StandaloneGame _standalone;
+    public bool IsSlaveInstalled => GetGame(GameEnum.Slave).IsBaseGameInstalled;
 
-    /// <summary>
-    ///     TekWar game instance.
-    /// </summary>
-    private readonly TekWarGame _tekwar;
+    public bool IsNamInstalled => GetGame(GameEnum.NAM).IsBaseGameInstalled;
 
-    /// <summary>
-    ///     Shadow Warrior game instance.
-    /// </summary>
-    private readonly WangGame _wang;
+    public bool IsWW2GIInstalled => GetGame(GameEnum.WW2GI).IsBaseGameInstalled;
 
-    /// <summary>
-    ///     Witchaven game instance.
-    /// </summary>
-    private readonly WitchavenGame _witch;
+    public bool IsWitchavenInstalled
+    {
+        get
+        {
+            var witch = (WitchavenGame)GetGame(GameEnum.Witchaven);
 
-    /// <summary>
-    ///     World War II GI game instance.
-    /// </summary>
-    private readonly WW2GIGame _ww2gi;
+            return witch.IsBaseGameInstalled || witch.IsWitchaven2Installed;
+        }
+    }
 
-    /// <summary>
-    ///     Initializes a new instance of the <see cref="InstalledGamesProvider" /> class.
-    /// </summary>
-    public InstalledGamesProvider() { }
+    public bool IsTekWarInstalled => GetGame(GameEnum.TekWar).IsBaseGameInstalled;
 
-    /// <summary>
-    ///     Initializes a new instance of the <see cref="InstalledGamesProvider" /> class.
-    /// </summary>
-    /// <param name="config">Configuration provider.</param>
     public InstalledGamesProvider(IConfigProvider config)
     {
-        _config = config;
+        Register(
+            new BloodGame
+            {
+                GameInstallFolder = config.PathBlood
+            },
+            (nameof(IConfigProvider.PathBlood), (g, v) => g.GameInstallFolder = v, () => config.PathBlood)
+            );
 
-        _blood = new()
-        {
-            GameInstallFolder = _config.PathBlood
-        };
+        Register(
+            new DukeGame
+            {
+                GameInstallFolder = config.PathDuke3D,
+                Duke64RomPath = config.PathDuke64,
+                DukeZHRomPath = config.PathDukeZH,
+                DukeWTInstallPath = config.PathDukeWT
+            },
+            (nameof(IConfigProvider.PathDuke3D), (g, v) => g.GameInstallFolder = v, () => config.PathDuke3D),
+            (nameof(IConfigProvider.PathDuke64), (g, v) => ((DukeGame)g).Duke64RomPath = v, () => config.PathDuke64),
+            (nameof(IConfigProvider.PathDukeZH), (g, v) => ((DukeGame)g).DukeZHRomPath = v, () => config.PathDukeZH),
+            (nameof(IConfigProvider.PathDukeWT), (g, v) => ((DukeGame)g).DukeWTInstallPath = v, () => config.PathDukeWT)
+            );
 
-        _duke3d = new()
-        {
-            GameInstallFolder = _config.PathDuke3D,
-            Duke64RomPath = _config.PathDuke64,
-            DukeZHRomPath = _config.PathDukeZH,
-            DukeWTInstallPath = _config.PathDukeWT
-        };
+        Register(
+            new WangGame
+            {
+                GameInstallFolder = config.PathWang
+            },
+            (nameof(IConfigProvider.PathWang), (g, v) => g.GameInstallFolder = v, () => config.PathWang)
+            );
 
-        _wang = new()
-        {
-            GameInstallFolder = _config.PathWang
-        };
+        Register(
+            new FuryGame
+            {
+                GameInstallFolder = config.PathFury
+            },
+            (nameof(IConfigProvider.PathFury), (g, v) => g.GameInstallFolder = v, () => config.PathFury)
+            );
 
-        _fury = new()
-        {
-            GameInstallFolder = _config.PathFury
-        };
+        Register(
+            new RedneckGame
+            {
+                GameInstallFolder = config.PathRedneck,
+                AgainInstallPath = config.PathRidesAgain
+            },
+            (nameof(IConfigProvider.PathRedneck), (g, v) => g.GameInstallFolder = v, () => config.PathRedneck),
+            (nameof(IConfigProvider.PathRidesAgain), (g, v) => ((RedneckGame)g).AgainInstallPath = v, () => config.PathRidesAgain)
+            );
 
-        _redneck = new()
-        {
-            GameInstallFolder = _config.PathRedneck,
-            AgainInstallPath = _config.PathRidesAgain
-        };
+        _games[GameEnum.RidesAgain] = _games[GameEnum.Redneck];
 
-        _slave = new()
-        {
-            GameInstallFolder = _config.PathSlave
-        };
+        Register(
+            new SlaveGame
+            {
+                GameInstallFolder = config.PathSlave
+            },
+            (nameof(IConfigProvider.PathSlave), (g, v) => g.GameInstallFolder = v, () => config.PathSlave)
+            );
 
-        _nam = new()
-        {
-            GameInstallFolder = _config.PathNam
-        };
+        Register(
+            new NamGame
+            {
+                GameInstallFolder = config.PathNam
+            },
+            (nameof(IConfigProvider.PathNam), (g, v) => g.GameInstallFolder = v, () => config.PathNam)
+            );
 
-        _ww2gi = new()
-        {
-            GameInstallFolder = _config.PathWW2GI
-        };
+        Register(
+            new WW2GIGame
+            {
+                GameInstallFolder = config.PathWW2GI
+            },
+            (nameof(IConfigProvider.PathWW2GI), (g, v) => g.GameInstallFolder = v, () => config.PathWW2GI)
+            );
 
-        _witch = new()
-        {
-            GameInstallFolder = _config.PathWitchaven,
-            Witchaven2InstallPath = _config.PathWitchaven2
-        };
+        Register(
+            new WitchavenGame
+            {
+                GameInstallFolder = config.PathWitchaven,
+                Witchaven2InstallPath = config.PathWitchaven2
+            },
+            (nameof(IConfigProvider.PathWitchaven), (g, v) => g.GameInstallFolder = v, () => config.PathWitchaven),
+            (nameof(IConfigProvider.PathWitchaven2), (g, v) => ((WitchavenGame)g).Witchaven2InstallPath = v, () => config.PathWitchaven2)
+            );
 
-        _tekwar = new()
-        {
-            GameInstallFolder = _config.PathTekWar
-        };
+        _games[GameEnum.Witchaven2] = _games[GameEnum.Witchaven];
 
-        _standalone = new();
+        Register(
+            new TekWarGame
+            {
+                GameInstallFolder = config.PathTekWar
+            },
+            (nameof(IConfigProvider.PathTekWar), (g, v) => g.GameInstallFolder = v, () => config.PathTekWar)
+            );
 
-        _config.ParameterChangedEvent += OnParameterChanged;
+        Register(new StandaloneGame());
+
+        config.ParameterChangedEvent += OnParameterChanged;
     }
 
     /// <summary>
-    ///     Is Blood installed.
+    ///     Gets the game instance for the specified game enum.
     /// </summary>
-    public bool IsBloodInstalled => _blood.IsBaseGameInstalled;
-    /// <summary>
-    ///     Is Duke Nukem 3D installed.
-    /// </summary>
-    public bool IsDukeInstalled => _duke3d.IsBaseGameInstalled || _duke3d.IsWorldTourInstalled || _duke3d.IsDuke64Installed;
-    /// <summary>
-    ///     Is Shadow Warrior installed.
-    /// </summary>
-    public bool IsWangInstalled => _wang.IsBaseGameInstalled;
-    /// <summary>
-    ///     Is Ion Fury installed.
-    /// </summary>
-    public bool IsFuryInstalled => _fury.IsBaseGameInstalled;
-    /// <summary>
-    ///     Is Redneck Rampage installed.
-    /// </summary>
-    public bool IsRedneckInstalled => _redneck.IsBaseGameInstalled || _redneck.IsAgainInstalled;
-    /// <summary>
-    ///     Is Powerslave installed.
-    /// </summary>
-    public bool IsSlaveInstalled => _slave.IsBaseGameInstalled;
-    /// <summary>
-    ///     Is NAM installed.
-    /// </summary>
-    public bool IsNamInstalled => _nam.IsBaseGameInstalled;
-    /// <summary>
-    ///     Is World War II GI installed.
-    /// </summary>
-    public bool IsWW2GIInstalled => _ww2gi.IsBaseGameInstalled;
-    /// <summary>
-    ///     Is Witchaven installed.
-    /// </summary>
-    public bool IsWitchavenInstalled => _witch.IsBaseGameInstalled || _witch.IsWitchaven2Installed;
-    /// <summary>
-    ///     Is TekWar installed.
-    /// </summary>
-    public bool IsTekWarInstalled => _tekwar.IsBaseGameInstalled;
-    /// <summary>
-    ///     Occurs when a game's install path changes.
-    /// </summary>
-    public event GameChanged? GameChangedEvent;
-
-
-    /// <summary>
-    ///     Get game by enum.
-    /// </summary>
-    /// <param name="gameEnum">Game enum.</param>
+    /// <param name="gameEnum">The game to look up.</param>
+    /// <returns>The corresponding <see cref="BaseGame" /> instance.</returns>
+    /// <exception cref="ArgumentOutOfRangeException">Thrown if the enum value is not registered.</exception>
     public BaseGame GetGame(GameEnum gameEnum)
     {
-        return gameEnum switch
+        if (_games.TryGetValue(gameEnum, out var game))
         {
-            GameEnum.Blood => _blood,
-            GameEnum.Duke3D => _duke3d,
-            GameEnum.Wang => _wang,
-            GameEnum.Fury => _fury,
-            GameEnum.Slave => _slave,
-            GameEnum.Redneck => _redneck,
-            GameEnum.RidesAgain => _redneck,
-            GameEnum.NAM => _nam,
-            GameEnum.WW2GI => _ww2gi,
-            GameEnum.Standalone => _standalone,
-            GameEnum.TekWar => _tekwar,
-            GameEnum.Witchaven => _witch,
-            GameEnum.Witchaven2 => _witch,
-            _ => throw new ArgumentOutOfRangeException(nameof(gameEnum), gameEnum, $"Unsupported game enum: {gameEnum}.")
-        };
+            return game;
+        }
+
+        throw new ArgumentOutOfRangeException(nameof(gameEnum), gameEnum, $"Unsupported game enum: {gameEnum}.");
     }
 
     /// <summary>
-    ///     Gets a list of all game instances.
+    ///     Returns all registered games.
     /// </summary>
+    /// <returns>A read-only list of all <see cref="BaseGame" /> instances.</returns>
     public virtual IReadOnlyList<BaseGame> GetGames()
     {
-        return
-        [
-            _blood,
-            _duke3d,
-            _wang,
-            _fury,
-            _slave,
-            _redneck,
-            _nam,
-            _ww2gi,
-            _standalone,
-            _tekwar,
-            _witch
-        ];
+        return [.. _games.Values];
     }
 
+    private void Register<T>(T game, params (string PropertyName, Action<T, string?> Setter, Func<string?> Getter)[] bindings) where T : BaseGame
+    {
+        _games[game.GameEnum] = game;
 
-    /// <summary>
-    ///     Handles configuration parameter changes to update game install paths.
-    /// </summary>
-    /// <param name="parameterName">Name of the changed parameter.</param>
+        foreach (var (propName, setter, getter) in bindings)
+        {
+            _configMappings[propName] = () =>
+            {
+                setter(game, getter());
+                GameChangedEvent?.Invoke(game.GameEnum);
+            };
+        }
+    }
+
     private void OnParameterChanged(string? parameterName)
     {
-        if (parameterName is null)
+        if (parameterName is not null && _configMappings.TryGetValue(parameterName, out var update))
         {
-            return;
-        }
-
-        if (parameterName.Equals(nameof(_config.PathBlood)))
-        {
-            _blood.GameInstallFolder = _config.PathBlood;
-            GameChangedEvent?.Invoke(_blood.GameEnum);
-        }
-        else if (parameterName.Equals(nameof(_config.PathDuke3D)))
-        {
-            _duke3d.GameInstallFolder = _config.PathDuke3D;
-            GameChangedEvent?.Invoke(_duke3d.GameEnum);
-        }
-        else if (parameterName.Equals(nameof(_config.PathDuke64)))
-        {
-            _duke3d.Duke64RomPath = _config.PathDuke64;
-            GameChangedEvent?.Invoke(_duke3d.GameEnum);
-        }
-        else if (parameterName.Equals(nameof(_config.PathDukeZH)))
-        {
-            _duke3d.DukeZHRomPath = _config.PathDukeZH;
-            GameChangedEvent?.Invoke(_duke3d.GameEnum);
-        }
-        else if (parameterName.Equals(nameof(_config.PathDukeWT)))
-        {
-            _duke3d.DukeWTInstallPath = _config.PathDukeWT;
-            GameChangedEvent?.Invoke(_duke3d.GameEnum);
-        }
-        else if (parameterName.Equals(nameof(_config.PathWang)))
-        {
-            _wang.GameInstallFolder = _config.PathWang;
-            GameChangedEvent?.Invoke(_wang.GameEnum);
-        }
-        else if (parameterName.Equals(nameof(_config.PathFury)))
-        {
-            _fury.GameInstallFolder = _config.PathFury;
-            GameChangedEvent?.Invoke(_fury.GameEnum);
-        }
-        else if (parameterName.Equals(nameof(_config.PathRedneck)))
-        {
-            _redneck.GameInstallFolder = _config.PathRedneck;
-            GameChangedEvent?.Invoke(_redneck.GameEnum);
-        }
-        else if (parameterName.Equals(nameof(_config.PathRidesAgain)))
-        {
-            _redneck.AgainInstallPath = _config.PathRidesAgain;
-            GameChangedEvent?.Invoke(_redneck.GameEnum);
-        }
-        else if (parameterName.Equals(nameof(_config.PathSlave)))
-        {
-            _slave.GameInstallFolder = _config.PathSlave;
-            GameChangedEvent?.Invoke(_slave.GameEnum);
-        }
-        else if (parameterName.Equals(nameof(_config.PathNam)))
-        {
-            _nam.GameInstallFolder = _config.PathNam;
-            GameChangedEvent?.Invoke(_nam.GameEnum);
-        }
-        else if (parameterName.Equals(nameof(_config.PathWW2GI)))
-        {
-            _ww2gi.GameInstallFolder = _config.PathWW2GI;
-            GameChangedEvent?.Invoke(_ww2gi.GameEnum);
-        }
-        else if (parameterName.Equals(nameof(_config.PathWitchaven)))
-        {
-            _witch.GameInstallFolder = _config.PathWitchaven;
-            GameChangedEvent?.Invoke(_witch.GameEnum);
-        }
-        else if (parameterName.Equals(nameof(_config.PathWitchaven2)))
-        {
-            _witch.Witchaven2InstallPath = _config.PathWitchaven2;
-            GameChangedEvent?.Invoke(_witch.GameEnum);
-        }
-        else if (parameterName.Equals(nameof(_config.PathTekWar)))
-        {
-            _tekwar.GameInstallFolder = _config.PathTekWar;
-            GameChangedEvent?.Invoke(_tekwar.GameEnum);
+            update();
         }
     }
 }

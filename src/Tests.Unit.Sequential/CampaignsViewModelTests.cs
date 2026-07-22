@@ -57,7 +57,7 @@ public sealed class CampaignsViewModelTests : IDisposable
         _configMock.Setup(x => x.Playtimes).Returns(new Dictionary<string, TimeSpan>());
         _configMock.Setup(x => x.Rating).Returns(new Dictionary<string, byte>());
 
-        _gamesProviderMock = new Mock<InstalledGamesProvider>();
+        _gamesProviderMock = new Mock<InstalledGamesProvider>(Mock.Of<IConfigProvider>());
         _gamesProviderMock.Setup(x => x.GetGames()).Returns([_game]);
 
         Mock<ICacheAdder<Stream>> bitmapsCache = new();
