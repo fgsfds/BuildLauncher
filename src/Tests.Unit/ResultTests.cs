@@ -46,6 +46,27 @@ public sealed class ResultTests
         Assert.Null(r.Message);
         Assert.True(r.IsSuccess);
     }
+
+    [Theory]
+    [InlineData(ResultEnum.Success)]
+    [InlineData(ResultEnum.HashError)]
+    [InlineData(ResultEnum.NotFound)]
+    [InlineData(ResultEnum.ConnectionError)]
+    [InlineData(ResultEnum.FileAccessError)]
+    [InlineData(ResultEnum.Cancelled)]
+    [InlineData(ResultEnum.Error)]
+    public void ResultEnum_Property_ReturnsValuePassedToConstructor(ResultEnum expected)
+    {
+        var r = new Result(expected, "msg");
+        Assert.Equal(expected, r.ResultEnum);
+    }
+
+    [Fact]
+    public void Default_ResultEnumIsSuccess()
+    {
+        var r = default(Result);
+        Assert.Equal(ResultEnum.Success, r.ResultEnum);
+    }
 }
 
 

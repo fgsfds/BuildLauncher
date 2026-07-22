@@ -46,9 +46,9 @@ public sealed class AppUpdateInstaller
     ///     Check GitHub for releases with version higher than current.
     /// </summary>
     /// <param name="currentVersion">Current SFD version</param>
-    public async Task<bool?> CheckForUpdates(Version currentVersion)
+    public async Task<bool?> CheckForUpdates(Version currentVersion, CancellationToken cancellationToken = default)
     {
-        var release = await _apiInterface.GetLatestAppReleaseAsync().ConfigureAwait(false);
+        var release = await _apiInterface.GetLatestAppReleaseAsync(cancellationToken).ConfigureAwait(false);
 
         if (release is null)
         {
@@ -69,7 +69,7 @@ public sealed class AppUpdateInstaller
     /// <summary>
     ///     Download latest release from GitHub and create update lock file.
     /// </summary>
-    public async Task DownloadAndUnpackLatestRelease()
+    public async Task DownloadAndUnpackLatestRelease(CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(_update?.DownloadUrl);
 
@@ -82,7 +82,9 @@ public sealed class AppUpdateInstaller
             File.Delete(fileName);
         }
 
-        _ = await _filesDownloader.DownloadFileAsync(updateUrl, fileName, CancellationToken.None).ConfigureAwait(false);
+        _ = await _filesDownloader.DownloadFileAsync(updateUrl, fileName, cancellationToken).ConfigureAwait(false);
+
+        cancellationToken.ThrowIfCancellationRequested();
 
         ZipFile.ExtractToDirectory(fileName, Path.Combine(ClientProperties.WorkingFolder, ClientConsts.UpdateFolder), true);
 

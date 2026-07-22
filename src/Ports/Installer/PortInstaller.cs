@@ -101,5 +101,5 @@ public sealed class PortInstaller : InstallerBase<BasePort>
     }
 
     /// <inheritdoc />
-    public override Task<GeneralReleaseJsonModel?> GetRelease() => _apiInterface.GetLatestPortReleaseAsync(_instance.PortEnum);
+    public override Task<GeneralReleaseJsonModel?> GetRelease(CancellationToken cancellationToken = default) => _apiInterface.GetLatestPortReleaseAsync(_instance.PortEnum, cancellationToken);
 }

@@ -6,6 +6,7 @@ using Avalonia.Controls.Notifications;
 using Avalonia.Desktop.Misc;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Core.All;
 using Core.All.Enums;
 using Core.All.Helpers;
 using Core.All.Serializable.Downloadable;
@@ -354,12 +355,23 @@ public sealed partial class DownloadsViewModel : ObservableObject
 
                 var isDownloaded = await _downloadableAddonsProvider.DownloadAddonAsync(item, _cancellationTokenSource.Token).ConfigureAwait(true);
 
-                if (!isDownloaded)
+                if (!isDownloaded.IsSuccess)
                 {
-                    NotificationsHelper.Show(
-                        $"Error while downloading {item.Title}.",
-                        NotificationType.Error
-                        );
+                    if (isDownloaded.ResultEnum is ResultEnum.Cancelled)
+                    {
+                        NotificationsHelper.Show(
+                            $"Downloading cancelled.",
+                            NotificationType.Warning
+                            );
+                    }
+                    else
+                    {
+                        NotificationsHelper.Show(
+                            $"Error while downloading {item.Title}.",
+                            NotificationType.Error
+                            );
+                    }
+
                 }
 
                 downloadCount++;

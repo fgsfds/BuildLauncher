@@ -31,28 +31,32 @@ public interface IApiInterface
     ///     Retrieves the list of downloadable addons for the specified game.
     /// </summary>
     /// <param name="gameEnum">The game to filter addons by.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
     /// <returns>A list of addon models, or null on failure.</returns>
-    Task<List<DownloadableAddonJsonModel>?> GetAddonsAsync(GameEnum gameEnum);
+    Task<List<DownloadableAddonJsonModel>?> GetAddonsAsync(GameEnum gameEnum, CancellationToken cancellationToken = default);
 
     /// <summary>
     ///     Retrieves the latest application release for self-update.
     /// </summary>
+    /// <param name="cancellationToken">Cancellation token.</param>
     /// <returns>The latest release, or null if not available.</returns>
-    Task<GeneralReleaseJsonModel?> GetLatestAppReleaseAsync();
+    Task<GeneralReleaseJsonModel?> GetLatestAppReleaseAsync(CancellationToken cancellationToken = default);
 
     /// <summary>
     ///     Retrieves the latest release for the specified port.
     /// </summary>
     /// <param name="portEnum">The port identifier.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
     /// <returns>The latest release, or null if not available.</returns>
-    Task<GeneralReleaseJsonModel?> GetLatestPortReleaseAsync(PortEnum portEnum);
+    Task<GeneralReleaseJsonModel?> GetLatestPortReleaseAsync(PortEnum portEnum, CancellationToken cancellationToken = default);
 
     /// <summary>
     ///     Retrieves the latest release for the specified tool.
     /// </summary>
     /// <param name="toolEnum">The tool identifier.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
     /// <returns>The latest release, or null if not available.</returns>
-    Task<GeneralReleaseJsonModel?> GetLatestToolReleaseAsync(ToolEnum toolEnum);
+    Task<GeneralReleaseJsonModel?> GetLatestToolReleaseAsync(ToolEnum toolEnum, CancellationToken cancellationToken = default);
 
     /// <summary>
     ///     Retrieves all addon ratings from the server.
@@ -64,20 +68,23 @@ public interface IApiInterface
     ///     Retrieves a signed upload URL for the specified file path.
     /// </summary>
     /// <param name="path">The relative file path.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
     /// <returns>A result containing the signed URL.</returns>
-    Task<Result<Uri?>> GetSignedUrlAsync(string path);
+    Task<Result<Uri?>> GetSignedUrlAsync(string path, CancellationToken cancellationToken = default);
 
     /// <summary>
     ///     Retrieves the upload folder path from the server.
     /// </summary>
+    /// <param name="cancellationToken">Cancellation token.</param>
     /// <returns>The upload folder path, or null on failure.</returns>
-    Task<string?> GetUploadFolderAsync();
+    Task<string?> GetUploadFolderAsync(CancellationToken cancellationToken = default);
 
     /// <summary>
     ///     Retrieves addon metadata from the server.
     /// </summary>
+    /// <param name="cancellationToken">Cancellation token.</param>
     /// <returns>A list of addon manifests, or null on failure.</returns>
-    Task<List<AddonManifestJsonModel>?> GetMetadataAsync();
+    Task<List<AddonManifestJsonModel>?> GetMetadataAsync(CancellationToken cancellationToken = default);
 
     /// <summary>
     ///     Increments the install count for the specified addon.

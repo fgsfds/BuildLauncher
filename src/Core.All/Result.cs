@@ -10,7 +10,7 @@ public readonly struct Result
     /// <summary>
     ///     Operation result enum value.
     /// </summary>
-    private readonly ResultEnum _resultEnum;
+    public ResultEnum ResultEnum { get; }
 
     /// <summary>
     ///     Gets the operation result message.
@@ -20,7 +20,7 @@ public readonly struct Result
     /// <summary>
     ///     Gets a value indicating whether the operation was successful.
     /// </summary>
-    public bool IsSuccess => _resultEnum is ResultEnum.Success;
+    public bool IsSuccess => ResultEnum is ResultEnum.Success;
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="Result" /> struct.
@@ -32,7 +32,7 @@ public readonly struct Result
         string message
         )
     {
-        _resultEnum = resultEnum;
+        ResultEnum = resultEnum;
         Message = message;
     }
 }

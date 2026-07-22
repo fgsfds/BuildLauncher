@@ -282,7 +282,7 @@ public sealed partial class PortViewModel : ObservableObject
     ///     Download and install port
     /// </summary>
     [RelayCommand]
-    private async Task InstallAsync()
+    private async Task InstallAsync(CancellationToken cancellationToken)
     {
         PortInstaller? installer = null;
 
@@ -295,7 +295,7 @@ public sealed partial class PortViewModel : ObservableObject
             installer.Progress.ProgressChanged += OnProgressChanged;
             ProgressBarValue = 0;
 
-            var isInstalled = await installer.InstallAsync().ConfigureAwait(true);
+            var isInstalled = await installer.InstallAsync(cancellationToken).ConfigureAwait(true);
         }
         catch (Exception ex)
         {

@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using System.Net.Http.Headers;
+using Core.All;
 using Microsoft.Extensions.Logging;
 
 namespace Core.Client.Tools;
@@ -36,10 +37,10 @@ public sealed class FilesDownloader
     ///     Download archive
     /// </summary>
     /// <param name="url">Link to file download</param>
-    /// <param name="filePath">Absolute path to destination file</param>
+    /// <param name="filePath">Absolute path to the destination file</param>
     /// <param name="cancellationToken">Cancellation Token</param>
     /// <exception cref="HttpRequestException">Thrown when the server returns an unsuccessful status code or does not support range requests for resume.</exception>
-    public async Task<bool> DownloadFileAsync(
+    public async Task<Result> DownloadFileAsync(
         Uri url,
         string filePath,
         CancellationToken cancellationToken
@@ -91,21 +92,32 @@ public sealed class FilesDownloader
         }
         catch (HttpIOException)
         {
-            await ContinueDownload(url, contentLength, fileStream, cancellationToken).ConfigureAwait(false);
+            try
+            {
+                await ContinueDownload(url, contentLength, fileStream, cancellationToken).ConfigureAwait(false);
+            }
+            catch (OperationCanceledException)
+            {
+                await fileStream.DisposeAsync().ConfigureAwait(false);
+
+                if (File.Exists(tempFile))
+                {
+                    File.Delete(tempFile);
+                }
+
+                return new(ResultEnum.Cancelled, string.Empty);
+            }
         }
         catch (OperationCanceledException)
         {
-            if (fileStream is not null)
-            {
-                await fileStream.DisposeAsync().ConfigureAwait(false);
-            }
+            await fileStream.DisposeAsync().ConfigureAwait(false);
 
             if (File.Exists(tempFile))
             {
                 File.Delete(tempFile);
             }
 
-            return false;
+            return new(ResultEnum.Cancelled, string.Empty);
         }
         finally
         {
@@ -115,7 +127,7 @@ public sealed class FilesDownloader
         _logger.LogInformation("Downloading finished, renaming temp file");
         File.Move(tempFile, filePath, true);
 
-        return true;
+        return new(ResultEnum.Success, string.Empty);
     }
 
 
@@ -140,11 +152,9 @@ public sealed class FilesDownloader
 
         try
         {
-            using HttpRequestMessage request = new()
-            {
-                RequestUri = url,
-                Method = HttpMethod.Get
-            };
+            using HttpRequestMessage request = new();
+            request.RequestUri = url;
+            request.Method = HttpMethod.Get;
 
             request.Headers.Range = new RangeHeaderValue(fileStream.Position, contentLength);
 

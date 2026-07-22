@@ -10,36 +10,23 @@ using Microsoft.Extensions.Logging;
 
 namespace Core.Client.Api;
 
-/// <summary>
-///     Provides a local file-based implementation of the API interface for offline use without network access.
-/// </summary>
 public sealed class OfflineApiInterface : IApiInterface
 {
     private readonly ILogger<OfflineApiInterface> _logger;
 
-    /// <summary>
-    ///     Semaphore for synchronizing access to cached data.
-    /// </summary>
     private readonly SemaphoreSlim _semaphore = new(1);
 
-    /// <summary>
-    ///     Cached addon data loaded from the local JSON file.
-    /// </summary>
     private Dictionary<GameEnum, List<DownloadableAddonJsonModel>>? _addonsJson;
 
-    /// <summary>
-    ///     Initializes a new instance of the <see cref="OfflineApiInterface" /> class.
-    /// </summary>
-    /// <param name="logger">Logger instance.</param>
     public OfflineApiInterface(ILogger<OfflineApiInterface> logger)
     {
         _logger = logger;
     }
 
     /// <inheritdoc />
-    public async Task<List<DownloadableAddonJsonModel>?> GetAddonsAsync(GameEnum gameEnum)
+    public async Task<List<DownloadableAddonJsonModel>?> GetAddonsAsync(GameEnum gameEnum, CancellationToken cancellationToken = default)
     {
-        await _semaphore.WaitAsync().ConfigureAwait(false);
+        await _semaphore.WaitAsync(cancellationToken).ConfigureAwait(false);
 
         try
         {
@@ -54,7 +41,8 @@ public sealed class OfflineApiInterface : IApiInterface
 
                 _addonsJson = await JsonSerializer.DeserializeAsync(
                     addonsJson,
-                    DownloadableAddonJsonModelDictionaryContext.Default.DictionaryGameEnumListDownloadableAddonJsonModel
+                    DownloadableAddonJsonModelDictionaryContext.Default.DictionaryGameEnumListDownloadableAddonJsonModel,
+                    cancellationToken
                     ).ConfigureAwait(false);
 
                 ArgumentNullException.ThrowIfNull(_addonsJson);
@@ -99,25 +87,26 @@ public sealed class OfflineApiInterface : IApiInterface
     }
 
     /// <inheritdoc />
-    public Task<GeneralReleaseJsonModel?> GetLatestAppReleaseAsync() => Task.FromResult<GeneralReleaseJsonModel?>(null);
+    public Task<GeneralReleaseJsonModel?> GetLatestAppReleaseAsync(CancellationToken cancellationToken = default) => Task.FromResult<GeneralReleaseJsonModel?>(null);
 
     /// <inheritdoc />
-    public Task<GeneralReleaseJsonModel?> GetLatestPortReleaseAsync(PortEnum portEnum) => Task.FromResult<GeneralReleaseJsonModel?>(null);
+    public Task<GeneralReleaseJsonModel?> GetLatestPortReleaseAsync(PortEnum portEnum, CancellationToken cancellationToken = default) => Task.FromResult<GeneralReleaseJsonModel?>(null);
 
     /// <inheritdoc />
-    public Task<GeneralReleaseJsonModel?> GetLatestToolReleaseAsync(ToolEnum toolEnum) => Task.FromResult<GeneralReleaseJsonModel?>(null);
+    public Task<GeneralReleaseJsonModel?> GetLatestToolReleaseAsync(ToolEnum toolEnum, CancellationToken cancellationToken = default) => Task.FromResult<GeneralReleaseJsonModel?>(null);
 
     /// <inheritdoc />
     public Task<bool> AddAddonToDatabaseAsync(AddonManifestJsonModel addonJson, DownloadableAddonJsonModel downloadableAddonJson) => Task.FromResult(false);
 
     /// <inheritdoc />
-    public async Task<string?> GetUploadFolderAsync()
+    public async Task<string?> GetUploadFolderAsync(CancellationToken cancellationToken = default)
     {
         using var dataJson = File.OpenRead(ClientProperties.PathToLocalDataJson);
 
         var data = await JsonSerializer.DeserializeAsync(
             dataJson,
-            DataJsonModelContext.Default.DictionaryStringString
+            DataJsonModelContext.Default.DictionaryStringString,
+            cancellationToken
             ).ConfigureAwait(false);
 
         if (data is null)
@@ -131,22 +120,23 @@ public sealed class OfflineApiInterface : IApiInterface
     }
 
     /// <inheritdoc />
-    public async Task<List<AddonManifestJsonModel>?> GetMetadataAsync()
+    public async Task<List<AddonManifestJsonModel>?> GetMetadataAsync(CancellationToken cancellationToken = default)
     {
         using var dataJson = File.OpenRead(ClientProperties.PathToLocalManifestsJson);
 
         var data = await JsonSerializer.DeserializeAsync(
             dataJson,
-            AddonManifestJsonContext.Default.ListAddonManifestJsonModel
+            AddonManifestJsonContext.Default.ListAddonManifestJsonModel,
+            cancellationToken
             ).ConfigureAwait(false);
 
         return data;
     }
 
     /// <inheritdoc />
-    public async Task<Result<Uri?>> GetSignedUrlAsync(string path)
+    public async Task<Result<Uri?>> GetSignedUrlAsync(string path, CancellationToken cancellationToken = default)
     {
-        var uploadFolder = await GetUploadFolderAsync().ConfigureAwait(false);
+        var uploadFolder = await GetUploadFolderAsync(cancellationToken).ConfigureAwait(false);
 
         if (string.IsNullOrWhiteSpace(uploadFolder))
         {

@@ -1,4 +1,6 @@
 using System.Net;
+using System.Net.Http.Headers;
+using Core.All;
 using Core.Client.Tools;
 using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
@@ -47,7 +49,7 @@ public sealed class FilesDownloaderTests : IDisposable
 
         var result = await downloader.DownloadFileAsync(url, destPath, CancellationToken.None);
 
-        Assert.True(result);
+        Assert.True(result.IsSuccess);
         Assert.True(File.Exists(destPath));
         Assert.Equal(data, await File.ReadAllBytesAsync(destPath));
     }
@@ -68,7 +70,7 @@ public sealed class FilesDownloaderTests : IDisposable
 
         var result = await downloader.DownloadFileAsync(url, destPath, CancellationToken.None);
 
-        Assert.True(result);
+        Assert.True(result.IsSuccess);
         Assert.True(File.Exists(destPath));
         Assert.Equal(data, await File.ReadAllBytesAsync(destPath));
     }
@@ -139,9 +141,32 @@ public sealed class FilesDownloaderTests : IDisposable
         cts.Cancel();
         var result = await downloader.DownloadFileAsync(url, destPath, cts.Token);
 
-        Assert.False(result);
+        Assert.Equal(ResultEnum.Cancelled, result.ResultEnum);
+        Assert.False(result.IsSuccess);
         Assert.False(File.Exists(destPath));
         Assert.False(File.Exists(destPath + ".temp"));
+    }
+
+    [Fact]
+    public async Task DownloadFileAsync_HttpIOException_RecoversViaContinueDownload()
+    {
+        var data = new byte[50_000];
+        new Random(42).NextBytes(data);
+        using var handler = new FaultThenSuccessHandler(data);
+        using var httpClient = new HttpClient(handler);
+        var httpFactoryMock = new Mock<IHttpClientFactory>();
+        httpFactoryMock.Setup(x => x.CreateClient(It.IsAny<string>())).Returns(httpClient);
+
+        var downloader = new FilesDownloader(httpFactoryMock.Object, NullLogger<FilesDownloader>.Instance);
+        var destPath = GetTempFilePath();
+        var url = new Uri("http://example.com/file.zip");
+
+        var result = await downloader.DownloadFileAsync(url, destPath, CancellationToken.None);
+
+        Assert.True(result.IsSuccess);
+        Assert.True(File.Exists(destPath));
+        Assert.Equal(data, await File.ReadAllBytesAsync(destPath));
+        Assert.True(handler.CallCount >= 2);
     }
 
     [Fact]
@@ -163,7 +188,7 @@ public sealed class FilesDownloaderTests : IDisposable
 
         var result = await downloader.DownloadFileAsync(url, destPath, CancellationToken.None);
 
-        Assert.True(result);
+        Assert.True(result.IsSuccess);
         Assert.True(File.Exists(destPath));
         Assert.False(File.Exists(tempPath));
     }
@@ -210,7 +235,7 @@ public sealed class FilesDownloaderTests : IDisposable
 
         var result = await downloader.DownloadFileAsync(url, destPath, CancellationToken.None);
 
-        Assert.True(result);
+        Assert.True(result.IsSuccess);
         Assert.Equal(data, await File.ReadAllBytesAsync(destPath));
     }
 
@@ -255,5 +280,117 @@ public sealed class FilesDownloaderTests : IDisposable
             length = 0;
             return false;
         }
+    }
+
+
+    private sealed class FaultThenSuccessHandler : HttpMessageHandler
+    {
+        private readonly byte[] _data;
+        private int _callCount;
+        private readonly long _bytesBeforeFault;
+
+        public int CallCount => _callCount;
+
+        public FaultThenSuccessHandler(byte[] data, long? bytesBeforeFault = null)
+        {
+            _data = data;
+            _bytesBeforeFault = bytesBeforeFault ?? data.Length / 2;
+            _callCount = 0;
+        }
+
+        protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+        {
+            var call = Interlocked.Increment(ref _callCount);
+
+            if (call == 1)
+            {
+                var response = new HttpResponseMessage(HttpStatusCode.OK);
+                response.Content = new FaultyContent(_data, _bytesBeforeFault);
+                response.Content.Headers.ContentLength = _data.Length;
+                return Task.FromResult(response);
+            }
+
+            var range = request.Headers.Range;
+            var from = range?.Ranges.FirstOrDefault()?.From ?? 0;
+            var start = (int)from;
+            var remaining = _data[start..];
+            var response2 = new HttpResponseMessage(HttpStatusCode.PartialContent);
+            response2.Content = new ByteArrayContent(remaining);
+            response2.Content.Headers.ContentLength = remaining.Length;
+            response2.Content.Headers.ContentRange = new ContentRangeHeaderValue(from, _data.Length - 1, _data.Length);
+            return Task.FromResult(response2);
+        }
+    }
+
+
+    private sealed class FaultyContent : ByteArrayContent
+    {
+        private readonly long _bytesBeforeFault;
+
+        public FaultyContent(byte[] data, long bytesBeforeFault) : base(data)
+        {
+            _bytesBeforeFault = bytesBeforeFault;
+        }
+
+        protected override Stream CreateContentReadStream(CancellationToken cancellationToken)
+        {
+            return new FaultyReadStream(base.CreateContentReadStream(cancellationToken), _bytesBeforeFault);
+        }
+
+        protected override Task<Stream> CreateContentReadStreamAsync()
+        {
+            return Task.FromResult<Stream>(new FaultyReadStream(base.CreateContentReadStream(CancellationToken.None), _bytesBeforeFault));
+        }
+    }
+
+
+    private sealed class FaultyReadStream : Stream
+    {
+        private readonly Stream _inner;
+        private readonly long _bytesBeforeFault;
+        private long _read;
+
+        public FaultyReadStream(Stream inner, long bytesBeforeFault)
+        {
+            _inner = inner;
+            _bytesBeforeFault = bytesBeforeFault;
+        }
+
+        public override bool CanRead => true;
+        public override bool CanSeek => false;
+        public override bool CanWrite => false;
+        public override long Length => throw new NotSupportedException();
+        public override long Position { get => _read; set => throw new NotSupportedException(); }
+
+        public override int Read(byte[] buffer, int offset, int count)
+        {
+            var toRead = (int)Math.Min(count, _bytesBeforeFault - _read);
+            if (toRead <= 0)
+            {
+                throw new HttpIOException(HttpRequestError.Unknown, "Simulated network error");
+            }
+
+            var read = _inner.Read(buffer, offset, toRead);
+            _read += read;
+            return read;
+        }
+
+        public override async Task<int> ReadAsync(byte[] buffer, int offset, int count, CancellationToken cancellationToken)
+        {
+            var toRead = (int)Math.Min(count, _bytesBeforeFault - _read);
+            if (toRead <= 0)
+            {
+                throw new HttpIOException(HttpRequestError.Unknown, "Simulated network error");
+            }
+
+            var read = await _inner.ReadAsync(buffer, offset, toRead, cancellationToken).ConfigureAwait(false);
+            _read += read;
+            return read;
+        }
+
+        public override void Flush() { }
+        public override long Seek(long offset, SeekOrigin origin) => throw new NotSupportedException();
+        public override void SetLength(long value) => throw new NotSupportedException();
+        public override void Write(byte[] buffer, int offset, int count) => throw new NotSupportedException();
     }
 }

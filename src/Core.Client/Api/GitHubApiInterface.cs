@@ -68,9 +68,9 @@ public sealed class GitHubApiInterface : IApiInterface
 
 
     /// <inheritdoc />
-    public async Task<List<DownloadableAddonJsonModel>?> GetAddonsAsync(GameEnum gameEnum)
+    public async Task<List<DownloadableAddonJsonModel>?> GetAddonsAsync(GameEnum gameEnum, CancellationToken cancellationToken = default)
     {
-        await _semaphore.WaitAsync().ConfigureAwait(false);
+        await _semaphore.WaitAsync(cancellationToken).ConfigureAwait(false);
 
         try
         {
@@ -80,14 +80,17 @@ public sealed class GitHubApiInterface : IApiInterface
 
                 for (var attempt = 1; attempt <= maxRetries; attempt++)
                 {
+                    cancellationToken.ThrowIfCancellationRequested();
+
                     try
                     {
                         using var httpClient = _httpClientFactory.CreateClient(HttpClientEnum.GitHub.GetDescription());
-                        await using var response = await httpClient.GetStreamAsync(CommonConstants.AddonsJsonUrl).ConfigureAwait(false);
+                        await using var response = await httpClient.GetStreamAsync(CommonConstants.AddonsJsonUrl, cancellationToken).ConfigureAwait(false);
 
                         _addonsJson = await JsonSerializer.DeserializeAsync(
                             response,
-                            DownloadableAddonJsonModelDictionaryContext.Default.DictionaryGameEnumListDownloadableAddonJsonModel
+                            DownloadableAddonJsonModelDictionaryContext.Default.DictionaryGameEnumListDownloadableAddonJsonModel,
+                            cancellationToken
                             ).ConfigureAwait(false);
 
                         if (_addonsJson is null)
@@ -100,7 +103,7 @@ public sealed class GitHubApiInterface : IApiInterface
                     catch (Exception ex) when ((ex is TaskCanceledException or HttpRequestException) && attempt < maxRetries)
                     {
                         _logger.LogWarning(ex, "Error while getting addons from GitHub (attempt {Attempt}/{MaxRetries})", attempt, maxRetries);
-                        await Task.Delay(TimeSpan.FromSeconds(Math.Pow(2, attempt))).ConfigureAwait(false);
+                        await Task.Delay(TimeSpan.FromSeconds(Math.Pow(2, attempt)), cancellationToken).ConfigureAwait(false);
                     }
                 }
 
@@ -149,9 +152,9 @@ public sealed class GitHubApiInterface : IApiInterface
     }
 
     /// <inheritdoc />
-    public async Task<GeneralReleaseJsonModel?> GetLatestAppReleaseAsync()
+    public async Task<GeneralReleaseJsonModel?> GetLatestAppReleaseAsync(CancellationToken cancellationToken = default)
     {
-        var result = await _appRepoReleasesProvider.GetLatestReleaseAsync(AppReleaseEnum.MainApp, ClientProperties.IsDeveloperMode).ConfigureAwait(false);
+        var result = await _appRepoReleasesProvider.GetLatestReleaseAsync(AppReleaseEnum.MainApp, ClientProperties.IsDeveloperMode, cancellationToken).ConfigureAwait(false);
 
         if (result?.TryGetValue(CommonProperties.OSEnum, out var release) is true)
         {
@@ -162,9 +165,9 @@ public sealed class GitHubApiInterface : IApiInterface
     }
 
     /// <inheritdoc />
-    public async Task<GeneralReleaseJsonModel?> GetLatestPortReleaseAsync(PortEnum portEnum)
+    public async Task<GeneralReleaseJsonModel?> GetLatestPortReleaseAsync(PortEnum portEnum, CancellationToken cancellationToken = default)
     {
-        var result = await _portsReleasesProviderBase.GetLatestReleaseAsync(portEnum, false).ConfigureAwait(false);
+        var result = await _portsReleasesProviderBase.GetLatestReleaseAsync(portEnum, false, cancellationToken).ConfigureAwait(false);
 
         if (result?.TryGetValue(CommonProperties.OSEnum, out var release) is true)
         {
@@ -175,9 +178,9 @@ public sealed class GitHubApiInterface : IApiInterface
     }
 
     /// <inheritdoc />
-    public async Task<GeneralReleaseJsonModel?> GetLatestToolReleaseAsync(ToolEnum toolEnum)
+    public async Task<GeneralReleaseJsonModel?> GetLatestToolReleaseAsync(ToolEnum toolEnum, CancellationToken cancellationToken = default)
     {
-        var result = await _toolsReleasesProviderBase.GetLatestReleaseAsync(toolEnum, false).ConfigureAwait(false);
+        var result = await _toolsReleasesProviderBase.GetLatestReleaseAsync(toolEnum, false, cancellationToken).ConfigureAwait(false);
 
         if (result?.TryGetValue(CommonProperties.OSEnum, out var release) is true)
         {
@@ -284,15 +287,15 @@ public sealed class GitHubApiInterface : IApiInterface
     }
 
     /// <inheritdoc />
-    public async Task<string?> GetUploadFolderAsync()
+    public async Task<string?> GetUploadFolderAsync(CancellationToken cancellationToken = default)
     {
-        await _semaphore.WaitAsync().ConfigureAwait(false);
+        await _semaphore.WaitAsync(cancellationToken).ConfigureAwait(false);
 
         try
         {
             if (_data is null)
             {
-                await InitDataAsync().ConfigureAwait(false);
+                await InitDataAsync(cancellationToken).ConfigureAwait(false);
             }
 
             return _data?.TryGetValue(DataJson.UploadFolder, out var uploadFolder) == true ? uploadFolder : null;
@@ -310,18 +313,19 @@ public sealed class GitHubApiInterface : IApiInterface
     }
 
     /// <inheritdoc />
-    public async Task<List<AddonManifestJsonModel>?> GetMetadataAsync()
+    public async Task<List<AddonManifestJsonModel>?> GetMetadataAsync(CancellationToken cancellationToken = default)
     {
         try
         {
             using var httpClient = _httpClientFactory.CreateClient();
 
-            using var jsonStream = await httpClient.GetStreamAsync(CommonConstants.ManifestsJsonUrl).ConfigureAwait(false)
-                                ?? throw new FormatException("Error while deserializing manifests.json");
+            using var jsonStream = await httpClient.GetStreamAsync(CommonConstants.ManifestsJsonUrl, cancellationToken).ConfigureAwait(false)
+                                 ?? throw new FormatException("Error while deserializing manifests.json");
 
             var meta = await JsonSerializer.DeserializeAsync(
                 jsonStream,
-                AddonManifestJsonContext.Default.ListAddonManifestJsonModel
+                AddonManifestJsonContext.Default.ListAddonManifestJsonModel,
+                cancellationToken
                 ).ConfigureAwait(false);
 
             return meta;
@@ -335,15 +339,15 @@ public sealed class GitHubApiInterface : IApiInterface
     }
 
     /// <inheritdoc />
-    public async Task<Result<Uri?>> GetSignedUrlAsync(string path)
+    public async Task<Result<Uri?>> GetSignedUrlAsync(string path, CancellationToken cancellationToken = default)
     {
-        await _semaphore.WaitAsync().ConfigureAwait(false);
+        await _semaphore.WaitAsync(cancellationToken).ConfigureAwait(false);
 
         try
         {
             if (_data is null)
             {
-                await InitDataAsync().ConfigureAwait(false);
+                await InitDataAsync(cancellationToken).ConfigureAwait(false);
             }
 
             if (_data is null || !_data.TryGetValue(DataJson.UploadFolder, out var uploadFolder))
@@ -371,12 +375,12 @@ public sealed class GitHubApiInterface : IApiInterface
     /// <summary>
     ///     Initializes the cached data dictionary by downloading data.json from GitHub.
     /// </summary>
-    private async Task InitDataAsync()
+    private async Task InitDataAsync(CancellationToken cancellationToken = default)
     {
         using var httpClient = _httpClientFactory.CreateClient(HttpClientEnum.GitHub.GetDescription());
-        using var response = await httpClient.GetStreamAsync(CommonConstants.DataJsonUrl).ConfigureAwait(false);
+        using var response = await httpClient.GetStreamAsync(CommonConstants.DataJsonUrl, cancellationToken).ConfigureAwait(false);
 
-        _data = await JsonSerializer.DeserializeAsync(response, DataJsonModelContext.Default.DictionaryStringString).ConfigureAwait(false)
+        _data = await JsonSerializer.DeserializeAsync(response, DataJsonModelContext.Default.DictionaryStringString, cancellationToken).ConfigureAwait(false)
              ?? throw new FormatException("Error while deserializing meta.json");
     }
 

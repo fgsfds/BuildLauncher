@@ -44,7 +44,7 @@ public sealed partial class AboutViewModel : ObservableObject
     public AboutViewModel(AppUpdateInstaller updateInstaller)
     {
         _updateInstaller = updateInstaller;
-        _ = CheckForUpdateAsync();
+        _ = CheckForUpdateAsync(CancellationToken.None);
     }
 
 
@@ -52,12 +52,12 @@ public sealed partial class AboutViewModel : ObservableObject
     ///     Checks for application updates asynchronously.
     /// </summary>
     /// <returns>A task representing the asynchronous operation.</returns>
-    private async Task CheckForUpdateAsync()
+    private async Task CheckForUpdateAsync(CancellationToken cancellationToken = default)
     {
         try
         {
             CurrentUpdateState = UpdateState.InProgress;
-            var updates = await _updateInstaller.CheckForUpdates(CurrentVersion).ConfigureAwait(true);
+            var updates = await _updateInstaller.CheckForUpdates(CurrentVersion, cancellationToken).ConfigureAwait(true);
 
             if (updates is null)
             {
@@ -100,17 +100,17 @@ public sealed partial class AboutViewModel : ObservableObject
     /// </summary>
     /// <returns>A task representing the asynchronous operation.</returns>
     [RelayCommand(CanExecute = nameof(CheckOrInstallUpdateCanExecute))]
-    private async Task CheckOrInstallUpdateAsync()
+    private async Task CheckOrInstallUpdateAsync(CancellationToken cancellationToken)
     {
         if (CurrentUpdateState is UpdateState.UpdateAvailable)
         {
             CurrentUpdateState = UpdateState.InProgress;
-            await _updateInstaller.DownloadAndUnpackLatestRelease().ConfigureAwait(true);
+            await _updateInstaller.DownloadAndUnpackLatestRelease(cancellationToken).ConfigureAwait(true);
             AppUpdateInstaller.InstallUpdate();
         }
         else
         {
-            await CheckForUpdateAsync().ConfigureAwait(true);
+            await CheckForUpdateAsync(cancellationToken).ConfigureAwait(true);
         }
     }
 

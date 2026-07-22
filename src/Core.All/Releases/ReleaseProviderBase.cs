@@ -54,7 +54,7 @@ public abstract class ReleaseProviderBase<T> where T : Enum
     /// <param name="e">Entity enum value identifying the release to fetch.</param>
     /// <param name="includePreReleases">If <c>true</c>, pre-release and draft entries are considered.</param>
     /// <returns>A dictionary mapping each OS to its release model, or <c>null</c> if no releases were found.</returns>
-    public async Task<Dictionary<OSEnum, GeneralReleaseJsonModel>?> GetLatestReleaseAsync(T e, bool includePreReleases)
+    public async Task<Dictionary<OSEnum, GeneralReleaseJsonModel>?> GetLatestReleaseAsync(T e, bool includePreReleases, CancellationToken cancellationToken = default)
     {
         try
         {
@@ -67,7 +67,7 @@ public abstract class ReleaseProviderBase<T> where T : Enum
                 return null;
             }
 
-            return await FetchAndCacheReleasesAsync(e, repo, includePreReleases).ConfigureAwait(false);
+            return await FetchAndCacheReleasesAsync(e, repo, includePreReleases, cancellationToken).ConfigureAwait(false);
         }
         catch (Exception ex)
         {
@@ -153,14 +153,15 @@ public abstract class ReleaseProviderBase<T> where T : Enum
     /// </summary>
     /// <param name="url">GitHub releases API URL.</param>
     /// <param name="includePreReleases">Whether to include pre-release and draft entries.</param>
-    private async Task<List<GitHubReleaseJsonModel>?> GetReleasesAsync(Uri url, bool includePreReleases)
+    private async Task<List<GitHubReleaseJsonModel>?> GetReleasesAsync(Uri url, bool includePreReleases, CancellationToken cancellationToken = default)
     {
         using var httpClient = _httpClientFactory.CreateClient(HttpClientEnum.GitHub.GetDescription());
-        await using var dataStream = await httpClient.GetStreamAsync(url).ConfigureAwait(false);
+        await using var dataStream = await httpClient.GetStreamAsync(url, cancellationToken).ConfigureAwait(false);
 
         var allReleases = await JsonSerializer.DeserializeAsync(
             dataStream,
-            GitHubReleaseEntityContext.Default.ListGitHubReleaseJsonModel
+            GitHubReleaseEntityContext.Default.ListGitHubReleaseJsonModel,
+            cancellationToken
             ).ConfigureAwait(false);
 
         if (allReleases is null)
@@ -185,17 +186,19 @@ public abstract class ReleaseProviderBase<T> where T : Enum
     /// <param name="repo">Repository entity configuration.</param>
     /// <param name="includePreReleases">Whether to include pre-release and draft entries.</param>
     private async Task<Dictionary<OSEnum, GeneralReleaseJsonModel>?> FetchAndCacheReleasesAsync(
-        T key, RepositoryEntity repo, bool includePreReleases)
+        T key, RepositoryEntity repo, bool includePreReleases, CancellationToken cancellationToken = default)
     {
         if (_releases.TryGetValue(key, out var cached))
         {
             return cached;
         }
 
+        cancellationToken.ThrowIfCancellationRequested();
+
         if (repo.CustomReleaseParser is not null)
         {
             using var httpClient = _httpClientFactory.CreateClient();
-            await using var dataStream = await httpClient.GetStreamAsync(repo.RepoUrl).ConfigureAwait(false);
+            await using var dataStream = await httpClient.GetStreamAsync(repo.RepoUrl, cancellationToken).ConfigureAwait(false);
             var release = repo.CustomReleaseParser(dataStream);
 
             _logger.LogInformation(
@@ -225,16 +228,20 @@ public abstract class ReleaseProviderBase<T> where T : Enum
 
         if (repo.SharedCacheKey is not null)
         {
+            cancellationToken.ThrowIfCancellationRequested();
+
             var lazy = _sharedRepoReleases.GetOrAdd(
                 repo.SharedCacheKey,
-                _ => new(() => GetReleasesAsync(repo.RepoUrl, includePreReleases))
+                _ => new(() => GetReleasesAsync(repo.RepoUrl, includePreReleases, CancellationToken.None))
                 );
 
             releases = await lazy.Value.ConfigureAwait(false);
+
+            cancellationToken.ThrowIfCancellationRequested();
         }
         else
         {
-            releases = await GetReleasesAsync(repo.RepoUrl, includePreReleases).ConfigureAwait(false);
+            releases = await GetReleasesAsync(repo.RepoUrl, includePreReleases, cancellationToken).ConfigureAwait(false);
         }
 
         return releases is null ? null : GetAndAddReleases(key, repo, releases);

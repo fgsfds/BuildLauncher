@@ -1,4 +1,5 @@
 ﻿using System.Security.Cryptography;
+using Core.All;
 using Core.All.Serializable.Downloadable;
 using Core.Client.Interfaces;
 using Core.Client.Tools;
@@ -100,33 +101,35 @@ public abstract class InstallerBase<T>
     /// <summary>
     ///     Returns latest release.
     /// </summary>
-    public abstract Task<GeneralReleaseJsonModel?> GetRelease();
+    public abstract Task<GeneralReleaseJsonModel?> GetRelease(CancellationToken cancellationToken = default);
 
     /// <summary>
     ///     Installs port/tool.
     /// </summary>
-    public async Task<bool> InstallAsync()
+    public async Task<Result> InstallAsync(CancellationToken cancellationToken = default)
     {
         try
         {
             _filesDownloader.ProgressChanged += OnProgressChanged;
             _archiveTools.ProgressChanged += OnProgressChanged;
 
-            var release = await GetRelease().ConfigureAwait(false);
+            var release = await GetRelease(cancellationToken).ConfigureAwait(false);
 
             if (release?.DownloadUrl is null)
             {
-                return false;
+                return new(ResultEnum.Error, string.Empty);
             }
 
             var filePath = Path.GetFileName(release.DownloadUrl.ToString());
 
-            var isDownloaded = await _filesDownloader.DownloadFileAsync(release.DownloadUrl, filePath, CancellationToken.None).ConfigureAwait(false);
+            var isDownloaded = await _filesDownloader.DownloadFileAsync(release.DownloadUrl, filePath, cancellationToken).ConfigureAwait(false);
 
-            if (!isDownloaded)
+            if (!isDownloaded.IsSuccess)
             {
-                return false;
+                return isDownloaded;
             }
+
+            cancellationToken.ThrowIfCancellationRequested();
 
             var isHashCorrect = await CheckFileHashAsync(filePath, release.Hash).ConfigureAwait(false);
 
@@ -137,20 +140,22 @@ public abstract class InstallerBase<T>
                     File.Delete(filePath);
                 }
 
-                return false;
+                return new(ResultEnum.HashError, string.Empty);
             }
+
+            cancellationToken.ThrowIfCancellationRequested();
 
             Backup();
 
-            await _archiveTools.UnpackArchiveAsync(filePath, _instance.InstallFolderPath).ConfigureAwait(false);
+            await _archiveTools.UnpackArchiveAsync(filePath, _instance.InstallFolderPath, cancellationToken).ConfigureAwait(false);
 
             File.Delete(filePath);
 
-            await File.WriteAllTextAsync(Path.Combine(_instance.InstallFolderPath, "version"), release.Version).ConfigureAwait(false);
+            await File.WriteAllTextAsync(Path.Combine(_instance.InstallFolderPath, "version"), release.Version, cancellationToken).ConfigureAwait(false);
 
             PostInstall(filePath);
 
-            return true;
+            return new(ResultEnum.Success, string.Empty);
         }
         catch (Exception ex)
         {

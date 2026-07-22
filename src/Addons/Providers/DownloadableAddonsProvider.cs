@@ -154,7 +154,7 @@ public sealed class DownloadableAddonsProvider
         return [.. addonTypeCache.Values];
     }
 
-    public async Task<bool> DownloadAddonAsync(
+    public async Task<Result> DownloadAddonAsync(
         DownloadableAddonJsonModel addon,
         CancellationToken cancellationToken
         )
@@ -191,11 +191,18 @@ public sealed class DownloadableAddonsProvider
 
             var isDownloaded = await _filesDownloader.DownloadFileAsync(url, pathToFile, cancellationToken).ConfigureAwait(false);
 
-            if (!isDownloaded)
+            if (!isDownloaded.IsSuccess)
             {
+                if (isDownloaded.ResultEnum is ResultEnum.Cancelled)
+                {
+                    _logger.LogError($"Downloading {addon.Title} cancelled.");
+
+                    return new(ResultEnum.Cancelled, string.Empty);
+                }
+
                 _logger.LogError($"Error while downloading {addon.Title}.");
 
-                return false;
+                return new(ResultEnum.Error, string.Empty);
             }
 
             var doesHashMatch = await CheckFileHashAsync(pathToFile, addon.Sha256, cancellationToken).ConfigureAwait(false);
@@ -209,7 +216,7 @@ public sealed class DownloadableAddonsProvider
 
                 _logger.LogError($"File hash for {addon.Title} doesn't match.");
 
-                return false;
+                return new(ResultEnum.HashError, string.Empty);
             }
 
             await _installedAddonsProvider.AddAddonAsync(pathToFile).ConfigureAwait(false);
@@ -224,7 +231,7 @@ public sealed class DownloadableAddonsProvider
                 }
             }
 
-            return true;
+            return new(ResultEnum.Success, string.Empty);
         }
         finally
         {

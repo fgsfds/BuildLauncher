@@ -236,7 +236,7 @@ public sealed partial class ToolViewModel : ObservableObject
     ///     Download and install tool
     /// </summary>
     [RelayCommand]
-    private async Task InstallAsync()
+    private async Task InstallAsync(CancellationToken cancellationToken)
     {
         ToolInstaller? installer = null;
 
@@ -250,7 +250,7 @@ public sealed partial class ToolViewModel : ObservableObject
             ProgressBarValue = 0;
             OnPropertyChanged(nameof(ProgressBarValue));
 
-            var isInstalled = await installer.InstallAsync().ConfigureAwait(true);
+            var isInstalled = await installer.InstallAsync(cancellationToken).ConfigureAwait(true);
         }
         catch (Exception ex)
         {

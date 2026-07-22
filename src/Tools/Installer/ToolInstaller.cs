@@ -112,5 +112,5 @@ public sealed class ToolInstaller : InstallerBase<BaseTool>
     }
 
     /// <inheritdoc />
-    public override Task<GeneralReleaseJsonModel?> GetRelease() => _apiInterface.GetLatestToolReleaseAsync(_instance.ToolEnum);
+    public override Task<GeneralReleaseJsonModel?> GetRelease(CancellationToken cancellationToken = default) => _apiInterface.GetLatestToolReleaseAsync(_instance.ToolEnum, cancellationToken);
 }
