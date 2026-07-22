@@ -70,18 +70,19 @@ public sealed class PortsInstallerTests
             NullLoggerFactory.Instance
             );
 
-        //Raze port = new();
         var installer = portInstallerFactory.Create(port);
 
-        await installer.InstallAsync();
+        var installResult = await installer.InstallAsync();
 
-        Assert.True(File.Exists(Path.Combine(port.InstallFolderPath, "version")));
-        Assert.True(File.Exists(port.PortExeFilePath));
+        Assert.True(installResult.IsSuccess, $"Port install failed: {installResult.Message}");
+
+        Assert.True(File.Exists(Path.Combine(port.InstallFolderPath, "version")), "Version file does not exist.");
+        Assert.True(File.Exists(port.PortExeFilePath), "Port exe does not exist.");
 
         installer.Uninstall();
 
-        Assert.False(File.Exists(Path.Combine(port.InstallFolderPath, "version")));
-        Assert.False(File.Exists(port.PortExeFilePath));
+        Assert.False(File.Exists(Path.Combine(port.InstallFolderPath, "version")), "Version file still exists.");
+        Assert.False(File.Exists(port.PortExeFilePath), "Port exe still exists.");
     }
 
 

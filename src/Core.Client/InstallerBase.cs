@@ -158,10 +158,10 @@ public abstract class InstallerBase<T>
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, $"Error while installing {_instance.ToString}.");
+            _logger.LogError(ex, $"Error while installing {_instance.ToString()}.");
             Uninstall();
 
-            throw;
+            return new(ResultEnum.Error, ex.ToString());
         }
         finally
         {
@@ -175,5 +175,5 @@ public abstract class InstallerBase<T>
     /// </summary>
     /// <param name="_">Unused sender parameter.</param>
     /// <param name="e">Progress value.</param>
-    protected void OnProgressChanged(object? _, float e) => ((IProgress<float>)Progress).Report(e);
+    private void OnProgressChanged(object? _, float e) => ((IProgress<float>)Progress).Report(e);
 }
