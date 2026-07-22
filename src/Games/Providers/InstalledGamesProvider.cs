@@ -4,16 +4,34 @@ using Games.Games;
 
 namespace Games.Providers;
 
+/// <summary>
+///     Provides access to all registered game instances and their install status.
+///     Listens to config changes to keep game paths in sync.
+/// </summary>
 public class InstalledGamesProvider
 {
+    /// <summary>
+    ///     Raised when a game's install path changes via config update.
+    /// </summary>
     public event GameChanged? GameChangedEvent;
+
+    /// <summary>
+    ///     Represents the method that handles <see cref="GameChangedEvent" />.
+    /// </summary>
+    /// <param name="game">The game whose install path changed.</param>
     public delegate void GameChanged(GameEnum game);
 
     private readonly Dictionary<GameEnum, BaseGame> _games = new();
     private readonly Dictionary<string, Action> _configMappings = new();
 
+    /// <summary>
+    ///     Whether Blood is installed.
+    /// </summary>
     public bool IsBloodInstalled => GetGame(GameEnum.Blood).IsBaseGameInstalled;
 
+    /// <summary>
+    ///     Whether any Duke Nukem 3D variant (base, World Tour, or Duke64) is installed.
+    /// </summary>
     public bool IsDukeInstalled
     {
         get
@@ -24,10 +42,19 @@ public class InstalledGamesProvider
         }
     }
 
+    /// <summary>
+    ///     Whether Shadow Warrior is installed.
+    /// </summary>
     public bool IsWangInstalled => GetGame(GameEnum.Wang).IsBaseGameInstalled;
 
+    /// <summary>
+    ///     Whether Ion Fury is installed.
+    /// </summary>
     public bool IsFuryInstalled => GetGame(GameEnum.Fury).IsBaseGameInstalled;
 
+    /// <summary>
+    ///     Whether any Redneck Rampage variant (base or Rides Again) is installed.
+    /// </summary>
     public bool IsRedneckInstalled
     {
         get
@@ -38,12 +65,24 @@ public class InstalledGamesProvider
         }
     }
 
+    /// <summary>
+    ///     Whether Powerslave is installed.
+    /// </summary>
     public bool IsSlaveInstalled => GetGame(GameEnum.Slave).IsBaseGameInstalled;
 
+    /// <summary>
+    ///     whether NAM is installed.
+    /// </summary>
     public bool IsNamInstalled => GetGame(GameEnum.NAM).IsBaseGameInstalled;
 
+    /// <summary>
+    ///     Whether World War II GI is installed.
+    /// </summary>
     public bool IsWW2GIInstalled => GetGame(GameEnum.WW2GI).IsBaseGameInstalled;
 
+    /// <summary>
+    ///     Whether any Witchaven variant (base or 2) is installed.
+    /// </summary>
     public bool IsWitchavenInstalled
     {
         get
@@ -54,8 +93,15 @@ public class InstalledGamesProvider
         }
     }
 
+    /// <summary>
+    ///     Whether TekWar is installed.
+    /// </summary>
     public bool IsTekWarInstalled => GetGame(GameEnum.TekWar).IsBaseGameInstalled;
 
+    /// <summary>
+    ///     Initializes a new instance of <see cref="InstalledGamesProvider" />.
+    /// </summary>
+    /// <param name="config">Configuration provider used to read initial game paths.</param>
     public InstalledGamesProvider(IConfigProvider config)
     {
         Register(
