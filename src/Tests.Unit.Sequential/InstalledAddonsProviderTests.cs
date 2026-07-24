@@ -966,6 +966,131 @@ public sealed class InstalledAddonsProviderTests : IDisposable
     }
 
     /// <summary>
+    ///     Tests that deleting a single addon from a grpinfo folder removes
+    ///     only the matching .grp file and leaves the rest of the folder intact.
+    /// </summary>
+    [Fact]
+    public void DeleteAddon_BaseAddon_GrpInfoAddon_DeletesOnlySingleGrpFile()
+    {
+        var grpInfoDir = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
+        Directory.CreateDirectory(grpInfoDir);
+
+        try
+        {
+            var grpInfoPath = Path.Combine(grpInfoDir, "addons.grpinfo");
+
+            File.WriteAllText(
+                grpInfoPath, """
+                grpinfo
+                {
+                    name       "Campaign One"
+                    scriptname "scripts/one.con"
+                    size       1000
+                }
+                {
+                    name       "Campaign Two"
+                    scriptname "scripts/two.con"
+                    size       2000
+                }
+                """
+            );
+
+            var grp1Path = Path.Combine(grpInfoDir, "camp1.grp");
+            var grp2Path = Path.Combine(grpInfoDir, "camp2.grp");
+            File.WriteAllBytes(grp1Path, new byte[1000]);
+            File.WriteAllBytes(grp2Path, new byte[2000]);
+
+            var parsed = new ParsedAddonFile
+            {
+                FileInfo = new AddonFilePathWrapper(grpInfoDir, "addons.grpinfo"),
+                SupportedGame = GameEnum.Duke3D,
+                Manifest = null,
+                GridHash = null,
+                PreviewHash = null
+            };
+
+            _installedAddonsProvider.AddAddon(parsed);
+
+            var campaigns = _installedAddonsProvider.GetInstalledAddonsByType(AddonTypeEnum.TC);
+            var campaignOne = campaigns.First(c => c.AddonId.Id == "campaign_one");
+
+            _installedAddonsProvider.DeleteAddon(campaignOne);
+
+            Assert.False(File.Exists(grp1Path), "Deleted .grp file should be removed");
+            Assert.True(File.Exists(grp2Path), "Other .grp file should remain");
+            Assert.True(File.Exists(grpInfoPath), ".grpinfo file should remain");
+            Assert.True(Directory.Exists(grpInfoDir), "Folder should remain when other addons exist");
+        }
+        finally
+        {
+            if (Directory.Exists(grpInfoDir))
+            {
+                Directory.Delete(grpInfoDir, true);
+            }
+        }
+    }
+
+    /// <summary>
+    ///     Tests that deleting the last addon from a grpinfo folder removes
+    ///     the .grp file, the .grpinfo file, and the folder itself.
+    /// </summary>
+    [Fact]
+    public void DeleteAddon_BaseAddon_LastGrpInfoAddon_DeletesGrpInfoAndFolder()
+    {
+        var grpInfoDir = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
+        Directory.CreateDirectory(grpInfoDir);
+
+        try
+        {
+            var grpInfoPath = Path.Combine(grpInfoDir, "addons.grpinfo");
+
+            File.WriteAllText(
+                grpInfoPath, """
+                grpinfo
+                {
+                    name       "Only Campaign"
+                    scriptname "scripts/only.con"
+                    size       3000
+                }
+                """
+            );
+
+            var grpPath = Path.Combine(grpInfoDir, "only.grp");
+            File.WriteAllBytes(grpPath, new byte[3000]);
+
+            var txtPath = Path.Combine(grpInfoDir, "readme.txt");
+            File.WriteAllBytes(txtPath, new byte[3000]);
+
+            var parsed = new ParsedAddonFile
+            {
+                FileInfo = new AddonFilePathWrapper(grpInfoDir, "addons.grpinfo"),
+                SupportedGame = GameEnum.Duke3D,
+                Manifest = null,
+                GridHash = null,
+                PreviewHash = null
+            };
+
+            _installedAddonsProvider.AddAddon(parsed);
+
+            var campaigns = _installedAddonsProvider.GetInstalledAddonsByType(AddonTypeEnum.TC);
+            var onlyCampaign = campaigns.First(c => c.AddonId.Id == "only_campaign");
+
+            _installedAddonsProvider.DeleteAddon(onlyCampaign);
+
+            Assert.False(File.Exists(grpPath), ".grp file should be removed");
+            Assert.False(File.Exists(grpInfoPath), ".grpinfo file should be removed when last addon is deleted");
+            Assert.False(Directory.Exists(grpInfoDir), "Folder should be removed when empty");
+        }
+        finally
+        {
+            if (Directory.Exists(grpInfoDir))
+            {
+                Directory.Delete(grpInfoDir, true);
+            }
+        }
+    }
+
+    /// <summary>
     ///     Tests that deleting a parsed addon file with a null manifest throws.
     /// </summary>
     [Fact]

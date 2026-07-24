@@ -403,7 +403,29 @@ public sealed class InstalledAddonsProvider : IDisposable
         }
         else if (addon.FileInfo.IsFolder)
         {
-            Directory.Delete(addon.FileInfo.PathToFolder, true);
+            var pathToFolder = addon.FileInfo.PathToFolder;
+            var grpInfoFile = Directory.GetFiles(pathToFolder, "*.grpinfo").FirstOrDefault();
+
+            if (grpInfoFile is not null)
+            {
+                var pathToFile = addon.FileInfo.PathToFile;
+
+                if (File.Exists(pathToFile))
+                {
+                    File.Delete(pathToFile);
+                }
+
+                var remainingGrps = Directory.GetFiles(pathToFolder, "*.grp");
+
+                if (remainingGrps.Length == 0)
+                {
+                    Directory.Delete(pathToFolder, recursive: true);
+                }
+            }
+            else
+            {
+                Directory.Delete(pathToFolder, true);
+            }
         }
         else
         {
