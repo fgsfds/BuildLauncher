@@ -610,21 +610,34 @@
     "description": "After blasting through D.C., Duke is engaging the enemy in good old L.A. once more. Having a few new weapons in his arsenal, 10 SP levels (1 secret) are awaiting exploration.\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
   },
   {
+    "id": "duke3d-duke-meets-doom",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "Duke Meets Doom",
+    "version": "3.1",
+    "author": "Oddeye",
+    "con_main": "DOOM.CON",
+    "description": "A three episode campaign that sees Doomguy battle demons who have opened portals to Earth (AKA Duke\u0027s Realm) to invade."
+  },
+  {
     "id": "duke3d-duke-nukem-advance-tc",
     "type": "TC",
     "game": {
       "name": "Duke3D"
     },
     "title": "Duke Nukem Advance TC",
-    "version": ".8",
-    "author": "branung",
-    "con_main": "DNAGAME.CON",
+    "version": "1.0",
+    "author": "branung, oasiz",
+    "con_main": "scripts/dna4pc.con",
+    "def_main": "dna.def",
     "dependencies": {
       "features": [
         "EDuke32_CON"
       ]
     },
-    "description": "https://www.moddb.com/mods/duke-nukem-advance-tc\r\nThe GBA game brought to Build! This mod for Duke 3D includes the entire campaign from Duke Nukem Advance by Torus Games, complete with all of its exclusive enemies, assets, and even in-level cutscenes!\r\n\r\nSince the GBA game runs on the Doom engine, this isn\u0027t a one-to-one port of the original. Instead, this is an attempt to bring the experience over to the more familiar game feel of the Build engine while staying faithful to the original\u0027s design. There\u0027s also optional enhancements such as voice clips in cutscenes and the ability to switch between the two completely different scripts the game has, which can be found in the mod\u0027s custom menu in-game.\r\n\r\nSpecial thanks to:\r\nGianni Matragrano for providing Duke lines for the cutscenes as one of the mod\u0027s options.\r\nVoxelvoid for sharing the work they\u0027ve done on their DNA4PC project on GitHub, which is how this got started."
+    "description": "A total conversion which aims to port DN:A onto EDuke32 \u0026 Duke3D codebase.\r\n\r\nDN:A itself runs on the proprietary Southpaw Engine developed by Torus games which is more known for powering the GBA port of Doom II. The GBA adaptation of Duke in many ways can be thought of as a mod for this engine, making DN:A mechanically and technically quite reminiscent of Doom\u0027s gameplay and limitations.\r\n\r\nThis conversion utilizes original assets such as sounds, graphics and levels with any necessary conversion and fixes to present them inside Build engine. Much of the DNA4PC gameplay code is a hybrid of original Duke (Which DN:A imitates in the first place). This approach will not result in an exact replication but as much of the relevant DN:A specific experience as possible has been backported and adapted. You can expect to see all of the major special Enemies, sounds and other gameplay behavior that forms the \u0022DN:A experience\u0022\r\n\r\nTLDR -- Experience Duke Nukem : Advance with all the bells \u0026 whistles of today.\r\n\r\n    \r\n"
   },
   {
     "id": "duke3d-dnf2013",
@@ -827,7 +840,7 @@
       "name": "Duke3D"
     },
     "title": "Genetic",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "author": "George-William Bernard, Mikko Sandt",
     "release_date": "2022-12-17",
     "con_main": "GENETIC.CON",
@@ -1247,6 +1260,24 @@
     "author": "Michael Clark, Matt Harris et al.",
     "con_main": "scripts/nuclear.con",
     "description": "9 SP (1 secret) \u002B 12 DM maps. Only first episode (\u0022Nuclear Neurosis\u0022) is for SP.\r\n\r\nExpect an average playtime of maybe 10-15 minutes per map, so they are not too huge.  It\u0027s definitely more about the action than level design, even though locations are nice. I especially liked \u0022Demolition Delapidation\u0022 where you can blow up pretty much everything, or \u0022Multi-Story Massacer\u0022 which lets you explore several levels of a skyscraper. However, sometimes there are apparently shortcuts which enable you to finish some maps rather quickly, often without even having to find/use all keycards.\r\n\r\nThere is one new weapon, the Gravity Gun, which makes enemies float indoors, sometimes dropping weapons, or die outdoors when flying too high after a hit. One new opponent has been added, a robot which is throwing grenades at you and can even harm you after you finished it off and get too close. Some guns have new sounds.\r\n\r\nSome new ideas are an electric fence that can damage you, malfunctioning pipebomb/nightvision pickups, Coke health, fake Atomic Health with only a \u002B5 bonus or mines which explode when you step on them.\r\n\r\n*Uses modified .grp from the EDuke32 Addon Compilation by NightFright*\r\nhttps://forums.duke4.net/topic/7640-release-eduke32-addon-compilation/"
+  },
+  {
+    "id": "duke3d-nuclear-showdown",
+    "type": "TC",
+    "game": {
+      "name": "Duke3D"
+    },
+    "title": "Nuclear Showdown",
+    "version": "2.1",
+    "author": "Jblade35",
+    "con_main": "ICDGAME.CON",
+    "def_main": "ns.def",
+    "dependencies": {
+      "features": [
+        "EDuke32_CON"
+      ]
+    },
+    "description": "https://www.moddb.com/mods/nuclear-showdown-redux\r\nNuclear showdown is a gameplay mod for Duke Nukem that adds many features such as new weapons, enemies, effects to the default game as well as usermaps - it is built so you can play your favourite usermaps with, even ones that use custom art. You can also play through Duke it out in DC if you have it.\r\n\r\nThe Redux version is the official v2 of Nuclear Showdown, fixed to work on newer versions of Eduke32 without the bugs.\r\n\r\nFirst of all, thanks to Nightfright for patching what he could of my old code and trying to keep the mod alive. This version was based off his version. also thanks to M210 for hosting NS on his site and also trying to fix a few bugs.\r\n\r\nFinally thanks to Oporix for releasing \u0027Block ignite\u0027 a usermap for Nuclear Showdown which inspired me to patch it so it\u0027s functional and relatively bug-free."
   },
   {
     "id": "duke3d-operation-blitzkrieg",
@@ -3634,6 +3665,21 @@
       "file": "snowb.map"
     },
     "description": "https://gamebanana.com/mods/150879\r\n\r\nIt\u0027s damn cold up here, this really must be one of the worst places to work for Heskel at."
+  },
+  {
+    "id": "fury-valley-of-the-king",
+    "type": "Map",
+    "game": {
+      "name": "Fury"
+    },
+    "title": "Valley of the King",
+    "version": "1.1",
+    "author": "Truck Stop Santa Claus",
+    "release_date": "2020-02-26",
+    "startmap": {
+      "file": "vallyking.map"
+    },
+    "description": "https://gamebanana.com/mods/150880\r\n\r\nShelly is now on her way to Egypt to stop the evil Dr. Heskel from stealing ancient artifacts for his sinister plans. You\u0027re in for a fight like nothing else in Ion Fury!\r\n\r\nThis map uses custom textures and music to give the map a feel unlike anything in Ion Fury."
   },
   {
     "id": "fury-zombie-fury",
