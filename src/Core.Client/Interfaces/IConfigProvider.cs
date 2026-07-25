@@ -174,14 +174,14 @@ public interface IConfigProvider
     /// </summary>
     /// <param name="addonId">The addon identifier.</param>
     /// <param name="isEnabled">Whether the mod should be enabled.</param>
-    void ChangeModState(AddonId addonId, bool isEnabled);
+    void ChangeModState(in AddonId addonId, bool isEnabled);
 
     /// <summary>
     ///     Adds or removes the specified addon from favorites.
     /// </summary>
     /// <param name="addonId">The addon identifier.</param>
     /// <param name="isEnabled">Whether to favorite the addon.</param>
-    void ChangeFavoriteState(AddonId addonId, bool isEnabled);
+    void ChangeFavoriteState(in AddonId addonId, bool isEnabled);
 
     /// <summary>
     ///     Enables or disables an option for the specified addon.

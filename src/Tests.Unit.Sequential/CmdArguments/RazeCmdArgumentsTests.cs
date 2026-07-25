@@ -402,7 +402,7 @@ public sealed class RazeCmdArgumentsTests
         Raze raze = new();
 
         var packedCamp = PortTestSetups.PackedDukeAddonCampaign();
-        var zipFilePath = packedCamp.FileInfo!.PathToFile;
+        var zipFilePath = packedCamp.FileInfo.Value.PathToFile;
 
         var args = raze.GetStartGameArgs(_dukeGame, packedCamp, [], [], true, true);
 

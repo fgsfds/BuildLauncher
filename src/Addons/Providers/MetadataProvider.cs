@@ -77,7 +77,12 @@ public sealed class MetadataProvider
         }
     }
 
-    public bool IsMetadataUpdateAvailable(AddonId addonId, AddonFilePathWrapper fileInfo)
+    /// <summary>
+    ///     Checks whether a metadata update is available for the given addon.
+    /// </summary>
+    /// <param name="addonId">Addon identifier.</param>
+    /// <param name="fileInfo">Addon file path wrapper.</param>
+    public bool IsMetadataUpdateAvailable(in AddonId addonId, AddonFilePathWrapper fileInfo)
     {
         if (_updatesCache.TryGetValue(fileInfo, out _))
         {

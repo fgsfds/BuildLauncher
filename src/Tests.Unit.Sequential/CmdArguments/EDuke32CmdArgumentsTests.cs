@@ -186,7 +186,7 @@ public sealed class EDuke32CmdArgumentsTests
         EDuke32 eduke32 = new();
 
         var packedCamp = PortTestSetups.PackedDukeAddonCampaign();
-        var zipFilePath = packedCamp.FileInfo!.PathToFile;
+        var zipFilePath = packedCamp.FileInfo.Value.PathToFile;
 
         var args = eduke32.GetStartGameArgs(_dukeGame, packedCamp, [], [], true, true);
 

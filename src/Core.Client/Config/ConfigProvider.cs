@@ -361,7 +361,7 @@ public sealed class ConfigProvider : IConfigProvider
     }
 
     /// <inheritdoc />
-    public void ChangeModState(AddonId addonId, bool isEnabled)
+    public void ChangeModState(in AddonId addonId, bool isEnabled)
     {
         using var dbContext = _dbContextFactory.CreateDbContext();
 
@@ -400,7 +400,7 @@ public sealed class ConfigProvider : IConfigProvider
     }
 
     /// <inheritdoc />
-    public void ChangeFavoriteState(AddonId addonId, bool isEnabled)
+    public void ChangeFavoriteState(in AddonId addonId, bool isEnabled)
     {
         using var dbContext = _dbContextFactory.CreateDbContext();
 

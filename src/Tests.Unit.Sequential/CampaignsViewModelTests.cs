@@ -177,7 +177,7 @@ public sealed class CampaignsViewModelTests : IDisposable
         _installedAddonsProvider.AddAddon(ParsedAddonFileHelper.CreateParsedAddonFile("camp-other", "Other Camp", "1.0", AddonTypeEnum.TC));
 
         var list = _viewModel.AddonsList;
-        var baseAddons = list.Where(a => a.AddonId?.Id is not null).ToList();
+        var baseAddons = list.Where(a => a.AddonId.Id is not null).ToList();
         var favIndex = baseAddons.IndexOf(baseAddons.First(a => a.AddonId.Id == "camp-fav"));
         var otherIndex = baseAddons.IndexOf(baseAddons.First(a => a.AddonId.Id == "camp-other"));
 
@@ -218,7 +218,7 @@ public sealed class CampaignsViewModelTests : IDisposable
         var campaign = _installedAddonsProvider.GetInstalledAddonsByType(AddonTypeEnum.TC).First(a => a.AddonId.Id == "del-test");
         _viewModel.SelectedAddon = campaign;
 
-        Directory.CreateDirectory(campaign.FileInfo!.PathToFolder);
+        Directory.CreateDirectory(campaign.FileInfo.Value.PathToFolder);
 
         _viewModel.DeleteAddonCommand.Execute(null);
 

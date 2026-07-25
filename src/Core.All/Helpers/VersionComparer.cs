@@ -187,4 +187,55 @@ public static class VersionComparer
 
         return v1[(dash1 + 1)..].SequenceCompareTo(v2[(dash2 + 1)..]);
     }
+
+    public static int GetNormalizedHashCode(string? version)
+    {
+        if (string.IsNullOrEmpty(version)) return 0;
+
+        var span = version.AsSpan();
+        var dashIndex = span.IndexOf('-');
+        var numericPart = dashIndex >= 0 ? span[..dashIndex] : span;
+
+        List<int> segments = [];
+        var allNumeric = true;
+
+        while (numericPart.Length > 0)
+        {
+            var dotIndex = numericPart.IndexOf('.');
+            var segment = dotIndex >= 0 ? numericPart[..dotIndex] : numericPart;
+
+            if (allNumeric && int.TryParse(segment, out var n))
+                segments.Add(n);
+            else
+                allNumeric = false;
+
+            numericPart = dotIndex >= 0 ? numericPart[(dotIndex + 1)..] : [];
+        }
+
+        var hash = new HashCode();
+
+        if (allNumeric)
+        {
+            while (segments.Count > 1 && segments[^1] == 0)
+                segments.RemoveAt(segments.Count - 1);
+            foreach (var s in segments)
+                hash.Add(s);
+        }
+        else
+        {
+            var r = dashIndex >= 0 ? span[..dashIndex] : span;
+            while (r.Length > 0)
+            {
+                var dotIndex = r.IndexOf('.');
+                var segment = dotIndex >= 0 ? r[..dotIndex] : r;
+                hash.Add(string.GetHashCode(segment, StringComparison.Ordinal));
+                r = dotIndex >= 0 ? r[(dotIndex + 1)..] : [];
+            }
+        }
+
+        if (dashIndex >= 0)
+            hash.Add(string.GetHashCode(span[(dashIndex + 1)..], StringComparison.Ordinal));
+
+        return hash.ToHashCode();
+    }
 }

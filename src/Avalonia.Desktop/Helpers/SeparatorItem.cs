@@ -14,7 +14,7 @@ public sealed class SeparatorItem : BaseAddon
     [SetsRequiredMembers]
     public SeparatorItem()
     {
-        AddonId = null!;
+        AddonId = default;
         Title = null!;
     }
 }

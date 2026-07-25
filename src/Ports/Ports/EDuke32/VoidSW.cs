@@ -150,7 +150,7 @@ public sealed class VoidSW : EDuke32
 
         if (wCamp.Type is AddonTypeEnum.TC)
         {
-            _ = sb.Append($@" {AddDirectoryParam}""{game.CampaignsFolderPath}"" {AddFileParam}""{wCamp.FileInfo.FileName}""");
+            _ = sb.Append($@" {AddDirectoryParam}""{game.CampaignsFolderPath}"" {AddFileParam}""{wCamp.FileInfo.Value.FileName}""");
         }
         else if (wCamp.Type is AddonTypeEnum.Map)
         {

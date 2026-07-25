@@ -61,6 +61,25 @@ public sealed class AddonIdTests
     }
 
     /// <summary>
+    ///     Tests that <see cref="AddonId.GetHashCode" /> returns the same hash for semantically equivalent versions
+    ///     (e.g., leading zeros, different segment counts that compare as equal).
+    /// </summary>
+    [Theory]
+    [InlineData("1.0", "01.0")]
+    [InlineData("1.00", "1.0")]
+    [InlineData("01.01", "1.1")]
+    [InlineData("1.0.0", "1.0")]
+    [InlineData("1.0.0", "01.00.00")]
+    [InlineData("1.0-alpha", "01.0-alpha")]
+    public void GetHashCode_SemanticEqualVersions_ReturnsSameHash(string version1, string version2)
+    {
+        var a = new AddonId("foo", version1);
+        var b = new AddonId("foo", version2);
+
+        Assert.Equal(a.GetHashCode(), b.GetHashCode());
+    }
+
+    /// <summary>
     ///     Tests that <see cref="AddonId.GetHashCode" /> is case-insensitive for the Id.
     /// </summary>
     [Fact]

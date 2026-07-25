@@ -88,8 +88,8 @@ public sealed class ConfigProviderFake : IConfigProvider
     public void ChangeAddonOptionState(string addonId, string option, bool isEnabled) => throw new NotSupportedException($"{nameof(ConfigProviderFake)} does not support {nameof(ChangeAddonOptionState)}.");
 
     /// <inheritdoc />
-    public void ChangeFavoriteState(AddonId addonId, bool isEnabled) => throw new NotSupportedException($"{nameof(ConfigProviderFake)} does not support {nameof(ChangeFavoriteState)}.");
+    public void ChangeFavoriteState(in AddonId addonId, bool isEnabled) => throw new NotSupportedException($"{nameof(ConfigProviderFake)} does not support {nameof(ChangeFavoriteState)}.");
 
     /// <inheritdoc />
-    public void ChangeModState(AddonId addonId, bool isEnabled) => throw new NotSupportedException($"{nameof(ConfigProviderFake)} does not support {nameof(ChangeModState)}.");
+    public void ChangeModState(in AddonId addonId, bool isEnabled) => throw new NotSupportedException($"{nameof(ConfigProviderFake)} does not support {nameof(ChangeModState)}.");
 }

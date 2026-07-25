@@ -303,7 +303,7 @@ public sealed class Raze : BasePort
 
         if (dCamp.Type is AddonTypeEnum.TC)
         {
-            _ = sb.Append($@" {AddFileParam}""{dCamp.FileInfo.PathToFile}""");
+            _ = sb.Append($@" {AddFileParam}""{dCamp.FileInfo.Value.PathToFile}""");
         }
         else if (dCamp.Type is AddonTypeEnum.Map)
         {
@@ -354,7 +354,7 @@ public sealed class Raze : BasePort
 
         if (wCamp.Type is AddonTypeEnum.TC)
         {
-            _ = sb.Append($@" {AddFileParam}""{wCamp.FileInfo.PathToFile}""");
+            _ = sb.Append($@" {AddFileParam}""{wCamp.FileInfo.Value.PathToFile}""");
         }
         else if (wCamp.Type is AddonTypeEnum.Map)
         {
@@ -422,7 +422,7 @@ public sealed class Raze : BasePort
 
         if (rCamp.Type is AddonTypeEnum.TC)
         {
-            _ = sb.Append($@" {AddFileParam}""{rCamp.FileInfo.PathToFile}""");
+            _ = sb.Append($@" {AddFileParam}""{rCamp.FileInfo.Value.PathToFile}""");
         }
         else if (rCamp.Type is AddonTypeEnum.Map)
         {
@@ -497,9 +497,9 @@ public sealed class Raze : BasePort
                     //blood unpacked addons
                     if (campaign is BloodCampaign bCamp &&
                         bCamp.FileInfo is not null &&
-                        bCamp.FileInfo.IsFolder)
+                        bCamp.FileInfo.Value.IsFolder)
                     {
-                        path = bCamp.FileInfo.PathToFolder.Replace('\\', '/');
+                        path = bCamp.FileInfo.Value.PathToFolder.Replace('\\', '/');
                         _ = sb.Append("Path=").AppendLine(path);
                     }
 

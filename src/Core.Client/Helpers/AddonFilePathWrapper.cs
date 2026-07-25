@@ -3,7 +3,7 @@
 /// <summary>
 ///     Wraps a folder or archive path together with a manifest file name.
 /// </summary>
-public sealed record AddonFilePathWrapper
+public readonly record struct AddonFilePathWrapper
 {
     private readonly string _mainFileName;
 
@@ -75,9 +75,6 @@ public sealed record AddonFilePathWrapper
         return new(newFolderPath, _mainFileName);
     }
 
-    /// <summary>
-    ///     Returns the combined path of the addon folder and manifest file name.
-    /// </summary>
     [Obsolete("Don't use ToString(), use properties instead.", true)]
     public override string ToString() => Path.Combine(_pathToAddonFileOrFolder, _mainFileName);
 }

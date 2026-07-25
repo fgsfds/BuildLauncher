@@ -132,4 +132,56 @@ public sealed class VersionCompareTests
 
         Assert.False(result);
     }
+
+    [Fact]
+    public void GetNormalizedHashCode_Null_ReturnsZero()
+    {
+        Assert.Equal(0, VersionComparer.GetNormalizedHashCode(null));
+    }
+
+    [Fact]
+    public void GetNormalizedHashCode_Empty_ReturnsZero()
+    {
+        Assert.Equal(0, VersionComparer.GetNormalizedHashCode(""));
+    }
+
+    [Theory]
+    [InlineData("1.0", "01.0")]
+    [InlineData("1.00", "1.0")]
+    [InlineData("01.01", "1.1")]
+    [InlineData("1.0.0", "1.0")]
+    [InlineData("1.0.0", "01.00.00")]
+    [InlineData("1.0-alpha", "01.0-alpha")]
+    [InlineData("2.10", "02.10")]
+    public void GetNormalizedHashCode_SemanticEqual_ReturnsSameHash(string version1, string version2)
+    {
+        Assert.Equal(
+            VersionComparer.GetNormalizedHashCode(version1),
+            VersionComparer.GetNormalizedHashCode(version2));
+    }
+
+    [Theory]
+    [InlineData("1.0", "2.0")]
+    [InlineData("1.0", "1.1")]
+    [InlineData("1.10", "1.9")]
+    [InlineData("1.0-a1", "1.0-a2")]
+    [InlineData("p1", "p2")]
+    public void GetNormalizedHashCode_Different_ReturnsDifferentHash(string version1, string version2)
+    {
+        Assert.NotEqual(
+            VersionComparer.GetNormalizedHashCode(version1),
+            VersionComparer.GetNormalizedHashCode(version2));
+    }
+
+    [Theory]
+    [InlineData("1.0-alpha")]
+    [InlineData("2.0.0-beta")]
+    [InlineData("p292")]
+    [InlineData("1.2.3.4")]
+    public void GetNormalizedHashCode_Deterministic(string version)
+    {
+        Assert.Equal(
+            VersionComparer.GetNormalizedHashCode(version),
+            VersionComparer.GetNormalizedHashCode(version));
+    }
 }

@@ -367,7 +367,7 @@ public class EDuke32 : BasePort
             }
             else
             {
-                _ = sb.Append($@" {AddFileParam}""{dCamp.FileInfo.PathToFile}""");
+                _ = sb.Append($@" {AddFileParam}""{addon.FileInfo.Value.PathToFile}""");
             }
         }
         else if (dCamp.Type is AddonTypeEnum.Map)
@@ -427,7 +427,7 @@ public class EDuke32 : BasePort
 
         if (fCamp.Type is AddonTypeEnum.TC)
         {
-            _ = sb.Append($@" {AddFileParam}""{fCamp.FileInfo.PathToFile}""");
+            _ = sb.Append($@" {AddFileParam}""{addon.FileInfo.Value.PathToFile}""");
         }
         else if (fCamp.Type is AddonTypeEnum.Map)
         {
@@ -545,7 +545,7 @@ public class EDuke32 : BasePort
 
         var saves = Directory.GetFiles(saveFolder);
 
-        var firstPart = campaign.FileInfo is not null && campaign.FileInfo.IsFolder ? campaign.FileInfo.PathToFolder : InstallFolderPath;
+        var firstPart = campaign.FileInfo is not null && campaign.FileInfo.Value.IsFolder ? campaign.FileInfo.Value.PathToFolder : InstallFolderPath;
 
         foreach (var save in saves)
         {
@@ -562,9 +562,9 @@ public class EDuke32 : BasePort
 
         string path;
 
-        if (campaign.FileInfo is not null && campaign.FileInfo.IsFolder)
+        if (campaign.FileInfo is not null && campaign.FileInfo.Value.IsFolder)
         {
-            path = campaign.FileInfo.PathToFolder;
+            path = campaign.FileInfo.Value.PathToFolder;
         }
         else
         {

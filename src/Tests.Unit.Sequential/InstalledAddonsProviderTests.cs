@@ -1461,7 +1461,7 @@ public sealed class InstalledAddonsProviderTests : IDisposable
 
         var parsedNoFile = ParsedAddonFileHelper.CreateParsedAddonFile("no-file", "No File", "1.0", AddonTypeEnum.TC) with
         {
-            FileInfo = null
+            FileInfo = default
         };
 
         var method = typeof(InstalledAddonsProvider).GetMethod("OnMetadataInitialized", BindingFlags.Instance | BindingFlags.NonPublic);

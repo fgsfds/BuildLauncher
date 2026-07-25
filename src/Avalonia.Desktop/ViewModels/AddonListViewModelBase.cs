@@ -334,7 +334,7 @@ public abstract partial class AddonListViewModelBase : RightPanelViewModel, IPor
 
         IsInProgress = true;
 
-        var result = await _metadataProvider.UpdateMetadataAsync(addon.FileInfo).ConfigureAwait(true);
+        var result = await _metadataProvider.UpdateMetadataAsync(addon.FileInfo.Value).ConfigureAwait(true);
 
         IsInProgress = false;
 

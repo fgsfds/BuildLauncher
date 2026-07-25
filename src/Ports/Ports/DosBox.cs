@@ -252,7 +252,7 @@ public sealed class DosBox : BasePort
             }
 
             _ = sb.Append($@" -c ""mount d \""{game.MapsFolderPath}""""");
-            _ = sb.Append($@" -c ""DUKE3D.EXE -map d:\\{map.FileInfo.FileName}""");
+            _ = sb.Append($@" -c ""DUKE3D.EXE -map d:\\{map.FileInfo.Value.FileName}""");
         }
         else
         {
@@ -313,6 +313,8 @@ public sealed class DosBox : BasePort
             bCamp.Type is AddonTypeEnum.TC &&
             addon.FileInfo is not null)
         {
+            var addonFileInfo = addon.FileInfo.Value;
+
             if (Directory.Exists(ClientProperties.TempFolderPath))
             {
                 Directory.Delete(ClientProperties.TempFolderPath, true);
@@ -333,9 +335,9 @@ public sealed class DosBox : BasePort
                 File.Copy(filePath, destFile, overwrite: true);
             }
 
-            if (addon.FileInfo.IsFolder)
+            if (addonFileInfo.IsFolder)
             {
-                foreach (var filePath in Directory.GetFiles(addon.FileInfo.PathToFolder))
+                foreach (var filePath in Directory.GetFiles(addonFileInfo.PathToFolder))
                 {
                     var fileName = Path.GetFileName(filePath);
                     var destFile = Path.Combine(ClientProperties.TempFolderPath, fileName);
@@ -346,7 +348,7 @@ public sealed class DosBox : BasePort
             {
                 Ensure.DirectoryExists(ClientProperties.TempFolderPath);
 
-                using var archive = ArchiveFactory.OpenArchive(addon.FileInfo.PathToFile);
+                using var archive = ArchiveFactory.OpenArchive(addonFileInfo.PathToFile);
                 archive.WriteToDirectory(ClientProperties.TempFolderPath);
             }
 
@@ -360,7 +362,7 @@ public sealed class DosBox : BasePort
         {
             _ = sb.Append(@$" -c ""mount c \""{game.GameInstallFolder}"""" -c ""c:""");
             _ = sb.Append(@$" -c ""mount d \""{game.MapsFolderPath}""""");
-            _ = sb.Append(@$" -c ""BLOOD.EXE -map d:\\{map.FileInfo.FileName}""");
+            _ = sb.Append(@$" -c ""BLOOD.EXE -map d:\\{map.FileInfo.Value.FileName}""");
 
             return;
         }

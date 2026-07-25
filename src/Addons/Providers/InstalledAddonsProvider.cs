@@ -387,13 +387,18 @@ public sealed class InstalledAddonsProvider : IDisposable
         ArgumentNullException.ThrowIfNull(_campaignsCache);
         ArgumentNullException.ThrowIfNull(_mapsCache);
         ArgumentNullException.ThrowIfNull(_modsCache);
-        ArgumentNullException.ThrowIfNull(addon.FileInfo);
+        if (!addon.FileInfo.HasValue)
+        {
+            throw new ArgumentNullException(nameof(addon.FileInfo));
+        }
+
+        var fileInfo = addon.FileInfo.Value;
 
         if (addon is LooseMap map)
         {
-            File.Delete(addon.FileInfo.PathToFile);
+            File.Delete(fileInfo.PathToFile);
 
-            var bloodIni = Path.Combine(addon.FileInfo.PathToFolder, map.BloodIni ?? string.Empty);
+            var bloodIni = Path.Combine(fileInfo.PathToFolder, map.BloodIni ?? string.Empty);
 
             if (map.BloodIni is not null &&
                 File.Exists(bloodIni))
@@ -401,14 +406,14 @@ public sealed class InstalledAddonsProvider : IDisposable
                 File.Delete(bloodIni);
             }
         }
-        else if (addon.FileInfo.IsFolder)
+        else if (fileInfo.IsFolder)
         {
-            var pathToFolder = addon.FileInfo.PathToFolder;
+            var pathToFolder = fileInfo.PathToFolder;
             var grpInfoFile = Directory.GetFiles(pathToFolder, "*.grpinfo").FirstOrDefault();
 
             if (grpInfoFile is not null)
             {
-                var pathToFile = addon.FileInfo.PathToFile;
+                var pathToFile = fileInfo.PathToFile;
 
                 if (File.Exists(pathToFile))
                 {
@@ -429,7 +434,7 @@ public sealed class InstalledAddonsProvider : IDisposable
         }
         else
         {
-            File.Delete(addon.FileInfo.PathToFile);
+            File.Delete(fileInfo.PathToFile);
         }
 
         if (addon.Type is AddonTypeEnum.TC)
@@ -448,11 +453,19 @@ public sealed class InstalledAddonsProvider : IDisposable
         AddonsChangedEvent?.Invoke(_game.GameEnum, addon.Type);
     }
 
+    /// <summary>
+    ///     Enables the specified addon.
+    /// </summary>
+    /// <param name="addon">Addon identifier.</param>
     public void EnableAddon(AddonId addon)
     {
         _addonActivator.EnableAddon(addon, _modsCache);
     }
 
+    /// <summary>
+    ///     Disables the specified addon.
+    /// </summary>
+    /// <param name="addon">Addon identifier.</param>
     public void DisableAddon(AddonId addon)
     {
         _addonActivator.DisableAddon(addon, _modsCache);
@@ -812,7 +825,7 @@ public sealed class InstalledAddonsProvider : IDisposable
                 continue;
             }
 
-            camp.IsMetadataUpdateAvailable = _metadataProvider.IsMetadataUpdateAvailable(camp.AddonId, camp.FileInfo);
+            camp.IsMetadataUpdateAvailable = _metadataProvider.IsMetadataUpdateAvailable(camp.AddonId, camp.FileInfo.Value);
         }
     }
 

@@ -163,7 +163,7 @@ public abstract partial class RightPanelViewModel : ObservableObject
     /// <summary>
     ///     Gets whether a metadata update is available for the selected addon.
     /// </summary>
-    public bool IsMetadataUpdateAvailable => SelectedAddon?.FileInfo is not null && _metadataProvider.IsMetadataUpdateAvailable(SelectedAddon.AddonId, SelectedAddon.FileInfo);
+    public bool IsMetadataUpdateAvailable => SelectedAddon?.FileInfo is not null && _metadataProvider.IsMetadataUpdateAvailable(SelectedAddon.AddonId, SelectedAddon.FileInfo.Value);
 
     /// <summary>
     ///     Gets the rating of the selected addon.

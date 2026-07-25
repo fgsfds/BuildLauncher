@@ -306,7 +306,7 @@ public abstract class BasePort : IInstallable
         //TODO e#m#
         if (camp.StartMap is MapFileJsonModel mapFile)
         {
-            _ = sb.Append($@" {AddFileParam}""{camp.FileInfo.PathToFile}""");
+            _ = sb.Append($@" {AddFileParam}""{camp.FileInfo.Value.PathToFile}""");
             _ = sb.Append($@" -map ""{mapFile.File}""");
         }
         else
@@ -369,19 +369,21 @@ public abstract class BasePort : IInstallable
             return;
         }
 
+        var bCampFileInfo = bCamp.FileInfo.Value;
+
         if (bCamp.Type is AddonTypeEnum.TC)
         {
             if (bCamp.Executables is not null)
             {
                 //don't add addon dir if the port is overridden
             }
-            else if (bCamp.FileInfo.IsFolder)
+            else if (bCampFileInfo.IsFolder)
             {
-                _ = sb.Append($@" {AddGameDirParam}""{bCamp.FileInfo.PathToFolder}""");
+                _ = sb.Append($@" {AddGameDirParam}""{bCampFileInfo.PathToFolder}""");
             }
             else
             {
-                _ = sb.Append($@" {AddFileParam}""{bCamp.FileInfo.PathToFile}""");
+                _ = sb.Append($@" {AddFileParam}""{bCampFileInfo.PathToFile}""");
             }
         }
         else if (bCamp.Type is AddonTypeEnum.Map)
@@ -428,7 +430,7 @@ public abstract class BasePort : IInstallable
 
         if (sCamp.Type is AddonTypeEnum.TC)
         {
-            _ = sb.Append($@" {AddFileParam}""{sCamp.FileInfo.PathToFile}""");
+            _ = sb.Append($@" {AddFileParam}""{sCamp.FileInfo.Value.PathToFile}""");
         }
         else if (sCamp.Type is AddonTypeEnum.Map)
         {
@@ -499,7 +501,7 @@ public abstract class BasePort : IInstallable
 
         if (dCamp.Type is AddonTypeEnum.TC)
         {
-            _ = sb.Append($@" {AddFileParam}""{dCamp.FileInfo.PathToFile}""");
+            _ = sb.Append($@" {AddFileParam}""{dCamp.FileInfo.Value.PathToFile}""");
         }
         else if (dCamp.Type is AddonTypeEnum.Map)
         {
@@ -544,12 +546,14 @@ public abstract class BasePort : IInstallable
                 continue;
             }
 
-            if (aMod.FileInfo.IsFolder)
+            var aModFileInfo = aMod.FileInfo.Value;
+
+            if (aModFileInfo.IsFolder)
             {
                 throw new InvalidOperationException("Folder mods are not supported in autoload");
             }
 
-            _ = sb.Append($@" {AddFileParam}""{aMod.FileInfo.FileName}""");
+            _ = sb.Append($@" {AddFileParam}""{aModFileInfo.FileName}""");
 
             if (aMod.AdditionalDefs is not null)
             {

@@ -256,7 +256,7 @@ public sealed class RedNukem : EDuke32
             }
             else
             {
-                _ = sb.Append($@" {AddFileParam}""{rCamp.FileInfo.PathToFile}""");
+                _ = sb.Append($@" {AddFileParam}""{addon.FileInfo.Value.PathToFile}""");
             }
         }
         else if (rCamp.Type is AddonTypeEnum.Map)
