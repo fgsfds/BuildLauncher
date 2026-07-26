@@ -11,6 +11,12 @@ using SharpCompress.Common;
 
 namespace Addons.Providers;
 
+/// <summary>
+///     Provides functionality to manage and retrieve metadata associated with add-ons.
+///     This class facilitates checking for metadata updates, initializing metadata storage,
+///     and updating metadata as needed. It also provides events to notify about metadata
+///     initialization and updates.
+/// </summary>
 public sealed class MetadataProvider
 {
     private readonly IApiInterface _apiInterface;
@@ -30,12 +36,28 @@ public sealed class MetadataProvider
         _logger = logger;
     }
 
+    /// <summary>
+    ///     Indicates whether the metadata has been successfully initialized.
+    /// </summary>
     [MemberNotNullWhen(true, nameof(_metaDict))]
     public bool IsInitialized => _metaDict is not null;
 
+    /// <summary>
+    ///     Occurs when the metadata has been successfully initialized.
+    /// </summary>
     public event EventHandler? MetadataInitializedEvent;
+
+    /// <summary>
+    ///     Occurs when the metadata associated with an addon file has been successfully updated.
+    /// </summary>
     public event EventHandler<ParsedAddonFile>? MetadataUpdatedEvent;
 
+    /// <summary>
+    ///     Asynchronously initializes the metadata cache by retrieving metadata from the API interface.
+    /// </summary>
+    /// <returns>
+    ///     A task representing the asynchronous operation. The task result is true if initialization succeeds, or false if it fails or metadata is unavailable.
+    /// </returns>
     public async Task<bool> InitializeAsync()
     {
         if (IsInitialized)
@@ -80,8 +102,12 @@ public sealed class MetadataProvider
     /// <summary>
     ///     Checks whether a metadata update is available for the given addon.
     /// </summary>
-    /// <param name="addonId">Addon identifier.</param>
-    /// <param name="fileInfo">Addon file path wrapper.</param>
+    /// <param name="addonId">
+    ///     Addon identifier.
+    /// </param>
+    /// <param name="fileInfo">
+    ///     Addon file path wrapper.
+    /// </param>
     public bool IsMetadataUpdateAvailable(in AddonId addonId, AddonFilePathWrapper fileInfo)
     {
         if (_updatesCache.TryGetValue(fileInfo, out _))
@@ -101,8 +127,8 @@ public sealed class MetadataProvider
             return false;
         }
 
-        var originalManifestStr = JsonSerializer.Serialize(originalManifest, AddonManifestJsonContext.Default.AddonManifestJsonModel);
-        var newManifestStr = JsonSerializer.Serialize(actualVersion, AddonManifestJsonContext.Default.AddonManifestJsonModel);
+        var originalManifestStr = JsonSerializer.Serialize(originalManifest, AddonManifestJsonContext.Default.AddonManifestJsonModel!);
+        var newManifestStr = JsonSerializer.Serialize(actualVersion, AddonManifestJsonContext.Default.AddonManifestJsonModel!);
 
         if (originalManifestStr.Equals(newManifestStr))
         {
@@ -126,6 +152,21 @@ public sealed class MetadataProvider
         return true;
     }
 
+    /// <summary>
+    ///     Asynchronously updates the metadata of the specified file. If the file is a zip archive,
+    ///     it handles the update by extracting data, performing the necessary operations, and replacing
+    ///     the file. If the file is a folder, it serializes and writes the metadata to the specified path.
+    ///     An event is triggered upon successful metadata update.
+    /// </summary>
+    /// <param name="fileInfo">
+    ///     An <see cref="AddonFilePathWrapper" /> object containing the file information, including
+    ///     its path and whether it represents a zip archive or folder.
+    /// </param>
+    /// <returns>
+    ///     A <see cref="Task{TResult}" /> representing the asynchronous operation. The task result contains
+    ///     a <see cref="Result{T}" /> with a boolean indicating success or failure, as well as additional
+    ///     result details.
+    /// </returns>
     public async Task<Result<bool>> UpdateMetadataAsync(AddonFilePathWrapper fileInfo)
     {
         try
@@ -141,7 +182,7 @@ public sealed class MetadataProvider
 
                 using (var archive = ZipArchive.OpenArchive(fileInfo.PathToFile))
                 {
-                    var existing = archive.Entries.FirstOrDefault(x => x.Key.Equals(update.FileInfo.ManifestFileName));
+                    var existing = archive.Entries.FirstOrDefault(x => x.Key?.Equals(update.FileInfo.ManifestFileName) is true);
 
                     if (existing is not null)
                     {
@@ -149,15 +190,14 @@ public sealed class MetadataProvider
                     }
 
                     using var ms = new MemoryStream();
-                    await JsonSerializer.SerializeAsync(ms, update.Manifest, AddonManifestJsonContext.Default.AddonManifestJsonModel).ConfigureAwait(false);
+                    await JsonSerializer.SerializeAsync(ms, update.Manifest, AddonManifestJsonContext.Default.AddonManifestJsonModel!).ConfigureAwait(false);
 
                     archive.AddEntry(update.FileInfo.ManifestFileName, ms);
 
                     archive.SaveTo(tempPath, new(CompressionType.None));
                 }
 
-                File.Delete(fileInfo.PathToFile);
-                File.Move(tempPath, fileInfo.PathToFile);
+                File.Move(tempPath, fileInfo.PathToFile, overwrite: true);
 
                 _updatesCache.Remove(fileInfo);
 
@@ -165,7 +205,7 @@ public sealed class MetadataProvider
             }
             else if (fileInfo.IsFolder)
             {
-                var addonJson = JsonSerializer.Serialize(update.Manifest, AddonManifestJsonContext.Default.AddonManifestJsonModel);
+                var addonJson = JsonSerializer.Serialize(update.Manifest, AddonManifestJsonContext.Default.AddonManifestJsonModel!);
                 await File.WriteAllTextAsync(fileInfo.PathToFile, addonJson).ConfigureAwait(false);
 
                 MetadataUpdatedEvent?.Invoke(this, update);
@@ -194,7 +234,7 @@ public sealed class MetadataProvider
 
             using var stream = File.OpenRead(fileInfo.PathToFile);
 
-            return JsonSerializer.Deserialize(stream, AddonManifestJsonContext.Default.AddonManifestJsonModel);
+            return JsonSerializer.Deserialize(stream, AddonManifestJsonContext.Default.AddonManifestJsonModel!);
         }
 
         if (fileInfo.IsZip)
@@ -214,7 +254,7 @@ public sealed class MetadataProvider
 
             using var stream = entry.OpenEntryStream();
 
-            return JsonSerializer.Deserialize(stream, AddonManifestJsonContext.Default.AddonManifestJsonModel);
+            return JsonSerializer.Deserialize(stream, AddonManifestJsonContext.Default.AddonManifestJsonModel!);
         }
 
         return null;

@@ -6,6 +6,10 @@ using SharpCompress.Archives;
 
 namespace Addons.Helpers;
 
+/// <summary>
+///     Provides functionality for extracting and processing addon files from archived packages.
+///     Specifically designed to handle archives containing addon-related metadata and resources.
+/// </summary>
 public sealed class ArchivedAddonExtractor
 {
     private readonly ILogger _logger;
@@ -15,6 +19,17 @@ public sealed class ArchivedAddonExtractor
         _logger = logger;
     }
 
+    /// <summary>
+    ///     Tries to extract the contents of a ZIP file if the specified file path points to a valid ZIP file.
+    ///     If the file is not a ZIP file, the method returns null.
+    /// </summary>
+    /// <param name="pathToFile">
+    ///     The file path to the archive to be extracted.
+    /// </param>
+    /// <returns>
+    ///     An <see cref="ExtractResult" /> representing the extraction results, including the directory where the contents
+    ///     were unpacked and the list of extracted addon manifests, or null if the file is not a ZIP archive.
+    /// </returns>
     public async Task<ExtractResult?> TryExtractIfNeededAsync(string pathToFile)
     {
         if (!pathToFile.EndsWith(".zip", StringComparison.OrdinalIgnoreCase))
@@ -22,21 +37,24 @@ public sealed class ArchivedAddonExtractor
             return null;
         }
 
+        string? unpackedTo = null;
+        IArchive? archive = null;
+
         try
         {
-            using var archive = ArchiveFactory.OpenArchive(pathToFile);
+            archive = ArchiveFactory.OpenArchive(pathToFile);
 
             if (archive.Entries.Any(static x => x.Key?.Equals("addons.grpinfo", StringComparison.OrdinalIgnoreCase) == true))
             {
-                var grpInfoUnpackedTo = Unpack(pathToFile, archive);
-                archive.Dispose();
-                File.Delete(pathToFile);
+                unpackedTo = Unpack(pathToFile, archive);
 
-                return new ExtractResult(grpInfoUnpackedTo, null);
+                return new ExtractResult(unpackedTo, null);
             }
 
             var addonJsonsInsideArchive = archive.Entries
-                                                 .Where(static x => x.Key?.StartsWith("addon") == true && x.Key.EndsWith(".json"))
+                                                 .Where(static x => x.Key?.StartsWith("addon", StringComparison.OrdinalIgnoreCase) == true &&
+                                                                    x.Key.EndsWith(".json", StringComparison.OrdinalIgnoreCase)
+                                                      )
                                                  .ToList();
 
             if (addonJsonsInsideArchive.Count == 0)
@@ -44,11 +62,11 @@ public sealed class ArchivedAddonExtractor
                 return null;
             }
 
-            using var addonJsonStream = addonJsonsInsideArchive[0].OpenEntryStream();
+            await using var addonJsonStream = await addonJsonsInsideArchive[0].OpenEntryStreamAsync().ConfigureAwait(false);
 
-            var addonDto = JsonSerializer.Deserialize(
+            var addonDto = await JsonSerializer.DeserializeAsync(
                 addonJsonStream,
-                AddonManifestJsonContext.Default.AddonManifestJsonModel
+                AddonManifestJsonContext.Default.AddonManifestJsonModel!
                 );
 
             if (addonDto is null)
@@ -56,22 +74,16 @@ public sealed class ArchivedAddonExtractor
                 return null;
             }
 
-            string? unpackedTo = null;
-
             if (addonDto.MainRff is not null || addonDto.SoundRff is not null)
             {
                 unpackedTo = Unpack(pathToFile, archive);
-                archive.Dispose();
-                File.Delete(pathToFile);
             }
             else if (addonDto.Executables is not null)
             {
                 unpackedTo = Unpack(pathToFile, archive);
-                archive.Dispose();
-                File.Delete(pathToFile);
             }
 
-            List<AddonManifestJsonModel> manifests = [];
+            List<AddonManifestJsonModel> manifests = new(3);
 
             if (unpackedTo is not null)
             {
@@ -81,10 +93,17 @@ public sealed class ArchivedAddonExtractor
                 {
                     await using var text = File.OpenRead(addonJson);
 
-                    var addonDto2 = JsonSerializer.Deserialize(
+                    var addonDto2 = await JsonSerializer.DeserializeAsync(
                         text,
-                        AddonManifestJsonContext.Default.AddonManifestJsonModel
-                        )!;
+                        AddonManifestJsonContext.Default.AddonManifestJsonModel!
+                        );
+
+                    if (addonDto2 is null)
+                    {
+                        _logger.LogError("Error while deserializing {FileName}.", addonJson);
+
+                        return null;
+                    }
 
                     manifests.Add(addonDto2);
                 }
@@ -93,12 +112,19 @@ public sealed class ArchivedAddonExtractor
             {
                 foreach (var addonJson in addonJsonsInsideArchive)
                 {
-                    using var addonJsonStream2 = await addonJson.OpenEntryStreamAsync();
+                    await using var addonJsonStream2 = await addonJson.OpenEntryStreamAsync().ConfigureAwait(false);
 
-                    var addonDto2 = JsonSerializer.Deserialize(
+                    var addonDto2 = await JsonSerializer.DeserializeAsync(
                         addonJsonStream2,
-                        AddonManifestJsonContext.Default.AddonManifestJsonModel
-                        )!;
+                        AddonManifestJsonContext.Default.AddonManifestJsonModel!
+                        );
+
+                    if (addonDto2 is null)
+                    {
+                        _logger.LogError("Error while deserializing {FileName}.", addonJson.Key);
+
+                        return null;
+                    }
 
                     manifests.Add(addonDto2);
                 }
@@ -111,6 +137,15 @@ public sealed class ArchivedAddonExtractor
             _logger.LogCritical(ex, "=== Error while unpacking archive ===");
 
             return null;
+        }
+        finally
+        {
+            archive?.Dispose();
+
+            if (unpackedTo is not null)
+            {
+                File.Delete(pathToFile);
+            }
         }
     }
 
@@ -131,9 +166,3 @@ public sealed class ArchivedAddonExtractor
         return unpackTo;
     }
 }
-
-
-public sealed record ExtractResult(
-    string? UnpackedTo,
-    IReadOnlyList<AddonManifestJsonModel>? Manifests
-    );

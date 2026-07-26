@@ -183,4 +183,47 @@ public sealed class ArchivedAddonExtractorTests : IDisposable
         Assert.Null(result);
         Assert.True(File.Exists(zipPath));
     }
+
+    [Fact]
+    public async Task TryExtractIfNeededAsync_ZipWithRffManifest_CorruptExtraJson_Unpacks()
+    {
+        var manifest = new AddonManifestJsonModel
+        {
+            Id = "rff-addon",
+            Title = "RFF Addon",
+            Version = "1.0",
+            AddonType = AddonTypeEnum.TC,
+            SupportedGame = new SupportedGameJsonModel
+            {
+                Game = GameEnum.Blood
+            },
+            MainRff = "custom.rff"
+        };
+
+        var json = JsonSerializer.Serialize(manifest, AddonManifestJsonContext.Default.AddonManifestJsonModel);
+
+        var zipPath = Path.Combine(_tempDir, "rff-addon.zip");
+
+        using (var stream = File.Create(zipPath))
+        using (var archive = new ZipArchive(stream, ZipArchiveMode.Create))
+        {
+            var entry = archive.CreateEntry("addon.json");
+            using (var writer = new StreamWriter(entry.Open()))
+            {
+                writer.Write(json);
+            }
+
+            var corruptEntry = archive.CreateEntry("addon_corrupt.json");
+            using (var corruptWriter = new StreamWriter(corruptEntry.Open()))
+            {
+                corruptWriter.Write("{corrupt}");
+            }
+        }
+
+        var result = await _extractor.TryExtractIfNeededAsync(zipPath);
+
+        Assert.Null(result);
+        Assert.False(File.Exists(zipPath));
+        Assert.True(Directory.Exists(Path.Combine(_tempDir, "rff-addon")));
+    }
 }

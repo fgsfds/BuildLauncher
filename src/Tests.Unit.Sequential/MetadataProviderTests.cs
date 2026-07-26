@@ -525,6 +525,27 @@ public sealed class MetadataProviderTests : IDisposable
         Assert.Equal("p292", received.Manifest.Version);
     }
 
+    [Fact]
+    public async Task UpdateMetadataAsync_ForZip_OriginalFileRemainsAndIsValid()
+    {
+        var (provider, _) = await CreateProviderAsync(
+            new List<AddonManifestJsonModel> { CreateRemoteManifest1(), CreateRemoteManifest2() }
+        );
+
+        var zipPath = Path.Combine(ClientProperties.AddonsFolderPath, "ZippedAddon.zip");
+        var zipWrapper = new AddonFilePathWrapper(zipPath, "addon.json");
+
+        _ = provider.IsMetadataUpdateAvailable(
+            new("blood-voxel-pack", "p292"),
+            zipWrapper
+        );
+
+        var result = await provider.UpdateMetadataAsync(zipWrapper);
+
+        Assert.True(result.IsSuccess);
+        Assert.True(File.Exists(zipPath));
+    }
+
     /// <summary>
     ///     Tests that updating metadata when the file does not exist returns an error.
     /// </summary>
