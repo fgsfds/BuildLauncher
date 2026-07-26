@@ -31,7 +31,7 @@ public sealed class BaseToolTests
     public void Mapster32_InstallFolderPath_ContainsEDuke32()
     {
         var tool = new Mapster32(null!);
-        Assert.EndsWith("EDuke32", (string?)tool.InstallFolderPath);
+        Assert.EndsWith("EDuke32", (string?)tool.InstallFolderPath, StringComparison.OrdinalIgnoreCase);
     }
 
     [Fact]

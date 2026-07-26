@@ -68,7 +68,7 @@ public abstract class InstallerBase<T>
 
         const string Sha = "sha256:";
 
-        if (hashStr.StartsWith(Sha))
+        if (hashStr.StartsWith(Sha, StringComparison.OrdinalIgnoreCase))
         {
             hashStr = hashStr[Sha.Length..];
         }

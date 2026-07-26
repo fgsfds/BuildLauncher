@@ -68,7 +68,7 @@ public sealed class AddonsDatabaseTests
         Assert.True(header.Content.Headers.ContentLength > 1, $"File {url} doesn't have size in the header.");
         Assert.Equal(size, header.Content.Headers.ContentLength);
 
-        if (url.ToString().StartsWith(S3Constants.S3Endpoint))
+        if (url.ToString().StartsWith(S3Constants.S3Endpoint, StringComparison.OrdinalIgnoreCase))
         {
             var actualHashStr = header.Headers
                                       .FirstOrDefault(x => x.Key.Equals("x-amz-meta-checksum-sha256")).Value

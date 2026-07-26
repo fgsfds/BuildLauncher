@@ -143,7 +143,7 @@ public abstract class BaseAddon
 
             for (var i = 0; i < lines.Length; i++)
             {
-                if (lines[i].StartsWith("http"))
+                if (lines[i].StartsWith("http", StringComparison.OrdinalIgnoreCase))
                 {
                     var line = lines[i].Trim();
                     lines[i] = $"[{line}]({line})";

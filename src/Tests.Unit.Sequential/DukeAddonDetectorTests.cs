@@ -105,7 +105,7 @@ public sealed class DukeAddonDetectorTests : IDisposable
         var result = _detector.TryFindAddon(DukeAddonEnum.DukeDC, _tempDir);
 
         Assert.True(result);
-        Assert.EndsWith("AddOns", _detector.AddonsPaths[DukeAddonEnum.DukeDC]);
+        Assert.EndsWith("AddOns", _detector.AddonsPaths[DukeAddonEnum.DukeDC], StringComparison.OrdinalIgnoreCase);
     }
 
     /// <summary>
@@ -119,7 +119,7 @@ public sealed class DukeAddonDetectorTests : IDisposable
         var result = _detector.TryFindAddon(DukeAddonEnum.DukeDC, _tempDir);
 
         Assert.True(result);
-        Assert.EndsWith(Path.Combine("addons", "dc"), _detector.AddonsPaths[DukeAddonEnum.DukeDC]);
+        Assert.EndsWith(Path.Combine("addons", "dc"), _detector.AddonsPaths[DukeAddonEnum.DukeDC], StringComparison.OrdinalIgnoreCase);
     }
 
     /// <summary>
@@ -133,7 +133,7 @@ public sealed class DukeAddonDetectorTests : IDisposable
         var result = _detector.TryFindAddon(DukeAddonEnum.DukeNW, _tempDir);
 
         Assert.True(result);
-        Assert.EndsWith(Path.Combine("addons", "nw"), _detector.AddonsPaths[DukeAddonEnum.DukeNW]);
+        Assert.EndsWith(Path.Combine("addons", "nw"), _detector.AddonsPaths[DukeAddonEnum.DukeNW], StringComparison.OrdinalIgnoreCase);
     }
 
     /// <summary>

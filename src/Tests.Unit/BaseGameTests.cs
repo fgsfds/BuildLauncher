@@ -35,21 +35,21 @@ public sealed class BaseGameTests : IDisposable
     public void CampaignsFolderPath_ContainsGameShortName()
     {
         var game = new BaseGameTestProxy();
-        Assert.EndsWith(Path.Combine("Test", "Campaigns"), (string?)game.CampaignsFolderPath);
+        Assert.EndsWith(Path.Combine("Test", "Campaigns"), (string?)game.CampaignsFolderPath, StringComparison.OrdinalIgnoreCase);
     }
 
     [Fact]
     public void MapsFolderPath_ContainsGameShortName()
     {
         var game = new BaseGameTestProxy();
-        Assert.EndsWith(Path.Combine("Test", "Maps"), (string?)game.MapsFolderPath);
+        Assert.EndsWith(Path.Combine("Test", "Maps"), (string?)game.MapsFolderPath, StringComparison.OrdinalIgnoreCase);
     }
 
     [Fact]
     public void ModsFolderPath_ContainsGameShortName()
     {
         var game = new BaseGameTestProxy();
-        Assert.EndsWith(Path.Combine("Test", "Mods"), (string?)game.ModsFolderPath);
+        Assert.EndsWith(Path.Combine("Test", "Mods"), (string?)game.ModsFolderPath, StringComparison.OrdinalIgnoreCase);
     }
 
     [Fact]

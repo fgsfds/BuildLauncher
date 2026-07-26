@@ -118,7 +118,7 @@ public sealed partial class DevViewModel : ObservableObject
         }
 
         var files = Directory.GetFiles(PathToAddonFolder, "*", SearchOption.TopDirectoryOnly)
-                             .Select(static x => Path.GetFileName(x).ToLower())
+                             .Select(static x => Path.GetFileName(x).ToLowerInvariant())
                              .ToList();
 
         if (SelectedGame is not GameEnum.Standalone &&
@@ -1037,7 +1037,7 @@ public sealed partial class DevViewModel : ObservableObject
         {
             if (char.IsLetterOrDigit(ch))
             {
-                _ = sb.Append(char.ToLower(ch));
+                _ = sb.Append(char.ToLowerInvariant(ch));
             }
             else if (char.IsWhiteSpace(ch))
             {

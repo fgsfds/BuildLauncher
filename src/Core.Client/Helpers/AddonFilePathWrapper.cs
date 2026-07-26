@@ -33,22 +33,22 @@ public readonly record struct AddonFilePathWrapper
     /// <summary>
     ///     True when the path ends with ".zip".
     /// </summary>
-    public bool IsZip => _pathToAddonFileOrFolder.EndsWith(".zip", StringComparison.InvariantCultureIgnoreCase);
+    public bool IsZip => _pathToAddonFileOrFolder.EndsWith(".zip", StringComparison.OrdinalIgnoreCase);
 
     /// <summary>
     ///     True when this is an unpacked folder addon with a ".json" manifest.
     /// </summary>
-    public bool IsJson => IsFolder && _mainFileName.EndsWith(".json", StringComparison.InvariantCultureIgnoreCase);
+    public bool IsJson => IsFolder && _mainFileName.EndsWith(".json", StringComparison.OrdinalIgnoreCase);
 
     /// <summary>
     ///     True when this is a loose ".map" file.
     /// </summary>
-    public bool IsMap => IsFolder && _mainFileName.EndsWith(".map", StringComparison.InvariantCultureIgnoreCase);
+    public bool IsMap => IsFolder && _mainFileName.EndsWith(".map", StringComparison.OrdinalIgnoreCase);
 
     /// <summary>
     ///     True when this is a ".grpinfo" file.
     /// </summary>
-    public bool IsGrpInfo => IsFolder && _mainFileName.EndsWith(".grpinfo", StringComparison.InvariantCultureIgnoreCase);
+    public bool IsGrpInfo => IsFolder && _mainFileName.EndsWith(".grpinfo", StringComparison.OrdinalIgnoreCase);
 
     /// <summary>
     ///     Returns the folder path. For zips, this is the parent directory.

@@ -67,6 +67,6 @@ public sealed class StubPortTests
     public void PortExeFilePath_ContainsInstallFolder()
     {
         var path = _port.PortExeFilePath;
-        Assert.StartsWith(_port.InstallFolderPath, (string?)path);
+        Assert.StartsWith(_port.InstallFolderPath, (string?)path, StringComparison.OrdinalIgnoreCase);
     }
 }

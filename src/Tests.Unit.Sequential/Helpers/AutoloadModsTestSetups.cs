@@ -51,15 +51,15 @@ internal sealed class AutoloadModsTestSetups
 
         _addon = gameEnum switch
         {
-            GameEnum.Duke3D => nameof(DukeAddonEnum.DukeVaca).ToLower(),
-            GameEnum.Blood => nameof(BloodAddonEnum.BloodCP).ToLower(),
-            GameEnum.Wang => nameof(WangAddonEnum.TwinDragon).ToLower(),
-            GameEnum.Redneck => nameof(RedneckAddonEnum.Route66).ToLower(),
+            GameEnum.Duke3D => nameof(DukeAddonEnum.DukeVaca).ToLowerInvariant(),
+            GameEnum.Blood => nameof(BloodAddonEnum.BloodCP).ToLowerInvariant(),
+            GameEnum.Wang => nameof(WangAddonEnum.TwinDragon).ToLowerInvariant(),
+            GameEnum.Redneck => nameof(RedneckAddonEnum.Route66).ToLowerInvariant(),
             GameEnum.Fury => "",
             GameEnum.Duke64 => "",
             GameEnum.Slave => "",
             GameEnum.NAM => "",
-            GameEnum.WW2GI => nameof(WW2GIAddonEnum.Platoon).ToLower(),
+            GameEnum.WW2GI => nameof(WW2GIAddonEnum.Platoon).ToLowerInvariant(),
             _ => throw new NotSupportedException()
         };
 

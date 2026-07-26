@@ -43,7 +43,7 @@ public sealed class PortInstaller : InstallerBase<BasePort>
     {
         if (_instance.PortEnum is PortEnum.DosBox)
         {
-            var subFolder = Directory.GetDirectories(_instance.InstallFolderPath).FirstOrDefault(x => x.Contains("dosbox-staging", StringComparison.InvariantCultureIgnoreCase));
+            var subFolder = Directory.GetDirectories(_instance.InstallFolderPath).FirstOrDefault(x => x.Contains("dosbox-staging", StringComparison.OrdinalIgnoreCase));
             FlattenSubfolder(_instance.InstallFolderPath, subFolder);
         }
         else if (_instance.PortEnum is PortEnum.ZeroRecomp)
@@ -58,7 +58,7 @@ public sealed class PortInstaller : InstallerBase<BasePort>
                 Trace.WriteLine($"Error creating portable.txt: {ex.Message}");
             }
 
-            var subFolder = Directory.GetDirectories(_instance.InstallFolderPath).FirstOrDefault(x => x.Contains("dnzh-", StringComparison.InvariantCultureIgnoreCase));
+            var subFolder = Directory.GetDirectories(_instance.InstallFolderPath).FirstOrDefault(x => x.Contains("dnzh-", StringComparison.OrdinalIgnoreCase));
             FlattenSubfolder(_instance.InstallFolderPath, subFolder);
         }
     }

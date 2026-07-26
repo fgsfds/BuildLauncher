@@ -119,7 +119,7 @@ internal sealed class AddonFactory
             return null;
         }
 
-        var bloodIniName = parsedAddonFile.FileInfo.FileName.Replace(".map", ".ini", StringComparison.InvariantCultureIgnoreCase);
+        var bloodIniName = parsedAddonFile.FileInfo.FileName.Replace(".map", ".ini", StringComparison.OrdinalIgnoreCase);
         var actualIni = Path.GetFileName(Directory.EnumerateFiles(parsedAddonFile.FileInfo.PathToFolder).FirstOrDefault(f => Path.GetFileName(f).Equals(bloodIniName, StringComparison.OrdinalIgnoreCase)));
 
         AddonId id = new(parsedAddonFile.FileInfo.FileName);

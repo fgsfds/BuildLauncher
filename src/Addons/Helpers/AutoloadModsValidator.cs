@@ -117,7 +117,7 @@ public static class AutoloadModsValidator
 
             foreach (var addon in mods)
             {
-                if (!dependentAddon.Key.Equals(addon.AddonId.Id, StringComparison.InvariantCultureIgnoreCase))
+                if (!dependentAddon.Key.Equals(addon.AddonId.Id, StringComparison.OrdinalIgnoreCase))
                 {
                     continue;
                 }

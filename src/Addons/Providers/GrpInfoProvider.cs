@@ -43,7 +43,7 @@ public static class GrpInfoProvider
                 continue;
             }
 
-            AddonId addonId = new(grpInfo.Name.ToLower().Replace(" ", "_"), null);
+            AddonId addonId = new(grpInfo.Name.ToLowerInvariant().Replace(" ", "_"), null);
 
             DukeCampaign camp = new()
             {

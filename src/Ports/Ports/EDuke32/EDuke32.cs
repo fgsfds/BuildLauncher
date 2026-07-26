@@ -573,7 +573,7 @@ public class EDuke32 : BasePort
 
         var files = from file in Directory.GetFiles(path)
                     from ext in SaveFileExtensions
-                    where file.EndsWith(ext)
+                    where file.EndsWith(ext, StringComparison.OrdinalIgnoreCase)
                     select file;
 
         Ensure.DirectoryExists(saveFolder);

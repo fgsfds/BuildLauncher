@@ -139,19 +139,19 @@ public sealed class ExecutablesConverter : JsonConverter<Dictionary<OSEnum, Dict
                     {
                         result.Add(OSEnum.Windows, []);
 
-                        if (winPort.StartsWith("nblood"))
+                        if (winPort.StartsWith("nblood", StringComparison.OrdinalIgnoreCase))
                         {
                             result[OSEnum.Windows].Add(PortEnum.NBlood, winPort);
                         }
-                        else if (winPort.StartsWith("notblood"))
+                        else if (winPort.StartsWith("notblood", StringComparison.OrdinalIgnoreCase))
                         {
                             result[OSEnum.Windows].Add(PortEnum.NotBlood, winPort);
                         }
-                        else if (winPort.StartsWith("eduke"))
+                        else if (winPort.StartsWith("eduke", StringComparison.OrdinalIgnoreCase))
                         {
                             result[OSEnum.Windows].Add(PortEnum.EDuke32, winPort);
                         }
-                        else if (winPort.StartsWith("raze"))
+                        else if (winPort.StartsWith("raze", StringComparison.OrdinalIgnoreCase))
                         {
                             result[OSEnum.Windows].Add(PortEnum.Raze, winPort);
                         }
@@ -165,19 +165,19 @@ public sealed class ExecutablesConverter : JsonConverter<Dictionary<OSEnum, Dict
                     {
                         result.Add(OSEnum.Linux, []);
 
-                        if (linPort.StartsWith("nblood"))
+                        if (linPort.StartsWith("nblood", StringComparison.OrdinalIgnoreCase))
                         {
                             result[OSEnum.Linux].Add(PortEnum.NBlood, linPort);
                         }
-                        else if (linPort.StartsWith("notblood"))
+                        else if (linPort.StartsWith("notblood", StringComparison.OrdinalIgnoreCase))
                         {
                             result[OSEnum.Linux].Add(PortEnum.NotBlood, linPort);
                         }
-                        else if (linPort.StartsWith("eduke"))
+                        else if (linPort.StartsWith("eduke", StringComparison.OrdinalIgnoreCase))
                         {
                             result[OSEnum.Linux].Add(PortEnum.EDuke32, linPort);
                         }
-                        else if (linPort.StartsWith("raze"))
+                        else if (linPort.StartsWith("raze", StringComparison.OrdinalIgnoreCase))
                         {
                             result[OSEnum.Linux].Add(PortEnum.Raze, linPort);
                         }

@@ -1,9 +1,7 @@
-using System.Collections.Immutable;
+using System.Text;
 using Addons.Addons;
 using Core.All.Enums;
-using Core.All.Enums.Addons;
 using Core.All.Helpers;
-using Core.All.Serializable.Addon;
 using Games.Games;
 
 namespace Tests.Unit;
@@ -107,7 +105,7 @@ public sealed class BasePortTests
     {
         var port = new BasePortTestProxy();
         var path = port.InstallFolderPath;
-        Assert.EndsWith(port.ShortName, path);
+        Assert.EndsWith(port.ShortName, path, StringComparison.OrdinalIgnoreCase);
     }
 
     [Fact]
@@ -115,7 +113,7 @@ public sealed class BasePortTests
     {
         var port = new BasePortTestProxy();
         var path = port.PortExeFilePath;
-        Assert.StartsWith(port.InstallFolderPath, path);
+        Assert.StartsWith(port.InstallFolderPath, path, StringComparison.OrdinalIgnoreCase);
         Assert.EndsWith(port.Exe, path, StringComparison.OrdinalIgnoreCase);
     }
 
@@ -152,8 +150,8 @@ public sealed class BasePortTests
     {
         var port = new BasePortTestProxy();
         var path = port.CallGetPathToAddonSavedGamesFolder("data", "myAddon");
-        Assert.StartsWith(port.PortSavedGamesFolderPath, path);
-        Assert.EndsWith("myAddon", path);
+        Assert.StartsWith(port.PortSavedGamesFolderPath, path, StringComparison.OrdinalIgnoreCase);
+        Assert.EndsWith("myAddon", path, StringComparison.OrdinalIgnoreCase);
     }
 
     [Fact]
@@ -176,7 +174,7 @@ public sealed class BasePortTests
     public void CallGetOptionsArgs_WithDefOption_AppendsDefParam()
     {
         var port = new BasePortTestProxy();
-        var sb = new System.Text.StringBuilder();
+        var sb = new StringBuilder();
         port.CallGetOptionsArgs(sb, CreateGame(), CreateCampaign("opt-test", "Opt Test", hasOptions: true), ["opt1"]);
         Assert.Contains("test.def", sb.ToString());
     }
@@ -185,7 +183,7 @@ public sealed class BasePortTests
     public void CallGetOptionsArgs_UnknownOption_ThrowsKeyNotFound()
     {
         var port = new BasePortTestProxy();
-        var sb = new System.Text.StringBuilder();
+        var sb = new StringBuilder();
         Assert.Throws<KeyNotFoundException>(() =>
             port.CallGetOptionsArgs(sb, CreateGame(), CreateCampaign("opt-test", "Opt Test", hasOptions: true), ["nonexistent"]));
     }

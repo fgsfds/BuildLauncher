@@ -85,11 +85,11 @@ internal static class PortTestSetups
             game.GameInstallFolder = originalFolder;
         }
 
-        var baseCamp = (BloodCampaign)campaigns[new AddonId(nameof(GameEnum.Blood).ToLower(), null)];
+        var baseCamp = (BloodCampaign)campaigns[new AddonId(nameof(GameEnum.Blood).ToLowerInvariant(), null)];
 
         var baseCampWithOptions = new BloodCampaign
         {
-            AddonId = new(nameof(GameEnum.Blood).ToLower(), null),
+            AddonId = new(nameof(GameEnum.Blood).ToLowerInvariant(), null),
             Type = AddonTypeEnum.Official,
             Title = "Blood",
             GridImageHash = null,
@@ -133,7 +133,7 @@ internal static class PortTestSetups
             }
         };
 
-        var cpCamp = (BloodCampaign)campaigns[new AddonId(nameof(BloodAddonEnum.BloodCP).ToLower(), null)];
+        var cpCamp = (BloodCampaign)campaigns[new AddonId(nameof(BloodAddonEnum.BloodCP).ToLowerInvariant(), null)];
 
         var tcCamp = new BloodCampaign
         {
@@ -395,13 +395,13 @@ internal static class PortTestSetups
             }
         }
 
-        var baseCamp = (DukeCampaign)campaigns[new AddonId(nameof(GameEnum.Duke3D).ToLower(), null)];
-        var vacaCamp = (DukeCampaign)campaigns[new AddonId(nameof(DukeAddonEnum.DukeVaca).ToLower(), null)];
-        var wtCamp = (DukeCampaign)campaigns[new AddonId(nameof(DukeVersionEnum.Duke3D_WT).ToLower(), null)];
-        var duke64Camp = (DukeCampaign)campaigns[new AddonId(nameof(GameEnum.Duke64).ToLower(), null)];
-        var zhCamp = (DukeCampaign)campaigns[new AddonId(nameof(GameEnum.DukeZeroHour).ToLower(), null)];
-        var dcCamp = (DukeCampaign)campaigns[new AddonId(nameof(DukeAddonEnum.DukeDC).ToLower(), null)];
-        var nwCamp = (DukeCampaign)campaigns[new AddonId(nameof(DukeAddonEnum.DukeNW).ToLower(), null)];
+        var baseCamp = (DukeCampaign)campaigns[new AddonId(nameof(GameEnum.Duke3D).ToLowerInvariant(), null)];
+        var vacaCamp = (DukeCampaign)campaigns[new AddonId(nameof(DukeAddonEnum.DukeVaca).ToLowerInvariant(), null)];
+        var wtCamp = (DukeCampaign)campaigns[new AddonId(nameof(DukeVersionEnum.Duke3D_WT).ToLowerInvariant(), null)];
+        var duke64Camp = (DukeCampaign)campaigns[new AddonId(nameof(GameEnum.Duke64).ToLowerInvariant(), null)];
+        var zhCamp = (DukeCampaign)campaigns[new AddonId(nameof(GameEnum.DukeZeroHour).ToLowerInvariant(), null)];
+        var dcCamp = (DukeCampaign)campaigns[new AddonId(nameof(DukeAddonEnum.DukeDC).ToLowerInvariant(), null)];
+        var nwCamp = (DukeCampaign)campaigns[new AddonId(nameof(DukeAddonEnum.DukeNW).ToLowerInvariant(), null)];
 
         var tcCamp = new DukeCampaign
         {
@@ -499,7 +499,7 @@ internal static class PortTestSetups
             game.GameInstallFolder = originalFolder;
         }
 
-        var camp = (DukeCampaign)campaigns[new AddonId(nameof(GameEnum.NAM).ToLower(), null)];
+        var camp = (DukeCampaign)campaigns[new AddonId(nameof(GameEnum.NAM).ToLowerInvariant(), null)];
 
         return (game, camp, modsProvider);
     }
@@ -543,9 +543,9 @@ internal static class PortTestSetups
             game.AgainInstallPath = originalAgainPath;
         }
 
-        var redneckCamp = (DukeCampaign)campaigns[new AddonId(nameof(GameEnum.Redneck).ToLower(), null)];
-        var againCamp = (DukeCampaign)campaigns[new AddonId(nameof(GameEnum.RidesAgain).ToLower(), null)];
-        var route66Camp = (DukeCampaign)campaigns[new AddonId(nameof(RedneckAddonEnum.Route66).ToLower(), null)];
+        var redneckCamp = (DukeCampaign)campaigns[new AddonId(nameof(GameEnum.Redneck).ToLowerInvariant(), null)];
+        var againCamp = (DukeCampaign)campaigns[new AddonId(nameof(GameEnum.RidesAgain).ToLowerInvariant(), null)];
+        var route66Camp = (DukeCampaign)campaigns[new AddonId(nameof(RedneckAddonEnum.Route66).ToLowerInvariant(), null)];
 
         return (game, redneckCamp, againCamp, route66Camp, modsProvider);
     }
@@ -579,7 +579,7 @@ internal static class PortTestSetups
             game.GameInstallFolder = originalFolder;
         }
 
-        var camp = (GenericCampaign)campaigns[new AddonId(nameof(GameEnum.Slave).ToLower(), null)];
+        var camp = (GenericCampaign)campaigns[new AddonId(nameof(GameEnum.Slave).ToLowerInvariant(), null)];
 
         return (game, camp, modsProvider);
     }
@@ -613,11 +613,11 @@ internal static class PortTestSetups
             game.GameInstallFolder = originalFolder;
         }
 
-        var wangCamp = (GenericCampaign)campaigns[new AddonId(nameof(GameEnum.Wang).ToLower(), null)];
+        var wangCamp = (GenericCampaign)campaigns[new AddonId(nameof(GameEnum.Wang).ToLowerInvariant(), null)];
 
         var tdCamp = new GenericCampaign
         {
-            AddonId = new(nameof(WangAddonEnum.TwinDragon).ToLower(), null),
+            AddonId = new(nameof(WangAddonEnum.TwinDragon).ToLowerInvariant(), null),
             Type = AddonTypeEnum.TC,
             Title = "Twin Dragon",
             GridImageHash = null,
@@ -695,8 +695,8 @@ internal static class PortTestSetups
             game.GameInstallFolder = originalFolder;
         }
 
-        var ww2Camp = (DukeCampaign)campaigns[new AddonId(nameof(GameEnum.WW2GI).ToLower(), null)];
-        var platoonCamp = (DukeCampaign)campaigns[new AddonId(nameof(WW2GIAddonEnum.Platoon).ToLower(), null)];
+        var ww2Camp = (DukeCampaign)campaigns[new AddonId(nameof(GameEnum.WW2GI).ToLowerInvariant(), null)];
+        var platoonCamp = (DukeCampaign)campaigns[new AddonId(nameof(WW2GIAddonEnum.Platoon).ToLowerInvariant(), null)];
 
         return (game, ww2Camp, platoonCamp, modsProvider);
     }
@@ -730,7 +730,7 @@ internal static class PortTestSetups
             game.GameInstallFolder = originalFolder;
         }
 
-        var camp = (DukeCampaign)campaigns[new AddonId(nameof(GameEnum.Fury).ToLower(), null)];
+        var camp = (DukeCampaign)campaigns[new AddonId(nameof(GameEnum.Fury).ToLowerInvariant(), null)];
 
         return (game, camp, modsProvider);
     }
@@ -765,7 +765,7 @@ internal static class PortTestSetups
             game.GameInstallFolder = originalFolder;
         }
 
-        var camp = (GenericCampaign)campaigns[new AddonId(nameof(GameEnum.Witchaven).ToLower(), null)];
+        var camp = (GenericCampaign)campaigns[new AddonId(nameof(GameEnum.Witchaven).ToLowerInvariant(), null)];
 
         return (game, camp);
     }
@@ -798,7 +798,7 @@ internal static class PortTestSetups
             game.GameInstallFolder = originalFolder;
         }
 
-        var camp = (DukeCampaign)campaigns[new AddonId(nameof(GameEnum.TekWar).ToLower(), null)];
+        var camp = (DukeCampaign)campaigns[new AddonId(nameof(GameEnum.TekWar).ToLowerInvariant(), null)];
 
         return (game, camp);
     }

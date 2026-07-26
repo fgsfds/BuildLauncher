@@ -51,10 +51,10 @@ public sealed class ToolInstaller : InstallerBase<BaseTool>
 
             foreach (var file in files)
             {
-                if (file.EndsWith(".exe", StringComparison.InvariantCultureIgnoreCase)
-                 || file.EndsWith(".ogg", StringComparison.InvariantCultureIgnoreCase)
-                 || file.EndsWith(".txt", StringComparison.InvariantCultureIgnoreCase)
-                 || file.EndsWith("version", StringComparison.InvariantCultureIgnoreCase)
+                if (file.EndsWith(".exe", StringComparison.OrdinalIgnoreCase)
+                 || file.EndsWith(".ogg", StringComparison.OrdinalIgnoreCase)
+                 || file.EndsWith(".txt", StringComparison.OrdinalIgnoreCase)
+                 || file.EndsWith("version", StringComparison.OrdinalIgnoreCase)
                    )
                 {
                     continue;

@@ -57,7 +57,7 @@ public sealed class Crc32HelperTests : IDisposable
     {
         File.WriteAllText(_tempFile, "test");
         var hex = Crc32Helper.GetCrc32Hex(_tempFile);
-        Assert.StartsWith("0x", hex);
+        Assert.StartsWith("0x", hex, StringComparison.OrdinalIgnoreCase);
         Assert.Equal(10, hex.Length); // 0x + 8 hex chars
     }
 

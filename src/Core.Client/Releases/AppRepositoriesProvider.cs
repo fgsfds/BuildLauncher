@@ -18,8 +18,8 @@ public sealed class AppRepositoriesProvider : IRepositoriesProvider<AppReleaseEn
             return new()
             {
                 RepoUrl = CommonConstants.GitHubReleases,
-                WindowsReleasePredicate = static asset => asset.FileName.EndsWith("win-x64.zip"),
-                LinuxReleasePredicate = static asset => asset.FileName.EndsWith("linux-x64.zip")
+                WindowsReleasePredicate = static asset => asset.FileName.EndsWith("win-x64.zip", StringComparison.OrdinalIgnoreCase),
+                LinuxReleasePredicate = static asset => asset.FileName.EndsWith("linux-x64.zip", StringComparison.OrdinalIgnoreCase)
             };
         }
 

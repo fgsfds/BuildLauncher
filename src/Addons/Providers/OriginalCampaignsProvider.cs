@@ -74,7 +74,7 @@ public sealed class OriginalCampaignsProvider
 
         if (dGame.IsWorldTourInstalled)
         {
-            var dukeWtId = nameof(DukeVersionEnum.Duke3D_WT).ToLower();
+            var dukeWtId = nameof(DukeVersionEnum.Duke3D_WT).ToLowerInvariant();
             AddonId version = new(dukeWtId, null);
 
             campaigns.Add(
@@ -116,7 +116,7 @@ public sealed class OriginalCampaignsProvider
         {
             if (dGame.GameInstallFolder != dGame.DukeWTInstallPath)
             {
-                var dukeId = nameof(GameEnum.Duke3D).ToLower();
+                var dukeId = nameof(GameEnum.Duke3D).ToLowerInvariant();
                 AddonId version = new(dukeId, null);
 
                 campaigns.Add(
@@ -156,7 +156,7 @@ public sealed class OriginalCampaignsProvider
 
             if (dGame.IsCaribbeanInstalled)
             {
-                var dukeVacaId = nameof(DukeAddonEnum.DukeVaca).ToLower();
+                var dukeVacaId = nameof(DukeAddonEnum.DukeVaca).ToLowerInvariant();
                 AddonId version = new(dukeVacaId, null);
 
                 campaigns.Add(
@@ -201,7 +201,7 @@ public sealed class OriginalCampaignsProvider
 
             if (dGame.IsNuclearWinterInstalled)
             {
-                var dukeNwId = nameof(DukeAddonEnum.DukeNW).ToLower();
+                var dukeNwId = nameof(DukeAddonEnum.DukeNW).ToLowerInvariant();
                 AddonId version = new(dukeNwId, null);
 
                 campaigns.Add(
@@ -245,7 +245,7 @@ public sealed class OriginalCampaignsProvider
 
             if (dGame.IsDukeDCInstalled)
             {
-                var dukeDcId = nameof(DukeAddonEnum.DukeDC).ToLower();
+                var dukeDcId = nameof(DukeAddonEnum.DukeDC).ToLowerInvariant();
                 AddonId version = new(dukeDcId, null);
 
                 campaigns.Add(
@@ -292,7 +292,7 @@ public sealed class OriginalCampaignsProvider
 
         if (dGame.IsDuke64Installed)
         {
-            var duke64Id = nameof(GameEnum.Duke64).ToLower();
+            var duke64Id = nameof(GameEnum.Duke64).ToLowerInvariant();
             AddonId version = new(duke64Id, null);
 
             campaigns.Add(
@@ -330,7 +330,7 @@ public sealed class OriginalCampaignsProvider
 
         if (dGame.IsDukeZHInstalled)
         {
-            var duke64Id = nameof(GameEnum.DukeZeroHour).ToLower();
+            var duke64Id = nameof(GameEnum.DukeZeroHour).ToLowerInvariant();
             AddonId version = new(duke64Id, null);
 
             campaigns.Add(
@@ -385,7 +385,7 @@ public sealed class OriginalCampaignsProvider
         Dictionary<AddonId, BaseAddon> campaigns = new(2);
 
         {
-            var bloodId = nameof(GameEnum.Blood).ToLower();
+            var bloodId = nameof(GameEnum.Blood).ToLowerInvariant();
             AddonId version = new(bloodId, null);
 
             campaigns.Add(
@@ -430,7 +430,7 @@ public sealed class OriginalCampaignsProvider
 
         if (bGame.IsCrypticPassageInstalled)
         {
-            var bloodCpId = nameof(BloodAddonEnum.BloodCP).ToLower();
+            var bloodCpId = nameof(BloodAddonEnum.BloodCP).ToLowerInvariant();
             AddonId version = new(bloodCpId, null);
 
             campaigns.Add(
@@ -487,7 +487,7 @@ public sealed class OriginalCampaignsProvider
 
         if (wGame.IsBaseGameInstalled)
         {
-            var wangId = nameof(GameEnum.Wang).ToLower();
+            var wangId = nameof(GameEnum.Wang).ToLowerInvariant();
             AddonId version = new(wangId, null);
 
             campaigns.Add(
@@ -540,7 +540,7 @@ public sealed class OriginalCampaignsProvider
 
         if (fGame.IsBaseGameInstalled)
         {
-            var furyId = nameof(GameEnum.Fury).ToLower();
+            var furyId = nameof(GameEnum.Fury).ToLowerInvariant();
             AddonId version = new(furyId, null);
 
             campaigns.Add(
@@ -619,7 +619,7 @@ public sealed class OriginalCampaignsProvider
         if (rGame.IsBaseGameInstalled)
         {
             {
-                var redneckId = nameof(GameEnum.Redneck).ToLower();
+                var redneckId = nameof(GameEnum.Redneck).ToLowerInvariant();
                 AddonId version = new(redneckId, null);
 
                 campaigns.Add(
@@ -661,7 +661,7 @@ public sealed class OriginalCampaignsProvider
 
             if (rGame.IsRoute66Installed)
             {
-                var redneckR66Id = nameof(RedneckAddonEnum.Route66).ToLower();
+                var redneckR66Id = nameof(RedneckAddonEnum.Route66).ToLowerInvariant();
                 AddonId version = new(redneckR66Id, null);
 
                 campaigns.Add(
@@ -699,7 +699,7 @@ public sealed class OriginalCampaignsProvider
 
         if (rGame.IsAgainInstalled)
         {
-            var redneckRaId = nameof(GameEnum.RidesAgain).ToLower();
+            var redneckRaId = nameof(GameEnum.RidesAgain).ToLowerInvariant();
             AddonId version = new(redneckRaId, null);
 
             campaigns.Add(
@@ -754,7 +754,7 @@ public sealed class OriginalCampaignsProvider
 
         if (nGame.IsBaseGameInstalled)
         {
-            var namId = nameof(GameEnum.NAM).ToLower();
+            var namId = nameof(GameEnum.NAM).ToLowerInvariant();
             AddonId version = new(namId, null);
 
             campaigns.Add(
@@ -814,7 +814,7 @@ public sealed class OriginalCampaignsProvider
 
         if (wGame.IsBaseGameInstalled)
         {
-            var ww2id = nameof(GameEnum.WW2GI).ToLower();
+            var ww2id = nameof(GameEnum.WW2GI).ToLowerInvariant();
             AddonId version = new(ww2id, null);
 
             campaigns.Add(
@@ -854,7 +854,7 @@ public sealed class OriginalCampaignsProvider
 
         if (wGame.IsPlatoonInstalled)
         {
-            var platoon = nameof(WW2GIAddonEnum.Platoon).ToLower();
+            var platoon = nameof(WW2GIAddonEnum.Platoon).ToLowerInvariant();
             AddonId version = new(platoon, null);
 
             campaigns.Add(
@@ -908,7 +908,7 @@ public sealed class OriginalCampaignsProvider
 
         if (tGame.IsBaseGameInstalled)
         {
-            var tekwarId = nameof(GameEnum.TekWar).ToLower();
+            var tekwarId = nameof(GameEnum.TekWar).ToLowerInvariant();
             AddonId version = new(tekwarId, null);
 
             campaigns.Add(
@@ -962,7 +962,7 @@ public sealed class OriginalCampaignsProvider
 
         if (sGame.IsBaseGameInstalled)
         {
-            var slaveId = nameof(GameEnum.Slave).ToLower();
+            var slaveId = nameof(GameEnum.Slave).ToLowerInvariant();
             AddonId version = new(slaveId, null);
 
             campaigns.Add(
@@ -1019,7 +1019,7 @@ public sealed class OriginalCampaignsProvider
 
         if (wGame.IsBaseGameInstalled)
         {
-            var whId = nameof(GameEnum.Witchaven).ToLower();
+            var whId = nameof(GameEnum.Witchaven).ToLowerInvariant();
             AddonId version = new(whId, null);
 
             campaigns.Add(
@@ -1056,7 +1056,7 @@ public sealed class OriginalCampaignsProvider
 
         if (wGame.IsWitchaven2Installed)
         {
-            var wh2Id = nameof(GameEnum.Witchaven2).ToLower();
+            var wh2Id = nameof(GameEnum.Witchaven2).ToLowerInvariant();
             AddonId version = new(wh2Id, null);
 
             campaigns.Add(

@@ -156,7 +156,7 @@ public sealed class AddonFactoryTests
         Assert.NotNull(addon.Executables);
         Assert.Contains(OSEnum.Windows, addon.Executables);
         Assert.Contains(PortEnum.EDuke32, addon.Executables[OSEnum.Windows]);
-        Assert.EndsWith("custom.exe", addon.Executables[OSEnum.Windows][PortEnum.EDuke32]);
+        Assert.EndsWith("custom.exe", addon.Executables[OSEnum.Windows][PortEnum.EDuke32], StringComparison.OrdinalIgnoreCase);
     }
 
     /// <summary>

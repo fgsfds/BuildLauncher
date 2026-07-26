@@ -155,7 +155,7 @@ public sealed class DosBox : BasePort
                 for (var i = 0; i < file.Length; i++)
                 {
                     if (file[i].StartsWith("memsize", StringComparison.OrdinalIgnoreCase) &&
-                        !file[i].Trim().EndsWith("64"))
+                        !file[i].Trim().EndsWith("64", StringComparison.OrdinalIgnoreCase))
                     {
                         file[i] = "memsize = 64";
                         File.WriteAllLines(config, file);

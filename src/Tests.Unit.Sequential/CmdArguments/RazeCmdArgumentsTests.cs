@@ -93,7 +93,7 @@ public sealed class RazeCmdArgumentsTests
                 Path={Directory.GetCurrentDirectory()}/Data/Addons/Blood/Mods
 
                 [SoundfontSearch.Directories]
-                """.Replace('\\', '/').Replace("\r\n", "\n"), config.Replace("\r\n", "\n")
+                """.Replace('\\', '/').Replace("\r\n", "\n"), config.Replace("\r\n", "\n"), StringComparison.Ordinal
             );
     }
 
@@ -126,7 +126,7 @@ public sealed class RazeCmdArgumentsTests
                 Path={Directory.GetCurrentDirectory()}/Data/Addons/Blood/Mods
 
                 [SoundfontSearch.Directories]
-                """.Replace('\\', '/').Replace("\r\n", "\n"), config.Replace("\r\n", "\n")
+                """.Replace('\\', '/').Replace("\r\n", "\n"), config.Replace("\r\n", "\n"), StringComparison.Ordinal
             );
     }
 
@@ -157,7 +157,7 @@ public sealed class RazeCmdArgumentsTests
                 Path={Directory.GetCurrentDirectory()}/Data/Addons/Blood/Mods
 
                 [SoundfontSearch.Directories]
-                """.Replace('\\', '/').Replace("\r\n", "\n"), config.Replace("\r\n", "\n")
+                """.Replace('\\', '/').Replace("\r\n", "\n"), config.Replace("\r\n", "\n"), StringComparison.Ordinal
             );
     }
 
@@ -189,7 +189,7 @@ public sealed class RazeCmdArgumentsTests
                 Path=D:/Games/Blood/blood_tc_folder
 
                 [SoundfontSearch.Directories]
-                """.Replace('\\', '/').Replace("\r\n", "\n"), config.Replace("\r\n", "\n")
+                """.Replace('\\', '/').Replace("\r\n", "\n"), config.Replace("\r\n", "\n"), StringComparison.Ordinal
             );
     }
 
@@ -222,7 +222,7 @@ public sealed class RazeCmdArgumentsTests
                 Path={Directory.GetCurrentDirectory()}/Data/Addons/Blood/Mods
 
                 [SoundfontSearch.Directories]
-                """.Replace('\\', '/').Replace("\r\n", "\n"), config.Replace("\r\n", "\n")
+                """.Replace('\\', '/').Replace("\r\n", "\n"), config.Replace("\r\n", "\n"), StringComparison.Ordinal
             );
     }
 
@@ -274,7 +274,7 @@ public sealed class RazeCmdArgumentsTests
                 Path={Directory.GetCurrentDirectory()}/Data/Addons/Duke3D/Mods
 
                 [SoundfontSearch.Directories]
-                """.Replace('\\', '/').Replace("\r\n", "\n"), config.Replace("\r\n", "\n")
+                """.Replace('\\', '/').Replace("\r\n", "\n"), config.Replace("\r\n", "\n"), StringComparison.Ordinal
             );
     }
 
@@ -311,7 +311,7 @@ public sealed class RazeCmdArgumentsTests
                 Path={Directory.GetCurrentDirectory()}/Data/Addons/Duke3D/Mods
 
                 [SoundfontSearch.Directories]
-                """.Replace('\\', '/').Replace("\r\n", "\n"), config.Replace("\r\n", "\n")
+                """.Replace('\\', '/').Replace("\r\n", "\n"), config.Replace("\r\n", "\n"), StringComparison.Ordinal
             );
     }
 
@@ -360,7 +360,7 @@ public sealed class RazeCmdArgumentsTests
                 Path={Directory.GetCurrentDirectory()}/Data/Addons/Duke3D/Mods
 
                 [SoundfontSearch.Directories]
-                """.Replace('\\', '/').Replace("\r\n", "\n"), config.Replace("\r\n", "\n")
+                """.Replace('\\', '/').Replace("\r\n", "\n"), config.Replace("\r\n", "\n"), StringComparison.Ordinal
             );
     }
 
@@ -475,7 +475,7 @@ public sealed class RazeCmdArgumentsTests
                 Path={Directory.GetCurrentDirectory()}/Data/Addons/Duke3D/Mods
 
                 [SoundfontSearch.Directories]
-                """.Replace('\\', '/').Replace("\r\n", "\n"), config.Replace("\r\n", "\n")
+                """.Replace('\\', '/').Replace("\r\n", "\n"), config.Replace("\r\n", "\n"), StringComparison.Ordinal
             );
     }
 
@@ -520,7 +520,7 @@ public sealed class RazeCmdArgumentsTests
                 Path={Directory.GetCurrentDirectory()}/Data/Addons/NAM/Mods
 
                 [SoundfontSearch.Directories]
-                """.Replace('\\', '/').Replace("\r\n", "\n"), config.Replace("\r\n", "\n")
+                """.Replace('\\', '/').Replace("\r\n", "\n"), config.Replace("\r\n", "\n"), StringComparison.Ordinal
             );
     }
 
@@ -562,7 +562,7 @@ public sealed class RazeCmdArgumentsTests
                 Path={Directory.GetCurrentDirectory()}/Data/Addons/Redneck/Mods
 
                 [SoundfontSearch.Directories]
-                """.Replace('\\', '/').Replace("\r\n", "\n"), config.Replace("\r\n", "\n")
+                """.Replace('\\', '/').Replace("\r\n", "\n"), config.Replace("\r\n", "\n"), StringComparison.Ordinal
             );
     }
 
@@ -604,7 +604,7 @@ public sealed class RazeCmdArgumentsTests
                 Path={Directory.GetCurrentDirectory()}/Data/Addons/Redneck/Mods
 
                 [SoundfontSearch.Directories]
-                """.Replace('\\', '/').Replace("\r\n", "\n"), config.Replace("\r\n", "\n")
+                """.Replace('\\', '/').Replace("\r\n", "\n"), config.Replace("\r\n", "\n"), StringComparison.Ordinal
             );
     }
 
@@ -646,7 +646,7 @@ public sealed class RazeCmdArgumentsTests
                 Path={Directory.GetCurrentDirectory()}/Data/Addons/Slave/Mods
 
                 [SoundfontSearch.Directories]
-                """.Replace('\\', '/').Replace("\r\n", "\n"), config.Replace("\r\n", "\n")
+                """.Replace('\\', '/').Replace("\r\n", "\n"), config.Replace("\r\n", "\n"), StringComparison.Ordinal
             );
     }
 
@@ -693,7 +693,7 @@ public sealed class RazeCmdArgumentsTests
                 Path={Directory.GetCurrentDirectory()}/Data/Addons/Wang/Mods
 
                 [SoundfontSearch.Directories]
-                """.Replace('\\', '/').Replace("\r\n", "\n"), config.Replace("\r\n", "\n")
+                """.Replace('\\', '/').Replace("\r\n", "\n"), config.Replace("\r\n", "\n"), StringComparison.Ordinal
             );
     }
 
@@ -737,7 +737,7 @@ public sealed class RazeCmdArgumentsTests
                 Path={Directory.GetCurrentDirectory()}/Data/Addons/Wang/Mods
 
                 [SoundfontSearch.Directories]
-                """.Replace('\\', '/').Replace("\r\n", "\n"), config.Replace("\r\n", "\n")
+                """.Replace('\\', '/').Replace("\r\n", "\n"), config.Replace("\r\n", "\n"), StringComparison.Ordinal
             );
     }
 
@@ -786,7 +786,7 @@ public sealed class RazeCmdArgumentsTests
                 Path={Directory.GetCurrentDirectory()}/Data/Addons/Wang/Mods
 
                 [SoundfontSearch.Directories]
-                """.Replace('\\', '/').Replace("\r\n", "\n"), config.Replace("\r\n", "\n")
+                """.Replace('\\', '/').Replace("\r\n", "\n"), config.Replace("\r\n", "\n"), StringComparison.Ordinal
             );
     }
 
@@ -830,7 +830,7 @@ public sealed class RazeCmdArgumentsTests
                 Path={Directory.GetCurrentDirectory()}/Data/Addons/WW2GI/Mods
 
                 [SoundfontSearch.Directories]
-                """.Replace('\\', '/').Replace("\r\n", "\n"), config.Replace("\r\n", "\n")
+                """.Replace('\\', '/').Replace("\r\n", "\n"), config.Replace("\r\n", "\n"), StringComparison.Ordinal
             );
     }
 
@@ -876,7 +876,7 @@ public sealed class RazeCmdArgumentsTests
                 Path={Directory.GetCurrentDirectory()}/Data/Addons/WW2GI/Mods
 
                 [SoundfontSearch.Directories]
-                """.Replace('\\', '/').Replace("\r\n", "\n"), config.Replace("\r\n", "\n")
+                """.Replace('\\', '/').Replace("\r\n", "\n"), config.Replace("\r\n", "\n"), StringComparison.Ordinal
             );
     }
 }

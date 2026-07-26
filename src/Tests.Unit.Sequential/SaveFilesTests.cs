@@ -146,8 +146,8 @@ public sealed class SaveFilesTests : IDisposable
 
         var savedFiles = Directory.GetFiles(saveFolder);
         Assert.Equal(2, savedFiles.Length);
-        Assert.Contains(savedFiles, f => f.EndsWith("savegame.sav"));
-        Assert.Contains(savedFiles, f => f.EndsWith("quick.esv"));
+        Assert.Contains(savedFiles, f => f.EndsWith("savegame.sav", StringComparison.OrdinalIgnoreCase));
+        Assert.Contains(savedFiles, f => f.EndsWith("quick.esv", StringComparison.OrdinalIgnoreCase));
     }
 
     /// <summary>
