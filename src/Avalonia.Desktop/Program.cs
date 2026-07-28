@@ -1,6 +1,7 @@
 ﻿using System.Runtime.InteropServices;
 using Core.Client;
 using Core.Client.Helpers;
+using Microsoft.Extensions.Logging;
 using Optris.Icons.Avalonia;
 using Optris.Icons.Avalonia.FontAwesome7;
 
@@ -36,6 +37,15 @@ public sealed partial class Program
 
         TaskScheduler.UnobservedTaskException += (_, e) =>
         {
+            if (e.Exception is null)
+            {
+                return;
+            }
+
+            using var loggerFactory = LoggerFactory.Create(x => x.AddDebug());
+            var logger = loggerFactory.CreateLogger<Program>();
+            logger.LogCritical(e.Exception, "Unobserved task exception");
+
             SaveCrashLog();
             e.SetObserved();
         };
@@ -93,7 +103,7 @@ public sealed partial class Program
 
         return AppBuilder.Configure<App>()
                          .UsePlatformDetect()
-                         .WithInterFont()
+                         .WithInterFont()!
                          .LogToTrace();
     }
 
@@ -107,7 +117,7 @@ public sealed partial class Program
         {
             File.Copy(
                 ClientProperties.PathToLogFile,
-                Path.Combine(ClientProperties.WorkingFolder, $"{DateTime.Now:dd_MM_yy_HH_mm}.crashlog"),
+                Path.Combine(ClientProperties.WorkingFolder, $"{DateTime.Now:dd_MM_yy_HH_mm_ss}.crashlog"),
                 true
                 );
         }
