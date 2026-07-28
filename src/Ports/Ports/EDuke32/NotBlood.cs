@@ -1,4 +1,5 @@
-﻿using Addons.Addons;
+﻿using System.Collections.Immutable;
+using Addons.Addons;
 using Core.All.Enums;
 using Games.Games;
 
@@ -22,10 +23,10 @@ public sealed class NotBlood : NBlood
     public override string Name => "NotBlood";
 
     /// <inheritdoc />
-    public override List<GameEnum> SupportedGames => [GameEnum.Blood];
+    public override ImmutableHashSet<GameEnum> SupportedGames { get; } = [GameEnum.Blood];
 
     /// <inheritdoc />
-    public override List<FeatureEnum> SupportedFeatures =>
+    public override ImmutableHashSet<FeatureEnum> SupportedFeatures { get; } =
     [
         FeatureEnum.Modern_Types,
         FeatureEnum.Hightile,

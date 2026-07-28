@@ -18,12 +18,12 @@ public sealed class WW2GIGame : BaseGame
     public override string ShortName => "WW2GI";
 
     /// <inheritdoc />
-    protected override IReadOnlyList<string> RequiredFiles => ["WW2GI.GRP"];
+    protected override IReadOnlyCollection<string> RequiredFiles { get; } = ["WW2GI.GRP"];
 
     /// <summary>
     ///     Files required for Platoon addon.
     /// </summary>
-    private IReadOnlyList<string> PlatoonFiles =>
+    private IReadOnlyCollection<string> PlatoonFiles { get; } =
     [
         "PLATOONL.DAT",
         "PLATOONL.DEF"

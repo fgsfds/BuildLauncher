@@ -17,7 +17,7 @@ public sealed class StandaloneGame : BaseGame
     public override string ShortName => FullName;
 
     /// <inheritdoc />
-    protected override IReadOnlyList<string> RequiredFiles => [];
+    protected override IReadOnlyCollection<string> RequiredFiles { get; } = [];
 
     /// <inheritdoc />
     public override Enum? Skills => null;

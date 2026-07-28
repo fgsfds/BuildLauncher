@@ -18,7 +18,7 @@ public sealed class NamGame : BaseGame
     public override string ShortName => "NAM";
 
     /// <inheritdoc />
-    protected override IReadOnlyList<string> RequiredFiles => ["NAM.GRP"];
+    protected override IReadOnlyCollection<string> RequiredFiles { get; } = ["NAM.GRP"];
 
     /// <inheritdoc />
     public override Enum Skills => new NamSkillsEnum();

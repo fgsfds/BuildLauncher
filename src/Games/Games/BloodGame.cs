@@ -32,7 +32,7 @@ public sealed class BloodGame : BaseGame
     public override string ShortName => FullName;
 
     /// <inheritdoc />
-    protected override IReadOnlyList<string> RequiredFiles =>
+    protected override IReadOnlyCollection<string> RequiredFiles { get; } =
     [
         ClientConsts.BloodIni,
         ClientConsts.BloodRff,

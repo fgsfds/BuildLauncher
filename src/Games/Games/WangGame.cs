@@ -18,7 +18,7 @@ public sealed class WangGame : BaseGame
     public override string ShortName => "Wang";
 
     /// <inheritdoc />
-    protected override IReadOnlyList<string> RequiredFiles => ["SW.GRP"];
+    protected override IReadOnlyCollection<string> RequiredFiles { get; } = ["SW.GRP"];
 
     /// <inheritdoc />
     public override Enum Skills => new WangSkillsEnum();

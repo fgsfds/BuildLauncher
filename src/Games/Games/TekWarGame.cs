@@ -24,7 +24,7 @@ public sealed class TekWarGame : BaseGame
     ];
 
     /// <inheritdoc />
-    protected override IReadOnlyList<string> RequiredFiles => _requiredFiles;
+    protected override IReadOnlyCollection<string> RequiredFiles => _requiredFiles;
 
     /// <inheritdoc />
     public override Enum? Skills => null;

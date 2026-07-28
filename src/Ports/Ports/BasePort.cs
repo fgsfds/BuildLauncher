@@ -69,12 +69,12 @@ public abstract class BasePort : IInstallable
     /// <summary>
     ///     Games supported by the port.
     /// </summary>
-    public abstract List<GameEnum> SupportedGames { get; }
+    public abstract ImmutableHashSet<GameEnum> SupportedGames { get; }
 
     /// <summary>
     ///     Features supported by the port.
     /// </summary>
-    public abstract List<FeatureEnum> SupportedFeatures { get; }
+    public abstract ImmutableHashSet<FeatureEnum> SupportedFeatures { get; }
 
     /// <summary>
     ///     Path to port saved games folder.
@@ -84,7 +84,7 @@ public abstract class BasePort : IInstallable
     /// <summary>
     ///     Game versions supported by the port.
     /// </summary>
-    public virtual List<string> SupportedGamesVersions => [];
+    public virtual ImmutableHashSet<string> SupportedGamesVersions { get; } = [];
 
     /// <summary>
     ///     Path to port executable.
@@ -159,7 +159,7 @@ public abstract class BasePort : IInstallable
     /// <summary>
     ///     Extensions of save game files.
     /// </summary>
-    protected ImmutableArray<string> SaveFileExtensions =>
+    protected HashSet<string> SaveFileExtensions { get; } =
     [
         ".sav",
         ".esv"

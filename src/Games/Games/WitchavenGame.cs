@@ -25,7 +25,7 @@ public sealed class WitchavenGame : BaseGame
     ];
 
     /// <inheritdoc />
-    protected override IReadOnlyList<string> RequiredFiles => _requiredFiles;
+    protected override IReadOnlyCollection<string> RequiredFiles => _requiredFiles;
 
     private static readonly List<string> _witchaven2RequiredFiles =
     [
@@ -38,7 +38,7 @@ public sealed class WitchavenGame : BaseGame
     /// <summary>
     ///     Files required for Witchaven 2.
     /// </summary>
-    private IReadOnlyList<string> Witchaven2RequiredFiles => _witchaven2RequiredFiles;
+    private IReadOnlyCollection<string> Witchaven2RequiredFiles => _witchaven2RequiredFiles;
 
     /// <summary>
     ///     Path to Witchaven 2 install folder.

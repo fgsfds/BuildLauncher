@@ -476,16 +476,16 @@ public sealed class PortsHelperTests
 
         public override string FullName => "TestGame";
         public override string ShortName => "TestGame";
-        protected override IReadOnlyList<string> RequiredFiles => [];
+        protected override IReadOnlyCollection<string> RequiredFiles { get; } = [];
         public override Enum? Skills => null;
     }
 
 
     private sealed class TestPort : BasePort
     {
-        private List<FeatureEnum> _supportedFeatures = [];
-        private List<GameEnum> _supportedGames = [];
-        private List<string> _supportedGamesVersions = [];
+        private ImmutableHashSet<FeatureEnum> _supportedFeatures = [];
+        private ImmutableHashSet<GameEnum> _supportedGames = [];
+        private ImmutableHashSet<string> _supportedGamesVersions = [];
 
         public TestPort(PortEnum portEnum, bool isInstalled = true)
         {
@@ -499,9 +499,9 @@ public sealed class PortsHelperTests
         public override string ShortName => "TestPort";
         protected override string WinExe => "test.exe";
         protected override string LinExe => "test";
-        public override List<GameEnum> SupportedGames => _supportedGames;
-        public override List<FeatureEnum> SupportedFeatures => _supportedFeatures;
-        public override List<string> SupportedGamesVersions => _supportedGamesVersions;
+        public override ImmutableHashSet<GameEnum> SupportedGames => _supportedGames;
+        public override ImmutableHashSet<FeatureEnum> SupportedFeatures => _supportedFeatures;
+        public override ImmutableHashSet<string> SupportedGamesVersions => _supportedGamesVersions;
         public override bool IsInstalled { get; }
         public override bool IsSkillSelectionAvailable => false;
         public override string? InstalledVersion => IsInstalled ? "1.0" : null;
@@ -525,8 +525,8 @@ public sealed class PortsHelperTests
         protected override void GetSkipIntroParameter(StringBuilder sb) { }
         protected override void GetSkipStartupParameter(StringBuilder sb) { }
 
-        public void SetSupportedGames(List<GameEnum> games) => _supportedGames = games;
-        public void SetSupportedFeatures(List<FeatureEnum> features) => _supportedFeatures = features;
-        public void SetSupportedGamesVersions(List<string> versions) => _supportedGamesVersions = versions;
+        public void SetSupportedGames(ImmutableHashSet<GameEnum> games) => _supportedGames = games;
+        public void SetSupportedFeatures(ImmutableHashSet<FeatureEnum> features) => _supportedFeatures = features;
+        public void SetSupportedGamesVersions(ImmutableHashSet<string> versions) => _supportedGamesVersions = versions;
     }
 }

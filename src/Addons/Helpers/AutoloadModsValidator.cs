@@ -1,4 +1,5 @@
-﻿using Addons.Addons;
+﻿using System.Collections.Immutable;
+using Addons.Addons;
 using Core.All.Enums;
 using Core.All.Helpers;
 
@@ -16,7 +17,7 @@ public static class AutoloadModsValidator
     /// <param name="campaign">Campaign</param>
     /// <param name="mods">Autoload mods</param>
     /// <param name="features">Features supported by the port</param>
-    public static bool ValidateAutoloadMod(AutoloadMod autoloadMod, BaseAddon campaign, IReadOnlyList<BaseAddon> mods, List<FeatureEnum> features)
+    public static bool ValidateAutoloadMod(AutoloadMod autoloadMod, BaseAddon campaign, IReadOnlyList<BaseAddon> mods, ImmutableHashSet<FeatureEnum> features)
     {
         if (!autoloadMod.IsEnabled)
         {

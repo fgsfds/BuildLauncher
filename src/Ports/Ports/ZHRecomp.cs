@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Collections.Immutable;
+using System.Text;
 using Addons.Addons;
 using Core.All.Enums;
 using Core.Client.Interfaces;
@@ -43,7 +44,7 @@ public sealed class ZHRecomp : BasePort
     public override string ShortName => "ZHRecomp";
 
     /// <inheritdoc />
-    public override List<GameEnum> SupportedGames => [GameEnum.DukeZeroHour];
+    public override ImmutableHashSet<GameEnum> SupportedGames { get; } = [GameEnum.DukeZeroHour];
 
     /// <inheritdoc />
     public override string? InstalledVersion
@@ -72,7 +73,7 @@ public sealed class ZHRecomp : BasePort
     public override bool IsSkillSelectionAvailable => false;
 
     /// <inheritdoc />
-    public override List<FeatureEnum> SupportedFeatures => [];
+    public override ImmutableHashSet<FeatureEnum> SupportedFeatures { get; } = [];
 
     /// <inheritdoc />
     protected override string ConfigFile => throw new NotImplementedException();

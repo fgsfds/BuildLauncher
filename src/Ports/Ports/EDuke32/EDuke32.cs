@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System.Collections.Immutable;
+using System.Diagnostics;
 using System.Text;
 using Addons.Addons;
 using Core.All.Enums;
@@ -68,7 +69,7 @@ public class EDuke32 : BasePort
     protected override string AddSndParam => throw new NotSupportedException();
 
     /// <inheritdoc />
-    public override List<GameEnum> SupportedGames =>
+    public override ImmutableHashSet<GameEnum> SupportedGames { get; } =
     [
         GameEnum.Duke3D,
         GameEnum.NAM,
@@ -77,7 +78,7 @@ public class EDuke32 : BasePort
     ];
 
     /// <inheritdoc />
-    public override List<string> SupportedGamesVersions =>
+    public override ImmutableHashSet<string> SupportedGamesVersions { get; } =
     [
         nameof(DukeVersionEnum.Duke3D_13D),
         nameof(DukeVersionEnum.Duke3D_Atomic),
@@ -85,7 +86,7 @@ public class EDuke32 : BasePort
     ];
 
     /// <inheritdoc />
-    public override List<FeatureEnum> SupportedFeatures =>
+    public override ImmutableHashSet<FeatureEnum> SupportedFeatures { get; } =
     [
         FeatureEnum.EDuke32_CON,
         FeatureEnum.Dynamic_Lighting,

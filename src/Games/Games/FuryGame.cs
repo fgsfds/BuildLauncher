@@ -18,7 +18,7 @@ public sealed class FuryGame : BaseGame
     public override string ShortName => "Fury";
 
     /// <inheritdoc />
-    protected override IReadOnlyList<string> RequiredFiles => ["fury.grp"];
+    protected override IReadOnlyCollection<string> RequiredFiles { get; } = ["fury.grp"];
 
     /// <inheritdoc />
     public override Enum Skills => new FurySkillsEnum();

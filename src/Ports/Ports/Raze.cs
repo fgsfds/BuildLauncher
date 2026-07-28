@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System.Collections.Immutable;
+using System.Diagnostics;
 using System.Text;
 using Addons.Addons;
 using Core.All.Enums;
@@ -26,7 +27,7 @@ public sealed class Raze : BasePort
     public override string Name => "Raze";
 
     /// <inheritdoc />
-    public override List<GameEnum> SupportedGames =>
+    public override ImmutableHashSet<GameEnum> SupportedGames { get; } =
     [
         GameEnum.Blood,
         GameEnum.Duke3D,
@@ -39,7 +40,7 @@ public sealed class Raze : BasePort
     ];
 
     /// <inheritdoc />
-    public override List<string> SupportedGamesVersions =>
+    public override ImmutableHashSet<string> SupportedGamesVersions { get; } =
     [
         nameof(DukeVersionEnum.Duke3D_13D),
         nameof(DukeVersionEnum.Duke3D_Atomic),
@@ -95,7 +96,7 @@ public sealed class Raze : BasePort
     protected override string SkillParam => throw new NotSupportedException();
 
     /// <inheritdoc />
-    public override List<FeatureEnum> SupportedFeatures =>
+    public override ImmutableHashSet<FeatureEnum> SupportedFeatures { get; } =
     [
         FeatureEnum.TROR,
         FeatureEnum.Hightile,

@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Collections.Immutable;
+using System.Text;
 using Addons.Addons;
 using Core.All.Enums;
 using Core.All.Enums.Addons;
@@ -25,13 +26,13 @@ public sealed class VoidSW : EDuke32
     public override string Name => "VoidSW";
 
     /// <inheritdoc />
-    public override List<GameEnum> SupportedGames => [GameEnum.Wang];
+    public override ImmutableHashSet<GameEnum> SupportedGames { get; } = [GameEnum.Wang];
 
     /// <inheritdoc />
     public override string InstallFolderPath => Path.Combine(ClientProperties.PortsFolderPath, "EDuke32");
 
     /// <inheritdoc />
-    public override List<FeatureEnum> SupportedFeatures =>
+    public override ImmutableHashSet<FeatureEnum> SupportedFeatures { get; } =
     [
         FeatureEnum.Hightile,
         FeatureEnum.Models,

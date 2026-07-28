@@ -214,7 +214,7 @@ public sealed partial class DownloadsViewModel : ObservableObject
     /// <summary>
     ///     Gets the list of available filter items.
     /// </summary>
-    public List<FilterItemEnum> FilterItems => [.. Enum.GetValues<FilterItemEnum>()];
+    public IReadOnlyCollection<FilterItemEnum> FilterItems { get; } = [.. Enum.GetValues<FilterItemEnum>()];
 
     /// <summary>
     ///     Gets or sets whether a download is in progress.

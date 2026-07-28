@@ -46,7 +46,7 @@ public sealed class RedNukem : EDuke32
     protected override string AddGrpParam => "-g ";
 
     /// <inheritdoc />
-    public override List<GameEnum> SupportedGames =>
+    public override ImmutableHashSet<GameEnum> SupportedGames { get; } =
     [
         GameEnum.Duke3D,
         GameEnum.Redneck,
@@ -57,10 +57,10 @@ public sealed class RedNukem : EDuke32
     ];
 
     /// <inheritdoc />
-    public override List<string> SupportedGamesVersions => [nameof(DukeVersionEnum.Duke3D_Atomic)];
+    public override ImmutableHashSet<string> SupportedGamesVersions { get; } = [nameof(DukeVersionEnum.Duke3D_Atomic)];
 
     /// <inheritdoc />
-    public override List<FeatureEnum> SupportedFeatures =>
+    public override ImmutableHashSet<FeatureEnum> SupportedFeatures { get; } =
     [
         FeatureEnum.Hightile,
         FeatureEnum.Models,

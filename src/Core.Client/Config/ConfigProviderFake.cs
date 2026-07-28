@@ -12,7 +12,7 @@ public sealed class ConfigProviderFake : IConfigProvider
     /// <summary>
     ///     Gets a dictionary of addon scores.
     /// </summary>
-    public Dictionary<string, bool> Scores => [];
+    public Dictionary<string, bool> Scores { get; } = [];
     /// <inheritdoc />
     public string? ApiPassword { get; set; } = null;
     /// <inheritdoc />
@@ -55,9 +55,9 @@ public sealed class ConfigProviderFake : IConfigProvider
     public Dictionary<string, byte> Rating { get; set; } = [];
 
     /// <inheritdoc />
-    public Dictionary<string, TimeSpan> Playtimes => [];
+    public Dictionary<string, TimeSpan> Playtimes { get; } = [];
     /// <inheritdoc />
-    public HashSet<string> DisabledAutoloadMods => [];
+    public HashSet<string> DisabledAutoloadMods { get; } = [];
 
     /// <inheritdoc />
     public HashSet<string> GetEnabledOptions(string addonId) => [];
@@ -72,7 +72,7 @@ public sealed class ConfigProviderFake : IConfigProvider
     public bool UseLocalApi { get; set; } = true;
 
     /// <inheritdoc />
-    public HashSet<AddonId> FavoriteAddons => [];
+    public HashSet<AddonId> FavoriteAddons { get; } = [];
 
 
     /// <inheritdoc />

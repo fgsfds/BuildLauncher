@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Collections.Immutable;
+using System.Text;
 using Addons.Addons;
 using Core.All.Enums;
 using Games.Games;
@@ -15,9 +16,9 @@ internal sealed class BasePortTestProxy : BasePort
     protected override string LinExe => string.Empty;
     public override string Name => string.Empty;
 
-    public override List<GameEnum> SupportedGames => [];
+    public override ImmutableHashSet<GameEnum> SupportedGames { get; } = [];
 
-    public override List<FeatureEnum> SupportedFeatures => [];
+    public override ImmutableHashSet<FeatureEnum> SupportedFeatures { get; } = [];
 
     public override string? InstalledVersion => string.Empty;
 

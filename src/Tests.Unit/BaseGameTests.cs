@@ -8,11 +8,11 @@ internal sealed class BaseGameTestProxy : BaseGame
     public override GameEnum GameEnum => GameEnum.Duke3D;
     public override string FullName => "Test Game";
     public override string ShortName => "Test";
-    protected override IReadOnlyList<string> RequiredFiles => ["TEST.GRP"];
+    protected override IReadOnlyCollection<string> RequiredFiles { get; } = ["TEST.GRP"];
     public override Enum? Skills => null;
 
-    public bool CallIsInstalled(IReadOnlyList<string> files, string? path = null) => IsInstalled(files, path);
-    public static IReadOnlyList<string> CallGenerateNumberedFiles(string baseName, string ext, int start, int endExclusive, int padWidth)
+    public bool CallIsInstalled(IReadOnlyCollection<string> files, string? path = null) => IsInstalled(files, path);
+    public static IReadOnlyCollection<string> CallGenerateNumberedFiles(string baseName, string ext, int start, int endExclusive, int padWidth)
         => GenerateNumberedFiles(baseName, ext, start, endExclusive, padWidth);
 }
 
@@ -120,8 +120,8 @@ public sealed class BaseGameTests : IDisposable
     {
         var files = BaseGameTestProxy.CallGenerateNumberedFiles("FILE", "EXT", 0, 3, 3);
         Assert.Equal(3, files.Count);
-        Assert.Equal("FILE000.EXT", files[0]);
-        Assert.Equal("FILE001.EXT", files[1]);
-        Assert.Equal("FILE002.EXT", files[2]);
+        Assert.Equal("FILE000.EXT", files.ElementAt(0));
+        Assert.Equal("FILE001.EXT", files.ElementAt(1));
+        Assert.Equal("FILE002.EXT", files.ElementAt(2));
     }
 }

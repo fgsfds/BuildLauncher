@@ -68,7 +68,7 @@ public sealed class GenerateNumberedFilesTests
     {
         var result = TestGame.Generate("X", "Y", 5, 6, 0);
         Assert.Single(result);
-        Assert.Equal("X5.Y", result[0]);
+        Assert.Equal("X5.Y", result.ElementAt(0));
     }
 
     /// <summary>
@@ -89,8 +89,8 @@ public sealed class GenerateNumberedFilesTests
     {
         var result = TestGame.Generate("TILES", "ART", 0, 11);
         Assert.Equal(11, result.Count);
-        Assert.Equal("TILES000.ART", result[0]);
-        Assert.Equal("TILES010.ART", result[^1]);
+        Assert.Equal("TILES000.ART", result.ElementAt(0));
+        Assert.Equal("TILES010.ART", result.ElementAt(^1));
     }
 
     /// <summary>
@@ -101,8 +101,8 @@ public sealed class GenerateNumberedFilesTests
     {
         var result = TestGame.Generate("LEVEL", "MAP", 1, 26, 0);
         Assert.Equal(25, result.Count);
-        Assert.Equal("LEVEL1.MAP", result[0]);
-        Assert.Equal("LEVEL25.MAP", result[^1]);
+        Assert.Equal("LEVEL1.MAP", result.ElementAt(0));
+        Assert.Equal("LEVEL25.MAP", result.ElementAt(^1));
     }
 
 
@@ -121,7 +121,7 @@ public sealed class GenerateNumberedFilesTests
         public override string ShortName => "Test";
 
         /// <inheritdoc />
-        protected override IReadOnlyList<string> RequiredFiles => [];
+        protected override IReadOnlyCollection<string> RequiredFiles { get; } = [];
 
         /// <inheritdoc />
         public override Enum? Skills => null;
@@ -129,7 +129,7 @@ public sealed class GenerateNumberedFilesTests
         /// <summary>
         ///     Exposes <see cref="BaseGame.GenerateNumberedFiles" /> for testing.
         /// </summary>
-        public static IReadOnlyList<string> Generate(string baseName, string extension, int start, int endExclusive, int padWidth = 3)
+        public static IReadOnlyCollection<string> Generate(string baseName, string extension, int start, int endExclusive, int padWidth = 3)
         {
             return GenerateNumberedFiles(baseName, extension, start, endExclusive, padWidth);
         }

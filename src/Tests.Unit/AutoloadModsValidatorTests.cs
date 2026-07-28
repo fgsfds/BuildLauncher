@@ -202,10 +202,7 @@ public sealed class AutoloadModsValidatorTests
 
         var campaign = CreateCampaign("campaign", "1.0", DukeGame);
 
-        var features = new List<FeatureEnum>
-        {
-            FeatureEnum.EDuke32_CON
-        };
+        ImmutableHashSet<FeatureEnum> features = [FeatureEnum.EDuke32_CON];
 
         var result = AutoloadModsValidator.ValidateAutoloadMod(mod, campaign, [], features);
 
@@ -228,12 +225,7 @@ public sealed class AutoloadModsValidatorTests
 
         var campaign = CreateCampaign("campaign", "1.0", DukeGame);
 
-        var features = new List<FeatureEnum>
-        {
-            FeatureEnum.Models,
-            FeatureEnum.Hightile,
-            FeatureEnum.EDuke32_CON
-        };
+        ImmutableHashSet<FeatureEnum> features = [FeatureEnum.Models, FeatureEnum.Hightile, FeatureEnum.EDuke32_CON];
 
         var result = AutoloadModsValidator.ValidateAutoloadMod(mod, campaign, [], features);
 

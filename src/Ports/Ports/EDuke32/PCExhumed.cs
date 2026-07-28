@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Collections.Immutable;
+using System.Text;
 using Addons.Addons;
 using Core.All.Enums;
 using Games.Games;
@@ -23,10 +24,10 @@ public sealed class PCExhumed : EDuke32
     public override string Name => "PCExhumed";
 
     /// <inheritdoc />
-    public override List<GameEnum> SupportedGames => [GameEnum.Slave];
+    public override ImmutableHashSet<GameEnum> SupportedGames { get; } = [GameEnum.Slave];
 
     /// <inheritdoc />
-    public override List<FeatureEnum> SupportedFeatures => [FeatureEnum.TileFromTexture];
+    public override ImmutableHashSet<FeatureEnum> SupportedFeatures { get; } = [FeatureEnum.TileFromTexture];
 
     /// <inheritdoc />
     protected override string ConfigFile => "pcexhumed.cfg";

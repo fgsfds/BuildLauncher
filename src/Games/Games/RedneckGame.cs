@@ -23,26 +23,26 @@ public sealed class RedneckGame : BaseGame
     public required string? AgainInstallPath { get; set; }
 
     /// <inheritdoc />
-    protected override IReadOnlyList<string> RequiredFiles => ["REDNECK.GRP"];
+    protected override IReadOnlyCollection<string> RequiredFiles { get; } = ["REDNECK.GRP"];
+
+    private readonly IReadOnlyCollection<string> _requiredR66Files = [
+        "TILESA66.ART",
+        "TILESB66.ART",
+        "TURD66.ANM",
+        "TURD66.VOC",
+        "END66.ANM",
+        "END66.VOC",
+        "BUBBA66.CON",
+        "DEFS66.CON",
+        "GATOR66.CON",
+        "GAME66.CON",
+        "PIG66.CON"
+    ];
 
     /// <summary>
     ///     Is Route 66 installed.
     /// </summary>
-    public bool IsRoute66Installed => IsInstalled(
-        [
-            "TILESA66.ART",
-            "TILESB66.ART",
-            "TURD66.ANM",
-            "TURD66.VOC",
-            "END66.ANM",
-            "END66.VOC",
-            "BUBBA66.CON",
-            "DEFS66.CON",
-            "GATOR66.CON",
-            "GAME66.CON",
-            "PIG66.CON"
-        ]
-        );
+    public bool IsRoute66Installed => IsInstalled(_requiredR66Files);
 
     /// <summary>
     ///     Is Rides Again installed.

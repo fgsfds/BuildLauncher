@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Collections.Immutable;
+using System.Text;
 using Addons.Addons;
 using Core.All.Enums;
 using Core.All.Enums.Versions;
@@ -24,7 +25,7 @@ public sealed class BuildGDX : BasePort
     public override string Name => "BuildGDX";
 
     /// <inheritdoc />
-    public override List<GameEnum> SupportedGames =>
+    public override ImmutableHashSet<GameEnum> SupportedGames { get; } =
     [
         GameEnum.Blood,
         GameEnum.Duke3D,
@@ -39,7 +40,7 @@ public sealed class BuildGDX : BasePort
     ];
 
     /// <inheritdoc />
-    public override List<string> SupportedGamesVersions =>
+    public override ImmutableHashSet<string> SupportedGamesVersions { get; } =
     [
         nameof(DukeVersionEnum.Duke3D_13D),
         nameof(DukeVersionEnum.Duke3D_Atomic),
@@ -70,7 +71,7 @@ public sealed class BuildGDX : BasePort
     }
 
     /// <inheritdoc />
-    public override List<FeatureEnum> SupportedFeatures =>
+    public override ImmutableHashSet<FeatureEnum> SupportedFeatures { get; } =
     [
         FeatureEnum.TROR,
         FeatureEnum.Hightile,

@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Collections.Immutable;
+using System.Text;
 using Addons.Addons;
 using Core.All.Enums;
 using Core.All.Enums.Addons;
@@ -47,7 +48,7 @@ public sealed class DosBox : BasePort
     public override string ShortName => "DosBox";
 
     /// <inheritdoc />
-    public override List<GameEnum> SupportedGames =>
+    public override ImmutableHashSet<GameEnum> SupportedGames { get; } =
     [
         GameEnum.Blood,
         GameEnum.Duke3D,
@@ -62,7 +63,7 @@ public sealed class DosBox : BasePort
     ];
 
     /// <inheritdoc />
-    public override List<string> SupportedGamesVersions =>
+    public override ImmutableHashSet<string> SupportedGamesVersions { get; } =
     [
         nameof(DukeVersionEnum.Duke3D_13D),
         nameof(DukeVersionEnum.Duke3D_Atomic)
@@ -92,7 +93,7 @@ public sealed class DosBox : BasePort
     }
 
     /// <inheritdoc />
-    public override List<FeatureEnum> SupportedFeatures => [];
+    public override ImmutableHashSet<FeatureEnum> SupportedFeatures { get; } = [];
 
     /// <inheritdoc />
     public override bool IsSkillSelectionAvailable => false;

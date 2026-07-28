@@ -59,7 +59,7 @@ public abstract class BaseGame
     /// <summary>
     ///     List of files required for the base game to work.
     /// </summary>
-    protected abstract IReadOnlyList<string> RequiredFiles { get; }
+    protected abstract IReadOnlyCollection<string> RequiredFiles { get; }
 
     /// <summary>
     ///     Enumeration of the available skill levels.
@@ -73,7 +73,7 @@ public abstract class BaseGame
     /// </summary>
     /// <param name="files">List of required files.</param>
     /// <param name="path">Folder where the files are searched.</param>
-    protected bool IsInstalled(IReadOnlyList<string> files, string? path = null)
+    protected bool IsInstalled(IReadOnlyCollection<string> files, string? path = null)
     {
         var gamePath = path ?? GameInstallFolder;
 
@@ -101,7 +101,7 @@ public abstract class BaseGame
     /// <param name="start">Inclusive start index.</param>
     /// <param name="endExclusive">Exclusive end index.</param>
     /// <param name="padWidth">Zero-padding width.</param>
-    protected static IReadOnlyList<string> GenerateNumberedFiles(string baseName, string extension, int start, int endExclusive, int padWidth)
+    protected static IReadOnlyCollection<string> GenerateNumberedFiles(string baseName, string extension, int start, int endExclusive, int padWidth)
     {
         List<string> result = new(endExclusive - start);
         var format = $"{baseName}{{0:D{padWidth}}}.{extension}";

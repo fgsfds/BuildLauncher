@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Collections.Immutable;
+using System.Text;
 using Addons.Addons;
 using Core.All.Enums;
 using Core.Client.Interfaces;
@@ -37,7 +38,7 @@ public sealed class Fury : EDuke32
     public override string Name => "Fury";
 
     /// <inheritdoc />
-    public override List<GameEnum> SupportedGames => [GameEnum.Fury];
+    public override ImmutableHashSet<GameEnum> SupportedGames { get; } = [GameEnum.Fury];
 
     /// <inheritdoc />
     public override string InstallFolderPath => _config.PathFury ?? string.Empty;
@@ -46,7 +47,7 @@ public sealed class Fury : EDuke32
     public override bool IsInstalled => File.Exists(PortExeFilePath);
 
     /// <inheritdoc />
-    public override List<FeatureEnum> SupportedFeatures =>
+    public override ImmutableHashSet<FeatureEnum> SupportedFeatures { get; } =
     [
         FeatureEnum.EDuke32_CON,
         FeatureEnum.Dynamic_Lighting,

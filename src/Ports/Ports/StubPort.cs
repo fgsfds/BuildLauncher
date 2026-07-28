@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Collections.Immutable;
+using System.Text;
 using Addons.Addons;
 using Core.All.Enums;
 using Games.Games;
@@ -23,10 +24,10 @@ public sealed class StubPort : BasePort
     public override string Name => "Stub";
 
     /// <inheritdoc />
-    public override List<GameEnum> SupportedGames => [];
+    public override ImmutableHashSet<GameEnum> SupportedGames { get; } = [];
 
     /// <inheritdoc />
-    public override List<FeatureEnum> SupportedFeatures => [];
+    public override ImmutableHashSet<FeatureEnum> SupportedFeatures { get; } = [];
 
     /// <inheritdoc />
     public override string? InstalledVersion => string.Empty;
