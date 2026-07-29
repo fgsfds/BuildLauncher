@@ -79,7 +79,7 @@ public abstract class BasePort : IInstallable
     /// <summary>
     ///     Path to port saved games folder.
     /// </summary>
-    public virtual string PortSavedGamesFolderPath => Path.Combine(ClientProperties.SavedGamesFolderPath, Name);
+    public string PortSavedGamesFolderPath => Path.Combine(ClientProperties.SavedGamesFolderPath, Name);
 
     /// <summary>
     ///     Game versions supported by the port.
@@ -181,7 +181,27 @@ public abstract class BasePort : IInstallable
     public abstract bool IsSkillSelectionAvailable { get; }
 
     /// <inheritdoc />
-    public abstract string? InstalledVersion { get; }
+    public virtual string? InstalledVersion
+    {
+        get
+        {
+            var versionFile = Path.Combine(InstallFolderPath, "version");
+
+            if (!File.Exists(versionFile))
+            {
+                return null;
+            }
+
+            try
+            {
+                return File.ReadAllText(versionFile);
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+    }
 
     /// <inheritdoc />
     public virtual string InstallFolderPath => Path.Combine(ClientProperties.PortsFolderPath, ShortName);

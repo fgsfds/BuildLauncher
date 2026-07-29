@@ -48,29 +48,6 @@ public sealed class BuildGDX : BasePort
     ];
 
     /// <inheritdoc />
-    public override string? InstalledVersion
-    {
-        get
-        {
-            var versionFile = Path.Combine(InstallFolderPath, "version");
-
-            if (!File.Exists(versionFile))
-            {
-                return null;
-            }
-
-            try
-            {
-                return File.ReadAllText(versionFile);
-            }
-            catch (Exception)
-            {
-                return null;
-            }
-        }
-    }
-
-    /// <inheritdoc />
     public override ImmutableHashSet<FeatureEnum> SupportedFeatures { get; } =
     [
         FeatureEnum.TROR,
