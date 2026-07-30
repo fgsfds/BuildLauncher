@@ -97,64 +97,9 @@ public abstract class BasePort : IInstallable
     protected abstract string ConfigFile { get; }
 
     /// <summary>
-    ///     Command-line parameter to add folder to search path.
+    ///     Command-line parameters for building arguments.
     /// </summary>
-    protected abstract string AddDirectoryParam { get; }
-
-    /// <summary>
-    ///     Command-line parameter to load main GRP file.
-    /// </summary>
-    protected abstract string MainGrpParam { get; }
-
-    /// <summary>
-    ///     Command-line parameter to load additional GRP file.
-    /// </summary>
-    protected abstract string AddGrpParam { get; }
-
-    /// <summary>
-    ///     Command-line parameter to load additional file.
-    /// </summary>
-    protected abstract string AddFileParam { get; }
-
-    /// <summary>
-    ///     Command-line parameter to load additional Def file.
-    /// </summary>
-    protected abstract string AddDefParam { get; }
-
-    /// <summary>
-    ///     Command-line parameter to load additional Con file.
-    /// </summary>
-    protected abstract string AddConParam { get; }
-
-    /// <summary>
-    ///     Command-line parameter to load main Def file.
-    /// </summary>
-    protected abstract string MainDefParam { get; }
-
-    /// <summary>
-    ///     Command-line parameter to load main Con file.
-    /// </summary>
-    protected abstract string MainConParam { get; }
-
-    /// <summary>
-    ///     Command-line parameter for skill selection.
-    /// </summary>
-    protected abstract string SkillParam { get; }
-
-    /// <summary>
-    ///     Command-line parameter for setting game directory.
-    /// </summary>
-    protected abstract string AddGameDirParam { get; }
-
-    /// <summary>
-    ///     Command-line parameter for adding main RFF file.
-    /// </summary>
-    protected abstract string AddRffParam { get; }
-
-    /// <summary>
-    ///     Command-line parameter for adding sound RFF file.
-    /// </summary>
-    protected abstract string AddSndParam { get; }
+    protected abstract PortCmdArguments CmdArguments { get; }
 
     /// <summary>
     ///     Extensions of save game files.
@@ -259,7 +204,7 @@ public abstract class BasePort : IInstallable
 
         if (skill is not null)
         {
-            _ = sb.Append($" {SkillParam}{skill}");
+            _ = sb.Append($" {CmdArguments.SkillLevel}{skill}");
         }
 
         if (skipIntro)
@@ -298,7 +243,7 @@ public abstract class BasePort : IInstallable
             {
                 if (option.Value is OptionalParameterTypeEnum.DEF)
                 {
-                    _ = sb.Append($@" {AddDefParam}""{option.Key}""");
+                    _ = sb.Append($@" {CmdArguments.AddDef}""{option.Key}""");
                 }
                 else if (option.Value is OptionalParameterTypeEnum.INI &&
                          game is BloodGame)
@@ -326,7 +271,7 @@ public abstract class BasePort : IInstallable
         //TODO e#m#
         if (camp.StartMap is MapFileJsonModel mapFile)
         {
-            _ = sb.Append($@" {AddFileParam}""{camp.FileInfo.Value.PathToFile}""");
+            _ = sb.Append($@" {CmdArguments.AddFile}""{camp.FileInfo.Value.PathToFile}""");
             _ = sb.Append($@" -map ""{mapFile.File}""");
         }
         else
@@ -345,7 +290,7 @@ public abstract class BasePort : IInstallable
             throw new ArgumentException($"Expected {nameof(MapFileJsonModel)} start map but received {camp.StartMap?.GetType().Name}.", nameof(camp));
         }
 
-        _ = sb.Append($@" {AddDirectoryParam}""{game.MapsFolderPath}""");
+        _ = sb.Append($@" {CmdArguments.AddDirectory}""{game.MapsFolderPath}""");
         _ = sb.Append($@" -map ""{mapFile.File}""");
     }
 
@@ -399,11 +344,11 @@ public abstract class BasePort : IInstallable
             }
             else if (bCampFileInfo.IsFolder)
             {
-                _ = sb.Append($@" {AddGameDirParam}""{bCampFileInfo.PathToFolder}""");
+                _ = sb.Append($@" {CmdArguments.AddGameDir}""{bCampFileInfo.PathToFolder}""");
             }
             else
             {
-                _ = sb.Append($@" {AddFileParam}""{bCampFileInfo.PathToFile}""");
+                _ = sb.Append($@" {CmdArguments.AddFile}""{bCampFileInfo.PathToFile}""");
             }
         }
         else if (bCamp.Type is AddonTypeEnum.Map)
@@ -417,12 +362,12 @@ public abstract class BasePort : IInstallable
 
         if (bCamp.RFF is not null)
         {
-            _ = sb.Append($@" {AddRffParam}""{bCamp.RFF}""");
+            _ = sb.Append($@" {CmdArguments.AddRff}""{bCamp.RFF}""");
         }
 
         if (bCamp.SND is not null)
         {
-            _ = sb.Append($@" {AddSndParam}""{bCamp.SND}""");
+            _ = sb.Append($@" {CmdArguments.AddSnd}""{bCamp.SND}""");
         }
     }
 
@@ -450,7 +395,7 @@ public abstract class BasePort : IInstallable
 
         if (sCamp.Type is AddonTypeEnum.TC)
         {
-            _ = sb.Append($@" {AddFileParam}""{sCamp.FileInfo.Value.PathToFile}""");
+            _ = sb.Append($@" {CmdArguments.AddFile}""{sCamp.FileInfo.Value.PathToFile}""");
         }
         else if (sCamp.Type is AddonTypeEnum.Map)
         {
@@ -469,11 +414,11 @@ public abstract class BasePort : IInstallable
     {
         if (game is NamGame)
         {
-            _ = sb.Append($" -nam {MainGrpParam}NAM.GRP");
+            _ = sb.Append($" -nam {CmdArguments.MainGrp}NAM.GRP");
         }
         else if (game is WW2GIGame)
         {
-            _ = sb.Append($" -ww2gi {MainGrpParam}WW2GI.GRP");
+            _ = sb.Append($" -ww2gi {CmdArguments.MainGrp}WW2GI.GRP");
         }
         else
         {
@@ -494,11 +439,11 @@ public abstract class BasePort : IInstallable
 
         if (addon.AddonId.Id.Equals(nameof(WW2GIAddonEnum.Platoon), StringComparison.OrdinalIgnoreCase))
         {
-            _ = sb.Append($" {AddGrpParam}PLATOONL.DAT {MainConParam}PLATOONL.DEF");
+            _ = sb.Append($" {CmdArguments.AddGrp}PLATOONL.DAT {CmdArguments.MainCon}PLATOONL.DEF");
         }
         else if (dCamp.MainCon is null)
         {
-            _ = sb.Append($" {MainConParam}GAME.CON");
+            _ = sb.Append($" {CmdArguments.MainCon}GAME.CON");
         }
 
         if (dCamp.FileInfo is null)
@@ -508,20 +453,20 @@ public abstract class BasePort : IInstallable
 
         if (dCamp.MainCon is not null)
         {
-            _ = sb.Append($@" {MainConParam}""{dCamp.MainCon}""");
+            _ = sb.Append($@" {CmdArguments.MainCon}""{dCamp.MainCon}""");
         }
 
         if (dCamp.AdditionalCons?.Any() is true)
         {
             foreach (var con in dCamp.AdditionalCons)
             {
-                _ = sb.Append($@" {AddConParam}""{con}""");
+                _ = sb.Append($@" {CmdArguments.AddCon}""{con}""");
             }
         }
 
         if (dCamp.Type is AddonTypeEnum.TC)
         {
-            _ = sb.Append($@" {AddFileParam}""{dCamp.FileInfo.Value.PathToFile}""");
+            _ = sb.Append($@" {CmdArguments.AddFile}""{dCamp.FileInfo.Value.PathToFile}""");
         }
         else if (dCamp.Type is AddonTypeEnum.Map)
         {
@@ -573,13 +518,13 @@ public abstract class BasePort : IInstallable
                 throw new InvalidOperationException("Folder mods are not supported in autoload");
             }
 
-            _ = sb.Append($@" {AddFileParam}""{aModFileInfo.FileName}""");
+            _ = sb.Append($@" {CmdArguments.AddFile}""{aModFileInfo.FileName}""");
 
             if (aMod.AdditionalDefs is not null)
             {
                 foreach (var def in aMod.AdditionalDefs)
                 {
-                    _ = sb.Append($@" {AddDefParam}""{def}""");
+                    _ = sb.Append($@" {CmdArguments.AddDef}""{def}""");
                 }
             }
 
@@ -587,7 +532,7 @@ public abstract class BasePort : IInstallable
             {
                 foreach (var con in aMod.AdditionalCons)
                 {
-                    _ = sb.Append($@" {AddConParam}""{con}""");
+                    _ = sb.Append($@" {CmdArguments.AddCon}""{con}""");
                 }
             }
 
@@ -598,7 +543,7 @@ public abstract class BasePort : IInstallable
             //Raze sets mods dir in the config
             PortEnum is not PortEnum.Raze)
         {
-            _ = sb.Append($@" {AddDirectoryParam}""{game.ModsFolderPath}""");
+            _ = sb.Append($@" {CmdArguments.AddDirectory}""{game.ModsFolderPath}""");
         }
     }
 

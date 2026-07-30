@@ -64,40 +64,21 @@ public sealed class BuildGDX : BasePort
     protected override string ConfigFile => string.Empty;
 
     /// <inheritdoc />
-    protected override string AddDirectoryParam => throw new NotSupportedException();
-
-    /// <inheritdoc />
-    protected override string AddFileParam => throw new NotSupportedException();
-
-    /// <inheritdoc />
-    protected override string AddDefParam => throw new NotSupportedException();
-
-    /// <inheritdoc />
-    protected override string AddConParam => throw new NotSupportedException();
-
-    /// <inheritdoc />
-    protected override string MainDefParam => throw new NotSupportedException();
-
-    /// <inheritdoc />
-    protected override string MainConParam => throw new NotSupportedException();
-
-    /// <inheritdoc />
-    protected override string MainGrpParam => throw new NotSupportedException();
-
-    /// <inheritdoc />
-    protected override string AddGrpParam => throw new NotSupportedException();
-
-    /// <inheritdoc />
-    protected override string SkillParam => throw new NotSupportedException();
-
-    /// <inheritdoc />
-    protected override string AddGameDirParam => throw new NotSupportedException();
-
-    /// <inheritdoc />
-    protected override string AddRffParam => throw new NotSupportedException();
-
-    /// <inheritdoc />
-    protected override string AddSndParam => throw new NotSupportedException();
+    protected override PortCmdArguments CmdArguments => new()
+    {
+        AddDirectory = null,
+        MainGrp = null,
+        AddGrp = null,
+        AddFile = null,
+        AddDef = null,
+        AddCon = null,
+        MainDef = null,
+        MainCon = null,
+        SkillLevel = null,
+        AddGameDir = null,
+        AddRff = null,
+        AddSnd = null
+    };
 
 
     /// <inheritdoc />

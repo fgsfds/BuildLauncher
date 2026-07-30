@@ -43,7 +43,10 @@ public sealed class RedNukem : EDuke32
     public override string Name => "RedNukem";
 
     /// <inheritdoc />
-    protected override string AddGrpParam => "-g ";
+    protected override PortCmdArguments CmdArguments => base.CmdArguments with
+    {
+        AddGrp = "-g "
+    };
 
     /// <inheritdoc />
     public override ImmutableHashSet<GameEnum> SupportedGames { get; } =
@@ -92,19 +95,19 @@ public sealed class RedNukem : EDuke32
 
         if (addon.MainDef is not null)
         {
-            _ = sb.Append($@" {MainDefParam}""{addon.MainDef}""");
+            _ = sb.Append($@" {CmdArguments.MainDef}""{addon.MainDef}""");
         }
         else
         {
             //overriding default def so gamename.def files are ignored
-            _ = sb.Append($@" {MainDefParam}""a""");
+            _ = sb.Append($@" {CmdArguments.MainDef}""a""");
         }
 
         if (addon.AdditionalDefs is not null)
         {
             foreach (var def in addon.AdditionalDefs)
             {
-                _ = sb.Append($@" {AddDefParam}""{def}""");
+                _ = sb.Append($@" {CmdArguments.AddDef}""{def}""");
             }
         }
 
@@ -119,13 +122,13 @@ public sealed class RedNukem : EDuke32
         }
         else if (game is NamGame nGame)
         {
-            _ = sb.Append($@" {AddDirectoryParam}""{game.GameInstallFolder}""");
+            _ = sb.Append($@" {CmdArguments.AddDirectory}""{game.GameInstallFolder}""");
 
             GetNamWW2GIArgs(sb, nGame, addon);
         }
         else if (game is WW2GIGame giGame)
         {
-            _ = sb.Append($@" {AddDirectoryParam}""{game.GameInstallFolder}""");
+            _ = sb.Append($@" {CmdArguments.AddDirectory}""{game.GameInstallFolder}""");
 
             GetNamWW2GIArgs(sb, giGame, addon);
         }
@@ -206,15 +209,15 @@ public sealed class RedNukem : EDuke32
     {
         if (addon.SupportedGame.GameEnum is GameEnum.RidesAgain)
         {
-            _ = sb.Append($@" {AddDirectoryParam}""{game.AgainInstallPath}""");
+            _ = sb.Append($@" {CmdArguments.AddDirectory}""{game.AgainInstallPath}""");
         }
         else if (addon.DependentAddons?.ContainsKey(nameof(RedneckAddonEnum.Route66)) is true)
         {
-            _ = sb.Append($@" {AddDirectoryParam}""{game.GameInstallFolder}"" -x GAME66.CON");
+            _ = sb.Append($@" {CmdArguments.AddDirectory}""{game.GameInstallFolder}"" -x GAME66.CON");
         }
         else
         {
-            _ = sb.Append($@" {AddDirectoryParam}""{game.GameInstallFolder}""");
+            _ = sb.Append($@" {CmdArguments.AddDirectory}""{game.GameInstallFolder}""");
         }
 
         if (addon.FileInfo is null)
@@ -236,14 +239,14 @@ public sealed class RedNukem : EDuke32
 
         if (rCamp.MainCon is not null)
         {
-            _ = sb.Append($@" {MainConParam}""{rCamp.MainCon}""");
+            _ = sb.Append($@" {CmdArguments.MainCon}""{rCamp.MainCon}""");
         }
 
         if (rCamp.AdditionalCons?.Any() is true)
         {
             foreach (var con in rCamp.AdditionalCons)
             {
-                _ = sb.Append($@" {AddConParam}""{con}""");
+                _ = sb.Append($@" {CmdArguments.AddCon}""{con}""");
             }
         }
 
@@ -256,7 +259,7 @@ public sealed class RedNukem : EDuke32
             }
             else
             {
-                _ = sb.Append($@" {AddFileParam}""{addon.FileInfo.Value.PathToFile}""");
+                _ = sb.Append($@" {CmdArguments.AddFile}""{addon.FileInfo.Value.PathToFile}""");
             }
         }
         else if (rCamp.Type is AddonTypeEnum.Map)

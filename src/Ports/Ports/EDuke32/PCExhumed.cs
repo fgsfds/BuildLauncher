@@ -47,23 +47,23 @@ public sealed class PCExhumed : EDuke32
         //don't search for steam/gog installs
         _ = sb.Append(" -usecwd");
 
-        _ = sb.Append(@$" {AddDirectoryParam}""{game.GameInstallFolder}""");
+        _ = sb.Append(@$" {CmdArguments.AddDirectory}""{game.GameInstallFolder}""");
 
         if (addon.MainDef is not null)
         {
-            _ = sb.Append($@" {MainDefParam}""{addon.MainDef}""");
+            _ = sb.Append($@" {CmdArguments.MainDef}""{addon.MainDef}""");
         }
         else
         {
             //overriding default def so gamename.def files are ignored
-            _ = sb.Append($@" {MainDefParam}""a""");
+            _ = sb.Append($@" {CmdArguments.MainDef}""a""");
         }
 
         if (addon.AdditionalDefs is not null)
         {
             foreach (var def in addon.AdditionalDefs)
             {
-                _ = sb.Append($@" {AddDefParam}""{def}""");
+                _ = sb.Append($@" {CmdArguments.AddDef}""{def}""");
             }
         }
 

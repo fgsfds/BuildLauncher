@@ -56,40 +56,21 @@ public sealed class ZHRecomp : BasePort
     protected override string ConfigFile => throw new NotImplementedException();
 
     /// <inheritdoc />
-    protected override string AddDirectoryParam => throw new NotImplementedException();
-
-    /// <inheritdoc />
-    protected override string MainGrpParam => throw new NotImplementedException();
-
-    /// <inheritdoc />
-    protected override string AddGrpParam => throw new NotImplementedException();
-
-    /// <inheritdoc />
-    protected override string AddFileParam => throw new NotImplementedException();
-
-    /// <inheritdoc />
-    protected override string AddDefParam => throw new NotImplementedException();
-
-    /// <inheritdoc />
-    protected override string AddConParam => throw new NotImplementedException();
-
-    /// <inheritdoc />
-    protected override string MainDefParam => throw new NotImplementedException();
-
-    /// <inheritdoc />
-    protected override string MainConParam => throw new NotImplementedException();
-
-    /// <inheritdoc />
-    protected override string SkillParam => throw new NotImplementedException();
-
-    /// <inheritdoc />
-    protected override string AddGameDirParam => throw new NotImplementedException();
-
-    /// <inheritdoc />
-    protected override string AddRffParam => throw new NotImplementedException();
-
-    /// <inheritdoc />
-    protected override string AddSndParam => throw new NotImplementedException();
+    protected override PortCmdArguments CmdArguments => new()
+    {
+        AddDirectory = null,
+        MainGrp = null,
+        AddGrp = null,
+        AddFile = null,
+        AddDef = null,
+        AddCon = null,
+        MainDef = null,
+        MainCon = null,
+        SkillLevel = null,
+        AddGameDir = null,
+        AddRff = null,
+        AddSnd = null
+    };
 
     /// <inheritdoc />
     protected override void GetStartCampaignArgs(StringBuilder sb, BaseGame game, BaseAddon addon) { }

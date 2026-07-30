@@ -43,22 +43,15 @@ public sealed class VoidSW : EDuke32
     protected override string ConfigFile => "voidsw.cfg";
 
     /// <inheritdoc />
-    protected override string AddDirectoryParam => "-j";
-
-    /// <inheritdoc />
-    protected override string AddFileParam => "-g";
-
-    /// <inheritdoc />
-    protected override string MainDefParam => "-h";
-
-    /// <inheritdoc />
-    protected override string AddDefParam => "-mh";
-
-    /// <inheritdoc />
-    protected override string AddConParam => throw new NotSupportedException();
-
-    /// <inheritdoc />
-    protected override string MainConParam => throw new NotSupportedException();
+    protected override PortCmdArguments CmdArguments => base.CmdArguments with
+    {
+        AddDirectory = "-j",
+        AddFile = "-g",
+        MainDef = "-h",
+        AddDef = "-mh",
+        AddCon = null,
+        MainCon = null
+    };
 
     /// <inheritdoc />
     public override bool IsDownloadable => false;
@@ -76,23 +69,23 @@ public sealed class VoidSW : EDuke32
     protected override void GetStartCampaignArgs(StringBuilder sb, BaseGame game, BaseAddon addon)
     {
         //don't search for steam/gog installs
-        _ = sb.Append($@" -usecwd {AddDirectoryParam}""{game.GameInstallFolder}""");
+        _ = sb.Append($@" -usecwd {CmdArguments.AddDirectory}""{game.GameInstallFolder}""");
 
         if (addon.MainDef is not null)
         {
-            _ = sb.Append($@" {MainDefParam}""{addon.MainDef}""");
+            _ = sb.Append($@" {CmdArguments.MainDef}""{addon.MainDef}""");
         }
         else
         {
             //overriding default def so gamename.def files are ignored
-            _ = sb.Append($@" {MainDefParam}""a""");
+            _ = sb.Append($@" {CmdArguments.MainDef}""a""");
         }
 
         if (addon.AdditionalDefs is not null)
         {
             foreach (var def in addon.AdditionalDefs)
             {
-                _ = sb.Append($@" {AddDefParam}""{def}""");
+                _ = sb.Append($@" {CmdArguments.AddDef}""{def}""");
             }
         }
 
@@ -151,7 +144,7 @@ public sealed class VoidSW : EDuke32
 
         if (wCamp.Type is AddonTypeEnum.TC)
         {
-            _ = sb.Append($@" {AddDirectoryParam}""{game.CampaignsFolderPath}"" {AddFileParam}""{wCamp.FileInfo.Value.FileName}""");
+            _ = sb.Append($@" {CmdArguments.AddDirectory}""{game.CampaignsFolderPath}"" {CmdArguments.AddFile}""{wCamp.FileInfo.Value.FileName}""");
         }
         else if (wCamp.Type is AddonTypeEnum.Map)
         {

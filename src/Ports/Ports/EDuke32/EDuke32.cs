@@ -33,40 +33,21 @@ public class EDuke32 : BasePort
     protected override string ConfigFile => "eduke32.cfg";
 
     /// <inheritdoc />
-    protected override string MainGrpParam => "-gamegrp ";
-
-    /// <inheritdoc />
-    protected override string AddGrpParam => "-grp ";
-
-    /// <inheritdoc />
-    protected override string AddDirectoryParam => "-j ";
-
-    /// <inheritdoc />
-    protected override string AddFileParam => "-g ";
-
-    /// <inheritdoc />
-    protected override string AddDefParam => "-mh ";
-
-    /// <inheritdoc />
-    protected override string AddConParam => "-mx ";
-
-    /// <inheritdoc />
-    protected override string MainDefParam => "-h ";
-
-    /// <inheritdoc />
-    protected override string MainConParam => "-x ";
-
-    /// <inheritdoc />
-    protected override string SkillParam => "-s";
-
-    /// <inheritdoc />
-    protected override string AddGameDirParam => "-game_dir ";
-
-    /// <inheritdoc />
-    protected override string AddRffParam => throw new NotSupportedException();
-
-    /// <inheritdoc />
-    protected override string AddSndParam => throw new NotSupportedException();
+    protected override PortCmdArguments CmdArguments => new()
+    {
+        AddDirectory = "-j ",
+        MainGrp = "-gamegrp ",
+        AddGrp = "-grp ",
+        AddFile = "-g ",
+        AddDef = "-mh ",
+        AddCon = "-mx ",
+        MainDef = "-h ",
+        MainCon = "-x ",
+        SkillLevel = "-s",
+        AddGameDir = "-game_dir ",
+        AddRff = null,
+        AddSnd = null
+    };
 
     /// <inheritdoc />
     public override ImmutableHashSet<GameEnum> SupportedGames { get; } =
@@ -177,7 +158,7 @@ public class EDuke32 : BasePort
 
         if (addon.MainDef is not null)
         {
-            _ = sb.Append($@" {MainDefParam}""{addon.MainDef}""");
+            _ = sb.Append($@" {CmdArguments.MainDef}""{addon.MainDef}""");
         }
         else if (game is FuryGame)
         {
@@ -186,14 +167,14 @@ public class EDuke32 : BasePort
         else
         {
             //overriding default def so gamename.def files are ignored
-            _ = sb.Append($@" {MainDefParam}""a""");
+            _ = sb.Append($@" {CmdArguments.MainDef}""a""");
         }
 
         if (addon.AdditionalDefs is not null)
         {
             foreach (var def in addon.AdditionalDefs)
             {
-                _ = sb.Append($@" {AddDefParam}""{def}""");
+                _ = sb.Append($@" {CmdArguments.AddDef}""{def}""");
             }
         }
 
@@ -203,19 +184,19 @@ public class EDuke32 : BasePort
         }
         else if (game is FuryGame fGame)
         {
-            _ = sb.Append($@" {AddDirectoryParam}""{game.GameInstallFolder}""");
+            _ = sb.Append($@" {CmdArguments.AddDirectory}""{game.GameInstallFolder}""");
 
             GetFuryArgs(sb, fGame, addon);
         }
         else if (game is NamGame nGame)
         {
-            _ = sb.Append($@" {AddDirectoryParam}""{game.GameInstallFolder}""");
+            _ = sb.Append($@" {CmdArguments.AddDirectory}""{game.GameInstallFolder}""");
 
             GetNamWW2GIArgs(sb, nGame, addon);
         }
         else if (game is WW2GIGame gBaseGame)
         {
-            _ = sb.Append($@" {AddDirectoryParam}""{game.GameInstallFolder}""");
+            _ = sb.Append($@" {CmdArguments.AddDirectory}""{game.GameInstallFolder}""");
 
             GetNamWW2GIArgs(sb, gBaseGame, addon);
         }
@@ -242,18 +223,18 @@ public class EDuke32 : BasePort
     {
         if (addon.SupportedGame.GameEnum is GameEnum.Duke64)
         {
-            _ = sb.Append(@$" {AddDirectoryParam}""{Path.GetDirectoryName(game.Duke64RomPath)}"" {MainGrpParam}""{Path.GetFileName(game.Duke64RomPath)}""");
+            _ = sb.Append(@$" {CmdArguments.AddDirectory}""{Path.GetDirectoryName(game.Duke64RomPath)}"" {CmdArguments.MainGrp}""{Path.GetFileName(game.Duke64RomPath)}""");
 
             return;
         }
 
         if (addon.SupportedGame.GameVersion?.Equals(nameof(DukeVersionEnum.Duke3D_WT), StringComparison.OrdinalIgnoreCase) == true)
         {
-            _ = sb.Append($@" {AddDirectoryParam}""{game.DukeWTInstallPath}"" -addon {(byte)DukeAddonEnum.Base} {AddDirectoryParam}""{Path.Combine(InstallFolderPath, ClientConsts.WTStopgap)}"" {MainGrpParam}e32wt.grp {AddDefParam}e32wt.def");
+            _ = sb.Append($@" {CmdArguments.AddDirectory}""{game.DukeWTInstallPath}"" -addon {(byte)DukeAddonEnum.Base} {CmdArguments.AddDirectory}""{Path.Combine(InstallFolderPath, ClientConsts.WTStopgap)}"" {CmdArguments.MainGrp}e32wt.grp {CmdArguments.AddDef}e32wt.def");
         }
         else
         {
-            _ = sb.Append($@" {AddDirectoryParam}""{game.GameInstallFolder}""");
+            _ = sb.Append($@" {CmdArguments.AddDirectory}""{game.GameInstallFolder}""");
 
             if (addon.DependentAddons is not null)
             {
@@ -264,14 +245,14 @@ public class EDuke32 : BasePort
 
                     if (!addonPath.Equals(game.GameInstallFolder))
                     {
-                        _ = sb.Append($@" {AddDirectoryParam}""{addonPath}""");
+                        _ = sb.Append($@" {CmdArguments.AddDirectory}""{addonPath}""");
                     }
 
-                    _ = sb.Append($" {AddGrpParam}DUKEDC.GRP");
+                    _ = sb.Append($" {CmdArguments.AddGrp}DUKEDC.GRP");
 
                     if (File.Exists(Path.Combine(addonPath, "DUKEDC.CON")))
                     {
-                        _ = sb.Append($" {MainConParam}DUKEDC.CON");
+                        _ = sb.Append($" {CmdArguments.MainCon}DUKEDC.CON");
                     }
                 }
                 //NUCLEAR WINTER
@@ -281,10 +262,10 @@ public class EDuke32 : BasePort
 
                     if (!addonPath.Equals(game.GameInstallFolder))
                     {
-                        _ = sb.Append($@" {AddDirectoryParam}""{addonPath}""");
+                        _ = sb.Append($@" {CmdArguments.AddDirectory}""{addonPath}""");
                     }
 
-                    _ = sb.Append($" {AddGrpParam}NWINTER.GRP {MainConParam}NWINTER.CON");
+                    _ = sb.Append($" {CmdArguments.AddGrp}NWINTER.GRP {CmdArguments.MainCon}NWINTER.CON");
                 }
                 //CARIBBEAN
                 else if (addon.DependentAddons.ContainsKey(nameof(DukeAddonEnum.DukeVaca)))
@@ -293,14 +274,14 @@ public class EDuke32 : BasePort
 
                     if (!addonPath.Equals(game.GameInstallFolder))
                     {
-                        _ = sb.Append($@" {AddDirectoryParam}""{addonPath}""");
+                        _ = sb.Append($@" {CmdArguments.AddDirectory}""{addonPath}""");
                     }
 
-                    _ = sb.Append($" {AddGrpParam}VACATION.GRP");
+                    _ = sb.Append($" {CmdArguments.AddGrp}VACATION.GRP");
 
                     if (File.Exists(Path.Combine(addonPath, "VACATION.CON")))
                     {
-                        _ = sb.Append($" {MainConParam}VACATION.CON");
+                        _ = sb.Append($" {CmdArguments.MainCon}VACATION.CON");
                     }
                 }
             }
@@ -325,14 +306,14 @@ public class EDuke32 : BasePort
 
         if (dCamp.MainCon is not null)
         {
-            _ = sb.Append($@" {MainConParam}""{dCamp.MainCon}""");
+            _ = sb.Append($@" {CmdArguments.MainCon}""{dCamp.MainCon}""");
         }
 
         if (dCamp.AdditionalCons?.Any() is true)
         {
             foreach (var con in dCamp.AdditionalCons)
             {
-                _ = sb.Append($@" {AddConParam}""{con}""");
+                _ = sb.Append($@" {CmdArguments.AddCon}""{con}""");
             }
         }
 
@@ -345,7 +326,7 @@ public class EDuke32 : BasePort
             }
             else
             {
-                _ = sb.Append($@" {AddFileParam}""{addon.FileInfo.Value.PathToFile}""");
+                _ = sb.Append($@" {CmdArguments.AddFile}""{addon.FileInfo.Value.PathToFile}""");
             }
         }
         else if (dCamp.Type is AddonTypeEnum.Map)
@@ -391,21 +372,21 @@ public class EDuke32 : BasePort
 
         if (fCamp.MainCon is not null)
         {
-            _ = sb.Append($@" {MainConParam}""{fCamp.MainCon}""");
+            _ = sb.Append($@" {CmdArguments.MainCon}""{fCamp.MainCon}""");
         }
 
         if (fCamp.AdditionalCons?.Any() is true)
         {
             foreach (var con in fCamp.AdditionalCons)
             {
-                _ = sb.Append($@" {AddConParam}""{con}""");
+                _ = sb.Append($@" {CmdArguments.AddCon}""{con}""");
             }
         }
 
 
         if (fCamp.Type is AddonTypeEnum.TC)
         {
-            _ = sb.Append($@" {AddFileParam}""{addon.FileInfo.Value.PathToFile}""");
+            _ = sb.Append($@" {CmdArguments.AddFile}""{addon.FileInfo.Value.PathToFile}""");
         }
         else if (fCamp.Type is AddonTypeEnum.Map)
         {

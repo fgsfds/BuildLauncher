@@ -39,13 +39,12 @@ public class NBlood : EDuke32
     protected override string ConfigFile => "nblood.cfg";
 
     /// <inheritdoc />
-    protected override string SkillParam => "-s ";
-
-    /// <inheritdoc />
-    protected override string AddRffParam => "-rff ";
-
-    /// <inheritdoc />
-    protected override string AddSndParam => "-snd ";
+    protected override PortCmdArguments CmdArguments => base.CmdArguments with
+    {
+        SkillLevel = "-s ",
+        AddRff = "-rff ",
+        AddSnd = "-snd "
+    };
 
 
     /// <inheritdoc />
@@ -62,23 +61,23 @@ public class NBlood : EDuke32
         //don't search for steam/gog installs
         _ = sb.Append(" -usecwd");
 
-        _ = sb.Append(@$" {AddDirectoryParam}""{game.GameInstallFolder}""");
+        _ = sb.Append(@$" {CmdArguments.AddDirectory}""{game.GameInstallFolder}""");
 
         if (addon.MainDef is not null)
         {
-            _ = sb.Append($@" {MainDefParam}""{addon.MainDef}""");
+            _ = sb.Append($@" {CmdArguments.MainDef}""{addon.MainDef}""");
         }
         else
         {
             //overriding default def so gamename.def files are ignored
-            _ = sb.Append($@" {MainDefParam}""a""");
+            _ = sb.Append($@" {CmdArguments.MainDef}""a""");
         }
 
         if (addon.AdditionalDefs is not null)
         {
             foreach (var def in addon.AdditionalDefs)
             {
-                _ = sb.Append($@" {AddDefParam}""{def}""");
+                _ = sb.Append($@" {CmdArguments.AddDef}""{def}""");
             }
         }
 

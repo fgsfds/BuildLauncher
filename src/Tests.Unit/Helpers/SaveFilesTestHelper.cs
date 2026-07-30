@@ -3,6 +3,7 @@ using System.Text;
 using Addons.Addons;
 using Core.All.Enums;
 using Games.Games;
+using Ports;
 using Ports.Ports;
 
 namespace Tests.Unit;
@@ -26,29 +27,21 @@ internal sealed class BasePortTestProxy : BasePort
 
     protected override string ConfigFile => string.Empty;
 
-    protected override string AddDirectoryParam => string.Empty;
-
-    protected override string MainGrpParam => string.Empty;
-
-    protected override string AddGrpParam => string.Empty;
-
-    protected override string AddFileParam => string.Empty;
-
-    protected override string AddDefParam => string.Empty;
-
-    protected override string AddConParam => string.Empty;
-
-    protected override string MainDefParam => string.Empty;
-
-    protected override string MainConParam => string.Empty;
-
-    protected override string SkillParam => string.Empty;
-
-    protected override string AddGameDirParam => string.Empty;
-
-    protected override string AddRffParam => string.Empty;
-
-    protected override string AddSndParam => string.Empty;
+    protected override PortCmdArguments CmdArguments => new()
+    {
+        AddDirectory = null,
+        MainGrp = null,
+        AddGrp = null,
+        AddFile = null,
+        AddDef = null,
+        AddCon = null,
+        MainDef = null,
+        MainCon = null,
+        SkillLevel = null,
+        AddGameDir = null,
+        AddRff = null,
+        AddSnd = null
+    };
 
     public override void AfterEnd(BaseGame game, BaseAddon campaign) { }
 

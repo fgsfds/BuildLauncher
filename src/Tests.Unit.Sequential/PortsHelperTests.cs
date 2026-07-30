@@ -6,6 +6,7 @@ using Core.All;
 using Core.All.Enums;
 using Core.All.Enums.Addons;
 using Games.Games;
+using Ports;
 using Ports.Ports;
 
 namespace Tests.Unit;
@@ -506,18 +507,21 @@ public sealed class PortsHelperTests
         public override bool IsSkillSelectionAvailable => false;
         public override string? InstalledVersion => IsInstalled ? "1.0" : null;
         protected override string ConfigFile => "";
-        protected override string AddDirectoryParam => "";
-        protected override string MainGrpParam => "";
-        protected override string AddGrpParam => "";
-        protected override string AddFileParam => "";
-        protected override string AddDefParam => "";
-        protected override string AddConParam => "";
-        protected override string MainDefParam => "";
-        protected override string MainConParam => "";
-        protected override string SkillParam => "";
-        protected override string AddGameDirParam => "";
-        protected override string AddRffParam => throw new NotSupportedException();
-        protected override string AddSndParam => throw new NotSupportedException();
+        protected override PortCmdArguments CmdArguments => new()
+        {
+            AddDirectory = null,
+            MainGrp = null,
+            AddGrp = null,
+            AddFile = null,
+            AddDef = null,
+            AddCon = null,
+            MainDef = null,
+            MainCon = null,
+            SkillLevel = null,
+            AddGameDir = null,
+            AddRff = null,
+            AddSnd = null
+        };
 
         public override void AfterEnd(BaseGame game, BaseAddon campaign) { }
         public override void BeforeStart(BaseGame game, BaseAddon campaign) { }

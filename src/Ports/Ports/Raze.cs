@@ -60,40 +60,21 @@ public sealed class Raze : BasePort
     protected override string ConfigFile => "raze_portable.ini";
 
     /// <inheritdoc />
-    protected override string AddFileParam => "-file ";
-
-    /// <inheritdoc />
-    protected override string AddDefParam => "-adddef ";
-
-    /// <inheritdoc />
-    protected override string AddConParam => "-addcon ";
-
-    /// <inheritdoc />
-    protected override string MainDefParam => "-def ";
-
-    /// <inheritdoc />
-    protected override string MainConParam => "-con ";
-
-    /// <inheritdoc />
-    protected override string AddDirectoryParam => AddFileParam;
-
-    /// <inheritdoc />
-    protected override string AddGameDirParam => AddFileParam;
-
-    /// <inheritdoc />
-    protected override string AddRffParam => AddFileParam;
-
-    /// <inheritdoc />
-    protected override string AddSndParam => AddFileParam;
-
-    /// <inheritdoc />
-    protected override string MainGrpParam => AddFileParam;
-
-    /// <inheritdoc />
-    protected override string AddGrpParam => AddFileParam;
-
-    /// <inheritdoc />
-    protected override string SkillParam => throw new NotSupportedException();
+    protected override PortCmdArguments CmdArguments => new()
+    {
+        AddDirectory = "-file ",
+        MainGrp = "-file ",
+        AddGrp = "-file ",
+        AddFile = "-file ",
+        AddDef = "-adddef ",
+        AddCon = "-addcon ",
+        MainDef = "-def ",
+        MainCon = "-con ",
+        SkillLevel = null,
+        AddGameDir = "-file ",
+        AddRff = "-file ",
+        AddSnd = "-file "
+    };
 
     /// <inheritdoc />
     public override ImmutableHashSet<FeatureEnum> SupportedFeatures { get; } =
@@ -179,19 +160,19 @@ public sealed class Raze : BasePort
 
         if (addon.MainDef is not null)
         {
-            _ = sb.Append($@" {MainDefParam}""{addon.MainDef}""");
+            _ = sb.Append($@" {CmdArguments.MainDef}""{addon.MainDef}""");
         }
         else
         {
             //overriding default def so gamename.def files are ignored
-            _ = sb.Append($@" {MainDefParam}""a""");
+            _ = sb.Append($@" {CmdArguments.MainDef}""a""");
         }
 
         if (addon.AdditionalDefs is not null)
         {
             foreach (var def in addon.AdditionalDefs)
             {
-                _ = sb.Append($@" {AddDefParam}""{def}""");
+                _ = sb.Append($@" {CmdArguments.AddDef}""{def}""");
             }
         }
 
@@ -290,21 +271,21 @@ public sealed class Raze : BasePort
 
         if (dCamp.MainCon is not null)
         {
-            _ = sb.Append($@" {MainConParam}""{dCamp.MainCon}""");
+            _ = sb.Append($@" {CmdArguments.MainCon}""{dCamp.MainCon}""");
         }
 
         if (dCamp.AdditionalCons?.Any() is true)
         {
             foreach (var con in dCamp.AdditionalCons)
             {
-                _ = sb.Append($@" {AddConParam}""{con}""");
+                _ = sb.Append($@" {CmdArguments.AddCon}""{con}""");
             }
         }
 
 
         if (dCamp.Type is AddonTypeEnum.TC)
         {
-            _ = sb.Append($@" {AddFileParam}""{dCamp.FileInfo.Value.PathToFile}""");
+            _ = sb.Append($@" {CmdArguments.AddFile}""{dCamp.FileInfo.Value.PathToFile}""");
         }
         else if (dCamp.Type is AddonTypeEnum.Map)
         {
@@ -340,12 +321,12 @@ public sealed class Raze : BasePort
         if (wCamp.DependentAddons is not null &&
             wCamp.DependentAddons.ContainsKey(nameof(WangAddonEnum.Wanton)))
         {
-            _ = sb.Append($" {AddFileParam}WT.GRP");
+            _ = sb.Append($" {CmdArguments.AddFile}WT.GRP");
         }
         else if (wCamp.DependentAddons is not null &&
                  wCamp.DependentAddons.ContainsKey(nameof(WangAddonEnum.TwinDragon)))
         {
-            _ = sb.Append($" {AddFileParam}TD.GRP");
+            _ = sb.Append($" {CmdArguments.AddFile}TD.GRP");
         }
 
         if (wCamp.FileInfo is null)
@@ -355,7 +336,7 @@ public sealed class Raze : BasePort
 
         if (wCamp.Type is AddonTypeEnum.TC)
         {
-            _ = sb.Append($@" {AddFileParam}""{wCamp.FileInfo.Value.PathToFile}""");
+            _ = sb.Append($@" {CmdArguments.AddFile}""{wCamp.FileInfo.Value.PathToFile}""");
         }
         else if (wCamp.Type is AddonTypeEnum.Map)
         {
@@ -409,21 +390,21 @@ public sealed class Raze : BasePort
 
         if (rCamp.MainCon is not null)
         {
-            _ = sb.Append($@" {MainConParam}""{rCamp.MainCon}""");
+            _ = sb.Append($@" {CmdArguments.MainCon}""{rCamp.MainCon}""");
         }
 
         if (rCamp.AdditionalCons?.Any() is true)
         {
             foreach (var con in rCamp.AdditionalCons)
             {
-                _ = sb.Append($@" {AddConParam}""{con}""");
+                _ = sb.Append($@" {CmdArguments.AddCon}""{con}""");
             }
         }
 
 
         if (rCamp.Type is AddonTypeEnum.TC)
         {
-            _ = sb.Append($@" {AddFileParam}""{rCamp.FileInfo.Value.PathToFile}""");
+            _ = sb.Append($@" {CmdArguments.AddFile}""{rCamp.FileInfo.Value.PathToFile}""");
         }
         else if (rCamp.Type is AddonTypeEnum.Map)
         {

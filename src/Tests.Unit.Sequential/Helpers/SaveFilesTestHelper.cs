@@ -3,6 +3,7 @@ using System.Text;
 using Addons.Addons;
 using Core.All.Enums;
 using Games.Games;
+using Ports;
 using Ports.Ports;
 using Ports.Ports.EDuke32;
 
@@ -40,40 +41,21 @@ internal sealed class BasePortTestProxy : BasePort
     protected override string ConfigFile => string.Empty;
 
     /// <inheritdoc />
-    protected override string AddDirectoryParam => string.Empty;
-
-    /// <inheritdoc />
-    protected override string MainGrpParam => string.Empty;
-
-    /// <inheritdoc />
-    protected override string AddGrpParam => string.Empty;
-
-    /// <inheritdoc />
-    protected override string AddFileParam => string.Empty;
-
-    /// <inheritdoc />
-    protected override string AddDefParam => string.Empty;
-
-    /// <inheritdoc />
-    protected override string AddConParam => string.Empty;
-
-    /// <inheritdoc />
-    protected override string MainDefParam => string.Empty;
-
-    /// <inheritdoc />
-    protected override string MainConParam => string.Empty;
-
-    /// <inheritdoc />
-    protected override string SkillParam => string.Empty;
-
-    /// <inheritdoc />
-    protected override string AddGameDirParam => string.Empty;
-
-    /// <inheritdoc />
-    protected override string AddRffParam => string.Empty;
-
-    /// <inheritdoc />
-    protected override string AddSndParam => string.Empty;
+    protected override PortCmdArguments CmdArguments => new()
+    {
+        AddDirectory = null,
+        MainGrp = null,
+        AddGrp = null,
+        AddFile = null,
+        AddDef = null,
+        AddCon = null,
+        MainDef = null,
+        MainCon = null,
+        SkillLevel = null,
+        AddGameDir = null,
+        AddRff = null,
+        AddSnd = null
+    };
 
     /// <inheritdoc />
     public override void AfterEnd(BaseGame game, BaseAddon campaign) { }
