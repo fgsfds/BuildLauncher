@@ -1,9 +1,10 @@
 using System.Collections.Immutable;
-using System.Text;
 using Addons.Addons;
 using Core.All.Enums;
 using Games.Games;
 using Ports;
+using Ports.Builders;
+using Ports.Helpers;
 using Ports.Ports;
 using Ports.Ports.EDuke32;
 
@@ -35,13 +36,10 @@ internal sealed class BasePortTestProxy : BasePort
     public override string? InstalledVersion => string.Empty;
 
     /// <inheritdoc />
-    public override bool IsSkillSelectionAvailable => false;
-
-    /// <inheritdoc />
     protected override string ConfigFile => string.Empty;
 
     /// <inheritdoc />
-    protected override PortCmdArguments CmdArguments => new()
+    public override PortCmdArguments CmdArguments => new()
     {
         AddDirectory = null,
         MainGrp = null,
@@ -54,7 +52,10 @@ internal sealed class BasePortTestProxy : BasePort
         SkillLevel = null,
         AddGameDir = null,
         AddRff = null,
-        AddSnd = null
+        AddSnd = null,
+        SkipIntro = null,
+        SkipStartup = null,
+        SkipSteam = null
     };
 
     /// <inheritdoc />
@@ -64,31 +65,35 @@ internal sealed class BasePortTestProxy : BasePort
     public override void BeforeStart(BaseGame game, BaseAddon campaign) { }
 
     /// <inheritdoc />
-    protected override void GetAutoloadModsArgs(StringBuilder sb, BaseGame game, BaseAddon addon, IReadOnlyList<BaseAddon> mods) { }
+    public void CallMoveSaveFilesFromStorage(BaseGame game, BaseAddon campaign) => SaveFilesHelper.MoveSaveFilesFromStorage(
+        GetPathToAddonSavedGamesFolder(game.ShortName, campaign.AddonId.Id),
+        GetGameSaveFilesFolder(game, campaign));
 
     /// <inheritdoc />
-    protected override void GetSkipIntroParameter(StringBuilder sb) { }
-
-    /// <inheritdoc />
-    protected override void GetSkipStartupParameter(StringBuilder sb) { }
-
-    /// <inheritdoc />
-    protected override void GetStartCampaignArgs(StringBuilder sb, BaseGame game, BaseAddon addon) { }
-
-    /// <inheritdoc />
-    public void CallMoveSaveFilesFromStorage(BaseGame game, BaseAddon campaign) => MoveSaveFilesFromStorage(game, campaign);
-
-    /// <inheritdoc />
-    public void CallMoveSaveFilesToStorage(BaseGame game, BaseAddon campaign) => MoveSaveFilesToStorage(game, campaign);
+    public void CallMoveSaveFilesToStorage(BaseGame game, BaseAddon campaign) => SaveFilesHelper.MoveSaveFilesToStorage(
+        GetPathToAddonSavedGamesFolder(game.ShortName, campaign.AddonId.Id),
+        GetGameSaveFilesFolder(game, campaign));
 
     /// <inheritdoc />
     public string CallGetPathToAddonSavedGamesFolder(string subFolder, string addonId) => GetPathToAddonSavedGamesFolder(subFolder, addonId);
 
     /// <inheritdoc />
-    public void CallGetMapArgs(StringBuilder sb, BaseAddon camp) => GetMapArgs(sb, camp);
+    public string CallGetMapArgs(BaseGame game, BaseAddon camp)
+    {
+        CmdParametersBuilder sb = CmdParametersBuilderFactory.Create(game, camp, this);
+        sb.AppendTcOrMapArgs(camp);
+
+        return sb.ToString();
+    }
 
     /// <inheritdoc />
-    public void CallGetOptionsArgs(StringBuilder sb, BaseGame game, BaseAddon addon, IReadOnlyList<string> enabledOptions) => GetOptionsArgs(sb, game, addon, enabledOptions);
+    public string CallGetOptionsArgs(BaseGame game, BaseAddon addon, IReadOnlyList<string> enabledOptions)
+    {
+        CmdParametersBuilder sb = CmdParametersBuilderFactory.Create(game, addon, this);
+        sb.AppendOptionsArgs(enabledOptions);
+
+        return sb.ToString();
+    }
 }
 
 
@@ -98,10 +103,14 @@ internal sealed class BasePortTestProxy : BasePort
 internal sealed class EDuke32TestProxy : EDuke32
 {
     /// <inheritdoc />
-    public void CallMoveSaveFilesFromStorage(BaseGame game, BaseAddon campaign) => MoveSaveFilesFromStorage(game, campaign);
+    public void CallMoveSaveFilesFromStorage(BaseGame game, BaseAddon campaign) => SaveFilesHelper.MoveSaveFilesFromStorage(
+        GetPathToAddonSavedGamesFolder(game.ShortName, campaign.AddonId.Id),
+        GetGameSaveFilesFolder(game, campaign));
 
     /// <inheritdoc />
-    public void CallMoveSaveFilesToStorage(BaseGame game, BaseAddon campaign) => MoveSaveFilesToStorage(game, campaign);
+    public void CallMoveSaveFilesToStorage(BaseGame game, BaseAddon campaign) => SaveFilesHelper.MoveSaveFilesToStorage(
+        GetPathToAddonSavedGamesFolder(game.ShortName, campaign.AddonId.Id),
+        GetGameSaveFilesFolder(game, campaign));
 
     /// <inheritdoc />
     public string CallGetPathToAddonSavedGamesFolder(string subFolder, string addonId) => GetPathToAddonSavedGamesFolder(subFolder, addonId);

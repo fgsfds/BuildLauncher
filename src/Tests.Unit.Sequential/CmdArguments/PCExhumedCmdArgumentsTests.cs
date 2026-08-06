@@ -1,4 +1,7 @@
 using Addons.Addons;
+using Core.All.Enums;
+using Core.All.Serializable.Addon;
+using Core.Client.Helpers;
 using Games.Games;
 using Ports.Ports.EDuke32;
 using Tests.Unit.Helpers;
@@ -46,19 +49,159 @@ public sealed class PCExhumedCmdArgumentsTests
         var args = pcExhumed.GetStartGameArgs(_slaveGame, _slaveCamp, mods, [], true, true);
 
         var expected = $"" +
-                       $" -g \"enabled_mod.zip\"" +
-                       $" -mh \"ENABLED1.DEF\"" +
-                       $" -mh \"ENABLED2.DEF\"" +
+                       $" -g \"{CmdArgsTestData.EnabledMod}\"" +
+                       $" -mh \"{CmdArgsTestData.EnabledDef1}\"" +
+                       $" -mh \"{CmdArgsTestData.EnabledDef2}\"" +
                        $" -j \"{Directory.GetCurrentDirectory()}\\Data\\Addons\\Slave\\Mods\"" +
-                       $" -usecwd" +
                        $" -j \"D:\\Games\\Slave\"" +
-                       $" -h \"a\"" +
                        $" -quick" +
                        $" -nosetup" +
+                       $" -usecwd" +
+                       $" -h \"a\"" +
                        $"";
 
-        NormalizerHelper.NormalizeExpectedArgs(ref args, ref expected);
+        CmdArgsAssert.Equal(expected, args);
+    }
 
-        Assert.Equal(expected, args);
+    /// <summary>
+    ///     Tests that PCExhumed appends the addon file for a Slave total conversion.
+    /// </summary>
+    [Fact]
+    public void SlaveTcTest()
+    {
+        PCExhumed pcExhumed = new();
+
+        var tcCamp = CampaignTestFactory.CreateGenericCampaign(
+            "exhumed-tc",
+            GameEnum.Slave,
+            new AddonFilePathWrapper("D:\\Maps\\exhumed_tc.zip", "exhumed_tc.zip"));
+
+        var args = pcExhumed.GetStartGameArgs(_slaveGame, tcCamp, [], [], true, true);
+
+        var expected = $"" +
+                       $" -j \"D:\\Games\\Slave\"" +
+                       $" -j \"D:\\Maps\"" +
+                       $" -g \"exhumed_tc.zip\"" +
+                       $" -quick" +
+                       $" -nosetup" +
+                       $" -usecwd" +
+                       $" -h \"a\"" +
+                       $"";
+
+        CmdArgsAssert.Equal(expected, args);
+    }
+
+    /// <summary>
+    ///     Tests that PCExhumed appends the addon game dir for a Slave TC folder.
+    /// </summary>
+    [Fact]
+    public void SlaveTCFolderTest()
+    {
+        PCExhumed pcExhumed = new();
+
+        var folderPath = Path.Combine("D:", "Games", "Slave", "slave_tc_folder");
+
+        var tcFolder = CampaignTestFactory.CreateGenericCampaign(
+            "exhumed-tc-folder",
+            GameEnum.Slave,
+            new AddonFilePathWrapper(folderPath, "addon.json"));
+
+        var args = pcExhumed.GetStartGameArgs(_slaveGame, tcFolder, [], [], true, true);
+
+        var expected = $"" +
+                       $" -j \"D:\\Games\\Slave\"" +
+                       $" -game_dir \"{folderPath}\"" +
+                       $" -quick" +
+                       $" -nosetup" +
+                       $" -usecwd" +
+                       $" -h \"a\"" +
+                       $"";
+
+        CmdArgsAssert.Equal(expected, args);
+    }
+
+    /// <summary>
+    ///     Tests that PCExhumed skips the addon file for a Slave TC with an executable override.
+    /// </summary>
+    [Fact]
+    public void SlaveTCExeOverrideTest()
+    {
+        PCExhumed pcExhumed = new();
+
+        var zipFilePath = Path.Combine("D:", "Games", "Slave", "exhumed_tc.zip");
+
+        var tcExe = CampaignTestFactory.CreateGenericCampaign(
+            "exhumed-tc-exe",
+            GameEnum.Slave,
+            new AddonFilePathWrapper(zipFilePath, "addon.json"),
+            executables: new Dictionary<OSEnum, Dictionary<PortEnum, string>>
+            {
+                {
+                    OSEnum.Windows, new Dictionary<PortEnum, string>
+                    {
+                        {
+                            PortEnum.PCExhumed, "pcexhumed.exe"
+                        }
+                    }
+                }
+            });
+
+        var args = pcExhumed.GetStartGameArgs(_slaveGame, tcExe, [], [], true, true);
+
+        var expected = $"" +
+                       $" -j \"D:\\Games\\Slave\"" +
+                       $" -quick" +
+                       $" -nosetup" +
+                       $" -usecwd" +
+                       $" -h \"a\"" +
+                       $"";
+
+        CmdArgsAssert.Equal(expected, args);
+    }
+
+    /// <summary>
+    ///     Tests that PCExhumed generates correct start arguments for a Slave loose map.
+    /// </summary>
+    [Fact]
+    public void SlaveLooseMapTest()
+    {
+        PCExhumed pcExhumed = new();
+
+        var looseMap = new LooseMap
+        {
+            AddonId = new("slave-loose-map", null),
+            Type = AddonTypeEnum.Map,
+            Title = "Slave Loose Map",
+            SupportedGame = new(GameEnum.Slave),
+            FileInfo = new AddonFilePathWrapper("Maps", "LOOSE.MAP"),
+            DependentAddons = null,
+            IncompatibleAddons = null,
+            RequiredFeatures = null,
+            StartMap = new MapFileJsonModel { File = "LOOSE.MAP" },
+            GridImageHash = null,
+            PreviewImageHash = null,
+            Description = null,
+            Author = null,
+            ReleaseDate = null,
+            MainDef = null,
+            AdditionalDefs = null,
+            Executables = null,
+            BloodIni = null,
+            Options = null
+        };
+
+        var args = pcExhumed.GetStartGameArgs(_slaveGame, looseMap, [], [], true, true);
+
+        var expected = $"" +
+                       $" -j \"D:\\Games\\Slave\"" +
+                       $" -j \"{_slaveGame.MapsFolderPath}\"" +
+                       $" -map \"{CmdArgsTestData.LooseMap}\"" +
+                       $" -quick" +
+                       $" -nosetup" +
+                       $" -usecwd" +
+                       $" -h \"a\"" +
+                       $"";
+
+        CmdArgsAssert.Equal(expected, args);
     }
 }

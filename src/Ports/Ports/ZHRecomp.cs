@@ -1,9 +1,9 @@
 ﻿using System.Collections.Immutable;
-using System.Text;
 using Addons.Addons;
 using Core.All.Enums;
 using Core.Client.Interfaces;
 using Games.Games;
+using Ports.Builders;
 
 namespace Ports.Ports;
 
@@ -47,16 +47,13 @@ public sealed class ZHRecomp : BasePort
     public override ImmutableHashSet<GameEnum> SupportedGames { get; } = [GameEnum.DukeZeroHour];
 
     /// <inheritdoc />
-    public override bool IsSkillSelectionAvailable => false;
-
-    /// <inheritdoc />
     public override ImmutableHashSet<FeatureEnum> SupportedFeatures { get; } = [];
 
     /// <inheritdoc />
     protected override string ConfigFile => throw new NotImplementedException();
 
     /// <inheritdoc />
-    protected override PortCmdArguments CmdArguments => new()
+    public override PortCmdArguments CmdArguments => new()
     {
         AddDirectory = null,
         MainGrp = null,
@@ -69,17 +66,11 @@ public sealed class ZHRecomp : BasePort
         SkillLevel = null,
         AddGameDir = null,
         AddRff = null,
-        AddSnd = null
+        AddSnd = null,
+        SkipIntro = null,
+        SkipStartup = null,
+        SkipSteam = null
     };
-
-    /// <inheritdoc />
-    protected override void GetStartCampaignArgs(StringBuilder sb, BaseGame game, BaseAddon addon) { }
-
-    /// <inheritdoc />
-    protected override void GetSkipIntroParameter(StringBuilder sb) { }
-
-    /// <inheritdoc />
-    protected override void GetSkipStartupParameter(StringBuilder sb) { }
 
     /// <inheritdoc />
     public override void BeforeStart(BaseGame game, BaseAddon campaign)
@@ -99,4 +90,9 @@ public sealed class ZHRecomp : BasePort
 
     /// <inheritdoc />
     public override void AfterEnd(BaseGame game, BaseAddon campaign) { }
+
+    /// <inheritdoc />
+    protected override void CustomModifyArgs(CmdParametersBuilder sb, BaseGame game, BaseAddon addon)
+    {
+    }
 }

@@ -2,6 +2,7 @@
 using Addons.Addons;
 using Core.All.Enums;
 using Games.Games;
+using Ports.Helpers;
 
 namespace Ports.Ports.EDuke32;
 
@@ -41,7 +42,9 @@ public sealed class NotBlood : NBlood
     /// <inheritdoc />
     public override void BeforeStart(BaseGame game, BaseAddon campaign)
     {
-        MoveSaveFilesFromStorage(game, campaign);
+        SaveFilesHelper.MoveSaveFilesFromStorage(
+            GetPathToAddonSavedGamesFolder(game.ShortName, campaign.AddonId.Id),
+            GetGameSaveFilesFolder(game, campaign));
         FixConfig();
     }
 }

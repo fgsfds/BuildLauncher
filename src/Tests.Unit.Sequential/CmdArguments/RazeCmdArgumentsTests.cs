@@ -1,4 +1,7 @@
 using Addons.Addons;
+using Core.All.Enums;
+using Core.All.Enums.Addons;
+using Core.Client.Helpers;
 using Games.Games;
 using Ports.Ports;
 using Tests.Unit.Helpers;
@@ -16,6 +19,7 @@ public sealed class RazeCmdArgumentsTests
     private readonly LooseMap _bloodLooseMap;
     private readonly AutoloadModsTestSetups _bloodMods;
     private readonly BloodCampaign _bloodTc;
+    private readonly BloodCampaign _bloodTcExeOverride;
     private readonly BloodCampaign _bloodTcFolder;
     private readonly DukeCampaign _dukeCamp;
 
@@ -55,7 +59,7 @@ public sealed class RazeCmdArgumentsTests
     /// </summary>
     public RazeCmdArgumentsTests()
     {
-        (_bloodGame, _bloodCamp, _, _bloodCpCamp, _bloodTc, _bloodTcFolder, _, _, _, _bloodLooseMap, _bloodMods) = PortTestSetups.Blood();
+        (_bloodGame, _bloodCamp, _, _bloodCpCamp, _bloodTc, _bloodTcFolder, _bloodTcExeOverride, _, _, _bloodLooseMap, _bloodMods) = PortTestSetups.Blood();
         (_dukeGame, _dukeCamp, _dukeVaca, _dukeTcForVaca, _dukeWtCamp, _, _, _, _, _dukeLooseMap, _dukeMods) = PortTestSetups.Duke3D();
         (_namGame, _namCamp, _namMods) = PortTestSetups.Nam();
         (_redneckGame, _redneckCamp, _redneckAgainCamp, _, _redneckMods) = PortTestSetups.Redneck();
@@ -76,25 +80,25 @@ public sealed class RazeCmdArgumentsTests
 
         raze.BeforeStart(_bloodGame, _bloodCamp);
         var args = raze.GetStartGameArgs(_bloodGame, _bloodCamp, mods, [], true, true);
-        var expected = @$" -file ""enabled_mod.zip"" -adddef ""ENABLED1.DEF"" -adddef ""ENABLED2.DEF"" -file ""mod_incompatible_with_addon.zip"" -file ""incompatible_mod_with_compatible_version.zip"" -file ""dependent_mod.zip"" -file ""dependent_mod_with_compatible_version.zip"" -savedir ""{Directory.GetCurrentDirectory()}\Data\Saves\Raze\Blood\blood"" -def ""a"" -ini ""BLOOD.INI"" -quick -nosetup";
 
-        NormalizerHelper.NormalizeExpectedArgs(ref args, ref expected);
+        var expected = $"" +
+                       $" -file \"{CmdArgsTestData.EnabledMod}\"" +
+                       $" -adddef \"{CmdArgsTestData.EnabledDef1}\"" +
+                       $" -adddef \"{CmdArgsTestData.EnabledDef2}\"" +
+                       $" -file \"{CmdArgsTestData.ModIncompatibleWithAddon}\"" +
+                       $" -file \"{CmdArgsTestData.IncompatibleModWithCompatibleVersion}\"" +
+                       $" -file \"{CmdArgsTestData.DependentMod}\"" +
+                       $" -file \"{CmdArgsTestData.DependentModWithCompatibleVersion}\"" +
+                       " -ini \"BLOOD.INI\"" +
+                       " -quick" +
+                       " -nosetup" +
+                       $" -savedir \"{Directory.GetCurrentDirectory()}\\Data\\Saves\\Raze\\Blood\\blood\"" +
+                       " -def \"a\"" +
+                       "";
 
-        Assert.Equal(expected, args);
+        CmdArgsAssert.Equal(expected, args);
 
-        var config = File.ReadAllText(Path.Combine(Directory.GetCurrentDirectory(), "Data", "Ports", "Raze", "raze_portable.ini"));
-
-        Assert.StartsWith(
-            $"""
-                [GameSearch.Directories]
-                Path=D:/Games/Blood
-
-                [FileSearch.Directories]
-                Path={Directory.GetCurrentDirectory()}/Data/Addons/Blood/Mods
-
-                [SoundfontSearch.Directories]
-                """.Replace('\\', '/').Replace("\r\n", "\n"), config.Replace("\r\n", "\n"), StringComparison.Ordinal
-            );
+        AssertRazeConfig(["D:/Games/Blood"], [$"{Directory.GetCurrentDirectory()}/Data/Addons/Blood/Mods"]);
     }
 
     /// <summary>
@@ -109,25 +113,25 @@ public sealed class RazeCmdArgumentsTests
 
         raze.BeforeStart(_bloodGame, _bloodCamp);
         var args = raze.GetStartGameArgs(_bloodGame, _bloodCpCamp, mods, [], true, true);
-        var expected = @$" -file ""enabled_mod.zip"" -adddef ""ENABLED1.DEF"" -adddef ""ENABLED2.DEF"" -file ""mod_requires_addon.zip"" -file ""incompatible_mod_with_compatible_version.zip"" -file ""dependent_mod.zip"" -file ""dependent_mod_with_compatible_version.zip"" -savedir ""{Directory.GetCurrentDirectory()}\Data\Saves\Raze\Blood\bloodcp"" -def ""a"" -ini ""CRYPTIC.INI"" -quick -nosetup";
 
-        NormalizerHelper.NormalizeExpectedArgs(ref args, ref expected);
+        var expected = $"" +
+                       $" -file \"{CmdArgsTestData.EnabledMod}\"" +
+                       $" -adddef \"{CmdArgsTestData.EnabledDef1}\"" +
+                       $" -adddef \"{CmdArgsTestData.EnabledDef2}\"" +
+                       $" -file \"{CmdArgsTestData.ModRequiresAddon}\"" +
+                       $" -file \"{CmdArgsTestData.IncompatibleModWithCompatibleVersion}\"" +
+                       $" -file \"{CmdArgsTestData.DependentMod}\"" +
+                       $" -file \"{CmdArgsTestData.DependentModWithCompatibleVersion}\"" +
+                       " -ini \"CRYPTIC.INI\"" +
+                       " -quick" +
+                       " -nosetup" +
+                       $" -savedir \"{Directory.GetCurrentDirectory()}\\Data\\Saves\\Raze\\Blood\\bloodcp\"" +
+                       " -def \"a\"" +
+                       "";
 
-        Assert.Equal(expected, args);
+        CmdArgsAssert.Equal(expected, args);
 
-        var config = File.ReadAllText(Path.Combine(Directory.GetCurrentDirectory(), "Data", "Ports", "Raze", "raze_portable.ini"));
-
-        Assert.StartsWith(
-            $"""
-                [GameSearch.Directories]
-                Path=D:/Games/Blood
-
-                [FileSearch.Directories]
-                Path={Directory.GetCurrentDirectory()}/Data/Addons/Blood/Mods
-
-                [SoundfontSearch.Directories]
-                """.Replace('\\', '/').Replace("\r\n", "\n"), config.Replace("\r\n", "\n"), StringComparison.Ordinal
-            );
+        AssertRazeConfig(["D:/Games/Blood"], [$"{Directory.GetCurrentDirectory()}/Data/Addons/Blood/Mods"]);
     }
 
     /// <summary>
@@ -140,25 +144,21 @@ public sealed class RazeCmdArgumentsTests
 
         raze.BeforeStart(_bloodGame, _bloodTc);
         var args = raze.GetStartGameArgs(_bloodGame, _bloodTc, [], [], true, true);
-        var expected = @$" -savedir ""{Directory.GetCurrentDirectory()}\Data\Saves\Raze\Blood\blood-tc"" -def ""a"" -ini ""TC.INI"" -file ""D:\Games\Blood\blood_tc.zip"" -file ""TC.RFF"" -file ""TC.SND"" -quick -nosetup";
 
-        NormalizerHelper.NormalizeExpectedArgs(ref args, ref expected);
+        var expected = $"" +
+                       " -ini \"TC.INI\"" +
+                       " -file \"blood_tc.zip\"" +
+                       " -file \"TC.RFF\"" +
+                       " -file \"TC.SND\"" +
+                       " -quick" +
+                       " -nosetup" +
+                       $" -savedir \"{Directory.GetCurrentDirectory()}\\Data\\Saves\\Raze\\Blood\\blood-tc\"" +
+                       " -def \"a\"" +
+                       "";
 
-        Assert.Equal(expected, args);
+        CmdArgsAssert.Equal(expected, args);
 
-        var config = File.ReadAllText(Path.Combine(Directory.GetCurrentDirectory(), "Data", "Ports", "Raze", "raze_portable.ini"));
-
-        Assert.StartsWith(
-            $"""
-                [GameSearch.Directories]
-                Path=D:/Games/Blood
-
-                [FileSearch.Directories]
-                Path={Directory.GetCurrentDirectory()}/Data/Addons/Blood/Mods
-
-                [SoundfontSearch.Directories]
-                """.Replace('\\', '/').Replace("\r\n", "\n"), config.Replace("\r\n", "\n"), StringComparison.Ordinal
-            );
+        AssertRazeConfig(["D:/Games/Blood"], [$"{Directory.GetCurrentDirectory()}/Data/Addons/Blood/Mods"]);
     }
 
     /// <summary>
@@ -171,26 +171,47 @@ public sealed class RazeCmdArgumentsTests
 
         raze.BeforeStart(_bloodGame, _bloodTcFolder);
         var args = raze.GetStartGameArgs(_bloodGame, _bloodTcFolder, [], [], true, true);
-        var expected = @$" -savedir ""{Directory.GetCurrentDirectory()}\Data\Saves\Raze\Blood\blood-tc-folder"" -def ""a"" -ini ""TC.INI"" -file ""D:\Games\Blood\blood_tc_folder"" -file ""TC.RFF"" -file ""TC.SND"" -quick -nosetup";
 
-        NormalizerHelper.NormalizeExpectedArgs(ref args, ref expected);
+        var expected = $"" +
+                       " -ini \"TC.INI\"" +
+                       " -file \"D:\\Games\\Blood\\blood_tc_folder\"" +
+                       " -file \"TC.RFF\"" +
+                       " -file \"TC.SND\"" +
+                       " -quick" +
+                       " -nosetup" +
+                       $" -savedir \"{Directory.GetCurrentDirectory()}\\Data\\Saves\\Raze\\Blood\\blood-tc-folder\"" +
+                       " -def \"a\"" +
+                       "";
 
-        Assert.Equal(expected, args);
+        CmdArgsAssert.Equal(expected, args);
 
-        var config = File.ReadAllText(Path.Combine(Directory.GetCurrentDirectory(), "Data", "Ports", "Raze", "raze_portable.ini"));
+        AssertRazeConfig(["D:/Games/Blood"], [$"{Directory.GetCurrentDirectory()}/Data/Addons/Blood/Mods", "D:/Games/Blood/blood_tc_folder"]);
+    }
 
-        Assert.StartsWith(
-            $"""
-                [GameSearch.Directories]
-                Path=D:/Games/Blood
+    /// <summary>
+    ///     Tests that Raze generates correct start arguments for a Blood TC with an executable override.
+    /// </summary>
+    [Fact]
+    public void BloodTCExeOverrideTest()
+    {
+        Raze raze = new();
 
-                [FileSearch.Directories]
-                Path={Directory.GetCurrentDirectory()}/Data/Addons/Blood/Mods
-                Path=D:/Games/Blood/blood_tc_folder
+        raze.BeforeStart(_bloodGame, _bloodTcExeOverride);
+        var args = raze.GetStartGameArgs(_bloodGame, _bloodTcExeOverride, [], [], true, true);
 
-                [SoundfontSearch.Directories]
-                """.Replace('\\', '/').Replace("\r\n", "\n"), config.Replace("\r\n", "\n"), StringComparison.Ordinal
-            );
+        var expected = $"" +
+                       " -ini \"TC.INI\"" +
+                       " -file \"TC.RFF\"" +
+                       " -file \"TC.SND\"" +
+                       " -quick" +
+                       " -nosetup" +
+                       $" -savedir \"{Directory.GetCurrentDirectory()}\\Data\\Saves\\Raze\\Blood\\blood-tc-exe-override\"" +
+                       " -def \"a\"" +
+                       "";
+
+        CmdArgsAssert.Equal(expected, args);
+
+        AssertRazeConfig(["D:/Games/Blood"], [$"{Directory.GetCurrentDirectory()}/Data/Addons/Blood/Mods", "D:/Games/Blood/blood_tc_folder"]);
     }
 
     /// <summary>
@@ -205,25 +226,27 @@ public sealed class RazeCmdArgumentsTests
 
         raze.BeforeStart(_bloodGame, _bloodLooseMap);
         var args = raze.GetStartGameArgs(_bloodGame, _bloodLooseMap, mods, [], true, true);
-        var expected = @$" -file ""enabled_mod.zip"" -adddef ""ENABLED1.DEF"" -adddef ""ENABLED2.DEF"" -file ""mod_incompatible_with_addon.zip"" -file ""incompatible_mod_with_compatible_version.zip"" -file ""dependent_mod.zip"" -file ""dependent_mod_with_compatible_version.zip"" -savedir ""{Directory.GetCurrentDirectory()}\Data\Saves\Raze\Blood\loose-map"" -def ""a"" -ini ""BLOOD.INI"" -file ""{Directory.GetCurrentDirectory()}\Data\Addons\Blood\Maps"" -map ""LOOSE.MAP"" -quick -nosetup";
 
-        NormalizerHelper.NormalizeExpectedArgs(ref args, ref expected);
+        var expected = $"" +
+                       $" -file \"{CmdArgsTestData.EnabledMod}\"" +
+                       $" -adddef \"{CmdArgsTestData.EnabledDef1}\"" +
+                       $" -adddef \"{CmdArgsTestData.EnabledDef2}\"" +
+                       $" -file \"{CmdArgsTestData.ModIncompatibleWithAddon}\"" +
+                       $" -file \"{CmdArgsTestData.IncompatibleModWithCompatibleVersion}\"" +
+                       $" -file \"{CmdArgsTestData.DependentMod}\"" +
+                       $" -file \"{CmdArgsTestData.DependentModWithCompatibleVersion}\"" +
+                       " -ini \"BLOOD.INI\"" +
+                       $" -file \"{Directory.GetCurrentDirectory()}\\Data\\Addons\\Blood\\Maps\"" +
+                       $" -map \"{CmdArgsTestData.LooseMap}\"" +
+                       " -quick" +
+                       " -nosetup" +
+                       $" -savedir \"{Directory.GetCurrentDirectory()}\\Data\\Saves\\Raze\\Blood\\loose-map\"" +
+                       " -def \"a\"" +
+                       "";
 
-        Assert.Equal(expected, args);
+        CmdArgsAssert.Equal(expected, args);
 
-        var config = File.ReadAllText(Path.Combine(Directory.GetCurrentDirectory(), "Data", "Ports", "Raze", "raze_portable.ini"));
-
-        Assert.StartsWith(
-            $"""
-                [GameSearch.Directories]
-                Path=D:/Games/Blood
-
-                [FileSearch.Directories]
-                Path={Directory.GetCurrentDirectory()}/Data/Addons/Blood/Mods
-
-                [SoundfontSearch.Directories]
-                """.Replace('\\', '/').Replace("\r\n", "\n"), config.Replace("\r\n", "\n"), StringComparison.Ordinal
-            );
+        AssertRazeConfig(["D:/Games/Blood"], [$"{Directory.GetCurrentDirectory()}/Data/Addons/Blood/Mods"]);
     }
 
     /// <summary>
@@ -240,42 +263,25 @@ public sealed class RazeCmdArgumentsTests
         var args = raze.GetStartGameArgs(_dukeGame, _dukeCamp, mods, [], true, true);
 
         var expected = $"" +
-                       $" -file \"enabled_mod.zip\"" +
-                       $" -adddef \"ENABLED1.DEF\"" +
-                       $" -adddef \"ENABLED2.DEF\"" +
-                       $" -addcon \"ENABLED1.CON\"" +
-                       $" -addcon \"ENABLED2.CON\"" +
-                       $" -file \"mod_incompatible_with_addon.zip\"" +
-                       $" -file \"incompatible_mod_with_compatible_version.zip\"" +
-                       $" -file \"dependent_mod.zip\"" +
-                       $" -file \"dependent_mod_with_compatible_version.zip\"" +
-                       $" -savedir \"{Directory.GetCurrentDirectory()}\\Data\\Saves\\Raze\\Duke3D\\duke3d\"" +
-                       $" -def \"a\"" +
+                       $" -file \"{CmdArgsTestData.EnabledMod}\"" +
+                       $" -adddef \"{CmdArgsTestData.EnabledDef1}\"" +
+                       $" -adddef \"{CmdArgsTestData.EnabledDef2}\"" +
+                       $" -addcon \"{CmdArgsTestData.EnabledCon1}\"" +
+                       $" -addcon \"{CmdArgsTestData.EnabledCon2}\"" +
+                       $" -file \"{CmdArgsTestData.ModIncompatibleWithAddon}\"" +
+                       $" -file \"{CmdArgsTestData.IncompatibleModWithCompatibleVersion}\"" +
+                       $" -file \"{CmdArgsTestData.DependentMod}\"" +
+                       $" -file \"{CmdArgsTestData.DependentModWithCompatibleVersion}\"" +
                        $" -addon 0" +
                        $" -quick" +
                        $" -nosetup" +
+                       $" -savedir \"{Directory.GetCurrentDirectory()}\\Data\\Saves\\Raze\\Duke3D\\duke3d\"" +
+                       $" -def \"a\"" +
                        $"";
 
-        NormalizerHelper.NormalizeExpectedArgs(ref args, ref expected);
+        CmdArgsAssert.Equal(expected, args);
 
-        Assert.Equal(expected, args);
-
-        var config = File.ReadAllText(Path.Combine(Directory.GetCurrentDirectory(), "Data", "Ports", "Raze", "raze_portable.ini"));
-
-        Assert.StartsWith(
-            $"""
-                [GameSearch.Directories]
-                Path=D:/Games/Duke3D
-                Path=D:/Games/Duke3D/Vaca
-                Path=D:/Games/Duke3D/DC
-                Path=D:/Games/Duke3D/NW
-
-                [FileSearch.Directories]
-                Path={Directory.GetCurrentDirectory()}/Data/Addons/Duke3D/Mods
-
-                [SoundfontSearch.Directories]
-                """.Replace('\\', '/').Replace("\r\n", "\n"), config.Replace("\r\n", "\n"), StringComparison.Ordinal
-            );
+        AssertRazeConfig(["D:/Games/Duke3D", "D:/Games/Duke3D/Vaca", "D:/Games/Duke3D/DC", "D:/Games/Duke3D/NW"], [$"{Directory.GetCurrentDirectory()}/Data/Addons/Duke3D/Mods"]);
     }
 
     /// <summary>
@@ -286,33 +292,20 @@ public sealed class RazeCmdArgumentsTests
     {
         Raze raze = new();
 
+        raze.BeforeStart(_dukeGame, _dukeWtCamp);
         var args = raze.GetStartGameArgs(_dukeGame, _dukeWtCamp, [], [], true, true);
 
         var expected = $"" +
-                       $" -savedir \"{Directory.GetCurrentDirectory()}\\Data\\Saves\\Raze\\Duke3D\\duke3d_wt\"" +
-                       $" -def \"a\"" +
                        $" -addon 0" +
                        $" -quick" +
                        $" -nosetup" +
+                       $" -savedir \"{Directory.GetCurrentDirectory()}\\Data\\Saves\\Raze\\Duke3D\\duke3d_wt\"" +
+                       $" -def \"a\"" +
                        $"";
 
-        NormalizerHelper.NormalizeExpectedArgs(ref args, ref expected);
+        CmdArgsAssert.Equal(expected, args);
 
-        Assert.Equal(expected, args);
-
-        var config = File.ReadAllText(Path.Combine(Directory.GetCurrentDirectory(), "Data", "Ports", "Raze", "raze_portable.ini"));
-
-        Assert.StartsWith(
-            $"""
-                [GameSearch.Directories]
-                Path=D:/Games/DukeWT
-
-                [FileSearch.Directories]
-                Path={Directory.GetCurrentDirectory()}/Data/Addons/Duke3D/Mods
-
-                [SoundfontSearch.Directories]
-                """.Replace('\\', '/').Replace("\r\n", "\n"), config.Replace("\r\n", "\n"), StringComparison.Ordinal
-            );
+        AssertRazeConfig(["D:/Games/DukeWT"], [$"{Directory.GetCurrentDirectory()}/Data/Addons/Duke3D/Mods"]);
     }
 
     /// <summary>
@@ -329,39 +322,22 @@ public sealed class RazeCmdArgumentsTests
         var args = raze.GetStartGameArgs(_dukeGame, _dukeVaca, mods, [], true, true);
 
         var expected = $"" +
-                       $" -file \"enabled_mod.zip\"" +
-                       $" -adddef \"ENABLED1.DEF\"" +
-                       $" -adddef \"ENABLED2.DEF\"" +
-                       $" -addcon \"ENABLED1.CON\"" +
-                       $" -addcon \"ENABLED2.CON\"" +
-                       $" -file \"mod_requires_addon.zip\"" +
-                       $" -savedir \"{Directory.GetCurrentDirectory()}\\Data\\Saves\\Raze\\Duke3D\\dukevaca\"" +
-                       $" -def \"a\"" +
+                       $" -file \"{CmdArgsTestData.EnabledMod}\"" +
+                       $" -adddef \"{CmdArgsTestData.EnabledDef1}\"" +
+                       $" -adddef \"{CmdArgsTestData.EnabledDef2}\"" +
+                       $" -addcon \"{CmdArgsTestData.EnabledCon1}\"" +
+                       $" -addcon \"{CmdArgsTestData.EnabledCon2}\"" +
+                       $" -file \"{CmdArgsTestData.ModRequiresAddon}\"" +
                        $" -addon 3" +
                        $" -quick" +
                        $" -nosetup" +
+                       $" -savedir \"{Directory.GetCurrentDirectory()}\\Data\\Saves\\Raze\\Duke3D\\dukevaca\"" +
+                       $" -def \"a\"" +
                        $"";
 
-        NormalizerHelper.NormalizeExpectedArgs(ref args, ref expected);
+        CmdArgsAssert.Equal(expected, args);
 
-        Assert.Equal(expected, args);
-
-        var config = File.ReadAllText(Path.Combine(Directory.GetCurrentDirectory(), "Data", "Ports", "Raze", "raze_portable.ini"));
-
-        Assert.StartsWith(
-            $"""
-                [GameSearch.Directories]
-                Path=D:/Games/Duke3D
-                Path=D:/Games/Duke3D/Vaca
-                Path=D:/Games/Duke3D/DC
-                Path=D:/Games/Duke3D/NW
-
-                [FileSearch.Directories]
-                Path={Directory.GetCurrentDirectory()}/Data/Addons/Duke3D/Mods
-
-                [SoundfontSearch.Directories]
-                """.Replace('\\', '/').Replace("\r\n", "\n"), config.Replace("\r\n", "\n"), StringComparison.Ordinal
-            );
+        AssertRazeConfig(["D:/Games/Duke3D", "D:/Games/Duke3D/Vaca", "D:/Games/Duke3D/DC", "D:/Games/Duke3D/NW"], [$"{Directory.GetCurrentDirectory()}/Data/Addons/Duke3D/Mods"]);
     }
 
     /// <summary>
@@ -372,25 +348,73 @@ public sealed class RazeCmdArgumentsTests
     {
         Raze raze = new();
 
+        raze.BeforeStart(_dukeGame, _dukeTcForVaca);
         var args = raze.GetStartGameArgs(_dukeGame, _dukeTcForVaca, [], [], true, true);
 
         var expected = $"" +
-                       $" -savedir \"{Directory.GetCurrentDirectory()}\\Data\\Saves\\Raze\\Duke3D\\duke-tc\"" +
-                       $" -def \"TC.DEF\"" +
-                       $" -adddef \"TC1.DEF\"" +
-                       $" -adddef \"TC2.DEF\"" +
                        $" -addon 3" +
-                       $" -con \"TC.CON\"" +
-                       $" -addcon \"TC1.CON\"" +
-                       $" -addcon \"TC2.CON\"" +
-                       $" -file \"{Path.Combine(Directory.GetCurrentDirectory(), "Data", "Duke3D", "Campaigns", "duke_tc.zip")}\"" +
+                       $" -con \"{CmdArgsTestData.TcCon}\"" +
+                       $" -addcon \"{CmdArgsTestData.TcCon1}\"" +
+                       $" -addcon \"{CmdArgsTestData.TcCon2}\"" +
+                       $" -file \"duke_tc.zip\"" +
                        $" -quick" +
                        $" -nosetup" +
+                       $" -savedir \"{Directory.GetCurrentDirectory()}\\Data\\Saves\\Raze\\Duke3D\\duke-tc\"" +
+                       $" -def \"{CmdArgsTestData.TcDef}\"" +
+                       $" -adddef \"{CmdArgsTestData.TcDef1}\"" +
+                       $" -adddef \"{CmdArgsTestData.TcDef2}\"" +
                        $"";
 
-        NormalizerHelper.NormalizeExpectedArgs(ref args, ref expected);
+        CmdArgsAssert.Equal(expected, args);
 
-        Assert.Equal(expected, args);
+        AssertRazeConfig(["D:/Games/Duke3D", "D:/Games/Duke3D/Vaca", "D:/Games/Duke3D/DC", "D:/Games/Duke3D/NW"], [$"{Directory.GetCurrentDirectory()}/Data/Addons/Duke3D/Mods", $"{Path.Combine(Directory.GetCurrentDirectory(), "Data", "Duke3D", "Campaigns")}"]);
+    }
+
+    /// <summary>
+    ///     Tests that Raze generates correct start arguments for a Duke TC in an unpacked folder.
+    /// </summary>
+    [Fact]
+    public void DukeTCFolderTest()
+    {
+        Raze raze = new();
+
+        var folderPath = Path.Combine(Directory.GetCurrentDirectory(), "Data", "Duke3D", "Campaigns", "duke_tc_folder");
+
+        var dukeTcFolder = CampaignTestFactory.CreateDukeCampaign(
+            "duke-tc-folder",
+            GameEnum.Duke3D,
+            new AddonFilePathWrapper(folderPath, "addon.json"),
+            dependentAddons: new Dictionary<string, string?>
+            {
+                {
+                    nameof(DukeAddonEnum.DukeVaca), null
+                }
+            },
+            mainCon: "TC.CON",
+            additionalCons: ["TC1.CON", "TC2.CON"],
+            mainDef: "TC.DEF",
+            additionalDefs: ["TC1.DEF", "TC2.DEF"]);
+
+        raze.BeforeStart(_dukeGame, dukeTcFolder);
+        var args = raze.GetStartGameArgs(_dukeGame, dukeTcFolder, [], [], true, true);
+
+        var expected = $"" +
+                       $" -addon 3" +
+                       $" -con \"{CmdArgsTestData.TcCon}\"" +
+                       $" -addcon \"{CmdArgsTestData.TcCon1}\"" +
+                       $" -addcon \"{CmdArgsTestData.TcCon2}\"" +
+                       $" -file \"{folderPath}\"" +
+                       $" -quick" +
+                       $" -nosetup" +
+                       $" -savedir \"{Directory.GetCurrentDirectory()}\\Data\\Saves\\Raze\\Duke3D\\duke-tc-folder\"" +
+                       $" -def \"{CmdArgsTestData.TcDef}\"" +
+                       $" -adddef \"{CmdArgsTestData.TcDef1}\"" +
+                       $" -adddef \"{CmdArgsTestData.TcDef2}\"" +
+                       $"";
+
+        CmdArgsAssert.Equal(expected, args);
+
+        AssertRazeConfig(["D:/Games/Duke3D", "D:/Games/Duke3D/Vaca", "D:/Games/Duke3D/DC", "D:/Games/Duke3D/NW"], [$"{Directory.GetCurrentDirectory()}/Data/Addons/Duke3D/Mods"]);
     }
 
     /// <summary>
@@ -402,22 +426,24 @@ public sealed class RazeCmdArgumentsTests
         Raze raze = new();
 
         var packedCamp = PortTestSetups.PackedDukeAddonCampaign();
-        var zipFilePath = packedCamp.FileInfo.Value.PathToFile;
+        var folderPath = packedCamp.FileInfo.Value.PathToFolder;
+        var fileName = packedCamp.FileInfo.Value.FileName;
 
+        raze.BeforeStart(_dukeGame, packedCamp);
         var args = raze.GetStartGameArgs(_dukeGame, packedCamp, [], [], true, true);
 
         var expected = $"" +
-                       $" -savedir \"{Directory.GetCurrentDirectory()}\\Data\\Saves\\Raze\\Duke3D\\packed-camp\"" +
-                       $" -def \"a\"" +
                        $" -addon 0" +
-                       $" -file \"{zipFilePath}\"" +
+                       $" -file \"{fileName}\"" +
                        $" -quick" +
                        $" -nosetup" +
+                       $" -savedir \"{Directory.GetCurrentDirectory()}\\Data\\Saves\\Raze\\Duke3D\\packed-camp\"" +
+                       $" -def \"a\"" +
                        $"";
 
-        NormalizerHelper.NormalizeExpectedArgs(ref args, ref expected);
+        CmdArgsAssert.Equal(expected, args);
 
-        Assert.Equal(expected, args);
+        AssertRazeConfig(["D:/Games/Duke3D", "D:/Games/Duke3D/Vaca", "D:/Games/Duke3D/DC", "D:/Games/Duke3D/NW"], [$"{Directory.GetCurrentDirectory()}/Data/Addons/Duke3D/Mods", $"{folderPath}"]);
     }
 
     /// <summary>
@@ -443,40 +469,26 @@ public sealed class RazeCmdArgumentsTests
         var args = raze.GetStartGameArgs(dukeGame, _dukeLooseMap, mods, [], true, true);
 
         var expected = $"" +
-                       $" -file \"enabled_mod.zip\"" +
-                       $" -adddef \"ENABLED1.DEF\"" +
-                       $" -adddef \"ENABLED2.DEF\"" +
-                       $" -addcon \"ENABLED1.CON\"" +
-                       $" -addcon \"ENABLED2.CON\"" +
-                       $" -file \"mod_incompatible_with_addon.zip\"" +
-                       $" -file \"incompatible_mod_with_compatible_version.zip\"" +
-                       $" -file \"dependent_mod.zip\"" +
-                       $" -file \"dependent_mod_with_compatible_version.zip\"" +
-                       $" -savedir \"{Directory.GetCurrentDirectory()}\\Data\\Saves\\Raze\\Duke3D\\loose-map\"" +
-                       $" -def \"a\"" +
+                       $" -file \"{CmdArgsTestData.EnabledMod}\"" +
+                       $" -adddef \"{CmdArgsTestData.EnabledDef1}\"" +
+                       $" -adddef \"{CmdArgsTestData.EnabledDef2}\"" +
+                       $" -addcon \"{CmdArgsTestData.EnabledCon1}\"" +
+                       $" -addcon \"{CmdArgsTestData.EnabledCon2}\"" +
+                       $" -file \"{CmdArgsTestData.ModIncompatibleWithAddon}\"" +
+                       $" -file \"{CmdArgsTestData.IncompatibleModWithCompatibleVersion}\"" +
+                       $" -file \"{CmdArgsTestData.DependentMod}\"" +
+                       $" -file \"{CmdArgsTestData.DependentModWithCompatibleVersion}\"" +
                        $" -file \"{Directory.GetCurrentDirectory()}\\Data\\Addons\\Duke3D\\Maps\"" +
-                       $" -map \"LOOSE.MAP\"" +
+                       $" -map \"{CmdArgsTestData.LooseMap}\"" +
                        $" -quick" +
                        $" -nosetup" +
+                       $" -savedir \"{Directory.GetCurrentDirectory()}\\Data\\Saves\\Raze\\Duke3D\\loose-map\"" +
+                       $" -def \"a\"" +
                        $"";
 
-        NormalizerHelper.NormalizeExpectedArgs(ref args, ref expected);
+        CmdArgsAssert.Equal(expected, args);
 
-        Assert.Equal(expected, args);
-
-        var config = File.ReadAllText(Path.Combine(Directory.GetCurrentDirectory(), "Data", "Ports", "Raze", "raze_portable.ini"));
-
-        Assert.StartsWith(
-            $"""
-                [GameSearch.Directories]
-                Path=D:/Games/Duke3D
-
-                [FileSearch.Directories]
-                Path={Directory.GetCurrentDirectory()}/Data/Addons/Duke3D/Mods
-
-                [SoundfontSearch.Directories]
-                """.Replace('\\', '/').Replace("\r\n", "\n"), config.Replace("\r\n", "\n"), StringComparison.Ordinal
-            );
+        AssertRazeConfig(["D:/Games/Duke3D"], [$"{Directory.GetCurrentDirectory()}/Data/Addons/Duke3D/Mods"]);
     }
 
     /// <summary>
@@ -493,35 +505,63 @@ public sealed class RazeCmdArgumentsTests
         var args = raze.GetStartGameArgs(_namGame, _namCamp, mods, [], true, true);
 
         var expected = $"" +
-                       $" -file \"enabled_mod.zip\"" +
-                       $" -adddef \"ENABLED1.DEF\"" +
-                       $" -adddef \"ENABLED2.DEF\"" +
-                       $" -savedir \"{Directory.GetCurrentDirectory()}\\Data\\Saves\\Raze\\NAM\\nam\"" +
-                       $" -def \"a\"" +
+                       $" -file \"{CmdArgsTestData.EnabledMod}\"" +
+                       $" -adddef \"{CmdArgsTestData.EnabledDef1}\"" +
+                       $" -adddef \"{CmdArgsTestData.EnabledDef2}\"" +
                        $" -nam" +
                        $" -file NAM.GRP" +
                        $" -con GAME.CON" +
                        $" -quick" +
                        $" -nosetup" +
+                       $" -savedir \"{Directory.GetCurrentDirectory()}\\Data\\Saves\\Raze\\NAM\\nam\"" +
+                       $" -def \"a\"" +
                        $"";
 
-        NormalizerHelper.NormalizeExpectedArgs(ref args, ref expected);
+        CmdArgsAssert.Equal(expected, args);
 
-        Assert.Equal(expected, args);
+        AssertRazeConfig(["D:/Games/NAM"], [$"{Directory.GetCurrentDirectory()}/Data/Addons/NAM/Mods"]);
+    }
 
-        var config = File.ReadAllText(Path.Combine(Directory.GetCurrentDirectory(), "Data", "Ports", "Raze", "raze_portable.ini"));
+    /// <summary>
+    ///     Tests that Raze generates correct start arguments for a NAM total conversion.
+    /// </summary>
+    [Fact]
+    public void NamTcTest()
+    {
+        Raze raze = new();
 
-        Assert.StartsWith(
-            $"""
-                [GameSearch.Directories]
-                Path=D:/Games/NAM
+        var zipFilePath = Path.Combine("D:", "Games", "NAM", "nam_tc.zip");
 
-                [FileSearch.Directories]
-                Path={Directory.GetCurrentDirectory()}/Data/Addons/NAM/Mods
+        var namTc = CampaignTestFactory.CreateDukeCampaign(
+            "nam-tc",
+            GameEnum.NAM,
+            new AddonFilePathWrapper(zipFilePath, "addon.json"),
+            mainCon: "TC.CON",
+            additionalCons: ["TC1.CON", "TC2.CON"],
+            mainDef: "TC.DEF",
+            additionalDefs: ["TC1.DEF", "TC2.DEF"]);
 
-                [SoundfontSearch.Directories]
-                """.Replace('\\', '/').Replace("\r\n", "\n"), config.Replace("\r\n", "\n"), StringComparison.Ordinal
-            );
+        raze.BeforeStart(_namGame, namTc);
+        var args = raze.GetStartGameArgs(_namGame, namTc, [], [], true, true);
+
+        var expected = $"" +
+                       $" -nam" +
+                       $" -file NAM.GRP" +
+                       $" -con \"{CmdArgsTestData.TcCon}\"" +
+                       $" -addcon \"{CmdArgsTestData.TcCon1}\"" +
+                       $" -addcon \"{CmdArgsTestData.TcCon2}\"" +
+                       $" -file \"nam_tc.zip\"" +
+                       $" -quick" +
+                       $" -nosetup" +
+                       $" -savedir \"{Directory.GetCurrentDirectory()}\\Data\\Saves\\Raze\\NAM\\nam-tc\"" +
+                       $" -def \"{CmdArgsTestData.TcDef}\"" +
+                       $" -adddef \"{CmdArgsTestData.TcDef1}\"" +
+                       $" -adddef \"{CmdArgsTestData.TcDef2}\"" +
+                       $"";
+
+        CmdArgsAssert.Equal(expected, args);
+
+        AssertRazeConfig(["D:/Games/NAM"], [$"{Directory.GetCurrentDirectory()}/Data/Addons/NAM/Mods"]);
     }
 
     /// <summary>
@@ -538,32 +578,18 @@ public sealed class RazeCmdArgumentsTests
         var args = raze.GetStartGameArgs(_redneckGame, _redneckCamp, mods, [], true, true);
 
         var expected = $"" +
-                       $" -file \"enabled_mod.zip\"" +
-                       $" -adddef \"ENABLED1.DEF\"" +
-                       $" -adddef \"ENABLED2.DEF\"" +
-                       $" -savedir \"{Directory.GetCurrentDirectory()}\\Data\\Saves\\Raze\\Redneck\\redneck\"" +
-                       $" -def \"a\"" +
+                       $" -file \"{CmdArgsTestData.EnabledMod}\"" +
+                       $" -adddef \"{CmdArgsTestData.EnabledDef1}\"" +
+                       $" -adddef \"{CmdArgsTestData.EnabledDef2}\"" +
                        $" -quick" +
                        $" -nosetup" +
+                       $" -savedir \"{Directory.GetCurrentDirectory()}\\Data\\Saves\\Raze\\Redneck\\redneck\"" +
+                       $" -def \"a\"" +
                        $"";
 
-        NormalizerHelper.NormalizeExpectedArgs(ref args, ref expected);
+        CmdArgsAssert.Equal(expected, args);
 
-        Assert.Equal(expected, args);
-
-        var config = File.ReadAllText(Path.Combine(Directory.GetCurrentDirectory(), "Data", "Ports", "Raze", "raze_portable.ini"));
-
-        Assert.StartsWith(
-            $"""
-                [GameSearch.Directories]
-                Path=D:/Games/Redneck
-
-                [FileSearch.Directories]
-                Path={Directory.GetCurrentDirectory()}/Data/Addons/Redneck/Mods
-
-                [SoundfontSearch.Directories]
-                """.Replace('\\', '/').Replace("\r\n", "\n"), config.Replace("\r\n", "\n"), StringComparison.Ordinal
-            );
+        AssertRazeConfig(["D:/Games/Redneck"], [$"{Directory.GetCurrentDirectory()}/Data/Addons/Redneck/Mods"]);
     }
 
     /// <summary>
@@ -580,32 +606,58 @@ public sealed class RazeCmdArgumentsTests
         var args = raze.GetStartGameArgs(_redneckGame, _redneckAgainCamp, mods, [], true, true);
 
         var expected = $"" +
-                       $" -file \"enabled_mod.zip\"" +
-                       $" -adddef \"ENABLED1.DEF\"" +
-                       $" -adddef \"ENABLED2.DEF\"" +
-                       $" -savedir \"{Directory.GetCurrentDirectory()}\\Data\\Saves\\Raze\\Redneck\\ridesagain\"" +
-                       $" -def \"a\"" +
+                       $" -file \"{CmdArgsTestData.EnabledMod}\"" +
+                       $" -adddef \"{CmdArgsTestData.EnabledDef1}\"" +
+                       $" -adddef \"{CmdArgsTestData.EnabledDef2}\"" +
                        $" -quick" +
                        $" -nosetup" +
+                       $" -savedir \"{Directory.GetCurrentDirectory()}\\Data\\Saves\\Raze\\Redneck\\ridesagain\"" +
+                       $" -def \"a\"" +
                        $"";
 
-        NormalizerHelper.NormalizeExpectedArgs(ref args, ref expected);
+        CmdArgsAssert.Equal(expected, args);
 
-        Assert.Equal(expected, args);
+        AssertRazeConfig(["D:/Games/Again"], [$"{Directory.GetCurrentDirectory()}/Data/Addons/Redneck/Mods"]);
+    }
 
-        var config = File.ReadAllText(Path.Combine(Directory.GetCurrentDirectory(), "Data", "Ports", "Raze", "raze_portable.ini"));
+    /// <summary>
+    ///     Tests that Raze generates correct start arguments for a Redneck Rampage total conversion.
+    /// </summary>
+    [Fact]
+    public void RedneckTcTest()
+    {
+        Raze raze = new();
 
-        Assert.StartsWith(
-            $"""
-                [GameSearch.Directories]
-                Path=D:/Games/Again
+        var zipFilePath = Path.Combine("D:", "Games", "Redneck", "redneck_tc.zip");
 
-                [FileSearch.Directories]
-                Path={Directory.GetCurrentDirectory()}/Data/Addons/Redneck/Mods
+        var redneckTc = CampaignTestFactory.CreateDukeCampaign(
+            "redneck-tc",
+            GameEnum.Redneck,
+            new AddonFilePathWrapper(zipFilePath, "addon.json"),
+            mainCon: "TC.CON",
+            additionalCons: ["TC1.CON", "TC2.CON"],
+            mainDef: "TC.DEF",
+            additionalDefs: ["TC1.DEF", "TC2.DEF"]);
 
-                [SoundfontSearch.Directories]
-                """.Replace('\\', '/').Replace("\r\n", "\n"), config.Replace("\r\n", "\n"), StringComparison.Ordinal
-            );
+        raze.BeforeStart(_redneckGame, redneckTc);
+        var args = raze.GetStartGameArgs(_redneckGame, redneckTc, [], [], true, true);
+
+        var expected = $"" +
+                       $" -con \"{CmdArgsTestData.TcCon}\"" +
+                       $" -addcon \"{CmdArgsTestData.TcCon1}\"" +
+                       $" -addcon \"{CmdArgsTestData.TcCon2}\"" +
+                       $" -file \"redneck_tc.zip\"" +
+                       $" -quick" +
+                       $" -nosetup" +
+                       $" -savedir \"{Directory.GetCurrentDirectory()}\\Data\\Saves\\Raze\\Redneck\\redneck-tc\"" +
+                       $" -def \"{CmdArgsTestData.TcDef}\"" +
+                       $" -adddef \"{CmdArgsTestData.TcDef1}\"" +
+                       $" -adddef \"{CmdArgsTestData.TcDef2}\"" +
+                       $"";
+
+        CmdArgsAssert.Equal(expected, args);
+
+        AssertRazeConfig(["D:/Games/Redneck"], [$"{Directory.GetCurrentDirectory()}/Data/Addons/Redneck/Mods"]);
     }
 
     /// <summary>
@@ -622,32 +674,80 @@ public sealed class RazeCmdArgumentsTests
         var args = raze.GetStartGameArgs(_slaveGame, _slaveCamp, mods, [], true, true);
 
         var expected = $"" +
-                       $" -file \"enabled_mod.zip\"" +
-                       $" -adddef \"ENABLED1.DEF\"" +
-                       $" -adddef \"ENABLED2.DEF\"" +
-                       $" -savedir \"{Directory.GetCurrentDirectory()}\\Data\\Saves\\Raze\\Slave\\slave\"" +
-                       $" -def \"a\"" +
+                       $" -file \"{CmdArgsTestData.EnabledMod}\"" +
+                       $" -adddef \"{CmdArgsTestData.EnabledDef1}\"" +
+                       $" -adddef \"{CmdArgsTestData.EnabledDef2}\"" +
                        $" -quick" +
                        $" -nosetup" +
+                       $" -savedir \"{Directory.GetCurrentDirectory()}\\Data\\Saves\\Raze\\Slave\\slave\"" +
+                       $" -def \"a\"" +
                        $"";
 
-        NormalizerHelper.NormalizeExpectedArgs(ref args, ref expected);
+        CmdArgsAssert.Equal(expected, args);
 
-        Assert.Equal(expected, args);
+        AssertRazeConfig(["D:/Games/Slave"], [$"{Directory.GetCurrentDirectory()}/Data/Addons/Slave/Mods"]);
+    }
 
-        var config = File.ReadAllText(Path.Combine(Directory.GetCurrentDirectory(), "Data", "Ports", "Raze", "raze_portable.ini"));
+    /// <summary>
+    ///     Tests that Raze generates correct start arguments for a Slave TC folder.
+    /// </summary>
+    [Fact]
+    public void SlaveTCFolderTest()
+    {
+        var folderPath = Path.Combine("D:", "Games", "Slave", "slave_tc_folder");
 
-        Assert.StartsWith(
-            $"""
-                [GameSearch.Directories]
-                Path=D:/Games/Slave
+        var slaveTcFolder = CampaignTestFactory.CreateGenericCampaign(
+            "slave-tc-folder",
+            GameEnum.Slave,
+            new AddonFilePathWrapper(folderPath, "addon.json"));
 
-                [FileSearch.Directories]
-                Path={Directory.GetCurrentDirectory()}/Data/Addons/Slave/Mods
+        Raze raze = new();
 
-                [SoundfontSearch.Directories]
-                """.Replace('\\', '/').Replace("\r\n", "\n"), config.Replace("\r\n", "\n"), StringComparison.Ordinal
-            );
+        raze.BeforeStart(_slaveGame, slaveTcFolder);
+        var args = raze.GetStartGameArgs(_slaveGame, slaveTcFolder, [], [], true, true);
+
+        var expected = $"" +
+                       $" -file \"{folderPath}\"" +
+                       $" -quick" +
+                       $" -nosetup" +
+                       $" -savedir \"{Directory.GetCurrentDirectory()}\\Data\\Saves\\Raze\\Slave\\slave-tc-folder\"" +
+                       $" -def \"a\"" +
+                       $"";
+
+        CmdArgsAssert.Equal(expected, args);
+
+        AssertRazeConfig(["D:/Games/Slave"], [$"{Directory.GetCurrentDirectory()}/Data/Addons/Slave/Mods"]);
+    }
+
+    /// <summary>
+    ///     Tests that Raze generates correct start arguments for a Slave total conversion.
+    /// </summary>
+    [Fact]
+    public void SlaveTcTest()
+    {
+        Raze raze = new();
+
+        var zipFilePath = Path.Combine("D:", "Games", "Slave", "slave_tc.zip");
+
+        var slaveTc = CampaignTestFactory.CreateGenericCampaign(
+            "slave-tc",
+            GameEnum.Slave,
+            new AddonFilePathWrapper(zipFilePath, "addon.json"));
+
+        raze.BeforeStart(_slaveGame, slaveTc);
+        var args = raze.GetStartGameArgs(_slaveGame, slaveTc, [], [], true, true);
+
+        var expected = $"" +
+                       $" -file \"slave_tc.zip\"" +
+                       $" -quick" +
+                       $" -nosetup" +
+                       $" -savedir \"{Directory.GetCurrentDirectory()}\\Data\\Saves\\Raze\\Slave\\slave-tc\"" +
+                       $" -def \"a\"" +
+                       $"";
+
+        CmdArgsAssert.Equal(expected, args);
+
+        AssertRazeConfig(["D:/Games/Slave"], [$"{Directory.GetCurrentDirectory()}/Data/Addons/Slave/Mods"]);
     }
 
     /// <summary>
@@ -663,38 +763,24 @@ public sealed class RazeCmdArgumentsTests
         raze.BeforeStart(_wangGame, _wangCamp);
         var args = raze.GetStartGameArgs(_wangGame, _wangCamp, mods, [], true, true);
 
-        var expected = "" +
-                       " -file \"enabled_mod.zip\"" +
-                       " -adddef \"ENABLED1.DEF\"" +
-                       " -adddef \"ENABLED2.DEF\"" +
-                       " -file \"mod_incompatible_with_addon.zip\"" +
-                       " -file \"incompatible_mod_with_compatible_version.zip\"" +
-                       " -file \"dependent_mod.zip\"" +
-                       " -file \"dependent_mod_with_compatible_version.zip\"" +
-                       " -file \"feature_mod.zip\"" +
-                       $" -savedir \"{Directory.GetCurrentDirectory()}\\Data\\Saves\\Raze\\Wang\\wang\"" +
-                       " -def \"a\"" +
+        var expected = $"" +
+                       $" -file \"{CmdArgsTestData.EnabledMod}\"" +
+                       $" -adddef \"{CmdArgsTestData.EnabledDef1}\"" +
+                       $" -adddef \"{CmdArgsTestData.EnabledDef2}\"" +
+                       $" -file \"{CmdArgsTestData.ModIncompatibleWithAddon}\"" +
+                       $" -file \"{CmdArgsTestData.IncompatibleModWithCompatibleVersion}\"" +
+                       $" -file \"{CmdArgsTestData.DependentMod}\"" +
+                       $" -file \"{CmdArgsTestData.DependentModWithCompatibleVersion}\"" +
+                       $" -file \"{CmdArgsTestData.FeatureMod}\"" +
                        " -quick" +
                        " -nosetup" +
+                       $" -savedir \"{Directory.GetCurrentDirectory()}\\Data\\Saves\\Raze\\Wang\\wang\"" +
+                       " -def \"a\"" +
                        "";
 
-        NormalizerHelper.NormalizeExpectedArgs(ref args, ref expected);
+        CmdArgsAssert.Equal(expected, args);
 
-        Assert.Equal(expected, args);
-
-        var config = File.ReadAllText(Path.Combine(Directory.GetCurrentDirectory(), "Data", "Ports", "Raze", "raze_portable.ini"));
-
-        Assert.StartsWith(
-            $"""
-                [GameSearch.Directories]
-                Path=D:/Games/Wang
-
-                [FileSearch.Directories]
-                Path={Directory.GetCurrentDirectory()}/Data/Addons/Wang/Mods
-
-                [SoundfontSearch.Directories]
-                """.Replace('\\', '/').Replace("\r\n", "\n"), config.Replace("\r\n", "\n"), StringComparison.Ordinal
-            );
+        AssertRazeConfig(["D:/Games/Wang"], [$"{Directory.GetCurrentDirectory()}/Data/Addons/Wang/Mods"]);
     }
 
     /// <summary>
@@ -710,35 +796,52 @@ public sealed class RazeCmdArgumentsTests
         raze.BeforeStart(_wangGame, _wangTdCamp);
         var args = raze.GetStartGameArgs(_wangGame, _wangTdCamp, mods, [], true, true);
 
-        var expected = "" +
-                       " -file \"enabled_mod.zip\"" +
-                       " -adddef \"ENABLED1.DEF\"" +
-                       " -adddef \"ENABLED2.DEF\"" +
-                       " -file \"mod_requires_addon.zip\"" +
-                       $" -savedir \"{Directory.GetCurrentDirectory()}\\Data\\Saves\\Raze\\Wang\\twindragon\"" +
-                       " -def \"a\"" +
-                       " -file \"D:\\Games\\Wang\\TD.zip\"" +
+        var expected = $"" +
+                       $" -file \"{CmdArgsTestData.EnabledMod}\"" +
+                       $" -adddef \"{CmdArgsTestData.EnabledDef1}\"" +
+                       $" -adddef \"{CmdArgsTestData.EnabledDef2}\"" +
+                       $" -file \"{CmdArgsTestData.ModRequiresAddon}\"" +
+                       " -file \"TD.zip\"" +
                        " -quick" +
                        " -nosetup" +
+                       $" -savedir \"{Directory.GetCurrentDirectory()}\\Data\\Saves\\Raze\\Wang\\twindragon\"" +
+                       " -def \"a\"" +
                        "";
 
-        NormalizerHelper.NormalizeExpectedArgs(ref args, ref expected);
+        CmdArgsAssert.Equal(expected, args);
 
-        Assert.Equal(expected, args);
+        AssertRazeConfig(["D:/Games/Wang"], [$"{Directory.GetCurrentDirectory()}/Data/Addons/Wang/Mods", $"{Path.Combine(Directory.GetCurrentDirectory(), "Data", "Addons", "Wang", "Campaigns")}"]);
+    }
 
-        var config = File.ReadAllText(Path.Combine(Directory.GetCurrentDirectory(), "Data", "Ports", "Raze", "raze_portable.ini"));
+    /// <summary>
+    ///     Tests that Raze generates correct start arguments for a Wang TC in an unpacked folder.
+    /// </summary>
+    [Fact]
+    public void WangTCFolderTest()
+    {
+        Raze raze = new();
 
-        Assert.StartsWith(
-            $"""
-                [GameSearch.Directories]
-                Path=D:/Games/Wang
+        var folderPath = Path.Combine(Directory.GetCurrentDirectory(), "Data", "Addons", "Wang", "Campaigns", "wang_tc_folder");
 
-                [FileSearch.Directories]
-                Path={Directory.GetCurrentDirectory()}/Data/Addons/Wang/Mods
+        var wangTcFolder = CampaignTestFactory.CreateGenericCampaign(
+            "wang-tc-folder",
+            GameEnum.Wang,
+            new AddonFilePathWrapper(folderPath, "addon.json"));
 
-                [SoundfontSearch.Directories]
-                """.Replace('\\', '/').Replace("\r\n", "\n"), config.Replace("\r\n", "\n"), StringComparison.Ordinal
-            );
+        raze.BeforeStart(_wangGame, wangTcFolder);
+        var args = raze.GetStartGameArgs(_wangGame, wangTcFolder, [], [], true, true);
+
+        var expected = "" +
+                       $" -file \"{folderPath}\"" +
+                       " -quick" +
+                       " -nosetup" +
+                       $" -savedir \"{Directory.GetCurrentDirectory()}\\Data\\Saves\\Raze\\Wang\\wang-tc-folder\"" +
+                       " -def \"a\"" +
+                       "";
+
+        CmdArgsAssert.Equal(expected, args);
+
+        AssertRazeConfig(["D:/Games/Wang"], [$"{Directory.GetCurrentDirectory()}/Data/Addons/Wang/Mods"]);
     }
 
     /// <summary>
@@ -755,39 +858,25 @@ public sealed class RazeCmdArgumentsTests
         var args = raze.GetStartGameArgs(_wangGame, _wangLooseMap, mods, [], true, true);
 
         var expected = $"" +
-                       $" -file \"enabled_mod.zip\"" +
-                       $" -adddef \"ENABLED1.DEF\"" +
-                       $" -adddef \"ENABLED2.DEF\"" +
-                       $" -file \"mod_incompatible_with_addon.zip\"" +
-                       $" -file \"incompatible_mod_with_compatible_version.zip\"" +
-                       $" -file \"dependent_mod.zip\"" +
-                       $" -file \"dependent_mod_with_compatible_version.zip\"" +
-                       $" -file \"feature_mod.zip\"" +
-                       $" -savedir \"{Directory.GetCurrentDirectory()}\\Data\\Saves\\Raze\\Wang\\loose-map\"" +
-                       $" -def \"a\"" +
+                       $" -file \"{CmdArgsTestData.EnabledMod}\"" +
+                       $" -adddef \"{CmdArgsTestData.EnabledDef1}\"" +
+                       $" -adddef \"{CmdArgsTestData.EnabledDef2}\"" +
+                       $" -file \"{CmdArgsTestData.ModIncompatibleWithAddon}\"" +
+                       $" -file \"{CmdArgsTestData.IncompatibleModWithCompatibleVersion}\"" +
+                       $" -file \"{CmdArgsTestData.DependentMod}\"" +
+                       $" -file \"{CmdArgsTestData.DependentModWithCompatibleVersion}\"" +
+                       $" -file \"{CmdArgsTestData.FeatureMod}\"" +
                        $" -file \"{Directory.GetCurrentDirectory()}\\Data\\Addons\\Wang\\Maps\"" +
-                       $" -map \"LOOSE.MAP\"" +
+                       $" -map \"{CmdArgsTestData.LooseMap}\"" +
                        $" -quick" +
                        $" -nosetup" +
+                       $" -savedir \"{Directory.GetCurrentDirectory()}\\Data\\Saves\\Raze\\Wang\\loose-map\"" +
+                       $" -def \"a\"" +
                        $"";
 
-        NormalizerHelper.NormalizeExpectedArgs(ref args, ref expected);
+        CmdArgsAssert.Equal(expected, args);
 
-        Assert.Equal(expected, args);
-
-        var config = File.ReadAllText(Path.Combine(Directory.GetCurrentDirectory(), "Data", "Ports", "Raze", "raze_portable.ini"));
-
-        Assert.StartsWith(
-            $"""
-                [GameSearch.Directories]
-                Path=D:/Games/Wang
-
-                [FileSearch.Directories]
-                Path={Directory.GetCurrentDirectory()}/Data/Addons/Wang/Mods
-
-                [SoundfontSearch.Directories]
-                """.Replace('\\', '/').Replace("\r\n", "\n"), config.Replace("\r\n", "\n"), StringComparison.Ordinal
-            );
+        AssertRazeConfig(["D:/Games/Wang"], [$"{Directory.GetCurrentDirectory()}/Data/Addons/Wang/Mods"]);
     }
 
     /// <summary>
@@ -803,35 +892,64 @@ public sealed class RazeCmdArgumentsTests
         raze.BeforeStart(_ww2Game, _ww2Camp);
         var args = raze.GetStartGameArgs(_ww2Game, _ww2Camp, mods, [], true, true);
 
-        var expected = "" +
-                       " -file \"enabled_mod.zip\"" +
-                       " -adddef \"ENABLED1.DEF\"" +
-                       " -adddef \"ENABLED2.DEF\"" +
-                       $" -savedir \"{Directory.GetCurrentDirectory()}\\Data\\Saves\\Raze\\WW2GI\\ww2gi\"" +
-                       " -def \"a\" -ww2gi" +
+        var expected = $"" +
+                       $" -file \"{CmdArgsTestData.EnabledMod}\"" +
+                       $" -adddef \"{CmdArgsTestData.EnabledDef1}\"" +
+                       $" -adddef \"{CmdArgsTestData.EnabledDef2}\"" +
+                       " -ww2gi" +
                        " -file WW2GI.GRP" +
                        " -con GAME.CON" +
                        " -quick" +
                        " -nosetup" +
+                       $" -savedir \"{Directory.GetCurrentDirectory()}\\Data\\Saves\\Raze\\WW2GI\\ww2gi\"" +
+                       " -def \"a\"" +
                        "";
 
-        NormalizerHelper.NormalizeExpectedArgs(ref args, ref expected);
+        CmdArgsAssert.Equal(expected, args);
 
-        Assert.Equal(expected, args);
+        AssertRazeConfig(["D:/Games/WW2GI"], [$"{Directory.GetCurrentDirectory()}/Data/Addons/WW2GI/Mods"]);
+    }
 
-        var config = File.ReadAllText(Path.Combine(Directory.GetCurrentDirectory(), "Data", "Ports", "Raze", "raze_portable.ini"));
+    /// <summary>
+    ///     Tests that Raze generates correct start arguments for a WW2 GI total conversion.
+    /// </summary>
+    [Fact]
+    public void WW2GiTcTest()
+    {
+        Raze raze = new();
 
-        Assert.StartsWith(
-            $"""
-                [GameSearch.Directories]
-                Path=D:/Games/WW2GI
+        var zipFilePath = Path.Combine("D:", "Games", "WW2GI", "ww2gi_tc.zip");
 
-                [FileSearch.Directories]
-                Path={Directory.GetCurrentDirectory()}/Data/Addons/WW2GI/Mods
+        var ww2GiTc = CampaignTestFactory.CreateDukeCampaign(
+            "ww2gi-tc",
+            GameEnum.WW2GI,
+            new AddonFilePathWrapper(zipFilePath, "addon.json"),
+            mainCon: "TC.CON",
+            additionalCons: ["TC1.CON", "TC2.CON"],
+            mainDef: "TC.DEF",
+            additionalDefs: ["TC1.DEF", "TC2.DEF"]);
 
-                [SoundfontSearch.Directories]
-                """.Replace('\\', '/').Replace("\r\n", "\n"), config.Replace("\r\n", "\n"), StringComparison.Ordinal
-            );
+        raze.BeforeStart(_ww2Game, ww2GiTc);
+        var args = raze.GetStartGameArgs(_ww2Game, ww2GiTc, [], [], true, true);
+
+        var expected = "" +
+                       " -ww2gi" +
+                       " -file WW2GI.GRP" +
+                       $" -con \"{CmdArgsTestData.TcCon}\"" +
+                       $" -addcon \"{CmdArgsTestData.TcCon1}\"" +
+                       $" -addcon \"{CmdArgsTestData.TcCon2}\"" +
+                       $" -file \"ww2gi_tc.zip\"" +
+                       " -quick" +
+                       " -nosetup" +
+                       $" -savedir \"{Directory.GetCurrentDirectory()}\\Data\\Saves\\Raze\\WW2GI\\ww2gi-tc\"" +
+                       $" -def \"{CmdArgsTestData.TcDef}\"" +
+                       $" -adddef \"{CmdArgsTestData.TcDef1}\"" +
+                       $" -adddef \"{CmdArgsTestData.TcDef2}\"" +
+                       "";
+
+        CmdArgsAssert.Equal(expected, args);
+
+        AssertRazeConfig(["D:/Games/WW2GI"], [$"{Directory.GetCurrentDirectory()}/Data/Addons/WW2GI/Mods"]);
     }
 
     /// <summary>
@@ -847,36 +965,52 @@ public sealed class RazeCmdArgumentsTests
         raze.BeforeStart(_ww2Game, _ww2PlatoonCamp);
         var args = raze.GetStartGameArgs(_ww2Game, _ww2PlatoonCamp, mods, [], true, true);
 
-        var expected = "" +
-                       " -file \"enabled_mod.zip\"" +
-                       " -adddef \"ENABLED1.DEF\"" +
-                       " -adddef \"ENABLED2.DEF\"" +
-                       $" -savedir \"{Directory.GetCurrentDirectory()}\\Data\\Saves\\Raze\\WW2GI\\platoon\"" +
-                       " -def \"a\"" +
+        var expected = $"" +
+                       $" -file \"{CmdArgsTestData.EnabledMod}\"" +
+                       $" -adddef \"{CmdArgsTestData.EnabledDef1}\"" +
+                       $" -adddef \"{CmdArgsTestData.EnabledDef2}\"" +
                        " -ww2gi" +
                        " -file WW2GI.GRP" +
                        " -file PLATOONL.DAT" +
                        " -con PLATOONL.DEF" +
                        " -quick" +
                        " -nosetup" +
+                       $" -savedir \"{Directory.GetCurrentDirectory()}\\Data\\Saves\\Raze\\WW2GI\\platoon\"" +
+                       " -def \"a\"" +
                        "";
 
-        NormalizerHelper.NormalizeExpectedArgs(ref args, ref expected);
+        CmdArgsAssert.Equal(expected, args);
 
-        Assert.Equal(expected, args);
+        AssertRazeConfig(["D:/Games/WW2GI"], [$"{Directory.GetCurrentDirectory()}/Data/Addons/WW2GI/Mods"]);
+    }
 
-        var config = File.ReadAllText(Path.Combine(Directory.GetCurrentDirectory(), "Data", "Ports", "Raze", "raze_portable.ini"));
+    /// <summary>
+    ///     Asserts that the Raze portable config file contains the expected game and file search directories.
+    /// </summary>
+    /// <param name="gameDirs">
+    ///     Expected paths under the <c>[GameSearch.Directories]</c> section.
+    /// </param>
+    /// <param name="fileDirs">
+    ///     Expected paths under the <c>[FileSearch.Directories]</c> section.
+    /// </param>
+    private static void AssertRazeConfig(string[] gameDirs, string[] fileDirs)
+    {
+        var configPath = Path.Combine(Directory.GetCurrentDirectory(), "Data", "Ports", "Raze", "raze_portable.ini");
+        var config = File.ReadAllText(configPath);
 
-        Assert.StartsWith(
-            $"""
-                [GameSearch.Directories]
-                Path=D:/Games/WW2GI
+        var games = string.Join(Environment.NewLine, gameDirs.Select(p => $"Path={p}"));
+        var files = string.Join(Environment.NewLine, fileDirs.Select(p => $"Path={p}"));
 
-                [FileSearch.Directories]
-                Path={Directory.GetCurrentDirectory()}/Data/Addons/WW2GI/Mods
+        var expected = $"""
+            [GameSearch.Directories]
+            {games}
 
-                [SoundfontSearch.Directories]
-                """.Replace('\\', '/').Replace("\r\n", "\n"), config.Replace("\r\n", "\n"), StringComparison.Ordinal
-            );
+            [FileSearch.Directories]
+            {files}
+
+            [SoundfontSearch.Directories]
+            """.Replace('\\', '/').Replace("\r\n", "\n");
+
+        Assert.StartsWith(expected, config.Replace("\r\n", "\n"), StringComparison.Ordinal);
     }
 }

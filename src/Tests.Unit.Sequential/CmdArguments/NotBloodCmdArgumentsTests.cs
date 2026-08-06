@@ -1,4 +1,5 @@
 using Addons.Addons;
+using Core.All.Enums;
 using Games.Games;
 using Ports.Ports.EDuke32;
 using Tests.Unit.Helpers;
@@ -11,6 +12,7 @@ namespace Tests.Unit.CmdArguments;
 public sealed class NotBloodCmdArgumentsTests
 {
     private readonly BloodCampaign _bloodCamp;
+    private readonly BloodCampaign _bloodCampWithOptions;
     private readonly BloodCampaign _bloodCpCamp;
     private readonly BloodGame _bloodGame;
     private readonly LooseMap _bloodLooseMap;
@@ -26,7 +28,7 @@ public sealed class NotBloodCmdArgumentsTests
     /// </summary>
     public NotBloodCmdArgumentsTests()
     {
-        (_bloodGame, _bloodCamp, _, _bloodCpCamp, _bloodTc, _bloodTcFolder, _bloodTcExeOverride, _bloodTcIncompatibleWithEnabledMod, _bloodTcIncompatibleWithEverything, _bloodLooseMap, _bloodMods) = PortTestSetups.Blood();
+        (_bloodGame, _bloodCamp, _bloodCampWithOptions, _bloodCpCamp, _bloodTc, _bloodTcFolder, _bloodTcExeOverride, _bloodTcIncompatibleWithEnabledMod, _bloodTcIncompatibleWithEverything, _bloodLooseMap, _bloodMods) = PortTestSetups.Blood();
     }
 
     /// <summary>
@@ -40,11 +42,27 @@ public sealed class NotBloodCmdArgumentsTests
         NotBlood notblood = new();
 
         var args = notblood.GetStartGameArgs(_bloodGame, _bloodCamp, mods, [], true, true, 2);
-        var expected = @$" -g ""enabled_mod.zip"" -mh ""ENABLED1.DEF"" -mh ""ENABLED2.DEF"" -g ""mod_incompatible_with_addon.zip"" -g ""incompatible_mod_with_compatible_version.zip"" -g ""dependent_mod.zip"" -g ""dependent_mod_with_compatible_version.zip"" -g ""feature_mod.zip"" -j ""{Directory.GetCurrentDirectory()}\Data\Addons\Blood\Mods"" -usecwd -j ""D:\Games\Blood"" -h ""a"" -ini ""BLOOD.INI"" -s 2 -quick -nosetup";
 
-        NormalizerHelper.NormalizeExpectedArgs(ref args, ref expected);
+        var expected = $"" +
+                       $" -g \"{CmdArgsTestData.EnabledMod}\"" +
+                       $" -mh \"{CmdArgsTestData.EnabledDef1}\"" +
+                       $" -mh \"{CmdArgsTestData.EnabledDef2}\"" +
+                       $" -g \"{CmdArgsTestData.ModIncompatibleWithAddon}\"" +
+                       $" -g \"{CmdArgsTestData.IncompatibleModWithCompatibleVersion}\"" +
+                       $" -g \"{CmdArgsTestData.DependentMod}\"" +
+                       $" -g \"{CmdArgsTestData.DependentModWithCompatibleVersion}\"" +
+                       $" -g \"{CmdArgsTestData.FeatureMod}\"" +
+                       $" -j \"{Directory.GetCurrentDirectory()}\\Data\\Addons\\Blood\\Mods\"" +
+                       " -j \"D:\\Games\\Blood\"" +
+                       " -ini \"BLOOD.INI\"" +
+                       " -s 2" +
+                       " -quick" +
+                       " -nosetup" +
+                       " -usecwd" +
+                       " -h \"a\"" +
+                       "";
 
-        Assert.Equal(expected, args);
+        CmdArgsAssert.Equal(expected, args);
     }
 
     /// <summary>
@@ -58,11 +76,27 @@ public sealed class NotBloodCmdArgumentsTests
         NotBlood notblood = new();
 
         var args = notblood.GetStartGameArgs(_bloodGame, _bloodCpCamp, mods, [], true, true, 2);
-        var expected = @$" -g ""enabled_mod.zip"" -mh ""ENABLED1.DEF"" -mh ""ENABLED2.DEF"" -g ""mod_requires_addon.zip"" -g ""incompatible_mod_with_compatible_version.zip"" -g ""dependent_mod.zip"" -g ""dependent_mod_with_compatible_version.zip"" -g ""feature_mod.zip"" -j ""{Directory.GetCurrentDirectory()}\Data\Addons\Blood\Mods"" -usecwd -j ""D:\Games\Blood"" -h ""a"" -ini ""CRYPTIC.INI"" -s 2 -quick -nosetup";
 
-        NormalizerHelper.NormalizeExpectedArgs(ref args, ref expected);
+        var expected = $"" +
+                       $" -g \"{CmdArgsTestData.EnabledMod}\"" +
+                       $" -mh \"{CmdArgsTestData.EnabledDef1}\"" +
+                       $" -mh \"{CmdArgsTestData.EnabledDef2}\"" +
+                       $" -g \"{CmdArgsTestData.ModRequiresAddon}\"" +
+                       $" -g \"{CmdArgsTestData.IncompatibleModWithCompatibleVersion}\"" +
+                       $" -g \"{CmdArgsTestData.DependentMod}\"" +
+                       $" -g \"{CmdArgsTestData.DependentModWithCompatibleVersion}\"" +
+                       $" -g \"{CmdArgsTestData.FeatureMod}\"" +
+                       $" -j \"{Directory.GetCurrentDirectory()}\\Data\\Addons\\Blood\\Mods\"" +
+                       " -j \"D:\\Games\\Blood\"" +
+                       " -ini \"CRYPTIC.INI\"" +
+                       " -s 2" +
+                       " -quick" +
+                       " -nosetup" +
+                       " -usecwd" +
+                       " -h \"a\"" +
+                       "";
 
-        Assert.Equal(expected, args);
+        CmdArgsAssert.Equal(expected, args);
     }
 
     /// <summary>
@@ -74,11 +108,22 @@ public sealed class NotBloodCmdArgumentsTests
         NotBlood notblood = new();
 
         var args = notblood.GetStartGameArgs(_bloodGame, _bloodTc, [], [], true, true, 2);
-        var expected = @" -usecwd -j ""D:\Games\Blood"" -h ""a"" -ini ""TC.INI"" -g ""D:\Games\Blood\blood_tc.zip"" -rff ""TC.RFF"" -snd ""TC.SND"" -s 2 -quick -nosetup";
 
-        NormalizerHelper.NormalizeExpectedArgs(ref args, ref expected);
+        var expected = $"" +
+                       " -j \"D:\\Games\\Blood\"" +
+                       " -ini \"TC.INI\"" +
+                       " -j \"D:\\Games\\Blood\"" +
+                       " -g \"blood_tc.zip\"" +
+                       " -rff \"TC.RFF\"" +
+                       " -snd \"TC.SND\"" +
+                       " -s 2" +
+                       " -quick" +
+                       " -nosetup" +
+                       " -usecwd" +
+                       " -h \"a\"" +
+                       "";
 
-        Assert.Equal(expected, args);
+        CmdArgsAssert.Equal(expected, args);
     }
 
     /// <summary>
@@ -90,11 +135,21 @@ public sealed class NotBloodCmdArgumentsTests
         NotBlood notblood = new();
 
         var args = notblood.GetStartGameArgs(_bloodGame, _bloodTcFolder, [], [], true, true, 2);
-        var expected = @" -usecwd -j ""D:\Games\Blood"" -h ""a"" -ini ""TC.INI"" -game_dir ""D:\Games\Blood\blood_tc_folder"" -rff ""TC.RFF"" -snd ""TC.SND"" -s 2 -quick -nosetup";
 
-        NormalizerHelper.NormalizeExpectedArgs(ref args, ref expected);
+        var expected = $"" +
+                       " -j \"D:\\Games\\Blood\"" +
+                       " -ini \"TC.INI\"" +
+                       " -game_dir \"D:\\Games\\Blood\\blood_tc_folder\"" +
+                       " -rff \"TC.RFF\"" +
+                       " -snd \"TC.SND\"" +
+                       " -s 2" +
+                       " -quick" +
+                       " -nosetup" +
+                       " -usecwd" +
+                       " -h \"a\"" +
+                       "";
 
-        Assert.Equal(expected, args);
+        CmdArgsAssert.Equal(expected, args);
     }
 
     /// <summary>
@@ -106,11 +161,20 @@ public sealed class NotBloodCmdArgumentsTests
         NotBlood notblood = new();
 
         var args = notblood.GetStartGameArgs(_bloodGame, _bloodTcExeOverride, [], [], true, true, 2);
-        var expected = @" -usecwd -j ""D:\Games\Blood"" -h ""a"" -ini ""TC.INI"" -rff ""TC.RFF"" -snd ""TC.SND"" -s 2 -quick -nosetup";
 
-        NormalizerHelper.NormalizeExpectedArgs(ref args, ref expected);
+        var expected = $"" +
+                       " -j \"D:\\Games\\Blood\"" +
+                       " -ini \"TC.INI\"" +
+                       " -rff \"TC.RFF\"" +
+                       " -snd \"TC.SND\"" +
+                       " -s 2" +
+                       " -quick" +
+                       " -nosetup" +
+                       " -usecwd" +
+                       " -h \"a\"" +
+                       "";
 
-        Assert.Equal(expected, args);
+        CmdArgsAssert.Equal(expected, args);
     }
 
     /// <summary>
@@ -124,11 +188,21 @@ public sealed class NotBloodCmdArgumentsTests
         NotBlood notblood = new();
 
         var args = notblood.GetStartGameArgs(_bloodGame, _bloodTcIncompatibleWithEnabledMod, mods, [], true, true, 2);
-        var expected = @$" -usecwd -j ""D:\Games\Blood"" -h ""a"" -ini ""TC.INI"" -game_dir ""D:\Games\Blood\blood_tc_folder"" -rff ""TC.RFF"" -snd ""TC.SND"" -s 2 -quick -nosetup";
 
-        NormalizerHelper.NormalizeExpectedArgs(ref args, ref expected);
+        var expected = $"" +
+                       " -j \"D:\\Games\\Blood\"" +
+                       " -ini \"TC.INI\"" +
+                       " -game_dir \"D:\\Games\\Blood\\blood_tc_folder\"" +
+                       " -rff \"TC.RFF\"" +
+                       " -snd \"TC.SND\"" +
+                       " -s 2" +
+                       " -quick" +
+                       " -nosetup" +
+                       " -usecwd" +
+                       " -h \"a\"" +
+                       "";
 
-        Assert.Equal(expected, args);
+        CmdArgsAssert.Equal(expected, args);
     }
 
     /// <summary>
@@ -142,11 +216,21 @@ public sealed class NotBloodCmdArgumentsTests
         NotBlood notblood = new();
 
         var args = notblood.GetStartGameArgs(_bloodGame, _bloodTcIncompatibleWithEverything, mods, [], true, true, 2);
-        var expected = @" -usecwd -j ""D:\Games\Blood"" -h ""a"" -ini ""TC.INI"" -game_dir ""D:\Games\Blood\blood_tc_folder"" -rff ""TC.RFF"" -snd ""TC.SND"" -s 2 -quick -nosetup";
 
-        NormalizerHelper.NormalizeExpectedArgs(ref args, ref expected);
+        var expected = $"" +
+                       " -j \"D:\\Games\\Blood\"" +
+                       " -ini \"TC.INI\"" +
+                       " -game_dir \"D:\\Games\\Blood\\blood_tc_folder\"" +
+                       " -rff \"TC.RFF\"" +
+                       " -snd \"TC.SND\"" +
+                       " -s 2" +
+                       " -quick" +
+                       " -nosetup" +
+                       " -usecwd" +
+                       " -h \"a\"" +
+                       "";
 
-        Assert.Equal(expected, args);
+        CmdArgsAssert.Equal(expected, args);
     }
 
     /// <summary>
@@ -160,10 +244,100 @@ public sealed class NotBloodCmdArgumentsTests
         NotBlood notblood = new();
 
         var args = notblood.GetStartGameArgs(_bloodGame, _bloodLooseMap, mods, [], true, true, 2);
-        var expected = @$" -g ""enabled_mod.zip"" -mh ""ENABLED1.DEF"" -mh ""ENABLED2.DEF"" -g ""mod_incompatible_with_addon.zip"" -g ""incompatible_mod_with_compatible_version.zip"" -g ""dependent_mod.zip"" -g ""dependent_mod_with_compatible_version.zip"" -g ""feature_mod.zip"" -j ""{Directory.GetCurrentDirectory()}\Data\Addons\Blood\Mods"" -usecwd -j ""D:\Games\Blood"" -h ""a"" -ini ""BLOOD.INI"" -j ""{Directory.GetCurrentDirectory()}\Data\Addons\Blood\Maps"" -map ""LOOSE.MAP"" -s 2 -quick -nosetup";
 
-        NormalizerHelper.NormalizeExpectedArgs(ref args, ref expected);
+        var expected = $"" +
+                       $" -g \"{CmdArgsTestData.EnabledMod}\"" +
+                       $" -mh \"{CmdArgsTestData.EnabledDef1}\"" +
+                       $" -mh \"{CmdArgsTestData.EnabledDef2}\"" +
+                       $" -g \"{CmdArgsTestData.ModIncompatibleWithAddon}\"" +
+                       $" -g \"{CmdArgsTestData.IncompatibleModWithCompatibleVersion}\"" +
+                       $" -g \"{CmdArgsTestData.DependentMod}\"" +
+                       $" -g \"{CmdArgsTestData.DependentModWithCompatibleVersion}\"" +
+                       $" -g \"{CmdArgsTestData.FeatureMod}\"" +
+                       $" -j \"{Directory.GetCurrentDirectory()}\\Data\\Addons\\Blood\\Mods\"" +
+                       " -j \"D:\\Games\\Blood\"" +
+                       " -ini \"BLOOD.INI\"" +
+                       $" -j \"{Directory.GetCurrentDirectory()}\\Data\\Addons\\Blood\\Maps\"" +
+                       $" -map \"{CmdArgsTestData.LooseMap}\"" +
+                       " -s 2" +
+                       " -quick" +
+                       " -nosetup" +
+                       " -usecwd" +
+                       " -h \"a\"" +
+                       "";
 
-        Assert.Equal(expected, args);
+        CmdArgsAssert.Equal(expected, args);
+    }
+
+    /// <summary>
+    ///     Tests that NotBlood generates correct start arguments with enabled options.
+    /// </summary>
+    [Fact]
+    public void BloodWithOptionsTest()
+    {
+        NotBlood notblood = new();
+
+        var args = notblood.GetStartGameArgs(_bloodGame, _bloodCampWithOptions, [], ["option 2"], true, true, 2);
+
+        var expected = $"" +
+                       " -j \"D:\\Games\\Blood\"" +
+                       " -mh \"OPT2.DEF\"" +
+                       " -mh \"OPT2_2.DEF\"" +
+                       " -s 2" +
+                       " -quick" +
+                       " -nosetup" +
+                       " -usecwd" +
+                       " -h \"a\"" +
+                       "";
+
+        CmdArgsAssert.Equal(expected, args);
+    }
+
+    /// <summary>
+    ///     Tests that NotBlood does not throw when the addon file info is null.
+    /// </summary>
+    [Fact]
+    public void Blood_NullFileInfo_DoesNotThrow()
+    {
+        NotBlood notblood = new();
+
+        var bloodTcNull = new BloodCampaign
+        {
+            AddonId = new("blood-tc-null", "1.0"),
+            Type = AddonTypeEnum.TC,
+            Title = "Blood TC",
+            SupportedGame = new(GameEnum.Blood),
+            FileInfo = null,
+            GridImageHash = null,
+            PreviewImageHash = null,
+            Description = null,
+            Author = null,
+            ReleaseDate = null,
+            MainDef = null,
+            AdditionalDefs = null,
+            INI = "TC.INI",
+            RFF = "TC.RFF",
+            SND = "TC.SND",
+            StartMap = null,
+            DependentAddons = null,
+            IncompatibleAddons = null,
+            RequiredFeatures = null,
+            Executables = null,
+            Options = null
+        };
+
+        var args = notblood.GetStartGameArgs(_bloodGame, bloodTcNull, [], [], true, true, 2);
+
+        var expected = $"" +
+                       " -j \"D:\\Games\\Blood\"" +
+                       " -ini \"TC.INI\"" +
+                       " -s 2" +
+                       " -quick" +
+                       " -nosetup" +
+                       " -usecwd" +
+                       " -h \"a\"" +
+                       "";
+
+        CmdArgsAssert.Equal(expected, args);
     }
 }

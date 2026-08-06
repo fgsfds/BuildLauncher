@@ -1,14 +1,12 @@
-﻿using System.Collections.Immutable;
-using System.Text;
+﻿using System.Buffers;
+using System.Collections.Immutable;
 using Addons.Addons;
-using Addons.Helpers;
 using Core.All.Enums;
-using Core.All.Enums.Addons;
 using Core.All.Helpers;
-using Core.All.Serializable.Addon;
 using Core.Client.Helpers;
 using Core.Client.Interfaces;
 using Games.Games;
+using Ports.Builders;
 
 namespace Ports.Ports;
 
@@ -17,12 +15,8 @@ namespace Ports.Ports;
 /// </summary>
 public abstract class BasePort : IInstallable
 {
-    /// <summary>
-    ///     Initializes a new instance of the <see cref="BasePort" /> class.
-    /// </summary>
-    protected BasePort()
-    {
-    }
+    private static readonly SearchValues<char> InvalidChars =
+        SearchValues.Create(Path.GetInvalidFileNameChars());
 
     /// <summary>
     ///     Port enum.
@@ -97,18 +91,14 @@ public abstract class BasePort : IInstallable
     protected abstract string ConfigFile { get; }
 
     /// <summary>
-    ///     Command-line parameters for building arguments.
+    ///     Path to the port config file.
     /// </summary>
-    protected abstract PortCmdArguments CmdArguments { get; }
+    public string PortConfigFilePath => Path.Combine(InstallFolderPath, ConfigFile);
 
     /// <summary>
-    ///     Extensions of save game files.
+    ///     Command-line parameters for building arguments.
     /// </summary>
-    protected HashSet<string> SaveFileExtensions { get; } =
-    [
-        ".sav",
-        ".esv"
-    ];
+    public abstract PortCmdArguments CmdArguments { get; }
 
     /// <summary>
     ///     Port's icon.
@@ -123,7 +113,7 @@ public abstract class BasePort : IInstallable
     /// <summary>
     ///     Indicates whether skill level can be selected from the command line.
     /// </summary>
-    public abstract bool IsSkillSelectionAvailable { get; }
+    public bool IsSkillSelectionAvailable => CmdArguments.SkillLevel is not null;
 
     /// <inheritdoc />
     public virtual string? InstalledVersion
@@ -157,16 +147,28 @@ public abstract class BasePort : IInstallable
     /// <summary>
     ///     Gets the path to an addon's saved games folder.
     /// </summary>
-    /// <param name="subFolder">Subfolder under port's saves folder</param>
-    /// <param name="addonId">Addon Id</param>
+    /// <param name="subFolder">
+    ///     Subfolder under port's saves folder
+    /// </param>
+    /// <param name="addonId">
+    ///     Addon Id
+    /// </param>
     protected string GetPathToAddonSavedGamesFolder(string subFolder, string addonId)
     {
-        var folderName = addonId;
+        var folderName = string.Create(
+            addonId.Length, addonId, (span, state) =>
+            {
+                state.AsSpan().CopyTo(span);
 
-        foreach (var ch in Path.GetInvalidFileNameChars())
-        {
-            folderName = folderName.Replace(ch, '_');
-        }
+                for (var i = 0; i < span.Length; i++)
+                {
+                    if (InvalidChars.Contains(span[i]))
+                    {
+                        span[i] = '_';
+                    }
+                }
+            }
+            );
 
         return Path.Combine(PortSavedGamesFolderPath, subFolder, folderName);
     }
@@ -174,13 +176,27 @@ public abstract class BasePort : IInstallable
     /// <summary>
     ///     Gets the command-line arguments to start the game with the selected campaign and autoload mods.
     /// </summary>
-    /// <param name="game">Game to start</param>
-    /// <param name="addon">Addon to start</param>
-    /// <param name="mods">Autoload mods</param>
-    /// <param name="enabledOptions">List of enabled options</param>
-    /// <param name="skipIntro">Skip intro</param>
-    /// <param name="skipStartup">Skip startup window</param>
-    /// <param name="skill">Skill level</param>
+    /// <param name="game">
+    ///     Game to start
+    /// </param>
+    /// <param name="addon">
+    ///     Addon to start
+    /// </param>
+    /// <param name="mods">
+    ///     Autoload mods
+    /// </param>
+    /// <param name="enabledOptions">
+    ///     List of enabled options
+    /// </param>
+    /// <param name="skipIntro">
+    ///     Skip intro
+    /// </param>
+    /// <param name="skipStartup">
+    ///     Skip startup window
+    /// </param>
+    /// <param name="skill">
+    ///     Skill level
+    /// </param>
     public string GetStartGameArgs(
         BaseGame game,
         BaseAddon addon,
@@ -191,16 +207,20 @@ public abstract class BasePort : IInstallable
         byte? skill = null
         )
     {
-        StringBuilder sb = new();
+        var sb = CmdParametersBuilderFactory.Create(game, addon, this);
 
-        GetAutoloadModsArgs(sb, game, addon, mods);
+        sb.AppendAutoloadModsArgs(mods);
 
-        GetStartCampaignArgs(sb, game, addon);
-
-        if (addon.Options is not null && enabledOptions.Any())
+        if (addon is LooseMap)
         {
-            GetOptionsArgs(sb, game, addon, enabledOptions);
+            sb.AppendLooseMapArgs();
         }
+        else
+        {
+            sb.AppendGameArgs(game, addon);
+        }
+
+        sb.AppendOptionsArgs(enabledOptions);
 
         if (skill is not null)
         {
@@ -209,559 +229,77 @@ public abstract class BasePort : IInstallable
 
         if (skipIntro)
         {
-            GetSkipIntroParameter(sb);
+            sb.AppendSkipIntroParameter();
         }
 
         if (skipStartup)
         {
-            GetSkipStartupParameter(sb);
+            sb.AppendSkipStartupParameter();
         }
+
+        CustomModifyArgs(sb, game, addon);
+
+        if (game is not FuryGame && addon.MainDef is null)
+        {
+            sb.AppendOverrideMainDef();
+        }
+        else
+        {
+            sb.AppendMainDefArgs();
+        }
+
+        sb.AppendAdditionalDefsArgs();
 
         return sb.ToString();
     }
 
     /// <summary>
-    ///     Appends command-line arguments for enabled options.
+    ///     Allows derived ports to modify command-line arguments specific to their implementation.
     /// </summary>
-    protected void GetOptionsArgs(
-        StringBuilder sb,
-        BaseGame game,
-        BaseAddon addon,
-        IReadOnlyList<string> enabledOptions
-        )
-    {
-        ArgumentNullException.ThrowIfNull(addon.Options);
-
-        foreach (var optionName in enabledOptions)
-        {
-            if (!addon.Options.TryGetValue(optionName, out var options))
-            {
-                throw new KeyNotFoundException($"Option '{optionName}' not found in addon options.");
-            }
-
-            foreach (var option in options)
-            {
-                if (option.Value is OptionalParameterTypeEnum.DEF)
-                {
-                    _ = sb.Append($@" {CmdArguments.AddDef}""{option.Key}""");
-                }
-                else if (option.Value is OptionalParameterTypeEnum.INI &&
-                         game is BloodGame)
-                {
-                    _ = sb.Append($@" -ini ""{option.Key}""");
-                }
-                else
-                {
-                    throw new NotSupportedException($"Option '{option.Key}' has unsupported type '{option.Value}' for non-Blood games.");
-                }
-            }
-        }
-    }
-
-    /// <summary>
-    ///     Gets startup arguments for manifested maps.
-    /// </summary>
-    protected void GetMapArgs(StringBuilder sb, BaseAddon camp)
-    {
-        if (camp.FileInfo is null)
-        {
-            throw new InvalidOperationException("Campaign file info is required for map args");
-        }
-
-        //TODO e#m#
-        if (camp.StartMap is MapFileJsonModel mapFile)
-        {
-            _ = sb.Append($@" {CmdArguments.AddFile}""{camp.FileInfo.Value.PathToFile}""");
-            _ = sb.Append($@" -map ""{mapFile.File}""");
-        }
-        else
-        {
-            throw new NotSupportedException($"Unsupported start map type: {camp.StartMap?.GetType().Name}.");
-        }
-    }
-
-    /// <summary>
-    ///     Gets startup arguments for loose maps.
-    /// </summary>
-    protected virtual void GetLooseMapArgs(StringBuilder sb, BaseGame game, BaseAddon camp)
-    {
-        if (camp.StartMap is not MapFileJsonModel mapFile)
-        {
-            throw new ArgumentException($"Expected {nameof(MapFileJsonModel)} start map but received {camp.StartMap?.GetType().Name}.", nameof(camp));
-        }
-
-        _ = sb.Append($@" {CmdArguments.AddDirectory}""{game.MapsFolderPath}""");
-        _ = sb.Append($@" -map ""{mapFile.File}""");
-    }
-
-    /// <summary>
-    ///     Appends command-line arguments for Blood game campaigns.
-    /// </summary>
-    protected virtual void GetBloodArgs(StringBuilder sb, BloodGame game, BaseAddon addon)
-    {
-        if (addon is LooseMap lMap)
-        {
-            if (lMap.BloodIni is null)
-            {
-                _ = sb.Append($@" -ini ""{ClientConsts.BloodIni}""");
-            }
-            else
-            {
-                _ = sb.Append($@" -ini ""{Path.GetFileName(lMap.BloodIni)}""");
-            }
-
-            GetLooseMapArgs(sb, game, addon);
-
-            return;
-        }
-
-        if (addon is not BloodCampaign bCamp)
-        {
-            throw new ArgumentException($"Expected {nameof(BloodCampaign)} but received {addon.GetType().Name}.", nameof(addon));
-        }
-
-        if (bCamp.INI is not null)
-        {
-            _ = sb.Append($@" -ini ""{bCamp.INI}""");
-        }
-        else if (bCamp.DependentAddons?.ContainsKey(nameof(BloodAddonEnum.BloodCP)) is true)
-        {
-            _ = sb.Append($@" -ini ""{ClientConsts.CrypticIni}""");
-        }
-
-        if (bCamp.FileInfo is null)
-        {
-            return;
-        }
-
-        var bCampFileInfo = bCamp.FileInfo.Value;
-
-        if (bCamp.Type is AddonTypeEnum.TC)
-        {
-            if (bCamp.Executables is not null)
-            {
-                //don't add addon dir if the port is overridden
-            }
-            else if (bCampFileInfo.IsFolder)
-            {
-                _ = sb.Append($@" {CmdArguments.AddGameDir}""{bCampFileInfo.PathToFolder}""");
-            }
-            else
-            {
-                _ = sb.Append($@" {CmdArguments.AddFile}""{bCampFileInfo.PathToFile}""");
-            }
-        }
-        else if (bCamp.Type is AddonTypeEnum.Map)
-        {
-            GetMapArgs(sb, bCamp);
-        }
-        else
-        {
-            throw new NotSupportedException($"Mod type {bCamp.Type} is not supported");
-        }
-
-        if (bCamp.RFF is not null)
-        {
-            _ = sb.Append($@" {CmdArguments.AddRff}""{bCamp.RFF}""");
-        }
-
-        if (bCamp.SND is not null)
-        {
-            _ = sb.Append($@" {CmdArguments.AddSnd}""{bCamp.SND}""");
-        }
-    }
-
-    /// <summary>
-    ///     Appends command-line arguments for Slave (PowerSlave) game campaigns.
-    /// </summary>
-    protected void GetSlaveArgs(StringBuilder sb, SlaveGame game, BaseAddon addon)
-    {
-        if (addon is LooseMap)
-        {
-            GetLooseMapArgs(sb, game, addon);
-
-            return;
-        }
-
-        if (addon is not GenericCampaign sCamp)
-        {
-            throw new ArgumentException($"Expected {nameof(GenericCampaign)} but received {addon.GetType().Name}.", nameof(addon));
-        }
-
-        if (sCamp.FileInfo is null)
-        {
-            return;
-        }
-
-        if (sCamp.Type is AddonTypeEnum.TC)
-        {
-            _ = sb.Append($@" {CmdArguments.AddFile}""{sCamp.FileInfo.Value.PathToFile}""");
-        }
-        else if (sCamp.Type is AddonTypeEnum.Map)
-        {
-            GetMapArgs(sb, sCamp);
-        }
-        else
-        {
-            throw new NotSupportedException($"Mod type {sCamp.Type} is not supported");
-        }
-    }
-
-    /// <summary>
-    ///     Appends command-line arguments for NAM and WW2GI game campaigns.
-    /// </summary>
-    protected virtual void GetNamWW2GIArgs(StringBuilder sb, BaseGame game, BaseAddon addon)
-    {
-        if (game is NamGame)
-        {
-            _ = sb.Append($" -nam {CmdArguments.MainGrp}NAM.GRP");
-        }
-        else if (game is WW2GIGame)
-        {
-            _ = sb.Append($" -ww2gi {CmdArguments.MainGrp}WW2GI.GRP");
-        }
-        else
-        {
-            throw new NotSupportedException($"Unsupported game type {game.GetType().Name} for NAM/WW2GI arguments.");
-        }
-
-        if (addon is LooseMap)
-        {
-            GetLooseMapArgs(sb, game, addon);
-
-            return;
-        }
-
-        if (addon is not DukeCampaign dCamp)
-        {
-            throw new ArgumentException($"Expected {nameof(DukeCampaign)} but received {addon.GetType().Name}.", nameof(addon));
-        }
-
-        if (addon.AddonId.Id.Equals(nameof(WW2GIAddonEnum.Platoon), StringComparison.OrdinalIgnoreCase))
-        {
-            _ = sb.Append($" {CmdArguments.AddGrp}PLATOONL.DAT {CmdArguments.MainCon}PLATOONL.DEF");
-        }
-        else if (dCamp.MainCon is null)
-        {
-            _ = sb.Append($" {CmdArguments.MainCon}GAME.CON");
-        }
-
-        if (dCamp.FileInfo is null)
-        {
-            return;
-        }
-
-        if (dCamp.MainCon is not null)
-        {
-            _ = sb.Append($@" {CmdArguments.MainCon}""{dCamp.MainCon}""");
-        }
-
-        if (dCamp.AdditionalCons?.Any() is true)
-        {
-            foreach (var con in dCamp.AdditionalCons)
-            {
-                _ = sb.Append($@" {CmdArguments.AddCon}""{con}""");
-            }
-        }
-
-        if (dCamp.Type is AddonTypeEnum.TC)
-        {
-            _ = sb.Append($@" {CmdArguments.AddFile}""{dCamp.FileInfo.Value.PathToFile}""");
-        }
-        else if (dCamp.Type is AddonTypeEnum.Map)
-        {
-            GetMapArgs(sb, dCamp);
-        }
-        else
-        {
-            throw new NotSupportedException($"Mod type {dCamp.Type} is not supported");
-        }
-    }
-
-    /// <summary>
-    ///     Gets command-line arguments to load mods.
-    /// </summary>
-    /// <param name="sb">String builder for parameters</param>
-    /// <param name="game">Game</param>
-    /// <param name="addon">Campaign\map</param>
-    /// <param name="mods">Autoload mods</param>
-    protected virtual void GetAutoloadModsArgs(StringBuilder sb, BaseGame game, BaseAddon addon, IReadOnlyList<BaseAddon> mods)
-    {
-        if (mods.Count == 0)
-        {
-            return;
-        }
-
-        var enabledModsCount = 0;
-
-        foreach (var mod in mods)
-        {
-            if (mod is not AutoloadMod aMod)
-            {
-                continue;
-            }
-
-            if (!AutoloadModsValidator.ValidateAutoloadMod(aMod, addon, mods, SupportedFeatures))
-            {
-                continue;
-            }
-
-            if (aMod.FileInfo is null)
-            {
-                continue;
-            }
-
-            var aModFileInfo = aMod.FileInfo.Value;
-
-            if (aModFileInfo.IsFolder)
-            {
-                throw new InvalidOperationException("Folder mods are not supported in autoload");
-            }
-
-            _ = sb.Append($@" {CmdArguments.AddFile}""{aModFileInfo.FileName}""");
-
-            if (aMod.AdditionalDefs is not null)
-            {
-                foreach (var def in aMod.AdditionalDefs)
-                {
-                    _ = sb.Append($@" {CmdArguments.AddDef}""{def}""");
-                }
-            }
-
-            if (aMod.AdditionalCons is not null)
-            {
-                foreach (var con in aMod.AdditionalCons)
-                {
-                    _ = sb.Append($@" {CmdArguments.AddCon}""{con}""");
-                }
-            }
-
-            enabledModsCount++;
-        }
-
-        if (enabledModsCount > 0 &&
-            //Raze sets mods dir in the config
-            PortEnum is not PortEnum.Raze)
-        {
-            _ = sb.Append($@" {CmdArguments.AddDirectory}""{game.ModsFolderPath}""");
-        }
-    }
+    /// <param name="sb">
+    ///     A builder object used to construct command-line arguments.
+    /// </param>
+    /// <param name="game">
+    ///     The base game for which the command-line arguments are being built.
+    /// </param>
+    /// <param name="addon">
+    ///     The addon or modification being applied to the game.
+    /// </param>
+    protected virtual void CustomModifyArgs(CmdParametersBuilder sb, BaseGame game, BaseAddon addon) { }
 
     /// <summary>
     ///     Performs cleanup after the port exits.
     /// </summary>
-    /// <param name="game">Game</param>
-    /// <param name="campaign">Campaign</param>
+    /// <param name="game">
+    ///     Game
+    /// </param>
+    /// <param name="campaign">
+    ///     Campaign
+    /// </param>
     public abstract void AfterEnd(BaseGame game, BaseAddon campaign);
 
     /// <summary>
     ///     Performs setup before starting the port.
     /// </summary>
-    /// <param name="game">Game</param>
-    /// <param name="campaign">Campaign</param>
+    /// <param name="game">
+    ///     Game
+    /// </param>
+    /// <param name="campaign">
+    ///     Campaign
+    /// </param>
     public abstract void BeforeStart(BaseGame game, BaseAddon campaign);
 
     /// <summary>
-    ///     Gets command-line arguments to start a custom map or campaign.
+    ///     Gets the folder where the game stores its save files for the given campaign.
     /// </summary>
-    /// <param name="sb">String builder for parameters</param>
-    /// <param name="game">Game</param>
-    /// <param name="addon">Map/campaign</param>
-    protected abstract void GetStartCampaignArgs(StringBuilder sb, BaseGame game, BaseAddon addon);
-
-    /// <summary>
-    ///     Appends the command-line parameter to skip the intro.
-    /// </summary>
-    /// <param name="sb">String builder for parameters</param>
-    protected abstract void GetSkipIntroParameter(StringBuilder sb);
-
-    /// <summary>
-    ///     Appends the command-line parameter to skip the startup window.
-    /// </summary>
-    /// <param name="sb">String builder for parameters</param>
-    protected abstract void GetSkipStartupParameter(StringBuilder sb);
-
-    /// <summary>
-    ///     Removes Route 66 art file overrides used for RedNukem.
-    /// </summary>
-    protected void RestoreRoute66Files(BaseGame game)
+    /// <param name="game">
+    ///     Game.
+    /// </param>
+    /// <param name="campaign">
+    ///     Campaign.
+    /// </param>
+    protected virtual string GetGameSaveFilesFolder(BaseGame game, BaseAddon campaign)
     {
-        if (game is not RedneckGame)
-        {
-            return;
-        }
-
-        ArgumentNullException.ThrowIfNull(game.GameInstallFolder);
-
-        var tilesA2 = Path.Combine(game.GameInstallFolder, "TILES024.ART");
-        var tilesB2 = Path.Combine(game.GameInstallFolder, "TILES025.ART");
-        var turdMovAnm2 = Path.Combine(game.GameInstallFolder, "TURDMOV.ANM");
-        var turdMovVoc2 = Path.Combine(game.GameInstallFolder, "TURDMOV.VOC");
-        var endMovAnm2 = Path.Combine(game.GameInstallFolder, "RR_OUTRO.ANM");
-        var endMovVoc2 = Path.Combine(game.GameInstallFolder, "LN_FINAL.VOC");
-
-        if (File.Exists(tilesA2))
-        {
-            File.Delete(tilesA2);
-        }
-
-        if (File.Exists(tilesB2))
-        {
-            File.Delete(tilesB2);
-        }
-
-        if (File.Exists(turdMovAnm2))
-        {
-            File.Delete(turdMovAnm2);
-        }
-
-        if (File.Exists(turdMovVoc2))
-        {
-            File.Delete(turdMovVoc2);
-        }
-
-        if (File.Exists(endMovAnm2))
-        {
-            File.Delete(endMovAnm2);
-        }
-
-        if (File.Exists(endMovVoc2))
-        {
-            File.Delete(endMovVoc2);
-        }
-    }
-
-    /// <summary>
-    ///     Restores Duke WT's ART files.
-    /// </summary>
-    protected void RestoreWtFiles(BaseGame game)
-    {
-        if (game is not DukeGame dGame)
-        {
-            return;
-        }
-
-        ArgumentNullException.ThrowIfNull(game.GameInstallFolder);
-
-        var art1 = Path.Combine(game.GameInstallFolder, "TILES009.ART");
-        var art1r = Path.Combine(game.GameInstallFolder, "TILES009._ART");
-
-        var art2 = Path.Combine(game.GameInstallFolder, "TILES020.ART");
-        var art2r = Path.Combine(game.GameInstallFolder, "TILES020._ART");
-
-        var art3 = Path.Combine(game.GameInstallFolder, "TILES021.ART");
-        var art3r = Path.Combine(game.GameInstallFolder, "TILES021._ART");
-
-        var art4 = Path.Combine(game.GameInstallFolder, "TILES022.ART");
-        var art4r = Path.Combine(game.GameInstallFolder, "TILES022._ART");
-
-        if (File.Exists(art1r))
-        {
-            File.Move(art1r, art1, true);
-        }
-
-        if (File.Exists(art2r))
-        {
-            File.Move(art2r, art2, true);
-        }
-
-        if (File.Exists(art3r))
-        {
-            File.Move(art3r, art3, true);
-        }
-
-        if (File.Exists(art4r))
-        {
-            File.Move(art4r, art4, true);
-        }
-
-        if (dGame.DukeWTInstallPath is not null)
-        {
-            art1 = Path.Combine(dGame.DukeWTInstallPath, "TILES009.ART");
-            art1r = Path.Combine(dGame.DukeWTInstallPath, "TILES009._ART");
-
-            art2 = Path.Combine(dGame.DukeWTInstallPath, "TILES020.ART");
-            art2r = Path.Combine(dGame.DukeWTInstallPath, "TILES020._ART");
-
-            art3 = Path.Combine(dGame.DukeWTInstallPath, "TILES021.ART");
-            art3r = Path.Combine(dGame.DukeWTInstallPath, "TILES021._ART");
-
-            art4 = Path.Combine(dGame.DukeWTInstallPath, "TILES022.ART");
-            art4r = Path.Combine(dGame.DukeWTInstallPath, "TILES022._ART");
-
-            if (File.Exists(art1r))
-            {
-                File.Move(art1r, art1, true);
-            }
-
-            if (File.Exists(art2r))
-            {
-                File.Move(art2r, art2, true);
-            }
-
-            if (File.Exists(art3r))
-            {
-                File.Move(art3r, art3, true);
-            }
-
-            if (File.Exists(art4r))
-            {
-                File.Move(art4r, art4, true);
-            }
-        }
-    }
-
-    /// <summary>
-    ///     Moves save files from the addon's saved games storage folder to the game's install folder.
-    /// </summary>
-    /// <param name="game">The game instance containing the target install folder.</param>
-    /// <param name="campaign">The addon campaign whose saves are to be moved.</param>
-    protected virtual void MoveSaveFilesFromStorage(BaseGame game, BaseAddon campaign)
-    {
-        var saveFolder = GetPathToAddonSavedGamesFolder(game.ShortName, campaign.AddonId.Id);
-
-        if (!Directory.Exists(saveFolder))
-        {
-            return;
-        }
-
-        var saves = Directory.GetFiles(saveFolder);
-
-        if (game.GameInstallFolder is null)
-        {
-            return;
-        }
-
-        foreach (var save in saves)
-        {
-            var destFileName = Path.Combine(game.GameInstallFolder, Path.GetFileName(save));
-            File.Move(save, destFileName, true);
-        }
-    }
-
-    /// <summary>
-    ///     Moves save files from the game installation folder to the addon's saved games folder.
-    /// </summary>
-    /// <param name="game">The game whose save files are to be moved.</param>
-    /// <param name="campaign">The addon or campaign whose save folder is the destination.</param>
-    protected virtual void MoveSaveFilesToStorage(BaseGame game, BaseAddon campaign)
-    {
-        var saveFolder = GetPathToAddonSavedGamesFolder(game.ShortName, campaign.AddonId.Id);
-
-        ArgumentNullException.ThrowIfNull(game.GameInstallFolder);
-        var path = game.GameInstallFolder;
-
-        var files = from file in Directory.GetFiles(path)
-                    from ext in SaveFileExtensions
-                    where file.EndsWith(ext, StringComparison.OrdinalIgnoreCase)
-                    select file;
-
-        Ensure.DirectoryExists(saveFolder);
-
-        foreach (var file in files)
-        {
-            var destFileName = Path.Combine(saveFolder, Path.GetFileName(file));
-            File.Move(file, destFileName, true);
-        }
+        return game.GameInstallFolder ?? throw new InvalidOperationException(nameof(game.GameInstallFolder));
     }
 }

@@ -1,5 +1,4 @@
 using System.Collections.Immutable;
-using System.Text;
 using Addons.Addons;
 using Avalonia.Desktop.Helpers;
 using Core.All;
@@ -504,10 +503,9 @@ public sealed class PortsHelperTests
         public override ImmutableHashSet<FeatureEnum> SupportedFeatures => _supportedFeatures;
         public override ImmutableHashSet<string> SupportedGamesVersions => _supportedGamesVersions;
         public override bool IsInstalled { get; }
-        public override bool IsSkillSelectionAvailable => false;
         public override string? InstalledVersion => IsInstalled ? "1.0" : null;
         protected override string ConfigFile => "";
-        protected override PortCmdArguments CmdArguments => new()
+        public override PortCmdArguments CmdArguments => new()
         {
             AddDirectory = null,
             MainGrp = null,
@@ -520,14 +518,14 @@ public sealed class PortsHelperTests
             SkillLevel = null,
             AddGameDir = null,
             AddRff = null,
-            AddSnd = null
+            AddSnd = null,
+            SkipIntro = null,
+            SkipStartup = null,
+            SkipSteam = null
         };
 
         public override void AfterEnd(BaseGame game, BaseAddon campaign) { }
         public override void BeforeStart(BaseGame game, BaseAddon campaign) { }
-        protected override void GetStartCampaignArgs(StringBuilder sb, BaseGame game, BaseAddon addon) { }
-        protected override void GetSkipIntroParameter(StringBuilder sb) { }
-        protected override void GetSkipStartupParameter(StringBuilder sb) { }
 
         public void SetSupportedGames(ImmutableHashSet<GameEnum> games) => _supportedGames = games;
         public void SetSupportedFeatures(ImmutableHashSet<FeatureEnum> features) => _supportedFeatures = features;

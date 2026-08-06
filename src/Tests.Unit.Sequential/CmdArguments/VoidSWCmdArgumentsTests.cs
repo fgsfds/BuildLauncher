@@ -1,4 +1,6 @@
 using Addons.Addons;
+using Core.All.Enums;
+using Core.Client.Helpers;
 using Games.Games;
 using Ports.Ports.EDuke32;
 using Tests.Unit.Helpers;
@@ -55,28 +57,26 @@ public sealed class VoidSWCmdArgumentsTests
 
         var args = voidSw.GetStartGameArgs(_wangGame, _wangCamp, mods, [], true, true, 3);
 
-        var expected = "" +
-                       " -g\"enabled_mod.zip\"" +
-                       " -mh\"ENABLED1.DEF\"" +
-                       " -mh\"ENABLED2.DEF\"" +
-                       " -g\"mod_incompatible_with_addon.zip\"" +
-                       " -g\"incompatible_mod_with_compatible_version.zip\"" +
-                       " -g\"dependent_mod.zip\"" +
-                       " -g\"dependent_mod_with_compatible_version.zip\"" +
-                       " -g\"feature_mod.zip\"" +
+        var expected = $"" +
+                       $" -g\"{CmdArgsTestData.EnabledMod}\"" +
+                       $" -mh\"{CmdArgsTestData.EnabledDef1}\"" +
+                       $" -mh\"{CmdArgsTestData.EnabledDef2}\"" +
+                       $" -g\"{CmdArgsTestData.ModIncompatibleWithAddon}\"" +
+                       $" -g\"{CmdArgsTestData.IncompatibleModWithCompatibleVersion}\"" +
+                       $" -g\"{CmdArgsTestData.DependentMod}\"" +
+                       $" -g\"{CmdArgsTestData.DependentModWithCompatibleVersion}\"" +
+                       $" -g\"{CmdArgsTestData.FeatureMod}\"" +
                        $" -j\"{Directory.GetCurrentDirectory()}\\Data\\Addons\\Wang\\Mods\"" +
-                       " -usecwd" +
                        " -j\"D:\\Games\\Wang\"" +
-                       " -h\"a\"" +
                        " -addon0" +
                        " -s3" +
                        " -quick" +
-                       " -nosetup"
-            ;
+                       " -nosetup" +
+                       " -usecwd" +
+                       " -h\"a\"" +
+                       "";
 
-        NormalizerHelper.NormalizeExpectedArgs(ref args, ref expected);
-
-        Assert.Equal(expected, args);
+        CmdArgsAssert.Equal(expected, args);
     }
 
     /// <summary>
@@ -91,25 +91,129 @@ public sealed class VoidSWCmdArgumentsTests
 
         var args = voidSw.GetStartGameArgs(_wangGame, _wangTdCamp, mods, [], true, true, 3);
 
-        var expected = "" +
-                       " -g\"enabled_mod.zip\"" +
-                       " -mh\"ENABLED1.DEF\"" +
-                       " -mh\"ENABLED2.DEF\"" +
-                       " -g\"mod_requires_addon.zip\"" +
+        var expected = $"" +
+                       $" -g\"{CmdArgsTestData.EnabledMod}\"" +
+                       $" -mh\"{CmdArgsTestData.EnabledDef1}\"" +
+                       $" -mh\"{CmdArgsTestData.EnabledDef2}\"" +
+                       $" -g\"{CmdArgsTestData.ModRequiresAddon}\"" +
                        $" -j\"{Directory.GetCurrentDirectory()}\\Data\\Addons\\Wang\\Mods\"" +
-                       " -usecwd -j\"D:\\Games\\Wang\"" +
-                       " -h\"a\"" +
+                       " -j\"D:\\Games\\Wang\"" +
                        " -addon0" +
-                       $" -j\"{Directory.GetCurrentDirectory()}\\Data\\Addons\\Wang\\Campaigns\"" +
+                       $" -j\"{Path.Combine(Directory.GetCurrentDirectory(), "Data", "Addons", "Wang", "Campaigns")}\"" +
                        " -g\"TD.zip\"" +
                        " -s3" +
                        " -quick" +
-                       " -nosetup"
-            ;
+                       " -nosetup" +
+                       " -usecwd" +
+                       " -h\"a\"" +
+                       "";
 
-        NormalizerHelper.NormalizeExpectedArgs(ref args, ref expected);
+        CmdArgsAssert.Equal(expected, args);
+    }
 
-        Assert.Equal(expected, args);
+    /// <summary>
+    ///     Tests that VoidSW generates correct start arguments for a Wang TC in an unpacked folder.
+    /// </summary>
+    [Fact]
+    public void WangTCFolderTest()
+    {
+        VoidSW voidSw = new();
+
+        var folderPath = Path.Combine(Directory.GetCurrentDirectory(), "Data", "Addons", "Wang", "Campaigns", "wang_tc_folder");
+
+        var wangTcFolder = CampaignTestFactory.CreateGenericCampaign(
+            "wang-tc-folder",
+            GameEnum.Wang,
+            new AddonFilePathWrapper(folderPath, "addon.json"));
+
+        var args = voidSw.GetStartGameArgs(_wangGame, wangTcFolder, [], [], true, true, 3);
+
+        var expected = $"" +
+                       $" -j\"D:\\Games\\Wang\"" +
+                       " -addon0" +
+                       $" -game_dir \"{folderPath}\"" +
+                       " -s3" +
+                       " -quick" +
+                       " -nosetup" +
+                       " -usecwd" +
+                       " -h\"a\"" +
+                       "";
+
+        CmdArgsAssert.Equal(expected, args);
+    }
+
+    /// <summary>
+    ///     Tests that VoidSW generates correct start arguments for a Wang total conversion.
+    /// </summary>
+    [Fact]
+    public void WangTcTest()
+    {
+        VoidSW voidSw = new();
+
+        var zipFilePath = Path.Combine(Directory.GetCurrentDirectory(), "Data", "Addons", "Wang", "Campaigns", "wang_tc.zip");
+        var folderPath = Path.GetDirectoryName(zipFilePath);
+
+        var wangTc = CampaignTestFactory.CreateGenericCampaign(
+            "wang-tc",
+            GameEnum.Wang,
+            new AddonFilePathWrapper(zipFilePath, "addon.json"));
+
+        var args = voidSw.GetStartGameArgs(_wangGame, wangTc, [], [], true, true, 3);
+
+        var expected = $"" +
+                       $" -j\"D:\\Games\\Wang\"" +
+                       " -addon0" +
+                       $" -j\"{folderPath}\"" +
+                       $" -g\"wang_tc.zip\"" +
+                       " -s3" +
+                       " -quick" +
+                       " -nosetup" +
+                       " -usecwd" +
+                       " -h\"a\"" +
+                       "";
+
+        CmdArgsAssert.Equal(expected, args);
+    }
+
+    /// <summary>
+    ///     Tests that VoidSW generates correct start arguments for a Wang TC with an executable override.
+    /// </summary>
+    [Fact]
+    public void WangTCExeOverrideTest()
+    {
+        VoidSW voidSw = new();
+
+        var zipFilePath = Path.Combine(Directory.GetCurrentDirectory(), "Data", "Addons", "Wang", "Campaigns", "wang_tc.zip");
+
+        var wangTcExe = CampaignTestFactory.CreateGenericCampaign(
+            "wang-tc-exe",
+            GameEnum.Wang,
+            new AddonFilePathWrapper(zipFilePath, "addon.json"),
+            executables: new Dictionary<OSEnum, Dictionary<PortEnum, string>>
+            {
+                {
+                    OSEnum.Windows, new Dictionary<PortEnum, string>
+                    {
+                        {
+                            PortEnum.VoidSW, "voidsw.exe"
+                        }
+                    }
+                }
+            });
+
+        var args = voidSw.GetStartGameArgs(_wangGame, wangTcExe, [], [], true, true, 3);
+
+        var expected = $"" +
+                       $" -j\"D:\\Games\\Wang\"" +
+                       " -addon0" +
+                       " -s3" +
+                       " -quick" +
+                       " -nosetup" +
+                       " -usecwd" +
+                       " -h\"a\"" +
+                       "";
+
+        CmdArgsAssert.Equal(expected, args);
     }
 
     /// <summary>
@@ -125,27 +229,25 @@ public sealed class VoidSWCmdArgumentsTests
         var args = voidSw.GetStartGameArgs(_wangGame, _wangLooseMap, mods, [], true, true, 3);
 
         var expected = $"" +
-                       $" -g\"enabled_mod.zip\"" +
-                       $" -mh\"ENABLED1.DEF\"" +
-                       $" -mh\"ENABLED2.DEF\"" +
-                       $" -g\"mod_incompatible_with_addon.zip\"" +
-                       $" -g\"incompatible_mod_with_compatible_version.zip\"" +
-                       $" -g\"dependent_mod.zip\"" +
-                       $" -g\"dependent_mod_with_compatible_version.zip\"" +
-                       $" -g\"feature_mod.zip\"" +
+                       $" -g\"{CmdArgsTestData.EnabledMod}\"" +
+                       $" -mh\"{CmdArgsTestData.EnabledDef1}\"" +
+                       $" -mh\"{CmdArgsTestData.EnabledDef2}\"" +
+                       $" -g\"{CmdArgsTestData.ModIncompatibleWithAddon}\"" +
+                       $" -g\"{CmdArgsTestData.IncompatibleModWithCompatibleVersion}\"" +
+                       $" -g\"{CmdArgsTestData.DependentMod}\"" +
+                       $" -g\"{CmdArgsTestData.DependentModWithCompatibleVersion}\"" +
+                       $" -g\"{CmdArgsTestData.FeatureMod}\"" +
                        $" -j\"{Directory.GetCurrentDirectory()}\\Data\\Addons\\Wang\\Mods\"" +
-                       $" -usecwd" +
                        $" -j\"D:\\Games\\Wang\"" +
-                       $" -h\"a\"" +
                        $" -j\"{Directory.GetCurrentDirectory()}\\Data\\Addons\\Wang\\Maps\"" +
-                       $" -map \"LOOSE.MAP\"" +
+                       $" -map \"{CmdArgsTestData.LooseMap}\"" +
                        $" -s3" +
                        $" -quick" +
                        $" -nosetup" +
+                       $" -usecwd" +
+                       $" -h\"a\"" +
                        $"";
 
-        NormalizerHelper.NormalizeExpectedArgs(ref args, ref expected);
-
-        Assert.Equal(expected, args);
+        CmdArgsAssert.Equal(expected, args);
     }
 }

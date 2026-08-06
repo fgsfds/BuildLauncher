@@ -64,4 +64,19 @@ public record PortCmdArguments
     ///     Command-line parameter for adding sound RFF file.
     /// </summary>
     public required string? AddSnd { get; init; }
+
+    /// <summary>
+    ///     Command-line parameter to skip the intro.
+    /// </summary>
+    public required string? SkipIntro { get; init; }
+
+    /// <summary>
+    ///     Command-line parameter to skip the startup window.
+    /// </summary>
+    public required string? SkipStartup { get; init; }
+
+    /// <summary>
+    ///     Command-line parameter to skip the Steam/GOG install search.
+    /// </summary>
+    public required string? SkipSteam { get; init; }
 }

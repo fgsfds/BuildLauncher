@@ -9,7 +9,7 @@ using Ports.Ports.EDuke32;
 using Ports.Providers;
 using Ports.Releases;
 
-namespace Ports;
+namespace Ports.Helpers;
 
 /// <summary>
 ///     Helper for registering port-related dependencies.

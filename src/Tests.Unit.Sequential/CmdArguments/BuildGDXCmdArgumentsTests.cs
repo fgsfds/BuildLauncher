@@ -56,8 +56,7 @@ public sealed class BuildGDXCmdArgumentsTests
         var args = buildGdx.GetStartGameArgs(_dukeGame, _dukeCamp, [], [], true, true);
         var expected = $" -jar ..\\..\\BuildGDX.jar -path \"{_dukeGame.GameInstallFolder}\" -game DUKE_NUKEM_3D";
 
-        NormalizerHelper.NormalizeExpectedArgs(ref args, ref expected);
-        Assert.Equal(expected, args);
+        CmdArgsAssert.Equal(expected, args);
     }
 
     /// <summary>
@@ -70,8 +69,7 @@ public sealed class BuildGDXCmdArgumentsTests
         var args = buildGdx.GetStartGameArgs(_bloodGame, _bloodCamp, [], [], true, true);
         var expected = $" -jar ..\\..\\BuildGDX.jar -path \"{_bloodGame.GameInstallFolder}\" -game BLOOD";
 
-        NormalizerHelper.NormalizeExpectedArgs(ref args, ref expected);
-        Assert.Equal(expected, args);
+        CmdArgsAssert.Equal(expected, args);
     }
 
     /// <summary>
@@ -84,8 +82,7 @@ public sealed class BuildGDXCmdArgumentsTests
         var args = buildGdx.GetStartGameArgs(_wangGame, _wangCamp, [], [], true, true);
         var expected = $" -jar ..\\..\\BuildGDX.jar -path \"{_wangGame.GameInstallFolder}\" -game SHADOW_WARRIOR";
 
-        NormalizerHelper.NormalizeExpectedArgs(ref args, ref expected);
-        Assert.Equal(expected, args);
+        CmdArgsAssert.Equal(expected, args);
     }
 
     /// <summary>
@@ -98,8 +95,7 @@ public sealed class BuildGDXCmdArgumentsTests
         var args = buildGdx.GetStartGameArgs(_slaveGame, _slaveCamp, [], [], true, true);
         var expected = $" -jar ..\\..\\BuildGDX.jar -path \"{_slaveGame.GameInstallFolder}\" -game POWERSLAVE";
 
-        NormalizerHelper.NormalizeExpectedArgs(ref args, ref expected);
-        Assert.Equal(expected, args);
+        CmdArgsAssert.Equal(expected, args);
     }
 
     /// <summary>
@@ -112,8 +108,7 @@ public sealed class BuildGDXCmdArgumentsTests
         var args = buildGdx.GetStartGameArgs(_redneckGame, _redneckCamp, [], [], true, true);
         var expected = $" -jar ..\\..\\BuildGDX.jar -path \"{_redneckGame.GameInstallFolder}\" -game REDNECK_RAMPAGE";
 
-        NormalizerHelper.NormalizeExpectedArgs(ref args, ref expected);
-        Assert.Equal(expected, args);
+        CmdArgsAssert.Equal(expected, args);
     }
 
     /// <summary>
@@ -126,8 +121,7 @@ public sealed class BuildGDXCmdArgumentsTests
         var args = buildGdx.GetStartGameArgs(_redneckGame, _ridesAgainCamp, [], [], true, true);
         var expected = $" -jar ..\\..\\BuildGDX.jar -path \"{_redneckGame.AgainInstallPath}\" -game RR_RIDES_AGAIN";
 
-        NormalizerHelper.NormalizeExpectedArgs(ref args, ref expected);
-        Assert.Equal(expected, args);
+        CmdArgsAssert.Equal(expected, args);
     }
 
     /// <summary>
@@ -140,8 +134,7 @@ public sealed class BuildGDXCmdArgumentsTests
         var args = buildGdx.GetStartGameArgs(_namGame, _namCamp, [], [], true, true);
         var expected = $" -jar ..\\..\\BuildGDX.jar -path \"{_namGame.GameInstallFolder}\" -game NAM";
 
-        NormalizerHelper.NormalizeExpectedArgs(ref args, ref expected);
-        Assert.Equal(expected, args);
+        CmdArgsAssert.Equal(expected, args);
     }
 
     /// <summary>
@@ -154,8 +147,7 @@ public sealed class BuildGDXCmdArgumentsTests
         var args = buildGdx.GetStartGameArgs(_witchavenGame, _witchavenCamp, [], [], true, true);
         var expected = $" -jar ..\\..\\BuildGDX.jar -path \"{_witchavenGame.GameInstallFolder}\" -game WITCHAVEN";
 
-        NormalizerHelper.NormalizeExpectedArgs(ref args, ref expected);
-        Assert.Equal(expected, args);
+        CmdArgsAssert.Equal(expected, args);
     }
 
     /// <summary>
@@ -168,7 +160,6 @@ public sealed class BuildGDXCmdArgumentsTests
         var args = buildGdx.GetStartGameArgs(_tekWarGame, _tekWarCamp, [], [], true, true);
         var expected = $" -jar ..\\..\\BuildGDX.jar -path \"{_tekWarGame.GameInstallFolder}\" -game TEKWAR";
 
-        NormalizerHelper.NormalizeExpectedArgs(ref args, ref expected);
-        Assert.Equal(expected, args);
+        CmdArgsAssert.Equal(expected, args);
     }
 }

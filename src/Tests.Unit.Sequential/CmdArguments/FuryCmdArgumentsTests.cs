@@ -1,5 +1,8 @@
 using Addons.Addons;
+using Core.All.Enums;
+using Core.All.Serializable.Addon;
 using Core.Client.Config;
+using Core.Client.Helpers;
 using Games.Games;
 using Ports.Ports.EDuke32;
 using Tests.Unit.Helpers;
@@ -47,24 +50,119 @@ public sealed class FuryCmdArgumentsTests
         var args = fury.GetStartGameArgs(_game, _camp, mods, [], true, true, 3);
 
         var expected = $"" +
-                       $" -g \"enabled_mod.zip\"" +
-                       $" -mh \"ENABLED1.DEF\"" +
-                       $" -mh \"ENABLED2.DEF\"" +
-                       $" -mx \"ENABLED1.CON\"" +
-                       $" -mx \"ENABLED2.CON\"" +
-                       $" -g \"mod_incompatible_with_addon.zip\"" +
-                       $" -g \"incompatible_mod_with_compatible_version.zip\"" +
-                       $" -g \"dependent_mod.zip\"" +
-                       $" -g \"dependent_mod_with_compatible_version.zip\"" +
-                       $" -g \"feature_mod.zip\"" +
+                       $" -g \"{CmdArgsTestData.EnabledMod}\"" +
+                       $" -mh \"{CmdArgsTestData.EnabledDef1}\"" +
+                       $" -mh \"{CmdArgsTestData.EnabledDef2}\"" +
+                       $" -mx \"{CmdArgsTestData.EnabledCon1}\"" +
+                       $" -mx \"{CmdArgsTestData.EnabledCon2}\"" +
+                       $" -g \"{CmdArgsTestData.ModIncompatibleWithAddon}\"" +
+                       $" -g \"{CmdArgsTestData.IncompatibleModWithCompatibleVersion}\"" +
+                       $" -g \"{CmdArgsTestData.DependentMod}\"" +
+                       $" -g \"{CmdArgsTestData.DependentModWithCompatibleVersion}\"" +
+                       $" -g \"{CmdArgsTestData.FeatureMod}\"" +
                        $" -j \"{Directory.GetCurrentDirectory()}\\Data\\Addons\\Fury\\Mods\"" +
                        $" -s3" +
                        $" -quick" +
                        $" -nosetup" +
                        $"";
 
-        NormalizerHelper.NormalizeExpectedArgs(ref args, ref expected);
+        CmdArgsAssert.Equal(expected, args);
+    }
 
-        Assert.Equal(expected, args);
+    /// <summary>
+    ///     Tests the Fury port command-line arguments for a zipped total conversion.
+    /// </summary>
+    [Fact]
+    public void FuryTCTest()
+    {
+        Fury fury = new(new ConfigProviderFake());
+
+        var zipFilePath = Path.Combine(Directory.GetCurrentDirectory(), "Data", "Fury", "Campaigns", "fury_tc.zip");
+        var folderPath = Path.GetDirectoryName(zipFilePath);
+
+        var tcCamp = CampaignTestFactory.CreateDukeCampaign(
+            "fury-tc",
+            GameEnum.Fury,
+            new AddonFilePathWrapper(zipFilePath, "addon.json"));
+
+        var args = fury.GetStartGameArgs(_game, tcCamp, [], [], true, true);
+
+        var expected = $"" +
+                       $" -j \"{folderPath}\"" +
+                       $" -g \"fury_tc.zip\"" +
+                       " -quick" +
+                       " -nosetup" +
+                       "";
+
+        CmdArgsAssert.Equal(expected, args);
+    }
+
+    /// <summary>
+    ///     Tests the Fury port command-line arguments for an unpacked TC folder.
+    /// </summary>
+    [Fact]
+    public void FuryTCFolderTest()
+    {
+        Fury fury = new(new ConfigProviderFake());
+
+        var folderPath = Path.Combine(Directory.GetCurrentDirectory(), "Data", "Fury", "Campaigns", "fury_tc_folder");
+
+        var tcFolder = CampaignTestFactory.CreateDukeCampaign(
+            "fury-tc-folder",
+            GameEnum.Fury,
+            new AddonFilePathWrapper(folderPath, "addon.json"));
+
+        var args = fury.GetStartGameArgs(_game, tcFolder, [], [], true, true);
+
+        var expected = $"" +
+                       $" -game_dir \"{folderPath}\"" +
+                       " -quick" +
+                       " -nosetup" +
+                       "";
+
+        CmdArgsAssert.Equal(expected, args);
+    }
+
+    /// <summary>
+    ///     Tests the Fury port command-line arguments for a loose map.
+    /// </summary>
+    [Fact]
+    public void FuryLooseMapTest()
+    {
+        Fury fury = new(new ConfigProviderFake());
+
+        var looseMap = new LooseMap
+        {
+            AddonId = new("fury-loose-map", null),
+            Type = AddonTypeEnum.Map,
+            Title = "Fury Loose Map",
+            SupportedGame = new(GameEnum.Fury),
+            FileInfo = new AddonFilePathWrapper("Maps", "LOOSE.MAP"),
+            DependentAddons = null,
+            IncompatibleAddons = null,
+            RequiredFeatures = null,
+            StartMap = new MapFileJsonModel { File = "LOOSE.MAP" },
+            GridImageHash = null,
+            PreviewImageHash = null,
+            Description = null,
+            Author = null,
+            ReleaseDate = null,
+            MainDef = null,
+            AdditionalDefs = null,
+            Executables = null,
+            BloodIni = null,
+            Options = null
+        };
+
+        var args = fury.GetStartGameArgs(_game, looseMap, [], [], true, true);
+
+        var expected = $"" +
+                       $" -j \"{_game.MapsFolderPath}\"" +
+                       $" -map \"{CmdArgsTestData.LooseMap}\"" +
+                       " -quick" +
+                       " -nosetup" +
+                       "";
+
+        CmdArgsAssert.Equal(expected, args);
     }
 }

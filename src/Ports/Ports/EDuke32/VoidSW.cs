@@ -1,10 +1,10 @@
 ﻿using System.Collections.Immutable;
-using System.Text;
 using Addons.Addons;
 using Core.All.Enums;
-using Core.All.Enums.Addons;
 using Core.Client.Helpers;
 using Games.Games;
+using Ports.Builders;
+using Ports.Helpers;
 
 namespace Ports.Ports.EDuke32;
 
@@ -43,7 +43,7 @@ public sealed class VoidSW : EDuke32
     protected override string ConfigFile => "voidsw.cfg";
 
     /// <inheritdoc />
-    protected override PortCmdArguments CmdArguments => base.CmdArguments with
+    public override PortCmdArguments CmdArguments => base.CmdArguments with
     {
         AddDirectory = "-j",
         AddFile = "-g",
@@ -60,134 +60,16 @@ public sealed class VoidSW : EDuke32
     /// <inheritdoc />
     public override void BeforeStart(BaseGame game, BaseAddon campaign)
     {
-        MoveSaveFilesFromStorage(game, campaign);
+        SaveFilesHelper.MoveSaveFilesFromStorage(
+            GetPathToAddonSavedGamesFolder(game.ShortName, campaign.AddonId.Id),
+            GetGameSaveFilesFolder(game, campaign));
         FixConfig();
     }
 
 
     /// <inheritdoc />
-    protected override void GetStartCampaignArgs(StringBuilder sb, BaseGame game, BaseAddon addon)
+    protected override void CustomModifyArgs(CmdParametersBuilder sb, BaseGame game, BaseAddon addon)
     {
-        //don't search for steam/gog installs
-        _ = sb.Append($@" -usecwd {CmdArguments.AddDirectory}""{game.GameInstallFolder}""");
-
-        if (addon.MainDef is not null)
-        {
-            _ = sb.Append($@" {CmdArguments.MainDef}""{addon.MainDef}""");
-        }
-        else
-        {
-            //overriding default def so gamename.def files are ignored
-            _ = sb.Append($@" {CmdArguments.MainDef}""a""");
-        }
-
-        if (addon.AdditionalDefs is not null)
-        {
-            foreach (var def in addon.AdditionalDefs)
-            {
-                _ = sb.Append($@" {CmdArguments.AddDef}""{def}""");
-            }
-        }
-
-
-        if (game is WangGame wGame)
-        {
-            GetWangArgs(sb, wGame, addon);
-        }
-        else
-        {
-            throw new NotSupportedException($"Mod type {addon.Type} for game {game} is not supported");
-        }
-    }
-
-
-    /// <summary>
-    ///     Appends command-line arguments for Shadow Warrior games in VoidSW.
-    /// </summary>
-    /// <param name="sb">String builder for parameters.</param>
-    /// <param name="game">Wang game instance.</param>
-    /// <param name="addon">Campaign or addon.</param>
-    private void GetWangArgs(StringBuilder sb, WangGame game, BaseAddon addon)
-    {
-        if (addon is LooseMap)
-        {
-            GetLooseMapArgs(sb, game, addon);
-
-            return;
-        }
-
-        if (addon is not GenericCampaign wCamp)
-        {
-            throw new ArgumentException($"Expected {nameof(GenericCampaign)} but received {addon.GetType().Name}.", nameof(addon));
-        }
-
-        if (wCamp.DependentAddons?.ContainsKey(nameof(WangAddonEnum.Wanton)) == true)
-        {
-            _ = sb.Append($" -addon{(byte)WangAddonEnum.Wanton}");
-        }
-        else if (wCamp.DependentAddons?.ContainsKey(nameof(WangAddonEnum.TwinDragon)) == true)
-        {
-            _ = sb.Append($" -addon{(byte)WangAddonEnum.TwinDragon}");
-        }
-        else
-        {
-            _ = sb.Append($" -addon{(byte)WangAddonEnum.Base}");
-        }
-
-
-        AddWangMusicFolder(sb, game);
-
-        if (wCamp.FileInfo is null)
-        {
-            return;
-        }
-
-        if (wCamp.Type is AddonTypeEnum.TC)
-        {
-            _ = sb.Append($@" {CmdArguments.AddDirectory}""{game.CampaignsFolderPath}"" {CmdArguments.AddFile}""{wCamp.FileInfo.Value.FileName}""");
-        }
-        else if (wCamp.Type is AddonTypeEnum.Map)
-        {
-            GetMapArgs(sb, wCamp);
-        }
-        else
-        {
-            throw new NotSupportedException($"Mod type {wCamp.Type} is not supported");
-        }
-    }
-
-
-    /// <summary>
-    ///     Adds the music folder to the command-line arguments if the game uses MIDI music.
-    /// </summary>
-    /// <param name="sb">String builder for parameters.</param>
-    /// <param name="game">Wang game instance.</param>
-    private static void AddWangMusicFolder(StringBuilder sb, WangGame game)
-    {
-        if (game.GameInstallFolder is null)
-        {
-            return;
-        }
-
-        if (File.Exists(Path.Combine(game.GameInstallFolder, "track02.ogg")))
-        {
-            return;
-        }
-
-        var folder = Path.Combine(game.GameInstallFolder, "MUSIC");
-
-        if (Directory.Exists(folder))
-        {
-            _ = sb.Append(@$" -j""{folder}""");
-
-            return;
-        }
-
-        folder = Path.Combine(game.GameInstallFolder, "classic", "MUSIC");
-
-        if (Directory.Exists(folder))
-        {
-            _ = sb.Append(@$" -j""{folder}""");
-        }
+        _ = sb.AppendSkipSteam();
     }
 }

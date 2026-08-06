@@ -1,12 +1,12 @@
 ﻿using System.Collections.Immutable;
 using System.Diagnostics;
-using System.Text;
 using Addons.Addons;
 using Core.All.Enums;
-using Core.All.Enums.Addons;
 using Core.All.Enums.Versions;
 using Core.Client.Helpers;
 using Games.Games;
+using Ports.Builders;
+using Ports.Helpers;
 using SharpCompress.Archives;
 using SharpCompress.Archives.Zip;
 
@@ -33,7 +33,7 @@ public class EDuke32 : BasePort
     protected override string ConfigFile => "eduke32.cfg";
 
     /// <inheritdoc />
-    protected override PortCmdArguments CmdArguments => new()
+    public override PortCmdArguments CmdArguments => new()
     {
         AddDirectory = "-j ",
         MainGrp = "-gamegrp ",
@@ -45,6 +45,9 @@ public class EDuke32 : BasePort
         MainCon = "-x ",
         SkillLevel = "-s",
         AddGameDir = "-game_dir ",
+        SkipIntro = " -quick",
+        SkipStartup = " -nosetup",
+        SkipSteam = " -usecwd",
         AddRff = null,
         AddSnd = null
     };
@@ -79,9 +82,6 @@ public class EDuke32 : BasePort
         FeatureEnum.TileFromTexture
     ];
 
-    /// <inheritdoc />
-    public override bool IsSkillSelectionAvailable => true;
-
 
     /// <summary>
     ///     Creates the World Tour stopgap folder with required files if it does not exist.
@@ -112,18 +112,13 @@ public class EDuke32 : BasePort
 
 
     /// <inheritdoc />
-    protected override void GetSkipIntroParameter(StringBuilder sb) => sb.Append(" -quick");
-
-    /// <inheritdoc />
-    protected override void GetSkipStartupParameter(StringBuilder sb) => sb.Append(" -nosetup");
-
-
-    /// <inheritdoc />
     public override void BeforeStart(BaseGame game, BaseAddon campaign)
     {
         CreateWTStopgapFolder();
 
-        MoveSaveFilesFromStorage(game, campaign);
+        SaveFilesHelper.MoveSaveFilesFromStorage(
+            GetPathToAddonSavedGamesFolder(game.ShortName, campaign.AddonId.Id),
+            GetGameSaveFilesFolder(game, campaign));
 
         try
         {
@@ -147,255 +142,16 @@ public class EDuke32 : BasePort
     /// <inheritdoc />
     public override void AfterEnd(BaseGame game, BaseAddon campaign)
     {
-        MoveSaveFilesToStorage(game, campaign);
+        SaveFilesHelper.MoveSaveFilesToStorage(
+            GetPathToAddonSavedGamesFolder(game.ShortName, campaign.AddonId.Id),
+            GetGameSaveFilesFolder(game, campaign));
     }
 
     /// <inheritdoc />
-    protected override void GetStartCampaignArgs(StringBuilder sb, BaseGame game, BaseAddon addon)
+    protected override void CustomModifyArgs(CmdParametersBuilder sb, BaseGame game, BaseAddon addon)
     {
-        _ = sb.Append(" -usecwd"); //don't search for steam/gog installs
+        _ = sb.AppendSkipSteam();
         _ = sb.Append(" -cachesize 262144"); //set cache to 256MiB
-
-        if (addon.MainDef is not null)
-        {
-            _ = sb.Append($@" {CmdArguments.MainDef}""{addon.MainDef}""");
-        }
-        else if (game is FuryGame)
-        {
-            //nothing to do
-        }
-        else
-        {
-            //overriding default def so gamename.def files are ignored
-            _ = sb.Append($@" {CmdArguments.MainDef}""a""");
-        }
-
-        if (addon.AdditionalDefs is not null)
-        {
-            foreach (var def in addon.AdditionalDefs)
-            {
-                _ = sb.Append($@" {CmdArguments.AddDef}""{def}""");
-            }
-        }
-
-        if (game is DukeGame dGame)
-        {
-            GetDukeArgs(sb, dGame, addon);
-        }
-        else if (game is FuryGame fGame)
-        {
-            _ = sb.Append($@" {CmdArguments.AddDirectory}""{game.GameInstallFolder}""");
-
-            GetFuryArgs(sb, fGame, addon);
-        }
-        else if (game is NamGame nGame)
-        {
-            _ = sb.Append($@" {CmdArguments.AddDirectory}""{game.GameInstallFolder}""");
-
-            GetNamWW2GIArgs(sb, nGame, addon);
-        }
-        else if (game is WW2GIGame gBaseGame)
-        {
-            _ = sb.Append($@" {CmdArguments.AddDirectory}""{game.GameInstallFolder}""");
-
-            GetNamWW2GIArgs(sb, gBaseGame, addon);
-        }
-        else
-        {
-            throw new NotSupportedException($"Mod type {addon.Type} for game {game} is not supported");
-        }
-    }
-
-
-    /// <summary>
-    ///     Gets startup arguments for Duke Nukem 3D campaigns.
-    /// </summary>
-    /// <param name="sb">
-    ///     StringBuilder
-    /// </param>
-    /// <param name="game">
-    ///     DukeGame
-    /// </param>
-    /// <param name="addon">
-    ///     DukeCampaign
-    /// </param>
-    protected void GetDukeArgs(StringBuilder sb, DukeGame game, BaseAddon addon)
-    {
-        if (addon.SupportedGame.GameEnum is GameEnum.Duke64)
-        {
-            _ = sb.Append(@$" {CmdArguments.AddDirectory}""{Path.GetDirectoryName(game.Duke64RomPath)}"" {CmdArguments.MainGrp}""{Path.GetFileName(game.Duke64RomPath)}""");
-
-            return;
-        }
-
-        if (addon.SupportedGame.GameVersion?.Equals(nameof(DukeVersionEnum.Duke3D_WT), StringComparison.OrdinalIgnoreCase) == true)
-        {
-            _ = sb.Append($@" {CmdArguments.AddDirectory}""{game.DukeWTInstallPath}"" -addon {(byte)DukeAddonEnum.Base} {CmdArguments.AddDirectory}""{Path.Combine(InstallFolderPath, ClientConsts.WTStopgap)}"" {CmdArguments.MainGrp}e32wt.grp {CmdArguments.AddDef}e32wt.def");
-        }
-        else
-        {
-            _ = sb.Append($@" {CmdArguments.AddDirectory}""{game.GameInstallFolder}""");
-
-            if (addon.DependentAddons is not null)
-            {
-                //DUKE IT OUT IN DC
-                if (addon.DependentAddons.ContainsKey(nameof(DukeAddonEnum.DukeDC)))
-                {
-                    var addonPath = game.AddonsPaths[DukeAddonEnum.DukeDC];
-
-                    if (!addonPath.Equals(game.GameInstallFolder))
-                    {
-                        _ = sb.Append($@" {CmdArguments.AddDirectory}""{addonPath}""");
-                    }
-
-                    _ = sb.Append($" {CmdArguments.AddGrp}DUKEDC.GRP");
-
-                    if (File.Exists(Path.Combine(addonPath, "DUKEDC.CON")))
-                    {
-                        _ = sb.Append($" {CmdArguments.MainCon}DUKEDC.CON");
-                    }
-                }
-                //NUCLEAR WINTER
-                else if (addon.DependentAddons.ContainsKey(nameof(DukeAddonEnum.DukeNW)))
-                {
-                    var addonPath = game.AddonsPaths[DukeAddonEnum.DukeNW];
-
-                    if (!addonPath.Equals(game.GameInstallFolder))
-                    {
-                        _ = sb.Append($@" {CmdArguments.AddDirectory}""{addonPath}""");
-                    }
-
-                    _ = sb.Append($" {CmdArguments.AddGrp}NWINTER.GRP {CmdArguments.MainCon}NWINTER.CON");
-                }
-                //CARIBBEAN
-                else if (addon.DependentAddons.ContainsKey(nameof(DukeAddonEnum.DukeVaca)))
-                {
-                    var addonPath = game.AddonsPaths[DukeAddonEnum.DukeVaca];
-
-                    if (!addonPath.Equals(game.GameInstallFolder))
-                    {
-                        _ = sb.Append($@" {CmdArguments.AddDirectory}""{addonPath}""");
-                    }
-
-                    _ = sb.Append($" {CmdArguments.AddGrp}VACATION.GRP");
-
-                    if (File.Exists(Path.Combine(addonPath, "VACATION.CON")))
-                    {
-                        _ = sb.Append($" {CmdArguments.MainCon}VACATION.CON");
-                    }
-                }
-            }
-        }
-
-        if (addon.FileInfo is null)
-        {
-            return;
-        }
-
-        if (addon is LooseMap)
-        {
-            GetLooseMapArgs(sb, game, addon);
-
-            return;
-        }
-
-        if (addon is not DukeCampaign dCamp)
-        {
-            throw new ArgumentException($"Expected {nameof(DukeCampaign)} but received {addon.GetType().Name}.", nameof(addon));
-        }
-
-        if (dCamp.MainCon is not null)
-        {
-            _ = sb.Append($@" {CmdArguments.MainCon}""{dCamp.MainCon}""");
-        }
-
-        if (dCamp.AdditionalCons?.Any() is true)
-        {
-            foreach (var con in dCamp.AdditionalCons)
-            {
-                _ = sb.Append($@" {CmdArguments.AddCon}""{con}""");
-            }
-        }
-
-
-        if (dCamp.Type is AddonTypeEnum.TC)
-        {
-            if (dCamp.Executables is not null)
-            {
-                //don't add addon dir if the port is overridden
-            }
-            else
-            {
-                _ = sb.Append($@" {CmdArguments.AddFile}""{addon.FileInfo.Value.PathToFile}""");
-            }
-        }
-        else if (dCamp.Type is AddonTypeEnum.Map)
-        {
-            GetMapArgs(sb, dCamp);
-        }
-        else
-        {
-            throw new NotSupportedException($"Mod type {dCamp.Type} is not supported");
-        }
-    }
-
-    /// <summary>
-    ///     Appends command-line arguments for Ion Fury games.
-    /// </summary>
-    /// <param name="sb">
-    ///     String builder for parameters.
-    /// </param>
-    /// <param name="game">
-    ///     Fury game instance.
-    /// </param>
-    /// <param name="addon">
-    ///     Campaign or addon.
-    /// </param>
-    protected void GetFuryArgs(StringBuilder sb, FuryGame game, BaseAddon addon)
-    {
-        if (addon.FileInfo is null)
-        {
-            return;
-        }
-
-        if (addon is LooseMap)
-        {
-            GetLooseMapArgs(sb, game, addon);
-
-            return;
-        }
-
-        if (addon is not DukeCampaign fCamp)
-        {
-            throw new ArgumentException($"Expected {nameof(DukeCampaign)} but received {addon.GetType().Name}.", nameof(addon));
-        }
-
-        if (fCamp.MainCon is not null)
-        {
-            _ = sb.Append($@" {CmdArguments.MainCon}""{fCamp.MainCon}""");
-        }
-
-        if (fCamp.AdditionalCons?.Any() is true)
-        {
-            foreach (var con in fCamp.AdditionalCons)
-            {
-                _ = sb.Append($@" {CmdArguments.AddCon}""{con}""");
-            }
-        }
-
-
-        if (fCamp.Type is AddonTypeEnum.TC)
-        {
-            _ = sb.Append($@" {CmdArguments.AddFile}""{addon.FileInfo.Value.PathToFile}""");
-        }
-        else if (fCamp.Type is AddonTypeEnum.Map)
-        {
-            GetMapArgs(sb, fCamp);
-        }
-        else
-        {
-            throw new NotSupportedException($"Mod type {fCamp.Type} is not supported");
-        }
     }
 
 
@@ -466,7 +222,7 @@ public class EDuke32 : BasePort
 
         if (campaign.AddonId.Id.Equals(nameof(DukeVersionEnum.Duke3D_WT), StringComparison.OrdinalIgnoreCase))
         {
-            RestoreWtFiles(game);
+            FilesHelpers.RestoreWtFiles(game);
         }
         else
         {
@@ -493,54 +249,13 @@ public class EDuke32 : BasePort
     }
 
     /// <inheritdoc />
-    protected override void MoveSaveFilesFromStorage(BaseGame game, BaseAddon campaign)
+    protected override string GetGameSaveFilesFolder(BaseGame game, BaseAddon campaign)
     {
-        var saveFolder = GetPathToAddonSavedGamesFolder(game.ShortName, campaign.AddonId.Id);
-
-        if (!Directory.Exists(saveFolder))
-        {
-            return;
-        }
-
-        var saves = Directory.GetFiles(saveFolder);
-
-        var firstPart = campaign.FileInfo is not null && campaign.FileInfo.Value.IsFolder ? campaign.FileInfo.Value.PathToFolder : InstallFolderPath;
-
-        foreach (var save in saves)
-        {
-            var destFileName = Path.Combine(firstPart, Path.GetFileName(save));
-            File.Move(save, destFileName, true);
-        }
-    }
-
-    /// <inheritdoc />
-    protected override void MoveSaveFilesToStorage(BaseGame game, BaseAddon campaign)
-    {
-        //copying saved games into separate folder
-        var saveFolder = GetPathToAddonSavedGamesFolder(game.ShortName, campaign.AddonId.Id);
-
-        string path;
-
         if (campaign.FileInfo is not null && campaign.FileInfo.Value.IsFolder)
         {
-            path = campaign.FileInfo.Value.PathToFolder;
-        }
-        else
-        {
-            path = InstallFolderPath;
+            return campaign.FileInfo.Value.PathToFolder;
         }
 
-        var files = from file in Directory.GetFiles(path)
-                    from ext in SaveFileExtensions
-                    where file.EndsWith(ext, StringComparison.OrdinalIgnoreCase)
-                    select file;
-
-        Ensure.DirectoryExists(saveFolder);
-
-        foreach (var file in files)
-        {
-            var destFileName = Path.Combine(saveFolder, Path.GetFileName(file));
-            File.Move(file, destFileName, true);
-        }
+        return InstallFolderPath;
     }
 }

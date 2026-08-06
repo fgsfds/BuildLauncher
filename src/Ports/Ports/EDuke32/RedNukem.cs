@@ -1,11 +1,12 @@
 ﻿using System.Collections.Immutable;
-using System.Text;
 using Addons.Addons;
 using Core.All.Enums;
 using Core.All.Enums.Addons;
 using Core.All.Enums.Versions;
 using Games.Games;
 using Microsoft.Extensions.Logging;
+using Ports.Builders;
+using Ports.Helpers;
 
 namespace Ports.Ports.EDuke32;
 
@@ -43,7 +44,7 @@ public sealed class RedNukem : EDuke32
     public override string Name => "RedNukem";
 
     /// <inheritdoc />
-    protected override PortCmdArguments CmdArguments => base.CmdArguments with
+    public override PortCmdArguments CmdArguments => base.CmdArguments with
     {
         AddGrp = "-g "
     };
@@ -79,77 +80,25 @@ public sealed class RedNukem : EDuke32
     {
         CreateBlankDemo();
         CreateOrDeleteBlankAnm(true);
-        MoveSaveFilesFromStorage(game, campaign);
+        SaveFilesHelper.MoveSaveFilesFromStorage(
+            GetPathToAddonSavedGamesFolder(game.ShortName, campaign.AddonId.Id),
+            GetGameSaveFilesFolder(game, campaign));
         FixConfig();
         FixRoute66Files(game, campaign);
         FixWtFiles(game, campaign);
     }
 
-
     /// <inheritdoc />
-    protected override void GetStartCampaignArgs(StringBuilder sb, BaseGame game, BaseAddon addon)
+    protected override void CustomModifyArgs(CmdParametersBuilder sb, BaseGame game, BaseAddon addon)
     {
-        //don't search for steam/gog installs
-        _ = sb.Append(" -usecwd");
-        _ = sb.Append(" -d blank.edm");
-
-        if (addon.MainDef is not null)
-        {
-            _ = sb.Append($@" {CmdArguments.MainDef}""{addon.MainDef}""");
-        }
-        else
-        {
-            //overriding default def so gamename.def files are ignored
-            _ = sb.Append($@" {CmdArguments.MainDef}""a""");
-        }
-
-        if (addon.AdditionalDefs is not null)
-        {
-            foreach (var def in addon.AdditionalDefs)
-            {
-                _ = sb.Append($@" {CmdArguments.AddDef}""{def}""");
-            }
-        }
-
-
-        if (game is DukeGame dGame)
-        {
-            GetDukeArgs(sb, dGame, addon);
-        }
-        else if (game is RedneckGame rGame)
-        {
-            GetRedneckArgs(sb, rGame, addon);
-        }
-        else if (game is NamGame nGame)
-        {
-            _ = sb.Append($@" {CmdArguments.AddDirectory}""{game.GameInstallFolder}""");
-
-            GetNamWW2GIArgs(sb, nGame, addon);
-        }
-        else if (game is WW2GIGame giGame)
-        {
-            _ = sb.Append($@" {CmdArguments.AddDirectory}""{game.GameInstallFolder}""");
-
-            GetNamWW2GIArgs(sb, giGame, addon);
-        }
-        else
-        {
-            throw new NotSupportedException($"Mod type {addon.Type} for game {game} is not supported");
-        }
-    }
-
-    /// <inheritdoc />
-    protected override void GetSkipIntroParameter(StringBuilder sb)
-    {
-        _ = sb.Append(" -quick");
-        CreateOrDeleteBlankAnm(false);
+        _ = sb.AppendSkipSteam();
     }
 
     /// <summary>
     ///     Creates or deletes blank animation files to skip or restore intros.
     /// </summary>
     /// <param name="isDelete"><see langword="true" /> to delete the files; <see langword="false" /> to create them.</param>
-    private void CreateOrDeleteBlankAnm(bool isDelete)
+    internal void CreateOrDeleteBlankAnm(bool isDelete)
     {
         ImmutableArray<string> files =
         [
@@ -200,80 +149,6 @@ public sealed class RedNukem : EDuke32
     }
 
     /// <summary>
-    ///     Appends command-line arguments for Redneck Rampage games in RedNukem.
-    /// </summary>
-    /// <param name="sb">String builder for parameters.</param>
-    /// <param name="game">Redneck game instance.</param>
-    /// <param name="addon">Campaign or addon.</param>
-    private void GetRedneckArgs(StringBuilder sb, RedneckGame game, BaseAddon addon)
-    {
-        if (addon.SupportedGame.GameEnum is GameEnum.RidesAgain)
-        {
-            _ = sb.Append($@" {CmdArguments.AddDirectory}""{game.AgainInstallPath}""");
-        }
-        else if (addon.DependentAddons?.ContainsKey(nameof(RedneckAddonEnum.Route66)) is true)
-        {
-            _ = sb.Append($@" {CmdArguments.AddDirectory}""{game.GameInstallFolder}"" -x GAME66.CON");
-        }
-        else
-        {
-            _ = sb.Append($@" {CmdArguments.AddDirectory}""{game.GameInstallFolder}""");
-        }
-
-        if (addon.FileInfo is null)
-        {
-            return;
-        }
-
-        if (addon is LooseMap)
-        {
-            GetLooseMapArgs(sb, game, addon);
-
-            return;
-        }
-
-        if (addon is not DukeCampaign rCamp)
-        {
-            throw new ArgumentException($"Expected {nameof(DukeCampaign)} but received {addon.GetType().Name}.", nameof(addon));
-        }
-
-        if (rCamp.MainCon is not null)
-        {
-            _ = sb.Append($@" {CmdArguments.MainCon}""{rCamp.MainCon}""");
-        }
-
-        if (rCamp.AdditionalCons?.Any() is true)
-        {
-            foreach (var con in rCamp.AdditionalCons)
-            {
-                _ = sb.Append($@" {CmdArguments.AddCon}""{con}""");
-            }
-        }
-
-
-        if (rCamp.Type is AddonTypeEnum.TC)
-        {
-            if (rCamp.Executables is not null)
-            {
-                //don't add addon dir if the port is overridden
-            }
-            else
-            {
-                _ = sb.Append($@" {CmdArguments.AddFile}""{addon.FileInfo.Value.PathToFile}""");
-            }
-        }
-        else if (rCamp.Type is AddonTypeEnum.Map)
-        {
-            GetMapArgs(sb, rCamp);
-        }
-        else
-        {
-            throw new NotSupportedException($"Mod type {rCamp.Type} is not supported");
-        }
-    }
-
-
-    /// <summary>
     ///     Copies or restores Route 66 art and video files for RedNukem.
     /// </summary>
     /// <param name="game">Game instance.</param>
@@ -318,7 +193,7 @@ public sealed class RedNukem : EDuke32
         }
         else
         {
-            RestoreRoute66Files(game);
+            FilesHelpers.RestoreRoute66Files(game);
         }
     }
 

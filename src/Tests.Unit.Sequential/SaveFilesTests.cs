@@ -1,4 +1,3 @@
-using System.Text;
 using Addons.Addons;
 using Core.All.Enums;
 using Core.Client.Helpers;
@@ -332,7 +331,6 @@ public sealed class SaveFilesTests : IDisposable
     public void GetMapArgs_NullFileInfo_ThrowsInvalidOperationException()
     {
         var port = new BasePortTestProxy();
-        var sb = new StringBuilder();
 
         var camp = new DukeCampaign
         {
@@ -359,17 +357,16 @@ public sealed class SaveFilesTests : IDisposable
             Options = null
         };
 
-        Assert.Throws<InvalidOperationException>(() => port.CallGetMapArgs(sb, camp));
+        Assert.Throws<InvalidOperationException>(() => port.CallGetMapArgs(_game, camp));
     }
 
     /// <summary>
     ///     Tests that getting options args with a DEF option appends the AddDef parameter.
     /// </summary>
     [Fact]
-    public void GetOptionsArgs_DefOption_AppendsAddDefParam()
+    public void GetOptionsArgs_DefOption_AppendsAddDef()
     {
         var port = new BasePortTestProxy();
-        var sb = new StringBuilder();
 
         var game = new DukeGame
         {
@@ -419,10 +416,10 @@ public sealed class SaveFilesTests : IDisposable
             "opt1"
         };
 
-        port.CallGetOptionsArgs(sb, game, addon, enabledOptions);
+        var args = port.CallGetOptionsArgs(game, addon, enabledOptions);
 
-        // AddDefParam is string.Empty in the proxy, so it outputs just `"test.def"`
-        Assert.Contains("\"test.def\"", sb.ToString());
+        // AddDef is null in the proxy, so it outputs just `"test.def"`
+        Assert.Contains("\"test.def\"", args);
     }
 
     private void CleanupParentDirs(string path)

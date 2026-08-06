@@ -1,5 +1,4 @@
 ﻿using System.Collections.Immutable;
-using System.Text;
 using Addons.Addons;
 using Core.All.Enums;
 using Games.Games;
@@ -33,13 +32,10 @@ public sealed class StubPort : BasePort
     public override string? InstalledVersion => string.Empty;
 
     /// <inheritdoc />
-    public override bool IsSkillSelectionAvailable => false;
-
-    /// <inheritdoc />
     protected override string ConfigFile => string.Empty;
 
     /// <inheritdoc />
-    protected override PortCmdArguments CmdArguments => new()
+    public override PortCmdArguments CmdArguments => new()
     {
         AddDirectory = null,
         MainGrp = null,
@@ -52,7 +48,10 @@ public sealed class StubPort : BasePort
         SkillLevel = null,
         AddGameDir = null,
         AddRff = null,
-        AddSnd = null
+        AddSnd = null,
+        SkipIntro = null,
+        SkipStartup = null,
+        SkipSteam = null
     };
 
     /// <inheritdoc />
@@ -60,16 +59,4 @@ public sealed class StubPort : BasePort
 
     /// <inheritdoc />
     public override void BeforeStart(BaseGame game, BaseAddon campaign) { }
-
-    /// <inheritdoc />
-    protected override void GetAutoloadModsArgs(StringBuilder sb, BaseGame game, BaseAddon addon, IReadOnlyList<BaseAddon> mods) { }
-
-    /// <inheritdoc />
-    protected override void GetSkipIntroParameter(StringBuilder sb) { }
-
-    /// <inheritdoc />
-    protected override void GetSkipStartupParameter(StringBuilder sb) { }
-
-    /// <inheritdoc />
-    protected override void GetStartCampaignArgs(StringBuilder sb, BaseGame game, BaseAddon addon) { }
 }

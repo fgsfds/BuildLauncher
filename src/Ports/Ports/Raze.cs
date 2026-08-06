@@ -3,9 +3,10 @@ using System.Diagnostics;
 using System.Text;
 using Addons.Addons;
 using Core.All.Enums;
-using Core.All.Enums.Addons;
 using Core.All.Enums.Versions;
 using Games.Games;
+using Ports.Builders;
+using Ports.Helpers;
 
 namespace Ports.Ports;
 
@@ -53,14 +54,10 @@ public sealed class Raze : BasePort
         : null;
 
     /// <inheritdoc />
-    public override bool IsSkillSelectionAvailable => false;
-
-
-    /// <inheritdoc />
     protected override string ConfigFile => "raze_portable.ini";
 
     /// <inheritdoc />
-    protected override PortCmdArguments CmdArguments => new()
+    public override PortCmdArguments CmdArguments => new()
     {
         AddDirectory = "-file ",
         MainGrp = "-file ",
@@ -73,7 +70,10 @@ public sealed class Raze : BasePort
         SkillLevel = null,
         AddGameDir = "-file ",
         AddRff = "-file ",
-        AddSnd = "-file "
+        AddSnd = "-file ",
+        SkipIntro = " -quick",
+        SkipStartup = " -nosetup",
+        SkipSteam = null
     };
 
     /// <inheritdoc />
@@ -87,13 +87,6 @@ public sealed class Raze : BasePort
         FeatureEnum.SndInfo,
         FeatureEnum.TileFromTexture
     ];
-
-    /// <inheritdoc />
-    protected override void GetSkipIntroParameter(StringBuilder sb) => sb.Append(" -quick");
-
-    /// <inheritdoc />
-    protected override void GetSkipStartupParameter(StringBuilder sb) => sb.Append(" -nosetup");
-
 
     /// <inheritdoc />
     public override void BeforeStart(BaseGame game, BaseAddon campaign)
@@ -137,9 +130,9 @@ public sealed class Raze : BasePort
             ArgumentNullException.ThrowIfNull(game.GameInstallFolder);
             AddGamePathsToConfig(game, campaign, game.GameInstallFolder, config);
 
-            RestoreRoute66Files(game);
+            FilesHelpers.RestoreRoute66Files(game);
 
-            RestoreWtFiles(game);
+            FilesHelpers.RestoreWtFiles(game);
         }
         catch (Exception ex)
         {
@@ -154,266 +147,9 @@ public sealed class Raze : BasePort
     }
 
     /// <inheritdoc />
-    protected override void GetStartCampaignArgs(StringBuilder sb, BaseGame game, BaseAddon addon)
+    protected override void CustomModifyArgs(CmdParametersBuilder sb, BaseGame game, BaseAddon addon)
     {
         _ = sb.Append($@" -savedir ""{GetPathToAddonSavedGamesFolder(game.ShortName, addon.AddonId.Id)}""");
-
-        if (addon.MainDef is not null)
-        {
-            _ = sb.Append($@" {CmdArguments.MainDef}""{addon.MainDef}""");
-        }
-        else
-        {
-            //overriding default def so gamename.def files are ignored
-            _ = sb.Append($@" {CmdArguments.MainDef}""a""");
-        }
-
-        if (addon.AdditionalDefs is not null)
-        {
-            foreach (var def in addon.AdditionalDefs)
-            {
-                _ = sb.Append($@" {CmdArguments.AddDef}""{def}""");
-            }
-        }
-
-        if (game is DukeGame dGame)
-        {
-            GetDukeArgs(sb, dGame, addon);
-        }
-        else if (game is NamGame nGame)
-        {
-            GetNamWW2GIArgs(sb, nGame, addon);
-        }
-        else if (game is WW2GIGame gBaseGame)
-        {
-            GetNamWW2GIArgs(sb, gBaseGame, addon);
-        }
-        else if (game is BloodGame bGame)
-        {
-            GetBloodArgs(sb, bGame, addon);
-        }
-        else if (game is WangGame wGame)
-        {
-            GetWangArgs(sb, wGame, addon);
-        }
-        else if (game is SlaveGame sGame)
-        {
-            GetSlaveArgs(sb, sGame, addon);
-        }
-        else if (game is RedneckGame rGame)
-        {
-            GetRedneckArgs(sb, rGame, addon);
-        }
-        else
-        {
-            throw new NotSupportedException($"Mod type {addon} for game {game} is not supported");
-        }
-    }
-
-    /// <summary>
-    ///     Appends command-line arguments for Duke Nukem 3D games in Raze.
-    /// </summary>
-    /// <param name="sb">String builder for parameters.</param>
-    /// <param name="game">Duke game instance.</param>
-    /// <param name="addon">Campaign or addon.</param>
-    private void GetDukeArgs(StringBuilder sb, DukeGame game, BaseAddon addon)
-    {
-        if (addon is LooseMap)
-        {
-            GetLooseMapArgs(sb, game, addon);
-
-            return;
-        }
-
-        if (addon is not DukeCampaign dCamp)
-        {
-            throw new ArgumentException($"Expected {nameof(DukeCampaign)} but received {addon.GetType().Name}.", nameof(addon));
-        }
-
-        if (dCamp.SupportedGame.GameVersion is not null &&
-            dCamp.SupportedGame.GameVersion.Equals(nameof(DukeVersionEnum.Duke3D_WT), StringComparison.OrdinalIgnoreCase))
-        {
-            var config = Path.Combine(InstallFolderPath, ConfigFile);
-
-            ArgumentNullException.ThrowIfNull(game.DukeWTInstallPath);
-            AddGamePathsToConfig(game, addon, game.DukeWTInstallPath, config);
-
-            _ = sb.Append($" -addon {(byte)DukeAddonEnum.Base}");
-        }
-        else
-        {
-            var dukeAddon = (byte)DukeAddonEnum.Base;
-
-            if (dCamp.DependentAddons is null)
-            {
-                dukeAddon = (byte)DukeAddonEnum.Base;
-            }
-            else if (dCamp.DependentAddons.ContainsKey(nameof(DukeAddonEnum.DukeDC)))
-            {
-                dukeAddon = (byte)DukeAddonEnum.DukeDC;
-            }
-            else if (dCamp.DependentAddons.ContainsKey(nameof(DukeAddonEnum.DukeNW)))
-            {
-                dukeAddon = (byte)DukeAddonEnum.DukeNW;
-            }
-            else if (dCamp.DependentAddons.ContainsKey(nameof(DukeAddonEnum.DukeVaca)))
-            {
-                dukeAddon = (byte)DukeAddonEnum.DukeVaca;
-            }
-
-            _ = sb.Append($" -addon {dukeAddon}");
-        }
-
-        if (dCamp.FileInfo is null)
-        {
-            return;
-        }
-
-        if (dCamp.MainCon is not null)
-        {
-            _ = sb.Append($@" {CmdArguments.MainCon}""{dCamp.MainCon}""");
-        }
-
-        if (dCamp.AdditionalCons?.Any() is true)
-        {
-            foreach (var con in dCamp.AdditionalCons)
-            {
-                _ = sb.Append($@" {CmdArguments.AddCon}""{con}""");
-            }
-        }
-
-
-        if (dCamp.Type is AddonTypeEnum.TC)
-        {
-            _ = sb.Append($@" {CmdArguments.AddFile}""{dCamp.FileInfo.Value.PathToFile}""");
-        }
-        else if (dCamp.Type is AddonTypeEnum.Map)
-        {
-            GetMapArgs(sb, dCamp);
-        }
-        else
-        {
-            throw new NotSupportedException($"Mod type {dCamp.Type} is not supported");
-        }
-    }
-
-    /// <summary>
-    ///     Appends command-line arguments for Shadow Warrior games in Raze.
-    /// </summary>
-    /// <param name="sb">String builder for parameters.</param>
-    /// <param name="game">Wang game instance.</param>
-    /// <param name="addon">Campaign or addon.</param>
-    private void GetWangArgs(StringBuilder sb, WangGame game, BaseAddon addon)
-    {
-        if (addon is LooseMap)
-        {
-            GetLooseMapArgs(sb, game, addon);
-
-            return;
-        }
-
-        if (addon is not GenericCampaign wCamp)
-        {
-            throw new ArgumentException($"Expected {nameof(GenericCampaign)} but received {addon.GetType().Name}.", nameof(addon));
-        }
-
-        //TODO downloaded addons support
-        if (wCamp.DependentAddons is not null &&
-            wCamp.DependentAddons.ContainsKey(nameof(WangAddonEnum.Wanton)))
-        {
-            _ = sb.Append($" {CmdArguments.AddFile}WT.GRP");
-        }
-        else if (wCamp.DependentAddons is not null &&
-                 wCamp.DependentAddons.ContainsKey(nameof(WangAddonEnum.TwinDragon)))
-        {
-            _ = sb.Append($" {CmdArguments.AddFile}TD.GRP");
-        }
-
-        if (wCamp.FileInfo is null)
-        {
-            return;
-        }
-
-        if (wCamp.Type is AddonTypeEnum.TC)
-        {
-            _ = sb.Append($@" {CmdArguments.AddFile}""{wCamp.FileInfo.Value.PathToFile}""");
-        }
-        else if (wCamp.Type is AddonTypeEnum.Map)
-        {
-            GetMapArgs(sb, wCamp);
-        }
-        else
-        {
-            throw new NotSupportedException($"Mod type {wCamp.Type} is not supported");
-        }
-    }
-
-    /// <summary>
-    ///     Appends command-line arguments for Redneck Rampage games in Raze.
-    /// </summary>
-    /// <param name="sb">String builder for parameters.</param>
-    /// <param name="game">Redneck game instance.</param>
-    /// <param name="addon">Campaign or addon.</param>
-    private void GetRedneckArgs(StringBuilder sb, RedneckGame game, BaseAddon addon)
-    {
-        if (addon is LooseMap)
-        {
-            GetLooseMapArgs(sb, game, addon);
-
-            return;
-        }
-
-        if (addon is not DukeCampaign rCamp)
-        {
-            throw new ArgumentException($"Expected {nameof(DukeCampaign)} but received {addon.GetType().Name}.", nameof(addon));
-        }
-
-        if (rCamp.DependentAddons is not null &&
-            rCamp.DependentAddons.ContainsKey(nameof(RedneckAddonEnum.Route66)))
-        {
-            _ = sb.Append(" -route66");
-
-            return;
-        }
-
-        if (rCamp.SupportedGame.GameEnum is GameEnum.RidesAgain)
-        {
-            var pathToConfig = Path.Combine(InstallFolderPath, ConfigFile);
-            ArgumentNullException.ThrowIfNull(game.AgainInstallPath);
-            AddGamePathsToConfig(game, addon, game.AgainInstallPath, pathToConfig);
-        }
-
-        if (rCamp.FileInfo is null)
-        {
-            return;
-        }
-
-        if (rCamp.MainCon is not null)
-        {
-            _ = sb.Append($@" {CmdArguments.MainCon}""{rCamp.MainCon}""");
-        }
-
-        if (rCamp.AdditionalCons?.Any() is true)
-        {
-            foreach (var con in rCamp.AdditionalCons)
-            {
-                _ = sb.Append($@" {CmdArguments.AddCon}""{con}""");
-            }
-        }
-
-
-        if (rCamp.Type is AddonTypeEnum.TC)
-        {
-            _ = sb.Append($@" {CmdArguments.AddFile}""{rCamp.FileInfo.Value.PathToFile}""");
-        }
-        else if (rCamp.Type is AddonTypeEnum.Map)
-        {
-            GetMapArgs(sb, rCamp);
-        }
-        else
-        {
-            throw new NotSupportedException($"Mod type {rCamp.Type} is not supported");
-        }
     }
 
     /// <summary>
@@ -423,7 +159,7 @@ public sealed class Raze : BasePort
     /// <param name="campaign">Campaign or addon.</param>
     /// <param name="gameInstallFolder">Path to the game install folder.</param>
     /// <param name="config">Path to the config file.</param>
-    private static void AddGamePathsToConfig(BaseGame game, BaseAddon campaign, string gameInstallFolder, string config)
+    internal static void AddGamePathsToConfig(BaseGame game, BaseAddon campaign, string gameInstallFolder, string config)
     {
         try
         {
@@ -476,13 +212,24 @@ public sealed class Raze : BasePort
                     var path = game.ModsFolderPath.Replace('\\', '/');
                     _ = sb.Append("Path=").AppendLine(path);
 
-                    //blood unpacked addons
+                    //unpacked addon folder
                     if (campaign is BloodCampaign bCamp &&
                         bCamp.FileInfo is not null &&
                         bCamp.FileInfo.Value.IsFolder)
                     {
                         path = bCamp.FileInfo.Value.PathToFolder.Replace('\\', '/');
                         _ = sb.Append("Path=").AppendLine(path);
+                    }
+
+                    //zipped addon folder (parent directory), unless it's the game install folder
+                    if (campaign.FileInfo is not null && !campaign.FileInfo.Value.IsFolder)
+                    {
+                        var addonFolder = campaign.FileInfo.Value.PathToFolder.Replace('\\', '/');
+
+                        if (!addonFolder.Equals(gameInstallFolder.Replace('\\', '/'), StringComparison.OrdinalIgnoreCase))
+                        {
+                            _ = sb.Append("Path=").AppendLine(addonFolder);
+                        }
                     }
 
                     while (i < contents.Length && !string.IsNullOrWhiteSpace(contents[i]))

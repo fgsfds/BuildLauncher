@@ -1,9 +1,10 @@
 ﻿using System.Collections.Immutable;
-using System.Text;
 using Addons.Addons;
 using Core.All.Enums;
 using Core.Client.Interfaces;
 using Games.Games;
+using Ports.Builders;
+using Ports.Helpers;
 
 namespace Ports.Ports.EDuke32;
 
@@ -69,36 +70,15 @@ public sealed class Fury : EDuke32
     /// <inheritdoc />
     public override void BeforeStart(BaseGame game, BaseAddon campaign)
     {
-        MoveSaveFilesFromStorage(game, campaign);
+        SaveFilesHelper.MoveSaveFilesFromStorage(
+            GetPathToAddonSavedGamesFolder(game.ShortName, campaign.AddonId.Id),
+            GetGameSaveFilesFolder(game, campaign));
         FixConfig();
     }
 
 
     /// <inheritdoc />
-    protected override void GetStartCampaignArgs(StringBuilder sb, BaseGame game, BaseAddon addon)
+    protected override void CustomModifyArgs(CmdParametersBuilder sb, BaseGame game, BaseAddon addon)
     {
-        if (addon.MainDef is not null)
-        {
-            _ = sb.Append($@" {CmdArguments.MainDef}""{addon.MainDef}""");
-        }
-        //no need to override main def
-
-        if (addon.AdditionalDefs is not null)
-        {
-            foreach (var def in addon.AdditionalDefs)
-            {
-                _ = sb.Append($@" {CmdArguments.AddDef}""{def}""");
-            }
-        }
-
-
-        if (game is FuryGame fGame)
-        {
-            GetFuryArgs(sb, fGame, addon);
-        }
-        else
-        {
-            throw new NotSupportedException($"Mod type {addon.Type} for game {game} is not supported");
-        }
     }
 }

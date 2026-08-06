@@ -414,7 +414,7 @@ internal static class PortTestSetups
             Description = null,
             SupportedGame = new(GameEnum.Duke3D, DukeVersionEnum.Duke3D_Atomic),
             RequiredFeatures = null,
-            FileInfo = new(Path.Combine(Directory.GetCurrentDirectory(), "Data", "Duke3D", "Campaigns"), "duke_tc.zip"),
+            FileInfo = new(Path.Combine(Directory.GetCurrentDirectory(), "Data", "Duke3D", "Campaigns", "duke_tc.zip"), "duke_tc.zip"),
             DependentAddons = new Dictionary<string, string?>
             {
                 {
@@ -627,7 +627,7 @@ internal static class PortTestSetups
             Description = null,
             SupportedGame = new(GameEnum.Wang),
             RequiredFeatures = null,
-            FileInfo = new(Path.Combine("D:", "Games", "Wang"), "TD.zip"),
+            FileInfo = new(Path.Combine(Directory.GetCurrentDirectory(), "Data", "Addons", "Wang", "Campaigns", "TD.zip"), "TD.zip"),
             DependentAddons = null,
             IncompatibleAddons = null,
             MainDef = null,

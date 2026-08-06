@@ -1,13 +1,11 @@
 ﻿using System.Collections.Immutable;
-using System.Text;
 using Addons.Addons;
 using Core.All.Enums;
-using Core.All.Enums.Addons;
 using Core.All.Enums.Versions;
-using Core.Client.Helpers;
 using Games.Games;
 using Microsoft.Extensions.Logging;
-using SharpCompress.Archives;
+using Ports.Builders;
+using Ports.Helpers;
 
 namespace Ports.Ports;
 
@@ -73,14 +71,10 @@ public sealed class DosBox : BasePort
     public override ImmutableHashSet<FeatureEnum> SupportedFeatures { get; } = [];
 
     /// <inheritdoc />
-    public override bool IsSkillSelectionAvailable => false;
-
-
-    /// <inheritdoc />
     protected override string ConfigFile => string.Empty;
 
     /// <inheritdoc />
-    protected override PortCmdArguments CmdArguments => new()
+    public override PortCmdArguments CmdArguments => new()
     {
         AddDirectory = null,
         MainGrp = null,
@@ -93,15 +87,20 @@ public sealed class DosBox : BasePort
         SkillLevel = null,
         AddGameDir = null,
         AddRff = null,
-        AddSnd = null
+        AddSnd = null,
+        SkipIntro = null,
+        SkipStartup = null,
+        SkipSteam = null
     };
 
 
     /// <inheritdoc />
     public override void BeforeStart(BaseGame game, BaseAddon campaign)
     {
-        MoveSaveFilesFromStorage(game, campaign);
-        RestoreRoute66Files(game);
+        SaveFilesHelper.MoveSaveFilesFromStorage(
+            GetPathToAddonSavedGamesFolder(game.ShortName, campaign.AddonId.Id),
+            GetGameSaveFilesFolder(game, campaign));
+        FilesHelpers.RestoreRoute66Files(game);
 
         try
         {
@@ -147,195 +146,17 @@ public sealed class DosBox : BasePort
     /// <inheritdoc />
     public override void AfterEnd(BaseGame game, BaseAddon campaign)
     {
-        MoveSaveFilesToStorage(game, campaign);
+        SaveFilesHelper.MoveSaveFilesToStorage(
+            GetPathToAddonSavedGamesFolder(game.ShortName, campaign.AddonId.Id),
+            GetGameSaveFilesFolder(game, campaign));
     }
 
     /// <inheritdoc />
-    protected override void GetStartCampaignArgs(StringBuilder sb, BaseGame game, BaseAddon addon)
+    protected override void CustomModifyArgs(CmdParametersBuilder sb, BaseGame game, BaseAddon addon)
     {
-        _ = sb.Append(@" --noconsole -c ""cycles max"" -c ""core dynamic""");
-
-        if (game is BloodGame bGame)
-        {
-            GetBloodArgs(sb, bGame, addon);
-        }
-        else if (game is DukeGame dGame)
-        {
-            GetDukeArgs(sb, dGame, addon);
-        }
-        else if (game is RedneckGame rGame)
-        {
-            GetRedneckArgs(sb, rGame, addon);
-        }
-        else if (game is WangGame wGame)
-        {
-            GetWangArgs(sb, wGame);
-        }
-
+        _ = sb.Append(" --noconsole");
+        _ = sb.Append(@" -c ""cycles max""");
+        _ = sb.Append(@" -c ""core dynamic""");
         _ = sb.Append(" -c \"exit\"");
     }
-
-    /// <summary>
-    ///     Appends command-line arguments for Duke Nukem 3D games in DosBox.
-    /// </summary>
-    /// <param name="sb">String builder for parameters.</param>
-    /// <param name="game">Duke game instance.</param>
-    /// <param name="addon">Campaign or addon.</param>
-    private static void GetDukeArgs(StringBuilder sb, DukeGame game, BaseAddon addon)
-    {
-        _ = sb.Append($@" -c ""mount c \""{game.GameInstallFolder}"""" -c ""c:""");
-
-        if (addon.AddonId.Id.Equals(nameof(DukeAddonEnum.DukeVaca), StringComparison.OrdinalIgnoreCase))
-        {
-            var pathToAddonFolder = game.AddonsPaths[DukeAddonEnum.DukeVaca];
-            _ = sb.Append($@" -c ""mount d \""{pathToAddonFolder}""""");
-            _ = sb.Append(@" -c ""VACATION.EXE /gd:\\VACATION.GRP /xd:\\VACATION.CON""");
-        }
-        else if (addon.AddonId.Id.Equals(nameof(DukeAddonEnum.DukeDC), StringComparison.OrdinalIgnoreCase))
-        {
-            var pathToAddonFolder = game.AddonsPaths[DukeAddonEnum.DukeDC];
-            _ = sb.Append($@" -c ""mount d \""{pathToAddonFolder}""""");
-            _ = sb.Append(@" -c ""DUKE3D.EXE /gd:\\DUKEDC.GRP /xd:\\DUKEDC.CON""");
-        }
-        else if (addon.AddonId.Id.Equals(nameof(DukeAddonEnum.DukeNW), StringComparison.OrdinalIgnoreCase))
-        {
-            var pathToAddonFolder = game.AddonsPaths[DukeAddonEnum.DukeNW];
-            _ = sb.Append($@" -c ""mount d \""{pathToAddonFolder}""""");
-            _ = sb.Append(@" -c ""DUKE3D.EXE /gd:\\NWINTER.GRP /xd:\\NWINTER.CON""");
-        }
-        else if (addon is LooseMap map)
-        {
-            if (map.FileInfo is null)
-            {
-                throw new InvalidOperationException("Map file info is required for DosBox loose map args");
-            }
-
-            _ = sb.Append($@" -c ""mount d \""{game.MapsFolderPath}""""");
-            _ = sb.Append($@" -c ""DUKE3D.EXE -map d:\\{map.FileInfo.Value.FileName}""");
-        }
-        else
-        {
-            _ = sb.Append(" -c DUKE3D.EXE");
-        }
-    }
-
-    /// <summary>
-    ///     Appends command-line arguments for Shadow Warrior games in DosBox.
-    /// </summary>
-    /// <param name="sb">String builder for parameters.</param>
-    /// <param name="game">Wang game instance.</param>
-    private static void GetWangArgs(StringBuilder sb, WangGame game)
-    {
-        _ = sb.Append($@" -c ""mount c \""{game.GameInstallFolder}"""" -c ""c:""");
-        _ = sb.Append(" -c Sw.EXE");
-    }
-
-    /// <summary>
-    ///     Appends command-line arguments for Redneck Rampage games in DosBox.
-    /// </summary>
-    /// <param name="sb">String builder for parameters.</param>
-    /// <param name="game">Redneck game instance.</param>
-    /// <param name="addon">Campaign or addon.</param>
-    private static void GetRedneckArgs(StringBuilder sb, RedneckGame game, BaseAddon addon)
-    {
-        if (addon.AddonId.Id.Equals(nameof(GameEnum.Redneck), StringComparison.OrdinalIgnoreCase))
-        {
-            _ = sb.Append($@" -c ""mount c \""{game.GameInstallFolder}"""" -c ""c:""");
-            _ = sb.Append(" -c RR.EXE");
-        }
-        else if (addon.AddonId.Id.Equals(nameof(GameEnum.RidesAgain), StringComparison.OrdinalIgnoreCase))
-        {
-            _ = sb.Append($@" -c ""mount c \""{game.AgainInstallPath}"""" -c ""c:""");
-            _ = sb.Append(" -c RA.EXE");
-        }
-        else if (addon.AddonId.Id.Equals(nameof(RedneckAddonEnum.Route66), StringComparison.OrdinalIgnoreCase))
-        {
-            _ = sb.Append($@" -c ""mount c \""{game.GameInstallFolder}"""" -c ""c:""");
-            _ = sb.Append(" -c ROUTE66.EXE");
-        }
-    }
-
-    /// <inheritdoc />
-    protected override void GetBloodArgs(StringBuilder sb, BloodGame game, BaseAddon addon)
-    {
-        ArgumentNullException.ThrowIfNull(game.GameInstallFolder);
-
-        if (addon.AddonId.Id.Equals(nameof(BloodAddonEnum.BloodCP), StringComparison.OrdinalIgnoreCase))
-        {
-            _ = sb.Append(@$" -c ""mount c \""{game.GameInstallFolder}"""" -c ""c:""");
-            _ = sb.Append(" -c CRYPTIC.EXE");
-
-            return;
-        }
-
-        if (addon is BloodCampaign bCamp &&
-            bCamp.Type is AddonTypeEnum.TC &&
-            addon.FileInfo is not null)
-        {
-            var addonFileInfo = addon.FileInfo.Value;
-
-            if (Directory.Exists(ClientProperties.TempFolderPath))
-            {
-                Directory.Delete(ClientProperties.TempFolderPath, true);
-            }
-
-            _ = Directory.CreateDirectory(ClientProperties.TempFolderPath);
-
-            foreach (var filePath in Directory.GetFiles(game.GameInstallFolder))
-            {
-                var fileName = Path.GetFileName(filePath);
-
-                if (fileName.EndsWith(".DEM", StringComparison.OrdinalIgnoreCase))
-                {
-                    continue;
-                }
-
-                var destFile = Path.Combine(ClientProperties.TempFolderPath, fileName);
-                File.Copy(filePath, destFile, overwrite: true);
-            }
-
-            if (addonFileInfo.IsFolder)
-            {
-                foreach (var filePath in Directory.GetFiles(addonFileInfo.PathToFolder))
-                {
-                    var fileName = Path.GetFileName(filePath);
-                    var destFile = Path.Combine(ClientProperties.TempFolderPath, fileName);
-                    File.Copy(filePath, destFile, overwrite: true);
-                }
-            }
-            else
-            {
-                Ensure.DirectoryExists(ClientProperties.TempFolderPath);
-
-                using var archive = ArchiveFactory.OpenArchive(addonFileInfo.PathToFile);
-                archive.WriteToDirectory(ClientProperties.TempFolderPath);
-            }
-
-            _ = sb.Append(@$" -c ""mount c \""{ClientProperties.TempFolderPath}"""" -c ""c:""");
-            _ = sb.Append(@$" -c ""BLOOD.EXE -ini {bCamp.INI} {(bCamp.RFF is null ? string.Empty : $"-RFF {bCamp.RFF}")} {(bCamp.SND is null ? string.Empty : $"-snd {bCamp.SND}")}""");
-
-            return;
-        }
-
-        if (addon is LooseMap map && map.FileInfo is not null)
-        {
-            _ = sb.Append(@$" -c ""mount c \""{game.GameInstallFolder}"""" -c ""c:""");
-            _ = sb.Append(@$" -c ""mount d \""{game.MapsFolderPath}""""");
-            _ = sb.Append(@$" -c ""BLOOD.EXE -map d:\\{map.FileInfo.Value.FileName}""");
-
-            return;
-        }
-
-        _ = sb.Append(@$" -c ""mount c \""{game.GameInstallFolder}"""" -c ""c:""");
-        _ = sb.Append(" -c BLOOD.EXE");
-    }
-
-    /// <inheritdoc />
-    protected override void GetAutoloadModsArgs(StringBuilder sb, BaseGame _, BaseAddon addon, IReadOnlyList<BaseAddon> mods) { }
-
-    /// <inheritdoc />
-    protected override void GetSkipIntroParameter(StringBuilder sb) { }
-
-    /// <inheritdoc />
-    protected override void GetSkipStartupParameter(StringBuilder sb) { }
 }
