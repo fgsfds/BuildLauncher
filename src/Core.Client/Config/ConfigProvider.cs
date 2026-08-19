@@ -16,6 +16,8 @@ public sealed class ConfigProvider : IConfigProvider
 {
     private readonly IDbContextFactory<DatabaseContext> _dbContextFactory;
 
+    private HashSet<AddonId>? _favoriteAddonsCache;
+
     /// <summary>
     ///     Initializes a new instance of the <see cref="ConfigProvider" /> class.
     /// </summary>
@@ -287,9 +289,16 @@ public sealed class ConfigProvider : IConfigProvider
     {
         get
         {
+            if (_favoriteAddonsCache is not null)
+            {
+                return _favoriteAddonsCache;
+            }
+
             using var dbContext = _dbContextFactory.CreateDbContext();
 
-            return [.. dbContext.Favorites.AsNoTracking().Select(x => new AddonId(x.AddonId, x.Version.Equals(string.Empty) ? null : x.Version))];
+            _favoriteAddonsCache = [.. dbContext.Favorites.AsNoTracking().Select(x => new AddonId(x.AddonId, x.Version.Equals(string.Empty) ? null : x.Version))];
+
+            return _favoriteAddonsCache;
         }
     }
 
@@ -434,6 +443,14 @@ public sealed class ConfigProvider : IConfigProvider
         }
 
         _ = dbContext.SaveChanges();
+
+        if (_favoriteAddonsCache is not null)
+        {
+            _ = isEnabled
+                ? _favoriteAddonsCache.Add(addonId)
+                : _favoriteAddonsCache.Remove(addonId);
+        }
+
         ParameterChangedEvent?.Invoke(nameof(FavoriteAddons));
     }
 
