@@ -85,7 +85,18 @@ public sealed partial class CampaignsControl : AddonListControlBase
 
         AddPortsButtons();
 
+        DetachedFromVisualTree += OnDetachedFromVisualTree;
         _portsProvider.CustomPortChangedEvent += OnCustomPortChanged;
+    }
+
+    /// <summary>
+    ///     Unsubscribes from the ports provider event when the control is detached
+    ///     from the visual tree to avoid a dangling subscription.
+    /// </summary>
+    private void OnDetachedFromVisualTree(object? sender, VisualTreeAttachmentEventArgs e)
+    {
+        _portsProvider.CustomPortChangedEvent -= OnCustomPortChanged;
+        DetachedFromVisualTree -= OnDetachedFromVisualTree;
     }
 
     /// <summary>

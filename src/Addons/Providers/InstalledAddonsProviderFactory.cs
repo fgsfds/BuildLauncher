@@ -9,7 +9,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Addons.Providers;
 
-public sealed class InstalledAddonsProviderFactory
+public sealed class InstalledAddonsProviderFactory : IDisposable
 {
     private readonly ICacheAdder<Stream> _bitmapsCache;
     private readonly IConfigProvider _config;
@@ -54,5 +54,16 @@ public sealed class InstalledAddonsProviderFactory
         _list.Add(game.GameEnum, newProvider);
 
         return newProvider;
+    }
+
+    /// <inheritdoc />
+    public void Dispose()
+    {
+        foreach (var provider in _list.Values)
+        {
+            provider.Dispose();
+        }
+
+        _list.Clear();
     }
 }

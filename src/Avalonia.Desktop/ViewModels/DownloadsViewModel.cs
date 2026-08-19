@@ -15,7 +15,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Avalonia.Desktop.ViewModels;
 
-public sealed partial class DownloadsViewModel : ObservableObject
+public sealed partial class DownloadsViewModel : ObservableObject, IDisposable
 {
     /// <summary>
     ///     Filter options for the downloadable addons list.
@@ -86,6 +86,14 @@ public sealed partial class DownloadsViewModel : ObservableObject
         _installedAddonsProvider.AddonsChangedEvent += OnAddonChanged;
         //_downloadableAddonsProvider.AddonsChangedEvent += OnAddonChanged;
         SelectedDownloads.CollectionChanged += OnSelectedDownloadsChanged;
+    }
+
+    /// <inheritdoc />
+    public void Dispose()
+    {
+        _installedAddonsProvider.AddonsChangedEvent -= OnAddonChanged;
+        SelectedDownloads.CollectionChanged -= OnSelectedDownloadsChanged;
+        _cancellationTokenSource?.Dispose();
     }
 
     /// <summary>

@@ -16,9 +16,11 @@ namespace Avalonia.Desktop.ViewModels;
 /// <summary>
 ///     Provides view model data and commands for the main window.
 /// </summary>
-public sealed class MainWindowViewModel : ObservableObject
+public sealed class MainWindowViewModel : ObservableObject, IDisposable
 {
     private readonly InstalledGamesProvider _gamesProvider;
+
+    private readonly GamePageViewModel[] _gamePageViewModels;
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="MainWindowViewModel" /> class.
@@ -170,6 +172,35 @@ public sealed class MainWindowViewModel : ObservableObject
             metadataProvider,
             downloadablesProviderFactory.Get(_gamesProvider.GetGame(GameEnum.Standalone))
             );
+
+        _gamePageViewModels =
+        [
+            DukeViewModel,
+            BloodViewModel,
+            WangViewModel,
+            FuryViewModel,
+            RedneckViewModel,
+            SlaveViewModel,
+            NamViewModel,
+            WWIIViewModel,
+            WitchavenViewModel,
+            TekWarViewModel,
+            StandaloneViewModel
+        ];
+    }
+
+    /// <inheritdoc />
+    public void Dispose()
+    {
+        _gamesProvider.GameChangedEvent -= OnGameChanged;
+
+        foreach (var viewModel in _gamePageViewModels)
+        {
+            viewModel.Dispose();
+        }
+
+        PortsPageViewModel.Dispose();
+        ToolsPageViewModel.Dispose();
     }
 
 

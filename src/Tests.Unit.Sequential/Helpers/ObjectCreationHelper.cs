@@ -58,4 +58,24 @@ public static class ObjectCreationHelper
 
         return installedAddonsProvider;
     }
+
+    internal static InstalledAddonsProviderFactory CreateInstalledAddonsProviderFactory(IConfigProvider config)
+    {
+        Mock<ICacheAdder<Stream>> bitmapsCache = new();
+
+        var metadataProvider = new MetadataProvider(
+            new OfflineApiInterface(NullLogger<OfflineApiInterface>.Instance),
+            NullLogger<MetadataProvider>.Instance
+            );
+
+        var originalCampaignsProvider = new OriginalCampaignsProvider(config);
+
+        return new InstalledAddonsProviderFactory(
+            config,
+            bitmapsCache.Object,
+            originalCampaignsProvider,
+            metadataProvider,
+            NullLoggerFactory.Instance
+            );
+    }
 }

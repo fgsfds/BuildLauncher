@@ -19,7 +19,7 @@ namespace Avalonia.Desktop.ViewModels;
 ///     Base class for ViewModels that display and manage a list of installed addons
 ///     (campaigns, maps, or mods) for a specific game.
 /// </summary>
-public abstract partial class AddonListViewModelBase : RightPanelViewModel, IPortsButtonControl
+public abstract partial class AddonListViewModelBase : RightPanelViewModel, IPortsButtonControl, IDisposable
 {
     protected readonly InstalledAddonsProvider _installedAddonsProvider;
     protected readonly ILogger _logger;
@@ -105,6 +105,14 @@ public abstract partial class AddonListViewModelBase : RightPanelViewModel, IPor
 
         _gamesProvider.GameChangedEvent += OnGameChanged;
         _installedAddonsProvider.AddonsChangedEvent += OnAddonChanged;
+    }
+
+    /// <inheritdoc />
+    public void Dispose()
+    {
+        _gamesProvider.GameChangedEvent -= OnGameChanged;
+        _installedAddonsProvider.AddonsChangedEvent -= OnAddonChanged;
+        GC.SuppressFinalize(this);
     }
 
     /// <summary>

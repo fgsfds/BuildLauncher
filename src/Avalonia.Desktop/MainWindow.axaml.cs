@@ -1,4 +1,5 @@
 ﻿using Avalonia.Controls;
+using Avalonia.Desktop.ViewModels;
 using Avalonia.Interactivity;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
@@ -62,6 +63,11 @@ public sealed partial class MainWindow : Window, IDisposable
     /// <inheritdoc />
     public void Dispose()
     {
+        if (DataContext is MainWindowViewModel viewModel)
+        {
+            viewModel.Dispose();
+        }
+
         _overlayBitmap?.Dispose();
     }
 

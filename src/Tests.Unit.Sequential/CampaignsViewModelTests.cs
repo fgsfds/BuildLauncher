@@ -263,6 +263,30 @@ public sealed class CampaignsViewModelTests : IDisposable
     }
 
     [Fact]
+    public void Dispose_UnsubscribesFromGameChangedEvent()
+    {
+        var list = _viewModel.AddonsList;
+
+        _viewModel.Dispose();
+
+        _configMock.Raise(x => x.ParameterChangedEvent += null, nameof(IConfigProvider.PathDuke3D));
+
+        Assert.Same(list, _viewModel.AddonsList);
+    }
+
+    [Fact]
+    public void Dispose_UnsubscribesFromAddonsChangedEvent()
+    {
+        var list = _viewModel.AddonsList;
+
+        _viewModel.Dispose();
+
+        _installedAddonsProvider.AddAddon(ParsedAddonFileHelper.CreateParsedAddonFile("camp-after", "After Dispose", "1.0", AddonTypeEnum.TC));
+
+        Assert.Same(list, _viewModel.AddonsList);
+    }
+
+    [Fact]
     public void AddonsList_FavoritesFirst_WithSeparator()
     {
         var favParsed = ParsedAddonFileHelper.CreateParsedAddonFile("camp-fav", "Fav Camp", "1.0", AddonTypeEnum.TC);

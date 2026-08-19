@@ -1,13 +1,18 @@
 ﻿using Addons.Providers;
+using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Core.All.Enums;
 using Core.Client.Helpers;
 
 namespace Avalonia.Desktop.ViewModels;
 
-public sealed partial class GamePageViewModel : ObservableObject
+public sealed partial class GamePageViewModel : ObservableObject, IDisposable
 {
     private readonly GameEnum _gameEnum;
+
+    private readonly MetadataProvider _metadataProvider;
+
+    private CancellationTokenSource? _alarmUpdateCts;
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="GamePageViewModel" /> class.
@@ -39,9 +44,26 @@ public sealed partial class GamePageViewModel : ObservableObject
         Mods = mods;
         Downloads = downloads;
 
+        _metadataProvider = metadataProvider;
+
         metadataProvider.MetadataUpdatedEvent += OnMetadataUpdated;
         metadataProvider.MetadataInitializedEvent += OnMetadataInitialized;
         //downloadablesProvider.AddonsChangedEvent += OnAddonsChanged;
+    }
+
+    /// <inheritdoc />
+    public void Dispose()
+    {
+        _metadataProvider.MetadataUpdatedEvent -= OnMetadataUpdated;
+        _metadataProvider.MetadataInitializedEvent -= OnMetadataInitialized;
+
+        _alarmUpdateCts?.Cancel();
+        _alarmUpdateCts?.Dispose();
+
+        Downloads.Dispose();
+        Campaigns.Dispose();
+        Maps?.Dispose();
+        Mods?.Dispose();
     }
 
     /// <summary>
@@ -106,15 +128,54 @@ public sealed partial class GamePageViewModel : ObservableObject
     /// </summary>
     private void OnMetadataUpdated(object? sender, ParsedAddonFile e)
     {
-        IsCampaignsAlarmShown = Campaigns.AddonsList.Any(x => x.IsMetadataUpdateAvailable);
-        IsMapsAlarmShown = Maps?.AddonsList.Any(x => x.IsMetadataUpdateAvailable) ?? false;
-        IsModsAlarmShown = Mods?.AddonsList.Any(x => x.IsMetadataUpdateAvailable) ?? false;
+        ScheduleAlarmUpdate();
     }
 
     /// <summary>
     ///     Handles the metadata initialized event.
     /// </summary>
     private void OnMetadataInitialized(object? sender, EventArgs e)
+    {
+        ScheduleAlarmUpdate();
+    }
+
+    /// <summary>
+    ///     Schedules a single coalesced alarm update after the current dispatcher cycle.
+    ///     Rapid successive metadata events are folded into one pass.
+    /// </summary>
+    private void ScheduleAlarmUpdate()
+    {
+        if (_alarmUpdateCts is not null)
+        {
+            return;
+        }
+
+        var cts = new CancellationTokenSource();
+
+        _alarmUpdateCts = cts;
+
+        Dispatcher.UIThread.Post(
+            async () =>
+                {
+                    await Task.Yield();
+
+                    if (cts.IsCancellationRequested)
+                    {
+                        return;
+                    }
+
+                    UpdateAlarms();
+
+                    _alarmUpdateCts?.Dispose();
+                    _alarmUpdateCts = null;
+                }
+        );
+    }
+
+    /// <summary>
+    ///     Recomputes all alarm indicators in a single pass over the cached addon lists.
+    /// </summary>
+    internal void UpdateAlarms()
     {
         IsCampaignsAlarmShown = Campaigns.AddonsList.Any(x => x.IsMetadataUpdateAvailable);
         IsMapsAlarmShown = Maps?.AddonsList.Any(x => x.IsMetadataUpdateAvailable) ?? false;

@@ -5,7 +5,7 @@ using Tools.Tools;
 
 namespace Avalonia.Desktop.ViewModels;
 
-public sealed partial class ToolsViewModel : ObservableObject
+public sealed partial class ToolsViewModel : ObservableObject, IDisposable
 {
     private readonly IViewModelsFactory _viewModelsFactory;
 
@@ -67,6 +67,15 @@ public sealed partial class ToolsViewModel : ObservableObject
         if (!HasUpdates && isUpdateAvailable)
         {
             HasUpdates = true;
+        }
+    }
+
+    /// <inheritdoc />
+    public void Dispose()
+    {
+        foreach (var tool in ToolsList)
+        {
+            tool.ToolChangedEvent -= OnToolChanged;
         }
     }
 }

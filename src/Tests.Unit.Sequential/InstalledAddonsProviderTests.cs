@@ -1200,6 +1200,41 @@ public sealed class InstalledAddonsProviderTests : IDisposable
         Assert.Null(ex);
     }
 
+    /// <summary>
+    ///     Tests that disposing the factory disposes all cached providers.
+    /// </summary>
+    [Fact]
+    public void Factory_Dispose_DisposesCachedProviders()
+    {
+        var config = new Mock<IConfigProvider>();
+        config.Setup(x => x.DisabledAutoloadMods).Returns([]);
+        config.Setup(x => x.FavoriteAddons).Returns([]);
+
+        var factory = ObjectCreationHelper.CreateInstalledAddonsProviderFactory(config.Object);
+
+        var dukeProvider = factory.Get(new DukeGame
+        {
+            Duke64RomPath = null,
+            DukeZHRomPath = null,
+            DukeWTInstallPath = null
+        });
+
+        var bloodProvider = factory.Get(new BloodGame
+        {
+            GameInstallFolder = null
+        });
+
+        var ex = Record.Exception(() => factory.Dispose());
+
+        Assert.Null(ex);
+        Assert.False(factory.Get(new DukeGame
+        {
+            Duke64RomPath = null,
+            DukeZHRomPath = null,
+            DukeWTInstallPath = null
+        }).Equals(dukeProvider), "Dispose should clear cached providers so a new one is created");
+    }
+
     [Fact]
     public async Task CreateCacheAsync_WithLocalFiles_FiresAddonsChangedEvent()
     {

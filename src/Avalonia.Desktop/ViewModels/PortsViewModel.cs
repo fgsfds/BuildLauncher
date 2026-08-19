@@ -12,7 +12,7 @@ using Ports.Providers;
 
 namespace Avalonia.Desktop.ViewModels;
 
-public sealed partial class PortsViewModel : ObservableObject
+public sealed partial class PortsViewModel : ObservableObject, IDisposable
 {
     private readonly IPortsProvider _installedPortsProvider;
 
@@ -370,5 +370,16 @@ public sealed partial class PortsViewModel : ObservableObject
     internal void OnPortChanged(PortEnum portEnum)
     {
         HasUpdates = PortsList.Any(static x => x.IsUpdateAvailable);
+    }
+
+    /// <inheritdoc />
+    public void Dispose()
+    {
+        foreach (var viewModel in PortsList)
+        {
+            viewModel.PortChangedEvent -= OnPortChanged;
+        }
+
+        _semaphore.Dispose();
     }
 }

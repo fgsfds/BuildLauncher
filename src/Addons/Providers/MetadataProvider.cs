@@ -17,8 +17,13 @@ namespace Addons.Providers;
 ///     and updating metadata as needed. It also provides events to notify about metadata
 ///     initialization and updates.
 /// </summary>
-public sealed class MetadataProvider
+public sealed class MetadataProvider : IDisposable
 {
+    /// <summary>
+    ///     Maximum number of cached update entries to retain. Prevents unbounded growth.
+    /// </summary>
+    private const int MaxUpdatesCacheSize = 256;
+
     private readonly IApiInterface _apiInterface;
     private readonly ILogger<MetadataProvider> _logger;
 
@@ -149,6 +154,13 @@ public sealed class MetadataProvider
             _updatesCache[newManifest.FileInfo] = newManifest;
         }
 
+        if (_updatesCache.Count > MaxUpdatesCacheSize)
+        {
+            var oldestKey = _updatesCache.Keys.First();
+
+            _ = _updatesCache.Remove(oldestKey);
+        }
+
         return true;
     }
 
@@ -221,6 +233,12 @@ public sealed class MetadataProvider
         }
 
         return new(ResultEnum.Success, false, string.Empty);
+    }
+
+    /// <inheritdoc />
+    public void Dispose()
+    {
+        _initSemaphore.Dispose();
     }
 
     private static AddonManifestJsonModel? ReadManifestFromDisk(AddonFilePathWrapper fileInfo)
