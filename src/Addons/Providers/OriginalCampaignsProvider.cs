@@ -17,9 +17,11 @@ public sealed class OriginalCampaignsProvider
 {
     private readonly IConfigProvider _config;
 
+    private readonly Dictionary<string, bool> _aftershockCache = [];
+
     /// <summary>
     ///     Initializes a new instance of the <see cref="OriginalCampaignsProvider" /> class.
-    /// </summary>
+    ///     </summary>
     /// <param name="config">Configuration provider used to check favorite addon state.</param>
     public OriginalCampaignsProvider(IConfigProvider config)
     {
@@ -542,14 +544,15 @@ public sealed class OriginalCampaignsProvider
         {
             var furyId = nameof(GameEnum.Fury).ToLowerInvariant();
             AddonId version = new(furyId, null);
+            var isAftershock = IsAftershock(fGame);
 
             campaigns.Add(
                 version, new DukeCampaign()
                 {
                     AddonId = version,
                     Type = AddonTypeEnum.Official,
-                    Title = IsAftershock(fGame) ? "Ion Fury: Aftershock" : "Ion Fury",
-                    GridImageHash = IsAftershock(fGame) ? "Aftershock".GetHashCode() : GameEnum.Fury.GetUniqueHash(),
+                    Title = isAftershock ? "Ion Fury: Aftershock" : "Ion Fury",
+                    GridImageHash = isAftershock ? "Aftershock".GetHashCode() : GameEnum.Fury.GetUniqueHash(),
                     Author = "Voidpoint, LLC",
                     ReleaseDate = new(2019, 08, 15),
                     Description = """
@@ -591,14 +594,25 @@ public sealed class OriginalCampaignsProvider
             return false;
         }
 
+        if (_aftershockCache.TryGetValue(fGame.GameInstallFolder, out var cached))
+        {
+            return cached;
+        }
+
         try
         {
             var text = File.ReadAllText(Path.Combine(fGame.GameInstallFolder, "fury.grpinfo"));
 
-            return text.Contains("ashock.def");
+            var result = text.Contains("ashock.def");
+
+            _aftershockCache[fGame.GameInstallFolder] = result;
+
+            return result;
         }
         catch
         {
+            _aftershockCache[fGame.GameInstallFolder] = false;
+
             return false;
         }
     }
