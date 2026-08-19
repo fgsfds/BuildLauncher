@@ -1,11 +1,11 @@
 using System.Collections.Immutable;
 using Avalonia.Desktop.ViewModels;
+using Avalonia.Headless.XUnit;
 using Core.All.Enums;
 using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
 using Ports.Ports;
 using Ports.Providers;
-using Tests.Unit.Helpers;
 
 namespace Tests.Unit;
 
@@ -13,8 +13,6 @@ public sealed class PortsViewModelTests
 {
     private readonly Mock<IPortsProvider> _portsProviderMock;
     private readonly PortsViewModel _viewModel;
-
-    static PortsViewModelTests() => HeadlessAvaloniaApp.EnsureInitialized();
 
     public PortsViewModelTests()
     {
@@ -31,7 +29,7 @@ public sealed class PortsViewModelTests
         );
     }
 
-    [Fact]
+    [AvaloniaFact]
     public void Constructor_PortsTypesFromPorts()
     {
         var factoryMock = new Mock<IViewModelsFactory>();
@@ -60,19 +58,19 @@ public sealed class PortsViewModelTests
         Assert.Equal(PortEnum.Stub, vm.PortsTypes[0]);
     }
 
-    [Fact]
+    [AvaloniaFact]
     public void Constructor_PortsList_Empty()
     {
         Assert.Empty(_viewModel.PortsList);
     }
 
-    [Fact]
+    [AvaloniaFact]
     public void Constructor_PortsTypes_Empty()
     {
         Assert.Empty(_viewModel.PortsTypes);
     }
 
-    [Fact]
+    [AvaloniaFact]
     public void CustomPorts_DelegatesToProvider()
     {
         _ = _viewModel.CustomPorts;
@@ -80,7 +78,7 @@ public sealed class PortsViewModelTests
         _portsProviderMock.Verify(x => x.GetCustomPorts(), Times.Once);
     }
 
-    [Fact]
+    [AvaloniaFact]
     public void PortsList_SetGet_Works()
     {
         Assert.Empty(_viewModel.PortsList);
@@ -89,31 +87,31 @@ public sealed class PortsViewModelTests
         Assert.Same(list, _viewModel.PortsList);
     }
 
-    [Fact]
+    [AvaloniaFact]
     public void ErrorMessage_Default_Empty()
     {
         Assert.Equal(string.Empty, _viewModel.ErrorMessage);
     }
 
-    [Fact]
+    [AvaloniaFact]
     public void HasUpdates_Default_False()
     {
         Assert.False(_viewModel.HasUpdates);
     }
 
-    [Fact]
+    [AvaloniaFact]
     public void IsEditorVisible_Default_False()
     {
         Assert.False(_viewModel.IsEditorVisible);
     }
 
-    [Fact]
+    [AvaloniaFact]
     public void SelectedCustomPort_Default_Null()
     {
         Assert.Null(_viewModel.SelectedCustomPort);
     }
 
-    [Fact]
+    [AvaloniaFact]
     public void AddCustomPortCommand_ClearsFieldsAndShowsEditor()
     {
         _viewModel.SelectedCustomPortName = "existing";
@@ -138,14 +136,14 @@ public sealed class PortsViewModelTests
         Assert.True(_viewModel.IsEditorVisible);
     }
 
-    [Fact]
+    [AvaloniaFact]
     public void EditCustomPort_CanExecute_Null_ReturnsFalse()
     {
         Assert.Null(_viewModel.SelectedCustomPort);
         Assert.False(_viewModel.EditCustomPortCommand.CanExecute(null));
     }
 
-    [Fact]
+    [AvaloniaFact]
     public void EditCustomPort_CanExecute_NotNull_ReturnsTrue()
     {
         _viewModel.SelectedCustomPort = new CustomPort
@@ -158,7 +156,7 @@ public sealed class PortsViewModelTests
         Assert.True(_viewModel.EditCustomPortCommand.CanExecute(null));
     }
 
-    [Fact]
+    [AvaloniaFact]
     public void EditCustomPortCommand_PopulatesFormAndShowsEditor()
     {
         var customPort = new CustomPort
@@ -177,21 +175,21 @@ public sealed class PortsViewModelTests
         Assert.True(_viewModel.IsEditorVisible);
     }
 
-    [Fact]
+    [AvaloniaFact]
     public void EditCustomPortCommand_NullSelected_CanExecuteFalse()
     {
         Assert.Null(_viewModel.SelectedCustomPort);
         Assert.False(_viewModel.EditCustomPortCommand.CanExecute(null));
     }
 
-    [Fact]
+    [AvaloniaFact]
     public void DeleteCustomPort_CanExecute_Null_ReturnsFalse()
     {
         Assert.Null(_viewModel.SelectedCustomPort);
         Assert.False(_viewModel.DeleteCustomPortCommand.CanExecute(null));
     }
 
-    [Fact]
+    [AvaloniaFact]
     public void DeleteCustomPort_CanExecute_NotNull_ReturnsTrue()
     {
         _viewModel.SelectedCustomPort = new CustomPort
@@ -204,7 +202,7 @@ public sealed class PortsViewModelTests
         Assert.True(_viewModel.DeleteCustomPortCommand.CanExecute(null));
     }
 
-    [Fact]
+    [AvaloniaFact]
     public void DeleteCustomPortCommand_DeletesAndRefreshes()
     {
         var customPort = new CustomPort
@@ -220,13 +218,13 @@ public sealed class PortsViewModelTests
         _portsProviderMock.Verify(x => x.DeleteCustomPort("DeleteMe"), Times.Once);
     }
 
-    [Fact]
+    [AvaloniaFact]
     public void DeleteCustomPortCommand_SelectedPortNull_Throws()
     {
         Assert.Throws<ArgumentNullException>(() => _viewModel.DeleteCustomPortCommand.Execute(null));
     }
 
-    [Fact]
+    [AvaloniaFact]
     public void SaveCustomPortCommand_EmptyName_ShowsError()
     {
         _viewModel.AddCustomPortCommand.Execute(null);
@@ -240,7 +238,7 @@ public sealed class PortsViewModelTests
         Assert.True(_viewModel.IsEditorVisible);
     }
 
-    [Fact]
+    [AvaloniaFact]
     public void SaveCustomPortCommand_EmptyPath_ShowsError()
     {
         _viewModel.AddCustomPortCommand.Execute(null);
@@ -254,7 +252,7 @@ public sealed class PortsViewModelTests
         Assert.True(_viewModel.IsEditorVisible);
     }
 
-    [Fact]
+    [AvaloniaFact]
     public void SaveCustomPortCommand_NullType_ShowsError()
     {
         _viewModel.AddCustomPortCommand.Execute(null);
@@ -267,7 +265,7 @@ public sealed class PortsViewModelTests
         Assert.True(_viewModel.IsEditorVisible);
     }
 
-    [Fact]
+    [AvaloniaFact]
     public void SaveCustomPortCommand_DuplicateNameForNewPort_ShowsError()
     {
         var existing = new CustomPort
@@ -298,7 +296,7 @@ public sealed class PortsViewModelTests
         Assert.True(vm.IsEditorVisible);
     }
 
-    [Fact]
+    [AvaloniaFact]
     public void SaveCustomPortCommand_ExeNotFound_ShowsError()
     {
         _viewModel.AddCustomPortCommand.Execute(null);
@@ -312,7 +310,7 @@ public sealed class PortsViewModelTests
         Assert.True(_viewModel.IsEditorVisible);
     }
 
-    [Fact]
+    [AvaloniaFact]
     public void SaveCustomPortCommand_ValidData_SavesAndHidesEditor()
     {
         var tempFile = Path.GetTempFileName();
@@ -348,7 +346,7 @@ public sealed class PortsViewModelTests
         }
     }
 
-    [Fact]
+    [AvaloniaFact]
     public void SaveCustomPortCommand_UpdateExisting_ValidData()
     {
         var tempFile = Path.GetTempFileName();
@@ -390,7 +388,7 @@ public sealed class PortsViewModelTests
         }
     }
 
-    [Fact]
+    [AvaloniaFact]
     public void SaveCustomPortCommand_DuplicateNameAllowedOnEdit_DoesNotShowDuplicateError()
     {
         var tempFile = Path.GetTempFileName();
@@ -432,7 +430,7 @@ public sealed class PortsViewModelTests
         }
     }
 
-    [Fact]
+    [AvaloniaFact]
     public void CancelCommand_HidesEditor()
     {
         _viewModel.AddCustomPortCommand.Execute(null);
@@ -443,7 +441,7 @@ public sealed class PortsViewModelTests
         Assert.False(_viewModel.IsEditorVisible);
     }
 
-    [Fact]
+    [AvaloniaFact]
     public void OnPortChanged_EmptyPortsList_HasUpdatesFalse()
     {
         _viewModel.PortsList = [];
@@ -453,7 +451,7 @@ public sealed class PortsViewModelTests
         Assert.False(_viewModel.HasUpdates);
     }
 
-    [Fact]
+    [AvaloniaFact]
     public void SelectedCustomPort_Changed_RaisesCanExecuteChanged()
     {
         var editCanExecuteChanged = false;
@@ -473,7 +471,7 @@ public sealed class PortsViewModelTests
         Assert.True(deleteCanExecuteChanged);
     }
 
-    [Fact]
+    [AvaloniaFact]
     public void PropertyChanged_ErrorMessage_Fires()
     {
         var fired = false;
@@ -488,7 +486,7 @@ public sealed class PortsViewModelTests
         Assert.True(fired);
     }
 
-    [Fact]
+    [AvaloniaFact]
     public void PropertyChanged_IsEditorVisible_Fires()
     {
         var fired = false;
@@ -503,7 +501,7 @@ public sealed class PortsViewModelTests
         Assert.True(fired);
     }
 
-    [Fact]
+    [AvaloniaFact]
     public void SelectedCustomPortName_PropertyChanged_Fires()
     {
         var fired = false;

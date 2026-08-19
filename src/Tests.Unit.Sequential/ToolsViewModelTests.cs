@@ -1,4 +1,6 @@
-﻿using Avalonia.Desktop.ViewModels;
+using System.Collections.Immutable;
+using Avalonia.Desktop.ViewModels;
+using Avalonia.Headless.XUnit;
 using Moq;
 using Tools.Tools;
 
@@ -6,9 +8,7 @@ namespace Tests.Unit;
 
 public sealed class ToolsViewModelTests
 {
-    static ToolsViewModelTests() => Helpers.HeadlessAvaloniaApp.EnsureInitialized();
-
-    [Fact]
+    [AvaloniaFact]
     public void Constructor_EmptyTools_ReturnsEmptyToolsList()
     {
         var factoryMock = new Mock<IViewModelsFactory>();
@@ -19,7 +19,7 @@ public sealed class ToolsViewModelTests
         Assert.False(vm.HasUpdates);
     }
 
-    [Fact]
+    [AvaloniaFact]
     public void Constructor_WithTools_PopulatesToolsList()
     {
         var factoryMock = new Mock<IViewModelsFactory>();
@@ -39,7 +39,7 @@ public sealed class ToolsViewModelTests
         Assert.Equal(2, vm.ToolsList.Count);
     }
 
-    [Fact]
+    [AvaloniaFact]
     public void Constructor_ToolsListContainsCorrectToolTypes()
     {
         var factoryMock = new Mock<IViewModelsFactory>();
@@ -55,7 +55,7 @@ public sealed class ToolsViewModelTests
         Assert.Same(dosBlood, vm.ToolsList[0].Tool);
     }
 
-    [Fact]
+    [AvaloniaFact]
     public void ToolsList_SetGet_Works()
     {
         var factoryMock = new Mock<IViewModelsFactory>();
@@ -64,14 +64,14 @@ public sealed class ToolsViewModelTests
         Assert.Empty(vm.ToolsList);
 
         var mapster32 = new Mapster32(null!);
-        var list = System.Collections.Immutable.ImmutableList<ToolViewModel>.Empty
-            .Add(new ToolViewModel(null!, null!, mapster32, null!));
+        var list = ImmutableList<ToolViewModel>.Empty
+                                               .Add(new ToolViewModel(null!, null!, mapster32, null!));
 
         vm.ToolsList = list;
         Assert.Same(list, vm.ToolsList);
     }
 
-    [Fact]
+    [AvaloniaFact]
     public void HasUpdates_Default_False()
     {
         var factoryMock = new Mock<IViewModelsFactory>();
@@ -80,7 +80,7 @@ public sealed class ToolsViewModelTests
         Assert.False(vm.HasUpdates);
     }
 
-    [Fact]
+    [AvaloniaFact]
     public void OnToolChanged_NotifiesHasUpdates()
     {
         var factoryMock = new Mock<IViewModelsFactory>();

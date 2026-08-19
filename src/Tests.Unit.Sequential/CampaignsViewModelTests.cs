@@ -3,6 +3,7 @@ using Addons.Helpers;
 using Addons.Providers;
 using Avalonia.Desktop.Misc;
 using Avalonia.Desktop.ViewModels;
+using Avalonia.Headless.XUnit;
 using Core.All;
 using Core.All.Enums;
 using Core.All.Serializable.Addon;
@@ -38,8 +39,6 @@ public sealed class CampaignsViewModelTests : IDisposable
     private readonly RatingProvider _ratingProvider;
     private readonly Mock<IUserNotifier> _userNotifierMock;
     private readonly CampaignsViewModel _viewModel;
-
-    static CampaignsViewModelTests() => HeadlessAvaloniaApp.EnsureInitialized();
 
     public CampaignsViewModelTests()
     {
@@ -120,7 +119,7 @@ public sealed class CampaignsViewModelTests : IDisposable
         _installedAddonsProvider.Dispose();
     }
 
-    [Fact]
+    [AvaloniaFact]
     public async Task InitializeAsync_Completes_AndListAvailable()
     {
         await _viewModel.InitializeAsync();
@@ -128,13 +127,13 @@ public sealed class CampaignsViewModelTests : IDisposable
         Assert.NotNull(_viewModel.AddonsList);
     }
 
-    [Fact]
+    [AvaloniaFact]
     public void AddonsList_Empty_ReturnsEmpty()
     {
         Assert.Empty(_viewModel.AddonsList);
     }
 
-    [Fact]
+    [AvaloniaFact]
     public void AddonsList_WithCampaigns_ReturnsCampaigns()
     {
         var parsed = ParsedAddonFileHelper.CreateParsedAddonFile("test-camp", "Test", "1.0", AddonTypeEnum.TC);
@@ -145,7 +144,7 @@ public sealed class CampaignsViewModelTests : IDisposable
         Assert.Contains(list, a => a.AddonId.Id == "test-camp");
     }
 
-    [Fact]
+    [AvaloniaFact]
     public void AddonsList_WithSearch_FiltersResults()
     {
         _installedAddonsProvider.AddAddon(ParsedAddonFileHelper.CreateParsedAddonFile("camp-a", "Alpha Camp", "1.0", AddonTypeEnum.TC));
@@ -158,7 +157,7 @@ public sealed class CampaignsViewModelTests : IDisposable
         Assert.DoesNotContain(list, a => a.AddonId.Id == "camp-b");
     }
 
-    [Fact]
+    [AvaloniaFact]
     public void AddonsList_WithSearchNoMatch_ReturnsEmpty()
     {
         _installedAddonsProvider.AddAddon(ParsedAddonFileHelper.CreateParsedAddonFile("camp-a", "Alpha Camp", "1.0", AddonTypeEnum.TC));
@@ -168,7 +167,7 @@ public sealed class CampaignsViewModelTests : IDisposable
         Assert.Empty(_viewModel.AddonsList);
     }
 
-    [Fact]
+    [AvaloniaFact]
     public void AddonsList_RepeatedAccess_ReturnsSameCachedInstance()
     {
         _installedAddonsProvider.AddAddon(ParsedAddonFileHelper.CreateParsedAddonFile("camp-a", "Alpha Camp", "1.0", AddonTypeEnum.TC));
@@ -179,7 +178,7 @@ public sealed class CampaignsViewModelTests : IDisposable
         Assert.Same(first, second);
     }
 
-    [Fact]
+    [AvaloniaFact]
     public void AddonsList_AddNewAddon_InvalidatesCache()
     {
         var first = _viewModel.AddonsList;
@@ -192,7 +191,7 @@ public sealed class CampaignsViewModelTests : IDisposable
         Assert.Contains(second, a => a.AddonId.Id == "camp-new");
     }
 
-    [Fact]
+    [AvaloniaFact]
     public void AddonsList_SearchBoxTextChange_InvalidatesCache()
     {
         _installedAddonsProvider.AddAddon(ParsedAddonFileHelper.CreateParsedAddonFile("camp-a", "Alpha Camp", "1.0", AddonTypeEnum.TC));
@@ -209,7 +208,7 @@ public sealed class CampaignsViewModelTests : IDisposable
         Assert.DoesNotContain(filtered, a => a.AddonId.Id == "camp-b");
     }
 
-    [Fact]
+    [AvaloniaFact]
     public void AddonsList_AddToFavorite_InvalidatesCache()
     {
         _installedAddonsProvider.AddAddon(ParsedAddonFileHelper.CreateParsedAddonFile("camp-fav", "Fav Camp", "1.0", AddonTypeEnum.TC));
@@ -229,7 +228,7 @@ public sealed class CampaignsViewModelTests : IDisposable
         Assert.True(favIndex < otherIndex, "Favorites should appear before non-favorites after cache invalidation");
     }
 
-    [Fact]
+    [AvaloniaFact]
     public void AddonsList_RemoveFromFavorite_InvalidatesCache()
     {
         var parsed = ParsedAddonFileHelper.CreateParsedAddonFile("camp-fav", "Fav Camp", "1.0", AddonTypeEnum.TC);
@@ -248,7 +247,7 @@ public sealed class CampaignsViewModelTests : IDisposable
         Assert.False(campaign.IsFavorite, "Removed favorite should no longer be marked as favorite after cache invalidation");
     }
 
-    [Fact]
+    [AvaloniaFact]
     public void AddonsList_IsInProgressChange_DoesNotInvalidateCache()
     {
         _installedAddonsProvider.AddAddon(ParsedAddonFileHelper.CreateParsedAddonFile("camp-a", "Alpha Camp", "1.0", AddonTypeEnum.TC));
@@ -262,7 +261,7 @@ public sealed class CampaignsViewModelTests : IDisposable
         Assert.Same(before, after);
     }
 
-    [Fact]
+    [AvaloniaFact]
     public void Dispose_UnsubscribesFromGameChangedEvent()
     {
         var list = _viewModel.AddonsList;
@@ -274,7 +273,7 @@ public sealed class CampaignsViewModelTests : IDisposable
         Assert.Same(list, _viewModel.AddonsList);
     }
 
-    [Fact]
+    [AvaloniaFact]
     public void Dispose_UnsubscribesFromAddonsChangedEvent()
     {
         var list = _viewModel.AddonsList;
@@ -286,7 +285,7 @@ public sealed class CampaignsViewModelTests : IDisposable
         Assert.Same(list, _viewModel.AddonsList);
     }
 
-    [Fact]
+    [AvaloniaFact]
     public void AddonsList_FavoritesFirst_WithSeparator()
     {
         var favParsed = ParsedAddonFileHelper.CreateParsedAddonFile("camp-fav", "Fav Camp", "1.0", AddonTypeEnum.TC);
@@ -303,7 +302,7 @@ public sealed class CampaignsViewModelTests : IDisposable
         Assert.True(favIndex < otherIndex, "Favorites should appear before non-favorites");
     }
 
-    [Fact]
+    [AvaloniaFact]
     public void SelectedAddon_Setter_FiresPropertyChanges()
     {
         _installedAddonsProvider.AddAddon(ParsedAddonFileHelper.CreateParsedAddonFile("test", "Test", "1.0", AddonTypeEnum.TC));
@@ -322,13 +321,13 @@ public sealed class CampaignsViewModelTests : IDisposable
         Assert.Contains(nameof(CampaignsViewModel.IsPreviewVisible), changedProperties);
     }
 
-    [Fact]
+    [AvaloniaFact]
     public void DeleteCampaign_NullSelectedAddon_Throws()
     {
         Assert.Throws<ArgumentNullException>(() => _viewModel.DeleteAddonCommand.Execute(null));
     }
 
-    [Fact]
+    [AvaloniaFact]
     public void DeleteCampaign_ValidCampaign_RemovesFromList()
     {
         var parsed = ParsedAddonFileHelper.CreateParsedAddonFile("del-test", "Delete Test", "1.0", AddonTypeEnum.TC);
@@ -343,7 +342,7 @@ public sealed class CampaignsViewModelTests : IDisposable
         Assert.DoesNotContain(_viewModel.AddonsList, a => a.AddonId.Id == "del-test");
     }
 
-    [Fact]
+    [AvaloniaFact]
     public void AddToFavorite_ValidAddon_UpdatesConfig()
     {
         _installedAddonsProvider.AddAddon(ParsedAddonFileHelper.CreateParsedAddonFile("fav-test", "Fav Test", "1.0", AddonTypeEnum.TC));
@@ -354,7 +353,7 @@ public sealed class CampaignsViewModelTests : IDisposable
         _configMock.Verify(x => x.ChangeFavoriteState(new AddonId("fav-test", "1.0"), true), Times.Once);
     }
 
-    [Fact]
+    [AvaloniaFact]
     public void RemoveFromFavorite_ValidAddon_UpdatesConfig()
     {
         _installedAddonsProvider.AddAddon(ParsedAddonFileHelper.CreateParsedAddonFile("unfav-test", "Unfav Test", "1.0", AddonTypeEnum.TC));
@@ -365,13 +364,13 @@ public sealed class CampaignsViewModelTests : IDisposable
         _configMock.Verify(x => x.ChangeFavoriteState(new AddonId("unfav-test", "1.0"), false), Times.Once);
     }
 
-    [Fact]
+    [AvaloniaFact]
     public void AddToFavorite_InvalidType_Throws()
     {
         Assert.Throws<ArgumentException>(() => _viewModel.AddToFavoriteCommand.Execute("not an addon"));
     }
 
-    [Fact]
+    [AvaloniaFact]
     public void ClearSearchBox_CanExecute_HasText()
     {
         _viewModel.SearchBoxText = "something";
@@ -379,7 +378,7 @@ public sealed class CampaignsViewModelTests : IDisposable
         Assert.True(_viewModel.ClearSearchBoxCommand.CanExecute(null));
     }
 
-    [Fact]
+    [AvaloniaFact]
     public void ClearSearchBox_CannotExecute_WhenEmpty()
     {
         _viewModel.SearchBoxText = string.Empty;
@@ -387,7 +386,7 @@ public sealed class CampaignsViewModelTests : IDisposable
         Assert.False(_viewModel.ClearSearchBoxCommand.CanExecute(null));
     }
 
-    [Fact]
+    [AvaloniaFact]
     public void ClearSearchBox_Executed_ClearsText()
     {
         _viewModel.SearchBoxText = "something";
@@ -397,7 +396,7 @@ public sealed class CampaignsViewModelTests : IDisposable
         Assert.Equal(string.Empty, _viewModel.SearchBoxText);
     }
 
-    [Fact]
+    [AvaloniaFact]
     public void ProcessDroppedFiles_DelegatesToInstaller()
     {
         var files = new List<string>
@@ -410,7 +409,7 @@ public sealed class CampaignsViewModelTests : IDisposable
         _addonInstallerMock.Verify(x => x.AddAddonsAsync(files, _game), Times.Once);
     }
 
-    [Fact]
+    [AvaloniaFact]
     public async Task UpdateMetadata_WithAddonValue_Completes()
     {
         var fileInfo = FileCreationHelper.CreateAddonManifestInTempFolder("meta-test", "TC", "Duke3D", "Meta Test", "1.0");
@@ -456,7 +455,7 @@ public sealed class CampaignsViewModelTests : IDisposable
         }
     }
 
-    [Fact]
+    [AvaloniaFact]
     public async Task UpdateMetadata_WithNullValue_FallsBackToSelectedAddon()
     {
         var fileInfo = FileCreationHelper.CreateAddonManifestInTempFolder("meta-selected", "TC", "Duke3D", "Meta Selected", "1.0");
@@ -502,7 +501,7 @@ public sealed class CampaignsViewModelTests : IDisposable
         }
     }
 
-    [Fact]
+    [AvaloniaFact]
     public async Task UpdateMetadata_AddonWithNullFileInfo_Throws()
     {
         var addon = new DukeCampaign
@@ -533,20 +532,20 @@ public sealed class CampaignsViewModelTests : IDisposable
         await Assert.ThrowsAsync<InvalidOperationException>(() => _viewModel.UpdateMetadataAsync(addon));
     }
 
-    [Fact]
+    [AvaloniaFact]
     public async Task UpdateMetadata_NullValueAndNullSelected_Throws()
     {
         await Assert.ThrowsAsync<ArgumentException>(() => _viewModel.UpdateMetadataAsync(null));
     }
 
-    [Fact]
+    [AvaloniaFact]
     public void StartCampaign_NullSelectedAddon_CaughtByViewModel()
     {
         var ex = Record.Exception(() => _viewModel.StartAddonCommand.Execute(new object()));
         Assert.Null(ex);
     }
 
-    [Fact]
+    [AvaloniaFact]
     public void StartCampaign_UnknownCommandType_CaughtByViewModel()
     {
         _installedAddonsProvider.AddAddon(ParsedAddonFileHelper.CreateParsedAddonFile("test", "Test", "1.0", AddonTypeEnum.TC));
@@ -558,7 +557,7 @@ public sealed class CampaignsViewModelTests : IDisposable
         Assert.Null(ex);
     }
 
-    [Fact]
+    [AvaloniaFact]
     public void StartCampaign_BasePort_Completes()
     {
         var parsed = ParsedAddonFileHelper.CreateParsedAddonFile("start-test", "Start Test", "1.0", AddonTypeEnum.TC);
