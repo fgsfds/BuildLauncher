@@ -169,6 +169,100 @@ public sealed class CampaignsViewModelTests : IDisposable
     }
 
     [Fact]
+    public void AddonsList_RepeatedAccess_ReturnsSameCachedInstance()
+    {
+        _installedAddonsProvider.AddAddon(ParsedAddonFileHelper.CreateParsedAddonFile("camp-a", "Alpha Camp", "1.0", AddonTypeEnum.TC));
+
+        var first = _viewModel.AddonsList;
+        var second = _viewModel.AddonsList;
+
+        Assert.Same(first, second);
+    }
+
+    [Fact]
+    public void AddonsList_AddNewAddon_InvalidatesCache()
+    {
+        var first = _viewModel.AddonsList;
+
+        _installedAddonsProvider.AddAddon(ParsedAddonFileHelper.CreateParsedAddonFile("camp-new", "New Camp", "1.0", AddonTypeEnum.TC));
+
+        var second = _viewModel.AddonsList;
+
+        Assert.NotSame(first, second);
+        Assert.Contains(second, a => a.AddonId.Id == "camp-new");
+    }
+
+    [Fact]
+    public void AddonsList_SearchBoxTextChange_InvalidatesCache()
+    {
+        _installedAddonsProvider.AddAddon(ParsedAddonFileHelper.CreateParsedAddonFile("camp-a", "Alpha Camp", "1.0", AddonTypeEnum.TC));
+        _installedAddonsProvider.AddAddon(ParsedAddonFileHelper.CreateParsedAddonFile("camp-b", "Beta Camp", "1.0", AddonTypeEnum.TC));
+
+        var unfiltered = _viewModel.AddonsList;
+
+        _viewModel.SearchBoxText = "Alpha";
+
+        var filtered = _viewModel.AddonsList;
+
+        Assert.NotSame(unfiltered, filtered);
+        Assert.Contains(filtered, a => a.AddonId.Id == "camp-a");
+        Assert.DoesNotContain(filtered, a => a.AddonId.Id == "camp-b");
+    }
+
+    [Fact]
+    public void AddonsList_AddToFavorite_InvalidatesCache()
+    {
+        _installedAddonsProvider.AddAddon(ParsedAddonFileHelper.CreateParsedAddonFile("camp-fav", "Fav Camp", "1.0", AddonTypeEnum.TC));
+        _installedAddonsProvider.AddAddon(ParsedAddonFileHelper.CreateParsedAddonFile("camp-other", "Other Camp", "1.0", AddonTypeEnum.TC));
+
+        var before = _viewModel.AddonsList;
+
+        var campaign = _installedAddonsProvider.GetInstalledAddonsByType(AddonTypeEnum.TC).First(a => a.AddonId.Id == "camp-fav");
+        _viewModel.AddToFavoriteCommand.Execute(campaign);
+
+        var after = _viewModel.AddonsList;
+
+        Assert.NotSame(before, after);
+
+        var favIndex = after.IndexOf(after.First(a => a.AddonId.Id == "camp-fav"));
+        var otherIndex = after.IndexOf(after.First(a => a.AddonId.Id == "camp-other"));
+        Assert.True(favIndex < otherIndex, "Favorites should appear before non-favorites after cache invalidation");
+    }
+
+    [Fact]
+    public void AddonsList_RemoveFromFavorite_InvalidatesCache()
+    {
+        var parsed = ParsedAddonFileHelper.CreateParsedAddonFile("camp-fav", "Fav Camp", "1.0", AddonTypeEnum.TC);
+        _favorites.Add(new AddonId("camp-fav", "1.0"));
+        _installedAddonsProvider.AddAddon(parsed);
+        _installedAddonsProvider.AddAddon(ParsedAddonFileHelper.CreateParsedAddonFile("camp-other", "Other Camp", "1.0", AddonTypeEnum.TC));
+
+        var before = _viewModel.AddonsList;
+
+        var campaign = _installedAddonsProvider.GetInstalledAddonsByType(AddonTypeEnum.TC).First(a => a.AddonId.Id == "camp-fav");
+        _viewModel.RemoveFromFavoriteCommand.Execute(campaign);
+
+        var after = _viewModel.AddonsList;
+
+        Assert.NotSame(before, after);
+        Assert.False(campaign.IsFavorite, "Removed favorite should no longer be marked as favorite after cache invalidation");
+    }
+
+    [Fact]
+    public void AddonsList_IsInProgressChange_DoesNotInvalidateCache()
+    {
+        _installedAddonsProvider.AddAddon(ParsedAddonFileHelper.CreateParsedAddonFile("camp-a", "Alpha Camp", "1.0", AddonTypeEnum.TC));
+
+        var before = _viewModel.AddonsList;
+
+        _viewModel.IsInProgress = true;
+
+        var after = _viewModel.AddonsList;
+
+        Assert.Same(before, after);
+    }
+
+    [Fact]
     public void AddonsList_FavoritesFirst_WithSeparator()
     {
         var favParsed = ParsedAddonFileHelper.CreateParsedAddonFile("camp-fav", "Fav Camp", "1.0", AddonTypeEnum.TC);

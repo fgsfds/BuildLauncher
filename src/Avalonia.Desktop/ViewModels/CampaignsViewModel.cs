@@ -72,47 +72,44 @@ public sealed class CampaignsViewModel : AddonListViewModelBase
     ///     Gets the list of installed campaigns, sorted with favorites first
     ///     and filtered by the current <see cref="AddonListViewModelBase.SearchBoxText" />.
     /// </summary>
-    public override ImmutableList<BaseAddon> AddonsList
+    protected override ImmutableList<BaseAddon> BuildAddonsList()
     {
-        get
+        var addons = _installedAddonsProvider.GetInstalledAddonsByType(AddonTypeEnum.TC);
+
+        var isSearchEmpty = string.IsNullOrWhiteSpace(SearchBoxText);
+
+        List<BaseAddon> favorites = [];
+
+        List<BaseAddon> list = new(addons.Count);
+
+        foreach (var addon in addons)
         {
-            var addons = _installedAddonsProvider.GetInstalledAddonsByType(AddonTypeEnum.TC);
-
-            var isSearchEmpty = string.IsNullOrWhiteSpace(SearchBoxText);
-
-            List<BaseAddon> favorites = [];
-
-            List<BaseAddon> list = new(addons.Count);
-
-            foreach (var addon in addons)
+            if (!isSearchEmpty && !addon.Title.Contains(SearchBoxText, StringComparison.OrdinalIgnoreCase))
             {
-                if (!isSearchEmpty && !addon.Title.Contains(SearchBoxText, StringComparison.OrdinalIgnoreCase))
-                {
-                    continue;
-                }
-
-                if (addon.IsFavorite)
-                {
-                    favorites.Add(addon);
-
-                    continue;
-                }
-
-                list.Add(addon);
+                continue;
             }
 
-            if (favorites.Count > 0)
+            if (addon.IsFavorite)
             {
-                return
-                [
-                    .. favorites,
-                    _separator,
-                    .. list
-                ];
+                favorites.Add(addon);
+
+                continue;
             }
 
-            return [.. list];
+            list.Add(addon);
         }
+
+        if (favorites.Count > 0)
+        {
+            return
+            [
+                .. favorites,
+                _separator,
+                .. list
+            ];
+        }
+
+        return [.. list];
     }
 
     /// <summary>

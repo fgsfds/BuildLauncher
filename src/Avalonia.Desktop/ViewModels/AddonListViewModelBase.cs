@@ -32,6 +32,8 @@ public abstract partial class AddonListViewModelBase : RightPanelViewModel, IPor
     private readonly IFolderOpener _folderOpener;
     private readonly IUserNotifier _userNotifier;
 
+    private ImmutableList<BaseAddon>? _addonsList;
+
     /// <summary>
     ///     Initializes a new instance of the <see cref="AddonListViewModelBase" /> class.
     /// </summary>
@@ -139,7 +141,7 @@ public abstract partial class AddonListViewModelBase : RightPanelViewModel, IPor
     {
         if (parameterName == Game.GameEnum)
         {
-            OnPropertyChanged(nameof(AddonsList));
+            RefreshAddonsList();
         }
     }
 
@@ -147,7 +149,7 @@ public abstract partial class AddonListViewModelBase : RightPanelViewModel, IPor
     {
         if (gameEnum == Game.GameEnum && addonType == AddonType)
         {
-            OnPropertyChanged(nameof(AddonsList));
+            RefreshAddonsList();
         }
     }
 
@@ -157,9 +159,34 @@ public abstract partial class AddonListViewModelBase : RightPanelViewModel, IPor
     /// <summary>
     ///     Gets the list of installed addons for the managed <see cref="AddonType" />.
     /// </summary>
-    public virtual ImmutableList<BaseAddon> AddonsList
+    public ImmutableList<BaseAddon> AddonsList
     {
-        get => [.. _installedAddonsProvider.GetInstalledAddonsByType(AddonType)];
+        get
+        {
+            if (_addonsList is null)
+            {
+                _addonsList = BuildAddonsList();
+            }
+
+            return _addonsList;
+        }
+    }
+
+    /// <summary>
+    ///     Builds the list of installed addons for the managed <see cref="AddonType" />.
+    ///     Override to apply additional sorting or filtering.
+    /// </summary>
+    protected virtual ImmutableList<BaseAddon> BuildAddonsList() => [.. _installedAddonsProvider.GetInstalledAddonsByType(AddonType)];
+
+    /// <summary>
+    /// Refreshes the list of addons by clearing the cached addon list and notifying
+    /// that the <see cref="AddonsList" /> property has changed.
+    /// </summary>
+    protected void RefreshAddonsList()
+    {
+        _addonsList = null;
+
+        OnPropertyChanged(nameof(AddonsList));
     }
 
     /// <summary>
@@ -192,15 +219,15 @@ public abstract partial class AddonListViewModelBase : RightPanelViewModel, IPor
     ///     Gets or sets the search box filter text.
     /// </summary>
     [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(AddonsList))]
     [NotifyCanExecuteChangedFor(nameof(ClearSearchBoxCommand))]
     public partial string SearchBoxText { get; set; } = string.Empty;
+
+    partial void OnSearchBoxTextChanged(string value) => RefreshAddonsList();
 
     /// <summary>
     ///     Gets or sets whether a background operation is in progress.
     /// </summary>
     [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(AddonsList))]
     public partial bool IsInProgress { get; set; }
 
     /// <summary>
@@ -362,7 +389,7 @@ public abstract partial class AddonListViewModelBase : RightPanelViewModel, IPor
         _config.ChangeFavoriteState(addon.AddonId, true);
         addon.IsFavorite = true;
 
-        OnPropertyChanged(nameof(AddonsList));
+        RefreshAddonsList();
     }
 
     /// <summary>
@@ -379,7 +406,7 @@ public abstract partial class AddonListViewModelBase : RightPanelViewModel, IPor
         _config.ChangeFavoriteState(addon.AddonId, false);
         addon.IsFavorite = false;
 
-        OnPropertyChanged(nameof(AddonsList));
+        RefreshAddonsList();
     }
 
     #endregion

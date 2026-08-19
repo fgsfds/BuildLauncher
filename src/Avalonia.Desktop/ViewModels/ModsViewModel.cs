@@ -69,17 +69,14 @@ public sealed partial class ModsViewModel : AddonListViewModelBase
     /// <summary>
     ///     Gets the list of installed autoload mods. No filtering is applied.
     /// </summary>
-    public override ImmutableList<BaseAddon> AddonsList
+    protected override ImmutableList<BaseAddon> BuildAddonsList()
     {
-        get
-        {
-            return
-            [
-                .. _installedAddonsProvider.GetInstalledAddonsByType(AddonTypeEnum.Mod)
-                                           .OfType<AutoloadMod>()
-                                           .OrderBy(static x => x.Title)
-            ];
-        }
+        return
+        [
+            .. _installedAddonsProvider.GetInstalledAddonsByType(AddonTypeEnum.Mod)
+                                       .OfType<AutoloadMod>()
+                                       .OrderBy(static x => x.Title)
+        ];
     }
 
     /// <summary>
@@ -106,7 +103,7 @@ public sealed partial class ModsViewModel : AddonListViewModelBase
                 _installedAddonsProvider.EnableAddon(mod.AddonId);
             }
 
-            OnPropertyChanged(nameof(AddonsList));
+            RefreshAddonsList();
         }
         catch (Exception ex)
         {

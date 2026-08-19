@@ -69,19 +69,16 @@ public sealed class MapsViewModel : AddonListViewModelBase
     ///     Gets the list of installed maps, filtered by the current
     ///     <see cref="AddonListViewModelBase.SearchBoxText" />.
     /// </summary>
-    public override ImmutableList<BaseAddon> AddonsList
+    protected override ImmutableList<BaseAddon> BuildAddonsList()
     {
-        get
+        var result = _installedAddonsProvider.GetInstalledAddonsByType(AddonTypeEnum.Map).OrderBy(static x => x.Title);
+
+        if (string.IsNullOrWhiteSpace(SearchBoxText))
         {
-            var result = _installedAddonsProvider.GetInstalledAddonsByType(AddonTypeEnum.Map).OrderBy(static x => x.Title);
-
-            if (string.IsNullOrWhiteSpace(SearchBoxText))
-            {
-                return [.. result];
-            }
-
-            return [.. result.Where(x => x.Title.Contains(SearchBoxText, StringComparison.CurrentCultureIgnoreCase))];
+            return [.. result];
         }
+
+        return [.. result.Where(x => x.Title.Contains(SearchBoxText, StringComparison.CurrentCultureIgnoreCase))];
     }
 
     /// <summary>
