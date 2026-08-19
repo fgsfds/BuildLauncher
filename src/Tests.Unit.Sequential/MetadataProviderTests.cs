@@ -23,7 +23,7 @@ public sealed class MetadataProviderTests : IDisposable
 
         var unpackToFolder = Path.Combine(ClientProperties.AddonsFolderPath, "UnpackedAddon");
         Directory.CreateDirectory(unpackToFolder);
-        using var archive = ArchiveFactory.OpenArchive(Path.Combine("Files", "UnpackedAddon.zip"));
+        using var archive = ArchiveFactory.Open(Path.Combine("Files", "UnpackedAddon.zip"));
         archive.WriteToDirectory(unpackToFolder);
     }
 

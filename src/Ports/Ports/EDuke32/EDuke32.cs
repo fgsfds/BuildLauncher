@@ -106,7 +106,7 @@ public class EDuke32 : BasePort
 
         Ensure.DirectoryExists(stopgapFolder);
 
-        using var archive = ZipArchive.OpenArchive(stream);
+        using var archive = ZipArchive.Open(stream);
         archive.WriteToDirectory(stopgapFolder);
     }
 

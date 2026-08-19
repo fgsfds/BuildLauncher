@@ -31,7 +31,7 @@ public sealed class ArchiveToolsTests : IDisposable
     }
 
     [Fact]
-    public async Task UnpackArchiveAsync_CancelledBeforeStart_ThrowsTaskCanceledException()
+    public async Task UnpackArchiveAsync_CancelledBeforeStart_ThrowsOperationCanceledException()
     {
         var archivePath = CreateTestArchive();
         var extractPath = Path.Combine(_tempDir, "extract");
@@ -40,7 +40,7 @@ public sealed class ArchiveToolsTests : IDisposable
         using var cts = new CancellationTokenSource();
         cts.Cancel();
 
-        await Assert.ThrowsAsync<TaskCanceledException>(() =>
+        await Assert.ThrowsAnyAsync<OperationCanceledException>(() =>
             archiveTools.UnpackArchiveAsync(archivePath, extractPath, cts.Token));
     }
 

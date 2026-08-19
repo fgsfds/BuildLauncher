@@ -192,7 +192,7 @@ public sealed class MetadataProvider : IDisposable
             {
                 var tempPath = fileInfo.PathToFile + ".temp";
 
-                using (var archive = ZipArchive.OpenArchive(fileInfo.PathToFile))
+                using (var archive = ZipArchive.Open(fileInfo.PathToFile))
                 {
                     var existing = archive.Entries.FirstOrDefault(x => x.Key?.Equals(update.FileInfo.ManifestFileName) is true);
 
@@ -262,7 +262,7 @@ public sealed class MetadataProvider : IDisposable
                 return null;
             }
 
-            using var archive = ArchiveFactory.OpenArchive(fileInfo.PathToFile);
+            using var archive = ArchiveFactory.Open(fileInfo.PathToFile);
             var entry = archive.Entries.FirstOrDefault(x => x.Key?.Equals(fileInfo.ManifestFileName, StringComparison.OrdinalIgnoreCase) == true);
 
             if (entry is null)

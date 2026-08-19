@@ -42,7 +42,7 @@ public sealed class ArchivedAddonExtractor
 
         try
         {
-            archive = ArchiveFactory.OpenArchive(pathToFile);
+            archive = ArchiveFactory.Open(pathToFile);
 
             if (archive.Entries.Any(static x => x.Key?.Equals("addons.grpinfo", StringComparison.OrdinalIgnoreCase) == true))
             {

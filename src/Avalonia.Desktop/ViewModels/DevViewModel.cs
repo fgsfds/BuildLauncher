@@ -650,7 +650,7 @@ public sealed partial class DevViewModel : ObservableObject
 
             List<FileStream> fileStreams = new();
 
-            using (var archive = ZipArchive.CreateArchive())
+            using (var archive = ZipArchive.Create())
             {
                 using (archive.PauseEntryRebuilding())
                 {
@@ -1620,7 +1620,7 @@ public sealed partial class DevViewModel : ObservableObject
         {
             try
             {
-                using var archive = ArchiveFactory.OpenArchive(file);
+                using var archive = ArchiveFactory.Open(file);
                 var jsons = archive.Entries.Where(x => x.Key?.StartsWith("addon", StringComparison.OrdinalIgnoreCase) == true && x.Key.EndsWith(".json", StringComparison.OrdinalIgnoreCase));
 
                 foreach (var json in jsons)

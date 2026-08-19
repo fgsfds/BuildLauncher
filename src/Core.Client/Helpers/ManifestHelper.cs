@@ -17,7 +17,7 @@ public static class ManifestHelper
     /// <returns>A result containing the deserialized manifest, or an error if not found.</returns>
     public static async Task<Result<AddonManifestJsonModel?>> GetMainManifestAsync(string pathToFile)
     {
-        using var archive = ZipArchive.OpenArchive(pathToFile);
+        using var archive = ZipArchive.Open(pathToFile);
         var addonJson = archive.Entries.FirstOrDefault(static x => x.Key?.Equals("addon.json", StringComparison.OrdinalIgnoreCase) == true);
 
         if (addonJson is null)

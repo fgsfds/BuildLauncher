@@ -743,7 +743,7 @@ public sealed class InstalledAddonsProvider : IDisposable
         }
         else
         {
-            using var archive = ArchiveFactory.OpenArchive(pathToFile);
+            using var archive = ArchiveFactory.Open(pathToFile);
             await using var cover = ImageHelper.GetCoverFromArchive(archive);
             await using var preview = ImageHelper.GetPreviewFromArchive(archive);
 

@@ -17,7 +17,7 @@ public sealed class ArchiveTools
 
     public event EventHandler<float>? ProgressChanged;
 
-    public Task UnpackArchiveAsync(
+    public async Task UnpackArchiveAsync(
         string pathToArchive,
         string unpackTo,
         CancellationToken cancellationToken = default
@@ -34,23 +34,31 @@ public sealed class ArchiveTools
 
         Ensure.DirectoryExists(unpackTo);
 
-        return Task.Run(() =>
+        _logger.LogInformation(
+            "Unpacking archive {PathToArchive} to {UnpackTo}.",
+            pathToArchive,
+            unpackTo
+            );
+
+        using var archive = ArchiveFactory.Open(
+            pathToArchive,
+            new ReaderOptions
             {
-                cancellationToken.ThrowIfCancellationRequested();
+                LeaveStreamOpen = false
+            }
+            );
 
-                using var archive = ArchiveFactory.OpenArchive(
-                    pathToArchive,
-                    ReaderOptions.ForFilePath
-                                 .WithProgress(progress)
-                    );
+        await archive.WriteToDirectoryAsync(
+                      unpackTo,
+                      progress: progress,
+                      cancellationToken: cancellationToken
+                      )
+                     .ConfigureAwait(false);
 
-                cancellationToken.ThrowIfCancellationRequested();
-
-                archive.WriteToDirectory(unpackTo);
-
-                cancellationToken.ThrowIfCancellationRequested();
-            },
-            cancellationToken
+        _logger.LogInformation(
+            "Unpacked archive {PathToArchive} to {UnpackTo}.",
+            pathToArchive,
+            unpackTo
             );
     }
 }

@@ -176,7 +176,7 @@ public sealed class DosBoxCmdParametersBuilder : CmdParametersBuilder
             {
                 Ensure.DirectoryExists(ClientProperties.TempFolderPath);
 
-                using var archive = ArchiveFactory.OpenArchive(addonFileInfo.PathToFile);
+                using var archive = ArchiveFactory.Open(addonFileInfo.PathToFile);
                 archive.WriteToDirectory(ClientProperties.TempFolderPath);
             }
 
