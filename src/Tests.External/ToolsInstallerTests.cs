@@ -67,7 +67,10 @@ public sealed class ToolsInstallerTests
                 NullLogger<GitHubApiInterface>.Instance
                 );
 
-            InstalledGamesProvider gamesProvider = new(new ConfigProviderFake { PathBlood = bloodDir });
+            var fakeConfig = new ConfigProviderFake();
+            fakeConfig.SetGamePath(GameEnum.Blood, bloodDir);
+
+            InstalledGamesProvider gamesProvider = new(fakeConfig);
 
             BaseTool tool = toolEnum switch
             {

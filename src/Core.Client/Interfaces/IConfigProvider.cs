@@ -1,4 +1,5 @@
 ﻿using Core.All;
+using Core.All.Enums;
 using Core.Client.Enums;
 
 namespace Core.Client.Interfaces;
@@ -36,79 +37,23 @@ public interface IConfigProvider
     bool UseLocalApi { get; set; }
 
     /// <summary>
-    ///     Gets or sets the installation path for Blood.
+    ///     Gets the installation path for the specified game.
     /// </summary>
-    string? PathBlood { get; set; }
+    /// <param name="game">The game to get the installation path for.</param>
+    /// <returns>The game path, or null if not set.</returns>
+    string? GetGamePath(GameEnum game);
 
     /// <summary>
-    ///     Gets or sets the installation path for Duke Nukem 3D.
+    ///     Sets the installation path for the specified game.
     /// </summary>
-    string? PathDuke3D { get; set; }
+    /// <param name="game">The game to set the installation path for.</param>
+    /// <param name="value">The path to store.</param>
+    void SetGamePath(GameEnum game, string? value);
 
     /// <summary>
-    ///     Gets or sets the installation path for Duke Nukem 64.
-    /// </summary>
-    string? PathDuke64 { get; set; }
-
-    /// <summary>
-    ///     Gets or sets the installation path for Duke ZH.
-    /// </summary>
-    string? PathDukeZH { get; set; }
-
-    /// <summary>
-    ///     Gets or sets the installation path for Duke WT.
+    ///     Gets or sets the installation path for Duke WT, which has no dedicated game enum.
     /// </summary>
     string? PathDukeWT { get; set; }
-
-    /// <summary>
-    ///     Gets or sets the installation path for Fury.
-    /// </summary>
-    string? PathFury { get; set; }
-
-    /// <summary>
-    ///     Gets or sets the installation path for Redneck Rampage.
-    /// </summary>
-    string? PathRedneck { get; set; }
-
-    /// <summary>
-    ///     Gets or sets the installation path for Redneck Rampage Rides Again.
-    /// </summary>
-    string? PathRidesAgain { get; set; }
-
-    /// <summary>
-    ///     Gets or sets the installation path for Slave.
-    /// </summary>
-    string? PathSlave { get; set; }
-
-    /// <summary>
-    ///     Gets or sets the installation path for Wang.
-    /// </summary>
-    string? PathWang { get; set; }
-
-    /// <summary>
-    ///     Gets or sets the installation path for NAM.
-    /// </summary>
-    string? PathNam { get; set; }
-
-    /// <summary>
-    ///     Gets or sets the installation path for WW2 GI.
-    /// </summary>
-    string? PathWW2GI { get; set; }
-
-    /// <summary>
-    ///     Gets or sets the installation path for Witchaven.
-    /// </summary>
-    string? PathWitchaven { get; set; }
-
-    /// <summary>
-    ///     Gets or sets the installation path for Witchaven 2.
-    /// </summary>
-    string? PathWitchaven2 { get; set; }
-
-    /// <summary>
-    ///     Gets or sets the installation path for TekWar.
-    /// </summary>
-    string? PathTekWar { get; set; }
 
     /// <summary>
     ///     Gets or sets the API password for local API authentication.

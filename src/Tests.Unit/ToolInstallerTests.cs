@@ -85,8 +85,16 @@ public sealed class ToolInstallerTests
         return new ToolInstaller(tool, apiMock.Object, gamesProvider, downloader, archiveTools, NullLogger<ToolInstaller>.Instance);
     }
 
-    private static InstalledGamesProvider CreateGamesProvider(string? bloodPath) =>
-        new(new ConfigProviderFake { PathBlood = bloodPath });
+    private static InstalledGamesProvider CreateGamesProvider(string? bloodPath)
+    {
+        var config = new ConfigProviderFake();
+        if (bloodPath is not null)
+        {
+            config.SetGamePath(GameEnum.Blood, bloodPath);
+        }
+
+        return new InstalledGamesProvider(config);
+    }
 
     private static void InvokeProtected(ToolInstaller installer, string methodName) =>
         typeof(ToolInstaller).GetMethod(methodName, BindingFlags.Instance | BindingFlags.NonPublic)!

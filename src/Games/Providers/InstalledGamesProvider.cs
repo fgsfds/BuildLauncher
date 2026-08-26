@@ -1,4 +1,4 @@
-﻿using Core.All.Enums;
+using Core.All.Enums;
 using Core.Client.Interfaces;
 using Games.Games;
 
@@ -107,49 +107,49 @@ public class InstalledGamesProvider
         Register(
             new BloodGame
             {
-                GameInstallFolder = config.PathBlood
+                GameInstallFolder = config.GetGamePath(GameEnum.Blood)
             },
-            (nameof(IConfigProvider.PathBlood), (g, v) => g.GameInstallFolder = v, () => config.PathBlood)
+            (nameof(GameEnum.Blood), (g, v) => g.GameInstallFolder = v, () => config.GetGamePath(GameEnum.Blood))
             );
 
         Register(
             new DukeGame
             {
-                GameInstallFolder = config.PathDuke3D,
-                Duke64RomPath = config.PathDuke64,
-                DukeZHRomPath = config.PathDukeZH,
+                GameInstallFolder = config.GetGamePath(GameEnum.Duke3D),
+                Duke64RomPath = config.GetGamePath(GameEnum.Duke64),
+                DukeZHRomPath = config.GetGamePath(GameEnum.DukeZeroHour),
                 DukeWTInstallPath = config.PathDukeWT
             },
-            (nameof(IConfigProvider.PathDuke3D), (g, v) => g.GameInstallFolder = v, () => config.PathDuke3D),
-            (nameof(IConfigProvider.PathDuke64), (g, v) => ((DukeGame)g).Duke64RomPath = v, () => config.PathDuke64),
-            (nameof(IConfigProvider.PathDukeZH), (g, v) => ((DukeGame)g).DukeZHRomPath = v, () => config.PathDukeZH),
+            (nameof(GameEnum.Duke3D), (g, v) => g.GameInstallFolder = v, () => config.GetGamePath(GameEnum.Duke3D)),
+            (nameof(GameEnum.Duke64), (g, v) => ((DukeGame)g).Duke64RomPath = v, () => config.GetGamePath(GameEnum.Duke64)),
+            (nameof(GameEnum.DukeZeroHour), (g, v) => ((DukeGame)g).DukeZHRomPath = v, () => config.GetGamePath(GameEnum.DukeZeroHour)),
             (nameof(IConfigProvider.PathDukeWT), (g, v) => ((DukeGame)g).DukeWTInstallPath = v, () => config.PathDukeWT)
             );
 
         Register(
             new WangGame
             {
-                GameInstallFolder = config.PathWang
+                GameInstallFolder = config.GetGamePath(GameEnum.Wang)
             },
-            (nameof(IConfigProvider.PathWang), (g, v) => g.GameInstallFolder = v, () => config.PathWang)
+            (nameof(GameEnum.Wang), (g, v) => g.GameInstallFolder = v, () => config.GetGamePath(GameEnum.Wang))
             );
 
         Register(
             new FuryGame
             {
-                GameInstallFolder = config.PathFury
+                GameInstallFolder = config.GetGamePath(GameEnum.Fury)
             },
-            (nameof(IConfigProvider.PathFury), (g, v) => g.GameInstallFolder = v, () => config.PathFury)
+            (nameof(GameEnum.Fury), (g, v) => g.GameInstallFolder = v, () => config.GetGamePath(GameEnum.Fury))
             );
 
         Register(
             new RedneckGame
             {
-                GameInstallFolder = config.PathRedneck,
-                AgainInstallPath = config.PathRidesAgain
+                GameInstallFolder = config.GetGamePath(GameEnum.Redneck),
+                AgainInstallPath = config.GetGamePath(GameEnum.RidesAgain)
             },
-            (nameof(IConfigProvider.PathRedneck), (g, v) => g.GameInstallFolder = v, () => config.PathRedneck),
-            (nameof(IConfigProvider.PathRidesAgain), (g, v) => ((RedneckGame)g).AgainInstallPath = v, () => config.PathRidesAgain)
+            (nameof(GameEnum.Redneck), (g, v) => g.GameInstallFolder = v, () => config.GetGamePath(GameEnum.Redneck)),
+            (nameof(GameEnum.RidesAgain), (g, v) => ((RedneckGame)g).AgainInstallPath = v, () => config.GetGamePath(GameEnum.RidesAgain))
             );
 
         _games[GameEnum.RidesAgain] = _games[GameEnum.Redneck];
@@ -157,35 +157,35 @@ public class InstalledGamesProvider
         Register(
             new SlaveGame
             {
-                GameInstallFolder = config.PathSlave
+                GameInstallFolder = config.GetGamePath(GameEnum.Slave)
             },
-            (nameof(IConfigProvider.PathSlave), (g, v) => g.GameInstallFolder = v, () => config.PathSlave)
+            (nameof(GameEnum.Slave), (g, v) => g.GameInstallFolder = v, () => config.GetGamePath(GameEnum.Slave))
             );
 
         Register(
             new NamGame
             {
-                GameInstallFolder = config.PathNam
+                GameInstallFolder = config.GetGamePath(GameEnum.NAM)
             },
-            (nameof(IConfigProvider.PathNam), (g, v) => g.GameInstallFolder = v, () => config.PathNam)
+            (nameof(GameEnum.NAM), (g, v) => g.GameInstallFolder = v, () => config.GetGamePath(GameEnum.NAM))
             );
 
         Register(
             new WW2GIGame
             {
-                GameInstallFolder = config.PathWW2GI
+                GameInstallFolder = config.GetGamePath(GameEnum.WW2GI)
             },
-            (nameof(IConfigProvider.PathWW2GI), (g, v) => g.GameInstallFolder = v, () => config.PathWW2GI)
+            (nameof(GameEnum.WW2GI), (g, v) => g.GameInstallFolder = v, () => config.GetGamePath(GameEnum.WW2GI))
             );
 
         Register(
             new WitchavenGame
             {
-                GameInstallFolder = config.PathWitchaven,
-                Witchaven2InstallPath = config.PathWitchaven2
+                GameInstallFolder = config.GetGamePath(GameEnum.Witchaven),
+                Witchaven2InstallPath = config.GetGamePath(GameEnum.Witchaven2)
             },
-            (nameof(IConfigProvider.PathWitchaven), (g, v) => g.GameInstallFolder = v, () => config.PathWitchaven),
-            (nameof(IConfigProvider.PathWitchaven2), (g, v) => ((WitchavenGame)g).Witchaven2InstallPath = v, () => config.PathWitchaven2)
+            (nameof(GameEnum.Witchaven), (g, v) => g.GameInstallFolder = v, () => config.GetGamePath(GameEnum.Witchaven)),
+            (nameof(GameEnum.Witchaven2), (g, v) => ((WitchavenGame)g).Witchaven2InstallPath = v, () => config.GetGamePath(GameEnum.Witchaven2))
             );
 
         _games[GameEnum.Witchaven2] = _games[GameEnum.Witchaven];
@@ -193,9 +193,9 @@ public class InstalledGamesProvider
         Register(
             new TekWarGame
             {
-                GameInstallFolder = config.PathTekWar
+                GameInstallFolder = config.GetGamePath(GameEnum.TekWar)
             },
-            (nameof(IConfigProvider.PathTekWar), (g, v) => g.GameInstallFolder = v, () => config.PathTekWar)
+            (nameof(GameEnum.TekWar), (g, v) => g.GameInstallFolder = v, () => config.GetGamePath(GameEnum.TekWar))
             );
 
         Register(new StandaloneGame());

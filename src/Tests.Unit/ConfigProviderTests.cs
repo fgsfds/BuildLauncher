@@ -1,7 +1,7 @@
 using Core.All;
+using Core.All.Enums;
 using Core.Client.Config;
 using Core.Client.Enums;
-using Microsoft.EntityFrameworkCore;
 
 namespace Tests.Unit;
 
@@ -68,51 +68,51 @@ public sealed class ConfigProviderTests : IDisposable
     [Fact]
     public void PathDuke3D_Default_ReturnsNull()
     {
-        Assert.Null(_provider.PathDuke3D);
+        Assert.Null(_provider.GetGamePath(GameEnum.Duke3D));
     }
 
     [Fact]
     public void PathDuke3D_TrailingSeparator_IsTrimmed()
     {
         var basePath = Path.Combine("C:\\", "Duke3D");
-        _provider.PathDuke3D = basePath + Path.DirectorySeparatorChar;
-        Assert.Equal(basePath, _provider.PathDuke3D);
+        _provider.SetGamePath(GameEnum.Duke3D, basePath + Path.DirectorySeparatorChar);
+        Assert.Equal(basePath, _provider.GetGamePath(GameEnum.Duke3D));
     }
 
     [Fact]
     public void AllGamePaths_CanStoreAndRetrieve()
     {
-        _provider.PathDuke3D = "a";
+        _provider.SetGamePath(GameEnum.Duke3D, "a");
         _provider.PathDukeWT = "b";
-        _provider.PathDuke64 = "c";
-        _provider.PathDukeZH = "d";
-        _provider.PathWang = "e";
-        _provider.PathBlood = "f";
-        _provider.PathRedneck = "g";
-        _provider.PathRidesAgain = "h";
-        _provider.PathSlave = "i";
-        _provider.PathFury = "j";
-        _provider.PathNam = "k";
-        _provider.PathWW2GI = "l";
-        _provider.PathWitchaven = "m";
-        _provider.PathWitchaven2 = "n";
-        _provider.PathTekWar = "o";
+        _provider.SetGamePath(GameEnum.Duke64, "c");
+        _provider.SetGamePath(GameEnum.DukeZeroHour, "d");
+        _provider.SetGamePath(GameEnum.Wang, "e");
+        _provider.SetGamePath(GameEnum.Blood, "f");
+        _provider.SetGamePath(GameEnum.Redneck, "g");
+        _provider.SetGamePath(GameEnum.RidesAgain, "h");
+        _provider.SetGamePath(GameEnum.Slave, "i");
+        _provider.SetGamePath(GameEnum.Fury, "j");
+        _provider.SetGamePath(GameEnum.NAM, "k");
+        _provider.SetGamePath(GameEnum.WW2GI, "l");
+        _provider.SetGamePath(GameEnum.Witchaven, "m");
+        _provider.SetGamePath(GameEnum.Witchaven2, "n");
+        _provider.SetGamePath(GameEnum.TekWar, "o");
 
-        Assert.Equal("a", _provider.PathDuke3D);
+        Assert.Equal("a", _provider.GetGamePath(GameEnum.Duke3D));
         Assert.Equal("b", _provider.PathDukeWT);
-        Assert.Equal("c", _provider.PathDuke64);
-        Assert.Equal("d", _provider.PathDukeZH);
-        Assert.Equal("e", _provider.PathWang);
-        Assert.Equal("f", _provider.PathBlood);
-        Assert.Equal("g", _provider.PathRedneck);
-        Assert.Equal("h", _provider.PathRidesAgain);
-        Assert.Equal("i", _provider.PathSlave);
-        Assert.Equal("j", _provider.PathFury);
-        Assert.Equal("k", _provider.PathNam);
-        Assert.Equal("l", _provider.PathWW2GI);
-        Assert.Equal("m", _provider.PathWitchaven);
-        Assert.Equal("n", _provider.PathWitchaven2);
-        Assert.Equal("o", _provider.PathTekWar);
+        Assert.Equal("c", _provider.GetGamePath(GameEnum.Duke64));
+        Assert.Equal("d", _provider.GetGamePath(GameEnum.DukeZeroHour));
+        Assert.Equal("e", _provider.GetGamePath(GameEnum.Wang));
+        Assert.Equal("f", _provider.GetGamePath(GameEnum.Blood));
+        Assert.Equal("g", _provider.GetGamePath(GameEnum.Redneck));
+        Assert.Equal("h", _provider.GetGamePath(GameEnum.RidesAgain));
+        Assert.Equal("i", _provider.GetGamePath(GameEnum.Slave));
+        Assert.Equal("j", _provider.GetGamePath(GameEnum.Fury));
+        Assert.Equal("k", _provider.GetGamePath(GameEnum.NAM));
+        Assert.Equal("l", _provider.GetGamePath(GameEnum.WW2GI));
+        Assert.Equal("m", _provider.GetGamePath(GameEnum.Witchaven));
+        Assert.Equal("n", _provider.GetGamePath(GameEnum.Witchaven2));
+        Assert.Equal("o", _provider.GetGamePath(GameEnum.TekWar));
     }
 
     [Fact]
@@ -366,8 +366,8 @@ public sealed class ConfigProviderTests : IDisposable
     {
         string? firedParam = null;
         _provider.ParameterChangedEvent += param => firedParam = param;
-        _provider.PathDuke3D = Path.Combine("C:\\", "Duke3D");
-        Assert.Equal(nameof(ConfigProvider.PathDuke3D), firedParam);
+        _provider.SetGamePath(GameEnum.Duke3D, Path.Combine("C:\\", "Duke3D"));
+        Assert.Equal(nameof(GameEnum.Duke3D), firedParam);
     }
 
     [Fact]
@@ -412,11 +412,11 @@ public sealed class ConfigProviderTests : IDisposable
         var firedParams = new List<string?>();
         _provider.ParameterChangedEvent += param => firedParams.Add(param);
         _provider.Theme = ThemeEnum.Dark;
-        _provider.PathDuke3D = Path.Combine("C:\\", "Duke");
+        _provider.SetGamePath(GameEnum.Duke3D, Path.Combine("C:\\", "Duke"));
         _provider.AddScore("addon1", 5);
         Assert.Equal(3, firedParams.Count);
         Assert.Equal(nameof(ConfigProvider.Theme), firedParams[0]);
-        Assert.Equal(nameof(ConfigProvider.PathDuke3D), firedParams[1]);
+        Assert.Equal(nameof(GameEnum.Duke3D), firedParams[1]);
         Assert.Equal(nameof(ConfigProvider.Rating), firedParams[2]);
     }
 
@@ -424,12 +424,12 @@ public sealed class ConfigProviderTests : IDisposable
     public void SettingPersistsAcrossNewProvider()
     {
         _provider.Theme = ThemeEnum.Dark;
-        _provider.PathDuke3D = Path.Combine("C:\\", "Duke3D");
+        _provider.SetGamePath(GameEnum.Duke3D, Path.Combine("C:\\", "Duke3D"));
         _provider.AddScore("addon1", 5);
 
         var freshProvider = new ConfigProvider(_dbContextFactory);
         Assert.Equal(ThemeEnum.Dark, freshProvider.Theme);
-        Assert.Equal(Path.Combine("C:\\", "Duke3D"), freshProvider.PathDuke3D);
+        Assert.Equal(Path.Combine("C:\\", "Duke3D"), freshProvider.GetGamePath(GameEnum.Duke3D));
         Assert.Equal((byte)5, freshProvider.Rating["addon1"]);
         freshProvider = null;
     }

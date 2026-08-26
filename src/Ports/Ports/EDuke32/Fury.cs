@@ -1,4 +1,4 @@
-﻿using System.Collections.Immutable;
+using System.Collections.Immutable;
 using Addons.Addons;
 using Core.All.Enums;
 using Core.Client.Interfaces;
@@ -42,7 +42,7 @@ public sealed class Fury : EDuke32
     public override ImmutableHashSet<GameEnum> SupportedGames { get; } = [GameEnum.Fury];
 
     /// <inheritdoc />
-    public override string InstallFolderPath => _config.PathFury ?? string.Empty;
+    public override string InstallFolderPath => _config.GetGamePath(GameEnum.Fury) ?? string.Empty;
 
     /// <inheritdoc />
     public override bool IsInstalled => File.Exists(PortExeFilePath);

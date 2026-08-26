@@ -2,6 +2,7 @@
 using System.Security.Cryptography;
 using System.Text;
 using Core.All;
+using Core.All.Enums;
 using Core.Client.Enums;
 using Core.Client.Interfaces;
 using Database.Client;
@@ -89,108 +90,16 @@ public sealed class ConfigProvider : IConfigProvider
 
     //GAME PATHS
     /// <inheritdoc />
-    public string? PathDuke3D
-    {
-        get => GetGamePath(nameof(PathDuke3D));
-        set => SetGamePathValue(value);
-    }
+    public string? GetGamePath(GameEnum game) => GetGamePath(game.ToString());
+
+    /// <inheritdoc />
+    public void SetGamePath(GameEnum game, string? value) => SetGamePathValue(value, game.ToString());
 
     /// <inheritdoc />
     public string? PathDukeWT
     {
         get => GetGamePath(nameof(PathDukeWT));
-        set => SetGamePathValue(value);
-    }
-
-    /// <inheritdoc />
-    public string? PathDuke64
-    {
-        get => GetGamePath(nameof(PathDuke64));
-        set => SetGamePathValue(value);
-    }
-
-    /// <inheritdoc />
-    public string? PathDukeZH
-    {
-        get => GetGamePath(nameof(PathDukeZH));
-        set => SetGamePathValue(value);
-    }
-
-    /// <inheritdoc />
-    public string? PathWang
-    {
-        get => GetGamePath(nameof(PathWang));
-        set => SetGamePathValue(value);
-    }
-
-    /// <inheritdoc />
-    public string? PathBlood
-    {
-        get => GetGamePath(nameof(PathBlood));
-        set => SetGamePathValue(value);
-    }
-
-    /// <inheritdoc />
-    public string? PathRedneck
-    {
-        get => GetGamePath(nameof(PathRedneck));
-        set => SetGamePathValue(value);
-    }
-
-    /// <inheritdoc />
-    public string? PathRidesAgain
-    {
-        get => GetGamePath(nameof(PathRidesAgain));
-        set => SetGamePathValue(value);
-    }
-
-    /// <inheritdoc />
-    public string? PathSlave
-    {
-        get => GetGamePath(nameof(PathSlave));
-        set => SetGamePathValue(value);
-    }
-
-    /// <inheritdoc />
-    public string? PathFury
-    {
-        get => GetGamePath(nameof(PathFury));
-        set => SetGamePathValue(value);
-    }
-
-    /// <inheritdoc />
-    public string? PathNam
-    {
-        get => GetGamePath(nameof(PathNam));
-        set => SetGamePathValue(value);
-    }
-
-    /// <inheritdoc />
-    public string? PathWW2GI
-    {
-        get => GetGamePath(nameof(PathWW2GI));
-        set => SetGamePathValue(value);
-    }
-
-    /// <inheritdoc />
-    public string? PathWitchaven
-    {
-        get => GetGamePath(nameof(PathWitchaven));
-        set => SetGamePathValue(value);
-    }
-
-    /// <inheritdoc />
-    public string? PathWitchaven2
-    {
-        get => GetGamePath(nameof(PathWitchaven2));
-        set => SetGamePathValue(value);
-    }
-
-    /// <inheritdoc />
-    public string? PathTekWar
-    {
-        get => GetGamePath(nameof(PathTekWar));
-        set => SetGamePathValue(value);
+        set => SetGamePathValue(value, nameof(PathDukeWT));
     }
 
     /// <inheritdoc />
@@ -567,8 +476,8 @@ public sealed class ConfigProvider : IConfigProvider
     ///     Sets a game path value in the database and fires the change event.
     /// </summary>
     /// <param name="value">The path to store.</param>
-    /// <param name="caller">The caller member name, automatically supplied.</param>
-    private void SetGamePathValue(string? value, [CallerMemberName] string caller = "")
+    /// <param name="caller">The storage key identifying the game.</param>
+    private void SetGamePathValue(string? value, string caller)
     {
         using var dbContext = _dbContextFactory.CreateDbContext();
 

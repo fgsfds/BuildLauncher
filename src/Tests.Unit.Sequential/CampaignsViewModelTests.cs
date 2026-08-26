@@ -268,7 +268,7 @@ public sealed class CampaignsViewModelTests : IDisposable
 
         _viewModel.Dispose();
 
-        _configMock.Raise(x => x.ParameterChangedEvent += null, nameof(IConfigProvider.PathDuke3D));
+        _configMock.Raise(x => x.ParameterChangedEvent += null, nameof(GameEnum.Duke3D));
 
         Assert.Same(list, _viewModel.AddonsList);
     }

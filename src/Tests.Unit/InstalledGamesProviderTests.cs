@@ -14,21 +14,21 @@ public sealed class InstalledGamesProviderTests
     public InstalledGamesProviderTests()
     {
         _configMock = new Mock<IConfigProvider>();
-        _configMock.Setup(x => x.PathDuke3D).Returns((string?)null);
-        _configMock.Setup(x => x.PathBlood).Returns((string?)null);
-        _configMock.Setup(x => x.PathWang).Returns((string?)null);
-        _configMock.Setup(x => x.PathFury).Returns((string?)null);
-        _configMock.Setup(x => x.PathRedneck).Returns((string?)null);
-        _configMock.Setup(x => x.PathRidesAgain).Returns((string?)null);
-        _configMock.Setup(x => x.PathSlave).Returns((string?)null);
-        _configMock.Setup(x => x.PathNam).Returns((string?)null);
-        _configMock.Setup(x => x.PathWW2GI).Returns((string?)null);
-        _configMock.Setup(x => x.PathWitchaven).Returns((string?)null);
-        _configMock.Setup(x => x.PathWitchaven2).Returns((string?)null);
-        _configMock.Setup(x => x.PathTekWar).Returns((string?)null);
+        _configMock.Setup(x => x.GetGamePath(GameEnum.Duke3D)).Returns((string?)null);
+        _configMock.Setup(x => x.GetGamePath(GameEnum.Blood)).Returns((string?)null);
+        _configMock.Setup(x => x.GetGamePath(GameEnum.Wang)).Returns((string?)null);
+        _configMock.Setup(x => x.GetGamePath(GameEnum.Fury)).Returns((string?)null);
+        _configMock.Setup(x => x.GetGamePath(GameEnum.Redneck)).Returns((string?)null);
+        _configMock.Setup(x => x.GetGamePath(GameEnum.RidesAgain)).Returns((string?)null);
+        _configMock.Setup(x => x.GetGamePath(GameEnum.Slave)).Returns((string?)null);
+        _configMock.Setup(x => x.GetGamePath(GameEnum.NAM)).Returns((string?)null);
+        _configMock.Setup(x => x.GetGamePath(GameEnum.WW2GI)).Returns((string?)null);
+        _configMock.Setup(x => x.GetGamePath(GameEnum.Witchaven)).Returns((string?)null);
+        _configMock.Setup(x => x.GetGamePath(GameEnum.Witchaven2)).Returns((string?)null);
+        _configMock.Setup(x => x.GetGamePath(GameEnum.TekWar)).Returns((string?)null);
         _configMock.Setup(x => x.PathDukeWT).Returns((string?)null);
-        _configMock.Setup(x => x.PathDuke64).Returns((string?)null);
-        _configMock.Setup(x => x.PathDukeZH).Returns((string?)null);
+        _configMock.Setup(x => x.GetGamePath(GameEnum.Duke64)).Returns((string?)null);
+        _configMock.Setup(x => x.GetGamePath(GameEnum.DukeZeroHour)).Returns((string?)null);
 
         _provider = new InstalledGamesProvider(_configMock.Object);
     }
@@ -241,7 +241,7 @@ public sealed class InstalledGamesProviderTests
         GameEnum? received = null;
         _provider.GameChangedEvent += g => received = g;
 
-        _configMock.Raise(x => x.ParameterChangedEvent += null, "PathDuke3D");
+        _configMock.Raise(x => x.ParameterChangedEvent += null, "Duke3D");
 
         Assert.NotNull(received);
         Assert.Equal(GameEnum.Duke3D, received);
@@ -253,7 +253,7 @@ public sealed class InstalledGamesProviderTests
         GameEnum? received = null;
         _provider.GameChangedEvent += g => received = g;
 
-        _configMock.Raise(x => x.ParameterChangedEvent += null, "PathBlood");
+        _configMock.Raise(x => x.ParameterChangedEvent += null, "Blood");
 
         Assert.Equal(GameEnum.Blood, received);
     }
@@ -264,7 +264,7 @@ public sealed class InstalledGamesProviderTests
         GameEnum? received = null;
         _provider.GameChangedEvent += g => received = g;
 
-        _configMock.Raise(x => x.ParameterChangedEvent += null, "PathWang");
+        _configMock.Raise(x => x.ParameterChangedEvent += null, "Wang");
 
         Assert.Equal(GameEnum.Wang, received);
     }
@@ -275,7 +275,7 @@ public sealed class InstalledGamesProviderTests
         GameEnum? received = null;
         _provider.GameChangedEvent += g => received = g;
 
-        _configMock.Raise(x => x.ParameterChangedEvent += null, "PathFury");
+        _configMock.Raise(x => x.ParameterChangedEvent += null, "Fury");
 
         Assert.Equal(GameEnum.Fury, received);
     }
@@ -286,7 +286,7 @@ public sealed class InstalledGamesProviderTests
         GameEnum? received = null;
         _provider.GameChangedEvent += g => received = g;
 
-        _configMock.Raise(x => x.ParameterChangedEvent += null, "PathSlave");
+        _configMock.Raise(x => x.ParameterChangedEvent += null, "Slave");
 
         Assert.Equal(GameEnum.Slave, received);
     }
@@ -297,7 +297,7 @@ public sealed class InstalledGamesProviderTests
         GameEnum? received = null;
         _provider.GameChangedEvent += g => received = g;
 
-        _configMock.Raise(x => x.ParameterChangedEvent += null, "PathNam");
+        _configMock.Raise(x => x.ParameterChangedEvent += null, "NAM");
 
         Assert.Equal(GameEnum.NAM, received);
     }
@@ -308,7 +308,7 @@ public sealed class InstalledGamesProviderTests
         GameEnum? received = null;
         _provider.GameChangedEvent += g => received = g;
 
-        _configMock.Raise(x => x.ParameterChangedEvent += null, "PathWW2GI");
+        _configMock.Raise(x => x.ParameterChangedEvent += null, "WW2GI");
 
         Assert.Equal(GameEnum.WW2GI, received);
     }
@@ -319,7 +319,7 @@ public sealed class InstalledGamesProviderTests
         GameEnum? received = null;
         _provider.GameChangedEvent += g => received = g;
 
-        _configMock.Raise(x => x.ParameterChangedEvent += null, "PathTekWar");
+        _configMock.Raise(x => x.ParameterChangedEvent += null, "TekWar");
 
         Assert.Equal(GameEnum.TekWar, received);
     }

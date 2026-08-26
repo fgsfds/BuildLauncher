@@ -1,4 +1,5 @@
 ﻿using Core.All;
+using Core.All.Enums;
 using Core.Client.Enums;
 using Core.Client.Interfaces;
 
@@ -18,41 +19,21 @@ public sealed class ConfigProviderFake : IConfigProvider
     /// <inheritdoc />
     public bool IsConsented { get; set; } = true;
     /// <inheritdoc />
-    public string? PathBlood { get; set; } = null;
-    /// <inheritdoc />
-    public string? PathDuke3D { get; set; } = null;
-    /// <inheritdoc />
-    public string? PathDuke64 { get; set; } = null;
-    /// <inheritdoc />
-    public string? PathDukeZH { get; set; } = null;
-    /// <inheritdoc />
     public string? PathDukeWT { get; set; } = null;
-    /// <inheritdoc />
-    public string? PathFury { get; set; } = null;
-    /// <inheritdoc />
-    public string? PathRedneck { get; set; } = null;
-    /// <inheritdoc />
-    public string? PathRidesAgain { get; set; } = null;
-    /// <inheritdoc />
-    public string? PathSlave { get; set; } = null;
-    /// <inheritdoc />
-    public string? PathWang { get; set; } = null;
-    /// <inheritdoc />
-    public string? PathNam { get; set; } = null;
-    /// <inheritdoc />
-    public string? PathWW2GI { get; set; } = null;
-    /// <inheritdoc />
-    public string? PathWitchaven { get; set; } = null;
-    /// <inheritdoc />
-    public string? PathWitchaven2 { get; set; } = null;
-    /// <inheritdoc />
-    public string? PathTekWar { get; set; } = null;
     /// <inheritdoc />
     public string? GitHubToken { get; set; } = null;
     /// <inheritdoc />
     public string? S3SecretKey { get; set; } = null;
     /// <inheritdoc />
     public Dictionary<string, byte> Rating { get; set; } = [];
+
+    private readonly Dictionary<GameEnum, string?> _gamePaths = [];
+
+    /// <inheritdoc />
+    public string? GetGamePath(GameEnum game) => _gamePaths.TryGetValue(game, out var path) ? path : null;
+
+    /// <inheritdoc />
+    public void SetGamePath(GameEnum game, string? value) => _gamePaths[game] = value;
 
     /// <inheritdoc />
     public Dictionary<string, TimeSpan> Playtimes { get; } = [];

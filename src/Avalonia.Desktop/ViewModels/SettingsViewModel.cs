@@ -63,8 +63,8 @@ public sealed partial class SettingsViewModel : ObservableObject
     /// </summary>
     public string? PathToBlood
     {
-        get => _config.PathBlood;
-        set => _config.PathBlood = value;
+        get => _config.GetGamePath(GameEnum.Blood);
+        set => _config.SetGamePath(GameEnum.Blood, value);
     }
 
     /// <summary>
@@ -72,8 +72,8 @@ public sealed partial class SettingsViewModel : ObservableObject
     /// </summary>
     public string? PathToDuke3D
     {
-        get => _config.PathDuke3D;
-        set => _config.PathDuke3D = value;
+        get => _config.GetGamePath(GameEnum.Duke3D);
+        set => _config.SetGamePath(GameEnum.Duke3D, value);
     }
 
     /// <summary>
@@ -90,8 +90,8 @@ public sealed partial class SettingsViewModel : ObservableObject
     /// </summary>
     public string? PathToDuke64
     {
-        get => _config.PathDuke64;
-        set => _config.PathDuke64 = value;
+        get => _config.GetGamePath(GameEnum.Duke64);
+        set => _config.SetGamePath(GameEnum.Duke64, value);
     }
 
     /// <summary>
@@ -99,8 +99,8 @@ public sealed partial class SettingsViewModel : ObservableObject
     /// </summary>
     public string? PathToDukeZH
     {
-        get => _config.PathDukeZH;
-        set => _config.PathDukeZH = value;
+        get => _config.GetGamePath(GameEnum.DukeZeroHour);
+        set => _config.SetGamePath(GameEnum.DukeZeroHour, value);
     }
 
     /// <summary>
@@ -108,8 +108,8 @@ public sealed partial class SettingsViewModel : ObservableObject
     /// </summary>
     public string? PathToWang
     {
-        get => _config.PathWang;
-        set => _config.PathWang = value;
+        get => _config.GetGamePath(GameEnum.Wang);
+        set => _config.SetGamePath(GameEnum.Wang, value);
     }
 
     /// <summary>
@@ -117,8 +117,8 @@ public sealed partial class SettingsViewModel : ObservableObject
     /// </summary>
     public string? PathToFury
     {
-        get => _config.PathFury;
-        set => _config.PathFury = value;
+        get => _config.GetGamePath(GameEnum.Fury);
+        set => _config.SetGamePath(GameEnum.Fury, value);
     }
 
     /// <summary>
@@ -126,8 +126,8 @@ public sealed partial class SettingsViewModel : ObservableObject
     /// </summary>
     public string? PathToRedneck
     {
-        get => _config.PathRedneck;
-        set => _config.PathRedneck = value;
+        get => _config.GetGamePath(GameEnum.Redneck);
+        set => _config.SetGamePath(GameEnum.Redneck, value);
     }
 
     /// <summary>
@@ -135,8 +135,8 @@ public sealed partial class SettingsViewModel : ObservableObject
     /// </summary>
     public string? PathToAgain
     {
-        get => _config.PathRidesAgain;
-        set => _config.PathRidesAgain = value;
+        get => _config.GetGamePath(GameEnum.RidesAgain);
+        set => _config.SetGamePath(GameEnum.RidesAgain, value);
     }
 
     /// <summary>
@@ -144,8 +144,8 @@ public sealed partial class SettingsViewModel : ObservableObject
     /// </summary>
     public string? PathToSlave
     {
-        get => _config.PathSlave;
-        set => _config.PathSlave = value;
+        get => _config.GetGamePath(GameEnum.Slave);
+        set => _config.SetGamePath(GameEnum.Slave, value);
     }
 
     /// <summary>
@@ -153,8 +153,8 @@ public sealed partial class SettingsViewModel : ObservableObject
     /// </summary>
     public string? PathToNam
     {
-        get => _config.PathNam;
-        set => _config.PathNam = value;
+        get => _config.GetGamePath(GameEnum.NAM);
+        set => _config.SetGamePath(GameEnum.NAM, value);
     }
 
     /// <summary>
@@ -162,8 +162,8 @@ public sealed partial class SettingsViewModel : ObservableObject
     /// </summary>
     public string? PathToWW2GI
     {
-        get => _config.PathWW2GI;
-        set => _config.PathWW2GI = value;
+        get => _config.GetGamePath(GameEnum.WW2GI);
+        set => _config.SetGamePath(GameEnum.WW2GI, value);
     }
 
     /// <summary>
@@ -171,8 +171,8 @@ public sealed partial class SettingsViewModel : ObservableObject
     /// </summary>
     public string? PathToWitchaven
     {
-        get => _config.PathWitchaven;
-        set => _config.PathWitchaven = value;
+        get => _config.GetGamePath(GameEnum.Witchaven);
+        set => _config.SetGamePath(GameEnum.Witchaven, value);
     }
 
     /// <summary>
@@ -180,8 +180,8 @@ public sealed partial class SettingsViewModel : ObservableObject
     /// </summary>
     public string? PathToWitchaven2
     {
-        get => _config.PathWitchaven2;
-        set => _config.PathWitchaven2 = value;
+        get => _config.GetGamePath(GameEnum.Witchaven2);
+        set => _config.SetGamePath(GameEnum.Witchaven2, value);
     }
 
     /// <summary>
@@ -189,8 +189,8 @@ public sealed partial class SettingsViewModel : ObservableObject
     /// </summary>
     public string? PathToTekWar
     {
-        get => _config.PathTekWar;
-        set => _config.PathTekWar = value;
+        get => _config.GetGamePath(GameEnum.TekWar);
+        set => _config.SetGamePath(GameEnum.TekWar, value);
     }
 
     /// <summary>

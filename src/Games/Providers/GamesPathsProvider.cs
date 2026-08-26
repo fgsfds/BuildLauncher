@@ -1,4 +1,4 @@
-﻿using Core.All.Enums;
+using Core.All.Enums;
 using Core.All.Enums.Versions;
 using Core.Client.Helpers;
 using Core.Client.Interfaces;
@@ -160,18 +160,26 @@ public sealed class GamesPathsProvider
 
     private void FillConfig()
     {
-        _config.PathDuke3D ??= GetPath(GameEnum.Duke3D);
+        EnsureGamePath(GameEnum.Duke3D, GetPath(GameEnum.Duke3D));
         _config.PathDukeWT ??= _dukeWtPath;
-        _config.PathWang ??= GetPath(GameEnum.Wang);
-        _config.PathBlood ??= GetPath(GameEnum.Blood);
-        _config.PathFury ??= GetPath(GameEnum.Fury);
-        _config.PathSlave ??= GetPath(GameEnum.Slave);
-        _config.PathRedneck ??= GetPath(GameEnum.Redneck);
-        _config.PathRidesAgain ??= GetPath(GameEnum.RidesAgain);
-        _config.PathNam ??= GetPath(GameEnum.NAM);
-        _config.PathWW2GI ??= GetPath(GameEnum.WW2GI);
-        _config.PathWitchaven ??= GetPath(GameEnum.Witchaven);
-        _config.PathWitchaven2 ??= GetPath(GameEnum.Witchaven2);
-        _config.PathTekWar ??= GetPath(GameEnum.TekWar);
+        EnsureGamePath(GameEnum.Wang, GetPath(GameEnum.Wang));
+        EnsureGamePath(GameEnum.Blood, GetPath(GameEnum.Blood));
+        EnsureGamePath(GameEnum.Fury, GetPath(GameEnum.Fury));
+        EnsureGamePath(GameEnum.Slave, GetPath(GameEnum.Slave));
+        EnsureGamePath(GameEnum.Redneck, GetPath(GameEnum.Redneck));
+        EnsureGamePath(GameEnum.RidesAgain, GetPath(GameEnum.RidesAgain));
+        EnsureGamePath(GameEnum.NAM, GetPath(GameEnum.NAM));
+        EnsureGamePath(GameEnum.WW2GI, GetPath(GameEnum.WW2GI));
+        EnsureGamePath(GameEnum.Witchaven, GetPath(GameEnum.Witchaven));
+        EnsureGamePath(GameEnum.Witchaven2, GetPath(GameEnum.Witchaven2));
+        EnsureGamePath(GameEnum.TekWar, GetPath(GameEnum.TekWar));
+    }
+
+    private void EnsureGamePath(GameEnum game, string? path)
+    {
+        if (_config.GetGamePath(game) is null && path is not null)
+        {
+            _config.SetGamePath(game, path);
+        }
     }
 }

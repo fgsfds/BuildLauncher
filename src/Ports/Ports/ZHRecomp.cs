@@ -1,4 +1,4 @@
-﻿using System.Collections.Immutable;
+using System.Collections.Immutable;
 using Addons.Addons;
 using Core.All.Enums;
 using Core.Client.Interfaces;
@@ -79,12 +79,12 @@ public sealed class ZHRecomp : BasePort
 
         if (!File.Exists(pathToRom))
         {
-            if (!File.Exists(_config.PathDukeZH))
+            if (!File.Exists(_config.GetGamePath(GameEnum.DukeZeroHour)))
             {
-                throw new InvalidOperationException($"Can't find {_config.PathDukeZH}.");
+                throw new InvalidOperationException($"Can't find {_config.GetGamePath(GameEnum.DukeZeroHour)}.");
             }
 
-            File.Copy(_config.PathDukeZH, pathToRom, true);
+            File.Copy(_config.GetGamePath(GameEnum.DukeZeroHour), pathToRom, true);
         }
     }
 
