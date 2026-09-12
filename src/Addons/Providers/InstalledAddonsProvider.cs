@@ -831,6 +831,11 @@ public sealed class InstalledAddonsProvider : IDisposable
 
     private void OnMetadataUpdated(object? sender, ParsedAddonFile e)
     {
+        if (e.Manifest is null)
+        {
+            return;
+        }
+
         try
         {
             if (_game.GameEnum != e.Manifest.SupportedGame.Game)

@@ -83,48 +83,48 @@ public sealed partial class MainWindow : Window, IDisposable
 
         if (!_config.IsConsented)
         {
-            ConsentWindow.IsVisible = true;
+            ConsentWindow!.IsVisible = true;
         }
 
         if (_installedGamesProvider.IsDukeInstalled)
         {
-            DukeTab.IsSelected = true;
+            DukeTab!.IsSelected = true;
         }
         else if (_installedGamesProvider.IsBloodInstalled)
         {
-            BloodTab.IsSelected = true;
+            BloodTab!.IsSelected = true;
         }
         else if (_installedGamesProvider.IsWangInstalled)
         {
-            WangTab.IsSelected = true;
+            WangTab!.IsSelected = true;
         }
         else if (_installedGamesProvider.IsFuryInstalled)
         {
-            FuryTab.IsSelected = true;
+            FuryTab!.IsSelected = true;
         }
         else if (_installedGamesProvider.IsRedneckInstalled)
         {
-            RedneckTab.IsSelected = true;
+            RedneckTab!.IsSelected = true;
         }
         else if (_installedGamesProvider.IsSlaveInstalled)
         {
-            SlaveTab.IsSelected = true;
+            SlaveTab!.IsSelected = true;
         }
         else if (_installedGamesProvider.IsNamInstalled)
         {
-            NamTab.IsSelected = true;
+            NamTab!.IsSelected = true;
         }
         else if (_installedGamesProvider.IsWW2GIInstalled)
         {
-            WW2GITab.IsSelected = true;
+            WW2GITab!.IsSelected = true;
         }
         else if (_installedGamesProvider.IsWitchavenInstalled)
         {
-            WitchavenTab.IsSelected = true;
+            WitchavenTab!.IsSelected = true;
         }
         else if (_installedGamesProvider.IsTekWarInstalled)
         {
-            TekWarTab.IsSelected = true;
+            TekWarTab!.IsSelected = true;
         }
     }
 
@@ -133,7 +133,7 @@ public sealed partial class MainWindow : Window, IDisposable
     /// </summary>
     private void OnConsentButtonClick(object? sender, RoutedEventArgs e)
     {
-        ConsentWindow.IsVisible = false;
+        ConsentWindow!.IsVisible = false;
         _config.IsConsented = true;
     }
 }

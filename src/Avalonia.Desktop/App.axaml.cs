@@ -123,7 +123,7 @@ public sealed class App : Application
         }
         catch (Exception ex)
         {
-            logger?.LogCritical(ex, "== Critical error while running app ==");
+            logger.LogCritical(ex, "== Critical error while running app ==");
 
             try
             {
@@ -131,7 +131,7 @@ public sealed class App : Application
             }
             catch (Exception ex2)
             {
-                logger?.LogCritical(ex2, "== Critical error while shutting down app ==");
+                logger.LogCritical(ex2, "== Critical error while shutting down app ==");
             }
 
             throw;

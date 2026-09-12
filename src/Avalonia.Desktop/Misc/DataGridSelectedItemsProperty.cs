@@ -34,7 +34,7 @@ public sealed class DataGridSelectedItemsProperty
                 {
                     list.Clear();
 
-                    foreach (var item in grid.SelectedItems)
+                    foreach (var item in grid.SelectedItems!)
                     {
                         _ = list.Add(item);
                     }
@@ -69,7 +69,7 @@ public sealed class DataGridSelectedItemsProperty
         {
             list.Clear();
 
-            foreach (var item in grid.SelectedItems)
+            foreach (var item in grid.SelectedItems!)
             {
                 _ = list.Add(item);
             }

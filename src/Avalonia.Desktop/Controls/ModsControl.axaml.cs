@@ -36,14 +36,14 @@ public sealed partial class ModsControl : AddonListControlBase
     /// </summary>
     private void ContextMenuOpened(object? sender, RoutedEventArgs e)
     {
-        if (ModsList.SelectedItem is not BaseAddon addon)
+        if (ModsList!.SelectedItem is not BaseAddon addon)
         {
             e.Handled = true;
 
             return;
         }
 
-        ClearContextMenu(ModsList.ContextMenu);
+        ClearContextMenu(ModsList!.ContextMenu!);
 
         if (addon.IsMetadataUpdateAvailable)
         {
@@ -54,8 +54,8 @@ public sealed partial class ModsControl : AddonListControlBase
                 Command = new AsyncRelayCommand(async () => await _viewModel.UpdateMetadataAsync(addon).ConfigureAwait(true))
             };
 
-            _ = ModsList.ContextMenu.Items.Add(updateMetadataButton);
-            _ = ModsList.ContextMenu.Items.Add(new Separator());
+            _ = ModsList!.ContextMenu!.Items.Add(updateMetadataButton);
+            _ = ModsList!.ContextMenu!.Items.Add(new Separator());
         }
 
         var deleteButton = new MenuItem()
@@ -68,11 +68,11 @@ public sealed partial class ModsControl : AddonListControlBase
                 )
         };
 
-        _ = ModsList.ContextMenu.Items.Add(deleteButton);
+        _ = ModsList!.ContextMenu!.Items.Add(deleteButton);
     }
 
     /// <summary>
     ///     Handles the context menu closing event.
     /// </summary>
-    private void ContextMenuClosed(object? sender, RoutedEventArgs e) => ClearContextMenu(ModsList.ContextMenu);
+    private void ContextMenuClosed(object? sender, RoutedEventArgs e) => ClearContextMenu(ModsList!.ContextMenu!);
 }

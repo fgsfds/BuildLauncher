@@ -121,7 +121,7 @@ public sealed partial class CampaignsControl : AddonListControlBase
                 Padding = new(5)
             };
 
-            BottomPanel.PortsButtonsPanel.Children.Add(button);
+            BottomPanel!.PortsButtonsPanel!.Children.Add(button);
 
             return;
         }
@@ -136,13 +136,13 @@ public sealed partial class CampaignsControl : AddonListControlBase
                 Command = new RelayCommand(
                     () =>
                         _viewModel.StartAddonCommand.Execute(port),
-                    () => PortsHelper.CheckPortRequirements(CampaignsList.SelectedItem, _viewModel.Game, port)
+                    () => PortsHelper.CheckPortRequirements(CampaignsList!.SelectedItem, _viewModel.Game, port)
                     ),
                 Margin = new(5),
                 Padding = new(5)
             };
 
-            BottomPanel.PortsButtonsPanel.Children.Add(portButton);
+            BottomPanel!.PortsButtonsPanel!.Children.Add(portButton);
         }
 
         Button customPortButton = new()
@@ -174,7 +174,7 @@ public sealed partial class CampaignsControl : AddonListControlBase
             IsVisible = false
         };
 
-        BottomPanel.PortsButtonsPanel.Children.Add(customPortButton);
+        BottomPanel!.PortsButtonsPanel!.Children.Add(customPortButton);
 
         AddCustomPortsButton();
     }
@@ -184,7 +184,7 @@ public sealed partial class CampaignsControl : AddonListControlBase
     /// </summary>
     private void AddCustomPortsButton()
     {
-        RemoveButtonByText(BottomPanel.PortsButtonsPanel, CustomPortStr);
+        RemoveButtonByText(BottomPanel!.PortsButtonsPanel!, CustomPortStr);
 
         MenuFlyout flyout = new()
         {
@@ -224,7 +224,7 @@ public sealed partial class CampaignsControl : AddonListControlBase
 
         customPortButton.Click += (sender, e) => flyout.ShowAt(customPortButton);
 
-        BottomPanel.PortsButtonsPanel.Children.Add(customPortButton);
+        BottomPanel!.PortsButtonsPanel!.Children.Add(customPortButton);
     }
 
     /// <summary>
@@ -232,13 +232,13 @@ public sealed partial class CampaignsControl : AddonListControlBase
     /// </summary>
     private void OnCampaignsListSelectionChanged(object? sender, SelectionChangedEventArgs e)
     {
-        NotifyPortButtonsCanExecuteChanged(BottomPanel.PortsButtonsPanel);
+        NotifyPortButtonsCanExecuteChanged(BottomPanel!.PortsButtonsPanel!);
 
-        var customPortButton = FindButtonByText(BottomPanel.PortsButtonsPanel, CustomPortStr);
+        var customPortButton = FindButtonByText(BottomPanel!.PortsButtonsPanel!, CustomPortStr);
 
         if (customPortButton is not null)
         {
-            customPortButton.IsEnabled = CampaignsList.SelectedItem is not null;
+            customPortButton.IsEnabled = CampaignsList!.SelectedItem is not null;
         }
     }
 
@@ -255,9 +255,9 @@ public sealed partial class CampaignsControl : AddonListControlBase
     /// </summary>
     private void ContextMenuOpened(object? sender, RoutedEventArgs e)
     {
-        ClearContextMenu(CampaignsList.ContextMenu);
+        ClearContextMenu(CampaignsList!.ContextMenu!);
 
-        if (CampaignsList.SelectedItem is not BaseAddon addon)
+        if (CampaignsList!.SelectedItem is not BaseAddon addon)
         {
             return;
         }
@@ -270,7 +270,7 @@ public sealed partial class CampaignsControl : AddonListControlBase
             {
                 Header = "Remove from favorites",
                 Padding = new(5),
-                Command = new RelayCommand(() => _viewModel.RemoveFromFavoriteCommand.Execute(CampaignsList.SelectedItem))
+                Command = new RelayCommand(() => _viewModel.RemoveFromFavoriteCommand.Execute(CampaignsList!.SelectedItem))
             };
         }
         else
@@ -279,12 +279,12 @@ public sealed partial class CampaignsControl : AddonListControlBase
             {
                 Header = "Add to favorites",
                 Padding = new(5),
-                Command = new RelayCommand(() => _viewModel.AddToFavoriteCommand.Execute(CampaignsList.SelectedItem))
+                Command = new RelayCommand(() => _viewModel.AddToFavoriteCommand.Execute(CampaignsList!.SelectedItem))
             };
         }
 
-        _ = CampaignsList.ContextMenu.Items.Add(favoriteButton);
-        _ = CampaignsList.ContextMenu.Items.Add(new Separator());
+        _ = CampaignsList!.ContextMenu!.Items.Add(favoriteButton);
+        _ = CampaignsList!.ContextMenu!.Items.Add(new Separator());
 
         if (addon.IsMetadataUpdateAvailable)
         {
@@ -295,13 +295,13 @@ public sealed partial class CampaignsControl : AddonListControlBase
                 Command = new AsyncRelayCommand(async () => await _viewModel.UpdateMetadataAsync(addon).ConfigureAwait(true))
             };
 
-            _ = CampaignsList.ContextMenu.Items.Add(updateMetadataButton);
-            _ = CampaignsList.ContextMenu.Items.Add(new Separator());
+            _ = CampaignsList!.ContextMenu!.Items.Add(updateMetadataButton);
+            _ = CampaignsList!.ContextMenu!.Items.Add(new Separator());
         }
 
         foreach (var port in _supportedPorts)
         {
-            if (!PortsHelper.CheckPortRequirements(CampaignsList.SelectedItem, _viewModel.Game, port))
+            if (!PortsHelper.CheckPortRequirements(CampaignsList!.SelectedItem, _viewModel.Game, port))
             {
                 continue;
             }
@@ -313,12 +313,12 @@ public sealed partial class CampaignsControl : AddonListControlBase
                 Command = new RelayCommand(() => _viewModel.StartAddonCommand.Execute(port))
             };
 
-            _ = CampaignsList.ContextMenu.Items.Add(portButton);
+            _ = CampaignsList!.ContextMenu!.Items.Add(portButton);
         }
 
-        if (CampaignsList.ContextMenu.Items.Count > 2)
+        if (CampaignsList!.ContextMenu!.Items.Count > 2)
         {
-            _ = CampaignsList.ContextMenu.Items.Add(new Separator());
+            _ = CampaignsList!.ContextMenu!.Items.Add(new Separator());
         }
 
 
@@ -340,13 +340,13 @@ public sealed partial class CampaignsControl : AddonListControlBase
                 Command = new RelayCommand(() => _viewModel.StartAddonCommand.Execute(port))
             };
 
-            _ = CampaignsList.ContextMenu.Items.Add(portButton);
+            _ = CampaignsList!.ContextMenu!.Items.Add(portButton);
             cPortsCount++;
         }
 
         if (cPortsCount > 0)
         {
-            _ = CampaignsList.ContextMenu.Items.Add(new Separator());
+            _ = CampaignsList!.ContextMenu!.Items.Add(new Separator());
         }
 
 
@@ -360,11 +360,11 @@ public sealed partial class CampaignsControl : AddonListControlBase
                 )
         };
 
-        _ = CampaignsList.ContextMenu.Items.Add(deleteButton);
+        _ = CampaignsList!.ContextMenu!.Items.Add(deleteButton);
     }
 
     /// <summary>
     ///     Handles the context menu closing event.
     /// </summary>
-    private void ContextMenuClosed(object? sender, RoutedEventArgs e) => ClearContextMenu(CampaignsList.ContextMenu);
+    private void ContextMenuClosed(object? sender, RoutedEventArgs e) => ClearContextMenu(CampaignsList!.ContextMenu!);
 }

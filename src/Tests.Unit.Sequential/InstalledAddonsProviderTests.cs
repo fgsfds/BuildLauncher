@@ -150,7 +150,7 @@ public sealed class InstalledAddonsProviderTests : IDisposable
     public void AddAddon_ModWithMainDef_Throws()
     {
         var parsed = ParsedAddonFileHelper.CreateParsedModFile("test-mod", "Test Mod", "1.0");
-        parsed.Manifest.MainDef = "GAME.CON";
+        parsed.Manifest!.MainDef = "GAME.CON";
 
         Assert.Throws<ArgumentException>(() => _installedAddonsProvider.AddAddon(parsed));
     }

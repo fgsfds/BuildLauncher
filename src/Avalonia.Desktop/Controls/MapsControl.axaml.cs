@@ -107,7 +107,7 @@ public sealed partial class MapsControl : AddonListControlBase
                             _viewModel.StartAddonCommand.Execute(new Tuple<BasePort, byte?>(port, null));
                         }
                     },
-                    () => PortsHelper.CheckPortRequirements(MapsList.SelectedItem, _viewModel.Game, port)
+                    () => PortsHelper.CheckPortRequirements(MapsList!.SelectedItem, _viewModel.Game, port)
                     ),
                 Margin = new(5),
                 Padding = new(5)
@@ -115,7 +115,7 @@ public sealed partial class MapsControl : AddonListControlBase
 
             button.Click += OnPortButtonClicked;
 
-            BottomPanel.PortsButtonsPanel.Children.Add(button);
+            BottomPanel!.PortsButtonsPanel!.Children.Add(button);
         }
     }
 
@@ -198,7 +198,7 @@ public sealed partial class MapsControl : AddonListControlBase
     /// </summary>
     private void OnMapsListSelectionChanged(object? sender, SelectionChangedEventArgs e)
     {
-        NotifyPortButtonsCanExecuteChanged(BottomPanel.PortsButtonsPanel);
+        NotifyPortButtonsCanExecuteChanged(BottomPanel!.PortsButtonsPanel!);
     }
 
     /// <summary>
@@ -230,9 +230,9 @@ public sealed partial class MapsControl : AddonListControlBase
     /// </summary>
     private void ContextMenuOpened(object? sender, RoutedEventArgs e)
     {
-        ClearContextMenu(MapsList.ContextMenu);
+        ClearContextMenu(MapsList!.ContextMenu!);
 
-        if (MapsList.SelectedItem is not BaseAddon addon)
+        if (MapsList!.SelectedItem is not BaseAddon addon)
         {
             return;
         }
@@ -246,13 +246,13 @@ public sealed partial class MapsControl : AddonListControlBase
                 Command = new AsyncRelayCommand(async () => await _viewModel.UpdateMetadataAsync(addon).ConfigureAwait(true))
             };
 
-            _ = MapsList.ContextMenu.Items.Add(updateMetadataButton);
-            _ = MapsList.ContextMenu.Items.Add(new Separator());
+            _ = MapsList!.ContextMenu!.Items.Add(updateMetadataButton);
+            _ = MapsList!.ContextMenu!.Items.Add(new Separator());
         }
 
         foreach (var port in _supportedPorts)
         {
-            if (!PortsHelper.CheckPortRequirements(MapsList.SelectedItem, _viewModel.Game, port))
+            if (!PortsHelper.CheckPortRequirements(MapsList!.SelectedItem, _viewModel.Game, port))
             {
                 continue;
             }
@@ -285,12 +285,12 @@ public sealed partial class MapsControl : AddonListControlBase
                 };
             }
 
-            _ = MapsList.ContextMenu.Items.Add(portButton);
+            _ = MapsList!.ContextMenu!.Items.Add(portButton);
         }
 
-        if (MapsList.ContextMenu.Items.Count > 0)
+        if (MapsList!.ContextMenu!.Items.Count > 0)
         {
-            _ = MapsList.ContextMenu.Items.Add(new Separator());
+            _ = MapsList!.ContextMenu!.Items.Add(new Separator());
         }
 
         var deleteButton = new MenuItem()
@@ -303,11 +303,11 @@ public sealed partial class MapsControl : AddonListControlBase
                 )
         };
 
-        _ = MapsList.ContextMenu.Items.Add(deleteButton);
+        _ = MapsList!.ContextMenu!.Items.Add(deleteButton);
     }
 
     /// <summary>
     ///     Handles the context menu closing event.
     /// </summary>
-    private void ContextMenuClosed(object? sender, RoutedEventArgs e) => ClearContextMenu(MapsList.ContextMenu);
+    private void ContextMenuClosed(object? sender, RoutedEventArgs e) => ClearContextMenu(MapsList!.ContextMenu!);
 }

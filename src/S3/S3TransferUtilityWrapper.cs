@@ -69,7 +69,7 @@ public sealed class S3TransferUtilityWrapper : IDisposable
 
         if (!string.IsNullOrWhiteSpace(sha))
         {
-            uploadRequest.Metadata["checksum-sha256"] = sha;
+            uploadRequest.Metadata!["checksum-sha256"] = sha;
         }
 
         return _transferUtility.UploadWithResponseAsync(uploadRequest, cancellationToken);
@@ -86,7 +86,7 @@ public sealed class S3TransferUtilityWrapper : IDisposable
         {
             if (!string.IsNullOrWhiteSpace(_secretKey))
             {
-                args.Headers["Referer"] = _secretKey;
+                args.Headers!["Referer"] = _secretKey;
             }
         }
     }

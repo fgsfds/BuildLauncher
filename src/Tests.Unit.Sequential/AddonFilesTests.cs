@@ -88,7 +88,7 @@ public sealed class AddonFilesTests : IDisposable
         await Task.Delay(100);
 
         Assert.False(File.Exists(pathToFile));
-        Assert.True(Directory.Exists(pathToFile.Replace(".zip", "")));
+        Assert.True(Directory.Exists(pathToFile!.Replace(".zip", "")));
 
         var installedMods = _installedAddonsProvider.GetInstalledAddonsByType(AddonTypeEnum.Mod);
         Assert.Equal(2, installedMods.Count);

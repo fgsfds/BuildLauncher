@@ -100,7 +100,7 @@ public sealed class IStartMapConverter : JsonConverter<IStartMap?>
         }
         else
         {
-            throw new NotSupportedException($"Serialization of {nameof(IStartMap)} type '{value.GetType().Name}' is not supported.");
+            throw new NotSupportedException($"Serialization of {nameof(IStartMap)} type '{value!.GetType().Name}' is not supported.");
         }
 
         writer.WriteEndObject();
@@ -135,7 +135,7 @@ public sealed class ExecutablesConverter : JsonConverter<Dictionary<OSEnum, Dict
                 {
                     Dictionary<OSEnum, Dictionary<PortEnum, string>> result = [];
 
-                    if (old.TryGetValue(OSEnum.Windows, out var winPort))
+                    if (old.TryGetValue(OSEnum.Windows, out var winPort) && winPort is not null)
                     {
                         result.Add(OSEnum.Windows, []);
 
@@ -161,7 +161,7 @@ public sealed class ExecutablesConverter : JsonConverter<Dictionary<OSEnum, Dict
                         }
                     }
 
-                    if (old.TryGetValue(OSEnum.Linux, out var linPort))
+                    if (old.TryGetValue(OSEnum.Linux, out var linPort) && linPort is not null)
                     {
                         result.Add(OSEnum.Linux, []);
 

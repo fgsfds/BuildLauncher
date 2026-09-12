@@ -97,7 +97,7 @@ public sealed partial class Program
     /// <returns>The configured AppBuilder.</returns>
     private static AppBuilder BuildAvaloniaApp()
     {
-        _ = IconProvider.Current
+        _ = IconProvider.Current!
                         .Register<FontAwesome7IconProvider>()
             ;
 
