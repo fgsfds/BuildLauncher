@@ -91,7 +91,8 @@ public sealed class GitHubApiInterface : IApiInterface
                     try
                     {
                         using var httpClient = _httpClientFactory.CreateClient(HttpClientEnum.GitHub.GetDescription());
-                        await using var response = await httpClient.GetStreamAsync(CommonConstants.AddonsJsonUrl, cancellationToken).ConfigureAwait(false);
+                        var response = await httpClient.GetStreamAsync(CommonConstants.AddonsJsonUrl, cancellationToken).ConfigureAwait(false);
+                        await using var responseScope = response.ConfigureAwait(false);
 
                         _addonsJson = await JsonSerializer.DeserializeAsync(
                             response,
@@ -284,8 +285,10 @@ public sealed class GitHubApiInterface : IApiInterface
 
         List<AddonManifestJsonModel>? manifests;
 
-        await using (var manifestsJson = File.OpenRead(ClientProperties.PathToLocalManifestsJson))
         {
+            var manifestsJson = File.OpenRead(ClientProperties.PathToLocalManifestsJson);
+            await using var manifestsJsonScope = manifestsJson.ConfigureAwait(false);
+
             manifests = await JsonSerializer.DeserializeAsync(
                 manifestsJson,
                 AddonManifestJsonContext.Default.ListAddonManifestJsonModel

@@ -156,7 +156,8 @@ public abstract class ReleaseProviderBase<T> where T : Enum
     private async Task<List<GitHubReleaseJsonModel>?> GetReleasesAsync(Uri url, bool includePreReleases, CancellationToken cancellationToken = default)
     {
         using var httpClient = _httpClientFactory.CreateClient(HttpClientEnum.GitHub.GetDescription());
-        await using var dataStream = await httpClient.GetStreamAsync(url, cancellationToken).ConfigureAwait(false);
+        var dataStream = await httpClient.GetStreamAsync(url, cancellationToken).ConfigureAwait(false);
+        await using var dataStreamScope = dataStream.ConfigureAwait(false);
 
         var allReleases = await JsonSerializer.DeserializeAsync(
             dataStream,
@@ -198,7 +199,8 @@ public abstract class ReleaseProviderBase<T> where T : Enum
         if (repo.CustomReleaseParser is not null)
         {
             using var httpClient = _httpClientFactory.CreateClient();
-            await using var dataStream = await httpClient.GetStreamAsync(repo.RepoUrl, cancellationToken).ConfigureAwait(false);
+            var dataStream = await httpClient.GetStreamAsync(repo.RepoUrl, cancellationToken).ConfigureAwait(false);
+            await using var dataStreamScope = dataStream.ConfigureAwait(false);
             var release = repo.CustomReleaseParser(dataStream);
 
             _logger.LogInformation(

@@ -1627,7 +1627,8 @@ public sealed partial class DevViewModel : ObservableObject
                 {
                     try
                     {
-                        await using var jsonStream = await json.OpenEntryStreamAsync().ConfigureAwait(false);
+                        var jsonStream = await json.OpenEntryStreamAsync().ConfigureAwait(false);
+                        await using var jsonStreamScope = jsonStream.ConfigureAwait(false);
 
                         var jsonStr = await JsonSerializer.DeserializeAsync(
                             jsonStream,

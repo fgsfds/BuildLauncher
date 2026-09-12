@@ -62,12 +62,13 @@ public sealed class ArchivedAddonExtractor
                 return null;
             }
 
-            await using var addonJsonStream = await addonJsonsInsideArchive[0].OpenEntryStreamAsync().ConfigureAwait(false);
+            var addonJsonStream = await addonJsonsInsideArchive[0].OpenEntryStreamAsync().ConfigureAwait(false);
+            await using var addonJsonStreamScope = addonJsonStream.ConfigureAwait(false);
 
             var addonDto = await JsonSerializer.DeserializeAsync(
                 addonJsonStream,
                 AddonManifestJsonContext.Default.AddonManifestJsonModel!
-                );
+                ).ConfigureAwait(false);
 
             if (addonDto is null)
             {
@@ -91,12 +92,13 @@ public sealed class ArchivedAddonExtractor
 
                 foreach (var addonJson in unpackedAddonJsons)
                 {
-                    await using var text = File.OpenRead(addonJson);
+                    var text = File.OpenRead(addonJson);
+                    await using var textScope = text.ConfigureAwait(false);
 
                     var addonDto2 = await JsonSerializer.DeserializeAsync(
                         text,
                         AddonManifestJsonContext.Default.AddonManifestJsonModel!
-                        );
+                        ).ConfigureAwait(false);
 
                     if (addonDto2 is null)
                     {
@@ -112,12 +114,13 @@ public sealed class ArchivedAddonExtractor
             {
                 foreach (var addonJson in addonJsonsInsideArchive)
                 {
-                    await using var addonJsonStream2 = await addonJson.OpenEntryStreamAsync().ConfigureAwait(false);
+                    var addonJsonStream2 = await addonJson.OpenEntryStreamAsync().ConfigureAwait(false);
+                    await using var addonJsonStream2Scope = addonJsonStream2.ConfigureAwait(false);
 
                     var addonDto2 = await JsonSerializer.DeserializeAsync(
                         addonJsonStream2,
                         AddonManifestJsonContext.Default.AddonManifestJsonModel!
-                        );
+                        ).ConfigureAwait(false);
 
                     if (addonDto2 is null)
                     {

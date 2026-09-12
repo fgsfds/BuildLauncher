@@ -101,7 +101,8 @@ public sealed class S3FilesUploader : IFilesUploader
 
             using CancellationTokenSource cts = new();
 
-            await using var fileStream = File.OpenRead(pathToLocalFile);
+            var fileStream = File.OpenRead(pathToLocalFile);
+            await using var fileStreamScope = fileStream.ConfigureAwait(false);
             _ = Task.Run(() => TrackProgress(fileStream, progress, cts.Token), cancellationToken);
 
             var sha = await SHA256.HashDataAsync(fileStream, cancellationToken).ConfigureAwait(false);
@@ -111,7 +112,7 @@ public sealed class S3FilesUploader : IFilesUploader
             using var transferUtility = await _s3Factory.CreateTransferUtilityAsync(cancellationToken).ConfigureAwait(false);
             _ = await transferUtility.UploadAsync(fileStream, fileKey, shaStr, cancellationToken).ConfigureAwait(false);
 
-            await cts.CancelAsync();
+            await cts.CancelAsync().ConfigureAwait(false);
 
             var metadataProvider = await _s3Factory.CreateMetadataProviderAsync(cancellationToken).ConfigureAwait(false);
             var fileMetadata = await metadataProvider.GetMetadata(fileKey).ConfigureAwait(false);
