@@ -87,7 +87,7 @@ public sealed class App : Application
         bitmapsCache.InitializeCache();
 
         _app.DataTemplates.Add(viewLocator);
-        _app.Resources.Add(new("CachedHashToBitmapConverter", new CachedHashToBitmapConverter(bitmapsCache)));
+        _app.Resources[nameof(CachedHashToBitmapConverter)] = new CachedHashToBitmapConverter(bitmapsCache);
 
         using MainWindow mainWindow = new(installedGamesProvider, config);
 
