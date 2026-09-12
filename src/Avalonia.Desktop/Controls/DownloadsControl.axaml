@@ -27,12 +27,14 @@
                       ItemsSource="{Binding FilterItems}"
                       SelectedItem="{Binding FilterSelectedItem}" />
 
-            <TextBox Name="SearchBox"
+            <TextBox x:Name="SearchBox"
+                     Grid.Row="0"
                      Grid.Column="1"
                      PlaceholderText="Search"
                      Text="{Binding SearchBoxText}" />
 
-            <Button Grid.Column="2"
+            <Button Grid.Row="0"
+                    Grid.Column="2"
                     Height="{Binding Bounds.Height, ElementName=SearchBox}"
                     Margin="5,0,0,0"
                     Command="{Binding ClearSearchBoxCommand}"
@@ -153,7 +155,7 @@
               Margin="0,12"
               ColumnDefinitions="auto,*,auto">
 
-            <Button Name="DownloadButton"
+            <Button x:Name="DownloadButton"
                     Grid.Column="0"
                     Margin="0,5,5,5"
                     Padding="5"
@@ -161,7 +163,7 @@
                     Content="{Binding DownloadButtonText, FallbackValue=Download}"
                     IsVisible="{Binding !IsInProgress}" />
 
-            <Button Name="CancelButton"
+            <Button x:Name="CancelButton"
                     Grid.Column="0"
                     Margin="0,5,5,5"
                     Padding="5"

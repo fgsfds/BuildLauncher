@@ -620,7 +620,7 @@
 
                                             <TextBlock Grid.Column="0" VerticalAlignment="Center">Id:</TextBlock>
 
-                                            <TextBox Name="AddonId"
+                                            <TextBox x:Name="AddonId"
                                                      Grid.Column="1"
                                                      Margin="3"
                                                      HorizontalAlignment="Stretch"
@@ -701,7 +701,7 @@
 
                                             <TextBlock Grid.Column="0" VerticalAlignment="Center">Id:</TextBlock>
 
-                                            <TextBox Name="AddonId"
+                                            <TextBox x:Name="AddonId"
                                                      Grid.Column="1"
                                                      Margin="3"
                                                      HorizontalAlignment="Stretch"
@@ -783,7 +783,7 @@
 
                                             <TextBlock Grid.Column="0" VerticalAlignment="Center">Name:</TextBlock>
 
-                                            <TextBox Name="AddonId"
+                                            <TextBox x:Name="AddonId"
                                                      Grid.Column="1"
                                                      Margin="3"
                                                      HorizontalAlignment="Stretch"

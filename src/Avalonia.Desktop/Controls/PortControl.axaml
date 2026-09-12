@@ -35,12 +35,12 @@
                      IsIndeterminate="{Binding IsCheckingForUpdates}"
                      Value="{Binding ProgressBarValue}" />
 
-        <Grid Name="ButtonsGrid"
+        <Grid x:Name="ButtonsGrid"
               Margin="0,0,0,10"
               HorizontalAlignment="Stretch"
               ColumnDefinitions="2*,*,*">
 
-            <Button Name="InstallButton"
+            <Button x:Name="InstallButton"
                     Grid.Column="0"
                     Height="{Binding #OpenFolderButton.Bounds.Height}"
                     Margin="5"

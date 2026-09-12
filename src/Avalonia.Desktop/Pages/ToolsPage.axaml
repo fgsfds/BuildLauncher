@@ -14,7 +14,7 @@
 
         <Grid RowDefinitions="auto,auto,auto,auto,*">
 
-            <ItemsControl Name="ToolsList"
+            <ItemsControl x:Name="ToolsList"
                           Grid.Row="0"
                           Padding="2"
                           ItemsSource="{Binding ToolsList}"

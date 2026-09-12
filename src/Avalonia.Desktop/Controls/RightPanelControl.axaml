@@ -20,7 +20,7 @@
                        IsVisible="{Binding IsPreviewVisible}"
                        Source="{Binding SelectedAddonPreview}" />
 
-                <md:MarkdownScrollViewer Name="Description"
+                <md:MarkdownScrollViewer x:Name="Description"
                                          Margin="10,5"
                                          Markdown="{Binding SelectedAddonDescription}">
 

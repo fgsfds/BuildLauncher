@@ -80,7 +80,7 @@
                 </Border>
             </Grid>
 
-            <ItemsControl Name="PortsList"
+            <ItemsControl x:Name="PortsList"
                           Grid.Row="0"
                           Padding="2"
                           ItemsSource="{Binding PortsList}"

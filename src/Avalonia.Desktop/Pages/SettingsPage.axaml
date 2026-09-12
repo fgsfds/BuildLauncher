@@ -64,7 +64,7 @@
                          Margin="0,3"
                          Text="{Binding PathToDuke3D}" />
 
-                <Button Name="ChooseFolderButton"
+                <Button x:Name="ChooseFolderButton"
                         Grid.Row="0"
                         Grid.Column="2"
                         Width="{Binding $self.Bounds.Height}"
