@@ -158,7 +158,7 @@ public static class DiHelper
                                         return $"[{DateTime.Now.ToLocalTime() + "]",-25} {message.LogLevel,-15} {message.Message} {message.Exception}";
                                     };
                                 }
-                                )
+                                )!
                            .AddFilter("System.Net.Http.HttpClient", LogLevel.None)
                            .AddFilter("Microsoft.EntityFrameworkCore", LogLevel.None)
                 );

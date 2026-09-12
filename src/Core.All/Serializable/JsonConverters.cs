@@ -16,7 +16,7 @@ public sealed class SupportedGameDtoConverter : JsonConverter<SupportedGameJsonM
     {
         if (reader.TokenType is JsonTokenType.StartObject)
         {
-            return JsonSerializer.Deserialize(ref reader, SupportedGameJsonContext.Default.SupportedGameJsonModel);
+            return JsonSerializer.Deserialize(ref reader, SupportedGameJsonContext.Default.SupportedGameJsonModel!);
         }
 
         if (reader.TokenType is JsonTokenType.String)
@@ -61,7 +61,7 @@ public sealed class IStartMapConverter : JsonConverter<IStartMap?>
         {
             try
             {
-                return JsonSerializer.Deserialize(ref reader, MapFileJsonContext.Default.MapFileJsonModel);
+                return JsonSerializer.Deserialize(ref reader, MapFileJsonContext.Default.MapFileJsonModel!);
             }
             catch
             {
@@ -70,7 +70,7 @@ public sealed class IStartMapConverter : JsonConverter<IStartMap?>
 
             try
             {
-                return JsonSerializer.Deserialize(ref reader, MapSlotJsonContext.Default.MapSlotJsonModel);
+                return JsonSerializer.Deserialize(ref reader, MapSlotJsonContext.Default.MapSlotJsonModel!);
             }
             catch
             {
@@ -120,7 +120,7 @@ public sealed class ExecutablesConverter : JsonConverter<Dictionary<OSEnum, Dict
         {
             try
             {
-                return JsonSerializer.Deserialize(ref reader, AddonManifestJsonContext.Default.DictionaryOSEnumDictionaryPortEnumString);
+                return JsonSerializer.Deserialize(ref reader, AddonManifestJsonContext.Default.DictionaryOSEnumDictionaryPortEnumString!);
             }
             catch
             {
@@ -129,7 +129,7 @@ public sealed class ExecutablesConverter : JsonConverter<Dictionary<OSEnum, Dict
 
             try
             {
-                var old = JsonSerializer.Deserialize(ref reader, AddonManifestJsonContext.Default.DictionaryOSEnumString);
+                var old = JsonSerializer.Deserialize(ref reader, AddonManifestJsonContext.Default.DictionaryOSEnumString!);
 
                 if (old is not null)
                 {

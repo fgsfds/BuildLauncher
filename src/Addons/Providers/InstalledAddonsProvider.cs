@@ -698,7 +698,7 @@ public sealed class InstalledAddonsProvider : IDisposable
     {
         var jsonStream = File.OpenRead(pathToFile);
         await using var jsonStreamScope = jsonStream.ConfigureAwait(false);
-        var manifest = await JsonSerializer.DeserializeAsync(jsonStream, AddonManifestJsonContext.Default.AddonManifestJsonModel).ConfigureAwait(false);
+        var manifest = await JsonSerializer.DeserializeAsync(jsonStream, AddonManifestJsonContext.Default.AddonManifestJsonModel!).ConfigureAwait(false);
 
         if (manifest is null)
         {

@@ -254,7 +254,7 @@ public sealed class SerializerTests
     [Fact]
     public void DeserializeAddonJson()
     {
-        var result = JsonSerializer.Deserialize(AddonJson, AddonManifestJsonContext.Default.AddonManifestJsonModel);
+        var result = JsonSerializer.Deserialize(AddonJson, AddonManifestJsonContext.Default.AddonManifestJsonModel!);
 
         Assert.NotNull(result);
 
@@ -308,7 +308,7 @@ public sealed class SerializerTests
     [Fact]
     public void DeserializeMinimalAddon()
     {
-        var result = JsonSerializer.Deserialize(MinimalAddonJson, AddonManifestJsonContext.Default.AddonManifestJsonModel);
+        var result = JsonSerializer.Deserialize(MinimalAddonJson, AddonManifestJsonContext.Default.AddonManifestJsonModel!);
 
         Assert.NotNull(result);
         Assert.Equal("minimal-id", result.Id);
@@ -341,7 +341,7 @@ public sealed class SerializerTests
     [Fact]
     public void DeserializeOfficialAddon()
     {
-        var result = JsonSerializer.Deserialize(OfficialAddonJson, AddonManifestJsonContext.Default.AddonManifestJsonModel);
+        var result = JsonSerializer.Deserialize(OfficialAddonJson, AddonManifestJsonContext.Default.AddonManifestJsonModel!);
 
         Assert.NotNull(result);
         Assert.Equal("duke1", result.Id);
@@ -362,7 +362,7 @@ public sealed class SerializerTests
     [Fact]
     public void DeserializeExhumedGame()
     {
-        var result = JsonSerializer.Deserialize(ExhumedGameJson, AddonManifestJsonContext.Default.AddonManifestJsonModel);
+        var result = JsonSerializer.Deserialize(ExhumedGameJson, AddonManifestJsonContext.Default.AddonManifestJsonModel!);
 
         Assert.NotNull(result);
         Assert.Equal(GameEnum.Slave, result.SupportedGame.Game);
@@ -375,7 +375,7 @@ public sealed class SerializerTests
     public void DeserializeBrokenAddonJson_Throws()
     {
         var ex = Assert.Throws<JsonException>(() =>
-                                                  JsonSerializer.Deserialize(BrokenAddonJson, AddonManifestJsonContext.Default.AddonManifestJsonModel)
+                                                  JsonSerializer.Deserialize(BrokenAddonJson, AddonManifestJsonContext.Default.AddonManifestJsonModel!)
             );
 
         Assert.Contains("unknown_token", ex.Message);
@@ -387,7 +387,7 @@ public sealed class SerializerTests
     [Fact]
     public void DeserializeSlotMapJson()
     {
-        var result = JsonSerializer.Deserialize(SlotMapJson, AddonManifestJsonContext.Default.AddonManifestJsonModel);
+        var result = JsonSerializer.Deserialize(SlotMapJson, AddonManifestJsonContext.Default.AddonManifestJsonModel!);
 
         Assert.NotNull(result);
         Assert.Equal(AddonTypeEnum.Map, result.AddonType);
@@ -403,7 +403,7 @@ public sealed class SerializerTests
     [Fact]
     public void DeserializeAddonWithoutStartmap()
     {
-        var result = JsonSerializer.Deserialize(NoStartmapJson, AddonManifestJsonContext.Default.AddonManifestJsonModel);
+        var result = JsonSerializer.Deserialize(NoStartmapJson, AddonManifestJsonContext.Default.AddonManifestJsonModel!);
 
         Assert.NotNull(result);
         Assert.Equal("no-startmap", result.Id);
@@ -418,7 +418,7 @@ public sealed class SerializerTests
     [Fact]
     public void DeserializeAddonWithIniOptions()
     {
-        var result = JsonSerializer.Deserialize(IniOptionsJson, AddonManifestJsonContext.Default.AddonManifestJsonModel);
+        var result = JsonSerializer.Deserialize(IniOptionsJson, AddonManifestJsonContext.Default.AddonManifestJsonModel!);
 
         Assert.NotNull(result);
         Assert.NotNull(result.Options);
@@ -434,7 +434,7 @@ public sealed class SerializerTests
     [Fact]
     public void DeserializeAddonWithAllFeatures()
     {
-        var result = JsonSerializer.Deserialize(AllFeaturesJson, AddonManifestJsonContext.Default.AddonManifestJsonModel);
+        var result = JsonSerializer.Deserialize(AllFeaturesJson, AddonManifestJsonContext.Default.AddonManifestJsonModel!);
 
         Assert.NotNull(result);
         Assert.NotNull(result.Dependencies);
@@ -459,7 +459,7 @@ public sealed class SerializerTests
     [Fact]
     public void DeserializeEmptyLists()
     {
-        var result = JsonSerializer.Deserialize(EmptyListsJson, AddonManifestJsonContext.Default.AddonManifestJsonModel);
+        var result = JsonSerializer.Deserialize(EmptyListsJson, AddonManifestJsonContext.Default.AddonManifestJsonModel!);
 
         Assert.NotNull(result);
         Assert.Empty(result.AdditionalCons!);
@@ -472,7 +472,7 @@ public sealed class SerializerTests
     [Fact]
     public void DeserializeStandaloneJsonOld()
     {
-        var result = JsonSerializer.Deserialize(StandaloneJsonOld, AddonManifestJsonContext.Default.AddonManifestJsonModel);
+        var result = JsonSerializer.Deserialize(StandaloneJsonOld, AddonManifestJsonContext.Default.AddonManifestJsonModel!);
 
         Assert.NotNull(result);
 
@@ -489,7 +489,7 @@ public sealed class SerializerTests
     [Fact]
     public void DeserializeStandaloneJson()
     {
-        var result = JsonSerializer.Deserialize(StandaloneJson, AddonManifestJsonContext.Default.AddonManifestJsonModel);
+        var result = JsonSerializer.Deserialize(StandaloneJson, AddonManifestJsonContext.Default.AddonManifestJsonModel!);
 
         Assert.NotNull(result);
 
@@ -506,12 +506,12 @@ public sealed class SerializerTests
     [Fact]
     public void SerializeThenDeserialize_RoundTrips()
     {
-        var original = JsonSerializer.Deserialize(AddonJson, AddonManifestJsonContext.Default.AddonManifestJsonModel);
+        var original = JsonSerializer.Deserialize(AddonJson, AddonManifestJsonContext.Default.AddonManifestJsonModel!);
         Assert.NotNull(original);
 
-        var serialized = JsonSerializer.Serialize(original, AddonManifestJsonContext.Default.AddonManifestJsonModel);
+        var serialized = JsonSerializer.Serialize(original, AddonManifestJsonContext.Default.AddonManifestJsonModel!);
 
-        var deserialized = JsonSerializer.Deserialize(serialized, AddonManifestJsonContext.Default.AddonManifestJsonModel);
+        var deserialized = JsonSerializer.Deserialize(serialized, AddonManifestJsonContext.Default.AddonManifestJsonModel!);
         Assert.NotNull(deserialized);
 
         Assert.Equal(original.Id, deserialized.Id);
@@ -536,12 +536,12 @@ public sealed class SerializerTests
     [Fact]
     public void SerializeMinimalAddon_RoundTrips()
     {
-        var original = JsonSerializer.Deserialize(MinimalAddonJson, AddonManifestJsonContext.Default.AddonManifestJsonModel);
+        var original = JsonSerializer.Deserialize(MinimalAddonJson, AddonManifestJsonContext.Default.AddonManifestJsonModel!);
         Assert.NotNull(original);
 
-        var serialized = JsonSerializer.Serialize(original, AddonManifestJsonContext.Default.AddonManifestJsonModel);
+        var serialized = JsonSerializer.Serialize(original, AddonManifestJsonContext.Default.AddonManifestJsonModel!);
 
-        var deserialized = JsonSerializer.Deserialize(serialized, AddonManifestJsonContext.Default.AddonManifestJsonModel);
+        var deserialized = JsonSerializer.Deserialize(serialized, AddonManifestJsonContext.Default.AddonManifestJsonModel!);
         Assert.NotNull(deserialized);
 
         Assert.Equal(original.Id, deserialized.Id);
@@ -574,7 +574,7 @@ public sealed class SerializerTests
                 }
                 """;
 
-            var result = JsonSerializer.Deserialize(json, AddonManifestJsonContext.Default.AddonManifestJsonModel);
+            var result = JsonSerializer.Deserialize(json, AddonManifestJsonContext.Default.AddonManifestJsonModel!);
             Assert.NotNull(result);
 
             return result.AddonType;
@@ -618,7 +618,7 @@ public sealed class SerializerTests
                 }
                 """;
 
-            var result = JsonSerializer.Deserialize(json, AddonManifestJsonContext.Default.AddonManifestJsonModel);
+            var result = JsonSerializer.Deserialize(json, AddonManifestJsonContext.Default.AddonManifestJsonModel!);
             Assert.NotNull(result);
             Assert.Equal(expected, result.SupportedGame.Game);
         }

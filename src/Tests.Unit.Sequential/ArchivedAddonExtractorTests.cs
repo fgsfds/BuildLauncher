@@ -74,7 +74,7 @@ public sealed class ArchivedAddonExtractorTests : IDisposable
             MainRff = "custom.rff"
         };
 
-        var json = JsonSerializer.Serialize(manifest, AddonManifestJsonContext.Default.AddonManifestJsonModel);
+        var json = JsonSerializer.Serialize(manifest, AddonManifestJsonContext.Default.AddonManifestJsonModel!);
 
         var zipPath = Path.Combine(_tempDir, "rff-addon.zip");
 
@@ -117,7 +117,7 @@ public sealed class ArchivedAddonExtractorTests : IDisposable
             }
         };
 
-        var json = JsonSerializer.Serialize(manifest, AddonManifestJsonContext.Default.AddonManifestJsonModel);
+        var json = JsonSerializer.Serialize(manifest, AddonManifestJsonContext.Default.AddonManifestJsonModel!);
 
         var zipPath = Path.Combine(_tempDir, "exe-addon.zip");
 
@@ -151,7 +151,7 @@ public sealed class ArchivedAddonExtractorTests : IDisposable
             }
         };
 
-        var json = JsonSerializer.Serialize(manifest, AddonManifestJsonContext.Default.AddonManifestJsonModel);
+        var json = JsonSerializer.Serialize(manifest, AddonManifestJsonContext.Default.AddonManifestJsonModel!);
 
         var zipPath = Path.Combine(_tempDir, "simple.zip");
 
@@ -200,7 +200,7 @@ public sealed class ArchivedAddonExtractorTests : IDisposable
             MainRff = "custom.rff"
         };
 
-        var json = JsonSerializer.Serialize(manifest, AddonManifestJsonContext.Default.AddonManifestJsonModel);
+        var json = JsonSerializer.Serialize(manifest, AddonManifestJsonContext.Default.AddonManifestJsonModel!);
 
         var zipPath = Path.Combine(_tempDir, "rff-addon.zip");
 

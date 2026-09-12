@@ -216,7 +216,7 @@ public sealed class GitHubApiInterfaceTests
             ]
         };
 
-        return JsonSerializer.Serialize(data, DownloadableAddonJsonModelDictionaryContext.Default.DictionaryGameEnumListDownloadableAddonJsonModel);
+        return JsonSerializer.Serialize(data, DownloadableAddonJsonModelDictionaryContext.Default.DictionaryGameEnumListDownloadableAddonJsonModel!);
     }
 
     private sealed class TestHandler : HttpMessageHandler
