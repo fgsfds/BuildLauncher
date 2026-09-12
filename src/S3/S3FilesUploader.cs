@@ -13,8 +13,8 @@ namespace S3;
 /// </summary>
 public sealed class S3FilesUploader : IFilesUploader
 {
-    private readonly S3UtilitiesFactory _s3Factory;
     private readonly ILogger<S3FilesUploader> _logger;
+    private readonly S3UtilitiesFactory _s3Factory;
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="S3FilesUploader" /> class.
@@ -33,41 +33,61 @@ public sealed class S3FilesUploader : IFilesUploader
         CancellationToken cancellationToken
         )
     {
-        var fileKey = S3Constants.S3SubFolder + "/" + relativePathToRemoteFile;
-
-        return InternalUploadAsync(pathToLocalFile, fileKey, progress, cancellationToken);
+        return InternalUploadAsync(pathToLocalFile, relativePathToRemoteFile, string.Empty, progress, cancellationToken);
     }
 
     /// <summary>
     ///     Uploads a file to the public uploads folder on S3.
     /// </summary>
-    /// <param name="pathToLocalFile">Path to the local file.</param>
-    /// <param name="relativePathToRemoteFile">Relative path in the remote storage.</param>
-    /// <param name="progress">Progress indicator.</param>
-    /// <param name="cancellationToken">Cancellation token.</param>
-    /// <returns>The upload result with remote file metadata.</returns>
+    /// <param name="pathToLocalFile">
+    ///     Path to the local file.
+    /// </param>
+    /// <param name="relativePathToRemoteFile">
+    ///     Relative path in the remote storage.
+    /// </param>
+    /// <param name="progress">
+    ///     Progress indicator.
+    /// </param>
+    /// <param name="cancellationToken">
+    ///     Cancellation token.
+    /// </param>
+    /// <returns>
+    ///     The upload result with remote file metadata.
+    /// </returns>
     public Task<Result<RemoteFileMetadata?>> UploadFileToPublicAsync(
         string pathToLocalFile,
         string relativePathToRemoteFile,
         StrongBox<int> progress,
         CancellationToken cancellationToken)
     {
-        var fileKey = "uploads/" + S3Constants.S3SubFolder + "/" + relativePathToRemoteFile;
-
-        return InternalUploadAsync(pathToLocalFile, fileKey, progress, cancellationToken);
+        return InternalUploadAsync(pathToLocalFile, relativePathToRemoteFile, "uploads/", progress, cancellationToken);
     }
 
     /// <summary>
     ///     Performs the internal file upload to S3.
     /// </summary>
-    /// <param name="pathToLocalFile">Path to the local file.</param>
-    /// <param name="fileKey">S3 object key.</param>
-    /// <param name="progress">Progress indicator.</param>
-    /// <param name="cancellationToken">Cancellation token.</param>
-    /// <returns>The upload result with remote file metadata.</returns>
+    /// <param name="pathToLocalFile">
+    ///     Path to the local file.
+    /// </param>
+    /// <param name="relativePathToRemoteFile">
+    ///     Relative path in the remote storage.
+    /// </param>
+    /// <param name="keyPrefix">
+    ///     Prefix prepended to the S3 object key.
+    /// </param>
+    /// <param name="progress">
+    ///     Progress indicator.
+    /// </param>
+    /// <param name="cancellationToken">
+    ///     Cancellation token.
+    /// </param>
+    /// <returns>
+    ///     The upload result with remote file metadata.
+    /// </returns>
     private async Task<Result<RemoteFileMetadata?>> InternalUploadAsync(
         string pathToLocalFile,
-        string fileKey,
+        string relativePathToRemoteFile,
+        string keyPrefix,
         StrongBox<int> progress,
         CancellationToken cancellationToken
         )
@@ -76,6 +96,9 @@ public sealed class S3FilesUploader : IFilesUploader
 
         try
         {
+            var subFolder = await _s3Factory.GetSubFolderAsync(cancellationToken).ConfigureAwait(false);
+            var fileKey = keyPrefix + subFolder + "/" + relativePathToRemoteFile;
+
             using CancellationTokenSource cts = new();
 
             await using var fileStream = File.OpenRead(pathToLocalFile);
@@ -85,12 +108,12 @@ public sealed class S3FilesUploader : IFilesUploader
             var shaStr = Convert.ToHexString(sha);
             fileStream.Position = 0;
 
-            using var transferUtility = _s3Factory.CreateTransferUtility();
+            using var transferUtility = await _s3Factory.CreateTransferUtilityAsync(cancellationToken).ConfigureAwait(false);
             _ = await transferUtility.UploadAsync(fileStream, fileKey, shaStr, cancellationToken).ConfigureAwait(false);
 
             await cts.CancelAsync();
 
-            var metadataProvider = _s3Factory.CreateMetadataProvider();
+            var metadataProvider = await _s3Factory.CreateMetadataProviderAsync(cancellationToken).ConfigureAwait(false);
             var fileMetadata = await metadataProvider.GetMetadata(fileKey).ConfigureAwait(false);
 
             if (fileMetadata.Size < 1)
@@ -123,9 +146,15 @@ public sealed class S3FilesUploader : IFilesUploader
     /// <summary>
     ///     Tracks the upload progress by reading the stream position.
     /// </summary>
-    /// <param name="streamToTrack">The file stream to track.</param>
-    /// <param name="progress">Progress indicator to update.</param>
-    /// <param name="cancellationToken">Cancellation token,</param>
+    /// <param name="streamToTrack">
+    ///     The file stream to track.
+    /// </param>
+    /// <param name="progress">
+    ///     Progress indicator to update.
+    /// </param>
+    /// <param name="cancellationToken">
+    ///     Cancellation token,
+    /// </param>
     private void TrackProgress(
         FileStream streamToTrack,
         StrongBox<int> progress,

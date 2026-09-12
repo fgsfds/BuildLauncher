@@ -73,6 +73,13 @@ public interface IApiInterface
     Task<Result<Uri?>> GetSignedUrlAsync(string path, CancellationToken cancellationToken = default);
 
     /// <summary>
+    ///     Retrieves the raw data.json configuration.
+    /// </summary>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>The data.json entries, or null on failure.</returns>
+    Task<Dictionary<string, string>?> GetDataJsonAsync(CancellationToken cancellationToken = default);
+
+    /// <summary>
     ///     Retrieves the upload folder path from the server.
     /// </summary>
     /// <param name="cancellationToken">Cancellation token.</param>

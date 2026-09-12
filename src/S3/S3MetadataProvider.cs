@@ -18,11 +18,17 @@ public sealed class S3MetadataProvider
     private readonly AmazonS3Client _client;
 
     /// <summary>
+    ///     S3 endpoint URL.
+    /// </summary>
+    private readonly string _endpoint;
+
+    /// <summary>
     ///     Initializes a new instance of the <see cref="S3MetadataProvider" /> class.
     /// </summary>
     public S3MetadataProvider(AmazonS3Config config, string bucket)
     {
         _bucket = bucket;
+        _endpoint = config.ServiceURL.TrimEnd('/');
 
         _client = new(new AnonymousAWSCredentials(), config);
     }
@@ -30,8 +36,12 @@ public sealed class S3MetadataProvider
     /// <summary>
     ///     Returns remote file metadata.
     /// </summary>
-    /// <param name="fileKey">Object key.</param>
-    /// <returns>Metadata.</returns>
+    /// <param name="fileKey">
+    ///     Object key.
+    /// </param>
+    /// <returns>
+    ///     Metadata.
+    /// </returns>
     public async Task<RemoteFileMetadata> GetMetadata(string fileKey)
     {
         var request = new GetObjectMetadataRequest
@@ -46,7 +56,7 @@ public sealed class S3MetadataProvider
         {
             Size = response.ContentLength,
             LastModified = response.LastModified,
-            Url = new($"{S3Constants.S3Endpoint}/{S3Constants.S3Bucket}/{fileKey}")
+            Url = new($"{_endpoint}/{_bucket}/{fileKey}")
         };
     }
 }

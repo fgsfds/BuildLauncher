@@ -1,7 +1,9 @@
 ﻿using System.Security.Cryptography;
 using System.Text.Json;
+using Core.All.Serializable;
 using Core.All.Serializable.Addon;
 using Core.All.Serializable.Downloadable;
+using Core.Client.Api;
 using Core.Client.Helpers;
 using Core.Client.Interfaces;
 using Microsoft.Extensions.Logging.Abstractions;
@@ -31,6 +33,16 @@ public sealed class AddonsDatabaseTests
     public AddonsDatabaseTests()
     {
         _httpClient.DefaultRequestHeaders.TryAddWithoutValidation("User-Agent", "UnitTest");
+    }
+
+    /// <summary>
+    ///     Reads and deserializes the local data.json configuration.
+    /// </summary>
+    private static Dictionary<string, string> GetDataJson()
+    {
+        var jsonString = File.ReadAllText(ClientProperties.PathToLocalDataJson!);
+
+        return JsonSerializer.Deserialize(jsonString, DataJsonModelContext.Default.DictionaryStringString) ?? [];
     }
 
     /// <summary>
@@ -68,7 +80,7 @@ public sealed class AddonsDatabaseTests
         Assert.True(header.Content.Headers.ContentLength > 1, $"File {url} doesn't have size in the header.");
         Assert.Equal(size, header.Content.Headers.ContentLength);
 
-        if (url.ToString().StartsWith(S3Constants.S3Endpoint, StringComparison.OrdinalIgnoreCase))
+        if (url.ToString().StartsWith(GetDataJson()[DataJson.S3Endpoint], StringComparison.OrdinalIgnoreCase))
         {
             var actualHashStr = header.Headers
                                       .FirstOrDefault(x => x.Key.Equals("x-amz-meta-checksum-sha256")).Value
@@ -118,15 +130,20 @@ public sealed class AddonsDatabaseTests
 
         using var minioClient = new MinioClient();
 
+        var data = GetDataJson();
+        var endpoint = data[DataJson.S3Endpoint];
+        var bucket = data[DataJson.S3Bucket];
+        var subFolder = data[DataJson.S3SubFolder];
+
         using var iMinioClient = minioClient
-                                .WithEndpoint(S3Constants.S3Endpoint.Split("//").Last())
+                                .WithEndpoint(endpoint.Split("//").Last())
                                 .WithCredentials(access, secret)
                                 .WithSSL(false)
                                 .Build();
 
         var args = new ListObjectsArgs()
-                  .WithBucket(S3Constants.S3Bucket)
-                  .WithPrefix(S3Constants.S3SubFolder + '/')
+                  .WithBucket(bucket)
+                  .WithPrefix(subFolder + '/')
                   .WithRecursive(true);
 
         var filesInBucket = new List<string>();
@@ -143,7 +160,7 @@ public sealed class AddonsDatabaseTests
                 continue;
             }
 
-            filesInBucket.Add($"{S3Constants.S3Endpoint}/{S3Constants.S3Bucket}/{item.Key}");
+            filesInBucket.Add($"{endpoint}/{bucket}/{item.Key}");
         }
 
         var looseFiles = filesInBucket.Except(addonsUrls).ToList();
@@ -162,7 +179,8 @@ public sealed class AddonsDatabaseTests
     public async Task UploadAddonTest()
     {
         Mock<IConfigProvider> config = new();
-        S3UtilitiesFactory s3factory = new(config.Object);
+        OfflineApiInterface api = new(NullLogger<OfflineApiInterface>.Instance);
+        S3UtilitiesFactory s3factory = new(config.Object, api);
         S3FilesUploader filesUploader = new(s3factory, NullLogger<S3FilesUploader>.Instance);
 
         var uploadResult = await filesUploader.UploadFileToPublicAsync(Path.Combine("Files", "TEST.MAP"), "test/TEST.MAP", new(), CancellationToken.None);
