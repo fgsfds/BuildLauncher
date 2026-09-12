@@ -13,7 +13,18 @@ namespace Avalonia.Desktop.Helpers;
 /// </summary>
 public sealed class CachedHashToBitmapConverter : IValueConverter
 {
-    private readonly BitmapsCache _bitmapsCache;
+    private readonly BitmapsCache? _bitmapsCache;
+
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="CachedHashToBitmapConverter" /> class.
+    /// </summary>
+    /// <remarks>
+    ///     Intended for XAML instantiation only. The cache-injected instance is registered as a
+    ///     resource at runtime and replaces this instance.
+    /// </remarks>
+    public CachedHashToBitmapConverter()
+    {
+    }
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="CachedHashToBitmapConverter" /> class.
@@ -37,7 +48,7 @@ public sealed class CachedHashToBitmapConverter : IValueConverter
             return null;
         }
 
-        var bitmap = _bitmapsCache.GetFromCache(valueStr);
+        var bitmap = _bitmapsCache?.GetFromCache(valueStr);
 
         return bitmap;
     }

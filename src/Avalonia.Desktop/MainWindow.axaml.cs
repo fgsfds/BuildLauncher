@@ -3,7 +3,6 @@ using Avalonia.Desktop.ViewModels;
 using Avalonia.Interactivity;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
-using Avalonia.Platform;
 using Core.Client.Interfaces;
 using Games.Providers;
 
@@ -17,11 +16,6 @@ public sealed partial class MainWindow : Window, IDisposable
     private readonly IConfigProvider _config;
 
     private readonly InstalledGamesProvider _installedGamesProvider;
-
-    /// <summary>
-    ///     The overlay bitmap displayed on highlighted items.
-    /// </summary>
-    private readonly Bitmap? _overlayBitmap;
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="MainWindow" /> class.
@@ -53,11 +47,6 @@ public sealed partial class MainWindow : Window, IDisposable
         RenderOptions.SetBitmapInterpolationMode(this, BitmapInterpolationMode.HighQuality);
 
         InitializeComponent();
-
-        var uri = new Uri("avares://BuildLauncher/Assets/overlay.png");
-        using var overlayStream = AssetLoader.Open(uri);
-        _overlayBitmap = new Bitmap(overlayStream);
-        Resources["HighlightOverlayBitmap"] = _overlayBitmap;
     }
 
     /// <inheritdoc />
@@ -67,8 +56,6 @@ public sealed partial class MainWindow : Window, IDisposable
         {
             viewModel.Dispose();
         }
-
-        _overlayBitmap?.Dispose();
     }
 
     /// <summary>
