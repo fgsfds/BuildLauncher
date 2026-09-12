@@ -73,7 +73,8 @@ public abstract class InstallerBase<T>
             hashStr = hashStr[Sha.Length..];
         }
 
-        await using var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.None);
+        var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.None);
+        await using var fileStreamScope = fileStream.ConfigureAwait(false);
         using var sha256 = SHA256.Create();
 
         var hashBytes = sha256.ComputeHash(fileStream);

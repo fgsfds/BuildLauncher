@@ -138,7 +138,8 @@ public sealed class OfflineApiInterface : IApiInterface
 
         try
         {
-            await using var dataJson = File.OpenRead(ClientProperties.PathToLocalDataJson);
+            var dataJson = File.OpenRead(ClientProperties.PathToLocalDataJson);
+            await using var dataJsonScope = dataJson.ConfigureAwait(false);
 
             var data = await JsonSerializer.DeserializeAsync(
                 dataJson,

@@ -4,6 +4,7 @@
         <IsPackable>false</IsPackable>
         <IsTestProject>true</IsTestProject>
         <AssemblyName>$(MSBuildProjectName)</AssemblyName>
+        <NoWarn>$(NoWarn);CA2007</NoWarn>
     </PropertyGroup>
 
     <ItemGroup>

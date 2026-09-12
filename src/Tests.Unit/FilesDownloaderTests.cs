@@ -383,7 +383,7 @@ public sealed class FilesDownloaderTests : IDisposable
                 throw new HttpIOException(HttpRequestError.Unknown, "Simulated network error");
             }
 
-            var read = await _inner.ReadAsync(buffer, offset, toRead, cancellationToken).ConfigureAwait(false);
+            var read = await _inner.ReadAsync(buffer, offset, toRead, cancellationToken);
             _read += read;
             return read;
         }

@@ -63,7 +63,8 @@ public sealed class FilesDownloader
             throw new HttpRequestException($"Failed to download file from '{url}'. Server returned status code {(int)response.StatusCode} ({response.StatusCode}).", null, response.StatusCode);
         }
 
-        await using var source = await response.Content.ReadAsStreamAsync(cancellationToken).ConfigureAwait(false);
+        var source = await response.Content.ReadAsStreamAsync(cancellationToken).ConfigureAwait(false);
+        await using var sourceScope = source.ConfigureAwait(false);
         var contentLength = response.Content.Headers.ContentLength;
 
         _logger.LogInformation($"File length is {contentLength}");
@@ -166,7 +167,8 @@ public sealed class FilesDownloader
                 throw new HttpRequestException($"Failed to resume download from '{url}'. Expected HTTP 206 Partial Content but received {(int)response.StatusCode} ({response.StatusCode}).", null, response.StatusCode);
             }
 
-            await using var source = await response.Content.ReadAsStreamAsync(cancellationToken).ConfigureAwait(false);
+            var source = await response.Content.ReadAsStreamAsync(cancellationToken).ConfigureAwait(false);
+            await using var sourceScope = source.ConfigureAwait(false);
 
             await source.CopyToAsync(fileStream, cancellationToken).ConfigureAwait(false);
         }

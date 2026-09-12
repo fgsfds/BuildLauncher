@@ -5,6 +5,7 @@
         <IsTestProject>true</IsTestProject>
         <AssemblyName>$(MSBuildProjectName)</AssemblyName>
         <ValidateExecutableReferencesMatchSelfContained>false</ValidateExecutableReferencesMatchSelfContained>
+        <NoWarn>$(NoWarn);CA2007</NoWarn>
     </PropertyGroup>
 
     <ItemGroup>

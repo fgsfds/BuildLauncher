@@ -246,8 +246,9 @@ public sealed class DownloadableAddonsProvider
         CancellationToken cancellationToken
         )
     {
-        await using var stream = File.OpenRead(filePath);
-        var actualHash = await SHA256.HashDataAsync(stream, cancellationToken);
+        var stream = File.OpenRead(filePath);
+        await using var streamScope = stream.ConfigureAwait(false);
+        var actualHash = await SHA256.HashDataAsync(stream, cancellationToken).ConfigureAwait(false);
         var actualHashStr = Convert.ToHexString(actualHash);
 
         return expectedHash.Equals(actualHashStr, StringComparison.OrdinalIgnoreCase);

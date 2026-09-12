@@ -89,17 +89,17 @@ public sealed class InstalledAddonsProvider : IDisposable
             {
                 case AddonTypeEnum.TC when cache.Count == 0:
                     _campaignsCache.Clear();
-                    await ScanCampaignsFolderAsync();
+                    await ScanCampaignsFolderAsync().ConfigureAwait(false);
 
                     break;
                 case AddonTypeEnum.Map when cache.Count == 0:
                     _mapsCache.Clear();
-                    await ScanMapsFolderAsync();
+                    await ScanMapsFolderAsync().ConfigureAwait(false);
 
                     break;
                 case AddonTypeEnum.Mod when cache.Count == 0:
                     _modsCache.Clear();
-                    await ScanModsFolderAsync();
+                    await ScanModsFolderAsync().ConfigureAwait(false);
 
                     break;
                 case AddonTypeEnum.Official:
@@ -604,7 +604,8 @@ public sealed class InstalledAddonsProvider : IDisposable
 
     private async Task<List<BaseAddon>> GetAddonFromJsonFileAsync(string pathToFile)
     {
-        await using var jsonStream = File.OpenRead(pathToFile);
+        var jsonStream = File.OpenRead(pathToFile);
+        await using var jsonStreamScope = jsonStream.ConfigureAwait(false);
         var manifest = await JsonSerializer.DeserializeAsync(jsonStream, AddonManifestJsonContext.Default.AddonManifestJsonModel).ConfigureAwait(false);
 
         if (manifest is null)
@@ -621,7 +622,8 @@ public sealed class InstalledAddonsProvider : IDisposable
         if (gridFile is not null)
         {
             gridImageHash = Crc32Helper.GetCrc32(gridFile);
-            await using var stream = File.OpenRead(gridFile);
+            var stream = File.OpenRead(gridFile);
+            await using var streamScope = stream.ConfigureAwait(false);
             _ = _bitmapsCache.TryAddGridToCache(gridImageHash.Value, stream);
         }
 
@@ -630,7 +632,8 @@ public sealed class InstalledAddonsProvider : IDisposable
         if (previewFile is not null)
         {
             previewImageHash = Crc32Helper.GetCrc32(previewFile);
-            await using var stream = File.OpenRead(previewFile);
+            var stream = File.OpenRead(previewFile);
+            await using var streamScope = stream.ConfigureAwait(false);
             _ = _bitmapsCache.TryAddPreviewToCache(previewImageHash.Value, stream);
         }
 
@@ -722,7 +725,8 @@ public sealed class InstalledAddonsProvider : IDisposable
             if (gridFile is not null)
             {
                 gridImageHash = Crc32Helper.GetCrc32(gridFile);
-                await using var stream = File.OpenRead(gridFile);
+                var stream = File.OpenRead(gridFile);
+                await using var streamScope = stream.ConfigureAwait(false);
                 _ = _bitmapsCache.TryAddGridToCache(gridImageHash.Value, stream);
             }
             else
@@ -733,7 +737,8 @@ public sealed class InstalledAddonsProvider : IDisposable
             if (previewFile is not null)
             {
                 previewImageHash = Crc32Helper.GetCrc32(previewFile);
-                await using var stream = File.OpenRead(previewFile);
+                var stream = File.OpenRead(previewFile);
+                await using var streamScope = stream.ConfigureAwait(false);
                 _ = _bitmapsCache.TryAddPreviewToCache(previewImageHash.Value, stream);
             }
             else
@@ -744,8 +749,10 @@ public sealed class InstalledAddonsProvider : IDisposable
         else
         {
             using var archive = ArchiveFactory.Open(pathToFile);
+#pragma warning disable CA2007 // 'await using' on a nullable value type cannot be configured with ConfigureAwait
             await using var cover = ImageHelper.GetCoverFromArchive(archive);
             await using var preview = ImageHelper.GetPreviewFromArchive(archive);
+#pragma warning restore CA2007
 
             gridImageHash = cover?.Crc;
             previewImageHash = preview?.Crc;
