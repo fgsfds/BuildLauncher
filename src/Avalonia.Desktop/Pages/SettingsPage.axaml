@@ -64,7 +64,7 @@
                          Margin="0,3"
                          Text="{Binding PathToDuke3D}" />
 
-                <Button Name="ChooseFolderButton"
+                <Button x:Name="ChooseFolderButton"
                         Grid.Row="0"
                         Grid.Column="2"
                         Width="{Binding $self.Bounds.Height}"
@@ -580,6 +580,7 @@
                          Text="{Binding GitHubToken}" />
 
                 <md:MarkdownScrollViewer Grid.Row="17"
+                                         Grid.Column="0"
                                          Grid.ColumnSpan="4"
                                          Margin="10,0,10,5"
                                          Markdown="*GitHub token is optional and helps to avoid rate limit exceeded error.*                                          *Open* [https://github.com/settings/tokens](https://github.com/settings/tokens) *to create new **classic** token.*                                          *Token is encrypted and can only be decrypted by the current user.*                                          " />

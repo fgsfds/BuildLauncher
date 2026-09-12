@@ -20,7 +20,7 @@
                        IsVisible="{Binding IsPreviewVisible}"
                        Source="{Binding SelectedAddonPreview}" />
 
-                <md:MarkdownScrollViewer Name="Description"
+                <md:MarkdownScrollViewer x:Name="Description"
                                          Margin="10,5"
                                          Markdown="{Binding SelectedAddonDescription}">
 
@@ -49,6 +49,7 @@
                        Text="Addon options" />
 
             <ItemsControl Grid.Row="1"
+                          Grid.Column="0"
                           Margin="5"
                           ItemsSource="{Binding AddonOptions}">
                 <ItemsControl.ItemTemplate>

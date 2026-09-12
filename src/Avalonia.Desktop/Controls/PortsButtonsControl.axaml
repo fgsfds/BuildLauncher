@@ -15,7 +15,7 @@
           VerticalAlignment="Center"
           ColumnDefinitions="*, auto, auto">
 
-        <StackPanel Name="PortsButtonsPanel"
+        <StackPanel x:Name="PortsButtonsPanel"
                     Grid.Column="0"
                     IsVisible="{Binding IsPortsButtonsVisible}"
                     Orientation="Horizontal">
