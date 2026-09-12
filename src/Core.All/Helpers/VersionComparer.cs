@@ -188,6 +188,15 @@ public static class VersionComparer
         return v1[(dash1 + 1)..].SequenceCompareTo(v2[(dash2 + 1)..]);
     }
 
+    /// <summary>
+    ///     Gets a hash code for the specified version that ignores non-semantic differences.
+    /// </summary>
+    /// <param name="version">
+    ///     The version string.
+    /// </param>
+    /// <returns>
+    ///     The normalized hash code.
+    /// </returns>
     public static int GetNormalizedHashCode(string? version)
     {
         if (string.IsNullOrEmpty(version)) return 0;

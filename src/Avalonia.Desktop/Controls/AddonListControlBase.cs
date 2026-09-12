@@ -13,8 +13,17 @@ namespace Avalonia.Desktop.Controls;
 /// </summary>
 public abstract class AddonListControlBase : UserControl
 {
+    /// <summary>
+    ///     The view model backing the derived control.
+    /// </summary>
     protected readonly AddonListViewModelBase _viewModel;
 
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="AddonListControlBase" /> class.
+    /// </summary>
+    /// <param name="viewModel">
+    ///     The view model backing the derived control.
+    /// </param>
     protected AddonListControlBase(AddonListViewModelBase viewModel)
     {
         _viewModel = viewModel;

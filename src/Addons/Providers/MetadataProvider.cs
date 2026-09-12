@@ -32,6 +32,15 @@ public sealed class MetadataProvider : IDisposable
     private readonly Dictionary<AddonFilePathWrapper, ParsedAddonFile> _updatesCache = [];
     private Dictionary<AddonId, AddonManifestJsonModel>? _metaDict;
 
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="MetadataProvider" /> class.
+    /// </summary>
+    /// <param name="apiInterface">
+    ///     The API interface.
+    /// </param>
+    /// <param name="logger">
+    ///     The logger.
+    /// </param>
     public MetadataProvider(
         IApiInterface apiInterface,
         ILogger<MetadataProvider> logger

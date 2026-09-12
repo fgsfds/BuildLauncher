@@ -1049,7 +1049,9 @@ public sealed partial class DevViewModel : ObservableObject
         OnPropertyChanged(nameof(AddonId));
     }
 
-
+    /// <summary>
+    ///     Gets or sets the selected game.
+    /// </summary>
     [NotifyPropertyChangedFor(nameof(AreDukePropertiesAvailable))]
     [NotifyPropertyChangedFor(nameof(IsMainConAvailable))]
     [NotifyPropertyChangedFor(nameof(AddonIdPrefix))]
@@ -1061,9 +1063,6 @@ public sealed partial class DevViewModel : ObservableObject
     [NotifyPropertyChangedFor(nameof(LinuxNBloodExe))]
     [NotifyPropertyChangedFor(nameof(LinuxNotBloodExe))]
     [NotifyPropertyChangedFor(nameof(LinuxEDukeExe))]
-    /// <summary>
-    ///     Gets or sets the selected game.
-    /// </summary>
     [ObservableProperty]
     private GameEnum? _selectedGame;
 

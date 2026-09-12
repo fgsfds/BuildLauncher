@@ -14,6 +14,12 @@ public sealed class ArchivedAddonExtractor
 {
     private readonly ILogger _logger;
 
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="ArchivedAddonExtractor" /> class.
+    /// </summary>
+    /// <param name="logger">
+    ///     The logger.
+    /// </param>
     public ArchivedAddonExtractor(ILogger logger)
     {
         _logger = logger;

@@ -21,9 +21,24 @@ namespace Avalonia.Desktop.ViewModels;
 /// </summary>
 public abstract partial class AddonListViewModelBase : RightPanelViewModel, IPortsButtonControl, IDisposable
 {
+    /// <summary>
+    ///     The provider of installed addons for the current game.
+    /// </summary>
     protected readonly InstalledAddonsProvider _installedAddonsProvider;
+
+    /// <summary>
+    ///     The logger.
+    /// </summary>
     protected readonly ILogger _logger;
+
+    /// <summary>
+    ///     The port starter used to launch addons.
+    /// </summary>
     protected readonly PortStarter _portStarter;
+
+    /// <summary>
+    ///     The configuration provider.
+    /// </summary>
     protected readonly IConfigProvider _config;
 
     private readonly IAddonDropHelper _addonInstaller;
