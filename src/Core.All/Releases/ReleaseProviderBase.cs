@@ -161,7 +161,7 @@ public abstract class ReleaseProviderBase<T> where T : Enum
 
         var allReleases = await JsonSerializer.DeserializeAsync(
             dataStream,
-            GitHubReleaseEntityContext.Default.ListGitHubReleaseJsonModel,
+            GitHubReleaseEntityContext.Default.ListGitHubReleaseJsonModel!,
             cancellationToken
             ).ConfigureAwait(false);
 

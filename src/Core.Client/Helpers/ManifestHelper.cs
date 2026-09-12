@@ -26,7 +26,7 @@ public static class ManifestHelper
         }
 
         using var stream = await addonJson.OpenEntryStreamAsync().ConfigureAwait(false);
-        var manifest = await JsonSerializer.DeserializeAsync(stream, AddonManifestJsonContext.Default.AddonManifestJsonModel).ConfigureAwait(false);
+        var manifest = await JsonSerializer.DeserializeAsync(stream, AddonManifestJsonContext.Default.AddonManifestJsonModel!).ConfigureAwait(false);
 
         return manifest is null
             ? new(ResultEnum.Error, null, "Error while deserializing addon.json.")

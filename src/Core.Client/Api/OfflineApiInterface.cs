@@ -52,7 +52,7 @@ public sealed class OfflineApiInterface : IApiInterface
 
                 _addonsJson = await JsonSerializer.DeserializeAsync(
                     addonsJson,
-                    DownloadableAddonJsonModelDictionaryContext.Default.DictionaryGameEnumListDownloadableAddonJsonModel,
+                    DownloadableAddonJsonModelDictionaryContext.Default.DictionaryGameEnumListDownloadableAddonJsonModel!,
                     cancellationToken
                     ).ConfigureAwait(false);
 
@@ -152,7 +152,7 @@ public sealed class OfflineApiInterface : IApiInterface
 
             var data = await JsonSerializer.DeserializeAsync(
                 dataJson,
-                DataJsonModelContext.Default.DictionaryStringString,
+                DataJsonModelContext.Default.DictionaryStringString!,
                 cancellationToken
                 ).ConfigureAwait(false);
 
@@ -201,7 +201,7 @@ public sealed class OfflineApiInterface : IApiInterface
 
             var data = await JsonSerializer.DeserializeAsync(
                 dataJson,
-                AddonManifestJsonContext.Default.ListAddonManifestJsonModel,
+                AddonManifestJsonContext.Default.ListAddonManifestJsonModel!,
                 cancellationToken
                 ).ConfigureAwait(false);
 

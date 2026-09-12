@@ -414,7 +414,7 @@ public sealed partial class DevViewModel : ObservableObject
             Executables = executables.Count == 0 ? null : executables
         };
 
-        jsonString = JsonSerializer.Serialize(addon, AddonManifestJsonContext.Default.AddonManifestJsonModel);
+        jsonString = JsonSerializer.Serialize(addon, AddonManifestJsonContext.Default.AddonManifestJsonModel!);
         JsonText = jsonString;
 
         return addon;
@@ -434,7 +434,7 @@ public sealed partial class DevViewModel : ObservableObject
 
             addon = JsonSerializer.Deserialize(
                 jsonStream,
-                AddonManifestJsonContext.Default.AddonManifestJsonModel
+                AddonManifestJsonContext.Default.AddonManifestJsonModel!
                 );
         }
         catch (Exception ex)
@@ -1631,7 +1631,7 @@ public sealed partial class DevViewModel : ObservableObject
 
                         var jsonStr = await JsonSerializer.DeserializeAsync(
                             jsonStream,
-                            AddonManifestJsonContext.Default.AddonManifestJsonModel
+                            AddonManifestJsonContext.Default.AddonManifestJsonModel!
                             ).ConfigureAwait(false);
 
                         if (jsonStr is null)
@@ -1653,7 +1653,7 @@ public sealed partial class DevViewModel : ObservableObject
             }
         }
 
-        var list = JsonSerializer.Serialize(result, AddonManifestJsonContext.Default.ListAddonManifestJsonModel);
+        var list = JsonSerializer.Serialize(result, AddonManifestJsonContext.Default.ListAddonManifestJsonModel!);
         await File.WriteAllTextAsync(ClientProperties.PathToLocalManifestsJson, list).ConfigureAwait(false);
     }
 

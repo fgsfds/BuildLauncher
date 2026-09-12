@@ -96,7 +96,7 @@ public sealed class GitHubApiInterface : IApiInterface
 
                         _addonsJson = await JsonSerializer.DeserializeAsync(
                             response,
-                            DownloadableAddonJsonModelDictionaryContext.Default.DictionaryGameEnumListDownloadableAddonJsonModel,
+                            DownloadableAddonJsonModelDictionaryContext.Default.DictionaryGameEnumListDownloadableAddonJsonModel!,
                             cancellationToken
                             ).ConfigureAwait(false);
 
@@ -238,7 +238,7 @@ public sealed class GitHubApiInterface : IApiInterface
         {
             addons = await JsonSerializer.DeserializeAsync(
                 addonsJson,
-                DownloadableAddonJsonModelDictionaryContext.Default.DictionaryGameEnumListDownloadableAddonJsonModel
+                DownloadableAddonJsonModelDictionaryContext.Default.DictionaryGameEnumListDownloadableAddonJsonModel!
                 ).ConfigureAwait(false);
         }
 
@@ -280,7 +280,7 @@ public sealed class GitHubApiInterface : IApiInterface
             add.Value.AddRange(sorted);
         }
 
-        var newAddonsJson = JsonSerializer.Serialize(addons, DownloadableAddonJsonModelDictionaryContext.Default.DictionaryGameEnumListDownloadableAddonJsonModel);
+        var newAddonsJson = JsonSerializer.Serialize(addons, DownloadableAddonJsonModelDictionaryContext.Default.DictionaryGameEnumListDownloadableAddonJsonModel!);
         await File.WriteAllTextAsync(ClientProperties.PathToLocalAddonsJson, newAddonsJson).ConfigureAwait(false);
 
         List<AddonManifestJsonModel>? manifests;
@@ -291,7 +291,7 @@ public sealed class GitHubApiInterface : IApiInterface
 
             manifests = await JsonSerializer.DeserializeAsync(
                 manifestsJson,
-                AddonManifestJsonContext.Default.ListAddonManifestJsonModel
+                AddonManifestJsonContext.Default.ListAddonManifestJsonModel!
                 ).ConfigureAwait(false);
         }
 
@@ -307,7 +307,7 @@ public sealed class GitHubApiInterface : IApiInterface
 
         manifests = [.. manifests.OrderBy(x => x.SupportedGame.Game).ThenBy(x => x.AddonType).ThenBy(x => x.Title)];
 
-        var newManifestsJson = JsonSerializer.Serialize(manifests, AddonManifestJsonContext.Default.ListAddonManifestJsonModel);
+        var newManifestsJson = JsonSerializer.Serialize(manifests, AddonManifestJsonContext.Default.ListAddonManifestJsonModel!);
         await File.WriteAllTextAsync(ClientProperties.PathToLocalManifestsJson, newManifestsJson).ConfigureAwait(false);
 
         _logger.LogInformation("Added addon {AddonId} v{Version} to the local database", addonJson.Id, addonJson.Version);
@@ -372,7 +372,7 @@ public sealed class GitHubApiInterface : IApiInterface
 
             var meta = await JsonSerializer.DeserializeAsync(
                 jsonStream,
-                AddonManifestJsonContext.Default.ListAddonManifestJsonModel,
+                AddonManifestJsonContext.Default.ListAddonManifestJsonModel!,
                 cancellationToken
                 ).ConfigureAwait(false);
 
@@ -416,7 +416,7 @@ public sealed class GitHubApiInterface : IApiInterface
         using var httpClient = _httpClientFactory.CreateClient(HttpClientEnum.GitHub.GetDescription());
         using var response = await httpClient.GetStreamAsync(CommonConstants.DataJsonUrl, cancellationToken).ConfigureAwait(false);
 
-        _data = await JsonSerializer.DeserializeAsync(response, DataJsonModelContext.Default.DictionaryStringString, cancellationToken).ConfigureAwait(false)
+        _data = await JsonSerializer.DeserializeAsync(response, DataJsonModelContext.Default.DictionaryStringString!, cancellationToken).ConfigureAwait(false)
              ?? throw new FormatException("Error while deserializing meta.json");
 
         _logger.LogInformation("Downloaded data.json from {Url} with {Count} entries", CommonConstants.DataJsonUrl, _data.Count);

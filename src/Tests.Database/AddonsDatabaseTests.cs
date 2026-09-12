@@ -42,7 +42,7 @@ public sealed class AddonsDatabaseTests
     {
         var jsonString = File.ReadAllText(ClientProperties.PathToLocalDataJson!);
 
-        return JsonSerializer.Deserialize(jsonString, DataJsonModelContext.Default.DictionaryStringString) ?? [];
+        return JsonSerializer.Deserialize(jsonString, DataJsonModelContext.Default.DictionaryStringString!) ?? [];
     }
 
     /// <summary>
@@ -51,7 +51,7 @@ public sealed class AddonsDatabaseTests
     public static IEnumerable<TheoryDataRow<Uri, long, string>> GetAddonTestData()
     {
         var jsonString = File.ReadAllText(ClientProperties.PathToLocalAddonsJson);
-        var addonsJson = JsonSerializer.Deserialize(jsonString, DownloadableAddonJsonModelDictionaryContext.Default.DictionaryGameEnumListDownloadableAddonJsonModel);
+        var addonsJson = JsonSerializer.Deserialize(jsonString, DownloadableAddonJsonModelDictionaryContext.Default.DictionaryGameEnumListDownloadableAddonJsonModel!);
 
         Assert.NotNull(addonsJson);
 
@@ -108,7 +108,7 @@ public sealed class AddonsDatabaseTests
     public async Task LooseFilesTest()
     {
         var addonsJsonString = File.ReadAllText(ClientProperties.PathToLocalAddonsJson);
-        var addonsJson = JsonSerializer.Deserialize(addonsJsonString, DownloadableAddonJsonModelDictionaryContext.Default.DictionaryGameEnumListDownloadableAddonJsonModel);
+        var addonsJson = JsonSerializer.Deserialize(addonsJsonString, DownloadableAddonJsonModelDictionaryContext.Default.DictionaryGameEnumListDownloadableAddonJsonModel!);
 
         Assert.NotNull(addonsJson);
 
@@ -136,15 +136,15 @@ public sealed class AddonsDatabaseTests
         var subFolder = data[DataJson.S3SubFolder];
 
         using var iMinioClient = minioClient
-                                .WithEndpoint(endpoint.Split("//").Last())
-                                .WithCredentials(access, secret)
-                                .WithSSL(false)
-                                .Build();
+                                .WithEndpoint(endpoint.Split("//").Last())!
+                                .WithCredentials(access, secret)!
+                                .WithSSL(false)!
+                                .Build()!;
 
         var args = new ListObjectsArgs()
                   .WithBucket(bucket)
                   .WithPrefix(subFolder + '/')
-                  .WithRecursive(true);
+                  .WithRecursive(true)!;
 
         var filesInBucket = new List<string>();
 
@@ -200,7 +200,7 @@ public sealed class AddonsDatabaseTests
     public async Task ManifestsJsonTest()
     {
         var manifestsJsonString = await File.ReadAllTextAsync(ClientProperties.PathToLocalManifestsJson);
-        var manifests = JsonSerializer.Deserialize(manifestsJsonString, AddonManifestJsonContext.Default.ListAddonManifestJsonModel);
+        var manifests = JsonSerializer.Deserialize(manifestsJsonString, AddonManifestJsonContext.Default.ListAddonManifestJsonModel!);
 
         Assert.NotNull(manifests);
     }
