@@ -12,6 +12,9 @@ using Microsoft.Extensions.Logging;
 
 namespace Addons.Providers;
 
+/// <summary>
+///     Provides the list of addons that can be downloaded for a game and installs them.
+/// </summary>
 public sealed class DownloadableAddonsProvider
 {
     private static readonly SemaphoreSlim _globalCacheSemaphore = new(1);
@@ -26,6 +29,27 @@ public sealed class DownloadableAddonsProvider
 
     private Dictionary<AddonTypeEnum, Dictionary<AddonId, DownloadableAddonJsonModel>>? _cache;
 
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="DownloadableAddonsProvider" /> class.
+    /// </summary>
+    /// <param name="game">
+    ///     The game.
+    /// </param>
+    /// <param name="archiveTools">
+    ///     The archive tools.
+    /// </param>
+    /// <param name="filesDownloader">
+    ///     The files downloader.
+    /// </param>
+    /// <param name="apiInterface">
+    ///     The API interface.
+    /// </param>
+    /// <param name="installedAddonsProviderFactory">
+    ///     The installed addons provider factory.
+    /// </param>
+    /// <param name="logger">
+    ///     The logger.
+    /// </param>
     [Obsolete($"Don't create directly. Use {nameof(DownloadableAddonsProviderFactory)}.")]
     public DownloadableAddonsProvider(
         BaseGame game,
@@ -45,8 +69,27 @@ public sealed class DownloadableAddonsProvider
         _installedAddonsProvider = installedAddonsProviderFactory.Get(_game);
     }
 
+    /// <summary>
+    ///     Gets the download progress reporter.
+    /// </summary>
     public Progress<float> Progress { get; } = new();
 
+    /// <summary>
+    ///     Creates or refreshes the cache of downloadable addons.
+    /// </summary>
+    /// <param name="createNew">
+    ///     Whether to force a new cache to be created.
+    /// </param>
+    /// <returns>
+    ///     <c>
+    ///         true
+    ///     </c>
+    ///     when the cache is available; otherwise
+    ///     <c>
+    ///         false
+    ///     </c>
+    ///     .
+    /// </returns>
     public async Task<bool> CreateCacheAsync(bool createNew)
     {
         try
@@ -99,6 +142,15 @@ public sealed class DownloadableAddonsProvider
         }
     }
 
+    /// <summary>
+    ///     Gets the downloadable addons of the specified type.
+    /// </summary>
+    /// <param name="addonType">
+    ///     The addon type.
+    /// </param>
+    /// <returns>
+    ///     The downloadable addons.
+    /// </returns>
     public ImmutableList<DownloadableAddonJsonModel> GetDownloadableAddons(AddonTypeEnum addonType)
     {
         if (_cache is null)
@@ -154,6 +206,18 @@ public sealed class DownloadableAddonsProvider
         return [.. addonTypeCache.Values];
     }
 
+    /// <summary>
+    ///     Downloads and installs the specified addon.
+    /// </summary>
+    /// <param name="addon">
+    ///     The addon to download.
+    /// </param>
+    /// <param name="cancellationToken">
+    ///     The cancellation token.
+    /// </param>
+    /// <returns>
+    ///     The result of the download.
+    /// </returns>
     public async Task<Result> DownloadAddonAsync(
         DownloadableAddonJsonModel addon,
         CancellationToken cancellationToken

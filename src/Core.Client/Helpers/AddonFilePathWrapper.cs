@@ -75,6 +75,7 @@ public readonly record struct AddonFilePathWrapper
         return new(newFolderPath, _mainFileName);
     }
 
+    /// <inheritdoc />
     [Obsolete("Don't use ToString(), use properties instead.", true)]
     public override string ToString() => Path.Combine(_pathToAddonFileOrFolder, _mainFileName);
 }

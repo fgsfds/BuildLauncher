@@ -556,6 +556,12 @@ public class CmdParametersBuilder
         }
     }
 
+    /// <summary>
+    ///     Appends the command-line arguments for the specified map addon.
+    /// </summary>
+    /// <param name="addon">
+    ///     The map addon.
+    /// </param>
     protected void AppendMapArgs(BaseAddon addon)
     {
         if (addon.FileInfo is null)

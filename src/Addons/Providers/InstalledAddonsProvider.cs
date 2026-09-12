@@ -16,8 +16,24 @@ using SharpCompress.Archives;
 
 namespace Addons.Providers;
 
+/// <summary>
+///     Tracks and manages the addons installed for a game.
+/// </summary>
 public sealed class InstalledAddonsProvider : IDisposable
 {
+    /// <summary>
+    ///     Represents a method that handles changes to installed addons.
+    /// </summary>
+    /// <param name="gameEnum">
+    ///     The game the change applies to.
+    /// </param>
+    /// <param name="addonType">
+    ///     The affected addon type, or
+    ///     <c>
+    ///         null
+    ///     </c>
+    ///     for all types.
+    /// </param>
     public delegate void AddonChanged(GameEnum gameEnum, AddonTypeEnum? addonType);
 
     internal readonly SemaphoreSlim _cacheUpdateSemaphore = new(1);
@@ -37,6 +53,30 @@ public sealed class InstalledAddonsProvider : IDisposable
     private readonly ILogger<InstalledAddonsProvider> _logger;
 
 
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="InstalledAddonsProvider" /> class.
+    /// </summary>
+    /// <param name="game">
+    ///     The game.
+    /// </param>
+    /// <param name="config">
+    ///     The configuration provider.
+    /// </param>
+    /// <param name="bitmapsCache">
+    ///     The bitmaps cache.
+    /// </param>
+    /// <param name="originalCampaignsProvider">
+    ///     The original campaigns provider.
+    /// </param>
+    /// <param name="metadataProvider">
+    ///     The metadata provider.
+    /// </param>
+    /// <param name="archivedAddonExtractor">
+    ///     The archived addon extractor.
+    /// </param>
+    /// <param name="logger">
+    ///     The logger.
+    /// </param>
     [Obsolete($"Don't create directly. Use {nameof(InstalledAddonsProviderFactory)}.")]
     public InstalledAddonsProvider(
         BaseGame game,
@@ -62,6 +102,7 @@ public sealed class InstalledAddonsProvider : IDisposable
         _metadataProvider.MetadataInitializedEvent += OnMetadataInitialized;
     }
 
+    /// <inheritdoc />
     public void Dispose()
     {
         _metadataProvider.MetadataUpdatedEvent -= OnMetadataUpdated;
@@ -70,8 +111,23 @@ public sealed class InstalledAddonsProvider : IDisposable
         _cacheUpdateSemaphore.Dispose();
     }
 
+    /// <summary>
+    ///     Occurs when the set of installed addons changes.
+    /// </summary>
     public event AddonChanged? AddonsChangedEvent;
 
+    /// <summary>
+    ///     Creates or refreshes the cache of installed addons for the specified addon type.
+    /// </summary>
+    /// <param name="createNew">
+    ///     Whether to rebuild the cache from scratch.
+    /// </param>
+    /// <param name="addonType">
+    ///     The addon type to scan for.
+    /// </param>
+    /// <returns>
+    ///     A task that represents the asynchronous operation.
+    /// </returns>
     public async Task CreateCacheAsync(bool createNew, AddonTypeEnum addonType)
     {
         try
@@ -266,6 +322,15 @@ public sealed class InstalledAddonsProvider : IDisposable
         }
     }
 
+    /// <summary>
+    ///     Adds the addon located at the specified path to the cache.
+    /// </summary>
+    /// <param name="pathToFile">
+    ///     The path to the addon file.
+    /// </param>
+    /// <returns>
+    ///     A task that represents the asynchronous operation.
+    /// </returns>
     public async Task AddAddonAsync(string pathToFile)
     {
         ArgumentNullException.ThrowIfNull(_campaignsCache);
@@ -305,6 +370,12 @@ public sealed class InstalledAddonsProvider : IDisposable
         }
     }
 
+    /// <summary>
+    ///     Adds the specified parsed addon file to the cache.
+    /// </summary>
+    /// <param name="parsedAddonFile">
+    ///     The parsed addon file.
+    /// </param>
     public void AddAddon(ParsedAddonFile parsedAddonFile)
     {
         ArgumentNullException.ThrowIfNull(_campaignsCache);
@@ -366,6 +437,12 @@ public sealed class InstalledAddonsProvider : IDisposable
         AddonsChangedEvent?.Invoke(_game.GameEnum, addon.Type);
     }
 
+    /// <summary>
+    ///     Removes the addon described by the specified parsed file from the cache.
+    /// </summary>
+    /// <param name="parsedAddonFile">
+    ///     The parsed addon file.
+    /// </param>
     public void DeleteAddon(ParsedAddonFile parsedAddonFile)
     {
         if (parsedAddonFile.Manifest is null)
@@ -382,6 +459,12 @@ public sealed class InstalledAddonsProvider : IDisposable
         }
     }
 
+    /// <summary>
+    ///     Removes the specified addon from the cache.
+    /// </summary>
+    /// <param name="addon">
+    ///     The addon to remove.
+    /// </param>
     public void DeleteAddon(BaseAddon addon)
     {
         ArgumentNullException.ThrowIfNull(_campaignsCache);
@@ -471,6 +554,15 @@ public sealed class InstalledAddonsProvider : IDisposable
         _addonActivator.DisableAddon(addon, _modsCache);
     }
 
+    /// <summary>
+    ///     Gets the installed addons of the specified type.
+    /// </summary>
+    /// <param name="addonType">
+    ///     The addon type.
+    /// </param>
+    /// <returns>
+    ///     The installed addons.
+    /// </returns>
     public IReadOnlyList<BaseAddon> GetInstalledAddonsByType(AddonTypeEnum addonType)
     {
         return addonType switch

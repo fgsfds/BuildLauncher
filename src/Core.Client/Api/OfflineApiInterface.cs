@@ -10,6 +10,9 @@ using Microsoft.Extensions.Logging;
 
 namespace Core.Client.Api;
 
+/// <summary>
+///     API interface implementation that serves data from local files for offline use.
+/// </summary>
 public sealed class OfflineApiInterface : IApiInterface
 {
     private readonly ILogger<OfflineApiInterface> _logger;
@@ -18,6 +21,12 @@ public sealed class OfflineApiInterface : IApiInterface
 
     private Dictionary<GameEnum, List<DownloadableAddonJsonModel>>? _addonsJson;
 
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="OfflineApiInterface" /> class.
+    /// </summary>
+    /// <param name="logger">
+    ///     The logger.
+    /// </param>
     public OfflineApiInterface(ILogger<OfflineApiInterface> logger)
     {
         _logger = logger;

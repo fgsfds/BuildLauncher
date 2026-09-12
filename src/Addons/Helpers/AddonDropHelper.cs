@@ -8,18 +8,52 @@ using SharpCompress.Archives;
 
 namespace Addons.Helpers;
 
+/// <summary>
+///     Adds dropped addon files to a game and installs them.
+/// </summary>
 public interface IAddonDropHelper
 {
+    /// <summary>
+    ///     Adds the addons from the specified file paths for the given game.
+    /// </summary>
+    /// <param name="filePaths">
+    ///     The paths of the dropped addon files.
+    /// </param>
+    /// <param name="game">
+    ///     The game the addons belong to.
+    /// </param>
+    /// <returns>
+    ///     The file names that failed to install, or
+    ///     <c>
+    ///         null
+    ///     </c>
+    ///     when all succeeded.
+    /// </returns>
     Task<List<string>?> AddAddonsAsync(List<string> filePaths, BaseGame game);
 }
 
 
+/// <summary>
+///     Default implementation of <see cref="IAddonDropHelper" />.
+/// </summary>
 public sealed class AddonDropHelper : IAddonDropHelper
 {
     private readonly InstalledAddonsProviderFactory _installedAddonsProvider;
     private readonly IUserNotifier _notifier;
     private readonly ILogger<AddonDropHelper> _logger;
 
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="AddonDropHelper" /> class.
+    /// </summary>
+    /// <param name="installedAddonsProvider">
+    ///     The installed addons provider factory.
+    /// </param>
+    /// <param name="notifier">
+    ///     The user notifier.
+    /// </param>
+    /// <param name="logger">
+    ///     The logger.
+    /// </param>
     public AddonDropHelper(
         InstalledAddonsProviderFactory installedAddonsProvider,
         IUserNotifier notifier,
@@ -31,6 +65,7 @@ public sealed class AddonDropHelper : IAddonDropHelper
         _logger = logger;
     }
 
+    /// <inheritdoc />
     public async Task<List<string>?> AddAddonsAsync(List<string> filePaths, BaseGame game)
     {
         if (filePaths.Count == 0)
