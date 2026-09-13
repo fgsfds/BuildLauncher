@@ -1184,8 +1184,8 @@ public sealed class InstalledAddonsProviderTests : IDisposable
     public void Dispose_DoesNotThrow()
     {
         var config = new Mock<IConfigProvider>();
-        config.Setup(x => x.DisabledAutoloadMods).Returns([]);
-        config.Setup(x => x.FavoriteAddons).Returns([]);
+        config.Setup(x => x.DisabledAutoloadMods).Returns(new HashSet<string>());
+        config.Setup(x => x.FavoriteAddons).Returns(new HashSet<AddonId>());
 
         var newProvider = ObjectCreationHelper.CreateInstalledAddonsProvider(
             new DukeGame
@@ -1207,8 +1207,8 @@ public sealed class InstalledAddonsProviderTests : IDisposable
     public void Factory_Dispose_DisposesCachedProviders()
     {
         var config = new Mock<IConfigProvider>();
-        config.Setup(x => x.DisabledAutoloadMods).Returns([]);
-        config.Setup(x => x.FavoriteAddons).Returns([]);
+        config.Setup(x => x.DisabledAutoloadMods).Returns(new HashSet<string>());
+        config.Setup(x => x.FavoriteAddons).Returns(new HashSet<AddonId>());
 
         var factory = ObjectCreationHelper.CreateInstalledAddonsProviderFactory(config.Object);
 

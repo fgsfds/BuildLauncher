@@ -19,12 +19,12 @@ public interface IConfigProvider
     /// <summary>
     ///     Gets the set of addon identifiers that are disabled from autoloading.
     /// </summary>
-    HashSet<string> DisabledAutoloadMods { get; }
+    IReadOnlySet<string> DisabledAutoloadMods { get; }
 
     /// <summary>
     ///     Gets the set of favorite addon identifiers with optional version.
     /// </summary>
-    HashSet<AddonId> FavoriteAddons { get; }
+    IReadOnlySet<AddonId> FavoriteAddons { get; }
 
     /// <summary>
     ///     Gets or sets whether the user has consented to data collection.
@@ -73,12 +73,12 @@ public interface IConfigProvider
     /// <summary>
     ///     Gets the dictionary of playtimes per addon.
     /// </summary>
-    Dictionary<string, TimeSpan> Playtimes { get; }
+    IReadOnlyDictionary<string, TimeSpan> Playtimes { get; }
 
     /// <summary>
     ///     Gets the dictionary of ratings per addon.
     /// </summary>
-    Dictionary<string, byte> Rating { get; }
+    IReadOnlyDictionary<string, byte> Rating { get; }
 
     /// <summary>
     ///     Gets or sets whether to skip the intro video.
@@ -141,5 +141,5 @@ public interface IConfigProvider
     /// </summary>
     /// <param name="addonId">The addon identifier.</param>
     /// <returns>A set of enabled option names.</returns>
-    HashSet<string> GetEnabledOptions(string addonId);
+    IReadOnlySet<string> GetEnabledOptions(string addonId);
 }

@@ -11,7 +11,7 @@ public static class SteamHelper
     /// <summary>
     ///     Retrieves a list of all absolute paths to the Steam libraries on the system.
     /// </summary>
-    public static List<string> GetSteamLibraries()
+    public static IReadOnlyList<string> GetSteamLibraries()
     {
         var steamInstallPath = GetSteamInstallPath();
 
@@ -34,7 +34,7 @@ public static class SteamHelper
     ///     Parses vdf file to extract paths to Steam libraries.
     /// </summary>
     /// <param name="pathToVdf">Path to the libraryfolders.vdf file.</param>
-    internal static List<string> GetLibrariesFromVdf(string pathToVdf)
+    internal static IReadOnlyList<string> GetLibrariesFromVdf(string pathToVdf)
     {
         List<string> result = new(4);
 

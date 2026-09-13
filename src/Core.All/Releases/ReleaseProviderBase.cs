@@ -54,7 +54,7 @@ public abstract class ReleaseProviderBase<T> where T : Enum
     /// <param name="e">Entity enum value identifying the release to fetch.</param>
     /// <param name="includePreReleases">If <c>true</c>, pre-release and draft entries are considered.</param>
     /// <returns>A dictionary mapping each OS to its release model, or <c>null</c> if no releases were found.</returns>
-    public async Task<Dictionary<OSEnum, GeneralReleaseJsonModel>?> GetLatestReleaseAsync(T e, bool includePreReleases, CancellationToken cancellationToken = default)
+    public async Task<IReadOnlyDictionary<OSEnum, GeneralReleaseJsonModel>?> GetLatestReleaseAsync(T e, bool includePreReleases, CancellationToken cancellationToken = default)
     {
         try
         {

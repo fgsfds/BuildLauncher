@@ -42,10 +42,10 @@ public sealed class PhysicalFileSystem : IFileSystem
     public void MoveDirectory(string source, string destination) => Directory.Move(source, destination);
 
     /// <inheritdoc />
-    public string[] GetFiles(string path) => Directory.GetFiles(path);
+    public IReadOnlyList<string> GetFiles(string path) => Directory.GetFiles(path);
 
     /// <inheritdoc />
-    public string[] GetFiles(string path, string searchPattern) => Directory.GetFiles(path, searchPattern);
+    public IReadOnlyList<string> GetFiles(string path, string searchPattern) => Directory.GetFiles(path, searchPattern);
 
     /// <inheritdoc />
     public void WriteAllText(string path, string contents) => File.WriteAllText(path, contents);
@@ -54,7 +54,7 @@ public sealed class PhysicalFileSystem : IFileSystem
     public string ReadAllText(string path) => File.ReadAllText(path);
 
     /// <inheritdoc />
-    public string[] ReadAllLines(string path) => File.ReadAllLines(path);
+    public IReadOnlyList<string> ReadAllLines(string path) => File.ReadAllLines(path);
 
     /// <inheritdoc />
     public Stream OpenRead(string path) => File.OpenRead(path);

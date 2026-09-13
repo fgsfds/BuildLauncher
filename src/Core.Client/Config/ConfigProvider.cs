@@ -161,7 +161,7 @@ public sealed class ConfigProvider : IConfigProvider
     }
 
     /// <inheritdoc />
-    public Dictionary<string, byte> Rating
+    public IReadOnlyDictionary<string, byte> Rating
     {
         get
         {
@@ -172,7 +172,7 @@ public sealed class ConfigProvider : IConfigProvider
     }
 
     /// <inheritdoc />
-    public Dictionary<string, TimeSpan> Playtimes
+    public IReadOnlyDictionary<string, TimeSpan> Playtimes
     {
         get
         {
@@ -183,18 +183,18 @@ public sealed class ConfigProvider : IConfigProvider
     }
 
     /// <inheritdoc />
-    public HashSet<string> DisabledAutoloadMods
+    public IReadOnlySet<string> DisabledAutoloadMods
     {
         get
         {
             using var dbContext = _dbContextFactory.CreateDbContext();
 
-            return [.. dbContext.DisabledAddons.AsNoTracking().Select(x => x.AddonId)];
+            return new HashSet<string>(dbContext.DisabledAddons.AsNoTracking().Select(x => x.AddonId));
         }
     }
 
     /// <inheritdoc />
-    public HashSet<AddonId> FavoriteAddons
+    public IReadOnlySet<AddonId> FavoriteAddons
     {
         get
         {
@@ -212,17 +212,17 @@ public sealed class ConfigProvider : IConfigProvider
     }
 
     /// <inheritdoc />
-    public HashSet<string> GetEnabledOptions(string addonId)
+    public IReadOnlySet<string> GetEnabledOptions(string addonId)
     {
         using var dbContext = _dbContextFactory.CreateDbContext();
         var existing = dbContext.Options.AsNoTracking().FirstOrDefault(x => x.AddonId.Equals(addonId));
 
         if (existing is null)
         {
-            return [];
+            return new HashSet<string>();
         }
 
-        return [.. existing.EnabledOptions.Split(';')];
+        return new HashSet<string>(existing.EnabledOptions.Split(';'));
     }
 
 

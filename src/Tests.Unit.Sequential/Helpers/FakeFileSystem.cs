@@ -91,7 +91,7 @@ public sealed class FakeFileSystem : IFileSystem
         }
     }
 
-    public string[] GetFiles(string path)
+    public IReadOnlyList<string> GetFiles(string path)
     {
         var normalized = Normalize(path).TrimEnd('\\', '/') + '\\';
         return _files.Keys
@@ -99,7 +99,7 @@ public sealed class FakeFileSystem : IFileSystem
             .ToArray();
     }
 
-    public string[] GetFiles(string path, string searchPattern)
+    public IReadOnlyList<string> GetFiles(string path, string searchPattern)
     {
         return GetFiles(path);
     }
@@ -114,7 +114,7 @@ public sealed class FakeFileSystem : IFileSystem
         return Encoding.UTF8.GetString(_files[Normalize(path)]);
     }
 
-    public string[] ReadAllLines(string path)
+    public IReadOnlyList<string> ReadAllLines(string path)
     {
         return ReadAllText(path).Split(["\r\n", "\r", "\n"], StringSplitOptions.None);
     }

@@ -594,7 +594,7 @@ public sealed class InstalledAddonsProvider : IDisposable
 
     private IReadOnlyList<BaseAddon> GetInstalledCampaigns()
     {
-        var campaigns = _originalCampaignsProvider.GetOriginalCampaigns(_game);
+        var campaigns = new Dictionary<AddonId, BaseAddon>(_originalCampaignsProvider.GetOriginalCampaigns(_game));
 
         if (!_cacheUpdateSemaphore.Wait(1))
         {

@@ -1,6 +1,7 @@
 using System.IO.Compression;
 using Addons.Helpers;
 using Addons.Providers;
+using Core.All;
 using Core.Client.Api;
 using Core.Client.Cache;
 using Core.Client.Helpers;
@@ -64,8 +65,8 @@ public sealed class AddonDropHelperTests : IDisposable
 
         Mock<ICacheAdder<Stream>> bitmapsCache = new();
         Mock<IConfigProvider> config = new();
-        config.Setup(x => x.DisabledAutoloadMods).Returns([]);
-        config.Setup(x => x.FavoriteAddons).Returns([]);
+        config.Setup(x => x.DisabledAutoloadMods).Returns(new HashSet<string>());
+        config.Setup(x => x.FavoriteAddons).Returns(new HashSet<AddonId>());
 
         OriginalCampaignsProvider originalCampaignsProvider = new(config.Object);
 

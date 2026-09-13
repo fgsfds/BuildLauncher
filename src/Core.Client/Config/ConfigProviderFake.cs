@@ -25,7 +25,7 @@ public sealed class ConfigProviderFake : IConfigProvider
     /// <inheritdoc />
     public string? S3SecretKey { get; set; } = null;
     /// <inheritdoc />
-    public Dictionary<string, byte> Rating { get; set; } = [];
+    public IReadOnlyDictionary<string, byte> Rating { get; set; } = new Dictionary<string, byte>();
 
     private readonly Dictionary<GameEnum, string?> _gamePaths = [];
 
@@ -36,12 +36,12 @@ public sealed class ConfigProviderFake : IConfigProvider
     public void SetGamePath(GameEnum game, string? value) => _gamePaths[game] = value;
 
     /// <inheritdoc />
-    public Dictionary<string, TimeSpan> Playtimes { get; } = [];
+    public IReadOnlyDictionary<string, TimeSpan> Playtimes { get; } = new Dictionary<string, TimeSpan>();
     /// <inheritdoc />
-    public HashSet<string> DisabledAutoloadMods { get; } = [];
+    public IReadOnlySet<string> DisabledAutoloadMods { get; } = new HashSet<string>();
 
     /// <inheritdoc />
-    public HashSet<string> GetEnabledOptions(string addonId) => [];
+    public IReadOnlySet<string> GetEnabledOptions(string addonId) => new HashSet<string>();
 
     /// <inheritdoc />
     public ThemeEnum Theme { get; set; } = ThemeEnum.System;
@@ -53,7 +53,7 @@ public sealed class ConfigProviderFake : IConfigProvider
     public bool UseLocalApi { get; set; } = true;
 
     /// <inheritdoc />
-    public HashSet<AddonId> FavoriteAddons { get; } = [];
+    public IReadOnlySet<AddonId> FavoriteAddons { get; } = new HashSet<AddonId>();
 
 
     /// <inheritdoc />

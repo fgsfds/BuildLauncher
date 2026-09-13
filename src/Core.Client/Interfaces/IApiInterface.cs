@@ -33,7 +33,7 @@ public interface IApiInterface
     /// <param name="gameEnum">The game to filter addons by.</param>
     /// <param name="cancellationToken">Cancellation token.</param>
     /// <returns>A list of addon models, or null on failure.</returns>
-    Task<List<DownloadableAddonJsonModel>?> GetAddonsAsync(GameEnum gameEnum, CancellationToken cancellationToken = default);
+    Task<IReadOnlyList<DownloadableAddonJsonModel>?> GetAddonsAsync(GameEnum gameEnum, CancellationToken cancellationToken = default);
 
     /// <summary>
     ///     Retrieves the latest application release for self-update.
@@ -62,7 +62,7 @@ public interface IApiInterface
     ///     Retrieves all addon ratings from the server.
     /// </summary>
     /// <returns>A dictionary of addon ratings, or null on failure.</returns>
-    Task<Dictionary<string, decimal>?> GetRatingsAsync();
+    Task<IReadOnlyDictionary<string, decimal>?> GetRatingsAsync();
 
     /// <summary>
     ///     Retrieves a signed upload URL for the specified file path.
@@ -77,7 +77,7 @@ public interface IApiInterface
     /// </summary>
     /// <param name="cancellationToken">Cancellation token.</param>
     /// <returns>The data.json entries, or null on failure.</returns>
-    Task<Dictionary<string, string>?> GetDataJsonAsync(CancellationToken cancellationToken = default);
+    Task<IReadOnlyDictionary<string, string>?> GetDataJsonAsync(CancellationToken cancellationToken = default);
 
     /// <summary>
     ///     Retrieves the upload folder path from the server.
@@ -91,7 +91,7 @@ public interface IApiInterface
     /// </summary>
     /// <param name="cancellationToken">Cancellation token.</param>
     /// <returns>A list of addon manifests, or null on failure.</returns>
-    Task<List<AddonManifestJsonModel>?> GetMetadataAsync(CancellationToken cancellationToken = default);
+    Task<IReadOnlyList<AddonManifestJsonModel>?> GetMetadataAsync(CancellationToken cancellationToken = default);
 
     /// <summary>
     ///     Increments the install count for the specified addon.

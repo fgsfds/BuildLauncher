@@ -306,8 +306,8 @@ public sealed class DownloadableAddonsProviderTests
 
         Mock<IApiInterface> api = new();
         var config = new Mock<IConfigProvider>();
-        config.Setup(x => x.DisabledAutoloadMods).Returns([]);
-        config.Setup(x => x.FavoriteAddons).Returns([]);
+        config.Setup(x => x.DisabledAutoloadMods).Returns(new HashSet<string>());
+        config.Setup(x => x.FavoriteAddons).Returns(new HashSet<AddonId>());
 
         var metadataProvider = new MetadataProvider(
             api.Object,

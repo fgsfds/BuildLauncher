@@ -75,7 +75,7 @@ internal static class PortTestSetups
         var originalFolder = game.GameInstallFolder;
         game.GameInstallFolder = testDir;
 
-        Dictionary<AddonId, BaseAddon> campaigns;
+        IReadOnlyDictionary<AddonId, BaseAddon> campaigns;
         try
         {
             campaigns = _provider.GetOriginalCampaigns(game);
@@ -376,7 +376,7 @@ internal static class PortTestSetups
         game.Duke64RomPath = Path.Combine(duke64TestDir, "rom.z64");
         game.DukeZHRomPath = Path.Combine(dukeZhTestDir, "rom.z64");
 
-        Dictionary<AddonId, BaseAddon> campaigns;
+        IReadOnlyDictionary<AddonId, BaseAddon> campaigns;
         try
         {
             campaigns = _provider.GetOriginalCampaigns(game);
@@ -489,7 +489,7 @@ internal static class PortTestSetups
         var originalFolder = game.GameInstallFolder;
         game.GameInstallFolder = testDir;
 
-        Dictionary<AddonId, BaseAddon> campaigns;
+        IReadOnlyDictionary<AddonId, BaseAddon> campaigns;
         try
         {
             campaigns = _provider.GetOriginalCampaigns(game);
@@ -532,7 +532,7 @@ internal static class PortTestSetups
         game.GameInstallFolder = testDir;
         game.AgainInstallPath = againTestDir;
 
-        Dictionary<AddonId, BaseAddon> campaigns;
+        IReadOnlyDictionary<AddonId, BaseAddon> campaigns;
         try
         {
             campaigns = _provider.GetOriginalCampaigns(game);
@@ -569,7 +569,7 @@ internal static class PortTestSetups
         var originalFolder = game.GameInstallFolder;
         game.GameInstallFolder = testDir;
 
-        Dictionary<AddonId, BaseAddon> campaigns;
+        IReadOnlyDictionary<AddonId, BaseAddon> campaigns;
         try
         {
             campaigns = _provider.GetOriginalCampaigns(game);
@@ -603,7 +603,7 @@ internal static class PortTestSetups
         var originalFolder = game.GameInstallFolder;
         game.GameInstallFolder = testDir;
 
-        Dictionary<AddonId, BaseAddon> campaigns;
+        IReadOnlyDictionary<AddonId, BaseAddon> campaigns;
         try
         {
             campaigns = _provider.GetOriginalCampaigns(game);
@@ -685,7 +685,7 @@ internal static class PortTestSetups
         var originalFolder = game.GameInstallFolder;
         game.GameInstallFolder = testDir;
 
-        Dictionary<AddonId, BaseAddon> campaigns;
+        IReadOnlyDictionary<AddonId, BaseAddon> campaigns;
         try
         {
             campaigns = _provider.GetOriginalCampaigns(game);
@@ -720,7 +720,7 @@ internal static class PortTestSetups
         var originalFolder = game.GameInstallFolder;
         game.GameInstallFolder = testDir;
 
-        Dictionary<AddonId, BaseAddon> campaigns;
+        IReadOnlyDictionary<AddonId, BaseAddon> campaigns;
         try
         {
             campaigns = _provider.GetOriginalCampaigns(game);
@@ -755,7 +755,7 @@ internal static class PortTestSetups
         var originalFolder = game.GameInstallFolder;
         game.GameInstallFolder = testDir;
 
-        Dictionary<AddonId, BaseAddon> campaigns;
+        IReadOnlyDictionary<AddonId, BaseAddon> campaigns;
         try
         {
             campaigns = _provider.GetOriginalCampaigns(game);
@@ -788,7 +788,7 @@ internal static class PortTestSetups
         var originalFolder = game.GameInstallFolder;
         game.GameInstallFolder = testDir;
 
-        Dictionary<AddonId, BaseAddon> campaigns;
+        IReadOnlyDictionary<AddonId, BaseAddon> campaigns;
         try
         {
             campaigns = _provider.GetOriginalCampaigns(game);

@@ -82,7 +82,7 @@ public static class GrpInfoProvider
     /// </summary>
     /// <param name="pathToFile">Path to the grpinfo file</param>
     /// <param name="expectedGrpsCount">Number of expected grps</param>
-    internal static List<GrpInfoEntry> Parse(string pathToFile, int expectedGrpsCount = 10)
+    internal static IReadOnlyList<GrpInfoEntry> Parse(string pathToFile, int expectedGrpsCount = 10)
     {
         var lines = File.ReadLines(pathToFile);
 

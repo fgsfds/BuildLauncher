@@ -74,7 +74,7 @@ public sealed class GitHubApiInterface : IApiInterface
 
 
     /// <inheritdoc />
-    public async Task<List<DownloadableAddonJsonModel>?> GetAddonsAsync(GameEnum gameEnum, CancellationToken cancellationToken = default)
+    public async Task<IReadOnlyList<DownloadableAddonJsonModel>?> GetAddonsAsync(GameEnum gameEnum, CancellationToken cancellationToken = default)
     {
         await _semaphore.WaitAsync(cancellationToken).ConfigureAwait(false);
 
@@ -316,7 +316,7 @@ public sealed class GitHubApiInterface : IApiInterface
     }
 
     /// <inheritdoc />
-    public async Task<Dictionary<string, string>?> GetDataJsonAsync(CancellationToken cancellationToken = default)
+    public async Task<IReadOnlyDictionary<string, string>?> GetDataJsonAsync(CancellationToken cancellationToken = default)
     {
         await _semaphore.WaitAsync(cancellationToken).ConfigureAwait(false);
 
@@ -361,7 +361,7 @@ public sealed class GitHubApiInterface : IApiInterface
     }
 
     /// <inheritdoc />
-    public async Task<List<AddonManifestJsonModel>?> GetMetadataAsync(CancellationToken cancellationToken = default)
+    public async Task<IReadOnlyList<AddonManifestJsonModel>?> GetMetadataAsync(CancellationToken cancellationToken = default)
     {
         try
         {
@@ -434,11 +434,11 @@ public sealed class GitHubApiInterface : IApiInterface
     }
 
     /// <inheritdoc />
-    public Task<Dictionary<string, decimal>?> GetRatingsAsync()
+    public Task<IReadOnlyDictionary<string, decimal>?> GetRatingsAsync()
     {
         _logger.LogDebug("GitHub API does not provide ratings; returning no ratings");
 
-        return Task.FromResult<Dictionary<string, decimal>?>(null);
+        return Task.FromResult<IReadOnlyDictionary<string, decimal>?>(null);
     }
 
     /// <inheritdoc />

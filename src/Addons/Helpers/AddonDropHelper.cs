@@ -29,7 +29,7 @@ public interface IAddonDropHelper
     ///     </c>
     ///     when all succeeded.
     /// </returns>
-    Task<List<string>?> AddAddonsAsync(List<string> filePaths, BaseGame game);
+    Task<IReadOnlyList<string>?> AddAddonsAsync(IReadOnlyList<string> filePaths, BaseGame game);
 }
 
 
@@ -66,7 +66,7 @@ public sealed class AddonDropHelper : IAddonDropHelper
     }
 
     /// <inheritdoc />
-    public async Task<List<string>?> AddAddonsAsync(List<string> filePaths, BaseGame game)
+    public async Task<IReadOnlyList<string>?> AddAddonsAsync(IReadOnlyList<string> filePaths, BaseGame game)
     {
         if (filePaths.Count == 0)
         {

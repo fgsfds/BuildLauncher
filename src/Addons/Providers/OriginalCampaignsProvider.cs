@@ -37,7 +37,7 @@ public sealed class OriginalCampaignsProvider
     ///     A dictionary where the keys are <see cref="AddonId" /> values representing the unique identifiers of the
     ///     campaigns,  and the values are <see cref="BaseAddon" /> instances representing the campaign details.
     /// </returns>
-    public Dictionary<AddonId, BaseAddon> GetOriginalCampaigns(BaseGame game)
+    public IReadOnlyDictionary<AddonId, BaseAddon> GetOriginalCampaigns(BaseGame game)
     {
         return game.GameEnum switch
         {

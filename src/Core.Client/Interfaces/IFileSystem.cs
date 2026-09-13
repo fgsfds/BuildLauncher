@@ -102,7 +102,7 @@ public interface IFileSystem
     /// <returns>
     ///     The file paths.
     /// </returns>
-    string[] GetFiles(string path);
+    IReadOnlyList<string> GetFiles(string path);
 
     /// <summary>
     ///     Gets the files in the specified directory that match the search pattern.
@@ -116,7 +116,7 @@ public interface IFileSystem
     /// <returns>
     ///     The matching file paths.
     /// </returns>
-    string[] GetFiles(string path, string searchPattern);
+    IReadOnlyList<string> GetFiles(string path, string searchPattern);
 
     /// <summary>
     ///     Writes text to the specified file.
@@ -149,7 +149,7 @@ public interface IFileSystem
     /// <returns>
     ///     The file lines.
     /// </returns>
-    string[] ReadAllLines(string path);
+    IReadOnlyList<string> ReadAllLines(string path);
 
     /// <summary>
     ///     Opens the specified file for reading.

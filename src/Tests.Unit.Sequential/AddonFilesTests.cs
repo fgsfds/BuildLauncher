@@ -1,4 +1,5 @@
 using Addons.Providers;
+using Core.All;
 using Core.All.Enums;
 using Core.Client.Helpers;
 using Core.Client.Interfaces;
@@ -17,8 +18,8 @@ public sealed class AddonFilesTests : IDisposable
     public AddonFilesTests()
     {
         Mock<IConfigProvider> configMock = new();
-        configMock.Setup(x => x.DisabledAutoloadMods).Returns([]);
-        configMock.Setup(x => x.FavoriteAddons).Returns([]);
+        configMock.Setup(x => x.DisabledAutoloadMods).Returns(new HashSet<string>());
+        configMock.Setup(x => x.FavoriteAddons).Returns(new HashSet<AddonId>());
 
         _installedAddonsProvider = ObjectCreationHelper.CreateInstalledAddonsProvider(_game, configMock.Object);
     }
@@ -131,8 +132,8 @@ public sealed class AddonFilesTests : IDisposable
         };
 
         Mock<IConfigProvider> configMock = new();
-        configMock.Setup(x => x.DisabledAutoloadMods).Returns([]);
-        configMock.Setup(x => x.FavoriteAddons).Returns([]);
+        configMock.Setup(x => x.DisabledAutoloadMods).Returns(new HashSet<string>());
+        configMock.Setup(x => x.FavoriteAddons).Returns(new HashSet<AddonId>());
 
         var installedAddonsProvider = ObjectCreationHelper.CreateInstalledAddonsProvider(dukeGame, configMock.Object);
 
