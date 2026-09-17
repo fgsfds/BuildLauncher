@@ -45,7 +45,6 @@
                        HorizontalAlignment="Left"
                        VerticalAlignment="Center"
                        FontWeight="Bold"
-                       Foreground="{DynamicResource SystemAccentColor}"
                        Text="Addon options" />
 
             <ItemsControl Grid.Row="1"
@@ -66,7 +65,6 @@
                    HorizontalAlignment="Center"
                    FontSize="16"
                    FontWeight="Bold"
-                   Foreground="{DynamicResource SystemAccentColor}"
                    Text="{Binding SelectedAddonPlaytime}" />
 
         <StackPanel Grid.Row="3"
@@ -77,14 +75,13 @@
                        HorizontalAlignment="Center"
                        VerticalAlignment="Center"
                        FontWeight="Bold"
-                       Foreground="{DynamicResource SystemAccentColor}"
-                       Text="Metadata update availble" />
+                       Text="Metadata update available" />
 
             <Button Margin="10,5"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
                     Background="Transparent"
-                    BorderBrush="Gray"
+                    BorderBrush="{DynamicResource ControlBorderBrush}"
                     Command="{Binding UpdateMetadataAsync}"
                     Content="Update" />
 

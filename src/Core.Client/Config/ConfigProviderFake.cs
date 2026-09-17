@@ -50,6 +50,8 @@ public sealed class ConfigProviderFake : IConfigProvider
     /// <inheritdoc />
     public bool SkipStartup { get; set; } = false;
     /// <inheritdoc />
+    public bool UseMica { get; set; } = true;
+    /// <inheritdoc />
     public bool UseLocalApi { get; set; } = true;
 
     /// <inheritdoc />

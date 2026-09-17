@@ -61,6 +61,13 @@ public sealed class ConfigProvider : IConfigProvider
     }
 
     /// <inheritdoc />
+    public bool UseMica
+    {
+        get => GetBoolValue(nameof(UseMica), true);
+        set => SetSettingsValue(value.ToString());
+    }
+
+    /// <inheritdoc />
     public bool UseLocalApi
     {
         get => GetBoolValue(nameof(UseLocalApi));
@@ -422,12 +429,15 @@ public sealed class ConfigProvider : IConfigProvider
     ///     Retrieves a boolean setting value from the database.
     /// </summary>
     /// <param name="propertyName">The setting property name.</param>
-    /// <returns>true if the value is parsed as true; otherwise, false.</returns>
-    private bool GetBoolValue(string propertyName)
+    /// <param name="defaultValue">The value returned when the setting is absent or cannot be parsed.</param>
+    /// <returns>The stored boolean value, or <paramref name="defaultValue" /> when absent or unparsable.</returns>
+    private bool GetBoolValue(string propertyName, bool defaultValue = false)
     {
         using var dbContext = _dbContextFactory.CreateDbContext();
 
-        return bool.TryParse(dbContext.Settings.AsNoTracking().FirstOrDefault(x => x.Name == propertyName)?.Value, out var result) && result;
+        var value = dbContext.Settings.AsNoTracking().FirstOrDefault(x => x.Name == propertyName)?.Value;
+
+        return bool.TryParse(value, out var result) ? result : defaultValue;
     }
 
     /// <summary>

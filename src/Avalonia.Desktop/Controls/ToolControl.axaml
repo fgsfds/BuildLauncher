@@ -35,7 +35,7 @@
         <StackPanel HorizontalAlignment="Center"
                     IsVisible="{Binding !Tool.CanBeInstalled}"
                     Orientation="Horizontal">
-            <TextBlock Foreground="{DynamicResource SystemAccentColor}" Text="{Binding Tool.InstallText, FallbackValue=''}" />
+            <TextBlock Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}" Text="{Binding Tool.InstallText, FallbackValue=''}" />
         </StackPanel>
 
         <ProgressBar Margin="5,10,5,5"
@@ -93,7 +93,7 @@
                     HorizontalAlignment="Stretch"
                     HorizontalContentAlignment="Center"
                     VerticalContentAlignment="Center"
-                    Background="Crimson"
+                    Background="{DynamicResource DangerBrush}"
                     Command="{Binding UninstallCommand}"
                     IsEnabled="{Binding IsInstalled}"
                     IsVisible="{Binding Tool.CanBeInstalled}"

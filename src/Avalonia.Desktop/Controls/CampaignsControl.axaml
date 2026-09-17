@@ -34,7 +34,7 @@
                            VerticalAlignment="Center"
                            Source="{Binding GridImageHash, Converter={StaticResource CachedHashToBitmapConverter}}" />
 
-                    <TextBlock Margin="0,0,0,-2"
+                    <TextBlock Margin="0"
                                Padding="5"
                                HorizontalAlignment="Stretch"
                                VerticalAlignment="Bottom"
@@ -44,7 +44,7 @@
                                TextAlignment="Center"
                                TextWrapping="Wrap" />
 
-                    <TextBlock Margin="0,0,0,-2"
+                    <TextBlock Margin="0"
                                Padding="5"
                                HorizontalAlignment="Stretch"
                                VerticalAlignment="Bottom"
@@ -55,42 +55,52 @@
 
                 <Grid IsVisible="{Binding GridImageHash, Converter={x:Static ObjectConverters.IsNull}}">
 
-                    <Border Background="Black" />
+                    <Border Background="{DynamicResource SurfaceSunken}" />
 
                     <Viewbox>
                         <TextBlock Margin="20"
                                    FontSize="500"
                                    FontWeight="Bold"
-                                   Foreground="{DynamicResource SystemAccentColor}"
                                    Text="{Binding Title, Converter={StaticResource StringToWrappedConverter}}"
                                    TextAlignment="Center" />
                     </Viewbox>
                 </Grid>
 
-                <Image x:Name="HighlightOverlay"
-                       HorizontalAlignment="Center"
-                       VerticalAlignment="Center"
-                       Source="{StaticResource HighlightOverlayBitmap}" />
+                <Border x:Name="HighlightOverlay"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Stretch">
+                    <Border.Background>
+                        <LinearGradientBrush StartPoint="0%,100%" EndPoint="100%,0%">
+                            <GradientStop Offset="0" Color="#00F7F6FA" />
+                            <GradientStop Offset="0.57" Color="#00F7F6FA" />
+                            <GradientStop Offset="0.6" Color="#21F7F6FA" />
+                            <GradientStop Offset="0.7" Color="#71F7F6FA" />
+                            <GradientStop Offset="0.8" Color="#B2F7F6FA" />
+                            <GradientStop Offset="0.9" Color="#E3F7F6FA" />
+                            <GradientStop Offset="1" Color="#FFF7F6FA" />
+                        </LinearGradientBrush>
+                    </Border.Background>
+                </Border>
 
                 <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
 
                     <i:Icon Margin="5"
                             HorizontalAlignment="Right"
                             VerticalAlignment="Top"
-                            BorderBrush="Black"
+                            BorderBrush="{DynamicResource IconOutlineBrush}"
                             BorderThickness="1"
                             FontSize="20"
-                            Foreground="Yellow"
+                            Foreground="{DynamicResource FavoriteBrush}"
                             IsVisible="{Binding IsFavorite}"
                             Value="fa7-star" />
 
                     <i:Icon Margin="5"
                             HorizontalAlignment="Right"
                             VerticalAlignment="Top"
-                            BorderBrush="Black"
+                            BorderBrush="{DynamicResource IconOutlineBrush}"
                             BorderThickness="1"
                             FontSize="20"
-                            Foreground="Crimson"
+                            Foreground="{DynamicResource WarningBrush}"
                             IsVisible="{Binding IsMetadataUpdateAvailable}"
                             ToolTip.Tip="Metadata update available"
                             Value="fa7-circle-exclamation" />
@@ -128,6 +138,7 @@
                  Grid.Row="1"
                  Grid.Column="0"
                  Padding="2"
+                 Background="{DynamicResource SurfaceRaised}"
                  IsEnabled="{Binding !IsInProgress}"
                  ItemsSource="{Binding AddonsList}"
                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
@@ -160,7 +171,7 @@
                         </Setter>
                     </Style>
 
-                    <Style Selector="^ Image#HighlightOverlay">
+                    <Style Selector="^ Border#HighlightOverlay">
                         <Setter Property="Opacity" Value="0.00" />
                         <Setter Property="Transitions">
                             <Setter.Value>
@@ -177,7 +188,7 @@
                             <Setter Property="RenderTransform" Value="scale(0.96)" />
                         </Style>
 
-                        <Style Selector="^ Image#HighlightOverlay">
+                        <Style Selector="^ Border#HighlightOverlay">
                             <Setter Property="Opacity" Value="0.2" />
                         </Style>
                     </Style>
@@ -188,7 +199,7 @@
                             <Setter Property="RenderTransform" Value="scale(1.0)" />
                         </Style>
 
-                        <Style Selector="^ Image#HighlightOverlay">
+                        <Style Selector="^ Border#HighlightOverlay">
                             <Setter Property="Opacity" Value="0.25" />
                         </Style>
                     </Style>

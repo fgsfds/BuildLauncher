@@ -12,7 +12,6 @@
     <Application.Resources>
         <ResourceDictionary>
             <helpers:CachedHashToBitmapConverter x:Key="CachedHashToBitmapConverter" />
-            <Bitmap x:Key="HighlightOverlayBitmap">avares://BuildLauncher/Assets/overlay.png</Bitmap>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

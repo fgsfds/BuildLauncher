@@ -91,6 +91,11 @@ public interface IConfigProvider
     bool SkipStartup { get; set; }
 
     /// <summary>
+    ///     Gets or sets whether the Mica system backdrop effect is enabled.
+    /// </summary>
+    bool UseMica { get; set; }
+
+    /// <summary>
     ///     Gets or sets the application UI theme.
     /// </summary>
     ThemeEnum Theme { get; set; }

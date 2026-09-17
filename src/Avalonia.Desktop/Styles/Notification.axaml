@@ -7,7 +7,7 @@
     <Style Selector="NotificationCard">
         <Setter Property="BorderBrush" Value="{DynamicResource SystemAccentColor}" />
         <Setter Property="BorderThickness" Value="1" />
-        <Setter Property="Background" Value="{Binding Path=Background, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" />
+        <Setter Property="Background" Value="{DynamicResource OverlaySurface}" />
         <Setter Property="CornerRadius" Value="5" />
 
         <Style Selector="^ TextBlock">

@@ -13,7 +13,6 @@
         d:DesignHeight="800"
         d:DesignWidth="1300"
         x:DataType="vm:MainWindowViewModel"
-        Background="{DynamicResource Background}"
         CanResize="True"
         ClipToBounds="True"
         ExtendClientAreaToDecorationsHint="True"
@@ -24,6 +23,12 @@
         mc:Ignorable="d">
 
     <Window.Styles>
+        <Style Selector="Window:not(.mica)">
+            <Setter Property="Background" Value="{DynamicResource Background}" />
+        </Style>
+        <Style Selector="Window.mica">
+            <Setter Property="Background" Value="Transparent" />
+        </Style>
         <Style Selector="WindowDrawnDecorations /template/ Panel#PART_TitleTextPanel &gt; TextBlock">
             <Setter Property="IsVisible" Value="False" />
         </Style>
@@ -48,6 +53,11 @@
 
         <Grid RowDefinitions="25,*">
 
+            <Border Grid.Row="0"
+                    Grid.RowSpan="2"
+                    Background="{DynamicResource BackdropBackground}"
+                    IsHitTestVisible="False" />
+
             <Grid x:Name="ConsentWindow"
                   Grid.Row="0"
                   Grid.RowSpan="2"
@@ -60,7 +70,7 @@
                         Grid.RowSpan="3"
                         Grid.Column="0"
                         Grid.ColumnSpan="3"
-                        Background="Black"
+                        Background="{DynamicResource ScrimBrush}"
                         IsHitTestVisible="True"
                         Opacity="0.5" />
 
@@ -263,7 +273,7 @@
                             <TextBlock Text="Ports" />
                             <i:Icon Margin="5,0,0,0"
                                     DataContext="{Binding PortsPageViewModel}"
-                                    Foreground="Crimson"
+                                    Foreground="{DynamicResource WarningBrush}"
                                     IsVisible="{Binding HasUpdates}"
                                     ToolTip.Tip="Updates available"
                                     Value="fa7-circle-exclamation" />
@@ -281,7 +291,7 @@
                             <TextBlock Text="Tools" />
                             <i:Icon Margin="5,0,0,0"
                                     DataContext="{Binding ToolsPageViewModel}"
-                                    Foreground="Crimson"
+                                    Foreground="{DynamicResource WarningBrush}"
                                     IsVisible="{Binding HasUpdates}"
                                     ToolTip.Tip="Updates available"
                                     Value="fa7-circle-exclamation" />
@@ -316,7 +326,7 @@
                             <TextBlock Text="About" />
                             <i:Icon Margin="5,0,0,0"
                                     DataContext="{Binding AboutPageViewModel}"
-                                    Foreground="Crimson"
+                                    Foreground="{DynamicResource WarningBrush}"
                                     IsVisible="{Binding CurrentUpdateState, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static vm:UpdateState.UpdateAvailable}}"
                                     ToolTip.Tip="App update available"
                                     Value="fa7-circle-exclamation" />

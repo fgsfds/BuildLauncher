@@ -45,6 +45,14 @@
                                  GroupName="theme"
                                  IsChecked="{Binding IsDarkTheme}" />
 
+                    <!--  Mica effect  -->
+                    <CheckBox Margin="20,5"
+                              VerticalAlignment="Center"
+                              IsChecked="{Binding UseMicaCheckbox}"
+                              IsVisible="{Binding IsMicaSupported}">
+                        Mica effect
+                    </CheckBox>
+
                 </StackPanel>
 
             </Grid>

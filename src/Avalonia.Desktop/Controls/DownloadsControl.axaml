@@ -57,7 +57,7 @@
                   Margin="0"
                   Padding="2"
                   misc:DataGridSelectedItemsProperty.SelectedItems="{Binding SelectedDownloads}"
-                  BorderBrush="Gray"
+                  BorderBrush="{DynamicResource ControlBorderBrush}"
                   BorderThickness="1"
                   CanUserReorderColumns="False"
                   CanUserResizeColumns="False"

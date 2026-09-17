@@ -3,14 +3,36 @@
     <ResourceDictionary.ThemeDictionaries>
         <ResourceDictionary x:Key="Dark">
             <SolidColorBrush x:Key="Background">#202020</SolidColorBrush>
-            <SolidColorBrush x:Key="PopupBackground">Black</SolidColorBrush>
+            <SolidColorBrush x:Key="BackdropBackground">#1A202020</SolidColorBrush>
+            <SolidColorBrush x:Key="SurfaceRaised">#04FFFFFF</SolidColorBrush>
+            <SolidColorBrush x:Key="SurfaceSunken">#FF101010</SolidColorBrush>
+            <SolidColorBrush x:Key="OverlaySurface">#FF2B2B2B</SolidColorBrush>
+            <SolidColorBrush x:Key="TitleBarBackgroundBrush">Transparent</SolidColorBrush>
             <SolidColorBrush x:Key="WindowBorder">Black</SolidColorBrush>
+            <SolidColorBrush x:Key="ScrimBrush">Black</SolidColorBrush>
+            <SolidColorBrush x:Key="DangerBrush">Crimson</SolidColorBrush>
+            <SolidColorBrush x:Key="WarningBrush">Crimson</SolidColorBrush>
+            <SolidColorBrush x:Key="LinkBrush">#FF64B5F6</SolidColorBrush>
+            <SolidColorBrush x:Key="FavoriteBrush">#FFFFD700</SolidColorBrush>
+            <SolidColorBrush x:Key="ControlBorderBrush">#FF4A4A4A</SolidColorBrush>
+            <SolidColorBrush x:Key="IconOutlineBrush">Black</SolidColorBrush>
             <BoxShadows x:Key="Shadow">0 0 5 Black</BoxShadows>
         </ResourceDictionary>
         <ResourceDictionary x:Key="Light">
             <SolidColorBrush x:Key="Background">White</SolidColorBrush>
-            <SolidColorBrush x:Key="PopupBackground">DarkGray</SolidColorBrush>
+            <SolidColorBrush x:Key="BackdropBackground">#1AFFFFFF</SolidColorBrush>
+            <SolidColorBrush x:Key="SurfaceRaised">#08000000</SolidColorBrush>
+            <SolidColorBrush x:Key="SurfaceSunken">#FFE0E0E0</SolidColorBrush>
+            <SolidColorBrush x:Key="OverlaySurface">#FFF2F2F2</SolidColorBrush>
+            <SolidColorBrush x:Key="TitleBarBackgroundBrush">Transparent</SolidColorBrush>
             <SolidColorBrush x:Key="WindowBorder">DarkGray</SolidColorBrush>
+            <SolidColorBrush x:Key="ScrimBrush">Black</SolidColorBrush>
+            <SolidColorBrush x:Key="DangerBrush">Crimson</SolidColorBrush>
+            <SolidColorBrush x:Key="WarningBrush">Crimson</SolidColorBrush>
+            <SolidColorBrush x:Key="LinkBrush">#FF1565C0</SolidColorBrush>
+            <SolidColorBrush x:Key="FavoriteBrush">#FFFFD700</SolidColorBrush>
+            <SolidColorBrush x:Key="ControlBorderBrush">#FFB0B0B0</SolidColorBrush>
+            <SolidColorBrush x:Key="IconOutlineBrush">Black</SolidColorBrush>
             <BoxShadows x:Key="Shadow">0 0 5 DarkGray</BoxShadows>
         </ResourceDictionary>
     </ResourceDictionary.ThemeDictionaries>

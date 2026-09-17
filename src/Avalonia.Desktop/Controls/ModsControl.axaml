@@ -19,6 +19,7 @@
                  Grid.Row="0"
                  Grid.Column="0"
                  Padding="2"
+                 Background="{DynamicResource SurfaceRaised}"
                  ItemsSource="{Binding AddonsList}"
                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                  SelectedItem="{Binding SelectedAddon}">
@@ -56,10 +57,10 @@
                             <i:Icon Margin="5"
                                     HorizontalAlignment="Right"
                                     VerticalAlignment="Center"
-                                    BorderBrush="Black"
+                                    BorderBrush="{DynamicResource IconOutlineBrush}"
                                     BorderThickness="1"
                                     FontSize="20"
-                                    Foreground="Crimson"
+                                    Foreground="{DynamicResource WarningBrush}"
                                     IsVisible="{Binding IsMetadataUpdateAvailable}"
                                     ToolTip.Tip="Metadata update available"
                                     Value="fa7-circle-exclamation" />

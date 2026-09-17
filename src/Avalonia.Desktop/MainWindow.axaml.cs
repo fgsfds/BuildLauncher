@@ -47,11 +47,15 @@ public sealed partial class MainWindow : Window, IDisposable
         RenderOptions.SetBitmapInterpolationMode(this, BitmapInterpolationMode.HighQuality);
 
         InitializeComponent();
+
+        EnableSystemBackdrop();
     }
 
     /// <inheritdoc />
     public void Dispose()
     {
+        _config.ParameterChangedEvent -= OnConfigParameterChanged;
+
         if (DataContext is MainWindowViewModel viewModel)
         {
             viewModel.Dispose();
@@ -67,6 +71,8 @@ public sealed partial class MainWindow : Window, IDisposable
         {
             return;
         }
+
+        UpdateBackdropState();
 
         if (!_config.IsConsented)
         {
@@ -122,5 +128,69 @@ public sealed partial class MainWindow : Window, IDisposable
     {
         ConsentWindow!.IsVisible = false;
         _config.IsConsented = true;
+    }
+
+    /// <summary> Requests a system backdrop on Windows, falling back to acrylic and blur when Mica is unavailable. </summary>
+    private void EnableSystemBackdrop()
+    {
+        if (!OperatingSystem.IsWindows())
+        {
+            return;
+        }
+
+        PropertyChanged += OnWindowPropertyChanged;
+        _config.ParameterChangedEvent += OnConfigParameterChanged;
+
+        ApplyBackdrop();
+    }
+
+    /// <summary> Applies or removes the system backdrop according to the current configuration. </summary>
+    private void ApplyBackdrop()
+    {
+        TransparencyLevelHint = _config.UseMica
+            ?
+            [
+                WindowTransparencyLevel.Mica,
+                WindowTransparencyLevel.AcrylicBlur,
+                WindowTransparencyLevel.Blur,
+                WindowTransparencyLevel.None
+            ]
+            : [WindowTransparencyLevel.None];
+
+        UpdateBackdropState();
+    }
+
+    /// <summary> Re-applies the system backdrop when the Mica setting changes. </summary>
+    /// <param name="parameterName"> The name of the changed configuration parameter. </param>
+    private void OnConfigParameterChanged(string? parameterName)
+    {
+        if (parameterName == nameof(IConfigProvider.UseMica))
+        {
+            ApplyBackdrop();
+        }
+    }
+
+    /// <summary> Enables the transparent window background when the platform provided an actual system backdrop. </summary>
+    private void UpdateBackdropState()
+    {
+        var hasBackdrop =
+            ActualTransparencyLevel.Equals(WindowTransparencyLevel.Mica)
+         || ActualTransparencyLevel.Equals(WindowTransparencyLevel.AcrylicBlur)
+         || ActualTransparencyLevel.Equals(WindowTransparencyLevel.Blur);
+
+        Classes.Set("mica", hasBackdrop);
+    }
+
+    /// <summary> Updates the backdrop state when the platform changes the achieved transparency level. </summary>
+    /// <param name="sender"> The event source. </param>
+    /// <param name="e"> The property change arguments. </param>
+    private void OnWindowPropertyChanged(object? sender, AvaloniaPropertyChangedEventArgs e)
+    {
+        if (e.Property != ActualTransparencyLevelProperty)
+        {
+            return;
+        }
+
+        UpdateBackdropState();
     }
 }

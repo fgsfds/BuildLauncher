@@ -57,6 +57,9 @@ public sealed partial class SettingsViewModel : ObservableObject
     /// </summary>
     public bool IsDeveloperMode => ClientProperties.IsDeveloperMode;
 
+    /// <summary> Gets whether the Mica system backdrop effect is available on the current platform. </summary>
+    public bool IsMicaSupported => OperatingSystem.IsWindows();
+
 
     /// <summary>
     ///     Gets or sets the path to Blood.
@@ -233,6 +236,17 @@ public sealed partial class SettingsViewModel : ObservableObject
         set
         {
             _config.SkipStartup = value;
+            OnPropertyChanged();
+        }
+    }
+
+    /// <summary> Gets or sets whether the Mica system backdrop effect is enabled. </summary>
+    public bool UseMicaCheckbox
+    {
+        get => _config.UseMica;
+        set
+        {
+            _config.UseMica = value;
             OnPropertyChanged();
         }
     }

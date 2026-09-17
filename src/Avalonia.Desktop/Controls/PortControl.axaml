@@ -83,7 +83,7 @@
                     HorizontalAlignment="Stretch"
                     HorizontalContentAlignment="Center"
                     VerticalContentAlignment="Center"
-                    Background="Crimson"
+                    Background="{DynamicResource DangerBrush}"
                     Command="{Binding UninstallCommand}"
                     IsEnabled="{Binding IsInstalled}"
                     ToolTip.Tip="Uninstall">

@@ -61,7 +61,7 @@
                         <TextBlock Grid.Row="3"
                                    Margin="5"
                                    HorizontalAlignment="Center"
-                                   Foreground="Crimson"
+                                   Foreground="{DynamicResource DangerBrush}"
                                    Text="{Binding ErrorMessage}"
                                    TextWrapping="Wrap" />
 

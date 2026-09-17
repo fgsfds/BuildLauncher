@@ -19,7 +19,6 @@
         <AvaloniaResource Include="Assets\icon.ico"/>
         <AvaloniaResource Include="Assets\logo.png"/>
         <AvaloniaResource Include="Assets\nam.png"/>
-        <AvaloniaResource Include="Assets\overlay.png"/>
         <AvaloniaResource Include="Assets\redneck.png"/>
         <AvaloniaResource Include="Assets\slave.png"/>
         <AvaloniaResource Include="Assets\sw.png"/>
