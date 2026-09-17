@@ -75,14 +75,6 @@ public sealed class GamesPathsProvider
 
         var libs = SteamHelper.GetSteamLibraries();
 
-        ScanLibraryPaths(
-            libs, DukeWtSteamPaths, path =>
-            {
-                _dukeWtPath ??= path;
-                _paths.TryAdd(GameEnum.Duke3D, path);
-            }
-            );
-
         foreach (var (game, subPaths) in SteamScans)
         {
             if (_paths.ContainsKey(game))
@@ -92,6 +84,14 @@ public sealed class GamesPathsProvider
 
             ScanLibraryPaths(libs, subPaths, path => _paths[game] = path);
         }
+
+        ScanLibraryPaths(
+            libs, DukeWtSteamPaths, path =>
+            {
+                _dukeWtPath ??= path;
+                _paths.TryAdd(GameEnum.Duke3D, path);
+            }
+            );
 
         FillConfig();
     }
