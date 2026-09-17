@@ -8,28 +8,48 @@ public sealed class GameSpecificTests
     [Fact]
     public void DukeGame_GameEnum_ReturnsDuke3D()
     {
-        var game = new DukeGame { Duke64RomPath = null, DukeZHRomPath = null, DukeWTInstallPath = null };
+        var game = new DukeGame()
+        {
+            Duke64RomPath = null,
+            DukeZHRomPath = null,
+            DukeWTInstallPath = null
+        };
         Assert.Equal(GameEnum.Duke3D, game.GameEnum);
     }
 
     [Fact]
     public void DukeGame_FullName_ReturnsDukeNukem3D()
     {
-        var game = new DukeGame { Duke64RomPath = null, DukeZHRomPath = null, DukeWTInstallPath = null };
+        var game = new DukeGame()
+        {
+            Duke64RomPath = null,
+            DukeZHRomPath = null,
+            DukeWTInstallPath = null
+        };
         Assert.Equal("Duke Nukem 3D", game.FullName);
     }
 
     [Fact]
     public void DukeGame_ShortName_ReturnsDuke3D()
     {
-        var game = new DukeGame { Duke64RomPath = null, DukeZHRomPath = null, DukeWTInstallPath = null };
+        var game = new DukeGame()
+        {
+            Duke64RomPath = null,
+            DukeZHRomPath = null,
+            DukeWTInstallPath = null
+        };
         Assert.Equal("Duke3D", game.ShortName);
     }
 
     [Fact]
     public void DukeGame_Skills_IsNotNull()
     {
-        var game = new DukeGame { Duke64RomPath = null, DukeZHRomPath = null, DukeWTInstallPath = null };
+        var game = new DukeGame()
+        {
+            Duke64RomPath = null,
+            DukeZHRomPath = null,
+            DukeWTInstallPath = null
+        };
         Assert.NotNull(game.Skills);
         Assert.True(game.AreSkillsAvailable);
     }
@@ -37,28 +57,48 @@ public sealed class GameSpecificTests
     [Fact]
     public void DukeGame_IsDuke64Installed_NullPath_ReturnsFalse()
     {
-        var game = new DukeGame { Duke64RomPath = null, DukeZHRomPath = null, DukeWTInstallPath = null };
+        var game = new DukeGame()
+        {
+            Duke64RomPath = null,
+            DukeZHRomPath = null,
+            DukeWTInstallPath = null
+        };
         Assert.False(game.IsDuke64Installed);
     }
 
     [Fact]
     public void DukeGame_IsDukeZHInstalled_NullPath_ReturnsFalse()
     {
-        var game = new DukeGame { Duke64RomPath = null, DukeZHRomPath = null, DukeWTInstallPath = null };
+        var game = new DukeGame()
+        {
+            Duke64RomPath = null,
+            DukeZHRomPath = null,
+            DukeWTInstallPath = null
+        };
         Assert.False(game.IsDukeZHInstalled);
     }
 
     [Fact]
     public void DukeGame_IsWorldTourInstalled_NullPath_ReturnsFalse()
     {
-        var game = new DukeGame { Duke64RomPath = null, DukeZHRomPath = null, DukeWTInstallPath = null };
+        var game = new DukeGame()
+        {
+            Duke64RomPath = null,
+            DukeZHRomPath = null,
+            DukeWTInstallPath = null
+        };
         Assert.False(game.IsWorldTourInstalled);
     }
 
     [Fact]
     public void DukeGame_CampaignsFolderPath_ContainsDuke3D()
     {
-        var game = new DukeGame { Duke64RomPath = null, DukeZHRomPath = null, DukeWTInstallPath = null };
+        var game = new DukeGame()
+        {
+            Duke64RomPath = null,
+            DukeZHRomPath = null,
+            DukeWTInstallPath = null
+        };
         Assert.Contains("Duke3D", game.CampaignsFolderPath);
     }
 
@@ -96,6 +136,19 @@ public sealed class GameSpecificTests
     {
         var game = new BloodGame();
         Assert.False(game.IsCrypticPassageInstalled);
+    }
+
+    [Fact]
+    public void BloodGame_HasNoAddonFolders()
+    {
+        var game = new BloodGame();
+
+        Assert.Empty(game.AddonsFolders);
+        Assert.Empty(game.AdditionalFolders);
+
+        game.InvalidateAddonsCache();
+
+        Assert.Empty(game.AddonsFolders);
     }
 
     [Fact]

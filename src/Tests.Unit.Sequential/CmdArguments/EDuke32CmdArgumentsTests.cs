@@ -71,7 +71,7 @@ public sealed class EDuke32CmdArgumentsTests
                        " -g \"dependent_mod_with_compatible_version.zip\"" +
                        " -g \"feature_mod.zip\"" +
                        $" -j \"{Directory.GetCurrentDirectory()}\\Data\\Addons\\Duke3D\\Mods\"" +
-                       " -j \"D:\\Games\\Duke3D\"" +
+                       $" -j \"{_dukeGame.GameInstallFolder}\"" +
                        " -s3" +
                        " -quick" +
                        " -nosetup" +
@@ -129,8 +129,8 @@ public sealed class EDuke32CmdArgumentsTests
                        $" -mx \"{CmdArgsTestData.EnabledCon2}\"" +
                        $" -g \"{CmdArgsTestData.ModRequiresAddon}\"" +
                        $" -j \"{Directory.GetCurrentDirectory()}\\Data\\Addons\\Duke3D\\Mods\"" +
-                       $" -j \"D:\\Games\\Duke3D\"" +
-                       $" -j \"D:\\Games\\Duke3D\\Vaca\"" +
+                       $" -j \"{_dukeGame.GameInstallFolder}\"" +
+                       $" -j \"{_dukeGame.AddonsFolders[DukeAddonEnum.DukeVaca]}\"" +
                        $" -grp VACATION.GRP" +
                        $" -quick" +
                        $" -nosetup" +
@@ -166,8 +166,8 @@ public sealed class EDuke32CmdArgumentsTests
                        $" -g \"{CmdArgsTestData.DependentModWithCompatibleVersion}\"" +
                        $" -g \"{CmdArgsTestData.FeatureMod}\"" +
                        $" -j \"{Directory.GetCurrentDirectory()}\\Data\\Addons\\Duke3D\\Mods\"" +
-                       $" -j \"D:\\Games\\Duke3D\"" +
-                       $" -j \"D:\\Games\\Duke3D\\DC\"" +
+                       $" -j \"{_dukeGame.GameInstallFolder}\"" +
+                       $" -j \"{_dukeGame.AddonsFolders[DukeAddonEnum.DukeDC]}\"" +
                        $" -grp DUKEDC.GRP" +
                        $" -quick" +
                        $" -nosetup" +
@@ -203,8 +203,8 @@ public sealed class EDuke32CmdArgumentsTests
                        $" -g \"{CmdArgsTestData.DependentModWithCompatibleVersion}\"" +
                        $" -g \"{CmdArgsTestData.FeatureMod}\"" +
                        $" -j \"{Directory.GetCurrentDirectory()}\\Data\\Addons\\Duke3D\\Mods\"" +
-                       $" -j \"D:\\Games\\Duke3D\"" +
-                       $" -j \"D:\\Games\\Duke3D\\NW\"" +
+                       $" -j \"{_dukeGame.GameInstallFolder}\"" +
+                       $" -j \"{_dukeGame.AddonsFolders[DukeAddonEnum.DukeNW]}\"" +
                        $" -grp NWINTER.GRP" +
                        $" -x NWINTER.CON" +
                        $" -quick" +
@@ -228,8 +228,8 @@ public sealed class EDuke32CmdArgumentsTests
         var args = eduke32.GetStartGameArgs(_dukeGame, _dukeTcForVaca, [], [], true, true);
 
         var expected = $"" +
-                       $" -j \"D:\\Games\\Duke3D\"" +
-                       $" -j \"D:\\Games\\Duke3D\\Vaca\"" +
+                       $" -j \"{_dukeGame.GameInstallFolder}\"" +
+                       $" -j \"{_dukeGame.AddonsFolders[DukeAddonEnum.DukeVaca]}\"" +
                        $" -grp VACATION.GRP" +
                        $" -x \"{CmdArgsTestData.TcCon}\"" +
                        $" -mx \"{CmdArgsTestData.TcCon1}\"" +
@@ -276,8 +276,8 @@ public sealed class EDuke32CmdArgumentsTests
         var args = eduke32.GetStartGameArgs(_dukeGame, tcFolder, [], [], true, true);
 
         var expected = $"" +
-                       $" -j \"D:\\Games\\Duke3D\"" +
-                       $" -j \"D:\\Games\\Duke3D\\Vaca\"" +
+                       $" -j \"{_dukeGame.GameInstallFolder}\"" +
+                       $" -j \"{_dukeGame.AddonsFolders[DukeAddonEnum.DukeVaca]}\"" +
                        $" -grp VACATION.GRP" +
                        $" -x \"{CmdArgsTestData.TcCon}\"" +
                        $" -mx \"{CmdArgsTestData.TcCon1}\"" +
@@ -334,8 +334,8 @@ public sealed class EDuke32CmdArgumentsTests
         var args = eduke32.GetStartGameArgs(_dukeGame, tcExe, [], [], true, true);
 
         var expected = $"" +
-                       $" -j \"D:\\Games\\Duke3D\"" +
-                       $" -j \"D:\\Games\\Duke3D\\Vaca\"" +
+                       $" -j \"{_dukeGame.GameInstallFolder}\"" +
+                       $" -j \"{_dukeGame.AddonsFolders[DukeAddonEnum.DukeVaca]}\"" +
                        $" -grp VACATION.GRP" +
                        $" -x \"{CmdArgsTestData.TcCon}\"" +
                        $" -mx \"{CmdArgsTestData.TcCon1}\"" +
@@ -404,7 +404,7 @@ public sealed class EDuke32CmdArgumentsTests
                        $" -g \"{CmdArgsTestData.DependentModWithCompatibleVersion}\"" +
                        $" -g \"{CmdArgsTestData.FeatureMod}\"" +
                        $" -j \"{Directory.GetCurrentDirectory()}\\Data\\Addons\\Duke3D\\Mods\"" +
-                       $" -j \"D:\\Games\\Duke3D\"" +
+                       $" -j \"{_dukeGame.GameInstallFolder}\"" +
                        $" -j \"{Directory.GetCurrentDirectory()}\\Data\\Addons\\Duke3D\\Maps\"" +
                        $" -map \"{CmdArgsTestData.LooseMap}\"" +
                        $" -s3" +
@@ -610,13 +610,12 @@ public sealed class EDuke32CmdArgumentsTests
 
         try
         {
-            var game = new DukeGame
+            var game = new DukeGame()
             {
                 Duke64RomPath = null,
                 DukeZHRomPath = null,
                 DukeWTInstallPath = null,
-                GameInstallFolder = tempDir,
-                AddonsPaths = []
+                GameInstallFolder = tempDir
             };
 
             var camp = new DukeCampaign
@@ -673,13 +672,12 @@ public sealed class EDuke32CmdArgumentsTests
         {
             Assert.False(Directory.Exists(stopgapFolder));
 
-            var game = new DukeGame
+            var game = new DukeGame()
             {
                 Duke64RomPath = null,
                 DukeZHRomPath = null,
                 DukeWTInstallPath = null,
-                GameInstallFolder = Path.GetTempPath(),
-                AddonsPaths = []
+                GameInstallFolder = Path.GetTempPath()
             };
 
             var camp = new DukeCampaign

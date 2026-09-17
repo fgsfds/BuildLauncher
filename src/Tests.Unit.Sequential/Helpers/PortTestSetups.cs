@@ -316,41 +316,29 @@ internal static class PortTestSetups
     {
         var modsProvider = new AutoloadModsTestSetups(GameEnum.Duke3D);
 
-        var game = new DukeGame
-        {
-            Duke64RomPath = Path.Combine("D:", "Games", "Duke64", "rom.z64"),
-            DukeZHRomPath = Path.Combine("D:", "Games", "DukeZH", "rom.z64"),
-            DukeWTInstallPath = Path.Combine("D:", "Games", "DukeWT"),
-            GameInstallFolder = Path.Combine("D:", "Games", "Duke3D"),
-            AddonsPaths = new()
-            {
-                {
-                    DukeAddonEnum.DukeVaca, Path.Combine("D:", "Games", "Duke3D", "Vaca")
-                },
-                {
-                    DukeAddonEnum.DukeDC, Path.Combine("D:", "Games", "Duke3D", "DC")
-                },
-                {
-                    DukeAddonEnum.DukeNW, Path.Combine("D:", "Games", "Duke3D", "NW")
-                }
-            }
-        };
-
         var testDir = Path.Combine(TestDataRoot, "Duke3D");
+        var addOnsDir = Path.Combine(testDir, "AddOns");
+        var nwDir = Path.Combine(testDir, "addons", "nw");
+        var vacaDir = Path.Combine(testDir, "addons", "vacation");
         var wtTestDir = Path.Combine(testDir, "WorldTour");
         var duke64TestDir = Path.Combine(testDir, "Duke64");
         var dukeZhTestDir = Path.Combine(testDir, "DukeZH");
 
         Directory.CreateDirectory(testDir);
+        Directory.CreateDirectory(addOnsDir);
+        Directory.CreateDirectory(nwDir);
+        Directory.CreateDirectory(vacaDir);
         Directory.CreateDirectory(wtTestDir);
         Directory.CreateDirectory(duke64TestDir);
         Directory.CreateDirectory(dukeZhTestDir);
 
-        CreateFiles(testDir,
-            "DUKE3D.GRP",
-            "VACATION.GRP",
-            "DUKEDC.GRP",
-            "NWINTER.GRP");
+        CreateFiles(testDir, "DUKE3D.GRP");
+        File.Delete(Path.Combine(testDir, "DUKEDC.GRP"));
+        File.Delete(Path.Combine(testDir, "NWINTER.GRP"));
+        File.Delete(Path.Combine(testDir, "VACATION.GRP"));
+        CreateFiles(addOnsDir, "DUKEDC.GRP");
+        CreateFiles(nwDir, "NWINTER.GRP");
+        CreateFiles(vacaDir, "VACATION.GRP");
         CreateFiles(wtTestDir,
             "EPISODE5BOSS.CON",
             "FIREFLYTROOPER.CON",
@@ -365,35 +353,23 @@ internal static class PortTestSetups
             using (File.Create(Path.Combine(dukeZhTestDir, "rom.z64"))) { }
         }
 
-        var originalFolder = game.GameInstallFolder;
-        var originalWtPath = game.DukeWTInstallPath;
-        var original64Path = game.Duke64RomPath;
-        var originalZhPath = game.DukeZHRomPath;
-        var savedAddonsPaths = new Dictionary<DukeAddonEnum, string>(game.AddonsPaths);
-
-        game.GameInstallFolder = testDir;
-        game.DukeWTInstallPath = wtTestDir;
-        game.Duke64RomPath = Path.Combine(duke64TestDir, "rom.z64");
-        game.DukeZHRomPath = Path.Combine(dukeZhTestDir, "rom.z64");
-
-        IReadOnlyDictionary<AddonId, BaseAddon> campaigns;
-        try
+        var detectionGame = new DukeGame()
         {
-            campaigns = _provider.GetOriginalCampaigns(game);
-        }
-        finally
-        {
-            game.GameInstallFolder = originalFolder;
-            game.DukeWTInstallPath = originalWtPath;
-            game.Duke64RomPath = original64Path;
-            game.DukeZHRomPath = originalZhPath;
+            GameInstallFolder = testDir,
+            DukeWTInstallPath = wtTestDir,
+            Duke64RomPath = Path.Combine(duke64TestDir, "rom.z64"),
+            DukeZHRomPath = Path.Combine(dukeZhTestDir, "rom.z64")
+        };
 
-            game.AddonsPaths.Clear();
-            foreach (var kvp in savedAddonsPaths)
-            {
-                game.AddonsPaths[kvp.Key] = kvp.Value;
-            }
-        }
+        var campaigns = _provider.GetOriginalCampaigns(detectionGame);
+
+        var game = new DukeGame()
+        {
+            Duke64RomPath = Path.Combine("D:", "Games", "Duke64", "rom.z64"),
+            DukeZHRomPath = Path.Combine("D:", "Games", "DukeZH", "rom.z64"),
+            DukeWTInstallPath = Path.Combine("D:", "Games", "DukeWT"),
+            GameInstallFolder = testDir
+        };
 
         var baseCamp = (DukeCampaign)campaigns[new AddonId(nameof(GameEnum.Duke3D).ToLowerInvariant(), null)];
         var vacaCamp = (DukeCampaign)campaigns[new AddonId(nameof(DukeAddonEnum.DukeVaca).ToLowerInvariant(), null)];

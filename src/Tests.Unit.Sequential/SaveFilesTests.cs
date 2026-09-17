@@ -38,13 +38,12 @@ public sealed class SaveFilesTests : IDisposable
         _gameDir = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
         Directory.CreateDirectory(_gameDir);
 
-        _game = new DukeGame
+        _game = new DukeGame()
         {
             Duke64RomPath = null,
             DukeZHRomPath = null,
             DukeWTInstallPath = null,
-            GameInstallFolder = _gameDir,
-            AddonsPaths = []
+            GameInstallFolder = _gameDir
         };
 
         _camp = new DukeCampaign
@@ -368,7 +367,7 @@ public sealed class SaveFilesTests : IDisposable
     {
         var port = new BasePortTestProxy();
 
-        var game = new DukeGame
+        var game = new DukeGame()
         {
             Duke64RomPath = null,
             DukeZHRomPath = null,

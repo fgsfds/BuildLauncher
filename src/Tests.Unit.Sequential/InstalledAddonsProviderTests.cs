@@ -3,6 +3,7 @@ using Addons.Addons;
 using Addons.Providers;
 using Core.All;
 using Core.All.Enums;
+using Core.All.Enums.Addons;
 using Core.All.Serializable.Addon;
 using Core.Client.Helpers;
 using Core.Client.Interfaces;
@@ -47,7 +48,7 @@ public sealed class InstalledAddonsProviderTests : IDisposable
     /// </summary>
     public InstalledAddonsProviderTests()
     {
-        _game = new DukeGame
+        _game = new DukeGame()
         {
             Duke64RomPath = null,
             DukeZHRomPath = null,
@@ -1188,7 +1189,7 @@ public sealed class InstalledAddonsProviderTests : IDisposable
         config.Setup(x => x.FavoriteAddons).Returns(new HashSet<AddonId>());
 
         var newProvider = ObjectCreationHelper.CreateInstalledAddonsProvider(
-            new DukeGame
+            new DukeGame()
             {
                 Duke64RomPath = null,
                 DukeZHRomPath = null,
@@ -1212,7 +1213,8 @@ public sealed class InstalledAddonsProviderTests : IDisposable
 
         var factory = ObjectCreationHelper.CreateInstalledAddonsProviderFactory(config.Object);
 
-        var dukeProvider = factory.Get(new DukeGame
+        var dukeProvider = factory.Get(
+            new DukeGame()
         {
             Duke64RomPath = null,
             DukeZHRomPath = null,
@@ -1227,7 +1229,10 @@ public sealed class InstalledAddonsProviderTests : IDisposable
         var ex = Record.Exception(() => factory.Dispose());
 
         Assert.Null(ex);
-        Assert.False(factory.Get(new DukeGame
+
+        Assert.False(
+            factory.Get(
+                new DukeGame()
         {
             Duke64RomPath = null,
             DukeZHRomPath = null,
@@ -1235,14 +1240,45 @@ public sealed class InstalledAddonsProviderTests : IDisposable
         }).Equals(dukeProvider), "Dispose should clear cached providers so a new one is created");
     }
 
+    /// <summary> Tests that a full cache rebuild re-detects official addons whose files appeared after the first scan. </summary>
+    [Fact]
+    public async Task CreateCacheAsync_CreateNew_RedetectsOfficialAddons()
+    {
+        var tempDir = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
+        _ = Directory.CreateDirectory(tempDir);
+        _game.GameInstallFolder = tempDir;
+
+        try
+        {
+            Assert.False(_game.IsDukeDCInstalled);
+
+            await File.WriteAllTextAsync(Path.Combine(tempDir, "DUKE3D.GRP"), "mock");
+            await File.WriteAllTextAsync(Path.Combine(tempDir, "DUKEDC.GRP"), "mock");
+
+            await _installedAddonsProvider.CreateCacheAsync(true, AddonTypeEnum.TC);
+
+            Assert.True(_game.IsDukeDCInstalled);
+
+            var campaigns = _installedAddonsProvider.GetInstalledAddonsByType(AddonTypeEnum.TC);
+            Assert.Contains(campaigns, c => c.AddonId.Id.Equals(nameof(DukeAddonEnum.DukeDC), StringComparison.OrdinalIgnoreCase));
+        }
+        finally
+        {
+            if (Directory.Exists(tempDir))
+            {
+                Directory.Delete(tempDir, true);
+            }
+        }
+    }
+
     [Fact]
     public async Task CreateCacheAsync_WithLocalFiles_FiresAddonsChangedEvent()
     {
         var fileInfo = FileCreationHelper.CreateAddonManifestInTempFolder("evt-camp", "TC", "Duke3D", "Event Camp", "1.0");
+        var destDir = Path.Combine(_game.CampaignsFolderPath, "evt-camp");
 
         try
         {
-            var destDir = Path.Combine(_game.CampaignsFolderPath, "evt-camp");
             Directory.CreateDirectory(destDir);
             File.Copy(fileInfo.PathToFile, Path.Combine(destDir, Path.GetFileName(fileInfo.PathToFile)), true);
 
@@ -1265,6 +1301,11 @@ public sealed class InstalledAddonsProviderTests : IDisposable
         }
         finally
         {
+            if (Directory.Exists(destDir))
+            {
+                Directory.Delete(destDir, true);
+            }
+
             var dir = Path.GetDirectoryName(fileInfo.PathToFile);
 
             if (dir is not null && Directory.Exists(dir))

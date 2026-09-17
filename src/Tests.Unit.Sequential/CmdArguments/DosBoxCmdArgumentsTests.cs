@@ -73,7 +73,7 @@ public sealed class DosBoxCmdArgumentsTests
     {
         DosBox dosBox = new();
         var args = dosBox.GetStartGameArgs(_dukeGame, _dukeVaca, [], [], true, true);
-        var vacaPath = _dukeGame.AddonsPaths[DukeAddonEnum.DukeVaca];
+        var vacaPath = _dukeGame.AddonsFolders[DukeAddonEnum.DukeVaca];
 
         var expected = $"" +
                        $" -c \"mount c \\\"{_dukeGame.GameInstallFolder}\"\" -c \"c:\"" +
@@ -93,7 +93,7 @@ public sealed class DosBoxCmdArgumentsTests
     {
         DosBox dosBox = new();
         var args = dosBox.GetStartGameArgs(_dukeGame, _dukeDc, [], [], true, true);
-        var dcPath = _dukeGame.AddonsPaths[DukeAddonEnum.DukeDC];
+        var dcPath = _dukeGame.AddonsFolders[DukeAddonEnum.DukeDC];
 
         var expected = $"" +
                        $" -c \"mount c \\\"{_dukeGame.GameInstallFolder}\"\" -c \"c:\"" +
@@ -113,7 +113,7 @@ public sealed class DosBoxCmdArgumentsTests
     {
         DosBox dosBox = new();
         var args = dosBox.GetStartGameArgs(_dukeGame, _dukeNw, [], [], true, true);
-        var nwPath = _dukeGame.AddonsPaths[DukeAddonEnum.DukeNW];
+        var nwPath = _dukeGame.AddonsFolders[DukeAddonEnum.DukeNW];
 
         var expected = $"" +
                        $" -c \"mount c \\\"{_dukeGame.GameInstallFolder}\"\" -c \"c:\"" +

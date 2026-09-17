@@ -45,7 +45,7 @@ public sealed class BasePortTests
 
     private static DukeGame CreateGame()
     {
-        return new DukeGame
+        return new DukeGame()
         {
             Duke64RomPath = null,
             DukeZHRomPath = null,

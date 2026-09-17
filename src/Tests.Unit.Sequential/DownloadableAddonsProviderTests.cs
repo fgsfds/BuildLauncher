@@ -296,7 +296,7 @@ public sealed class DownloadableAddonsProviderTests
     /// </summary>
     private static DownloadableAddonsProvider CreateProvider()
     {
-        var game = new DukeGame
+        var game = new DukeGame()
         {
             Duke64RomPath = null,
             DukeZHRomPath = null,

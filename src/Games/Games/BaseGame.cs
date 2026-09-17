@@ -10,6 +10,17 @@ namespace Games.Games;
 public abstract class BaseGame
 {
     /// <summary>
+    ///     Shared empty addon folders collection returned by games without addons.
+    /// </summary>
+    private static readonly IReadOnlyDictionary<Enum, string> EmptyAddonsFolders = new Dictionary<Enum, string>();
+
+    /// <summary> Cached addon folders. Rebuilt when <see cref="GameInstallFolder" /> changes or the cache is invalidated. </summary>
+    private IReadOnlyDictionary<Enum, string>? _addonsFoldersCache;
+
+    /// <summary> The install folder the addon folders cache was built for. </summary>
+    private string? _addonsFoldersCacheFolder;
+
+    /// <summary>
     ///     Game install folder.
     /// </summary>
     public string? GameInstallFolder { get; set; }
@@ -39,6 +50,40 @@ public abstract class BaseGame
     /// </summary>
     [MemberNotNullWhen(true, nameof(Skills))]
     public bool AreSkillsAvailable => Skills is not null;
+
+    /// <summary> Collection of additional folders that contain game data or its addons. </summary>
+    public IReadOnlyList<string> AdditionalFolders => [.. AddonsFolders.Values.Distinct()];
+
+    /// <summary> Collection of paths to folders that contain game's addons. </summary>
+    public IReadOnlyDictionary<Enum, string> AddonsFolders
+    {
+        get
+        {
+            if (_addonsFoldersCache is not null && string.Equals(_addonsFoldersCacheFolder, GameInstallFolder, StringComparison.OrdinalIgnoreCase))
+            {
+                return _addonsFoldersCache;
+            }
+
+            _addonsFoldersCacheFolder = GameInstallFolder;
+            _addonsFoldersCache = DetectAddonsFolders();
+
+            return _addonsFoldersCache;
+        }
+    }
+
+    /// <summary> Invalidates any cached addon detection data so it is recomputed on the next access. </summary>
+    public void InvalidateAddonsCache()
+    {
+        _addonsFoldersCache = null;
+        _addonsFoldersCacheFolder = null;
+    }
+
+    /// <summary> Addons that are detected in the game install folder. </summary>
+    protected virtual IReadOnlyCollection<Enum> SupportedAddons => [];
+
+    /// <summary> Detects the folders that contain the game's addons. </summary>
+    /// <returns> A dictionary mapping detected addons to their folders. </returns>
+    protected virtual IReadOnlyDictionary<Enum, string> DetectAddonsFolders() => EmptyAddonsFolders;
 
 
     /// <summary>
@@ -71,8 +116,12 @@ public abstract class BaseGame
     /// <summary>
     ///     Do provided files exist in the folder.
     /// </summary>
-    /// <param name="files">List of required files.</param>
-    /// <param name="path">Folder where the files are searched.</param>
+    /// <param name="files">
+    ///     List of required files.
+    /// </param>
+    /// <param name="path">
+    ///     Folder where the files are searched.
+    /// </param>
     protected bool IsInstalled(IReadOnlyCollection<string> files, string? path = null)
     {
         var gamePath = path ?? GameInstallFolder;
@@ -96,11 +145,21 @@ public abstract class BaseGame
     /// <summary>
     ///     Generates a list of zero-padded numbered filenames.
     /// </summary>
-    /// <param name="baseName">Base name prefix (e.g. "TILES").</param>
-    /// <param name="extension">File extension without dot (e.g. "ART").</param>
-    /// <param name="start">Inclusive start index.</param>
-    /// <param name="endExclusive">Exclusive end index.</param>
-    /// <param name="padWidth">Zero-padding width.</param>
+    /// <param name="baseName">
+    ///     Base name prefix (e.g. "TILES").
+    /// </param>
+    /// <param name="extension">
+    ///     File extension without dot (e.g. "ART").
+    /// </param>
+    /// <param name="start">
+    ///     Inclusive start index.
+    /// </param>
+    /// <param name="endExclusive">
+    ///     Exclusive end index.
+    /// </param>
+    /// <param name="padWidth">
+    ///     Zero-padding width.
+    /// </param>
     protected static IReadOnlyCollection<string> GenerateNumberedFiles(string baseName, string extension, int start, int endExclusive, int padWidth)
     {
         List<string> result = new(endExclusive - start);

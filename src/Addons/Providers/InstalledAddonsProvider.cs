@@ -139,6 +139,7 @@ public sealed class InstalledAddonsProvider : IDisposable
             if (createNew)
             {
                 cache.Clear();
+                _game.InvalidateAddonsCache();
             }
 
             switch (addonType)

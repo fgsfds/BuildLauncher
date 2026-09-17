@@ -42,7 +42,7 @@ public sealed class CampaignsViewModelTests : IDisposable
 
     public CampaignsViewModelTests()
     {
-        _game = new DukeGame
+        _game = new DukeGame()
         {
             Duke64RomPath = null,
             DukeZHRomPath = null,

@@ -49,7 +49,7 @@ public sealed class AddonFactoryTests
     /// </summary>
     public AddonFactoryTests()
     {
-        _game = new DukeGame
+        _game = new DukeGame()
         {
             Duke64RomPath = null,
             DukeZHRomPath = null,

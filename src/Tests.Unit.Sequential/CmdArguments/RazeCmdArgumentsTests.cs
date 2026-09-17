@@ -281,7 +281,7 @@ public sealed class RazeCmdArgumentsTests
 
         CmdArgsAssert.Equal(expected, args);
 
-        AssertRazeConfig(["D:/Games/Duke3D", "D:/Games/Duke3D/Vaca", "D:/Games/Duke3D/DC", "D:/Games/Duke3D/NW"], [$"{Directory.GetCurrentDirectory()}/Data/Addons/Duke3D/Mods"]);
+        AssertRazeConfig(RazeDukePaths(), [$"{Directory.GetCurrentDirectory()}/Data/Addons/Duke3D/Mods"]);
     }
 
     /// <summary>
@@ -337,7 +337,7 @@ public sealed class RazeCmdArgumentsTests
 
         CmdArgsAssert.Equal(expected, args);
 
-        AssertRazeConfig(["D:/Games/Duke3D", "D:/Games/Duke3D/Vaca", "D:/Games/Duke3D/DC", "D:/Games/Duke3D/NW"], [$"{Directory.GetCurrentDirectory()}/Data/Addons/Duke3D/Mods"]);
+        AssertRazeConfig(RazeDukePaths(), [$"{Directory.GetCurrentDirectory()}/Data/Addons/Duke3D/Mods"]);
     }
 
     /// <summary>
@@ -367,7 +367,12 @@ public sealed class RazeCmdArgumentsTests
 
         CmdArgsAssert.Equal(expected, args);
 
-        AssertRazeConfig(["D:/Games/Duke3D", "D:/Games/Duke3D/Vaca", "D:/Games/Duke3D/DC", "D:/Games/Duke3D/NW"], [$"{Directory.GetCurrentDirectory()}/Data/Addons/Duke3D/Mods", $"{Path.Combine(Directory.GetCurrentDirectory(), "Data", "Duke3D", "Campaigns")}"]);
+        AssertRazeConfig(
+            RazeDukePaths(), [
+                $"{Directory.GetCurrentDirectory()}/Data/Addons/Duke3D/Mods",
+                $"{Path.Combine(Directory.GetCurrentDirectory(), "Data", "Duke3D", "Campaigns")}"
+            ]
+            );
     }
 
     /// <summary>
@@ -414,7 +419,7 @@ public sealed class RazeCmdArgumentsTests
 
         CmdArgsAssert.Equal(expected, args);
 
-        AssertRazeConfig(["D:/Games/Duke3D", "D:/Games/Duke3D/Vaca", "D:/Games/Duke3D/DC", "D:/Games/Duke3D/NW"], [$"{Directory.GetCurrentDirectory()}/Data/Addons/Duke3D/Mods"]);
+        AssertRazeConfig(RazeDukePaths(), [$"{Directory.GetCurrentDirectory()}/Data/Addons/Duke3D/Mods"]);
     }
 
     /// <summary>
@@ -443,7 +448,12 @@ public sealed class RazeCmdArgumentsTests
 
         CmdArgsAssert.Equal(expected, args);
 
-        AssertRazeConfig(["D:/Games/Duke3D", "D:/Games/Duke3D/Vaca", "D:/Games/Duke3D/DC", "D:/Games/Duke3D/NW"], [$"{Directory.GetCurrentDirectory()}/Data/Addons/Duke3D/Mods", $"{folderPath}"]);
+        AssertRazeConfig(
+            RazeDukePaths(), [
+                $"{Directory.GetCurrentDirectory()}/Data/Addons/Duke3D/Mods",
+                $"{folderPath}"
+            ]
+            );
     }
 
     /// <summary>
@@ -454,13 +464,12 @@ public sealed class RazeCmdArgumentsTests
     {
         var mods = _dukeMods.StandardModsWithCons;
 
-        var dukeGame = new DukeGame
+        var dukeGame = new DukeGame()
         {
             Duke64RomPath = null,
             DukeZHRomPath = null,
             DukeWTInstallPath = null,
-            GameInstallFolder = Path.Combine("D:", "Games", "Duke3D"),
-            AddonsPaths = []
+            GameInstallFolder = Path.Combine("D:", "Games", "Duke3D")
         };
 
         Raze raze = new();
@@ -982,6 +991,20 @@ public sealed class RazeCmdArgumentsTests
         CmdArgsAssert.Equal(expected, args);
 
         AssertRazeConfig(["D:/Games/WW2GI"], [$"{Directory.GetCurrentDirectory()}/Data/Addons/WW2GI/Mods"]);
+    }
+
+    /// <summary> Builds the expected Duke3D game and addon search directories from the test data layout. </summary>
+    private static string[] RazeDukePaths()
+    {
+        var testDir = Path.Combine(Directory.GetCurrentDirectory(), "Data", "TestSetups", "Duke3D");
+
+        return
+        [
+            testDir,
+            Path.Combine(testDir, "addons", "vacation"),
+            Path.Combine(testDir, "AddOns"),
+            Path.Combine(testDir, "addons", "nw")
+        ];
     }
 
     /// <summary>

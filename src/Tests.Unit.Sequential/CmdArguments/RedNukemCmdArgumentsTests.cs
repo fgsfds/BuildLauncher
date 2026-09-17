@@ -96,7 +96,7 @@ public sealed class RedNukemCmdArgumentsTests
                        $" -g \"{CmdArgsTestData.DependentMod}\"" +
                        $" -g \"{CmdArgsTestData.DependentModWithCompatibleVersion}\"" +
                        $" -j \"{Directory.GetCurrentDirectory()}\\Data\\Addons\\Duke3D\\Mods\"" +
-                       " -j \"D:\\Games\\Duke3D\"" +
+                       $" -j \"{_dukeGame.GameInstallFolder}\"" +
                        " -quick" +
                        " -d blank.edm" +
                        " -nosetup" +
@@ -127,8 +127,8 @@ public sealed class RedNukemCmdArgumentsTests
                        $" -mx \"{CmdArgsTestData.EnabledCon2}\"" +
                        $" -g \"{CmdArgsTestData.ModRequiresAddon}\"" +
                        $" -j \"{Directory.GetCurrentDirectory()}\\Data\\Addons\\Duke3D\\Mods\"" +
-                       " -j \"D:\\Games\\Duke3D\"" +
-                       " -j \"D:\\Games\\Duke3D\\Vaca\"" +
+                       $" -j \"{_dukeGame.GameInstallFolder}\"" +
+                       $" -j \"{_dukeGame.AddonsFolders[DukeAddonEnum.DukeVaca]}\"" +
                        " -g VACATION.GRP" +
                        " -quick" +
                        " -d blank.edm" +
@@ -151,8 +151,8 @@ public sealed class RedNukemCmdArgumentsTests
         var args = eduke32.GetStartGameArgs(_dukeGame, _dukeTcForVaca, [], [], true, true);
 
         var expected = $"" +
-                       " -j \"D:\\Games\\Duke3D\"" +
-                       " -j \"D:\\Games\\Duke3D\\Vaca\"" +
+                       $" -j \"{_dukeGame.GameInstallFolder}\"" +
+                       $" -j \"{_dukeGame.AddonsFolders[DukeAddonEnum.DukeVaca]}\"" +
                        " -g VACATION.GRP" +
                        $" -x \"{CmdArgsTestData.TcCon}\"" +
                        $" -mx \"{CmdArgsTestData.TcCon1}\"" +
@@ -199,8 +199,8 @@ public sealed class RedNukemCmdArgumentsTests
         var args = redNukem.GetStartGameArgs(_dukeGame, tcFolder, [], [], true, true);
 
         var expected = $"" +
-                       " -j \"D:\\Games\\Duke3D\"" +
-                       " -j \"D:\\Games\\Duke3D\\Vaca\"" +
+                       $" -j \"{_dukeGame.GameInstallFolder}\"" +
+                       $" -j \"{_dukeGame.AddonsFolders[DukeAddonEnum.DukeVaca]}\"" +
                        " -g VACATION.GRP" +
                        $" -x \"{CmdArgsTestData.TcCon}\"" +
                        $" -mx \"{CmdArgsTestData.TcCon1}\"" +
@@ -257,8 +257,8 @@ public sealed class RedNukemCmdArgumentsTests
         var args = redNukem.GetStartGameArgs(_dukeGame, tcExe, [], [], true, true);
 
         var expected = $"" +
-                       " -j \"D:\\Games\\Duke3D\"" +
-                       " -j \"D:\\Games\\Duke3D\\Vaca\"" +
+                       $" -j \"{_dukeGame.GameInstallFolder}\"" +
+                       $" -j \"{_dukeGame.AddonsFolders[DukeAddonEnum.DukeVaca]}\"" +
                        " -g VACATION.GRP" +
                        $" -x \"{CmdArgsTestData.TcCon}\"" +
                        $" -mx \"{CmdArgsTestData.TcCon1}\"" +
@@ -326,7 +326,7 @@ public sealed class RedNukemCmdArgumentsTests
                        $" -g \"{CmdArgsTestData.DependentMod}\"" +
                        $" -g \"{CmdArgsTestData.DependentModWithCompatibleVersion}\"" +
                        $" -j \"{Directory.GetCurrentDirectory()}\\Data\\Addons\\Duke3D\\Mods\"" +
-                       " -j \"D:\\Games\\Duke3D\"" +
+                       $" -j \"{_dukeGame.GameInstallFolder}\"" +
                        $" -j \"{Directory.GetCurrentDirectory()}\\Data\\Addons\\Duke3D\\Maps\"" +
                        $" -map \"{CmdArgsTestData.LooseMap}\"" +
                        " -quick" +

@@ -44,7 +44,7 @@ public class EDuke32CmdParametersBuilder : CmdParametersBuilder
                 //DUKE IT OUT IN DC
                 if (addon.DependentAddons.ContainsKey(nameof(DukeAddonEnum.DukeDC)))
                 {
-                    var addonPath = game.AddonsPaths[DukeAddonEnum.DukeDC];
+                    var addonPath = game.AddonsFolders[DukeAddonEnum.DukeDC];
 
                     if (!addonPath.Equals(game.GameInstallFolder))
                     {
@@ -61,7 +61,7 @@ public class EDuke32CmdParametersBuilder : CmdParametersBuilder
                 //NUCLEAR WINTER
                 else if (addon.DependentAddons.ContainsKey(nameof(DukeAddonEnum.DukeNW)))
                 {
-                    var addonPath = game.AddonsPaths[DukeAddonEnum.DukeNW];
+                    var addonPath = game.AddonsFolders[DukeAddonEnum.DukeNW];
 
                     if (!addonPath.Equals(game.GameInstallFolder))
                     {
@@ -73,7 +73,7 @@ public class EDuke32CmdParametersBuilder : CmdParametersBuilder
                 //CARIBBEAN
                 else if (addon.DependentAddons.ContainsKey(nameof(DukeAddonEnum.DukeVaca)))
                 {
-                    var addonPath = game.AddonsPaths[DukeAddonEnum.DukeVaca];
+                    var addonPath = game.AddonsFolders[DukeAddonEnum.DukeVaca];
 
                     if (!addonPath.Equals(game.GameInstallFolder))
                     {

@@ -1,6 +1,5 @@
 ﻿using Core.All.Enums;
 using Core.All.Enums.Addons;
-using Games.Helpers;
 using Games.Skills;
 
 namespace Games.Games;
@@ -10,10 +9,13 @@ namespace Games.Games;
 /// </summary>
 public sealed class DukeGame : BaseGame
 {
-    /// <summary>
-    ///     Detector for Duke Nukem 3D addon installations.
-    /// </summary>
-    private readonly DukeAddonDetector _addonDetector = new();
+    /// <inheritdoc />
+    protected override IReadOnlyCollection<Enum> SupportedAddons =>
+    [
+        DukeAddonEnum.DukeVaca,
+        DukeAddonEnum.DukeDC,
+        DukeAddonEnum.DukeNW
+    ];
 
     /// <inheritdoc />
     public override GameEnum GameEnum => GameEnum.Duke3D;
@@ -45,17 +47,17 @@ public sealed class DukeGame : BaseGame
     /// <summary>
     ///     Is Duke it Out in DC installed.
     /// </summary>
-    public bool IsDukeDCInstalled => _addonDetector.TryFindAddon(DukeAddonEnum.DukeDC, GameInstallFolder);
+    public bool IsDukeDCInstalled => AddonsFolders.ContainsKey(DukeAddonEnum.DukeDC);
 
     /// <summary>
     ///     Is Nuclear Winter installed.
     /// </summary>
-    public bool IsNuclearWinterInstalled => _addonDetector.TryFindAddon(DukeAddonEnum.DukeNW, GameInstallFolder);
+    public bool IsNuclearWinterInstalled => AddonsFolders.ContainsKey(DukeAddonEnum.DukeNW);
 
     /// <summary>
     ///     Is Caribbean installed.
     /// </summary>
-    public bool IsCaribbeanInstalled => _addonDetector.TryFindAddon(DukeAddonEnum.DukeVaca, GameInstallFolder);
+    public bool IsCaribbeanInstalled => AddonsFolders.ContainsKey(DukeAddonEnum.DukeVaca);
 
     /// <summary>
     ///     Is World Tour installed.
@@ -78,23 +80,80 @@ public sealed class DukeGame : BaseGame
     /// </summary>
     public bool IsDukeZHInstalled => File.Exists(DukeZHRomPath);
 
-    /// <summary>
-    ///     List of paths to Duke's addons folders.
-    /// </summary>
-    public Dictionary<DukeAddonEnum, string> AddonsPaths
-    {
-        get => _addonDetector.AddonsPaths;
-        init
-        {
-            _addonDetector.AddonsPaths.Clear();
-
-            foreach (var kvp in value)
-            {
-                _addonDetector.AddonsPaths[kvp.Key] = kvp.Value;
-            }
-        }
-    }
-
     /// <inheritdoc />
     public override Enum Skills => new Duke3DSkillsEnum();
+
+
+    /// <inheritdoc />
+    protected override IReadOnlyDictionary<Enum, string> DetectAddonsFolders()
+    {
+        Dictionary<Enum, string> folders = [];
+
+        foreach (var addon in SupportedAddons)
+        {
+            if (TryFindAddon(addon, GameInstallFolder, out var addonFolder) && addonFolder is not null)
+            {
+                folders[addon] = addonFolder;
+            }
+        }
+
+        return folders;
+    }
+
+
+    /// <summary>
+    ///     Search for a specific Duke addon in the game install folder, checking all known retail/remaster layouts.
+    /// </summary>
+    /// <param name="addon">
+    ///     The addon to search for.
+    /// </param>
+    /// <param name="gameInstallFolder">
+    ///     Duke Nukem 3D base install folder.
+    /// </param>
+    /// <param name="addonFolder">
+    ///     The directory containing the addon GRP, if found.
+    /// </param>
+    /// <returns>
+    ///     <see langword="true" /> if the addon GRP was found.
+    /// </returns>
+    private static bool TryFindAddon(Enum addon, string? gameInstallFolder, out string? addonFolder)
+    {
+        addonFolder = null;
+
+        if (gameInstallFolder is null)
+        {
+            return false;
+        }
+
+        var file = addon switch
+        {
+            DukeAddonEnum.DukeDC => "DUKEDC.GRP",
+            DukeAddonEnum.DukeNW => "NWINTER.GRP",
+            DukeAddonEnum.DukeVaca => "VACATION.GRP",
+            _ => throw new ArgumentOutOfRangeException(nameof(addon), addon, $"Unsupported addon value: {addon}.")
+        };
+
+        string[] searchPaths =
+        [
+            Path.Combine(gameInstallFolder, file),
+            Path.Combine(gameInstallFolder, "AddOns", file),
+            Path.Combine(gameInstallFolder, "addons", "dc", file),
+            Path.Combine(gameInstallFolder, "addons", "nw", file),
+            Path.Combine(gameInstallFolder, "addons", "vacation", file)
+        ];
+
+        foreach (var path in searchPaths)
+        {
+            if (!File.Exists(path))
+            {
+                continue;
+            }
+
+            addonFolder = Path.GetDirectoryName(path);
+
+            return addonFolder is not null;
+        }
+
+        return false;
+    }
 }
