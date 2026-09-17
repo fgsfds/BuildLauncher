@@ -26,9 +26,9 @@ public enum PortEnum : byte
     NBlood = 4,
 
     /// <summary>
-    ///     RedNukem port.
+    ///     Rednukem port.
     /// </summary>
-    RedNukem = 5,
+    Rednukem = 5,
 
     /// <summary>
     ///     PCExhumed port.

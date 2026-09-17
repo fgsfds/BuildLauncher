@@ -406,7 +406,7 @@ public sealed class CmdParametersBuilderTests
         (BasePort Port, Type Expected)[] cases =
         [
             (new VoidSW(), typeof(VoidSWCmdParametersBuilder)),
-            (new RedNukem(), typeof(RedNukemCmdParametersBuilder)),
+            (new Rednukem(), typeof(RednukemCmdParametersBuilder)),
             (new EDuke32(), typeof(EDuke32CmdParametersBuilder)),
             (new NBlood(), typeof(EDuke32CmdParametersBuilder)),
             (new NotBlood(), typeof(EDuke32CmdParametersBuilder)),

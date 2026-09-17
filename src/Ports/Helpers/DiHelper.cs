@@ -32,7 +32,7 @@ public static class DiHelper
         _ = container.AddSingleton<BasePort, NotBlood>();
         _ = container.AddSingleton<BasePort, Fury>();
         _ = container.AddSingleton<BasePort, PCExhumed>();
-        _ = container.AddSingleton<BasePort, RedNukem>();
+        _ = container.AddSingleton<BasePort, Rednukem>();
         _ = container.AddSingleton<BasePort, VoidSW>();
         _ = container.AddSingleton<BasePort, Raze>();
         _ = container.AddSingleton<BasePort, BuildGDX>();

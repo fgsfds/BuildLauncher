@@ -8,7 +8,7 @@ namespace Ports.Helpers;
 public class FilesHelpers
 {
     /// <summary>
-    ///     Removes Route 66 art file overrides used for RedNukem.
+    ///     Removes Route 66 art file overrides used for Rednukem.
     /// </summary>
     public static void RestoreRoute66Files(BaseGame game)
     {

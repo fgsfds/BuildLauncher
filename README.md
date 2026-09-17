@@ -62,7 +62,7 @@ Another goal of this project is to create a unification standard for Build Engin
 - Keep saved games for custom content in separate folders
 - Track your playtime for games and custom content
 - Create Would Tour Stopgap for EDuke32 automatically
-- Run Route 66 with RedNukem without renaming original files
+- Run Route 66 with Rednukem without renaming original files
 
 </td>
 </tr>

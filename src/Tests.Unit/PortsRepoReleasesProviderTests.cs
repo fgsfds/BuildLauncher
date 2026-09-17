@@ -144,7 +144,7 @@ public sealed class PortsRepoReleasesProviderTests
 
         _ = await provider.GetLatestReleaseAsync(PortEnum.NBlood, false);
         _ = await provider.GetLatestReleaseAsync(PortEnum.PCExhumed, false);
-        _ = await provider.GetLatestReleaseAsync(PortEnum.RedNukem, false);
+        _ = await provider.GetLatestReleaseAsync(PortEnum.Rednukem, false);
 
         httpFactoryMock.Verify(x => x.CreateClient(It.IsAny<string>()), Times.Once);
     }

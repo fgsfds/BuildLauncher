@@ -34,7 +34,7 @@ public readonly struct RepositoryEntity
     public Func<GitHubReleaseJsonModel, GitHubReleaseAsset, string>? VersionSelector { get; init; }
 
     /// <summary>
-    ///     Shared cache key for repos used by multiple entities (e.g., NBlood/PCExhumed/RedNukem sharing the same GitHub repo).
+    ///     Shared cache key for repos used by multiple entities (e.g., NBlood/PCExhumed/Rednukem sharing the same GitHub repo).
     ///     When set, releases are fetched once and reused across all entities with the same key.
     /// </summary>
     public string? SharedCacheKey { get; init; }

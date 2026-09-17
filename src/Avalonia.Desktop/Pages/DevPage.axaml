@@ -913,19 +913,19 @@
                                            Grid.Column="0"
                                            Margin="5"
                                            VerticalAlignment="Center"
-                                           Text="RedNukem:" />
+                                           Text="Rednukem:" />
 
                                 <TextBox Grid.Row="4"
                                          Grid.Column="1"
                                          MinWidth="150"
                                          Margin="5"
-                                         Text="{Binding WindowsRedNukemExe}" />
+                                         Text="{Binding WindowsRednukemExe}" />
 
                                 <TextBox Grid.Row="4"
                                          Grid.Column="2"
                                          MinWidth="150"
                                          Margin="5"
-                                         Text="{Binding LinuxRedNukemExe}" />
+                                         Text="{Binding LinuxRednukemExe}" />
 
                                 <TextBlock Grid.Row="5"
                                            Grid.Column="0"

@@ -11,28 +11,28 @@ using Ports.Helpers;
 namespace Ports.Ports.EDuke32;
 
 /// <summary>
-///     RedNukem port.
+///     Rednukem port.
 /// </summary>
-public sealed class RedNukem : EDuke32
+public sealed class Rednukem : EDuke32
 {
-    private readonly ILogger<RedNukem> _logger = null!;
+    private readonly ILogger<Rednukem> _logger = null!;
 
     /// <summary>
-    ///     Initializes a new instance of the <see cref="RedNukem" /> class.
+    ///     Initializes a new instance of the <see cref="Rednukem" /> class.
     /// </summary>
-    public RedNukem() { }
+    public Rednukem() { }
 
     /// <summary>
-    ///     Initializes a new instance of the <see cref="RedNukem" /> class.
+    ///     Initializes a new instance of the <see cref="Rednukem" /> class.
     /// </summary>
     /// <param name="logger">Logger instance.</param>
-    public RedNukem(ILogger<RedNukem> logger)
+    public Rednukem(ILogger<Rednukem> logger)
     {
         _logger = logger;
     }
 
     /// <inheritdoc />
-    public override PortEnum PortEnum => PortEnum.RedNukem;
+    public override PortEnum PortEnum => PortEnum.Rednukem;
 
     /// <inheritdoc />
     protected override string WinExe => "rednukem.exe";
@@ -41,7 +41,7 @@ public sealed class RedNukem : EDuke32
     protected override string LinExe => throw new NotSupportedException();
 
     /// <inheritdoc />
-    public override string Name => "RedNukem";
+    public override string Name => "Rednukem";
 
     /// <inheritdoc />
     public override PortCmdArguments CmdArguments => base.CmdArguments with
@@ -149,11 +149,11 @@ public sealed class RedNukem : EDuke32
     }
 
     /// <summary>
-    ///     Copies or restores Route 66 art and video files for RedNukem.
+    ///     Copies or restores Route 66 art and video files for Rednukem.
     /// </summary>
     /// <param name="game">Game instance.</param>
     /// <param name="campaign">Campaign or addon.</param>
-    [Obsolete("Remove if RedNukem can ever properly launch R66")]
+    [Obsolete("Remove if Rednukem can ever properly launch R66")]
     private void FixRoute66Files(BaseGame game, BaseAddon campaign)
     {
         if (game is not RedneckGame)

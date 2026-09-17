@@ -19,8 +19,8 @@ public static class CmdParametersBuilderFactory
         {
             case PortEnum.VoidSW:
                 return new VoidSWCmdParametersBuilder(game, addon, port);
-            case PortEnum.RedNukem:
-                return new RedNukemCmdParametersBuilder(game, addon, port);
+            case PortEnum.Rednukem:
+                return new RednukemCmdParametersBuilder(game, addon, port);
             case PortEnum.EDuke32:
             case PortEnum.NBlood:
             case PortEnum.NotBlood:

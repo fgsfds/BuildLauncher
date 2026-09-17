@@ -125,13 +125,13 @@ public sealed partial class DevViewModel : ObservableObject
             WindowsNBloodExe is null &&
             WindowsNotBloodExe is null &&
             WindowsEDukeExe is null &&
-            WindowsRedNukemExe is null &&
+            WindowsRednukemExe is null &&
             WindowsRazeExe is null &&
             WindowsPCExhumedExe is null &&
             LinuxNBloodExe is null &&
             LinuxNotBloodExe is null &&
             LinuxEDukeExe is null &&
-            LinuxRedNukemExe is null &&
+            LinuxRednukemExe is null &&
             LinuxRazeExe is null &&
             LinuxPCExhumedExe is null &&
             MainRff is null &&
@@ -319,10 +319,10 @@ public sealed partial class DevViewModel : ObservableObject
             executables[OSEnum.Windows].Add(PortEnum.EDuke32, WindowsEDukeExe);
         }
 
-        if (!string.IsNullOrWhiteSpace(WindowsRedNukemExe))
+        if (!string.IsNullOrWhiteSpace(WindowsRednukemExe))
         {
             _ = executables.TryAdd(OSEnum.Windows, []);
-            executables[OSEnum.Windows].Add(PortEnum.RedNukem, WindowsRedNukemExe);
+            executables[OSEnum.Windows].Add(PortEnum.Rednukem, WindowsRednukemExe);
         }
 
         if (!string.IsNullOrWhiteSpace(WindowsRazeExe))
@@ -355,10 +355,10 @@ public sealed partial class DevViewModel : ObservableObject
             executables[OSEnum.Linux].Add(PortEnum.EDuke32, LinuxEDukeExe);
         }
 
-        if (!string.IsNullOrWhiteSpace(LinuxRedNukemExe))
+        if (!string.IsNullOrWhiteSpace(LinuxRednukemExe))
         {
             _ = executables.TryAdd(OSEnum.Linux, []);
-            executables[OSEnum.Linux].Add(PortEnum.RedNukem, LinuxRedNukemExe);
+            executables[OSEnum.Linux].Add(PortEnum.Rednukem, LinuxRednukemExe);
         }
 
         if (!string.IsNullOrWhiteSpace(LinuxRazeExe))
@@ -866,10 +866,10 @@ public sealed partial class DevViewModel : ObservableObject
     private string? _windowsNotBloodExe;
 
     /// <summary>
-    ///     Gets or sets the Windows RedNukem executable path.
+    ///     Gets or sets the Windows Rednukem executable path.
     /// </summary>
     [ObservableProperty]
-    private string? _windowsRedNukemExe;
+    private string? _windowsRednukemExe;
 
     /// <summary>
     ///     Gets or sets the Windows Raze executable path.
@@ -890,10 +890,10 @@ public sealed partial class DevViewModel : ObservableObject
     private string? _linuxNBloodExe;
 
     /// <summary>
-    ///     Gets or sets the Linux RedNukem executable path.
+    ///     Gets or sets the Linux Rednukem executable path.
     /// </summary>
     [ObservableProperty]
-    private string? _linuxRedNukemExe;
+    private string? _linuxRednukemExe;
 
     /// <summary>
     ///     Gets or sets the Linux Raze executable path.

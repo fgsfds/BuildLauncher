@@ -37,9 +37,9 @@ public sealed class ZeroHourCmdArgumentsTests
     public void DukeTest()
     {
         Mock<IConfigProvider> _config = new();
-        ZHRecomp redNukem = new(_config.Object);
+        ZHRecomp rednukem = new(_config.Object);
 
-        var args = redNukem.GetStartGameArgs(_dukeGame, _dukeZhCamp, [], [], true, true);
+        var args = rednukem.GetStartGameArgs(_dukeGame, _dukeZhCamp, [], [], true, true);
 
         Assert.Equal(string.Empty, args);
     }

@@ -8,14 +8,14 @@ using Ports.Ports.EDuke32;
 namespace Ports.Builders;
 
 /// <summary>
-///     Command parameters builder for the RedNukem port.
+///     Command parameters builder for the Rednukem port.
 /// </summary>
-public sealed class RedNukemCmdParametersBuilder : EDuke32CmdParametersBuilder
+public sealed class RednukemCmdParametersBuilder : EDuke32CmdParametersBuilder
 {
     /// <summary>
-    ///     Initializes a new instance of the <see cref="RedNukemCmdParametersBuilder" /> class.
+    ///     Initializes a new instance of the <see cref="RednukemCmdParametersBuilder" /> class.
     /// </summary>
-    public RedNukemCmdParametersBuilder(BaseGame game, BaseAddon addon, BasePort port)
+    public RednukemCmdParametersBuilder(BaseGame game, BaseAddon addon, BasePort port)
         : base(game, addon, port)
     {
     }
@@ -27,12 +27,12 @@ public sealed class RedNukemCmdParametersBuilder : EDuke32CmdParametersBuilder
 
         _ = Append(" -d blank.edm");
 
-        if (Port is not RedNukem redNukem)
+        if (Port is not Rednukem rednukem)
         {
             throw new Exception();
         }
 
-        redNukem.CreateOrDeleteBlankAnm(false);
+        rednukem.CreateOrDeleteBlankAnm(false);
 
         return this;
     }

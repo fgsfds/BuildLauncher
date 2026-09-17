@@ -94,7 +94,7 @@ public sealed partial class PortsRepositoriesProvider : IRepositoriesProvider<Po
             };
         }
 
-        if (releaseEnum is PortEnum.RedNukem)
+        if (releaseEnum is PortEnum.Rednukem)
         {
             return new()
             {

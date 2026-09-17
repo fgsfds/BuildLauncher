@@ -1,5 +1,4 @@
 ﻿using Core.All.Enums;
-using Core.All.Providers;
 using Ports.Releases;
 
 namespace Tests.Unit;
@@ -62,9 +61,9 @@ public sealed class PortsRepositoriesProviderTests
     }
 
     [Fact]
-    public void GetRepo_RedNukem_SharesCacheWithNBlood()
+    public void GetRepo_Rednukem_SharesCacheWithNBlood()
     {
-        var repo = _provider.GetRepo(PortEnum.RedNukem);
+        var repo = _provider.GetRepo(PortEnum.Rednukem);
         Assert.Equal("nukeykt/NBlood", repo.SharedCacheKey);
     }
 
