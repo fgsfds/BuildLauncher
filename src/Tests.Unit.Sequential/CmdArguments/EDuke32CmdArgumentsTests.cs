@@ -180,6 +180,40 @@ public sealed class EDuke32CmdArgumentsTests
     }
 
     /// <summary>
+    ///     Tests that EDuke32 command-line arguments fall back to the game install folder when the Duke DC addon folder was not detected, without throwing
+    ///     and without adding the install folder as an extra search path.
+    /// </summary>
+    [Fact]
+    public void GetStartGameArgs_DukeDcAddonFolderNotDetected_FallsBackToInstallFolder()
+    {
+        var installFolder = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
+
+        var game = new DukeGame
+        {
+            Duke64RomPath = null,
+            DukeZHRomPath = null,
+            DukeWTInstallPath = null,
+            GameInstallFolder = installFolder
+        };
+
+        EDuke32 eduke32 = new();
+
+        var args = eduke32.GetStartGameArgs(game, _dukeDcCamp, [], [], true, true);
+
+        var expected = $"" +
+                       $" -j \"{installFolder}\"" +
+                       $" -grp DUKEDC.GRP" +
+                       $" -quick" +
+                       $" -nosetup" +
+                       $" -usecwd" +
+                       $" -cachesize 262144" +
+                       $" -h \"a\"" +
+                       $"";
+
+        CmdArgsAssert.Equal(expected, args);
+    }
+
+    /// <summary>
     ///     Tests the EDuke32 command-line arguments for Duke Nuclear Winter.
     /// </summary>
     [Fact]

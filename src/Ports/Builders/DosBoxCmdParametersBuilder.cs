@@ -61,19 +61,19 @@ public sealed class DosBoxCmdParametersBuilder : CmdParametersBuilder
 
         if (addon.AddonId.Id.Equals(nameof(DukeAddonEnum.DukeVaca), StringComparison.OrdinalIgnoreCase))
         {
-            var pathToAddonFolder = game.AddonsFolders[DukeAddonEnum.DukeVaca];
+            var pathToAddonFolder = game.AddonsFolders.TryGetValue(DukeAddonEnum.DukeVaca, out var vacaFolder) ? vacaFolder : game.GameInstallFolder;
             _ = Append($@" -c ""mount d \""{pathToAddonFolder}""""");
             _ = Append($@" -c ""{VacationExe} /gd:\\VACATION.GRP /xd:\\VACATION.CON""");
         }
         else if (addon.AddonId.Id.Equals(nameof(DukeAddonEnum.DukeDC), StringComparison.OrdinalIgnoreCase))
         {
-            var pathToAddonFolder = game.AddonsFolders[DukeAddonEnum.DukeDC];
+            var pathToAddonFolder = game.AddonsFolders.TryGetValue(DukeAddonEnum.DukeDC, out var dcFolder) ? dcFolder : game.GameInstallFolder;
             _ = Append($@" -c ""mount d \""{pathToAddonFolder}""""");
             _ = Append($@" -c ""{DukeExe} /gd:\\DUKEDC.GRP /xd:\\DUKEDC.CON""");
         }
         else if (addon.AddonId.Id.Equals(nameof(DukeAddonEnum.DukeNW), StringComparison.OrdinalIgnoreCase))
         {
-            var pathToAddonFolder = game.AddonsFolders[DukeAddonEnum.DukeNW];
+            var pathToAddonFolder = game.AddonsFolders.TryGetValue(DukeAddonEnum.DukeNW, out var nwFolder) ? nwFolder : game.GameInstallFolder;
             _ = Append($@" -c ""mount d \""{pathToAddonFolder}""""");
             _ = Append($@" -c ""{DukeExe} /gd:\\NWINTER.GRP /xd:\\NWINTER.CON""");
         }

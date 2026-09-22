@@ -44,16 +44,16 @@ public class EDuke32CmdParametersBuilder : CmdParametersBuilder
                 //DUKE IT OUT IN DC
                 if (addon.DependentAddons.ContainsKey(nameof(DukeAddonEnum.DukeDC)))
                 {
-                    var addonPath = game.AddonsFolders[DukeAddonEnum.DukeDC];
+                    var addonPath = game.AddonsFolders.TryGetValue(DukeAddonEnum.DukeDC, out var dcFolder) ? dcFolder : game.GameInstallFolder;
 
-                    if (!addonPath.Equals(game.GameInstallFolder))
+                    if (addonPath is not null && !addonPath.Equals(game.GameInstallFolder))
                     {
                         _ = Append($@" {Port.CmdArguments.AddDirectory}""{addonPath}""");
                     }
 
                     _ = Append($" {Port.CmdArguments.AddGrp}DUKEDC.GRP");
 
-                    if (File.Exists(Path.Combine(addonPath, "DUKEDC.CON")))
+                    if (addonPath is not null && File.Exists(Path.Combine(addonPath, "DUKEDC.CON")))
                     {
                         _ = Append($" {Port.CmdArguments.MainCon}DUKEDC.CON");
                     }
@@ -61,9 +61,9 @@ public class EDuke32CmdParametersBuilder : CmdParametersBuilder
                 //NUCLEAR WINTER
                 else if (addon.DependentAddons.ContainsKey(nameof(DukeAddonEnum.DukeNW)))
                 {
-                    var addonPath = game.AddonsFolders[DukeAddonEnum.DukeNW];
+                    var addonPath = game.AddonsFolders.TryGetValue(DukeAddonEnum.DukeNW, out var nwFolder) ? nwFolder : game.GameInstallFolder;
 
-                    if (!addonPath.Equals(game.GameInstallFolder))
+                    if (addonPath is not null && !addonPath.Equals(game.GameInstallFolder))
                     {
                         _ = Append($@" {Port.CmdArguments.AddDirectory}""{addonPath}""");
                     }
@@ -73,16 +73,16 @@ public class EDuke32CmdParametersBuilder : CmdParametersBuilder
                 //CARIBBEAN
                 else if (addon.DependentAddons.ContainsKey(nameof(DukeAddonEnum.DukeVaca)))
                 {
-                    var addonPath = game.AddonsFolders[DukeAddonEnum.DukeVaca];
+                    var addonPath = game.AddonsFolders.TryGetValue(DukeAddonEnum.DukeVaca, out var vacaFolder) ? vacaFolder : game.GameInstallFolder;
 
-                    if (!addonPath.Equals(game.GameInstallFolder))
+                    if (addonPath is not null && !addonPath.Equals(game.GameInstallFolder))
                     {
                         _ = Append($@" {Port.CmdArguments.AddDirectory}""{addonPath}""");
                     }
 
                     _ = Append($" {Port.CmdArguments.AddGrp}VACATION.GRP");
 
-                    if (File.Exists(Path.Combine(addonPath, "VACATION.CON")))
+                    if (addonPath is not null && File.Exists(Path.Combine(addonPath, "VACATION.CON")))
                     {
                         _ = Append($" {Port.CmdArguments.MainCon}VACATION.CON");
                     }

@@ -106,6 +106,37 @@ public sealed class DosBoxCmdArgumentsTests
     }
 
     /// <summary>
+    ///     Tests that DOSBox command-line arguments fall back to the game install folder when the Duke DC addon folder was not detected, without throwing
+    ///     and while still launching the DC GRP.
+    /// </summary>
+    [Fact]
+    public void GetStartGameArgs_DukeDcAddonFolderNotDetected_FallsBackToInstallFolder()
+    {
+        var installFolder = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
+
+        var game = new DukeGame
+        {
+            Duke64RomPath = null,
+            DukeZHRomPath = null,
+            DukeWTInstallPath = null,
+            GameInstallFolder = installFolder
+        };
+
+        DosBox dosBox = new();
+
+        var args = dosBox.GetStartGameArgs(game, _dukeDc, [], [], true, true);
+
+        var expected = $"" +
+                       $" -c \"mount c \\\"{installFolder}\"\" -c \"c:\"" +
+                       $" -c \"mount d \\\"{installFolder}\"\"" +
+                       $" -c \"DUKE3D.EXE /gd:\\\\DUKEDC.GRP /xd:\\\\DUKEDC.CON\"" +
+                       $" --noconsole -c \"cycles max\" -c \"core dynamic\"" +
+                       $" -c \"exit\"";
+
+        CmdArgsAssert.Equal(expected, args);
+    }
+
+    /// <summary>
     ///     Tests the DOSBox command-line arguments for Duke: NW.
     /// </summary>
     [Fact]
