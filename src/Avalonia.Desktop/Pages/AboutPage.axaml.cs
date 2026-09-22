@@ -55,6 +55,9 @@ public sealed partial class AboutPage : UserControl
     /// </summary>
     private void GitHubIssuesClick(object sender, RoutedEventArgs e) => OpenUrl("https://github.com/fgsfds/BuildLauncher/issues/new");
 
+    /// <summary> Opens the SignPath page. </summary>
+    private void SignPathClick(object sender, RoutedEventArgs e) => OpenUrl("https://about.signpath.io/");
+
     /// <summary>
     ///     Opens the releases page to show the changelog.
     /// </summary>
