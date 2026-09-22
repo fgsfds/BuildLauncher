@@ -14,11 +14,17 @@ public abstract class BaseGame
     /// </summary>
     private static readonly IReadOnlyDictionary<Enum, string> EmptyAddonsFolders = new Dictionary<Enum, string>();
 
+    /// <summary> Synchronizes access to the cached install-folder data. </summary>
+    private readonly Lock _cacheLock = new();
+
+    /// <summary> The install folder the cached data was built for. </summary>
+    private string? _cacheFolder;
+
     /// <summary> Cached addon folders. Rebuilt when <see cref="GameInstallFolder" /> changes or the cache is invalidated. </summary>
     private IReadOnlyDictionary<Enum, string>? _addonsFoldersCache;
 
-    /// <summary> The install folder the addon folders cache was built for. </summary>
-    private string? _addonsFoldersCacheFolder;
+    /// <summary> Cached base game install check. Rebuilt when <see cref="GameInstallFolder" /> changes or the cache is invalidated. </summary>
+    private bool? _isBaseGameInstalledCache;
 
     /// <summary>
     ///     Game install folder.
@@ -28,7 +34,28 @@ public abstract class BaseGame
     /// <summary>
     ///     Is base game installed.
     /// </summary>
-    public bool IsBaseGameInstalled => IsInstalled(RequiredFiles);
+    public bool IsBaseGameInstalled
+    {
+        get
+        {
+            var folder = GameInstallFolder;
+
+            if (folder is null)
+            {
+                return IsInstalled(RequiredFiles);
+            }
+
+            lock (_cacheLock)
+            {
+                if (!string.Equals(_cacheFolder, folder, StringComparison.OrdinalIgnoreCase))
+                {
+                    ResetCaches(folder);
+                }
+
+                return _isBaseGameInstalledCache ??= IsInstalled(RequiredFiles);
+            }
+        }
+    }
 
     /// <summary>
     ///     Path to custom campaigns folder.
@@ -59,23 +86,43 @@ public abstract class BaseGame
     {
         get
         {
-            if (_addonsFoldersCache is not null && string.Equals(_addonsFoldersCacheFolder, GameInstallFolder, StringComparison.OrdinalIgnoreCase))
+            var folder = GameInstallFolder;
+
+            if (folder is null)
             {
-                return _addonsFoldersCache;
+                return DetectAddonsFolders();
             }
 
-            _addonsFoldersCacheFolder = GameInstallFolder;
-            _addonsFoldersCache = DetectAddonsFolders();
+            lock (_cacheLock)
+            {
+                if (!string.Equals(_cacheFolder, folder, StringComparison.OrdinalIgnoreCase))
+                {
+                    ResetCaches(folder);
+                }
 
-            return _addonsFoldersCache;
+                return _addonsFoldersCache ??= DetectAddonsFolders();
+            }
         }
     }
 
-    /// <summary> Invalidates any cached addon detection data so it is recomputed on the next access. </summary>
+    /// <summary> Invalidates any cached addon detection and base-game install data so it is recomputed on the next access. </summary>
     public void InvalidateAddonsCache()
     {
+        lock (_cacheLock)
+        {
+            _addonsFoldersCache = null;
+            _isBaseGameInstalledCache = null;
+            _cacheFolder = null;
+        }
+    }
+
+    /// <summary> Resets the cached data and records the install folder the next context is built for. </summary>
+    /// <param name="folder"> The install folder of the new context. </param>
+    private void ResetCaches(string folder)
+    {
         _addonsFoldersCache = null;
-        _addonsFoldersCacheFolder = null;
+        _isBaseGameInstalledCache = null;
+        _cacheFolder = folder;
     }
 
     /// <summary> Addons that are detected in the game install folder. </summary>

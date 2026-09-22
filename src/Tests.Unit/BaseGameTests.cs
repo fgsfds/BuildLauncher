@@ -127,6 +127,42 @@ public sealed class BaseGameTests : IDisposable
         Assert.True(game.IsBaseGameInstalled);
     }
 
+    /// <summary> The install status is cached until the addons cache is invalidated. </summary>
+    [Fact]
+    public void IsBaseGameInstalled_CachesResultUntilInvalidated()
+    {
+        var file = Path.Combine(_tempDir, "TEST.GRP");
+        File.WriteAllText(file, "");
+
+        var game = new BaseGameTestProxy();
+        game.GameInstallFolder = _tempDir;
+        Assert.True(game.IsBaseGameInstalled);
+
+        File.Delete(file);
+        Assert.True(game.IsBaseGameInstalled);
+
+        game.InvalidateAddonsCache();
+        Assert.False(game.IsBaseGameInstalled);
+    }
+
+    /// <summary> Changing the install folder recomputes the install status without explicit invalidation. </summary>
+    [Fact]
+    public void IsBaseGameInstalled_InstallFolderChanged_Recomputes()
+    {
+        var file = Path.Combine(_tempDir, "TEST.GRP");
+        File.WriteAllText(file, "");
+
+        var secondDir = Path.Combine(_tempDir, "second");
+        Directory.CreateDirectory(secondDir);
+
+        var game = new BaseGameTestProxy();
+        game.GameInstallFolder = _tempDir;
+        Assert.True(game.IsBaseGameInstalled);
+
+        game.GameInstallFolder = secondDir;
+        Assert.False(game.IsBaseGameInstalled);
+    }
+
     [Fact]
     public void GenerateNumberedFiles_Default_MatchesExpectedPattern()
     {

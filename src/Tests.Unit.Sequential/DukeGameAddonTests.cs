@@ -215,4 +215,21 @@ public sealed class DukeGameAddonTests : IDisposable
         Assert.True(_game.IsNuclearWinterInstalled);
         Assert.Equal(otherDir, _game.AddonsFolders[DukeAddonEnum.DukeNW]);
     }
+
+    /// <summary> Tests that reading the install status after a folder change does not leave a stale addon folders cache. </summary>
+    [Fact]
+    public void AddonsFolders_ContextInvalidatedByInstallCheck_DoesNotReturnStaleCache()
+    {
+        var otherDir = Path.Combine(_tempDir, "Other");
+        _ = Directory.CreateDirectory(otherDir);
+
+        _ = CreateGrp("DUKEDC.GRP");
+
+        Assert.True(_game.IsDukeDCInstalled);
+
+        _game.GameInstallFolder = otherDir;
+
+        Assert.False(_game.IsBaseGameInstalled);
+        Assert.Empty(_game.AddonsFolders);
+    }
 }
