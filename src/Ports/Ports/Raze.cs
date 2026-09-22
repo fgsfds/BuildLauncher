@@ -182,7 +182,7 @@ public sealed class Raze : BasePort
                     {
                         foreach (var folder in game.AdditionalFolders)
                         {
-                            if (folder.Equals(gameInstallFolder))
+                            if (folder.Equals(gameInstallFolder, StringComparison.OrdinalIgnoreCase))
                             {
                                 continue;
                             }

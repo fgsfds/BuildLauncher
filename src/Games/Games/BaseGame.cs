@@ -52,7 +52,7 @@ public abstract class BaseGame
     public bool AreSkillsAvailable => Skills is not null;
 
     /// <summary> Collection of additional folders that contain game data or its addons. </summary>
-    public IReadOnlyList<string> AdditionalFolders => [.. AddonsFolders.Values.Distinct()];
+    public IReadOnlyList<string> AdditionalFolders => [.. AddonsFolders.Values.Distinct(StringComparer.OrdinalIgnoreCase)];
 
     /// <summary> Collection of paths to folders that contain game's addons. </summary>
     public IReadOnlyDictionary<Enum, string> AddonsFolders

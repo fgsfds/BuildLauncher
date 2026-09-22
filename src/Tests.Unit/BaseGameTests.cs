@@ -1,4 +1,5 @@
 ﻿using Core.All.Enums;
+using Core.All.Enums.Addons;
 using Games.Games;
 
 namespace Tests.Unit;
@@ -11,6 +12,17 @@ internal sealed class BaseGameTestProxy : BaseGame
     protected override IReadOnlyCollection<string> RequiredFiles { get; } = ["TEST.GRP"];
     public override Enum? Skills => null;
 
+    /// <summary> Detected addon folders returned by <see cref="DetectAddonsFolders" /> when set. </summary>
+    public IReadOnlyDictionary<Enum, string>? AddonsFoldersToReturn { get; set; }
+
+    /// <summary> Returns <see cref="AddonsFoldersToReturn" /> when set, otherwise the base implementation. </summary>
+    /// <returns> The detected addon folders. </returns>
+    protected override IReadOnlyDictionary<Enum, string> DetectAddonsFolders() => AddonsFoldersToReturn ?? base.DetectAddonsFolders();
+
+    /// <summary> Invokes the protected <see cref="BaseGame.IsInstalled" /> method. </summary>
+    /// <param name="files"> The required files to look for. </param>
+    /// <param name="path"> The folder to search, or the game install folder when null. </param>
+    /// <returns> True when all files exist. </returns>
     public bool CallIsInstalled(IReadOnlyCollection<string> files, string? path = null) => IsInstalled(files, path);
     public static IReadOnlyCollection<string> CallGenerateNumberedFiles(string baseName, string ext, int start, int endExclusive, int padWidth)
         => GenerateNumberedFiles(baseName, ext, start, endExclusive, padWidth);
@@ -123,5 +135,21 @@ public sealed class BaseGameTests : IDisposable
         Assert.Equal("FILE000.EXT", files.ElementAt(0));
         Assert.Equal("FILE001.EXT", files.ElementAt(1));
         Assert.Equal("FILE002.EXT", files.ElementAt(2));
+    }
+
+    /// <summary> Addons mapping to the same folder with different casing are collapsed to a single entry. </summary>
+    [Fact]
+    public void AdditionalFolders_AddonsInSameFolderDifferentCasing_Deduplicates()
+    {
+        var game = new BaseGameTestProxy
+        {
+            AddonsFoldersToReturn = new Dictionary<Enum, string>
+            {
+                [DukeAddonEnum.DukeDC] = @"C:\Games\Duke\AddOns",
+                [DukeAddonEnum.DukeNW] = @"c:\games\duke\addons"
+            }
+        };
+
+        Assert.Single(game.AdditionalFolders);
     }
 }
