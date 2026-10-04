@@ -2,6 +2,16 @@
 
 Instructions for AI coding agents working in the **BuildLauncher** repository.
 
+## Repository language
+
+Write all new and edited repository content in English, including documentation,
+skills, agent instructions, code comments, identifiers, and commit messages.
+Preserve original third-party names, quotations, and localized resource text when
+translation would change their meaning or behavior. Conversation with the user may
+remain in their preferred language.
+Keep documentation self-contained: use repository-relative references and generic
+input/output examples, never machine-specific paths to external local files or folders.
+
 ## Project overview
 
 BuildLauncher is a cross-platform (Windows + Linux) desktop frontend for Build Engine
@@ -64,11 +74,14 @@ src/
   Ports             BasePort + concrete ports, installer, cmd-argument builders,
                     PortsProvider, PortStarter, process runner.
   Tools             BaseTool + editing/utility tools, tool installer.
+  Addon.ArtExporter Standalone .NET CLI for ART/SURFACE to indexed PNG + DEF.
   S3                S3 file uploader and utilities.
   Avalonia.Desktop  App entry point, DI composition root, views, view models.
   Benchmarks        BenchmarkDotNet harness.
   Tests.*           Test projects (see above).
 db/                 addon/data/manifest JSON databases shipped with the app.
+.agents/docs/       Maintained addon specifications and conversion documentation.
+.agents/skills/     Repository-local addon preparation skills and reference checks.
 ```
 
 Project references (never introduce a cycle that reverses these):
@@ -81,6 +94,7 @@ Games             -> Core.All, Core.Client
 Addons            -> Core.All, Core.Client, Games
 Ports             -> Core.All, Games, Addons
 Tools             -> Core.All, Games
+Addon.ArtExporter -> Core.All
 S3                -> Core.Client
 Avalonia.Desktop  -> Core.All, Games, Ports, Tools, S3
 Benchmarks        -> Core.Client, Addons
@@ -120,7 +134,7 @@ The three core abstractions are parallel in shape:
   paths, cached addon-folder detection.
 - `Addons.Addons.BaseAddon` — an immutable, `required`-initialized description of a
   campaign (`TC`), map, mod (`AutoloadMod`), or official addon. Identity is `AddonId`
-  (title + optional version, case-insensitive, semantically versioned).
+  (manifest ID + optional version, case-insensitive, semantically versioned).
 - `Ports.Ports.BasePort` — executable/config paths, supported games & features, and
   command-line argument construction through `CmdParametersBuilder`. Port-specific
   behavior is added by overriding `CustomModifyArgs`, `BeforeStart`, `AfterEnd`.
@@ -230,23 +244,74 @@ These are enforced by `.editorconfig` and analyzers; follow them in every edit.
 
 For preparing/reviewing `addon.json`, converting addon package layouts, or updating
 its specification, read `.agents/skills/buildlauncher-addon-json/SKILL.md` and
-`docs/addon.json-Specifications.md`. The skill is repository-local; load its file
+`.agents/docs/addon.json-Specifications.md`. The skill is repository-local; load its file
 explicitly if the current client does not discover repository skills automatically.
 The specification records its reviewed source commit; re-check changed code before
 reusing a documented contract.
 
+For complete addon preparation or source/prepared comparisons, use
+`.agents/skills/buildlauncher-convert-addon/SKILL.md` and
+`.agents/docs/addon-conversion-plan.md`. Resource work is routed to
+`.agents/skills/buildlauncher-blood-art/SKILL.md` for PNG/DEF export and
+`.agents/skills/buildlauncher-blood-rff/SKILL.md` for Blood addons containing RFF
+files, unpacked native packaging and optional DEF assembly; artwork and descriptions to
+`.agents/skills/buildlauncher-addon-presentation/SKILL.md`.
+The standalone .NET resource exporter lives in `src/Addon.ArtExporter`; read
+`.agents/docs/art-exporter.md` for its CLI and supported formats. An independent read-only ART/SURFACE audit helper is included in the resource
+skill; its supported profile is documented in the shared exporter guide.
+VOXEL.DAT export into a separate DEF
+is a later training step. The user excluded port compatibility checks for this
+conversion workflow; report them as untested instead of requiring them.
+
 - Keep the manifest contract separate from `db/addons.json` (download catalog),
   `db/data.json` (application/game data), and `db/manifests.json` (manifest collection).
-- Verify parsing with `AddonManifestJsonContext`, then factory, package, and port
-  behavior. A serializer-only test fixture is not necessarily a runnable template.
+- Validate generated manifests with `AddonManifestJsonContext` and
+  `Core.All.Helpers.AddonManifestValidator`, shared with `DevViewModel.GetAddonJson`.
+  See `.agents/docs/addon-manifest-validation.md` for the read-only CLI. Then check
+  factory constraints, references and package layout; keep excluded port checks
+  untested. A serializer-only test fixture is not necessarily a runnable template.
 - Preserve source archives and live installations; prepare conversions in a fresh
   output directory and validate every manifest before importing anything into BL.
+- Check `db/addons.json` during every conversion for an existing release of the
+  same addon. Preserve a confirmed existing ID and reuse suitable descriptions
+  and grid/preview artwork from an older release before searching or generating
+  replacements. User-supplied materials take priority; record the reused version
+  and validate artwork dimensions, format and game palette. See the presentation
+  skill for catalog fields, archive retrieval and version-specific checks.
+- Blood addons containing RFF files need unpacking and may retain native ART,
+  RFF and DAT. Detect RFF case-insensitively, including inside source archives;
+  identify and declare the actual main/sound RFF files so BL unpacks the ZIP.
+  This is the normal profile for those addons and needs no separate approval.
+  Without RFF, convert ART/DAT to DEF-backed resources; unsupported DAT conversion
+  is unresolved, not a reason to retain raw files or invent an RFF declaration.
+  Use existing RFFs directly. Any required RFS compilation needs verified inputs
+  and commands; no compiler is implemented in the ART exporter. Keeping native
+  VOXEL.DAT in the RFF profile does not implement VOXEL-to-DEF export.
+- Declare `TileFromTexture` when generated DEF resources use `tilefromtexture`;
+  the resource exporter does not generate the addon manifest.
+- For a requested source-only conversion, finish and validate the output and freeze
+  its file hashes before opening a prepared comparison fixture.
+- Keep maintained instructions shared in `.agents/docs/` and `.agents/skills/`.
+  Do not create Markdown instructions, reference notes or reports for individual
+  addons. Keep per-conversion inventories, provenance and comparisons in JSON
+  outside addon.json; summarize results in the conversation. Preserve original
+  author-provided documentation. Run documented CLI commands from the repository
+  root.
 - Record conversion provenance, unresolved requirements, and untested game/port/OS
   combinations outside `addon.json`. Do not infer conversion or launch support merely
   from the presence of a model field or enum member.
 - When wiki publication is requested, keep its text aligned with the local
   specification. That request does not authorize committing/pushing application
   changes, changing catalog data, uploading to S3, or publishing addon packages.
+
+## Addon tooling verification (2026-10-04)
+
+After adding the exporter and shared authoring validator, the solution build passed
+with zero errors; `Tests.Unit` passed 692/692 and `Tests.Unit.Sequential` 406/406.
+The exporter and shared validator have been exercised against real addon resources
+as well as isolated regression fixtures. Resource, manifest and packaging checks
+remain separate from port compatibility, game launches and live BL import. The
+older app-review baseline below remains a historical review.
 
 ## App review backlog (2026-10-01)
 

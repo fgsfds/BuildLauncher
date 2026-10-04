@@ -2,7 +2,7 @@
 
 This page documents the manifest accepted by BuildLauncher, including the differences between JSON parsing and actual addon loading/launching. It extends the [original addon descriptor](https://lerppu.net/db64/#Addon-Descriptor-Specification-v1-0).
 
-**Documentation revision: 1.0i, reviewed 2026-10-04 against [BuildLauncher commit 3ecec2a](https://github.com/fgsfds/BuildLauncher/tree/3ecec2a5fb6374d76427f1999fd9a2881c2b7c9e).** This is a documentation revision, not a new JSON field or a change to the application. There is no manifest schema-version token. The top-level `version` is the addon's release version.
+**Documentation revision: 1.0j. Parser and runtime contract reviewed 2026-10-04 against [BuildLauncher commit 3ecec2a](https://github.com/fgsfds/BuildLauncher/tree/3ecec2a5fb6374d76427f1999fd9a2881c2b7c9e).** This is a documentation revision, not a new JSON field or a change to the application. There is no manifest schema-version token. The top-level `version` is the addon's release version.
 
 ## JSON rules
 
@@ -15,6 +15,28 @@ This page documents the manifest accepted by BuildLauncher, including the differ
 - A syntactically valid manifest does not prove that its files exist, its scripts work, or the selected source port supports the addon.
 
 The source of truth for names and types is [AddonManifestJsonModel and its serializer context](https://github.com/fgsfds/BuildLauncher/blob/3ecec2a5fb6374d76427f1999fd9a2881c2b7c9e/src/Core.All/Serializable/Addon/AddonManifestJsonModel.cs).
+
+## Authoring validation
+
+The current checkout additionally shares authoring rules between
+`DevViewModel.GetAddonJson` and the resource CLI through
+[AddonManifestValidator](../../src/Core.All/Helpers/AddonManifestValidator.cs).
+These rules are stricter than deserialization: require nonblank ID, title and
+release version, a user-addon type, and a start map for map packages; ordinary
+packages must avoid reserved root filenames and unsupported Blood ART/DAT/RFS.
+Standalone/custom-executable/RFF exceptions affect package-file restrictions only.
+They do not establish runtime support.
+
+Run from the repository root for every generated manifest:
+
+```powershell
+dotnet run --project src/Addon.ArtExporter -- validate-addon --input ./prepared-addon
+```
+
+See [the complete authoring rules](addon-manifest-validation.md) for exceptions,
+additional-manifest validation and exit codes. These additions describe the current
+checkout rather than the older parser/runtime review commit above. Required-file
+checks, factory constraints and game execution remain separate.
 
 ## Required fields
 
@@ -215,8 +237,8 @@ When converting an original addon:
 2. Work on a copy in a fresh output directory. Preserve the original archive and existing installations. Extract nested containers or convert resources only when required by the selected port and verified against its input formats.
 3. Choose `tc`, `map`, or `mod` from the launch behavior. Write a root manifest with real IDs, credits, versions, paths, and dependencies; omit unsupported or unverified claims.
 4. Check declared files plus files referenced by CON/DEF includes and Blood INI episode sections. Preserve exact casing for Linux. Keep required base-game resources external rather than silently adding them to the package.
-5. Deserialize **every** manifest with `AddonManifestJsonContext.Default.AddonManifestJsonModel`, then validate factory/port behavior and the output layout. A generic JSON linter alone does not validate BL's contract.
-6. Test import and generated launch arguments in an isolated installation. A successful real launch is a separate check; record the tested game, port, OS, and any untested combinations.
+5. Deserialize **every** manifest with `AddonManifestJsonContext.Default.AddonManifestJsonModel` and run the shared authoring validator against its actual root files. Then check factory constraints, references and output layout. A generic JSON linter alone does not validate BL's contract.
+6. Test import and game execution only within the requested scope, in an isolated installation. The current conversion workflow excludes port compatibility checks. Record the tested game, port, OS and untested combinations separately.
 
 Current extraction has destructive failure paths: an existing same-name output folder can be deleted, and the source ZIP can be removed after unpacking even if later manifest loading fails. This describes current behavior, not a recommended preparation strategy. Keep source copies and validate before importing.
 
@@ -333,6 +355,8 @@ The reviewed source commit is linked above so these findings can be reproduced e
 All five complete JSON examples were checked with the current manifest serializer on Windows/.NET 10. Additional parsing checks covered missing required properties, property/enum casing, game aliases, CRC types, map formats, and executable formats. This review does not establish successful interactive launches or Linux behavior.
 
 ## Changelog
+
+**1.0j (2026-10-04)** - Added the shared developer/CLI authoring validation and its distinction from the unchanged parser contract. Moved maintained repository documentation to `.agents/docs/`.
 
 **1.0i (2026-10-04)** - Reconciled documentation with the current code: required fields and case rules; game/feature/port enums; string-only, unenforced CRC metadata; `release_date`; `options`; nested executables and legacy mapping; package layout; separation of parser support and runtime limitations; complete examples.
 

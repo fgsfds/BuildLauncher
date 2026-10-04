@@ -96,6 +96,8 @@ Want to create and submit your own addons? Learn about addons specifications? Ca
 
 **Check [WIKI](https://github.com/fgsfds/BuildLauncher/wiki) for more information.**
 
+For addon preparation, see the repository [manifest specification](.agents/docs/addon.json-Specifications.md), [conversion plan](.agents/docs/addon-conversion-plan.md), [.NET resource exporter](.agents/docs/art-exporter.md), and [manifest validation](.agents/docs/addon-manifest-validation.md).
+
 </td>
 </tr>
 
