@@ -55,8 +55,8 @@ remains the common parser contract, distinct from preparation instructions.
    TileFromTexture when active generated DEF uses tilefromtexture. Prepare images
    and description through [the presentation skill](../skills/buildlauncher-addon-presentation/SKILL.md).
    Preserve exact game palette provenance and identify generated illustrations.
-6. **Validate independently.** Parse every manifest and apply the
-   [authoring checklist](addon-manifest-validation.md). Check factory constraints,
+6. **Validate independently.** Run [`validate-addon`](addon-manifest-validation.md)
+   for every manifest. Check factory constraints,
    references/search origins, native/container structure, conversion fidelity and
    final images according to the profile. Serializer acceptance does not prove launch support.
 7. **Package and deliver.** Put the default addon.json at ZIP root, without a
@@ -116,10 +116,9 @@ before deriving requirements. Game-specific findings and recipes are in profiles
 
 ## Tools and specialized roles
 
-The [ART guide](art-exporter.md) documents the profile verifier in this checkout
-and the exporter in the local backup history. Select the resource recipe through
-the actual game profile. Follow [the manifest checklist](addon-manifest-validation.md)
-for the current editor rules.
+Use the [.NET exporter and Python verifier](art-exporter.md) when the selected
+game profile calls for ART/SURFACE conversion. Use [`validate-addon`](addon-manifest-validation.md)
+for the authoring checks shared with the developer editor.
 
 | Shared task | Skill |
 | --- | --- |

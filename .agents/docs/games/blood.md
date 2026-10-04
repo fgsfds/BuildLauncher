@@ -76,13 +76,12 @@ assuming the prepared package reproduces every installer branch.
 
 ## ART/SURFACE tools
 
-The [ART guide](../art-exporter.md) identifies the local checkout that contains
-the .NET exporter. Its ART v1 workflow converts tiles and optional SURFACE.DAT
+The [.NET exporter](../art-exporter.md) converts ART v1 tiles and optional SURFACE.DAT
 to indexed PNGs and DEF definitions using an explicitly supplied game palette.
 Use a separate conversion directory and keep the original resources.
 
-The current checkout includes a Python/Pillow verifier for the simple
-ART/SURFACE profile. The guide lists the verifier's command, checks and limits.
+Use the Python/Pillow verifier for the simple ART/SURFACE profile. The guide
+lists the verifier's command, checks and limits.
 
 ## Later VOXEL stage
 
@@ -95,7 +94,7 @@ The user explicitly permitted skipping absent tiles for SURFACE; determine the
 VOXEL policy separately.
 
 Future checks must include odd table byte lengths, -1/nonempty bindings, missing
-KVX and failure preservation. ART tests in the exporter checkout exercise palette,
+KVX and failure preservation. The .NET exporter tests exercise palette,
 transparency, signed offsets, animation directions, view bits, both header forms,
 short surfaces and invalid/overlapping/truncated resources.
 

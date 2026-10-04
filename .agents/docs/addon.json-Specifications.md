@@ -2,7 +2,7 @@
 
 This page documents the manifest accepted by BuildLauncher, including the differences between JSON parsing and actual addon loading/launching. It extends the [original addon descriptor](https://lerppu.net/db64/#Addon-Descriptor-Specification-v1-0).
 
-**Documentation revision 1.0k.** Reviewed against BuildLauncher `master` at commit `9e28d9775c68d23e0fd2e20fa29a77e0e9f677a0` on 2026-11-12. The top-level `version` identifies the addon release. The manifest has no schema-version field.
+**Documentation revision 1.0l.** Reviewed against BuildLauncher `master` at commit `68300f5a3b1d5bea5ef2e2ef1fe1c05a9393e16e` on 2026-11-12. The top-level `version` identifies the addon release. The manifest has no schema-version field.
 
 ## JSON rules
 
@@ -18,10 +18,9 @@ The source of truth for names and types is [AddonManifestJsonModel and its seria
 
 ## Authoring validation
 
-The developer editor applies form and root-filename checks beyond JSON
-deserialization. Follow [manifest authoring validation](addon-manifest-validation.md)
-for the current editor checklist, final package checks, and instructions for the
-optional command in the backup checkout.
+The developer editor and the read-only `validate-addon` command share authoring
+checks for required metadata, map selection and root filenames. Run the command
+for every manifest in the prepared package. See [manifest authoring validation](addon-manifest-validation.md).
 
 ## Required fields
 
@@ -222,7 +221,7 @@ When converting an original addon:
 2. Work on a copy in a fresh output directory. Preserve the original archive and existing installations. Extract nested containers or convert resources only when required by the selected port and verified against its input formats.
 3. Choose `tc`, `map`, or `mod` from the launch behavior. Write a root manifest with real IDs, credits, versions, paths, and dependencies; omit unsupported or unverified claims.
 4. Check declared files plus files referenced by CON/DEF includes and Blood INI episode sections. Preserve exact casing for Linux. Keep required base-game resources external rather than silently adding them to the package.
-5. Deserialize **every** manifest with `AddonManifestJsonContext.Default.AddonManifestJsonModel` and check the editor's [authoring rules](addon-manifest-validation.md) against its actual root files. Then check factory constraints, references and output layout. A generic JSON linter alone does not validate BL's contract.
+5. Run [`validate-addon`](addon-manifest-validation.md) for **every** manifest against the prepared root files. Then check factory constraints, references and output layout. A generic JSON linter alone does not validate BL's contract.
 6. Test import and game execution only within the requested scope, in an isolated installation. The current conversion workflow excludes port compatibility checks. Record the tested game, port, OS and untested combinations separately.
 
 Current extraction has destructive failure paths: an existing same-name output folder can be deleted, and the source ZIP can be removed after unpacking even if later manifest loading fails. This describes current behavior, not a recommended preparation strategy. Keep source copies and validate before importing.
@@ -340,6 +339,8 @@ The implementation and tests below are relative to the checkout. The reviewed co
 The complete examples illustrate manifest structure. Use the authoring and package checks before importing an addon, and verify launch behavior for each game, port and OS in scope.
 
 ## Changelog
+
+**1.0l (2026-11-12)** – Documented the shared authoring validator and CLI included in BuildLauncher commit `68300f5`.
 
 **1.0k (2026-11-12)** – Updated the current-checkout authoring instructions and identified the backup checkout that contains the optional CLI.
 

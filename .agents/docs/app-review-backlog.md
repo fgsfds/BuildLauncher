@@ -1,6 +1,6 @@
 # BuildLauncher app review backlog
 
-Current source baseline is `master` at `9e28d9775c68d23e0fd2e20fa29a77e0e9f677a0`,
+Current source baseline is `master` at `68300f5a3b1d5bea5ef2e2ef1fe1c05a9393e16e`,
 reviewed 2026-11-12. Recheck source and tests before implementing a finding.
 The local `codex/backup-before-committer-rewrite` branch contains earlier
 implementation and test work. Commit IDs below are for inspecting that history
@@ -64,8 +64,8 @@ and exercise its failure cases before treating the finding as resolved.
 ## Verification scope
 
 The solution built on Windows with SDK 10.0.403 on 2026-11-12.
-`Tests.Unit` passed 606/606 and `Tests.Unit.Sequential` passed 403/403.
-The build reported 324 warnings and zero errors. Those results cover the
+`Tests.Unit` passed 692/692 and `Tests.Unit.Sequential` passed 406/406.
+The build reported 328 warnings and zero errors. Those results cover the
 current checkout. The larger suites described in the backup history cover a
 different source revision.
 

@@ -19,8 +19,8 @@ and [the manifest skill](../buildlauncher-addon-json/SKILL.md). Identify an exis
   remains native; separate VOXEL-to-DEF export is still deferred.
 - Declare the actual `rff_main` and/or `rff_sound` relative root filenames. The
   current ArchivedAddonExtractor unpacks a ZIP when either field is non-null;
-  the developer editor skips normal Blood root-file restrictions when a main or
-  sound RFF form field is set. Use only real, nonblank declarations. Do not invent an RFF field to bypass checks.
+  the shared authoring validator skips normal Blood root-file restrictions for a
+  nonblank main or sound RFF declaration. Do not invent an RFF field to bypass checks.
 - Prepare in fresh staging. Rename a reserved blood.ini to an addon-specific INI
   and update `ini`; preserve its contents unless a verified edit is required.
   Validate map, music, video and sound references separately.
@@ -159,7 +159,7 @@ Check every include, PNG, KVX, map and rffdefineid path, including appended reso
 extensions. Distinguish exact matches, case-only mismatches and truly missing files.
 Fix confirmed source typos only with established intent, and record corrections.
 INI/DEF semantic lookup and filesystem case checks are separate from JSON parsing.
-Apply the [authoring checklist](../../docs/addon-manifest-validation.md) to every final manifest. Put input hashes,
+Run [`validate-addon`](../../docs/addon-manifest-validation.md) for every final manifest. Put input hashes,
 compiled-resource comparisons, preset deltas, omissions and unresolved questions
 in JSON evidence outside the package. Keep shared instructions here; no per-addon
 Markdown is required.

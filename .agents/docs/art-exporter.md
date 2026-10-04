@@ -1,11 +1,11 @@
 # ART resource export and verification
 
-The current `master` checkout includes the read-only
-[ART/SURFACE profile verifier](#validation). The standalone .NET exporter and
-its tests are in local commit `4a79ece7920beea555dcb1c78601adbdf6420bd4`
-(available via `codex/backup-before-committer-rewrite`). The exporter commands,
-format limits and output contract below apply to a checkout containing
-`src/Addon.ArtExporter`. BuildLauncher itself does not perform this conversion.
+The standalone .NET 10 console project
+[`src/Addon.ArtExporter`](../../src/Addon.ArtExporter/Addon.ArtExporter.csproj)
+is part of `BuildLauncher.slnx`. It converts ART and optional Blood SURFACE.DAT
+to indexed PNGs and a DEF module. The
+[Python/Pillow verifier](#validation) can check the supported output profile
+independently.
 
 For Blood addons containing RFF files, use unpacked native packaging and retain
 ART/RFF/DAT; the ART exporter is unnecessary for that profile. Without RFF,
@@ -13,9 +13,9 @@ ART/DAT require DEF-backed conversion. This tool implements ART/SURFACE only;
 VOXEL and other unsupported DAT formats require a separate verified recipe. See
 [the common workflow](addon-conversion-plan.md) and [game profiles](games/index.md) for recipe selection; Blood-specific DAT semantics must not be applied to other games.
 
-## Run the exporter from the backup checkout
+## Run the exporter
 
-Install the .NET 10 SDK, then run from the root of the checkout containing the exporter:
+Install the .NET 10 SDK, then run from the repository root.
 
 ```powershell
 dotnet run --project src/Addon.ArtExporter -- --help
@@ -53,13 +53,13 @@ Use the published `BuildLauncher.ArtExporter` executable, or run its DLL with do
 | `--help` | Prints usage and exits successfully. |
 
 Exit codes: 0 for success/help, 2 for usage or invalid path arguments, 1 for invalid
-resource data or filesystem failures. Errors identify the resource and tile where
+resource data or filesystem failures. An existing output or missing directory is a filesystem failure. Errors identify the resource and tile where
 possible. Duplicate options and unknown flags are rejected.
 
 For generated addon.json, run `validate-addon --input PACKAGE_DIRECTORY` with
 the same executable, or see [manifest authoring validation](addon-manifest-validation.md)
-for the checkout, dotnet command and rules. This command has its own --input/--manifest options;
-it performs no export or file writes.
+for the command and rules. Validation uses its own `--input` and `--manifest`
+options and leaves package files unchanged.
 
 ## Input formats and conversion
 
@@ -156,7 +156,7 @@ report belongs in the distributed archive. For the complete process, read
 
 ## Validation
 
-In the exporter checkout, `src/Tests.Unit/ArtResourceExporterTests.cs` covers public export
+[`ArtResourceExporterTests`](../../src/Tests.Unit/ArtResourceExporterTests.cs) cover public export
 behavior, including independent PNG decoding and CRC checks, pixel orientation,
 palette/transparency, metadata, both header forms and preservation on failures.
 
@@ -184,7 +184,7 @@ unreferenced PNGs and inconsistent resources. A present SURFACE table must cover
 exported IDs; missing DAT expects zero surfaces.
 
 Its grammar excludes optional ifcrc, Blood extra bits, backward animations and
-VOXEL.DAT. The exporter checkout's .NET tests cover the first three cases. Voxel
+VOXEL.DAT. The .NET exporter tests cover the first three cases. Voxel
 conversion is still deferred. It does not validate addon manifests,
 ZIP import or game execution. Run its isolated checks from the repository root:
 

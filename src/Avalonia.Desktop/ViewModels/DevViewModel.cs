@@ -10,6 +10,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Core.All.Enums;
 using Core.All.Enums.Versions;
+using Core.All.Helpers;
 using Core.All.Interfaces;
 using Core.All.Serializable.Addon;
 using Core.Client.Helpers;
@@ -32,47 +33,6 @@ public sealed partial class DevViewModel : ObservableObject
     private readonly IConfigProvider _config;
 
     private readonly IFilesUploader _filesUploader;
-
-    /// <summary>
-    ///     Set of forbidden file names that cannot be used in addons.
-    /// </summary>
-    private readonly HashSet<string> _forbiddenNames =
-    [
-        "duke3d.def",
-        "rr.def",
-        "rrra.def",
-        "nam.def",
-        "napalm.def",
-        "ww2gi.def",
-        "blood.def",
-        "sw.def",
-        "exhumed.def",
-        "game.con",
-        "defs.con",
-        "user.con",
-        "nam.con",
-        "napalm.con",
-        "ww2gi.con",
-        "blood.ini",
-        "cryptic.ini"
-    ];
-
-    /// <summary>
-    ///     Set of forbidden OGG file names for Blood addons.
-    /// </summary>
-    private readonly HashSet<string> _forbiddenOggs =
-    [
-        "blood00.ogg",
-        "blood01.ogg",
-        "blood02.ogg",
-        "blood03.ogg",
-        "blood04.ogg",
-        "blood05.ogg",
-        "blood06.ogg",
-        "blood07.ogg",
-        "blood08.ogg",
-        "blood09.ogg"
-    ];
 
     private readonly InstalledGamesProvider _gamesProvider;
 
@@ -117,60 +77,6 @@ public sealed partial class DevViewModel : ObservableObject
             throw new InvalidOperationException("Addon folder is not selected.");
         }
 
-        var files = Directory.GetFiles(PathToAddonFolder, "*", SearchOption.TopDirectoryOnly)
-                             .Select(static x => Path.GetFileName(x).ToLowerInvariant())
-                             .ToList();
-
-        if (SelectedGame is not GameEnum.Standalone &&
-            WindowsNBloodExe is null &&
-            WindowsNotBloodExe is null &&
-            WindowsEDukeExe is null &&
-            WindowsRednukemExe is null &&
-            WindowsRazeExe is null &&
-            WindowsPCExhumedExe is null &&
-            LinuxNBloodExe is null &&
-            LinuxNotBloodExe is null &&
-            LinuxEDukeExe is null &&
-            LinuxRednukemExe is null &&
-            LinuxRazeExe is null &&
-            LinuxPCExhumedExe is null &&
-            MainRff is null &&
-            SoundRff is null)
-        {
-            var forbidden = files.Intersect(_forbiddenNames);
-
-            if (forbidden.Any())
-            {
-                throw new InvalidOperationException($"Common file names cannot be used in addon folder. Rename these files: {string.Join(", ", forbidden)}.");
-            }
-
-            if (SelectedGame is GameEnum.Blood)
-            {
-                if (string.IsNullOrWhiteSpace(MainRff) && string.IsNullOrWhiteSpace(SoundRff))
-                {
-                    if (files.Any(static x => x.EndsWith(".ART", StringComparison.OrdinalIgnoreCase)))
-                    {
-                        throw new InvalidOperationException("ART files are not supported in Blood addons. Convert them to DEF.");
-                    }
-
-                    if (files.Any(static x => x.EndsWith(".DAT", StringComparison.OrdinalIgnoreCase)))
-                    {
-                        throw new InvalidOperationException("DAT files are not supported in Blood addons. Convert them to DEF.");
-                    }
-
-                    if (files.Any(static x => x.EndsWith(".RFS", StringComparison.OrdinalIgnoreCase)))
-                    {
-                        throw new InvalidOperationException("Addons with RFS files are not supported.");
-                    }
-                }
-
-                if (files.Intersect(_forbiddenOggs).Any())
-                {
-                    throw new InvalidOperationException("blood00.ogg through blood09.ogg are reserved and cannot be used. Start with blood10.ogg.");
-                }
-            }
-        }
-
         ErrorText = null;
 
         var addonType =
@@ -188,19 +94,9 @@ public sealed partial class DevViewModel : ObservableObject
             : IsDukeWTSelected ? DukeVersionEnum.Duke3D_WT
             : null;
 
-        if (string.IsNullOrWhiteSpace(AddonTitle))
-        {
-            throw new InvalidOperationException("Addon title must be specified.");
-        }
-
         if (string.IsNullOrWhiteSpace(AddonId))
         {
             throw new InvalidOperationException("Addon ID must be specified.");
-        }
-
-        if (string.IsNullOrWhiteSpace(AddonVersion))
-        {
-            throw new InvalidOperationException("Addon version must be specified.");
         }
 
         List<FeatureEnum> features = [];
@@ -413,6 +309,14 @@ public sealed partial class DevViewModel : ObservableObject
             StartMap = startMap,
             Executables = executables.Count == 0 ? null : executables
         };
+
+        var validation = AddonManifestValidator.Validate(
+            addon,
+            Directory.EnumerateFiles(PathToAddonFolder, "*", SearchOption.TopDirectoryOnly).Select(static path => Path.GetFileName(path)!));
+        if (!validation.IsSuccess)
+        {
+            throw new InvalidOperationException(validation.Message);
+        }
 
         jsonString = JsonSerializer.Serialize(addon, AddonManifestJsonContext.Default.AddonManifestJsonModel!);
         JsonText = jsonString;

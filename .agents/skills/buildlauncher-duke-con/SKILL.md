@@ -73,7 +73,7 @@ markers, palette overrides and dynamic content, use
    and record the tested compiler revision. Keep inherited nonfatal warnings
    separate from errors; do not substitute another edition's actor code or rewrite
    original control flow just to obtain a warning-free log.
-7. Apply the [manifest checks](../../docs/addon-manifest-validation.md) and verify references, native map data,
+7. Run [`validate-addon`](../../docs/addon-manifest-validation.md) for each final root manifest and verify references, native map data,
    source-file accounting and final root ZIP inventory/hashes. Verify differences
    from the older release after accounting for deliberate CON renames/edits.
    Keep JSON provenance outside addon.json. Game launches, renderer behavior,

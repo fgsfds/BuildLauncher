@@ -41,7 +41,7 @@ Use [the shared library lessons](../../docs/addon-conversion-plan.md#lessons-fro
 
 ## Validation and delivery
 
-Follow [manifest authoring validation](../../docs/addon-manifest-validation.md) for the current checkout. Parse every final manifest with `AddonManifestJsonContext.Default.AddonManifestJsonModel` and apply the editor checklist to the actual root filenames. Use the optional read-only CLI only from a checkout containing it.
+Run [`validate-addon`](../../docs/addon-manifest-validation.md) once per final root manifest against the prepared directory. It uses the manifest parser and shared developer-editor authoring rules.
 
 Verify required resource paths, referenced includes/INI maps, uniqueness of option names and dependency IDs, addon-factory constraints, and the actual final ZIP/folder layout. The current workflow excludes port compatibility checks; record them as untested. Do not add a `$schema` property to manifests: the current parser rejects it.
 

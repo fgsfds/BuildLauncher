@@ -18,6 +18,7 @@
     </ItemGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\Addon.ArtExporter\Addon.ArtExporter.csproj"/>
         <ProjectReference Include="..\Core.All\Core.All.csproj"/>
         <ProjectReference Include="..\Core.Client\Core.Client.csproj"/>
         <ProjectReference Include="..\Database.Client\Database.Client.csproj"/>

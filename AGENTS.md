@@ -75,6 +75,7 @@ src/
   Ports             BasePort + concrete ports, installer, cmd-argument builders,
                     PortsProvider, PortStarter, process runner.
   Tools             BaseTool + editing/utility tools, tool installer.
+  Addon.ArtExporter Standalone .NET CLI for ART/SURFACE export and manifest validation.
   S3                S3 file uploader and utilities.
   Avalonia.Desktop  App entry point, DI composition root, views, view models.
   Benchmarks        BenchmarkDotNet harness.
@@ -94,6 +95,7 @@ Games             -> Core.All, Core.Client
 Addons            -> Core.All, Core.Client, Games
 Ports             -> Core.All, Games, Addons
 Tools             -> Core.All, Games
+Addon.ArtExporter -> Core.All
 S3                -> Core.Client
 Avalonia.Desktop  -> Core.All, Games, Ports, Tools, S3
 Benchmarks        -> Core.Client, Addons
@@ -270,18 +272,17 @@ CON/GRP-family TCs also use `.agents/skills/buildlauncher-duke-large-tc/SKILL.md
 roles, include graphs, palette tables and unresolved-reference classification.
 Route artwork and descriptions to
 `.agents/skills/buildlauncher-addon-presentation/SKILL.md`.
-The [ART guide](.agents/docs/art-exporter.md) identifies the backup checkout
-containing the exporter and documents the read-only ART/SURFACE verifier in this
-checkout. VOXEL.DAT export remains deferred. The user excluded port compatibility
+The [ART guide](.agents/docs/art-exporter.md) covers the .NET exporter and
+independent Python/Pillow verifier. VOXEL.DAT export remains deferred. The user excluded port compatibility
 checks for this conversion workflow. Report them as untested.
 
 
 - Keep the manifest contract separate from `db/addons.json` (download catalog),
   `db/data.json` (application/game data), and `db/manifests.json` (manifest collection).
-- Parse each generated manifest with `AddonManifestJsonContext` and follow
-  [manifest authoring validation](.agents/docs/addon-manifest-validation.md)
-  for the current editor checks. Verify factory constraints, references and
-  package layout before import.
+- Run [`validate-addon`](.agents/docs/addon-manifest-validation.md) for each
+  generated manifest. It parses with `AddonManifestJsonContext` and applies the
+  authoring rules shared with the developer editor. Verify factory constraints,
+  references and package layout before import.
 - Preserve source archives and live installations; prepare conversions in a fresh
   output directory and validate every manifest before importing anything into BL.
 - Check `db/addons.json` during every conversion for an existing release of the

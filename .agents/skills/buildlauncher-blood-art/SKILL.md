@@ -1,6 +1,6 @@
 ---
 name: buildlauncher-blood-art
-description: Convert Build ART and Blood SURFACE.DAT to indexed PNG and DEF with the backup checkout's exporter, or verify an existing export with the Python checker. Use for ZIP-loaded resources, including Blood addons without RFF files.
+description: Convert Build ART and Blood SURFACE.DAT to indexed PNG and DEF with the repository's .NET exporter, or verify an existing export with the Python checker. Use for ZIP-loaded resources, including Blood addons without RFF files.
 ---
 
 # ART and Blood surface conversion
@@ -8,7 +8,7 @@ description: Convert Build ART and Blood SURFACE.DAT to indexed PNG and DEF with
 Select packaging through the [Blood profile](../../docs/games/blood.md); other
 games must use their own profiles before applying this tool.
 
-Read [the ART guide](../../docs/art-exporter.md) for the backup checkout that contains the .NET exporter, its commands, format limits, palette rules and output staging. Use the Python/Pillow verifier in this checkout to check existing exports. If an export is required and the exporter is unavailable, report the missing tool.
+Run the .NET 10 exporter in `src/Addon.ArtExporter`. Read [the ART guide](../../docs/art-exporter.md) for commands, format limits, palette rules, output staging and the Python/Pillow verifier.
 
 Check Blood addon inputs for RFF files case-insensitively, including nested archives. If present, the addon needs unpacking: preserve native ART/RFF/DAT and use [the RFF packaging skill](../buildlauncher-blood-rff/SKILL.md). No separate profile approval is needed. Do not run the ART exporter or drop VOXEL.DAT for that package; exporter size limits do not constrain native resources. Without RFF, ART/DAT require DEF-backed conversion; unsupported DAT formats remain an unresolved conversion step.
 
@@ -27,8 +27,8 @@ The user excluded port compatibility checks. Report them as untested; resource v
 
 ## Verification
 
-When changing the exporter in its checkout, run the affected .NET tests and build. Its tests independently decode PNG chunks and exercise data fidelity and failure preservation.
+When changing the exporter, run the affected .NET tests and build. Its tests independently decode PNG chunks and exercise data fidelity and failure preservation.
 
-For the simple reference grammar, optionally run `python .agents/skills/buildlauncher-blood-art/scripts/audit_art_profile.py SOURCE OUTPUT --def resources.def --palette GAME.act` with Python and Pillow. This helper is read-only and checks exact rotated PNG indices, palette, transparency, offsets, surfaces and forward/oscillating animations. It does not accept optional ifcrc, extra bits, backward animation or voxel syntax. The exporter checkout's .NET tests cover CRC, extra bits and backward animations.
+For the simple reference grammar, optionally run `python .agents/skills/buildlauncher-blood-art/scripts/audit_art_profile.py SOURCE OUTPUT --def resources.def --palette GAME.act` with Python and Pillow. This helper is read-only and checks exact rotated PNG indices, palette, transparency, offsets, surfaces and forward/oscillating animations. It does not accept optional ifcrc, extra bits, backward animation or voxel syntax. The .NET exporter tests cover CRC, extra bits and backward animations.
 
 Run its own behavioral checks with `python .agents/skills/buildlauncher-blood-art/scripts/test_audit_art_profile.py`. Exit 0 means these resource checks passed; manifests, final ZIP packaging and game execution require separate checks. Record tool version/options and hashes from conversion-report.json outside addon.json.
