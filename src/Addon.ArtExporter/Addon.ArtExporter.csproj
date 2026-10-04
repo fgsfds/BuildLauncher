@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <AssemblyName>BuildLauncher.ArtExporter</AssemblyName>
+    </PropertyGroup>
+    <ItemGroup>
+        <PackageReference Include="System.IO.Hashing" />
+        <PackageReference Include="IDisposableAnalyzers" PrivateAssets="all" />
+    </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\Core.All\Core.All.csproj" />
+    </ItemGroup>
+</Project>
