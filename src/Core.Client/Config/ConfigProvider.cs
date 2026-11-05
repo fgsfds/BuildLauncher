@@ -1,4 +1,4 @@
-﻿using System.Runtime.CompilerServices;
+using System.Runtime.CompilerServices;
 using System.Security.Cryptography;
 using System.Text;
 using Core.All;
@@ -243,7 +243,7 @@ public sealed class ConfigProvider : IConfigProvider
             return new HashSet<string>();
         }
 
-        return new HashSet<string>(existing.EnabledOptions.Split(';'));
+        return new HashSet<string>(existing.EnabledOptions.Split(';', StringSplitOptions.RemoveEmptyEntries));
     }
 
 
@@ -394,7 +394,7 @@ public sealed class ConfigProvider : IConfigProvider
         {
             if (existing is not null)
             {
-                var enabled = existing.EnabledOptions.Split(';').ToHashSet();
+                var enabled = existing.EnabledOptions.Split(';', StringSplitOptions.RemoveEmptyEntries).ToHashSet();
                 enabled.Add(option);
                 existing.EnabledOptions = string.Join(';', enabled);
             }
@@ -417,7 +417,7 @@ public sealed class ConfigProvider : IConfigProvider
                 return;
             }
 
-            var enabled = existing.EnabledOptions.Split(';').ToList();
+            var enabled = existing.EnabledOptions.Split(';', StringSplitOptions.RemoveEmptyEntries).ToList();
             _ = enabled.Remove(option);
 
             existing.EnabledOptions = string.Join(';', enabled);

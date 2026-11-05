@@ -355,7 +355,7 @@ public sealed class ConfigProviderTests : IDisposable
     {
         _provider.ChangeAddonOptionState("addon1", "opt1", true);
         _provider.ChangeAddonOptionState("addon1", "opt1", false);
-        Assert.DoesNotContain("opt1", _provider.GetEnabledOptions("addon1"));
+        Assert.Empty(_provider.GetEnabledOptions("addon1"));
     }
 
     [Fact]
@@ -447,5 +447,57 @@ public sealed class ConfigProviderTests : IDisposable
         Assert.Equal(Path.Combine("C:\\", "Duke3D"), freshProvider.GetGamePath(GameEnum.Duke3D));
         Assert.Equal((byte)5, freshProvider.Rating["addon1"]);
         freshProvider = null;
+    }
+
+    /// <summary> Repeated option toggles persist an exact set across provider instances. </summary>
+    [Fact]
+    public void ChangeAddonOptionState_RepeatedCycles_PersistExactSet()
+    {
+        for (var cycle = 0; cycle < 3; cycle++)
+        {
+            _provider.ChangeAddonOptionState("campaign", "music", true);
+            _provider.ChangeAddonOptionState("campaign", "music", true);
+            Assert.Equal(["music"], new ConfigProvider(_dbContextFactory).GetEnabledOptions("campaign"));
+            _provider.ChangeAddonOptionState("campaign", "music", false);
+            Assert.Empty(new ConfigProvider(_dbContextFactory).GetEnabledOptions("campaign"));
+        }
+    }
+
+    /// <summary> Window settings update existing rows without overwriting unrelated preferences. </summary>
+    [Fact]
+    public void WindowSettings_OverwriteAndReset_PreserveOtherSettings()
+    {
+        _provider.Theme = ThemeEnum.Dark;
+        _provider.ActiveTab = "BloodTab";
+        _provider.ActiveTab = "PortsTab";
+        _provider.WindowPlacement = "0;0;1300;800;True";
+        _provider.WindowPlacement = string.Empty;
+        var restored = new ConfigProvider(_dbContextFactory);
+        Assert.Equal("PortsTab", restored.ActiveTab);
+        Assert.Empty(restored.WindowPlacement);
+        Assert.Equal(ThemeEnum.Dark, restored.Theme);
+        using var context = _dbContextFactory.CreateDbContext();
+        Assert.Single(context.Settings.Where(x => x.Name == nameof(ConfigProvider.ActiveTab)));
+    }
+
+    /// <summary> Legacy empty separators do not become enabled addon options and are normalized by subsequent edits. </summary>
+    /// <param name="stored">The legacy serialized option set.</param>
+    [Theory]
+    [InlineData("")]
+    [InlineData(";;")]
+    [InlineData(";music;;")]
+    public void GetEnabledOptions_LegacyEmptyEntries_IgnoresAndNormalizes(string stored)
+    {
+        using (var context = _dbContextFactory.CreateDbContext())
+        {
+            _ = context.Options.Add(new Database.Client.DbEntities.OptionsDbEntity { AddonId = "legacy", EnabledOptions = stored });
+            _ = context.SaveChanges();
+        }
+
+        Assert.DoesNotContain(string.Empty, _provider.GetEnabledOptions("legacy"));
+        _provider.ChangeAddonOptionState("legacy", "music", true);
+        Assert.Equal(["music"], _provider.GetEnabledOptions("legacy"));
+        _provider.ChangeAddonOptionState("legacy", "music", false);
+        Assert.Empty(new ConfigProvider(_dbContextFactory).GetEnabledOptions("legacy"));
     }
 }
