@@ -108,6 +108,24 @@ public sealed class InstallerBaseTests : IDisposable
         Assert.Single(Directory.GetDirectories(_root));
     }
 
+    /// <summary> Foreign-OS releases are rejected before any download or installation mutation. </summary>
+    [Fact]
+    public async Task InstallAsync_ForeignPlatform_PreservesInstallation()
+    {
+        var instance = new Mock<IInstallable>();
+        instance.SetupGet(x => x.InstallFolderPath).Returns(Path.Combine(_root, "live"));
+        var http = new Mock<IHttpClientFactory>(MockBehavior.Strict);
+        var release = new GeneralReleaseJsonModel
+        {
+            SupportedOS = OperatingSystem.IsWindows() ? Core.All.Enums.OSEnum.Linux : Core.All.Enums.OSEnum.Windows,
+            Version = "2.0", Description = "", DownloadUrl = new Uri("https://example.invalid/release.zip"), Hash = null
+        };
+        var result = await new TestInstaller(instance.Object, http.Object, release).InstallAsync(TestContext.Current.CancellationToken);
+        Assert.False(result.IsSuccess);
+        Assert.Equal("old", File.ReadAllText(Path.Combine(_root, "live", "game.exe")));
+        http.VerifyNoOtherCalls();
+    }
+
     /// <summary> Exposes installer failure points without changing production services. </summary>
     private sealed class TestInstaller : InstallerBase<IInstallable>
     {

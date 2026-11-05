@@ -14,6 +14,9 @@ public abstract class BaseGame
     /// </summary>
     private static readonly IReadOnlyDictionary<Enum, string> EmptyAddonsFolders = new Dictionary<Enum, string>();
 
+    /// <summary> Compares filesystem paths according to the host platform. </summary>
+    private static readonly StringComparer PathComparer = OperatingSystem.IsWindows() ? StringComparer.OrdinalIgnoreCase : StringComparer.Ordinal;
+
     /// <summary> Synchronizes access to the cached install-folder data. </summary>
     private readonly Lock _cacheLock = new();
 
@@ -47,7 +50,7 @@ public abstract class BaseGame
 
             lock (_cacheLock)
             {
-                if (!string.Equals(_cacheFolder, folder, StringComparison.OrdinalIgnoreCase))
+                if (!PathComparer.Equals(_cacheFolder, folder))
                 {
                     ResetCaches(folder);
                 }
@@ -79,7 +82,7 @@ public abstract class BaseGame
     public bool AreSkillsAvailable => Skills is not null;
 
     /// <summary> Collection of additional folders that contain game data or its addons. </summary>
-    public IReadOnlyList<string> AdditionalFolders => [.. AddonsFolders.Values.Distinct(StringComparer.OrdinalIgnoreCase)];
+    public IReadOnlyList<string> AdditionalFolders => [.. AddonsFolders.Values.Distinct(PathComparer)];
 
     /// <summary> Collection of paths to folders that contain game's addons. </summary>
     public IReadOnlyDictionary<Enum, string> AddonsFolders
@@ -95,7 +98,7 @@ public abstract class BaseGame
 
             lock (_cacheLock)
             {
-                if (!string.Equals(_cacheFolder, folder, StringComparison.OrdinalIgnoreCase))
+                if (!PathComparer.Equals(_cacheFolder, folder))
                 {
                     ResetCaches(folder);
                 }

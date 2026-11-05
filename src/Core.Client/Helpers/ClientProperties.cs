@@ -84,76 +84,36 @@ public static class ClientProperties
     /// <summary>
     ///     Path to the local addons.json file.
     /// </summary>
-    public static string? PathToLocalAddonsJson
+    public static string? PathToLocalAddonsJson => FindLocalDatabaseFile(WorkingFolder, "addons.json");
+
+    /// <summary> Gets the local application data JSON path. </summary>
+    public static string? PathToLocalDataJson => FindLocalDatabaseFile(WorkingFolder, "data.json");
+
+    /// <summary> Gets the local addon manifests JSON path. </summary>
+    public static string? PathToLocalManifestsJson => FindLocalDatabaseFile(WorkingFolder, "manifests.json");
+
+    /// <summary> Prefers adjacent published data, then finds development data at a repository root. </summary>
+    /// <param name="workingFolder">The application directory.</param>
+    /// <param name="fileName">The database filename.</param>
+    /// <returns>The existing file path, or null when unavailable.</returns>
+    internal static string? FindLocalDatabaseFile(string workingFolder, string fileName)
     {
-        get
+        var adjacent = Path.Combine(workingFolder, "db", fileName);
+        if (File.Exists(adjacent))
         {
-            var path1 = Path.Combine(WorkingFolder, "..", "..", "..", "..", "db", "addons.json");
-
-            if (File.Exists(path1))
-            {
-                return path1;
-            }
-
-            var path2 = Path.Combine(WorkingFolder, "db", "addons.json");
-
-            if (File.Exists(path2))
-            {
-                return path2;
-            }
-
-            return null;
+            return adjacent;
         }
-    }
 
-    /// <summary>
-    ///     Path to the local data.json file.
-    /// </summary>
-    public static string? PathToLocalDataJson
-    {
-        get
+        for (var directory = new DirectoryInfo(workingFolder); directory is not null; directory = directory.Parent)
         {
-            var path1 = Path.Combine(WorkingFolder, "..", "..", "..", "..", "db", "data.json");
-
-            if (File.Exists(path1))
+            if (File.Exists(Path.Combine(directory.FullName, "BuildLauncher.slnx")))
             {
-                return path1;
+                var candidate = Path.Combine(directory.FullName, "db", fileName);
+                return File.Exists(candidate) ? candidate : null;
             }
-
-            var path2 = Path.Combine(WorkingFolder, "db", "data.json");
-
-            if (File.Exists(path2))
-            {
-                return path2;
-            }
-
-            return null;
         }
-    }
 
-    /// <summary>
-    ///     Path to the local manifests.json file.
-    /// </summary>
-    public static string? PathToLocalManifestsJson
-    {
-        get
-        {
-            var path1 = Path.Combine(WorkingFolder, "..", "..", "..", "..", "db", "manifests.json");
-
-            if (File.Exists(path1))
-            {
-                return path1;
-            }
-
-            var path2 = Path.Combine(WorkingFolder, "db", "manifests.json");
-
-            if (File.Exists(path2))
-            {
-                return path2;
-            }
-
-            return null;
-        }
+        return null;
     }
 
     /// <summary>

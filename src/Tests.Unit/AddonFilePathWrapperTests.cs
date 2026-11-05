@@ -8,6 +8,34 @@ namespace Tests.Unit;
 /// </summary>
 public sealed class AddonFilePathWrapperTests
 {
+    /// <summary> Existing versioned directories remain folders even when their names contain dots. </summary>
+    [Fact]
+    public void DottedDirectory_ResolvesManifestInsideDirectory()
+    {
+        var folder = Path.Combine(Path.GetTempPath(), "addon.1.2-" + Guid.NewGuid().ToString("N"));
+        _ = Directory.CreateDirectory(folder);
+        try
+        {
+            var wrapper = new AddonFilePathWrapper(folder, "addon.json");
+            Assert.True(wrapper.IsFolder);
+            Assert.True(wrapper.IsJson);
+            Assert.Equal(folder, wrapper.PathToFolder);
+            Assert.Equal(Path.Combine(folder, "addon.json"), wrapper.PathToFile);
+        }
+        finally { Directory.Delete(folder); }
+    }
+
+    /// <summary> A backslash is a valid Linux filename character, not a native separator. </summary>
+    [Fact]
+    public void LinuxAbsolutePath_PreservesLiteralBackslash()
+    {
+        if (!OperatingSystem.IsLinux()) { return; }
+        var folder = Path.Combine(Path.GetTempPath(), "addon" + (char)92 + "name");
+        var wrapper = new AddonFilePathWrapper(folder, "addon.json");
+        Assert.Equal(folder, wrapper.PathToFolder);
+        Assert.Equal(Path.Combine(folder, "addon.json"), wrapper.PathToFile);
+    }
+
     /// <summary>
     ///     Tests that <see cref="AddonFilePathWrapper.IsFolder" /> returns the expected value for various paths.
     /// </summary>

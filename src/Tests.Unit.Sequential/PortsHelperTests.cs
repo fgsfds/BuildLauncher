@@ -54,7 +54,7 @@ public sealed class PortsHelperTests
         var addon = CreateCampaign(
             executables: new()
             {
-                [OSEnum.Windows] = new()
+                [Core.All.Helpers.CommonProperties.OSEnum] = new()
                 {
                     [PortEnum.EDuke32] = "eduke32.exe"
                 }
@@ -75,7 +75,7 @@ public sealed class PortsHelperTests
         var addon = CreateCampaign(
             executables: new()
             {
-                [OSEnum.Windows] = new()
+                [Core.All.Helpers.CommonProperties.OSEnum] = new()
                 {
                     [PortEnum.EDuke32] = "eduke32.exe"
                 }
@@ -85,6 +85,20 @@ public sealed class PortsHelperTests
         var result = PortsHelper.CheckPortRequirements(addon, game, port);
 
         Assert.False(result);
+    }
+
+    /// <summary> A manifest containing only another platform's executables safely uses normal requirements. </summary>
+    [Fact]
+    public void CheckPortRequirements_ForeignExecutableMap_DoesNotThrowOrOverrideFeatures()
+    {
+        var game = new TestGame(GameEnum.Duke3D);
+        var port = new TestPort(PortEnum.EDuke32);
+        var other = OperatingSystem.IsWindows() ? OSEnum.Linux : OSEnum.Windows;
+        var addon = CreateCampaign(requiredFeatures: [FeatureEnum.Models], executables: new()
+        {
+            [other] = new() { [PortEnum.EDuke32] = "foreign-executable" }
+        });
+        Assert.False(PortsHelper.CheckPortRequirements(addon, game, port));
     }
 
     [Fact]

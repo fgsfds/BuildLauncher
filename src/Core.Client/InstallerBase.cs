@@ -1,5 +1,6 @@
 using Core.Client.Helpers;
 using Core.All;
+using Core.All.Helpers;
 using Core.All.Serializable.Downloadable;
 using Core.Client.Interfaces;
 using Core.Client.Tools;
@@ -89,6 +90,11 @@ public abstract class InstallerBase<T>
             if (release?.DownloadUrl is null)
             {
                 return new(ResultEnum.Error, string.Empty);
+            }
+
+            if (release.SupportedOS != CommonProperties.OSEnum)
+            {
+                return new(ResultEnum.Error, $"The release targets {release.SupportedOS}, not {CommonProperties.OSEnum}.");
             }
 
             downloadFolder = Path.Combine(Path.GetTempPath(), "BuildLauncher-download-" + Guid.NewGuid().ToString("N"));

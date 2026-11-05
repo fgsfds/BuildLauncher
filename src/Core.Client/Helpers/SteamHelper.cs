@@ -20,14 +20,40 @@ public static class SteamHelper
             return [];
         }
 
-        var libraryfolders = Path.Combine(steamInstallPath, "steamapps", "libraryfolders.vdf");
+        return GetSteamLibraries(steamInstallPath);
+    }
 
-        if (!File.Exists(libraryfolders))
+    /// <summary> Finds the default library and any additional libraries in a Steam installation. </summary>
+    /// <param name="steamInstallPath">The Steam installation directory.</param>
+    /// <returns>The existing game-library folders.</returns>
+    internal static IReadOnlyList<string> GetSteamLibraries(string steamInstallPath)
+    {
+        var primary = Path.Combine(steamInstallPath, "steamapps", "common");
+        var result = new List<string>();
+        if (Directory.Exists(primary))
         {
-            return [];
+            result.Add(primary);
         }
 
-        return GetLibrariesFromVdf(libraryfolders);
+        var libraryfolders = Path.Combine(steamInstallPath, "steamapps", "libraryfolders.vdf");
+
+        try
+        {
+            if (File.Exists(libraryfolders))
+            {
+                result.AddRange(GetLibrariesFromVdf(libraryfolders));
+            }
+        }
+        catch (IOException)
+        {
+            // A missing or unreadable library index must not prevent application startup.
+        }
+        catch (UnauthorizedAccessException)
+        {
+            // The default accessible library remains usable without access to the index.
+        }
+
+        return result.Distinct(OperatingSystem.IsWindows() ? StringComparer.OrdinalIgnoreCase : StringComparer.Ordinal).ToArray();
     }
 
     /// <summary>
@@ -65,14 +91,33 @@ public static class SteamHelper
 
             var dir = dirSpan.ToString().Replace("\\\\", "\\");
 
-            if (Directory.Exists(dir))
+            if (Path.IsPathFullyQualified(dir) && Directory.Exists(dir))
             {
-                var path = Path.Combine(dir, "steamapps", "common");
+                var path = Path.Combine(Path.GetFullPath(dir), "steamapps", "common");
                 result.Add(path);
             }
         }
 
         return result;
+    }
+
+    /// <summary> Finds native, legacy, or Flatpak Steam data without assuming one home layout. </summary>
+    /// <param name="home">The user home directory.</param>
+    /// <param name="dataHome">An optional absolute XDG data directory.</param>
+    /// <returns>An existing Steam installation, preferring one with a library index.</returns>
+    internal static string? FindLinuxSteamInstallPath(string home, string? dataHome)
+    {
+        var data = !string.IsNullOrWhiteSpace(dataHome) && Path.IsPathFullyQualified(dataHome)
+            ? dataHome : Path.Combine(home, ".local", "share");
+        var candidates = new[]
+        {
+            Path.Combine(data, "Steam"),
+            Path.Combine(home, ".steam", "steam"),
+            Path.Combine(home, ".steam", "root"),
+            Path.Combine(home, ".var", "app", "com.valvesoftware.Steam", ".local", "share", "Steam")
+        };
+        return candidates.FirstOrDefault(path => File.Exists(Path.Combine(path, "steamapps", "libraryfolders.vdf")))
+            ?? candidates.FirstOrDefault(Directory.Exists);
     }
 
     /// <summary>
@@ -100,7 +145,11 @@ public static class SteamHelper
         {
             var home = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
 
-            result = Path.Combine(home, ".local/share/Steam");
+            result = FindLinuxSteamInstallPath(home, Environment.GetEnvironmentVariable("XDG_DATA_HOME"));
+            if (result is null)
+            {
+                return null;
+            }
         }
         else
         {

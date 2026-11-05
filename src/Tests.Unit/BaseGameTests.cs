@@ -43,6 +43,37 @@ public sealed class BaseGameTests : IDisposable
         try { Directory.Delete(_tempDir, true); } catch { }
     }
 
+    /// <summary> Distinct Linux paths differing only by case invalidate the install cache. </summary>
+    [Fact]
+    public void InstallFolder_CaseChange_RechecksLinuxFiles()
+    {
+        if (!OperatingSystem.IsLinux()) { return; }
+        var first = Path.Combine(_tempDir, "Game");
+        var second = Path.Combine(_tempDir, "game");
+        _ = Directory.CreateDirectory(first);
+        _ = Directory.CreateDirectory(second);
+        File.WriteAllText(Path.Combine(first, "TEST.GRP"), "data");
+        var game = new BaseGameTestProxy { GameInstallFolder = first };
+        Assert.True(game.IsBaseGameInstalled);
+        game.GameInstallFolder = second;
+        Assert.False(game.IsBaseGameInstalled);
+    }
+
+    /// <summary> Linux addon paths that differ by case must remain distinct. </summary>
+    [Fact]
+    public void AdditionalFolders_PreservesDistinctLinuxPaths()
+    {
+        var game = new BaseGameTestProxy
+        {
+            AddonsFoldersToReturn = new Dictionary<Enum, string>
+            {
+                [DukeAddonEnum.DukeVaca] = Path.Combine(_tempDir, "Addon"),
+                [DukeAddonEnum.DukeDC] = Path.Combine(_tempDir, "addon")
+            }
+        };
+        Assert.Equal(OperatingSystem.IsWindows() ? 1 : 2, game.AdditionalFolders.Count);
+    }
+
     [Fact]
     public void CampaignsFolderPath_ContainsGameShortName()
     {
@@ -175,7 +206,7 @@ public sealed class BaseGameTests : IDisposable
 
     /// <summary> Addons mapping to the same folder with different casing are collapsed to a single entry. </summary>
     [Fact]
-    public void AdditionalFolders_AddonsInSameFolderDifferentCasing_Deduplicates()
+    public void AdditionalFolders_DifferentCasing_UsesPlatformComparison()
     {
         var game = new BaseGameTestProxy
         {
@@ -186,6 +217,6 @@ public sealed class BaseGameTests : IDisposable
             }
         };
 
-        Assert.Single(game.AdditionalFolders);
+        Assert.Equal(OperatingSystem.IsWindows() ? 1 : 2, game.AdditionalFolders.Count);
     }
 }

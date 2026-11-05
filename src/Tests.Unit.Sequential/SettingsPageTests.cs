@@ -16,6 +16,20 @@ namespace Tests.Unit.Sequential;
 /// <summary> Exercises settings controls through their production bindings and commands. </summary>
 public sealed class SettingsPageTests
 {
+    /// <summary> Credential editing is disabled where encrypted storage is unavailable. </summary>
+    [AvaloniaFact]
+    public void Credentials_EnabledOnlyOnSupportedPlatform()
+    {
+        HeadlessView.Prepare();
+        var config = new ConfigProviderFake { GitHubToken = "fixture token" };
+        using var host = new HeadlessView(new SettingsPage { DataContext = new SettingsViewModel(config, new GamesPathsProvider(config)) });
+        var box = host.Window.GetVisualDescendants().OfType<TextBox>().Single(x => x.Text == "fixture token");
+        Assert.Equal(OperatingSystem.IsWindows(), box.IsEnabled);
+        var notice = host.Window.GetVisualDescendants().OfType<TextBlock>()
+            .Single(x => x.Text?.StartsWith("Encrypted credential storage", StringComparison.Ordinal) == true);
+        Assert.Equal(!OperatingSystem.IsWindows(), notice.IsVisible);
+    }
+
     /// <summary> Theme radio buttons update both saved settings and the application's requested theme. </summary>
     /// <param name="theme">The theme selected by the user.</param>
     [AvaloniaTheory]

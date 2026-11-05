@@ -62,6 +62,9 @@ separate lint command: analyzers run on build.
 For native smoke tests of published Windows and Linux executables and the release gate,
 see [published release checks](.agents/docs/published-build-tests.md).
 
+For Linux filesystem behavior, platform limitations and regression coverage, see
+[Linux support](.agents/docs/linux-support.md).
+
 ## Repository layout
 
 ```

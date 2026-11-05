@@ -561,7 +561,7 @@ public sealed class ConfigProvider : IConfigProvider
     {
         if (!OperatingSystem.IsWindows())
         {
-            throw new PlatformNotSupportedException("Windows Data Protection API (DPAPI) is only available on Windows.");
+            return null;
         }
 
         try

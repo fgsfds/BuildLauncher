@@ -22,6 +22,24 @@ public sealed class ConfigProviderTests : IDisposable
         Assert.Equal("BloodTab", restored.ActiveTab);
     }
 
+    /// <summary> Windows-encrypted credentials remain intact and unavailable when read on Linux. </summary>
+    [Fact]
+    public void Credentials_LinuxRead_PreservesUnavailableEncryptedValues()
+    {
+        if (!OperatingSystem.IsLinux()) { return; }
+        using var context = _dbContextFactory.CreateDbContext();
+        context.Settings.Add(new Database.Client.DbEntities.SettingsDbEntity { Name = "GitHubToken", Value = "encrypted-windows-token" });
+        context.Settings.Add(new Database.Client.DbEntities.SettingsDbEntity { Name = "S3SecretKey", Value = "encrypted-windows-secret" });
+        _ = context.SaveChanges();
+        Assert.Null(_provider.GitHubToken);
+        Assert.Null(_provider.S3SecretKey);
+        Assert.Throws<PlatformNotSupportedException>(() => _provider.GitHubToken = "new token");
+        Assert.Throws<PlatformNotSupportedException>(() => _provider.S3SecretKey = "new secret");
+        using var verification = _dbContextFactory.CreateDbContext();
+        Assert.Equal("encrypted-windows-token", verification.Settings.Single(x => x.Name == "GitHubToken").Value);
+        Assert.Equal("encrypted-windows-secret", verification.Settings.Single(x => x.Name == "S3SecretKey").Value);
+    }
+
     private readonly InMemoryDbContextFactory _dbContextFactory;
     private readonly ConfigProvider _provider;
 

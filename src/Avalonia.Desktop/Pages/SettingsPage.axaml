@@ -585,6 +585,7 @@
                          Grid.Column="1"
                          Grid.ColumnSpan="3"
                          Margin="0,3,10,3"
+                         IsEnabled="{Binding CanStoreSecrets}"
                          Text="{Binding GitHubToken}" />
 
                 <md:MarkdownScrollViewer Grid.Row="17"
@@ -594,7 +595,12 @@
                                          Markdown="*GitHub token is optional and helps to avoid rate limit exceeded error.*                                          *Open* [https://github.com/settings/tokens](https://github.com/settings/tokens) *to create new **classic** token.*                                          *Token is encrypted and can only be decrypted by the current user.*                                          " />
 
 
-                <!--  GitHub token  -->
+                <TextBlock Grid.Row="19" Grid.ColumnSpan="4" Margin="10,5"
+                           IsVisible="{Binding !CanStoreSecrets}"
+                           TextWrapping="Wrap"
+                           Text="Encrypted credential storage is currently available only on Windows. Saved Windows credentials are preserved but cannot be used on Linux." />
+
+                <!--  S3 secret key  -->
                 <TextBlock Grid.Row="18"
                            Grid.Column="0"
                            Margin="10,5"
@@ -607,6 +613,7 @@
                          Grid.ColumnSpan="3"
                          Margin="0,3,10,3"
                          IsVisible="{Binding IsDeveloperMode}"
+                         IsEnabled="{Binding CanStoreSecrets}"
                          Text="{Binding S3SecretKey}" />
 
 

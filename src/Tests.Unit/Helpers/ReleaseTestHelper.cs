@@ -50,7 +50,7 @@ internal static class ReleaseTestHelper
     /// <returns>The release metadata.</returns>
     public static GeneralReleaseJsonModel Release(string? hash = null) => new()
     {
-        SupportedOS = OSEnum.Windows,
+        SupportedOS = Core.All.Helpers.CommonProperties.OSEnum,
         Version = "2.0",
         Description = string.Empty,
         DownloadUrl = new Uri("https://example.invalid/release.zip"),

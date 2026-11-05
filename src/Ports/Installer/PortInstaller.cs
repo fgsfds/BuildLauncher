@@ -62,9 +62,15 @@ public sealed class PortInstaller : InstallerBase<BasePort>
             FlattenSubfolder(installFolder, subFolder);
         }
 
-        if (!File.Exists(Path.Combine(installFolder, _instance.Exe)))
+        var executable = Path.Combine(installFolder, _instance.Exe);
+        if (!File.Exists(executable))
         {
             throw new InvalidDataException("The release does not contain the port executable.");
+        }
+
+        if (OperatingSystem.IsLinux())
+        {
+            File.SetUnixFileMode(executable, File.GetUnixFileMode(executable) | UnixFileMode.UserExecute);
         }
     }
 

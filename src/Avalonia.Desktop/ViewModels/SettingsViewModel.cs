@@ -60,6 +60,9 @@ public sealed partial class SettingsViewModel : ObservableObject
     /// <summary> Gets whether the Mica system backdrop effect is available on the current platform. </summary>
     public bool IsMicaSupported => OperatingSystem.IsWindows();
 
+    /// <summary> Whether encrypted credential storage is available on this platform. </summary>
+    public bool CanStoreSecrets => OperatingSystem.IsWindows();
+
 
     /// <summary>
     ///     Gets or sets the path to Blood.

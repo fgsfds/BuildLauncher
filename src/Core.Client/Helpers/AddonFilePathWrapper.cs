@@ -10,13 +10,15 @@ public readonly record struct AddonFilePathWrapper
     private readonly string _pathToAddonFileOrFolder;
 
     /// <summary>
-    ///     Initializes a new wrapper, normalizing path separators to the platform native character.
+    ///     Initializes a wrapper, preserving native Linux filenames and normalizing Windows-style paths.
     /// </summary>
     /// <param name="pathToAddon">Path to the folder or zip file containing the addon.</param>
     /// <param name="mainFileName">Name of the manifest file (entry name inside zip for packed addons).</param>
     public AddonFilePathWrapper(string pathToAddon, string mainFileName)
     {
-        _pathToAddonFileOrFolder = pathToAddon.Replace('\\', Path.DirectorySeparatorChar).Replace('/', Path.DirectorySeparatorChar);
+        _pathToAddonFileOrFolder = OperatingSystem.IsLinux() && Path.IsPathFullyQualified(pathToAddon)
+            ? pathToAddon
+            : pathToAddon.Replace('\\', Path.DirectorySeparatorChar).Replace('/', Path.DirectorySeparatorChar);
         _mainFileName = mainFileName;
     }
 
@@ -26,14 +28,14 @@ public readonly record struct AddonFilePathWrapper
     public string ManifestFileName => _mainFileName;
 
     /// <summary>
-    ///     True when the path is a folder (no file extension).
+    ///     True for an existing directory, or a directory path without an extension.
     /// </summary>
-    public bool IsFolder => string.IsNullOrEmpty(Path.GetExtension(_pathToAddonFileOrFolder));
+    public bool IsFolder => Directory.Exists(_pathToAddonFileOrFolder) || string.IsNullOrEmpty(Path.GetExtension(_pathToAddonFileOrFolder));
 
     /// <summary>
     ///     True when the path ends with ".zip".
     /// </summary>
-    public bool IsZip => _pathToAddonFileOrFolder.EndsWith(".zip", StringComparison.OrdinalIgnoreCase);
+    public bool IsZip => !IsFolder && _pathToAddonFileOrFolder.EndsWith(".zip", StringComparison.OrdinalIgnoreCase);
 
     /// <summary>
     ///     True when this is an unpacked folder addon with a ".json" manifest.

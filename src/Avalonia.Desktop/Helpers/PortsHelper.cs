@@ -1,6 +1,7 @@
 ﻿using Addons.Addons;
 using Core.All;
 using Core.All.Enums;
+using Core.All.Helpers;
 using Core.All.Enums.Addons;
 using Games.Games;
 using Ports.Ports;
@@ -30,9 +31,9 @@ public static class PortsHelper
             return false;
         }
 
-        if (addon.Executables?[OSEnum.Windows] is not null)
+        if (addon.Executables?.TryGetValue(CommonProperties.OSEnum, out var executables) == true)
         {
-            return addon.Executables[OSEnum.Windows].ContainsKey(port.PortEnum);
+            return executables.ContainsKey(port.PortEnum);
         }
 
         if (addon.RequiredFeatures?.Except(port.SupportedFeatures).Any() is true)
