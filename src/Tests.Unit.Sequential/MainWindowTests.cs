@@ -5,27 +5,13 @@ using Avalonia.Headless.XUnit;
 using Avalonia.Threading;
 using Core.Client.Config;
 using Games.Providers;
-using Optris.Icons.Avalonia;
-using Optris.Icons.Avalonia.FontAwesome7;
+using Tests.Unit.Sequential.Helpers;
 
 namespace Tests.Unit.Sequential;
 
 /// <summary> Verifies main window settings across launches. </summary>
 public sealed class MainWindowTests
 {
-    /// <summary> Whether the application icon provider has been registered for window creation. </summary>
-    private static bool _iconsRegistered;
-
-    /// <summary> Registers the icon provider that normal application startup supplies. </summary>
-    private static void EnsureIconsRegistered()
-    {
-        if (!_iconsRegistered)
-        {
-            _ = IconProvider.Current.Register<FontAwesome7IconProvider>();
-            _iconsRegistered = true;
-        }
-    }
-
     /// <summary> Restores available tabs and falls back to Settings for unavailable tabs when no games are installed. </summary>
     /// <param name="savedTab">The persisted tab name.</param>
     /// <param name="expectedTab">The tab expected after startup.</param>
@@ -37,7 +23,7 @@ public sealed class MainWindowTests
     [InlineData("", "SettingsTab")]
     public void Open_RestoresAvailableTabOrDefault(string savedTab, string expectedTab)
     {
-        EnsureIconsRegistered();
+        HeadlessView.Prepare();
         var config = new ConfigProviderFake { ActiveTab = savedTab, UseMica = false };
         using var window = new MainWindow(new InstalledGamesProvider(config), config);
         window.FindControl<TabItem>("BloodTab")!.IsEnabled = false;
@@ -53,7 +39,7 @@ public sealed class MainWindowTests
     [AvaloniaFact]
     public void Close_SavesNormalBoundsAndTab()
     {
-        EnsureIconsRegistered();
+        HeadlessView.Prepare();
         var config = new ConfigProviderFake { WindowPlacement = "0;0;1300;800;False", UseMica = false };
         using (var window = new MainWindow(new InstalledGamesProvider(config), config))
         {
@@ -89,7 +75,7 @@ public sealed class MainWindowTests
     [InlineData(true)]
     public void Close_MaximizedOrMinimized_PreservesNormalBounds(bool minimized)
     {
-        EnsureIconsRegistered();
+        HeadlessView.Prepare();
         var config = new ConfigProviderFake { WindowPlacement = "0;0;1300;800;False", UseMica = false };
         using var window = new MainWindow(new InstalledGamesProvider(config), config);
         window.Show();
@@ -115,7 +101,7 @@ public sealed class MainWindowTests
     [InlineData(nameof(Core.Client.Interfaces.IConfigProvider.ActiveTab))]
     public void Close_SettingsWriteFails_StillCloses(string setting)
     {
-        EnsureIconsRegistered();
+        HeadlessView.Prepare();
         var config = new Moq.Mock<Core.Client.Interfaces.IConfigProvider>();
         config.SetupGet(x => x.WindowPlacement).Returns("0;0;1300;800;False");
         if (setting == nameof(Core.Client.Interfaces.IConfigProvider.WindowPlacement))
@@ -139,7 +125,7 @@ public sealed class MainWindowTests
     [AvaloniaFact]
     public void Close_Canceled_DoesNotSaveSettings()
     {
-        EnsureIconsRegistered();
+        HeadlessView.Prepare();
         var config = new ConfigProviderFake { WindowPlacement = "0;0;1300;800;False", ActiveTab = "SettingsTab", UseMica = false };
         using var window = new MainWindow(new InstalledGamesProvider(config), config);
         window.Show();

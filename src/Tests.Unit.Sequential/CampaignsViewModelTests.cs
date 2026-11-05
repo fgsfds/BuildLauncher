@@ -1,3 +1,8 @@
+using Avalonia.Controls;
+using Avalonia.Desktop.Controls;
+using Avalonia.Threading;
+using Avalonia.VisualTree;
+using Tests.Unit.Sequential.Helpers;
 using Addons.Addons;
 using Addons.Helpers;
 using Addons.Providers;
@@ -119,7 +124,10 @@ public sealed class CampaignsViewModelTests : IDisposable
 
     public void Dispose()
     {
-        _installedAddonsProvider.Dispose();
+        _viewModel.Dispose();
+        _installedAddonsProviderFactory.Dispose();
+        _metadataProvider.Dispose();
+        _bitmapsCache.Dispose();
     }
 
     [AvaloniaFact]
@@ -595,5 +603,39 @@ public sealed class CampaignsViewModelTests : IDisposable
         await viewModel.StartAddonCommand.ExecuteAsync(map ? Tuple.Create<BasePort, byte?>(port, null) : port);
         _userNotifierMock.Verify(x => x.Show(Moq.It.Is<string>(message => message.Contains(port.PortExeFilePath, StringComparison.Ordinal)), NotificationSeverity.Error), Times.Once());
         _configMock.Verify(x => x.AddPlaytime(Moq.It.IsAny<string>(), Moq.It.IsAny<TimeSpan>()), Times.Never());
+    }
+
+    /// <summary> Installed campaign and map views filter, clear search and bind the selected addon. </summary>
+    /// <param name="map">Whether to exercise the maps page instead of campaigns.</param>
+    [AvaloniaTheory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public void AddonControl_SearchAndSelection_UpdateBindings(bool map)
+    {
+        HeadlessView.Prepare();
+        using var maps = new MapsViewModel(_game, _gamesProviderMock.Object, _configMock.Object,
+            _playtimeProvider, _ratingProvider, _metadataProvider, _installedAddonsProviderFactory,
+            _portStarter, _bitmapsCache, _addonInstallerMock.Object, _folderOpenerMock.Object,
+            _userNotifierMock.Object, NullLogger<MapsViewModel>.Instance);
+        var vm = map ? (AddonListViewModelBase)maps : _viewModel;
+        var type = map ? AddonTypeEnum.Map : AddonTypeEnum.TC;
+        _installedAddonsProvider.AddAddon(ParsedAddonFileHelper.CreateParsedAddonFile("ui-alpha", "Alpha adventure", "1.0", type));
+        _installedAddonsProvider.AddAddon(ParsedAddonFileHelper.CreateParsedAddonFile("ui-beta", "Beta adventure", "1.0", type));
+        var control = map ? (UserControl)new MapsControl() : new CampaignsControl();
+        control.DataContext = vm;
+        using var host = new HeadlessView(control);
+        var list = control.FindControl<ListBox>(map ? "MapsList" : "CampaignsList")!;
+        var search = control.FindControl<TextBox>("SearchBox")!;
+        search.Text = "ALPHA";
+        Dispatcher.UIThread.RunJobs();
+        var addon = Assert.Single(list.ItemsSource!.OfType<BaseAddon>());
+        Assert.Equal("ui-alpha", addon.AddonId.Id);
+        list.SelectedItem = addon;
+        Assert.Same(addon, vm.SelectedAddon);
+        search.Text = "no matching addon";
+        Assert.Empty(list.ItemsSource!.OfType<BaseAddon>());
+        host.Click(host.Window.GetVisualDescendants().OfType<Button>().Single(x => ToolTip.GetTip(x)?.ToString() == "Clear search"));
+        Assert.Contains(list.ItemsSource!.OfType<BaseAddon>(), x => x.AddonId.Id == "ui-alpha");
+        Assert.Contains(list.ItemsSource!.OfType<BaseAddon>(), x => x.AddonId.Id == "ui-beta");
     }
 }

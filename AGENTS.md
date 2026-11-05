@@ -219,6 +219,14 @@ These are enforced by `.editorconfig` and analyzers; follow them in every edit.
 - Use xunit `[Fact]`/`[Theory]`, `[InlineData]`, and `Moq` for dependencies.
 - Test observable behavior through public APIs; avoid testing private members.
 - UI/view-model tests belong in `Tests.Unit.Sequential` (Avalonia headless).
+  `Helpers/HeadlessView` hosts production XAML with Fluent/DataGrid templates and
+  keyboard activation. Call `HeadlessView.Prepare()` before constructing controls;
+  it shares process-wide icon registration while restoring per-test app resources.
+  Headless control coverage includes settings, custom ports, campaign/map search and
+  selection, download filtering/multi-selection/refresh, and port/tool release states.
+  Use fake services and controlled task completions; these tests do not launch games,
+  download packages, or exercise native file pickers. Run them with the existing
+  sequential test command above on Windows and Linux.
 - Do not add real-network or shared-disk-dependent tests to `Tests.Unit`; isolate
   dependencies with fakes (`ConfigProviderFake`, `FakeHttpMessageHandler`, offline API,
   in-memory stubs). File-operation tests may use unique temporary directories and must
