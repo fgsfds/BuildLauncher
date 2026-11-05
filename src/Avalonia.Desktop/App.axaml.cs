@@ -70,15 +70,27 @@ public sealed class App : Application
 
         LoadBindings();
 
-        FixDatabase();
-
-        using var dbContext = _services.GetRequiredService<IDbContextFactory<DatabaseContext>>().CreateDbContext();
-        dbContext.Database.Migrate();
+        var logger = _services.GetRequiredService<ILoggerFactory>().CreateLogger<App>();
+        using (var dbContext = _services.GetRequiredService<IDbContextFactory<DatabaseContext>>().CreateDbContext())
+        {
+            try
+            {
+                var recoveredLocks = DatabaseInitializer.InitializeAsync(dbContext).GetAwaiter().GetResult();
+                if (recoveredLocks > 0)
+                {
+                    logger.LogWarning("Recovered an abandoned SQLite migration lock. SQLite recovery files were preserved.");
+                }
+            }
+            catch (Exception ex)
+            {
+                logger.LogCritical(ex, "Could not initialize the application database.");
+                throw;
+            }
+        }
 
         var config = _services.GetRequiredService<IConfigProvider>();
         var viewLocator = _services.GetRequiredService<ViewLocator>();
         var vmFactory = _services.GetRequiredService<IViewModelsFactory>();
-        var logger = _services.GetRequiredService<ILoggerFactory>().CreateLogger<App>();
         var installedGamesProvider = _services.GetRequiredService<InstalledGamesProvider>();
 
         SetTheme(config.Theme);
@@ -243,27 +255,5 @@ public sealed class App : Application
         };
 
         _app.RequestedThemeVariant = themeEnum;
-    }
-
-    /// <summary>
-    ///     Cleans up stale database WAL and SHM files.
-    /// </summary>
-    private static void FixDatabase()
-    {
-        if (Design.IsDesignMode)
-        {
-            return;
-        }
-
-        var files = Directory.GetFiles(ClientProperties.WorkingFolder);
-
-        foreach (var file in files)
-        {
-            if (file.EndsWith(".db-wal", StringComparison.OrdinalIgnoreCase)
-             || file.EndsWith(".db-shm", StringComparison.OrdinalIgnoreCase))
-            {
-                File.Delete(file);
-            }
-        }
     }
 }
