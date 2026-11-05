@@ -1,4 +1,4 @@
-﻿using Core.All;
+using Core.All;
 using Core.All.Enums;
 using Core.Client.Enums;
 
@@ -9,6 +9,22 @@ namespace Core.Client.Interfaces;
 /// </summary>
 public interface IConfigProvider
 {
+    /// <summary> Gets or sets the saved main window placement, or an empty value for the default placement. </summary>
+    string WindowPlacement { get; set; }
+
+    /// <summary>Gets or sets the last selected main window tab, or an empty value for the default tab.</summary>
+    string ActiveTab { get; set; }
+
+    /// <summary> Gets the last selected sub-tab for a game. </summary>
+    /// <param name="gameTabName">The name of the game's main window tab.</param>
+    /// <returns>The sub-tab name, or an empty string for the default.</returns>
+    string GetGameSubTab(string gameTabName);
+
+    /// <summary> Saves the last selected sub-tab for a game. </summary>
+    /// <param name="gameTabName">The name of the game's main window tab.</param>
+    /// <param name="subTabName">The sub-tab name, or an empty string for the default.</param>
+    void SetGameSubTab(string gameTabName, string subTabName);
+
     /// <summary>
     ///     Represents a method that handles configuration parameter change events.
     /// </summary>

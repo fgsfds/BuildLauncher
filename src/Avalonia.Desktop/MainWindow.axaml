@@ -108,8 +108,10 @@
 
             </Grid>
 
-            <TabControl Grid.Row="1"
+            <TabControl x:Name="MainTabs"
+                        Grid.Row="1"
                         Margin="5"
+                        SelectionChanged="OnMainTabSelectionChanged"
                         TabStripPlacement="Left">
 
                 <!--  Duke 3D  -->

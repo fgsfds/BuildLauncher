@@ -34,6 +34,26 @@ public sealed class ConfigProvider : IConfigProvider
 
     //SETTINGS
     /// <inheritdoc />
+    public string WindowPlacement
+    {
+        get => GetStringValue(nameof(WindowPlacement));
+        set => SetSettingsValue(value);
+    }
+
+    /// <inheritdoc />
+    public string ActiveTab
+    {
+        get => GetStringValue(nameof(ActiveTab));
+        set => SetSettingsValue(value);
+    }
+
+    /// <inheritdoc />
+    public string GetGameSubTab(string gameTabName) => GetStringValue($"GameSubTab:{gameTabName}");
+
+    /// <inheritdoc />
+    public void SetGameSubTab(string gameTabName, string subTabName) => SetSettingsValue(subTabName, $"GameSubTab:{gameTabName}");
+
+    /// <inheritdoc />
     public ThemeEnum Theme
     {
         get

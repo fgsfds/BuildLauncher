@@ -14,4 +14,12 @@ public sealed partial class GamePage : UserControl
     {
         InitializeComponent();
     }
+
+    /// <summary> Gets or restores the selected sub-tab, falling back to Campaigns. </summary>
+    internal string SelectedSubTab
+    {
+        get => (GameTabs.SelectedItem as TabItem)?.Name ?? nameof(CampaignsTab);
+        set => GameTabs.SelectedItem = GameTabs.Items.OfType<TabItem>().FirstOrDefault(tab =>
+            tab.Name == value && tab.IsEnabled && tab.IsVisible) ?? CampaignsTab;
+    }
 }

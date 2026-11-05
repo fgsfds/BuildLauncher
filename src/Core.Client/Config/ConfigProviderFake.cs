@@ -10,6 +10,21 @@ namespace Core.Client.Config;
 /// </summary>
 public sealed class ConfigProviderFake : IConfigProvider
 {
+    /// <inheritdoc />
+    public string WindowPlacement { get; set; } = string.Empty;
+
+    /// <inheritdoc />
+    public string ActiveTab { get; set; } = string.Empty;
+
+    /// <summary> Stores the selected sub-tab for each game tab. </summary>
+    private readonly Dictionary<string, string> _gameSubTabs = [];
+
+    /// <inheritdoc />
+    public string GetGameSubTab(string gameTabName) => _gameSubTabs.GetValueOrDefault(gameTabName, string.Empty);
+
+    /// <inheritdoc />
+    public void SetGameSubTab(string gameTabName, string subTabName) => _gameSubTabs[gameTabName] = subTabName;
+
     /// <summary>
     ///     Gets a dictionary of addon scores.
     /// </summary>

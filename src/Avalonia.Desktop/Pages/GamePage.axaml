@@ -10,8 +10,8 @@
 
     <Grid RowDefinitions="*">
 
-        <TabControl>
-            <TabItem Margin="5">
+        <TabControl x:Name="GameTabs">
+            <TabItem x:Name="CampaignsTab" Margin="5">
 
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal">
@@ -28,7 +28,7 @@
                 <UserControl Content="{Binding Campaigns}" />
             </TabItem>
 
-            <TabItem Margin="5" IsVisible="{Binding Maps, Converter={x:Static ObjectConverters.IsNotNull}, FallbackValue=False}">
+            <TabItem x:Name="MapsTab" Margin="5" IsVisible="{Binding Maps, Converter={x:Static ObjectConverters.IsNotNull}, FallbackValue=False}">
 
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal">
@@ -44,7 +44,7 @@
                 <UserControl Content="{Binding Maps}" />
             </TabItem>
 
-            <TabItem Margin="5" IsVisible="{Binding Mods, Converter={x:Static ObjectConverters.IsNotNull}, FallbackValue=False}">
+            <TabItem x:Name="ModsTab" Margin="5" IsVisible="{Binding Mods, Converter={x:Static ObjectConverters.IsNotNull}, FallbackValue=False}">
 
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal">
@@ -60,7 +60,7 @@
                 <UserControl Content="{Binding Mods}" />
             </TabItem>
 
-            <TabItem Margin="5">
+            <TabItem x:Name="DownloadsTab" Margin="5">
 
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal">

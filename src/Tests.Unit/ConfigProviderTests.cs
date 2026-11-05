@@ -7,6 +7,36 @@ namespace Tests.Unit;
 
 public sealed class ConfigProviderTests : IDisposable
 {
+    /// <summary> Persists window settings in the existing settings table across provider instances. </summary>
+    [Fact]
+    public void WindowSettings_PersistAcrossProviderInstances()
+    {
+        Assert.Empty(_provider.WindowPlacement);
+        Assert.Empty(_provider.ActiveTab);
+
+        _provider.WindowPlacement = "-1500;40;1400;850;True";
+        _provider.ActiveTab = "BloodTab";
+
+        var restored = new ConfigProvider(_dbContextFactory);
+        Assert.Equal(_provider.WindowPlacement, restored.WindowPlacement);
+        Assert.Equal("BloodTab", restored.ActiveTab);
+    }
+
+    /// <summary> Persists independent sub-tab selections for each game across provider instances. </summary>
+    [Fact]
+    public void GameSubTabs_PersistIndependentlyAcrossProviderInstances()
+    {
+        Assert.Empty(_provider.GetGameSubTab("DukeTab"));
+        _provider.SetGameSubTab("DukeTab", "MapsTab");
+        _provider.SetGameSubTab("BloodTab", "DownloadsTab");
+        _provider.SetGameSubTab("DukeTab", "ModsTab");
+
+        var restored = new ConfigProvider(_dbContextFactory);
+        Assert.Equal("ModsTab", restored.GetGameSubTab("DukeTab"));
+        Assert.Equal("DownloadsTab", restored.GetGameSubTab("BloodTab"));
+        Assert.Empty(restored.GetGameSubTab("WangTab"));
+    }
+
     private readonly InMemoryDbContextFactory _dbContextFactory;
     private readonly ConfigProvider _provider;
 
