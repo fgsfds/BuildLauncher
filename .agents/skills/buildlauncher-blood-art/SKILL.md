@@ -5,6 +5,9 @@ description: Export and verify Build ART-to-PNG/DEF resources with the repositor
 
 # ART and Blood surface conversion
 
+Select packaging through the [Blood profile](../../docs/games/blood.md); other
+games must use their own profiles before applying this tool.
+
 Use the repository's `src/Addon.ArtExporter` .NET 10 console project. Read [the exporter documentation](../../docs/art-exporter.md) for commands, format limits, palette rules and output staging. The shared guide also documents the optional verifier profile and known game-palette fingerprints.
 
 Check Blood addon inputs for RFF files case-insensitively, including nested archives. If present, the addon needs unpacking: preserve native ART/RFF/DAT and use [the RFF packaging skill](../buildlauncher-blood-rff/SKILL.md). No separate profile approval is needed. Do not run the ART exporter or drop VOXEL.DAT for that package; exporter size limits do not constrain native resources. Without RFF, ART/DAT require DEF-backed conversion; unsupported DAT formats remain an unresolved conversion step.

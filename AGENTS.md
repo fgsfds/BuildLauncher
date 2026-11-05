@@ -163,12 +163,12 @@ and validated by `MetadataProvider`. Offline mode reads the local `db/` files.
 - `Database.Client.DatabaseContext` is the only `DbContext`; use
   `IDbContextFactory<DatabaseContext>` (registered by `WithDatabase`) — do not inject a
   scoped context into singletons.
-- Migrations live in `src/Database.Client/Migrations` and are applied at startup via
-  `dbContext.Database.Migrate()`. Add new migrations with EF Core tooling against
+- Migrations live in `src/Database.Client/Migrations` and are applied at startup through
+  `DatabaseInitializer.InitializeAsync()`. Add new migrations with EF Core tooling against
   `Database.Client`; never edit an already-applied migration.
-- The DB file is `BuildLauncher.db` in the working folder. Startup currently deletes
-  `*.db-wal`/`*.db-shm` files; this is a data-loss bug, not a maintenance pattern to copy.
-  Let SQLite recover/checkpoint its own journal files.
+- The DB file is `BuildLauncher.db` in the working folder. Startup uses `DatabaseInitializer`
+  to serialize migrations and recover abandoned EF migration locks. Never delete
+  `*.db-wal`/`*.db-shm` files; let SQLite recover/checkpoint its own journal files.
 
 ### Error handling
 
@@ -251,10 +251,22 @@ reusing a documented contract.
 
 For complete addon preparation or source/prepared comparisons, use
 `.agents/skills/buildlauncher-convert-addon/SKILL.md` and
-`.agents/docs/addon-conversion-plan.md`. Resource work is routed to
+`.agents/docs/addon-conversion-plan.md` for the common workflow, then read the
+actual game's profile through `.agents/docs/games/index.md`. Game profiles own
+resource/script recipes and artwork styles: RFF/INI and Blood DAT rules are
+Blood-only; CON and GRP support depend on the actual game and port. Do not apply
+Blood recipes or Shadow Warrior lettering to other games. Apply shared
+CON/GRP-family rules to Duke, Redneck, Rides Again, NAM and WWII GI through
+`.agents/docs/games/con-grp-family.md`, using their actual commands and resources.
+Resource work is routed to
 `.agents/skills/buildlauncher-blood-art/SKILL.md` for PNG/DEF export and
 `.agents/skills/buildlauncher-blood-rff/SKILL.md` for Blood addons containing RFF
-files, unpacked native packaging and optional DEF assembly; artwork and descriptions to
+files, unpacked native packaging and optional DEF assembly. CON/GRP-family campaigns
+use `.agents/skills/buildlauncher-duke-con/SKILL.md` for reserved CON renames,
+include/episode/resource checks and native MAP/audio packaging. Large nested-resource
+CON/GRP-family TCs also use `.agents/skills/buildlauncher-duke-large-tc/SKILL.md` for container
+roles, include graphs, palette tables and unresolved-reference classification.
+Route artwork and descriptions to
 `.agents/skills/buildlauncher-addon-presentation/SKILL.md`.
 The standalone .NET resource exporter lives in `src/Addon.ArtExporter`; read
 `.agents/docs/art-exporter.md` for its CLI and supported formats. An independent read-only ART/SURFACE audit helper is included in the resource
@@ -273,20 +285,49 @@ conversion workflow; report them as untested instead of requiring them.
 - Preserve source archives and live installations; prepare conversions in a fresh
   output directory and validate every manifest before importing anything into BL.
 - Check `db/addons.json` during every conversion for an existing release of the
-  same addon. Preserve a confirmed existing ID and reuse suitable descriptions
-  and grid/preview artwork from an older release before searching or generating
+  same addon. Preserve a confirmed existing ID unless the user explicitly requests
+  a separate edition identity; record the original catalog ID/version. Reuse
+  suitable descriptions and grid/preview artwork from an older release before searching or generating
   replacements. User-supplied materials take priority; record the reused version
   and validate artwork dimensions, format and game palette. See the presentation
   skill for catalog fields, archive retrieval and version-specific checks.
-- Blood addons containing RFF files need unpacking and may retain native ART,
-  RFF and DAT. Detect RFF case-insensitively, including inside source archives;
-  identify and declare the actual main/sound RFF files so BL unpacks the ZIP.
-  This is the normal profile for those addons and needs no separate approval.
-  Without RFF, convert ART/DAT to DEF-backed resources; unsupported DAT conversion
-  is unresolved, not a reason to retain raw files or invent an RFF declaration.
-  Use existing RFFs directly. Any required RFS compilation needs verified inputs
-  and commands; no compiler is implemented in the ART exporter. Keeping native
-  VOXEL.DAT in the RFF profile does not implement VOXEL-to-DEF export.
+- Read the source addon's applicable README variants, credits and release notes
+  in root/subdirectories/archives for metadata and description, even when a
+  catalog entry exists. Distinguish addon documentation from bundled tools'
+  readmes; reconcile conflicts and record provenance rather than copying stale
+  catalog text or assuming an outdated README header describes the current release.
+- For newer versions of the same addon, `release_date` remains the original
+  release date. Improved editions of older addons, such as BHSE, use the
+  improved edition's release date instead. Prefer README or previously verified
+  edition-specific evidence; record provenance and keep latest update dates
+  outside addon.json. Do not infer release dates from catalog UpdateDate.
+- BAT launchers/installers are unnecessary in prepared BL addons. Read them as
+  preparation evidence, establish declared entry points and required resources,
+  then omit .bat files from the runtime package and Extras. Preserve original
+  source archives and record hashes/reasons for omissions. Follow the shared
+  conversion plan's launch and metadata lessons for edition versions, naming,
+  current INI references and optional music fields.
+- Standalone installation-only guides are unnecessary for adapted BL addons.
+  Read them for preparation evidence, then omit them from the package and Extras;
+  preserve source archives and record hashes/reasons. Keep mixed README/manuals
+  with credits, licenses or gameplay information unchanged rather than deleting
+  them or removing their installation sections.
+- Newly generated grid/preview art should match the library's old-school 8-bit
+  Build texture/sprite look rather than realistic painted covers. Inspect actual
+  references and supply them to imagegen; compose portrait and landscape separately.
+  Honor explicit requests to ignore an addon's existing artwork. Preserve game
+  identity, verify the exact palette, and inspect final pixels/title readability.
+- Only TCs/campaigns and standalone games require grid and preview images.
+  Maps and mods require only preview; do not generate a grid unless explicitly
+  requested or treat a missing grid as incomplete preparation.
+- When creating grid/preview images, follow `.agents/docs/addon-artwork-style.md`
+  and the presentation skill. Match the same game/type references and preserve
+  established addon branding. Compose grid and preview separately; previews may
+  be title cards or resource showcases. Record missing-reference fallbacks.
+- Select runtime scripts, resource containers, native packaging and conversions
+  through `.agents/docs/games/index.md` and the actual game profile. RFF entry
+  points are Blood-only; CON/GRP support and DAT meanings depend on game/port.
+  Keep detailed Blood and Duke recipes in their profiles and specialized skills.
 - Declare `TileFromTexture` when generated DEF resources use `tilefromtexture`;
   the resource exporter does not generate the addon manifest.
 - For a requested source-only conversion, finish and validate the output and freeze
@@ -315,53 +356,50 @@ older app-review baseline below remains a historical review.
 
 ## App review backlog (2026-10-01)
 
-This is a source review, not a record of completed fixes. P1 means a high-impact
+This originated as a source review; completed fixes are marked with their dates. P1 means a high-impact
 correctness/data-preservation issue; P2 means normal-priority correctness or usability.
 Re-check the named code before implementing a finding and remove/update resolved items.
 Keep fixes focused; this backlog does not authorize a wholesale rewrite.
 
 ### P1: preserve user data and working installations
 
-1. **SQLite recovery files are deleted before opening the database.**
-   `src/Avalonia.Desktop/App.axaml.cs`, `FixDatabase`, deletes every `.db-wal` and
-   `.db-shm` in the working directory before migration. A WAL can contain committed
-   changes that have not reached the main DB, especially after a crash. It can also
-   belong to another running process or another database. Remove blanket deletion and
-   let SQLite recover. Check a restart with uncheckpointed committed data and a second
-   open connection. Reference: [SQLite WAL lifecycle](https://www.sqlite.org/wal.html).
+1. **Resolved (2026-11-05): startup preserves SQLite recovery files.**
+   DatabaseInitializer serializes application startup migrations with an exclusive
+   database-specific file handle that the OS releases after a crash. While holding it,
+   startup removes abandoned EF migration-lock rows and lets SQLite recover its own
+   WAL/SHM data. The lock filename is retained; its presence alone does not hold the lock.
+   All application startup migrations must use this initializer. External migration
+   tools must not run concurrently. Startup logs migration failures rather than deleting
+   recovery files or resetting the database.
+   Regression tests reproduce EF startup waiting indefinitely on an abandoned
+   __EFMigrationsLock row, then verify WAL-only committed data, pending migrations,
+   active startup exclusion, normal open connections, repeated startup, unrelated
+   recovery files and corruption preservation. The original historical failing database
+   was unavailable; the reproduced EF lock failure is not proof of its exact condition.
 
-2. **A failed update can uninstall an existing port/tool.**
-   `src/Core.Client/InstallerBase.cs`, `InstallAsync`, calls `Uninstall()` for any
-   exception, including release lookup, HTTP failure and cancellation before extraction.
-   `PortInstaller.Uninstall` recursively deletes the live install folder; `Backup()` is
-   empty for ports. `ToolInstaller.Uninstall` for DOSBlood deletes `BLOOD.EXE` before
-   restoring its backup, even when failure occurred before any backup was made.
-   Extract into a unique staging directory, verify/post-process there,
-   and replace the live install only after success with rollback available. Cleanup
-   failures must not hide the original error. Return `Cancelled` for cancellation.
-   Check network failure, corrupt archive, hash mismatch and cancellation against an
-   existing installation, including configs and user files.
+2. **Resolved (2026-11-05): failed port/tool updates preserve live installations.**
+   Installation now downloads to an isolated directory and prepares a sibling staging
+   directory, including existing user files and staged tool backup/post-install work.
+   Replacement rolls back a failed move and retains recovery files if rollback fails.
+   Cancellation returns Cancelled; cleanup errors do not hide the operation result.
+   Regression coverage includes lookup/HTTP/hash/archive/post-install failures,
+   cancellation, DOSBlood backups, successful updates and directory replacement rollback.
 
-3. **Addon extraction replaces live content before validation and deletes its source
-   even when manifest loading fails.** `src/Addons/Helpers/ArchivedAddonExtractor.cs`,
-   `Unpack`, recursively deletes an existing folder named after the ZIP before extracting.
-   `TryExtractIfNeededAsync` deletes the archive in `finally` whenever `unpackedTo` is
-   set, including later deserialization failures. Stage and validate all manifests
-   before replacing content or removing the archive; preserve the previous folder on
-   failure. Check a malformed second manifest, interrupted extraction, and a same-name
-   folder containing user edits. Do not claim archive traversal protection without
-   checking the actual SharpCompress behavior and adding adversarial archive tests.
+3. **Resolved (2026-11-05): addon extraction validates manifests before replacement.**
+   Root manifests are all parsed and their required runtime fields checked before native
+   extraction. Any manifest can require native extraction. Files are extracted with
+   their directory layout into fresh staging and committed with rollback; the source ZIP
+   is removed only after success. Tests cover malformed later manifests, interrupted
+   extraction and preservation of same-name user content. These tests do not establish
+   archive traversal or symbolic-link protection.
 
-4. **Self-update has no integrity check or rollback.**
-   `src/Core.Client/AppUpdateInstaller.cs` ignores the download result, never checks
-   the release hash, reuses the update directory, and renames the old executable before
-   ensuring replacement will succeed. A failed move leaves the normal executable absent;
-   stale staging contents can survive earlier attempts. Validate download and hash,
-   extract into fresh staging, verify the expected executable, then replace with rollback.
-   Create the update marker only after preparation succeeds. Check bad hashes, missing
-   executable, stale staging, cancellation and a failed replacement move. Verify both
-   published Windows and Linux layouts; do not assume copying just the executable is
-   sufficient for every publish configuration.
+4. **Resolved (2026-11-05): self-update preparation and replacement are recoverable.**
+   Preparation checks the download outcome, verifies a supplied release digest, extracts
+   into fresh staging and requires the expected executable before publishing its marker.
+   Installation replaces every payload file and restores changed files on failure.
+   Tests cover bad hashes, missing executables, stale staging, cancellation, HTTP/archive
+   errors, companion files and a replacement collision. Actual published Windows/Linux
+   self-restarts and recovery from process termination during commit remain untested.
 
 ### P2: cross-platform correctness and operation results
 
@@ -381,22 +419,17 @@ Keep fixes focused; this backlog does not authorize a wholesale rewrite.
    plaintext. Check Linux save/load and a database copied from Windows with encrypted
    credentials; unavailable credentials must not crash startup or settings bindings.
 
-7. **Addon executable selection always uses Windows and can erase a custom override.**
-   `src/Ports/Ports/PortStarter.cs`, `StartAsync`, selects `OSEnum.Windows` regardless
-   of runtime OS. The `TryGetValue(..., out pathToExe)` also resets a supplied custom
-   executable when the addon has a Windows dictionary but no entry for that port.
-   Select `CommonProperties.OSEnum`, use a separate lookup variable, and define override
-   precedence explicitly. Check Linux manifests, absent per-port entries, and custom ports.
+7. **Resolved (2026-11-05): executable overrides follow the runtime platform.**
+   Explicit custom executable choices take precedence over per-platform addon overrides;
+   absent per-port entries fall back without clearing a custom choice. Regression tests
+   cover Windows and Linux selection, missing entries and explicit custom executables.
 
-8. **Launch errors are swallowed and cleanup/playtime are unreliable.**
-   `PortStarter.StartPortAsync` logs failures and returns normally; `StartAsync` then
-   records time even if no process started. The stopwatch includes setup time, the
-   disposable process handle is never disposed, and `AfterEnd` is skipped if argument
-   construction or playtime persistence throws after `BeforeStart` changed files.
-   Return a launch outcome, dispose the handle, measure the running process, and pair
-   successful setup with cleanup in `finally`. Check a null process, start/wait failures,
-   argument failure after setup, and persistence failure. The UI should report the
-   executable and a useful error instead of silently appearing to launch successfully.
+8. **Resolved (2026-11-05): launch results and cleanup are explicit.**
+   PortStarter returns an outcome consumed by campaign/map UI notifications, disposes
+   process handles, measures process wait time and records playtime only after a
+   successful wait. Successful setup is paired with cleanup in finally, including
+   argument-generation and persistence failures. Tests cover null handles, start/wait
+   errors, setup/argument/persistence/cleanup failures and UI error notifications.
 
 9. **Port/tool installation failures receive no UI feedback.**
    `src/Avalonia.Desktop/ViewModels/PortViewModel.cs` and `ToolViewModel.cs` assign
@@ -432,11 +465,12 @@ Keep fixes focused; this backlog does not authorize a wholesale rewrite.
     Exercise refresh concurrent with add/delete and enumeration; do not add nested
     semaphore waits that deadlock.
 
-13. **Disabling the last option leaves an empty-string option.**
-    `src/Core.Client/Config/ConfigProvider.cs`, `GetEnabledOptions`, splits an empty
-    stored string into a set containing `""`. Remove empty entries or delete the empty
-    row; check `Assert.Empty` after disabling the last option and enable/disable cycles.
-    The existing last-option test checks only that the former option is absent.
+13. **Resolved (2026-11-05): disabling the last option returns an empty set.**
+    ConfigProvider ignores empty entries when reading and editing serialized option
+    sets. Tests assert an actually empty result after disabling the last option,
+    repeated enable/disable cycles across provider instances, duplicate enables and
+    normalization of legacy empty separators. The former test only checked absence
+    of the removed option and did not detect the empty-string entry.
 
 14. **Legacy save-folder migration can prevent startup.**
     `src/Avalonia.Desktop/App.axaml.cs`, `RenameSaveFolder`, calls `Directory.Move`
@@ -482,6 +516,34 @@ Keep fixes focused; this backlog does not authorize a wholesale rewrite.
 - If SDK reproducibility is desired, add an explicit SDK/roll-forward policy to
   `global.json`; the current runner selection alone does not pin an SDK.
 
+### App regression coverage (2026-11-05)
+
+The expanded local suites passed on Windows: **736/736** in Tests.Unit and
+**459/459** in Tests.Unit.Sequential. The solution build passed with zero errors;
+existing analyzer warnings remain. This update added 32 test cases and strengthened
+existing assertions relative to the previous 713/450 local test baseline.
+
+| Area | Added or strengthened behavior checks |
+| --- | --- |
+| Downloads and integrity | HTTP failures preserve an existing destination; empty successful downloads replace it; SHA-256 accepts API prefixes/casing, rejects changed payloads and respects cancellation without retaining file handles. |
+| Archives and installation | Nested files with equal basenames remain distinct; retries after post-install failure retain nested saves; disposal of uncommitted staging preserves the live directory. |
+| Self-update | Failed preparation preserves an earlier prepared update and marker; rollback removes newly introduced files as well as restoring replaced files. |
+| Configuration and games | Exact option sets survive repeated toggles and provider recreation; legacy empty entries are ignored; window-setting updates preserve unrelated preferences; game-path changes refresh detection and notify observers. |
+| Launch and UI | Cleanup and playtime wait for process completion; simultaneous launch/cleanup failures retain both diagnostics; canceled closes do not save settings; missing monitor data preserves placement. |
+| Addon loading | Deserializable manifests with invalid required identifiers, titles or game fields preserve both the source archive and existing user content. |
+| SQLite startup | Restart snapshots cover WAL with and without retained SHM, pending migrations, pre-cancellation and queued startup resuming after lock release. |
+
+Tests that change the current culture or use Avalonia remain in Tests.Unit.Sequential.
+Decimal-comma formatting is simulated with a cloned invariant culture because the
+application enables invariant globalization; the tests do not change runtime settings.
+File tests use unique temporary directories and fake HTTP/process dependencies.
+
+These tests do not establish comprehensive code coverage, external-service or S3
+behavior, Linux runtime behavior, native multi-monitor transitions, real game launches,
+or published self-update restarts. Run Tests.External and Tests.Database separately
+when their services and credentials are available. Historical validation below remains
+for comparison, not as the current test count.
+
 ### Validation baseline and gaps
 
 Reviewed on Windows with SDK 10.0.401. `dotnet build --no-restore --verbosity quiet
@@ -491,9 +553,8 @@ Linux execution, published self-update and interactive game launches were not ru
 These passing suites do not establish that the failure cases above are safe.
 
 Prioritize behavioral regression tests for P1 recovery and platform/transition cases.
-`Tests.Unit/PortInstallerTests.cs`, `Uninstall_DeletesInstallFolder`, currently never
-calls `Uninstall` or asserts deletion; replace its misleading constructor-only checks
-with isolated file-operation assertions. The downloader resume fake accepts a range
+`Tests.Unit/PortInstallerTests.cs`, `Uninstall_DeletesInstallFolder`, now calls
+`Uninstall` against an isolated installation and asserts deletion. The downloader resume fake accepts a range
 without checking its end, so it misses the range bug. Linux path tests must use an
 actual Linux layout rather than Windows fixtures containing backslashes.
 

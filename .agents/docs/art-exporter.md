@@ -8,7 +8,7 @@ For Blood addons containing RFF files, use unpacked native packaging and retain
 ART/RFF/DAT; the ART exporter is unnecessary for that profile. Without RFF,
 ART/DAT require DEF-backed conversion. This tool implements ART/SURFACE only;
 VOXEL and other unsupported DAT formats require a separate verified recipe. See
-[the conversion plan](addon-conversion-plan.md) for profile selection.
+[the common workflow](addon-conversion-plan.md) and [game profiles](games/index.md) for recipe selection; Blood-specific DAT semantics must not be applied to other games.
 
 ## Run
 
@@ -85,6 +85,12 @@ bytes. Its corresponding rotated tile-PNG palette has SHA-256
 `9615ac0d70b96a3611392f46b6748411bda545a05b5129b75c33bc2f84176a14`.
 These are game-palette fingerprints, not an addon-specific palette recipe. Supply
 the correct verified palette for the selected game; no palette is bundled.
+The supplied Duke3D/Redneck RGB ACT presentation reference has SHA-256
+`3b11874a049a27940e6e50e62dd8578da71b4d0a9132038eff8fefa4386fe713` for 768 bytes.
+Its game mapping was confirmed in the supplied editor's Duke 3D / RR / NAM / WWII GI
+palette menu and matched a verified older Duke3D package's indexed preview.
+This records presentation-palette evidence, not a tested Duke ART export recipe.
+
 Presentation previews use the original palette ordering, independently of the
 rotation used for exported tiles. Check the actual palette bytes and alpha rather
 than assuming a screenshot or PNG filename establishes the palette.
