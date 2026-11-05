@@ -1,5 +1,7 @@
 ﻿using Addons.Addons;
+using Core.All.Enums;
 using Core.All.Enums.Addons;
+using Core.All.Serializable.Addon;
 using Games.Games;
 using Ports.Ports;
 
@@ -54,7 +56,17 @@ public sealed class VoidSWCmdParametersBuilder : EDuke32CmdParametersBuilder
             return this;
         }
 
-        AppendTcOrMapArgs(addon);
+        var fileInfo = wCamp.FileInfo.Value;
+        if (addon.Type is AddonTypeEnum.Map && fileInfo.IsZip && addon.StartMap is MapFileJsonModel mapFile)
+        {
+            _ = Append($@" {Port.CmdArguments.AddDirectory}""{fileInfo.PathToFolder}""");
+            _ = Append($@" {Port.CmdArguments.AddFile}""{fileInfo.FileName}""");
+            _ = Append($@" -map ""{mapFile.File}""");
+        }
+        else
+        {
+            AppendTcOrMapArgs(addon);
+        }
 
         return this;
     }

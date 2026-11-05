@@ -1,5 +1,6 @@
 using Addons.Addons;
 using Core.All.Enums;
+using Core.All.Serializable.Addon;
 using Core.Client.Helpers;
 using Games.Games;
 using Ports.Ports.EDuke32;
@@ -214,6 +215,46 @@ public sealed class VoidSWCmdArgumentsTests
                        "";
 
         CmdArgsAssert.Equal(expected, args);
+    }
+
+    /// <summary>
+    ///     Ensures archived map lookup mounts the ZIP by filename from its search directory.
+    /// </summary>
+    /// <param name="mapPath">The selected root or nested map path inside the ZIP.</param>
+    [Theory]
+    [InlineData("ZDORMS.MAP")]
+    [InlineData("REMIX/ZDSMLCTF.MAP")]
+    public void WangArchivedMapUsesSearchDirectoryTest(string mapPath)
+    {
+        var folderPath = Path.Combine(Directory.GetCurrentDirectory(), "Data", "Addons", "Wang", "Maps With Spaces");
+        var zipPath = Path.Combine(folderPath, "wang-map.zip");
+        var map = new GenericCampaign
+        {
+            AddonId = new("wang-map", "1.0"),
+            Type = AddonTypeEnum.Map,
+            Title = "Wang map",
+            SupportedGame = new(GameEnum.Wang),
+            FileInfo = new AddonFilePathWrapper(zipPath, "addon_1.json"),
+            StartMap = new MapFileJsonModel { File = mapPath },
+            Author = null,
+            ReleaseDate = null,
+            Description = null,
+            RequiredFeatures = null,
+            DependentAddons = null,
+            IncompatibleAddons = null,
+            GridImageHash = null,
+            PreviewImageHash = null,
+            MainDef = null,
+            AdditionalDefs = null,
+            Executables = null,
+            Options = null
+        };
+        var port = new VoidSW();
+
+        var args = port.GetStartGameArgs(_wangGame, map, [], [], true, true, 3);
+
+        Assert.Contains($" -j\"{folderPath}\" -g\"wang-map.zip\" -map \"{mapPath}\"", args, StringComparison.Ordinal);
+        Assert.DoesNotContain($" -g\"{zipPath}\"", args, StringComparison.Ordinal);
     }
 
     /// <summary>
