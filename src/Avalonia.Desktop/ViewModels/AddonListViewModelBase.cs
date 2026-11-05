@@ -1,3 +1,4 @@
+using Core.All;
 using System.Collections.Immutable;
 using Addons.Addons;
 using Addons.Helpers;
@@ -276,7 +277,11 @@ public abstract partial class AddonListViewModelBase : RightPanelViewModel, IPor
         {
             ArgumentNullException.ThrowIfNull(SelectedAddon);
 
-            await StartAddonCoreAsync(command).ConfigureAwait(true);
+            var result = await StartAddonCoreAsync(command).ConfigureAwait(true);
+            if (!result.IsSuccess)
+            {
+                _userNotifier.Show(result.Message, NotificationSeverity.Error);
+            }
 
             OnPropertyChanged(nameof(SelectedAddonPlaytime));
         }
@@ -297,7 +302,7 @@ public abstract partial class AddonListViewModelBase : RightPanelViewModel, IPor
     /// <returns>
     ///     A task representing the asynchronous operation.
     /// </returns>
-    protected virtual Task StartAddonCoreAsync(object? command)
+    protected virtual Task<Result> StartAddonCoreAsync(object? command)
     {
         throw new NotSupportedException("This addon type does not support starting.");
     }

@@ -1,3 +1,4 @@
+using Core.All;
 using System.Collections.Immutable;
 using Addons.Addons;
 using Addons.Helpers;
@@ -98,7 +99,7 @@ public sealed class MapsViewModel : AddonListViewModelBase
     /// <param name="command">
     ///     A <see cref="BasePort" /> to start with.
     /// </param>
-    protected override async Task StartAddonCoreAsync(object? command)
+    protected override async Task<Result> StartAddonCoreAsync(object? command)
     {
         if (SelectedAddon is null)
         {
@@ -110,7 +111,7 @@ public sealed class MapsViewModel : AddonListViewModelBase
             throw new ArgumentException($"Expected {nameof(Tuple)} but received {command?.GetType().Name}.", nameof(command));
         }
 
-        await _portStarter.StartAsync(
+        return await _portStarter.StartAsync(
             parameter.Item1,
             Game,
             SelectedAddon,

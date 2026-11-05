@@ -36,6 +36,9 @@ public sealed class CampaignsViewModelTests : IDisposable
     private readonly MetadataProvider _metadataProvider;
     private readonly PlaytimeProvider _playtimeProvider;
     private readonly PortStarter _portStarter;
+
+    /// <summary> Controls launch failure without creating an operating-system process. </summary>
+    private readonly FakeProcessRunner _processRunner = new();
     private readonly RatingProvider _ratingProvider;
     private readonly Mock<IUserNotifier> _userNotifierMock;
     private readonly CampaignsViewModel _viewModel;
@@ -87,7 +90,7 @@ public sealed class CampaignsViewModelTests : IDisposable
         _portStarter = new PortStarter(
             _playtimeProvider,
             _installedAddonsProviderFactory,
-            new FakeProcessRunner(),
+            _processRunner,
             NullLogger<PortStarter>.Instance
             );
 
@@ -573,4 +576,24 @@ public sealed class CampaignsViewModelTests : IDisposable
         Assert.Null(ex);
     }
 
+
+    /// <summary> Failed launches display an actionable message and do not record playtime. </summary>
+    /// <param name="map">Whether to exercise the map or campaign view model.</param>
+    [AvaloniaTheory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public async Task StartAddon_FailedProcess_NotifiesUser(bool map)
+    {
+        _processRunner.ShouldReturnNull = true;
+        using var maps = new MapsViewModel(_game, _gamesProviderMock.Object, _configMock.Object,
+            _playtimeProvider, _ratingProvider, _metadataProvider, _installedAddonsProviderFactory,
+            _portStarter, _bitmapsCache, _addonInstallerMock.Object, _folderOpenerMock.Object,
+            _userNotifierMock.Object, NullLogger<MapsViewModel>.Instance);
+        var viewModel = map ? (AddonListViewModelBase)maps : _viewModel;
+        viewModel.SelectedAddon = CampaignTestFactory.CreateDukeCampaign("failed", GameEnum.Duke3D, null, map ? AddonTypeEnum.Map : AddonTypeEnum.TC);
+        var port = new StubPort();
+        await viewModel.StartAddonCommand.ExecuteAsync(map ? Tuple.Create<BasePort, byte?>(port, null) : port);
+        _userNotifierMock.Verify(x => x.Show(Moq.It.Is<string>(message => message.Contains("stub.exe")), NotificationSeverity.Error), Times.Once());
+        _configMock.Verify(x => x.AddPlaytime(Moq.It.IsAny<string>(), Moq.It.IsAny<TimeSpan>()), Times.Never());
+    }
 }

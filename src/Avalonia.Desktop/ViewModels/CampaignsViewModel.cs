@@ -1,3 +1,4 @@
+using Core.All;
 using System.Collections.Immutable;
 using Addons.Addons;
 using Addons.Helpers;
@@ -131,7 +132,7 @@ public sealed class CampaignsViewModel : AddonListViewModelBase
     /// <param name="command">
     ///     A <see cref="BasePort" /> or <see cref="CustomPort" /> to start with.
     /// </param>
-    protected override async Task StartAddonCoreAsync(object? command)
+    protected override async Task<Result> StartAddonCoreAsync(object? command)
     {
         if (SelectedAddon is null)
         {
@@ -142,7 +143,7 @@ public sealed class CampaignsViewModel : AddonListViewModelBase
 
         if (command is BasePort port)
         {
-            await _portStarter.StartAsync(
+            return await _portStarter.StartAsync(
                 port,
                 Game,
                 SelectedAddon,
@@ -154,7 +155,7 @@ public sealed class CampaignsViewModel : AddonListViewModelBase
         }
         else if (command is CustomPort customPort)
         {
-            await _portStarter.StartAsync(
+            return await _portStarter.StartAsync(
                 customPort.BasePort,
                 Game,
                 SelectedAddon,
