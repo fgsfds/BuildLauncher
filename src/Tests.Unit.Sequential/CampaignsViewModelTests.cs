@@ -593,7 +593,7 @@ public sealed class CampaignsViewModelTests : IDisposable
         viewModel.SelectedAddon = CampaignTestFactory.CreateDukeCampaign("failed", GameEnum.Duke3D, null, map ? AddonTypeEnum.Map : AddonTypeEnum.TC);
         var port = new StubPort();
         await viewModel.StartAddonCommand.ExecuteAsync(map ? Tuple.Create<BasePort, byte?>(port, null) : port);
-        _userNotifierMock.Verify(x => x.Show(Moq.It.Is<string>(message => message.Contains("stub.exe")), NotificationSeverity.Error), Times.Once());
+        _userNotifierMock.Verify(x => x.Show(Moq.It.Is<string>(message => message.Contains(port.PortExeFilePath, StringComparison.Ordinal)), NotificationSeverity.Error), Times.Once());
         _configMock.Verify(x => x.AddPlaytime(Moq.It.IsAny<string>(), Moq.It.IsAny<TimeSpan>()), Times.Never());
     }
 }

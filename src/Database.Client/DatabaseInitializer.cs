@@ -79,8 +79,9 @@ public static class DatabaseInitializer
                     // Keep the filename after disposal: unlinking it could let two processes lock different files.
                     return new FileStream(path, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None);
                 }
-                catch (IOException) when (!wait.IsCancellationRequested)
+                catch (IOException)
                 {
+                    wait.Token.ThrowIfCancellationRequested();
                     await Task.Delay(TimeSpan.FromMilliseconds(100), wait.Token).ConfigureAwait(false);
                 }
             }

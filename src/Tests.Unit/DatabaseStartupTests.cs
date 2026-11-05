@@ -102,8 +102,12 @@ public sealed class DatabaseStartupTests : IDisposable
     }
 
     /// <summary> Recovery never clears a migration lock while another startup holds exclusive ownership. </summary>
-    [Fact]
-    public async Task Initialize_ActiveStartupLock_CancelsWithoutClearingEfLock()
+    /// <param name="cancelAfterMilliseconds">The cancellation delay, including retry boundaries.</param>
+    [Theory]
+    [InlineData(1)]
+    [InlineData(100)]
+    [InlineData(300)]
+    public async Task Initialize_ActiveStartupLock_CancelsWithoutClearingEfLock(int cancelAfterMilliseconds)
     {
         await using var writer = Context("busy.db");
         await writer.Database.MigrateAsync(TestContext.Current.CancellationToken);
@@ -111,7 +115,7 @@ public sealed class DatabaseStartupTests : IDisposable
         await using var reader = Context("busy.db");
         using (var held = new FileStream(Path.Combine(_root, "busy.db.startup.lock"), FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None))
         {
-            using var cancellation = new CancellationTokenSource(TimeSpan.FromMilliseconds(300));
+            using var cancellation = new CancellationTokenSource(TimeSpan.FromMilliseconds(cancelAfterMilliseconds));
             _ = await Assert.ThrowsAnyAsync<OperationCanceledException>(() => DatabaseInitializer.InitializeAsync(reader, cancellation.Token));
             await writer.Database.OpenConnectionAsync(TestContext.Current.CancellationToken);
             using var command = writer.Database.GetDbConnection().CreateCommand();
