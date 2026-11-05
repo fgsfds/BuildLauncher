@@ -393,4 +393,32 @@ public sealed class FilesDownloaderTests : IDisposable
         public override void SetLength(long value) => throw new NotSupportedException();
         public override void Write(byte[] buffer, int offset, int count) => throw new NotSupportedException();
     }
+
+    /// <summary> An HTTP failure must not overwrite an existing downloaded file. </summary>
+    /// <param name="status">The unsuccessful HTTP response.</param>
+    [Theory]
+    [InlineData(HttpStatusCode.NotFound)]
+    [InlineData(HttpStatusCode.ServiceUnavailable)]
+    public async Task DownloadFileAsync_HttpFailure_PreservesExistingDestination(HttpStatusCode status)
+    {
+        var destination = GetTempFilePath();
+        await File.WriteAllTextAsync(destination, "existing", TestContext.Current.CancellationToken);
+        var downloader = new FilesDownloader(Helpers.ReleaseTestHelper.Http([], status), NullLogger<FilesDownloader>.Instance);
+        var error = await Assert.ThrowsAsync<HttpRequestException>(() => downloader.DownloadFileAsync(new Uri("https://example.invalid/file.zip"), destination, TestContext.Current.CancellationToken));
+        Assert.Equal(status, error.StatusCode);
+        Assert.Equal("existing", await File.ReadAllTextAsync(destination, TestContext.Current.CancellationToken));
+        Assert.False(File.Exists(destination + ".temp"));
+    }
+
+    /// <summary> An empty successful response produces a valid empty file and removes the temporary file. </summary>
+    [Fact]
+    public async Task DownloadFileAsync_EmptyPayload_ReplacesDestination()
+    {
+        var destination = GetTempFilePath();
+        await File.WriteAllTextAsync(destination, "old", TestContext.Current.CancellationToken);
+        var downloader = new FilesDownloader(Helpers.ReleaseTestHelper.Http([]), NullLogger<FilesDownloader>.Instance);
+        Assert.True((await downloader.DownloadFileAsync(new Uri("https://example.invalid/empty"), destination, TestContext.Current.CancellationToken)).IsSuccess);
+        Assert.Equal(0, new FileInfo(destination).Length);
+        Assert.False(File.Exists(destination + ".temp"));
+    }
 }

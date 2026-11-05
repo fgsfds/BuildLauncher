@@ -89,6 +89,25 @@ public sealed class InstallerBaseTests : IDisposable
         Assert.Equal("2.0", File.ReadAllText(Path.Combine(_root, "live", "version")));
     }
 
+    /// <summary> An installer can retry after failure without losing nested user content. </summary>
+    [Fact]
+    public async Task InstallAsync_RetryAfterPostInstallFailure_Succeeds()
+    {
+        var live = Path.Combine(_root, "live");
+        _ = Directory.CreateDirectory(Path.Combine(live, "saves"));
+        await File.WriteAllTextAsync(Path.Combine(live, "saves", "slot.sav"), "save", TestContext.Current.CancellationToken);
+        var instance = new Mock<IInstallable>();
+        instance.SetupGet(x => x.InstallFolderPath).Returns(live);
+        var installer = new TestInstaller(instance.Object, ReleaseTestHelper.Http(ReleaseTestHelper.Zip(("game.exe", "new"), ("resources/data.bin", "data"))), ReleaseTestHelper.Release());
+        installer.AfterExtraction = () => throw new IOException("Post-install failed");
+        Assert.False((await installer.InstallAsync(TestContext.Current.CancellationToken)).IsSuccess);
+        installer.AfterExtraction = null;
+        Assert.True((await installer.InstallAsync(TestContext.Current.CancellationToken)).IsSuccess);
+        Assert.Equal("save", await File.ReadAllTextAsync(Path.Combine(live, "saves", "slot.sav"), TestContext.Current.CancellationToken));
+        Assert.Equal("data", await File.ReadAllTextAsync(Path.Combine(live, "resources", "data.bin"), TestContext.Current.CancellationToken));
+        Assert.Single(Directory.GetDirectories(_root));
+    }
+
     /// <summary> Exposes installer failure points without changing production services. </summary>
     private sealed class TestInstaller : InstallerBase<IInstallable>
     {

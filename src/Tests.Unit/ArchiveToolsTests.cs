@@ -71,4 +71,22 @@ public sealed class ArchiveToolsTests : IDisposable
     }
 
     private string CreateTestArchive() => CreateTestArchive(_tempDir);
+
+    /// <summary> Nested resources with matching basenames remain distinct and unrelated files survive extraction. </summary>
+    [Fact]
+    public async Task UnpackArchiveAsync_NestedResources_PreservesLayoutAndExistingFiles()
+    {
+        var archivePath = Path.Combine(_tempDir, "nested.zip");
+        await File.WriteAllBytesAsync(archivePath, Helpers.ReleaseTestHelper.Zip(("maps/level.map", "map"), ("extras/level.map", "extra")), TestContext.Current.CancellationToken);
+        var destination = Path.Combine(_tempDir, "output");
+        _ = Directory.CreateDirectory(Path.Combine(destination, "maps"));
+        await File.WriteAllTextAsync(Path.Combine(destination, "maps", "level.map"), "old", TestContext.Current.CancellationToken);
+        await File.WriteAllTextAsync(Path.Combine(destination, "user.cfg"), "keep", TestContext.Current.CancellationToken);
+        var tools = new ArchiveTools(NullLogger<ArchiveTools>.Instance);
+        await tools.UnpackArchiveAsync(archivePath, destination, TestContext.Current.CancellationToken);
+        Assert.Equal("map", await File.ReadAllTextAsync(Path.Combine(destination, "maps", "level.map"), TestContext.Current.CancellationToken));
+        Assert.Equal("extra", await File.ReadAllTextAsync(Path.Combine(destination, "extras", "level.map"), TestContext.Current.CancellationToken));
+        Assert.Equal("keep", await File.ReadAllTextAsync(Path.Combine(destination, "user.cfg"), TestContext.Current.CancellationToken));
+        Assert.False(File.Exists(Path.Combine(destination, "level.map")));
+    }
 }

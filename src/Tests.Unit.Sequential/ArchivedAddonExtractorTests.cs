@@ -292,4 +292,36 @@ public sealed class ArchivedAddonExtractorTests : IDisposable
         Assert.Equal(2, result.Manifests!.Count);
         Assert.False(File.Exists(path));
     }
+
+    /// <summary> Deserializable manifests with invalid required fields must not replace an installed addon. </summary>
+    /// <param name="invalidField">The required field made invalid.</param>
+    [Theory]
+    [InlineData("id")]
+    [InlineData("title")]
+    [InlineData("game")]
+    public async Task TryExtractIfNeededAsync_InvalidRequiredField_PreservesFiles(string invalidField)
+    {
+        var manifest = new AddonManifestJsonModel
+        {
+            Id = invalidField == "id" ? " " : "valid",
+            Title = invalidField == "title" ? " " : "Valid",
+            Version = "1.0", AddonType = AddonTypeEnum.TC,
+            SupportedGame = invalidField == "game" ? null! : new SupportedGameJsonModel { Game = GameEnum.Blood },
+            MainRff = "resource.rff"
+        };
+        var path = Path.Combine(_tempDir, "invalid.zip");
+        using (var archive = ZipFile.Open(path, ZipArchiveMode.Create))
+        {
+            using var writer = new StreamWriter(archive.CreateEntry("addon.json").Open());
+            writer.Write(JsonSerializer.Serialize(manifest, AddonManifestJsonContext.Default.AddonManifestJsonModel));
+        }
+
+        var destination = Path.Combine(_tempDir, "invalid");
+        _ = Directory.CreateDirectory(destination);
+        File.WriteAllText(Path.Combine(destination, "user.txt"), "keep");
+        Assert.Null(await _extractor.TryExtractIfNeededAsync(path));
+        Assert.True(File.Exists(path));
+        Assert.Equal("keep", File.ReadAllText(Path.Combine(destination, "user.txt")));
+        Assert.Single(Directory.GetFiles(destination));
+    }
 }

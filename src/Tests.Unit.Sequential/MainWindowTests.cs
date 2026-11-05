@@ -134,4 +134,31 @@ public sealed class MainWindowTests
         window.Close();
         Assert.True(closed);
     }
+
+    /// <summary> Canceling a close does not persist provisional bounds or tab selection. </summary>
+    [AvaloniaFact]
+    public void Close_Canceled_DoesNotSaveSettings()
+    {
+        EnsureIconsRegistered();
+        var config = new ConfigProviderFake { WindowPlacement = "0;0;1300;800;False", ActiveTab = "SettingsTab", UseMica = false };
+        using var window = new MainWindow(new InstalledGamesProvider(config), config);
+        window.Show();
+        window.FindControl<TabControl>("MainTabs")!.SelectedItem = window.FindControl<TabItem>("PortsTab");
+        EventHandler<WindowClosingEventArgs> cancel = (_, e) => e.Cancel = true;
+        window.Closing += cancel;
+        try
+        {
+            window.Close();
+            Assert.True(window.IsVisible);
+            Assert.Equal("SettingsTab", config.ActiveTab);
+            Assert.Equal("0;0;1300;800;False", config.WindowPlacement);
+        }
+        finally
+        {
+            window.Closing -= cancel;
+            window.Close();
+        }
+
+        Assert.Equal("PortsTab", config.ActiveTab);
+    }
 }

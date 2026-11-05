@@ -141,6 +141,7 @@ public sealed class AppUpdateInstallerTests : IDisposable
         var update = Path.Combine(_root, ClientConsts.UpdateFolder);
         _ = Directory.CreateDirectory(update);
         File.WriteAllText(Path.Combine(update, "app.exe"), "new");
+        File.WriteAllText(Path.Combine(update, "new-library.dll"), "new library");
         File.WriteAllText(Path.Combine(update, "z-blocked"), "payload");
         _ = Directory.CreateDirectory(Path.Combine(_root, "z-blocked"));
         File.WriteAllText(Path.Combine(_root, "z-blocked", "user.txt"), "keep");
@@ -149,7 +150,27 @@ public sealed class AppUpdateInstallerTests : IDisposable
         Assert.ThrowsAny<IOException>(() => AppUpdateInstaller.ApplyPreparedUpdate(_root, "app.exe"));
 
         Assert.Equal("old", File.ReadAllText(Path.Combine(_root, "app.exe")));
+        Assert.False(File.Exists(Path.Combine(_root, "new-library.dll")));
         Assert.Equal("keep", File.ReadAllText(Path.Combine(_root, "z-blocked", "user.txt")));
         Assert.True(File.Exists(Path.Combine(_root, ClientConsts.UpdateFile)));
+    }
+
+    /// <summary> Failed preparation does not destroy a previously prepared valid update. </summary>
+    [Fact]
+    public async Task Prepare_BadHash_PreservesPreviouslyPreparedUpdate()
+    {
+        var update = Path.Combine(_root, ClientConsts.UpdateFolder);
+        _ = Directory.CreateDirectory(update);
+        File.WriteAllText(Path.Combine(update, "app.exe"), "previous update");
+        File.WriteAllText(Path.Combine(_root, ClientConsts.UpdateFile), "previous marker");
+        var api = new Mock<IApiInterface>();
+        api.Setup(x => x.GetLatestAppReleaseAsync(It.IsAny<CancellationToken>())).ReturnsAsync(ReleaseTestHelper.Release("incorrect"));
+        var installer = new AppUpdateInstaller(new FilesDownloader(ReleaseTestHelper.Http(ReleaseTestHelper.Zip(("app.exe", "bad update"))), NullLogger<FilesDownloader>.Instance), api.Object, NullLogger<AppUpdateInstaller>.Instance);
+        Assert.True(await installer.CheckForUpdates(new Version(1, 0), TestContext.Current.CancellationToken));
+        _ = await Assert.ThrowsAsync<InvalidDataException>(() => installer.DownloadAndUnpackLatestRelease(_root, "app.exe", TestContext.Current.CancellationToken));
+        Assert.Equal("previous update", File.ReadAllText(Path.Combine(update, "app.exe")));
+        Assert.Equal("previous marker", File.ReadAllText(Path.Combine(_root, ClientConsts.UpdateFile)));
+        Assert.Equal("old", File.ReadAllText(Path.Combine(_root, "app.exe")));
+        Assert.Single(Directory.GetDirectories(_root));
     }
 }

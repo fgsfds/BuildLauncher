@@ -27,4 +27,32 @@ public sealed class DirectoryReplacementTests
             Directory.Delete(root, true);
         }
     }
+
+    /// <summary> Disposing an uncommitted replacement removes staging without touching live content. </summary>
+    [Fact]
+    public void Dispose_UncommittedReplacement_PreservesOriginal()
+    {
+        var root = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString("N"));
+        var live = Path.Combine(root, "live");
+        _ = Directory.CreateDirectory(live);
+        File.WriteAllText(Path.Combine(live, "user.cfg"), "original");
+        try
+        {
+            string staging;
+            using (var replacement = new DirectoryReplacement(live, NullLogger.Instance))
+            {
+                staging = replacement.StagingPath;
+                replacement.CopyExisting();
+                File.WriteAllText(Path.Combine(staging, "user.cfg"), "modified");
+            }
+
+            Assert.False(Directory.Exists(staging));
+            Assert.Equal("original", File.ReadAllText(Path.Combine(live, "user.cfg")));
+            Assert.Single(Directory.GetDirectories(root));
+        }
+        finally
+        {
+            Directory.Delete(root, true);
+        }
+    }
 }

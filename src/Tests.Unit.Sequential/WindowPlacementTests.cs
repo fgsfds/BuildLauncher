@@ -66,4 +66,37 @@ public sealed class WindowPlacementTests
     [InlineData("0;0;1300;0;True")]
     [InlineData("0;0;1300;800;invalid")]
     public void Parse_InvalidPlacement_ReturnsNull(string? value) => Assert.Null(WindowPlacement.Parse(value));
+
+    /// <summary> Persistence remains invariant when the user uses decimal-comma regional settings. </summary>
+    /// <param name="groupSeparator">The simulated regional digit-group separator.</param>
+    [Theory]
+    [InlineData(" ")]
+    [InlineData(".")]
+    public void Serialization_DecimalCommaCulture_RoundTrips(string groupSeparator)
+    {
+        var original = System.Globalization.CultureInfo.CurrentCulture;
+        try
+        {
+            var culture = (System.Globalization.CultureInfo)System.Globalization.CultureInfo.InvariantCulture.Clone();
+            culture.NumberFormat.NumberDecimalSeparator = ",";
+            culture.NumberFormat.NumberGroupSeparator = groupSeparator;
+            System.Globalization.CultureInfo.CurrentCulture = culture;
+            var placement = new WindowPlacement(new PixelPoint(-1500, 25), new Size(1400.5, 850.25), false);
+            Assert.Equal(placement, WindowPlacement.Parse(placement.ToString()));
+            Assert.Contains("1400.5;850.25", placement.ToString(), StringComparison.Ordinal);
+        }
+        finally
+        {
+            System.Globalization.CultureInfo.CurrentCulture = original;
+        }
+    }
+
+    /// <summary> Missing or unusable monitor information leaves the saved placement intact. </summary>
+    [Fact]
+    public void FitToScreens_NoUsableMonitors_PreservesPlacement()
+    {
+        var placement = new WindowPlacement(new PixelPoint(50, 25), new Size(1400, 850), true);
+        Assert.Equal(placement, placement.FitToScreens([]));
+        Assert.Equal(placement, placement.FitToScreens([(new PixelRect(0, 0, 1920, 1080), double.NaN), (new PixelRect(0, 0, 0, 0), 1)]));
+    }
 }

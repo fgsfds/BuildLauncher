@@ -345,4 +345,32 @@ public sealed class InstalledGamesProviderTests
 
         Assert.False(fired);
     }
+
+    /// <summary> Changing a configured game path updates detection and notifies observers without recreating the game. </summary>
+    [Fact]
+    public void GamePathChange_ReevaluatesInstallationAndRaisesEvent()
+    {
+        var directory = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString("N"));
+        _ = Directory.CreateDirectory(directory);
+        try
+        {
+            File.WriteAllText(Path.Combine(directory, "DUKE3D.GRP"), "test");
+            var original = _provider.GetGame(GameEnum.Duke3D);
+            Assert.False(_provider.IsDukeInstalled);
+            var changes = new List<GameEnum>();
+            _provider.GameChangedEvent += changes.Add;
+            _configMock.Setup(x => x.GetGamePath(GameEnum.Duke3D)).Returns(directory);
+            _configMock.Raise(x => x.ParameterChangedEvent += null, nameof(GameEnum.Duke3D));
+            Assert.Same(original, _provider.GetGame(GameEnum.Duke3D));
+            Assert.True(_provider.IsDukeInstalled);
+            _configMock.Setup(x => x.GetGamePath(GameEnum.Duke3D)).Returns((string?)null);
+            _configMock.Raise(x => x.ParameterChangedEvent += null, nameof(GameEnum.Duke3D));
+            Assert.False(_provider.IsDukeInstalled);
+            Assert.Equal([GameEnum.Duke3D, GameEnum.Duke3D], changes);
+        }
+        finally
+        {
+            Directory.Delete(directory, true);
+        }
+    }
 }

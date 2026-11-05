@@ -58,6 +58,7 @@ public sealed class PortStarterTests
     [InlineData("playtime")]
     [InlineData("cleanup")]
     [InlineData("setup")]
+    [InlineData("start-cleanup")]
     public async Task StartAsync_HandlesFailureAndCleanup(string failure)
     {
         var config = new Mock<IConfigProvider>();
@@ -76,7 +77,7 @@ public sealed class PortStarterTests
             port.Setup(x => x.BeforeStart(It.IsAny<BaseGame>(), It.IsAny<BaseAddon>())).Throws(new IOException("Setup failed"));
         }
 
-        if (failure == "cleanup")
+        if (failure is "cleanup" or "start-cleanup")
         {
             port.Setup(x => x.AfterEnd(It.IsAny<BaseGame>(), It.IsAny<BaseAddon>())).Throws(new IOException("Cleanup failed"));
         }
@@ -84,7 +85,7 @@ public sealed class PortStarterTests
         var process = new Mock<IProcessRunResult>();
         var runner = new Mock<IProcessRunner>();
         runner.Setup(x => x.Start(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).Returns(failure == "null" ? null : process.Object);
-        if (failure == "start")
+        if (failure is "start" or "start-cleanup")
         {
             runner.Setup(x => x.Start(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).Throws(new IOException("Start failed"));
         }
@@ -109,6 +110,49 @@ public sealed class PortStarterTests
         if (!result.IsSuccess)
         {
             Assert.Contains("test.exe", result.Message, StringComparison.Ordinal);
+            if (failure == "start-cleanup")
+            {
+                Assert.Contains("Start failed", result.Message, StringComparison.Ordinal);
+                Assert.Contains("Cleanup failed", result.Message, StringComparison.Ordinal);
+            }
         }
+    }
+
+    /// <summary> Cleanup, handle disposal and playtime persistence happen only after the process wait completes. </summary>
+    [Fact]
+    public async Task StartAsync_RunningProcess_DefersCleanupAndPlaytime()
+    {
+        var config = new Mock<IConfigProvider>();
+        config.SetupGet(x => x.Playtimes).Returns(new Dictionary<string, TimeSpan>());
+        using var factory = ObjectCreationHelper.CreateInstalledAddonsProviderFactory(config.Object);
+        var port = new Mock<BasePort> { CallBase = true };
+        port.SetupGet(x => x.PortEnum).Returns(PortEnum.Stub);
+        port.SetupGet(x => x.CmdArguments).Returns(new StubPort().CmdArguments);
+        var process = new Mock<IProcessRunResult>();
+        var runner = new Mock<IProcessRunner>();
+        var exit = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
+        runner.Setup(x => x.Start(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).Returns(process.Object);
+        runner.Setup(x => x.WaitForExitAsync(process.Object, It.IsAny<CancellationToken>())).Returns(exit.Task);
+        var starter = new PortStarter(new PlaytimeProvider(config.Object), factory, runner.Object, NullLogger<PortStarter>.Instance);
+        var game = new DukeGame { Duke64RomPath = null, DukeZHRomPath = null, DukeWTInstallPath = null };
+        var addon = CampaignTestFactory.CreateDukeCampaign("running", GameEnum.Duke3D, null);
+        var operation = starter.StartAsync(port.Object, game, addon, [], null, false, false, Path.Combine(Path.GetTempPath(), "running.exe"));
+        try
+        {
+            Assert.False(operation.IsCompleted);
+            port.Verify(x => x.AfterEnd(game, addon), Times.Never());
+            process.Verify(x => x.Dispose(), Times.Never());
+            config.Verify(x => x.AddPlaytime(It.IsAny<string>(), It.IsAny<TimeSpan>()), Times.Never());
+        }
+        finally
+        {
+            exit.TrySetResult();
+            await operation;
+        }
+
+        Assert.True((await operation).IsSuccess);
+        port.Verify(x => x.AfterEnd(game, addon), Times.Once());
+        process.Verify(x => x.Dispose(), Times.Once());
+        config.Verify(x => x.AddPlaytime("running", It.IsAny<TimeSpan>()), Times.Once());
     }
 }
