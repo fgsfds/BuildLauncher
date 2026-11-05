@@ -10,6 +10,12 @@ namespace Core.Client.Config;
 /// </summary>
 public sealed class ConfigProviderFake : IConfigProvider
 {
+    /// <inheritdoc />
+    public string WindowPlacement { get; set; } = string.Empty;
+
+    /// <inheritdoc />
+    public string ActiveTab { get; set; } = string.Empty;
+
     /// <summary>
     ///     Gets a dictionary of addon scores.
     /// </summary>

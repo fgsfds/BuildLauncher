@@ -7,6 +7,21 @@ namespace Tests.Unit;
 
 public sealed class ConfigProviderTests : IDisposable
 {
+    /// <summary> Persists window settings in the existing settings table across provider instances. </summary>
+    [Fact]
+    public void WindowSettings_PersistAcrossProviderInstances()
+    {
+        Assert.Empty(_provider.WindowPlacement);
+        Assert.Empty(_provider.ActiveTab);
+
+        _provider.WindowPlacement = "-1500;40;1400;850;True";
+        _provider.ActiveTab = "BloodTab";
+
+        var restored = new ConfigProvider(_dbContextFactory);
+        Assert.Equal(_provider.WindowPlacement, restored.WindowPlacement);
+        Assert.Equal("BloodTab", restored.ActiveTab);
+    }
+
     private readonly InMemoryDbContextFactory _dbContextFactory;
     private readonly ConfigProvider _provider;
 

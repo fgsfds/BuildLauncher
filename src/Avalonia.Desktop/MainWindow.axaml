@@ -108,7 +108,8 @@
 
             </Grid>
 
-            <TabControl Grid.Row="1"
+            <TabControl x:Name="MainTabs"
+                        Grid.Row="1"
                         Margin="5"
                         TabStripPlacement="Left">
 

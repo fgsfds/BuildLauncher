@@ -9,6 +9,12 @@ namespace Core.Client.Interfaces;
 /// </summary>
 public interface IConfigProvider
 {
+    /// <summary> Gets or sets the saved main window placement, or an empty value for the default placement. </summary>
+    string WindowPlacement { get; set; }
+
+    /// <summary> Gets or sets the name of the last selected main window tab. </summary>
+    string ActiveTab { get; set; }
+
     /// <summary>
     ///     Represents a method that handles configuration parameter change events.
     /// </summary>

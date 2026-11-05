@@ -1,4 +1,7 @@
-﻿using Avalonia.Controls;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
+using Avalonia.Controls;
+using Avalonia.Desktop.Helpers;
 using Avalonia.Desktop.ViewModels;
 using Avalonia.Interactivity;
 using Avalonia.Media;
@@ -13,9 +16,23 @@ namespace Avalonia.Desktop;
 /// </summary>
 public sealed partial class MainWindow : Window, IDisposable
 {
+    /// <summary> The persisted application settings. </summary>
     private readonly IConfigProvider _config;
 
+    /// <summary> Records best-effort settings persistence failures. </summary>
+    private readonly ILogger<MainWindow> _logger = NullLogger<MainWindow>.Instance;
+
+    /// <summary> The installed games used for the default tab selection. </summary>
     private readonly InstalledGamesProvider _installedGamesProvider;
+
+    /// <summary> The last normal bounds, retained while maximized or minimized. </summary>
+    private WindowPlacement? _normalPlacement;
+
+    /// <summary> Whether startup restoration has completed. </summary>
+    private bool _isOpened;
+
+    /// <summary> The last non-minimized window state. </summary>
+    private bool _wasMaximized;
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="MainWindow" /> class.
@@ -33,9 +50,11 @@ public sealed partial class MainWindow : Window, IDisposable
     /// </summary>
     /// <param name="installedGamesProvider">The installed games provider.</param>
     /// <param name="config">The configuration provider.</param>
+    /// <param name="logger">Records settings persistence failures.</param>
     public MainWindow(
         InstalledGamesProvider installedGamesProvider,
-        IConfigProvider config
+        IConfigProvider config,
+        ILogger<MainWindow>? logger = null
         )
     {
         ArgumentNullException.ThrowIfNull(installedGamesProvider);
@@ -43,11 +62,14 @@ public sealed partial class MainWindow : Window, IDisposable
 
         _installedGamesProvider = installedGamesProvider;
         _config = config;
+        _logger = logger ?? NullLogger<MainWindow>.Instance;
 
         RenderOptions.SetBitmapInterpolationMode(this, BitmapInterpolationMode.HighQuality);
 
         InitializeComponent();
 
+        RestoreWindowPlacement();
+        PositionChanged += OnPositionChanged;
         EnableSystemBackdrop();
     }
 
@@ -55,6 +77,8 @@ public sealed partial class MainWindow : Window, IDisposable
     public void Dispose()
     {
         _config.ParameterChangedEvent -= OnConfigParameterChanged;
+        PropertyChanged -= OnWindowPropertyChanged;
+        PositionChanged -= OnPositionChanged;
 
         if (DataContext is MainWindowViewModel viewModel)
         {
@@ -78,6 +102,8 @@ public sealed partial class MainWindow : Window, IDisposable
         {
             ConsentWindow!.IsVisible = true;
         }
+
+        MainTabs.SelectedItem = SettingsTab;
 
         if (_installedGamesProvider.IsDukeInstalled)
         {
@@ -118,6 +144,105 @@ public sealed partial class MainWindow : Window, IDisposable
         else if (_installedGamesProvider.IsTekWarInstalled)
         {
             TekWarTab!.IsSelected = true;
+        }
+
+        var savedTabName = _config.ActiveTab;
+        var savedTab = MainTabs.Items.OfType<TabItem>().FirstOrDefault(tab =>
+            tab.Name == savedTabName && tab.IsEnabled && tab.IsVisible);
+
+        if (savedTab is not null)
+        {
+            MainTabs.SelectedItem = savedTab;
+        }
+
+        _isOpened = true;
+        CaptureWindowPlacement();
+    }
+
+    /// <summary> Restores bounds before showing the window and fits them to the current monitor layout. </summary>
+    private void RestoreWindowPlacement()
+    {
+        var saved = WindowPlacement.Parse(_config.WindowPlacement);
+        var placement = saved ?? new WindowPlacement(Position, new Size(1300, 800), true);
+        var fitted = placement.FitToScreens(Screens.All.Select(screen => (screen.WorkingArea, screen.Scaling)).ToArray());
+
+        MinWidth = Math.Min(1300, fitted.Size.Width);
+        MinHeight = Math.Min(800, fitted.Size.Height);
+        Width = fitted.Size.Width;
+        Height = fitted.Size.Height;
+        _normalPlacement = fitted;
+        _wasMaximized = fitted.IsMaximized;
+
+        if (saved is not null)
+        {
+            WindowStartupLocation = WindowStartupLocation.Manual;
+            Position = fitted.Position;
+            WindowState = fitted.IsMaximized ? WindowState.Maximized : WindowState.Normal;
+        }
+    }
+
+    /// <summary> Captures normal bounds without replacing them with maximized or minimized bounds. </summary>
+    private void CaptureWindowPlacement()
+    {
+        if (!_isOpened)
+        {
+            return;
+        }
+
+        if (WindowState != WindowState.Minimized)
+        {
+            _wasMaximized = WindowState == WindowState.Maximized;
+        }
+
+        if (WindowState == WindowState.Normal && Bounds.Width > 0 && Bounds.Height > 0)
+        {
+            _normalPlacement = new WindowPlacement(Position, Bounds.Size, false);
+        }
+    }
+
+    /// <inheritdoc />
+    protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
+    {
+        base.OnPropertyChanged(change);
+
+        if (change.Property == BoundsProperty || change.Property == WindowStateProperty)
+        {
+            CaptureWindowPlacement();
+        }
+    }
+
+    /// <summary> Captures the normal window position when it moves. </summary>
+    /// <param name="sender">The window that moved.</param>
+    /// <param name="e">The new desktop position.</param>
+    private void OnPositionChanged(object? sender, PixelPointEventArgs e) => CaptureWindowPlacement();
+
+    /// <inheritdoc />
+    protected override void OnClosing(WindowClosingEventArgs e)
+    {
+        base.OnClosing(e);
+
+        if (e.Cancel || !_isOpened)
+        {
+            return;
+        }
+
+        CaptureWindowPlacement();
+
+        try
+        {
+            if (_normalPlacement is not null)
+            {
+                _config.WindowPlacement = (_normalPlacement with { IsMaximized = _wasMaximized }).ToString();
+            }
+
+            if (MainTabs.SelectedItem is TabItem { Name: not null } tab)
+            {
+                _config.ActiveTab = tab.Name;
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning(ex, "Could not save main window settings.");
         }
     }
 
