@@ -1,4 +1,4 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
 using Core.All.Enums;
 using Core.All.Serializable.Downloadable;
 using Core.Client;
@@ -36,21 +36,21 @@ public sealed class PortInstaller : InstallerBase<BasePort>
     }
 
     /// <inheritdoc />
-    protected override void Backup() { }
+    protected override void Backup(string installFolder) { }
 
     /// <inheritdoc />
-    protected override void PostInstall()
+    protected override void PostInstall(string installFolder)
     {
         if (_instance.PortEnum is PortEnum.DosBox)
         {
-            var subFolder = Directory.GetDirectories(_instance.InstallFolderPath).FirstOrDefault(x => x.Contains("dosbox-staging", StringComparison.OrdinalIgnoreCase));
-            FlattenSubfolder(_instance.InstallFolderPath, subFolder);
+            var subFolder = Directory.GetDirectories(installFolder).FirstOrDefault(x => x.Contains("dosbox-staging", StringComparison.OrdinalIgnoreCase));
+            FlattenSubfolder(installFolder, subFolder);
         }
         else if (_instance.PortEnum is PortEnum.ZeroRecomp)
         {
             try
             {
-                var portable = Path.Combine(_instance.InstallFolderPath, "portable.txt");
+                var portable = Path.Combine(installFolder, "portable.txt");
                 File.WriteAllText(portable, string.Empty);
             }
             catch (Exception ex)
@@ -58,8 +58,13 @@ public sealed class PortInstaller : InstallerBase<BasePort>
                 Trace.WriteLine($"Error creating portable.txt: {ex.Message}");
             }
 
-            var subFolder = Directory.GetDirectories(_instance.InstallFolderPath).FirstOrDefault(x => x.Contains("dnzh-", StringComparison.OrdinalIgnoreCase));
-            FlattenSubfolder(_instance.InstallFolderPath, subFolder);
+            var subFolder = Directory.GetDirectories(installFolder).FirstOrDefault(x => x.Contains("dnzh-", StringComparison.OrdinalIgnoreCase));
+            FlattenSubfolder(installFolder, subFolder);
+        }
+
+        if (!File.Exists(Path.Combine(installFolder, _instance.Exe)))
+        {
+            throw new InvalidDataException("The release does not contain the port executable.");
         }
     }
 

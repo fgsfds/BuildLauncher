@@ -1,4 +1,4 @@
-﻿using System.Security.Cryptography;
+using Core.Client.Helpers;
 using Core.All;
 using Core.All.Serializable.Downloadable;
 using Core.Client.Interfaces;
@@ -51,47 +51,16 @@ public abstract class InstallerBase<T>
     public Progress<float> Progress { get; init; } = new();
 
     /// <summary>
-    ///     Verifies the SHA-256 hash of a downloaded file against the expected value.
-    /// </summary>
-    /// <param name="filePath">Path to the downloaded file.</param>
-    /// <param name="hashStr">Expected hash string, optionally prefixed with "sha256:".</param>
-    /// <returns>true if the hash matches or hashStr is null; otherwise, false.</returns>
-    private static async Task<bool> CheckFileHashAsync(
-        string filePath,
-        string? hashStr
-        )
-    {
-        if (hashStr is null)
-        {
-            return true;
-        }
-
-        const string Sha = "sha256:";
-
-        if (hashStr.StartsWith(Sha, StringComparison.OrdinalIgnoreCase))
-        {
-            hashStr = hashStr[Sha.Length..];
-        }
-
-        var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.None);
-        await using var fileStreamScope = fileStream.ConfigureAwait(false);
-        using var sha256 = SHA256.Create();
-
-        var hashBytes = sha256.ComputeHash(fileStream);
-        var localFileHash = Convert.ToHexString(hashBytes);
-
-        return hashStr.Equals(localFileHash, StringComparison.OrdinalIgnoreCase);
-    }
-
-    /// <summary>
     ///     Performs post install actions.
     /// </summary>
-    protected abstract void PostInstall();
+    /// <param name="installFolder">The isolated staging directory.</param>
+    protected abstract void PostInstall(string installFolder);
 
     /// <summary>
     ///     Backups required files.
     /// </summary>
-    protected abstract void Backup();
+    /// <param name="installFolder">The isolated staging directory containing existing files.</param>
+    protected abstract void Backup(string installFolder);
 
     /// <summary>
     ///     Uninstalls port/tool.
@@ -108,8 +77,10 @@ public abstract class InstallerBase<T>
     /// </summary>
     public async Task<Result> InstallAsync(CancellationToken cancellationToken = default)
     {
+        string? downloadFolder = null;
         try
         {
+            cancellationToken.ThrowIfCancellationRequested();
             _filesDownloader.ProgressChanged += OnProgressChanged;
             _archiveTools.ProgressChanged += OnProgressChanged;
 
@@ -120,7 +91,9 @@ public abstract class InstallerBase<T>
                 return new(ResultEnum.Error, string.Empty);
             }
 
-            var filePath = Path.GetFileName(release.DownloadUrl.ToString());
+            downloadFolder = Path.Combine(Path.GetTempPath(), "BuildLauncher-download-" + Guid.NewGuid().ToString("N"));
+            _ = Directory.CreateDirectory(downloadFolder);
+            var filePath = Path.Combine(downloadFolder, "release.archive");
 
             var isDownloaded = await _filesDownloader.DownloadFileAsync(release.DownloadUrl, filePath, cancellationToken).ConfigureAwait(false);
 
@@ -131,7 +104,7 @@ public abstract class InstallerBase<T>
 
             cancellationToken.ThrowIfCancellationRequested();
 
-            var isHashCorrect = await CheckFileHashAsync(filePath, release.Hash).ConfigureAwait(false);
+            var isHashCorrect = await FileHash.MatchesAsync(filePath, release.Hash, cancellationToken).ConfigureAwait(false);
 
             if (!isHashCorrect)
             {
@@ -145,29 +118,42 @@ public abstract class InstallerBase<T>
 
             cancellationToken.ThrowIfCancellationRequested();
 
-            Backup();
-
-            await _archiveTools.UnpackArchiveAsync(filePath, _instance.InstallFolderPath, cancellationToken).ConfigureAwait(false);
-
-            File.Delete(filePath);
-
-            await File.WriteAllTextAsync(Path.Combine(_instance.InstallFolderPath, "version"), release.Version, cancellationToken).ConfigureAwait(false);
-
-            PostInstall();
+            using var replacement = new DirectoryReplacement(_instance.InstallFolderPath, _logger);
+            replacement.CopyExisting(cancellationToken);
+            Backup(replacement.StagingPath);
+            await _archiveTools.UnpackArchiveAsync(filePath, replacement.StagingPath, cancellationToken).ConfigureAwait(false);
+            PostInstall(replacement.StagingPath);
+            await File.WriteAllTextAsync(Path.Combine(replacement.StagingPath, "version"), release.Version, cancellationToken).ConfigureAwait(false);
+            cancellationToken.ThrowIfCancellationRequested();
+            replacement.Commit();
 
             return new(ResultEnum.Success, string.Empty);
+        }
+        catch (OperationCanceledException)
+        {
+            return new(ResultEnum.Cancelled, string.Empty);
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, $"Error while installing {_instance.ToString()}.");
-            Uninstall();
 
-            return new(ResultEnum.Error, ex.ToString());
+            return new(ResultEnum.Error, ex.Message);
         }
         finally
         {
             _filesDownloader.ProgressChanged -= OnProgressChanged;
             _archiveTools.ProgressChanged -= OnProgressChanged;
+            try
+            {
+                if (downloadFolder is not null)
+                {
+                    Directory.Delete(downloadFolder, true);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWarning(ex, "Could not remove download directory {Path}.", downloadFolder);
+            }
         }
     }
 

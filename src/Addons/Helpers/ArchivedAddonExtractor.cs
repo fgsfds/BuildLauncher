@@ -1,8 +1,10 @@
 using System.Text.Json;
+using Core.All.Enums;
 using Core.All.Serializable.Addon;
 using Core.Client.Helpers;
 using Microsoft.Extensions.Logging;
 using SharpCompress.Archives;
+using SharpCompress.Common;
 
 namespace Addons.Helpers;
 
@@ -43,135 +45,65 @@ public sealed class ArchivedAddonExtractor
             return null;
         }
 
-        string? unpackedTo = null;
-        IArchive? archive = null;
-
         try
         {
-            archive = ArchiveFactory.Open(pathToFile);
+            using var archive = ArchiveFactory.Open(pathToFile);
+            var hasGrpInfo = archive.Entries.Any(static entry => entry.Key?.Equals("addons.grpinfo", StringComparison.OrdinalIgnoreCase) == true);
+            var manifestEntries = archive.Entries.Where(static entry =>
+                !entry.IsDirectory && entry.Key is not null &&
+                !entry.Key.Contains('/') && !entry.Key.Contains('\\') &&
+                entry.Key.StartsWith("addon", StringComparison.OrdinalIgnoreCase) &&
+                entry.Key.EndsWith(".json", StringComparison.OrdinalIgnoreCase)).ToArray();
 
-            if (archive.Entries.Any(static x => x.Key?.Equals("addons.grpinfo", StringComparison.OrdinalIgnoreCase) == true))
-            {
-                unpackedTo = Unpack(pathToFile, archive);
-
-                return new ExtractResult(unpackedTo, null);
-            }
-
-            var addonJsonsInsideArchive = archive.Entries
-                                                 .Where(static x => x.Key?.StartsWith("addon", StringComparison.OrdinalIgnoreCase) == true &&
-                                                                    x.Key.EndsWith(".json", StringComparison.OrdinalIgnoreCase)
-                                                      )
-                                                 .ToList();
-
-            if (addonJsonsInsideArchive.Count == 0)
+            if (!hasGrpInfo && manifestEntries.Length == 0)
             {
                 return null;
             }
 
-            var addonJsonStream = await addonJsonsInsideArchive[0].OpenEntryStreamAsync().ConfigureAwait(false);
-            await using var addonJsonStreamScope = addonJsonStream.ConfigureAwait(false);
-
-            var addonDto = await JsonSerializer.DeserializeAsync(
-                addonJsonStream,
-                AddonManifestJsonContext.Default.AddonManifestJsonModel!
-                ).ConfigureAwait(false);
-
-            if (addonDto is null)
+            var manifests = new List<AddonManifestJsonModel>();
+            foreach (var entry in manifestEntries)
             {
-                return null;
-            }
-
-            if (addonDto.MainRff is not null || addonDto.SoundRff is not null)
-            {
-                unpackedTo = Unpack(pathToFile, archive);
-            }
-            else if (addonDto.Executables is not null)
-            {
-                unpackedTo = Unpack(pathToFile, archive);
-            }
-
-            List<AddonManifestJsonModel> manifests = new(3);
-
-            if (unpackedTo is not null)
-            {
-                var unpackedAddonJsons = Directory.GetFiles(unpackedTo, "addon*.json");
-
-                foreach (var addonJson in unpackedAddonJsons)
+                var stream = await entry.OpenEntryStreamAsync().ConfigureAwait(false);
+                await using var streamScope = stream.ConfigureAwait(false);
+                var manifest = await JsonSerializer.DeserializeAsync(stream, AddonManifestJsonContext.Default.AddonManifestJsonModel).ConfigureAwait(false);
+                if (manifest is null || manifest.SupportedGame is null ||
+                    string.IsNullOrWhiteSpace(manifest.Id) || string.IsNullOrWhiteSpace(manifest.Title) ||
+                    !Enum.IsDefined(manifest.SupportedGame.Game) ||
+                    manifest.AddonType is not (AddonTypeEnum.TC or AddonTypeEnum.Map or AddonTypeEnum.Mod))
                 {
-                    var text = File.OpenRead(addonJson);
-                    await using var textScope = text.ConfigureAwait(false);
-
-                    var addonDto2 = await JsonSerializer.DeserializeAsync(
-                        text,
-                        AddonManifestJsonContext.Default.AddonManifestJsonModel!
-                        ).ConfigureAwait(false);
-
-                    if (addonDto2 is null)
-                    {
-                        _logger.LogError("Error while deserializing {FileName}.", addonJson);
-
-                        return null;
-                    }
-
-                    manifests.Add(addonDto2);
+                    throw new InvalidDataException($"Invalid addon manifest: {entry.Key}");
                 }
+
+                manifests.Add(manifest);
             }
-            else
+
+            var needsExtraction = hasGrpInfo || manifests.Any(static manifest =>
+                manifest.MainRff is not null || manifest.SoundRff is not null || manifest.Executables is not null);
+            if (!needsExtraction)
             {
-                foreach (var addonJson in addonJsonsInsideArchive)
-                {
-                    var addonJsonStream2 = await addonJson.OpenEntryStreamAsync().ConfigureAwait(false);
-                    await using var addonJsonStream2Scope = addonJsonStream2.ConfigureAwait(false);
-
-                    var addonDto2 = await JsonSerializer.DeserializeAsync(
-                        addonJsonStream2,
-                        AddonManifestJsonContext.Default.AddonManifestJsonModel!
-                        ).ConfigureAwait(false);
-
-                    if (addonDto2 is null)
-                    {
-                        _logger.LogError("Error while deserializing {FileName}.", addonJson.Key);
-
-                        return null;
-                    }
-
-                    manifests.Add(addonDto2);
-                }
+                return new ExtractResult(null, [.. manifests]);
             }
 
-            return new ExtractResult(unpackedTo, [.. manifests]);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogCritical(ex, "=== Error while unpacking archive ===");
-
-            return null;
-        }
-        finally
-        {
-            archive?.Dispose();
-
-            if (unpackedTo is not null)
+            var destination = Path.Combine(Path.GetDirectoryName(Path.GetFullPath(pathToFile))!, Path.GetFileNameWithoutExtension(pathToFile));
+            using var replacement = new DirectoryReplacement(destination, _logger);
+            archive.WriteToDirectory(replacement.StagingPath, new ExtractionOptions { ExtractFullPath = true, Overwrite = true });
+            archive.Dispose();
+            replacement.Commit();
+            try
             {
                 File.Delete(pathToFile);
             }
+            catch (Exception ex)
+            {
+                _logger.LogWarning(ex, "Addon installed, but its source archive could not be removed: {Path}.", pathToFile);
+            }
+
+            return new ExtractResult(destination, hasGrpInfo ? null : [.. manifests]);
         }
-    }
-
-    private static string Unpack(string pathToFile, IArchive archive)
-    {
-        var fileFolder = Path.GetDirectoryName(pathToFile) ?? throw new InvalidOperationException($"Could not determine directory for {pathToFile}");
-        var unpackTo = Path.Combine(fileFolder, Path.GetFileNameWithoutExtension(pathToFile));
-
-        if (Directory.Exists(unpackTo))
+        catch (Exception ex)
         {
-            Directory.Delete(unpackTo, true);
+            _logger.LogError(ex, "Error while preparing addon archive {Path}; the source archive was retained.", pathToFile);
+            return null;
         }
-
-        Ensure.DirectoryExists(unpackTo);
-
-        archive.WriteToDirectory(unpackTo);
-
-        return unpackTo;
     }
 }

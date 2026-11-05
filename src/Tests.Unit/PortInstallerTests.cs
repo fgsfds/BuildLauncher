@@ -52,12 +52,13 @@ public sealed class PortInstallerTests
             var downloader = new FilesDownloader(new Mock<IHttpClientFactory>().Object, NullLogger<FilesDownloader>.Instance);
             var archiveTools = new ArchiveTools(NullLogger<ArchiveTools>.Instance);
 
-            var stubPort = new StubPort();
-            var installFolderField = typeof(StubPort).GetProperty("InstallFolderPath");
-            Assert.NotNull(installFolderField);
+            var port = new Mock<BasePort>();
+            port.SetupGet(x => x.InstallFolderPath).Returns(tempDir);
+            var installer = new PortInstaller(port.Object, apiMock.Object, downloader, archiveTools, NullLogger<PortInstaller>.Instance);
 
-            var installer = new PortInstaller(stubPort, apiMock.Object, downloader, archiveTools, NullLogger<PortInstaller>.Instance);
-            Assert.NotNull(installer);
+            installer.Uninstall();
+
+            Assert.False(Directory.Exists(tempDir));
         }
         finally
         {

@@ -1,4 +1,4 @@
-﻿using Core.Client.Helpers;
+using Core.Client.Helpers;
 using Microsoft.Extensions.Logging;
 using SharpCompress.Archives;
 using SharpCompress.Common;
@@ -77,6 +77,7 @@ public sealed class ArchiveTools
 
         await archive.WriteToDirectoryAsync(
                       unpackTo,
+                      options: new ExtractionOptions { ExtractFullPath = true, Overwrite = true },
                       progress: progress,
                       cancellationToken: cancellationToken
                       )

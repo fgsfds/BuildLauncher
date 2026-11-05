@@ -51,6 +51,7 @@ public sealed partial class Program
         };
 
         Directory.SetCurrentDirectory(AppDomain.CurrentDomain.BaseDirectory);
+        AppUpdateInstaller.CleanupCompletedUpdates(ClientProperties.WorkingFolder);
 
         if (File.Exists(Path.Combine(ClientProperties.WorkingFolder, ClientConsts.UpdateFile)))
         {

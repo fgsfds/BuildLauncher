@@ -1,255 +1,118 @@
-using System.Reflection;
+using System.Net;
 using Core.All.Enums;
-using Core.All.Serializable.Downloadable;
 using Core.Client.Config;
-using Core.Client.Helpers;
 using Core.Client.Interfaces;
 using Core.Client.Tools;
 using Games.Providers;
 using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
+using Tests.Unit.Helpers;
 using Tools.Installer;
 using Tools.Tools;
 
 namespace Tests.Unit;
 
-public sealed class ToolInstallerTests
+/// <summary> Verifies tool installation through its public API in isolated directories. </summary>
+public sealed class ToolInstallerTests : IDisposable
 {
-    [Fact]
-    public void Create_Mapster32_ReturnsToolInstaller()
+    /// <summary> The test-owned root. </summary>
+    private readonly string _root = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString("N"));
+
+    /// <summary> Creates a fake Blood installation. </summary>
+    public ToolInstallerTests()
     {
-        var apiMock = new Mock<IApiInterface>();
-        var gamesMock = new Mock<InstalledGamesProvider>(Mock.Of<IConfigProvider>());
-        var downloader = new FilesDownloader(new Mock<IHttpClientFactory>().Object, NullLogger<FilesDownloader>.Instance);
-        var archiveTools = new ArchiveTools(NullLogger<ArchiveTools>.Instance);
-
-        var mapster32 = new Mapster32(gamesMock.Object);
-        var installer = new ToolInstaller(mapster32, apiMock.Object, gamesMock.Object, downloader, archiveTools, NullLogger<ToolInstaller>.Instance);
-
-        Assert.NotNull(installer);
+        _ = Directory.CreateDirectory(_root);
+        File.WriteAllText(Path.Combine(_root, "BLOOD.EXE"), "original");
+        File.WriteAllText(Path.Combine(_root, "game.art"), "art");
     }
 
-    [Fact]
-    public void Create_DOSBlood_ReturnsToolInstaller()
-    {
-        var apiMock = new Mock<IApiInterface>();
-        var gamesMock = new Mock<InstalledGamesProvider>(Mock.Of<IConfigProvider>());
-        var downloader = new FilesDownloader(new Mock<IHttpClientFactory>().Object, NullLogger<FilesDownloader>.Instance);
-        var archiveTools = new ArchiveTools(NullLogger<ArchiveTools>.Instance);
+    /// <summary> Deletes only test-owned files. </summary>
+    public void Dispose() => Directory.Delete(_root, true);
 
-        var dosBlood = new DOSBlood(gamesMock.Object);
-        var installer = new ToolInstaller(dosBlood, apiMock.Object, gamesMock.Object, downloader, archiveTools, NullLogger<ToolInstaller>.Instance);
-
-        Assert.NotNull(installer);
-    }
-
-    [Fact]
-    public void Create_XMapEdit_ReturnsToolInstaller()
-    {
-        var apiMock = new Mock<IApiInterface>();
-        var gamesMock = new Mock<InstalledGamesProvider>(Mock.Of<IConfigProvider>());
-        var downloader = new FilesDownloader(new Mock<IHttpClientFactory>().Object, NullLogger<FilesDownloader>.Instance);
-        var archiveTools = new ArchiveTools(NullLogger<ArchiveTools>.Instance);
-
-        var xmapedit = new XMapEdit(gamesMock.Object);
-        var installer = new ToolInstaller(xmapedit, apiMock.Object, gamesMock.Object, downloader, archiveTools, NullLogger<ToolInstaller>.Instance);
-
-        Assert.NotNull(installer);
-    }
-
-    [Fact]
-    public async Task GetRelease_DelegatesToApiInterface()
-    {
-        var apiMock = new Mock<IApiInterface>();
-        apiMock.Setup(x => x.GetLatestToolReleaseAsync(It.IsAny<ToolEnum>())).ReturnsAsync((GeneralReleaseJsonModel?)null);
-
-        var gamesMock = new Mock<InstalledGamesProvider>(Mock.Of<IConfigProvider>());
-        var downloader = new FilesDownloader(new Mock<IHttpClientFactory>().Object, NullLogger<FilesDownloader>.Instance);
-        var archiveTools = new ArchiveTools(NullLogger<ArchiveTools>.Instance);
-
-        var dosBlood = new DOSBlood(gamesMock.Object);
-        var installer = new ToolInstaller(dosBlood, apiMock.Object, gamesMock.Object, downloader, archiveTools, NullLogger<ToolInstaller>.Instance);
-
-        var release = await installer.GetRelease();
-
-        Assert.Null(release);
-        apiMock.Verify(x => x.GetLatestToolReleaseAsync(ToolEnum.DOSBlood), Times.Once);
-    }
-
-    private static ToolInstaller CreateInstaller(BaseTool tool, InstalledGamesProvider gamesProvider)
-    {
-        var apiMock = new Mock<IApiInterface>();
-        var downloader = new FilesDownloader(new Mock<IHttpClientFactory>().Object, NullLogger<FilesDownloader>.Instance);
-        var archiveTools = new ArchiveTools(NullLogger<ArchiveTools>.Instance);
-
-        return new ToolInstaller(tool, apiMock.Object, gamesProvider, downloader, archiveTools, NullLogger<ToolInstaller>.Instance);
-    }
-
-    private static InstalledGamesProvider CreateGamesProvider(string? bloodPath)
+    /// <summary> Creates the game's configuration without accessing a live installation. </summary>
+    /// <returns>The installed game provider.</returns>
+    private InstalledGamesProvider Games()
     {
         var config = new ConfigProviderFake();
-        if (bloodPath is not null)
-        {
-            config.SetGamePath(GameEnum.Blood, bloodPath);
-        }
-
+        config.SetGamePath(GameEnum.Blood, _root);
         return new InstalledGamesProvider(config);
     }
 
-    private static void InvokeProtected(ToolInstaller installer, string methodName) =>
-        typeof(ToolInstaller).GetMethod(methodName, BindingFlags.Instance | BindingFlags.NonPublic)!
-            .Invoke(installer, null);
-
-    [Fact]
-    public void DOSBlood_Backup_RenamesBloodExeToBak()
+    /// <summary> Creates an installer with an in-memory release download. </summary>
+    /// <param name="tool">The tool being installed.</param>
+    /// <param name="games">The game paths.</param>
+    /// <param name="data">The downloaded archive.</param>
+    /// <param name="status">The fake HTTP response status.</param>
+    /// <returns>The installer.</returns>
+    private static ToolInstaller Installer(BaseTool tool, InstalledGamesProvider games, byte[] data, HttpStatusCode status = HttpStatusCode.OK)
     {
-        var bloodDir = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
-        Directory.CreateDirectory(bloodDir);
-        var bloodExe = Path.Combine(bloodDir, "BLOOD.EXE");
-        File.WriteAllText(bloodExe, "blood");
-
-        try
-        {
-            var games = CreateGamesProvider(bloodDir);
-            var installer = CreateInstaller(new DOSBlood(games), games);
-
-            InvokeProtected(installer, "Backup");
-
-            Assert.False(File.Exists(bloodExe), "Original BLOOD.EXE should be moved.");
-            Assert.True(File.Exists(bloodExe + ".BAK"), "Backup BLOOD.EXE.BAK should exist.");
-        }
-        finally
-        {
-            Directory.Delete(bloodDir, true);
-        }
+        var api = new Mock<IApiInterface>();
+        api.Setup(x => x.GetLatestToolReleaseAsync(It.IsAny<ToolEnum>(), It.IsAny<CancellationToken>())).ReturnsAsync(ReleaseTestHelper.Release());
+        return new ToolInstaller(tool, api.Object, games,
+            new FilesDownloader(ReleaseTestHelper.Http(data, status), NullLogger<FilesDownloader>.Instance),
+            new ArchiveTools(NullLogger<ArchiveTools>.Instance), NullLogger<ToolInstaller>.Instance);
     }
 
-    [Fact]
-    public void DOSBlood_Backup_ExistingBak_DoesNotOverwrite()
+    /// <summary> DOSBlood updates retain the original backup and uninstall restores it. </summary>
+    /// <param name="existingBackup">Whether a previous install already made a backup.</param>
+    [Theory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public async Task DOSBlood_InstallAndUninstall_PreservesOriginal(bool existingBackup)
     {
-        var bloodDir = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
-        Directory.CreateDirectory(bloodDir);
-        var bloodExe = Path.Combine(bloodDir, "BLOOD.EXE");
-        var bloodExeBak = bloodExe + ".BAK";
-        File.WriteAllText(bloodExe, "blood");
-        File.WriteAllText(bloodExeBak, "existing bak");
-
-        try
+        var exe = Path.Combine(_root, "BLOOD.EXE");
+        if (existingBackup)
         {
-            var games = CreateGamesProvider(bloodDir);
-            var installer = CreateInstaller(new DOSBlood(games), games);
-
-            InvokeProtected(installer, "Backup");
-
-            Assert.True(File.Exists(bloodExe), "Original BLOOD.EXE should remain when a backup already exists.");
-            Assert.Equal("existing bak", File.ReadAllText(bloodExeBak));
+            File.WriteAllText(exe + ".BAK", "backup");
         }
-        finally
-        {
-            Directory.Delete(bloodDir, true);
-        }
+
+        var games = Games();
+        var installer = Installer(new DOSBlood(games), games, ReleaseTestHelper.Zip(("BLOOD.EXE", "updated")));
+        var result = await installer.InstallAsync(TestContext.Current.CancellationToken);
+        Assert.True(result.IsSuccess, result.Message);
+        Assert.Equal("updated", File.ReadAllText(exe));
+        Assert.Equal(existingBackup ? "backup" : "original", File.ReadAllText(exe + ".BAK"));
+        Assert.Equal("art", File.ReadAllText(Path.Combine(_root, "game.art")));
+
+        installer.Uninstall();
+        Assert.Equal(existingBackup ? "backup" : "original", File.ReadAllText(exe));
+        Assert.False(File.Exists(exe + ".BAK"));
     }
 
-    [Fact]
-    public void DOSBlood_Uninstall_DeletesBloodExeAndVersionAndRestoresBak()
+    /// <summary> Failure before or after backup preparation leaves the original executable intact. </summary>
+    /// <param name="networkFailure">Whether HTTP fails before extraction.</param>
+    [Theory]
+    [InlineData(true)]
+    [InlineData(false)]
+    public async Task DOSBlood_FailedInstall_DoesNotDeleteExecutable(bool networkFailure)
     {
-        var bloodDir = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
-        Directory.CreateDirectory(bloodDir);
-        var bloodExe = Path.Combine(bloodDir, "BLOOD.EXE");
-        var bloodExeBak = bloodExe + ".BAK";
-        var versionFile = Path.Combine(bloodDir, "version");
-        File.WriteAllText(bloodExe, "blood");
-        File.WriteAllText(bloodExeBak, "original exe");
-        File.WriteAllText(versionFile, "1.0");
-
-        try
-        {
-            var games = CreateGamesProvider(bloodDir);
-            var installer = CreateInstaller(new DOSBlood(games), games);
-
-            installer.Uninstall();
-
-            Assert.Equal("original exe", File.ReadAllText(bloodExe));
-            Assert.False(File.Exists(bloodExeBak), "BLOOD.EXE.BAK should be removed after restore.");
-            Assert.False(File.Exists(versionFile), "version file should be deleted.");
-        }
-        finally
-        {
-            Directory.Delete(bloodDir, true);
-        }
+        var games = Games();
+        var installer = Installer(new DOSBlood(games), games, [1, 2, 3], networkFailure ? HttpStatusCode.ServiceUnavailable : HttpStatusCode.OK);
+        var result = await installer.InstallAsync(TestContext.Current.CancellationToken);
+        Assert.False(result.IsSuccess);
+        Assert.Equal("original", File.ReadAllText(Path.Combine(_root, "BLOOD.EXE")));
+        Assert.False(File.Exists(Path.Combine(_root, "BLOOD.EXE.BAK")));
     }
 
+    /// <summary> XMapEdit copies game resources while excluding unrelated executables and music. </summary>
     [Fact]
-    public void DOSBlood_Uninstall_NullInstallFolder_Throws()
+    public async Task XMapEdit_Install_CopiesGameResources()
     {
-        var games = CreateGamesProvider(null);
-        var installer = CreateInstaller(new DOSBlood(games), games);
+        File.WriteAllText(Path.Combine(_root, "track.ogg"), "music");
+        var destination = Path.Combine(_root, "editor");
+        var tool = new Mock<BaseTool>();
+        tool.SetupGet(x => x.InstallFolderPath).Returns(destination);
+        tool.SetupGet(x => x.ToolEnum).Returns(ToolEnum.XMapEdit);
+        var installer = Installer(tool.Object, Games(), ReleaseTestHelper.Zip(("editor.exe", "editor")));
+        var result = await installer.InstallAsync(TestContext.Current.CancellationToken);
+        Assert.True(result.IsSuccess, result.Message);
+        Assert.Equal("art", File.ReadAllText(Path.Combine(destination, "game.art")));
+        Assert.False(File.Exists(Path.Combine(destination, "BLOOD.EXE")));
+        Assert.False(File.Exists(Path.Combine(destination, "track.ogg")));
+        Assert.Equal("2.0", File.ReadAllText(Path.Combine(destination, "version")));
 
-        Assert.Throws<InvalidOperationException>(() => installer.Uninstall());
-    }
-
-    [Fact]
-    public void XMapEdit_PostInstall_CopiesFilesSkippingExeOggTxtVersion()
-    {
-        var bloodDir = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
-        Directory.CreateDirectory(bloodDir);
-        File.WriteAllText(Path.Combine(bloodDir, "BLOOD.EXE"), "skip");
-        File.WriteAllText(Path.Combine(bloodDir, "sound.ogg"), "skip");
-        File.WriteAllText(Path.Combine(bloodDir, "readme.txt"), "skip");
-        File.WriteAllText(Path.Combine(bloodDir, "version"), "skip");
-        File.WriteAllText(Path.Combine(bloodDir, "game.art"), "copy");
-        File.WriteAllText(Path.Combine(bloodDir, "game.map"), "copy");
-
-        var installFolder = Path.Combine(ClientProperties.ToolsFolderPath, new XMapEdit(null!).Name);
-
-        try
-        {
-            Directory.CreateDirectory(installFolder);
-            var games = CreateGamesProvider(bloodDir);
-            var installer = CreateInstaller(new XMapEdit(games), games);
-
-            InvokeProtected(installer, "PostInstall");
-
-            Assert.True(File.Exists(Path.Combine(installFolder, "game.art")), "game.art should be copied.");
-            Assert.True(File.Exists(Path.Combine(installFolder, "game.map")), "game.map should be copied.");
-            Assert.False(File.Exists(Path.Combine(installFolder, "BLOOD.EXE")), "BLOOD.EXE should be skipped.");
-            Assert.False(File.Exists(Path.Combine(installFolder, "sound.ogg")), "sound.ogg should be skipped.");
-            Assert.False(File.Exists(Path.Combine(installFolder, "readme.txt")), "readme.txt should be skipped.");
-            Assert.False(File.Exists(Path.Combine(installFolder, "version")), "version should be skipped.");
-        }
-        finally
-        {
-            if (Directory.Exists(installFolder))
-            {
-                Directory.Delete(installFolder, true);
-            }
-
-            Directory.Delete(bloodDir, true);
-        }
-    }
-
-    [Fact]
-    public void XMapEdit_Uninstall_DeletesInstallFolder()
-    {
-        var installFolder = Path.Combine(ClientProperties.ToolsFolderPath, new XMapEdit(null!).Name);
-        Directory.CreateDirectory(installFolder);
-        File.WriteAllText(Path.Combine(installFolder, "game.art"), "data");
-
-        try
-        {
-            var games = CreateGamesProvider(null);
-            var installer = CreateInstaller(new XMapEdit(games), games);
-
-            installer.Uninstall();
-
-            Assert.False(Directory.Exists(installFolder), "XMapEdit install folder should be deleted.");
-        }
-        finally
-        {
-            if (Directory.Exists(installFolder))
-            {
-                Directory.Delete(installFolder, true);
-            }
-        }
+        installer.Uninstall();
+        Assert.False(Directory.Exists(destination));
+        Assert.Equal("original", File.ReadAllText(Path.Combine(_root, "BLOOD.EXE")));
     }
 }

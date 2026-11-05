@@ -185,7 +185,7 @@ public sealed class ArchivedAddonExtractorTests : IDisposable
     }
 
     [Fact]
-    public async Task TryExtractIfNeededAsync_ZipWithRffManifest_CorruptExtraJson_Unpacks()
+    public async Task TryExtractIfNeededAsync_ZipWithRffManifest_CorruptExtraJson_PreservesSourceAndInstallation()
     {
         var manifest = new AddonManifestJsonModel
         {
@@ -220,10 +220,76 @@ public sealed class ArchivedAddonExtractorTests : IDisposable
             }
         }
 
+        var existing = Path.Combine(_tempDir, "rff-addon");
+        _ = Directory.CreateDirectory(existing);
+        File.WriteAllText(Path.Combine(existing, "user.txt"), "keep");
+
         var result = await _extractor.TryExtractIfNeededAsync(zipPath);
 
         Assert.Null(result);
-        Assert.False(File.Exists(zipPath));
-        Assert.True(Directory.Exists(Path.Combine(_tempDir, "rff-addon")));
+        Assert.True(File.Exists(zipPath));
+        Assert.Equal("keep", File.ReadAllText(Path.Combine(existing, "user.txt")));
+        Assert.Single(Directory.GetFiles(existing));
+    }
+
+    /// <summary> A failure after extracting some entries does not replace existing user content. </summary>
+    [Fact]
+    public async Task TryExtractIfNeededAsync_ExtractionFails_PreservesSourceAndDestination()
+    {
+        var path = Path.Combine(_tempDir, "failed.zip");
+        using (var archive = ZipFile.Open(path, ZipArchiveMode.Create))
+        {
+            using (var writer = new StreamWriter(archive.CreateEntry("addons.grpinfo").Open()))
+            {
+                writer.Write("test");
+            }
+
+            using (var writer = new StreamWriter(archive.CreateEntry("collision").Open()))
+            {
+                writer.Write("file");
+            }
+
+            using (var writer = new StreamWriter(archive.CreateEntry("collision/child.txt").Open()))
+            {
+                writer.Write("cannot create a child under a file");
+            }
+        }
+
+        var destination = Path.Combine(_tempDir, "failed");
+        _ = Directory.CreateDirectory(destination);
+        File.WriteAllText(Path.Combine(destination, "user.txt"), "keep");
+        var result = await _extractor.TryExtractIfNeededAsync(path);
+        Assert.Null(result);
+        Assert.True(File.Exists(path));
+        Assert.Equal("keep", File.ReadAllText(Path.Combine(destination, "user.txt")));
+        Assert.Single(Directory.GetFiles(destination));
+        Assert.Single(Directory.GetDirectories(_tempDir));
+    }
+
+    /// <summary> A later manifest may require native extraction even when the first manifest does not. </summary>
+    [Fact]
+    public async Task TryExtractIfNeededAsync_LaterNativeManifest_ExtractsAllManifests()
+    {
+        var path = Path.Combine(_tempDir, "multiple.zip");
+        using (var archive = ZipFile.Open(path, ZipArchiveMode.Create))
+        {
+            foreach (var name in new[] { "addon.json", "addon_native.json" })
+            {
+                var manifest = new AddonManifestJsonModel
+                {
+                    Id = name, Title = name, Version = "1.0", AddonType = AddonTypeEnum.TC,
+                    SupportedGame = new SupportedGameJsonModel { Game = GameEnum.Blood },
+                    MainRff = name == "addon_native.json" ? "native.rff" : null
+                };
+                using var writer = new StreamWriter(archive.CreateEntry(name).Open());
+                writer.Write(JsonSerializer.Serialize(manifest, AddonManifestJsonContext.Default.AddonManifestJsonModel));
+            }
+        }
+
+        var result = await _extractor.TryExtractIfNeededAsync(path);
+        Assert.NotNull(result);
+        Assert.NotNull(result.UnpackedTo);
+        Assert.Equal(2, result.Manifests!.Count);
+        Assert.False(File.Exists(path));
     }
 }

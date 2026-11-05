@@ -1,4 +1,4 @@
-﻿using Core.All.Enums;
+using Core.All.Enums;
 using Core.All.Serializable.Downloadable;
 using Core.Client;
 using Core.Client.Interfaces;
@@ -35,7 +35,7 @@ public sealed class ToolInstaller : InstallerBase<BaseTool>
     }
 
     /// <inheritdoc />
-    protected override void PostInstall()
+    protected override void PostInstall(string installFolder)
     {
         if (_instance.ToolEnum is ToolEnum.Mapster32)
         {
@@ -45,7 +45,7 @@ public sealed class ToolInstaller : InstallerBase<BaseTool>
         {
             var pathToBlood = _gamesProvider.GetGame(GameEnum.Blood).GameInstallFolder ?? throw new InvalidOperationException("Can't find Blood install path.");
 
-            _ = Directory.CreateDirectory(_instance.InstallFolderPath);
+            _ = Directory.CreateDirectory(installFolder);
 
             var files = Directory.GetFiles(pathToBlood);
 
@@ -61,23 +61,22 @@ public sealed class ToolInstaller : InstallerBase<BaseTool>
                 }
 
                 var fileName = Path.GetFileName(file);
-                File.Copy(file, Path.Combine(_instance.InstallFolderPath, fileName), true);
+                File.Copy(file, Path.Combine(installFolder, fileName), true);
             }
         }
     }
 
     /// <inheritdoc />
-    protected override void Backup()
+    protected override void Backup(string installFolder)
     {
         if (_instance.ToolEnum is ToolEnum.DOSBlood)
         {
-            var pathToBlood = _gamesProvider.GetGame(GameEnum.Blood).GameInstallFolder ?? throw new InvalidOperationException("Can't find Blood install path.");
-            var bloodExe = Path.Combine(pathToBlood, "BLOOD.EXE");
+            var bloodExe = Path.Combine(installFolder, "BLOOD.EXE");
             var bloodExeBak = bloodExe + ".BAK";
 
             if (!File.Exists(bloodExeBak))
             {
-                File.Move(bloodExe, bloodExe + ".BAK", true);
+                File.Copy(bloodExe, bloodExeBak);
             }
         }
     }
