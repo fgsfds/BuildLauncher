@@ -81,13 +81,27 @@ public sealed class AppUpdateInstaller
     /// <returns>The preparation task.</returns>
     public async Task DownloadAndUnpackLatestRelease(string workingFolder, string executableName, CancellationToken cancellationToken = default)
     {
-        ArgumentNullException.ThrowIfNull(_update?.DownloadUrl);
+        ArgumentNullException.ThrowIfNull(_update);
+        await DownloadAndUnpackReleaseAsync(_update, workingFolder, executableName, cancellationToken).ConfigureAwait(false);
+    }
+
+    /// <summary> Downloads and validates an explicitly selected release before making it available for installation. </summary>
+    /// <param name="release">The release metadata selected by the caller.</param>
+    /// <param name="workingFolder">The application installation directory.</param>
+    /// <param name="executableName">The expected executable filename.</param>
+    /// <param name="cancellationToken">Cancels preparation before publishing the update.</param>
+    /// <returns>The preparation task.</returns>
+    public async Task DownloadAndUnpackReleaseAsync(GeneralReleaseJsonModel release, string workingFolder,
+        string executableName, CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(release);
+        ArgumentNullException.ThrowIfNull(release.DownloadUrl);
         var updateFolder = Path.Combine(workingFolder, ClientConsts.UpdateFolder);
         using var replacement = new DirectoryReplacement(updateFolder, _logger);
         var download = replacement.StagingPath + ".zip";
         try
         {
-            var result = await _filesDownloader.DownloadFileAsync(_update.DownloadUrl, download, cancellationToken).ConfigureAwait(false);
+            var result = await _filesDownloader.DownloadFileAsync(release.DownloadUrl, download, cancellationToken).ConfigureAwait(false);
             if (result.ResultEnum == Core.All.ResultEnum.Cancelled)
             {
                 throw new OperationCanceledException(cancellationToken);
@@ -98,7 +112,7 @@ public sealed class AppUpdateInstaller
                 throw new IOException($"Update download failed: {result.Message}");
             }
 
-            if (!await FileHash.MatchesAsync(download, _update.Hash, cancellationToken).ConfigureAwait(false))
+            if (!await FileHash.MatchesAsync(download, release.Hash, cancellationToken).ConfigureAwait(false))
             {
                 throw new InvalidDataException("The update SHA-256 digest does not match the release.");
             }
@@ -153,13 +167,17 @@ public sealed class AppUpdateInstaller
             {
                 var relative = Path.GetRelativePath(updateFolder, source);
                 var destination = Path.Combine(workingFolder, relative);
-                var original = Path.Combine(backup, relative);
+                var original = Path.Combine(backup, "original", relative);
+                var displaced = Path.Combine(backup, "running", relative);
                 _ = Directory.CreateDirectory(Path.GetDirectoryName(destination)!);
                 _ = Directory.CreateDirectory(Path.GetDirectoryName(original)!);
                 var existed = File.Exists(destination);
                 if (existed)
                 {
-                    File.Move(destination, original);
+                    // Keep an independent recovery copy: some mounted filesystems cannot reliably retain a renamed running image.
+                    File.Copy(destination, original);
+                    _ = Directory.CreateDirectory(Path.GetDirectoryName(displaced)!);
+                    File.Move(destination, displaced);
                 }
 
                 changed.Add((destination, original, existed));
@@ -189,7 +207,7 @@ public sealed class AppUpdateInstaller
 
                     if (item.Existed)
                     {
-                        File.Move(item.Backup, item.Destination);
+                        File.Copy(item.Backup, item.Destination);
                     }
                 }
                 catch (Exception rollbackFailure)
@@ -283,7 +301,8 @@ public sealed class AppUpdateInstaller
     /// <summary>
     ///     Install update.
     /// </summary>
-    public static void InstallUpdate()
+    /// <param name="restartArguments">Optional arguments passed to the updated Windows application.</param>
+    public static void InstallUpdate(IReadOnlyList<string>? restartArguments = null)
     {
         try
         {
@@ -294,7 +313,13 @@ public sealed class AppUpdateInstaller
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
                 //starting new version of the app
-                using var process = Process.Start(oldExe);
+                var start = new ProcessStartInfo(oldExe) { WorkingDirectory = dir };
+                foreach (var argument in restartArguments ?? [])
+                {
+                    start.ArgumentList.Add(argument);
+                }
+
+                using var process = Process.Start(start) ?? throw new InvalidOperationException("The updated application could not be started.");
             }
 
             Environment.Exit(0);

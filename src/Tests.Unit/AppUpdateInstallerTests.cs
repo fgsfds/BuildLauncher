@@ -125,6 +125,25 @@ public sealed class AppUpdateInstallerTests : IDisposable
         Assert.False(File.Exists(Path.Combine(_root, ClientConsts.UpdateFile)));
     }
 
+    /// <summary> Explicit release preparation uses the supplied metadata without a prior API lookup. </summary>
+    [Fact]
+    public async Task PrepareExplicitRelease_DownloadsAndValidatesSelectedPayload()
+    {
+        var data = ReleaseTestHelper.Zip(("app.exe", "selected release"));
+        var api = new Mock<IApiInterface>(MockBehavior.Strict);
+        var installer = new AppUpdateInstaller(
+            new FilesDownloader(ReleaseTestHelper.Http(data), NullLogger<FilesDownloader>.Instance),
+            api.Object, NullLogger<AppUpdateInstaller>.Instance);
+        var release = ReleaseTestHelper.Release("sha256:" + Convert.ToHexString(SHA256.HashData(data)));
+
+        await installer.DownloadAndUnpackReleaseAsync(release, _root, "app.exe", TestContext.Current.CancellationToken);
+
+        Assert.Equal("old", File.ReadAllText(Path.Combine(_root, "app.exe")));
+        Assert.Equal("selected release", File.ReadAllText(Path.Combine(_root, ClientConsts.UpdateFolder, "app.exe")));
+        Assert.True(File.Exists(Path.Combine(_root, ClientConsts.UpdateFile)));
+        api.VerifyNoOtherCalls();
+    }
+
     /// <summary> A missing executable never causes the live executable to be renamed. </summary>
     [Fact]
     public void Apply_MissingExecutable_PreservesCurrentExecutable()
@@ -142,6 +161,10 @@ public sealed class AppUpdateInstallerTests : IDisposable
         _ = Directory.CreateDirectory(update);
         File.WriteAllText(Path.Combine(update, "app.exe"), "new");
         File.WriteAllText(Path.Combine(update, "new-library.dll"), "new library");
+        _ = Directory.CreateDirectory(Path.Combine(_root, "lib"));
+        _ = Directory.CreateDirectory(Path.Combine(update, "lib"));
+        File.WriteAllText(Path.Combine(_root, "lib", "runtime.dll"), "old library");
+        File.WriteAllText(Path.Combine(update, "lib", "runtime.dll"), "replacement library");
         File.WriteAllText(Path.Combine(update, "z-blocked"), "payload");
         _ = Directory.CreateDirectory(Path.Combine(_root, "z-blocked"));
         File.WriteAllText(Path.Combine(_root, "z-blocked", "user.txt"), "keep");
@@ -151,6 +174,8 @@ public sealed class AppUpdateInstallerTests : IDisposable
 
         Assert.Equal("old", File.ReadAllText(Path.Combine(_root, "app.exe")));
         Assert.False(File.Exists(Path.Combine(_root, "new-library.dll")));
+        Assert.Equal("old library", File.ReadAllText(Path.Combine(_root, "lib", "runtime.dll")));
+        Assert.Empty(Directory.GetDirectories(_root, ".update-backup-*"));
         Assert.Equal("keep", File.ReadAllText(Path.Combine(_root, "z-blocked", "user.txt")));
         Assert.True(File.Exists(Path.Combine(_root, ClientConsts.UpdateFile)));
     }

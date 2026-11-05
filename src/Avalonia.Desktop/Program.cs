@@ -1,4 +1,5 @@
 ﻿using System.Runtime.InteropServices;
+using Avalonia.Desktop.Helpers;
 using Core.Client;
 using Core.Client.Helpers;
 using Microsoft.Extensions.Logging;
@@ -20,7 +21,7 @@ public sealed partial class Program
     [STAThread]
     public static int Main(string[] args)
     {
-        var smokeTest = args.Contains("--smoke-test") || args.Contains("--smoke-test-restart");
+        var smokeTest = args.Contains("--smoke-test") || args.Contains("--smoke-test-restart") || args.Contains("--smoke-update");
 
         if (smokeTest && (!args.Contains("--offline") || !File.Exists(Path.Combine(AppContext.BaseDirectory, ".published-smoke-test"))))
         {
@@ -71,7 +72,7 @@ public sealed partial class Program
 
         if (File.Exists(Path.Combine(ClientProperties.WorkingFolder, ClientConsts.UpdateFile)))
         {
-            AppUpdateInstaller.InstallUpdate();
+            AppUpdateInstaller.InstallUpdate(smokeTest ? ["--offline", "--smoke-test-restart"] : null);
 
             return 0;
         }
@@ -88,6 +89,12 @@ public sealed partial class Program
 
         try
         {
+            if (args.Contains("--smoke-update"))
+            {
+                PublishedUpdateTest.RunAsync().GetAwaiter().GetResult();
+                return 0;
+            }
+
             var builder = BuildAvaloniaApp();
 
             return App.Run(builder, smokeTest, args.Contains("--smoke-test-restart"));

@@ -74,7 +74,7 @@ internal static class PublishedSmokeTest
             window.Close();
             Require(config.ActiveTab == "ToolsTab", "Closing the window did not save the active tab.");
             Require(WindowPlacement.Parse(config.WindowPlacement) is not null, "Closing did not save window placement.");
-            File.WriteAllText(Path.Combine(AppContext.BaseDirectory, restart ? "restart.passed" : "first.passed"), "Passed");
+            File.WriteAllText(Path.Combine(AppContext.BaseDirectory, restart ? "restart.passed" : "first.passed"), Core.Client.Helpers.ClientProperties.CurrentVersion.ToString());
         }
         catch (Exception ex)
         {

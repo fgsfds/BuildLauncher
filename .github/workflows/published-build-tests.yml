@@ -23,7 +23,7 @@ jobs:
           - os: ubuntu-latest
             profile: Linux
     runs-on: ${{ matrix.os }}
-    timeout-minutes: 20
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v7
         with:
@@ -44,6 +44,16 @@ jobs:
       - name: Test published Linux executable
         if: runner.os == 'Linux'
         run: xvfb-run --auto-servernum --server-args="-screen 0 1600x1000x24" pwsh -File scripts/Test-PublishedBuild.ps1 -PublishDirectory publish -ResultsDirectory "${{ runner.temp }}/published-smoke"
+      - name: Publish older-version updater fixture
+        shell: pwsh
+        run: dotnet publish src/Avalonia.Desktop/Avalonia.Desktop.csproj -p:PublishProfile=${{ matrix.profile }} -p:Version=0.0.1 -c Release -o baseline
+      - name: Test Windows updater
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: ./scripts/Test-PublishedUpdater.ps1 -PublishDirectory publish -BaselineDirectory baseline -VerifiedPublishResults "${{ runner.temp }}/published-smoke" -ResultsDirectory "${{ runner.temp }}/published-updater"
+      - name: Test Linux updater and manual restart
+        if: runner.os == 'Linux'
+        run: xvfb-run --auto-servernum --server-args="-screen 0 1600x1000x24" pwsh -File scripts/Test-PublishedUpdater.ps1 -PublishDirectory publish -BaselineDirectory baseline -VerifiedPublishResults "${{ runner.temp }}/published-smoke" -ResultsDirectory "${{ runner.temp }}/published-updater"
       - name: Upload diagnostics
         if: always()
         uses: actions/upload-artifact@v7
@@ -55,6 +65,12 @@ jobs:
             ${{ runner.temp }}/published-smoke/*.txt
             ${{ runner.temp }}/published-smoke/*.png
             ${{ runner.temp }}/published-smoke/*.passed
+            ${{ runner.temp }}/published-updater/**/*.log
+            ${{ runner.temp }}/published-updater/**/*.crashlog
+            ${{ runner.temp }}/published-updater/**/*.update_crashlog
+            ${{ runner.temp }}/published-updater/**/*.txt
+            ${{ runner.temp }}/published-updater/**/*.png
+            ${{ runner.temp }}/published-updater/**/*.passed
           if-no-files-found: ignore
       - name: Upload tested executable
         uses: actions/upload-artifact@v7
