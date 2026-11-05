@@ -3,6 +3,11 @@ on:
   push:
 
 jobs:
+  published-build-tests:
+    uses: ./.github/workflows/published-build-tests.yml
+    with:
+      ref: ${{ github.sha }}
+
   build-and-test-windows:
     runs-on: windows-latest
     steps:

@@ -56,8 +56,10 @@ public sealed class App : Application
     ///     Runs the application with the specified AppBuilder.
     /// </summary>
     /// <param name="builder">The application builder.</param>
+    /// <param name="smokeTest">Whether to verify the published executable in an isolated test directory.</param>
+    /// <param name="restart">Whether to verify settings from the first smoke-test launch.</param>
     /// <returns>The application exit code.</returns>
-    public static int Run(AppBuilder builder)
+    public static int Run(AppBuilder builder, bool smokeTest = false, bool restart = false)
     {
         int code;
 
@@ -127,7 +129,13 @@ public sealed class App : Application
         RenameSaveFolder(portsProvider);
 
         var metadataProvider = _services.GetRequiredService<MetadataProvider>();
-        _ = metadataProvider.InitializeAsync();
+        var metadataInitialization = metadataProvider.InitializeAsync();
+
+        if (smokeTest)
+        {
+            mainWindow.Opened += async (_, _) => await PublishedSmokeTest.RunAsync(
+                mainWindow, lifetime, config, _services.GetRequiredService<IApiInterface>(), metadataInitialization, restart).ConfigureAwait(true);
+        }
 
         try
         {

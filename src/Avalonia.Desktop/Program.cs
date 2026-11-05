@@ -20,6 +20,13 @@ public sealed partial class Program
     [STAThread]
     public static int Main(string[] args)
     {
+        var smokeTest = args.Contains("--smoke-test") || args.Contains("--smoke-test-restart");
+
+        if (smokeTest && (!args.Contains("--offline") || !File.Exists(Path.Combine(AppContext.BaseDirectory, ".published-smoke-test"))))
+        {
+            return 2;
+        }
+
         AppDomain.CurrentDomain.UnhandledException += (_, e) =>
         {
             if (e.ExceptionObject is not Exception ex)
@@ -27,12 +34,16 @@ public sealed partial class Program
                 return;
             }
 
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            if (!smokeTest && RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
                 WinMsgBox.Show("Fatal error", ex.ToString());
             }
 
             SaveCrashLog();
+            if (smokeTest)
+            {
+                File.WriteAllText(Path.Combine(AppContext.BaseDirectory, "smoke-error.txt"), ex.ToString());
+            }
         };
 
         TaskScheduler.UnobservedTaskException += (_, e) =>
@@ -47,6 +58,11 @@ public sealed partial class Program
             logger.LogCritical(e.Exception, "Unobserved task exception");
 
             SaveCrashLog();
+            if (smokeTest)
+            {
+                File.WriteAllText(Path.Combine(AppContext.BaseDirectory, "smoke-error.txt"), e.Exception.ToString());
+            }
+
             e.SetObserved();
         };
 
@@ -74,11 +90,11 @@ public sealed partial class Program
         {
             var builder = BuildAvaloniaApp();
 
-            return App.Run(builder);
+            return App.Run(builder, smokeTest, args.Contains("--smoke-test-restart"));
         }
         catch (Exception ex)
         {
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            if (!smokeTest && RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
                 WinMsgBox.Show(
                     "Critical error",
@@ -87,6 +103,11 @@ public sealed partial class Program
             }
 
             SaveCrashLog();
+
+            if (smokeTest)
+            {
+                File.WriteAllText(Path.Combine(AppContext.BaseDirectory, "smoke-error.txt"), ex.ToString());
+            }
 
             return -1;
         }

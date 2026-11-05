@@ -88,14 +88,14 @@ public static class ClientProperties
     {
         get
         {
-            var path1 = Path.Combine(WorkingFolder, @"..\..\..\..\db\addons.json");
+            var path1 = Path.Combine(WorkingFolder, "..", "..", "..", "..", "db", "addons.json");
 
             if (File.Exists(path1))
             {
                 return path1;
             }
 
-            var path2 = Path.Combine(WorkingFolder, @"db\addons.json");
+            var path2 = Path.Combine(WorkingFolder, "db", "addons.json");
 
             if (File.Exists(path2))
             {
@@ -113,14 +113,14 @@ public static class ClientProperties
     {
         get
         {
-            var path1 = Path.Combine(WorkingFolder, @"..\..\..\..\db\data.json");
+            var path1 = Path.Combine(WorkingFolder, "..", "..", "..", "..", "db", "data.json");
 
             if (File.Exists(path1))
             {
                 return path1;
             }
 
-            var path2 = Path.Combine(WorkingFolder, @"db\data.json");
+            var path2 = Path.Combine(WorkingFolder, "db", "data.json");
 
             if (File.Exists(path2))
             {
@@ -138,14 +138,14 @@ public static class ClientProperties
     {
         get
         {
-            var path1 = Path.Combine(WorkingFolder, @"..\..\..\..\db\manifests.json");
+            var path1 = Path.Combine(WorkingFolder, "..", "..", "..", "..", "db", "manifests.json");
 
             if (File.Exists(path1))
             {
                 return path1;
             }
 
-            var path2 = Path.Combine(WorkingFolder, @"db\manifests.json");
+            var path2 = Path.Combine(WorkingFolder, "db", "manifests.json");
 
             if (File.Exists(path2))
             {

@@ -1,0 +1,64 @@
+name: Published build tests
+on:
+  workflow_call:
+    inputs:
+      ref:
+        description: Exact source revision to publish and test
+        required: true
+        type: string
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    name: Published ${{ matrix.profile }} smoke test
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-latest
+            profile: Windows
+          - os: ubuntu-latest
+            profile: Linux
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ inputs.ref || github.sha }}
+      - uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: 10.0.x
+      - name: Install Linux display dependencies
+        if: runner.os == 'Linux'
+        run: sudo apt-get update && sudo apt-get install -y xvfb libice6 libsm6 libfontconfig1 libx11-6 libxrandr2 libxi6 libxcursor1 libgl1 libegl1
+      - name: Publish release executable
+        shell: pwsh
+        run: dotnet publish src/Avalonia.Desktop/Avalonia.Desktop.csproj -p:PublishProfile=${{ matrix.profile }} -c Release -o publish
+      - name: Test published Windows executable
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: ./scripts/Test-PublishedBuild.ps1 -PublishDirectory publish -ResultsDirectory "${{ runner.temp }}/published-smoke"
+      - name: Test published Linux executable
+        if: runner.os == 'Linux'
+        run: xvfb-run --auto-servernum --server-args="-screen 0 1600x1000x24" pwsh -File scripts/Test-PublishedBuild.ps1 -PublishDirectory publish -ResultsDirectory "${{ runner.temp }}/published-smoke"
+      - name: Upload diagnostics
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: published-smoke-${{ matrix.profile }}
+          path: |
+            ${{ runner.temp }}/published-smoke/*.log
+            ${{ runner.temp }}/published-smoke/*.crashlog
+            ${{ runner.temp }}/published-smoke/*.txt
+            ${{ runner.temp }}/published-smoke/*.png
+            ${{ runner.temp }}/published-smoke/*.passed
+          if-no-files-found: ignore
+      - name: Upload tested executable
+        uses: actions/upload-artifact@v7
+        with:
+          name: tested-publish-${{ matrix.profile }}
+          path: publish/
+          if-no-files-found: error

@@ -59,6 +59,9 @@ dotnet test --project ./src/Tests.External/Tests.External.csproj --no-build
 Always run the affected unit test project (s) plus a build after a change. There is no
 separate lint command: analyzers run on build.
 
+For native smoke tests of published Windows and Linux executables and the release gate,
+see [published release checks](.agents/docs/published-build-tests.md).
+
 ## Repository layout
 
 ```
