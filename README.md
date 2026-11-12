@@ -54,14 +54,14 @@ Another goal of this project is to create a unification standard for Build Engin
 <td valign="center">
 <img align="right" src="img/img3.png">
 
-- Automatically detect Build Engine games installed from Steam or Zoom platform (GOG support will be added later)
+- Detect supported Steam installations and the ZOOM Platform edition of Duke Nukem 3D Atomic on Windows
 - Download and update all major source ports for Build Engine games
 - Download custom maps, campaigns and mods for supported games
 - Launch original games, their addons, and custom content with the port of your choice without any tweaking and manual installing
 - Load multiple mods at the same time without manually editing .def files
 - Keep saved games for custom content in separate folders
 - Track your playtime for games and custom content
-- Create Would Tour Stopgap for EDuke32 automatically
+- Create World Tour Stopgap for EDuke32 automatically
 - Run Route 66 with Rednukem without renaming original files
 
 </td>
@@ -76,9 +76,11 @@ Another goal of this project is to create a unification standard for Build Engin
 <tr>
 <td valign="center">
 
-Download latest release for your platform from <a href="https://github.com/fgsfds/BuildLauncher/releases">release page</a>
+Download the Windows x64 archive from the <a href="https://github.com/fgsfds/BuildLauncher/releases">releases page</a> and extract it to a writable folder.
 
-Unpack zip archive anywhere and run <b>BuildLauncher.exe</b>
+On Windows, run <b>BuildLauncher.exe</b>. For Linux x64, publish from the repository root with <code>dotnet publish src/Avalonia.Desktop -p:PublishProfile=Linux -c Release -o ./publish/linux-x64</code>, then run <code>./BuildLauncher</code> from <code>publish/linux-x64/</code>. If the executable permission was lost during extraction, run <code>chmod +x BuildLauncher</code> first. The automated release workflow currently publishes Windows x64 only.
+
+The launcher uses its application folder as the working directory. Use <code>--dev</code> to open the addon authoring tools. On Windows, use <code>--offline</code> with the repository's <code>db/</code> folder beside the executable for local metadata. Offline JSON lookup on Linux is a known limitation in this revision.
 
 </td>
 </tr>
@@ -95,6 +97,8 @@ Unpack zip archive anywhere and run <b>BuildLauncher.exe</b>
 Want to create and submit your own addons? Learn about addons specifications? Care about security and privacy?
 
 **Check [WIKI](https://github.com/fgsfds/BuildLauncher/wiki) for more information.**
+
+For addon preparation, see the repository [manifest specification](.agents/docs/addon.json-Specifications.md), [common conversion plan](.agents/docs/addon-conversion-plan.md), [game-specific profiles](.agents/docs/games/index.md), [ART resource export and verification](.agents/docs/art-exporter.md), [manifest validation](.agents/docs/addon-manifest-validation.md), and [artwork styles](.agents/docs/addon-artwork-style.md).
 
 </td>
 </tr>

@@ -1,0 +1,28 @@
+# Redneck Rampage Rides Again addon preparation
+
+Read the [common preparation workflow](../addon-conversion-plan.md),
+[manifest contract](../addon.json-Specifications.md) and
+[common artwork rules](../addon-artwork-style.md) first. This profile applies to
+`game.name: RidesAgain`; shared CON/GRP-family recipes apply alongside this profile.
+
+## Shared preparation rules
+
+Apply [the shared CON/GRP family guide](con-grp-family.md), including the rules
+originally learned from Duke campaigns and large TCs. Use this game's manifest
+name, scripts, base resources and supported port commands; keep its artwork below.
+
+## Resource and runtime boundaries
+
+Rides Again shares the GRP container and CON script formats with Redneck,
+Duke3D, NAM and WWII GI. Reuse container inspection and CON include/reference
+checks, with distinct game/edition and port
+selection. Preserve a confirmed existing manifest identity and verify the current
+Redneck-family factory/provider mapping before authoring a new campaign. Inspect
+Rides Again-specific scripts, resources and builder branches; neither a Redneck
+base-game package nor a Duke recipe establishes compatibility. No Blood RFF/INI.
+
+## Artwork
+
+### Grid
+
+The reviewed library did not establish a grid style for this game.
